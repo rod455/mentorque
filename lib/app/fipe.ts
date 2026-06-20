@@ -15,7 +15,7 @@ export type VehicleKind = "carros" | "motos" | "caminhoes";
 export type Brand = { nome: string; valor: string };
 export type Model = { modelo: string; valor: string };
 export type PriceEntry = { value: number; year: number; fuel: string; label: string; codigoFipe: string };
-export type MatchResult = { value: number; codigoFipe: string; label: string };
+export type MatchResult = { value: number; codigoFipe: string; label: string; year: number };
 
 async function getJson<T>(url: string): Promise<T> {
   const res = await fetch(url, {
@@ -140,15 +140,21 @@ async function matchBrasil(kind: VehicleKind, brandName: string, modelName: stri
       }
     })
   );
-  for (const { m, ps } of withPrices) {
-    const exact = ps.find((p) => p.year === year);
-    if (exact) return { value: exact.value, codigoFipe: exact.codigoFipe, label: `${brand.name} ${m.name} ${exact.year}` };
+  // Among variants that actually list the exact year, prefer the most "base"
+  // trim (shortest name).
+  const exacts = withPrices
+    .map(({ m, ps }) => ({ m, p: ps.find((p) => p.year === year) }))
+    .filter((x): x is { m: { name: string; code: string }; p: PriceEntry } => !!x.p)
+    .sort((a, b) => a.m.name.length - b.m.name.length);
+  if (exacts[0]) {
+    const { m, p } = exacts[0];
+    return { value: p.value, codigoFipe: p.codigoFipe, label: `${brand.name} ${m.name} ${p.year}`, year: p.year };
   }
   let best: { res: MatchResult; diff: number } | null = null;
   for (const { m, ps } of withPrices)
     for (const p of ps) {
       const d = Math.abs(p.year - year);
-      if (!best || d < best.diff) best = { res: { value: p.value, codigoFipe: p.codigoFipe, label: `${brand.name} ${m.name} ${p.year}` }, diff: d };
+      if (!best || d < best.diff) best = { res: { value: p.value, codigoFipe: p.codigoFipe, label: `${brand.name} ${m.name} ${p.year}`, year: p.year }, diff: d };
     }
   return best?.res ?? null;
 }
@@ -171,15 +177,13 @@ async function matchParallel(kind: VehicleKind, brandName: string, modelName: st
     })
   );
 
-  // Prefer a variant that has the exact year.
+  // Among variants that list the exact year, prefer the most "base" trim.
   let chosen: { m: { name: string; code: string }; ano: ParAno } | null = null;
-  for (const { m, anos } of withAnos) {
-    const ex = anos.find((a) => parseInt(a.nome, 10) === year);
-    if (ex) {
-      chosen = { m, ano: ex };
-      break;
-    }
-  }
+  const exacts = withAnos
+    .map(({ m, anos }) => ({ m, ano: anos.find((a) => parseInt(a.nome, 10) === year) }))
+    .filter((x): x is { m: { name: string; code: string }; ano: ParAno } => !!x.ano)
+    .sort((a, b) => a.m.name.length - b.m.name.length);
+  if (exacts[0]) chosen = exacts[0];
   if (!chosen) {
     let diff = Infinity;
     for (const { m, anos } of withAnos)
@@ -194,7 +198,8 @@ async function matchParallel(kind: VehicleKind, brandName: string, modelName: st
   }
   if (!chosen) return null;
   const pr = await getJson<ParPrice>(`${PARALLEL}/${kind}/marcas/${brand.code}/modelos/${chosen.m.code}/anos/${chosen.ano.codigo}`);
-  return { value: parseBRL(pr.Valor), codigoFipe: pr.CodigoFipe ?? "", label: `${brand.name} ${chosen.m.name} ${pr.AnoModelo ?? year}` };
+  const yr = parseInt(chosen.ano.nome, 10) || year;
+  return { value: parseBRL(pr.Valor), codigoFipe: pr.CodigoFipe ?? "", label: `${brand.name} ${chosen.m.name} ${pr.AnoModelo ?? yr}`, year: yr };
 }
 
 function pickByName(list: { name: string; code: string }[], target: string) {
@@ -205,5 +210,5 @@ function pickByName(list: { name: string; code: string }[], target: string) {
 // keep upstream calls bounded.
 function modelCandidates(list: { name: string; code: string }[], target: string) {
   const n = normalize(target);
-  return list.filter((x) => normalize(x.name).includes(n)).sort((a, b) => a.name.length - b.name.length).slice(0, 12);
+  return list.filter((x) => normalize(x.name).includes(n)).sort((a, b) => a.name.length - b.name.length).slice(0, 24);
 }

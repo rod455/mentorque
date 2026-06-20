@@ -106,7 +106,13 @@ export function SwapFlow({ onClose }: { onClose: () => void }) {
     let alive = true;
     const fallback = () => alive && setCurBase({ value: estimateFipe(s.vehicle!.model, s.vehicle!.year), source: "estimate" });
     fipeMatch(type, s.vehicle.make, s.vehicle.model, s.vehicle.year)
-      .then((r) => alive && setCurBase({ value: r.value, source: "fipe" }))
+      .then((r) => {
+        if (!alive) return;
+        // Trust FIPE only when the matched year is close to the real one;
+        // otherwise the free-text match missed — use the local estimate.
+        if (Math.abs(r.year - s.vehicle!.year) <= 1) setCurBase({ value: r.value, source: "fipe" });
+        else fallback();
+      })
       .catch(fallback);
   }, [step, curBase, s.vehicle, type]);
 

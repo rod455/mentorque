@@ -7,7 +7,7 @@ import type { VehicleType } from "./types";
 export type Brand = { nome: string; valor: string };
 export type Model = { modelo: string; valor: string };
 export type PriceEntry = { value: number; year: number; fuel: string; label: string; codigoFipe: string };
-export type MatchResult = { value: number; codigoFipe: string; label: string };
+export type MatchResult = { value: number; codigoFipe: string; label: string; year: number };
 
 export const kindOf = (t: VehicleType) => (t === "moto" ? "motos" : "carros");
 
