@@ -21,6 +21,6 @@ async function api<T>(params: Record<string, string>): Promise<T> {
 export const fipeGetBrands = (t: VehicleType) => api<Brand[]>({ action: "brands", type: kindOf(t) });
 export const fipeGetModels = (t: VehicleType, brand: string) =>
   api<Model[]>({ action: "models", type: kindOf(t), brand });
-export const fipeGetPrices = (code: string) => api<PriceEntry[]>({ action: "price", code });
+export const fipeGetPrices = (t: VehicleType, code: string) => api<PriceEntry[]>({ action: "price", type: kindOf(t), code });
 export const fipeMatch = (t: VehicleType, brand: string, model: string, year: number) =>
   api<MatchResult>({ action: "match", type: kindOf(t), brand, model, year: String(year) });

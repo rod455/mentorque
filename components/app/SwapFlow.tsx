@@ -76,7 +76,7 @@ export function SwapFlow({ onClose }: { onClose: () => void }) {
     setModelSel(m);
     setPriceSel(null);
     setLoading(true);
-    fipeGetPrices(m.valor)
+    fipeGetPrices(type, m.valor)
       .then((p) => setPrices(p))
       .catch(() => setFipeMode(false))
       .finally(() => setLoading(false));
