@@ -38,10 +38,9 @@ export async function GET(req: Request) {
       return ok(res);
     }
     return NextResponse.json({ error: "bad_action" }, { status: 400 });
-  } catch (e) {
-    return NextResponse.json(
-      { error: "fipe_unavailable", detail: e instanceof Error ? e.message : String(e) },
-      { status: 502, headers: { "cache-control": "no-store" } }
-    );
+  } catch {
+    // Both providers down / shapes changed — the client falls back to the
+    // local estimate, so the trade-in flow keeps working.
+    return NextResponse.json({ error: "fipe_unavailable" }, { status: 502, headers: { "cache-control": "no-store" } });
   }
 }
