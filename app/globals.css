@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --font-display / --font-sans are provided by next/font (see app/layout.tsx). */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-graphite text-cream font-sans antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+    letter-spacing: -0.01em;
+  }
+  /* Strong, visible focus ring everywhere (WCAG) */
+  :focus-visible {
+    outline: 3px solid #F2A623;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Subtle hexagon grid motif, used sparingly as a section background */
+.hex-field {
+  background-image: url("/logo/hex-pattern.svg");
+  background-size: 220px;
+  background-repeat: repeat;
+}

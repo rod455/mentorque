@@ -1,1 +1,22 @@
-tools/node_modules/
+# dependencies
+/node_modules
+/tools/node_modules
+
+# next.js
+/.next/
+/out/
+/build
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+
+# local env files
+.env*.local
+
+# typescript
+next-env.d.ts
+
+# vercel
+.vercel
