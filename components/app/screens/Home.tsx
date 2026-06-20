@@ -10,10 +10,12 @@ export function HomeScreen({
   onNavigate,
   onDiagnose,
   onPaywall,
+  onSwap,
 }: {
   onNavigate: (t: Tab) => void;
   onDiagnose: () => void;
   onPaywall: () => void;
+  onSwap: () => void;
 }) {
   const c = useContent();
   const { s } = usePrototype();
@@ -141,7 +143,7 @@ export function HomeScreen({
           <SectionTitle>{c.home.swapTitle}</SectionTitle>
           <Card className="ring-coral/20">
             <p className="text-sm text-cream/70">{c.home.swapBody}</p>
-            <button onClick={onPaywall} className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-coral">
+            <button onClick={onSwap} className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-coral">
               <Icon name="check" className="hidden" />
               {c.home.swapCta} →
             </button>

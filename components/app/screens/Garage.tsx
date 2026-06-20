@@ -10,7 +10,7 @@ import { IconArrow } from "@/lib/icons";
 
 type GarageTab = "overview" | "maintenance" | "diagnosis" | "specs";
 
-export function GarageScreen({ onPaywall, onLearn }: { onPaywall: () => void; onLearn: () => void }) {
+export function GarageScreen({ onPaywall, onLearn, onSwap }: { onPaywall: () => void; onLearn: () => void; onSwap: () => void }) {
   const c = useContent();
   const { s } = usePrototype();
   const [open, setOpen] = useState(false);
@@ -134,6 +134,18 @@ export function GarageScreen({ onPaywall, onLearn }: { onPaywall: () => void; on
               <GateRow title={c.garage.fairPrice} access={eff("premium")} onLockedTap={onPaywall} />
               <GateRow title={c.garage.teamReview} access={s.premium ? "free" : "consulting"} onLockedTap={onPaywall} />
             </div>
+
+            {/* Trade-in decision entry inside the vehicle (spec §8) */}
+            <button
+              onClick={onSwap}
+              className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-coral/20 hover:ring-coral/40"
+            >
+              <span className="grid h-9 w-9 place-items-center rounded-lg bg-coral/15 text-coral">
+                <span className="text-base">🔁</span>
+              </span>
+              <span className="flex-1 font-display text-[15px] text-cream">{c.home.swapTitle}</span>
+              <span className="text-cream/40">›</span>
+            </button>
           </div>
         )}
 

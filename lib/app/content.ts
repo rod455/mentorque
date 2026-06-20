@@ -7,6 +7,35 @@ import type { Access, Severity, Tag, Vehicle } from "./types";
 
 export type Intention = { tag: Tag; icon: string; label: string; blurb: string };
 
+// Rough "new price" per model in BRL thousands — only to drive a believable
+// FIPE-style estimate in the trade-in flow (mocked; real FIPE API comes later).
+const FIPE_BASE_K: Record<string, number> = {
+  Gol: 75, Polo: 95, "T-Cross": 140, Nivus: 130,
+  Onix: 90, Tracker: 130, Cruze: 130, S10: 230,
+  Argo: 85, Strada: 110, Mobi: 70, Toro: 180,
+  Corolla: 160, Hilux: 280, Yaris: 100, "Corolla Cross": 200,
+  Civic: 200, City: 130, "HR-V": 180, "CG 160": 16, "CB 500": 45, PCX: 22,
+  HB20: 90, Creta: 150, Tucson: 230,
+  Ka: 80, Ranger: 280, Bronco: 400,
+  Kwid: 75, Duster: 130, Sandero: 90,
+  "Fazer 250": 22, "MT-03": 35, "Factor 150": 16,
+  "GSX-S750": 55, Burgman: 25, "DR 160": 18,
+  "Meteor 350": 30, Himalayan: 45, "Classic 350": 30,
+};
+
+// Estimate a vehicle's resale value: base price depreciated ~8%/yr, then a
+// condition factor (1.0 great … 0.85 fair). Rounded to a tidy figure.
+export function estimateFipe(model: string, year: number, conditionFactor = 1): number {
+  const baseK = FIPE_BASE_K[model] ?? 90;
+  const age = Math.max(0, 2025 - year);
+  const v = baseK * 1000 * Math.pow(0.92, age) * conditionFactor;
+  return Math.max(5000, Math.round(v / 500) * 500);
+}
+
+export function formatBRL(n: number): string {
+  return "R$ " + Math.round(n).toLocaleString("pt-BR");
+}
+
 export function getContent(locale: Locale) {
   const T = (pt: string, en: string) => (locale === "pt" ? pt : en);
 
@@ -260,6 +289,53 @@ export function getContent(locale: Locale) {
       oilAlertOn: T("Alerta ativo", "Reminder on"),
       oilAlertPremium: T("Recurso Premium", "Premium feature"),
       nextOil: T("Próxima troca por volta de", "Next change around"),
+    },
+
+    swap: {
+      flowTitle: T("Trocar meu carro", "Trade in my car"),
+      intro: T("Apoio à decisão — não é vitrine. Vamos montar um plano realista pra você trocar com segurança.", "Decision support — not a storefront. Let's build a realistic plan to swap with confidence."),
+      start: T("Começar", "Start"),
+      next: T("Continuar", "Continue"),
+      back: T("Voltar", "Back"),
+
+      targetTitle: T("Qual carro você está de olho?", "Which car do you have your eye on?"),
+      targetHint: T("Escolha marca, modelo e ano do carro desejado.", "Pick the make, model and year you want."),
+
+      currentTitle: T("Sobre o seu carro atual", "About your current car"),
+      currentHint: T("Usamos isso pra estimar o valor na tabela FIPE.", "We use this to estimate the FIPE value."),
+      odometer: T("Quilometragem atual (km)", "Current mileage (km)"),
+      odometerPh: T("ex.: 60000", "e.g. 60000"),
+      condition: T("Estado de conservação", "Condition"),
+      condGreat: T("Ótimo", "Great"),
+      condGood: T("Bom", "Good"),
+      condFair: T("Regular", "Fair"),
+
+      planTitle: T("Seu planejamento", "Your plan"),
+      planHint: T("Sem julgamento — só pra montar o caminho.", "No judgment — just to map the path."),
+      down: T("Quanto você tem de entrada hoje?", "How much can you put down today?"),
+      downPh: T("ex.: 10000", "e.g. 10000"),
+      monthly: T("Quanto consegue separar por mês?", "How much can you set aside monthly?"),
+      monthlyPh: T("ex.: 800", "e.g. 800"),
+      timeframe: T("Em quanto tempo quer trocar?", "When do you want to swap?"),
+      tf6: T("6 meses", "6 months"),
+      tf12: T("1 ano", "1 year"),
+      tf24: T("2 anos", "2 years"),
+      tf36: T("3 anos", "3 years"),
+
+      result: T("Como você pode chegar lá", "How you can get there"),
+      currentValue: T("Seu carro hoje (FIPE est.)", "Your car today (est. FIPE)"),
+      targetValue: T("Carro desejado (est.)", "Target car (est.)"),
+      difference: T("Diferença a cobrir", "Gap to cover"),
+      coveredAlready: T("Boa! Seu carro + entrada já cobrem o desejado. Sobra cerca de {x}.", "Nice! Your car + down payment already cover it. About {x} to spare."),
+      coveredBySaving: T("Guardando {m}/mês por {n}, você troca sem financiar.", "Saving {m}/month for {n}, you swap without financing."),
+      coveredByFinance: T("Juntando o que dá, faltaria financiar cerca de {x} — parcela estimada {p}/mês.", "After saving what you can, you'd finance about {x} — est. {p}/month."),
+      saveNeeded: T("Precisa guardar", "Need to save"),
+      perMonth: T("por mês", "per month"),
+      financeEst: T("Financiamento estimado", "Estimated financing"),
+      disclaimer: T("Estimativas para planejamento. Em breve, propostas reais de parceiros (financiamento, seguro, lojistas) aqui dentro.", "Planning estimates. Soon, real partner offers (financing, insurance, dealers) right here."),
+      missingVehicle: T("Cadastre seu carro atual primeiro pra estimarmos a FIPE.", "Add your current car first so we can estimate the FIPE."),
+      finish: T("Concluir", "Done"),
+      redo: T("Refazer", "Redo"),
     },
 
     learn: {

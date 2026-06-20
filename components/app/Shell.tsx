@@ -8,6 +8,7 @@ import { Card, Icon, PhoneFrame, Sheet, useContent } from "./ui";
 import { HomeScreen } from "./screens/Home";
 import { GarageScreen } from "./screens/Garage";
 import { LearnScreen, ConsultingScreen, AccountScreen } from "./screens/Misc";
+import { SwapFlow } from "./SwapFlow";
 
 export type Tab = "home" | "garage" | "learn" | "consulting" | "account";
 
@@ -17,8 +18,10 @@ export function Shell() {
   const [tab, setTab] = useState<Tab>("home");
   const [paywall, setPaywall] = useState(false);
   const [diagnose, setDiagnose] = useState(false);
+  const [swap, setSwap] = useState(false);
 
   const openPaywall = () => setPaywall(true);
+  const openSwap = () => setSwap(true);
 
   return (
     <PhoneFrame>
@@ -43,8 +46,8 @@ export function Shell() {
 
       {/* Active screen */}
       <main className="flex-1 overflow-y-auto px-5 pb-28">
-        {tab === "home" && <HomeScreen onNavigate={setTab} onDiagnose={() => setDiagnose(true)} onPaywall={openPaywall} />}
-        {tab === "garage" && <GarageScreen onPaywall={openPaywall} onLearn={() => setTab("learn")} />}
+        {tab === "home" && <HomeScreen onNavigate={setTab} onDiagnose={() => setDiagnose(true)} onPaywall={openPaywall} onSwap={openSwap} />}
+        {tab === "garage" && <GarageScreen onPaywall={openPaywall} onLearn={() => setTab("learn")} onSwap={openSwap} />}
         {tab === "learn" && <LearnScreen onPaywall={openPaywall} />}
         {tab === "consulting" && <ConsultingScreen onPaywall={openPaywall} />}
         {tab === "account" && <AccountScreen onPaywall={openPaywall} />}
@@ -55,6 +58,7 @@ export function Shell() {
 
       <PaywallSheet open={paywall} onClose={() => setPaywall(false)} />
       <DiagnoseSheet open={diagnose} onClose={() => setDiagnose(false)} onPaywall={() => { setDiagnose(false); openPaywall(); }} />
+      {swap && <SwapFlow onClose={() => setSwap(false)} />}
     </PhoneFrame>
   );
 }
