@@ -119,8 +119,9 @@ export async function matchPrice(kind: VehicleKind, brandName: string, modelName
   }
 }
 
-// Try several model variants and prefer one that actually has the asked year
-// (e.g. "Gol 1.0" 2018 over "Gol 1.8 Mi" whose newest is 2004).
+// Scan up to 12 model variants in parallel and prefer one that actually lists
+// the asked year (e.g. Gol 2018 -> a Gol variant that has 2018), shortest name
+// first; otherwise fall back to the closest year found.
 async function matchBrasil(kind: VehicleKind, brandName: string, modelName: string, year: number): Promise<MatchResult | null> {
   const brands = await getJson<BrasilBrand[]>(`${BRASIL}/marcas/v1/${kind}`);
   const brand = pickByName(brands.map((b) => ({ name: b.nome, code: b.valor })), brandName);
@@ -129,16 +130,26 @@ async function matchBrasil(kind: VehicleKind, brandName: string, modelName: stri
   const cands = modelCandidates(models.map((m) => ({ name: m.modelo, code: m.valor })), modelName);
   if (cands.length === 0) return null;
 
-  let best: { res: MatchResult; diff: number } | null = null;
-  for (const m of cands) {
-    const prices = (await getJson<BrasilPrice[]>(`${BRASIL}/preco/v1/${m.code}`)).map((p) => priceEntry(p.valor, p.anoModelo, p.combustivel, p.codigoFipe));
-    if (prices.length === 0) continue;
-    const exact = prices.find((p) => p.year === year);
+  const withPrices = await Promise.all(
+    cands.map(async (m) => {
+      try {
+        const ps = (await getJson<BrasilPrice[]>(`${BRASIL}/preco/v1/${m.code}`)).map((p) => priceEntry(p.valor, p.anoModelo, p.combustivel, p.codigoFipe));
+        return { m, ps };
+      } catch {
+        return { m, ps: [] as PriceEntry[] };
+      }
+    })
+  );
+  for (const { m, ps } of withPrices) {
+    const exact = ps.find((p) => p.year === year);
     if (exact) return { value: exact.value, codigoFipe: exact.codigoFipe, label: `${brand.name} ${m.name} ${exact.year}` };
-    const closest = prices.slice().sort((a, b) => Math.abs(a.year - year) - Math.abs(b.year - year))[0];
-    const diff = Math.abs(closest.year - year);
-    if (!best || diff < best.diff) best = { res: { value: closest.value, codigoFipe: closest.codigoFipe, label: `${brand.name} ${m.name} ${closest.year}` }, diff };
   }
+  let best: { res: MatchResult; diff: number } | null = null;
+  for (const { m, ps } of withPrices)
+    for (const p of ps) {
+      const d = Math.abs(p.year - year);
+      if (!best || d < best.diff) best = { res: { value: p.value, codigoFipe: p.codigoFipe, label: `${brand.name} ${m.name} ${p.year}` }, diff: d };
+    }
   return best?.res ?? null;
 }
 
@@ -150,20 +161,40 @@ async function matchParallel(kind: VehicleKind, brandName: string, modelName: st
   const cands = modelCandidates(r.modelos.map((m) => ({ name: m.nome, code: m.codigo })), modelName);
   if (cands.length === 0) return null;
 
-  let best: { res: MatchResult; diff: number } | null = null;
-  for (const m of cands) {
-    const anos = await getJson<ParAno[]>(`${PARALLEL}/${kind}/marcas/${brand.code}/modelos/${m.code}/anos`);
-    const exactAno = anos.find((a) => parseInt(a.nome, 10) === year);
-    const closestAno = anos.slice().sort((a, b) => Math.abs(parseInt(a.nome, 10) - year) - Math.abs(parseInt(b.nome, 10) - year))[0];
-    const ano = exactAno ?? closestAno;
-    if (!ano) continue;
-    const pr = await getJson<ParPrice>(`${PARALLEL}/${kind}/marcas/${brand.code}/modelos/${m.code}/anos/${ano.codigo}`);
-    const res: MatchResult = { value: parseBRL(pr.Valor), codigoFipe: pr.CodigoFipe ?? "", label: `${brand.name} ${m.name} ${pr.AnoModelo ?? year}` };
-    if (exactAno) return res;
-    const diff = Math.abs(parseInt(ano.nome, 10) - year);
-    if (!best || diff < best.diff) best = { res, diff };
+  const withAnos = await Promise.all(
+    cands.map(async (m) => {
+      try {
+        return { m, anos: await getJson<ParAno[]>(`${PARALLEL}/${kind}/marcas/${brand.code}/modelos/${m.code}/anos`) };
+      } catch {
+        return { m, anos: [] as ParAno[] };
+      }
+    })
+  );
+
+  // Prefer a variant that has the exact year.
+  let chosen: { m: { name: string; code: string }; ano: ParAno } | null = null;
+  for (const { m, anos } of withAnos) {
+    const ex = anos.find((a) => parseInt(a.nome, 10) === year);
+    if (ex) {
+      chosen = { m, ano: ex };
+      break;
+    }
   }
-  return best?.res ?? null;
+  if (!chosen) {
+    let diff = Infinity;
+    for (const { m, anos } of withAnos)
+      for (const a of anos) {
+        const y = parseInt(a.nome, 10);
+        if (!Number.isFinite(y)) continue;
+        if (Math.abs(y - year) < diff) {
+          diff = Math.abs(y - year);
+          chosen = { m, ano: a };
+        }
+      }
+  }
+  if (!chosen) return null;
+  const pr = await getJson<ParPrice>(`${PARALLEL}/${kind}/marcas/${brand.code}/modelos/${chosen.m.code}/anos/${chosen.ano.codigo}`);
+  return { value: parseBRL(pr.Valor), codigoFipe: pr.CodigoFipe ?? "", label: `${brand.name} ${chosen.m.name} ${pr.AnoModelo ?? year}` };
 }
 
 function pickByName(list: { name: string; code: string }[], target: string) {
@@ -174,5 +205,5 @@ function pickByName(list: { name: string; code: string }[], target: string) {
 // keep upstream calls bounded.
 function modelCandidates(list: { name: string; code: string }[], target: string) {
   const n = normalize(target);
-  return list.filter((x) => normalize(x.name).includes(n)).sort((a, b) => a.name.length - b.name.length).slice(0, 5);
+  return list.filter((x) => normalize(x.name).includes(n)).sort((a, b) => a.name.length - b.name.length).slice(0, 12);
 }
