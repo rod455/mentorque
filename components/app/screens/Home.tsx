@@ -4,6 +4,7 @@ import type { Tab } from "../Shell";
 import { dominantTag, usePrototype } from "@/lib/app/store";
 import { Button } from "@/components/ui/Button";
 import { Card, Icon, SectionTitle, SeverityDot, useContent } from "../ui";
+import { LastServiceBlock, VehicleHero } from "../VehicleHome";
 
 export function HomeScreen({
   onNavigate,
@@ -108,6 +109,14 @@ export function HomeScreen({
 
   return (
     <div>
+      {/* Vehicle photo hero + last-service log */}
+      {!s.noVehicle && (
+        <>
+          <VehicleHero />
+          <LastServiceBlock onPaywall={onPaywall} />
+        </>
+      )}
+
       {/* Needs attention — aggregated alerts across vehicles */}
       {!s.noVehicle && (
         <section>

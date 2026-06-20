@@ -18,3 +18,11 @@ export type Severity = "high" | "medium" | "low";
 
 // Access gate for a section: free, premium, or human consulting.
 export type Access = "free" | "premium" | "consulting";
+
+// A logged maintenance/service event (the "última revisão").
+export type ServiceRecord = {
+  date: string; // ISO yyyy-mm-dd
+  km: number; // odometer at the service
+  items: string[]; // keys of changed parts (see content.serviceItems)
+  notes?: string;
+};

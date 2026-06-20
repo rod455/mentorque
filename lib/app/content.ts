@@ -97,6 +97,20 @@ export function getContent(locale: Locale) {
     { name: T("1:1 com o creator", "1:1 with the creator"), body: T("Sessão individual para casos difíceis ou decisão de compra. Vagas limitadas.", "One-on-one session for hard cases or buying decisions. Limited slots."), access: "consulting", cta: T("Agendar sessão", "Book a session") },
   ];
 
+  // Parts/services that can be logged in a "última revisão".
+  const serviceItems: { key: string; label: string }[] = [
+    { key: "oil", label: T("Óleo do motor", "Engine oil") },
+    { key: "oilfilter", label: T("Filtro de óleo", "Oil filter") },
+    { key: "airfilter", label: T("Filtro de ar", "Air filter") },
+    { key: "brakepads", label: T("Pastilhas de freio", "Brake pads") },
+    { key: "belt", label: T("Correia / corrente", "Belt / chain") },
+    { key: "spark", label: T("Velas", "Spark plugs") },
+    { key: "brakefluid", label: T("Fluido de freio", "Brake fluid") },
+    { key: "tires", label: T("Pneus", "Tires") },
+    { key: "battery", label: T("Bateria", "Battery") },
+    { key: "coolant", label: T("Arrefecimento", "Coolant") },
+  ];
+
   // ---- UI strings ----------------------------------------------------------
   return {
     intentions,
@@ -109,6 +123,7 @@ export function getContent(locale: Locale) {
     specs,
     tracks,
     consultingTiers,
+    serviceItems,
 
     onboarding: {
       welcomeEyebrow: T("Mentorque", "Mentorque"),
@@ -213,6 +228,38 @@ export function getContent(locale: Locale) {
       specsConfirm: T("Confirmação do detalhe exato do seu ano", "Confirm the exact spec for your year"),
       learnOnlyTitle: T("Você está na trilha de aprender", "You're on the learning track"),
       learnOnlyBody: T("Cadastre um veículo quando tiver um — aí a garagem ganha vida.", "Add a vehicle when you have one — the garage comes alive then."),
+    },
+
+    hero: {
+      addPhoto: T("Adicionar foto", "Add photo"),
+      changePhoto: T("Trocar foto", "Change photo"),
+      odometer: T("km rodados", "km driven"),
+      setOdometer: T("Informe a quilometragem", "Set the odometer"),
+    },
+
+    service: {
+      cardTitle: T("Última revisão", "Last service"),
+      register: T("Cadastrar última revisão", "Log last service"),
+      update: T("Atualizar revisão", "Update service"),
+      none: T("Nenhuma revisão cadastrada ainda", "No service logged yet"),
+      sheetTitle: T("Última revisão", "Last service"),
+      date: T("Data da revisão", "Service date"),
+      km: T("Quilometragem (km)", "Odometer (km)"),
+      kmPh: T("ex.: 45000", "e.g. 45000"),
+      what: T("O que foi trocado / feito", "What was changed / done"),
+      notes: T("Observações (opcional)", "Notes (optional)"),
+      notesPh: T("ex.: feito na concessionária", "e.g. done at the dealership"),
+      save: T("Salvar revisão", "Save service"),
+      on: T("em", "on"),
+      atKm: T("aos", "at"),
+      kmShort: "km",
+      itemsLabel: T("Itens", "Items"),
+      oilAlertTitle: T("Alerta de troca de óleo", "Oil-change reminder"),
+      oilAlertBody: T("Avisamos quando faltar pouco pra próxima troca.", "We'll remind you as the next change gets close."),
+      oilAlertCreate: T("Criar alerta", "Create reminder"),
+      oilAlertOn: T("Alerta ativo", "Reminder on"),
+      oilAlertPremium: T("Recurso Premium", "Premium feature"),
+      nextOil: T("Próxima troca por volta de", "Next change around"),
     },
 
     learn: {

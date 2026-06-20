@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import type { Tag, Vehicle } from "./types";
+import type { ServiceRecord, Tag, Vehicle } from "./types";
 
 // The prototype keeps the whole "session" client-side (mocked data, no backend
 // yet). It persists to localStorage so a refresh doesn't drop you out of the
@@ -14,6 +14,10 @@ type Session = {
   vehicle: Vehicle | null; // null while unset; cleared by "learn only"
   noVehicle: boolean; // true when the user explicitly has no vehicle
   premium: boolean;
+  photo: string | null; // user's car photo (downscaled data URL)
+  odometerKm: number | null; // current mileage
+  lastService: ServiceRecord | null; // most recent logged service
+  oilAlertKm: number | null; // km target for the next oil-change reminder
 };
 
 const EMPTY: Session = {
@@ -23,6 +27,10 @@ const EMPTY: Session = {
   vehicle: null,
   noVehicle: false,
   premium: false,
+  photo: null,
+  odometerKm: null,
+  lastService: null,
+  oilAlertKm: null,
 };
 
 const STORAGE_KEY = "mentorque-proto";
@@ -35,6 +43,8 @@ type StoreValue = {
   setNoVehicle: () => void;
   finishOnboarding: () => void;
   setPremium: (v: boolean) => void;
+  setPhoto: (dataUrl: string) => void;
+  saveLastService: (rec: ServiceRecord, oilAlertKm: number | null) => void;
   reset: () => void;
 };
 
@@ -85,11 +95,17 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const setNoVehicle = useCallback(() => setS((p) => persistReturn(p, { vehicle: null, noVehicle: true })), []);
   const finishOnboarding = useCallback(() => setS((p) => persistReturn(p, { onboarded: true })), []);
   const setPremium = useCallback((v: boolean) => setS((p) => persistReturn(p, { premium: v })), []);
+  const setPhoto = useCallback((dataUrl: string) => setS((p) => persistReturn(p, { photo: dataUrl })), []);
+  const saveLastService = useCallback(
+    (rec: ServiceRecord, oilAlertKm: number | null) =>
+      setS((p) => persistReturn(p, { lastService: rec, odometerKm: rec.km, oilAlertKm })),
+    []
+  );
   const reset = useCallback(() => persist(EMPTY), [persist]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s, toggleIntention, setPrincipal, setVehicle, setNoVehicle, finishOnboarding, setPremium, reset }),
-    [s, toggleIntention, setPrincipal, setVehicle, setNoVehicle, finishOnboarding, setPremium, reset]
+    () => ({ s, toggleIntention, setPrincipal, setVehicle, setNoVehicle, finishOnboarding, setPremium, setPhoto, saveLastService, reset }),
+    [s, toggleIntention, setPrincipal, setVehicle, setNoVehicle, finishOnboarding, setPremium, setPhoto, saveLastService, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
