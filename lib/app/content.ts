@@ -336,6 +336,15 @@ export function getContent(locale: Locale) {
       missingVehicle: T("Cadastre seu carro atual primeiro pra estimarmos a FIPE.", "Add your current car first so we can estimate the FIPE."),
       finish: T("Concluir", "Done"),
       redo: T("Refazer", "Redo"),
+      searchBrand: T("Buscar marca…", "Search make…"),
+      searchModel: T("Buscar modelo…", "Search model…"),
+      pickYearVersion: T("Ano e versão", "Year & version"),
+      loadingFipe: T("Consultando a tabela FIPE…", "Querying the FIPE table…"),
+      fipeSource: T("Fonte: tabela FIPE · BrasilAPI", "Source: FIPE table · BrasilAPI"),
+      fipeOffline: T("FIPE indisponível agora — usando estimativa.", "FIPE unavailable now — using an estimate."),
+      estimatedTag: T("estimado", "estimated"),
+      fipeTag: "FIPE",
+      noResults: T("Nada encontrado", "No results"),
     },
 
     learn: {
