@@ -23,9 +23,15 @@ export type PriceEntry = { value: number; year: number; fuel: string; label: str
 async function get<T>(path: string): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     next: { revalidate: REVALIDATE },
-    headers: { accept: "application/json" },
+    headers: {
+      accept: "application/json",
+      "user-agent": "mentorque/1.0 (+https://mentorque.app)",
+    },
   });
-  if (!res.ok) throw new Error(`fipe ${res.status} ${path}`);
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`fipe ${res.status} ${path} :: ${body.slice(0, 160)}`);
+  }
   return (await res.json()) as T;
 }
 

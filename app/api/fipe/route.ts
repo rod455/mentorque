@@ -54,6 +54,10 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "bad_action" }, { status: 400 });
   } catch (e) {
     // BrasilAPI down / shape changed — the client falls back to the estimate.
-    return NextResponse.json({ error: "fipe_unavailable" }, { status: 502 });
+    // `detail` is surfaced temporarily to diagnose the integration live.
+    return NextResponse.json(
+      { error: "fipe_unavailable", detail: e instanceof Error ? e.message : String(e) },
+      { status: 502, headers: { "cache-control": "no-store" } }
+    );
   }
 }
