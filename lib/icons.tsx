@@ -92,6 +92,85 @@ export const IconArrow = (p: IconProps) => (
   </Base>
 );
 
+// Home / hub
+export const IconHome = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 11 12 4l8 7" />
+    <path d="M6 10v8.5a1 1 0 0 0 1 1h3.5V15h3v4.5H17a1 1 0 0 0 1-1V10" />
+  </Base>
+);
+
+// Locked premium content
+export const IconLock = (p: IconProps) => (
+  <Base {...p}>
+    <rect x="5" y="10.5" width="14" height="9" rx="2" />
+    <path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" />
+    <path d="M12 14v2.2" />
+  </Base>
+);
+
+// Account / avatar
+export const IconUser = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="8.5" r="3.3" />
+    <path d="M5.5 19a6.5 6.5 0 0 1 13 0" />
+  </Base>
+);
+
+// Reminders / recalls
+export const IconBell = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M6.5 10a5.5 5.5 0 0 1 11 0c0 4 1.5 5 1.5 5H5s1.5-1 1.5-5" />
+    <path d="M10 18.5a2 2 0 0 0 4 0" />
+  </Base>
+);
+
+// Add a vehicle
+export const IconPlus = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M12 5v14M5 12h14" />
+  </Base>
+);
+
+// Close a sheet / modal
+export const IconClose = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M6 6l12 12M18 6 6 18" />
+  </Base>
+);
+
+// Severity / alert
+export const IconAlert = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M12 4 2.5 20h19z" />
+    <path d="M12 10v4M12 17h.01" />
+  </Base>
+);
+
+// Maintenance schedule
+export const IconCalendar = (p: IconProps) => (
+  <Base {...p}>
+    <rect x="4" y="5.5" width="16" height="14" rx="2" />
+    <path d="M4 9.5h16M8 4v3M16 4v3" />
+  </Base>
+);
+
+// Trade-in / swap decision
+export const IconSwap = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M5 8h11l-2.5-2.5M19 16H8l2.5 2.5" />
+  </Base>
+);
+
+// Motorcycle (vehicle type)
+export const IconMoto = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="5.5" cy="16" r="2.5" />
+    <circle cx="18.5" cy="16" r="2.5" />
+    <path d="M8 16h7l-3-4h4l1.5 2M11 8h3l1 4M8 16l2-4h2" />
+  </Base>
+);
+
 export const ICONS = {
   track: IconTrack,
   diagnose: IconDiagnose,
