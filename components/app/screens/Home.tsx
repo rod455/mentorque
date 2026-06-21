@@ -1,10 +1,59 @@
 "use client";
 
+import type { ReactNode } from "react";
 import type { Tab } from "../Shell";
-import { dominantTag, usePrototype } from "@/lib/app/store";
-import { Button } from "@/components/ui/Button";
-import { Card, Icon, SectionTitle, SeverityDot, useContent } from "../ui";
+import type { Severity } from "@/lib/app/types";
+import { usePrototype } from "@/lib/app/store";
+import { Icon, SeverityDot, useContent } from "../ui";
 import { LastServiceBlock, VehicleHero } from "../VehicleHome";
+
+type Accent = "amber" | "coral" | "teal";
+
+const CHIP: Record<Accent, string> = {
+  amber: "bg-amber/15 text-amber",
+  coral: "bg-coral/15 text-coral",
+  teal: "bg-teal/15 text-teal",
+};
+
+// A clean, square action tile (Bloom-style grid).
+function Tile({
+  icon,
+  title,
+  subtitle,
+  accent,
+  corner,
+  footer,
+  onClick,
+}: {
+  icon: string;
+  title: string;
+  subtitle?: string;
+  accent: Accent;
+  corner?: ReactNode;
+  footer?: ReactNode;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="group flex aspect-square flex-col justify-between rounded-3xl bg-graphite-800 p-4 text-left ring-1 ring-white/5 transition-all hover:ring-white/15 active:scale-[0.98]"
+    >
+      <div className="flex items-start justify-between">
+        <span className={`grid h-11 w-11 place-items-center rounded-2xl ${CHIP[accent]}`}>
+          <Icon name={icon} className="h-6 w-6" />
+        </span>
+        {corner ?? <span className="text-cream/25 transition-colors group-hover:text-cream/50">↗</span>}
+      </div>
+      <div>
+        <p className="font-display text-[15px] font-semibold leading-tight text-cream">{title}</p>
+        {subtitle && <p className="mt-1 text-xs leading-snug text-cream/50">{subtitle}</p>}
+        {footer}
+      </div>
+    </button>
+  );
+}
+
+const SEV_RANK: Record<Severity, number> = { high: 3, medium: 2, low: 1 };
 
 export function HomeScreen({
   onNavigate,
@@ -19,149 +68,94 @@ export function HomeScreen({
 }) {
   const c = useContent();
   const { s } = usePrototype();
-  const dom = dominantTag(s);
 
-  // All blocks exist for everyone; the dominant intention just leads (spec §4).
-  const lead =
-    s.noVehicle || ["learn", "career"].includes(dom)
-      ? "track"
-      : dom === "save"
-      ? "problems"
-      : dom === "care"
-      ? "maintenance"
-      : dom === "urgent"
-      ? "diagnose"
-      : "problems";
+  const worstProblem = [...c.problems].sort((a, b) => SEV_RANK[b.severity] - SEV_RANK[a.severity])[0];
 
-  const order = ["attention", lead, "problems", "maintenance", "diagnose", "track"].filter(
-    (v, i, a) => a.indexOf(v) === i && v !== "attention"
-  );
-
-  const blocks: Record<string, JSX.Element> = {
-    problems: (
-      <section key="problems">
-        <SectionTitle action={<button onClick={() => onNavigate("garage")} className="text-xs text-amber">{c.common.seeAll}</button>}>
-          {c.home.commonProblems}
-        </SectionTitle>
-        <div className="space-y-2">
-          {c.problems.slice(0, 3).map((p) => (
-            <button
-              key={p.title}
-              onClick={() => onNavigate("garage")}
-              className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/5 hover:ring-white/15"
-            >
-              <SeverityDot level={p.severity} />
-              <span className="flex-1 font-display text-[15px] text-cream">{p.title}</span>
-              <span className="text-sm text-cream/60">{p.cost}</span>
-            </button>
-          ))}
-        </div>
-      </section>
-    ),
-    maintenance: (
-      <section key="maintenance">
-        <SectionTitle action={<button onClick={() => onNavigate("garage")} className="text-xs text-amber">{c.common.seeAll}</button>}>
-          {c.home.maintenanceNow}
-        </SectionTitle>
-        <div className="space-y-2">
-          {c.maintenance.slice(0, 2).map((m) => (
-            <div key={m.title} className="flex items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 ring-1 ring-white/5">
-              <Icon name="calendar" className="h-5 w-5 text-teal" />
-              <span className="flex-1">
-                <span className="block font-display text-[15px] text-cream">{m.title}</span>
-                <span className="block text-xs text-cream/50">{m.when}</span>
-              </span>
-              <span className="text-sm text-cream/60">{m.cost}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-    ),
-    diagnose: (
-      <section key="diagnose">
-        <SectionTitle>{c.home.diagnoseHighlight}</SectionTitle>
-        <Card className="flex items-center gap-3 ring-amber/20">
-          <span className="grid h-11 w-11 place-items-center rounded-xl bg-amber/15 text-amber">
-            <Icon name="diagnose" className="h-6 w-6" />
-          </span>
-          <span className="flex-1 text-sm text-cream/70">{c.diagnose.bySymptom} · {c.diagnose.byObd}</span>
-          <Button size="md" onClick={onDiagnose}>
-            {c.nav.diagnose}
-          </Button>
-        </Card>
-      </section>
-    ),
-    track: (
-      <section key="track">
-        <SectionTitle action={<button onClick={() => onNavigate("learn")} className="text-xs text-amber">{c.common.seeAll}</button>}>
-          {c.home.continueTrack}
-        </SectionTitle>
-        <button onClick={() => onNavigate("learn")} className="block w-full text-left">
-          <Card>
-            <p className="font-display text-base text-cream">{c.tracks[0].title}</p>
-            <p className="mt-1 text-xs text-cream/55">{c.tracks[0].level} · {c.tracks[0].lessons} {c.learn.lessons}</p>
+  // Learning-first layout when there's no vehicle yet.
+  if (s.noVehicle) {
+    return (
+      <div className="grid grid-cols-2 gap-3 pt-1">
+        <Tile
+          icon="track"
+          title={c.nav.learn}
+          subtitle={c.tracks[0].title}
+          accent="amber"
+          onClick={() => onNavigate("learn")}
+          footer={
             <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-graphite-700">
               <div className="h-full w-1/3 rounded-full bg-amber" />
             </div>
-          </Card>
-        </button>
-      </section>
-    ),
-  };
+          }
+        />
+        <Tile icon="diagnose" title={c.nav.diagnose} subtitle={c.diagnose.bySymptom} accent="coral" onClick={onDiagnose} />
+        <Tile icon="consult" title={c.nav.consulting} subtitle={c.home.consultingShortcut} accent="teal" onClick={() => onNavigate("consulting")} />
+      </div>
+    );
+  }
 
   return (
     <div>
       {/* Vehicle photo hero + last-service log */}
-      {!s.noVehicle && (
-        <>
-          <VehicleHero />
-          <LastServiceBlock onPaywall={onPaywall} />
-        </>
-      )}
+      <VehicleHero />
+      <LastServiceBlock onPaywall={onPaywall} />
 
-      {/* Needs attention — aggregated alerts across vehicles */}
-      {!s.noVehicle && (
-        <section>
-          <SectionTitle>{c.home.needsAttention}</SectionTitle>
-          <Card className="ring-coral/25">
-            <div className="flex items-center gap-3">
-              <Icon name="alert" className="h-5 w-5 text-coral" />
-              <span className="flex-1 text-sm text-cream/80">{c.garage.detectedBody}</span>
+      {/* Needs attention — slim accent strip */}
+      <button
+        onClick={onDiagnose}
+        className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-coral/10 px-4 py-3 text-left ring-1 ring-coral/25 transition-colors hover:ring-coral/40"
+      >
+        <Icon name="alert" className="h-5 w-5 shrink-0 text-coral" />
+        <span className="min-w-0 flex-1">
+          <span className="block text-xs uppercase tracking-wide text-coral/80">{c.home.needsAttention}</span>
+          <span className="block truncate text-sm text-cream/80">{c.garage.detectedBody}</span>
+        </span>
+        <span className="shrink-0 text-coral">›</span>
+      </button>
+
+      {/* Square action grid */}
+      <div className="mt-3 grid grid-cols-2 gap-3">
+        <Tile icon="diagnose" title={c.nav.diagnose} subtitle={c.diagnose.bySymptom} accent="amber" onClick={onDiagnose} />
+
+        <Tile
+          icon="car"
+          title={c.home.swapCta}
+          subtitle="FIPE"
+          accent="coral"
+          onClick={onSwap}
+        />
+
+        <Tile
+          icon="tools"
+          title={c.home.commonProblems}
+          subtitle={worstProblem?.title}
+          accent="teal"
+          corner={worstProblem ? <SeverityDot level={worstProblem.severity} /> : undefined}
+          onClick={() => onNavigate("garage")}
+        />
+
+        <Tile
+          icon="calendar"
+          title={c.garage.tabs.maintenance}
+          subtitle={c.maintenance[0]?.title}
+          accent="amber"
+          onClick={() => onNavigate("garage")}
+        />
+
+        <Tile
+          icon="track"
+          title={c.nav.learn}
+          subtitle={c.tracks[0].title}
+          accent="teal"
+          onClick={() => onNavigate("learn")}
+          footer={
+            <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-graphite-700">
+              <div className="h-full w-1/3 rounded-full bg-amber" />
             </div>
-            <button onClick={onDiagnose} className="mt-3 text-sm font-medium text-amber">
-              {c.nav.diagnose} →
-            </button>
-          </Card>
-        </section>
-      )}
+          }
+        />
 
-      {order.map((k) => blocks[k])}
-
-      {/* Trade-in decision card (appears on cost signals) */}
-      {!s.noVehicle && (
-        <section>
-          <SectionTitle>{c.home.swapTitle}</SectionTitle>
-          <Card className="ring-coral/20">
-            <p className="text-sm text-cream/70">{c.home.swapBody}</p>
-            <button onClick={onSwap} className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-coral">
-              <Icon name="check" className="hidden" />
-              {c.home.swapCta} →
-            </button>
-          </Card>
-        </section>
-      )}
-
-      {/* Consulting shortcut */}
-      <section className="mt-5">
-        <button
-          onClick={() => onNavigate("consulting")}
-          className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 ring-1 ring-white/5 hover:ring-white/15"
-        >
-          <Icon name="consult" className="h-5 w-5 text-coral" />
-          <span className="flex-1 text-left font-display text-[15px] text-cream">{c.home.consultingShortcut}</span>
-          <span className="text-cream/40">›</span>
-        </button>
-      </section>
+        <Tile icon="consult" title={c.nav.consulting} subtitle={c.home.consultingShortcut} accent="coral" onClick={() => onNavigate("consulting")} />
+      </div>
     </div>
   );
 }
