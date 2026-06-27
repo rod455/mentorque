@@ -303,6 +303,28 @@ export function getContent(locale: Locale) {
       cta: T("Acessar", "Open"),
     },
 
+    safety: {
+      title: T("Recalls e segurança", "Recalls & safety"),
+      source: T("Fonte: NHTSA · mercado dos EUA", "Source: NHTSA · US market"),
+      loading: T("Consultando a NHTSA…", "Checking NHTSA…"),
+      noMatch: T("Sem dados da NHTSA para este modelo (catálogo dos EUA). Fonte nacional em breve.", "No NHTSA data for this model (US catalog). A local source is coming soon."),
+      recallsTitle: T("Recalls", "Recalls"),
+      recallsNone: T("Nenhum recall em aberto encontrado.", "No open recalls found."),
+      recallsFound: T("{n} recall(s) encontrado(s)", "{n} recall(s) found"),
+      component: T("Componente", "Component"),
+      consequence: T("Risco", "Risk"),
+      remedy: T("Solução", "Remedy"),
+      complaintsTitle: T("Reclamações de donos", "Owner complaints"),
+      complaintsCount: T("{n} reclamações registradas na NHTSA", "{n} complaints filed with NHTSA"),
+      complaintsNone: T("Nenhuma reclamação registrada.", "No complaints filed."),
+      ratingTitle: T("Nota de segurança", "Safety rating"),
+      ratingOverall: T("Geral", "Overall"),
+      ratingFront: T("Colisão frontal", "Front crash"),
+      ratingSide: T("Colisão lateral", "Side crash"),
+      ratingRollover: T("Capotamento", "Rollover"),
+      ratingNone: T("Sem nota publicada para este modelo.", "No published rating for this model."),
+    },
+
     critical: {
       title: T("Problemas críticos do seu carro", "Your car's critical problems"),
       intro: T("Os pontos que mais aparecem nesse modelo — com causa e solução.", "The issues that show up most on this model — with cause and fix."),

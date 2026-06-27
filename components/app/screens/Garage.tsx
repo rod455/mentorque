@@ -7,6 +7,7 @@ import type { Access } from "@/lib/app/types";
 import { Button } from "@/components/ui/Button";
 import { AccessBadge, Card, GateRow, Icon, SectionTitle, SeverityDot, useContent } from "../ui";
 import { LastServiceBlock, VehicleHero } from "../VehicleHome";
+import { SafetyPanel } from "../SafetyPanel";
 import { IconArrow } from "@/lib/icons";
 
 type GarageTab = "overview" | "maintenance" | "diagnosis" | "specs";
@@ -128,13 +129,8 @@ export function GarageScreen({ onPaywall, onLearn, onSwap }: { onPaywall: () => 
               </div>
             </div>
 
-            <div>
-              <SectionTitle>{c.garage.recalls}</SectionTitle>
-              <div className="flex items-center gap-2 rounded-xl bg-graphite-800 px-3.5 py-3 text-sm text-cream/60 ring-1 ring-white/5">
-                <span className="text-teal">✓</span>
-                {c.garage.recallNone}
-              </div>
-            </div>
+            {/* Live recalls / complaints / safety rating from NHTSA */}
+            <SafetyPanel />
 
             <div className="space-y-2">
               <GateRow title={c.garage.stepByStep} access={eff("premium")} onLockedTap={onPaywall} />
