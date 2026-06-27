@@ -47,45 +47,15 @@ export function LearnScreen({ onPaywall }: { onPaywall: () => void }) {
   );
 }
 
-// ---- Consultoria -----------------------------------------------------------
-export function ConsultingScreen({ onPaywall }: { onPaywall: () => void }) {
-  const c = useContent();
-  const { s } = usePrototype();
-
-  return (
-    <div className="pt-2">
-      <SectionTitle>{c.consulting.title}</SectionTitle>
-      <p className="mb-4 text-sm text-cream/60">{c.consulting.intro}</p>
-      <div className="space-y-2.5">
-        {c.consultingTiers.map((tier) => {
-          const locked = tier.access !== "free" && !(s.premium && tier.access === "premium");
-          return (
-            <Card key={tier.name} className={tier.access === "consulting" ? "ring-coral/20" : undefined}>
-              <div className="flex items-center justify-between gap-2">
-                <span className="font-display text-base text-cream">{tier.name}</span>
-                <AccessBadge access={tier.access} />
-              </div>
-              <p className="mt-1.5 text-sm text-cream/60">{tier.body}</p>
-              <Button
-                variant={tier.access === "free" ? "secondary" : "primary"}
-                className="mt-3"
-                onClick={locked ? onPaywall : undefined}
-              >
-                {tier.cta}
-              </Button>
-            </Card>
-          );
-        })}
-      </div>
-      <p className="mt-4 rounded-lg bg-graphite-800 px-3.5 py-3 text-xs text-cream/50 ring-1 ring-white/5">{c.consulting.inlineNote}</p>
-    </div>
-  );
-}
-
-// ---- Conta -----------------------------------------------------------------
+// ---- Perfil ----------------------------------------------------------------
 export function AccountScreen({ onPaywall }: { onPaywall: () => void }) {
   const c = useContent();
   const { s, setPremium, reset } = usePrototype();
+
+  const levelLabel = s.level ? c.levels.find((l) => l.key === s.level)?.label : null;
+  const intentionLabels = s.intentions
+    .map((t) => c.intentions.find((it) => it.tag === t)?.label)
+    .filter(Boolean) as string[];
 
   const row = (label: string, right?: React.ReactNode, onClick?: () => void) => (
     <button
@@ -99,9 +69,33 @@ export function AccountScreen({ onPaywall }: { onPaywall: () => void }) {
 
   return (
     <div className="pt-2">
-      <SectionTitle>{c.account.title}</SectionTitle>
+      <SectionTitle>{c.nav.profile}</SectionTitle>
 
-      <Card className="ring-amber/20">
+      {/* Identity card */}
+      <Card className="flex items-center gap-3">
+        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-amber/15 text-amber">
+          <Icon name="user" className="h-6 w-6" />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block font-display text-lg font-semibold text-cream">{s.name ?? c.account.title}</span>
+          <span className="block truncate text-xs text-cream/55">
+            {[levelLabel, vehicleLabel(s.vehicle, "")].filter(Boolean).join(" · ") || "—"}
+          </span>
+        </span>
+      </Card>
+
+      {intentionLabels.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {intentionLabels.map((l) => (
+            <span key={l} className="rounded-full bg-graphite-700 px-2.5 py-1 text-xs text-cream/75">
+              {l}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* Plan */}
+      <Card className="mt-3 ring-amber/20">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-xs text-cream/50">{c.account.plan}</p>

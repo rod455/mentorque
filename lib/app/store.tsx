@@ -1,16 +1,20 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import type { ServiceRecord, Tag, Vehicle } from "./types";
+import type { Level, ServiceRecord, Tag, Vehicle } from "./types";
 
 // The prototype keeps the whole "session" client-side (mocked data, no backend
 // yet). It persists to localStorage so a refresh doesn't drop you out of the
 // experience mid-test.
 
+// Onboarding lets the user pick up to three intentions (Q2).
+export const MAX_INTENTIONS = 3;
+
 type Session = {
   onboarded: boolean;
-  intentions: Tag[];
-  principal: Tag | null;
+  name: string | null; // first name, for the Home greeting
+  intentions: Tag[]; // up to MAX_INTENTIONS (Q2)
+  level: Level | null; // experience level (Q3)
   vehicle: Vehicle | null; // null while unset; cleared by "learn only"
   noVehicle: boolean; // true when the user explicitly has no vehicle
   premium: boolean;
@@ -22,8 +26,9 @@ type Session = {
 
 const EMPTY: Session = {
   onboarded: false,
+  name: null,
   intentions: [],
-  principal: null,
+  level: null,
   vehicle: null,
   noVehicle: false,
   premium: false,
@@ -37,8 +42,9 @@ const STORAGE_KEY = "mentorque-proto";
 
 type StoreValue = {
   s: Session;
+  setName: (name: string) => void;
   toggleIntention: (t: Tag) => void;
-  setPrincipal: (t: Tag) => void;
+  setLevel: (l: Level) => void;
   setVehicle: (v: Vehicle) => void;
   setNoVehicle: () => void;
   finishOnboarding: () => void;
@@ -76,12 +82,10 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
     (t: Tag) =>
       setS((prev) => {
         const has = prev.intentions.includes(t);
+        // Removing is always allowed; adding is capped at MAX_INTENTIONS.
+        if (!has && prev.intentions.length >= MAX_INTENTIONS) return prev;
         const intentions = has ? prev.intentions.filter((x) => x !== t) : [...prev.intentions, t];
-        // Keep principal valid; default it to the first pick when <3 selected.
-        let principal = prev.principal;
-        if (principal && !intentions.includes(principal)) principal = null;
-        if (!principal && intentions.length > 0 && intentions.length < 3) principal = intentions[0];
-        const next = { ...prev, intentions, principal };
+        const next = { ...prev, intentions };
         try {
           window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
         } catch {}
@@ -90,7 +94,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
     []
   );
 
-  const setPrincipal = useCallback((t: Tag) => setS((p) => persistReturn(p, { principal: t })), []);
+  const setName = useCallback((name: string) => setS((p) => persistReturn(p, { name: name.trim() || null })), []);
+  const setLevel = useCallback((l: Level) => setS((p) => persistReturn(p, { level: l })), []);
   const setVehicle = useCallback((v: Vehicle) => setS((p) => persistReturn(p, { vehicle: v, noVehicle: false })), []);
   const setNoVehicle = useCallback(() => setS((p) => persistReturn(p, { vehicle: null, noVehicle: true })), []);
   const finishOnboarding = useCallback(() => setS((p) => persistReturn(p, { onboarded: true })), []);
@@ -104,8 +109,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const reset = useCallback(() => persist(EMPTY), [persist]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s, toggleIntention, setPrincipal, setVehicle, setNoVehicle, finishOnboarding, setPremium, setPhoto, saveLastService, reset }),
-    [s, toggleIntention, setPrincipal, setVehicle, setNoVehicle, finishOnboarding, setPremium, setPhoto, saveLastService, reset]
+    () => ({ s, setName, toggleIntention, setLevel, setVehicle, setNoVehicle, finishOnboarding, setPremium, setPhoto, saveLastService, reset }),
+    [s, setName, toggleIntention, setLevel, setVehicle, setNoVehicle, finishOnboarding, setPremium, setPhoto, saveLastService, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
@@ -126,10 +131,28 @@ export function usePrototype() {
   return ctx;
 }
 
-// The dominant tag drives Home ordering and which Premium pitch closes.
-// Urgency wins when present; otherwise the chosen principal; otherwise the
-// first intention; defaulting to "care".
+// Tags that lead with the learning thread rather than the "fix my car" thread.
+const LEARN_TAGS: Tag[] = ["learn_cars", "mechanics", "electronics", "career", "curiosity"];
+
+// The dominant tag drives Home ordering and which Premium pitch closes. A live
+// problem ("fix") wins when present; otherwise the first chosen intention;
+// defaulting to "understand".
 export function dominantTag(s: Session): Tag {
-  if (s.intentions.includes("urgent")) return "urgent";
-  return s.principal ?? s.intentions[0] ?? "care";
+  if (s.intentions.includes("fix")) return "fix";
+  return s.intentions[0] ?? "understand";
+}
+
+// Whether the experience should lead with learning (no vehicle, or the dominant
+// intention is a learning one). Drives the onboarding "first lesson" beat and
+// the learning-first Home layout.
+export function isLearnFirst(s: Session): boolean {
+  return s.noVehicle || LEARN_TAGS.includes(dominantTag(s));
+}
+
+// Pro audiences (working mechanics, engineering students/engineers, or anyone
+// aiming for the field) get the "knowledge straight from the industry" shortcut.
+export function isProAudience(s: Session): boolean {
+  const proLevel = s.level === "mechanic" || s.level === "eng_student" || s.level === "engineer";
+  const proIntent = s.intentions.some((t) => t === "career" || t === "mechanics" || t === "electronics");
+  return proLevel || proIntent;
 }

@@ -162,6 +162,21 @@ export const IconSwap = (p: IconProps) => (
   </Base>
 );
 
+// Explore — compass
+export const IconCompass = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="m15 9-1.4 4.6L9 15l1.4-4.6z" />
+  </Base>
+);
+
+// Spark / industry knowledge — lightning insight
+export const IconSpark = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M13 3 5 13h6l-1 8 8-10h-6z" />
+  </Base>
+);
+
 // Motorcycle (vehicle type)
 export const IconMoto = (p: IconProps) => (
   <Base {...p}>

@@ -6,6 +6,7 @@ import { vehicleLabel } from "@/lib/app/content";
 import type { Access } from "@/lib/app/types";
 import { Button } from "@/components/ui/Button";
 import { AccessBadge, Card, GateRow, Icon, SectionTitle, SeverityDot, useContent } from "../ui";
+import { LastServiceBlock, VehicleHero } from "../VehicleHome";
 import { IconArrow } from "@/lib/icons";
 
 type GarageTab = "overview" | "maintenance" | "diagnosis" | "specs";
@@ -41,7 +42,11 @@ export function GarageScreen({ onPaywall, onLearn, onSwap }: { onPaywall: () => 
   // Vehicle list → detail.
   if (!open) {
     return (
-      <div className="pt-2">
+      <div className="pt-1">
+        {/* Photo hero + last-service log live with the vehicle */}
+        <VehicleHero />
+        <LastServiceBlock onPaywall={onPaywall} />
+
         <SectionTitle action={<button className="text-xs text-amber">{c.garage.add}</button>}>{c.garage.title}</SectionTitle>
         <button onClick={() => setOpen(true)} className="block w-full text-left">
           <Card className="flex items-center gap-3 hover:ring-white/15">
@@ -50,7 +55,7 @@ export function GarageScreen({ onPaywall, onLearn, onSwap }: { onPaywall: () => 
             </span>
             <span className="flex-1">
               <span className="block font-display text-base text-cream">{vehicleLabel(s.vehicle, "—")}</span>
-              <span className="block text-xs text-cream/50">{c.specs[0].value}</span>
+              <span className="block text-xs text-cream/50">{s.vehicle?.engine ?? c.specs[0].value}</span>
             </span>
             <IconArrow className="h-5 w-5 text-cream/40" />
           </Card>

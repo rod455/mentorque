@@ -11,12 +11,14 @@ import {
   IconCheck,
   IconClose,
   IconCommunity,
+  IconCompass,
   IconConsult,
   IconDiagnose,
   IconHome,
   IconLock,
   IconMoto,
   IconPlus,
+  IconSpark,
   IconTools,
   IconTrack,
   IconUser,
@@ -42,6 +44,8 @@ const ICON_REGISTRY: Record<string, (p: { className?: string }) => JSX.Element> 
   alert: IconAlert,
   calendar: IconCalendar,
   plus: IconPlus,
+  explore: IconCompass,
+  spark: IconSpark,
 };
 
 export function Icon({ name, className }: { name: string; className?: string }) {
