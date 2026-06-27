@@ -46,6 +46,7 @@ type StoreValue = {
   toggleIntention: (t: Tag) => void;
   setLevel: (l: Level) => void;
   setVehicle: (v: Vehicle) => void;
+  setVehicleSpec: (patch: { engine?: string; version?: string }) => void;
   setNoVehicle: () => void;
   finishOnboarding: () => void;
   setPremium: (v: boolean) => void;
@@ -97,6 +98,11 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const setName = useCallback((name: string) => setS((p) => persistReturn(p, { name: name.trim() || null })), []);
   const setLevel = useCallback((l: Level) => setS((p) => persistReturn(p, { level: l })), []);
   const setVehicle = useCallback((v: Vehicle) => setS((p) => persistReturn(p, { vehicle: v, noVehicle: false })), []);
+  const setVehicleSpec = useCallback(
+    (patch: { engine?: string; version?: string }) =>
+      setS((p) => (p.vehicle ? persistReturn(p, { vehicle: { ...p.vehicle, ...patch } }) : p)),
+    []
+  );
   const setNoVehicle = useCallback(() => setS((p) => persistReturn(p, { vehicle: null, noVehicle: true })), []);
   const finishOnboarding = useCallback(() => setS((p) => persistReturn(p, { onboarded: true })), []);
   const setPremium = useCallback((v: boolean) => setS((p) => persistReturn(p, { premium: v })), []);
@@ -109,8 +115,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const reset = useCallback(() => persist(EMPTY), [persist]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s, setName, toggleIntention, setLevel, setVehicle, setNoVehicle, finishOnboarding, setPremium, setPhoto, saveLastService, reset }),
-    [s, setName, toggleIntention, setLevel, setVehicle, setNoVehicle, finishOnboarding, setPremium, setPhoto, saveLastService, reset]
+    () => ({ s, setName, toggleIntention, setLevel, setVehicle, setVehicleSpec, setNoVehicle, finishOnboarding, setPremium, setPhoto, saveLastService, reset }),
+    [s, setName, toggleIntention, setLevel, setVehicle, setVehicleSpec, setNoVehicle, finishOnboarding, setPremium, setPhoto, saveLastService, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

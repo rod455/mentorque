@@ -10,7 +10,13 @@ export function Plans() {
   return (
     <Section id="plans" theme="light" className="bg-white">
       <SectionHeading theme="light" title={t.plans.title} intro={t.plans.intro} />
-      <div className="mt-12 grid items-stretch gap-5 lg:grid-cols-3">
+
+      {/* Anchoring: frame Premium against a single shop overcharge */}
+      <p className="mt-6 max-w-2xl border-l-2 border-amber pl-4 text-base leading-relaxed text-ink/75">
+        {t.plans.anchor}
+      </p>
+
+      <div className="mt-10 grid items-stretch gap-5 lg:grid-cols-3">
         {t.plans.items.map((plan, i) => {
           const highlight = plan.highlight;
           return (
@@ -57,7 +63,12 @@ export function Plans() {
           );
         })}
       </div>
-      <p className="mt-6 text-sm text-ink/55">{t.plans.note}</p>
+      {/* Risk reversal / zero-risk bias */}
+      <p className="mt-8 flex items-start gap-2.5 rounded-xl bg-teal/10 px-4 py-3 text-sm leading-relaxed text-ink/80 ring-1 ring-teal/20">
+        <IconCheck className="mt-0.5 h-4 w-4 shrink-0 text-teal" />
+        {t.plans.guarantee}
+      </p>
+      <p className="mt-4 text-sm text-ink/55">{t.plans.note}</p>
     </Section>
   );
 }

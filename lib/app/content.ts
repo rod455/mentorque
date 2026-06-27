@@ -28,7 +28,7 @@ const FIPE_BASE_K: Record<string, number> = {
 // condition factor (1.0 great … 0.85 fair). Rounded to a tidy figure.
 export function estimateFipe(model: string, year: number, conditionFactor = 1): number {
   const baseK = FIPE_BASE_K[model] ?? 90;
-  const age = Math.max(0, 2025 - year);
+  const age = Math.max(0, 2026 - year);
   const v = baseK * 1000 * Math.pow(0.92, age) * conditionFactor;
   return Math.max(5000, Math.round(v / 500) * 500);
 }
@@ -80,7 +80,8 @@ export function getContent(locale: Locale) {
     Suzuki: ["GSX-S750", "Burgman", "DR 160"],
     "Royal Enfield": ["Meteor 350", "Himalayan", "Classic 350"],
   };
-  const years = Array.from({ length: 16 }, (_, i) => 2025 - i);
+  // Include the latest model year (2026 versions are already out).
+  const years = Array.from({ length: 17 }, (_, i) => 2026 - i);
 
   // ---- Mocked vehicle profile ---------------------------------------------
   const problems: { title: string; severity: Severity; cost: string; detail: Access; cause: string; solution: string }[] = [
@@ -340,6 +341,19 @@ export function getContent(locale: Locale) {
       obdFull: T("Leitura OBD2 completa", "Full OBD2 reading"),
       deepDiag: T("Diagnóstico aprofundado + reparo", "Deep diagnosis + repair"),
       specsConfirm: T("Confirmação do detalhe exato do seu ano", "Confirm the exact spec for your year"),
+
+      // Premium ultra-personalization: exact engine + version of the car
+      ultraTitle: T("Ultrapersonalização", "Ultra-personalization"),
+      ultraBody: T("Informe o motor e a versão exatos do seu carro para deixar diagnósticos, peças e custos sob medida.", "Tell us your car's exact engine and version so diagnostics, parts and costs become tailor-made."),
+      ultraEngine: T("Motor exato", "Exact engine"),
+      ultraEnginePh: T("ex.: 1.4 TSI 250", "e.g. 1.4 TSI 250"),
+      ultraVersion: T("Versão / acabamento", "Version / trim"),
+      ultraVersionPh: T("ex.: Highline, Comfortline", "e.g. Highline, Comfortline"),
+      ultraSave: T("Salvar personalização", "Save personalization"),
+      ultraSaved: T("Personalização salva", "Personalization saved"),
+      ultraLockedTitle: T("Ultrapersonalização do seu carro", "Ultra-personalize your car"),
+      ultraLockedBody: T("Motor e versão exatos para deixar tudo sob medida. Recurso Premium.", "Exact engine and version to make everything tailor-made. Premium feature."),
+
       learnOnlyTitle: T("Você está na trilha de aprender", "You're on the learning track"),
       learnOnlyBody: T("Cadastre um veículo quando tiver um — aí a garagem ganha vida.", "Add a vehicle when you have one — the garage comes alive then."),
     },

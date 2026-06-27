@@ -2,12 +2,12 @@ export const pt = {
   code: "pt",
   label: "PT",
   meta: {
-    title: "Mentorque — aprenda mecânica com um especialista no bolso",
+    title: "Mentorque — entenda seu carro e pare de pagar caro na oficina",
     description:
-      "Mentorque é o app de educação em mecânica automotiva do básico ao avançado, com consultoria especializada. Entenda seu carro, economize na oficina e tenha ajuda humana quando travar.",
-    ogTitle: "Mentorque — mecânica do básico ao avançado, com consultoria no bolso",
+      "Mentorque é o app que te ensina mecânica do básico ao avançado, mostra o preço justo antes da oficina e coloca um especialista de verdade no seu bolso. Entre na lista de fundadores.",
+    ogTitle: "Mentorque — um especialista de mecânica no seu bolso",
     ogDescription:
-      "Trilhas guiadas, diagnóstico por sintoma, ferramentas (OBD2, preço justo, checklist) e consultoria com o creator e a equipe. Entre na lista de espera.",
+      "Trilhas guiadas, diagnóstico por sintoma, preço justo e consultoria com quem é da indústria. Teste o protótipo agora e entre na lista de fundadores.",
   },
   nav: {
     features: "Recursos",
@@ -16,20 +16,23 @@ export const pt = {
     plans: "Planos",
     faq: "Dúvidas",
     cta: "Entrar na lista",
+    tryApp: "Testar app",
     toggleLang: "English",
     skipToContent: "Pular para o conteúdo",
     menu: "Menu",
   },
   hero: {
-    eyebrow: "iOS e Android · em breve",
+    eyebrow: "Acesso antecipado · lote de fundadores",
     headlines: [
-      { a: "Entenda seu carro. Economize. ", b: "Pare de ser refém da oficina." },
+      { a: "Pare de pagar caro por não entender ", b: "do seu próprio carro." },
       { a: "Mecânica do básico ao avançado, ", b: "com um especialista no bolso." },
-      { a: "Aprenda a cuidar do seu carro — ", b: "e tenha quem confiar quando travar." },
+      { a: "Saiba o que o carro tem antes da oficina — ", b: "e nunca mais seja refém." },
     ],
     subheadline:
-      "Aprender mecânica do básico ao avançado — com consultoria especializada no bolso. Conteúdo te ensina; o diferencial é ter um especialista de confiança quando o vídeo não basta.",
-    ctaNote: "Sem spam. Avisamos quando o app sair e você entra com vantagem.",
+      "Aprenda a entender seu carro, descubra o preço justo antes de fechar serviço e fale com um especialista de verdade quando travar. Você não precisa virar mecânico — só parar de pagar pelo que não entende.",
+    ctaNote: "Sem spam. Grátis pra sempre no plano base — quem entra agora trava as vantagens de fundador.",
+    tryCta: "Ver o app funcionando — sem baixar",
+    tryNote: "30 segundos, sem cadastro.",
     comingSoon: "Em breve na",
     appStore: "App Store",
     googlePlay: "Google Play",
@@ -41,47 +44,67 @@ export const pt = {
   },
   waitlist: {
     placeholder: "Seu melhor e-mail",
-    button: "Entrar na lista de espera",
+    button: "Quero ser fundador",
     loading: "Enviando…",
-    successTitle: "Você está na lista!",
-    successBody: "Pronto. Vamos te avisar em primeira mão quando o Mentorque chegar.",
+    successTitle: "Pronto — seu lugar de fundador está garantido!",
+    successBody: "Você entra com preço travado e acesso antecipado. Avisamos em primeira mão quando o app abrir.",
     again: "Cadastrar outro e-mail",
     errorRequired: "Digite seu e-mail.",
     errorEmail: "Hmm, esse e-mail não parece válido.",
     errorGeneric: "Algo deu errado. Tente de novo em instantes.",
-    privacy: "Ao entrar, você concorda em receber novidades do Mentorque. Cancele quando quiser.",
+    privacy: "Grátis. Sem cartão. Cancele quando quiser. Seu e-mail só serve pra te avisar do lançamento.",
     emailLabel: "Endereço de e-mail",
   },
   trust: {
-    ledBy: "Liderado por um creator de mecânica — não é mais um curso genérico de plataforma.",
-    waitlistCountPre: "Mais de",
-    waitlistCount: "8 mil",
-    waitlistCountPost: "pessoas já na lista de espera.",
+    eyebrow: "Por que entrar agora",
+    ledBy: "Quem te ensina trabalha na indústria automotiva de verdade — não é mais um curso genérico de plataforma.",
+    foundingTitle: "Entre como membro fundador",
+    foundingBody: "O primeiro lote tem vantagens que não voltam depois do lançamento.",
+    perks: [
+      "Preço de fundador travado pra sempre",
+      "Acesso antecipado, antes de chegar às lojas",
+      "Selo de fundador e brindes dentro do app",
+    ],
+    spotsLabel: "Vagas do 1º lote de fundadores",
+    spotsNote: "quase esgotado · encerra no lançamento",
     pressLabel: "Visto em",
     pressPlaceholders: ["Imprensa", "Parceiro", "Canal", "Oficina"],
   },
   problem: {
-    title: "Cuidar de carro hoje é caro, confuso e cheio de armadilha",
+    title: "Quanto você já perdeu por não entender do seu carro?",
     intro:
-      "Você não precisa virar mecânico. Precisa entender o suficiente pra decidir bem — e ter quem te oriente quando a conta não fecha.",
+      "Toda vez que você não sabe o que o carro tem, alguém decide por você — e quase sempre cobra a mais. O Mentorque tira esse poder da oficina e devolve pra você.",
     items: [
       {
-        pain: "Manutenção cara e imprevisível",
-        turn: "Aprenda o que realmente importa e use o estimador de preço justo para chegar na oficina sabendo quanto custa.",
+        pain: "Você paga o que mandarem pagar",
+        turn: "Chegue na oficina já sabendo a causa provável e a faixa de preço justa. Quando você entende, o orçamento abusivo não cola.",
       },
       {
-        pain: "Medo de ser enganado",
-        turn: "Diagnóstico por sintoma e segunda opinião da equipe: você chega informado e não cai em serviço inventado.",
+        pain: "Medo de ser enganado a cada visita",
+        turn: "Diagnóstico por sintoma e segunda opinião da equipe: você fecha o serviço com confiança, não no escuro.",
       },
       {
-        pain: "Conteúdo grátis é um caos",
-        turn: "Trilhas estruturadas do básico ao avançado, na voz de quem entende — sem caçar vídeo solto no YouTube.",
+        pain: "Horas perdidas caçando vídeo solto",
+        turn: "Trilhas estruturadas do básico ao avançado, na voz de quem é da área — o conhecimento certo, sem garimpo no YouTube.",
       },
       {
-        pain: "Carro velho, manual perdido",
-        turn: "Tudo personalizado pelo seu veículo (marca, modelo, ano): checklists e passos que servem pro SEU carro.",
+        pain: "Conselho genérico que não serve pro SEU carro",
+        turn: "Tudo se ajusta ao seu veículo (marca, modelo, ano): checklists e passos que valem pro carro que está na sua garagem.",
       },
     ],
+  },
+  tryNow: {
+    eyebrow: "Experimente antes de se comprometer",
+    title: "Monte sua garagem em 2 minutos — de graça",
+    body:
+      "Não precisa acreditar numa promessa de landing page. Abra o protótipo, cadastre seu carro e veja seu diagnóstico e suas trilhas aparecerem na hora. Sem baixar, sem cartão, sem cadastro.",
+    bullets: [
+      "Diagnóstico por sintoma feito pro seu modelo",
+      "Faixa de preço justo antes da oficina",
+      "Sua primeira trilha já liberada",
+    ],
+    cta: "Abrir o protótipo agora",
+    note: "Funciona melhor no celular.",
   },
   features: {
     title: "Tudo para entender, manter e decidir com confiança",
@@ -91,17 +114,17 @@ export const pt = {
       {
         icon: "track",
         title: "Trilhas do iniciante ao avançado",
-        body: "Cursos guiados na voz do creator, do zero à autonomia, com certificado ao concluir cada trilha.",
+        body: "Cursos guiados na voz de quem é da indústria, do zero à autonomia, com certificado ao concluir cada trilha.",
       },
       {
         icon: "diagnose",
         title: "Diagnóstico por sintoma",
-        body: "Descreva o que sente (“faz um barulho ao frear”) e receba um passo a passo de possíveis causas e o que checar.",
+        body: "Descreva o que sente (“faz um barulho ao frear”) e receba um passo a passo de causas prováveis e o que checar.",
       },
       {
         icon: "tools",
-        title: "Ferramentas de verdade",
-        body: "Leitor de código OBD2, checklist de manutenção por veículo, estimador de preço justo e histórico do carro.",
+        title: "Preço justo antes da oficina",
+        body: "Estimador de preço justo, leitor de código OBD2, checklist de manutenção por veículo e histórico do carro.",
       },
       {
         icon: "consult",
@@ -121,13 +144,36 @@ export const pt = {
     ],
   },
   how: {
-    title: "Como funciona",
-    intro: "Quatro passos, do cadastro do carro até a ajuda especializada.",
+    title: "Comece a entender seu carro hoje",
+    intro: "Quatro passos simples, do cadastro do carro até a ajuda especializada.",
     steps: [
-      { n: "01", title: "Cadastre seu veículo", body: "Marca, modelo e ano. A partir daí tudo se ajusta ao seu carro ou moto." },
-      { n: "02", title: "Aprenda na trilha", body: "Siga os cursos do básico ao avançado, no seu ritmo, e ganhe certificado." },
-      { n: "03", title: "Diagnostique com as ferramentas", body: "Use o diagnóstico por sintoma, o OBD2 e o checklist para entender o que está acontecendo." },
-      { n: "04", title: "Peça ajuda quando travar", body: "Acione a consultoria — comunidade, equipe ou 1:1 com o creator — e resolva com segurança." },
+      { n: "01", title: "Monte sua garagem", body: "Cadastre marca, modelo e ano em 2 minutos. A partir daí, tudo no app é sobre o SEU carro." },
+      { n: "02", title: "Veja o que ele tem", body: "Diagnóstico por sintoma, OBD2 e checklist mostram na hora o que precisa de atenção — e quanto deve custar." },
+      { n: "03", title: "Aprenda no seu ritmo", body: "Siga as trilhas do básico ao avançado e ganhe certificado a cada etapa concluída." },
+      { n: "04", title: "Chame um especialista", body: "Travou? Acione a consultoria — comunidade, equipe ou 1:1 com o creator — e resolva com segurança." },
+    ],
+  },
+  social: {
+    eyebrow: "Quem está chegando",
+    title: "O que as pessoas dizem",
+    intro: "Espaço reservado para depoimentos reais — troque pelos seus quando tiver.",
+    placeholderTag: "exemplo · substituir",
+    items: [
+      {
+        quote: "Em uma semana eu entendi mais do meu carro do que em anos de oficina. Cheguei pra trocar a embreagem sabendo o preço justo e economizei de verdade.",
+        name: "Nome do usuário",
+        context: "Gol 2014 · São Paulo",
+      },
+      {
+        quote: "O diagnóstico por sintoma me mostrou que era só a vela, não o motor inteiro como queriam me cobrar. Pagou o app por anos numa visita só.",
+        name: "Nome do usuário",
+        context: "Onix 2018 · Belo Horizonte",
+      },
+      {
+        quote: "Comecei do zero, sem saber abrir o capô. Hoje faço minha própria manutenção básica e ainda ajudo os amigos. As trilhas são absurdas.",
+        name: "Nome do usuário",
+        context: "Estudante · Curitiba",
+      },
     ],
   },
   consulting: {
@@ -157,6 +203,8 @@ export const pt = {
     title: "Planos para cada momento",
     intro:
       "Comece de graça e evolua quando precisar de mais ferramentas e de ajuda humana. Preços finais na abertura.",
+    anchor:
+      "Uma única peça trocada à toa na oficina costuma custar mais que um ano inteiro de Premium. O app se paga já no primeiro “não” que você consegue dar.",
     items: [
       {
         name: "Grátis",
@@ -183,7 +231,7 @@ export const pt = {
         ],
         cta: "Quero o Premium",
         highlight: true,
-        badge: "Mais popular",
+        badge: "Escolha da maioria",
       },
       {
         name: "Consultoria",
@@ -199,6 +247,7 @@ export const pt = {
         highlight: false,
       },
     ],
+    guarantee: "Sem cartão pra começar. Sem fidelidade. Você sobe pro Premium só quando fizer sentido — e cancela com um toque.",
     note: "Os valores e a estrutura final dos planos serão confirmados no lançamento.",
   },
   benefits: {
@@ -208,7 +257,7 @@ export const pt = {
       "Aprenda de verdade, com estrutura do básico ao avançado — não vídeo solto.",
       "Tenha ajuda humana quando travar, não só um chat automático.",
       "Tudo feito para o seu carro: marca, modelo e ano.",
-      "A confiança de um creator que vive de mecânica, não de marketing.",
+      "A confiança de quem vive da indústria automotiva, não de marketing.",
       "Decida com dados: códigos OBD2, histórico e checklists no seu bolso.",
     ],
   },
@@ -217,12 +266,20 @@ export const pt = {
     intro: "Se ficar alguma dúvida, é só responder o e-mail de boas-vindas.",
     items: [
       {
+        q: "Preciso pagar pra entrar na lista?",
+        a: "Não. Entrar na lista de fundadores é grátis e não pede cartão. Você só garante preço travado e acesso antecipado quando o app abrir.",
+      },
+      {
         q: "É para quem nunca mexeu em carro?",
         a: "Sim. As trilhas começam do absoluto zero, com linguagem simples, e avançam até temas técnicos. Você escolhe até onde quer ir.",
       },
       {
-        q: "Funciona para o meu carro ou mota?",
+        q: "Funciona para o meu carro ou moto?",
         a: "Você cadastra marca, modelo e ano, e o conteúdo, checklists e ferramentas se ajustam ao seu veículo — carro ou moto.",
+      },
+      {
+        q: "Posso testar antes de me cadastrar?",
+        a: "Pode. Há um protótipo interativo aqui mesmo no site: monte sua garagem e veja o diagnóstico e as trilhas funcionando, sem baixar nada e sem cadastro.",
       },
       {
         q: "Preciso comprar algum equipamento para o OBD2?",
@@ -233,27 +290,21 @@ export const pt = {
         a: "São três níveis: a comunidade (gratuita), o diagnóstico feito pela equipe e a sessão 1:1 com o creator para casos difíceis. Você escolhe conforme a necessidade.",
       },
       {
-        q: "Tem certificado?",
-        a: "Sim. Ao concluir uma trilha você recebe um certificado de conclusão do Mentorque.",
-      },
-      {
         q: "É pago? Tem plano grátis?",
-        a: "Tem um plano gratuito com trilhas introdutórias e comunidade. Recursos avançados e a consultoria ficam nos planos pagos.",
-      },
-      {
-        q: "Em quais países e plataformas?",
-        a: "Vamos lançar no Brasil e nos Estados Unidos, para iOS e Android, com o conteúdo em português e inglês.",
+        a: "Tem um plano gratuito, para sempre, com trilhas introdutórias e comunidade. Recursos avançados e a consultoria ficam nos planos pagos.",
       },
       {
         q: "Quando o app fica disponível?",
-        a: "Estamos finalizando. Entre na lista de espera para ser avisado em primeira mão e garantir condições de quem chegou cedo.",
+        a: "Estamos finalizando. Entre na lista de fundadores para ser avisado em primeira mão e garantir as condições de quem chegou cedo — elas não voltam depois do lançamento.",
       },
     ],
   },
   finalCta: {
-    title: "Entre cedo. Saia na frente.",
+    title: "Entre como fundador. Saia na frente.",
     body:
-      "Garanta seu lugar na lista de espera e seja dos primeiros a aprender mecânica com um especialista no bolso — com vantagens de fundador.",
+      "As vantagens de fundador são do primeiro lote e fecham no lançamento: preço travado pra sempre, acesso antecipado e o selo de fundador no app. Depois, vira preço cheio.",
+    urgency: "Lote de fundadores · encerra no lançamento",
+    tryCta: "Ou teste o app agora, sem baixar",
   },
   footer: {
     tagline: "Mecânica do básico ao avançado, com consultoria especializada no bolso.",

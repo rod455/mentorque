@@ -103,6 +103,18 @@ export function Hero() {
 
           <p className="mt-4 text-sm text-cream/55">{t.hero.ctaNote}</p>
 
+          {/* Reciprocity / foot-in-the-door: try the prototype before committing */}
+          <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1">
+            <a
+              href="/app"
+              className="inline-flex items-center gap-2 font-display text-sm font-medium text-amber underline-offset-4 hover:underline"
+            >
+              {t.hero.tryCta}
+              <span aria-hidden>→</span>
+            </a>
+            <span className="text-xs text-cream/45">{t.hero.tryNote}</span>
+          </div>
+
           <div className="mt-8">
             <StoreBadges />
           </div>

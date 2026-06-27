@@ -55,7 +55,9 @@ export function GarageScreen({ onPaywall, onLearn, onSwap }: { onPaywall: () => 
             </span>
             <span className="flex-1">
               <span className="block font-display text-base text-cream">{vehicleLabel(s.vehicle, "—")}</span>
-              <span className="block text-xs text-cream/50">{s.vehicle?.engine ?? c.specs[0].value}</span>
+              <span className="block text-xs text-cream/50">
+                {[s.vehicle?.engine, s.vehicle?.version].filter(Boolean).join(" · ") || c.specs[0].value}
+              </span>
             </span>
             <IconArrow className="h-5 w-5 text-cream/40" />
           </Card>
@@ -196,6 +198,7 @@ export function GarageScreen({ onPaywall, onLearn, onSwap }: { onPaywall: () => 
 
         {tab === "specs" && (
           <div className="space-y-2">
+            <UltraBlock onPaywall={onPaywall} />
             {c.specs.map((sp) => (
               <div key={sp.label} className="flex items-center justify-between gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 ring-1 ring-white/5">
                 <span className="text-sm text-cream/55">{sp.label}</span>
@@ -212,5 +215,59 @@ export function GarageScreen({ onPaywall, onLearn, onSwap }: { onPaywall: () => 
         )}
       </div>
     </div>
+  );
+}
+
+// Premium ultra-personalization: exact engine + version of the car. Free users
+// hit the paywall; Premium users get an inline form that patches the vehicle.
+function UltraBlock({ onPaywall }: { onPaywall: () => void }) {
+  const c = useContent();
+  const { s, setVehicleSpec } = usePrototype();
+  const [engine, setEngine] = useState(s.vehicle?.engine ?? "");
+  const [version, setVersion] = useState(s.vehicle?.version ?? "");
+  const [saved, setSaved] = useState(false);
+
+  if (!s.premium) {
+    return (
+      <GateRow
+        title={c.garage.ultraLockedTitle}
+        subtitle={c.garage.ultraLockedBody}
+        access="premium"
+        left={<Icon name="spark" className="h-5 w-5 text-amber" />}
+        onLockedTap={onPaywall}
+      />
+    );
+  }
+
+  const dirty = engine.trim() !== (s.vehicle?.engine ?? "") || version.trim() !== (s.vehicle?.version ?? "");
+  const inputCls = "w-full rounded-xl bg-graphite-700 px-3.5 py-2.5 text-cream ring-1 ring-white/10 outline-none placeholder:text-cream/40 focus:ring-amber";
+
+  const save = () => {
+    setVehicleSpec({ engine: engine.trim() || undefined, version: version.trim() || undefined });
+    setSaved(true);
+  };
+
+  return (
+    <Card className="ring-amber/25">
+      <div className="flex items-center gap-2 text-amber">
+        <Icon name="spark" className="h-4 w-4" />
+        <span className="text-xs font-medium uppercase tracking-wide">{c.garage.ultraTitle}</span>
+        <span className="ml-auto rounded-md bg-amber/15 px-2 py-0.5 text-[11px] font-medium text-amber">Premium</span>
+      </div>
+      <p className="mt-1.5 text-sm text-cream/70">{c.garage.ultraBody}</p>
+      <div className="mt-3 space-y-2.5">
+        <label className="block">
+          <span className="mb-1 block text-xs text-cream/55">{c.garage.ultraEngine}</span>
+          <input value={engine} placeholder={c.garage.ultraEnginePh} onChange={(e) => { setEngine(e.target.value); setSaved(false); }} className={inputCls} />
+        </label>
+        <label className="block">
+          <span className="mb-1 block text-xs text-cream/55">{c.garage.ultraVersion}</span>
+          <input value={version} placeholder={c.garage.ultraVersionPh} onChange={(e) => { setVersion(e.target.value); setSaved(false); }} className={inputCls} />
+        </label>
+      </div>
+      <Button size="lg" className="mt-3 w-full" disabled={!dirty} onClick={save}>
+        {saved && !dirty ? c.garage.ultraSaved : c.garage.ultraSave}
+      </Button>
+    </Card>
   );
 }

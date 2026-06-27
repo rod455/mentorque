@@ -30,7 +30,8 @@ export type Vehicle = {
   make: string;
   model: string;
   year: number;
-  engine?: string; // optional motorização / trim (e.g. "1.0 TSI", "2.0 Flex")
+  engine?: string; // optional motorização (e.g. "1.0 TSI", "2.0 Flex")
+  version?: string; // exact trim/version, Premium ultra-personalization (e.g. "Highline 250 TSI")
 };
 
 // Severity dot used across problems / alerts (red / amber / teal).
