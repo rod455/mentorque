@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Vehicle } from "@/lib/app/types";
+import { usePrototype } from "@/lib/app/store";
 import {
   fetchComplaints,
   fetchRecalls,
@@ -23,9 +23,11 @@ type State = {
 // Live recalls / complaints / safety from NHTSA for the registered vehicle.
 // NHTSA is US-market, so BR-only models legitimately return nothing — we show a
 // clear source note instead of an error.
-export function SafetyPanel({ vehicle: v }: { vehicle: Vehicle | null }) {
+export function SafetyPanel() {
   const c = useContent();
   const s = c.safety;
+  const { s: session } = usePrototype();
+  const v = session.vehicle;
 
   const [state, setState] = useState<State>({ loading: true, recalls: null, complaints: null, safety: null, failed: false });
 

@@ -1,53 +1,49 @@
-// Domain types for the car-centric Mentorque app (multi-vehicle garage).
+// Prototype domain types for the Mentorque in-app experience.
+
+// Onboarding "what do you want to do here?" intentions (Q2). Multiple choice,
+// up to three. Each is a weighted tag, not a route: tags reorder Home and the
+// vehicle profile and decide whether the learn-first or fix-first thread leads.
+export type Tag =
+  | "learn_cars" // Aprender mais sobre carros
+  | "understand" // Entender melhor o meu carro
+  | "fix" // Resolver um problema que apareceu
+  | "mechanics" // Aprender mecânica
+  | "electronics" // Aprender eletrônica automotiva
+  | "career" // Me preparar para trabalhar na área
+  | "maintenance" // Melhorar a manutenção do meu carro
+  | "curiosity"; // Apenas matar a curiosidade
+
+// Onboarding "what's your level?" (Q3). Single choice. The pro tiers
+// (mechanic / engineering) unlock the "knowledge from the industry" shortcut.
+export type Level =
+  | "beginner"
+  | "intermediate"
+  | "advanced"
+  | "mechanic"
+  | "eng_student"
+  | "engineer";
 
 export type VehicleType = "car" | "moto";
 
-// A vehicle in the user's garage. Each one carries its own km, photo and, for
-// Premium, the exact engine + version (ultra-personalization).
 export type Vehicle = {
-  id: string;
   type: VehicleType;
   make: string;
   model: string;
   year: number;
-  engine?: string; // motorização (e.g. "1.0 Turbo")
-  version?: string; // exact trim / version (Premium)
-  plate?: string; // placa (optional)
-  odometerKm?: number; // km atual
-  photo?: string; // downscaled data URL
+  engine?: string; // optional motorização (e.g. "1.0 TSI", "2.0 Flex")
+  version?: string; // exact trim/version, Premium ultra-personalization (e.g. "Highline 250 TSI")
 };
 
-// A logged maintenance/service event, always tied to a vehicle.
-export type ServiceRecord = {
-  id: string;
-  vehicleId: string;
-  type: string; // serviceType key (oil, brakes, revision, other…)
-  date: string; // ISO yyyy-mm-dd
-  km: number; // odometer at the service
-  shop?: string; // oficina
-  total?: number; // valor total (BRL)
-  parts: ServicePart[]; // peças trocadas
-  notes?: string;
-  photo?: string; // foto da nota (data URL)
-};
-
-export type ServicePart = { name: string; value?: number };
-
-// Severity used across problems / attention points (red / amber / teal).
+// Severity dot used across problems / alerts (red / amber / teal).
 export type Severity = "high" | "medium" | "low";
 
 // Access gate for a section: free, premium, or human consulting.
 export type Access = "free" | "premium" | "consulting";
 
-// Vehicle sub-systems the health view breaks down into.
-export type SystemKey = "engine" | "brakes" | "suspension" | "tires" | "electrical";
-
-// Small id generator (browser runtime — crypto when available).
-export function newId(): string {
-  try {
-    if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
-  } catch {
-    /* ignore */
-  }
-  return "v" + Math.random().toString(36).slice(2) + Date.now().toString(36);
-}
+// A logged maintenance/service event (the "última revisão").
+export type ServiceRecord = {
+  date: string; // ISO yyyy-mm-dd
+  km: number; // odometer at the service
+  items: string[]; // keys of changed parts (see content.serviceItems)
+  notes?: string;
+};

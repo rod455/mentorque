@@ -3,34 +3,22 @@
 import type { ReactNode } from "react";
 import { useI18n } from "@/lib/i18n";
 import { getContent } from "@/lib/app/content";
-import { useNav } from "@/lib/app/nav";
 import type { Access, Severity } from "@/lib/app/types";
 import {
   IconAlert,
-  IconArrow,
-  IconBolt,
-  IconBook,
-  IconBrake,
   IconCalendar,
   IconCar,
   IconCheck,
-  IconClock,
   IconClose,
   IconCommunity,
   IconCompass,
   IconConsult,
   IconDiagnose,
-  IconEngine,
-  IconGauge,
   IconHome,
   IconLock,
   IconMoto,
   IconPlus,
-  IconSettings,
-  IconShield,
   IconSpark,
-  IconSuspension,
-  IconTire,
   IconTools,
   IconTrack,
   IconUser,
@@ -58,16 +46,6 @@ const ICON_REGISTRY: Record<string, (p: { className?: string }) => JSX.Element> 
   plus: IconPlus,
   explore: IconCompass,
   spark: IconSpark,
-  gauge: IconGauge,
-  clock: IconClock,
-  book: IconBook,
-  settings: IconSettings,
-  engine: IconEngine,
-  brakes: IconBrake,
-  suspension: IconSuspension,
-  tires: IconTire,
-  electrical: IconBolt,
-  shield: IconShield,
 };
 
 export function Icon({ name, className }: { name: string; className?: string }) {
@@ -86,29 +64,6 @@ export function PhoneFrame({ children }: { children: ReactNode }) {
     </div>
   );
 }
-
-// Standard screen header: back arrow (when the nav stack can pop) + title.
-export function AppHeader({ title, subtitle, action }: { title: string; subtitle?: string; action?: ReactNode }) {
-  const { canBack, back } = useNav();
-  return (
-    <header className="flex items-center gap-3 pb-3 pt-5">
-      {canBack ? (
-        <button onClick={back} className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-graphite-700 text-cream/70 hover:text-cream" aria-label="back">
-          <IconArrow className="h-4 w-4 rotate-180" />
-        </button>
-      ) : null}
-      <div className="min-w-0 flex-1">
-        <h1 className="truncate font-display text-xl font-bold text-cream">{title}</h1>
-        {subtitle ? <p className="truncate text-xs text-cream/55">{subtitle}</p> : null}
-      </div>
-      {action}
-    </header>
-  );
-}
-
-// Shared input styling for forms.
-export const inputCls =
-  "w-full rounded-xl bg-graphite-800 px-3.5 py-3 text-cream ring-1 ring-white/10 outline-none placeholder:text-cream/40 focus:ring-amber";
 
 export function Chip({
   active,
