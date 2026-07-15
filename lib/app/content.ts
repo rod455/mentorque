@@ -260,6 +260,7 @@ export function getContent(locale: Locale) {
       cars: T("Meus Carros", "My Cars"),
       problems: T("Problemas", "Problems"),
       history: T("Histórico", "History"),
+      studies: T("Estudos", "Studies"),
       profile: T("Perfil", "Profile"),
     },
 

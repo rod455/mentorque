@@ -65,11 +65,12 @@ function Router() {
   );
 }
 
-type Tab = "cars" | "problems" | "history" | "profile";
+type Tab = "cars" | "problems" | "history" | "studies" | "profile";
 const TAB_OF: Record<View["name"], Tab> = {
-  cars: "cars", addCar: "cars", car: "cars", health: "cars", system: "cars", revisions: "cars", learn: "cars", content: "cars", carSettings: "cars",
+  cars: "cars", addCar: "cars", car: "cars", health: "cars", system: "cars", revisions: "cars", carSettings: "cars",
   symptoms: "problems", symptom: "problems", checklist: "problems",
   history: "history", addService: "history", service: "history",
+  learn: "studies", content: "studies",
   profile: "profile", subscribe: "profile",
 };
 
@@ -84,6 +85,7 @@ function BottomNav() {
     { tab: "cars", icon: "car", label: c.nav.cars, go: () => root({ name: "cars" }) },
     { tab: "problems", icon: "diagnose", label: c.nav.problems, go: () => root(hasCar ? { name: "symptoms" } : { name: "cars" }) },
     { tab: "history", icon: "clock", label: c.nav.history, go: () => root(hasCar ? { name: "history" } : { name: "cars" }) },
+    { tab: "studies", icon: "book", label: c.nav.studies, go: () => root({ name: "learn" }) },
     { tab: "profile", icon: "user", label: c.nav.profile, go: () => root({ name: "profile" }) },
   ];
 
