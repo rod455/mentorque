@@ -1,14 +1,22 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
+import { servicesFor, usePrototype } from "@/lib/app/store";
 import { computeHealth } from "@/lib/app/health";
-import { vehicleLabel } from "@/lib/app/content";
+import { LIMITS, economySaved } from "@/lib/app/premium";
+import { formatBRL, vehicleLabel } from "@/lib/app/content";
 import { resizeImage } from "@/lib/app/image";
-import type { Vehicle, VehicleType } from "@/lib/app/types";
+import type { ServiceRecord, VehicleType } from "@/lib/app/types";
 import { Button } from "@/components/ui/Button";
 import { useNav } from "@/lib/app/nav";
 import { AppHeader, Card, Chip, Icon, inputCls, useContent } from "../ui";
+
+function monthsSince(iso: string): number {
+  const d = new Date(iso + "T00:00:00");
+  if (isNaN(d.getTime())) return 999;
+  const now = new Date();
+  return Math.max(0, (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth()));
+}
 
 function healthColor(score: number) {
   return score >= 80 ? "text-teal" : score >= 60 ? "text-amber" : "text-coral";
@@ -24,18 +32,29 @@ export function CarsScreen() {
   const { s, setActiveVehicle } = usePrototype();
   const { go, root } = useNav();
 
+  const atLimit = !s.premium && s.vehicles.length >= LIMITS.freeCars;
+  const onAdd = () => go(atLimit ? { name: "subscribe", ctx: "cars" } : { name: "addCar" });
+  const totalSaved = s.premium ? economySaved(s.services) : 0;
+
   return (
     <div>
       <AppHeader
         title={c.cars.title}
         action={
           s.vehicles.length > 0 ? (
-            <button onClick={() => go({ name: "addCar" })} className="grid h-9 w-9 place-items-center rounded-full bg-amber text-graphite" aria-label={c.cars.add}>
+            <button onClick={onAdd} className="grid h-9 w-9 place-items-center rounded-full bg-amber text-graphite" aria-label={c.cars.add}>
               <Icon name="plus" className="h-5 w-5" />
             </button>
           ) : undefined
         }
       />
+
+      {s.premium && totalSaved > 0 && (
+        <div className="mb-3 flex items-center gap-2.5 rounded-2xl bg-teal/10 px-4 py-3 ring-1 ring-teal/20">
+          <span className="text-lg">💰</span>
+          <span className="text-sm text-cream/85">{c.premium.saved.replace("{v}", formatBRL(totalSaved))}</span>
+        </div>
+      )}
 
       {s.vehicles.length === 0 ? (
         <Card className="mt-4 text-center">
@@ -51,41 +70,73 @@ export function CarsScreen() {
       ) : (
         <div className="space-y-3">
           {s.vehicles.map((v) => {
-            const health = computeHealth(v, servicesFor(s, v.id));
+            const services = servicesFor(s, v.id);
+            const health = computeHealth(v, services);
             return (
-              <button
-                key={v.id}
-                onClick={() => {
-                  setActiveVehicle(v.id);
-                  root({ name: "car" });
-                }}
-                className="block w-full text-left"
-              >
-                <Card className="flex items-center gap-3 hover:ring-white/15">
-                  <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-teal/15 text-teal">
-                    {v.photo ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={v.photo} alt="" className="h-full w-full object-cover" />
-                    ) : (
-                      <Icon name={v.type === "moto" ? "moto" : "car"} className="h-7 w-7" />
-                    )}
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block font-display text-base text-cream">{vehicleLabel(v)}</span>
-                    <span className="block truncate text-xs text-cream/50">
-                      {[v.plate, v.odometerKm != null ? `${v.odometerKm.toLocaleString()} km` : c.cars.noKm].filter(Boolean).join(" · ")}
+              <button key={v.id} onClick={() => { setActiveVehicle(v.id); root({ name: "car" }); }} className="block w-full text-left">
+                <Card className="hover:ring-white/15">
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-teal/15 text-teal">
+                      {v.photo ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={v.photo} alt="" className="h-full w-full object-cover" />
+                      ) : (
+                        <Icon name={v.type === "moto" ? "moto" : "car"} className="h-7 w-7" />
+                      )}
                     </span>
-                  </span>
-                  <span className="shrink-0 text-right">
-                    <span className="block text-[10px] uppercase tracking-wide text-cream/40">{c.cars.health}</span>
-                    <HealthPill score={health.score} />
-                  </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-display text-base text-cream">{vehicleLabel(v)}</span>
+                      <span className="block truncate text-xs text-cream/50">
+                        {[v.plate, v.odometerKm != null ? `${v.odometerKm.toLocaleString()} km` : c.cars.noKm].filter(Boolean).join(" · ")}
+                      </span>
+                    </span>
+                    <span className="shrink-0 text-right">
+                      <span className="block text-[10px] uppercase tracking-wide text-cream/40">{c.cars.health}</span>
+                      <HealthPill score={health.score} />
+                    </span>
+                  </div>
+                  {s.premium ? <PremiumCarDetail services={services} systems={health.systems} /> : <FreeCarAlert findings={health.findings} />}
                 </Card>
               </button>
             );
           })}
         </div>
       )}
+    </div>
+  );
+}
+
+// Free: one generic alert chip.
+function FreeCarAlert({ findings }: { findings: { code: string; severity: string }[] }) {
+  const c = useContent();
+  const overdue = findings.some((f) => f.code === "oil_overdue" || f.code === "revision_overdue");
+  const label = overdue ? c.cars.alertOverdue : findings.length ? c.cars.alertPending : c.cars.ok;
+  const tone = overdue ? "bg-coral/15 text-coral" : findings.length ? "bg-amber/15 text-amber" : "bg-teal/15 text-teal";
+  return (
+    <div className="mt-2.5">
+      <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-medium ${tone}`}>{label}</span>
+    </div>
+  );
+}
+
+// Premium: last service + system attention icons.
+function PremiumCarDetail({ services, systems }: { services: ServiceRecord[]; systems: { key: string; status: string }[] }) {
+  const c = useContent();
+  const last = services[0];
+  const lastText = last ? c.premium.lastService.replace("{t}", c.premium.monthsAgo.replace("{n}", String(monthsSince(last.date)))) : c.premium.never;
+  const attention = systems.filter((sy) => sy.status !== "ok").slice(0, 3);
+  return (
+    <div className="mt-2.5 flex items-center gap-2">
+      <span className="text-xs text-cream/55">{lastText}</span>
+      <span className="ml-auto flex items-center gap-1.5">
+        {attention.length === 0 ? (
+          <span className="text-teal">✓</span>
+        ) : (
+          attention.map((sy) => (
+            <Icon key={sy.key} name={sy.key} className={`h-4 w-4 ${sy.status === "overdue" ? "text-coral" : "text-amber"}`} />
+          ))
+        )}
+      </span>
     </div>
   );
 }

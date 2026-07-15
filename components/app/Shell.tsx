@@ -53,7 +53,7 @@ function Router() {
       case "content": return <ContentScreen id={view.id} />;
       case "carSettings": return <CarSettingsScreen />;
       case "profile": return <ProfileScreen />;
-      case "subscribe": return <SubscribeScreen />;
+      case "subscribe": return <SubscribeScreen ctx={view.ctx} />;
     }
   })();
 

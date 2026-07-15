@@ -3,12 +3,24 @@
 import { useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
+import { LIMITS } from "@/lib/app/premium";
 import { formatBRL } from "@/lib/app/content";
 import { resizeImage } from "@/lib/app/image";
 import type { ServicePart, ServiceRecord } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, Chip, Icon, inputCls, SectionTitle, useContent } from "../ui";
+import { AppHeader, Card, Chip, Icon, inputCls, PremiumBadge, SectionTitle, useContent } from "../ui";
+
+// Suggested common parts per service type (Premium).
+const SUGGESTED_PARTS: Record<string, string[]> = {
+  oil: ["Óleo do motor", "Filtro de óleo"],
+  brakes: ["Pastilhas", "Discos", "Fluido de freio"],
+  revision: ["Óleo", "Filtro de ar", "Filtro de combustível", "Velas"],
+  suspension: ["Amortecedores", "Bieletas", "Batentes"],
+  tires: ["Pneus", "Alinhamento", "Balanceamento"],
+  battery: ["Bateria"],
+  timing: ["Correia dentada", "Tensor", "Bomba d'água"],
+};
 
 function useTypeLabel() {
   const c = useContent();
@@ -38,13 +50,15 @@ export function HistoryScreen() {
   const all = servicesFor(s, v.id);
   const list = filter === "all" ? all : all.filter((r) => r.type === filter);
   const usedTypes = Array.from(new Set(all.map((r) => r.type)));
+  const atLimit = !s.premium && all.length >= LIMITS.freeServices;
+  const onAdd = () => go(atLimit ? { name: "subscribe", ctx: "history" } : { name: "addService" });
 
   return (
     <div>
       <AppHeader
         title={c.history.title}
         action={
-          <button onClick={() => go({ name: "addService" })} className="grid h-9 w-9 place-items-center rounded-full bg-amber text-graphite" aria-label={c.history.add}>
+          <button onClick={onAdd} className="grid h-9 w-9 place-items-center rounded-full bg-amber text-graphite" aria-label={c.history.add}>
             <Icon name="plus" className="h-5 w-5" />
           </button>
         }
@@ -62,6 +76,7 @@ export function HistoryScreen() {
         </Card>
       ) : (
         <>
+          {s.premium && <SpendReport services={all} />}
           {usedTypes.length > 1 && (
             <div className="mb-3 flex flex-wrap gap-2">
               <Chip active={filter === "all"} onClick={() => setFilter("all")}>{c.history.all}</Chip>
@@ -92,7 +107,7 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
   const c = useContent();
   const a = c.addService;
   const { s, addService, updateService } = usePrototype();
-  const { back } = useNav();
+  const { back, go } = useNav();
   const v = activeVehicle(s);
   const editing = editId ? s.services.find((r) => r.id === editId) ?? null : null;
   const src = editing ?? preset;
@@ -106,7 +121,14 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
   const [parts, setParts] = useState<ServicePart[]>(src?.parts ?? []);
   const [notes, setNotes] = useState(src?.notes ?? "");
   const [photo, setPhoto] = useState<string | undefined>(src?.photo);
+  const [category, setCategory] = useState<ServiceRecord["category"]>(src?.category);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const addPart = () => {
+    if (!s.premium && parts.length >= LIMITS.freeParts) { go({ name: "subscribe", ctx: "parts" }); return; }
+    setParts((ps) => [...ps, { name: "" }]);
+  };
+  const suggestions = (SUGGESTED_PARTS[type] ?? []).filter((sp) => !parts.some((p) => p.name === sp));
 
   if (!v) return <AppHeader title={a.title} />;
 
@@ -134,6 +156,7 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
       parts: parts.filter((p) => p.name.trim()),
       notes: notes.trim() || undefined,
       photo,
+      category: s.premium ? category : undefined,
     };
     if (editing) updateService(editing.id, rec);
     else addService(rec);
@@ -172,6 +195,18 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
           </Field>
         </div>
 
+        {/* Premium: classify the service */}
+        {s.premium && (
+          <div>
+            <p className="mb-1.5 text-xs uppercase tracking-wide text-cream/45">{a.type}</p>
+            <div className="flex flex-wrap gap-2">
+              {([["preventive", c.premium.preventive], ["corrective", c.premium.corrective], ["upgrade", c.premium.upgrade]] as const).map(([k, lbl]) => (
+                <Chip key={k} active={category === k} onClick={() => setCategory(category === k ? undefined : k)}>{lbl}</Chip>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div>
           <p className="mb-1.5 text-xs uppercase tracking-wide text-cream/45">{a.parts}</p>
           <div className="space-y-2">
@@ -179,15 +214,24 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
               <div key={i} className="flex gap-2">
                 <input value={p.name} onChange={(e) => setParts((ps) => ps.map((x, j) => (j === i ? { ...x, name: e.target.value } : x)))} placeholder={a.partName} className={`${inputCls} flex-1`} />
                 <input value={p.value != null ? String(p.value) : ""} inputMode="numeric" onChange={(e) => setParts((ps) => ps.map((x, j) => (j === i ? { ...x, value: e.target.value ? parseInt(e.target.value.replace(/\D/g, ""), 10) : undefined } : x)))} placeholder={a.partValue} className={`${inputCls} w-24`} />
-                <button onClick={() => setParts((ps) => ps.filter((_, j) => j !== i))} className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-graphite-700 text-cream/60" aria-label="remove">
-                  <Icon name="close" className="hidden" />✕
-                </button>
+                <button onClick={() => setParts((ps) => ps.filter((_, j) => j !== i))} className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-graphite-700 text-cream/60" aria-label="remove">✕</button>
               </div>
             ))}
-            <button onClick={() => setParts((ps) => [...ps, { name: "" }])} className="text-sm font-medium text-amber">
-              + {a.addPart}
+            <button onClick={addPart} className="text-sm font-medium text-amber">
+              {!s.premium && parts.length >= LIMITS.freeParts ? `🔒 ${a.addPart}` : `+ ${a.addPart}`}
             </button>
           </div>
+          {/* Premium: suggested common parts */}
+          {s.premium && suggestions.length > 0 && (
+            <div className="mt-2">
+              <p className="mb-1 text-[11px] text-cream/45">{c.premium.suggestedParts}</p>
+              <div className="flex flex-wrap gap-1.5">
+                {suggestions.map((sp) => (
+                  <button key={sp} onClick={() => setParts((ps) => [...ps, { name: sp }])} className="rounded-full bg-graphite-700 px-2.5 py-1 text-xs text-cream/75 ring-1 ring-white/10 hover:ring-amber/30">+ {sp}</button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <Field label={a.notes}>
@@ -276,11 +320,61 @@ export function ServiceDetail({ id }: { id: string }) {
         </>
       )}
 
-      <div className="mt-6 flex gap-2">
+      {/* Premium: export + price comparison */}
+      <Button className="mt-6 w-full" onClick={() => {
+        if (!s.premium) { go({ name: "subscribe", ctx: "exportPdf" }); return; }
+        const label = typeLabel(r.type);
+        const text = `${label} — ${dateFmt(r.date)} · ${r.km.toLocaleString()} km${r.total != null ? " · " + formatBRL(r.total) : ""}\n${r.parts.map((p) => "• " + p.name).join("\n")}`;
+        const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a"); a.href = url; a.download = `${label}.txt`; a.click(); URL.revokeObjectURL(url);
+      }}>
+        {s.premium ? c.premium.exportPdf : `🔒 ${c.premium.exportPdf}`}
+      </Button>
+      {s.premium && r.total != null && <p className="mt-2 text-center text-xs text-cream/55">{c.premium.vsAverage}</p>}
+
+      <div className="mt-4 flex gap-2">
         <Button variant="secondary" className="flex-1" onClick={() => go({ name: "addService", editId: r.id })}>{c.common.edit}</Button>
         <Button variant="ghost" className="flex-1 !text-coral" onClick={del}>{c.common.delete}</Button>
       </div>
     </div>
+  );
+}
+
+// Premium spending report: per-year bars + average per km.
+function SpendReport({ services }: { services: ServiceRecord[] }) {
+  const c = useContent();
+  const withTotal = services.filter((r) => r.total != null);
+  const byYear = new Map<string, number>();
+  for (const r of withTotal) byYear.set(r.date.slice(0, 4), (byYear.get(r.date.slice(0, 4)) ?? 0) + (r.total ?? 0));
+  const years = [...byYear.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+  const max = Math.max(1, ...years.map(([, v]) => v));
+  const kms = services.map((r) => r.km).filter((k) => k > 0);
+  const totalSpend = withTotal.reduce((a, r) => a + (r.total ?? 0), 0);
+  const kmRange = kms.length > 1 ? Math.max(...kms) - Math.min(...kms) : 0;
+  const perKm = kmRange > 0 ? totalSpend / kmRange : 0;
+
+  if (years.length === 0) return null;
+
+  return (
+    <Card className="mb-3">
+      <p className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-cream/45">{c.premium.chartsTitle} <PremiumBadge /></p>
+      <p className="mb-1 text-[11px] text-cream/45">{c.premium.perYear}</p>
+      <div className="space-y-1.5">
+        {years.map(([y, v]) => (
+          <div key={y} className="flex items-center gap-2">
+            <span className="w-9 shrink-0 text-xs text-cream/55">{y}</span>
+            <span className="h-3 flex-1 overflow-hidden rounded-full bg-graphite-700">
+              <span className="block h-full rounded-full bg-amber" style={{ width: `${Math.round((v / max) * 100)}%` }} />
+            </span>
+            <span className="w-16 shrink-0 text-right text-xs text-cream/70">{formatBRL(v)}</span>
+          </div>
+        ))}
+      </div>
+      {perKm > 0 && (
+        <p className="mt-2.5 text-xs text-cream/55">{c.premium.perKm}: <span className="text-cream/80">{formatBRL(perKm)}/km</span></p>
+      )}
+    </Card>
   );
 }
 

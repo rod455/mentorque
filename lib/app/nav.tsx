@@ -22,7 +22,7 @@ export type View =
   | { name: "content"; id: string }
   | { name: "carSettings" }
   | { name: "profile" }
-  | { name: "subscribe" };
+  | { name: "subscribe"; ctx?: string };
 
 type NavValue = {
   view: View;

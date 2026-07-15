@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { usePrototype } from "@/lib/app/store";
+import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
@@ -105,13 +105,17 @@ export function ProfileScreen() {
   );
 }
 
-// 3.1.B — Assinatura
-export function SubscribeScreen() {
+// 3.1.B — Assinatura (contextual paywall + detailed Free vs Premium)
+export function SubscribeScreen({ ctx }: { ctx?: string }) {
   const c = useContent();
   const sub = c.subscribe;
-  const { setPremium } = usePrototype();
+  const { s, setPremium } = usePrototype();
   const { back } = useNav();
   const [plan, setPlan] = useState<"monthly" | "annual">("annual");
+
+  const car = activeVehicle(s)?.model ?? c.profile.myCars;
+  const paywall = ctx ? c.paywalls[ctx] : undefined;
+  const fill = (t: string) => t.replace("{car}", car);
 
   const subscribe = () => {
     setPremium(true);
@@ -121,17 +125,28 @@ export function SubscribeScreen() {
   return (
     <div>
       <AppHeader title={sub.title} />
-      <p className="text-sm text-cream/65">{sub.intro}</p>
 
-      <div className="mt-4 space-y-2">
-        {sub.benefits.map((b) => (
-          <div key={b} className="flex items-center gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-2.5 ring-1 ring-white/5">
-            <Icon name="check" className="h-4 w-4 shrink-0 text-teal" />
-            <span className="text-sm text-cream/85">{b}</span>
+      {/* Contextual header for the action that triggered the paywall */}
+      {paywall ? (
+        <Card className="ring-amber/30">
+          <div className="mb-2 flex items-center gap-2 text-amber">
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber/15 text-base">★</span>
+            <span className="font-display text-base font-semibold text-cream">{fill(paywall.title)}</span>
           </div>
-        ))}
-      </div>
+          <ul className="space-y-1.5">
+            {paywall.benefits.map((b) => (
+              <li key={b} className="flex gap-2 text-sm text-cream/85">
+                <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0 text-amber" />
+                {fill(b)}
+              </li>
+            ))}
+          </ul>
+        </Card>
+      ) : (
+        <p className="text-sm text-cream/65">{sub.intro}</p>
+      )}
 
+      {/* Plans */}
       <div className="mt-5 grid grid-cols-2 gap-3">
         {([["annual", sub.annual], ["monthly", sub.monthly]] as const).map(([key, pl]) => {
           const active = plan === key;
@@ -151,9 +166,30 @@ export function SubscribeScreen() {
         })}
       </div>
 
-      <Button size="lg" className="mt-5 w-full" onClick={subscribe}>
+      <Button size="lg" className="mt-4 w-full" onClick={subscribe}>
         {sub.cta}
       </Button>
+      <button onClick={back} className="mt-2 w-full py-2 text-center text-sm text-cream/55 hover:text-cream">
+        {sub.later}
+      </button>
+
+      {/* Detailed Free vs Premium comparison */}
+      <SectionTitle>{sub.compareTitle}</SectionTitle>
+      <div className="overflow-hidden rounded-2xl ring-1 ring-white/5">
+        <div className="grid grid-cols-[1.3fr_0.85fr_1fr] bg-graphite-800 text-[11px] font-medium uppercase tracking-wide text-cream/45">
+          <span className="px-3 py-2" />
+          <span className="px-2 py-2 text-center">{sub.colFree}</span>
+          <span className="px-2 py-2 text-center text-amber">{sub.colPremium}</span>
+        </div>
+        {sub.compare.map((row, i) => (
+          <div key={row.label} className={`grid grid-cols-[1.3fr_0.85fr_1fr] items-center text-sm ${i % 2 ? "bg-graphite-800/40" : "bg-graphite-800/10"}`}>
+            <span className="px-3 py-2.5 text-cream/80">{row.label}</span>
+            <span className="px-2 py-2.5 text-center text-xs text-cream/55">{row.free}</span>
+            <span className="px-2 py-2.5 text-center text-xs font-medium text-cream">{row.premium}</span>
+          </div>
+        ))}
+      </div>
+
       <p className="mt-3 text-center text-xs text-cream/45">{sub.terms}</p>
     </div>
   );

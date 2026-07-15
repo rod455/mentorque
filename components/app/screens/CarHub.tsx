@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { computeHealth } from "@/lib/app/health";
+import { LIMITS } from "@/lib/app/premium";
 import { vehicleLabel } from "@/lib/app/content";
 import { useNav, type View } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
@@ -145,7 +146,7 @@ export function CarSelector() {
             </button>
           ))}
         </div>
-        <Button variant="ghost" className="mt-3 w-full" onClick={() => { setOpen(false); go({ name: "addCar" }); }}>
+        <Button variant="ghost" className="mt-3 w-full" onClick={() => { setOpen(false); go(!s.premium && s.vehicles.length >= LIMITS.freeCars ? { name: "subscribe", ctx: "cars" } : { name: "addCar" }); }}>
           + {c.cars.add}
         </Button>
       </Sheet>

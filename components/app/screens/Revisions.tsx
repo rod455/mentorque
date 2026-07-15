@@ -4,7 +4,7 @@ import { useState } from "react";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { computeUpcoming, type UpcomingItem } from "@/lib/app/health";
 import { useNav } from "@/lib/app/nav";
-import { AppHeader, Card, Icon, SectionTitle, useContent } from "../ui";
+import { AppHeader, Card, Icon, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
 
 const statusTone: Record<string, string> = { overdue: "text-coral", soon: "text-amber", ok: "text-teal" };
 
@@ -45,6 +45,9 @@ export function RevisionsScreen() {
         <span className={`text-xs font-medium ${statusTone[it.status]}`}>{r.statusLabels[it.status]}</span>
       </div>
       <p className="mt-0.5 text-xs text-cream/55">{detail(it)}</p>
+      {s.premium && r.cost[it.key] && (
+        <p className="mt-1 text-xs text-cream/70">{r.estCost}: <span className="text-amber">{r.cost[it.key]}</span></p>
+      )}
       <div className="mt-2.5 flex gap-2">
         <button
           onClick={() => setReminded((rm) => (rm.includes(it.key) ? rm : [...rm, it.key]))}
@@ -65,6 +68,14 @@ export function RevisionsScreen() {
   return (
     <div>
       <AppHeader title={r.title} />
+      {s.premium ? (
+        <Card className="mb-3 flex items-center gap-2.5 ring-amber/25">
+          <span className="text-lg">🔮</span>
+          <span className="text-sm text-cream/85">{r.smartAlert}</span>
+        </Card>
+      ) : (
+        <UpgradeBanner ctx="revisions" text={r.nudge.replace("{car}", v.model)} />
+      )}
       {items.length === 0 ? (
         <Card className="flex items-center gap-2 text-sm text-cream/60">
           <span className="text-teal">✓</span> {r.none}

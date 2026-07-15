@@ -29,6 +29,7 @@ export type ServiceRecord = {
   parts: ServicePart[]; // peças trocadas
   notes?: string;
   photo?: string; // foto da nota (data URL)
+  category?: "preventive" | "corrective" | "upgrade"; // Premium classification
 };
 
 export type ServicePart = { name: string; value?: number };

@@ -17,6 +17,7 @@ export function CarSettingsScreen() {
   const services = servicesFor(s, v.id);
 
   const exportHistory = () => {
+    if (!s.premium) { go({ name: "subscribe", ctx: "exportPdf" }); return; }
     const lines = [
       `${vehicleLabel(v)}${v.plate ? " · " + v.plate : ""}`,
       v.odometerKm != null ? `${v.odometerKm.toLocaleString()} km` : "",

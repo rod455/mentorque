@@ -4,7 +4,7 @@ import { useState } from "react";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, Icon, SectionTitle, useContent } from "../ui";
+import { AppHeader, Card, Icon, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
 
 // 2.6.A — Aprenda mecânica (para este carro)
 export function LearnScreen() {
@@ -17,34 +17,39 @@ export function LearnScreen() {
   const rest = c.lessons.slice(3);
   const typeLabel = (t: string) => (t === "video" ? c.learn.video : c.learn.article);
 
-  const Row = ({ id, title, type }: { id: string; title: string; type: string }) => (
-    <button onClick={() => go({ name: "content", id })} className="flex w-full items-center gap-3 rounded-2xl bg-graphite-800 p-3.5 text-left ring-1 ring-white/5 hover:ring-amber/30">
-      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-amber/12 text-amber">
-        <Icon name={type === "video" ? "diagnose" : "book"} className="h-6 w-6" />
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="block truncate font-display text-[15px] text-cream">{title}</span>
-        <span className="block text-xs text-cream/50">{typeLabel(type)}</span>
-      </span>
-      <span className="text-cream/40">›</span>
-    </button>
-  );
+  const Row = ({ id, title, type, premium }: { id: string; title: string; type: string; premium?: boolean }) => {
+    const locked = premium && !s.premium;
+    return (
+      <button
+        onClick={() => go(locked ? { name: "subscribe", ctx: "learn" } : { name: "content", id })}
+        className="flex w-full items-center gap-3 rounded-2xl bg-graphite-800 p-3.5 text-left ring-1 ring-white/5 hover:ring-amber/30"
+      >
+        <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl ${locked ? "bg-amber/10 text-amber/70" : "bg-amber/12 text-amber"}`}>
+          <Icon name={type === "video" ? "diagnose" : "book"} className="h-6 w-6" />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block truncate font-display text-[15px] text-cream">{title}</span>
+          <span className="block text-xs text-cream/50">{typeLabel(type)}</span>
+        </span>
+        {locked ? <PremiumBadge /> : <span className="text-cream/40">›</span>}
+      </button>
+    );
+  };
 
   return (
     <div>
       <AppHeader title={`${c.learn.title}${v ? " · " + v.model : ""}`} />
       <SectionTitle>{c.learn.recommended}</SectionTitle>
       <div className="space-y-2.5">
-        {recommended.map((l) => <Row key={l.id} id={l.id} title={l.title} type={l.type} />)}
+        {recommended.map((l) => <Row key={l.id} id={l.id} title={l.title} type={l.type} premium={l.premium} />)}
       </div>
-      {rest.length > 0 && (
-        <>
-          <SectionTitle>{c.learn.all}</SectionTitle>
-          <div className="space-y-2.5">
-            {rest.map((l) => <Row key={l.id} id={l.id} title={l.title} type={l.type} />)}
-          </div>
-        </>
-      )}
+      <>
+        <SectionTitle>{c.learn.all}</SectionTitle>
+        <div className="space-y-2.5">
+          {rest.map((l) => <Row key={l.id} id={l.id} title={l.title} type={l.type} premium={l.premium} />)}
+        </div>
+      </>
+      {!s.premium && <UpgradeBanner ctx="learn" text={c.paywalls.learn.title} />}
     </div>
   );
 }
@@ -52,6 +57,7 @@ export function LearnScreen() {
 // 2.6.B — Tela de conteúdo
 export function ContentScreen({ id }: { id: string }) {
   const c = useContent();
+  const { s } = usePrototype();
   const lesson = c.lessons.find((l) => l.id === id);
   const [done, setDone] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -97,6 +103,7 @@ export function ContentScreen({ id }: { id: string }) {
         <Button className="flex-1" onClick={() => setDone((d) => !d)}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
         <Button variant="ghost" className="flex-1" onClick={() => setSaved((v) => !v)}>{saved ? "★" : "☆"} {c.learn.saveLater}</Button>
       </div>
+      {!s.premium && <UpgradeBanner ctx="learn" text={c.paywalls.learn.title} />}
     </div>
   );
 }

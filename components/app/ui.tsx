@@ -87,6 +87,52 @@ export function PhoneFrame({ children }: { children: ReactNode }) {
   );
 }
 
+// Small "Premium" pill.
+export function PremiumBadge({ className }: { className?: string }) {
+  return <span className={`inline-flex items-center gap-0.5 rounded-md bg-amber/15 px-1.5 py-0.5 text-[10px] font-semibold text-amber ${className ?? ""}`}>★ Premium</span>;
+}
+
+// "Recomendado para o seu carro" pill.
+export function RecoBadge({ children }: { children: ReactNode }) {
+  return <span className="inline-flex items-center gap-1 rounded-md bg-teal/15 px-1.5 py-0.5 text-[10px] font-medium text-teal">✦ {children}</span>;
+}
+
+// Contextual upgrade nudge (doesn't block) → opens the paywall for `ctx`.
+export function UpgradeBanner({ ctx, text }: { ctx: string; text: string }) {
+  const { go } = useNav();
+  return (
+    <button
+      onClick={() => go({ name: "subscribe", ctx })}
+      className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-amber/10 px-4 py-3 text-left ring-1 ring-amber/25 transition-colors hover:ring-amber/40"
+    >
+      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-amber/20 text-amber">★</span>
+      <span className="min-w-0 flex-1 text-sm text-cream/85">{text}</span>
+      <span className="shrink-0 text-xs font-medium text-amber">›</span>
+    </button>
+  );
+}
+
+// Locked content card (gates a Premium-only block) → opens the paywall.
+export function LockedCard({ ctx, title, body }: { ctx: string; title: string; body?: string }) {
+  const { go } = useNav();
+  const c = useContent();
+  return (
+    <button
+      onClick={() => go({ name: "subscribe", ctx })}
+      className="flex w-full items-start gap-3 rounded-2xl bg-graphite-800 px-4 py-3.5 text-left ring-1 ring-amber/20 hover:ring-amber/40"
+    >
+      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-amber/15 text-amber">
+        <IconLock className="h-5 w-5" />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block font-display text-[15px] text-cream">{title}</span>
+        {body ? <span className="mt-0.5 block text-xs text-cream/55">{body}</span> : null}
+        <span className="mt-1.5 inline-block text-xs font-medium text-amber">{c.common.unlock} ›</span>
+      </span>
+    </button>
+  );
+}
+
 // Standard screen header: back arrow (when the nav stack can pop) + title.
 export function AppHeader({ title, subtitle, action }: { title: string; subtitle?: string; action?: ReactNode }) {
   const { canBack, back } = useNav();

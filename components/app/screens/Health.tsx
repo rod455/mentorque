@@ -2,11 +2,12 @@
 
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { computeHealth, SERVICE_SYSTEMS } from "@/lib/app/health";
-import { vehicleLabel } from "@/lib/app/content";
+import { costProjection, systemPct, systemPriority } from "@/lib/app/premium";
+import { formatBRL, vehicleLabel } from "@/lib/app/content";
 import type { SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, Icon, SectionTitle, SeverityDot, useContent } from "../ui";
+import { AppHeader, Card, Icon, LockedCard, PremiumBadge, SectionTitle, SeverityDot, useContent } from "../ui";
 import { SafetyPanel } from "../SafetyPanel";
 
 const SYSTEM_TO_SERVICE: Record<SystemKey, string> = {
@@ -19,7 +20,7 @@ const SYSTEM_TO_SERVICE: Record<SystemKey, string> = {
 
 const scoreColor = (n: number) => (n >= 80 ? "text-teal" : n >= 60 ? "text-amber" : "text-coral");
 const statusTone: Record<string, string> = { ok: "text-teal", attention: "text-amber", overdue: "text-coral" };
-const sevOf = (status: string) => (status === "overdue" ? "high" : status === "attention" ? "medium" : "low") as "high" | "medium" | "low";
+const REMAINING: Record<string, string> = { ok: "80%", attention: "40%", overdue: "15%" };
 
 // 2.3.A — Visão geral da saúde
 export function HealthScreen() {
@@ -82,21 +83,34 @@ export function HealthScreen() {
       {/* Systems */}
       <SectionTitle>{h.systemsTitle}</SectionTitle>
       <div className="space-y-2">
-        {health.systems.map((sys) => (
-          <button
-            key={sys.key}
-            onClick={() => go({ name: "system", system: sys.key })}
-            className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/5 hover:ring-white/15"
-          >
-            <span className="grid h-9 w-9 place-items-center rounded-lg bg-graphite-700 text-cream/70">
-              <Icon name={sys.key} className="h-5 w-5" />
-            </span>
-            <span className="flex-1 font-display text-[15px] text-cream">{h.systemLabels[sys.key]}</span>
-            <span className={`text-xs font-medium ${statusTone[sys.status]}`}>{h.statusLabels[sys.status]}</span>
-            <span className="text-cream/40">›</span>
-          </button>
-        ))}
+        {health.systems.map((sys) => {
+          const gated = !s.premium && sys.status !== "ok";
+          return (
+            <button
+              key={sys.key}
+              onClick={() => go(gated ? { name: "subscribe", ctx: "health" } : { name: "system", system: sys.key })}
+              className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/5 hover:ring-white/15"
+            >
+              <span className="grid h-9 w-9 place-items-center rounded-lg bg-graphite-700 text-cream/70">
+                <Icon name={sys.key} className="h-5 w-5" />
+              </span>
+              <span className="flex-1 font-display text-[15px] text-cream">{h.systemLabels[sys.key]}</span>
+              {s.premium && <span className={`text-xs font-semibold ${statusTone[sys.status]}`}>{systemPct(sys.status)}%</span>}
+              <span className={`text-xs font-medium ${statusTone[sys.status]}`}>{h.statusLabels[sys.status]}</span>
+              <span className="text-cream/40">{gated ? "🔒" : "›"}</span>
+            </button>
+          );
+        })}
       </div>
+
+      {/* Premium: cost projection + prioritized recommendations */}
+      {s.premium ? (
+        <PremiumHealthExtras vehicle={v} services={servicesFor(s, v.id)} />
+      ) : (
+        <div className="mt-4">
+          <LockedCard ctx="health" title={c.premium.lockedSystem} />
+        </div>
+      )}
 
       {/* Live recalls / complaints / safety (NHTSA) */}
       <div className="mt-2">
@@ -156,6 +170,35 @@ export function SystemDetail({ system }: { system: SystemKey }) {
         ))}
       </ul>
 
+      {/* Premium: remaining life + suggested action order */}
+      {s.premium ? (
+        <>
+          <SectionTitle>{c.premium.remainingLife}</SectionTitle>
+          <Card>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-cream/80">{h.systemLabels[system]}</span>
+              <span className={`font-display text-lg font-semibold ${statusTone[status?.status ?? "ok"]}`}>{REMAINING[status?.status ?? "ok"]}</span>
+            </div>
+            <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-graphite-700">
+              <div className={`h-full rounded-full ${status?.status === "overdue" ? "bg-coral" : status?.status === "attention" ? "bg-amber" : "bg-teal"}`} style={{ width: REMAINING[status?.status ?? "ok"] }} />
+            </div>
+          </Card>
+          <SectionTitle>{c.premium.actionOrder}</SectionTitle>
+          <ol className="space-y-2">
+            {[`${d.state}: ${h.systemLabels[system]}`, `${c.premium.shopSuggests}`, `${c.history.add}`].map((step, i) => (
+              <li key={i} className="flex gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-3 text-sm text-cream/85 ring-1 ring-white/5">
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-amber/15 font-display text-xs font-semibold text-amber">{i + 1}</span>
+                {step}
+              </li>
+            ))}
+          </ol>
+        </>
+      ) : (
+        <div className="mt-4">
+          <LockedCard ctx="systemDetail" title={c.premium.lockedSystem} />
+        </div>
+      )}
+
       <SectionTitle>{d.related}</SectionTitle>
       {related.length === 0 ? (
         <p className="rounded-xl bg-graphite-800 px-3.5 py-3 text-sm text-cream/55 ring-1 ring-white/5">{d.noHistory}</p>
@@ -173,6 +216,44 @@ export function SystemDetail({ system }: { system: SystemKey }) {
       <Button className="mt-5 w-full" onClick={() => go({ name: "addService", preset: { type: SYSTEM_TO_SERVICE[system] } })}>
         {d.addRelated}
       </Button>
+    </div>
+  );
+}
+
+// Premium: 6-month cost projection + prioritized recommendations.
+function PremiumHealthExtras({ vehicle, services }: { vehicle: import("@/lib/app/types").Vehicle; services: import("@/lib/app/types").ServiceRecord[] }) {
+  const c = useContent();
+  const h = c.health;
+  const proj = costProjection(vehicle, services);
+  const systems = computeHealth(vehicle, services).systems;
+  const groups = { now: systems.filter((x) => systemPriority(x.status) === "now"), soon: systems.filter((x) => systemPriority(x.status) === "soon") };
+  const label: Record<"now" | "soon", string> = { now: c.premium.priorityNow, soon: c.premium.prioritySoon };
+
+  return (
+    <div className="mt-4 space-y-4">
+      {proj.high > 0 && (
+        <Card className="ring-amber/25">
+          <p className="text-sm text-cream/85">
+            {c.premium.projection.replace("{low}", formatBRL(proj.low)).replace("{high}", formatBRL(proj.high))}
+          </p>
+        </Card>
+      )}
+      {(["now", "soon"] as const).map((k) =>
+        groups[k].length ? (
+          <div key={k}>
+            <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-cream/45">{label[k]}</p>
+            <div className="space-y-1.5">
+              {groups[k].map((sy) => (
+                <div key={sy.key} className="flex items-center gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-2.5 text-sm ring-1 ring-white/5">
+                  <Icon name={sy.key} className={`h-4 w-4 ${k === "now" ? "text-coral" : "text-amber"}`} />
+                  <span className="flex-1 text-cream/85">{h.systemLabels[sy.key]}</span>
+                  <span className={`text-xs font-medium ${statusTone[sy.status]}`}>{systemPct(sy.status)}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null
+      )}
     </div>
   );
 }

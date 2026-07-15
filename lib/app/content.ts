@@ -158,8 +158,43 @@ export function getContent(locale: Locale) {
     },
   ];
 
+  // Premium-only depth per symptom (ranked prices, shop scripts, regional band).
+  type SymPremium = { priceDetail: { label: string; range: string }[]; shopSuggests: string[]; questionBefore: string[]; regional: string };
+  const symptomPremium: Record<string, SymPremium> = {
+    "brake-noise": {
+      priceDetail: [
+        { label: T("Pastilhas dianteiras", "Front pads"), range: "R$ 250–450" },
+        { label: T("Discos (par)", "Rotors (pair)"), range: "R$ 400–900" },
+        { label: T("Mão de obra", "Labor"), range: "R$ 120–250" },
+      ],
+      shopSuggests: [T("Trocar pastilhas + discos “por garantia”", "Replace pads AND rotors “to be safe”"), T("Trocar fluido de freio junto", "Change brake fluid too")],
+      questionBefore: [T("Os discos realmente estão fora da tolerância? Peça a medição.", "Are the rotors truly out of spec? Ask for the measurement."), T("Dá pra retificar em vez de trocar?", "Can they be resurfaced instead of replaced?")],
+      regional: T("Na sua região, freios dianteiros costumam ficar entre R$ 380 e R$ 650.", "In your area, front brakes usually run R$ 380–650."),
+    },
+    cel: {
+      priceDetail: [
+        { label: T("Jogo de velas", "Spark plug set"), range: "R$ 120–320" },
+        { label: T("Bobina", "Coil"), range: "R$ 180–450" },
+        { label: T("Diagnóstico + leitura", "Diagnosis + scan"), range: "R$ 80–150" },
+      ],
+      shopSuggests: [T("Trocar todo o kit de ignição", "Replace the whole ignition kit"), T("Limpeza de bicos “preventiva”", "“Preventive” injector cleaning")],
+      questionBefore: [T("Qual o código exato lido? Peça o número (ex.: P0301).", "What's the exact code? Ask for the number (e.g. P0301)."), T("Dá pra trocar só a peça com defeito?", "Can you replace only the faulty part?")],
+      regional: T("Falha de ignição costuma sair por R$ 200–500 na sua região.", "Misfire repairs usually run R$ 200–500 in your area."),
+    },
+    "hard-start": {
+      priceDetail: [
+        { label: T("Bateria", "Battery"), range: "R$ 350–700" },
+        { label: T("Motor de arranque", "Starter"), range: "R$ 400–900" },
+        { label: T("Bomba de combustível", "Fuel pump"), range: "R$ 500–1.200" },
+      ],
+      shopSuggests: [T("Trocar bateria e arranque juntos", "Replace battery and starter together")],
+      questionBefore: [T("Testaram a carga da bateria e o alternador antes?", "Did they test the battery and alternator first?")],
+      regional: T("Diagnóstico de partida costuma custar R$ 80–150 na sua região.", "A starting-system diagnosis usually runs R$ 80–150 in your area."),
+    },
+  };
+
   // ---- Learn content (2.6) -------------------------------------------------
-  type Lesson = { id: string; title: string; type: "video" | "article"; system: SystemKey | "geral"; need: string[]; steps: string[]; safety: string[] };
+  type Lesson = { id: string; title: string; type: "video" | "article"; system: SystemKey | "geral"; premium?: boolean; need: string[]; steps: string[]; safety: string[] };
   const lessons: Lesson[] = [
     {
       id: "oil-change",
@@ -175,6 +210,7 @@ export function getContent(locale: Locale) {
       title: T("Trocar a pastilha de freio", "Replace the brake pads"),
       type: "video",
       system: "brakes",
+      premium: true,
       need: [T("Pastilhas novas", "New pads"), T("Macaco e cavalete", "Jack and stands"), T("Chave de roda", "Lug wrench")],
       steps: [T("Suspenda e remova a roda", "Lift and remove the wheel"), T("Solte a pinça", "Unbolt the caliper"), T("Troque as pastilhas", "Swap the pads"), T("Monte e teste o freio devagar", "Reassemble and test brakes gently")],
       safety: [T("Use cavalete, nunca só o macaco", "Use stands, never the jack alone"), T("Bombeie o pedal antes de sair", "Pump the pedal before driving")],
@@ -184,6 +220,7 @@ export function getContent(locale: Locale) {
       title: T("Lendo códigos OBD2", "Reading OBD2 codes"),
       type: "article",
       system: "engine",
+      premium: true,
       need: [T("Adaptador OBD2", "OBD2 adapter"), T("App de leitura", "A reader app")],
       steps: [T("Conecte o adaptador", "Plug in the adapter"), T("Leia os códigos ativos", "Read active codes"), T("Anote e pesquise cada código", "Note and look up each code")],
       safety: [T("Não dirija com a luz piscando", "Don't drive with a flashing light")],
@@ -234,6 +271,7 @@ export function getContent(locale: Locale) {
     modelsByMake,
     years,
     symptoms,
+    symptomPremium,
     lessons,
     serviceTypes,
     consultingTiers,
@@ -264,6 +302,88 @@ export function getContent(locale: Locale) {
       profile: T("Perfil", "Profile"),
     },
 
+    // Shared Premium labels across screens.
+    premium: {
+      badge: "Premium",
+      recommended: T("Recomendado para o seu carro", "Recommended for your car"),
+      recoReason: T("comum em {car} com mais de {km}", "common on {car} over {km}"),
+      lastService: T("Última revisão: {t}", "Last service: {t}"),
+      monthsAgo: T("há {n} meses", "{n} months ago"),
+      never: T("sem revisão registrada", "no service logged"),
+      saved: T("Você já economizou ~{v} evitando serviços desnecessários", "You've saved ~{v} avoiding unnecessary work"),
+      projection: T("Se nada for feito, você pode gastar {low}–{high} nos próximos 6 meses.", "If nothing is done, you could spend {low}–{high} in the next 6 months."),
+      priorityNow: T("Faça agora", "Do it now"),
+      prioritySoon: T("Nos próximos 3 meses", "In the next 3 months"),
+      priorityWatch: T("Apenas acompanhe", "Just keep an eye on it"),
+      shopSuggests: T("O que a maioria das oficinas costuma sugerir", "What most shops tend to suggest"),
+      questionBefore: T("O que você pode questionar antes de autorizar", "What to question before you approve"),
+      regionalTitle: T("Comparativo na sua região", "Comparison in your area"),
+      remainingLife: T("Vida útil restante", "Remaining life"),
+      actionOrder: T("Ordem sugerida de ações", "Suggested order of actions"),
+      lockedCauses: T("Assine o Premium para ver todas as causas e preços detalhados para o seu {car}.", "Subscribe to see all causes and detailed prices for your {car}."),
+      lockedSystem: T("Detalhamento completo disponível no Premium.", "Full breakdown available on Premium."),
+      chartsTitle: T("Relatório de gastos", "Spending report"),
+      perYear: T("Gasto por ano", "Spend per year"),
+      perKm: T("Gasto médio por km", "Average spend per km"),
+      preventive: T("Preventivo", "Preventive"),
+      corrective: T("Corretivo", "Corrective"),
+      upgrade: T("Upgrade", "Upgrade"),
+      suggestedParts: T("Peças comuns para este serviço", "Common parts for this service"),
+      compareQuotes: T("Comparar orçamentos", "Compare quotes"),
+      exportPdf: T("Exportar em PDF", "Export as PDF"),
+      vsAverage: T("Este serviço está na média para o seu modelo.", "This service is in line with the average for your model."),
+      startHere: T("Comece por aqui", "Start here"),
+    },
+
+    // Contextual paywalls ({car} replaced by the active model).
+    paywalls: {
+      generic: { title: T("Desbloqueie o Premium", "Unlock Premium"), benefits: [] as string[] },
+      cars: {
+        title: T("Cuide de mais carros", "Care for more cars"),
+        benefits: [T("Carros ilimitados na sua garagem", "Unlimited cars in your garage"), T("Diagnósticos avançados para cada um", "Advanced diagnostics for each"), T("Saúde detalhada e economia estimada", "Detailed health and estimated savings")],
+      },
+      symptomCauses: {
+        title: T("Veja todas as causas do seu {car}", "See every cause for your {car}"),
+        benefits: [T("Causas ranqueadas por probabilidade", "Causes ranked by likelihood"), T("Faixas de preço detalhadas por peça", "Detailed price ranges per part"), T("O que questionar antes de autorizar", "What to question before you approve")],
+      },
+      symptomReco: {
+        title: T("Recomendações para o seu {car}", "Recommendations for your {car}"),
+        benefits: [T("Sintomas comuns no seu modelo/ano/km", "Symptoms common on your model/year/km"), T("Prioridade do que olhar primeiro", "Priority of what to check first")],
+      },
+      checklist: {
+        title: T("Checklists completos e em PDF", "Complete checklists, in PDF"),
+        benefits: [T("Checklist específico para o sintoma + modelo", "Symptom + model specific checklist"), T("Ilimitados e exportáveis em PDF", "Unlimited and PDF-exportable"), T("Compare vários orçamentos", "Compare multiple quotes")],
+      },
+      health: {
+        title: T("Saúde detalhada do seu {car}", "Detailed health for your {car}"),
+        benefits: [T("Saúde por sistema, peça a peça", "Health per system, part by part"), T("Projeção de custos dos próximos 6 meses", "6-month cost projection"), T("Recomendações priorizadas", "Prioritized recommendations")],
+      },
+      systemDetail: {
+        title: T("Detalhe completo por componente", "Full component-level detail"),
+        benefits: [T("Vida útil restante estimada", "Estimated remaining life"), T("Ordem sugerida de ações", "Suggested order of actions")],
+      },
+      history: {
+        title: T("Histórico ilimitado + relatórios", "Unlimited history + reports"),
+        benefits: [T("Serviços ilimitados por carro", "Unlimited services per car"), T("Filtros avançados e gráficos de gasto", "Advanced filters and spending charts"), T("Relatório para valorizar na venda", "A report to boost resale value")],
+      },
+      parts: {
+        title: T("Registre peças ilimitadas", "Log unlimited parts"),
+        benefits: [T("Peças ilimitadas por serviço", "Unlimited parts per service"), T("Classifique preventivo/corretivo/upgrade", "Tag preventive/corrective/upgrade"), T("Sugestão automática de peças", "Automatic parts suggestions")],
+      },
+      exportPdf: {
+        title: T("Exporte um relatório bonito", "Export a polished report"),
+        benefits: [T("PDF pronto para oficina ou venda", "PDF ready for the shop or resale"), T("Comparativo com a média do modelo", "Comparison with the model average")],
+      },
+      revisions: {
+        title: T("Revisões personalizadas do seu {car}", "Personalized service for your {car}"),
+        benefits: [T("Lista de itens por modelo/ano/motor", "Item list by model/year/engine"), T("Alertas inteligentes pelo seu histórico", "Smart alerts from your history"), T("Custo estimado da próxima revisão", "Estimated cost of the next service")],
+      },
+      learn: {
+        title: T("Biblioteca completa e trilhas", "Full library and tracks"),
+        benefits: [T("Todos os vídeos e artigos", "All videos and articles"), T("Trilhas por modelo do seu carro", "Tracks by your car's model"), T("Sequência recomendada e certificados", "Recommended sequence and certificates")],
+      },
+    } as Record<string, { title: string; benefits: string[] }>,
+
     splash: {
       cards: [
         { icon: "car", title: T("Cadastre seu carro", "Add your car"), body: T("Sua garagem digital: modelo, ano, km e foto.", "Your digital garage: model, year, mileage and photo.") },
@@ -281,6 +401,9 @@ export function getContent(locale: Locale) {
       add: T("Adicionar carro", "Add car"),
       health: T("Saúde", "Health"),
       noKm: T("km não informado", "mileage not set"),
+      alertOverdue: T("Revisão vencida", "Service overdue"),
+      alertPending: T("Serviço pendente", "Service pending"),
+      ok: T("Tudo em dia", "All up to date"),
     },
 
     addCar: {
@@ -338,6 +461,9 @@ export function getContent(locale: Locale) {
       observe: T("O que observar", "What to look for"),
       genChecklist: T("Gerar checklist para oficina", "Generate a shop checklist"),
       knowIt: T("Já sei o que é", "I know what it is"),
+      recoNudge: T("Assine o Premium para ver recomendações personalizadas para o seu carro.", "Subscribe to see personalized recommendations for your car."),
+      detailedPrice: T("Preço detalhado por peça", "Detailed price per part"),
+      km80: T("80.000 km", "80,000 km"),
     },
 
     checklist: {
@@ -351,6 +477,9 @@ export function getContent(locale: Locale) {
       shopPh: T("Nome da oficina", "Shop name"),
       saveToHistory: T("Salvar no histórico", "Save to history"),
       share: T("Compartilhar", "Share"),
+      pdf: T("Exportar PDF / WhatsApp", "Export PDF / WhatsApp"),
+      premiumNudge: T("Quer checklists completos, ilimitados e em PDF? Assine o Premium.", "Want complete, unlimited checklists in PDF? Subscribe."),
+      lockedItems: T("Itens específicos (espessura mínima, tolerâncias) no Premium.", "Specific items (min thickness, tolerances) on Premium."),
     },
 
     health: {
@@ -445,6 +574,13 @@ export function getContent(locale: Locale) {
       overdueKm: T("vencida há {n} km", "{n} km overdue"),
       inKm: T("em {n} km", "in {n} km"),
       monthsAgo: T("última há {n} meses", "last done {n} months ago"),
+      estCost: T("Custo estimado", "Estimated cost"),
+      nudge: T("Assine o Premium para a lista completa de itens e o custo estimado do seu {car}.", "Subscribe for the full item list and estimated cost for your {car}."),
+      smartAlert: T("Pelo seu histórico, os freios devem pedir atenção nos próximos 10.000 km.", "Based on your history, brakes should need attention within the next 10,000 km."),
+      cost: {
+        oil: "R$ 180–350", airfilter: "R$ 60–140", brakes: "R$ 300–700", brakefluid: "R$ 120–260",
+        timing: "R$ 600–1.500", tires: "R$ 800–2.000", battery: "R$ 350–700",
+      } as Record<string, string>,
     },
 
     learn: {
@@ -506,8 +642,21 @@ export function getContent(locale: Locale) {
       monthly: { name: T("Mensal", "Monthly"), price: "R$ 29,90", note: T("por mês", "per month") },
       annual: { name: T("Anual", "Annual"), price: "R$ 239,90", note: T("por ano", "per year"), save: T("economia de 33%", "save 33%") },
       cta: T("Assinar agora", "Subscribe now"),
+      later: T("Talvez depois", "Maybe later"),
       terms: T("Termos e política de privacidade", "Terms & privacy policy"),
       restore: T("Restaurar compra", "Restore purchase"),
+      compareTitle: T("Free vs Premium", "Free vs Premium"),
+      colFree: T("Grátis", "Free"),
+      colPremium: "Premium",
+      compare: [
+        { label: T("Carros", "Cars"), free: T("Até 2", "Up to 2"), premium: T("Ilimitados", "Unlimited") },
+        { label: T("Diagnósticos", "Diagnostics"), free: T("Básicos", "Basic"), premium: T("Avançados e personalizados", "Advanced & personalized") },
+        { label: T("Checklist p/ oficina", "Shop checklist"), free: T("Básico", "Basic"), premium: T("Completo + PDF", "Full + PDF") },
+        { label: T("Histórico de serviços", "Service history"), free: T("Até 20", "Up to 20"), premium: T("Ilimitado + relatórios", "Unlimited + reports") },
+        { label: T("Saúde do carro", "Car health"), free: T("Genérica", "Generic"), premium: T("Por sistema + projeção", "Per system + projection") },
+        { label: T("Conteúdo", "Content"), free: T("Limitado", "Limited"), premium: T("Completo + trilhas", "Full + tracks") },
+        { label: T("Exportar PDF / preços", "Export PDF / prices"), free: "—", premium: "✓" },
+      ] as { label: string; free: string; premium: string }[],
     },
 
     // Live recalls / complaints / safety (NHTSA) — used by SafetyPanel.
