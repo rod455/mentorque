@@ -1,134 +1,149 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import type { Level, ServiceRecord, Tag, Vehicle } from "./types";
+import { newId, type ServiceRecord, type Vehicle } from "./types";
 
-// The prototype keeps the whole "session" client-side (mocked data, no backend
-// yet). It persists to localStorage so a refresh doesn't drop you out of the
-// experience mid-test.
-
-// Onboarding lets the user pick up to three intentions (Q2).
-export const MAX_INTENTIONS = 3;
+// Client-side session for the car-centric prototype: a garage of vehicles, one
+// "active" vehicle, and a flat list of service records. Persisted to
+// localStorage so a refresh keeps the whole garage.
 
 type Session = {
   onboarded: boolean;
-  name: string | null; // first name, for the Home greeting
-  intentions: Tag[]; // up to MAX_INTENTIONS (Q2)
-  level: Level | null; // experience level (Q3)
-  vehicle: Vehicle | null; // null while unset; cleared by "learn only"
-  noVehicle: boolean; // true when the user explicitly has no vehicle
+  name: string | null;
   premium: boolean;
-  photo: string | null; // user's car photo (downscaled data URL)
-  odometerKm: number | null; // current mileage
-  lastService: ServiceRecord | null; // most recent logged service
-  oilAlertKm: number | null; // km target for the next oil-change reminder
+  vehicles: Vehicle[];
+  activeVehicleId: string | null;
+  services: ServiceRecord[];
 };
 
 const EMPTY: Session = {
   onboarded: false,
   name: null,
-  intentions: [],
-  level: null,
-  vehicle: null,
-  noVehicle: false,
   premium: false,
-  photo: null,
-  odometerKm: null,
-  lastService: null,
-  oilAlertKm: null,
+  vehicles: [],
+  activeVehicleId: null,
+  services: [],
 };
 
-const STORAGE_KEY = "mentorque-proto";
+const STORAGE_KEY = "mentorque-garage";
 
 type StoreValue = {
   s: Session;
   setName: (name: string) => void;
-  toggleIntention: (t: Tag) => void;
-  setLevel: (l: Level) => void;
-  setVehicle: (v: Vehicle) => void;
-  setVehicleSpec: (patch: { engine?: string; version?: string }) => void;
-  setNoVehicle: () => void;
-  finishOnboarding: () => void;
   setPremium: (v: boolean) => void;
-  setPhoto: (dataUrl: string) => void;
-  saveLastService: (rec: ServiceRecord, oilAlertKm: number | null) => void;
+  addVehicle: (v: Omit<Vehicle, "id">) => string;
+  updateVehicle: (id: string, patch: Partial<Vehicle>) => void;
+  removeVehicle: (id: string) => void;
+  setActiveVehicle: (id: string) => void;
+  addService: (rec: Omit<ServiceRecord, "id">) => string;
+  updateService: (id: string, patch: Partial<ServiceRecord>) => void;
+  removeService: (id: string) => void;
+  finishOnboarding: () => void;
   reset: () => void;
 };
 
 const Ctx = createContext<StoreValue | null>(null);
 
+// Migrate the old single-vehicle shape (mentorque-proto) if present.
+function migrate(parsed: any): Session {
+  if (parsed && Array.isArray(parsed.vehicles)) return { ...EMPTY, ...parsed } as Session;
+  const next: Session = { ...EMPTY };
+  if (parsed?.vehicle) {
+    const id = newId();
+    next.vehicles = [{ id, ...parsed.vehicle, odometerKm: parsed.odometerKm ?? undefined, photo: parsed.photo ?? undefined }];
+    next.activeVehicleId = id;
+    if (parsed.lastService) {
+      next.services = [{ id: newId(), vehicleId: id, type: "revision", date: parsed.lastService.date, km: parsed.lastService.km, parts: [], notes: parsed.lastService.notes }];
+    }
+  }
+  next.name = parsed?.name ?? null;
+  next.premium = !!parsed?.premium;
+  next.onboarded = !!parsed?.onboarded && next.vehicles.length > 0;
+  return next;
+}
+
 export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const [s, setS] = useState<Session>(EMPTY);
 
-  // Hydrate from storage after mount (avoids SSR hydration mismatch).
   useEffect(() => {
     try {
-      const raw = typeof window !== "undefined" && window.localStorage.getItem(STORAGE_KEY);
-      if (raw) setS({ ...EMPTY, ...(JSON.parse(raw) as Partial<Session>) });
+      const raw = typeof window !== "undefined" && (window.localStorage.getItem(STORAGE_KEY) || window.localStorage.getItem("mentorque-proto"));
+      if (raw) setS(migrate(JSON.parse(raw)));
     } catch {
       /* ignore malformed storage */
     }
   }, []);
 
-  const persist = useCallback((next: Session) => {
-    setS(next);
+  const commit = useCallback((next: Session) => {
     try {
       if (typeof window !== "undefined") window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch {
       /* ignore quota errors */
     }
+    return next;
   }, []);
 
-  const toggleIntention = useCallback(
-    (t: Tag) =>
-      setS((prev) => {
-        const has = prev.intentions.includes(t);
-        // Removing is always allowed; adding is capped at MAX_INTENTIONS.
-        if (!has && prev.intentions.length >= MAX_INTENTIONS) return prev;
-        const intentions = has ? prev.intentions.filter((x) => x !== t) : [...prev.intentions, t];
-        const next = { ...prev, intentions };
-        try {
-          window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-        } catch {}
-        return next;
-      }),
-    []
+  const patch = useCallback((fn: (prev: Session) => Session) => setS((prev) => commit(fn(prev))), [commit]);
+
+  const setName = useCallback((name: string) => patch((p) => ({ ...p, name: name.trim() || null })), [patch]);
+  const setPremium = useCallback((v: boolean) => patch((p) => ({ ...p, premium: v })), [patch]);
+
+  const addVehicle = useCallback(
+    (v: Omit<Vehicle, "id">) => {
+      const id = newId();
+      patch((p) => ({ ...p, vehicles: [...p.vehicles, { ...v, id }], activeVehicleId: id }));
+      return id;
+    },
+    [patch]
   );
 
-  const setName = useCallback((name: string) => setS((p) => persistReturn(p, { name: name.trim() || null })), []);
-  const setLevel = useCallback((l: Level) => setS((p) => persistReturn(p, { level: l })), []);
-  const setVehicle = useCallback((v: Vehicle) => setS((p) => persistReturn(p, { vehicle: v, noVehicle: false })), []);
-  const setVehicleSpec = useCallback(
-    (patch: { engine?: string; version?: string }) =>
-      setS((p) => (p.vehicle ? persistReturn(p, { vehicle: { ...p.vehicle, ...patch } }) : p)),
-    []
+  const updateVehicle = useCallback(
+    (id: string, up: Partial<Vehicle>) => patch((p) => ({ ...p, vehicles: p.vehicles.map((v) => (v.id === id ? { ...v, ...up } : v)) })),
+    [patch]
   );
-  const setNoVehicle = useCallback(() => setS((p) => persistReturn(p, { vehicle: null, noVehicle: true })), []);
-  const finishOnboarding = useCallback(() => setS((p) => persistReturn(p, { onboarded: true })), []);
-  const setPremium = useCallback((v: boolean) => setS((p) => persistReturn(p, { premium: v })), []);
-  const setPhoto = useCallback((dataUrl: string) => setS((p) => persistReturn(p, { photo: dataUrl })), []);
-  const saveLastService = useCallback(
-    (rec: ServiceRecord, oilAlertKm: number | null) =>
-      setS((p) => persistReturn(p, { lastService: rec, odometerKm: rec.km, oilAlertKm })),
-    []
+
+  const removeVehicle = useCallback(
+    (id: string) =>
+      patch((p) => {
+        const vehicles = p.vehicles.filter((v) => v.id !== id);
+        const services = p.services.filter((r) => r.vehicleId !== id);
+        const activeVehicleId = p.activeVehicleId === id ? vehicles[0]?.id ?? null : p.activeVehicleId;
+        return { ...p, vehicles, services, activeVehicleId };
+      }),
+    [patch]
   );
-  const reset = useCallback(() => persist(EMPTY), [persist]);
+
+  const setActiveVehicle = useCallback((id: string) => patch((p) => ({ ...p, activeVehicleId: id })), [patch]);
+
+  const addService = useCallback(
+    (rec: Omit<ServiceRecord, "id">) => {
+      const id = newId();
+      patch((p) => {
+        // Logging a service also advances the vehicle's odometer if higher.
+        const vehicles = p.vehicles.map((v) => (v.id === rec.vehicleId && rec.km > (v.odometerKm ?? 0) ? { ...v, odometerKm: rec.km } : v));
+        return { ...p, services: [{ ...rec, id }, ...p.services], vehicles };
+      });
+      return id;
+    },
+    [patch]
+  );
+
+  const updateService = useCallback(
+    (id: string, up: Partial<ServiceRecord>) => patch((p) => ({ ...p, services: p.services.map((r) => (r.id === id ? { ...r, ...up } : r)) })),
+    [patch]
+  );
+
+  const removeService = useCallback((id: string) => patch((p) => ({ ...p, services: p.services.filter((r) => r.id !== id) })), [patch]);
+
+  const finishOnboarding = useCallback(() => patch((p) => ({ ...p, onboarded: true })), [patch]);
+  const reset = useCallback(() => patch(() => ({ ...EMPTY })), [patch]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s, setName, toggleIntention, setLevel, setVehicle, setVehicleSpec, setNoVehicle, finishOnboarding, setPremium, setPhoto, saveLastService, reset }),
-    [s, setName, toggleIntention, setLevel, setVehicle, setVehicleSpec, setNoVehicle, finishOnboarding, setPremium, setPhoto, saveLastService, reset]
+    () => ({ s, setName, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, finishOnboarding, reset }),
+    [s, setName, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
-}
-
-// Small helper: merge a patch, write through to storage, return the next state.
-function persistReturn(prev: Session, patch: Partial<Session>): Session {
-  const next = { ...prev, ...patch };
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-  } catch {}
-  return next;
 }
 
 export function usePrototype() {
@@ -137,28 +152,11 @@ export function usePrototype() {
   return ctx;
 }
 
-// Tags that lead with the learning thread rather than the "fix my car" thread.
-const LEARN_TAGS: Tag[] = ["learn_cars", "mechanics", "electronics", "career", "curiosity"];
-
-// The dominant tag drives Home ordering and which Premium pitch closes. A live
-// problem ("fix") wins when present; otherwise the first chosen intention;
-// defaulting to "understand".
-export function dominantTag(s: Session): Tag {
-  if (s.intentions.includes("fix")) return "fix";
-  return s.intentions[0] ?? "understand";
+// ---- Selectors -------------------------------------------------------------
+export function activeVehicle(s: Session): Vehicle | null {
+  return s.vehicles.find((v) => v.id === s.activeVehicleId) ?? s.vehicles[0] ?? null;
 }
-
-// Whether the experience should lead with learning (no vehicle, or the dominant
-// intention is a learning one). Drives the onboarding "first lesson" beat and
-// the learning-first Home layout.
-export function isLearnFirst(s: Session): boolean {
-  return s.noVehicle || LEARN_TAGS.includes(dominantTag(s));
-}
-
-// Pro audiences (working mechanics, engineering students/engineers, or anyone
-// aiming for the field) get the "knowledge straight from the industry" shortcut.
-export function isProAudience(s: Session): boolean {
-  const proLevel = s.level === "mechanic" || s.level === "eng_student" || s.level === "engineer";
-  const proIntent = s.intentions.some((t) => t === "career" || t === "mechanics" || t === "electronics");
-  return proLevel || proIntent;
+export function servicesFor(s: Session, vehicleId: string | null | undefined): ServiceRecord[] {
+  if (!vehicleId) return [];
+  return s.services.filter((r) => r.vehicleId === vehicleId).sort((a, b) => b.date.localeCompare(a.date) || b.km - a.km);
 }
