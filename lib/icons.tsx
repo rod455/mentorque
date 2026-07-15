@@ -162,6 +162,87 @@ export const IconSwap = (p: IconProps) => (
   </Base>
 );
 
+// Health gauge / speedometer
+export const IconGauge = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 15a8 8 0 1 1 16 0" />
+    <path d="M12 15l4-4" />
+    <path d="M4 15h1.5M18.5 15H20M12 7v1.5" />
+  </Base>
+);
+
+// History / clock
+export const IconClock = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M12 7.5V12l3 1.8" />
+  </Base>
+);
+
+// Learn / book
+export const IconBook = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M5 5.5A1.5 1.5 0 0 1 6.5 4H19v13H6.5A1.5 1.5 0 0 0 5 18.5z" />
+    <path d="M19 17v3H6.5A1.5 1.5 0 0 1 5 18.5" />
+  </Base>
+);
+
+// Car settings / gear
+export const IconSettings = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="3" />
+    <path d="M12 3v2.5M12 18.5V21M4.2 7.5l2.2 1.3M17.6 15.2l2.2 1.3M4.2 16.5l2.2-1.3M17.6 8.8l2.2-1.3" />
+  </Base>
+);
+
+// Engine block
+export const IconEngine = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 12v4h2l2 2h5v-2h3l2-2v-3h2v-2h-2V9h-3V6h-4v3H8l-2 2H4z" />
+  </Base>
+);
+
+// Brake disc
+export const IconBrake = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="7.5" />
+    <circle cx="12" cy="12" r="2.5" />
+    <path d="M12 4.5v2M12 17.5v2M4.5 12h2M17.5 12h2" />
+  </Base>
+);
+
+// Suspension coil
+export const IconSuspension = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M12 3v2M12 19v2" />
+    <path d="M8 6h8l-8 3h8l-8 3h8l-8 3h8" />
+  </Base>
+);
+
+// Tire
+export const IconTire = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="8.5" />
+    <circle cx="12" cy="12" r="3.5" />
+    <path d="M12 3.5v3M12 17.5v3M3.5 12h3M17.5 12h3" />
+  </Base>
+);
+
+// Electrical / bolt
+export const IconBolt = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M13 3 5 13h6l-1 8 8-10h-6z" />
+  </Base>
+);
+
+// Safety shield
+export const IconShield = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M12 3 5 6v5c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z" />
+    <path d="m9 12 2 2 4-4" />
+  </Base>
+);
+
 // Explore — compass
 export const IconCompass = (p: IconProps) => (
   <Base {...p}>
