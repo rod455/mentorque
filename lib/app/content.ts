@@ -205,7 +205,8 @@ export function getContent(locale: Locale) {
       title: T("Como trocar o óleo (passo a passo)", "How to change the oil (step by step)"),
       type: "video",
       system: "engine",
-      media: { provider: "mp4", src: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
+      // TODO: troque pelo link/ID do YouTube real desta aula (aceita URL completa ou só o ID).
+      media: { provider: "youtube", src: "jNQXAC9IVRw" },
       need: [T("Óleo e filtro corretos", "Correct oil and filter"), T("Chave de filtro e bacia", "Filter wrench and drain pan"), T("Luvas", "Gloves")],
       steps: [T("Aqueça o motor e desligue", "Warm the engine, then turn off"), T("Drene o óleo velho", "Drain the old oil"), T("Troque o filtro", "Replace the filter"), T("Complete com o óleo novo e confira o nível", "Refill and check the level")],
       safety: [T("Motor morno, nunca quente", "Warm engine, never hot"), T("Descarte o óleo em ponto de coleta", "Dispose of oil at a collection point")],
@@ -216,7 +217,8 @@ export function getContent(locale: Locale) {
       type: "video",
       system: "brakes",
       premium: true,
-      media: { provider: "mp4", src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" },
+      // TODO: troque pelo link/ID do YouTube real desta aula (aceita URL completa ou só o ID).
+      media: { provider: "youtube", src: "jNQXAC9IVRw" },
       need: [T("Pastilhas novas", "New pads"), T("Macaco e cavalete", "Jack and stands"), T("Chave de roda", "Lug wrench")],
       steps: [T("Suspenda e remova a roda", "Lift and remove the wheel"), T("Solte a pinça", "Unbolt the caliper"), T("Troque as pastilhas", "Swap the pads"), T("Monte e teste o freio devagar", "Reassemble and test brakes gently")],
       safety: [T("Use cavalete, nunca só o macaco", "Use stands, never the jack alone"), T("Bombeie o pedal antes de sair", "Pump the pedal before driving")],
