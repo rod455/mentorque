@@ -5,6 +5,7 @@ import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Card, Icon, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
+import { VideoPlayer } from "../VideoPlayer";
 
 // 2.6.A — Aprenda mecânica (para este carro)
 export function LearnScreen() {
@@ -67,10 +68,14 @@ export function ContentScreen({ id }: { id: string }) {
     <div>
       <AppHeader title={lesson.title} />
 
-      {/* Media placeholder */}
-      <div className="grid aspect-video place-items-center rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 text-cream/30 ring-1 ring-white/10">
-        <Icon name={lesson.type === "video" ? "diagnose" : "book"} className="h-12 w-12" />
-      </div>
+      {/* Player (in-app) or article placeholder */}
+      {lesson.media ? (
+        <VideoPlayer media={lesson.media} />
+      ) : (
+        <div className="grid aspect-video place-items-center rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 text-cream/30 ring-1 ring-white/10">
+          <Icon name={lesson.type === "video" ? "diagnose" : "book"} className="h-12 w-12" />
+        </div>
+      )}
 
       <Block title={c.learn.need}>
         <ul className="space-y-1.5">
