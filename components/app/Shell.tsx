@@ -1,5 +1,7 @@
 "use client";
 
+import { useRef } from "react";
+import type { PointerEvent as ReactPointerEvent } from "react";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { NavProvider, useNav, type View } from "@/lib/app/nav";
 import { Icon, useContent } from "./ui";
@@ -33,7 +35,21 @@ function PhoneShell({ children }: { children: React.ReactNode }) {
 
 // Maps a view to a screen. Deep car screens live under the "cars" tab.
 function Router() {
-  const { view } = useNav();
+  const { view, back, canBack } = useNav();
+
+  // Swipe left→right = go back to the previous screen (last one the user was on).
+  const down = useRef<{ x: number; y: number } | null>(null);
+  const onPointerDown = (e: ReactPointerEvent) => {
+    down.current = { x: e.clientX, y: e.clientY };
+  };
+  const onPointerUp = (e: ReactPointerEvent) => {
+    const start = down.current;
+    down.current = null;
+    if (!start) return;
+    const dx = e.clientX - start.x;
+    const dy = e.clientY - start.y;
+    if (dx > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && canBack) back();
+  };
 
   const screen = (() => {
     switch (view.name) {
@@ -59,7 +75,13 @@ function Router() {
 
   return (
     <>
-      <main className="flex-1 overflow-y-auto px-5 pb-28">{screen}</main>
+      <main
+        className="flex-1 overflow-y-auto px-5 pb-28"
+        onPointerDown={onPointerDown}
+        onPointerUp={onPointerUp}
+      >
+        {screen}
+      </main>
       <BottomNav />
     </>
   );
