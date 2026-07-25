@@ -5,10 +5,10 @@
 // Assets esperados em /public/carro/: carro-base.png e carro-roda.png
 // Posições das rodas calibradas por análise de pixel da arte oficial — não recortar os PNGs.
 
-export default function CarroMentorque({ size = 640, driving = true, speed = 0.9 }) {
+export default function CarroMentorque({ size = 640, driving = true, speed = 0.9, boost = false }) {
   return (
     <div
-      className={`carro-wrap ${driving ? "driving" : ""}`}
+      className={`carro-wrap ${driving ? "driving" : ""} ${boost ? "boost" : ""}`}
       style={{ width: size, "--spin": `${speed}s` }}
     >
       <img className="base" src="/carro/carro-base.png" alt="Conversível Mentorque" draggable={false} />
@@ -49,6 +49,13 @@ export default function CarroMentorque({ size = 640, driving = true, speed = 0.9
           0% { opacity: 0; transform: translate(0, 0) scale(0.4); }
           20% { opacity: 0.5; }
           100% { opacity: 0; transform: translate(90%, -130%) scale(1.7); }
+        }
+        /* On acceleration: denser, bigger, faster smoke */
+        .boost.driving .exhaust { animation-name: exhaust-boost; animation-duration: 0.5s; }
+        @keyframes exhaust-boost {
+          0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
+          15% { opacity: 0.85; }
+          100% { opacity: 0; transform: translate(120%, -170%) scale(2.5); }
         }
         @media (prefers-reduced-motion: reduce) {
           .carro-wrap, .roda, .exhaust { animation: none !important; }

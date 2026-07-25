@@ -31,7 +31,7 @@ export function OnboardingFlow() {
       setTimeout(() => {
         setI(1);
         setCarLeaving(false);
-      }, 680);
+      }, 850);
     } else {
       advance();
     }
@@ -48,35 +48,31 @@ export function OnboardingFlow() {
         <div className="flex flex-1 flex-col items-center justify-center text-center">
           {/* Ilustração por card: 0 carro, 1 Biela idle, 2 cena da garagem.
               Brilho âmbar atrás dissolve o contorno. */}
-          <div className="relative mb-8 flex min-h-[19rem] items-center justify-center">
-            <span
-              aria-hidden
-              className={`pointer-events-none absolute left-1/2 top-1/2 h-64 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl transition-opacity duration-500 ${
-                carLeaving ? "opacity-0" : "opacity-100"
-              }`}
-              style={{ background: "radial-gradient(closest-side, rgba(242,166,35,0.32), transparent)" }}
-            />
-            {i === 0 ? (
-              // overflow-hidden "track" so the car clips at the card edge as it leaves
-              <div className="relative flex w-full justify-center overflow-hidden">
+          {/* full-bleed clip so the car can drive off the entire screen width */}
+          <div className="-mx-6 overflow-hidden">
+            <div className="relative mb-8 flex min-h-[19rem] items-center justify-center">
+              <span
+                aria-hidden
+                className={`pointer-events-none absolute left-1/2 top-1/2 h-64 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl transition-opacity duration-500 ${
+                  carLeaving ? "opacity-0" : "opacity-100"
+                }`}
+                style={{ background: "radial-gradient(closest-side, rgba(242,166,35,0.32), transparent)" }}
+              />
+              {i === 0 ? (
                 <div className={carLeaving ? "car-exit" : ""}>
-                  <CarroMentorque size={300} driving speed={carLeaving ? 0.25 : 0.9} />
+                  <CarroMentorque size={300} driving speed={carLeaving ? 0.22 : 0.9} boost={carLeaving} />
                 </div>
-              </div>
-            ) : i === 1 ? (
-              <div className="relative">
+              ) : i === 1 ? (
                 <BielaMascote size={188} />
-              </div>
-            ) : (
-              <div className="relative">
+              ) : (
                 <img
                   src="/onboarding/cena-garagem.png"
                   alt="Biela na garagem com o conversível Mentorque"
                   className="w-[300px] max-w-full select-none"
                   draggable={false}
                 />
-              </div>
-            )}
+              )}
+            </div>
           </div>
           <div className={`transition-opacity duration-300 ${carLeaving ? "opacity-0" : "opacity-100"}`}>
             <h1 className="text-balance font-display text-[26px] font-bold leading-tight text-cream">{card.title}</h1>
@@ -93,12 +89,12 @@ export function OnboardingFlow() {
 
       <style jsx>{`
         .car-exit {
-          animation: car-drive-off 0.68s cubic-bezier(0.5, 0, 0.9, 0.25) forwards;
+          animation: car-drive-off 0.85s cubic-bezier(0.45, 0, 0.85, 0.2) forwards;
         }
         @keyframes car-drive-off {
           0% { transform: translateX(0); }
-          16% { transform: translateX(16px); }
-          100% { transform: translateX(-205%); }
+          14% { transform: translateX(18px); }
+          100% { transform: translateX(-130vw); }
         }
         @media (prefers-reduced-motion: reduce) {
           .car-exit { animation: none; }
