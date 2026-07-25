@@ -31,12 +31,12 @@ export function OnboardingFlow() {
           <div className="relative mb-8 flex min-h-[19rem] items-center justify-center">
             <span
               aria-hidden
-              className="pointer-events-none absolute left-1/2 top-1/2 h-56 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
-              style={{ background: "radial-gradient(closest-side, rgba(242,166,35,0.22), transparent)" }}
+              className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+              style={{ background: "radial-gradient(closest-side, rgba(242,166,35,0.32), transparent)" }}
             />
             <div className="relative">
               {i === 0 ? (
-                <CarroMentorque size={300} driving={false} />
+                <CarroMentorque size={300} driving />
               ) : i === 1 ? (
                 <BielaMascote size={188} />
               ) : (
