@@ -26,15 +26,28 @@ export function OnboardingFlow() {
 
       <div className="flex flex-1 flex-col px-6 pb-8">
         <div className="flex flex-1 flex-col items-center justify-center text-center">
-          {/* Mascote por card (tabela "Onde aplicar" do handoff): 0 carro estático, 1 idle, 2 aceno */}
-          <div className="mb-8 flex h-52 items-end justify-center">
-            {i === 0 ? (
-              <CarroMentorque size={300} driving={false} />
-            ) : i === 1 ? (
-              <BielaMascote size={188} />
-            ) : (
-              <BielaMascote size={188} pose="acenando" />
-            )}
+          {/* Ilustração por card: 0 carro estático, 1 Biela idle, 2 cena da garagem.
+              Brilho âmbar atrás (como no design de referência) dissolve o contorno. */}
+          <div className="relative mb-8 flex min-h-[19rem] items-center justify-center">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute left-1/2 top-1/2 h-56 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+              style={{ background: "radial-gradient(closest-side, rgba(242,166,35,0.22), transparent)" }}
+            />
+            <div className="relative">
+              {i === 0 ? (
+                <CarroMentorque size={300} driving={false} />
+              ) : i === 1 ? (
+                <BielaMascote size={188} />
+              ) : (
+                <img
+                  src="/onboarding/cena-garagem.png"
+                  alt="Biela na garagem com o conversível Mentorque"
+                  className="w-[300px] max-w-full select-none"
+                  draggable={false}
+                />
+              )}
+            </div>
           </div>
           <h1 className="text-balance font-display text-[26px] font-bold leading-tight text-cream">{card.title}</h1>
           <p className="mx-auto mt-3 max-w-xs text-pretty text-sm text-cream/70">{card.body}</p>
