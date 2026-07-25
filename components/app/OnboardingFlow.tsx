@@ -6,7 +6,6 @@ import { usePrototype } from "@/lib/app/store";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
 import { PhoneFrame, ProgressDots, useContent } from "./ui";
-import BielaMascote from "@/components/BielaMascote";
 import CarroMentorque from "@/components/CarroMentorque";
 
 // 0.1 — Splash / apresentação (3 cards) → finishes into 1.1 Meus Carros.
@@ -90,7 +89,12 @@ export function OnboardingFlow() {
                 <CarroMentorque size={300} driving speed={carLeaving ? 0.2 : 0.9} boost={carLeaving} />
               </div>
             ) : i === 1 ? (
-              <BielaMascote size={188} />
+              <img
+                src="/biela/biela-cafe-anim.webp"
+                alt="Biela tomando um café"
+                className="w-[188px] max-w-full select-none"
+                draggable={false}
+              />
             ) : (
               <img
                 src="/onboarding/cena-garagem.png"
