@@ -10,6 +10,7 @@ import type { ServiceRecord, VehicleType } from "@/lib/app/types";
 import { Button } from "@/components/ui/Button";
 import { useNav } from "@/lib/app/nav";
 import { AppHeader, Card, Chip, Icon, inputCls, useContent } from "../ui";
+import BielaMascote from "@/components/BielaMascote";
 
 function monthsSince(iso: string): number {
   const d = new Date(iso + "T00:00:00");
@@ -58,14 +59,9 @@ export function CarsScreen() {
 
       {s.vehicles.length === 0 ? (
         <Card className="mt-4 text-center">
-          {/* Garagem vazia → Biela chamando pra cadastrar o primeiro carro */}
+          {/* Garagem vazia → Biela acenando (estático, bordas limpas) */}
           <div className="mx-auto mb-1 flex justify-center">
-            <img
-              src="/biela/biela-vemca-anim.webp"
-              alt="Biela convidando você a cadastrar o carro"
-              className="w-[200px] max-w-full select-none"
-              draggable={false}
-            />
+            <BielaMascote pose="acenando" size={220} />
           </div>
           <p className="font-display text-base text-cream">{c.cars.emptyTitle}</p>
           <p className="mx-auto mt-1 max-w-xs text-sm text-cream/55">{c.cars.emptyBody}</p>
