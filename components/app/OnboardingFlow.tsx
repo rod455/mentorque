@@ -32,9 +32,14 @@ export function OnboardingFlow() {
     if (!start || carLeaving) return;
     const dx = e.clientX - start.x;
     const dy = e.clientY - start.y;
-    // horizontal, rightward, past threshold
-    if (dx > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && i > 0) {
-      setI((v) => v - 1);
+    const horizontal = Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5;
+    if (!horizontal) return;
+    if (dx > 0) {
+      // left→right = back
+      if (i > 0) setI((v) => v - 1);
+    } else {
+      // right→left = forward (same behavior as the Continue button)
+      onContinue();
     }
   };
 
