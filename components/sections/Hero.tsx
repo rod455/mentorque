@@ -6,6 +6,7 @@ import { useI18n } from "@/lib/i18n";
 import { WaitlistForm } from "@/components/ui/WaitlistForm";
 import { StoreBadges } from "@/components/ui/StoreBadges";
 import { PhoneMockup } from "@/components/ui/PhoneMockup";
+import BielaNoCarro from "@/components/BielaNoCarro";
 import { HexMotif } from "@/components/ui/HexMotif";
 
 const ROTATE_MS = 5000;
@@ -120,7 +121,9 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="relative">
+        <div className="relative flex flex-col items-center gap-8">
+          {/* Cena da Biela dirigindo (handoff "Onde aplicar" → Hero da landing) */}
+          <BielaNoCarro size={400} />
           <PhoneMockup />
         </div>
       </div>

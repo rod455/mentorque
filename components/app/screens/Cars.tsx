@@ -10,6 +10,7 @@ import type { ServiceRecord, VehicleType } from "@/lib/app/types";
 import { Button } from "@/components/ui/Button";
 import { useNav } from "@/lib/app/nav";
 import { AppHeader, Card, Chip, Icon, inputCls, useContent } from "../ui";
+import BielaMascote from "@/components/BielaMascote";
 
 function monthsSince(iso: string): number {
   const d = new Date(iso + "T00:00:00");
@@ -58,8 +59,9 @@ export function CarsScreen() {
 
       {s.vehicles.length === 0 ? (
         <Card className="mt-4 text-center">
-          <div className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-2xl bg-graphite-700 text-cream/60">
-            <Icon name="car" className="h-7 w-7" />
+          {/* Garagem vazia (tabela "Onde aplicar" do handoff) → Biela acenando */}
+          <div className="mx-auto mb-1 flex justify-center">
+            <BielaMascote pose="acenando" size={220} />
           </div>
           <p className="font-display text-base text-cream">{c.cars.emptyTitle}</p>
           <p className="mx-auto mt-1 max-w-xs text-sm text-cream/55">{c.cars.emptyBody}</p>

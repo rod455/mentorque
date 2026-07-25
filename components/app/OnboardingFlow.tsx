@@ -4,7 +4,9 @@ import { useState } from "react";
 import { usePrototype } from "@/lib/app/store";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
-import { Icon, PhoneFrame, ProgressDots, useContent } from "./ui";
+import { PhoneFrame, ProgressDots, useContent } from "./ui";
+import BielaMascote from "@/components/BielaMascote";
+import CarroMentorque from "@/components/CarroMentorque";
 
 // 0.1 — Splash / apresentação (3 cards) → finishes into 1.1 Meus Carros.
 export function OnboardingFlow() {
@@ -24,8 +26,15 @@ export function OnboardingFlow() {
 
       <div className="flex flex-1 flex-col px-6 pb-8">
         <div className="flex flex-1 flex-col items-center justify-center text-center">
-          <div className="mb-8 grid h-24 w-24 place-items-center rounded-[2rem] bg-amber/15 text-amber shadow-glow">
-            <Icon name={card.icon} className="h-12 w-12" />
+          {/* Mascote por card (tabela "Onde aplicar" do handoff): 0 carro estático, 1 idle, 2 aceno */}
+          <div className="mb-8 flex h-52 items-end justify-center">
+            {i === 0 ? (
+              <CarroMentorque size={300} driving={false} />
+            ) : i === 1 ? (
+              <BielaMascote size={188} />
+            ) : (
+              <BielaMascote size={188} pose="acenando" />
+            )}
           </div>
           <h1 className="text-balance font-display text-[26px] font-bold leading-tight text-cream">{card.title}</h1>
           <p className="mx-auto mt-3 max-w-xs text-pretty text-sm text-cream/70">{card.body}</p>
