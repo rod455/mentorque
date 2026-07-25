@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import type { PointerEvent as ReactPointerEvent } from "react";
 import { usePrototype } from "@/lib/app/store";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
@@ -19,6 +20,23 @@ export function OnboardingFlow() {
   const card = cards[i];
 
   const advance = () => (last ? finishOnboarding() : setI((v) => v + 1));
+
+  // Swipe left→right anywhere on the screen = go back a card (no button).
+  const down = useRef<{ x: number; y: number } | null>(null);
+  const onPointerDown = (e: ReactPointerEvent) => {
+    down.current = { x: e.clientX, y: e.clientY };
+  };
+  const onPointerUp = (e: ReactPointerEvent) => {
+    const start = down.current;
+    down.current = null;
+    if (!start || carLeaving) return;
+    const dx = e.clientX - start.x;
+    const dy = e.clientY - start.y;
+    // horizontal, rightward, past threshold
+    if (dx > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && i > 0) {
+      setI((v) => v - 1);
+    }
+  };
 
   const onContinue = () => {
     if (carLeaving) return;
@@ -39,6 +57,11 @@ export function OnboardingFlow() {
 
   return (
     <PhoneFrame>
+      <div
+        className="flex flex-1 flex-col"
+        onPointerDown={onPointerDown}
+        onPointerUp={onPointerUp}
+      >
       <div className="flex items-center justify-between px-5 pb-2 pt-5">
         <ProgressDots total={cards.length} index={i} />
         <LangSwitcher />
@@ -83,6 +106,7 @@ export function OnboardingFlow() {
             {last ? c.splash.start : c.splash.next}
           </Button>
         </div>
+      </div>
       </div>
 
       <style jsx>{`
