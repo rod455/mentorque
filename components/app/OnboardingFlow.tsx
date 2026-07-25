@@ -48,31 +48,32 @@ export function OnboardingFlow() {
         <div className="flex flex-1 flex-col items-center justify-center text-center">
           {/* Ilustração por card: 0 carro, 1 Biela idle, 2 cena da garagem.
               Brilho âmbar atrás dissolve o contorno. */}
-          {/* full-bleed clip so the car can drive off the entire screen width */}
-          <div className="-mx-6 overflow-hidden">
-            <div className="relative mb-8 flex min-h-[19rem] items-center justify-center">
-              <span
-                aria-hidden
-                className={`pointer-events-none absolute left-1/2 top-1/2 h-64 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl transition-opacity duration-500 ${
-                  carLeaving ? "opacity-0" : "opacity-100"
-                }`}
-                style={{ background: "radial-gradient(closest-side, rgba(242,166,35,0.32), transparent)" }}
-              />
-              {i === 0 ? (
+          <div className="relative mb-8 flex min-h-[19rem] items-center justify-center">
+            <span
+              aria-hidden
+              className={`pointer-events-none absolute left-1/2 top-1/2 h-64 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl transition-opacity duration-500 ${
+                carLeaving ? "opacity-0" : "opacity-100"
+              }`}
+              style={{ background: "radial-gradient(closest-side, rgba(242,166,35,0.32), transparent)" }}
+            />
+            {i === 0 ? (
+              // Full-bleed clip ONLY around the car (glow stays outside, uncut) so it can
+              // drive off the whole screen without boxing the other cards' art.
+              <div className="-mx-6 flex flex-1 items-center justify-center self-stretch overflow-hidden">
                 <div className={carLeaving ? "car-exit" : ""}>
                   <CarroMentorque size={300} driving speed={carLeaving ? 0.22 : 0.9} boost={carLeaving} />
                 </div>
-              ) : i === 1 ? (
-                <BielaMascote size={188} />
-              ) : (
-                <img
-                  src="/onboarding/cena-garagem.png"
-                  alt="Biela na garagem com o conversível Mentorque"
-                  className="w-[300px] max-w-full select-none"
-                  draggable={false}
-                />
-              )}
-            </div>
+              </div>
+            ) : i === 1 ? (
+              <BielaMascote size={188} />
+            ) : (
+              <img
+                src="/onboarding/cena-garagem.png"
+                alt="Biela na garagem com o conversível Mentorque"
+                className="w-[300px] max-w-full select-none"
+                draggable={false}
+              />
+            )}
           </div>
           <div className={`transition-opacity duration-300 ${carLeaving ? "opacity-0" : "opacity-100"}`}>
             <h1 className="text-balance font-display text-[26px] font-bold leading-tight text-cream">{card.title}</h1>
