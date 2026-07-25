@@ -97,8 +97,8 @@ export function OnboardingFlow() {
         }
         @keyframes car-drive-off {
           0% { transform: translateX(0); }
-          16% { transform: translateX(-16px); }
-          100% { transform: translateX(190%); }
+          16% { transform: translateX(16px); }
+          100% { transform: translateX(-205%); }
         }
         @media (prefers-reduced-motion: reduce) {
           .car-exit { animation: none; }
