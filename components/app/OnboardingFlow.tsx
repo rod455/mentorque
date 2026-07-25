@@ -31,7 +31,7 @@ export function OnboardingFlow() {
       setTimeout(() => {
         setI(1);
         setCarLeaving(false);
-      }, 850);
+      }, 1350);
     } else {
       advance();
     }
@@ -57,12 +57,9 @@ export function OnboardingFlow() {
               style={{ background: "radial-gradient(closest-side, rgba(242,166,35,0.32), transparent)" }}
             />
             {i === 0 ? (
-              // Full-bleed clip ONLY around the car (glow stays outside, uncut) so it can
-              // drive off the whole screen without boxing the other cards' art.
-              <div className="-mx-6 flex flex-1 items-center justify-center self-stretch overflow-hidden">
-                <div className={carLeaving ? "car-exit" : ""}>
-                  <CarroMentorque size={300} driving speed={carLeaving ? 0.22 : 0.9} boost={carLeaving} />
-                </div>
+              // The car drives off the whole screen; PhoneFrame clips at the screen edge.
+              <div className={carLeaving ? "car-exit" : ""}>
+                <CarroMentorque size={300} driving speed={carLeaving ? 0.2 : 0.9} boost={carLeaving} />
               </div>
             ) : i === 1 ? (
               <BielaMascote size={188} />
@@ -90,12 +87,12 @@ export function OnboardingFlow() {
 
       <style jsx>{`
         .car-exit {
-          animation: car-drive-off 0.85s cubic-bezier(0.45, 0, 0.85, 0.2) forwards;
+          animation: car-drive-off 1.35s cubic-bezier(0.5, 0, 0.72, 0.3) forwards;
         }
         @keyframes car-drive-off {
           0% { transform: translateX(0); }
-          14% { transform: translateX(18px); }
-          100% { transform: translateX(-130vw); }
+          14% { transform: translateX(20px); }
+          100% { transform: translateX(-135vw); }
         }
         @media (prefers-reduced-motion: reduce) {
           .car-exit { animation: none; }

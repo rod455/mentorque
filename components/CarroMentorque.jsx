@@ -17,6 +17,9 @@ export default function CarroMentorque({ size = 640, driving = true, speed = 0.9
       <span className="exhaust e1" />
       <span className="exhaust e2" />
       <span className="exhaust e3" />
+      <span className="exhaust e4" />
+      <span className="exhaust e5" />
+      <span className="exhaust e6" />
       <style jsx>{`
         .carro-wrap {
           position: relative;
@@ -38,24 +41,33 @@ export default function CarroMentorque({ size = 640, driving = true, speed = 0.9
         /* Exhaust smoke from the tailpipe at the rear (right) — drifts back + up */
         .exhaust {
           position: absolute; left: 88%; top: 70%;
-          width: 5.5%; aspect-ratio: 1; border-radius: 50%;
-          background: radial-gradient(circle, rgba(216, 216, 222, 0.55), rgba(216, 216, 222, 0));
+          width: 6%; aspect-ratio: 1; border-radius: 50%;
+          background: radial-gradient(circle, rgba(214, 214, 220, 0.6), rgba(214, 214, 220, 0));
           opacity: 0;
         }
         .driving .exhaust { animation: exhaust-puff 1.3s ease-out infinite; }
         .exhaust.e2 { animation-delay: 0.43s; }
         .exhaust.e3 { animation-delay: 0.86s; }
+        .exhaust.e4 { animation-delay: 0.22s; }
+        .exhaust.e5 { animation-delay: 0.65s; }
+        .exhaust.e6 { animation-delay: 1.08s; }
         @keyframes exhaust-puff {
           0% { opacity: 0; transform: translate(0, 0) scale(0.4); }
-          20% { opacity: 0.5; }
+          20% { opacity: 0.45; }
           100% { opacity: 0; transform: translate(90%, -130%) scale(1.7); }
         }
-        /* On acceleration: denser, bigger, faster smoke */
-        .boost.driving .exhaust { animation-name: exhaust-boost; animation-duration: 0.5s; }
+        /* On acceleration: much denser, bigger, faster smoke (thick stream) */
+        .boost.driving .exhaust { animation-name: exhaust-boost; animation-duration: 0.42s; }
+        .boost .exhaust.e1 { animation-delay: 0s; }
+        .boost .exhaust.e2 { animation-delay: 0.07s; }
+        .boost .exhaust.e3 { animation-delay: 0.14s; }
+        .boost .exhaust.e4 { animation-delay: 0.21s; }
+        .boost .exhaust.e5 { animation-delay: 0.28s; }
+        .boost .exhaust.e6 { animation-delay: 0.35s; }
         @keyframes exhaust-boost {
-          0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
-          15% { opacity: 0.85; }
-          100% { opacity: 0; transform: translate(120%, -170%) scale(2.5); }
+          0% { opacity: 0; transform: translate(0, 0) scale(0.8); }
+          12% { opacity: 0.95; }
+          100% { opacity: 0; transform: translate(150%, -200%) scale(3.4); }
         }
         @media (prefers-reduced-motion: reduce) {
           .carro-wrap, .roda, .exhaust { animation: none !important; }
