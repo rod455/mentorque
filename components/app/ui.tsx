@@ -79,8 +79,8 @@ export function Icon({ name, className }: { name: string; className?: string }) 
 // web prototype reads as a device. Children scroll inside.
 export function PhoneFrame({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen w-full bg-graphite-900 text-cream antialiased">
-      <div className="mx-auto flex min-h-screen w-full max-w-[440px] flex-col overflow-hidden bg-graphite shadow-card sm:my-0 sm:min-h-screen">
+    <div className="min-h-screen w-full overflow-x-hidden bg-graphite-900 text-cream antialiased">
+      <div className="mx-auto flex min-h-screen w-full max-w-[440px] flex-col bg-graphite shadow-card sm:my-0 sm:min-h-screen">
         {children}
       </div>
     </div>

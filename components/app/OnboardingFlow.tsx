@@ -119,9 +119,11 @@ export function OnboardingFlow() {
           animation: car-drive-off 1.35s cubic-bezier(0.5, 0, 0.72, 0.3) forwards;
         }
         @keyframes car-drive-off {
-          0% { transform: translateX(0); }
+          0% { transform: translateX(0); opacity: 1; }
           14% { transform: translateX(20px); }
-          100% { transform: translateX(-135vw); }
+          40% { opacity: 1; }
+          82% { opacity: 0; }
+          100% { transform: translateX(-135vw); opacity: 0; }
         }
         @media (prefers-reduced-motion: reduce) {
           .car-exit { animation: none; }
