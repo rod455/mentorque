@@ -3,13 +3,14 @@
 import { useRef, useState } from "react";
 import { servicesFor, usePrototype } from "@/lib/app/store";
 import { computeHealth } from "@/lib/app/health";
+import { computeQuizHealth } from "@/lib/app/healthQuiz";
 import { LIMITS, economySaved } from "@/lib/app/premium";
 import { formatBRL, vehicleLabel } from "@/lib/app/content";
 import { resizeImage } from "@/lib/app/image";
 import type { ServiceRecord, VehicleType } from "@/lib/app/types";
 import { Button } from "@/components/ui/Button";
 import { useNav } from "@/lib/app/nav";
-import { AppHeader, Card, Chip, Icon, inputCls, useContent } from "../ui";
+import { AppHeader, Card, Chip, Icon, inputCls, Sheet, useContent } from "../ui";
 import BielaMascote from "@/components/BielaMascote";
 
 // Standard car "avatars" (placeholder until custom art is uploaded).
@@ -50,8 +51,16 @@ export function HealthPill({ score }: { score: number }) {
 // 1.1 — Meus Carros
 export function CarsScreen() {
   const c = useContent();
-  const { s, setActiveVehicle } = usePrototype();
+  const { s, setActiveVehicle, updateVehicle } = usePrototype();
   const { go, root } = useNav();
+  const [editNickId, setEditNickId] = useState<string | null>(null);
+  const [nickInput, setNickInput] = useState("");
+
+  const openNick = (id: string, current?: string) => { setNickInput(current ?? ""); setEditNickId(id); };
+  const saveNick = () => {
+    if (editNickId) updateVehicle(editNickId, { nickname: nickInput.trim() || undefined });
+    setEditNickId(null);
+  };
 
   const atLimit = !s.premium && s.vehicles.length >= LIMITS.freeCars;
   const onAdd = () => go(atLimit ? { name: "subscribe", ctx: "cars" } : { name: "addCar" });
@@ -94,8 +103,15 @@ export function CarsScreen() {
           {s.vehicles.map((v) => {
             const services = servicesFor(s, v.id);
             const health = computeHealth(v, services);
+            const score = computeQuizHealth(v.quiz ?? {}, v).score;
             return (
-              <button key={v.id} onClick={() => { setActiveVehicle(v.id); root({ name: "car" }); }} className="block w-full text-left">
+              <div
+                key={v.id}
+                role="button"
+                tabIndex={0}
+                onClick={() => { setActiveVehicle(v.id); root({ name: "car" }); }}
+                className="block w-full cursor-pointer text-left"
+              >
                 <Card className="hover:ring-white/15">
                   <div className="flex items-center gap-3">
                     <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-teal/15 text-teal">
@@ -107,23 +123,55 @@ export function CarsScreen() {
                       )}
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block font-display text-base text-cream">{vehicleLabel(v)}</span>
+                      <span className="flex items-center gap-1.5">
+                        <span className="truncate font-display text-base text-cream">{v.nickname || v.model}</span>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); openNick(v.id, v.nickname); }}
+                          className="shrink-0 text-amber/70 hover:text-amber"
+                          aria-label={c.common.edit}
+                        >
+                          <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M12 20h9" />
+                            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                          </svg>
+                        </button>
+                      </span>
                       <span className="block truncate text-xs text-cream/50">
-                        {[v.plate, v.odometerKm != null ? `${v.odometerKm.toLocaleString()} km` : c.cars.noKm].filter(Boolean).join(" · ")}
+                        {v.odometerKm != null ? `${v.odometerKm.toLocaleString()} km` : c.cars.noKm}
                       </span>
                     </span>
                     <span className="shrink-0 text-right">
                       <span className="block text-[10px] uppercase tracking-wide text-cream/40">{c.cars.health}</span>
-                      <HealthPill score={health.score} />
+                      <HealthPill score={score} />
                     </span>
                   </div>
-                  {s.premium ? <PremiumCarDetail services={services} systems={health.systems} /> : <FreeCarAlert findings={health.findings} />}
+                  <div className="mt-2 flex items-end justify-between gap-2">
+                    <div className="min-w-0">
+                      {s.premium ? <PremiumCarDetail services={services} systems={health.systems} /> : <FreeCarAlert findings={health.findings} />}
+                    </div>
+                    <span className="shrink-0 text-[11px] text-cream/45">{vehicleLabel(v)}</span>
+                  </div>
                 </Card>
-              </button>
+              </div>
             );
           })}
         </div>
       )}
+
+      {/* Edit car name (nickname) */}
+      <Sheet open={editNickId != null} onClose={() => setEditNickId(null)}>
+        <h2 className="font-display text-xl font-bold text-cream">{c.cars.nameCar}</h2>
+        <input
+          value={nickInput}
+          onChange={(e) => setNickInput(e.target.value)}
+          placeholder={c.cars.nameCarPh}
+          className={`mt-4 ${inputCls}`}
+        />
+        <Button size="lg" className="mt-4 w-full" onClick={saveNick}>
+          {c.common.save}
+        </Button>
+      </Sheet>
     </div>
   );
 }

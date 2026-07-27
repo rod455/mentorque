@@ -15,6 +15,7 @@ export type Vehicle = {
   plate?: string; // placa (optional)
   odometerKm?: number; // km atual
   photo?: string; // downscaled data URL
+  nickname?: string; // custom name the user gives the car
   quiz?: Record<string, string>; // Health-quiz answers (questionId -> optionKey)
 };
 

@@ -412,6 +412,8 @@ export function getContent(locale: Locale) {
       alertOverdue: T("Revisão vencida", "Service overdue"),
       alertPending: T("Serviço pendente", "Service pending"),
       ok: T("Tudo em dia", "All up to date"),
+      nameCar: T("Nome do carro", "Car name"),
+      nameCarPh: T("Ex.: meu Fusquinha", "e.g. my little Bug"),
     },
 
     addCar: {
