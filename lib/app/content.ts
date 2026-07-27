@@ -38,7 +38,7 @@ export function getContent(locale: Locale) {
     Suzuki: ["GSX-S750", "Burgman", "DR 160"],
     "Royal Enfield": ["Meteor 350", "Himalayan", "Classic 350"],
   };
-  const years = Array.from({ length: 17 }, (_, i) => 2026 - i);
+  const years = Array.from({ length: 27 }, (_, i) => 2026 - i);
 
   // ---- Symptoms (2.2) ------------------------------------------------------
   type Sym = {
@@ -424,6 +424,7 @@ export function getContent(locale: Locale) {
       model: T("Modelo", "Model"),
       modelPh: T("Digite o modelo", "Type the model"),
       year: T("Ano", "Year"),
+      yearPh: T("Selecione o ano", "Select the year"),
       engine: T("Versão / motor (opcional, recomendado)", "Version / engine (optional, recommended)"),
       enginePh: T("ex.: 1.0 Turbo", "e.g. 1.0 Turbo"),
       version: T("Versão exata", "Exact version"),

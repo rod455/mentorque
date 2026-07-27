@@ -254,7 +254,20 @@ export function AddCarScreen({ editId }: { editId?: string }) {
             </Field>
           ))}
 
-        {model && <Picker label={a.year} value={year} options={c.years.slice(0, 14)} onPick={setYear} />}
+        {model && (
+          <Field label={a.year}>
+            <select
+              value={year ?? ""}
+              onChange={(e) => setYear(e.target.value ? Number(e.target.value) : null)}
+              className={inputCls}
+            >
+              <option value="" disabled>{a.yearPh}</option>
+              {c.years.map((y) => (
+                <option key={y} value={y}>{y}</option>
+              ))}
+            </select>
+          </Field>
+        )}
 
         <Field label={a.engine}>
           <input value={engine} onChange={(e) => setEngine(e.target.value)} placeholder={a.enginePh} className={inputCls} />
