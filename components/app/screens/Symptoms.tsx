@@ -32,7 +32,7 @@ export function SymptomsScreen() {
 
   return (
     <div>
-      <AppHeader title={v ? `${ui.title} ${v.model}?` : c.nav.problems} />
+      <AppHeader title={v ? ui.titleCar.replace("{car}", v.model) : c.nav.problems} />
 
       {/* Cena da Biela na garagem (banner) — feather nas bordas dissolve o contorno */}
       <div className="-mt-1 mb-4 overflow-hidden rounded-2xl">
