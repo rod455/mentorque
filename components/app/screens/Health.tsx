@@ -6,7 +6,7 @@ import { computeHealth, SERVICE_SYSTEMS } from "@/lib/app/health";
 import { computeQuizHealth, getHealthQuiz } from "@/lib/app/healthQuiz";
 import { useI18n } from "@/lib/i18n";
 import { costProjection, systemPct, systemPriority } from "@/lib/app/premium";
-import { formatBRL, vehicleLabel } from "@/lib/app/content";
+import { carName, formatBRL, vehicleLabel } from "@/lib/app/content";
 import type { SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
@@ -50,7 +50,7 @@ export function HealthScreen() {
 
   return (
     <div>
-      <AppHeader title={`${h.title} ${v.model}`} />
+      <AppHeader title={`${h.title} ${carName(v)}`} />
 
       {/* Score */}
       <Card className="flex items-center gap-4">
@@ -187,7 +187,7 @@ export function SystemDetail({ system }: { system: SystemKey }) {
 
   return (
     <div>
-      <AppHeader title={`${h.systemLabels[system]} – ${v.model}`} />
+      <AppHeader title={`${h.systemLabels[system]} – ${carName(v)}`} />
 
       <SectionTitle>{d.state}</SectionTitle>
       <Card className="flex items-center gap-3">

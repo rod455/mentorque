@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { symptomRecommended } from "@/lib/app/premium";
-import { vehicleLabel } from "@/lib/app/content";
+import { carName, vehicleLabel } from "@/lib/app/content";
 import type { SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
@@ -32,7 +32,7 @@ export function SymptomsScreen() {
 
   return (
     <div>
-      <AppHeader title={v ? ui.titleCar.replace("{car}", v.model) : c.nav.problems} />
+      <AppHeader title={v ? ui.titleCar.replace("{car}", carName(v)) : c.nav.problems} />
 
       {/* Cena da Biela na garagem (banner) — feather nas bordas dissolve o contorno */}
       <div className="-mt-1 mb-4 overflow-hidden rounded-2xl">
@@ -86,7 +86,7 @@ export function SymptomDetail({ id }: { id: string }) {
   const ui = c.symptomsUi;
   const { s } = usePrototype();
   const { go, root } = useNav();
-  const car = activeVehicle(s)?.model ?? "";
+  const car = carName(activeVehicle(s), "");
   const sx = c.symptoms.find((x) => x.id === id);
   if (!sx) return <AppHeader title="—" />;
   const pd = c.symptomPremium[sx.id];

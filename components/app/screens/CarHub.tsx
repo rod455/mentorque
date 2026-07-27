@@ -4,7 +4,7 @@ import { useState } from "react";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { computeHealth } from "@/lib/app/health";
 import { LIMITS } from "@/lib/app/premium";
-import { vehicleLabel } from "@/lib/app/content";
+import { carName, vehicleLabel } from "@/lib/app/content";
 import { useNav, type View } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { Card, Icon, inputCls, Sheet, useContent } from "../ui";
@@ -53,7 +53,8 @@ export function CarHub() {
           )}
         </span>
         <div className="min-w-0 flex-1">
-          <p className="font-display text-lg font-semibold text-cream">{vehicleLabel(v)}</p>
+          <p className="truncate font-display text-lg font-semibold text-cream">{carName(v)}</p>
+          {v.nickname && <p className="truncate text-xs text-cream/50">{vehicleLabel(v)}</p>}
           <KmLine />
         </div>
         <button onClick={() => go({ name: "health" })} className="shrink-0 text-right">

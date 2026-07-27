@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
+import { carName } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Card, Icon, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
@@ -39,7 +40,7 @@ export function LearnScreen() {
 
   return (
     <div>
-      <AppHeader title={`${c.learn.title}${v ? " · " + v.model : ""}`} />
+      <AppHeader title={`${c.learn.title}${v ? " · " + carName(v) : ""}`} />
       <SectionTitle>{c.learn.recommended}</SectionTitle>
       <div className="space-y-2.5">
         {recommended.map((l) => <Row key={l.id} id={l.id} title={l.title} type={l.type} premium={l.premium} />)}

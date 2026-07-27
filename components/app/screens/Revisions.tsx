@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { computeUpcoming, type UpcomingItem } from "@/lib/app/health";
+import { carName } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { AppHeader, Card, Icon, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
 
@@ -74,7 +75,7 @@ export function RevisionsScreen() {
           <span className="text-sm text-cream/85">{r.smartAlert}</span>
         </Card>
       ) : (
-        <UpgradeBanner ctx="revisions" text={r.nudge.replace("{car}", v.model)} />
+        <UpgradeBanner ctx="revisions" text={r.nudge.replace("{car}", carName(v))} />
       )}
       {items.length === 0 ? (
         <Card className="flex items-center gap-2 text-sm text-cream/60">

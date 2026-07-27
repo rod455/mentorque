@@ -15,6 +15,12 @@ export function vehicleLabel(v: Vehicle | null, fallback = "—"): string {
   return `${v.make} ${v.model} ${v.year}`;
 }
 
+// Short display name for a vehicle: the user's nickname if set, else the model.
+export function carName(v: Vehicle | null, fallback = "—"): string {
+  if (!v) return fallback;
+  return v.nickname || v.model;
+}
+
 export function getContent(locale: Locale) {
   const T = (pt: string, en: string) => (locale === "pt" ? pt : en);
 

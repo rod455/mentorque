@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
+import { carName } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
@@ -243,7 +244,7 @@ export function SubscribeScreen({ ctx }: { ctx?: string }) {
   const { back } = useNav();
   const [plan, setPlan] = useState<"monthly" | "annual">("annual");
 
-  const car = activeVehicle(s)?.model ?? c.profile.myCars;
+  const car = carName(activeVehicle(s), c.profile.myCars);
   const paywall = ctx ? c.paywalls[ctx] : undefined;
   const fill = (t: string) => t.replace("{car}", car);
 
