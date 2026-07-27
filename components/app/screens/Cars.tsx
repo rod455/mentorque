@@ -148,7 +148,7 @@ export function AddCarScreen({ editId }: { editId?: string }) {
   const c = useContent();
   const a = c.addCar;
   const { s, addVehicle, updateVehicle } = usePrototype();
-  const { go, back, root } = useNav();
+  const { back, root } = useNav();
   const editing = editId ? s.vehicles.find((v) => v.id === editId) ?? null : null;
 
   const [type, setType] = useState<VehicleType>(editing?.type ?? "car");
@@ -156,9 +156,8 @@ export function AddCarScreen({ editId }: { editId?: string }) {
   const [model, setModel] = useState<string | null>(editing?.model ?? null);
   const [year, setYear] = useState<number | null>(editing?.year ?? null);
   const [engine, setEngine] = useState(editing?.engine ?? "");
-  const [version, setVersion] = useState(editing?.version ?? "");
-  const [plate, setPlate] = useState(editing?.plate ?? "");
   const [km, setKm] = useState(editing?.odometerKm != null ? String(editing.odometerKm) : "");
+  const [makeOpen, setMakeOpen] = useState(false);
   const [photo, setPhoto] = useState<string | undefined>(editing?.photo);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -181,8 +180,6 @@ export function AddCarScreen({ editId }: { editId?: string }) {
       model: model!,
       year: year!,
       engine: engine.trim() || undefined,
-      version: s.premium && version.trim() ? version.trim() : undefined,
-      plate: plate.trim() || undefined,
       odometerKm: km ? parseInt(km, 10) : undefined,
       photo,
     };
@@ -196,6 +193,9 @@ export function AddCarScreen({ editId }: { editId?: string }) {
   };
 
   const models = make ? c.modelsByMake[make] ?? [] : [];
+  const makeMatches = c.makes[type].filter(
+    (m) => !make || (m.toLowerCase().includes(make.toLowerCase()) && m.toLowerCase() !== make.toLowerCase())
+  );
 
   return (
     <div>
@@ -215,33 +215,54 @@ export function AddCarScreen({ editId }: { editId?: string }) {
           ))}
         </div>
 
-        <Picker label={a.make} value={make} options={c.makes[type]} onPick={(v) => { setMake(v); setModel(null); }} />
-        {make && <Picker label={a.model} value={model} options={models} onPick={setModel} />}
+        {/* Marca — campo aberto com autocomplete */}
+        <Field label={a.make}>
+          <div className="relative">
+            <input
+              value={make ?? ""}
+              onChange={(e) => { setMake(e.target.value || null); setModel(null); setMakeOpen(true); }}
+              onFocus={() => setMakeOpen(true)}
+              onBlur={() => setTimeout(() => setMakeOpen(false), 120)}
+              placeholder={a.makePh}
+              autoComplete="off"
+              className={inputCls}
+            />
+            {makeOpen && makeMatches.length > 0 && (
+              <div className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-xl bg-graphite-700 p-1 shadow-card ring-1 ring-white/10">
+                {makeMatches.map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => { setMake(m); setModel(null); setMakeOpen(false); }}
+                    className="block w-full rounded-lg px-3 py-2 text-left text-sm text-cream hover:bg-white/5"
+                  >
+                    {m}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </Field>
+
+        {make &&
+          (models.length > 0 ? (
+            <Picker label={a.model} value={model} options={models} onPick={setModel} />
+          ) : (
+            <Field label={a.model}>
+              <input value={model ?? ""} onChange={(e) => setModel(e.target.value || null)} placeholder={a.modelPh} className={inputCls} />
+            </Field>
+          ))}
+
         {model && <Picker label={a.year} value={year} options={c.years.slice(0, 14)} onPick={setYear} />}
 
         <Field label={a.engine}>
           <input value={engine} onChange={(e) => setEngine(e.target.value)} placeholder={a.enginePh} className={inputCls} />
         </Field>
 
-        {/* Version — Premium ultra-personalization */}
-        <Field label={a.version}>
-          {s.premium ? (
-            <input value={version} onChange={(e) => setVersion(e.target.value)} placeholder={a.versionPh} className={inputCls} />
-          ) : (
-            <button onClick={() => go({ name: "subscribe" })} className="flex w-full items-center gap-2 rounded-xl bg-amber/10 px-3.5 py-3 text-left text-sm text-amber ring-1 ring-amber/20 hover:ring-amber/40">
-              🔒 {a.versionPremium}
-            </button>
-          )}
+        <Field label={a.km}>
+          <input value={km} inputMode="numeric" onChange={(e) => setKm(e.target.value.replace(/\D/g, ""))} placeholder={a.kmPh} className={inputCls} />
         </Field>
-
-        <div className="grid grid-cols-2 gap-3">
-          <Field label={a.plate}>
-            <input value={plate} onChange={(e) => setPlate(e.target.value.toUpperCase())} placeholder={a.platePh} className={inputCls} />
-          </Field>
-          <Field label={a.km}>
-            <input value={km} inputMode="numeric" onChange={(e) => setKm(e.target.value.replace(/\D/g, ""))} placeholder={a.kmPh} className={inputCls} />
-          </Field>
-        </div>
 
         <Field label={a.photo}>
           <button onClick={() => inputRef.current?.click()} className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/10 hover:ring-amber/30">
