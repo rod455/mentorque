@@ -530,6 +530,9 @@ export function getContent(locale: Locale) {
       none: T("Nenhum serviço registrado ainda.", "No services logged yet."),
       add: T("Adicionar serviço", "Add service"),
       all: T("Todos", "All"),
+      noCarTitle: T("Nenhum histórico", "No history"),
+      noCarBody: T("Cadastre seu carro para ter as informações!", "Add your car to see the info here!"),
+      addCar: T("Cadastrar carro", "Add car"),
     },
 
     addService: {

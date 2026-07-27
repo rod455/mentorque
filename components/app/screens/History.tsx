@@ -45,7 +45,23 @@ export function HistoryScreen() {
   const { go } = useNav();
   const v = activeVehicle(s);
   const [filter, setFilter] = useState<string>("all");
-  if (!v) return <AppHeader title={c.history.title} />;
+  if (!v) {
+    return (
+      <div>
+        <AppHeader title={c.history.title} />
+        <Card className="mt-2 text-center">
+          <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-graphite-700 text-cream/60">
+            <Icon name="clock" className="h-6 w-6" />
+          </div>
+          <p className="font-display text-base text-cream">{c.history.noCarTitle}</p>
+          <p className="mx-auto mt-1 max-w-xs text-sm text-cream/55">{c.history.noCarBody}</p>
+          <Button className="mt-4" onClick={() => go({ name: "addCar" })}>
+            {c.history.addCar}
+          </Button>
+        </Card>
+      </div>
+    );
+  }
 
   const all = servicesFor(s, v.id);
   const list = filter === "all" ? all : all.filter((r) => r.type === filter);

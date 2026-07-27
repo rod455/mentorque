@@ -33,6 +33,22 @@ export function SymptomsScreen() {
   return (
     <div>
       <AppHeader title={`${ui.title} ${v ? v.model : ""}?`} />
+
+      {/* Cena da Biela na garagem (banner) — feather nas bordas dissolve o contorno */}
+      <div className="-mt-1 mb-4 overflow-hidden rounded-2xl">
+        <img
+          src="/biela/cena-biela-garagem.webp"
+          alt="Biela na garagem com o carro"
+          className="aspect-[3/2] w-full object-cover"
+          draggable={false}
+          style={{
+            objectPosition: "center 42%",
+            WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, #000 14%, #000 82%, transparent 100%)",
+            maskImage: "linear-gradient(to bottom, transparent 0%, #000 14%, #000 82%, transparent 100%)",
+          }}
+        />
+      </div>
+
       <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={ui.searchPh} className={inputCls} />
 
       {!s.premium && <UpgradeBanner ctx="symptomReco" text={ui.recoNudge} />}
