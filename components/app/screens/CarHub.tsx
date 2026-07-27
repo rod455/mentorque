@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
-import { computeHealth } from "@/lib/app/health";
+import { activeVehicle, usePrototype } from "@/lib/app/store";
+import { computeQuizHealth } from "@/lib/app/healthQuiz";
 import { LIMITS } from "@/lib/app/premium";
 import { carName, vehicleLabel } from "@/lib/app/content";
 import { useNav, type View } from "@/lib/app/nav";
@@ -27,7 +27,7 @@ export function CarHub() {
     );
   }
 
-  const health = computeHealth(v, servicesFor(s, v.id));
+  const score = computeQuizHealth(v.quiz ?? {}, v).score;
 
   const cards: { icon: string; title: string; sub: string; view: View; accent: string }[] = [
     { icon: "gauge", title: c.carHub.cards.health, sub: c.carHub.cards.healthSub, view: { name: "health" }, accent: "bg-teal/15 text-teal" },
@@ -59,7 +59,7 @@ export function CarHub() {
         </div>
         <button onClick={() => go({ name: "health" })} className="shrink-0 text-right">
           <span className="block text-[10px] uppercase tracking-wide text-cream/40">{c.carHub.health}</span>
-          <HealthPill score={health.score} />
+          <HealthPill score={score} />
         </button>
       </Card>
 
