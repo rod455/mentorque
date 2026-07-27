@@ -12,6 +12,26 @@ import { useNav } from "@/lib/app/nav";
 import { AppHeader, Card, Chip, Icon, inputCls, useContent } from "../ui";
 import BielaMascote from "@/components/BielaMascote";
 
+// Standard car "avatars" (placeholder until custom art is uploaded).
+const CAR_AVATARS = ["🚗", "🚙", "🏎️", "🚕", "🛻", "🚐", "🚓", "🏍️", "🛵", "🚜"];
+
+// Render an emoji avatar to a small PNG data URL so it works anywhere a car
+// photo is shown (car list, hub, etc.) with the existing <img> code.
+function emojiToDataUrl(emoji: string): string {
+  if (typeof document === "undefined") return "";
+  const size = 128;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return "";
+  ctx.font = "92px serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(emoji, size / 2, size / 2 + 6);
+  return canvas.toDataURL("image/png");
+}
+
 function monthsSince(iso: string): number {
   const d = new Date(iso + "T00:00:00");
   if (isNaN(d.getTime())) return 999;
@@ -159,6 +179,7 @@ export function AddCarScreen({ editId }: { editId?: string }) {
   const [km, setKm] = useState(editing?.odometerKm != null ? String(editing.odometerKm) : "");
   const [makeOpen, setMakeOpen] = useState(false);
   const [photo, setPhoto] = useState<string | undefined>(editing?.photo);
+  const [avatarSel, setAvatarSel] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const valid = !!(make && model && year);
@@ -167,6 +188,7 @@ export function AddCarScreen({ editId }: { editId?: string }) {
     if (!file) return;
     try {
       setPhoto(await resizeImage(file));
+      setAvatarSel(null);
     } catch {
       /* ignore */
     }
@@ -278,6 +300,24 @@ export function AddCarScreen({ editId }: { editId?: string }) {
         </Field>
 
         <Field label={a.photo}>
+          {/* Avatares padrão de carro (placeholder até subir os avatares reais) */}
+          <p className="mb-2 text-xs text-cream/45">{a.avatarLabel}</p>
+          <div className="mb-3 flex flex-wrap gap-2">
+            {CAR_AVATARS.map((emoji) => {
+              const active = avatarSel === emoji;
+              return (
+                <button
+                  key={emoji}
+                  type="button"
+                  onClick={() => { setAvatarSel(emoji); setPhoto(emojiToDataUrl(emoji)); }}
+                  className={`grid h-11 w-11 place-items-center rounded-xl text-2xl ring-1 transition-colors ${active ? "bg-amber/15 ring-amber" : "bg-graphite-800 ring-white/10 hover:ring-white/25"}`}
+                  aria-label={`Avatar ${emoji}`}
+                >
+                  {emoji}
+                </button>
+              );
+            })}
+          </div>
           <button onClick={() => inputRef.current?.click()} className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/10 hover:ring-amber/30">
             <span className="grid h-10 w-10 place-items-center overflow-hidden rounded-lg bg-graphite-700 text-cream/60">
               {photo ? (
