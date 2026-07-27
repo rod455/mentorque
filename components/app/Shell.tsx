@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
-import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { NavProvider, useNav, type View } from "@/lib/app/nav";
 import { Icon, useContent } from "./ui";
 import { CarsScreen, AddCarScreen } from "./screens/Cars";
@@ -98,15 +97,13 @@ const TAB_OF: Record<View["name"], Tab> = {
 
 function BottomNav() {
   const c = useContent();
-  const { s } = usePrototype();
   const { view, root } = useNav();
   const active = TAB_OF[view.name];
-  const hasCar = !!activeVehicle(s);
 
   const items: { tab: Tab; icon: string; label: string; go: () => void }[] = [
     { tab: "cars", icon: "car", label: c.nav.cars, go: () => root({ name: "cars" }) },
-    { tab: "problems", icon: "diagnose", label: c.nav.problems, go: () => root(hasCar ? { name: "symptoms" } : { name: "cars" }) },
-    { tab: "history", icon: "clock", label: c.nav.history, go: () => root(hasCar ? { name: "history" } : { name: "cars" }) },
+    { tab: "problems", icon: "diagnose", label: c.nav.problems, go: () => root({ name: "symptoms" }) },
+    { tab: "history", icon: "clock", label: c.nav.history, go: () => root({ name: "history" }) },
     { tab: "studies", icon: "book", label: c.nav.studies, go: () => root({ name: "learn" }) },
     { tab: "profile", icon: "user", label: c.nav.profile, go: () => root({ name: "profile" }) },
   ];
