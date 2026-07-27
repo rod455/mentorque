@@ -7,15 +7,34 @@ import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
 import { AccessBadge, AppHeader, Card, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
 
+const BR_STATES = ["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"];
+const SUPPORT_EMAIL = "mentorque.ar@gmail.com";
+
 // 3.1.A — Perfil
 export function ProfileScreen() {
   const c = useContent();
   const p = c.profile;
-  const { s, setName, setPremium, reset } = usePrototype();
+  const { s, setName, setEmail, setState, setPremium, reset } = usePrototype();
   const { go } = useNav();
   const [editName, setEditName] = useState(false);
   const [nameInput, setNameInput] = useState(s.name ?? "");
+  const [editEmail, setEditEmail] = useState(false);
+  const [emailInput, setEmailInput] = useState(s.email ?? "");
   const [consult, setConsult] = useState(false);
+  const [supType, setSupType] = useState<"doubt" | "suggestion" | "bug">("doubt");
+  const [supMsg, setSupMsg] = useState("");
+  const [supErr, setSupErr] = useState(false);
+
+  const sendSupport = () => {
+    if (!supMsg.trim()) return setSupErr(true);
+    const labels: Record<string, string> = { doubt: p.support.doubt, suggestion: p.support.suggestion, bug: p.support.bug };
+    const subject = `[${labels[supType]}] Mentorque`;
+    const sig = [s.name, s.email].filter(Boolean).join(" · ");
+    const body = supMsg + (sig ? `\n\n— ${sig}` : "");
+    if (typeof window !== "undefined") {
+      window.location.href = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+  };
 
   const row = (label: string, right?: React.ReactNode, onClick?: () => void) => (
     <button onClick={onClick} className="flex w-full items-center justify-between gap-3 rounded-xl bg-graphite-800 px-3.5 py-3.5 text-left ring-1 ring-white/5">
@@ -35,14 +54,14 @@ export function ProfileScreen() {
         </span>
         <div className="min-w-0 flex-1">
           <p className="font-display text-lg font-semibold text-cream">{s.name || p.guest}</p>
-          <p className="truncate text-xs text-cream/55">{p.carsCount.replace("{n}", String(s.vehicles.length))}</p>
+          <p className="truncate text-xs text-cream/55">{s.email || p.carsCount.replace("{n}", String(s.vehicles.length))}</p>
         </div>
         <button onClick={() => { setNameInput(s.name ?? ""); setEditName(true); }} className="shrink-0 text-xs font-medium text-amber">
           {c.common.edit}
         </button>
       </Card>
 
-      {/* Plan */}
+      {/* Plano atual */}
       <Card className="mt-3 ring-amber/20">
         <div className="flex items-center justify-between">
           <div>
@@ -55,25 +74,136 @@ export function ProfileScreen() {
             <Button onClick={() => go({ name: "subscribe" })}>{p.subscribe}</Button>
           )}
         </div>
+
+        <p className="mb-2 mt-4 text-[11px] font-medium uppercase tracking-wide text-cream/40">
+          {s.premium ? p.perksTitle : p.perksFreeTitle}
+        </p>
+        <ul className="space-y-2">
+          {p.perks.map((perk) => (
+            <li key={perk} className="flex items-start gap-2.5 text-sm">
+              <span className={`mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full ${s.premium ? "bg-teal/20 text-teal" : "bg-white/5 text-cream/40"}`}>
+                <Icon name="check" className="h-3 w-3" />
+              </span>
+              <span className={s.premium ? "text-cream/85" : "text-cream/55"}>{perk}</span>
+            </li>
+          ))}
+        </ul>
+
+        <Button variant="secondary" className="mt-4 w-full" onClick={() => go({ name: "subscribe" })}>
+          <Icon name="spark" className="h-4 w-4" /> {p.seePlans}
+        </Button>
+        {s.premium && (
+          <button onClick={() => setPremium(false)} className="mt-2 w-full py-1.5 text-center text-sm text-cream/45 hover:text-coral">
+            {p.cancelPlan}
+          </button>
+        )}
       </Card>
 
-      <div className="mt-3 space-y-2">
-        {s.premium && row(p.manage, undefined, () => go({ name: "subscribe" }))}
-        {row(p.consulting, <AccessBadge access="premium" />, () => setConsult(true))}
-        {row(p.language, <span onClick={(e) => e.stopPropagation()}><LangSwitcher /></span>)}
+      {/* Detalhes da conta */}
+      <SectionTitle>{p.account}</SectionTitle>
+      <div className="overflow-hidden rounded-2xl bg-graphite-800 ring-1 ring-white/5 divide-y divide-white/5">
+        <button onClick={() => { setNameInput(s.name ?? ""); setEditName(true); }} className="flex w-full items-center gap-3 px-4 py-3.5 text-left">
+          <Icon name="user" className="h-4 w-4 shrink-0 text-cream/40" />
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] text-cream/45">{p.name}</p>
+            <p className="truncate text-sm text-cream">{s.name || p.guest}</p>
+          </div>
+          <span className="shrink-0 text-xs font-medium text-amber">{c.common.edit}</span>
+        </button>
+        <button onClick={() => { setEmailInput(s.email ?? ""); setEditEmail(true); }} className="flex w-full items-center gap-3 px-4 py-3.5 text-left">
+          <Icon name="consult" className="h-4 w-4 shrink-0 text-cream/40" />
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] text-cream/45">{p.email}</p>
+            <p className="truncate text-sm text-cream">{s.email || p.notSet}</p>
+          </div>
+          <span className="shrink-0 text-xs font-medium text-amber">{c.common.edit}</span>
+        </button>
+        <div className="flex items-center gap-3 px-4 py-3">
+          <Icon name="explore" className="h-4 w-4 shrink-0 text-cream/40" />
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] text-cream/45">{p.stateLabel}</p>
+            <p className="truncate text-sm text-cream">{s.state || p.notSet}</p>
+          </div>
+          <select
+            value={s.state ?? ""}
+            onChange={(e) => setState(e.target.value)}
+            className="shrink-0 rounded-lg bg-graphite-700 px-2 py-1.5 text-sm text-cream ring-1 ring-white/10 outline-none focus:ring-amber"
+          >
+            <option value="">{p.stateSelect}</option>
+            {BR_STATES.map((uf) => (
+              <option key={uf} value={uf}>{uf}</option>
+            ))}
+          </select>
+        </div>
+        <div className="flex items-center gap-3 px-4 py-3">
+          <Icon name="book" className="h-4 w-4 shrink-0 text-cream/40" />
+          <p className="min-w-0 flex-1 text-sm text-cream">{p.language}</p>
+          <LangSwitcher />
+        </div>
       </div>
+
+      <div className="mt-2">
+        {row(p.consulting, <AccessBadge access="premium" />, () => setConsult(true))}
+      </div>
+
+      {/* Dúvidas ou sugestões → e-mail */}
+      <SectionTitle>{p.support.title}</SectionTitle>
+      <Card>
+        <p className="text-sm text-cream/60">{p.support.subtitle}</p>
+        <div className="mt-3 grid grid-cols-3 gap-2">
+          {([["doubt", p.support.doubt], ["suggestion", p.support.suggestion], ["bug", p.support.bug]] as const).map(([key, label]) => {
+            const active = supType === key;
+            return (
+              <button
+                key={key}
+                onClick={() => setSupType(key)}
+                className={`rounded-xl px-2 py-2 text-sm font-medium ring-1 transition-colors ${active ? "bg-amber text-graphite ring-amber" : "bg-graphite-700 text-cream/70 ring-white/10"}`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+        <textarea
+          value={supMsg}
+          onChange={(e) => { setSupMsg(e.target.value); setSupErr(false); }}
+          rows={4}
+          placeholder={p.support.messagePh}
+          className={`mt-3 resize-none ${inputCls}`}
+        />
+        {supErr && <p className="mt-1 text-xs text-coral">{p.support.empty}</p>}
+        <Button size="lg" className="mt-3 w-full" onClick={sendSupport}>
+          {p.support.send}
+        </Button>
+      </Card>
 
       <SectionTitle>{p.demo}</SectionTitle>
       <div className="space-y-2">
-        {s.premium && row(p.downgrade, <span className="text-cream/40">↺</span>, () => setPremium(false))}
         {row(p.reset, <Icon name="alert" className="h-4 w-4 text-coral" />, reset)}
       </div>
+
+      <p className="mt-6 px-2 text-center text-[11px] leading-relaxed text-cream/35">{p.disclaimer}</p>
 
       {/* Edit name sheet */}
       <Sheet open={editName} onClose={() => setEditName(false)}>
         <h2 className="font-display text-xl font-bold text-cream">{p.name}</h2>
         <input value={nameInput} onChange={(e) => setNameInput(e.target.value)} placeholder={p.namePh} className={`mt-4 ${inputCls}`} />
         <Button size="lg" className="mt-4 w-full" onClick={() => { setName(nameInput); setEditName(false); }}>
+          {c.common.save}
+        </Button>
+      </Sheet>
+
+      {/* Edit email sheet */}
+      <Sheet open={editEmail} onClose={() => setEditEmail(false)}>
+        <h2 className="font-display text-xl font-bold text-cream">{p.email}</h2>
+        <input
+          type="email"
+          value={emailInput}
+          onChange={(e) => setEmailInput(e.target.value)}
+          placeholder={p.emailPh}
+          className={`mt-4 ${inputCls}`}
+        />
+        <Button size="lg" className="mt-4 w-full" onClick={() => { setEmail(emailInput); setEditEmail(false); }}>
           {c.common.save}
         </Button>
       </Sheet>

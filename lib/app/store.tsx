@@ -10,6 +10,8 @@ import { newId, type ServiceRecord, type Vehicle } from "./types";
 type Session = {
   onboarded: boolean;
   name: string | null;
+  email: string | null;
+  state: string | null;
   premium: boolean;
   vehicles: Vehicle[];
   activeVehicleId: string | null;
@@ -19,6 +21,8 @@ type Session = {
 const EMPTY: Session = {
   onboarded: false,
   name: null,
+  email: null,
+  state: null,
   premium: false,
   vehicles: [],
   activeVehicleId: null,
@@ -30,6 +34,8 @@ const STORAGE_KEY = "mentorque-garage";
 type StoreValue = {
   s: Session;
   setName: (name: string) => void;
+  setEmail: (email: string) => void;
+  setState: (state: string) => void;
   setPremium: (v: boolean) => void;
   addVehicle: (v: Omit<Vehicle, "id">) => string;
   updateVehicle: (id: string, patch: Partial<Vehicle>) => void;
@@ -57,6 +63,8 @@ function migrate(parsed: any): Session {
     }
   }
   next.name = parsed?.name ?? null;
+  next.email = parsed?.email ?? null;
+  next.state = parsed?.state ?? null;
   next.premium = !!parsed?.premium;
   next.onboarded = !!parsed?.onboarded && next.vehicles.length > 0;
   return next;
@@ -86,6 +94,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const patch = useCallback((fn: (prev: Session) => Session) => setS((prev) => commit(fn(prev))), [commit]);
 
   const setName = useCallback((name: string) => patch((p) => ({ ...p, name: name.trim() || null })), [patch]);
+  const setEmail = useCallback((email: string) => patch((p) => ({ ...p, email: email.trim() || null })), [patch]);
+  const setState = useCallback((state: string) => patch((p) => ({ ...p, state: state || null })), [patch]);
   const setPremium = useCallback((v: boolean) => patch((p) => ({ ...p, premium: v })), [patch]);
 
   const addVehicle = useCallback(
@@ -139,8 +149,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const reset = useCallback(() => patch(() => ({ ...EMPTY })), [patch]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s, setName, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, finishOnboarding, reset }),
-    [s, setName, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, finishOnboarding, reset]
+    () => ({ s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, finishOnboarding, reset }),
+    [s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

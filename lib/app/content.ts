@@ -634,6 +634,38 @@ export function getContent(locale: Locale) {
       reset: T("Reiniciar protótipo", "Reset prototype"),
       demo: "Demo",
       downgrade: T("Voltar ao grátis (demo)", "Back to free (demo)"),
+      account: T("Detalhes da conta", "Account details"),
+      email: T("E-mail", "Email"),
+      emailPh: T("seu@email.com", "you@email.com"),
+      stateLabel: T("Seu estado", "Your state"),
+      stateSelect: T("Selecione", "Select"),
+      notSet: T("Não informado", "Not set"),
+      cancelPlan: T("Cancelar assinatura", "Cancel subscription"),
+      seePlans: T("Ver planos", "See plans"),
+      perksTitle: T("Seus benefícios", "Your benefits"),
+      perksFreeTitle: T("Com o Premium você desbloqueia", "Premium unlocks"),
+      perks: [
+        T("Sintomas com todas as causas e preço por peça", "Symptoms with all causes and per-part pricing"),
+        T("Saúde por sistema + projeção de custo", "Per-system health + cost projection"),
+        T("Plano de revisão do seu modelo", "Maintenance plan for your model"),
+        T("Histórico e relatórios ilimitados", "Unlimited history and reports"),
+        T("Biblioteca de aulas completa", "Full lesson library"),
+        T("Consultoria com especialista", "Expert consulting"),
+      ],
+      support: {
+        title: T("Dúvidas ou sugestões?", "Questions or suggestions?"),
+        subtitle: T("Fale direto com a gente", "Talk to us directly"),
+        doubt: T("Dúvida", "Question"),
+        suggestion: T("Sugestão", "Suggestion"),
+        bug: "Bug",
+        messagePh: T("Escreva sua mensagem aqui...", "Write your message here..."),
+        send: T("Enviar mensagem", "Send message"),
+        empty: T("Escreva uma mensagem antes de enviar.", "Write a message before sending."),
+      },
+      disclaimer: T(
+        "Este app é independente e não possui vínculo com montadoras ou entidades oficiais. Marcas e modelos são citados apenas para fins informativos.",
+        "This app is independent and not affiliated with automakers or official entities. Brands and models are cited for informational purposes only."
+      ),
     },
 
     subscribe: {
