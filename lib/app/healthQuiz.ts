@@ -203,7 +203,22 @@ function kmAgeNote(v: Vehicle, now: Date): number {
   return (ageNote + kmNote) / 2;
 }
 
+// First scheduled service (generic until each car's manual is loaded):
+// oil at 10.000 km OR 12 months, whichever first.
+const FIRST_SERVICE_KM = 10000;
+
+// A car below its first scheduled service is essentially up-to-date: nothing is
+// due yet. Requires low km AND a recent model-year (the interval is km-or-time).
+function isBeforeFirstService(v: Vehicle, now: Date): boolean {
+  if (typeof v.odometerKm !== "number" || v.odometerKm <= 0) return false;
+  return v.odometerKm < FIRST_SERVICE_KM && now.getFullYear() - v.year <= 1;
+}
+
 export function computeQuizHealth(answers: Record<string, string>, v: Vehicle, now = new Date()): QuizResult {
+  // Default note for UNANSWERED questions: a brand-new car (before its first
+  // service) is treated as up-to-date; otherwise a conservative intermediate.
+  const def = isBeforeFirstService(v, now) ? 9 : 5;
+
   // --- VHS: weighted average of answered VHS questions (renormalized). ---
   let wSum = 0;
   let contrib = 0;
@@ -211,7 +226,7 @@ export function computeQuizHealth(answers: Record<string, string>, v: Vehicle, n
   for (const q of HEALTH_QUESTIONS) {
     if (!q.vhs) continue;
     const o = optOf(q.id, answers);
-    const note = o?.note ?? 5; // "unknown" is conservative-intermediate
+    const note = o?.note ?? def;
     contrib += (note / 10) * q.vhs;
     wSum += q.vhs;
     if (o?.cap != null) cap = Math.min(cap, o.cap);
@@ -224,9 +239,9 @@ export function computeQuizHealth(answers: Record<string, string>, v: Vehicle, n
     kmAge: kmAgeNote(v, now),
     engine: noteOf("engineArch", answers, 6),
     transmission: noteOf("transmission", answers, 6),
-    use: noteOf("usePattern", answers, 6),
-    history: noteOf("history", answers, 4),
-    symptoms: (noteOf("noises", answers) + noteOf("engineRun", answers)) / 2,
+    use: noteOf("usePattern", answers, def),
+    history: noteOf("history", answers, def),
+    symptoms: (noteOf("noises", answers, def) + noteOf("engineRun", answers, def)) / 2,
   };
   const W = { kmAge: 0.25, engine: 0.15, transmission: 0.15, use: 0.2, history: 0.15, symptoms: 0.1 };
   const robustness =
