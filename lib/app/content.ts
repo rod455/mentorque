@@ -505,6 +505,7 @@ export function getContent(locale: Locale) {
       quizCtaSub: T("10 perguntas para ter um diagnóstico mais preciso", "10 questions for a more accurate diagnosis"),
       quizRedo: T("Refazer o quiz de saúde", "Retake the health quiz"),
       quizBasedOn: T("Diagnóstico baseado no seu quiz", "Diagnosis based on your quiz"),
+      quizProvisional: T("Provisório — faça o quiz para o cálculo real", "Provisional — take the quiz for the real score"),
       quizTitle: T("Quiz de Saúde", "Health Quiz"),
       quizIntro: T("Responda com sinceridade — quanto mais preciso, melhor o diagnóstico.", "Answer honestly — the more accurate, the better the diagnosis."),
       quizSubmit: T("Ver resultado", "See result"),

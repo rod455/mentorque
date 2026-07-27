@@ -35,8 +35,11 @@ export function HealthScreen() {
   if (!v) return <AppHeader title={h.scoreLabel} />;
 
   const health = computeHealth(v, servicesFor(s, v.id));
-  const quiz = v.quiz && Object.keys(v.quiz).length ? computeQuizHealth(v.quiz, v) : null;
-  const displayScore = quiz ? quiz.score : health.score;
+  // The score always uses the spec formula; before the quiz, unanswered
+  // questions fall back to a conservative note, so it reads lower + provisional.
+  const hasQuiz = !!(v.quiz && Object.keys(v.quiz).length);
+  const result = computeQuizHealth(v.quiz ?? {}, v);
+  const displayScore = result.score;
 
   const findingText = (code: string, km?: number, system?: SystemKey) => {
     let text = h.findings[code] ?? code;
@@ -65,21 +68,25 @@ export function HealthScreen() {
         <div className="min-w-0">
           <p className="font-display text-base text-cream">{h.scoreLabel}</p>
           <p className="truncate text-sm text-cream/55">{vehicleLabel(v)}</p>
-          {quiz && <p className="mt-0.5 text-xs text-teal">✓ {h.quizBasedOn}</p>}
+          {hasQuiz ? (
+            <p className="mt-0.5 text-xs text-teal">✓ {h.quizBasedOn}</p>
+          ) : (
+            <p className="mt-0.5 text-xs text-amber/80">{h.quizProvisional}</p>
+          )}
         </div>
       </Card>
 
       {/* Health quiz: CTA when not taken, breakdown when taken */}
-      {quiz ? (
+      {hasQuiz ? (
         <>
           <div className="mt-3 grid grid-cols-2 gap-2">
             <div className="rounded-2xl bg-graphite-800 px-3.5 py-3 ring-1 ring-white/5">
               <p className="text-[11px] text-cream/45">{h.quizNow}</p>
-              <p className={`font-display text-lg font-bold ${scoreColor(quiz.vhs)}`}>{quiz.vhs}%</p>
+              <p className={`font-display text-lg font-bold ${scoreColor(result.vhs)}`}>{result.vhs}%</p>
             </div>
             <div className="rounded-2xl bg-graphite-800 px-3.5 py-3 ring-1 ring-white/5">
               <p className="text-[11px] text-cream/45">{h.quizRisk}</p>
-              <p className={`font-display text-lg font-bold ${scoreColor(100 - quiz.vri)}`}>{quiz.vri}</p>
+              <p className={`font-display text-lg font-bold ${scoreColor(100 - result.vri)}`}>{result.vri}</p>
             </div>
           </div>
           <button onClick={() => go({ name: "healthQuiz" })} className="mt-2 w-full py-1.5 text-center text-sm text-amber/80 hover:text-amber">
