@@ -1,7 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { computeHealth, SERVICE_SYSTEMS } from "@/lib/app/health";
+import { computeQuizHealth, getHealthQuiz } from "@/lib/app/healthQuiz";
+import { useI18n } from "@/lib/i18n";
 import { costProjection, systemPct, systemPriority } from "@/lib/app/premium";
 import { formatBRL, vehicleLabel } from "@/lib/app/content";
 import type { SystemKey } from "@/lib/app/types";
@@ -32,6 +35,8 @@ export function HealthScreen() {
   if (!v) return <AppHeader title={h.scoreLabel} />;
 
   const health = computeHealth(v, servicesFor(s, v.id));
+  const quiz = v.quiz && Object.keys(v.quiz).length ? computeQuizHealth(v.quiz, v) : null;
+  const displayScore = quiz ? quiz.score : health.score;
 
   const findingText = (code: string, km?: number, system?: SystemKey) => {
     let text = h.findings[code] ?? code;
@@ -51,17 +56,49 @@ export function HealthScreen() {
             <circle cx="18" cy="18" r="15.5" fill="none" stroke="currentColor" strokeWidth="3" className="text-white/10" />
             <circle
               cx="18" cy="18" r="15.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"
-              strokeDasharray={`${(health.score / 100) * 97.4} 97.4`}
-              className={scoreColor(health.score)}
+              strokeDasharray={`${(displayScore / 100) * 97.4} 97.4`}
+              className={scoreColor(displayScore)}
             />
           </svg>
-          <span className={`absolute font-display text-xl font-bold ${scoreColor(health.score)}`}>{health.score}%</span>
+          <span className={`absolute font-display text-xl font-bold ${scoreColor(displayScore)}`}>{displayScore}%</span>
         </div>
-        <div>
+        <div className="min-w-0">
           <p className="font-display text-base text-cream">{h.scoreLabel}</p>
-          <p className="text-sm text-cream/55">{vehicleLabel(v)}</p>
+          <p className="truncate text-sm text-cream/55">{vehicleLabel(v)}</p>
+          {quiz && <p className="mt-0.5 text-xs text-teal">✓ {h.quizBasedOn}</p>}
         </div>
       </Card>
+
+      {/* Health quiz: CTA when not taken, breakdown when taken */}
+      {quiz ? (
+        <>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <div className="rounded-2xl bg-graphite-800 px-3.5 py-3 ring-1 ring-white/5">
+              <p className="text-[11px] text-cream/45">{h.quizNow}</p>
+              <p className={`font-display text-lg font-bold ${scoreColor(quiz.vhs)}`}>{quiz.vhs}%</p>
+            </div>
+            <div className="rounded-2xl bg-graphite-800 px-3.5 py-3 ring-1 ring-white/5">
+              <p className="text-[11px] text-cream/45">{h.quizRisk}</p>
+              <p className={`font-display text-lg font-bold ${scoreColor(100 - quiz.vri)}`}>{quiz.vri}</p>
+            </div>
+          </div>
+          <button onClick={() => go({ name: "healthQuiz" })} className="mt-2 w-full py-1.5 text-center text-sm text-amber/80 hover:text-amber">
+            {h.quizRedo}
+          </button>
+        </>
+      ) : (
+        <button
+          onClick={() => go({ name: "healthQuiz" })}
+          className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-amber/10 px-4 py-3.5 text-left ring-1 ring-amber/30 hover:ring-amber/50"
+        >
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber/15 text-lg">📋</span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-display text-sm font-semibold text-cream">{h.quizCta}</span>
+            <span className="block text-xs text-cream/60">{h.quizCtaSub}</span>
+          </span>
+          <span className="text-amber">›</span>
+        </button>
+      )}
 
       {/* Attention points */}
       <SectionTitle>{h.attention}</SectionTitle>
@@ -254,6 +291,72 @@ function PremiumHealthExtras({ vehicle, services }: { vehicle: import("@/lib/app
           </div>
         ) : null
       )}
+    </div>
+  );
+}
+
+// 2.3.C — Quiz de Saúde (questionário completo → fórmula VHS/VRI do spec)
+export function HealthQuizScreen() {
+  const c = useContent();
+  const h = c.health;
+  const { locale } = useI18n();
+  const { s, updateVehicle } = usePrototype();
+  const { back } = useNav();
+  const v = activeVehicle(s);
+  const questions = getHealthQuiz(locale);
+  const [answers, setAnswers] = useState<Record<string, string>>(v?.quiz ?? {});
+
+  if (!v) return <AppHeader title={h.quizTitle} />;
+
+  const answered = questions.filter((q) => answers[q.id]).length;
+  const allDone = answered === questions.length;
+
+  const submit = () => {
+    if (!allDone) return;
+    updateVehicle(v.id, { quiz: answers });
+    back();
+  };
+
+  return (
+    <div>
+      <AppHeader title={h.quizTitle} />
+      <p className="text-sm text-cream/60">{h.quizIntro}</p>
+      <p className="mt-1 text-xs text-cream/45">
+        {h.quizProgress.replace("{a}", String(answered)).replace("{b}", String(questions.length))}
+      </p>
+
+      <div className="mt-4 space-y-5 pb-2">
+        {questions.map((q, i) => (
+          <div key={q.id}>
+            <p className="mb-2 font-display text-[15px] text-cream">
+              <span className="text-amber">{i + 1}.</span> {q.label}
+            </p>
+            <div className="space-y-1.5">
+              {q.options.map((o) => {
+                const sel = answers[q.id] === o.key;
+                return (
+                  <button
+                    key={o.key}
+                    onClick={() => setAnswers((a) => ({ ...a, [q.id]: o.key }))}
+                    className={`flex w-full items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-left text-sm ring-1 transition-colors ${
+                      sel ? "bg-amber/15 text-cream ring-amber" : "bg-graphite-800 text-cream/75 ring-white/5 hover:ring-white/15"
+                    }`}
+                  >
+                    <span className={`grid h-4 w-4 shrink-0 place-items-center rounded-full ring-1 ${sel ? "bg-amber ring-amber" : "ring-white/25"}`}>
+                      {sel && <span className="h-1.5 w-1.5 rounded-full bg-graphite" />}
+                    </span>
+                    {o.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <Button size="lg" className="mt-3 w-full" disabled={!allDone} onClick={submit}>
+        {h.quizSubmit}
+      </Button>
     </div>
   );
 }

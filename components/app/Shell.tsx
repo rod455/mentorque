@@ -7,7 +7,7 @@ import { Icon, useContent } from "./ui";
 import { CarsScreen, AddCarScreen } from "./screens/Cars";
 import { CarHub } from "./screens/CarHub";
 import { SymptomsScreen, SymptomDetail, ChecklistScreen } from "./screens/Symptoms";
-import { HealthScreen, SystemDetail } from "./screens/Health";
+import { HealthScreen, HealthQuizScreen, SystemDetail } from "./screens/Health";
 import { HistoryScreen, AddServiceScreen, ServiceDetail } from "./screens/History";
 import { RevisionsScreen } from "./screens/Revisions";
 import { LearnScreen, ContentScreen } from "./screens/Learn";
@@ -59,6 +59,7 @@ function Router() {
       case "symptom": return <SymptomDetail id={view.id} />;
       case "checklist": return <ChecklistScreen symptomId={view.symptomId} />;
       case "health": return <HealthScreen />;
+      case "healthQuiz": return <HealthQuizScreen />;
       case "system": return <SystemDetail system={view.system} />;
       case "history": return <HistoryScreen />;
       case "addService": return <AddServiceScreen preset={view.preset} editId={view.editId} />;
@@ -88,7 +89,7 @@ function Router() {
 
 type Tab = "cars" | "problems" | "history" | "studies" | "profile";
 const TAB_OF: Record<View["name"], Tab> = {
-  cars: "cars", addCar: "cars", car: "cars", health: "cars", system: "cars", revisions: "cars", carSettings: "cars",
+  cars: "cars", addCar: "cars", car: "cars", health: "cars", healthQuiz: "cars", system: "cars", revisions: "cars", carSettings: "cars",
   symptoms: "problems", symptom: "problems", checklist: "problems",
   history: "history", addService: "history", service: "history",
   learn: "studies", content: "studies",

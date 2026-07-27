@@ -15,6 +15,7 @@ export type Vehicle = {
   plate?: string; // placa (optional)
   odometerKm?: number; // km atual
   photo?: string; // downscaled data URL
+  quiz?: Record<string, string>; // Health-quiz answers (questionId -> optionKey)
 };
 
 // A logged maintenance/service event, always tied to a vehicle.

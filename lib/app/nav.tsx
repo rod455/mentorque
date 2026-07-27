@@ -13,6 +13,7 @@ export type View =
   | { name: "symptom"; id: string }
   | { name: "checklist"; symptomId: string }
   | { name: "health" }
+  | { name: "healthQuiz" }
   | { name: "system"; system: SystemKey }
   | { name: "history" }
   | { name: "addService"; preset?: Partial<ServiceRecord>; editId?: string }
