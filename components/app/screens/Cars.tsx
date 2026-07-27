@@ -1,37 +1,17 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { servicesFor, usePrototype } from "@/lib/app/store";
 import { computeHealth } from "@/lib/app/health";
 import { computeQuizHealth } from "@/lib/app/healthQuiz";
 import { LIMITS, economySaved } from "@/lib/app/premium";
 import { formatBRL, vehicleLabel } from "@/lib/app/content";
-import { resizeImage } from "@/lib/app/image";
+import { AvatarPickerSheet } from "../AvatarPicker";
 import type { ServiceRecord, VehicleType } from "@/lib/app/types";
 import { Button } from "@/components/ui/Button";
 import { useNav } from "@/lib/app/nav";
 import { AppHeader, Card, Chip, Icon, inputCls, Sheet, useContent } from "../ui";
 import BielaMascote from "@/components/BielaMascote";
-
-// Standard car "avatars" (placeholder until custom art is uploaded).
-const CAR_AVATARS = ["🚗", "🚙", "🏎️", "🚕", "🛻", "🚐", "🚓", "🏍️", "🛵", "🚜"];
-
-// Render an emoji avatar to a small PNG data URL so it works anywhere a car
-// photo is shown (car list, hub, etc.) with the existing <img> code.
-function emojiToDataUrl(emoji: string): string {
-  if (typeof document === "undefined") return "";
-  const size = 128;
-  const canvas = document.createElement("canvas");
-  canvas.width = size;
-  canvas.height = size;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return "";
-  ctx.font = "92px serif";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText(emoji, size / 2, size / 2 + 6);
-  return canvas.toDataURL("image/png");
-}
 
 function monthsSince(iso: string): number {
   const d = new Date(iso + "T00:00:00");
@@ -227,21 +207,9 @@ export function AddCarScreen({ editId }: { editId?: string }) {
   const [km, setKm] = useState(editing?.odometerKm != null ? String(editing.odometerKm) : "");
   const [makeOpen, setMakeOpen] = useState(false);
   const [photo, setPhoto] = useState<string | undefined>(editing?.photo);
-  const [avatarSel, setAvatarSel] = useState<string | null>(null);
   const [avatarSheet, setAvatarSheet] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const valid = !!(make && model && year);
-
-  const onPhoto = async (file?: File) => {
-    if (!file) return;
-    try {
-      setPhoto(await resizeImage(file));
-      setAvatarSel(null);
-    } catch {
-      /* ignore */
-    }
-  };
 
   const save = () => {
     if (!valid) return;
@@ -366,7 +334,6 @@ export function AddCarScreen({ editId }: { editId?: string }) {
             <span className="flex-1 text-sm text-cream/70">{photo ? a.changeAvatar : a.chooseAvatar}</span>
             <span className="text-cream/40">›</span>
           </button>
-          <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={(e) => { onPhoto(e.target.files?.[0]); setAvatarSheet(false); }} />
         </Field>
 
         {!valid && <p className="text-xs text-cream/45">{a.needModel}</p>}
@@ -382,43 +349,13 @@ export function AddCarScreen({ editId }: { editId?: string }) {
       </div>
 
       {/* Janela de avatares / foto */}
-      <Sheet open={avatarSheet} onClose={() => setAvatarSheet(false)}>
-        <h2 className="font-display text-xl font-bold text-cream">{a.chooseAvatar}</h2>
-        <p className="mt-1 text-sm text-cream/55">{a.avatarLabel}</p>
-        <div className="mt-3 grid grid-cols-5 gap-2">
-          {CAR_AVATARS.map((emoji) => {
-            const active = avatarSel === emoji;
-            return (
-              <button
-                key={emoji}
-                type="button"
-                onClick={() => { setAvatarSel(emoji); setPhoto(emojiToDataUrl(emoji)); setAvatarSheet(false); }}
-                className={`grid aspect-square place-items-center rounded-xl text-2xl ring-1 transition-colors ${active ? "bg-amber/15 ring-amber" : "bg-graphite-700 ring-white/10 hover:ring-white/25"}`}
-                aria-label={`Avatar ${emoji}`}
-              >
-                {emoji}
-              </button>
-            );
-          })}
-        </div>
-        <button
-          type="button"
-          onClick={() => inputRef.current?.click()}
-          className="mt-4 flex w-full items-center gap-3 rounded-xl bg-graphite-700 px-3.5 py-3 text-left ring-1 ring-white/10 hover:ring-amber/30"
-        >
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-graphite-800 text-cream/60">📷</span>
-          <span className="text-sm text-cream/80">{a.addPhoto}</span>
-        </button>
-        {photo && (
-          <button
-            type="button"
-            onClick={() => { setPhoto(undefined); setAvatarSel(null); setAvatarSheet(false); }}
-            className="mt-2 w-full py-1.5 text-center text-sm text-coral/80 hover:text-coral"
-          >
-            {a.removePhoto}
-          </button>
-        )}
-      </Sheet>
+      <AvatarPickerSheet
+        open={avatarSheet}
+        onClose={() => setAvatarSheet(false)}
+        photo={photo}
+        onSelect={setPhoto}
+        labels={{ title: a.chooseAvatar, sub: a.avatarLabel, addPhoto: a.addPhoto, remove: a.removePhoto }}
+      />
     </div>
   );
 }

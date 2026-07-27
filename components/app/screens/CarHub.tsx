@@ -8,12 +8,14 @@ import { carName, vehicleLabel } from "@/lib/app/content";
 import { useNav, type View } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { Card, Icon, inputCls, Sheet, useContent } from "../ui";
+import { AvatarPickerSheet } from "../AvatarPicker";
 import { HealthPill } from "./Cars";
 
 export function CarHub() {
   const c = useContent();
-  const { s } = usePrototype();
+  const { s, updateVehicle } = usePrototype();
   const { go } = useNav();
+  const [avatarSheet, setAvatarSheet] = useState(false);
   const v = activeVehicle(s);
 
   if (!v) {
@@ -44,14 +46,25 @@ export function CarHub() {
 
       {/* Photo + km + health summary */}
       <Card className="mt-3 flex items-center gap-3">
-        <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-teal/15 text-teal">
+        <button
+          type="button"
+          onClick={() => setAvatarSheet(true)}
+          className="relative grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-teal/15 text-teal ring-1 ring-white/10 hover:ring-amber/40"
+          aria-label={c.addCar.chooseAvatar}
+        >
           {v.photo ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={v.photo} alt="" className="h-full w-full object-cover" />
           ) : (
             <Icon name={v.type === "moto" ? "moto" : "car"} className="h-8 w-8" />
           )}
-        </span>
+          <span className="absolute bottom-0.5 right-0.5 grid h-4 w-4 place-items-center rounded-full bg-amber text-graphite">
+            <svg viewBox="0 0 24 24" className="h-2.5 w-2.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+            </svg>
+          </span>
+        </button>
         <div className="min-w-0 flex-1">
           <p className="truncate font-display text-lg font-semibold text-cream">{carName(v)}</p>
           {v.nickname && <p className="truncate text-xs text-cream/50">{vehicleLabel(v)}</p>}
@@ -80,6 +93,14 @@ export function CarHub() {
           </button>
         ))}
       </div>
+
+      <AvatarPickerSheet
+        open={avatarSheet}
+        onClose={() => setAvatarSheet(false)}
+        photo={v.photo}
+        onSelect={(p) => updateVehicle(v.id, { photo: p })}
+        labels={{ title: c.addCar.chooseAvatar, sub: c.addCar.avatarLabel, addPhoto: c.addCar.addPhoto, remove: c.addCar.removePhoto }}
+      />
     </div>
   );
 }
