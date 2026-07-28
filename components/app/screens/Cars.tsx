@@ -260,13 +260,14 @@ export function AddCarScreen({ editId }: { editId?: string }) {
     }
   };
 
-  const models = make ? c.modelsByMake[make] ?? [] : [];
+  const modelsMap = type === "moto" ? c.motoModelsByMake : c.modelsByMake;
+  const models = make ? modelsMap[make] ?? [] : [];
   const makeMatches = c.makes[type].filter(
     (m) => !make || (m.toLowerCase().includes(make.toLowerCase()) && m.toLowerCase() !== make.toLowerCase())
   );
 
   // Flat make+model catalog for the combined search field.
-  const catalog = c.makes[type].flatMap((mk) => (c.modelsByMake[mk] ?? []).map((md) => ({ make: mk, model: md })));
+  const catalog = c.makes[type].flatMap((mk) => (modelsMap[mk] ?? []).map((md) => ({ make: mk, model: md })));
   const q = query.trim().toLowerCase();
   const comboResults = q
     ? catalog
