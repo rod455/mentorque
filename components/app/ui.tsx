@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { useI18n } from "@/lib/i18n";
 import { getContent } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
@@ -155,6 +155,60 @@ export function AppHeader({ title, subtitle, action }: { title: string; subtitle
 // Shared input styling for forms.
 export const inputCls =
   "w-full rounded-xl bg-graphite-800 px-3.5 py-3 text-cream ring-1 ring-white/10 outline-none placeholder:text-cream/40 focus:ring-amber";
+
+// Free-text input with a suggestion dropdown (same pattern as the car brand
+// field): the list opens on focus and filters as you type. `options` are the
+// candidate suggestions; the user can still type anything not in the list.
+export function Autocomplete({
+  value,
+  onChange,
+  options,
+  placeholder,
+  className,
+  inputMode,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  options: string[];
+  placeholder?: string;
+  className?: string;
+  inputMode?: "text" | "numeric";
+}) {
+  const [open, setOpen] = useState(false);
+  const q = value.trim().toLowerCase();
+  const matches = options.filter(
+    (o) => !q || (o.toLowerCase().includes(q) && o.toLowerCase() !== q)
+  );
+  return (
+    <div className={`relative ${className ?? ""}`}>
+      <input
+        value={value}
+        inputMode={inputMode}
+        onChange={(e) => { onChange(e.target.value); setOpen(true); }}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setTimeout(() => setOpen(false), 120)}
+        placeholder={placeholder}
+        autoComplete="off"
+        className={inputCls}
+      />
+      {open && matches.length > 0 && (
+        <div className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-xl bg-graphite-700 p-1 shadow-card ring-1 ring-white/10">
+          {matches.map((m) => (
+            <button
+              key={m}
+              type="button"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => { onChange(m); setOpen(false); }}
+              className="block w-full rounded-lg px-3 py-2 text-left text-sm text-cream hover:bg-white/5"
+            >
+              {m}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function Chip({
   active,

@@ -9,18 +9,7 @@ import { resizeImage } from "@/lib/app/image";
 import type { ServicePart, ServiceRecord } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, Chip, Icon, inputCls, PremiumBadge, SectionTitle, useContent } from "../ui";
-
-// Suggested common parts per service type (Premium).
-const SUGGESTED_PARTS: Record<string, string[]> = {
-  oil: ["Óleo do motor", "Filtro de óleo"],
-  brakes: ["Pastilhas", "Discos", "Fluido de freio"],
-  revision: ["Óleo", "Filtro de ar", "Filtro de combustível", "Velas"],
-  suspension: ["Amortecedores", "Bieletas", "Batentes"],
-  tires: ["Pneus", "Alinhamento", "Balanceamento"],
-  battery: ["Bateria"],
-  timing: ["Correia dentada", "Tensor", "Bomba d'água"],
-};
+import { AppHeader, Autocomplete, Card, Chip, Icon, inputCls, PremiumBadge, SectionTitle, useContent } from "../ui";
 
 function useTypeLabel() {
   const c = useContent();
@@ -144,7 +133,12 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
     if (!s.premium && parts.length >= LIMITS.freeParts) { go({ name: "subscribe", ctx: "parts" }); return; }
     setParts((ps) => [...ps, { name: "" }]);
   };
-  const suggestions = (SUGGESTED_PARTS[type] ?? []).filter((sp) => !parts.some((p) => p.name === sp));
+
+  // Autocomplete sources: shops the user has used before, and parts common to
+  // the selected service type plus any part typed in past services.
+  const shopOptions = Array.from(new Set(s.services.map((r) => r.shop).filter((x): x is string => !!x && !!x.trim())));
+  const pastParts = Array.from(new Set(s.services.flatMap((r) => r.parts.map((p) => p.name)).filter((x) => x.trim())));
+  const partOptions = Array.from(new Set([...(c.partsByType[type] ?? []), ...pastParts]));
 
   if (!v) return <AppHeader title={a.title} />;
 
@@ -204,7 +198,7 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
 
         <div className="grid grid-cols-2 gap-3">
           <Field label={a.shop}>
-            <input value={shop} onChange={(e) => setShop(e.target.value)} placeholder={a.shopPh} className={inputCls} />
+            <Autocomplete value={shop} onChange={setShop} options={shopOptions} placeholder={a.shopPh} />
           </Field>
           <Field label={a.total}>
             <input value={total} inputMode="numeric" onChange={(e) => setTotal(e.target.value.replace(/\D/g, ""))} placeholder={a.totalPh} className={inputCls} />
@@ -227,27 +221,33 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
           <p className="mb-1.5 text-xs uppercase tracking-wide text-cream/45">{a.parts}</p>
           <div className="space-y-2">
             {parts.map((p, i) => (
-              <div key={i} className="flex gap-2">
-                <input value={p.name} onChange={(e) => setParts((ps) => ps.map((x, j) => (j === i ? { ...x, name: e.target.value } : x)))} placeholder={a.partName} className={`${inputCls} flex-1`} />
-                <input value={p.value != null ? String(p.value) : ""} inputMode="numeric" onChange={(e) => setParts((ps) => ps.map((x, j) => (j === i ? { ...x, value: e.target.value ? parseInt(e.target.value.replace(/\D/g, ""), 10) : undefined } : x)))} placeholder={a.partValue} className={`${inputCls} w-24`} />
-                <button onClick={() => setParts((ps) => ps.filter((_, j) => j !== i))} className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-graphite-700 text-cream/60" aria-label="remove">✕</button>
+              <div key={i} className="rounded-xl bg-graphite-800 p-2.5 ring-1 ring-white/5">
+                <div className="flex items-start gap-2">
+                  <Autocomplete
+                    className="flex-1"
+                    value={p.name}
+                    onChange={(val) => setParts((ps) => ps.map((x, j) => (j === i ? { ...x, name: val } : x)))}
+                    options={partOptions}
+                    placeholder={a.partName}
+                  />
+                  <button onClick={() => setParts((ps) => ps.filter((_, j) => j !== i))} className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-graphite-700 text-cream/60" aria-label="remove">✕</button>
+                </div>
+                <div className="mt-2 flex items-center gap-2 rounded-xl bg-graphite-900 px-3 ring-1 ring-white/10 focus-within:ring-amber">
+                  <span className="text-sm text-cream/40">R$</span>
+                  <input
+                    value={p.value != null ? String(p.value) : ""}
+                    inputMode="numeric"
+                    onChange={(e) => setParts((ps) => ps.map((x, j) => (j === i ? { ...x, value: e.target.value ? parseInt(e.target.value.replace(/\D/g, ""), 10) : undefined } : x)))}
+                    placeholder={a.partValue}
+                    className="w-full bg-transparent py-3 text-cream outline-none placeholder:text-cream/40"
+                  />
+                </div>
               </div>
             ))}
             <button onClick={addPart} className="text-sm font-medium text-amber">
               {!s.premium && parts.length >= LIMITS.freeParts ? `🔒 ${a.addPart}` : `+ ${a.addPart}`}
             </button>
           </div>
-          {/* Premium: suggested common parts */}
-          {s.premium && suggestions.length > 0 && (
-            <div className="mt-2">
-              <p className="mb-1 text-[11px] text-cream/45">{c.premium.suggestedParts}</p>
-              <div className="flex flex-wrap gap-1.5">
-                {suggestions.map((sp) => (
-                  <button key={sp} onClick={() => setParts((ps) => [...ps, { name: sp }])} className="rounded-full bg-graphite-700 px-2.5 py-1 text-xs text-cream/75 ring-1 ring-white/10 hover:ring-amber/30">+ {sp}</button>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
         <Field label={a.notes}>
