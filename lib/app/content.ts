@@ -9,6 +9,25 @@ export function formatBRL(n: number): string {
   return "R$ " + Math.round(n).toLocaleString("pt-BR");
 }
 
+// Months since an ISO date (yyyy-mm-dd), or null if unset/invalid.
+export function monthsSinceDate(iso?: string, now = new Date()): number | null {
+  if (!iso) return null;
+  const d = new Date(iso + "T00:00:00");
+  if (isNaN(d.getTime())) return null;
+  return Math.max(0, (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth()));
+}
+
+// Human "1 ano e 2 meses" / "1 year and 2 months" from a month count.
+export function formatMonths(n: number, locale: Locale): string {
+  const y = Math.floor(n / 12);
+  const m = n % 12;
+  const pt = locale === "pt";
+  const yr = y > 0 ? `${y} ${y === 1 ? (pt ? "ano" : "year") : pt ? "anos" : "years"}` : "";
+  const mo = m > 0 ? `${m} ${m === 1 ? (pt ? "mês" : "month") : pt ? "meses" : "months"}` : "";
+  if (yr && mo) return `${yr} ${pt ? "e" : "and"} ${mo}`;
+  return yr || mo || (pt ? "menos de 1 mês" : "less than 1 month");
+}
+
 // "Make Model Year" label for a vehicle.
 export function vehicleLabel(v: Vehicle | null, fallback = "—"): string {
   if (!v) return fallback;
@@ -824,10 +843,19 @@ export function getContent(locale: Locale) {
       byTime: T("Baseadas no tempo", "Based on time"),
       none: T("Sem revisões pendentes. Mantenha o km atualizado.", "Nothing pending. Keep the mileage updated."),
       needKm: T("Informe o km atual para calcular as revisões.", "Set the current mileage to compute upcoming service."),
+      setKm: T("Informar km", "Set mileage"),
+      setPurchase: T("Quando você comprou o carro?", "When did you buy the car?"),
+      setPurchaseCta: T("Informar data de compra", "Set purchase date"),
+      planTitle: T("Plano do Biela para o seu {car}", "Biela's plan for your {car}"),
+      planLoading: T("Biela está montando seu plano com o manual e seu histórico...", "Biela is building your plan from the manual and your history..."),
+      fromManual: T("do manual", "from the manual"),
+      general: T("geral", "general"),
+      basedOn: T("Baseado no manual, no seu histórico, no km e no tempo de uso.", "Based on the manual, your history, mileage and time owned."),
+      ownedFor: T("Você tem esse carro há {n}", "You've owned this car for {n}"),
       remind: T("Agendar lembrete", "Set a reminder"),
       reminded: T("Lembrete criado", "Reminder set"),
       didIt: T("Já fiz esse serviço", "I already did this"),
-      statusLabels: { overdue: T("Vencida", "Overdue"), soon: T("Em breve", "Soon"), ok: T("Em dia", "OK") },
+      statusLabels: { overdue: T("Vencida", "Overdue"), soon: T("Em breve", "Soon"), ok: T("Em dia", "OK"), unknown: T("A confirmar", "To confirm") },
       ruleLabels: {
         oil: T("Troca de óleo", "Oil change"),
         airfilter: T("Filtro de ar", "Air filter"),
@@ -894,6 +922,9 @@ export function getContent(locale: Locale) {
     carSettings: {
       title: T("Configurações do carro", "Car settings"),
       data: T("Dados do carro", "Car data"),
+      purchaseDate: T("Data de compra", "Purchase date"),
+      purchaseHint: T("Ajuda a calcular revisões por tempo de uso.", "Helps compute time-based service."),
+      notSet: T("Não informada", "Not set"),
       export: T("Exportar histórico em PDF", "Export history as PDF"),
       shareLink: T("Compartilhar link do histórico", "Share history link"),
       danger: T("Zona de risco", "Danger zone"),

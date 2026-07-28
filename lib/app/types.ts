@@ -16,6 +16,7 @@ export type Vehicle = {
   odometerKm?: number; // km atual
   photo?: string; // downscaled data URL
   nickname?: string; // custom name the user gives the car
+  purchaseDate?: string; // ISO yyyy-mm-dd — when the owner bought the car
   quiz?: Record<string, string>; // Health-quiz answers (questionId -> optionKey)
 };
 

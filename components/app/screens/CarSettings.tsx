@@ -1,18 +1,22 @@
 "use client";
 
+import { useI18n } from "@/lib/i18n";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
-import { formatBRL, vehicleLabel } from "@/lib/app/content";
+import { formatBRL, formatMonths, monthsSinceDate, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, Icon, SectionTitle, useContent } from "../ui";
+import { AppHeader, Card, Icon, inputCls, SectionTitle, useContent } from "../ui";
 
 export function CarSettingsScreen() {
   const c = useContent();
   const cs = c.carSettings;
-  const { s, removeVehicle } = usePrototype();
+  const { locale } = useI18n();
+  const { s, removeVehicle, updateVehicle } = usePrototype();
   const { go, root } = useNav();
   const v = activeVehicle(s);
   if (!v) return <AppHeader title={cs.title} />;
+
+  const ownedMonths = monthsSinceDate(v.purchaseDate);
 
   const services = servicesFor(s, v.id);
 
@@ -76,6 +80,25 @@ export function CarSettingsScreen() {
         <button onClick={() => go({ name: "addCar", editId: v.id })} className="shrink-0 text-xs font-medium text-amber">
           {c.common.edit}
         </button>
+      </Card>
+
+      {/* Purchase date — feeds time-based revisions */}
+      <Card className="mt-3">
+        <label className="block">
+          <span className="mb-1.5 flex items-center gap-2 text-xs uppercase tracking-wide text-cream/45">
+            <Icon name="calendar" className="h-3.5 w-3.5" /> {cs.purchaseDate}
+          </span>
+          <input
+            type="date"
+            value={v.purchaseDate ?? ""}
+            max={new Date().toISOString().slice(0, 10)}
+            onChange={(e) => updateVehicle(v.id, { purchaseDate: e.target.value || undefined })}
+            className={inputCls}
+          />
+        </label>
+        <p className="mt-1.5 text-xs text-cream/50">
+          {ownedMonths != null ? c.revisions.ownedFor.replace("{n}", formatMonths(ownedMonths, locale)) : cs.purchaseHint}
+        </p>
       </Card>
 
       <div className="mt-3 space-y-2">

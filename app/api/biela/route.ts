@@ -1,43 +1,9 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { retrieveManualContext, type CarCtx as Car } from "@/lib/rag";
 
 export const runtime = "nodejs";
 
-type Car = { make?: string; model?: string; year?: number; km?: number | null };
 type Body = { question?: string; locale?: string; car?: Car | null };
-
-// RAG: embed the question and pull the most relevant manual passages for this
-// car from Supabase. Returns "" (no grounding) unless both the embeddings
-// provider and the service-role key are configured, and manuals were ingested.
-async function retrieveManualContext(question: string, car: Car | null): Promise<string> {
-  const openaiKey = process.env.OPENAI_API_KEY;
-  const supaUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!openaiKey || !supaUrl || !serviceKey) return "";
-  try {
-    const embRes = await fetch("https://api.openai.com/v1/embeddings", {
-      method: "POST",
-      headers: { "content-type": "application/json", authorization: `Bearer ${openaiKey}` },
-      body: JSON.stringify({ model: "text-embedding-3-small", input: question }),
-    });
-    if (!embRes.ok) throw new Error(`embeddings_${embRes.status}`);
-    const emb = (await embRes.json()).data?.[0]?.embedding;
-    if (!emb) return "";
-
-    const supabase = createClient(supaUrl, serviceKey, { auth: { persistSession: false } });
-    const { data, error } = await supabase.rpc("match_manual_chunks", {
-      query_embedding: emb,
-      match_count: 5,
-      f_make: car?.make ?? null,
-      f_model: car?.model ?? null,
-    });
-    if (error || !Array.isArray(data) || data.length === 0) return "";
-    return (data as { content: string }[]).map((r, i) => `[${i + 1}] ${r.content}`).join("\n\n");
-  } catch (err) {
-    console.warn("[biela] manual retrieval failed:", err);
-    return "";
-  }
-}
 
 // System prompt: Biela's persona + safety rails. Car context is injected below.
 function systemPrompt(locale: string, car: Car | null): string {

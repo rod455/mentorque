@@ -151,9 +151,12 @@ export function computeUpcoming(vehicle: Vehicle, services: ServiceRecord[], now
       const status: UpcomingItem["status"] = inKm <= 0 ? "overdue" : inKm <= 2000 ? "soon" : "ok";
       if (status !== "ok" || !last) items.push({ key: rule.key, basis: "km", status, dueKm, inKm, systems: rule.systems });
     }
-    // time-based
-    if (rule.everyMonths && last) {
-      const months = monthsBetween(last.date, now);
+    // time-based — anchor on the last service of this type, or (for a car with
+    // no such service yet) on the purchase date so newly bought cars still get
+    // time-based reminders.
+    const anchor = last?.date ?? vehicle.purchaseDate;
+    if (rule.everyMonths && anchor) {
+      const months = monthsBetween(anchor, now);
       const status: UpcomingItem["status"] = months >= rule.everyMonths ? "overdue" : months >= rule.everyMonths - 3 ? "soon" : "ok";
       if (status !== "ok") items.push({ key: rule.key, basis: "time", status, months, systems: rule.systems });
     }
