@@ -4,25 +4,40 @@ import { useRef } from "react";
 import { resizeImage } from "@/lib/app/image";
 import { Sheet } from "./ui";
 
-// Standard car "avatars" (placeholder until custom art is uploaded).
-export const CAR_AVATARS = ["🚗", "🚙", "🏎️", "🚕", "🛻", "🚐", "🚓", "🏍️", "🛵", "🚜"];
-
-// Render an emoji avatar to a small PNG data URL so it works anywhere a car
-// photo is shown (car list, hub, etc.) with the existing <img> code.
-export function emojiToDataUrl(emoji: string): string {
-  if (typeof document === "undefined") return "";
-  const size = 128;
-  const canvas = document.createElement("canvas");
-  canvas.width = size;
-  canvas.height = size;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return "";
-  ctx.font = "92px serif";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText(emoji, size / 2, size / 2 + 6);
-  return canvas.toDataURL("image/png");
-}
+// Mentorque fleet avatars (512x512 transparent PNGs in /public/avatars).
+// Everyday cars first, then the "dream garage" sports set.
+export const AVATARS = [
+  "avatar-fusca-azul",
+  "avatar-hatch-vermelho",
+  "avatar-sedan-prata",
+  "avatar-sedan-grafite",
+  "avatar-city-teal",
+  "avatar-suv-branco",
+  "avatar-suv-verde",
+  "avatar-jipe-verde",
+  "avatar-picape-azul",
+  "avatar-picape-ambar",
+  "avatar-perua-vinho",
+  "avatar-minivan-azul",
+  "avatar-kombi",
+  "avatar-van-entrega",
+  "avatar-utilitaria-laranja",
+  "avatar-taxi-amarelo",
+  "avatar-eletrico-branco",
+  "avatar-classico-verde",
+  "avatar-esportivo-amarelo",
+  "avatar-muscle-preto",
+  "avatar-supercarro-vermelho",
+  "avatar-coupe-classico-prata",
+  "avatar-turbo-japones-branco",
+  "avatar-muscle-moderno-grafite",
+  "avatar-roadster-verde",
+  "avatar-hipercarro-preto",
+  "avatar-rally-azul",
+  "avatar-gt-classico-vermelho",
+  "avatar-track-laranja",
+  "avatar-eletrico-futurista",
+].map((name) => `/avatars/${name}.png`);
 
 type Labels = { title: string; sub: string; addPhoto: string; remove: string };
 
@@ -57,18 +72,21 @@ export function AvatarPickerSheet({
       <h2 className="font-display text-xl font-bold text-cream">{labels.title}</h2>
       <p className="mt-1 text-sm text-cream/55">{labels.sub}</p>
 
-      <div className="mt-3 grid grid-cols-5 gap-2">
-        {CAR_AVATARS.map((emoji) => (
-          <button
-            key={emoji}
-            type="button"
-            onClick={() => { onSelect(emojiToDataUrl(emoji)); onClose(); }}
-            className="grid aspect-square place-items-center rounded-xl bg-graphite-700 text-2xl ring-1 ring-white/10 transition-colors hover:ring-amber/40"
-            aria-label={`Avatar ${emoji}`}
-          >
-            {emoji}
-          </button>
-        ))}
+      <div className="mt-3 grid max-h-[46vh] grid-cols-4 gap-2 overflow-y-auto pr-1">
+        {AVATARS.map((src) => {
+          const active = photo === src;
+          return (
+            <button
+              key={src}
+              type="button"
+              onClick={() => { onSelect(src); onClose(); }}
+              className={`grid aspect-square place-items-center overflow-hidden rounded-xl bg-graphite-700 ring-1 transition-colors ${active ? "ring-amber" : "ring-white/10 hover:ring-amber/40"}`}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={src} alt="" className="h-full w-full object-contain p-1" draggable={false} />
+            </button>
+          );
+        })}
       </div>
 
       <button
