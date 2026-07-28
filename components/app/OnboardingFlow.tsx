@@ -75,15 +75,9 @@ export function OnboardingFlow() {
       <div className="flex flex-1 flex-col px-6 pb-8">
         <div className="flex flex-1 flex-col items-center justify-center text-center">
           {/* Ilustração por card: 0 carro, 1 Biela idle, 2 cena da garagem.
-              Brilho âmbar atrás dissolve o contorno. */}
+              PNGs com fundo transparente — sem glow atrás (que virava um box
+              visível no fundo escuro do celular). */}
           <div className="relative mb-8 flex min-h-[19rem] items-center justify-center">
-            <span
-              aria-hidden
-              className={`pointer-events-none absolute left-1/2 top-1/2 h-64 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl transition-opacity duration-500 ${
-                carLeaving ? "opacity-0" : "opacity-100"
-              }`}
-              style={{ background: "radial-gradient(closest-side, rgba(242,166,35,0.32), transparent)" }}
-            />
             {i === 0 ? (
               // The car drives off the whole screen; PhoneFrame clips at the screen edge.
               <div className={carLeaving ? "car-exit" : ""}>
