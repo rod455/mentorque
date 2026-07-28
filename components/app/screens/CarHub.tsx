@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useI18n } from "@/lib/i18n";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { computeQuizHealth } from "@/lib/app/healthQuiz";
 import { LIMITS } from "@/lib/app/premium";
-import { carName, vehicleLabel } from "@/lib/app/content";
+import { carName, formatMonths, monthsSinceDate, vehicleLabel } from "@/lib/app/content";
 import { useNav, type View } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { Card, Icon, inputCls, Sheet, useContent } from "../ui";
@@ -16,6 +17,8 @@ export function CarHub() {
   const { s, updateVehicle } = usePrototype();
   const { go } = useNav();
   const [avatarSheet, setAvatarSheet] = useState(false);
+  const [nickOpen, setNickOpen] = useState(false);
+  const [nickInput, setNickInput] = useState("");
   const v = activeVehicle(s);
 
   if (!v) {
@@ -66,9 +69,23 @@ export function CarHub() {
           </span>
         </button>
         <div className="min-w-0 flex-1">
-          <p className="truncate font-display text-lg font-semibold text-cream">{carName(v)}</p>
+          <div className="flex items-center gap-1.5">
+            <p className="truncate font-display text-lg font-semibold text-cream">{carName(v)}</p>
+            <button
+              type="button"
+              onClick={() => { setNickInput(v.nickname ?? ""); setNickOpen(true); }}
+              className="shrink-0 text-amber/70 hover:text-amber"
+              aria-label={c.common.edit}
+            >
+              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+              </svg>
+            </button>
+          </div>
           {v.nickname && <p className="truncate text-xs text-cream/50">{vehicleLabel(v)}</p>}
           <KmLine />
+          <PurchaseLine />
         </div>
         <button onClick={() => go({ name: "health" })} className="shrink-0 text-right">
           <span className="block text-[10px] uppercase tracking-wide text-cream/40">{c.carHub.health}</span>
@@ -101,7 +118,47 @@ export function CarHub() {
         onSelect={(p) => updateVehicle(v.id, { photo: p })}
         labels={{ title: c.addCar.chooseAvatar, sub: c.addCar.avatarLabel, addPhoto: c.addCar.addPhoto, remove: c.addCar.removePhoto }}
       />
+
+      {/* Edit car name (nickname) */}
+      <Sheet open={nickOpen} onClose={() => setNickOpen(false)}>
+        <h2 className="font-display text-xl font-bold text-cream">{c.cars.nameCar}</h2>
+        <input value={nickInput} onChange={(e) => setNickInput(e.target.value)} placeholder={c.cars.nameCarPh} className={`mt-4 ${inputCls}`} />
+        <Button size="lg" className="mt-4 w-full" onClick={() => { updateVehicle(v.id, { nickname: nickInput.trim() || undefined }); setNickOpen(false); }}>
+          {c.common.save}
+        </Button>
+      </Sheet>
     </div>
+  );
+}
+
+// Purchase-date line with inline edit sheet — feeds time-based revisions.
+function PurchaseLine() {
+  const c = useContent();
+  const { locale } = useI18n();
+  const { s, updateVehicle } = usePrototype();
+  const v = activeVehicle(s);
+  const [open, setOpen] = useState(false);
+  if (!v) return null;
+  const months = monthsSinceDate(v.purchaseDate);
+
+  return (
+    <>
+      <button onClick={() => setOpen(true)} className="mt-0.5 flex items-center gap-1.5 text-xs text-cream/55 hover:text-cream">
+        <Icon name="calendar" className="h-3.5 w-3.5" />
+        {months != null ? c.revisions.ownedFor.replace("{n}", formatMonths(months, locale)) : c.revisions.setPurchaseCta}
+      </button>
+      <Sheet open={open} onClose={() => setOpen(false)}>
+        <h2 className="font-display text-xl font-bold text-cream">{c.revisions.setPurchase}</h2>
+        <input
+          type="date"
+          value={v.purchaseDate ?? ""}
+          max={new Date().toISOString().slice(0, 10)}
+          onChange={(e) => updateVehicle(v.id, { purchaseDate: e.target.value || undefined })}
+          className={`mt-4 ${inputCls}`}
+        />
+        <Button size="lg" className="mt-4 w-full" onClick={() => setOpen(false)}>{c.common.save}</Button>
+      </Sheet>
+    </>
   );
 }
 
