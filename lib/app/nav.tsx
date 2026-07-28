@@ -20,6 +20,8 @@ export type View =
   | { name: "service"; id: string }
   | { name: "revisions" }
   | { name: "learn" }
+  | { name: "studyTrack"; trackId: string }
+  | { name: "biela" }
   | { name: "content"; id: string }
   | { name: "carSettings" }
   | { name: "profile" }
