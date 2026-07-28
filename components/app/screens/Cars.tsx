@@ -28,6 +28,29 @@ export function HealthPill({ score }: { score: number }) {
   return <span className={`font-display text-sm font-semibold ${healthColor(score)}`}>{score}%</span>;
 }
 
+// Biela chegando com o carro na garagem — toca 1x ao abrir "Meus Carros" e
+// congela no último frame. A `key` por montagem recria o <img> a cada visita
+// para reiniciar a animação (que é loop=1 no próprio webp).
+function ArrivalBanner() {
+  const [mountKey] = useState(() => Date.now());
+  return (
+    <div className="mb-3 overflow-hidden rounded-2xl bg-graphite-800 ring-1 ring-white/5">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        key={mountKey}
+        src="/biela/cena-chegada.webp"
+        alt=""
+        className="aspect-[16/10] w-full object-cover"
+        style={{
+          objectPosition: "center 58%",
+          WebkitMaskImage: "linear-gradient(to bottom, #000 78%, transparent 100%)",
+          maskImage: "linear-gradient(to bottom, #000 78%, transparent 100%)",
+        }}
+      />
+    </div>
+  );
+}
+
 // 1.1 — Meus Carros
 export function CarsScreen() {
   const c = useContent();
@@ -65,6 +88,8 @@ export function CarsScreen() {
           <span className="text-sm text-cream/85">{c.premium.saved.replace("{v}", formatBRL(totalSaved))}</span>
         </div>
       )}
+
+      {s.vehicles.length > 0 && <ArrivalBanner />}
 
       {s.vehicles.length === 0 ? (
         <Card className="mt-4 text-center">
