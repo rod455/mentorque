@@ -27,6 +27,7 @@ export async function retrieveManualContext(query: string, car: CarCtx | null, m
       match_count: matchCount,
       f_make: car?.make ?? null,
       f_model: car?.model ?? null,
+      f_year: car?.year ?? null,
     });
     if (error || !Array.isArray(data) || data.length === 0) return "";
     return (data as { content: string }[]).map((r, i) => `[${i + 1}] ${r.content}`).join("\n\n");

@@ -20,10 +20,11 @@ const args = process.argv.slice(2);
 const opt = (name) => { const i = args.indexOf(`--${name}`); return i >= 0 ? args[i + 1] : undefined; };
 const make = opt("make");
 const model = opt("model") ?? null;
+const year = opt("year") ? parseInt(opt("year"), 10) : null;
 const title = opt("title") ?? null;
 const url = opt("url");
 const dry = args.includes("--dry");
-const file = args.filter((a) => !a.startsWith("--")).find((a) => a !== make && a !== model && a !== title && a !== url);
+const file = args.filter((a) => !a.startsWith("--")).find((a) => a !== make && a !== model && a !== title && a !== url && a !== opt("year"));
 
 if (!make || (!file && !url)) { console.error("Missing --make or a PDF/txt file (or --url). See header for usage."); process.exit(1); }
 
@@ -44,7 +45,7 @@ async function main() {
   if (dry) { console.log("\n[--dry] Skipping embeddings/insert."); return; }
 
   const supabase = createClient(URL, KEY, { auth: { persistSession: false } });
-  const n = await ingestManual({ supabase, openaiKey: OAI, make, model, title, text, replace: true, log: (m) => console.log(m) });
+  const n = await ingestManual({ supabase, openaiKey: OAI, make, model, year, title, text, replace: true, log: (m) => console.log(m) });
   console.log(`Done. ${n} chunks stored.`);
 }
 

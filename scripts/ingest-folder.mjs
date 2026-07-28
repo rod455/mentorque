@@ -2,19 +2,22 @@
 /**
  * Batch-ingest a whole folder of manuals into the Biela RAG.
  *
- * Name each PDF as `Make__Model.pdf` (double underscore between make and model)
- * using the SAME make/model spelling the app uses. Examples:
- *   Chevrolet__Onix.pdf
- *   Hyundai__HB20.pdf
- *   Volkswagen__T-Cross.pdf
- *   Toyota__Corolla Cross.pdf
+ * Name each PDF as `Make_Model_Year.pdf` (the trailing 4-digit year is
+ * optional) using the SAME make/model spelling the app uses. Examples:
+ *   Fiat_Strada_2022.pdf
+ *   Volkswagen_T-Cross_2025.pdf
+ *   Hyundai_HB20_2023.pdf
+ *   Chevrolet_Onix.pdf            (no year)
+ * A `Make__Model__Year.pdf` (double underscore) form is also accepted for
+ * models whose name has spaces.
  *
  * Usage:
  *   node --env-file=.env.local scripts/ingest-folder.mjs ./manuais
  *   node --env-file=.env.local scripts/ingest-folder.mjs --dry ./manuais   # parse only, no cost
  *
- * Re-running replaces a manual's chunks (no duplicates). One bad file doesn't
- * stop the batch. Env: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY
+ * Re-running replaces a manual's chunks for that year (no duplicates); different
+ * years of the same model coexist. One bad file doesn't stop the batch.
+ * Env: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY
  */
 import { readdirSync } from "node:fs";
 import { join, basename, extname } from "node:path";
@@ -32,11 +35,23 @@ if (!dry && (!URL || !KEY || !OAI)) {
   process.exit(1);
 }
 
-// "Make__Model.pdf" -> { make, model }
+// "Make_Model_Year.pdf" (or "Make__Model__Year.pdf") -> { make, model, year }.
+// The trailing 4-digit part, if present, is the year.
 function parseName(fname) {
   const stem = basename(fname, extname(fname));
-  const parts = stem.split("__").map((s) => s.trim()).filter(Boolean);
-  return { make: parts[0], model: parts[1] ?? null, title: stem };
+  let make, model, year = null;
+  if (stem.includes("__")) {
+    const p = stem.split("__").map((s) => s.trim()).filter(Boolean);
+    if (p.length && /^\d{4}$/.test(p[p.length - 1])) year = parseInt(p.pop(), 10);
+    make = p[0];
+    model = p.slice(1).join(" ") || null;
+  } else {
+    const p = stem.split("_").map((s) => s.trim()).filter(Boolean);
+    if (p.length && /^\d{4}$/.test(p[p.length - 1])) year = parseInt(p.pop(), 10);
+    make = p[0];
+    model = p.slice(1).join(" ") || null;
+  }
+  return { make, model, year, title: stem };
 }
 
 async function main() {
@@ -48,23 +63,24 @@ async function main() {
   const ok = [], skipped = [], failed = [];
 
   for (const f of files) {
-    const { make, model, title } = parseName(f);
+    const { make, model, year, title } = parseName(f);
     if (!make || !model) {
-      console.warn(`⚠️  Skipping "${f}" — name must be Make__Model.pdf`);
+      console.warn(`⚠️  Skipping "${f}" — name must be Make_Model_Year.pdf`);
       skipped.push(f);
       continue;
     }
+    const tag = `${make} ${model}${year ? " " + year : ""}`;
     try {
       const bytes = await bytesFrom({ file: join(dir, f) });
       const text = await extractText(bytes);
       if (dry) {
         const n = chunk(text).length;
-        console.log(`• ${make} ${model}: ${text.length} chars → ${n} chunks ${n === 0 ? "⚠️ (empty — scanned?)" : ""}`);
+        console.log(`• ${tag}: ${text.length} chars → ${n} chunks ${n === 0 ? "⚠️ (empty — scanned?)" : ""}`);
         ok.push(f);
         continue;
       }
-      process.stdout.write(`• ${make} ${model}: ingesting... `);
-      const n = await ingestManual({ supabase, openaiKey: OAI, make, model, title, text, replace: true });
+      process.stdout.write(`• ${tag}: ingesting... `);
+      const n = await ingestManual({ supabase, openaiKey: OAI, make, model, year, title, text, replace: true });
       console.log(`${n} chunks ✓`);
       ok.push(f);
     } catch (e) {

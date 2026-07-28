@@ -48,28 +48,31 @@ export async function embed(input, openaiKey) {
   return (await res.json()).data.map((d) => d.embedding);
 }
 
-// Delete any existing manual for this exact make/model (cascade clears its
-// chunks) so re-ingesting is idempotent instead of duplicating.
-async function clearExisting(supabase, make, model) {
+// Delete any existing manual for this exact make/model/year (cascade clears its
+// chunks) so re-ingesting is idempotent. Different years of the same model
+// coexist — only the matching year is replaced.
+async function clearExisting(supabase, make, model, year) {
   let q = supabase.from("manuals").delete().eq("make", make);
   q = model ? q.eq("model", model) : q.is("model", null);
+  q = year != null ? q.eq("year_from", year) : q;
   const { error } = await q;
   if (error) throw error;
 }
 
 // Full ingest of one manual's text. Returns the number of chunks stored.
-export async function ingestManual({ supabase, openaiKey, make, model = null, title = null, text, replace = true, log = () => {} }) {
+export async function ingestManual({ supabase, openaiKey, make, model = null, year = null, title = null, text, replace = true, log = () => {} }) {
   const chunks = chunk(text);
   if (chunks.length === 0) throw new Error("no text extracted (scanned PDF? needs OCR)");
-  if (replace) await clearExisting(supabase, make, model);
+  if (replace) await clearExisting(supabase, make, model, year);
 
-  const { data: manual, error } = await supabase.from("manuals").insert({ make, model, title }).select("id").single();
+  const { data: manual, error } = await supabase
+    .from("manuals").insert({ make, model, title, year_from: year, year_to: year }).select("id").single();
   if (error) throw error;
 
   for (let i = 0; i < chunks.length; i += 64) {
     const batch = chunks.slice(i, i + 64);
     const embeddings = await embed(batch, openaiKey);
-    const rows = batch.map((content, j) => ({ manual_id: manual.id, make, model, content, embedding: embeddings[j] }));
+    const rows = batch.map((content, j) => ({ manual_id: manual.id, make, model, year, content, embedding: embeddings[j] }));
     const { error: e2 } = await supabase.from("manual_chunks").insert(rows);
     if (e2) throw e2;
     log(`  ${Math.min(i + 64, chunks.length)}/${chunks.length}`);
