@@ -2,7 +2,7 @@
 
 import { useI18n } from "@/lib/i18n";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
-import { formatBRL, formatMonths, monthsSinceDate, vehicleLabel } from "@/lib/app/content";
+import { formatBRL, formatMonths, minPurchaseDate, monthsSinceDate, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Card, Icon, inputCls, SectionTitle, useContent } from "../ui";
@@ -91,8 +91,9 @@ export function CarSettingsScreen() {
           <input
             type="date"
             value={v.purchaseDate ?? ""}
+            min={minPurchaseDate(v.year)}
             max={new Date().toISOString().slice(0, 10)}
-            onChange={(e) => updateVehicle(v.id, { purchaseDate: e.target.value || undefined })}
+            onChange={(e) => { const val = e.target.value; if (val && val < minPurchaseDate(v.year)) return; updateVehicle(v.id, { purchaseDate: val || undefined }); }}
             className={inputCls}
           />
         </label>

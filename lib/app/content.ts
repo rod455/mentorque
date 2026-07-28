@@ -9,6 +9,14 @@ export function formatBRL(n: number): string {
   return "R$ " + Math.round(n).toLocaleString("pt-BR");
 }
 
+// Earliest plausible purchase date for a model year. Brazilian cars launch in
+// the second half of the previous calendar year, so we floor at Jan 1 of
+// (year - 1) — generous enough to allow the real launch window while blocking
+// impossible dates (e.g. a 2025 model "bought" years earlier).
+export function minPurchaseDate(year: number): string {
+  return `${year - 1}-01-01`;
+}
+
 // Months since an ISO date (yyyy-mm-dd), or null if unset/invalid.
 export function monthsSinceDate(iso?: string, now = new Date()): number | null {
   if (!iso) return null;

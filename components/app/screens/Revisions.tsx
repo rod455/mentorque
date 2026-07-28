@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { computeUpcoming, type UpcomingItem } from "@/lib/app/health";
-import { carName, formatMonths, monthsSinceDate } from "@/lib/app/content";
+import { carName, formatMonths, minPurchaseDate, monthsSinceDate } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Card, Icon, inputCls, PremiumBadge, SectionTitle, Sheet, UpgradeBanner, useContent } from "../ui";
@@ -176,8 +176,9 @@ export function RevisionsScreen() {
         <input
           type="date"
           value={v.purchaseDate ?? ""}
+          min={minPurchaseDate(v.year)}
           max={new Date().toISOString().slice(0, 10)}
-          onChange={(e) => updateVehicle(v.id, { purchaseDate: e.target.value || undefined })}
+          onChange={(e) => { const val = e.target.value; if (val && val < minPurchaseDate(v.year)) return; updateVehicle(v.id, { purchaseDate: val || undefined }); }}
           className={`mt-4 ${inputCls}`}
         />
         <Button size="lg" className="mt-4 w-full" onClick={() => setDateSheet(false)}>{c.common.save}</Button>
