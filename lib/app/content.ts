@@ -57,7 +57,7 @@ export function getContent(locale: Locale) {
     moto: ["Honda", "Yamaha", "Suzuki", "Royal Enfield"],
   };
   const modelsByMake: Record<string, string[]> = {
-    Volkswagen: ["Gol", "Polo", "T-Cross", "Nivus", "Virtus", "Voyage", "Saveiro", "Tera"],
+    Volkswagen: ["Gol", "Polo", "T-Cross", "Nivus", "Virtus", "Voyage", "Saveiro", "Tera", "Fusca"],
     Chevrolet: ["Onix", "Tracker", "Cruze", "S10", "Spin"],
     Fiat: ["Argo", "Strada", "Mobi", "Toro", "Pulse"],
     Toyota: ["Corolla", "Hilux", "Yaris", "Corolla Cross"],
@@ -684,6 +684,11 @@ export function getContent(locale: Locale) {
       moto: T("Moto", "Motorcycle"),
       make: T("Marca", "Make"),
       makePh: T("Digite ou escolha a marca", "Type or pick the make"),
+      carField: T("Carro (marca e modelo)", "Car (make and model)"),
+      carFieldPh: T("Digite a marca ou o modelo (ex.: Onix, Volks...)", "Type the make or model (e.g. Onix, VW...)"),
+      manualEntry: T("Não encontrou? Digitar manualmente", "Can't find it? Enter manually"),
+      backToSearch: T("← Voltar para a busca", "← Back to search"),
+      noCarMatch: T("Nenhum carro encontrado.", "No car found."),
       model: T("Modelo", "Model"),
       modelPh: T("Digite o modelo", "Type the model"),
       year: T("Ano", "Year"),

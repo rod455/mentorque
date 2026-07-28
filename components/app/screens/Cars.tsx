@@ -233,6 +233,10 @@ export function AddCarScreen({ editId }: { editId?: string }) {
   const [makeOpen, setMakeOpen] = useState(false);
   const [photo, setPhoto] = useState<string | undefined>(editing?.photo);
   const [avatarSheet, setAvatarSheet] = useState(false);
+  // Combined car search (single field) vs. manual make/model entry.
+  const [query, setQuery] = useState(editing?.make && editing?.model ? `${editing.model} · ${editing.make}` : "");
+  const [comboOpen, setComboOpen] = useState(false);
+  const [manualMode, setManualMode] = useState(false);
 
   const valid = !!(make && model && year);
 
@@ -261,6 +265,25 @@ export function AddCarScreen({ editId }: { editId?: string }) {
     (m) => !make || (m.toLowerCase().includes(make.toLowerCase()) && m.toLowerCase() !== make.toLowerCase())
   );
 
+  // Flat make+model catalog for the combined search field.
+  const catalog = c.makes[type].flatMap((mk) => (c.modelsByMake[mk] ?? []).map((md) => ({ make: mk, model: md })));
+  const q = query.trim().toLowerCase();
+  const comboResults = q
+    ? catalog
+        .filter((p) => p.model.toLowerCase().includes(q) || p.make.toLowerCase().includes(q))
+        .map((p) => {
+          const ml = p.model.toLowerCase();
+          const rank = ml === q ? 0 : ml.startsWith(q) ? 1 : ml.includes(q) ? 2 : 3;
+          return { ...p, rank };
+        })
+        .sort((x, y) => x.rank - y.rank || x.make.localeCompare(y.make) || x.model.localeCompare(y.model))
+        .slice(0, 40)
+    : [];
+
+  const pickCar = (mk: string, md: string) => {
+    setMake(mk); setModel(md); setQuery(`${md} · ${mk}`); setComboOpen(false);
+  };
+
   return (
     <div>
       <AppHeader title={editing ? a.editTitle : a.title} />
@@ -270,7 +293,7 @@ export function AddCarScreen({ editId }: { editId?: string }) {
           {(["car", "moto"] as VehicleType[]).map((tp) => (
             <button
               key={tp}
-              onClick={() => { setType(tp); setMake(null); setModel(null); }}
+              onClick={() => { setType(tp); setMake(null); setModel(null); setQuery(""); }}
               className={`flex items-center justify-center gap-2 rounded-xl py-3 font-display ring-1 transition-colors ${type === tp ? "bg-teal/15 text-teal ring-teal" : "bg-graphite-800 text-cream/70 ring-white/10"}`}
             >
               <Icon name={tp === "car" ? "car" : "moto"} className="h-5 w-5" />
@@ -279,44 +302,87 @@ export function AddCarScreen({ editId }: { editId?: string }) {
           ))}
         </div>
 
-        {/* Marca — campo aberto com autocomplete */}
-        <Field label={a.make}>
-          <div className="relative">
-            <input
-              value={make ?? ""}
-              onChange={(e) => { setMake(e.target.value || null); setModel(null); setMakeOpen(true); }}
-              onFocus={() => setMakeOpen(true)}
-              onBlur={() => setTimeout(() => setMakeOpen(false), 120)}
-              placeholder={a.makePh}
-              autoComplete="off"
-              className={inputCls}
-            />
-            {makeOpen && makeMatches.length > 0 && (
-              <div className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-xl bg-graphite-700 p-1 shadow-card ring-1 ring-white/10">
-                {makeMatches.map((m) => (
-                  <button
-                    key={m}
-                    type="button"
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => { setMake(m); setModel(null); setMakeOpen(false); }}
-                    className="block w-full rounded-lg px-3 py-2 text-left text-sm text-cream hover:bg-white/5"
-                  >
-                    {m}
-                  </button>
-                ))}
+        {!manualMode ? (
+          /* Campo único: busca combinada marca + modelo */
+          <Field label={a.carField}>
+            <div className="relative">
+              <input
+                value={query}
+                onChange={(e) => { setQuery(e.target.value); setMake(null); setModel(null); setComboOpen(true); }}
+                onFocus={() => setComboOpen(true)}
+                onBlur={() => setTimeout(() => setComboOpen(false), 150)}
+                placeholder={a.carFieldPh}
+                autoComplete="off"
+                className={inputCls}
+              />
+              {comboOpen && q.length > 0 && (
+                <div className="absolute z-20 mt-1 max-h-64 w-full overflow-auto rounded-xl bg-graphite-700 p-1 shadow-card ring-1 ring-white/10">
+                  {comboResults.length > 0 ? (
+                    comboResults.map((p) => (
+                      <button
+                        key={p.make + "/" + p.model}
+                        type="button"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => pickCar(p.make, p.model)}
+                        className="flex w-full items-baseline gap-2 rounded-lg px-3 py-2 text-left hover:bg-white/5"
+                      >
+                        <span className="font-display text-sm text-cream">{p.model}</span>
+                        <span className="text-xs text-cream/50">· {p.make}</span>
+                      </button>
+                    ))
+                  ) : (
+                    <div className="px-3 py-2 text-sm text-cream/50">{a.noCarMatch}</div>
+                  )}
+                </div>
+              )}
+            </div>
+            <button type="button" onClick={() => { setManualMode(true); setComboOpen(false); }} className="mt-1.5 text-xs font-medium text-amber/80 hover:text-amber">
+              {a.manualEntry}
+            </button>
+          </Field>
+        ) : (
+          /* Fallback: marca + modelo manuais (carros fora do catálogo) */
+          <>
+            <Field label={a.make}>
+              <div className="relative">
+                <input
+                  value={make ?? ""}
+                  onChange={(e) => { setMake(e.target.value || null); setModel(null); setMakeOpen(true); }}
+                  onFocus={() => setMakeOpen(true)}
+                  onBlur={() => setTimeout(() => setMakeOpen(false), 120)}
+                  placeholder={a.makePh}
+                  autoComplete="off"
+                  className={inputCls}
+                />
+                {makeOpen && makeMatches.length > 0 && (
+                  <div className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-xl bg-graphite-700 p-1 shadow-card ring-1 ring-white/10">
+                    {makeMatches.map((m) => (
+                      <button
+                        key={m}
+                        type="button"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => { setMake(m); setModel(null); setMakeOpen(false); }}
+                        className="block w-full rounded-lg px-3 py-2 text-left text-sm text-cream hover:bg-white/5"
+                      >
+                        {m}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </Field>
-
-        {make &&
-          (models.length > 0 ? (
-            <Picker label={a.model} value={model} options={models} onPick={setModel} />
-          ) : (
-            <Field label={a.model}>
-              <input value={model ?? ""} onChange={(e) => setModel(e.target.value || null)} placeholder={a.modelPh} className={inputCls} />
             </Field>
-          ))}
+            {models.length > 0 ? (
+              <Picker label={a.model} value={model} options={models} onPick={setModel} />
+            ) : (
+              <Field label={a.model}>
+                <input value={model ?? ""} onChange={(e) => setModel(e.target.value || null)} placeholder={a.modelPh} className={inputCls} />
+              </Field>
+            )}
+            <button type="button" onClick={() => setManualMode(false)} className="text-xs font-medium text-amber/80 hover:text-amber">
+              {a.backToSearch}
+            </button>
+          </>
+        )}
 
         {model && (
           <Field label={a.year}>
