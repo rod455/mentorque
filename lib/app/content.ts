@@ -57,7 +57,7 @@ export function getContent(locale: Locale) {
     moto: ["Honda", "Yamaha", "Suzuki", "Royal Enfield"],
   };
   const modelsByMake: Record<string, string[]> = {
-    Volkswagen: ["Gol", "Polo", "T-Cross", "Nivus", "Virtus"],
+    Volkswagen: ["Gol", "Polo", "T-Cross", "Nivus", "Virtus", "Voyage", "Saveiro", "Tera"],
     Chevrolet: ["Onix", "Tracker", "Cruze", "S10", "Spin"],
     Fiat: ["Argo", "Strada", "Mobi", "Toro", "Pulse"],
     Toyota: ["Corolla", "Hilux", "Yaris", "Corolla Cross"],
