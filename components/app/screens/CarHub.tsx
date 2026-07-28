@@ -111,6 +111,10 @@ export function CarHub() {
         ))}
       </div>
 
+      <Button variant="secondary" className="mt-3 w-full" onClick={() => go({ name: "revisions" })}>
+        {c.health.seeRevisions}
+      </Button>
+
       <AvatarPickerSheet
         open={avatarSheet}
         onClose={() => setAvatarSheet(false)}
