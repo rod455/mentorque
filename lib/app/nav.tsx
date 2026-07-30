@@ -11,6 +11,7 @@ export type View =
   | { name: "car" }
   | { name: "symptoms" }
   | { name: "symptom"; id: string }
+  | { name: "systemProblems"; system: SystemKey }
   | { name: "checklist"; symptomId: string }
   | { name: "health" }
   | { name: "healthQuiz" }
@@ -21,7 +22,7 @@ export type View =
   | { name: "revisions" }
   | { name: "learn" }
   | { name: "studyTrack"; trackId: string }
-  | { name: "biela" }
+  | { name: "biela"; seed?: string }
   | { name: "content"; id: string }
   | { name: "carSettings" }
   | { name: "profile" }

@@ -524,6 +524,15 @@ export function getContent(locale: Locale) {
     { key: "other", label: T("Outro", "Other") },
   ];
 
+  // Subsistemas do carro — grade de navegação em "Problemas".
+  const problemSystems: { key: SystemKey; label: string; icon: string; sub: string }[] = [
+    { key: "engine", label: T("Motor", "Engine"), icon: "engine", sub: T("Partida, força, consumo, luz", "Start, power, consumption, light") },
+    { key: "brakes", label: T("Freios", "Brakes"), icon: "brakes", sub: T("Barulho, pedal, frenagem", "Noise, pedal, braking") },
+    { key: "suspension", label: T("Suspensão", "Suspension"), icon: "suspension", sub: T("Barulhos, buracos, direção", "Noises, bumps, steering") },
+    { key: "tires", label: T("Pneus & Rodas", "Tires & Wheels"), icon: "tires", sub: T("Vibração, desgaste, calibragem", "Vibration, wear, pressure") },
+    { key: "electrical", label: T("Elétrica", "Electrical"), icon: "electrical", sub: T("Bateria, partida, luzes", "Battery, starting, lights") },
+  ];
+
   // Peças comuns por tipo de serviço — alimenta o autocomplete de "Peças trocadas".
   const partsByType: Record<string, string[]> = locale === "pt"
     ? {
@@ -568,6 +577,7 @@ export function getContent(locale: Locale) {
     lessons,
     serviceTypes,
     partsByType,
+    problemSystems,
     studyTracks,
     consultingTiers,
 
@@ -762,8 +772,20 @@ export function getContent(locale: Locale) {
     symptomsUi: {
       title: T("O que está acontecendo com seu", "What's going on with your"),
       titleCar: T("Será que precisamos levar seu {car} para a oficina?", "Should we take your {car} to the shop?"),
-      searchPh: T("Busque por sintoma (ex: freio, motor, barulho)", "Search a symptom (e.g. brakes, engine, noise)"),
+      searchPh: T("Descreva o problema (ex: barulho ao frear, luz do motor)", "Describe the problem (e.g. noise when braking, engine light)"),
       none: T("Nenhum sintoma encontrado.", "No symptoms found."),
+      browseBySystem: T("Ou explore por sistema", "Or browse by system"),
+      common: T("Sintomas comuns", "Common symptoms"),
+      systemProblems: T("Problemas de {system}", "{system} problems"),
+      notListed: T("Não é nenhum desses?", "None of these?"),
+      askBielaAbout: T("Perguntar ao Biela sobre isso", "Ask Biela about it"),
+      askBielaQ: T("Perguntar ao Biela sobre \"{q}\"", "Ask Biela about \"{q}\""),
+      talkToBiela: T("Falar com o Biela", "Talk to Biela"),
+      anamneseTitle: T("Antes do diagnóstico, me conta:", "Before the diagnosis, tell me:"),
+      anamneseSub: T("Responda pra afinar o diagnóstico do Biela.", "Answer to sharpen Biela's diagnosis."),
+      yes: T("Sim", "Yes"),
+      no: T("Não", "No"),
+      diagnoseWithBiela: T("Diagnóstico com o Biela", "Diagnose with Biela"),
       causes: T("Possíveis causas", "Possible causes"),
       urgency: T("Nível de urgência", "Urgency level"),
       price: T("Faixa de preço estimada", "Estimated price range"),

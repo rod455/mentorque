@@ -277,14 +277,14 @@ export function ContentScreen({ id }: { id: string }) {
 // 2.6.D — Chat com o Biela (agente de IA / mecânico)
 type Msg = { role: "user" | "biela"; text: string; note?: string };
 
-export function BielaChatScreen() {
+export function BielaChatScreen({ seed }: { seed?: string }) {
   const c = useContent();
   const { locale } = useI18n();
   const { s } = usePrototype();
   const { go } = useNav();
   const v = activeVehicle(s);
   const [msgs, setMsgs] = useState<Msg[]>([{ role: "biela", text: c.biela.intro }]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(seed ?? "");
   const [busy, setBusy] = useState(false);
   const [used, setUsed] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);

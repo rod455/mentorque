@@ -6,7 +6,7 @@ import { NavProvider, useNav, type View } from "@/lib/app/nav";
 import { Icon, useContent } from "./ui";
 import { CarsScreen, AddCarScreen } from "./screens/Cars";
 import { CarHub } from "./screens/CarHub";
-import { SymptomsScreen, SymptomDetail, ChecklistScreen } from "./screens/Symptoms";
+import { SymptomsScreen, SymptomDetail, SystemProblemsScreen, ChecklistScreen } from "./screens/Symptoms";
 import { HealthScreen, HealthQuizScreen, SystemDetail } from "./screens/Health";
 import { HistoryScreen, AddServiceScreen, ServiceDetail } from "./screens/History";
 import { RevisionsScreen } from "./screens/Revisions";
@@ -57,6 +57,7 @@ function Router() {
       case "car": return <CarHub />;
       case "symptoms": return <SymptomsScreen />;
       case "symptom": return <SymptomDetail id={view.id} />;
+      case "systemProblems": return <SystemProblemsScreen system={view.system} />;
       case "checklist": return <ChecklistScreen symptomId={view.symptomId} />;
       case "health": return <HealthScreen />;
       case "healthQuiz": return <HealthQuizScreen />;
@@ -67,7 +68,7 @@ function Router() {
       case "revisions": return <RevisionsScreen />;
       case "learn": return <LearnScreen />;
       case "studyTrack": return <StudyTrackScreen trackId={view.trackId} />;
-      case "biela": return <BielaChatScreen />;
+      case "biela": return <BielaChatScreen seed={view.seed} />;
       case "content": return <ContentScreen id={view.id} />;
       case "carSettings": return <CarSettingsScreen />;
       case "profile": return <ProfileScreen />;
@@ -92,7 +93,7 @@ function Router() {
 type Tab = "cars" | "problems" | "history" | "studies" | "profile";
 const TAB_OF: Record<View["name"], Tab> = {
   cars: "cars", addCar: "cars", car: "cars", health: "cars", healthQuiz: "cars", system: "cars", revisions: "cars", carSettings: "cars",
-  symptoms: "problems", symptom: "problems", checklist: "problems",
+  symptoms: "problems", symptom: "problems", systemProblems: "problems", checklist: "problems",
   history: "history", addService: "history", service: "history",
   learn: "studies", studyTrack: "studies", biela: "studies", content: "studies",
   profile: "profile", subscribe: "profile",

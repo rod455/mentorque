@@ -7,7 +7,7 @@ import { carName, vehicleLabel } from "@/lib/app/content";
 import type { SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, inputCls, LockedCard, PremiumBadge, RecoBadge, SeverityDot, UpgradeBanner, useContent } from "../ui";
+import { AppHeader, Card, Icon, inputCls, LockedCard, PremiumBadge, RecoBadge, SeverityDot, UpgradeBanner, useContent } from "../ui";
 
 // Map a symptom category to a service type for pre-filling the history form.
 const CATEGORY_TO_SERVICE: Record<SystemKey, string> = {
@@ -18,7 +18,44 @@ const CATEGORY_TO_SERVICE: Record<SystemKey, string> = {
   electrical: "battery",
 };
 
-// 2.2.A — Lista de sintomas
+// A tappable symptom row (reused in the hub search + the by-system list).
+function SymptomRow({ sx, reco }: { sx: ReturnType<typeof useContent>["symptoms"][number]; reco?: boolean }) {
+  const c = useContent();
+  const { go } = useNav();
+  return (
+    <button
+      onClick={() => go({ name: "symptom", id: sx.id })}
+      className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3.5 text-left ring-1 ring-white/5 hover:ring-amber/30"
+    >
+      <SeverityDot level={sx.urgency.level} />
+      <span className="min-w-0 flex-1">
+        <span className="block font-display text-[15px] text-cream">{sx.label}</span>
+        {reco && <span className="mt-1 block"><RecoBadge>{c.premium.recommended}</RecoBadge></span>}
+      </span>
+      <span className="text-cream/40">›</span>
+    </button>
+  );
+}
+
+// "Talk to Biela" fallback row — seeds the chat with the problem/query.
+function AskBielaRow({ seed, label }: { seed: string; label: string }) {
+  const { go } = useNav();
+  return (
+    <button
+      onClick={() => go({ name: "biela", seed })}
+      className="flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-amber/15 to-amber/5 px-3.5 py-3.5 text-left ring-1 ring-amber/25 hover:ring-amber/45"
+    >
+      <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-graphite-900/40">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/biela/biela-idle.png" alt="" className="h-full w-full object-contain" />
+      </span>
+      <span className="min-w-0 flex-1 text-sm text-cream/90">{label}</span>
+      <span className="shrink-0 text-amber">›</span>
+    </button>
+  );
+}
+
+// 2.2.A — Problemas: hub (busca + subsistemas + comuns + Biela)
 export function SymptomsScreen() {
   const c = useContent();
   const ui = c.symptomsUi;
@@ -26,15 +63,17 @@ export function SymptomsScreen() {
   const { go } = useNav();
   const v = activeVehicle(s);
   const [q, setQ] = useState("");
+  const [open, setOpen] = useState(false);
 
   const services = v ? servicesFor(s, v.id) : [];
-  const list = c.symptoms.filter((sx) => sx.label.toLowerCase().includes(q.toLowerCase()));
+  const query = q.trim().toLowerCase();
+  const matches = query ? c.symptoms.filter((sx) => sx.label.toLowerCase().includes(query)) : [];
 
   return (
     <div>
       <AppHeader title={v ? ui.titleCar.replace("{car}", carName(v)) : c.nav.problems} />
 
-      {/* Cena da Biela na garagem (banner) — feather nas bordas dissolve o contorno */}
+      {/* Cena da Biela na garagem (banner) */}
       <div className="-mt-1 mb-4 overflow-hidden rounded-2xl">
         <img
           src="/biela/cena-biela-garagem.webp"
@@ -49,33 +88,109 @@ export function SymptomsScreen() {
         />
       </div>
 
-      <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={ui.searchPh} className={inputCls} />
+      {/* Busca com autocomplete */}
+      <div className="relative">
+        <input
+          value={q}
+          onChange={(e) => { setQ(e.target.value); setOpen(true); }}
+          onFocus={() => setOpen(true)}
+          onBlur={() => setTimeout(() => setOpen(false), 150)}
+          placeholder={ui.searchPh}
+          autoComplete="off"
+          className={inputCls}
+        />
+        {open && query.length > 0 && (
+          <div className="absolute z-20 mt-1 max-h-72 w-full overflow-auto rounded-xl bg-graphite-700 p-1 shadow-card ring-1 ring-white/10">
+            {matches.map((sx) => (
+              <button
+                key={sx.id}
+                type="button"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => go({ name: "symptom", id: sx.id })}
+                className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left hover:bg-white/5"
+              >
+                <SeverityDot level={sx.urgency.level} />
+                <span className="text-sm text-cream">{sx.label}</span>
+              </button>
+            ))}
+            {/* Sempre oferece o Biela como saída */}
+            <button
+              type="button"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => go({ name: "biela", seed: (v ? `Meu ${carName(v)} ` : "Meu carro ") + `está com: ${q}. O que pode ser e o que devo fazer?` })}
+              className="mt-1 flex w-full items-center gap-2.5 rounded-lg bg-amber/10 px-3 py-2.5 text-left ring-1 ring-amber/20 hover:ring-amber/40"
+            >
+              <span className="text-amber">🐻</span>
+              <span className="text-sm text-cream/90">{ui.askBielaQ.replace("{q}", q)}</span>
+            </button>
+          </div>
+        )}
+      </div>
 
       {!s.premium && <UpgradeBanner ctx="symptomReco" text={ui.recoNudge} />}
 
-      <div className="mt-3 space-y-2">
-        {list.length === 0 ? (
-          <p className="rounded-xl bg-graphite-800 px-3.5 py-3 text-sm text-cream/55 ring-1 ring-white/5">{ui.none}</p>
+      {/* Grade de subsistemas */}
+      <p className="mb-2.5 mt-4 text-xs font-semibold uppercase tracking-wide text-cream/45">{ui.browseBySystem}</p>
+      <div className="grid grid-cols-2 gap-3">
+        {c.problemSystems.map((sysm) => (
+          <button
+            key={sysm.key}
+            onClick={() => go({ name: "systemProblems", system: sysm.key })}
+            className="flex flex-col gap-2 rounded-3xl bg-graphite-800 p-4 text-left ring-1 ring-white/5 transition-all hover:ring-white/15 active:scale-[0.98]"
+          >
+            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-coral/12 text-coral">
+              <Icon name={sysm.icon} className="h-6 w-6" />
+            </span>
+            <span>
+              <span className="block font-display text-[15px] font-semibold leading-tight text-cream">{sysm.label}</span>
+              <span className="mt-1 block text-xs leading-snug text-cream/50">{sysm.sub}</span>
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {/* Sintomas comuns */}
+      <p className="mb-2.5 mt-5 text-xs font-semibold uppercase tracking-wide text-cream/45">{ui.common}</p>
+      <div className="space-y-2">
+        {c.symptoms.map((sx) => (
+          <SymptomRow key={sx.id} sx={sx} reco={!!(s.premium && v && symptomRecommended(sx.category, v, services))} />
+        ))}
+      </div>
+
+      <div className="mt-4">
+        <AskBielaRow seed={(v ? `Meu ${carName(v)} ` : "Meu carro ") + "está com um problema que não achei na lista. Pode me ajudar a diagnosticar?"} label={ui.talkToBiela} />
+      </div>
+    </div>
+  );
+}
+
+// 2.2.A′ — Problemas de um subsistema
+export function SystemProblemsScreen({ system }: { system: SystemKey }) {
+  const c = useContent();
+  const ui = c.symptomsUi;
+  const { s } = usePrototype();
+  const v = activeVehicle(s);
+  const sysm = c.problemSystems.find((x) => x.key === system);
+  const list = c.symptoms.filter((sx) => sx.category === system);
+  const services = v ? servicesFor(s, v.id) : [];
+  const label = sysm?.label ?? system;
+
+  return (
+    <div>
+      <AppHeader title={ui.systemProblems.replace("{system}", label)} />
+      <div className="mt-1 space-y-2">
+        {list.length > 0 ? (
+          list.map((sx) => <SymptomRow key={sx.id} sx={sx} reco={!!(s.premium && v && symptomRecommended(sx.category, v, services))} />)
         ) : (
-          list.map((sx) => {
-            const reco = s.premium && v && symptomRecommended(sx.category, v, services);
-            return (
-              <button
-                key={sx.id}
-                onClick={() => go({ name: "symptom", id: sx.id })}
-                className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3.5 text-left ring-1 ring-white/5 hover:ring-amber/30"
-              >
-                <SeverityDot level={sx.urgency.level} />
-                <span className="min-w-0 flex-1">
-                  <span className="block font-display text-[15px] text-cream">{sx.label}</span>
-                  {reco && <span className="mt-1 block"><RecoBadge>{c.premium.recommended}</RecoBadge></span>}
-                </span>
-                <span className="text-cream/40">›</span>
-              </button>
-            );
-          })
+          <p className="rounded-xl bg-graphite-800 px-3.5 py-3 text-sm text-cream/55 ring-1 ring-white/5">{ui.none}</p>
         )}
       </div>
+
+      <p className="mb-2 mt-5 text-sm text-cream/60">{ui.notListed}</p>
+      <AskBielaRow
+        seed={(v ? `Meu ${carName(v)} ` : "Meu carro ") + `está com um problema no sistema de ${label.toLowerCase()} que não achei na lista. Pode me ajudar a diagnosticar?`}
+        label={ui.talkToBiela}
+      />
     </div>
   );
 }
@@ -86,17 +201,59 @@ export function SymptomDetail({ id }: { id: string }) {
   const ui = c.symptomsUi;
   const { s } = usePrototype();
   const { go, root } = useNav();
-  const car = carName(activeVehicle(s), "");
+  const v = activeVehicle(s);
+  const car = carName(v, "");
   const sx = c.symptoms.find((x) => x.id === id);
+  const [answers, setAnswers] = useState<Record<number, "yes" | "no">>({});
   if (!sx) return <AppHeader title="—" />;
   const pd = c.symptomPremium[sx.id];
 
   const shownCauses = s.premium ? sx.causes : sx.causes.slice(0, 2);
   const hiddenCauses = sx.causes.length - shownCauses.length;
 
+  // Compose a rich prompt for Biela from the symptom + anamnese answers.
+  const bielaSeed = () => {
+    const ans = sx.observe
+      .map((o, i) => (answers[i] ? `${o} ${answers[i] === "yes" ? ui.yes : ui.no}` : null))
+      .filter(Boolean);
+    const carPart = v ? `Meu ${carName(v)} (${v.year}${v.odometerKm != null ? `, ${v.odometerKm.toLocaleString()} km` : ""})` : "Meu carro";
+    return `${carPart} está com: ${sx.label}.${ans.length ? " " + ans.join("; ") + "." : ""} O que pode ser e o que devo fazer?`;
+  };
+
   return (
     <div>
       <AppHeader title={sx.label} />
+
+      {/* Mini-anamnese: perguntas de observação viram um questionário rápido */}
+      {sx.observe.length > 0 && (
+        <Card className="mt-1 ring-amber/20">
+          <p className="font-display text-[15px] text-cream">{ui.anamneseTitle}</p>
+          <p className="mt-0.5 text-xs text-cream/55">{ui.anamneseSub}</p>
+          <div className="mt-3 space-y-2.5">
+            {sx.observe.map((o, i) => (
+              <div key={o} className="flex items-center gap-2">
+                <span className="min-w-0 flex-1 text-sm text-cream/85">{o}</span>
+                <div className="flex shrink-0 gap-1.5">
+                  {(["yes", "no"] as const).map((val) => (
+                    <button
+                      key={val}
+                      onClick={() => setAnswers((a) => { const n = { ...a }; if (n[i] === val) delete n[i]; else n[i] = val; return n; })}
+                      className={`rounded-lg px-3 py-1.5 text-xs font-medium ring-1 transition-colors ${
+                        answers[i] === val ? "bg-amber text-graphite ring-amber" : "bg-graphite-700 text-cream/70 ring-white/10 hover:ring-amber/30"
+                      }`}
+                    >
+                      {val === "yes" ? ui.yes : ui.no}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <Button className="mt-4 w-full" onClick={() => go({ name: "biela", seed: bielaSeed() })}>
+            🐻 {ui.diagnoseWithBiela}
+          </Button>
+        </Card>
+      )}
 
       <Section title={ui.causes}>
         <ul className="space-y-1.5">
@@ -158,17 +315,6 @@ export function SymptomDetail({ id }: { id: string }) {
           </Section>
         </>
       )}
-
-      <Section title={ui.observe}>
-        <ul className="space-y-1.5">
-          {sx.observe.map((o) => (
-            <li key={o} className="flex gap-2 text-sm text-cream/80">
-              <span className="text-teal">?</span>
-              {o}
-            </li>
-          ))}
-        </ul>
-      </Section>
 
       <div className="mt-6 space-y-2.5">
         <Button size="lg" className="w-full" onClick={() => go({ name: "checklist", symptomId: sx.id })}>
