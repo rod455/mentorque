@@ -21,6 +21,7 @@ export type View =
   | { name: "service"; id: string }
   | { name: "revisions" }
   | { name: "learn" }
+  | { name: "equipment" }
   | { name: "studyTrack"; trackId: string }
   | { name: "biela"; seed?: string }
   | { name: "content"; id: string }

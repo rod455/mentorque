@@ -128,7 +128,7 @@ export function SymptomsScreen() {
 
       {!s.premium && <UpgradeBanner ctx="symptomReco" text={ui.recoNudge} />}
 
-      {/* Grade de subsistemas */}
+      {/* Grade de subsistemas + Equipamentos úteis */}
       <p className="mb-2.5 mt-4 text-xs font-semibold uppercase tracking-wide text-cream/45">{ui.browseBySystem}</p>
       <div className="grid grid-cols-2 gap-3">
         {c.problemSystems.map((sysm) => (
@@ -146,6 +146,19 @@ export function SymptomsScreen() {
             </span>
           </button>
         ))}
+        {/* Equipamentos úteis — ao lado dos subsistemas */}
+        <button
+          onClick={() => go({ name: "equipment" })}
+          className="flex flex-col gap-2 rounded-3xl bg-graphite-800 p-4 text-left ring-1 ring-amber/20 transition-all hover:ring-amber/40 active:scale-[0.98]"
+        >
+          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-amber/15 text-amber">
+            <Icon name="tools" className="h-6 w-6" />
+          </span>
+          <span>
+            <span className="block font-display text-[15px] font-semibold leading-tight text-cream">{c.equipmentUi.cardTitle}</span>
+            <span className="mt-1 block text-xs leading-snug text-cream/50">{c.equipmentUi.cardSub}</span>
+          </span>
+        </button>
       </div>
 
       <div className="mt-5">
