@@ -65,7 +65,6 @@ export function SymptomsScreen() {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
 
-  const services = v ? servicesFor(s, v.id) : [];
   const query = q.trim().toLowerCase();
   const matches = query ? c.symptoms.filter((sx) => sx.label.toLowerCase().includes(query)) : [];
 
@@ -149,15 +148,7 @@ export function SymptomsScreen() {
         ))}
       </div>
 
-      {/* Sintomas comuns */}
-      <p className="mb-2.5 mt-5 text-xs font-semibold uppercase tracking-wide text-cream/45">{ui.common}</p>
-      <div className="space-y-2">
-        {c.symptoms.map((sx) => (
-          <SymptomRow key={sx.id} sx={sx} reco={!!(s.premium && v && symptomRecommended(sx.category, v, services))} />
-        ))}
-      </div>
-
-      <div className="mt-4">
+      <div className="mt-5">
         <AskBielaRow seed={(v ? `Meu ${carName(v)} ` : "Meu carro ") + "está com um problema que não achei na lista. Pode me ajudar a diagnosticar?"} label={ui.talkToBiela} />
       </div>
     </div>
