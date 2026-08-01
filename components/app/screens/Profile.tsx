@@ -26,6 +26,24 @@ const RATE_URL = "https://mentorque.com.br";
 // produção, para não liberar Premium de graça se algo estiver desconfigurado.
 const isLocalDev = () => typeof window !== "undefined" && /^(localhost|127\.0\.0\.1|\[::1\])/.test(window.location.hostname);
 
+function GoogleIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className}>
+      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.76h3.56c2.08-1.92 3.28-4.74 3.28-8.09Z" />
+      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.56-2.76c-.99.66-2.26 1.06-3.72 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23Z" />
+      <path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18a11 11 0 0 0 0 9.88l3.66-2.84Z" />
+      <path fill="#EA4335" d="M12 4.75c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 1.46 14.97.5 12 .5A11 11 0 0 0 2.18 7.06l3.66 2.84C6.71 6.7 9.14 4.75 12 4.75Z" />
+    </svg>
+  );
+}
+function AppleIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M16.365 1.43c0 1.14-.417 2.2-1.11 2.98-.84.95-2.2 1.68-3.32 1.6-.14-1.12.42-2.3 1.09-3.05.75-.84 2.08-1.5 3.16-1.53.03.13.04.27.04.4l.14-.4Zm3.6 15.9c-.2.47-.44.9-.72 1.3-.5.72-.9 1.22-1.22 1.5-.5.46-1.03.7-1.6.72-.4 0-.9-.12-1.47-.35-.57-.23-1.1-.35-1.58-.35-.5 0-1.04.12-1.63.35-.6.23-1.07.35-1.44.36-.55.02-1.1-.22-1.63-.73-.34-.3-.77-.82-1.28-1.56-.55-.8-1-1.72-1.35-2.78-.38-1.13-.57-2.23-.57-3.3 0-1.22.26-2.28.79-3.16a4.65 4.65 0 0 1 1.66-1.68 4.47 4.47 0 0 1 2.24-.63c.42 0 .98.13 1.68.4.7.26 1.15.4 1.35.4.15 0 .65-.16 1.5-.47.8-.29 1.48-.41 2.03-.36 1.5.12 2.63.71 3.38 1.78-1.34.81-2 1.95-1.99 3.4.01 1.14.42 2.08 1.24 2.83.37.35.79.62 1.25.81-.1.29-.2.57-.32.84Z" />
+    </svg>
+  );
+}
+
 // iOS-style on/off switch.
 function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void }) {
   return (
@@ -159,8 +177,29 @@ export function ProfileScreen() {
     <div>
       <AppHeader title={p.title} onBack={() => root({ name: "cars" })} />
 
-      {/* Login — só para deslogado (logado tem a seção CONTA no final) */}
-      {enabled && !user && (
+      {/* Topo: foto + nome + e-mail (logado) — ou card de login (deslogado) */}
+      {enabled && user ? (
+        <div className="flex flex-col items-center pb-1 pt-2 text-center">
+          <button onClick={() => avatarRef.current?.click()} className="relative" aria-label={p.changePhoto}>
+            <span className="grid h-24 w-24 place-items-center overflow-hidden rounded-full bg-teal/15 text-teal ring-1 ring-white/10">
+              {avatarSrc ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={avatarSrc} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <span className="font-display text-3xl font-semibold text-cream">{displayName[0]?.toUpperCase() ?? "?"}</span>
+              )}
+            </span>
+            <span className="absolute bottom-0.5 right-0.5 grid h-7 w-7 place-items-center rounded-full bg-amber text-graphite ring-4 ring-graphite">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z" /><circle cx="12" cy="13" r="3.2" /></svg>
+            </span>
+          </button>
+          <button onClick={() => { setNameInput(s.name ?? ""); setEditName(true); }} className="mt-3 font-serif text-xl font-bold text-cream">
+            {displayName}
+          </button>
+          <p className="mt-0.5 text-sm text-cream/55">{user.email}</p>
+          <input ref={avatarRef} type="file" accept="image/*" className="hidden" onChange={(e) => pickAvatar(e.target.files?.[0])} />
+        </div>
+      ) : enabled ? (
         <Card>
           <div className="flex items-center gap-3.5">
             <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-2xl bg-teal/10 ring-1 ring-teal/20">
@@ -178,7 +217,7 @@ export function ProfileScreen() {
             {p.save.cta} <span aria-hidden>→</span>
           </button>
         </Card>
-      )}
+      ) : null}
 
       {/* 2) Premium — linha em destaque que expande os benefícios (ou upsell) */}
       {s.premium ? (
@@ -309,33 +348,21 @@ export function ProfileScreen() {
         <IconRow icon="check" tint="bg-amber/15 text-amber" label={p.rate} onClick={() => window.open(RATE_URL, "_blank", "noopener,noreferrer")} />
       </Group>
 
-      {/* Conta — no final (dados + sessão + exclusão) */}
+      {/* Conta — no final: forma de login (ou trocar senha) + sair + excluir */}
       {enabled && user && (
         <>
           <SectionTitle>{p.accountTitle}</SectionTitle>
           <Group>
-            {/* Cabeçalho: avatar (toca p/ trocar) + nome + provedor/e-mail */}
-            <div className="flex items-center gap-3 px-4 py-3.5">
-              <button onClick={() => avatarRef.current?.click()} className="relative shrink-0" aria-label={p.changePhoto}>
-                <span className="grid h-11 w-11 place-items-center overflow-hidden rounded-full bg-teal/15 text-teal ring-1 ring-white/10">
-                  {avatarSrc ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={avatarSrc} alt="" className="h-full w-full object-cover" />
-                  ) : (
-                    <span className="font-display text-base font-semibold text-cream">{displayName[0]?.toUpperCase() ?? "?"}</span>
-                  )}
+            {provider === "google" || provider === "apple" ? (
+              <div className="flex w-full items-center gap-3 px-4 py-3.5">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.06]">
+                  {provider === "apple" ? <AppleIcon className="h-5 w-5 text-cream" /> : <GoogleIcon className="h-5 w-5" />}
                 </span>
-                <span className="absolute -bottom-0.5 -right-0.5 grid h-5 w-5 place-items-center rounded-full bg-amber text-graphite ring-2 ring-graphite-800">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z" /><circle cx="12" cy="13" r="3.2" /></svg>
-                </span>
-              </button>
-              <div className="min-w-0 flex-1">
-                <p className="truncate font-serif text-[15px] font-semibold text-cream">{displayName}</p>
-                <p className="truncate text-xs text-cream/50">{p.connectedWith.replace("{p}", providerLabel)} · {user.email}</p>
+                <span className="min-w-0 flex-1 font-display text-[15px] text-cream">{p.connectedWith.replace("{p}", providerLabel)}</span>
               </div>
-              <button onClick={() => { setNameInput(s.name ?? ""); setEditName(true); }} className="shrink-0 text-xs font-medium text-amber">{c.common.edit}</button>
-            </div>
-            <IconRow icon="shield" tint="bg-teal/15 text-teal" label={p.changePassword} action={pwSent ? p.passwordSent : undefined} onClick={pwSent ? undefined : changePassword} />
+            ) : (
+              <IconRow icon="shield" tint="bg-teal/15 text-teal" label={p.changePassword} action={pwSent ? p.passwordSent : undefined} onClick={pwSent ? undefined : changePassword} />
+            )}
             <IconRow icon="user" tint="bg-graphite-700 text-cream/60" label={c.auth.signOut} onClick={() => signOut()} />
             <IconRow icon="alert" tint="bg-coral/15 text-coral" label={p.deleteAccount} danger onClick={removeAccount} />
           </Group>
