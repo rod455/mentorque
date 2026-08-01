@@ -23,6 +23,7 @@ type Session = {
   startedAt: string | null; // primeiro dia no app (para marcos de tempo)
   notifications: boolean; // preferência de notificações
   units: "metric" | "imperial"; // preferência de unidades
+  avatar: string | null; // foto de perfil (data URL), sobrepõe a do Google
 };
 
 const EMPTY: Session = {
@@ -39,6 +40,7 @@ const EMPTY: Session = {
   startedAt: null,
   notifications: false,
   units: "metric",
+  avatar: null,
 };
 
 // Today as yyyy-mm-dd (client-side only).
@@ -65,6 +67,7 @@ type StoreValue = {
   setMomentPhoto: (id: string, dataUrl: string | null) => void;
   setNotifications: (v: boolean) => void;
   setUnits: (v: "metric" | "imperial") => void;
+  setAvatar: (dataUrl: string | null) => void;
   finishOnboarding: () => void;
   reset: () => void;
 };
@@ -121,6 +124,7 @@ function mergeSessions(cloud: Session, local: Session): Session {
     startedAt: [cloud.startedAt, local.startedAt].filter(Boolean).sort()[0] ?? todayISO(),
     notifications: cloud.notifications ?? local.notifications ?? false,
     units: cloud.units ?? local.units ?? "metric",
+    avatar: cloud.avatar ?? local.avatar ?? null,
   };
 }
 
@@ -257,13 +261,14 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
 
   const setNotifications = useCallback((v: boolean) => patch((p) => ({ ...p, notifications: v })), [patch]);
   const setUnits = useCallback((v: "metric" | "imperial") => patch((p) => ({ ...p, units: v })), [patch]);
+  const setAvatar = useCallback((dataUrl: string | null) => patch((p) => ({ ...p, avatar: dataUrl })), [patch]);
 
   const finishOnboarding = useCallback(() => patch((p) => ({ ...p, onboarded: true, startedAt: p.startedAt ?? todayISO() })), [patch]);
   const reset = useCallback(() => patch(() => ({ ...EMPTY, momentPhotos: {} })), [patch]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, setNotifications, setUnits, finishOnboarding, reset }),
-    [s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, setNotifications, setUnits, finishOnboarding, reset]
+    () => ({ s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, setNotifications, setUnits, setAvatar, finishOnboarding, reset }),
+    [s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, setNotifications, setUnits, setAvatar, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

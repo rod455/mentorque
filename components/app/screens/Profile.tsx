@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/app/auth";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
+import { resizeImage } from "@/lib/app/image";
 import { APP_VERSION, carName } from "@/lib/app/content";
 import { computeStatus } from "@/lib/app/gamification";
 import { PhaseEmblem } from "../Emblem";
@@ -91,13 +92,22 @@ export function ProfileScreen() {
   const p = c.profile;
   const g = c.gamification;
   const { user, enabled, signOut } = useAuth();
-  const { s, setState, setPremium, setNotifications, setUnits, reset } = usePrototype();
+  const { s, setState, setPremium, setNotifications, setUnits, setAvatar, reset } = usePrototype();
   const { go, root } = useNav();
   const gam = computeStatus(s);
   const phaseName = g.phases[gam.phase.id].name;
   const [about, setAbout] = useState(false);
   const [privacy, setPrivacy] = useState(false);
   const [talk, setTalk] = useState(false);
+  const avatarRef = useRef<HTMLInputElement>(null);
+
+  // Profile photo: user's uploaded avatar wins; otherwise the Google picture.
+  const googlePic = (user?.user_metadata?.avatar_url ?? user?.user_metadata?.picture) as string | undefined;
+  const avatarSrc = s.avatar ?? googlePic ?? null;
+  const pickAvatar = async (file?: File) => {
+    if (!file) return;
+    try { setAvatar(await resizeImage(file, 400, 0.85)); } catch { /* ignore */ }
+  };
 
   return (
     <div>
@@ -106,9 +116,19 @@ export function ProfileScreen() {
       {/* 1) Salve sua garagem — login (com a fotinha do Biela) / ou conectado */}
       {enabled && user ? (
         <Card className="flex items-center gap-3">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-teal/15 text-teal">
-            <Icon name="check" className="h-5 w-5" />
-          </span>
+          <button onClick={() => avatarRef.current?.click()} className="relative shrink-0" aria-label={p.changePhoto}>
+            <span className="grid h-12 w-12 place-items-center overflow-hidden rounded-full bg-teal/15 text-teal ring-1 ring-white/10">
+              {avatarSrc ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={avatarSrc} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <span className="font-display text-lg font-semibold text-cream">{(s.name?.trim()?.[0] ?? user.email?.[0] ?? "?").toUpperCase()}</span>
+              )}
+            </span>
+            <span className="absolute -bottom-0.5 -right-0.5 grid h-5 w-5 place-items-center rounded-full bg-amber text-graphite ring-2 ring-graphite-800">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z" /><circle cx="12" cy="13" r="3.2" /></svg>
+            </span>
+          </button>
           <div className="min-w-0 flex-1">
             <p className="text-xs text-cream/50">{c.auth.signedInAs}</p>
             <p className="truncate font-display text-sm text-cream">{user.email}</p>
@@ -116,6 +136,7 @@ export function ProfileScreen() {
           <button onClick={() => signOut()} className="shrink-0 text-xs font-medium text-coral/80 hover:text-coral">
             {c.auth.signOut}
           </button>
+          <input ref={avatarRef} type="file" accept="image/*" className="hidden" onChange={(e) => pickAvatar(e.target.files?.[0])} />
         </Card>
       ) : (
         <Card>

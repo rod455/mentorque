@@ -1345,6 +1345,7 @@ export function getContent(locale: Locale) {
         T("Consultoria com especialista", "Expert consulting"),
       ],
       driverDefault: T("Motorista", "Driver"),
+      changePhoto: T("Trocar foto de perfil", "Change profile photo"),
       // Login card (login-only, sem convidado)
       save: {
         title: T("Salve sua garagem", "Save your garage"),
