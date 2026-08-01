@@ -68,6 +68,8 @@ type StoreValue = {
   setNotifications: (v: boolean) => void;
   setUnits: (v: "metric" | "imperial") => void;
   setAvatar: (dataUrl: string | null) => void;
+  subscribed: boolean; // assinatura Stripe ativa (fonte da verdade do premium)
+  refreshSubscription: () => void;
   finishOnboarding: () => void;
   reset: () => void;
 };
@@ -130,10 +132,32 @@ function mergeSessions(cloud: Session, local: Session): Session {
 
 export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const [s, setS] = useState<Session>(EMPTY);
+  const [subActive, setSubActive] = useState(false); // assinatura Stripe ativa
   const { user } = useAuth();
   const supabase = getBrowserSupabase();
   const loadedFor = useRef<string | null>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Reads the user's Stripe subscription status from the `subscriptions` table.
+  const refreshSubscription = useCallback(async () => {
+    if (!user || !supabase) { setSubActive(false); return; }
+    const { data } = await supabase.from("subscriptions").select("status").eq("user_id", user.id).maybeSingle();
+    setSubActive(!!data && ["active", "trialing"].includes(String(data.status)));
+  }, [user, supabase]);
+
+  useEffect(() => { refreshSubscription(); }, [refreshSubscription]);
+
+  // Coming back from Stripe Checkout (/app?checkout=success): the webhook may
+  // take a moment, so re-check a couple times and clean the URL.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has("checkout")) return;
+    window.history.replaceState({}, "", window.location.pathname);
+    const t1 = setTimeout(refreshSubscription, 1500);
+    const t2 = setTimeout(refreshSubscription, 4000);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, [refreshSubscription]);
 
   useEffect(() => {
     try {
@@ -266,9 +290,13 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const finishOnboarding = useCallback(() => patch((p) => ({ ...p, onboarded: true, startedAt: p.startedAt ?? todayISO() })), [patch]);
   const reset = useCallback(() => patch(() => ({ ...EMPTY, momentPhotos: {} })), [patch]);
 
+  // Effective session: a real Stripe subscription forces premium on. The raw
+  // `s` (synced to the cloud) is left untouched to avoid drift with the webhook.
+  const es = useMemo(() => (subActive && !s.premium ? { ...s, premium: true } : s), [s, subActive]);
+
   const value = useMemo<StoreValue>(
-    () => ({ s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, setNotifications, setUnits, setAvatar, finishOnboarding, reset }),
-    [s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, setNotifications, setUnits, setAvatar, finishOnboarding, reset]
+    () => ({ s: es, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, setNotifications, setUnits, setAvatar, subscribed: subActive, refreshSubscription, finishOnboarding, reset }),
+    [es, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, setNotifications, setUnits, setAvatar, subActive, refreshSubscription, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

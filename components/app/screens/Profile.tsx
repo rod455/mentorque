@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/app/auth";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { resizeImage } from "@/lib/app/image";
 import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
+import { openBillingPortal, startCheckout } from "@/lib/app/billing";
 import { APP_VERSION, carName } from "@/lib/app/content";
 import { computeStatus } from "@/lib/app/gamification";
 import { PhaseEmblem } from "../Emblem";
@@ -93,8 +94,14 @@ export function ProfileScreen() {
   const p = c.profile;
   const g = c.gamification;
   const { user, enabled, signOut } = useAuth();
-  const { s, setState, setPremium, setNotifications, setUnits, setAvatar, reset } = usePrototype();
+  const { s, setState, setPremium, setNotifications, setUnits, setAvatar, subscribed, reset } = usePrototype();
   const { go, root } = useNav();
+
+  // Real subscribers manage/cancel via the Stripe portal; demo premium toggles off.
+  const managePlan = async () => {
+    if (subscribed) { const r = await openBillingPortal(); if (r.url) window.location.href = r.url; return; }
+    setPremium(false);
+  };
   const gam = computeStatus(s);
   const phaseName = g.phases[gam.phase.id].name;
   const [about, setAbout] = useState(false);
@@ -185,8 +192,8 @@ export function ProfileScreen() {
               </li>
             ))}
           </ul>
-          <button onClick={() => setPremium(false)} className="mt-4 w-full py-1.5 text-center text-sm text-cream/45 hover:text-coral">
-            {p.cancelPlan}
+          <button onClick={managePlan} className="mt-4 w-full py-1.5 text-center text-sm text-cream/45 hover:text-coral">
+            {subscribed ? p.manage : p.cancelPlan}
           </button>
         </Card>
       ) : (
@@ -395,13 +402,26 @@ export function SubscribeScreen({ ctx }: { ctx?: string }) {
   const { back } = useNav();
   const [plan, setPlan] = useState<"monthly" | "annual">("annual");
 
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+
   const car = carName(activeVehicle(s), c.profile.myCars);
   const paywall = ctx ? c.paywalls[ctx] : undefined;
   const fill = (t: string) => t.replace("{car}", car);
 
-  const subscribe = () => {
-    setPremium(true);
-    back();
+  const subscribe = async () => {
+    setErr(""); setBusy(true);
+    try {
+      const res = await startCheckout(plan);
+      if (res.url) { window.location.href = res.url; return; } // vai pro Stripe
+      // Stripe não configurado → mantém o protótipo funcional (toggle demo).
+      if (res.error === "not_configured" || res.error === "no_price") { setPremium(true); back(); return; }
+      setErr(res.error === "unauthorized" ? sub.needLogin : sub.checkoutError);
+    } catch {
+      setErr(sub.checkoutError);
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -448,9 +468,10 @@ export function SubscribeScreen({ ctx }: { ctx?: string }) {
         })}
       </div>
 
-      <Button size="lg" className="mt-4 w-full" onClick={subscribe}>
-        {sub.cta}
+      <Button size="lg" className="mt-4 w-full" disabled={busy} onClick={subscribe}>
+        {busy ? sub.working : sub.cta}
       </Button>
+      {err && <p className="mt-2 text-center text-xs text-coral">{err}</p>}
       <button onClick={back} className="mt-2 w-full py-2 text-center text-sm text-cream/55 hover:text-cream">
         {sub.later}
       </button>
