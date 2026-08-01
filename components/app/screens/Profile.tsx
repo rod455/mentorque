@@ -22,6 +22,10 @@ const BR_STATES = ["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","
 // Store links — trocar pelos links reais da Play/App Store quando publicar.
 const RATE_URL = "https://mentorque.com.br";
 
+// O toggle "demo" de Premium (sem Stripe) só vale em dev local — nunca em
+// produção, para não liberar Premium de graça se algo estiver desconfigurado.
+const isLocalDev = () => typeof window !== "undefined" && /^(localhost|127\.0\.0\.1|\[::1\])/.test(window.location.hostname);
+
 // iOS-style on/off switch.
 function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void }) {
   return (
@@ -410,8 +414,8 @@ export function SubscribeScreen({ ctx }: { ctx?: string }) {
   const fill = (t: string) => t.replace("{car}", car);
 
   const subscribe = () => {
-    if (!stripeConfigured()) { setPremium(true); back(); return; } // sem Stripe → demo
     if (!user) { go({ name: "auth" }); return; } // assinar precisa de conta
+    if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; } // demo só em dev
     go({ name: "checkout", plan }); // abre o checkout embutido
   };
 
@@ -503,8 +507,8 @@ export function CheckoutScreen({ plan }: { plan: "monthly" | "annual" }) {
       const res = await startCheckout(plan);
       if (cancelled) return;
       if (res.clientSecret) { setClientSecret(res.clientSecret); return; }
-      // Stripe não configurado → mantém o protótipo funcional (toggle demo).
-      if (res.error === "not_configured" || res.error === "no_price") { setPremium(true); back(); return; }
+      // Stripe não configurado: em dev local cai no demo; em produção mostra erro.
+      if ((res.error === "not_configured" || res.error === "no_price") && isLocalDev()) { setPremium(true); back(); return; }
       setErr(res.error === "unauthorized" ? sub.needLogin : sub.checkoutError);
     })();
     return () => { cancelled = true; };
