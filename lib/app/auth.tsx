@@ -13,6 +13,8 @@ type AuthValue = {
   signUpEmail: (email: string, password: string, name?: string) => Promise<Result>;
   signInEmail: (email: string, password: string) => Promise<Result>;
   signInGoogle: () => Promise<Result>;
+  signInApple: () => Promise<Result>;
+  resetPassword: (email: string) => Promise<Result>;
   signOut: () => Promise<void>;
 };
 
@@ -55,11 +57,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return error ? { error: error.message } : {};
   }, [supabase]);
 
+  const signInApple = useCallback(async (): Promise<Result> => {
+    if (!supabase) return { error: "auth_disabled" };
+    const { error } = await supabase.auth.signInWithOAuth({ provider: "apple", options: { redirectTo: redirectTo() } });
+    return error ? { error: error.message } : {};
+  }, [supabase]);
+
+  const resetPassword = useCallback(async (email: string): Promise<Result> => {
+    if (!supabase) return { error: "auth_disabled" };
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo: redirectTo() });
+    return error ? { error: error.message } : {};
+  }, [supabase]);
+
   const signOut = useCallback(async () => { await supabase?.auth.signOut(); }, [supabase]);
 
   const value = useMemo<AuthValue>(
-    () => ({ user, ready, enabled: !!supabase, signUpEmail, signInEmail, signInGoogle, signOut }),
-    [user, ready, supabase, signUpEmail, signInEmail, signInGoogle, signOut]
+    () => ({ user, ready, enabled: !!supabase, signUpEmail, signInEmail, signInGoogle, signInApple, resetPassword, signOut }),
+    [user, ready, supabase, signUpEmail, signInEmail, signInGoogle, signInApple, resetPassword, signOut]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
