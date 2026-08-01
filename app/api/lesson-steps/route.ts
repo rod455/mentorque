@@ -15,18 +15,35 @@ type Body = {
 
 const LEVELS = {
   iniciante: {
-    pt: "NÍVEL INICIANTE: quem nunca mexeu no carro. Detalhe MUITO cada passo, explique os termos, diga onde fica cada peça, quanto apertar, o que NÃO fazer, e quebre passos grandes em sub-passos numerados. Pode ter mais passos.",
-    en: "BEGINNER LEVEL: someone who has never worked on a car. Explain each step in great detail, define terms, say where each part is, how much to tighten, what NOT to do, and break big steps into numbered sub-steps. It can have more steps.",
+    pt: "NÍVEL INICIANTE: a pessoa nunca abriu o capô e não sabe os nomes das peças. Seja MUITO descritivo. Para CADA passo: (1) diga ONDE fica a peça e COMO identificá-la — cor, formato, tamanho, 'ao lado de tal coisa', 'embaixo do motor'; (2) quebre ações em sub-passos (a, b, c); (3) diga o tempo/quantidade/aperto quando fizer sentido; (4) avise o que NÃO fazer. Exemplo do tom: 'Abra o capô e localize o bujão de dreno do óleo — é um parafuso grande de cabeça sextavada, embaixo do motor, no ponto mais baixo do cárter.' Gere MAIS passos, bem explicados. NÃO seja genérico como 'drene o óleo'.",
+    en: "BEGINNER LEVEL: the person has never opened the hood and doesn't know part names. Be VERY descriptive. For EACH step: (1) say WHERE the part is and HOW to identify it — color, shape, size, 'next to X', 'under the engine'; (2) break actions into sub-steps (a, b, c); (3) give time/amount/torque when it helps; (4) warn what NOT to do. Tone example: 'Open the hood and find the oil drain plug — a large hex-head bolt under the engine, at the lowest point of the oil pan.' Produce MORE steps, well explained. Do NOT be generic like 'drain the oil.'",
   },
   avancado: {
     pt: "NÍVEL AVANÇADO: já tem prática. Passos claros e diretos, sem explicar o óbvio.",
     en: "ADVANCED LEVEL: has some practice. Clear, direct steps, no need to explain the obvious.",
   },
   mecanico: {
-    pt: "NÍVEL MECÂNICO: profissional. Passos enxutos e técnicos, com torques/especificações quando pertinente, assumindo domínio total.",
-    en: "MECHANIC LEVEL: professional. Terse, technical steps with torques/specs when relevant, assuming full mastery.",
+    pt: "NÍVEL MECÂNICO: profissional. Passos enxutos e técnicos, com torques/especificações e nomes técnicos, assumindo domínio total. Menos passos, densos.",
+    en: "MECHANIC LEVEL: professional. Terse, technical steps with torques/specs and technical names, assuming full mastery. Fewer, denser steps.",
   },
 } as const;
+
+// Pull the first JSON array of strings out of the model's reply, tolerating
+// stray prose or code fences around it.
+function parseSteps(raw: string): string[] | null {
+  let t = raw.trim().replace(/```json/gi, "").replace(/```/g, "").trim();
+  const start = t.indexOf("[");
+  const end = t.lastIndexOf("]");
+  if (start >= 0 && end > start) t = t.slice(start, end + 1);
+  try {
+    const arr = JSON.parse(t);
+    if (Array.isArray(arr)) {
+      const steps = arr.map((x) => (typeof x === "string" ? x : x?.step ?? x?.text ?? "")).filter((s) => typeof s === "string" && s.trim());
+      return steps.length ? steps : null;
+    }
+  } catch { /* fall through */ }
+  return null;
+}
 
 export async function POST(request: Request) {
   let body: Body;
@@ -37,7 +54,7 @@ export async function POST(request: Request) {
   const level = (body.level && LEVELS[body.level]) ? body.level : "avancado";
   const baseSteps = body.steps ?? [];
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey || baseSteps.length === 0) return NextResponse.json({ ok: true, mode: "basic" });
+  if (!apiKey || baseSteps.length === 0) return NextResponse.json({ ok: true, mode: "basic", reason: !apiKey ? "no_key" : "no_steps" });
 
   try {
     const manual = await retrieveManualContext(
@@ -58,17 +75,16 @@ export async function POST(request: Request) {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "content-type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01" },
-      body: JSON.stringify({ model: process.env.BIELA_MODEL ?? "claude-sonnet-5", max_tokens: 1200, system, messages: [{ role: "user", content: userMsg }] }),
+      body: JSON.stringify({ model: process.env.BIELA_MODEL ?? "claude-sonnet-5", max_tokens: 1800, system, messages: [{ role: "user", content: userMsg }] }),
     });
     if (!res.ok) throw new Error(`anthropic_${res.status}`);
     const data = await res.json();
-    let txt: string = Array.isArray(data.content) ? data.content.filter((b: { type: string }) => b.type === "text").map((b: { text: string }) => b.text).join("") : "";
-    txt = txt.trim().replace(/^```json\s*/i, "").replace(/^```\s*/, "").replace(/```\s*$/, "").trim();
-    const steps = JSON.parse(txt);
-    if (!Array.isArray(steps) || !steps.every((x) => typeof x === "string")) throw new Error("bad_shape");
+    const txt: string = Array.isArray(data.content) ? data.content.filter((b: { type: string }) => b.type === "text").map((b: { text: string }) => b.text).join("") : "";
+    const steps = parseSteps(txt);
+    if (!steps) throw new Error("bad_shape");
     return NextResponse.json({ ok: true, mode: "ai", steps });
   } catch (err) {
     console.warn("[lesson-steps] adapt failed, falling back:", err);
-    return NextResponse.json({ ok: true, mode: "basic" });
+    return NextResponse.json({ ok: true, mode: "basic", reason: "error", detail: String((err as Error)?.message ?? err) });
   }
 }
