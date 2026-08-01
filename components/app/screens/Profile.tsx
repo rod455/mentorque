@@ -97,7 +97,7 @@ export function ProfileScreen() {
 
   return (
     <div>
-      <AppHeader title={p.title} centered onBack={() => root({ name: "cars" })} />
+      <AppHeader title={p.title} onBack={() => root({ name: "cars" })} />
 
       {/* 1) Salve sua garagem — login (com a fotinha do Biela) / ou conectado */}
       {enabled && user ? (
