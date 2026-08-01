@@ -120,7 +120,7 @@ export function ProfileScreen() {
               <img src="/biela/biela-acenando.png" alt="Biela" className="h-12 w-12 object-contain" draggable={false} />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="font-display text-[15px] font-semibold text-cream">{p.save.title}</p>
+              <p className="font-serif text-base font-semibold text-cream">{p.save.title}</p>
               <p className="mt-0.5 text-xs leading-relaxed text-cream/55">{p.save.body}</p>
             </div>
           </div>
@@ -139,7 +139,7 @@ export function ProfileScreen() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs text-cream/50">{p.plan}</p>
-              <p className="font-display text-lg font-semibold text-cream">{p.premium}</p>
+              <p className="font-serif text-lg font-semibold text-cream">{p.premium}</p>
             </div>
             <span className="rounded-md bg-amber/15 px-2.5 py-1 text-xs font-medium text-amber">★ Premium</span>
           </div>
@@ -165,7 +165,7 @@ export function ProfileScreen() {
         >
           <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber/20 text-lg">👑</span>
           <span className="min-w-0 flex-1">
-            <span className="block font-display text-[15px] font-bold text-cream">{p.unlock.title}</span>
+            <span className="block font-serif text-base font-semibold text-cream">{p.unlock.title}</span>
             <span className="mt-0.5 block text-xs leading-relaxed text-cream/60">{p.unlock.body}</span>
           </span>
           <span className="shrink-0 text-lg text-amber">→</span>
@@ -178,7 +178,7 @@ export function ProfileScreen() {
           <PhaseEmblem id={gam.phase.id} emoji={gam.phase.emoji} size={60} active />
           <div className="min-w-0 flex-1">
             <p className="text-[11px] font-semibold uppercase tracking-wider text-cream/45">{g.phaseLabel}</p>
-            <p className="font-display text-xl font-semibold text-cream">{phaseName}</p>
+            <p className="font-serif text-xl font-semibold text-cream">{phaseName}</p>
           </div>
         </div>
 
@@ -284,7 +284,7 @@ export function ProfileScreen() {
 
       {/* Edit name sheet */}
       <Sheet open={editName} onClose={() => setEditName(false)}>
-        <h2 className="font-display text-xl font-bold text-cream">{p.name}</h2>
+        <h2 className="font-serif text-xl font-semibold text-cream">{p.name}</h2>
         <input value={nameInput} onChange={(e) => setNameInput(e.target.value)} placeholder={p.namePh} className={`mt-4 ${inputCls}`} />
         <Button size="lg" className="mt-4 w-full" onClick={() => { setName(nameInput); setEditName(false); }}>
           {c.common.save}
@@ -293,7 +293,7 @@ export function ProfileScreen() {
 
       {/* Edit email sheet */}
       <Sheet open={editEmail} onClose={() => setEditEmail(false)}>
-        <h2 className="font-display text-xl font-bold text-cream">{p.email}</h2>
+        <h2 className="font-serif text-xl font-semibold text-cream">{p.email}</h2>
         <input
           type="email"
           value={emailInput}
@@ -308,7 +308,7 @@ export function ProfileScreen() {
 
       {/* Consulting sheet (moved under Premium) */}
       <Sheet open={consult} onClose={() => setConsult(false)}>
-        <h2 className="font-display text-xl font-bold text-cream">{p.consulting}</h2>
+        <h2 className="font-serif text-xl font-semibold text-cream">{p.consulting}</h2>
         <div className="mt-4 space-y-2.5">
           {c.consultingTiers.map((tier) => {
             const locked = tier.access !== "free" && !(s.premium && tier.access === "premium");

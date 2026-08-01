@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { Space_Grotesk, Inter, Lora } from "next/font/google";
 import { I18nProvider } from "@/lib/i18n";
 import "./globals.css";
 
@@ -13,6 +13,16 @@ const display = Space_Grotesk({
 const sans = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+});
+
+// Elegant book serif for titles/names — matches the Bloom look. UI chrome
+// (buttons, labels, body) stays on the sans above.
+const serif = Lora({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-serif",
   display: "swap",
 });
 
@@ -60,7 +70,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={`${display.variable} ${sans.variable}`}>
+    <html lang="pt-BR" className={`${display.variable} ${sans.variable} ${serif.variable}`}>
       <body>
         <I18nProvider>
           <a

@@ -34,7 +34,7 @@ export function GamificationScreen() {
               <PhaseEmblem id={ph.id} emoji={ph.emoji} size={44} active={current} />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <p className="font-display text-[15px] font-semibold text-cream">{meta.name}</p>
+                  <p className="font-serif text-base font-semibold text-cream">{meta.name}</p>
                   {current && <span className="rounded bg-amber/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-amber">{g.phaseLabel}</span>}
                 </div>
                 <p className="mt-0.5 text-[13px] leading-snug text-cream/55">{meta.desc}</p>
@@ -55,7 +55,7 @@ export function GamificationScreen() {
       </div>
 
       <div className="mt-4 rounded-2xl bg-teal/[0.08] p-3.5 ring-1 ring-teal/20">
-        <p className="font-display text-sm font-semibold text-cream">🌱 {g.noRushTitle}</p>
+        <p className="font-serif text-[15px] font-semibold text-cream">🌱 {g.noRushTitle}</p>
         <p className="mt-1 text-[13px] leading-snug text-cream/65">{g.noRushBody}</p>
       </div>
     </div>
@@ -106,7 +106,7 @@ export function AchievementsScreen() {
               }`}
             >
               <MedalEmblem emoji={m.emoji} size={56} earned={got} />
-              <p className={`mt-2.5 font-display text-sm font-semibold ${got ? "text-cream" : "text-cream/45"}`}>{meta.title}</p>
+              <p className={`mt-2.5 font-serif text-sm font-semibold ${got ? "text-cream" : "text-cream/45"}`}>{meta.title}</p>
               <p className={`mt-1 text-xs leading-snug ${got ? "text-cream/60" : "text-cream/35"}`}>{meta.desc}</p>
               {m.manual ? (
                 <button

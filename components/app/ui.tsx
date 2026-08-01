@@ -144,7 +144,7 @@ export function AppHeader({ title, subtitle, action }: { title: string; subtitle
         </button>
       ) : null}
       <div className="min-w-0 flex-1">
-        <h1 className="text-balance font-display text-xl font-bold leading-tight text-cream">{title}</h1>
+        <h1 className="text-balance font-serif text-xl font-semibold leading-tight tracking-normal text-cream">{title}</h1>
         {subtitle ? <p className="truncate text-xs text-cream/55">{subtitle}</p> : null}
       </div>
       {action}
