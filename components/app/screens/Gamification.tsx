@@ -5,6 +5,7 @@ import { usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
 import { computeStatus, MILESTONES, PHASES, type GamSession } from "@/lib/app/gamification";
 import { MedalEmblem, PhaseEmblem } from "../Emblem";
+import { Button } from "@/components/ui/Button";
 import { AppHeader, SectionTitle, useContent } from "../ui";
 
 // Reads the gamification status from the prototype session.
@@ -18,6 +19,7 @@ export function GamificationScreen() {
   const c = useContent();
   const g = c.gamification;
   const { status } = useGam();
+  const { back } = useNav();
 
   return (
     <div>
@@ -58,6 +60,8 @@ export function GamificationScreen() {
         <p className="font-serif text-[15px] font-semibold text-cream">🌱 {g.noRushTitle}</p>
         <p className="mt-1 text-[13px] leading-snug text-cream/65">{g.noRushBody}</p>
       </div>
+
+      <Button size="lg" className="mt-5 w-full" onClick={back}>{g.gotIt}</Button>
     </div>
   );
 }

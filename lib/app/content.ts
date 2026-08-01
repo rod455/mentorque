@@ -1381,6 +1381,7 @@ export function getContent(locale: Locale) {
       ],
       noRushTitle: T("Sem pressa", "No rush"),
       noRushBody: T("Sua fase mais alta fica sempre salva. Mesmo longe por um tempo, você não perde o nível.", "Your highest phase is always saved. Away for a while? You keep your level."),
+      gotIt: T("Entendi", "Got it"),
 
       // "Seu acervo" — marcos & momentos
       acervoTitle: T("Seu acervo", "Your collection"),
