@@ -32,13 +32,17 @@ export async function POST(req: Request) {
   }
 
   const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_SITE_URL || "https://mentorque.com.br";
+  const trialDays = Number(process.env.STRIPE_TRIAL_DAYS ?? 7); // 0 = sem teste grátis
   const session = await stripe.checkout.sessions.create({
     mode: "subscription",
     ui_mode: "embedded", // formulário embutido no app
     customer: customerId,
     line_items: [{ price: priceId, quantity: 1 }],
     client_reference_id: user.id,
-    subscription_data: { metadata: { user_id: user.id } },
+    subscription_data: {
+      metadata: { user_id: user.id },
+      ...(trialDays > 0 ? { trial_period_days: trialDays } : {}),
+    },
     allow_promotion_codes: true,
     locale: "pt-BR",
     return_url: `${origin}/app?checkout=success`,

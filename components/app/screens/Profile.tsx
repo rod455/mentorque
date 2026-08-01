@@ -533,93 +533,109 @@ function SupportForm() {
 }
 
 // 3.1.B — Assinatura (contextual paywall + detailed Free vs Premium)
-export function SubscribeScreen({ ctx }: { ctx?: string }) {
+// Verde de "incluído" (círculo com check).
+function TealCheck() {
+  return (
+    <span className="grid h-5 w-5 place-items-center rounded-full bg-teal text-graphite">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="h-3 w-3"><path d="M20 6 9 17l-5-5" /></svg>
+    </span>
+  );
+}
+
+export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   const c = useContent();
   const sub = c.subscribe;
-  const { s, setPremium } = usePrototype();
+  const { setPremium, subscribed, refreshSubscription } = usePrototype();
   const { user } = useAuth();
   const { back, go } = useNav();
-  const [plan, setPlan] = useState<"monthly" | "annual">("annual");
-
-  const car = carName(activeVehicle(s), c.profile.myCars);
-  const paywall = ctx ? c.paywalls[ctx] : undefined;
-  const fill = (t: string) => t.replace("{car}", car);
+  const [remind, setRemind] = useState(true);
 
   const subscribe = () => {
-    if (!user) { go({ name: "auth" }); return; } // assinar precisa de conta
+    if (!user) { go({ name: "auth" }); return; }
     if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; } // demo só em dev
-    go({ name: "checkout", plan }); // abre o checkout embutido
+    go({ name: "checkout", plan: "annual" }); // checkout embutido (com teste grátis)
   };
 
   return (
-    <div>
-      <AppHeader title={sub.title} />
-
-      {/* Contextual header for the action that triggered the paywall */}
-      {paywall ? (
-        <Card className="ring-amber/30">
-          <div className="mb-2 flex items-center gap-2 text-amber">
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber/15 text-base">★</span>
-            <span className="font-display text-base font-semibold text-cream">{fill(paywall.title)}</span>
-          </div>
-          <ul className="space-y-1.5">
-            {paywall.benefits.map((b) => (
-              <li key={b} className="flex gap-2 text-sm text-cream/85">
-                <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0 text-amber" />
-                {fill(b)}
-              </li>
-            ))}
-          </ul>
-        </Card>
-      ) : (
-        <p className="text-sm text-cream/65">{sub.intro}</p>
-      )}
-
-      {/* Plans */}
-      <div className="mt-5 grid grid-cols-2 gap-3">
-        {([["annual", sub.annual], ["monthly", sub.monthly]] as const).map(([key, pl]) => {
-          const active = plan === key;
-          const save = "save" in pl ? pl.save : undefined;
-          return (
-            <button
-              key={key}
-              onClick={() => setPlan(key)}
-              className={`rounded-2xl p-4 text-left ring-1 transition-all ${active ? "bg-amber/10 ring-amber" : "bg-graphite-800 ring-white/10"}`}
-            >
-              <p className="font-display text-sm text-cream/70">{pl.name}</p>
-              <p className="mt-1 font-display text-xl font-bold text-cream">{pl.price}</p>
-              <p className="text-xs text-cream/50">{pl.note}</p>
-              {save && <p className="mt-1 text-xs font-medium text-teal">{save}</p>}
-            </button>
-          );
-        })}
+    <div className="pb-4">
+      {/* Barra superior: fechar + links */}
+      <div className="flex items-center justify-between pb-3 pt-4 text-xs text-cream/50">
+        <button onClick={back} aria-label="fechar" className="grid h-8 w-8 place-items-center rounded-full bg-graphite-700 text-cream/70 hover:text-cream">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><path d="M6 6l12 12M18 6 6 18" /></svg>
+        </button>
+        <div className="flex items-center gap-2">
+          <button onClick={() => { refreshSubscription(); if (subscribed) back(); }} className="hover:text-cream">{sub.restore}</button>
+          <span>·</span>
+          <a href="/privacidade" className="hover:text-cream">{sub.termsLink}</a>
+          <span>·</span>
+          <a href="/privacidade" className="hover:text-cream">{sub.privacyLink}</a>
+        </div>
       </div>
 
-      <Button size="lg" className="mt-4 w-full" onClick={subscribe}>
-        {sub.cta}
-      </Button>
-      <button onClick={back} className="mt-2 w-full py-2 text-center text-sm text-cream/55 hover:text-cream">
-        {sub.later}
-      </button>
+      {/* Herói */}
+      <div className="flex flex-col items-center px-4 text-center">
+        <img src="/biela/biela-idle.png" alt="Biela" className="h-32 w-32 object-contain" draggable={false} />
+        <h1 className="mt-2 font-serif text-2xl font-bold text-cream">{sub.trialTitle}</h1>
+      </div>
 
-      {/* Detailed Free vs Premium comparison */}
-      <SectionTitle>{sub.compareTitle}</SectionTitle>
-      <div className="overflow-hidden rounded-2xl ring-1 ring-white/5">
-        <div className="grid grid-cols-[1.3fr_0.85fr_1fr] bg-graphite-800 text-[11px] font-medium uppercase tracking-wide text-cream/45">
-          <span className="px-3 py-2" />
-          <span className="px-2 py-2 text-center">{sub.colFree}</span>
-          <span className="px-2 py-2 text-center text-amber">{sub.colPremium}</span>
-        </div>
-        {sub.compare.map((row, i) => (
-          <div key={row.label} className={`grid grid-cols-[1.3fr_0.85fr_1fr] items-center text-sm ${i % 2 ? "bg-graphite-800/40" : "bg-graphite-800/10"}`}>
-            <span className="px-3 py-2.5 text-cream/80">{row.label}</span>
-            <span className="px-2 py-2.5 text-center text-xs text-cream/55">{row.free}</span>
-            <span className="px-2 py-2.5 text-center text-xs font-medium text-cream">{row.premium}</span>
-          </div>
+      {/* Benefícios */}
+      <ul className="mx-auto mt-4 max-w-sm space-y-2.5">
+        {sub.bullets.map((b) => (
+          <li key={b} className="flex items-center gap-2.5 text-sm text-cream/85">
+            <TealCheck /> {b}
+          </li>
+        ))}
+      </ul>
+
+      {/* Depoimentos */}
+      <div className="mt-4 space-y-3">
+        {sub.testimonials.map((t) => (
+          <Card key={t.name}>
+            <p className="text-amber">★★★★★</p>
+            <p className="mt-1.5 text-sm italic text-cream/85">&quot;{t.quote}&quot;</p>
+            <p className="mt-1 text-xs text-cream/50">— {t.name}</p>
+          </Card>
         ))}
       </div>
 
-      <p className="mt-3 text-center text-xs text-cream/45">{sub.terms}</p>
+      {/* Conheça o Premium — comparação */}
+      <div className="mt-4 overflow-hidden rounded-2xl bg-graphite-800 ring-1 ring-white/[0.06]">
+        <div className="grid grid-cols-[1.6fr_0.6fr_0.7fr] items-center border-b border-white/[0.06] px-3.5 py-3">
+          <span className="font-display text-sm font-semibold text-cream">{sub.knowTitle}</span>
+          <span className="text-center text-xs font-medium text-cream/45">{sub.colFree}</span>
+          <span className="text-center text-xs font-semibold text-amber">{sub.colPremium}</span>
+        </div>
+        <div className="[&>*+*]:border-t [&>*+*]:border-white/[0.05]">
+          {sub.features.map((f) => (
+            <div key={f.label} className="grid grid-cols-[1.6fr_0.6fr_0.7fr] items-center px-3.5 py-2.5">
+              <span className="flex items-center gap-2.5 text-sm text-cream/85">
+                <Icon name={f.icon} className="h-4 w-4 text-cream/45" /> {f.label}
+              </span>
+              <span className="flex justify-center">
+                {f.free === "check" ? <TealCheck /> : f.free === "ltd" ? (
+                  <span className="rounded bg-amber/15 px-1.5 py-0.5 text-[10px] font-semibold text-amber">{sub.ltd}</span>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4 text-cream/25"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
+                )}
+              </span>
+              <span className="flex justify-center"><TealCheck /></span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Lembrar antes do teste terminar */}
+      <div className="mt-4 flex items-center gap-3 rounded-2xl bg-graphite-800 px-4 py-3.5 ring-1 ring-white/[0.06]">
+        <Icon name="alert" className="h-5 w-5 text-cream/60" />
+        <span className="flex-1 text-sm text-cream/85">{sub.reminder}</span>
+        <Toggle on={remind} onChange={setRemind} />
+      </div>
+
+      {/* CTA */}
+      <Button size="lg" className="mt-4 w-full" onClick={subscribe}>
+        {sub.trialCta.replace("{n}", String(sub.trialDays))}
+      </Button>
+      <p className="mx-auto mt-3 max-w-xs text-center text-xs leading-relaxed text-cream/45">{sub.trialFine}</p>
     </div>
   );
 }
