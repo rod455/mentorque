@@ -5,7 +5,11 @@ import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/app/auth";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { resizeImage } from "@/lib/app/image";
+import { getBrowserSupabase } from "@/lib/supabaseBrowser";
 import { APP_VERSION, carName } from "@/lib/app/content";
+
+// Storage bucket for profile photos (confira o nome exato no Supabase).
+const AVATAR_BUCKET = "Avatars";
 import { computeStatus } from "@/lib/app/gamification";
 import { PhaseEmblem } from "../Emblem";
 import { useNav } from "@/lib/app/nav";
@@ -106,7 +110,23 @@ export function ProfileScreen() {
   const avatarSrc = s.avatar ?? googlePic ?? null;
   const pickAvatar = async (file?: File) => {
     if (!file) return;
-    try { setAvatar(await resizeImage(file, 400, 0.85)); } catch { /* ignore */ }
+    try {
+      const dataUrl = await resizeImage(file, 400, 0.85);
+      const supabase = getBrowserSupabase();
+      // Logado → sobe pro Storage e guarda só a URL. Convidado/falha → local.
+      if (user && supabase) {
+        const blob = await (await fetch(dataUrl)).blob();
+        const path = `${user.id}/avatar.jpg`;
+        const { error } = await supabase.storage.from(AVATAR_BUCKET).upload(path, blob, { upsert: true, contentType: "image/jpeg" });
+        if (!error) {
+          const { data } = supabase.storage.from(AVATAR_BUCKET).getPublicUrl(path);
+          setAvatar(`${data.publicUrl}?t=${Date.now()}`); // cache-buster (upsert reusa o path)
+          return;
+        }
+        console.warn("[avatar] upload failed, keeping local:", error.message);
+      }
+      setAvatar(dataUrl);
+    } catch { /* ignore */ }
   };
 
   return (
