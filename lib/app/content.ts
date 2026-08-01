@@ -1283,8 +1283,12 @@ export function getContent(locale: Locale) {
         suggestion: T("Sugestão", "Suggestion"),
         bug: "Bug",
         messagePh: T("Escreva sua mensagem aqui...", "Write your message here..."),
+        emailPh: T("Seu e-mail (pra gente responder)", "Your email (so we can reply)"),
         send: T("Enviar mensagem", "Send message"),
+        sending: T("Enviando...", "Sending..."),
         empty: T("Escreva uma mensagem antes de enviar.", "Write a message before sending."),
+        sent: T("Mensagem enviada! Obrigado — respondemos em breve. 🐻", "Message sent! Thanks — we'll reply soon. 🐻"),
+        error: T("Não deu pra enviar agora. Tente de novo em instantes.", "Couldn't send right now. Please try again shortly."),
       },
       disclaimer: T(
         "Este app é independente e não possui vínculo com montadoras ou entidades oficiais. Marcas e modelos são citados apenas para fins informativos.",

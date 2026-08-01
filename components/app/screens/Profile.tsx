@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useI18n } from "@/lib/i18n";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { carName } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
@@ -9,12 +10,22 @@ import { LangSwitcher } from "@/components/ui/LangSwitcher";
 import { AccessBadge, AppHeader, Card, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
 
 const BR_STATES = ["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"];
-const SUPPORT_EMAIL = "mentorque.ar@gmail.com";
+
+// A stable per-device id so support messages can be traced (like the example).
+function deviceId(): string {
+  if (typeof window === "undefined") return "—";
+  try {
+    let id = window.localStorage.getItem("mentorque-uid");
+    if (!id) { id = (crypto?.randomUUID?.() ?? String(Math.random()).slice(2)); window.localStorage.setItem("mentorque-uid", id); }
+    return id;
+  } catch { return "—"; }
+}
 
 // 3.1.A — Perfil
 export function ProfileScreen() {
   const c = useContent();
   const p = c.profile;
+  const { locale } = useI18n();
   const { s, setName, setEmail, setState, setPremium, reset } = usePrototype();
   const { go } = useNav();
   const [editName, setEditName] = useState(false);
@@ -24,16 +35,31 @@ export function ProfileScreen() {
   const [consult, setConsult] = useState(false);
   const [supType, setSupType] = useState<"doubt" | "suggestion" | "bug">("doubt");
   const [supMsg, setSupMsg] = useState("");
+  const [supEmail, setSupEmail] = useState(s.email ?? "");
   const [supErr, setSupErr] = useState(false);
+  const [supStatus, setSupStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
-  const sendSupport = () => {
+  const sendSupport = async () => {
     if (!supMsg.trim()) return setSupErr(true);
-    const labels: Record<string, string> = { doubt: p.support.doubt, suggestion: p.support.suggestion, bug: p.support.bug };
-    const subject = `[${labels[supType]}] Mentorque`;
-    const sig = [s.name, s.email].filter(Boolean).join(" · ");
-    const body = supMsg + (sig ? `\n\n— ${sig}` : "");
-    if (typeof window !== "undefined") {
-      window.location.href = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setSupStatus("sending");
+    try {
+      const res = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          type: supType,
+          message: supMsg.trim(),
+          name: s.name || undefined,
+          email: (supEmail || s.email || "").trim() || undefined,
+          userId: deviceId(),
+          locale,
+        }),
+      });
+      if (!res.ok) throw new Error("send_failed");
+      setSupStatus("sent");
+      setSupMsg("");
+    } catch {
+      setSupStatus("error");
     }
   };
 
@@ -165,17 +191,31 @@ export function ProfileScreen() {
             );
           })}
         </div>
-        <textarea
-          value={supMsg}
-          onChange={(e) => { setSupMsg(e.target.value); setSupErr(false); }}
-          rows={4}
-          placeholder={p.support.messagePh}
-          className={`mt-3 resize-none ${inputCls}`}
-        />
-        {supErr && <p className="mt-1 text-xs text-coral">{p.support.empty}</p>}
-        <Button size="lg" className="mt-3 w-full" onClick={sendSupport}>
-          {p.support.send}
-        </Button>
+        {supStatus === "sent" ? (
+          <div className="mt-3 rounded-xl bg-teal/10 px-3.5 py-3 text-sm text-teal ring-1 ring-teal/20">{p.support.sent}</div>
+        ) : (
+          <>
+            <textarea
+              value={supMsg}
+              onChange={(e) => { setSupMsg(e.target.value); setSupErr(false); }}
+              rows={4}
+              placeholder={p.support.messagePh}
+              className={`mt-3 resize-none ${inputCls}`}
+            />
+            <input
+              value={supEmail}
+              onChange={(e) => setSupEmail(e.target.value)}
+              type="email"
+              placeholder={p.support.emailPh}
+              className={`mt-2 ${inputCls}`}
+            />
+            {supErr && <p className="mt-1 text-xs text-coral">{p.support.empty}</p>}
+            {supStatus === "error" && <p className="mt-1 text-xs text-coral">{p.support.error}</p>}
+            <Button size="lg" className="mt-3 w-full" disabled={supStatus === "sending"} onClick={sendSupport}>
+              {supStatus === "sending" ? p.support.sending : p.support.send}
+            </Button>
+          </>
+        )}
       </Card>
 
       <SectionTitle>{p.demo}</SectionTitle>
