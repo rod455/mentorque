@@ -54,7 +54,7 @@ function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void 
       onClick={() => onChange(!on)}
       className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${on ? "bg-amber" : "bg-graphite-600"}`}
     >
-      <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-cream shadow transition-transform ${on ? "translate-x-[22px]" : "translate-x-0.5"}`} />
+      <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-cream shadow transition-transform ${on ? "translate-x-5" : "translate-x-0.5"}`} />
     </button>
   );
 }
@@ -158,6 +158,22 @@ export function ProfileScreen() {
     await signOut();
     reset();
     root({ name: "cars" });
+  };
+
+  // Ativar notificações pede a permissão de push do sistema (iOS/Android/desktop).
+  const toggleNotifications = async (on: boolean) => {
+    if (!on) { setNotifications(false); return; }
+    if (typeof window !== "undefined" && "Notification" in window && typeof Notification.requestPermission === "function") {
+      try {
+        const perm = await Notification.requestPermission();
+        setNotifications(perm === "granted");
+      } catch {
+        setNotifications(false);
+      }
+    } else {
+      // Sem API de notificação (ex.: iOS fora do app instalado) — salva a preferência.
+      setNotifications(true);
+    }
   };
 
   // Profile photo: user's uploaded avatar wins; otherwise the Google picture.
@@ -303,7 +319,7 @@ export function ProfileScreen() {
       {/* Preferências */}
       <SectionTitle>{p.preferences}</SectionTitle>
       <Group>
-        <IconRow icon="alert" tint="bg-teal/15 text-teal" label={p.notifications} right={<Toggle on={s.notifications} onChange={setNotifications} />} />
+        <IconRow icon="alert" tint="bg-teal/15 text-teal" label={p.notifications} right={<Toggle on={s.notifications} onChange={toggleNotifications} />} />
         <IconRow icon="book" tint="bg-amber/15 text-amber" label={p.language} right={<LangSwitcher />} />
         <IconRow
           icon="gauge" tint="bg-teal/15 text-teal" label={p.units}

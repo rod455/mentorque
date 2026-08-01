@@ -29,8 +29,8 @@ export function Shell() {
 
 function PhoneShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen w-full bg-graphite-900 text-cream antialiased">
-      <div className="mx-auto flex min-h-screen w-full max-w-[440px] flex-col bg-graphite shadow-card">{children}</div>
+    <div className="min-h-screen w-full overflow-x-hidden bg-graphite-900 text-cream antialiased">
+      <div className="mx-auto flex min-h-screen w-full max-w-[440px] flex-col overflow-x-hidden bg-graphite shadow-card">{children}</div>
     </div>
   );
 }
@@ -88,7 +88,7 @@ function Router() {
   return (
     <>
       <main
-        className="flex-1 overflow-y-auto px-5 pb-28"
+        className="flex-1 overflow-y-auto overflow-x-hidden px-5 pb-28"
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
       >
