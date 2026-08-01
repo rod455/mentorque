@@ -18,6 +18,7 @@ type Session = {
   vehicles: Vehicle[];
   activeVehicleId: string | null;
   services: ServiceRecord[];
+  claimedMilestones: string[]; // experiential badges the user marks by hand
 };
 
 const EMPTY: Session = {
@@ -29,6 +30,7 @@ const EMPTY: Session = {
   vehicles: [],
   activeVehicleId: null,
   services: [],
+  claimedMilestones: [],
 };
 
 const STORAGE_KEY = "mentorque-garage";
@@ -46,6 +48,7 @@ type StoreValue = {
   addService: (rec: Omit<ServiceRecord, "id">) => string;
   updateService: (id: string, patch: Partial<ServiceRecord>) => void;
   removeService: (id: string) => void;
+  toggleMilestone: (id: string) => void;
   finishOnboarding: () => void;
   reset: () => void;
 };
@@ -90,6 +93,7 @@ function mergeSessions(cloud: Session, local: Session): Session {
     vehicles: mergeById(cloud.vehicles ?? [], local.vehicles ?? []),
     activeVehicleId: cloud.activeVehicleId ?? local.activeVehicleId ?? null,
     services: mergeById(cloud.services ?? [], local.services ?? []),
+    claimedMilestones: [...new Set([...(cloud.claimedMilestones ?? []), ...(local.claimedMilestones ?? [])])],
   };
 }
 
@@ -204,12 +208,21 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
 
   const removeService = useCallback((id: string) => patch((p) => ({ ...p, services: p.services.filter((r) => r.id !== id) })), [patch]);
 
+  const toggleMilestone = useCallback(
+    (id: string) =>
+      patch((p) => {
+        const has = p.claimedMilestones.includes(id);
+        return { ...p, claimedMilestones: has ? p.claimedMilestones.filter((m) => m !== id) : [...p.claimedMilestones, id] };
+      }),
+    [patch]
+  );
+
   const finishOnboarding = useCallback(() => patch((p) => ({ ...p, onboarded: true })), [patch]);
   const reset = useCallback(() => patch(() => ({ ...EMPTY })), [patch]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, finishOnboarding, reset }),
-    [s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, finishOnboarding, reset]
+    () => ({ s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, finishOnboarding, reset }),
+    [s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

@@ -13,8 +13,9 @@ export type GamSession = {
   email?: string | null;
   state?: string | null;
   premium?: boolean;
-  vehicles: unknown[];
+  vehicles: ReadonlyArray<{ nickname?: string | null }>;
   services: unknown[];
+  claimedMilestones?: string[];
 };
 
 export type Phase = {
@@ -92,6 +93,8 @@ export type Milestone = {
   id: string;
   emoji: string;
   cat: "marco" | "momento";
+  // Experiential badges only the driver can confirm: tap to mark as lived.
+  manual?: boolean;
   earned: (s: GamSession) => boolean;
 };
 
@@ -99,20 +102,31 @@ const filled = (v?: string | null) => !!v && v.trim().length > 0;
 const profileComplete = (s: GamSession) => filled(s.name) && filled(s.email) && filled(s.state);
 const cars = (s: GamSession) => s.vehicles?.length ?? 0;
 const svc = (s: GamSession) => s.services?.length ?? 0;
+const claimed = (s: GamSession, id: string) => (s.claimedMilestones ?? []).includes(id);
+const hasNickname = (s: GamSession) => (s.vehicles ?? []).some((v) => filled(v?.nickname));
 
-// "Marcos" = concrete milestones we can verify from the session. "Momentos" =
-// time/habit-based moments that unlock as the user keeps coming back — most
-// stay aspirational (locked/grey) in the prototype, exactly like the reference.
+// "Marcos" mix things we can verify from the session (cadastros, serviços) with
+// experiências que só o motorista conhece — essas são `manual` e o usuário
+// marca com um toque. "Momentos" = hábitos ao longo do tempo (aspiracionais).
 export const MILESTONES: Milestone[] = [
-  // Marcos
+  // Marcos — cuidado / uso
   { id: "welcome", emoji: "👋", cat: "marco", earned: () => true },
   { id: "firstCar", emoji: "🚗", cat: "marco", earned: (s) => cars(s) >= 1 },
+  { id: "named", emoji: "🏷️", cat: "marco", earned: (s) => hasNickname(s) },
   { id: "profileDone", emoji: "🪪", cat: "marco", earned: (s) => profileComplete(s) },
   { id: "firstService", emoji: "🧾", cat: "marco", earned: (s) => svc(s) >= 1 },
   { id: "fiveServices", emoji: "📋", cat: "marco", earned: (s) => svc(s) >= 5 },
   { id: "garageFull", emoji: "🅿️", cat: "marco", earned: (s) => cars(s) >= 3 },
   { id: "tenServices", emoji: "🗂️", cat: "marco", earned: (s) => svc(s) >= 10 },
   { id: "supporter", emoji: "⭐", cat: "marco", earned: (s) => !!s.premium },
+
+  // Marcos — experiência (o motorista confirma)
+  { id: "firstTrip", emoji: "🛣️", cat: "marco", manual: true, earned: (s) => claimed(s, "firstTrip") },
+  { id: "roadTrip", emoji: "🌄", cat: "marco", manual: true, earned: (s) => claimed(s, "roadTrip") },
+  { id: "firstWash", emoji: "🧼", cat: "marco", manual: true, earned: (s) => claimed(s, "firstWash") },
+  { id: "nightDrive", emoji: "🌙", cat: "marco", manual: true, earned: (s) => claimed(s, "nightDrive") },
+  { id: "rain", emoji: "🌧️", cat: "marco", manual: true, earned: (s) => claimed(s, "rain") },
+  { id: "fullTank", emoji: "⛽", cat: "marco", manual: true, earned: (s) => claimed(s, "fullTank") },
 
   // Momentos
   { id: "onboard", emoji: "🧭", cat: "momento", earned: () => true },

@@ -83,6 +83,7 @@ export function AchievementsScreen() {
   const c = useContent();
   const g = c.gamification;
   const { s } = useGam();
+  const { toggleMilestone } = usePrototype();
   const [tab, setTab] = useState<"marco" | "momento">("marco");
 
   const items = MILESTONES.filter((m) => m.cat === tab);
@@ -123,7 +124,18 @@ export function AchievementsScreen() {
               <Badge emoji={m.emoji} tint="bg-amber/15" size="lg" locked={!got} />
               <p className={`mt-2.5 font-display text-sm font-semibold ${got ? "text-cream" : "text-cream/45"}`}>{meta.title}</p>
               <p className={`mt-1 text-xs leading-snug ${got ? "text-cream/60" : "text-cream/35"}`}>{meta.desc}</p>
-              {!got && <span className="mt-2 rounded-md bg-white/5 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-cream/40">{g.soon}</span>}
+              {m.manual ? (
+                <button
+                  onClick={() => toggleMilestone(m.id)}
+                  className={`mt-2.5 rounded-full px-3 py-1 text-[11px] font-semibold ring-1 transition-colors ${
+                    got ? "bg-amber/15 text-amber ring-amber/30" : "bg-white/5 text-cream/70 ring-white/10 hover:text-cream"
+                  }`}
+                >
+                  {got ? g.lived : g.markDone}
+                </button>
+              ) : (
+                !got && <span className="mt-2 rounded-md bg-white/5 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-cream/40">{g.soon}</span>
+              )}
             </div>
           );
         })}
