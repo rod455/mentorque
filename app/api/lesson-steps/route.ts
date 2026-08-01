@@ -77,7 +77,10 @@ export async function POST(request: Request) {
       headers: { "content-type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01" },
       body: JSON.stringify({ model: process.env.BIELA_MODEL ?? "claude-sonnet-5", max_tokens: 1800, system, messages: [{ role: "user", content: userMsg }] }),
     });
-    if (!res.ok) throw new Error(`anthropic_${res.status}`);
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      throw new Error(`anthropic_${res.status}: ${body.slice(0, 400)}`);
+    }
     const data = await res.json();
     const txt: string = Array.isArray(data.content) ? data.content.filter((b: { type: string }) => b.type === "text").map((b: { text: string }) => b.text).join("") : "";
     const steps = parseSteps(txt);
