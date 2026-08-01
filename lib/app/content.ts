@@ -1308,14 +1308,14 @@ export function getContent(locale: Locale) {
       driverDefault: T("Motorista", "Driver"),
       // Login card (login-only, sem convidado)
       save: {
-        title: T("Salve seu carro na nuvem", "Save your car to the cloud"),
-        body: T("Crie sua conta e leve sua garagem, histórico e conquistas para qualquer aparelho — sem perder nada.", "Create your account and take your garage, history and achievements to any device — without losing a thing."),
+        title: T("Salve sua garagem", "Save your garage"),
+        body: T("Entre para manter sua garagem e histórico seguros em qualquer aparelho.", "Sign in to keep your garage and history safe on any device."),
         cta: T("Entrar no Mentorque", "Sign in to Mentorque"),
       },
-      // Card "Desbloqueie o Premium" em destaque
+      // Card "Desbloqueie o Premium" em destaque (compacto)
       unlock: {
         title: T("Desbloqueie o Premium", "Unlock Premium"),
-        body: T("Cuide do seu carro sem limites.", "Care for your car without limits."),
+        body: T("Garagem ilimitada, conteúdos exclusivos e muito mais", "Unlimited garage, exclusive content and more"),
         cta: T("Ver planos Premium", "See Premium plans"),
         benefits: [
           T("Garagem ilimitada", "Unlimited garage"),
@@ -1346,6 +1346,8 @@ export function getContent(locale: Locale) {
     gamification: {
       // Level card (no Perfil)
       cardTitle: T("Sua jornada", "Your journey"),
+      phaseLabel: T("SUA FASE", "YOUR PHASE"),
+      next: T("Próximo: {phase}", "Next: {phase}"),
       pointsShort: "pts",
       toNext: T("Faltam {n} pts para {phase}", "{n} pts to {phase}"),
       maxLevel: T("Você chegou ao topo! 🏆", "You reached the top! 🏆"),

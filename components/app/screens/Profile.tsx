@@ -98,73 +98,41 @@ export function ProfileScreen() {
     <div>
       <AppHeader title={p.title} />
 
-      {/* Identity + fase atual (gamificação) */}
-      <Card>
-        <div className="flex items-center gap-3">
-          <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-full text-2xl ${gam.phase.tint}`}>
-            {gam.phase.emoji}
+      {/* 1) Salve sua garagem — login (com a fotinha do Biela) / ou conectado */}
+      {enabled && user ? (
+        <Card className="flex items-center gap-3">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-teal/15 text-teal">
+            <Icon name="check" className="h-5 w-5" />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="truncate font-display text-lg font-semibold text-cream">{s.name?.trim() || p.driverDefault}</p>
-            <p className="truncate text-xs text-cream/55">{phaseName} · {gam.points} {g.pointsShort}</p>
+            <p className="text-xs text-cream/50">{c.auth.signedInAs}</p>
+            <p className="truncate font-display text-sm text-cream">{user.email}</p>
           </div>
-          <button onClick={() => { setNameInput(s.name ?? ""); setEditName(true); }} className="shrink-0 text-xs font-medium text-amber">
-            {c.common.edit}
+          <button onClick={() => signOut()} className="shrink-0 text-xs font-medium text-coral/80 hover:text-coral">
+            {c.auth.signOut}
           </button>
-        </div>
-
-        {/* Progresso para a próxima fase */}
-        <div className="mt-4">
-          <div className="h-2 overflow-hidden rounded-full bg-white/[0.06]">
-            <div className="h-full rounded-full bg-amber transition-all" style={{ width: `${Math.round(gam.progress * 100)}%` }} />
-          </div>
-          <p className="mt-1.5 text-[11px] text-cream/50">
-            {gam.nextPhase
-              ? g.toNext.replace("{n}", String(gam.toNext)).replace("{phase}", g.phases[gam.nextPhase.id].name)
-              : g.maxLevel}
-          </p>
-        </div>
-
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          <Button variant="secondary" onClick={() => go({ name: "gamification" })}>{g.howBtn}</Button>
-          <Button variant="secondary" onClick={() => go({ name: "achievements" })}>
-            🏅 {g.acervoBtn}
-          </Button>
-        </div>
-      </Card>
-
-      {/* Conta (login / sincronização) — só quando o auth está configurado */}
-      {enabled && (
-        user ? (
-          <Card className="mt-3 flex items-center gap-3">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-teal/15 text-teal">
-              <Icon name="check" className="h-5 w-5" />
+        </Card>
+      ) : (
+        <Card>
+          <div className="flex items-center gap-3.5">
+            <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-2xl bg-teal/10 ring-1 ring-teal/20">
+              <img src="/biela/biela-acenando.png" alt="Biela" className="h-12 w-12 object-contain" draggable={false} />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-xs text-cream/50">{c.auth.signedInAs}</p>
-              <p className="truncate font-display text-sm text-cream">{user.email}</p>
+              <p className="font-display text-[15px] font-semibold text-cream">{p.save.title}</p>
+              <p className="mt-0.5 text-xs leading-relaxed text-cream/55">{p.save.body}</p>
             </div>
-            <button onClick={() => signOut()} className="shrink-0 text-xs font-medium text-coral/80 hover:text-coral">
-              {c.auth.signOut}
-            </button>
-          </Card>
-        ) : (
-          <Card className="mt-3">
-            <div className="flex items-start gap-3">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-teal/15 text-teal">
-                <Icon name="shield" className="h-5 w-5" />
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="font-display text-[15px] font-semibold text-cream">{p.save.title}</p>
-                <p className="mt-0.5 text-xs leading-relaxed text-cream/55">{p.save.body}</p>
-              </div>
-            </div>
-            <Button size="lg" className="mt-3 w-full" onClick={() => go({ name: "auth" })}>{p.save.cta}</Button>
-          </Card>
-        )
+          </div>
+          <button
+            onClick={() => go({ name: "auth" })}
+            className="mt-3.5 flex w-full items-center justify-center gap-2 rounded-full bg-amber px-5 py-2.5 font-display text-sm font-semibold text-graphite transition-colors hover:bg-amber-300"
+          >
+            {p.save.cta} <span aria-hidden>→</span>
+          </button>
+        </Card>
       )}
 
-      {/* Plano / Premium */}
+      {/* 2) Desbloqueie o Premium — destaque compacto (ou plano atual) */}
       {s.premium ? (
         <Card className="mt-3 ring-amber/20">
           <div className="flex items-center justify-between">
@@ -190,30 +158,48 @@ export function ProfileScreen() {
           </button>
         </Card>
       ) : (
-        // Destaque: Desbloqueie o Premium
-        <div className="mt-3 overflow-hidden rounded-2xl bg-gradient-to-br from-amber/20 via-amber/10 to-amber/[0.04] p-[1px] ring-1 ring-amber/40">
-          <div className="rounded-2xl bg-graphite-800/80 p-4">
-            <div className="flex items-center gap-2 text-amber">
-              <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber/20 text-base">★</span>
-              <span className="font-display text-base font-bold text-cream">{p.unlock.title}</span>
-            </div>
-            <p className="mt-1.5 text-sm text-cream/70">{p.unlock.body}</p>
-            <ul className="mt-3 space-y-2">
-              {p.unlock.benefits.map((b) => (
-                <li key={b} className="flex items-start gap-2.5 text-sm">
-                  <span className="mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full bg-amber/20 text-amber">
-                    <Icon name="check" className="h-3 w-3" />
-                  </span>
-                  <span className="text-cream/90">{b}</span>
-                </li>
-              ))}
-            </ul>
-            <Button size="lg" className="mt-4 w-full" onClick={() => go({ name: "subscribe" })}>
-              <Icon name="spark" className="h-4 w-4" /> {p.unlock.cta}
-            </Button>
-          </div>
-        </div>
+        <button
+          onClick={() => go({ name: "subscribe" })}
+          className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-amber/25 via-amber/12 to-amber/[0.06] p-4 text-left ring-1 ring-amber/40 transition-colors hover:ring-amber/60"
+        >
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber/20 text-lg">👑</span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-display text-[15px] font-bold text-cream">{p.unlock.title}</span>
+            <span className="mt-0.5 block text-xs leading-relaxed text-cream/60">{p.unlock.body}</span>
+          </span>
+          <span className="shrink-0 text-lg text-amber">→</span>
+        </button>
       )}
+
+      {/* 3) Sua fase (gamificação) */}
+      <Card className="mt-3">
+        <div className="flex items-center gap-3.5">
+          <span className={`grid h-14 w-14 shrink-0 place-items-center rounded-full text-2xl ${gam.phase.tint}`}>
+            {gam.phase.emoji}
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-cream/45">{g.phaseLabel}</p>
+            <p className="font-display text-xl font-semibold text-cream">{phaseName}</p>
+          </div>
+          <span className="shrink-0 text-xs font-medium text-cream/40">{gam.points} {g.pointsShort}</span>
+        </div>
+
+        <div className="mt-3.5 h-2 overflow-hidden rounded-full bg-white/[0.06]">
+          <div className="h-full rounded-full bg-amber transition-all" style={{ width: `${Math.round(gam.progress * 100)}%` }} />
+        </div>
+        <p className="mt-1.5 text-[11px] italic text-cream/50">
+          {gam.nextPhase ? g.next.replace("{phase}", g.phases[gam.nextPhase.id].name) : g.maxLevel}
+        </p>
+
+        <div className="mt-3.5 flex items-center justify-between border-t border-white/[0.06] pt-3.5">
+          <button onClick={() => go({ name: "achievements" })} className="flex items-center gap-1.5 text-sm font-medium text-cream/80 hover:text-cream">
+            <Icon name="book" className="h-4 w-4" /> {g.acervoBtn}
+          </button>
+          <button onClick={() => go({ name: "gamification" })} className="flex items-center gap-1.5 text-sm font-medium text-amber hover:text-amber-300">
+            <span className="grid h-4 w-4 place-items-center rounded-full ring-1 ring-current text-[10px]">?</span> {g.howBtn}
+          </button>
+        </div>
+      </Card>
 
       {/* Detalhes da conta */}
       <SectionTitle>{p.account}</SectionTitle>
