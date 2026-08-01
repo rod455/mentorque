@@ -16,6 +16,8 @@ export type GamSession = {
   vehicles: ReadonlyArray<{ nickname?: string | null }>;
   services: unknown[];
   claimedMilestones?: string[];
+  momentPhotos?: Record<string, string>;
+  startedAt?: string | null;
 };
 
 export type Phase = {
@@ -93,7 +95,8 @@ export type Milestone = {
   id: string;
   emoji: string;
   cat: "marco" | "momento";
-  // Experiential badges only the driver can confirm: tap to mark as lived.
+  // Marcos: `manual` ones the driver confirms with a tap; the rest unlock from
+  // real app usage. Momentos: experiences the driver registers (com foto).
   manual?: boolean;
   earned: (s: GamSession) => boolean;
 };
@@ -104,37 +107,49 @@ const cars = (s: GamSession) => s.vehicles?.length ?? 0;
 const svc = (s: GamSession) => s.services?.length ?? 0;
 const claimed = (s: GamSession, id: string) => (s.claimedMilestones ?? []).includes(id);
 const hasNickname = (s: GamSession) => (s.vehicles ?? []).some((v) => filled(v?.nickname));
+const hasPhoto = (s: GamSession, id: string) => !!s.momentPhotos?.[id];
+// A moment counts as lived once the driver marks it or adds a photo.
+export const isLived = (s: GamSession, id: string) => claimed(s, id) || hasPhoto(s, id);
 
-// "Marcos" mix things we can verify from the session (cadastros, serviços) with
-// experiências que só o motorista conhece — essas são `manual` e o usuário
-// marca com um toque. "Momentos" = hábitos ao longo do tempo (aspiracionais).
+// Whole months since an ISO date (yyyy-mm-dd). Runs client-side only.
+function monthsSince(iso?: string | null): number {
+  if (!iso) return 0;
+  const d = new Date(iso.length <= 10 ? `${iso}T00:00:00` : iso);
+  if (isNaN(d.getTime())) return 0;
+  const now = new Date();
+  return Math.max(0, (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth()));
+}
+
+// "Marcos" = conquistas (umas destravam pelo uso do app, outras o motorista
+// marca). "Momentos" = experiências vividas com o carro, com foto opcional.
 export const MILESTONES: Milestone[] = [
-  // Marcos — cuidado / uso
+  // Marcos — automáticos (uso do app)
   { id: "welcome", emoji: "👋", cat: "marco", earned: () => true },
   { id: "firstCar", emoji: "🚗", cat: "marco", earned: (s) => cars(s) >= 1 },
   { id: "named", emoji: "🏷️", cat: "marco", earned: (s) => hasNickname(s) },
   { id: "profileDone", emoji: "🪪", cat: "marco", earned: (s) => profileComplete(s) },
   { id: "firstService", emoji: "🧾", cat: "marco", earned: (s) => svc(s) >= 1 },
   { id: "fiveServices", emoji: "📋", cat: "marco", earned: (s) => svc(s) >= 5 },
-  { id: "garageFull", emoji: "🅿️", cat: "marco", earned: (s) => cars(s) >= 3 },
   { id: "tenServices", emoji: "🗂️", cat: "marco", earned: (s) => svc(s) >= 10 },
+  { id: "garageFull", emoji: "🅿️", cat: "marco", earned: (s) => cars(s) >= 3 },
   { id: "supporter", emoji: "⭐", cat: "marco", earned: (s) => !!s.premium },
+  { id: "firstMonth", emoji: "🗓️", cat: "marco", earned: (s) => monthsSince(s.startedAt) >= 1 },
+  { id: "firstYear", emoji: "🎂", cat: "marco", earned: (s) => monthsSince(s.startedAt) >= 12 },
 
-  // Marcos — experiência (o motorista confirma)
-  { id: "firstTrip", emoji: "🛣️", cat: "marco", manual: true, earned: (s) => claimed(s, "firstTrip") },
-  { id: "roadTrip", emoji: "🌄", cat: "marco", manual: true, earned: (s) => claimed(s, "roadTrip") },
-  { id: "firstWash", emoji: "🧼", cat: "marco", manual: true, earned: (s) => claimed(s, "firstWash") },
-  { id: "nightDrive", emoji: "🌙", cat: "marco", manual: true, earned: (s) => claimed(s, "nightDrive") },
-  { id: "rain", emoji: "🌧️", cat: "marco", manual: true, earned: (s) => claimed(s, "rain") },
-  { id: "fullTank", emoji: "⛽", cat: "marco", manual: true, earned: (s) => claimed(s, "fullTank") },
+  // Marcos — o motorista marca (fazer e ativar)
+  { id: "onTime", emoji: "✅", cat: "marco", manual: true, earned: (s) => claimed(s, "onTime") },
+  { id: "streak", emoji: "🔥", cat: "marco", manual: true, earned: (s) => claimed(s, "streak") },
+  { id: "explorer", emoji: "📚", cat: "marco", manual: true, earned: (s) => claimed(s, "explorer") },
+  { id: "diagnostician", emoji: "🔍", cat: "marco", manual: true, earned: (s) => claimed(s, "diagnostician") },
+  { id: "comeback", emoji: "🔄", cat: "marco", manual: true, earned: (s) => claimed(s, "comeback") },
 
-  // Momentos
-  { id: "onboard", emoji: "🧭", cat: "momento", earned: () => true },
-  { id: "firstMonth", emoji: "🗓️", cat: "momento", earned: () => false },
-  { id: "firstYear", emoji: "🎂", cat: "momento", earned: () => false },
-  { id: "comeback", emoji: "🔄", cat: "momento", earned: () => false },
-  { id: "onTime", emoji: "✅", cat: "momento", earned: () => false },
-  { id: "streak", emoji: "🔥", cat: "momento", earned: () => false },
-  { id: "explorer", emoji: "📚", cat: "momento", earned: () => false },
-  { id: "diagnostician", emoji: "🔍", cat: "momento", earned: () => false },
+  // Momentos — experiências com o carro (registra + foto)
+  { id: "firstTrip", emoji: "🛣️", cat: "momento", earned: (s) => isLived(s, "firstTrip") },
+  { id: "roadTrip", emoji: "🌄", cat: "momento", earned: (s) => isLived(s, "roadTrip") },
+  { id: "firstWash", emoji: "🧼", cat: "momento", earned: (s) => isLived(s, "firstWash") },
+  { id: "nightDrive", emoji: "🌙", cat: "momento", earned: (s) => isLived(s, "nightDrive") },
+  { id: "rain", emoji: "🌧️", cat: "momento", earned: (s) => isLived(s, "rain") },
+  { id: "sunset", emoji: "🌅", cat: "momento", earned: (s) => isLived(s, "sunset") },
+  { id: "fullTank", emoji: "⛽", cat: "momento", earned: (s) => isLived(s, "fullTank") },
+  { id: "accessory", emoji: "🎁", cat: "momento", earned: (s) => isLived(s, "accessory") },
 ];

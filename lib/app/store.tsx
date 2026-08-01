@@ -18,7 +18,9 @@ type Session = {
   vehicles: Vehicle[];
   activeVehicleId: string | null;
   services: ServiceRecord[];
-  claimedMilestones: string[]; // experiential badges the user marks by hand
+  claimedMilestones: string[]; // badges the user marks by hand
+  momentPhotos: Record<string, string>; // momento id → foto (data URL)
+  startedAt: string | null; // primeiro dia no app (para marcos de tempo)
 };
 
 const EMPTY: Session = {
@@ -31,7 +33,14 @@ const EMPTY: Session = {
   activeVehicleId: null,
   services: [],
   claimedMilestones: [],
+  momentPhotos: {},
+  startedAt: null,
 };
+
+// Today as yyyy-mm-dd (client-side only).
+function todayISO(): string {
+  return new Date().toISOString().slice(0, 10);
+}
 
 const STORAGE_KEY = "mentorque-garage";
 
@@ -49,6 +58,7 @@ type StoreValue = {
   updateService: (id: string, patch: Partial<ServiceRecord>) => void;
   removeService: (id: string) => void;
   toggleMilestone: (id: string) => void;
+  setMomentPhoto: (id: string, dataUrl: string | null) => void;
   finishOnboarding: () => void;
   reset: () => void;
 };
@@ -57,8 +67,15 @@ const Ctx = createContext<StoreValue | null>(null);
 
 // Migrate the old single-vehicle shape (mentorque-proto) if present.
 function migrate(parsed: any): Session {
-  if (parsed && Array.isArray(parsed.vehicles)) return { ...EMPTY, ...parsed } as Session;
+  if (parsed && Array.isArray(parsed.vehicles)) {
+    const sess = { ...EMPTY, ...parsed } as Session;
+    if (!Array.isArray(sess.claimedMilestones)) sess.claimedMilestones = [];
+    if (!sess.momentPhotos || typeof sess.momentPhotos !== "object") sess.momentPhotos = {};
+    if (!sess.startedAt) sess.startedAt = todayISO();
+    return sess;
+  }
   const next: Session = { ...EMPTY };
+  next.startedAt = parsed?.startedAt ?? todayISO();
   if (parsed?.vehicle) {
     const id = newId();
     next.vehicles = [{ id, ...parsed.vehicle, odometerKm: parsed.odometerKm ?? undefined, photo: parsed.photo ?? undefined }];
@@ -94,6 +111,8 @@ function mergeSessions(cloud: Session, local: Session): Session {
     activeVehicleId: cloud.activeVehicleId ?? local.activeVehicleId ?? null,
     services: mergeById(cloud.services ?? [], local.services ?? []),
     claimedMilestones: [...new Set([...(cloud.claimedMilestones ?? []), ...(local.claimedMilestones ?? [])])],
+    momentPhotos: { ...(local.momentPhotos ?? {}), ...(cloud.momentPhotos ?? {}) },
+    startedAt: [cloud.startedAt, local.startedAt].filter(Boolean).sort()[0] ?? todayISO(),
   };
 }
 
@@ -217,12 +236,23 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
     [patch]
   );
 
-  const finishOnboarding = useCallback(() => patch((p) => ({ ...p, onboarded: true })), [patch]);
-  const reset = useCallback(() => patch(() => ({ ...EMPTY })), [patch]);
+  const setMomentPhoto = useCallback(
+    (id: string, dataUrl: string | null) =>
+      patch((p) => {
+        const photos = { ...p.momentPhotos };
+        if (dataUrl) photos[id] = dataUrl;
+        else delete photos[id];
+        return { ...p, momentPhotos: photos };
+      }),
+    [patch]
+  );
+
+  const finishOnboarding = useCallback(() => patch((p) => ({ ...p, onboarded: true, startedAt: p.startedAt ?? todayISO() })), [patch]);
+  const reset = useCallback(() => patch(() => ({ ...EMPTY, momentPhotos: {} })), [patch]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, finishOnboarding, reset }),
-    [s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, finishOnboarding, reset]
+    () => ({ s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, finishOnboarding, reset }),
+    [s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
