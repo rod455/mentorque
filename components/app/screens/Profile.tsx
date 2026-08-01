@@ -7,7 +7,7 @@ import { useAuth } from "@/lib/app/auth";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { resizeImage } from "@/lib/app/image";
 import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
-import { openBillingPortal, startCheckout } from "@/lib/app/billing";
+import { deleteAccount, openBillingPortal, startCheckout } from "@/lib/app/billing";
 import { getStripeJs, stripeConfigured } from "@/lib/app/stripeClient";
 import { APP_VERSION, carName } from "@/lib/app/content";
 import { computeStatus } from "@/lib/app/gamification";
@@ -99,8 +99,8 @@ export function ProfileScreen() {
   const c = useContent();
   const p = c.profile;
   const g = c.gamification;
-  const { user, enabled, signOut } = useAuth();
-  const { s, setState, setPremium, setNotifications, setUnits, setAvatar, subscribed, reset } = usePrototype();
+  const { user, enabled, signOut, resetPassword } = useAuth();
+  const { s, setName, setState, setPremium, setNotifications, setUnits, setAvatar, subscribed, reset } = usePrototype();
   const { go, root } = useNav();
 
   // Real subscribers manage/cancel via the Stripe portal; demo premium toggles off.
@@ -114,7 +114,28 @@ export function ProfileScreen() {
   const [privacy, setPrivacy] = useState(false);
   const [talk, setTalk] = useState(false);
   const [premiumOpen, setPremiumOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [editName, setEditName] = useState(false);
+  const [nameInput, setNameInput] = useState(s.name ?? "");
+  const [pwSent, setPwSent] = useState(false);
   const avatarRef = useRef<HTMLInputElement>(null);
+
+  // Name shown at the top: user's name → Google name → email prefix.
+  const googleName = (user?.user_metadata?.full_name ?? user?.user_metadata?.name) as string | undefined;
+  const displayName = s.name?.trim() || googleName?.trim() || user?.email?.split("@")[0] || p.driverDefault;
+
+  const changePassword = async () => {
+    if (!user?.email) return;
+    const r = await resetPassword(user.email);
+    if (!r.error) setPwSent(true);
+  };
+  const removeAccount = async () => {
+    if (typeof window !== "undefined" && !window.confirm(p.deleteConfirm)) return;
+    await deleteAccount();
+    await signOut();
+    reset();
+    root({ name: "cars" });
+  };
 
   // Profile photo: user's uploaded avatar wins; otherwise the Google picture.
   const googlePic = (user?.user_metadata?.avatar_url ?? user?.user_metadata?.picture) as string | undefined;
@@ -133,31 +154,52 @@ export function ProfileScreen() {
     <div>
       <AppHeader title={p.title} onBack={() => root({ name: "cars" })} />
 
-      {/* 1) Salve sua garagem — login (com a fotinha do Biela) / ou conectado */}
+      {/* 1) Conta — cabeçalho com nome; toca pra expandir os detalhes */}
       {enabled && user ? (
-        <Card className="flex items-center gap-3">
-          <button onClick={() => avatarRef.current?.click()} className="relative shrink-0" aria-label={p.changePhoto}>
-            <span className="grid h-12 w-12 place-items-center overflow-hidden rounded-full bg-teal/15 text-teal ring-1 ring-white/10">
-              {avatarSrc ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={avatarSrc} alt="" className="h-full w-full object-cover" />
-              ) : (
-                <span className="font-display text-lg font-semibold text-cream">{(s.name?.trim()?.[0] ?? user.email?.[0] ?? "?").toUpperCase()}</span>
-              )}
-            </span>
-            <span className="absolute -bottom-0.5 -right-0.5 grid h-5 w-5 place-items-center rounded-full bg-amber text-graphite ring-2 ring-graphite-800">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z" /><circle cx="12" cy="13" r="3.2" /></svg>
-            </span>
-          </button>
-          <div className="min-w-0 flex-1">
-            <p className="text-xs text-cream/50">{c.auth.signedInAs}</p>
-            <p className="truncate font-display text-sm text-cream">{user.email}</p>
+        <div className="overflow-hidden rounded-2xl bg-graphite-800 ring-1 ring-white/[0.06]">
+          <div className="flex items-center gap-3 p-4">
+            <button onClick={() => avatarRef.current?.click()} className="relative shrink-0" aria-label={p.changePhoto}>
+              <span className="grid h-12 w-12 place-items-center overflow-hidden rounded-full bg-teal/15 text-teal ring-1 ring-white/10">
+                {avatarSrc ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={avatarSrc} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <span className="font-display text-lg font-semibold text-cream">{displayName[0]?.toUpperCase() ?? "?"}</span>
+                )}
+              </span>
+              <span className="absolute -bottom-0.5 -right-0.5 grid h-5 w-5 place-items-center rounded-full bg-amber text-graphite ring-2 ring-graphite-800">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z" /><circle cx="12" cy="13" r="3.2" /></svg>
+              </span>
+            </button>
+            <button onClick={() => setAccountOpen((v) => !v)} className="min-w-0 flex-1 text-left">
+              <span className="block text-xs text-cream/50">{c.auth.signedInAs}</span>
+              <span className="block truncate font-serif text-base font-semibold text-cream">{displayName}</span>
+            </button>
+            <button onClick={() => setAccountOpen((v) => !v)} className="shrink-0 text-lg text-cream/30" aria-label="expand">
+              <span className={`inline-block transition-transform ${accountOpen ? "rotate-90" : ""}`}>›</span>
+            </button>
+            <input ref={avatarRef} type="file" accept="image/*" className="hidden" onChange={(e) => pickAvatar(e.target.files?.[0])} />
           </div>
-          <button onClick={() => signOut()} className="shrink-0 text-xs font-medium text-coral/80 hover:text-coral">
-            {c.auth.signOut}
-          </button>
-          <input ref={avatarRef} type="file" accept="image/*" className="hidden" onChange={(e) => pickAvatar(e.target.files?.[0])} />
-        </Card>
+
+          {accountOpen && (
+            <div className="border-t border-white/[0.06] [&>*+*]:border-t [&>*+*]:border-white/[0.06]">
+              <IconRow icon="user" tint="bg-amber/15 text-amber" label={p.name} value={s.name || p.notSet} action={c.common.edit} onClick={() => { setNameInput(s.name ?? ""); setEditName(true); }} />
+              <IconRow icon="consult" tint="bg-teal/15 text-teal" label={p.email} value={user.email ?? p.notSet} />
+              <IconRow
+                icon="explore" tint="bg-coral/15 text-coral" label={p.stateLabel} value={s.state || undefined}
+                right={
+                  <select value={s.state ?? ""} onChange={(e) => setState(e.target.value)} className="shrink-0 rounded-lg bg-graphite-700 px-2 py-1.5 text-sm text-cream ring-1 ring-white/10 outline-none focus:ring-amber">
+                    <option value="">{p.stateSelect}</option>
+                    {BR_STATES.map((uf) => (<option key={uf} value={uf}>{uf}</option>))}
+                  </select>
+                }
+              />
+              <IconRow icon="shield" tint="bg-teal/15 text-teal" label={p.changePassword} action={pwSent ? p.passwordSent : undefined} onClick={pwSent ? undefined : changePassword} />
+              <IconRow icon="user" tint="bg-graphite-700 text-cream/60" label={c.auth.signOut} onClick={() => signOut()} />
+              <IconRow icon="alert" tint="bg-coral/15 text-coral" label={p.deleteAccount} danger onClick={removeAccount} />
+            </div>
+          )}
+        </div>
       ) : (
         <Card>
           <div className="flex items-center gap-3.5">
@@ -307,6 +349,15 @@ export function ProfileScreen() {
         <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber/15 font-display text-sm font-bold text-amber">M</span>
         <p className="text-[11px] text-cream/35">{p.version.replace("{v}", APP_VERSION)}</p>
       </div>
+
+      {/* Editar nome */}
+      <Sheet open={editName} onClose={() => setEditName(false)}>
+        <h2 className="font-serif text-xl font-semibold text-cream">{p.name}</h2>
+        <input value={nameInput} onChange={(e) => setNameInput(e.target.value)} placeholder={p.namePh} className={`mt-4 ${inputCls}`} />
+        <Button size="lg" className="mt-4 w-full" onClick={() => { setName(nameInput); setEditName(false); }}>
+          {c.common.save}
+        </Button>
+      </Sheet>
 
       {/* Sobre o app */}
       <Sheet open={about} onClose={() => setAbout(false)}>

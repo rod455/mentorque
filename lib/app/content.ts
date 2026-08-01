@@ -1346,6 +1346,10 @@ export function getContent(locale: Locale) {
       ],
       driverDefault: T("Motorista", "Driver"),
       changePhoto: T("Trocar foto de perfil", "Change profile photo"),
+      changePassword: T("Trocar senha", "Change password"),
+      passwordSent: T("Link enviado ✓", "Link sent ✓"),
+      deleteAccount: T("Excluir conta", "Delete account"),
+      deleteConfirm: T("Tem certeza? Isso apaga sua conta e todos os seus dados — não dá pra desfazer.", "Are you sure? This deletes your account and all your data — it can't be undone."),
       // Login card (login-only, sem convidado)
       save: {
         title: T("Salve sua garagem", "Save your garage"),
