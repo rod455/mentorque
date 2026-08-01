@@ -134,15 +134,34 @@ export function LockedCard({ ctx, title, body }: { ctx: string; title: string; b
 }
 
 // Standard screen header: back arrow (when the nav stack can pop) + title.
-export function AppHeader({ title, subtitle, action }: { title: string; subtitle?: string; action?: ReactNode }) {
+export function AppHeader({ title, subtitle, action, centered, onBack }: { title: string; subtitle?: string; action?: ReactNode; centered?: boolean; onBack?: () => void }) {
   const { canBack, back } = useNav();
+  const showBack = onBack ? true : canBack;
+  const doBack = onBack ?? back;
+
+  const backBtn = (
+    <button onClick={doBack} className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-graphite-700 text-cream/70 hover:text-cream" aria-label="back">
+      <IconArrow className="h-4 w-4 rotate-180" />
+    </button>
+  );
+
+  // Centered (Bloom-style): back on the left, title centered, balanced spacer.
+  if (centered) {
+    return (
+      <header className="flex items-center gap-3 pb-3 pt-5">
+        {showBack ? backBtn : <span className="h-9 w-9 shrink-0" />}
+        <div className="min-w-0 flex-1 text-center">
+          <h1 className="text-balance font-serif text-xl font-semibold leading-tight tracking-normal text-cream">{title}</h1>
+          {subtitle ? <p className="truncate text-xs text-cream/55">{subtitle}</p> : null}
+        </div>
+        <span className="grid h-9 w-9 shrink-0 place-items-center">{action}</span>
+      </header>
+    );
+  }
+
   return (
     <header className="flex items-center gap-3 pb-3 pt-5">
-      {canBack ? (
-        <button onClick={back} className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-graphite-700 text-cream/70 hover:text-cream" aria-label="back">
-          <IconArrow className="h-4 w-4 rotate-180" />
-        </button>
-      ) : null}
+      {showBack ? backBtn : null}
       <div className="min-w-0 flex-1">
         <h1 className="text-balance font-serif text-xl font-semibold leading-tight tracking-normal text-cream">{title}</h1>
         {subtitle ? <p className="truncate text-xs text-cream/55">{subtitle}</p> : null}

@@ -57,7 +57,7 @@ export function ProfileScreen() {
   const { locale } = useI18n();
   const { user, enabled, signOut } = useAuth();
   const { s, setName, setEmail, setState, setPremium, reset } = usePrototype();
-  const { go } = useNav();
+  const { go, root } = useNav();
   const gam = computeStatus(s);
   const phaseName = g.phases[gam.phase.id].name;
   const [editName, setEditName] = useState(false);
@@ -97,7 +97,7 @@ export function ProfileScreen() {
 
   return (
     <div>
-      <AppHeader title={p.title} />
+      <AppHeader title={p.title} centered onBack={() => root({ name: "cars" })} />
 
       {/* 1) Salve sua garagem — login (com a fotinha do Biela) / ou conectado */}
       {enabled && user ? (
