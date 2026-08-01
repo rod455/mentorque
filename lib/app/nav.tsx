@@ -30,7 +30,6 @@ export type View =
   | { name: "profile" }
   | { name: "gamification" }
   | { name: "achievements" }
-  | { name: "support" }
   | { name: "auth" }
   | { name: "subscribe"; ctx?: string };
 

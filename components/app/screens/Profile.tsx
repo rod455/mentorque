@@ -97,6 +97,7 @@ export function ProfileScreen() {
   const phaseName = g.phases[gam.phase.id].name;
   const [about, setAbout] = useState(false);
   const [privacy, setPrivacy] = useState(false);
+  const [talk, setTalk] = useState(false);
 
   return (
     <div>
@@ -236,7 +237,16 @@ export function ProfileScreen() {
       <SectionTitle>{p.info}</SectionTitle>
       <Group>
         <IconRow icon="spark" tint="bg-amber/15 text-amber" label={p.about} onClick={() => setAbout(true)} />
-        <IconRow icon="consult" tint="bg-teal/15 text-teal" label={p.talkToUs} onClick={() => go({ name: "support" })} />
+        <IconRow
+          icon="consult" tint="bg-teal/15 text-teal" label={p.talkToUs}
+          right={<span className={`text-lg text-cream/30 transition-transform ${talk ? "rotate-90" : ""}`}>›</span>}
+          onClick={() => setTalk((v) => !v)}
+        />
+        {talk && (
+          <div className="px-4 py-4">
+            <SupportForm />
+          </div>
+        )}
         <IconRow icon="shield" tint="bg-coral/15 text-coral" label={p.privacy} onClick={() => setPrivacy(true)} />
         <IconRow icon="check" tint="bg-amber/15 text-amber" label={p.rate} onClick={() => window.open(RATE_URL, "_blank", "noopener,noreferrer")} />
       </Group>
@@ -268,8 +278,8 @@ export function ProfileScreen() {
   );
 }
 
-// 3.1.E — Fale com a gente (formulário de dúvida / sugestão / bug → e-mail)
-export function SupportScreen() {
+// 3.1.E — Fale com a gente: formulário inline (expande no Perfil).
+function SupportForm() {
   const c = useContent();
   const p = c.profile;
   const { locale } = useI18n();
@@ -306,49 +316,46 @@ export function SupportScreen() {
 
   return (
     <div>
-      <AppHeader title={p.talkToUs} />
-      <Card>
-        <p className="text-sm text-cream/60">{p.support.subtitle}</p>
-        <div className="mt-3 grid grid-cols-3 gap-2">
-          {([["doubt", p.support.doubt], ["suggestion", p.support.suggestion], ["bug", p.support.bug]] as const).map(([key, label]) => {
-            const active = supType === key;
-            return (
-              <button
-                key={key}
-                onClick={() => setSupType(key)}
-                className={`rounded-xl px-2 py-2 text-sm font-medium ring-1 transition-colors ${active ? "bg-amber text-graphite ring-amber" : "bg-graphite-700 text-cream/70 ring-white/10"}`}
-              >
-                {label}
-              </button>
-            );
-          })}
-        </div>
-        {supStatus === "sent" ? (
-          <div className="mt-3 rounded-xl bg-teal/10 px-3.5 py-3 text-sm text-teal ring-1 ring-teal/20">{p.support.sent}</div>
-        ) : (
-          <>
-            <textarea
-              value={supMsg}
-              onChange={(e) => { setSupMsg(e.target.value); setSupErr(false); }}
-              rows={5}
-              placeholder={p.support.messagePh}
-              className={`mt-3 resize-none ${inputCls}`}
-            />
-            <input
-              value={supEmail}
-              onChange={(e) => setSupEmail(e.target.value)}
-              type="email"
-              placeholder={p.support.emailPh}
-              className={`mt-2 ${inputCls}`}
-            />
-            {supErr && <p className="mt-1 text-xs text-coral">{p.support.empty}</p>}
-            {supStatus === "error" && <p className="mt-1 text-xs text-coral">{p.support.error}</p>}
-            <Button size="lg" className="mt-3 w-full" disabled={supStatus === "sending"} onClick={sendSupport}>
-              {supStatus === "sending" ? p.support.sending : p.support.send}
-            </Button>
-          </>
-        )}
-      </Card>
+      <p className="text-sm text-cream/60">{p.support.subtitle}</p>
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        {([["doubt", p.support.doubt], ["suggestion", p.support.suggestion], ["bug", p.support.bug]] as const).map(([key, label]) => {
+          const active = supType === key;
+          return (
+            <button
+              key={key}
+              onClick={() => setSupType(key)}
+              className={`rounded-xl px-2 py-2 text-sm font-medium ring-1 transition-colors ${active ? "bg-amber text-graphite ring-amber" : "bg-graphite-700 text-cream/70 ring-white/10"}`}
+            >
+              {label}
+            </button>
+          );
+        })}
+      </div>
+      {supStatus === "sent" ? (
+        <div className="mt-3 rounded-xl bg-teal/10 px-3.5 py-3 text-sm text-teal ring-1 ring-teal/20">{p.support.sent}</div>
+      ) : (
+        <>
+          <textarea
+            value={supMsg}
+            onChange={(e) => { setSupMsg(e.target.value); setSupErr(false); }}
+            rows={5}
+            placeholder={p.support.messagePh}
+            className={`mt-3 resize-none ${inputCls}`}
+          />
+          <input
+            value={supEmail}
+            onChange={(e) => setSupEmail(e.target.value)}
+            type="email"
+            placeholder={p.support.emailPh}
+            className={`mt-2 ${inputCls}`}
+          />
+          {supErr && <p className="mt-1 text-xs text-coral">{p.support.empty}</p>}
+          {supStatus === "error" && <p className="mt-1 text-xs text-coral">{p.support.error}</p>}
+          <Button size="lg" className="mt-3 w-full" disabled={supStatus === "sending"} onClick={sendSupport}>
+            {supStatus === "sending" ? p.support.sending : p.support.send}
+          </Button>
+        </>
+      )}
     </div>
   );
 }
