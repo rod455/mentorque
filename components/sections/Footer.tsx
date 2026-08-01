@@ -7,8 +7,9 @@ import { LangSwitcher } from "@/components/ui/LangSwitcher";
 const SOCIALS = ["Instagram", "YouTube", "TikTok"];
 
 export function Footer() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const year = new Date().getFullYear();
+  const privacyHref = locale === "en" ? "/privacy" : "/privacidade";
   const nav = [
     { href: "#features", label: t.nav.features },
     { href: "#how", label: t.nav.how },
@@ -56,7 +57,7 @@ export function Footer() {
           <div>
             <h2 className="font-display text-sm font-semibold text-cream/80">{t.footer.legalTitle}</h2>
             <ul className="mt-4 space-y-2.5">
-              <li><a href="#" className="text-sm text-cream/60 hover:text-cream">{t.footer.privacy}</a></li>
+              <li><a href={privacyHref} className="text-sm text-cream/60 hover:text-cream">{t.footer.privacy}</a></li>
               <li><a href="#" className="text-sm text-cream/60 hover:text-cream">{t.footer.terms}</a></li>
               <li><a href="#" className="text-sm text-cream/60 hover:text-cream">{t.footer.contact}</a></li>
             </ul>
