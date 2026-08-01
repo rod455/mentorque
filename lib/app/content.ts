@@ -1356,17 +1356,17 @@ export function getContent(locale: Locale) {
 
       // Fases (badges)
       phases: {
-        aprendiz: { name: T("Aprendiz", "Beginner"), desc: T("Você acabou de chegar e está conhecendo o Mentorque.", "You just arrived and are getting to know Mentorque.") },
-        piloto: { name: T("Piloto", "Driver"), desc: T("Seu carro já está na garagem e você começou a cuidar dele.", "Your car is in the garage and you've started caring for it.") },
-        cuidador: { name: T("Cuidador", "Caretaker"), desc: T("Você mantém os registros em dia e cuida da manutenção.", "You keep records up to date and stay on top of maintenance.") },
-        mecanico: { name: T("Mecânico de Garagem", "Garage Mechanic"), desc: T("Domínio do histórico e das revisões do seu carro.", "You've mastered your car's history and services.") },
-        mestre: { name: T("Mestre da Garagem", "Garage Master"), desc: T("Referência no cuidado — seu carro está sempre em ordem.", "A reference in care — your car is always in order.") },
-        lenda: { name: T("Lenda Mentorque", "Mentorque Legend"), desc: T("O topo, reservado a quem vive o Mentorque todos os dias.", "The top, reserved for those who live Mentorque every day.") },
+        aprendiz: { name: T("Aprendiz", "Beginner"), desc: T("O começo. Você acabou de chegar.", "The start. You just arrived.") },
+        piloto: { name: T("Piloto", "Driver"), desc: T("Você pegou o ritmo dos primeiros cuidados.", "You're getting the hang of caring.") },
+        cuidador: { name: T("Cuidador", "Caretaker"), desc: T("Cuidar do carro já virou rotina.", "Caring for your car is now routine.") },
+        mecanico: { name: T("Mecânico de Garagem", "Garage Mechanic"), desc: T("Você domina o histórico e as revisões.", "You master history and services.") },
+        mestre: { name: T("Mestre da Garagem", "Garage Master"), desc: T("Cuidado impecável, ano após ano.", "Flawless care, year after year.") },
+        lenda: { name: T("Lenda Mentorque", "Mentorque Legend"), desc: T("Cuidado raro. O topo do Mentorque.", "Rare care. The top of Mentorque.") },
       } as Record<string, { name: string; desc: string }>,
 
       // "Como funciona?" — fases + atividades
       howTitle: T("Como as fases funcionam", "How phases work"),
-      howIntro: T("Cada cuidado com o seu carro te faz avançar de fase. Quanto mais você usa o Mentorque, mais alto você chega.", "Every bit of care for your car moves you up a phase. The more you use Mentorque, the higher you climb."),
+      howIntro: T("Cada fase reflete o quanto você cuida do carro. Você avança conforme cuida.", "Each phase reflects how much you care for your car. You advance as you care."),
       phasesTitle: T("As fases", "The phases"),
       advanceTitle: T("O que faz você avançar", "What moves you forward"),
       activities: [
@@ -1380,7 +1380,7 @@ export function getContent(locale: Locale) {
         { emoji: "🏅", label: T("Desbloquear um marco", "Unlock a milestone"), pts: "+5" },
       ],
       noRushTitle: T("Sem pressa", "No rush"),
-      noRushBody: T("Sua fase mais alta fica sempre salva. Mesmo que passe um tempo longe, você não perde o seu nível.", "Your highest phase is always saved. Even if you're away for a while, you never lose your level."),
+      noRushBody: T("Sua fase mais alta fica sempre salva. Mesmo longe por um tempo, você não perde o nível.", "Your highest phase is always saved. Away for a while? You keep your level."),
 
       // "Seu acervo" — marcos & momentos
       acervoTitle: T("Seu acervo", "Your collection"),

@@ -5,7 +5,7 @@ import { usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
 import { computeStatus, MILESTONES, PHASES, type GamSession } from "@/lib/app/gamification";
 import { MedalEmblem, PhaseEmblem } from "../Emblem";
-import { AppHeader, Card, SectionTitle, useContent } from "../ui";
+import { AppHeader, SectionTitle, useContent } from "../ui";
 
 // Reads the gamification status from the prototype session.
 function useGam(): { status: ReturnType<typeof computeStatus>; s: GamSession } {
@@ -22,27 +22,24 @@ export function GamificationScreen() {
   return (
     <div>
       <AppHeader title={g.howTitle} />
-      <p className="text-sm leading-relaxed text-cream/65">{g.howIntro}</p>
+      <p className="text-sm leading-snug text-cream/65">{g.howIntro}</p>
 
       <SectionTitle>{g.phasesTitle}</SectionTitle>
-      <div className="space-y-2.5">
+      <div className="space-y-1">
         {PHASES.map((ph, i) => {
           const meta = g.phases[ph.id];
           const current = i === status.phaseIndex;
-          const reached = i <= status.phaseIndex;
           return (
-            <Card key={ph.id} className={current ? "ring-amber/40" : undefined}>
-              <div className="flex items-center gap-3.5">
-                <PhaseEmblem id={ph.id} emoji={ph.emoji} size={52} active={current} locked={!reached} />
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    <p className="font-display text-base font-semibold text-cream">{meta.name}</p>
-                    {current && <span className="rounded-md bg-amber/15 px-2 py-0.5 text-[10px] font-semibold text-amber">{g.phaseLabel}</span>}
-                  </div>
-                  <p className="mt-0.5 text-sm text-cream/60">{meta.desc}</p>
+            <div key={ph.id} className={`flex items-center gap-3 rounded-xl px-1.5 py-2 ${current ? "bg-amber/[0.07] ring-1 ring-amber/25" : ""}`}>
+              <PhaseEmblem id={ph.id} emoji={ph.emoji} size={44} active={current} />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <p className="font-display text-[15px] font-semibold text-cream">{meta.name}</p>
+                  {current && <span className="rounded bg-amber/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-amber">{g.phaseLabel}</span>}
                 </div>
+                <p className="mt-0.5 text-[13px] leading-snug text-cream/55">{meta.desc}</p>
               </div>
-            </Card>
+            </div>
           );
         })}
       </div>
@@ -50,17 +47,17 @@ export function GamificationScreen() {
       <SectionTitle>{g.advanceTitle}</SectionTitle>
       <div className="overflow-hidden rounded-2xl bg-graphite-800 ring-1 ring-white/[0.06] [&>*+*]:border-t [&>*+*]:border-white/[0.06]">
         {g.activities.map((a) => (
-          <div key={a.label} className="flex items-center gap-3 px-4 py-3">
-            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white/5 text-base">{a.emoji}</span>
-            <span className="min-w-0 flex-1 text-sm text-cream/85">{a.label}</span>
+          <div key={a.label} className="flex items-center gap-3 px-4 py-2.5">
+            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-white/5 text-sm">{a.emoji}</span>
+            <span className="min-w-0 flex-1 text-[13px] text-cream/85">{a.label}</span>
           </div>
         ))}
       </div>
 
-      <Card className="mt-5 ring-teal/20">
+      <div className="mt-4 rounded-2xl bg-teal/[0.08] p-3.5 ring-1 ring-teal/20">
         <p className="font-display text-sm font-semibold text-cream">🌱 {g.noRushTitle}</p>
-        <p className="mt-1 text-sm leading-relaxed text-cream/65">{g.noRushBody}</p>
-      </Card>
+        <p className="mt-1 text-[13px] leading-snug text-cream/65">{g.noRushBody}</p>
+      </div>
     </div>
   );
 }
