@@ -113,6 +113,7 @@ export function ProfileScreen() {
   const [about, setAbout] = useState(false);
   const [privacy, setPrivacy] = useState(false);
   const [talk, setTalk] = useState(false);
+  const [premiumOpen, setPremiumOpen] = useState(false);
   const avatarRef = useRef<HTMLInputElement>(null);
 
   // Profile photo: user's uploaded avatar wins; otherwise the Google picture.
@@ -177,31 +178,36 @@ export function ProfileScreen() {
         </Card>
       )}
 
-      {/* 2) Desbloqueie o Premium — destaque compacto (ou plano atual) */}
+      {/* 2) Premium — linha compacta que expande os benefícios (ou destaque de upsell) */}
       {s.premium ? (
-        <Card className="mt-3 ring-amber/20">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs text-cream/50">{p.plan}</p>
-              <p className="font-serif text-lg font-semibold text-cream">{p.premium}</p>
-            </div>
-            <span className="rounded-md bg-amber/15 px-2.5 py-1 text-xs font-medium text-amber">★ Premium</span>
-          </div>
-          <p className="mb-2 mt-4 text-[11px] font-medium uppercase tracking-wide text-cream/40">{p.perksTitle}</p>
-          <ul className="space-y-2">
-            {p.perks.map((perk) => (
-              <li key={perk} className="flex items-start gap-2.5 text-sm">
-                <span className="mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full bg-teal/20 text-teal">
-                  <Icon name="check" className="h-3 w-3" />
-                </span>
-                <span className="text-cream/85">{perk}</span>
-              </li>
-            ))}
-          </ul>
-          <button onClick={managePlan} className="mt-4 w-full py-1.5 text-center text-sm text-cream/45 hover:text-coral">
-            {subscribed ? p.manage : p.cancelPlan}
+        <div className="mt-3 overflow-hidden rounded-2xl bg-graphite-800 ring-1 ring-amber/20">
+          <button onClick={() => setPremiumOpen((v) => !v)} className="flex w-full items-center gap-3 p-4 text-left">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber/15 text-lg">★</span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-xs text-cream/50">{p.plan}</span>
+              <span className="block font-serif text-base font-semibold text-cream">{p.premium}</span>
+            </span>
+            <span className={`shrink-0 text-lg text-cream/30 transition-transform ${premiumOpen ? "rotate-90" : ""}`}>›</span>
           </button>
-        </Card>
+          {premiumOpen && (
+            <div className="border-t border-white/[0.06] px-4 pb-4 pt-3">
+              <p className="mb-2 text-[11px] font-medium uppercase tracking-wide text-cream/40">{p.perksTitle}</p>
+              <ul className="space-y-2">
+                {p.perks.map((perk) => (
+                  <li key={perk} className="flex items-start gap-2.5 text-sm">
+                    <span className="mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full bg-teal/20 text-teal">
+                      <Icon name="check" className="h-3 w-3" />
+                    </span>
+                    <span className="text-cream/85">{perk}</span>
+                  </li>
+                ))}
+              </ul>
+              <button onClick={managePlan} className="mt-4 w-full py-1.5 text-center text-sm text-cream/45 hover:text-coral">
+                {subscribed ? p.manage : p.cancelPlan}
+              </button>
+            </div>
+          )}
+        </div>
       ) : (
         <button
           onClick={() => go({ name: "subscribe" })}
