@@ -1347,7 +1347,7 @@ export function getContent(locale: Locale) {
       // Card "Desbloqueie o Premium" em destaque (compacto)
       unlock: {
         title: T("Desbloqueie o Premium", "Unlock Premium"),
-        body: T("Garagem ilimitada, conteúdos exclusivos e muito mais", "Unlimited garage, exclusive content and more"),
+        body: T("Garagem ilimitada, conteúdos exclusivos e diagnóstico ilimitado com o Biela.", "Unlimited garage, exclusive content and unlimited diagnosis with Biela."),
         cta: T("Ver planos Premium", "See Premium plans"),
         benefits: [
           T("Garagem ilimitada", "Unlimited garage"),
