@@ -54,16 +54,17 @@ function AppleIcon({ className }: { className?: string }) {
 
 // iOS-style on/off switch. Knob lives inside via flex + padding, so it can
 // never bleed past the track (no absolute/translate overflow).
-function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void }) {
+function Toggle({ on, onChange, size = "md" }: { on: boolean; onChange: (v: boolean) => void; size?: "sm" | "md" }) {
+  const sm = size === "sm";
   return (
     <button
       type="button"
       role="switch"
       aria-checked={on}
       onClick={() => onChange(!on)}
-      className={`inline-flex h-6 w-11 shrink-0 items-center rounded-full p-0.5 transition-colors ${on ? "bg-amber" : "bg-graphite-600"}`}
+      className={`inline-flex shrink-0 items-center rounded-full p-0.5 transition-colors ${sm ? "h-5 w-9" : "h-6 w-11"} ${on ? "bg-amber" : "bg-graphite-600"}`}
     >
-      <span className={`h-5 w-5 rounded-full bg-cream shadow transition-transform ${on ? "translate-x-5" : "translate-x-0"}`} />
+      <span className={`rounded-full bg-cream shadow transition-transform ${sm ? "h-4 w-4" : "h-5 w-5"} ${on ? (sm ? "translate-x-4" : "translate-x-5") : "translate-x-0"}`} />
     </button>
   );
 }
@@ -549,7 +550,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   const { setPremium, subscribed, refreshSubscription } = usePrototype();
   const { user } = useAuth();
   const { back, go } = useNav();
-  const [remind, setRemind] = useState(true);
+  const [remind, setRemind] = useState(false);
   const [platform, setPlatform] = useState<Platform>("other");
   useEffect(() => setPlatform(detectPlatform()), []);
   const trialDays = trialDaysFor(platform);
@@ -628,11 +629,11 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
         </div>
       </div>
 
-      {/* Lembrar antes do teste terminar */}
-      <div className="mt-4 flex items-center gap-3 rounded-2xl bg-graphite-800 px-4 py-3.5 ring-1 ring-white/[0.06]">
-        <Icon name="alert" className="h-5 w-5 text-cream/60" />
-        <span className="flex-1 text-sm text-cream/85">{sub.reminder}</span>
-        <Toggle on={remind} onChange={setRemind} />
+      {/* Lembrar antes do teste terminar — linha compacta, desativada por padrão */}
+      <div className="mt-3 flex items-center gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-2.5 ring-1 ring-white/[0.06]">
+        <Icon name="alert" className="h-4 w-4 text-cream/50" />
+        <span className="flex-1 text-xs text-cream/70">{sub.reminder}</span>
+        <Toggle on={remind} onChange={setRemind} size="sm" />
       </div>
 
       {/* CTA */}
