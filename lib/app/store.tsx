@@ -21,6 +21,8 @@ type Session = {
   claimedMilestones: string[]; // badges the user marks by hand
   momentPhotos: Record<string, string>; // momento id → foto (data URL)
   startedAt: string | null; // primeiro dia no app (para marcos de tempo)
+  notifications: boolean; // preferência de notificações
+  units: "metric" | "imperial"; // preferência de unidades
 };
 
 const EMPTY: Session = {
@@ -35,6 +37,8 @@ const EMPTY: Session = {
   claimedMilestones: [],
   momentPhotos: {},
   startedAt: null,
+  notifications: false,
+  units: "metric",
 };
 
 // Today as yyyy-mm-dd (client-side only).
@@ -59,6 +63,8 @@ type StoreValue = {
   removeService: (id: string) => void;
   toggleMilestone: (id: string) => void;
   setMomentPhoto: (id: string, dataUrl: string | null) => void;
+  setNotifications: (v: boolean) => void;
+  setUnits: (v: "metric" | "imperial") => void;
   finishOnboarding: () => void;
   reset: () => void;
 };
@@ -113,6 +119,8 @@ function mergeSessions(cloud: Session, local: Session): Session {
     claimedMilestones: [...new Set([...(cloud.claimedMilestones ?? []), ...(local.claimedMilestones ?? [])])],
     momentPhotos: { ...(local.momentPhotos ?? {}), ...(cloud.momentPhotos ?? {}) },
     startedAt: [cloud.startedAt, local.startedAt].filter(Boolean).sort()[0] ?? todayISO(),
+    notifications: cloud.notifications ?? local.notifications ?? false,
+    units: cloud.units ?? local.units ?? "metric",
   };
 }
 
@@ -247,12 +255,15 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
     [patch]
   );
 
+  const setNotifications = useCallback((v: boolean) => patch((p) => ({ ...p, notifications: v })), [patch]);
+  const setUnits = useCallback((v: "metric" | "imperial") => patch((p) => ({ ...p, units: v })), [patch]);
+
   const finishOnboarding = useCallback(() => patch((p) => ({ ...p, onboarded: true, startedAt: p.startedAt ?? todayISO() })), [patch]);
   const reset = useCallback(() => patch(() => ({ ...EMPTY, momentPhotos: {} })), [patch]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, finishOnboarding, reset }),
-    [s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, finishOnboarding, reset]
+    () => ({ s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, setNotifications, setUnits, finishOnboarding, reset }),
+    [s, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, setNotifications, setUnits, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

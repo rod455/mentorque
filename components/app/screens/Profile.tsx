@@ -4,15 +4,51 @@ import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/app/auth";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
-import { carName } from "@/lib/app/content";
+import { APP_VERSION, carName } from "@/lib/app/content";
 import { computeStatus } from "@/lib/app/gamification";
 import { PhaseEmblem } from "../Emblem";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
-import { AccessBadge, AppHeader, Card, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
+import { AppHeader, Card, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
 
 const BR_STATES = ["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"];
+
+// Store links — trocar pelos links reais da Play/App Store quando publicar.
+const RATE_URL = "https://mentorque.com.br";
+
+// iOS-style on/off switch.
+function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={on}
+      onClick={() => onChange(!on)}
+      className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${on ? "bg-amber" : "bg-graphite-600"}`}
+    >
+      <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-cream shadow transition-transform ${on ? "translate-x-[22px]" : "translate-x-0.5"}`} />
+    </button>
+  );
+}
+
+// Small segmented control (e.g. Métrico / Imperial).
+function Segmented({ value, options, onChange }: { value: string; options: [string, string][]; onChange: (v: string) => void }) {
+  return (
+    <div className="flex shrink-0 rounded-lg bg-graphite-700 p-0.5 text-xs font-medium ring-1 ring-white/10">
+      {options.map(([val, label]) => (
+        <button
+          key={val}
+          type="button"
+          onClick={() => onChange(val)}
+          className={`rounded-md px-2.5 py-1 transition-colors ${value === val ? "bg-amber text-graphite" : "text-cream/60"}`}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 // A stable per-device id so support messages can be traced (like the example).
 function deviceId(): string {
@@ -54,46 +90,13 @@ export function ProfileScreen() {
   const c = useContent();
   const p = c.profile;
   const g = c.gamification;
-  const { locale } = useI18n();
   const { user, enabled, signOut } = useAuth();
-  const { s, setName, setEmail, setState, setPremium, reset } = usePrototype();
+  const { s, setState, setPremium, setNotifications, setUnits, reset } = usePrototype();
   const { go, root } = useNav();
   const gam = computeStatus(s);
   const phaseName = g.phases[gam.phase.id].name;
-  const [editName, setEditName] = useState(false);
-  const [nameInput, setNameInput] = useState(s.name ?? "");
-  const [editEmail, setEditEmail] = useState(false);
-  const [emailInput, setEmailInput] = useState(s.email ?? "");
-  const [consult, setConsult] = useState(false);
-  const [supType, setSupType] = useState<"doubt" | "suggestion" | "bug">("doubt");
-  const [supMsg, setSupMsg] = useState("");
-  const [supEmail, setSupEmail] = useState(s.email ?? "");
-  const [supErr, setSupErr] = useState(false);
-  const [supStatus, setSupStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-
-  const sendSupport = async () => {
-    if (!supMsg.trim()) return setSupErr(true);
-    setSupStatus("sending");
-    try {
-      const res = await fetch("/api/feedback", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          type: supType,
-          message: supMsg.trim(),
-          name: s.name || undefined,
-          email: (supEmail || s.email || "").trim() || undefined,
-          userId: deviceId(),
-          locale,
-        }),
-      });
-      if (!res.ok) throw new Error("send_failed");
-      setSupStatus("sent");
-      setSupMsg("");
-    } catch {
-      setSupStatus("error");
-    }
-  };
+  const [about, setAbout] = useState(false);
+  const [privacy, setPrivacy] = useState(false);
 
   return (
     <div>
@@ -199,13 +202,23 @@ export function ProfileScreen() {
         </div>
       </Card>
 
-      {/* Detalhes da conta */}
-      <SectionTitle>{p.account}</SectionTitle>
+      {/* Preferências */}
+      <SectionTitle>{p.preferences}</SectionTitle>
       <Group>
-        <IconRow icon="user" tint="bg-amber/15 text-amber" label={p.name} value={s.name || p.notSet} action={c.common.edit} onClick={() => { setNameInput(s.name ?? ""); setEditName(true); }} />
-        <IconRow icon="consult" tint="bg-teal/15 text-teal" label={p.email} value={s.email || p.notSet} action={c.common.edit} onClick={() => { setEmailInput(s.email ?? ""); setEditEmail(true); }} />
+        <IconRow icon="alert" tint="bg-teal/15 text-teal" label={p.notifications} right={<Toggle on={s.notifications} onChange={setNotifications} />} />
+        <IconRow icon="book" tint="bg-amber/15 text-amber" label={p.language} right={<LangSwitcher />} />
         <IconRow
-          icon="explore" tint="bg-coral/15 text-coral" label={p.stateLabel} value={s.state || undefined}
+          icon="gauge" tint="bg-teal/15 text-teal" label={p.units}
+          right={
+            <Segmented
+              value={s.units}
+              options={[["metric", p.metric], ["imperial", p.imperial]]}
+              onChange={(v) => setUnits(v as "metric" | "imperial")}
+            />
+          }
+        />
+        <IconRow
+          icon="explore" tint="bg-coral/15 text-coral" label={p.location} value={s.state || undefined}
           right={
             <select
               value={s.state ?? ""}
@@ -219,15 +232,81 @@ export function ProfileScreen() {
         />
       </Group>
 
-      {/* Preferências */}
-      <SectionTitle>{p.preferences}</SectionTitle>
+      {/* Informações */}
+      <SectionTitle>{p.info}</SectionTitle>
       <Group>
-        <IconRow icon="book" tint="bg-teal/15 text-teal" label={p.language} right={<LangSwitcher />} />
-        <IconRow icon="spark" tint="bg-amber/15 text-amber" label={p.consulting} right={<AccessBadge access="premium" />} onClick={() => setConsult(true)} />
+        <IconRow icon="spark" tint="bg-amber/15 text-amber" label={p.about} onClick={() => setAbout(true)} />
+        <IconRow icon="consult" tint="bg-teal/15 text-teal" label={p.talkToUs} onClick={() => go({ name: "support" })} />
+        <IconRow icon="shield" tint="bg-coral/15 text-coral" label={p.privacy} onClick={() => setPrivacy(true)} />
+        <IconRow icon="check" tint="bg-amber/15 text-amber" label={p.rate} onClick={() => window.open(RATE_URL, "_blank", "noopener,noreferrer")} />
       </Group>
 
-      {/* Dúvidas ou sugestões → e-mail */}
-      <SectionTitle>{p.support.title}</SectionTitle>
+      <SectionTitle>{p.demo}</SectionTitle>
+      <Group>
+        <IconRow icon="alert" tint="bg-coral/15 text-coral" label={p.reset} danger onClick={reset} />
+      </Group>
+
+      {/* Rodapé */}
+      <div className="mt-8 flex flex-col items-center gap-2">
+        <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber/15 font-display text-sm font-bold text-amber">M</span>
+        <p className="text-[11px] text-cream/35">{p.version.replace("{v}", APP_VERSION)}</p>
+      </div>
+
+      {/* Sobre o app */}
+      <Sheet open={about} onClose={() => setAbout(false)}>
+        <h2 className="font-serif text-xl font-semibold text-cream">{p.aboutTitle}</h2>
+        <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-cream/70">{p.aboutBody}</p>
+        <p className="mt-4 text-xs text-cream/40">{p.version.replace("{v}", APP_VERSION)}</p>
+      </Sheet>
+
+      {/* Política de privacidade */}
+      <Sheet open={privacy} onClose={() => setPrivacy(false)}>
+        <h2 className="font-serif text-xl font-semibold text-cream">{p.privacyTitle}</h2>
+        <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-cream/70">{p.privacyBody}</p>
+      </Sheet>
+    </div>
+  );
+}
+
+// 3.1.E — Fale com a gente (formulário de dúvida / sugestão / bug → e-mail)
+export function SupportScreen() {
+  const c = useContent();
+  const p = c.profile;
+  const { locale } = useI18n();
+  const { s } = usePrototype();
+  const [supType, setSupType] = useState<"doubt" | "suggestion" | "bug">("doubt");
+  const [supMsg, setSupMsg] = useState("");
+  const [supEmail, setSupEmail] = useState(s.email ?? "");
+  const [supErr, setSupErr] = useState(false);
+  const [supStatus, setSupStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+
+  const sendSupport = async () => {
+    if (!supMsg.trim()) return setSupErr(true);
+    setSupStatus("sending");
+    try {
+      const res = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          type: supType,
+          message: supMsg.trim(),
+          name: s.name || undefined,
+          email: (supEmail || s.email || "").trim() || undefined,
+          userId: deviceId(),
+          locale,
+        }),
+      });
+      if (!res.ok) throw new Error("send_failed");
+      setSupStatus("sent");
+      setSupMsg("");
+    } catch {
+      setSupStatus("error");
+    }
+  };
+
+  return (
+    <div>
+      <AppHeader title={p.talkToUs} />
       <Card>
         <p className="text-sm text-cream/60">{p.support.subtitle}</p>
         <div className="mt-3 grid grid-cols-3 gap-2">
@@ -251,7 +330,7 @@ export function ProfileScreen() {
             <textarea
               value={supMsg}
               onChange={(e) => { setSupMsg(e.target.value); setSupErr(false); }}
-              rows={4}
+              rows={5}
               placeholder={p.support.messagePh}
               className={`mt-3 resize-none ${inputCls}`}
             />
@@ -270,65 +349,6 @@ export function ProfileScreen() {
           </>
         )}
       </Card>
-
-      <SectionTitle>{p.demo}</SectionTitle>
-      <Group>
-        <IconRow icon="alert" tint="bg-coral/15 text-coral" label={p.reset} danger onClick={reset} />
-      </Group>
-
-      {/* Rodapé */}
-      <div className="mt-8 flex flex-col items-center gap-2">
-        <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber/15 font-display text-sm font-bold text-amber">M</span>
-        <p className="mx-auto max-w-xs px-4 text-center text-[11px] leading-relaxed text-cream/35">{p.disclaimer}</p>
-      </div>
-
-      {/* Edit name sheet */}
-      <Sheet open={editName} onClose={() => setEditName(false)}>
-        <h2 className="font-serif text-xl font-semibold text-cream">{p.name}</h2>
-        <input value={nameInput} onChange={(e) => setNameInput(e.target.value)} placeholder={p.namePh} className={`mt-4 ${inputCls}`} />
-        <Button size="lg" className="mt-4 w-full" onClick={() => { setName(nameInput); setEditName(false); }}>
-          {c.common.save}
-        </Button>
-      </Sheet>
-
-      {/* Edit email sheet */}
-      <Sheet open={editEmail} onClose={() => setEditEmail(false)}>
-        <h2 className="font-serif text-xl font-semibold text-cream">{p.email}</h2>
-        <input
-          type="email"
-          value={emailInput}
-          onChange={(e) => setEmailInput(e.target.value)}
-          placeholder={p.emailPh}
-          className={`mt-4 ${inputCls}`}
-        />
-        <Button size="lg" className="mt-4 w-full" onClick={() => { setEmail(emailInput); setEditEmail(false); }}>
-          {c.common.save}
-        </Button>
-      </Sheet>
-
-      {/* Consulting sheet (moved under Premium) */}
-      <Sheet open={consult} onClose={() => setConsult(false)}>
-        <h2 className="font-serif text-xl font-semibold text-cream">{p.consulting}</h2>
-        <div className="mt-4 space-y-2.5">
-          {c.consultingTiers.map((tier) => {
-            const locked = tier.access !== "free" && !(s.premium && tier.access === "premium");
-            return (
-              <Card key={tier.name} className={tier.access === "consulting" ? "ring-coral/20" : undefined}>
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-display text-base text-cream">{tier.name}</span>
-                  <AccessBadge access={tier.access} />
-                </div>
-                <p className="mt-1.5 text-sm text-cream/60">{tier.body}</p>
-                {locked && (
-                  <Button variant="secondary" className="mt-3" onClick={() => { setConsult(false); go({ name: "subscribe" }); }}>
-                    {c.common.unlock}
-                  </Button>
-                )}
-              </Card>
-            );
-          })}
-        </div>
-      </Sheet>
     </div>
   );
 }

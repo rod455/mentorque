@@ -5,6 +5,9 @@ import type { Access, Severity, SystemKey, Vehicle } from "./types";
 // bilingual. Per-model depth is intentionally generic (the exact model-year
 // detail is where Premium / consulting adds value).
 
+// App version shown in the Profile footer.
+export const APP_VERSION = "1.0.0";
+
 export function formatBRL(n: number): string {
   return "R$ " + Math.round(n).toLocaleString("pt-BR");
 }
@@ -1283,6 +1286,28 @@ export function getContent(locale: Locale) {
       consulting: T("Consultoria e conteúdos exclusivos", "Consulting & exclusive content"),
       language: T("Idioma", "Language"),
       preferences: T("Preferências", "Preferences"),
+      notifications: T("Notificações", "Notifications"),
+      units: T("Unidades", "Units"),
+      metric: T("Métrico", "Metric"),
+      imperial: T("Imperial", "Imperial"),
+      location: T("Localização", "Location"),
+      // Informações
+      info: T("Informações", "Information"),
+      about: T("Sobre o app", "About the app"),
+      talkToUs: T("Fale com a gente", "Talk to us"),
+      privacy: T("Política de privacidade", "Privacy policy"),
+      rate: T("Avaliar o Mentorque", "Rate Mentorque"),
+      version: T("Mentorque v{v}", "Mentorque v{v}"),
+      aboutTitle: T("Sobre o Mentorque", "About Mentorque"),
+      aboutBody: T(
+        "O Mentorque é o seu copiloto para cuidar do carro com confiança: organize sua garagem, entenda sintomas, acompanhe revisões e aprenda mecânica no seu ritmo — tudo em português.\n\nNossa missão é deixar o cuidado com o carro simples, econômico e sem depender de achismo na oficina.",
+        "Mentorque is your copilot to care for your car with confidence: organize your garage, understand symptoms, track services and learn mechanics at your pace — all in one place.\n\nOur mission is to make car care simple, affordable and free of guesswork at the shop."
+      ),
+      privacyTitle: T("Política de privacidade", "Privacy policy"),
+      privacyBody: T(
+        "Levamos sua privacidade a sério. Os dados da sua garagem ficam no seu aparelho e, se você criar uma conta, são sincronizados de forma segura para você acessar de outros dispositivos.\n\nNão vendemos seus dados. Usamos suas informações apenas para operar e melhorar o app. Você pode solicitar a exclusão dos seus dados a qualquer momento pelo Fale com a gente.\n\nVersão completa em mentorque.com.br/privacidade.",
+        "We take your privacy seriously. Your garage data stays on your device and, if you create an account, is securely synced so you can access it from other devices.\n\nWe don't sell your data. We use your information only to operate and improve the app. You can request deletion of your data anytime via Talk to us.\n\nFull version at mentorque.com.br/privacy."
+      ),
       signOut: T("Sair", "Sign out"),
       reset: T("Reiniciar protótipo", "Reset prototype"),
       demo: "Demo",
