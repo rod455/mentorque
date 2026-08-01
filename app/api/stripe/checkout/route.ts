@@ -34,15 +34,15 @@ export async function POST(req: Request) {
   const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_SITE_URL || "https://mentorque.com.br";
   const session = await stripe.checkout.sessions.create({
     mode: "subscription",
+    ui_mode: "embedded", // formulário embutido no app
     customer: customerId,
     line_items: [{ price: priceId, quantity: 1 }],
     client_reference_id: user.id,
     subscription_data: { metadata: { user_id: user.id } },
     allow_promotion_codes: true,
     locale: "pt-BR",
-    success_url: `${origin}/app?checkout=success`,
-    cancel_url: `${origin}/app?checkout=cancel`,
+    return_url: `${origin}/app?checkout=success`,
   });
 
-  return NextResponse.json({ url: session.url });
+  return NextResponse.json({ clientSecret: session.client_secret });
 }

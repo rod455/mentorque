@@ -13,7 +13,7 @@ import { RevisionsScreen } from "./screens/Revisions";
 import { LearnScreen, StudyTrackScreen, ForYourCarScreen, ContentScreen, BielaChatScreen } from "./screens/Learn";
 import { EquipmentScreen } from "./screens/Equipment";
 import { CarSettingsScreen } from "./screens/CarSettings";
-import { ProfileScreen, SubscribeScreen } from "./screens/Profile";
+import { ProfileScreen, SubscribeScreen, CheckoutScreen } from "./screens/Profile";
 import { GamificationScreen, AchievementsScreen } from "./screens/Gamification";
 import { AuthScreen } from "./screens/Auth";
 
@@ -81,6 +81,7 @@ function Router() {
       case "achievements": return <AchievementsScreen />;
       case "auth": return <AuthScreen />;
       case "subscribe": return <SubscribeScreen ctx={view.ctx} />;
+      case "checkout": return <CheckoutScreen plan={view.plan} />;
     }
   })();
 
@@ -104,7 +105,7 @@ const TAB_OF: Record<View["name"], Tab> = {
   symptoms: "problems", symptom: "problems", systemProblems: "problems", equipment: "problems", checklist: "problems",
   history: "history", addService: "history", service: "history",
   learn: "studies", studyTrack: "studies", forYourCar: "studies", biela: "studies", content: "studies",
-  profile: "profile", gamification: "profile", achievements: "profile", auth: "profile", subscribe: "profile",
+  profile: "profile", gamification: "profile", achievements: "profile", auth: "profile", subscribe: "profile", checkout: "profile",
 };
 
 function BottomNav() {

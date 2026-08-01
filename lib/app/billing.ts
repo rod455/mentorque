@@ -1,6 +1,6 @@
 import { getBrowserSupabase } from "@/lib/supabaseBrowser";
 
-type BillingResult = { url?: string; error?: string };
+type BillingResult = { url?: string; clientSecret?: string; error?: string };
 
 // POST to a Stripe route with the current Supabase access token attached.
 async function authedPost(path: string, body?: unknown): Promise<BillingResult> {

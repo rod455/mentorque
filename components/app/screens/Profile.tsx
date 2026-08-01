@@ -1,12 +1,14 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/app/auth";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { resizeImage } from "@/lib/app/image";
 import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
 import { openBillingPortal, startCheckout } from "@/lib/app/billing";
+import { getStripeJs, stripeConfigured } from "@/lib/app/stripeClient";
 import { APP_VERSION, carName } from "@/lib/app/content";
 import { computeStatus } from "@/lib/app/gamification";
 import { PhaseEmblem } from "../Emblem";
@@ -399,29 +401,18 @@ export function SubscribeScreen({ ctx }: { ctx?: string }) {
   const c = useContent();
   const sub = c.subscribe;
   const { s, setPremium } = usePrototype();
-  const { back } = useNav();
+  const { user } = useAuth();
+  const { back, go } = useNav();
   const [plan, setPlan] = useState<"monthly" | "annual">("annual");
-
-  const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState("");
 
   const car = carName(activeVehicle(s), c.profile.myCars);
   const paywall = ctx ? c.paywalls[ctx] : undefined;
   const fill = (t: string) => t.replace("{car}", car);
 
-  const subscribe = async () => {
-    setErr(""); setBusy(true);
-    try {
-      const res = await startCheckout(plan);
-      if (res.url) { window.location.href = res.url; return; } // vai pro Stripe
-      // Stripe não configurado → mantém o protótipo funcional (toggle demo).
-      if (res.error === "not_configured" || res.error === "no_price") { setPremium(true); back(); return; }
-      setErr(res.error === "unauthorized" ? sub.needLogin : sub.checkoutError);
-    } catch {
-      setErr(sub.checkoutError);
-    } finally {
-      setBusy(false);
-    }
+  const subscribe = () => {
+    if (!stripeConfigured()) { setPremium(true); back(); return; } // sem Stripe → demo
+    if (!user) { go({ name: "auth" }); return; } // assinar precisa de conta
+    go({ name: "checkout", plan }); // abre o checkout embutido
   };
 
   return (
@@ -468,10 +459,9 @@ export function SubscribeScreen({ ctx }: { ctx?: string }) {
         })}
       </div>
 
-      <Button size="lg" className="mt-4 w-full" disabled={busy} onClick={subscribe}>
-        {busy ? sub.working : sub.cta}
+      <Button size="lg" className="mt-4 w-full" onClick={subscribe}>
+        {sub.cta}
       </Button>
-      {err && <p className="mt-2 text-center text-xs text-coral">{err}</p>}
       <button onClick={back} className="mt-2 w-full py-2 text-center text-sm text-cream/55 hover:text-cream">
         {sub.later}
       </button>
@@ -494,6 +484,50 @@ export function SubscribeScreen({ ctx }: { ctx?: string }) {
       </div>
 
       <p className="mt-3 text-center text-xs text-cream/45">{sub.terms}</p>
+    </div>
+  );
+}
+
+// 3.1.F — Checkout embutido (Stripe Embedded Checkout)
+export function CheckoutScreen({ plan }: { plan: "monthly" | "annual" }) {
+  const c = useContent();
+  const sub = c.subscribe;
+  const { setPremium } = usePrototype();
+  const { back } = useNav();
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [err, setErr] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const res = await startCheckout(plan);
+      if (cancelled) return;
+      if (res.clientSecret) { setClientSecret(res.clientSecret); return; }
+      // Stripe não configurado → mantém o protótipo funcional (toggle demo).
+      if (res.error === "not_configured" || res.error === "no_price") { setPremium(true); back(); return; }
+      setErr(res.error === "unauthorized" ? sub.needLogin : sub.checkoutError);
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plan]);
+
+  return (
+    <div>
+      <AppHeader title={sub.title} />
+      {err ? (
+        <Card className="text-center">
+          <p className="text-sm text-coral">{err}</p>
+          <Button variant="secondary" className="mt-3" onClick={back}>{c.common.cancel}</Button>
+        </Card>
+      ) : clientSecret ? (
+        <div className="overflow-hidden rounded-2xl bg-white">
+          <EmbeddedCheckoutProvider stripe={getStripeJs()} options={{ clientSecret }}>
+            <EmbeddedCheckout />
+          </EmbeddedCheckoutProvider>
+        </div>
+      ) : (
+        <p className="mt-8 text-center text-sm text-cream/55">{sub.working}</p>
+      )}
     </div>
   );
 }
