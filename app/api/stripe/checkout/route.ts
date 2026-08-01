@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getStripe, priceFor } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
+import { detectPlatform } from "@/lib/app/platform";
 
 export const runtime = "nodejs";
 
@@ -32,7 +33,14 @@ export async function POST(req: Request) {
   }
 
   const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_SITE_URL || "https://mentorque.com.br";
-  const trialDays = Number(process.env.STRIPE_TRIAL_DAYS ?? 7); // 0 = sem teste grátis
+  // Teste grátis por plataforma: 3 dias no iPhone, 7 no Android/outros.
+  const platform =
+    body?.platform === "ios" || body?.platform === "android"
+      ? body.platform
+      : detectPlatform(req.headers.get("user-agent") ?? undefined);
+  const iosDays = Number(process.env.STRIPE_TRIAL_DAYS_IOS ?? 3);
+  const otherDays = Number(process.env.STRIPE_TRIAL_DAYS ?? 7);
+  const trialDays = platform === "ios" ? iosDays : otherDays; // 0 = sem teste grátis
   const session = await stripe.checkout.sessions.create({
     mode: "subscription",
     ui_mode: "embedded", // formulário embutido no app

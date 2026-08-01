@@ -9,6 +9,7 @@ import { resizeImage } from "@/lib/app/image";
 import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
 import { cancelSubscription, deleteAccount, openBillingPortal, reactivateSubscription, startCheckout } from "@/lib/app/billing";
 import { getStripeJs, stripeConfigured } from "@/lib/app/stripeClient";
+import { detectPlatform, trialDaysFor, type Platform } from "@/lib/app/platform";
 import { APP_VERSION, carName } from "@/lib/app/content";
 import { computeStatus } from "@/lib/app/gamification";
 import { PhaseEmblem } from "../Emblem";
@@ -549,6 +550,9 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   const { user } = useAuth();
   const { back, go } = useNav();
   const [remind, setRemind] = useState(true);
+  const [platform, setPlatform] = useState<Platform>("other");
+  useEffect(() => setPlatform(detectPlatform()), []);
+  const trialDays = trialDaysFor(platform);
 
   const subscribe = () => {
     if (!user) { go({ name: "auth" }); return; }
@@ -633,7 +637,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
 
       {/* CTA */}
       <Button size="lg" className="mt-4 w-full" onClick={subscribe}>
-        {sub.trialCta.replace("{n}", String(sub.trialDays))}
+        {sub.trialCta.replace("{n}", String(trialDays))}
       </Button>
       <p className="mx-auto mt-3 max-w-xs text-center text-xs leading-relaxed text-cream/45">{sub.trialFine}</p>
     </div>
@@ -652,7 +656,7 @@ export function CheckoutScreen({ plan }: { plan: "monthly" | "annual" }) {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const res = await startCheckout(plan);
+      const res = await startCheckout(plan, detectPlatform());
       if (cancelled) return;
       if (res.clientSecret) { setClientSecret(res.clientSecret); return; }
       // Stripe não configurado: em dev local cai no demo; em produção mostra erro.
