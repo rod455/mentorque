@@ -44,7 +44,8 @@ function AppleIcon({ className }: { className?: string }) {
   );
 }
 
-// iOS-style on/off switch.
+// iOS-style on/off switch. Knob lives inside via flex + padding, so it can
+// never bleed past the track (no absolute/translate overflow).
 function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void }) {
   return (
     <button
@@ -52,9 +53,9 @@ function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void 
       role="switch"
       aria-checked={on}
       onClick={() => onChange(!on)}
-      className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${on ? "bg-amber" : "bg-graphite-600"}`}
+      className={`inline-flex h-6 w-11 shrink-0 items-center rounded-full p-0.5 transition-colors ${on ? "bg-amber" : "bg-graphite-600"}`}
     >
-      <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-cream shadow transition-transform ${on ? "translate-x-5" : "translate-x-0.5"}`} />
+      <span className={`h-5 w-5 rounded-full bg-cream shadow transition-transform ${on ? "translate-x-5" : "translate-x-0"}`} />
     </button>
   );
 }
