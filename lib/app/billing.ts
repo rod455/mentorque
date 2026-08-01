@@ -23,4 +23,5 @@ async function authedPost(path: string, body?: unknown): Promise<BillingResult> 
 export const startCheckout = (plan: "monthly" | "annual") => authedPost("/api/stripe/checkout", { plan });
 export const openBillingPortal = () => authedPost("/api/stripe/portal");
 export const cancelSubscription = () => authedPost("/api/stripe/cancel");
+export const reactivateSubscription = () => authedPost("/api/stripe/reactivate");
 export const deleteAccount = () => authedPost("/api/account/delete");

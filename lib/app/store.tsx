@@ -69,6 +69,8 @@ type StoreValue = {
   setUnits: (v: "metric" | "imperial") => void;
   setAvatar: (dataUrl: string | null) => void;
   subscribed: boolean; // assinatura Stripe ativa (fonte da verdade do premium)
+  subscriptionEndsAt: string | null; // fim do período atual (ISO)
+  subscriptionCanceling: boolean; // marcada para cancelar no fim do período
   refreshSubscription: () => void;
   finishOnboarding: () => void;
   reset: () => void;
@@ -132,17 +134,22 @@ function mergeSessions(cloud: Session, local: Session): Session {
 
 export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const [s, setS] = useState<Session>(EMPTY);
-  const [subActive, setSubActive] = useState(false); // assinatura Stripe ativa
+  const [sub, setSub] = useState<{ active: boolean; endsAt: string | null; canceling: boolean }>({ active: false, endsAt: null, canceling: false });
+  const subActive = sub.active;
   const { user } = useAuth();
   const supabase = getBrowserSupabase();
   const loadedFor = useRef<string | null>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Reads the user's Stripe subscription status from the `subscriptions` table.
+  // Reads the user's Stripe subscription from the `subscriptions` table.
   const refreshSubscription = useCallback(async () => {
-    if (!user || !supabase) { setSubActive(false); return; }
-    const { data } = await supabase.from("subscriptions").select("status").eq("user_id", user.id).maybeSingle();
-    setSubActive(!!data && ["active", "trialing"].includes(String(data.status)));
+    if (!user || !supabase) { setSub({ active: false, endsAt: null, canceling: false }); return; }
+    const { data } = await supabase.from("subscriptions").select("status, current_period_end, cancel_at_period_end").eq("user_id", user.id).maybeSingle();
+    setSub({
+      active: !!data && ["active", "trialing"].includes(String(data.status)),
+      endsAt: (data?.current_period_end as string | null) ?? null,
+      canceling: !!data?.cancel_at_period_end,
+    });
   }, [user, supabase]);
 
   useEffect(() => { refreshSubscription(); }, [refreshSubscription]);
@@ -295,8 +302,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const es = useMemo(() => (subActive && !s.premium ? { ...s, premium: true } : s), [s, subActive]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s: es, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, setNotifications, setUnits, setAvatar, subscribed: subActive, refreshSubscription, finishOnboarding, reset }),
-    [es, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, setNotifications, setUnits, setAvatar, subActive, refreshSubscription, finishOnboarding, reset]
+    () => ({ s: es, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, setNotifications, setUnits, setAvatar, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
+    [es, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, setNotifications, setUnits, setAvatar, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

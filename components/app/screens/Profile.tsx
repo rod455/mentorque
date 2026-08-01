@@ -7,7 +7,7 @@ import { useAuth } from "@/lib/app/auth";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { resizeImage } from "@/lib/app/image";
 import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
-import { cancelSubscription, deleteAccount, openBillingPortal, startCheckout } from "@/lib/app/billing";
+import { cancelSubscription, deleteAccount, openBillingPortal, reactivateSubscription, startCheckout } from "@/lib/app/billing";
 import { getStripeJs, stripeConfigured } from "@/lib/app/stripeClient";
 import { APP_VERSION, carName } from "@/lib/app/content";
 import { computeStatus } from "@/lib/app/gamification";
@@ -25,6 +25,13 @@ const RATE_URL = "https://mentorque.com.br";
 // O toggle "demo" de Premium (sem Stripe) só vale em dev local — nunca em
 // produção, para não liberar Premium de graça se algo estiver desconfigurado.
 const isLocalDev = () => typeof window !== "undefined" && /^(localhost|127\.0\.0\.1|\[::1\])/.test(window.location.hostname);
+
+// "1 de setembro de 2026" a partir de um ISO.
+function fmtDate(iso: string | null, locale: string): string {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  return isNaN(d.getTime()) ? "—" : d.toLocaleDateString(locale === "pt" ? "pt-BR" : "en-US", { day: "numeric", month: "long", year: "numeric" });
+}
 
 function GoogleIcon({ className }: { className?: string }) {
   return (
@@ -118,18 +125,28 @@ export function ProfileScreen() {
   const c = useContent();
   const p = c.profile;
   const g = c.gamification;
+  const { locale } = useI18n();
   const { user, enabled, signOut, resetPassword } = useAuth();
-  const { s, setName, setState, setPremium, setNotifications, setUnits, setAvatar, subscribed, reset } = usePrototype();
+  const { s, setName, setState, setPremium, setNotifications, setUnits, setAvatar, subscribed, subscriptionEndsAt, subscriptionCanceling, refreshSubscription, reset } = usePrototype();
   const { go, root } = useNav();
 
-  const [cancelMsg, setCancelMsg] = useState("");
+  const [busyPlan, setBusyPlan] = useState(false);
   // "Gerenciar" abre o portal do Stripe; cancelar encerra no fim do período.
   const managePlan = async () => { const r = await openBillingPortal(); if (r.url) window.location.href = r.url; };
+  const softRefresh = () => { setTimeout(refreshSubscription, 1500); setTimeout(refreshSubscription, 4000); };
   const cancelPlan = async () => {
     if (!subscribed) { setPremium(false); return; } // demo
     if (typeof window !== "undefined" && !window.confirm(p.cancelConfirm)) return;
+    setBusyPlan(true);
     const r = await cancelSubscription();
-    if (!r.error) setCancelMsg(p.canceledNote);
+    setBusyPlan(false);
+    if (!r.error) { refreshSubscription(); softRefresh(); }
+  };
+  const reactivatePlan = async () => {
+    setBusyPlan(true);
+    const r = await reactivateSubscription();
+    setBusyPlan(false);
+    if (!r.error) { refreshSubscription(); softRefresh(); }
   };
   const gam = computeStatus(s);
   const phaseName = g.phases[gam.phase.id].name;
@@ -261,17 +278,28 @@ export function ProfileScreen() {
                   </li>
                 ))}
               </ul>
-              {cancelMsg ? (
-                <p className="mt-4 rounded-xl bg-teal/10 px-3.5 py-2.5 text-center text-sm text-teal ring-1 ring-teal/20">{cancelMsg}</p>
-              ) : (
+              {/* Validade da assinatura */}
+              {subscribed && subscriptionEndsAt && (
+                <p className={`mt-4 text-center text-[13px] ${subscriptionCanceling ? "text-coral/80" : "text-cream/55"}`}>
+                  {(subscriptionCanceling ? p.expiresOn : p.activeUntil).replace("{d}", fmtDate(subscriptionEndsAt, locale))}
+                </p>
+              )}
+              {subscriptionCanceling ? (
+                // Cancelamento agendado → oferecer reativar
+                <Button className={`w-full ${subscribed && subscriptionEndsAt ? "mt-3" : "mt-4"}`} disabled={busyPlan} onClick={reactivatePlan}>
+                  {p.reactivate}
+                </Button>
+              ) : subscribed ? (
                 <>
-                  {subscribed && (
-                    <Button variant="secondary" className="mt-4 w-full" onClick={managePlan}>{p.manage}</Button>
-                  )}
-                  <button onClick={cancelPlan} className="mt-2 w-full py-1.5 text-center text-sm text-cream/45 hover:text-coral">
+                  <Button variant="secondary" className="mt-3 w-full" onClick={managePlan}>{p.manage}</Button>
+                  <button onClick={cancelPlan} disabled={busyPlan} className="mt-2 w-full py-1.5 text-center text-sm text-cream/45 hover:text-coral disabled:opacity-50">
                     {p.cancelPlan}
                   </button>
                 </>
+              ) : (
+                <button onClick={cancelPlan} className="mt-4 w-full py-1.5 text-center text-sm text-cream/45 hover:text-coral">
+                  {p.cancelPlan}
+                </button>
               )}
             </div>
           )}

@@ -41,6 +41,7 @@ export async function POST(req: Request) {
       price_id: price?.id ?? null,
       plan: planForPrice(price?.id),
       current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
+      cancel_at_period_end: !!sub.cancel_at_period_end,
       updated_at: new Date().toISOString(),
     });
   };
