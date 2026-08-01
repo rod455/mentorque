@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
-import { getStripe, planForPrice } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
+import { upsertSubscription } from "@/lib/subscriptionSync";
 
 export const runtime = "nodejs";
 
@@ -23,43 +24,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "bad_signature" }, { status: 400 });
   }
 
-  const upsertFromSub = async (sub: Stripe.Subscription, fallbackUserId?: string | null) => {
-    const userId = sub.metadata?.user_id || fallbackUserId;
-    if (!userId) return;
-    const item = sub.items.data[0];
-    const price = item?.price;
-    // A partir das versões novas da API, current_period_end vive no item da
-    // assinatura (não mais no objeto subscription). Lê do item com fallback.
-    const periodEnd =
-      (item as { current_period_end?: number } | undefined)?.current_period_end ??
-      (sub as unknown as { current_period_end?: number }).current_period_end;
-    await admin.from("subscriptions").upsert({
-      user_id: userId,
-      stripe_customer_id: typeof sub.customer === "string" ? sub.customer : sub.customer.id,
-      stripe_subscription_id: sub.id,
-      status: sub.status,
-      price_id: price?.id ?? null,
-      plan: planForPrice(price?.id),
-      current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
-      cancel_at_period_end: !!sub.cancel_at_period_end,
-      updated_at: new Date().toISOString(),
-    });
-  };
-
   try {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
         if (session.subscription) {
           const sub = await stripe.subscriptions.retrieve(session.subscription as string);
-          await upsertFromSub(sub, session.client_reference_id);
+          await upsertSubscription(admin, sub, session.client_reference_id);
         }
         break;
       }
       case "customer.subscription.created":
       case "customer.subscription.updated":
       case "customer.subscription.deleted": {
-        await upsertFromSub(event.data.object as Stripe.Subscription);
+        await upsertSubscription(admin, event.data.object as Stripe.Subscription);
         break;
       }
     }

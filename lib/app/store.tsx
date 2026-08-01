@@ -161,10 +161,18 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
     const params = new URLSearchParams(window.location.search);
     if (!params.has("checkout")) return;
     window.history.replaceState({}, "", window.location.pathname);
-    const t1 = setTimeout(refreshSubscription, 1500);
-    const t2 = setTimeout(refreshSubscription, 4000);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, [refreshSubscription]);
+    let cancelled = false;
+    (async () => {
+      // Puxa o estado autoritativo do Stripe (não depende do webhook).
+      try {
+        const token = supabase ? (await supabase.auth.getSession()).data.session?.access_token : undefined;
+        if (token) await fetch("/api/stripe/sync", { method: "POST", headers: { authorization: `Bearer ${token}` } });
+      } catch { /* ignore */ }
+      if (!cancelled) refreshSubscription();
+    })();
+    const t = setTimeout(refreshSubscription, 3000);
+    return () => { cancelled = true; clearTimeout(t); };
+  }, [refreshSubscription, supabase]);
 
   useEffect(() => {
     try {

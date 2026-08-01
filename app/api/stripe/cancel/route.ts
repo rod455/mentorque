@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
+import { upsertSubscription } from "@/lib/subscriptionSync";
 
 export const runtime = "nodejs";
 
@@ -21,6 +22,7 @@ export async function POST(req: Request) {
   const subId = row?.stripe_subscription_id as string | undefined;
   if (!subId) return NextResponse.json({ error: "no_subscription" }, { status: 400 });
 
-  await stripe.subscriptions.update(subId, { cancel_at_period_end: true });
+  const sub = await stripe.subscriptions.update(subId, { cancel_at_period_end: true });
+  await upsertSubscription(admin, sub, user.id); // grava direto (não depende do webhook)
   return NextResponse.json({ ok: true });
 }
