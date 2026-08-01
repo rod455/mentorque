@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/app/auth";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { carName } from "@/lib/app/content";
 import { computeStatus } from "@/lib/app/gamification";
+import { PhaseEmblem } from "../Emblem";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
@@ -174,14 +175,11 @@ export function ProfileScreen() {
       {/* 3) Sua fase (gamificação) */}
       <Card className="mt-3">
         <div className="flex items-center gap-3.5">
-          <span className={`grid h-14 w-14 shrink-0 place-items-center rounded-full text-2xl ${gam.phase.tint}`}>
-            {gam.phase.emoji}
-          </span>
+          <PhaseEmblem id={gam.phase.id} emoji={gam.phase.emoji} size={60} active />
           <div className="min-w-0 flex-1">
             <p className="text-[11px] font-semibold uppercase tracking-wider text-cream/45">{g.phaseLabel}</p>
             <p className="font-display text-xl font-semibold text-cream">{phaseName}</p>
           </div>
-          <span className="shrink-0 text-xs font-medium text-cream/40">{gam.points} {g.pointsShort}</span>
         </div>
 
         <div className="mt-3.5 h-2 overflow-hidden rounded-full bg-white/[0.06]">
