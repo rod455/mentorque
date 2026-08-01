@@ -60,7 +60,7 @@ export function GamificationScreen() {
           const current = i === status.phaseIndex;
           return (
             <div key={ph.id} className={`flex items-center gap-3 rounded-xl px-1.5 py-2 ${current ? "bg-amber/[0.07] ring-1 ring-amber/25" : ""}`}>
-              <PhaseEmblem id={ph.id} emoji={ph.emoji} size={44} active={current} />
+              <PhaseEmblem id={ph.id} emoji={ph.emoji} size={48} active={current} />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <p className="font-serif text-base font-semibold text-cream">{meta.name}</p>
