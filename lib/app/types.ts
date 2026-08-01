@@ -24,7 +24,8 @@ export type Vehicle = {
 export type ServiceRecord = {
   id: string;
   vehicleId: string;
-  type: string; // serviceType key (oil, brakes, revision, other…)
+  type: string; // serviceType key (oil, brakes, revision, other…) or free text
+  system?: SystemKey; // subsistema afetado (motor, freios, …), auto-inferido
   date: string; // ISO yyyy-mm-dd
   km: number; // odometer at the service
   shop?: string; // oficina

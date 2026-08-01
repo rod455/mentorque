@@ -6,14 +6,73 @@ import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { LIMITS } from "@/lib/app/premium";
 import { formatBRL } from "@/lib/app/content";
 import { resizeImage } from "@/lib/app/image";
-import type { ServicePart, ServiceRecord } from "@/lib/app/types";
+import type { ServicePart, ServiceRecord, SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Autocomplete, Card, Chip, Icon, inputCls, PremiumBadge, SectionTitle, useContent } from "../ui";
 
+const SYSTEMS: SystemKey[] = ["engine", "brakes", "suspension", "tires", "electrical"];
+
+// Default subsystem for each known service type.
+const SERVICE_SYSTEM: Record<string, SystemKey> = {
+  oil: "engine", brakes: "brakes", revision: "engine", suspension: "suspension",
+  tires: "tires", battery: "electrical", timing: "engine", airfilter: "engine", brakefluid: "brakes",
+};
+
+// Guess the subsystem from free text (e.g. "óleo do motor" → engine).
+function inferSystem(text: string): SystemKey | null {
+  const t = text.toLowerCase();
+  if (/(óleo|oleo|vela|correia|corrente|motor|filtro|arrefec|radiador|junta|inje[çc]|distribui|embreag|escapa|turbo|bomba d)/.test(t)) return "engine";
+  if (/(freio|pastilha|disco|lona|fluido de freio|abs|tambor)/.test(t)) return "brakes";
+  if (/(suspens|amortec|mola|bandeja|batente|piv[ôo]|terminal|bieleta|coxim|bucha|rolament)/.test(t)) return "suspension";
+  if (/(pneu|roda|balanceam|alinham|calibr|estepe|c[aâ]mara)/.test(t)) return "tires";
+  if (/(bateria|alternador|farol|l[âa]mpada|fus[íi]vel|el[ée]tr|chicote|sensor|arranque|partida|ignia|vidro el)/.test(t)) return "electrical";
+  return null;
+}
+
 function useTypeLabel() {
   const c = useContent();
   return (key: string) => c.serviceTypes.find((t) => t.key === key)?.label ?? key;
+}
+
+// A picked service in the current visit.
+type PickedService = { type: string; label: string; system: SystemKey | null };
+
+// Autocomplete input that ADDS a service to the list (Enter or pick a suggestion).
+function ServicePicker({ options, exclude, onAdd, placeholder }: { options: string[]; exclude: string[]; onAdd: (label: string) => void; placeholder?: string }) {
+  const [q, setQ] = useState("");
+  const [open, setOpen] = useState(false);
+  const ql = q.trim().toLowerCase();
+  const ex = exclude.map((x) => x.toLowerCase());
+  const matches = options.filter((o) => !ex.includes(o.toLowerCase()) && (!ql || o.toLowerCase().includes(ql)));
+  const add = (label: string) => { const l = label.trim(); if (!l) return; onAdd(l); setQ(""); setOpen(false); };
+
+  return (
+    <div className="relative">
+      <div className="flex gap-2">
+        <input
+          value={q}
+          onChange={(e) => { setQ(e.target.value); setOpen(true); }}
+          onFocus={() => setOpen(true)}
+          onBlur={() => setTimeout(() => setOpen(false), 120)}
+          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); add(q); } }}
+          placeholder={placeholder}
+          autoComplete="off"
+          className={inputCls}
+        />
+        <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => add(q)} disabled={!q.trim()} className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-amber text-lg text-graphite disabled:opacity-40" aria-label="add">+</button>
+      </div>
+      {open && matches.length > 0 && (
+        <div className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-xl bg-graphite-700 p-1 shadow-card ring-1 ring-white/10">
+          {matches.map((m) => (
+            <button key={m} type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => add(m)} className="block w-full rounded-lg px-3 py-2 text-left text-sm text-cream hover:bg-white/5">
+              {m}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 function fmtDate(iso: string, locale: string) {
@@ -94,7 +153,10 @@ export function HistoryScreen() {
             {list.map((r) => (
               <button key={r.id} onClick={() => go({ name: "service", id: r.id })} className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/5 hover:ring-white/15">
                 <span className="min-w-0 flex-1">
-                  <span className="block font-display text-[15px] text-cream">{typeLabel(r.type)}</span>
+                  <span className="flex items-center gap-2">
+                    <span className="truncate font-display text-[15px] text-cream">{typeLabel(r.type)}</span>
+                    {r.system && <span className="shrink-0 rounded bg-white/5 px-1.5 py-0.5 text-[10px] text-cream/55">{c.health.systemLabels[r.system]}</span>}
+                  </span>
                   <span className="block text-xs text-cream/50">{dateFmt(r.date)} · {r.km.toLocaleString()} km</span>
                 </span>
                 {r.total != null && <span className="shrink-0 text-sm text-cream/70">{formatBRL(r.total)}</span>}
@@ -118,7 +180,21 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
   const src = editing ?? preset;
 
   const today = new Date().toISOString().slice(0, 10);
-  const [type, setType] = useState(src?.type ?? "oil");
+
+  // Resolve a typed/picked label into a service (known key + subsystem, or free text).
+  const resolveService = (label: string): PickedService => {
+    const st = c.serviceTypes.find((t) => t.label.toLowerCase() === label.trim().toLowerCase());
+    if (st) return { type: st.key, label: st.label, system: st.key === "other" ? inferSystem(label) : SERVICE_SYSTEM[st.key] ?? null };
+    return { type: label.trim(), label: label.trim(), system: inferSystem(label) };
+  };
+
+  const initialServices = (): PickedService[] => {
+    if (!src?.type) return [];
+    const st = c.serviceTypes.find((t) => t.key === src.type);
+    return [{ type: src.type, label: st?.label ?? src.type, system: (editing?.system ?? (st ? SERVICE_SYSTEM[src.type] : inferSystem(src.type))) ?? null }];
+  };
+
+  const [services, setServices] = useState<PickedService[]>(initialServices);
   const [date, setDate] = useState(src?.date ?? today);
   const [km, setKm] = useState(src?.km != null ? String(src.km) : v?.odometerKm != null ? String(v.odometerKm) : "");
   const [shop, setShop] = useState(src?.shop ?? "");
@@ -129,21 +205,25 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
   const [category, setCategory] = useState<ServiceRecord["category"]>(src?.category);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const addService2 = (label: string) => setServices((ss) => (ss.some((x) => x.label.toLowerCase() === label.trim().toLowerCase()) ? ss : [...ss, resolveService(label)]));
+  const setSvcSystem = (i: number, sys: SystemKey | null) => setServices((ss) => ss.map((x, j) => (j === i ? { ...x, system: sys } : x)));
+  const removeSvc = (i: number) => setServices((ss) => ss.filter((_, j) => j !== i));
+
   const addPart = () => {
     if (!s.premium && parts.length >= LIMITS.freeParts) { go({ name: "subscribe", ctx: "parts" }); return; }
     setParts((ps) => [...ps, { name: "" }]);
   };
 
-  // Autocomplete sources: shops the user has used before, and parts common to
-  // the selected service type plus any part typed in past services.
+  // Autocomplete sources: known service labels + past services; shops; parts.
+  const serviceOptions = Array.from(new Set([...c.serviceTypes.filter((t) => t.key !== "other").map((t) => t.label), ...s.services.map((r) => c.serviceTypes.find((t) => t.key === r.type)?.label ?? r.type)]));
   const shopOptions = Array.from(new Set(s.services.map((r) => r.shop).filter((x): x is string => !!x && !!x.trim())));
   const pastParts = Array.from(new Set(s.services.flatMap((r) => r.parts.map((p) => p.name)).filter((x) => x.trim())));
-  const partOptions = Array.from(new Set([...(c.partsByType[type] ?? []), ...pastParts]));
+  const partOptions = Array.from(new Set([...(c.partsByType[services[0]?.type ?? "other"] ?? []), ...pastParts]));
 
   if (!v) return <AppHeader title={a.title} />;
 
   const kmNum = parseInt(km, 10);
-  const valid = !!date && Number.isFinite(kmNum) && kmNum >= 0;
+  const valid = services.length > 0 && !!date && Number.isFinite(kmNum) && kmNum >= 0;
 
   const onPhoto = async (file?: File) => {
     if (!file) return;
@@ -156,20 +236,26 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
 
   const save = () => {
     if (!valid) return;
-    const rec = {
+    const rec = (svc: PickedService, withVisit: boolean) => ({
       vehicleId: v.id,
-      type,
+      type: svc.type,
+      system: svc.system ?? undefined,
       date,
       km: kmNum,
       shop: shop.trim() || undefined,
-      total: total ? parseInt(total, 10) : undefined,
-      parts: parts.filter((p) => p.name.trim()),
+      total: withVisit && total ? parseInt(total, 10) : undefined,
+      parts: withVisit ? parts.filter((p) => p.name.trim()) : [],
       notes: notes.trim() || undefined,
       photo,
       category: s.premium ? category : undefined,
-    };
-    if (editing) updateService(editing.id, rec);
-    else addService(rec);
+    });
+    if (editing) {
+      // Update the edited record with the first service; any extra ones are new.
+      updateService(editing.id, rec(services[0], true));
+      services.slice(1).forEach((svc) => addService(rec(svc, false)));
+    } else {
+      services.forEach((svc, i) => addService(rec(svc, i === 0)));
+    }
     back();
   };
 
@@ -179,12 +265,27 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
 
       <div className="space-y-4 pb-4">
         <div>
-          <p className="mb-1.5 text-xs uppercase tracking-wide text-cream/45">{a.type}</p>
-          <div className="flex flex-wrap gap-2">
-            {c.serviceTypes.map((t) => (
-              <Chip key={t.key} active={type === t.key} onClick={() => setType(t.key)}>{t.label}</Chip>
-            ))}
-          </div>
+          <p className="mb-1 text-xs uppercase tracking-wide text-cream/45">{a.services}</p>
+          <p className="mb-2 text-xs text-cream/45">{a.servicesHint}</p>
+          {services.length > 0 && (
+            <div className="mb-2 space-y-2">
+              {services.map((sv, i) => (
+                <div key={i} className="flex items-center gap-2 rounded-xl bg-graphite-800 p-2 pl-3 ring-1 ring-white/5">
+                  <span className="min-w-0 flex-1 truncate text-sm text-cream">{sv.label}</span>
+                  <select
+                    value={sv.system ?? ""}
+                    onChange={(e) => setSvcSystem(i, (e.target.value || null) as SystemKey | null)}
+                    className="shrink-0 rounded-lg bg-graphite-700 px-2 py-1.5 text-xs text-cream ring-1 ring-white/10 outline-none focus:ring-amber"
+                  >
+                    <option value="">{a.systemGeneral}</option>
+                    {SYSTEMS.map((k) => (<option key={k} value={k}>{c.health.systemLabels[k]}</option>))}
+                  </select>
+                  <button onClick={() => removeSvc(i)} className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-graphite-700 text-cream/60" aria-label="remove">✕</button>
+                </div>
+              ))}
+            </div>
+          )}
+          <ServicePicker options={serviceOptions} exclude={services.map((x) => x.label)} onAdd={addService2} placeholder={a.servicePh} />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -208,7 +309,7 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
         {/* Premium: classify the service */}
         {s.premium && (
           <div>
-            <p className="mb-1.5 text-xs uppercase tracking-wide text-cream/45">{a.type}</p>
+            <p className="mb-1.5 text-xs uppercase tracking-wide text-cream/45">{a.classify}</p>
             <div className="flex flex-wrap gap-2">
               {([["preventive", c.premium.preventive], ["corrective", c.premium.corrective], ["upgrade", c.premium.upgrade]] as const).map(([k, lbl]) => (
                 <Chip key={k} active={category === k} onClick={() => setCategory(category === k ? undefined : k)}>{lbl}</Chip>
@@ -302,6 +403,7 @@ export function ServiceDetail({ id }: { id: string }) {
         <div className="grid grid-cols-2 gap-3 text-sm">
           <Info label={c.addService.date} value={dateFmt(r.date)} />
           <Info label={c.addService.km} value={`${r.km.toLocaleString()} km`} />
+          {r.system && <Info label={c.addService.subsystem} value={c.health.systemLabels[r.system]} />}
           {r.shop && <Info label={c.addService.shop} value={r.shop} />}
           {r.total != null && <Info label={c.addService.total} value={formatBRL(r.total)} />}
         </div>
