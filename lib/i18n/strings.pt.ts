@@ -44,7 +44,7 @@ export const pt = {
   },
   waitlist: {
     placeholder: "Seu melhor e-mail",
-    button: "Quero ser fundador",
+    button: "Quero testar o projeto",
     loading: "Enviando…",
     successTitle: "Pronto — seu lugar de fundador está garantido!",
     successBody: "Você entra com preço travado e acesso antecipado. Avisamos em primeira mão quando o app abrir.",

@@ -46,7 +46,7 @@ export const en: Strings = {
   },
   waitlist: {
     placeholder: "Your best email",
-    button: "I want to be a founder",
+    button: "I want to test the project",
     loading: "Sending…",
     successTitle: "Done — your founder spot is locked in!",
     successBody: "You're in with locked pricing and early access. We'll be the first to tell you when the app opens.",
