@@ -2,6 +2,8 @@
 
 import { useRef, useState } from "react";
 import { usePrototype } from "@/lib/app/store";
+import { useAuth } from "@/lib/app/auth";
+import { uploadUserPhoto, deleteUserPhoto } from "@/lib/app/uploadPhoto";
 import { useNav } from "@/lib/app/nav";
 import { computeStatus, isLived, MILESTONES, PHASES, type GamSession } from "@/lib/app/gamification";
 import { MedalEmblem, PhaseEmblem } from "../Emblem";
@@ -193,6 +195,7 @@ function MomentSheet({ id, emoji, onClose }: { id: string; emoji: string; onClos
   const c = useContent();
   const g = c.gamification;
   const { s, toggleMilestone, setMomentPhoto } = usePrototype();
+  const { user } = useAuth();
   const meta = g.milestones[id];
   const photo = s.momentPhotos?.[id];
   const lived = isLived(s, id);
@@ -207,7 +210,10 @@ function MomentSheet({ id, emoji, onClose }: { id: string; emoji: string; onClos
     setBusy(true);
     try {
       const dataUrl = await resizeImage(file);
-      setMomentPhoto(id, dataUrl); // adicionar foto = momento vivido
+      // Logado → Storage (guarda a URL). Convidado/falha → local. Adicionar
+      // foto já marca o momento como vivido.
+      const url = user ? await uploadUserPhoto(user.id, `moment-${id}`, dataUrl) : null;
+      setMomentPhoto(id, url ?? dataUrl);
     } catch {
       /* ignore bad image */
     } finally {
@@ -217,6 +223,7 @@ function MomentSheet({ id, emoji, onClose }: { id: string; emoji: string; onClos
 
   const remove = () => {
     setMomentPhoto(id, null);
+    if (user) deleteUserPhoto(user.id, `moment-${id}`);
     if (claimedManually) toggleMilestone(id);
     onClose();
   };
