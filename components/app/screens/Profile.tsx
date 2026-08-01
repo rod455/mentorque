@@ -118,7 +118,6 @@ export function ProfileScreen() {
   const [privacy, setPrivacy] = useState(false);
   const [talk, setTalk] = useState(false);
   const [premiumOpen, setPremiumOpen] = useState(false);
-  const [accountOpen, setAccountOpen] = useState(false);
   const [editName, setEditName] = useState(false);
   const [nameInput, setNameInput] = useState(s.name ?? "");
   const [pwSent, setPwSent] = useState(false);
@@ -127,6 +126,8 @@ export function ProfileScreen() {
   // Name shown at the top: user's name → Google name → email prefix.
   const googleName = (user?.user_metadata?.full_name ?? user?.user_metadata?.name) as string | undefined;
   const displayName = s.name?.trim() || googleName?.trim() || user?.email?.split("@")[0] || p.driverDefault;
+  const provider = (user?.app_metadata?.provider as string | undefined) ?? "email";
+  const providerLabel = provider === "google" ? "Google" : provider === "apple" ? "Apple" : "e-mail";
 
   const changePassword = async () => {
     if (!user?.email) return;
@@ -158,53 +159,8 @@ export function ProfileScreen() {
     <div>
       <AppHeader title={p.title} onBack={() => root({ name: "cars" })} />
 
-      {/* 1) Conta — cabeçalho com nome; toca pra expandir os detalhes */}
-      {enabled && user ? (
-        <div className="overflow-hidden rounded-2xl bg-graphite-800 ring-1 ring-white/[0.06]">
-          <div className="flex items-center gap-3 p-4">
-            <button onClick={() => avatarRef.current?.click()} className="relative shrink-0" aria-label={p.changePhoto}>
-              <span className="grid h-12 w-12 place-items-center overflow-hidden rounded-full bg-teal/15 text-teal ring-1 ring-white/10">
-                {avatarSrc ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={avatarSrc} alt="" className="h-full w-full object-cover" />
-                ) : (
-                  <span className="font-display text-lg font-semibold text-cream">{displayName[0]?.toUpperCase() ?? "?"}</span>
-                )}
-              </span>
-              <span className="absolute -bottom-0.5 -right-0.5 grid h-5 w-5 place-items-center rounded-full bg-amber text-graphite ring-2 ring-graphite-800">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z" /><circle cx="12" cy="13" r="3.2" /></svg>
-              </span>
-            </button>
-            <button onClick={() => setAccountOpen((v) => !v)} className="min-w-0 flex-1 text-left">
-              <span className="block text-xs text-cream/50">{c.auth.signedInAs}</span>
-              <span className="block truncate font-serif text-base font-semibold text-cream">{displayName}</span>
-            </button>
-            <button onClick={() => setAccountOpen((v) => !v)} className="shrink-0 text-lg text-cream/30" aria-label="expand">
-              <span className={`inline-block transition-transform ${accountOpen ? "rotate-90" : ""}`}>›</span>
-            </button>
-            <input ref={avatarRef} type="file" accept="image/*" className="hidden" onChange={(e) => pickAvatar(e.target.files?.[0])} />
-          </div>
-
-          {accountOpen && (
-            <div className="border-t border-white/[0.06] [&>*+*]:border-t [&>*+*]:border-white/[0.06]">
-              <IconRow icon="user" tint="bg-amber/15 text-amber" label={p.name} value={s.name || p.notSet} action={c.common.edit} onClick={() => { setNameInput(s.name ?? ""); setEditName(true); }} />
-              <IconRow icon="consult" tint="bg-teal/15 text-teal" label={p.email} value={user.email ?? p.notSet} />
-              <IconRow
-                icon="explore" tint="bg-coral/15 text-coral" label={p.stateLabel} value={s.state || undefined}
-                right={
-                  <select value={s.state ?? ""} onChange={(e) => setState(e.target.value)} className="shrink-0 rounded-lg bg-graphite-700 px-2 py-1.5 text-sm text-cream ring-1 ring-white/10 outline-none focus:ring-amber">
-                    <option value="">{p.stateSelect}</option>
-                    {BR_STATES.map((uf) => (<option key={uf} value={uf}>{uf}</option>))}
-                  </select>
-                }
-              />
-              <IconRow icon="shield" tint="bg-teal/15 text-teal" label={p.changePassword} action={pwSent ? p.passwordSent : undefined} onClick={pwSent ? undefined : changePassword} />
-              <IconRow icon="user" tint="bg-graphite-700 text-cream/60" label={c.auth.signOut} onClick={() => signOut()} />
-              <IconRow icon="alert" tint="bg-coral/15 text-coral" label={p.deleteAccount} danger onClick={removeAccount} />
-            </div>
-          )}
-        </div>
-      ) : (
+      {/* Login — só para deslogado (logado tem a seção CONTA no final) */}
+      {enabled && !user && (
         <Card>
           <div className="flex items-center gap-3.5">
             <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-2xl bg-teal/10 ring-1 ring-teal/20">
@@ -352,6 +308,39 @@ export function ProfileScreen() {
         <IconRow icon="shield" tint="bg-coral/15 text-coral" label={p.privacy} onClick={() => setPrivacy(true)} />
         <IconRow icon="check" tint="bg-amber/15 text-amber" label={p.rate} onClick={() => window.open(RATE_URL, "_blank", "noopener,noreferrer")} />
       </Group>
+
+      {/* Conta — no final (dados + sessão + exclusão) */}
+      {enabled && user && (
+        <>
+          <SectionTitle>{p.accountTitle}</SectionTitle>
+          <Group>
+            {/* Cabeçalho: avatar (toca p/ trocar) + nome + provedor/e-mail */}
+            <div className="flex items-center gap-3 px-4 py-3.5">
+              <button onClick={() => avatarRef.current?.click()} className="relative shrink-0" aria-label={p.changePhoto}>
+                <span className="grid h-11 w-11 place-items-center overflow-hidden rounded-full bg-teal/15 text-teal ring-1 ring-white/10">
+                  {avatarSrc ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={avatarSrc} alt="" className="h-full w-full object-cover" />
+                  ) : (
+                    <span className="font-display text-base font-semibold text-cream">{displayName[0]?.toUpperCase() ?? "?"}</span>
+                  )}
+                </span>
+                <span className="absolute -bottom-0.5 -right-0.5 grid h-5 w-5 place-items-center rounded-full bg-amber text-graphite ring-2 ring-graphite-800">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z" /><circle cx="12" cy="13" r="3.2" /></svg>
+                </span>
+              </button>
+              <div className="min-w-0 flex-1">
+                <p className="truncate font-serif text-[15px] font-semibold text-cream">{displayName}</p>
+                <p className="truncate text-xs text-cream/50">{p.connectedWith.replace("{p}", providerLabel)} · {user.email}</p>
+              </div>
+              <button onClick={() => { setNameInput(s.name ?? ""); setEditName(true); }} className="shrink-0 text-xs font-medium text-amber">{c.common.edit}</button>
+            </div>
+            <IconRow icon="shield" tint="bg-teal/15 text-teal" label={p.changePassword} action={pwSent ? p.passwordSent : undefined} onClick={pwSent ? undefined : changePassword} />
+            <IconRow icon="user" tint="bg-graphite-700 text-cream/60" label={c.auth.signOut} onClick={() => signOut()} />
+            <IconRow icon="alert" tint="bg-coral/15 text-coral" label={p.deleteAccount} danger onClick={removeAccount} />
+          </Group>
+        </>
+      )}
 
       <SectionTitle>{p.demo}</SectionTitle>
       <Group>

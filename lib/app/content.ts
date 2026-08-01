@@ -1348,6 +1348,8 @@ export function getContent(locale: Locale) {
       ],
       driverDefault: T("Motorista", "Driver"),
       changePhoto: T("Trocar foto de perfil", "Change profile photo"),
+      accountTitle: T("Conta", "Account"),
+      connectedWith: T("Conectado com {p}", "Connected with {p}"),
       changePassword: T("Trocar senha", "Change password"),
       passwordSent: T("Link enviado ✓", "Link sent ✓"),
       deleteAccount: T("Excluir conta", "Delete account"),
