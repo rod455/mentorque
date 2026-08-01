@@ -7,7 +7,7 @@ import { useAuth } from "@/lib/app/auth";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { resizeImage } from "@/lib/app/image";
 import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
-import { deleteAccount, openBillingPortal, startCheckout } from "@/lib/app/billing";
+import { cancelSubscription, deleteAccount, openBillingPortal, startCheckout } from "@/lib/app/billing";
 import { getStripeJs, stripeConfigured } from "@/lib/app/stripeClient";
 import { APP_VERSION, carName } from "@/lib/app/content";
 import { computeStatus } from "@/lib/app/gamification";
@@ -103,10 +103,14 @@ export function ProfileScreen() {
   const { s, setName, setState, setPremium, setNotifications, setUnits, setAvatar, subscribed, reset } = usePrototype();
   const { go, root } = useNav();
 
-  // Real subscribers manage/cancel via the Stripe portal; demo premium toggles off.
-  const managePlan = async () => {
-    if (subscribed) { const r = await openBillingPortal(); if (r.url) window.location.href = r.url; return; }
-    setPremium(false);
+  const [cancelMsg, setCancelMsg] = useState("");
+  // "Gerenciar" abre o portal do Stripe; cancelar encerra no fim do período.
+  const managePlan = async () => { const r = await openBillingPortal(); if (r.url) window.location.href = r.url; };
+  const cancelPlan = async () => {
+    if (!subscribed) { setPremium(false); return; } // demo
+    if (typeof window !== "undefined" && !window.confirm(p.cancelConfirm)) return;
+    const r = await cancelSubscription();
+    if (!r.error) setCancelMsg(p.canceledNote);
   };
   const gam = computeStatus(s);
   const phaseName = g.phases[gam.phase.id].name;
@@ -220,19 +224,20 @@ export function ProfileScreen() {
         </Card>
       )}
 
-      {/* 2) Premium — linha compacta que expande os benefícios (ou destaque de upsell) */}
+      {/* 2) Premium — linha em destaque que expande os benefícios (ou upsell) */}
       {s.premium ? (
-        <div className="mt-3 overflow-hidden rounded-2xl bg-graphite-800 ring-1 ring-amber/20">
+        <div className="mt-3 overflow-hidden rounded-2xl bg-gradient-to-br from-amber/25 via-amber/10 to-amber/[0.05] ring-1 ring-amber/45">
           <button onClick={() => setPremiumOpen((v) => !v)} className="flex w-full items-center gap-3 p-4 text-left">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber/15 text-lg">★</span>
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber/25 text-lg text-amber">★</span>
             <span className="min-w-0 flex-1">
-              <span className="block text-xs text-cream/50">{p.plan}</span>
-              <span className="block font-serif text-base font-semibold text-cream">{p.premium}</span>
+              <span className="block text-xs text-cream/60">{p.plan}</span>
+              <span className="block font-serif text-base font-bold text-cream">{p.premium}</span>
             </span>
-            <span className={`shrink-0 text-lg text-cream/30 transition-transform ${premiumOpen ? "rotate-90" : ""}`}>›</span>
+            <span className="shrink-0 rounded-md bg-amber/25 px-2 py-0.5 text-[11px] font-semibold text-amber">★ Premium</span>
+            <span className={`shrink-0 text-lg text-amber transition-transform ${premiumOpen ? "rotate-90" : ""}`}>›</span>
           </button>
           {premiumOpen && (
-            <div className="border-t border-white/[0.06] px-4 pb-4 pt-3">
+            <div className="border-t border-amber/15 bg-graphite-800/60 px-4 pb-4 pt-3">
               <p className="mb-2 text-[11px] font-medium uppercase tracking-wide text-cream/40">{p.perksTitle}</p>
               <ul className="space-y-2">
                 {p.perks.map((perk) => (
@@ -244,9 +249,18 @@ export function ProfileScreen() {
                   </li>
                 ))}
               </ul>
-              <button onClick={managePlan} className="mt-4 w-full py-1.5 text-center text-sm text-cream/45 hover:text-coral">
-                {subscribed ? p.manage : p.cancelPlan}
-              </button>
+              {cancelMsg ? (
+                <p className="mt-4 rounded-xl bg-teal/10 px-3.5 py-2.5 text-center text-sm text-teal ring-1 ring-teal/20">{cancelMsg}</p>
+              ) : (
+                <>
+                  {subscribed && (
+                    <Button variant="secondary" className="mt-4 w-full" onClick={managePlan}>{p.manage}</Button>
+                  )}
+                  <button onClick={cancelPlan} className="mt-2 w-full py-1.5 text-center text-sm text-cream/45 hover:text-coral">
+                    {p.cancelPlan}
+                  </button>
+                </>
+              )}
             </div>
           )}
         </div>

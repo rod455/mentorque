@@ -1333,6 +1333,8 @@ export function getContent(locale: Locale) {
       stateSelect: T("Selecione", "Select"),
       notSet: T("Não informado", "Not set"),
       cancelPlan: T("Cancelar assinatura", "Cancel subscription"),
+      cancelConfirm: T("Cancelar a assinatura? Você continua Premium até o fim do período já pago.", "Cancel the subscription? You keep Premium until the end of the paid period."),
+      canceledNote: T("Assinatura cancelada. Você segue Premium até o fim do período.", "Subscription canceled. You stay Premium until the end of the period."),
       seePlans: T("Ver planos", "See plans"),
       perksTitle: T("Seus benefícios", "Your benefits"),
       perksFreeTitle: T("Com o Premium você desbloqueia", "Premium unlocks"),
