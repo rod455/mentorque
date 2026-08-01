@@ -22,6 +22,7 @@ export type View =
   | { name: "revisions" }
   | { name: "learn" }
   | { name: "equipment" }
+  | { name: "forYourCar" }
   | { name: "studyTrack"; trackId: string }
   | { name: "biela"; seed?: string }
   | { name: "content"; id: string }

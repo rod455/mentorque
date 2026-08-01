@@ -10,7 +10,7 @@ import { SymptomsScreen, SymptomDetail, SystemProblemsScreen, ChecklistScreen } 
 import { HealthScreen, HealthQuizScreen, SystemDetail } from "./screens/Health";
 import { HistoryScreen, AddServiceScreen, ServiceDetail } from "./screens/History";
 import { RevisionsScreen } from "./screens/Revisions";
-import { LearnScreen, StudyTrackScreen, ContentScreen, BielaChatScreen } from "./screens/Learn";
+import { LearnScreen, StudyTrackScreen, ForYourCarScreen, ContentScreen, BielaChatScreen } from "./screens/Learn";
 import { EquipmentScreen } from "./screens/Equipment";
 import { CarSettingsScreen } from "./screens/CarSettings";
 import { ProfileScreen, SubscribeScreen } from "./screens/Profile";
@@ -70,6 +70,7 @@ function Router() {
       case "learn": return <LearnScreen />;
       case "equipment": return <EquipmentScreen />;
       case "studyTrack": return <StudyTrackScreen trackId={view.trackId} />;
+      case "forYourCar": return <ForYourCarScreen />;
       case "biela": return <BielaChatScreen seed={view.seed} />;
       case "content": return <ContentScreen id={view.id} />;
       case "carSettings": return <CarSettingsScreen />;
@@ -97,7 +98,7 @@ const TAB_OF: Record<View["name"], Tab> = {
   cars: "cars", addCar: "cars", car: "cars", health: "cars", healthQuiz: "cars", system: "cars", revisions: "cars", carSettings: "cars",
   symptoms: "problems", symptom: "problems", systemProblems: "problems", equipment: "problems", checklist: "problems",
   history: "history", addService: "history", service: "history",
-  learn: "studies", studyTrack: "studies", biela: "studies", content: "studies",
+  learn: "studies", studyTrack: "studies", forYourCar: "studies", biela: "studies", content: "studies",
   profile: "profile", subscribe: "profile",
 };
 
