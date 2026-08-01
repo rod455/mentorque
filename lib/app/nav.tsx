@@ -28,6 +28,8 @@ export type View =
   | { name: "content"; id: string }
   | { name: "carSettings" }
   | { name: "profile" }
+  | { name: "gamification" }
+  | { name: "achievements" }
   | { name: "auth" }
   | { name: "subscribe"; ctx?: string };
 

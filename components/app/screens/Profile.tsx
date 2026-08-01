@@ -5,6 +5,7 @@ import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/app/auth";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { carName } from "@/lib/app/content";
+import { computeStatus } from "@/lib/app/gamification";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
@@ -51,10 +52,13 @@ function IconRow({ icon, tint, label, value, action, right, onClick, danger }: {
 export function ProfileScreen() {
   const c = useContent();
   const p = c.profile;
+  const g = c.gamification;
   const { locale } = useI18n();
   const { user, enabled, signOut } = useAuth();
   const { s, setName, setEmail, setState, setPremium, reset } = usePrototype();
   const { go } = useNav();
+  const gam = computeStatus(s);
+  const phaseName = g.phases[gam.phase.id].name;
   const [editName, setEditName] = useState(false);
   const [nameInput, setNameInput] = useState(s.name ?? "");
   const [editEmail, setEditEmail] = useState(false);
@@ -94,21 +98,42 @@ export function ProfileScreen() {
     <div>
       <AppHeader title={p.title} />
 
-      {/* Identity */}
-      <Card className="flex items-center gap-3">
-        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-amber/15 text-amber">
-          <Icon name="user" className="h-6 w-6" />
-        </span>
-        <div className="min-w-0 flex-1">
-          <p className="font-display text-lg font-semibold text-cream">{s.name || p.guest}</p>
-          <p className="truncate text-xs text-cream/55">{s.email || p.carsCount.replace("{n}", String(s.vehicles.length))}</p>
+      {/* Identity + fase atual (gamificação) */}
+      <Card>
+        <div className="flex items-center gap-3">
+          <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-full text-2xl ${gam.phase.tint}`}>
+            {gam.phase.emoji}
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="truncate font-display text-lg font-semibold text-cream">{s.name?.trim() || p.driverDefault}</p>
+            <p className="truncate text-xs text-cream/55">{phaseName} · {gam.points} {g.pointsShort}</p>
+          </div>
+          <button onClick={() => { setNameInput(s.name ?? ""); setEditName(true); }} className="shrink-0 text-xs font-medium text-amber">
+            {c.common.edit}
+          </button>
         </div>
-        <button onClick={() => { setNameInput(s.name ?? ""); setEditName(true); }} className="shrink-0 text-xs font-medium text-amber">
-          {c.common.edit}
-        </button>
+
+        {/* Progresso para a próxima fase */}
+        <div className="mt-4">
+          <div className="h-2 overflow-hidden rounded-full bg-white/[0.06]">
+            <div className="h-full rounded-full bg-amber transition-all" style={{ width: `${Math.round(gam.progress * 100)}%` }} />
+          </div>
+          <p className="mt-1.5 text-[11px] text-cream/50">
+            {gam.nextPhase
+              ? g.toNext.replace("{n}", String(gam.toNext)).replace("{phase}", g.phases[gam.nextPhase.id].name)
+              : g.maxLevel}
+          </p>
+        </div>
+
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <Button variant="secondary" onClick={() => go({ name: "gamification" })}>{g.howBtn}</Button>
+          <Button variant="secondary" onClick={() => go({ name: "achievements" })}>
+            🏅 {g.acervoBtn}
+          </Button>
+        </div>
       </Card>
 
-      {/* Conta (login/sincronização) — só quando o auth está configurado */}
+      {/* Conta (login / sincronização) — só quando o auth está configurado */}
       {enabled && (
         user ? (
           <Card className="mt-3 flex items-center gap-3">
@@ -124,64 +149,76 @@ export function ProfileScreen() {
             </button>
           </Card>
         ) : (
-          <button
-            onClick={() => go({ name: "auth" })}
-            className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-amber/15 to-amber/5 p-4 text-left ring-1 ring-amber/25 hover:ring-amber/45"
-          >
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-amber/15 text-amber">
-              <Icon name="user" className="h-5 w-5" />
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block font-display text-[15px] font-semibold text-cream">{c.auth.createOrSignIn}</span>
-              <span className="mt-0.5 block text-xs text-cream/55">{c.auth.syncNote}</span>
-            </span>
-            <span className="shrink-0 text-amber">›</span>
-          </button>
+          <Card className="mt-3">
+            <div className="flex items-start gap-3">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-teal/15 text-teal">
+                <Icon name="shield" className="h-5 w-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="font-display text-[15px] font-semibold text-cream">{p.save.title}</p>
+                <p className="mt-0.5 text-xs leading-relaxed text-cream/55">{p.save.body}</p>
+              </div>
+            </div>
+            <Button size="lg" className="mt-3 w-full" onClick={() => go({ name: "auth" })}>{p.save.cta}</Button>
+          </Card>
         )
       )}
 
-      {/* Plano atual */}
-      <Card className="mt-3 ring-amber/20">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-xs text-cream/50">{p.plan}</p>
-            <p className="font-display text-lg font-semibold text-cream">{s.premium ? p.premium : p.free}</p>
-          </div>
-          {s.premium ? (
+      {/* Plano / Premium */}
+      {s.premium ? (
+        <Card className="mt-3 ring-amber/20">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs text-cream/50">{p.plan}</p>
+              <p className="font-display text-lg font-semibold text-cream">{p.premium}</p>
+            </div>
             <span className="rounded-md bg-amber/15 px-2.5 py-1 text-xs font-medium text-amber">★ Premium</span>
-          ) : (
-            <Button onClick={() => go({ name: "subscribe" })}>{p.subscribe}</Button>
-          )}
-        </div>
-
-        <p className="mb-2 mt-4 text-[11px] font-medium uppercase tracking-wide text-cream/40">
-          {s.premium ? p.perksTitle : p.perksFreeTitle}
-        </p>
-        <ul className="space-y-2">
-          {p.perks.map((perk) => (
-            <li key={perk} className="flex items-start gap-2.5 text-sm">
-              <span className={`mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full ${s.premium ? "bg-teal/20 text-teal" : "bg-white/5 text-cream/40"}`}>
-                <Icon name="check" className="h-3 w-3" />
-              </span>
-              <span className={s.premium ? "text-cream/85" : "text-cream/55"}>{perk}</span>
-            </li>
-          ))}
-        </ul>
-
-        <Button variant="secondary" className="mt-4 w-full" onClick={() => go({ name: "subscribe" })}>
-          <Icon name="spark" className="h-4 w-4" /> {p.seePlans}
-        </Button>
-        {s.premium && (
-          <button onClick={() => setPremium(false)} className="mt-2 w-full py-1.5 text-center text-sm text-cream/45 hover:text-coral">
+          </div>
+          <p className="mb-2 mt-4 text-[11px] font-medium uppercase tracking-wide text-cream/40">{p.perksTitle}</p>
+          <ul className="space-y-2">
+            {p.perks.map((perk) => (
+              <li key={perk} className="flex items-start gap-2.5 text-sm">
+                <span className="mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full bg-teal/20 text-teal">
+                  <Icon name="check" className="h-3 w-3" />
+                </span>
+                <span className="text-cream/85">{perk}</span>
+              </li>
+            ))}
+          </ul>
+          <button onClick={() => setPremium(false)} className="mt-4 w-full py-1.5 text-center text-sm text-cream/45 hover:text-coral">
             {p.cancelPlan}
           </button>
-        )}
-      </Card>
+        </Card>
+      ) : (
+        // Destaque: Desbloqueie o Premium
+        <div className="mt-3 overflow-hidden rounded-2xl bg-gradient-to-br from-amber/20 via-amber/10 to-amber/[0.04] p-[1px] ring-1 ring-amber/40">
+          <div className="rounded-2xl bg-graphite-800/80 p-4">
+            <div className="flex items-center gap-2 text-amber">
+              <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber/20 text-base">★</span>
+              <span className="font-display text-base font-bold text-cream">{p.unlock.title}</span>
+            </div>
+            <p className="mt-1.5 text-sm text-cream/70">{p.unlock.body}</p>
+            <ul className="mt-3 space-y-2">
+              {p.unlock.benefits.map((b) => (
+                <li key={b} className="flex items-start gap-2.5 text-sm">
+                  <span className="mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full bg-amber/20 text-amber">
+                    <Icon name="check" className="h-3 w-3" />
+                  </span>
+                  <span className="text-cream/90">{b}</span>
+                </li>
+              ))}
+            </ul>
+            <Button size="lg" className="mt-4 w-full" onClick={() => go({ name: "subscribe" })}>
+              <Icon name="spark" className="h-4 w-4" /> {p.unlock.cta}
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Detalhes da conta */}
       <SectionTitle>{p.account}</SectionTitle>
       <Group>
-        <IconRow icon="user" tint="bg-amber/15 text-amber" label={p.name} value={s.name || p.guest} action={c.common.edit} onClick={() => { setNameInput(s.name ?? ""); setEditName(true); }} />
+        <IconRow icon="user" tint="bg-amber/15 text-amber" label={p.name} value={s.name || p.notSet} action={c.common.edit} onClick={() => { setNameInput(s.name ?? ""); setEditName(true); }} />
         <IconRow icon="consult" tint="bg-teal/15 text-teal" label={p.email} value={s.email || p.notSet} action={c.common.edit} onClick={() => { setEmailInput(s.email ?? ""); setEditEmail(true); }} />
         <IconRow
           icon="explore" tint="bg-coral/15 text-coral" label={p.stateLabel} value={s.state || undefined}

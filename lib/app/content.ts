@@ -1305,6 +1305,24 @@ export function getContent(locale: Locale) {
         T("Biblioteca de aulas completa", "Full lesson library"),
         T("Consultoria com especialista", "Expert consulting"),
       ],
+      driverDefault: T("Motorista", "Driver"),
+      // Login card (login-only, sem convidado)
+      save: {
+        title: T("Salve seu carro na nuvem", "Save your car to the cloud"),
+        body: T("Crie sua conta e leve sua garagem, histórico e conquistas para qualquer aparelho — sem perder nada.", "Create your account and take your garage, history and achievements to any device — without losing a thing."),
+        cta: T("Entrar no Mentorque", "Sign in to Mentorque"),
+      },
+      // Card "Desbloqueie o Premium" em destaque
+      unlock: {
+        title: T("Desbloqueie o Premium", "Unlock Premium"),
+        body: T("Cuide do seu carro sem limites.", "Care for your car without limits."),
+        cta: T("Ver planos Premium", "See Premium plans"),
+        benefits: [
+          T("Garagem ilimitada", "Unlimited garage"),
+          T("Conteúdos exclusivos para o seu carro", "Exclusive content for your car"),
+          T("Diagnóstico ilimitado com o Biela", "Unlimited diagnosis with Biela"),
+        ],
+      },
       support: {
         title: T("Dúvidas ou sugestões?", "Questions or suggestions?"),
         subtitle: T("Fale direto com a gente", "Talk to us directly"),
@@ -1323,6 +1341,72 @@ export function getContent(locale: Locale) {
         "Este app é independente e não possui vínculo com montadoras ou entidades oficiais. Marcas e modelos são citados apenas para fins informativos.",
         "This app is independent and not affiliated with automakers or official entities. Brands and models are cited for informational purposes only."
       ),
+    },
+
+    gamification: {
+      // Level card (no Perfil)
+      cardTitle: T("Sua jornada", "Your journey"),
+      pointsShort: "pts",
+      toNext: T("Faltam {n} pts para {phase}", "{n} pts to {phase}"),
+      maxLevel: T("Você chegou ao topo! 🏆", "You reached the top! 🏆"),
+      howBtn: T("Como funciona?", "How it works?"),
+      acervoBtn: T("Seu acervo", "Your collection"),
+
+      // Fases (badges)
+      phases: {
+        aprendiz: { name: T("Aprendiz", "Beginner"), desc: T("Você acabou de chegar e está conhecendo o Mentorque.", "You just arrived and are getting to know Mentorque.") },
+        piloto: { name: T("Piloto", "Driver"), desc: T("Seu carro já está na garagem e você começou a cuidar dele.", "Your car is in the garage and you've started caring for it.") },
+        cuidador: { name: T("Cuidador", "Caretaker"), desc: T("Você mantém os registros em dia e cuida da manutenção.", "You keep records up to date and stay on top of maintenance.") },
+        mecanico: { name: T("Mecânico de Garagem", "Garage Mechanic"), desc: T("Domínio do histórico e das revisões do seu carro.", "You've mastered your car's history and services.") },
+        mestre: { name: T("Mestre da Garagem", "Garage Master"), desc: T("Referência no cuidado — seu carro está sempre em ordem.", "A reference in care — your car is always in order.") },
+        lenda: { name: T("Lenda Mentorque", "Mentorque Legend"), desc: T("O topo, reservado a quem vive o Mentorque todos os dias.", "The top, reserved for those who live Mentorque every day.") },
+      } as Record<string, { name: string; desc: string }>,
+
+      // "Como funciona?" — fases + atividades
+      howTitle: T("Como as fases funcionam", "How phases work"),
+      howIntro: T("Cada cuidado com o seu carro te faz avançar de fase. Quanto mais você usa o Mentorque, mais alto você chega.", "Every bit of care for your car moves you up a phase. The more you use Mentorque, the higher you climb."),
+      phasesTitle: T("As fases", "The phases"),
+      advanceTitle: T("O que faz você avançar", "What moves you forward"),
+      activities: [
+        { emoji: "🚗", label: T("Adicionar um carro à garagem", "Add a car to your garage"), pts: "+20" },
+        { emoji: "🧾", label: T("Registrar um serviço no histórico", "Log a service in your history"), pts: "+15" },
+        { emoji: "🪪", label: T("Completar seu perfil", "Complete your profile"), pts: "+15" },
+        { emoji: "🔍", label: T("Fazer um diagnóstico de sintoma", "Run a symptom diagnosis"), pts: "+10" },
+        { emoji: "📚", label: T("Concluir uma aula nos Estudos", "Finish a lesson in Studies"), pts: "+15" },
+        { emoji: "💬", label: T("Tirar uma dúvida com o Biela", "Ask Biela a question"), pts: "+10" },
+        { emoji: "✅", label: T("Manter a revisão em dia", "Keep your service on time"), pts: "+25" },
+        { emoji: "🏅", label: T("Desbloquear um marco", "Unlock a milestone"), pts: "+5" },
+      ],
+      noRushTitle: T("Sem pressa", "No rush"),
+      noRushBody: T("Sua fase mais alta fica sempre salva. Mesmo que passe um tempo longe, você não perde o seu nível.", "Your highest phase is always saved. Even if you're away for a while, you never lose your level."),
+
+      // "Seu acervo" — marcos & momentos
+      acervoTitle: T("Seu acervo", "Your collection"),
+      acervoIntro: T("Marcos e momentos da sua jornada cuidando do carro.", "Milestones and moments from your car-care journey."),
+      tabMarcos: T("Marcos", "Milestones"),
+      tabMomentos: T("Momentos", "Moments"),
+      earnedCount: T("{n} de {total} conquistados", "{n} of {total} earned"),
+      soon: T("Em breve", "Coming soon"),
+      milestones: {
+        // Marcos
+        welcome: { title: T("Bem-vindo a bordo", "Welcome aboard"), desc: T("Você começou a cuidar do seu carro com o Mentorque.", "You started caring for your car with Mentorque.") },
+        firstCar: { title: T("Primeiro carro", "First car"), desc: T("Você cadastrou seu primeiro carro na garagem.", "You registered your first car in the garage.") },
+        profileDone: { title: T("Perfil completo", "Complete profile"), desc: T("Nome, e-mail e estado preenchidos.", "Name, email and state all set.") },
+        firstService: { title: T("Primeiro registro", "First log"), desc: T("Você registrou o primeiro serviço no histórico.", "You logged your first service in the history.") },
+        fiveServices: { title: T("Cinco serviços", "Five services"), desc: T("Cinco serviços registrados. Histórico ganhando forma!", "Five services logged. Your history is taking shape!") },
+        garageFull: { title: T("Garagem cheia", "Full garage"), desc: T("Três ou mais carros na sua garagem.", "Three or more cars in your garage.") },
+        tenServices: { title: T("Histórico de mestre", "Master history"), desc: T("Dez serviços registrados. Cuidado exemplar!", "Ten services logged. Exemplary care!") },
+        supporter: { title: T("Apoiador Premium", "Premium supporter"), desc: T("Você desbloqueou o Premium e apoia o projeto.", "You unlocked Premium and support the project.") },
+        // Momentos
+        onboard: { title: T("A primeira volta", "The first drive"), desc: T("Seu começo de jornada no Mentorque.", "The start of your Mentorque journey.") },
+        firstMonth: { title: T("Um mês juntos", "One month together"), desc: T("Um mês cuidando do carro por aqui.", "A month of caring for your car here.") },
+        firstYear: { title: T("Um ano juntos", "One year together"), desc: T("Um ano de estrada ao lado do Mentorque.", "A year on the road with Mentorque.") },
+        comeback: { title: T("Você voltou", "You're back"), desc: T("Retomou os cuidados depois de um tempo longe.", "Back to caring after some time away.") },
+        onTime: { title: T("Revisão em dia", "Service on time"), desc: T("Fez a revisão dentro do prazo recomendado.", "Did the service within the recommended window.") },
+        streak: { title: T("Sequência de cuidados", "Care streak"), desc: T("Vários cuidados seguidos, sem deixar passar.", "Several cares in a row, nothing slipping.") },
+        explorer: { title: T("Explorador dos Estudos", "Studies explorer"), desc: T("Concluiu aulas e aprendeu sobre o seu carro.", "Finished lessons and learned about your car.") },
+        diagnostician: { title: T("Bom de diagnóstico", "Sharp diagnostician"), desc: T("Investigou sintomas e resolveu problemas.", "Investigated symptoms and solved problems.") },
+      } as Record<string, { title: string; desc: string }>,
     },
 
     subscribe: {
