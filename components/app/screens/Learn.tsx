@@ -238,38 +238,16 @@ export function ForYourCarScreen() {
 // 2.6.C — Detalhe do conteúdo (tutorial com passos OU artigo com parágrafos)
 export function ContentScreen({ id }: { id: string }) {
   const c = useContent();
-  const { locale } = useI18n();
   const { s } = usePrototype();
-  const v = activeVehicle(s);
   const lesson = c.lessons.find((l) => l.id === id);
   const [done, setDone] = useState(false);
   const [saved, setSaved] = useState(false);
   const [level, setLevel] = useState<"iniciante" | "avancado" | "mecanico">("avancado");
-  const [leveled, setLeveled] = useState<Record<string, string[]>>({});
-  const [loadingLevel, setLoadingLevel] = useState(false);
   if (!lesson) return <AppHeader title="—" />;
 
+  const byLevel = lesson.stepsByLevel; // 3 níveis fixos (sem chamada de API)
   const hasSteps = lesson.steps.length > 0;
-  const shownSteps = level === "avancado" ? lesson.steps : leveled[level] ?? lesson.steps;
-
-  // Switch depth level; fetch a Biela-adapted version for iniciante/mecânico.
-  const chooseLevel = async (lv: "iniciante" | "avancado" | "mecanico") => {
-    setLevel(lv);
-    if (lv === "avancado" || leveled[lv]) return;
-    setLoadingLevel(true);
-    try {
-      const res = await fetch("/api/lesson-steps", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          title: lesson.title, steps: lesson.steps, need: lesson.need, safety: lesson.safety, level: lv, locale,
-          car: v ? { make: v.make, model: v.model, year: v.year } : null,
-        }),
-      });
-      const data = await res.json();
-      if (data.mode === "ai" && Array.isArray(data.steps)) setLeveled((m) => ({ ...m, [lv]: data.steps }));
-    } catch { /* keep base steps */ } finally { setLoadingLevel(false); }
-  };
+  const shownSteps = byLevel ? byLevel[level] : lesson.steps;
 
   return (
     <div>
@@ -307,33 +285,29 @@ export function ContentScreen({ id }: { id: string }) {
         <div className="mt-5">
           <div className="mb-2.5 flex items-center justify-between gap-2">
             <p className="text-xs font-semibold uppercase tracking-wide text-cream/45">{c.learn.steps}</p>
-            {/* Seletor de nível: mais iniciante = mais detalhado */}
-            <div className="flex gap-1 rounded-lg bg-graphite-800 p-0.5 ring-1 ring-white/10">
-              {(["iniciante", "avancado", "mecanico"] as const).map((lv) => (
-                <button
-                  key={lv}
-                  onClick={() => chooseLevel(lv)}
-                  className={`rounded-md px-2 py-1 text-[11px] font-medium transition-colors ${level === lv ? "bg-amber text-graphite" : "text-cream/60 hover:text-cream"}`}
-                >
-                  {c.learn.levels[lv]}
-                </button>
-              ))}
-            </div>
+            {/* Seletor de nível (só quando há níveis fixos): mais iniciante = mais detalhado */}
+            {byLevel && (
+              <div className="flex gap-1 rounded-lg bg-graphite-800 p-0.5 ring-1 ring-white/10">
+                {(["iniciante", "avancado", "mecanico"] as const).map((lv) => (
+                  <button
+                    key={lv}
+                    onClick={() => setLevel(lv)}
+                    className={`rounded-md px-2 py-1 text-[11px] font-medium transition-colors ${level === lv ? "bg-amber text-graphite" : "text-cream/60 hover:text-cream"}`}
+                  >
+                    {c.learn.levels[lv]}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-          {loadingLevel ? (
-            <p className="flex items-center gap-2 rounded-xl bg-graphite-800 px-3.5 py-3 text-sm text-cream/55 ring-1 ring-white/5">
-              <span className="text-amber">🐻</span> {c.learn.levelLoading}
-            </p>
-          ) : (
-            <ol className="space-y-2">
-              {shownSteps.map((x, i) => (
-                <li key={i} className="flex gap-2.5 text-sm text-cream/85">
-                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-amber/15 font-display text-xs font-semibold text-amber">{i + 1}</span>
-                  {x}
-                </li>
-              ))}
-            </ol>
-          )}
+          <ol className="space-y-2">
+            {shownSteps.map((x, i) => (
+              <li key={i} className="flex gap-2.5 text-sm text-cream/85">
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-amber/15 font-display text-xs font-semibold text-amber">{i + 1}</span>
+                {x}
+              </li>
+            ))}
+          </ol>
         </div>
       )}
 
