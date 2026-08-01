@@ -22,6 +22,31 @@ function deviceId(): string {
   } catch { return "—"; }
 }
 
+// Grouped settings card — rows share one rounded container with soft dividers.
+function Group({ children }: { children: React.ReactNode }) {
+  return <div className="overflow-hidden rounded-2xl bg-graphite-800 ring-1 ring-white/[0.06] [&>*+*]:border-t [&>*+*]:border-white/[0.06]">{children}</div>;
+}
+
+// A settings row: colored icon square + label (+ optional value) + right slot.
+function IconRow({ icon, tint, label, value, action, right, onClick, danger }: {
+  icon: string; tint: string; label: string; value?: string; action?: string; right?: React.ReactNode; onClick?: () => void; danger?: boolean;
+}) {
+  const inner = (
+    <>
+      <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${tint}`}>
+        <Icon name={icon} className="h-5 w-5" />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className={`block font-display text-[15px] ${danger ? "text-coral" : "text-cream"}`}>{label}</span>
+        {value ? <span className="mt-0.5 block truncate text-xs text-cream/50">{value}</span> : null}
+      </span>
+      {right ?? (action ? <span className="shrink-0 text-xs font-medium text-amber">{action}</span> : onClick ? <span className="shrink-0 text-lg text-cream/30">›</span> : null)}
+    </>
+  );
+  const cls = "flex w-full items-center gap-3 px-4 py-3.5 text-left";
+  return onClick ? <button onClick={onClick} className={cls}>{inner}</button> : <div className={cls}>{inner}</div>;
+}
+
 // 3.1.A — Perfil
 export function ProfileScreen() {
   const c = useContent();
@@ -64,13 +89,6 @@ export function ProfileScreen() {
       setSupStatus("error");
     }
   };
-
-  const row = (label: string, right?: React.ReactNode, onClick?: () => void) => (
-    <button onClick={onClick} className="flex w-full items-center justify-between gap-3 rounded-xl bg-graphite-800 px-3.5 py-3.5 text-left ring-1 ring-white/5">
-      <span className="font-display text-[15px] text-cream">{label}</span>
-      {right ?? <span className="text-cream/40">›</span>}
-    </button>
-  );
 
   return (
     <div>
@@ -162,50 +180,30 @@ export function ProfileScreen() {
 
       {/* Detalhes da conta */}
       <SectionTitle>{p.account}</SectionTitle>
-      <div className="overflow-hidden rounded-2xl bg-graphite-800 ring-1 ring-white/5 divide-y divide-white/5">
-        <button onClick={() => { setNameInput(s.name ?? ""); setEditName(true); }} className="flex w-full items-center gap-3 px-4 py-3.5 text-left">
-          <Icon name="user" className="h-4 w-4 shrink-0 text-cream/40" />
-          <div className="min-w-0 flex-1">
-            <p className="text-[11px] text-cream/45">{p.name}</p>
-            <p className="truncate text-sm text-cream">{s.name || p.guest}</p>
-          </div>
-          <span className="shrink-0 text-xs font-medium text-amber">{c.common.edit}</span>
-        </button>
-        <button onClick={() => { setEmailInput(s.email ?? ""); setEditEmail(true); }} className="flex w-full items-center gap-3 px-4 py-3.5 text-left">
-          <Icon name="consult" className="h-4 w-4 shrink-0 text-cream/40" />
-          <div className="min-w-0 flex-1">
-            <p className="text-[11px] text-cream/45">{p.email}</p>
-            <p className="truncate text-sm text-cream">{s.email || p.notSet}</p>
-          </div>
-          <span className="shrink-0 text-xs font-medium text-amber">{c.common.edit}</span>
-        </button>
-        <div className="flex items-center gap-3 px-4 py-3">
-          <Icon name="explore" className="h-4 w-4 shrink-0 text-cream/40" />
-          <div className="min-w-0 flex-1">
-            <p className="text-[11px] text-cream/45">{p.stateLabel}</p>
-            <p className="truncate text-sm text-cream">{s.state || p.notSet}</p>
-          </div>
-          <select
-            value={s.state ?? ""}
-            onChange={(e) => setState(e.target.value)}
-            className="shrink-0 rounded-lg bg-graphite-700 px-2 py-1.5 text-sm text-cream ring-1 ring-white/10 outline-none focus:ring-amber"
-          >
-            <option value="">{p.stateSelect}</option>
-            {BR_STATES.map((uf) => (
-              <option key={uf} value={uf}>{uf}</option>
-            ))}
-          </select>
-        </div>
-        <div className="flex items-center gap-3 px-4 py-3">
-          <Icon name="book" className="h-4 w-4 shrink-0 text-cream/40" />
-          <p className="min-w-0 flex-1 text-sm text-cream">{p.language}</p>
-          <LangSwitcher />
-        </div>
-      </div>
+      <Group>
+        <IconRow icon="user" tint="bg-amber/15 text-amber" label={p.name} value={s.name || p.guest} action={c.common.edit} onClick={() => { setNameInput(s.name ?? ""); setEditName(true); }} />
+        <IconRow icon="consult" tint="bg-teal/15 text-teal" label={p.email} value={s.email || p.notSet} action={c.common.edit} onClick={() => { setEmailInput(s.email ?? ""); setEditEmail(true); }} />
+        <IconRow
+          icon="explore" tint="bg-coral/15 text-coral" label={p.stateLabel} value={s.state || undefined}
+          right={
+            <select
+              value={s.state ?? ""}
+              onChange={(e) => setState(e.target.value)}
+              className="shrink-0 rounded-lg bg-graphite-700 px-2 py-1.5 text-sm text-cream ring-1 ring-white/10 outline-none focus:ring-amber"
+            >
+              <option value="">{p.stateSelect}</option>
+              {BR_STATES.map((uf) => (<option key={uf} value={uf}>{uf}</option>))}
+            </select>
+          }
+        />
+      </Group>
 
-      <div className="mt-2">
-        {row(p.consulting, <AccessBadge access="premium" />, () => setConsult(true))}
-      </div>
+      {/* Preferências */}
+      <SectionTitle>{p.preferences}</SectionTitle>
+      <Group>
+        <IconRow icon="book" tint="bg-teal/15 text-teal" label={p.language} right={<LangSwitcher />} />
+        <IconRow icon="spark" tint="bg-amber/15 text-amber" label={p.consulting} right={<AccessBadge access="premium" />} onClick={() => setConsult(true)} />
+      </Group>
 
       {/* Dúvidas ou sugestões → e-mail */}
       <SectionTitle>{p.support.title}</SectionTitle>
@@ -253,11 +251,15 @@ export function ProfileScreen() {
       </Card>
 
       <SectionTitle>{p.demo}</SectionTitle>
-      <div className="space-y-2">
-        {row(p.reset, <Icon name="alert" className="h-4 w-4 text-coral" />, reset)}
-      </div>
+      <Group>
+        <IconRow icon="alert" tint="bg-coral/15 text-coral" label={p.reset} danger onClick={reset} />
+      </Group>
 
-      <p className="mt-6 px-2 text-center text-[11px] leading-relaxed text-cream/35">{p.disclaimer}</p>
+      {/* Rodapé */}
+      <div className="mt-8 flex flex-col items-center gap-2">
+        <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber/15 font-display text-sm font-bold text-amber">M</span>
+        <p className="mx-auto max-w-xs px-4 text-center text-[11px] leading-relaxed text-cream/35">{p.disclaimer}</p>
+      </div>
 
       {/* Edit name sheet */}
       <Sheet open={editName} onClose={() => setEditName(false)}>

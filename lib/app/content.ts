@@ -1282,6 +1282,7 @@ export function getContent(locale: Locale) {
       carsCount: T("{n} carro(s) cadastrado(s)", "{n} car(s) registered"),
       consulting: T("Consultoria e conteúdos exclusivos", "Consulting & exclusive content"),
       language: T("Idioma", "Language"),
+      preferences: T("Preferências", "Preferences"),
       signOut: T("Sair", "Sign out"),
       reset: T("Reiniciar protótipo", "Reset prototype"),
       demo: "Demo",
