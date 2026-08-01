@@ -1,7 +1,9 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { newId, type ServiceRecord, type Vehicle } from "./types";
+import { useAuth } from "./auth";
+import { getBrowserSupabase } from "@/lib/supabaseBrowser";
 
 // Client-side session for the car-centric prototype: a garage of vehicles, one
 // "active" vehicle, and a flat list of service records. Persisted to
@@ -70,8 +72,33 @@ function migrate(parsed: any): Session {
   return next;
 }
 
+// Union two lists of entities by id (keeps items from both, cloud winning ties).
+function mergeById<T extends { id: string }>(cloud: T[], local: T[]): T[] {
+  const map = new Map<string, T>();
+  for (const x of [...(local ?? []), ...(cloud ?? [])]) map.set(x.id, x);
+  return [...map.values()];
+}
+// Merge cloud + local so logging in never loses guest work: cloud scalars win
+// when set, but local-only vehicles/services are kept.
+function mergeSessions(cloud: Session, local: Session): Session {
+  return {
+    onboarded: !!cloud.onboarded || !!local.onboarded,
+    name: cloud.name ?? local.name,
+    email: cloud.email ?? local.email,
+    state: cloud.state ?? local.state,
+    premium: !!cloud.premium || !!local.premium,
+    vehicles: mergeById(cloud.vehicles ?? [], local.vehicles ?? []),
+    activeVehicleId: cloud.activeVehicleId ?? local.activeVehicleId ?? null,
+    services: mergeById(cloud.services ?? [], local.services ?? []),
+  };
+}
+
 export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const [s, setS] = useState<Session>(EMPTY);
+  const { user } = useAuth();
+  const supabase = getBrowserSupabase();
+  const loadedFor = useRef<string | null>(null);
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     try {
@@ -92,6 +119,38 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const patch = useCallback((fn: (prev: Session) => Session) => setS((prev) => commit(fn(prev))), [commit]);
+
+  // On login: pull the user's cloud state and merge the local (guest) work into
+  // it so nothing is lost. First login with an empty cloud pushes local up.
+  useEffect(() => {
+    if (!user || !supabase) { loadedFor.current = null; return; }
+    if (loadedFor.current === user.id) return;
+    loadedFor.current = user.id;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.from("user_state").select("data").eq("user_id", user.id).maybeSingle();
+      if (cancelled) return;
+      const cloud = (data?.data ?? null) as Session | null;
+      setS((local) => {
+        const merged = cloud ? mergeSessions(cloud, local) : local;
+        if (!merged.email) merged.email = user.email ?? null;
+        return commit(merged);
+      });
+    })();
+    return () => { cancelled = true; };
+  }, [user, supabase, commit]);
+
+  // Debounced push of the whole session to the cloud while logged in.
+  useEffect(() => {
+    if (!user || !supabase) return;
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => {
+      supabase.from("user_state").upsert({ user_id: user.id, data: s }).then(({ error }) => {
+        if (error) console.warn("[sync] save failed:", error.message);
+      });
+    }, 800);
+    return () => { if (saveTimer.current) clearTimeout(saveTimer.current); };
+  }, [s, user, supabase]);
 
   const setName = useCallback((name: string) => patch((p) => ({ ...p, name: name.trim() || null })), [patch]);
   const setEmail = useCallback((email: string) => patch((p) => ({ ...p, email: email.trim() || null })), [patch]);

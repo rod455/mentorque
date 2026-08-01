@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
+import { useAuth } from "@/lib/app/auth";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { carName } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
@@ -26,6 +27,7 @@ export function ProfileScreen() {
   const c = useContent();
   const p = c.profile;
   const { locale } = useI18n();
+  const { user, enabled, signOut } = useAuth();
   const { s, setName, setEmail, setState, setPremium, reset } = usePrototype();
   const { go } = useNav();
   const [editName, setEditName] = useState(false);
@@ -87,6 +89,38 @@ export function ProfileScreen() {
           {c.common.edit}
         </button>
       </Card>
+
+      {/* Conta (login/sincronização) — só quando o auth está configurado */}
+      {enabled && (
+        user ? (
+          <Card className="mt-3 flex items-center gap-3">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-teal/15 text-teal">
+              <Icon name="check" className="h-5 w-5" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs text-cream/50">{c.auth.signedInAs}</p>
+              <p className="truncate font-display text-sm text-cream">{user.email}</p>
+            </div>
+            <button onClick={() => signOut()} className="shrink-0 text-xs font-medium text-coral/80 hover:text-coral">
+              {c.auth.signOut}
+            </button>
+          </Card>
+        ) : (
+          <button
+            onClick={() => go({ name: "auth" })}
+            className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-amber/15 to-amber/5 p-4 text-left ring-1 ring-amber/25 hover:ring-amber/45"
+          >
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-amber/15 text-amber">
+              <Icon name="user" className="h-5 w-5" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block font-display text-[15px] font-semibold text-cream">{c.auth.createOrSignIn}</span>
+              <span className="mt-0.5 block text-xs text-cream/55">{c.auth.syncNote}</span>
+            </span>
+            <span className="shrink-0 text-amber">›</span>
+          </button>
+        )
+      )}
 
       {/* Plano atual */}
       <Card className="mt-3 ring-amber/20">

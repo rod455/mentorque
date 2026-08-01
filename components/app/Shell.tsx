@@ -14,6 +14,7 @@ import { LearnScreen, StudyTrackScreen, ForYourCarScreen, ContentScreen, BielaCh
 import { EquipmentScreen } from "./screens/Equipment";
 import { CarSettingsScreen } from "./screens/CarSettings";
 import { ProfileScreen, SubscribeScreen } from "./screens/Profile";
+import { AuthScreen } from "./screens/Auth";
 
 export function Shell() {
   return (
@@ -75,6 +76,7 @@ function Router() {
       case "content": return <ContentScreen id={view.id} />;
       case "carSettings": return <CarSettingsScreen />;
       case "profile": return <ProfileScreen />;
+      case "auth": return <AuthScreen />;
       case "subscribe": return <SubscribeScreen ctx={view.ctx} />;
     }
   })();
@@ -99,7 +101,7 @@ const TAB_OF: Record<View["name"], Tab> = {
   symptoms: "problems", symptom: "problems", systemProblems: "problems", equipment: "problems", checklist: "problems",
   history: "history", addService: "history", service: "history",
   learn: "studies", studyTrack: "studies", forYourCar: "studies", biela: "studies", content: "studies",
-  profile: "profile", subscribe: "profile",
+  profile: "profile", auth: "profile", subscribe: "profile",
 };
 
 function BottomNav() {
