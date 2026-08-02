@@ -49,8 +49,7 @@ export function HomeScreen() {
   const car = activeVehicle(s);
   const hasCar = s.vehicles.length > 0;
   const status = computeStatus(s);
-  // read-obd2 é ferramenta de consulta — nunca conta como "visto".
-  const seen = (s.seenLessons ?? []).filter((id) => id !== "read-obd2");
+  const seen = s.seenLessons ?? [];
   const picks = forYou(c.lessons, { make: car?.make, pref: levelPref(status.phaseIndex), seen });
 
   // Memórias: marcos e momentos conquistados, priorizando Momentos.

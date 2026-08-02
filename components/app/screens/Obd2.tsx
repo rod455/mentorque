@@ -7,12 +7,13 @@ import { AppHeader, Card, SeverityDot, inputCls, useContent } from "../ui";
 import { Button } from "@/components/ui/Button";
 
 // 2.2.E — Códigos OBD2: o que são, a ferramenta e a consulta com autocomplete.
-// Não marca como "vista": é uma ferramenta de consulta, deve seguir no Para você.
+// Concluir é ação do usuário (botão no fim), como nas outras aulas.
 export function Obd2Screen() {
   const c = useContent();
   const t = c.obd2;
-  const { s } = usePrototype();
+  const { s, markLessonSeen } = usePrototype();
   const { go } = useNav();
+  const done = (s.seenLessons ?? []).includes("read-obd2");
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [picked, setPicked] = useState<(typeof t.codes)[number] | null>(null);
@@ -116,6 +117,11 @@ export function Obd2Screen() {
           </Button>
         </Card>
       )}
+
+      {/* Concluído — mesma mecânica das outras aulas */}
+      <Button variant="secondary" className="mt-6 w-full" onClick={() => markLessonSeen("read-obd2")}>
+        {done ? `✓ ${c.learn.completed}` : c.learn.complete}
+      </Button>
     </div>
   );
 }
