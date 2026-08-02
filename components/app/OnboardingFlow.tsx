@@ -193,7 +193,7 @@ export function OnboardingFlow() {
         /* Página 5 — monte seu teste */
         <div className="flex flex-1 flex-col overflow-y-auto px-6 pb-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {/* Biela cercada de recursos */}
-          <div className="relative mx-auto mt-8 flex h-44 w-full max-w-xs items-end justify-center">
+          <div className="relative mx-auto mt-3 flex h-60 w-full max-w-xs items-end justify-center">
             <BielaMascote size={118} />
             {[
               { icon: "diagnose", cls: "left-0 top-4" },
