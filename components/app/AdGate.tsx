@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { usePrototype } from "@/lib/app/store";
 import { adUnit, initAdMob, nativeAdMob } from "@/lib/app/admob";
+import { detectPlatform } from "@/lib/app/platform";
+import { isNativeApp } from "@/lib/app/wrapper";
 import { useNav } from "@/lib/app/nav";
 import { useContent } from "./ui";
 
@@ -121,6 +123,12 @@ export function AdOverlay({ kind, onDone, onCancel }: { kind: "interstitial" | "
       )}
     </div>
   );
+}
+
+// Anúncios habilitados? No app nativo da Apple, NUNCA (nem house ad) —
+// lá o modelo é só conteúdo bloqueado + assinatura via IAP.
+export function adsEnabled(): boolean {
+  return !(isNativeApp() && detectPlatform() === "ios");
 }
 
 // Gate por tela: devolve se o anúncio ainda precisa aparecer (só free).

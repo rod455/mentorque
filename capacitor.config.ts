@@ -14,6 +14,10 @@ const config: CapacitorConfig = {
   android: {
     allowMixedContent: false,
   },
+  ios: {
+    // Sem anúncios no iOS: o SDK do AdMob fica fora do build da Apple.
+    includePlugins: ["@capacitor/app", "@revenuecat/purchases-capacitor"],
+  },
   plugins: {
     AdMob: {
       appId: "ca-app-pub-9316035916536420~8094986125",

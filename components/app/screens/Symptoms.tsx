@@ -8,7 +8,7 @@ import type { SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Card, Icon, inputCls, LockedCard, PremiumBadge, RecoBadge, SeverityDot, UpgradeBanner, useContent } from "../ui";
-import { AdOverlay } from "../AdGate";
+import { AdOverlay, adsEnabled } from "../AdGate";
 
 // Map a symptom category to a service type for pre-filling the history form.
 const CATEGORY_TO_SERVICE: Record<SystemKey, string> = {
@@ -316,7 +316,7 @@ export function SymptomDetail({ id }: { id: string }) {
   // Interstitial ao abrir um problema específico (só free).
   const [adDone, setAdDone] = useState(false);
   if (!sx) return <AppHeader title="—" />;
-  const needAd = !s.premium && !adDone;
+  const needAd = adsEnabled() && !s.premium && !adDone;
   const pd = c.symptomPremium[sx.id];
 
   const shownCauses = s.premium ? sx.causes : sx.causes.slice(0, 2);

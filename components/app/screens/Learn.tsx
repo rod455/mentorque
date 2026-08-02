@@ -8,7 +8,7 @@ import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Card, Chip, Icon, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
 import { VideoPlayer } from "../VideoPlayer";
-import { AdOverlay } from "../AdGate";
+import { AdOverlay, adsEnabled } from "../AdGate";
 
 const FREE_BIELA_QUESTIONS = 0; // Biela é sempre Premium (sem perguntas grátis)
 
@@ -287,7 +287,7 @@ export function ContentScreen({ id }: { id: string }) {
   const saved = lesson ? (s.savedLessons ?? []).includes(lesson.id) : false;
   // Interstitial ao abrir uma aula (só free).
   const [adDone, setAdDone] = useState(false);
-  const needAd = !s.premium && !adDone;
+  const needAd = adsEnabled() && !s.premium && !adDone;
   if (!lesson) return <AppHeader title="—" />;
 
   const byLevel = lesson.stepsByLevel; // 3 níveis fixos (sem chamada de API)

@@ -51,14 +51,6 @@
 	<array>
 		<string>armv7</string>
 	</array>
-	<!-- AdMob iOS: SUBSTITUA pelo App ID do app iOS criado no AdMob
-	     (AdMob → Apps → Adicionar app → iOS). Sem o valor real, os anúncios
-	     não servem no iPhone. -->
-	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-9316035916536420~0000000000</string>
-	<!-- ATT: aviso exibido antes de anúncios personalizados (obrigatório iOS 14+) -->
-	<key>NSUserTrackingUsageDescription</key>
-	<string>Usamos seu identificador para mostrar anúncios mais relevantes na versão gratuita do app.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
