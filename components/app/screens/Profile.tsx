@@ -555,12 +555,13 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   useEffect(() => setPlatform(detectPlatform()), []);
   const trialDays = trialDaysFor(platform);
 
-  // Plano escolhido no onboarding ("Monte seu teste") chega via ctx.
-  const chosenPlan: "monthly" | "annual" = _ctx === "onb-monthly" ? "monthly" : "annual";
+  // Plano selecionável no paywall (o checkout embutido nasce com um preço fixo,
+  // então a escolha acontece aqui). O onboarding pré-seleciona via ctx.
+  const [plan, setPlan] = useState<"monthly" | "annual">(_ctx === "onb-monthly" ? "monthly" : "annual");
   const subscribe = () => {
     if (!user) { go({ name: "auth" }); return; }
     if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; } // demo só em dev
-    go({ name: "checkout", plan: chosenPlan }); // checkout embutido (com teste grátis)
+    go({ name: "checkout", plan }); // checkout embutido (com teste grátis)
   };
 
   // Pop-up de saída: 10% OFF ao fechar o paywall. Depois de aparecer, fica
@@ -695,11 +696,33 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
         <Toggle on={remind} onChange={setRemind} size="sm" />
       </div>
 
+      {/* Escolha do plano */}
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        <button
+          onClick={() => setPlan("annual")}
+          className={`relative rounded-2xl p-4 text-left ring-2 transition-colors ${plan === "annual" ? "bg-amber text-graphite ring-amber" : "bg-graphite-800 text-cream ring-white/10"}`}
+        >
+          <span className={`absolute -top-2.5 left-3 rounded-full px-2 py-0.5 text-[10px] font-bold ${plan === "annual" ? "bg-graphite text-amber" : "bg-amber/20 text-amber"}`}>{sub.planBadge}</span>
+          <span className="block font-display text-base font-bold">{sub.planAnnual}</span>
+          <span className={`mt-0.5 block text-sm ${plan === "annual" ? "text-graphite/75" : "text-cream/60"}`}>{sub.planAnnualPrice}</span>
+          <span className={`block text-xs ${plan === "annual" ? "text-graphite/60" : "text-cream/45"}`}>{sub.planAnnualNote}</span>
+        </button>
+        <button
+          onClick={() => setPlan("monthly")}
+          className={`rounded-2xl p-4 text-left ring-2 transition-colors ${plan === "monthly" ? "bg-amber text-graphite ring-amber" : "bg-graphite-800 text-cream ring-white/10"}`}
+        >
+          <span className="block font-display text-base font-bold">{sub.planMonthly}</span>
+          <span className={`mt-0.5 block text-sm ${plan === "monthly" ? "text-graphite/75" : "text-cream/60"}`}>{sub.planMonthlyPrice}</span>
+        </button>
+      </div>
+
       {/* CTA */}
       <Button size="lg" className="mt-4 w-full" onClick={subscribe}>
         {sub.trialCta.replace("{n}", String(trialDays))}
       </Button>
-      <p className="mx-auto mt-3 max-w-xs text-center text-xs leading-relaxed text-cream/45">{sub.trialFine}</p>
+      <p className="mx-auto mt-3 max-w-xs text-center text-xs leading-relaxed text-cream/45">
+        {plan === "annual" ? sub.trialFine : sub.trialFineMonthly}
+      </p>
 
       {/* Pop-up de saída — 10% OFF (formato Bloom) */}
       {showOffer && (

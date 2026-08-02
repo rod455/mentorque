@@ -1926,6 +1926,13 @@ export function getContent(locale: Locale) {
       reminder: T("Lembrar antes do teste terminar", "Remind me before the trial ends"),
       trialCta: T("Começar {n} dias grátis", "Start {n}-day free trial"),
       trialFine: T("Após o período grátis, R$ 239,90 cobrado anual. Cancele quando quiser.", "After the free trial, R$ 239.90 billed yearly. Cancel anytime."),
+      trialFineMonthly: T("Após o período grátis, R$ 29,90 por mês. Cancele quando quiser.", "After the free trial, R$ 29.90 per month. Cancel anytime."),
+      planAnnual: T("Anual", "Yearly"),
+      planAnnualPrice: T("R$ 239,90/ano", "R$ 239.90/yr"),
+      planAnnualNote: T("R$ 19,99/mês", "R$ 19.99/mo"),
+      planBadge: T("Melhor preço", "Best value"),
+      planMonthly: T("Mensal", "Monthly"),
+      planMonthlyPrice: T("R$ 29,90/mês", "R$ 29.90/mo"),
       // Pop-up de saída do paywall — oferta de 10% de desconto
       exitTitle: T("Desbloqueie o Mentorque Premium com 10% de desconto 🔥", "Unlock Mentorque Premium with 10% off 🔥"),
       exitSub: T("Desbloqueie os recursos premium hoje mesmo por um preço especial. Válido somente para hoje!", "Unlock premium features today at a special price. Today only!"),
