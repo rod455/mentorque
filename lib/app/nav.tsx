@@ -15,6 +15,7 @@ export type View =
   | { name: "symptom"; id: string }
   | { name: "systemProblems"; system: SystemKey }
   | { name: "checklist"; symptomId: string }
+  | { name: "obd2" }
   | { name: "health" }
   | { name: "healthQuiz" }
   | { name: "system"; system: SystemKey }

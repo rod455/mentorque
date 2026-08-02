@@ -169,6 +169,19 @@ export function SymptomsScreen() {
         </button>
       </div>
 
+      {/* Códigos OBD2 — leitura da luz do painel */}
+      <button
+        onClick={() => go({ name: "obd2" })}
+        className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-3.5 py-3.5 text-left ring-1 ring-white/5 hover:ring-amber/30"
+      >
+        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-teal/15 text-2xl">🔌</span>
+        <span className="min-w-0 flex-1">
+          <span className="block font-display text-[15px] font-semibold text-cream">{c.obd2.entryTitle}</span>
+          <span className="mt-0.5 block text-xs text-cream/50">{c.obd2.entrySub}</span>
+        </span>
+        <span className="shrink-0 text-cream/40">›</span>
+      </button>
+
       <div className="mt-5">
         <AskBielaRow seed={(v ? `Meu ${carName(v)} ` : "Meu carro ") + "está com um problema que não achei na lista. Pode me ajudar a diagnosticar?"} label={ui.talkToBiela} />
       </div>
