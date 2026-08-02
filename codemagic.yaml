@@ -18,7 +18,7 @@ workflows:
     integrations:
       app_store_connect: asc-mentorque
     environment:
-      node: 20
+      node: 22
       xcode: latest
       cocoapods: default
       ios_signing:
