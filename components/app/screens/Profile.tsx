@@ -14,7 +14,7 @@ import { isNativeApp } from "@/lib/app/wrapper";
 import { APP_VERSION, carName } from "@/lib/app/content";
 import { computeStatus } from "@/lib/app/gamification";
 import { PhaseEmblem } from "../Emblem";
-import { useNav } from "@/lib/app/nav";
+import { useNav, type View } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
 import { AppHeader, Card, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
@@ -555,7 +555,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   const sub = c.subscribe;
   const { setPremium, subscribed, refreshSubscription } = usePrototype();
   const { user } = useAuth();
-  const { back, go } = useNav();
+  const { back, go, root } = useNav();
   const [remind, setRemind] = useState(false);
   const [platform, setPlatform] = useState<Platform>("other");
   useEffect(() => setPlatform(trialPlatform()), []);
@@ -570,35 +570,63 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
     go({ name: "checkout", plan }); // checkout embutido (com teste grátis)
   };
 
-  // Pop-up de saída: 10% OFF ao fechar o paywall. Depois de aparecer, fica
-  // suprimido por 30 minutos (localStorage). Se o usuário rejeitar, entra a
-  // oferta final (25% OFF, tela cheia) — no máximo 1x a cada 3 dias.
+  // Funil de saída do paywall: QUALQUER saída (X, abas de baixo, gesto de
+  // voltar) dispara as ofertas — 10% OFF (suprimido por 30 min) e, na
+  // rejeição ou se o 10% estiver suprimido, 25% OFF em tela cheia (1x a cada
+  // 3 dias). Assinantes e o app da loja saem direto.
   const OFFER_KEY = "mentorque-exit-offer-ts";
   const OFFER2_KEY = "mentorque-exit2-ts";
   const [showOffer, setShowOffer] = useState(false);
   const [showOffer2, setShowOffer2] = useState(false);
   const [offerLeft, setOfferLeft] = useState(120);
+  const pendingExit = useRef<View | null>(null);
   useEffect(() => {
     if (!showOffer) return;
     const t = setInterval(() => setOfferLeft((n) => n - 1), 1000);
     return () => clearInterval(t);
   }, [showOffer]);
+
+  // Conclui a saída: vai pro destino pedido (ex.: aba Início) ou volta.
+  const exitNow = () => {
+    const target = pendingExit.current;
+    pendingExit.current = null;
+    if (target) root(target);
+    else back();
+  };
+
+  const fresh = (key: string, windowMs: number) => {
+    let last = 0;
+    try { last = Number(window.localStorage.getItem(key) ?? 0); } catch { /* ignore */ }
+    return Date.now() - last > windowMs;
+  };
+  const mark = (key: string) => { try { window.localStorage.setItem(key, String(Date.now())); } catch { /* ignore */ } };
+
+  // Tenta mostrar uma oferta na saída. true = mostrou (segura a navegação).
+  const requestExit = (target: View | null): boolean => {
+    if (subscribed || isNativeApp()) return false;
+    pendingExit.current = target;
+    if (fresh(OFFER_KEY, 30 * 60 * 1000)) { mark(OFFER_KEY); setOfferLeft(120); setShowOffer(true); return true; }
+    if (fresh(OFFER2_KEY, 3 * 24 * 60 * 60 * 1000)) { mark(OFFER2_KEY); setShowOffer2(true); return true; }
+    return false;
+  };
+
+  // Saídas vindas de fora da tela (abas de baixo, gesto de voltar) chegam
+  // como evento disparado pelo Shell; preventDefault segura a navegação.
   useEffect(() => {
-    if (showOffer && offerLeft <= 0) { setShowOffer(false); back(); }
+    const h = (e: Event) => {
+      const target = (e as CustomEvent<View | null>).detail ?? null;
+      if (requestExit(target)) e.preventDefault();
+    };
+    window.addEventListener("mq-paywall-exit", h);
+    return () => window.removeEventListener("mq-paywall-exit", h);
+  });
+
+  const tryClose = () => { if (!requestExit(null)) back(); };
+
+  useEffect(() => {
+    if (showOffer && offerLeft <= 0) { setShowOffer(false); exitNow(); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offerLeft, showOffer]);
-
-  const tryClose = () => {
-    let last = 0;
-    try { last = Number(window.localStorage.getItem(OFFER_KEY) ?? 0); } catch { /* ignore */ }
-    if (!subscribed && Date.now() - last > 30 * 60 * 1000) {
-      try { window.localStorage.setItem(OFFER_KEY, String(Date.now())); } catch { /* ignore */ }
-      setOfferLeft(120);
-      setShowOffer(true);
-      return;
-    }
-    back();
-  };
 
   const subscribeOffer = () => {
     if (!user) { go({ name: "auth" }); return; }
@@ -606,17 +634,15 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
     go({ name: "checkout", plan: "annual", offer: "exit10" });
   };
 
-  // Rejeitou o 10%: mostra a oferta final (25%) se não apareceu nos últimos 3 dias.
+  // Rejeitou o 10%: entra a oferta final (25%) se disponível; senão sai.
   const dismissOffer1 = () => {
     setShowOffer(false);
-    let last2 = 0;
-    try { last2 = Number(window.localStorage.getItem(OFFER2_KEY) ?? 0); } catch { /* ignore */ }
-    if (!subscribed && Date.now() - last2 > 3 * 24 * 60 * 60 * 1000) {
-      try { window.localStorage.setItem(OFFER2_KEY, String(Date.now())); } catch { /* ignore */ }
+    if (!subscribed && fresh(OFFER2_KEY, 3 * 24 * 60 * 60 * 1000)) {
+      mark(OFFER2_KEY);
       setShowOffer2(true);
       return;
     }
-    back();
+    exitNow();
   };
 
   const subscribeOffer2 = () => {
@@ -817,7 +843,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
               </button>
               {/* Recusa discreta — sai da oferta */}
               <button
-                onClick={() => { setShowOffer2(false); back(); }}
+                onClick={() => { setShowOffer2(false); exitNow(); }}
                 className="mx-auto mt-3 block text-xs text-cream/35 underline-offset-2 hover:text-cream/60 hover:underline"
               >
                 {sub.exit2Skip}

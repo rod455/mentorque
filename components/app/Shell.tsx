@@ -87,7 +87,11 @@ function Router() {
     if (!start) return;
     const dx = e.clientX - start.x;
     const dy = e.clientY - start.y;
-    if (dx > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && canBack) back();
+    if (dx > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && canBack) {
+      // Saindo do paywall por gesto: o funil de ofertas pode segurar a saída.
+      if (view.name === "subscribe" && !paywallExitAllowed(null)) return;
+      back();
+    }
   };
 
   const screen = (() => {
@@ -199,6 +203,14 @@ function WelcomeBack({ currentView }: { currentView: View["name"] }) {
   );
 }
 
+// Saída do paywall: dispara o evento que o SubscribeScreen escuta. Se uma
+// oferta for exibida, o evento é cancelado e a navegação fica segurada.
+function paywallExitAllowed(target: View | null): boolean {
+  if (typeof window === "undefined") return true;
+  const ev = new CustomEvent<View | null>("mq-paywall-exit", { detail: target, cancelable: true });
+  return window.dispatchEvent(ev); // false = preventDefault (oferta na tela)
+}
+
 // Cabeçalho fixo das abas principais: marca à esquerda, foto de perfil à direita.
 const TAB_ROOTS = new Set<View["name"]>(["home", "cars", "symptoms", "history", "learn"]);
 
@@ -247,12 +259,19 @@ function BottomNav() {
   const { view, root } = useNav();
   const active = TAB_OF[view.name];
 
+  // Saindo do paywall por uma aba, o funil de ofertas pode segurar a saída;
+  // ao dispensar as ofertas, a navegação pendente é concluída pela própria tela.
+  const tryGo = (v: View) => {
+    if (view.name === "subscribe" && !paywallExitAllowed(v)) return;
+    root(v);
+  };
+
   const items: { tab: Tab; icon: string; label: string; go: () => void }[] = [
-    { tab: "home", icon: "home", label: c.nav.home, go: () => root({ name: "home" }) },
-    { tab: "cars", icon: "car", label: c.nav.carsShort, go: () => root({ name: "cars" }) },
-    { tab: "problems", icon: "diagnose", label: c.nav.problems, go: () => root({ name: "symptoms" }) },
-    { tab: "history", icon: "clock", label: c.nav.history, go: () => root({ name: "history" }) },
-    { tab: "studies", icon: "book", label: c.nav.studies, go: () => root({ name: "learn" }) },
+    { tab: "home", icon: "home", label: c.nav.home, go: () => tryGo({ name: "home" }) },
+    { tab: "cars", icon: "car", label: c.nav.carsShort, go: () => tryGo({ name: "cars" }) },
+    { tab: "problems", icon: "diagnose", label: c.nav.problems, go: () => tryGo({ name: "symptoms" }) },
+    { tab: "history", icon: "clock", label: c.nav.history, go: () => tryGo({ name: "history" }) },
+    { tab: "studies", icon: "book", label: c.nav.studies, go: () => tryGo({ name: "learn" }) },
   ];
 
   return (
