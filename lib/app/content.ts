@@ -1495,6 +1495,7 @@ export function getContent(locale: Locale) {
 
     addService: {
       title: T("Adicionar serviço", "Add service"),
+      noCarBody: T("Cadastre seu carro para registrar o serviço realizado.", "Add your car to log the service you had done."),
       editTitle: T("Editar serviço", "Edit service"),
       type: T("Tipo de serviço", "Service type"),
       services: T("Serviços realizados", "Services done"),

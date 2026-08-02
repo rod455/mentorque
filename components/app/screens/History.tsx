@@ -220,7 +220,24 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
   const pastParts = Array.from(new Set(s.services.flatMap((r) => r.parts.map((p) => p.name)).filter((x) => x.trim())));
   const partOptions = Array.from(new Set([...(c.partsByType[services[0]?.type ?? "other"] ?? []), ...pastParts]));
 
-  if (!v) return <AppHeader title={a.title} />;
+  if (!v) {
+    // Sem carro cadastrado — mesmo estado vazio da aba Histórico.
+    return (
+      <div>
+        <AppHeader title={a.title} />
+        <Card className="mt-2 text-center">
+          <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-graphite-700 text-cream/60">
+            <Icon name="clock" className="h-6 w-6" />
+          </div>
+          <p className="font-display text-base text-cream">{c.history.noCarTitle}</p>
+          <p className="mx-auto mt-1 max-w-xs text-sm text-cream/55">{a.noCarBody}</p>
+          <Button className="mt-4" onClick={() => go({ name: "addCar" })}>
+            {c.history.addCar}
+          </Button>
+        </Card>
+      </div>
+    );
+  }
 
   const kmNum = parseInt(km, 10);
   const valid = services.length > 0 && !!date && Number.isFinite(kmNum) && kmNum >= 0;
