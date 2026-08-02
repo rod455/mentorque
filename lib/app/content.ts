@@ -1640,6 +1640,11 @@ export function getContent(locale: Locale) {
       complete: T("Marcar como concluído", "Mark as complete"),
       completed: T("Concluído", "Completed"),
       saveLater: T("Salvar para ver depois", "Save for later"),
+      savedLabel: T("Salvo", "Saved"),
+      savedTitle: T("Salvos", "Saved"),
+      savedSub: T("Conteúdos que você guardou para ver depois.", "Content you saved for later."),
+      viewSaved: T("Ver salvos", "View saved"),
+      savedEmpty: T("Nada salvo ainda. Toque em \"Salvar para ver depois\" em qualquer conteúdo.", "Nothing saved yet. Tap \"Save for later\" on any content."),
     },
     biela: {
       cardTitle: T("Fala com o Biela", "Chat with Biela"),

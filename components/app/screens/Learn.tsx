@@ -151,6 +151,21 @@ export function LearnScreen() {
             </button>
           )}
 
+          {/* Salvos para ver depois */}
+          {(s.savedLessons ?? []).length > 0 && (
+            <button
+              onClick={() => go({ name: "savedLessons" })}
+              className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 p-4 text-left ring-1 ring-white/5 hover:ring-amber/30"
+            >
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-amber/15 text-lg text-amber">★</span>
+              <span className="min-w-0 flex-1">
+                <span className="block font-display text-[15px] font-semibold text-cream">{c.learn.savedTitle}</span>
+                <span className="mt-0.5 block text-xs text-cream/55">{c.learn.viewSaved} · {(s.savedLessons ?? []).length}</span>
+              </span>
+              <span className="shrink-0 text-cream/40">›</span>
+            </button>
+          )}
+
           {/* Trilhas de conhecimento */}
           <SectionTitle>{c.learn.tracks}</SectionTitle>
           <div className="grid grid-cols-2 gap-3">
@@ -239,15 +254,36 @@ export function ForYourCarScreen() {
   );
 }
 
+// 2.6.B″ — Salvos (conteúdos guardados para ver depois)
+export function SavedLessonsScreen() {
+  const c = useContent();
+  const { s } = usePrototype();
+  const items = (s.savedLessons ?? [])
+    .map((id) => c.lessons.find((l) => l.id === id))
+    .filter((l): l is Item => !!l);
+  return (
+    <div>
+      <AppHeader title={c.learn.savedTitle} subtitle={c.learn.savedSub} />
+      {items.length > 0 ? (
+        <div className="mt-1 space-y-2.5">
+          {items.map((l) => <ItemRow key={l.id} item={l} />)}
+        </div>
+      ) : (
+        <p className="py-10 text-center text-sm text-cream/50">{c.learn.savedEmpty}</p>
+      )}
+    </div>
+  );
+}
+
 // 2.6.C — Detalhe do conteúdo (tutorial com passos OU artigo com parágrafos)
 export function ContentScreen({ id }: { id: string }) {
   const c = useContent();
-  const { s, markLessonSeen } = usePrototype();
+  const { s, markLessonSeen, toggleLessonSaved } = usePrototype();
   const lesson = c.lessons.find((l) => l.id === id);
-  const [saved, setSaved] = useState(false);
   const [level, setLevel] = useState<"iniciante" | "avancado" | "mecanico">("avancado");
-  // Concluído é ação do usuário (botão) — e fica salvo na sessão.
+  // Concluído e Salvo são ações do usuário (botões) — persistem na sessão.
   const done = lesson ? (s.seenLessons ?? []).includes(lesson.id) : false;
+  const saved = lesson ? (s.savedLessons ?? []).includes(lesson.id) : false;
   if (!lesson) return <AppHeader title="—" />;
 
   const byLevel = lesson.stepsByLevel; // 3 níveis fixos (sem chamada de API)
@@ -328,7 +364,7 @@ export function ContentScreen({ id }: { id: string }) {
 
       <div className="mt-6 flex gap-2">
         <Button className="flex-1" onClick={() => markLessonSeen(lesson.id)}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
-        <Button variant="ghost" className="flex-1" onClick={() => setSaved((v) => !v)}>{saved ? "★" : "☆"} {c.learn.saveLater}</Button>
+        <Button variant="ghost" className="flex-1" onClick={() => toggleLessonSaved(lesson.id)}>{saved ? `★ ${c.learn.savedLabel}` : `☆ ${c.learn.saveLater}`}</Button>
       </div>
       {!s.premium && <UpgradeBanner ctx="learn" text={c.paywalls.learn.title} />}
     </div>

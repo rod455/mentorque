@@ -15,7 +15,7 @@ import { SymptomsScreen, SymptomDetail, SystemProblemsScreen, ChecklistScreen } 
 import { HealthScreen, HealthQuizScreen, SystemDetail } from "./screens/Health";
 import { HistoryScreen, AddServiceScreen, ServiceDetail } from "./screens/History";
 import { RevisionsScreen } from "./screens/Revisions";
-import { LearnScreen, StudyTrackScreen, ForYourCarScreen, ContentScreen, BielaChatScreen } from "./screens/Learn";
+import { LearnScreen, StudyTrackScreen, ForYourCarScreen, SavedLessonsScreen, ContentScreen, BielaChatScreen } from "./screens/Learn";
 import { EquipmentScreen } from "./screens/Equipment";
 import { EquipmentHowToScreen } from "./screens/EquipmentHowTo";
 import { Obd2Screen } from "./screens/Obd2";
@@ -114,6 +114,7 @@ function Router() {
       case "equipmentHowTo": return <EquipmentHowToScreen itemId={view.itemId} />;
       case "studyTrack": return <StudyTrackScreen trackId={view.trackId} />;
       case "forYourCar": return <ForYourCarScreen />;
+      case "savedLessons": return <SavedLessonsScreen />;
       case "biela": return <BielaChatScreen seed={view.seed} />;
       // A "aula" de OBD2 abre a página real de consulta de códigos.
       case "content": return view.id === "read-obd2" ? <Obd2Screen /> : <ContentScreen id={view.id} />;
@@ -237,7 +238,7 @@ const TAB_OF: Record<View["name"], Tab> = {
   cars: "cars", addCar: "cars", car: "cars", health: "cars", healthQuiz: "cars", system: "cars", revisions: "cars", carSettings: "cars",
   symptoms: "problems", symptom: "problems", systemProblems: "problems", equipment: "problems", equipmentHowTo: "problems", checklist: "problems", obd2: "problems",
   history: "history", addService: "history", service: "history",
-  learn: "studies", studyTrack: "studies", forYourCar: "studies", biela: "studies", content: "studies",
+  learn: "studies", studyTrack: "studies", forYourCar: "studies", savedLessons: "studies", biela: "studies", content: "studies",
   profile: "profile", gamification: "profile", achievements: "profile", auth: "profile", subscribe: "profile", checkout: "profile",
 };
 

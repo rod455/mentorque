@@ -18,9 +18,11 @@ function levelPref(phaseIndex: number): "facil" | "medio" | "avancado" {
   return "avancado";
 }
 
-// "Para você": ranqueia as aulas por marca do carro + nível, priorizando o que
-// ainda não foi assistido. Dinâmico: muda com o carro, a fase e o histórico.
-function forYou(lessons: Lesson[], opts: { make?: string; pref: string; seen: string[] }): Lesson[] {
+// "Para você": ranqueia as aulas por marca do carro + nível. Regras:
+// - salvos vão pro FIM da lista (mesmo se concluídos) — ficam à mão;
+// - concluído e NÃO salvo sai da seção;
+// - o resto vem primeiro, por relevância.
+function forYou(lessons: Lesson[], opts: { make?: string; pref: string; seen: string[]; saved: string[] }): Lesson[] {
   const make = opts.make?.toLowerCase();
   const score = (l: Lesson) => {
     let n = 0;
@@ -29,9 +31,14 @@ function forYou(lessons: Lesson[], opts: { make?: string; pref: string; seen: st
     if (l.type === "video") n += 1;
     return n;
   };
-  const unseen = lessons.filter((l) => !opts.seen.includes(l.id)).sort((a, b) => score(b) - score(a));
-  const seen = lessons.filter((l) => opts.seen.includes(l.id)).sort((a, b) => score(b) - score(a));
-  return [...unseen, ...seen].slice(0, 8);
+  const fresh = lessons
+    .filter((l) => !opts.seen.includes(l.id) && !opts.saved.includes(l.id))
+    .sort((a, b) => score(b) - score(a));
+  // Salvos na ordem em que foram guardados.
+  const savedList = opts.saved
+    .map((id) => lessons.find((l) => l.id === id))
+    .filter((l): l is Lesson => !!l);
+  return [...fresh, ...savedList].slice(0, 8);
 }
 
 function typeIcon(t: string) {
@@ -50,7 +57,8 @@ export function HomeScreen() {
   const hasCar = s.vehicles.length > 0;
   const status = computeStatus(s);
   const seen = s.seenLessons ?? [];
-  const picks = forYou(c.lessons, { make: car?.make, pref: levelPref(status.phaseIndex), seen });
+  const savedIds = s.savedLessons ?? [];
+  const picks = forYou(c.lessons, { make: car?.make, pref: levelPref(status.phaseIndex), seen, saved: savedIds });
 
   // Memórias: marcos e momentos conquistados, priorizando Momentos.
   const memories = MILESTONES.filter((m) => m.earned(s)).sort(
@@ -176,6 +184,9 @@ export function HomeScreen() {
                       <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-graphite-900/80 text-amber">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-3.5 w-3.5"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
                       </span>
+                    )}
+                    {savedIds.includes(l.id) && (
+                      <span className="absolute left-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-graphite-900/80 text-xs text-amber">★</span>
                     )}
                     {seen.includes(l.id) && !locked && (
                       <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-teal/90 text-graphite">
