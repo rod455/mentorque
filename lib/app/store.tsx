@@ -66,7 +66,7 @@ type StoreValue = {
   updateService: (id: string, patch: Partial<ServiceRecord>) => void;
   removeService: (id: string) => void;
   toggleMilestone: (id: string) => void;
-  markLessonSeen: (id: string) => void;
+  markLessonSeen: (id: string) => void; // alterna concluído/não concluído
   setMomentPhoto: (id: string, dataUrl: string | null) => void;
   setNotifications: (v: boolean) => void;
   setUnits: (v: "metric" | "imperial") => void;
@@ -293,7 +293,11 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   );
 
   const markLessonSeen = useCallback(
-    (id: string) => patch((p) => (p.seenLessons.includes(id) ? p : { ...p, seenLessons: [...p.seenLessons, id] })),
+    (id: string) =>
+      patch((p) => ({
+        ...p,
+        seenLessons: p.seenLessons.includes(id) ? p.seenLessons.filter((l) => l !== id) : [...p.seenLessons, id],
+      })),
     [patch]
   );
 

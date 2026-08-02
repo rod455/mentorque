@@ -244,11 +244,10 @@ export function ContentScreen({ id }: { id: string }) {
   const c = useContent();
   const { s, markLessonSeen } = usePrototype();
   const lesson = c.lessons.find((l) => l.id === id);
-  const [done, setDone] = useState(false);
   const [saved, setSaved] = useState(false);
   const [level, setLevel] = useState<"iniciante" | "avancado" | "mecanico">("avancado");
-  // Marca o conteúdo como visto (para a Home sugerir outros).
-  useEffect(() => { if (lesson) markLessonSeen(lesson.id); }, [lesson, markLessonSeen]);
+  // Concluído é ação do usuário (botão) — e fica salvo na sessão.
+  const done = lesson ? (s.seenLessons ?? []).includes(lesson.id) : false;
   if (!lesson) return <AppHeader title="—" />;
 
   const byLevel = lesson.stepsByLevel; // 3 níveis fixos (sem chamada de API)
@@ -328,7 +327,7 @@ export function ContentScreen({ id }: { id: string }) {
       )}
 
       <div className="mt-6 flex gap-2">
-        <Button className="flex-1" onClick={() => setDone((d) => !d)}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
+        <Button className="flex-1" onClick={() => markLessonSeen(lesson.id)}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
         <Button variant="ghost" className="flex-1" onClick={() => setSaved((v) => !v)}>{saved ? "★" : "☆"} {c.learn.saveLater}</Button>
       </div>
       {!s.premium && <UpgradeBanner ctx="learn" text={c.paywalls.learn.title} />}
