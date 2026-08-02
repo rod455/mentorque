@@ -777,16 +777,8 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
       {showOffer2 && (
         <div className="fixed inset-0 z-[60] mx-auto w-full max-w-[440px] overflow-y-auto bg-graphite-900 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <div className="flex min-h-full flex-col px-6 pb-8 pt-5">
-            <button
-              onClick={() => { setShowOffer2(false); back(); }}
-              aria-label="fechar"
-              className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/10 text-cream/80 hover:text-cream"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><path d="M6 6l12 12M18 6 6 18" /></svg>
-            </button>
-
-            {/* Biela + faixas "OFERTA ÚNICA" */}
-            <div className="relative mt-1 flex h-52 items-center justify-center overflow-hidden">
+            {/* Biela + faixas "OFERTA ÚNICA" (sem X — a recusa fica embaixo) */}
+            <div className="relative mt-2 flex h-52 items-center justify-center overflow-hidden">
               {[
                 { top: "top-3", rot: "-rotate-[18deg]" },
                 { top: "top-16", rot: "rotate-[14deg]" },
@@ -822,6 +814,13 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
                 className="w-full rounded-full bg-amber py-3.5 font-display text-[15px] font-semibold text-graphite active:scale-[0.99]"
               >
                 {sub.exit2Cta}
+              </button>
+              {/* Recusa discreta — sai da oferta */}
+              <button
+                onClick={() => { setShowOffer2(false); back(); }}
+                className="mx-auto mt-3 block text-xs text-cream/35 underline-offset-2 hover:text-cream/60 hover:underline"
+              >
+                {sub.exit2Skip}
               </button>
               <p className="mt-3 text-center text-[11px] leading-relaxed text-cream/45">
                 {sub.exit2Agree}{" "}

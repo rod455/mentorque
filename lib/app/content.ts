@@ -1968,7 +1968,8 @@ export function getContent(locale: Locale) {
       exit2Old: "R$ 239,90",
       exit2Price: T("R$ 179,90/ano", "R$ 179.90/yr"),
       exit2Fine: T("Cobrança de R$ 179,90 por ano, cancelamento a qualquer momento.", "Billed R$ 179.90 per year, cancel anytime."),
-      exit2Cta: T("Continuar", "Continue"),
+      exit2Cta: T("Aproveitar a oferta", "Claim the offer"),
+      exit2Skip: T("Desperdiçar esta oferta única", "Waste this one-time offer"),
       exit2Agree: T("Ao continuar, você concorda com nossos", "By continuing, you agree to our"),
       // Modo leitor (app da loja) — sem compra dentro do app
       readerTitle: T("Assinatura indisponível neste app", "Subscription not available in this app"),
