@@ -69,7 +69,9 @@ export async function POST(req: Request) {
       metadata: { user_id: user.id },
       ...(trialDays > 0 ? { trial_period_days: trialDays } : {}),
     },
-    ...(exitCoupon ? { discounts: [{ coupon: exitCoupon }] } : { allow_promotion_codes: true }),
+    // Códigos promocionais (ex.: 100OFF) só valem no plano mensal — no anual o
+    // campo nem aparece. Ofertas de saída entram via `discounts` (exclusivo).
+    ...(exitCoupon ? { discounts: [{ coupon: exitCoupon }] } : plan === "monthly" ? { allow_promotion_codes: true } : {}),
     locale: "pt-BR",
     return_url: `${origin}/app?checkout=success`,
   });
