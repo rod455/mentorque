@@ -21,8 +21,14 @@ export function SearchScreen() {
   useEffect(() => { inputRef.current?.focus(); }, []);
 
   const query = q.trim().toLowerCase();
-  const matches = query.length >= 2 ? c.symptoms.filter((sx) => sx.label.toLowerCase().includes(query)) : [];
+  // Resultados: problemas (sintomas) + serviços (troca de óleo etc.).
+  const problemHits = query.length >= 2 ? c.symptoms.filter((sx) => sx.label.toLowerCase().includes(query)) : [];
+  const serviceHits =
+    query.length >= 2 ? c.serviceTypes.filter((t) => t.key !== "other" && t.label.toLowerCase().includes(query)) : [];
+  const hasResults = problemHits.length + serviceHits.length > 0;
   const bielaSeed = (v ? `Meu ${carName(v)} ` : "Meu carro ") + `está com: ${q}. O que pode ser e o que devo fazer?`;
+  // Sem premium, a Biela leva pro paywall; com premium, abre o chat.
+  const askBiela = () => go(s.premium ? { name: "biela", seed: bielaSeed } : { name: "subscribe", ctx: "search" });
 
   return (
     <div>
@@ -59,30 +65,53 @@ export function SearchScreen() {
         </div>
       ) : (
         <div className="space-y-2">
-          {matches.map((sx) => (
+          {/* Problemas */}
+          {problemHits.map((sx) => (
             <button
-              key={sx.id}
+              key={`p-${sx.id}`}
               onClick={() => go({ name: "symptom", id: sx.id })}
               className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3.5 text-left ring-1 ring-white/5 hover:ring-amber/30"
             >
               <SeverityDot level={sx.urgency.level} />
               <span className="min-w-0 flex-1 font-display text-[15px] text-cream">{sx.label}</span>
+              <span className="shrink-0 text-[11px] text-cream/40">{t.problemTag}</span>
               <span className="text-cream/40">›</span>
             </button>
           ))}
 
-          {/* Biela sempre como saída */}
-          <button
-            onClick={() => go({ name: "biela", seed: bielaSeed })}
-            className="flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-amber/15 to-amber/5 px-3.5 py-3.5 text-left ring-1 ring-amber/25 hover:ring-amber/45"
-          >
-            <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-graphite-900/40">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/biela/biela-idle.png" alt="" className="h-full w-full object-contain" />
-            </span>
-            <span className="min-w-0 flex-1 text-sm text-cream/90">{t.askBiela.replace("{q}", q)}</span>
-            <span className="shrink-0 text-amber">›</span>
-          </button>
+          {/* Serviços — leva a registrar o serviço */}
+          {serviceHits.map((st) => (
+            <button
+              key={`s-${st.key}`}
+              onClick={() => go({ name: "addService", preset: { type: st.key } })}
+              className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3.5 text-left ring-1 ring-white/5 hover:ring-teal/30"
+            >
+              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-teal/15 text-teal">
+                <Icon name="clock" className="h-3.5 w-3.5" />
+              </span>
+              <span className="min-w-0 flex-1 font-display text-[15px] text-cream">{st.label}</span>
+              <span className="shrink-0 text-[11px] text-cream/40">{t.serviceTag}</span>
+              <span className="text-cream/40">›</span>
+            </button>
+          ))}
+
+          {/* Sem resultado → pergunte pro Biela (leva ao Premium) */}
+          {!hasResults && (
+            <>
+              <p className="mb-1 mt-2 text-sm text-cream/55">{t.empty}</p>
+              <button
+                onClick={askBiela}
+                className="flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-amber/15 to-amber/5 px-3.5 py-3.5 text-left ring-1 ring-amber/25 hover:ring-amber/45"
+              >
+                <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-graphite-900/40">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/biela/biela-idle.png" alt="" className="h-full w-full object-contain" />
+                </span>
+                <span className="min-w-0 flex-1 text-sm text-cream/90">{t.askBiela.replace("{q}", q)}</span>
+                <span className="shrink-0 text-amber">›</span>
+              </button>
+            </>
+          )}
         </div>
       )}
     </div>

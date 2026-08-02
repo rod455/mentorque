@@ -877,8 +877,10 @@ export function getContent(locale: Locale) {
       ph: T("Buscar problemas ou serviços", "Search problems or services"),
       title: T("Buscar no catálogo", "Search the catalog"),
       hint: T("Digite pelo menos 2 caracteres para encontrar problemas e serviços.", "Type at least 2 characters to find problems and services."),
-      empty: T("Nada encontrado. Pergunte à Biela 👇", "Nothing found. Ask Biela 👇"),
+      empty: T("Não achamos esse assunto. Pergunte à Biela 👇", "We couldn't find that. Ask Biela 👇"),
       askBiela: T("Perguntar à Biela sobre “{q}”", "Ask Biela about “{q}”"),
+      problemTag: T("Problema", "Problem"),
+      serviceTag: T("Serviço", "Service"),
     },
 
     // Shared Premium labels across screens.
