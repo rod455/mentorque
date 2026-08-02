@@ -4,6 +4,7 @@ import { useRef } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { NavProvider, useNav, type View } from "@/lib/app/nav";
 import { usePrototype } from "@/lib/app/store";
+import { useAuth } from "@/lib/app/auth";
 import { Icon, useContent } from "./ui";
 import { Logo } from "@/components/ui/Logo";
 import { HomeScreen } from "./screens/Home";
@@ -112,7 +113,11 @@ const TAB_ROOTS = new Set<View["name"]>(["home", "cars", "symptoms", "history", 
 function TopBar() {
   const { root } = useNav();
   const { s } = usePrototype();
-  const initial = (s.name || "").trim().charAt(0).toUpperCase() || "?";
+  const { user } = useAuth();
+  // Mesma regra do Perfil: avatar enviado > foto do login (Google) > inicial.
+  const googlePic = (user?.user_metadata?.avatar_url ?? user?.user_metadata?.picture) as string | undefined;
+  const avatarSrc = s.avatar ?? googlePic ?? null;
+  const initial = (s.name || user?.email || "").trim().charAt(0).toUpperCase() || "?";
 
   return (
     <header className="flex items-center justify-between px-5 pb-1 pt-[max(env(safe-area-inset-top),14px)]">
@@ -124,9 +129,9 @@ function TopBar() {
         aria-label="Perfil"
         className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-teal/25 font-display text-sm font-semibold text-teal ring-1 ring-white/10"
       >
-        {s.avatar ? (
+        {avatarSrc ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={s.avatar} alt="" className="h-full w-full object-cover" />
+          <img src={avatarSrc} alt="" className="h-full w-full object-cover" />
         ) : (
           initial
         )}

@@ -211,7 +211,7 @@ export function ProfileScreen() {
 
   return (
     <div>
-      <AppHeader title={p.title} onBack={() => root({ name: "cars" })} />
+      <AppHeader title={p.title} onBack={() => root({ name: "home" })} />
 
       {/* Topo: foto + nome + e-mail (logado) — ou card de login (deslogado) */}
       {enabled && user ? (
