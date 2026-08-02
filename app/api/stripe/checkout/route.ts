@@ -26,6 +26,16 @@ export async function POST(req: Request) {
   // Reuse the user's Stripe customer, or create + persist one.
   const { data: row } = await admin.from("subscriptions").select("stripe_customer_id").eq("user_id", user.id).maybeSingle();
   let customerId = row?.stripe_customer_id as string | undefined;
+  // O id salvo pode ser de outra conta/modo do Stripe (ex.: dados do modo de
+  // teste após ir pro live). Valida antes de usar; inválido → recria.
+  if (customerId) {
+    try {
+      const cust = await stripe.customers.retrieve(customerId);
+      if ((cust as { deleted?: boolean }).deleted) customerId = undefined;
+    } catch {
+      customerId = undefined;
+    }
+  }
   if (!customerId) {
     const customer = await stripe.customers.create({ email: user.email ?? undefined, metadata: { user_id: user.id } });
     customerId = customer.id;
