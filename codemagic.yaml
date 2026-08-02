@@ -20,7 +20,6 @@ workflows:
     environment:
       node: 22
       xcode: latest
-      cocoapods: default
       ios_signing:
         distribution_type: app_store
         bundle_identifier: mentorque.app
@@ -29,8 +28,6 @@ workflows:
         script: npm ci
       - name: Sincronizar Capacitor iOS
         script: npx cap sync ios
-      - name: CocoaPods
-        script: cd ios/App && pod install
       - name: Número da build (incremental)
         script: |
           cd ios/App
@@ -38,7 +35,7 @@ workflows:
       - name: Compilar .ipa
         script: |
           xcode-project build-ipa \
-            --workspace ios/App/App.xcworkspace \
+            --project ios/App/App.xcodeproj \
             --scheme App
     artifacts:
       - build/ios/ipa/*.ipa
