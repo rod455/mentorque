@@ -442,11 +442,6 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
         </div>
       ) : (
         <>
-          {!s.premium && (
-            <p className="mb-1.5 text-center text-[11px] text-cream/45">
-              {c.biela.freeLeft.replace("{n}", String(Math.max(0, FREE_BIELA_QUESTIONS - used)))}
-            </p>
-          )}
           <div className="mb-2 flex items-end gap-2">
             <textarea
               ref={inputRef}

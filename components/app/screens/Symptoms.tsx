@@ -343,7 +343,7 @@ export function SymptomDetail({ id }: { id: string }) {
               </div>
             ))}
           </div>
-          <Button className="mt-4 w-full" onClick={() => go({ name: "biela", seed: bielaSeed() })}>
+          <Button className="mt-4 w-full" onClick={() => go(s.premium ? { name: "biela", seed: bielaSeed() } : { name: "subscribe", ctx: "biela" })}>
             🐻 {ui.diagnoseWithBiela}
           </Button>
         </Card>

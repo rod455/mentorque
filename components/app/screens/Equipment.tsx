@@ -1,5 +1,6 @@
 "use client";
 
+import { usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
 import { AppHeader, useContent } from "../ui";
 
@@ -7,6 +8,7 @@ import { AppHeader, useContent } from "../ui";
 export function EquipmentScreen() {
   const c = useContent();
   const e = c.equipmentUi;
+  const { s } = usePrototype();
   const { go } = useNav();
 
   return (
@@ -42,7 +44,7 @@ export function EquipmentScreen() {
 
       {/* Tie-in com o Biela */}
       <button
-        onClick={() => go({ name: "biela", seed: e.bielaSeed })}
+        onClick={() => go(s.premium ? { name: "biela", seed: e.bielaSeed } : { name: "subscribe", ctx: "biela" })}
         className="mt-6 flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-amber/15 to-amber/5 px-3.5 py-3.5 text-left ring-1 ring-amber/25 hover:ring-amber/45"
       >
         <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-graphite-900/40">
