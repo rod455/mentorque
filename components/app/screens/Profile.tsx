@@ -561,11 +561,46 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
     go({ name: "checkout", plan: "annual" }); // checkout embutido (com teste grátis)
   };
 
+  // Pop-up de saída: 10% OFF ao fechar o paywall. Depois de aparecer, fica
+  // suprimido por 30 minutos (localStorage).
+  const OFFER_KEY = "mentorque-exit-offer-ts";
+  const [showOffer, setShowOffer] = useState(false);
+  const [offerLeft, setOfferLeft] = useState(120);
+  useEffect(() => {
+    if (!showOffer) return;
+    const t = setInterval(() => setOfferLeft((n) => n - 1), 1000);
+    return () => clearInterval(t);
+  }, [showOffer]);
+  useEffect(() => {
+    if (showOffer && offerLeft <= 0) { setShowOffer(false); back(); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offerLeft, showOffer]);
+
+  const tryClose = () => {
+    let last = 0;
+    try { last = Number(window.localStorage.getItem(OFFER_KEY) ?? 0); } catch { /* ignore */ }
+    if (!subscribed && Date.now() - last > 30 * 60 * 1000) {
+      try { window.localStorage.setItem(OFFER_KEY, String(Date.now())); } catch { /* ignore */ }
+      setOfferLeft(120);
+      setShowOffer(true);
+      return;
+    }
+    back();
+  };
+
+  const subscribeOffer = () => {
+    if (!user) { go({ name: "auth" }); return; }
+    if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; }
+    go({ name: "checkout", plan: "annual", offer: "exit10" });
+  };
+
+  const mmss = `${String(Math.floor(Math.max(0, offerLeft) / 60)).padStart(2, "0")}:${String(Math.max(0, offerLeft) % 60).padStart(2, "0")}`;
+
   return (
     <div className="pb-4">
       {/* Barra superior: fechar + links */}
       <div className="flex items-center justify-between pb-3 pt-4 text-xs text-cream/50">
-        <button onClick={back} aria-label="fechar" className="grid h-8 w-8 place-items-center rounded-full bg-graphite-700 text-cream/70 hover:text-cream">
+        <button onClick={tryClose} aria-label="fechar" className="grid h-8 w-8 place-items-center rounded-full bg-graphite-700 text-cream/70 hover:text-cream">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><path d="M6 6l12 12M18 6 6 18" /></svg>
         </button>
         <div className="flex items-center gap-2">
@@ -641,12 +676,42 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
         {sub.trialCta.replace("{n}", String(trialDays))}
       </Button>
       <p className="mx-auto mt-3 max-w-xs text-center text-xs leading-relaxed text-cream/45">{sub.trialFine}</p>
+
+      {/* Pop-up de saída — 10% OFF (formato Bloom) */}
+      {showOffer && (
+        <div className="fixed inset-0 z-50 bg-black/60">
+          <div className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-[440px] rounded-t-3xl bg-cream px-6 pb-8 pt-5 text-center text-graphite">
+            <button
+              onClick={() => { setShowOffer(false); back(); }}
+              aria-label="fechar oferta"
+              className="absolute right-4 top-4 text-graphite/45 hover:text-graphite"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5"><path d="M6 6l12 12M18 6 6 18" /></svg>
+            </button>
+            <h2 className="mx-auto mt-4 max-w-xs font-serif text-2xl font-bold leading-snug">{sub.exitTitle}</h2>
+            <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-graphite/55">{sub.exitSub}</p>
+            <p className="mt-4 text-xs text-graphite/50">{sub.exitExpires}</p>
+            <p className="font-display text-3xl font-bold tabular-nums">{mmss}</p>
+            <div className="mt-3 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/5">
+              <span className="inline-block rounded-full bg-amber px-3 py-1 text-xs font-bold text-graphite">{sub.exitBadge}</span>
+              <p className="mt-2 font-serif text-3xl font-bold">{sub.exitPrice}</p>
+            </div>
+            <button
+              onClick={subscribeOffer}
+              className="mt-4 w-full rounded-full bg-graphite py-3.5 font-display text-[15px] font-semibold text-cream active:scale-[0.99]"
+            >
+              {sub.exitCta}
+            </button>
+            <p className="mx-auto mt-3 max-w-xs text-xs leading-relaxed text-graphite/55">{sub.exitFine}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 // 3.1.F — Checkout embutido (Stripe Embedded Checkout)
-export function CheckoutScreen({ plan }: { plan: "monthly" | "annual" }) {
+export function CheckoutScreen({ plan, offer }: { plan: "monthly" | "annual"; offer?: string }) {
   const c = useContent();
   const sub = c.subscribe;
   const { setPremium } = usePrototype();
@@ -657,7 +722,7 @@ export function CheckoutScreen({ plan }: { plan: "monthly" | "annual" }) {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const res = await startCheckout(plan, detectPlatform());
+      const res = await startCheckout(plan, detectPlatform(), offer);
       if (cancelled) return;
       if (res.clientSecret) { setClientSecret(res.clientSecret); return; }
       // Stripe não configurado: em dev local cai no demo; em produção mostra erro.

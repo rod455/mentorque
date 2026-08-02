@@ -110,7 +110,7 @@ function Router() {
       case "achievements": return <AchievementsScreen />;
       case "auth": return <AuthScreen />;
       case "subscribe": return <SubscribeScreen ctx={view.ctx} />;
-      case "checkout": return <CheckoutScreen plan={view.plan} />;
+      case "checkout": return <CheckoutScreen plan={view.plan} offer={view.offer} />;
     }
   })();
 

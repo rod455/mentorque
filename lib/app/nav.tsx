@@ -36,7 +36,7 @@ export type View =
   | { name: "achievements" }
   | { name: "auth" }
   | { name: "subscribe"; ctx?: string }
-  | { name: "checkout"; plan: "monthly" | "annual" };
+  | { name: "checkout"; plan: "monthly" | "annual"; offer?: string };
 
 type NavValue = {
   view: View;

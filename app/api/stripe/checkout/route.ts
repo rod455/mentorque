@@ -41,6 +41,9 @@ export async function POST(req: Request) {
   const iosDays = Number(process.env.STRIPE_TRIAL_DAYS_IOS ?? 3);
   const otherDays = Number(process.env.STRIPE_TRIAL_DAYS ?? 7);
   const trialDays = platform === "ios" ? iosDays : otherDays; // 0 = sem teste grátis
+  // Oferta de saída do paywall: aplica 10% OFF direto (o Stripe não permite
+  // combinar `discounts` com `allow_promotion_codes`).
+  const exitCoupon = body?.offer === "exit10" ? process.env.STRIPE_EXIT_COUPON || "EXIT10" : null;
   const session = await stripe.checkout.sessions.create({
     mode: "subscription",
     ui_mode: "embedded", // formulário embutido no app
@@ -51,7 +54,7 @@ export async function POST(req: Request) {
       metadata: { user_id: user.id },
       ...(trialDays > 0 ? { trial_period_days: trialDays } : {}),
     },
-    allow_promotion_codes: true,
+    ...(exitCoupon ? { discounts: [{ coupon: exitCoupon }] } : { allow_promotion_codes: true }),
     locale: "pt-BR",
     return_url: `${origin}/app?checkout=success`,
   });
