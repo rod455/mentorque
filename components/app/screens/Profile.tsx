@@ -555,10 +555,12 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   useEffect(() => setPlatform(detectPlatform()), []);
   const trialDays = trialDaysFor(platform);
 
+  // Plano escolhido no onboarding ("Monte seu teste") chega via ctx.
+  const chosenPlan: "monthly" | "annual" = _ctx === "onb-monthly" ? "monthly" : "annual";
   const subscribe = () => {
     if (!user) { go({ name: "auth" }); return; }
     if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; } // demo só em dev
-    go({ name: "checkout", plan: "annual" }); // checkout embutido (com teste grátis)
+    go({ name: "checkout", plan: chosenPlan }); // checkout embutido (com teste grátis)
   };
 
   // Pop-up de saída: 10% OFF ao fechar o paywall. Depois de aparecer, fica

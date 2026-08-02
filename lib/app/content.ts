@@ -1205,6 +1205,41 @@ export function getContent(locale: Locale) {
       ],
       start: T("Começar", "Get started"),
       next: T("Continuar", "Continue"),
+      // Página 4 — prova social
+      social: {
+        title: T("Amado por motoristas de todo o Brasil", "Loved by drivers everywhere"),
+        sub: T("Avaliações e histórias reais", "Real reviews and stories"),
+        rating: "4,8",
+        ratingNote: T("média das avaliações", "average rating"),
+        stat1: "10.000+",
+        stat1Label: T("diagnósticos feitos", "diagnoses run"),
+        stat2: "5.000+",
+        stat2Label: T("motoristas", "drivers"),
+        quotes: [
+          { quote: T("Descobri o problema do meu carro em minutos. Finalmente sei o que pedir na oficina.", "Found my car's problem in minutes. Finally I know what to ask the shop."), name: "Marina S." },
+          { quote: T("O diagnóstico me salvou de pagar um orçamento absurdo. Apontou o problema e o preço justo.", "The diagnosis saved me from an absurd quote. It showed the problem and the fair price."), name: "Carlos E." },
+          { quote: T("Os lembretes de revisão mudaram tudo. Não perco mais nenhuma manutenção.", "Service reminders changed everything. I never miss maintenance now."), name: "Juliana M." },
+          { quote: T("O melhor app de carro que já usei. O histórico e o Biela são certeiros.", "Best car app I've used. The history and Biela are spot on."), name: "Patrícia L." },
+        ],
+      },
+      // Página 5 — monte seu teste
+      trial: {
+        notNow: T("Agora não", "Not now"),
+        title: T("Monte seu teste", "Build your trial"),
+        bullets: [
+          T("Aproveite seus primeiros {n} dias, grátis", "Enjoy your first {n} days, free"),
+          T("Cancele quando quiser pelo app", "Cancel anytime in the app"),
+          T("Diagnóstico rápido e soluções na hora", "Fast diagnosis, instant solutions"),
+          T("Informações detalhadas e confiáveis", "Detailed, reliable information"),
+        ],
+        freeLabel: T("Grátis", "Free"),
+        freeDays: T("{n} dias", "{n} days"),
+        monthlyLabel: T("1 mês", "1 month"),
+        monthlyPrice: "R$ 29,90",
+        fineAnnual: T("{n} dias grátis, depois R$ 239,90/ano (R$ 19,99/mês)", "{n} days free, then R$ 239.90/yr (R$ 19.99/mo)"),
+        fineMonthly: T("R$ 29,90/mês, cancele quando quiser", "R$ 29.90/mo, cancel anytime"),
+        cta: T("Continuar", "Continue"),
+      },
     },
 
     cars: {

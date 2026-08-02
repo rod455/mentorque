@@ -47,7 +47,19 @@ function PhoneShell({ children }: { children: React.ReactNode }) {
 
 // Maps a view to a screen. Deep car screens live under the "cars" tab.
 function Router() {
-  const { view, back, canBack, depth, lastAction } = useNav();
+  const { view, back, canBack, depth, lastAction, go } = useNav();
+
+  // Vindo do onboarding ("Monte seu teste"): abre o paywall com o plano escolhido.
+  useEffect(() => {
+    try {
+      const plan = window.sessionStorage.getItem("mentorque-onboarding-plan");
+      if (plan === "annual" || plan === "monthly") {
+        window.sessionStorage.removeItem("mentorque-onboarding-plan");
+        go({ name: "subscribe", ctx: `onb-${plan}` });
+      }
+    } catch { /* ignore */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Scroll responsivo: avançar/abrir conteúdo ou trocar de aba → topo;
   // voltar → restaura a posição de onde o usuário estava (por nível da pilha).
