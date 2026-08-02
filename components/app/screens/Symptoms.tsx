@@ -180,32 +180,63 @@ const SYSTEM_ICON: Record<SystemKey, string> = {
   electrical: "electrical",
 };
 
-// Seção "Problemas comuns": prioriza o que é relevante pro carro do usuário
-// (sistema precisando de atenção / km alta) e completa com os gerais.
+// Sistemas tipicamente mais reclamados por marca (heurística leve, só para
+// ordenar quais problemas comuns aparecem primeiro — não é um diagnóstico).
+const MAKE_COMMON_SYSTEMS: Record<string, SystemKey[]> = {
+  volkswagen: ["electrical", "suspension"],
+  fiat: ["electrical", "suspension"],
+  chevrolet: ["suspension", "electrical"],
+  ford: ["electrical", "engine"],
+  renault: ["electrical", "engine"],
+  hyundai: ["suspension", "brakes"],
+  toyota: ["brakes", "tires"],
+  honda: ["suspension", "brakes"],
+  jeep: ["electrical", "engine"],
+  nissan: ["engine", "electrical"],
+  peugeot: ["electrical", "engine"],
+  citroen: ["electrical", "engine"],
+  "citroën": ["electrical", "engine"],
+};
+
+// Seção "Problemas comuns": prioriza o que é relevante para os carros do
+// usuário — sistema pedindo atenção/km alta (qualquer carro) e sistemas
+// típicos da marca — e completa com os problemas gerais.
 function CommonProblems() {
   const c = useContent();
   const ui = c.symptomsUi;
   const { s } = usePrototype();
   const { go } = useNav();
+  const cars = s.vehicles;
   const v = activeVehicle(s);
-  const services = v ? servicesFor(s, v.id) : [];
+  const SYSTEMS: SystemKey[] = ["brakes", "engine", "suspension", "tires", "electrical"];
 
-  const reco = (sx: (typeof c.symptoms)[number]) => (v ? symptomRecommended(sx.category, v, services) : false);
-  const picks = [...c.symptoms].sort((a, b) => Number(reco(b)) - Number(reco(a))).slice(0, 10);
+  // Sistemas que pedem atenção (saúde/km) em QUALQUER carro do usuário.
+  const recoSystems = new Set<SystemKey>();
+  // Sistemas típicos das marcas dos carros do usuário.
+  const makeSystems = new Set<SystemKey>();
+  for (const car of cars) {
+    const svc = servicesFor(s, car.id);
+    for (const sys of SYSTEMS) if (symptomRecommended(sys, car, svc)) recoSystems.add(sys);
+    (MAKE_COMMON_SYSTEMS[(car.make || "").trim().toLowerCase()] ?? []).forEach((sys) => makeSystems.add(sys));
+  }
+
+  const isReco = (sx: (typeof c.symptoms)[number]) => recoSystems.has(sx.category);
+  const score = (sx: (typeof c.symptoms)[number]) => (isReco(sx) ? 2 : 0) + (makeSystems.has(sx.category) ? 1 : 0);
+  const picks = [...c.symptoms].sort((a, b) => score(b) - score(a)).slice(0, 12);
+
+  const sub = cars.length > 1 ? ui.commonSubCars : v ? ui.commonSubCar.replace("{car}", carName(v)) : ui.commonSub;
 
   return (
     <section className="mt-6">
       <h3 className="font-serif text-lg font-bold text-cream">{ui.commonTitle}</h3>
-      <p className="mb-3 mt-0.5 text-xs text-cream/45">
-        {v ? ui.commonSubCar.replace("{car}", carName(v)) : ui.commonSub}
-      </p>
+      <p className="mb-3 mt-0.5 text-xs text-cream/45">{sub}</p>
       <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {picks.map((sx) => (
           <button key={sx.id} onClick={() => go({ name: "symptom", id: sx.id })} className="w-36 shrink-0 text-left">
             <div className="relative grid aspect-square place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ring-white/[0.06]">
               <Icon name={SYSTEM_ICON[sx.category] ?? "diagnose"} className="h-9 w-9 text-coral/70" />
               <span className="absolute left-2 top-2"><SeverityDot level={sx.urgency.level} /></span>
-              {reco(sx) && (
+              {isReco(sx) && (
                 <span className="absolute bottom-2 left-2 rounded-full bg-amber/90 px-1.5 py-0.5 text-[9px] font-semibold text-graphite">
                   {c.premium.recommended}
                 </span>

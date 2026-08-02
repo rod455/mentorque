@@ -1054,6 +1054,7 @@ export function getContent(locale: Locale) {
       common: T("Sintomas comuns", "Common symptoms"),
       commonTitle: T("Problemas comuns", "Common problems"),
       commonSubCar: T("Os que mais aparecem no seu {car} e em carros em geral", "Most common on your {car} and cars in general"),
+      commonSubCars: T("Os que mais aparecem nos seus carros e em geral", "Most common on your cars and in general"),
       commonSub: T("Os problemas que mais aparecem nos carros", "The problems that show up most on cars"),
       systemProblems: T("Problemas de {system}", "{system} problems"),
       notListed: T("Não é nenhum desses?", "None of these?"),
