@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePrototype } from "@/lib/app/store";
-import { ADMOB, nativeAdMob } from "@/lib/app/admob";
+import { ADMOB, initAdMob, nativeAdMob } from "@/lib/app/admob";
 import { useNav } from "@/lib/app/nav";
 import { useContent } from "./ui";
 
@@ -28,6 +28,7 @@ export function AdOverlay({ kind, onDone, onCancel }: { kind: "interstitial" | "
     if (!plugin) { setMode("house"); return; }
     (async () => {
       try {
+        await initAdMob(plugin);
         if (kind === "interstitial") {
           await plugin.prepareInterstitial({ adId: ADMOB.interstitial });
           await plugin.showInterstitial();

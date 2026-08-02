@@ -1964,6 +1964,10 @@ export function getContent(locale: Locale) {
       exit2Fine: T("Cobrança de R$ 179,90 por ano, cancelamento a qualquer momento.", "Billed R$ 179.90 per year, cancel anytime."),
       exit2Cta: T("Continuar", "Continue"),
       exit2Agree: T("Ao continuar, você concorda com nossos", "By continuing, you agree to our"),
+      // Modo leitor (app da loja) — sem compra dentro do app
+      readerTitle: T("Assinatura indisponível neste app", "Subscription not available in this app"),
+      readerBody: T("O Mentorque Premium não está disponível para compra nesta versão do aplicativo. Se você já é assinante, entre na sua conta e todos os recursos serão liberados automaticamente.", "Mentorque Premium can't be purchased in this version of the app. If you're already a subscriber, sign in and everything unlocks automatically."),
+      readerOk: T("Entendi", "Got it"),
       compareTitle: T("Free vs Premium", "Free vs Premium"),
       colFree: T("Grátis", "Free"),
       colPremium: "Premium",

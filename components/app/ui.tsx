@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import { useI18n } from "@/lib/i18n";
 import { getContent } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
+import { isNativeApp } from "@/lib/app/wrapper";
 import type { Access, Severity } from "@/lib/app/types";
 import {
   IconAlert,
@@ -100,6 +101,8 @@ export function RecoBadge({ children }: { children: ReactNode }) {
 // Contextual upgrade nudge (doesn't block) → opens the paywall for `ctx`.
 export function UpgradeBanner({ ctx, text }: { ctx: string; text: string }) {
   const { go } = useNav();
+  // Modo leitor (app da loja): sem convites de assinatura.
+  if (isNativeApp()) return null;
   return (
     <button
       onClick={() => go({ name: "subscribe", ctx })}

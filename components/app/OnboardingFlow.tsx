@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { usePrototype } from "@/lib/app/store";
 import { detectPlatform, trialDaysFor } from "@/lib/app/platform";
+import { isNativeApp } from "@/lib/app/wrapper";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
 import { Icon, PhoneFrame, ProgressDots, useContent } from "./ui";
@@ -30,7 +31,10 @@ export function OnboardingFlow() {
   const [carLeaving, setCarLeaving] = useState(false);
   const [plan, setPlan] = useState<"annual" | "monthly">("annual");
   const [remind, setRemind] = useState(false);
-  const total = cards.length + 2; // 3 cards + social + trial
+  // App da loja (modo leitor): sem a página "Monte seu teste" (compra).
+  const [native, setNative] = useState(false);
+  useEffect(() => setNative(isNativeApp()), []);
+  const total = cards.length + (native ? 1 : 2); // 3 cards + social (+ trial na web)
   const last = i === total - 1;
   const card = i < cards.length ? cards[i] : null;
 
@@ -43,7 +47,9 @@ export function OnboardingFlow() {
     finishOnboarding();
   };
 
-  const advance = () => (last ? finishToPlan() : setI((v) => v + 1));
+  // Na web, a última página (trial) leva ao paywall; no app da loja a última é
+  // a prova social e encerra direto.
+  const advance = () => (last ? (native ? finishOnboarding() : finishToPlan()) : setI((v) => v + 1));
 
   // Swipe left→right anywhere on the screen = go back a card (no button).
   const down = useRef<{ x: number; y: number } | null>(null);

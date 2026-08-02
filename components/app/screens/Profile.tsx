@@ -10,6 +10,7 @@ import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
 import { cancelSubscription, deleteAccount, openBillingPortal, reactivateSubscription, startCheckout } from "@/lib/app/billing";
 import { getStripeJs, stripeConfigured } from "@/lib/app/stripeClient";
 import { detectPlatform, trialDaysFor, type Platform } from "@/lib/app/platform";
+import { isNativeApp } from "@/lib/app/wrapper";
 import { APP_VERSION, carName } from "@/lib/app/content";
 import { computeStatus } from "@/lib/app/gamification";
 import { PhaseEmblem } from "../Emblem";
@@ -306,7 +307,7 @@ export function ProfileScreen() {
             </div>
           )}
         </div>
-      ) : (
+      ) : isNativeApp() ? null : (
         <button
           onClick={() => go({ name: "subscribe" })}
           className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-amber/25 via-amber/12 to-amber/[0.06] p-4 text-left ring-1 ring-amber/40 transition-colors hover:ring-amber/60"
@@ -416,10 +417,15 @@ export function ProfileScreen() {
         </>
       )}
 
-      <SectionTitle>{p.demo}</SectionTitle>
-      <Group>
-        <IconRow icon="alert" tint="bg-coral/15 text-coral" label={p.reset} danger onClick={reset} />
-      </Group>
+      {/* Ferramentas de demo — só em dev local, nunca em produção/loja */}
+      {isLocalDev() && (
+        <>
+          <SectionTitle>{p.demo}</SectionTitle>
+          <Group>
+            <IconRow icon="alert" tint="bg-coral/15 text-coral" label={p.reset} danger onClick={reset} />
+          </Group>
+        </>
+      )}
 
       {/* Rodapé */}
       <div className="mt-8 flex flex-col items-center gap-2">
@@ -620,6 +626,19 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   };
 
   const mmss = `${String(Math.floor(Math.max(0, offerLeft) / 60)).padStart(2, "0")}:${String(Math.max(0, offerLeft) % 60).padStart(2, "0")}`;
+
+  // Modo leitor (app da loja): não há compra dentro do app — só o aviso.
+  if (isNativeApp()) {
+    return (
+      <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 text-center">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/biela/biela-idle.png" alt="Biela" className="h-32 w-32 object-contain" draggable={false} />
+        <h1 className="mt-3 font-serif text-2xl font-bold text-cream">{sub.readerTitle}</h1>
+        <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-cream/60">{sub.readerBody}</p>
+        <Button className="mt-6" onClick={back}>{sub.readerOk}</Button>
+      </div>
+    );
+  }
 
   return (
     <div className="pb-4">

@@ -10,11 +10,20 @@ export const ADMOB = {
 } as const;
 
 type AdMobPlugin = {
+  initialize?: (o?: object) => Promise<unknown>;
   prepareInterstitial: (o: { adId: string }) => Promise<unknown>;
   showInterstitial: () => Promise<unknown>;
   prepareRewardVideoAd: (o: { adId: string }) => Promise<unknown>;
   showRewardVideoAd: () => Promise<unknown>;
 };
+
+let admobReady = false;
+// Inicializa o SDK uma única vez (obrigatório antes do primeiro anúncio).
+export async function initAdMob(plugin: AdMobPlugin): Promise<void> {
+  if (admobReady) return;
+  try { await plugin.initialize?.({}); } catch { /* segue mesmo assim */ }
+  admobReady = true;
+}
 
 // Plugin nativo injetado pelo wrapper (Capacitor). undefined no navegador.
 export function nativeAdMob(): AdMobPlugin | undefined {
