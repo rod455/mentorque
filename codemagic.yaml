@@ -28,6 +28,8 @@ workflows:
         script: npm ci
       - name: Sincronizar Capacitor iOS
         script: npx cap sync ios
+      - name: Aplicar perfis de assinatura
+        script: xcode-project use-profiles
       - name: Número da build (incremental)
         script: |
           cd ios/App
