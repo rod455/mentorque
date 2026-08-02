@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { NavProvider, useNav, type View } from "@/lib/app/nav";
 import { usePrototype } from "@/lib/app/store";
@@ -23,6 +23,7 @@ import { CarSettingsScreen } from "./screens/CarSettings";
 import { ProfileScreen, SubscribeScreen, CheckoutScreen } from "./screens/Profile";
 import { GamificationScreen, AchievementsScreen } from "./screens/Gamification";
 import { AuthScreen } from "./screens/Auth";
+import BielaMascote from "@/components/BielaMascote";
 
 export function Shell() {
   return (
@@ -118,6 +119,7 @@ function Router() {
 
   return (
     <>
+      <WelcomeBack currentView={view.name} />
       {showTopBar && <TopBar />}
       <main
         ref={mainRef}
@@ -130,6 +132,57 @@ function Router() {
       </main>
       <BottomNav />
     </>
+  );
+}
+
+// Tela de retorno (formato Bloom): quando o app volta do segundo plano e o
+// usuário ainda não cadastrou o primeiro carro, convida a cadastrar.
+function WelcomeBack({ currentView }: { currentView: View["name"] }) {
+  const c = useContent();
+  const w = c.welcomeBack;
+  const { s } = usePrototype();
+  const { go } = useNav();
+  const [show, setShow] = useState(false);
+  const hasCar = s.vehicles.length > 0;
+
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === "visible") setShow(true);
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, []);
+
+  // Só para quem ainda não tem carro; não interrompe o próprio cadastro.
+  if (!show || hasCar || currentView === "addCar" || currentView === "auth") return null;
+
+  return (
+    <div className="fixed inset-0 z-50 mx-auto flex w-full max-w-[440px] flex-col items-center justify-center bg-graphite px-6 text-center">
+      <BielaMascote pose="acenando" size={180} />
+      <h1 className="mt-5 max-w-xs font-serif text-2xl font-bold leading-snug text-cream">{w.title}</h1>
+      <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-cream/55">{w.sub}</p>
+
+      <div className="mt-6 w-full max-w-sm space-y-2.5">
+        {w.bullets.map((b) => (
+          <div key={b.label} className="flex items-center gap-3 rounded-2xl bg-graphite-800 px-4 py-3 text-left ring-1 ring-white/[0.06]">
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-amber/15 text-amber">
+              <Icon name={b.icon} className="h-5 w-5" />
+            </span>
+            <span className="text-sm text-cream/85">{b.label}</span>
+          </div>
+        ))}
+      </div>
+
+      <button
+        onClick={() => { setShow(false); go({ name: "addCar" }); }}
+        className="mt-6 w-full max-w-sm rounded-full bg-amber py-3.5 font-display text-[15px] font-semibold text-graphite active:scale-[0.99]"
+      >
+        🚗 {w.cta}
+      </button>
+      <button onClick={() => setShow(false)} className="mt-3 rounded-full bg-graphite-800 px-4 py-2 text-xs text-cream/60 ring-1 ring-white/[0.06]">
+        → {w.later}
+      </button>
+    </div>
   );
 }
 

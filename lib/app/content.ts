@@ -1091,6 +1091,19 @@ export function getContent(locale: Locale) {
       seeAll: T("Ver todas", "See all"),
     },
 
+    // Tela de retorno (app volta do segundo plano sem carro cadastrado)
+    welcomeBack: {
+      title: T("Adicione seu primeiro carro à garagem", "Add your first car to the garage"),
+      sub: T("Falta pouco pra começar: cadastre seu carro e eu te ajudo a cuidar dele.", "You're almost there: add your car and I'll help you care for it."),
+      bullets: [
+        { icon: "diagnose", label: T("Diagnóstico rápido de problemas", "Fast problem diagnosis") },
+        { icon: "calendar", label: T("Plano de revisão personalizado", "Personalized service plan") },
+        { icon: "clock", label: T("Histórico completo do seu carro", "Your car's full history") },
+      ],
+      cta: T("Cadastrar meu carro", "Add my car"),
+      later: T("Faço isso depois", "I'll do it later"),
+    },
+
     // Tela de busca (aberta pela barra da Home)
     search: {
       ph: T("Buscar problemas ou serviços", "Search problems or services"),
