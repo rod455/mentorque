@@ -100,7 +100,8 @@ function Router() {
       case "studyTrack": return <StudyTrackScreen trackId={view.trackId} />;
       case "forYourCar": return <ForYourCarScreen />;
       case "biela": return <BielaChatScreen seed={view.seed} />;
-      case "content": return <ContentScreen id={view.id} />;
+      // A "aula" de OBD2 abre a página real de consulta de códigos.
+      case "content": return view.id === "read-obd2" ? <Obd2Screen /> : <ContentScreen id={view.id} />;
       case "carSettings": return <CarSettingsScreen />;
       case "profile": return <ProfileScreen />;
       case "gamification": return <GamificationScreen />;

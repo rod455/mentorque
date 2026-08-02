@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
 import { AppHeader, Card, SeverityDot, inputCls, useContent } from "../ui";
@@ -10,8 +10,10 @@ import { Button } from "@/components/ui/Button";
 export function Obd2Screen() {
   const c = useContent();
   const t = c.obd2;
-  const { s } = usePrototype();
+  const { s, markLessonSeen } = usePrototype();
   const { go } = useNav();
+  // Conta como a "aula" de OBD2 vista (para o "Para você" sugerir outras).
+  useEffect(() => markLessonSeen("read-obd2"), [markLessonSeen]);
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [picked, setPicked] = useState<(typeof t.codes)[number] | null>(null);
