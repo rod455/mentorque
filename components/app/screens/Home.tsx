@@ -187,14 +187,14 @@ export function HomeScreen() {
         <section className="mt-6">
           <div className="mb-3 flex items-baseline justify-between">
             <h3 className="font-serif text-lg font-bold text-cream">{h.memoriesTitle}</h3>
-            <button onClick={() => root({ name: "achievements" })} className="text-xs font-medium text-amber">{h.seeAll}</button>
+            <button onClick={() => go({ name: "achievements" })} className="text-xs font-medium text-amber">{h.seeAll}</button>
           </div>
           <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {memories.map((m) => {
               const photo = s.momentPhotos?.[m.id];
               const label = gm[m.id]?.title ?? m.id;
               return (
-                <button key={m.id} onClick={() => root({ name: "achievements" })} className="w-28 shrink-0 text-left">
+                <button key={m.id} onClick={() => go({ name: "achievements" })} className="w-28 shrink-0 text-left">
                   <div className="grid aspect-square place-items-center overflow-hidden rounded-2xl bg-graphite-800 ring-1 ring-white/[0.06]">
                     {photo ? (
                       // eslint-disable-next-line @next/next/no-img-element
