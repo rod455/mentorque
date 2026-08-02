@@ -6,7 +6,7 @@ export const ADMOB = {
   // Interstitial premiado (rewarded) — cadastrar carro / adicionar serviço
   rewardedInterstitial: "ca-app-pub-9316035916536420/3313432733",
   // Interstitial normal — abrir problema específico / abrir aula
-  interstitial: "ca-app-pub-9316035916536420/5960757314",
+  interstitial: "ca-app-pub-9316035916536420/6890695608",
 } as const;
 
 type AdMobPlugin = {
