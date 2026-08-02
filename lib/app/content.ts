@@ -472,7 +472,6 @@ export function getContent(locale: Locale) {
       title: T("Lendo códigos OBD2", "Reading OBD2 codes"),
       type: "article",
       system: "engine",
-      premium: true,
       need: [T("Adaptador OBD2", "OBD2 adapter"), T("App de leitura", "A reader app")],
       steps: [T("Conecte o adaptador", "Plug in the adapter"), T("Leia os códigos ativos", "Read active codes"), T("Anote e pesquise cada código", "Note and look up each code")],
       safety: [T("Não dirija com a luz piscando", "Don't drive with a flashing light")],
