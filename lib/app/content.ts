@@ -1251,6 +1251,12 @@ export function getContent(locale: Locale) {
         monthlyPrice: "R$ 29,90",
         fineAnnual: T("{n} dias grátis, depois R$ 239,90/ano (R$ 19,99/mês)", "{n} days free, then R$ 239.90/yr (R$ 19.99/mo)"),
         fineMonthly: T("R$ 29,90/mês, cancele quando quiser", "R$ 29.90/mo, cancel anytime"),
+        // Versão com o preço em destaque (formato Bloom)
+        finePrefix: T("{n} dias grátis, depois", "{n} days free, then"),
+        finePrice: "R$ 239,90",
+        fineSuffix: T("/ano (R$ 19,99/mês)", "/yr (R$ 19.99/mo)"),
+        fineMonthlyPrice: "R$ 29,90",
+        fineMonthlySuffix: T("/mês, cancele quando quiser", "/mo, cancel anytime"),
         cta: T("Continuar", "Continue"),
       },
     },

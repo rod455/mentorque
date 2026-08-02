@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { usePrototype } from "@/lib/app/store";
-import { detectPlatform, trialDaysFor } from "@/lib/app/platform";
+import { trialDaysFor, trialPlatform } from "@/lib/app/platform";
 import { isNativeApp } from "@/lib/app/wrapper";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
@@ -39,7 +39,7 @@ export function OnboardingFlow() {
   const card = i < cards.length ? cards[i] : null;
 
   const [trialDays, setTrialDays] = useState(7);
-  useEffect(() => setTrialDays(trialDaysFor(detectPlatform())), []);
+  useEffect(() => setTrialDays(trialDaysFor(trialPlatform())), []);
 
   // Última página: Continuar leva ao paywall/checkout do plano escolhido.
   const finishToPlan = () => {
@@ -185,7 +185,7 @@ export function OnboardingFlow() {
         <div className="flex flex-1 flex-col overflow-y-auto px-6 pb-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {/* Biela cercada de recursos */}
           <div className="relative mx-auto mt-1 flex h-44 w-full max-w-xs items-end justify-center">
-            <BielaMascote size={150} />
+            <BielaMascote size={118} />
             {[
               { icon: "diagnose", cls: "left-0 top-4" },
               { icon: "calendar", cls: "left-6 bottom-2" },
@@ -236,8 +236,20 @@ export function OnboardingFlow() {
             </button>
           </div>
 
-          <p className="mt-3 text-center text-xs text-cream/55">
-            {(plan === "annual" ? trial.fineAnnual : trial.fineMonthly).replace("{n}", String(trialDays))}
+          {/* Preço em evidência (formato Bloom) */}
+          <p className="mt-3 text-center text-sm text-cream/60">
+            {plan === "annual" ? (
+              <>
+                {trial.finePrefix.replace("{n}", String(trialDays))}{" "}
+                <strong className="font-display text-base font-bold text-cream">{trial.finePrice}</strong>
+                {trial.fineSuffix}
+              </>
+            ) : (
+              <>
+                <strong className="font-display text-base font-bold text-cream">{trial.fineMonthlyPrice}</strong>
+                {trial.fineMonthlySuffix}
+              </>
+            )}
           </p>
 
           <div className="mt-auto pt-4">

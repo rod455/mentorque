@@ -18,9 +18,19 @@ export function detectPlatform(ua?: string): Platform {
   return "other";
 }
 
-// Dias de teste grátis por plataforma: 3 no iPhone, 7 no Android/outros.
+// Dias de teste grátis: 3 SOMENTE dentro do app nativo da Apple; na web
+// (qualquer navegador, incluindo Safari no iPhone) e no app Android são 7.
 // Mantido em sincronia com os defaults do servidor (STRIPE_TRIAL_DAYS_IOS=3,
 // STRIPE_TRIAL_DAYS=7).
 export function trialDaysFor(platform: Platform): number {
   return platform === "ios" ? 3 : 7;
+}
+
+// Plataforma "efetiva" para o trial: só conta como iOS se estiver rodando
+// dentro do wrapper nativo (Capacitor) em um aparelho Apple.
+export function trialPlatform(): Platform {
+  const native =
+    typeof window !== "undefined" &&
+    !!(window as unknown as { Capacitor?: unknown }).Capacitor;
+  return native && detectPlatform() === "ios" ? "ios" : "other";
 }

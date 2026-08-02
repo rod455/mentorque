@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStripe, priceFor } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
-import { detectPlatform } from "@/lib/app/platform";
 
 export const runtime = "nodejs";
 
@@ -43,14 +42,12 @@ export async function POST(req: Request) {
   }
 
   const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_SITE_URL || "https://mentorque.com.br";
-  // Teste grátis por plataforma: 3 dias no iPhone, 7 no Android/outros.
-  const platform =
-    body?.platform === "ios" || body?.platform === "android"
-      ? body.platform
-      : detectPlatform(req.headers.get("user-agent") ?? undefined);
+  // Teste grátis: 3 dias SÓ quando o cliente declara iOS nativo (app da
+  // Apple); web (inclusive Safari/iPhone) e Android ganham 7. Não usamos o
+  // user-agent — Safari no iPhone é web e leva 7.
   const iosDays = Number(process.env.STRIPE_TRIAL_DAYS_IOS ?? 3);
   const otherDays = Number(process.env.STRIPE_TRIAL_DAYS ?? 7);
-  const trialDays = platform === "ios" ? iosDays : otherDays; // 0 = sem teste grátis
+  const trialDays = body?.platform === "ios" ? iosDays : otherDays; // 0 = sem teste grátis
   // Ofertas de saída do paywall: aplicam o cupom direto (o Stripe não permite
   // combinar `discounts` com `allow_promotion_codes`).
   const exitCoupon =

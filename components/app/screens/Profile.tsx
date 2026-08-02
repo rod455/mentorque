@@ -9,7 +9,7 @@ import { resizeImage } from "@/lib/app/image";
 import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
 import { cancelSubscription, deleteAccount, openBillingPortal, reactivateSubscription, startCheckout } from "@/lib/app/billing";
 import { getStripeJs, stripeConfigured } from "@/lib/app/stripeClient";
-import { detectPlatform, trialDaysFor, type Platform } from "@/lib/app/platform";
+import { trialDaysFor, trialPlatform, type Platform } from "@/lib/app/platform";
 import { isNativeApp } from "@/lib/app/wrapper";
 import { APP_VERSION, carName } from "@/lib/app/content";
 import { computeStatus } from "@/lib/app/gamification";
@@ -558,7 +558,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   const { back, go } = useNav();
   const [remind, setRemind] = useState(false);
   const [platform, setPlatform] = useState<Platform>("other");
-  useEffect(() => setPlatform(detectPlatform()), []);
+  useEffect(() => setPlatform(trialPlatform()), []);
   const trialDays = trialDaysFor(platform);
 
   // Plano selecionável no paywall (o checkout embutido nasce com um preço fixo,
@@ -848,7 +848,7 @@ export function CheckoutScreen({ plan, offer }: { plan: "monthly" | "annual"; of
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const res = await startCheckout(plan, detectPlatform(), offer);
+      const res = await startCheckout(plan, trialPlatform(), offer);
       if (cancelled) return;
       if (res.clientSecret) { setClientSecret(res.clientSecret); return; }
       // Stripe não configurado: em dev local cai no demo; em produção mostra erro.
