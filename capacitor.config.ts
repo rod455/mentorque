@@ -3,7 +3,7 @@ import type { CapacitorConfig } from "@capacitor/cli";
 // Wrapper nativo do Mentorque (Capacitor). A WebView carrega o app de
 // produção — todo conteúdo atualiza via deploy, sem novo release na loja.
 const config: CapacitorConfig = {
-  appId: "br.com.mentorque.app",
+  appId: "mentorque.app",
   appName: "Mentorque",
   // webDir é obrigatório mas não é usado: o app roda do servidor (abaixo).
   webDir: "public",
