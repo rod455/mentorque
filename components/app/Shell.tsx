@@ -76,6 +76,25 @@ function Router() {
     if (el) scrollPos.current[posKey] = el.scrollTop;
   };
 
+  // Botão físico/gesto de voltar do Android (wrapper): volta na navegação do
+  // app; na raiz, minimiza o app (sem fechar). Paywall passa pelo funil.
+  useEffect(() => {
+    type Handle = { remove: () => void };
+    const AppPlugin = (window as unknown as {
+      Capacitor?: { Plugins?: { App?: { addListener?: (ev: string, cb: () => void) => Handle | Promise<Handle>; minimizeApp?: () => void } } };
+    }).Capacitor?.Plugins?.App;
+    if (!AppPlugin?.addListener) return;
+    const sub = AppPlugin.addListener("backButton", () => {
+      if (view.name === "subscribe" && !paywallExitAllowed(null)) return;
+      if (canBack) back();
+      else AppPlugin.minimizeApp?.();
+    });
+    return () => {
+      if (sub && "remove" in sub) (sub as Handle).remove();
+      else (sub as Promise<Handle>)?.then?.((h) => h.remove());
+    };
+  }, [view, canBack, back]);
+
   // Swipe left→right = go back to the previous screen (last one the user was on).
   const down = useRef<{ x: number; y: number } | null>(null);
   const onPointerDown = (e: ReactPointerEvent) => {
