@@ -117,7 +117,7 @@ function Router() {
       <main
         ref={mainRef}
         onScroll={onScroll}
-        className="flex-1 overflow-y-auto overflow-x-hidden px-5 pb-28"
+        className="flex-1 overflow-y-auto overflow-x-hidden px-5 pb-28 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
       >
