@@ -1267,6 +1267,7 @@ export function getContent(locale: Locale) {
     symptomsUi: {
       title: T("O que está acontecendo com seu", "What's going on with your"),
       titleCar: T("Será que precisamos levar seu {car} para a oficina?", "Should we take your {car} to the shop?"),
+      titleNoCar: T("Devemos ir para a oficina?", "Should we go to the shop?"),
       searchPh: T("Descreva o problema (ex: barulho ao frear, luz do motor)", "Describe the problem (e.g. noise when braking, engine light)"),
       none: T("Nenhum sintoma encontrado.", "No symptoms found."),
       browseBySystem: T("Ou explore por sistema", "Or browse by system"),

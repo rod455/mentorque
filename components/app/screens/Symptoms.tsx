@@ -72,7 +72,7 @@ export function SymptomsScreen() {
 
   return (
     <div>
-      <AppHeader title={v ? ui.titleCar.replace("{car}", carName(v)) : c.nav.problems} />
+      <AppHeader title={v ? ui.titleCar.replace("{car}", carName(v)) : ui.titleNoCar} />
 
       {/* Cena da Biela na garagem (banner) */}
       <div className="-mt-1 mb-4 overflow-hidden rounded-2xl">
