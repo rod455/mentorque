@@ -1310,7 +1310,7 @@ export function getContent(locale: Locale) {
       ],
       disclaimer: T("O Biela orienta, mas não substitui uma inspeção presencial em itens de segurança (freio, direção, airbag).", "Biela guides you, but doesn't replace an in-person inspection for safety items (brakes, steering, airbags)."),
       freeLeft: T("{n} perguntas grátis restantes hoje", "{n} free questions left today"),
-      freeOver: T("Você usou suas perguntas grátis. Assine o Premium para conversar sem limites com o Biela.", "You've used your free questions. Go Premium to chat with Biela without limits."),
+      freeOver: T("O Biela é um recurso Premium. Assine para conversar à vontade com o seu mecânico de IA.", "Biela is a Premium feature. Subscribe to chat freely with your AI mechanic."),
       premiumCta: T("Conversar sem limites", "Chat without limits"),
       offlineNote: T("(Respondendo em modo básico — a IA completa com os manuais está sendo conectada.)", "(Answering in basic mode — the full AI with manuals is being connected.)"),
     },

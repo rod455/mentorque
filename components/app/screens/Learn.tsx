@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { AppHeader, Card, Chip, Icon, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
 import { VideoPlayer } from "../VideoPlayer";
 
-const FREE_BIELA_QUESTIONS = 3;
+const FREE_BIELA_QUESTIONS = 0; // Biela é sempre Premium (sem perguntas grátis)
 
 type Item = ReturnType<typeof useContent>["lessons"][number];
 
@@ -43,13 +43,15 @@ function ItemRow({ item }: { item: Item }) {
   );
 }
 
-// Big entry card that opens the Biela AI chat.
+// Big entry card that opens the Biela AI chat. Biela é sempre Premium: sem
+// assinatura, o card leva ao paywall; com assinatura, abre o chat.
 function BielaCard() {
   const c = useContent();
+  const { s } = usePrototype();
   const { go } = useNav();
   return (
     <button
-      onClick={() => go({ name: "biela" })}
+      onClick={() => go(s.premium ? { name: "biela" } : { name: "subscribe", ctx: "biela" })}
       className="flex w-full items-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-br from-amber/20 to-amber/5 p-4 text-left ring-1 ring-amber/25 hover:ring-amber/45"
     >
       <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-2xl bg-graphite-900/40">
@@ -125,27 +127,29 @@ export function LearnScreen() {
         <>
           <BielaCard />
 
-          {/* Para o seu carro — um box único que abre a lista */}
-          <button
-            onClick={() => go({ name: "forYourCar" })}
-            className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 p-4 text-left ring-1 ring-white/5 hover:ring-amber/30"
-          >
-            <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-2xl bg-teal/15 text-teal">
-              {v?.photo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={v.photo} alt="" className="h-full w-full object-cover" />
-              ) : (
-                <Icon name={v?.type === "moto" ? "moto" : "car"} className="h-6 w-6" />
-              )}
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block font-display text-[15px] font-semibold text-cream">
-                {v ? c.learn.forYourCar.replace("{car}", carName(v)) : c.learn.recommended}
+          {/* Para o seu carro — só aparece quando há carro cadastrado */}
+          {v && (
+            <button
+              onClick={() => go({ name: "forYourCar" })}
+              className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 p-4 text-left ring-1 ring-white/5 hover:ring-amber/30"
+            >
+              <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-2xl bg-teal/15 text-teal">
+                {v.photo ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={v.photo} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <Icon name={v.type === "moto" ? "moto" : "car"} className="h-6 w-6" />
+                )}
               </span>
-              <span className="mt-0.5 block text-xs text-cream/55">{c.learn.forYourCarCount.replace("{n}", String(recommended.length))}</span>
-            </span>
-            <span className="shrink-0 text-cream/40">›</span>
-          </button>
+              <span className="min-w-0 flex-1">
+                <span className="block font-display text-[15px] font-semibold text-cream">
+                  {c.learn.forYourCar.replace("{car}", carName(v))}
+                </span>
+                <span className="mt-0.5 block text-xs text-cream/55">{c.learn.forYourCarCount.replace("{n}", String(recommended.length))}</span>
+              </span>
+              <span className="shrink-0 text-cream/40">›</span>
+            </button>
+          )}
 
           {/* Trilhas de conhecimento */}
           <SectionTitle>{c.learn.tracks}</SectionTitle>
