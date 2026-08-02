@@ -140,43 +140,43 @@ export function OnboardingFlow() {
           </div>
         </div>
       ) : i === cards.length ? (
-        /* Página 4 — prova social */
-        <div className="flex flex-1 flex-col overflow-y-auto px-6 pb-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <h1 className="mt-2 font-serif text-3xl font-bold leading-tight text-cream">{social.title}</h1>
-          <p className="mt-1.5 text-sm text-cream/50">{social.sub}</p>
+        /* Página 4 — prova social (compacta: cabe sem scroll, botão visível) */
+        <div className="flex flex-1 flex-col px-6 pb-6">
+          <h1 className="mt-1 font-serif text-2xl font-bold leading-tight text-cream">{social.title}</h1>
+          <p className="mt-1 text-xs text-cream/50">{social.sub}</p>
 
-          <div className="mt-6 text-center">
-            <p className="font-serif text-4xl font-bold text-cream">{social.rating}</p>
-            <p className="mt-0.5 text-lg tracking-wide text-amber">★★★★★</p>
-            <p className="mt-0.5 text-xs text-cream/50">{social.ratingNote}</p>
-          </div>
-
-          <div className="mt-5 grid grid-cols-2 divide-x divide-white/10">
-            <div className="pr-4 text-center">
-              <p className="font-serif text-2xl font-bold text-cream">{social.stat1}</p>
-              <p className="mt-0.5 text-xs text-cream/50">{social.stat1Label}</p>
+          <div className="mt-3 flex items-center justify-center gap-6">
+            <div className="text-center">
+              <p className="font-serif text-3xl font-bold leading-none text-cream">{social.rating}</p>
+              <p className="mt-0.5 text-sm tracking-wide text-amber">★★★★★</p>
+              <p className="text-[10px] text-cream/45">{social.ratingNote}</p>
             </div>
-            <div className="pl-4 text-center">
-              <p className="font-serif text-2xl font-bold text-cream">{social.stat2}</p>
-              <p className="mt-0.5 text-xs text-cream/50">{social.stat2Label}</p>
+            <div className="h-10 w-px bg-white/10" />
+            <div className="text-center">
+              <p className="font-serif text-xl font-bold leading-tight text-cream">{social.stat1}</p>
+              <p className="text-[10px] text-cream/45">{social.stat1Label}</p>
+            </div>
+            <div className="text-center">
+              <p className="font-serif text-xl font-bold leading-tight text-cream">{social.stat2}</p>
+              <p className="text-[10px] text-cream/45">{social.stat2Label}</p>
             </div>
           </div>
 
           {/* Depoimentos levemente inclinados, como na referência */}
-          <div className="mt-6 flex-1 space-y-3">
-            {social.quotes.map((q, idx) => (
+          <div className="mt-4 flex-1 space-y-2.5">
+            {social.quotes.slice(0, 3).map((q, idx) => (
               <div
                 key={q.name}
-                className={`rounded-2xl bg-graphite-800 p-3.5 ring-1 ring-white/[0.06] ${idx % 2 === 0 ? "-rotate-1 mr-6" : "rotate-1 ml-6"}`}
+                className={`rounded-xl bg-graphite-800 px-3 py-2.5 ring-1 ring-white/[0.06] ${idx % 2 === 0 ? "-rotate-1 mr-5" : "rotate-1 ml-5"}`}
               >
-                <p className="text-sm tracking-wide text-amber">★★★★★</p>
-                <p className="mt-1 text-sm leading-snug text-cream/85">{q.quote}</p>
-                <p className="mt-1.5 text-xs font-medium text-cream/55">{q.name} <span className="text-teal">✔</span></p>
+                <p className="text-xs tracking-wide text-amber">★★★★★</p>
+                <p className="mt-0.5 text-[13px] leading-snug text-cream/85">{q.quote}</p>
+                <p className="mt-1 text-[11px] font-medium text-cream/55">{q.name} <span className="text-teal">✔</span></p>
               </div>
             ))}
           </div>
 
-          <Button size="lg" className="mt-5 w-full" onClick={onContinue}>
+          <Button size="lg" className="mt-3 w-full" onClick={onContinue}>
             {c.splash.next}
           </Button>
         </div>
