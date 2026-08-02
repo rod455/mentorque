@@ -10,6 +10,7 @@ import type { ServicePart, ServiceRecord, SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Autocomplete, Card, Chip, Icon, inputCls, PremiumBadge, SectionTitle, useContent } from "../ui";
+import { AdOverlay } from "../AdGate";
 
 const SYSTEMS: SystemKey[] = ["engine", "brakes", "suspension", "tires", "electrical"];
 
@@ -204,6 +205,9 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
   const [photo, setPhoto] = useState<string | undefined>(src?.photo);
   const [category, setCategory] = useState<ServiceRecord["category"]>(src?.category);
   const inputRef = useRef<HTMLInputElement>(null);
+  // Anúncio rewarded antes de registrar (só free; edição não conta).
+  const [adDone, setAdDone] = useState(false);
+  const needAd = !s.premium && !editing && !adDone;
 
   const addService2 = (label: string) => setServices((ss) => (ss.some((x) => x.label.toLowerCase() === label.trim().toLowerCase()) ? ss : [...ss, resolveService(label)]));
   const setSvcSystem = (i: number, sys: SystemKey | null) => setServices((ss) => ss.map((x, j) => (j === i ? { ...x, system: sys } : x)));
@@ -278,6 +282,7 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
 
   return (
     <div>
+      {needAd && <AdOverlay kind="rewarded" onDone={() => setAdDone(true)} onCancel={back} />}
       <AppHeader title={editing ? a.editTitle : a.title} />
 
       <div className="space-y-4 pb-4">

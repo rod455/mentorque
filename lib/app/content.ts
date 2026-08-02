@@ -1091,6 +1091,19 @@ export function getContent(locale: Locale) {
       seeAll: T("Ver todas", "See all"),
     },
 
+    // Anúncios (somente usuários free) — house ads até plugar a rede
+    ads: {
+      badge: T("Anúncio", "Ad"),
+      rewardedHint: T("Assista para continuar", "Watch to continue"),
+      closeIn: T("Fechar em {s}s", "Close in {s}s"),
+      rewardIn: T("Liberando em {s}s…", "Unlocking in {s}s…"),
+      unlocked: T("Liberado! 🎉", "Unlocked! 🎉"),
+      cont: T("Continuar", "Continue"),
+      houseTitle: T("Cansado de anúncios?", "Tired of ads?"),
+      houseBody: T("Assine o Premium e use o Mentorque sem interrupções — com o Biela ilimitado e todos os recursos.", "Go Premium and use Mentorque without interruptions — with unlimited Biela and every feature."),
+      houseCta: T("Conhecer o Premium", "See Premium"),
+    },
+
     // Tela de retorno (app volta do segundo plano sem carro cadastrado)
     welcomeBack: {
       title: T("Adicione seu primeiro carro à garagem", "Add your first car to the garage"),
