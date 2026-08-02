@@ -1195,6 +1195,11 @@ export function getContent(locale: Locale) {
       essential: T("Essencial", "Essential"),
       bielaCta: T("Não sabe qual comprar? Pergunte ao Biela.", "Not sure which to buy? Ask Biela."),
       bielaSeed: T("Quais equipamentos e ferramentas você recomenda eu ter para o meu carro?", "What equipment and tools do you recommend I keep for my car?"),
+      howTo: T("Como usar", "How to use"),
+      howToSeed: T(
+        "Me ensina a usar {item} no meu carro: passo a passo, cuidados de segurança e erros comuns de quem nunca usou.",
+        "Teach me how to use {item} on my car: step by step, safety precautions and common first-timer mistakes."
+      ),
     },
 
     checklist: {

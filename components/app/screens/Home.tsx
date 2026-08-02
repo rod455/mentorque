@@ -148,6 +148,13 @@ export function HomeScreen() {
           </div>
           <p className="mb-3 text-xs text-cream/45">{h.forYouSub}</p>
           <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {/* Kit do motorista — guia de equipamentos (conteúdo free) */}
+            <button onClick={() => go({ name: "equipment" })} className="flex w-36 shrink-0 flex-col self-start text-left">
+              <div className="grid aspect-square place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ring-white/[0.06]">
+                <Icon name="tools" className="h-9 w-9 text-amber/70" />
+              </div>
+              <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{c.equipmentUi.cardTitle}</p>
+            </button>
             {picks.map((l) => {
               const locked = l.premium && !s.premium;
               return (
