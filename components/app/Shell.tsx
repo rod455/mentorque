@@ -174,31 +174,36 @@ function WelcomeBack({ currentView }: { currentView: View["name"] }) {
   if (!show || hasCar || currentView === "addCar" || currentView === "auth") return null;
 
   return (
-    <div className="fixed inset-0 z-50 mx-auto flex w-full max-w-[440px] flex-col items-center justify-center bg-graphite px-6 text-center">
-      <BielaMascote pose="acenando" size={180} />
-      <h1 className="mt-5 max-w-xs font-serif text-2xl font-bold leading-snug text-cream">{w.title}</h1>
-      <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-cream/55">{w.sub}</p>
+    // Responsivo: conteúdo centralizado que cabe numa tela; em aparelhos muito
+    // pequenos, rola em vez de cortar. Padding inferior respeita a barra do
+    // navegador (safe area).
+    <div className="fixed inset-0 z-50 mx-auto w-full max-w-[440px] overflow-y-auto bg-graphite [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex min-h-full flex-col items-center justify-center px-6 pb-[max(env(safe-area-inset-bottom),20px)] pt-4 text-center">
+        <BielaMascote pose="acenando" size={116} />
+        <h1 className="mt-3 max-w-xs font-serif text-xl font-bold leading-snug text-cream">{w.title}</h1>
+        <p className="mx-auto mt-1.5 max-w-xs text-sm leading-relaxed text-cream/55">{w.sub}</p>
 
-      <div className="mt-6 w-full max-w-sm space-y-2.5">
-        {w.bullets.map((b) => (
-          <div key={b.label} className="flex items-center gap-3 rounded-2xl bg-graphite-800 px-4 py-3 text-left ring-1 ring-white/[0.06]">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-amber/15 text-amber">
-              <Icon name={b.icon} className="h-5 w-5" />
-            </span>
-            <span className="text-sm text-cream/85">{b.label}</span>
-          </div>
-        ))}
+        <div className="mt-4 w-full max-w-sm space-y-2">
+          {w.bullets.map((b) => (
+            <div key={b.label} className="flex items-center gap-3 rounded-2xl bg-graphite-800 px-4 py-2.5 text-left ring-1 ring-white/[0.06]">
+              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-amber/15 text-amber">
+                <Icon name={b.icon} className="h-4.5 w-4.5" />
+              </span>
+              <span className="text-sm text-cream/85">{b.label}</span>
+            </div>
+          ))}
+        </div>
+
+        <button
+          onClick={() => { setShow(false); go({ name: "addCar" }); }}
+          className="mt-4 w-full max-w-sm rounded-full bg-amber py-3 font-display text-[15px] font-semibold text-graphite active:scale-[0.99]"
+        >
+          🚗 {w.cta}
+        </button>
+        <button onClick={() => setShow(false)} className="mt-2.5 rounded-full bg-graphite-800 px-4 py-2 text-xs text-cream/60 ring-1 ring-white/[0.06]">
+          → {w.later}
+        </button>
       </div>
-
-      <button
-        onClick={() => { setShow(false); go({ name: "addCar" }); }}
-        className="mt-6 w-full max-w-sm rounded-full bg-amber py-3.5 font-display text-[15px] font-semibold text-graphite active:scale-[0.99]"
-      >
-        🚗 {w.cta}
-      </button>
-      <button onClick={() => setShow(false)} className="mt-3 rounded-full bg-graphite-800 px-4 py-2 text-xs text-cream/60 ring-1 ring-white/[0.06]">
-        → {w.later}
-      </button>
     </div>
   );
 }
