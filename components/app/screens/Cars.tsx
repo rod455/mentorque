@@ -74,11 +74,9 @@ export function CarsScreen() {
       <AppHeader
         title={c.cars.title}
         action={
-          s.vehicles.length > 0 ? (
-            <button onClick={onAdd} className="grid h-9 w-9 place-items-center rounded-full bg-amber text-graphite" aria-label={c.cars.add}>
-              <Icon name="plus" className="h-5 w-5" />
-            </button>
-          ) : undefined
+          <button onClick={onAdd} className="grid h-9 w-9 place-items-center rounded-full bg-amber text-graphite" aria-label={c.cars.add}>
+            <Icon name="plus" className="h-5 w-5" />
+          </button>
         }
       />
 
@@ -92,17 +90,18 @@ export function CarsScreen() {
       {s.vehicles.length > 0 && <ArrivalBanner />}
 
       {s.vehicles.length === 0 ? (
-        <Card className="mt-4 text-center">
-          {/* Garagem vazia → Biela acenando (estático, bordas limpas) */}
-          <div className="mx-auto mb-1 flex justify-center">
-            <BielaMascote pose="acenando" size={220} />
-          </div>
-          <p className="font-display text-base text-cream">{c.cars.emptyTitle}</p>
-          <p className="mx-auto mt-1 max-w-xs text-sm text-cream/55">{c.cars.emptyBody}</p>
-          <Button className="mt-4" onClick={() => go({ name: "addCar" })}>
-            {c.cars.add}
-          </Button>
-        </Card>
+        // Garagem vazia — mascote centralizado, sem caixa/contorno (estilo Bloom)
+        <div className="flex min-h-[62vh] flex-col items-center justify-center text-center">
+          <BielaMascote pose="acenando" size={200} />
+          <p className="mt-4 font-serif text-2xl font-bold text-cream">{c.cars.emptyTitle}</p>
+          <p className="mx-auto mt-1.5 max-w-xs text-sm text-cream/55">{c.cars.emptyBody}</p>
+          <button
+            onClick={() => go({ name: "addCar" })}
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-amber px-7 py-3.5 font-display text-[15px] font-semibold text-graphite active:scale-[0.99]"
+          >
+            <Icon name="plus" className="h-5 w-5" /> {c.cars.add}
+          </button>
+        </div>
       ) : (
         <div className="space-y-3">
           {s.vehicles.map((v) => {
