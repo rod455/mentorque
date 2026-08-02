@@ -35,15 +35,9 @@ export function EquipmentScreen() {
                     </div>
                     <p className="mt-1 text-xs leading-snug text-cream/60">{it.use}</p>
                   </div>
-                  {/* Como usar → explicação do Biela pro seu carro (Premium) */}
+                  {/* Como usar → página do guia (Premium) */}
                   <button
-                    onClick={() =>
-                      go(
-                        s.premium
-                          ? { name: "biela", seed: e.howToSeed.replace("{item}", it.name.toLowerCase()) }
-                          : { name: "subscribe", ctx: "equipment" }
-                      )
-                    }
+                    onClick={() => go(s.premium ? { name: "equipmentHowTo", itemId: it.id } : { name: "subscribe", ctx: "equipment" })}
                     className="shrink-0 self-center rounded-full bg-amber/15 px-2.5 py-1 text-[11px] font-semibold text-amber ring-1 ring-amber/25 hover:bg-amber/25"
                   >
                     {e.howTo}
