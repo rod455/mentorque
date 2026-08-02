@@ -153,7 +153,7 @@ export function HomeScreen() {
                 <button
                   key={l.id}
                   onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
-                  className="w-36 shrink-0 text-left"
+                  className="flex w-36 shrink-0 flex-col self-start text-left"
                 >
                   <div className="relative aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ring-white/[0.06]">
                     {l.thumb ? (
@@ -195,7 +195,7 @@ export function HomeScreen() {
               const photo = s.momentPhotos?.[m.id];
               const label = gm[m.id]?.title ?? m.id;
               return (
-                <button key={m.id} onClick={() => go({ name: "achievements" })} className="w-28 shrink-0 text-left">
+                <button key={m.id} onClick={() => go({ name: "achievements" })} className="flex w-28 shrink-0 flex-col self-start text-left">
                   <div className="grid aspect-square place-items-center overflow-hidden rounded-2xl bg-graphite-800 ring-1 ring-white/[0.06]">
                     {photo ? (
                       // eslint-disable-next-line @next/next/no-img-element
