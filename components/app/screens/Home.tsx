@@ -7,6 +7,7 @@ import { vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { useContent, Card, Icon } from "../ui";
 import { HealthPill } from "./Cars";
+import { CommonProblems } from "./Symptoms";
 
 type Lesson = ReturnType<typeof useContent>["lessons"][number];
 
@@ -210,6 +211,9 @@ export function HomeScreen() {
           </div>
         </section>
       )}
+
+      {/* Problemas comuns — mesmo formato dos cards (reusa a lógica da aba Problemas) */}
+      <CommonProblems />
 
       {/* Ações rápidas */}
       <p className="mb-2 mt-6 font-display text-sm font-semibold text-cream/70">{h.quickTitle}</p>

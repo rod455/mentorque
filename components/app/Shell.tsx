@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { NavProvider, useNav, type View } from "@/lib/app/nav";
 import { usePrototype } from "@/lib/app/store";
@@ -42,7 +42,24 @@ function PhoneShell({ children }: { children: React.ReactNode }) {
 
 // Maps a view to a screen. Deep car screens live under the "cars" tab.
 function Router() {
-  const { view, back, canBack } = useNav();
+  const { view, back, canBack, depth } = useNav();
+
+  // Scroll responsivo: avançar/abrir conteúdo → topo; voltar → restaura a
+  // posição de onde o usuário estava. Guarda o scroll por nível da pilha.
+  const mainRef = useRef<HTMLElement>(null);
+  const scrollPos = useRef<Record<number, number>>({});
+  const prevDepth = useRef(depth);
+  useLayoutEffect(() => {
+    const el = mainRef.current;
+    if (!el) return;
+    if (depth < prevDepth.current) el.scrollTop = scrollPos.current[depth] ?? 0; // voltou
+    else el.scrollTop = 0; // avançou ou trocou de aba
+    prevDepth.current = depth;
+  }, [view, depth]);
+  const onScroll = () => {
+    const el = mainRef.current;
+    if (el) scrollPos.current[depth] = el.scrollTop;
+  };
 
   // Swipe left→right = go back to the previous screen (last one the user was on).
   const down = useRef<{ x: number; y: number } | null>(null);
@@ -98,6 +115,8 @@ function Router() {
     <>
       {showTopBar && <TopBar />}
       <main
+        ref={mainRef}
+        onScroll={onScroll}
         className="flex-1 overflow-y-auto overflow-x-hidden px-5 pb-28"
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}

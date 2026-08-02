@@ -39,6 +39,7 @@ export type View =
 type NavValue = {
   view: View;
   canBack: boolean;
+  depth: number; // tamanho da pilha (para restaurar o scroll ao voltar)
   go: (v: View) => void; // push
   back: () => void;
   root: (v: View) => void; // reset stack (bottom nav)
@@ -54,7 +55,7 @@ export function NavProvider({ initial, children }: { initial: View; children: Re
   const root = useCallback((v: View) => setStack([v]), []);
 
   const value = useMemo<NavValue>(
-    () => ({ view: stack[stack.length - 1], canBack: stack.length > 1, go, back, root }),
+    () => ({ view: stack[stack.length - 1], canBack: stack.length > 1, depth: stack.length, go, back, root }),
     [stack, go, back, root]
   );
 

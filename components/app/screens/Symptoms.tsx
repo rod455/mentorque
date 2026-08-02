@@ -201,7 +201,7 @@ const MAKE_COMMON_SYSTEMS: Record<string, SystemKey[]> = {
 // Seção "Problemas comuns": prioriza o que é relevante para os carros do
 // usuário — sistema pedindo atenção/km alta (qualquer carro) e sistemas
 // típicos da marca — e completa com os problemas gerais.
-function CommonProblems() {
+export function CommonProblems() {
   const c = useContent();
   const ui = c.symptomsUi;
   const { s } = usePrototype();
