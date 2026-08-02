@@ -2,27 +2,61 @@
 
 import { useEffect, useState } from "react";
 import { usePrototype } from "@/lib/app/store";
+import { ADMOB, nativeAdMob } from "@/lib/app/admob";
 import { useNav } from "@/lib/app/nav";
 import { useContent } from "./ui";
 
-// Anúncio em tela cheia para usuários free. Por enquanto exibe "house ads"
-// (promoção do Premium) com a MESMA mecânica de uma rede real — quando houver
-// conta de anúncios (AdMob via wrapper nativo / AdSense H5), pluga-se aqui.
-//
-// - interstitial: contagem de 5s → aparece o X para fechar e seguir.
-// - rewarded: contagem de 8s → botão "Continuar" libera a ação; fechar antes
-//   cancela (onCancel).
+// Anúncio em tela cheia para usuários free.
+// 1) Dentro do wrapper nativo (Capacitor): usa o AdMob real — interstitial
+//    (ca-app-pub-…/5960757314) e rewarded (ca-app-pub-…/3313432733).
+// 2) No navegador (ou se o AdMob falhar): house ad do Premium com a mesma
+//    mecânica — interstitial: 5s → X fecha; rewarded: 8s → Continuar libera,
+//    fechar antes cancela (onCancel).
 export function AdOverlay({ kind, onDone, onCancel }: { kind: "interstitial" | "rewarded"; onDone: () => void; onCancel?: () => void }) {
   const c = useContent();
   const t = c.ads;
   const { go } = useNav();
   const total = kind === "rewarded" ? 8 : 5;
   const [left, setLeft] = useState(total);
+  // "native": tentando o AdMob do wrapper; "house": anúncio interno.
+  const [mode, setMode] = useState<"native" | "house">(() => (nativeAdMob() ? "native" : "house"));
+
   useEffect(() => {
+    if (mode !== "native") return;
+    let cancelled = false;
+    const plugin = nativeAdMob();
+    if (!plugin) { setMode("house"); return; }
+    (async () => {
+      try {
+        if (kind === "interstitial") {
+          await plugin.prepareInterstitial({ adId: ADMOB.interstitial });
+          await plugin.showInterstitial();
+          if (!cancelled) onDone();
+        } else {
+          await plugin.prepareRewardVideoAd({ adId: ADMOB.rewardedInterstitial });
+          await plugin.showRewardVideoAd();
+          if (!cancelled) onDone();
+        }
+      } catch {
+        if (!cancelled) setMode("house"); // sem rede/erro → house ad
+      }
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
+
+  useEffect(() => {
+    if (mode !== "house") return;
+    setLeft(total);
     const timer = setInterval(() => setLeft((n) => Math.max(0, n - 1)), 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [mode, total]);
   const done = left <= 0;
+
+  // Aguardando o anúncio nativo abrir — fundo escuro discreto.
+  if (mode === "native") {
+    return <div className="fixed inset-0 z-[70] mx-auto w-full max-w-[440px] bg-graphite-900" />;
+  }
 
   return (
     <div className="fixed inset-0 z-[70] mx-auto flex w-full max-w-[440px] flex-col bg-graphite-900">
