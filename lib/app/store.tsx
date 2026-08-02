@@ -20,6 +20,7 @@ type Session = {
   services: ServiceRecord[];
   claimedMilestones: string[]; // badges the user marks by hand
   momentPhotos: Record<string, string>; // momento id → foto (data URL)
+  seenLessons: string[]; // aulas/conteúdos já abertos (para sugerir outros)
   startedAt: string | null; // primeiro dia no app (para marcos de tempo)
   notifications: boolean; // preferência de notificações
   units: "metric" | "imperial"; // preferência de unidades
@@ -37,6 +38,7 @@ const EMPTY: Session = {
   services: [],
   claimedMilestones: [],
   momentPhotos: {},
+  seenLessons: [],
   startedAt: null,
   notifications: false,
   units: "metric",
@@ -64,6 +66,7 @@ type StoreValue = {
   updateService: (id: string, patch: Partial<ServiceRecord>) => void;
   removeService: (id: string) => void;
   toggleMilestone: (id: string) => void;
+  markLessonSeen: (id: string) => void;
   setMomentPhoto: (id: string, dataUrl: string | null) => void;
   setNotifications: (v: boolean) => void;
   setUnits: (v: "metric" | "imperial") => void;
@@ -84,6 +87,7 @@ function migrate(parsed: any): Session {
     const sess = { ...EMPTY, ...parsed } as Session;
     if (!Array.isArray(sess.claimedMilestones)) sess.claimedMilestones = [];
     if (!sess.momentPhotos || typeof sess.momentPhotos !== "object") sess.momentPhotos = {};
+    if (!Array.isArray(sess.seenLessons)) sess.seenLessons = [];
     if (!sess.startedAt) sess.startedAt = todayISO();
     return sess;
   }
@@ -125,6 +129,7 @@ function mergeSessions(cloud: Session, local: Session): Session {
     services: mergeById(cloud.services ?? [], local.services ?? []),
     claimedMilestones: [...new Set([...(cloud.claimedMilestones ?? []), ...(local.claimedMilestones ?? [])])],
     momentPhotos: { ...(local.momentPhotos ?? {}), ...(cloud.momentPhotos ?? {}) },
+    seenLessons: [...new Set([...(cloud.seenLessons ?? []), ...(local.seenLessons ?? [])])],
     startedAt: [cloud.startedAt, local.startedAt].filter(Boolean).sort()[0] ?? todayISO(),
     notifications: cloud.notifications ?? local.notifications ?? false,
     units: cloud.units ?? local.units ?? "metric",
@@ -287,6 +292,11 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
     [patch]
   );
 
+  const markLessonSeen = useCallback(
+    (id: string) => patch((p) => (p.seenLessons.includes(id) ? p : { ...p, seenLessons: [...p.seenLessons, id] })),
+    [patch]
+  );
+
   const setMomentPhoto = useCallback(
     (id: string, dataUrl: string | null) =>
       patch((p) => {
@@ -310,8 +320,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const es = useMemo(() => (subActive && !s.premium ? { ...s, premium: true } : s), [s, subActive]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s: es, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, setNotifications, setUnits, setAvatar, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
-    [es, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, setMomentPhoto, setNotifications, setUnits, setAvatar, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
+    () => ({ s: es, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, setMomentPhoto, setNotifications, setUnits, setAvatar, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
+    [es, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, setMomentPhoto, setNotifications, setUnits, setAvatar, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

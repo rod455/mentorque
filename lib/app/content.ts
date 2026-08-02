@@ -403,6 +403,7 @@ export function getContent(locale: Locale) {
     model?: string;
     difficulty?: "facil" | "medio" | "avancado";
     media?: Media;
+    thumb?: string; // imagem ilustrativa do card (opcional; ex.: /learn/oil.jpg)
     body?: string[];
     need: string[];
     steps: string[];
@@ -865,6 +866,19 @@ export function getContent(locale: Locale) {
       qStudies: T("Aprender", "Learn"),
       yourCar: T("Seu carro", "Your car"),
       viewCar: T("Abrir", "Open"),
+      forYouTitle: T("Para você", "For you"),
+      forYouSub: T("Baseado no seu nível e no seu carro", "Based on your level and your car"),
+      memoriesTitle: T("Memórias", "Memories"),
+      seeAll: T("Ver todas", "See all"),
+    },
+
+    // Tela de busca (aberta pela barra da Home)
+    search: {
+      ph: T("Buscar problemas ou serviços", "Search problems or services"),
+      title: T("Buscar no catálogo", "Search the catalog"),
+      hint: T("Digite pelo menos 2 caracteres para encontrar problemas e serviços.", "Type at least 2 characters to find problems and services."),
+      empty: T("Nada encontrado. Pergunte à Biela 👇", "Nothing found. Ask Biela 👇"),
+      askBiela: T("Perguntar à Biela sobre “{q}”", "Ask Biela about “{q}”"),
     },
 
     // Shared Premium labels across screens.

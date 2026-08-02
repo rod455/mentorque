@@ -238,11 +238,13 @@ export function ForYourCarScreen() {
 // 2.6.C — Detalhe do conteúdo (tutorial com passos OU artigo com parágrafos)
 export function ContentScreen({ id }: { id: string }) {
   const c = useContent();
-  const { s } = usePrototype();
+  const { s, markLessonSeen } = usePrototype();
   const lesson = c.lessons.find((l) => l.id === id);
   const [done, setDone] = useState(false);
   const [saved, setSaved] = useState(false);
   const [level, setLevel] = useState<"iniciante" | "avancado" | "mecanico">("avancado");
+  // Marca o conteúdo como visto (para a Home sugerir outros).
+  useEffect(() => { if (lesson) markLessonSeen(lesson.id); }, [lesson, markLessonSeen]);
   if (!lesson) return <AppHeader title="—" />;
 
   const byLevel = lesson.stepsByLevel; // 3 níveis fixos (sem chamada de API)

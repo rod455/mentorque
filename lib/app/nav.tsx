@@ -7,6 +7,7 @@ import type { ServiceRecord, SystemKey } from "./types";
 // reset used by the bottom navigation. Params travel with the view.
 export type View =
   | { name: "home" }
+  | { name: "search" }
   | { name: "cars" }
   | { name: "addCar"; editId?: string }
   | { name: "car" }

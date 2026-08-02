@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/app/auth";
 import { Icon, useContent } from "./ui";
 import { Logo } from "@/components/ui/Logo";
 import { HomeScreen } from "./screens/Home";
+import { SearchScreen } from "./screens/Search";
 import { CarsScreen, AddCarScreen } from "./screens/Cars";
 import { CarHub } from "./screens/CarHub";
 import { SymptomsScreen, SymptomDetail, SystemProblemsScreen, ChecklistScreen } from "./screens/Symptoms";
@@ -60,6 +61,7 @@ function Router() {
   const screen = (() => {
     switch (view.name) {
       case "home": return <HomeScreen />;
+      case "search": return <SearchScreen />;
       case "cars": return <CarsScreen />;
       case "addCar": return <AddCarScreen editId={view.editId} />;
       case "car": return <CarHub />;
@@ -142,7 +144,7 @@ function TopBar() {
 
 type Tab = "home" | "cars" | "problems" | "history" | "studies" | "profile";
 const TAB_OF: Record<View["name"], Tab> = {
-  home: "home",
+  home: "home", search: "home",
   cars: "cars", addCar: "cars", car: "cars", health: "cars", healthQuiz: "cars", system: "cars", revisions: "cars", carSettings: "cars",
   symptoms: "problems", symptom: "problems", systemProblems: "problems", equipment: "problems", checklist: "problems",
   history: "history", addService: "history", service: "history",
