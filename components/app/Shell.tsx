@@ -3,7 +3,10 @@
 import { useRef } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { NavProvider, useNav, type View } from "@/lib/app/nav";
+import { usePrototype } from "@/lib/app/store";
 import { Icon, useContent } from "./ui";
+import { Logo } from "@/components/ui/Logo";
+import { HomeScreen } from "./screens/Home";
 import { CarsScreen, AddCarScreen } from "./screens/Cars";
 import { CarHub } from "./screens/CarHub";
 import { SymptomsScreen, SymptomDetail, SystemProblemsScreen, ChecklistScreen } from "./screens/Symptoms";
@@ -19,7 +22,7 @@ import { AuthScreen } from "./screens/Auth";
 
 export function Shell() {
   return (
-    <NavProvider initial={{ name: "cars" }}>
+    <NavProvider initial={{ name: "home" }}>
       <PhoneShell>
         <Router />
       </PhoneShell>
@@ -55,6 +58,7 @@ function Router() {
 
   const screen = (() => {
     switch (view.name) {
+      case "home": return <HomeScreen />;
       case "cars": return <CarsScreen />;
       case "addCar": return <AddCarScreen editId={view.editId} />;
       case "car": return <CarHub />;
@@ -85,8 +89,11 @@ function Router() {
     }
   })();
 
+  const showTopBar = TAB_ROOTS.has(view.name);
+
   return (
     <>
+      {showTopBar && <TopBar />}
       <main
         className="flex-1 overflow-y-auto overflow-x-hidden px-5 pb-28"
         onPointerDown={onPointerDown}
@@ -99,8 +106,38 @@ function Router() {
   );
 }
 
-type Tab = "cars" | "problems" | "history" | "studies" | "profile";
+// Cabeçalho fixo das abas principais: marca à esquerda, foto de perfil à direita.
+const TAB_ROOTS = new Set<View["name"]>(["home", "cars", "symptoms", "history", "learn"]);
+
+function TopBar() {
+  const { root } = useNav();
+  const { s } = usePrototype();
+  const initial = (s.name || "").trim().charAt(0).toUpperCase() || "?";
+
+  return (
+    <header className="flex items-center justify-between px-5 pb-1 pt-[max(env(safe-area-inset-top),14px)]">
+      <button onClick={() => root({ name: "home" })} className="flex items-center" aria-label="Início">
+        <Logo variant="lockup-dark" className="h-7 w-auto" priority />
+      </button>
+      <button
+        onClick={() => root({ name: "profile" })}
+        aria-label="Perfil"
+        className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-teal/25 font-display text-sm font-semibold text-teal ring-1 ring-white/10"
+      >
+        {s.avatar ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={s.avatar} alt="" className="h-full w-full object-cover" />
+        ) : (
+          initial
+        )}
+      </button>
+    </header>
+  );
+}
+
+type Tab = "home" | "cars" | "problems" | "history" | "studies" | "profile";
 const TAB_OF: Record<View["name"], Tab> = {
+  home: "home",
   cars: "cars", addCar: "cars", car: "cars", health: "cars", healthQuiz: "cars", system: "cars", revisions: "cars", carSettings: "cars",
   symptoms: "problems", symptom: "problems", systemProblems: "problems", equipment: "problems", checklist: "problems",
   history: "history", addService: "history", service: "history",
@@ -114,11 +151,11 @@ function BottomNav() {
   const active = TAB_OF[view.name];
 
   const items: { tab: Tab; icon: string; label: string; go: () => void }[] = [
-    { tab: "cars", icon: "car", label: c.nav.cars, go: () => root({ name: "cars" }) },
+    { tab: "home", icon: "home", label: c.nav.home, go: () => root({ name: "home" }) },
+    { tab: "cars", icon: "car", label: c.nav.carsShort, go: () => root({ name: "cars" }) },
     { tab: "problems", icon: "diagnose", label: c.nav.problems, go: () => root({ name: "symptoms" }) },
     { tab: "history", icon: "clock", label: c.nav.history, go: () => root({ name: "history" }) },
     { tab: "studies", icon: "book", label: c.nav.studies, go: () => root({ name: "learn" }) },
-    { tab: "profile", icon: "user", label: c.nav.profile, go: () => root({ name: "profile" }) },
   ];
 
   return (

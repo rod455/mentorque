@@ -6,6 +6,7 @@ import type { ServiceRecord, SystemKey } from "./types";
 // Lightweight in-app router: a stack of views with push/back plus a "root"
 // reset used by the bottom navigation. Params travel with the view.
 export type View =
+  | { name: "home" }
   | { name: "cars" }
   | { name: "addCar"; editId?: string }
   | { name: "car" }

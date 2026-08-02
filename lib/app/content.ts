@@ -836,11 +836,35 @@ export function getContent(locale: Locale) {
     },
 
     nav: {
+      home: T("Início", "Home"),
       cars: T("Meus Carros", "My Cars"),
+      carsShort: T("Carros", "Cars"),
       problems: T("Problemas", "Problems"),
       history: T("Histórico", "History"),
       studies: T("Estudos", "Studies"),
       profile: T("Perfil", "Profile"),
+    },
+
+    // 0.0 — Início (dashboard)
+    home: {
+      morning: T("Bom dia", "Good morning"),
+      afternoon: T("Boa tarde", "Good afternoon"),
+      evening: T("Boa noite", "Good evening"),
+      driver: T("motorista", "driver"),
+      heroTitleEmpty: T("Vamos cadastrar o seu primeiro carro", "Let's add your first car"),
+      heroCtaEmpty: T("Cadastrar meu carro", "Add my car"),
+      heroTitle: T("O que vamos cuidar hoje?", "What shall we care for today?"),
+      heroCta: T("Diagnosticar um problema", "Diagnose a problem"),
+      searchPh: T("Buscar problemas ou serviços", "Search problems or services"),
+      premiumTitle: T("Teste o Premium grátis", "Try Premium free"),
+      premiumSub: T("Toque para começar", "Tap to start"),
+      quickTitle: T("Ações rápidas", "Quick actions"),
+      qDiagnose: T("Diagnosticar", "Diagnose"),
+      qService: T("Registrar serviço", "Log service"),
+      qRevisions: T("Plano de revisão", "Service plan"),
+      qStudies: T("Aprender", "Learn"),
+      yourCar: T("Seu carro", "Your car"),
+      viewCar: T("Abrir", "Open"),
     },
 
     // Shared Premium labels across screens.
