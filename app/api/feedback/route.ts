@@ -11,6 +11,7 @@ const TYPE_LABEL: Record<string, { pt: string; en: string; emoji: string }> = {
   doubt: { pt: "Dúvida", en: "Question", emoji: "❓" },
   suggestion: { pt: "Sugestão", en: "Suggestion", emoji: "💡" },
   bug: { pt: "Bug", en: "Bug", emoji: "🐛" },
+  deletion: { pt: "EXCLUSÃO DE CONTA", en: "ACCOUNT DELETION", emoji: "🗑️" },
 };
 
 const esc = (s: string) => s.replace(/[<>&]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" }[c] as string));
