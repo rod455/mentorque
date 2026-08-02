@@ -44,10 +44,10 @@ export function HomeScreen() {
       <div className="relative mt-3 overflow-hidden rounded-3xl bg-graphite-800 ring-1 ring-white/5">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/biela/cena-biela-garagem.webp"
+          src="/biela/cena-chegada.webp"
           alt=""
           className="aspect-[16/12] w-full object-cover"
-          style={{ objectPosition: "center 40%" }}
+          style={{ objectPosition: "center 52%" }}
           draggable={false}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-graphite-900 via-graphite-900/40 to-transparent" />
