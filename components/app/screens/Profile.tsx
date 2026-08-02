@@ -11,6 +11,7 @@ import { cancelSubscription, deleteAccount, openBillingPortal, reactivateSubscri
 import { getStripeJs, stripeConfigured } from "@/lib/app/stripeClient";
 import { trialDaysFor, trialPlatform, type Platform } from "@/lib/app/platform";
 import { isNativeApp } from "@/lib/app/wrapper";
+import { hasActiveEntitlement, initPurchases, type RcPackage } from "@/lib/app/purchases";
 import { APP_VERSION, carName } from "@/lib/app/content";
 import { computeStatus } from "@/lib/app/gamification";
 import { PhaseEmblem } from "../Emblem";
@@ -653,8 +654,97 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
 
   const mmss = `${String(Math.floor(Math.max(0, offerLeft) / 60)).padStart(2, "0")}:${String(Math.max(0, offerLeft) % 60).padStart(2, "0")}`;
 
-  // Modo leitor (app da loja): não há compra dentro do app — só o aviso.
+  // App nativo iOS: compra interna via RevenueCat (Apple IAP). Carrega os
+  // pacotes da oferta; sem RevenueCat (ex.: Android), fica o modo leitor.
+  const [iap, setIap] = useState<{ monthly?: RcPackage; annual?: RcPackage } | null>(null);
+  const [iapBusy, setIapBusy] = useState(false);
+  useEffect(() => {
+    if (!isNativeApp()) return;
+    (async () => {
+      const p = await initPurchases(user?.id ?? null);
+      if (!p) return;
+      try {
+        const offs = await p.getOfferings();
+        const pkgs = offs.current?.availablePackages ?? [];
+        const monthly = pkgs.find((x) => x.packageType === "MONTHLY") ?? pkgs.find((x) => x.identifier === "$rc_monthly");
+        const annual = pkgs.find((x) => x.packageType === "ANNUAL") ?? pkgs.find((x) => x.identifier === "$rc_annual");
+        if (monthly || annual) setIap({ monthly, annual });
+      } catch { /* sem ofertas → modo leitor */ }
+    })();
+  }, [user]);
+
+  const buyNative = async () => {
+    const pkg = plan === "monthly" ? iap?.monthly ?? iap?.annual : iap?.annual ?? iap?.monthly;
+    if (!pkg || iapBusy) return;
+    if (!user) { go({ name: "auth" }); return; }
+    setIapBusy(true);
+    try {
+      const p = await initPurchases(user.id);
+      const res = await p?.purchasePackage({ aPackage: pkg });
+      if (res && hasActiveEntitlement(res.customerInfo)) {
+        setPremium(true);
+        refreshSubscription();
+        back();
+      }
+    } catch { /* cancelado/erro — permanece na tela */ } finally {
+      setIapBusy(false);
+    }
+  };
+
+  const restoreNative = async () => {
+    try {
+      const p = await initPurchases(user?.id ?? null);
+      const res = await p?.restorePurchases();
+      if (res && hasActiveEntitlement(res.customerInfo)) { setPremium(true); refreshSubscription(); back(); }
+    } catch { /* ignore */ }
+  };
+
   if (isNativeApp()) {
+    // Paywall com compra interna (IAP) quando o RevenueCat está configurado.
+    if (iap) {
+      return (
+        <div className="flex min-h-[80vh] flex-col px-2 pb-6">
+          <div className="flex items-center justify-between pb-2 pt-4 text-xs text-cream/50">
+            <button onClick={back} aria-label="fechar" className="grid h-8 w-8 place-items-center rounded-full bg-graphite-700 text-cream/70">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><path d="M6 6l12 12M18 6 6 18" /></svg>
+            </button>
+            <button onClick={restoreNative} className="hover:text-cream">{sub.restore}</button>
+          </div>
+          <div className="flex flex-col items-center text-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/biela/biela-idle.png" alt="Biela" className="h-28 w-28 object-contain" draggable={false} />
+            <h1 className="mt-1 font-serif text-2xl font-bold text-cream">{sub.trialTitle}</h1>
+          </div>
+          <ul className="mx-auto mt-3 max-w-sm space-y-2">
+            {sub.bullets.map((b) => (
+              <li key={b} className="flex items-center gap-2.5 text-sm text-cream/85"><TealCheck /> {b}</li>
+            ))}
+          </ul>
+          <div className="mt-4 grid grid-cols-2 gap-3">
+            {(["annual", "monthly"] as const).map((k) => {
+              const pkg = k === "annual" ? iap.annual : iap.monthly;
+              if (!pkg) return <span key={k} />;
+              const sel = plan === k;
+              return (
+                <button key={k} onClick={() => setPlan(k)} className={`rounded-2xl p-4 text-left ring-2 transition-colors ${sel ? "bg-amber text-graphite ring-amber" : "bg-graphite-800 text-cream ring-white/10"}`}>
+                  <span className="block font-display text-base font-bold">{k === "annual" ? sub.planAnnual : sub.planMonthly}</span>
+                  <span className={`mt-0.5 block text-sm ${sel ? "text-graphite/75" : "text-cream/60"}`}>
+                    {pkg.product?.priceString ?? (k === "annual" ? sub.planAnnualPrice : sub.planMonthlyPrice)}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          <Button size="lg" className="mt-4 w-full" onClick={buyNative} disabled={iapBusy}>
+            {iapBusy ? "…" : sub.trialCta.replace("{n}", String(trialDays))}
+          </Button>
+          <p className="mx-auto mt-3 max-w-xs text-center text-xs leading-relaxed text-cream/45">
+            {plan === "annual" ? sub.trialFine : sub.trialFineMonthly}
+          </p>
+        </div>
+      );
+    }
+    // Sem IAP configurado (ex.: Android): modo leitor.
     return (
       <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 text-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}

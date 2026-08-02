@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePrototype } from "@/lib/app/store";
-import { ADMOB, initAdMob, nativeAdMob } from "@/lib/app/admob";
+import { adUnit, initAdMob, nativeAdMob } from "@/lib/app/admob";
 import { useNav } from "@/lib/app/nav";
 import { useContent } from "./ui";
 
@@ -19,7 +19,7 @@ export function AdOverlay({ kind, onDone, onCancel }: { kind: "interstitial" | "
   const total = kind === "rewarded" ? 8 : 5;
   const [left, setLeft] = useState(total);
   // "native": tentando o AdMob do wrapper; "house": anúncio interno.
-  const [mode, setMode] = useState<"native" | "house">(() => (nativeAdMob() ? "native" : "house"));
+  const [mode, setMode] = useState<"native" | "house">(() => (nativeAdMob() && adUnit(kind) ? "native" : "house"));
 
   useEffect(() => {
     if (mode !== "native") return;
@@ -29,12 +29,14 @@ export function AdOverlay({ kind, onDone, onCancel }: { kind: "interstitial" | "
     (async () => {
       try {
         await initAdMob(plugin);
+        const adId = adUnit(kind);
+        if (!adId) throw new Error("no ad unit");
         if (kind === "interstitial") {
-          await plugin.prepareInterstitial({ adId: ADMOB.interstitial });
+          await plugin.prepareInterstitial({ adId });
           await plugin.showInterstitial();
           if (!cancelled) onDone();
         } else {
-          await plugin.prepareRewardVideoAd({ adId: ADMOB.rewardedInterstitial });
+          await plugin.prepareRewardVideoAd({ adId });
           await plugin.showRewardVideoAd();
           if (!cancelled) onDone();
         }

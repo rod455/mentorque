@@ -1,0 +1,48 @@
+# Build iOS na nuvem (Codemagic) → TestFlight.
+#
+# Configuração única no painel do Codemagic (codemagic.io):
+# 1. Conectar este repositório GitHub.
+# 2. Teams → Integrations → App Store Connect: adicionar uma chave de API do
+#    App Store Connect (criada em appstoreconnect.apple.com → Usuários e
+#    Acesso → Chaves) com o nome "asc-mentorque".
+# 3. O signing automático usa essa integração (distribution app_store).
+#
+# Pré-requisitos na Apple:
+# - Bundle ID "mentorque.app" registrado (developer.apple.com → Identifiers)
+# - App criado no App Store Connect com esse bundle id
+workflows:
+  ios-testflight:
+    name: iOS → TestFlight
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: asc-mentorque
+    environment:
+      node: 20
+      xcode: latest
+      cocoapods: default
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: mentorque.app
+    scripts:
+      - name: Instalar dependências web
+        script: npm ci
+      - name: Sincronizar Capacitor iOS
+        script: npx cap sync ios
+      - name: CocoaPods
+        script: cd ios/App && pod install
+      - name: Número da build (incremental)
+        script: |
+          cd ios/App
+          agvtool new-version -all $((${PROJECT_BUILD_NUMBER:-0} + 1))
+      - name: Compilar .ipa
+        script: |
+          xcode-project build-ipa \
+            --workspace ios/App/App.xcworkspace \
+            --scheme App
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
