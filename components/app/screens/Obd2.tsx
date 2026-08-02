@@ -1,19 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
 import { AppHeader, Card, SeverityDot, inputCls, useContent } from "../ui";
 import { Button } from "@/components/ui/Button";
 
 // 2.2.E — Códigos OBD2: o que são, a ferramenta e a consulta com autocomplete.
+// Não marca como "vista": é uma ferramenta de consulta, deve seguir no Para você.
 export function Obd2Screen() {
   const c = useContent();
   const t = c.obd2;
-  const { s, markLessonSeen } = usePrototype();
+  const { s } = usePrototype();
   const { go } = useNav();
-  // Conta como a "aula" de OBD2 vista (para o "Para você" sugerir outras).
-  useEffect(() => markLessonSeen("read-obd2"), [markLessonSeen]);
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [picked, setPicked] = useState<(typeof t.codes)[number] | null>(null);

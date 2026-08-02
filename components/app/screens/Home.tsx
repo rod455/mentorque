@@ -49,7 +49,9 @@ export function HomeScreen() {
   const car = activeVehicle(s);
   const hasCar = s.vehicles.length > 0;
   const status = computeStatus(s);
-  const picks = forYou(c.lessons, { make: car?.make, pref: levelPref(status.phaseIndex), seen: s.seenLessons ?? [] });
+  // read-obd2 é ferramenta de consulta — nunca conta como "visto".
+  const seen = (s.seenLessons ?? []).filter((id) => id !== "read-obd2");
+  const picks = forYou(c.lessons, { make: car?.make, pref: levelPref(status.phaseIndex), seen });
 
   // Memórias: marcos e momentos conquistados, priorizando Momentos.
   const memories = MILESTONES.filter((m) => m.earned(s)).sort(
@@ -169,7 +171,7 @@ export function HomeScreen() {
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-3.5 w-3.5"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
                       </span>
                     )}
-                    {s.seenLessons?.includes(l.id) && !locked && (
+                    {seen.includes(l.id) && !locked && (
                       <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-teal/90 text-graphite">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="h-3 w-3"><path d="M20 6 9 17l-5-5" /></svg>
                       </span>
