@@ -418,8 +418,8 @@ export function ProfileScreen() {
         </>
       )}
 
-      {/* Ferramentas de demo — só em dev local, nunca em produção/loja */}
-      {isLocalDev() && (
+      {/* Ferramentas de demo — na web (para testes); nunca nos apps da loja */}
+      {!isNativeApp() && (
         <>
           <SectionTitle>{p.demo}</SectionTitle>
           <Group>
