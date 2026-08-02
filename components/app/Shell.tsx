@@ -33,32 +33,32 @@ export function Shell() {
 }
 
 function PhoneShell({ children }: { children: React.ReactNode }) {
+  // Altura travada (h-dvh) para o <main> ser o scroller real — assim a
+  // navegação controla o scroll (topo ao avançar, restaura ao voltar).
   return (
-    <div className="min-h-screen w-full overflow-x-hidden bg-graphite-900 text-cream antialiased">
-      <div className="mx-auto flex min-h-screen w-full max-w-[440px] flex-col overflow-x-hidden bg-graphite shadow-card">{children}</div>
+    <div className="h-screen w-full overflow-hidden bg-graphite-900 text-cream antialiased supports-[height:100dvh]:h-dvh">
+      <div className="mx-auto flex h-full w-full max-w-[440px] flex-col overflow-hidden bg-graphite shadow-card">{children}</div>
     </div>
   );
 }
 
 // Maps a view to a screen. Deep car screens live under the "cars" tab.
 function Router() {
-  const { view, back, canBack, depth } = useNav();
+  const { view, back, canBack, depth, lastAction } = useNav();
 
-  // Scroll responsivo: avançar/abrir conteúdo → topo; voltar → restaura a
-  // posição de onde o usuário estava. Guarda o scroll por nível da pilha.
+  // Scroll responsivo: avançar/abrir conteúdo ou trocar de aba → topo;
+  // voltar → restaura a posição de onde o usuário estava (por nível da pilha).
   const mainRef = useRef<HTMLElement>(null);
-  const scrollPos = useRef<Record<number, number>>({});
-  const prevDepth = useRef(depth);
+  const scrollPos = useRef<Record<string, number>>({});
+  const posKey = `${depth}:${view.name}`;
   useLayoutEffect(() => {
     const el = mainRef.current;
     if (!el) return;
-    if (depth < prevDepth.current) el.scrollTop = scrollPos.current[depth] ?? 0; // voltou
-    else el.scrollTop = 0; // avançou ou trocou de aba
-    prevDepth.current = depth;
-  }, [view, depth]);
+    el.scrollTop = lastAction === "back" ? scrollPos.current[posKey] ?? 0 : 0;
+  }, [view, depth, lastAction, posKey]);
   const onScroll = () => {
     const el = mainRef.current;
-    if (el) scrollPos.current[depth] = el.scrollTop;
+    if (el) scrollPos.current[posKey] = el.scrollTop;
   };
 
   // Swipe left→right = go back to the previous screen (last one the user was on).

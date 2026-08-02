@@ -40,6 +40,7 @@ type NavValue = {
   view: View;
   canBack: boolean;
   depth: number; // tamanho da pilha (para restaurar o scroll ao voltar)
+  lastAction: "go" | "back" | "root"; // última navegação (controle de scroll)
   go: (v: View) => void; // push
   back: () => void;
   root: (v: View) => void; // reset stack (bottom nav)
@@ -49,14 +50,15 @@ const Ctx = createContext<NavValue | null>(null);
 
 export function NavProvider({ initial, children }: { initial: View; children: React.ReactNode }) {
   const [stack, setStack] = useState<View[]>([initial]);
+  const [lastAction, setLastAction] = useState<"go" | "back" | "root">("root");
 
-  const go = useCallback((v: View) => setStack((s) => [...s, v]), []);
-  const back = useCallback(() => setStack((s) => (s.length > 1 ? s.slice(0, -1) : s)), []);
-  const root = useCallback((v: View) => setStack([v]), []);
+  const go = useCallback((v: View) => { setLastAction("go"); setStack((s) => [...s, v]); }, []);
+  const back = useCallback(() => { setLastAction("back"); setStack((s) => (s.length > 1 ? s.slice(0, -1) : s)); }, []);
+  const root = useCallback((v: View) => { setLastAction("root"); setStack([v]); }, []);
 
   const value = useMemo<NavValue>(
-    () => ({ view: stack[stack.length - 1], canBack: stack.length > 1, depth: stack.length, go, back, root }),
-    [stack, go, back, root]
+    () => ({ view: stack[stack.length - 1], canBack: stack.length > 1, depth: stack.length, lastAction, go, back, root }),
+    [stack, lastAction, go, back, root]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
