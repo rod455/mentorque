@@ -38,11 +38,13 @@ function SymptomRow({ sx, reco }: { sx: ReturnType<typeof useContent>["symptoms"
 }
 
 // "Talk to Biela" fallback row — seeds the chat with the problem/query.
+// Biela é sempre Premium: sem assinatura, leva ao paywall.
 function AskBielaRow({ seed, label }: { seed: string; label: string }) {
+  const { s } = usePrototype();
   const { go } = useNav();
   return (
     <button
-      onClick={() => go({ name: "biela", seed })}
+      onClick={() => go(s.premium ? { name: "biela", seed } : { name: "subscribe", ctx: "biela" })}
       className="flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-amber/15 to-amber/5 px-3.5 py-3.5 text-left ring-1 ring-amber/25 hover:ring-amber/45"
     >
       <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-graphite-900/40">
@@ -116,7 +118,13 @@ export function SymptomsScreen() {
             <button
               type="button"
               onMouseDown={(e) => e.preventDefault()}
-              onClick={() => go({ name: "biela", seed: (v ? `Meu ${carName(v)} ` : "Meu carro ") + `está com: ${q}. O que pode ser e o que devo fazer?` })}
+              onClick={() =>
+                go(
+                  s.premium
+                    ? { name: "biela", seed: (v ? `Meu ${carName(v)} ` : "Meu carro ") + `está com: ${q}. O que pode ser e o que devo fazer?` }
+                    : { name: "subscribe", ctx: "biela" }
+                )
+              }
               className="mt-1 flex w-full items-center gap-2.5 rounded-lg bg-amber/10 px-3 py-2.5 text-left ring-1 ring-amber/20 hover:ring-amber/40"
             >
               <span className="text-amber">🐻</span>

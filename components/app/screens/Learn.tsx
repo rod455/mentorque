@@ -350,12 +350,21 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
   const [busy, setBusy] = useState(false);
   const [used, setUsed] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const gated = !s.premium && used >= FREE_BIELA_QUESTIONS;
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [msgs, busy]);
+
+  // Campo cresce conforme o texto (inclusive quando já vem preenchido pelo seed).
+  useEffect(() => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = Math.min(el.scrollHeight, 180) + "px";
+  }, [input, gated]);
 
   const ask = async (question: string) => {
     const text = question.trim();
@@ -440,12 +449,13 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
           )}
           <div className="mb-2 flex items-end gap-2">
             <textarea
+              ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); ask(input); } }}
               rows={1}
               placeholder={c.biela.inputPh}
-              className="max-h-28 flex-1 resize-none rounded-xl bg-graphite-800 px-3.5 py-3 text-cream ring-1 ring-white/10 outline-none placeholder:text-cream/40 focus:ring-amber"
+              className="max-h-44 flex-1 resize-none overflow-y-auto rounded-xl bg-graphite-800 px-3.5 py-3 text-cream ring-1 ring-white/10 outline-none placeholder:text-cream/40 focus:ring-amber"
             />
             <button
               onClick={() => ask(input)}
