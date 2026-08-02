@@ -564,9 +564,12 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   };
 
   // Pop-up de saída: 10% OFF ao fechar o paywall. Depois de aparecer, fica
-  // suprimido por 30 minutos (localStorage).
+  // suprimido por 30 minutos (localStorage). Se o usuário rejeitar, entra a
+  // oferta final (25% OFF, tela cheia) — no máximo 1x a cada 3 dias.
   const OFFER_KEY = "mentorque-exit-offer-ts";
+  const OFFER2_KEY = "mentorque-exit2-ts";
   const [showOffer, setShowOffer] = useState(false);
+  const [showOffer2, setShowOffer2] = useState(false);
   const [offerLeft, setOfferLeft] = useState(120);
   useEffect(() => {
     if (!showOffer) return;
@@ -594,6 +597,25 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
     if (!user) { go({ name: "auth" }); return; }
     if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; }
     go({ name: "checkout", plan: "annual", offer: "exit10" });
+  };
+
+  // Rejeitou o 10%: mostra a oferta final (25%) se não apareceu nos últimos 3 dias.
+  const dismissOffer1 = () => {
+    setShowOffer(false);
+    let last2 = 0;
+    try { last2 = Number(window.localStorage.getItem(OFFER2_KEY) ?? 0); } catch { /* ignore */ }
+    if (!subscribed && Date.now() - last2 > 3 * 24 * 60 * 60 * 1000) {
+      try { window.localStorage.setItem(OFFER2_KEY, String(Date.now())); } catch { /* ignore */ }
+      setShowOffer2(true);
+      return;
+    }
+    back();
+  };
+
+  const subscribeOffer2 = () => {
+    if (!user) { go({ name: "auth" }); return; }
+    if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; }
+    go({ name: "checkout", plan: "annual", offer: "exit25" });
   };
 
   const mmss = `${String(Math.floor(Math.max(0, offerLeft) / 60)).padStart(2, "0")}:${String(Math.max(0, offerLeft) % 60).padStart(2, "0")}`;
@@ -684,7 +706,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
         <div className="fixed inset-0 z-50 bg-black/60">
           <div className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-[440px] rounded-t-3xl bg-cream px-6 pb-8 pt-5 text-center text-graphite">
             <button
-              onClick={() => { setShowOffer(false); back(); }}
+              onClick={dismissOffer1}
               aria-label="fechar oferta"
               className="absolute right-4 top-4 text-graphite/45 hover:text-graphite"
             >
@@ -705,6 +727,66 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
               {sub.exitCta}
             </button>
             <p className="mx-auto mt-3 max-w-xs text-xs leading-relaxed text-graphite/55">{sub.exitFine}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Oferta final — 25% OFF em tela cheia (formato Bloom) */}
+      {showOffer2 && (
+        <div className="fixed inset-0 z-[60] mx-auto w-full max-w-[440px] overflow-y-auto bg-graphite-900 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex min-h-full flex-col px-6 pb-8 pt-5">
+            <button
+              onClick={() => { setShowOffer2(false); back(); }}
+              aria-label="fechar"
+              className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/10 text-cream/80 hover:text-cream"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><path d="M6 6l12 12M18 6 6 18" /></svg>
+            </button>
+
+            {/* Biela + faixas "OFERTA ÚNICA" */}
+            <div className="relative mt-1 flex h-52 items-center justify-center overflow-hidden">
+              {[
+                { top: "top-3", rot: "-rotate-[18deg]" },
+                { top: "top-16", rot: "rotate-[14deg]" },
+                { top: "top-32", rot: "-rotate-[10deg]" },
+              ].map((r, idx) => (
+                <div key={idx} className={`absolute ${r.top} left-[-30%] w-[160%] ${r.rot} whitespace-nowrap bg-amber/10 py-1 text-center text-[10px] font-semibold tracking-[0.2em] text-amber/60`}>
+                  {Array.from({ length: 4 }, () => sub.exit2Ribbon).join("   ·   ")}
+                </div>
+              ))}
+              <div className="relative z-10">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/biela/biela-acenando.png" alt="Biela" className="h-44 w-44 object-contain" draggable={false} />
+              </div>
+            </div>
+
+            <h2 className="mt-3 text-center font-serif text-4xl font-bold text-cream">{sub.exit2Title}</h2>
+            <p className="mt-2 flex items-center justify-center gap-1.5 text-sm text-amber">
+              <span aria-hidden>⚠️</span> {sub.exit2Warn}
+            </p>
+
+            <div className="mt-5 rounded-3xl bg-graphite-800 p-5 text-center ring-1 ring-white/[0.06]">
+              <p className="text-[11px] font-semibold tracking-[0.18em] text-cream/60">{sub.exit2Best}</p>
+              <div className="mt-3 rounded-2xl bg-graphite-900 p-4 ring-1 ring-white/[0.06]">
+                <p className="text-sm text-cream/40 line-through">{sub.exit2Old}</p>
+                <p className="mt-0.5 font-serif text-3xl font-bold text-cream">{sub.exit2Price}</p>
+              </div>
+            </div>
+            <p className="mx-auto mt-3 max-w-xs text-center text-xs leading-relaxed text-cream/50">{sub.exit2Fine}</p>
+
+            <div className="mt-auto pt-5">
+              <button
+                onClick={subscribeOffer2}
+                className="w-full rounded-full bg-amber py-3.5 font-display text-[15px] font-semibold text-graphite active:scale-[0.99]"
+              >
+                {sub.exit2Cta}
+              </button>
+              <p className="mt-3 text-center text-[11px] leading-relaxed text-cream/45">
+                {sub.exit2Agree}{" "}
+                <a href="/privacidade" className="underline hover:text-cream">{sub.termsLink}</a>{" "}e{" "}
+                <a href="/privacidade" className="underline hover:text-cream">{sub.privacyLink}</a>
+              </p>
+            </div>
           </div>
         </div>
       )}
