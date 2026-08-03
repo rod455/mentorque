@@ -1522,6 +1522,14 @@ export function getContent(locale: Locale) {
       quizProgress: T("{a} de {b} respondidas", "{a} of {b} answered"),
       quizNow: T("Estado atual (VHS)", "Current condition (VHS)"),
       quizRisk: T("Risco futuro (VRI)", "Future risk (VRI)"),
+      quizNowInfo: T(
+        "VHS (Vehicle Health Score) mede o estado do carro HOJE: é a média ponderada das suas respostas do quiz com o histórico de manutenção. De 0 a 100% — quanto mais alto, melhor o estado atual.",
+        "VHS (Vehicle Health Score) measures the car's condition TODAY: a weighted average of your quiz answers and the maintenance history. From 0 to 100% — the higher, the better."
+      ),
+      quizRiskInfo: T(
+        "VRI (Vehicle Risk Index) estima o risco de problemas no FUTURO, olhando idade, quilometragem e a robustez do conjunto motor/câmbio. De 0 a 100 — aqui, quanto MENOR o número, melhor.",
+        "VRI (Vehicle Risk Index) estimates the risk of FUTURE problems, based on age, mileage and the robustness of the engine/transmission combo. From 0 to 100 — here, the LOWER, the better."
+      ),
       statusLabels: { ok: T("Em dia", "Up to date"), attention: T("Atenção", "Attention"), overdue: T("Verificar", "Check it") },
       systemLabels: {
         engine: T("Motor", "Engine"),

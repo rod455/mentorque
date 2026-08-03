@@ -31,6 +31,7 @@ export function HealthScreen() {
   const h = c.health;
   const { s } = usePrototype();
   const { go } = useNav();
+  const [scoreInfo, setScoreInfo] = useState<"vhs" | "vri" | null>(null);
   const v = activeVehicle(s);
   if (!v) return <AppHeader title={h.scoreLabel} />;
 
@@ -81,14 +82,37 @@ export function HealthScreen() {
         <>
           <div className="mt-3 grid grid-cols-2 gap-2">
             <div className="rounded-2xl bg-graphite-800 px-3.5 py-3 ring-1 ring-white/5">
-              <p className="text-[11px] text-cream/45">{h.quizNow}</p>
+              <div className="flex items-center justify-between gap-1">
+                <p className="text-[11px] text-cream/45">{h.quizNow}</p>
+                <button
+                  onClick={() => setScoreInfo(scoreInfo === "vhs" ? null : "vhs")}
+                  aria-label="info VHS"
+                  className={`grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] font-bold ring-1 ${scoreInfo === "vhs" ? "bg-amber text-graphite ring-amber" : "bg-white/5 text-cream/50 ring-white/15"}`}
+                >
+                  i
+                </button>
+              </div>
               <p className={`font-display text-lg font-bold ${scoreColor(result.vhs)}`}>{result.vhs}%</p>
             </div>
             <div className="rounded-2xl bg-graphite-800 px-3.5 py-3 ring-1 ring-white/5">
-              <p className="text-[11px] text-cream/45">{h.quizRisk}</p>
+              <div className="flex items-center justify-between gap-1">
+                <p className="text-[11px] text-cream/45">{h.quizRisk}</p>
+                <button
+                  onClick={() => setScoreInfo(scoreInfo === "vri" ? null : "vri")}
+                  aria-label="info VRI"
+                  className={`grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] font-bold ring-1 ${scoreInfo === "vri" ? "bg-amber text-graphite ring-amber" : "bg-white/5 text-cream/50 ring-white/15"}`}
+                >
+                  i
+                </button>
+              </div>
               <p className={`font-display text-lg font-bold ${scoreColor(100 - result.vri)}`}>{result.vri}</p>
             </div>
           </div>
+          {scoreInfo && (
+            <div className="mt-2 rounded-xl bg-graphite-800 px-3.5 py-3 text-xs leading-relaxed text-cream/70 ring-1 ring-amber/25">
+              {scoreInfo === "vhs" ? h.quizNowInfo : h.quizRiskInfo}
+            </div>
+          )}
           <button onClick={() => go({ name: "healthQuiz" })} className="mt-2 w-full py-1.5 text-center text-sm text-amber/80 hover:text-amber">
             {h.quizRedo}
           </button>
