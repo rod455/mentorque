@@ -56,6 +56,25 @@ function PremiumPreview({ car }: { car: string }) {
   );
 }
 
+// Lembrete persistido: fica salvo no perfil e aparece em "Próximos serviços"
+// (aba Histórico). Tocar de novo remove.
+function ReminderButton({ vehicleId, itemKey }: { vehicleId: string; itemKey: string }) {
+  const c = useContent();
+  const r = c.revisions;
+  const { s, toggleReminder } = usePrototype();
+  const on = (s.reminders ?? []).includes(`${vehicleId}:${itemKey}`);
+  return (
+    <button
+      onClick={() => toggleReminder(vehicleId, itemKey)}
+      className={`rounded-lg px-3 py-1.5 text-xs font-medium ring-1 transition-colors ${
+        on ? "bg-teal/15 text-teal ring-teal/30" : "bg-graphite-700 text-cream/80 ring-white/10 hover:ring-white/20"
+      }`}
+    >
+      {on ? `🔔 ${r.reminded}` : r.remind}
+    </button>
+  );
+}
+
 type PlanItem = { item: string; status: "overdue" | "soon" | "ok" | "unknown"; when: string; note?: string; source: "manual" | "general"; serviceType?: string };
 type Plan = { summary: string; items: PlanItem[] };
 
@@ -68,7 +87,6 @@ export function RevisionsScreen() {
   const v = activeVehicle(s);
   const services = v ? servicesFor(s, v.id) : [];
 
-  const [reminded, setReminded] = useState<string[]>([]);
   const [plan, setPlan] = useState<Plan | null>(null);
   const [grounded, setGrounded] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState(false);
@@ -134,9 +152,7 @@ export function RevisionsScreen() {
       </p>
       {it.note && <p className="mt-1 text-xs text-cream/70">{it.note}</p>}
       <div className="mt-2.5 flex gap-2">
-        <button onClick={() => setReminded((rm) => (rm.includes(it.item) ? rm : [...rm, it.item]))} className="rounded-lg bg-graphite-700 px-3 py-1.5 text-xs font-medium text-cream/80 ring-1 ring-white/10 hover:ring-white/20">
-          {reminded.includes(it.item) ? `🔔 ${r.reminded}` : r.remind}
-        </button>
+        <ReminderButton vehicleId={v.id} itemKey={it.serviceType ?? it.item} />
         <button onClick={() => go({ name: "addService", preset: { type: it.serviceType ?? "other" } })} className="rounded-lg bg-amber/15 px-3 py-1.5 text-xs font-medium text-amber ring-1 ring-amber/20 hover:ring-amber/40">
           {r.didIt}
         </button>
@@ -159,9 +175,7 @@ export function RevisionsScreen() {
       <p className="mt-0.5 text-xs text-cream/55">{detDetail(it)}</p>
       {s.premium && r.cost[it.key] && <p className="mt-1 text-xs text-cream/70">{r.estCost}: <span className="text-amber">{r.cost[it.key]}</span></p>}
       <div className="mt-2.5 flex gap-2">
-        <button onClick={() => setReminded((rm) => (rm.includes(it.key) ? rm : [...rm, it.key]))} className="rounded-lg bg-graphite-700 px-3 py-1.5 text-xs font-medium text-cream/80 ring-1 ring-white/10 hover:ring-white/20">
-          {reminded.includes(it.key) ? `🔔 ${r.reminded}` : r.remind}
-        </button>
+        <ReminderButton vehicleId={v.id} itemKey={it.key} />
         <button onClick={() => go({ name: "addService", preset: { type: it.key } })} className="rounded-lg bg-amber/15 px-3 py-1.5 text-xs font-medium text-amber ring-1 ring-amber/20 hover:ring-amber/40">
           {r.didIt}
         </button>

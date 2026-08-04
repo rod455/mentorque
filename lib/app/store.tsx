@@ -25,6 +25,7 @@ type Session = {
   seenLessons: string[]; // aulas concluídas pelo usuário
   savedLessons: string[]; // aulas salvas para ver depois
   pinnedLessons: string[]; // conteúdos fixados na Home (abaixo do carro)
+  reminders: string[]; // lembretes de revisão: "vehicleId:itemKey"
   startedAt: string | null; // primeiro dia no app (para marcos de tempo)
   notifications: boolean; // preferência de notificações
   units: "metric" | "imperial"; // preferência de unidades
@@ -46,6 +47,7 @@ const EMPTY: Session = {
   seenLessons: [],
   savedLessons: [],
   pinnedLessons: [],
+  reminders: [],
   startedAt: null,
   notifications: false,
   units: "metric",
@@ -78,6 +80,7 @@ type StoreValue = {
   toggleLessonSaved: (id: string) => void; // alterna salvo para ver depois
   toggleLessonPinned: (id: string) => void; // alterna fixado na Home
   moveLessonPinned: (id: string, delta: -1 | 1) => void; // sobe/desce um fixado
+  toggleReminder: (vehicleId: string, itemKey: string) => void; // lembrete de revisão
   setMomentPhoto: (id: string, dataUrl: string | null) => void;
   setNotifications: (v: boolean) => void;
   setUnits: (v: "metric" | "imperial") => void;
@@ -101,6 +104,7 @@ function migrate(parsed: any): Session {
     if (!Array.isArray(sess.seenLessons)) sess.seenLessons = [];
     if (!Array.isArray(sess.savedLessons)) sess.savedLessons = [];
     if (!Array.isArray(sess.pinnedLessons)) sess.pinnedLessons = [];
+    if (!Array.isArray(sess.reminders)) sess.reminders = [];
     if (!sess.startedAt) sess.startedAt = todayISO();
     return sess;
   }
@@ -146,6 +150,7 @@ function mergeSessions(cloud: Session, local: Session): Session {
     seenLessons: [...new Set([...(cloud.seenLessons ?? []), ...(local.seenLessons ?? [])])],
     savedLessons: [...new Set([...(cloud.savedLessons ?? []), ...(local.savedLessons ?? [])])],
     pinnedLessons: [...new Set([...(cloud.pinnedLessons ?? []), ...(local.pinnedLessons ?? [])])],
+    reminders: [...new Set([...(cloud.reminders ?? []), ...(local.reminders ?? [])])],
     startedAt: [cloud.startedAt, local.startedAt].filter(Boolean).sort()[0] ?? todayISO(),
     notifications: cloud.notifications ?? local.notifications ?? false,
     units: cloud.units ?? local.units ?? "metric",
@@ -339,6 +344,18 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
     [patch]
   );
 
+  // Lembrete de revisão por carro+item — aparece em "Próximos serviços"
+  // (aba Histórico) e persiste/sincroniza como o resto do perfil.
+  const toggleReminder = useCallback(
+    (vehicleId: string, itemKey: string) =>
+      patch((p) => {
+        const id = `${vehicleId}:${itemKey}`;
+        const had = p.reminders.includes(id);
+        return { ...p, reminders: had ? p.reminders.filter((r) => r !== id) : [...p.reminders, id] };
+      }),
+    [patch]
+  );
+
   // Reordena um fixado (delta -1 sobe, +1 desce) — o usuário escolhe a ordem.
   const moveLessonPinned = useCallback(
     (id: string, delta: -1 | 1) =>
@@ -376,8 +393,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const es = useMemo(() => (subActive && !s.premium ? { ...s, premium: true } : s), [s, subActive]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s: es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, setMomentPhoto, setNotifications, setUnits, setAvatar, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
-    [es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, setMomentPhoto, setNotifications, setUnits, setAvatar, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
+    () => ({ s: es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
+    [es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

@@ -1758,6 +1758,16 @@ export function getContent(locale: Locale) {
       // Prévia borrada do plano Premium (o que o assinante realmente recebe)
       previewTitle: T("Com o Premium, o plano do seu {car} fica assim", "With Premium, your {car}'s plan looks like this"),
       previewCta: T("Ver meu plano completo", "See my full plan"),
+      // Bloco "Próximos serviços" na aba Histórico
+      upcomingTitle: T("Próximos serviços", "Upcoming service"),
+      nextInMonths: T("{n} meses para a próxima revisão por tempo", "{n} months until the next time-based service"),
+      nextInOneMonth: T("1 mês para a próxima revisão por tempo", "1 month until the next time-based service"),
+      nextThisMonth: T("Revisão por tempo vence este mês", "Time-based service is due this month"),
+      nextOverdue: T("Revisão por tempo vencida há {n} meses", "Time-based service overdue by {n} months"),
+      nextKmHint: T("Atualize o km para saber se precisa fazer antes.", "Update the mileage to see if it's needed sooner."),
+      remindersTitle: T("Seus lembretes", "Your reminders"),
+      remindersEmpty: T("Nenhum lembrete. Agende em Próximas revisões.", "No reminders yet. Set them in Upcoming service."),
+      seeAllRevisions: T("Ver próximas revisões", "See upcoming service"),
       previewItems: [
         { item: T("Óleo e filtro — intervalo do seu motor", "Oil and filter — your engine's interval"), when: T("a cada 10.000 km ou 12 meses", "every 10,000 km or 12 months"), note: T("O manual do seu carro pede óleo 5W30 sintético; a oficina costuma oferecer o mineral, mais barato e fora de especificação.", "Your manual calls for 5W30 synthetic; shops often push cheaper mineral oil, out of spec."), cost: "R$ 210–390" },
         { item: T("Correia dentada — ponto crítico do seu motor", "Timing belt — critical point on your engine"), when: T("faltam ~18.000 km", "~18,000 km to go"), note: T("Neste motor a correia arrebenta sem aviso e danifica as válvulas — não passe do intervalo.", "On this engine the belt snaps without warning and damages the valves — don't exceed the interval."), cost: "R$ 780–1.600" },

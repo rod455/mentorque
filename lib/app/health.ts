@@ -166,3 +166,20 @@ export function computeUpcoming(vehicle: Vehicle, services: ServiceRecord[], now
   const rank = { overdue: 0, soon: 1, ok: 2 } as const;
   return items.sort((a, b) => rank[a.status] - rank[b.status] || (a.inKm ?? 0) - (b.inKm ?? 0));
 }
+
+// Próxima revisão POR TEMPO: quantos meses faltam (negativo = vencida) para o
+// item de calendário mais próximo. Usado no card "Próximos serviços" do
+// Histórico. Âncora: último serviço daquele tipo ou a data de compra.
+export type NextByTime = { key: string; monthsLeft: number; everyMonths: number };
+
+export function nextServiceByTime(vehicle: Vehicle, services: ServiceRecord[], now = new Date()): NextByTime | null {
+  let best: NextByTime | null = null;
+  for (const rule of REVISION_RULES) {
+    if (!rule.everyMonths) continue;
+    const anchor = lastOfType(services, rule.key)?.date ?? vehicle.purchaseDate;
+    if (!anchor) continue;
+    const monthsLeft = rule.everyMonths - monthsBetween(anchor, now);
+    if (!best || monthsLeft < best.monthsLeft) best = { key: rule.key, monthsLeft, everyMonths: rule.everyMonths };
+  }
+  return best;
+}

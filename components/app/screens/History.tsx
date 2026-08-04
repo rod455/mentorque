@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { LIMITS } from "@/lib/app/premium";
+import { nextServiceByTime } from "@/lib/app/health";
 import { formatBRL } from "@/lib/app/content";
 import { resizeImage } from "@/lib/app/image";
 import type { ServicePart, ServiceRecord, SystemKey } from "@/lib/app/types";
@@ -86,6 +87,69 @@ function useDateFmt() {
 }
 
 // 2.4.A — Lista de histórico
+// "Próximos serviços" — no Premium, um retângulo com o tempo que falta para a
+// próxima revisão por calendário (+ dica de atualizar o km). Abaixo, os
+// lembretes que o usuário agendou em Próximas revisões.
+function UpcomingBlock() {
+  const c = useContent();
+  const r = c.revisions;
+  const { s, toggleReminder } = usePrototype();
+  const { go } = useNav();
+  const v = activeVehicle(s);
+  if (!v) return null;
+
+  const next = s.premium ? nextServiceByTime(v, servicesFor(s, v.id)) : null;
+  const mine = (s.reminders ?? []).filter((id) => id.startsWith(`${v.id}:`));
+  if (!next && mine.length === 0) return null;
+
+  const nextText = (() => {
+    if (!next) return null;
+    const m = Math.round(next.monthsLeft);
+    if (m < 0) return { text: r.nextOverdue.replace("{n}", String(Math.abs(m))), tone: "coral" as const };
+    if (m === 0) return { text: r.nextThisMonth, tone: "amber" as const };
+    if (m === 1) return { text: r.nextInOneMonth, tone: "amber" as const };
+    return { text: r.nextInMonths.replace("{n}", String(m)), tone: "teal" as const };
+  })();
+  const tone = { coral: "ring-coral/30 text-coral", amber: "ring-amber/30 text-amber", teal: "ring-teal/25 text-teal" };
+
+  return (
+    <div className="mb-4">
+      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-cream/45">{r.upcomingTitle}</p>
+
+      {nextText && (
+        <button onClick={() => go({ name: "revisions" })} className={`mb-2 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ${tone[nextText.tone]}`}>
+          <Icon name="calendar" className="h-5 w-5 shrink-0" />
+          <span className="min-w-0 flex-1">
+            <span className="block font-display text-sm text-cream">{nextText.text}</span>
+            {v.odometerKm == null && <span className="mt-0.5 block text-xs text-cream/50">{r.nextKmHint}</span>}
+          </span>
+          <span className="shrink-0 text-cream/30">›</span>
+        </button>
+      )}
+
+      {mine.length > 0 && (
+        <div className="space-y-1.5">
+          {mine.map((id) => {
+            const key = id.slice(v.id.length + 1);
+            return (
+              <div key={id} className="flex items-center gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-2.5 ring-1 ring-white/5">
+                <span className="text-sm">🔔</span>
+                <span className="min-w-0 flex-1 truncate text-sm text-cream/85">{r.ruleLabels[key] ?? key}</span>
+                <button onClick={() => go({ name: "addService", preset: { type: key } })} className="shrink-0 rounded-lg bg-amber/15 px-2.5 py-1 text-xs font-medium text-amber ring-1 ring-amber/20">
+                  {r.didIt}
+                </button>
+                <button onClick={() => toggleReminder(v.id, key)} aria-label="remover" className="shrink-0 text-cream/35 hover:text-cream/70">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><path d="M6 6l12 12M18 6 6 18" /></svg>
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function HistoryScreen() {
   const c = useContent();
   const typeLabel = useTypeLabel();
@@ -114,6 +178,7 @@ export function HistoryScreen() {
 
   const all = servicesFor(s, v.id);
   const list = filter === "all" ? all : all.filter((r) => r.type === filter);
+  const upcoming = <UpcomingBlock />;
   const usedTypes = Array.from(new Set(all.map((r) => r.type)));
   const atLimit = !s.premium && all.length >= LIMITS.freeServices;
   const onAdd = () => go(atLimit ? { name: "subscribe", ctx: "history" } : { name: "addService" });
@@ -128,6 +193,8 @@ export function HistoryScreen() {
           </button>
         }
       />
+
+      {upcoming}
 
       {all.length === 0 ? (
         <Card className="mt-2 text-center">
