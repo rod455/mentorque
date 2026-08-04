@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { computeQuizHealth } from "@/lib/app/healthQuiz";
@@ -86,6 +86,7 @@ export function CarHub() {
           {v.nickname && <p className="truncate text-xs text-cream/50">{vehicleLabel(v)}</p>}
           <KmLine />
           <PurchaseLine />
+          <FipeLine />
         </div>
         <button onClick={() => go({ name: "health" })} className="shrink-0 text-right">
           <span className="block text-[10px] uppercase tracking-wide text-cream/40">{c.carHub.health}</span>
@@ -175,6 +176,51 @@ function PurchaseLine() {
         <Button size="lg" className="mt-4 w-full" onClick={() => setOpen(false)}>{c.common.save}</Button>
       </Sheet>
     </>
+  );
+}
+
+// Valor FIPE do veículo (referência mensal). Cache local de 24h por carro;
+// "~" quando a versão não casou exatamente com um nome da tabela.
+function FipeLine() {
+  const { s } = usePrototype();
+  const v = activeVehicle(s);
+  const [info, setInfo] = useState<{ value: string; month: string | null; approximate: boolean } | null>(null);
+
+  useEffect(() => {
+    if (!v) return;
+    setInfo(null);
+    const key = `mq-fipe-${v.id}`;
+    try {
+      const cached = JSON.parse(localStorage.getItem(key) ?? "null") as { at: number; info: typeof info } | null;
+      if (cached?.info && Date.now() - cached.at < 24 * 60 * 60 * 1000) {
+        setInfo(cached.info);
+        return;
+      }
+    } catch { /* cache inválido — segue para a busca */ }
+    const ctl = new AbortController();
+    fetch(
+      `/api/fipe-value?type=${v.type}&make=${encodeURIComponent(v.make)}&model=${encodeURIComponent(v.model)}&year=${v.year}&version=${encodeURIComponent(v.engine ?? "")}`,
+      { signal: ctl.signal }
+    )
+      .then((r) => (r.ok ? r.json() : null))
+      .then((js) => {
+        if (!js?.value) return;
+        const next = { value: js.value as string, month: (js.month as string | null) ?? null, approximate: !!js.approximate };
+        setInfo(next);
+        try { localStorage.setItem(key, JSON.stringify({ at: Date.now(), info: next })); } catch { /* sem espaço */ }
+      })
+      .catch(() => {});
+    return () => ctl.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [v?.id, v?.engine, v?.year]);
+
+  if (!v || !info) return null;
+  return (
+    <p className="mt-0.5 flex items-center gap-1.5 text-xs text-cream/55">
+      <span aria-hidden>💰</span>
+      FIPE {info.approximate ? "~" : ""}{info.value}
+      {info.month && <span className="text-cream/35">· {info.month}</span>}
+    </p>
   );
 }
 
