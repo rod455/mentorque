@@ -279,7 +279,7 @@ export function HomeScreen() {
                 <button key="kit" onClick={() => go({ name: "equipment" })} className="flex w-36 shrink-0 flex-col self-start text-left">
                   <div className="aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ring-white/[0.06]">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/learn/equipment.png" alt="" className="h-full w-full object-cover" draggable={false} />
+                    <img src="/learn/equipment.png?v=2" alt="" className="h-full w-full object-cover" draggable={false} />
                   </div>
                   <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{c.equipmentUi.cardTitle}</p>
                 </button>
