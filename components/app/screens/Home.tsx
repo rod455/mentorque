@@ -8,6 +8,7 @@ import { useNav } from "@/lib/app/nav";
 import { isNativeApp } from "@/lib/app/wrapper";
 import { useContent, Card, Icon } from "../ui";
 import { HealthPill } from "./Cars";
+import { FipeLine } from "./CarHub";
 import { CommonProblems } from "./Symptoms";
 
 type Lesson = ReturnType<typeof useContent>["lessons"][number];
@@ -156,6 +157,7 @@ export function HomeScreen() {
               <span className="min-w-0 flex-1">
                 <span className="block text-[11px] uppercase tracking-wide text-cream/45">{h.yourCar}</span>
                 <span className="block truncate font-display text-[15px] text-cream">{car.nickname || vehicleLabel(car)}</span>
+                <FipeLine />
               </span>
               {/* Mesma fórmula do quiz usada na Saúde e no hub — um número só no app inteiro */}
               <HealthPill score={computeQuizHealth(car.quiz ?? {}, car).score} />

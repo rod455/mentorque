@@ -191,7 +191,8 @@ function PurchaseLine() {
 
 // Valor FIPE do veículo (referência mensal). Cache local de 24h por carro;
 // "~" quando a versão não casou exatamente com um nome da tabela.
-function FipeLine() {
+// Reusada na Home (cartão "Seu carro") — por isso renderiza <span>.
+export function FipeLine() {
   const { s } = usePrototype();
   const v = activeVehicle(s);
   const [info, setInfo] = useState<{ value: string; month: string | null; approximate: boolean } | null>(null);
@@ -226,11 +227,11 @@ function FipeLine() {
 
   if (!v || !info) return null;
   return (
-    <p className="mt-0.5 flex items-center gap-1.5 text-xs text-cream/55">
+    <span className="mt-0.5 flex items-center gap-1.5 text-xs text-cream/55">
       <span aria-hidden>💰</span>
       FIPE {info.approximate ? "~" : ""}{info.value}
       {info.month && <span className="text-cream/35">· {info.month}</span>}
-    </p>
+    </span>
   );
 }
 
