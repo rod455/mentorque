@@ -37,7 +37,7 @@ function ItemRow({ item }: { item: Item }) {
       <span className={`grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl ring-1 ${locked ? "bg-amber/10 text-amber/70 ring-amber/25" : "bg-amber/12 text-amber ring-amber/45"}`}>
         {item.thumb ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.thumb} alt="" className={`h-full w-full object-cover ${locked ? "opacity-60" : ""}`} draggable={false} />
+          <img src={item.thumb} alt="" className={`h-full w-full object-contain ${locked ? "opacity-60" : ""}`} draggable={false} />
         ) : (
           <Icon name={typeIcon(item.type)} className="h-6 w-6" />
         )}
