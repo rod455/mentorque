@@ -486,6 +486,7 @@ export function getContent(locale: Locale) {
       title: T("Luz de injeção ligada? Descubra!", "Check-engine light on? Find out!"),
       type: "article",
       system: "engine",
+      addedAt: "2026-08-03",
       need: [T("Adaptador OBD2", "OBD2 adapter"), T("App de leitura", "A reader app")],
       steps: [T("Conecte o adaptador", "Plug in the adapter"), T("Leia os códigos ativos", "Read active codes"), T("Anote e pesquise cada código", "Note and look up each code")],
       safety: [T("Não dirija com a luz piscando", "Don't drive with a flashing light")],

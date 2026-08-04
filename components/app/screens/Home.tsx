@@ -40,12 +40,6 @@ function forYou(lessons: Lesson[], opts: { make?: string; pref: string; seen: st
   const news = pool.filter((l) => isNewLesson(l)).sort((a, b) => (b.addedAt ?? "").localeCompare(a.addedAt ?? ""));
   const rest = pool.filter((l) => !isNewLesson(l)).sort((a, b) => score(b) - score(a));
   const fresh = [...news, ...rest];
-  // Calculadora Etanol × Gasolina fixa na 2ª posição (enquanto não concluída).
-  const fuelIdx = fresh.findIndex((l) => l.id === "fuel-compare");
-  if (fuelIdx > 1) {
-    const [fuel] = fresh.splice(fuelIdx, 1);
-    fresh.splice(1, 0, fuel);
-  }
   // Salvos na ordem em que foram guardados.
   const savedList = opts.saved
     .map((id) => lessons.find((l) => l.id === id))
@@ -168,53 +162,58 @@ export function HomeScreen() {
           </div>
           <p className="mb-3 text-xs text-cream/45">{h.forYouSub}</p>
           <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {/* Kit do motorista — guia de equipamentos (conteúdo free) */}
-            <button onClick={() => go({ name: "equipment" })} className="flex w-36 shrink-0 flex-col self-start text-left">
-              <div className="grid aspect-square place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ring-white/[0.06]">
-                <Icon name="tools" className="h-9 w-9 text-amber/70" />
-              </div>
-              <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{c.equipmentUi.cardTitle}</p>
-            </button>
-            {picks.map((l) => {
-              const locked = l.premium && !s.premium;
-              return (
-                <button
-                  key={l.id}
-                  onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
-                  className="flex w-36 shrink-0 flex-col self-start text-left"
-                >
-                  <div className="relative aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ring-white/[0.06]">
-                    {l.thumb ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={l.thumb} alt="" className="h-full w-full object-cover" draggable={false} />
-                    ) : (
-                      <span className="grid h-full w-full place-items-center text-amber/70">
-                        <Icon name={typeIcon(l.type)} className="h-9 w-9" />
-                      </span>
-                    )}
-                    {locked && (
-                      <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-graphite-900/80 text-amber">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-3.5 w-3.5"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
-                      </span>
-                    )}
-                    {savedIds.includes(l.id) && (
-                      <span className="absolute left-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-graphite-900/80 text-xs text-amber">★</span>
-                    )}
-                    {isNewLesson(l) && !savedIds.includes(l.id) && !seen.includes(l.id) && (
-                      <span className="absolute left-2 top-2 rounded-full bg-amber px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-graphite">
-                        {h.newBadge}
-                      </span>
-                    )}
-                    {seen.includes(l.id) && !locked && (
-                      <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-teal/90 text-graphite">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="h-3 w-3"><path d="M20 6 9 17l-5-5" /></svg>
-                      </span>
-                    )}
+            {(() => {
+              const lessonCard = (l: Lesson) => {
+                const locked = l.premium && !s.premium;
+                return (
+                  <button
+                    key={l.id}
+                    onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
+                    className="flex w-36 shrink-0 flex-col self-start text-left"
+                  >
+                    <div className="relative aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ring-white/[0.06]">
+                      {l.thumb ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={l.thumb} alt="" className="h-full w-full object-cover" draggable={false} />
+                      ) : (
+                        <span className="grid h-full w-full place-items-center text-amber/70">
+                          <Icon name={typeIcon(l.type)} className="h-9 w-9" />
+                        </span>
+                      )}
+                      {locked && (
+                        <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-graphite-900/80 text-amber">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-3.5 w-3.5"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
+                        </span>
+                      )}
+                      {savedIds.includes(l.id) && (
+                        <span className="absolute left-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-graphite-900/80 text-xs text-amber">★</span>
+                      )}
+                      {isNewLesson(l) && !savedIds.includes(l.id) && !seen.includes(l.id) && (
+                        <span className="absolute left-2 top-2 rounded-full bg-amber px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-graphite">
+                          {h.newBadge}
+                        </span>
+                      )}
+                      {seen.includes(l.id) && !locked && (
+                        <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-teal/90 text-graphite">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="h-3 w-3"><path d="M20 6 9 17l-5-5" /></svg>
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{l.title}</p>
+                  </button>
+                );
+              };
+              // Kit do motorista fixo na 3ª posição; aulas ao redor.
+              const kitCard = (
+                <button key="kit" onClick={() => go({ name: "equipment" })} className="flex w-36 shrink-0 flex-col self-start text-left">
+                  <div className="grid aspect-square place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ring-white/[0.06]">
+                    <Icon name="tools" className="h-9 w-9 text-amber/70" />
                   </div>
-                  <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{l.title}</p>
+                  <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{c.equipmentUi.cardTitle}</p>
                 </button>
               );
-            })}
+              return [...picks.slice(0, 2).map(lessonCard), kitCard, ...picks.slice(2).map(lessonCard)];
+            })()}
           </div>
         </section>
       )}
