@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
-import { AppHeader, Card, SeverityDot, inputCls, useContent } from "../ui";
+import { AppHeader, Card, SeverityDot, UpgradeBanner, inputCls, useContent } from "../ui";
 import { Button } from "@/components/ui/Button";
 import { VideoPlayer } from "../VideoPlayer";
 
@@ -151,60 +151,80 @@ export function Obd2Screen() {
   );
 }
 
-// Como escanear com o leitor OBD2: vídeo, onde fica a porta, passo a passo da
-// leitura e, no fim, a mesma consulta de códigos.
+// "Como usar seu scanner OBD2" — mesmo template visual das outras aulas
+// (vídeo → texto → você vai precisar → passo a passo → segurança → botões),
+// com a consulta de códigos como seção extra antes dos botões.
 export function Obd2ScanScreen() {
   const c = useContent();
   const t = c.obd2;
-  const { s, markLessonSeen } = usePrototype();
-  const done = (s.seenLessons ?? []).includes("obd2-scan");
+  const { s, markLessonSeen, toggleLessonSaved } = usePrototype();
   const lesson = c.lessons.find((l) => l.id === "obd2-scan");
+  const done = (s.seenLessons ?? []).includes("obd2-scan");
+  const saved = (s.savedLessons ?? []).includes("obd2-scan");
+  if (!lesson) return <AppHeader title={t.scanTitle} />;
 
   return (
     <div>
-      <AppHeader title={t.scanTitle} />
+      <AppHeader title={lesson.title} />
 
-      <p className="text-sm leading-relaxed text-cream/70">{t.scanIntro}</p>
+      {/* Player (in-app), igual às demais aulas */}
+      {lesson.media && <VideoPlayer media={lesson.media} />}
 
-      {/* Vídeo da aula */}
-      {lesson?.media && (
-        <div className="mt-4">
-          <VideoPlayer media={lesson.media} />
+      {/* Corpo do artigo */}
+      <div className="mt-5 space-y-3">
+        <p className="text-sm leading-relaxed text-cream/85">{t.scanIntro}</p>
+        <p className="text-sm leading-relaxed text-cream/85">
+          <span className="font-semibold text-cream">{t.whereTitle}:</span> {t.whereBody}
+        </p>
+      </div>
+
+      {/* Você vai precisar */}
+      <div className="mt-5">
+        <p className="mb-2.5 text-xs font-semibold uppercase tracking-wide text-cream/45">{c.learn.need}</p>
+        <ul className="space-y-1.5">
+          {lesson.need.map((x) => (
+            <li key={x} className="flex gap-2 text-sm text-cream/80"><span className="text-teal">✓</span>{x}</li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Passo a passo */}
+      <div className="mt-5">
+        <p className="mb-2.5 text-xs font-semibold uppercase tracking-wide text-cream/45">{c.learn.steps}</p>
+        <ol className="space-y-2">
+          {t.scanSteps.map((x, i) => (
+            <li key={i} className="flex gap-2.5 text-sm text-cream/85">
+              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-amber/15 font-display text-xs font-semibold text-amber">{i + 1}</span>
+              {x}
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      {/* Dicas de segurança */}
+      {lesson.safety.length > 0 && (
+        <div className="mt-5">
+          <p className="mb-2.5 text-xs font-semibold uppercase tracking-wide text-cream/45">{c.learn.safety}</p>
+          <ul className="space-y-1.5">
+            {lesson.safety.map((x) => (
+              <li key={x} className="flex gap-2 rounded-lg bg-coral/10 px-3 py-2 text-sm text-cream/85 ring-1 ring-coral/15"><span className="text-coral">!</span>{x}</li>
+            ))}
+          </ul>
         </div>
       )}
 
-      {/* Onde fica a porta */}
-      <Card className="mt-4">
-        <div className="flex items-start gap-3">
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-teal/15 text-2xl">📍</span>
-          <div className="min-w-0 flex-1">
-            <p className="font-display text-[15px] font-semibold text-cream">{t.whereTitle}</p>
-            <p className="mt-1 text-sm leading-relaxed text-cream/65">{t.whereBody}</p>
-          </div>
-        </div>
-      </Card>
-
-      {/* Passo a passo */}
-      <p className="mb-2 mt-6 font-serif text-lg font-bold text-cream">{t.stepsTitle}</p>
-      <div className="space-y-2">
-        {t.scanSteps.map((step, i) => (
-          <div key={i} className="flex items-start gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 ring-1 ring-white/5">
-            <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-amber/15 font-display text-xs font-bold text-amber">
-              {i + 1}
-            </span>
-            <p className="text-sm leading-relaxed text-cream/80">{step}</p>
-          </div>
-        ))}
+      {/* Consulta de códigos — extra desta aula */}
+      <div className="mt-5">
+        <p className="mb-2.5 text-xs font-semibold uppercase tracking-wide text-cream/45">{t.searchTitle}</p>
+        <Obd2Lookup />
       </div>
 
-      {/* Consulta de códigos — a mesma da página de códigos */}
-      <p className="mb-2 mt-6 font-serif text-lg font-bold text-cream">{t.searchTitle}</p>
-      <Obd2Lookup />
-
-      {/* Concluído — mesma mecânica das outras aulas */}
-      <Button variant="secondary" className="mt-6 w-full" onClick={() => markLessonSeen("obd2-scan")}>
-        {done ? `✓ ${c.learn.completed}` : c.learn.complete}
-      </Button>
+      {/* Botões padrão: concluir + salvar */}
+      <div className="mt-6 flex gap-2">
+        <Button className="flex-1" onClick={() => markLessonSeen("obd2-scan")}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
+        <Button variant="ghost" className="flex-1" onClick={() => toggleLessonSaved("obd2-scan")}>{saved ? `★ ${c.learn.savedLabel}` : `☆ ${c.learn.saveLater}`}</Button>
+      </div>
+      {!s.premium && <UpgradeBanner ctx="learn" text={c.paywalls.learn.title} />}
     </div>
   );
 }
