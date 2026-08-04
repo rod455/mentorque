@@ -6,11 +6,11 @@ import { computeHealth, SERVICE_SYSTEMS } from "@/lib/app/health";
 import { computeQuizHealth, getHealthQuiz } from "@/lib/app/healthQuiz";
 import { useI18n } from "@/lib/i18n";
 import { costProjection, systemPct, systemPriority } from "@/lib/app/premium";
-import { carName, formatBRL, vehicleLabel } from "@/lib/app/content";
+import { carName, formatBRL, minPurchaseDate, vehicleLabel } from "@/lib/app/content";
 import type { SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, Icon, LockedCard, PremiumBadge, SectionTitle, SeverityDot, useContent } from "../ui";
+import { AppHeader, Card, Icon, inputCls, LockedCard, PremiumBadge, SectionTitle, SeverityDot, useContent } from "../ui";
 import { SafetyPanel } from "../SafetyPanel";
 
 const SYSTEM_TO_SERVICE: Record<SystemKey, string> = {
@@ -336,15 +336,17 @@ export function HealthQuizScreen() {
   const v = activeVehicle(s);
   const questions = getHealthQuiz(locale);
   const [answers, setAnswers] = useState<Record<string, string>>(v?.quiz ?? {});
+  const [purchase, setPurchase] = useState<string>(v?.purchaseDate ?? "");
 
   if (!v) return <AppHeader title={h.quizTitle} />;
 
-  const answered = questions.filter((q) => answers[q.id]).length;
-  const allDone = answered === questions.length;
+  const total = questions.length + 1; // +1: data de compra (pergunta 1)
+  const answered = questions.filter((q) => answers[q.id]).length + (purchase ? 1 : 0);
+  const allDone = answered === total;
 
   const submit = () => {
     if (!allDone) return;
-    updateVehicle(v.id, { quiz: answers });
+    updateVehicle(v.id, { quiz: answers, purchaseDate: purchase || undefined });
     back();
   };
 
@@ -353,14 +355,30 @@ export function HealthQuizScreen() {
       <AppHeader title={h.quizTitle} />
       <p className="text-sm text-cream/60">{h.quizIntro}</p>
       <p className="mt-1 text-xs text-cream/45">
-        {h.quizProgress.replace("{a}", String(answered)).replace("{b}", String(questions.length))}
+        {h.quizProgress.replace("{a}", String(answered)).replace("{b}", String(total))}
       </p>
 
       <div className="mt-4 space-y-5 pb-2">
+        {/* Pergunta 1 — data de compra (alimenta as revisões por tempo de uso) */}
+        <div>
+          <p className="mb-2 font-display text-[15px] text-cream">
+            <span className="text-amber">1.</span> {c.revisions.setPurchase}
+          </p>
+          <input
+            type="date"
+            value={purchase}
+            min={minPurchaseDate(v.year)}
+            max={new Date().toISOString().slice(0, 10)}
+            onChange={(e) => { const val = e.target.value; if (val && val < minPurchaseDate(v.year)) return; setPurchase(val); }}
+            className={`${inputCls} ${purchase ? "ring-amber/40" : ""}`}
+          />
+          <p className="mt-1.5 text-xs text-cream/45">{c.carSettings.purchaseHint}</p>
+        </div>
+
         {questions.map((q, i) => (
           <div key={q.id}>
             <p className="mb-2 font-display text-[15px] text-cream">
-              <span className="text-amber">{i + 1}.</span> {q.label}
+              <span className="text-amber">{i + 2}.</span> {q.label}
             </p>
             <div className="space-y-1.5">
               {q.options.map((o) => {

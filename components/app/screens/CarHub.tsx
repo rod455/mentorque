@@ -147,10 +147,21 @@ function PurchaseLine() {
 
   return (
     <>
-      <button onClick={() => setOpen(true)} className="mt-0.5 flex items-center gap-1.5 text-xs text-cream/55 hover:text-cream">
-        <Icon name="calendar" className="h-3.5 w-3.5" />
-        {months != null ? c.revisions.ownedFor.replace("{n}", formatMonths(months, locale)) : c.revisions.setPurchaseCta}
-      </button>
+      {months != null ? (
+        <button onClick={() => setOpen(true)} className="mt-0.5 flex items-center gap-1.5 text-xs text-cream/55 hover:text-cream">
+          <Icon name="calendar" className="h-3.5 w-3.5" />
+          {c.revisions.ownedFor.replace("{n}", formatMonths(months, locale))}
+        </button>
+      ) : (
+        // Sem data de compra: chamada em destaque — a data alimenta as revisões por tempo.
+        <button
+          onClick={() => setOpen(true)}
+          className="mt-1.5 flex items-center gap-1.5 rounded-lg bg-amber/15 px-2.5 py-1.5 text-xs font-semibold text-amber ring-1 ring-amber/40 hover:bg-amber/20"
+        >
+          <Icon name="calendar" className="h-3.5 w-3.5" />
+          {c.revisions.setPurchaseCta}
+        </button>
+      )}
       <Sheet open={open} onClose={() => setOpen(false)}>
         <h2 className="font-display text-xl font-bold text-cream">{c.revisions.setPurchase}</h2>
         <input
