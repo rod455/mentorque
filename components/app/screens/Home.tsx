@@ -203,7 +203,9 @@ export function HomeScreen() {
                   </button>
                 );
               };
-              // Kit do motorista fixo na 3ª posição; aulas ao redor.
+              // Kit do motorista na 3ª posição — arranjo INICIAL, não regra:
+              // quando o ranking por engajamento (content_events) entrar, o
+              // Kit participa como os demais e pode subir/descer.
               const kitCard = (
                 <button key="kit" onClick={() => go({ name: "equipment" })} className="flex w-36 shrink-0 flex-col self-start text-left">
                   <div className="grid aspect-square place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ring-white/[0.06]">

@@ -98,9 +98,13 @@ function Router() {
   }, [view, canBack, back]);
 
   // Métrica de engajamento: registra a abertura de cada conteúdo/aula.
+  // O Kit do motorista conta como conteúdo ("equipment") — assim ele entra no
+  // mesmo ranking de engajamento das aulas e pode mudar de posição no futuro.
   useEffect(() => {
     if (view.name === "content") trackContent(view.id, "open");
     else if (view.name === "obd2") trackContent("read-obd2", "open");
+    else if (view.name === "equipment") trackContent("equipment", "open");
+    else if (view.name === "equipmentHowTo") trackContent(`equipment-${view.itemId}`, "open");
   }, [view]);
 
   // Swipe left→right = go back to the previous screen (last one the user was on).
