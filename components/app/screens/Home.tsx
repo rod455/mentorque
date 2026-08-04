@@ -186,9 +186,8 @@ export function HomeScreen() {
                   >
                     <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-amber/10 text-amber/80">
                       {l.thumb ? (
-                        // Miniatura: mostra a ilustração (topo), não a faixa do título
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={l.thumb} alt="" className="h-full w-full object-cover object-top" draggable={false} />
+                        <img src={l.thumb} alt="" className="h-full w-full object-cover" draggable={false} />
                       ) : (
                         <Icon name={typeIcon(l.type)} className="h-5 w-5" />
                       )}
@@ -269,8 +268,7 @@ export function HomeScreen() {
                         </span>
                       )}
                     </div>
-                    {/* As capas já trazem o título embutido — sem duplicar */}
-                    {!l.thumb && <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{l.title}</p>}
+                    <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{l.title}</p>
                   </button>
                 );
               };
@@ -283,6 +281,7 @@ export function HomeScreen() {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/learn/equipment.png" alt="" className="h-full w-full object-cover" draggable={false} />
                   </div>
+                  <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{c.equipmentUi.cardTitle}</p>
                 </button>
               );
               // 1ª posição: com carro cadastrado, "Próximas revisões". Se

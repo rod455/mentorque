@@ -36,9 +36,8 @@ function ItemRow({ item }: { item: Item }) {
     >
       <span className={`grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl ${locked ? "bg-amber/10 text-amber/70" : "bg-amber/12 text-amber"}`}>
         {item.thumb ? (
-          // Capa da aula (recortada no topo, sem a faixa do título)
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.thumb} alt="" className={`h-full w-full object-cover object-top ${locked ? "opacity-60" : ""}`} draggable={false} />
+          <img src={item.thumb} alt="" className={`h-full w-full object-cover ${locked ? "opacity-60" : ""}`} draggable={false} />
         ) : (
           <Icon name={typeIcon(item.type)} className="h-6 w-6" />
         )}
