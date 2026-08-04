@@ -184,7 +184,7 @@ export function HomeScreen() {
                     onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
                     className="flex min-w-0 flex-1 items-center gap-3 text-left"
                   >
-                    <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl bg-amber/10 text-amber/80">
+                    <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-amber/10 text-amber/80">
                       {l.thumb ? (
                         // Miniatura: mostra a ilustração (topo), não a faixa do título
                         // eslint-disable-next-line @next/next/no-img-element

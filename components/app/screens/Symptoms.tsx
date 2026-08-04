@@ -162,8 +162,9 @@ export function SymptomsScreen() {
           onClick={() => go({ name: "equipment" })}
           className="flex flex-col gap-2 rounded-3xl bg-graphite-800 p-4 text-left ring-1 ring-amber/20 transition-all hover:ring-amber/40 active:scale-[0.98]"
         >
-          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-amber/15 text-amber">
-            <Icon name="tools" className="h-6 w-6" />
+          <span className="grid h-16 w-16 place-items-center overflow-hidden rounded-2xl bg-amber/10">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/learn/equipment.png" alt="" className="h-full w-full object-cover object-top" draggable={false} />
           </span>
           <span>
             <span className="block font-display text-[15px] font-semibold leading-tight text-cream">{c.equipmentUi.cardTitle}</span>
@@ -177,7 +178,10 @@ export function SymptomsScreen() {
         onClick={() => go({ name: "obd2" })}
         className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-3.5 py-3.5 text-left ring-1 ring-white/5 hover:ring-amber/30"
       >
-        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-teal/15 text-2xl">🔌</span>
+        <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-2xl bg-teal/10">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/learn/read-obd2.png" alt="" className="h-full w-full object-cover object-top" draggable={false} />
+        </span>
         <span className="min-w-0 flex-1">
           <span className="block font-display text-[15px] font-semibold text-cream">{c.obd2.entryTitle}</span>
           <span className="mt-0.5 block text-xs text-cream/50">{c.obd2.entrySub}</span>

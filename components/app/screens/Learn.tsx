@@ -34,8 +34,14 @@ function ItemRow({ item }: { item: Item }) {
       onClick={() => go(locked ? { name: "subscribe", ctx: "learn" } : { name: "content", id: item.id })}
       className="flex w-full items-center gap-3 rounded-2xl bg-graphite-800 p-3.5 text-left ring-1 ring-white/5 hover:ring-amber/30"
     >
-      <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl ${locked ? "bg-amber/10 text-amber/70" : "bg-amber/12 text-amber"}`}>
-        <Icon name={typeIcon(item.type)} className="h-6 w-6" />
+      <span className={`grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl ${locked ? "bg-amber/10 text-amber/70" : "bg-amber/12 text-amber"}`}>
+        {item.thumb ? (
+          // Capa da aula (recortada no topo, sem a faixa do título)
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={item.thumb} alt="" className={`h-full w-full object-cover object-top ${locked ? "opacity-60" : ""}`} draggable={false} />
+        ) : (
+          <Icon name={typeIcon(item.type)} className="h-6 w-6" />
+        )}
       </span>
       <span className="min-w-0 flex-1">
         <span className="block truncate font-display text-[15px] text-cream">{item.title}</span>
