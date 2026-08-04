@@ -184,7 +184,7 @@ export function HomeScreen() {
                     onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
                     className="flex min-w-0 flex-1 items-center gap-3 text-left"
                   >
-                    <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-amber/10 text-amber/80">
+                    <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-amber/10 text-amber/80 ring-1 ring-amber/45">
                       {l.thumb ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={l.thumb} alt="" className="h-full w-full object-cover" draggable={false} />
@@ -240,7 +240,7 @@ export function HomeScreen() {
                     onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
                     className="flex w-36 shrink-0 flex-col self-start text-left"
                   >
-                    <div className="relative aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ring-white/[0.06]">
+                    <div className="relative aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ring-amber/45">
                       {l.thumb ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={l.thumb} alt="" className="h-full w-full object-cover" draggable={false} />
@@ -277,7 +277,7 @@ export function HomeScreen() {
               // Kit participa como os demais e pode subir/descer.
               const kitCard = (
                 <button key="kit" onClick={() => go({ name: "equipment" })} className="flex w-36 shrink-0 flex-col self-start text-left">
-                  <div className="aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ring-white/[0.06]">
+                  <div className="aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ring-amber/45">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/learn/equipment.png?v=2" alt="" className="h-full w-full object-cover" draggable={false} />
                   </div>
