@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { servicesFor, usePrototype } from "@/lib/app/store";
 import { computeHealth } from "@/lib/app/health";
 import { computeQuizHealth } from "@/lib/app/healthQuiz";
@@ -241,6 +241,26 @@ export function AddCarScreen({ editId }: { editId?: string }) {
   const [adDone, setAdDone] = useState(false);
   const needAd = adsEnabled() && !s.premium && !editing && !adDone;
 
+  // Versões reais do veículo (tabela FIPE) quando marca+modelo+ano estão
+  // definidos — viram sugestões no campo Versão/Motor (digitação livre segue).
+  const [versions, setVersions] = useState<string[]>([]);
+  const [verOpen, setVerOpen] = useState(false);
+  useEffect(() => {
+    setVersions([]);
+    if (!make || !model || !year) return;
+    const ctl = new AbortController();
+    fetch(`/api/versions?type=${type}&make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}&year=${year}`, { signal: ctl.signal })
+      .then((r) => (r.ok ? r.json() : { versions: [] }))
+      .then((js) => setVersions(Array.isArray(js.versions) ? js.versions : []))
+      .catch(() => {});
+    return () => ctl.abort();
+  }, [type, make, model, year]);
+  const verQ = engine.trim().toLowerCase();
+  const verMatches = versions
+    .filter((v) => !verQ || v.toLowerCase().includes(verQ))
+    .filter((v) => v.toLowerCase() !== verQ)
+    .slice(0, 12);
+
   const valid = !!(make && model && year);
 
   const save = () => {
@@ -405,7 +425,32 @@ export function AddCarScreen({ editId }: { editId?: string }) {
         )}
 
         <Field label={a.engine}>
-          <input value={engine} onChange={(e) => setEngine(e.target.value)} placeholder={a.enginePh} className={inputCls} />
+          <div className="relative">
+            <input
+              value={engine}
+              onChange={(e) => { setEngine(e.target.value); setVerOpen(true); }}
+              onFocus={() => setVerOpen(true)}
+              onBlur={() => setTimeout(() => setVerOpen(false), 150)}
+              placeholder={a.enginePh}
+              autoComplete="off"
+              className={inputCls}
+            />
+            {verOpen && verMatches.length > 0 && (
+              <div className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-xl bg-graphite-700 p-1 shadow-card ring-1 ring-white/10">
+                {verMatches.map((v) => (
+                  <button
+                    key={v}
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => { setEngine(v); setVerOpen(false); }}
+                    className="block w-full rounded-lg px-3 py-2 text-left text-sm text-cream hover:bg-white/5"
+                  >
+                    {v}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </Field>
 
         <Field label={a.km}>
