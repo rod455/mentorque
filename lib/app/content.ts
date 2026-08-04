@@ -430,15 +430,16 @@ export function getContent(locale: Locale) {
     safety: string[];
   };
   // Helper for article-style items (no tool list / safety block).
-  const art = (o: { id: string; title: string; track: string; system?: SystemKey | "geral"; premium?: boolean; make?: string; model?: string; body: string[]; media?: Media; type?: "video" | "article" | "checklist"; traits?: string[]; situations?: string[]; addedAt?: string }): Lesson => ({
+  const art = (o: { id: string; title: string; track: string; system?: SystemKey | "geral"; premium?: boolean; make?: string; model?: string; body: string[]; media?: Media; thumb?: string; type?: "video" | "article" | "checklist"; traits?: string[]; situations?: string[]; addedAt?: string }): Lesson => ({
     id: o.id, title: o.title, track: o.track, system: o.system ?? "geral", premium: o.premium,
-    make: o.make, model: o.model, media: o.media, type: o.type ?? "article", body: o.body,
+    make: o.make, model: o.model, media: o.media, thumb: o.thumb, type: o.type ?? "article", body: o.body,
     traits: o.traits, situations: o.situations, addedAt: o.addedAt,
     need: [], steps: [], safety: [],
   });
   const lessons: Lesson[] = [
     {
       id: "oil-change",
+      thumb: "/learn/oil-change.png",
       track: "diy",
       title: T("Como trocar o óleo (passo a passo)", "How to change the oil (step by step)"),
       type: "video",
@@ -464,6 +465,7 @@ export function getContent(locale: Locale) {
     },
     {
       id: "brake-pads",
+      thumb: "/learn/brake-pads.png",
       track: "diy",
       title: T("Trocar a pastilha de freio", "Replace the brake pads"),
       type: "video",
@@ -488,6 +490,7 @@ export function getContent(locale: Locale) {
     },
     {
       id: "read-obd2",
+      thumb: "/learn/read-obd2.png",
       track: "diagnosis",
       title: T("Luz de injeção ligada? Descubra o que é!", "Check-engine light on? Find out what it is!"),
       type: "article",
@@ -499,6 +502,7 @@ export function getContent(locale: Locale) {
     },
     {
       id: "obd2-scan",
+      thumb: "/learn/obd2-scan.png",
       track: "diagnosis",
       title: T("Como usar seu scanner OBD2", "How to use your OBD2 scanner"),
       type: "video",
@@ -511,6 +515,7 @@ export function getContent(locale: Locale) {
     },
     {
       id: "fuel-compare",
+      thumb: "/learn/fuel-compare.png",
       track: "money",
       title: T("Etanol ou Gasolina? O que rende mais no meu carro?", "Ethanol or Gasoline? Which goes further in my car?"),
       type: "article",
@@ -522,6 +527,7 @@ export function getContent(locale: Locale) {
     },
     {
       id: "basics",
+      thumb: "/learn/basics.png",
       track: "fundamentals",
       title: T("Mecânica básica para donos", "Basic mechanics for owners"),
       type: "article",
@@ -532,6 +538,7 @@ export function getContent(locale: Locale) {
     },
     {
       id: "tire-care",
+      thumb: "/learn/tire-care.png",
       track: "diy",
       title: T("Cuidando dos pneus", "Taking care of your tires"),
       type: "article",
@@ -542,25 +549,25 @@ export function getContent(locale: Locale) {
     },
 
     // ── Fundamentos ─────────────────────────────────────────────
-    art({ id: "fund-systems", track: "fundamentals", title: T("Os 6 sistemas do carro", "The 6 systems of a car"), body: [
+    art({ id: "fund-systems", thumb: "/learn/fund-systems.png", track: "fundamentals", title: T("Os 6 sistemas do carro", "The 6 systems of a car"), body: [
       T("Todo carro é a soma de seis sistemas: motor (gera força), transmissão (leva a força às rodas), freios, suspensão, direção e elétrica.", "Every car is the sum of six systems: engine (makes power), transmission (sends it to the wheels), brakes, suspension, steering and electrical."),
       T("Entender o que cada um faz te ajuda a saber onde está o problema quando algo sai do normal — e a conversar de igual pra igual com a oficina.", "Understanding what each one does helps you locate a problem when something feels off — and talk to the shop on equal footing."),
     ]}),
-    art({ id: "fund-dashboard", track: "fundamentals", title: T("Luzes do painel: o que significam", "Dashboard lights: what they mean"), body: [
+    art({ id: "fund-dashboard", thumb: "/learn/fund-dashboard.png", track: "fundamentals", title: T("Luzes do painel: o que significam", "Dashboard lights: what they mean"), body: [
       T("Verde/azul é informação. Amarelo é atenção: resolva em breve. Vermelho é pare agora — óleo, temperatura ou freio.", "Green/blue is information. Yellow means attention: fix it soon. Red means stop now — oil, temperature or brakes."),
       T("Se a luz do motor pisca, evite acelerar e procure diagnóstico. Fixa, dá pra rodar com cuidado até a oficina.", "If the engine light flashes, avoid accelerating and get it diagnosed. Steady, you can drive gently to the shop."),
     ]}),
-    art({ id: "fund-fluids", track: "fundamentals", title: T("Os 5 fluidos essenciais", "The 5 essential fluids"), system: "engine", body: [
+    art({ id: "fund-fluids", thumb: "/learn/fund-fluids.png", track: "fundamentals", title: T("Os 5 fluidos essenciais", "The 5 essential fluids"), system: "engine", body: [
       T("Óleo do motor, fluido de freio, líquido de arrefecimento, fluido de direção e água do limpador. Cada um tem cor e função próprias.", "Engine oil, brake fluid, coolant, steering fluid and washer water. Each has its own color and job."),
       T("Verificar os níveis a cada abastecimento leva 2 minutos e evita a maioria das panes graves.", "Checking levels at each fill-up takes 2 minutes and prevents most serious breakdowns."),
     ]}),
-    { id: "fund-calendar", track: "fundamentals", title: T("Calendário de manutenção", "Maintenance calendar"), type: "checklist", system: "geral",
+    { id: "fund-calendar", thumb: "/learn/fund-calendar.png", track: "fundamentals", title: T("Calendário de manutenção", "Maintenance calendar"), type: "checklist", system: "geral",
       need: [], body: [T("Um roteiro do que revisar e quando.", "A guide of what to check and when.")],
       steps: [T("Óleo e filtro: a cada 10 mil km ou 1 ano", "Oil and filter: every 10,000 km or 1 year"), T("Pneus: rodízio a cada 10 mil km, calibragem quinzenal", "Tires: rotate every 10,000 km, pressure every 2 weeks"), T("Freios: inspeção a cada 20 mil km", "Brakes: inspect every 20,000 km"), T("Correia dentada: 50–60 mil km (ver manual)", "Timing belt: 50–60k km (see manual)"), T("Fluido de freio: a cada 2 anos", "Brake fluid: every 2 years")],
       safety: [] },
 
     // ── Faça Você Mesmo (DIY) ──────────────────────────────────
-    { id: "diy-battery", track: "diy", title: T("Trocar a bateria", "Replace the battery"), type: "video", system: "electrical", difficulty: "facil",
+    { id: "diy-battery", thumb: "/learn/diy-battery.png", track: "diy", title: T("Trocar a bateria", "Replace the battery"), type: "video", system: "electrical", difficulty: "facil",
       media: { provider: "youtube", src: "jNQXAC9IVRw" }, body: [],
       need: [T("Bateria nova compatível", "Compatible new battery"), T("Chave de boca 10mm", "10mm wrench")],
       steps: [T("Desligue tudo e solte o polo negativo (−) primeiro", "Turn everything off and remove the negative (−) first"), T("Solte o positivo (+) e a presilha", "Remove the positive (+) and the clamp"), T("Troque a bateria e reaperte na ordem inversa", "Swap the battery and refit in reverse order")],
@@ -576,7 +583,7 @@ export function getContent(locale: Locale) {
         mecanico: [T("Ignição off; preserve memória se necessário (alimentação auxiliar).", "Ignition off; preserve memory if needed (aux power)."), T("Desconecte (−), depois (+); remova a fixação.", "Disconnect (−), then (+); remove the hold-down."), T("Instale bateria de spec, fixe, reconecte (+) e (−); proteja bornes.", "Fit spec battery, secure, reconnect (+) and (−); protect terminals."), T("Teste carga/alternador; reprograme módulos se aplicável.", "Test charge/alternator; reprogram modules if applicable.")],
       },
       safety: [T("Negativo sai primeiro, entra por último", "Negative off first, on last"), T("Não encoste as duas chaves nos polos", "Don't bridge both terminals")] },
-    { id: "diy-airfilter", track: "diy", title: T("Trocar o filtro de ar", "Replace the air filter"), type: "video", system: "engine", difficulty: "facil",
+    { id: "diy-airfilter", thumb: "/learn/diy-airfilter.png", track: "diy", title: T("Trocar o filtro de ar", "Replace the air filter"), type: "video", system: "engine", difficulty: "facil",
       media: { provider: "youtube", src: "jNQXAC9IVRw" }, body: [],
       need: [T("Filtro de ar novo", "New air filter")],
       steps: [T("Abra a caixa do filtro (presilhas ou parafusos)", "Open the airbox (clips or screws)"), T("Retire o filtro velho e limpe a caixa", "Remove the old filter and clean the box"), T("Encaixe o novo na posição correta e feche", "Fit the new one the right way and close")],
@@ -591,7 +598,7 @@ export function getContent(locale: Locale) {
         mecanico: [T("Motor frio. Abra o airbox (presilhas/parafusos).", "Engine cold. Open the airbox (clips/screws)."), T("Remova o elemento, limpe a carcaça, verifique vedação.", "Remove the element, clean the housing, check sealing."), T("Instale o novo alinhado, feche garantindo estanqueidade da admissão.", "Fit the new one aligned, close ensuring intake sealing.")],
       },
       safety: [T("Não ligue o motor com a caixa aberta", "Don't run the engine with the box open")] },
-    { id: "diy-wipers", track: "diy", title: T("Trocar as palhetas do limpador", "Replace the wiper blades"), type: "video", system: "electrical", difficulty: "facil",
+    { id: "diy-wipers", thumb: "/learn/diy-wipers.png", track: "diy", title: T("Trocar as palhetas do limpador", "Replace the wiper blades"), type: "video", system: "electrical", difficulty: "facil",
       media: { provider: "youtube", src: "jNQXAC9IVRw" }, body: [],
       need: [T("Palhetas do tamanho correto", "Correct-size blades")],
       steps: [T("Levante o braço e aperte a trava", "Lift the arm and press the tab"), T("Deslize a palheta velha para fora", "Slide the old blade out"), T("Encaixe a nova até ouvir o clique", "Clip the new one until it clicks")],
@@ -608,55 +615,55 @@ export function getContent(locale: Locale) {
       safety: [T("Segure o braço para não bater no vidro", "Hold the arm so it doesn't snap onto the glass")] },
 
     // ── Diagnóstico ────────────────────────────────────────────
-    art({ id: "diag-noises", track: "diagnosis", title: T("Que barulho é esse? Guia de sons", "What's that noise? Sound guide"), body: [
+    art({ id: "diag-noises", thumb: "/learn/diag-noises.png", track: "diagnosis", title: T("Que barulho é esse? Guia de sons", "What's that noise? Sound guide"), body: [
       T("Chiado ao frear = pastilha no fim. Batida em buraco = suspensão. Assobio ao acelerar = correia ou admissão. Estalo ao esterçar = homocinética.", "Squeal when braking = pads worn. Knock over bumps = suspension. Whistle on throttle = belt or intake. Click when turning = CV joint."),
       T("Grave o som com o celular e mostre pro Biela ou pra oficina — ajuda muito no diagnóstico.", "Record the sound with your phone and show Biela or the shop — it helps a lot with the diagnosis."),
     ]}),
-    art({ id: "diag-smells", track: "diagnosis", title: T("Cheiros e fumaça: o que indicam", "Smells and smoke: what they mean"), body: [
+    art({ id: "diag-smells", thumb: "/learn/diag-smells.png", track: "diagnosis", title: T("Cheiros e fumaça: o que indicam", "Smells and smoke: what they mean"), body: [
       T("Fumaça azul = queima de óleo. Branca densa = água no motor (junta). Preta = mistura rica. Cheiro doce = arrefecimento vazando.", "Blue smoke = burning oil. Thick white = water in the engine (gasket). Black = rich mixture. Sweet smell = coolant leak."),
       T("Cheiro de queimado ao frear pede parada imediata: freio superaquecido.", "A burning smell when braking means stop now: overheated brakes."),
     ]}),
-    art({ id: "diag-leaks", track: "diagnosis", title: T("Manchas no chão: qual vazamento?", "Stains on the floor: which leak?"), body: [
+    art({ id: "diag-leaks", thumb: "/learn/diag-leaks.png", track: "diagnosis", title: T("Manchas no chão: qual vazamento?", "Stains on the floor: which leak?"), body: [
       T("Marrom/preto = óleo. Vermelho/rosa = direção ou câmbio. Verde/laranja = arrefecimento. Transparente = ar-condicionado (normal).", "Brown/black = oil. Red/pink = steering or transmission. Green/orange = coolant. Clear = A/C (normal)."),
       T("Coloque um papelão sob o carro à noite para localizar a origem do vazamento.", "Put cardboard under the car overnight to locate where the leak comes from."),
     ]}),
 
     // ── Economia & Bolso ───────────────────────────────────────
-    art({ id: "money-fuel", track: "money", title: T("Dirigir gastando menos", "Drive spending less"), body: [
+    art({ id: "money-fuel", thumb: "/learn/money-fuel.png", track: "money", title: T("Dirigir gastando menos", "Drive spending less"), body: [
       T("Calibragem correta, filtro limpo e conduzir suave (sem arrancadas) economizam até 20% de combustível.", "Correct pressure, a clean filter and smooth driving (no jackrabbit starts) save up to 20% of fuel."),
       T("Peso extra e ar-condicionado em alta velocidade pesam menos do que se imagina; janela aberta na estrada pesa mais.", "Extra weight and A/C at high speed matter less than people think; open windows on the highway matter more."),
     ]}),
-    art({ id: "money-repair-replace", track: "money", title: T("Consertar ou trocar de carro?", "Repair or replace the car?"), body: [
+    art({ id: "money-repair-replace", thumb: "/learn/money-repair-replace.png", track: "money", title: T("Consertar ou trocar de carro?", "Repair or replace the car?"), body: [
       T("Regra prática: se o conserto passa de 50% do valor do carro, ou se você gasta em reparos mais que uma parcela por mês, reavalie.", "Rule of thumb: if a repair exceeds 50% of the car's value, or you spend more on repairs than a monthly payment, reconsider."),
       T("Some tudo que gastou no último ano (está no seu Histórico) antes de decidir.", "Add up everything you spent in the last year (it's in your History) before deciding."),
     ]}),
-    art({ id: "money-quote", track: "money", title: T("Ler um orçamento e evitar golpes", "Read a quote and avoid scams"), body: [
+    art({ id: "money-quote", thumb: "/learn/money-quote.png", track: "money", title: T("Ler um orçamento e evitar golpes", "Read a quote and avoid scams"), body: [
       T("Exija orçamento por escrito com peças e mão de obra separadas. Desconfie de 'já que abriu, troca tudo'.", "Demand a written quote with parts and labor itemized. Be wary of 'while it's open, replace everything'."),
       T("Peça as peças velhas de volta e um segundo orçamento em reparos caros.", "Ask for the old parts back and get a second quote on expensive repairs."),
     ]}),
-    { id: "money-used", track: "money", title: T("Checklist para comprar usado", "Used-car checklist"), type: "checklist", system: "geral",
+    { id: "money-used", thumb: "/learn/money-used.png", track: "money", title: T("Checklist para comprar usado", "Used-car checklist"), type: "checklist", system: "geral",
       need: [], body: [T("O que conferir antes de fechar negócio.", "What to check before closing the deal.")],
       steps: [T("Histórico de manutenção e dono anterior", "Service history and previous owner"), T("Alinhamento da pintura e folgas (batida)", "Paint and panel gaps (crash)"), T("Óleo, arrefecimento e fumaça na partida", "Oil, coolant and smoke at startup"), T("Test-drive: freio, câmbio, ruídos", "Test drive: brakes, gearbox, noises"), T("Débitos, multas e vistoria cautelar", "Debts, fines and an independent inspection")],
       safety: [] },
 
     // ── Por Montadora ──────────────────────────────────────────
-    art({ id: "brand-vw", track: "brand", make: "Volkswagen", premium: true, title: T("Volkswagen: pontos de atenção", "Volkswagen: what to watch"), body: [
+    art({ id: "brand-vw", thumb: "/learn/brand-vw.png", track: "brand", make: "Volkswagen", premium: true, title: T("Volkswagen: pontos de atenção", "Volkswagen: what to watch"), body: [
       T("Linha TSI: atenção à corrente de comando e ao consumo de óleo em motores mais rodados. Turbo pede óleo no ponto certo.", "TSI line: watch the timing chain and oil consumption on higher-mileage engines. The turbo needs oil right on spec."),
       T("Revisões oficiais a cada 10 mil km/1 ano. Consulte o manual do seu modelo para os intervalos exatos.", "Official service every 10,000 km/1 year. Check your model's manual for the exact intervals."),
     ]}),
-    art({ id: "brand-chevrolet", track: "brand", make: "Chevrolet", premium: true, title: T("Chevrolet: pontos de atenção", "Chevrolet: what to watch"), body: [
+    art({ id: "brand-chevrolet", thumb: "/learn/brand-chevrolet.png", track: "brand", make: "Chevrolet", premium: true, title: T("Chevrolet: pontos de atenção", "Chevrolet: what to watch"), body: [
       T("Motores 1.0/1.2 turbo modernos são econômicos, mas exigem óleo correto e troca em dia para proteger o turbo.", "Modern 1.0/1.2 turbo engines are efficient but demand the correct oil and on-time changes to protect the turbo."),
       T("Atenção ao módulo elétrico e ao MyLink em modelos mais antigos.", "Watch the electrical module and MyLink on older models."),
     ]}),
-    art({ id: "brand-fiat", track: "brand", make: "Fiat", premium: true, title: T("Fiat: pontos de atenção", "Fiat: what to watch"), body: [
+    art({ id: "brand-fiat", thumb: "/learn/brand-fiat.png", track: "brand", make: "Fiat", premium: true, title: T("Fiat: pontos de atenção", "Fiat: what to watch"), body: [
       T("Firefly (1.0/1.3) é robusto; cuide da correia dentada banhada a óleo nos que a usam. Picapes pedem atenção à suspensão traseira.", "Firefly (1.0/1.3) is sturdy; mind the oil-bathed timing belt where fitted. Pickups need attention to the rear suspension."),
       T("Câmbio automatizado antigo (Dualogic) pede condução adaptada e revisão específica.", "The old automated gearbox (Dualogic) needs an adapted driving style and specific servicing."),
     ]}),
-    art({ id: "brand-toyota", track: "brand", make: "Toyota", premium: true, title: T("Toyota: pontos de atenção", "Toyota: what to watch"), body: [
+    art({ id: "brand-toyota", thumb: "/learn/brand-toyota.png", track: "brand", make: "Toyota", premium: true, title: T("Toyota: pontos de atenção", "Toyota: what to watch"), body: [
       T("Fama de confiável se mantém com revisão em dia. Aspirados são tranquilos; híbridos pedem cuidado com a bateria de alta tensão.", "The reliability reputation holds with on-time service. NA engines are easy; hybrids need care with the high-voltage battery."),
       T("Intervalos oficiais a cada 10 mil km. Peças originais costumam durar mais.", "Official intervals every 10,000 km. Genuine parts tend to last longer."),
     ]}),
-    art({ id: "brand-byd", track: "brand", make: "BYD", premium: true, title: T("BYD: cuidados com elétricos", "BYD: caring for EVs"), body: [
+    art({ id: "brand-byd", thumb: "/learn/brand-byd.png", track: "brand", make: "BYD", premium: true, title: T("BYD: cuidados com elétricos", "BYD: caring for EVs"), body: [
       T("Sem óleo de motor, mas há fluido de arrefecimento da bateria, freios e filtro de cabine. A manutenção é mais barata, não inexistente.", "No engine oil, but there's battery coolant, brakes and a cabin filter. Maintenance is cheaper, not zero."),
       T("Freio regenerativo faz as pastilhas durarem muito; ainda assim inspecione contra corrosão.", "Regen braking makes pads last a long time; still inspect them for corrosion."),
     ]}),
@@ -684,47 +691,47 @@ export function getContent(locale: Locale) {
     ]}),
 
     // ── Esportivos / Garagem dos Sonhos ────────────────────────
-    art({ id: "sport-turbo", track: "sports", title: T("Turbo vs aspirado", "Turbo vs naturally aspirated"), body: [
+    art({ id: "sport-turbo", thumb: "/learn/sport-turbo.png", track: "sports", title: T("Turbo vs aspirado", "Turbo vs naturally aspirated"), body: [
       T("O turbo usa os gases do escape para 'empurrar' mais ar ao motor — mais potência de um motor pequeno. Aspirado respira sozinho: resposta linear e simplicidade.", "A turbo uses exhaust gases to force more air in — more power from a small engine. NA breathes on its own: linear response and simplicity."),
       T("Turbo pede óleo em dia e alguns segundos de marcha lenta antes de desligar após uso forte.", "Turbos need on-time oil and a few seconds of idle before shutting off after hard use."),
     ]}),
-    art({ id: "sport-drivetrain", track: "sports", title: T("Tração: dianteira, traseira, integral", "Drive: front, rear, all-wheel"), body: [
+    art({ id: "sport-drivetrain", thumb: "/learn/sport-drivetrain.png", track: "sports", title: T("Tração: dianteira, traseira, integral", "Drive: front, rear, all-wheel"), body: [
       T("Dianteira é barata e estável. Traseira é a preferida dos esportivos pela distribuição de peso na aceleração. Integral agarra em qualquer piso.", "Front-wheel is cheap and stable. Rear-wheel is the sports favorite for weight transfer under acceleration. All-wheel grips on any surface."),
       T("Cada uma muda como o carro se comporta na curva e na chuva.", "Each changes how the car behaves in corners and in the rain."),
     ]}),
-    art({ id: "sport-dct", track: "sports", premium: true, title: T("Câmbio de dupla embreagem (DCT)", "Dual-clutch gearbox (DCT)"), body: [
+    art({ id: "sport-dct", thumb: "/learn/sport-dct.png", track: "sports", premium: true, title: T("Câmbio de dupla embreagem (DCT)", "Dual-clutch gearbox (DCT)"), body: [
       T("Duas embreagens pré-selecionam a próxima marcha: trocas em milésimos, sem cortar a força. É o câmbio dos superesportivos e de muitos populares turbo.", "Two clutches pre-select the next gear: shifts in milliseconds without cutting power. It's the gearbox of supercars and many turbo hatches."),
       T("Exige óleo específico e não gosta de 'segurar na rampa' no ponto de fricção.", "It needs specific oil and dislikes being held on a hill at the friction point."),
     ]}),
-    art({ id: "sport-aero", track: "sports", premium: true, title: T("Aerodinâmica e downforce", "Aerodynamics and downforce"), body: [
+    art({ id: "sport-aero", thumb: "/learn/sport-aero.png", track: "sports", premium: true, title: T("Aerodinâmica e downforce", "Aerodynamics and downforce"), body: [
       T("Asas e difusores invertem o princípio do avião: em vez de sustentar, empurram o carro contra o chão. Mais aderência em alta velocidade.", "Wings and diffusers invert the airplane principle: instead of lift, they push the car into the ground. More grip at high speed."),
       T("Downforce custa arrasto — por isso carros de rua buscam equilíbrio entre grude e velocidade final.", "Downforce costs drag — that's why road cars balance grip and top speed."),
     ]}),
-    art({ id: "sport-911", track: "sports", premium: true, title: T("Ícone: Porsche 911", "Icon: Porsche 911"), body: [
+    art({ id: "sport-911", thumb: "/learn/sport-911.png", track: "sports", premium: true, title: T("Ícone: Porsche 911", "Icon: Porsche 911"), body: [
       T("Desde 1963 com o motor atrás do eixo traseiro — uma 'anomalia' que a Porsche transformou em obra-prima de engenharia geração após geração.", "Since 1963 with the engine behind the rear axle — an 'anomaly' Porsche turned into an engineering masterpiece generation after generation."),
       T("Prova de que evolução constante vale mais que reinvenção: a silhueta é quase a mesma há 60 anos.", "Proof that constant evolution beats reinvention: the silhouette has barely changed in 60 years."),
     ]}),
-    art({ id: "sport-gtr", track: "sports", premium: true, title: T("Ícone: Nissan GT-R", "Icon: Nissan GT-R"), body: [
+    art({ id: "sport-gtr", thumb: "/learn/sport-gtr.png", track: "sports", premium: true, title: T("Ícone: Nissan GT-R", "Icon: Nissan GT-R"), body: [
       T("Apelidado de 'Godzilla', usa tração integral inteligente e motor V6 biturbo montado à mão para humilhar superesportivos que custam o triplo.", "Nicknamed 'Godzilla', it uses smart all-wheel drive and a hand-built twin-turbo V6 to humble supercars costing triple."),
       T("Um marco de como tecnologia pode democratizar a performance.", "A milestone in how technology can democratize performance."),
     ]}),
-    art({ id: "sport-muscle", track: "sports", premium: true, title: T("Muscle cars: a era dos V8", "Muscle cars: the V8 era"), body: [
+    art({ id: "sport-muscle", thumb: "/learn/sport-muscle.png", track: "sports", premium: true, title: T("Muscle cars: a era dos V8", "Muscle cars: the V8 era"), body: [
       T("Anos 60-70 nos EUA: motores V8 gigantes em carros acessíveis. Mustang, Camaro e Charger viraram lenda pela força bruta e pelo som.", "1960s-70s USA: huge V8 engines in affordable cars. Mustang, Camaro and Charger became legends for brute force and sound."),
       T("A filosofia 'sem substituto para cilindrada' moldou a cultura automotiva por décadas.", "The 'no replacement for displacement' philosophy shaped car culture for decades."),
     ]}),
 
     // ── Cultura & Curiosidades ─────────────────────────────────
-    art({ id: "cult-history", track: "culture", title: T("Breve história do automóvel", "A brief history of the car"), media: { provider: "youtube", src: "jNQXAC9IVRw" }, type: "video", body: [
+    art({ id: "cult-history", thumb: "/learn/cult-history.png", track: "culture", title: T("Breve história do automóvel", "A brief history of the car"), media: { provider: "youtube", src: "jNQXAC9IVRw" }, type: "video", body: [
       T("De 1886, com o Benz Patent-Motorwagen, à linha de montagem de Ford e à eletrificação de hoje — pouco mais de um século que mudou o mundo.", "From 1886, with the Benz Patent-Motorwagen, to Ford's assembly line and today's electrification — just over a century that changed the world."),
     ]}),
-    art({ id: "cult-ev", track: "culture", title: T("Como funciona um carro elétrico", "How an electric car works"), body: [
+    art({ id: "cult-ev", thumb: "/learn/cult-ev.png", track: "culture", title: T("Como funciona um carro elétrico", "How an electric car works"), body: [
       T("Bateria alimenta um motor elétrico que entrega torque instantâneo. Sem câmbio, sem embreagem, sem óleo de motor.", "A battery feeds an electric motor delivering instant torque. No gearbox, no clutch, no engine oil."),
       T("O freio regenerativo recarrega a bateria ao desacelerar — por isso as pastilhas duram tanto.", "Regenerative braking recharges the battery when slowing down — that's why the pads last so long."),
     ]}),
-    art({ id: "cult-hybrid", track: "culture", title: T("Híbridos: dois mundos", "Hybrids: two worlds"), body: [
+    art({ id: "cult-hybrid", thumb: "/learn/cult-hybrid.png", track: "culture", title: T("Híbridos: dois mundos", "Hybrids: two worlds"), body: [
       T("Combinam motor a combustão e elétrico. No trânsito, rodam no elétrico (econômico); na estrada, o motor assume. Alguns recarregam na tomada (plug-in).", "They combine a combustion and an electric motor. In traffic they run electric (efficient); on the highway the engine takes over. Some charge from a plug (plug-in)."),
     ]}),
-    art({ id: "cult-adas", track: "culture", title: T("ADAS: os assistentes de direção", "ADAS: driver assists"), body: [
+    art({ id: "cult-adas", thumb: "/learn/cult-adas.png", track: "culture", title: T("ADAS: os assistentes de direção", "ADAS: driver assists"), body: [
       T("Frenagem automática, alerta de faixa e piloto adaptativo usam câmeras e radares para reduzir acidentes.", "Automatic braking, lane alerts and adaptive cruise use cameras and radars to cut accidents."),
       T("São assistentes, não pilotos: exigem atenção total do motorista.", "They're assistants, not drivers: they require the driver's full attention."),
     ]}),

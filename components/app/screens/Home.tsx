@@ -186,8 +186,9 @@ export function HomeScreen() {
                   >
                     <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl bg-amber/10 text-amber/80">
                       {l.thumb ? (
+                        // Miniatura: mostra a ilustração (topo), não a faixa do título
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={l.thumb} alt="" className="h-full w-full object-cover" draggable={false} />
+                        <img src={l.thumb} alt="" className="h-full w-full object-cover object-top" draggable={false} />
                       ) : (
                         <Icon name={typeIcon(l.type)} className="h-5 w-5" />
                       )}
@@ -268,7 +269,8 @@ export function HomeScreen() {
                         </span>
                       )}
                     </div>
-                    <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{l.title}</p>
+                    {/* As capas já trazem o título embutido — sem duplicar */}
+                    {!l.thumb && <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{l.title}</p>}
                   </button>
                 );
               };
@@ -277,10 +279,10 @@ export function HomeScreen() {
               // Kit participa como os demais e pode subir/descer.
               const kitCard = (
                 <button key="kit" onClick={() => go({ name: "equipment" })} className="flex w-36 shrink-0 flex-col self-start text-left">
-                  <div className="grid aspect-square place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ring-white/[0.06]">
-                    <Icon name="tools" className="h-9 w-9 text-amber/70" />
+                  <div className="aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ring-white/[0.06]">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/learn/equipment.png" alt="" className="h-full w-full object-cover" draggable={false} />
                   </div>
-                  <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{c.equipmentUi.cardTitle}</p>
                 </button>
               );
               // 1ª posição: com carro cadastrado, "Próximas revisões". Se
