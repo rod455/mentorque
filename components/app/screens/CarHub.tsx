@@ -145,13 +145,23 @@ function PurchaseLine() {
   const [open, setOpen] = useState(false);
   if (!v) return null;
   const months = monthsSinceDate(v.purchaseDate);
+  // Formato compacto para caber em UMA linha no cartão: até 11 meses usa
+  // "X meses"; a partir de 1 ano usa anos com decimal proporcional ("5,6 anos").
+  const ownedCompact = (() => {
+    if (months == null) return null;
+    if (months < 12) return formatMonths(months, locale);
+    const y = Math.round((months / 12) * 10) / 10;
+    const txt = Number.isInteger(y) ? String(y) : y.toFixed(1).replace(".", locale === "pt" ? "," : ".");
+    if (y === 1) return locale === "pt" ? "1 ano" : "1 year";
+    return locale === "pt" ? `${txt} anos` : `${txt} years`;
+  })();
 
   return (
     <>
       {months != null ? (
-        <button onClick={() => setOpen(true)} className="mt-0.5 flex items-center gap-1.5 text-xs text-cream/55 hover:text-cream">
-          <Icon name="calendar" className="h-3.5 w-3.5" />
-          {c.revisions.ownedFor.replace("{n}", formatMonths(months, locale))}
+        <button onClick={() => setOpen(true)} className="mt-0.5 flex items-center gap-1.5 truncate text-xs text-cream/55 hover:text-cream">
+          <Icon name="calendar" className="h-3.5 w-3.5 shrink-0" />
+          <span className="truncate">{c.revisions.ownedFor.replace("{n}", ownedCompact ?? "")}</span>
         </button>
       ) : (
         // Sem data de compra: chamada em destaque — a data alimenta as revisões por tempo.

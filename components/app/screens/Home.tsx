@@ -1,7 +1,7 @@
 "use client";
 
-import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
-import { computeHealth } from "@/lib/app/health";
+import { activeVehicle, usePrototype } from "@/lib/app/store";
+import { computeQuizHealth } from "@/lib/app/healthQuiz";
 import { computeStatus, MILESTONES } from "@/lib/app/gamification";
 import { isNewLesson, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
@@ -157,7 +157,8 @@ export function HomeScreen() {
                 <span className="block text-[11px] uppercase tracking-wide text-cream/45">{h.yourCar}</span>
                 <span className="block truncate font-display text-[15px] text-cream">{car.nickname || vehicleLabel(car)}</span>
               </span>
-              <HealthPill score={computeHealth(car, servicesFor(s, car.id)).score} />
+              {/* Mesma fórmula do quiz usada na Saúde e no hub — um número só no app inteiro */}
+              <HealthPill score={computeQuizHealth(car.quiz ?? {}, car).score} />
             </div>
           </Card>
         </button>
