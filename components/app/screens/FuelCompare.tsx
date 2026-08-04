@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
-import { compareFuel, engineLooksTurbo } from "@/lib/app/fuelCompare";
+import { compareFuel, energyRatio, engineFactorK, engineLooksTurbo } from "@/lib/app/fuelCompare";
 import { carName } from "@/lib/app/content";
 import { AppHeader, Card, UpgradeBanner, inputCls, useContent } from "../ui";
 import { Button } from "@/components/ui/Button";
@@ -42,10 +42,29 @@ export function FuelCompareScreen() {
   };
   const verdict = compareFuel(input);
   const bothKnown = !!(input.gasKmL && input.ethKmL);
+  // Limiar mostrado no cartão pendente (calculável sem os preços).
+  const pendingThreshold = bothKnown && input.gasKmL && input.ethKmL
+    ? input.ethKmL / input.gasKmL
+    : energyRatio() * engineFactorK(turbo, highComp);
+
+  // Valores salvos podem chegar DEPOIS de abrir a tela (sync da nuvem):
+  // enquanto o usuário não mexeu em nada, repovoa os campos ao chegarem.
+  const dirty = useRef(false);
+  useEffect(() => {
+    if (dirty.current || !v?.fuelPrefs) return;
+    const fp = v.fuelPrefs;
+    if (fp.gasPrice != null) setGasPrice(fmt(fp.gasPrice));
+    if (fp.ethPrice != null) setEthPrice(fmt(fp.ethPrice));
+    if (fp.gasKmL != null) setGasKmL(fmt(fp.gasKmL, 1));
+    if (fp.ethKmL != null) setEthKmL(fmt(fp.ethKmL, 1));
+    if (fp.turbo != null) setTurbo(fp.turbo);
+    if (fp.highComp != null) setHighComp(fp.highComp);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [v?.id, v?.fuelPrefs]);
 
   // Persiste no veículo (sincroniza entre aparelhos junto com a garagem).
   useEffect(() => {
-    if (!v) return;
+    if (!v || !dirty.current) return;
     const timer = setTimeout(() => {
       updateVehicle(v.id, {
         fuelPrefs: {
@@ -86,11 +105,11 @@ export function FuelCompareScreen() {
       <div className="grid grid-cols-2 gap-2">
         <label className="block">
           <span className="mb-1 block text-xs text-cream/55">{t.gasPrice}</span>
-          <input value={gasPrice} inputMode="decimal" onChange={(e) => setGasPrice(e.target.value)} placeholder={t.pricePh} className={inputCls} />
+          <input value={gasPrice} inputMode="decimal" onChange={(e) => { dirty.current = true; setGasPrice(e.target.value); }} placeholder={t.pricePh} className={inputCls} />
         </label>
         <label className="block">
           <span className="mb-1 block text-xs text-cream/55">{t.ethPrice}</span>
-          <input value={ethPrice} inputMode="decimal" onChange={(e) => setEthPrice(e.target.value)} placeholder={t.pricePh} className={inputCls} />
+          <input value={ethPrice} inputMode="decimal" onChange={(e) => { dirty.current = true; setEthPrice(e.target.value); }} placeholder={t.pricePh} className={inputCls} />
         </label>
       </div>
 
@@ -100,11 +119,11 @@ export function FuelCompareScreen() {
       <div className="grid grid-cols-2 gap-2">
         <label className="block">
           <span className="mb-1 block text-xs text-cream/55">{t.gasKmL}</span>
-          <input value={gasKmL} inputMode="decimal" onChange={(e) => setGasKmL(e.target.value)} placeholder={t.kmlPh} className={inputCls} />
+          <input value={gasKmL} inputMode="decimal" onChange={(e) => { dirty.current = true; setGasKmL(e.target.value); }} placeholder={t.kmlPh} className={inputCls} />
         </label>
         <label className="block">
           <span className="mb-1 block text-xs text-cream/55">{t.ethKmL}</span>
-          <input value={ethKmL} inputMode="decimal" onChange={(e) => setEthKmL(e.target.value)} placeholder={t.kmlPh} className={inputCls} />
+          <input value={ethKmL} inputMode="decimal" onChange={(e) => { dirty.current = true; setEthKmL(e.target.value); }} placeholder={t.kmlPh} className={inputCls} />
         </label>
       </div>
 
@@ -115,16 +134,29 @@ export function FuelCompareScreen() {
           <p className="mb-2 text-xs leading-relaxed text-cream/50">{t.engineSub}</p>
           <p className="mb-1.5 text-sm text-cream/80">{t.turboQ}</p>
           <div className="flex gap-2">
-            <button className={chip(!turbo)} onClick={() => setTurbo(false)}>{t.turboNo}</button>
-            <button className={chip(turbo)} onClick={() => setTurbo(true)}>{t.turboYes}</button>
+            <button className={chip(!turbo)} onClick={() => { dirty.current = true; setTurbo(false); }}>{t.turboNo}</button>
+            <button className={chip(turbo)} onClick={() => { dirty.current = true; setTurbo(true); }}>{t.turboYes}</button>
           </div>
           <p className="mb-1.5 mt-3 text-sm text-cream/80">{t.compQ}</p>
           <div className="flex gap-2">
-            <button className={chip(!highComp)} onClick={() => setHighComp(false)}>{t.compNo}</button>
-            <button className={chip(highComp)} onClick={() => setHighComp(true)}>{t.compYes}</button>
+            <button className={chip(!highComp)} onClick={() => { dirty.current = true; setHighComp(false); }}>{t.compNo}</button>
+            <button className={chip(highComp)} onClick={() => { dirty.current = true; setHighComp(true); }}>{t.compYes}</button>
           </div>
           <p className="mt-1.5 text-xs text-cream/45">{t.compHint.replace("{car}", v ? carName(v) : "do carro")}</p>
         </>
+      )}
+
+      {/* Veredito pendente: mostra o formato do resultado com * no lugar dos
+          números que dependem dos preços — o limiar do carro já aparece real */}
+      {!verdict && (
+        <Card className="mt-5 ring-white/10">
+          <p className="font-display text-xl font-bold text-cream/45">⛽ {t.resultPending}</p>
+          <p className="mt-2 text-sm leading-relaxed text-cream/50">
+            {t.ratioLine.replace("{ratio}", "**")}{" "}
+            {t.thresholdLine.replace("{threshold}", String(Math.round(pendingThreshold * 100)))}
+          </p>
+          <p className="mt-2.5 text-xs font-medium text-amber/80">{t.pendingHint}</p>
+        </Card>
       )}
 
       {/* Veredito */}

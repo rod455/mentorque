@@ -1445,6 +1445,8 @@ export function getContent(locale: Locale) {
       compNo: T("Até 12:1 / não sei", "Up to 12:1 / not sure"),
       resultEth: T("Abasteça com ETANOL", "Fill up with ETHANOL"),
       resultGas: T("Abasteça com GASOLINA", "Fill up with GASOLINE"),
+      resultPending: T("Abasteça com ***", "Fill up with ***"),
+      pendingHint: T("Preencha os preços do posto acima para ver o veredito.", "Fill in the pump prices above to see the verdict."),
       ratioLine: T("O etanol está custando {ratio}% do preço da gasolina.", "Ethanol is costing {ratio}% of the gasoline price."),
       thresholdLine: T("No seu carro, ele compensa quando custa menos de {threshold}%.", "In your car, it pays off below {threshold}%."),
       estimatedNote: T("Consumo no etanol estimado pelo perfil do motor (≈ {kml} km/l). Informe os consumos reais para afinar a conta.", "Ethanol mileage estimated from the engine profile (≈ {kml} km/l). Enter real figures to sharpen the math."),
