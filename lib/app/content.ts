@@ -83,7 +83,7 @@ export function getContent(locale: Locale) {
     Honda: ["HR-V", "City", "City Hatchback", "Civic", "WR-V", "ZR-V", "CR-V", "Fit", "Accord"],
     Jeep: ["Renegade", "Compass", "Commander", "Wrangler", "Gladiator"],
     Renault: ["Kwid", "Kardian", "Duster", "Oroch", "Sandero", "Logan", "Stepway", "Captur", "Master", "Megane", "Fluence"],
-    Nissan: ["Kicks", "Versa", "Frontier", "Sentra", "March", "Leaf"],
+    Nissan: ["Kicks", "Versa", "Frontier", "Sentra", "March", "Leaf", "Livina", "GT-R"],
     Ford: ["Ranger", "Territory", "Bronco", "Bronco Sport", "Maverick", "Mustang", "Ka", "Ka Sedan", "EcoSport"],
     Peugeot: ["208", "2008", "3008", "5008", "Partner", "Expert", "Boxer", "308", "408"],
     "Citroën": ["C3", "C3 Aircross", "Basalt", "C4 Cactus", "C4 Lounge", "Jumpy", "Jumper"],
