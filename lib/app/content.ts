@@ -152,9 +152,9 @@ export function getContent(locale: Locale) {
       price: "R$ 150–500",
       observe: [T("Piorou de repente ou aos poucos?", "Did it worsen suddenly or gradually?"), T("Anda muito no trânsito parado?", "Lots of stop-and-go traffic?")],
       checklist: [
-        T("Trocar filtro de ar e de combustível", "Replace air and fuel filters"),
-        T("Limpeza de bicos injetores", "Clean the injectors"),
-        T("Calibrar os pneus", "Set tire pressure"),
+        T("Verificar estado dos filtros de ar e de combustível", "Check the condition of the air and fuel filters"),
+        T("Verificar se os bicos injetores estão sujos", "Check whether the injectors are clogged"),
+        T("Conferir a pressão dos pneus", "Check tire pressure"),
         T("Verificar sensores de mistura", "Check air/fuel sensors"),
       ],
     },
@@ -182,7 +182,7 @@ export function getContent(locale: Locale) {
       price: "R$ 80–400",
       observe: [T("Vibra em alguma velocidade específica?", "Does it vibrate at a specific speed?"), T("Vibra só ao frear?", "Only when braking?")],
       checklist: [
-        T("Balancear e alinhar", "Balance and align"),
+        T("Verificar balanceamento e alinhamento", "Check balancing and alignment"),
         T("Inspecionar desgaste dos pneus", "Inspect tire wear"),
         T("Medir empenamento dos discos", "Measure rotor warping"),
       ],
@@ -198,7 +198,7 @@ export function getContent(locale: Locale) {
       checklist: [
         T("Testar amortecedores (rebote)", "Test the shocks (bounce test)"),
         T("Verificar bieletas, buchas e batentes", "Check links, bushings and bump-stops"),
-        T("Trocar peças aos pares", "Replace parts in pairs"),
+        T("Se precisar trocar: exigir a troca aos pares", "If replacing: insist parts are replaced in pairs"),
         T("Pedir orçamento detalhado", "Ask for an itemized quote"),
       ],
     },
@@ -227,7 +227,7 @@ export function getContent(locale: Locale) {
       urgency: { level: "medium", text: T("Médio – piora o consumo e pode danificar o catalisador", "Medium – worsens consumption and can damage the catalytic converter") },
       price: "R$ 200–800",
       observe: [T("Falha mais na aceleração ou em marcha lenta?", "Misfires more on acceleration or at idle?"), T("A luz do motor piscou?", "Did the engine light flash?")],
-      checklist: [T("Verificar velas, cabos e bobinas", "Check plugs, wires and coils"), T("Ler códigos com scanner OBD2", "Read codes with an OBD2 scanner"), T("Limpeza de bicos injetores", "Clean the injectors"), T("Pedir orçamento detalhado", "Ask for an itemized quote")],
+      checklist: [T("Verificar velas, cabos e bobinas", "Check plugs, wires and coils"), T("Ler códigos com scanner OBD2", "Read codes with an OBD2 scanner"), T("Verificar se os bicos injetores precisam de limpeza", "Check whether the injectors need cleaning"), T("Pedir orçamento detalhado", "Ask for an itemized quote")],
     },
     {
       id: "engine-power-loss",
@@ -237,7 +237,7 @@ export function getContent(locale: Locale) {
       urgency: { level: "medium", text: T("Médio – diagnostique antes de viagens longas", "Medium – diagnose before long trips") },
       price: "R$ 150–1.200",
       observe: [T("Entrou em 'modo de emergência' (rpm limitado)?", "Did it go into limp mode (limited rpm)?"), T("Perdeu força de repente ou aos poucos?", "Sudden or gradual power loss?")],
-      checklist: [T("Trocar filtros de ar e combustível", "Replace air and fuel filters"), T("Ler códigos OBD2", "Read OBD2 codes"), T("Verificar sistema de turbo/admissão", "Check the turbo/intake system"), T("Pedir orçamento detalhado", "Ask for an itemized quote")],
+      checklist: [T("Verificar estado dos filtros de ar e combustível", "Check the condition of the air and fuel filters"), T("Ler códigos OBD2", "Read OBD2 codes"), T("Verificar sistema de turbo/admissão", "Check the turbo/intake system"), T("Pedir orçamento detalhado", "Ask for an itemized quote")],
     },
     {
       id: "engine-smoke",
@@ -259,7 +259,7 @@ export function getContent(locale: Locale) {
       urgency: { level: "high", text: T("Alto – item de segurança; não rode assim", "High – safety item; don't drive like this") },
       price: "R$ 120–600",
       observe: [T("O pedal vai quase até o fundo?", "Does the pedal go almost to the floor?"), T("O nível do fluido está baixo?", "Is the fluid level low?")],
-      checklist: [T("Verificar nível e cor do fluido de freio", "Check brake fluid level and color"), T("Sangrar o sistema (tirar o ar)", "Bleed the system (remove air)"), T("Procurar vazamentos nas rodas", "Look for leaks at the wheels"), T("Pedir orçamento detalhado", "Ask for an itemized quote")],
+      checklist: [T("Verificar nível e cor do fluido de freio", "Check brake fluid level and color"), T("Verificar se há ar no sistema (pede sangria)", "Check for air in the system (needs bleeding)"), T("Procurar vazamentos nas rodas", "Look for leaks at the wheels"), T("Pedir orçamento detalhado", "Ask for an itemized quote")],
     },
     {
       id: "brake-pull",
@@ -269,7 +269,7 @@ export function getContent(locale: Locale) {
       urgency: { level: "medium", text: T("Médio – afeta a segurança em frenagens fortes", "Medium – affects safety under hard braking") },
       price: "R$ 150–700",
       observe: [T("Puxa só ao frear ou o tempo todo?", "Pulls only when braking or all the time?"), T("Para qual lado puxa?", "Which side does it pull to?")],
-      checklist: [T("Verificar pinças e pistões", "Check calipers and pistons"), T("Medir espessura das pastilhas dos dois lados", "Measure pad thickness on both sides"), T("Calibrar os pneus", "Set tire pressure"), T("Pedir orçamento detalhado", "Ask for an itemized quote")],
+      checklist: [T("Verificar pinças e pistões", "Check calipers and pistons"), T("Medir espessura das pastilhas dos dois lados", "Measure pad thickness on both sides"), T("Conferir a pressão dos pneus", "Check tire pressure"), T("Pedir orçamento detalhado", "Ask for an itemized quote")],
     },
 
     // ── Suspensão / Direção ──────────────────────────────────
@@ -291,7 +291,7 @@ export function getContent(locale: Locale) {
       urgency: { level: "medium", text: T("Médio – aumenta a distância de frenagem", "Medium – increases braking distance") },
       price: "R$ 400–1.800",
       observe: [T("Continua balançando depois de uma lombada?", "Keeps bouncing after a speed bump?"), T("Desce mais de um lado?", "Sits lower on one side?")],
-      checklist: [T("Teste de amortecedores (bate-e-solta)", "Bounce test on the shocks"), T("Verificar molas e batentes", "Check springs and bump stops"), T("Alinhar e balancear depois", "Align and balance afterward"), T("Pedir orçamento detalhado", "Ask for an itemized quote")],
+      checklist: [T("Teste de amortecedores (bate-e-solta)", "Bounce test on the shocks"), T("Verificar molas e batentes", "Check springs and bump stops"), T("Se trocar amortecedores: alinhar e balancear depois", "If replacing shocks: align and balance afterward"), T("Pedir orçamento detalhado", "Ask for an itemized quote")],
     },
 
     // ── Pneus & Rodas ────────────────────────────────────────
@@ -303,7 +303,7 @@ export function getContent(locale: Locale) {
       urgency: { level: "medium", text: T("Médio – encurta a vida do pneu e da segurança", "Medium – shortens tire life and safety") },
       price: "R$ 80–500",
       observe: [T("Gasta mais na borda interna ou externa?", "Wears more on the inner or outer edge?"), T("O volante está centralizado em reta?", "Is the wheel centered when going straight?")],
-      checklist: [T("Alinhar e balancear", "Align and balance"), T("Inspecionar componentes da suspensão", "Inspect suspension parts"), T("Fazer rodízio dos pneus", "Rotate the tires"), T("Calibrar corretamente", "Set correct pressure")],
+      checklist: [T("Verificar alinhamento e geometria", "Check alignment and geometry"), T("Inspecionar componentes da suspensão", "Inspect suspension parts"), T("Conferir se o rodízio dos pneus está em dia", "Check whether tire rotation is up to date"), T("Conferir a pressão correta", "Check for correct pressure")],
     },
     {
       id: "tire-pressure-loss",
@@ -313,7 +313,7 @@ export function getContent(locale: Locale) {
       urgency: { level: "medium", text: T("Médio – calibre e inspecione antes de rodar muito", "Medium – inflate and inspect before driving far") },
       price: "R$ 30–300",
       observe: [T("Esvazia rápido ou aos poucos?", "Deflates fast or slowly?"), T("Só um pneu ou vários?", "One tire or several?")],
-      checklist: [T("Localizar o furo (água e sabão)", "Find the leak (soapy water)"), T("Verificar a válvula", "Check the valve"), T("Conferir se a roda está empenada", "Check if the wheel is bent"), T("Reparar ou trocar o pneu", "Repair or replace the tire")],
+      checklist: [T("Localizar o furo (água e sabão)", "Find the leak (soapy water)"), T("Verificar a válvula", "Check the valve"), T("Conferir se a roda está empenada", "Check if the wheel is bent"), T("Avaliar se o pneu tem reparo ou precisa trocar", "Assess whether the tire can be repaired or must be replaced")],
     },
 
     // ── Elétrica ─────────────────────────────────────────────
@@ -335,7 +335,7 @@ export function getContent(locale: Locale) {
       urgency: { level: "medium", text: T("Médio – pode indicar problema de carga", "Medium – may point to a charging problem") },
       price: "R$ 80–800",
       observe: [T("Enfraquecem em marcha lenta?", "Do they dim at idle?"), T("Piora ao ligar o ar ou o som?", "Worse with A/C or stereo on?")],
-      checklist: [T("Medir tensão com o motor ligado", "Measure voltage with engine running"), T("Limpar e apertar terminais", "Clean and tighten terminals"), T("Verificar alternador", "Check the alternator"), T("Checar aterramentos", "Check grounding points")],
+      checklist: [T("Medir tensão com o motor ligado", "Measure voltage with engine running"), T("Verificar terminais (folga e oxidação)", "Check terminals (looseness and corrosion)"), T("Verificar alternador", "Check the alternator"), T("Checar aterramentos", "Check grounding points")],
     },
     {
       id: "ac-not-cooling",
@@ -345,7 +345,7 @@ export function getContent(locale: Locale) {
       urgency: { level: "low", text: T("Baixo – conforto; resolva quando puder", "Low – comfort; handle when convenient") },
       price: "R$ 120–1.500",
       observe: [T("Sai ar, mas quente?", "Air comes out, but warm?"), T("Faz barulho ao ligar o A/C?", "Any noise when turning on A/C?")],
-      checklist: [T("Verificar carga de gás e vazamentos", "Check refrigerant charge and leaks"), T("Testar o compressor", "Test the compressor"), T("Trocar filtro de cabine", "Replace the cabin filter"), T("Higienizar o sistema", "Sanitize the system")],
+      checklist: [T("Verificar carga de gás e vazamentos", "Check refrigerant charge and leaks"), T("Testar o compressor", "Test the compressor"), T("Verificar filtro de cabine (sujeira)", "Check the cabin filter (dirt)"), T("Avaliar se precisa de higienização", "Assess whether it needs sanitizing")],
     },
   ];
 
@@ -1489,8 +1489,11 @@ export function getContent(locale: Locale) {
     },
 
     checklist: {
-      title: T("Checklist", "Checklist"),
-      intro: T("Leve isto para a oficina — peça item por item.", "Take this to the shop — ask item by item."),
+      title: T("O que verificar", "What to check"),
+      intro: T(
+        "Estas são as áreas que têm relação com este problema — é aqui que a oficina deve olhar. Se sugerirem serviços fora desta lista, pergunte o motivo antes de aprovar.",
+        "These are the areas related to this problem — this is where the shop should look. If they suggest work outside this list, ask why before approving."
+      ),
       notes: T("Anotações do orçamento", "Quote notes"),
       notesPh: T("ex.: trocar só as dianteiras", "e.g. front pads only"),
       total: T("Valor total do orçamento (R$)", "Total quote (R$)"),
