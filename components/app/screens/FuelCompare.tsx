@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { compareFuel, energyRatio, engineFactorK, engineLooksTurbo } from "@/lib/app/fuelCompare";
 import { carName } from "@/lib/app/content";
-import { AppHeader, Card, UpgradeBanner, inputCls, useContent } from "../ui";
+import { AppHeader, Card, PinButton, UpgradeBanner, inputCls, useContent } from "../ui";
 import { Button } from "@/components/ui/Button";
 
 // Etanol × Gasolina — decide qual combustível compensa no posto.
@@ -194,10 +194,11 @@ export function FuelCompareScreen() {
 
       <p className="mt-4 text-xs leading-relaxed text-cream/45">{t.redo}</p>
 
-      {/* Botões padrão: concluir + salvar */}
+      {/* Botões padrão: concluir + salvar + fixar */}
       <div className="mt-5 flex gap-2">
         <Button className="flex-1" onClick={() => markLessonSeen("fuel-compare")}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
         <Button variant="ghost" className="flex-1" onClick={() => toggleLessonSaved("fuel-compare")}>{saved ? `★ ${c.learn.savedLabel}` : `☆ ${c.learn.saveLater}`}</Button>
+        <PinButton id="fuel-compare" />
       </div>
       {!s.premium && <UpgradeBanner ctx="learn" text={c.paywalls.learn.title} />}
     </div>

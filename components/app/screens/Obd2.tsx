@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
-import { AppHeader, Card, SeverityDot, UpgradeBanner, inputCls, useContent } from "../ui";
+import { AppHeader, Card, PinButton, SeverityDot, UpgradeBanner, inputCls, useContent } from "../ui";
 import { Button } from "@/components/ui/Button";
 import { VideoPlayer } from "../VideoPlayer";
 
@@ -144,10 +144,11 @@ export function Obd2Screen() {
       <p className="mb-2 mt-6 font-serif text-lg font-bold text-cream">{t.searchTitle}</p>
       <Obd2Lookup />
 
-      {/* Botões padrão: concluir + salvar */}
+      {/* Botões padrão: concluir + salvar + fixar */}
       <div className="mt-6 flex gap-2">
         <Button className="flex-1" onClick={() => markLessonSeen("read-obd2")}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
         <Button variant="ghost" className="flex-1" onClick={() => toggleLessonSaved("read-obd2")}>{saved ? `★ ${c.learn.savedLabel}` : `☆ ${c.learn.saveLater}`}</Button>
+        <PinButton id="read-obd2" />
       </div>
       {!s.premium && <UpgradeBanner ctx="learn" text={c.paywalls.learn.title} />}
     </div>
@@ -222,10 +223,11 @@ export function Obd2ScanScreen() {
         <Obd2Lookup />
       </div>
 
-      {/* Botões padrão: concluir + salvar */}
+      {/* Botões padrão: concluir + salvar + fixar */}
       <div className="mt-6 flex gap-2">
         <Button className="flex-1" onClick={() => markLessonSeen("obd2-scan")}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
         <Button variant="ghost" className="flex-1" onClick={() => toggleLessonSaved("obd2-scan")}>{saved ? `★ ${c.learn.savedLabel}` : `☆ ${c.learn.saveLater}`}</Button>
+        <PinButton id="obd2-scan" />
       </div>
       {!s.premium && <UpgradeBanner ctx="learn" text={c.paywalls.learn.title} />}
     </div>

@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { useI18n } from "@/lib/i18n";
 import { getContent } from "@/lib/app/content";
+import { usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
 import { isNativeApp } from "@/lib/app/wrapper";
 import type { Access, Severity } from "@/lib/app/types";
@@ -354,5 +355,25 @@ export function ProgressDots({ total, index }: { total: number; index: number })
         />
       ))}
     </div>
+  );
+}
+
+// Botão 📌 de fixar conteúdo na Home (seção "Fixados", abaixo do carro).
+// Quadrado, entra ao lado de Concluir/Salvar no rodapé das aulas.
+export function PinButton({ id }: { id: string }) {
+  const c = useContent();
+  const { s, toggleLessonPinned } = usePrototype();
+  const pinned = (s.pinnedLessons ?? []).includes(id);
+  return (
+    <button
+      onClick={() => toggleLessonPinned(id)}
+      aria-label={pinned ? c.learn.pinned : c.learn.pin}
+      title={pinned ? c.learn.pinned : c.learn.pin}
+      className={`grid h-12 w-12 shrink-0 place-items-center rounded-full text-lg ring-1 transition-colors ${
+        pinned ? "bg-amber/15 ring-amber" : "bg-transparent ring-white/15 opacity-60 hover:opacity-100"
+      }`}
+    >
+      📌
+    </button>
   );
 }

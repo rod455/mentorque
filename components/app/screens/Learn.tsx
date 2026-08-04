@@ -6,7 +6,7 @@ import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { carName, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, Chip, Icon, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
+import { AppHeader, Card, Chip, Icon, PinButton, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
 import { VideoPlayer } from "../VideoPlayer";
 import { AdOverlay, adsEnabled } from "../AdGate";
 
@@ -279,7 +279,7 @@ export function SavedLessonsScreen() {
 // 2.6.C — Detalhe do conteúdo (tutorial com passos OU artigo com parágrafos)
 export function ContentScreen({ id }: { id: string }) {
   const c = useContent();
-  const { s, markLessonSeen, toggleLessonSaved } = usePrototype();
+  const { s, markLessonSeen, toggleLessonSaved, toggleLessonPinned } = usePrototype();
   const lesson = c.lessons.find((l) => l.id === id);
   const [level, setLevel] = useState<"iniciante" | "avancado" | "mecanico">("avancado");
   // Concluído e Salvo são ações do usuário (botões) — persistem na sessão.
@@ -370,6 +370,7 @@ export function ContentScreen({ id }: { id: string }) {
       <div className="mt-6 flex gap-2">
         <Button className="flex-1" onClick={() => markLessonSeen(lesson.id)}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
         <Button variant="ghost" className="flex-1" onClick={() => toggleLessonSaved(lesson.id)}>{saved ? `★ ${c.learn.savedLabel}` : `☆ ${c.learn.saveLater}`}</Button>
+        <PinButton id={lesson.id} />
       </div>
       {!s.premium && <UpgradeBanner ctx="learn" text={c.paywalls.learn.title} />}
     </div>

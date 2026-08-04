@@ -24,6 +24,7 @@ type Session = {
   momentPhotos: Record<string, string>; // momento id → foto (data URL)
   seenLessons: string[]; // aulas concluídas pelo usuário
   savedLessons: string[]; // aulas salvas para ver depois
+  pinnedLessons: string[]; // conteúdos fixados na Home (abaixo do carro)
   startedAt: string | null; // primeiro dia no app (para marcos de tempo)
   notifications: boolean; // preferência de notificações
   units: "metric" | "imperial"; // preferência de unidades
@@ -44,6 +45,7 @@ const EMPTY: Session = {
   momentPhotos: {},
   seenLessons: [],
   savedLessons: [],
+  pinnedLessons: [],
   startedAt: null,
   notifications: false,
   units: "metric",
@@ -74,6 +76,7 @@ type StoreValue = {
   toggleMilestone: (id: string) => void;
   markLessonSeen: (id: string) => void; // alterna concluído/não concluído
   toggleLessonSaved: (id: string) => void; // alterna salvo para ver depois
+  toggleLessonPinned: (id: string) => void; // alterna fixado na Home
   setMomentPhoto: (id: string, dataUrl: string | null) => void;
   setNotifications: (v: boolean) => void;
   setUnits: (v: "metric" | "imperial") => void;
@@ -96,6 +99,7 @@ function migrate(parsed: any): Session {
     if (!sess.momentPhotos || typeof sess.momentPhotos !== "object") sess.momentPhotos = {};
     if (!Array.isArray(sess.seenLessons)) sess.seenLessons = [];
     if (!Array.isArray(sess.savedLessons)) sess.savedLessons = [];
+    if (!Array.isArray(sess.pinnedLessons)) sess.pinnedLessons = [];
     if (!sess.startedAt) sess.startedAt = todayISO();
     return sess;
   }
@@ -140,6 +144,7 @@ function mergeSessions(cloud: Session, local: Session): Session {
     momentPhotos: { ...(local.momentPhotos ?? {}), ...(cloud.momentPhotos ?? {}) },
     seenLessons: [...new Set([...(cloud.seenLessons ?? []), ...(local.seenLessons ?? [])])],
     savedLessons: [...new Set([...(cloud.savedLessons ?? []), ...(local.savedLessons ?? [])])],
+    pinnedLessons: [...new Set([...(cloud.pinnedLessons ?? []), ...(local.pinnedLessons ?? [])])],
     startedAt: [cloud.startedAt, local.startedAt].filter(Boolean).sort()[0] ?? todayISO(),
     notifications: cloud.notifications ?? local.notifications ?? false,
     units: cloud.units ?? local.units ?? "metric",
@@ -323,6 +328,16 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
     [patch]
   );
 
+  const toggleLessonPinned = useCallback(
+    (id: string) =>
+      patch((p) => {
+        const had = p.pinnedLessons.includes(id);
+        trackContent(id, had ? "unpin" : "pin");
+        return { ...p, pinnedLessons: had ? p.pinnedLessons.filter((l) => l !== id) : [...p.pinnedLessons, id] };
+      }),
+    [patch]
+  );
+
   const setMomentPhoto = useCallback(
     (id: string, dataUrl: string | null) =>
       patch((p) => {
@@ -346,8 +361,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const es = useMemo(() => (subActive && !s.premium ? { ...s, premium: true } : s), [s, subActive]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s: es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, setMomentPhoto, setNotifications, setUnits, setAvatar, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
-    [es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, setMomentPhoto, setNotifications, setUnits, setAvatar, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
+    () => ({ s: es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, setMomentPhoto, setNotifications, setUnits, setAvatar, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
+    [es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, setMomentPhoto, setNotifications, setUnits, setAvatar, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

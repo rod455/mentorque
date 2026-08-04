@@ -23,7 +23,7 @@ function levelPref(phaseIndex: number): "facil" | "medio" | "avancado" {
 // - salvos vão pro FIM da lista (mesmo se concluídos) — ficam à mão;
 // - concluído e NÃO salvo sai da seção;
 // - o resto vem primeiro, por relevância.
-function forYou(lessons: Lesson[], opts: { make?: string; pref: string; seen: string[]; saved: string[] }): Lesson[] {
+function forYou(lessons: Lesson[], opts: { make?: string; pref: string; seen: string[]; saved: string[]; pinned: string[] }): Lesson[] {
   const make = opts.make?.toLowerCase();
   const score = (l: Lesson) => {
     let n = 0;
@@ -34,7 +34,10 @@ function forYou(lessons: Lesson[], opts: { make?: string; pref: string; seen: st
   };
   // "obd2-scan" vive só na área de Estudos — no Para você fica a aula
   // "Luz de injeção ligada? Descubra!" (read-obd2), que leva até ela.
-  const pool = lessons.filter((l) => l.id !== "obd2-scan" && !opts.seen.includes(l.id) && !opts.saved.includes(l.id));
+  // Fixados vivem na seção própria (abaixo do carro) — fora do Para você.
+  const pool = lessons.filter(
+    (l) => l.id !== "obd2-scan" && !opts.seen.includes(l.id) && !opts.saved.includes(l.id) && !opts.pinned.includes(l.id)
+  );
   // Conteúdo novo (addedAt ≤ 7 dias) vai para a frente, do mais recente para
   // o mais antigo; o resto segue por relevância.
   const news = pool.filter((l) => isNewLesson(l)).sort((a, b) => (b.addedAt ?? "").localeCompare(a.addedAt ?? ""));
@@ -43,6 +46,7 @@ function forYou(lessons: Lesson[], opts: { make?: string; pref: string; seen: st
   // Salvos na ordem em que foram guardados — SEMPRE presentes no fim da
   // lista (o corte de 8 vale só para as sugestões, senão o salvo some).
   const savedList = opts.saved
+    .filter((id) => !opts.pinned.includes(id))
     .map((id) => lessons.find((l) => l.id === id))
     .filter((l): l is Lesson => !!l)
     .slice(0, 4);
@@ -66,7 +70,11 @@ export function HomeScreen() {
   const status = computeStatus(s);
   const seen = s.seenLessons ?? [];
   const savedIds = s.savedLessons ?? [];
-  const picks = forYou(c.lessons, { make: car?.make, pref: levelPref(status.phaseIndex), seen, saved: savedIds });
+  const pinnedIds = s.pinnedLessons ?? [];
+  const pinnedList = pinnedIds
+    .map((id) => c.lessons.find((l) => l.id === id))
+    .filter((l): l is Lesson => !!l);
+  const picks = forYou(c.lessons, { make: car?.make, pref: levelPref(status.phaseIndex), seen, saved: savedIds, pinned: pinnedIds });
 
   // Memórias: marcos e momentos conquistados, priorizando Momentos.
   const memories = MILESTONES.filter((m) => m.earned(s)).sort(
@@ -153,6 +161,36 @@ export function HomeScreen() {
             </div>
           </Card>
         </button>
+      )}
+
+      {/* Fixados — conteúdos que o usuário usa com frequência (📌 nas aulas) */}
+      {pinnedList.length > 0 && (
+        <section className="mt-5">
+          <h3 className="mb-2 font-serif text-lg font-bold text-cream">{h.pinnedTitle}</h3>
+          <div className="space-y-2">
+            {pinnedList.map((l) => {
+              const locked = l.premium && !s.premium;
+              return (
+                <button
+                  key={l.id}
+                  onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
+                  className="flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/5 hover:ring-amber/30"
+                >
+                  <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl bg-amber/10 text-amber/80">
+                    {l.thumb ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={l.thumb} alt="" className="h-full w-full object-cover" draggable={false} />
+                    ) : (
+                      <Icon name={typeIcon(l.type)} className="h-5 w-5" />
+                    )}
+                  </span>
+                  <span className="min-w-0 flex-1 truncate font-display text-sm text-cream/90">{l.title}</span>
+                  <span aria-hidden className="shrink-0 text-amber">📌</span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
       )}
 
       {/* Para você — sugestões de conteúdo (quadrados de mesmo tamanho) */}

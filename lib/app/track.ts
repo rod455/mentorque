@@ -4,7 +4,7 @@ import { getBrowserSupabase } from "@/lib/supabaseBrowser";
 
 // Registro de engajamento por conteúdo (fire-and-forget, nunca bloqueia a UI).
 // Vai para public.content_events; leitura só pelo painel (RLS sem SELECT).
-export type ContentEvent = "open" | "complete" | "uncomplete" | "save" | "unsave";
+export type ContentEvent = "open" | "complete" | "uncomplete" | "save" | "unsave" | "pin" | "unpin";
 
 // Dedup de "open" na sessão: reabrir a mesma aula no mesmo pageview não conta.
 const openedThisSession = new Set<string>();
