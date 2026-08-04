@@ -477,6 +477,18 @@ export function getContent(locale: Locale) {
       safety: [T("Não dirija com a luz piscando", "Don't drive with a flashing light")],
     },
     {
+      id: "obd2-scan",
+      track: "diagnosis",
+      title: T("Como escanear com o seu leitor OBD2", "How to scan with your OBD2 reader"),
+      type: "video",
+      system: "engine",
+      // TODO: troque pelo link/ID do YouTube real desta aula.
+      media: { provider: "youtube", src: "jNQXAC9IVRw" },
+      need: [T("Leitor OBD2 (Bluetooth ou cabo)", "OBD2 reader (Bluetooth or cable)"), T("App de leitura no celular", "A reader app on your phone")],
+      steps: [T("Encontre a porta OBD2", "Find the OBD2 port"), T("Conecte e pareie o leitor", "Plug in and pair the reader"), T("Leia e anote os códigos", "Read and note the codes")],
+      safety: [T("Não apague códigos antes de resolver a causa", "Don't clear codes before fixing the cause")],
+    },
+    {
       id: "fuel-compare",
       track: "money",
       title: T("Etanol ou gasolina: qual compensa?", "Ethanol or gasoline: which pays off?"),
@@ -1431,6 +1443,25 @@ export function getContent(locale: Locale) {
         "Um scanner OBD2. Os de tomada Bluetooth (tipo ELM327) custam a partir de ~R$ 30 e funcionam com apps gratuitos no celular. É só plugar na porta (geralmente embaixo do volante), parear e ler os códigos.",
         "An OBD2 scanner. Bluetooth dongles (ELM327-style) start at ~$10 and work with free phone apps. Plug it into the port (usually under the steering wheel), pair it and read the codes."
       ),
+      scanCta: T("Como escanear corretamente com o seu leitor", "How to scan correctly with your reader"),
+      scanTitle: T("Como escanear com o OBD2", "How to scan with OBD2"),
+      scanIntro: T(
+        "Ler os códigos do carro é mais simples do que parece: são 2 minutos entre plugar o leitor e ter a resposta na tela do celular. Veja onde fica a porta, como conectar e o que fazer com o resultado.",
+        "Reading your car's codes is simpler than it looks: about 2 minutes from plugging the reader to seeing the answer on your phone. Here's where the port is, how to connect and what to do with the result."
+      ),
+      whereTitle: T("Onde fica a porta OBD2", "Where the OBD2 port is"),
+      whereBody: T(
+        "Na grande maioria dos carros, a porta fica embaixo do painel, do lado do motorista — perto da coluna da direção, na altura dos joelhos. Em alguns modelos ela vem escondida atrás de uma tampinha plástica ou perto da caixa de fusíveis. É um conector trapezoidal de 16 pinos.",
+        "In most cars the port sits under the dash on the driver's side — near the steering column, at knee height. In some models it hides behind a small plastic cover or near the fuse box. It's a 16-pin trapezoid connector."
+      ),
+      stepsTitle: T("Passo a passo da leitura", "Reading, step by step"),
+      scanSteps: [
+        T("Com o carro desligado, encaixe o leitor na porta OBD2 até firmar.", "With the car off, plug the reader into the OBD2 port until it's snug."),
+        T("Ligue a ignição SEM dar partida (painel aceso). Alguns leitores também funcionam com o motor ligado.", "Turn the ignition ON without starting (dash lights on). Some readers also work with the engine running."),
+        T("No celular, ative o Bluetooth e abra o app do leitor (ex.: Torque, Car Scanner, ELM327). Pareie com o dispositivo — o PIN costuma ser 1234 ou 0000.", "On your phone, enable Bluetooth and open the reader app (e.g. Torque, Car Scanner, ELM327). Pair with the device — the PIN is usually 1234 or 0000."),
+        T("Toque em \"Ler códigos\" (ou \"Diagnóstico\") e aguarde alguns segundos.", "Tap \"Read codes\" (or \"Diagnostics\") and wait a few seconds."),
+        T("Anote os códigos que aparecerem (ex.: P0300) e consulte o significado logo abaixo. Evite apagar os códigos antes de resolver a causa — a luz volta e você perde o histórico.", "Note the codes that appear (e.g. P0300) and look up their meaning below. Avoid clearing codes before fixing the cause — the light comes back and you lose the history."),
+      ],
       searchTitle: T("Consultar um código", "Look up a code"),
       searchPh: T("Digite o código — ex.: P0300", "Type the code — e.g. P0300"),
       system: T("Sistema", "System"),

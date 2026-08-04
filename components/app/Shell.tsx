@@ -18,7 +18,7 @@ import { RevisionsScreen } from "./screens/Revisions";
 import { LearnScreen, StudyTrackScreen, ForYourCarScreen, SavedLessonsScreen, ContentScreen, BielaChatScreen } from "./screens/Learn";
 import { EquipmentScreen } from "./screens/Equipment";
 import { EquipmentHowToScreen } from "./screens/EquipmentHowTo";
-import { Obd2Screen } from "./screens/Obd2";
+import { Obd2Screen, Obd2ScanScreen } from "./screens/Obd2";
 import { FuelCompareScreen } from "./screens/FuelCompare";
 import { CarSettingsScreen } from "./screens/CarSettings";
 import { ProfileScreen, SubscribeScreen, CheckoutScreen } from "./screens/Profile";
@@ -143,6 +143,7 @@ function Router() {
       // "Aulas"-ferramenta abrem a página real (OBD2, Etanol × Gasolina).
       case "content":
         if (view.id === "read-obd2") return <Obd2Screen />;
+        if (view.id === "obd2-scan") return <Obd2ScanScreen />;
         if (view.id === "fuel-compare") return <FuelCompareScreen />;
         return <ContentScreen id={view.id} />;
       case "carSettings": return <CarSettingsScreen />;

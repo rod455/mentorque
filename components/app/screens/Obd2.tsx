@@ -5,15 +5,15 @@ import { usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
 import { AppHeader, Card, SeverityDot, inputCls, useContent } from "../ui";
 import { Button } from "@/components/ui/Button";
+import { VideoPlayer } from "../VideoPlayer";
 
-// 2.2.E — Códigos OBD2: o que são, a ferramenta e a consulta com autocomplete.
-// Concluir é ação do usuário (botão no fim), como nas outras aulas.
-export function Obd2Screen() {
+// Consulta de códigos com autocomplete — usada na página de códigos e na de
+// "como escanear". "Aprofunde" monta a pergunta pro Biela (premium).
+function Obd2Lookup() {
   const c = useContent();
   const t = c.obd2;
-  const { s, markLessonSeen } = usePrototype();
+  const { s } = usePrototype();
   const { go } = useNav();
-  const done = (s.seenLessons ?? []).includes("read-obd2");
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [picked, setPicked] = useState<(typeof t.codes)[number] | null>(null);
@@ -32,7 +32,6 @@ export function Obd2Screen() {
     setOpen(false);
   };
 
-  // "Aprofunde": monta a pergunta pro Biela; sem premium vai pro paywall.
   const deepen = (code: string, meaning?: string) => {
     const seed = meaning
       ? t.deepenSeed.replace("{code}", code).replace("{meaning}", meaning)
@@ -41,26 +40,7 @@ export function Obd2Screen() {
   };
 
   return (
-    <div>
-      <AppHeader title={t.title} />
-
-      {/* O que são os códigos */}
-      <p className="text-sm leading-relaxed text-cream/70">{t.intro}</p>
-      <p className="mt-2.5 text-sm leading-relaxed text-cream/70">{t.howToRead}</p>
-
-      {/* Ferramenta necessária */}
-      <Card className="mt-4">
-        <div className="flex items-start gap-3">
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-amber/15 text-2xl">🔌</span>
-          <div className="min-w-0 flex-1">
-            <p className="font-display text-[15px] font-semibold text-cream">{t.toolTitle}</p>
-            <p className="mt-1 text-sm leading-relaxed text-cream/65">{t.toolBody}</p>
-          </div>
-        </div>
-      </Card>
-
-      {/* Consulta com autocomplete */}
-      <p className="mb-2 mt-6 font-serif text-lg font-bold text-cream">{t.searchTitle}</p>
+    <>
       <div className="relative">
         <input
           value={q}
@@ -117,9 +97,112 @@ export function Obd2Screen() {
           </Button>
         </Card>
       )}
+    </>
+  );
+}
+
+// 2.2.E — Códigos OBD2: o que são, a ferramenta e a consulta com autocomplete.
+// Concluir é ação do usuário (botão no fim), como nas outras aulas.
+export function Obd2Screen() {
+  const c = useContent();
+  const t = c.obd2;
+  const { s, markLessonSeen } = usePrototype();
+  const { go } = useNav();
+  const done = (s.seenLessons ?? []).includes("read-obd2");
+
+  return (
+    <div>
+      <AppHeader title={t.title} />
+
+      {/* O que são os códigos */}
+      <p className="text-sm leading-relaxed text-cream/70">{t.intro}</p>
+      <p className="mt-2.5 text-sm leading-relaxed text-cream/70">{t.howToRead}</p>
+
+      {/* Ferramenta necessária */}
+      <Card className="mt-4">
+        <div className="flex items-start gap-3">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-amber/15 text-2xl">🔌</span>
+          <div className="min-w-0 flex-1">
+            <p className="font-display text-[15px] font-semibold text-cream">{t.toolTitle}</p>
+            <p className="mt-1 text-sm leading-relaxed text-cream/65">{t.toolBody}</p>
+          </div>
+        </div>
+      </Card>
+
+      {/* Como escanear — aula com vídeo e passo a passo */}
+      <button
+        onClick={() => go({ name: "content", id: "obd2-scan" })}
+        className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-amber/10 px-4 py-3.5 text-left ring-1 ring-amber/30 hover:ring-amber/50"
+      >
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber/15 text-lg">🎬</span>
+        <span className="min-w-0 flex-1 font-display text-sm font-semibold text-cream">{t.scanCta}</span>
+        <span className="text-amber">›</span>
+      </button>
+
+      {/* Consulta com autocomplete */}
+      <p className="mb-2 mt-6 font-serif text-lg font-bold text-cream">{t.searchTitle}</p>
+      <Obd2Lookup />
 
       {/* Concluído — mesma mecânica das outras aulas */}
       <Button variant="secondary" className="mt-6 w-full" onClick={() => markLessonSeen("read-obd2")}>
+        {done ? `✓ ${c.learn.completed}` : c.learn.complete}
+      </Button>
+    </div>
+  );
+}
+
+// Como escanear com o leitor OBD2: vídeo, onde fica a porta, passo a passo da
+// leitura e, no fim, a mesma consulta de códigos.
+export function Obd2ScanScreen() {
+  const c = useContent();
+  const t = c.obd2;
+  const { s, markLessonSeen } = usePrototype();
+  const done = (s.seenLessons ?? []).includes("obd2-scan");
+  const lesson = c.lessons.find((l) => l.id === "obd2-scan");
+
+  return (
+    <div>
+      <AppHeader title={t.scanTitle} />
+
+      <p className="text-sm leading-relaxed text-cream/70">{t.scanIntro}</p>
+
+      {/* Vídeo da aula */}
+      {lesson?.media && (
+        <div className="mt-4">
+          <VideoPlayer media={lesson.media} />
+        </div>
+      )}
+
+      {/* Onde fica a porta */}
+      <Card className="mt-4">
+        <div className="flex items-start gap-3">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-teal/15 text-2xl">📍</span>
+          <div className="min-w-0 flex-1">
+            <p className="font-display text-[15px] font-semibold text-cream">{t.whereTitle}</p>
+            <p className="mt-1 text-sm leading-relaxed text-cream/65">{t.whereBody}</p>
+          </div>
+        </div>
+      </Card>
+
+      {/* Passo a passo */}
+      <p className="mb-2 mt-6 font-serif text-lg font-bold text-cream">{t.stepsTitle}</p>
+      <div className="space-y-2">
+        {t.scanSteps.map((step, i) => (
+          <div key={i} className="flex items-start gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 ring-1 ring-white/5">
+            <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-amber/15 font-display text-xs font-bold text-amber">
+              {i + 1}
+            </span>
+            <p className="text-sm leading-relaxed text-cream/80">{step}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Consulta de códigos — a mesma da página de códigos */}
+      <p className="mb-2 mt-6 font-serif text-lg font-bold text-cream">{t.searchTitle}</p>
+      <Obd2Lookup />
+
+      {/* Concluído — mesma mecânica das outras aulas */}
+      <Button variant="secondary" className="mt-6 w-full" onClick={() => markLessonSeen("obd2-scan")}>
         {done ? `✓ ${c.learn.completed}` : c.learn.complete}
       </Button>
     </div>
