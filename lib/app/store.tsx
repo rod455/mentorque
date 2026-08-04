@@ -77,6 +77,7 @@ type StoreValue = {
   markLessonSeen: (id: string) => void; // alterna concluído/não concluído
   toggleLessonSaved: (id: string) => void; // alterna salvo para ver depois
   toggleLessonPinned: (id: string) => void; // alterna fixado na Home
+  moveLessonPinned: (id: string, delta: -1 | 1) => void; // sobe/desce um fixado
   setMomentPhoto: (id: string, dataUrl: string | null) => void;
   setNotifications: (v: boolean) => void;
   setUnits: (v: "metric" | "imperial") => void;
@@ -338,6 +339,20 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
     [patch]
   );
 
+  // Reordena um fixado (delta -1 sobe, +1 desce) — o usuário escolhe a ordem.
+  const moveLessonPinned = useCallback(
+    (id: string, delta: -1 | 1) =>
+      patch((p) => {
+        const arr = [...p.pinnedLessons];
+        const i = arr.indexOf(id);
+        const j = i + delta;
+        if (i < 0 || j < 0 || j >= arr.length) return p;
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+        return { ...p, pinnedLessons: arr };
+      }),
+    [patch]
+  );
+
   const setMomentPhoto = useCallback(
     (id: string, dataUrl: string | null) =>
       patch((p) => {
@@ -361,8 +376,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const es = useMemo(() => (subActive && !s.premium ? { ...s, premium: true } : s), [s, subActive]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s: es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, setMomentPhoto, setNotifications, setUnits, setAvatar, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
-    [es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, setMomentPhoto, setNotifications, setUnits, setAvatar, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
+    () => ({ s: es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, setMomentPhoto, setNotifications, setUnits, setAvatar, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
+    [es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, setMomentPhoto, setNotifications, setUnits, setAvatar, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

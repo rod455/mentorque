@@ -62,7 +62,7 @@ export function HomeScreen() {
   const c = useContent();
   const h = c.home;
   const gm = c.gamification.milestones;
-  const { s } = usePrototype();
+  const { s, moveLessonPinned } = usePrototype();
   const { go, root } = useNav();
 
   const car = activeVehicle(s);
@@ -163,30 +163,55 @@ export function HomeScreen() {
         </button>
       )}
 
-      {/* Fixados — conteúdos que o usuário usa com frequência (📌 nas aulas) */}
+      {/* Fixados — conteúdos que o usuário usa com frequência (📌 nas aulas);
+          setinhas reordenam (o próprio usuário escolhe o que fica na frente) */}
       {pinnedList.length > 0 && (
         <section className="mt-5">
           <h3 className="mb-2 font-serif text-lg font-bold text-cream">{h.pinnedTitle}</h3>
           <div className="space-y-2">
-            {pinnedList.map((l) => {
+            {pinnedList.map((l, i) => {
               const locked = l.premium && !s.premium;
               return (
-                <button
+                <div
                   key={l.id}
-                  onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
-                  className="flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/5 hover:ring-amber/30"
+                  className="flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-3.5 py-2.5 ring-1 ring-white/5"
                 >
-                  <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl bg-amber/10 text-amber/80">
-                    {l.thumb ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={l.thumb} alt="" className="h-full w-full object-cover" draggable={false} />
-                    ) : (
-                      <Icon name={typeIcon(l.type)} className="h-5 w-5" />
-                    )}
-                  </span>
-                  <span className="min-w-0 flex-1 truncate font-display text-sm text-cream/90">{l.title}</span>
-                  <span aria-hidden className="shrink-0 text-amber">📌</span>
-                </button>
+                  <button
+                    onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
+                    className="flex min-w-0 flex-1 items-center gap-3 text-left"
+                  >
+                    <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl bg-amber/10 text-amber/80">
+                      {l.thumb ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={l.thumb} alt="" className="h-full w-full object-cover" draggable={false} />
+                      ) : (
+                        <Icon name={typeIcon(l.type)} className="h-5 w-5" />
+                      )}
+                    </span>
+                    <span className="min-w-0 flex-1 truncate font-display text-sm text-cream/90">{l.title}</span>
+                    <span aria-hidden className="shrink-0 text-amber">📌</span>
+                  </button>
+                  {pinnedList.length > 1 && (
+                    <span className="flex shrink-0 flex-col">
+                      <button
+                        onClick={() => moveLessonPinned(l.id, -1)}
+                        disabled={i === 0}
+                        aria-label="subir"
+                        className={`grid h-6 w-7 place-items-center rounded-md ${i === 0 ? "text-cream/15" : "text-cream/60 hover:bg-white/5 hover:text-cream"}`}
+                      >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="h-3.5 w-3.5"><path d="m6 14 6-6 6 6" /></svg>
+                      </button>
+                      <button
+                        onClick={() => moveLessonPinned(l.id, 1)}
+                        disabled={i === pinnedList.length - 1}
+                        aria-label="descer"
+                        className={`grid h-6 w-7 place-items-center rounded-md ${i === pinnedList.length - 1 ? "text-cream/15" : "text-cream/60 hover:bg-white/5 hover:text-cream"}`}
+                      >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="h-3.5 w-3.5"><path d="m6 10 6 6 6-6" /></svg>
+                      </button>
+                    </span>
+                  )}
+                </div>
               );
             })}
           </div>
