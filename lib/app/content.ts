@@ -469,7 +469,7 @@ export function getContent(locale: Locale) {
     {
       id: "read-obd2",
       track: "diagnosis",
-      title: T("Lendo códigos OBD2", "Reading OBD2 codes"),
+      title: T("Luz de injeção ligada? Descubra!", "Check-engine light on? Find out!"),
       type: "article",
       system: "engine",
       need: [T("Adaptador OBD2", "OBD2 adapter"), T("App de leitura", "A reader app")],
