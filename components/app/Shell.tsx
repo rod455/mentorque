@@ -19,6 +19,7 @@ import { LearnScreen, StudyTrackScreen, ForYourCarScreen, SavedLessonsScreen, Co
 import { EquipmentScreen } from "./screens/Equipment";
 import { EquipmentHowToScreen } from "./screens/EquipmentHowTo";
 import { Obd2Screen } from "./screens/Obd2";
+import { FuelCompareScreen } from "./screens/FuelCompare";
 import { CarSettingsScreen } from "./screens/CarSettings";
 import { ProfileScreen, SubscribeScreen, CheckoutScreen } from "./screens/Profile";
 import { GamificationScreen, AchievementsScreen } from "./screens/Gamification";
@@ -139,8 +140,11 @@ function Router() {
       case "forYourCar": return <ForYourCarScreen />;
       case "savedLessons": return <SavedLessonsScreen />;
       case "biela": return <BielaChatScreen seed={view.seed} />;
-      // A "aula" de OBD2 abre a página real de consulta de códigos.
-      case "content": return view.id === "read-obd2" ? <Obd2Screen /> : <ContentScreen id={view.id} />;
+      // "Aulas"-ferramenta abrem a página real (OBD2, Etanol × Gasolina).
+      case "content":
+        if (view.id === "read-obd2") return <Obd2Screen />;
+        if (view.id === "fuel-compare") return <FuelCompareScreen />;
+        return <ContentScreen id={view.id} />;
       case "carSettings": return <CarSettingsScreen />;
       case "profile": return <ProfileScreen />;
       case "gamification": return <GamificationScreen />;

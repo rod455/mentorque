@@ -18,6 +18,18 @@ export type Vehicle = {
   nickname?: string; // custom name the user gives the car
   purchaseDate?: string; // ISO yyyy-mm-dd — when the owner bought the car
   quiz?: Record<string, string>; // Health-quiz answers (questionId -> optionKey)
+  fuelPrefs?: FuelPrefs; // Etanol × Gasolina calculator inputs (per vehicle)
+};
+
+// Saved inputs of the Etanol × Gasolina calculator, so the user only fills
+// prices on a new station visit. Consumptions in km/l; prices in R$/l.
+export type FuelPrefs = {
+  gasKmL?: number;
+  ethKmL?: number;
+  gasPrice?: number;
+  ethPrice?: number;
+  turbo?: boolean; // turbo de fábrica
+  highComp?: boolean; // taxa de compressão > 12:1
 };
 
 // A logged maintenance/service event, always tied to a vehicle.
