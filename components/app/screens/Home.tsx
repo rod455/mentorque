@@ -40,11 +40,13 @@ function forYou(lessons: Lesson[], opts: { make?: string; pref: string; seen: st
   const news = pool.filter((l) => isNewLesson(l)).sort((a, b) => (b.addedAt ?? "").localeCompare(a.addedAt ?? ""));
   const rest = pool.filter((l) => !isNewLesson(l)).sort((a, b) => score(b) - score(a));
   const fresh = [...news, ...rest];
-  // Salvos na ordem em que foram guardados.
+  // Salvos na ordem em que foram guardados — SEMPRE presentes no fim da
+  // lista (o corte de 8 vale só para as sugestões, senão o salvo some).
   const savedList = opts.saved
     .map((id) => lessons.find((l) => l.id === id))
-    .filter((l): l is Lesson => !!l);
-  return [...fresh, ...savedList].slice(0, 8);
+    .filter((l): l is Lesson => !!l)
+    .slice(0, 4);
+  return [...fresh.slice(0, Math.max(2, 8 - savedList.length)), ...savedList];
 }
 
 function typeIcon(t: string) {
