@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { NavProvider, useNav, type View } from "@/lib/app/nav";
 import { usePrototype } from "@/lib/app/store";
+import { trackContent } from "@/lib/app/track";
 import { useAuth } from "@/lib/app/auth";
 import { Icon, useContent } from "./ui";
 import { Logo } from "@/components/ui/Logo";
@@ -95,6 +96,12 @@ function Router() {
       else (sub as Promise<Handle>)?.then?.((h) => h.remove());
     };
   }, [view, canBack, back]);
+
+  // Métrica de engajamento: registra a abertura de cada conteúdo/aula.
+  useEffect(() => {
+    if (view.name === "content") trackContent(view.id, "open");
+    else if (view.name === "obd2") trackContent("read-obd2", "open");
+  }, [view]);
 
   // Swipe left→right = go back to the previous screen (last one the user was on).
   const down = useRef<{ x: number; y: number } | null>(null);

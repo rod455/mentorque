@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { newId, type ServiceRecord, type Vehicle } from "./types";
 import { useAuth } from "./auth";
 import { getBrowserSupabase } from "@/lib/supabaseBrowser";
+import { trackContent } from "./track";
 
 // Client-side session for the car-centric prototype: a garage of vehicles, one
 // "active" vehicle, and a flat list of service records. Persisted to
@@ -299,19 +300,21 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
 
   const markLessonSeen = useCallback(
     (id: string) =>
-      patch((p) => ({
-        ...p,
-        seenLessons: p.seenLessons.includes(id) ? p.seenLessons.filter((l) => l !== id) : [...p.seenLessons, id],
-      })),
+      patch((p) => {
+        const had = p.seenLessons.includes(id);
+        trackContent(id, had ? "uncomplete" : "complete");
+        return { ...p, seenLessons: had ? p.seenLessons.filter((l) => l !== id) : [...p.seenLessons, id] };
+      }),
     [patch]
   );
 
   const toggleLessonSaved = useCallback(
     (id: string) =>
-      patch((p) => ({
-        ...p,
-        savedLessons: p.savedLessons.includes(id) ? p.savedLessons.filter((l) => l !== id) : [...p.savedLessons, id],
-      })),
+      patch((p) => {
+        const had = p.savedLessons.includes(id);
+        trackContent(id, had ? "unsave" : "save");
+        return { ...p, savedLessons: had ? p.savedLessons.filter((l) => l !== id) : [...p.savedLessons, id] };
+      }),
     [patch]
   );
 

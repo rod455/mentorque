@@ -20,6 +20,16 @@ export function minPurchaseDate(year: number): string {
   return `${year - 1}-01-01`;
 }
 
+// Conteúdo "Novo": publicado (addedAt) há no máximo 7 dias. Enquanto durar,
+// vai para a 1ª posição do "Para você" com o selo — some antes se o usuário
+// concluir ou salvar a aula.
+export function isNewLesson(l: { addedAt?: string }, now = new Date()): boolean {
+  if (!l.addedAt) return false;
+  const d = new Date(l.addedAt + "T00:00:00");
+  if (isNaN(d.getTime())) return false;
+  return now.getTime() - d.getTime() < 7 * 24 * 60 * 60 * 1000;
+}
+
 // Months since an ISO date (yyyy-mm-dd), or null if unset/invalid.
 export function monthsSinceDate(iso?: string, now = new Date()): number | null {
   if (!iso) return null;
@@ -404,6 +414,10 @@ export function getContent(locale: Locale) {
     difficulty?: "facil" | "medio" | "avancado";
     media?: Media;
     thumb?: string; // imagem ilustrativa do card (opcional; ex.: /learn/oil.jpg)
+    // Data de publicação (ISO yyyy-mm-dd). Conteúdo com até 7 dias vai para a
+    // 1ª posição do "Para você" com o selo "Novo" — defina em TODO conteúdo
+    // novo que for adicionado.
+    addedAt?: string;
     body?: string[];
     need: string[];
     steps: string[];
@@ -494,6 +508,7 @@ export function getContent(locale: Locale) {
       title: T("Etanol ou gasolina: qual compensa?", "Ethanol or gasoline: which pays off?"),
       type: "article",
       system: "engine",
+      addedAt: "2026-08-04",
       need: [T("Preços do posto", "Pump prices"), T("Consumo do carro, se souber", "Your car's km/l, if known")],
       steps: [T("Informe os preços do posto", "Enter the pump prices"), T("Conte como é o seu motor", "Tell us about your engine"), T("Veja qual combustível compensa", "See which fuel pays off")],
       safety: [],
@@ -1108,6 +1123,7 @@ export function getContent(locale: Locale) {
       yourCar: T("Seu carro", "Your car"),
       viewCar: T("Abrir", "Open"),
       forYouTitle: T("Para você", "For you"),
+      newBadge: T("Novo", "New"),
       forYouSub: T("Baseado no seu nível e no seu carro", "Based on your level and your car"),
       memoriesTitle: T("Memórias", "Memories"),
       seeAll: T("Ver todas", "See all"),

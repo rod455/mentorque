@@ -3,7 +3,7 @@
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { computeHealth } from "@/lib/app/health";
 import { computeStatus, MILESTONES } from "@/lib/app/gamification";
-import { vehicleLabel } from "@/lib/app/content";
+import { isNewLesson, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { isNativeApp } from "@/lib/app/wrapper";
 import { useContent, Card, Icon } from "../ui";
@@ -34,9 +34,12 @@ function forYou(lessons: Lesson[], opts: { make?: string; pref: string; seen: st
   };
   // "obd2-scan" vive só na área de Estudos — no Para você fica a aula
   // "Luz de injeção ligada? Descubra!" (read-obd2), que leva até ela.
-  const fresh = lessons
-    .filter((l) => l.id !== "obd2-scan" && !opts.seen.includes(l.id) && !opts.saved.includes(l.id))
-    .sort((a, b) => score(b) - score(a));
+  const pool = lessons.filter((l) => l.id !== "obd2-scan" && !opts.seen.includes(l.id) && !opts.saved.includes(l.id));
+  // Conteúdo novo (addedAt ≤ 7 dias) vai para a frente, do mais recente para
+  // o mais antigo; o resto segue por relevância.
+  const news = pool.filter((l) => isNewLesson(l)).sort((a, b) => (b.addedAt ?? "").localeCompare(a.addedAt ?? ""));
+  const rest = pool.filter((l) => !isNewLesson(l)).sort((a, b) => score(b) - score(a));
+  const fresh = [...news, ...rest];
   // Calculadora Etanol × Gasolina fixa na 2ª posição (enquanto não concluída).
   const fuelIdx = fresh.findIndex((l) => l.id === "fuel-compare");
   if (fuelIdx > 1) {
@@ -196,6 +199,11 @@ export function HomeScreen() {
                     )}
                     {savedIds.includes(l.id) && (
                       <span className="absolute left-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-graphite-900/80 text-xs text-amber">★</span>
+                    )}
+                    {isNewLesson(l) && !savedIds.includes(l.id) && !seen.includes(l.id) && (
+                      <span className="absolute left-2 top-2 rounded-full bg-amber px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-graphite">
+                        {h.newBadge}
+                      </span>
                     )}
                     {seen.includes(l.id) && !locked && (
                       <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-teal/90 text-graphite">
