@@ -14,7 +14,8 @@ type Session = {
   onboarded: boolean;
   name: string | null;
   email: string | null;
-  state: string | null;
+  state: string | null; // UF (ex.: "SP") — usada no ajuste regional de preços
+  city: string | null; // cidade — cidades grandes têm faixa de preço própria
   premium: boolean;
   vehicles: Vehicle[];
   activeVehicleId: string | null;
@@ -34,6 +35,7 @@ const EMPTY: Session = {
   name: null,
   email: null,
   state: null,
+  city: null,
   premium: false,
   vehicles: [],
   activeVehicleId: null,
@@ -60,6 +62,7 @@ type StoreValue = {
   setName: (name: string) => void;
   setEmail: (email: string) => void;
   setState: (state: string) => void;
+  setCity: (city: string) => void;
   setPremium: (v: boolean) => void;
   addVehicle: (v: Omit<Vehicle, "id">) => string;
   updateVehicle: (id: string, patch: Partial<Vehicle>) => void;
@@ -128,6 +131,7 @@ function mergeSessions(cloud: Session, local: Session): Session {
     name: cloud.name ?? local.name,
     email: cloud.email ?? local.email,
     state: cloud.state ?? local.state,
+    city: cloud.city ?? local.city,
     premium: !!cloud.premium || !!local.premium,
     vehicles: mergeById(cloud.vehicles ?? [], local.vehicles ?? []),
     activeVehicleId: cloud.activeVehicleId ?? local.activeVehicleId ?? null,
@@ -240,6 +244,7 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const setName = useCallback((name: string) => patch((p) => ({ ...p, name: name.trim() || null })), [patch]);
   const setEmail = useCallback((email: string) => patch((p) => ({ ...p, email: email.trim() || null })), [patch]);
   const setState = useCallback((state: string) => patch((p) => ({ ...p, state: state || null })), [patch]);
+  const setCity = useCallback((city: string) => patch((p) => ({ ...p, city: city.trim() || null })), [patch]);
   const setPremium = useCallback((v: boolean) => patch((p) => ({ ...p, premium: v })), [patch]);
 
   const addVehicle = useCallback(
@@ -341,8 +346,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const es = useMemo(() => (subActive && !s.premium ? { ...s, premium: true } : s), [s, subActive]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s: es, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, setMomentPhoto, setNotifications, setUnits, setAvatar, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
-    [es, setName, setEmail, setState, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, setMomentPhoto, setNotifications, setUnits, setAvatar, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
+    () => ({ s: es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, setMomentPhoto, setNotifications, setUnits, setAvatar, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
+    [es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, setMomentPhoto, setNotifications, setUnits, setAvatar, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

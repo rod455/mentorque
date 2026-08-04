@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { symptomRecommended } from "@/lib/app/premium";
 import { carName, vehicleLabel } from "@/lib/app/content";
+import { adjustPriceRange, regionFactor, regionLabel, UF_LIST } from "@/lib/app/pricing";
 import type { SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, Icon, inputCls, LockedCard, PremiumBadge, RecoBadge, SeverityDot, UpgradeBanner, useContent } from "../ui";
+import { AppHeader, Card, Icon, inputCls, LockedCard, PremiumBadge, RecoBadge, SeverityDot, Sheet, UpgradeBanner, useContent } from "../ui";
 import { AdOverlay, adsEnabled } from "../AdGate";
 
 // Map a symptom category to a service type for pre-filling the history form.
@@ -313,6 +314,7 @@ export function SymptomDetail({ id }: { id: string }) {
   const car = carName(v, "");
   const sx = c.symptoms.find((x) => x.id === id);
   const [answers, setAnswers] = useState<Record<number, "yes" | "no">>({});
+  const [regionOpen, setRegionOpen] = useState(false);
   // Interstitial ao abrir um problema específico (só free).
   const [adDone, setAdDone] = useState(false);
   if (!sx) return <AppHeader title="—" />;
@@ -320,7 +322,12 @@ export function SymptomDetail({ id }: { id: string }) {
   const pd = c.symptomPremium[sx.id];
 
   const shownCauses = s.premium ? sx.causes : sx.causes.slice(0, 2);
-  const hiddenCauses = sx.causes.length - shownCauses.length;
+  const lockedCauses = s.premium ? [] : sx.causes.slice(2);
+
+  // Ajuste regional dos preços: cidade grande tem fator próprio; senão, a
+  // média do estado; sem região, a faixa nacional de referência.
+  const { factor, specific } = regionFactor(s.state, s.city);
+  const rLabel = regionLabel(s.state, s.city);
 
   // Compose a rich prompt for Biela from the symptom + anamnese answers.
   const bielaSeed = () => {
@@ -336,9 +343,86 @@ export function SymptomDetail({ id }: { id: string }) {
       {needAd && <AdOverlay kind="interstitial" onDone={() => setAdDone(true)} />}
       <AppHeader title={sx.label} />
 
-      {/* Mini-anamnese: perguntas de observação viram um questionário rápido */}
+      {/* Texto curto de abertura */}
+      <p className="mt-1 text-sm leading-relaxed text-cream/60">{ui.detailIntro}</p>
+
+      <Section title={ui.causes}>
+        <ul className="space-y-1.5">
+          {shownCauses.map((cause) => (
+            <li key={cause} className="flex gap-2 text-sm text-cream/80">
+              <span className="text-amber">•</span>
+              {cause}
+            </li>
+          ))}
+          {/* Causas extras: borradas com cadeado — dá pra ver que existe mais */}
+          {lockedCauses.map((cause) => (
+            <li key={cause}>
+              <button
+                onClick={() => go({ name: "subscribe", ctx: "symptomCauses" })}
+                className="flex w-full items-center gap-2 text-left"
+              >
+                <span className="text-amber">•</span>
+                <span aria-hidden className="min-w-0 flex-1 select-none text-sm text-cream/70 blur-[4px]">{cause}</span>
+                <span className="grid h-5 w-5 shrink-0 place-items-center text-amber">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-3.5 w-3.5"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+        {lockedCauses.length > 0 && (
+          <button onClick={() => go({ name: "subscribe", ctx: "symptomCauses" })} className="mt-2 text-xs font-medium text-amber">
+            {c.premium.lockedCauses.replace("{car}", car)} ›
+          </button>
+        )}
+      </Section>
+
+      <Section title={ui.urgency}>
+        <div className="flex items-center gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-3 ring-1 ring-white/5">
+          <SeverityDot level={sx.urgency.level} />
+          <span className="text-sm text-cream/85">{sx.urgency.text}</span>
+        </div>
+      </Section>
+
+      <Section title={ui.price}>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="font-display text-lg text-cream">{adjustPriceRange(sx.price, factor)}</p>
+            <p className="text-xs text-cream/45">
+              {rLabel
+                ? (specific ? ui.regionFor : ui.regionForState).replace("{r}", specific ? rLabel : (s.state ?? rLabel))
+                : ui.priceNote}
+            </p>
+          </div>
+          {/* Região do usuário: cidade grande → faixa própria; senão, estado */}
+          <button
+            onClick={() => setRegionOpen(true)}
+            className="flex shrink-0 items-center gap-1.5 rounded-lg bg-graphite-800 px-2.5 py-1.5 text-xs font-medium text-cream/75 ring-1 ring-white/10 hover:ring-amber/40"
+          >
+            <span aria-hidden>📍</span>
+            {rLabel ? `${rLabel} · ${ui.regionEdit}` : ui.regionSet}
+          </button>
+        </div>
+        {s.premium && pd && (
+          <div className="mt-3">
+            <p className="mb-1.5 flex items-center gap-2 text-xs uppercase tracking-wide text-cream/45">{ui.detailedPrice} <PremiumBadge /></p>
+            <div className="space-y-1.5">
+              {pd.priceDetail.map((row) => (
+                <div key={row.label} className="flex items-center justify-between rounded-xl bg-graphite-800 px-3.5 py-2.5 text-sm ring-1 ring-white/5">
+                  <span className="text-cream/80">{row.label}</span>
+                  <span className="text-cream/60">{adjustPriceRange(row.range, factor)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </Section>
+
+      <RegionSheet open={regionOpen} onClose={() => setRegionOpen(false)} />
+
+      {/* Aprofundar com o Biela: mini-anamnese + CTA (premium) */}
       {sx.observe.length > 0 && (
-        <Card className="mt-1 ring-amber/20">
+        <Card className="mt-5 ring-amber/20">
           <p className="font-display text-[15px] text-cream">{ui.anamneseTitle}</p>
           <p className="mt-0.5 text-xs text-cream/55">{ui.anamneseSub}</p>
           <div className="mt-3 space-y-2.5">
@@ -362,52 +446,10 @@ export function SymptomDetail({ id }: { id: string }) {
             ))}
           </div>
           <Button className="mt-4 w-full" onClick={() => go(s.premium ? { name: "biela", seed: bielaSeed() } : { name: "subscribe", ctx: "biela" })}>
-            🐻 {ui.diagnoseWithBiela}
+            {s.premium ? "🐻" : "🔒"} {ui.diagnoseWithBiela}
           </Button>
         </Card>
       )}
-
-      <Section title={ui.causes}>
-        <ul className="space-y-1.5">
-          {shownCauses.map((cause) => (
-            <li key={cause} className="flex gap-2 text-sm text-cream/80">
-              <span className="text-amber">•</span>
-              {cause}
-            </li>
-          ))}
-        </ul>
-        {!s.premium && hiddenCauses > 0 && (
-          <div className="mt-2.5">
-            <LockedCard ctx="symptomCauses" title={c.premium.lockedCauses.replace("{car}", car)} />
-          </div>
-        )}
-      </Section>
-
-      <Section title={ui.urgency}>
-        <div className="flex items-center gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-3 ring-1 ring-white/5">
-          <SeverityDot level={sx.urgency.level} />
-          <span className="text-sm text-cream/85">{sx.urgency.text}</span>
-        </div>
-      </Section>
-
-      <Section title={ui.price}>
-        <p className="font-display text-lg text-cream">{sx.price}</p>
-        <p className="text-xs text-cream/45">{ui.priceNote}</p>
-        {s.premium && pd && (
-          <div className="mt-3">
-            <p className="mb-1.5 flex items-center gap-2 text-xs uppercase tracking-wide text-cream/45">{ui.detailedPrice} <PremiumBadge /></p>
-            <div className="space-y-1.5">
-              {pd.priceDetail.map((row) => (
-                <div key={row.label} className="flex items-center justify-between rounded-xl bg-graphite-800 px-3.5 py-2.5 text-sm ring-1 ring-white/5">
-                  <span className="text-cream/80">{row.label}</span>
-                  <span className="text-cream/60">{row.range}</span>
-                </div>
-              ))}
-            </div>
-            <p className="mt-2 rounded-lg bg-teal/10 px-3 py-2 text-xs text-teal ring-1 ring-teal/15">{pd.regional}</p>
-          </div>
-        )}
-      </Section>
 
       {s.premium && pd && (
         <>
@@ -440,6 +482,43 @@ export function SymptomDetail({ id }: { id: string }) {
   );
 }
 
+// Região do usuário (estado + cidade) — grava no perfil e refina os preços:
+// cidade grande tem faixa própria; nas demais vale a média do estado.
+function RegionSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const c = useContent();
+  const ui = c.symptomsUi;
+  const { s, setState, setCity } = usePrototype();
+  const [uf, setUf] = useState(s.state ?? "");
+  const [cityLocal, setCityLocal] = useState(s.city ?? "");
+  useEffect(() => {
+    if (open) { setUf(s.state ?? ""); setCityLocal(s.city ?? ""); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  return (
+    <Sheet open={open} onClose={onClose}>
+      <h2 className="font-display text-xl font-bold text-cream">{ui.regionTitle}</h2>
+      <p className="mt-1 text-sm text-cream/60">{ui.regionSub}</p>
+      <div className="mt-4 space-y-3">
+        <Field label={ui.regionState}>
+          <select value={uf} onChange={(e) => setUf(e.target.value)} className={inputCls}>
+            <option value="">{ui.regionStatePh}</option>
+            {UF_LIST.map((u) => (
+              <option key={u.uf} value={u.uf}>{u.name} ({u.uf})</option>
+            ))}
+          </select>
+        </Field>
+        <Field label={ui.regionCity}>
+          <input value={cityLocal} onChange={(e) => setCityLocal(e.target.value)} placeholder={ui.regionCityPh} className={inputCls} />
+        </Field>
+      </div>
+      <Button size="lg" className="mt-4 w-full" onClick={() => { setState(uf); setCity(cityLocal); onClose(); }}>
+        {ui.regionSave}
+      </Button>
+    </Sheet>
+  );
+}
+
 // 2.2.C — Checklist para oficina
 export function ChecklistScreen({ symptomId }: { symptomId: string }) {
   const c = useContent();
@@ -451,8 +530,10 @@ export function ChecklistScreen({ symptomId }: { symptomId: string }) {
   const [shop, setShop] = useState("");
   if (!sx) return <AppHeader title="—" />;
 
+  // Os 3 primeiros itens (os mais relevantes) são livres; o resto fica
+  // borrado com cadeado — dá pra ver que existe mais.
   const items = s.premium ? sx.checklist : sx.checklist.slice(0, 3);
-  const hidden = sx.checklist.length - items.length;
+  const lockedItems = s.premium ? [] : sx.checklist.slice(3);
 
   const share = async () => {
     if (!s.premium) {
@@ -492,8 +573,25 @@ export function ChecklistScreen({ symptomId }: { symptomId: string }) {
             <span className="text-sm text-cream/85">{item}</span>
           </div>
         ))}
+        {lockedItems.map((item) => (
+          <button
+            key={item}
+            onClick={() => go({ name: "subscribe", ctx: "checklist" })}
+            className="flex w-full items-start gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/5"
+          >
+            <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-md ring-1 ring-white/20 text-cream/40">☐</span>
+            <span aria-hidden className="min-w-0 flex-1 select-none text-sm text-cream/70 blur-[4px]">{item}</span>
+            <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center text-amber">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-3.5 w-3.5"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
+            </span>
+          </button>
+        ))}
       </div>
-      {!s.premium && hidden > 0 && <div className="mt-2"><LockedCard ctx="checklist" title={c.checklist.lockedItems} /></div>}
+      {lockedItems.length > 0 && (
+        <button onClick={() => go({ name: "subscribe", ctx: "checklist" })} className="mt-2 text-xs font-medium text-amber">
+          {c.checklist.lockedItems} ›
+        </button>
+      )}
 
       <div className="mt-4 space-y-3">
         <Field label={c.checklist.shop}>
