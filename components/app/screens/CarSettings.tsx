@@ -1,11 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { formatBRL, formatMonths, minPurchaseDate, monthsSinceDate, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, Icon, inputCls, SectionTitle, useContent } from "../ui";
+import { AppHeader, Card, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
 
 export function CarSettingsScreen() {
   const c = useContent();
@@ -13,6 +14,8 @@ export function CarSettingsScreen() {
   const { locale } = useI18n();
   const { s, removeVehicle, updateVehicle } = usePrototype();
   const { go, root } = useNav();
+  const [soldSheet, setSoldSheet] = useState(false);
+  const [soldInput, setSoldInput] = useState("");
   const v = activeVehicle(s);
   if (!v) return <AppHeader title={cs.title} />;
 
@@ -107,11 +110,65 @@ export function CarSettingsScreen() {
         <Row icon="explore" label={cs.shareLink} onClick={shareLink} />
       </div>
 
+      {/* Vendi o carro — arquiva mantendo tudo */}
+      <SectionTitle>{cs.soldTitle}</SectionTitle>
+      {v.soldAt ? (
+        <button
+          onClick={() => updateVehicle(v.id, { soldAt: undefined })}
+          className="flex w-full items-center gap-3 rounded-xl bg-teal/10 px-3.5 py-3.5 text-left ring-1 ring-teal/25 hover:ring-teal/40"
+        >
+          <Icon name="car" className="h-5 w-5 shrink-0 text-teal" />
+          <span className="min-w-0 flex-1">
+            <span className="block font-display text-[15px] text-teal">{cs.unsoldCta}</span>
+            <span className="block text-xs text-cream/50">{cs.soldOn.replace("{d}", v.soldAt.split("-").reverse().join("/"))}</span>
+          </span>
+        </button>
+      ) : (
+        <button
+          onClick={() => { setSoldInput(new Date().toISOString().slice(0, 10)); setSoldSheet(true); }}
+          className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3.5 text-left ring-1 ring-white/10 hover:ring-amber/30"
+        >
+          <span className="text-lg">🤝</span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-display text-[15px] text-cream">{cs.soldCta}</span>
+            <span className="block text-xs text-cream/50">{cs.soldSheetBody}</span>
+          </span>
+        </button>
+      )}
+
       <SectionTitle>{cs.danger}</SectionTitle>
       <button onClick={del} className="flex w-full items-center gap-3 rounded-xl bg-coral/10 px-3.5 py-3.5 text-left ring-1 ring-coral/25 hover:ring-coral/40">
         <Icon name="alert" className="h-5 w-5 shrink-0 text-coral" />
         <span className="font-display text-[15px] text-coral">{cs.deleteCar}</span>
       </button>
+      <p className="mt-1.5 text-xs leading-relaxed text-cream/45">{cs.deleteNote}</p>
+
+      {/* Data da venda */}
+      <Sheet open={soldSheet} onClose={() => setSoldSheet(false)}>
+        <h2 className="font-display text-xl font-bold text-cream">{cs.soldSheetTitle}</h2>
+        <p className="mt-1 text-sm leading-relaxed text-cream/60">{cs.soldSheetBody}</p>
+        <label className="mt-4 block">
+          <span className="mb-1 block text-xs text-cream/55">{cs.soldWhen}</span>
+          <input
+            type="date"
+            value={soldInput}
+            max={new Date().toISOString().slice(0, 10)}
+            onChange={(e) => setSoldInput(e.target.value)}
+            className={inputCls}
+          />
+        </label>
+        <Button
+          size="lg"
+          className="mt-4 w-full"
+          onClick={() => {
+            updateVehicle(v.id, { soldAt: soldInput || new Date().toISOString().slice(0, 10) });
+            setSoldSheet(false);
+            root({ name: "cars" });
+          }}
+        >
+          {cs.soldSave}
+        </Button>
+      </Sheet>
     </div>
   );
 }

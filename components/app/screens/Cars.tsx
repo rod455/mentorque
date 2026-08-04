@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { servicesFor, usePrototype } from "@/lib/app/store";
+import { ownedVehicles, servicesFor, soldVehicles, usePrototype } from "@/lib/app/store";
 import { computeHealth } from "@/lib/app/health";
 import { computeQuizHealth } from "@/lib/app/healthQuiz";
 import { LIMITS, economySaved } from "@/lib/app/premium";
@@ -11,7 +11,7 @@ import { AdOverlay, adsEnabled } from "../AdGate";
 import type { ServiceRecord, VehicleType } from "@/lib/app/types";
 import { Button } from "@/components/ui/Button";
 import { useNav } from "@/lib/app/nav";
-import { AppHeader, Card, Chip, Icon, inputCls, Sheet, useContent } from "../ui";
+import { AppHeader, Card, Chip, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
 import BielaMascote from "@/components/BielaMascote";
 
 function monthsSince(iso: string): number {
@@ -66,7 +66,9 @@ export function CarsScreen() {
     setEditNickId(null);
   };
 
-  const atLimit = !s.premium && s.vehicles.length >= LIMITS.freeCars;
+  const owned = ownedVehicles(s);
+  const sold = soldVehicles(s);
+  const atLimit = !s.premium && owned.length >= LIMITS.freeCars;
   const onAdd = () => go(atLimit ? { name: "subscribe", ctx: "cars" } : { name: "addCar" });
   const totalSaved = s.premium ? economySaved(s.services) : 0;
 
@@ -88,9 +90,9 @@ export function CarsScreen() {
         </div>
       )}
 
-      {s.vehicles.length > 0 && <ArrivalBanner />}
+      {owned.length > 0 && <ArrivalBanner />}
 
-      {s.vehicles.length === 0 ? (
+      {owned.length === 0 ? (
         // Garagem vazia — mascote centralizado, sem caixa/contorno (estilo Bloom)
         <div className="flex min-h-[62vh] flex-col items-center justify-center text-center">
           <BielaMascote pose="acenando" size={200} />
@@ -105,7 +107,7 @@ export function CarsScreen() {
         </div>
       ) : (
         <div className="space-y-3">
-          {s.vehicles.map((v) => {
+          {owned.map((v) => {
             const services = servicesFor(s, v.id);
             const health = computeHealth(v, services);
             const score = computeQuizHealth(v.quiz ?? {}, v).score;
@@ -162,6 +164,40 @@ export function CarsScreen() {
             );
           })}
         </div>
+      )}
+
+      {/* Carros que já tive — vendidos: histórico preservado, sem alertas */}
+      {sold.length > 0 && (
+        <>
+          <SectionTitle>{c.cars.soldSection}</SectionTitle>
+          <div className="space-y-2">
+            {sold.map((v) => (
+              <button
+                key={v.id}
+                onClick={() => { setActiveVehicle(v.id); root({ name: "car" }); }}
+                className="flex w-full items-center gap-3 rounded-2xl bg-graphite-800/60 px-3.5 py-3 text-left ring-1 ring-white/5 hover:ring-white/15"
+              >
+                <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite-700 text-cream/40">
+                  {v.photo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={v.photo} alt="" className="h-full w-full object-cover opacity-60" />
+                  ) : (
+                    <Icon name={v.type === "moto" ? "moto" : "car"} className="h-5 w-5" />
+                  )}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate font-display text-sm text-cream/70">{v.nickname || vehicleLabel(v)}</span>
+                  <span className="block text-xs text-cream/40">
+                    {c.carSettings.soldOn.replace("{d}", (v.soldAt ?? "").split("-").reverse().join("/"))}
+                  </span>
+                </span>
+                <span className="shrink-0 rounded-md bg-white/[0.06] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-cream/45">
+                  {c.carSettings.soldBadge}
+                </span>
+              </button>
+            ))}
+          </div>
+        </>
       )}
 
       {/* Edit car name (nickname) */}

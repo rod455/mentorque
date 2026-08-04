@@ -407,8 +407,19 @@ export function usePrototype() {
 }
 
 // ---- Selectors -------------------------------------------------------------
+// Carros ativos = os que o usuário ainda tem (vendidos ficam arquivados).
+export function ownedVehicles(s: Session): Vehicle[] {
+  return s.vehicles.filter((v) => !v.soldAt);
+}
+export function soldVehicles(s: Session): Vehicle[] {
+  return s.vehicles.filter((v) => !!v.soldAt);
+}
 export function activeVehicle(s: Session): Vehicle | null {
-  return s.vehicles.find((v) => v.id === s.activeVehicleId) ?? s.vehicles[0] ?? null;
+  const active = s.vehicles.find((v) => v.id === s.activeVehicleId);
+  if (active && !active.soldAt) return active;
+  // Vendeu o carro ativo → cai para outro que ainda tem; se só restarem
+  // vendidos, mantém o selecionado para o histórico seguir acessível.
+  return ownedVehicles(s)[0] ?? active ?? s.vehicles[0] ?? null;
 }
 export function servicesFor(s: Session, vehicleId: string | null | undefined): ServiceRecord[] {
   if (!vehicleId) return [];

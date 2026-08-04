@@ -17,6 +17,9 @@ export type Vehicle = {
   photo?: string; // downscaled data URL
   nickname?: string; // custom name the user gives the car
   purchaseDate?: string; // ISO yyyy-mm-dd — when the owner bought the car
+  // Carro vendido/arquivado: sai da garagem ativa (sem revisões nem alertas),
+  // mas todo o histórico é preservado e continua consultável.
+  soldAt?: string; // ISO yyyy-mm-dd
   quiz?: Record<string, string>; // Health-quiz answers (questionId -> optionKey)
   fuelPrefs?: FuelPrefs; // Etanol × Gasolina calculator inputs (per vehicle)
 };
