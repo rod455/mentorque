@@ -35,6 +35,12 @@ function forYou(lessons: Lesson[], opts: { make?: string; pref: string; seen: st
   const fresh = lessons
     .filter((l) => !opts.seen.includes(l.id) && !opts.saved.includes(l.id))
     .sort((a, b) => score(b) - score(a));
+  // Calculadora Etanol × Gasolina fixa na 2ª posição (enquanto não concluída).
+  const fuelIdx = fresh.findIndex((l) => l.id === "fuel-compare");
+  if (fuelIdx > 1) {
+    const [fuel] = fresh.splice(fuelIdx, 1);
+    fresh.splice(1, 0, fuel);
+  }
   // Salvos na ordem em que foram guardados.
   const savedList = opts.saved
     .map((id) => lessons.find((l) => l.id === id))
