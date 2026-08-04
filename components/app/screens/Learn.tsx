@@ -158,7 +158,10 @@ export function LearnScreen() {
               onClick={() => go({ name: "savedLessons" })}
               className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 p-4 text-left ring-1 ring-white/5 hover:ring-amber/30"
             >
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-amber/15 text-lg text-amber">★</span>
+              {/* Marcador (não a estrela do Premium) — conceitos diferentes */}
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-teal/15 text-teal">
+                <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5"><path d="M6 3h12a1 1 0 0 1 1 1v16.2a.8.8 0 0 1-1.24.67L12 17.5l-5.76 3.37A.8.8 0 0 1 5 20.2V4a1 1 0 0 1 1-1Z" /></svg>
+              </span>
               <span className="min-w-0 flex-1">
                 <span className="block font-display text-[15px] font-semibold text-cream">{c.learn.savedTitle}</span>
                 <span className="mt-0.5 block text-xs text-cream/55">{c.learn.viewSaved} · {(s.savedLessons ?? []).length}</span>
