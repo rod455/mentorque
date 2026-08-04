@@ -1,6 +1,8 @@
 "use client";
 
-import { activeVehicle, usePrototype } from "@/lib/app/store";
+import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
+import { personalScore, vehicleSituations, vehicleTraits } from "@/lib/app/traits";
+import type { ServiceRecord } from "@/lib/app/types";
 import { computeQuizHealth } from "@/lib/app/healthQuiz";
 import { computeStatus, MILESTONES } from "@/lib/app/gamification";
 import { isNewLesson, vehicleLabel } from "@/lib/app/content";
@@ -24,15 +26,14 @@ function levelPref(phaseIndex: number): "facil" | "medio" | "avancado" {
 // - salvos vão pro FIM da lista (mesmo se concluídos) — ficam à mão;
 // - concluído e NÃO salvo sai da seção;
 // - o resto vem primeiro, por relevância.
-function forYou(lessons: Lesson[], opts: { make?: string; pref: string; seen: string[]; saved: string[]; pinned: string[] }): Lesson[] {
-  const make = opts.make?.toLowerCase();
-  const score = (l: Lesson) => {
-    let n = 0;
-    if (make && l.make && l.make.toLowerCase() === make) n += 5;
-    if (l.difficulty === opts.pref) n += 2;
-    if (l.type === "video") n += 1;
-    return n;
-  };
+function forYou(lessons: Lesson[], opts: { car?: ReturnType<typeof activeVehicle>; services?: ServiceRecord[]; pref: string; seen: string[]; saved: string[]; pinned: string[] }): Lesson[] {
+  // Mesma personalização da tela de Estudos: características do veículo +
+  // situação do dono (ver lib/app/traits.ts), com fallback genérico.
+  const car = opts.car;
+  const traits = car ? vehicleTraits(car) : new Set<never>();
+  const situations = car ? vehicleSituations(car, opts.services ?? []) : new Set<never>();
+  const score = (l: Lesson) =>
+    personalScore(l, { make: car?.make, model: car?.model, traits: traits as never, situations: situations as never, pref: opts.pref });
   // "obd2-scan" vive só na área de Estudos — no Para você fica a aula
   // "Luz de injeção ligada? Descubra!" (read-obd2), que leva até ela.
   // Fixados vivem na seção própria (abaixo do carro) — fora do Para você.
@@ -75,7 +76,7 @@ export function HomeScreen() {
   const pinnedList = pinnedIds
     .map((id) => c.lessons.find((l) => l.id === id))
     .filter((l): l is Lesson => !!l);
-  const picks = forYou(c.lessons, { make: car?.make, pref: levelPref(status.phaseIndex), seen, saved: savedIds, pinned: pinnedIds });
+  const picks = forYou(c.lessons, { car, services: car ? servicesFor(s, car.id) : [], pref: levelPref(status.phaseIndex), seen, saved: savedIds, pinned: pinnedIds });
 
   // Memórias: marcos e momentos conquistados, priorizando Momentos.
   const memories = MILESTONES.filter((m) => m.earned(s)).sort(

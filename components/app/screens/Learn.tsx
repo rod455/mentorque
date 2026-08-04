@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { activeVehicle, usePrototype } from "@/lib/app/store";
+import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
+import { personalScore, vehicleSituations, vehicleTraits } from "@/lib/app/traits";
+import type { ServiceRecord } from "@/lib/app/types";
 import { carName, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
@@ -73,13 +75,24 @@ function BielaCard() {
 
 // Pick the most relevant items for the active car: model-specific first, then
 // brand, then fundamentals/DIY basics.
-function recommendedFor(v: ReturnType<typeof activeVehicle>, lessons: Item[]): Item[] {
-  const model = v ? lessons.filter((l) => l.model === v.model) : [];
-  const brand = v ? lessons.filter((l) => l.make === v.make && !l.model) : [];
+// Recomendação personalizada: modelo/marca quando existe, mas principalmente
+// as CARACTERÍSTICAS do veículo (turbo, CVT, elétrico, alto km…) e a SITUAÇÃO
+// do dono (comprou agora, revisão vencida, sem histórico) — assim qualquer
+// carro recebe conteúdo relevante, não só os 5 modelos do catálogo.
+function recommendedFor(v: ReturnType<typeof activeVehicle>, lessons: Item[], services: ServiceRecord[] = []): Item[] {
+  if (!v) return lessons.filter((l) => (l.track === "fundamentals" || l.track === "diy") && !l.make).slice(0, 5);
+  const traits = vehicleTraits(v);
+  const situations = vehicleSituations(v, services);
+  const scored = lessons
+    .map((l) => ({ l, n: personalScore(l, { make: v.make, model: v.model, traits, situations }) }))
+    .filter((x) => x.n > 0)
+    .sort((a, b) => b.n - a.n)
+    .map((x) => x.l);
+  // Completa com fundamentos/DIY genéricos se a personalização render pouco.
   const base = lessons.filter((l) => (l.track === "fundamentals" || l.track === "diy") && !l.make);
   const seen = new Set<string>();
   const out: Item[] = [];
-  for (const l of [...model, ...brand, ...base]) {
+  for (const l of [...scored, ...base]) {
     if (seen.has(l.id)) continue;
     seen.add(l.id);
     out.push(l);
@@ -99,7 +112,7 @@ export function LearnScreen() {
   const query = q.trim().toLowerCase();
   const searching = query.length > 0;
   const results = searching ? c.lessons.filter((l) => l.title.toLowerCase().includes(query)) : [];
-  const recommended = recommendedFor(v, c.lessons);
+  const recommended = recommendedFor(v, c.lessons, v ? servicesFor(s, v.id) : []);
 
   return (
     <div>
@@ -243,7 +256,7 @@ export function ForYourCarScreen() {
   const c = useContent();
   const { s } = usePrototype();
   const v = activeVehicle(s);
-  const items = recommendedFor(v, c.lessons);
+  const items = recommendedFor(v, c.lessons, v ? servicesFor(s, v.id) : []);
   return (
     <div>
       <AppHeader
