@@ -279,7 +279,39 @@ export function HomeScreen() {
                   <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{c.equipmentUi.cardTitle}</p>
                 </button>
               );
-              return [...picks.slice(0, 2).map(lessonCard), kitCard, ...picks.slice(2).map(lessonCard)];
+              // 1ª posição: com carro cadastrado, "Próximas revisões". Se
+              // faltar dado (quiz de saúde, km ou data de compra), o card
+              // pede para completar — sem dados o plano não fica preciso.
+              const carComplete =
+                !!car && !!(car.quiz && Object.keys(car.quiz).length) && car.odometerKm != null && !!car.purchaseDate;
+              const revisionsCard = car ? (
+                <button
+                  key="revisions"
+                  onClick={() => {
+                    if (carComplete) root({ name: "revisions" });
+                    else if (!(car.quiz && Object.keys(car.quiz).length) || !car.purchaseDate) go({ name: "healthQuiz" });
+                    else go({ name: "car" });
+                  }}
+                  className="flex w-36 shrink-0 flex-col self-start text-left"
+                >
+                  <div className={`relative grid aspect-square place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ${carComplete ? "ring-white/[0.06]" : "ring-amber/30"}`}>
+                    <Icon name="calendar" className={`h-9 w-9 ${carComplete ? "text-teal/80" : "text-amber/80"}`} />
+                    {!carComplete && (
+                      <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-amber font-display text-sm font-bold text-graphite">!</span>
+                    )}
+                  </div>
+                  <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">
+                    {carComplete ? h.revisionsCard : h.completeCarCard}
+                  </p>
+                  {!carComplete && <p className="line-clamp-2 text-[11px] leading-snug text-amber/80">{h.completeCarWhy}</p>}
+                </button>
+              ) : null;
+              return [
+                ...(revisionsCard ? [revisionsCard] : []),
+                ...picks.slice(0, 2).map(lessonCard),
+                kitCard,
+                ...picks.slice(2).map(lessonCard),
+              ];
             })()}
           </div>
         </section>
