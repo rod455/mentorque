@@ -479,7 +479,7 @@ export function getContent(locale: Locale) {
     {
       id: "obd2-scan",
       track: "diagnosis",
-      title: T("Como escanear com o seu leitor OBD2", "How to scan with your OBD2 reader"),
+      title: T("Como usar seu scanner OBD2", "How to use your OBD2 scanner"),
       type: "video",
       system: "engine",
       // TODO: troque pelo link/ID do YouTube real desta aula.
@@ -1444,7 +1444,7 @@ export function getContent(locale: Locale) {
         "An OBD2 scanner. Bluetooth dongles (ELM327-style) start at ~$10 and work with free phone apps. Plug it into the port (usually under the steering wheel), pair it and read the codes."
       ),
       scanCta: T("Como escanear corretamente com o seu leitor", "How to scan correctly with your reader"),
-      scanTitle: T("Como escanear com o OBD2", "How to scan with OBD2"),
+      scanTitle: T("Como usar seu scanner OBD2", "How to use your OBD2 scanner"),
       scanIntro: T(
         "Ler os códigos do carro é mais simples do que parece: são 2 minutos entre plugar o leitor e ter a resposta na tela do celular. Veja onde fica a porta, como conectar e o que fazer com o resultado.",
         "Reading your car's codes is simpler than it looks: about 2 minutes from plugging the reader to seeing the answer on your phone. Here's where the port is, how to connect and what to do with the result."

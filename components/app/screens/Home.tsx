@@ -32,8 +32,10 @@ function forYou(lessons: Lesson[], opts: { make?: string; pref: string; seen: st
     if (l.type === "video") n += 1;
     return n;
   };
+  // "obd2-scan" vive só na área de Estudos — no Para você fica a aula
+  // "Luz de injeção ligada? Descubra!" (read-obd2), que leva até ela.
   const fresh = lessons
-    .filter((l) => !opts.seen.includes(l.id) && !opts.saved.includes(l.id))
+    .filter((l) => l.id !== "obd2-scan" && !opts.seen.includes(l.id) && !opts.saved.includes(l.id))
     .sort((a, b) => score(b) - score(a));
   // Calculadora Etanol × Gasolina fixa na 2ª posição (enquanto não concluída).
   const fuelIdx = fresh.findIndex((l) => l.id === "fuel-compare");
