@@ -153,7 +153,7 @@ export function CarsScreen() {
                   </div>
                   <div className="mt-2 flex items-end justify-between gap-2">
                     <div className="min-w-0">
-                      {s.premium ? <PremiumCarDetail services={services} systems={health.systems} /> : <FreeCarAlert findings={health.findings} />}
+                      {s.premium ? <PremiumCarDetail services={services} systems={health.systems} /> : <FreeCarAlert vehicleId={v.id} findings={health.findings} />}
                     </div>
                     <span className="shrink-0 text-[11px] text-cream/45">{vehicleLabel(v)}</span>
                   </div>
@@ -182,14 +182,33 @@ export function CarsScreen() {
 }
 
 // Free: one generic alert chip.
-function FreeCarAlert({ findings }: { findings: { code: string; severity: string }[] }) {
+// Selo de alerta do carro. Quando há pendência, é um atalho direto para
+// Próximas revisões (o lugar onde o usuário resolve o que está vencido).
+function FreeCarAlert({ vehicleId, findings }: { vehicleId: string; findings: { code: string; severity: string }[] }) {
   const c = useContent();
+  const { root } = useNav();
+  const { setActiveVehicle } = usePrototype();
   const overdue = findings.some((f) => f.code === "oil_overdue" || f.code === "revision_overdue");
   const label = overdue ? c.cars.alertOverdue : findings.length ? c.cars.alertPending : c.cars.ok;
   const tone = overdue ? "bg-coral/15 text-coral" : findings.length ? "bg-amber/15 text-amber" : "bg-teal/15 text-teal";
+  const pending = overdue || findings.length > 0;
+
+  if (!pending) {
+    return (
+      <div className="mt-2.5">
+        <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-medium ${tone}`}>{label}</span>
+      </div>
+    );
+  }
   return (
     <div className="mt-2.5">
-      <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-medium ${tone}`}>{label}</span>
+      <button
+        type="button"
+        onClick={(e) => { e.stopPropagation(); setActiveVehicle(vehicleId); root({ name: "revisions" }); }}
+        className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-medium ring-1 ring-transparent hover:ring-current ${tone}`}
+      >
+        {label} ›
+      </button>
     </div>
   );
 }
