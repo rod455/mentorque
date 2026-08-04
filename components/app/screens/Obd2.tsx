@@ -106,9 +106,10 @@ function Obd2Lookup() {
 export function Obd2Screen() {
   const c = useContent();
   const t = c.obd2;
-  const { s, markLessonSeen } = usePrototype();
+  const { s, markLessonSeen, toggleLessonSaved } = usePrototype();
   const { go } = useNav();
   const done = (s.seenLessons ?? []).includes("read-obd2");
+  const saved = (s.savedLessons ?? []).includes("read-obd2");
 
   return (
     <div>
@@ -143,10 +144,12 @@ export function Obd2Screen() {
       <p className="mb-2 mt-6 font-serif text-lg font-bold text-cream">{t.searchTitle}</p>
       <Obd2Lookup />
 
-      {/* Concluído — mesma mecânica das outras aulas */}
-      <Button variant="secondary" className="mt-6 w-full" onClick={() => markLessonSeen("read-obd2")}>
-        {done ? `✓ ${c.learn.completed}` : c.learn.complete}
-      </Button>
+      {/* Botões padrão: concluir + salvar */}
+      <div className="mt-6 flex gap-2">
+        <Button className="flex-1" onClick={() => markLessonSeen("read-obd2")}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
+        <Button variant="ghost" className="flex-1" onClick={() => toggleLessonSaved("read-obd2")}>{saved ? `★ ${c.learn.savedLabel}` : `☆ ${c.learn.saveLater}`}</Button>
+      </div>
+      {!s.premium && <UpgradeBanner ctx="learn" text={c.paywalls.learn.title} />}
     </div>
   );
 }

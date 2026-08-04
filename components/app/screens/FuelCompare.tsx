@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { compareFuel, engineLooksTurbo } from "@/lib/app/fuelCompare";
 import { carName } from "@/lib/app/content";
-import { AppHeader, Card, inputCls, useContent } from "../ui";
+import { AppHeader, Card, UpgradeBanner, inputCls, useContent } from "../ui";
 import { Button } from "@/components/ui/Button";
 
 // Etanol × Gasolina — decide qual combustível compensa no posto.
@@ -19,9 +19,10 @@ const fmt = (n: number, d = 2) => n.toFixed(d).replace(".", ",");
 export function FuelCompareScreen() {
   const c = useContent();
   const t = c.fuelCompare;
-  const { s, updateVehicle, markLessonSeen } = usePrototype();
+  const { s, updateVehicle, markLessonSeen, toggleLessonSaved } = usePrototype();
   const v = activeVehicle(s);
   const done = (s.seenLessons ?? []).includes("fuel-compare");
+  const saved = (s.savedLessons ?? []).includes("fuel-compare");
 
   const p = v?.fuelPrefs;
   const [gasPrice, setGasPrice] = useState(p?.gasPrice != null ? fmt(p.gasPrice) : "");
@@ -161,10 +162,12 @@ export function FuelCompareScreen() {
 
       <p className="mt-4 text-xs leading-relaxed text-cream/45">{t.redo}</p>
 
-      {/* Concluído — mesma mecânica das outras aulas */}
-      <Button variant="secondary" className="mt-5 w-full" onClick={() => markLessonSeen("fuel-compare")}>
-        {done ? `✓ ${c.learn.completed}` : c.learn.complete}
-      </Button>
+      {/* Botões padrão: concluir + salvar */}
+      <div className="mt-5 flex gap-2">
+        <Button className="flex-1" onClick={() => markLessonSeen("fuel-compare")}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
+        <Button variant="ghost" className="flex-1" onClick={() => toggleLessonSaved("fuel-compare")}>{saved ? `★ ${c.learn.savedLabel}` : `☆ ${c.learn.saveLater}`}</Button>
+      </div>
+      {!s.premium && <UpgradeBanner ctx="learn" text={c.paywalls.learn.title} />}
     </div>
   );
 }
