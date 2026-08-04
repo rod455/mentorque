@@ -11,6 +11,51 @@ import { AppHeader, Card, Icon, inputCls, PremiumBadge, SectionTitle, Sheet, Upg
 
 const statusTone: Record<string, string> = { overdue: "text-coral", soon: "text-amber", ok: "text-teal", unknown: "text-cream/50" };
 
+// Prévia do plano Premium para quem é free: mostra COMO o plano fica —
+// item do manual, quando, a observação e o custo — tudo borrado com cadeado.
+function PremiumPreview({ car }: { car: string }) {
+  const c = useContent();
+  const r = c.revisions;
+  const { go } = useNav();
+  return (
+    <div className="mt-5">
+      <p className="mb-2.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-cream/45">
+        {r.previewTitle.replace("{car}", car)} <PremiumBadge />
+      </p>
+      <div className="relative space-y-2">
+        {r.previewItems.map((it, i) => (
+          <div key={i} className="rounded-xl bg-graphite-800 px-3.5 py-3 ring-1 ring-white/5">
+            <div className="flex items-center gap-2">
+              <span aria-hidden className="flex-1 select-none font-display text-[15px] text-cream blur-[4px]">{it.item}</span>
+              <span className="shrink-0 text-amber">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
+              </span>
+            </div>
+            <p className="mt-0.5 flex items-center gap-1.5 text-xs">
+              <span aria-hidden className="select-none text-cream/55 blur-[3px]">{it.when}</span>
+              <span className="rounded bg-teal/15 px-1.5 py-0.5 text-[10px] text-teal">✦ {r.fromManual}</span>
+            </p>
+            <p aria-hidden className="mt-1 select-none text-xs leading-relaxed text-cream/70 blur-[4px]">{it.note}</p>
+            <p className="mt-1 text-xs text-cream/70">
+              {r.estCost}: <span aria-hidden className="select-none text-amber blur-[4px]">{it.cost}</span>
+            </p>
+          </div>
+        ))}
+        {/* Camada clicável por cima: qualquer toque leva ao paywall */}
+        <button
+          onClick={() => go({ name: "subscribe", ctx: "revisions" })}
+          aria-label={r.previewCta}
+          className="absolute inset-0 z-10 flex items-end justify-center rounded-xl bg-gradient-to-t from-graphite-900/70 via-transparent to-transparent pb-3"
+        >
+          <span className="rounded-full bg-amber px-4 py-2 font-display text-xs font-semibold text-graphite shadow-card">
+            🔓 {r.previewCta}
+          </span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 type PlanItem = { item: string; status: "overdue" | "soon" | "ok" | "unknown"; when: string; note?: string; source: "manual" | "general"; serviceType?: string };
 type Plan = { summary: string; items: PlanItem[] };
 
@@ -160,6 +205,7 @@ export function RevisionsScreen() {
           <UpgradeBanner ctx="revisions" text={r.nudge.replace("{car}", carName(v))} />
           <div className="mt-3" />
           {renderDeterministic()}
+          <PremiumPreview car={carName(v)} />
         </>
       )}
 

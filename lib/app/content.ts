@@ -1755,6 +1755,14 @@ export function getContent(locale: Locale) {
       monthsAgo: T("última há {n} meses", "last done {n} months ago"),
       estCost: T("Custo estimado", "Estimated cost"),
       nudge: T("Assine o Premium para a lista completa de itens e o custo estimado do seu {car}.", "Subscribe for the full item list and estimated cost for your {car}."),
+      // Prévia borrada do plano Premium (o que o assinante realmente recebe)
+      previewTitle: T("Com o Premium, o plano do seu {car} fica assim", "With Premium, your {car}'s plan looks like this"),
+      previewCta: T("Ver meu plano completo", "See my full plan"),
+      previewItems: [
+        { item: T("Óleo e filtro — intervalo do seu motor", "Oil and filter — your engine's interval"), when: T("a cada 10.000 km ou 12 meses", "every 10,000 km or 12 months"), note: T("O manual do seu carro pede óleo 5W30 sintético; a oficina costuma oferecer o mineral, mais barato e fora de especificação.", "Your manual calls for 5W30 synthetic; shops often push cheaper mineral oil, out of spec."), cost: "R$ 210–390" },
+        { item: T("Correia dentada — ponto crítico do seu motor", "Timing belt — critical point on your engine"), when: T("faltam ~18.000 km", "~18,000 km to go"), note: T("Neste motor a correia arrebenta sem aviso e danifica as válvulas — não passe do intervalo.", "On this engine the belt snaps without warning and damages the valves — don't exceed the interval."), cost: "R$ 780–1.600" },
+        { item: T("Velas de ignição — pelo seu histórico", "Spark plugs — from your history"), when: T("previsto para os próximos 4 meses", "expected in the next 4 months"), note: T("Você registrou consumo alto: trocar as velas antes do previsto costuma resolver.", "You logged high consumption: replacing the plugs early usually fixes it."), cost: "R$ 160–320" },
+      ],
       smartAlert: T("Pelo seu histórico, os freios devem pedir atenção nos próximos 10.000 km.", "Based on your history, brakes should need attention within the next 10,000 km."),
       cost: {
         oil: "R$ 180–350", airfilter: "R$ 60–140", brakes: "R$ 300–700", brakefluid: "R$ 120–260",
