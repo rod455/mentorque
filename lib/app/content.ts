@@ -483,7 +483,7 @@ export function getContent(locale: Locale) {
     {
       id: "read-obd2",
       track: "diagnosis",
-      title: T("Luz de injeção ligada? Descubra!", "Check-engine light on? Find out!"),
+      title: T("Luz de injeção ligada? Descubra o que é!", "Check-engine light on? Find out what it is!"),
       type: "article",
       system: "engine",
       addedAt: "2026-08-03",
@@ -506,7 +506,7 @@ export function getContent(locale: Locale) {
     {
       id: "fuel-compare",
       track: "money",
-      title: T("Etanol ou gasolina: qual compensa?", "Ethanol or gasoline: which pays off?"),
+      title: T("Etanol ou Gasolina? O que rende mais no meu carro?", "Ethanol or Gasoline? Which goes further in my car?"),
       type: "article",
       system: "engine",
       addedAt: "2026-08-04",
