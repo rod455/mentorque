@@ -1608,6 +1608,7 @@ export function getContent(locale: Locale) {
       totalPh: T("ex.: 480", "e.g. 480"),
       shop: T("Oficina", "Shop"),
       shopPh: T("Nome da oficina", "Shop name"),
+      city: T("Cidade", "City"),
       saveToHistory: T("Salvar no histórico", "Save to history"),
       share: T("Compartilhar", "Share"),
       pdf: T("Exportar PDF / WhatsApp", "Export PDF / WhatsApp"),

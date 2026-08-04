@@ -5,6 +5,7 @@ import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { symptomRecommended } from "@/lib/app/premium";
 import { carName, vehicleLabel } from "@/lib/app/content";
 import { adjustPriceRange, regionFactor, regionLabel, UF_LIST } from "@/lib/app/pricing";
+import { trackPriceReport } from "@/lib/app/track";
 import type { SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
@@ -522,10 +523,11 @@ function RegionSheet({ open, onClose }: { open: boolean; onClose: () => void }) 
 // 2.2.C — Checklist para oficina
 export function ChecklistScreen({ symptomId }: { symptomId: string }) {
   const c = useContent();
-  const { s } = usePrototype();
+  const { s, setCity } = usePrototype();
   const { go } = useNav();
   const sx = c.symptoms.find((x) => x.id === symptomId);
   const [notes, setNotes] = useState("");
+  const [city, setCityLocal] = useState(s.city ?? "");
   const [total, setTotal] = useState("");
   const [shop, setShop] = useState("");
   if (!sx) return <AppHeader title="—" />;
@@ -550,6 +552,18 @@ export function ChecklistScreen({ symptomId }: { symptomId: string }) {
   };
 
   const saveToHistory = () => {
+    // Cidade digitada atualiza o perfil (refina os preços regionais) e o
+    // orçamento vira dado de calibração das faixas (price_reports).
+    if (city.trim() && city.trim() !== (s.city ?? "")) setCity(city);
+    if (total) {
+      trackPriceReport({
+        symptomId: sx.id,
+        uf: s.state,
+        city: city.trim() || s.city,
+        shop: shop.trim() || null,
+        totalBrl: parseInt(total, 10),
+      });
+    }
     go({
       name: "addService",
       preset: {
@@ -596,6 +610,9 @@ export function ChecklistScreen({ symptomId }: { symptomId: string }) {
       <div className="mt-4 space-y-3">
         <Field label={c.checklist.shop}>
           <input value={shop} onChange={(e) => setShop(e.target.value)} placeholder={c.checklist.shopPh} className={inputCls} />
+        </Field>
+        <Field label={c.checklist.city}>
+          <input value={city} onChange={(e) => setCityLocal(e.target.value)} placeholder={c.symptomsUi.regionCityPh} className={inputCls} />
         </Field>
         <Field label={c.checklist.total}>
           <input value={total} inputMode="numeric" onChange={(e) => setTotal(e.target.value.replace(/\D/g, ""))} placeholder={c.checklist.totalPh} className={inputCls} />
