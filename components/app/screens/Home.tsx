@@ -279,7 +279,7 @@ export function HomeScreen() {
                 <button key="kit" onClick={() => go({ name: "equipment" })} className="flex w-36 shrink-0 flex-col self-start text-left">
                   <div className="aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 p-2.5 ring-1 ring-amber/45">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/learn/equipment.png?v=2" alt="" className="h-full w-full object-contain" draggable={false} />
+                    <img src="/learn/equipment.png?v=4" alt="" className="h-full w-full object-contain" draggable={false} />
                   </div>
                   <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{c.equipmentUi.cardTitle}</p>
                 </button>
@@ -299,8 +299,9 @@ export function HomeScreen() {
                   }}
                   className="flex w-36 shrink-0 flex-col self-start text-left"
                 >
-                  <div className={`relative grid aspect-square place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ${carComplete ? "ring-white/[0.06]" : "ring-amber/30"}`}>
-                    <Icon name="calendar" className={`h-9 w-9 ${carComplete ? "text-teal/80" : "text-amber/80"}`} />
+                  <div className={`relative grid aspect-square place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 p-2.5 ring-1 ${carComplete ? "ring-white/[0.06]" : "ring-amber/30"}`}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/learn/revisions.png?v=4" alt="" className="h-full w-full object-contain" draggable={false} />
                     {!carComplete && (
                       <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-amber font-display text-sm font-bold text-graphite">!</span>
                     )}

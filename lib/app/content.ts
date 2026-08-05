@@ -439,7 +439,7 @@ export function getContent(locale: Locale) {
   const lessons: Lesson[] = [
     {
       id: "oil-change",
-      thumb: "/learn/oil-change.png?v=2",
+      thumb: "/learn/oil-change.png?v=4",
       track: "diy",
       title: T("Como trocar o óleo (passo a passo)", "How to change the oil (step by step)"),
       type: "video",
@@ -465,7 +465,7 @@ export function getContent(locale: Locale) {
     },
     {
       id: "brake-pads",
-      thumb: "/learn/brake-pads.png?v=2",
+      thumb: "/learn/brake-pads.png?v=4",
       track: "diy",
       title: T("Trocar a pastilha de freio", "Replace the brake pads"),
       type: "video",
@@ -490,7 +490,7 @@ export function getContent(locale: Locale) {
     },
     {
       id: "read-obd2",
-      thumb: "/learn/read-obd2.png?v=2",
+      thumb: "/learn/read-obd2.png?v=4",
       track: "diagnosis",
       title: T("Luz de injeção ligada? Descubra o que é!", "Check-engine light on? Find out what it is!"),
       type: "article",
@@ -502,7 +502,7 @@ export function getContent(locale: Locale) {
     },
     {
       id: "obd2-scan",
-      thumb: "/learn/obd2-scan.png?v=2",
+      thumb: "/learn/obd2-scan.png?v=4",
       track: "diagnosis",
       title: T("Como usar seu scanner OBD2", "How to use your OBD2 scanner"),
       type: "video",
@@ -515,7 +515,7 @@ export function getContent(locale: Locale) {
     },
     {
       id: "fuel-compare",
-      thumb: "/learn/fuel-compare.png?v=2",
+      thumb: "/learn/fuel-compare.png?v=4",
       track: "money",
       title: T("Etanol ou Gasolina? O que rende mais no meu carro?", "Ethanol or Gasoline? Which goes further in my car?"),
       type: "article",
@@ -527,7 +527,7 @@ export function getContent(locale: Locale) {
     },
     {
       id: "basics",
-      thumb: "/learn/basics.png?v=2",
+      thumb: "/learn/basics.png?v=4",
       track: "fundamentals",
       title: T("Mecânica básica para donos", "Basic mechanics for owners"),
       type: "article",
@@ -538,7 +538,7 @@ export function getContent(locale: Locale) {
     },
     {
       id: "tire-care",
-      thumb: "/learn/tire-care.png?v=2",
+      thumb: "/learn/tire-care.png?v=4",
       track: "diy",
       title: T("Cuidando dos pneus", "Taking care of your tires"),
       type: "article",
@@ -549,25 +549,25 @@ export function getContent(locale: Locale) {
     },
 
     // ── Fundamentos ─────────────────────────────────────────────
-    art({ id: "fund-systems", thumb: "/learn/fund-systems.png?v=2", track: "fundamentals", title: T("Os 6 sistemas do carro", "The 6 systems of a car"), body: [
+    art({ id: "fund-systems", thumb: "/learn/fund-systems.png?v=4", track: "fundamentals", title: T("Os 6 sistemas do carro", "The 6 systems of a car"), body: [
       T("Todo carro é a soma de seis sistemas: motor (gera força), transmissão (leva a força às rodas), freios, suspensão, direção e elétrica.", "Every car is the sum of six systems: engine (makes power), transmission (sends it to the wheels), brakes, suspension, steering and electrical."),
       T("Entender o que cada um faz te ajuda a saber onde está o problema quando algo sai do normal — e a conversar de igual pra igual com a oficina.", "Understanding what each one does helps you locate a problem when something feels off — and talk to the shop on equal footing."),
     ]}),
-    art({ id: "fund-dashboard", thumb: "/learn/fund-dashboard.png?v=2", track: "fundamentals", title: T("Luzes do painel: o que significam", "Dashboard lights: what they mean"), body: [
+    art({ id: "fund-dashboard", thumb: "/learn/fund-dashboard.png?v=4", track: "fundamentals", title: T("Luzes do painel: o que significam", "Dashboard lights: what they mean"), body: [
       T("Verde/azul é informação. Amarelo é atenção: resolva em breve. Vermelho é pare agora — óleo, temperatura ou freio.", "Green/blue is information. Yellow means attention: fix it soon. Red means stop now — oil, temperature or brakes."),
       T("Se a luz do motor pisca, evite acelerar e procure diagnóstico. Fixa, dá pra rodar com cuidado até a oficina.", "If the engine light flashes, avoid accelerating and get it diagnosed. Steady, you can drive gently to the shop."),
     ]}),
-    art({ id: "fund-fluids", thumb: "/learn/fund-fluids.png?v=2", track: "fundamentals", title: T("Os 5 fluidos essenciais", "The 5 essential fluids"), system: "engine", body: [
+    art({ id: "fund-fluids", thumb: "/learn/fund-fluids.png?v=4", track: "fundamentals", title: T("Os 5 fluidos essenciais", "The 5 essential fluids"), system: "engine", body: [
       T("Óleo do motor, fluido de freio, líquido de arrefecimento, fluido de direção e água do limpador. Cada um tem cor e função próprias.", "Engine oil, brake fluid, coolant, steering fluid and washer water. Each has its own color and job."),
       T("Verificar os níveis a cada abastecimento leva 2 minutos e evita a maioria das panes graves.", "Checking levels at each fill-up takes 2 minutes and prevents most serious breakdowns."),
     ]}),
-    { id: "fund-calendar", thumb: "/learn/fund-calendar.png?v=2", track: "fundamentals", title: T("Calendário de manutenção", "Maintenance calendar"), type: "checklist", system: "geral",
+    { id: "fund-calendar", thumb: "/learn/fund-calendar.png?v=4", track: "fundamentals", title: T("Calendário de manutenção", "Maintenance calendar"), type: "checklist", system: "geral",
       need: [], body: [T("Um roteiro do que revisar e quando.", "A guide of what to check and when.")],
       steps: [T("Óleo e filtro: a cada 10 mil km ou 1 ano", "Oil and filter: every 10,000 km or 1 year"), T("Pneus: rodízio a cada 10 mil km, calibragem quinzenal", "Tires: rotate every 10,000 km, pressure every 2 weeks"), T("Freios: inspeção a cada 20 mil km", "Brakes: inspect every 20,000 km"), T("Correia dentada: 50–60 mil km (ver manual)", "Timing belt: 50–60k km (see manual)"), T("Fluido de freio: a cada 2 anos", "Brake fluid: every 2 years")],
       safety: [] },
 
     // ── Faça Você Mesmo (DIY) ──────────────────────────────────
-    { id: "diy-battery", thumb: "/learn/diy-battery.png?v=2", track: "diy", title: T("Trocar a bateria", "Replace the battery"), type: "video", system: "electrical", difficulty: "facil",
+    { id: "diy-battery", thumb: "/learn/diy-battery.png?v=4", track: "diy", title: T("Trocar a bateria", "Replace the battery"), type: "video", system: "electrical", difficulty: "facil",
       media: { provider: "youtube", src: "jNQXAC9IVRw" }, body: [],
       need: [T("Bateria nova compatível", "Compatible new battery"), T("Chave de boca 10mm", "10mm wrench")],
       steps: [T("Desligue tudo e solte o polo negativo (−) primeiro", "Turn everything off and remove the negative (−) first"), T("Solte o positivo (+) e a presilha", "Remove the positive (+) and the clamp"), T("Troque a bateria e reaperte na ordem inversa", "Swap the battery and refit in reverse order")],
@@ -583,7 +583,7 @@ export function getContent(locale: Locale) {
         mecanico: [T("Ignição off; preserve memória se necessário (alimentação auxiliar).", "Ignition off; preserve memory if needed (aux power)."), T("Desconecte (−), depois (+); remova a fixação.", "Disconnect (−), then (+); remove the hold-down."), T("Instale bateria de spec, fixe, reconecte (+) e (−); proteja bornes.", "Fit spec battery, secure, reconnect (+) and (−); protect terminals."), T("Teste carga/alternador; reprograme módulos se aplicável.", "Test charge/alternator; reprogram modules if applicable.")],
       },
       safety: [T("Negativo sai primeiro, entra por último", "Negative off first, on last"), T("Não encoste as duas chaves nos polos", "Don't bridge both terminals")] },
-    { id: "diy-airfilter", thumb: "/learn/diy-airfilter.png?v=2", track: "diy", title: T("Trocar o filtro de ar", "Replace the air filter"), type: "video", system: "engine", difficulty: "facil",
+    { id: "diy-airfilter", thumb: "/learn/diy-airfilter.png?v=4", track: "diy", title: T("Trocar o filtro de ar", "Replace the air filter"), type: "video", system: "engine", difficulty: "facil",
       media: { provider: "youtube", src: "jNQXAC9IVRw" }, body: [],
       need: [T("Filtro de ar novo", "New air filter")],
       steps: [T("Abra a caixa do filtro (presilhas ou parafusos)", "Open the airbox (clips or screws)"), T("Retire o filtro velho e limpe a caixa", "Remove the old filter and clean the box"), T("Encaixe o novo na posição correta e feche", "Fit the new one the right way and close")],
@@ -598,7 +598,7 @@ export function getContent(locale: Locale) {
         mecanico: [T("Motor frio. Abra o airbox (presilhas/parafusos).", "Engine cold. Open the airbox (clips/screws)."), T("Remova o elemento, limpe a carcaça, verifique vedação.", "Remove the element, clean the housing, check sealing."), T("Instale o novo alinhado, feche garantindo estanqueidade da admissão.", "Fit the new one aligned, close ensuring intake sealing.")],
       },
       safety: [T("Não ligue o motor com a caixa aberta", "Don't run the engine with the box open")] },
-    { id: "diy-wipers", thumb: "/learn/diy-wipers.png?v=2", track: "diy", title: T("Trocar as palhetas do limpador", "Replace the wiper blades"), type: "video", system: "electrical", difficulty: "facil",
+    { id: "diy-wipers", thumb: "/learn/diy-wipers.png?v=4", track: "diy", title: T("Trocar as palhetas do limpador", "Replace the wiper blades"), type: "video", system: "electrical", difficulty: "facil",
       media: { provider: "youtube", src: "jNQXAC9IVRw" }, body: [],
       need: [T("Palhetas do tamanho correto", "Correct-size blades")],
       steps: [T("Levante o braço e aperte a trava", "Lift the arm and press the tab"), T("Deslize a palheta velha para fora", "Slide the old blade out"), T("Encaixe a nova até ouvir o clique", "Clip the new one until it clicks")],
@@ -615,123 +615,123 @@ export function getContent(locale: Locale) {
       safety: [T("Segure o braço para não bater no vidro", "Hold the arm so it doesn't snap onto the glass")] },
 
     // ── Diagnóstico ────────────────────────────────────────────
-    art({ id: "diag-noises", thumb: "/learn/diag-noises.png?v=2", track: "diagnosis", title: T("Que barulho é esse? Guia de sons", "What's that noise? Sound guide"), body: [
+    art({ id: "diag-noises", thumb: "/learn/diag-noises.png?v=4", track: "diagnosis", title: T("Que barulho é esse? Guia de sons", "What's that noise? Sound guide"), body: [
       T("Chiado ao frear = pastilha no fim. Batida em buraco = suspensão. Assobio ao acelerar = correia ou admissão. Estalo ao esterçar = homocinética.", "Squeal when braking = pads worn. Knock over bumps = suspension. Whistle on throttle = belt or intake. Click when turning = CV joint."),
       T("Grave o som com o celular e mostre pro Biela ou pra oficina — ajuda muito no diagnóstico.", "Record the sound with your phone and show Biela or the shop — it helps a lot with the diagnosis."),
     ]}),
-    art({ id: "diag-smells", thumb: "/learn/diag-smells.png?v=2", track: "diagnosis", title: T("Cheiros e fumaça: o que indicam", "Smells and smoke: what they mean"), body: [
+    art({ id: "diag-smells", thumb: "/learn/diag-smells.png?v=4", track: "diagnosis", title: T("Cheiros e fumaça: o que indicam", "Smells and smoke: what they mean"), body: [
       T("Fumaça azul = queima de óleo. Branca densa = água no motor (junta). Preta = mistura rica. Cheiro doce = arrefecimento vazando.", "Blue smoke = burning oil. Thick white = water in the engine (gasket). Black = rich mixture. Sweet smell = coolant leak."),
       T("Cheiro de queimado ao frear pede parada imediata: freio superaquecido.", "A burning smell when braking means stop now: overheated brakes."),
     ]}),
-    art({ id: "diag-leaks", thumb: "/learn/diag-leaks.png?v=2", track: "diagnosis", title: T("Manchas no chão: qual vazamento?", "Stains on the floor: which leak?"), body: [
+    art({ id: "diag-leaks", thumb: "/learn/diag-leaks.png?v=4", track: "diagnosis", title: T("Manchas no chão: qual vazamento?", "Stains on the floor: which leak?"), body: [
       T("Marrom/preto = óleo. Vermelho/rosa = direção ou câmbio. Verde/laranja = arrefecimento. Transparente = ar-condicionado (normal).", "Brown/black = oil. Red/pink = steering or transmission. Green/orange = coolant. Clear = A/C (normal)."),
       T("Coloque um papelão sob o carro à noite para localizar a origem do vazamento.", "Put cardboard under the car overnight to locate where the leak comes from."),
     ]}),
 
     // ── Economia & Bolso ───────────────────────────────────────
-    art({ id: "money-fuel", thumb: "/learn/money-fuel.png?v=2", track: "money", title: T("Dirigir gastando menos", "Drive spending less"), body: [
+    art({ id: "money-fuel", thumb: "/learn/money-fuel.png?v=4", track: "money", title: T("Dirigir gastando menos", "Drive spending less"), body: [
       T("Calibragem correta, filtro limpo e conduzir suave (sem arrancadas) economizam até 20% de combustível.", "Correct pressure, a clean filter and smooth driving (no jackrabbit starts) save up to 20% of fuel."),
       T("Peso extra e ar-condicionado em alta velocidade pesam menos do que se imagina; janela aberta na estrada pesa mais.", "Extra weight and A/C at high speed matter less than people think; open windows on the highway matter more."),
     ]}),
-    art({ id: "money-repair-replace", thumb: "/learn/money-repair-replace.png?v=2", track: "money", title: T("Consertar ou trocar de carro?", "Repair or replace the car?"), body: [
+    art({ id: "money-repair-replace", thumb: "/learn/money-repair-replace.png?v=4", track: "money", title: T("Consertar ou trocar de carro?", "Repair or replace the car?"), body: [
       T("Regra prática: se o conserto passa de 50% do valor do carro, ou se você gasta em reparos mais que uma parcela por mês, reavalie.", "Rule of thumb: if a repair exceeds 50% of the car's value, or you spend more on repairs than a monthly payment, reconsider."),
       T("Some tudo que gastou no último ano (está no seu Histórico) antes de decidir.", "Add up everything you spent in the last year (it's in your History) before deciding."),
     ]}),
-    art({ id: "money-quote", thumb: "/learn/money-quote.png?v=2", track: "money", title: T("Ler um orçamento e evitar golpes", "Read a quote and avoid scams"), body: [
+    art({ id: "money-quote", thumb: "/learn/money-quote.png?v=4", track: "money", title: T("Ler um orçamento e evitar golpes", "Read a quote and avoid scams"), body: [
       T("Exija orçamento por escrito com peças e mão de obra separadas. Desconfie de 'já que abriu, troca tudo'.", "Demand a written quote with parts and labor itemized. Be wary of 'while it's open, replace everything'."),
       T("Peça as peças velhas de volta e um segundo orçamento em reparos caros.", "Ask for the old parts back and get a second quote on expensive repairs."),
     ]}),
-    { id: "money-used", thumb: "/learn/money-used.png?v=2", track: "money", title: T("Checklist para comprar usado", "Used-car checklist"), type: "checklist", system: "geral",
+    { id: "money-used", thumb: "/learn/money-used.png?v=4", track: "money", title: T("Checklist para comprar usado", "Used-car checklist"), type: "checklist", system: "geral",
       need: [], body: [T("O que conferir antes de fechar negócio.", "What to check before closing the deal.")],
       steps: [T("Histórico de manutenção e dono anterior", "Service history and previous owner"), T("Alinhamento da pintura e folgas (batida)", "Paint and panel gaps (crash)"), T("Óleo, arrefecimento e fumaça na partida", "Oil, coolant and smoke at startup"), T("Test-drive: freio, câmbio, ruídos", "Test drive: brakes, gearbox, noises"), T("Débitos, multas e vistoria cautelar", "Debts, fines and an independent inspection")],
       safety: [] },
 
     // ── Por Montadora ──────────────────────────────────────────
-    art({ id: "brand-vw", thumb: "/learn/brand-vw.png?v=2", track: "brand", make: "Volkswagen", premium: true, title: T("Volkswagen: pontos de atenção", "Volkswagen: what to watch"), body: [
+    art({ id: "brand-vw", thumb: "/learn/brand-vw.png?v=4", track: "brand", make: "Volkswagen", premium: true, title: T("Volkswagen: pontos de atenção", "Volkswagen: what to watch"), body: [
       T("Linha TSI: atenção à corrente de comando e ao consumo de óleo em motores mais rodados. Turbo pede óleo no ponto certo.", "TSI line: watch the timing chain and oil consumption on higher-mileage engines. The turbo needs oil right on spec."),
       T("Revisões oficiais a cada 10 mil km/1 ano. Consulte o manual do seu modelo para os intervalos exatos.", "Official service every 10,000 km/1 year. Check your model's manual for the exact intervals."),
     ]}),
-    art({ id: "brand-chevrolet", thumb: "/learn/brand-chevrolet.png?v=2", track: "brand", make: "Chevrolet", premium: true, title: T("Chevrolet: pontos de atenção", "Chevrolet: what to watch"), body: [
+    art({ id: "brand-chevrolet", thumb: "/learn/brand-chevrolet.png?v=4", track: "brand", make: "Chevrolet", premium: true, title: T("Chevrolet: pontos de atenção", "Chevrolet: what to watch"), body: [
       T("Motores 1.0/1.2 turbo modernos são econômicos, mas exigem óleo correto e troca em dia para proteger o turbo.", "Modern 1.0/1.2 turbo engines are efficient but demand the correct oil and on-time changes to protect the turbo."),
       T("Atenção ao módulo elétrico e ao MyLink em modelos mais antigos.", "Watch the electrical module and MyLink on older models."),
     ]}),
-    art({ id: "brand-fiat", thumb: "/learn/brand-fiat.png?v=2", track: "brand", make: "Fiat", premium: true, title: T("Fiat: pontos de atenção", "Fiat: what to watch"), body: [
+    art({ id: "brand-fiat", thumb: "/learn/brand-fiat.png?v=4", track: "brand", make: "Fiat", premium: true, title: T("Fiat: pontos de atenção", "Fiat: what to watch"), body: [
       T("Firefly (1.0/1.3) é robusto; cuide da correia dentada banhada a óleo nos que a usam. Picapes pedem atenção à suspensão traseira.", "Firefly (1.0/1.3) is sturdy; mind the oil-bathed timing belt where fitted. Pickups need attention to the rear suspension."),
       T("Câmbio automatizado antigo (Dualogic) pede condução adaptada e revisão específica.", "The old automated gearbox (Dualogic) needs an adapted driving style and specific servicing."),
     ]}),
-    art({ id: "brand-toyota", thumb: "/learn/brand-toyota.png?v=2", track: "brand", make: "Toyota", premium: true, title: T("Toyota: pontos de atenção", "Toyota: what to watch"), body: [
+    art({ id: "brand-toyota", thumb: "/learn/brand-toyota.png?v=4", track: "brand", make: "Toyota", premium: true, title: T("Toyota: pontos de atenção", "Toyota: what to watch"), body: [
       T("Fama de confiável se mantém com revisão em dia. Aspirados são tranquilos; híbridos pedem cuidado com a bateria de alta tensão.", "The reliability reputation holds with on-time service. NA engines are easy; hybrids need care with the high-voltage battery."),
       T("Intervalos oficiais a cada 10 mil km. Peças originais costumam durar mais.", "Official intervals every 10,000 km. Genuine parts tend to last longer."),
     ]}),
-    art({ id: "brand-byd", thumb: "/learn/brand-byd.png?v=2", track: "brand", make: "BYD", premium: true, title: T("BYD: cuidados com elétricos", "BYD: caring for EVs"), body: [
+    art({ id: "brand-byd", thumb: "/learn/brand-byd.png?v=4", track: "brand", make: "BYD", premium: true, title: T("BYD: cuidados com elétricos", "BYD: caring for EVs"), body: [
       T("Sem óleo de motor, mas há fluido de arrefecimento da bateria, freios e filtro de cabine. A manutenção é mais barata, não inexistente.", "No engine oil, but there's battery coolant, brakes and a cabin filter. Maintenance is cheaper, not zero."),
       T("Freio regenerativo faz as pastilhas durarem muito; ainda assim inspecione contra corrosão.", "Regen braking makes pads last a long time; still inspect them for corrosion."),
     ]}),
 
     // ── Por Modelo ─────────────────────────────────────────────
-    art({ id: "model-onix", thumb: "/learn/model-onix.png?v=2", track: "model", make: "Chevrolet", model: "Onix", premium: true, title: T("Chevrolet Onix: guia do dono", "Chevrolet Onix: owner's guide"), body: [
+    art({ id: "model-onix", thumb: "/learn/model-onix.png?v=4", track: "model", make: "Chevrolet", model: "Onix", premium: true, title: T("Chevrolet Onix: guia do dono", "Chevrolet Onix: owner's guide"), body: [
       T("Onix turbo (1.0): use óleo 0W-20/5W-30 conforme o ano e não atrase a troca — o turbo agradece. Revisão a cada 10 mil km.", "Onix turbo (1.0): use 0W-20/5W-30 oil per year and don't delay changes — the turbo thanks you. Service every 10,000 km."),
       T("Pontos comuns: sensores e módulo elétrico; mantenha a bateria em boas condições.", "Common points: sensors and the electrical module; keep the battery healthy."),
     ]}),
-    art({ id: "model-hb20", thumb: "/learn/model-hb20.png?v=2", track: "model", make: "Hyundai", model: "HB20", premium: true, title: T("Hyundai HB20: guia do dono", "Hyundai HB20: owner's guide"), body: [
+    art({ id: "model-hb20", thumb: "/learn/model-hb20.png?v=4", track: "model", make: "Hyundai", model: "HB20", premium: true, title: T("Hyundai HB20: guia do dono", "Hyundai HB20: owner's guide"), body: [
       T("Motores 1.0 aspirado e turbo. O turbo (T-GDI) pede óleo correto e troca em dia. Suspensão firme, boa durabilidade.", "1.0 NA and turbo engines. The turbo (T-GDI) needs the right oil and on-time changes. Firm suspension, good durability."),
       T("Revisões a cada 10 mil km; atenção às buchas da suspensão com o tempo.", "Service every 10,000 km; watch the suspension bushings over time."),
     ]}),
-    art({ id: "model-polo", thumb: "/learn/model-polo.png?v=2", track: "model", make: "Volkswagen", model: "Polo", premium: true, title: T("VW Polo: guia do dono", "VW Polo: owner's guide"), body: [
+    art({ id: "model-polo", thumb: "/learn/model-polo.png?v=4", track: "model", make: "Volkswagen", model: "Polo", premium: true, title: T("VW Polo: guia do dono", "VW Polo: owner's guide"), body: [
       T("TSI 1.0 é econômico e esperto. Cuide do nível de óleo entre trocas e use combustível de qualidade para o turbo.", "The 1.0 TSI is efficient and clever. Watch the oil level between changes and use quality fuel for the turbo."),
       T("Central multimídia e sensores pedem atenção; revisão a cada 10 mil km.", "Infotainment and sensors need attention; service every 10,000 km."),
     ]}),
-    art({ id: "model-strada", thumb: "/learn/model-strada.png?v=2", track: "model", make: "Fiat", model: "Strada", premium: true, title: T("Fiat Strada: guia do dono", "Fiat Strada: owner's guide"), body: [
+    art({ id: "model-strada", thumb: "/learn/model-strada.png?v=4", track: "model", make: "Fiat", model: "Strada", premium: true, title: T("Fiat Strada: guia do dono", "Fiat Strada: owner's guide"), body: [
       T("Picape mais vendida do país. Firefly confiável; atenção à suspensão traseira quando anda carregada e à geometria.", "The country's best-selling pickup. Reliable Firefly; watch the rear suspension when loaded and the alignment."),
       T("Uso de trabalho acelera desgaste de freio e pneu — inspecione com mais frequência.", "Work use speeds up brake and tire wear — inspect more often."),
     ]}),
-    art({ id: "model-corolla", thumb: "/learn/model-corolla.png?v=2", track: "model", make: "Toyota", model: "Corolla", premium: true, title: T("Toyota Corolla: guia do dono", "Toyota Corolla: owner's guide"), body: [
+    art({ id: "model-corolla", thumb: "/learn/model-corolla.png?v=4", track: "model", make: "Toyota", model: "Corolla", premium: true, title: T("Toyota Corolla: guia do dono", "Toyota Corolla: owner's guide"), body: [
       T("Sedã referência em durabilidade. Versão híbrida traz economia enorme; a bateria tem longa vida com uso normal.", "A benchmark sedan for durability. The hybrid brings huge savings; the battery lasts long with normal use."),
       T("Mantenha revisões oficiais para preservar valor de revenda e garantia estendida.", "Keep official service to preserve resale value and the extended warranty."),
     ]}),
 
     // ── Esportivos / Garagem dos Sonhos ────────────────────────
-    art({ id: "sport-turbo", thumb: "/learn/sport-turbo.png?v=2", track: "sports", title: T("Turbo vs aspirado", "Turbo vs naturally aspirated"), body: [
+    art({ id: "sport-turbo", thumb: "/learn/sport-turbo.png?v=4", track: "sports", title: T("Turbo vs aspirado", "Turbo vs naturally aspirated"), body: [
       T("O turbo usa os gases do escape para 'empurrar' mais ar ao motor — mais potência de um motor pequeno. Aspirado respira sozinho: resposta linear e simplicidade.", "A turbo uses exhaust gases to force more air in — more power from a small engine. NA breathes on its own: linear response and simplicity."),
       T("Turbo pede óleo em dia e alguns segundos de marcha lenta antes de desligar após uso forte.", "Turbos need on-time oil and a few seconds of idle before shutting off after hard use."),
     ]}),
-    art({ id: "sport-drivetrain", thumb: "/learn/sport-drivetrain.png?v=2", track: "sports", title: T("Tração: dianteira, traseira, integral", "Drive: front, rear, all-wheel"), body: [
+    art({ id: "sport-drivetrain", thumb: "/learn/sport-drivetrain.png?v=4", track: "sports", title: T("Tração: dianteira, traseira, integral", "Drive: front, rear, all-wheel"), body: [
       T("Dianteira é barata e estável. Traseira é a preferida dos esportivos pela distribuição de peso na aceleração. Integral agarra em qualquer piso.", "Front-wheel is cheap and stable. Rear-wheel is the sports favorite for weight transfer under acceleration. All-wheel grips on any surface."),
       T("Cada uma muda como o carro se comporta na curva e na chuva.", "Each changes how the car behaves in corners and in the rain."),
     ]}),
-    art({ id: "sport-dct", thumb: "/learn/sport-dct.png?v=2", track: "sports", premium: true, title: T("Câmbio de dupla embreagem (DCT)", "Dual-clutch gearbox (DCT)"), body: [
+    art({ id: "sport-dct", thumb: "/learn/sport-dct.png?v=4", track: "sports", premium: true, title: T("Câmbio de dupla embreagem (DCT)", "Dual-clutch gearbox (DCT)"), body: [
       T("Duas embreagens pré-selecionam a próxima marcha: trocas em milésimos, sem cortar a força. É o câmbio dos superesportivos e de muitos populares turbo.", "Two clutches pre-select the next gear: shifts in milliseconds without cutting power. It's the gearbox of supercars and many turbo hatches."),
       T("Exige óleo específico e não gosta de 'segurar na rampa' no ponto de fricção.", "It needs specific oil and dislikes being held on a hill at the friction point."),
     ]}),
-    art({ id: "sport-aero", thumb: "/learn/sport-aero.png?v=2", track: "sports", premium: true, title: T("Aerodinâmica e downforce", "Aerodynamics and downforce"), body: [
+    art({ id: "sport-aero", thumb: "/learn/sport-aero.png?v=4", track: "sports", premium: true, title: T("Aerodinâmica e downforce", "Aerodynamics and downforce"), body: [
       T("Asas e difusores invertem o princípio do avião: em vez de sustentar, empurram o carro contra o chão. Mais aderência em alta velocidade.", "Wings and diffusers invert the airplane principle: instead of lift, they push the car into the ground. More grip at high speed."),
       T("Downforce custa arrasto — por isso carros de rua buscam equilíbrio entre grude e velocidade final.", "Downforce costs drag — that's why road cars balance grip and top speed."),
     ]}),
-    art({ id: "sport-911", thumb: "/learn/sport-911.png?v=2", track: "sports", premium: true, title: T("Ícone: Porsche 911", "Icon: Porsche 911"), body: [
+    art({ id: "sport-911", thumb: "/learn/sport-911.png?v=4", track: "sports", premium: true, title: T("Ícone: Porsche 911", "Icon: Porsche 911"), body: [
       T("Desde 1963 com o motor atrás do eixo traseiro — uma 'anomalia' que a Porsche transformou em obra-prima de engenharia geração após geração.", "Since 1963 with the engine behind the rear axle — an 'anomaly' Porsche turned into an engineering masterpiece generation after generation."),
       T("Prova de que evolução constante vale mais que reinvenção: a silhueta é quase a mesma há 60 anos.", "Proof that constant evolution beats reinvention: the silhouette has barely changed in 60 years."),
     ]}),
-    art({ id: "sport-gtr", thumb: "/learn/sport-gtr.png?v=2", track: "sports", premium: true, title: T("Ícone: Nissan GT-R", "Icon: Nissan GT-R"), body: [
+    art({ id: "sport-gtr", thumb: "/learn/sport-gtr.png?v=4", track: "sports", premium: true, title: T("Ícone: Nissan GT-R", "Icon: Nissan GT-R"), body: [
       T("Apelidado de 'Godzilla', usa tração integral inteligente e motor V6 biturbo montado à mão para humilhar superesportivos que custam o triplo.", "Nicknamed 'Godzilla', it uses smart all-wheel drive and a hand-built twin-turbo V6 to humble supercars costing triple."),
       T("Um marco de como tecnologia pode democratizar a performance.", "A milestone in how technology can democratize performance."),
     ]}),
-    art({ id: "sport-muscle", thumb: "/learn/sport-muscle.png?v=2", track: "sports", premium: true, title: T("Muscle cars: a era dos V8", "Muscle cars: the V8 era"), body: [
+    art({ id: "sport-muscle", thumb: "/learn/sport-muscle.png?v=4", track: "sports", premium: true, title: T("Muscle cars: a era dos V8", "Muscle cars: the V8 era"), body: [
       T("Anos 60-70 nos EUA: motores V8 gigantes em carros acessíveis. Mustang, Camaro e Charger viraram lenda pela força bruta e pelo som.", "1960s-70s USA: huge V8 engines in affordable cars. Mustang, Camaro and Charger became legends for brute force and sound."),
       T("A filosofia 'sem substituto para cilindrada' moldou a cultura automotiva por décadas.", "The 'no replacement for displacement' philosophy shaped car culture for decades."),
     ]}),
 
     // ── Cultura & Curiosidades ─────────────────────────────────
-    art({ id: "cult-history", thumb: "/learn/cult-history.png?v=2", track: "culture", title: T("Breve história do automóvel", "A brief history of the car"), media: { provider: "youtube", src: "jNQXAC9IVRw" }, type: "video", body: [
+    art({ id: "cult-history", thumb: "/learn/cult-history.png?v=4", track: "culture", title: T("Breve história do automóvel", "A brief history of the car"), media: { provider: "youtube", src: "jNQXAC9IVRw" }, type: "video", body: [
       T("De 1886, com o Benz Patent-Motorwagen, à linha de montagem de Ford e à eletrificação de hoje — pouco mais de um século que mudou o mundo.", "From 1886, with the Benz Patent-Motorwagen, to Ford's assembly line and today's electrification — just over a century that changed the world."),
     ]}),
-    art({ id: "cult-ev", thumb: "/learn/cult-ev.png?v=2", track: "culture", title: T("Como funciona um carro elétrico", "How an electric car works"), body: [
+    art({ id: "cult-ev", thumb: "/learn/cult-ev.png?v=4", track: "culture", title: T("Como funciona um carro elétrico", "How an electric car works"), body: [
       T("Bateria alimenta um motor elétrico que entrega torque instantâneo. Sem câmbio, sem embreagem, sem óleo de motor.", "A battery feeds an electric motor delivering instant torque. No gearbox, no clutch, no engine oil."),
       T("O freio regenerativo recarrega a bateria ao desacelerar — por isso as pastilhas duram tanto.", "Regenerative braking recharges the battery when slowing down — that's why the pads last so long."),
     ]}),
-    art({ id: "cult-hybrid", thumb: "/learn/cult-hybrid.png?v=2", track: "culture", title: T("Híbridos: dois mundos", "Hybrids: two worlds"), body: [
+    art({ id: "cult-hybrid", thumb: "/learn/cult-hybrid.png?v=4", track: "culture", title: T("Híbridos: dois mundos", "Hybrids: two worlds"), body: [
       T("Combinam motor a combustão e elétrico. No trânsito, rodam no elétrico (econômico); na estrada, o motor assume. Alguns recarregam na tomada (plug-in).", "They combine a combustion and an electric motor. In traffic they run electric (efficient); on the highway the engine takes over. Some charge from a plug (plug-in)."),
     ]}),
-    art({ id: "cult-adas", thumb: "/learn/cult-adas.png?v=2", track: "culture", title: T("ADAS: os assistentes de direção", "ADAS: driver assists"), body: [
+    art({ id: "cult-adas", thumb: "/learn/cult-adas.png?v=4", track: "culture", title: T("ADAS: os assistentes de direção", "ADAS: driver assists"), body: [
       T("Frenagem automática, alerta de faixa e piloto adaptativo usam câmeras e radares para reduzir acidentes.", "Automatic braking, lane alerts and adaptive cruise use cameras and radars to cut accidents."),
       T("São assistentes, não pilotos: exigem atenção total do motorista.", "They're assistants, not drivers: they require the driver's full attention."),
     ]}),
@@ -739,7 +739,7 @@ export function getContent(locale: Locale) {
     // ── Por característica do veículo (traits) ───────────────────────────
     // Servem a centenas de modelos: um conteúdo de turbo vale para Polo TSI,
     // Kicks, Compass, Pulse Abarth… Ver lib/app/traits.ts.
-    art({ id: "trait-turbo", thumb: "/learn/trait-turbo.png?v=2", track: "diy", traits: ["turbo"], system: "engine", addedAt: "2026-08-04",
+    art({ id: "trait-turbo", thumb: "/learn/trait-turbo.png?v=4", track: "diy", traits: ["turbo"], system: "engine", addedAt: "2026-08-04",
       title: T("Motor turbo: 5 cuidados que dobram a vida dele", "Turbo engine: 5 habits that double its life"), body: [
       T("O turbo trabalha a mais de 100.000 rpm e é lubrificado pelo óleo do motor. Isso muda três coisas na sua rotina: o óleo tem que ser exatamente o especificado, o intervalo de troca é mais curto, e nível baixo é muito mais grave que num aspirado.", "The turbo spins over 100,000 rpm and is lubricated by engine oil. That changes three things: the oil must be exactly the specified one, the interval is shorter, and low level is far more serious than on a naturally aspirated engine."),
       T("1) Use só o óleo da especificação do manual — o turbo é o primeiro a sofrer com óleo errado. 2) Confira o nível a cada 15 dias, não a cada revisão.", "1) Use only the manual's oil spec — the turbo suffers first from wrong oil. 2) Check the level every two weeks, not every service."),
@@ -747,21 +747,21 @@ export function getContent(locale: Locale) {
       T("4) Nos primeiros minutos com o motor frio, evite acelerar forte — o óleo ainda está grosso e não chegou bem ao turbo. 5) Filtro de ar sujo faz o turbo trabalhar mais: troque no prazo.", "4) In the first minutes when cold, avoid hard acceleration — the oil is still thick and hasn't reached the turbo. 5) A dirty air filter makes the turbo work harder: replace on schedule."),
       T("Sinais de alerta: fumaça azulada, apito agudo que aumenta com a aceleração, perda de força e consumo de óleo entre trocas. Qualquer um deles pede diagnóstico antes de virar prejuízo grande.", "Warning signs: bluish smoke, a high-pitched whine that rises with revs, power loss and oil consumption between changes. Any of these calls for a diagnosis before it becomes expensive."),
     ]}),
-    art({ id: "trait-cvt", thumb: "/learn/trait-cvt.png?v=2", track: "fundamentals", traits: ["cvt"], system: "engine", addedAt: "2026-08-04",
+    art({ id: "trait-cvt", thumb: "/learn/trait-cvt.png?v=4", track: "fundamentals", traits: ["cvt"], system: "engine", addedAt: "2026-08-04",
       title: T("Câmbio CVT: o que preserva e o que destrói", "CVT gearbox: what preserves it and what kills it"), body: [
       T("O CVT não tem marchas: ele usa uma correia de aço entre polias que mudam de diâmetro. É suave e econômico, mas trabalha por atrito — e é por isso que o fluido dele é item de vida ou morte.", "A CVT has no gears: it uses a steel belt between variable pulleys. It's smooth and efficient, but works by friction — which is why its fluid is a life-or-death item."),
       T("Regra número um: troque o fluido no intervalo do manual (costuma ser entre 40.000 e 60.000 km) e use SÓ o fluido especificado. Fluido genérico de automático destrói um CVT — não é exagero de fabricante.", "Rule one: change the fluid at the manual's interval (usually 40,000–60,000 km) and use ONLY the specified fluid. Generic automatic fluid destroys a CVT — that's not marketing."),
       T("O que desgasta: arrancadas bruscas, sair com o carro atolado forçando na areia/lama, e rebocar acima do permitido. O CVT sofre com torque repentino, justamente o oposto do que ele foi feito para fazer.", "What wears it: hard launches, forcing through sand or mud, and towing over the limit. CVTs suffer from sudden torque — the opposite of what they're built for."),
       T("Sinais de problema: trepidação ao acelerar em baixa velocidade, o motor 'disparar' de rotação sem o carro acompanhar, ou barulho de zumbido que aumenta com a velocidade. Não deixe passar: reparo de CVT é caro.", "Trouble signs: shudder at low speed, engine revving without the car following, or a hum that rises with speed. Don't ignore it: CVT repair is expensive."),
     ]}),
-    art({ id: "trait-dct", thumb: "/learn/trait-dct.png?v=2", track: "fundamentals", traits: ["dct", "amt"], system: "engine", addedAt: "2026-08-04",
+    art({ id: "trait-dct", thumb: "/learn/trait-dct.png?v=4", track: "fundamentals", traits: ["dct", "amt"], system: "engine", addedAt: "2026-08-04",
       title: T("Câmbio automatizado no dia a dia: o que é normal", "Automated gearbox day to day: what's normal"), body: [
       T("Dupla embreagem e câmbio automatizado de uma embreagem são, por dentro, câmbios manuais que o computador opera. Isso explica os 'defeitos' que na verdade são características: pequenos trancos em baixa velocidade e hesitação na saída.", "Dual-clutch and single-clutch automated gearboxes are, inside, manual gearboxes operated by a computer. That explains the 'faults' that are actually traits: small jerks at low speed and hesitation from a stop."),
       T("O que realmente faz mal: ficar em D parado no trânsito com o pé no freio por muito tempo (nas versões secas, a embreagem fica patinando e esquenta) e usar o acelerador para segurar o carro em subida — use o freio de mão.", "What really hurts: sitting in D in traffic with your foot on the brake (on dry-clutch versions the clutch slips and overheats) and holding the car on a hill with the throttle — use the handbrake instead."),
       T("Em engarrafamento pesado, ponha em N nas paradas longas. Em subidas com manobra (rampa de garagem), seja decidido: meia-embreagem prolongada é o que mais queima o conjunto.", "In heavy traffic, shift to N during long stops. On ramps, be decisive: prolonged slipping is what burns the clutch pack."),
       T("Trepidação forte ao sair, cheiro de queimado e luz de câmbio no painel são sinais de embreagem no fim. Diagnóstico cedo pode significar trocar só a embreagem em vez do câmbio inteiro.", "Strong shudder from a stop, a burnt smell and a gearbox light are signs of a worn clutch. An early diagnosis can mean replacing just the clutch instead of the whole box."),
     ]}),
-    art({ id: "trait-ev", thumb: "/learn/trait-ev.png?v=2", track: "fundamentals", traits: ["ev"], system: "electrical", addedAt: "2026-08-04",
+    art({ id: "trait-ev", thumb: "/learn/trait-ev.png?v=4", track: "fundamentals", traits: ["ev"], system: "electrical", addedAt: "2026-08-04",
       title: T("Elétrico: a rotina que preserva a bateria", "Electric: the routine that preserves the battery"), body: [
       T("A bateria é o componente mais caro do carro — e ela envelhece por dois motivos: ciclos de carga e temperatura. A boa notícia é que a rotina que preserva é simples e não atrapalha o uso.", "The battery is the car's most expensive part — and it ages for two reasons: charge cycles and heat. The good news: the routine that preserves it is simple."),
       T("No dia a dia, mantenha entre 20% e 80%. Carga até 100% só quando for viajar, e de preferência saia logo depois (bateria cheia parada, no calor, é o pior cenário). Abaixo de 10% com frequência também desgasta.", "Day to day, keep it between 20% and 80%. Charge to 100% only before a trip, and leave soon after (a full battery sitting in the heat is the worst case). Frequently going below 10% also wears it."),
@@ -769,14 +769,14 @@ export function getContent(locale: Locale) {
       T("O que muda na manutenção: não tem óleo de motor, vela ou correia — mas continuam existindo freios, suspensão, pneus, fluido de freio e filtro de cabine. E atenção aos pneus: elétrico é mais pesado e desgasta mais rápido.", "What changes: no engine oil, plugs or belts — but brakes, suspension, tires, brake fluid and cabin filter remain. Watch the tires: EVs are heavier and wear them faster."),
       T("Curiosidade útil: o freio regenerativo faz as pastilhas durarem muito mais, mas por rodarem pouco elas podem oxidar. Uma frenagem mais firme de vez em quando ajuda a limpar os discos.", "Useful note: regenerative braking makes pads last much longer, but since they're barely used they can rust. An occasional firmer stop helps clean the discs."),
     ]}),
-    art({ id: "trait-diesel", thumb: "/learn/trait-diesel.png?v=2", track: "fundamentals", traits: ["diesel"], system: "engine", addedAt: "2026-08-04",
+    art({ id: "trait-diesel", thumb: "/learn/trait-diesel.png?v=4", track: "fundamentals", traits: ["diesel"], system: "engine", addedAt: "2026-08-04",
       title: T("Diesel: os cuidados que evitam prejuízo grande", "Diesel: the care that avoids big bills"), body: [
       T("Motor diesel moderno trabalha com pressão de injeção altíssima, e o inimigo número um é a água no combustível. Por isso o filtro (o famoso 'filtro Racor' ou separador) é o item mais importante da manutenção.", "A modern diesel runs at very high injection pressure, and enemy number one is water in the fuel. That's why the filter/water separator is the single most important maintenance item."),
       T("Drene o separador de água no intervalo indicado e troque o filtro de combustível rigorosamente no prazo. Bico injetor de diesel custa caro, e água ou sujeira acabam com o conjunto em pouco tempo.", "Drain the water separator at the recommended interval and replace the fuel filter strictly on time. Diesel injectors are expensive, and water or dirt destroy them quickly."),
       T("Se o seu tem Arla 32 (SCR), nunca deixe faltar nem complete com água: o sistema entra em modo de emergência e limita a potência. Use Arla de procedência e evite deixar o galão aberto no sol.", "If yours uses DEF (SCR), never run out and never top it up with water: the system goes into limp mode. Use quality DEF and don't leave the jug open in the sun."),
       T("Filtro de partículas (DPF): trajetos curtos e cidade impedem a queima automática da fuligem. Se o painel avisar, faça o que o manual pede — geralmente rodar em velocidade constante por alguns minutos. Ignorar entope o filtro e o reparo é caro.", "Particulate filter (DPF): short city trips prevent automatic soot burn-off. If the dash warns you, do what the manual says — usually drive at steady speed for a few minutes. Ignoring it clogs the filter and repair is costly."),
     ]}),
-    art({ id: "trait-highkm", thumb: "/learn/trait-highkm.png?v=2", track: "diagnosis", traits: ["highKm", "oldCar"], system: "geral", addedAt: "2026-08-04",
+    art({ id: "trait-highkm", thumb: "/learn/trait-highkm.png?v=4", track: "diagnosis", traits: ["highKm", "oldCar"], system: "geral", addedAt: "2026-08-04",
       title: T("Passou de 100 mil km? Revise estes 7 pontos", "Past 100,000 km? Check these 7 points"), body: [
       T("Carro com quilometragem alta não é problema — carro com quilometragem alta e manutenção adiada é. Nesta faixa, alguns itens saem do 'ainda aguenta' e entram no 'já era para ter trocado'.", "High mileage isn't a problem — high mileage with deferred maintenance is. At this point, some items move from 'still fine' to 'should already have been replaced'."),
       T("1) Correia dentada e tensor (se o seu motor usa correia): passar do intervalo pode destruir o motor. 2) Bomba d'água — costuma ser trocada junto com a correia, e sai muito mais barato assim.", "1) Timing belt and tensioner (if your engine uses a belt): exceeding the interval can destroy the engine. 2) Water pump — usually replaced together with the belt, and much cheaper that way."),
@@ -784,14 +784,14 @@ export function getContent(locale: Locale) {
       T("6) Mangueiras e correia de acessórios: borracha ressecada racha sem aviso. 7) Fluido de freio e de arrefecimento — envelhecem por tempo, não por km, e quase ninguém lembra.", "6) Hoses and accessory belt: dry rubber cracks without warning. 7) Brake and coolant fluid — they age by time, not mileage, and almost everyone forgets."),
       T("Dica de bolso: faça um item por mês em vez de tudo de uma vez. Espalhado, cabe no orçamento; adiado, vira guincho.", "Budget tip: do one item per month instead of everything at once. Spread out it fits the budget; postponed it becomes a tow truck."),
     ]}),
-    art({ id: "trait-appuse", thumb: "/learn/trait-appuse.png?v=2", track: "money", traits: ["appUse"], system: "geral", addedAt: "2026-08-04",
+    art({ id: "trait-appuse", thumb: "/learn/trait-appuse.png?v=4", track: "money", traits: ["appUse"], system: "geral", addedAt: "2026-08-04",
       title: T("Rodar de aplicativo: manutenção em ritmo dobrado", "Driving for apps: maintenance at double pace"), body: [
       T("Quem roda de aplicativo faz em um ano a quilometragem que um motorista comum faz em três — e quase toda em cidade, que é o uso mais severo que existe para um carro.", "App drivers cover in one year what a regular driver covers in three — and almost all of it in the city, the most severe use a car can face."),
       T("Na prática, use o intervalo 'severo' do manual, não o normal: costuma ser metade da quilometragem para óleo e filtros. É contraintuitivo, mas trocar mais vezes sai muito mais barato que um motor.", "In practice, use the manual's 'severe' interval, not the normal one: usually half the mileage for oil and filters. Counterintuitive, but changing more often is far cheaper than an engine."),
       T("Itens que somem rápido nesse uso: pastilhas de freio (para-e-anda), embreagem (se manual), amortecedores (peso extra de passageiros) e pneus. Calibrar toda semana economiza combustível e pneu ao mesmo tempo.", "Items that vanish fast: brake pads (stop-and-go), clutch (if manual), shocks (extra passenger weight) and tires. Weekly pressure checks save both fuel and tires."),
       T("Registre TODO serviço aqui no app. Além de organizar, o histórico completo aumenta o valor de revenda — e para quem roda muito, revender bem faz parte do lucro.", "Log EVERY service here. Beyond organization, a complete history raises resale value — and for high-mileage drivers, reselling well is part of the profit."),
     ]}),
-    art({ id: "trait-urban", thumb: "/learn/trait-urban.png?v=2", track: "money", traits: ["urbanUse"], system: "engine", addedAt: "2026-08-04",
+    art({ id: "trait-urban", thumb: "/learn/trait-urban.png?v=4", track: "money", traits: ["urbanUse"], system: "engine", addedAt: "2026-08-04",
       title: T("Só cidade e trajeto curto? Isso desgasta mais", "Short city trips? That wears more"), body: [
       T("Parece o contrário, mas rodar pouco e só na cidade é considerado uso SEVERO pelos fabricantes. O motivo: em trajetos curtos o motor não chega à temperatura ideal de trabalho.", "It seems backwards, but low-mileage city driving is classified as SEVERE use by manufacturers. The reason: on short trips the engine never reaches its ideal temperature."),
       T("Sem aquecer direito, sobra combustível não queimado e água da condensação no óleo — o que acelera a formação de borra. Por isso o óleo pode vencer por TEMPO mesmo com poucos quilômetros rodados.", "Without warming up, unburnt fuel and condensation stay in the oil — which speeds up sludge. That's why oil can expire by TIME even with few kilometers driven."),
@@ -800,7 +800,7 @@ export function getContent(locale: Locale) {
     ]}),
 
     // ── Por situação do dono (situations) ────────────────────────────────
-    art({ id: "sit-just-bought", thumb: "/learn/sit-just-bought.png?v=2", track: "money", situations: ["justBought"], system: "geral", addedAt: "2026-08-04",
+    art({ id: "sit-just-bought", thumb: "/learn/sit-just-bought.png?v=4", track: "money", situations: ["justBought"], system: "geral", addedAt: "2026-08-04",
       title: T("Comprou agora? Faça isso nos primeiros 30 dias", "Just bought it? Do this in the first 30 days"), body: [
       T("Carro usado vem com um histórico que você não viveu. Estes primeiros 30 dias definem se você vai herdar os problemas do dono anterior ou começar do zero com segurança.", "A used car comes with a history you didn't live. These first 30 days decide whether you inherit the previous owner's problems or start fresh."),
       T("1) Troque o óleo e o filtro, independente do que disseram. É barato e zera a dúvida. 2) Verifique fluido de freio e de arrefecimento — são os mais esquecidos e os que causam os estragos mais caros.", "1) Change oil and filter regardless of what you were told. It's cheap and removes all doubt. 2) Check brake and coolant fluid — the most forgotten and the ones causing the priciest damage."),
@@ -808,7 +808,7 @@ export function getContent(locale: Locale) {
       T("4) Calibre os pneus e olhe a data de fabricação deles (4 números na lateral: semana e ano). Pneu com mais de 5 anos endurece mesmo com sulco bom. 5) Teste a bateria — a maioria dos vendedores não troca.", "4) Set tire pressure and check their manufacture date (4 digits on the sidewall: week and year). Tires over 5 years old harden even with good tread. 5) Test the battery — most sellers don't replace it."),
       T("6) Registre tudo isso aqui no app com a data de hoje. A partir de agora o histórico é seu, e daqui a três anos você vai agradecer.", "6) Log all of it here with today's date. From now on the history is yours, and in three years you'll be glad."),
     ]}),
-    art({ id: "sit-overdue", thumb: "/learn/sit-overdue.png?v=2", track: "fundamentals", situations: ["overdue"], system: "engine", addedAt: "2026-08-04",
+    art({ id: "sit-overdue", thumb: "/learn/sit-overdue.png?v=4", track: "fundamentals", situations: ["overdue"], system: "engine", addedAt: "2026-08-04",
       title: T("Atrasou a revisão? O que acontece e por onde começar", "Service overdue? What happens and where to start"), body: [
       T("Primeiro, sem pânico: atraso não é sentença. Mas a ordem em que você resolve importa, porque alguns itens só ficam caros e outros deixam você na estrada.", "First, don't panic: being late isn't a death sentence. But the order matters, because some items just get expensive while others strand you."),
       T("Comece pelo que é SEGURANÇA: freios (pastilha, disco, fluido) e pneus. Não dá para negociar prazo com item que decide se o carro para ou não.", "Start with SAFETY: brakes (pads, discs, fluid) and tires. There's no negotiating deadlines with what decides whether the car stops."),
@@ -816,7 +816,7 @@ export function getContent(locale: Locale) {
       T("Por último, o que é desempenho e economia: filtros de ar e combustível, velas. Atrasar aqui custa em consumo, não em quebra — dá para escalonar por alguns meses.", "Last, performance and economy: air and fuel filters, spark plugs. Delaying here costs fuel, not failures — you can spread these over a few months."),
       T("Exceção importante: correia dentada não entra nessa fila. Se estiver vencida, é a primeira coisa — ela não avisa antes de arrebentar.", "Important exception: the timing belt isn't in this queue. If it's overdue, it comes first — it gives no warning before snapping."),
     ]}),
-    art({ id: "sit-no-history", thumb: "/learn/sit-no-history.png?v=2", track: "money", situations: ["noHistory"], system: "geral", addedAt: "2026-08-04",
+    art({ id: "sit-no-history", thumb: "/learn/sit-no-history.png?v=4", track: "money", situations: ["noHistory"], system: "geral", addedAt: "2026-08-04",
       title: T("Monte o histórico do seu carro (ele vale dinheiro)", "Build your car's history (it's worth money)"), body: [
       T("Histórico de manutenção não é burocracia: é a diferença entre vender seu carro pela tabela ou aceitar deságio de 10% a 15% porque o comprador não tem como confiar no que você diz.", "A maintenance history isn't bureaucracy: it's the difference between selling at book value or accepting a 10–15% discount because the buyer can't verify what you say."),
       T("Comece pelo que você lembra, mesmo aproximado. Registre a última troca de óleo, o último serviço grande e qualquer peça trocada. Data aproximada vale mais que nenhuma.", "Start with what you remember, even roughly. Log the last oil change, the last big service and any part replaced. An approximate date is worth more than none."),

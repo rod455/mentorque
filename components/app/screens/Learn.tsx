@@ -325,8 +325,15 @@ export function ContentScreen({ id }: { id: string }) {
       {lesson.media ? (
         <VideoPlayer media={lesson.media} />
       ) : (
-        <div className="grid aspect-video place-items-center rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 text-cream/30 ring-1 ring-white/10">
-          <Icon name={typeIcon(lesson.type)} className="h-12 w-12" />
+        <div className="grid aspect-video place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 text-cream/30 ring-1 ring-white/10">
+          {/* Vídeo ainda não publicado usa a arte de player; texto usa a própria capa. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={lesson.type === "video" ? "/learn/_video-placeholder.png?v=4" : lesson.thumb ?? "/learn/_video-placeholder.png?v=4"}
+            alt=""
+            className="h-full w-full object-contain p-3"
+            draggable={false}
+          />
         </div>
       )}
 

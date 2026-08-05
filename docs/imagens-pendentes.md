@@ -1,8 +1,10 @@
 # Mentorque — Imagens
 
-> **Status (05/08/2026):** pacote de 94 imagens recebido e instalado. Restam
-> as 3 avulsas listadas no fim. A `memories/accessory.png` foi recuperada
-> separando-a da `fullTank.png`, onde as duas artes vieram na mesma folha.
+> **Status (05/08/2026):** COMPLETO — 98/98 imagens instaladas.
+> As 43 capas de Estudos foram substituidas pela versao v4 (mesmo estilo giz
+> dos demais pacotes). As 3 avulsas chegaram. A `memories/accessory.png` foi
+> recuperada separando-a da `fullTank.png`, onde as duas artes vieram na
+> mesma folha. Cache-busting das capas esta em `?v=4`.
 
 Inventário de todos os espaços do app que ainda usam **ícone de linha ou emoji**
 onde deveria entrar arte. Os IDs são os nomes exatos de arquivo esperados.
