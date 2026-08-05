@@ -838,6 +838,8 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
           className={`relative rounded-2xl p-4 text-left ring-2 transition-colors ${plan === "annual" ? "bg-amber text-graphite ring-amber" : "bg-graphite-800 text-cream ring-white/10"}`}
         >
           <span className={`absolute -top-2.5 left-3 rounded-full px-2 py-0.5 text-[10px] font-bold ${plan === "annual" ? "bg-graphite text-amber" : "bg-amber/20 text-amber"}`}>{sub.planBadge}</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/badges/badge-anual.png" alt="" className="absolute -top-3 right-2 h-11 w-11 object-contain drop-shadow" draggable={false} />
           <span className="block font-display text-base font-bold">{sub.planAnnual}</span>
           <span className={`mt-0.5 block text-sm ${plan === "annual" ? "text-graphite/75" : "text-cream/60"}`}>{sub.planAnnualPrice}</span>
           <span className={`block text-xs ${plan === "annual" ? "text-graphite/60" : "text-cream/45"}`}>{sub.planAnnualNote}</span>

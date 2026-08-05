@@ -83,11 +83,11 @@ export function HomeScreen() {
     (a, b) => (a.cat === "momento" ? 0 : 1) - (b.cat === "momento" ? 0 : 1)
   );
 
-  const quick: { icon: string; label: string; tint: string; go: () => void }[] = [
-    { icon: "diagnose", label: h.qDiagnose, tint: "bg-coral/15 text-coral", go: () => root({ name: "symptoms" }) },
-    { icon: "clock", label: h.qService, tint: "bg-teal/15 text-teal", go: () => go({ name: "addService" }) },
-    { icon: "calendar", label: h.qRevisions, tint: "bg-amber/15 text-amber", go: () => root({ name: "revisions" }) },
-    { icon: "book", label: h.qStudies, tint: "bg-white/10 text-cream/80", go: () => root({ name: "learn" }) },
+  const quick: { art: string; label: string; tint: string; go: () => void }[] = [
+    { art: "diagnose", label: h.qDiagnose, tint: "bg-coral/15", go: () => root({ name: "symptoms" }) },
+    { art: "log-service", label: h.qService, tint: "bg-teal/15", go: () => go({ name: "addService" }) },
+    { art: "service-plan", label: h.qRevisions, tint: "bg-amber/15", go: () => root({ name: "revisions" }) },
+    { art: "learn", label: h.qStudies, tint: "bg-white/10", go: () => root({ name: "learn" }) },
   ];
 
   return (
@@ -340,7 +340,8 @@ export function HomeScreen() {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={photo} alt="" className="h-full w-full object-cover" draggable={false} />
                     ) : (
-                      <span className="text-3xl">{m.emoji}</span>
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={`/memories/${m.id}.png`} alt="" className="h-full w-full object-contain p-1.5" draggable={false} />
                     )}
                   </div>
                   <p className="mt-1.5 line-clamp-2 text-[12px] leading-snug text-cream/80">{label}</p>
@@ -359,8 +360,9 @@ export function HomeScreen() {
       <div className="grid grid-cols-4 gap-2.5">
         {quick.map((q) => (
           <button key={q.label} onClick={q.go} className="flex flex-col items-center gap-1.5">
-            <span className={`grid h-14 w-14 place-items-center rounded-2xl ${q.tint}`}>
-              <Icon name={q.icon} className="h-6 w-6" />
+            <span className={`grid h-14 w-14 place-items-center overflow-hidden rounded-2xl p-2 ${q.tint}`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`/actions/${q.art}.png`} alt="" className="h-full w-full object-contain" draggable={false} />
             </span>
             <span className="text-center text-[11px] leading-tight text-cream/70">{q.label}</span>
           </button>

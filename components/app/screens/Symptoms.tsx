@@ -9,7 +9,7 @@ import { trackPriceReport } from "@/lib/app/track";
 import type { SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, Icon, inputCls, LockedCard, PremiumBadge, RecoBadge, SeverityDot, Sheet, UpgradeBanner, useContent } from "../ui";
+import { AppHeader, Card, inputCls, LockedCard, PremiumBadge, RecoBadge, SeverityDot, Sheet, UpgradeBanner, useContent } from "../ui";
 import { AdOverlay, adsEnabled } from "../AdGate";
 
 // Map a symptom category to a service type for pre-filling the history form.
@@ -148,8 +148,9 @@ export function SymptomsScreen() {
             onClick={() => go({ name: "systemProblems", system: sysm.key })}
             className="flex flex-col gap-2 rounded-3xl bg-graphite-800 p-4 text-left ring-1 ring-white/5 transition-all hover:ring-white/15 active:scale-[0.98]"
           >
-            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-coral/12 text-coral">
-              <Icon name={sysm.icon} className="h-6 w-6" />
+            <span className="grid h-16 w-16 place-items-center overflow-hidden rounded-2xl bg-coral/12 p-1.5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`/systems/${sysm.key}.png`} alt="" className="h-full w-full object-contain" draggable={false} />
             </span>
             <span>
               <span className="block font-display text-[15px] font-semibold leading-tight text-cream">{sysm.label}</span>
@@ -198,15 +199,6 @@ export function SymptomsScreen() {
     </div>
   );
 }
-
-// Ícone ilustrativo por sistema (placeholder do card).
-const SYSTEM_ICON: Record<SystemKey, string> = {
-  brakes: "brakes",
-  engine: "engine",
-  suspension: "suspension",
-  tires: "tires",
-  electrical: "electrical",
-};
 
 // Sistemas tipicamente mais reclamados por marca (heurística leve, só para
 // ordenar quais problemas comuns aparecem primeiro — não é um diagnóstico).
@@ -261,8 +253,9 @@ export function CommonProblems() {
       <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {picks.map((sx) => (
           <button key={sx.id} onClick={() => go({ name: "symptom", id: sx.id })} className="flex w-36 shrink-0 flex-col self-start text-left">
-            <div className="relative grid aspect-square place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 ring-1 ring-white/[0.06]">
-              <Icon name={SYSTEM_ICON[sx.category] ?? "diagnose"} className="h-9 w-9 text-coral/70" />
+            <div className="relative grid aspect-square place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 p-2.5 ring-1 ring-white/[0.06]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`/problems/${sx.id}.png`} alt="" className="h-full w-full object-contain" draggable={false} />
               <span className="absolute left-2 top-2"><SeverityDot level={sx.urgency.level} /></span>
               {isReco(sx) && (
                 <span className="absolute bottom-2 left-2 rounded-full bg-amber/90 px-1.5 py-0.5 text-[9px] font-semibold text-graphite">

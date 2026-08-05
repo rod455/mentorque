@@ -26,7 +26,10 @@ export function EquipmentScreen() {
                   key={it.name}
                   className={`flex gap-3 rounded-2xl bg-graphite-800 p-3.5 ring-1 ${it.star ? "ring-amber/30" : "ring-white/5"}`}
                 >
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-graphite-700 text-2xl">{it.emoji}</span>
+                  <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite-700 p-1">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={`/kit/${it.id}.png`} alt="" className="h-full w-full object-contain" draggable={false} />
+                  </span>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <span className="font-display text-[15px] text-cream">{it.name}</span>

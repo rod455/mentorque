@@ -197,8 +197,9 @@ export function LearnScreen() {
                 onClick={() => go({ name: "studyTrack", trackId: t.id })}
                 className="group flex flex-col gap-2 rounded-3xl bg-graphite-800 p-4 text-left ring-1 ring-white/5 transition-all hover:ring-white/15 active:scale-[0.98]"
               >
-                <span className={`grid h-11 w-11 place-items-center rounded-2xl ${t.accent}`}>
-                  <Icon name={t.icon} className="h-6 w-6" />
+                <span className={`grid h-16 w-16 place-items-center overflow-hidden rounded-2xl p-1.5 ${t.accent}`}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={`/tracks/${t.id}.png`} alt="" className="h-full w-full object-contain" draggable={false} />
                 </span>
                 <span>
                   <span className="block font-display text-[15px] font-semibold leading-tight text-cream">{t.title}</span>
