@@ -250,7 +250,7 @@ export function CommonProblems() {
     <section className="mt-6">
       <h3 className="font-serif text-lg font-bold text-cream">{ui.commonTitle}</h3>
       <p className="mb-3 mt-0.5 text-xs text-cream/45">{sub}</p>
-      <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {picks.map((sx) => (
           <button key={sx.id} onClick={() => go({ name: "symptom", id: sx.id })} className="flex w-36 shrink-0 flex-col self-start text-left">
             <div className="relative grid aspect-square place-items-center overflow-hidden rounded-2xl bg-graphite ring-1 ring-amber/45">

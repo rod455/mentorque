@@ -230,7 +230,7 @@ export function HomeScreen() {
             <button onClick={() => root({ name: "learn" })} className="text-xs font-medium text-amber">{h.seeAll}</button>
           </div>
           <p className="mb-3 text-xs text-cream/45">{h.forYouSub}</p>
-          <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {(() => {
               const lessonCard = (l: Lesson) => {
                 const locked = l.premium && !s.premium;
@@ -332,7 +332,7 @@ export function HomeScreen() {
             <h3 className="font-serif text-lg font-bold text-cream">{h.memoriesTitle}</h3>
             <button onClick={() => go({ name: "achievements" })} className="text-xs font-medium text-amber">{h.seeAll}</button>
           </div>
-          <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {memories.map((m) => {
               const photo = s.momentPhotos?.[m.id];
               const label = gm[m.id]?.title ?? m.id;
