@@ -163,7 +163,7 @@ export function SymptomsScreen() {
           onClick={() => go({ name: "equipment" })}
           className="flex flex-col gap-2 rounded-3xl bg-graphite-800 p-4 text-left ring-1 ring-amber/20 transition-all hover:ring-amber/40 active:scale-[0.98]"
         >
-          <span className="grid h-16 w-16 place-items-center overflow-hidden rounded-2xl bg-amber/10 p-1.5 ring-1 ring-amber/45">
+          <span className="grid h-16 w-16 place-items-center overflow-hidden rounded-2xl bg-graphite ring-1 ring-amber/45">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/learn/equipment.png?v=4" alt="" className="h-full w-full object-contain" draggable={false} />
           </span>
@@ -179,7 +179,7 @@ export function SymptomsScreen() {
         onClick={() => go({ name: "obd2" })}
         className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-3.5 py-3.5 text-left ring-1 ring-white/5 hover:ring-amber/30"
       >
-        <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-2xl bg-teal/10 p-1.5 ring-1 ring-amber/45">
+        <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-2xl bg-graphite ring-1 ring-amber/45">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/learn/read-obd2.png?v=4" alt="" className="h-full w-full object-contain" draggable={false} />
         </span>
@@ -253,7 +253,7 @@ export function CommonProblems() {
       <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {picks.map((sx) => (
           <button key={sx.id} onClick={() => go({ name: "symptom", id: sx.id })} className="flex w-36 shrink-0 flex-col self-start text-left">
-            <div className="relative grid aspect-square place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 p-2.5 ring-1 ring-white/[0.06]">
+            <div className="relative grid aspect-square place-items-center overflow-hidden rounded-2xl bg-graphite ring-1 ring-amber/45">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={`/problems/${sx.id}.png`} alt="" className="h-full w-full object-contain" draggable={false} />
               <span className="absolute left-2 top-2"><SeverityDot level={sx.urgency.level} /></span>

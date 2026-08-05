@@ -184,7 +184,7 @@ export function HomeScreen() {
                     onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
                     className="flex min-w-0 flex-1 items-center gap-3 text-left"
                   >
-                    <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-amber/10 p-1.5 text-amber/80 ring-1 ring-amber/45">
+                    <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite text-amber/80 ring-1 ring-amber/45">
                       {l.thumb ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={l.thumb} alt="" className="h-full w-full object-contain" draggable={false} />
@@ -240,7 +240,9 @@ export function HomeScreen() {
                     onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
                     className="flex w-36 shrink-0 flex-col self-start text-left"
                   >
-                    <div className="relative aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 p-2.5 ring-1 ring-amber/45">
+                    {/* As capas já trazem o fundo #16181D e a margem interna — o card
+                        usa o mesmo tom e zero padding para não criar moldura dupla. */}
+                    <div className="relative aspect-square overflow-hidden rounded-2xl bg-graphite ring-1 ring-amber/45">
                       {l.thumb ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={l.thumb} alt="" className="h-full w-full object-contain" draggable={false} />
@@ -277,7 +279,7 @@ export function HomeScreen() {
               // Kit participa como os demais e pode subir/descer.
               const kitCard = (
                 <button key="kit" onClick={() => go({ name: "equipment" })} className="flex w-36 shrink-0 flex-col self-start text-left">
-                  <div className="aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 p-2.5 ring-1 ring-amber/45">
+                  <div className="aspect-square overflow-hidden rounded-2xl bg-graphite ring-1 ring-amber/45">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/learn/equipment.png?v=4" alt="" className="h-full w-full object-contain" draggable={false} />
                   </div>
@@ -299,7 +301,7 @@ export function HomeScreen() {
                   }}
                   className="flex w-36 shrink-0 flex-col self-start text-left"
                 >
-                  <div className={`relative grid aspect-square place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 p-2.5 ring-1 ${carComplete ? "ring-white/[0.06]" : "ring-amber/30"}`}>
+                  <div className="relative grid aspect-square place-items-center overflow-hidden rounded-2xl bg-graphite ring-1 ring-amber/45">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/learn/revisions.png?v=4" alt="" className="h-full w-full object-contain" draggable={false} />
                     {!carComplete && (
@@ -336,13 +338,13 @@ export function HomeScreen() {
               const label = gm[m.id]?.title ?? m.id;
               return (
                 <button key={m.id} onClick={() => go({ name: "achievements" })} className="flex w-28 shrink-0 flex-col self-start text-left">
-                  <div className="grid aspect-square place-items-center overflow-hidden rounded-2xl bg-graphite-800 ring-1 ring-white/[0.06]">
+                  <div className="grid aspect-square place-items-center overflow-hidden rounded-2xl bg-graphite ring-1 ring-white/[0.06]">
                     {photo ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={photo} alt="" className="h-full w-full object-cover" draggable={false} />
                     ) : (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={`/memories/${m.id}.png`} alt="" className="h-full w-full object-contain p-1.5" draggable={false} />
+                      <img src={`/memories/${m.id}.png`} alt="" className="h-full w-full object-contain" draggable={false} />
                     )}
                   </div>
                   <p className="mt-1.5 line-clamp-2 text-[12px] leading-snug text-cream/80">{label}</p>

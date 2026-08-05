@@ -242,9 +242,9 @@ function MomentSheet({ id, emoji, onClose }: { id: string; emoji: string; onClos
         {photo ? (
           <img src={photo} alt="" className="h-full w-full object-cover" />
         ) : (
-          <div className="relative h-full w-full bg-graphite-800">
+          <div className="relative h-full w-full bg-graphite">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/memories/_empty-photo.png" alt="" className="h-full w-full object-contain p-3" draggable={false} />
+            <img src="/memories/_empty-photo.png" alt="" className="h-full w-full object-cover" draggable={false} />
             <span className="absolute inset-x-0 bottom-2 px-6 text-center text-xs text-cream/45">{g.photoSub}</span>
           </div>
         )}

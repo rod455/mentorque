@@ -34,7 +34,7 @@ function ItemRow({ item }: { item: Item }) {
       onClick={() => go(locked ? { name: "subscribe", ctx: "learn" } : { name: "content", id: item.id })}
       className="flex w-full items-center gap-3 rounded-2xl bg-graphite-800 p-3.5 text-left ring-1 ring-white/5 hover:ring-amber/30"
     >
-      <span className={`grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl p-1.5 ring-1 ${locked ? "bg-amber/10 text-amber/70 ring-amber/25" : "bg-amber/12 text-amber ring-amber/45"}`}>
+      <span className={`grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite ring-1 ${locked ? "text-amber/70 ring-amber/25" : "text-amber ring-amber/45"}`}>
         {item.thumb ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={item.thumb} alt="" className={`h-full w-full object-contain ${locked ? "opacity-60" : ""}`} draggable={false} />
@@ -325,13 +325,14 @@ export function ContentScreen({ id }: { id: string }) {
       {lesson.media ? (
         <VideoPlayer media={lesson.media} />
       ) : (
-        <div className="grid aspect-video place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-700 to-graphite-800 text-cream/30 ring-1 ring-white/10">
-          {/* Vídeo ainda não publicado usa a arte de player; texto usa a própria capa. */}
+        <div className="grid aspect-video place-items-center overflow-hidden rounded-2xl bg-graphite ring-1 ring-white/10">
+          {/* Vídeo ainda não publicado usa a arte de player (16:9, preenche);
+              artigo de texto usa a própria capa, que é quadrada e centraliza. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={lesson.type === "video" ? "/learn/_video-placeholder.png?v=4" : lesson.thumb ?? "/learn/_video-placeholder.png?v=4"}
             alt=""
-            className="h-full w-full object-contain p-3"
+            className={`h-full w-full ${lesson.type === "video" || !lesson.thumb ? "object-cover" : "object-contain"}`}
             draggable={false}
           />
         </div>
