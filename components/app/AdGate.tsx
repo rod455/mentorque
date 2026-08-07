@@ -65,11 +65,11 @@ export function AdOverlay({ kind, onDone, onCancel }: { kind: "interstitial" | "
 
   // Aguardando o anúncio nativo abrir — fundo escuro discreto.
   if (mode === "native") {
-    return <div className="fixed inset-0 z-[70] mx-auto w-full max-w-[440px] bg-graphite-900" />;
+    return <div className="fixed inset-0 z-[70] app-col bg-graphite-900" />;
   }
 
   return (
-    <div className="fixed inset-0 z-[70] mx-auto flex w-full max-w-[440px] flex-col bg-graphite-900">
+    <div className="fixed inset-0 z-[70] app-col flex flex-col bg-graphite-900">
       {/* Barra do anúncio */}
       <div className="flex items-center justify-between px-4 pb-2 pt-[max(env(safe-area-inset-top),16px)]">
         <span className="rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-cream/60">{t.badge}</span>

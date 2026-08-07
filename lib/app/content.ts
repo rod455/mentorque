@@ -1213,6 +1213,7 @@ export function getContent(locale: Locale) {
       driver: T("motorista", "driver"),
       heroTitleEmpty: T("Vamos cadastrar o seu primeiro carro", "Let's add your first car"),
       heroCtaEmpty: T("Cadastrar meu carro", "Add my car"),
+      heroSkipEmpty: T("Explorar sem cadastrar →", "Explore without adding a car →"),
       heroTitle: T("O que vamos cuidar hoje?", "What shall we care for today?"),
       heroCta: T("Diagnosticar um problema", "Diagnose a problem"),
       searchPh: T("Buscar problemas ou serviços", "Search problems or services"),
@@ -1728,6 +1729,14 @@ export function getContent(locale: Locale) {
     health: {
       title: T("Saúde do seu", "Health of your"),
       scoreLabel: T("Saúde", "Health"),
+      // Estado vazio: sem carro cadastrado a tela devolvia só o título.
+      noCarTitle: T("Cadastre um carro para ver a saúde dele", "Add a car to see its health"),
+      noCarBody: T(
+        "A partir da marca, do ano e da quilometragem, o Mentorque calcula uma nota de saúde por sistema — motor, freios, suspensão, pneus e elétrica — e mostra o que está vencido.",
+        "From the make, year and mileage, Mentorque computes a health score per system — engine, brakes, suspension, tires and electrical — and shows what's overdue."
+      ),
+      noCarCta: T("Cadastrar meu carro", "Add my car"),
+      noCarBrowse: T("Antes disso, explore os problemas comuns", "Or browse common problems first"),
       attention: T("Pontos de atenção", "Points of attention"),
       allGood: T("Nenhum ponto crítico no momento. Continue registrando os serviços.", "Nothing critical right now. Keep logging services."),
       systemsTitle: T("Sistemas", "Systems"),
@@ -2000,7 +2009,7 @@ export function getContent(locale: Locale) {
         "We take your privacy seriously. Your garage data stays on your device and, if you create an account, is securely synced so you can access it from other devices.\n\nWe don't sell your data and use no third-party analytics. Your prompts to Biela and your car details are sent to AI providers to generate the answer — without your name or email.\n\nIn the free Android app we show Google AdMob ads, which use your device's advertising identifier. We ask for your consent before the first ad and you can change it under Ad preferences. Premium subscribers see no ads.\n\nYou can delete your account and data at any time here in Profile.\n\nFull version at mentorque.com.br/privacy."
       ),
       signOut: T("Sair", "Sign out"),
-      reset: T("Reiniciar protótipo", "Reset prototype"),
+      reset: T("Apagar os dados deste aparelho", "Erase this device's data"),
       demo: "Demo",
       downgrade: T("Voltar ao grátis (demo)", "Back to free (demo)"),
       account: T("Detalhes da conta", "Account details"),

@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/Button";
 import { AppHeader, Card, Chip, Icon, PinButton, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
 import { VideoPlayer } from "../VideoPlayer";
 import { AdOverlay, adsEnabled } from "../AdGate";
+import { canShowAd, markAdShown, registerContentOpen } from "@/lib/app/adPolicy";
 
 const FREE_BIELA_QUESTIONS = 0; // Biela é sempre Premium (sem perguntas grátis)
 
@@ -307,9 +308,17 @@ export function ContentScreen({ id }: { id: string }) {
   // Concluído e Salvo são ações do usuário (botões) — persistem na sessão.
   const done = lesson ? (s.seenLessons ?? []).includes(lesson.id) : false;
   const saved = lesson ? (s.savedLessons ?? []).includes(lesson.id) : false;
-  // Interstitial ao abrir uma aula (só free).
-  const [adDone, setAdDone] = useState(false);
-  const needAd = adsEnabled() && !s.premium && !adDone;
+  // Interstitial ao abrir uma aula (só free), sujeito à política de anúncios:
+  // carência nas primeiras aberturas, intervalo mínimo e teto diário.
+  const [needAd, setNeedAd] = useState(false);
+  useEffect(() => {
+    registerContentOpen();
+    if (adsEnabled() && !s.premium && canShowAd()) {
+      markAdShown();
+      setNeedAd(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
   if (!lesson) return <AppHeader title="—" />;
 
   const byLevel = lesson.stepsByLevel; // 3 níveis fixos (sem chamada de API)
@@ -318,7 +327,7 @@ export function ContentScreen({ id }: { id: string }) {
 
   return (
     <div>
-      {needAd && <AdOverlay kind="interstitial" onDone={() => setAdDone(true)} />}
+      {needAd && <AdOverlay kind="interstitial" onDone={() => setNeedAd(false)} />}
       <AppHeader title={lesson.title} />
 
       {/* Player (in-app), or a placeholder for text content */}

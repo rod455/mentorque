@@ -47,8 +47,8 @@ function PhoneShell({ children }: { children: React.ReactNode }) {
   // Android edge-to-edge a status bar cobre o y=0, e as telas profundas usam
   // o `AppHeader` em vez da `TopBar`.
   return (
-    <div className="h-screen w-full overflow-hidden bg-graphite-900 text-cream antialiased supports-[height:100dvh]:h-dvh">
-      <div className="mx-auto flex h-full w-full max-w-[440px] flex-col overflow-hidden bg-graphite pt-[env(safe-area-inset-top)] shadow-card">{children}</div>
+    <div className="app-backdrop h-screen w-full overflow-hidden text-cream antialiased supports-[height:100dvh]:h-dvh">
+      <div className="app-col flex h-full flex-col overflow-hidden bg-graphite pt-[env(safe-area-inset-top)] shadow-card">{children}</div>
     </div>
   );
 }
@@ -202,6 +202,8 @@ function Router() {
   );
 }
 
+const WELCOME_BACK_KEY = "mentorque-welcome-back";
+
 // Tela de retorno (formato Bloom): quando o app volta do segundo plano e o
 // usuário ainda não cadastrou o primeiro carro, convida a cadastrar.
 function WelcomeBack({ currentView }: { currentView: View["name"] }) {
@@ -212,9 +214,19 @@ function WelcomeBack({ currentView }: { currentView: View["name"] }) {
   const [show, setShow] = useState(false);
   const hasCar = s.vehicles.length > 0;
 
+  // Uma vez por instalação. Antes disparava a cada retorno do segundo plano —
+  // quem só quisesse olhar o app sem cadastrar carro levava uma tela cheia de
+  // convite toda vez que voltava, inclusive entre um print e outro.
   useEffect(() => {
     const onVisible = () => {
-      if (document.visibilityState === "visible") setShow(true);
+      if (document.visibilityState !== "visible") return;
+      try {
+        if (window.localStorage.getItem(WELCOME_BACK_KEY)) return;
+        window.localStorage.setItem(WELCOME_BACK_KEY, "1");
+      } catch {
+        /* modo privado: mostra uma vez por sessão */
+      }
+      setShow(true);
     };
     document.addEventListener("visibilitychange", onVisible);
     return () => document.removeEventListener("visibilitychange", onVisible);
@@ -227,7 +239,7 @@ function WelcomeBack({ currentView }: { currentView: View["name"] }) {
     // Responsivo: conteúdo centralizado que cabe numa tela; em aparelhos muito
     // pequenos, rola em vez de cortar. Padding inferior respeita a barra do
     // navegador (safe area).
-    <div className="fixed inset-0 z-50 mx-auto w-full max-w-[440px] overflow-y-auto bg-graphite [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="fixed inset-0 z-50 app-col overflow-y-auto bg-graphite [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       <div className="flex min-h-full flex-col items-center justify-center px-6 pb-[max(env(safe-area-inset-bottom),20px)] pt-[max(env(safe-area-inset-top),16px)] text-center">
         <BielaMascote pose="acenando" size={116} />
         <h1 className="mt-3 max-w-xs font-serif text-xl font-bold leading-snug text-cream">{w.title}</h1>
@@ -330,7 +342,7 @@ function BottomNav() {
   ];
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-30 mx-auto w-full max-w-[440px] border-t border-white/10 bg-graphite-900/95 px-2 pb-[max(env(safe-area-inset-bottom),8px)] backdrop-blur">
+    <nav className="fixed inset-x-0 bottom-0 z-30 app-col border-t border-white/10 bg-graphite-900/95 px-2 pb-[max(env(safe-area-inset-bottom),8px)] backdrop-blur">
       <div className="flex items-end">
         {items.map((it) => {
           const on = active === it.tab;

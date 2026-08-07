@@ -435,8 +435,10 @@ export function ProfileScreen() {
         </>
       )}
 
-      {/* Ferramentas de demo — na web (para testes); nunca nos apps da loja */}
-      {!isNativeApp() && (
+      {/* Ferramentas de desenvolvimento — só em localhost. Antes apareciam em
+          produção (web), com o rótulo "Reiniciar protótipo" à vista de quem
+          avalia o app nas lojas. */}
+      {isLocalDev() && (
         <>
           <SectionTitle>{p.demo}</SectionTitle>
           <Group>
@@ -881,7 +883,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
       {/* Pop-up de saída — 10% OFF (formato Bloom) */}
       {showOffer && (
         <div className="fixed inset-0 z-50 bg-black/60">
-          <div className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-[440px] rounded-t-3xl bg-cream px-6 pb-8 pt-5 text-center text-graphite">
+          <div className="absolute inset-x-0 bottom-0 app-col rounded-t-3xl bg-cream px-6 pb-8 pt-5 text-center text-graphite">
             <button
               onClick={dismissOffer1}
               aria-label="fechar oferta"
@@ -910,7 +912,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
 
       {/* Oferta final — 25% OFF em tela cheia (formato Bloom) */}
       {showOffer2 && (
-        <div className="fixed inset-0 z-[60] mx-auto w-full max-w-[440px] overflow-y-auto bg-graphite-900 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="fixed inset-0 z-[60] app-col overflow-y-auto bg-graphite-900 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <div className="flex min-h-full flex-col px-6 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-[max(env(safe-area-inset-top),20px)]">
             {/* Biela + faixas "OFERTA ÚNICA" (sem X — a recusa fica embaixo) */}
             <div className="relative mt-2 flex h-52 items-center justify-center overflow-hidden">
