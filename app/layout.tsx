@@ -66,6 +66,10 @@ export const viewport: Viewport = {
   themeColor: "#16181D",
   width: "device-width",
   initialScale: 1,
+  // Edge-to-edge. Sem isto o wrapper Android (Capacitor SystemBars) recua a
+  // própria WebView para dentro das barras do sistema: o app fica com tarjas
+  // e todo o `env(safe-area-inset-*)` do Shell devolve 0.
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

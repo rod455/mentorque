@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_rules"
+        android:dataExtractionRules="@xml/data_extraction_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -11,6 +13,12 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-9316035916536420~8094986125"
+        />
+        <!-- Adia a medição do SDK até a primeira requisição de anúncio — que
+             só acontece depois do consentimento (UMP). Ver lib/app/admob.ts. -->
+        <meta-data
+            android:name="com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT"
+            android:value="true"
         />
 
         <activity
@@ -39,4 +47,10 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Sem esta, `navigator.onLine` na WebView reporta sempre `true` — e a
+         tela offline (webshell) nunca sabe quando a rede voltou. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Declarada explicitamente porque a Play exige que o uso do ID de
+         publicidade apareça no manifesto e na aba Segurança de dados. -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 </manifest>

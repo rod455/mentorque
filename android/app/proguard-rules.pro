@@ -1,21 +1,21 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
+# Regras do R8 para o build de release.
 #
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# As regras de reflexão do Capacitor (plugins anotados com @CapacitorPlugin e
+# subclasses de com.getcapacitor.Plugin) já vêm do `consumerProguardFiles` da
+# própria biblioteca — não precisa repetir aqui. O que fica neste arquivo é o
+# que é específico deste app.
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# O bridge Capacitor injeta objetos Java na WebView via @JavascriptInterface.
+# Sem isto, o R8 renomeia os métodos e a ponte JS→nativo some no release.
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# A ponte lê o nome das classes de plugin do capacitor.plugins.json em tempo
+# de execução (Class.forName), então elas não podem ser renomeadas.
+-keep class br.com.mentorque.app.** { *; }
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Mantém números de linha nos stack traces do Play Console (o mapping.txt
+# enviado junto com o .aab desofusca o resto).
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile

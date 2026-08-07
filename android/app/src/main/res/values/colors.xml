@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Paleta da marca (espelha tailwind.config.ts). Sem este arquivo o app
+         herdava o Indigo/Pink do template do Android Studio. -->
+    <color name="graphite">#16181D</color>
+    <color name="graphite900">#101216</color>
+    <color name="amber">#F2A623</color>
+    <color name="teal">#0F8A66</color>
+    <color name="cream">#F4F2EC</color>
+
+    <!-- Aliases exigidos pelo AppTheme do AppCompat. -->
+    <color name="colorPrimary">#16181D</color>
+    <color name="colorPrimaryDark">#101216</color>
+    <color name="colorAccent">#F2A623</color>
+</resources>

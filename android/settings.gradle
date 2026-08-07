@@ -1,5 +1,18 @@
 include ':app'
+
+// `capacitor-cordova-android-plugins/` é gerado por `npx cap sync android` e
+// não vai para o git. Sem ele, o Gradle falharia com um erro obscuro sobre um
+// projeto inexistente — daí a mensagem explícita.
+def cordovaPlugins = new File(rootDir, 'capacitor-cordova-android-plugins')
+if (!cordovaPlugins.exists()) {
+    throw new GradleException(
+        "Projeto Capacitor não sincronizado.\n" +
+        "Rode na raiz do repositório:\n\n" +
+        "    npm install && npm run sync:android\n"
+    )
+}
+
 include ':capacitor-cordova-android-plugins'
-project(':capacitor-cordova-android-plugins').projectDir = new File('./capacitor-cordova-android-plugins/')
+project(':capacitor-cordova-android-plugins').projectDir = cordovaPlugins
 
 apply from: 'capacitor.settings.gradle'

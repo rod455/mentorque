@@ -6,6 +6,8 @@ import { NavProvider, useNav, type View } from "@/lib/app/nav";
 import { usePrototype } from "@/lib/app/store";
 import { trackContent } from "@/lib/app/track";
 import { useAuth } from "@/lib/app/auth";
+import { adsEnabled } from "./AdGate";
+import { ensureConsent, nativeAdMob } from "@/lib/app/admob";
 import { Icon, useContent } from "./ui";
 import { Logo } from "@/components/ui/Logo";
 import { HomeScreen } from "./screens/Home";
@@ -40,9 +42,13 @@ export function Shell() {
 function PhoneShell({ children }: { children: React.ReactNode }) {
   // Altura travada (h-dvh) para o <main> ser o scroller real — assim a
   // navegação controla o scroll (topo ao avançar, restaura ao voltar).
+  //
+  // O recuo do topo fica na coluna inteira (e não em cada cabeçalho): no
+  // Android edge-to-edge a status bar cobre o y=0, e as telas profundas usam
+  // o `AppHeader` em vez da `TopBar`.
   return (
     <div className="h-screen w-full overflow-hidden bg-graphite-900 text-cream antialiased supports-[height:100dvh]:h-dvh">
-      <div className="mx-auto flex h-full w-full max-w-[440px] flex-col overflow-hidden bg-graphite shadow-card">{children}</div>
+      <div className="mx-auto flex h-full w-full max-w-[440px] flex-col overflow-hidden bg-graphite pt-[env(safe-area-inset-top)] shadow-card">{children}</div>
     </div>
   );
 }
@@ -77,6 +83,15 @@ function Router() {
     const el = mainRef.current;
     if (el) scrollPos.current[posKey] = el.scrollTop;
   };
+
+  // Consentimento de anúncios (UMP) na abertura do app, não na hora do
+  // primeiro anúncio: é o que o Google pede, e é o que popula o "Preferências
+  // de anúncios" no Perfil.
+  useEffect(() => {
+    if (!adsEnabled()) return;
+    const plugin = nativeAdMob();
+    if (plugin) void ensureConsent(plugin);
+  }, []);
 
   // Botão físico/gesto de voltar do Android (wrapper): volta na navegação do
   // app; na raiz, minimiza o app (sem fechar). Paywall passa pelo funil.
@@ -176,7 +191,7 @@ function Router() {
       <main
         ref={mainRef}
         onScroll={onScroll}
-        className="flex-1 overflow-y-auto overflow-x-hidden px-5 pb-28 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        className="flex-1 overflow-y-auto overflow-x-hidden px-5 pb-[calc(7rem+env(safe-area-inset-bottom))] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
       >
@@ -213,7 +228,7 @@ function WelcomeBack({ currentView }: { currentView: View["name"] }) {
     // pequenos, rola em vez de cortar. Padding inferior respeita a barra do
     // navegador (safe area).
     <div className="fixed inset-0 z-50 mx-auto w-full max-w-[440px] overflow-y-auto bg-graphite [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-      <div className="flex min-h-full flex-col items-center justify-center px-6 pb-[max(env(safe-area-inset-bottom),20px)] pt-4 text-center">
+      <div className="flex min-h-full flex-col items-center justify-center px-6 pb-[max(env(safe-area-inset-bottom),20px)] pt-[max(env(safe-area-inset-top),16px)] text-center">
         <BielaMascote pose="acenando" size={116} />
         <h1 className="mt-3 max-w-xs font-serif text-xl font-bold leading-snug text-cream">{w.title}</h1>
         <p className="mx-auto mt-1.5 max-w-xs text-sm leading-relaxed text-cream/55">{w.sub}</p>
@@ -264,7 +279,7 @@ function TopBar() {
   const initial = (s.name || user?.email || "").trim().charAt(0).toUpperCase() || "?";
 
   return (
-    <header className="flex items-center justify-between px-5 pb-1 pt-[max(env(safe-area-inset-top),14px)]">
+    <header className="flex items-center justify-between px-5 pb-1 pt-3.5">
       <button onClick={() => root({ name: "home" })} className="flex items-center" aria-label="Início">
         <Logo variant="lockup-dark" className="h-7 w-auto" priority />
       </button>

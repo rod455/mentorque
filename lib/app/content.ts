@@ -1986,6 +1986,7 @@ export function getContent(locale: Locale) {
       about: T("Sobre o app", "About the app"),
       talkToUs: T("Fale com a gente", "Talk to us"),
       privacy: T("Política de privacidade", "Privacy policy"),
+      adPrivacy: T("Preferências de anúncios", "Ad preferences"),
       rate: T("Avaliar o Mentorque", "Rate Mentorque"),
       version: T("Mentorque v{v}", "Mentorque v{v}"),
       aboutTitle: T("Sobre o Mentorque", "About Mentorque"),

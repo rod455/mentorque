@@ -30,8 +30,30 @@ export function adUnit(kind: "interstitial" | "rewarded"): string | null {
   return id || null;
 }
 
+// Modo de teste. Servir anúncios REAIS para si mesmo durante o
+// desenvolvimento é tráfego inválido e pode suspender a conta do AdMob, então
+// os aparelhos de teste entram por env (Vercel) e o SDK os registra no
+// initialize. O ID do aparelho aparece no logcat na primeira requisição:
+//   "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABC123")"
+const TEST_DEVICES = (process.env.NEXT_PUBLIC_ADMOB_TEST_DEVICES ?? "")
+  .split(",")
+  .map((d) => d.trim())
+  .filter(Boolean);
+const TESTING = TEST_DEVICES.length > 0;
+
+type ConsentStatus = "NOT_REQUIRED" | "OBTAINED" | "REQUIRED" | "UNKNOWN";
+type ConsentInfo = {
+  status: ConsentStatus;
+  isConsentFormAvailable?: boolean;
+  canRequestAds: boolean;
+  privacyOptionsRequirementStatus?: "NOT_REQUIRED" | "REQUIRED" | "UNKNOWN";
+};
+
 type AdMobPlugin = {
-  initialize?: (o?: object) => Promise<unknown>;
+  initialize?: (o?: { testingDevices?: string[]; initializeForTesting?: boolean }) => Promise<unknown>;
+  requestConsentInfo?: (o?: { testDeviceIdentifiers?: string[] }) => Promise<ConsentInfo>;
+  showConsentForm?: () => Promise<ConsentInfo>;
+  showPrivacyOptionsForm?: () => Promise<void>;
   prepareInterstitial: (o: { adId: string }) => Promise<unknown>;
   showInterstitial: () => Promise<unknown>;
   prepareRewardVideoAd: (o: { adId: string }) => Promise<unknown>;
@@ -49,6 +71,59 @@ let admobReady = false;
 // Inicializa o SDK uma única vez (obrigatório antes do primeiro anúncio).
 export async function initAdMob(plugin: AdMobPlugin): Promise<void> {
   if (admobReady) return;
-  try { await plugin.initialize?.({}); } catch { /* segue mesmo assim */ }
+  try {
+    await plugin.initialize?.(TESTING ? { initializeForTesting: true, testingDevices: TEST_DEVICES } : {});
+  } catch {
+    /* segue mesmo assim */
+  }
   admobReady = true;
+}
+
+let consent: ConsentInfo | null = null;
+let consentInFlight: Promise<ConsentInfo | null> | null = null;
+
+// Consentimento (UMP do Google — atende LGPD/GDPR). Precisa rodar ANTES do
+// primeiro anúncio: sem ele o SDK não pode personalizar e, no EEE, não pode
+// nem servir. `canRequestAds: false` significa "sem anúncio" → house ad.
+//
+// A mensagem em si é configurada no painel do AdMob
+// (Privacidade e mensagens → Consentimento do UE / Regulamentações).
+export async function ensureConsent(plugin: AdMobPlugin): Promise<ConsentInfo | null> {
+  if (consent) return consent;
+  if (consentInFlight) return consentInFlight;
+  const requestConsentInfo = plugin.requestConsentInfo;
+  if (!requestConsentInfo) return null; // plugin antigo: não bloqueia
+
+  consentInFlight = (async () => {
+    try {
+      let info = await requestConsentInfo(TESTING ? { testDeviceIdentifiers: TEST_DEVICES } : undefined);
+      if (info.status === "REQUIRED" && info.isConsentFormAvailable && plugin.showConsentForm) {
+        info = await plugin.showConsentForm();
+      }
+      consent = info;
+      return info;
+    } catch {
+      return null; // erro de rede/SDK → o AdGate cai no house ad
+    } finally {
+      consentInFlight = null;
+    }
+  })();
+
+  return consentInFlight;
+}
+
+// O usuário pode rever a escolha depois? (exigência do Google quando a
+// mensagem de consentimento é exibida). Usado pela tela de Privacidade.
+export function privacyOptionsRequired(): boolean {
+  return consent?.privacyOptionsRequirementStatus === "REQUIRED";
+}
+
+export async function openPrivacyOptions(): Promise<void> {
+  const plugin = nativeAdMob();
+  if (!plugin?.showPrivacyOptionsForm) return;
+  try {
+    await plugin.showPrivacyOptionsForm();
+  } catch {
+    /* ignore */
+  }
 }
