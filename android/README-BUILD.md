@@ -68,6 +68,36 @@ Configuração única no painel do Codemagic:
    (JSON da conta de serviço criada em Play Console → Configuração → acesso
    via API), marcada como **secreta**.
 
+## Login social (configuração obrigatória no Supabase)
+
+O app nativo não pode fazer OAuth dentro da própria WebView: o Google recusa
+WebView embutida (`disallowed_useragent`) e um retorno `https://` cairia no
+navegador do sistema, deixando o app deslogado. Então o fluxo é:
+
+1. O app abre a página do provedor numa **aba do sistema** (`@capacitor/browser`).
+2. O provedor volta para o deep link **`mentorque.app://auth-callback`**.
+3. O Android/iOS reabre o app com essa URL e `lib/app/auth.tsx` troca o código
+   pela sessão (PKCE).
+
+Para isso funcionar, no painel do Supabase → **Authentication → URL
+Configuration → Redirect URLs**, adicione:
+
+```
+mentorque.app://auth-callback
+https://mentorque.com.br/app
+```
+
+O primeiro é o retorno do app; o segundo atende a web e os links enviados por
+e-mail (confirmação de conta e redefinição de senha), que podem ser abertos em
+outro aparelho e por isso continuam em `https://`.
+
+Nada muda no Google Cloud nem na Apple: o redirect URI deles continua sendo o
+callback do Supabase (`https://<projeto>.supabase.co/auth/v1/callback`).
+
+O esquema `mentorque.app` está declarado em três lugares, que precisam ficar em
+sincronia: `res/values/strings.xml` (`custom_url_scheme`), o `intent-filter` do
+`AndroidManifest.xml` e o `CFBundleURLTypes` do `ios/App/App/Info.plist`.
+
 ## Versões
 
 - `versionCode` — vem de `MENTORQUE_VERSION_CODE` (o CI usa o número da
@@ -86,6 +116,7 @@ Configuração única no painel do Codemagic:
 | Splash (API do Android 12+, compat até o 6) | `res/values/styles.xml` + `MainActivity.java` |
 | AdMob: app id, consentimento (UMP), aparelhos de teste | `AndroidManifest.xml` + `lib/app/admob.ts` |
 | Modo leitor (sem venda de assinatura no app da loja) | `lib/app/wrapper.ts` → `isNativeApp()` |
+| Login social por deep link | `lib/app/auth.tsx` + `intent-filter` no manifesto |
 | Plugins que entram no pacote Android | `capacitor.config.ts` → `android.includePlugins` |
 | Assinatura e `versionCode` | `app/build.gradle` + `codemagic.yaml` |
 
@@ -102,6 +133,9 @@ npx @capacitor/assets generate --android    # usa assets/icon.png e assets/splas
       o build de release passa pelo R8 (`minifyEnabled true`), que não é
       exercitado pelo build de debug
 - [ ] Modo avião: confirmar que aparece a tela "Sem conexão", não tela branca
+- [ ] **Entrar com Google e com Apple num aparelho real**: a aba do sistema
+      abre, e ao terminar o app reabre já logado. Se voltar deslogado, falta
+      o `mentorque.app://auth-callback` nos Redirect URLs do Supabase
 - [ ] Tocar em "Política de privacidade" e "Avaliar o Mentorque": devem abrir
       **fora** do app (aba do sistema), nunca a landing dentro da WebView
 - [ ] **Segurança de dados** no Play Console declarando o ID de publicidade
