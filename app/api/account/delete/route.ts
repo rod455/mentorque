@@ -36,6 +36,12 @@ export async function POST(req: Request) {
   try { await admin.from("subscriptions").delete().eq("user_id", user.id); } catch { /* ignore */ }
   try { await admin.from("user_state").delete().eq("user_id", user.id); } catch { /* ignore */ }
 
+  // Engajamento e orçamentos informados são anonimizados, não apagados: sem
+  // user_id deixam de ser dado pessoal e a base agregada (calibração regional
+  // de preço, ranking de conteúdo) continua de pé. É o que a política diz.
+  try { await admin.from("content_events").update({ user_id: null }).eq("user_id", user.id); } catch { /* ignore */ }
+  try { await admin.from("price_reports").update({ user_id: null }).eq("user_id", user.id); } catch { /* ignore */ }
+
   // Finally, delete the auth user.
   const { error } = await admin.auth.admin.deleteUser(user.id);
   if (error) return NextResponse.json({ error: "delete_failed" }, { status: 500 });
