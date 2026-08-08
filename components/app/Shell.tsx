@@ -57,17 +57,42 @@ function PhoneShell({ children }: { children: React.ReactNode }) {
 function Router() {
   const { view, back, canBack, depth, lastAction, go } = useNav();
 
-  // Vindo do onboarding ("Monte seu teste"): abre o paywall com o plano escolhido.
+  // Vindo do onboarding ("Monte seu teste"): abre o paywall com o plano
+  // escolhido — mas só depois do login.
+  //
+  // Assinar deslogado amarraria a compra a um usuário anônimo do RevenueCat: o
+  // motorista pagaria e o Premium não apareceria na conta dele. Então, sem
+  // sessão, o app manda para a tela de entrar e guarda o plano; assim que o
+  // login acontece, o paywall abre sozinho no plano que ele já tinha escolhido.
+  const { user } = useAuth();
+  const [planoPendente, setPlanoPendente] = useState<"annual" | "monthly" | null>(null);
   useEffect(() => {
     try {
       const plan = window.sessionStorage.getItem("mentorque-onboarding-plan");
       if (plan === "annual" || plan === "monthly") {
         window.sessionStorage.removeItem("mentorque-onboarding-plan");
-        go({ name: "subscribe", ctx: `onb-${plan}` });
+        setPlanoPendente(plan);
       }
     } catch { /* ignore */ }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // Depende de `view` de propósito: a tela de login chama `back()` sozinha ao
+  // entrar, e sem esperar a pilha assentar o paywall seria empurrado antes —
+  // aí o `back()` atrasado derrubaria justamente ele.
+  const pediuLogin = useRef(false);
+  useEffect(() => {
+    if (!planoPendente) return;
+    if (!user) {
+      if (view.name === "auth") return;                             // está logando
+      if (pediuLogin.current) { setPlanoPendente(null); return; }    // desistiu do login
+      pediuLogin.current = true;
+      go({ name: "auth" });
+      return;
+    }
+    if (view.name === "auth") return;                               // espera sair do login
+    setPlanoPendente(null);
+    go({ name: "subscribe", ctx: `onb-${planoPendente}` });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planoPendente, user, view]);
 
   // Scroll responsivo: avançar/abrir conteúdo ou trocar de aba → topo;
   // voltar → restaura a posição de onde o usuário estava (por nível da pilha).

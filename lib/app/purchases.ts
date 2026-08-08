@@ -17,6 +17,7 @@ type PurchasesPlugin = {
   getOfferings: () => Promise<{ current?: { availablePackages?: RcPackage[] } | null }>;
   purchasePackage: (o: { aPackage: RcPackage }) => Promise<{ customerInfo?: CustomerInfo }>;
   restorePurchases: () => Promise<{ customerInfo?: CustomerInfo }>;
+  logIn: (o: { appUserID: string }) => Promise<unknown>;
 };
 
 // Plugin nativo injetado pelo wrapper (Capacitor). undefined no navegador.
@@ -27,12 +28,20 @@ export function nativePurchases(): PurchasesPlugin | undefined {
 }
 
 let configured = false;
+let identificado: string | null = null;
 // Configura o SDK uma vez, amarrando a compra ao usuário Supabase (o webhook
 // usa esse id para liberar o Premium no banco).
 //
 // Só iOS, por política: no Android o app da loja é "modo leitor" e não vende
 // assinatura. Sem esta trava, uma chave do RevenueCat configurada por engano
 // ligaria o paywall nativo no Android — que exigiria Google Play Billing.
+//
+// O `logIn` no fim conserta um furo silencioso: o `configured` é de módulo, e a
+// primeira chamada costuma vir sem usuário (o onboarding carrega as ofertas
+// antes de qualquer login). Sem ele, toda chamada seguinte — inclusive a que
+// passa o id do Supabase — saía pelo atalho e a assinatura ficava presa num
+// usuário anônimo do RevenueCat: o motorista pagava e o Premium não chegava na
+// conta dele, nem em outro aparelho, nem no site.
 export async function initPurchases(userId: string | null): Promise<PurchasesPlugin | null> {
   if (nativePlatform() !== "ios") return null;
   const p = nativePurchases();
@@ -41,9 +50,16 @@ export async function initPurchases(userId: string | null): Promise<PurchasesPlu
     try {
       await p.configure({ apiKey: REVENUECAT_IOS_KEY, ...(userId ? { appUserID: userId } : {}) });
       configured = true;
+      identificado = userId ?? null;
     } catch {
       return null;
     }
+  }
+  if (userId && userId !== identificado) {
+    try {
+      await p.logIn({ appUserID: userId });
+      identificado = userId;
+    } catch { /* segue com a identidade atual; melhor vender do que travar */ }
   }
   return p;
 }

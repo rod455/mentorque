@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { usePrototype } from "@/lib/app/store";
+import { useAuth } from "@/lib/app/auth";
 import { trialDaysFor, trialPlatform } from "@/lib/app/platform";
 import { isNativeApp, nativePlatform } from "@/lib/app/wrapper";
 import { hasActiveEntitlement, initPurchases, type RcPackage } from "@/lib/app/purchases";
@@ -28,6 +29,7 @@ export function OnboardingFlow() {
   const social = c.splash.social;
   const trial = c.splash.trial;
   const { finishOnboarding, setPremium } = usePrototype();
+  const { user } = useAuth();
   const [i, setI] = useState(0);
   const [carLeaving, setCarLeaving] = useState(false);
   const [plan, setPlan] = useState<"annual" | "monthly">("annual");
@@ -98,7 +100,11 @@ export function OnboardingFlow() {
   const advance = () => {
     if (!last) { setI((v) => v + 1); return; }
     if (!sells) { finishOnboarding(); return; }
-    if (isNativeApp() && iap) { void buyNow(); return; }
+    // Comprar deslogado deixaria a assinatura numa conta anônima do RevenueCat:
+    // o motorista pagaria e o Premium não apareceria na conta dele, nem em
+    // outro aparelho, nem no site. Sem login, o plano escolhido fica guardado e
+    // o app pede para entrar antes de abrir a folha da Apple (ver Shell.tsx).
+    if (isNativeApp() && iap && user) { void buyNow(); return; }
     finishToPlan();
   };
 
