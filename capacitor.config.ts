@@ -24,7 +24,14 @@ const config: CapacitorConfig = {
   },
   ios: {
     // Sem anúncios no iOS: o SDK do AdMob fica fora do build da Apple.
-    includePlugins: ["@capacitor/app", "@capacitor/browser", "@revenuecat/purchases-capacitor"],
+    // O social-login precisa entrar: é ele que abre a folha nativa da Apple e
+    // do Google e devolve o idToken para o app (lib/app/socialLogin.ts).
+    includePlugins: [
+      "@capacitor/app",
+      "@capacitor/browser",
+      "@revenuecat/purchases-capacitor",
+      "@capgo/capacitor-social-login",
+    ],
   },
   plugins: {
     AdMob: {

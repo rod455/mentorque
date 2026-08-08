@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Sign in with Apple. Sem esta permissão o iOS recusa a folha nativa com
+	     erro 1000 (ASAuthorizationError.unknown) e o botão simplesmente não
+	     abre nada. É o que faz o login da Apple acontecer DENTRO do app.
+
+	     Do outro lado, a capacidade "Sign In with Apple" precisa estar ligada
+	     no App ID (developer.apple.com → Identifiers → mentorque.app), senão o
+	     perfil de assinatura não é gerado e o build falha na hora de assinar. -->
+	<key>com.apple.developer.applesignin</key>
+	<array>
+		<string>Default</string>
+	</array>
+</dict>
+</plist>

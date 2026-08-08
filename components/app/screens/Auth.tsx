@@ -47,6 +47,26 @@ export function AuthScreen() {
   const [err, setErr] = useState("");
   const [notice, setNotice] = useState("");
   const [confirmSent, setConfirmSent] = useState(false);
+  // No iPhone o login social acontece dentro do app (folha nativa da Apple /
+  // do Google) e pode demorar alguns segundos entre autorizar e a sessão
+  // existir. Sem estado aqui os botões pareciam mortos.
+  const [social, setSocial] = useState<"" | "google" | "apple">("");
+  const [socialErr, setSocialErr] = useState("");
+
+  const doSocial = async (provider: "google" | "apple") => {
+    if (social) return;
+    setErr(""); setNotice(""); setSocialErr(""); setSocial(provider);
+    try {
+      const res = provider === "google" ? await signInGoogle() : await signInApple();
+      if (res.canceled || res.deferred) return;
+      if (res.error) { setSocialErr(res.error); return; }
+      back();
+    } catch (e) {
+      setSocialErr(e instanceof Error ? e.message : a.errGeneric);
+    } finally {
+      setSocial("");
+    }
+  };
 
   const submit = async () => {
     setErr(""); setNotice(""); setBusy(true);
@@ -86,18 +106,18 @@ export function AuthScreen() {
 
       <Card>
         {/* Social */}
-        <button onClick={() => signInGoogle()} className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-cream px-4 py-3 font-display text-sm font-semibold text-graphite transition-colors hover:bg-white">
+        <button onClick={() => doSocial("google")} disabled={!!social} className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-cream px-4 py-3 font-display text-sm font-semibold text-graphite transition-colors hover:bg-white disabled:opacity-60">
           <svg viewBox="0 0 24 24" className="h-5 w-5"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.76h3.56c2.08-1.92 3.28-4.74 3.28-8.09Z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.56-2.76c-.99.66-2.26 1.06-3.72 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23Z"/><path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18a11 11 0 0 0 0 9.88l3.66-2.84Z"/><path fill="#EA4335" d="M12 4.75c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 1.46 14.97.5 12 .5A11 11 0 0 0 2.18 7.06l3.66 2.84C6.71 6.7 9.14 4.75 12 4.75Z"/></svg>
-          {a.google}
+          {social === "google" ? a.working : a.google}
         </button>
-        <button onClick={() => signInApple()} className="mt-2.5 flex w-full items-center justify-center gap-2.5 rounded-xl bg-black px-4 py-3 font-display text-sm font-semibold text-white ring-1 ring-white/15 transition-opacity hover:opacity-90">
+        <button onClick={() => doSocial("apple")} disabled={!!social} className="mt-2.5 flex w-full items-center justify-center gap-2.5 rounded-xl bg-black px-4 py-3 font-display text-sm font-semibold text-white ring-1 ring-white/15 transition-opacity hover:opacity-90 disabled:opacity-60">
           <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5"><path d="M16.365 1.43c0 1.14-.417 2.2-1.11 2.98-.84.95-2.2 1.68-3.32 1.6-.14-1.12.42-2.3 1.09-3.05.75-.84 2.08-1.5 3.16-1.53.03.13.04.27.04.4l.14-.4Zm3.6 15.9c-.2.47-.44.9-.72 1.3-.5.72-.9 1.22-1.22 1.5-.5.46-1.03.7-1.6.72-.4 0-.9-.12-1.47-.35-.57-.23-1.1-.35-1.58-.35-.5 0-1.04.12-1.63.35-.6.23-1.07.35-1.44.36-.55.02-1.1-.22-1.63-.73-.34-.3-.77-.82-1.28-1.56-.55-.8-1-1.72-1.35-2.78-.38-1.13-.57-2.23-.57-3.3 0-1.22.26-2.28.79-3.16a4.65 4.65 0 0 1 1.66-1.68 4.47 4.47 0 0 1 2.24-.63c.42 0 .98.13 1.68.4.7.26 1.15.4 1.35.4.15 0 .65-.16 1.5-.47.8-.29 1.48-.41 2.03-.36 1.5.12 2.63.71 3.38 1.78-1.34.81-2 1.95-1.99 3.4.01 1.14.42 2.08 1.24 2.83.37.35.79.62 1.25.81-.1.29-.2.57-.32.84Z"/></svg>
-          {a.apple}
+          {social === "apple" ? a.working : a.apple}
         </button>
-        {oauthError && (
+        {(socialErr || oauthError) && (
           <p className="mt-2.5 rounded-lg bg-coral/10 px-3 py-2 text-center text-xs leading-snug text-coral ring-1 ring-coral/25">
             Não conseguimos concluir o login pelo provedor. Tente novamente ou entre com e-mail e senha.
-            <span className="mt-1 block text-[10px] opacity-70">{oauthError}</span>
+            <span className="mt-1 block text-[10px] opacity-70">{socialErr || oauthError}</span>
           </p>
         )}
         <p className="mt-2.5 text-center text-xs text-cream/45">{a.socialNote}</p>

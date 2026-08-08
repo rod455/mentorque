@@ -6,13 +6,21 @@ import { getBrowserSupabase } from "@/lib/supabaseBrowser";
 import {
   closeExternal,
   emailRedirectUrl,
+  isIPad,
   isNativeApp,
   NATIVE_AUTH_CALLBACK,
+  NATIVE_AUTH_REDIRECT,
+  nativePlatform,
   onDeepLink,
   openExternal,
 } from "./wrapper";
+import { googleNativeConfigured, nativeSocialLogin } from "./socialLogin";
 
-type Result = { error?: string; needsConfirm?: boolean };
+// `canceled`: o usuário fechou a folha do provedor — não é erro, a tela não
+// deve piscar vermelho nem seguir adiante.
+// `deferred`: o login continua FORA do app (aba do sistema) e termina no deep
+// link. A tela de login precisa continuar de pé até o retorno.
+type Result = { error?: string; needsConfirm?: boolean; canceled?: boolean; deferred?: boolean };
 
 type AuthValue = {
   user: User | null;
@@ -118,23 +126,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Login social.
   //
-  // No app nativo isto NÃO pode acontecer dentro da WebView: o Google recusa
-  // WebView embutida (`disallowed_useragent`), e um redirecionamento http
-  // voltaria para o navegador do sistema — deixando o app deslogado, que é
-  // exatamente o que acontecia antes. Então abrimos a página do provedor numa
-  // aba do sistema e pedimos o retorno pelo deep link.
+  // No iPhone o login é NATIVO: a folha da Apple / do Google devolve um idToken
+  // direto para o app e o Supabase troca por sessão. Nada de navegador, nada de
+  // redirecionamento — era justamente o ida-e-volta que nunca fechava, deixando
+  // a sessão no site e o app deslogado (ver lib/app/socialLogin.ts).
+  //
+  // Fora daí (Android, iPad, ou Google sem client id configurado) sobra o
+  // caminho antigo: abrir o provedor numa aba do sistema e receber o retorno
+  // pelo deep link. Dentro da WebView não dá — o Google recusa WebView embutida
+  // com `disallowed_useragent`.
   const signInOAuth = useCallback(async (provider: "google" | "apple"): Promise<Result> => {
     if (!supabase) return { error: "auth_disabled" };
 
     if (isNativeApp()) {
+      const canNative =
+        nativePlatform() === "ios" &&
+        (provider === "apple" || (googleNativeConfigured() && !isIPad()));
+
+      if (canNative) return await nativeSocialLogin(supabase, provider);
+
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
-        options: { redirectTo: NATIVE_AUTH_CALLBACK, skipBrowserRedirect: true },
+        options: { redirectTo: NATIVE_AUTH_REDIRECT, skipBrowserRedirect: true },
       });
       if (error) return { error: error.message };
       if (!data?.url) return { error: "oauth_no_url" };
       openExternal(data.url);
-      return {};
+      return { deferred: true };
     }
 
     const { error } = await supabase.auth.signInWithOAuth({

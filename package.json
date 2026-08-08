@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "sync:android": "cap sync android",
-    "sync:ios": "cap sync ios",
+    "sync:ios": "node scripts/ios-google-scheme.mjs && cap sync ios",
     "open:android": "cap open android",
     "build:native": "node scripts/build-native.mjs"
   },
@@ -19,6 +19,7 @@
     "@capacitor/browser": "^8.0.4",
     "@capacitor/core": "^8.5.0",
     "@capacitor/ios": "^8.5.0",
+    "@capgo/capacitor-social-login": "^8.3.40",
     "@revenuecat/purchases-capacitor": "^13.3.0",
     "@stripe/react-stripe-js": "^6.8.0",
     "@stripe/stripe-js": "^9.12.1",

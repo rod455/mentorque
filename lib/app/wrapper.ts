@@ -18,6 +18,14 @@ export const APP_ORIGIN = "https://mentorque.com.br";
 // URL Configuration → Redirect URLs.
 export const NATIVE_AUTH_CALLBACK = "mentorque://auth-callback";
 
+// Endereço que o app pede como retorno do login social.
+//
+// Não pedimos o esquema próprio direto: o GoTrue recusa `mentorque://` na
+// validação de Redirect URLs (verificado nos logs — ele descartava e caía no
+// Site URL, deixando a sessão no site). Pedimos esta página https, que passa
+// na validação, e ela repassa para o app pelo esquema próprio.
+export const NATIVE_AUTH_REDIRECT = `${APP_ORIGIN}/auth-bridge`;
+
 type CapacitorGlobal = {
   getPlatform?: () => string;
   Plugins?: {
@@ -40,6 +48,15 @@ function capacitor(): CapacitorGlobal | undefined {
 export function nativePlatform(): "ios" | "android" | null {
   const p = capacitor()?.getPlatform?.();
   return p === "ios" || p === "android" ? p : null;
+}
+
+// iPad. O Google Sign-In nativo é apresentado em popover no iPad e derruba o
+// app; lá o login social cai no caminho por navegador. O iPadOS 13+ se anuncia
+// como "Macintosh" no user-agent, daí a segunda checagem.
+export function isIPad(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent || "";
+  return /iPad/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
 }
 
 // A WebView do wrapper só empurra para o navegador do sistema quando o host
