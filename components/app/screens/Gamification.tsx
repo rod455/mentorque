@@ -96,12 +96,12 @@ export function GamificationScreen() {
 }
 
 // 3.1.D — "Seu acervo": milestone grid with Marcos / Momentos tabs.
-export function AchievementsScreen() {
+export function AchievementsScreen({ initialTab }: { initialTab?: "marco" | "momento" }) {
   const c = useContent();
   const g = c.gamification;
   const { s } = useGam();
   const { toggleMilestone } = usePrototype();
-  const [tab, setTab] = useState<"marco" | "momento">("marco");
+  const [tab, setTab] = useState<"marco" | "momento">(initialTab ?? "marco");
   const [openMoment, setOpenMoment] = useState<string | null>(null);
 
   const items = MILESTONES.filter((m) => m.cat === tab);

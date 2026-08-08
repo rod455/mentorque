@@ -82,6 +82,7 @@ export function HomeScreen() {
   const memories = MILESTONES.filter((m) => m.earned(s)).sort(
     (a, b) => (a.cat === "momento" ? 0 : 1) - (b.cat === "momento" ? 0 : 1)
   );
+  const livedMoments = memories.filter((m) => m.cat === "momento").length;
 
   const quick: { art: string; label: string; tint: string; go: () => void }[] = [
     { art: "diagnose", label: h.qDiagnose, tint: "bg-coral/15", go: () => root({ name: "symptoms" }) },
@@ -342,12 +343,32 @@ export function HomeScreen() {
             <h3 className="font-serif text-lg font-bold text-cream">{h.memoriesTitle}</h3>
             <button onClick={() => go({ name: "achievements" })} className="text-xs font-medium text-amber">{h.seeAll}</button>
           </div>
+          {/* Marcos destravam sozinhos; Momentos são os que o motorista
+              registra. Sem nenhum Momento vivido, a seção só mostra o que veio
+              de brinde — então o convite vem antes do carrossel, direto na aba
+              certa do acervo. */}
+          {livedMoments === 0 && (
+            <button
+              onClick={() => go({ name: "achievements", tab: "momento" })}
+              className="mb-3 flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-amber/15 to-amber/5 px-4 py-3.5 text-left ring-1 ring-amber/25 hover:ring-amber/45"
+            >
+              <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite ring-1 ring-amber/35">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/memories/firstTrip.png" alt="" className="h-full w-full object-contain" draggable={false} />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block font-display text-[15px] font-semibold text-cream">{h.addMemories}</span>
+                <span className="mt-0.5 block text-xs leading-snug text-cream/55">{h.addMemoriesSub}</span>
+              </span>
+              <span className="shrink-0 text-amber">›</span>
+            </button>
+          )}
           <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {memories.map((m) => {
               const photo = s.momentPhotos?.[m.id];
               const label = gm[m.id]?.title ?? m.id;
               return (
-                <button key={m.id} onClick={() => go({ name: "achievements" })} className="flex w-28 shrink-0 flex-col self-start text-left">
+                <button key={m.id} onClick={() => go({ name: "achievements", tab: m.cat })} className="flex w-28 shrink-0 flex-col self-start text-left">
                   <div className="grid aspect-square place-items-center overflow-hidden rounded-2xl bg-graphite ring-1 ring-white/[0.06]">
                     {photo ? (
                       // eslint-disable-next-line @next/next/no-img-element

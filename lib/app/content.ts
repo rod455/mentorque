@@ -1320,6 +1320,8 @@ export function getContent(locale: Locale) {
       forYouSub: T("Baseado no seu nível e no seu carro", "Based on your level and your car"),
       memoriesTitle: T("Memórias", "Memories"),
       seeAll: T("Ver todas", "See all"),
+      addMemories: T("Adicionar memórias", "Add memories"),
+      addMemoriesSub: T("Registre os momentos que viveu com o carro", "Log the moments you've lived with your car"),
     },
 
     // Anúncios (somente usuários free) — house ads até plugar a rede

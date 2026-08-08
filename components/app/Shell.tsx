@@ -175,7 +175,7 @@ function Router() {
       case "carSettings": return <CarSettingsScreen />;
       case "profile": return <ProfileScreen />;
       case "gamification": return <GamificationScreen />;
-      case "achievements": return <AchievementsScreen />;
+      case "achievements": return <AchievementsScreen initialTab={view.tab} />;
       case "auth": return <AuthScreen />;
       case "subscribe": return <SubscribeScreen ctx={view.ctx} />;
       case "checkout": return <CheckoutScreen plan={view.plan} offer={view.offer} />;

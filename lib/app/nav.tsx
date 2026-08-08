@@ -34,7 +34,9 @@ export type View =
   | { name: "carSettings" }
   | { name: "profile" }
   | { name: "gamification" }
-  | { name: "achievements" }
+  // `tab` abre o acervo já na aba certa — quem vem de "Adicionar memórias"
+  // quer Momentos, não Marcos.
+  | { name: "achievements"; tab?: "marco" | "momento" }
   | { name: "auth" }
   | { name: "subscribe"; ctx?: string }
   | { name: "checkout"; plan: "monthly" | "annual"; offer?: string };
