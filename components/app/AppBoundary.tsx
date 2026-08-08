@@ -28,6 +28,12 @@ const RELOAD_KEY = "mentorque-chunk-reload";
 export class AppBoundary extends React.Component<Props, State> {
   state: State = { failed: false };
 
+  // Avisa o vigia inline do layout que o React montou — sem isso ele acha que
+  // o app morreu e mostra o aviso de recarregar por cima.
+  componentDidMount() {
+    (window as unknown as { __mqReady?: () => void }).__mqReady?.();
+  }
+
   static getDerivedStateFromError(): State {
     return { failed: true };
   }
