@@ -65,6 +65,18 @@ android {
             if (hasSigningConfig) {
                 signingConfig signingConfigs.release
             }
+            // Sem keystore o pacote sai válido, mas não assinado — e a Play só
+            // avisa disso no upload. Melhor gritar aqui.
+            gradle.taskGraph.whenReady { graph ->
+                if (!hasSigningConfig && graph.allTasks.any { it.name.toLowerCase().contains("release") }) {
+                    logger.warn(
+                        "\n*** ATENÇÃO: build de release SEM ASSINATURA ***\n" +
+                        "    A Google Play vai recusar este .aab.\n" +
+                        "    Crie android/keystore.properties (ver README-BUILD.md) ou\n" +
+                        "    use Build → Generate Signed App Bundle no Android Studio.\n"
+                    )
+                }
+            }
             // O wrapper quase não tem código Java próprio, mas o shrinker corta
             // as partes não usadas do SDK do AdMob e do AndroidX. As regras de
             // reflexão do Capacitor vêm do consumerProguardFiles da lib, e as

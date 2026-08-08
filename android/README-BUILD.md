@@ -22,6 +22,18 @@ npm run sync:android      # = npx cap sync android
 
 Se esquecer, o Gradle para com uma mensagem dizendo exatamente isto.
 
+## Build local — caminho curto (Windows)
+
+```powershell
+cd C:\Apps\Mentorque
+.\scripts\release-android.ps1
+```
+
+O script faz `git pull`, `npm install`, `cap sync android` e `gradlew clean
+bundleRelease`, e no fim imprime o caminho do `.aab`, o do `mapping.txt` e o
+`versionCode` que entrou no pacote. Para sobrescrever o número sem editar o
+`gradle.properties`: `.\scripts\release-android.ps1 -VersionCode 3`.
+
 ## Build local
 
 ```bash
