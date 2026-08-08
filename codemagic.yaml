@@ -27,11 +27,9 @@ workflows:
         #   NEXT_PUBLIC_SITE_URL            https://mentorque.com.br — para onde
         #                                   o app manda os fetch de /api
         #   NEXT_PUBLIC_REVENUECAT_IOS_KEY  assinatura pela Apple
-        #   NEXT_PUBLIC_GOOGLE_WEB_CLIENT_ID  login com Google (o mesmo que está
-        #                                   no provider Google do Supabase)
-        #   NEXT_PUBLIC_GOOGLE_IOS_CLIENT_ID  login com Google no iPhone; o
-        #                                   esquema reverso dele entra no
-        #                                   Info.plist no passo abaixo
+        #
+        # O client id do Google NÃO precisa entrar aqui: ele é público (viaja
+        # dentro do binário) e está fixo em lib/app/socialLogin.ts.
         #
         # Stripe NÃO entra: no app nativo o paywall desvia para a compra da
         # Apple antes de qualquer caminho do Stripe, então a tela de checkout
@@ -48,8 +46,9 @@ workflows:
         # aponta mais para o site. Precisa das variáveis NEXT_PUBLIC_* abaixo.
         script: npm run build:native
       - name: Esquema do Google no Info.plist
-        # O SDK do Google Sign-In volta por um esquema derivado do iOS Client
-        # ID. Sem ele registrado, o botão do Google não abre nada.
+        # O esquema já está commitado; este passo só reescreve se alguém tiver
+        # definido NEXT_PUBLIC_GOOGLE_IOS_CLIENT_ID para outro projeto do
+        # Google Cloud. Sem o esquema, o botão do Google não abre nada.
         script: node scripts/ios-google-scheme.mjs
       - name: Sincronizar Capacitor iOS
         script: npx cap sync ios

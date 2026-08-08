@@ -35,20 +35,9 @@ const REQUIRED = {
   NEXT_PUBLIC_REVENUECAT_IOS_KEY: "assinatura pela Apple",
 };
 
-// Sem estas o app ainda sobe e funciona — só o botão do Google fica sem efeito
-// (o login da Apple é independente). Aviso, não erro.
-const OPTIONAL = {
-  NEXT_PUBLIC_GOOGLE_WEB_CLIENT_ID: "login com Google (o mesmo cadastrado no Supabase)",
-  NEXT_PUBLIC_GOOGLE_IOS_CLIENT_ID: "login com Google no iPhone",
-};
-
+// O client id do Google não entra nesta lista: ele é público e mora no código
+// (lib/app/socialLogin.ts), justamente para não existir build sem ele.
 function checkEnv() {
-  const semGoogle = Object.entries(OPTIONAL).filter(([k]) => !process.env[k]?.trim());
-  if (semGoogle.length) {
-    log("AVISO — login com Google ficará indisponível no app; faltam:");
-    for (const [k, uso] of semGoogle) log(`  - ${k}  (${uso})`);
-  }
-
   const missing = Object.entries(REQUIRED).filter(([k]) => !process.env[k]?.trim());
   if (!missing.length) {
     log(`variáveis do pacote: ${Object.keys(REQUIRED).length}/${Object.keys(REQUIRED).length} presentes`);

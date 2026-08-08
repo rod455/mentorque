@@ -6,25 +6,20 @@
 // estiver no Info.plist, o SDK aborta antes de abrir qualquer coisa — o botão
 // do Google não faz nada.
 //
-// O client id não pode ficar no repositório como valor fixo: ele muda entre
-// projetos do Google Cloud e vem por variável de ambiente
-// (NEXT_PUBLIC_GOOGLE_IOS_CLIENT_ID, grupo "Mentorque" no Codemagic). Por isso
-// este script escreve o esquema no Info.plist na hora do build.
-//
-// Sem a variável: não faz nada e avisa. O login da Apple continua funcionando;
-// só o do Google fica indisponível no app.
+// O valor padrão é o mesmo de lib/app/socialLogin.ts — os dois precisam apontar
+// para o mesmo client id, senão o SDK abre a tela do Google e não consegue
+// voltar. Client id não é segredo (ele fica visível no Info.plist do app
+// publicado), então mora no repositório; a variável de ambiente
+// NEXT_PUBLIC_GOOGLE_IOS_CLIENT_ID sobrescreve quando o projeto do Google Cloud
+// mudar.
 import fs from "node:fs";
 import path from "node:path";
 
 const PLIST = path.join(process.cwd(), "ios", "App", "App", "Info.plist");
 const MARKER = "com.googleusercontent.apps.";
+const PADRAO = "43445984392-mvc7mg1dlljbdq942aort4hhvet5l78h.apps.googleusercontent.com";
 
-const clientId = (process.env.NEXT_PUBLIC_GOOGLE_IOS_CLIENT_ID ?? "").trim();
-
-if (!clientId) {
-  console.warn("[ios-google-scheme] NEXT_PUBLIC_GOOGLE_IOS_CLIENT_ID ausente — login do Google ficará indisponível no app.");
-  process.exit(0);
-}
+const clientId = (process.env.NEXT_PUBLIC_GOOGLE_IOS_CLIENT_ID ?? "").trim() || PADRAO;
 
 if (!/^[\w-]+\.apps\.googleusercontent\.com$/.test(clientId)) {
   console.error(`[ios-google-scheme] valor inválido: "${clientId}"`);

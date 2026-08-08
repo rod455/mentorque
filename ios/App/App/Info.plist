@@ -84,6 +84,16 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
+			<string>br.com.mentorque.google</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.43445984392-mvc7mg1dlljbdq942aort4hhvet5l78h</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
 			<string>br.com.mentorque.auth</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>

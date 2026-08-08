@@ -32,12 +32,20 @@ type Plugin = {
   logout: (o: { provider: string }) => Promise<void>;
 };
 
-// Client IDs do Google Cloud. O `webClientId` é o mesmo que fica cadastrado no
-// provider Google do Supabase — é a "audiência" que ele espera dentro do token.
-// O `iOSClientId` é o do app iPhone; o esquema reverso dele precisa estar no
-// Info.plist (ver scripts/ios-google-scheme.mjs).
-const GOOGLE_WEB_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_WEB_CLIENT_ID ?? "";
-const GOOGLE_IOS_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_IOS_CLIENT_ID ?? "";
+// Client IDs do Google Cloud.
+//
+// O do iPhone fica escrito aqui de propósito, e não só em variável de ambiente:
+// client id do Google não é segredo — ele viaja dentro do binário, no esquema
+// reverso do Info.plist, onde qualquer um lê. Deixar fixo elimina o modo de
+// falha mais provável: subir um build sem a variável e descobrir no aparelho
+// que o botão do Google não faz nada. A variável ainda tem precedência, para
+// trocar de projeto no Google Cloud sem mexer no código.
+const GOOGLE_IOS_CLIENT_ID =
+  process.env.NEXT_PUBLIC_GOOGLE_IOS_CLIENT_ID?.trim() ||
+  "43445984392-mvc7mg1dlljbdq942aort4hhvet5l78h.apps.googleusercontent.com";
+
+// Só serve fora do iPhone (Android). No iOS o plugin ignora — ver abaixo.
+const GOOGLE_WEB_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_WEB_CLIENT_ID?.trim() ?? "";
 
 // No iPhone quem manda é o iOS Client ID: é ele que o plugin entrega ao SDK do
 // Google (GoogleProvider.swift só inicializa se `iOSClientId` existir) e é ele
