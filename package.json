@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "sync:android": "cap sync android",
+    "android:studio": "npm run build:native && cap sync android",
     "sync:ios": "node scripts/ios-google-scheme.mjs && cap sync ios",
     "open:android": "cap open android",
     "build:native": "node scripts/build-native.mjs"
