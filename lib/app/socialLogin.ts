@@ -39,8 +39,12 @@ type Plugin = {
 const GOOGLE_WEB_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_WEB_CLIENT_ID ?? "";
 const GOOGLE_IOS_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_IOS_CLIENT_ID ?? "";
 
+// No iPhone quem manda é o iOS Client ID: é ele que o plugin entrega ao SDK do
+// Google (GoogleProvider.swift só inicializa se `iOSClientId` existir) e é ele
+// que vira a audiência do idToken — ou seja, é esse valor que precisa estar em
+// "Authorized Client IDs" no provider Google do Supabase.
 export function googleNativeConfigured(): boolean {
-  return !!GOOGLE_WEB_CLIENT_ID;
+  return nativePlatform() === "ios" ? !!GOOGLE_IOS_CLIENT_ID : !!GOOGLE_WEB_CLIENT_ID;
 }
 
 // O plugin só faz sentido dentro do wrapper. Carregado sob demanda para não
@@ -51,10 +55,11 @@ function loadPlugin(): Promise<Plugin> {
     cached = import("@capgo/capacitor-social-login").then(async (mod) => {
       const plugin = mod.SocialLogin as unknown as Plugin;
       const ios = nativePlatform() === "ios";
+      const google: Record<string, string> = {};
+      if (GOOGLE_WEB_CLIENT_ID) google.webClientId = GOOGLE_WEB_CLIENT_ID;
+      if (ios && GOOGLE_IOS_CLIENT_ID) google.iOSClientId = GOOGLE_IOS_CLIENT_ID;
       await plugin.initialize({
-        ...(GOOGLE_WEB_CLIENT_ID
-          ? { google: { webClientId: GOOGLE_WEB_CLIENT_ID, ...(ios && GOOGLE_IOS_CLIENT_ID ? { iOSClientId: GOOGLE_IOS_CLIENT_ID } : {}) } }
-          : {}),
+        ...(Object.keys(google).length ? { google } : {}),
         // No iOS a Apple é nativa (ASAuthorization) e não precisa de nada aqui.
         ...(ios ? { apple: {} } : {}),
       });
