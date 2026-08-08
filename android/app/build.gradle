@@ -19,15 +19,19 @@ def hasSigningConfig = keystorePath != null && !keystorePath.trim().isEmpty() &&
 
 // A Play exige versionCode crescente a cada envio — e um código já enviado
 // fica queimado mesmo que a versão tenha sido reprovada.
-//   local:  ./gradlew bundleRelease -PmentorqueVersionCode=2
-//   CI:     MENTORQUE_VERSION_CODE=<n> (ver codemagic.yaml)
+//
+// Ordem: variável de ambiente (CI, ver codemagic.yaml) → propriedade do Gradle
+// → 1. A propriedade vem de `mentorqueVersionCode` em gradle.properties, então
+// o assistente "Generate Signed Bundle" do Android Studio — que não aceita
+// passar `-P` — pega o número certo sem precisar de flag. O env vindo antes
+// garante que o CI continue mandando no número da build.
 //
 // Resolvido aqui, num Integer, e só depois atribuído. Escrever
 // `versionCode (a ?: b) as int` dentro do defaultConfig parece equivalente mas
 // não é: em Groovy o `as int` recai sobre o RETORNO de `versionCode(...)`, que
 // portanto recebe a String — e o AGP falha com "Value is null".
-def resolvedVersionCode = (project.findProperty("mentorqueVersionCode")
-    ?: System.getenv("MENTORQUE_VERSION_CODE")
+def resolvedVersionCode = (System.getenv("MENTORQUE_VERSION_CODE")
+    ?: project.findProperty("mentorqueVersionCode")
     ?: "1").toString().trim().toInteger()
 
 android {

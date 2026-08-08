@@ -100,10 +100,12 @@ sincronia: `res/values/strings.xml` (`custom_url_scheme`), o `intent-filter` do
 
 ## Versões
 
-- `versionCode` — passe na linha de comando (`-PmentorqueVersionCode=2`) ou por
-  `MENTORQUE_VERSION_CODE`, que é o que o CI usa. Sem nenhum dos dois, cai em
-  `1`. **Um versionCode já enviado fica queimado mesmo que a versão tenha sido
-  reprovada** — a Play recusa o upload repetido.
+- `versionCode` — **incremente `mentorqueVersionCode` em `gradle.properties` a
+  cada envio**. Fica lá (e não no `build.gradle`) para o assistente
+  "Generate Signed Bundle" do Android Studio pegar o número sem precisar de
+  flag. O CI ignora esse valor e usa `MENTORQUE_VERSION_CODE`, que tem
+  precedência. **Um versionCode já enviado fica queimado mesmo que a versão
+  tenha sido reprovada** — a Play recusa o upload repetido.
 - `versionName` — em `app/build.gradle`. É o que o usuário vê ("1.0" → "1.1").
 
 ## O que já está configurado
