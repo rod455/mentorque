@@ -62,6 +62,7 @@ workflows:
         script: |
           shopt -s nullglob
           achou=0
+          serve=0
           for p in "$HOME/Library/MobileDevice/Provisioning Profiles/"*.mobileprovision; do
             achou=1
             security cms -D -i "$p" > /tmp/perfil.plist 2>/dev/null || continue
@@ -73,11 +74,24 @@ workflows:
             echo "    criado: $criado"
             if grep -q "com.apple.developer.applesignin" /tmp/perfil.plist; then
               echo "    Sign In with Apple: SIM"
+              serve=1
             else
-              echo "    Sign In with Apple: NAO  <<< este perfil nao serve, precisa ser reemitido"
+              echo "    Sign In with Apple: NAO"
             fi
           done
           [ "$achou" = "1" ] || echo "(nenhum perfil foi baixado)"
+          if [ "$serve" != "1" ]; then
+            echo ""
+            echo "Nenhum perfil baixado autoriza Sign In with Apple — o archive vai falhar."
+            echo ""
+            echo "O perfil NAO vem da Apple: vem da copia guardada no painel do Codemagic"
+            echo "(Teams -> Integrations -> Code signing identities -> iOS provisioning"
+            echo "profiles). Apagar no portal da Apple nao tem efeito nenhum aqui."
+            echo ""
+            echo "Para resolver: gere um perfil de App Store novo no portal da Apple,"
+            echo "baixe o .mobileprovision e substitua a copia guardada no Codemagic."
+            exit 1
+          fi
       - name: Número da build (incremental)
         script: |
           cd ios/App
