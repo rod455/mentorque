@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { usePrototype } from "@/lib/app/store";
 import { trialDaysFor, trialPlatform } from "@/lib/app/platform";
-import { isNativeApp } from "@/lib/app/wrapper";
+import { isNativeApp, nativePlatform } from "@/lib/app/wrapper";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
 import { Icon, PhoneFrame, ProgressDots, useContent } from "./ui";
@@ -31,10 +31,14 @@ export function OnboardingFlow() {
   const [carLeaving, setCarLeaving] = useState(false);
   const [plan, setPlan] = useState<"annual" | "monthly">("annual");
   const [remind, setRemind] = useState(false);
-  // App da loja (modo leitor): sem a página "Monte seu teste" (compra).
-  const [native, setNative] = useState(false);
-  useEffect(() => setNative(isNativeApp()), []);
-  const total = cards.length + (native ? 1 : 2); // 3 cards + social (+ trial na web)
+  // Onde dá para assinar: web (Stripe) e iOS (compra da Apple via RevenueCat).
+  // No Android o app é "modo leitor" — a política do Play Billing não permite
+  // vender por fora, então lá a página de teste não aparece.
+  const [sells, setSells] = useState(true);
+  useEffect(() => {
+    setSells(!isNativeApp() || nativePlatform() === "ios");
+  }, []);
+  const total = cards.length + (sells ? 2 : 1); // 3 cards + social (+ teste onde vende)
   const last = i === total - 1;
   const card = i < cards.length ? cards[i] : null;
 
@@ -47,9 +51,9 @@ export function OnboardingFlow() {
     finishOnboarding();
   };
 
-  // Na web, a última página (trial) leva ao paywall; no app da loja a última é
-  // a prova social e encerra direto.
-  const advance = () => (last ? (native ? finishOnboarding() : finishToPlan()) : setI((v) => v + 1));
+  // Onde vende, a última página é a do teste e leva ao paywall (no iOS, direto
+  // na compra da Apple). No Android a última é a prova social e encerra.
+  const advance = () => (last ? (sells ? finishToPlan() : finishOnboarding()) : setI((v) => v + 1));
 
   // Swipe left→right anywhere on the screen = go back a card (no button).
   const down = useRef<{ x: number; y: number } | null>(null);
