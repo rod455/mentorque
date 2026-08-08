@@ -60,9 +60,29 @@ workflows:
           agvtool new-version -all $((${PROJECT_BUILD_NUMBER:-0} + 1))
       - name: Compilar .ipa
         script: |
-          xcode-project build-ipa \
-            --project ios/App/App.xcodeproj \
-            --scheme App
+          # `xcode-project` engole a saída do xcodebuild e devolve só "exited
+          # with status code 65" — inútil para descobrir o que quebrou. O erro
+          # de verdade fica no log que ele grava em /tmp/xcodebuild_logs, então
+          # em caso de falha a gente desenterra e imprime aqui mesmo.
+          if ! xcode-project build-ipa --project ios/App/App.xcodeproj --scheme App; then
+            echo ""
+            echo "===================== erro real do xcodebuild ====================="
+            found=0
+            for f in /tmp/xcodebuild_logs/*.log; do
+              [ -f "$f" ] || continue
+              found=1
+              echo "--- $f"
+              grep -nE "error:|fatal|Provisioning profile|entitlement|Signing for|does(n't| not) (support|contain)|failed to (resolve|download)" "$f" | tail -80
+            done
+            if [ "$found" = "0" ]; then
+              echo "(nenhum log em /tmp/xcodebuild_logs — últimas linhas de qualquer log encontrado)"
+              find /tmp /Users/builder/clone/build -name "*.log" -newermt "-30 minutes" 2>/dev/null | head -5 | while read -r f; do
+                echo "--- $f"; tail -60 "$f"
+              done
+            fi
+            echo "==================================================================="
+            exit 1
+          fi
     artifacts:
       - build/ios/ipa/*.ipa
       # O erro real do xcodebuild não cabe na tela do passo — o Codemagic dobra
