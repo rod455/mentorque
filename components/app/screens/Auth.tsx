@@ -37,7 +37,7 @@ export function AuthScreen() {
   const c = useContent();
   const a = c.auth;
   const { back } = useNav();
-  const { signInEmail, signUpEmail, signInGoogle, signInApple, resetPassword } = useAuth();
+  const { signInEmail, signUpEmail, signInGoogle, signInApple, resetPassword, oauthError } = useAuth();
   const [mode, setMode] = useState<"in" | "up">("in");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -94,6 +94,12 @@ export function AuthScreen() {
           <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5"><path d="M16.365 1.43c0 1.14-.417 2.2-1.11 2.98-.84.95-2.2 1.68-3.32 1.6-.14-1.12.42-2.3 1.09-3.05.75-.84 2.08-1.5 3.16-1.53.03.13.04.27.04.4l.14-.4Zm3.6 15.9c-.2.47-.44.9-.72 1.3-.5.72-.9 1.22-1.22 1.5-.5.46-1.03.7-1.6.72-.4 0-.9-.12-1.47-.35-.57-.23-1.1-.35-1.58-.35-.5 0-1.04.12-1.63.35-.6.23-1.07.35-1.44.36-.55.02-1.1-.22-1.63-.73-.34-.3-.77-.82-1.28-1.56-.55-.8-1-1.72-1.35-2.78-.38-1.13-.57-2.23-.57-3.3 0-1.22.26-2.28.79-3.16a4.65 4.65 0 0 1 1.66-1.68 4.47 4.47 0 0 1 2.24-.63c.42 0 .98.13 1.68.4.7.26 1.15.4 1.35.4.15 0 .65-.16 1.5-.47.8-.29 1.48-.41 2.03-.36 1.5.12 2.63.71 3.38 1.78-1.34.81-2 1.95-1.99 3.4.01 1.14.42 2.08 1.24 2.83.37.35.79.62 1.25.81-.1.29-.2.57-.32.84Z"/></svg>
           {a.apple}
         </button>
+        {oauthError && (
+          <p className="mt-2.5 rounded-lg bg-coral/10 px-3 py-2 text-center text-xs leading-snug text-coral ring-1 ring-coral/25">
+            Não conseguimos concluir o login pelo provedor. Tente novamente ou entre com e-mail e senha.
+            <span className="mt-1 block text-[10px] opacity-70">{oauthError}</span>
+          </p>
+        )}
         <p className="mt-2.5 text-center text-xs text-cream/45">{a.socialNote}</p>
 
         {/* Divider */}

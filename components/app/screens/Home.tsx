@@ -7,7 +7,7 @@ import { computeQuizHealth } from "@/lib/app/healthQuiz";
 import { computeStatus, MILESTONES } from "@/lib/app/gamification";
 import { isNewLesson, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
-import { isNativeApp } from "@/lib/app/wrapper";
+import { sellsInApp } from "@/lib/app/wrapper";
 import { useContent, Card, Icon } from "../ui";
 import { HealthPill } from "./Cars";
 import { FipeLine } from "./CarHub";
@@ -128,7 +128,7 @@ export function HomeScreen() {
       </div>
 
       {/* Premium (oculto no app da loja — modo leitor) */}
-      {!s.premium && !isNativeApp() && (
+      {!s.premium && sellsInApp() && (
         <button
           onClick={() => go({ name: "subscribe", ctx: "home" })}
           className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-gradient-to-r from-amber/20 to-amber/5 px-4 py-3.5 text-left ring-1 ring-amber/25"

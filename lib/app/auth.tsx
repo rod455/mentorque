@@ -24,6 +24,10 @@ type AuthValue = {
   signInApple: () => Promise<Result>;
   resetPassword: (email: string) => Promise<Result>;
   signOut: () => Promise<void>;
+  // Falha do retorno OAuth no app nativo. Sem isto o usuário voltava para a
+  // tela de login sem nenhuma explicação — parecia que tinha dado certo.
+  oauthError: string;
+  clearOauthError: () => void;
 };
 
 const Ctx = createContext<AuthValue | null>(null);
@@ -33,12 +37,12 @@ const Ctx = createContext<AuthValue | null>(null);
 // O Supabase usa PKCE: o `code_verifier` fica no armazenamento DESTE cliente
 // (a WebView do app), então a troca do código pela sessão tem que acontecer
 // aqui — não na aba do sistema onde o usuário digitou a senha.
-async function completeOAuth(supabase: SupabaseClient, rawUrl: string): Promise<void> {
+async function completeOAuth(supabase: SupabaseClient, rawUrl: string): Promise<string> {
   let url: URL;
   try {
     url = new URL(rawUrl);
   } catch {
-    return;
+    return "callback_url_invalida";
   }
 
   // O provedor pode devolver o erro tanto na query quanto no fragmento.
@@ -47,29 +51,35 @@ async function completeOAuth(supabase: SupabaseClient, rawUrl: string): Promise<
   if (err) {
     console.warn("[auth] oauth callback error:", err);
     closeExternal();
-    return;
+    return err;
   }
 
   const code = url.searchParams.get("code");
   if (code) {
-    await supabase.auth.exchangeCodeForSession(code);
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
     closeExternal();
-    return;
+    return error?.message ?? "";
   }
 
   // Fallback para projetos configurados no fluxo implícito (tokens no #).
   const access_token = hash.get("access_token");
   const refresh_token = hash.get("refresh_token");
   if (access_token && refresh_token) {
-    await supabase.auth.setSession({ access_token, refresh_token });
+    const { error } = await supabase.auth.setSession({ access_token, refresh_token });
     closeExternal();
+    return error?.message ?? "";
   }
+  // Chegou o deep link mas sem código nem token: quase sempre significa que
+  // "mentorque.app://auth-callback" não está na lista de Redirect URLs do
+  // Supabase, e o provedor devolveu para outro lugar.
+  return "sem_codigo_no_retorno";
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const supabase = getBrowserSupabase();
   const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(!supabase); // if disabled, we're "ready" (guest)
+  const [oauthError, setOauthError] = useState("");
 
   useEffect(() => {
     if (!supabase) return;
@@ -85,7 +95,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!supabase) return;
     return onDeepLink((url) => {
       if (!url.startsWith(NATIVE_AUTH_CALLBACK)) return;
-      void completeOAuth(supabase, url);
+      void completeOAuth(supabase, url).then(setOauthError);
     });
   }, [supabase]);
 
@@ -146,8 +156,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = useCallback(async () => { await supabase?.auth.signOut(); }, [supabase]);
 
   const value = useMemo<AuthValue>(
-    () => ({ user, ready, enabled: !!supabase, signUpEmail, signInEmail, signInGoogle, signInApple, resetPassword, signOut }),
-    [user, ready, supabase, signUpEmail, signInEmail, signInGoogle, signInApple, resetPassword, signOut]
+    () => ({ user, ready, enabled: !!supabase, signUpEmail, signInEmail, signInGoogle, signInApple, resetPassword, signOut, oauthError, clearOauthError: () => setOauthError("") }),
+    [user, ready, supabase, signUpEmail, signInEmail, signInGoogle, signInApple, resetPassword, signOut, oauthError]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

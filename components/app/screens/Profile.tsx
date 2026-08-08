@@ -11,7 +11,7 @@ import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
 import { cancelSubscription, deleteAccount, openBillingPortal, reactivateSubscription, startCheckout } from "@/lib/app/billing";
 import { getStripeJs, stripeConfigured } from "@/lib/app/stripeClient";
 import { trialDaysFor, trialPlatform, type Platform } from "@/lib/app/platform";
-import { isNativeApp, openExternal, storeListingUrl } from "@/lib/app/wrapper";
+import { isNativeApp, openExternal, sellsInApp, storeListingUrl } from "@/lib/app/wrapper";
 import { hasActiveEntitlement, initPurchases, type RcPackage } from "@/lib/app/purchases";
 import { openPrivacyOptions, privacyOptionsRequired } from "@/lib/app/admob";
 import { APP_VERSION, carName } from "@/lib/app/content";
@@ -321,7 +321,7 @@ export function ProfileScreen() {
             </div>
           )}
         </div>
-      ) : isNativeApp() ? null : (
+      ) : !sellsInApp() ? null : (
         <button
           onClick={() => go({ name: "subscribe" })}
           className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-amber/25 via-amber/12 to-amber/[0.06] p-4 text-left ring-1 ring-amber/40 transition-colors hover:ring-amber/60"
@@ -624,7 +624,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
 
   // Tenta mostrar uma oferta na saída. true = mostrou (segura a navegação).
   const requestExit = (target: View | null): boolean => {
-    if (subscribed || isNativeApp()) return false;
+    if (subscribed || !sellsInApp()) return false;
     pendingExit.current = target;
     if (fresh(OFFER_KEY, 30 * 60 * 1000)) { mark(OFFER_KEY); setOfferLeft(120); setShowOffer(true); return true; }
     if (fresh(OFFER2_KEY, 3 * 24 * 60 * 60 * 1000)) { mark(OFFER2_KEY); setShowOffer2(true); return true; }

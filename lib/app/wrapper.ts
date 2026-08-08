@@ -84,6 +84,19 @@ export function emailRedirectUrl(): string {
   return typeof window !== "undefined" ? `${window.location.origin}/app` : `${APP_ORIGIN}/app`;
 }
 
+// Onde o app pode VENDER assinatura.
+//
+// Web: checkout do Stripe. iOS: compra da Apple via RevenueCat. Android: não —
+// a política do Play Billing proíbe cobrar por fora, então lá o app é "modo
+// leitor" e nem convida para assinar.
+//
+// Isto existe porque a checagem era `isNativeApp()`, herdada de quando os dois
+// apps eram modo leitor. Com a venda ligada no iOS, aquela checagem escondia
+// TODO o Premium no iPhone.
+export function sellsInApp(): boolean {
+  return !isNativeApp() || nativePlatform() === "ios";
+}
+
 // Link da loja para "avaliar o app". Na web cai no site.
 export function storeListingUrl(): string {
   const platform = nativePlatform();
