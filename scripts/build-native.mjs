@@ -25,6 +25,39 @@ const DEST = path.join(root, "native", "app");
 
 const log = (m) => console.log(`[build:native] ${m}`);
 
+// Variáveis que ficam EMBUTIDAS no pacote. Se faltar alguma, o build continua
+// passando e o .ipa sobe normalmente — o estrago só aparece no aparelho, com
+// login morto ou paywall vazio. Melhor quebrar aqui, com o nome do que faltou.
+const REQUIRED = {
+  NEXT_PUBLIC_SUPABASE_URL: "login e banco de dados",
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: "login e banco de dados",
+  NEXT_PUBLIC_SITE_URL: "para onde o app manda os fetch de /api",
+  NEXT_PUBLIC_REVENUECAT_IOS_KEY: "assinatura pela Apple",
+};
+
+function checkEnv() {
+  const missing = Object.entries(REQUIRED).filter(([k]) => !process.env[k]?.trim());
+  if (!missing.length) {
+    log(`variáveis do pacote: ${Object.keys(REQUIRED).length}/${Object.keys(REQUIRED).length} presentes`);
+    // O erro clássico é trocar SITE_URL pela URL do Supabase — aí todo fetch
+    // de /api vai para um domínio que não tem essas rotas.
+    if (/supabase\.co/i.test(process.env.NEXT_PUBLIC_SITE_URL ?? "")) {
+      throw new Error(
+        "NEXT_PUBLIC_SITE_URL está apontando para o Supabase. Deve ser o site do app " +
+        "(ex.: https://mentorque.com.br) — é de lá que vêm as rotas /api."
+      );
+    }
+    return;
+  }
+  const lista = missing.map(([k, uso]) => `  - ${k}  (${uso})`).join("\n");
+  const msg = `faltam variáveis de ambiente no build:\n${lista}\n\n` +
+    "No Codemagic: Applications → Mentorque → Environment variables, com\n" +
+    '"mentorque-web" no campo de grupo.';
+  // Em CI isso é fatal. Localmente segue, para dar para testar o empacotamento.
+  if (process.env.CI) throw new Error(msg);
+  log(`AVISO — ${msg}`);
+}
+
 function restoreApi() {
   if (fs.existsSync(API_PARKED)) {
     fs.rmSync(API, { recursive: true, force: true });
@@ -38,6 +71,8 @@ function restoreApi() {
 process.on("exit", restoreApi);
 process.on("SIGINT", () => { restoreApi(); process.exit(130); });
 process.on("SIGTERM", () => { restoreApi(); process.exit(143); });
+
+checkEnv();
 
 try {
   if (fs.existsSync(API_PARKED)) {
