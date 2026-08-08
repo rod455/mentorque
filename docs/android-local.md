@@ -30,8 +30,34 @@ git pull origin main
 
 ## 2. Variáveis de ambiente (só na primeira vez)
 
-Copie `.env.example` para `.env.local` e preencha. Para o Android, quatro
-importam — e a que mais dá problema é a terceira:
+No PowerShell, dentro de `C:\Apps\Mentorque`:
+
+```powershell
+@"
+NEXT_PUBLIC_SUPABASE_URL=https://ajaxhsvjvmqtiyzelgrd.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_tiPExxVzcmHVYlxVEEUzyA_3Bs7G_kC
+NEXT_PUBLIC_SITE_URL=https://mentorque.com.br
+NEXT_PUBLIC_REVENUECAT_IOS_KEY=nao-usado-no-android
+"@ | Set-Content -Encoding utf8 .env.local
+```
+
+O arquivo é ignorado pelo git (`.gitignore` linha `.env*.local`), então fica só
+na sua máquina e nenhum `git pull` o apaga.
+
+A chave do RevenueCat só vale para o iPhone; num build de Android o valor é
+irrelevante. Se um dia for compilar o iOS aqui, troque pela chave real
+(Codemagic → grupo `Mentorque`).
+
+Para conferir que pegou, o `build:native` diz na primeira linha:
+
+```
+[build:native] variáveis do pacote: 4/4 presentes
+```
+
+Se aparecer `AVISO — faltam variáveis`, o `.env.local` não está na raiz do
+projeto ou tem nome errado.
+
+As quatro, e o que cada uma faz — a terceira é a que mais dá problema:
 
 | Variável | Para quê |
 |---|---|

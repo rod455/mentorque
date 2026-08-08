@@ -14,8 +14,16 @@
 import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+// `@next/env` é CommonJS: o import nomeado não resolve num arquivo .mjs.
+import nextEnv from "@next/env";
 
 const root = process.cwd();
+
+// `.env.local` é lido pelo Next lá dentro do `next build` — este script roda
+// antes, no Node puro, onde ele não existe. Sem isto a conferência abaixo
+// acusaria variáveis faltando mesmo com o arquivo no lugar (no CI passava
+// batido, porque lá elas são variáveis de ambiente de verdade).
+nextEnv.loadEnvConfig(root, false, { info: () => {}, error: console.error });
 const API = path.join(root, "app", "api");
 const API_PARKED = path.join(root, ".api-parked");
 // Com `distDir` customizado, `output: "export"` grava o HTML dentro do próprio
