@@ -146,11 +146,19 @@ workflows:
       java: 21
       groups:
         - google_play
+        # As MESMAS variáveis do iOS: desde que o app deixou de apontar para o
+        # site, o Android também é empacotado e precisa delas embutidas.
+        - Mentorque
       android_signing:
         - mentorque-upload
     scripts:
       - name: Instalar dependências web
         script: npm ci
+      - name: Gerar o app estático que vai dentro do binário
+        # Sem isto o `webDir` (native/app) não existe e o `cap sync` falha com
+        # "Could not find the web assets directory". O passo faltava desde que
+        # o app parou de apontar para o site e passou a ser empacotado.
+        script: npm run build:native
       - name: Sincronizar Capacitor Android
         script: npx cap sync android
       - name: Assinatura (keystore do Codemagic → keystore.properties)
