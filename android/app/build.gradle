@@ -17,6 +17,19 @@ def keystoreValue = { String propKey, String envKey ->
 def keystorePath = keystoreValue("storeFile", "MENTORQUE_KEYSTORE_PATH")
 def hasSigningConfig = keystorePath != null && !keystorePath.trim().isEmpty() && file(keystorePath).exists()
 
+// A Play exige versionCode crescente a cada envio — e um código já enviado
+// fica queimado mesmo que a versão tenha sido reprovada.
+//   local:  ./gradlew bundleRelease -PmentorqueVersionCode=2
+//   CI:     MENTORQUE_VERSION_CODE=<n> (ver codemagic.yaml)
+//
+// Resolvido aqui, num Integer, e só depois atribuído. Escrever
+// `versionCode (a ?: b) as int` dentro do defaultConfig parece equivalente mas
+// não é: em Groovy o `as int` recai sobre o RETORNO de `versionCode(...)`, que
+// portanto recebe a String — e o AGP falha com "Value is null".
+def resolvedVersionCode = (project.findProperty("mentorqueVersionCode")
+    ?: System.getenv("MENTORQUE_VERSION_CODE")
+    ?: "1").toString().trim().toInteger()
+
 android {
     namespace = "br.com.mentorque.app"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -24,13 +37,7 @@ android {
         applicationId "mentorque.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        // A Play exige versionCode crescente a cada envio — e um código já
-        // enviado fica queimado mesmo que a versão tenha sido reprovada.
-        //   local:  ./gradlew bundleRelease -PmentorqueVersionCode=2
-        //   CI:     MENTORQUE_VERSION_CODE=<n> (ver codemagic.yaml)
-        versionCode (project.findProperty("mentorqueVersionCode")
-            ?: System.getenv("MENTORQUE_VERSION_CODE")
-            ?: "1") as int
+        versionCode resolvedVersionCode
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
