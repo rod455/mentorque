@@ -66,8 +66,12 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<!-- Retorno do login social (mentorque.app://auth-callback). Ver
-	     lib/app/auth.tsx e o intent-filter equivalente no AndroidManifest. -->
+	<!-- Retorno do login social (mentorque://auth-callback). Ver lib/app/auth.tsx
+	     e o intent-filter equivalente no AndroidManifest.
+	     O esquema antigo "mentorque.app" fica registrado para nao quebrar links
+	     ja emitidos, mas o app usa o novo: o GoTrue do Supabase recusava
+	     "mentorque.app://" na validacao de Redirect URLs — inclusive com
+	     curinga — e caia no Site URL, deixando a sessao no site em vez do app. -->
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -77,6 +81,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>mentorque</string>
 				<string>mentorque.app</string>
 			</array>
 		</dict>

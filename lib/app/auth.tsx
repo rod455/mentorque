@@ -70,7 +70,7 @@ async function completeOAuth(supabase: SupabaseClient, rawUrl: string): Promise<
     return error?.message ?? "";
   }
   // Chegou o deep link mas sem código nem token: quase sempre significa que
-  // "mentorque.app://auth-callback" não está na lista de Redirect URLs do
+  // "mentorque://auth-callback" não está na lista de Redirect URLs do
   // Supabase, e o provedor devolveu para outro lugar.
   return "sem_codigo_no_retorno";
 }
@@ -89,7 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [supabase]);
 
   // Retorno do OAuth no app nativo: o provedor redireciona para
-  // `mentorque.app://auth-callback`, o Android/iOS reabre o app com essa URL e
+  // `mentorque://auth-callback`, o Android/iOS reabre o app com essa URL e
   // é aqui que a sessão é criada.
   useEffect(() => {
     if (!supabase) return;

@@ -3,5 +3,5 @@
     <string name="app_name">Mentorque</string>
     <string name="title_activity_main">Mentorque</string>
     <string name="package_name">mentorque.app</string>
-    <string name="custom_url_scheme">mentorque.app</string>
+    <string name="custom_url_scheme">mentorque</string>
 </resources>

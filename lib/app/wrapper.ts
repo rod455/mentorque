@@ -16,7 +16,7 @@ export const APP_ORIGIN = "https://mentorque.com.br";
 // android/app/src/main/res/values/strings.xml (e do CFBundleURLTypes no
 // Info.plist do iOS). Precisa estar cadastrado em Supabase → Authentication →
 // URL Configuration → Redirect URLs.
-export const NATIVE_AUTH_CALLBACK = "mentorque.app://auth-callback";
+export const NATIVE_AUTH_CALLBACK = "mentorque://auth-callback";
 
 type CapacitorGlobal = {
   getPlatform?: () => string;
@@ -64,7 +64,7 @@ export function closeExternal(): void {
   void browser?.close?.().catch(() => undefined);
 }
 
-// Assina os deep links recebidos pelo app (`mentorque.app://…`). Devolve uma
+// Assina os deep links recebidos pelo app (`mentorque://…`). Devolve uma
 // função de limpeza; no navegador não faz nada.
 export function onDeepLink(handler: (url: string) => void): () => void {
   const app = capacitor()?.Plugins?.App;
