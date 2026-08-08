@@ -66,6 +66,14 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<!-- O app deixa anexar foto do carro, do serviço e do perfil (inputs de
+	     arquivo nas telas Garagem, Calendário, Perfil e Conquistas). No iOS,
+	     abrir a galeria ou a câmera sem estes textos derruba o app na hora do
+	     toque — e a revisão da Apple sinaliza a ausência. -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Para você anexar fotos do seu carro, dos serviços feitos e da sua conta.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Para fotografar seu carro, uma nota de serviço ou um problema na hora.</string>
 	<!-- Retorno do login social (mentorque://auth-callback). Ver lib/app/auth.tsx
 	     e o intent-filter equivalente no AndroidManifest.
 	     O esquema antigo "mentorque.app" fica registrado para nao quebrar links
