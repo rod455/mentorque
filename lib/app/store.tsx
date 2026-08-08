@@ -163,9 +163,10 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const [s, setS] = useState<Session>(EMPTY);
   const [sub, setSub] = useState<{ active: boolean; endsAt: string | null; canceling: boolean }>({ active: false, endsAt: null, canceling: false });
   const subActive = sub.active;
-  const { user } = useAuth();
+  const { user, ready: authReady } = useAuth();
   const supabase = getBrowserSupabase();
   const loadedFor = useRef<string | null>(null);
+  const teveSessao = useRef(false);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Reads the user's Stripe subscription from the `subscriptions` table.
@@ -240,6 +241,25 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
     })();
     return () => { cancelled = true; };
   }, [user, supabase, commit]);
+
+  // Ao sair da conta, o Premium sai junto.
+  //
+  // `premium` é uma marca gravada no aparelho, sobrevivente do tempo em que o
+  // app era só protótipo local. Sem sessão não existe assinatura: quem pagou
+  // pagou numa conta, e é de lá que o Premium volta no próximo login (o
+  // `mergeSessions` traz da nuvem e o `subscriptions` confirma). Deixar a marca
+  // acesa mostrava Premium para um deslogado — e, pior, para quem viesse depois
+  // no mesmo aparelho.
+  //
+  // Só depois de `authReady`: no boot o usuário ainda é null enquanto a sessão
+  // é restaurada, e apagar aí tiraria o Premium de quem está logado.
+  useEffect(() => {
+    if (!authReady) return;
+    if (user) { teveSessao.current = true; return; }
+    if (!teveSessao.current) return;
+    teveSessao.current = false;
+    setS((prev) => (prev.premium ? commit({ ...prev, premium: false }) : prev));
+  }, [user, authReady, commit]);
 
   // Debounced push of the whole session to the cloud while logged in.
   useEffect(() => {
