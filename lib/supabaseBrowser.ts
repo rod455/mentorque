@@ -9,10 +9,19 @@ let client: SupabaseClient | null | undefined;
 
 export function getBrowserSupabase(): SupabaseClient | null {
   if (client !== undefined) return client;
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  client = url && key
-    ? createClient(url, key, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } })
-    : null;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
+  try {
+    client = url && key
+      ? createClient(url, key, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } })
+      : null;
+  } catch (e) {
+    // URL malformada faz o createClient lançar. Isso roda no render do
+    // AuthProvider, então sem o try derruba a árvore inteira — e, na
+    // exportação estática, quebra o build com "Error occurred prerendering
+    // page /app". Melhor cair no modo convidado e seguir funcionando.
+    console.error("[supabase] configuração inválida, autenticação desligada:", e);
+    client = null;
+  }
   return client;
 }

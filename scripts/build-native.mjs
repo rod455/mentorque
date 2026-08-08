@@ -47,6 +47,22 @@ function checkEnv() {
         "(ex.: https://mentorque.com.br) — é de lá que vêm as rotas /api."
       );
     }
+    // Endereço sem esquema (ou com espaço colado) só estoura lá na frente, no
+    // meio da pré-renderização, com uma mensagem que não diz qual variável é.
+    for (const k of ["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SITE_URL"]) {
+      const raw = process.env[k].trim();
+      let ok = false;
+      try { ok = /^https?:$/.test(new URL(raw).protocol); } catch { ok = false; }
+      if (!ok) {
+        throw new Error(
+          `${k} não é uma URL válida: "${raw}"\n` +
+          "Precisa começar com https:// e não pode ter espaço nem barra sobrando.\n" +
+          (k.includes("SUPABASE")
+            ? "Ex.: https://ajaxhsvjvmqtiyzelgrd.supabase.co"
+            : "Ex.: https://mentorque.com.br")
+        );
+      }
+    }
     return;
   }
   const lista = missing.map(([k, uso]) => `  - ${k}  (${uso})`).join("\n");
