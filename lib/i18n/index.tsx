@@ -22,7 +22,15 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 
   // Hydrate from storage / browser language after mount (PT-BR is the default).
   useEffect(() => {
-    const stored = (typeof window !== "undefined" && window.localStorage.getItem(STORAGE_KEY)) as Locale | null;
+    // Aparelho com dados de site bloqueados faz o próprio acesso ao
+    // localStorage lançar. Sem o try isso derruba a árvore inteira e o app
+    // abre em tela preta.
+    let stored: Locale | null = null;
+    try {
+      stored = (typeof window !== "undefined" && window.localStorage.getItem(STORAGE_KEY)) as Locale | null;
+    } catch {
+      /* segue com o padrão */
+    }
     if (stored === "pt" || stored === "en") {
       setLocaleState(stored);
       return;
@@ -39,7 +47,11 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 
   const setLocale = useCallback((l: Locale) => {
     setLocaleState(l);
-    if (typeof window !== "undefined") window.localStorage.setItem(STORAGE_KEY, l);
+    try {
+      if (typeof window !== "undefined") window.localStorage.setItem(STORAGE_KEY, l);
+    } catch {
+      /* modo privado: vale só para esta sessão */
+    }
   }, []);
 
   const toggle = useCallback(() => setLocale(locale === "pt" ? "en" : "pt"), [locale, setLocale]);

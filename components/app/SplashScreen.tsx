@@ -1,27 +1,51 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // Brand splash shown on app entry: the M-in-hexagon mark pops in and keeps a
 // subtle "vibrating" pulse (like the reference), with the name + tagline below.
 // Auto-dismisses after a short hold; tap to skip; respects reduced-motion.
 export function SplashScreen({ onDone }: { onDone: () => void }) {
   const [leaving, setLeaving] = useState(false);
+  const finished = useRef(false);
+
+  // Só sai uma vez, venha de onde vier (transição, cancelamento ou prazo).
+  const finish = useCallback(() => {
+    if (finished.current) return;
+    finished.current = true;
+    onDone();
+  }, [onDone]);
 
   useEffect(() => {
-    const reduce =
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let reduce = false;
+    try {
+      reduce = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    } catch {
+      /* matchMedia indisponível — segue com a animação normal */
+    }
     const t = setTimeout(() => setLeaving(true), reduce ? 900 : 2200);
-    return () => clearTimeout(t);
-  }, []);
+
+    // TRAVA DE SEGURANÇA. Antes, a splash só saía pelo onTransitionEnd — e
+    // esse evento simplesmente não chega em vários casos reais: "Reduzir
+    // movimento" zerando a duração, o app indo para segundo plano no meio da
+    // transição (o WebKit dispara transitioncancel), ou o CSS do styled-jsx
+    // não tendo sido aplicado. Sem o evento, `splashDone` nunca virava true, o
+    // Shell nunca era montado e a splash já estava com opacity: 0 — ou seja,
+    // TELA PRETA travada, sem nenhuma forma de interagir. Era esse o bug que a
+    // revisão da Apple encontrou. Este prazo garante a entrada no app.
+    const hard = setTimeout(finish, 4000);
+    return () => { clearTimeout(t); clearTimeout(hard); };
+  }, [finish]);
 
   return (
     <div
       className={`splash ${leaving ? "leaving" : ""}`}
       onClick={() => setLeaving(true)}
       onTransitionEnd={(e) => {
-        if (leaving && e.target === e.currentTarget) onDone();
+        if (leaving && e.target === e.currentTarget) finish();
+      }}
+      onTransitionCancel={(e) => {
+        if (leaving && e.target === e.currentTarget) finish();
       }}
       role="img"
       aria-label="Mentorque — Seu carro na palma da sua mão"
