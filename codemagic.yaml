@@ -17,14 +17,19 @@ workflows:
       node: 22
       xcode: latest
       groups:
-        # Variáveis do build web (Codemagic → Environment variables → grupo
-        # "mentorque-web"). São embutidas no pacote, então precisam existir
-        # AQUI, não só na Vercel:
-        #   NEXT_PUBLIC_SUPABASE_URL
-        #   NEXT_PUBLIC_SUPABASE_ANON_KEY
-        #   NEXT_PUBLIC_SITE_URL
-        #   NEXT_PUBLIC_REVENUECAT_IOS_KEY
-        #   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+        # Variáveis do build web (Codemagic → Applications → Mentorque →
+        # Environment variables, com "mentorque-web" no campo de grupo). Elas
+        # são embutidas no pacote, então precisam existir AQUI, não só na
+        # Vercel:
+        #   NEXT_PUBLIC_SUPABASE_URL        login e banco
+        #   NEXT_PUBLIC_SUPABASE_ANON_KEY   idem
+        #   NEXT_PUBLIC_SITE_URL            https://mentorque.com.br — para onde
+        #                                   o app manda os fetch de /api
+        #   NEXT_PUBLIC_REVENUECAT_IOS_KEY  assinatura pela Apple
+        #
+        # Stripe NÃO entra: no app nativo o paywall desvia para a compra da
+        # Apple antes de qualquer caminho do Stripe, então a tela de checkout
+        # é inalcançável no iOS.
         - mentorque-web
       ios_signing:
         distribution_type: app_store
