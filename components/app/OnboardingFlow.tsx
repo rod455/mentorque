@@ -5,6 +5,7 @@ import type { PointerEvent as ReactPointerEvent } from "react";
 import { usePrototype } from "@/lib/app/store";
 import { trialDaysFor, trialPlatform } from "@/lib/app/platform";
 import { isNativeApp, nativePlatform } from "@/lib/app/wrapper";
+import { hasActiveEntitlement, initPurchases, type RcPackage } from "@/lib/app/purchases";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
 import { Icon, PhoneFrame, ProgressDots, useContent } from "./ui";
@@ -26,7 +27,7 @@ export function OnboardingFlow() {
   const cards = c.splash.cards;
   const social = c.splash.social;
   const trial = c.splash.trial;
-  const { finishOnboarding } = usePrototype();
+  const { finishOnboarding, setPremium } = usePrototype();
   const [i, setI] = useState(0);
   const [carLeaving, setCarLeaving] = useState(false);
   const [plan, setPlan] = useState<"annual" | "monthly">("annual");
@@ -37,6 +38,26 @@ export function OnboardingFlow() {
   const [sells, setSells] = useState(true);
   useEffect(() => {
     setSells(!isNativeApp() || nativePlatform() === "ios");
+  }, []);
+
+  // No iOS a compra é da Apple: carregamos as ofertas já aqui para o botão
+  // "Continuar" abrir a folha de pagamento na hora, em vez de levar o
+  // motorista a mais uma tela para tocar de novo.
+  const [iap, setIap] = useState<{ monthly?: RcPackage; annual?: RcPackage } | null>(null);
+  const [buying, setBuying] = useState(false);
+  useEffect(() => {
+    if (!isNativeApp()) return;
+    (async () => {
+      const rc = await initPurchases(null);
+      if (!rc) return;
+      try {
+        const offs = await rc.getOfferings();
+        const pkgs = offs.current?.availablePackages ?? [];
+        const monthly = pkgs.find((x) => x.packageType === "MONTHLY") ?? pkgs.find((x) => x.identifier === "$rc_monthly");
+        const annual = pkgs.find((x) => x.packageType === "ANNUAL") ?? pkgs.find((x) => x.identifier === "$rc_annual");
+        if (monthly || annual) setIap({ monthly, annual });
+      } catch { /* sem ofertas: cai no fluxo antigo */ }
+    })();
   }, []);
   const total = cards.length + (sells ? 2 : 1); // 3 cards + social (+ teste onde vende)
   const last = i === total - 1;
@@ -53,7 +74,33 @@ export function OnboardingFlow() {
 
   // Onde vende, a última página é a do teste e leva ao paywall (no iOS, direto
   // na compra da Apple). No Android a última é a prova social e encerra.
-  const advance = () => (last ? (sells ? finishToPlan() : finishOnboarding()) : setI((v) => v + 1));
+  // No iOS com as ofertas em mãos, "Continuar" na última página compra direto:
+  // abre a folha de pagamento da Apple sem passar por outra tela. Se a compra
+  // não estiver disponível (ofertas ainda carregando, Android, web), segue o
+  // caminho antigo pelo paywall.
+  const buyNow = async () => {
+    const pkg = plan === "monthly" ? iap?.monthly ?? iap?.annual : iap?.annual ?? iap?.monthly;
+    const rc = pkg ? await initPurchases(null) : null;
+    if (!pkg || !rc) { finishToPlan(); return; }
+    setBuying(true);
+    try {
+      const res = await rc.purchasePackage({ aPackage: pkg });
+      if (res && hasActiveEntitlement(res.customerInfo)) setPremium(true);
+      finishOnboarding();
+    } catch {
+      // Cancelou ou falhou: entra no app do mesmo jeito, sem travar ninguém.
+      finishOnboarding();
+    } finally {
+      setBuying(false);
+    }
+  };
+
+  const advance = () => {
+    if (!last) { setI((v) => v + 1); return; }
+    if (!sells) { finishOnboarding(); return; }
+    if (isNativeApp() && iap) { void buyNow(); return; }
+    finishToPlan();
+  };
 
   // Swipe left→right anywhere on the screen = go back a card (no button).
   const down = useRef<{ x: number; y: number } | null>(null);
@@ -197,8 +244,12 @@ export function OnboardingFlow() {
         /* Página 5 — monte seu teste */
         <div className="flex flex-1 flex-col overflow-hidden px-6 pb-4">
           {/* Biela cercada de recursos */}
-          <div className="relative mx-auto flex h-36 w-full max-w-xs items-end justify-center">
-            <BielaMascote size={118} />
+          {/* A arte da Biela e 615x1102 (bem alta): o `size` do componente e a
+              LARGURA, e a altura sai proporcional (1,79x). Com 118 de largura
+              ela ocupava 211px numa caixa de 144 e ficava cortada. Aqui a
+              largura e calculada a partir da altura que cabe. */}
+          <div className="relative mx-auto flex h-40 w-full max-w-xs items-end justify-center">
+            <BielaMascote size={88} />
             {[
               { icon: "diagnose", cls: "left-0 top-4" },
               { icon: "calendar", cls: "left-6 bottom-2" },
@@ -266,7 +317,7 @@ export function OnboardingFlow() {
           </p>
 
           <div className="mt-auto pt-3">
-            <Button size="lg" className="w-full" onClick={onContinue}>{trial.cta}</Button>
+            <Button size="lg" className="w-full" onClick={onContinue} disabled={buying}>{buying ? "…" : trial.cta}</Button>
 
             {/* Lembrete antes do teste acabar */}
             <div className="mt-2.5 flex items-center gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-2 ring-1 ring-white/[0.06]">
