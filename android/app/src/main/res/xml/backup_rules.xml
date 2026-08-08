@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Backup automático (Android 11 e anteriores). O estado do app vive no
+     localStorage da WebView e inclui a sessão do Supabase — restaurar isso em
+     outro aparelho entregaria uma sessão autenticada junto com o backup. -->
+<full-backup-content>
+    <exclude domain="database" path="." />
+    <exclude domain="sharedpref" path="." />
+    <exclude domain="file" path="app_webview" />
+</full-backup-content>

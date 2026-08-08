@@ -113,6 +113,16 @@ export function HomeScreen() {
           >
             {hasCar ? h.heroCta : h.heroCtaEmpty}
           </button>
+          {/* Cadastrar o carro não pode parecer obrigatório: problemas, aulas
+              e códigos OBD2 funcionam sem nenhum veículo na garagem. */}
+          {!hasCar && (
+            <button
+              onClick={() => root({ name: "symptoms" })}
+              className="mt-2 w-full py-1.5 text-center text-[13px] text-cream/60 hover:text-cream"
+            >
+              {h.heroSkipEmpty}
+            </button>
+          )}
         </div>
       </div>
 

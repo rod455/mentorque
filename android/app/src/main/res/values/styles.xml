@@ -3,20 +3,28 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Tema da WebView. O BridgeActivity aplica este estilo no onCreate, e o
+         Capacitor pinta as barras do sistema com o windowBackground — que
+         precisa ser grafite, não o branco/preto padrão. -->
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/graphite</item>
         <item name="android:background">@null</item>
     </style>
 
-
+    <!-- Splash. A API do Android 12+ desenha o ícone centralizado sobre uma
+         cor sólida; o `installSplashScreen()` no MainActivity estende o mesmo
+         visual para Android 6–11. O antigo `android:background` com um PNG de
+         320x480 esticava a arte e duplicava com o splash do sistema. -->
     <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
-        <item name="android:background">@drawable/splash</item>
+        <item name="windowSplashScreenBackground">@color/graphite</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/AppTheme.NoActionBar</item>
     </style>
 </resources>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePrototype } from "@/lib/app/store";
-import { adUnit, initAdMob, nativeAdMob } from "@/lib/app/admob";
+import { adUnit, ensureConsent, initAdMob, nativeAdMob } from "@/lib/app/admob";
 import { detectPlatform } from "@/lib/app/platform";
 import { isNativeApp } from "@/lib/app/wrapper";
 import { useNav } from "@/lib/app/nav";
@@ -30,6 +30,11 @@ export function AdOverlay({ kind, onDone, onCancel }: { kind: "interstitial" | "
     if (!plugin) { setMode("house"); return; }
     (async () => {
       try {
+        // Consentimento (UMP) antes de qualquer requisição de anúncio.
+        // `canRequestAds: false` = usuário recusou ou o formulário falhou.
+        const info = await ensureConsent(plugin);
+        if (info && !info.canRequestAds) throw new Error("no consent");
+        if (cancelled) return;
         await initAdMob(plugin);
         const adId = adUnit(kind);
         if (!adId) throw new Error("no ad unit");
@@ -60,13 +65,13 @@ export function AdOverlay({ kind, onDone, onCancel }: { kind: "interstitial" | "
 
   // Aguardando o anúncio nativo abrir — fundo escuro discreto.
   if (mode === "native") {
-    return <div className="fixed inset-0 z-[70] mx-auto w-full max-w-[440px] bg-graphite-900" />;
+    return <div className="fixed inset-0 z-[70] app-col bg-graphite-900" />;
   }
 
   return (
-    <div className="fixed inset-0 z-[70] mx-auto flex w-full max-w-[440px] flex-col bg-graphite-900">
+    <div className="fixed inset-0 z-[70] app-col flex flex-col bg-graphite-900">
       {/* Barra do anúncio */}
-      <div className="flex items-center justify-between px-4 pb-2 pt-4">
+      <div className="flex items-center justify-between px-4 pb-2 pt-[max(env(safe-area-inset-top),16px)]">
         <span className="rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-cream/60">{t.badge}</span>
         {kind === "interstitial" ? (
           done ? (
@@ -99,7 +104,7 @@ export function AdOverlay({ kind, onDone, onCancel }: { kind: "interstitial" | "
 
       {/* Rodapé do rewarded */}
       {kind === "rewarded" && (
-        <div className="px-6 pb-8">
+        <div className="px-6 pb-[calc(2rem+env(safe-area-inset-bottom))]">
           {done ? (
             <>
               <p className="mb-2 text-center text-sm text-teal">{t.unlocked}</p>

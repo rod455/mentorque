@@ -25,6 +25,38 @@
   }
 }
 
+@layer components {
+  /* Coluna do app. A Google Play reprovou a versão anterior em parte pela
+     aparência em tela grande: a coluna era fixa em 440px sobre fundo preto
+     chapado, então em tablet e foldable o app virava uma faixa estreita entre
+     duas tarjas. Aqui ela cresce com a tela (sem esticar a ponto de quebrar a
+     medida de leitura) e o fundo ganha a marca. */
+  .app-col {
+    width: 100%;
+    max-width: 440px;
+    margin-inline: auto;
+  }
+  @media (min-width: 768px) {
+    .app-col { max-width: 560px; }
+  }
+  @media (min-width: 1280px) {
+    .app-col { max-width: 640px; }
+  }
+
+  /* Fundo atrás da coluna: em telas largas as margens precisam parecer
+     intencionais, não sobra. */
+  .app-backdrop {
+    background-color: theme("colors.graphite.900");
+  }
+  @media (min-width: 768px) {
+    .app-backdrop {
+      background-image:
+        radial-gradient(120% 90% at 50% -10%, rgba(242, 166, 35, 0.10), transparent 60%),
+        radial-gradient(90% 70% at 50% 110%, rgba(15, 138, 102, 0.08), transparent 65%);
+    }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {

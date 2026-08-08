@@ -81,8 +81,8 @@ export function Icon({ name, className }: { name: string; className?: string }) 
 // web prototype reads as a device. Children scroll inside.
 export function PhoneFrame({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen w-full overflow-x-hidden bg-graphite-900 text-cream antialiased">
-      <div className="mx-auto flex min-h-screen w-full max-w-[440px] flex-col bg-graphite shadow-card sm:my-0 sm:min-h-screen">
+    <div className="app-backdrop min-h-screen w-full overflow-x-hidden text-cream antialiased">
+      <div className="app-col flex min-h-screen flex-col bg-graphite pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)] shadow-card sm:my-0 sm:min-h-screen">
         {children}
       </div>
     </div>
@@ -331,7 +331,7 @@ export function Sheet({ open, onClose, children }: { open: boolean; onClose: () 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center" role="dialog" aria-modal="true">
       <button aria-label="close" className="absolute inset-0 bg-black/60" onClick={onClose} />
-      <div className="relative w-full max-w-[440px] animate-fade-up rounded-t-3xl bg-graphite-800 p-5 pb-7 ring-1 ring-white/10">
+      <div className="relative app-col animate-fade-up rounded-t-3xl bg-graphite-800 p-5 pb-[calc(1.75rem+env(safe-area-inset-bottom))] ring-1 ring-white/10">
         <button
           onClick={onClose}
           className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full bg-graphite-700 text-cream/70 hover:text-cream"

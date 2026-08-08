@@ -10,8 +10,9 @@ import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
 import { cancelSubscription, deleteAccount, openBillingPortal, reactivateSubscription, startCheckout } from "@/lib/app/billing";
 import { getStripeJs, stripeConfigured } from "@/lib/app/stripeClient";
 import { trialDaysFor, trialPlatform, type Platform } from "@/lib/app/platform";
-import { isNativeApp } from "@/lib/app/wrapper";
+import { isNativeApp, openExternal, storeListingUrl } from "@/lib/app/wrapper";
 import { hasActiveEntitlement, initPurchases, type RcPackage } from "@/lib/app/purchases";
+import { openPrivacyOptions, privacyOptionsRequired } from "@/lib/app/admob";
 import { APP_VERSION, carName } from "@/lib/app/content";
 import { computeStatus } from "@/lib/app/gamification";
 import { PhaseEmblem } from "../Emblem";
@@ -22,8 +23,8 @@ import { AppHeader, Card, Icon, inputCls, SectionTitle, Sheet, useContent } from
 
 const BR_STATES = ["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"];
 
-// Store links — trocar pelos links reais da Play/App Store quando publicar.
-const RATE_URL = "https://mentorque.com.br";
+// "Avaliar o app" vai para a ficha da loja da plataforma (ver
+// `storeListingUrl`); no navegador cai no site.
 
 // O toggle "demo" de Premium (sem Stripe) só vale em dev local — nunca em
 // produção, para não liberar Premium de graça se algo estiver desconfigurado.
@@ -136,7 +137,14 @@ export function ProfileScreen() {
 
   const [busyPlan, setBusyPlan] = useState(false);
   // "Gerenciar" abre o portal do Stripe; cancelar encerra no fim do período.
-  const managePlan = async () => { const r = await openBillingPortal(); if (r.url) window.location.href = r.url; };
+  // No app da loja o portal sai para o navegador do sistema — assinatura
+  // externa não pode ser operada dentro da WebView (política do Play).
+  const managePlan = async () => {
+    const r = await openBillingPortal();
+    if (!r.url) return;
+    if (isNativeApp()) openExternal(r.url);
+    else window.location.href = r.url;
+  };
   const softRefresh = () => { setTimeout(refreshSubscription, 1500); setTimeout(refreshSubscription, 4000); };
   const cancelPlan = async () => {
     if (!subscribed) { setPremium(false); return; } // demo
@@ -156,6 +164,10 @@ export function ProfileScreen() {
   const phaseName = g.phases[gam.phase.id].name;
   const [about, setAbout] = useState(false);
   const [privacy, setPrivacy] = useState(false);
+  // O UMP roda na abertura do app (Shell); aqui só perguntamos se ele exige
+  // um ponto de entrada para revisar o consentimento.
+  const [adPrivacy, setAdPrivacy] = useState(false);
+  useEffect(() => setAdPrivacy(privacyOptionsRequired()), []);
   const [talk, setTalk] = useState(false);
   const [premiumOpen, setPremiumOpen] = useState(false);
   const [editName, setEditName] = useState(false);
@@ -394,7 +406,12 @@ export function ProfileScreen() {
           </div>
         )}
         <IconRow icon="shield" tint="bg-coral/15 text-coral" label={p.privacy} onClick={() => setPrivacy(true)} />
-        <IconRow icon="check" tint="bg-amber/15 text-amber" label={p.rate} onClick={() => window.open(RATE_URL, "_blank", "noopener,noreferrer")} />
+        {/* Exigência do Google quando a mensagem de consentimento é exibida:
+            o usuário precisa poder rever a escolha depois. */}
+        {adPrivacy && (
+          <IconRow icon="shield" tint="bg-graphite-700 text-cream/60" label={p.adPrivacy} onClick={openPrivacyOptions} />
+        )}
+        <IconRow icon="check" tint="bg-amber/15 text-amber" label={p.rate} onClick={() => openExternal(storeListingUrl())} />
       </Group>
 
       {/* Conta — no final: forma de login (ou trocar senha) + sair + excluir */}
@@ -418,8 +435,10 @@ export function ProfileScreen() {
         </>
       )}
 
-      {/* Ferramentas de demo — na web (para testes); nunca nos apps da loja */}
-      {!isNativeApp() && (
+      {/* Ferramentas de desenvolvimento — só em localhost. Antes apareciam em
+          produção (web), com o rótulo "Reiniciar protótipo" à vista de quem
+          avalia o app nas lojas. */}
+      {isLocalDev() && (
         <>
           <SectionTitle>{p.demo}</SectionTitle>
           <Group>
@@ -864,7 +883,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
       {/* Pop-up de saída — 10% OFF (formato Bloom) */}
       {showOffer && (
         <div className="fixed inset-0 z-50 bg-black/60">
-          <div className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-[440px] rounded-t-3xl bg-cream px-6 pb-8 pt-5 text-center text-graphite">
+          <div className="absolute inset-x-0 bottom-0 app-col rounded-t-3xl bg-cream px-6 pb-8 pt-5 text-center text-graphite">
             <button
               onClick={dismissOffer1}
               aria-label="fechar oferta"
@@ -893,8 +912,8 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
 
       {/* Oferta final — 25% OFF em tela cheia (formato Bloom) */}
       {showOffer2 && (
-        <div className="fixed inset-0 z-[60] mx-auto w-full max-w-[440px] overflow-y-auto bg-graphite-900 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <div className="flex min-h-full flex-col px-6 pb-8 pt-5">
+        <div className="fixed inset-0 z-[60] app-col overflow-y-auto bg-graphite-900 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex min-h-full flex-col px-6 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-[max(env(safe-area-inset-top),20px)]">
             {/* Biela + faixas "OFERTA ÚNICA" (sem X — a recusa fica embaixo) */}
             <div className="relative mt-2 flex h-52 items-center justify-center overflow-hidden">
               {[

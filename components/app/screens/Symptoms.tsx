@@ -11,6 +11,7 @@ import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Card, inputCls, LockedCard, PremiumBadge, RecoBadge, SeverityDot, Sheet, UpgradeBanner, useContent } from "../ui";
 import { AdOverlay, adsEnabled } from "../AdGate";
+import { canShowAd, markAdShown, registerContentOpen } from "@/lib/app/adPolicy";
 
 // Map a symptom category to a service type for pre-filling the history form.
 const CATEGORY_TO_SERVICE: Record<SystemKey, string> = {
@@ -313,10 +314,18 @@ export function SymptomDetail({ id }: { id: string }) {
   const sx = c.symptoms.find((x) => x.id === id);
   const [answers, setAnswers] = useState<Record<number, "yes" | "no">>({});
   const [regionOpen, setRegionOpen] = useState(false);
-  // Interstitial ao abrir um problema específico (só free).
-  const [adDone, setAdDone] = useState(false);
+  // Interstitial ao abrir um problema específico (só free), sujeito à política
+  // de anúncios: carência nas primeiras aberturas, intervalo e teto diário.
+  const [needAd, setNeedAd] = useState(false);
+  useEffect(() => {
+    registerContentOpen();
+    if (adsEnabled() && !s.premium && canShowAd()) {
+      markAdShown();
+      setNeedAd(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
   if (!sx) return <AppHeader title="—" />;
-  const needAd = adsEnabled() && !s.premium && !adDone;
   const pd = c.symptomPremium[sx.id];
 
   const shownCauses = s.premium ? sx.causes : sx.causes.slice(0, 2);
@@ -338,7 +347,7 @@ export function SymptomDetail({ id }: { id: string }) {
 
   return (
     <div>
-      {needAd && <AdOverlay kind="interstitial" onDone={() => setAdDone(true)} />}
+      {needAd && <AdOverlay kind="interstitial" onDone={() => setNeedAd(false)} />}
       <AppHeader title={sx.label} />
 
       {/* Texto curto de abertura */}

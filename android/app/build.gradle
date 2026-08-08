@@ -1,5 +1,39 @@
 apply plugin: 'com.android.application'
 
+// Assinatura de release. Duas origens, nesta ordem:
+//   1. android/keystore.properties (build local — arquivo fora do git)
+//   2. variáveis de ambiente (CI: MENTORQUE_KEYSTORE_* )
+// Sem nenhuma das duas o build de release sai NÃO assinado, em vez de quebrar
+// — assim `assembleRelease` continua servindo para conferir o pacote.
+def keystorePropsFile = rootProject.file("keystore.properties")
+def keystoreProps = new Properties()
+if (keystorePropsFile.exists()) {
+    keystorePropsFile.withInputStream { keystoreProps.load(it) }
+}
+
+def keystoreValue = { String propKey, String envKey ->
+    keystoreProps.getProperty(propKey) ?: System.getenv(envKey)
+}
+def keystorePath = keystoreValue("storeFile", "MENTORQUE_KEYSTORE_PATH")
+def hasSigningConfig = keystorePath != null && !keystorePath.trim().isEmpty() && file(keystorePath).exists()
+
+// A Play exige versionCode crescente a cada envio — e um código já enviado
+// fica queimado mesmo que a versão tenha sido reprovada.
+//
+// Ordem: variável de ambiente (CI, ver codemagic.yaml) → propriedade do Gradle
+// → 1. A propriedade vem de `mentorqueVersionCode` em gradle.properties, então
+// o assistente "Generate Signed Bundle" do Android Studio — que não aceita
+// passar `-P` — pega o número certo sem precisar de flag. O env vindo antes
+// garante que o CI continue mandando no número da build.
+//
+// Resolvido aqui, num Integer, e só depois atribuído. Escrever
+// `versionCode (a ?: b) as int` dentro do defaultConfig parece equivalente mas
+// não é: em Groovy o `as int` recai sobre o RETORNO de `versionCode(...)`, que
+// portanto recebe a String — e o AGP falha com "Value is null".
+def resolvedVersionCode = (System.getenv("MENTORQUE_VERSION_CODE")
+    ?: project.findProperty("mentorqueVersionCode")
+    ?: "1").toString().trim().toInteger()
+
 android {
     namespace = "br.com.mentorque.app"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -7,7 +41,7 @@ android {
         applicationId "mentorque.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
+        versionCode resolvedVersionCode
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
@@ -16,10 +50,40 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    if (hasSigningConfig) {
+        signingConfigs {
+            release {
+                storeFile file(keystorePath)
+                storePassword keystoreValue("storePassword", "MENTORQUE_KEYSTORE_PASSWORD")
+                keyAlias keystoreValue("keyAlias", "MENTORQUE_KEY_ALIAS")
+                keyPassword keystoreValue("keyPassword", "MENTORQUE_KEY_PASSWORD")
+            }
+        }
+    }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (hasSigningConfig) {
+                signingConfig signingConfigs.release
+            }
+            // Sem keystore o pacote sai válido, mas não assinado — e a Play só
+            // avisa disso no upload. Melhor gritar aqui.
+            gradle.taskGraph.whenReady { graph ->
+                if (!hasSigningConfig && graph.allTasks.any { it.name.toLowerCase().contains("release") }) {
+                    logger.warn(
+                        "\n*** ATENÇÃO: build de release SEM ASSINATURA ***\n" +
+                        "    A Google Play vai recusar este .aab.\n" +
+                        "    Crie android/keystore.properties (ver README-BUILD.md) ou\n" +
+                        "    use Build → Generate Signed App Bundle no Android Studio.\n"
+                    )
+                }
+            }
+            // O wrapper quase não tem código Java próprio, mas o shrinker corta
+            // as partes não usadas do SDK do AdMob e do AndroidX. As regras de
+            // reflexão do Capacitor vêm do consumerProguardFiles da lib, e as
+            // do projeto ficam em proguard-rules.pro.
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }

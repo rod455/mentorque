@@ -7,7 +7,6 @@ import { computeQuizHealth } from "@/lib/app/healthQuiz";
 import { LIMITS, economySaved } from "@/lib/app/premium";
 import { formatBRL, vehicleLabel } from "@/lib/app/content";
 import { AvatarPickerSheet } from "../AvatarPicker";
-import { AdOverlay, adsEnabled } from "../AdGate";
 import type { ServiceRecord, VehicleType } from "@/lib/app/types";
 import { Button } from "@/components/ui/Button";
 import { useNav } from "@/lib/app/nav";
@@ -292,9 +291,6 @@ export function AddCarScreen({ editId }: { editId?: string }) {
   const [query, setQuery] = useState(editing?.make && editing?.model ? `${editing.model} · ${editing.make}` : "");
   const [comboOpen, setComboOpen] = useState(false);
   const [manualMode, setManualMode] = useState(false);
-  // Anúncio rewarded antes de cadastrar (só free; edição não conta).
-  const [adDone, setAdDone] = useState(false);
-  const needAd = adsEnabled() && !s.premium && !editing && !adDone;
 
   // Versões reais do veículo (tabela FIPE) quando marca+modelo+ano estão
   // definidos — viram sugestões no campo Versão/Motor (digitação livre segue).
@@ -365,7 +361,8 @@ export function AddCarScreen({ editId }: { editId?: string }) {
 
   return (
     <div>
-      {needAd && <AdOverlay kind="rewarded" onDone={() => setAdDone(true)} onCancel={back} />}
+      {/* Sem anúncio aqui: cadastrar o carro é a primeira ação útil do app e
+          não pode ficar atrás de um vídeo de 8 segundos. */}
       <AppHeader title={editing ? a.editTitle : a.title} />
 
       <div className="space-y-5 pb-4">

@@ -6,3 +6,88 @@ export function isNativeApp(): boolean {
   if (typeof window === "undefined") return false;
   return !!(window as unknown as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor;
 }
+
+// Origem de produção do app. Precisa bater com `server.url` do
+// capacitor.config.ts — é para cá que voltam os links de e-mail (confirmação
+// de conta, redefinição de senha), que podem ser abertos em outro aparelho.
+export const APP_ORIGIN = "https://mentorque.com.br";
+
+// Retorno do OAuth no app nativo. O esquema vem do `custom_url_scheme` em
+// android/app/src/main/res/values/strings.xml (e do CFBundleURLTypes no
+// Info.plist do iOS). Precisa estar cadastrado em Supabase → Authentication →
+// URL Configuration → Redirect URLs.
+export const NATIVE_AUTH_CALLBACK = "mentorque.app://auth-callback";
+
+type CapacitorGlobal = {
+  getPlatform?: () => string;
+  Plugins?: {
+    Browser?: { open: (o: { url: string }) => Promise<unknown>; close?: () => Promise<unknown> };
+    App?: {
+      addListener?: (ev: string, cb: (data: { url: string }) => void) => AppListener | Promise<AppListener>;
+    };
+  };
+};
+
+export type AppListener = { remove: () => void };
+
+function capacitor(): CapacitorGlobal | undefined {
+  if (typeof window === "undefined") return undefined;
+  return (window as unknown as { Capacitor?: CapacitorGlobal }).Capacitor;
+}
+
+// Plataforma do wrapper nativo, ou null no navegador. Diferente de
+// `detectPlatform()` (que lê o user-agent e responde também na web).
+export function nativePlatform(): "ios" | "android" | null {
+  const p = capacitor()?.getPlatform?.();
+  return p === "ios" || p === "android" ? p : null;
+}
+
+// A WebView do wrapper só empurra para o navegador do sistema quando o host
+// muda (Capacitor: `Bridge.launchIntent`). Ou seja, um link para
+// `mentorque.com.br/privacidade` abriria a landing — com os planos e o
+// checkout do Stripe — DENTRO do app da loja, o que viola a política de
+// pagamentos do Google Play. Por isso qualquer saída do app passa por aqui,
+// que usa o plugin Browser (aba do sistema) quando disponível.
+export function openExternal(url: string): void {
+  if (typeof window === "undefined") return;
+  const browser = capacitor()?.Plugins?.Browser;
+  if (browser) {
+    void browser.open({ url }).catch(() => window.open(url, "_blank", "noopener,noreferrer"));
+    return;
+  }
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+
+// Fecha a aba do sistema aberta por `openExternal` (fim do fluxo de OAuth).
+export function closeExternal(): void {
+  const browser = capacitor()?.Plugins?.Browser;
+  void browser?.close?.().catch(() => undefined);
+}
+
+// Assina os deep links recebidos pelo app (`mentorque.app://…`). Devolve uma
+// função de limpeza; no navegador não faz nada.
+export function onDeepLink(handler: (url: string) => void): () => void {
+  const app = capacitor()?.Plugins?.App;
+  if (!app?.addListener) return () => undefined;
+  const sub = app.addListener("appUrlOpen", (data) => handler(data.url));
+  return () => {
+    if (sub && "remove" in sub) (sub as AppListener).remove();
+    else void (sub as Promise<AppListener>)?.then?.((h) => h.remove());
+  };
+}
+
+// URL de retorno para os links enviados por e-mail (confirmação de conta,
+// redefinição de senha). Sempre https e absoluta: esses links podem ser
+// abertos em outro aparelho, onde o deep link não resolveria.
+export function emailRedirectUrl(): string {
+  if (isNativeApp()) return `${APP_ORIGIN}/app`;
+  return typeof window !== "undefined" ? `${window.location.origin}/app` : `${APP_ORIGIN}/app`;
+}
+
+// Link da loja para "avaliar o app". Na web cai no site.
+export function storeListingUrl(): string {
+  const platform = nativePlatform();
+  if (platform === "android") return "https://play.google.com/store/apps/details?id=mentorque.app";
+  if (platform === "ios") return "https://apps.apple.com/app/mentorque/id0000000000"; // TODO: id real após o 1º release
+  return "https://mentorque.com.br";
+}

@@ -21,6 +21,39 @@ const SYSTEM_TO_SERVICE: Record<SystemKey, string> = {
   electrical: "battery",
 };
 
+// Sem carro cadastrado, as três telas de saúde devolviam só um <AppHeader/> —
+// um título numa tela em branco. Estado vazio de verdade: explica o que a
+// funcionalidade faz e oferece as duas saídas úteis.
+function NoCarHealth() {
+  const c = useContent();
+  const h = c.health;
+  const { go, root } = useNav();
+  return (
+    <div>
+      <AppHeader title={h.scoreLabel} />
+      <div className="flex min-h-[58vh] flex-col items-center justify-center px-2 text-center">
+        <span className="grid h-20 w-20 place-items-center rounded-3xl bg-teal/12 text-teal">
+          <Icon name="check" className="h-9 w-9" />
+        </span>
+        <h2 className="mt-4 font-serif text-xl font-bold leading-snug text-cream">{h.noCarTitle}</h2>
+        <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-cream/55">{h.noCarBody}</p>
+        <button
+          onClick={() => go({ name: "addCar" })}
+          className="mt-6 w-full max-w-xs rounded-full bg-amber py-3.5 font-display text-[15px] font-semibold text-graphite active:scale-[0.99]"
+        >
+          {h.noCarCta}
+        </button>
+        <button
+          onClick={() => root({ name: "symptoms" })}
+          className="mt-3 text-sm text-cream/50 underline underline-offset-4 hover:text-cream/80"
+        >
+          {h.noCarBrowse}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 const scoreColor = (n: number) => (n >= 80 ? "text-teal" : n >= 60 ? "text-amber" : "text-coral");
 const statusTone: Record<string, string> = { ok: "text-teal", attention: "text-amber", overdue: "text-coral" };
 const REMAINING: Record<string, string> = { ok: "80%", attention: "40%", overdue: "15%" };
@@ -33,7 +66,7 @@ export function HealthScreen() {
   const { go } = useNav();
   const [scoreInfo, setScoreInfo] = useState<"vhs" | "vri" | null>(null);
   const v = activeVehicle(s);
-  if (!v) return <AppHeader title={h.scoreLabel} />;
+  if (!v) return <NoCarHealth />;
 
   const health = computeHealth(v, servicesFor(s, v.id));
   // The score always uses the spec formula; before the quiz, unanswered
@@ -200,7 +233,7 @@ export function SystemDetail({ system }: { system: SystemKey }) {
   const { s } = usePrototype();
   const { go } = useNav();
   const v = activeVehicle(s);
-  if (!v) return <AppHeader title="—" />;
+  if (!v) return <NoCarHealth />;
 
   const services = servicesFor(s, v.id);
   const related = services.filter((r) => (SERVICE_SYSTEMS[r.type] ?? []).includes(system));
@@ -338,7 +371,7 @@ export function HealthQuizScreen() {
   const [answers, setAnswers] = useState<Record<string, string>>(v?.quiz ?? {});
   const [purchase, setPurchase] = useState<string>(v?.purchaseDate ?? "");
 
-  if (!v) return <AppHeader title={h.quizTitle} />;
+  if (!v) return <NoCarHealth />;
 
   const total = questions.length + 1; // +1: data de compra (pergunta 1)
   const answered = questions.filter((q) => answers[q.id]).length + (purchase ? 1 : 0);

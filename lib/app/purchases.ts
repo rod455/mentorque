@@ -2,6 +2,8 @@
 // wrapper nativo iOS, onde a Apple exige IAP para assinaturas digitais.
 // A chave pública do app iOS fica no RevenueCat (Project → API keys) e entra
 // via env NEXT_PUBLIC_REVENUECAT_IOS_KEY (Vercel).
+import { nativePlatform } from "./wrapper";
+
 export const REVENUECAT_IOS_KEY = process.env.NEXT_PUBLIC_REVENUECAT_IOS_KEY ?? "";
 
 export type RcPackage = {
@@ -27,7 +29,12 @@ export function nativePurchases(): PurchasesPlugin | undefined {
 let configured = false;
 // Configura o SDK uma vez, amarrando a compra ao usuário Supabase (o webhook
 // usa esse id para liberar o Premium no banco).
+//
+// Só iOS, por política: no Android o app da loja é "modo leitor" e não vende
+// assinatura. Sem esta trava, uma chave do RevenueCat configurada por engano
+// ligaria o paywall nativo no Android — que exigiria Google Play Billing.
 export async function initPurchases(userId: string | null): Promise<PurchasesPlugin | null> {
+  if (nativePlatform() !== "ios") return null;
   const p = nativePurchases();
   if (!p || !REVENUECAT_IOS_KEY) return null;
   if (!configured) {
