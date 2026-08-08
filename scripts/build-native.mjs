@@ -148,5 +148,15 @@ for (const entry of fs.readdirSync(outDir)) {
 // exportada em "/" é substituída de propósito: ela é do site, não do app.
 fs.copyFileSync(path.join(DEST, "app", "index.html"), path.join(DEST, "index.html"));
 
-const size = execSync(`du -sh ${DEST}`).toString().split("\t")[0];
-log(`pronto — native/app (${size})`);
+// Somado em Node, não com `du`: o build também roda no Windows (Android Studio
+// na máquina do desenvolvedor), onde `du` não existe — e derrubava o script
+// depois de o pacote já estar pronto, com um erro que não dizia isso.
+function tamanho(dir) {
+  let total = 0;
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const alvo = path.join(dir, e.name);
+    total += e.isDirectory() ? tamanho(alvo) : fs.statSync(alvo).size;
+  }
+  return total;
+}
+log(`pronto — native/app (${Math.round(tamanho(DEST) / 1024 / 1024)} MB)`);
