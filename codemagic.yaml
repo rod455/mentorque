@@ -54,6 +54,30 @@ workflows:
         script: npx cap sync ios
       - name: Aplicar perfis de assinatura
         script: xcode-project use-profiles
+      - name: Conferir os perfis baixados
+        # Um perfil emitido ANTES de a capability entrar no App ID continua
+        # sendo baixado normalmente, e o archive só quebra lá na frente com
+        # "doesn't include the Sign In with Apple capability". Aqui a gente
+        # abre o perfil e diz na cara se ele serve ou não.
+        script: |
+          shopt -s nullglob
+          achou=0
+          for p in "$HOME/Library/MobileDevice/Provisioning Profiles/"*.mobileprovision; do
+            achou=1
+            security cms -D -i "$p" > /tmp/perfil.plist 2>/dev/null || continue
+            nome=$(/usr/libexec/PlistBuddy -c "Print :Name" /tmp/perfil.plist 2>/dev/null)
+            uuid=$(/usr/libexec/PlistBuddy -c "Print :UUID" /tmp/perfil.plist 2>/dev/null)
+            criado=$(/usr/libexec/PlistBuddy -c "Print :CreationDate" /tmp/perfil.plist 2>/dev/null)
+            echo "--- $nome"
+            echo "    uuid:   $uuid"
+            echo "    criado: $criado"
+            if grep -q "com.apple.developer.applesignin" /tmp/perfil.plist; then
+              echo "    Sign In with Apple: SIM"
+            else
+              echo "    Sign In with Apple: NAO  <<< este perfil nao serve, precisa ser reemitido"
+            fi
+          done
+          [ "$achou" = "1" ] || echo "(nenhum perfil foi baixado)"
       - name: Número da build (incremental)
         script: |
           cd ios/App
