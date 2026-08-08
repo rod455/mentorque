@@ -122,25 +122,21 @@ for (const entry of fs.readdirSync(outDir)) {
   fs.cpSync(path.join(outDir, entry), path.join(DEST, entry), { recursive: true });
 }
 
-// A WebView abre o index.html da raiz do webDir. O app mora em /app/, então a
-// raiz redireciona para lá. É navegação na MESMA origem (capacitor://localhost),
-// então continua dentro do app — diferente do wrapper antigo, que apontava para
-// uma URL https e por isso escapava para o Safari.
-fs.writeFileSync(
-  path.join(DEST, "index.html"),
-  `<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Mentorque</title>
-    <style>html,body{height:100%;margin:0;background:#16181d}</style>
-    <script>location.replace("./app/");</script>
-  </head>
-  <body></body>
-</html>
-`
-);
+// O app tem que SER o index.html da raiz.
+//
+// O roteador do Capacitor no iOS (Router.swift) resolve assim:
+//
+//     if pathUrl.pathExtension.isEmpty { return basePath + "/index.html" }
+//
+// Ou seja, TODO caminho sem extensão devolve o index.html da raiz — é o
+// comportamento clássico de SPA. Uma primeira versão daqui punha na raiz um
+// redirecionamento para "./app/"; como "/app/" também não tem extensão, o
+// Capacitor devolvia a raiz de novo e o app entrava em laço infinito: tela
+// preta, sem nem chegar na splash.
+//
+// Copiando o HTML do app para a raiz, qualquer rota cai direto nele. A landing
+// exportada em "/" é substituída de propósito: ela é do site, não do app.
+fs.copyFileSync(path.join(DEST, "app", "index.html"), path.join(DEST, "index.html"));
 
 const size = execSync(`du -sh ${DEST}`).toString().split("\t")[0];
 log(`pronto — native/app (${size})`);
