@@ -1,4 +1,8 @@
-import { loadStripe, type Stripe } from "@stripe/stripe-js";
+import type { Stripe } from "@stripe/stripe-js";
+// `/pure` não injeta o script do Stripe no import — ele só é baixado quando
+// o checkout embutido é aberto. No app da loja isso nunca acontece (iOS usa
+// a compra da Apple), então nada de Stripe sai pela rede lá.
+import { loadStripe } from "@stripe/stripe-js/pure";
 
 // Loads Stripe.js once (client-side) using the publishable key. Returns a
 // resolved-null promise when the key isn't set, so callers degrade gracefully.

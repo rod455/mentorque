@@ -3,6 +3,7 @@
 // local mock estimator so the experience never breaks.
 
 import type { VehicleType } from "./types";
+import { apiUrl } from "@/lib/app/apiBase";
 
 export type Brand = { nome: string; valor: string };
 export type Model = { modelo: string; valor: string };
@@ -13,7 +14,7 @@ export const kindOf = (t: VehicleType) => (t === "moto" ? "motos" : "carros");
 
 async function api<T>(params: Record<string, string>): Promise<T> {
   const qs = new URLSearchParams(params).toString();
-  const res = await fetch(`/api/fipe?${qs}`);
+  const res = await fetch(apiUrl(`/api/fipe?${qs}`));
   if (!res.ok) throw new Error(`fipe ${res.status}`);
   return (await res.json()) as T;
 }

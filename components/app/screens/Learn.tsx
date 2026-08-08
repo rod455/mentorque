@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { apiUrl } from "@/lib/app/apiBase";
 import { useI18n } from "@/lib/i18n";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { personalScore, vehicleSituations, vehicleTraits } from "@/lib/app/traits";
@@ -454,7 +455,7 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
     setBusy(true);
     if (!s.premium) setUsed((n) => n + 1);
     try {
-      const res = await fetch("/api/biela", {
+      const res = await fetch(apiUrl("/api/biela"), {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({

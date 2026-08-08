@@ -1,19 +1,20 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
-// Wrapper nativo do Mentorque (Capacitor). A WebView carrega o app de
-// produção — todo conteúdo atualiza via deploy, sem novo release na loja.
+// App nativo do Mentorque (Capacitor). O app roda INTEIRO de dentro do
+// binário: telas, estilos, imagens e lógica são arquivos empacotados, gerados
+// por `npm run build:native`. Não existe `server.url` — a WebView nunca sai
+// para a internet para desenhar a interface, então não há tela branca por
+// falta de rede nem navegação escapando para o Safari.
+//
+// O que continua vindo da rede: as rotas de API (Biela, Stripe, FIPE, revisões)
+// e o catálogo de conteúdo, ambos chamados por URL absoluta.
 const config: CapacitorConfig = {
   appId: "mentorque.app",
   appName: "Mentorque",
-  // Só a casca offline é empacotada no app. Apontar para `public/` embarcaria
-  // ~32 MB de imagens que a WebView nunca lê (o app roda do servidor abaixo).
-  webDir: "native/webshell",
+  webDir: "native/app",
   server: {
-    url: "https://mentorque.com.br/app",
     androidScheme: "https",
-    // Sem rede (ou erro HTTP no carregamento): a WebView cai nesta página
-    // empacotada em vez de mostrar tela branca.
-    errorPath: "offline.html",
+    iosScheme: "capacitor",
   },
   android: {
     allowMixedContent: false,

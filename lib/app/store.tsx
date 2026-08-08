@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { apiUrl } from "@/lib/app/apiBase";
 import { newId, type ServiceRecord, type Vehicle } from "./types";
 import { useAuth } from "./auth";
 import { getBrowserSupabase } from "@/lib/supabaseBrowser";
@@ -192,7 +193,7 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
       // Puxa o estado autoritativo do Stripe (não depende do webhook).
       try {
         const token = supabase ? (await supabase.auth.getSession()).data.session?.access_token : undefined;
-        if (token) await fetch("/api/stripe/sync", { method: "POST", headers: { authorization: `Bearer ${token}` } });
+        if (token) await fetch(apiUrl("/api/stripe/sync"), { method: "POST", headers: { authorization: `Bearer ${token}` } });
       } catch { /* ignore */ }
       if (!cancelled) refreshSubscription();
     })();

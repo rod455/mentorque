@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import { apiUrl } from "@/lib/app/apiBase";
 import { useI18n } from "@/lib/i18n";
 import { IconCheck } from "@/lib/icons";
 
@@ -34,7 +35,7 @@ export function WaitlistForm({
     setError(null);
     setStatus("loading");
     try {
-      const res = await fetch("/api/waitlist", {
+      const res = await fetch(apiUrl("/api/waitlist"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: value, locale }),

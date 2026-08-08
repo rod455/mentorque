@@ -1,4 +1,5 @@
 import { getBrowserSupabase } from "@/lib/supabaseBrowser";
+import { apiUrl } from "@/lib/app/apiBase";
 
 type BillingResult = { url?: string; clientSecret?: string; error?: string };
 
@@ -7,7 +8,7 @@ async function authedPost(path: string, body?: unknown): Promise<BillingResult> 
   const supabase = getBrowserSupabase();
   const token = supabase ? (await supabase.auth.getSession()).data.session?.access_token : undefined;
   try {
-    const res = await fetch(path, {
+    const res = await fetch(apiUrl(path), {
       method: "POST",
       headers: { "content-type": "application/json", ...(token ? { authorization: `Bearer ${token}` } : {}) },
       body: JSON.stringify(body ?? {}),

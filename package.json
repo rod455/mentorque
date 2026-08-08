@@ -9,7 +9,8 @@
     "lint": "next lint",
     "sync:android": "cap sync android",
     "sync:ios": "cap sync ios",
-    "open:android": "cap open android"
+    "open:android": "cap open android",
+    "build:native": "node scripts/build-native.mjs"
   },
   "dependencies": {
     "@capacitor-community/admob": "^8.0.0",

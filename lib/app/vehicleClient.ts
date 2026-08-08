@@ -3,12 +3,13 @@
 // for BR-only models that NHTSA (US market) doesn't cover.
 
 import type { ComplaintsSummary, RecallItem, SafetyRating } from "./nhtsa";
+import { apiUrl } from "@/lib/app/apiBase";
 
 export type { ComplaintsSummary, RecallItem, SafetyRating };
 
 async function api<T>(params: Record<string, string>): Promise<T> {
   const qs = new URLSearchParams(params).toString();
-  const res = await fetch(`/api/vehicle?${qs}`);
+  const res = await fetch(apiUrl(`/api/vehicle?${qs}`));
   if (!res.ok) throw new Error(`vehicle ${res.status}`);
   return (await res.json()) as T;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { apiUrl } from "@/lib/app/apiBase";
 import { ownedVehicles, servicesFor, soldVehicles, usePrototype } from "@/lib/app/store";
 import { computeHealth } from "@/lib/app/health";
 import { computeQuizHealth } from "@/lib/app/healthQuiz";
@@ -300,7 +301,7 @@ export function AddCarScreen({ editId }: { editId?: string }) {
     setVersions([]);
     if (!make || !model || !year) return;
     const ctl = new AbortController();
-    fetch(`/api/versions?type=${type}&make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}&year=${year}`, { signal: ctl.signal })
+    fetch(apiUrl(`/api/versions?type=${type}&make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}&year=${year}`), { signal: ctl.signal })
       .then((r) => (r.ok ? r.json() : { versions: [] }))
       .then((js) => setVersions(Array.isArray(js.versions) ? js.versions : []))
       .catch(() => {});

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { apiUrl } from "@/lib/app/apiBase";
 
 // Formulário público de solicitação de exclusão de conta (LGPD / Google Play).
 // Envia a solicitação por e-mail via /api/feedback (Resend).
@@ -14,7 +15,7 @@ export function DeleteAccountForm() {
     if (!email.trim() || state === "sending") return;
     setState("sending");
     try {
-      const res = await fetch("/api/feedback", {
+      const res = await fetch(apiUrl("/api/feedback"), {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({

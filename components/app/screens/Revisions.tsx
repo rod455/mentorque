@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { apiUrl } from "@/lib/app/apiBase";
 import { useI18n } from "@/lib/i18n";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { computeUpcoming, type UpcomingItem } from "@/lib/app/health";
@@ -99,7 +100,7 @@ export function RevisionsScreen() {
     if (!v || !s.premium) { setPlan(null); return; }
     const ctrl = new AbortController();
     setLoadingPlan(true);
-    fetch("/api/revisions", {
+    fetch(apiUrl("/api/revisions"), {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({

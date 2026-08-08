@@ -16,12 +16,26 @@ workflows:
     environment:
       node: 22
       xcode: latest
+      groups:
+        # Variáveis do build web (Codemagic → Environment variables → grupo
+        # "mentorque-web"). São embutidas no pacote, então precisam existir
+        # AQUI, não só na Vercel:
+        #   NEXT_PUBLIC_SUPABASE_URL
+        #   NEXT_PUBLIC_SUPABASE_ANON_KEY
+        #   NEXT_PUBLIC_SITE_URL
+        #   NEXT_PUBLIC_REVENUECAT_IOS_KEY
+        #   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+        - mentorque-web
       ios_signing:
         distribution_type: app_store
         bundle_identifier: mentorque.app
     scripts:
       - name: Instalar dependências web
         script: npm ci
+      - name: Gerar o app estático que vai dentro do binário
+        # Sem isso o webDir (native/app) não existe: o app é empacotado, não
+        # aponta mais para o site. Precisa das variáveis NEXT_PUBLIC_* abaixo.
+        script: npm run build:native
       - name: Sincronizar Capacitor iOS
         script: npx cap sync ios
       - name: Aplicar perfis de assinatura

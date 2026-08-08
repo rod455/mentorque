@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { apiUrl } from "@/lib/app/apiBase";
 import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/app/auth";
@@ -494,7 +495,7 @@ function SupportForm() {
     if (!supMsg.trim()) return setSupErr(true);
     setSupStatus("sending");
     try {
-      const res = await fetch("/api/feedback", {
+      const res = await fetch(apiUrl("/api/feedback"), {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({

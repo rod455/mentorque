@@ -21,3 +21,9 @@ next-env.d.ts
 # vercel
 .vercel
 *.tsbuildinfo
+
+# Pacote gerado por `npm run build:native` (entra no binário das lojas).
+# É saída de build: o Codemagic gera na hora, não versionamos 34 MB.
+/native/app
+/.next-native
+/.api-parked
