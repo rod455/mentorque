@@ -225,3 +225,23 @@ Lista de equipamentos, hoje 100% emoji, chip de 44 px.
 5. **Kit (22)** — tela mais interna, menor impacto.
 6. **Ações rápidas (4)** — ícones de linha funcionam bem a 56 px; é o pacote
    mais opcional.
+
+---
+
+## 9. Capas dos vídeos do canal — 10 imagens · `public/learn/<id>.png` · 600 × 600
+
+Primeira leva de Shorts próprios, publicada em 08/08/2026. Entraram sem capa
+(caem no ícone genérico). Mesmo estilo giz dos demais pacotes.
+
+| id | vídeo |
+|---|---|
+| `vid-turbo-pressao` | Turbo: o que significa "1 kg" de pressão |
+| `vid-marcha-lenta-preparado` | Marcha lenta "embaralhada" em carro preparado |
+| `vid-turbo-fabrica` | Por que o turbo de fábrica não estoura |
+| `vid-nitro` | Como funciona o nitro (NOS) |
+| `vid-cortar-molas` | Não rebaixe cortando as molas |
+| `vid-manual-suave` | Dirigir manual de forma suave |
+| `vid-manual-habitos` | 2 hábitos a evitar no câmbio manual |
+| `vid-pneu-indices` | Índice de carga e velocidade do pneu |
+| `vid-pneu-medidas` | Ler a medida do pneu (225/45 R17) |
+| `vid-gasolina-e30` | Gasolina com 30% de etanol |

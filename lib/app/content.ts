@@ -445,7 +445,6 @@ export function getContent(locale: Locale) {
       type: "video",
       system: "engine",
       // TODO: troque pelo link/ID do YouTube real desta aula (aceita URL completa ou só o ID).
-      media: { provider: "youtube", src: "jNQXAC9IVRw" },
       need: [T("Óleo e filtro corretos", "Correct oil and filter"), T("Chave de filtro e bacia", "Filter wrench and drain pan"), T("Luvas", "Gloves")],
       steps: [T("Aqueça o motor e desligue", "Warm the engine, then turn off"), T("Drene o óleo velho", "Drain the old oil"), T("Troque o filtro", "Replace the filter"), T("Complete com o óleo novo e confira o nível", "Refill and check the level")],
       stepsByLevel: {
@@ -472,7 +471,6 @@ export function getContent(locale: Locale) {
       system: "brakes",
       premium: true,
       // TODO: troque pelo link/ID do YouTube real desta aula (aceita URL completa ou só o ID).
-      media: { provider: "youtube", src: "jNQXAC9IVRw" },
       need: [T("Pastilhas novas", "New pads"), T("Macaco e cavalete", "Jack and stands"), T("Chave de roda", "Lug wrench")],
       steps: [T("Suspenda e remova a roda", "Lift and remove the wheel"), T("Solte a pinça", "Unbolt the caliper"), T("Troque as pastilhas", "Swap the pads"), T("Monte e teste o freio devagar", "Reassemble and test brakes gently")],
       stepsByLevel: {
@@ -508,7 +506,6 @@ export function getContent(locale: Locale) {
       type: "video",
       system: "engine",
       // TODO: troque pelo link/ID do YouTube real desta aula.
-      media: { provider: "youtube", src: "jNQXAC9IVRw" },
       need: [T("Leitor OBD2 (Bluetooth ou cabo)", "OBD2 reader (Bluetooth or cable)"), T("App de leitura no celular", "A reader app on your phone")],
       steps: [T("Encontre a porta OBD2", "Find the OBD2 port"), T("Conecte e pareie o leitor", "Plug in and pair the reader"), T("Leia e anote os códigos", "Read and note the codes")],
       safety: [T("Não apague códigos antes de resolver a causa", "Don't clear codes before fixing the cause")],
@@ -568,7 +565,7 @@ export function getContent(locale: Locale) {
 
     // ── Faça Você Mesmo (DIY) ──────────────────────────────────
     { id: "diy-battery", thumb: "/learn/diy-battery.png?v=4", track: "diy", title: T("Trocar a bateria", "Replace the battery"), type: "video", system: "electrical", difficulty: "facil",
-      media: { provider: "youtube", src: "jNQXAC9IVRw" }, body: [],
+      body: [],
       need: [T("Bateria nova compatível", "Compatible new battery"), T("Chave de boca 10mm", "10mm wrench")],
       steps: [T("Desligue tudo e solte o polo negativo (−) primeiro", "Turn everything off and remove the negative (−) first"), T("Solte o positivo (+) e a presilha", "Remove the positive (+) and the clamp"), T("Troque a bateria e reaperte na ordem inversa", "Swap the battery and refit in reverse order")],
       stepsByLevel: {
@@ -584,7 +581,7 @@ export function getContent(locale: Locale) {
       },
       safety: [T("Negativo sai primeiro, entra por último", "Negative off first, on last"), T("Não encoste as duas chaves nos polos", "Don't bridge both terminals")] },
     { id: "diy-airfilter", thumb: "/learn/diy-airfilter.png?v=4", track: "diy", title: T("Trocar o filtro de ar", "Replace the air filter"), type: "video", system: "engine", difficulty: "facil",
-      media: { provider: "youtube", src: "jNQXAC9IVRw" }, body: [],
+      body: [],
       need: [T("Filtro de ar novo", "New air filter")],
       steps: [T("Abra a caixa do filtro (presilhas ou parafusos)", "Open the airbox (clips or screws)"), T("Retire o filtro velho e limpe a caixa", "Remove the old filter and clean the box"), T("Encaixe o novo na posição correta e feche", "Fit the new one the right way and close")],
       stepsByLevel: {
@@ -599,7 +596,7 @@ export function getContent(locale: Locale) {
       },
       safety: [T("Não ligue o motor com a caixa aberta", "Don't run the engine with the box open")] },
     { id: "diy-wipers", thumb: "/learn/diy-wipers.png?v=4", track: "diy", title: T("Trocar as palhetas do limpador", "Replace the wiper blades"), type: "video", system: "electrical", difficulty: "facil",
-      media: { provider: "youtube", src: "jNQXAC9IVRw" }, body: [],
+      body: [],
       need: [T("Palhetas do tamanho correto", "Correct-size blades")],
       steps: [T("Levante o braço e aperte a trava", "Lift the arm and press the tab"), T("Deslize a palheta velha para fora", "Slide the old blade out"), T("Encaixe a nova até ouvir o clique", "Clip the new one until it clicks")],
       stepsByLevel: {
@@ -721,7 +718,7 @@ export function getContent(locale: Locale) {
     ]}),
 
     // ── Cultura & Curiosidades ─────────────────────────────────
-    art({ id: "cult-history", thumb: "/learn/cult-history.png?v=4", track: "culture", title: T("Breve história do automóvel", "A brief history of the car"), media: { provider: "youtube", src: "jNQXAC9IVRw" }, type: "video", body: [
+    art({ id: "cult-history", thumb: "/learn/cult-history.png?v=4", track: "culture", title: T("Breve história do automóvel", "A brief history of the car"), type: "video", body: [
       T("De 1886, com o Benz Patent-Motorwagen, à linha de montagem de Ford e à eletrificação de hoje — pouco mais de um século que mudou o mundo.", "From 1886, with the Benz Patent-Motorwagen, to Ford's assembly line and today's electrification — just over a century that changed the world."),
     ]}),
     art({ id: "cult-ev", thumb: "/learn/cult-ev.png?v=4", track: "culture", title: T("Como funciona um carro elétrico", "How an electric car works"), body: [
@@ -823,6 +820,94 @@ export function getContent(locale: Locale) {
       T("Depois, procure as notas: oficinas guardam registro por CPF ou placa, e concessionárias têm o histórico completo no sistema. Uma ligação costuma resolver anos de lacuna.", "Then hunt for receipts: shops keep records by tax ID or plate, and dealers have the full history in their system. One phone call often fills years of gaps."),
       T("Daqui pra frente, fotografe a nota assim que sair da oficina e registre na hora. Leva 30 segundos e evita o 'foi ano passado ou retrasado?' que sempre acontece.", "From now on, photograph the receipt as you leave the shop and log it right away. It takes 30 seconds and avoids the 'was it last year or the year before?' that always happens."),
       T("Bônus: com o histórico completo, o app passa a calcular suas revisões com precisão real, em vez de estimar pelo genérico.", "Bonus: with a complete history, the app computes your service schedule with real precision instead of generic estimates."),
+    ]}),
+
+    // ── Vídeos do canal (primeira leva) ──────────────────────────────────
+    // Shorts próprios. O texto abaixo do player resume o vídeo para quem
+    // prefere ler — e é o que alimenta a busca interna.
+    art({ id: "vid-turbo-pressao", track: "sports", type: "video", system: "engine", traits: ["turbo"], addedAt: "2026-08-08",
+      media: { provider: "youtube", src: "it8V3v7XEp8" },
+      title: T("Turbo: o que significa \"1 kg\" de pressão?", "Turbo: what does \"1 kg\" of boost mean?"), body: [
+      T("Quando o pessoal fala \"esse carro tem 1 kg de turbo\", está falando de pressão de sobrealimentação — o quanto o turbo empurra de ar a mais para dentro do motor, além da pressão atmosférica.", "When people say \"this car runs 1 kg of boost\", they mean forced-induction pressure — how much extra air the turbo pushes into the engine, on top of atmospheric pressure."),
+      T("A unidade de oficina é o kgf/cm². Na prática: 1 kg ≈ 1 bar ≈ 14,7 psi. São três formas de dizer quase a mesma coisa, e é por isso que manômetro importado marca psi e o brasileiro marca kg.", "The shop unit is kgf/cm². In practice: 1 kg ≈ 1 bar ≈ 14.7 psi. Three ways of saying nearly the same thing — which is why imported gauges read psi and Brazilian ones read kg."),
+      T("O detalhe que importa: é pressão RELATIVA, acima da atmosférica. Com 1 kg de pressão o motor recebe aproximadamente o dobro de massa de ar — e, com combustível proporcional, o potencial de potência também quase dobra.", "The key detail: it's RELATIVE pressure, above atmospheric. At 1 kg of boost the engine takes in roughly twice the air mass — and, with matching fuel, the power potential nearly doubles too."),
+      T("Por isso pressão não é um número solto: sem combustível, injeção e refrigeração acompanhando, subir a pressão só aproxima o motor da detonação.", "That's why boost isn't a number on its own: without fuel, tuning and cooling to match, raising it only brings the engine closer to detonation."),
+    ]}),
+    art({ id: "vid-marcha-lenta-preparado", track: "sports", type: "video", system: "engine", addedAt: "2026-08-08",
+      media: { provider: "youtube", src: "FevmurLQFwg" },
+      title: T("Por que carro preparado tem marcha lenta \"embaralhada\"", "Why a modified car has a lumpy idle"), body: [
+      T("Aquele ronco irregular, que parece que o motor vai morrer e não morre, não é defeito: é consequência direta do comando de válvulas usado em motor preparado.", "That uneven lope, like the engine is about to stall but never does, isn't a fault: it's a direct consequence of the camshaft used in a built engine."),
+      T("Um comando mais \"bravo\" fica com as válvulas de admissão e escape abertas ao mesmo tempo por mais tempo — o chamado cruzamento. Em alta rotação isso enche melhor o cilindro e é onde a potência aparece.", "A more aggressive cam keeps the intake and exhaust valves open together for longer — what's called overlap. At high rpm that fills the cylinder better, and that's where the power shows up."),
+      T("Em marcha lenta o efeito se inverte: parte dos gases queimados volta para a admissão e a mistura fica instável de ciclo para ciclo. O resultado audível é a lenta oscilando.", "At idle the effect reverses: some burnt gas flows back into the intake and the mixture becomes unstable cycle to cycle. What you hear is that oscillating idle."),
+      T("Ou seja, é o preço de projeto: quem ganha em cima perde embaixo. Num motor de rua com comando original, marcha lenta irregular NÃO é normal — aí vale investigar vela, bico, corpo de borboleta ou falsa entrada de ar.", "So it's a design trade-off: gain up top, lose down low. On a stock street engine, a rough idle is NOT normal — there it's worth checking plugs, injectors, throttle body or a vacuum leak."),
+    ]}),
+    art({ id: "vid-turbo-fabrica", track: "sports", type: "video", system: "engine", traits: ["turbo"], addedAt: "2026-08-08",
+      media: { provider: "youtube", src: "PaFA9VnLfUg" },
+      title: T("Por que o turbo de fábrica não \"estoura\" de pressão", "Why a factory turbo doesn't overboost"), body: [
+      T("Se o turbo comprime cada vez mais ar conforme o motor gira, por que a pressão não sobe indefinidamente até quebrar tudo? Porque existe um alívio proposital no sistema.", "If the turbo compresses more air the faster the engine spins, why doesn't boost climb forever until something breaks? Because there's a deliberate relief in the system."),
+      T("Quem faz esse trabalho é a wastegate: uma válvula que desvia parte dos gases de escape para fora da turbina assim que a pressão alvo é atingida. Menos gás na turbina, menos rotação, pressão estabilizada.", "The wastegate does that job: a valve that routes part of the exhaust gas around the turbine once target boost is reached. Less gas through the turbine, less speed, boost holds steady."),
+      T("Nos carros modernos ela é comandada eletronicamente pela central, que ajusta a pressão em tempo real conforme rotação, temperatura, altitude e qualidade do combustível.", "On modern cars it's electronically controlled by the ECU, which trims boost in real time based on rpm, temperature, altitude and fuel quality."),
+      T("E existe uma segunda rede de proteção: se a central detecta pressão acima do previsto ou sinal de detonação, ela corta — o famoso \"corte por sobrepressão\". Por isso mexer só na pressão, sem acompanhar o resto, costuma terminar em motor aberto.", "And there's a second safety net: if the ECU sees more boost than expected or detects knock, it cuts — the classic overboost cut. Which is why raising boost alone, without the rest, usually ends with the engine apart."),
+    ]}),
+    art({ id: "vid-nitro", track: "sports", type: "video", system: "engine", addedAt: "2026-08-08",
+      media: { provider: "youtube", src: "21Mmi4ZGzPg" },
+      title: T("Como funciona o nitro (NOS) de verdade", "How nitrous (NOS) actually works"), body: [
+      T("Ao contrário do que o cinema sugere, o nitro não é um combustível. É óxido nitroso (N₂O), um gás que serve para levar MAIS OXIGÊNIO para dentro do motor.", "Unlike what the movies suggest, nitrous isn't a fuel. It's nitrous oxide (N₂O), a gas used to carry MORE OXYGEN into the engine."),
+      T("Dentro da câmara, acima de mais ou menos 300 °C, a molécula se quebra e libera oxigênio livre — bem mais concentrado do que o do ar, que só tem 21%. Com mais oxigênio disponível, dá para queimar mais combustível.", "Inside the chamber, above roughly 300 °C, the molecule breaks down and releases free oxygen — far more concentrated than air, which is only 21% oxygen. With more oxygen available, you can burn more fuel."),
+      T("Tem um bônus: o N₂O sai do cilindro em expansão e resfria bastante a mistura admitida, o que aumenta a densidade do ar e ajuda contra a detonação.", "There's a bonus: N₂O expands as it leaves the bottle and cools the intake charge considerably, which raises air density and helps fight detonation."),
+      T("E tem o risco: se entrar nitro sem aumentar o combustível na mesma proporção, a mistura fica pobre e a temperatura dispara. É assim que se derrete pistão em segundos — o nitro não perdoa erro de dosagem.", "And there's the risk: if nitrous goes in without a matching increase in fuel, the mixture runs lean and temperature spikes. That's how you melt a piston in seconds — nitrous doesn't forgive a dosing mistake."),
+    ]}),
+    art({ id: "vid-cortar-molas", track: "diy", type: "video", system: "suspension", addedAt: "2026-08-08",
+      media: { provider: "youtube", src: "MItRkRFIazQ" },
+      title: T("Não rebaixe seu carro cortando as molas", "Never lower your car by cutting the springs"), body: [
+      T("Cortar mola é o jeito barato de rebaixar — e é também o jeito mais rápido de estragar a suspensão inteira. Vale entender o que acontece por dentro.", "Cutting springs is the cheap way to lower a car — and also the fastest way to ruin the whole suspension. It's worth understanding what happens inside."),
+      T("A mola original é calculada para uma constante específica. Ao cortar, ela fica mais curta e mais DURA, de forma imprevisível. Muitas são progressivas: as espiras têm passos diferentes, e cortar justamente a parte macia destrói o projeto.", "The original spring is calculated for a specific rate. Cutting it makes it shorter and STIFFER, in an unpredictable way. Many are progressive: the coils have different pitches, and cutting exactly the soft section destroys the design."),
+      T("Pior: a ponta cortada não assenta direito na sede. A mola trabalha torta, faz barulho e pode até se soltar do prato numa lombada com a roda no ar.", "Worse: the cut end doesn't seat properly. The spring works crooked, makes noise and can even pop out of its seat over a bump with the wheel unloaded."),
+      T("O amortecedor também paga a conta: ele passa a trabalhar fora do curso para o qual foi projetado, batendo no fim de curso, e morre cedo. Some a isso a geometria alterada, que come pneu e piora a frenagem.", "The shock pays too: it starts working outside its designed travel, bottoming out, and dies early. Add the altered geometry, which eats tires and hurts braking."),
+      T("Se quiser rebaixar, use kit de molas esportivas projetado para o seu carro — vem com a constante certa, a altura certa e, de preferência, amortecedor compatível. E lembre: alteração de altura precisa estar regularizada para passar na vistoria.", "If you want to lower it, use a sport spring kit designed for your car — correct rate, correct height and, ideally, matching shocks. And remember: a ride-height change must be properly registered to pass inspection."),
+    ]}),
+    art({ id: "vid-manual-suave", track: "fundamentals", type: "video", system: "engine", traits: ["manualGearbox"], addedAt: "2026-08-08",
+      media: { provider: "youtube", src: "6Wsp-O5eTuE" },
+      title: T("Como dirigir um carro manual de forma suave", "How to drive a manual smoothly"), body: [
+      T("Trancos em carro manual quase nunca são do carro: são de sincronismo entre o pé da embreagem e o acelerador. A boa notícia é que isso se aprende rápido.", "Jerky shifts in a manual are almost never the car: they're a timing mismatch between the clutch foot and the throttle. The good news is that it's quickly learned."),
+      T("Na saída, o segredo é o ponto de atrito: solte a embreagem até o carro começar a se mover sozinho, segure ali por um instante e só então acelere e termine de soltar. Pressa nessa fase é o que causa o solavanco.", "Pulling away, the secret is the friction point: release the clutch until the car starts moving on its own, hold there a moment, then add throttle and finish releasing. Rushing this is what causes the lurch."),
+      T("Na troca, alivie o acelerador ANTES de pisar na embreagem, e volte a acelerar de forma progressiva enquanto solta. O motor e a caixa chegam na mesma rotação e a troca fica imperceptível.", "When shifting, ease off the throttle BEFORE pressing the clutch, and feed it back progressively as you release. Engine and gearbox meet at the same speed and the shift becomes invisible."),
+      T("Reduções pedem o contrário: um toque no acelerador com a embreagem embaixo iguala as rotações e evita aquele \"freio motor\" brusco que joga todo mundo para frente.", "Downshifts need the opposite: a blip of throttle with the clutch in matches revs and avoids that abrupt engine braking that throws everyone forward."),
+    ]}),
+    art({ id: "vid-manual-habitos", track: "fundamentals", type: "video", system: "engine", traits: ["manualGearbox"], addedAt: "2026-08-08",
+      media: { provider: "youtube", src: "puVd8XimuV4" },
+      title: T("2 hábitos para evitar ao dirigir um carro manual", "2 habits to avoid when driving a manual"), body: [
+      T("São dois costumes tão comuns que quase ninguém percebe que está fazendo — e os dois cobram caro na hora de trocar a embreagem.", "Two habits so common that almost nobody notices they're doing them — and both get expensive when it's time to replace the clutch."),
+      T("O primeiro: descansar o pé sobre o pedal da embreagem enquanto dirige. Mesmo sem afundar, o peso da perna já encosta o rolamento no platô. Ele gira o tempo todo sob carga e morre bem antes da hora — e o disco começa a patinar.", "The first: resting your foot on the clutch pedal while driving. Even without pressing, the weight of your leg touches the release bearing against the pressure plate. It spins under load all the time and dies early — and the disc starts slipping."),
+      T("O segundo: segurar o carro parado em subida usando a embreagem no ponto de atrito, em vez do freio. Nessa hora o disco está patinando de propósito, gerando calor puro. É o jeito mais rápido de queimar embreagem que existe.", "The second: holding the car on a hill with the clutch at the friction point instead of the brake. The disc is slipping on purpose, generating pure heat. It's the fastest way to burn a clutch there is."),
+      T("As correções são simples: pé esquerdo no descanso sempre que não estiver trocando, e em subida use o freio de mão ou o pé no freio até a hora de sair. Sua embreagem pode durar o dobro só com isso.", "The fixes are simple: left foot on the dead pedal whenever you're not shifting, and on a hill use the handbrake or footbrake until you move off. Your clutch can last twice as long from that alone."),
+      T("Bônus: parado no semáforo, prefira ponto morto com o pé no freio. Ficar com a marcha engatada e a embreagem pisada mantém o rolamento sob carga sem necessidade.", "Bonus: at a red light, prefer neutral with your foot on the brake. Sitting in gear with the clutch down keeps the bearing loaded for no reason."),
+    ]}),
+    art({ id: "vid-pneu-indices", track: "fundamentals", type: "video", system: "tires", addedAt: "2026-08-08",
+      media: { provider: "youtube", src: "pEELOa-PWBE" },
+      title: T("Pneu: o que são os índices de carga e velocidade", "Tires: what the load and speed ratings mean"), body: [
+      T("Depois da medida, o pneu traz dois códigos que quase ninguém olha na hora de comprar — e são justamente os que dizem se aquele pneu pode ou não rodar no seu carro.", "After the size, a tire carries two codes almost nobody checks when buying — and they're exactly the ones that say whether that tire may run on your car."),
+      T("Num 91V, o 91 é o índice de CARGA: o peso máximo que aquele pneu aguenta, consultado numa tabela. O 91 equivale a 615 kg por pneu. Quatro pneus, mais de 2,4 toneladas de capacidade.", "In a 91V, the 91 is the LOAD index: the maximum weight that tire supports, read from a table. 91 equals 615 kg per tire. Four tires, over 2.4 tonnes of capacity."),
+      T("A letra é o índice de VELOCIDADE, a máxima que o pneu suporta com segurança de forma contínua. T é 190 km/h, H é 210, V é 240, W é 270. Não é sugestão: acima disso a estrutura aquece além do previsto.", "The letter is the SPEED rating, the maximum the tire safely sustains. T is 190 km/h, H is 210, V is 240, W is 270. It's not a suggestion: beyond that the carcass heats past its design limit."),
+      T("A regra prática: nunca monte pneu com índice ABAIXO do que a montadora especifica — está na etiqueta da coluna da porta ou no manual. Índice maior pode; menor compromete segurança e ainda pode invalidar seguro em caso de acidente.", "Rule of thumb: never fit a tire rated BELOW what the manufacturer specifies — it's on the door-jamb label or in the manual. Higher is fine; lower compromises safety and may even void insurance in a crash."),
+    ]}),
+    art({ id: "vid-pneu-medidas", track: "fundamentals", type: "video", system: "tires", addedAt: "2026-08-08",
+      media: { provider: "youtube", src: "30LdSYoE_-0" },
+      title: T("Como ler a medida do pneu (225/45 R17)", "How to read tire size (225/45 R17)"), body: [
+      T("Aquela sequência na lateral do pneu não é código secreto: cada número diz uma dimensão, e entender isso evita comprar errado.", "That sequence on the sidewall isn't a secret code: each number is a dimension, and understanding it keeps you from buying the wrong tire."),
+      T("No 225/45 R17, o 225 é a LARGURA da banda de rodagem em milímetros — de um flanco ao outro.", "In 225/45 R17, the 225 is the tread WIDTH in millimetres — from one sidewall to the other."),
+      T("O 45 é o PERFIL, e essa é a parte que confunde: não é milímetro, é porcentagem da largura. A altura do flanco é 45% de 225, ou seja, cerca de 101 mm. Por isso o mesmo perfil 45 dá alturas diferentes em larguras diferentes.", "The 45 is the ASPECT RATIO, and this is the confusing part: it's not millimetres, it's a percentage of the width. Sidewall height is 45% of 225 — about 101 mm. That's why the same 45 profile gives different heights at different widths."),
+      T("O R indica construção radial, padrão em praticamente todo pneu de passeio. E o 17 é o diâmetro do ARO, esse sim em polegadas — a única medida em polegada da sequência.", "The R means radial construction, standard on virtually every passenger tire. And 17 is the RIM diameter, this one in inches — the only imperial measurement in the sequence."),
+      T("Detalhe que salva dinheiro: mudar a medida altera o diâmetro total da roda e desregula o velocímetro e o hodômetro. Se for mudar, procure uma combinação que mantenha o diâmetro externo próximo do original.", "A money-saving detail: changing the size alters overall rolling diameter and throws off the speedometer and odometer. If you do change, look for a combination that keeps the outer diameter close to stock."),
+    ]}),
+    art({ id: "vid-gasolina-e30", track: "money", type: "video", system: "engine", addedAt: "2026-08-08",
+      media: { provider: "youtube", src: "GfO31Icr5bg" },
+      title: T("A gasolina com 30% de etanol: o que muda para você", "Gasoline with 30% ethanol: what changes for you"), body: [
+      T("A gasolina comum vendida no Brasil não é gasolina pura: ela já vem misturada com etanol anidro. Essa proporção subiu, e isso mexe com consumo e com a conta do posto.", "Regular gasoline sold in Brazil isn't pure gasoline: it already comes blended with anhydrous ethanol. That share went up, and it affects both consumption and what you pay at the pump."),
+      T("O etanol tem menos energia por litro que a gasolina. Quanto maior a fatia de etanol na mistura, um pouco menos o litro rende — a diferença é pequena, na casa de 1%, mas existe e aparece no tanque cheio.", "Ethanol carries less energy per litre than gasoline. The bigger the ethanol share, the slightly less each litre delivers — the difference is small, around 1%, but it's real and shows up over a full tank."),
+      T("Carro flex lida com isso sem drama: a central lê o sensor e ajusta a injeção sozinha. Modelos antigos não-flex, anteriores a 2003, são os que pedem atenção — vale confirmar no manual qual mistura o motor aceita.", "Flex-fuel cars handle it without drama: the ECU reads the sensor and adjusts fuelling on its own. Older non-flex models, before 2003, are the ones needing attention — check the manual for the blend the engine accepts."),
+      T("Na prática o que muda para o seu bolso é a régua de comparação. Aquela regra dos 70% entre etanol e gasolina se desloca um pouco quando a mistura muda, então não decida de cabeça.", "In practice what changes for your wallet is the yardstick. That 70% rule between ethanol and gasoline shifts a little when the blend changes, so don't decide from memory."),
+      T("Use a calculadora de Etanol × Gasolina aqui do app: ela compara com o consumo REAL do seu carro, que é o único número que importa para a sua decisão no posto.", "Use the Ethanol × Gasoline calculator here in the app: it compares using your car's REAL consumption, the only number that matters for your decision at the pump."),
     ]}),
   ];
 
