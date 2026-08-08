@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import type { PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useState } from "react";
 import { usePrototype } from "@/lib/app/store";
+import { useSwipe } from "@/lib/app/swipe";
 import { useAuth } from "@/lib/app/auth";
 import { trialDaysFor, trialPlatform } from "@/lib/app/platform";
 import { isNativeApp, nativePlatform } from "@/lib/app/wrapper";
@@ -108,27 +108,12 @@ export function OnboardingFlow() {
     finishToPlan();
   };
 
-  // Swipe left→right anywhere on the screen = go back a card (no button).
-  const down = useRef<{ x: number; y: number } | null>(null);
-  const onPointerDown = (e: ReactPointerEvent) => {
-    down.current = { x: e.clientX, y: e.clientY };
-  };
-  const onPointerUp = (e: ReactPointerEvent) => {
-    const start = down.current;
-    down.current = null;
-    if (!start || carLeaving) return;
-    const dx = e.clientX - start.x;
-    const dy = e.clientY - start.y;
-    const horizontal = Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5;
-    if (!horizontal) return;
-    if (dx > 0) {
-      // left→right = back
-      if (i > 0) setI((v) => v - 1);
-    } else {
-      // right→left = forward (same behavior as the Continue button)
-      onContinue();
-    }
-  };
+  // Arrastar na tela troca de página: para a direita volta, para a esquerda
+  // avança (mesmo efeito do botão Continuar).
+  const swipe = useSwipe({
+    onRight: () => { if (!carLeaving && i > 0) setI((v) => v - 1); },
+    onLeft: () => { if (!carLeaving) onContinue(); },
+  });
 
   const onContinue = () => {
     if (carLeaving) return;
@@ -151,8 +136,7 @@ export function OnboardingFlow() {
     <PhoneFrame>
       <div
         className="flex flex-1 flex-col"
-        onPointerDown={onPointerDown}
-        onPointerUp={onPointerUp}
+        {...swipe}
       >
       <div className="flex items-center justify-between px-5 pb-2 pt-5">
         <ProgressDots total={total} index={i} />

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import type { PointerEvent as ReactPointerEvent } from "react";
 import { NavProvider, useNav, type View } from "@/lib/app/nav";
+import { useSwipe } from "@/lib/app/swipe";
 import { usePrototype } from "@/lib/app/store";
 import { trackContent } from "@/lib/app/track";
 import { useAuth } from "@/lib/app/auth";
@@ -147,23 +147,15 @@ function Router() {
     else if (view.name === "equipmentHowTo") trackContent(`equipment-${view.itemId}`, "open");
   }, [view]);
 
-  // Swipe left→right = go back to the previous screen (last one the user was on).
-  const down = useRef<{ x: number; y: number } | null>(null);
-  const onPointerDown = (e: ReactPointerEvent) => {
-    down.current = { x: e.clientX, y: e.clientY };
-  };
-  const onPointerUp = (e: ReactPointerEvent) => {
-    const start = down.current;
-    down.current = null;
-    if (!start) return;
-    const dx = e.clientX - start.x;
-    const dy = e.clientY - start.y;
-    if (dx > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && canBack) {
+  // Arrastar da esquerda para a direita volta para a tela anterior.
+  const swipe = useSwipe({
+    onRight: () => {
+      if (!canBack) return;
       // Saindo do paywall por gesto: o funil de ofertas pode segurar a saída.
       if (view.name === "subscribe" && !paywallExitAllowed(null)) return;
       back();
-    }
-  };
+    },
+  });
 
   const screen = (() => {
     switch (view.name) {
@@ -217,8 +209,7 @@ function Router() {
         ref={mainRef}
         onScroll={onScroll}
         className="flex-1 overflow-y-auto overflow-x-hidden px-5 pb-[calc(7rem+env(safe-area-inset-bottom))] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-        onPointerDown={onPointerDown}
-        onPointerUp={onPointerUp}
+        {...swipe}
       >
         {screen}
       </main>
