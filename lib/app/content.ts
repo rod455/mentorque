@@ -2274,6 +2274,7 @@ export function getContent(locale: Locale) {
       later: T("Talvez depois", "Maybe later"),
       terms: T("Termos e política de privacidade", "Terms & privacy policy"),
       restore: T("Restaurar compra", "Restore purchase"),
+      loadingIap: T("Carregando os planos…", "Loading plans…"),
       privacyLink: T("Privacidade", "Privacy"),
       termsLink: T("Termos", "Terms"),
       // Paywall com teste grátis

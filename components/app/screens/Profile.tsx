@@ -678,11 +678,15 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   // pacotes da oferta; sem RevenueCat (ex.: Android), fica o modo leitor.
   const [iap, setIap] = useState<{ monthly?: RcPackage; annual?: RcPackage } | null>(null);
   const [iapBusy, setIapBusy] = useState(false);
+  // Carregar as ofertas leva alguns segundos. Sem este estado, quem abria o
+  // paywall antes de terminar via "Assinatura indisponível neste app" — que é
+  // a mensagem do modo leitor, não de carregamento.
+  const [iapReady, setIapReady] = useState(!isNativeApp());
   useEffect(() => {
     if (!isNativeApp()) return;
     (async () => {
       const p = await initPurchases(user?.id ?? null);
-      if (!p) return;
+      if (!p) { setIapReady(true); return; }
       try {
         const offs = await p.getOfferings();
         const pkgs = offs.current?.availablePackages ?? [];
@@ -690,6 +694,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
         const annual = pkgs.find((x) => x.packageType === "ANNUAL") ?? pkgs.find((x) => x.identifier === "$rc_annual");
         if (monthly || annual) setIap({ monthly, annual });
       } catch { /* sem ofertas → modo leitor */ }
+      finally { setIapReady(true); }
     })();
   }, [user]);
 
@@ -761,6 +766,16 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
           <p className="mx-auto mt-3 max-w-xs text-center text-xs leading-relaxed text-cream/45">
             {plan === "annual" ? sub.trialFine : sub.trialFineMonthly}
           </p>
+        </div>
+      );
+    }
+    // Ainda buscando as ofertas na Apple: espera, em vez de anunciar que não
+    // dá para assinar.
+    if (!iapReady) {
+      return (
+        <div className="flex min-h-[70vh] flex-col items-center justify-center gap-3 px-6 text-center">
+          <span className="h-8 w-8 animate-spin rounded-full border-2 border-amber/30 border-t-amber" />
+          <p className="text-sm text-cream/55">{sub.loadingIap}</p>
         </div>
       );
     }

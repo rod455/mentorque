@@ -145,15 +145,15 @@ export function OnboardingFlow() {
         </div>
       ) : i === cards.length ? (
         /* Página 4 — prova social (formato Bloom: cards sobrepostos, sem scroll) */
-        <div className="flex flex-1 flex-col px-6 pb-6">
-          <h1 className="mt-1 font-serif text-3xl font-bold leading-tight text-cream">{social.title}</h1>
-          <p className="mt-1.5 text-sm text-cream/50">{social.sub}</p>
+        <div className="flex flex-1 flex-col overflow-hidden px-6 pb-4">
+          <h1 className="mt-1 font-serif text-[26px] font-bold leading-tight text-cream">{social.title}</h1>
+          <p className="mt-1 text-[13px] text-cream/50">{social.sub}</p>
 
           {/* Nota central ladeada por ícones (como as folhas do Bloom) */}
-          <div className="mt-4 flex items-center justify-center gap-8">
+          <div className="mt-3 flex items-center justify-center gap-8">
             <Icon name="tools" className="h-8 w-8 text-amber/30" />
             <div className="text-center">
-              <p className="font-serif text-4xl font-bold leading-none text-cream">{social.rating}</p>
+              <p className="font-serif text-[32px] font-bold leading-none text-cream">{social.rating}</p>
               <p className="mt-1 text-base tracking-wide text-amber">★★★★★</p>
               <p className="mt-0.5 text-xs text-cream/45">{social.ratingNote}</p>
             </div>
@@ -161,43 +161,43 @@ export function OnboardingFlow() {
           </div>
 
           {/* Estatísticas */}
-          <div className="mt-4 grid grid-cols-2 divide-x divide-white/10">
+          <div className="mt-3 grid grid-cols-2 divide-x divide-white/10">
             <div className="pr-4 text-center">
-              <p className="font-serif text-2xl font-bold leading-tight text-cream">{social.stat1}</p>
+              <p className="font-serif text-xl font-bold leading-tight text-cream">{social.stat1}</p>
               <p className="text-xs text-cream/45">{social.stat1Label}</p>
             </div>
             <div className="pl-4 text-center">
-              <p className="font-serif text-2xl font-bold leading-tight text-cream">{social.stat2}</p>
+              <p className="font-serif text-xl font-bold leading-tight text-cream">{social.stat2}</p>
               <p className="text-xs text-cream/45">{social.stat2Label}</p>
             </div>
           </div>
 
           {/* Depoimentos sobrepostos e inclinados, como na referência */}
-          <div className="mt-5 flex-1">
+          <div className="mt-3 min-h-0 flex-1">
             {social.quotes.map((q, idx) => (
               <div
                 key={q.name}
                 style={{ zIndex: idx + 1 }}
-                className={`relative rounded-2xl bg-graphite-800 px-3.5 py-3 shadow-card ring-1 ring-white/[0.1] ${
-                  idx === 0 ? "" : "-mt-6"
+                className={`relative rounded-2xl bg-graphite-800 px-3.5 py-2.5 shadow-card ring-1 ring-white/[0.1] ${
+                  idx === 0 ? "" : "-mt-8"
                 } ${idx % 2 === 0 ? "-rotate-2 mr-12" : "rotate-2 ml-12"}`}
               >
                 <p className="text-xs tracking-wide text-amber">★★★★★</p>
-                <p className="mt-1 text-[13px] leading-snug text-cream/90">{q.quote}</p>
+                <p className="mt-0.5 line-clamp-2 text-[12.5px] leading-snug text-cream/90">{q.quote}</p>
                 <p className="mt-1 text-[11px] font-medium text-cream/55">{q.name} <span className="text-teal">✔</span></p>
               </div>
             ))}
           </div>
 
-          <Button size="lg" className="mt-4 w-full" onClick={onContinue}>
+          <Button size="lg" className="mt-3 w-full shrink-0" onClick={onContinue}>
             {c.splash.next}
           </Button>
         </div>
       ) : (
         /* Página 5 — monte seu teste */
-        <div className="flex flex-1 flex-col overflow-y-auto px-6 pb-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex flex-1 flex-col overflow-hidden px-6 pb-4">
           {/* Biela cercada de recursos */}
-          <div className="relative mx-auto mt-3 flex h-60 w-full max-w-xs items-end justify-center">
+          <div className="relative mx-auto flex h-36 w-full max-w-xs items-end justify-center">
             <BielaMascote size={118} />
             {[
               { icon: "diagnose", cls: "left-0 top-4" },
@@ -211,9 +211,9 @@ export function OnboardingFlow() {
             ))}
           </div>
 
-          <h1 className="mt-3 text-center font-serif text-3xl font-bold text-cream">{trial.title}</h1>
+          <h1 className="text-center font-serif text-[24px] font-bold text-cream">{trial.title}</h1>
 
-          <div className="mt-4 space-y-2.5 rounded-2xl bg-graphite-800 p-4 ring-1 ring-white/[0.06]">
+          <div className="mt-2.5 space-y-1.5 rounded-2xl bg-graphite-800 p-3 ring-1 ring-white/[0.06]">
             {trial.bullets.map((b) => (
               <div key={b} className="flex items-center gap-2.5 text-sm text-cream/85">
                 <CheckDot /> {b.replace("{n}", String(trialDays))}
@@ -222,7 +222,7 @@ export function OnboardingFlow() {
           </div>
 
           {/* Escolha do plano */}
-          <div className="mt-4 grid grid-cols-2 gap-3">
+          <div className="mt-2.5 grid grid-cols-2 gap-2.5">
             <button
               onClick={() => setPlan("annual")}
               className={`rounded-2xl p-4 text-left ring-2 transition-colors ${plan === "annual" ? "bg-amber text-graphite ring-amber" : "bg-graphite-800 text-cream ring-white/10"}`}
@@ -250,7 +250,7 @@ export function OnboardingFlow() {
           </div>
 
           {/* Preço em evidência (formato Bloom) */}
-          <p className="mt-3 text-center text-sm text-cream/60">
+          <p className="mt-2.5 text-center text-[13px] leading-snug text-cream/60">
             {plan === "annual" ? (
               <>
                 {trial.finePrefix.replace("{n}", String(trialDays))}{" "}
@@ -265,11 +265,11 @@ export function OnboardingFlow() {
             )}
           </p>
 
-          <div className="mt-auto pt-4">
+          <div className="mt-auto pt-3">
             <Button size="lg" className="w-full" onClick={onContinue}>{trial.cta}</Button>
 
             {/* Lembrete antes do teste acabar */}
-            <div className="mt-3 flex items-center gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-2.5 ring-1 ring-white/[0.06]">
+            <div className="mt-2.5 flex items-center gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-2 ring-1 ring-white/[0.06]">
               <span className="flex-1 text-xs text-cream/70">{c.subscribe.reminder}</span>
               <button
                 type="button"
@@ -282,7 +282,7 @@ export function OnboardingFlow() {
               </button>
             </div>
 
-            <div className="mt-3 flex items-center justify-center gap-2 text-xs text-cream/45">
+            <div className="mt-2.5 flex items-center justify-center gap-2 text-xs text-cream/45">
               <a href="/privacidade" className="hover:text-cream">{c.subscribe.termsLink}</a>
               <span>·</span>
               <a href="/privacidade" className="hover:text-cream">{c.subscribe.privacyLink}</a>
