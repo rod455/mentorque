@@ -65,6 +65,9 @@ workflows:
             --scheme App
     artifacts:
       - build/ios/ipa/*.ipa
+      # O erro real do xcodebuild não cabe na tela do passo — o Codemagic dobra
+      # a saída. Baixar este log é o caminho curto quando o archive falha.
+      - /tmp/xcodebuild_logs/*.log
     publishing:
       app_store_connect:
         auth: integration
