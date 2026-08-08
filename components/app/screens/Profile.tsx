@@ -187,6 +187,17 @@ export function ProfileScreen() {
     const r = await resetPassword(user.email);
     if (!r.error) setPwSent(true);
   };
+  // Sair da conta leva para a Home, em vez de deixar o motorista no Perfil.
+  //
+  // Todo o bloco da conta (trocar senha, sair, excluir) vive dentro de
+  // `{user && ...}`: no instante em que a sessão cai ele some e as linhas de
+  // baixo sobem para debaixo do dedo. Foi assim que um toque em "Sair" acabou
+  // abrindo "Avaliar o app" — o toque acertou a linha que tomou o lugar.
+  const leave = async () => {
+    await signOut();
+    root({ name: "home" });
+  };
+
   const removeAccount = async () => {
     if (typeof window !== "undefined" && !window.confirm(p.deleteConfirm)) return;
     await deleteAccount();
@@ -430,7 +441,7 @@ export function ProfileScreen() {
             ) : (
               <IconRow icon="shield" tint="bg-teal/15 text-teal" label={p.changePassword} action={pwSent ? p.passwordSent : undefined} onClick={pwSent ? undefined : changePassword} />
             )}
-            <IconRow icon="user" tint="bg-graphite-700 text-cream/60" label={c.auth.signOut} onClick={() => signOut()} />
+            <IconRow icon="user" tint="bg-graphite-700 text-cream/60" label={c.auth.signOut} onClick={leave} />
             <IconRow icon="alert" tint="bg-coral/15 text-coral" label={p.deleteAccount} danger onClick={removeAccount} />
           </Group>
         </>

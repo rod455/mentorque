@@ -115,9 +115,17 @@ export function sellsInApp(): boolean {
 }
 
 // Link da loja para "avaliar o app". Na web cai no site.
+//
+// O id da Apple ficou `id0000000000` de placeholder até aqui — quem tocasse em
+// "Avaliar o app" no iPhone caía numa App Store dizendo que o app não existe.
+// 6797291865 é o id real (o mesmo da URL do App Store Connect), e
+// `?action=write-review` abre direto a folha de avaliação em vez da ficha.
+//
+// Enquanto o app não estiver publicado o link ainda não resolve — é o
+// comportamento esperado, não o defeito antigo.
 export function storeListingUrl(): string {
   const platform = nativePlatform();
   if (platform === "android") return "https://play.google.com/store/apps/details?id=mentorque.app";
-  if (platform === "ios") return "https://apps.apple.com/app/mentorque/id0000000000"; // TODO: id real após o 1º release
+  if (platform === "ios") return "https://apps.apple.com/app/id6797291865?action=write-review";
   return "https://mentorque.com.br";
 }
