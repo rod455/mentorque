@@ -35,9 +35,9 @@ workflows:
         # Apple antes de qualquer caminho do Stripe, então a tela de checkout
         # é inalcançável no iOS.
         - Mentorque
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: mentorque.app
+      # Sem bloco `ios_signing`: ele NÃO cria nada — apenas escolhe entre os
+      # certificados e perfis já guardados em Code signing identities. Quem
+      # cria/busca na Apple é o passo "Assinatura" abaixo.
     scripts:
       - name: Instalar dependências web
         script: npm ci
@@ -52,6 +52,28 @@ workflows:
         script: node scripts/ios-google-scheme.mjs
       - name: Sincronizar Capacitor iOS
         script: npx cap sync ios
+      - name: Assinatura (buscar ou criar na Apple)
+        # Busca o certificado de distribuição e o perfil do App Store direto da
+        # Apple, pela integração asc-mentorque, e CRIA o que faltar. É o único
+        # passo que cria de verdade: o bloco `ios_signing` do ambiente só
+        # seleciona entre arquivos enviados à mão ao painel.
+        #
+        # Assim o build deixa de depender de cópias guardadas, que ficam para
+        # trás toda vez que uma capability muda ou um certificado é reemitido —
+        # o que já custou várias rodadas.
+        script: |
+          set -e
+          keychain initialize
+          if ! app-store-connect fetch-signing-files "mentorque.app" \
+              --platform IOS \
+              --type IOS_APP_STORE \
+              --create; then
+            echo ""
+            echo "=== falhou; sinalizacao dos parametros aceitos ==="
+            app-store-connect fetch-signing-files --help || true
+            exit 1
+          fi
+          keychain add-certificates
       - name: Aplicar perfis de assinatura
         script: xcode-project use-profiles
       - name: Conferir os perfis baixados
