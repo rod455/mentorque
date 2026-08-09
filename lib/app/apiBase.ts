@@ -24,3 +24,28 @@ export function apiUrl(path: string): string {
   if (!path.startsWith("/")) path = `/${path}`;
   return isNative() ? `${REMOTE}${path}` : path;
 }
+
+/**
+ * POST de JSON que não dispara verificação prévia (preflight) no app.
+ *
+ * `content-type: application/json` numa requisição para outra origem obriga o
+ * navegador a mandar antes um OPTIONS e só seguir se a resposta agradar. Nos
+ * registros do servidor, as chamadas do iPhone não chegavam NEM como OPTIONS —
+ * morriam dentro da WebView, mesmo com o servidor liberando qualquer origem.
+ *
+ * `text/plain` está na lista curta de tipos que dispensam a verificação: a
+ * requisição vira "simples" e sai direto. O corpo continua sendo JSON e o
+ * servidor continua lendo com `request.json()`, que não olha o cabeçalho.
+ *
+ * Na web nada muda — lá é mesma origem e o tipo correto é melhor.
+ */
+export function apiPost(path: string, body: unknown, headers: Record<string, string> = {}): Promise<Response> {
+  return fetch(apiUrl(path), {
+    method: "POST",
+    headers: {
+      "content-type": isNative() ? "text/plain;charset=UTF-8" : "application/json",
+      ...headers,
+    },
+    body: JSON.stringify(body),
+  });
+}

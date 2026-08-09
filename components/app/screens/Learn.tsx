@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { apiUrl } from "@/lib/app/apiBase";
+import { apiPost, apiUrl } from "@/lib/app/apiBase";
 import { useI18n } from "@/lib/i18n";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { personalScore, vehicleSituations, vehicleTraits } from "@/lib/app/traits";
 import type { ServiceRecord } from "@/lib/app/types";
 import { carName, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
+import { isNativeApp } from "@/lib/app/wrapper";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Card, Chip, Icon, PinButton, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
 import { VideoPlayer } from "../VideoPlayer";
@@ -455,19 +456,21 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
     setBusy(true);
     if (!s.premium) setUsed((n) => n + 1);
     try {
-      const res = await fetch(apiUrl("/api/biela"), {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          question: text,
-          locale,
-          car: v ? { make: v.make, model: v.model, year: v.year, km: v.odometerKm } : null,
-        }),
+      const res = await apiPost("/api/biela", {
+        question: text,
+        locale,
+        car: v ? { make: v.make, model: v.model, year: v.year, km: v.odometerKm } : null,
       });
       const data = await res.json();
       setMsgs((m) => [...m, { role: "biela", text: data.answer, note: data.mode === "ai" ? undefined : c.biela.offlineNote }]);
-    } catch {
-      setMsgs((m) => [...m, { role: "biela", text: fallbackAnswer(v, locale), note: c.biela.offlineNote }]);
+    } catch (e) {
+      // No app, mostra o motivo real da falha junto do aviso. Sem isto a tela
+      // ficava idêntica para "sem internet", "endereço errado" e "navegador
+      // bloqueou" — e cada diagnóstico custava um build inteiro.
+      const detalhe = isNativeApp()
+        ? ` · ${apiUrl("/api/biela")} → ${e instanceof Error ? e.message : String(e)}`
+        : "";
+      setMsgs((m) => [...m, { role: "biela", text: fallbackAnswer(v, locale), note: c.biela.offlineNote + detalhe }]);
     } finally {
       setBusy(false);
     }
