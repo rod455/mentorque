@@ -15,30 +15,46 @@ import { NextResponse, type NextRequest } from "next/server";
 // para qualquer pergunta, porque a pergunta nunca saía do aparelho. Vale para
 // todas as rotas: FIPE, revisões, feedback, exclusão de conta.
 //
-// Lista fechada em vez de `*`: são exatamente as origens que o Capacitor usa,
-// mais o próprio site. Nenhuma rota depende de cookie (a autenticação é por
-// cabeçalho Authorization), então não há credencial viajando por aqui.
-const PERMITIDAS = new Set([
-  "capacitor://localhost", // iOS — `iosScheme` do capacitor.config.ts
-  "ionic://localhost",     // iOS, esquema antigo
-  "https://localhost",     // Android — `androidScheme`
+// Libera qualquer origem, de propósito.
+//
+// A primeira versão tinha uma lista fechada com as origens que a documentação
+// do Capacitor promete (`capacitor://localhost` e afins). Não funcionou: os
+// registros da Vercel mostraram ZERO requisições em /api/biela enquanto o
+// /embed, que é iframe e não passa por CORS, chegava normalmente do mesmo app
+// no mesmo minuto. Ou seja, o WebView manda uma origem diferente da
+// documentada — provavelmente `null`, que é o que o WebKit usa quando o
+// esquema não é padrão.
+//
+// Adivinhar de novo custaria mais um deploy às cegas. E `*` aqui não abre nada
+// que já não estivesse aberto: CORS protege as CREDENCIAIS DO NAVEGADOR do
+// usuário, não o servidor. Nenhuma rota usa cookie — quem precisa de permissão
+// exige `Authorization`, um token que mora no armazenamento do app e nenhum
+// site de terceiro consegue ler. Qualquer pessoa já podia chamar estas rotas
+// por curl; o cabeçalho nunca impediu isso.
+const CABECALHOS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "authorization, content-type",
+  "Access-Control-Max-Age": "86400",
+};
+
+// Origens conhecidas. Não servem mais para permitir — só para o registro
+// abaixo não poluir o log com o tráfego normal do site.
+const CONHECIDAS = new Set([
+  "capacitor://localhost",
+  "ionic://localhost",
+  "https://localhost",
   "http://localhost",
-  "http://localhost:3000", // desenvolvimento
+  "http://localhost:3000",
   "https://mentorque.com.br",
   "https://www.mentorque.com.br",
 ]);
 
 function cabecalhos(origem: string | null): Headers {
-  const h = new Headers();
-  if (!origem || !PERMITIDAS.has(origem)) return h;
-  h.set("Access-Control-Allow-Origin", origem);
-  // Sem isto, um cache guardaria a resposta de uma origem e serviria para
-  // outra.
-  h.set("Vary", "Origin");
-  h.set("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS");
-  h.set("Access-Control-Allow-Headers", "authorization, content-type");
-  h.set("Access-Control-Max-Age", "86400");
-  return h;
+  // Registra a origem desconhecida uma vez por requisição: é assim que a gente
+  // finalmente descobre o que o iPhone manda, sem precisar de um Mac.
+  if (origem && !CONHECIDAS.has(origem)) console.log(`[cors] origem inesperada: ${origem}`);
+  return new Headers(CABECALHOS);
 }
 
 export function middleware(request: NextRequest) {
