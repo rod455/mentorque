@@ -84,6 +84,32 @@ function checkEnv() {
   log(`AVISO — ${msg}`);
 }
 
+// O endereço pode ser válido como URL e ainda assim não existir. Foi o que
+// aconteceu com `https://mentorque.app` (que era o exemplo no .env.example e
+// não resolve): o app abria normalmente e nenhuma rota respondia — Biela
+// repetindo a mesma frase, FIPE mudo, revisões vazias. Como o valor fica
+// EMBUTIDO no binário, o conserto exige um build novo e uma revisão da loja.
+// Melhor descobrir aqui, em dois segundos.
+async function checkSiteAlcancavel() {
+  const base = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (!base) return;
+  const alvo = `${base.replace(/\/+$/, "")}/api/versions?make=fiat&model=argo`;
+  try {
+    const r = await fetch(alvo, { method: "GET", signal: AbortSignal.timeout(15000) });
+    if (!r.ok) throw new Error(`respondeu ${r.status}`);
+    log(`site alcançável: ${base}`);
+  } catch (e) {
+    const msg = `NEXT_PUBLIC_SITE_URL não respondeu: ${base}\n` +
+      `  (${e instanceof Error ? e.message : e})\n\n` +
+      "É de lá que o app busca TODAS as rotas /api — Biela, FIPE, revisões,\n" +
+      "feedback. Com o endereço errado o app abre e não responde nada, e o\n" +
+      "valor vai embutido no binário: só um build novo conserta.\n" +
+      "Deve ser https://mentorque.com.br (não mentorque.app, que não existe).";
+    if (process.env.CI) throw new Error(msg);
+    log(`AVISO — ${msg}`);
+  }
+}
+
 function restoreApi() {
   if (fs.existsSync(API_PARKED)) {
     fs.rmSync(API, { recursive: true, force: true });
@@ -99,6 +125,7 @@ process.on("SIGINT", () => { restoreApi(); process.exit(130); });
 process.on("SIGTERM", () => { restoreApi(); process.exit(143); });
 
 checkEnv();
+await checkSiteAlcancavel();
 
 try {
   if (fs.existsSync(API_PARKED)) {
