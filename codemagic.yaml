@@ -35,9 +35,18 @@ workflows:
         # Apple antes de qualquer caminho do Stripe, então a tela de checkout
         # é inalcançável no iOS.
         - Mentorque
-      # Sem bloco `ios_signing`: ele NÃO cria nada — apenas escolhe entre os
-      # certificados e perfis já guardados em Code signing identities. Quem
-      # cria/busca na Apple é o passo "Assinatura" abaixo.
+      # Certificado e perfil vêm de Code signing identities, no painel do
+      # Codemagic — enviados à mão. Este bloco só ESCOLHE entre eles, pelo
+      # bundle id e pelo tipo de distribuição; não cria nada.
+      #
+      # Já tentei trocar por `app-store-connect fetch-signing-files --create`,
+      # que criaria na Apple: ele exige uma CERTIFICATE_PRIVATE_KEY que não
+      # existe aqui e falha com "Cannot save Signing Certificates without
+      # certificate private key". Enquanto essa chave não estiver no grupo de
+      # variáveis, o caminho é o manual.
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: mentorque.app
     scripts:
       - name: Instalar dependências web
         script: npm ci
@@ -52,28 +61,6 @@ workflows:
         script: node scripts/ios-google-scheme.mjs
       - name: Sincronizar Capacitor iOS
         script: npx cap sync ios
-      - name: Assinatura (buscar ou criar na Apple)
-        # Busca o certificado de distribuição e o perfil do App Store direto da
-        # Apple, pela integração asc-mentorque, e CRIA o que faltar. É o único
-        # passo que cria de verdade: o bloco `ios_signing` do ambiente só
-        # seleciona entre arquivos enviados à mão ao painel.
-        #
-        # Assim o build deixa de depender de cópias guardadas, que ficam para
-        # trás toda vez que uma capability muda ou um certificado é reemitido —
-        # o que já custou várias rodadas.
-        script: |
-          set -e
-          keychain initialize
-          if ! app-store-connect fetch-signing-files "mentorque.app" \
-              --platform IOS \
-              --type IOS_APP_STORE \
-              --create; then
-            echo ""
-            echo "=== falhou; sinalizacao dos parametros aceitos ==="
-            app-store-connect fetch-signing-files --help || true
-            exit 1
-          fi
-          keychain add-certificates
       - name: Aplicar perfis de assinatura
         script: xcode-project use-profiles
       - name: Conferir os perfis baixados
