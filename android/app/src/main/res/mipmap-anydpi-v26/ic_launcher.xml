@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- O fundo preenche os 108dp inteiros: é ele que aparece nos cantos depois
+     que o launcher aplica a máscara do aparelho. Só a frente tem folga, e ela
+     já vem embutida no PNG (a marca ocupa 62% do lado, dentro da zona segura
+     de 66dp). Encolher as DUAS camadas por inset, como estava antes, deixava a
+     volta do ícone transparente. Ver scripts/android-icons.mjs. -->
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-    <background>
-        <inset android:drawable="@mipmap/ic_launcher_background" android:inset="16.7%" />
-    </background>
-    <foreground>
-        <inset android:drawable="@mipmap/ic_launcher_foreground" android:inset="16.7%" />
-    </foreground>
+    <background android:drawable="@mipmap/ic_launcher_background" />
+    <foreground android:drawable="@mipmap/ic_launcher_foreground" />
 </adaptive-icon>
