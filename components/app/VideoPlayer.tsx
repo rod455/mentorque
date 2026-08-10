@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { APP_ORIGIN, isNativeApp } from "@/lib/app/wrapper";
+import { isNativeApp } from "@/lib/app/wrapper";
+import { siteOrigin } from "@/lib/app/apiBase";
 
 // In-app video player. Plays a direct file (self-hosted MP4/HLS via Supabase
 // Storage, Cloudflare Stream, Mux, R2…) or embeds YouTube/Vimeo. The user never
@@ -57,7 +58,7 @@ export function VideoPlayer({ media }: { media: Media }) {
   const isYt = media.provider === "youtube";
   const id = isYt ? youtubeId(media.src) : "";
   const ytSrc = native
-    ? `${(process.env.NEXT_PUBLIC_SITE_URL || APP_ORIGIN).replace(/\/+$/, "")}/embed?v=${id}`
+    ? `${siteOrigin()}/embed?v=${id}`
     : `https://www.youtube-nocookie.com/embed/${id}?playsinline=1&rel=0&modestbranding=1`;
   const src = isYt ? ytSrc : vimeoEmbed(media.src);
 

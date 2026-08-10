@@ -91,20 +91,37 @@ function checkEnv() {
 // EMBUTIDO no binário, o conserto exige um build novo e uma revisão da loja.
 // Melhor descobrir aqui, em dois segundos.
 async function checkSiteAlcancavel() {
-  const base = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-  if (!base) return;
-  const alvo = `${base.replace(/\/+$/, "")}/api/versions?make=fiat&model=argo`;
+  const cru = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (!cru) return;
+  // Mesma normalização de lib/app/apiBase.ts: é este o endereço que o app vai
+  // chamar de verdade, então é este que precisa ser testado.
+  const base = cru.replace(/\/+$/, "").replace(/^(https?:\/\/)mentorque\.com\.br/i, "$1www.mentorque.com.br");
+  if (base !== cru.replace(/\/+$/, "")) log(`endereço normalizado: ${cru} → ${base}`);
+  const alvo = `${base}/api/versions?make=fiat&model=argo`;
   try {
-    const r = await fetch(alvo, { method: "GET", signal: AbortSignal.timeout(15000) });
+    // `redirect: "manual"` de propósito. O Node segue redirecionamento sozinho e
+    // a conferência passava mesmo com o domínio respondendo 308 — enquanto no
+    // aparelho o mesmo 308 mata a chamada, porque o navegador se recusa a
+    // seguir redirecionamento que troca de origem num fetch. Foi assim que a
+    // Biela ficou muda por dias.
+    const r = await fetch(alvo, { method: "GET", redirect: "manual", signal: AbortSignal.timeout(15000) });
+    if (r.status >= 300 && r.status < 400) {
+      throw new Error(
+        `redireciona (${r.status}) para ${r.headers.get("location") ?? "?"}\n` +
+        "  Use o endereço final, sem salto: no app um redirecionamento entre\n" +
+        "  origens derruba o fetch com \"Load failed\"."
+      );
+    }
     if (!r.ok) throw new Error(`respondeu ${r.status}`);
-    log(`site alcançável: ${base}`);
+    log(`site alcançável, sem redirecionamento: ${base}`);
   } catch (e) {
     const msg = `NEXT_PUBLIC_SITE_URL não respondeu: ${base}\n` +
       `  (${e instanceof Error ? e.message : e})\n\n` +
       "É de lá que o app busca TODAS as rotas /api — Biela, FIPE, revisões,\n" +
       "feedback. Com o endereço errado o app abre e não responde nada, e o\n" +
       "valor vai embutido no binário: só um build novo conserta.\n" +
-      "Deve ser https://mentorque.com.br (não mentorque.app, que não existe).";
+      "Deve ser https://www.mentorque.com.br — com www, que é o endereço final\n" +
+      "(o domínio sem www responde 308 e o app não segue esse salto).";
     if (process.env.CI) throw new Error(msg);
     log(`AVISO — ${msg}`);
   }

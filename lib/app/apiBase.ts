@@ -9,7 +9,27 @@ import { APP_ORIGIN } from "./wrapper";
 //
 // NEXT_PUBLIC_SITE_URL permite apontar um build para outro ambiente (staging)
 // sem tocar no código.
-const REMOTE = (process.env.NEXT_PUBLIC_SITE_URL || APP_ORIGIN).replace(/\/+$/, "");
+// Endereço do site SEM redirecionamento.
+//
+// `mentorque.com.br` responde 308 apontando para `www.mentorque.com.br`. Numa
+// navegação isso é invisível — o iframe do vídeo sempre funcionou. Já num
+// `fetch` entre origens, o navegador se recusa a seguir um redirecionamento
+// que troca de origem e devolve "Load failed", sem nunca chamar a rota. Era o
+// que matava a Biela: o erro não estava no servidor nem no CORS, estava no
+// salto de domínio antes de chegar lá.
+//
+// Normalizado aqui para o app funcionar mesmo com a variável de ambiente
+// apontando para o domínio sem www.
+function semRedirecionamento(base: string): string {
+  return base.replace(/\/+$/, "").replace(/^(https?:\/\/)mentorque\.com\.br/i, "$1www.mentorque.com.br");
+}
+
+const REMOTE = semRedirecionamento(process.env.NEXT_PUBLIC_SITE_URL || APP_ORIGIN);
+
+/** Origem do site já normalizada — use para iframes e links absolutos. */
+export function siteOrigin(): string {
+  return REMOTE;
+}
 
 function isNative(): boolean {
   if (typeof window === "undefined") return false;
