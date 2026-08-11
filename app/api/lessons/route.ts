@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createHash } from "node:crypto";
-import { getContent } from "@/lib/app/content";
+import { getContent, type Content } from "@/lib/app/content";
+import type { AulaRemota, Bilingue } from "@/lib/app/remoteLessons";
 
 // Catálogo de aulas servido pela rede, para publicar conteúdo sem gerar build.
 //
@@ -20,24 +21,20 @@ import { getContent } from "@/lib/app/content";
 
 export const revalidate = 300;
 
-type Bilingue = { pt: string; en: string };
-type AulaRemota = {
-  id: string;
-  title: Bilingue;
-  body: Bilingue[];
-  type: string;
-  track: string;
-  system?: string;
-  premium?: boolean;
-  make?: string;
-  model?: string;
-  difficulty?: string;
-  traits?: string[];
-  situations?: string[];
-  media?: unknown;
-  thumb?: string;
-  addedAt?: string;
-};
+type Aula = Content["lessons"][number];
+
+// Espalhar a aula inteira e só DEPOIS trocar os campos de texto é deliberado.
+//
+// A primeira versão enumerava campo por campo — e esqueceu `need`, `steps` e
+// `safety`, que são obrigatórios no tipo. Chegavam `undefined` no aparelho e
+// toda aula derrubava o app ao abrir. Com o espalhamento, campo novo entra
+// sozinho no payload e o erro não tem como se repetir.
+function bilingue(pt: string[] | undefined, en: string[] | undefined): Bilingue[] | undefined {
+  if (!pt) return undefined;
+  // Diferença de tamanho entre os idiomas não pode derrubar a aula: o que
+  // faltar em inglês cai para o português, que é sempre a versão de origem.
+  return pt.map((texto, i) => ({ pt: texto, en: en?.[i] ?? texto }));
+}
 
 function montar(): AulaRemota[] {
   const pt = getContent("pt").lessons;
@@ -46,26 +43,22 @@ function montar(): AulaRemota[] {
 
   const saida: AulaRemota[] = [];
   for (const a of pt) {
-    const b = porId.get(a.id);
-    // Sem par em inglês a aula fica de fora: melhor servir menos do que servir
-    // um card que aparece vazio para metade dos usuários.
-    if (!b || !a.body || !b.body || a.body.length !== b.body.length) continue;
+    const b: Aula | undefined = porId.get(a.id);
+    if (!b) continue;
     saida.push({
-      id: a.id,
+      ...a,
       title: { pt: a.title, en: b.title },
-      body: a.body.map((texto, i) => ({ pt: texto, en: b.body![i] })),
-      type: a.type,
-      track: a.track,
-      system: a.system,
-      premium: a.premium,
-      make: a.make,
-      model: a.model,
-      difficulty: a.difficulty,
-      traits: a.traits,
-      situations: a.situations,
-      media: a.media,
-      thumb: a.thumb,
-      addedAt: a.addedAt,
+      body: bilingue(a.body, b.body),
+      need: bilingue(a.need, b.need) ?? [],
+      steps: bilingue(a.steps, b.steps) ?? [],
+      safety: bilingue(a.safety, b.safety) ?? [],
+      stepsByLevel: a.stepsByLevel
+        ? {
+            iniciante: bilingue(a.stepsByLevel.iniciante, b.stepsByLevel?.iniciante) ?? [],
+            avancado: bilingue(a.stepsByLevel.avancado, b.stepsByLevel?.avancado) ?? [],
+            mecanico: bilingue(a.stepsByLevel.mecanico, b.stepsByLevel?.mecanico) ?? [],
+          }
+        : undefined,
     });
   }
   return saida;

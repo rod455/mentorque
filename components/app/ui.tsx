@@ -51,7 +51,7 @@ export function useContent() {
   const remoto = useSyncExternalStore(subscribe, snapshot, serverSnapshot);
   return useMemo(() => {
     if (!remoto) return base;
-    return { ...base, lessons: paraIdioma(remoto, locale) as typeof base.lessons };
+    return { ...base, lessons: paraIdioma(remoto, locale) };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [base, remoto, locale]);
 }

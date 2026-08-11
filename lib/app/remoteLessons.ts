@@ -1,6 +1,7 @@
 "use client";
 
 import { apiUrl } from "./apiBase";
+import type { Content } from "./content";
 
 // Catálogo de aulas vindo da rede.
 //
@@ -12,23 +13,20 @@ import { apiUrl } from "./apiBase";
 // Assim, publicar uma aula nova passa a ser um deploy do site em vez de um
 // build, uma revisão da Apple e uma atualização na mão do usuário.
 
-type Bilingue = { pt: string; en: string };
-export type AulaRemota = {
-  id: string;
+export type Bilingue = { pt: string; en: string };
+type Aula = Content["lessons"][number];
+
+// Derivado do tipo real da aula, e não escrito à mão: assim um campo novo em
+// `Lesson` aparece aqui como erro de compilação, em vez de sumir calado no
+// payload e chegar `undefined` no aparelho — que foi como toda aula quebrou ao
+// abrir na primeira versão disto.
+export type AulaRemota = Omit<Aula, "title" | "body" | "need" | "steps" | "safety" | "stepsByLevel"> & {
   title: Bilingue;
-  body: Bilingue[];
-  type: string;
-  track: string;
-  system?: string;
-  premium?: boolean;
-  make?: string;
-  model?: string;
-  difficulty?: string;
-  traits?: string[];
-  situations?: string[];
-  media?: unknown;
-  thumb?: string;
-  addedAt?: string;
+  body?: Bilingue[];
+  need: Bilingue[];
+  steps: Bilingue[];
+  safety: Bilingue[];
+  stepsByLevel?: { iniciante: Bilingue[]; avancado: Bilingue[]; mecanico: Bilingue[] };
 };
 type Pacote = { version: string; lessons: AulaRemota[] };
 
@@ -51,8 +49,12 @@ function valido(p: unknown): p is Pacote {
     (a) =>
       a && typeof a.id === "string" && a.id.length > 0 &&
       a.title && typeof a.title.pt === "string" && typeof a.title.en === "string" &&
-      Array.isArray(a.body) &&
-      typeof a.track === "string" && typeof a.type === "string"
+      typeof a.track === "string" && typeof a.type === "string" &&
+      // Obrigatórios no tipo da aula. A tela lê `.length` deles direto, então
+      // um payload sem eles derruba o app — melhor recusar o pacote inteiro e
+      // seguir com o embutido.
+      Array.isArray(a.need) && Array.isArray(a.steps) && Array.isArray(a.safety) &&
+      (a.body === undefined || Array.isArray(a.body))
   );
 }
 
@@ -115,11 +117,22 @@ export function snapshot(): Pacote | null {
 export function serverSnapshot(): Pacote | null { return null; }
 
 /** Converte o pacote bilíngue para o idioma ativo, no formato que o app usa. */
-export function paraIdioma(p: Pacote, locale: string) {
-  const idioma = locale === "pt" ? "pt" : "en";
+export function paraIdioma(p: Pacote, locale: string): Aula[] {
+  const i = locale === "pt" ? "pt" : "en";
+  const um = (v: Bilingue[] | undefined) => v?.map((t) => t[i]);
   return p.lessons.map((a) => ({
     ...a,
-    title: a.title[idioma],
-    body: a.body.map((t) => t[idioma]),
+    title: a.title[i],
+    body: um(a.body),
+    need: um(a.need) ?? [],
+    steps: um(a.steps) ?? [],
+    safety: um(a.safety) ?? [],
+    stepsByLevel: a.stepsByLevel
+      ? {
+          iniciante: um(a.stepsByLevel.iniciante) ?? [],
+          avancado: um(a.stepsByLevel.avancado) ?? [],
+          mecanico: um(a.stepsByLevel.mecanico) ?? [],
+        }
+      : undefined,
   }));
 }
