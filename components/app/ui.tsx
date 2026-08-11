@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
 import { useI18n } from "@/lib/i18n";
+import { paraIdioma, serverSnapshot, snapshot, subscribe } from "@/lib/app/remoteLessons";
 import { getContent } from "@/lib/app/content";
 import { usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
@@ -39,9 +40,20 @@ import {
 } from "@/lib/icons";
 
 // Resolve all copy/data for the active locale.
+//
+// O catálogo de aulas pode vir da rede: publicar aula nova passa a ser um
+// deploy do site, sem build nem revisão de loja. A lista embutida continua
+// sendo a base — a remota só entra quando existe e é válida, então rede ruim,
+// primeira abertura e modo avião seguem mostrando o app cheio.
 export function useContent() {
   const { locale } = useI18n();
-  return getContent(locale);
+  const base = getContent(locale);
+  const remoto = useSyncExternalStore(subscribe, snapshot, serverSnapshot);
+  return useMemo(() => {
+    if (!remoto) return base;
+    return { ...base, lessons: paraIdioma(remoto, locale) as typeof base.lessons };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [base, remoto, locale]);
 }
 
 const ICON_REGISTRY: Record<string, (p: { className?: string }) => JSX.Element> = {
