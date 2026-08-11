@@ -30,6 +30,18 @@ export type AulaRemota = Omit<Aula, "title" | "body" | "need" | "steps" | "safet
 };
 type Pacote = { version: string; lessons: AulaRemota[] };
 
+// Interruptor do catálogo remoto.
+//
+// Desligado para o envio à App Store. O mecanismo está pronto e testado, mas
+// ele acabou de causar uma quebra (a rota descartava campos obrigatórios da
+// aula), e não vale carregar esse risco numa submissão que já foi devolvida
+// duas vezes. Com `false`, o app usa exclusivamente o catálogo embutido no
+// binário — o mesmo que sempre funcionou.
+//
+// Para religar depois da aprovação: troque para `true` e gere um build. Nada
+// mais precisa mudar; a rota /api/lessons continua no ar e servindo.
+const REMOTO_LIGADO = false;
+
 const CHAVE = "mentorque-aulas-remotas";
 
 let memoria: Pacote | null = null;
@@ -95,6 +107,12 @@ async function buscar() {
 export function subscribe(fn: () => void): () => void {
   ouvintes.add(fn);
   if (ouvintes.size === 1) {
+    if (!REMOTO_LIGADO) {
+      // Apaga o que estiver guardado: um aparelho que já baixou um catálogo
+      // antes de o interruptor cair não pode continuar usando aquilo.
+      try { window.localStorage.removeItem(CHAVE); } catch { /* ignore */ }
+      return () => { ouvintes.delete(fn); };
+    }
     ler();
     void buscar();
   }
@@ -103,7 +121,7 @@ export function subscribe(fn: () => void): () => void {
 
 /** Instantâneo para o cliente: o pacote guardado, ou null. */
 export function snapshot(): Pacote | null {
-  if (typeof window === "undefined") return null;
+  if (!REMOTO_LIGADO || typeof window === "undefined") return null;
   return ler();
 }
 
