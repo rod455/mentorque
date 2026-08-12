@@ -8,12 +8,13 @@ import { isNativeApp } from "@/lib/app/wrapper";
 import { useNav } from "@/lib/app/nav";
 import { useContent } from "./ui";
 
-// Anúncio em tela cheia para usuários free.
-// 1) Dentro do wrapper nativo (Capacitor): usa o AdMob real — interstitial
-//    (ca-app-pub-…/5960757314) e rewarded (ca-app-pub-…/3313432733).
-// 2) No navegador (ou se o AdMob falhar): house ad do Premium com a mesma
-//    mecânica — interstitial: 5s → X fecha; rewarded: 8s → Continuar libera,
-//    fechar antes cancela (onCancel).
+// Anúncio em tela cheia para usuários free. Só chega aqui quem está no app
+// nativo do Android — ver `adsEnabled()` no fim do arquivo.
+// 1) Caminho normal: AdMob real — interstitial (ca-app-pub-…/6890695608) e
+//    rewarded (ca-app-pub-…/3313432733).
+// 2) Se o AdMob falhar (sem rede, sem consentimento, bloco ausente): house ad
+//    do Premium com a mesma mecânica — interstitial: 5s → X fecha; rewarded:
+//    8s → Continuar libera, fechar antes cancela (onCancel).
 export function AdOverlay({ kind, onDone, onCancel }: { kind: "interstitial" | "rewarded"; onDone: () => void; onCancel?: () => void }) {
   const c = useContent();
   const t = c.ads;
@@ -130,10 +131,23 @@ export function AdOverlay({ kind, onDone, onCancel }: { kind: "interstitial" | "
   );
 }
 
-// Anúncios habilitados? No app nativo da Apple, NUNCA (nem house ad) —
-// lá o modelo é só conteúdo bloqueado + assinatura via IAP.
+// Onde o anúncio pode aparecer: SOMENTE dentro do app nativo do Android.
+//
+// Antes a regra era ao contrário — anúncio em todo lugar, menos no app da
+// Apple. Isso deixava o navegador com o house ad e uma espera de 5 segundos
+// antes de abrir uma aula, o que na web é caro do jeito errado: quem chega
+// pela busca ou por um link não tem app instalado, não tem vínculo nenhum
+// com o produto, e o que o anúncio faz na prática é adiar a única coisa que
+// poderia convencer essa pessoa a ficar. Ali o conteúdo é a isca; segurá-lo
+// atrás de um cronômetro derruba a primeira visita.
+//
+// Na Apple continua valendo o de sempre: nada de anúncio, nem house ad — o
+// modelo lá é conteúdo bloqueado + assinatura via IAP.
+//
+// No Android o AdMob permanece, com a política de adPolicy.ts (carência,
+// intervalo e teto diário) — lá a pessoa já instalou o app.
 export function adsEnabled(): boolean {
-  return !(isNativeApp() && detectPlatform() === "ios");
+  return isNativeApp() && detectPlatform() === "android";
 }
 
 // Gate por tela: devolve se o anúncio ainda precisa aparecer (só free).
