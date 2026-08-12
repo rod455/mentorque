@@ -53,6 +53,11 @@ export async function POST(request: Request) {
   // car.make/model from Supabase (pgvector over the uploaded manuals) and inject
   // them into the system prompt so intervals/torques are model-accurate.
   if (!apiKey) {
+    // Registrado de propósito: sem esta linha, "modo básico por falta de chave"
+    // e "modo básico porque a chamada falhou" ficam idênticos no aparelho, e os
+    // registros da Vercel ficam mudos — o único jeito de distinguir era abrir o
+    // app e ler a resposta. Agora aparece na Vercel, em segundos.
+    console.warn("[biela] ANTHROPIC_API_KEY ausente no ambiente — respondendo em modo básico");
     return NextResponse.json({ ok: true, mode: "basic", answer: basicAnswer(locale, car) });
   }
 
