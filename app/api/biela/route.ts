@@ -85,7 +85,19 @@ export async function POST(request: Request) {
         messages: [{ role: "user", content: question }],
       }),
     });
-    if (!res.ok) throw new Error(`anthropic_${res.status}`);
+    // O corpo do erro é lido e registrado de propósito.
+    //
+    // Todas as causas possíveis aqui desembocam na MESMA tela para o motorista
+    // ("modo básico"), e o status sozinho não separa as principais: 400 vale
+    // tanto para saldo esgotado quanto para requisição torta. A Anthropic diz
+    // qual é em texto claro ("Your credit balance is too low…", "model not
+    // found"), então guardar essa frase transforma o diagnóstico numa consulta
+    // aos registros, em vez de um chute por eliminação. A chave não aparece —
+    // ela vai só no cabeçalho, que não é registrado.
+    if (!res.ok) {
+      const detalhe = await res.text().catch(() => "");
+      throw new Error(`anthropic_${res.status}: ${detalhe.slice(0, 500)}`);
+    }
     const data = await res.json();
     const answer = Array.isArray(data.content)
       ? data.content.filter((b: { type: string }) => b.type === "text").map((b: { text: string }) => b.text).join("\n").trim()
