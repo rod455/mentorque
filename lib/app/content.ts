@@ -2278,6 +2278,11 @@ export function getContent(locale: Locale) {
       about: T("Sobre o app", "About the app"),
       talkToUs: T("Fale com a gente", "Talk to us"),
       privacy: T("Política de privacidade", "Privacy policy"),
+      // Fica no Perfil, e não só no paywall: quem já assina não passa mais pela
+      // tela de compra, e era justamente o assinante — a pessoa com um contrato
+      // em vigor — que ficava sem caminho nenhum para reler o que assinou.
+      terms: T("Termos de uso", "Terms of use"),
+      privacyFull: T("Ler a política completa", "Read the full policy"),
       adPrivacy: T("Preferências de anúncios", "Ad preferences"),
       rate: T("Avaliar o Mentorque", "Rate Mentorque"),
       version: T("Mentorque v{v}", "Mentorque v{v}"),
@@ -2288,8 +2293,8 @@ export function getContent(locale: Locale) {
       ),
       privacyTitle: T("Política de privacidade", "Privacy policy"),
       privacyBody: T(
-        "Levamos sua privacidade a sério. Os dados da sua garagem ficam no seu aparelho e, se você criar uma conta, são sincronizados de forma segura para você acessar de outros dispositivos.\n\nNão vendemos seus dados e não usamos ferramentas de análise de terceiros. Suas perguntas ao Biela e os dados do carro são enviados a provedores de IA para gerar a resposta — sem o seu nome ou e-mail.\n\nNa versão gratuita do app Android exibimos anúncios do Google AdMob, que usa o identificador de publicidade do aparelho. Pedimos seu consentimento antes do primeiro anúncio e você pode rever a escolha em Preferências de anúncios. Assinantes Premium não veem anúncios.\n\nVocê pode excluir sua conta e seus dados a qualquer momento aqui no Perfil.\n\nVersão completa em mentorque.com.br/privacidade.",
-        "We take your privacy seriously. Your garage data stays on your device and, if you create an account, is securely synced so you can access it from other devices.\n\nWe don't sell your data and use no third-party analytics. Your prompts to Biela and your car details are sent to AI providers to generate the answer — without your name or email.\n\nIn the free Android app we show Google AdMob ads, which use your device's advertising identifier. We ask for your consent before the first ad and you can change it under Ad preferences. Premium subscribers see no ads.\n\nYou can delete your account and data at any time here in Profile.\n\nFull version at mentorque.com.br/privacy."
+        "Levamos sua privacidade a sério. Os dados da sua garagem ficam no seu aparelho e, se você criar uma conta, são sincronizados de forma segura para você acessar de outros dispositivos.\n\nNão vendemos seus dados e não usamos ferramentas de análise de terceiros. Suas perguntas ao Biela e os dados do carro são enviados a provedores de IA para gerar a resposta — sem o seu nome ou e-mail.\n\nNa versão gratuita do app Android exibimos anúncios do Google AdMob, que usa o identificador de publicidade do aparelho. Pedimos seu consentimento antes do primeiro anúncio e você pode rever a escolha em Preferências de anúncios. Assinantes Premium não veem anúncios.\n\nVocê pode excluir sua conta e seus dados a qualquer momento aqui no Perfil.",
+        "We take your privacy seriously. Your garage data stays on your device and, if you create an account, is securely synced so you can access it from other devices.\n\nWe don't sell your data and use no third-party analytics. Your prompts to Biela and your car details are sent to AI providers to generate the answer — without your name or email.\n\nIn the free Android app we show Google AdMob ads, which use your device's advertising identifier. We ask for your consent before the first ad and you can change it under Ad preferences. Premium subscribers see no ads.\n\nYou can delete your account and data at any time here in Profile."
       ),
       signOut: T("Sair", "Sign out"),
       reset: T("Apagar os dados deste aparelho", "Erase this device's data"),

@@ -14,6 +14,7 @@ import { trialDaysFor, trialPlatform, type Platform } from "@/lib/app/platform";
 import { isNativeApp, openExternal, sellsInApp, storeListingUrl } from "@/lib/app/wrapper";
 import { hasActiveEntitlement, initPurchases, type RcPackage } from "@/lib/app/purchases";
 import { openPrivacyOptions, privacyOptionsRequired } from "@/lib/app/admob";
+import { privacyUrl, termsUrl } from "@/lib/app/legal";
 import { APP_VERSION, carName } from "@/lib/app/content";
 import { computeStatus } from "@/lib/app/gamification";
 import { PhaseEmblem } from "../Emblem";
@@ -418,6 +419,7 @@ export function ProfileScreen() {
           </div>
         )}
         <IconRow icon="shield" tint="bg-coral/15 text-coral" label={p.privacy} onClick={() => setPrivacy(true)} />
+        <IconRow icon="book" tint="bg-cream/10 text-cream/70" label={p.terms} onClick={() => openExternal(termsUrl(locale))} />
         {/* Exigência do Google quando a mensagem de consentimento é exibida:
             o usuário precisa poder rever a escolha depois. */}
         {adPrivacy && (
@@ -485,6 +487,12 @@ export function ProfileScreen() {
       <Sheet open={privacy} onClose={() => setPrivacy(false)}>
         <h2 className="font-serif text-xl font-semibold text-cream">{p.privacyTitle}</h2>
         <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-cream/70">{p.privacyBody}</p>
+        {/* O texto acima é um resumo; o documento que vale é o do site. Antes
+            ele só aparecia citado no meio do parágrafo, como endereço escrito
+            por extenso — dava para ler, não dava para tocar. */}
+        <Button variant="secondary" className="mt-4 w-full" onClick={() => openExternal(privacyUrl(locale))}>
+          {p.privacyFull}
+        </Button>
       </Sheet>
     </div>
   );
