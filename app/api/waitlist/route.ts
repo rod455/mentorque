@@ -1,40 +1,37 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { waitlistWelcome } from "@/lib/email/waitlist";
 
 export const runtime = "nodejs";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const FROM = process.env.WAITLIST_FROM ?? "Mentorque <contato@mentorque.com.br>";
 
-// Best-effort welcome email via Resend. Never blocks the signup: if the key is
-// missing or the send fails, we just log and move on.
+// Boas-vindas pelo Resend. Nunca bloqueia o cadastro: se a chave faltar ou o
+// envio falhar, registra e segue — o lead já está salvo, e recusar o cadastro
+// por causa do e-mail seria trocar um problema pequeno por um grande.
 async function sendWelcome(email: string, locale: "pt" | "en") {
   const key = process.env.RESEND_API_KEY;
-  if (!key) return;
-  const pt = locale === "pt";
-  const subject = pt ? "Você entrou na lista do Mentorque 🚗" : "You're on the Mentorque waitlist 🚗";
-  const html = pt
-    ? `<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#141414;color:#f4efe6;padding:32px;border-radius:16px;max-width:520px;margin:auto">
-        <h1 style="margin:0 0 12px;font-size:22px">Bem-vindo à garagem! 🐻</h1>
-        <p style="margin:0 0 12px;line-height:1.6;color:#cfc9bd">Você foi adicionado à nossa <b>lista de espera</b>. Ficamos muito felizes em ter você por aqui!</p>
-        <p style="margin:0 0 12px;line-height:1.6;color:#cfc9bd">O Mentorque te ajuda a entender seu carro, descobrir o preço justo antes da oficina e falar com um especialista de verdade. Assim que abrirmos o acesso, você será avisado em primeira mão — com as vantagens de quem chegou cedo.</p>
-        <p style="margin:16px 0 0;line-height:1.6;color:#8f8a80">Até já,<br/>Equipe Mentorque</p>
-      </div>`
-    : `<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#141414;color:#f4efe6;padding:32px;border-radius:16px;max-width:520px;margin:auto">
-        <h1 style="margin:0 0 12px;font-size:22px">Welcome to the garage! 🐻</h1>
-        <p style="margin:0 0 12px;line-height:1.6;color:#cfc9bd">You've been added to our <b>waitlist</b>. We're thrilled to have you!</p>
-        <p style="margin:0 0 12px;line-height:1.6;color:#cfc9bd">Mentorque helps you understand your car, find the fair price before the shop and talk to a real expert. The moment we open access, you'll be the first to know — with early-bird perks.</p>
-        <p style="margin:16px 0 0;line-height:1.6;color:#8f8a80">See you soon,<br/>The Mentorque team</p>
-      </div>`;
+  if (!key) {
+    console.warn("[waitlist] RESEND_API_KEY ausente — boas-vindas NÃO enviadas");
+    return;
+  }
+  const { subject, html, text } = waitlistWelcome(locale);
   try {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { "content-type": "application/json", authorization: `Bearer ${key}` },
-      body: JSON.stringify({ from: FROM, to: [email], subject, html }),
+      // `text` junto do `html` não é capricho: mensagem só-HTML pontua pior nos
+      // filtros de spam, e é o que o cliente em modo texto mostra.
+      body: JSON.stringify({ from: FROM, to: [email], subject, html, text }),
     });
-    if (!res.ok) console.warn("[waitlist] email send failed:", res.status, await res.text().catch(() => ""));
+    if (!res.ok) {
+      // O corpo do erro diz qual é: 403 costuma ser domínio não verificado no
+      // Resend, 401 é chave inválida. Sem ele, sobra só o número.
+      console.warn("[waitlist] envio falhou:", res.status, await res.text().catch(() => ""));
+    }
   } catch (err) {
-    console.warn("[waitlist] email error:", err);
+    console.warn("[waitlist] erro de envio:", err);
   }
 }
 
