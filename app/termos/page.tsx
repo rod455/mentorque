@@ -33,8 +33,16 @@ export default function TermosPage() {
         Serviço, você concorda com estes Termos. Se não concordar, não utilize o Serviço.
       </p>
       <p>
-        Estes Termos também servem como o contrato de licença de usuário final (EULA) do aplicativo
-        distribuído pela App Store e pelo Google Play.
+        Estes Termos também servem como o contrato de licença de usuário final (EULA) do aplicativo. No
+        aplicativo distribuído pela App Store aplica-se ainda o{" "}
+        <a
+          href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Contrato de Licença de Usuário Final Padrão da Apple
+        </a>
+        , e estes Termos o complementam no que não conflitar com ele.
       </p>
 
       <h2>1. O que o Mentorque é — e o que não é</h2>

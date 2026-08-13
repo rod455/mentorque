@@ -29,8 +29,16 @@ export default function TermsPage() {
         you agree to these Terms. If you do not agree, please do not use the Service.
       </p>
       <p>
-        These Terms also serve as the end-user license agreement (EULA) for the application distributed
-        through the App Store and Google Play.
+        These Terms also serve as the end-user license agreement (EULA) for the application. For the app
+        distributed through the App Store, Apple&apos;s{" "}
+        <a
+          href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Standard End User License Agreement
+        </a>{" "}
+        also applies, and these Terms supplement it to the extent they do not conflict with it.
       </p>
 
       <h2>1. What Mentorque is — and what it isn&apos;t</h2>
