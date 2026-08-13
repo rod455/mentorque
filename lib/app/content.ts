@@ -2471,8 +2471,21 @@ export function getContent(locale: Locale) {
       terms: T("Termos e política de privacidade", "Terms & privacy policy"),
       restore: T("Restaurar compra", "Restore purchase"),
       loadingIap: T("Carregando os planos…", "Loading plans…"),
-      privacyLink: T("Privacidade", "Privacy"),
-      termsLink: T("Termos", "Terms"),
+      privacyLink: T("Política de Privacidade", "Privacy Policy"),
+      termsLink: T("Termos de Uso", "Terms of Use"),
+      // Ficha da assinatura exibida no fluxo de compra do app da Apple.
+      //
+      // A diretriz 3.1.2(c) exige que título, duração e preço estejam VISÍVEIS
+      // dentro do app, junto dos links para os termos e a privacidade. O preço
+      // vem da própria Apple (`product.priceString`), então o que fica aqui é o
+      // nome e o prazo — o resto o paywall preenche.
+      iapProduct: T("Mentorque Premium", "Mentorque Premium"),
+      iapAnnualLength: T("Assinatura de 12 meses, renovação automática", "12-month subscription, auto-renewing"),
+      iapMonthlyLength: T("Assinatura de 1 mês, renovação automática", "1-month subscription, auto-renewing"),
+      iapRenewNote: T(
+        "A renovação é automática, pela sua conta Apple, salvo cancelamento até 24 horas antes do fim do período. Gerencie em Ajustes → Assinaturas.",
+        "Renews automatically through your Apple account unless cancelled at least 24 hours before the end of the period. Manage in Settings → Subscriptions."
+      ),
       // Paywall com teste grátis
       trialTitle: T("Experimente o Premium", "Try Premium"),
       trialDays: 7,

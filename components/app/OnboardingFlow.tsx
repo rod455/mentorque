@@ -9,7 +9,7 @@ import { isNativeApp, nativePlatform } from "@/lib/app/wrapper";
 import { hasActiveEntitlement, initPurchases, type RcPackage } from "@/lib/app/purchases";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
-import { Icon, PhoneFrame, ProgressDots, useContent } from "./ui";
+import { Icon, LegalLinks, PhoneFrame, ProgressDots, useContent } from "./ui";
 import BielaMascote from "@/components/BielaMascote";
 import CarroMentorque from "@/components/CarroMentorque";
 
@@ -323,10 +323,8 @@ export function OnboardingFlow() {
               </button>
             </div>
 
-            <div className="mt-2.5 flex items-center justify-center gap-2 text-xs text-cream/45">
-              <a href="/privacidade" className="hover:text-cream">{c.subscribe.termsLink}</a>
-              <span>·</span>
-              <a href="/privacidade" className="hover:text-cream">{c.subscribe.privacyLink}</a>
+            <div className="mt-2.5 flex items-center justify-center text-xs text-cream/45">
+              <LegalLinks />
             </div>
           </div>
         </div>

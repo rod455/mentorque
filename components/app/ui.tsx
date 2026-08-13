@@ -7,6 +7,7 @@ import { getContent } from "@/lib/app/content";
 import { usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
 import { sellsInApp } from "@/lib/app/wrapper";
+import { privacyUrl, termsUrl } from "@/lib/app/legal";
 import type { Access, Severity } from "@/lib/app/types";
 import {
   IconAlert,
@@ -87,6 +88,29 @@ const ICON_REGISTRY: Record<string, (p: { className?: string }) => JSX.Element> 
 export function Icon({ name, className }: { name: string; className?: string }) {
   const Cmp = ICON_REGISTRY[name] ?? IconCheck;
   return <Cmp className={className} />;
+}
+
+/**
+ * Links para os Termos de Uso e a Política de Privacidade.
+ *
+ * Existe como componente para não haver "a versão do paywall" e "a versão do
+ * onboarding": a Apple exige esses dois links em TODA tela onde a assinatura é
+ * vendida, e a versão anterior tinha três cópias soltas — todas apontando para
+ * `/privacidade`, inclusive a dos termos, e todas relativas, o que dentro do
+ * app da loja não levava a lugar nenhum. Foi o que reprovou a versão pela
+ * diretriz 3.1.2(c).
+ */
+export function LegalLinks({ className = "", underline = false }: { className?: string; underline?: boolean }) {
+  const { locale } = useI18n();
+  const c = useContent();
+  const cls = `hover:text-cream ${underline ? "underline underline-offset-2" : ""}`;
+  return (
+    <span className={`inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 ${className}`}>
+      <a href={termsUrl(locale)} target="_blank" rel="noreferrer" className={cls}>{c.subscribe.termsLink}</a>
+      <span aria-hidden>·</span>
+      <a href={privacyUrl(locale)} target="_blank" rel="noreferrer" className={cls}>{c.subscribe.privacyLink}</a>
+    </span>
+  );
 }
 
 // The phone frame: centers a fixed-width column on a graphite backdrop so the

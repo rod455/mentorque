@@ -20,7 +20,7 @@ import { PhaseEmblem } from "../Emblem";
 import { useNav, type View } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
-import { AppHeader, Card, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
+import { AppHeader, Card, Icon, inputCls, LegalLinks, SectionTitle, Sheet, useContent } from "../ui";
 
 const BR_STATES = ["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"];
 
@@ -774,9 +774,36 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
           <Button size="lg" className="mt-4 w-full" onClick={buyNative} disabled={iapBusy}>
             {iapBusy ? "…" : sub.trialCta.replace("{n}", String(trialDays))}
           </Button>
-          <p className="mx-auto mt-3 max-w-xs text-center text-xs leading-relaxed text-cream/45">
-            {plan === "annual" ? sub.trialFine : sub.trialFineMonthly}
-          </p>
+
+          {/*
+            Ficha da assinatura + links legais.
+
+            A diretriz 3.1.2(c) da Apple exige, DENTRO do app, quatro coisas
+            juntas: título da assinatura, duração, preço e links funcionais para
+            os termos e a privacidade. Os três primeiros existiam espalhados
+            (nome do plano no cartão, preço vindo da Apple, prazo só na letra
+            miúda) e os links não existiam de todo neste caminho — o paywall
+            nativo retorna antes do trecho da web, que era o único que os tinha.
+            Reunidos aqui, num bloco só, para a revisão encontrar de imediato.
+
+            O preço vem de `product.priceString`: é o valor que a Apple vai
+            cobrar de fato, na moeda da conta, e não uma cópia nossa que pode
+            divergir do que está na App Store Connect.
+          */}
+          <div className="mx-auto mt-4 max-w-xs text-center text-xs leading-relaxed text-cream/45">
+            <p className="text-cream/70">
+              {sub.iapProduct} · {plan === "annual" ? sub.planAnnual : sub.planMonthly}
+              {(() => {
+                const pkg = plan === "annual" ? iap.annual : iap.monthly;
+                const preco = pkg?.product?.priceString ?? (plan === "annual" ? sub.planAnnualPrice : sub.planMonthlyPrice);
+                return ` · ${preco}`;
+              })()}
+            </p>
+            <p className="mt-1">{plan === "annual" ? sub.iapAnnualLength : sub.iapMonthlyLength}</p>
+            <p className="mt-2">{plan === "annual" ? sub.trialFine : sub.trialFineMonthly}</p>
+            <p className="mt-2">{sub.iapRenewNote}</p>
+            <LegalLinks className="mt-3 text-cream/60" underline />
+          </div>
         </div>
       );
     }
@@ -812,9 +839,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
         <div className="flex items-center gap-2">
           <button onClick={() => { refreshSubscription(); if (subscribed) back(); }} className="hover:text-cream">{sub.restore}</button>
           <span>·</span>
-          <a href="/privacidade" className="hover:text-cream">{sub.termsLink}</a>
-          <span>·</span>
-          <a href="/privacidade" className="hover:text-cream">{sub.privacyLink}</a>
+          <LegalLinks />
         </div>
       </div>
 
@@ -987,9 +1012,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
                 {sub.exit2Skip}
               </button>
               <p className="mt-3 text-center text-[11px] leading-relaxed text-cream/45">
-                {sub.exit2Agree}{" "}
-                <a href="/privacidade" className="underline hover:text-cream">{sub.termsLink}</a>{" "}e{" "}
-                <a href="/privacidade" className="underline hover:text-cream">{sub.privacyLink}</a>
+                {sub.exit2Agree} <LegalLinks underline />
               </p>
             </div>
           </div>
@@ -1039,6 +1062,9 @@ export function CheckoutScreen({ plan, offer }: { plan: "monthly" | "annual"; of
       ) : (
         <p className="mt-8 text-center text-sm text-cream/55">{sub.working}</p>
       )}
+      {/* Também no checkout da web: é uma tela de compra, e o pedido da Apple
+          vale como bom hábito em qualquer lugar onde se cobra. */}
+      <p className="mt-5 text-center text-xs text-cream/45"><LegalLinks /></p>
     </div>
   );
 }
