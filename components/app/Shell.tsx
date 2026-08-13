@@ -200,6 +200,20 @@ function Router() {
   })();
 
   const showTopBar = TAB_ROOTS.has(view.name);
+  // Folga do rodapé.
+  //
+  // As telas que rolam ganham 7rem: a barra de abas é fixa e cobriria o fim do
+  // conteúdo, então sobra respiro no fim da rolagem. Já as telas que gerenciam
+  // a PRÓPRIA altura (o chat, com o campo de digitação colado embaixo) herdavam
+  // essa mesma folga e ela virava um buraco preto de uns 90px entre o campo e a
+  // barra — o safe-area ainda entrava duas vezes, aqui e na própria barra.
+  //
+  // Para elas a folga é exatamente a altura da barra: 3.75rem do conteúdo
+  // (ícone + rótulo + py-2, medidos em 60px) mais o mesmo `max(safe, 8px)` que
+  // ela usa de padding. Somam os 68px que a barra ocupa de fato.
+  const folgaRodape = ALTURA_PROPRIA.has(view.name)
+    ? "pb-[calc(3.75rem+max(env(safe-area-inset-bottom),8px))]"
+    : "pb-[calc(7rem+env(safe-area-inset-bottom))]";
 
   return (
     <>
@@ -208,7 +222,7 @@ function Router() {
       <main
         ref={mainRef}
         onScroll={onScroll}
-        className="flex-1 overflow-y-auto overflow-x-hidden px-5 pb-[calc(7rem+env(safe-area-inset-bottom))] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        className={`flex-1 overflow-y-auto overflow-x-hidden px-5 ${folgaRodape} [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden`}
         {...swipe}
       >
         {screen}
@@ -296,6 +310,10 @@ function paywallExitAllowed(target: View | null): boolean {
 
 // Cabeçalho fixo das abas principais: marca à esquerda, foto de perfil à direita.
 const TAB_ROOTS = new Set<View["name"]>(["home", "cars", "symptoms", "history", "learn"]);
+
+// Telas que ocupam a altura toda por conta própria, em vez de rolar. Ver
+// `folgaRodape` acima.
+const ALTURA_PROPRIA = new Set<View["name"]>(["biela"]);
 
 function TopBar() {
   const { root } = useNav();

@@ -483,8 +483,14 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
         subtitle={v ? `${c.biela.contextPrefix} ${vehicleLabel(v)}${v.odometerKm != null ? " · " + v.odometerKm.toLocaleString() + " km" : ""}` : undefined}
       />
 
-      {/* Conversa */}
-      <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto pb-2">
+      {/* Conversa.
+          `mt-auto` no miolo encosta as mensagens embaixo enquanto elas cabem na
+          tela, como em qualquer conversa — antes a saudação ficava colada no
+          topo e sobrava um vão até as sugestões. Quando passam da altura, o
+          `mt-auto` deixa de ter efeito e a rolagem volta ao normal (é por isso
+          que não dá para usar `justify-end`, que corta o começo). */}
+      <div ref={scrollRef} className="flex flex-1 flex-col overflow-y-auto pb-2">
+        <div className="mt-auto space-y-3">
         {msgs.map((m, i) => (
           <div key={i} className={m.role === "user" ? "flex justify-end" : "flex items-end gap-2"}>
             {m.role === "biela" && (
@@ -508,6 +514,7 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
             {c.biela.thinking}
           </div>
         )}
+        </div>
       </div>
 
       {/* Sugestões (só no início) */}
