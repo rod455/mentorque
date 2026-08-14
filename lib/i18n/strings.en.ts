@@ -154,28 +154,13 @@ export const en: Strings = {
       { n: "04", title: "Call an expert", body: "Stuck? Tap into consulting — community, team or 1:1 with the creator — and solve it safely." },
     ],
   },
+  // Empty on purpose — see the note in strings.pt.ts. Fill `items` in both
+  // files when real testimonials exist and the section comes back on its own.
   social: {
     eyebrow: "Who's coming in",
     title: "What people are saying",
-    intro: "Reserved space for real testimonials — swap in your own when you have them.",
-    placeholderTag: "example · replace",
-    items: [
-      {
-        quote: "In a week I understood more about my car than in years at the shop. I went in to replace the clutch knowing the fair price and genuinely saved money.",
-        name: "User name",
-        context: "Gol 2014 · São Paulo",
-      },
-      {
-        quote: "The symptom diagnosis showed me it was just the spark plug, not the whole engine they wanted to charge for. Paid for the app for years in a single visit.",
-        name: "User name",
-        context: "Onix 2018 · Belo Horizonte",
-      },
-      {
-        quote: "I started from zero, didn't even know how to open the hood. Now I do my own basic maintenance and help friends. The tracks are incredible.",
-        name: "User name",
-        context: "Student · Curitiba",
-      },
-    ],
+    intro: "Stories from people already using Mentorque day to day.",
+    items: [] as { quote: string; name: string; context: string }[],
   },
   consulting: {
     eyebrow: "The edge",

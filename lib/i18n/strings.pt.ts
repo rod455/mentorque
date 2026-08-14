@@ -153,28 +153,21 @@ export const pt = {
       { n: "04", title: "Chame um especialista", body: "Travou? Acione a consultoria — comunidade, equipe ou 1:1 com o creator — e resolva com segurança." },
     ],
   },
+  // Depoimentos.
+  //
+  // A lista está VAZIA de propósito, e com ela a seção inteira some da página
+  // (ver components/sections/SocialProof.tsx). Antes havia três exemplos
+  // inventados, marcados com uma etiqueta "exemplo · substituir" — que é pior
+  // que não ter seção nenhuma: quem chega pelo Instagram não lê a etiqueta,
+  // lê "Nome do usuário · Gol 2014" e entende que o app inventa gente.
+  //
+  // Para publicar depoimentos de verdade, basta preencher `items` aqui e no
+  // arquivo em inglês. A seção volta sozinha.
   social: {
     eyebrow: "Quem está chegando",
     title: "O que as pessoas dizem",
-    intro: "Espaço reservado para depoimentos reais — troque pelos seus quando tiver.",
-    placeholderTag: "exemplo · substituir",
-    items: [
-      {
-        quote: "Em uma semana eu entendi mais do meu carro do que em anos de oficina. Cheguei pra trocar a embreagem sabendo o preço justo e economizei de verdade.",
-        name: "Nome do usuário",
-        context: "Gol 2014 · São Paulo",
-      },
-      {
-        quote: "O diagnóstico por sintoma me mostrou que era só a vela, não o motor inteiro como queriam me cobrar. Pagou o app por anos numa visita só.",
-        name: "Nome do usuário",
-        context: "Onix 2018 · Belo Horizonte",
-      },
-      {
-        quote: "Comecei do zero, sem saber abrir o capô. Hoje faço minha própria manutenção básica e ainda ajudo os amigos. As trilhas são absurdas.",
-        name: "Nome do usuário",
-        context: "Estudante · Curitiba",
-      },
-    ],
+    intro: "Histórias de quem já usa o Mentorque no dia a dia.",
+    items: [] as { quote: string; name: string; context: string }[],
   },
   consulting: {
     eyebrow: "O diferencial",
