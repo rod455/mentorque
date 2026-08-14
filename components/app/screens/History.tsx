@@ -241,7 +241,7 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
   const c = useContent();
   const a = c.addService;
   const { s, addService, updateService } = usePrototype();
-  const { back, go } = useNav();
+  const { back, go, root } = useNav();
   const v = activeVehicle(s);
   const editing = editId ? s.services.find((r) => r.id === editId) ?? null : null;
   const src = editing ?? preset;
@@ -340,7 +340,15 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
     } else {
       services.forEach((svc, i) => addService(rec(svc, i === 0)));
     }
-    back();
+    // Depois de salvar, vai para o histórico — não para a tela anterior.
+    //
+    // `back()` devolvia para de onde o usuário veio, e um dos caminhos é o
+    // orçamento do checklist ("Salvar no histórico"). Quem salvava por ali
+    // caía de volta no formulário de orçamento, sem sinal nenhum de que o
+    // serviço tinha sido registrado — parecia que o salvamento falhou. O
+    // histórico é o destino que faz sentido para todos os caminhos: é onde o
+    // serviço recém-criado aparece.
+    root({ name: "history" });
   };
 
   return (

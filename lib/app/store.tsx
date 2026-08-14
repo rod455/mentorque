@@ -135,16 +135,30 @@ function mergeById<T extends { id: string }>(cloud: T[], local: T[]): T[] {
 }
 // Merge cloud + local so logging in never loses guest work: cloud scalars win
 // when set, but local-only vehicles/services are kept.
-function mergeSessions(cloud: Session, local: Session): Session {
+// Exportada para poder ser testada sozinha: são regras de correção de DADOS
+// (quem fica com o Premium, qual carro fica ativo) e quebrar qualquer uma delas
+// é invisível na tela até alguém perder trabalho ou ganhar assinatura de graça.
+export function mergeSessions(cloud: Session, local: Session): Session {
   return {
     onboarded: !!cloud.onboarded || !!local.onboarded,
     name: cloud.name ?? local.name,
     email: cloud.email ?? local.email,
     state: cloud.state ?? local.state,
     city: cloud.city ?? local.city,
-    premium: !!cloud.premium || !!local.premium,
+    // Premium vem SÓ da nuvem. Antes era `cloud || local`, e a marca gravada no
+    // aparelho vazava para a conta seguinte: quem entrasse com um e-mail novo
+    // num aparelho onde alguém já fora assinante nascia Premium sem ter pago.
+    // Assinatura pertence à conta, não ao aparelho.
+    premium: !!cloud.premium,
     vehicles: mergeById(cloud.vehicles ?? [], local.vehicles ?? []),
-    activeVehicleId: cloud.activeVehicleId ?? local.activeVehicleId ?? null,
+    // O carro ATIVO é o local, quando existe.
+    //
+    // A nuvem ganhando aqui era o que fazia os serviços "sumirem" ao entrar na
+    // conta: as telas listam o histórico do carro ativo, então trocar o carro
+    // debaixo do usuário esconde tudo o que ele acabou de cadastrar. Nada era
+    // perdido — os dois carros e os dois históricos seguem na garagem —, mas do
+    // lado de cá é indistinguível de perda de dados.
+    activeVehicleId: local.activeVehicleId ?? cloud.activeVehicleId ?? null,
     services: mergeById(cloud.services ?? [], local.services ?? []),
     claimedMilestones: [...new Set([...(cloud.claimedMilestones ?? []), ...(local.claimedMilestones ?? [])])],
     momentPhotos: { ...(local.momentPhotos ?? {}), ...(cloud.momentPhotos ?? {}) },
@@ -234,7 +248,12 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
       if (cancelled) return;
       const cloud = (data?.data ?? null) as Session | null;
       setS((local) => {
-        const merged = cloud ? mergeSessions(cloud, local) : local;
+        // Sem estado na nuvem, esta conta é nova: fica com o trabalho feito
+        // como convidado, mas NÃO com o Premium. A assinatura teria de vir de
+        // algum lugar, e não veio — a compra exige estar logado, então uma
+        // conta sem registro na nuvem nunca assinou nada. Quem já pagou e
+        // reinstalou recupera pelo "Restaurar compra" da própria loja.
+        const merged = cloud ? mergeSessions(cloud, local) : { ...local, premium: false };
         if (!merged.email) merged.email = user.email ?? null;
         return commit(merged);
       });

@@ -76,6 +76,14 @@ export function HomeScreen() {
   const pinnedList = pinnedIds
     .map((id) => c.lessons.find((l) => l.id === id))
     .filter((l): l is Lesson => !!l);
+  // Salvos para ver depois. Ficavam só dentro de Estudos → Salvos, e quem
+  // tocava em "Salvar para depois" voltava para o Início esperando encontrar
+  // ali — sem nada, parecia que o salvamento não pegou. Os já fixados saem da
+  // lista: apareceriam duas vezes na mesma tela.
+  const savedList = savedIds
+    .filter((id) => !pinnedIds.includes(id))
+    .map((id) => c.lessons.find((l) => l.id === id))
+    .filter((l): l is Lesson => !!l);
   const picks = forYou(c.lessons, { car, services: car ? servicesFor(s, car.id) : [], pref: levelPref(status.phaseIndex), seen, saved: savedIds, pinned: pinnedIds });
 
   // Memórias: marcos e momentos conquistados, priorizando Momentos.
@@ -227,6 +235,41 @@ export function HomeScreen() {
                     </span>
                   )}
                 </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* Salvos para depois */}
+      {savedList.length > 0 && (
+        <section className="mt-5">
+          <div className="mb-2 flex items-baseline justify-between">
+            <h3 className="font-serif text-lg font-bold text-cream">{c.learn.savedTitle}</h3>
+            {savedList.length > 4 && (
+              <button onClick={() => go({ name: "savedLessons" })} className="text-xs font-medium text-amber">{h.seeAll}</button>
+            )}
+          </div>
+          <div className="space-y-2">
+            {savedList.slice(0, 4).map((l) => {
+              const locked = l.premium && !s.premium;
+              return (
+                <button
+                  key={l.id}
+                  onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
+                  className="flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-3.5 py-2.5 text-left ring-1 ring-white/5"
+                >
+                  <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite text-amber/80 ring-1 ring-amber/45">
+                    {l.thumb ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={l.thumb} alt="" className="h-full w-full object-contain" draggable={false} />
+                    ) : (
+                      <Icon name={typeIcon(l.type)} className="h-5 w-5" />
+                    )}
+                  </span>
+                  <span className="min-w-0 flex-1 truncate font-display text-sm text-cream/90">{l.title}</span>
+                  <span aria-hidden className="shrink-0 text-amber">★</span>
+                </button>
               );
             })}
           </div>
