@@ -37,7 +37,7 @@ export const REVISION_RULES: RevisionRule[] = [
   { key: "battery", everyMonths: 48, systems: ["electrical"] },
 ];
 
-export type Finding = { code: string; severity: "high" | "medium" | "low"; system?: SystemKey; km?: number };
+export type Finding = { code: string; severity: "high" | "medium" | "low"; system?: SystemKey; km?: number; months?: number };
 export type SystemStatus = { key: SystemKey; status: "ok" | "attention" | "overdue"; lastKm?: number; lastDate?: string };
 export type Health = { score: number; findings: Finding[]; systems: SystemStatus[]; hasKm: boolean };
 
@@ -90,11 +90,35 @@ export function computeHealth(vehicle: Vehicle, services: ServiceRecord[], now =
     }
   }
 
-  // 3) Major revision cadence (every 10k km).
+  // 3) Revisão periódica: 10.000 km OU 12 meses, o que vier primeiro.
+  //
+  // A regra anterior era `!revision || km - revision.km >= 10000`. O `!revision`
+  // sozinho acusava revisão atrasada em QUALQUER carro sem registro — inclusive
+  // um 2025 com 5.000 km comprado há três meses, que ainda nem chegou perto do
+  // primeiro intervalo. A tela ficava se contradizendo: todos os sistemas "Em
+  // dia", e no topo "Revisão periódica recomendada".
+  //
+  // Sem registro de revisão, a contagem parte da compra (ou do primeiro dia no
+  // app, quando a data da compra não foi informada). Isso é o que o manual diz:
+  // a primeira revisão vence por km rodado ou por tempo de uso, não por o
+  // aplicativo não saber de nada.
   const revision = lastOfType(services, "revision");
-  if (hasKm && (!revision || km! - (revision.km || 0) >= 10000)) {
+  const kmDesdeRevisao = revision ? km! - (revision.km || 0) : km!;
+  const mesesDesdeRevisao = revision
+    ? monthsBetween(revision.date, now)
+    : vehicle.purchaseDate
+      ? monthsBetween(vehicle.purchaseDate, now)
+      : null;
+  const venceuPorKm = hasKm && kmDesdeRevisao >= 10000;
+  const venceuPorTempo = mesesDesdeRevisao != null && mesesDesdeRevisao >= 12;
+  if (venceuPorKm || venceuPorTempo) {
     score -= 10;
-    findings.push({ code: "revision_overdue", severity: "medium" });
+    findings.push({
+      code: venceuPorKm ? "revision_overdue_km" : "revision_overdue_time",
+      severity: "medium",
+      km: venceuPorKm ? kmDesdeRevisao : undefined,
+      months: venceuPorTempo && !venceuPorKm ? Math.round(mesesDesdeRevisao!) : undefined,
+    });
   }
 
   // 4) Per-system status + long-unserviced penalty.

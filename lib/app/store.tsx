@@ -62,6 +62,24 @@ function todayISO(): string {
 
 const STORAGE_KEY = "mentorque-garage";
 
+// De QUEM é o estado guardado neste aparelho.
+//
+// O armazenamento local é do aparelho, não da conta — e sem essa marca não há
+// como distinguir "trabalho que um convidado fez e merece ser levado para a
+// conta" de "dados da conta anterior que usou este celular". O merge tratava os
+// dois igual, e carros de uma conta apareciam dentro de outra.
+const DONO_KEY = "mentorque-garage-owner";
+
+function lerDono(): string | null {
+  try { return window.localStorage.getItem(DONO_KEY); } catch { return null; }
+}
+function gravarDono(id: string | null): void {
+  try {
+    if (id) window.localStorage.setItem(DONO_KEY, id);
+    else window.localStorage.removeItem(DONO_KEY);
+  } catch { /* modo privado: sem marca, o merge cai no caminho conservador */ }
+}
+
 type StoreValue = {
   s: Session;
   setName: (name: string) => void;
@@ -247,13 +265,26 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
       const { data } = await supabase.from("user_state").select("data").eq("user_id", user.id).maybeSingle();
       if (cancelled) return;
       const cloud = (data?.data ?? null) as Session | null;
+      // De quem era o que está guardado aqui. `null` = convidado: ninguém
+      // logou neste aparelho desde a última limpeza, então o trabalho é de quem
+      // está entrando agora e deve ser levado junto.
+      const dono = lerDono();
+      const deOutraConta = dono !== null && dono !== user.id;
+      gravarDono(user.id);
+
       setS((local) => {
+        // Estado de OUTRA conta não se mistura. Era isto que fazia os carros de
+        // um usuário aparecerem na garagem de outro que entrasse no mesmo
+        // aparelho: dados pessoais atravessando contas, e a vítima sem como
+        // saber de onde vieram. Nada se perde — o dono anterior tem tudo na
+        // nuvem dele.
+        const base = deOutraConta ? EMPTY : local;
         // Sem estado na nuvem, esta conta é nova: fica com o trabalho feito
         // como convidado, mas NÃO com o Premium. A assinatura teria de vir de
         // algum lugar, e não veio — a compra exige estar logado, então uma
         // conta sem registro na nuvem nunca assinou nada. Quem já pagou e
         // reinstalou recupera pelo "Restaurar compra" da própria loja.
-        const merged = cloud ? mergeSessions(cloud, local) : { ...local, premium: false };
+        const merged = cloud ? mergeSessions(cloud, base) : { ...base, premium: false };
         if (!merged.email) merged.email = user.email ?? null;
         return commit(merged);
       });
@@ -261,23 +292,23 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
     return () => { cancelled = true; };
   }, [user, supabase, commit]);
 
-  // Ao sair da conta, o Premium sai junto.
+  // Ao sair da conta, o aparelho volta a zero.
   //
-  // `premium` é uma marca gravada no aparelho, sobrevivente do tempo em que o
-  // app era só protótipo local. Sem sessão não existe assinatura: quem pagou
-  // pagou numa conta, e é de lá que o Premium volta no próximo login (o
-  // `mergeSessions` traz da nuvem e o `subscriptions` confirma). Deixar a marca
-  // acesa mostrava Premium para um deslogado — e, pior, para quem viesse depois
-  // no mesmo aparelho.
+  // Antes só o `premium` era apagado, e a garagem continuava na tela. Parece
+  // gentil e não é: os dados ficavam visíveis para a próxima pessoa que
+  // abrisse o app neste celular, e voltavam a se misturar no login seguinte.
+  // Nada se perde — tudo o que existia foi para a nuvem enquanto a sessão
+  // estava aberta, e volta no próximo login.
   //
   // Só depois de `authReady`: no boot o usuário ainda é null enquanto a sessão
-  // é restaurada, e apagar aí tiraria o Premium de quem está logado.
+  // é restaurada, e limpar aí apagaria a tela de quem está logado.
   useEffect(() => {
     if (!authReady) return;
     if (user) { teveSessao.current = true; return; }
     if (!teveSessao.current) return;
     teveSessao.current = false;
-    setS((prev) => (prev.premium ? commit({ ...prev, premium: false }) : prev));
+    gravarDono(null);
+    setS(() => commit({ ...EMPTY, startedAt: todayISO() }));
   }, [user, authReady, commit]);
 
   // Debounced push of the whole session to the cloud while logged in.

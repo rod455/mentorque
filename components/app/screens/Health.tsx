@@ -75,9 +75,10 @@ export function HealthScreen() {
   const result = computeQuizHealth(v.quiz ?? {}, v);
   const displayScore = result.score;
 
-  const findingText = (code: string, km?: number, system?: SystemKey) => {
+  const findingText = (code: string, km?: number, system?: SystemKey, months?: number) => {
     let text = h.findings[code] ?? code;
     if (km != null) text = text.replace("{n}", km.toLocaleString());
+    if (months != null) text = text.replace("{n}", String(months));
     if (system) text = text.replace("{s}", h.systemLabels[system]);
     return text;
   };
@@ -175,7 +176,7 @@ export function HealthScreen() {
           {health.findings.map((f, i) => (
             <div key={i} className="flex items-start gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-3 ring-1 ring-white/5">
               <SeverityDot level={f.severity} />
-              <span className="text-sm text-cream/85">{findingText(f.code, f.km, f.system)}</span>
+              <span className="text-sm text-cream/85">{findingText(f.code, f.km, f.system, f.months)}</span>
             </div>
           ))}
         </div>

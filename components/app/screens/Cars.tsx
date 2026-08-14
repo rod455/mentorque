@@ -224,7 +224,7 @@ function FreeCarAlert({ vehicleId, findings }: { vehicleId: string; findings: { 
   const c = useContent();
   const { root } = useNav();
   const { setActiveVehicle } = usePrototype();
-  const overdue = findings.some((f) => f.code === "oil_overdue" || f.code === "revision_overdue");
+  const overdue = findings.some((f) => f.code === "oil_overdue" || f.code.startsWith("revision_overdue"));
   const label = overdue ? c.cars.alertOverdue : findings.length ? c.cars.alertPending : c.cars.ok;
   const tone = overdue ? "bg-coral/15 text-coral" : findings.length ? "bg-amber/15 text-amber" : "bg-teal/15 text-teal";
   const pending = overdue || findings.length > 0;

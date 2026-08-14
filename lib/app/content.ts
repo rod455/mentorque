@@ -2056,7 +2056,10 @@ export function getContent(locale: Locale) {
         oil_overdue: T("Troca de óleo atrasada (~{n} km além do intervalo).", "Oil change overdue (~{n} km past the interval)."),
         oil_due_soon: T("Troca de óleo próxima (em ~{n} km).", "Oil change coming up (in ~{n} km)."),
         oil_unknown: T("Sem registro de troca de óleo.", "No oil change on record."),
-        revision_overdue: T("Revisão periódica recomendada.", "Periodic service recommended."),
+        // Dizem POR QUE venceu. "Revisão periódica recomendada", sozinho, não
+        // dava ao dono como conferir se procedia — e procedia pouco.
+        revision_overdue_km: T("Revisão periódica vencida (~{n} km desde a última).", "Periodic service overdue (~{n} km since the last one)."),
+        revision_overdue_time: T("Revisão periódica vencida por tempo ({n} meses desde a última).", "Periodic service overdue by time ({n} months since the last one)."),
         system_no_history: T("{s}: sem histórico registrado.", "{s}: no service on record."),
       } as Record<string, string>,
     },
