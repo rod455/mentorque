@@ -590,6 +590,49 @@ function TealCheck() {
   );
 }
 
+/**
+ * Comparação grátis × Premium.
+ *
+ * Vivia solta dentro do trecho da WEB do paywall — e o caminho nativo retorna
+ * antes dele. Ou seja: no app da loja, que é onde a assinatura é de fato
+ * vendida, o comprador via o Biela e um botão de assinar, sem nenhuma tabela
+ * dizendo o que muda. Como componente, os dois caminhos mostram a mesma coisa e
+ * não há como um evoluir sem o outro.
+ */
+function ComparativoPlanos() {
+  const c = useContent();
+  const sub = c.subscribe;
+  const cadeado = (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4 text-cream/25">
+      <rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" />
+    </svg>
+  );
+  return (
+    <div className="overflow-hidden rounded-2xl bg-graphite-800 ring-1 ring-white/[0.06]">
+      <div className="grid grid-cols-[1.6fr_0.6fr_0.7fr] items-center border-b border-white/[0.06] px-3.5 py-3">
+        <span className="font-display text-sm font-semibold text-cream">{sub.knowTitle}</span>
+        <span className="text-center text-xs font-medium text-cream/45">{sub.colFree}</span>
+        <span className="text-center text-xs font-semibold text-amber">{sub.colPremium}</span>
+      </div>
+      <div className="[&>*+*]:border-t [&>*+*]:border-white/[0.05]">
+        {sub.features.map((f) => (
+          <div key={f.label} className="grid grid-cols-[1.6fr_0.6fr_0.7fr] items-center px-3.5 py-2.5">
+            <span className="flex items-center gap-2.5 text-sm text-cream/85">
+              <Icon name={f.icon} className="h-4 w-4 text-cream/45" /> {f.label}
+            </span>
+            <span className="flex justify-center">
+              {f.free === "check" ? <TealCheck /> : f.free === "ltd" ? (
+                <span className="rounded bg-amber/15 px-1.5 py-0.5 text-[10px] font-semibold text-amber">{sub.ltd}</span>
+              ) : cadeado}
+            </span>
+            <span className="flex justify-center"><TealCheck /></span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   const c = useContent();
   const sub = c.subscribe;
@@ -764,6 +807,8 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
               <li key={b} className="flex items-center gap-2.5 text-sm text-cream/85"><TealCheck /> {b}</li>
             ))}
           </ul>
+          {/* Antes de escolher o plano, o que muda de um para o outro. */}
+          <div className="mt-4"><ComparativoPlanos /></div>
           <div className="mt-4 grid grid-cols-2 gap-3">
             {(["annual", "monthly"] as const).map((k) => {
               const pkg = k === "annual" ? iap.annual : iap.monthly;
@@ -878,30 +923,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
       </div>
 
       {/* Conheça o Premium — comparação */}
-      <div className="mt-4 overflow-hidden rounded-2xl bg-graphite-800 ring-1 ring-white/[0.06]">
-        <div className="grid grid-cols-[1.6fr_0.6fr_0.7fr] items-center border-b border-white/[0.06] px-3.5 py-3">
-          <span className="font-display text-sm font-semibold text-cream">{sub.knowTitle}</span>
-          <span className="text-center text-xs font-medium text-cream/45">{sub.colFree}</span>
-          <span className="text-center text-xs font-semibold text-amber">{sub.colPremium}</span>
-        </div>
-        <div className="[&>*+*]:border-t [&>*+*]:border-white/[0.05]">
-          {sub.features.map((f) => (
-            <div key={f.label} className="grid grid-cols-[1.6fr_0.6fr_0.7fr] items-center px-3.5 py-2.5">
-              <span className="flex items-center gap-2.5 text-sm text-cream/85">
-                <Icon name={f.icon} className="h-4 w-4 text-cream/45" /> {f.label}
-              </span>
-              <span className="flex justify-center">
-                {f.free === "check" ? <TealCheck /> : f.free === "ltd" ? (
-                  <span className="rounded bg-amber/15 px-1.5 py-0.5 text-[10px] font-semibold text-amber">{sub.ltd}</span>
-                ) : (
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4 text-cream/25"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
-                )}
-              </span>
-              <span className="flex justify-center"><TealCheck /></span>
-            </div>
-          ))}
-        </div>
-      </div>
+      <div className="mt-4"><ComparativoPlanos /></div>
 
       {/* Lembrar antes do teste terminar — linha compacta, desativada por padrão */}
       <div className="mt-3 flex items-center gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-2.5 ring-1 ring-white/[0.06]">
