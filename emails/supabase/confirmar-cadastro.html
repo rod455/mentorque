@@ -1,0 +1,64 @@
+<!-- Supabase → Authentication → Emails → "Confirm signup"
+     Assunto: Confirme seu e-mail no Mentorque
+
+     As variáveis entre {{ }} são preenchidas pelo Supabase. NÃO renomeie.
+     O endereço das imagens é absoluto de propósito: o e-mail é aberto fora do
+     site, e caminho relativo não resolve em lugar nenhum. -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4f2ec;padding:24px 12px;margin:0">
+  <tr><td align="center">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;background:#ffffff;border-radius:16px;overflow:hidden">
+
+      <tr><td align="center" style="background:#16181D;padding:24px 24px 0 24px">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td style="padding-right:9px"><img src="https://www.mentorque.com.br/email/marca.png" width="28" height="28" alt="" style="display:block;border:0"></td>
+          <td style="font:700 18px/1 -apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:#f4f2ec">Mentorque</td>
+        </tr></table>
+        <img src="https://www.mentorque.com.br/email/biela.png" width="88" alt="" style="display:block;border:0;margin:12px auto 0 auto">
+      </td></tr>
+      <tr><td align="center" style="background:#16181D;padding:2px 24px 24px 24px">
+        <div style="font:700 21px/1.3 Georgia,'Times New Roman',serif;color:#f4f2ec">Confirme seu e-mail</div>
+      </td></tr>
+
+      <tr><td style="padding:26px 28px 0 28px">
+        <p style="margin:0 0 18px 0;font:400 15px/1.65 -apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:#2b2f36">
+          Sua conta no Mentorque está quase pronta. Toque no botão abaixo para confirmar
+          que este e-mail é seu — depois disso, sua garagem sincroniza entre os aparelhos.
+        </p>
+      </td></tr>
+
+      <tr><td align="center" style="padding:0 28px 4px 28px">
+        <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#F2A623;color:#16181D;font:700 15px/1 -apple-system,'Segoe UI',Roboto,Arial,sans-serif;text-decoration:none;padding:15px 36px;border-radius:999px">Confirmar meu e-mail</a>
+      </td></tr>
+
+      <!-- Alguns clientes de e-mail removem o botão. O endereço em texto é o
+           plano B, e não custa nada deixá-lo aqui. -->
+      <tr><td style="padding:20px 28px 0 28px">
+        <p style="margin:0 0 6px 0;font:400 12px/1.5 -apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:#6b7078">
+          Se o botão não funcionar, copie e cole este endereço no navegador:
+        </p>
+        <p style="margin:0;font:400 12px/1.5 -apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:#6b7078;word-break:break-all">
+          {{ .ConfirmationURL }}
+        </p>
+      </td></tr>
+
+      <tr><td style="padding:20px 28px 28px 28px">
+        <p style="margin:0;font:400 13px/1.6 -apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:#6b7078">
+          Não foi você que criou esta conta? Pode ignorar esta mensagem — sem a confirmação,
+          nada é ativado.
+        </p>
+        <p style="margin:10px 0 0 0;font:400 12px/1.6 -apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:#8b9098">
+          Didn't create this account? You can ignore this email — nothing is activated without confirmation.
+        </p>
+      </td></tr>
+    </table>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px">
+      <tr><td align="center" style="padding:18px 24px 6px 24px">
+        <p style="margin:0;font:400 12px/1.6 -apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:#6b7078">
+          Mentorque © 2026 · <a href="https://www.mentorque.com.br/privacidade" style="color:#6b7078">Privacidade</a> ·
+          <a href="https://www.mentorque.com.br/termos" style="color:#6b7078">Termos</a>
+        </p>
+      </td></tr>
+    </table>
+  </td></tr>
+</table>
