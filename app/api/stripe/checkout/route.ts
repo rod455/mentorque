@@ -74,12 +74,21 @@ export async function POST(req: Request) {
     // cancelando a assinatura de quem achava que estava tudo certo. Explícito,
     // ninguém troca sem perceber o que está trocando.
     payment_method_collection: "always",
-    // Códigos promocionais valem nos DOIS planos. Ficavam só no mensal, o que
-    // impedia liberar o anual para alguém específico com um cupom de 100% —
-    // que é justamente o caso de convidado, parceiro ou teste de imprensa.
+    // Campo de código promocional SÓ no mensal.
+    //
+    // Não é preferência: é a única forma de limitar um cupom a um plano. O
+    // Stripe restringe cupom por produto, e mensal e anual são dois preços do
+    // MESMO produto (prod_Uzk5rOdtM3Q1ge) — então lá não dá para separar.
+    // Deixar o campo no anual significa aceitar que qualquer código de 100%
+    // valha R$ 239,90 em vez de R$ 29,90.
+    //
     // Ofertas de saída entram por `discounts`, e o Stripe não deixa combinar os
     // dois: ou o cupom já aplicado, ou o campo para digitar um.
-    ...(exitCoupon ? { discounts: [{ coupon: exitCoupon }] } : { allow_promotion_codes: true }),
+    ...(exitCoupon
+      ? { discounts: [{ coupon: exitCoupon }] }
+      : plan === "monthly"
+        ? { allow_promotion_codes: true }
+        : {}),
     locale: "pt-BR",
     return_url: `${origin}/app?checkout=success`,
   });
