@@ -66,9 +66,20 @@ export async function POST(req: Request) {
       metadata: { user_id: user.id },
       ...(trialDays > 0 ? { trial_period_days: trialDays } : {}),
     },
-    // Códigos promocionais (ex.: 100OFF) só valem no plano mensal — no anual o
-    // campo nem aparece. Ofertas de saída entram via `discounts` (exclusivo).
-    ...(exitCoupon ? { discounts: [{ coupon: exitCoupon }] } : plan === "monthly" ? { allow_promotion_codes: true } : {}),
+    // Cartão SEMPRE exigido, mesmo quando a primeira fatura sai zerada.
+    //
+    // É o padrão do Stripe hoje, e está escrito aqui de propósito: com um cupom
+    // de 100% ou um teste grátis, `if_required` deixaria a pessoa assinar sem
+    // meio de pagamento — e quando o desconto acabasse a cobrança falharia,
+    // cancelando a assinatura de quem achava que estava tudo certo. Explícito,
+    // ninguém troca sem perceber o que está trocando.
+    payment_method_collection: "always",
+    // Códigos promocionais valem nos DOIS planos. Ficavam só no mensal, o que
+    // impedia liberar o anual para alguém específico com um cupom de 100% —
+    // que é justamente o caso de convidado, parceiro ou teste de imprensa.
+    // Ofertas de saída entram por `discounts`, e o Stripe não deixa combinar os
+    // dois: ou o cupom já aplicado, ou o campo para digitar um.
+    ...(exitCoupon ? { discounts: [{ coupon: exitCoupon }] } : { allow_promotion_codes: true }),
     locale: "pt-BR",
     return_url: `${origin}/app?checkout=success`,
   });
