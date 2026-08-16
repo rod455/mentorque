@@ -845,7 +845,7 @@ export function getContent(locale: Locale) {
       T("Nos carros modernos ela é comandada eletronicamente pela central, que ajusta a pressão em tempo real conforme rotação, temperatura, altitude e qualidade do combustível.", "On modern cars it's electronically controlled by the ECU, which trims boost in real time based on rpm, temperature, altitude and fuel quality."),
       T("E existe uma segunda rede de proteção: se a central detecta pressão acima do previsto ou sinal de detonação, ela corta — o famoso \"corte por sobrepressão\". Por isso mexer só na pressão, sem acompanhar o resto, costuma terminar em motor aberto.", "And there's a second safety net: if the ECU sees more boost than expected or detects knock, it cuts — the classic overboost cut. Which is why raising boost alone, without the rest, usually ends with the engine apart."),
     ]}),
-    art({ id: "vid-nitro", track: "sports", type: "video", system: "engine", addedAt: "2026-08-08",
+    art({ id: "vid-nitro", track: "sports", type: "video", system: "engine", addedAt: "2026-08-08", thumb: "/learn/vid-nitro.png",
       media: { provider: "youtube", src: "21Mmi4ZGzPg", vertical: true },
       title: T("Como funciona o nitro (NOS) de verdade", "How nitrous (NOS) actually works"), body: [
       T("Ao contrário do que o cinema sugere, o nitro não é um combustível. É óxido nitroso (N₂O), um gás que serve para levar MAIS OXIGÊNIO para dentro do motor.", "Unlike what the movies suggest, nitrous isn't a fuel. It's nitrous oxide (N₂O), a gas used to carry MORE OXYGEN into the engine."),
@@ -905,7 +905,7 @@ export function getContent(locale: Locale) {
       T("Na prática o que muda para o seu bolso é a régua de comparação. Aquela regra dos 70% entre etanol e gasolina se desloca um pouco quando a mistura muda, então não decida de cabeça.", "In practice what changes for your wallet is the yardstick. That 70% rule between ethanol and gasoline shifts a little when the blend changes, so don't decide from memory."),
       T("Use a calculadora de Etanol × Gasolina aqui do app: ela compara com o consumo REAL do seu carro, que é o único número que importa para a sua decisão no posto.", "Use the Ethanol × Gasoline calculator here in the app: it compares using your car's REAL consumption, the only number that matters for your decision at the pump."),
     ]}),
-    art({ id: "vid-harley-som", track: "culture", type: "video", system: "engine", addedAt: "2026-08-10",
+    art({ id: "vid-harley-som", track: "culture", type: "video", system: "engine", addedAt: "2026-08-10", thumb: "/learn/vid-harley-som.png",
       media: { provider: "youtube", src: "sz1L3xrGUtE", vertical: true },
       title: T("Por que a Harley tem aquele ronco inconfundível", "Why a Harley has that unmistakable rumble"), body: [
       T("Aquele som irregular, meio 'engasgado', não é ajuste nem escapamento: é geometria de motor. A Harley usa um V-twin de 45 graus, e é esse ângulo que assina o ruído.", "That irregular, almost stuttering sound isn't tuning or exhaust: it's engine geometry. Harley uses a 45-degree V-twin, and that angle signs the noise."),
@@ -913,7 +913,7 @@ export function getContent(locale: Locale) {
       T("Esse espaçamento desigual é o que o ouvido reconhece. Um motor com explosões regulares soa contínuo; um com intervalo irregular soa pulsado — daí o apelido de 'potato-potato'.", "That uneven spacing is what the ear recognises. An engine with evenly spaced firing sounds continuous; one with irregular gaps sounds pulsed — hence the 'potato-potato' nickname."),
       T("Vale a curiosidade: o mesmo princípio explica por que um V8 americano soa diferente de um V8 de Fórmula 1. Não é o número de cilindros que define o som, é a ORDEM e o espaçamento das explosões.", "Worth knowing: the same principle explains why an American V8 sounds different from a Formula 1 V8. It isn't the cylinder count that defines the sound, it's the ORDER and spacing of the firing events."),
     ]}),
-    art({ id: "vid-luz-injecao-acendeu", track: "fundamentals", type: "video", system: "electrical", addedAt: "2026-08-10",
+    art({ id: "vid-luz-injecao-acendeu", track: "fundamentals", type: "video", system: "electrical", addedAt: "2026-08-10", thumb: "/learn/vid-luz-injecao-acendeu.png",
       media: { provider: "youtube", src: "0DPAPZNXE9s", vertical: true },
       title: T("A luz de injeção acendeu: o que fazer agora", "The check-engine light came on: what to do now"), body: [
       T("Primeiro, respire: luz de injeção acesa não significa parar no acostamento. Ela avisa que a central detectou algo fora do esperado em alguma leitura do motor — pode ser grave ou pode ser uma tampa de tanque mal fechada.", "First, breathe: a check-engine light doesn't mean pull over immediately. It says the ECU spotted something outside the expected range in an engine reading — that can be serious, or it can be a loose fuel cap."),
@@ -921,7 +921,7 @@ export function getContent(locale: Locale) {
       T("Observe o carro enquanto dirige: perdeu força, engasga, aumentou o consumo, cheiro estranho? Esses sinais somados à luz mudam a urgência. Sem nenhum deles, é quase sempre sensor ou emissão.", "Watch the car as you drive: any power loss, hesitation, higher consumption, odd smell? Those signs alongside the light change the urgency. With none of them, it's almost always a sensor or emissions issue."),
       T("O caminho barato é ler o código antes de autorizar serviço. Um leitor OBD2 diz qual sistema reclamou, e você entra na oficina sabendo do que se trata — o app tem uma aula só sobre isso.", "The cheap route is reading the code before authorising any work. An OBD2 reader tells you which system complained, and you walk into the shop knowing what it's about — the app has a whole lesson on that."),
     ]}),
-    art({ id: "vid-ar-cardan", track: "culture", type: "video", system: "engine", addedAt: "2026-08-10",
+    art({ id: "vid-ar-cardan", track: "culture", type: "video", system: "engine", addedAt: "2026-08-10", thumb: "/learn/vid-ar-cardan.png",
       media: { provider: "youtube", src: "q7chR7gDo8Y", vertical: true },
       title: T("O ar-condicionado funcionaria ligado no eixo cardã?", "Could the A/C run off the driveshaft?"), body: [
       T("A pergunta parece boba, mas ela ensina algo real sobre como o carro distribui trabalho. O compressor do ar-condicionado é acionado pela correia, que gira junto com o motor.", "The question sounds silly, but it teaches something real about how a car splits up work. The A/C compressor is driven by the belt, which spins with the engine."),
@@ -929,7 +929,7 @@ export function getContent(locale: Locale) {
       T("É justamente por isso que tudo que precisa funcionar com o carro parado — ar-condicionado, alternador, direção hidráulica, bomba d'água — vem da correia do motor, e não da transmissão.", "That's exactly why everything that must work while stationary — A/C, alternator, power steering, water pump — comes off the engine belt and not the transmission."),
       T("A exceção moderna são os elétricos e híbridos: neles o compressor tem motor próprio, alimentado pela bateria. Por isso um híbrido consegue manter o ar gelado com o motor a combustão desligado.", "The modern exception are EVs and hybrids: there the compressor has its own electric motor, fed by the battery. That's how a hybrid keeps the cabin cold with the combustion engine switched off."),
     ]}),
-    art({ id: "vid-chevette-cg150", track: "culture", type: "video", system: "engine", addedAt: "2026-08-10",
+    art({ id: "vid-chevette-cg150", track: "culture", type: "video", system: "engine", addedAt: "2026-08-10", thumb: "/learn/vid-chevette-cg150.png",
       media: { provider: "youtube", src: "jDGKfvVzT2A", vertical: true },
       title: T("Chevette com motor de CG 150: por que não anda", "A Chevette with a CG 150 engine: why it won't move"), body: [
       T("A brincadeira de colocar um motor de moto de 150 cilindradas num carro de mais de 800 kg serve para explicar uma coisa só: potência sem TORQUE não move massa.", "The joke of dropping a 150cc motorcycle engine into a car weighing over 800 kg exists to explain one thing: power without TORQUE doesn't move mass."),
@@ -937,7 +937,7 @@ export function getContent(locale: Locale) {
       T("Na teoria, com relação de marchas suficientemente curta, ele andaria: caixa de câmbio multiplica torque. O problema é que cada redução multiplica também o tempo — o carro sairia, mas em velocidade de caminhada.", "In theory, with short enough gearing, it would move: a gearbox multiplies torque. The problem is that every reduction also multiplies time — the car would go, but at walking pace."),
       T("A lição que fica vale para escolher carro de verdade: motor pequeno em carro pesado não é só 'mais lento', é um motor obrigado a trabalhar sempre em rotação alta, o que consome mais e desgasta antes.", "The lesson applies to buying a real car: a small engine in a heavy car isn't just 'slower' — it's an engine forced to live at high rpm, which burns more fuel and wears out sooner."),
     ]}),
-    art({ id: "vid-roda-grande-1000", track: "diy", type: "video", system: "tires", addedAt: "2026-08-10",
+    art({ id: "vid-roda-grande-1000", track: "diy", type: "video", system: "tires", addedAt: "2026-08-10", thumb: "/learn/vid-roda-grande-1000.png",
       media: { provider: "youtube", src: "TM9r6kvgkrM", vertical: true },
       title: T("Roda grande num 1.0: o que você perde", "Big wheels on a 1.0: what you give up"), body: [
       T("Roda maior fica bonita e piora quase tudo o que você sente ao dirigir. Não é implicância: são três efeitos físicos que aparecem juntos.", "Bigger wheels look good and make almost everything you feel while driving worse. It's not snobbery: three physical effects show up together."),
@@ -945,7 +945,7 @@ export function getContent(locale: Locale) {
       T("Segundo, o PERFIL do pneu diminui para caber no aro maior. Menos borracha entre o aro e o asfalto significa menos amortecimento: buracos chegam inteiros na suspensão e no seu corpo, e o risco de empenar a roda sobe.", "Second, the tire PROFILE shrinks to fit the bigger rim. Less rubber between rim and road means less cushioning: potholes reach the suspension and your body intact, and the risk of bending a wheel goes up."),
       T("Terceiro, o diâmetro total muda e o velocímetro passa a mentir. Se for fazer mesmo assim, procure a combinação que mantém o diâmetro externo próximo do original — é o que preserva a leitura e o comportamento do carro.", "Third, overall diameter changes and the speedometer starts lying. If you're doing it anyway, find the combination that keeps the outer diameter near stock — that's what preserves both the reading and the car's behaviour."),
     ]}),
-    art({ id: "vid-cilindrada", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-08-10",
+    art({ id: "vid-cilindrada", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-08-10", thumb: "/learn/vid-cilindrada.png",
       media: { provider: "youtube", src: "KTTRj-YhqiM", vertical: true },
       title: T("O que significa um carro ser 1.0, 1.6 ou 2.0", "What it means for a car to be 1.0, 1.6 or 2.0"), body: [
       T("Esse número é a CILINDRADA: o volume total que os pistões deslocam somando todos os cilindros, medido em litros. Um 1.0 desloca aproximadamente um litro de ar por ciclo completo.", "That number is DISPLACEMENT: the total volume the pistons sweep across all cylinders, measured in litres. A 1.0 displaces roughly one litre of air per complete cycle."),
@@ -953,7 +953,7 @@ export function getContent(locale: Locale) {
       T("O turbo quebrou essa regra. Ele empurra ar comprimido para dentro, então um 1.0 turbo pode receber mais ar que um 1.6 aspirado. É por isso que hoje existe 1.0 com mais de 120 cv, coisa impensável há vinte anos.", "The turbo broke that rule. It forces compressed air in, so a 1.0 turbo can take in more air than a naturally aspirated 1.6. That's why 1.0 engines making over 120 hp exist today, unthinkable twenty years ago."),
       T("No Brasil o número também mexe no bolso por outro motivo: a faixa de IPVA e a categoria de seguro costumam seguir a cilindrada, não a potência real. Dois carros de força parecida podem ter custo anual bem diferente.", "In Brazil the number also hits your wallet for another reason: vehicle tax brackets and insurance categories usually follow displacement, not actual power. Two cars with similar output can cost quite differently per year."),
     ]}),
-    art({ id: "vid-avanco-ignicao", track: "sports", type: "video", system: "engine", addedAt: "2026-08-10",
+    art({ id: "vid-avanco-ignicao", track: "sports", type: "video", system: "engine", addedAt: "2026-08-10", thumb: "/learn/vid-avanco-ignicao.png",
       media: { provider: "youtube", src: "9dnCVHCqFmc", vertical: true },
       title: T("Avanço de ignição: por que a vela dispara antes da hora", "Ignition timing: why the spark fires early"), body: [
       T("A vela não solta faísca quando o pistão chega no topo. Ela solta ANTES — e esse adiantamento tem nome: avanço de ignição.", "The spark plug doesn't fire when the piston reaches the top. It fires BEFORE — and that head start has a name: ignition advance."),
@@ -961,7 +961,7 @@ export function getContent(locale: Locale) {
       T("Quanto mais rápido o motor gira, menos tempo o pistão dá para a chama — então o avanço precisa AUMENTAR com a rotação. A central faz isso continuamente, dezenas de vezes por segundo.", "The faster the engine spins, the less time the piston gives the flame — so advance has to INCREASE with rpm. The ECU does this continuously, dozens of times per second."),
       T("Avanço demais é perigoso: a pressão sobe cedo e o motor detona, aquele barulho de batida de pino que quebra pistão. É por isso que a central recua o avanço sozinha quando o sensor de detonação escuta o problema, ou quando o combustível é de octanagem baixa.", "Too much advance is dangerous: pressure peaks early and the engine knocks, that pinging noise that breaks pistons. That's why the ECU pulls timing back on its own when the knock sensor hears trouble, or when fuel octane is low."),
     ]}),
-    art({ id: "vid-sedan", track: "culture", type: "video", addedAt: "2026-08-10",
+    art({ id: "vid-sedan", track: "culture", type: "video", addedAt: "2026-08-10", thumb: "/learn/vid-sedan.png",
       media: { provider: "youtube", src: "0z3VOWxlAEA", vertical: true },
       title: T("Por que o porta-malas separado ainda faz sentido", "Why a separate trunk still makes sense"), body: [
       T("Sedan não é só 'hatch com bunda'. A separação entre cabine e porta-malas muda três coisas concretas: ruído, rigidez e segurança da carga.", "A sedan isn't just 'a hatch with a rear end'. Separating cabin from trunk changes three concrete things: noise, rigidity and cargo security."),
@@ -969,7 +969,7 @@ export function getContent(locale: Locale) {
       T("A RIGIDEZ vem de graça com essa parede: ela funciona como um reforço estrutural atrás dos bancos. Por isso, comparando o mesmo modelo nas duas carrocerias, a versão sedan costuma ser mais firme.", "RIGIDITY comes free with that wall: it acts as structural bracing behind the seats. That's why, comparing the same model in both body styles, the sedan version tends to feel more solid."),
       T("O custo é a flexibilidade. Hatch engole objeto alto, sedan não. A escolha honesta é sobre uso: quem carrega volume ganha com o hatch, quem roda estrada e valoriza silêncio ganha com o sedan.", "The cost is flexibility. A hatch swallows tall objects, a sedan doesn't. The honest choice is about use: haulers gain with the hatch, highway drivers who value quiet gain with the sedan."),
     ]}),
-    art({ id: "vid-balanceamento-motor", track: "sports", type: "video", system: "engine", addedAt: "2026-08-10",
+    art({ id: "vid-balanceamento-motor", track: "sports", type: "video", system: "engine", addedAt: "2026-08-10", thumb: "/learn/vid-balanceamento-motor.png",
       media: { provider: "youtube", src: "7SBlL3xgQV0", vertical: true },
       title: T("Balanceamento de motor: por que uns tremem e outros não", "Engine balance: why some shake and others don't"), body: [
       T("Todo motor tem partes subindo e descendo milhares de vezes por minuto. Se essas massas não se cancelam, sobra vibração — e vibração vira barulho, desgaste e coxim quebrado.", "Every engine has parts moving up and down thousands of times a minute. If those masses don't cancel each other out, vibration is left over — and vibration becomes noise, wear and broken mounts."),
@@ -977,7 +977,7 @@ export function getContent(locale: Locale) {
       T("Motores de 3 e 4 cilindros não têm essa sorte. Sobram forças que o virabrequim sozinho não equilibra, e a solução é mecânica: EIXOS BALANCEADORES, que giram no sentido contrário criando uma vibração oposta que cancela a original.", "Three- and four-cylinder engines aren't so lucky. Forces are left over that the crankshaft alone can't balance, so the fix is mechanical: BALANCE SHAFTS that spin the opposite way, creating an opposing vibration that cancels the original."),
       T("Vale saber disso na hora de comparar carros: parte do que se sente como 'refinamento' num motor não é potência nem tecnologia de injeção, é geometria decidida no projeto e impossível de corrigir depois.", "Worth knowing when comparing cars: part of what feels like 'refinement' in an engine isn't power or injection tech, it's geometry decided at the design stage and impossible to fix later."),
     ]}),
-    art({ id: "vid-flutter", track: "sports", type: "video", system: "engine", traits: ["turbo"], addedAt: "2026-08-10",
+    art({ id: "vid-flutter", track: "sports", type: "video", system: "engine", traits: ["turbo"], addedAt: "2026-08-10", thumb: "/learn/vid-flutter.png",
       media: { provider: "youtube", src: "eHcAs6_PBUk", vertical: true },
       title: T("Aquele barulho de 'pomba' no turbo é defeito", "That turbo 'fluttering' noise is a fault"), body: [
       T("O som de esvoaçar quando você tira o pé, que muita gente persegue como se fosse sinal de carro preparado, tem nome técnico: compressor surge. E ele não é enfeite, é o compressor apanhando.", "The fluttering sound when you lift off, which many people chase as if it proved a modified car, has a technical name: compressor surge. It isn't decoration, it's the compressor taking a beating."),
@@ -985,7 +985,7 @@ export function getContent(locale: Locale) {
       T("A peça que existe justamente para evitar isso é a válvula de alívio. Ela abre no instante em que você solta o acelerador e desvia esse ar, protegendo o eixo e os mancais do turbo do impacto.", "The part that exists to prevent exactly this is the blow-off or recirculation valve. It opens the instant you lift, diverting that air and shielding the turbo shaft and bearings from the hit."),
       T("Por isso carro de fábrica com turbo não faz esse barulho. Quando ele aparece, quase sempre é válvula com defeito, mangueira solta ou alguém que a removeu de propósito atrás do som — trocando durabilidade do turbo por efeito sonoro.", "That's why a factory turbo car doesn't make that noise. When it shows up it's almost always a faulty valve, a loose hose, or someone who removed it on purpose chasing the sound — trading turbo life for an audio effect."),
     ]}),
-    art({ id: "vid-e32", track: "money", type: "video", system: "engine", addedAt: "2026-08-10",
+    art({ id: "vid-e32", track: "money", type: "video", system: "engine", addedAt: "2026-08-10", thumb: "/learn/vid-e32.png",
       media: { provider: "youtube", src: "HuL8rav6www", vertical: true },
       title: T("Gasolina E32: mais etanol na mistura, o que muda", "E32 gasoline: more ethanol in the blend, what changes"), body: [
       T("A gasolina comum brasileira nunca foi pura — ela carrega etanol anidro misturado por lei. Essa fatia subiu de novo, e cada aumento mexe no rendimento por litro.", "Brazilian regular gasoline was never pure — it carries anhydrous ethanol blended in by law. That share went up again, and every increase moves the yield per litre."),
@@ -993,7 +993,7 @@ export function getContent(locale: Locale) {
       T("Em compensação, mais etanol eleva a octanagem da mistura, o que dá à central mais margem de avanço de ignição antes da detonação. Em motor turbo moderno isso pode até compensar parte da perda.", "In exchange, more ethanol raises the blend's octane, giving the ECU more ignition advance margin before knock. On a modern turbo engine that can even offset part of the loss."),
       T("Para a sua decisão no posto, o efeito prático é um só: a régua de comparação entre etanol e gasolina se desloca. Aquela regra dos 70% deixa de valer redondinha, então use a calculadora do app com o consumo real do seu carro.", "For your decision at the pump the practical effect is one: the yardstick between ethanol and gasoline shifts. That neat 70% rule stops holding exactly, so use the app's calculator with your car's real consumption."),
     ]}),
-    art({ id: "vid-altitude", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-08-10",
+    art({ id: "vid-altitude", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-08-10", thumb: "/learn/vid-altitude.png",
       media: { provider: "youtube", src: "KJbVwaXALZU", vertical: true },
       title: T("Por que o carro perde força na serra", "Why a car loses power up in the mountains"), body: [
       T("Subiu para uma cidade alta e o carro pareceu mais fraco? Não é impressão nem falta de manutenção. É menos ar disponível.", "Drove up to a high-altitude town and the car felt weaker? It isn't your imagination or poor maintenance. There's simply less air available."),
@@ -1001,7 +1001,7 @@ export function getContent(locale: Locale) {
       T("A regra prática usada por engenheiros é de aproximadamente 1% de perda a cada 100 metros de altitude num motor aspirado. A 1.000 metros já são cerca de 10% — perceptível numa subida com o carro cheio.", "The rule of thumb engineers use is roughly 1% loss per 100 metres of altitude on a naturally aspirated engine. At 1,000 metres that's about 10% — noticeable on a climb with a full car."),
       T("Motor turbo sofre bem menos, e esse é um dos seus méritos menos comentados: o compressor simplesmente trabalha um pouco mais para entregar a mesma pressão no coletor. Por isso carro turbo praticamente não muda de comportamento entre o litoral e a serra.", "A turbo engine suffers far less, and that's one of its least-discussed merits: the compressor simply works a bit harder to deliver the same manifold pressure. That's why a turbo car barely changes behaviour between sea level and the mountains."),
     ]}),
-    art({ id: "vid-fastback-hibrido-partida", track: "model", type: "video", system: "engine", make: "Fiat", model: "Fastback", addedAt: "2026-08-10",
+    art({ id: "vid-fastback-hibrido-partida", track: "model", type: "video", system: "engine", make: "Fiat", model: "Fastback", addedAt: "2026-08-10", thumb: "/learn/vid-fastback-hibrido-partida.png",
       media: { provider: "youtube", src: "mwdjn2Hry6A", vertical: true },
       title: T("Fiat Fastback híbrido: como funciona a partida", "Fiat Fastback hybrid: how starting works"), body: [
       T("No Fastback híbrido a partida não acontece como num carro comum. Não existe o motor de arranque tradicional girando o volante com aquele ruído característico.", "On the hybrid Fastback, starting doesn't happen like on an ordinary car. There's no traditional starter motor cranking the flywheel with that familiar noise."),
@@ -1009,7 +1009,7 @@ export function getContent(locale: Locale) {
       T("Essa mesma peça é o que permite o start-stop funcionar sem incomodar. Como a religada é feita por correia e não por engrenagem, ela é rápida e suave o bastante para acontecer dezenas de vezes no trânsito sem chamar atenção.", "That same part is what lets stop-start work without annoying you. Because restarts happen through the belt rather than a gear, they're quick and smooth enough to occur dozens of times in traffic unnoticed."),
       T("O cuidado prático é com a bateria: sistemas assim usam bateria específica, de 12V reforçada ou de lítio auxiliar, e trocar por uma comum compromete o start-stop e pode acender luz no painel. Na hora da troca, confirme a especificação no manual.", "The practical caution is the battery: systems like this use a specific one — a reinforced 12V or an auxiliary lithium pack — and fitting an ordinary one compromises stop-start and can trigger dash warnings. When replacing, confirm the spec in the manual."),
     ]}),
-    art({ id: "vid-velozes-furiosos", track: "culture", type: "video", system: "engine", addedAt: "2026-08-10",
+    art({ id: "vid-velozes-furiosos", track: "culture", type: "video", system: "engine", addedAt: "2026-08-10", thumb: "/learn/vid-velozes-furiosos.png",
       media: { provider: "youtube", src: "yMY4cUfHWws", vertical: true },
       title: T("O que Velozes e Furiosos errou sobre carros", "What Fast & Furious got wrong about cars"), body: [
       T("O filme popularizou a cultura automotiva como nenhum outro, e por isso vale separar o que é licença poética do que as pessoas passaram a repetir como verdade.", "The films popularised car culture like nothing else, which is why it's worth separating artistic licence from what people started repeating as fact."),
@@ -1017,7 +1017,7 @@ export function getContent(locale: Locale) {
       T("A famosa 'décima marcha' também não existe. Mais marchas não geram velocidade: velocidade final vem de potência contra arrasto aerodinâmico. Uma marcha longa demais só faz o motor não ter força para puxar.", "The famous 'tenth gear' doesn't exist either. More gears don't create speed: top speed comes from power against aerodynamic drag. A gear that's too tall just leaves the engine without the force to pull."),
       T("O que o filme acertou, e isso tem valor real, é o vínculo entre pessoa e máquina — e a ideia de que entender o próprio carro é parte do prazer de dirigir. Essa parte pode levar a sério.", "What the films got right, and this has real value, is the bond between person and machine — and the idea that understanding your own car is part of the joy of driving. That part you can take seriously."),
     ]}),
-    art({ id: "vid-tsi", track: "fundamentals", type: "video", system: "engine", traits: ["turbo"], addedAt: "2026-08-10",
+    art({ id: "vid-tsi", track: "fundamentals", type: "video", system: "engine", traits: ["turbo"], addedAt: "2026-08-10", thumb: "/learn/vid-tsi.png",
       media: { provider: "youtube", src: "WncKe4SK5QQ", vertical: true },
       title: T("O que quer dizer TSI, TFSI e essas siglas", "What TSI, TFSI and those badges mean"), body: [
       T("Sigla em tampa de motor não é enfeite: cada letra descreve uma tecnologia. TSI, do grupo Volkswagen, junta injeção direta com sobrealimentação.", "The badge on an engine cover isn't decoration: each letter describes a technology. TSI, from the Volkswagen group, combines direct injection with forced induction."),
@@ -1025,7 +1025,7 @@ export function getContent(locale: Locale) {
       T("O 'T' é o turbo, que resolve o outro lado: entrega torque cedo, em rotação baixa, que é onde o motorista comum vive. Por isso um 1.0 TSI puxa como um aspirado bem maior no dia a dia.", "The 'T' is the turbo, solving the other half: it delivers torque early, at low rpm, which is where everyday drivers live. That's why a 1.0 TSI pulls like a much larger naturally aspirated engine in daily use."),
       T("O ponto de atenção da injeção direta é que ela deixa de 'lavar' as válvulas de admissão com combustível, então carvão se acumula nelas com o tempo. Combustível de qualidade e troca de óleo em dia são o que atrasa esse acúmulo.", "The catch with direct injection is that it no longer 'washes' the intake valves with fuel, so carbon builds up there over time. Quality fuel and on-time oil changes are what slow that build-up down."),
     ]}),
-    art({ id: "vid-diesel-disparando", track: "fundamentals", type: "video", system: "engine", traits: ["diesel"], addedAt: "2026-08-10",
+    art({ id: "vid-diesel-disparando", track: "fundamentals", type: "video", system: "engine", traits: ["diesel"], addedAt: "2026-08-10", thumb: "/learn/vid-diesel-disparando.png",
       media: { provider: "youtube", src: "XHVtcOAxVes", vertical: true },
       title: T("Motor diesel disparado: por que a chave não desliga", "Diesel runaway: why the key won't shut it off"), body: [
       T("Existe uma falha em motor diesel que assusta quem vê: o motor acelera sozinho, sobe de rotação e não obedece à chave. Chama-se disparo, e entender o mecanismo explica por que a chave é inútil ali.", "There's a diesel failure that terrifies anyone who witnesses it: the engine revs up on its own, climbs, and ignores the key. It's called runaway, and understanding the mechanism explains why the key is useless."),
@@ -1033,7 +1033,7 @@ export function getContent(locale: Locale) {
       T("Essa outra fonte costuma ser o próprio óleo do motor, aspirado pelo coletor por causa de turbo com retentor gasto ou excesso de óleo no cárter. O motor passa a se alimentar de si mesmo, e cada aumento de rotação puxa mais óleo — é um ciclo que se realimenta.", "That other source is usually the engine's own oil, drawn in through the intake because of worn turbo seals or an overfilled sump. The engine starts feeding on itself, and every rpm increase pulls in more oil — a self-reinforcing loop."),
       T("A única forma de parar é cortar o AR: bloquear a admissão. Por isso motores diesel de aplicação industrial têm uma válvula de emergência exatamente para isso. Deixado solto, o motor gira até se destruir.", "The only way to stop it is cutting the AIR: block the intake. That's why industrial diesel engines have an emergency shut-off valve for exactly this. Left alone, the engine spins until it destroys itself."),
     ]}),
-    art({ id: "vid-comprar-usado", track: "money", type: "video", addedAt: "2026-08-10",
+    art({ id: "vid-comprar-usado", track: "money", type: "video", addedAt: "2026-08-10", thumb: "/learn/vid-comprar-usado.png",
       media: { provider: "youtube", src: "_IQQoa3ksZ4", vertical: true },
       title: T("Comprar carro usado: o que olhar antes do preço", "Buying used: what to check before the price"), body: [
       T("Quem começa pelo preço acaba pagando duas vezes. A ordem que economiza dinheiro é: histórico, estrutura, mecânica — e só então negociação.", "Starting with the price means paying twice. The money-saving order is: history, structure, mechanicals — and only then negotiation."),
@@ -1041,7 +1041,7 @@ export function getContent(locale: Locale) {
       T("ESTRUTURA se vê com o carro limpo e à luz do dia: alinhamento das frestas entre portas e capô, diferença de tom na pintura, parafusos de para-lama com marca de chave. Retoque não é problema; retoque escondendo batida estrutural é.", "STRUCTURE shows with the car clean and in daylight: panel gaps around doors and hood, paint tone differences, fender bolts with wrench marks. Touch-up isn't a problem; touch-up hiding structural damage is."),
       T("Por último, uma inspeção paga por um profissional de sua confiança — não do vendedor. Ela custa uma fração do primeiro reparo que você evitaria, e é o único momento em que alguém olha o carro defendendo o seu interesse.", "Finally, an inspection paid for by a professional you trust — not the seller's. It costs a fraction of the first repair you'd avoid, and it's the only moment someone examines the car defending your interest."),
     ]}),
-    art({ id: "vid-luz-injecao-dica", track: "fundamentals", type: "video", system: "electrical", addedAt: "2026-08-10",
+    art({ id: "vid-luz-injecao-dica", track: "fundamentals", type: "video", system: "electrical", addedAt: "2026-08-10", thumb: "/learn/vid-luz-injecao-dica.png",
       media: { provider: "youtube", src: "nYiPnYVZlSI", vertical: true },
       title: T("Dica rápida: a luz de injeção acendeu sozinha", "Quick tip: the check-engine light came on by itself"), body: [
       T("Antes de marcar oficina, faça a checagem de trinta segundos que resolve uma parte considerável dos casos: a tampa do tanque.", "Before booking a shop, do the thirty-second check that solves a fair share of cases: the fuel cap."),
@@ -1049,7 +1049,7 @@ export function getContent(locale: Locale) {
       T("Aperte a tampa até ouvir os cliques e rode alguns dias. A luz não apaga na hora: a central precisa repetir o teste algumas vezes antes de considerar o problema resolvido.", "Tighten the cap until it clicks and drive for a few days. The light won't clear instantly: the ECU needs to repeat the test several times before considering the fault resolved."),
       T("Se depois disso ela continuar acesa, aí sim vale ler o código. E se em algum momento ela começar a PISCAR, pare de tratar como dica rápida: piscando indica falha de combustão, que estraga o catalisador rapidamente.", "If it's still on after that, then it's worth reading the code. And if it ever starts FLASHING, stop treating it as a quick tip: flashing means a misfire, which ruins the catalytic converter fast."),
     ]}),
-    art({ id: "vid-luz-injecao-como-funciona", track: "fundamentals", type: "video", system: "electrical", addedAt: "2026-08-10",
+    art({ id: "vid-luz-injecao-como-funciona", track: "fundamentals", type: "video", system: "electrical", addedAt: "2026-08-10", thumb: "/learn/vid-luz-injecao-como-funciona.png",
       media: { provider: "youtube", src: "ZQzgYUB8POQ", vertical: true },
       title: T("Como a luz de injeção decide acender", "How the check-engine light decides to come on"), body: [
       T("A luz não tem um sensor próprio. Ela é a saída de um sistema de autodiagnóstico que compara, o tempo todo, o que os sensores medem com o que a central espera para aquela condição.", "The light has no sensor of its own. It's the output of a self-diagnostic system that constantly compares what the sensors measure against what the ECU expects for that condition."),
@@ -1057,7 +1057,7 @@ export function getContent(locale: Locale) {
       T("O 'tempo suficiente' importa: a central não acende a luz na primeira leitura estranha, justamente para não alarmar por uma oscilação. Ela confirma o desvio em ciclos de condução antes de avisar você.", "That 'long enough' matters: the ECU doesn't light the lamp on the first odd reading, precisely to avoid alarming you over a blip. It confirms the deviation across drive cycles before warning you."),
       T("Por isso a luz é um começo de conversa, não um diagnóstico. O código diz qual circuito reclamou — não diz qual peça está com defeito. Trocar peça só pelo código é o caminho mais comum de gastar sem resolver.", "That's why the light is the start of a conversation, not a diagnosis. The code says which circuit complained — not which part is faulty. Replacing parts by code alone is the most common way to spend without fixing."),
     ]}),
-    art({ id: "vid-etanol-gasolina", track: "money", type: "video", system: "engine", addedAt: "2026-08-10",
+    art({ id: "vid-etanol-gasolina", track: "money", type: "video", system: "engine", addedAt: "2026-08-10", thumb: "/learn/vid-etanol-gasolina.png",
       media: { provider: "youtube", src: "sPmfF7DD3n4", vertical: true },
       title: T("Etanol ou gasolina: a conta que decide", "Ethanol or gasoline: the math that decides"), body: [
       T("A regra dos 70% virou senso comum, mas ela é uma média nacional — e a sua decisão no posto não é sobre a média, é sobre o SEU carro.", "The 70% rule became common sense, but it's a national average — and your decision at the pump isn't about the average, it's about YOUR car."),
@@ -1065,7 +1065,7 @@ export function getContent(locale: Locale) {
       T("O problema é que 70% é aproximação. Motores turbo modernos aproveitam melhor a octanagem alta do etanol e chegam perto de 75%. Motores antigos ficam abaixo de 70%. E a mistura de etanol na gasolina, que subiu, desloca tudo mais um pouco.", "The catch is that 70% is an approximation. Modern turbo engines exploit ethanol's high octane better and get closer to 75%. Older engines land below 70%. And the ethanol share blended into gasoline, which has risen, shifts everything a little more."),
       T("O jeito certo é medir: anote o consumo de um tanque cheio de cada, no mesmo tipo de trajeto. Com esses dois números a comparação deixa de ser regra de bolso e passa a ser a conta do seu carro — é o que a calculadora do app faz.", "The right way is to measure: log consumption over a full tank of each, on the same kind of route. With those two numbers the comparison stops being a rule of thumb and becomes your car's own math — which is what the app's calculator does."),
     ]}),
-    art({ id: "vid-turbo-aspirado", track: "sports", type: "video", system: "engine", addedAt: "2026-08-10",
+    art({ id: "vid-turbo-aspirado", track: "sports", type: "video", system: "engine", addedAt: "2026-08-10", thumb: "/learn/vid-turbo-aspirado.png",
       media: { provider: "youtube", src: "laI-4DH6kRY", vertical: true },
       title: T("Turbo ou aspirado: o que muda de verdade", "Turbo or naturally aspirated: what really changes"), body: [
       T("Aspirado enche os cilindros com a pressão do ambiente. Turbo comprime esse ar antes de entrar. Toda diferença de caráter entre os dois nasce dessa única frase.", "A naturally aspirated engine fills its cylinders at ambient pressure. A turbo compresses that air before it goes in. Every difference in character between them comes from that single sentence."),
@@ -1073,7 +1073,7 @@ export function getContent(locale: Locale) {
       T("O aspirado devolve resposta imediata e previsível: pisou, aconteceu, sem o intervalo que o turbo precisa para acumular pressão. É também um motor mecanicamente mais simples, com menos peças submetidas a calor extremo.", "The naturally aspirated engine gives immediate, predictable response: you press, it happens, without the lag a turbo needs to build pressure. It's also mechanically simpler, with fewer parts under extreme heat."),
       T("Na manutenção a diferença é real: turbo trabalha a temperaturas altíssimas e depende de óleo limpo para sobreviver. Não é frágil, mas é menos tolerante a óleo vencido e a desligar o motor logo depois de exigir dele.", "In maintenance the difference is real: a turbo runs at extreme temperatures and depends on clean oil to survive. It isn't fragile, but it's less forgiving of overdue oil and of switching off right after working it hard."),
     ]}),
-    art({ id: "vid-turbo-nitro", track: "sports", type: "video", system: "engine", addedAt: "2026-08-10",
+    art({ id: "vid-turbo-nitro", track: "sports", type: "video", system: "engine", addedAt: "2026-08-10", thumb: "/learn/vid-turbo-nitro.png",
       media: { provider: "youtube", src: "K4OcLtykijI", vertical: true },
       title: T("Turbo ou nitro: dois jeitos de meter mais ar", "Turbo or nitrous: two ways to force more air in"), body: [
       T("Os dois resolvem o mesmo problema — colocar mais oxigênio dentro do cilindro — por caminhos opostos, e essa diferença define quando cada um faz sentido.", "Both solve the same problem — getting more oxygen into the cylinder — by opposite routes, and that difference defines when each makes sense."),
@@ -1081,7 +1081,7 @@ export function getContent(locale: Locale) {
       T("O nitro CARREGA o oxigênio junto, dentro de uma garrafa. Ao se decompor pelo calor, o óxido nitroso libera oxigênio e ainda resfria a admissão. Efeito instantâneo, sem espera — e limitado ao que cabe na garrafa.", "Nitrous CARRIES the oxygen with it, inside a bottle. Decomposing under heat, nitrous oxide releases oxygen and cools the intake as a bonus. Instant effect, no waiting — and limited to what fits in the bottle."),
       T("Daí a divisão prática: turbo é ganho permanente e é o que as montadoras adotam. Nitro é ganho de alguns segundos, usado em arrancada, e exige motor reforçado — a pressão dentro do cilindro sobe de uma vez, sem o motor ter tempo de se acomodar.", "Hence the practical split: a turbo is a permanent gain and what carmakers adopt. Nitrous is a few seconds of gain, used off the line, and demands a reinforced engine — cylinder pressure jumps all at once, with no time for the engine to settle."),
     ]}),
-    art({ id: "vid-tres-cilindros", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-08-10",
+    art({ id: "vid-tres-cilindros", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-08-10", thumb: "/learn/vid-tres-cilindros.png",
       media: { provider: "youtube", src: "OYPNu3VPfRo", vertical: true },
       title: T("Por que motor 3 cilindros treme mais", "Why a three-cylinder engine shakes more"), body: [
       T("Aquela trepidação do 3 cilindros na marcha lenta não é defeito nem falta de ajuste. É consequência direta de ter um número ímpar de cilindros.", "That three-cylinder shimmy at idle isn't a fault or a bad tune. It's the direct consequence of having an odd number of cylinders."),
@@ -1089,7 +1089,7 @@ export function getContent(locale: Locale) {
       T("A solução das montadoras é o eixo balanceador: um eixo girando em sentido contrário, criando exatamente a vibração oposta. Funciona bem, mas custa peça, peso e uma fração de atrito.", "The manufacturers' fix is a balance shaft: a shaft spinning the opposite way, creating exactly the opposing vibration. It works well, but costs a part, weight and a fraction of friction."),
       T("Em troca vêm vantagens reais: menos atrito interno que um 4 cilindros, menos peso, aquecimento mais rápido e aquele ronco meio rouco que virou assinatura. Se o seu treme um pouco parado e some ao acelerar, é característica — se treme e o carro engasga, aí é falha e vale investigar.", "In exchange come real advantages: less internal friction than a four, less weight, faster warm-up and that slightly raspy note that became a signature. If yours shakes a bit at rest and smooths out under acceleration, that's character — if it shakes and the car stumbles, that's a fault worth investigating."),
     ]}),
-    art({ id: "vid-ressonador", track: "sports", type: "video", system: "engine", addedAt: "2026-08-10",
+    art({ id: "vid-ressonador", track: "sports", type: "video", system: "engine", addedAt: "2026-08-10", thumb: "/learn/vid-ressonador.png",
       media: { provider: "youtube", src: "vPxBV6il_A4", vertical: true },
       title: T("Ressonador: a peça que todo mundo remove sem saber", "The resonator: the part everyone removes without knowing"), body: [
       T("Aquele bojo no meio do escapamento ou da admissão parece enfeite e é a primeira coisa que some numa modificação. Ele existe para cancelar uma frequência específica de ruído.", "That bulge in the middle of the exhaust or intake looks like decoration and is the first thing to go in a modification. It exists to cancel one specific noise frequency."),
@@ -1097,7 +1097,7 @@ export function getContent(locale: Locale) {
       T("Por isso removê-lo não libera potência: ele não restringe fluxo de forma relevante. O que ele fazia era matar aquele drone chato que aparece numa rotação específica, normalmente em velocidade de estrada.", "That's why removing it doesn't free up power: it doesn't meaningfully restrict flow. What it did was kill that irritating drone that shows up at one specific rpm, usually at highway speed."),
       T("O resultado prático de tirar costuma ser exatamente esse: o carro não fica mais rápido e ganha um zumbido constante na estrada, que cansa em viagem longa. Vale saber antes de autorizar o serviço.", "The practical result of removing it is usually exactly that: the car gets no faster and gains a constant highway drone that wears you down on long trips. Worth knowing before authorising the work."),
     ]}),
-    art({ id: "vid-oxido-nitroso", track: "sports", type: "video", system: "engine", addedAt: "2026-08-10",
+    art({ id: "vid-oxido-nitroso", track: "sports", type: "video", system: "engine", addedAt: "2026-08-10", thumb: "/learn/vid-oxido-nitroso.png",
       media: { provider: "youtube", src: "zCURAxPuk_I", vertical: true },
       title: T("Óxido nitroso: por que ele dá potência", "Nitrous oxide: why it makes power"), body: [
       T("O N2O não queima. Ele não é combustível — e é justamente aí que quase todo mundo entende errado o que o nitro faz num motor.", "N2O doesn't burn. It isn't a fuel — and that's precisely where nearly everyone misunderstands what nitrous does in an engine."),
