@@ -7,8 +7,23 @@
 /** Id numérico do app na App Store (o mesmo da URL do App Store Connect). */
 export const APPLE_APP_ID = "6797291865";
 
-/** Ficha do app na App Store. Publicada em agosto de 2026. */
+/** Ficha do app na App Store. */
 export const APP_STORE_URL = `https://apps.apple.com/br/app/mentorque/id${APPLE_APP_ID}`;
+
+/**
+ * A landing já anuncia a App Store?
+ *
+ * O app FOI aprovado e a ficha existe — este interruptor não é sobre isso. Ele
+ * é sobre a landing, que ainda está escrita para o pré-lançamento: "acesso
+ * antecipado", "lote de fundadores", "antes de chegar às lojas". Um botão de
+ * baixar no meio disso se contradiz, e a página perde os dois discursos de uma
+ * vez.
+ *
+ * Fica `false` até a landing ser reescrita para app publicado. Aí basta virar
+ * para `true` — o endereço já está aqui, testado, e os selos voltam sozinhos
+ * nos dois lugares onde aparecem.
+ */
+export const APP_STORE_PUBLICADO = false;
 
 /**
  * Folha de avaliação, para o "Avaliar o Mentorque" dentro do app.

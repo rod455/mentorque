@@ -1,14 +1,19 @@
 import { useI18n } from "@/lib/i18n";
-import { APP_STORE_URL, PLAY_STORE_PUBLICADO, PLAY_STORE_URL } from "@/lib/stores";
+import {
+  APP_STORE_PUBLICADO,
+  APP_STORE_URL,
+  PLAY_STORE_PUBLICADO,
+  PLAY_STORE_URL,
+} from "@/lib/stores";
 
 /**
  * Selos das lojas. Com `href` viram link; sem `href`, continuam um botão inerte
  * com a legenda "Em breve".
  *
- * A App Store já está publicada (agosto de 2026). O Google Play ainda não, e a
- * legenda de espera fica até `PLAY_STORE_PUBLICADO` virar `true` — apontar para
- * uma ficha inexistente é pior que não apontar: quem toca recebe um erro da
- * própria loja e conclui que o app saiu do ar.
+ * Quem manda são os interruptores em lib/stores.ts. No Google Play é literal (a
+ * ficha não existe). Na Apple é uma decisão de posicionamento: o app está
+ * aprovado, mas a landing ainda vende pré-lançamento, e anunciar a loja no meio
+ * disso derruba os dois discursos.
  */
 function Badge({
   store,
@@ -47,7 +52,11 @@ export function StoreBadges({ className }: { className?: string }) {
   const { t } = useI18n();
   return (
     <div className={`flex flex-wrap gap-3 ${className ?? ""}`}>
-      <Badge store={t.hero.appStore} caption={t.hero.downloadOn} href={APP_STORE_URL} />
+      <Badge
+        store={t.hero.appStore}
+        caption={APP_STORE_PUBLICADO ? t.hero.downloadOn : t.hero.comingSoon}
+        href={APP_STORE_PUBLICADO ? APP_STORE_URL : undefined}
+      />
       <Badge
         store={t.hero.googlePlay}
         caption={PLAY_STORE_PUBLICADO ? t.hero.downloadOn : t.hero.comingSoon}
