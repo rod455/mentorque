@@ -685,8 +685,19 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   const mark = (key: string) => { try { window.localStorage.setItem(key, String(Date.now())); } catch { /* ignore */ } };
 
   // Tenta mostrar uma oferta na saída. true = mostrou (segura a navegação).
+  //
+  // Só na WEB. As telas de oferta vivem depois do `return` do caminho nativo
+  // (linha ~789), então no app da loja elas nunca chegam a ser renderizadas —
+  // e o guard aqui usava `sellsInApp()`, que é true no iOS. Ou seja: o app
+  // cancelava a saída para exibir uma tela que não existia. Quem tocava numa
+  // aba de baixo estando no paywall não ia a lugar nenhum, sem nenhum sinal,
+  // até o cronômetro de 120s zerar e navegar sozinho dois minutos depois.
+  //
+  // O desconto também não faria sentido lá: a compra no iOS passa pela Apple,
+  // que não conhece cupom do Stripe. Oferta de saída no app precisa ser outro
+  // produto/oferta da própria Apple — não este funil.
   const requestExit = (target: View | null): boolean => {
-    if (subscribed || !sellsInApp()) return false;
+    if (subscribed || isNativeApp()) return false;
     pendingExit.current = target;
     if (fresh(OFFER_KEY, 30 * 60 * 1000)) { mark(OFFER_KEY); setOfferLeft(120); setShowOffer(true); return true; }
     if (fresh(OFFER2_KEY, 3 * 24 * 60 * 60 * 1000)) { mark(OFFER2_KEY); setShowOffer2(true); return true; }
