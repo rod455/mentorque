@@ -24,11 +24,6 @@ export function FinalCta() {
         <div className="mt-8">
           <WaitlistForm theme="dark" />
         </div>
-        <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
-          <a href="/app" className="font-display text-sm font-medium text-amber underline-offset-4 hover:underline">
-            {t.finalCta.tryCta} →
-          </a>
-        </div>
         <div className="mt-8">
           <StoreBadges />
         </div>

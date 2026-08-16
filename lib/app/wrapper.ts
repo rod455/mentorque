@@ -2,6 +2,8 @@
 // Usado pelo "modo leitor": na versão da loja não oferecemos compra de
 // assinatura (política do Google Play Billing) — o Premium é assinado pelo
 // site e funciona normalmente no app após o login.
+import { APP_STORE_REVIEW_URL, PLAY_STORE_URL } from "@/lib/stores";
+
 export function isNativeApp(): boolean {
   if (typeof window === "undefined") return false;
   return !!(window as unknown as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor;
@@ -116,16 +118,16 @@ export function sellsInApp(): boolean {
 
 // Link da loja para "avaliar o app". Na web cai no site.
 //
-// O id da Apple ficou `id0000000000` de placeholder até aqui — quem tocasse em
-// "Avaliar o app" no iPhone caía numa App Store dizendo que o app não existe.
-// 6797291865 é o id real (o mesmo da URL do App Store Connect), e
-// `?action=write-review` abre direto a folha de avaliação em vez da ficha.
+// Os endereços moram em lib/stores.ts: o id da Apple já aparecia escrito à mão
+// aqui e na landing, e id errado só se descobre quando alguém toca no botão e
+// cai numa App Store dizendo que o app não existe — foi o que aconteceu
+// enquanto ele era `id0000000000`.
 //
-// Enquanto o app não estiver publicado o link ainda não resolve — é o
-// comportamento esperado, não o defeito antigo.
+// A ficha da Apple está publicada; a do Google Play ainda não, então o link do
+// Android continua sem destino real por ora.
 export function storeListingUrl(): string {
   const platform = nativePlatform();
-  if (platform === "android") return "https://play.google.com/store/apps/details?id=mentorque.app";
-  if (platform === "ios") return "https://apps.apple.com/app/id6797291865?action=write-review";
-  return "https://mentorque.com.br";
+  if (platform === "android") return PLAY_STORE_URL;
+  if (platform === "ios") return APP_STORE_REVIEW_URL;
+  return "https://www.mentorque.com.br";
 }

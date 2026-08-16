@@ -31,8 +31,7 @@ export const pt = {
     subheadline:
       "Aprenda a entender seu carro, descubra o preço justo antes de fechar serviço e fale com um especialista de verdade quando travar. Você não precisa virar mecânico — só parar de pagar pelo que não entende.",
     ctaNote: "Sem spam. Grátis pra sempre no plano base — quem entra agora trava as vantagens de fundador.",
-    tryCta: "Ver o app funcionando — sem baixar",
-    tryNote: "30 segundos, sem cadastro.",
+    downloadOn: "Baixe na",
     comingSoon: "Em breve na",
     appStore: "App Store",
     googlePlay: "Google Play",
@@ -191,6 +190,14 @@ export const pt = {
         note: "Consultoria · vagas limitadas",
       },
     ],
+    // Contato direto. O nome e o cargo estão aqui porque são o motivo de a
+    // pessoa clicar: "falar com um especialista" é promessa vaga; "falar com um
+    // engenheiro da Mercedes" é verificável e vale o toque.
+    contactTitle: "Fale direto com o especialista",
+    contactName: "Alessandro Vila Nova",
+    contactRole: "Engenheiro da Mercedes-Benz nos Estados Unidos",
+    contactCta: "Chamar no WhatsApp",
+    contactPhoneLabel: "+1 (248) 768-0340",
   },
   plans: {
     title: "Planos para cada momento",
@@ -297,7 +304,6 @@ export const pt = {
     body:
       "As vantagens de fundador são do primeiro lote e fecham no lançamento: preço travado pra sempre, acesso antecipado e o selo de fundador no app. Depois, vira preço cheio.",
     urgency: "Lote de fundadores · encerra no lançamento",
-    tryCta: "Ou teste o app agora, sem baixar",
   },
   footer: {
     tagline: "Mecânica do básico ao avançado, com consultoria especializada no bolso.",

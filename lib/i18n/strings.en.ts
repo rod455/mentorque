@@ -33,8 +33,7 @@ export const en: Strings = {
     subheadline:
       "Learn to understand your car, find the fair price before approving any work, and talk to a real expert when you get stuck. You don't need to become a mechanic — just stop paying for what you don't understand.",
     ctaNote: "No spam. Free forever on the base plan — join now and lock in your founder perks.",
-    tryCta: "See the app in action — no download",
-    tryNote: "30 seconds, no signup.",
+    downloadOn: "Download on the",
     comingSoon: "Coming soon to",
     appStore: "App Store",
     googlePlay: "Google Play",
@@ -184,6 +183,11 @@ export const en: Strings = {
         note: "Consulting · limited spots",
       },
     ],
+    contactTitle: "Talk to the expert directly",
+    contactName: "Alessandro Vila Nova",
+    contactRole: "Mercedes-Benz engineer in the United States",
+    contactCta: "Message on WhatsApp",
+    contactPhoneLabel: "+1 (248) 768-0340",
   },
   plans: {
     title: "Plans for every stage",
@@ -290,7 +294,6 @@ export const en: Strings = {
     body:
       "Founder perks are for the first batch and close at launch: pricing locked in forever, early access and the founder badge in the app. After that, it's full price.",
     urgency: "Founders batch · closes at launch",
-    tryCta: "Or try the app now, no download",
   },
   footer: {
     tagline: "Mechanics from basics to advanced, with expert consulting in your pocket.",

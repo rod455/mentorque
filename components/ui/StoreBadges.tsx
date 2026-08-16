@@ -1,8 +1,14 @@
 import { useI18n } from "@/lib/i18n";
+import { APP_STORE_URL, PLAY_STORE_PUBLICADO, PLAY_STORE_URL } from "@/lib/stores";
 
 /**
- * App Store / Google Play badges as placeholders. They render as buttons today
- * (no live link). When the app ships, set `href` to turn them into anchors.
+ * Selos das lojas. Com `href` viram link; sem `href`, continuam um botão inerte
+ * com a legenda "Em breve".
+ *
+ * A App Store já está publicada (agosto de 2026). O Google Play ainda não, e a
+ * legenda de espera fica até `PLAY_STORE_PUBLICADO` virar `true` — apontar para
+ * uma ficha inexistente é pior que não apontar: quem toca recebe um erro da
+ * própria loja e conclui que o app saiu do ar.
  */
 function Badge({
   store,
@@ -27,7 +33,7 @@ function Badge({
   const cls =
     "inline-flex h-12 items-center rounded-xl bg-graphite-700 px-4 ring-1 ring-white/10 transition-colors hover:bg-graphite-600 focus-visible:outline-none";
   return href ? (
-    <a href={href} className={cls}>
+    <a href={href} target="_blank" rel="noreferrer" className={cls}>
       {inner}
     </a>
   ) : (
@@ -41,8 +47,12 @@ export function StoreBadges({ className }: { className?: string }) {
   const { t } = useI18n();
   return (
     <div className={`flex flex-wrap gap-3 ${className ?? ""}`}>
-      <Badge store={t.hero.appStore} caption={t.hero.comingSoon} />
-      <Badge store={t.hero.googlePlay} caption={t.hero.comingSoon} />
+      <Badge store={t.hero.appStore} caption={t.hero.downloadOn} href={APP_STORE_URL} />
+      <Badge
+        store={t.hero.googlePlay}
+        caption={PLAY_STORE_PUBLICADO ? t.hero.downloadOn : t.hero.comingSoon}
+        href={PLAY_STORE_PUBLICADO ? PLAY_STORE_URL : undefined}
+      />
     </div>
   );
 }
