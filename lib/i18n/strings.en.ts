@@ -9,7 +9,7 @@ export const en: Strings = {
       "Mentorque teaches you mechanics from basics to advanced, shows the fair price before the shop, and puts a real expert in your pocket. Join the founders list.",
     ogTitle: "Mentorque — a mechanic expert in your pocket",
     ogDescription:
-      "Guided tracks, symptom-based diagnosis, fair pricing and consulting with someone who's in the industry. Try the prototype now and join the founders list.",
+      "Guided tracks, symptom-based diagnosis, fair pricing and consulting with someone who's in the industry. Download it free on the App Store.",
   },
   nav: {
     features: "Features",
@@ -18,7 +18,6 @@ export const en: Strings = {
     plans: "Plans",
     faq: "FAQ",
     cta: "Join the list",
-    tryApp: "Try the app",
     toggleLang: "Português",
     skipToContent: "Skip to content",
     menu: "Menu",
@@ -45,7 +44,7 @@ export const en: Strings = {
   },
   waitlist: {
     placeholder: "Your best email",
-    button: "I want to test the project",
+    button: "Join the waitlist",
     loading: "Sending…",
     successTitle: "Done — your founder spot is locked in!",
     successBody: "You're in with locked pricing and early access. We'll be the first to tell you when the app opens.",
@@ -93,19 +92,6 @@ export const en: Strings = {
         turn: "Everything adapts to your vehicle (make, model, year): checklists and steps that fit the car actually in your garage.",
       },
     ],
-  },
-  tryNow: {
-    eyebrow: "Try before you commit",
-    title: "Build your garage in 2 minutes — free",
-    body:
-      "You don't have to take a landing page's word for it. Open the prototype, add your car, and watch your diagnosis and tracks appear instantly. No download, no card, no signup.",
-    bullets: [
-      "Symptom-based diagnosis built for your model",
-      "Fair price range before the shop",
-      "Your first track already unlocked",
-    ],
-    cta: "Open the prototype now",
-    note: "Works best on mobile.",
   },
   features: {
     title: "Everything to understand, maintain and decide with confidence",
@@ -268,8 +254,8 @@ export const en: Strings = {
         a: "You register make, model and year, and the content, checklists and tools adapt to your vehicle — car or bike.",
       },
       {
-        q: "Can I try it before signing up?",
-        a: "Yes. There's an interactive prototype right here on the site: build your garage and see the diagnosis and tracks working, with no download and no signup.",
+        q: "Do I have to pay to use it?",
+        a: "No. Download it on the App Store and use it for free: garage, symptom diagnosis, OBD2 codes, fuel calculator and most of the lessons. Premium is optional.",
       },
       {
         q: "Do I need to buy equipment for OBD2?",

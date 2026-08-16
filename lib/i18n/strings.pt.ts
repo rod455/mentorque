@@ -7,7 +7,7 @@ export const pt = {
       "Mentorque é o app que te ensina mecânica do básico ao avançado, mostra o preço justo antes da oficina e coloca um especialista de verdade no seu bolso. Entre na lista de fundadores.",
     ogTitle: "Mentorque — um especialista de mecânica no seu bolso",
     ogDescription:
-      "Trilhas guiadas, diagnóstico por sintoma, preço justo e consultoria com quem é da indústria. Teste o protótipo agora e entre na lista de fundadores.",
+      "Trilhas guiadas, diagnóstico por sintoma, preço justo e consultoria com quem é da indústria. Baixe grátis na App Store.",
   },
   nav: {
     features: "Recursos",
@@ -16,7 +16,6 @@ export const pt = {
     plans: "Planos",
     faq: "Dúvidas",
     cta: "Entrar na lista",
-    tryApp: "Testar app",
     toggleLang: "English",
     skipToContent: "Pular para o conteúdo",
     menu: "Menu",
@@ -43,7 +42,7 @@ export const pt = {
   },
   waitlist: {
     placeholder: "Seu melhor e-mail",
-    button: "Quero testar o projeto",
+    button: "Entrar na lista de espera",
     loading: "Enviando…",
     successTitle: "Pronto — seu lugar de fundador está garantido!",
     successBody: "Você entra com preço travado e acesso antecipado. Avisamos em primeira mão quando o app abrir.",
@@ -91,19 +90,6 @@ export const pt = {
         turn: "Tudo se ajusta ao seu veículo (marca, modelo, ano): checklists e passos que valem pro carro que está na sua garagem.",
       },
     ],
-  },
-  tryNow: {
-    eyebrow: "Experimente antes de se comprometer",
-    title: "Monte sua garagem em 2 minutos — de graça",
-    body:
-      "Não precisa acreditar numa promessa de landing page. Abra o protótipo, cadastre seu carro e veja seu diagnóstico e suas trilhas aparecerem na hora. Sem baixar, sem cartão, sem cadastro.",
-    bullets: [
-      "Diagnóstico por sintoma feito pro seu modelo",
-      "Faixa de preço justo antes da oficina",
-      "Sua primeira trilha já liberada",
-    ],
-    cta: "Abrir o protótipo agora",
-    note: "Funciona melhor no celular.",
   },
   features: {
     title: "Tudo para entender, manter e decidir com confiança",
@@ -278,8 +264,8 @@ export const pt = {
         a: "Você cadastra marca, modelo e ano, e o conteúdo, checklists e ferramentas se ajustam ao seu veículo — carro ou moto.",
       },
       {
-        q: "Posso testar antes de me cadastrar?",
-        a: "Pode. Há um protótipo interativo aqui mesmo no site: monte sua garagem e veja o diagnóstico e as trilhas funcionando, sem baixar nada e sem cadastro.",
+        q: "Preciso pagar para usar?",
+        a: "Não. Baixe na App Store e use de graça: garagem, diagnóstico por sintoma, códigos OBD2, calculadora de combustível e boa parte das aulas. O Premium é opcional.",
       },
       {
         q: "Preciso comprar algum equipamento para o OBD2?",

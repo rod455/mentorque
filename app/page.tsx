@@ -2,7 +2,6 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/sections/Hero";
 import { TrustBar } from "@/components/sections/TrustBar";
 import { ProblemSolution } from "@/components/sections/ProblemSolution";
-import { TryNow } from "@/components/sections/TryNow";
 import { Features } from "@/components/sections/Features";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { SocialProof } from "@/components/sections/SocialProof";
@@ -22,7 +21,6 @@ export default function Page() {
         <Hero />
         <TrustBar />
         <ProblemSolution />
-        <TryNow />
         <Features />
         <HowItWorks />
         <SocialProof />
