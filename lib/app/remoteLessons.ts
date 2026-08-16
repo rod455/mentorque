@@ -32,15 +32,22 @@ type Pacote = { version: string; lessons: AulaRemota[] };
 
 // Interruptor do catálogo remoto.
 //
-// Desligado para o envio à App Store. O mecanismo está pronto e testado, mas
-// ele acabou de causar uma quebra (a rota descartava campos obrigatórios da
-// aula), e não vale carregar esse risco numa submissão que já foi devolvida
-// duas vezes. Com `false`, o app usa exclusivamente o catálogo embutido no
-// binário — o mesmo que sempre funcionou.
+// LIGADO. Ficou `false` durante o envio à App Store: o mecanismo tinha acabado
+// de causar uma quebra (a rota descartava campos obrigatórios da aula) e não
+// valia carregar esse risco numa submissão já devolvida duas vezes. O app foi
+// aprovado, e a causa daquela quebra não volta — a rota agora espalha a aula
+// inteira em vez de enumerar campo a campo.
 //
-// Para religar depois da aprovação: troque para `true` e gere um build. Nada
-// mais precisa mudar; a rota /api/lessons continua no ar e servindo.
-const REMOTO_LIGADO = false;
+// O embutido continua sendo o piso: `valido()` recusa pacote torto, e rede
+// fora, JSON estranho ou primeira abertura caem no catálogo do binário. O que
+// muda é que publicar aula passa a ser um deploy do site.
+//
+// CAPAS: `thumb` viaja como está escrito na aula. Caminho relativo
+// (`/learn/x.png`) resolve DENTRO do pacote do app — serve para arte que já foi
+// no binário. Aula publicada entre um build e outro precisa do endereço
+// completo do site, senão o card chega sem imagem. Ver a nota em `content.ts`,
+// no campo `thumb`.
+const REMOTO_LIGADO = true;
 
 const CHAVE = "mentorque-aulas-remotas";
 

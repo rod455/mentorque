@@ -418,7 +418,20 @@ export function getContent(locale: Locale) {
     traits?: string[];
     situations?: string[];
     media?: Media;
-    thumb?: string; // imagem ilustrativa do card (opcional; ex.: /learn/oil.jpg)
+    // Imagem ilustrativa do card (opcional). Duas formas, e a escolha importa:
+    //
+    // - Relativa (`/learn/oil-change.png`) para arte que JÁ foi junto num build.
+    //   No app da loja o caminho resolve dentro do próprio pacote: carrega
+    //   instantâneo e funciona sem rede. É o caso de quase tudo aqui.
+    //
+    // - Absoluta (`https://www.mentorque.com.br/learn/x.png`) para aula
+    //   publicada ENTRE dois builds. O catálogo remoto entrega o texto da aula
+    //   pela rede, mas não entrega arquivo: uma capa relativa apontaria para uma
+    //   imagem que não existe no aparelho, e o card chegaria vazio.
+    //
+    // No build seguinte a arte passa a estar no binário e o endereço pode voltar
+    // a ser relativo — vale a pena, porque aí volta a funcionar sem rede.
+    thumb?: string;
     // Data de publicação (ISO yyyy-mm-dd). Conteúdo com até 7 dias vai para a
     // 1ª posição do "Para você" com o selo "Novo" — defina em TODO conteúdo
     // novo que for adicionado.
