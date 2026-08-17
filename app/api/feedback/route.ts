@@ -87,6 +87,13 @@ export async function POST(request: Request) {
       console.error("[feedback] resend error:", res.status, await res.text().catch(() => ""));
       return NextResponse.json({ ok: false, error: "send_failed" }, { status: 502 });
     }
+    // Sucesso também vira registro.
+    //
+    // Sem esta linha, "a mensagem chegou e o e-mail saiu" e "a requisição morreu
+    // no aparelho e nunca chegou aqui" ficam IDÊNTICOS na Vercel: os dois
+    // aparecem como silêncio. Foi exatamente essa dúvida que travou o
+    // diagnóstico do primeiro teste no TestFlight.
+    console.log(`[feedback] enviado: tipo=${body.type ?? "?"} nota=${nota ?? "-"} para=${TO}`);
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("[feedback] error:", err);

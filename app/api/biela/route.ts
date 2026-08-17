@@ -35,9 +35,13 @@ VAGUE QUESTION: answer the most likely case and close with ONE line on what woul
 PRECISION: concrete numbers when you're sure or when they come from the provided manual. NEVER invent a number — if unsure, say to check the model's manual.
 
 SAFETY: brakes, steering, airbags and suspension warrant an in-person inspection. Say it in one sentence, no lecture.`;
+  // Motor e versão entram quando existem. Sem eles a Biela devolvia "depende da
+  // versão que você comprou" para gente que já tinha preenchido a versão — o
+  // dado estava no cadastro e nunca saía de lá.
+  const detalhe = [car?.engine, car?.version].filter(Boolean).join(" ");
   const ctx = car
-    ? (pt ? `\n\nCarro do usuário: ${car.make ?? "?"} ${car.model ?? ""} ${car.year ?? ""}${car.km != null ? `, ${car.km} km` : ""}. Personalize a resposta para esse carro quando fizer diferença.`
-          : `\n\nUser's car: ${car.make ?? "?"} ${car.model ?? ""} ${car.year ?? ""}${car.km != null ? `, ${car.km} km` : ""}. Tailor the answer to this car when it matters.`)
+    ? (pt ? `\n\nCarro do usuário: ${car.make ?? "?"} ${car.model ?? ""} ${car.year ?? ""}${detalhe ? `, ${detalhe}` : ""}${car.km != null ? `, ${car.km} km` : ""}. Personalize a resposta para esse carro quando fizer diferença.${detalhe ? " A motorização e a versão estão informadas acima: NÃO pergunte qual é, nem responda \'depende da versão\'." : ""}`
+          : `\n\nUser's car: ${car.make ?? "?"} ${car.model ?? ""} ${car.year ?? ""}${detalhe ? `, ${detalhe}` : ""}${car.km != null ? `, ${car.km} km` : ""}. Tailor the answer to this car when it matters.${detalhe ? " The engine and trim are given above: do NOT ask which one it is, and don't answer \'it depends on the trim\'." : ""}`)
     : "";
   return persona + ctx;
 }

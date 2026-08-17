@@ -4,7 +4,15 @@
 // service-role key are configured and manuals were ingested.
 import { createClient } from "@supabase/supabase-js";
 
-export type CarCtx = { make?: string; model?: string; year?: number; km?: number | null };
+export type CarCtx = {
+  make?: string; model?: string; year?: number; km?: number | null;
+  // Motorização e versão MUDAM a resposta: intervalo de correia, tipo de óleo e
+  // meia dúzia de outras coisas dependem de ser 1.0 turbo ou 1.3 aspirado. O
+  // cadastro sempre teve os dois campos; eles só não chegavam até aqui, e a
+  // Biela respondia "depende da versão que você comprou" para quem já tinha
+  // informado a versão.
+  engine?: string; version?: string;
+};
 
 export async function retrieveManualContext(query: string, car: CarCtx | null, matchCount = 6): Promise<string> {
   const openaiKey = process.env.OPENAI_API_KEY;

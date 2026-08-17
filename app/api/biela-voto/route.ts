@@ -75,5 +75,8 @@ export async function POST(request: Request) {
     console.error("[biela-voto] insert falhou:", error.message);
     return NextResponse.json({ ok: false, error: "insert_failed" }, { status: 502 });
   }
+  // Mesmo motivo do /api/feedback: sem registro no caminho feliz, não há como
+  // separar "gravou" de "a requisição nunca chegou".
+  console.log(`[biela-voto] gravado: ${voto}${body.motivo ? ` (${body.motivo})` : ""}`);
   return NextResponse.json({ ok: true, guardado: true });
 }

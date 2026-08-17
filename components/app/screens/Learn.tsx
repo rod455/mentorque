@@ -510,6 +510,14 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
     setVotos((m) => ({ ...m, [i]: v }));
     desarmar();
     if (v === "down") { setMotivoDe(i); return; } // o motivo é que vale; o voto vai com ele
+    // Voltar para 👍 fecha o "O que faltou?".
+    //
+    // Sem isto, quem tocasse 👎 e se arrependesse ficava com a pergunta de
+    // motivo aberta embaixo de um polegar para cima — a tela dizia duas coisas
+    // contrárias ao mesmo tempo, e um toque no motivo teria gravado um voto
+    // negativo que a pessoa já tinha desfeito.
+    setMotivoDe((atual) => (atual === i ? null : atual));
+    setComentario("");
     registrar(i, "up");
     relogio.current = setTimeout(() => {
       relogio.current = null;
@@ -544,7 +552,7 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
       const res = await apiPost("/api/biela", {
         question: text,
         locale,
-        car: v ? { make: v.make, model: v.model, year: v.year, km: v.odometerKm } : null,
+        car: v ? { make: v.make, model: v.model, year: v.year, km: v.odometerKm, engine: v.engine, version: v.version } : null,
       });
       const data = await res.json();
       setMsgs((m) => [...m, {
