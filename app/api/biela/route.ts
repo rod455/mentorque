@@ -3,7 +3,34 @@ import { retrieveManualContext, type CarCtx as Car } from "@/lib/rag";
 
 export const runtime = "nodejs";
 
-type Body = { question?: string; locale?: string; car?: Car | null };
+type Turno = { role?: string; content?: string };
+type Body = { question?: string; locale?: string; car?: Car | null; historico?: Turno[] };
+
+// Memória curta da conversa.
+//
+// O aplicativo já manda recortado (lib/app/bielaChat.ts), mas isto aqui é a
+// borda pública: revalida a alternância que a API da Anthropic exige (user →
+// assistant, começando em user) e corta o tamanho, para uma requisição forjada
+// não virar um prompt gigante pago por nós.
+const MAX_TURNOS = 3;
+
+function historicoLimpo(bruto: Turno[] | undefined): { role: "user" | "assistant"; content: string }[] {
+  if (!Array.isArray(bruto)) return [];
+  const pares: { role: "user" | "assistant"; content: string }[][] = [];
+  for (let i = 0; i + 1 < bruto.length; i += 2) {
+    const p = bruto[i];
+    const r = bruto[i + 1];
+    if (p?.role !== "user" || r?.role !== "assistant") break; // fora de ordem: descarta daqui em diante
+    const pergunta = typeof p.content === "string" ? p.content.trim().slice(0, 500) : "";
+    const resposta = typeof r.content === "string" ? r.content.trim().slice(0, 1500) : "";
+    if (!pergunta || !resposta) break;
+    pares.push([
+      { role: "user", content: pergunta },
+      { role: "assistant", content: resposta },
+    ]);
+  }
+  return pares.slice(-MAX_TURNOS).flat();
+}
 
 // System prompt: Biela's persona + safety rails. Car context is injected below.
 function systemPrompt(locale: string, car: Car | null): string {
@@ -64,6 +91,7 @@ export async function POST(request: Request) {
   const question = (body.question ?? "").trim();
   const locale = body.locale === "en" ? "en" : "pt";
   const car = body.car ?? null;
+  const historico = historicoLimpo(body.historico);
   if (!question) return NextResponse.json({ ok: false, error: "empty_question" }, { status: 422 });
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -83,7 +111,12 @@ export async function POST(request: Request) {
 
   try {
     // Ground the answer in the model's manual when the RAG is configured.
-    const manual = await retrieveManualContext(question, car, 8);
+    //
+    // Cinco trechos, não oito: o manual é a maior parte da entrada e é
+    // reenviado a cada pergunta, e num prompt de resposta curta os últimos
+    // trechos eram contexto que o modelo ignorava. O que sobrou paga a memória
+    // dos três turnos abaixo — a conta por pergunta fica onde estava.
+    const manual = await retrieveManualContext(question, car, 5);
     let system = systemPrompt(locale, car);
     if (manual) {
       system += (locale === "pt"
@@ -104,12 +137,13 @@ export async function POST(request: Request) {
         // aqui só impede o texto gigante quando ele resolve desobedecer.
         //
         // Baixou de 900 para 600 junto com o prompt. Não desce mais: teto curto
-        // demais corta a resposta no meio da frase, que é pior que uma resposta
-        // comprida — e a pessoa não tem como pedir a continuação, porque cada
-        // pergunta é respondida isolada.
+        // demais corta a resposta no meio da frase, e uma resposta cortada é
+        // pior que uma comprida.
         max_tokens: 600,
         system,
-        messages: [{ role: "user", content: question }],
+        // Os últimos turnos entram antes da pergunta: sem isso, "e o nitro?"
+        // depois de uma resposta sobre óleo chegava sem nada atrás.
+        messages: [...historico, { role: "user", content: question }],
       }),
     });
     // O corpo do erro é lido e registrado de propósito.

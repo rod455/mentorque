@@ -2230,6 +2230,7 @@ export function getContent(locale: Locale) {
       intro: T("Oi! Sou o Biela 🐻 Manjo tudo de mecânica. Me conta o que está acontecendo com o seu carro que eu te ajudo — pode perguntar de barulho, revisão, orçamento, o que for.", "Hi! I'm Biela 🐻 I know cars inside out. Tell me what's going on and I'll help — noises, service, quotes, anything."),
       inputPh: T("Pergunte ao Biela...", "Ask Biela..."),
       send: T("Enviar", "Send"),
+      novaConversa: T("Nova conversa", "New chat"),
       thinking: T("Biela está pensando...", "Biela is thinking..."),
       suggestions: [
         T("Que barulho pode ser esse ao frear?", "What could this braking noise be?"),

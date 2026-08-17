@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { apiPost, apiUrl } from "@/lib/app/apiBase";
+import { carregarConversa, historicoParaIA, idConversa, limparConversa, salvarConversa, type Msg } from "@/lib/app/bielaChat";
 import { pedirFeedback } from "@/lib/app/feedbackPrompt";
 import { useI18n } from "@/lib/i18n";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
@@ -449,12 +450,7 @@ export function ContentScreen({ id }: { id: string }) {
 }
 
 // 2.6.D — Chat com o Biela (agente de IA / mecânico)
-type Msg = {
-  role: "user" | "biela"; text: string; note?: string;
-  // Guardados na mensagem para o voto poder mandar o contexto exato daquela
-  // resposta — e não o estado da tela no instante do polegar, que já mudou.
-  pergunta?: string; modo?: string; comManual?: boolean;
-};
+// O tipo Msg e a persistência moram em lib/app/bielaChat.ts.
 
 export function BielaChatScreen({ seed }: { seed?: string }) {
   const c = useContent();
@@ -462,16 +458,40 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
   const { s } = usePrototype();
   const { go } = useNav();
   const v = activeVehicle(s);
-  const [msgs, setMsgs] = useState<Msg[]>([{ role: "biela", text: c.biela.intro }]);
+  // Uma conversa por carro: quem tem um só nunca percebe, e quem tem dois não
+  // vê resposta sobre o Argo pendurada acima de uma pergunta sobre o outro.
+  const idChat = idConversa(v?.id);
+  // A saudação é sempre remontada aqui (fica fora do que é gravado), então ela
+  // acompanha o idioma atual.
+  const abertura = (): Msg[] => [{ role: "biela", text: c.biela.intro }];
+  const [msgs, setMsgs] = useState<Msg[]>(() => [...abertura(), ...carregarConversa(idChat)]);
   const [input, setInput] = useState(seed ?? "");
   const [busy, setBusy] = useState(false);
   const [used, setUsed] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [votos, setVotos] = useState<Record<number, "up" | "down">>({});
   const [motivoDe, setMotivoDe] = useState<number | null>(null); // índice da resposta esperando motivo
   const [comentario, setComentario] = useState("");
   const relogio = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Grava a cada mudança. `msgs.slice(1)` tira a saudação; o recorte das 15
+  // últimas interações é feito lá dentro.
+  useEffect(() => {
+    salvarConversa(idChat, msgs.slice(1), s.vehicles.map((x) => x.id));
+  }, [msgs, idChat, s.vehicles]);
+
+  // Trocar de carro com a tela montada não acontece hoje (não há seletor de
+  // veículo aqui), mas se um dia houver, a conversa recarrega em vez de ser
+  // gravada no carro errado. `pular` evita o retrabalho na primeira montagem,
+  // onde o useState já leu o mesmo dado.
+  const pular = useRef(true);
+  useEffect(() => {
+    if (pular.current) { pular.current = false; return; }
+    setMsgs([...abertura(), ...carregarConversa(idChat)]);
+    setMotivoDe(null);
+    setComentario("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idChat]);
 
   const gated = !s.premium && used >= FREE_BIELA_QUESTIONS;
 
@@ -490,6 +510,15 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
   // aconteceu.
   useEffect(() => desarmar, []);
 
+  const novaConversa = () => {
+    desarmar();
+    limparConversa(idChat);
+    setMsgs(abertura());
+    setMotivoDe(null);
+    setComentario("");
+    setInput("");
+  };
+
   // Manda o voto para /api/biela-voto, que guarda o par pergunta+resposta.
   // Falhar aqui não pode atrapalhar ninguém: quem tocou no polegar já seguiu a
   // vida, e uma mensagem de erro por causa disso seria pior que o silêncio.
@@ -507,7 +536,7 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
   };
 
   const votar = (i: number, v: "up" | "down") => {
-    setVotos((m) => ({ ...m, [i]: v }));
+    setMsgs((m) => m.map((msg, j) => (j === i ? { ...msg, voto: v } : msg)));
     desarmar();
     if (v === "down") { setMotivoDe(i); return; } // o motivo é que vale; o voto vai com ele
     // Voltar para 👍 fecha o "O que faltou?".
@@ -545,6 +574,9 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
     if (!text || busy || gated) return;
     desarmar(); // ainda está resolvendo algo: o próximo 👍 arma de novo
     setInput("");
+    // Recortado ANTES de empilhar a pergunta nova: `historicoParaIA` só junta
+    // pares fechados, e a pergunta que acabou de sair ainda não tem resposta.
+    const historico = historicoParaIA(msgs);
     setMsgs((m) => [...m, { role: "user", text }]);
     setBusy(true);
     if (!s.premium) setUsed((n) => n + 1);
@@ -552,6 +584,7 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
       const res = await apiPost("/api/biela", {
         question: text,
         locale,
+        historico,
         car: v ? { make: v.make, model: v.model, year: v.year, km: v.odometerKm, engine: v.engine, version: v.version } : null,
       });
       const data = await res.json();
@@ -577,6 +610,18 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
       <AppHeader
         title={c.biela.title}
         subtitle={v ? `${c.biela.contextPrefix} ${vehicleLabel(v)}${v.odometerKm != null ? " · " + v.odometerKm.toLocaleString() + " km" : ""}` : undefined}
+        action={
+          msgs.length > 1 ? (
+            <button
+              onClick={novaConversa}
+              aria-label={c.biela.novaConversa}
+              title={c.biela.novaConversa}
+              className="grid h-9 w-9 place-items-center rounded-full bg-graphite-700 text-cream/70 hover:text-cream"
+            >
+              <Icon name="plus" className="h-4 w-4" />
+            </button>
+          ) : undefined
+        }
       />
 
       {/* Conversa.
@@ -606,8 +651,8 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
                         key={opcao}
                         onClick={() => votar(i, opcao)}
                         aria-label={rotulo}
-                        aria-pressed={votos[i] === opcao}
-                        className={`rounded-lg px-2 py-1 text-sm transition-colors ${votos[i] === opcao ? "bg-amber/20" : "opacity-45 hover:opacity-100"}`}
+                        aria-pressed={m.voto === opcao}
+                        className={`rounded-lg px-2 py-1 text-sm transition-colors ${m.voto === opcao ? "bg-amber/20" : "opacity-45 hover:opacity-100"}`}
                       >
                         {icone}
                       </button>
@@ -637,7 +682,7 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
                       />
                     </div>
                   )}
-                  {votos[i] === "down" && motivoDe !== i && (
+                  {m.voto === "down" && motivoDe !== i && (
                     <p className="mt-1.5 text-xs text-cream/40">{c.feedback.bielaObrigado}</p>
                   )}
                 </div>

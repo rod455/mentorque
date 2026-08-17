@@ -6,9 +6,11 @@ export const runtime = "nodejs";
 // Voto numa resposta da Biela.
 //
 // O 👍 já servia para armar o pedido de nota; aqui os dois viram registro, e o
-// 👎 vira o material para a Biela melhorar. Guardamos o PAR pergunta+resposta
-// porque a rota da Biela responde cada pergunta isolada (manda uma mensagem só,
-// sem histórico) — então o par é o contexto completo, e não um recorte dele.
+// 👎 vira o material para a Biela melhorar. Guardamos o PAR pergunta+resposta,
+// e não a conversa inteira: o par é o que a pessoa julgou ao tocar no polegar.
+// Desde que a Biela passou a receber os três últimos turnos, o par pode ter
+// dependido do que veio antes — se um 👎 não fizer sentido isolado, é aí que
+// está o motivo.
 //
 // Escreve com a chave de serviço de propósito: assim o aplicativo nunca toca na
 // tabela, e ela pode ficar sem política nenhuma de RLS. Ver supabase/biela_votos.sql.
