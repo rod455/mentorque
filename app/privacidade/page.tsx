@@ -87,6 +87,10 @@ export default function PrivacidadePage() {
         <li>Sincronizar seus dados entre aparelhos quando você tem conta.</li>
         <li>Enviar e-mails transacionais (confirmação de conta, redefinição de senha, respostas de suporte).</li>
         <li>Gerar respostas do assistente Biela e os planos de revisão personalizados para o seu carro.</li>
+        <li>Melhorar as respostas do Biela: quando <strong>você toca em 👍 ou 👎</strong> numa resposta, guardamos
+          aquela pergunta e aquela resposta, junto do motivo que você marcar. É o que nos permite descobrir onde ele
+          erra e corrigir. Esse registro <strong>não leva seu nome, e-mail nem identificador de conta</strong>, e é
+          apagado automaticamente após 90 dias. Sem o seu toque no polegar, nada da conversa é guardado por nós.</li>
         <li>Calcular a estimativa de preço por região a partir dos orçamentos informados pelos usuários.</li>
         <li>Processar sua assinatura Premium e liberar os recursos pagos.</li>
         <li>Exibir e medir anúncios na versão gratuita do app Android, quando você consente.</li>

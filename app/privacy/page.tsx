@@ -79,6 +79,10 @@ export default function PrivacyPage() {
         <li>Sync your data across devices when you have an account.</li>
         <li>Send transactional emails (account confirmation, password reset, support replies).</li>
         <li>Generate Biela assistant responses and the maintenance plans tailored to your car.</li>
+        <li>Improve Biela&apos;s answers: when <strong>you tap 👍 or 👎</strong> on an answer, we store that question
+          and that answer along with the reason you pick. It&apos;s how we find where it gets things wrong and fix
+          them. This record carries <strong>no name, email or account identifier</strong>, and is deleted
+          automatically after 90 days. Without your tap, we store none of the conversation.</li>
         <li>Compute the regional price estimate from the prices users report.</li>
         <li>Process your Premium subscription and unlock paid features.</li>
         <li>Serve and measure ads in the free Android app, when you consent.</li>

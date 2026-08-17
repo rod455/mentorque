@@ -7,9 +7,9 @@ import { useI18n } from "@/lib/i18n";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { personalScore, vehicleSituations, vehicleTraits } from "@/lib/app/traits";
 import type { ServiceRecord } from "@/lib/app/types";
-import { carName, vehicleLabel } from "@/lib/app/content";
+import { APP_VERSION, carName, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
-import { isNativeApp } from "@/lib/app/wrapper";
+import { isNativeApp, nativePlatform } from "@/lib/app/wrapper";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Card, Chip, Icon, PinButton, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
 import { VideoPlayer } from "../VideoPlayer";
@@ -17,6 +17,17 @@ import { AdOverlay, adsEnabled } from "../AdGate";
 import { canShowAd, markAdShown, registerContentOpen } from "@/lib/app/adPolicy";
 
 const FREE_BIELA_QUESTIONS = 0; // Biela é sempre Premium (sem perguntas grátis)
+
+// Id anônimo do aparelho — o mesmo que o Perfil já usa nas mensagens de
+// suporte. Serve só para agrupar votos do mesmo celular; não identifica conta.
+function aparelhoId(): string {
+  if (typeof window === "undefined") return "—";
+  try {
+    let id = window.localStorage.getItem("mentorque-uid");
+    if (!id) { id = crypto?.randomUUID?.() ?? String(Math.random()).slice(2); window.localStorage.setItem("mentorque-uid", id); }
+    return id;
+  } catch { return "—"; }
+}
 
 type Item = ReturnType<typeof useContent>["lessons"][number];
 
@@ -438,7 +449,12 @@ export function ContentScreen({ id }: { id: string }) {
 }
 
 // 2.6.D — Chat com o Biela (agente de IA / mecânico)
-type Msg = { role: "user" | "biela"; text: string; note?: string };
+type Msg = {
+  role: "user" | "biela"; text: string; note?: string;
+  // Guardados na mensagem para o voto poder mandar o contexto exato daquela
+  // resposta — e não o estado da tela no instante do polegar, que já mudou.
+  pergunta?: string; modo?: string; comManual?: boolean;
+};
 
 export function BielaChatScreen({ seed }: { seed?: string }) {
   const c = useContent();
@@ -453,6 +469,8 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [votos, setVotos] = useState<Record<number, "up" | "down">>({});
+  const [motivoDe, setMotivoDe] = useState<number | null>(null); // índice da resposta esperando motivo
+  const [comentario, setComentario] = useState("");
   const relogio = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const gated = !s.premium && used >= FREE_BIELA_QUESTIONS;
@@ -472,10 +490,27 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
   // aconteceu.
   useEffect(() => desarmar, []);
 
+  // Manda o voto para /api/biela-voto, que guarda o par pergunta+resposta.
+  // Falhar aqui não pode atrapalhar ninguém: quem tocou no polegar já seguiu a
+  // vida, e uma mensagem de erro por causa disso seria pior que o silêncio.
+  const registrar = (i: number, voto: "up" | "down", motivo?: string, comentario?: string) => {
+    const msg = msgs[i];
+    if (!msg?.pergunta) return;
+    void apiPost("/api/biela-voto", {
+      voto, motivo, comentario,
+      pergunta: msg.pergunta, resposta: msg.text,
+      carro: v ? `${v.make} ${v.model} ${v.year}` : undefined,
+      comManual: msg.comManual, modo: msg.modo, locale,
+      plataforma: isNativeApp() ? (nativePlatform() ?? "nativo") : "web",
+      versao: APP_VERSION, aparelho: aparelhoId(),
+    }).catch(() => undefined);
+  };
+
   const votar = (i: number, v: "up" | "down") => {
     setVotos((m) => ({ ...m, [i]: v }));
     desarmar();
-    if (v !== "up") return;
+    if (v === "down") { setMotivoDe(i); return; } // o motivo é que vale; o voto vai com ele
+    registrar(i, "up");
     relogio.current = setTimeout(() => {
       relogio.current = null;
       // Meia pergunta escrita não é fim de conversa, é alguém formulando —
@@ -512,7 +547,10 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
         car: v ? { make: v.make, model: v.model, year: v.year, km: v.odometerKm } : null,
       });
       const data = await res.json();
-      setMsgs((m) => [...m, { role: "biela", text: data.answer, note: data.mode === "ai" ? undefined : c.biela.offlineNote }]);
+      setMsgs((m) => [...m, {
+        role: "biela", text: data.answer, note: data.mode === "ai" ? undefined : c.biela.offlineNote,
+        pergunta: text, modo: data.mode, comManual: data.usedManual,
+      }]);
     } catch (e) {
       // No app, mostra o motivo real da falha junto do aviso. Sem isto a tela
       // ficava idêntica para "sem internet", "endereço errado" e "navegador
@@ -520,7 +558,7 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
       const detalhe = isNativeApp()
         ? ` · ${apiUrl("/api/biela")} → ${e instanceof Error ? e.message : String(e)}`
         : "";
-      setMsgs((m) => [...m, { role: "biela", text: fallbackAnswer(v, locale), note: c.biela.offlineNote + detalhe }]);
+      setMsgs((m) => [...m, { role: "biela", text: fallbackAnswer(v, locale), note: c.biela.offlineNote + detalhe, pergunta: text, modo: "offline" }]);
     } finally {
       setBusy(false);
     }
@@ -553,18 +591,47 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
               <p className="whitespace-pre-wrap">{m.text}</p>
               {m.note && <p className="mt-1.5 text-[11px] italic text-cream/45">{m.note}</p>}
               {m.role === "biela" && i > 0 && (
-                <div className="mt-2 flex gap-1 border-t border-white/5 pt-2">
-                  {([["up", "👍", c.feedback.bielaUtil], ["down", "👎", c.feedback.bielaInutil]] as const).map(([v, icone, rotulo]) => (
-                    <button
-                      key={v}
-                      onClick={() => votar(i, v)}
-                      aria-label={rotulo}
-                      aria-pressed={votos[i] === v}
-                      className={`rounded-lg px-2 py-1 text-sm transition-colors ${votos[i] === v ? "bg-amber/20" : "opacity-45 hover:opacity-100"}`}
-                    >
-                      {icone}
-                    </button>
-                  ))}
+                <div className="mt-2 border-t border-white/5 pt-2">
+                  <div className="flex gap-1">
+                    {([["up", "\u{1F44D}", c.feedback.bielaUtil], ["down", "\u{1F44E}", c.feedback.bielaInutil]] as const).map(([opcao, icone, rotulo]) => (
+                      <button
+                        key={opcao}
+                        onClick={() => votar(i, opcao)}
+                        aria-label={rotulo}
+                        aria-pressed={votos[i] === opcao}
+                        className={`rounded-lg px-2 py-1 text-sm transition-colors ${votos[i] === opcao ? "bg-amber/20" : "opacity-45 hover:opacity-100"}`}
+                      >
+                        {icone}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* O motivo é o que transforma "resposta ruim" em conserto. */}
+                  {motivoDe === i && (
+                    <div className="mt-2">
+                      <p className="text-xs text-cream/50">{c.feedback.bielaPorQue}</p>
+                      <div className="mt-1.5 flex flex-wrap gap-1.5">
+                        {([["errada", c.feedback.bielaErrada], ["incompleta", c.feedback.bielaIncompleta], ["confusa", c.feedback.bielaConfusa]] as const).map(([chave, rotulo]) => (
+                          <button
+                            key={chave}
+                            onClick={() => { registrar(i, "down", chave, comentario.trim() || undefined); setMotivoDe(null); setComentario(""); }}
+                            className="rounded-full bg-graphite-700 px-2.5 py-1 text-xs text-cream/80 ring-1 ring-white/10 hover:bg-graphite-600"
+                          >
+                            {rotulo}
+                          </button>
+                        ))}
+                      </div>
+                      <input
+                        value={comentario}
+                        onChange={(e) => setComentario(e.target.value)}
+                        placeholder={c.feedback.bielaComentario}
+                        className="mt-2 w-full rounded-lg bg-graphite-900 px-2.5 py-1.5 text-xs text-cream placeholder:text-cream/30 ring-1 ring-white/10 focus:outline-none focus:ring-amber/40"
+                      />
+                    </div>
+                  )}
+                  {votos[i] === "down" && motivoDe !== i && (
+                    <p className="mt-1.5 text-xs text-cream/40">{c.feedback.bielaObrigado}</p>
+                  )}
                 </div>
               )}
             </div>

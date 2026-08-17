@@ -2304,6 +2304,13 @@ export function getContent(locale: Locale) {
       // Polegares na resposta da Biela
       bielaUtil: T("Resposta útil", "Helpful answer"),
       bielaInutil: T("Resposta ruim", "Poor answer"),
+      // O 👎 sozinho só conta tristeza. O motivo é o que diz onde consertar.
+      bielaPorQue: T("O que faltou?", "What was missing?"),
+      bielaErrada: T("Errada", "Wrong"),
+      bielaIncompleta: T("Não respondeu", "Didn't answer"),
+      bielaConfusa: T("Confusa", "Confusing"),
+      bielaComentario: T("Quer detalhar? (opcional)", "Want to add detail? (optional)"),
+      bielaObrigado: T("Obrigado — isso ajuda a Biela a melhorar.", "Thanks — this helps Biela improve."),
     },
 
     profile: {
@@ -2347,8 +2354,8 @@ export function getContent(locale: Locale) {
       ),
       privacyTitle: T("Política de privacidade", "Privacy policy"),
       privacyBody: T(
-        "Levamos sua privacidade a sério. Os dados da sua garagem ficam no seu aparelho e, se você criar uma conta, são sincronizados de forma segura para você acessar de outros dispositivos.\n\nNão vendemos seus dados e não usamos ferramentas de análise de terceiros. Suas perguntas ao Biela e os dados do carro são enviados a provedores de IA para gerar a resposta — sem o seu nome ou e-mail.\n\nNa versão gratuita do app Android exibimos anúncios do Google AdMob, que usa o identificador de publicidade do aparelho. Pedimos seu consentimento antes do primeiro anúncio e você pode rever a escolha em Preferências de anúncios. Assinantes Premium não veem anúncios.\n\nVocê pode excluir sua conta e seus dados a qualquer momento aqui no Perfil.",
-        "We take your privacy seriously. Your garage data stays on your device and, if you create an account, is securely synced so you can access it from other devices.\n\nWe don't sell your data and use no third-party analytics. Your prompts to Biela and your car details are sent to AI providers to generate the answer — without your name or email.\n\nIn the free Android app we show Google AdMob ads, which use your device's advertising identifier. We ask for your consent before the first ad and you can change it under Ad preferences. Premium subscribers see no ads.\n\nYou can delete your account and data at any time here in Profile."
+        "Levamos sua privacidade a sério. Os dados da sua garagem ficam no seu aparelho e, se você criar uma conta, são sincronizados de forma segura para você acessar de outros dispositivos.\n\nNão vendemos seus dados e não usamos ferramentas de análise de terceiros. Suas perguntas ao Biela e os dados do carro são enviados a provedores de IA para gerar a resposta — sem o seu nome ou e-mail. Se você tocar em 👍 ou 👎 numa resposta, guardamos aquela pergunta e aquela resposta para melhorar o Biela, também sem o seu nome, e apagamos depois de 90 dias.\n\nNa versão gratuita do app Android exibimos anúncios do Google AdMob, que usa o identificador de publicidade do aparelho. Pedimos seu consentimento antes do primeiro anúncio e você pode rever a escolha em Preferências de anúncios. Assinantes Premium não veem anúncios.\n\nVocê pode excluir sua conta e seus dados a qualquer momento aqui no Perfil.",
+        "We take your privacy seriously. Your garage data stays on your device and, if you create an account, is securely synced so you can access it from other devices.\n\nWe don't sell your data and use no third-party analytics. Your prompts to Biela and your car details are sent to AI providers to generate the answer — without your name or email. If you tap 👍 or 👎 on an answer, we store that question and answer to improve Biela, also without your name, and delete it after 90 days.\n\nIn the free Android app we show Google AdMob ads, which use your device's advertising identifier. We ask for your consent before the first ad and you can change it under Ad preferences. Premium subscribers see no ads.\n\nYou can delete your account and data at any time here in Profile."
       ),
       signOut: T("Sair", "Sign out"),
       reset: T("Apagar os dados deste aparelho", "Erase this device's data"),

@@ -102,7 +102,10 @@ export async function POST(request: Request) {
     const answer = Array.isArray(data.content)
       ? data.content.filter((b: { type: string }) => b.type === "text").map((b: { text: string }) => b.text).join("\n").trim()
       : "";
-    return NextResponse.json({ ok: true, mode: "ai", answer: answer || basicAnswer(locale, car) });
+    // `usedManual` vai junto para o registro do voto: quando alguém marca a
+    // resposta como ruim, saber se ela veio do manual do carro ou de
+    // conhecimento geral é a primeira coisa a olhar.
+    return NextResponse.json({ ok: true, mode: "ai", answer: answer || basicAnswer(locale, car), usedManual: !!manual });
   } catch (err) {
     console.warn("[biela] AI call failed, falling back:", err);
     return NextResponse.json({ ok: true, mode: "basic", answer: basicAnswer(locale, car) });
