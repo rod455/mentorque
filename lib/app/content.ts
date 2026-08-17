@@ -6,7 +6,7 @@ import type { Access, Severity, SystemKey, Vehicle } from "./types";
 // detail is where Premium / consulting adds value).
 
 // App version shown in the Profile footer.
-export const APP_VERSION = "1.0.0";
+export const APP_VERSION = "1.1.0";
 
 export function formatBRL(n: number): string {
   return "R$ " + Math.round(n).toLocaleString("pt-BR");
