@@ -46,6 +46,20 @@ create table if not exists public.biela_votos (
 
 alter table public.biela_votos enable row level security;
 
+-- PERMISSÃO. Não é redundante com o RLS acima — são camadas independentes, e
+-- esta tabela já nasceu quebrada por causa disso: o servidor tinha a chave de
+-- serviço, o RLS não a atrapalhava, e o Postgres respondia
+-- "permission denied for table biela_votos" porque o GRANT nunca existiu.
+--
+-- Passar por cima do RLS não dá privilégio nenhum. Uma coisa é a política
+-- decidir QUAIS LINHAS você enxerga; outra é ter direito de tocar na tabela.
+grant select, insert, delete on table public.biela_votos to service_role;
+
+-- E o resto do mundo fica de fora, explicitamente. O app fala com a rota, nunca
+-- com a tabela: aqui dentro há pergunta digitada por gente, e pergunta de gente
+-- traz placa, nome e endereço no meio sem ninguém pedir.
+revoke all on table public.biela_votos from anon, authenticated;
+
 -- Consulta do dia a dia: os 👎 da semana, do mais recente para o mais antigo.
 create index if not exists biela_votos_criado_em_idx
   on public.biela_votos (criado_em desc);
