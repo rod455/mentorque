@@ -2268,6 +2268,44 @@ export function getContent(locale: Locale) {
       deleteConfirm: T("Isso apagará todo o histórico deste carro. Deseja continuar?", "This will erase all history for this car. Continue?"),
     },
 
+    // Pedido de nota. A pergunta não cita a loja: mencioná-la antes da resposta
+    // induz a nota, e é o que separa "perguntar" de "colher elogio".
+    feedback: {
+      pergunta: T("Como está sendo usar o Mentorque?", "How's Mentorque working out for you?"),
+      subtitulo: T("Sua resposta chega direto para quem faz o app.", "Your answer goes straight to the people who build the app."),
+      estrelaLabel: T("Dar nota {n} de 5", "Rate {n} out of 5"),
+      depois: T("Agora não", "Not now"),
+
+      // Nota 4 ou 5
+      obrigadoTitulo: T("Que bom saber 🧡", "Great to hear 🧡"),
+      obrigadoCorpo: T(
+        "Se der um minuto, uma avaliação na loja ajuda outras pessoas a encontrarem o app.",
+        "If you have a minute, a store review helps other people find the app."
+      ),
+      irParaLoja: T("Avaliar na App Store", "Review on the App Store"),
+      irParaLojaGenerico: T("Avaliar o app", "Rate the app"),
+
+      // Nota 1 a 3
+      contaTitulo: T("O que deu errado?", "What went wrong?"),
+      contaCorpo: T(
+        "Escreva do seu jeito. Lemos tudo, e o que dá para consertar entra na fila.",
+        "Write it however you like. We read everything, and what can be fixed gets queued."
+      ),
+      placeholder: T("O que te incomodou?", "What bothered you?"),
+      emailLabel: T("Seu e-mail (opcional, para respondermos)", "Your email (optional, so we can reply)"),
+      enviar: T("Enviar", "Send"),
+      enviando: T("Enviando…", "Sending…"),
+      enviado: T("Recebemos. Obrigado por escrever.", "Got it. Thanks for writing."),
+      erro: T("Não deu para enviar. Tente de novo em instantes.", "Couldn't send. Try again in a moment."),
+      // Continua disponível para quem deu nota baixa: esconder a loja de quem
+      // está insatisfeito é o que a Apple trata como manipulação da avaliação.
+      lojaMesmoAssim: T("Prefiro avaliar na loja", "I'd rather review on the store"),
+
+      // Polegares na resposta da Biela
+      bielaUtil: T("Resposta útil", "Helpful answer"),
+      bielaInutil: T("Resposta ruim", "Poor answer"),
+    },
+
     profile: {
       title: T("Perfil", "Profile"),
       guest: T("Convidado", "Guest"),

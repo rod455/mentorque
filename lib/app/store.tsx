@@ -31,6 +31,19 @@ type Session = {
   notifications: boolean; // preferência de notificações
   units: "metric" | "imperial"; // preferência de unidades
   avatar: string | null; // foto de perfil (data URL), sobrepõe a do Google
+  // Histórico do pedido de nota. Mora na sessão de propósito: sair da conta
+  // limpa o aparelho inteiro, então guardar só no armazenamento local faria a
+  // pergunta voltar a cada login e a cada reinstalação — exatamente o que as
+  // janelas de espera existem para evitar. Aqui ele sobe junto para
+  // `user_state` e volta no próximo login, em qualquer aparelho.
+  feedback?: FeedbackState;
+};
+
+export type FeedbackState = {
+  perguntadoEm: string | null; // último pedido (ISO yyyy-mm-dd)
+  respondidoEm: string | null; // última resposta (ISO); null = fechou sem responder
+  nota: number | null; // 1..5 da última resposta
+  foiParaLoja: boolean; // tocou no botão que abre a ficha da loja
 };
 
 const EMPTY: Session = {
@@ -53,6 +66,7 @@ const EMPTY: Session = {
   notifications: false,
   units: "metric",
   avatar: null,
+  feedback: undefined,
 };
 
 // Today as yyyy-mm-dd (client-side only).
@@ -104,6 +118,7 @@ type StoreValue = {
   setNotifications: (v: boolean) => void;
   setUnits: (v: "metric" | "imperial") => void;
   setAvatar: (dataUrl: string | null) => void;
+  patchFeedback: (parte: Partial<FeedbackState>) => void; // registra o pedido de nota
   subscribed: boolean; // assinatura Stripe ativa (fonte da verdade do premium)
   subscriptionEndsAt: string | null; // fim do período atual (ISO)
   subscriptionCanceling: boolean; // marcada para cancelar no fim do período
@@ -188,6 +203,26 @@ export function mergeSessions(cloud: Session, local: Session): Session {
     notifications: cloud.notifications ?? local.notifications ?? false,
     units: cloud.units ?? local.units ?? "metric",
     avatar: cloud.avatar ?? local.avatar ?? null,
+    feedback: mergeFeedback(cloud.feedback, local.feedback),
+  };
+}
+
+// Feedback: junta pelo lado mais RESTRITIVO, não pelo mais recente.
+//
+// Aqui o `||` é seguro, ao contrário do que aconteceu com o premium: lá ele
+// concedia um benefício e por isso vazava entre contas; aqui ele só cala o app.
+// Na dúvida entre perguntar e não perguntar, não perguntar é o erro barato.
+function mergeFeedback(cloud?: FeedbackState, local?: FeedbackState): FeedbackState | undefined {
+  if (!cloud) return local;
+  if (!local) return cloud;
+  // A data mais recente manda: é a que adia mais o próximo pedido.
+  const maisNovo = (a: string | null, b: string | null) => [a, b].filter(Boolean).sort().pop() ?? null;
+  const recente = (cloud.respondidoEm ?? "") >= (local.respondidoEm ?? "") ? cloud : local;
+  return {
+    perguntadoEm: maisNovo(cloud.perguntadoEm, local.perguntadoEm),
+    respondidoEm: maisNovo(cloud.respondidoEm, local.respondidoEm),
+    nota: recente.nota ?? cloud.nota ?? local.nota ?? null,
+    foiParaLoja: !!cloud.foiParaLoja || !!local.foiParaLoja,
   };
 }
 
@@ -456,6 +491,24 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const setUnits = useCallback((v: "metric" | "imperial") => patch((p) => ({ ...p, units: v })), [patch]);
   const setAvatar = useCallback((dataUrl: string | null) => patch((p) => ({ ...p, avatar: dataUrl })), [patch]);
 
+  // Registra o que aconteceu no pedido de nota. Recebe um pedaço, não o objeto
+  // inteiro, para nunca apagar sem querer o `foiParaLoja` de quem já avaliou.
+  const patchFeedback = useCallback(
+    (parte: Partial<FeedbackState>) =>
+      patch((p) => ({
+        ...p,
+        feedback: {
+          perguntadoEm: null,
+          respondidoEm: null,
+          nota: null,
+          foiParaLoja: false,
+          ...(p.feedback ?? {}),
+          ...parte,
+        },
+      })),
+    [patch]
+  );
+
   const finishOnboarding = useCallback(() => patch((p) => ({ ...p, onboarded: true, startedAt: p.startedAt ?? todayISO() })), [patch]);
   const reset = useCallback(() => patch(() => ({ ...EMPTY, momentPhotos: {} })), [patch]);
 
@@ -464,8 +517,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const es = useMemo(() => (subActive && !s.premium ? { ...s, premium: true } : s), [s, subActive]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s: es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
-    [es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
+    () => ({ s: es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
+    [es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

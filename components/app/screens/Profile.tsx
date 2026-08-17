@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { apiUrl } from "@/lib/app/apiBase";
+import { apiPost, apiUrl } from "@/lib/app/apiBase";
 import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/app/auth";
@@ -514,17 +514,22 @@ function SupportForm() {
     if (!supMsg.trim()) return setSupErr(true);
     setSupStatus("sending");
     try {
-      const res = await fetch(apiUrl("/api/feedback"), {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          type: supType,
-          message: supMsg.trim(),
-          name: s.name || undefined,
-          email: (supEmail || s.email || "").trim() || undefined,
-          userId: deviceId(),
-          locale,
-        }),
+      // `apiPost`, não `fetch` com JSON.
+      //
+      // `content-type: application/json` numa chamada entre origens obriga o
+      // navegador a mandar antes um OPTIONS, e o registro em apiBase.ts conta
+      // que essa verificação morria dentro da WebView do iPhone — as chamadas
+      // não chegavam NEM como OPTIONS. O middleware hoje responde CORS, mas o
+      // canal por onde o usuário reclama do app é o último que pode depender
+      // disso: se ele falhar, ninguém avisa, porque avisar é justamente o que
+      // ele deixou de fazer.
+      const res = await apiPost("/api/feedback", {
+        type: supType,
+        message: supMsg.trim(),
+        name: s.name || undefined,
+        email: (supEmail || s.email || "").trim() || undefined,
+        userId: deviceId(),
+        locale,
       });
       if (!res.ok) throw new Error("send_failed");
       setSupStatus("sent");

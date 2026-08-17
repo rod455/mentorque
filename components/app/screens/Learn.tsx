@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { apiPost, apiUrl } from "@/lib/app/apiBase";
+import { pedirFeedback } from "@/lib/app/feedbackPrompt";
 import { useI18n } from "@/lib/i18n";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { personalScore, vehicleSituations, vehicleTraits } from "@/lib/app/traits";
@@ -310,6 +311,24 @@ export function ContentScreen({ id }: { id: string }) {
   // Concluído e Salvo são ações do usuário (botões) — persistem na sessão.
   const done = lesson ? (s.seenLessons ?? []).includes(lesson.id) : false;
   const saved = lesson ? (s.savedLessons ?? []).includes(lesson.id) : false;
+
+  // Conclui a aula e, na TERCEIRA da mesma trilha, pede a nota.
+  //
+  // Três aulas do mesmo assunto é alguém que escolheu um tema e foi fundo —
+  // sinal bem mais forte que três aulas soltas. Trilha inteira seria melhor
+  // ainda, mas as trilhas têm de 5 a 22 aulas e o gatilho quase nunca chegaria.
+  //
+  // Conta o TOTAL depois de concluir, e não o toque: `markLessonSeen` alterna
+  // nos dois sentidos, e contar toques faria desmarcar-e-marcar de novo abrir a
+  // pergunta a cada vez.
+  const concluir = () => {
+    if (!lesson) return;
+    markLessonSeen(lesson.id);
+    if (done) return; // estava marcada: este toque desmarcou
+    const daTrilha = new Set(c.lessons.filter((l) => l.track === lesson.track).map((l) => l.id));
+    const concluidas = new Set([...(s.seenLessons ?? []), lesson.id].filter((x) => daTrilha.has(x)));
+    if (concluidas.size === 3) pedirFeedback(s, "tres-aulas-trilha");
+  };
   // Interstitial ao abrir uma aula (só free), sujeito à política de anúncios:
   // carência nas primeiras aberturas, intervalo mínimo e teto diário.
   const [needAd, setNeedAd] = useState(false);
@@ -409,7 +428,7 @@ export function ContentScreen({ id }: { id: string }) {
       )}
 
       <div className="mt-6 flex gap-2">
-        <Button className="flex-1" onClick={() => markLessonSeen(lesson.id)}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
+        <Button className="flex-1" onClick={concluir}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
         <Button variant="ghost" className="flex-1" onClick={() => toggleLessonSaved(lesson.id)}>{saved ? `★ ${c.learn.savedLabel}` : `☆ ${c.learn.saveLater}`}</Button>
         <PinButton id={lesson.id} />
       </div>
@@ -433,8 +452,38 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
   const [used, setUsed] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [votos, setVotos] = useState<Record<number, "up" | "down">>({});
+  const relogio = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const gated = !s.premium && used >= FREE_BIELA_QUESTIONS;
+
+  // O 👍 ARMA o pedido de nota; quem dispara é o silêncio.
+  //
+  // Perguntar na hora do polegar interromperia alguém no meio de um problema no
+  // carro — o pior momento possível para pedir estrelas. Trinta segundos sem
+  // pergunta nova é o sinal de que a conversa acabou bem.
+  //
+  // O 👎 fica guardado só na tela por ora: ele é o melhor material para corrigir
+  // a Biela, mas mandar cada polegar para baixo por e-mail encheria a caixa.
+  const desarmar = () => {
+    if (relogio.current) { clearTimeout(relogio.current); relogio.current = null; }
+  };
+  // Sair da tela cancela: a folha não deve pular numa tela onde o momento não
+  // aconteceu.
+  useEffect(() => desarmar, []);
+
+  const votar = (i: number, v: "up" | "down") => {
+    setVotos((m) => ({ ...m, [i]: v }));
+    desarmar();
+    if (v !== "up") return;
+    relogio.current = setTimeout(() => {
+      relogio.current = null;
+      // Meia pergunta escrita não é fim de conversa, é alguém formulando —
+      // e interromper aí é pior do que interromper logo.
+      if (inputRef.current?.value.trim()) return;
+      pedirFeedback(s, "biela-util");
+    }, 30_000);
+  };
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -451,6 +500,7 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
   const ask = async (question: string) => {
     const text = question.trim();
     if (!text || busy || gated) return;
+    desarmar(); // ainda está resolvendo algo: o próximo 👍 arma de novo
     setInput("");
     setMsgs((m) => [...m, { role: "user", text }]);
     setBusy(true);
@@ -502,6 +552,21 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
             <div className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${m.role === "user" ? "bg-amber text-graphite" : "bg-graphite-800 text-cream/90 ring-1 ring-white/5"}`}>
               <p className="whitespace-pre-wrap">{m.text}</p>
               {m.note && <p className="mt-1.5 text-[11px] italic text-cream/45">{m.note}</p>}
+              {m.role === "biela" && i > 0 && (
+                <div className="mt-2 flex gap-1 border-t border-white/5 pt-2">
+                  {([["up", "👍", c.feedback.bielaUtil], ["down", "👎", c.feedback.bielaInutil]] as const).map(([v, icone, rotulo]) => (
+                    <button
+                      key={v}
+                      onClick={() => votar(i, v)}
+                      aria-label={rotulo}
+                      aria-pressed={votos[i] === v}
+                      className={`rounded-lg px-2 py-1 text-sm transition-colors ${votos[i] === v ? "bg-amber/20" : "opacity-45 hover:opacity-100"}`}
+                    >
+                      {icone}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         ))}

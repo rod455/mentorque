@@ -5,12 +5,15 @@ import { useI18n } from "@/lib/i18n";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { LIMITS } from "@/lib/app/premium";
 import { nextServiceByTime } from "@/lib/app/health";
+import { pedirFeedback } from "@/lib/app/feedbackPrompt";
 import { formatBRL } from "@/lib/app/content";
 import { resizeImage } from "@/lib/app/image";
 import type { ServicePart, ServiceRecord, SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Autocomplete, Card, Chip, Icon, inputCls, PremiumBadge, SectionTitle, useContent } from "../ui";
+
+const hojeISO = () => new Date().toISOString().slice(0, 10);
 
 const SYSTEMS: SystemKey[] = ["engine", "brakes", "suspension", "tires", "electrical"];
 
@@ -349,6 +352,20 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
     // histórico é o destino que faz sentido para todos os caminhos: é onde o
     // serviço recém-criado aparece.
     root({ name: "history" });
+
+    // Primeiro serviço registrado, e num dia diferente do cadastro.
+    //
+    // O "dia diferente" não é detalhe: quem monta o histórico antigo do carro
+    // na primeira sessão chega aqui com três minutos de app, e a nota que daria
+    // seria de primeira impressão, não do produto. Quem voltou no dia seguinte
+    // para registrar a troca de óleo, sim, tem o que avaliar.
+    //
+    // `s.services` ainda é o estado de antes do `addService` — por isso a
+    // comparação é com zero. E `startedAt` sobrevive a login em outro aparelho
+    // e a reinstalação, porque o merge guarda sempre a data mais antiga.
+    if (!editing && s.services.length === 0 && s.startedAt && s.startedAt !== hojeISO()) {
+      pedirFeedback(s, "primeiro-servico");
+    }
   };
 
   return (
