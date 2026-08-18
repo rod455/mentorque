@@ -1,9 +1,14 @@
 # Mentorque — build Android
 
-O app Android é um **wrapper** (Capacitor) que carrega `https://mentorque.com.br/app`
-numa WebView. Conteúdo, telas e preços atualizam via deploy do site — **não**
-precisa de novo release na loja, exceto se mudar esta "casca" (ícone, splash,
-nome, plugins, permissões, política de navegação).
+O app Android é **empacotado** (Capacitor): telas, estilos, textos e imagens
+viajam dentro do `.aab`, gerados por `npm run build:native`. Não existe
+`server.url` — a WebView não sai para a internet para desenhar a interface.
+
+> ⚠️ **Mudança de tela, texto ou preço exige build novo.** Até a versão 1.0 o
+> app carregava `https://mentorque.com.br/app` e bastava um deploy da Vercel;
+> não é mais assim. O que ainda vem pela rede, e portanto muda só com deploy:
+> as rotas de `/api` (Biela, Stripe, FIPE, revisões) e o catálogo remoto de
+> conteúdo (`lib/app/remoteLessons.ts`).
 
 ## Pré-requisitos (uma vez)
 - Android Studio com SDK 36 e JDK 21
@@ -17,10 +22,15 @@ limpo não compila até você rodar, na raiz do repositório:
 
 ```bash
 npm install
-npm run sync:android      # = npx cap sync android
+npm run android:studio    # = npm run build:native && npx cap sync android
 ```
 
-Se esquecer, o Gradle para com uma mensagem dizendo exatamente isto.
+**Use `android:studio`, não `sync:android`.** O `sync:android` roda só o
+`cap sync`, que COPIA o site já compilado — ele não compila nada. Sem o
+`build:native` antes, ou o Gradle para com "Could not find the web assets
+directory", ou pior: encontra a pasta da build anterior e gera um `.aab`
+perfeitamente válido com o app da semana passada dentro. O pacote sobe, a Play
+aprova, e nenhuma das mudanças chega ao aparelho de ninguém.
 
 ## Build local — caminho curto (Windows)
 
@@ -32,13 +42,18 @@ cd C:\Apps\Mentorque
 O script faz `git pull`, `npm install`, `cap sync android` e `gradlew clean
 bundleRelease`, e no fim imprime o caminho do `.aab`, o do `mapping.txt` e o
 `versionCode` que entrou no pacote. Para sobrescrever o número sem editar o
-`gradle.properties`: `.\scripts\release-android.ps1 -VersionCode 3`.
+`gradle.properties`: `.\scripts\release-android.ps1 -VersionCode 4`.
 
 ## Build local
 
 ```bash
+npm run android:studio    # compila o site, sincroniza
 npm run open:android      # abre o projeto no Android Studio
 ```
+
+A ordem importa: o Android Studio empacota o que estiver em
+`android/app/src/main/assets/public` no momento do build. Abrir o Studio sem
+rodar o `android:studio` antes gera um pacote com o app antigo.
 
 Ou direto pela linha de comando:
 
@@ -87,7 +102,11 @@ WebView embutida (`disallowed_useragent`) e um retorno `https://` cairia no
 navegador do sistema, deixando o app deslogado. Então o fluxo é:
 
 1. O app abre a página do provedor numa **aba do sistema** (`@capacitor/browser`).
-2. O provedor volta para o deep link **`mentorque.app://auth-callback`**.
+2. O provedor volta para o deep link **`mentorque://auth-callback`** — o valor
+   real está em `lib/app/wrapper.ts` (`NATIVE_AUTH_CALLBACK`). Escreveu-se
+   `mentorque.app://` aqui por um tempo, e é errado: o Android registra só o
+   esquema `mentorque` (`res/values/strings.xml`). O iPhone atende os dois, por
+   herança, o que escondia o engano.
 3. O Android/iOS reabre o app com essa URL e `lib/app/auth.tsx` troca o código
    pela sessão (PKCE).
 
@@ -95,7 +114,7 @@ Para isso funcionar, no painel do Supabase → **Authentication → URL
 Configuration → Redirect URLs**, adicione:
 
 ```
-mentorque.app://auth-callback
+mentorque://auth-callback
 https://mentorque.com.br/app
 ```
 
@@ -124,8 +143,7 @@ sincronia: `res/values/strings.xml` (`custom_url_scheme`), o `intent-filter` do
 
 | Item | Onde |
 | --- | --- |
-| URL do app na WebView | `capacitor.config.ts` → `server.url` |
-| Tela offline (sem rede, em vez de tela branca) | `native/webshell/offline.html` → `server.errorPath` |
+| Site empacotado que vai dentro do `.aab` | `scripts/build-native.mjs` → `webDir: native/app` |
 | Trava de navegação (não sai de `/app`) | `components/app/NativeLinkGuard.tsx` |
 | Edge-to-edge + ícones claros nas barras | `viewportFit` em `app/layout.tsx` + `plugins.SystemBars` |
 | Splash (API do Android 12+, compat até o 6) | `res/values/styles.xml` + `MainActivity.java` |
@@ -143,14 +161,17 @@ npx @capacitor/assets generate --android    # usa assets/icon.png e assets/splas
 
 ## Antes de enviar para a Play
 
-- [ ] `npm run sync:android` rodado
+- [ ] `npm run android:studio` rodado (build:native **+** sync — ver acima)
+- [ ] `mentorqueVersionCode` incrementado em `gradle.properties`
 - [ ] Instalar o `.aab` de **release** num aparelho real e abrir o app —
       o build de release passa pelo R8 (`minifyEnabled true`), que não é
       exercitado pelo build de debug
-- [ ] Modo avião: confirmar que aparece a tela "Sem conexão", não tela branca
+- [ ] Modo avião: o app abre e navega normalmente (a interface é local); só o
+      Biela e as revisões devem avisar que falta rede. Tela branca aqui
+      significa que o `build:native` não entrou no pacote
 - [ ] **Entrar com Google e com Apple num aparelho real**: a aba do sistema
       abre, e ao terminar o app reabre já logado. Se voltar deslogado, falta
-      o `mentorque.app://auth-callback` nos Redirect URLs do Supabase
+      o `mentorque://auth-callback` nos Redirect URLs do Supabase
 - [ ] Tocar em "Política de privacidade" e "Avaliar o Mentorque": devem abrir
       **fora** do app (aba do sistema), nunca a landing dentro da WebView
 - [ ] **Segurança de dados** no Play Console declarando o ID de publicidade

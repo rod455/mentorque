@@ -2,7 +2,7 @@
 // Usado pelo "modo leitor": na versão da loja não oferecemos compra de
 // assinatura (política do Google Play Billing) — o Premium é assinado pelo
 // site e funciona normalmente no app após o login.
-import { APP_STORE_REVIEW_URL, PLAY_STORE_URL } from "@/lib/stores";
+import { APP_STORE_REVIEW_URL, PLAY_STORE_REVIEW_URL } from "@/lib/stores";
 
 export function isNativeApp(): boolean {
   if (typeof window === "undefined") return false;
@@ -123,11 +123,12 @@ export function sellsInApp(): boolean {
 // cai numa App Store dizendo que o app não existe — foi o que aconteceu
 // enquanto ele era `id0000000000`.
 //
-// A ficha da Apple está publicada; a do Google Play ainda não, então o link do
-// Android continua sem destino real por ora.
+// As duas fichas estão publicadas. A da Apple abre direto na caixa de nota
+// (`?action=write-review`); a da Play não tem equivalente e abre a ficha, com o
+// formulário de avaliação logo abaixo da descrição — ver lib/stores.ts.
 export function storeListingUrl(): string {
   const platform = nativePlatform();
-  if (platform === "android") return PLAY_STORE_URL;
+  if (platform === "android") return PLAY_STORE_REVIEW_URL;
   if (platform === "ios") return APP_STORE_REVIEW_URL;
   return "https://www.mentorque.com.br";
 }

@@ -2284,6 +2284,9 @@ export function getContent(locale: Locale) {
         "If you have a minute, a store review helps other people find the app."
       ),
       irParaLoja: T("Avaliar na App Store", "Review on the App Store"),
+      // Cada loja pelo nome dela. Um rótulo só, dizendo "App Store", mandaria
+      // metade dos usuários para uma loja que o aparelho deles não tem.
+      irParaLojaPlay: T("Avaliar na Google Play", "Review on Google Play"),
       irParaLojaGenerico: T("Avaliar o app", "Rate the app"),
 
       // Nota 1 a 3
@@ -2609,6 +2612,12 @@ export function getContent(locale: Locale) {
       readerTitle: T("Assinatura indisponível neste app", "Subscription not available in this app"),
       readerBody: T("O Mentorque Premium não está disponível para compra nesta versão do aplicativo. Se você já é assinante, entre na sua conta e todos os recursos serão liberados automaticamente.", "Mentorque Premium can't be purchased in this version of the app. If you're already a subscriber, sign in and everything unlocks automatically."),
       readerOk: T("Entendi", "Got it"),
+      // O corpo manda "entre na sua conta" — e a tela precisa ter esse caminho.
+      // Sem ele o texto pedia uma coisa impossível de fazer dali.
+      readerSignIn: T("Entrar na minha conta", "Sign in to my account"),
+      readerRefresh: T("Já sou assinante — atualizar", "I'm already a subscriber — refresh"),
+      readerChecking: T("Conferindo…", "Checking…"),
+      readerNotFound: T("Não encontramos uma assinatura ativa nesta conta.", "We couldn't find an active subscription on this account."),
       compareTitle: T("Free vs Premium", "Free vs Premium"),
       colFree: T("Grátis", "Free"),
       colPremium: "Premium",

@@ -84,8 +84,16 @@ export function FeedbackSheet() {
   if (!aberta) return null;
 
   const baixa = nota != null && nota <= 3;
-  // Só o iOS tem ficha publicada hoje; no Android e na web o rótulo é genérico.
-  const naLoja = isNativeApp() && nativePlatform() === "ios";
+  // Nos dois apps a ficha existe agora, então o rótulo cita a loja — cada uma
+  // pelo nome dela, porque "Avaliar na App Store" num Android manda a pessoa
+  // para uma loja que o aparelho dela não tem. Na web fica genérico: ali o
+  // botão leva ao site, e falar em loja seria promessa que o link não cumpre.
+  const plataforma = isNativeApp() ? nativePlatform() : null;
+  const rotuloLoja =
+    plataforma === "ios" ? f.irParaLoja
+    : plataforma === "android" ? f.irParaLojaPlay
+    : f.irParaLojaGenerico;
+  const naLoja = plataforma !== null;
 
   return (
     <Sheet open onClose={() => setAberta(false)}>
@@ -153,9 +161,7 @@ export function FeedbackSheet() {
           <h2 className="px-10 font-serif text-xl font-bold text-cream">{f.obrigadoTitulo}</h2>
           <p className="mx-auto mt-1.5 max-w-xs text-sm text-cream/55">{f.obrigadoCorpo}</p>
           {/* Botão, nunca redirecionamento: a pessoa decide se vai. */}
-          <Button className="mt-5 w-full" onClick={paraALoja}>
-            {naLoja ? f.irParaLoja : f.irParaLojaGenerico}
-          </Button>
+          <Button className="mt-5 w-full" onClick={paraALoja}>{rotuloLoja}</Button>
           <button onClick={() => setAberta(false)} className="mt-3 text-sm text-cream/45 hover:text-cream/70">
             {f.depois}
           </button>

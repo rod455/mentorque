@@ -11,7 +11,7 @@ import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
 import { cancelSubscription, deleteAccount, openBillingPortal, reactivateSubscription, startCheckout } from "@/lib/app/billing";
 import { getStripeJs, stripeConfigured } from "@/lib/app/stripeClient";
 import { trialDaysFor, trialPlatform, type Platform } from "@/lib/app/platform";
-import { isNativeApp, openExternal, sellsInApp, storeListingUrl } from "@/lib/app/wrapper";
+import { isNativeApp, nativePlatform, openExternal, sellsInApp, storeListingUrl } from "@/lib/app/wrapper";
 import { hasActiveEntitlement, initPurchases, type RcPackage } from "@/lib/app/purchases";
 import { openPrivacyOptions, privacyOptionsRequired } from "@/lib/app/admob";
 import { privacyUrl, termsUrl } from "@/lib/app/legal";
@@ -759,7 +759,12 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   // Carregar as ofertas leva alguns segundos. Sem este estado, quem abria o
   // paywall antes de terminar via "Assinatura indisponível neste app" — que é
   // a mensagem do modo leitor, não de carregamento.
-  const [iapReady, setIapReady] = useState(!isNativeApp());
+  //
+  // A espera só faz sentido onde existe o que esperar. No Android não há
+  // RevenueCat nenhum (`initPurchases` devolve null na primeira linha), então
+  // o "Carregando os planos…" era uma promessa que a tela nunca ia cumprir —
+  // um piscar de esperança antes do modo leitor. Só o iPhone começa esperando.
+  const [iapReady, setIapReady] = useState(nativePlatform() !== "ios");
   useEffect(() => {
     if (!isNativeApp()) return;
     (async () => {
@@ -793,6 +798,27 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
       setIapBusy(false);
     }
   };
+
+  // Modo leitor: "já sou assinante". Não é compra nem restauração de loja —
+  // é reler a tabela de assinaturas do Supabase, onde cai quem pagou pelo site.
+  //
+  // O resultado precisa de um pequeno intervalo: `refreshSubscription` devolve
+  // void e escreve num estado, então quem toca no botão só descobre o desfecho
+  // no render seguinte. Sem a espera o botão piscava e nada visível mudava —
+  // que é indistinguível de um botão quebrado.
+  const [conferindo, setConferindo] = useState(false);
+  const [semAssinatura, setSemAssinatura] = useState(false);
+  const reconferir = () => {
+    setSemAssinatura(false);
+    setConferindo(true);
+    refreshSubscription();
+  };
+  useEffect(() => {
+    if (!conferindo) return;
+    if (subscribed) { setConferindo(false); back(); return; }
+    const t = setTimeout(() => { setConferindo(false); setSemAssinatura(true); }, 1500);
+    return () => clearTimeout(t);
+  }, [conferindo, subscribed, back]);
 
   const restoreNative = async () => {
     try {
@@ -887,13 +913,47 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
       );
     }
     // Sem IAP configurado (ex.: Android): modo leitor.
+    //
+    // Esta tela é o DESTINO de quase trinta caminhos — o card da Biela, cada
+    // aula trancada, o limite de carros, o botão do house ad. Ela era um beco:
+    // uma frase mandando "entre na sua conta" e um "Entendi" que só voltava.
+    // Quem estava deslogado não tinha como entrar dali, e quem já assinava na
+    // web não tinha como pedir ao app que conferisse de novo.
+    //
+    // O que entra é só restauração de acesso (entrar / reconferir) e a
+    // comparação de planos, que explica por que aquele cadeado existe. Convite
+    // de compra por fora continua fora: é o que a política do Play proíbe.
     return (
-      <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 text-center">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/biela/biela-idle.png" alt="Biela" className="h-32 w-32 object-contain" draggable={false} />
-        <h1 className="mt-3 font-serif text-2xl font-bold text-cream">{sub.readerTitle}</h1>
-        <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-cream/60">{sub.readerBody}</p>
-        <Button className="mt-6" onClick={back}>{sub.readerOk}</Button>
+      <div className="flex min-h-[70vh] flex-col px-2 pb-6">
+        <div className="flex items-center pb-2 pt-4">
+          <button onClick={back} aria-label="fechar" className="grid h-8 w-8 place-items-center rounded-full bg-graphite-700 text-cream/70">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><path d="M6 6l12 12M18 6 6 18" /></svg>
+          </button>
+        </div>
+        <div className="flex flex-col items-center text-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/biela/biela-idle.png" alt="Biela" className="h-28 w-28 object-contain" draggable={false} />
+          <h1 className="mt-2 font-serif text-2xl font-bold text-cream">{sub.readerTitle}</h1>
+          <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-cream/60">{sub.readerBody}</p>
+        </div>
+
+        <div className="mt-5">
+          {user ? (
+            <>
+              <Button className="w-full" onClick={reconferir} disabled={conferindo}>
+                {conferindo ? sub.readerChecking : sub.readerRefresh}
+              </Button>
+              {semAssinatura && <p className="mt-2 text-center text-xs text-cream/45">{sub.readerNotFound}</p>}
+            </>
+          ) : (
+            <Button className="w-full" onClick={() => go({ name: "auth" })}>{sub.readerSignIn}</Button>
+          )}
+        </div>
+
+        {/* Por que aquele cadeado existe. Sem preço e sem botão de compra. */}
+        <div className="mt-5"><ComparativoPlanos /></div>
+
+        <button onClick={back} className="mx-auto mt-5 block text-sm text-cream/45 hover:text-cream/70">{sub.readerOk}</button>
       </div>
     );
   }

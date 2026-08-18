@@ -31,14 +31,31 @@ export const APP_STORE_PUBLICADO = false;
  */
 export const APP_STORE_REVIEW_URL = `https://apps.apple.com/app/id${APPLE_APP_ID}?action=write-review`;
 
-/** Play Store. Ainda NÃO publicado — o link existe, a ficha não. */
+/** Ficha do app na Google Play. Publicada. */
 export const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=mentorque.app";
+
+/**
+ * Endereço usado pelo "Avaliar o Mentorque" dentro do app Android.
+ *
+ * A Play não tem equivalente ao `?action=write-review` da Apple: não existe URL
+ * que abra a caixa de nota direto. O caminho oficial para isso é a API de
+ * avaliação dentro do app (Play In-App Review), que exigiria código nativo. Até
+ * lá, a ficha é o melhor destino — o formulário de avaliação está nela, logo
+ * abaixo da descrição.
+ *
+ * Fica em `https://` e não em `market://`: a saída do app passa pelo plugin
+ * Browser (aba do sistema), que não sabe abrir esquemas de aplicativo. O
+ * endereço da Play é um link verificado do próprio app da loja, então o Android
+ * o entrega ao aplicativo da Play mesmo assim.
+ */
+export const PLAY_STORE_REVIEW_URL = PLAY_STORE_URL;
 
 /**
  * O Android já saiu?
  *
- * Enquanto for `false`, a landing mostra "Em breve" no lugar do link — apontar
- * para uma ficha que não existe é pior que não apontar: quem toca recebe um
- * erro da própria Play Store e conclui que o app foi tirado do ar.
+ * O app FOI aprovado e a ficha existe — este interruptor, como o da Apple, é
+ * sobre a LANDING, que ainda está escrita para o pré-lançamento. Vira `true`
+ * junto com a reescrita da página; o endereço aqui já é o real e o app já o usa
+ * (o "Avaliar o Mentorque" não depende deste interruptor).
  */
 export const PLAY_STORE_PUBLICADO = false;

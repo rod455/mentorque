@@ -3,9 +3,16 @@
 #   ios-testflight    → .ipa assinado → TestFlight
 #   android-play      → .aab assinado → Google Play (faixa de teste interno)
 #
-# As duas cascas carregam a WebView de https://mentorque.com.br/app, então só
-# precisam rodar quando a casca muda (ícone, splash, plugins, permissões,
-# versão). Mudança de conteúdo/tela/preço vai por deploy do site.
+# ATENÇÃO — isto mudou e o texto antigo enganava: os dois apps NÃO apontam mais
+# para https://mentorque.com.br/app. Desde que passaram a ser empacotados
+# (`npm run build:native` → `webDir: native/app`, sem `server.url`), telas,
+# estilos e textos viajam DENTRO do binário. Ou seja: mudança de tela, de texto
+# ou de preço exige um build novo aqui — deploy da Vercel sozinho não chega ao
+# aparelho de ninguém.
+#
+# O que continua vindo pela rede, e portanto muda só com deploy do site: as
+# rotas de /api (Biela, Stripe, FIPE, revisões) e o catálogo remoto de conteúdo
+# (lib/app/remoteLessons.ts).
 workflows:
   ios-testflight:
     name: iOS → TestFlight
