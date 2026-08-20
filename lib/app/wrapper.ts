@@ -103,17 +103,41 @@ export function emailRedirectUrl(): string {
   return typeof window !== "undefined" ? `${window.location.origin}/app` : `${APP_ORIGIN}/app`;
 }
 
+// Chave pública do RevenueCat da loja onde o app está rodando.
+//
+// São variáveis de BUILD: entram no pacote na hora do `build:native` e não são
+// lidas em tempo de execução. Compilar sem elas gera um app que abre normal e
+// simplesmente não vende — o que já custou três diagnósticos no iOS.
+//
+// A ausência da chave é o interruptor do modo leitor. É assim que o Android
+// atravessou o lançamento inteiro sem vender, e é assim que ele passa a vender
+// no dia em que a chave existir: sem tocar em nenhuma tela.
+const CHAVES_IAP: Record<string, string> = {
+  ios: process.env.NEXT_PUBLIC_REVENUECAT_IOS_KEY ?? "",
+  android: process.env.NEXT_PUBLIC_REVENUECAT_ANDROID_KEY ?? "",
+};
+
+export function iapKey(): string {
+  const p = nativePlatform();
+  return p ? CHAVES_IAP[p] ?? "" : "";
+}
+
 // Onde o app pode VENDER assinatura.
 //
-// Web: checkout do Stripe. iOS: compra da Apple via RevenueCat. Android: não —
-// a política do Play Billing proíbe cobrar por fora, então lá o app é "modo
-// leitor" e nem convida para assinar.
+// Web: checkout do Stripe. App de loja: só onde houver chave de compra interna
+// — Apple IAP no iPhone, Play Billing no Android. Sem chave, aquela loja fica
+// em "modo leitor": não vende e não convida para assinar, que é o que a
+// política do Play exige de quem não usa o Play Billing.
 //
-// Isto existe porque a checagem era `isNativeApp()`, herdada de quando os dois
-// apps eram modo leitor. Com a venda ligada no iOS, aquela checagem escondia
-// TODO o Premium no iPhone.
+// Era `nativePlatform() === "ios"` fixo. Virou uma pergunta sobre a chave para
+// o Android poder entrar sem mexer em tela nenhuma: com a chave no build, o
+// paywall, o banner de upgrade e o botão do house ad voltam sozinhos.
+//
+// Antes disso a checagem era `isNativeApp()`, herdada de quando os dois apps
+// eram modo leitor. Com a venda ligada no iOS, aquela checagem escondia TODO o
+// Premium no iPhone.
 export function sellsInApp(): boolean {
-  return !isNativeApp() || nativePlatform() === "ios";
+  return !isNativeApp() || !!iapKey();
 }
 
 // Link da loja para "avaliar o app". Na web cai no site.

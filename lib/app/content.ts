@@ -2556,6 +2556,13 @@ export function getContent(locale: Locale) {
         "A renovação é automática, pela sua conta Apple, salvo cancelamento até 24 horas antes do fim do período. Gerencie em Ajustes → Assinaturas.",
         "Renews automatically through your Apple account unless cancelled at least 24 hours before the end of the period. Manage in Settings → Subscriptions."
       ),
+      // O mesmo aviso, para quem comprou pela Play. Cada loja tem a sua conta e
+      // o seu lugar de cancelar — mandar um usuário Android para "Ajustes →
+      // Assinaturas" do iPhone é instrução para um aparelho que ele não tem.
+      iapRenewNotePlay: T(
+        "A renovação é automática, pela sua conta do Google Play, salvo cancelamento até 24 horas antes do fim do período. Gerencie na Play Store → Pagamentos e assinaturas.",
+        "Renews automatically through your Google Play account unless cancelled at least 24 hours before the end of the period. Manage in Play Store → Payments and subscriptions."
+      ),
       // Paywall com teste grátis
       trialTitle: T("Experimente o Premium", "Try Premium"),
       trialDays: 7,
@@ -2581,8 +2588,15 @@ export function getContent(locale: Locale) {
       ] as { icon: string; label: string; free: "check" | "ltd" | "lock" }[],
       reminder: T("Lembrar antes do teste terminar", "Remind me before the trial ends"),
       trialCta: T("Começar {n} dias grátis", "Start {n}-day free trial"),
-      trialFine: T("Após o período grátis, R$ 239,90 cobrado anual. Cancele quando quiser.", "After the free trial, R$ 239.90 billed yearly. Cancel anytime."),
-      trialFineMonthly: T("Após o período grátis, R$ 29,90 por mês. Cancele quando quiser.", "After the free trial, R$ 29.90 per month. Cancel anytime."),
+      // `{preco}` é substituído por quem desenha a tela: na web pelo preço do
+      // Stripe, no app da loja pelo `priceString` que a própria loja devolve.
+      //
+      // Estava escrito à mão ("R$ 239,90") e isso punha DOIS preços diferentes
+      // na mesma tela assim que a loja cobrasse outro valor — o cartão do plano
+      // dizendo um, a letra miúda dizendo outro. Além de confundir, é o tipo de
+      // contradição que a revisão da Apple trata como preço incorreto (3.1.2(c)).
+      trialFine: T("Após o período grátis, {preco} cobrado anual. Cancele quando quiser.", "After the free trial, {preco} billed yearly. Cancel anytime."),
+      trialFineMonthly: T("Após o período grátis, {preco} por mês. Cancele quando quiser.", "After the free trial, {preco} per month. Cancel anytime."),
       planAnnual: T("Anual", "Yearly"),
       planAnnualPrice: T("R$ 239,90/ano", "R$ 239.90/yr"),
       planAnnualNote: T("R$ 19,99/mês", "R$ 19.99/mo"),

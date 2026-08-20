@@ -1,10 +1,12 @@
-// Compras internas (Apple In-App Purchase via RevenueCat) — usadas apenas no
-// wrapper nativo iOS, onde a Apple exige IAP para assinaturas digitais.
-// A chave pública do app iOS fica no RevenueCat (Project → API keys) e entra
-// via env NEXT_PUBLIC_REVENUECAT_IOS_KEY (Vercel).
-import { nativePlatform } from "./wrapper";
-
-export const REVENUECAT_IOS_KEY = process.env.NEXT_PUBLIC_REVENUECAT_IOS_KEY ?? "";
+// Compras internas pela loja (Apple IAP e Google Play Billing), via RevenueCat.
+// As duas lojas exigem o pagamento delas para assinatura digital consumida
+// dentro do app; o Stripe fica para a web.
+//
+// As chaves públicas ficam no RevenueCat (Project → API keys) e entram por env:
+// NEXT_PUBLIC_REVENUECAT_IOS_KEY (`appl_…`) e NEXT_PUBLIC_REVENUECAT_ANDROID_KEY
+// (`goog_…`). A resolução mora em wrapper.ts, junto do `sellsInApp()` que decide
+// as telas — os dois precisam concordar, e concordam por lerem a mesma fonte.
+import { iapKey } from "./wrapper";
 
 export type RcPackage = {
   identifier: string;
@@ -32,9 +34,13 @@ let identificado: string | null = null;
 // Configura o SDK uma vez, amarrando a compra ao usuário Supabase (o webhook
 // usa esse id para liberar o Premium no banco).
 //
-// Só iOS, por política: no Android o app da loja é "modo leitor" e não vende
-// assinatura. Sem esta trava, uma chave do RevenueCat configurada por engano
-// ligaria o paywall nativo no Android — que exigiria Google Play Billing.
+// Quem manda aqui é a CHAVE, não a plataforma.
+//
+// Era `nativePlatform() !== "ios"` fixo, de quando o Android não podia vender.
+// Agora as duas lojas passam pelo mesmo caminho — Apple IAP e Play Billing,
+// ambos pelo RevenueCat — e cada uma entra quando a sua chave existir no build.
+// Sem chave devolve null e o app cai no modo leitor, que é exatamente o
+// comportamento de antes: por isso ligar o Android não exigiu mexer em telas.
 //
 // O `logIn` no fim conserta um furo silencioso: o `configured` é de módulo, e a
 // primeira chamada costuma vir sem usuário (o onboarding carrega as ofertas
@@ -43,12 +49,12 @@ let identificado: string | null = null;
 // usuário anônimo do RevenueCat: o motorista pagava e o Premium não chegava na
 // conta dele, nem em outro aparelho, nem no site.
 export async function initPurchases(userId: string | null): Promise<PurchasesPlugin | null> {
-  if (nativePlatform() !== "ios") return null;
+  const chave = iapKey();
   const p = nativePurchases();
-  if (!p || !REVENUECAT_IOS_KEY) return null;
+  if (!p || !chave) return null;
   if (!configured) {
     try {
-      await p.configure({ apiKey: REVENUECAT_IOS_KEY, ...(userId ? { appUserID: userId } : {}) });
+      await p.configure({ apiKey: chave, ...(userId ? { appUserID: userId } : {}) });
       configured = true;
       identificado = userId ?? null;
     } catch {

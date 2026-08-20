@@ -38,6 +38,7 @@ NEXT_PUBLIC_SUPABASE_URL=https://ajaxhsvjvmqtiyzelgrd.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_tiPExxVzcmHVYlxVEEUzyA_3Bs7G_kC
 NEXT_PUBLIC_SITE_URL=https://mentorque.com.br
 NEXT_PUBLIC_REVENUECAT_IOS_KEY=nao-usado-no-android
+NEXT_PUBLIC_REVENUECAT_ANDROID_KEY=
 "@ | Set-Content -Encoding utf8 .env.local
 ```
 
@@ -65,6 +66,16 @@ As quatro, e o que cada uma faz — a terceira é a que mais dá problema:
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | idem |
 | `NEXT_PUBLIC_SITE_URL` | `https://mentorque.com.br` — de onde vêm as rotas `/api` |
 | `NEXT_PUBLIC_REVENUECAT_IOS_KEY` | só iPhone; no Android fica sem uso |
+| `NEXT_PUBLIC_REVENUECAT_ANDROID_KEY` | liga a venda pelo Play Billing (`goog_…`) |
+
+**A chave da Play é o interruptor da venda no Android.** Vazia (ou ausente), o
+app compila em "modo leitor": sem paywall, sem banner de upgrade, exatamente
+como a versão publicada hoje. Com a chave, o paywall de compra aparece sozinho
+— nenhuma tela muda de código. Pegue em RevenueCat → Project → API keys, no app
+da Google Play.
+
+Como é variável de **build**, trocá-la exige recompilar: `npm run android:studio`
+de novo. Não adianta editar o `.env.local` e só reabrir o Android Studio.
 
 `NEXT_PUBLIC_SITE_URL` errado gera um app que abre normalmente e não responde
 nada: Biela muda, FIPE, revisões — tudo depende dela. Não é o endereço do

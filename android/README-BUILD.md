@@ -148,7 +148,7 @@ sincronia: `res/values/strings.xml` (`custom_url_scheme`), o `intent-filter` do
 | Edge-to-edge + ícones claros nas barras | `viewportFit` em `app/layout.tsx` + `plugins.SystemBars` |
 | Splash (API do Android 12+, compat até o 6) | `res/values/styles.xml` + `MainActivity.java` |
 | AdMob: app id, consentimento (UMP), aparelhos de teste | `AndroidManifest.xml` + `lib/app/admob.ts` |
-| Modo leitor (sem venda de assinatura no app da loja) | `lib/app/wrapper.ts` → `isNativeApp()` |
+| Venda pela loja (Play Billing / Apple IAP) | `NEXT_PUBLIC_REVENUECAT_ANDROID_KEY` no build → `lib/app/wrapper.ts` → `sellsInApp()` |
 | Login social por deep link | `lib/app/auth.tsx` + `intent-filter` no manifesto |
 | Plugins que entram no pacote Android | `capacitor.config.ts` → `android.includePlugins` |
 | Assinatura e `versionCode` | `app/build.gradle` + `codemagic.yaml` |

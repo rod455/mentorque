@@ -35,6 +35,10 @@ workflows:
         #                                   o app manda os fetch de /api
         #   NEXT_PUBLIC_REVENUECAT_IOS_KEY  assinatura pela Apple
         #
+        # O Android usa NEXT_PUBLIC_REVENUECAT_ANDROID_KEY no lugar dessa. Ela
+        # é o interruptor da venda pelo Play Billing: sem ela, o build do
+        # Android sai em modo leitor (sem paywall).
+        #
         # O client id do Google NÃO precisa entrar aqui: ele é público (viaja
         # dentro do binário) e está fixo em lib/app/socialLogin.ts.
         #

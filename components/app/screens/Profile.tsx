@@ -11,7 +11,7 @@ import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
 import { cancelSubscription, deleteAccount, openBillingPortal, reactivateSubscription, startCheckout } from "@/lib/app/billing";
 import { getStripeJs, stripeConfigured } from "@/lib/app/stripeClient";
 import { trialDaysFor, trialPlatform, type Platform } from "@/lib/app/platform";
-import { isNativeApp, nativePlatform, openExternal, sellsInApp, storeListingUrl } from "@/lib/app/wrapper";
+import { iapKey, isNativeApp, nativePlatform, openExternal, sellsInApp, storeListingUrl } from "@/lib/app/wrapper";
 import { hasActiveEntitlement, initPurchases, type RcPackage } from "@/lib/app/purchases";
 import { openPrivacyOptions, privacyOptionsRequired } from "@/lib/app/admob";
 import { privacyUrl, termsUrl } from "@/lib/app/legal";
@@ -760,11 +760,12 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   // paywall antes de terminar via "Assinatura indisponível neste app" — que é
   // a mensagem do modo leitor, não de carregamento.
   //
-  // A espera só faz sentido onde existe o que esperar. No Android não há
-  // RevenueCat nenhum (`initPurchases` devolve null na primeira linha), então
-  // o "Carregando os planos…" era uma promessa que a tela nunca ia cumprir —
-  // um piscar de esperança antes do modo leitor. Só o iPhone começa esperando.
-  const [iapReady, setIapReady] = useState(nativePlatform() !== "ios");
+  // A espera só faz sentido onde existe o que esperar. Sem chave de compra
+  // interna, `initPurchases` devolve null na primeira linha e o "Carregando os
+  // planos…" vira uma promessa que a tela nunca cumpre — um piscar de esperança
+  // antes do modo leitor. Espera só quem tem chave; hoje o iPhone, e o Android
+  // no dia em que a chave da Play entrar no build.
+  const [iapReady, setIapReady] = useState(!iapKey());
   useEffect(() => {
     if (!isNativeApp()) return;
     (async () => {
@@ -885,20 +886,30 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
             cobrar de fato, na moeda da conta, e não uma cópia nossa que pode
             divergir do que está na App Store Connect.
           */}
-          <div className="mx-auto mt-4 max-w-xs text-center text-xs leading-relaxed text-cream/45">
-            <p className="text-cream/70">
-              {sub.iapProduct} · {plan === "annual" ? sub.planAnnual : sub.planMonthly}
-              {(() => {
-                const pkg = plan === "annual" ? iap.annual : iap.monthly;
-                const preco = pkg?.product?.priceString ?? (plan === "annual" ? sub.planAnnualPrice : sub.planMonthlyPrice);
-                return ` · ${preco}`;
-              })()}
-            </p>
-            <p className="mt-1">{plan === "annual" ? sub.iapAnnualLength : sub.iapMonthlyLength}</p>
-            <p className="mt-2">{plan === "annual" ? sub.trialFine : sub.trialFineMonthly}</p>
-            <p className="mt-2">{sub.iapRenewNote}</p>
-            <LegalLinks className="mt-3 text-cream/60" underline />
-          </div>
+          {(() => {
+            // Um preço só na tela inteira: o que a loja vai cobrar de fato.
+            //
+            // A letra miúda trazia "R$ 239,90" escrito à mão. Assim que a loja
+            // cobrasse outro valor, o cartão do plano dizia um preço e a linha
+            // logo abaixo dizia outro — contradição na mesma tela, e a revisão
+            // da Apple lê isso como preço incorreto (3.1.2(c)).
+            const pkg = plan === "annual" ? iap.annual : iap.monthly;
+            const preco = pkg?.product?.priceString ?? (plan === "annual" ? sub.planAnnualPrice : sub.planMonthlyPrice);
+            const fine = (plan === "annual" ? sub.trialFine : sub.trialFineMonthly).replace("{preco}", preco);
+            // Cada loja tem a sua conta e o seu lugar de cancelar.
+            const renovacao = nativePlatform() === "android" ? sub.iapRenewNotePlay : sub.iapRenewNote;
+            return (
+              <div className="mx-auto mt-4 max-w-xs text-center text-xs leading-relaxed text-cream/45">
+                <p className="text-cream/70">
+                  {sub.iapProduct} · {plan === "annual" ? sub.planAnnual : sub.planMonthly} · {preco}
+                </p>
+                <p className="mt-1">{plan === "annual" ? sub.iapAnnualLength : sub.iapMonthlyLength}</p>
+                <p className="mt-2">{fine}</p>
+                <p className="mt-2">{renovacao}</p>
+                <LegalLinks className="mt-3 text-cream/60" underline />
+              </div>
+            );
+          })()}
         </div>
       );
     }
@@ -1035,7 +1046,10 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
         {sub.trialCta.replace("{n}", String(trialDays))}
       </Button>
       <p className="mx-auto mt-3 max-w-xs text-center text-xs leading-relaxed text-cream/45">
-        {plan === "annual" ? sub.trialFine : sub.trialFineMonthly}
+        {/* Na web quem cobra é o Stripe, então o preço vem da mesma constante
+            que o cartão do plano acima — os dois nunca divergem. */}
+        {(plan === "annual" ? sub.trialFine : sub.trialFineMonthly)
+          .replace("{preco}", plan === "annual" ? sub.planAnnualPrice : sub.planMonthlyPrice)}
       </p>
 
       {/* Pop-up de saída — 10% OFF (formato Bloom) */}

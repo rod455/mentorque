@@ -18,9 +18,16 @@ const config: CapacitorConfig = {
   },
   android: {
     allowMixedContent: false,
-    // Sem RevenueCat no Android: o app da loja é "modo leitor" (não vende
-    // assinatura), então a biblioteca do Play Billing não deve ir no pacote.
-    includePlugins: ["@capacitor/app", "@capacitor/browser", "@capacitor-community/admob"],
+    // O RevenueCat entra aqui para o Play Billing. A biblioteca ir no pacote
+    // NÃO liga a venda: quem liga é a NEXT_PUBLIC_REVENUECAT_ANDROID_KEY no
+    // build (lib/app/wrapper.ts → sellsInApp). Sem a chave o app segue em modo
+    // leitor, igual a antes, e o plugin fica inerte.
+    includePlugins: [
+      "@capacitor/app",
+      "@capacitor/browser",
+      "@capacitor-community/admob",
+      "@revenuecat/purchases-capacitor",
+    ],
   },
   ios: {
     // Sem anúncios no iOS: o SDK do AdMob fica fora do build da Apple.

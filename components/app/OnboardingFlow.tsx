@@ -5,7 +5,7 @@ import { usePrototype } from "@/lib/app/store";
 import { useSwipe } from "@/lib/app/swipe";
 import { useAuth } from "@/lib/app/auth";
 import { trialDaysFor, trialPlatform } from "@/lib/app/platform";
-import { isNativeApp, nativePlatform } from "@/lib/app/wrapper";
+import { isNativeApp, sellsInApp } from "@/lib/app/wrapper";
 import { hasActiveEntitlement, initPurchases, type RcPackage } from "@/lib/app/purchases";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
@@ -34,12 +34,16 @@ export function OnboardingFlow() {
   const [carLeaving, setCarLeaving] = useState(false);
   const [plan, setPlan] = useState<"annual" | "monthly">("annual");
   const [remind, setRemind] = useState(false);
-  // Onde dá para assinar: web (Stripe) e iOS (compra da Apple via RevenueCat).
-  // No Android o app é "modo leitor" — a política do Play Billing não permite
-  // vender por fora, então lá a página de teste não aparece.
+  // Onde dá para assinar: web (Stripe) e a loja que tiver chave de compra
+  // interna. Sem chave o app fica em "modo leitor" e a página de teste some —
+  // é o caso do Android enquanto o Play Billing não estiver ligado.
+  //
+  // A regra é uma só, em `sellsInApp()`. Estava duplicada aqui, e regra
+  // duplicada é como uma das cópias deixa de valer sem ninguém notar: ligar o
+  // Android teria acendido o paywall e deixado o onboarding mudo.
   const [sells, setSells] = useState(true);
   useEffect(() => {
-    setSells(!isNativeApp() || nativePlatform() === "ios");
+    setSells(sellsInApp());
   }, []);
 
   // No iOS a compra é da Apple: carregamos as ofertas já aqui para o botão
