@@ -28,7 +28,14 @@ export type AulaRemota = Omit<Aula, "title" | "body" | "need" | "steps" | "safet
   safety: Bilingue[];
   stepsByLevel?: { iniciante: Bilingue[]; avancado: Bilingue[]; mecanico: Bilingue[] };
 };
-type Pacote = { version: string; lessons: AulaRemota[] };
+
+// Trilhas guiadas também viajam no pacote: trilha nova ou reordenada entra por
+// deploy do site, sem build. Campo OPCIONAL de ponta a ponta — payload antigo
+// (só lessons) continua válido, e app antigo ignora o campo que não conhece.
+type Curso = Content["courses"][number];
+export type CursoRemoto = Omit<Curso, "title" | "goal"> & { title: Bilingue; goal: Bilingue };
+
+type Pacote = { version: string; lessons: AulaRemota[]; courses?: CursoRemoto[] };
 
 // Interruptor do catálogo remoto.
 //
@@ -74,6 +81,21 @@ function valido(p: unknown): p is Pacote {
       // seguir com o embutido.
       Array.isArray(a.need) && Array.isArray(a.steps) && Array.isArray(a.safety) &&
       (a.body === undefined || Array.isArray(a.body))
+  ) && cursosValidos((p as Pacote).courses);
+}
+
+// Trilha torta não derruba o pacote das aulas? Derruba sim — de propósito: um
+// pacote meio-válido gravado no armazenamento viraria fonte permanente de
+// estado esquisito. Ou vem tudo certo, ou fica o catálogo anterior.
+function cursosValidos(cs: unknown): boolean {
+  if (cs === undefined) return true; // payload antigo, sem trilhas
+  if (!Array.isArray(cs)) return false;
+  return cs.every(
+    (t) =>
+      t && typeof t.id === "string" && t.id.length > 0 &&
+      t.title && typeof t.title.pt === "string" && typeof t.title.en === "string" &&
+      t.goal && typeof t.goal.pt === "string" && typeof t.goal.en === "string" &&
+      Array.isArray(t.order) && t.order.every((x: unknown) => typeof x === "string")
   );
 }
 
@@ -160,4 +182,11 @@ export function paraIdioma(p: Pacote, locale: string): Aula[] {
         }
       : undefined,
   }));
+}
+
+/** Trilhas do pacote no idioma ativo — null quando o payload não as traz. */
+export function cursosParaIdioma(p: Pacote, locale: string): Curso[] | null {
+  if (!p.courses) return null;
+  const i = locale === "pt" ? "pt" : "en";
+  return p.courses.map((t) => ({ ...t, title: t.title[i], goal: t.goal[i] }));
 }

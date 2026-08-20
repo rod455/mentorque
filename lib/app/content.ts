@@ -432,6 +432,16 @@ export function getContent(locale: Locale) {
     // No build seguinte a arte passa a estar no binário e o endereço pode voltar
     // a ser relativo — vale a pena, porque aí volta a funcionar sem rede.
     thumb?: string;
+    // Aulas relacionadas ("Continue por aqui" no rodapé do artigo) — ids de
+    // outras aulas. Dentro do `body` também vale o link inline
+    // `[[id-da-aula|texto do link]]`, renderizado como link âmbar no parágrafo.
+    //
+    // O `body` aceita ainda três prefixos de estrutura (aula sem prefixo segue
+    // renderizando como sempre):
+    //   "## Título"  → subtítulo de seção
+    //   ">> Texto"   → caixa de destaque ("na prática")
+    //   "!! Texto"   → caixa de alerta (segurança/risco)
+    related?: string[];
     // Data de publicação (ISO yyyy-mm-dd). Conteúdo com até 7 dias vai para a
     // 1ª posição do "Para você" com o selo "Novo" — defina em TODO conteúdo
     // novo que for adicionado.
@@ -1133,6 +1143,95 @@ export function getContent(locale: Locale) {
     { id: "culture", icon: "spark", title: T("Cultura & Curiosidades", "Culture & Trivia"), subtitle: T("História e tecnologia", "History and technology"), accent: "bg-amber/15 text-amber" },
   ];
 
+  // ---- Trilhas guiadas (cursos) --------------------------------------------
+  //
+  // Diferente das categorias acima (filtros de navegação livre), uma trilha é
+  // um CURSO: ordem do simples ao difícil, objetivo declarado e progresso
+  // visível ("3 de 7"). O progresso vem de `seenLessons` ∩ `order` — nenhum
+  // estado novo, e o que já sincroniza na nuvem continua valendo.
+  //
+  // `order` só pode citar aulas que existem no catálogo; a tela ignora ids
+  // desconhecidos (uma trilha remota nova não pode quebrar num app antigo).
+  // A ordem é sugerida, nunca trancada: quem quer pular, pula.
+  type Course = {
+    id: string;
+    icon: string;
+    title: string;
+    goal: string;
+    level: "iniciante" | "intermediario" | "avancado";
+    order: string[];
+    // Mesmo vocabulário de traits.ts: a trilha certa aparece primeiro para o
+    // dono certo (turbo → "Motor turbo") sem o usuário procurar.
+    traits?: string[];
+    situations?: string[];
+  };
+  const courses: Course[] = [
+    {
+      id: "course-first30", icon: "car", level: "iniciante",
+      title: T("Primeiros 30 dias", "First 30 days"),
+      goal: T("Acabou de pegar o carro? Saia do zero: sistemas, painel, fluidos e o histórico que valoriza o veículo.", "Just got the car? Start from zero: systems, dashboard, fluids and the history that adds value."),
+      situations: ["justBought"],
+      order: ["fund-systems", "fund-dashboard", "fund-fluids", "basics", "sit-just-bought", "fund-calendar", "sit-no-history"],
+    },
+    {
+      id: "course-signals", icon: "diagnose", level: "iniciante",
+      title: T("O que o carro diz", "What the car is telling you"),
+      goal: T("Diagnóstico pelos sentidos — som, cheiro, mancha no chão — e a luz de injeção explicada antes do scanner.", "Diagnosis by the senses — sound, smell, stains — and the check-engine light explained before the scanner."),
+      order: ["diag-noises", "diag-smells", "diag-leaks", "vid-luz-injecao-como-funciona", "vid-luz-injecao-acendeu", "read-obd2", "obd2-scan", "trait-highkm"],
+    },
+    {
+      id: "course-diy", icon: "tools", level: "intermediario",
+      title: T("Faça você mesmo", "Do it yourself"),
+      goal: T("Os cinco serviços que você faz em casa, em ordem de dificuldade — da palheta à pastilha de freio.", "The five jobs you can do at home, in order of difficulty — wipers to brake pads."),
+      order: ["diy-wipers", "diy-airfilter", "diy-battery", "oil-change", "brake-pads"],
+    },
+    {
+      id: "course-fuel", icon: "gauge", level: "iniciante",
+      title: T("Combustível e consumo", "Fuel and mileage"),
+      goal: T("Da conta etanol × gasolina ao E30/E32 e aos hábitos que fazem o tanque render.", "From the ethanol × gasoline math to E30/E32 and the habits that stretch a tank."),
+      order: ["vid-etanol-gasolina", "fuel-compare", "vid-gasolina-e30", "vid-e32", "money-fuel", "trait-urban"],
+    },
+    {
+      id: "course-engine", icon: "engine", level: "intermediario",
+      title: T("Motor por dentro", "Inside the engine"),
+      goal: T("O vocabulário do motor: cilindrada, 3 cilindros, siglas TSI, altitude e diesel.", "Engine vocabulary: displacement, 3-cylinder shake, TSI badges, altitude and diesel."),
+      order: ["vid-cilindrada", "vid-tres-cilindros", "vid-tsi", "vid-altitude", "vid-diesel-disparando", "trait-diesel"],
+      traits: ["diesel"],
+    },
+    {
+      id: "course-turbo", icon: "spark", level: "avancado",
+      title: T("Motor turbo, do zero", "Turbo engines, from zero"),
+      goal: T("Do \"o que muda num turbo\" ao barulho de pomba — e os cuidados que dobram a vida dele.", "From \"what changes with a turbo\" to the flutter noise — and the habits that double its life."),
+      traits: ["turbo"],
+      order: ["vid-turbo-aspirado", "vid-turbo-pressao", "vid-turbo-fabrica", "vid-flutter", "trait-turbo"],
+    },
+    {
+      id: "course-gearbox", icon: "settings", level: "intermediario",
+      title: T("Câmbio automático", "Automatic gearboxes"),
+      goal: T("CVT, dupla embreagem e automatizado: o que cada um estranha, o que destrói e o que é normal.", "CVT, dual-clutch and automated manual: what each one does, what kills it and what's normal."),
+      traits: ["cvt", "dct", "amt"],
+      order: ["trait-cvt", "sport-dct", "trait-dct"],
+    },
+    {
+      id: "course-tires", icon: "track", level: "iniciante",
+      title: T("Pneus e rodas", "Tires and wheels"),
+      goal: T("Ler a medida, entender os índices e cuidar do único ponto do carro que toca o chão.", "Read the size, understand the ratings and care for the only part touching the road."),
+      order: ["vid-pneu-medidas", "vid-pneu-indices", "tire-care"],
+    },
+    {
+      id: "course-buy", icon: "check", level: "intermediario",
+      title: T("Comprar bem", "Buying smart"),
+      goal: T("O que olhar antes do preço, o checklist do usado, o orçamento sem golpe e a decisão consertar × trocar.", "What to inspect before the price, the used-car checklist, honest quotes and the fix × replace call."),
+      order: ["vid-comprar-usado", "money-used", "money-quote", "money-repair-replace", "sit-no-history"],
+    },
+    {
+      id: "course-prep", icon: "track", level: "avancado",
+      title: T("Preparação sem besteira", "Tuning without the nonsense"),
+      goal: T("Nove vídeos em sequência: da marcha lenta preparada ao óxido nitroso, passando pelos erros clássicos.", "Nine videos in sequence: from the lopey idle to nitrous, through the classic mistakes."),
+      order: ["vid-marcha-lenta-preparado", "vid-avanco-ignicao", "vid-balanceamento-motor", "vid-ressonador", "vid-cortar-molas", "vid-roda-grande-1000", "vid-nitro", "vid-turbo-nitro", "vid-oxido-nitroso"],
+    },
+  ];
+
   // ---- Service types (2.4) -------------------------------------------------
   const serviceTypes: { key: string; label: string }[] = [
     { key: "oil", label: T("Troca de óleo", "Oil change") },
@@ -1469,6 +1568,7 @@ export function getContent(locale: Locale) {
     equipment,
     equipmentHowTo,
     studyTracks,
+    courses,
     consultingTiers,
 
     common: {
@@ -2196,7 +2296,23 @@ export function getContent(locale: Locale) {
       searchPh: T("O que você quer aprender?", "What do you want to learn?"),
       forYourCar: T("Para o seu {car}", "For your {car}"),
       forYourCarSub: T("Selecionado pelo seu carro e pela saúde dele", "Picked for your car and its health"),
-      tracks: T("Trilhas de conhecimento", "Knowledge tracks"),
+      tracks: T("Explorar por tema", "Browse by topic"),
+      // Trilhas guiadas (cursos com ordem e progresso)
+      coursesTitle: T("Trilhas", "Tracks"),
+      coursesSub: T("Sequências com começo, meio e fim", "Sequences with a start, middle and end"),
+      courseProgress: T("{n} de {total} aulas", "{n} of {total} lessons"),
+      courseStart: T("Começar", "Start"),
+      courseContinue: T("Continuar", "Continue"),
+      courseDoneBadge: T("Concluída", "Completed"),
+      courseLessonCtx: T("Aula {n} de {total}", "Lesson {n} of {total}"),
+      courseNext: T("Próxima aula", "Next lesson"),
+      courseNextUp: T("A seguir na trilha", "Next in this track"),
+      completeAndNext: T("Concluir e ir para a próxima", "Complete and go to the next"),
+      relatedTitle: T("Continue por aqui", "Keep going"),
+      courseLevels: { iniciante: T("Iniciante", "Beginner"), intermediario: T("Intermediário", "Intermediate"), avancado: T("Avançado", "Advanced") },
+      courseDoneTitle: T("Trilha concluída! 🏁", "Track completed! 🏁"),
+      courseDoneBody: T("Você fechou \"{t}\" — todas as aulas concluídas. Já sabe mais do que a maioria dos donos de carro.", "You finished \"{t}\" — every lesson done. You now know more than most car owners."),
+      courseDoneCta: T("Ver outras trilhas", "See other tracks"),
       recommended: T("Recomendados para o seu carro", "Recommended for your car"),
       all: T("Todos os conteúdos", "All content"),
       empty: T("Nada por aqui ainda.", "Nothing here yet."),

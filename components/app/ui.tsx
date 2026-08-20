@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
 import { useI18n } from "@/lib/i18n";
-import { paraIdioma, serverSnapshot, snapshot, subscribe } from "@/lib/app/remoteLessons";
+import { cursosParaIdioma, paraIdioma, serverSnapshot, snapshot, subscribe } from "@/lib/app/remoteLessons";
 import { getContent } from "@/lib/app/content";
 import { usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
@@ -52,7 +52,8 @@ export function useContent() {
   const remoto = useSyncExternalStore(subscribe, snapshot, serverSnapshot);
   return useMemo(() => {
     if (!remoto) return base;
-    return { ...base, lessons: paraIdioma(remoto, locale) };
+    const cursos = cursosParaIdioma(remoto, locale);
+    return { ...base, lessons: paraIdioma(remoto, locale), ...(cursos ? { courses: cursos } : {}) };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [base, remoto, locale]);
 }

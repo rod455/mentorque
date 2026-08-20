@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createHash } from "node:crypto";
 import { getContent, type Content } from "@/lib/app/content";
-import type { AulaRemota, Bilingue } from "@/lib/app/remoteLessons";
+import type { AulaRemota, Bilingue, CursoRemoto } from "@/lib/app/remoteLessons";
 
 // Catálogo de aulas servido pela rede, para publicar conteúdo sem gerar build.
 //
@@ -64,14 +64,26 @@ function montar(): AulaRemota[] {
   return saida;
 }
 
+// Trilhas guiadas, no mesmo esquema bilíngue: título e objetivo por idioma,
+// resto (order, traits…) espalhado como está.
+function montarCursos(): CursoRemoto[] {
+  const pt = getContent("pt").courses;
+  const en = new Map(getContent("en").courses.map((t) => [t.id, t]));
+  return pt.map((t) => {
+    const b = en.get(t.id);
+    return { ...t, title: { pt: t.title, en: b?.title ?? t.title }, goal: { pt: t.goal, en: b?.goal ?? t.goal } };
+  });
+}
+
 export function GET() {
   const lessons = montar();
+  const courses = montarCursos();
   // A versão é o resumo do próprio conteúdo: muda quando (e só quando) alguma
-  // aula muda. O app compara com o que tem guardado e evita reescrever à toa.
-  const version = createHash("sha1").update(JSON.stringify(lessons)).digest("hex").slice(0, 12);
+  // aula ou trilha muda. O app compara com o guardado e evita reescrever à toa.
+  const version = createHash("sha1").update(JSON.stringify({ lessons, courses })).digest("hex").slice(0, 12);
 
   return NextResponse.json(
-    { version, count: lessons.length, lessons },
+    { version, count: lessons.length, lessons, courses },
     {
       headers: {
         // Cache curto na borda: publicar uma aula chega ao aparelho em minutos,

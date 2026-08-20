@@ -12,7 +12,7 @@ import { APP_VERSION, carName, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { isNativeApp, nativePlatform } from "@/lib/app/wrapper";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, Chip, Icon, PinButton, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
+import { AppHeader, Card, Chip, Icon, PinButton, PremiumBadge, SectionTitle, Sheet, UpgradeBanner, useContent } from "../ui";
 import { VideoPlayer } from "../VideoPlayer";
 import { AdOverlay, adsEnabled } from "../AdGate";
 import { canShowAd, markAdShown, registerContentOpen } from "@/lib/app/adPolicy";
@@ -31,6 +31,108 @@ function aparelhoId(): string {
 }
 
 type Item = ReturnType<typeof useContent>["lessons"][number];
+type Course = ReturnType<typeof useContent>["courses"][number];
+
+// ---- Trilhas guiadas (cursos) ----------------------------------------------
+// Uma trilha referencia aulas por id em `order`. Ids desconhecidos são
+// ignorados (trilha remota nova não pode quebrar num catálogo antigo), então
+// tudo parte de `courseItems`, nunca do `order` cru.
+
+function courseItems(course: Course, lessons: Item[]): Item[] {
+  const byId = new Map(lessons.map((l) => [l.id, l]));
+  return course.order.map((id) => byId.get(id)).filter((x): x is Item => !!x);
+}
+
+function courseProgress(course: Course, lessons: Item[], seen: string[]): { done: number; total: number; next: Item | null } {
+  const items = courseItems(course, lessons);
+  const seenSet = new Set(seen);
+  const done = items.filter((l) => seenSet.has(l.id)).length;
+  return { done, total: items.length, next: items.find((l) => !seenSet.has(l.id)) ?? null };
+}
+
+// A trilha a que uma aula pertence (a primeira, se houver mais de uma) + posição.
+function courseOf(lessonId: string, courses: Course[], lessons: Item[]): { course: Course; index: number; items: Item[] } | null {
+  for (const course of courses) {
+    const items = courseItems(course, lessons);
+    const index = items.findIndex((l) => l.id === lessonId);
+    if (index >= 0) return { course, index, items };
+  }
+  return null;
+}
+
+// Medidor segmentado: uma casa por aula, verdes as concluídas.
+function CourseMeter({ done, total }: { done: number; total: number }) {
+  return (
+    <div className="flex flex-1 gap-[3px]" role="img" aria-label={`${done}/${total}`}>
+      {Array.from({ length: total }, (_, i) => (
+        <span key={i} className={`h-1.5 flex-1 rounded-full ${i < done ? "bg-teal" : "bg-white/10"}`} />
+      ))}
+    </div>
+  );
+}
+
+// ---- Artigo estruturado -----------------------------------------------------
+// O `body` continua string[] (compatível com as aulas antigas e com o catálogo
+// remoto); a estrutura vem de prefixos por parágrafo:
+//   "## Título"  subtítulo   ·   ">> Texto"  caixa de destaque
+//   "!! Texto"   caixa de alerta
+// E `[[id-da-aula|texto]]` em qualquer parágrafo vira link para a aula.
+
+function InlineText({ text }: { text: string }) {
+  const { go } = useNav();
+  const parts: React.ReactNode[] = [];
+  const re = /\[\[([a-z0-9-]+)\|([^\]]+)\]\]/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    if (m.index > last) parts.push(text.slice(last, m.index));
+    const id = m[1];
+    parts.push(
+      <button key={m.index} onClick={() => go({ name: "content", id })} className="font-medium text-amber underline decoration-amber/40 underline-offset-2 hover:decoration-amber">
+        {m[2]}
+      </button>
+    );
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return <>{parts}</>;
+}
+
+function ArticleBody({ body }: { body: string[] }) {
+  return (
+    <div className="mt-5 space-y-3">
+      {body.map((raw, i) => {
+        if (raw.startsWith("## ")) {
+          return (
+            <h2 key={i} className="pt-2 font-serif text-lg font-bold leading-snug text-cream">
+              <InlineText text={raw.slice(3)} />
+            </h2>
+          );
+        }
+        if (raw.startsWith(">> ")) {
+          return (
+            <div key={i} className="rounded-xl bg-amber/10 px-3.5 py-3 text-sm leading-relaxed text-cream/90 ring-1 ring-amber/20">
+              <InlineText text={raw.slice(3)} />
+            </div>
+          );
+        }
+        if (raw.startsWith("!! ")) {
+          return (
+            <div key={i} className="flex gap-2 rounded-xl bg-coral/10 px-3.5 py-3 text-sm leading-relaxed text-cream/90 ring-1 ring-coral/20">
+              <span aria-hidden className="text-coral">!</span>
+              <span><InlineText text={raw.slice(3)} /></span>
+            </div>
+          );
+        }
+        return (
+          <p key={i} className="text-sm leading-relaxed text-cream/85">
+            <InlineText text={raw} />
+          </p>
+        );
+      })}
+    </div>
+  );
+}
 
 function typeLabel(c: ReturnType<typeof useContent>, t: string) {
   return t === "video" ? c.learn.video : t === "checklist" ? c.learn.checklist : c.learn.article;
@@ -135,6 +237,22 @@ export function LearnScreen() {
   const results = searching ? c.lessons.filter((l) => l.title.toLowerCase().includes(query)) : [];
   const recommended = recommendedFor(v, c.lessons, v ? servicesFor(s, v.id) : []);
 
+  // Trilhas ordenadas: a que combina com o carro (turbo → "Motor turbo") vem
+  // primeiro; entre iguais, em andamento > não começada > concluída.
+  const traits = new Set<string>(v ? [...vehicleTraits(v)] : []);
+  const situations = new Set<string>(v ? [...vehicleSituations(v, servicesFor(s, v.id))] : []);
+  const orderedCourses = c.courses
+    .map((course) => {
+      const { done, total } = courseProgress(course, c.lessons, s.seenLessons ?? []);
+      const fits =
+        (course.traits ?? []).some((t) => traits.has(t)) ||
+        (course.situations ?? []).some((x) => situations.has(x));
+      const started = done > 0 && done < total;
+      return { course, done, total, started, rank: (fits ? 0 : 2) + (done === total ? 3 : started ? 0 : 1) };
+    })
+    .filter((x) => x.total > 0)
+    .sort((a, b) => a.rank - b.rank);
+
   return (
     <div>
       <AppHeader title={c.learn.title} />
@@ -204,7 +322,41 @@ export function LearnScreen() {
             </button>
           )}
 
-          {/* Trilhas de conhecimento */}
+          {/* Trilhas guiadas — cursos com ordem e progresso. Ordenadas por
+              relevância para o carro ativo (traits/situations) e, entre iguais,
+              as em andamento primeiro. */}
+          <SectionTitle>{c.learn.coursesTitle}</SectionTitle>
+          <p className="-mt-1 mb-2.5 text-xs text-cream/45">{c.learn.coursesSub}</p>
+          <div className="space-y-2.5">
+            {orderedCourses.map(({ course, done, total, started }) => (
+              <button
+                key={course.id}
+                onClick={() => go({ name: "course", id: course.id })}
+                className="flex w-full flex-col gap-2.5 rounded-2xl bg-graphite-800 p-4 text-left ring-1 ring-white/5 transition-all hover:ring-amber/30 active:scale-[0.99]"
+              >
+                <span className="flex items-center gap-3">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber/12 text-amber">
+                    <Icon name={course.icon} className="h-5 w-5" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate font-display text-[15px] font-semibold text-cream">{course.title}</span>
+                    <span className="block text-xs text-cream/50">{c.learn.courseLevels[course.level]}</span>
+                  </span>
+                  <span className="shrink-0 rounded-md bg-white/5 px-2 py-0.5 font-display text-xs font-semibold tabular-nums text-cream/70">
+                    {done === total ? `✓ ${c.learn.courseDoneBadge}` : `${done}/${total}`}
+                  </span>
+                </span>
+                <span className="flex items-center gap-2.5">
+                  <CourseMeter done={done} total={total} />
+                  <span className="shrink-0 text-xs font-medium text-amber">
+                    {done === total ? "↻" : started ? `${c.learn.courseContinue} ›` : `${c.learn.courseStart} ›`}
+                  </span>
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* Categorias — navegação livre */}
           <SectionTitle>{c.learn.tracks}</SectionTitle>
           <div className="grid grid-cols-2 gap-3">
             {c.studyTracks.map((t) => (
@@ -273,6 +425,76 @@ export function StudyTrackScreen({ trackId }: { trackId: string }) {
   );
 }
 
+// 2.6.B+ — Trilha guiada (curso): objetivo, progresso e a sequência numerada.
+export function CourseScreen({ id }: { id: string }) {
+  const c = useContent();
+  const { s } = usePrototype();
+  const { go } = useNav();
+  const course = c.courses.find((x) => x.id === id);
+  if (!course) return <AppHeader title="—" />;
+
+  const items = courseItems(course, c.lessons);
+  const seen = new Set(s.seenLessons ?? []);
+  const done = items.filter((l) => seen.has(l.id)).length;
+  const next = items.find((l) => !seen.has(l.id));
+
+  return (
+    <div>
+      <AppHeader title={course.title} />
+      <p className="text-sm leading-relaxed text-cream/60">{course.goal}</p>
+
+      {/* Progresso + continuar */}
+      <div className="mt-4 rounded-2xl bg-graphite-800 p-4 ring-1 ring-white/5">
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-xs font-semibold uppercase tracking-wide text-cream/45">{c.learn.courseLevels[course.level]}</span>
+          <span className="font-display text-sm font-bold tabular-nums text-cream">
+            {c.learn.courseProgress.replace("{n}", String(done)).replace("{total}", String(items.length))}
+          </span>
+        </div>
+        <div className="mt-2.5 flex items-center gap-2.5">
+          <CourseMeter done={done} total={items.length} />
+        </div>
+        {next ? (
+          <button
+            onClick={() => go({ name: "content", id: next.id })}
+            className="mt-3.5 w-full rounded-full bg-amber py-3 text-center font-display text-[15px] font-semibold text-graphite active:scale-[0.99]"
+          >
+            {done === 0 ? c.learn.courseStart : c.learn.courseContinue} → {next.title.length > 28 ? next.title.slice(0, 28) + "…" : next.title}
+          </button>
+        ) : (
+          <p className="mt-3.5 text-center text-sm font-medium text-teal">✓ {c.learn.courseDoneBadge}</p>
+        )}
+      </div>
+
+      {/* Sequência (sugerida, nunca trancada: qualquer aula abre) */}
+      <div className="mt-4 space-y-2">
+        {items.map((l, i) => {
+          const isDone = seen.has(l.id);
+          const locked = l.premium && !s.premium;
+          return (
+            <button
+              key={l.id}
+              onClick={() => go(locked ? { name: "subscribe", ctx: "learn" } : { name: "content", id: l.id })}
+              className={`flex w-full items-center gap-3 rounded-2xl p-3 text-left ring-1 transition-all hover:ring-amber/30 ${isDone ? "bg-teal/[0.07] ring-teal/20" : "bg-graphite-800 ring-white/5"}`}
+            >
+              <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-full font-display text-xs font-bold ${isDone ? "bg-teal text-graphite" : "bg-white/8 text-cream/60"}`}>
+                {isDone ? "✓" : i + 1}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className={`block truncate font-display text-sm ${isDone ? "text-cream/60" : "text-cream"}`}>{l.title}</span>
+                <span className="block text-[11px] text-cream/45">{typeLabel(c, l.type)}</span>
+              </span>
+              {locked ? <PremiumBadge /> : <span className="shrink-0 text-cream/30">›</span>}
+            </button>
+          );
+        })}
+      </div>
+
+      {!s.premium && <UpgradeBanner ctx="learn" text={c.paywalls.learn.title} />}
+    </div>
+  );
+}
+
 // 2.6.B′ — Para o seu carro (conteúdos escolhidos pelo carro ativo)
 export function ForYourCarScreen() {
   const c = useContent();
@@ -317,6 +539,7 @@ export function SavedLessonsScreen() {
 // 2.6.C — Detalhe do conteúdo (tutorial com passos OU artigo com parágrafos)
 export function ContentScreen({ id }: { id: string }) {
   const c = useContent();
+  const { go, back } = useNav();
   const { s, markLessonSeen, toggleLessonSaved, toggleLessonPinned } = usePrototype();
   const lesson = c.lessons.find((l) => l.id === id);
   const [level, setLevel] = useState<"iniciante" | "avancado" | "mecanico">("avancado");
@@ -333,6 +556,12 @@ export function ContentScreen({ id }: { id: string }) {
   // Conta o TOTAL depois de concluir, e não o toque: `markLessonSeen` alterna
   // nos dois sentidos, e contar toques faria desmarcar-e-marcar de novo abrir a
   // pergunta a cada vez.
+  // Posição desta aula na trilha guiada, se pertencer a alguma. Alimenta o
+  // contexto "Aula n de N", o botão de próxima e a celebração de conclusão.
+  const inCourse = lesson ? courseOf(lesson.id, c.courses, c.lessons) : null;
+  const courseNext = inCourse ? inCourse.items[inCourse.index + 1] ?? null : null;
+  const [celebrate, setCelebrate] = useState(false);
+
   const concluir = () => {
     if (!lesson) return;
     markLessonSeen(lesson.id);
@@ -340,6 +569,19 @@ export function ContentScreen({ id }: { id: string }) {
     const daTrilha = new Set(c.lessons.filter((l) => l.track === lesson.track).map((l) => l.id));
     const concluidas = new Set([...(s.seenLessons ?? []), lesson.id].filter((x) => daTrilha.has(x)));
     if (concluidas.size === 3) pedirFeedback(s, "tres-aulas-trilha");
+    // Fechou a última aula pendente da trilha guiada? Celebra.
+    if (inCourse) {
+      const seenNow = new Set([...(s.seenLessons ?? []), lesson.id]);
+      if (inCourse.items.every((l) => seenNow.has(l.id))) setCelebrate(true);
+    }
+  };
+
+  // Concluir e já abrir a próxima da trilha — o gesto que transforma a lista
+  // numa aula de curso. (`go` empilha; voltar volta para esta aula.)
+  const concluirEAvancar = () => {
+    if (!lesson || !courseNext) return;
+    concluir();
+    if (!done) go({ name: "content", id: courseNext.id });
   };
   // Interstitial ao abrir uma aula (só free), sujeito à política de anúncios:
   // carência nas primeiras aberturas, intervalo mínimo e teto diário.
@@ -361,7 +603,10 @@ export function ContentScreen({ id }: { id: string }) {
   return (
     <div>
       {needAd && <AdOverlay kind="interstitial" onDone={() => setNeedAd(false)} />}
-      <AppHeader title={lesson.title} />
+      <AppHeader
+        title={lesson.title}
+        subtitle={inCourse ? `${inCourse.course.title} · ${c.learn.courseLessonCtx.replace("{n}", String(inCourse.index + 1)).replace("{total}", String(inCourse.items.length))}` : undefined}
+      />
 
       {/* Player (in-app), or a placeholder for text content */}
       {lesson.media ? (
@@ -380,14 +625,8 @@ export function ContentScreen({ id }: { id: string }) {
         </div>
       )}
 
-      {/* Article body */}
-      {lesson.body && lesson.body.length > 0 && (
-        <div className="mt-5 space-y-3">
-          {lesson.body.map((p, i) => (
-            <p key={i} className="text-sm leading-relaxed text-cream/85">{p}</p>
-          ))}
-        </div>
-      )}
+      {/* Corpo do artigo — estrutura por prefixos (##, >>, !!) e links [[..]] */}
+      {lesson.body && lesson.body.length > 0 && <ArticleBody body={lesson.body} />}
 
       {lesson.need.length > 0 && (
         <Block title={c.learn.need}>
@@ -439,12 +678,63 @@ export function ContentScreen({ id }: { id: string }) {
         </Block>
       )}
 
-      <div className="mt-6 flex gap-2">
-        <Button className="flex-1" onClick={concluir}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
-        <Button variant="ghost" className="flex-1" onClick={() => toggleLessonSaved(lesson.id)}>{saved ? `★ ${c.learn.savedLabel}` : `☆ ${c.learn.saveLater}`}</Button>
-        <PinButton id={lesson.id} />
-      </div>
+      {/* Ações. Dentro de uma trilha com próxima aula, o gesto primário é
+          "concluir e avançar" — é o que faz a lista virar curso. */}
+      {courseNext && !done ? (
+        <div className="mt-6 space-y-2">
+          <Button className="w-full" onClick={concluirEAvancar}>{c.learn.completeAndNext} →</Button>
+          <div className="flex gap-2">
+            <Button variant="ghost" className="flex-1" onClick={concluir}>{c.learn.complete}</Button>
+            <Button variant="ghost" className="flex-1" onClick={() => toggleLessonSaved(lesson.id)}>{saved ? `★ ${c.learn.savedLabel}` : `☆ ${c.learn.saveLater}`}</Button>
+            <PinButton id={lesson.id} />
+          </div>
+        </div>
+      ) : (
+        <div className="mt-6 flex gap-2">
+          <Button className="flex-1" onClick={concluir}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
+          <Button variant="ghost" className="flex-1" onClick={() => toggleLessonSaved(lesson.id)}>{saved ? `★ ${c.learn.savedLabel}` : `☆ ${c.learn.saveLater}`}</Button>
+          <PinButton id={lesson.id} />
+        </div>
+      )}
+
+      {/* A seguir na trilha */}
+      {courseNext && (
+        <div className="mt-5">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-cream/45">{c.learn.courseNextUp}</p>
+          <ItemRow item={courseNext} />
+        </div>
+      )}
+
+      {/* Continue por aqui — aulas relacionadas escolhidas no conteúdo */}
+      {(lesson.related ?? []).length > 0 && (
+        <div className="mt-5">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-cream/45">{c.learn.relatedTitle}</p>
+          <div className="space-y-2.5">
+            {(lesson.related ?? [])
+              .map((rid) => c.lessons.find((l) => l.id === rid))
+              .filter((l): l is Item => !!l && l.id !== courseNext?.id)
+              .slice(0, 3)
+              .map((l) => <ItemRow key={l.id} item={l} />)}
+          </div>
+        </div>
+      )}
+
       {!s.premium && <UpgradeBanner ctx="learn" text={c.paywalls.learn.title} />}
+
+      {/* Trilha concluída — celebração */}
+      <Sheet open={celebrate} onClose={() => setCelebrate(false)}>
+        <div className="flex flex-col items-center pt-2 text-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/biela/biela-idle.png" alt="" className="h-28 w-28 object-contain" draggable={false} />
+          <h2 className="mt-2 font-serif text-xl font-bold text-cream">{c.learn.courseDoneTitle}</h2>
+          <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-cream/65">
+            {c.learn.courseDoneBody.replace("{t}", inCourse?.course.title ?? "")}
+          </p>
+          <Button className="mt-5 w-full" onClick={() => { setCelebrate(false); back(); }}>
+            {c.learn.courseDoneCta}
+          </Button>
+        </div>
+      </Sheet>
     </div>
   );
 }
