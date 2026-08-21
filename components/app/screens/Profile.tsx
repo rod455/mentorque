@@ -759,9 +759,16 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   // Funil de saída do paywall: QUALQUER saída (X, abas de baixo, gesto de
   // voltar) dispara as ofertas — 10% OFF (suprimido por 30 min) e, na
   // rejeição ou se o 10% estiver suprimido, 25% OFF em tela cheia (1x a cada
-  // 3 dias). Assinantes e o app da loja saem direto.
+  // 3 dias). Assinantes saem direto.
   // Ofertas de saída do Play (Android): carregadas junto com os pacotes.
   const [exitOpts, setExitOpts] = useState<{ o10: GoogleOption | null; o25: GoogleOption | null }>({ o10: null, o25: null });
+  // Ofertas de saída da Apple (iOS). A Apple não deixa aplicar desconto num
+  // produto para usuário NOVO (promotional offer é só para quem já assina ou
+  // assinou), então o desconto lá é outro produto no mesmo grupo de
+  // assinaturas — mentorque_annual_10/25 — servido pelos pacotes custom
+  // "exit10"/"exit25" do offering. No Android esses pacotes não têm produto e
+  // o RevenueCat nem os devolve; os dois estados coexistem sem conflito.
+  const [exitPkgs, setExitPkgs] = useState<{ p10: RcPackage | null; p25: RcPackage | null }>({ p10: null, p25: null });
   const OFFER_KEY = "mentorque-exit-offer-ts";
   const OFFER2_KEY = "mentorque-exit2-ts";
   const [showOffer, setShowOffer] = useState(false);
@@ -791,22 +798,18 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
 
   // Tenta mostrar uma oferta na saída. true = mostrou (segura a navegação).
   //
-  // Só na WEB. As telas de oferta vivem depois do `return` do caminho nativo
-  // (linha ~789), então no app da loja elas nunca chegam a ser renderizadas —
-  // e o guard aqui usava `sellsInApp()`, que é true no iOS. Ou seja: o app
-  // cancelava a saída para exibir uma tela que não existia. Quem tocava numa
-  // aba de baixo estando no paywall não ia a lugar nenhum, sem nenhum sinal,
-  // até o cronômetro de 120s zerar e navegar sozinho dois minutos depois.
-  //
-  // O desconto também não faria sentido lá: a compra no iOS passa pela Apple,
-  // que não conhece cupom do Stripe. Oferta de saída no app precisa ser outro
-  // produto/oferta da própria Apple — não este funil.
+  // No app da loja o funil só liga com a oferta REAL da loja já carregada:
+  // no Android as ofertas do Play (exit10/exit25 dentro da assinatura), no
+  // iOS os pacotes com os produtos com desconto (mentorque_annual_10/25).
+  // Segurar a navegação sem ter o que vender repetiria o bug antigo: o app
+  // cancelava a saída para exibir uma tela sem oferta nenhuma, e quem tocava
+  // numa aba de baixo não ia a lugar nenhum até o cronômetro zerar.
   const requestExit = (target: View | null): boolean => {
     if (subscribed) return false;
-    // No app da loja o funil só existe no Android com as ofertas do Play já
-    // carregadas (exit10/exit25). No iOS continua sem funil: desconto lá
-    // exigiria promotional offer da Apple, que é outro mecanismo.
-    if (isNativeApp() && !(nativePlatform() === "android" && (exitOpts.o10 || exitOpts.o25))) return false;
+    const nativeExitReady = nativePlatform() === "android"
+      ? !!(exitOpts.o10 || exitOpts.o25)
+      : !!(exitPkgs.p10 || exitPkgs.p25);
+    if (isNativeApp() && !nativeExitReady) return false;
     pendingExit.current = target;
     if (fresh(OFFER_KEY, 30 * 60 * 1000)) { mark(OFFER_KEY); setOfferLeft(120); setShowOffer(true); return true; }
     if (fresh(OFFER2_KEY, 3 * 24 * 60 * 60 * 1000)) { mark(OFFER2_KEY); setShowOffer2(true); return true; }
@@ -852,8 +855,34 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
     }
   };
 
+  // Compra um pacote de saída da Apple (exit10/exit25). Mesmo desfecho do
+  // buyGoogleOffer; a diferença é o mecanismo — aqui é um produto comum,
+  // comprado como qualquer pacote.
+  const buyExitPackage = async (pkg: RcPackage | null) => {
+    if (!pkg || iapBusy) return;
+    if (!user) { go({ name: "auth" }); return; }
+    setIapBusy(true);
+    try {
+      const p = await initPurchases(user.id);
+      const res = await p?.purchasePackage({ aPackage: pkg });
+      if (res && hasActiveEntitlement(res.customerInfo)) {
+        setPremium(true);
+        refreshSubscription();
+        setShowOffer(false);
+        setShowOffer2(false);
+        back();
+      }
+    } catch { /* cancelou/erro: permanece na oferta */ } finally {
+      setIapBusy(false);
+    }
+  };
+
   const subscribeOffer = () => {
-    if (isNativeApp()) { void buyGoogleOffer(exitOpts.o10 ?? exitOpts.o25); return; }
+    if (isNativeApp()) {
+      if (nativePlatform() === "android") { void buyGoogleOffer(exitOpts.o10 ?? exitOpts.o25); return; }
+      void buyExitPackage(exitPkgs.p10 ?? exitPkgs.p25);
+      return;
+    }
     if (!user) { go({ name: "auth" }); return; }
     if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; }
     go({ name: "checkout", plan: "annual", offer: "exit10" });
@@ -871,7 +900,11 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   };
 
   const subscribeOffer2 = () => {
-    if (isNativeApp()) { void buyGoogleOffer(exitOpts.o25 ?? exitOpts.o10); return; }
+    if (isNativeApp()) {
+      if (nativePlatform() === "android") { void buyGoogleOffer(exitOpts.o25 ?? exitOpts.o10); return; }
+      void buyExitPackage(exitPkgs.p25 ?? exitPkgs.p10);
+      return;
+    }
     if (!user) { go({ name: "auth" }); return; }
     if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; }
     go({ name: "checkout", plan: "annual", offer: "exit25" });
@@ -904,8 +937,13 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
         const monthly = pkgs.find((x) => x.packageType === "MONTHLY") ?? pkgs.find((x) => x.identifier === "$rc_monthly");
         const annual = pkgs.find((x) => x.packageType === "ANNUAL") ?? pkgs.find((x) => x.identifier === "$rc_annual");
         if (monthly || annual) setIap({ monthly, annual });
-        // Ofertas de saída do Play (Android). No iOS vêm null e o funil não liga.
+        // Ofertas de saída. Android: ofertas do Play dentro da assinatura.
+        // iOS: pacotes custom com os produtos anuais com desconto.
         setExitOpts({ o10: googleOffer(annual, "exit10"), o25: googleOffer(annual, "exit25") });
+        setExitPkgs({
+          p10: pkgs.find((x) => x.identifier === "exit10") ?? null,
+          p25: pkgs.find((x) => x.identifier === "exit25") ?? null,
+        });
       } catch { /* sem ofertas → modo leitor */ }
       finally { setIapReady(true); }
     })();
@@ -959,11 +997,11 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   };
 
   // Pop-ups do funil de saída. Definidos aqui (e não no JSX de um caminho só)
-  // porque precisam renderizar tanto na web quanto no paywall nativo do
-  // Android — antes eles moravam depois do return nativo e o app da loja
-  // segurava a navegação para mostrar uma tela que não existia.
-  // No Android, os preços vêm da oferta real do Play (offerPrice); na web,
-  // das strings do Stripe.
+  // porque precisam renderizar tanto na web quanto no paywall nativo — antes
+  // eles moravam depois do return nativo e o app da loja segurava a navegação
+  // para mostrar uma tela que não existia.
+  // Preços: no Android da oferta real do Play (offerPrice), no iOS do produto
+  // com desconto da App Store (priceString), na web das strings do Stripe.
   const exitOverlays = (
     <>
       {/* Pop-up de saída — 10% OFF (formato Bloom) */}
@@ -983,7 +1021,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
             <p className="font-display text-3xl font-bold tabular-nums">{mmss}</p>
             <div className="mt-3 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/5">
               <span className="inline-block rounded-full bg-amber px-3 py-1 text-xs font-bold text-graphite">{sub.exitBadge}</span>
-              <p className="mt-2 font-serif text-3xl font-bold">{(isNativeApp() && offerPrice(exitOpts.o10)) || sub.exitPrice}</p>
+              <p className="mt-2 font-serif text-3xl font-bold">{(isNativeApp() && (offerPrice(exitOpts.o10) ?? exitPkgs.p10?.product?.priceString)) || sub.exitPrice}</p>
             </div>
             <button
               onClick={subscribeOffer}
@@ -1026,7 +1064,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
               <p className="text-[11px] font-semibold tracking-[0.18em] text-cream/60">{sub.exit2Best}</p>
               <div className="mt-3 rounded-2xl bg-graphite-900 p-4 ring-1 ring-white/[0.06]">
                 <p className="text-sm text-cream/40 line-through">{(isNativeApp() && (iap?.annual?.product?.priceString ?? null)) || sub.exit2Old}</p>
-                <p className="mt-0.5 font-serif text-3xl font-bold text-cream">{(isNativeApp() && offerPrice(exitOpts.o25)) || sub.exit2Price}</p>
+                <p className="mt-0.5 font-serif text-3xl font-bold text-cream">{(isNativeApp() && (offerPrice(exitOpts.o25) ?? exitPkgs.p25?.product?.priceString)) || sub.exit2Price}</p>
               </div>
             </div>
             <p className="mx-auto mt-3 max-w-xs text-center text-xs leading-relaxed text-cream/50">{sub.exit2Fine}</p>
