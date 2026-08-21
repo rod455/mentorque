@@ -35,7 +35,16 @@ export async function POST(req: Request) {
   if (!UUID_RE.test(userId)) return NextResponse.json({ ok: true, skipped: "anonymous_user" });
 
   const productId = (event.product_id ?? "").toLowerCase();
-  const plan = productId.includes("annual") || productId.includes("year") || productId.includes("anual") ? "annual" : "monthly";
+  // No Google o produto chega como "assinatura:planoBase" (ex.:
+  // "annual100:monthly"), e quem diz o plano é o PLANO BASE, não a assinatura.
+  // Farejar a string inteira classificava errado quando o id da assinatura
+  // continha "annual". Na Apple não há dois-pontos e o id inteiro vale.
+  const base = productId.includes(":") ? productId.split(":").pop()! : productId;
+  const plan = /month|mensal/.test(base)
+    ? "monthly"
+    : /annual|year|anual/.test(base) || /annual|year|anual/.test(productId)
+      ? "annual"
+      : "monthly";
   const periodEnd = event.expiration_at_ms ? new Date(event.expiration_at_ms).toISOString() : null;
 
   if (ACTIVE.has(event.type)) {
