@@ -12,7 +12,7 @@ import { APP_VERSION, carName, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { isNativeApp, nativePlatform } from "@/lib/app/wrapper";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, Chip, Icon, PinButton, PremiumBadge, SectionTitle, Sheet, UpgradeBanner, useContent } from "../ui";
+import { AppHeader, Card, Chip, Icon, PinButton, PremiumBadge, SectionTitle, Sheet, Thumb, UpgradeBanner, useContent } from "../ui";
 import { VideoPlayer } from "../VideoPlayer";
 import { AdOverlay, adsEnabled } from "../AdGate";
 import { canShowAd, markAdShown, registerContentOpen } from "@/lib/app/adPolicy";
@@ -154,8 +154,7 @@ function ItemRow({ item }: { item: Item }) {
     >
       <span className={`grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite ring-1 ${locked ? "text-amber/70 ring-amber/25" : "text-amber ring-amber/45"}`}>
         {item.thumb ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.thumb} alt="" className={`h-full w-full object-contain ${locked ? "opacity-60" : ""}`} draggable={false} />
+          <Thumb src={item.thumb} className={`h-full w-full object-contain ${locked ? "opacity-60" : ""}`} />
         ) : (
           <Icon name={typeIcon(item.type)} className="h-6 w-6" />
         )}
@@ -615,12 +614,9 @@ export function ContentScreen({ id }: { id: string }) {
         <div className="grid aspect-video place-items-center overflow-hidden rounded-2xl bg-graphite ring-1 ring-white/10">
           {/* Vídeo ainda não publicado usa a arte de player (16:9, preenche);
               artigo de texto usa a própria capa, que é quadrada e centraliza. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Thumb
             src={lesson.type === "video" ? "/learn/_video-placeholder.png?v=4" : lesson.thumb ?? "/learn/_video-placeholder.png?v=4"}
-            alt=""
             className={`h-full w-full ${lesson.type === "video" || !lesson.thumb ? "object-cover" : "object-contain"}`}
-            draggable={false}
           />
         </div>
       )}

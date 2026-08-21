@@ -9,7 +9,7 @@ import { isNewLesson, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { openStorePage, useUpdateAvailable } from "@/lib/app/appUpdate";
 import { sellsInApp } from "@/lib/app/wrapper";
-import { useContent, Card, Icon } from "../ui";
+import { useContent, Card, Icon, Thumb } from "../ui";
 import { HealthPill } from "./Cars";
 import { FipeLine } from "./CarHub";
 import { CommonProblems } from "./Symptoms";
@@ -227,8 +227,7 @@ export function HomeScreen() {
                   >
                     <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite text-amber/80 ring-1 ring-amber/45">
                       {l.thumb ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={l.thumb} alt="" className="h-full w-full object-contain" draggable={false} />
+                        <Thumb src={l.thumb} className="h-full w-full object-contain" />
                       ) : (
                         <Icon name={typeIcon(l.type)} className="h-5 w-5" />
                       )}
@@ -283,8 +282,7 @@ export function HomeScreen() {
                 >
                   <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite text-amber/80 ring-1 ring-amber/45">
                     {l.thumb ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={l.thumb} alt="" className="h-full w-full object-contain" draggable={false} />
+                      <Thumb src={l.thumb} className="h-full w-full object-contain" />
                     ) : (
                       <Icon name={typeIcon(l.type)} className="h-5 w-5" />
                     )}
@@ -320,8 +318,7 @@ export function HomeScreen() {
                         usa o mesmo tom e zero padding para não criar moldura dupla. */}
                     <div className="relative aspect-square overflow-hidden rounded-2xl bg-graphite ring-1 ring-amber/45">
                       {l.thumb ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={l.thumb} alt="" className="h-full w-full object-contain" draggable={false} />
+                        <Thumb src={l.thumb} className="h-full w-full object-contain" />
                       ) : (
                         <span className="grid h-full w-full place-items-center text-amber/70">
                           <Icon name={typeIcon(l.type)} className="h-9 w-9" />

@@ -4,6 +4,7 @@ import { useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
 import { useI18n } from "@/lib/i18n";
 import { cursosParaIdioma, paraIdioma, serverSnapshot, snapshot, subscribe } from "@/lib/app/remoteLessons";
 import { getContent } from "@/lib/app/content";
+import { siteOrigin } from "@/lib/app/apiBase";
 import { usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
 import { sellsInApp } from "@/lib/app/wrapper";
@@ -351,6 +352,33 @@ export function GateRow({
 
 export function Card({ children, className }: { children: ReactNode; className?: string }) {
   return <div className={["rounded-2xl bg-graphite-800 p-4 ring-1 ring-white/5", className].filter(Boolean).join(" ")}>{children}</div>;
+}
+
+// Capa de aula com fallback para o site.
+//
+// No app da loja as capas moram DENTRO do binário: capa adicionada depois do
+// build não existe no aparelho e o <img> quebrava em silêncio. Aqui, quando o
+// arquivo local falha, a mesma imagem é buscada em mentorque.com.br, que a
+// Vercel já serve desde o deploy. Assim capa nova chega sem build (remota,
+// exige internet) e vira local no build seguinte, voltando a abrir offline.
+// A troca só acontece uma vez: a URL absoluta não começa com "/" e o onError
+// não tem para onde escalar, então um 404 real não entra em laço.
+export function Thumb({ src, className }: { src: string; className?: string }) {
+  const [prev, setPrev] = useState(src);
+  const [url, setUrl] = useState(src);
+  if (prev !== src) { setPrev(src); setUrl(src); } // outra aula no mesmo card: recomeça do local
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={url}
+      alt=""
+      draggable={false}
+      className={className}
+      onError={() => {
+        if (url.startsWith("/")) setUrl(`${siteOrigin()}${url.split("?")[0]}`);
+      }}
+    />
+  );
 }
 
 export function SectionTitle({ children, action }: { children: ReactNode; action?: ReactNode }) {
