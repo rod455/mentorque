@@ -1,7 +1,12 @@
 # Builds nativos na nuvem (Codemagic).
 #
+#   lojas             → .ipa + .aab num build só → TestFlight e Google Play
 #   ios-testflight    → .ipa assinado → TestFlight
 #   android-play      → .aab assinado → Google Play (faixa de teste interno)
+#
+# O "lojas" é o caminho normal de release: uma máquina Mac compila o web uma
+# vez e empacota as duas plataformas. Os dois workflows de uma loja só ficam
+# para quando um lado precisa de build e o outro não.
 #
 # ATENÇÃO — isto mudou e o texto antigo enganava: os dois apps NÃO apontam mais
 # para https://mentorque.com.br/app. Desde que passaram a ser empacotados
@@ -14,6 +19,141 @@
 # rotas de /api (Biela, Stripe, FIPE, revisões) e o catálogo remoto de conteúdo
 # (lib/app/remoteLessons.ts).
 workflows:
+  lojas:
+    name: iOS + Android → lojas
+    # Uma máquina Mac faz os dois: o Android compila normalmente no macOS, e o
+    # iOS só compila aqui. Custa minutos de Mac para o lado Android também,
+    # mas é UM build, um clique, e o web (npm run build:native) roda uma vez
+    # em vez de duas. Atenção ao tudo-ou-nada: se o archive do iOS falhar, o
+    # .aab nem chega a ser gerado (e vice-versa não: o Android compila antes,
+    # de propósito, por ser o passo mais previsível).
+    max_build_duration: 90
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: asc-mentorque
+    environment:
+      node: 22
+      xcode: latest
+      java: 21
+      groups:
+        - google_play
+        - Mentorque
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: mentorque.app
+      android_signing:
+        - mentorque-upload
+    scripts:
+      - name: Instalar dependências web
+        script: npm ci
+      - name: Gerar o app estático que vai dentro dos binários
+        # Um build web só, embutido nos dois pacotes — é a mesma interface.
+        script: npm run build:native
+      - name: Esquema do Google no Info.plist
+        script: node scripts/ios-google-scheme.mjs
+      - name: Sincronizar Capacitor (iOS e Android)
+        script: npx cap sync
+      - name: Assinatura Android (keystore do Codemagic → keystore.properties)
+        script: |
+          cat > android/keystore.properties <<EOF
+          storeFile=$CM_KEYSTORE_PATH
+          storePassword=$CM_KEYSTORE_PASSWORD
+          keyAlias=$CM_KEY_ALIAS
+          keyPassword=$CM_KEY_PASSWORD
+          EOF
+      - name: Compilar .aab
+        script: |
+          # A Play recusa versionCode repetido. O número da build incrementa a
+          # cada rodada; o piso do gradle.properties protege contra o contador
+          # do Codemagic estar atrás de um número já enviado por fora (os
+          # builds feitos à mão no Android Studio não passam por aqui).
+          piso=$(grep -o 'mentorqueVersionCode=[0-9]*' android/gradle.properties | cut -d= -f2)
+          v=$(( ${PROJECT_BUILD_NUMBER:-0} + 1 ))
+          [ "$v" -lt "${piso:-1}" ] && v=$piso
+          export MENTORQUE_VERSION_CODE=$v
+          echo "versionCode deste envio: $v"
+          cd android
+          ./gradlew bundleRelease
+      - name: Aplicar perfis de assinatura (iOS)
+        script: xcode-project use-profiles
+      - name: Conferir os perfis baixados
+        # Igual ao do ios-testflight: um perfil sem a capability do Sign In
+        # with Apple só quebraria lá na frente, com erro vago; aqui a gente
+        # abre o perfil e falha cedo, com instrução de conserto.
+        script: |
+          shopt -s nullglob
+          achou=0
+          serve=0
+          for p in "$HOME/Library/MobileDevice/Provisioning Profiles/"*.mobileprovision; do
+            achou=1
+            security cms -D -i "$p" > /tmp/perfil.plist 2>/dev/null || continue
+            nome=$(/usr/libexec/PlistBuddy -c "Print :Name" /tmp/perfil.plist 2>/dev/null)
+            uuid=$(/usr/libexec/PlistBuddy -c "Print :UUID" /tmp/perfil.plist 2>/dev/null)
+            criado=$(/usr/libexec/PlistBuddy -c "Print :CreationDate" /tmp/perfil.plist 2>/dev/null)
+            echo "--- $nome"
+            echo "    uuid:   $uuid"
+            echo "    criado: $criado"
+            if grep -q "com.apple.developer.applesignin" /tmp/perfil.plist; then
+              echo "    Sign In with Apple: SIM"
+              serve=1
+            else
+              echo "    Sign In with Apple: NAO"
+            fi
+          done
+          [ "$achou" = "1" ] || echo "(nenhum perfil foi baixado)"
+          if [ "$serve" != "1" ]; then
+            echo ""
+            echo "Nenhum perfil baixado autoriza Sign In with Apple — o archive vai falhar."
+            echo ""
+            echo "O perfil NAO vem da Apple: vem da copia guardada no painel do Codemagic"
+            echo "(Teams -> Integrations -> Code signing identities -> iOS provisioning"
+            echo "profiles). Apagar no portal da Apple nao tem efeito nenhum aqui."
+            echo ""
+            echo "Para resolver: gere um perfil de App Store novo no portal da Apple,"
+            echo "baixe o .mobileprovision e substitua a copia guardada no Codemagic."
+            exit 1
+          fi
+      - name: Número da build (iOS, incremental)
+        script: |
+          cd ios/App
+          agvtool new-version -all $((${PROJECT_BUILD_NUMBER:-0} + 1))
+      - name: Compilar .ipa
+        script: |
+          # Mesmo desenterro de log do ios-testflight: o xcode-project engole a
+          # saída real do xcodebuild.
+          if ! xcode-project build-ipa --project ios/App/App.xcodeproj --scheme App; then
+            echo ""
+            echo "===================== erro real do xcodebuild ====================="
+            found=0
+            for f in /tmp/xcodebuild_logs/*.log; do
+              [ -f "$f" ] || continue
+              found=1
+              echo "--- $f"
+              grep -nE "error:|fatal|Provisioning profile|entitlement|Signing for|does(n't| not) (support|contain)|failed to (resolve|download)" "$f" | tail -80
+            done
+            if [ "$found" = "0" ]; then
+              echo "(nenhum log em /tmp/xcodebuild_logs — últimas linhas de qualquer log encontrado)"
+              find /tmp /Users/builder/clone/build -name "*.log" -newermt "-30 minutes" 2>/dev/null | head -5 | while read -r f; do
+                echo "--- $f"; tail -60 "$f"
+              done
+            fi
+            echo "==================================================================="
+            exit 1
+          fi
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - android/app/build/outputs/bundle/release/*.aab
+      - android/app/build/outputs/mapping/release/mapping.txt
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+      google_play:
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
+        submit_as_draft: false
+
   ios-testflight:
     name: iOS → TestFlight
     max_build_duration: 60
@@ -191,8 +331,15 @@ workflows:
           EOF
       - name: Compilar .aab
         script: |
-          # A Play recusa um versionCode repetido; o número da build resolve.
-          export MENTORQUE_VERSION_CODE=$((${PROJECT_BUILD_NUMBER:-0} + 1))
+          # A Play recusa versionCode repetido. O número da build incrementa a
+          # cada rodada; o piso do gradle.properties protege contra o contador
+          # do Codemagic estar atrás de um número já enviado por fora (os
+          # builds feitos à mão no Android Studio não passam por aqui).
+          piso=$(grep -o 'mentorqueVersionCode=[0-9]*' android/gradle.properties | cut -d= -f2)
+          v=$(( ${PROJECT_BUILD_NUMBER:-0} + 1 ))
+          [ "$v" -lt "${piso:-1}" ] && v=$piso
+          export MENTORQUE_VERSION_CODE=$v
+          echo "versionCode deste envio: $v"
           cd android
           ./gradlew bundleRelease
     artifacts:
