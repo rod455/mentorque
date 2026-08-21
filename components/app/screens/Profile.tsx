@@ -12,7 +12,7 @@ import { cancelSubscription, deleteAccount, openBillingPortal, reactivateSubscri
 import { getStripeJs, stripeConfigured } from "@/lib/app/stripeClient";
 import { trialDaysFor, trialPlatform, type Platform } from "@/lib/app/platform";
 import { iapKey, isNativeApp, nativePlatform, openExternal, sellsInApp, storeListingUrl } from "@/lib/app/wrapper";
-import { hasActiveEntitlement, initPurchases, type RcPackage } from "@/lib/app/purchases";
+import { googleOffer, hasActiveEntitlement, initPurchases, offerPrice, type GoogleOption, type RcPackage } from "@/lib/app/purchases";
 import { openPrivacyOptions, privacyOptionsRequired } from "@/lib/app/admob";
 import { privacyUrl, termsUrl } from "@/lib/app/legal";
 import { APP_VERSION, carName } from "@/lib/app/content";
@@ -148,6 +148,59 @@ export function ProfileScreen() {
     else window.location.href = r.url;
   };
   const softRefresh = () => { setTimeout(refreshSubscription, 1500); setTimeout(refreshSubscription, 4000); };
+
+  // Assinatura comprada NA PLAY (Android): os botões do Stripe não servem para
+  // ela. Detectamos pelo entitlement ativo no RevenueCat e, junto, carregamos
+  // a oferta de retenção `save30` (2 meses do mensal com 30% off). O fluxo de
+  // cancelar passa a oferecer o desconto antes de abrir a ficha da Play.
+  const [lojaSub, setLojaSub] = useState(false);
+  const [saveOpt, setSaveOpt] = useState<GoogleOption | null>(null);
+  const [saveSheet, setSaveSheet] = useState(false);
+  const [saveBusy, setSaveBusy] = useState(false);
+  const [saveOk, setSaveOk] = useState(false);
+  useEffect(() => {
+    if (nativePlatform() !== "android" || !s.premium) return;
+    (async () => {
+      const pl = await initPurchases(user?.id ?? null);
+      if (!pl) return;
+      try {
+        const info = await pl.getCustomerInfo();
+        if (!hasActiveEntitlement(info.customerInfo)) return;
+        setLojaSub(true);
+        const offs = await pl.getOfferings();
+        const pkgs = offs.current?.availablePackages ?? [];
+        const monthly = pkgs.find((x) => x.packageType === "MONTHLY") ?? pkgs.find((x) => x.identifier === "$rc_monthly");
+        setSaveOpt(googleOffer(monthly, "save30"));
+      } catch { /* sem RevenueCat acessível: segue com os botões da web */ }
+    })();
+  }, [s.premium, user]);
+
+  // Ficha de assinaturas da Play, já aberta no produto certo.
+  const abrirFichaPlay = () => {
+    const sku = saveOpt?.productId ?? "";
+    openExternal(`https://play.google.com/store/account/subscriptions${sku ? `?sku=${sku}&package=mentorque.app` : ""}`);
+  };
+
+  const aceitarSave30 = async () => {
+    if (!saveOpt || saveBusy) return;
+    setSaveBusy(true);
+    try {
+      const pl = await initPurchases(user?.id ?? null);
+      // Troca de plano dentro da mesma assinatura da Play: o "produto antigo"
+      // é o id da própria assinatura, que é o mesmo para mensal e anual.
+      const res = await pl?.purchaseSubscriptionOption({
+        subscriptionOption: saveOpt,
+        googleProductChangeInfo: { oldProductIdentifier: saveOpt.productId },
+      });
+      if (res && hasActiveEntitlement(res.customerInfo)) {
+        setSaveOk(true);
+        refreshSubscription();
+        softRefresh();
+      }
+    } catch { /* cancelou/erro: permanece na folha */ } finally {
+      setSaveBusy(false);
+    }
+  };
   const cancelPlan = async () => {
     if (!subscribed) { setPremium(false); return; } // demo
     if (typeof window !== "undefined" && !window.confirm(p.cancelConfirm)) return;
@@ -318,6 +371,18 @@ export function ProfileScreen() {
                 <Button className={`w-full ${subscribed && subscriptionEndsAt ? "mt-3" : "mt-4"}`} disabled={busyPlan} onClick={reactivatePlan}>
                   {p.reactivate}
                 </Button>
+              ) : lojaSub ? (
+                // Assinatura da Play: gerenciar abre a loja; cancelar passa
+                // antes pela oferta de retenção (se ela carregou).
+                <>
+                  <Button variant="secondary" className="mt-3 w-full" onClick={abrirFichaPlay}>{p.manageStore}</Button>
+                  <button
+                    onClick={() => (saveOpt ? setSaveSheet(true) : abrirFichaPlay())}
+                    className="mt-2 w-full py-1.5 text-center text-sm text-cream/45 hover:text-coral"
+                  >
+                    {p.cancelPlan}
+                  </button>
+                </>
               ) : subscribed ? (
                 <>
                   <Button variant="secondary" className="mt-3 w-full" onClick={managePlan}>{p.manage}</Button>
@@ -484,6 +549,39 @@ export function ProfileScreen() {
       </Sheet>
 
       {/* Política de privacidade */}
+      {/* Retenção pré-cancelamento (assinatura da Play): oferece o save30
+          antes de mandar para a ficha da loja. */}
+      <Sheet open={saveSheet} onClose={() => { setSaveSheet(false); setSaveOk(false); }}>
+        {saveOk ? (
+          <div className="flex flex-col items-center pt-2 text-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/biela/biela-idle.png" alt="" className="h-24 w-24 object-contain" draggable={false} />
+            <p className="mt-3 font-serif text-xl font-bold text-cream">{p.saveDone}</p>
+            <Button className="mt-5 w-full" onClick={() => { setSaveSheet(false); setSaveOk(false); }}>OK</Button>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center pt-2 text-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/biela/biela-acenando.png" alt="" className="h-24 w-24 object-contain" draggable={false} />
+            <h2 className="mt-2 font-serif text-xl font-bold text-cream">{p.saveTitle}</h2>
+            <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-cream/65">{p.saveBody}</p>
+            <Button className="mt-5 w-full" disabled={saveBusy} onClick={aceitarSave30}>
+              {saveBusy
+                ? "…"
+                : offerPrice(saveOpt)
+                  ? p.saveCta.replace("{preco}", offerPrice(saveOpt) ?? "")
+                  : p.saveCtaNoPrice}
+            </Button>
+            <button
+              onClick={() => { setSaveSheet(false); abrirFichaPlay(); }}
+              className="mt-3 text-sm text-cream/45 underline-offset-2 hover:text-coral hover:underline"
+            >
+              {p.saveNo}
+            </button>
+          </div>
+        )}
+      </Sheet>
+
       <Sheet open={privacy} onClose={() => setPrivacy(false)}>
         <h2 className="font-serif text-xl font-semibold text-cream">{p.privacyTitle}</h2>
         <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-cream/70">{p.privacyBody}</p>
@@ -662,6 +760,8 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   // voltar) dispara as ofertas — 10% OFF (suprimido por 30 min) e, na
   // rejeição ou se o 10% estiver suprimido, 25% OFF em tela cheia (1x a cada
   // 3 dias). Assinantes e o app da loja saem direto.
+  // Ofertas de saída do Play (Android): carregadas junto com os pacotes.
+  const [exitOpts, setExitOpts] = useState<{ o10: GoogleOption | null; o25: GoogleOption | null }>({ o10: null, o25: null });
   const OFFER_KEY = "mentorque-exit-offer-ts";
   const OFFER2_KEY = "mentorque-exit2-ts";
   const [showOffer, setShowOffer] = useState(false);
@@ -702,7 +802,11 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   // que não conhece cupom do Stripe. Oferta de saída no app precisa ser outro
   // produto/oferta da própria Apple — não este funil.
   const requestExit = (target: View | null): boolean => {
-    if (subscribed || isNativeApp()) return false;
+    if (subscribed) return false;
+    // No app da loja o funil só existe no Android com as ofertas do Play já
+    // carregadas (exit10/exit25). No iOS continua sem funil: desconto lá
+    // exigiria promotional offer da Apple, que é outro mecanismo.
+    if (isNativeApp() && !(nativePlatform() === "android" && (exitOpts.o10 || exitOpts.o25))) return false;
     pendingExit.current = target;
     if (fresh(OFFER_KEY, 30 * 60 * 1000)) { mark(OFFER_KEY); setOfferLeft(120); setShowOffer(true); return true; }
     if (fresh(OFFER2_KEY, 3 * 24 * 60 * 60 * 1000)) { mark(OFFER2_KEY); setShowOffer2(true); return true; }
@@ -727,7 +831,29 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offerLeft, showOffer]);
 
+  // Compra uma oferta do Play (exit10/exit25). Fecha os pop-ups e sai do
+  // paywall quando o entitlement chega.
+  const buyGoogleOffer = async (opt: GoogleOption | null) => {
+    if (!opt || iapBusy) return;
+    if (!user) { go({ name: "auth" }); return; }
+    setIapBusy(true);
+    try {
+      const pl = await initPurchases(user.id);
+      const res = await pl?.purchaseSubscriptionOption({ subscriptionOption: opt });
+      if (res && hasActiveEntitlement(res.customerInfo)) {
+        setPremium(true);
+        refreshSubscription();
+        setShowOffer(false);
+        setShowOffer2(false);
+        back();
+      }
+    } catch { /* cancelou/erro: permanece na oferta */ } finally {
+      setIapBusy(false);
+    }
+  };
+
   const subscribeOffer = () => {
+    if (isNativeApp()) { void buyGoogleOffer(exitOpts.o10 ?? exitOpts.o25); return; }
     if (!user) { go({ name: "auth" }); return; }
     if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; }
     go({ name: "checkout", plan: "annual", offer: "exit10" });
@@ -745,6 +871,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   };
 
   const subscribeOffer2 = () => {
+    if (isNativeApp()) { void buyGoogleOffer(exitOpts.o25 ?? exitOpts.o10); return; }
     if (!user) { go({ name: "auth" }); return; }
     if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; }
     go({ name: "checkout", plan: "annual", offer: "exit25" });
@@ -777,6 +904,8 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
         const monthly = pkgs.find((x) => x.packageType === "MONTHLY") ?? pkgs.find((x) => x.identifier === "$rc_monthly");
         const annual = pkgs.find((x) => x.packageType === "ANNUAL") ?? pkgs.find((x) => x.identifier === "$rc_annual");
         if (monthly || annual) setIap({ monthly, annual });
+        // Ofertas de saída do Play (Android). No iOS vêm null e o funil não liga.
+        setExitOpts({ o10: googleOffer(annual, "exit10"), o25: googleOffer(annual, "exit25") });
       } catch { /* sem ofertas → modo leitor */ }
       finally { setIapReady(true); }
     })();
@@ -828,6 +957,103 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
       if (res && hasActiveEntitlement(res.customerInfo)) { setPremium(true); refreshSubscription(); back(); }
     } catch { /* ignore */ }
   };
+
+  // Pop-ups do funil de saída. Definidos aqui (e não no JSX de um caminho só)
+  // porque precisam renderizar tanto na web quanto no paywall nativo do
+  // Android — antes eles moravam depois do return nativo e o app da loja
+  // segurava a navegação para mostrar uma tela que não existia.
+  // No Android, os preços vêm da oferta real do Play (offerPrice); na web,
+  // das strings do Stripe.
+  const exitOverlays = (
+    <>
+      {/* Pop-up de saída — 10% OFF (formato Bloom) */}
+      {showOffer && (
+        <div className="fixed inset-0 z-50 bg-black/60">
+          <div className="absolute inset-x-0 bottom-0 app-col rounded-t-3xl bg-cream px-6 pb-8 pt-5 text-center text-graphite">
+            <button
+              onClick={dismissOffer1}
+              aria-label="fechar oferta"
+              className="absolute right-4 top-4 text-graphite/45 hover:text-graphite"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5"><path d="M6 6l12 12M18 6 6 18" /></svg>
+            </button>
+            <h2 className="mx-auto mt-4 max-w-xs font-serif text-2xl font-bold leading-snug">{sub.exitTitle}</h2>
+            <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-graphite/55">{sub.exitSub}</p>
+            <p className="mt-4 text-xs text-graphite/50">{sub.exitExpires}</p>
+            <p className="font-display text-3xl font-bold tabular-nums">{mmss}</p>
+            <div className="mt-3 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/5">
+              <span className="inline-block rounded-full bg-amber px-3 py-1 text-xs font-bold text-graphite">{sub.exitBadge}</span>
+              <p className="mt-2 font-serif text-3xl font-bold">{(isNativeApp() && offerPrice(exitOpts.o10)) || sub.exitPrice}</p>
+            </div>
+            <button
+              onClick={subscribeOffer}
+              className="mt-4 w-full rounded-full bg-graphite py-3.5 font-display text-[15px] font-semibold text-cream active:scale-[0.99]"
+            >
+              {sub.exitCta}
+            </button>
+            <p className="mx-auto mt-3 max-w-xs text-xs leading-relaxed text-graphite/55">{sub.exitFine}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Oferta final — 25% OFF em tela cheia (formato Bloom) */}
+      {showOffer2 && (
+        <div className="fixed inset-0 z-[60] app-col overflow-y-auto bg-graphite-900 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex min-h-full flex-col px-6 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-[max(env(safe-area-inset-top),20px)]">
+            {/* Biela + faixas "OFERTA ÚNICA" (sem X — a recusa fica embaixo) */}
+            <div className="relative mt-2 flex h-52 items-center justify-center overflow-hidden">
+              {[
+                { top: "top-3", rot: "-rotate-[18deg]" },
+                { top: "top-16", rot: "rotate-[14deg]" },
+                { top: "top-32", rot: "-rotate-[10deg]" },
+              ].map((r, idx) => (
+                <div key={idx} className={`absolute ${r.top} left-[-30%] w-[160%] ${r.rot} whitespace-nowrap bg-amber/10 py-1 text-center text-[10px] font-semibold tracking-[0.2em] text-amber/60`}>
+                  {Array.from({ length: 4 }, () => sub.exit2Ribbon).join("   ·   ")}
+                </div>
+              ))}
+              <div className="relative z-10">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/biela/biela-acenando.png" alt="Biela" className="h-44 w-44 object-contain" draggable={false} />
+              </div>
+            </div>
+
+            <h2 className="mt-3 text-center font-serif text-4xl font-bold text-cream">{sub.exit2Title}</h2>
+            <p className="mt-2 flex items-center justify-center gap-1.5 text-sm text-amber">
+              <span aria-hidden>⚠️</span> {sub.exit2Warn}
+            </p>
+
+            <div className="mt-5 rounded-3xl bg-graphite-800 p-5 text-center ring-1 ring-white/[0.06]">
+              <p className="text-[11px] font-semibold tracking-[0.18em] text-cream/60">{sub.exit2Best}</p>
+              <div className="mt-3 rounded-2xl bg-graphite-900 p-4 ring-1 ring-white/[0.06]">
+                <p className="text-sm text-cream/40 line-through">{(isNativeApp() && (iap?.annual?.product?.priceString ?? null)) || sub.exit2Old}</p>
+                <p className="mt-0.5 font-serif text-3xl font-bold text-cream">{(isNativeApp() && offerPrice(exitOpts.o25)) || sub.exit2Price}</p>
+              </div>
+            </div>
+            <p className="mx-auto mt-3 max-w-xs text-center text-xs leading-relaxed text-cream/50">{sub.exit2Fine}</p>
+
+            <div className="mt-auto pt-5">
+              <button
+                onClick={subscribeOffer2}
+                className="w-full rounded-full bg-amber py-3.5 font-display text-[15px] font-semibold text-graphite active:scale-[0.99]"
+              >
+                {sub.exit2Cta}
+              </button>
+              {/* Recusa discreta — sai da oferta */}
+              <button
+                onClick={() => { setShowOffer2(false); exitNow(); }}
+                className="mx-auto mt-3 block text-xs text-cream/35 underline-offset-2 hover:text-cream/60 hover:underline"
+              >
+                {sub.exit2Skip}
+              </button>
+              <p className="mt-3 text-center text-[11px] leading-relaxed text-cream/45">
+                {sub.exit2Agree} <LegalLinks underline />
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 
   if (isNativeApp()) {
     // Paywall com compra interna (IAP) quando o RevenueCat está configurado.
@@ -910,6 +1136,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
               </div>
             );
           })()}
+          {exitOverlays}
         </div>
       );
     }
@@ -1052,92 +1279,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
           .replace("{preco}", plan === "annual" ? sub.planAnnualPrice : sub.planMonthlyPrice)}
       </p>
 
-      {/* Pop-up de saída — 10% OFF (formato Bloom) */}
-      {showOffer && (
-        <div className="fixed inset-0 z-50 bg-black/60">
-          <div className="absolute inset-x-0 bottom-0 app-col rounded-t-3xl bg-cream px-6 pb-8 pt-5 text-center text-graphite">
-            <button
-              onClick={dismissOffer1}
-              aria-label="fechar oferta"
-              className="absolute right-4 top-4 text-graphite/45 hover:text-graphite"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5"><path d="M6 6l12 12M18 6 6 18" /></svg>
-            </button>
-            <h2 className="mx-auto mt-4 max-w-xs font-serif text-2xl font-bold leading-snug">{sub.exitTitle}</h2>
-            <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-graphite/55">{sub.exitSub}</p>
-            <p className="mt-4 text-xs text-graphite/50">{sub.exitExpires}</p>
-            <p className="font-display text-3xl font-bold tabular-nums">{mmss}</p>
-            <div className="mt-3 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/5">
-              <span className="inline-block rounded-full bg-amber px-3 py-1 text-xs font-bold text-graphite">{sub.exitBadge}</span>
-              <p className="mt-2 font-serif text-3xl font-bold">{sub.exitPrice}</p>
-            </div>
-            <button
-              onClick={subscribeOffer}
-              className="mt-4 w-full rounded-full bg-graphite py-3.5 font-display text-[15px] font-semibold text-cream active:scale-[0.99]"
-            >
-              {sub.exitCta}
-            </button>
-            <p className="mx-auto mt-3 max-w-xs text-xs leading-relaxed text-graphite/55">{sub.exitFine}</p>
-          </div>
-        </div>
-      )}
-
-      {/* Oferta final — 25% OFF em tela cheia (formato Bloom) */}
-      {showOffer2 && (
-        <div className="fixed inset-0 z-[60] app-col overflow-y-auto bg-graphite-900 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <div className="flex min-h-full flex-col px-6 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-[max(env(safe-area-inset-top),20px)]">
-            {/* Biela + faixas "OFERTA ÚNICA" (sem X — a recusa fica embaixo) */}
-            <div className="relative mt-2 flex h-52 items-center justify-center overflow-hidden">
-              {[
-                { top: "top-3", rot: "-rotate-[18deg]" },
-                { top: "top-16", rot: "rotate-[14deg]" },
-                { top: "top-32", rot: "-rotate-[10deg]" },
-              ].map((r, idx) => (
-                <div key={idx} className={`absolute ${r.top} left-[-30%] w-[160%] ${r.rot} whitespace-nowrap bg-amber/10 py-1 text-center text-[10px] font-semibold tracking-[0.2em] text-amber/60`}>
-                  {Array.from({ length: 4 }, () => sub.exit2Ribbon).join("   ·   ")}
-                </div>
-              ))}
-              <div className="relative z-10">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/biela/biela-acenando.png" alt="Biela" className="h-44 w-44 object-contain" draggable={false} />
-              </div>
-            </div>
-
-            <h2 className="mt-3 text-center font-serif text-4xl font-bold text-cream">{sub.exit2Title}</h2>
-            <p className="mt-2 flex items-center justify-center gap-1.5 text-sm text-amber">
-              <span aria-hidden>⚠️</span> {sub.exit2Warn}
-            </p>
-
-            <div className="mt-5 rounded-3xl bg-graphite-800 p-5 text-center ring-1 ring-white/[0.06]">
-              <p className="text-[11px] font-semibold tracking-[0.18em] text-cream/60">{sub.exit2Best}</p>
-              <div className="mt-3 rounded-2xl bg-graphite-900 p-4 ring-1 ring-white/[0.06]">
-                <p className="text-sm text-cream/40 line-through">{sub.exit2Old}</p>
-                <p className="mt-0.5 font-serif text-3xl font-bold text-cream">{sub.exit2Price}</p>
-              </div>
-            </div>
-            <p className="mx-auto mt-3 max-w-xs text-center text-xs leading-relaxed text-cream/50">{sub.exit2Fine}</p>
-
-            <div className="mt-auto pt-5">
-              <button
-                onClick={subscribeOffer2}
-                className="w-full rounded-full bg-amber py-3.5 font-display text-[15px] font-semibold text-graphite active:scale-[0.99]"
-              >
-                {sub.exit2Cta}
-              </button>
-              {/* Recusa discreta — sai da oferta */}
-              <button
-                onClick={() => { setShowOffer2(false); exitNow(); }}
-                className="mx-auto mt-3 block text-xs text-cream/35 underline-offset-2 hover:text-cream/60 hover:underline"
-              >
-                {sub.exit2Skip}
-              </button>
-              <p className="mt-3 text-center text-[11px] leading-relaxed text-cream/45">
-                {sub.exit2Agree} <LegalLinks underline />
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+      {exitOverlays}
     </div>
   );
 }

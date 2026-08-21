@@ -8,19 +8,51 @@
 // as telas — os dois precisam concordar, e concordam por lerem a mesma fonte.
 import { iapKey } from "./wrapper";
 
+// Opção de assinatura do Google (plano base ou oferta). O `id` de uma oferta
+// vem como "planoBase:oferta" (ex.: "annual:exit10"); o `productId` é o id da
+// assinatura na Play (ex.: "annual100"), que também é o "produto antigo" numa
+// troca de plano — tudo mora na mesma assinatura.
+export type GoogleOption = {
+  id: string;
+  storeProductId?: string;
+  productId: string;
+  isBasePlan?: boolean;
+  pricingPhases?: { price?: { formatted?: string }; billingPeriod?: unknown }[];
+};
+
 export type RcPackage = {
   identifier: string;
   packageType?: string;
-  product?: { priceString?: string; title?: string; identifier?: string };
+  product?: { priceString?: string; title?: string; identifier?: string; subscriptionOptions?: GoogleOption[] | null };
 };
 type CustomerInfo = { entitlements?: { active?: Record<string, unknown> } };
 type PurchasesPlugin = {
   configure: (o: { apiKey: string; appUserID?: string }) => Promise<unknown>;
   getOfferings: () => Promise<{ current?: { availablePackages?: RcPackage[] } | null }>;
   purchasePackage: (o: { aPackage: RcPackage }) => Promise<{ customerInfo?: CustomerInfo }>;
+  // Compra uma opção específica do Google (é assim que se aplica uma oferta
+  // com elegibilidade "determinada pelo desenvolvedor", que o purchasePackage
+  // nunca seleciona sozinho). `googleProductChangeInfo` entra quando o usuário
+  // JÁ assina e está trocando de plano (ex.: retenção no cancelamento).
+  purchaseSubscriptionOption: (o: {
+    subscriptionOption: GoogleOption;
+    googleProductChangeInfo?: { oldProductIdentifier: string };
+  }) => Promise<{ customerInfo?: CustomerInfo }>;
+  getCustomerInfo: () => Promise<{ customerInfo?: CustomerInfo }>;
   restorePurchases: () => Promise<{ customerInfo?: CustomerInfo }>;
   logIn: (o: { appUserID: string }) => Promise<unknown>;
 };
+
+// Acha uma oferta do Google pelo id ("exit10", "save30") dentro de um pacote.
+export function googleOffer(pkg: RcPackage | undefined, offerId: string): GoogleOption | null {
+  const options = pkg?.product?.subscriptionOptions ?? [];
+  return options.find((o) => o.id === offerId || o.id.endsWith(`:${offerId}`)) ?? null;
+}
+
+// Preço formatado da primeira fase da oferta (o valor COM desconto).
+export function offerPrice(opt: GoogleOption | null): string | null {
+  return opt?.pricingPhases?.[0]?.price?.formatted ?? null;
+}
 
 // Plugin nativo injetado pelo wrapper (Capacitor). undefined no navegador.
 export function nativePurchases(): PurchasesPlugin | undefined {
