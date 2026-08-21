@@ -7,6 +7,7 @@ import { computeQuizHealth } from "@/lib/app/healthQuiz";
 import { computeStatus, MILESTONES } from "@/lib/app/gamification";
 import { isNewLesson, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
+import { openStorePage, useUpdateAvailable } from "@/lib/app/appUpdate";
 import { sellsInApp } from "@/lib/app/wrapper";
 import { useContent, Card, Icon } from "../ui";
 import { HealthPill } from "./Cars";
@@ -69,6 +70,7 @@ export function HomeScreen() {
 
   const car = activeVehicle(s);
   const hasCar = s.vehicles.length > 0;
+  const updateReady = useUpdateAvailable();
   const status = computeStatus(s);
   const seen = s.seenLessons ?? [];
   const savedIds = s.savedLessons ?? [];
@@ -101,6 +103,26 @@ export function HomeScreen() {
 
   return (
     <div className="pb-4">
+      {/* Versão nova na loja. Só no app empacotado, e só quando o build
+          instalado está atrás do publicado (lib/app/appUpdate.ts). Vive no
+          topo porque o motorista precisa VER antes de rolar — mas pequeno:
+          é um lembrete, não um bloqueio. */}
+      {updateReady && (
+        <button
+          onClick={openStorePage}
+          className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-teal/10 px-4 py-3 text-left ring-1 ring-teal/25 active:scale-[0.99]"
+        >
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-teal/15 text-teal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14" /></svg>
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-display text-[14px] font-semibold text-cream">{h.updateTitle}</span>
+            <span className="block truncate text-xs text-cream/55">{h.updateSub}</span>
+          </span>
+          <span className="shrink-0 rounded-full bg-teal px-3.5 py-1.5 text-xs font-bold text-graphite">{h.updateCta}</span>
+        </button>
+      )}
+
       {/* Herói */}
       <div className="relative mt-3 overflow-hidden rounded-3xl bg-graphite-800 ring-1 ring-white/5">
         {/* eslint-disable-next-line @next/next/no-img-element */}
