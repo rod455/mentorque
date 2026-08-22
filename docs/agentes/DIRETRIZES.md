@@ -53,7 +53,7 @@ priorizadas. Ruído é inimigo: só notificar o Rodrigo com substância.
 
 | Papel | Onde roda | Cadência | Manual |
 |---|---|---|---|
-| Sentinela | n8n (workflow "Sentinela Mentorque") | a cada hora | sentinela.md |
+| Sentinela | n8n (workflow "Sentinela Mentorque") | 2x por dia | sentinela.md |
 | Diretor de operação | Rotina Claude | semanal (seg) | a criar |
 | QA/Produto | Rotina Claude | semanal (qua) | a criar |
 | CRO/BeSci | Rotina Claude | semanal (sex) | a criar |
