@@ -47,3 +47,44 @@ $$;
 
 -- Só o painel (e a chave de serviço) enxergam; app e anônimos, nunca.
 revoke all on function public.cadastros_do_dia(date) from anon, authenticated;
+
+-- ─ Variante por período (também JÁ APLICADA no banco) ─
+-- Uso:  select * from cadastros_no_periodo('2026-07-21', '2026-07-30');
+-- Exclui contas de teste (email começando com fake_). Datas em horário de
+-- Brasília, inclusivas nas duas pontas.
+create or replace function public.cadastros_no_periodo(inicio date, fim date)
+returns table (
+  id uuid,
+  email text,
+  horario_brasilia timestamp,
+  email_confirmado_em timestamp,
+  metodo text,
+  aparelho text,
+  versao_app text
+)
+language sql
+security definer
+set search_path = public, auth
+as $$
+  select
+    u.id,
+    u.email::text,
+    (u.created_at at time zone 'America/Sao_Paulo')::timestamp(0),
+    (u.email_confirmed_at at time zone 'America/Sao_Paulo')::timestamp(0),
+    coalesce(u.raw_app_meta_data->>'provider', 'email') as metodo,
+    f.plataforma as aparelho,
+    f.versao as versao_app
+  from auth.users u
+  left join lateral (
+    select fe.plataforma, fe.versao
+    from public.funil_eventos fe
+    where fe.user_id = u.id and fe.evento = 'cadastro'
+    order by fe.criado_em
+    limit 1
+  ) f on true
+  where u.email not like 'fake_%'
+    and (u.created_at at time zone 'America/Sao_Paulo')::date between inicio and fim
+  order by u.created_at desc;
+$$;
+
+revoke all on function public.cadastros_no_periodo(date, date) from anon, authenticated;
