@@ -3,6 +3,15 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-22 · O time completo entra em campo
+- UTM ligada ao funil: eventos da web carregam a etiqueta de campanha que a
+  LP guarda; mídia paga nasce mensurável.
+- Ponte de dados criada no n8n (retrato diário → docs/dados/retrato.md via
+  API do GitHub); aguarda o PAT "GitHub Analista" para ativar.
+- Rotinas agendadas: Diretor (seg), Conteúdo & SEO (ter), QA/Produto (qua),
+  CRO/BeSci (sex), ASO & Lojas (dias 1 e 15). Especialistas em silêncio;
+  só o Diretor notifica.
+
 ## 2026-08-22 · Analista de Dados nasce (avaliações das lojas)
 - Tabela lojas_avaliacoes + rota /api/avaliacoes (POST coleta, GET resumo).
 - Workflow diário no n8n coletando o feed público da App Store; rodou limpo,
