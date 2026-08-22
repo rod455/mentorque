@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { personalScore, vehicleSituations, vehicleTraits } from "@/lib/app/traits";
 import type { ServiceRecord } from "@/lib/app/types";
@@ -9,7 +10,8 @@ import { isNewLesson, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { openStorePage, useUpdateAvailable } from "@/lib/app/appUpdate";
 import { sellsInApp } from "@/lib/app/wrapper";
-import { useContent, Card, Icon, Thumb } from "../ui";
+import { Button } from "@/components/ui/Button";
+import { useContent, Card, Icon, inputCls, Sheet, Thumb } from "../ui";
 import { HealthPill } from "./Cars";
 import { FipeLine } from "./CarHub";
 import { CommonProblems } from "./Symptoms";
@@ -65,12 +67,50 @@ export function HomeScreen() {
   const c = useContent();
   const h = c.home;
   const gm = c.gamification.milestones;
-  const { s, moveLessonPinned } = usePrototype();
+  const { s, moveLessonPinned, updateVehicle } = usePrototype();
   const { go, root } = useNav();
 
   const car = activeVehicle(s);
   const hasCar = s.vehicles.length > 0;
   const updateReady = useUpdateAvailable();
+
+  // Lembrete mensal de km. O carimbo kmUpdatedAt (gravado pelo store a cada
+  // mudança do odômetro) diz há quanto tempo o número está parado; passados
+  // 30 dias, a tela inicial pede o valor novo. "Agora não" adia por 3 dias
+  // (marcador local por veículo). Km menor que o registrado não passa: o
+  // odômetro só anda para frente, então valor menor é erro de digitação.
+  const [kmAsk, setKmAsk] = useState(false);
+  const [kmNovo, setKmNovo] = useState("");
+  const [kmErro, setKmErro] = useState<string | null>(null);
+  const KM_SNOOZE = "mq-km-snooze-";
+  useEffect(() => {
+    if (!car || car.odometerKm == null) return;
+    const DIA = 24 * 60 * 60 * 1000;
+    let adiado = 0;
+    try { adiado = Number(window.localStorage.getItem(KM_SNOOZE + car.id) ?? 0); } catch { /* sem armazenamento: pergunta */ }
+    const informado = car.kmUpdatedAt ? Date.parse(car.kmUpdatedAt) : 0;
+    if (Date.now() - informado > 30 * DIA && Date.now() - adiado > 3 * DIA) {
+      setKmNovo("");
+      setKmErro(null);
+      setKmAsk(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [car?.id]);
+  const adiarKm = () => {
+    try { window.localStorage.setItem(KM_SNOOZE + (car?.id ?? ""), String(Date.now())); } catch { /* ignore */ }
+    setKmAsk(false);
+  };
+  const salvarKm = () => {
+    if (!car) return;
+    const n = parseInt(kmNovo.replace(/\D/g, ""), 10);
+    if (!Number.isFinite(n)) { setKmErro(h.kmAskInvalid); return; }
+    if (car.odometerKm != null && n < car.odometerKm) {
+      setKmErro(h.kmAskLower.replace("{novo}", n.toLocaleString()).replace("{atual}", car.odometerKm.toLocaleString()));
+      return;
+    }
+    updateVehicle(car.id, { odometerKm: n });
+    setKmAsk(false);
+  };
   const status = computeStatus(s);
   const seen = s.seenLessons ?? [];
   const savedIds = s.savedLessons ?? [];
@@ -464,6 +504,29 @@ export function HomeScreen() {
           </button>
         ))}
       </div>
+
+      {/* Lembrete mensal: atualizar o km do painel */}
+      <Sheet open={kmAsk} onClose={adiarKm}>
+        <h2 className="font-display text-xl font-bold text-cream">{h.kmAskTitle}</h2>
+        <p className="mt-1 text-sm leading-relaxed text-cream/60">
+          {h.kmAskBody.replace("{km}", (car?.odometerKm ?? 0).toLocaleString())}
+        </p>
+        <input
+          inputMode="numeric"
+          pattern="[0-9]*"
+          value={kmNovo}
+          onChange={(e) => { setKmNovo(e.target.value); setKmErro(null); }}
+          placeholder={h.kmAskPh}
+          className={`mt-4 ${inputCls}`}
+        />
+        {kmErro && (
+          <p className="mt-2 rounded-lg bg-coral/10 px-3 py-2 text-sm leading-relaxed text-coral ring-1 ring-coral/20">{kmErro}</p>
+        )}
+        <Button size="lg" className="mt-4 w-full" onClick={salvarKm}>{h.kmAskSave}</Button>
+        <button onClick={adiarKm} className="mx-auto mt-3 block py-1 text-sm text-cream/50 hover:text-cream">
+          {h.kmAskLater}
+        </button>
+      </Sheet>
     </div>
   );
 }

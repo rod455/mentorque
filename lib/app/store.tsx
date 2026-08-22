@@ -374,7 +374,18 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   );
 
   const updateVehicle = useCallback(
-    (id: string, up: Partial<Vehicle>) => patch((p) => ({ ...p, vehicles: p.vehicles.map((v) => (v.id === id ? { ...v, ...up } : v)) })),
+    (id: string, up: Partial<Vehicle>) =>
+      patch((p) => ({
+        ...p,
+        vehicles: p.vehicles.map((v) => {
+          if (v.id !== id) return v;
+          // Km novo ganha carimbo de quando foi informado — é ele que dispara
+          // (e adia) o lembrete mensal de atualizar o km. Centralizado aqui
+          // para valer em toda tela que mexa no odômetro.
+          const carimbo = "odometerKm" in up && up.odometerKm !== v.odometerKm ? { kmUpdatedAt: new Date().toISOString() } : {};
+          return { ...v, ...up, ...carimbo };
+        }),
+      })),
     [patch]
   );
 

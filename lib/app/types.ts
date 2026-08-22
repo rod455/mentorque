@@ -14,6 +14,9 @@ export type Vehicle = {
   version?: string; // exact trim / version (Premium)
   plate?: string; // placa (optional)
   odometerKm?: number; // km atual
+  // Quando o km foi informado pela última vez (carimbado pelo store a cada
+  // mudança de odometerKm). Alimenta o lembrete mensal de atualizar o km.
+  kmUpdatedAt?: string; // ISO
   photo?: string; // downscaled data URL
   nickname?: string; // custom name the user gives the car
   purchaseDate?: string; // ISO yyyy-mm-dd — when the owner bought the car
