@@ -3,6 +3,19 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-22 · Coleta total preparada (metricas externas, desligada)
+- Mesa de pouso única no banco: tabela metricas_diarias (dia + fonte, jsonb)
+  e rota /api/metricas; /api/dados passou a devolver fontesExternas e o
+  retrato diário ganhou a seção "Fontes externas" (workflow republicado).
+- Workflow novo "Analista: metricas externas" no n8n, com 11 braços
+  independentes (Search Console, Stripe, YouTube, Meta Ads, Google Ads,
+  RevenueCat, Vercel, AdMob, App Store Connect, Play vitals e avaliações do
+  Play). Fica DESLIGADO até as credenciais serem coladas; braço sem
+  credencial só registra o próprio erro, não derruba os demais.
+- Checklist de chaves e de cliques (selecionar credencial nos nós) está no
+  manual analista-dados.md. Decisão do dono: tudo num workflow só, blindado
+  por braço, e tudo preparado antes de ligar.
+
 ## 2026-08-22 · O time completo entra em campo
 - UTM ligada ao funil: eventos da web carregam a etiqueta de campanha que a
   LP guarda; mídia paga nasce mensurável.

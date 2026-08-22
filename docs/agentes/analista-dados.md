@@ -21,17 +21,72 @@ leem. Não analisa, não opina, não notifica o Rodrigo; entrega matéria-prima.
    Contents deste repositório). É a fonte primária do Diretor, do CRO e do
    ASO. Primeiro commit real: ed50a29.
 
-## Fontes que ele ainda vai assumir
+## Workflow pronto, esperando as chaves (DESLIGADO)
 
-- Avaliações do Google Play: falta só colar o JSON da conta de serviço como
-  credencial no n8n (o braço do workflow já está desenhado).
-- Stripe (receita real e MRR): precisa de chave restrita de leitura.
-- YouTube (views dos vídeos): precisa de credencial OAuth do YouTube no n8n.
-- Search Console (buscas que trazem o site): a credencial Google do n8n já
-  tem o escopo autorizado; é só construir o workflow.
-- Mídia paga (Google Ads e Meta): entra junto com as campanhas; exige token
-  de leitura de cada plataforma. A captura de UTM no funil já está pronta
-  do lado do site.
+3. **Métricas externas** (diário, 5h30 quando ligar)
+   https://n8n.vocaboost.com.br/workflow/8HswG6ZPdzBSnlPv
+   Um braço por fonte, todos independentes: braço sem credencial ou com erro
+   grava o próprio erro e não derruba os demais. Cada braço grava um pacote
+   por dia na mesa única POST /api/metricas (tabela metricas_diarias), que o
+   /api/dados devolve em fontesExternas e o retrato diário resume na seção
+   "Fontes externas". Exceção: o braço de avaliações do Play grava em
+   /api/avaliacoes, junto com as da Apple.
+
+   Braços e o que cada um coleta:
+   - search_console: cliques e impressões por dia (28d) + top 20 consultas
+   - stripe: assinaturas ativas, MRR estimado, receita 30d
+   - youtube: inscritos, views totais, views dos últimos 10 vídeos
+   - meta_ads: gasto, impressões, cliques e instalações por dia (7d)
+   - google_ads: custo, cliques, impressões e conversões por dia (7d)
+   - revenuecat: visão geral do projeto (assinaturas, MRR, trials)
+   - vercel: deploys da semana e estado do último deploy
+   - admob: ganhos e impressões de anúncio por dia (7d)
+   - app_store_connect: estado das versões do app (acompanha aprovação)
+   - play_console: taxa de crash e ANR por dia (vitals)
+   - avaliações do Google Play (últimos 7 dias da API, por isso é diário)
+
+## Checklist para ligar (credenciais no n8n, uma por linha)
+
+Criar em https://n8n.vocaboost.com.br/home/credentials e depois selecionar
+nos nós do braço correspondente (a API não permite anexar por fora):
+
+- [ ] Search Console: NÃO precisa de chave nova; selecionar a credencial
+      "Google account" que já existe nos 3 nós do braço.
+- [ ] Google Play (vitals + avaliações): credencial tipo "Google API"
+      (Service Account), colando o JSON da conta revenuecat@mentorque.iam.
+      Vale para os 3 nós do Play.
+- [ ] Stripe: credencial "Bearer Auth" com uma chave RESTRITA de leitura
+      (Stripe Dashboard, Developers, API keys, Create restricted key: Read
+      em Subscriptions e Charges). Nos 2 nós do Stripe.
+- [ ] YouTube: credencial "YouTube OAuth2 API" (mesmo fluxo de 2 cliques do
+      Gmail, cliente OAuth do projeto Vocaboost). Nos 3 nós do YouTube.
+- [ ] RevenueCat: credencial "Bearer Auth" com chave secreta da API v2
+      (RevenueCat, Project settings, API keys). Nos 2 nós.
+- [ ] Vercel: credencial "Bearer Auth" com token de acesso (Vercel, Account
+      Settings, Tokens). Nos 2 nós.
+- [ ] Meta Ads: credencial "Bearer Auth" com token da Marketing API. Nos 2
+      nós. Entra quando as campanhas começarem.
+- [ ] Google Ads: credencial "Google Ads OAuth2 API" (pede também o
+      developer token da conta). Nos 2 nós. Se a API mudar de versão até lá,
+      ajustar o v20 nas URLs.
+- [ ] AdMob: credencial "Google OAuth2 API" nova com escopo
+      https://www.googleapis.com/auth/admob.readonly. Nos 2 nós.
+- [ ] App Store Connect: credencial "JWT Auth" com a chave .p8 (algoritmo
+      ES256) e, no nó "App Store: token", preencher os placeholders de
+      Issuer ID e Key ID. Nos 2 nós.
+
+Pode ativar o workflow com só parte das credenciais prontas: os braços sem
+credencial apenas registram o próprio erro na mesa. Quando tudo estiver
+selecionado, ativar o workflow (botão Active) e conferir a primeira execução.
+
+## Fora do workflow (limites conhecidos)
+
+- Instalações do Play e downloads da Apple: as APIs oficiais entregam isso
+  em relatórios (CSV no GCS e TSV gz); fica para uma fase 2 ou leitura
+  manual nos consoles.
+- Vercel Web Analytics não tem API pública estável; o braço vercel cobre
+  deploys e saúde. AdMob cobre a receita de anúncio.
+- Mídia paga: a captura de UTM no funil já está pronta do lado do site.
 
 ## Aprendizados
 
