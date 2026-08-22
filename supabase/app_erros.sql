@@ -1,7 +1,7 @@
 -- Erros de execução capturados dentro do app (a visão "de dentro" que a
 -- Sentinela não tem: tela quebrada, exceção de JavaScript, promessa rejeitada).
 --
--- Rode uma vez no painel do Supabase: SQL Editor → cole → Run.
+-- JÁ APLICADO no banco (via integração). Guardado aqui como registro da fonte.
 --
 -- QUEM ESCREVE AQUI: só o servidor, pela rota /api/erros, com a chave de
 -- serviço. Mesmo padrão da biela_votos e do funil: RLS ligado e SEM política,
