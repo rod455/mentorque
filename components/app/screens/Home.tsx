@@ -516,8 +516,8 @@ export function HomeScreen() {
           pattern="[0-9]*"
           value={kmNovo}
           onChange={(e) => { setKmNovo(e.target.value); setKmErro(null); }}
-          placeholder={h.kmAskPh}
-          className={`mt-4 ${inputCls}`}
+          placeholder={h.kmAskPh.replace("{km}", (car?.odometerKm ?? 0).toLocaleString())}
+          className={`mt-4 ${inputCls} placeholder:text-cream/30`}
         />
         {kmErro && (
           <p className="mt-2 rounded-lg bg-coral/10 px-3 py-2 text-sm leading-relaxed text-coral ring-1 ring-coral/20">{kmErro}</p>

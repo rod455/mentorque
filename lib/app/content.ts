@@ -1820,7 +1820,7 @@ export function getContent(locale: Locale) {
       updateCta: T("Atualizar", "Update"),
       kmAskTitle: T("Hora de atualizar o km", "Time to update the mileage"),
       kmAskBody: T("Faz um mês desde a última atualização. O último valor foi {km} km. Quanto marca o painel hoje?", "It's been a month since the last update. The last value was {km} km. What does the dash show today?"),
-      kmAskPh: T("Km atual", "Current km"),
+      kmAskPh: T("km atual: {km}", "current km: {km}"),
       kmAskSave: T("Salvar km", "Save mileage"),
       kmAskLater: T("Agora não", "Not now"),
       kmAskLower: T("O valor informado ({novo} km) é menor que o registrado ({atual} km). O km só anda para frente; confira o painel.", "The value entered ({novo} km) is lower than the recorded one ({atual} km). Mileage only goes up; check the dash."),
