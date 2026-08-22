@@ -5,7 +5,7 @@ import { apiPost } from "@/lib/app/apiBase";
 import { useI18n } from "@/lib/i18n";
 import { usePrototype } from "@/lib/app/store";
 import { EVENTO, type MotivoFeedback } from "@/lib/app/feedbackPrompt";
-import { isNativeApp, nativePlatform, openExternal, storeListingUrl } from "@/lib/app/wrapper";
+import { effectiveStorePlatform, isNativeApp, nativePlatform, openExternal, storeListingUrl } from "@/lib/app/wrapper";
 import { APP_VERSION } from "@/lib/app/content";
 import { Button } from "@/components/ui/Button";
 import { Sheet, inputCls, useContent } from "./ui";
@@ -84,11 +84,12 @@ export function FeedbackSheet() {
   if (!aberta) return null;
 
   const baixa = nota != null && nota <= 3;
-  // Nos dois apps a ficha existe agora, então o rótulo cita a loja — cada uma
-  // pelo nome dela, porque "Avaliar na App Store" num Android manda a pessoa
-  // para uma loja que o aparelho dela não tem. Na web fica genérico: ali o
+  // O rótulo cita a loja pelo nome, porque "Avaliar na App Store" num Android
+  // manda a pessoa para uma loja que o aparelho dela não tem. Vale também na
+  // WEB pelo celular: o user-agent diz o aparelho, e um iPhone no Safari vai
+  // para a App Store como iria pelo app. Só o desktop fica genérico — ali o
   // botão leva ao site, e falar em loja seria promessa que o link não cumpre.
-  const plataforma = isNativeApp() ? nativePlatform() : null;
+  const plataforma = effectiveStorePlatform();
   const rotuloLoja =
     plataforma === "ios" ? f.irParaLoja
     : plataforma === "android" ? f.irParaLojaPlay

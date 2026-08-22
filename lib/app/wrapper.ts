@@ -3,6 +3,7 @@
 // assinatura (política do Google Play Billing) — o Premium é assinado pelo
 // site e funciona normalmente no app após o login.
 import { APP_STORE_REVIEW_URL, PLAY_STORE_REVIEW_URL } from "@/lib/stores";
+import { detectPlatform } from "@/lib/app/platform";
 
 export function isNativeApp(): boolean {
   if (typeof window === "undefined") return false;
@@ -151,8 +152,22 @@ export function sellsInApp(): boolean {
 // (`?action=write-review`); a da Play não tem equivalente e abre a ficha, com o
 // formulário de avaliação logo abaixo da descrição — ver lib/stores.ts.
 export function storeListingUrl(): string {
-  const platform = nativePlatform();
+  const platform = effectiveStorePlatform();
   if (platform === "android") return PLAY_STORE_REVIEW_URL;
   if (platform === "ios") return APP_STORE_REVIEW_URL;
   return "https://www.mentorque.com.br";
+}
+
+// Loja que faz sentido para ESTE aparelho, dentro ou fora do wrapper.
+//
+// `nativePlatform()` só responde no app empacotado; na web mobile ela devolve
+// null e o convite de avaliação mandava a pessoa para o site — um beco. O
+// user-agent diz a plataforma do aparelho mesmo no navegador, então um iPhone
+// na web vai para a App Store e um Android para a Play. Desktop continua null:
+// lá não existe loja para apontar.
+export function effectiveStorePlatform(): "ios" | "android" | null {
+  const nativa = nativePlatform();
+  if (nativa) return nativa;
+  const ua = detectPlatform();
+  return ua === "other" ? null : ua;
 }
