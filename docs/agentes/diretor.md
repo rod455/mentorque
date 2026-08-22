@@ -6,18 +6,17 @@ a semana em UM relatório executivo e no máximo TRÊS prioridades.
 
 ## Fontes, na ordem
 
-1. **Funil**: GET https://www.mentorque.com.br/api/funil (WebFetch). Se o
-   acesso falhar por proxy, usar a ferramenta da Vercel
-   (web_fetch_vercel_url) com https://mentorque-ten.vercel.app/api/funil.
-   Traz as semanas (aberturas, visitantes, cadastros, paywall, checkouts,
-   assinaturas, renovações, cancelamentos, expirados) e o retrato das
-   assinaturas ativas.
-2. **Receita web**: integração do Stripe (assinaturas, pagamentos, churn web).
-3. **Tráfego do site**: integração da Vercel (web analytics do projeto
-   "mentorque", team rodrigos-projects-3acdc7aa).
-4. **O que mudou no produto**: `git log --oneline` da semana no repositório.
-5. **O time**: docs/agentes/DIARIO.md e os manuais, para saber o que os
-   outros agentes fizeram e recomendaram.
+1. **O retrato diário**: docs/dados/retrato.md, commitado toda manhã pelo
+   Analista de Dados (funil semana a semana, assinaturas, cadastros, erros e
+   avaliações das lojas, com o JSON bruto no fim). É a fonte primária: um
+   `git pull` e está tudo aí. Se o arquivo estiver com mais de 2 dias,
+   registrar que a ponte falhou (vira recomendação de conserto).
+2. **O que mudou no produto**: `git log --oneline` da semana no repositório.
+3. **O time**: docs/agentes/DIARIO.md e os artifacts dos outros agentes
+   (QA às quartas, CRO às sextas, Conteúdo às terças, ASO nos dias 1 e 15),
+   para consolidar o que fizeram e recomendaram.
+4. **Se disponíveis na sessão**: integrações de Stripe e Vercel enriquecem
+   receita e tráfego; sem elas, o retrato basta e a falta não é erro.
 
 ## O relatório (artifact)
 

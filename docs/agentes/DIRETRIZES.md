@@ -55,8 +55,11 @@ priorizadas. Ruído é inimigo: só notificar o Rodrigo com substância.
 |---|---|---|---|
 | Sentinela | n8n (workflow "Sentinela Mentorque") | 2x por dia | sentinela.md |
 | Analista de Dados | n8n (coletores) | diário | analista-dados.md |
-| Diretor de operação | Rotina Claude | semanal (seg) | a criar |
-| QA/Produto | Rotina Claude | semanal (qua) | a criar |
-| CRO/BeSci | Rotina Claude | semanal (sex) | a criar |
-| Conteúdo & SEO | Rotina Claude | semanal | a criar |
-| ASO & Lojas | Rotina Claude | quinzenal | a criar |
+| Diretor de operação | Rotina Claude | semanal (seg 08h) | diretor.md |
+| QA/Produto | Rotina Claude | semanal (qua 08h) | qa-produto.md |
+| CRO/BeSci | Rotina Claude | semanal (sex 08h) | cro-besci.md |
+| Conteúdo & SEO | Rotina Claude | semanal (ter 08h) | conteudo-seo.md |
+| ASO & Lojas | Rotina Claude | dias 1 e 15 (08h) | aso-lojas.md |
+
+Só o Diretor notifica o Rodrigo por padrão; os especialistas publicam
+artifact e registram no diário, e o Diretor consolida na segunda.
