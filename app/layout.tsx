@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, Inter, Lora } from "next/font/google";
 import { I18nProvider } from "@/lib/i18n";
+import { GoogleTag } from "@/components/GoogleTag";
 import "./globals.css";
 
 const display = Space_Grotesk({
@@ -76,6 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR" className={`${display.variable} ${sans.variable} ${serif.variable}`}>
       <body>
+        <GoogleTag />
         <I18nProvider>
           <a
             href="#top"

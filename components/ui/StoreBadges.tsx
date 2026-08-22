@@ -1,3 +1,5 @@
+"use client";
+
 import { useI18n } from "@/lib/i18n";
 import {
   APP_STORE_PUBLICADO,
@@ -5,6 +7,7 @@ import {
   PLAY_STORE_PUBLICADO,
   PLAY_STORE_URL,
 } from "@/lib/stores";
+import { marcarCliqueDownload } from "@/components/lp/Rastreio";
 
 /**
  * Selos das lojas. Com `href` viram link; sem `href`, continuam um botão inerte
@@ -17,10 +20,12 @@ import {
  */
 function Badge({
   store,
+  loja,
   caption,
   href,
 }: {
   store: string;
+  loja: "app_store" | "google_play";
   caption: string;
   href?: string;
 }) {
@@ -38,7 +43,13 @@ function Badge({
   const cls =
     "inline-flex h-12 items-center rounded-xl bg-graphite-700 px-4 ring-1 ring-white/10 transition-colors hover:bg-graphite-600 focus-visible:outline-none";
   return href ? (
-    <a href={href} target="_blank" rel="noreferrer" className={cls}>
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className={cls}
+      onClick={() => marcarCliqueDownload(loja)}
+    >
       {inner}
     </a>
   ) : (
@@ -54,11 +65,13 @@ export function StoreBadges({ className }: { className?: string }) {
     <div className={`flex flex-wrap gap-3 ${className ?? ""}`}>
       <Badge
         store={t.hero.appStore}
+        loja="app_store"
         caption={APP_STORE_PUBLICADO ? t.hero.downloadOn : t.hero.comingSoon}
         href={APP_STORE_PUBLICADO ? APP_STORE_URL : undefined}
       />
       <Badge
         store={t.hero.googlePlay}
+        loja="google_play"
         caption={PLAY_STORE_PUBLICADO ? t.hero.downloadOn : t.hero.comingSoon}
         href={PLAY_STORE_PUBLICADO ? PLAY_STORE_URL : undefined}
       />
