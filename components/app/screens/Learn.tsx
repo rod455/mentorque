@@ -610,14 +610,19 @@ export function ContentScreen({ id }: { id: string }) {
       {/* Player (in-app), or a placeholder for text content */}
       {lesson.media ? (
         <VideoPlayer media={lesson.media} />
+      ) : lesson.type !== "video" && lesson.thumb ? (
+        // Capa de artigo: a arte é QUADRADA, então o quadro também é — num
+        // quadro 16:9 ela estourava em cima e embaixo, cortando o desenho.
+        // No desktop a largura é limitada para o quadrado não virar um
+        // paredão; o fundo da moldura é o mesmo tom do fundo das artes, então
+        // qualquer sobra é invisível.
+        <div className="overflow-hidden rounded-2xl bg-graphite ring-1 ring-white/10">
+          <Thumb src={lesson.thumb} className="mx-auto aspect-square w-full max-w-md object-contain" />
+        </div>
       ) : (
+        // Vídeo ainda não publicado (ou artigo sem capa): arte de player 16:9.
         <div className="grid aspect-video place-items-center overflow-hidden rounded-2xl bg-graphite ring-1 ring-white/10">
-          {/* Vídeo ainda não publicado usa a arte de player (16:9, preenche);
-              artigo de texto usa a própria capa, que é quadrada e centraliza. */}
-          <Thumb
-            src={lesson.type === "video" ? "/learn/_video-placeholder.png?v=4" : lesson.thumb ?? "/learn/_video-placeholder.png?v=4"}
-            className={`h-full w-full ${lesson.type === "video" || !lesson.thumb ? "object-cover" : "object-contain"}`}
-          />
+          <Thumb src="/learn/_video-placeholder.png?v=4" className="h-full w-full object-cover" />
         </div>
       )}
 
@@ -636,7 +641,7 @@ export function ContentScreen({ id }: { id: string }) {
 
       {hasSteps && (
         <div className="mt-5">
-          <div className="mb-2.5 flex items-center justify-between gap-2">
+          <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2">
             <p className="text-xs font-semibold uppercase tracking-wide text-cream/45">{c.learn.steps}</p>
             {/* Seletor de nível (só quando há níveis fixos): mais iniciante = mais detalhado */}
             {byLevel && (
@@ -676,19 +681,23 @@ export function ContentScreen({ id }: { id: string }) {
 
       {/* Ações. Dentro de uma trilha com próxima aula, o gesto primário é
           "concluir e avançar" — é o que faz a lista virar curso. */}
+      {/* Os rótulos são longos ("Salvar para ver depois") e o Button tem
+          altura fixa que proíbe quebra de linha: em tela estreita o texto
+          estourava para fora do botão. `fluido` libera a altura e deixa o
+          rótulo quebrar, então o botão cresce em vez de vazar. */}
       {courseNext && !done ? (
         <div className="mt-6 space-y-2">
-          <Button className="w-full" onClick={concluirEAvancar}>{c.learn.completeAndNext} →</Button>
-          <div className="flex gap-2">
-            <Button variant="ghost" className="flex-1" onClick={concluir}>{c.learn.complete}</Button>
-            <Button variant="ghost" className="flex-1" onClick={() => toggleLessonSaved(lesson.id)}>{saved ? `★ ${c.learn.savedLabel}` : `☆ ${c.learn.saveLater}`}</Button>
+          <Button className="w-full !h-auto min-h-11 whitespace-normal py-2.5 leading-snug" onClick={concluirEAvancar}>{c.learn.completeAndNext} →</Button>
+          <div className="flex items-stretch gap-2">
+            <Button variant="ghost" className="min-w-0 flex-1 !h-auto min-h-11 whitespace-normal py-2 text-[13px] leading-snug" onClick={concluir}>{c.learn.complete}</Button>
+            <Button variant="ghost" className="min-w-0 flex-1 !h-auto min-h-11 whitespace-normal py-2 text-[13px] leading-snug" onClick={() => toggleLessonSaved(lesson.id)}>{saved ? `★ ${c.learn.savedLabel}` : `☆ ${c.learn.saveLater}`}</Button>
             <PinButton id={lesson.id} />
           </div>
         </div>
       ) : (
-        <div className="mt-6 flex gap-2">
-          <Button className="flex-1" onClick={concluir}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
-          <Button variant="ghost" className="flex-1" onClick={() => toggleLessonSaved(lesson.id)}>{saved ? `★ ${c.learn.savedLabel}` : `☆ ${c.learn.saveLater}`}</Button>
+        <div className="mt-6 flex items-stretch gap-2">
+          <Button className="min-w-0 flex-1 !h-auto min-h-11 whitespace-normal py-2 text-[13px] leading-snug" onClick={concluir}>{done ? `✓ ${c.learn.completed}` : c.learn.complete}</Button>
+          <Button variant="ghost" className="min-w-0 flex-1 !h-auto min-h-11 whitespace-normal py-2 text-[13px] leading-snug" onClick={() => toggleLessonSaved(lesson.id)}>{saved ? `★ ${c.learn.savedLabel}` : `☆ ${c.learn.saveLater}`}</Button>
           <PinButton id={lesson.id} />
         </div>
       )}
