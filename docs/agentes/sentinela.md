@@ -31,7 +31,7 @@ olhada. Falha que some na reconferência é transitória: silêncio.
 - Quando tudo volta ao normal depois de uma falha confirmada, manda um aviso
   de recuperação e zera o estado.
 - Canal: e-mail (credencial "Gmail account", Gmail OAuth2) para
-  rodrigomoraessilva455@gmail.com.
+  rodrigomoraessilva455@gmail.com e mentorque.ar@gmail.com.
 
 ## Aprendizados
 
