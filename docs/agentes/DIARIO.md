@@ -3,6 +3,13 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-22 · Analista de Dados nasce (avaliações das lojas)
+- Tabela lojas_avaliacoes + rota /api/avaliacoes (POST coleta, GET resumo).
+- Workflow diário no n8n coletando o feed público da App Store; rodou limpo,
+  tabela vazia porque o app ainda não tem avaliações (esperado).
+- Destino: resumo do Diretor, respostas do ASO e troca dos depoimentos da LP
+  por citações reais "via App Store" quando existirem.
+
 ## 2026-08-22 · Sentinela v2 (direcionamento do dono)
 - Cadência reduzida para 2x por dia (12h em 12h).
 - Dupla homologação: falha na primeira olhada espera 1 minuto e é reconferida;
