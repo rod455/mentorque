@@ -21,6 +21,9 @@ create table if not exists public.lojas_avaliacoes (
 
 alter table public.lojas_avaliacoes enable row level security;
 revoke all on public.lojas_avaliacoes from anon, authenticated;
+-- Tabela criada via integração não herda DML para o papel de serviço:
+-- sem este grant a rota devolvia "permission denied" (aprendido em 2026-08-22).
+grant select, insert, update, delete on public.lojas_avaliacoes to service_role;
 
 create index if not exists lojas_avaliacoes_loja_coleta
   on public.lojas_avaliacoes (loja, coletado_em desc);

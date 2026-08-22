@@ -50,8 +50,15 @@ leem. Não analisa, não opina, não notifica o Rodrigo; entrega matéria-prima.
 Criar em https://n8n.vocaboost.com.br/home/credentials e depois selecionar
 nos nós do braço correspondente (a API não permite anexar por fora):
 
-- [ ] Search Console: NÃO precisa de chave nova; selecionar a credencial
-      "Google account" que já existe nos 3 nós do braço.
+- [x] Meta Ads: credencial Bearer criada e testada em 2026-08-22 (enxergou a
+      conta "Mentorque Ads"; gasto zerado porque ainda não há campanha).
+      Pendência de segurança: o token atual tem acesso de leitura E edição;
+      trocar por um só de leitura (ads_read) quando der.
+- [ ] Search Console: credencial "Google account" já selecionada nos nós,
+      MAS a conta ainda não tem a propriedade do site: cadastrar
+      www.mentorque.com.br em search.google.com/search-console (verificação
+      por TXT no DNS do Registro.br). Sem isso o braço registra
+      "Nenhuma propriedade mentorque no Search Console".
 - [ ] Google Play (vitals + avaliações): credencial tipo "Google API"
       (Service Account), colando o JSON da conta revenuecat@mentorque.iam.
       Vale para os 3 nós do Play.
@@ -64,8 +71,6 @@ nos nós do braço correspondente (a API não permite anexar por fora):
       (RevenueCat, Project settings, API keys). Nos 2 nós.
 - [ ] Vercel: credencial "Bearer Auth" com token de acesso (Vercel, Account
       Settings, Tokens). Nos 2 nós.
-- [ ] Meta Ads: credencial "Bearer Auth" com token da Marketing API. Nos 2
-      nós. Entra quando as campanhas começarem.
 - [ ] Google Ads: credencial "Google Ads OAuth2 API" (pede também o
       developer token da conta). Nos 2 nós. Se a API mudar de versão até lá,
       ajustar o v20 nas URLs.

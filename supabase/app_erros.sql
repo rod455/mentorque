@@ -24,5 +24,8 @@ create table if not exists public.app_erros (
 
 alter table public.app_erros enable row level security;
 revoke all on public.app_erros from anon, authenticated;
+-- Tabela criada via integração não herda DML para o papel de serviço:
+-- sem este grant a rota devolvia "permission denied" (aprendido em 2026-08-22).
+grant select, insert, update, delete on public.app_erros to service_role;
 
 create index if not exists app_erros_criado on public.app_erros (criado_em);

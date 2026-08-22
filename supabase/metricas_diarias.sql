@@ -23,6 +23,9 @@ create table if not exists public.metricas_diarias (
 
 alter table public.metricas_diarias enable row level security;
 revoke all on public.metricas_diarias from anon, authenticated;
+-- Tabela criada via integração não herda DML para o papel de serviço:
+-- sem este grant a rota devolvia "permission denied" (aprendido em 2026-08-22).
+grant select, insert, update, delete on public.metricas_diarias to service_role;
 
 create index if not exists metricas_diarias_fonte_dia
   on public.metricas_diarias (fonte, dia desc);

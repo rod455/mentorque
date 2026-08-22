@@ -3,6 +3,22 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-22 · Meta conectada e um bug de permissão corrigido no banco
+- Token da Marketing API da Meta (usuário do sistema "Analista Mentorque",
+  criado pelo Luiz) colado no n8n e testado: enxerga a conta "Mentorque Ads"
+  (BRL); gasto zerado porque ainda não há campanha. Pendência: trocar por
+  token só de leitura (ads_read), o atual também edita.
+- Teste de ponta a ponta do workflow de métricas revelou que tabelas criadas
+  via integração não herdam permissão de escrita para o papel de serviço:
+  app_erros, lojas_avaliacoes e metricas_diarias estavam com a rota travada
+  em "permission denied" (latente nas duas primeiras, que só tinham recebido
+  listas vazias). Grant aplicado nas três; segunda execução gravou as 10
+  fontes na mesa, Meta com dado real e as demais registrando o próprio erro,
+  provando a blindagem por braço.
+- Descoberta no braço do Search Console: a conta Google conectada só tem a
+  propriedade do vocaboost; falta cadastrar www.mentorque.com.br no Search
+  Console (verificação por TXT no Registro.br).
+
 ## 2026-08-22 · Coleta total preparada (metricas externas, desligada)
 - Mesa de pouso única no banco: tabela metricas_diarias (dia + fonte, jsonb)
   e rota /api/metricas; /api/dados passou a devolver fontesExternas e o
