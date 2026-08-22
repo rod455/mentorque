@@ -473,7 +473,7 @@ export function getContent(locale: Locale) {
       stepsByLevel: {
         iniciante: [
           T("Estacione num lugar plano, puxe o freio de mão e deixe o motor ligado 2-3 min só pra amornar o óleo (morno escorre melhor). Depois desligue e tire a chave.", "Park on a flat spot, set the handbrake and let the engine run 2-3 min just to warm the oil (warm oil flows better). Then switch off and remove the key."),
-          T("Abra o capô (alavanca embaixo do painel, lado do motorista, + trava na frente do carro). Em cima do motor, ache a tampa de óleo — geralmente tem o desenho de uma lata de óleo. Abra: ajuda o óleo velho a escorrer.", "Open the hood (lever under the dash on the driver's side + latch at the front). On top of the engine find the oil filler cap — usually marked with an oil-can icon. Open it: it helps the old oil drain."),
+          T("Abra o capô (alavanca embaixo do painel, lado do motorista, + trava na frente do carro). Em cima do motor, ache a tampa de óleo: geralmente tem o desenho de uma lata de óleo. Abra: ajuda o óleo velho a escorrer.", "Open the hood (lever under the dash on the driver's side + latch at the front). On top of the engine find the oil filler cap: usually marked with an oil-can icon. Open it: it helps the old oil drain."),
           T("Levante o carro com o macaco num ponto firme e ponha os cavaletes (NUNCA fique embaixo só com o macaco). Embaixo do motor, ache o bujão de dreno: um parafuso grande sextavado no ponto mais baixo do cárter (a 'panela' de metal embaixo do motor).", "Lift the car with the jack at a solid point and set the stands (NEVER get under it on the jack alone). Under the engine find the drain plug: a large hex bolt at the lowest point of the oil pan (the metal 'pan' under the engine)."),
           T("Ponha a bacia embaixo do bujão. Com a chave, gire o bujão no sentido anti-horário até soltar e deixe TODO o óleo velho escorrer (5-10 min). Cuidado, pode estar morno. Recoloque o bujão e aperte firme (sem exagerar).", "Put the pan under the plug. With a wrench, turn the plug counterclockwise to loosen it and let ALL the old oil drain (5-10 min). Careful, it may be warm. Refit the plug and tighten firmly (don't overdo it)."),
           T("Ache o filtro de óleo: um cilindro (metal ou plástico) rosqueado no bloco do motor. Com a chave de filtro, gire anti-horário e remova. Passe um pouco de óleo novo na borrachinha de vedação do filtro novo e rosqueie à mão até encostar + 3/4 de volta.", "Find the oil filter: a cylinder (metal or plastic) screwed into the engine block. With the filter wrench, turn it counterclockwise and remove. Smear a little new oil on the new filter's rubber seal and screw it on by hand until it seats + 3/4 turn."),
@@ -499,7 +499,7 @@ export function getContent(locale: Locale) {
       stepsByLevel: {
         iniciante: [
           T("Com o carro ainda no chão, afrouxe (só um pouco) as porcas da roda. Depois levante com o macaco num ponto firme, ponha o cavalete e remova a roda.", "With the car still on the ground, slightly loosen the wheel nuts. Then lift with the jack at a solid point, set the stand and remove the wheel."),
-          T("Atrás da roda está a pinça de freio: uma peça de metal 'abraçando' o disco (a peça redonda e lisa). Ela é presa por 2 parafusos atrás — solte-os e levante a pinça. Não a deixe pendurada pela mangueira: apoie num gancho ou arame.", "Behind the wheel is the caliper: a metal part 'hugging' the disc (the round, smooth part). It's held by 2 bolts at the back — undo them and lift the caliper. Don't let it hang by the hose: rest it on a hook or wire."),
+          T("Atrás da roda está a pinça de freio: uma peça de metal 'abraçando' o disco (a peça redonda e lisa). Ela é presa por 2 parafusos atrás: solte-os e levante a pinça. Não a deixe pendurada pela mangueira: apoie num gancho ou arame.", "Behind the wheel is the caliper: a metal part 'hugging' the disc (the round, smooth part). It's held by 2 bolts at the back: undo them and lift the caliper. Don't let it hang by the hose: rest it on a hook or wire."),
           T("As pastilhas são as duas plaquinhas com material de atrito, uma de cada lado do disco. Tire as velhas observando a posição. Empurre o pistão da pinça de volta devagar (uma ferramenta de recuo ou um grampo tipo sargento ajuda) pra caber a pastilha nova, mais grossa.", "The pads are the two plates with friction material, one on each side of the disc. Remove the old ones, noting their position. Push the caliper piston back slowly (a wind-back tool or a C-clamp helps) so the thicker new pad fits."),
           T("Encaixe as pastilhas novas no mesmo lugar das velhas, recoloque a pinça e aperte os 2 parafusos firme. Repita no outro lado do MESMO eixo (freio se troca sempre em par).", "Fit the new pads where the old ones were, refit the caliper and tighten the 2 bolts firmly. Repeat on the other side of the SAME axle (brakes are always replaced in pairs)."),
           T("Monte a roda, abaixe o carro e aperte as porcas em cruz. ANTES de sair, pise no pedal de freio várias vezes até ele endurecer (as pastilhas precisam encostar no disco). Faça as primeiras freadas devagar.", "Refit the wheel, lower the car and tighten the nuts in a star pattern. BEFORE driving, press the brake pedal several times until it firms up (the pads need to seat against the disc). Take the first few stops gently."),
@@ -571,10 +571,10 @@ export function getContent(locale: Locale) {
     // ── Fundamentos ─────────────────────────────────────────────
     art({ id: "fund-systems", thumb: "/learn/fund-systems.png?v=4", track: "fundamentals", title: T("Os 6 sistemas do carro", "The 6 systems of a car"), body: [
       T("Todo carro é a soma de seis sistemas: motor (gera força), transmissão (leva a força às rodas), freios, suspensão, direção e elétrica.", "Every car is the sum of six systems: engine (makes power), transmission (sends it to the wheels), brakes, suspension, steering and electrical."),
-      T("Entender o que cada um faz te ajuda a saber onde está o problema quando algo sai do normal — e a conversar de igual pra igual com a oficina.", "Understanding what each one does helps you locate a problem when something feels off — and talk to the shop on equal footing."),
+      T("Entender o que cada um faz te ajuda a saber onde está o problema quando algo sai do normal, e a conversar de igual pra igual com a oficina.", "Understanding what each one does helps you locate a problem when something feels off, and talk to the shop on equal footing."),
     ]}),
     art({ id: "fund-dashboard", thumb: "/learn/fund-dashboard.png?v=4", track: "fundamentals", title: T("Luzes do painel: o que significam", "Dashboard lights: what they mean"), body: [
-      T("Verde/azul é informação. Amarelo é atenção: resolva em breve. Vermelho é pare agora — óleo, temperatura ou freio.", "Green/blue is information. Yellow means attention: fix it soon. Red means stop now — oil, temperature or brakes."),
+      T("Verde/azul é informação. Amarelo é atenção: resolva em breve. Vermelho é pare agora: óleo, temperatura ou freio.", "Green/blue is information. Yellow means attention: fix it soon. Red means stop now: oil, temperature or brakes."),
       T("Se a luz do motor pisca, evite acelerar e procure diagnóstico. Fixa, dá pra rodar com cuidado até a oficina.", "If the engine light flashes, avoid accelerating and get it diagnosed. Steady, you can drive gently to the shop."),
     ]}),
     art({ id: "fund-fluids", thumb: "/learn/fund-fluids.png?v=4", track: "fundamentals", title: T("Os 5 fluidos essenciais", "The 5 essential fluids"), system: "engine", body: [
@@ -595,7 +595,7 @@ export function getContent(locale: Locale) {
         iniciante: [
           T("Carro desligado e chave fora. Abra o capô e ache a bateria: uma caixa retangular com 2 bornes em cima, um marcado (+) e outro (−). Se o rádio tiver senha, tenha o código à mão (ele apaga sem energia).", "Car off and key out. Open the hood and find the battery: a rectangular box with 2 terminals on top, one marked (+) and one (−). If the radio has a code, have it handy (it resets without power)."),
           T("SEMPRE comece pelo negativo (−, quase sempre cabo preto): solte a porca do borne com a chave (geralmente 10mm) e afaste o cabo pro lado, sem deixar encostar em nada de metal.", "ALWAYS start with the negative (−, almost always the black cable): loosen the terminal nut with the wrench (usually 10mm) and move the cable aside, not letting it touch any metal."),
-          T("Depois solte o positivo (+, cabo vermelho) e a presilha/suporte que prende a bateria. Retire a bateria velha com cuidado — ela é pesada.", "Then loosen the positive (+, red cable) and the clamp/bracket holding the battery. Lift out the old battery carefully — it's heavy."),
+          T("Depois solte o positivo (+, cabo vermelho) e a presilha/suporte que prende a bateria. Retire a bateria velha com cuidado: ela é pesada.", "Then loosen the positive (+, red cable) and the clamp/bracket holding the battery. Lift out the old battery carefully: it's heavy."),
           T("Ponha a nova na mesma posição, prenda o suporte, e reconecte na ORDEM INVERSA: primeiro o positivo (+), depois o negativo (−). Aperte bem os dois bornes.", "Put the new one in the same position, secure the bracket, and reconnect in REVERSE ORDER: positive (+) first, then negative (−). Tighten both terminals well."),
           T("Passe um pouco de vaselina/spray nos bornes contra corrosão. Ligue o carro pra testar. Se o rádio pedir código, digite o do manual.", "Dab a little grease/spray on the terminals against corrosion. Start the car to test. If the radio asks for a code, enter the one from the manual."),
         ],
@@ -611,7 +611,7 @@ export function getContent(locale: Locale) {
         iniciante: [
           T("Motor frio e desligado. Abra o capô e ache a caixa do filtro de ar: uma caixa de plástico preta, geralmente grande, ligada a uma mangueira grossa que vai pro motor.", "Engine cold and off. Open the hood and find the airbox: a large black plastic box, usually connected to a thick hose going to the engine."),
           T("Abra a caixa: solte as presilhas de metal nas laterais (ou os parafusos, dependendo do carro) e levante a tampa.", "Open the box: release the metal clips on the sides (or the screws, depending on the car) and lift the lid."),
-          T("Tire o filtro velho (parece uma sanfona de papel numa moldura). Repare o lado que fica pra cima. Limpe a poeira de dentro da caixa com um pano — não deixe cair nada na mangueira.", "Remove the old filter (it looks like a paper accordion in a frame). Note which side faces up. Wipe the dust inside the box with a cloth — don't let anything fall into the hose."),
+          T("Tire o filtro velho (parece uma sanfona de papel numa moldura). Repare o lado que fica pra cima. Limpe a poeira de dentro da caixa com um pano. Não deixe cair nada na mangueira.", "Remove the old filter (it looks like a paper accordion in a frame). Note which side faces up. Wipe the dust inside the box with a cloth. Don't let anything fall into the hose."),
           T("Coloque o filtro novo na mesma posição do velho, encaixando a borracha na borda. Feche a tampa e prenda as presilhas/parafusos. Confirme que fechou bem, sem folga.", "Put the new filter in the same position as the old one, seating the rubber on the edge. Close the lid and secure the clips/screws. Make sure it's fully closed, no gaps."),
         ],
         avancado: [T("Abra a caixa do filtro (presilhas ou parafusos)", "Open the airbox (clips or screws)"), T("Retire o filtro velho e limpe a carcaça", "Remove the old filter and clean the housing"), T("Encaixe o novo alinhado e feche vedando bem", "Fit the new one aligned and close it sealed")],
@@ -637,7 +637,7 @@ export function getContent(locale: Locale) {
     // ── Diagnóstico ────────────────────────────────────────────
     art({ id: "diag-noises", thumb: "/learn/diag-noises.png?v=4", track: "diagnosis", title: T("Que barulho é esse? Guia de sons", "What's that noise? Sound guide"), body: [
       T("Chiado ao frear = pastilha no fim. Batida em buraco = suspensão. Assobio ao acelerar = correia ou admissão. Estalo ao esterçar = homocinética.", "Squeal when braking = pads worn. Knock over bumps = suspension. Whistle on throttle = belt or intake. Click when turning = CV joint."),
-      T("Grave o som com o celular e mostre pro Biela ou pra oficina — ajuda muito no diagnóstico.", "Record the sound with your phone and show Biela or the shop — it helps a lot with the diagnosis."),
+      T("Grave o som com o celular e mostre pro Biela ou pra oficina: ajuda muito no diagnóstico.", "Record the sound with your phone and show Biela or the shop, it helps a lot with the diagnosis."),
     ]}),
     art({ id: "diag-smells", thumb: "/learn/diag-smells.png?v=4", track: "diagnosis", title: T("Cheiros e fumaça: o que indicam", "Smells and smoke: what they mean"), body: [
       T("Fumaça azul = queima de óleo. Branca densa = água no motor (junta). Preta = mistura rica. Cheiro doce = arrefecimento vazando.", "Blue smoke = burning oil. Thick white = water in the engine (gasket). Black = rich mixture. Sweet smell = coolant leak."),
@@ -690,7 +690,7 @@ export function getContent(locale: Locale) {
 
     // ── Por Modelo ─────────────────────────────────────────────
     art({ id: "model-onix", thumb: "/learn/model-onix.png?v=4", track: "model", make: "Chevrolet", model: "Onix", premium: true, title: T("Chevrolet Onix: guia do dono", "Chevrolet Onix: owner's guide"), body: [
-      T("Onix turbo (1.0): use óleo 0W-20/5W-30 conforme o ano e não atrase a troca — o turbo agradece. Revisão a cada 10 mil km.", "Onix turbo (1.0): use 0W-20/5W-30 oil per year and don't delay changes — the turbo thanks you. Service every 10,000 km."),
+      T("Onix turbo (1.0): use óleo 0W-20/5W-30 conforme o ano e não atrase a troca, o turbo agradece. Revisão a cada 10 mil km.", "Onix turbo (1.0): use 0W-20/5W-30 oil per year and don't delay changes, the turbo thanks you. Service every 10,000 km."),
       T("Pontos comuns: sensores e módulo elétrico; mantenha a bateria em boas condições.", "Common points: sensors and the electrical module; keep the battery healthy."),
     ]}),
     art({ id: "model-hb20", thumb: "/learn/model-hb20.png?v=4", track: "model", make: "Hyundai", model: "HB20", premium: true, title: T("Hyundai HB20: guia do dono", "Hyundai HB20: owner's guide"), body: [
@@ -703,7 +703,7 @@ export function getContent(locale: Locale) {
     ]}),
     art({ id: "model-strada", thumb: "/learn/model-strada.png?v=4", track: "model", make: "Fiat", model: "Strada", premium: true, title: T("Fiat Strada: guia do dono", "Fiat Strada: owner's guide"), body: [
       T("Picape mais vendida do país. Firefly confiável; atenção à suspensão traseira quando anda carregada e à geometria.", "The country's best-selling pickup. Reliable Firefly; watch the rear suspension when loaded and the alignment."),
-      T("Uso de trabalho acelera desgaste de freio e pneu — inspecione com mais frequência.", "Work use speeds up brake and tire wear — inspect more often."),
+      T("Uso de trabalho acelera desgaste de freio e pneu: inspecione com mais frequência.", "Work use speeds up brake and tire wear: inspect more often."),
     ]}),
     art({ id: "model-corolla", thumb: "/learn/model-corolla.png?v=4", track: "model", make: "Toyota", model: "Corolla", premium: true, title: T("Toyota Corolla: guia do dono", "Toyota Corolla: owner's guide"), body: [
       T("Sedã referência em durabilidade. Versão híbrida traz economia enorme; a bateria tem longa vida com uso normal.", "A benchmark sedan for durability. The hybrid brings huge savings; the battery lasts long with normal use."),
@@ -721,10 +721,10 @@ export function getContent(locale: Locale) {
     ]}),
     art({ id: "sport-aero", thumb: "/learn/sport-aero.png?v=4", track: "sports", premium: true, title: T("Aerodinâmica e downforce", "Aerodynamics and downforce"), body: [
       T("Asas e difusores invertem o princípio do avião: em vez de sustentar, empurram o carro contra o chão. Mais aderência em alta velocidade.", "Wings and diffusers invert the airplane principle: instead of lift, they push the car into the ground. More grip at high speed."),
-      T("Downforce custa arrasto — por isso carros de rua buscam equilíbrio entre grude e velocidade final.", "Downforce costs drag — that's why road cars balance grip and top speed."),
+      T("Downforce custa arrasto, por isso carros de rua buscam equilíbrio entre grude e velocidade final.", "Downforce costs drag: that's why road cars balance grip and top speed."),
     ]}),
     art({ id: "sport-911", thumb: "/learn/sport-911.png?v=4", track: "sports", premium: true, title: T("Ícone: Porsche 911", "Icon: Porsche 911"), body: [
-      T("Desde 1963 com o motor atrás do eixo traseiro — uma 'anomalia' que a Porsche transformou em obra-prima de engenharia geração após geração.", "Since 1963 with the engine behind the rear axle — an 'anomaly' Porsche turned into an engineering masterpiece generation after generation."),
+      T("Desde 1963 com o motor atrás do eixo traseiro, uma 'anomalia' que a Porsche transformou em obra-prima de engenharia geração após geração.", "Since 1963 with the engine behind the rear axle, an 'anomaly' Porsche turned into an engineering masterpiece generation after generation."),
       T("Prova de que evolução constante vale mais que reinvenção: a silhueta é quase a mesma há 60 anos.", "Proof that constant evolution beats reinvention: the silhouette has barely changed in 60 years."),
     ]}),
     art({ id: "sport-gtr", thumb: "/learn/sport-gtr.png?v=4", track: "sports", premium: true, title: T("Ícone: Nissan GT-R", "Icon: Nissan GT-R"), body: [
@@ -738,11 +738,11 @@ export function getContent(locale: Locale) {
 
     // ── Cultura & Curiosidades ─────────────────────────────────
     art({ id: "cult-history", thumb: "/learn/cult-history.png?v=4", track: "culture", title: T("Breve história do automóvel", "A brief history of the car"), type: "video", body: [
-      T("De 1886, com o Benz Patent-Motorwagen, à linha de montagem de Ford e à eletrificação de hoje — pouco mais de um século que mudou o mundo.", "From 1886, with the Benz Patent-Motorwagen, to Ford's assembly line and today's electrification — just over a century that changed the world."),
+      T("De 1886, com o Benz Patent-Motorwagen, à linha de montagem de Ford e à eletrificação de hoje: pouco mais de um século que mudou o mundo.", "From 1886, with the Benz Patent-Motorwagen, to Ford's assembly line and today's electrification: just over a century that changed the world."),
     ]}),
     art({ id: "cult-ev", thumb: "/learn/cult-ev.png?v=4", track: "culture", title: T("Como funciona um carro elétrico", "How an electric car works"), body: [
       T("Bateria alimenta um motor elétrico que entrega torque instantâneo. Sem câmbio, sem embreagem, sem óleo de motor.", "A battery feeds an electric motor delivering instant torque. No gearbox, no clutch, no engine oil."),
-      T("O freio regenerativo recarrega a bateria ao desacelerar — por isso as pastilhas duram tanto.", "Regenerative braking recharges the battery when slowing down — that's why the pads last so long."),
+      T("O freio regenerativo recarrega a bateria ao desacelerar, por isso as pastilhas duram tanto.", "Regenerative braking recharges the battery when slowing down: that's why the pads last so long."),
     ]}),
     art({ id: "cult-hybrid", thumb: "/learn/cult-hybrid.png?v=4", track: "culture", title: T("Híbridos: dois mundos", "Hybrids: two worlds"), body: [
       T("Combinam motor a combustão e elétrico. No trânsito, rodam no elétrico (econômico); na estrada, o motor assume. Alguns recarregam na tomada (plug-in).", "They combine a combustion and an electric motor. In traffic they run electric (efficient); on the highway the engine takes over. Some charge from a plug (plug-in)."),
@@ -758,31 +758,31 @@ export function getContent(locale: Locale) {
     art({ id: "trait-turbo", thumb: "/learn/trait-turbo.png?v=4", track: "diy", traits: ["turbo"], system: "engine", addedAt: "2026-08-04",
       title: T("Motor turbo: 5 cuidados que dobram a vida dele", "Turbo engine: 5 habits that double its life"), body: [
       T("O turbo trabalha a mais de 100.000 rpm e é lubrificado pelo óleo do motor. Isso muda três coisas na sua rotina: o óleo tem que ser exatamente o especificado, o intervalo de troca é mais curto, e nível baixo é muito mais grave que num aspirado.", "The turbo spins over 100,000 rpm and is lubricated by engine oil. That changes three things: the oil must be exactly the specified one, the interval is shorter, and low level is far more serious than on a naturally aspirated engine."),
-      T("1) Use só o óleo da especificação do manual — o turbo é o primeiro a sofrer com óleo errado. 2) Confira o nível a cada 15 dias, não a cada revisão.", "1) Use only the manual's oil spec — the turbo suffers first from wrong oil. 2) Check the level every two weeks, not every service."),
+      T("1) Use só o óleo da especificação do manual, o turbo é o primeiro a sofrer com óleo errado. 2) Confira o nível a cada 15 dias, não a cada revisão.", "1) Use only the manual's oil spec, the turbo suffers first from wrong oil. 2) Check the level every two weeks, not every service."),
       T("3) Depois de rodar forte (estrada, subida, carga), deixe o motor em marcha lenta por 30–60 segundos antes de desligar: o óleo precisa continuar circulando para o turbo esfriar. Desligar quente é o que mais 'mata' turbina.", "3) After hard driving, idle for 30–60 seconds before shutting off: oil must keep flowing to cool the turbo. Shutting down hot is the top turbo killer."),
-      T("4) Nos primeiros minutos com o motor frio, evite acelerar forte — o óleo ainda está grosso e não chegou bem ao turbo. 5) Filtro de ar sujo faz o turbo trabalhar mais: troque no prazo.", "4) In the first minutes when cold, avoid hard acceleration — the oil is still thick and hasn't reached the turbo. 5) A dirty air filter makes the turbo work harder: replace on schedule."),
+      T("4) Nos primeiros minutos com o motor frio, evite acelerar forte, o óleo ainda está grosso e não chegou bem ao turbo. 5) Filtro de ar sujo faz o turbo trabalhar mais: troque no prazo.", "4) In the first minutes when cold, avoid hard acceleration, the oil is still thick and hasn't reached the turbo. 5) A dirty air filter makes the turbo work harder: replace on schedule."),
       T("Sinais de alerta: fumaça azulada, apito agudo que aumenta com a aceleração, perda de força e consumo de óleo entre trocas. Qualquer um deles pede diagnóstico antes de virar prejuízo grande.", "Warning signs: bluish smoke, a high-pitched whine that rises with revs, power loss and oil consumption between changes. Any of these calls for a diagnosis before it becomes expensive."),
     ]}),
     art({ id: "trait-cvt", thumb: "/learn/trait-cvt.png?v=4", track: "fundamentals", traits: ["cvt"], system: "engine", addedAt: "2026-08-04",
       title: T("Câmbio CVT: o que preserva e o que destrói", "CVT gearbox: what preserves it and what kills it"), body: [
-      T("O CVT não tem marchas: ele usa uma correia de aço entre polias que mudam de diâmetro. É suave e econômico, mas trabalha por atrito — e é por isso que o fluido dele é item de vida ou morte.", "A CVT has no gears: it uses a steel belt between variable pulleys. It's smooth and efficient, but works by friction — which is why its fluid is a life-or-death item."),
-      T("Regra número um: troque o fluido no intervalo do manual (costuma ser entre 40.000 e 60.000 km) e use SÓ o fluido especificado. Fluido genérico de automático destrói um CVT — não é exagero de fabricante.", "Rule one: change the fluid at the manual's interval (usually 40,000–60,000 km) and use ONLY the specified fluid. Generic automatic fluid destroys a CVT — that's not marketing."),
-      T("O que desgasta: arrancadas bruscas, sair com o carro atolado forçando na areia/lama, e rebocar acima do permitido. O CVT sofre com torque repentino, justamente o oposto do que ele foi feito para fazer.", "What wears it: hard launches, forcing through sand or mud, and towing over the limit. CVTs suffer from sudden torque — the opposite of what they're built for."),
+      T("O CVT não tem marchas: ele usa uma correia de aço entre polias que mudam de diâmetro. É suave e econômico, mas trabalha por atrito, e é por isso que o fluido dele é item de vida ou morte.", "A CVT has no gears: it uses a steel belt between variable pulleys. It's smooth and efficient, but works by friction, which is why its fluid is a life-or-death item."),
+      T("Regra número um: troque o fluido no intervalo do manual (costuma ser entre 40.000 e 60.000 km) e use SÓ o fluido especificado. Fluido genérico de automático destrói um CVT. Não é exagero de fabricante.", "Rule one: change the fluid at the manual's interval (usually 40,000–60,000 km) and use ONLY the specified fluid. Generic automatic fluid destroys a CVT: that's not marketing."),
+      T("O que desgasta: arrancadas bruscas, sair com o carro atolado forçando na areia/lama, e rebocar acima do permitido. O CVT sofre com torque repentino, justamente o oposto do que ele foi feito para fazer.", "What wears it: hard launches, forcing through sand or mud, and towing over the limit. CVTs suffer from sudden torque, the opposite of what they're built for."),
       T("Sinais de problema: trepidação ao acelerar em baixa velocidade, o motor 'disparar' de rotação sem o carro acompanhar, ou barulho de zumbido que aumenta com a velocidade. Não deixe passar: reparo de CVT é caro.", "Trouble signs: shudder at low speed, engine revving without the car following, or a hum that rises with speed. Don't ignore it: CVT repair is expensive."),
     ]}),
     art({ id: "trait-dct", thumb: "/learn/trait-dct.png?v=4", track: "fundamentals", traits: ["dct", "amt"], system: "engine", addedAt: "2026-08-04",
       title: T("Câmbio automatizado no dia a dia: o que é normal", "Automated gearbox day to day: what's normal"), body: [
       T("Dupla embreagem e câmbio automatizado de uma embreagem são, por dentro, câmbios manuais que o computador opera. Isso explica os 'defeitos' que na verdade são características: pequenos trancos em baixa velocidade e hesitação na saída.", "Dual-clutch and single-clutch automated gearboxes are, inside, manual gearboxes operated by a computer. That explains the 'faults' that are actually traits: small jerks at low speed and hesitation from a stop."),
-      T("O que realmente faz mal: ficar em D parado no trânsito com o pé no freio por muito tempo (nas versões secas, a embreagem fica patinando e esquenta) e usar o acelerador para segurar o carro em subida — use o freio de mão.", "What really hurts: sitting in D in traffic with your foot on the brake (on dry-clutch versions the clutch slips and overheats) and holding the car on a hill with the throttle — use the handbrake instead."),
+      T("O que realmente faz mal: ficar em D parado no trânsito com o pé no freio por muito tempo (nas versões secas, a embreagem fica patinando e esquenta) e usar o acelerador para segurar o carro em subida. Use o freio de mão.", "What really hurts: sitting in D in traffic with your foot on the brake (on dry-clutch versions the clutch slips and overheats) and holding the car on a hill with the throttle. Use the handbrake instead."),
       T("Em engarrafamento pesado, ponha em N nas paradas longas. Em subidas com manobra (rampa de garagem), seja decidido: meia-embreagem prolongada é o que mais queima o conjunto.", "In heavy traffic, shift to N during long stops. On ramps, be decisive: prolonged slipping is what burns the clutch pack."),
       T("Trepidação forte ao sair, cheiro de queimado e luz de câmbio no painel são sinais de embreagem no fim. Diagnóstico cedo pode significar trocar só a embreagem em vez do câmbio inteiro.", "Strong shudder from a stop, a burnt smell and a gearbox light are signs of a worn clutch. An early diagnosis can mean replacing just the clutch instead of the whole box."),
     ]}),
     art({ id: "trait-ev", thumb: "/learn/trait-ev.png?v=4", track: "fundamentals", traits: ["ev"], system: "electrical", addedAt: "2026-08-04",
       title: T("Elétrico: a rotina que preserva a bateria", "Electric: the routine that preserves the battery"), body: [
-      T("A bateria é o componente mais caro do carro — e ela envelhece por dois motivos: ciclos de carga e temperatura. A boa notícia é que a rotina que preserva é simples e não atrapalha o uso.", "The battery is the car's most expensive part — and it ages for two reasons: charge cycles and heat. The good news: the routine that preserves it is simple."),
+      T("A bateria é o componente mais caro do carro, e ela envelhece por dois motivos: ciclos de carga e temperatura. A boa notícia é que a rotina que preserva é simples e não atrapalha o uso.", "The battery is the car's most expensive part, and it ages for two reasons: charge cycles and heat. The good news: the routine that preserves it is simple."),
       T("No dia a dia, mantenha entre 20% e 80%. Carga até 100% só quando for viajar, e de preferência saia logo depois (bateria cheia parada, no calor, é o pior cenário). Abaixo de 10% com frequência também desgasta.", "Day to day, keep it between 20% and 80%. Charge to 100% only before a trip, and leave soon after (a full battery sitting in the heat is the worst case). Frequently going below 10% also wears it."),
       T("Carregador rápido é ótimo na estrada, mas não como rotina diária: ele aquece muito mais a bateria. Se puder, deixe a carga lenta em casa como padrão e o rápido para as viagens.", "Fast charging is great on trips, but not as a daily routine: it heats the battery much more. Use slow home charging as the default and fast charging for travel."),
-      T("O que muda na manutenção: não tem óleo de motor, vela ou correia — mas continuam existindo freios, suspensão, pneus, fluido de freio e filtro de cabine. E atenção aos pneus: elétrico é mais pesado e desgasta mais rápido.", "What changes: no engine oil, plugs or belts — but brakes, suspension, tires, brake fluid and cabin filter remain. Watch the tires: EVs are heavier and wear them faster."),
+      T("O que muda na manutenção: não tem óleo de motor, vela ou correia, mas continuam existindo freios, suspensão, pneus, fluido de freio e filtro de cabine. E atenção aos pneus: elétrico é mais pesado e desgasta mais rápido.", "What changes: no engine oil, plugs or belts, but brakes, suspension, tires, brake fluid and cabin filter remain. Watch the tires: EVs are heavier and wear them faster."),
       T("Curiosidade útil: o freio regenerativo faz as pastilhas durarem muito mais, mas por rodarem pouco elas podem oxidar. Uma frenagem mais firme de vez em quando ajuda a limpar os discos.", "Useful note: regenerative braking makes pads last much longer, but since they're barely used they can rust. An occasional firmer stop helps clean the discs."),
     ]}),
     art({ id: "trait-diesel", thumb: "/learn/trait-diesel.png?v=4", track: "fundamentals", traits: ["diesel"], system: "engine", addedAt: "2026-08-04",
@@ -790,27 +790,27 @@ export function getContent(locale: Locale) {
       T("Motor diesel moderno trabalha com pressão de injeção altíssima, e o inimigo número um é a água no combustível. Por isso o filtro (o famoso 'filtro Racor' ou separador) é o item mais importante da manutenção.", "A modern diesel runs at very high injection pressure, and enemy number one is water in the fuel. That's why the filter/water separator is the single most important maintenance item."),
       T("Drene o separador de água no intervalo indicado e troque o filtro de combustível rigorosamente no prazo. Bico injetor de diesel custa caro, e água ou sujeira acabam com o conjunto em pouco tempo.", "Drain the water separator at the recommended interval and replace the fuel filter strictly on time. Diesel injectors are expensive, and water or dirt destroy them quickly."),
       T("Se o seu tem Arla 32 (SCR), nunca deixe faltar nem complete com água: o sistema entra em modo de emergência e limita a potência. Use Arla de procedência e evite deixar o galão aberto no sol.", "If yours uses DEF (SCR), never run out and never top it up with water: the system goes into limp mode. Use quality DEF and don't leave the jug open in the sun."),
-      T("Filtro de partículas (DPF): trajetos curtos e cidade impedem a queima automática da fuligem. Se o painel avisar, faça o que o manual pede — geralmente rodar em velocidade constante por alguns minutos. Ignorar entope o filtro e o reparo é caro.", "Particulate filter (DPF): short city trips prevent automatic soot burn-off. If the dash warns you, do what the manual says — usually drive at steady speed for a few minutes. Ignoring it clogs the filter and repair is costly."),
+      T("Filtro de partículas (DPF): trajetos curtos e cidade impedem a queima automática da fuligem. Se o painel avisar, faça o que o manual pede: geralmente rodar em velocidade constante por alguns minutos. Ignorar entope o filtro e o reparo é caro.", "Particulate filter (DPF): short city trips prevent automatic soot burn-off. If the dash warns you, do what the manual says: usually drive at steady speed for a few minutes. Ignoring it clogs the filter and repair is costly."),
     ]}),
     art({ id: "trait-highkm", thumb: "/learn/trait-highkm.png?v=4", track: "diagnosis", traits: ["highKm", "oldCar"], system: "geral", addedAt: "2026-08-04",
       title: T("Passou de 100 mil km? Revise estes 7 pontos", "Past 100,000 km? Check these 7 points"), body: [
-      T("Carro com quilometragem alta não é problema — carro com quilometragem alta e manutenção adiada é. Nesta faixa, alguns itens saem do 'ainda aguenta' e entram no 'já era para ter trocado'.", "High mileage isn't a problem — high mileage with deferred maintenance is. At this point, some items move from 'still fine' to 'should already have been replaced'."),
-      T("1) Correia dentada e tensor (se o seu motor usa correia): passar do intervalo pode destruir o motor. 2) Bomba d'água — costuma ser trocada junto com a correia, e sai muito mais barato assim.", "1) Timing belt and tensioner (if your engine uses a belt): exceeding the interval can destroy the engine. 2) Water pump — usually replaced together with the belt, and much cheaper that way."),
-      T("3) Coxins do motor e câmbio (aquele tremor novo em marcha lenta). 4) Amortecedores: raramente 'quebram', vão morrendo devagar — e você só percebe depois de trocar. 5) Buchas e bieletas da suspensão, origem da maioria dos ruídos.", "3) Engine and gearbox mounts (that new idle vibration). 4) Shocks: they rarely 'break', they fade — and you only notice after replacing them. 5) Suspension bushings and links, the source of most noises."),
-      T("6) Mangueiras e correia de acessórios: borracha ressecada racha sem aviso. 7) Fluido de freio e de arrefecimento — envelhecem por tempo, não por km, e quase ninguém lembra.", "6) Hoses and accessory belt: dry rubber cracks without warning. 7) Brake and coolant fluid — they age by time, not mileage, and almost everyone forgets."),
+      T("Carro com quilometragem alta não é problema: carro com quilometragem alta e manutenção adiada é. Nesta faixa, alguns itens saem do 'ainda aguenta' e entram no 'já era para ter trocado'.", "High mileage isn't a problem: high mileage with deferred maintenance is. At this point, some items move from 'still fine' to 'should already have been replaced'."),
+      T("1) Correia dentada e tensor (se o seu motor usa correia): passar do intervalo pode destruir o motor. 2) Bomba d'água: costuma ser trocada junto com a correia, e sai muito mais barato assim.", "1) Timing belt and tensioner (if your engine uses a belt): exceeding the interval can destroy the engine. 2) Water pump: usually replaced together with the belt, and much cheaper that way."),
+      T("3) Coxins do motor e câmbio (aquele tremor novo em marcha lenta). 4) Amortecedores: raramente 'quebram', vão morrendo devagar, e você só percebe depois de trocar. 5) Buchas e bieletas da suspensão, origem da maioria dos ruídos.", "3) Engine and gearbox mounts (that new idle vibration). 4) Shocks: they rarely 'break', they fade, and you only notice after replacing them. 5) Suspension bushings and links, the source of most noises."),
+      T("6) Mangueiras e correia de acessórios: borracha ressecada racha sem aviso. 7) Fluido de freio e de arrefecimento: envelhecem por tempo, não por km, e quase ninguém lembra.", "6) Hoses and accessory belt: dry rubber cracks without warning. 7) Brake and coolant fluid: they age by time, not mileage, and almost everyone forgets."),
       T("Dica de bolso: faça um item por mês em vez de tudo de uma vez. Espalhado, cabe no orçamento; adiado, vira guincho.", "Budget tip: do one item per month instead of everything at once. Spread out it fits the budget; postponed it becomes a tow truck."),
     ]}),
     art({ id: "trait-appuse", thumb: "/learn/trait-appuse.png?v=4", track: "money", traits: ["appUse"], system: "geral", addedAt: "2026-08-04",
       title: T("Rodar de aplicativo: manutenção em ritmo dobrado", "Driving for apps: maintenance at double pace"), body: [
-      T("Quem roda de aplicativo faz em um ano a quilometragem que um motorista comum faz em três — e quase toda em cidade, que é o uso mais severo que existe para um carro.", "App drivers cover in one year what a regular driver covers in three — and almost all of it in the city, the most severe use a car can face."),
+      T("Quem roda de aplicativo faz em um ano a quilometragem que um motorista comum faz em três, e quase toda em cidade, que é o uso mais severo que existe para um carro.", "App drivers cover in one year what a regular driver covers in three, and almost all of it in the city, the most severe use a car can face."),
       T("Na prática, use o intervalo 'severo' do manual, não o normal: costuma ser metade da quilometragem para óleo e filtros. É contraintuitivo, mas trocar mais vezes sai muito mais barato que um motor.", "In practice, use the manual's 'severe' interval, not the normal one: usually half the mileage for oil and filters. Counterintuitive, but changing more often is far cheaper than an engine."),
       T("Itens que somem rápido nesse uso: pastilhas de freio (para-e-anda), embreagem (se manual), amortecedores (peso extra de passageiros) e pneus. Calibrar toda semana economiza combustível e pneu ao mesmo tempo.", "Items that vanish fast: brake pads (stop-and-go), clutch (if manual), shocks (extra passenger weight) and tires. Weekly pressure checks save both fuel and tires."),
-      T("Registre TODO serviço aqui no app. Além de organizar, o histórico completo aumenta o valor de revenda — e para quem roda muito, revender bem faz parte do lucro.", "Log EVERY service here. Beyond organization, a complete history raises resale value — and for high-mileage drivers, reselling well is part of the profit."),
+      T("Registre TODO serviço aqui no app. Além de organizar, o histórico completo aumenta o valor de revenda, e para quem roda muito, revender bem faz parte do lucro.", "Log EVERY service here. Beyond organization, a complete history raises resale value, and for high-mileage drivers, reselling well is part of the profit."),
     ]}),
     art({ id: "trait-urban", thumb: "/learn/trait-urban.png?v=4", track: "money", traits: ["urbanUse"], system: "engine", addedAt: "2026-08-04",
       title: T("Só cidade e trajeto curto? Isso desgasta mais", "Short city trips? That wears more"), body: [
       T("Parece o contrário, mas rodar pouco e só na cidade é considerado uso SEVERO pelos fabricantes. O motivo: em trajetos curtos o motor não chega à temperatura ideal de trabalho.", "It seems backwards, but low-mileage city driving is classified as SEVERE use by manufacturers. The reason: on short trips the engine never reaches its ideal temperature."),
-      T("Sem aquecer direito, sobra combustível não queimado e água da condensação no óleo — o que acelera a formação de borra. Por isso o óleo pode vencer por TEMPO mesmo com poucos quilômetros rodados.", "Without warming up, unburnt fuel and condensation stay in the oil — which speeds up sludge. That's why oil can expire by TIME even with few kilometers driven."),
+      T("Sem aquecer direito, sobra combustível não queimado e água da condensação no óleo, o que acelera a formação de borra. Por isso o óleo pode vencer por TEMPO mesmo com poucos quilômetros rodados.", "Without warming up, unburnt fuel and condensation stay in the oil, which speeds up sludge. That's why oil can expire by TIME even with few kilometers driven."),
       T("O que fazer: respeite o prazo em meses (normalmente 12), mesmo que o km não tenha chegado. E, uma vez por semana, faça um trajeto mais longo (20–30 minutos) para o motor aquecer de verdade.", "What to do: respect the interval in months (usually 12) even if the mileage hasn't arrived. And once a week take a longer trip (20–30 minutes) so the engine truly warms up."),
       T("Outros itens que sofrem no para-e-anda: pastilhas de freio, bateria (viagens curtas não recarregam por completo) e escapamento, que acumula umidade e enferruja por dentro.", "Other items that suffer in stop-and-go: brake pads, the battery (short trips never fully recharge it) and the exhaust, which collects moisture and rusts from inside."),
     ]}),
@@ -819,9 +819,9 @@ export function getContent(locale: Locale) {
     art({ id: "sit-just-bought", thumb: "/learn/sit-just-bought.png?v=4", track: "money", situations: ["justBought"], system: "geral", addedAt: "2026-08-04",
       title: T("Comprou agora? Faça isso nos primeiros 30 dias", "Just bought it? Do this in the first 30 days"), body: [
       T("Carro usado vem com um histórico que você não viveu. Estes primeiros 30 dias definem se você vai herdar os problemas do dono anterior ou começar do zero com segurança.", "A used car comes with a history you didn't live. These first 30 days decide whether you inherit the previous owner's problems or start fresh."),
-      T("1) Troque o óleo e o filtro, independente do que disseram. É barato e zera a dúvida. 2) Verifique fluido de freio e de arrefecimento — são os mais esquecidos e os que causam os estragos mais caros.", "1) Change oil and filter regardless of what you were told. It's cheap and removes all doubt. 2) Check brake and coolant fluid — the most forgotten and the ones causing the priciest damage."),
+      T("1) Troque o óleo e o filtro, independente do que disseram. É barato e zera a dúvida. 2) Verifique fluido de freio e de arrefecimento: são os mais esquecidos e os que causam os estragos mais caros.", "1) Change oil and filter regardless of what you were told. It's cheap and removes all doubt. 2) Check brake and coolant fluid, the most forgotten and the ones causing the priciest damage."),
       T("3) Descubra quando foi a última troca da correia dentada. Se ninguém souber, considere trocada por você: é o único item em que 'apostar' pode custar um motor.", "3) Find out when the timing belt was last changed. If nobody knows, treat it as due: it's the one item where gambling can cost an engine."),
-      T("4) Calibre os pneus e olhe a data de fabricação deles (4 números na lateral: semana e ano). Pneu com mais de 5 anos endurece mesmo com sulco bom. 5) Teste a bateria — a maioria dos vendedores não troca.", "4) Set tire pressure and check their manufacture date (4 digits on the sidewall: week and year). Tires over 5 years old harden even with good tread. 5) Test the battery — most sellers don't replace it."),
+      T("4) Calibre os pneus e olhe a data de fabricação deles (4 números na lateral: semana e ano). Pneu com mais de 5 anos endurece mesmo com sulco bom. 5) Teste a bateria, a maioria dos vendedores não troca.", "4) Set tire pressure and check their manufacture date (4 digits on the sidewall: week and year). Tires over 5 years old harden even with good tread. 5) Test the battery: most sellers don't replace it."),
       T("6) Registre tudo isso aqui no app com a data de hoje. A partir de agora o histórico é seu, e daqui a três anos você vai agradecer.", "6) Log all of it here with today's date. From now on the history is yours, and in three years you'll be glad."),
     ]}),
     art({ id: "sit-overdue", thumb: "/learn/sit-overdue.png?v=4", track: "fundamentals", situations: ["overdue"], system: "engine", addedAt: "2026-08-04",
@@ -829,8 +829,8 @@ export function getContent(locale: Locale) {
       T("Primeiro, sem pânico: atraso não é sentença. Mas a ordem em que você resolve importa, porque alguns itens só ficam caros e outros deixam você na estrada.", "First, don't panic: being late isn't a death sentence. But the order matters, because some items just get expensive while others strand you."),
       T("Comece pelo que é SEGURANÇA: freios (pastilha, disco, fluido) e pneus. Não dá para negociar prazo com item que decide se o carro para ou não.", "Start with SAFETY: brakes (pads, discs, fluid) and tires. There's no negotiating deadlines with what decides whether the car stops."),
       T("Depois o que protege o motor: óleo vencido perde a capacidade de lubrificar e vira borra, que entope os canais. Óleo atrasado é o caminho mais curto e mais caro para um motor arruinado.", "Then what protects the engine: expired oil loses its lubricating ability and turns to sludge, clogging passages. Late oil is the shortest and priciest path to a ruined engine."),
-      T("Por último, o que é desempenho e economia: filtros de ar e combustível, velas. Atrasar aqui custa em consumo, não em quebra — dá para escalonar por alguns meses.", "Last, performance and economy: air and fuel filters, spark plugs. Delaying here costs fuel, not failures — you can spread these over a few months."),
-      T("Exceção importante: correia dentada não entra nessa fila. Se estiver vencida, é a primeira coisa — ela não avisa antes de arrebentar.", "Important exception: the timing belt isn't in this queue. If it's overdue, it comes first — it gives no warning before snapping."),
+      T("Por último, o que é desempenho e economia: filtros de ar e combustível, velas. Atrasar aqui custa em consumo, não em quebra: dá para escalonar por alguns meses.", "Last, performance and economy: air and fuel filters, spark plugs. Delaying here costs fuel, not failures: you can spread these over a few months."),
+      T("Exceção importante: correia dentada não entra nessa fila. Se estiver vencida, é a primeira coisa: ela não avisa antes de arrebentar.", "Important exception: the timing belt isn't in this queue. If it's overdue, it comes first, it gives no warning before snapping."),
     ]}),
     art({ id: "sit-no-history", thumb: "/learn/sit-no-history.png?v=4", track: "money", situations: ["noHistory"], system: "geral", addedAt: "2026-08-04",
       title: T("Monte o histórico do seu carro (ele vale dinheiro)", "Build your car's history (it's worth money)"), body: [
@@ -1378,13 +1378,13 @@ export function getContent(locale: Locale) {
     {
       id: "course-signals", icon: "diagnose", level: "iniciante",
       title: T("O que o carro diz", "What the car is telling you"),
-      goal: T("Diagnóstico pelos sentidos — som, cheiro, mancha no chão — e a luz de injeção explicada antes do scanner.", "Diagnosis by the senses — sound, smell, stains — and the check-engine light explained before the scanner."),
+      goal: T("Diagnóstico pelos sentidos, som, cheiro, mancha no chão, e a luz de injeção explicada antes do scanner.", "Diagnosis by the senses, sound, smell, stains, and the check-engine light explained before the scanner."),
       order: ["diag-noises", "diag-smells", "diag-leaks", "vid-luz-injecao-como-funciona", "vid-luz-injecao-acendeu", "read-obd2", "obd2-scan", "diag-superaquecimento", "diag-vibracao", "trait-highkm"],
     },
     {
       id: "course-diy", icon: "tools", level: "intermediario",
       title: T("Faça você mesmo", "Do it yourself"),
-      goal: T("Os cinco serviços que você faz em casa, em ordem de dificuldade — da palheta à pastilha de freio.", "The five jobs you can do at home, in order of difficulty — wipers to brake pads."),
+      goal: T("Os cinco serviços que você faz em casa, em ordem de dificuldade, da palheta à pastilha de freio.", "The five jobs you can do at home, in order of difficulty: wipers to brake pads."),
       order: ["diy-wipers", "diy-airfilter", "diy-battery", "oil-change", "brake-pads"],
     },
     {
@@ -1403,7 +1403,7 @@ export function getContent(locale: Locale) {
     {
       id: "course-turbo", icon: "spark", level: "avancado",
       title: T("Motor turbo, do zero", "Turbo engines, from zero"),
-      goal: T("Do \"o que muda num turbo\" ao barulho de pomba — e os cuidados que dobram a vida dele.", "From \"what changes with a turbo\" to the flutter noise — and the habits that double its life."),
+      goal: T("Do \"o que muda num turbo\" ao barulho de pomba, e os cuidados que dobram a vida dele.", "From \"what changes with a turbo\" to the flutter noise, and the habits that double its life."),
       traits: ["turbo"],
       order: ["vid-turbo-aspirado", "vid-turbo-pressao", "vid-turbo-fabrica", "vid-flutter", "trait-turbo"],
     },
@@ -1454,7 +1454,7 @@ export function getContent(locale: Locale) {
       section: T("Emergência no carro (leve sempre)", "Car emergency (always carry)"),
       items: [
         { id: "spare-kit", emoji: "🛞", name: T("Estepe, macaco e chave de roda", "Spare, jack and lug wrench"), use: T("Trocar um pneu furado na estrada.", "Change a flat tire on the road."), essential: true },
-        { id: "triangle", emoji: "🔺", name: T("Triângulo de sinalização", "Warning triangle"), use: T("Sinalizar o carro parado — obrigatório por lei.", "Signal a stopped car — required by law."), essential: true },
+        { id: "triangle", emoji: "🔺", name: T("Triângulo de sinalização", "Warning triangle"), use: T("Sinalizar o carro parado: obrigatório por lei.", "Signal a stopped car: required by law."), essential: true },
         { id: "jumper", emoji: "🔋", name: T("Cabo de chupeta (ou bateria auxiliar)", "Jumper cables (or jump-starter)"), use: T("Dar partida quando a bateria descarrega. A bateria auxiliar funciona sem outro carro.", "Start the car when the battery dies. A jump-starter works without another car."), essential: true },
         { id: "inflator", emoji: "💨", name: T("Calibrador + compressor portátil", "Gauge + portable inflator"), use: T("Calibrar e encher o pneu em qualquer lugar.", "Check and inflate a tire anywhere.") },
         { id: "flashlight", emoji: "🔦", name: T("Lanterna", "Flashlight"), use: T("Enxergar embaixo do capô ou trocar pneu à noite.", "See under the hood or change a tire at night.") },
@@ -1465,7 +1465,7 @@ export function getContent(locale: Locale) {
     {
       section: T("Diagnóstico", "Diagnostics"),
       items: [
-        { id: "obd2", emoji: "🔌", name: T("Scanner OBD2", "OBD2 scanner"), use: T("A 'chave' do painel: plugue na entrada OBD2 (embaixo do volante) e leia os códigos de erro — descubra o que a luz acesa significa. Há versões Bluetooth que ligam num app no celular.", "The dashboard 'key': plug into the OBD2 port (under the wheel) and read the fault codes — find out what a warning light means. Bluetooth versions pair with a phone app."), star: true },
+        { id: "obd2", emoji: "🔌", name: T("Scanner OBD2", "OBD2 scanner"), use: T("A 'chave' do painel: plugue na entrada OBD2 (embaixo do volante) e leia os códigos de erro, descubra o que a luz acesa significa. Há versões Bluetooth que ligam num app no celular.", "The dashboard 'key': plug into the OBD2 port (under the wheel) and read the fault codes, find out what a warning light means. Bluetooth versions pair with a phone app."), star: true },
         { id: "multimeter", emoji: "🔧", name: T("Multímetro", "Multimeter"), use: T("Testar bateria, alternador, fusíveis e fiação.", "Test the battery, alternator, fuses and wiring.") },
         { id: "oilgauge", emoji: "🌡️", name: T("Medidor de pressão de óleo", "Oil pressure gauge"), use: T("Confirmar a pressão do óleo do motor.", "Confirm the engine's oil pressure.") },
       ],
@@ -1474,7 +1474,7 @@ export function getContent(locale: Locale) {
       section: T("Ferramentas de garagem", "Garage tools"),
       items: [
         { id: "sockets", emoji: "🧰", name: T("Jogo de chaves e soquetes", "Wrench & socket set"), use: T("A base de quase todo reparo.", "The foundation of almost any repair."), essential: true },
-        { id: "pliers", emoji: "🗜️", name: T("Alicate (universal e de bico)", "Pliers (combination and needle-nose)"), use: T("Segurar, cortar e dobrar — mil usos.", "Grip, cut and bend — a thousand uses.") },
+        { id: "pliers", emoji: "🗜️", name: T("Alicate (universal e de bico)", "Pliers (combination and needle-nose)"), use: T("Segurar, cortar e dobrar: mil usos.", "Grip, cut and bend, a thousand uses.") },
         { id: "screwdrivers", emoji: "🪛", name: T("Chaves de fenda e Philips", "Flathead & Phillips screwdrivers"), use: T("Parafusos de painéis, presilhas e tampas.", "Panel screws, clips and covers.") },
         { id: "filterwrench", emoji: "⭕", name: T("Chave de filtro de óleo", "Oil filter wrench"), use: T("Soltar o filtro na troca de óleo.", "Loosen the filter during an oil change.") },
         { id: "jackstands", emoji: "🛠️", name: T("Macaco hidráulico + cavaletes", "Trolley jack + stands"), use: T("Levantar o carro com segurança. Nunca só o macaco.", "Lift the car safely. Never on the jack alone.") },
@@ -1500,14 +1500,14 @@ export function getContent(locale: Locale) {
       steps: [
         T("Pare num lugar plano e seguro, longe do fluxo. Puxe o freio de mão, ligue o pisca-alerta e posicione o triângulo atrás do carro.", "Stop somewhere flat and safe, away from traffic. Set the handbrake, turn on the hazards and place the triangle behind the car."),
         T("Com o carro AINDA NO CHÃO, afrouxe (só afrouxe) os parafusos da roda furada girando a chave no sentido anti-horário. Pode usar o peso do corpo na chave.", "With the car STILL ON THE GROUND, loosen (just loosen) the flat tire's bolts counterclockwise. Use your body weight on the wrench if needed."),
-        T("Encaixe o macaco no ponto de apoio indicado no manual — uma marca reforçada na lateral, perto da roda. Gire a manivela até o pneu furado sair do chão.", "Fit the jack at the lift point shown in the manual — a reinforced mark on the sill near the wheel. Crank until the flat tire is off the ground."),
+        T("Encaixe o macaco no ponto de apoio indicado no manual, uma marca reforçada na lateral, perto da roda. Gire a manivela até o pneu furado sair do chão.", "Fit the jack at the lift point shown in the manual, a reinforced mark on the sill near the wheel. Crank until the flat tire is off the ground."),
         T("Termine de soltar os parafusos (guarde todos juntos) e puxe a roda com as duas mãos.", "Finish removing the bolts (keep them together) and pull the wheel off with both hands."),
         T("Encaixe o estepe, rosqueie os parafusos com a mão em ordem de cruz (um oposto ao outro), desça o carro e dê o aperto final com a chave, também em cruz.", "Fit the spare, hand-thread the bolts in a criss-cross order, lower the car and do the final tightening with the wrench, also criss-cross."),
-        T("No primeiro posto, calibre o estepe (estepes finos costumam pedir mais pressão — veja o manual) e conserte o pneu furado o quanto antes.", "At the first gas station, inflate the spare (temporary spares often need higher pressure — check the manual) and repair the flat as soon as possible."),
+        T("No primeiro posto, calibre o estepe (estepes finos costumam pedir mais pressão. Veja o manual) e conserte o pneu furado o quanto antes.", "At the first gas station, inflate the spare (temporary spares often need higher pressure. Check the manual) and repair the flat as soon as possible."),
       ],
       safety: [
         T("Nunca coloque qualquer parte do corpo embaixo do carro apoiado só no macaco.", "Never put any part of your body under a car held only by the jack."),
-        T("Estepe temporário (fino) tem limite de velocidade — geralmente 80 km/h.", "Temporary (skinny) spares have a speed limit — usually 80 km/h (50 mph)."),
+        T("Estepe temporário (fino) tem limite de velocidade: geralmente 80 km/h.", "Temporary (skinny) spares have a speed limit: usually 80 km/h (50 mph)."),
       ],
     },
     triangle: {
@@ -1515,7 +1515,7 @@ export function getContent(locale: Locale) {
         T("Ligue o pisca-alerta assim que parar o carro.", "Turn on the hazard lights as soon as you stop."),
         T("Monte o triângulo e posicione-o atrás do carro, na mesma faixa em que ele está.", "Assemble the triangle and place it behind the car, in the same lane."),
         T("Distância: em via urbana, uns 30 m (~40 passos largos); em rodovia, 80 m ou mais (~100 passos). Quanto mais rápida a via, mais longe.", "Distance: in the city, about 30 m (~40 big steps); on a highway, 80 m or more (~100 steps). The faster the road, the farther away."),
-        T("Se parou depois de uma curva ou lombada, posicione o triângulo ANTES dela — quem vem precisa ser avisado antes de te ver.", "If you stopped past a curve or crest, place the triangle BEFORE it — drivers need the warning before they can see you."),
+        T("Se parou depois de uma curva ou lombada, posicione o triângulo ANTES dela: quem vem precisa ser avisado antes de te ver.", "If you stopped past a curve or crest, place the triangle BEFORE it: drivers need the warning before they can see you."),
         T("À noite ou na chuva, aumente a distância e vista colete refletivo se tiver.", "At night or in rain, increase the distance and wear a reflective vest if you have one."),
       ],
       safety: [T("Ande pelo acostamento, nunca pela pista, e não fique parado entre o carro e o tráfego.", "Walk on the shoulder, never on the road, and don't stand between the car and traffic.")],
@@ -1530,24 +1530,24 @@ export function getContent(locale: Locale) {
       ],
       safety: [
         T("Nunca deixe as garras vermelha e preta se tocarem com os cabos conectados.", "Never let the red and black clamps touch while connected."),
-        T("Bateria estufada ou vazando: não tente a chupeta — chame socorro.", "Swollen or leaking battery: don't attempt a jump — call for help."),
+        T("Bateria estufada ou vazando: não tente a chupeta, chame socorro.", "Swollen or leaking battery: don't attempt a jump, call for help."),
       ],
     },
     inflator: {
       steps: [
-        T("Descubra a pressão certa na etiqueta da coluna da porta do motorista ou na tampa do tanque (ex.: 32 psi). Não use a pressão escrita no pneu — aquele é o máximo.", "Find the right pressure on the driver's door jamb sticker or fuel flap (e.g. 32 psi). Don't use the number on the tire — that's the maximum."),
+        T("Descubra a pressão certa na etiqueta da coluna da porta do motorista ou na tampa do tanque (ex.: 32 psi). Não use a pressão escrita no pneu, aquele é o máximo.", "Find the right pressure on the driver's door jamb sticker or fuel flap (e.g. 32 psi). Don't use the number on the tire: that's the maximum."),
         T("Calibre com o pneu frio (menos de ~2 km rodados). Pneu quente marca pressão maior e engana.", "Check with cold tires (less than ~2 km driven). Warm tires read higher and mislead."),
         T("Desrosqueie a tampinha da válvula e encaixe o bico firme, sem vazar ar. Leia a pressão atual.", "Unscrew the valve cap and press the chuck on firmly, without hissing. Read the current pressure."),
         T("Ligue o compressor na tomada 12V do carro e encha até a pressão da etiqueta. Confira de novo e recoloque a tampinha.", "Plug the inflator into the car's 12V socket and fill to the sticker pressure. Re-check and refit the cap."),
-        T("Uma vez por mês, confira também o estepe — furo com estepe vazio é furo em dobro.", "Once a month, check the spare too — a flat spare doubles the trouble."),
+        T("Uma vez por mês, confira também o estepe: furo com estepe vazio é furo em dobro.", "Once a month, check the spare too, a flat spare doubles the trouble."),
       ],
       safety: [T("Não ultrapasse muito a pressão indicada; excesso desgasta o centro do pneu e piora a aderência.", "Don't overshoot the indicated pressure; excess wears the tire's center and hurts grip.")],
     },
     flashlight: {
       steps: [
-        T("Guarde sempre no mesmo lugar (porta-luvas ou porta-malas) — emergência não dá tempo de procurar.", "Keep it always in the same place (glovebox or trunk) — emergencies leave no time to search."),
+        T("Guarde sempre no mesmo lugar (porta-luvas ou porta-malas): emergência não dá tempo de procurar.", "Keep it always in the same place (glovebox or trunk): emergencies leave no time to search."),
         T("Prefira LED, recarregável por USB ou com um jogo de pilhas reserva junto.", "Prefer LED, USB-rechargeable or with a spare set of batteries next to it."),
-        T("Muitos modelos têm modo piscante — serve como sinalização extra à noite.", "Many models have a strobe mode — extra signaling at night."),
+        T("Muitos modelos têm modo piscante: serve como sinalização extra à noite.", "Many models have a strobe mode: extra signaling at night."),
         T("Teste uma vez por mês; recarregue ou troque as pilhas antes de viagens.", "Test it monthly; recharge or swap batteries before trips."),
       ],
       safety: [T("Trocando pneu à noite: apoie a lanterna iluminando a roda e mantenha o colete refletivo.", "Changing a tire at night: prop the light on the wheel and keep your reflective vest on.")],
@@ -1569,7 +1569,7 @@ export function getContent(locale: Locale) {
         T("Quem reboca sai bem devagar, sem trancos. Quem é rebocado liga a ignição (destrava a direção e o freio funciona), e mantém a corda esticada freando de leve.", "The towing driver starts very gently, no jerks. The towed driver switches the ignition on (unlocks steering, brakes work) and keeps the strap taut by braking lightly."),
         T("Velocidade máxima de 40–60 km/h, pisca-alerta ligado nos dois carros, e só por trajetos curtos.", "Max 40–60 km/h, hazards on in both cars, short distances only."),
       ],
-      safety: [T("Câmbio automático: confira o manual antes — muitos não podem ser rebocados com as rodas de tração no chão.", "Automatic gearbox: check the manual first — many can't be towed with the drive wheels on the ground.")],
+      safety: [T("Câmbio automático: confira o manual antes, muitos não podem ser rebocados com as rodas de tração no chão.", "Automatic gearbox: check the manual first, many can't be towed with the drive wheels on the ground.")],
     },
     obd2: {
       steps: [
@@ -1578,7 +1578,7 @@ export function getContent(locale: Locale) {
         T("Ligue a ignição sem dar partida. No scanner Bluetooth, abra o app (Car Scanner, Torque…) e pareie.", "Turn the ignition on without starting. For Bluetooth scanners, open the app (Car Scanner, Torque…) and pair."),
         T("Toque em 'Ler códigos' e anote o que aparecer (ex.: P0301).", "Tap 'Read codes' and note what comes up (e.g. P0301)."),
         T("Consulte o significado na nossa página Códigos OBD2 (aba Problemas).", "Look up each code on our OBD2 codes page (Problems tab)."),
-        T("Só use 'Apagar códigos' DEPOIS de resolver a causa — apagar não conserta, e some com a pista.", "Only 'Clear codes' AFTER fixing the cause — clearing doesn't repair, and erases the trail."),
+        T("Só use 'Apagar códigos' DEPOIS de resolver a causa: apagar não conserta, e some com a pista.", "Only 'Clear codes' AFTER fixing the cause: clearing doesn't repair, and erases the trail."),
       ],
       safety: [T("Luz da injeção PISCANDO = falha ativa grave. Pare o quanto antes.", "FLASHING check-engine light = active serious fault. Stop as soon as possible.")],
     },
@@ -1588,43 +1588,43 @@ export function getContent(locale: Locale) {
         T("Ponta vermelha no polo + da bateria, ponta preta no –.", "Red probe on the battery's + post, black on –."),
         T("Carro desligado: 12,4–12,7V = bateria boa; abaixo de 12V = descarregada ou no fim da vida.", "Car off: 12.4–12.7V = healthy; below 12V = discharged or dying."),
         T("Carro ligado: 13,5–14,7V = alternador carregando; fora dessa faixa, revise o alternador.", "Car running: 13.5–14.7V = alternator charging; outside that range, have the alternator checked."),
-        T("Fusível: modo continuidade (símbolo de som). Encoste uma ponta em cada lado — apitou, o fusível está bom.", "Fuse: continuity mode (sound symbol). Touch each end — a beep means the fuse is good."),
+        T("Fusível: modo continuidade (símbolo de som). Encoste uma ponta em cada lado: apitou, o fusível está bom.", "Fuse: continuity mode (sound symbol). Touch each end, a beep means the fuse is good."),
       ],
-      safety: [T("Não meça corrente (A) sem saber o que está fazendo — queima o aparelho e pode causar curto.", "Don't measure current (A) unless you know what you're doing — it can fry the meter and cause a short.")],
+      safety: [T("Não meça corrente (A) sem saber o que está fazendo: queima o aparelho e pode causar curto.", "Don't measure current (A) unless you know what you're doing, it can fry the meter and cause a short.")],
     },
     oilgauge: {
       steps: [
         T("Uso mais avançado: o medidor entra no lugar do sensor de pressão de óleo do motor (rosqueado no bloco).", "More advanced use: the gauge screws into the engine block in place of the oil pressure sensor."),
         T("Com o motor na temperatura normal, compare a leitura em marcha lenta e a ~2.000 rpm com a faixa do manual.", "With the engine at normal temperature, compare the reading at idle and ~2,000 rpm with the manual's range."),
-        T("Pressão baixa com nível de óleo correto = investigar bomba de óleo ou folgas internas — caso de oficina.", "Low pressure with correct oil level = oil pump or internal wear to investigate — shop territory."),
+        T("Pressão baixa com nível de óleo correto = investigar bomba de óleo ou folgas internas: caso de oficina.", "Low pressure with correct oil level = oil pump or internal wear to investigate: shop territory."),
         T("Se não se sentir seguro, peça o teste numa oficina: é rápido e barato.", "If unsure, ask a shop to run the test: it's quick and cheap."),
       ],
-      safety: [T("Motor e óleo quentes queimam — espere esfriar antes de mexer.", "Hot engine and oil burn — let it cool before working.")],
+      safety: [T("Motor e óleo quentes queimam: espere esfriar antes de mexer.", "Hot engine and oil burn: let it cool before working.")],
     },
     sockets: {
       steps: [
         T("Use o soquete do tamanho EXATO do parafuso (em mm). Folgado, ele espana a cabeça.", "Use the EXACT socket size for the bolt (in mm). A loose fit rounds the head."),
         T("Na catraca, a alavanca/trava define o sentido: aperto ou solto. Encaixe fundo e gire com firmeza.", "On the ratchet, the switch sets the direction: tighten or loosen. Seat it fully and turn firmly."),
         T("Parafuso travado: use uma extensão para ganhar alavanca, ou aplique desengripante e espere 10–15 minutos.", "Stuck bolt: use an extension for leverage, or apply penetrating oil and wait 10–15 minutes."),
-        T("Guarde cada soquete no seu lugar na maleta — é o que evita perder as medidas mais usadas.", "Return each socket to its slot in the case — that's how you avoid losing the most-used sizes."),
+        T("Guarde cada soquete no seu lugar na maleta: é o que evita perder as medidas mais usadas.", "Return each socket to its slot in the case: that's how you avoid losing the most-used sizes."),
       ],
-      safety: [T("Prefira EMPURRAR a chave (mão aberta) a puxá-la — se escapar, machuca menos.", "Prefer PUSHING the wrench (open palm) over pulling — if it slips, you get hurt less.")],
+      safety: [T("Prefira EMPURRAR a chave (mão aberta) a puxá-la, se escapar, machuca menos.", "Prefer PUSHING the wrench (open palm) over pulling, if it slips, you get hurt less.")],
     },
     pliers: {
       steps: [
         T("Alicate universal: segurar, dobrar e cortar (o corte fica na base das mandíbulas).", "Combination pliers: grip, bend and cut (the cutter is at the base of the jaws)."),
         T("Alicate de bico: lugares apertados, presilhas, molas pequenas e conectores.", "Needle-nose: tight spots, clips, small springs and connectors."),
-        T("Conector elétrico: puxe sempre pelo CONECTOR, nunca pelo fio — fio arrebentado por dentro é defeito difícil de achar.", "Electrical connector: always pull the CONNECTOR, never the wire — a wire broken inside is a hard fault to find."),
+        T("Conector elétrico: puxe sempre pelo CONECTOR, nunca pelo fio, fio arrebentado por dentro é defeito difícil de achar.", "Electrical connector: always pull the CONNECTOR, never the wire, a wire broken inside is a hard fault to find."),
       ],
       safety: [T("Mexendo em fiação: desconecte o polo negativo da bateria antes.", "Working on wiring: disconnect the battery's negative terminal first.")],
     },
     screwdrivers: {
       steps: [
-        T("Escolha a ponta do tamanho exato da fenda do parafuso — ponta menor ou maior espana.", "Match the tip exactly to the screw head — too small or too big strips it."),
+        T("Escolha a ponta do tamanho exato da fenda do parafuso: ponta menor ou maior espana.", "Match the tip exactly to the screw head: too small or too big strips it."),
         T("Pressione firme PARA DENTRO enquanto gira, principalmente em parafuso Phillips.", "Press firmly INWARD while turning, especially with Phillips screws."),
         T("Presilhas plásticas de acabamento: alavanca suave; o ideal é uma espátula plástica pra não marcar o painel.", "Plastic trim clips: gentle prying; a plastic trim tool is ideal to avoid marking panels."),
       ],
-      safety: [T("Chave de fenda não é talhadeira nem alavanca pesada — a ponta quebra e voa.", "A screwdriver is not a chisel or a crowbar — the tip can snap and fly.")],
+      safety: [T("Chave de fenda não é talhadeira nem alavanca pesada, a ponta quebra e voa.", "A screwdriver is not a chisel or a crowbar, the tip can snap and fly.")],
     },
     filterwrench: {
       steps: [
@@ -1651,26 +1651,26 @@ export function getContent(locale: Locale) {
       steps: [
         T("Descubra o torque correto no manual (rodas costumam pedir 110–120 N·m).", "Find the correct torque in the manual (wheels usually take 110–120 N·m)."),
         T("Ajuste o valor girando o cabo do torquímetro até a marca na escala (N·m).", "Set the value by turning the handle to the mark on the N·m scale."),
-        T("Aperte em ordem de cruz até sentir/ouvir o 'clique' — e PARE aí. Continuar passa do torque.", "Tighten in a criss-cross order until you feel/hear the 'click' — and STOP there. Going on over-torques."),
-        T("Depois de usar, volte o ajuste para o mínimo da escala — preserva a mola calibrada.", "After use, wind the setting back to the scale's minimum — it preserves the calibrated spring."),
+        T("Aperte em ordem de cruz até sentir/ouvir o 'clique', e PARE aí. Continuar passa do torque.", "Tighten in a criss-cross order until you feel/hear the 'click', and STOP there. Going on over-torques."),
+        T("Depois de usar, volte o ajuste para o mínimo da escala: preserva a mola calibrada.", "After use, wind the setting back to the scale's minimum, it preserves the calibrated spring."),
       ],
-      safety: [T("Torquímetro é só para APERTAR — soltar parafuso com ele descalibra a ferramenta.", "A torque wrench is for TIGHTENING only — loosening with it ruins the calibration.")],
+      safety: [T("Torquímetro é só para APERTAR: soltar parafuso com ele descalibra a ferramenta.", "A torque wrench is for TIGHTENING only: loosening with it ruins the calibration.")],
     },
     drainpan: {
       steps: [
-        T("Posicione a bacia sob o bujão ANTES de soltá-lo — e um pouco deslocada na direção do jato, que sai forte no começo.", "Place the pan under the drain plug BEFORE loosening it — slightly offset toward the stream, which shoots out at first."),
+        T("Posicione a bacia sob o bujão ANTES de soltá-lo, e um pouco deslocada na direção do jato, que sai forte no começo.", "Place the pan under the drain plug BEFORE loosening it: slightly offset toward the stream, which shoots out at first."),
         T("Deixe escorrer todo o óleo (5–10 minutos).", "Let all the oil drain (5–10 minutes)."),
-        T("Transfira o óleo usado para um recipiente que feche bem — a própria embalagem do óleo novo serve.", "Transfer the used oil to a sealable container — the new oil's bottle works."),
+        T("Transfira o óleo usado para um recipiente que feche bem, a própria embalagem do óleo novo serve.", "Transfer the used oil to a sealable container, the new oil's bottle works."),
         T("Entregue num ponto de coleta (postos e autopeças recebem). Nunca no ralo, na terra ou no lixo comum.", "Drop it at a collection point (gas stations and parts stores take it). Never down the drain, on soil or in regular trash."),
       ],
-      safety: [T("Óleo usado é contaminante e irrita a pele — use luvas.", "Used oil is a contaminant and skin irritant — wear gloves.")],
+      safety: [T("Óleo usado é contaminante e irrita a pele. Use luvas.", "Used oil is a contaminant and skin irritant: wear gloves.")],
     },
     spareoil: {
       steps: [
-        T("Use o MESMO tipo e viscosidade do óleo que está no motor (ex.: 5W30 sintético) — confira o manual ou a etiqueta da última troca.", "Use the SAME type and viscosity as the oil in the engine (e.g. 5W30 synthetic) — check the manual or the last-change sticker."),
-        T("Cheque o nível com o carro frio e em piso plano: tire a vareta, limpe, insira de novo, tire e leia — o óleo deve estar entre MIN e MAX.", "Check the level with the car cold and level: pull the dipstick, wipe, reinsert, pull and read — oil should sit between MIN and MAX."),
+        T("Use o MESMO tipo e viscosidade do óleo que está no motor (ex.: 5W30 sintético). Confira o manual ou a etiqueta da última troca.", "Use the SAME type and viscosity as the oil in the engine (e.g. 5W30 synthetic). Check the manual or the last-change sticker."),
+        T("Cheque o nível com o carro frio e em piso plano: tire a vareta, limpe, insira de novo, tire e leia, o óleo deve estar entre MIN e MAX.", "Check the level with the car cold and level: pull the dipstick, wipe, reinsert, pull and read, oil should sit between MIN and MAX."),
         T("Faltando, complete AOS POUCOS pela tampa de óleo (meio copo por vez), conferindo a vareta a cada adição.", "If low, top up LITTLE BY LITTLE through the filler cap (half a cup at a time), re-checking the dipstick each time."),
-        T("Não passe do MAX — óleo demais também danifica o motor.", "Don't go past MAX — too much oil also damages the engine."),
+        T("Não passe do MAX: óleo demais também danifica o motor.", "Don't go past MAX: too much oil also damages the engine."),
       ],
       safety: [T("Nunca abra a tampa do óleo com o motor funcionando.", "Never open the oil cap with the engine running.")],
     },
@@ -1681,7 +1681,7 @@ export function getContent(locale: Locale) {
         T("Complete com o aditivo correto já diluído (ou pronto-uso). Não use só água, e não misture aditivos de cores diferentes.", "Top up with the correct coolant pre-mixed (or ready-to-use). Don't use plain water, and don't mix different coolant colors."),
         T("Nível baixando sempre = vazamento ou consumo interno. Investigue na oficina.", "Level always dropping = leak or internal consumption. Have a shop investigate."),
       ],
-      safety: [T("NUNCA abra a tampa do radiador/reservatório com o motor quente — o jato ferve e causa queimaduras graves.", "NEVER open the radiator/reservoir cap on a hot engine — the boiling spray causes serious burns.")],
+      safety: [T("NUNCA abra a tampa do radiador/reservatório com o motor quente, o jato ferve e causa queimaduras graves.", "NEVER open the radiator/reservoir cap on a hot engine, the boiling spray causes serious burns.")],
     },
     wd40: {
       steps: [
@@ -1697,17 +1697,17 @@ export function getContent(locale: Locale) {
     },
     tape: {
       steps: [
-        T("Mangueira furada (emergência): seque bem, enrole a fita ESTICANDO, com várias voltas sobrepostas — e vá direto à oficina.", "Leaking hose (emergency): dry it well, wrap the tape STRETCHED with several overlapping turns — then head straight to a shop."),
+        T("Mangueira furada (emergência): seque bem, enrole a fita ESTICANDO, com várias voltas sobrepostas, e vá direto à oficina.", "Leaking hose (emergency): dry it well, wrap the tape STRETCHED with several overlapping turns, then head straight to a shop."),
         T("Fio desencapado: desconecte o negativo da bateria, enrole cobrindo bem além do trecho danificado.", "Exposed wire: disconnect the battery negative, wrap well past the damaged section."),
         T("Abraçadeiras: prenda fiação solta e acabamentos que vibram até o reparo definitivo.", "Zip ties: secure loose wiring and rattling trim until the proper repair."),
       ],
-      safety: [T("São reparos PROVISÓRIOS — providencie o conserto definitivo logo.", "These are TEMPORARY fixes — get the proper repair done soon.")],
+      safety: [T("São reparos PROVISÓRIOS: providencie o conserto definitivo logo.", "These are TEMPORARY fixes: get the proper repair done soon.")],
     },
     gloves: {
       steps: [
         T("Luvas nitrílicas descartáveis para óleo e graxa; luva de vaqueta para peças quentes ou pesadas.", "Disposable nitrile gloves for oil and grease; leather gloves for hot or heavy parts."),
         T("Pano de microfibra para acabamento e vidros; pano de algodão para graxa pesada.", "Microfiber cloth for trim and glass; cotton rags for heavy grease."),
-        T("Pano sujo de óleo ou solvente: guarde em recipiente fechado ou descarte — amontoado, pode entrar em combustão espontânea.", "Rags soaked in oil or solvent: store in a closed container or discard — piled up, they can self-combust."),
+        T("Pano sujo de óleo ou solvente: guarde em recipiente fechado ou descarte, amontoado, pode entrar em combustão espontânea.", "Rags soaked in oil or solvent: store in a closed container or discard, piled up, they can self-combust."),
       ],
       safety: [T("Tire anéis, pulseiras e relógio antes de mexer no motor.", "Remove rings, bracelets and watches before working on the engine.")],
     },
@@ -1855,7 +1855,7 @@ export function getContent(locale: Locale) {
       unlocked: T("Liberado! 🎉", "Unlocked! 🎉"),
       cont: T("Continuar", "Continue"),
       houseTitle: T("Cansado de anúncios?", "Tired of ads?"),
-      houseBody: T("Assine o Premium e use o Mentorque sem interrupções — com o Biela ilimitado e todos os recursos.", "Go Premium and use Mentorque without interruptions — with unlimited Biela and every feature."),
+      houseBody: T("Assine o Premium e use o Mentorque sem interrupções, com o Biela ilimitado e todos os recursos.", "Go Premium and use Mentorque without interruptions, with unlimited Biela and every feature."),
       houseCta: T("Conhecer o Premium", "See Premium"),
     },
 
@@ -2109,7 +2109,7 @@ export function getContent(locale: Locale) {
       yes: T("Sim", "Yes"),
       no: T("Não", "No"),
       diagnoseWithBiela: T("Aprofundar diagnóstico com o Biela", "Deepen the diagnosis with Biela"),
-      detailIntro: T("Veja o que pode ser, a urgência e quanto deve custar — e chegue na oficina sabendo o que pedir.", "See what it could be, how urgent it is and what it should cost — and walk into the shop knowing what to ask."),
+      detailIntro: T("Veja o que pode ser, a urgência e quanto deve custar, e chegue na oficina sabendo o que pedir.", "See what it could be, how urgent it is and what it should cost, and walk into the shop knowing what to ask."),
       causes: T("Possíveis causas", "Possible causes"),
       urgency: T("Nível de urgência", "Urgency level"),
       price: T("Faixa de preço estimada", "Estimated price range"),
@@ -2137,7 +2137,7 @@ export function getContent(locale: Locale) {
     fuelCompare: {
       title: T("Etanol ou Gasolina?", "Ethanol or Gasoline?"),
       forCar: T("Cálculo para o seu {car}", "Calculated for your {car}"),
-      noCar: T("Cadastre seu carro para um cálculo mais preciso — por enquanto, usamos valores médios.", "Add your car for a more precise result — for now we use average values."),
+      noCar: T("Cadastre seu carro para um cálculo mais preciso, por enquanto, usamos valores médios.", "Add your car for a more precise result, for now we use average values."),
       intro: T(
         "A famosa \"regra dos 70%\" é só o ponto de partida: o número certo depende do rendimento do SEU carro e do SEU motor. Preencha os preços do posto e a gente faz a conta certa.",
         "The famous \"70% rule\" is just a starting point: the right number depends on YOUR car's mileage and engine. Enter the pump prices and we'll do the real math."
@@ -2147,17 +2147,17 @@ export function getContent(locale: Locale) {
       ethPrice: T("Etanol", "Ethanol"),
       pricePh: T("ex.: 6,09", "e.g. 6.09"),
       consumptionTitle: T("Consumo do seu carro (km/l)", "Your car's mileage (km/l)"),
-      consumptionSub: T("Se souber, informe — deixa o cálculo exato. Não sabe? Deixe em branco que estimamos pelo motor.", "If you know it, fill it in — makes the math exact. Don't know? Leave blank and we'll estimate from the engine."),
+      consumptionSub: T("Se souber, informe: deixa o cálculo exato. Não sabe? Deixe em branco que estimamos pelo motor.", "If you know it, fill it in: makes the math exact. Don't know? Leave blank and we'll estimate from the engine."),
       gasKmL: T("Na gasolina", "On gasoline"),
       ethKmL: T("No etanol", "On ethanol"),
       kmlPh: T("ex.: 11,5", "e.g. 11.5"),
       engineTitle: T("Sobre o seu motor", "About your engine"),
-      engineSub: T("Só usamos isto quando falta algum consumo — motores turbo e de alta compressão aproveitam melhor o etanol.", "Only used when a km/l is missing — turbo and high-compression engines make better use of ethanol."),
+      engineSub: T("Só usamos isto quando falta algum consumo: motores turbo e de alta compressão aproveitam melhor o etanol.", "Only used when a km/l is missing: turbo and high-compression engines make better use of ethanol."),
       turboQ: T("O motor é turbo de fábrica?", "Is the engine factory-turbocharged?"),
       turboYes: T("Turbo de fábrica", "Factory turbo"),
       turboNo: T("Aspirado (sem turbo)", "Naturally aspirated"),
       compQ: T("Taxa de compressão acima de 12:1?", "Compression ratio above 12:1?"),
-      compHint: T("Está na ficha técnica do carro — uma busca rápida por \"taxa de compressão {car}\" resolve.", "It's in the car's spec sheet — a quick search for \"{car} compression ratio\" finds it."),
+      compHint: T("Está na ficha técnica do carro, uma busca rápida por \"taxa de compressão {car}\" resolve.", "It's in the car's spec sheet, a quick search for \"{car} compression ratio\" finds it."),
       compYes: T("Acima de 12:1", "Above 12:1"),
       compNo: T("Até 12:1 / não sei", "Up to 12:1 / not sure"),
       resultEth: T("Abasteça com ETANOL", "Fill up with ETHANOL"),
@@ -2171,7 +2171,7 @@ export function getContent(locale: Locale) {
       costKmGas: T("Gasolina", "Gasoline"),
       costKmEth: T("Etanol", "Ethanol"),
       savings: T("Economia de ~{pct}% por km rodado", "~{pct}% cheaper per km driven"),
-      redo: T("Vale refazer a conta a cada abastecimento — os preços mudam de posto para posto.", "Worth redoing at every fill-up — prices change from station to station."),
+      redo: T("Vale refazer a conta a cada abastecimento, os preços mudam de posto para posto.", "Worth redoing at every fill-up: prices change from station to station."),
     },
 
     obd2: {
@@ -2179,8 +2179,8 @@ export function getContent(locale: Locale) {
       entryTitle: T("Códigos OBD2", "OBD2 codes"),
       entrySub: T("Descubra o que a luz do painel está dizendo", "Find out what that dashboard light means"),
       intro: T(
-        "Todo carro fabricado a partir de ~2010 no Brasil tem uma porta OBD2. Quando algo sai do normal, o carro grava um código de falha — é ele que acende a luz da injeção no painel. Lendo o código, você sai do achismo e descobre exatamente onde investigar.",
-        "Every car made since ~2008 has an OBD2 port. When something goes off-spec, the car stores a fault code — that's what turns on the check-engine light. Reading the code takes out the guesswork and tells you exactly where to look."
+        "Todo carro fabricado a partir de ~2010 no Brasil tem uma porta OBD2. Quando algo sai do normal, o carro grava um código de falha: é ele que acende a luz da injeção no painel. Lendo o código, você sai do achismo e descobre exatamente onde investigar.",
+        "Every car made since ~2008 has an OBD2 port. When something goes off-spec, the car stores a fault code: that's what turns on the check-engine light. Reading the code takes out the guesswork and tells you exactly where to look."
       ),
       howToRead: T(
         "Como ler: a primeira letra indica a área (P = motor/câmbio, C = chassi, B = carroceria, U = rede elétrica). Os números detalham o sistema e a falha específica.",
@@ -2199,22 +2199,22 @@ export function getContent(locale: Locale) {
       ),
       whereTitle: T("Onde fica a porta OBD2", "Where the OBD2 port is"),
       whereBody: T(
-        "Na grande maioria dos carros, a porta fica embaixo do painel, do lado do motorista — perto da coluna da direção, na altura dos joelhos. Em alguns modelos ela vem escondida atrás de uma tampinha plástica ou perto da caixa de fusíveis. É um conector trapezoidal de 16 pinos.",
-        "In most cars the port sits under the dash on the driver's side — near the steering column, at knee height. In some models it hides behind a small plastic cover or near the fuse box. It's a 16-pin trapezoid connector."
+        "Na grande maioria dos carros, a porta fica embaixo do painel, do lado do motorista: perto da coluna da direção, na altura dos joelhos. Em alguns modelos ela vem escondida atrás de uma tampinha plástica ou perto da caixa de fusíveis. É um conector trapezoidal de 16 pinos.",
+        "In most cars the port sits under the dash on the driver's side: near the steering column, at knee height. In some models it hides behind a small plastic cover or near the fuse box. It's a 16-pin trapezoid connector."
       ),
       stepsTitle: T("Passo a passo da leitura", "Reading, step by step"),
       scanSteps: [
         T("Com o carro desligado, encaixe o leitor na porta OBD2 até firmar.", "With the car off, plug the reader into the OBD2 port until it's snug."),
         T("Ligue a ignição SEM dar partida (painel aceso). Alguns leitores também funcionam com o motor ligado.", "Turn the ignition ON without starting (dash lights on). Some readers also work with the engine running."),
-        T("No celular, ative o Bluetooth e abra o app do leitor (ex.: Torque, Car Scanner, ELM327). Pareie com o dispositivo — o PIN costuma ser 1234 ou 0000.", "On your phone, enable Bluetooth and open the reader app (e.g. Torque, Car Scanner, ELM327). Pair with the device — the PIN is usually 1234 or 0000."),
+        T("No celular, ative o Bluetooth e abra o app do leitor (ex.: Torque, Car Scanner, ELM327). Pareie com o dispositivo, o PIN costuma ser 1234 ou 0000.", "On your phone, enable Bluetooth and open the reader app (e.g. Torque, Car Scanner, ELM327). Pair with the device, the PIN is usually 1234 or 0000."),
         T("Toque em \"Ler códigos\" (ou \"Diagnóstico\") e aguarde alguns segundos.", "Tap \"Read codes\" (or \"Diagnostics\") and wait a few seconds."),
-        T("Anote os códigos que aparecerem (ex.: P0300) e consulte o significado logo abaixo. Evite apagar os códigos antes de resolver a causa — a luz volta e você perde o histórico.", "Note the codes that appear (e.g. P0300) and look up their meaning below. Avoid clearing codes before fixing the cause — the light comes back and you lose the history."),
+        T("Anote os códigos que aparecerem (ex.: P0300) e consulte o significado logo abaixo. Evite apagar os códigos antes de resolver a causa, a luz volta e você perde o histórico.", "Note the codes that appear (e.g. P0300) and look up their meaning below. Avoid clearing codes before fixing the cause, the light comes back and you lose the history."),
       ],
       searchTitle: T("Consultar um código", "Look up a code"),
-      searchPh: T("Digite o código — ex.: P0300", "Type the code — e.g. P0300"),
+      searchPh: T("Digite o código: ex.: P0300", "Type the code, e.g. P0300"),
       system: T("Sistema", "System"),
       meaning: T("O que significa", "What it means"),
-      notFound: T("Não temos esse código na tabela — mas o Biela conhece todos.", "That code isn't in our table — but Biela knows them all."),
+      notFound: T("Não temos esse código na tabela, mas o Biela conhece todos.", "That code isn't in our table, but Biela knows them all."),
       deepen: T("Aprofunde sobre o que pode ser", "Dig into what it could be"),
       deepenSeed: T(
         "Meu scanner OBD2 mostrou o código {code} ({meaning}). O que pode ser, o que devo verificar primeiro e é seguro rodar assim?",
@@ -2233,11 +2233,11 @@ export function getContent(locale: Locale) {
         { code: "P0118", meaning: T("Sensor de temperatura do motor com sinal alto", "Engine coolant temp sensor high input"), system: T("Motor", "Engine"), level: "medium" },
         { code: "P0120", meaning: T("Sensor de posição da borboleta (TPS) com falha", "Throttle position sensor (TPS) fault"), system: T("Motor", "Engine"), level: "medium" },
         { code: "P0128", meaning: T("Motor demora a esquentar (provável válvula termostática)", "Engine slow to warm up (likely thermostat)"), system: T("Motor", "Engine"), level: "low" },
-        { code: "P0130", meaning: T("Sonda lambda (sensor de O2) com falha — banco 1", "O2 sensor fault — bank 1"), system: T("Motor", "Engine"), level: "medium" },
-        { code: "P0135", meaning: T("Aquecedor da sonda lambda com falha — banco 1", "O2 sensor heater fault — bank 1"), system: T("Motor", "Engine"), level: "low" },
+        { code: "P0130", meaning: T("Sonda lambda (sensor de O2) com falha: banco 1", "O2 sensor fault: bank 1"), system: T("Motor", "Engine"), level: "medium" },
+        { code: "P0135", meaning: T("Aquecedor da sonda lambda com falha: banco 1", "O2 sensor heater fault: bank 1"), system: T("Motor", "Engine"), level: "low" },
         { code: "P0141", meaning: T("Aquecedor da sonda lambda pós-catalisador com falha", "Downstream O2 sensor heater fault"), system: T("Motor", "Engine"), level: "low" },
-        { code: "P0171", meaning: T("Mistura pobre — banco 1 (ar demais ou combustível de menos)", "System too lean — bank 1"), system: T("Motor", "Engine"), level: "medium" },
-        { code: "P0172", meaning: T("Mistura rica — banco 1 (combustível demais)", "System too rich — bank 1"), system: T("Motor", "Engine"), level: "medium" },
+        { code: "P0171", meaning: T("Mistura pobre: banco 1 (ar demais ou combustível de menos)", "System too lean: bank 1"), system: T("Motor", "Engine"), level: "medium" },
+        { code: "P0172", meaning: T("Mistura rica: banco 1 (combustível demais)", "System too rich: bank 1"), system: T("Motor", "Engine"), level: "medium" },
         { code: "P0300", meaning: T("Falhas de combustão aleatórias (misfire) em vários cilindros", "Random/multiple cylinder misfire"), system: T("Motor", "Engine"), level: "high" },
         { code: "P0301", meaning: T("Falha de combustão (misfire) no cilindro 1", "Cylinder 1 misfire"), system: T("Motor", "Engine"), level: "high" },
         { code: "P0302", meaning: T("Falha de combustão (misfire) no cilindro 2", "Cylinder 2 misfire"), system: T("Motor", "Engine"), level: "high" },
@@ -2247,8 +2247,8 @@ export function getContent(locale: Locale) {
         { code: "P0335", meaning: T("Sensor de rotação do virabrequim com falha", "Crankshaft position sensor fault"), system: T("Motor", "Engine"), level: "high" },
         { code: "P0340", meaning: T("Sensor de fase do comando de válvulas com falha", "Camshaft position sensor fault"), system: T("Motor", "Engine"), level: "medium" },
         { code: "P0401", meaning: T("Fluxo insuficiente na válvula EGR", "EGR insufficient flow"), system: T("Motor", "Engine"), level: "medium" },
-        { code: "P0420", meaning: T("Catalisador com eficiência abaixo do mínimo — banco 1", "Catalyst efficiency below threshold — bank 1"), system: T("Motor", "Engine"), level: "medium" },
-        { code: "P0430", meaning: T("Catalisador com eficiência abaixo do mínimo — banco 2", "Catalyst efficiency below threshold — bank 2"), system: T("Motor", "Engine"), level: "medium" },
+        { code: "P0420", meaning: T("Catalisador com eficiência abaixo do mínimo: banco 1", "Catalyst efficiency below threshold: bank 1"), system: T("Motor", "Engine"), level: "medium" },
+        { code: "P0430", meaning: T("Catalisador com eficiência abaixo do mínimo: banco 2", "Catalyst efficiency below threshold: bank 2"), system: T("Motor", "Engine"), level: "medium" },
         { code: "P0440", meaning: T("Falha no sistema de vapores de combustível (EVAP)", "EVAP system fault"), system: T("Motor", "Engine"), level: "low" },
         { code: "P0442", meaning: T("Pequeno vazamento no sistema EVAP (confira a tampa do tanque)", "EVAP small leak (check the gas cap)"), system: T("Motor", "Engine"), level: "low" },
         { code: "P0455", meaning: T("Grande vazamento no sistema EVAP (tampa do tanque solta?)", "EVAP large leak (loose gas cap?)"), system: T("Motor", "Engine"), level: "low" },
@@ -2293,7 +2293,7 @@ export function getContent(locale: Locale) {
       working: T("Aguarde...", "Please wait..."),
       confirmTitle: T("Confira seu e-mail 📬", "Check your email 📬"),
       confirmBody: T("Enviamos um link de confirmação para {email}. Clique nele para ativar sua conta.", "We sent a confirmation link to {email}. Click it to activate your account."),
-      guestNote: T("Você pode continuar como convidado — seus dados ficam salvos neste aparelho.", "You can keep using it as a guest — your data stays on this device."),
+      guestNote: T("Você pode continuar como convidado: seus dados ficam salvos neste aparelho.", "You can keep using it as a guest: your data stays on this device."),
       account: T("Conta", "Account"),
       signedInAs: T("Conectado como", "Signed in as"),
       signOut: T("Sair da conta", "Sign out"),
@@ -2318,8 +2318,8 @@ export function getContent(locale: Locale) {
     checklist: {
       title: T("O que verificar", "What to check"),
       intro: T(
-        "Estas são as áreas que têm relação com este problema — é aqui que a oficina deve olhar. Se sugerirem serviços fora desta lista, pergunte o motivo antes de aprovar.",
-        "These are the areas related to this problem — this is where the shop should look. If they suggest work outside this list, ask why before approving."
+        "Estas são as áreas que têm relação com este problema: é aqui que a oficina deve olhar. Se sugerirem serviços fora desta lista, pergunte o motivo antes de aprovar.",
+        "These are the areas related to this problem, this is where the shop should look. If they suggest work outside this list, ask why before approving."
       ),
       notes: T("Anotações do orçamento", "Quote notes"),
       notesPh: T("ex.: trocar só as dianteiras", "e.g. front pads only"),
@@ -2341,8 +2341,8 @@ export function getContent(locale: Locale) {
       // Estado vazio: sem carro cadastrado a tela devolvia só o título.
       noCarTitle: T("Cadastre um carro para ver a saúde dele", "Add a car to see its health"),
       noCarBody: T(
-        "A partir da marca, do ano e da quilometragem, o Mentorque calcula uma nota de saúde por sistema — motor, freios, suspensão, pneus e elétrica — e mostra o que está vencido.",
-        "From the make, year and mileage, Mentorque computes a health score per system — engine, brakes, suspension, tires and electrical — and shows what's overdue."
+        "A partir da marca, do ano e da quilometragem, o Mentorque calcula uma nota de saúde por sistema, motor, freios, suspensão, pneus e elétrica, e mostra o que está vencido.",
+        "From the make, year and mileage, Mentorque computes a health score per system, engine, brakes, suspension, tires and electrical, and shows what's overdue."
       ),
       noCarCta: T("Cadastrar meu carro", "Add my car"),
       noCarBrowse: T("Antes disso, explore os problemas comuns", "Or browse common problems first"),
@@ -2354,20 +2354,20 @@ export function getContent(locale: Locale) {
       quizCtaSub: T("10 perguntas para ter um diagnóstico mais preciso", "10 questions for a more accurate diagnosis"),
       quizRedo: T("Refazer o quiz de saúde", "Retake the health quiz"),
       quizBasedOn: T("Diagnóstico baseado no seu quiz", "Diagnosis based on your quiz"),
-      quizProvisional: T("Provisório — faça o quiz para o cálculo real", "Provisional — take the quiz for the real score"),
+      quizProvisional: T("Provisório: faça o quiz para o cálculo real", "Provisional: take the quiz for the real score"),
       quizTitle: T("Quiz de Saúde", "Health Quiz"),
-      quizIntro: T("Responda com sinceridade — quanto mais preciso, melhor o diagnóstico.", "Answer honestly — the more accurate, the better the diagnosis."),
+      quizIntro: T("Responda com sinceridade: quanto mais preciso, melhor o diagnóstico.", "Answer honestly, the more accurate, the better the diagnosis."),
       quizSubmit: T("Ver resultado", "See result"),
       quizProgress: T("{a} de {b} respondidas", "{a} of {b} answered"),
       quizNow: T("Estado atual (VHS)", "Current condition (VHS)"),
       quizRisk: T("Risco futuro (VRI)", "Future risk (VRI)"),
       quizNowInfo: T(
-        "VHS (Vehicle Health Score) mede o estado do carro HOJE: é a média ponderada das suas respostas do quiz com o histórico de manutenção. De 0 a 100% — quanto mais alto, melhor o estado atual.",
-        "VHS (Vehicle Health Score) measures the car's condition TODAY: a weighted average of your quiz answers and the maintenance history. From 0 to 100% — the higher, the better."
+        "VHS (Vehicle Health Score) mede o estado do carro HOJE: é a média ponderada das suas respostas do quiz com o histórico de manutenção. De 0 a 100%: quanto mais alto, melhor o estado atual.",
+        "VHS (Vehicle Health Score) measures the car's condition TODAY: a weighted average of your quiz answers and the maintenance history. From 0 to 100%, the higher, the better."
       ),
       quizRiskInfo: T(
-        "VRI (Vehicle Risk Index) estima o risco de problemas no FUTURO, olhando idade, quilometragem e a robustez do conjunto motor/câmbio. De 0 a 100 — aqui, quanto MENOR o número, melhor.",
-        "VRI (Vehicle Risk Index) estimates the risk of FUTURE problems, based on age, mileage and the robustness of the engine/transmission combo. From 0 to 100 — here, the LOWER, the better."
+        "VRI (Vehicle Risk Index) estima o risco de problemas no FUTURO, olhando idade, quilometragem e a robustez do conjunto motor/câmbio. De 0 a 100: aqui, quanto MENOR o número, melhor.",
+        "VRI (Vehicle Risk Index) estimates the risk of FUTURE problems, based on age, mileage and the robustness of the engine/transmission combo. From 0 to 100: here, the LOWER, the better."
       ),
       statusLabels: { ok: T("Em dia", "Up to date"), attention: T("Atenção", "Attention"), overdue: T("Verificar", "Check it") },
       systemLabels: {
@@ -2416,7 +2416,7 @@ export function getContent(locale: Locale) {
       editTitle: T("Editar serviço", "Edit service"),
       type: T("Tipo de serviço", "Service type"),
       services: T("Serviços realizados", "Services done"),
-      servicesHint: T("Digite ou escolha — dá pra adicionar vários de uma vez.", "Type or pick — you can add several at once."),
+      servicesHint: T("Digite ou escolha: dá pra adicionar vários de uma vez.", "Type or pick: you can add several at once."),
       servicePh: T("Ex.: troca de óleo, pastilha de freio…", "e.g. oil change, brake pads…"),
       subsystem: T("Subsistema", "Subsystem"),
       systemGeneral: T("Geral", "General"),
@@ -2493,9 +2493,9 @@ export function getContent(locale: Locale) {
       remindersEmpty: T("Nada agendado. Adicione em Próximas revisões.", "Nothing scheduled. Add from Upcoming service."),
       seeAllRevisions: T("Ver próximas revisões", "See upcoming service"),
       previewItems: [
-        { item: T("Óleo e filtro — intervalo do seu motor", "Oil and filter — your engine's interval"), when: T("a cada 10.000 km ou 12 meses", "every 10,000 km or 12 months"), note: T("O manual do seu carro pede óleo 5W30 sintético; a oficina costuma oferecer o mineral, mais barato e fora de especificação.", "Your manual calls for 5W30 synthetic; shops often push cheaper mineral oil, out of spec."), cost: "R$ 210–390" },
-        { item: T("Correia dentada — ponto crítico do seu motor", "Timing belt — critical point on your engine"), when: T("faltam ~18.000 km", "~18,000 km to go"), note: T("Neste motor a correia arrebenta sem aviso e danifica as válvulas — não passe do intervalo.", "On this engine the belt snaps without warning and damages the valves — don't exceed the interval."), cost: "R$ 780–1.600" },
-        { item: T("Velas de ignição — pelo seu histórico", "Spark plugs — from your history"), when: T("previsto para os próximos 4 meses", "expected in the next 4 months"), note: T("Você registrou consumo alto: trocar as velas antes do previsto costuma resolver.", "You logged high consumption: replacing the plugs early usually fixes it."), cost: "R$ 160–320" },
+        { item: T("Óleo e filtro: intervalo do seu motor", "Oil and filter: your engine's interval"), when: T("a cada 10.000 km ou 12 meses", "every 10,000 km or 12 months"), note: T("O manual do seu carro pede óleo 5W30 sintético; a oficina costuma oferecer o mineral, mais barato e fora de especificação.", "Your manual calls for 5W30 synthetic; shops often push cheaper mineral oil, out of spec."), cost: "R$ 210–390" },
+        { item: T("Correia dentada: ponto crítico do seu motor", "Timing belt: critical point on your engine"), when: T("faltam ~18.000 km", "~18,000 km to go"), note: T("Neste motor a correia arrebenta sem aviso e danifica as válvulas. Não passe do intervalo.", "On this engine the belt snaps without warning and damages the valves. Don't exceed the interval."), cost: "R$ 780–1.600" },
+        { item: T("Velas de ignição: pelo seu histórico", "Spark plugs: from your history"), when: T("previsto para os próximos 4 meses", "expected in the next 4 months"), note: T("Você registrou consumo alto: trocar as velas antes do previsto costuma resolver.", "You logged high consumption: replacing the plugs early usually fixes it."), cost: "R$ 160–320" },
       ],
       smartAlert: T("Pelo seu histórico, os freios devem pedir atenção nos próximos 10.000 km.", "Based on your history, brakes should need attention within the next 10,000 km."),
       cost: {
@@ -2524,7 +2524,7 @@ export function getContent(locale: Locale) {
       relatedTitle: T("Continue por aqui", "Keep going"),
       courseLevels: { iniciante: T("Iniciante", "Beginner"), intermediario: T("Intermediário", "Intermediate"), avancado: T("Avançado", "Advanced") },
       courseDoneTitle: T("Trilha concluída! 🏁", "Track completed! 🏁"),
-      courseDoneBody: T("Você fechou \"{t}\" — todas as aulas concluídas. Já sabe mais do que a maioria dos donos de carro.", "You finished \"{t}\" — every lesson done. You now know more than most car owners."),
+      courseDoneBody: T("Você fechou \"{t}\": todas as aulas concluídas. Já sabe mais do que a maioria dos donos de carro.", "You finished \"{t}\": every lesson done. You now know more than most car owners."),
       courseDoneCta: T("Ver outras trilhas", "See other tracks"),
       recommended: T("Recomendados para o seu carro", "Recommended for your car"),
       all: T("Todos os conteúdos", "All content"),
@@ -2553,10 +2553,10 @@ export function getContent(locale: Locale) {
     },
     biela: {
       cardTitle: T("Fala com o Biela", "Chat with Biela"),
-      cardSub: T("Seu mecânico de IA — tira qualquer dúvida", "Your AI mechanic — ask anything"),
+      cardSub: T("Seu mecânico de IA: tira qualquer dúvida", "Your AI mechanic: ask anything"),
       title: T("Biela", "Biela"),
       contextPrefix: T("Sobre seu", "About your"),
-      intro: T("Oi! Sou o Biela 🐻 Manjo tudo de mecânica. Me conta o que está acontecendo com o seu carro que eu te ajudo — pode perguntar de barulho, revisão, orçamento, o que for.", "Hi! I'm Biela 🐻 I know cars inside out. Tell me what's going on and I'll help — noises, service, quotes, anything."),
+      intro: T("Oi! Sou o Biela 🐻 Manjo tudo de mecânica. Me conta o que está acontecendo com o seu carro que eu te ajudo: pode perguntar de barulho, revisão, orçamento, o que for.", "Hi! I'm Biela 🐻 I know cars inside out. Tell me what's going on and I'll help: noises, service, quotes, anything."),
       inputPh: T("Pergunte ao Biela...", "Ask Biela..."),
       send: T("Enviar", "Send"),
       novaConversa: T("Nova conversa", "New chat"),
@@ -2571,7 +2571,7 @@ export function getContent(locale: Locale) {
       freeLeft: T("{n} perguntas grátis restantes hoje", "{n} free questions left today"),
       freeOver: T("O Biela é um recurso Premium. Assine para conversar à vontade com o seu mecânico de IA.", "Biela is a Premium feature. Subscribe to chat freely with your AI mechanic."),
       premiumCta: T("Conversar sem limites", "Chat without limits"),
-      offlineNote: T("(Respondendo em modo básico — a IA completa com os manuais está sendo conectada.)", "(Answering in basic mode — the full AI with manuals is being connected.)"),
+      offlineNote: T("(Respondendo em modo básico, a IA completa com os manuais está sendo conectada.)", "(Answering in basic mode, the full AI with manuals is being connected.)"),
     },
 
     carSettings: {
@@ -2586,7 +2586,7 @@ export function getContent(locale: Locale) {
       soldTitle: T("Não tenho mais este carro", "I no longer have this car"),
       soldCta: T("Marcar como vendido", "Mark as sold"),
       soldSheetTitle: T("Vendeu ou se desfez do carro?", "Sold or parted with the car?"),
-      soldSheetBody: T("Ele sai da sua garagem e para de gerar revisões e alertas — mas todo o histórico, as notas e as memórias ficam guardados.", "It leaves your garage and stops generating service alerts — but the whole history, receipts and memories stay saved."),
+      soldSheetBody: T("Ele sai da sua garagem e para de gerar revisões e alertas, mas todo o histórico, as notas e as memórias ficam guardados.", "It leaves your garage and stops generating service alerts, but the whole history, receipts and memories stay saved."),
       soldWhen: T("Quando foi?", "When was it?"),
       soldSave: T("Confirmar", "Confirm"),
       soldBadge: T("Vendido", "Sold"),
@@ -2648,7 +2648,7 @@ export function getContent(locale: Locale) {
       bielaIncompleta: T("Não respondeu", "Didn't answer"),
       bielaConfusa: T("Confusa", "Confusing"),
       bielaComentario: T("Quer detalhar? (opcional)", "Want to add detail? (optional)"),
-      bielaObrigado: T("Obrigado — isso ajuda a Biela a melhorar.", "Thanks — this helps Biela improve."),
+      bielaObrigado: T("Obrigado, isso ajuda a Biela a melhorar.", "Thanks, this helps Biela improve."),
     },
 
     profile: {
@@ -2695,13 +2695,13 @@ export function getContent(locale: Locale) {
       version: T("Mentorque v{v}", "Mentorque v{v}"),
       aboutTitle: T("Sobre o Mentorque", "About Mentorque"),
       aboutBody: T(
-        "O Mentorque é o seu copiloto para cuidar do carro com confiança: organize sua garagem, entenda sintomas, acompanhe revisões e aprenda mecânica no seu ritmo — tudo em português.\n\nNossa missão é deixar o cuidado com o carro simples, econômico e sem depender de achismo na oficina.",
-        "Mentorque is your copilot to care for your car with confidence: organize your garage, understand symptoms, track services and learn mechanics at your pace — all in one place.\n\nOur mission is to make car care simple, affordable and free of guesswork at the shop."
+        "O Mentorque é o seu copiloto para cuidar do carro com confiança: organize sua garagem, entenda sintomas, acompanhe revisões e aprenda mecânica no seu ritmo, tudo em português.\n\nNossa missão é deixar o cuidado com o carro simples, econômico e sem depender de achismo na oficina.",
+        "Mentorque is your copilot to care for your car with confidence: organize your garage, understand symptoms, track services and learn mechanics at your pace, all in one place.\n\nOur mission is to make car care simple, affordable and free of guesswork at the shop."
       ),
       privacyTitle: T("Política de privacidade", "Privacy policy"),
       privacyBody: T(
-        "Levamos sua privacidade a sério. Os dados da sua garagem ficam no seu aparelho e, se você criar uma conta, são sincronizados de forma segura para você acessar de outros dispositivos.\n\nNão vendemos seus dados e não usamos ferramentas de análise de terceiros. Suas perguntas ao Biela e os dados do carro são enviados a provedores de IA para gerar a resposta — sem o seu nome ou e-mail. Se você tocar em 👍 ou 👎 numa resposta, guardamos aquela pergunta e aquela resposta para melhorar o Biela, também sem o seu nome, e apagamos depois de 90 dias.\n\nNa versão gratuita do app Android exibimos anúncios do Google AdMob, que usa o identificador de publicidade do aparelho. Pedimos seu consentimento antes do primeiro anúncio e você pode rever a escolha em Preferências de anúncios. Assinantes Premium não veem anúncios.\n\nVocê pode excluir sua conta e seus dados a qualquer momento aqui no Perfil.",
-        "We take your privacy seriously. Your garage data stays on your device and, if you create an account, is securely synced so you can access it from other devices.\n\nWe don't sell your data and use no third-party analytics. Your prompts to Biela and your car details are sent to AI providers to generate the answer — without your name or email. If you tap 👍 or 👎 on an answer, we store that question and answer to improve Biela, also without your name, and delete it after 90 days.\n\nIn the free Android app we show Google AdMob ads, which use your device's advertising identifier. We ask for your consent before the first ad and you can change it under Ad preferences. Premium subscribers see no ads.\n\nYou can delete your account and data at any time here in Profile."
+        "Levamos sua privacidade a sério. Os dados da sua garagem ficam no seu aparelho e, se você criar uma conta, são sincronizados de forma segura para você acessar de outros dispositivos.\n\nNão vendemos seus dados e não usamos ferramentas de análise de terceiros. Suas perguntas ao Biela e os dados do carro são enviados a provedores de IA para gerar a resposta, sem o seu nome ou e-mail. Se você tocar em 👍 ou 👎 numa resposta, guardamos aquela pergunta e aquela resposta para melhorar o Biela, também sem o seu nome, e apagamos depois de 90 dias.\n\nNa versão gratuita do app Android exibimos anúncios do Google AdMob, que usa o identificador de publicidade do aparelho. Pedimos seu consentimento antes do primeiro anúncio e você pode rever a escolha em Preferências de anúncios. Assinantes Premium não veem anúncios.\n\nVocê pode excluir sua conta e seus dados a qualquer momento aqui no Perfil.",
+        "We take your privacy seriously. Your garage data stays on your device and, if you create an account, is securely synced so you can access it from other devices.\n\nWe don't sell your data and use no third-party analytics. Your prompts to Biela and your car details are sent to AI providers to generate the answer, without your name or email. If you tap 👍 or 👎 on an answer, we store that question and answer to improve Biela, also without your name, and delete it after 90 days.\n\nIn the free Android app we show Google AdMob ads, which use your device's advertising identifier. We ask for your consent before the first ad and you can change it under Ad preferences. Premium subscribers see no ads.\n\nYou can delete your account and data at any time here in Profile."
       ),
       signOut: T("Sair", "Sign out"),
       reset: T("Apagar os dados deste aparelho", "Erase this device's data"),
@@ -2736,7 +2736,7 @@ export function getContent(locale: Locale) {
       changePassword: T("Trocar senha", "Change password"),
       passwordSent: T("Link enviado ✓", "Link sent ✓"),
       deleteAccount: T("Excluir conta", "Delete account"),
-      deleteConfirm: T("Tem certeza? Isso apaga sua conta e todos os seus dados — não dá pra desfazer.", "Are you sure? This deletes your account and all your data — it can't be undone."),
+      deleteConfirm: T("Tem certeza? Isso apaga sua conta e todos os seus dados. Não dá pra desfazer.", "Are you sure? This deletes your account and all your data, it can't be undone."),
       // Login card (login-only, sem convidado)
       save: {
         title: T("Salve sua garagem", "Save your garage"),
@@ -2765,7 +2765,7 @@ export function getContent(locale: Locale) {
         send: T("Enviar mensagem", "Send message"),
         sending: T("Enviando...", "Sending..."),
         empty: T("Escreva uma mensagem antes de enviar.", "Write a message before sending."),
-        sent: T("Mensagem enviada! Obrigado — respondemos em breve. 🐻", "Message sent! Thanks — we'll reply soon. 🐻"),
+        sent: T("Mensagem enviada! Obrigado: respondemos em breve. 🐻", "Message sent! Thanks: we'll reply soon. 🐻"),
         error: T("Não deu pra enviar agora. Tente de novo em instantes.", "Couldn't send right now. Please try again shortly."),
       },
       disclaimer: T(
@@ -2971,7 +2971,7 @@ export function getContent(locale: Locale) {
       // O corpo manda "entre na sua conta" — e a tela precisa ter esse caminho.
       // Sem ele o texto pedia uma coisa impossível de fazer dali.
       readerSignIn: T("Entrar na minha conta", "Sign in to my account"),
-      readerRefresh: T("Já sou assinante — atualizar", "I'm already a subscriber — refresh"),
+      readerRefresh: T("Já sou assinante: atualizar", "I'm already a subscriber: refresh"),
       readerChecking: T("Conferindo…", "Checking…"),
       readerNotFound: T("Não encontramos uma assinatura ativa nesta conta.", "We couldn't find an active subscription on this account."),
       compareTitle: T("Free vs Premium", "Free vs Premium"),
