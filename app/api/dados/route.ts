@@ -15,11 +15,14 @@ export async function GET() {
   const d14 = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString();
   const d7 = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
-  const [{ data: semanas }, { data: subs }, { data: cadastros }, { data: erros }] = await Promise.all([
+  const d10dias = new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+
+  const [{ data: semanas }, { data: subs }, { data: cadastros }, { data: erros }, { data: metricas }] = await Promise.all([
     admin.from("funil_semana").select("*").limit(12),
     admin.from("subscriptions").select("status, cancel_at_period_end, plan"),
     admin.from("funil_eventos").select("criado_em, plataforma").eq("evento", "cadastro").gte("criado_em", d14),
     admin.from("app_erros").select("criado_em, mensagem, plataforma").gte("criado_em", d7).limit(2000),
+    admin.from("metricas_diarias").select("dia, fonte, dados").gte("dia", d10dias).order("dia", { ascending: false }).limit(120),
   ]);
 
   const ativas = (subs ?? []).filter((s) => s.status === "active");
@@ -51,5 +54,12 @@ export async function GET() {
     },
     cadastrosPorDia,
     erros7d: { total: (erros ?? []).length, top: topErros },
+    // Fontes externas coletadas pelo Analista (metricas_diarias): para cada
+    // fonte, o pacote mais recente e a série dos últimos 10 dias.
+    fontesExternas: (() => {
+      const porFonte: Record<string, { dia: string; dados: unknown }[]> = {};
+      for (const m of metricas ?? []) (porFonte[m.fonte] ??= []).push({ dia: m.dia, dados: m.dados });
+      return porFonte;
+    })(),
   });
 }
