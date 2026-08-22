@@ -17,6 +17,18 @@ type RcEvent = {
   app_user_id?: string;
   product_id?: string;
   expiration_at_ms?: number;
+  store?: string; // PLAY_STORE | APP_STORE | …
+};
+
+// Funil: o lado financeiro das lojas. O mapa é deliberadamente curto —
+// UNCANCELLATION e PRODUCT_CHANGE mexem na assinatura mas não são um degrau
+// novo do funil, então não geram evento.
+const FUNIL: Record<string, string> = {
+  INITIAL_PURCHASE: "assinou",
+  NON_RENEWING_PURCHASE: "assinou",
+  RENEWAL: "renovou",
+  CANCELLATION: "cancelou",
+  EXPIRATION: "expirou",
 };
 
 export async function POST(req: Request) {
@@ -74,6 +86,17 @@ export async function POST(req: Request) {
       current_period_end: periodEnd,
       cancel_at_period_end: false,
       updated_at: new Date().toISOString(),
+    });
+  }
+
+  const passoFunil = FUNIL[event.type];
+  if (passoFunil) {
+    await admin.from("funil_eventos").insert({
+      evento: passoFunil,
+      user_id: userId,
+      plataforma: event.store === "PLAY_STORE" ? "android" : event.store === "APP_STORE" ? "ios" : "loja",
+      origem: "revenuecat",
+      extra: { product: productId },
     });
   }
 

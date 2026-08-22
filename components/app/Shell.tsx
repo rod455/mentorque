@@ -28,6 +28,7 @@ import { CarSettingsScreen } from "./screens/CarSettings";
 import { ProfileScreen, SubscribeScreen, CheckoutScreen } from "./screens/Profile";
 import { GamificationScreen, AchievementsScreen } from "./screens/Gamification";
 import { AuthScreen } from "./screens/Auth";
+import { funil } from "@/lib/app/funil";
 import BielaMascote from "@/components/BielaMascote";
 
 export function Shell() {
@@ -66,6 +67,22 @@ function Router() {
   // sessão, o app manda para a tela de entrar e guarda o plano; assim que o
   // login acontece, o paywall abre sozinho no plano que ele já tinha escolhido.
   const { user } = useAuth();
+
+  // Funil: uma abertura por sessão; e "cadastro" na primeira sessão logada de
+  // uma conta RECÉM-criada (created_at nos últimos 15 min — cobre e-mail e
+  // login social, sem contar logins de conta antiga). O marcador local garante
+  // que cada aparelho relata o cadastro uma vez só.
+  useEffect(() => { funil("abriu_app", { umaVez: true }); }, []);
+  useEffect(() => {
+    if (!user) return;
+    try { if (window.localStorage.getItem("mq-cadastro-ev")) return; } catch { /* segue */ }
+    const criado = Date.parse((user as { created_at?: string }).created_at ?? "");
+    if (Number.isFinite(criado) && Date.now() - criado < 15 * 60 * 1000) {
+      funil("cadastro", { userId: user.id });
+    }
+    try { window.localStorage.setItem("mq-cadastro-ev", "1"); } catch { /* ignore */ }
+  }, [user]);
+
   const [planoPendente, setPlanoPendente] = useState<"annual" | "monthly" | null>(null);
   useEffect(() => {
     try {
