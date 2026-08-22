@@ -65,6 +65,26 @@ function Selos({ onde }: { onde: string }) {
   );
 }
 
+// CTA primário no padrão que converte em mobile: UMA pílula gigante de alto
+// contraste que abre direto a loja do aparelho. Os selos ficam logo abaixo
+// como caminho explícito por loja (e para quem lê no desktop).
+function BotaoGigante({ onde }: { onde: string }) {
+  const abrir = () => {
+    marcarCliqueDownload("auto");
+    const p = detectPlatform();
+    window.open(p === "ios" ? APP_STORE_URL : PLAY_STORE_URL, "_blank");
+  };
+  return (
+    <button
+      onClick={abrir}
+      data-onde={onde}
+      className="w-full max-w-xl rounded-full bg-amber py-4 font-display text-lg font-bold text-graphite shadow-lg shadow-amber/20 transition-transform active:scale-[0.99] sm:py-5"
+    >
+      Baixar grátis agora
+    </button>
+  );
+}
+
 export function LandingDownload({ variante }: { variante?: string }) {
   const headline = HEADLINES[variante ?? "default"] ?? HEADLINES.default;
 
@@ -96,7 +116,8 @@ export function LandingDownload({ variante }: { variante?: string }) {
               <p className="mx-auto mt-4 max-w-md text-lg leading-relaxed text-cream/70 lg:mx-0">
                 Diagnóstico por sintoma, preço justo antes da oficina e aulas de mecânica com quem é da indústria. Grátis pra começar.
               </p>
-              <div className="mt-7" id="baixar">
+              <div className="mt-7 flex flex-col items-center gap-4 lg:items-start" id="baixar">
+                <BotaoGigante onde="hero" />
                 <Selos onde="hero" />
               </div>
               <p className="mt-3 text-sm text-cream/55">Grátis. Sem cartão. Já disponível pra iPhone e Android.</p>
@@ -114,9 +135,22 @@ export function LandingDownload({ variante }: { variante?: string }) {
         </div>
       </section>
 
-      {/* 2. BARRA DE CONFIANÇA */}
-      <div className="border-y border-white/5 bg-graphite-800 px-5 py-3 text-center text-sm text-cream/60">
-        ⭐ Disponível na App Store e Google Play · Feito por quem trabalha na indústria automotiva
+      {/* 2. BARRA DE CONFIANÇA (faixa de selos, estilo logo strip) */}
+      <div className="border-y border-white/5 bg-graphite-800 px-5 py-5">
+        <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-x-10 gap-y-3 text-cream/70">
+          <span className="flex items-center gap-2.5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M16.4 12.7c0-2 1.6-2.9 1.7-3-1-1.4-2.4-1.6-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7-1.3 0-2.6.8-3.3 2-1.4 2.4-.4 6 1 8 .7.9 1.4 2 2.5 2 1 0 1.3-.6 2.5-.6 1.2 0 1.5.6 2.5.6 1 0 1.7-.9 2.4-1.9.8-1.1 1.1-2.1 1.1-2.2-.1 0-2.1-.8-2.1-3.2zM14.6 6.3c.5-.7.9-1.6.8-2.6-.8 0-1.8.6-2.4 1.3-.5.6-1 1.6-.8 2.5.9.1 1.8-.5 2.4-1.2z" /></svg>
+            <span className="flex flex-col leading-tight"><span className="text-[10px] text-cream/45">Disponível na</span><span className="font-display text-sm font-semibold">App Store</span></span>
+          </span>
+          <span className="flex items-center gap-2.5">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M4 3.3c-.3.2-.5.6-.5 1.1v15.2c0 .5.2.9.5 1.1l8.2-8.7L4 3.3z" opacity=".9" /><path d="M15.1 9.4 5.6 3l10.6 6.1-1.1.3zM5.6 21l9.5-6.4 1.1.3L5.6 21z" opacity=".75" /><path d="m17.9 10.1 2.6 1.5c.7.4.7 1.4 0 1.8l-2.6 1.5-1.6-2.4 1.6-2.4z" opacity=".85" /></svg>
+            <span className="flex flex-col leading-tight"><span className="text-[10px] text-cream/45">Disponível no</span><span className="font-display text-sm font-semibold">Google Play</span></span>
+          </span>
+          <span className="flex items-center gap-2.5">
+            <span aria-hidden className="text-xl">🔧</span>
+            <span className="flex flex-col leading-tight"><span className="text-[10px] text-cream/45">Feito por quem</span><span className="font-display text-sm font-semibold">trabalha na indústria</span></span>
+          </span>
+        </div>
       </div>
 
       {/* 3. O PROBLEMA */}
@@ -142,11 +176,12 @@ export function LandingDownload({ variante }: { variante?: string }) {
       <section className="bg-graphite-800/60 px-5 py-14 sm:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="font-serif text-3xl font-bold">Chegue na oficina sabendo o que o carro tem. E quanto deve custar.</h2>
-          <div className="mt-8 space-y-4 text-left">
+          <div className="mt-8 grid gap-4 text-left sm:grid-cols-2">
             {[
               { n: "1", titulo: "Diagnóstico por sintoma", texto: "Descreva o barulho, veja as causas prováveis e a urgência real." },
               { n: "2", titulo: "Preço justo antes de fechar", texto: "Faixa de preço do serviço e checklist pra levar na oficina." },
               { n: "3", titulo: "Aprenda com quem é da indústria", texto: "Trilhas do zero ao avançado, sem garimpo no YouTube." },
+              { n: "4", titulo: "Seu carro acompanhado", texto: "Saúde do carro, revisões no prazo e histórico de tudo que você fez." },
             ].map((r) => (
               <div key={r.n} className="flex gap-4 rounded-2xl bg-graphite-800 p-5 ring-1 ring-white/5">
                 <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-amber/15 font-display font-bold text-amber">{r.n}</span>
@@ -157,7 +192,8 @@ export function LandingDownload({ variante }: { variante?: string }) {
               </div>
             ))}
           </div>
-          <div className="mt-8">
+          <div className="mt-8 flex flex-col items-center gap-4">
+            <BotaoGigante onde="solucao" />
             <Selos onde="solucao" />
           </div>
         </div>
@@ -183,10 +219,40 @@ export function LandingDownload({ variante }: { variante?: string }) {
           <p className="mx-auto mt-3 max-w-lg leading-relaxed text-cream/70">
             Plano gratuito pra sempre: garagem, diagnóstico por sintoma e aulas introdutórias sem pagar nada. E quem baixa agora entra no <strong className="text-cream">lote de fundadores</strong>: preço de assinatura travado pra sempre.
           </p>
-          <div className="mt-7">
+          <div className="mt-7 flex flex-col items-center gap-4">
+            <BotaoGigante onde="final" />
             <Selos onde="final" />
           </div>
           <p className="mt-3 text-sm text-cream/55">Sem cartão. Sem fidelidade. Cancele quando quiser.</p>
+        </div>
+      </section>
+
+      {/* 6b. PERGUNTAS FREQUENTES (sanfona nativa, zero JavaScript) — mata as
+          objeções de quem chegou frio pelo anúncio antes do último CTA. */}
+      <section className="px-5 py-14 sm:px-8">
+        <div className="mx-auto max-w-2xl">
+          <h2 className="text-center font-serif text-3xl font-bold">Perguntas frequentes</h2>
+          <div className="mt-8 space-y-3">
+            {[
+              { p: "O Mentorque é grátis?", r: "Sim. Garagem, diagnóstico por sintoma e as aulas introdutórias são gratuitos pra sempre, sem cartão. O Premium desbloqueia o plano de revisões pelo manual do seu carro, a Biela ilimitada e as trilhas completas." },
+              { p: "Funciona pra qualquer carro?", r: "Sim. Você cadastra marca, modelo, ano e motor, e o app adapta diagnóstico, revisões e conteúdo ao seu carro, de populares a importados, incluindo motos na garagem." },
+              { p: "Preciso entender de mecânica?", r: "Não. O app foi feito pra quem NÃO entende: você descreve o problema do seu jeito, em português normal, e ele te explica o que pode ser, a urgência e quanto deve custar." },
+              { p: "O app substitui a oficina?", r: "Não, e nem tenta. Ele te prepara PARA a oficina: você chega sabendo as causas prováveis, a faixa de preço justa e as perguntas certas. Quem decide continua sendo você, com um mecânico de confiança." },
+              { p: "Funciona no iPhone e no Android?", r: "Sim, nas duas lojas. E a sua conta vale nos dois: começou no celular, continua no computador pelo site." },
+              { p: "Quanto custa o Premium?", r: "Tem plano mensal e anual, com teste grátis pra conhecer. O preço está na página de assinatura dentro do app, e quem baixa agora entra no lote de fundadores, com preço travado pra sempre." },
+            ].map((f) => (
+              <details key={f.p} className="group rounded-2xl bg-graphite-800 ring-1 ring-white/5">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 font-display text-[15px] font-semibold text-cream [&::-webkit-details-marker]:hidden">
+                  {f.p}
+                  <span aria-hidden className="text-amber transition-transform group-open:rotate-45">+</span>
+                </summary>
+                <p className="px-5 pb-4 text-sm leading-relaxed text-cream/70">{f.r}</p>
+              </details>
+            ))}
+          </div>
+          <div className="mt-8 flex justify-center">
+            <BotaoGigante onde="faq" />
+          </div>
         </div>
       </section>
 
