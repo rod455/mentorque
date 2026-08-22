@@ -32,6 +32,21 @@ function anonId(): string {
 // Dedup por sessão: reabrir a mesma tela no mesmo pageview não conta de novo.
 const enviados = new Set<string>();
 
+// A etiqueta de campanha que a LP (/landing) guardou no aparelho. É ela que
+// liga anúncio a cadastro e a assinatura: sem UTM no evento, mídia paga vira
+// chute. Só existe na web (a LP e o app web dividem a mesma origem); no app
+// da loja a atribuição de instalação é outro capítulo.
+function utmGuardada(): Record<string, string> | null {
+  try {
+    const bruto = window.localStorage.getItem("mq-utm");
+    if (!bruto) return null;
+    const u = JSON.parse(bruto) as Record<string, string>;
+    return u && typeof u === "object" ? u : null;
+  } catch {
+    return null;
+  }
+}
+
 export function funil(evento: EventoFunil, o?: { userId?: string | null; origem?: string; umaVez?: boolean }): void {
   try {
     if (typeof window === "undefined") return;
@@ -47,6 +62,7 @@ export function funil(evento: EventoFunil, o?: { userId?: string | null; origem?
       plataforma: isNativeApp() ? nativePlatform() ?? "nativo" : "web",
       versao: APP_VERSION,
       origem: o?.origem ?? null,
+      utm: utmGuardada(),
     }).catch(() => undefined);
   } catch {
     // métricas nunca podem quebrar o app

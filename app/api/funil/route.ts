@@ -27,6 +27,20 @@ export async function POST(req: Request) {
   if (!EVENTOS_DO_APP.has(evento)) return NextResponse.json({ error: "evento_invalido" }, { status: 400 });
 
   const userId = typeof b?.userId === "string" && UUID_RE.test(b.userId) ? b.userId : null;
+
+  // UTM da campanha (guardada pela LP no aparelho): só as chaves conhecidas,
+  // cortadas. É o que liga anúncio a cadastro e a assinatura.
+  let utm: Record<string, string> | null = null;
+  if (b?.utm && typeof b.utm === "object") {
+    const bruto = b.utm as Record<string, unknown>;
+    const limpo: Record<string, string> = {};
+    for (const k of ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "v", "em"]) {
+      const val = corta(bruto[k], 80);
+      if (val) limpo[k] = val;
+    }
+    if (Object.keys(limpo).length) utm = limpo;
+  }
+
   await admin.from("funil_eventos").insert({
     evento,
     anon_id: corta(b?.anonId, 64),
@@ -34,6 +48,7 @@ export async function POST(req: Request) {
     plataforma: corta(b?.plataforma, 16),
     versao: corta(b?.versao, 16),
     origem: corta(b?.origem, 32),
+    extra: utm ? { utm } : null,
   });
   return NextResponse.json({ ok: true });
 }
