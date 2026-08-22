@@ -212,6 +212,26 @@ export function LandingDownload({ variante }: { variante?: string }) {
         </div>
       </section>
 
+      {/* 5b. DEPOIMENTOS (os mesmos do onboarding do app) */}
+      <section className="px-5 py-14 sm:px-8">
+        <div className="mx-auto max-w-4xl text-center">
+          <h2 className="font-serif text-3xl font-bold">Amado por motoristas de todo o Brasil</h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            {[
+              { quote: "Descobri o problema do meu carro em minutos. Finalmente sei o que pedir na oficina.", name: "Marina S." },
+              { quote: "O diagnóstico me salvou de pagar um orçamento absurdo. Apontou o problema e o preço justo.", name: "Carlos E." },
+              { quote: "Os lembretes de revisão mudaram tudo. Não perco mais nenhuma manutenção.", name: "Juliana M." },
+            ].map((d) => (
+              <figure key={d.name} className="flex flex-col rounded-2xl bg-graphite-800 p-5 text-left ring-1 ring-white/5">
+                <span aria-hidden className="text-sm tracking-wider text-amber">★★★★★</span>
+                <blockquote className="mt-2 flex-1 text-sm leading-relaxed text-cream/80">“{d.quote}”</blockquote>
+                <figcaption className="mt-3 text-xs font-semibold text-cream/50">{d.name}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* 6. REVERSÃO DE RISCO + CTA FINAL */}
       <section className="bg-graphite-800/60 px-5 py-14 sm:px-8">
         <div className="mx-auto max-w-2xl text-center">
