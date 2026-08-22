@@ -8,7 +8,7 @@ import { LIMITS } from "@/lib/app/premium";
 import { carName, formatMonths, minPurchaseDate, monthsSinceDate, vehicleLabel } from "@/lib/app/content";
 import { useNav, type View } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { Card, Icon, inputCls, Sheet, useContent } from "../ui";
+import { Card, DateField, Icon, inputCls, Sheet, useContent } from "../ui";
 import { AvatarPickerSheet } from "../AvatarPicker";
 import { HealthPill } from "./Cars";
 
@@ -175,12 +175,11 @@ function PurchaseLine() {
       )}
       <Sheet open={open} onClose={() => setOpen(false)}>
         <h2 className="font-display text-xl font-bold text-cream">{c.revisions.setPurchase}</h2>
-        <input
-          type="date"
+        <DateField
           value={v.purchaseDate ?? ""}
           min={minPurchaseDate(v.year)}
           max={new Date().toISOString().slice(0, 10)}
-          onChange={(e) => { const val = e.target.value; if (val && val < minPurchaseDate(v.year)) return; updateVehicle(v.id, { purchaseDate: val || undefined }); }}
+          onCommit={(val) => updateVehicle(v.id, { purchaseDate: val || undefined })}
           className={`mt-4 ${inputCls}`}
         />
         <Button size="lg" className="mt-4 w-full" onClick={() => setOpen(false)}>{c.common.save}</Button>

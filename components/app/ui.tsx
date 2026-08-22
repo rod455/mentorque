@@ -354,6 +354,49 @@ export function Card({ children, className }: { children: ReactNode; className?:
   return <div className={["rounded-2xl bg-graphite-800 p-4 ring-1 ring-white/5", className].filter(Boolean).join(" ")}>{children}</div>;
 }
 
+// Campo de data que tolera digitação parcial.
+//
+// O <input type="date"> reporta valores intermediários enquanto a pessoa
+// digita (ano "2025" passa por 0002, 0020, 0202...). O padrão antigo validava
+// a CADA tecla e, ao rejeitar um intermediário, o React forçava o campo de
+// volta ao valor guardado — apagando os segmentos já digitados. Aqui o campo
+// segue a digitação livremente (rascunho local); um valor válido é entregue
+// na hora, e um inválido só é corrigido quando a pessoa SAI do campo, preso
+// ao limite mais próximo (min/max). Sair da tela no meio da digitação
+// descarta o rascunho e mantém o último valor válido.
+export function DateField({ value, min, max, onCommit, className }: {
+  value: string;
+  min?: string;
+  max?: string;
+  onCommit: (val: string) => void;
+  className?: string;
+}) {
+  const [prev, setPrev] = useState(value);
+  const [draft, setDraft] = useState(value);
+  if (prev !== value) { setPrev(value); setDraft(value); } // mudou por fora (outro carro, restauração)
+  const dentro = (val: string) => !val || ((!min || val >= min) && (!max || val <= max));
+  return (
+    <input
+      type="date"
+      value={draft}
+      min={min}
+      max={max}
+      className={className}
+      onChange={(e) => {
+        const val = e.target.value;
+        setDraft(val);
+        if (dentro(val)) onCommit(val);
+      }}
+      onBlur={() => {
+        if (dentro(draft)) return;
+        const preso = min && draft < min ? min : max ?? draft;
+        setDraft(preso);
+        onCommit(preso);
+      }}
+    />
+  );
+}
+
 // Capa de aula com fallback para o site.
 //
 // No app da loja as capas moram DENTRO do binário: capa adicionada depois do

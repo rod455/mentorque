@@ -8,7 +8,7 @@ import { computeUpcoming, type UpcomingItem } from "@/lib/app/health";
 import { carName, formatMonths, minPurchaseDate, monthsSinceDate } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, Icon, inputCls, PremiumBadge, SectionTitle, Sheet, UpgradeBanner, useContent } from "../ui";
+import { AppHeader, Card, DateField, Icon, inputCls, PremiumBadge, SectionTitle, Sheet, UpgradeBanner, useContent } from "../ui";
 
 const statusTone: Record<string, string> = { overdue: "text-coral", soon: "text-amber", ok: "text-teal", unknown: "text-cream/50" };
 
@@ -234,12 +234,11 @@ export function RevisionsScreen() {
       {/* Set purchase date */}
       <Sheet open={dateSheet} onClose={() => setDateSheet(false)}>
         <h2 className="font-display text-xl font-bold text-cream">{r.setPurchase}</h2>
-        <input
-          type="date"
+        <DateField
           value={v.purchaseDate ?? ""}
           min={minPurchaseDate(v.year)}
           max={new Date().toISOString().slice(0, 10)}
-          onChange={(e) => { const val = e.target.value; if (val && val < minPurchaseDate(v.year)) return; updateVehicle(v.id, { purchaseDate: val || undefined }); }}
+          onCommit={(val) => updateVehicle(v.id, { purchaseDate: val || undefined })}
           className={`mt-4 ${inputCls}`}
         />
         <Button size="lg" className="mt-4 w-full" onClick={() => setDateSheet(false)}>{c.common.save}</Button>

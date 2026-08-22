@@ -6,7 +6,7 @@ import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { formatBRL, formatMonths, minPurchaseDate, monthsSinceDate, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
+import { AppHeader, Card, DateField, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
 
 export function CarSettingsScreen() {
   const c = useContent();
@@ -91,12 +91,11 @@ export function CarSettingsScreen() {
           <span className="mb-1.5 flex items-center gap-2 text-xs uppercase tracking-wide text-cream/45">
             <Icon name="calendar" className="h-3.5 w-3.5" /> {cs.purchaseDate}
           </span>
-          <input
-            type="date"
+          <DateField
             value={v.purchaseDate ?? ""}
             min={minPurchaseDate(v.year)}
             max={new Date().toISOString().slice(0, 10)}
-            onChange={(e) => { const val = e.target.value; if (val && val < minPurchaseDate(v.year)) return; updateVehicle(v.id, { purchaseDate: val || undefined }); }}
+            onCommit={(val) => updateVehicle(v.id, { purchaseDate: val || undefined })}
             className={inputCls}
           />
         </label>

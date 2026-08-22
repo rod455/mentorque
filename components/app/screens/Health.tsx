@@ -10,7 +10,7 @@ import { carName, formatBRL, minPurchaseDate, vehicleLabel } from "@/lib/app/con
 import type { SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, Icon, inputCls, LockedCard, PremiumBadge, SectionTitle, SeverityDot, useContent } from "../ui";
+import { AppHeader, Card, DateField, Icon, inputCls, LockedCard, PremiumBadge, SectionTitle, SeverityDot, useContent } from "../ui";
 import { SafetyPanel } from "../SafetyPanel";
 
 const SYSTEM_TO_SERVICE: Record<SystemKey, string> = {
@@ -398,12 +398,11 @@ export function HealthQuizScreen() {
           <p className="mb-2 font-display text-[15px] text-cream">
             <span className="text-amber">1.</span> {c.revisions.setPurchase}
           </p>
-          <input
-            type="date"
+          <DateField
             value={purchase}
             min={minPurchaseDate(v.year)}
             max={new Date().toISOString().slice(0, 10)}
-            onChange={(e) => { const val = e.target.value; if (val && val < minPurchaseDate(v.year)) return; setPurchase(val); }}
+            onCommit={setPurchase}
             className={`${inputCls} ${purchase ? "ring-amber/40" : ""}`}
           />
           <p className="mt-1.5 text-xs text-cream/45">{c.carSettings.purchaseHint}</p>
