@@ -16,7 +16,7 @@ https://n8n.vocaboost.com.br/workflow/WT6FZR4cIjUmtBw9), a cada hora.
 - Um mesmo problema não repete aviso por 6 horas.
 - Quando tudo volta ao normal depois de uma falha, manda um aviso de
   recuperação e zera o estado.
-- Canal: e-mail (Gmail, credencial "Gmail Sentinela") para
+- Canal: e-mail (Gmail, credencial "Gmail account" (Gmail OAuth2)) para
   rodrigomoraessilva455@gmail.com.
 
 ## Aprendizados
