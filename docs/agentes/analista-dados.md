@@ -14,14 +14,24 @@ leem. Não analisa, não opina, não notifica o Rodrigo; entrega matéria-prima.
    permissão; falta colar o JSON no n8n). A API do Play devolve só os últimos
    7 dias, por isso a coleta diária importa.
 
+2. **Retrato diário** (diário, 6h)
+   https://n8n.vocaboost.com.br/workflow/3iP9vS2KQJ6E9cHD
+   GET /api/dados + GET /api/avaliacoes → monta docs/dados/retrato.md e
+   commita na main via API do GitHub (credencial Bearer, PAT restrito a
+   Contents deste repositório). É a fonte primária do Diretor, do CRO e do
+   ASO. Primeiro commit real: ed50a29.
+
 ## Fontes que ele ainda vai assumir
 
-- Retrato diário consolidado: GET /api/dados (funil, assinaturas, cadastros,
-  erros) publicado num lugar que o Diretor leia sem depender de conector.
-- Stripe (receita), YouTube (views), Search Console (SEO): fáceis, com as
-  credenciais do n8n.
+- Avaliações do Google Play: falta só colar o JSON da conta de serviço como
+  credencial no n8n (o braço do workflow já está desenhado).
+- Stripe (receita real e MRR): precisa de chave restrita de leitura.
+- YouTube (views dos vídeos): precisa de credencial OAuth do YouTube no n8n.
+- Search Console (buscas que trazem o site): a credencial Google do n8n já
+  tem o escopo autorizado; é só construir o workflow.
 - Mídia paga (Google Ads e Meta): entra junto com as campanhas; exige token
-  de leitura de cada plataforma e captura de UTM no funil.
+  de leitura de cada plataforma. A captura de UTM no funil já está pronta
+  do lado do site.
 
 ## Aprendizados
 
