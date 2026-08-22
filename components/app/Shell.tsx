@@ -29,6 +29,7 @@ import { ProfileScreen, SubscribeScreen, CheckoutScreen } from "./screens/Profil
 import { GamificationScreen, AchievementsScreen } from "./screens/Gamification";
 import { AuthScreen } from "./screens/Auth";
 import { funil } from "@/lib/app/funil";
+import { vigiarErros } from "@/lib/app/erros";
 import BielaMascote from "@/components/BielaMascote";
 
 export function Shell() {
@@ -72,7 +73,7 @@ function Router() {
   // uma conta RECÉM-criada (created_at nos últimos 15 min — cobre e-mail e
   // login social, sem contar logins de conta antiga). O marcador local garante
   // que cada aparelho relata o cadastro uma vez só.
-  useEffect(() => { funil("abriu_app", { umaVez: true }); }, []);
+  useEffect(() => { funil("abriu_app", { umaVez: true }); vigiarErros(); }, []);
   useEffect(() => {
     if (!user) return;
     try { if (window.localStorage.getItem("mq-cadastro-ev")) return; } catch { /* segue */ }

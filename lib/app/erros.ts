@@ -1,0 +1,57 @@
+"use client";
+
+// Coletor de erros do app (fire-and-forget, nunca bloqueia nem quebra a UI).
+//
+// A Sentinela vigia o Mentorque por fora; isto aqui é a visão de DENTRO: um
+// erro de JavaScript ou uma promessa rejeitada no aparelho de um usuário vira
+// uma linha em public.app_erros, que o agente de QA lê para achar tela
+// quebrada antes de virar avaliação de uma estrela.
+//
+// Sem fornecedor externo de propósito: o app é quase todo WebView, então o
+// window.onerror enxerga o que importa. Crash NATIVO (raro, na casca do
+// Capacitor) não passa por aqui — esse aparece nos Android vitals e no App
+// Store Connect. Se um dia precisarmos de mais, a troca por Sentry é isolada
+// neste arquivo.
+import { apiPost } from "./apiBase";
+import { APP_VERSION } from "./content";
+import { isNativeApp, nativePlatform } from "./wrapper";
+
+// Tetos que protegem o servidor de um aparelho em loop de erro: no máximo 10
+// envios por sessão e nunca a mesma mensagem duas vezes.
+const MAX_POR_SESSAO = 10;
+let enviados = 0;
+const vistos = new Set<string>();
+let ligado = false;
+
+function reportar(tipo: "erro" | "promessa", mensagem: string, stack?: string, origem?: string): void {
+  try {
+    if (!mensagem || enviados >= MAX_POR_SESSAO) return;
+    const chave = mensagem.slice(0, 120);
+    if (vistos.has(chave)) return;
+    vistos.add(chave);
+    enviados += 1;
+    void apiPost("/api/erros", {
+      tipo,
+      mensagem: mensagem.slice(0, 500),
+      stack: (stack ?? "").slice(0, 2000),
+      origem: (origem ?? (typeof location !== "undefined" ? location.pathname : "")).slice(0, 200),
+      plataforma: isNativeApp() ? nativePlatform() ?? "nativo" : "web",
+      versao: APP_VERSION,
+    }).catch(() => undefined);
+  } catch { /* o coletor jamais pode causar o que coleta */ }
+}
+
+/** Liga os ouvintes globais de erro. Chamar uma vez, na montagem do app. */
+export function vigiarErros(): void {
+  if (ligado || typeof window === "undefined") return;
+  ligado = true;
+  window.addEventListener("error", (e) => {
+    const err = (e as ErrorEvent).error as { stack?: string } | undefined;
+    const onde = (e as ErrorEvent).filename ? `${(e as ErrorEvent).filename}:${(e as ErrorEvent).lineno}` : undefined;
+    reportar("erro", (e as ErrorEvent).message ?? "erro sem mensagem", err?.stack, onde);
+  });
+  window.addEventListener("unhandledrejection", (e) => {
+    const r = (e as PromiseRejectionEvent).reason as { message?: string; stack?: string } | undefined;
+    reportar("promessa", r?.message ?? String((e as PromiseRejectionEvent).reason ?? "rejeição sem motivo"), r?.stack);
+  });
+}
