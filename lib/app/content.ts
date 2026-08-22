@@ -2617,6 +2617,11 @@ export function getContent(locale: Locale) {
       // metade dos usuários para uma loja que o aparelho deles não tem.
       irParaLojaPlay: T("Avaliar na Google Play", "Review on Google Play"),
       irParaLojaGenerico: T("Avaliar o app", "Rate the app"),
+      // Desktop: sem loja no aparelho, mas a pessoa TEM conta numa das duas —
+      // ela escolhe qual avaliar pelo navegador.
+      escolhaLoja: T("Avaliar o app:", "Rate the app:"),
+      lojaAndroid: T("Android", "Android"),
+      lojaIphone: T("iPhone", "iPhone"),
 
       // Nota 1 a 3
       contaTitulo: T("O que deu errado?", "What went wrong?"),

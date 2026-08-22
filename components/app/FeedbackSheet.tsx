@@ -6,6 +6,7 @@ import { useI18n } from "@/lib/i18n";
 import { usePrototype } from "@/lib/app/store";
 import { EVENTO, type MotivoFeedback } from "@/lib/app/feedbackPrompt";
 import { effectiveStorePlatform, isNativeApp, nativePlatform, openExternal, storeListingUrl } from "@/lib/app/wrapper";
+import { APP_STORE_REVIEW_URL, PLAY_STORE_REVIEW_URL } from "@/lib/stores";
 import { APP_VERSION } from "@/lib/app/content";
 import { Button } from "@/components/ui/Button";
 import { Sheet, inputCls, useContent } from "./ui";
@@ -56,6 +57,14 @@ export function FeedbackSheet() {
   const paraALoja = () => {
     patchFeedback({ foiParaLoja: true });
     openExternal(storeListingUrl());
+    setAberta(false);
+  };
+
+  // Desktop: o aparelho não tem loja, mas a pessoa tem conta numa das duas —
+  // ela escolhe qual avaliar pelo navegador.
+  const paraLojaEscolhida = (url: string) => {
+    patchFeedback({ foiParaLoja: true });
+    openExternal(url);
     setAberta(false);
   };
 
@@ -153,16 +162,35 @@ export function FeedbackSheet() {
           )}
           {/* A loja continua ao alcance de quem deu nota baixa. Esconder aqui é
               exatamente o filtro que a Apple trata como manipulação da nota. */}
-          <button onClick={paraALoja} className="mx-auto mt-4 block text-xs text-cream/40 underline hover:text-cream/70">
-            {naLoja ? f.lojaMesmoAssim : f.irParaLojaGenerico}
-          </button>
+          {naLoja ? (
+            <button onClick={paraALoja} className="mx-auto mt-4 block text-xs text-cream/40 underline hover:text-cream/70">
+              {f.lojaMesmoAssim}
+            </button>
+          ) : (
+            <p className="mt-4 text-center text-xs text-cream/40">
+              {f.lojaMesmoAssim}{" "}
+              <button onClick={() => paraLojaEscolhida(PLAY_STORE_REVIEW_URL)} className="underline hover:text-cream/70">{f.lojaAndroid}</button>
+              {" · "}
+              <button onClick={() => paraLojaEscolhida(APP_STORE_REVIEW_URL)} className="underline hover:text-cream/70">{f.lojaIphone}</button>
+            </p>
+          )}
         </div>
       ) : (
         <div className="pt-1 text-center">
           <h2 className="px-10 font-serif text-xl font-bold text-cream">{f.obrigadoTitulo}</h2>
           <p className="mx-auto mt-1.5 max-w-xs text-sm text-cream/55">{f.obrigadoCorpo}</p>
           {/* Botão, nunca redirecionamento: a pessoa decide se vai. */}
-          <Button className="mt-5 w-full" onClick={paraALoja}>{rotuloLoja}</Button>
+          {naLoja ? (
+            <Button className="mt-5 w-full" onClick={paraALoja}>{rotuloLoja}</Button>
+          ) : (
+            // Desktop: as duas lojas na mesma linha — quem tem Android avalia
+            // na Play, quem tem iPhone na App Store, pela conta no navegador.
+            <div className="mt-5 flex items-center gap-2">
+              <span className="shrink-0 text-sm text-cream/70">{f.escolhaLoja}</span>
+              <Button className="min-w-0 flex-1" onClick={() => paraLojaEscolhida(PLAY_STORE_REVIEW_URL)}>{f.lojaAndroid}</Button>
+              <Button className="min-w-0 flex-1" onClick={() => paraLojaEscolhida(APP_STORE_REVIEW_URL)}>{f.lojaIphone}</Button>
+            </div>
+          )}
           <button onClick={() => setAberta(false)} className="mt-3 text-sm text-cream/45 hover:text-cream/70">
             {f.depois}
           </button>
