@@ -67,8 +67,10 @@ nos nós do braço correspondente (a API não permite anexar por fora):
       ATENÇÃO: o modo live mostra 0 assinaturas ativas, mas a tabela
       subscriptions do banco mostra 1 anual ativa; provável assinatura de
       teste no banco. Esclarecer com o Rodrigo.
-- [ ] YouTube: credencial "YouTube OAuth2 API" (mesmo fluxo de 2 cliques do
-      Gmail, cliente OAuth do projeto Vocaboost). Nos 3 nós do YouTube.
+- [x] YouTube: pronto e testado em 2026-08-23. Cliente OAuth novo
+      "Mentorque N8N" (projeto Mentorque, app publicado em produção),
+      conta mentorque.ar. Coleta os 10 últimos vídeos; views zeradas
+      porque os vídeos ainda estão privados/não listados.
 - [x] RevenueCat: pronto e testado em 2026-08-23 (chave secreta v2). Dado
       real: 22 usuários ativos, 22 clientes novos, 0 assinaturas ativas.
 - [x] Vercel: pronto e testado em 2026-08-23 (token de acesso). Dado real:
