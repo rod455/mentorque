@@ -56,12 +56,13 @@ leem. Não analisa, não opina, não notifica o Rodrigo; entrega matéria-prima.
 ## Downloads reais das lojas (metade construída)
 
 Para fechar o primeiro degrau do funil (instalação → abertura → cadastro):
-- Apple: braço construído no workflow de métricas (fonte
-  app_store_downloads, Vendor Number 94182924, relatório diário SUMMARY
-  que EXCLUI TestFlight). Pendente: chave .p8 nova com papel "Vendas e
-  relatórios" (a chave Developer não alcança o endpoint; a Apple recusou
-  com "API key does not allow this request"). Trocar a credencial e o
-  Key ID no nó "App Store: token vendas".
+- Apple: PRONTO e testado em 2026-08-23 (fonte app_store_downloads,
+  Vendor Number 94182924, relatório diário SUMMARY que exclui TestFlight).
+  Chave única PS9LWJKWK6 com papéis Developer + Sales + Access to Reports
+  (a Apple permite combinar papéis numa chave; não precisa de Admin).
+  Primeiro dado: 0 downloads orgânicos em 21/08, ou seja, os usuários
+  ativos até aqui são todos de teste. Pendência de higiene: revogar a
+  chave Developer antiga (U25N5Y86SS) no App Store Connect.
 - Google: aguardando o Play Console gerar os primeiros relatórios
   estatísticos do app (em 23/08 ainda mostrava "Não há relatórios
   mensais disponíveis"); quando existirem, copiar o URI do Cloud Storage

@@ -3,6 +3,18 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-23 · Downloads reais da Apple no ar (e um insight)
+- Braço app_store_downloads pronto e testado: relatório diário de vendas
+  da Apple (Vendor 94182924), que EXCLUI TestFlight, baixado, descompactado
+  e interpretado. Chave única PS9LWJKWK6 (Developer + Sales + Access to
+  Reports; aprendizado: a Apple combina papéis numa chave só).
+- Primeiro dado: 21/08 teve 0 downloads orgânicos na App Store. Confirma
+  que os 22 "usuários ativos" do RevenueCat são aparelhos de teste. A
+  aquisição de verdade começa do zero, e agora é medida do jeito certo.
+- Play downloads: aguardando o console gerar os primeiros relatórios.
+- Aprendizado técnico: onError não sobrevive ao addNode da API do n8n;
+  reaplicar com setNodeSettings depois de adicionar nós.
+
 ## 2026-08-23 · Visão de empresa completa + vigia de anomalias
 - Eventos de primeira ação de valor no app (abriu_trilha, cadastrou_carro):
   ativação real passa a ser medida; web desde já, lojas no próximo build.
