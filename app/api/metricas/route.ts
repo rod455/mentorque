@@ -15,6 +15,9 @@ export const runtime = "nodejs";
 const FONTES = new Set([
   "search_console", "stripe", "youtube", "meta_ads", "google_ads",
   "revenuecat", "vercel", "admob", "app_store_connect", "play_console",
+  // Downloads reais das lojas (relatório de vendas da Apple exclui
+  // TestFlight; o do Play virá do export no Cloud Storage).
+  "app_store_downloads", "play_downloads",
 ]);
 const MAX_DADOS = 20000; // bytes de JSON por pacote
 

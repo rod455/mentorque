@@ -14,7 +14,8 @@ create table if not exists public.metricas_diarias (
   dia          date not null,
   fonte        text not null check (fonte in (
     'search_console', 'stripe', 'youtube', 'meta_ads', 'google_ads',
-    'revenuecat', 'vercel', 'admob', 'app_store_connect', 'play_console'
+    'revenuecat', 'vercel', 'admob', 'app_store_connect', 'play_console',
+    'app_store_downloads', 'play_downloads'
   )),
   dados        jsonb not null default '{}'::jsonb,
   coletado_em  timestamptz not null default now(),
