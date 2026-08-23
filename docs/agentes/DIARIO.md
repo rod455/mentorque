@@ -3,6 +3,24 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-23 · A receita de anúncio do Mentorque não era do Mentorque
+- O dono desconfiou dos números do AdMob e estava certo. A conta é
+  compartilhada com os outros apps dele e o coletor pedia o relatório da
+  conta inteira, sem filtro de app.
+- Provado sem margem: rodando sem filtro, a conta devolve exatamente 2 apps
+  com movimento nos últimos 8 dias, "Concurseiro: Concurso Público"
+  (US$ 0,91 / 328 impressões) e "Bolão na Copa" (US$ 0,74 / 81 impressões).
+  A soma bate com o US$ 1,64 que estava sendo atribuído ao Mentorque.
+- **Número real do Mentorque: zero impressão e zero ganho.** O app existe
+  com anúncio no código, mas ninguém viu anúncio nenhum em 8 dias.
+- Corrigido com filtro por app no pedido e conferência no normalizador (ele
+  descarta e conta linha de outro app em vez de somar calado).
+- Cuidado registrado na skill: filtro que não casa com nada é idêntico a
+  "não teve movimento". Só dá para afirmar zero depois de rodar uma vez sem
+  filtro e conferir que o formato do identificador bate.
+- FICA EM ABERTO: Stripe e YouTube são chamados da conta inteira também.
+  Mesma classe de risco, ainda não auditados.
+
 ## 2026-08-23 · O build do app estava quebrado e ninguém sabia
 - Ao preparar o envio das lojas, `npm run build:native` falhou. Causa:
   export estático exige página renderizável sem servidor, e /landing (lê

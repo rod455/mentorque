@@ -151,3 +151,22 @@ rodada seguinte. Recomendação sem número previsto não aprende nada.
   oficial de GENTE REAL: contas do banco + régua de uso do funil. O pacote
   revenuecat carrega uma nota se rotulando como bruto; usar só como ordem
   de grandeza de instalação, nunca como usuários em análise.
+- 2026-08-23: a conta do AdMob é COMPARTILHADA com outros apps do dono, e o
+  coletor pedia o relatório da conta inteira. Tudo que apareceu como receita
+  de anúncio do Mentorque até 23/08 era, na verdade, de "Concurseiro" e
+  "Bolão na Copa". Corrigido com filtro por app
+  (ca-app-pub-9316035916536420~8094986125) no pedido e conferência no
+  normalizador. **Número real do Mentorque: zero. Zero impressão, zero
+  ganho, em 8 dias.**
+- REGRA GERAL que sai daí, e que já valeu duas vezes (RevenueCat e AdMob):
+  toda conta que o dono usa em mais de um produto entrega o TOTAL DELE por
+  padrão, não o do Mentorque. Antes de acreditar em qualquer número de
+  fonte externa, pergunte "isto está filtrado para o Mentorque?" e prove.
+  Ainda não auditados sob essa régua: Stripe (a chamada é da conta toda) e
+  YouTube (canal do `mine=true`). Se for usar esses números em análise,
+  confira antes ou registre a dúvida em vez de afirmar.
+- Truque para não se enganar sozinho: filtro que não casa com nada é
+  IDÊNTICO a "não teve movimento". Sempre que um filtro novo devolver zero,
+  rode uma vez SEM filtro e olhe os identificadores que voltam, para provar
+  que o formato bate. Foi assim que se confirmou que o zero do Mentorque é
+  zero de verdade, e não filtro errado.
