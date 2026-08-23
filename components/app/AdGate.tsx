@@ -152,8 +152,25 @@ export function AdOverlay({ kind, onDone, onCancel }: { kind: "interstitial" | "
 //
 // No Android o AdMob permanece, com a política de adPolicy.ts (carência,
 // intervalo e teto diário) — lá a pessoa já instalou o app.
+// Chave geral dos anúncios. DESLIGADA por decisão do dono (23/08/2026).
+//
+// Tudo do lado do AdMob está pronto e conferido contra a API: app APPROVED e
+// vinculado à ficha da Play, os dois blocos existem com o formato certo e o id
+// do AndroidManifest bate com o do painel. O que falta é vontade de mostrar
+// anúncio, não configuração — e enquanto o app é novo e o foco é conversão
+// para Premium, anúncio só atrapalha a primeira impressão.
+//
+// Com ela desligada NADA de anúncio acontece: sem SDK, sem pedido de
+// consentimento na abertura, e nem o house ad do Premium interrompe alguém.
+//
+// PARA LIGAR: NEXT_PUBLIC_ADS=1 no ambiente do build e gerar um build novo.
+// O valor entra embutido no binário, então trocar a variável sem gerar build
+// não muda nada no aparelho de ninguém. No Codemagic, a variável vai no grupo
+// usado pelo workflow `lojas`.
+const ADS_LIGADOS = (process.env.NEXT_PUBLIC_ADS ?? "").trim() === "1";
+
 export function adsEnabled(): boolean {
-  return isNativeApp() && detectPlatform() === "android";
+  return ADS_LIGADOS && isNativeApp() && detectPlatform() === "android";
 }
 
 // Gate por tela: devolve se o anúncio ainda precisa aparecer (só free).

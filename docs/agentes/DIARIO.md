@@ -3,6 +3,22 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-23 · Anúncios: tudo configurado e conferido, e DESLIGADOS
+- Decisão do dono depois da auditoria: configurar tudo, não ligar agora.
+  Enquanto o app é novo e o foco é conversão para Premium, anúncio atrapalha
+  a primeira impressão.
+- Interruptor: NEXT_PUBLIC_ADS, desligado por padrão. Com ele desligado NADA
+  de anúncio acontece: sem SDK, sem pedido de consentimento na abertura, e
+  nem o anúncio interno do Premium interrompe alguém. Para ligar, é a
+  variável no ambiente do build MAIS um build novo, porque o valor entra
+  embutido no binário.
+- Agora são dois interruptores desse tipo, os dois documentados no
+  .env.example: NEXT_PUBLIC_ADS e NEXT_PUBLIC_APPLE_WEB.
+- Estado do AdMob confirmado pelo painel do dono, igual ao que a API disse:
+  exatamente 2 blocos, "Intersticial" (6890695608) e "Intersticial premiado"
+  (3313432733), com os mesmos códigos que estão no código. Nada a mexer no
+  painel quando for ligar.
+
 ## 2026-08-23 · Auditoria dos anúncios: o caminho em uso está certo, o outro não
 - Pedido do dono: zero é esperado (app novo, sem gente), o que interessa é
   se o anúncio FUNCIONARIA. Conferido contra a API do AdMob, não por leitura
