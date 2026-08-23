@@ -33,6 +33,23 @@ export async function coletarDadosOperacao() {
   ]);
   const { data: experimentos } = await admin.from("experimentos_resultados").select("*").limit(120);
 
+  // A quebra do funil (28 dias, pessoas distintas): quantos por cento passam
+  // de cada etapa para a seguinte, e onde está a maior perda. É o mapa de
+  // prioridade dos testes A/B do CRO.
+  const { data: etapas28 } = await admin.from("funil_etapas_28d").select("*");
+  const porEtapa = new Map((etapas28 ?? []).map((e) => [e.evento, Number(e.pessoas)]));
+  const CADEIA = ["abriu_app", "cadastro", "ativacao", "viu_paywall", "iniciou_checkout", "assinou"] as const;
+  const quebraFunil = CADEIA.slice(0, -1).map((de, i) => {
+    const para = CADEIA[i + 1];
+    const antes = porEtapa.get(de) ?? 0;
+    const depois = porEtapa.get(para) ?? 0;
+    return {
+      de, para, antes, depois,
+      taxa: antes > 0 ? Math.round((depois / antes) * 1000) / 10 : null,
+      perdidos: Math.max(0, antes - depois),
+    };
+  });
+
   const ativas = (subs ?? []).filter((s) => s.status === "active");
 
   const cadastrosPorDia: Record<string, number> = {};
@@ -86,6 +103,8 @@ export async function coletarDadosOperacao() {
     // Testes A/B em curso: eventos e pessoas por experimento e variante
     // (caderno em docs/agentes/experimentos.md).
     experimentos: experimentos ?? [],
+    // Onde o funil quebra (28 dias): taxa de passagem etapa a etapa.
+    quebraFunil,
     // Fontes externas coletadas pelo Analista (metricas_diarias): para cada
     // fonte, o pacote mais recente e a série dos últimos 10 dias.
     fontesExternas: porFonte,

@@ -171,6 +171,16 @@ export default async function Painel({ searchParams }: { searchParams: { chave?:
     { rotulo: "LTV", valor: null, espera: "primeira leitura real na renovação da coorte anual (mês 12)", nota: "coortes de assinantes já registram" },
   ];
 
+  // Onde o funil quebra: a pior taxa de passagem (com gente na etapa de
+  // origem) ganha destaque; é ali que o próximo teste A/B deve mirar.
+  const NOME_ETAPA: Record<string, string> = {
+    abriu_app: "Abriram o app", cadastro: "Criaram conta", ativacao: "Primeira ação de valor",
+    viu_paywall: "Viram o paywall", iniciou_checkout: "Iniciaram checkout", assinou: "Assinaram",
+  };
+  const quebras = (dados.quebraFunil as any[]) ?? [];
+  const comVolume = quebras.filter((q) => q.antes > 0 && q.taxa != null);
+  const piorTaxa = comVolume.length ? Math.min(...comVolume.map((q) => q.taxa)) : null;
+
   const geradoEm = new Intl.DateTimeFormat("pt-BR", { timeZone: "America/Sao_Paulo", dateStyle: "short", timeStyle: "short" }).format(new Date());
 
   return (
@@ -204,6 +214,35 @@ export default async function Painel({ searchParams }: { searchParams: { chave?:
                 {m.nota && <p className="mt-0.5 text-[11px] text-cream/40">{m.nota}</p>}
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-8">
+          <h2 className="font-display text-sm font-semibold uppercase tracking-widest text-amber">Onde o funil quebra (28 dias)</h2>
+          <div className="mt-3 rounded-2xl bg-graphite-800 p-4 ring-1 ring-white/10">
+            {comVolume.length === 0 ? (
+              <p className="text-sm text-cream/50">Sem volume ainda: a série de eventos nasceu em 23/08 (web) e os apps das lojas entram no próximo build. As quebras aparecem aqui sozinhas.</p>
+            ) : (
+              <div className="space-y-2">
+                {quebras.map((q) => {
+                  const pior = q.taxa != null && q.taxa === piorTaxa && q.antes > 0;
+                  return (
+                    <div key={q.de} className="flex items-center gap-3 text-sm">
+                      <span className="w-44 shrink-0 text-cream/75">{NOME_ETAPA[q.de]} → {NOME_ETAPA[q.para]}</span>
+                      <div className="h-2 flex-1 overflow-hidden rounded-full bg-graphite-700">
+                        {q.taxa != null && (
+                          <div className="h-full rounded-full" style={{ width: `${Math.min(100, q.taxa)}%`, background: pior ? "#C24D26" : "#C8841F" }} />
+                        )}
+                      </div>
+                      <span className="w-28 shrink-0 text-right tabular-nums text-cream/80">
+                        {q.taxa != null ? `${q.taxa}%` : "sem gente"} {pior && <span className="ml-1 rounded-full bg-coral/20 px-2 py-0.5 text-[10px] uppercase tracking-wide text-cream">maior quebra</span>}
+                      </span>
+                    </div>
+                  );
+                })}
+                <p className="pt-1 text-xs text-cream/45">Pessoas distintas por etapa nos últimos 28 dias. A pior passagem é o alvo natural do próximo teste A/B (propostas no caderno de experimentos).</p>
+              </div>
+            )}
           </div>
         </section>
 

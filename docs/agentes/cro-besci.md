@@ -33,8 +33,11 @@ ouvido no usuário, não só nos números.
 5. **UMA aposta nova**, registrada no caderno ANTES de implementar:
    hipótese, métrica, princípio. Baixo risco (texto, ordem, ênfase)
    implementa direto na main com tipos e build passando. Jornada ou copy
-   em dúvida honesta entre duas versões: teste A/B 50/50 com a infra de
-   variantes (abaixo). Grande ou arriscado: vira recomendação no artifact.
+   em dúvida honesta entre duas versões: **PROPOR teste A/B** mirando a
+   maior quebra do funil (dados.quebraFunil / painel): registrar no caderno
+   como PROPOSTO com a tese BeSci explicada para leigos e levar no artifact.
+   O TESTE SÓ LIGA COM APROVAÇÃO DO DONO; sem aprovação, fica proposto.
+   Grande ou arriscado: vira recomendação no artifact.
 6. Artifact "Conversão da semana": vereditos fechados, o que mudou no mapa,
    a aposta nova e no máximo 3 recomendações. DIARIO, commit, push.
 
