@@ -3,6 +3,17 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-23 · Quebra do funil visível + A/B com aprovação do dono
+- Painel ganhou a seção "Onde o funil quebra" (28 dias, pessoas distintas
+  por etapa, pior passagem destacada): é o mapa de prioridade dos testes.
+- Fluxo de A/B mudou por decisão do dono: o CRO PROPÕE (estado PROPOSTO no
+  caderno, com a tese BeSci explicada para leigos) e SÓ ativa com aprovação
+  do Rodrigo. Manual, caderno e rotina das sextas atualizados.
+- Incidente e conserto: ao trancar as rotas de agregados, a Sentinela levou
+  401 no /api/funil e alertou CERTO (dupla homologação funcionou de ponta a
+  ponta). Ela aprendeu a chave, foi republicada e mandou o "voltou ao
+  normal". Aprendizado: toda rota nova trancada exige atualizar os vigias.
+
 ## 2026-08-23 · Painel /painel + agregados trancados por chave
 - Painel da operação em www.mentorque.com.br/painel (renderizado no
   servidor, portão por ?chave=): blocos Marketing, Engajamento e Vendas,
