@@ -11,7 +11,7 @@ import { resizeImage } from "@/lib/app/image";
 import type { ServicePart, ServiceRecord, SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Autocomplete, Card, Chip, Icon, inputCls, PremiumBadge, SectionTitle, useContent } from "../ui";
+import { AppHeader, Autocomplete, Card, Chip, Icon, inputCls, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
 
 const hojeISO = () => new Date().toISOString().slice(0, 10);
 
@@ -219,6 +219,15 @@ export function HistoryScreen() {
               ))}
             </div>
           )}
+          {/* Premium depois do valor entregue: quem já registrou dois ou mais
+              serviços tem histórico de verdade, então a promessa (relatório de
+              gastos, histórico sem limite) é concreta. Fica DEPOIS do primeiro
+              serviço de propósito: é no primeiro que o app pede nota na loja, e
+              dois pedidos no mesmo instante se anulam. Rodada de 23/08. */}
+          {!s.premium && all.length >= 2 && (
+            <UpgradeBanner ctx="pos-servico" text={c.history.upsellHistorico} />
+          )}
+
           <div className="space-y-2">
             {list.map((r) => (
               <button key={r.id} onClick={() => go({ name: "service", id: r.id })} className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/5 hover:ring-white/15">

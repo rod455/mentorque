@@ -741,6 +741,15 @@ export function ContentScreen({ id }: { id: string }) {
           <Button className="mt-5 w-full" onClick={() => { setCelebrate(false); back(); }}>
             {c.learn.courseDoneCta}
           </Button>
+          {/* O pedido de Premium logo depois do valor entregue: a pessoa
+              acabou de concluir a trilha inteira. Momento mapeado na rodada
+              do CRO de 23/08; o ctx vira a origem no funil, então dá para
+              comparar quanto ESTE momento converte contra os demais. */}
+          {!s.premium && (
+            <div className="w-full">
+              <UpgradeBanner ctx="trilha-concluida" text={c.learn.courseDoneUpsell} />
+            </div>
+          )}
         </div>
       </Sheet>
     </div>

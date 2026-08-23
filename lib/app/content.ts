@@ -2413,6 +2413,14 @@ export function getContent(locale: Locale) {
       noCarTitle: T("Calendário vazio", "Empty calendar"),
       noCarBody: T("Cadastre seu carro para ter as informações!", "Add your car to see the info here!"),
       addCar: T("Cadastrar carro", "Add car"),
+      // Convite do Premium para quem JÁ registrou serviços: a promessa
+      // (relatório de gastos) só faz sentido com histórico na mão, e por isso
+      // só aparece do segundo serviço em diante, longe do pedido de nota na
+      // loja que acontece no primeiro. Rodada de 23/08.
+      upsellHistorico: T(
+        "Veja quanto já gastou com o carro e guarde histórico sem limite",
+        "See how much you have spent and keep unlimited history",
+      ),
     },
 
     addService: {
@@ -2531,6 +2539,13 @@ export function getContent(locale: Locale) {
       courseDoneTitle: T("Trilha concluída! 🏁", "Track completed! 🏁"),
       courseDoneBody: T("Você fechou \"{t}\": todas as aulas concluídas. Já sabe mais do que a maioria dos donos de carro.", "You finished \"{t}\": every lesson done. You now know more than most car owners."),
       courseDoneCta: T("Ver outras trilhas", "See other tracks"),
+      // Convite do Premium no momento em que a pessoa ACABOU de concluir uma
+      // trilha: valor sentido primeiro, pedido depois (timing do pedido,
+      // skill besci). Mapeado como oportunidade na rodada de 23/08.
+      courseDoneUpsell: T(
+        "Continue: trilhas completas e sem limite no Premium",
+        "Keep going: full, unlimited tracks with Premium",
+      ),
       recommended: T("Recomendados para o seu carro", "Recommended for your car"),
       all: T("Todos os conteúdos", "All content"),
       empty: T("Nada por aqui ainda.", "Nothing here yet."),
