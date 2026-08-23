@@ -24,8 +24,19 @@ const root = process.cwd();
 // acusaria variáveis faltando mesmo com o arquivo no lugar (no CI passava
 // batido, porque lá elas são variáveis de ambiente de verdade).
 nextEnv.loadEnvConfig(root, false, { info: () => {}, error: console.error });
-const API = path.join(root, "app", "api");
-const API_PARKED = path.join(root, ".api-parked");
+// Rotas que existem SÓ no site e não podem entrar no pacote do app.
+//
+// `output: "export"` exige que TUDO seja renderizável estaticamente, e nenhuma
+// destas é: as rotas de API são route handlers, a LP de campanha lê
+// searchParams no servidor e o painel é `force-dynamic`. Nenhuma delas faz
+// sentido dentro do binário — a WebView serve só /app —, então saem do caminho
+// na hora de exportar e voltam logo depois.
+//
+// Nasceu só com `api`. Virou lista quando /landing e /painel entraram no site e
+// quebraram o build do app em silêncio: ninguém rodou `build:native` entre a
+// criação delas e o envio seguinte. Rota nova de site vem para cá.
+const SO_NO_SITE = ["api", "landing", "painel"];
+const PARK = path.join(root, ".build-native-parked");
 // Com `distDir` customizado, `output: "export"` grava o HTML dentro do próprio
 // distDir em vez de `out/`.
 const OUT = path.join(root, ".next-native");
@@ -127,15 +138,31 @@ async function checkSiteAlcancavel() {
   }
 }
 
-function restoreApi() {
-  if (fs.existsSync(API_PARKED)) {
-    fs.rmSync(API, { recursive: true, force: true });
-    fs.renameSync(API_PARKED, API);
-    log("app/api devolvido");
+function guardarSoDoSite() {
+  const guardadas = [];
+  fs.mkdirSync(PARK, { recursive: true });
+  for (const nome of SO_NO_SITE) {
+    const de = path.join(root, "app", nome);
+    if (!fs.existsSync(de)) continue;
+    fs.renameSync(de, path.join(PARK, nome));
+    guardadas.push(nome);
   }
+  log(`fora da exportação: ${guardadas.map((n) => `app/${n}`).join(", ") || "nada"}`);
 }
 
-// Qualquer saída (erro, Ctrl+C) precisa devolver app/api — senão o repositório
+function restoreApi() {
+  if (!fs.existsSync(PARK)) return;
+  const nomes = fs.readdirSync(PARK);
+  for (const nome of nomes) {
+    const para = path.join(root, "app", nome);
+    fs.rmSync(para, { recursive: true, force: true });
+    fs.renameSync(path.join(PARK, nome), para);
+  }
+  fs.rmSync(PARK, { recursive: true, force: true });
+  if (nomes.length) log(`devolvido: ${nomes.map((n) => `app/${n}`).join(", ")}`);
+}
+
+// Qualquer saída (erro, Ctrl+C) precisa devolver as rotas — senão o repositório
 // fica quebrado e o build da Vercel vai junto.
 process.on("exit", restoreApi);
 process.on("SIGINT", () => { restoreApi(); process.exit(130); });
@@ -145,12 +172,14 @@ checkEnv();
 await checkSiteAlcancavel();
 
 try {
-  if (fs.existsSync(API_PARKED)) {
-    throw new Error(".api-parked já existe — um build anterior morreu no meio. Devolva app/api antes de seguir.");
+  if (fs.existsSync(PARK)) {
+    throw new Error(
+      ".build-native-parked já existe — um build anterior morreu no meio.\n" +
+      "  Devolva o que está lá para dentro de app/ antes de seguir."
+    );
   }
 
-  log("guardando app/api fora do caminho da exportação");
-  fs.renameSync(API, API_PARKED);
+  guardarSoDoSite();
 
   log("exportando o app estático");
   execSync("next build", {
