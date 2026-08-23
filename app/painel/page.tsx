@@ -148,6 +148,29 @@ export default async function Painel({ searchParams }: { searchParams: { chave?:
   const mrrCent = Number(st.mrrCentavos ?? 0);
   const versaoIos = (asc.versoes as any[])?.[0];
 
+  // Unit economics: cada métrica se calcula sozinha quando o insumo existe;
+  // sem insumo, diz o que está esperando em vez de inventar número (regra da
+  // skill de análise). Moedas separadas de propósito: mídia em R$, AdMob em US$.
+  const dias7 = dias.slice(-8, -1);
+  const cadastros7d = dias7.reduce((s, d) => s + (dados.cadastrosPorDia[d] ?? 0), 0);
+  const aparelhos = Number(rc.active_users ?? 0);
+  const ganhosAds7d = Number(admob.ganhos7d ?? 0);
+  const pagantes = Number(st.assinaturasAtivas ?? 0) + Number(rc.active_subscriptions ?? 0);
+  const receitaAssinaturaMes = mrrCent / 100 + Number(rc.mrr ?? 0);
+
+  const cac = gastoMidia > 0 && cadastros7d > 0 ? gastoMidia / cadastros7d : null;
+  const arpuAdsMes = aparelhos > 0 ? (ganhosAds7d / aparelhos) * (30 / 7) : null;
+  const arppuMes = pagantes > 0 ? receitaAssinaturaMes / pagantes : null;
+  const paybackMeses = cac != null && arppuMes != null && arppuMes > 0 ? cac / arppuMes : null;
+
+  const economics: { rotulo: string; valor: string | null; espera: string; nota?: string }[] = [
+    { rotulo: "CAC", valor: cac != null ? `R$ ${cac.toFixed(2)}` : null, espera: gastoMidia > 0 ? "aguardando cadastro atribuível" : "aguardando primeira campanha", nota: "gasto 7d / cadastros 7d" },
+    { rotulo: "ARPU anúncios", valor: arpuAdsMes != null ? `US$ ${arpuAdsMes.toFixed(2)}/mês` : null, espera: "aguardando aparelhos ativos", nota: "AdMob / aparelhos (inclui testes)" },
+    { rotulo: "ARPPU", valor: arppuMes != null ? `R$ ${arppuMes.toFixed(2)}/mês` : null, espera: "aguardando primeiro assinante", nota: "assinatura mensalizada / pagantes" },
+    { rotulo: "Payback", valor: paybackMeses != null ? `${paybackMeses.toFixed(1)} meses` : null, espera: cac == null ? "aguardando CAC" : "aguardando primeiro assinante", nota: "CAC / receita mensal por pagante" },
+    { rotulo: "LTV", valor: null, espera: "primeira leitura real na renovação da coorte anual (mês 12)", nota: "coortes de assinantes já registram" },
+  ];
+
   const geradoEm = new Intl.DateTimeFormat("pt-BR", { timeZone: "America/Sao_Paulo", dateStyle: "short", timeStyle: "short" }).format(new Date());
 
   return (
@@ -166,6 +189,23 @@ export default async function Painel({ searchParams }: { searchParams: { chave?:
           <Tile rotulo="Anúncios 7d" valor={`US$ ${Number(admob.ganhos7d ?? 0).toFixed(2)}`} nota="AdMob" />
           <Tile rotulo="iOS na Apple" valor={versaoIos ? String(versaoIos.versao) : "?"} nota={versaoIos ? String(versaoIos.estado).replaceAll("_", " ").toLowerCase() : "sem dado"} />
         </div>
+
+        <section className="mt-8">
+          <h2 className="font-display text-sm font-semibold uppercase tracking-widest text-amber">Unit economics</h2>
+          <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            {economics.map((m) => (
+              <div key={m.rotulo} className="rounded-2xl bg-graphite-800 p-4 ring-1 ring-white/10">
+                <p className="text-[11px] font-medium uppercase tracking-wide text-cream/50">{m.rotulo}</p>
+                {m.valor ? (
+                  <p className="mt-1 font-display text-xl font-semibold tabular-nums text-cream">{m.valor}</p>
+                ) : (
+                  <p className="mt-1 text-sm leading-snug text-cream/45">{m.espera}</p>
+                )}
+                {m.nota && <p className="mt-0.5 text-[11px] text-cream/40">{m.nota}</p>}
+              </div>
+            ))}
+          </div>
+        </section>
 
         <Bloco titulo="Marketing · gente chegando">
           <CartaoGrafico titulo="Cadastros por dia (14 dias)">
