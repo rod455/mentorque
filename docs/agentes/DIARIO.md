@@ -3,6 +3,20 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-23 · O build do app estava quebrado e ninguém sabia
+- Ao preparar o envio das lojas, `npm run build:native` falhou. Causa:
+  export estático exige página renderizável sem servidor, e /landing (lê
+  searchParams no servidor) e /painel (force-dynamic) entraram no site
+  depois do último envio. Quebrado desde 22/08, invisível porque o build da
+  Vercel continuou passando e ninguém rodou o do app nesse meio-tempo.
+- Consertado generalizando o que já existia para o app/api: agora é uma
+  lista (api, landing, painel) que sai do caminho na hora de exportar e
+  volta depois, com o nome do que saiu no log. Rota nova que só exista no
+  site entra nessa lista.
+- APRENDIZADO PARA O QA: build verde na Vercel não diz nada sobre o build do
+  app. São dois alvos diferentes do mesmo código. Vale rodar `build:native`
+  na varredura semanal, senão a quebra só aparece na véspera do envio.
+
 ## 2026-08-23 · Funil provado vivo + botão da Apple escondido fora do iPhone
 - O funil GRAVOU pela primeira vez desde que foi criado: dois abriu_app pelo
   Safari do dono. A permissão estava certa; o zero anterior era porque os

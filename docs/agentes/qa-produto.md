@@ -10,7 +10,12 @@ antes que ela vire avaliação de uma estrela, e CONSERTA o que for seguro
 2. **Erros reais primeiro**: docs/dados/retrato.md traz o resumo de
    app_erros (7 dias). Cada mensagem recorrente é um chamado: achar a causa
    no código e corrigir.
-3. **Saúde do código**: `npx tsc --noEmit`, `npm run build`, `npx next lint`.
+3. **Saúde do código**: `npx tsc --noEmit`, `npm run build`, `npx next lint` e
+   `npm run build:native`. O último não é opcional: `npm run build` compila o
+   SITE, e o app das lojas é outro alvo (export estático, sem servidor). Em
+   22/08 duas páginas novas do site quebraram o build do app e ficou assim por
+   dois dias, com a Vercel verde o tempo todo. Se quebrar, quase sempre é
+   página nova que só existe no site — a lista fica em scripts/build-native.mjs.
    Qualquer quebra é prioridade zero.
 4. **Varredura dirigida**: escolher UM fluxo crítico por semana (login,
    compra, quiz, funil de saída, catálogo remoto, campos de formulário) e ler
