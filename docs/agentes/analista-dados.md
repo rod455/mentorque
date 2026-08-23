@@ -78,11 +78,13 @@ nos nós do braço correspondente (a API não permite anexar por fora):
 - [ ] Google Ads: credencial "Google Ads OAuth2 API" (pede também o
       developer token da conta). Nos 2 nós. Se a API mudar de versão até lá,
       ajustar o v20 nas URLs.
-- [ ] AdMob: credencial "Google OAuth2 API" nova com escopo
-      https://www.googleapis.com/auth/admob.readonly. Nos 2 nós.
-- [ ] App Store Connect: credencial "JWT Auth" com a chave .p8 (algoritmo
-      ES256) e, no nó "App Store: token", preencher os placeholders de
-      Issuer ID e Key ID. Nos 2 nós.
+- [x] AdMob: pronto e testado em 2026-08-23 (cliente Mentorque N8N + escopo
+      admob.readonly). Dado real: receita diária em USD desde 15/08, cerca
+      de US$ 1,64 na última semana.
+- [x] App Store Connect: pronto e testado em 2026-08-23 (chave .p8 ES256,
+      Key ID U25N5Y86SS). Primeira coleta: 1.1 WAITING_FOR_REVIEW e 1.0
+      READY_FOR_SALE. Detalhe técnico: o nó JWT do n8n precisa das claims
+      em modo JSON (iss/iat/exp/aud); os campos estruturados não convertem.
 
 Pode ativar o workflow com só parte das credenciais prontas: os braços sem
 credencial apenas registram o próprio erro na mesa. Quando tudo estiver

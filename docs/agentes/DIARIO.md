@@ -3,6 +3,19 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-23 · Nove de dez fontes conectadas
+- YouTube (cliente OAuth novo "Mentorque N8N", projeto Mentorque, app
+  publicado em produção): coleta os 10 últimos vídeos; views zeradas
+  enquanto os vídeos estiverem privados.
+- AdMob: receita real de anúncio medida, em USD, cerca de US$ 1,64 nos
+  últimos 7 dias com 30 a 78 impressões por dia.
+- App Store Connect: chave .p8 conectada; primeira coleta mostrou a 1.1
+  WAITING_FOR_REVIEW e a 1.0 READY_FOR_SALE. Aprendizado técnico: o nó JWT
+  do n8n exige claims em modo JSON (iss, iat, exp, aud); os campos
+  estruturados do nó não convertem para os nomes padrão.
+- Falta só o Google Ads (developer token em processo, entra com as
+  campanhas). Workflow de métricas segue DESLIGADO por decisão do dono.
+
 ## 2026-08-23 · Sete de dez fontes conectadas
 - Search Console verificado (propriedade sc-domain:mentorque.com.br) e
   coletando; série nasce zerada porque a propriedade é nova.
