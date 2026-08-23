@@ -3,6 +3,16 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-23 · Painel /painel + agregados trancados por chave
+- Painel da operação em www.mentorque.com.br/painel (renderizado no
+  servidor, portão por ?chave=): blocos Marketing, Engajamento e Vendas,
+  série diária de cadastros, usuários e receita de anúncio, coortes,
+  fundo do funil e frescor das fontes.
+- Decisão do dono: agregados não ficam abertos. Rotas de leitura e POSTs
+  dos coletores exigem a chave DADOS_CHAVE (header x-mq-chave); POSTs do
+  app (eventos e erros) seguem abertos. Os 4 workflows do n8n que falam
+  com as rotas já apresentam a chave.
+
 ## 2026-08-23 · Downloads reais da Apple no ar (e um insight)
 - Braço app_store_downloads pronto e testado: relatório diário de vendas
   da Apple (Vendor 94182924), que EXCLUI TestFlight, baixado, descompactado
