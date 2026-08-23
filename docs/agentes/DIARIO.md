@@ -3,6 +3,23 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-23 · Funil provado vivo + botão da Apple escondido fora do iPhone
+- O funil GRAVOU pela primeira vez desde que foi criado: dois abriu_app pelo
+  Safari do dono. A permissão estava certa; o zero anterior era porque os
+  binários das lojas (1.0 de 02/08 e 1.1 de 21/08) são ANTERIORES ao código
+  do funil, de 22/08. Consequência: todo usuário de loja é invisível até o
+  próximo envio. Isso sozinho já justifica o build.
+- Bug real encontrado pelo dono: "Entrar com a Apple" quebra fora do iPhone.
+  O fluxo web da Apple exige um Services ID próprio (domínio verificado +
+  URL de retorno do Supabase), que não existe. Os registros confirmam:
+  Supabase redireciona para a Apple e nunca recebe retorno, então o app nem
+  consegue mostrar erro. O botão agora só aparece no app da Apple, onde o
+  login é nativo. Religa com NEXT_PUBLIC_APPLE_WEB=1 depois de configurar.
+- NÃO é bug: carros de convidado entrarem na conta ao logar. É o merge
+  proposital (store.tsx), para ninguém perder o que fez antes de criar
+  conta. O que FALTA é remover duplicata: dois cadastros do mesmo carro
+  viram dois carros. Fica para o QA olhar.
+
 ## 2026-08-23 · Gargalo do push resolvido: cada agente ganhou sessão fixa
 - Causa raiz confirmada com teste isolado: sessão criada na hora pela
   rotina nasce sem destino de escrita, então o agente trabalha, tenta

@@ -55,6 +55,30 @@ export function googleNativeConfigured(): boolean {
   return nativePlatform() === "ios" ? !!GOOGLE_IOS_CLIENT_ID : !!GOOGLE_WEB_CLIENT_ID;
 }
 
+// "Entrar com a Apple" FORA do iPhone.
+//
+// No iPhone o login é nativo (ASAuthorization) e a audiência do idToken é o
+// bundle do app — funciona sem mais nada. Em qualquer outro lugar (Safari,
+// Chrome, Android) o pedido vai pelo fluxo web da Apple, que exige um
+// identificador SEPARADO na conta de desenvolvedor: um Services ID, com o
+// domínio verificado e a URL de retorno do Supabase cadastrada. O bundle do
+// app não serve.
+//
+// Sem esse Services ID a Apple recusa na tela DELA, depois que o navegador já
+// saiu do nosso domínio. Do nosso lado não sobra nada: o Supabase registra
+// "Redirecting to external provider" e nunca recebe retorno, então o app nem
+// tem como mostrar um erro útil. O usuário só vê a tela de erro da Apple e
+// conclui que o Mentorque está quebrado.
+//
+// Enquanto o Services ID não existir, o botão não aparece fora do iPhone.
+// Botão que some é ruim; botão que leva a um beco sem saída é pior.
+// Para religar depois de configurar: NEXT_PUBLIC_APPLE_WEB=1.
+const APPLE_WEB_CONFIGURADO = (process.env.NEXT_PUBLIC_APPLE_WEB ?? "").trim() === "1";
+
+export function appleLoginDisponivel(): boolean {
+  return nativePlatform() === "ios" || APPLE_WEB_CONFIGURADO;
+}
+
 // O plugin só faz sentido dentro do wrapper. Carregado sob demanda para não
 // entrar no pacote do site.
 let cached: Promise<Plugin> | null = null;
