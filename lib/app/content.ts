@@ -2933,7 +2933,16 @@ export function getContent(locale: Locale) {
         { icon: "spark", label: T("Diagnóstico ilimitado com o Biela", "Unlimited diagnosis with Biela"), free: "lock" },
         { icon: "book", label: T("Biblioteca de aulas completa", "Full lesson library"), free: "lock" },
       ] as { icon: string; label: string; free: "check" | "ltd" | "lock" }[],
-      reminder: T("Lembrar antes do teste terminar", "Remind me before the trial ends"),
+      // Era um interruptor "Lembrar antes do teste terminar" que NÃO agendava
+      // aviso nenhum (estado morto na tela). Prometer aviso e não avisar é o
+      // caminho curto para a cobrança surpresa e a avaliação de uma estrela.
+      // Virou a informação verdadeira que responde ao mesmo medo: o controle
+      // do cancelamento está com a pessoa, e ela sabe onde. Quando existir
+      // notificação local de verdade no app, o lembrete volta como recurso.
+      reminder: T(
+        "Cancele quando quiser pelo Perfil, sem falar com ninguém.",
+        "Cancel anytime from your Profile, no need to talk to anyone.",
+      ),
       trialCta: T("Começar {n} dias grátis", "Start {n}-day free trial"),
       // `{preco}` é substituído por quem desenha a tela: na web pelo preço do
       // Stripe, no app da loja pelo `priceString` que a própria loja devolve.

@@ -743,7 +743,6 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   const { setPremium, subscribed, refreshSubscription } = usePrototype();
   const { user } = useAuth();
   const { back, go, root } = useNav();
-  const [remind, setRemind] = useState(false);
   const [platform, setPlatform] = useState<Platform>("other");
   useEffect(() => setPlatform(trialPlatform()), []);
   const trialDays = trialDaysFor(platform);
@@ -1290,11 +1289,10 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
       {/* Conheça o Premium — comparação */}
       <div className="mt-4"><ComparativoPlanos /></div>
 
-      {/* Lembrar antes do teste terminar — linha compacta, desativada por padrão */}
+      {/* Cancelamento no controle de quem assina (linha compacta) */}
       <div className="mt-3 flex items-center gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-2.5 ring-1 ring-white/[0.06]">
         <Icon name="alert" className="h-4 w-4 text-cream/50" />
         <span className="flex-1 text-xs text-cream/70">{sub.reminder}</span>
-        <Toggle on={remind} onChange={setRemind} size="sm" />
       </div>
 
       {/* Escolha do plano */}

@@ -33,7 +33,6 @@ export function OnboardingFlow() {
   const [i, setI] = useState(0);
   const [carLeaving, setCarLeaving] = useState(false);
   const [plan, setPlan] = useState<"annual" | "monthly">("annual");
-  const [remind, setRemind] = useState(false);
   // Onde dá para assinar: web (Stripe) e a loja que tiver chave de compra
   // interna. Sem chave o app fica em "modo leitor" e a página de teste some —
   // é o caso do Android enquanto o Play Billing não estiver ligado.
@@ -315,19 +314,10 @@ export function OnboardingFlow() {
               {buying ? "…" : plan === "annual" ? trial.ctaAnnual : trial.ctaMonthly}
             </Button>
 
-            {/* Lembrete antes do teste acabar */}
-            <div className="mt-2.5 flex items-center gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-2 ring-1 ring-white/[0.06]">
-              <span className="flex-1 text-xs text-cream/70">{c.subscribe.reminder}</span>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={remind}
-                onClick={() => setRemind((v) => !v)}
-                className={`inline-flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 transition-colors ${remind ? "bg-amber" : "bg-graphite-600"}`}
-              >
-                <span className={`h-4 w-4 rounded-full bg-cream shadow transition-transform ${remind ? "translate-x-4" : "translate-x-0"}`} />
-              </button>
-            </div>
+            {/* Quem manda no cancelamento é a pessoa, e ela sabe onde */}
+            <p className="mt-2.5 rounded-xl bg-graphite-800 px-3.5 py-2 text-xs text-cream/70 ring-1 ring-white/[0.06]">
+              {c.subscribe.reminder}
+            </p>
 
             <div className="mt-2.5 flex items-center justify-center text-xs text-cream/45">
               <LegalLinks />
