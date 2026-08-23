@@ -45,6 +45,24 @@ leem. Não analisa, não opina, não notifica o Rodrigo; entrega matéria-prima.
    - play_console: taxa de crash e ANR por dia (vitals)
    - avaliações do Google Play (últimos 7 dias da API, por isso é diário)
 
+4. **Vigia de anomalias** (diário, 7h30 quando ligar; DESLIGADO)
+   https://n8n.vocaboost.com.br/workflow/ljWzGCZ8J0nmlYRf
+   Lê /api/dados e o frescor da mesa de métricas depois da coleta e SÓ
+   manda e-mail (para os dois endereços do Rodrigo) quando algo foge do
+   padrão: erros disparando, uso caindo forte, cancelamentos, crash acima
+   de 2%, deploy quebrado, fonte muda há 2+ dias ou coleta parada. Dia
+   normal é silêncio. Testado em 2026-08-23 (dia normal, nenhum e-mail).
+
+## Downloads reais das lojas (pendente de 2 informações do dono)
+
+Para fechar o primeiro degrau do funil (instalação → abertura → cadastro):
+- Apple: o relatório de vendas exige o **Vendor Number** (App Store
+  Connect, Pagamentos e Relatórios Financeiros, canto superior).
+- Google: as estatísticas de download exigem o **URI do Cloud Storage**
+  (Play Console, Fazer download de relatórios, Estatísticas, botão
+  "Copiar URI do Cloud Storage").
+Com os dois em mãos, os braços entram no workflow de métricas.
+
 ## Checklist para ligar (credenciais no n8n, uma por linha)
 
 Criar em https://n8n.vocaboost.com.br/home/credentials e depois selecionar

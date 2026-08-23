@@ -3,6 +3,24 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-23 · Visão de empresa completa + vigia de anomalias
+- Eventos de primeira ação de valor no app (abriu_trilha, cadastrou_carro):
+  ativação real passa a ser medida; web desde já, lojas no próximo build.
+- Views novas: ativacao_coortes, assinaturas_coortes (renovou/saiu por
+  coorte mensal de assinante) e cadastros_por_campanha (a ponta nossa do
+  CAC). /api/dados ganhou uso.ativacao, vendas e marketing.
+- Retrato reorganizado como EMPRESA: blocos MARKETING (com CAC calculado
+  quando houver gasto), ENGAJAMENTO e VENDAS, com o método na skill.
+- Skill ganhou "O painel da empresa" e as métricas de crescimento saudável
+  (retenção que estabiliza, coortes melhorando, stickiness, quick ratio,
+  LTV/CAC, payback, churn, MRR) com régua por estágio.
+- Vigia de anomalias criado no n8n (DESLIGADO): diário 7h30, e-mail só
+  quando algo foge do padrão; testado num dia normal, silêncio como
+  esperado. Gmail anexado por API (o bug de anexar credencial é só nos
+  nós HTTP Request).
+- Downloads reais das lojas: pendente de Vendor Number (Apple) e URI do
+  Cloud Storage (Play), anotado no manual do Analista.
+
 ## 2026-08-23 · Régua de uso + skill de análise (e um bug grave achado)
 - ACHADO GRAVE no caminho: funil_eventos NUNCA tinha aceitado um evento
   (mesmo bug de permissão do dia anterior, presente desde a criação).
