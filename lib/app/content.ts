@@ -2405,6 +2405,25 @@ export function getContent(locale: Locale) {
       never: T("sem registro", "no record"),
     },
 
+    // Pergunta que aparece ao entrar numa conta que já tem garagem, quando o
+    // aparelho tem carros cadastrados como convidado.
+    importar: {
+      title: T("Levar para a sua conta?", "Add to your account?"),
+      body: T(
+        "Estes carros foram cadastrados neste aparelho antes de você entrar na conta. Marque os que são seus.",
+        "These cars were added on this device before you signed in. Check the ones that are yours."
+      ),
+      aviso: T(
+        "O que não for marcado não vai para a sua conta.",
+        "Anything left unchecked will not be added to your account."
+      ),
+      servico: T("serviço no histórico", "service logged"),
+      servicos: T("serviços no histórico", "services logged"),
+      semServico: T("sem histórico", "no history"),
+      importar: T("Levar os marcados", "Add the checked ones"),
+      importarNenhum: T("Não levar nenhum", "Do not add any"),
+    },
+
     history: {
       title: T("Calendário do carro", "Car calendar"),
       none: T("Nenhum serviço registrado ainda.", "No services logged yet."),

@@ -10,6 +10,7 @@ import { adsEnabled } from "./AdGate";
 import { ensureConsent, nativeAdMob } from "@/lib/app/admob";
 import { Icon, useContent } from "./ui";
 import { FeedbackSheet } from "./FeedbackSheet";
+import { ImportarGaragem } from "./ImportarGaragem";
 import { Logo } from "@/components/ui/Logo";
 import { HomeScreen } from "./screens/Home";
 import { SearchScreen } from "./screens/Search";
@@ -240,6 +241,10 @@ function Router() {
       <WelcomeBack currentView={view.name} />
       {/* Montada uma vez, acordada por evento. Ver lib/app/feedbackPrompt.ts. */}
       <FeedbackSheet />
+      {/* Só aparece ao entrar numa conta que já tem garagem com carros de
+          convidado no aparelho. Fica por cima de tudo: a decisão vem antes de
+          a pessoa mexer numa garagem que ainda pode mudar. */}
+      <ImportarGaragem />
       {showTopBar && <TopBar />}
       <main
         ref={mainRef}

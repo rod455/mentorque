@@ -15,10 +15,18 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   Supabase redireciona para a Apple e nunca recebe retorno, então o app nem
   consegue mostrar erro. O botão agora só aparece no app da Apple, onde o
   login é nativo. Religa com NEXT_PUBLIC_APPLE_WEB=1 depois de configurar.
-- NÃO é bug: carros de convidado entrarem na conta ao logar. É o merge
-  proposital (store.tsx), para ninguém perder o que fez antes de criar
-  conta. O que FALTA é remover duplicata: dois cadastros do mesmo carro
-  viram dois carros. Fica para o QA olhar.
+- Carros de convidado entrando na conta ao logar era proposital, mas o dono
+  decidiu que o app não escolhe por ele: agora PERGUNTA. Ao entrar numa
+  conta que já tem garagem, os carros feitos sem login não sobem sozinhos;
+  aparece uma tela com a lista, tudo desmarcado, e o dono marca os que são
+  dele. Nada marcado = a conta fica como estava. A tela não fecha sem
+  botão, porque descartar trabalho não pode ser toque errado. Conta nova
+  (sem nada na nuvem) continua levando tudo sem perguntar, que ali não há
+  ambiguidade. Serviços e lembretes seguem o carro escolhido.
+- Efeito colateral bom: num aparelho emprestado, o carro de quem mexeu
+  antes deixa de entrar na conta de quem logou depois.
+- Continua em aberto: duplicata. O mesmo carro cadastrado duas vezes ainda
+  vira dois carros, agora só que com o dono tendo aprovado. Fica para o QA.
 
 ## 2026-08-23 · Gargalo do push resolvido: cada agente ganhou sessão fixa
 - Causa raiz confirmada com teste isolado: sessão criada na hora pela

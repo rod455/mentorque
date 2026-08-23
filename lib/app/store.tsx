@@ -84,6 +84,18 @@ const STORAGE_KEY = "mentorque-garage";
 // dois igual, e carros de uma conta apareciam dentro de outra.
 const DONO_KEY = "mentorque-garage-owner";
 
+// O que está gravado NESTE aparelho, lido direto. Serve de rede de segurança
+// para o login: `commit` escreve aqui a cada mudança, então é a versão
+// persistida do que o convidado fez.
+function lerDoAparelho(): Session {
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY) || window.localStorage.getItem("mentorque-proto");
+    return raw ? migrate(JSON.parse(raw)) : EMPTY;
+  } catch {
+    return EMPTY;
+  }
+}
+
 function lerDono(): string | null {
   try { return window.localStorage.getItem(DONO_KEY); } catch { return null; }
 }
@@ -96,6 +108,9 @@ function gravarDono(id: string | null): void {
 
 type StoreValue = {
   s: Session;
+  // Carros feitos como convidado esperando o dono decidir se entram na conta.
+  importacaoPendente: ImportacaoPendente | null;
+  resolverImportacao: (ids: string[]) => void;
   setName: (name: string) => void;
   setEmail: (email: string) => void;
   setState: (state: string) => void;
@@ -207,6 +222,46 @@ export function mergeSessions(cloud: Session, local: Session): Session {
   };
 }
 
+// O que o convidado fez NESTE APARELHO e a conta ainda não tem.
+//
+// Só entra aqui o que é inequivocamente do usuário e some se ninguém decidir:
+// carros, o histórico deles e os lembretes deles. Aula lida, marco e
+// preferência continuam se somando sozinhos — somar isso não confunde ninguém
+// nem deixa lixo na garagem, e perguntar sobre cada aula seria absurdo.
+export type ImportacaoPendente = {
+  veiculos: Vehicle[];
+  servicos: ServiceRecord[];
+  lembretes: string[];
+};
+
+function daGaragemDoConvidado(cloud: Session, local: Session): ImportacaoPendente | null {
+  const naNuvem = new Set((cloud.vehicles ?? []).map((v) => v.id));
+  const veiculos = (local.vehicles ?? []).filter((v) => !naNuvem.has(v.id));
+  if (!veiculos.length) return null;
+  const ids = new Set(veiculos.map((v) => v.id));
+  return {
+    veiculos,
+    servicos: (local.services ?? []).filter((r) => ids.has(r.vehicleId)),
+    // Lembrete é "vehicleId:itemKey" — vai junto com o carro dele.
+    lembretes: (local.reminders ?? []).filter((r) => ids.has(r.split(":")[0])),
+  };
+}
+
+// A sessão local SEM o que está esperando decisão: é ela que entra no merge,
+// para a conta nunca mostrar carro que o dono ainda não aprovou.
+function semOsPendentes(local: Session, p: ImportacaoPendente): Session {
+  const ids = new Set(p.veiculos.map((v) => v.id));
+  return {
+    ...local,
+    vehicles: (local.vehicles ?? []).filter((v) => !ids.has(v.id)),
+    services: (local.services ?? []).filter((r) => !ids.has(r.vehicleId)),
+    reminders: (local.reminders ?? []).filter((r) => !ids.has(r.split(":")[0])),
+    // Carro ativo que não entrou não pode seguir apontado: a Home abriria
+    // lendo um carro que não está na garagem.
+    activeVehicleId: local.activeVehicleId && ids.has(local.activeVehicleId) ? null : local.activeVehicleId,
+  };
+}
+
 // Feedback: junta pelo lado mais RESTRITIVO, não pelo mais recente.
 //
 // Aqui o `||` é seguro, ao contrário do que aconteceu com o premium: lá ele
@@ -235,6 +290,12 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const loadedFor = useRef<string | null>(null);
   const teveSessao = useRef(false);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [importacaoPendente, setImportacaoPendente] = useState<ImportacaoPendente | null>(null);
+  // Espelho da sessão para ler o estado atual DEPOIS de um await, sem
+  // depender de atualização funcional: o merge do login precisa comparar a
+  // nuvem com o que existe no aparelho e decidir fora da fase de render.
+  const sRef = useRef(s);
+  useEffect(() => { sRef.current = s; }, [s]);
 
   // Reads the user's Stripe subscription from the `subscriptions` table.
   const refreshSubscription = useCallback(async () => {
@@ -290,7 +351,7 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const patch = useCallback((fn: (prev: Session) => Session) => setS((prev) => commit(fn(prev))), [commit]);
 
   // On login: pull the user's cloud state and merge the local (guest) work into
-  // it so nothing is lost. First login with an empty cloud pushes local up.
+  // it. Conta nova leva tudo; conta que já existe PERGUNTA antes (ver abaixo).
   useEffect(() => {
     if (!user || !supabase) { loadedFor.current = null; return; }
     if (loadedFor.current === user.id) return;
@@ -302,30 +363,76 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
       const cloud = (data?.data ?? null) as Session | null;
       // De quem era o que está guardado aqui. `null` = convidado: ninguém
       // logou neste aparelho desde a última limpeza, então o trabalho é de quem
-      // está entrando agora e deve ser levado junto.
+      // está entrando agora.
       const dono = lerDono();
       const deOutraConta = dono !== null && dono !== user.id;
       gravarDono(user.id);
 
-      setS((local) => {
-        // Estado de OUTRA conta não se mistura. Era isto que fazia os carros de
-        // um usuário aparecerem na garagem de outro que entrasse no mesmo
-        // aparelho: dados pessoais atravessando contas, e a vítima sem como
-        // saber de onde vieram. Nada se perde — o dono anterior tem tudo na
-        // nuvem dele.
-        const base = deOutraConta ? EMPTY : local;
-        // Sem estado na nuvem, esta conta é nova: fica com o trabalho feito
-        // como convidado, mas NÃO com o Premium. A assinatura teria de vir de
-        // algum lugar, e não veio — a compra exige estar logado, então uma
-        // conta sem registro na nuvem nunca assinou nada. Quem já pagou e
-        // reinstalou recupera pelo "Restaurar compra" da própria loja.
-        const merged = cloud ? mergeSessions(cloud, base) : { ...base, premium: false };
-        if (!merged.email) merged.email = user.email ?? null;
-        return commit(merged);
-      });
+      // Estado de OUTRA conta não se mistura nem se oferece. Era isto que fazia
+      // os carros de um usuário aparecerem na garagem de outro que entrasse no
+      // mesmo aparelho: dados pessoais atravessando contas, e a vítima sem como
+      // saber de onde vieram. Nada se perde — o dono anterior tem tudo na
+      // nuvem dele.
+      //
+      // Vale o estado em memória; se ele ainda não tiver garagem, cai no que
+      // está gravado no aparelho. Os dois efeitos (ler o armazenamento e
+      // consultar a nuvem) começam juntos, e sem essa rede de segurança
+      // existiria uma janela em que o convidado parece não ter feito nada e o
+      // app deixaria de perguntar, descartando os carros em silêncio.
+      const naMemoria = sRef.current;
+      const doAparelho = naMemoria.vehicles.length ? naMemoria : lerDoAparelho();
+      const local = deOutraConta ? EMPTY : doAparelho;
+
+      // Conta NOVA (sem estado na nuvem): leva o trabalho de convidado sem
+      // perguntar. Não há garagem com que comparar, o carro é claramente de
+      // quem acabou de criar a conta, e uma pergunta aqui seria fricção pura.
+      // O Premium NÃO vem junto: a compra exige estar logado, então conta sem
+      // registro na nuvem nunca assinou nada. Quem pagou e reinstalou recupera
+      // pelo "Restaurar compra" da própria loja.
+      if (!cloud) {
+        setS(commit({ ...local, premium: false, email: local.email ?? user.email ?? null }));
+        return;
+      }
+
+      // Conta que JÁ TEM garagem: o que foi feito como convidado neste aparelho
+      // não entra sozinho. Juntar por conta própria é como o dono acabou com
+      // cinco carros sem ter pedido — e num aparelho emprestado seria pior,
+      // porque o carro de outra pessoa entraria na conta de quem logou.
+      // Então o merge sobe SEM esses carros e o dono decide um a um.
+      const pendente = daGaragemDoConvidado(cloud, local);
+      const merged = mergeSessions(cloud, pendente ? semOsPendentes(local, pendente) : local);
+      if (!merged.email) merged.email = user.email ?? null;
+      setS(commit(merged));
+      setImportacaoPendente(pendente);
     })();
     return () => { cancelled = true; };
   }, [user, supabase, commit]);
+
+  // Resposta do dono à pergunta acima. Lista vazia = não importar nada: a conta
+  // fica exatamente como estava na nuvem, e o que o convidado fez neste
+  // aparelho não sobe. É uma escolha, não um acidente — a tela não fecha sem
+  // que um dos dois botões seja tocado.
+  const resolverImportacao = useCallback((ids: string[]) => {
+    const pend = importacaoPendente;
+    setImportacaoPendente(null);
+    if (!pend) return;
+    const escolhidos = new Set(ids);
+    const veiculos = pend.veiculos.filter((v) => escolhidos.has(v.id));
+    if (!veiculos.length) return;
+    patch((p) => {
+      const jaTem = new Set(p.vehicles.map((v) => v.id));
+      const novos = veiculos.filter((v) => !jaTem.has(v.id));
+      return {
+        ...p,
+        vehicles: [...p.vehicles, ...novos],
+        services: [...p.services, ...pend.servicos.filter((r) => escolhidos.has(r.vehicleId))],
+        reminders: [...new Set([...p.reminders, ...pend.lembretes.filter((r) => escolhidos.has(r.split(":")[0]))])],
+        // Garagem vazia até aqui: o primeiro importado vira o ativo, senão a
+        // Home abriria sem carro selecionado tendo carro na garagem.
+        activeVehicleId: p.activeVehicleId ?? novos[0]?.id ?? null,
+      };
+    });
+  }, [importacaoPendente, patch]);
 
   // Ao sair da conta, o aparelho volta a zero.
   //
@@ -528,8 +635,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const es = useMemo(() => (subActive && !s.premium ? { ...s, premium: true } : s), [s, subActive]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s: es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
-    [es, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
+    () => ({ s: es, importacaoPendente, resolverImportacao, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
+    [es, importacaoPendente, resolverImportacao, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
