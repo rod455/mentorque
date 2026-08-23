@@ -4,6 +4,8 @@ import { resumoAvaliacoes } from "@/lib/operacao";
 import { chaveDadosOk, negada } from "@/lib/chaveDados";
 
 export const runtime = "nodejs";
+// Teto de duracao: funcao pendurada segura memoria provisionada (e cota).
+export const maxDuration = 10;
 
 // Avaliações do app nas lojas (tabela public.lojas_avaliacoes).
 //

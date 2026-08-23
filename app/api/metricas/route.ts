@@ -3,6 +3,8 @@ import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { chaveDadosOk, negada } from "@/lib/chaveDados";
 
 export const runtime = "nodejs";
+// Teto de duracao: funcao pendurada segura memoria provisionada (e cota).
+export const maxDuration = 10;
 
 // Métricas diárias das fontes externas (tabela public.metricas_diarias).
 //

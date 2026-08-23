@@ -1,3 +1,4 @@
+export const maxDuration = 15;
 import { NextResponse } from "next/server";
 
 // Versões disponíveis de um marca+modelo(+ano), via tabela FIPE pública

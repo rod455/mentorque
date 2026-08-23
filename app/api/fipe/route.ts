@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getBrands, getModels, getPrices, matchPrice, type VehicleKind } from "@/lib/app/fipe";
 
 export const runtime = "nodejs";
+// Teto de duracao: funcao pendurada segura memoria provisionada (e cota).
+export const maxDuration = 15;
 
 const KINDS: VehicleKind[] = ["carros", "motos", "caminhoes"];
 const kindOf = (v: string | null): VehicleKind => (KINDS.includes(v as VehicleKind) ? (v as VehicleKind) : "carros");

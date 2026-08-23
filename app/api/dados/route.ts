@@ -3,6 +3,8 @@ import { coletarDadosOperacao } from "@/lib/operacao";
 import { chaveDadosOk, negada } from "@/lib/chaveDados";
 
 export const runtime = "nodejs";
+// Teto de duracao: funcao pendurada segura memoria provisionada (e cota).
+export const maxDuration = 15;
 
 // O retrato diário da operação, consolidado numa rota só. É a matéria-prima
 // do Analista de Dados (n8n). TRANCADA pela chave dos dados: agregados de

@@ -1,3 +1,4 @@
+export const maxDuration = 15;
 import { NextResponse } from "next/server";
 
 // Valor FIPE do veículo (marca+modelo+ano, refinado pela versão quando ela

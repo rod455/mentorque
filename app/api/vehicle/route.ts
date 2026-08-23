@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getComplaints, getRecalls, getSafety } from "@/lib/app/nhtsa";
 
 export const runtime = "nodejs";
+// Teto de duracao: funcao pendurada segura memoria provisionada (e cota).
+export const maxDuration = 15;
 
 // NHTSA data changes slowly (recalls/ratings are not real-time): a day of edge
 // cache with a week of stale-while-revalidate keeps it fresh enough and cheap.

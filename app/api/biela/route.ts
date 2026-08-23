@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { retrieveManualContext, type CarCtx as Car } from "@/lib/rag";
 
 export const runtime = "nodejs";
+// Teto de duracao: funcao pendurada segura memoria provisionada (e cota).
+export const maxDuration = 30;
 
 type Turno = { role?: string; content?: string };
 type Body = { question?: string; locale?: string; car?: Car | null; historico?: Turno[] };
