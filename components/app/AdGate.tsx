@@ -44,8 +44,14 @@ export function AdOverlay({ kind, onDone, onCancel }: { kind: "interstitial" | "
           await plugin.showInterstitial();
           if (!cancelled) onDone();
         } else {
-          await plugin.prepareRewardVideoAd({ adId });
-          await plugin.showRewardVideoAd();
+          // O nosso bloco premiado é REWARDED_INTERSTITIAL (conferido na API do
+          // AdMob), e no SDK isso é um objeto diferente do vídeo premiado.
+          // Pedir o formato errado devolve erro e cai no house ad calado.
+          if (!plugin.prepareRewardInterstitialAd || !plugin.showRewardInterstitialAd) {
+            throw new Error("sem intersticial premiado no plugin");
+          }
+          await plugin.prepareRewardInterstitialAd({ adId });
+          await plugin.showRewardInterstitialAd();
           if (!cancelled) onDone();
         }
       } catch {

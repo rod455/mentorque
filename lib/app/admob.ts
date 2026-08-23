@@ -16,7 +16,10 @@ export const ADMOB = {
     android: "ca-app-pub-9316035916536420/6890695608",
     ios: "", // TODO: bloco interstitial iOS
   },
-  // Interstitial premiado (rewarded) — cadastrar carro / adicionar serviço
+  // Intersticial premiado (REWARDED_INTERSTITIAL no painel do AdMob).
+  // Hoje NÃO está em uso em tela nenhuma: saiu do cadastro de carro quando os
+  // anúncios foram tirados do caminho crítico do primeiro uso. Fica pronto e
+  // conferido para quando voltar a fazer sentido.
   rewarded: {
     android: "ca-app-pub-9316035916536420/3313432733",
     ios: "", // TODO: bloco rewarded iOS
@@ -56,8 +59,18 @@ type AdMobPlugin = {
   showPrivacyOptionsForm?: () => Promise<void>;
   prepareInterstitial: (o: { adId: string }) => Promise<unknown>;
   showInterstitial: () => Promise<unknown>;
+  // Vídeo premiado (formato REWARDED). NÃO é o que o nosso bloco é — ver abaixo.
   prepareRewardVideoAd: (o: { adId: string }) => Promise<unknown>;
   showRewardVideoAd: () => Promise<unknown>;
+  // Intersticial premiado (formato REWARDED_INTERSTITIAL). É ESTE que casa com
+  // o bloco 3313432733 do Mentorque, conferido na API do AdMob em 23/08.
+  //
+  // Os dois formatos são objetos diferentes no SDK do Google: pedir um vídeo
+  // premiado usando o id de um intersticial premiado devolve erro de formato e
+  // o anúncio nunca carrega. O código pedia o formato errado, então esse
+  // caminho cairia SEMPRE no house ad, em silêncio, sem ninguém perceber.
+  prepareRewardInterstitialAd?: (o: { adId: string }) => Promise<unknown>;
+  showRewardInterstitialAd?: () => Promise<unknown>;
 };
 
 // Plugin nativo injetado pelo wrapper (Capacitor). undefined no navegador.

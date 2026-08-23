@@ -3,6 +3,26 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-23 · Auditoria dos anúncios: o caminho em uso está certo, o outro não
+- Pedido do dono: zero é esperado (app novo, sem gente), o que interessa é
+  se o anúncio FUNCIONARIA. Conferido contra a API do AdMob, não por leitura
+  de código.
+- O que está certo: o app "Mentorque" existe no AdMob, plataforma ANDROID,
+  estado APPROVED e VINCULADO à ficha da Play (mentorque.app). O id do
+  AndroidManifest bate com o do painel. O bloco 6890695608 existe, é
+  INTERSTITIAL, pertence ao app, e é exatamente o que o código pede. Sem
+  variável de aparelho de teste no CI, então o build sai em modo real.
+- BUG ENCONTRADO: o bloco premiado 3313432733 é REWARDED_INTERSTITIAL no
+  painel, mas o código pedia vídeo premiado (prepareRewardVideoAd). São
+  objetos diferentes no SDK; pedir o formato errado devolve erro e o app cai
+  no house ad em silêncio. Corrigido para prepareRewardInterstitialAd.
+- Impacto hoje: NENHUM, porque nada no app renderiza o premiado desde que os
+  anúncios saíram do caminho crítico do primeiro uso. Era uma armadilha para
+  o dia em que voltasse a ser usado.
+- Aprendizado: bloco de anúncio tem FORMATO, e o formato do painel precisa
+  casar com o método do SDK. Conferir na API (adUnits → adFormat) antes de
+  ligar qualquer formato novo, em vez de confiar no nome que o bloco recebeu.
+
 ## 2026-08-23 · A receita de anúncio do Mentorque não era do Mentorque
 - O dono desconfiou dos números do AdMob e estava certo. A conta é
   compartilhada com os outros apps dele e o coletor pedia o relatório da
