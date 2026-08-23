@@ -54,11 +54,10 @@ nos nós do braço correspondente (a API não permite anexar por fora):
       conta "Mentorque Ads"; gasto zerado porque ainda não há campanha).
       Pendência de segurança: o token atual tem acesso de leitura E edição;
       trocar por um só de leitura (ads_read) quando der.
-- [ ] Search Console: credencial "Google account" já selecionada nos nós,
-      MAS a conta ainda não tem a propriedade do site: cadastrar
-      www.mentorque.com.br em search.google.com/search-console (verificação
-      por TXT no DNS do Registro.br). Sem isso o braço registra
-      "Nenhuma propriedade mentorque no Search Console".
+- [x] Search Console: pronto e testado em 2026-08-23. Propriedade
+      sc-domain:mentorque.com.br verificada por TXT no Registro.br, conta
+      appfactory.rlm como proprietária; coleta veio zerada porque a
+      propriedade é nova e o Google acumula a partir de agora.
 - [ ] Google Play (vitals + avaliações): credencial tipo "Google API"
       (Service Account), colando o JSON da conta revenuecat@mentorque.iam.
       Vale para os 3 nós do Play.
