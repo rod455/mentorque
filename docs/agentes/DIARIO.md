@@ -3,6 +3,29 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-23 · Mapa do app (rodada especial do CRO) e o gargalo do push
+- Rodada especial pedida pelo dono, só análise: mapa completo da jornada do
+  anúncio ao premium, veredito sobre banner de premium, onde caberiam
+  ebooks e framework de personas. Tudo escrito em mapa-experiencia.md.
+- Achados que valem decisão do dono: (1) o pedido de premium aparece 2x
+  antes de qualquer valor sentido, e o banner da Home para quem não tem
+  carro é o candidato natural a sair; (2) três pontos naturais para ebook
+  (trilha concluída, sintoma resolvido, código OBD2), nenhum ocupado hoje;
+  (3) a campanha não atravessa da loja para o app instalado (sem install
+  referrer nem deep link), então CAC por campanha mede bem só a web.
+- Achado técnico: abriu_trilha mede ABRIR uma categoria, não concluir nada.
+  Falta evento de conclusão (trilha, aula, serviço, sintoma) para medir
+  valor consumado. Próximo buraco de instrumentação.
+- Duas mudanças diretas foram para a main (CTA do teste por plano e fim do
+  lembrete falso), ambas registradas no caderno de experimentos com
+  veredito aberto para 20/09.
+- GARGALO ESTRUTURAL: pela segunda vez a sessão de rotina não conseguiu
+  pushar (sem permissão de escrita no repositório), e o trabalho precisou
+  ser reaplicado à mão por uma sessão do dono. Enquanto isso não for
+  resolvido no ambiente das rotinas, a memória do time depende de alguém
+  reaplicar. Proposta: liberar acesso de escrita ao repositório no ambiente
+  das rotinas, ou fazer os agentes gravarem via API do GitHub como o n8n.
+
 ## 2026-08-23 · Quebra do funil visível + A/B com aprovação do dono
 - Painel ganhou a seção "Onde o funil quebra" (28 dias, pessoas distintas
   por etapa, pior passagem destacada): é o mapa de prioridade dos testes.
