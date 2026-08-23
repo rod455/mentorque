@@ -87,3 +87,8 @@ rodada seguinte. Recomendação sem número previsto não aprende nada.
   vivem no banco (auth.users, excluindo fake_). Em 23/08: 22 aparelhos
   abriram, 8 contas reais criadas (36% de abertura para cadastro). Nunca
   somar nem comparar os dois como se fossem a mesma coisa.
+- 2026-08-23 (decisão do dono): não existe como separar TestFlight dentro
+  dos números do RevenueCat (a API só marca sandbox em compras). Régua
+  oficial de GENTE REAL: contas do banco + régua de uso do funil. O pacote
+  revenuecat carrega uma nota se rotulando como bruto; usar só como ordem
+  de grandeza de instalação, nunca como usuários em análise.
