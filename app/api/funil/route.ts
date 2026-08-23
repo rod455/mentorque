@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
+import { chaveDadosOk, negada } from "@/lib/chaveDados";
 
 export const runtime = "nodejs";
 
@@ -58,7 +59,8 @@ export async function POST(req: Request) {
   return NextResponse.json({ ok: true });
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  if (!chaveDadosOk(req)) return negada();
   const admin = getSupabaseAdmin();
   if (!admin) return NextResponse.json({ error: "not_configured" }, { status: 501 });
 
