@@ -82,4 +82,8 @@ rodada seguinte. Recomendação sem número previsto não aprende nada.
 
 ## Aprendizados com os nossos dados
 
-- (vazio ainda; a primeira coorte conta a primeira história)
+- 2026-08-23: "active_users" do RevenueCat conta APARELHOS que abriram o
+  app (SDK, inclui anônimos, testes do dono e TestFlight); contas criadas
+  vivem no banco (auth.users, excluindo fake_). Em 23/08: 22 aparelhos
+  abriram, 8 contas reais criadas (36% de abertura para cadastro). Nunca
+  somar nem comparar os dois como se fossem a mesma coisa.
