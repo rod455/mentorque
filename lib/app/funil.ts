@@ -13,7 +13,13 @@ import { apiPost } from "./apiBase";
 import { APP_VERSION } from "./content";
 import { isNativeApp, nativePlatform } from "./wrapper";
 
-export type EventoFunil = "abriu_app" | "cadastro" | "viu_paywall" | "iniciou_checkout";
+export type EventoFunil =
+  | "abriu_app"
+  | "cadastro"
+  | "viu_paywall"
+  | "iniciou_checkout"
+  | "abriu_trilha"
+  | "cadastrou_carro";
 
 const CHAVE_ANON = "mq-anon-id";
 function anonId(): string {

@@ -63,6 +63,65 @@ aberturas por usuário ativo. São réguas EMPRESTADAS: valem só para dar
 escala até a nossa própria série existir. A meta real é cada coorte ser
 melhor que a anterior.
 
+## O painel da empresa: Marketing, Engajamento, Vendas
+
+A visão completa se organiza em três blocos (é a ordem do retrato). Cada
+bloco tem UM número que resume ("o número do bloco") e os de apoio.
+
+**MARKETING (gente chegando)**
+- Número do bloco: cadastros por semana.
+- Apoio: cadastros por origem e campanha (cadastros_por_campanha), cliques
+  e consultas do Search Console, views do YouTube, gasto de mídia.
+- **CAC por campanha** = gasto da campanha / cadastros com a UTM dela.
+  Enquanto não há campanha, o bloco mostra origem orgânica.
+
+**ENGAJAMENTO (gente usando e voltando)**
+- Número do bloco: retenção da coorte (voltaram em 1 a 7 dias).
+- Apoio: usuários ativos por semana, frequência, **ativação real**
+  (ativados_7d: fizeram abriu_trilha ou cadastrou_carro em até 7 dias do
+  cadastro), erros do app, avaliações das lojas, vitals do Play.
+
+**VENDAS (gente pagando e continuando)**
+- Número do bloco: assinaturas ativas e MRR.
+- Apoio: funil paywall → checkout → assinou, coorte de assinantes
+  (assinaturas_coortes: dos que assinaram no mês X, quantos renovaram e
+  quantos saíram), receita de anúncio (AdMob), receita real (Stripe).
+
+## O que uma startup de app saudável acompanha (e o que "saudável" significa)
+
+As métricas clássicas do mercado, na régua que importa em cada estágio:
+
+1. **Curva de retenção que ESTABILIZA**: o sinal número um de
+   product-market fit. A curva de cada coorte pode cair no começo, mas
+   precisa achatar num patamar acima de zero (pessoas que ficaram). Curva
+   que vai a zero = balde furado; crescer aquisição em cima disso é pagar
+   para encher um balde sem fundo.
+2. **Coortes melhorando**: cada coorte nova reter mais que a anterior
+   prova que o produto está melhorando. É a NOSSA métrica de norte
+   enquanto o volume é pequeno.
+3. **Stickiness (ativos no dia / ativos no mês)**: acima de 20% indica
+   hábito real; apps de utilidade vivem bem entre 10 e 25%.
+4. **Quick ratio de usuários** (novos + ressuscitados / perdidos no
+   período): acima de 1 a base cresce; muito acima de 2 é crescimento
+   forte. Vale também para assinantes.
+5. **LTV / CAC**: o valor que um assinante deixa na vida dele dividido
+   pelo custo de adquirir. Régua de mercado: acima de 3 é saudável;
+   abaixo de 1 é queimar dinheiro. Só calculável com campanhas rodando e
+   alguns meses de renovação.
+6. **Payback do CAC**: em quantos meses a assinatura devolve o custo de
+   aquisição. Menos de 12 meses é confortável para app de assinatura.
+7. **Churn mensal de assinantes**: para B2C, abaixo de 5% ao mês é bom;
+   anual dilui isso (o nosso plano forte é anual, então o número aparece
+   devagar e a renovação do mês 12 é o teste de verdade).
+8. **MRR e composição do crescimento**: quanto do MRR novo vem de gente
+   nova vs preço vs retorno. Crescer só com entrada nova e churn alto é
+   crescimento de aparência.
+
+Regra de estágio: com menos de algumas centenas de usuários, os itens 1,
+2 e 3 mandam; 4 a 8 entram conforme mídia paga e assinantes existirem.
+Não perseguir 8 números de uma vez: o Diretor destaca o número do bloco
+e aponta UM desvio por semana.
+
 ## Ligando causa e efeito
 
 Toda mudança relevante (versão nova, tela mexida, campanha ligada) tem

@@ -12,7 +12,12 @@ export const runtime = "nodejs";
 //
 // GET: agregados sem PII (a visão semanal + o retrato das assinaturas), a
 // fonte dos relatórios dos agentes e de qualquer painel.
-const EVENTOS_DO_APP = new Set(["abriu_app", "cadastro", "viu_paywall", "iniciou_checkout"]);
+const EVENTOS_DO_APP = new Set([
+  "abriu_app", "cadastro", "viu_paywall", "iniciou_checkout",
+  // Primeira ação de valor: é o que separa "criou conta" de "experimentou
+  // de verdade" (ativação real na skill de análise).
+  "abriu_trilha", "cadastrou_carro",
+]);
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const corta = (v: unknown, n: number) => (typeof v === "string" && v.trim() ? v.trim().slice(0, n) : null);

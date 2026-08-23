@@ -20,6 +20,7 @@ export async function GET() {
   const [
     { data: semanas }, { data: subs }, { data: cadastros }, { data: erros }, { data: metricas },
     { data: usoDiario }, { data: usoSemanal }, { data: coortes },
+    { data: ativacao }, { data: assCoortes }, { data: porCampanha },
   ] = await Promise.all([
     admin.from("funil_semana").select("*").limit(12),
     admin.from("subscriptions").select("status, cancel_at_period_end, plan"),
@@ -29,6 +30,9 @@ export async function GET() {
     admin.from("uso_diario").select("*").limit(14),
     admin.from("uso_semanal").select("*").limit(8),
     admin.from("retencao_coortes").select("*").limit(8),
+    admin.from("ativacao_coortes").select("*").limit(8),
+    admin.from("assinaturas_coortes").select("*").limit(12),
+    admin.from("cadastros_por_campanha").select("*").limit(20),
   ]);
 
   const ativas = (subs ?? []).filter((s) => s.status === "active");
@@ -67,7 +71,15 @@ export async function GET() {
       porDia: usoDiario ?? [],
       porSemana: usoSemanal ?? [],
       coortes: coortes ?? [],
+      // Ativação real: % da coorte que fez a primeira ação de valor
+      // (abriu trilha ou cadastrou carro) em até 7 dias do cadastro.
+      ativacao: ativacao ?? [],
     },
+    // Vendas: coorte mensal de quem assinou e o que aconteceu depois.
+    vendas: { assinaturasCoortes: assCoortes ?? [] },
+    // Marketing: de onde vieram os cadastros dos últimos 28 dias (UTM da LP).
+    // Cruzado com o gasto de meta_ads/google_ads, vira CAC por campanha.
+    marketing: { cadastrosPorCampanha: porCampanha ?? [] },
     // Fontes externas coletadas pelo Analista (metricas_diarias): para cada
     // fonte, o pacote mais recente e a série dos últimos 10 dias.
     fontesExternas: (() => {

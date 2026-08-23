@@ -11,6 +11,7 @@ import { AvatarPickerSheet } from "../AvatarPicker";
 import type { ServiceRecord, VehicleType } from "@/lib/app/types";
 import { Button } from "@/components/ui/Button";
 import { useNav } from "@/lib/app/nav";
+import { funil } from "@/lib/app/funil";
 import { AppHeader, Card, Chip, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
 import BielaMascote from "@/components/BielaMascote";
 
@@ -331,6 +332,8 @@ export function AddCarScreen({ editId }: { editId?: string }) {
       back();
     } else {
       addVehicle(data);
+      // Primeira ação de valor do funil: cadastrou um veículo (ativação real).
+      funil("cadastrou_carro", { umaVez: true, origem: type });
       root({ name: "car" });
     }
   };

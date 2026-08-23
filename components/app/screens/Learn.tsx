@@ -11,6 +11,7 @@ import type { ServiceRecord } from "@/lib/app/types";
 import { APP_VERSION, carName, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { isNativeApp, nativePlatform } from "@/lib/app/wrapper";
+import { funil } from "@/lib/app/funil";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Card, Chip, Icon, PinButton, PremiumBadge, SectionTitle, Sheet, Thumb, UpgradeBanner, useContent } from "../ui";
 import { VideoPlayer } from "../VideoPlayer";
@@ -387,6 +388,8 @@ export function LearnScreen() {
 export function StudyTrackScreen({ trackId }: { trackId: string }) {
   const c = useContent();
   const { s } = usePrototype();
+  // Primeira ação de valor do funil: abriu uma trilha (ativação real).
+  useEffect(() => { funil("abriu_trilha", { umaVez: true, origem: trackId }); }, [trackId]);
   const track = c.studyTracks.find((t) => t.id === trackId);
   const items = c.lessons.filter((l) => l.track === trackId);
   if (!track) return <AppHeader title="—" />;
