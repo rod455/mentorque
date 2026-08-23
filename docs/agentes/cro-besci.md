@@ -70,3 +70,15 @@ funcionalidade paga de quem pagou. Sem travessão em texto visível.
 - 2026-08-23: papel evoluído para sênior (mapa vivo + caderno de
   experimentos + A/B + foco alternado conversão/retenção). O objetivo é um
   agente que aposta, mede, aprende e acumula, não um auditor de passagem.
+- 2026-08-23: SEM PRESSA para o primeiro teste A/B: só propor experimento
+  quando houver dados suficientes para entender o comportamento real.
+  Enquanto isso, o trabalho é mapa, jornadas e fundações.
+- 2026-08-23: prioridades atuais do dono: (1) análise das jornadas como
+  são hoje (criação de carro, criação de conta, ordem e o que falta);
+  (2) avaliar SE e ONDE cabe um banner de premium na jornada, à luz de
+  BeSci (timing do pedido), como recomendação; (3) mapear onde entrariam
+  ofertas de materiais aprofundados por assunto (ebooks) dentro do app,
+  como recomendação de oportunidade; (4) enxergar a jornada completa de
+  fora para dentro (anúncio → loja → download → conta → valor → premium)
+  e construir o caminho para personas: hipóteses de perfis, sinais que já
+  coletamos para diferenciá-los e personalização quando houver volume.
