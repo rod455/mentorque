@@ -3,6 +3,21 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-23 · Sete de dez fontes conectadas
+- Search Console verificado (propriedade sc-domain:mentorque.com.br) e
+  coletando; série nasce zerada porque a propriedade é nova.
+- Rodrigo colou as chaves de Stripe, RevenueCat, Vercel e o JSON do Play;
+  as quatro testadas no mesmo dia. Primeiros dados reais: RevenueCat com 22
+  usuários ativos e 0 assinaturas; Vercel com 20 deploys sadios na semana;
+  Play sem reviews e sem vitals ainda (app recém-chegado às lojas).
+- Ajuste no braço de vitals: a API do Play publica com uns 3 dias de
+  atraso, janela mudou para 12 a 4 dias atrás.
+- Discrepância aberta: Stripe live mostra 0 assinaturas ativas, banco
+  mostra 1 anual ativa (provável teste). Esclarecer antes do Diretor tratar
+  como receita.
+- Faltam: YouTube, AdMob, App Store Connect (.p8) e Google Ads (token em
+  processo). Workflow segue desligado.
+
 ## 2026-08-22 · Meta conectada e um bug de permissão corrigido no banco
 - Token da Marketing API da Meta (usuário do sistema "Analista Mentorque",
   criado pelo Luiz) colado no n8n e testado: enxerga a conta "Mentorque Ads"

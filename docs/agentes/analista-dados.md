@@ -58,18 +58,21 @@ nos nós do braço correspondente (a API não permite anexar por fora):
       sc-domain:mentorque.com.br verificada por TXT no Registro.br, conta
       appfactory.rlm como proprietária; coleta veio zerada porque a
       propriedade é nova e o Google acumula a partir de agora.
-- [ ] Google Play (vitals + avaliações): credencial tipo "Google API"
-      (Service Account), colando o JSON da conta revenuecat@mentorque.iam.
-      Vale para os 3 nós do Play.
-- [ ] Stripe: credencial "Bearer Auth" com uma chave RESTRITA de leitura
-      (Stripe Dashboard, Developers, API keys, Create restricted key: Read
-      em Subscriptions e Charges). Nos 2 nós do Stripe.
+- [x] Google Play (vitals + avaliações): pronto e testado em 2026-08-23,
+      com o JSON da conta revenuecat@. Avaliações respondem vazio (loja sem
+      reviews ainda) e vitals respondem vazio (app quase sem uso). A API de
+      vitals publica com uns 3 dias de atraso, por isso a janela consulta de
+      12 a 4 dias atrás.
+- [x] Stripe: pronto e testado em 2026-08-23 com chave restrita de leitura.
+      ATENÇÃO: o modo live mostra 0 assinaturas ativas, mas a tabela
+      subscriptions do banco mostra 1 anual ativa; provável assinatura de
+      teste no banco. Esclarecer com o Rodrigo.
 - [ ] YouTube: credencial "YouTube OAuth2 API" (mesmo fluxo de 2 cliques do
       Gmail, cliente OAuth do projeto Vocaboost). Nos 3 nós do YouTube.
-- [ ] RevenueCat: credencial "Bearer Auth" com chave secreta da API v2
-      (RevenueCat, Project settings, API keys). Nos 2 nós.
-- [ ] Vercel: credencial "Bearer Auth" com token de acesso (Vercel, Account
-      Settings, Tokens). Nos 2 nós.
+- [x] RevenueCat: pronto e testado em 2026-08-23 (chave secreta v2). Dado
+      real: 22 usuários ativos, 22 clientes novos, 0 assinaturas ativas.
+- [x] Vercel: pronto e testado em 2026-08-23 (token de acesso). Dado real:
+      20 deploys nos últimos 7 dias, todos prontos, produção saudável.
 - [ ] Google Ads: credencial "Google Ads OAuth2 API" (pede também o
       developer token da conta). Nos 2 nós. Se a API mudar de versão até lá,
       ajustar o v20 nas URLs.
