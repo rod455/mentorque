@@ -3,6 +3,22 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-23 · Gargalo do push resolvido: cada agente ganhou sessão fixa
+- Causa raiz confirmada com teste isolado: sessão criada na hora pela
+  rotina nasce sem destino de escrita, então o agente trabalha, tenta
+  pushar e falha no fim. Uma sessão criada com destino de escrita pushou
+  de primeira (commit de teste, depois revertido).
+- Conserto: os cinco agentes agora têm sessão de trabalho fixa e nomeada,
+  e as rotinas do calendário acordam essa sessão em vez de abrir uma nova.
+  Efeito colateral bom: o agente lembra da rodada anterior, então o CRO
+  fecha o veredito da aposta que ele mesmo registrou, o Conteúdo alterna o
+  formato certo e o ASO não repete resposta já rascunhada.
+- Onde o dono vê o trabalho de cada um está escrito em ONDE-VER.md, com os
+  ids das sessões e o que checar quando um agente parar de entregar.
+- Notificação: só o Diretor avisa, na segunda. Como rotina ligada a sessão
+  fixa não carrega notificação própria, o próprio Diretor passou a mandar o
+  aviso no fim da rodada, com a manchete e o que precisa de decisão.
+
 ## 2026-08-23 · Mapa do app (rodada especial do CRO) e o gargalo do push
 - Rodada especial pedida pelo dono, só análise: mapa completo da jornada do
   anúncio ao premium, veredito sobre banner de premium, onde caberiam
