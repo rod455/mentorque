@@ -78,15 +78,28 @@ este último mesmo para quem ainda não cadastrou carro nenhum.
 - Contra: contraria o timing do pedido da própria skill BeSci. Pedir antes
   de qualquer valor sentido custa confiança, não só conversão.
 
-Onde caberia melhor (recomendação, decisão do dono):
+Onde caberia melhor (recomendação da rodada):
 1. No aviso de trilha concluída, que hoje não tem oferta nenhuma.
 2. Depois do primeiro serviço registrado, e nunca junto do pedido de nota
    na loja (dois pedidos no mesmo instante se anulam).
 3. No detalhe de um sintoma diagnosticado.
 
-Candidato mais claro a sair: o banner da Home para quem ainda NÃO tem carro,
-porque a Home já tem no mesmo espaço um pedido mais legítimo (cadastrar o
-carro), e dois pedidos competindo enfraquecem os dois.
+DECISÃO DO DONO (2026-08-23): adicionar os momentos novos, sem tirar os
+antigos. Implementado no mesmo dia:
+- Trilha concluída: UpgradeBanner dentro do aviso de celebração,
+  ctx "trilha-concluida" (Learn.tsx).
+- Histórico: UpgradeBanner a partir do SEGUNDO serviço registrado,
+  ctx "pos-servico" (History.tsx). Do segundo em diante de propósito: é no
+  primeiro que o app pede nota na loja, e a promessa de relatório de gastos
+  só é concreta com histórico na mão.
+- Ponto 3 NÃO recebeu banner novo: o detalhe do sintoma já tem três
+  convites de Premium (causas bloqueadas, diagnóstico com a Biela e o
+  banner de recomendações). Um quarto seria poluição, não conversão.
+- O banner da Home para quem não tem carro FICA, por decisão do dono.
+
+Como ler o resultado: cada ctx vira a origem do evento viu_paywall, então
+a view experimentos e o funil por origem mostram qual momento converte
+melhor. Comparar em 4 semanas contra o paywall do onboarding.
 
 # Ebooks: onde a oferta de material aprofundado é natural
 
