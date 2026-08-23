@@ -31,6 +31,7 @@ export async function coletarDadosOperacao() {
     admin.from("assinaturas_coortes").select("*").limit(12),
     admin.from("cadastros_por_campanha").select("*").limit(20),
   ]);
+  const { data: experimentos } = await admin.from("experimentos_resultados").select("*").limit(120);
 
   const ativas = (subs ?? []).filter((s) => s.status === "active");
 
@@ -82,6 +83,9 @@ export async function coletarDadosOperacao() {
     // Marketing: de onde vieram os cadastros dos últimos 28 dias (UTM da LP).
     // Cruzado com o gasto de meta_ads/google_ads, vira CAC por campanha.
     marketing: { cadastrosPorCampanha: porCampanha ?? [] },
+    // Testes A/B em curso: eventos e pessoas por experimento e variante
+    // (caderno em docs/agentes/experimentos.md).
+    experimentos: experimentos ?? [],
     // Fontes externas coletadas pelo Analista (metricas_diarias): para cada
     // fonte, o pacote mais recente e a série dos últimos 10 dias.
     fontesExternas: porFonte,

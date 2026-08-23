@@ -47,6 +47,23 @@ export async function POST(req: Request) {
     if (Object.keys(limpo).length) utm = limpo;
   }
 
+  // Testes A/B em curso no aparelho (carimbo dos experimentos): no máximo 6
+  // pares, chaves e valores curtos. É o que permite ler conversão por
+  // variante sem tabela nova (view experimentos_resultados).
+  let exp: Record<string, string> | null = null;
+  if (b?.exp && typeof b.exp === "object" && !Array.isArray(b.exp)) {
+    const bruto = b.exp as Record<string, unknown>;
+    const limpo: Record<string, string> = {};
+    for (const k of Object.keys(bruto).slice(0, 6)) {
+      const chave = k.trim().slice(0, 32);
+      const val = corta(bruto[k], 16);
+      if (chave && val) limpo[chave] = val;
+    }
+    if (Object.keys(limpo).length) exp = limpo;
+  }
+
+  const extra = utm || exp ? { ...(utm ? { utm } : {}), ...(exp ? { exp } : {}) } : null;
+
   await admin.from("funil_eventos").insert({
     evento,
     anon_id: corta(b?.anonId, 64),
@@ -54,7 +71,7 @@ export async function POST(req: Request) {
     plataforma: corta(b?.plataforma, 16),
     versao: corta(b?.versao, 16),
     origem: corta(b?.origem, 32),
-    extra: utm ? { utm } : null,
+    extra,
   });
   return NextResponse.json({ ok: true });
 }

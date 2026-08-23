@@ -12,6 +12,8 @@
 import { apiPost } from "./apiBase";
 import { APP_VERSION } from "./content";
 import { isNativeApp, nativePlatform } from "./wrapper";
+import { anonId } from "./anon";
+import { variantesAtivas } from "./experimentos";
 
 export type EventoFunil =
   | "abriu_app"
@@ -20,20 +22,6 @@ export type EventoFunil =
   | "iniciou_checkout"
   | "abriu_trilha"
   | "cadastrou_carro";
-
-const CHAVE_ANON = "mq-anon-id";
-function anonId(): string {
-  try {
-    let v = window.localStorage.getItem(CHAVE_ANON);
-    if (!v) {
-      v = crypto.randomUUID();
-      window.localStorage.setItem(CHAVE_ANON, v);
-    }
-    return v;
-  } catch {
-    return "sem-armazenamento";
-  }
-}
 
 // Dedup por sessão: reabrir a mesma tela no mesmo pageview não conta de novo.
 const enviados = new Set<string>();
@@ -69,6 +57,9 @@ export function funil(evento: EventoFunil, o?: { userId?: string | null; origem?
       versao: APP_VERSION,
       origem: o?.origem ?? null,
       utm: utmGuardada(),
+      // Os testes A/B que esta pessoa está vendo: é o carimbo que permite
+      // ler conversão por variante (view experimentos_resultados).
+      exp: variantesAtivas(),
     }).catch(() => undefined);
   } catch {
     // métricas nunca podem quebrar o app
