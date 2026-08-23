@@ -2012,7 +2012,12 @@ export function getContent(locale: Locale) {
         fineSuffix: T("/ano (R$ 19,99/mês)", "/yr (R$ 19.99/mo)"),
         fineMonthlyPrice: "R$ 29,90",
         fineMonthlySuffix: T("/mês, cancele quando quiser", "/mo, cancel anytime"),
+        // O botão diz o que o clique faz, por plano: quem escolheu o anual vê o
+        // teste grátis que acabou de montar; quem escolheu o mensal sabe que a
+        // cobrança é imediata. Achado da rodada do CRO de 23/08.
         cta: T("Continuar", "Continue"),
+        ctaAnnual: T("Começar teste grátis", "Start free trial"),
+        ctaMonthly: T("Assinar agora", "Subscribe now"),
       },
     },
 

@@ -311,7 +311,9 @@ export function OnboardingFlow() {
           </p>
 
           <div className="mt-auto pt-3">
-            <Button size="lg" className="w-full" onClick={onContinue} disabled={buying}>{buying ? "…" : trial.cta}</Button>
+            <Button size="lg" className="w-full" onClick={onContinue} disabled={buying}>
+              {buying ? "…" : plan === "annual" ? trial.ctaAnnual : trial.ctaMonthly}
+            </Button>
 
             {/* Lembrete antes do teste acabar */}
             <div className="mt-2.5 flex items-center gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-2 ring-1 ring-white/[0.06]">
