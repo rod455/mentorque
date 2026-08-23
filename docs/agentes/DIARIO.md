@@ -3,6 +3,24 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-23 · Régua de uso + skill de análise (e um bug grave achado)
+- ACHADO GRAVE no caminho: funil_eventos NUNCA tinha aceitado um evento
+  (mesmo bug de permissão do dia anterior, presente desde a criação).
+  Varredura completa achou 6 objetos sem acesso do papel de serviço
+  (funil_eventos, funil_semana, content_events, price_reports, user_state,
+  waitlist); user_state e waitlist funcionavam por outros caminhos, o resto
+  estava mudo. Tudo corrigido + default privileges para tabelas futuras.
+  A série do funil COMEÇA em 2026-08-23; web emite já, apps das lojas só a
+  partir do próximo build.
+- Régua de uso criada: views uso_diario, uso_semanal e retencao_coortes
+  (pessoas distintas, frequência, retenção por coorte de cadastro), no
+  /api/dados (campo uso) e no retrato (seção "Uso do app").
+- Skill escrita em docs/agentes/skills/analise-da-operacao.md: as quatro
+  perguntas (aquisição, ativação, retenção, receita), definições, regras de
+  honestidade com amostra pequena, roteiro de diagnóstico e réguas
+  emprestadas. Diretor e CRO agora leem antes de analisar (manuais
+  atualizados).
+
 ## 2026-08-23 · Nove de dez fontes conectadas
 - YouTube (cliente OAuth novo "Mentorque N8N", projeto Mentorque, app
   publicado em produção): coleta os 10 últimos vídeos; views zeradas

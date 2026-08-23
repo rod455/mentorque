@@ -4,6 +4,12 @@ Roda toda segunda-feira de manhã (rotina agendada, sessão nova do Claude Code
 neste ambiente). É o único agente que fala com o Rodrigo por padrão: consolida
 a semana em UM relatório executivo e no máximo TRÊS prioridades.
 
+## Antes de analisar
+
+Ler a skill docs/agentes/skills/analise-da-operacao.md: é o método (as
+quatro perguntas, definições da régua de uso, regras de honestidade com
+amostra pequena e o roteiro de diagnóstico). O relatório segue esse método.
+
 ## Fontes, na ordem
 
 1. **O retrato diário**: docs/dados/retrato.md, commitado toda manhã pelo
