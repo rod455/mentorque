@@ -53,15 +53,19 @@ leem. Não analisa, não opina, não notifica o Rodrigo; entrega matéria-prima.
    de 2%, deploy quebrado, fonte muda há 2+ dias ou coleta parada. Dia
    normal é silêncio. Testado em 2026-08-23 (dia normal, nenhum e-mail).
 
-## Downloads reais das lojas (pendente de 2 informações do dono)
+## Downloads reais das lojas (metade construída)
 
 Para fechar o primeiro degrau do funil (instalação → abertura → cadastro):
-- Apple: o relatório de vendas exige o **Vendor Number** (App Store
-  Connect, Pagamentos e Relatórios Financeiros, canto superior).
-- Google: as estatísticas de download exigem o **URI do Cloud Storage**
-  (Play Console, Fazer download de relatórios, Estatísticas, botão
-  "Copiar URI do Cloud Storage").
-Com os dois em mãos, os braços entram no workflow de métricas.
+- Apple: braço construído no workflow de métricas (fonte
+  app_store_downloads, Vendor Number 94182924, relatório diário SUMMARY
+  que EXCLUI TestFlight). Pendente: chave .p8 nova com papel "Vendas e
+  relatórios" (a chave Developer não alcança o endpoint; a Apple recusou
+  com "API key does not allow this request"). Trocar a credencial e o
+  Key ID no nó "App Store: token vendas".
+- Google: aguardando o Play Console gerar os primeiros relatórios
+  estatísticos do app (em 23/08 ainda mostrava "Não há relatórios
+  mensais disponíveis"); quando existirem, copiar o URI do Cloud Storage
+  na tela Fazer download de relatórios → Estatísticas.
 
 ## Checklist para ligar (credenciais no n8n, uma por linha)
 
