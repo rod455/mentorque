@@ -23,9 +23,10 @@ Horário de Brasília. No calendário elas ficam gravadas em UTC (11h).
    tudo que ele fez, rodada por rodada, desde a primeira. É o lugar mais
    completo: mostra o raciocínio, não só a conclusão.
 2. **Galeria de artifacts.** Toda rodada publica um relatório com nome
-   fixo: "Relatório da semana" (Diretor), "QA da semana", "Conversão da
+   fixo: "Semana Mentorque" (Diretor), "QA da semana", "Conversão da
    semana", "Conteúdo da semana", "Lojas da quinzena". É a leitura de 3
-   minutos.
+   minutos. O do Diretor é um artifact NOVO por semana, com a data no
+   conteúdo, então a galeria vira o histórico semana a semana.
 3. **Este repositório.** DIARIO.md tem o registro de cada rodada em ordem,
    o mais novo em cima, e o `git log` mostra exatamente o que cada agente
    mudou no código.

@@ -52,7 +52,33 @@ o agente do papel certo na rodada seguinte.
 
 ## Aprendizados
 
-- (vazio ainda)
+- 2026-08-24: a rota /api/funil NÃO é alcançável de dentro da sessão da
+  rotina (o proxy de rede bloqueia mentorque.com.br, e o curl nem completa a
+  conexão). Não insistir: o caminho normal do Diretor é o retrato do dia.
+- 2026-08-24: o banco (integração do Supabase) responde nesta sessão e é o
+  melhor complemento do retrato, porque o retrato só traz o funil semanal e
+  o banco traz o que falta para COMPARAR semanas. As três consultas que
+  valeram a rodada: contas novas por semana em auth.users (excluindo
+  fake_), eventos por tipo em funil_eventos, e a tabela subscriptions com
+  join em auth.users para ver QUEM é cada assinante. Sem a terceira, o
+  relatório teria repetido "1 assinatura ativa" pela terceira semana.
+- 2026-08-24: número que não se explica precisa ser aberto até a linha, não
+  só conferido contra outra fonte. A discrepância Stripe (0) contra banco
+  (1) ficou três dias como "esclarecer"; bastou olhar a linha para virar
+  fato (a conta de revisão das lojas, validade 2099, sem id de cobrança).
+- 2026-08-24: fonte que consulta a conta inteira do dono corta dos dois
+  lados. Para receita ela superestima (foi o caso do AdMob), mas quando ela
+  devolve ZERO isso PROVA o zero do Mentorque, porque o total é
+  superconjunto. Dá para afirmar receita zero com o Stripe da conta toda.
+- 2026-08-24: o Web Analytics da Vercel não está ativado no projeto
+  mentorque (a API responde "Web Analytics not found"). Ou seja, tráfego do
+  site não existe como número hoje. Pela Vercel dá para pegar saúde de
+  deploy (list_deployments), que é o que o retrato já mostra. Não gastar a
+  rodada tentando; se um dia for ativado, o retrato avisa.
+- 2026-08-24: distinguir ZERO de SEM MEDIÇÃO é a coisa mais importante do
+  relatório neste estágio. Etapa que nunca recebeu evento não pode aparecer
+  como 0 ao lado de uma etapa que recebeu e deu 0. No artifact isso virou
+  hachura contra barra; em texto, a regra é sempre escrever "sem medição".
 
 ## Direcionamentos do dono
 

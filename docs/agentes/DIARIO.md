@@ -3,6 +3,35 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-24 · Diretor: primeiro relatório semanal (17 a 23/08)
+- Artifact "Semana Mentorque":
+  https://claude.ai/code/artifact/0d77de71-0a02-40d3-9807-9c6752eb8d64
+- Número da semana: ZERO cadastros, contra 4 na semana de 10 a 16 (dias 11,
+  13, 14 e 16, duas por login da Apple no iPhone). São 8 dias seguidos sem
+  ninguém novo. Total acumulado desde 01/08: 8 contas reais.
+- Sem defeito por trás: 0 erro no app, 0 avaliação nas lojas, 20 deploys
+  verdes. O que falta é topo de funil: 0 clique na busca, R$0 de mídia, e os
+  10 vídeos do YouTube seguem privados desde 10/08.
+- Funil 17 a 23 (medido só a partir de 23/08): 4 aberturas, 2 pessoas,
+  0 cadastros, 0 paywall, 0 checkout, 0 assinatura. Sem semana anterior com
+  que comparar. Em 24/08, já fora da semana, apareceu o PRIMEIRO
+  viu_paywall da história do funil.
+- DÚVIDA DE 23/08 FECHADA: a "1 assinatura anual ativa" do banco é
+  revisor@mentorque.com.br, criada em 02/08, validade 2099-12-31, sem
+  nenhum id de Stripe. É a conta de revisão das lojas, não é receita. E o
+  zero do Stripe é confiável justamente porque a consulta é da conta
+  inteira do dono: zero no superconjunto prova zero aqui.
+- Prioridades entregues: (1) mandar build novo às lojas, porque 1.0 e 1.1
+  são anteriores ao funil e todo usuário de loja é invisível; (2) tornar os
+  10 vídeos do YouTube públicos, único canal pronto e de custo zero, com
+  UTM para medir; (3) marcar a conta do revisor como interna nas contagens
+  (marcar, não apagar).
+- Fontes que falharam nesta rodada, registradas no relatório: /api/funil
+  bloqueada pelo proxy da sessão (usado o fallback do retrato + banco);
+  integração do Stripe não autorizada na sessão (usado o pacote do n8n de
+  23/08); Vercel Web Analytics NÃO está ativado no projeto mentorque, então
+  não existe medição de tráfego do site hoje.
+
 ## 2026-08-23 · Anúncios: tudo configurado e conferido, e DESLIGADOS
 - Decisão do dono depois da auditoria: configurar tudo, não ligar agora.
   Enquanto o app é novo e o foco é conversão para Premium, anúncio atrapalha
