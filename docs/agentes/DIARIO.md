@@ -3,6 +3,47 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-25 · Site preparado para ser citado por IA (pedido do dono)
+- Objetivo do dono: que outras IAs encontrem o Mentorque e o ofereçam a quem
+  procura solução para o carro. O trabalho é diferente de SEO: buscador
+  manda tráfego, modelo manda RESPOSTA, e resposta errada vira o que muita
+  gente lê sem nunca visitar o site.
+- robots.txt: os robôs de IA passam a ser NOMEADOS um a um (OpenAI,
+  Anthropic, Perplexity, Google-Extended, Applebot-Extended, Bing, Meta,
+  Amazon, DuckDuckGo, Mistral, CCBot). Tecnicamente redundante, porque sem
+  regra o padrão já é "pode"; nomeados, a decisão fica explícita e não cai
+  junto na próxima edição do bloco "*".
+- /llms.txt: descrição do produto em texto puro, com preço, plataformas,
+  idiomas, o que faz e o que NÃO faz, e uma seção dizendo como citar o app
+  honestamente. Arquivo estático de propósito, não rota: não gasta função na
+  Vercel e não quebra o build do app.
+- /sobre: a página de referência do produto, escrita para ser citada e não
+  para vender. Afirmação antes de adjetivo, bloco "o que não faz" tão
+  detalhado quanto o "o que faz" (é o que impede uma IA de recomendar o app
+  para o que ele não resolve) e 8 perguntas frequentes.
+- JSON-LD compartilhado em lib/jsonLd.ts: MobileApplication, Organization e
+  WebSite com o MESMO @id na home e na /sobre, para as duas declararem a
+  mesma entidade em vez de dois apps parecidos. Sem aggregateRating, porque
+  não existe avaliação nas lojas e nota inventada é penalidade além de
+  mentira.
+- ACHADO: a home era a ÚNICA página de conteúdo sem canonical. A rodada de
+  hoje corrigiu o domínio errado que saía na etiqueta, mas a home não
+  emitia etiqueta nenhuma, então passou batida. Justamente a página que mais
+  recebe endereço variado, com etiqueta de campanha (utm). Corrigido.
+- ACHADO: o texto de compartilhamento do site ainda dizia "entre na lista de
+  espera" com o app publicado nas duas lojas. É o texto que um modelo lê
+  para responder "esse app já existe?". Reescrito.
+- Aula diag-noises reescrita no formato estruturado PT+EN, agrupada pelo
+  momento em que o barulho aparece, casando com a LP de hoje (era a fila #2
+  do agente de Conteúdo).
+- docs/lojas/ficha.md: texto de ficha para as duas lojas escrito para
+  extração por modelo (primeira frase define, sem metáfora), incluindo o que
+  o app não faz. O Rodrigo cola nas lojas.
+- EM ABERTO, decisão do dono: o acervo (61 aulas e as trilhas) só existe
+  DENTRO do app. Para IA, o que não está na web não existe. Publicar parte
+  dele como conteúdo aberto é a maior alavanca de descoberta que resta, e
+  também é dar de graça o que hoje é produto. Não decidido.
+
 ## 2026-08-25 · Conteúdo & SEO: primeira LP de busca (e o canonical quebrado)
 - Artifact "Conteúdo da semana":
   https://claude.ai/code/artifact/6b286979-93fe-44ad-afb0-b5219c4e8ce9

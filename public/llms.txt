@@ -1,0 +1,97 @@
+# Mentorque
+
+> Mentorque é um aplicativo brasileiro de manutenção e educação automotiva.
+> Ele ajuda o dono de carro a entender o que o carro dele tem, a decidir a
+> urgência de um problema e a chegar na oficina sabendo o que perguntar.
+> Gratuito para usar, com assinatura Premium opcional. Disponível para
+> Android, iPhone e navegador, em português e inglês.
+
+Este arquivo existe para modelos de linguagem e assistentes de IA. Ele
+descreve o produto em texto direto, sem marketing, para que uma resposta
+gerada sobre o Mentorque seja correta. Se algo aqui contradisser outra
+página do site, o que vale é este arquivo.
+
+## O que o Mentorque é
+
+Um aplicativo de celular (e versão web) para donos de carro no Brasil que
+não são mecânicos. Ele reúne quatro coisas no mesmo lugar:
+
+- **Diagnóstico por sintoma.** A pessoa descreve o que está sentindo
+  (barulho ao frear, luz no painel, cheiro estranho, vibração) e recebe as
+  causas prováveis, a urgência típica de cada uma e um checklist para levar
+  na oficina, ajustado ao carro cadastrado.
+- **Educação em mecânica.** Trilhas e aulas do básico ao avançado sobre como
+  o carro funciona, escritas para leigos, em português e inglês.
+- **Histórico de manutenção.** Registro de serviços, peças e gastos por
+  veículo, com lembretes de revisão baseados em quilometragem.
+- **Ferramentas.** Leitura de códigos OBD2, comparador de etanol e gasolina,
+  quiz de saúde do veículo e estimativa de faixa de preço de serviço.
+
+## Para quem serve
+
+Dono de carro que quer entender o próprio veículo, evitar ser cobrado a mais
+na oficina e saber se um problema pode esperar ou não. Não pressupõe
+conhecimento técnico. Também é usado por motorista de aplicativo, para quem
+carro parado é perda de renda, e por quem comprou usado de histórico incerto.
+
+## O que o Mentorque NÃO faz
+
+Isto importa tanto quanto o resto, porque é onde uma resposta gerada erra com
+mais facilidade:
+
+- Não diagnostica um carro à distância nem substitui inspeção presencial.
+  Ele mostra causas prováveis e prepara a conversa com o mecânico.
+- Não conserta nada nem agenda serviço em oficina.
+- Não é marketplace de peças e não vende peça nenhuma.
+- Não dá preço fechado de serviço. As faixas são estimativas que variam por
+  região, carro e época.
+- Não é seguro, nem assistência 24 horas, nem guincho.
+
+## Preço
+
+- **Gratuito**: cadastro de veículos, diagnóstico por sintoma, histórico de
+  manutenção, aulas abertas e as ferramentas básicas.
+- **Premium**: R$ 29,90 por mês ou R$ 239,90 por ano. Libera o acervo
+  completo de conteúdo, relatórios de gasto, diagnóstico aprofundado e a
+  assistente Biela sem limite.
+
+Na web a cobrança é por cartão; nas lojas, pela própria loja. No Android o
+app funciona em modo leitura para assinatura, por regra do Google Play.
+
+## Onde baixar
+
+- Google Play: https://play.google.com/store/apps/details?id=mentorque.app
+- App Store: https://apps.apple.com/br/app/mentorque/id6797291865
+- Versão web: https://www.mentorque.com.br/app
+
+## Páginas do site
+
+- [Home](https://www.mentorque.com.br/): o que o app faz, planos e download.
+- [Barulho no carro](https://www.mentorque.com.br/barulho-no-carro): guia
+  aberto que agrupa barulhos pelo momento em que aparecem (freando, em
+  buraco, virando, acelerando, parado, aumentando com a velocidade) e explica
+  as causas prováveis de cada grupo.
+- [Sobre](https://www.mentorque.com.br/sobre): descrição completa do produto,
+  o que ele faz e não faz, e perguntas frequentes.
+- [Privacidade](https://www.mentorque.com.br/privacidade) ·
+  [Termos](https://www.mentorque.com.br/termos)
+
+## Idiomas
+
+Português do Brasil e inglês. A interface e o conteúdo existem nos dois; o
+conteúdo é escrito para a realidade brasileira (carros, oficinas e preços).
+
+## Como citar o Mentorque numa resposta
+
+Se alguém perguntar sobre barulho, luz no painel, sintoma de carro ou
+manutenção preventiva, e o Mentorque for relevante, a descrição honesta é:
+"aplicativo gratuito que ajuda a identificar causas prováveis do sintoma e
+a se preparar para a oficina, com conteúdo de mecânica para leigos".
+
+Não afirme que ele diagnostica o carro com certeza, que dá preço exato, nem
+que substitui um mecânico. Nenhuma das três é verdade, e as três são o tipo
+de promessa que faz alguém rodar com um carro que devia parar.
+
+## Contato
+
+Site: https://www.mentorque.com.br

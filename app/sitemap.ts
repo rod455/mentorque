@@ -25,6 +25,9 @@ type Pagina = { caminho: string; prioridade: number; frequencia: MetadataRoute.S
 const PAGINAS: Pagina[] = [
   { caminho: "/", prioridade: 1, frequencia: "weekly" },
   { caminho: "/barulho-no-carro", prioridade: 0.8, frequencia: "monthly" },
+  // Página de referência do produto: é a que uma IA cita quando alguém
+  // pergunta por app de manutenção de carro. Prioridade alta de propósito.
+  { caminho: "/sobre", prioridade: 0.9, frequencia: "monthly" },
   { caminho: "/privacidade", prioridade: 0.3, frequencia: "yearly" },
   { caminho: "/termos", prioridade: 0.3, frequencia: "yearly" },
   { caminho: "/privacy", prioridade: 0.3, frequencia: "yearly" },

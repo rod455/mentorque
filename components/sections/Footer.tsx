@@ -22,6 +22,11 @@ export function Footer() {
     // com mais autoridade do site. Só aparece em português porque os guias são
     // escritos em português.
     ...(locale === "en" ? [] : [{ href: "/barulho-no-carro", label: "Barulho no carro" }]),
+    // A /sobre vale nos DOIS idiomas: ela não é guia de busca, é a descrição de
+    // referência do produto, e é dela que sai o resumo quando alguém pergunta a
+    // uma IA se existe app para entender o carro. Sem link a partir da home,
+    // ela seria uma página órfã que ninguém e nenhum robô alcança.
+    { href: "/sobre", label: locale === "en" ? "About Mentorque" : "Sobre o Mentorque" },
   ];
 
   return (

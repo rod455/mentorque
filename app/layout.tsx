@@ -55,21 +55,30 @@ export const metadata: Metadata = {
     "OBD2",
     "manutenção de carro",
     "auto mechanics app",
+    "app para carro",
+    "barulho no carro",
+    "luz do painel acesa",
+    "diagnóstico de carro",
+    "histórico de manutenção do carro",
   ],
   authors: [{ name: "Mentorque" }],
   openGraph: {
     type: "website",
     siteName: "Mentorque",
     title: "Mentorque — mecânica do básico ao avançado, com consultoria no bolso",
+    // Estava dizendo "entre na lista de espera" com o app JÁ publicado nas duas
+    // lojas. Descrição desatualizada não é detalhe de vaidade: é o texto que um
+    // modelo de linguagem lê para responder "esse app já existe?", e a resposta
+    // errada afasta exatamente quem estava pronto para baixar.
     description:
-      "Trilhas guiadas, diagnóstico por sintoma, ferramentas (OBD2, preço justo, checklist) e consultoria com o creator e a equipe. Entre na lista de espera.",
+      "Diagnóstico por sintoma, trilhas de mecânica para leigos, histórico de manutenção e ferramentas como OBD2 e comparador de combustível. Grátis para usar, no Android, no iPhone e no navegador.",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Mentorque" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Mentorque — mecânica do básico ao avançado, com consultoria no bolso",
     description:
-      "Aprenda mecânica com um especialista no bolso. Entre na lista de espera do Mentorque.",
+      "Entenda o que seu carro tem, decida a urgência e chegue na oficina sabendo o que perguntar. Grátis para usar.",
     images: ["/og-image.png"],
   },
   // Favicon/apple-icon are auto-injected from app/icon.svg and app/apple-icon.png.
