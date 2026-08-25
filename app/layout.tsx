@@ -27,7 +27,19 @@ const serif = Lora({
   display: "swap",
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mentorque.app";
+// Base de TODA URL absoluta que o Next gera: canonical de cada página, og:url,
+// og:image e o endereço do sitemap.
+//
+// O padrão era `https://mentorque.app`, um domínio que não resolve. Como
+// `NEXT_PUBLIC_SITE_URL` não está definida na Vercel (o mesmo tropeço já está
+// documentado em lib/email/waitlist.ts), era ESSE endereço que ia no canonical
+// de todas as páginas. Canonical apontando para fora do domínio é o jeito mais
+// eficiente de pedir ao buscador que ele não indexe o site: ele lê a etiqueta
+// como "a versão boa mora ali", e ali não existe nada.
+//
+// A variável continua valendo, para apontar um build a outro ambiente. O que
+// mudou é o padrão: quando ela falta, cai no endereço real do site.
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.mentorque.com.br";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

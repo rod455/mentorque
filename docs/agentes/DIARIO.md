@@ -3,6 +3,44 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-25 · Conteúdo & SEO: primeira LP de busca (e o canonical quebrado)
+- Artifact "Conteúdo da semana":
+  https://claude.ai/code/artifact/6b286979-93fe-44ad-afb0-b5219c4e8ce9
+- ENTREGA DA RODADA (formato a, LP de palavra-chave): /barulho-no-carro.
+  Estrutura visual da /landing, e o oposto dela no que importa: indexável,
+  com link interno, escrita para ganhar a posição sendo útil de graça. O
+  ângulo é o MÉTODO, não o catálogo de peças: agrupa o barulho pelo momento
+  em que ele aparece (freando, em buraco, virando, acelerando, parado,
+  aumentando com a velocidade). As causas conversam de propósito com o
+  diagnóstico por sintoma do app, para página e app não se contradizerem.
+- Escolha da palavra: cai em cima do que o app já faz bem, tem cauda longa
+  por baixo para as próximas páginas, é menos disputada que "luz de injeção"
+  (que exige autoridade que um site novo não tem), e é a única alavanca de
+  topo de funil de custo zero que este papel controla sozinho.
+- ACHADO GRAVE, corrigido: o `canonical` de TODAS as páginas do site
+  apontava para https://mentorque.app, domínio que não resolve. O padrão
+  estava escrito no app/layout.tsx e, como NEXT_PUBLIC_SITE_URL não está
+  definida na Vercel, era ele que valia. Canonical para fora do domínio é o
+  jeito mais eficiente de pedir para não ser indexado. Ajuda a explicar o
+  zero clique na busca além da propriedade ser nova. O mesmo tropeço já
+  estava documentado em lib/email/waitlist.ts; o layout ficou para trás.
+  Conferido no HTML gerado antes e depois.
+- Encanamento que não existia: /sitemap.xml e /robots.txt (nenhum dos dois
+  existia). Sitemap com as 7 páginas indexáveis; robots aponta para ele e
+  bloqueia /api, /painel, /auth-bridge e /embed. A /landing NÃO é bloqueada
+  no robots de propósito: ela sai do índice pelo noindex dela, e bloquear
+  impediria o robô de ler esse noindex.
+- Link interno da home para a LP no rodapé (só em PT), que é por onde o robô
+  chega até ela a partir da página com mais autoridade do site.
+- A LP entrou na lista SO_NO_SITE do build:native. Os dois builds rodados e
+  passando (site e app), tipos limpos.
+- PARA O RODRIGO (não é deste papel fazer): pedir indexação da home e da
+  /barulho-no-carro no Search Console, já que o canonical das duas mudou.
+- Próximas: (1) pauta de gravação "o barulho que o freio faz de propósito",
+  casada com esta LP e com a aula de pastilha; (2) reescrever a aula
+  diag-noises ("Que barulho é esse?"), hoje com dois parágrafos, no formato
+  estruturado PT+EN.
+
 ## 2026-08-24 · Diretor: primeiro relatório semanal (17 a 23/08)
 - Artifact "Semana Mentorque":
   https://claude.ai/code/artifact/0d77de71-0a02-40d3-9807-9c6752eb8d64

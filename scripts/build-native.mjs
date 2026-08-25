@@ -35,7 +35,12 @@ nextEnv.loadEnvConfig(root, false, { info: () => {}, error: console.error });
 // Nasceu só com `api`. Virou lista quando /landing e /painel entraram no site e
 // quebraram o build do app em silêncio: ninguém rodou `build:native` entre a
 // criação delas e o envio seguinte. Rota nova de site vem para cá.
-const SO_NO_SITE = ["api", "landing", "painel"];
+//
+// As LPs de palavra-chave entram aqui pelo outro motivo: elas SÃO exportáveis
+// (renderizam no servidor sem searchParams), mas são páginas de busca do site,
+// escritas para quem ainda não tem o app. Dentro do binário virariam peso morto
+// com links para as lojas onde a pessoa já está.
+const SO_NO_SITE = ["api", "landing", "painel", "barulho-no-carro"];
 const PARK = path.join(root, ".build-native-parked");
 // Com `distDir` customizado, `output: "export"` grava o HTML dentro do próprio
 // distDir em vez de `out/`.

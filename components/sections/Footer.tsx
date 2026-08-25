@@ -17,6 +17,11 @@ export function Footer() {
     { href: "#consulting", label: t.nav.consulting },
     { href: "#plans", label: t.nav.plans },
     { href: "#faq", label: t.nav.faq },
+    // Guias de busca: páginas próprias, indexáveis, fora da home. O link daqui
+    // não é enfeite — é por ele que o robô chega até elas a partir da página
+    // com mais autoridade do site. Só aparece em português porque os guias são
+    // escritos em português.
+    ...(locale === "en" ? [] : [{ href: "/barulho-no-carro", label: "Barulho no carro" }]),
   ];
 
   return (
