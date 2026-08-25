@@ -2728,7 +2728,16 @@ export function getContent(locale: Locale) {
       consulting: T("Consultoria e conteúdos exclusivos", "Consulting & exclusive content"),
       language: T("Idioma", "Language"),
       preferences: T("Preferências", "Preferences"),
-      notifications: T("Notificações", "Notifications"),
+      notifications: T("Avisar antes de cobrar", "Warn me before charging"),
+      // Aviso que sai 2 dias antes do fim do teste. Escrito para ser honesto,
+      // não para segurar: diz que a cobrança vem e onde cancelar. Texto de
+      // retenção ("não perca seu acesso") no único momento em que a pessoa
+      // confia no app é o que faz ela cancelar ali mesmo.
+      avisoTesteTitulo: T("Seu teste grátis acaba em 2 dias", "Your free trial ends in 2 days"),
+      avisoTesteCorpo: T(
+        "Depois disso a cobrança entra automaticamente. Se não quiser continuar, dá para cancelar agora mesmo no app, em Perfil.",
+        "After that the charge goes through automatically. If you'd rather not continue, you can cancel right now in the app, under Profile."
+      ),
       units: T("Unidades", "Units"),
       metric: T("Métrico", "Metric"),
       imperial: T("Imperial", "Imperial"),

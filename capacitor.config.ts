@@ -25,6 +25,7 @@ const config: CapacitorConfig = {
     includePlugins: [
       "@capacitor/app",
       "@capacitor/browser",
+      "@capacitor/local-notifications",
       "@capacitor-community/admob",
       "@revenuecat/purchases-capacitor",
     ],
@@ -36,6 +37,7 @@ const config: CapacitorConfig = {
     includePlugins: [
       "@capacitor/app",
       "@capacitor/browser",
+      "@capacitor/local-notifications",
       "@revenuecat/purchases-capacitor",
       "@capgo/capacitor-social-login",
     ],

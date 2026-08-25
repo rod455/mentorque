@@ -30,6 +30,7 @@ import { ProfileScreen, SubscribeScreen, CheckoutScreen } from "./screens/Profil
 import { GamificationScreen, AchievementsScreen } from "./screens/Gamification";
 import { AuthScreen } from "./screens/Auth";
 import { funil } from "@/lib/app/funil";
+import { sincronizarLembrete } from "@/lib/app/lembreteAssinatura";
 import { vigiarErros } from "@/lib/app/erros";
 import BielaMascote from "@/components/BielaMascote";
 
@@ -60,6 +61,8 @@ function PhoneShell({ children }: { children: React.ReactNode }) {
 // Maps a view to a screen. Deep car screens live under the "cars" tab.
 function Router() {
   const { view, back, canBack, depth, lastAction, go } = useNav();
+  const c = useContent();
+  const { s, subscribed, subscriptionEndsAt, subscriptionCanceling } = usePrototype();
 
   // Vindo do onboarding ("Monte seu teste"): abre o paywall com o plano
   // escolhido — mas só depois do login.
@@ -137,6 +140,26 @@ function Router() {
     const plugin = nativeAdMob();
     if (plugin) void ensureConsent(plugin);
   }, []);
+
+  // Lembrete de fim do teste grátis, em dia com o estado da assinatura.
+  //
+  // Roda a cada mudança de propósito: quem assina hoje precisa do aviso
+  // agendado, quem cancela precisa dele desmarcado (não vai ser cobrado, então
+  // não há o que avisar), e quem desliga a preferência precisa que ele suma.
+  // Reagendar com o mesmo id substitui o anterior, então isto nunca empilha.
+  //
+  // Não pede permissão aqui: pedir fora de um toque da pessoa é o caminho mais
+  // curto para o "não" definitivo do sistema. Quem liga o interruptor no Perfil
+  // é que dispara o pedido.
+  useEffect(() => {
+    void sincronizarLembrete({
+      querLembrete: s.notifications,
+      assinante: subscribed,
+      fimDoPeriodo: subscriptionEndsAt,
+      cancelando: subscriptionCanceling,
+      textos: { titulo: c.profile.avisoTesteTitulo, corpo: c.profile.avisoTesteCorpo },
+    });
+  }, [s.notifications, subscribed, subscriptionEndsAt, subscriptionCanceling, c.profile.avisoTesteTitulo, c.profile.avisoTesteCorpo]);
 
   // Botão físico/gesto de voltar do Android (wrapper): volta na navegação do
   // app; na raiz, minimiza o app (sem fechar). Paywall passa pelo funil.

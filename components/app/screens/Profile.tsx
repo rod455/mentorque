@@ -6,6 +6,7 @@ import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/app/auth";
 import { activeVehicle, usePrototype } from "@/lib/app/store";
+import { AVISO, cancelar, notificacoesDisponiveis, pedirPermissao } from "@/lib/app/notificacoes";
 import { resizeImage } from "@/lib/app/image";
 import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
 import { cancelSubscription, deleteAccount, openBillingPortal, reactivateSubscription, startCheckout } from "@/lib/app/billing";
@@ -261,20 +262,24 @@ export function ProfileScreen() {
     root({ name: "cars" });
   };
 
-  // Ativar notificações pede a permissão de push do sistema (iOS/Android/desktop).
+  // Ligar o lembrete pede a permissão NATIVA do sistema.
+  //
+  // Antes isto chamava `Notification.requestPermission()`, a API do navegador.
+  // Dentro do app das lojas ela não serve: a permissão que ela concede é da
+  // WebView, e quem agenda notificação no aparelho é o plugin nativo, que
+  // continua sem permissão nenhuma. E o caminho alternativo salvava a
+  // preferência como se tivesse dado certo. Nos dois casos o interruptor ficava
+  // ligado sem nada agendado atrás.
+  //
+  // Agora só liga se o sistema tiver dito sim de verdade. Recusa mantém o
+  // interruptor desligado, que é a informação honesta: aviso não vai chegar.
   const toggleNotifications = async (on: boolean) => {
-    if (!on) { setNotifications(false); return; }
-    if (typeof window !== "undefined" && "Notification" in window && typeof Notification.requestPermission === "function") {
-      try {
-        const perm = await Notification.requestPermission();
-        setNotifications(perm === "granted");
-      } catch {
-        setNotifications(false);
-      }
-    } else {
-      // Sem API de notificação (ex.: iOS fora do app instalado) — salva a preferência.
-      setNotifications(true);
+    if (!on) {
+      setNotifications(false);
+      await cancelar(AVISO.fimDoTeste);
+      return;
     }
+    setNotifications(await pedirPermissao());
   };
 
   // Profile photo: user's uploaded avatar wins; otherwise the Google picture.
@@ -443,7 +448,12 @@ export function ProfileScreen() {
       {/* Preferências */}
       <SectionTitle>{p.preferences}</SectionTitle>
       <Group>
-        <IconRow icon="alert" tint="bg-teal/15 text-teal" label={p.notifications} right={<Toggle on={s.notifications} onChange={toggleNotifications} />} />
+        {/* Só onde o aparelho consegue notificar. No navegador não existe
+            agendamento local, então o interruptor prometeria um aviso que nunca
+            sairia — foi exatamente por isso que a versão anterior dele saiu. */}
+        {notificacoesDisponiveis() && (
+          <IconRow icon="alert" tint="bg-teal/15 text-teal" label={p.notifications} right={<Toggle on={s.notifications} onChange={toggleNotifications} />} />
+        )}
         <IconRow icon="book" tint="bg-amber/15 text-amber" label={p.language} right={<LangSwitcher />} />
         <IconRow
           icon="gauge" tint="bg-teal/15 text-teal" label={p.units}
