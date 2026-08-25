@@ -76,15 +76,23 @@ export async function POST(req: Request) {
     payment_method_collection: "always",
     // Campo de código promocional SÓ no mensal.
     //
-    // Hoje cada plano é um produto separado no Stripe, e cada cupom nasce preso
-    // ao seu (`applies_to.products`): os de convite valem no mensal, os de saída
-    // no anual. Quem recusa um código fora do lugar é o próprio Stripe.
+    // ATENÇÃO ao mexer aqui: hoje esta linha é a ÚNICA proteção que existe.
     //
-    // Isto aqui é a segunda camada, e existe por um motivo simples: não há
-    // nenhum código de digitar que valha no anual. Campo sem código válido atrás
-    // só serve para quem está chutando nome de cupom. Se um dia existir uma
-    // promoção anual, basta soltar esta condição — a trava de verdade está no
-    // cupom.
+    // O comentário anterior dizia que cada cupom nascia preso ao seu produto
+    // (`applies_to.products`) e que "a trava de verdade está no cupom". Conferido
+    // no Stripe em 25/08/2026: NÃO ESTÁ. Os cupons de convite de 100%
+    // (LANCAMENTO100, ALESSANDRO100) não têm `applies_to` nenhum, então valem em
+    // qualquer produto. Mensal e anual são produtos separados de verdade
+    // (prod_V5FXz22xLMjrWp e prod_V5FXazQcVcz4zm), mas o cupom não sabe disso.
+    //
+    // Na prática o risco hoje é zero, porque sem `allow_promotion_codes` o campo
+    // nem aparece no anual e não há onde digitar. Mas é um passo de distância:
+    // soltar esta condição acreditando na proteção do cupom transforma um código
+    // de R$ 29,90 num de R$ 239,90. Já aconteceu antes, quando os dois planos
+    // dividiam um produto só.
+    //
+    // Para ter as duas camadas de novo é preciso RECRIAR os cupons com
+    // `applies_to`: o Stripe não deixa esse campo ser alterado depois.
     //
     // (Antes os dois planos dividiam um produto só, e não havia como separar
     // pelo Stripe: um código de 100% digitado no anual valia R$ 239,90 em vez de
