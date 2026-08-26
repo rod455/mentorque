@@ -11,6 +11,11 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    // Deixa um import terminar em ".ts". Serve a scripts/verifica-quiz.ts, que
+    // roda no node puro (--experimental-strip-types) e por isso PRECISA da
+    // extensão no import. Só afeta o que o compilador aceita ler; com noEmit
+    // ligado, nada disso chega ao pacote que o Next gera.
+    "allowImportingTsExtensions": true,
     "jsx": "preserve",
     "incremental": true,
     "plugins": [{ "name": "next" }],
