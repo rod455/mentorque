@@ -2439,6 +2439,62 @@ export function getContent(locale: Locale) {
       importarNenhum: T("Não levar nenhum", "Do not add any"),
     },
 
+    // Quiz diário. O tom aqui decide se a pessoa volta amanhã: a explicação
+    // ensina, nunca corrige; errar não leva bronca; e a sequência é celebrada
+    // sem virar chantagem ("não perca sua sequência!" é a frase que faz alguém
+    // desinstalar em vez de voltar).
+    quiz: {
+      titulo: T("Pergunta do dia", "Question of the day"),
+      abrirHome: T("Pergunta do dia", "Question of the day"),
+      abrirHomeSub: T("Um minuto. Vale a sequência.", "One minute. Keeps your streak."),
+      acertou: T("Acertou!", "Correct!"),
+      errou: T("Não é essa", "Not this one"),
+      // Depois de errar, o rótulo da opção certa. "A resposta é" e não "o
+      // correto seria": a segunda soa como professor corrigindo prova.
+      aRespostaE: T("A resposta é:", "The answer is:"),
+      verAula: T("Ver a aula completa", "See the full lesson"),
+      seguir: T("Seguir", "Continue"),
+      // Sequência.
+      sequenciaUm: T("1 dia seguido", "1 day in a row"),
+      sequenciaN: T("{n} dias seguidos", "{n} days in a row"),
+      sequenciaComecou: T("Sua sequência começou hoje", "Your streak starts today"),
+      recorde: T("Seu recorde: {n}", "Your best: {n}"),
+      recordeNovo: T("Novo recorde!", "New best!"),
+      perdaoUsado: T(
+        "Você faltou ontem e a sequência foi mantida. Todo mundo tem direito a um dia por semana.",
+        "You missed yesterday and your streak was kept. Everyone gets one day a week."
+      ),
+      // Estatística do dia. Só aparece quando há gente suficiente; a tela
+      // simplesmente omite a frase quando não há.
+      placarCertos: T("{p}% acertaram hoje", "{p}% got it right today"),
+      placarPoucos: T("Você foi um dos primeiros hoje", "You were one of the first today"),
+      // Já respondeu.
+      jaRespondeuTitulo: T("Você já respondeu hoje", "You've answered today"),
+      jaRespondeuCorpo: T("A próxima sai amanhã. Vale a pena não perder.", "The next one is tomorrow. Worth not missing."),
+      // Convite para ligar o aviso, mostrado depois de responder.
+      avisoTitulo: T("Quer o de amanhã no celular?", "Want tomorrow's on your phone?"),
+      avisoCorpo: T(
+        "A gente manda um aviso quando a pergunta do dia sair. Nada além disso.",
+        "We'll send one notification when the day's question is out. Nothing else."
+      ),
+      // Depois de 2+ dias de sequência o convite muda de argumento: aí a
+      // pessoa tem algo a perder, e falar disso é honesto em vez de genérico.
+      avisoCorpoSequencia: T(
+        "Você está com {n} dias seguidos. O aviso é o que evita perder a sequência por esquecimento.",
+        "You're on {n} days in a row. The reminder is what keeps a forgotten day from breaking it."
+      ),
+      avisoSim: T("Quero o aviso", "Yes, remind me"),
+      avisoNao: T("Agora não", "Not now"),
+      // Texto do aviso que sai na bandeja do celular. Curto porque a bandeja
+      // corta, e sem ameaça porque notificação que cobra vira notificação
+      // desligada.
+      avisoPushTitulo: T("Pergunta do dia", "Question of the day"),
+      avisoPushCorpo: T("A de hoje já saiu. Um minuto e a sequência continua.", "Today's is out. One minute keeps your streak going."),
+      // Faixa no calendário.
+      faixaResponder: T("Responda a pergunta do dia", "Answer today's question"),
+      faixaFeito: T("Pergunta de hoje: feita", "Today's question: done"),
+    },
+
     // Sino do cabeçalho. Todo aviso aqui é derivado do estado atual do app
     // (ver lib/app/avisos.ts), então os textos falam de coisa que a pessoa
     // ainda pode resolver. Nada de "você perdeu": aviso que só informa perda é

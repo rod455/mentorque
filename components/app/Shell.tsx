@@ -29,10 +29,12 @@ import { Obd2Screen, Obd2ScanScreen } from "./screens/Obd2";
 import { FuelCompareScreen } from "./screens/FuelCompare";
 import { CarSettingsScreen } from "./screens/CarSettings";
 import { ProfileScreen, SubscribeScreen, CheckoutScreen } from "./screens/Profile";
+import { QuizScreen } from "./screens/Quiz";
 import { GamificationScreen, AchievementsScreen } from "./screens/Gamification";
 import { AuthScreen } from "./screens/Auth";
 import { funil } from "@/lib/app/funil";
 import { sincronizarLembrete } from "@/lib/app/lembreteAssinatura";
+import { sincronizarLembreteQuiz } from "@/lib/app/lembreteQuiz";
 import { vigiarErros } from "@/lib/app/erros";
 import BielaMascote from "@/components/BielaMascote";
 
@@ -163,6 +165,18 @@ function Router() {
     });
   }, [s.notifications, subscribed, subscriptionEndsAt, subscriptionCanceling, c.profile.avisoTesteTitulo, c.profile.avisoTesteCorpo]);
 
+  // Aviso do quiz de amanhã. Reagendado a cada mudança do estado do quiz (ou
+  // seja, a cada resposta) e a cada abertura do app: é isso que faz o aviso
+  // apontar sempre para o próximo dia ainda não respondido, em vez de cobrar
+  // uma coisa já feita. Ver lib/app/lembreteQuiz.ts.
+  useEffect(() => {
+    void sincronizarLembreteQuiz({
+      quer: s.notifications,
+      quiz: s.quiz,
+      textos: { titulo: c.quiz.avisoPushTitulo, corpo: c.quiz.avisoPushCorpo },
+    });
+  }, [s.notifications, s.quiz, c.quiz.avisoPushTitulo, c.quiz.avisoPushCorpo]);
+
   // Botão físico/gesto de voltar do Android (wrapper): volta na navegação do
   // app; na raiz, minimiza o app (sem fechar). Paywall passa pelo funil.
   useEffect(() => {
@@ -237,6 +251,7 @@ function Router() {
         return <ContentScreen id={view.id} />;
       case "carSettings": return <CarSettingsScreen />;
       case "profile": return <ProfileScreen />;
+      case "quiz": return <QuizScreen />;
       case "gamification": return <GamificationScreen />;
       case "achievements": return <AchievementsScreen initialTab={view.tab} />;
       case "auth": return <AuthScreen />;
@@ -411,6 +426,7 @@ const TAB_OF: Record<View["name"], Tab> = {
   symptoms: "problems", symptom: "problems", systemProblems: "problems", equipment: "problems", equipmentHowTo: "problems", checklist: "problems", obd2: "problems",
   history: "history", addService: "history", service: "history",
   learn: "studies", studyTrack: "studies", course: "studies", forYourCar: "studies", savedLessons: "studies", biela: "studies", content: "studies",
+  quiz: "studies",
   profile: "profile", gamification: "profile", achievements: "profile", auth: "profile", subscribe: "profile", checkout: "profile",
 };
 

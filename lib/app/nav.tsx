@@ -35,6 +35,7 @@ export type View =
   | { name: "carSettings" }
   | { name: "profile" }
   | { name: "gamification" }
+  | { name: "quiz" }
   // `tab` abre o acervo já na aba certa — quem vem de "Adicionar memórias"
   // quer Momentos, não Marcos.
   | { name: "achievements"; tab?: "marco" | "momento" }

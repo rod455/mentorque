@@ -13,6 +13,7 @@ import { sellsInApp } from "@/lib/app/wrapper";
 import { Button } from "@/components/ui/Button";
 import { useContent, Card, Icon, inputCls, Sheet, Thumb } from "../ui";
 import { SeletorDeCarro } from "../SeletorDeCarro";
+import { FaixaDoQuiz } from "../FaixaDoQuiz";
 import { HealthPill } from "./Cars";
 import { FipeLine } from "./CarHub";
 import { CommonProblems } from "./Symptoms";
@@ -214,6 +215,11 @@ export function HomeScreen() {
           <span className="shrink-0 text-lg text-amber">›</span>
         </button>
       )}
+
+      {/* Pergunta do dia. Fica aqui, e não no topo, porque o hábito se constrói
+          na terceira tela que a pessoa vê todo dia — e porque acima dela mora o
+          que resolve o problema de quem abriu o app COM um problema. */}
+      <FaixaDoQuiz />
 
       {/* Busca (abre a tela de busca) */}
       <button

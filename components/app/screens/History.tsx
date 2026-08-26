@@ -12,6 +12,9 @@ import type { ServicePart, ServiceRecord, SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Autocomplete, Card, Chip, Icon, inputCls, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
+import { FaixaDoQuiz } from "../FaixaDoQuiz";
+import { ConviteDeAviso } from "../ConviteDeAviso";
+import { QUIZ_ZERADO, diaLocal, sequenciaHoje } from "@/lib/app/quiz/sequencia";
 
 const hojeISO = () => new Date().toISOString().slice(0, 10);
 
@@ -182,6 +185,7 @@ export function HistoryScreen() {
   const list = filter === "all" ? all : all.filter((r) => r.type === filter);
   const upcoming = <UpcomingBlock />;
   const usedTypes = Array.from(new Set(all.map((r) => r.type)));
+  const sequenciaDoQuiz = sequenciaHoje(s.quiz ?? QUIZ_ZERADO, diaLocal());
   const atLimit = !s.premium && all.length >= LIMITS.freeServices;
   const onAdd = () => go(atLimit ? { name: "subscribe", ctx: "history" } : { name: "addService" });
 
@@ -195,6 +199,13 @@ export function HistoryScreen() {
           </button>
         }
       />
+
+      {/* Pergunta do dia no calendário. Quem entra aqui veio ver o que o carro
+          precisa nos próximos dias, ou seja, já está no modo "o que vem por
+          aí" — é o contexto certo para um hábito diário e para o convite de
+          notificação logo abaixo. */}
+      <FaixaDoQuiz compacta />
+      <ConviteDeAviso momento="calendario" sequencia={sequenciaDoQuiz} />
 
       {upcoming}
 

@@ -12,6 +12,7 @@ import { LangSwitcher } from "@/components/ui/LangSwitcher";
 import { Icon, LegalLinks, PhoneFrame, ProgressDots, useContent } from "./ui";
 import BielaMascote from "@/components/BielaMascote";
 import CarroMentorque from "@/components/CarroMentorque";
+import { QuizDeBoasVindas } from "./QuizDeBoasVindas";
 
 function CheckDot() {
   return (
@@ -64,7 +65,11 @@ export function OnboardingFlow() {
       } catch { /* sem ofertas: cai no fluxo antigo */ }
     })();
   }, []);
-  const total = cards.length + (sells ? 2 : 1); // 3 cards + social (+ teste onde vende)
+  // A pergunta de boas-vindas entra como uma página entre os cards e a prova
+  // social. Fica FORA de toda a lógica de compra de propósito: é só mais um
+  // índice, e o caminho do paywall segue exatamente como estava.
+  const PAGINA_DO_QUIZ = cards.length;
+  const total = cards.length + 1 + (sells ? 2 : 1); // 3 cards + quiz + social (+ teste onde vende)
   const last = i === total - 1;
   const card = i < cards.length ? cards[i] : null;
 
@@ -183,7 +188,10 @@ export function OnboardingFlow() {
             </Button>
           </div>
         </div>
-      ) : i === cards.length ? (
+      ) : i === PAGINA_DO_QUIZ ? (
+        /* Página 4 — a primeira pergunta do dia, jogada de verdade */
+        <QuizDeBoasVindas aoSeguir={advance} />
+      ) : i === PAGINA_DO_QUIZ + 1 ? (
         /* Página 4 — prova social (formato Bloom: cards sobrepostos, sem scroll) */
         <div className="flex flex-1 flex-col overflow-y-auto px-6 pb-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <h1 className="mt-1 font-serif text-[28px] font-bold leading-tight text-cream">{social.title}</h1>

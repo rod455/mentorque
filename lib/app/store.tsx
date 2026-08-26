@@ -6,6 +6,7 @@ import { newId, type ServiceRecord, type Vehicle } from "./types";
 import { useAuth } from "./auth";
 import { getBrowserSupabase } from "@/lib/supabaseBrowser";
 import { trackContent } from "./track";
+import { aoResponder, diaLocal, QUIZ_ZERADO, type EstadoQuiz } from "./quiz/sequencia";
 
 // Client-side session for the car-centric prototype: a garage of vehicles, one
 // "active" vehicle, and a flat list of service records. Persisted to
@@ -37,6 +38,10 @@ type Session = {
   // janelas de espera existem para evitar. Aqui ele sobe junto para
   // `user_state` e volta no próximo login, em qualquer aparelho.
   feedback?: FeedbackState;
+  // Sequência do quiz diário. Mora na sessão, e não no aparelho, porque é o
+  // único ativo que o quiz constrói: quem tem 60 dias seguidos e troca de
+  // celular não pode perder isso. Sobe para `user_state` junto com o resto.
+  quiz?: EstadoQuiz;
 };
 
 /** Em que pé está a volta do checkout. `null` = não veio de lá. */
@@ -70,6 +75,7 @@ const EMPTY: Session = {
   units: "metric",
   avatar: null,
   feedback: undefined,
+  quiz: undefined,
 };
 
 // Today as yyyy-mm-dd (client-side only).
@@ -140,6 +146,7 @@ type StoreValue = {
   setUnits: (v: "metric" | "imperial") => void;
   setAvatar: (dataUrl: string | null) => void;
   patchFeedback: (parte: Partial<FeedbackState>) => void; // registra o pedido de nota
+  responderQuiz: (acertou: boolean) => void; // resposta do quiz do dia
   subscribed: boolean; // assinatura Stripe ativa (fonte da verdade do premium)
   subscriptionEndsAt: string | null; // fim do período atual (ISO)
   subscriptionCanceling: boolean; // marcada para cancelar no fim do período
@@ -739,6 +746,16 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
     [patch]
   );
 
+  // Registra a resposta do quiz de hoje. A regra inteira (sequência, perdão,
+  // recorde) vive em quiz/sequencia.ts e é conferida por npm run verifica:quiz;
+  // aqui só se guarda o resultado. `aoResponder` é idempotente no dia, então
+  // toque duplo e tela remontando não contam duas vezes.
+  const responderQuiz = useCallback(
+    (acertou: boolean) =>
+      patch((p) => ({ ...p, quiz: aoResponder(p.quiz ?? QUIZ_ZERADO, diaLocal(), acertou) })),
+    [patch]
+  );
+
   const finishOnboarding = useCallback(() => patch((p) => ({ ...p, onboarded: true, startedAt: p.startedAt ?? todayISO() })), [patch]);
   const reset = useCallback(() => patch(() => ({ ...EMPTY, momentPhotos: {} })), [patch]);
 
@@ -747,8 +764,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const es = useMemo(() => (subActive && !s.premium ? { ...s, premium: true } : s), [s, subActive]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s: es, importacaoPendente, resolverImportacao, checkoutVoltando, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
-    [es, importacaoPendente, resolverImportacao, checkoutVoltando, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
+    () => ({ s: es, importacaoPendente, resolverImportacao, checkoutVoltando, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, responderQuiz, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
+    [es, importacaoPendente, resolverImportacao, checkoutVoltando, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, responderQuiz, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
