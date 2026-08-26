@@ -100,9 +100,24 @@ const html = `<!doctype html>
 const tmp = SAIDA.replace(/\.pdf$/, ".html");
 writeFileSync(tmp, html, "utf8");
 
-let chromium: typeof import("playwright").chromium;
+// Tipo mínimo escrito à mão, e não `typeof import("playwright")`: o pacote não
+// está instalado, então referenciar os tipos dele quebraria o `tsc --noEmit`
+// do projeto inteiro por causa de um script auxiliar. O `import()` fica numa
+// variável para o compilador não tentar resolver o módulo.
+type Navegador = {
+  launch: (o: { executablePath?: string }) => Promise<{
+    newPage: () => Promise<{
+      goto: (url: string, o?: { waitUntil?: string }) => Promise<unknown>;
+      pdf: (o: Record<string, unknown>) => Promise<unknown>;
+    }>;
+    close: () => Promise<void>;
+  }>;
+};
+
+let chromium: Navegador;
 try {
-  ({ chromium } = await import("playwright"));
+  const pacote = "playwright";
+  ({ chromium } = (await import(pacote)) as { chromium: Navegador });
 } catch {
   console.log(`HTML gerado: ${tmp}`);
   console.log("Playwright não instalado — abra o HTML no navegador e use Imprimir → Salvar como PDF.");
