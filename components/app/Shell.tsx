@@ -12,6 +12,7 @@ import { Icon, useContent } from "./ui";
 import { FeedbackSheet } from "./FeedbackSheet";
 import { ImportarGaragem } from "./ImportarGaragem";
 import { ConfirmandoPagamento } from "./ConfirmandoPagamento";
+import { SinoDeAvisos } from "./Avisos";
 import { Logo } from "@/components/ui/Logo";
 import { HomeScreen } from "./screens/Home";
 import { SearchScreen } from "./screens/Search";
@@ -384,18 +385,21 @@ function TopBar() {
       <button onClick={() => root({ name: "home" })} className="flex items-center" aria-label="Início">
         <Logo variant="lockup-dark" className="h-7 w-auto" priority />
       </button>
-      <button
-        onClick={() => root({ name: "profile" })}
-        aria-label="Perfil"
-        className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-teal/25 font-display text-sm font-semibold text-teal ring-1 ring-white/10"
-      >
-        {avatarSrc ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={avatarSrc} alt="" className="h-full w-full object-cover" />
-        ) : (
-          initial
-        )}
-      </button>
+      <div className="flex items-center gap-2">
+        <SinoDeAvisos />
+        <button
+          onClick={() => root({ name: "profile" })}
+          aria-label="Perfil"
+          className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-teal/25 font-display text-sm font-semibold text-teal ring-1 ring-white/10"
+        >
+          {avatarSrc ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={avatarSrc} alt="" className="h-full w-full object-cover" />
+          ) : (
+            initial
+          )}
+        </button>
+      </div>
     </header>
   );
 }

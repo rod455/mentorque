@@ -1846,6 +1846,7 @@ export function getContent(locale: Locale) {
       qRevisions: T("Plano de revisão", "Service plan"),
       qStudies: T("Aprender", "Learn"),
       yourCar: T("Seu carro", "Your car"),
+      switchCar: T("Trocar de carro", "Switch car"),
       viewCar: T("Abrir", "Open"),
       forYouTitle: T("Para você", "For you"),
       newBadge: T("Novo", "New"),
@@ -2436,6 +2437,41 @@ export function getContent(locale: Locale) {
       semServico: T("sem histórico", "no history"),
       importar: T("Levar os marcados", "Add the checked ones"),
       importarNenhum: T("Não levar nenhum", "Do not add any"),
+    },
+
+    // Sino do cabeçalho. Todo aviso aqui é derivado do estado atual do app
+    // (ver lib/app/avisos.ts), então os textos falam de coisa que a pessoa
+    // ainda pode resolver. Nada de "você perdeu": aviso que só informa perda é
+    // cobrança.
+    avisos: {
+      titulo: T("Avisos", "Alerts"),
+      abrir: T("Abrir avisos", "Open alerts"),
+      vazioTitulo: T("Nada por aqui", "All clear"),
+      vazioCorpo: T(
+        "Revisão perto do prazo, cobrança chegando ou aula nova aparecem nesta lista.",
+        "Service coming due, an upcoming charge or a new lesson show up in this list."
+      ),
+      // Dois pontos, e não "no {carro}": o nome vem do apelido que a pessoa
+      // deu, e apelido não combina com preposição fixa. "Revisão vencida no A
+      // moto" é o tipo de frase que denuncia o modelo de texto.
+      revisaoVencidaTitulo: T("Revisão vencida: {carro}", "Service overdue: {carro}"),
+      revisaoVencidaCorpo: T("1 item passou do prazo.", "1 item is past due."),
+      revisaoVencidaCorpoN: T("{n} itens passaram do prazo.", "{n} items are past due."),
+      revisaoPertoTitulo: T("Revisão chegando: {carro}", "Service coming up: {carro}"),
+      revisaoPertoCorpo: T("1 item está perto do prazo.", "1 item is close to due."),
+      revisaoPertoCorpoN: T("{n} itens estão perto do prazo.", "{n} items are close to due."),
+      assinaturaTituloHoje: T("Sua assinatura renova hoje", "Your subscription renews today"),
+      assinaturaTitulo1: T("Sua assinatura renova amanhã", "Your subscription renews tomorrow"),
+      assinaturaTituloN: T("Sua assinatura renova em {dias} dias", "Your subscription renews in {dias} days"),
+      assinaturaCorpo: T(
+        "A cobrança entra nessa data. Dá para cancelar antes no seu perfil.",
+        "The charge goes through on that date. You can cancel before then in your profile."
+      ),
+      versaoTitulo: T("Versão nova na loja", "New version in the store"),
+      versaoCorpo: T("Atualize para pegar as correções.", "Update to get the fixes."),
+      aulaTitulo: T("Aula nova: {titulo}", "New lesson: {titulo}"),
+      aulaCorpo: T("Toque para abrir.", "Tap to open."),
+      aulaCorpoN: T("E mais {n} novas em Estudos.", "And {n} more in Learn."),
     },
 
     // Volta do checkout. Textos escritos para NÃO mandar tentar de novo: o

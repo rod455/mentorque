@@ -12,6 +12,7 @@ import { openStorePage, useUpdateAvailable } from "@/lib/app/appUpdate";
 import { sellsInApp } from "@/lib/app/wrapper";
 import { Button } from "@/components/ui/Button";
 import { useContent, Card, Icon, inputCls, Sheet, Thumb } from "../ui";
+import { SeletorDeCarro } from "../SeletorDeCarro";
 import { HealthPill } from "./Cars";
 import { FipeLine } from "./CarHub";
 import { CommonProblems } from "./Symptoms";
@@ -223,7 +224,10 @@ export function HomeScreen() {
         <span className="text-sm text-cream/45">{h.searchPh}</span>
       </button>
 
-      {/* Seu carro */}
+      {/* Seu carro. A faixa de troca vem colada em cima do card de propósito:
+          o que ela muda é justamente o que o card mostra logo abaixo, então a
+          resposta ao toque aparece no mesmo campo de visão. */}
+      <SeletorDeCarro />
       {car && (
         <button onClick={() => root({ name: "car" })} className="mt-3 w-full text-left">
           <Card className="hover:ring-white/15">
