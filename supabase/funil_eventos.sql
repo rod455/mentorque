@@ -44,6 +44,25 @@ revoke all on public.funil_eventos from anon, authenticated;
 
 create index if not exists funil_eventos_evento_criado
   on public.funil_eventos (evento, criado_em);
+-- Unicidade dos eventos que NAO podem contar duas vezes.
+--
+-- Ficam no banco, e nao num "confere antes de inserir", porque os dois
+-- caminhos que gravam podem chegar no mesmo segundo: o webhook do Stripe e o
+-- /api/stripe/sync gravam o mesmo `assinou`, e nenhuma verificacao no codigo
+-- da conta de uma corrida assim. O segundo bate no indice e some.
+--
+-- `renovou` de proposito FICA DE FORA: renovar de novo e fato novo todo mes, e
+-- travar isso apagaria receita da leitura.
+create unique index if not exists funil_eventos_assinou_unico
+  on public.funil_eventos (evento, (extra->>'sub'))
+  where evento = 'assinou' and extra->>'sub' is not null;
+
+-- Um cadastro por conta. E o que permite o app mandar o evento sem janela
+-- apertada de tempo: manda, e o banco fica so com o primeiro.
+create unique index if not exists funil_eventos_cadastro_unico
+  on public.funil_eventos (evento, user_id)
+  where evento = 'cadastro' and user_id is not null;
+
 create index if not exists funil_eventos_anon
   on public.funil_eventos (anon_id) where anon_id is not null;
 

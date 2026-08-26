@@ -78,18 +78,31 @@ function Router() {
   // login acontece, o paywall abre sozinho no plano que ele já tinha escolhido.
   const { user } = useAuth();
 
-  // Funil: uma abertura por sessão; e "cadastro" na primeira sessão logada de
-  // uma conta RECÉM-criada (created_at nos últimos 15 min — cobre e-mail e
-  // login social, sem contar logins de conta antiga). O marcador local garante
-  // que cada aparelho relata o cadastro uma vez só.
+  // Funil: uma abertura por sessão; e "cadastro" na primeira vez que uma conta
+  // NOVA abre o app.
+  //
+  // POR QUE 7 DIAS, e não os 15 minutos de antes: a janela antiga presumia que
+  // criar conta e abrir o app são o mesmo instante, e não são. Confirmação de
+  // e-mail, a pessoa fechando o app no meio, ou simplesmente voltando à noite
+  // já estouravam o prazo. O resultado ficou medido: 9 contas criadas em agosto
+  // e ZERO eventos de cadastro. O cliente que assinou de verdade criou a conta
+  // às 21:18 e abriu o app às 23:53 — nunca teve chance de ser contado.
+  //
+  // E o marcador local era gravado MESMO quando o evento não saía, então um
+  // aparelho que perdesse a janela uma vez ficava mudo para sempre. Agora só é
+  // gravado quando o evento realmente foi mandado.
+  //
+  // Contagem dobrada não é mais problema do cliente: o índice
+  // `funil_eventos_cadastro_unico` garante um cadastro por conta, no banco.
+  // Isso é o que permite a janela ser generosa sem medo.
   useEffect(() => { funil("abriu_app", { umaVez: true }); vigiarErros(); }, []);
   useEffect(() => {
     if (!user) return;
     try { if (window.localStorage.getItem("mq-cadastro-ev")) return; } catch { /* segue */ }
     const criado = Date.parse((user as { created_at?: string }).created_at ?? "");
-    if (Number.isFinite(criado) && Date.now() - criado < 15 * 60 * 1000) {
-      funil("cadastro", { userId: user.id });
-    }
+    const DIAS = 7 * 24 * 60 * 60 * 1000;
+    if (!Number.isFinite(criado) || Date.now() - criado > DIAS) return;
+    funil("cadastro", { userId: user.id });
     try { window.localStorage.setItem("mq-cadastro-ev", "1"); } catch { /* ignore */ }
   }, [user]);
 

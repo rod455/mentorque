@@ -3,6 +3,7 @@ import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { upsertSubscription } from "@/lib/subscriptionSync";
+import { eventoDeFunil } from "@/lib/funilServidor";
 
 export const runtime = "nodejs";
 
@@ -24,17 +25,17 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "bad_signature" }, { status: 400 });
   }
 
-  // Funil: os eventos financeiros nascem AQUI (e no webhook do RevenueCat),
-  // confirmados pelo processador — nunca pelo app. Falha no registro não pode
-  // derrubar o webhook: o insert não lança, e o funil é métrica, não caixa.
+  // Funil: os eventos financeiros nascem no SERVIDOR, confirmados pelo
+  // processador, nunca pelo app. O registro em si vive em lib/funilServidor.ts,
+  // compartilhado com o /api/stripe/sync — as duas portas gravam o mesmo
+  // `assinou` e o índice único do banco fica com um só.
+  //
+  // Antes, o insert daqui engolia QUALQUER erro (`.then(() => undefined)`).
+  // Isso é o que faz uma etapa ficar em zero parecendo desinteresse de quem usa
+  // o app, quando na verdade o banco recusou a linha. Agora duplicado sai em
+  // silêncio, que é o esperado, e o resto vai para o log.
   const funil = (evento: string, userId?: string | null, extra?: Record<string, unknown>) =>
-    admin.from("funil_eventos").insert({
-      evento,
-      user_id: userId && /^[0-9a-f-]{36}$/i.test(userId) ? userId : null,
-      plataforma: "web",
-      origem: "stripe",
-      extra: extra ?? null,
-    }).then(() => undefined);
+    eventoDeFunil(admin, evento, { userId, origem: "stripe", extra });
 
   try {
     switch (event.type) {

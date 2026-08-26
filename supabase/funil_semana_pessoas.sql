@@ -1,7 +1,9 @@
--- PROPOSTA — NÃO APLICADA NO BANCO. Depende de decisão do Rodrigo.
+-- APLICADA em 26/08/2026, com o aval do dono.
 --
--- (Todos os outros arquivos desta pasta são registro do que JÁ está aplicado.
--- Este não é. Alterar view existente está fora da alçada dos agentes.)
+-- Entrou junto com os índices de unicidade em funil_eventos.sql. O primeiro
+-- número que ela produziu já valeu a mudança: na semana de 24/08 os 4 eventos
+-- de paywall são 2 pessoas, e os 3 de checkout são UMA pessoa só. A taxa de
+-- passagem que se lia antes (75%) não existia.
 --
 -- O PROBLEMA
 --
