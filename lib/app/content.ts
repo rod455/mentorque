@@ -2493,6 +2493,9 @@ export function getContent(locale: Locale) {
       // Faixa no calendário.
       faixaResponder: T("Responda a pergunta do dia", "Answer today's question"),
       faixaFeito: T("Pergunta de hoje: feita", "Today's question: done"),
+      // Com a sequência no selo da direita, o subtítulo ficou livre para dizer
+      // o que interessa depois de responder: existe uma amanhã.
+      faixaFeitoSub: T("A próxima sai amanhã", "The next one is tomorrow"),
       // A primeira vez. Dois textos porque são dois momentos: quem acabou de
       // cadastrar o carro merece a ligação com o que acabou de fazer; quem não
       // cadastrou recebe no dia seguinte e precisa de um convite que funcione
