@@ -13,6 +13,7 @@ import { FeedbackSheet } from "./FeedbackSheet";
 import { ImportarGaragem } from "./ImportarGaragem";
 import { ConfirmandoPagamento } from "./ConfirmandoPagamento";
 import { SinoDeAvisos } from "./Avisos";
+import { PrimeiroQuiz } from "./PrimeiroQuiz";
 import { Logo } from "@/components/ui/Logo";
 import { HomeScreen } from "./screens/Home";
 import { SearchScreen } from "./screens/Search";
@@ -289,6 +290,11 @@ function Router() {
           propósito: é o que impede alguém que acabou de pagar de tocar num
           recurso Premium, bater no paywall e começar um segundo checkout. */}
       <ConfirmandoPagamento />
+      {/* A primeira pergunta, uma vez só: depois do primeiro carro cadastrado
+          ou, para quem não cadastrou, no dia seguinte. Fica ABAIXO do aviso de
+          pagamento na ordem de empilhamento (z-65 contra z-70): quem acabou de
+          pagar não pode ter um quiz por cima da confirmação da compra. */}
+      <PrimeiroQuiz />
       {showTopBar && <TopBar />}
       <main
         ref={mainRef}

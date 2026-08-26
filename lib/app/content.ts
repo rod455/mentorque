@@ -2493,6 +2493,22 @@ export function getContent(locale: Locale) {
       // Faixa no calendário.
       faixaResponder: T("Responda a pergunta do dia", "Answer today's question"),
       faixaFeito: T("Pergunta de hoje: feita", "Today's question: done"),
+      // A primeira vez. Dois textos porque são dois momentos: quem acabou de
+      // cadastrar o carro merece a ligação com o que acabou de fazer; quem não
+      // cadastrou recebe no dia seguinte e precisa de um convite que funcione
+      // sem esse gancho.
+      primeiroComCarro: T(
+        "Carro na garagem. Enquanto você está aqui, uma pergunta rápida:",
+        "Car in the garage. While you're here, a quick question:"
+      ),
+      primeiroSemCarro: T(
+        "Toda manhã tem uma pergunta nova sobre carro. Esta é a de estreia:",
+        "Every morning there's a new question about cars. Here's your first:"
+      ),
+      primeiroFecho: T(
+        "É só isso: uma por dia, um minuto. Sua sequência começou hoje, e errar não quebra ela.",
+        "That's it: one a day, one minute. Your streak starts today, and getting it wrong doesn't break it."
+      ),
     },
 
     // Sino do cabeçalho. Todo aviso aqui é derivado do estado atual do app
