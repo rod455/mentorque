@@ -185,23 +185,48 @@ export function montarAvisos(e: EntradaAvisos): Aviso[] {
   return lista.sort((a, b) => peso[a.tom] - peso[b.tom]);
 }
 
-// ---- O que já foi lido ------------------------------------------------------
+// ---- Lidos e dispensados ----------------------------------------------------
 //
-// Fica no aparelho, não na conta. Um aviso lido é uma informação sobre a tela
-// que a pessoa olhou naquele celular, não sobre a conta dela, e sincronizar
-// isso custaria uma tabela e uma escrita a cada abertura do sino para
-// resolver um problema que ninguém tem.
+// Duas listas, porque são duas coisas diferentes:
+//
+// - LIDO é "eu vi". Sai do contador do sino, continua na lista. Acontece
+//   sozinho, ao abrir a folha;
+// - DISPENSADO é "não quero mais ver isto". Sai da lista inteira. Só acontece
+//   por um toque no X, e é uma decisão da pessoa sobre um aviso que ela pode
+//   muito bem não ter resolvido. O app não discute: some.
+//
+// As duas ficam no aparelho, não na conta. É informação sobre a tela que a
+// pessoa olhou naquele celular, não sobre a conta dela, e sincronizar custaria
+// uma tabela e uma escrita a cada abertura do sino para resolver um problema
+// que ninguém tem.
 
-const CHAVE = "mq-avisos-lidos";
+const CHAVE_LIDOS = "mq-avisos-lidos";
+const CHAVE_DISPENSADOS = "mq-avisos-dispensados";
 
-export function lerLidos(): string[] {
+function ler(chave: string): string[] {
   try {
-    const cru = window.localStorage.getItem(CHAVE);
+    const cru = window.localStorage.getItem(chave);
     const arr = cru ? (JSON.parse(cru) as unknown) : [];
     return Array.isArray(arr) ? arr.filter((x): x is string => typeof x === "string") : [];
   } catch {
     return [];
   }
+}
+
+function gravar(chave: string, ids: string[]): void {
+  try {
+    window.localStorage.setItem(chave, JSON.stringify(ids));
+  } catch {
+    /* sem armazenamento: o sino reabre com tudo por ler, que é o lado seguro */
+  }
+}
+
+export function lerLidos(): string[] {
+  return ler(CHAVE_LIDOS);
+}
+
+export function lerDispensados(): string[] {
+  return ler(CHAVE_DISPENSADOS);
 }
 
 /**
@@ -213,9 +238,19 @@ export function lerLidos(): string[] {
  * marcado como lido para sempre e a PRÓXIMA versão nasceria silenciosa.
  */
 export function marcarLidos(idsVivos: string[]): void {
-  try {
-    window.localStorage.setItem(CHAVE, JSON.stringify(idsVivos));
-  } catch {
-    /* sem armazenamento: o sino reabre com tudo por ler, o que é o lado seguro */
-  }
+  gravar(CHAVE_LIDOS, idsVivos);
+}
+
+/**
+ * Dispensa um aviso e devolve a lista nova de dispensados.
+ *
+ * `idsVivos` são TODOS os avisos que o app montaria agora, inclusive os já
+ * dispensados — e não só os que estão na tela. Sem isso a poda comeria a
+ * própria lista: um aviso dispensado não aparece, logo não estaria entre os
+ * "vivos", logo seria esquecido, logo voltaria na abertura seguinte.
+ */
+export function dispensar(id: string, idsVivos: string[]): string[] {
+  const novo = [...new Set([...lerDispensados(), id])].filter((x) => idsVivos.includes(x));
+  gravar(CHAVE_DISPENSADOS, novo);
+  return novo;
 }

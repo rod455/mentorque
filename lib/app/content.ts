@@ -2446,6 +2446,7 @@ export function getContent(locale: Locale) {
     avisos: {
       titulo: T("Avisos", "Alerts"),
       abrir: T("Abrir avisos", "Open alerts"),
+      dispensar: T("Dispensar aviso", "Dismiss alert"),
       vazioTitulo: T("Nada por aqui", "All clear"),
       vazioCorpo: T(
         "Revisão perto do prazo, cobrança chegando ou aula nova aparecem nesta lista.",

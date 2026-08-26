@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { ownedVehicles, servicesFor, usePrototype } from "@/lib/app/store";
 import { isNewLesson } from "@/lib/app/content";
 import { openStorePage, useUpdateAvailable } from "@/lib/app/appUpdate";
-import { montarAvisos, lerLidos, marcarLidos, type Aviso, type Tom } from "@/lib/app/avisos";
+import { montarAvisos, lerLidos, lerDispensados, marcarLidos, dispensar, type Aviso, type Tom } from "@/lib/app/avisos";
 import { useNav } from "@/lib/app/nav";
 import { Icon, Sheet, useContent } from "./ui";
 
@@ -36,8 +36,14 @@ export function SinoDeAvisos() {
   const temVersaoNova = useUpdateAvailable();
   const [aberto, setAberto] = useState(false);
   const [lidos, setLidos] = useState<string[]>(() => (typeof window === "undefined" ? [] : lerLidos()));
+  const [dispensados, setDispensados] = useState<string[]>(() =>
+    typeof window === "undefined" ? [] : lerDispensados()
+  );
 
-  const avisos = useMemo(
+  // Todos os avisos que cabem agora, dispensados incluídos. Esta é a lista que
+  // define o que está "vivo", e é ela que as podas de lidos e dispensados
+  // usam como referência.
+  const todos = useMemo(
     () =>
       montarAvisos({
         carros: ownedVehicles(s),
@@ -55,15 +61,23 @@ export function SinoDeAvisos() {
     [s, subscribed, subscriptionEndsAt, subscriptionCanceling, temVersaoNova, c.lessons, a]
   );
 
+  // O que a pessoa realmente vê. Dispensado não conta para o sino nem ocupa
+  // linha: ela já disse que não quer aquilo ali.
+  const avisos = useMemo(() => todos.filter((x) => !dispensados.includes(x.id)), [todos, dispensados]);
+
   const naoLidos = avisos.filter((x) => !lidos.includes(x.id)).length;
 
   const abrir = () => {
     setAberto(true);
     // Marca os de agora e, no mesmo passo, esquece os que já saíram da lista:
     // é isso que deixa um id fixo como "versao-nova" acender de novo no futuro.
-    const vivos = avisos.map((x) => x.id);
+    const vivos = todos.map((x) => x.id);
     marcarLidos(vivos);
     setLidos(vivos);
+  };
+
+  const dispensarAviso = (aviso: Aviso) => {
+    setDispensados(dispensar(aviso.id, todos.map((x) => x.id)));
   };
 
   const seguir = (aviso: Aviso) => {
@@ -121,20 +135,34 @@ export function SinoDeAvisos() {
             {avisos.map((x) => {
               const cor = TINTA[x.tom];
               return (
-                <button
+                // Div, e não button: o X é um botão e botão dentro de botão não
+                // existe em HTML. Dois alvos de toque irmãos, um por ação.
+                <div
                   key={x.id}
-                  onClick={() => seguir(x)}
-                  className="flex w-full items-start gap-3 rounded-2xl bg-graphite-700 px-3.5 py-3 text-left ring-1 ring-white/[0.06] active:bg-graphite-600"
+                  className="flex items-start gap-1 rounded-2xl bg-graphite-700 py-3 pl-3.5 pr-1.5 ring-1 ring-white/[0.06]"
                 >
-                  <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full ${cor.fundo} ${cor.texto}`}>
-                    <Icon name={x.icone} className="h-4.5 w-4.5" />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block font-display text-[14px] font-semibold leading-snug text-cream">{x.titulo}</span>
-                    <span className="mt-0.5 block text-[13px] leading-relaxed text-cream/60">{x.corpo}</span>
-                  </span>
-                  <span aria-hidden className="mt-1 shrink-0 text-cream/30">›</span>
-                </button>
+                  <button onClick={() => seguir(x)} className="flex min-w-0 flex-1 items-start gap-3 text-left">
+                    <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full ${cor.fundo} ${cor.texto}`}>
+                      <Icon name={x.icone} className="h-4.5 w-4.5" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-display text-[14px] font-semibold leading-snug text-cream">{x.titulo}</span>
+                      <span className="mt-0.5 block text-[13px] leading-relaxed text-cream/60">{x.corpo}</span>
+                    </span>
+                  </button>
+                  {/* Alvo de 32px com o desenho menor dentro: o X fica a um
+                      polegar do texto do aviso, e um toque torto não pode
+                      apagar o aviso quando a intenção era abri-lo. */}
+                  <button
+                    onClick={() => dispensarAviso(x)}
+                    aria-label={a.dispensar}
+                    className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-cream/35 active:bg-white/10 active:text-cream/70"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" className="h-3.5 w-3.5">
+                      <path d="M6 6l12 12M18 6L6 18" />
+                    </svg>
+                  </button>
+                </div>
               );
             })}
           </div>
