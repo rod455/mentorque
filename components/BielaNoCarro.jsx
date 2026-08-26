@@ -5,11 +5,17 @@
 // Assets esperados em /public/biela-carro/: biela-carro-base.png e biela-carro-roda.png
 // Percentuais calibrados por análise de pixel da arte oficial — não recortar os PNGs.
 
+// `size` é o tamanho DESEJADO, não uma exigência: o `maxWidth: 100%` abaixo é
+// o que impede a cena de esticar o layout numa tela estreita. Sem ele, a cena
+// empurrava a coluna do grid do topo da landing para 400px num celular de
+// 393px, e como aquela seção é `overflow-hidden` o excesso não virava rolagem
+// e sim texto e botão cortados na borda direita. As peças internas são todas
+// percentuais, então encolher a moldura já ajusta rodas e vapor junto.
 export default function BielaNoCarro({ size = 640, driving = true, speed = 0.9 }) {
   return (
     <div
       className={`cena-wrap ${driving ? "driving" : ""}`}
-      style={{ width: size, "--spin": `${speed}s` }}
+      style={{ width: size, maxWidth: "100%", "--spin": `${speed}s` }}
     >
       <img className="base" src="/biela-carro/biela-carro-base.png" alt="Biela dirigindo o conversível Mentorque" draggable={false} />
       <img className="roda f" src="/biela-carro/biela-carro-roda.png" alt="" draggable={false} />

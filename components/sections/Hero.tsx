@@ -48,8 +48,12 @@ export function Hero() {
         className="pointer-events-none absolute -left-16 bottom-0 h-72 w-72 text-amber/10"
       />
 
+      {/* `min-w-0` nas duas colunas: por padrão uma coluna de grid nunca fica
+          menor que o conteúdo dela, então basta um filho de largura fixa para
+          esticar a grade inteira além da tela. Com a seção em `overflow-hidden`
+          isso não vira rolagem, vira corte. */}
       <div className="relative mx-auto grid w-full max-w-content items-center gap-14 lg:grid-cols-[1.05fr_0.95fr]">
-        <div>
+        <div className="min-w-0">
           <p className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs font-medium uppercase tracking-[0.14em] text-amber ring-1 ring-white/10">
             {t.hero.eyebrow}
           </p>
@@ -112,7 +116,7 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="relative flex flex-col items-center gap-8">
+        <div className="relative flex min-w-0 flex-col items-center gap-8">
           {/* Cena da Biela dirigindo (handoff "Onde aplicar" → Hero da landing) */}
           <BielaNoCarro size={400} />
           <PhoneMockup />
