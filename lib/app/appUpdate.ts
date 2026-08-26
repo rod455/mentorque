@@ -7,6 +7,7 @@
 // e acende o banner quando está atrás. Na web não existe: lá o deploy já
 // entrega a versão nova a todo mundo.
 import { useEffect, useState } from "react";
+import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/stores";
 import { apiUrl } from "./apiBase";
 import { nativePlatform, openExternal } from "./wrapper";
 
@@ -49,9 +50,22 @@ export function useUpdateAvailable(): boolean {
   return avail;
 }
 
-/** Abre a ficha do app na loja da plataforma (para atualizar). */
+/**
+ * Abre a ficha do app na loja da plataforma (para atualizar).
+ *
+ * Os endereços vêm de lib/stores.ts, e não escritos à mão aqui. Eram duas
+ * cópias dos mesmos dois links, com o id numérico da Apple digitado de novo:
+ * exatamente o tipo de duplicação que ninguém percebe até alguém tocar no
+ * botão e cair numa loja dizendo que o app não existe.
+ *
+ * Sem plataforma nativa não há o que atualizar (na web o deploy já entregou a
+ * versão nova), então a função não faz nada em vez de chutar uma loja. Hoje
+ * isso é inalcançável, porque quem chama só aparece quando `useUpdateAvailable`
+ * é true e ele exige plataforma nativa — mas o `else` anterior mandava o
+ * navegador para a App Store, e é uma armadilha esperando o próximo uso.
+ */
 export function openStorePage(): void {
   const p = nativePlatform();
-  if (p === "android") openExternal("https://play.google.com/store/apps/details?id=mentorque.app");
-  else openExternal("https://apps.apple.com/app/id6797291865");
+  if (p === "android") openExternal(PLAY_STORE_URL);
+  else if (p === "ios") openExternal(APP_STORE_URL);
 }
