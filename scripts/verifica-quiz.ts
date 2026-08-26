@@ -11,6 +11,7 @@ import {
   QUIZ_ZERADO,
   aoResponder,
   diasEntre,
+  mesclarQuiz,
   perguntaDoDia,
   respondeuHoje,
   sequenciaHoje,
@@ -116,6 +117,56 @@ ok("da a volta depois de 64 dias",
   `${perguntaDoDia(banco, "2026-09-01")?.id} vs ${perguntaDoDia(banco, "2026-11-04")?.id}`);
 ok("data anterior a epoca nao quebra", !!perguntaDoDia(banco, "2026-01-05"));
 ok("banco de uma pergunta so nao quebra", perguntaDoDia([banco[0]], "2026-09-10")?.id === "p0");
+
+// ---- juntar nuvem e aparelho -----------------------------------------------
+// Este bloco existe por um defeito real: `mergeSessions` montava a sessao campo
+// a campo e nao tinha `quiz`. Logado, toda recarga passava por ali e a resposta
+// do dia evaporava.
+const q = (ultimoDia: string | null, sequencia: number, recorde = sequencia, perdaoEm: string | null = null, respostas = sequencia, acertos = sequencia): EstadoQuiz =>
+  ({ ultimoDia, sequencia, recorde, perdaoEm, respostas, acertos });
+
+ok("sem nuvem, vale o aparelho", mesclarQuiz(undefined, q("2026-09-03", 3))?.sequencia === 3);
+ok("sem aparelho, vale a nuvem", mesclarQuiz(q("2026-09-03", 3), undefined)?.sequencia === 3);
+ok("os dois vazios dao vazio", mesclarQuiz(undefined, undefined) === undefined);
+
+// O caso do defeito: respondeu AGORA no aparelho, a nuvem ainda esta em ontem.
+{
+  const m = mesclarQuiz(q("2026-09-02", 1), q("2026-09-03", 2))!;
+  ok("a resposta mais nova vence a nuvem atrasada", m.ultimoDia === "2026-09-03" && m.sequencia === 2, `${m.ultimoDia} seq=${m.sequencia}`);
+}
+// E o contrario: respondeu em outro aparelho e este esta velho.
+{
+  const m = mesclarQuiz(q("2026-09-05", 5), q("2026-09-02", 2))!;
+  ok("a nuvem mais nova vence o aparelho atrasado", m.ultimoDia === "2026-09-05" && m.sequencia === 5, `${m.ultimoDia} seq=${m.sequencia}`);
+}
+// Dia e sequencia andam juntos: nunca o dia de um com o numero do outro.
+{
+  const m = mesclarQuiz(q("2026-09-02", 40), q("2026-09-03", 2))!;
+  ok("nao mistura o dia de um com a sequencia do outro", m.ultimoDia === "2026-09-03" && m.sequencia === 2, `${m.ultimoDia} seq=${m.sequencia}`);
+  ok("mas o recorde antigo sobrevive", m.recorde === 40, `rec=${m.recorde}`);
+}
+// Mesmo dia dos dois lados: fica a sequencia maior.
+{
+  const m = mesclarQuiz(q("2026-09-03", 3), q("2026-09-03", 7))!;
+  ok("mesmo dia fica com a sequencia maior", m.sequencia === 7, `seq=${m.sequencia}`);
+}
+// Perdao gasto num aparelho conta no outro.
+{
+  const m = mesclarQuiz(q("2026-09-03", 3, 3, "2026-09-01"), q("2026-09-03", 3, 3, null))!;
+  ok("perdao gasto na nuvem conta no aparelho", m.perdaoEm === "2026-09-01", String(m.perdaoEm));
+  const n = mesclarQuiz(q("2026-09-03", 3, 3, "2026-09-01"), q("2026-09-03", 3, 3, "2026-09-02"))!;
+  ok("entre dois perdoes fica o mais recente", n.perdaoEm === "2026-09-02", String(n.perdaoEm));
+}
+// Totais sao maximo, nunca soma.
+{
+  const m = mesclarQuiz(q("2026-09-03", 3, 3, null, 30, 20), q("2026-09-03", 3, 3, null, 28, 19))!;
+  ok("respostas e acertos sao o maximo, nao a soma", m.respostas === 30 && m.acertos === 20, `${m.respostas}/${m.acertos}`);
+}
+// Nuvem sem nenhum dia (conta nova) e aparelho com resposta de hoje.
+{
+  const m = mesclarQuiz(QUIZ_ZERADO, q("2026-09-03", 1))!;
+  ok("conta nova na nuvem nao apaga a resposta do aparelho", m.ultimoDia === "2026-09-03" && m.sequencia === 1, `${m.ultimoDia} seq=${m.sequencia}`);
+}
 
 // ---- um ano de uso real ----------------------------------------------------
 // Responde todo dia por 365 dias: a sequencia tem de bater exatamente.

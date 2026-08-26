@@ -118,6 +118,65 @@ export function aoResponder(e: EstadoQuiz, hoje: string, acertou: boolean): Esta
   };
 }
 
+/**
+ * Junta o quiz da nuvem com o do aparelho.
+ *
+ * Chamada no login e em toda abertura de app com sessão aberta, porque é aí
+ * que as duas cópias se encontram. Sem ela, uma das duas simplesmente vencia e
+ * a outra sumia — foi assim que uma resposta dada e recarregada em seguida
+ * voltou ao estado de não respondida.
+ *
+ * As regras vêm do que cada campo significa:
+ *
+ * - `ultimoDia` e `sequencia` andam JUNTOS. Uma sequência é sempre "tantos
+ *   dias até o dia X"; pegar o dia de um lado e o número do outro produziria
+ *   um número que nunca existiu. Ganha o lado que respondeu por último;
+ * - `recorde` é o máximo dos dois. Recorde não diminui, nem trocando de
+ *   aparelho;
+ * - `perdaoEm` é o mais recente. Perdão gasto num celular está gasto no outro,
+ *   senão bastaria alternar aparelhos para nunca perder uma sequência;
+ * - `respostas` e `acertos` são o MÁXIMO, nunca a soma. É a mesma pessoa
+ *   respondendo uma vez por dia: somar contaria de novo cada resposta que já
+ *   estava nos dois lados.
+ */
+export function mesclarQuiz(nuvem?: EstadoQuiz, local?: EstadoQuiz): EstadoQuiz | undefined {
+  if (!nuvem) return local;
+  if (!local) return nuvem;
+
+  // Quem respondeu por último leva o par (dia, sequência). Empate no mesmo dia
+  // fica com a sequência maior: as duas descrevem o mesmo dia, e a menor só
+  // pode ser uma cópia que ficou para trás.
+  const dias = !nuvem.ultimoDia
+    ? local
+    : !local.ultimoDia
+      ? nuvem
+      : diasEntre(nuvem.ultimoDia, local.ultimoDia) > 0
+        ? local
+        : diasEntre(nuvem.ultimoDia, local.ultimoDia) < 0
+          ? nuvem
+          : nuvem.sequencia >= local.sequencia
+            ? nuvem
+            : local;
+
+  const perdaoMaisNovo =
+    !nuvem.perdaoEm
+      ? local.perdaoEm
+      : !local.perdaoEm
+        ? nuvem.perdaoEm
+        : diasEntre(nuvem.perdaoEm, local.perdaoEm) > 0
+          ? local.perdaoEm
+          : nuvem.perdaoEm;
+
+  return {
+    ultimoDia: dias.ultimoDia,
+    sequencia: dias.sequencia,
+    recorde: Math.max(nuvem.recorde, local.recorde),
+    perdaoEm: perdaoMaisNovo,
+    respostas: Math.max(nuvem.respostas, local.respostas),
+    acertos: Math.max(nuvem.acertos, local.acertos),
+  };
+}
+
 // ---- Qual pergunta sai hoje -------------------------------------------------
 
 /**

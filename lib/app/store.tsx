@@ -6,7 +6,7 @@ import { newId, type ServiceRecord, type Vehicle } from "./types";
 import { useAuth } from "./auth";
 import { getBrowserSupabase } from "@/lib/supabaseBrowser";
 import { trackContent } from "./track";
-import { aoResponder, diaLocal, QUIZ_ZERADO, type EstadoQuiz } from "./quiz/sequencia";
+import { aoResponder, diaLocal, mesclarQuiz, QUIZ_ZERADO, type EstadoQuiz } from "./quiz/sequencia";
 
 // Client-side session for the car-centric prototype: a garage of vehicles, one
 // "active" vehicle, and a flat list of service records. Persisted to
@@ -199,6 +199,20 @@ function mergeById<T extends { id: string }>(cloud: T[], local: T[]): T[] {
 // Exportada para poder ser testada sozinha: são regras de correção de DADOS
 // (quem fica com o Premium, qual carro fica ativo) e quebrar qualquer uma delas
 // é invisível na tela até alguém perder trabalho ou ganhar assinatura de graça.
+/**
+ * Trava de compilação: TODA chave de Session precisa aparecer no merge.
+ *
+ * Existe porque este merge é uma lista branca escrita à mão, e campo opcional
+ * esquecido aqui não dá erro nenhum: ele simplesmente some na primeira
+ * recarga de quem está logado. Foi o que aconteceu com o `quiz` — a pessoa
+ * respondia, recarregava e a resposta tinha evaporado, porque `quiz?:` é
+ * opcional e o compilador não reclamava da ausência.
+ *
+ * Com `satisfies` contra este tipo, esquecer uma chave nova vira erro de
+ * compilação em vez de perda de dados silenciosa meses depois.
+ */
+type TodasAsChavesDaSessao = Record<keyof Required<Session>, unknown>;
+
 export function mergeSessions(cloud: Session, local: Session): Session {
   return {
     onboarded: !!cloud.onboarded || !!local.onboarded,
@@ -232,7 +246,10 @@ export function mergeSessions(cloud: Session, local: Session): Session {
     units: cloud.units ?? local.units ?? "metric",
     avatar: cloud.avatar ?? local.avatar ?? null,
     feedback: mergeFeedback(cloud.feedback, local.feedback),
-  };
+    // A sequência do quiz sobrevive à troca de aparelho. Regra em
+    // quiz/sequencia.ts, conferida por `npm run verifica:quiz`.
+    quiz: mesclarQuiz(cloud.quiz, local.quiz),
+  } satisfies TodasAsChavesDaSessao;
 }
 
 // O que o convidado fez NESTE APARELHO e a conta ainda não tem.
