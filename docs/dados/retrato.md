@@ -1,17 +1,17 @@
 # Retrato diario da operacao Mentorque
 
-Gerado pelo Analista de Dados (n8n) em 2026-08-25T09:00:06.822Z.
+Gerado pelo Analista de Dados (n8n) em 2026-08-26T09:00:06.474Z.
 NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 
 ## MARKETING (gente chegando)
-- Semana corrente (2026-08-24): aberturas 4, visitantes 3, cadastros 0
+- Semana corrente (2026-08-24): aberturas 10, visitantes 6, cadastros 0
 - Semana anterior (2026-08-17): aberturas 4, visitantes 2, cadastros 0
 - Midia paga: sem gasto no periodo (crescimento organico)
 - Busca Google 28d: 0 cliques, 0 impressoes
 - YouTube: 0 inscritos, 0 views totais, 10 videos recentes
 
 ## ENGAJAMENTO (gente usando e voltando)
-- Semana corrente (2026-08-24): 3 usuarios ativos, 4 aberturas (1.3 por usuario)
+- Semana corrente (2026-08-24): 6 usuarios ativos, 10 aberturas (1.7 por usuario)
 - Semana anterior (2026-08-17): 2 usuarios ativos, 4 aberturas (2 por usuario)
 - Erros no app 7d: 0
 - Play vitals: sem dados de crash ainda
@@ -19,7 +19,7 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 
 ## VENDAS (gente pagando e continuando)
 - Assinaturas ativas (banco): 1 (anuais 1, mensais 0), cancelamento agendado: 0
-- Fundo do funil, Semana corrente: viram paywall 1, iniciaram checkout 0, assinaram 0, cancelaram 0
+- Fundo do funil, Semana corrente: viram paywall 4, iniciaram checkout 3, assinaram 0, cancelaram 0
 - Fundo do funil, Semana anterior: viram paywall 0, iniciaram checkout 0, assinaram 0, cancelaram 0
 - Stripe (live): 0 assinaturas, MRR 0.00, receita 30d 0.00
 - RevenueCat: 0 assinaturas, MRR 0 (aviso: active_users = aparelhos, inclui testes)
@@ -44,15 +44,15 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 ```json
 {
   "dados": {
-    "geradoEm": "2026-08-25T09:00:05.192Z",
+    "geradoEm": "2026-08-26T09:00:05.048Z",
     "funilSemanas": [
       {
         "semana": "2026-08-24",
-        "aberturas": 4,
-        "visitantes": 3,
+        "aberturas": 10,
+        "visitantes": 6,
         "cadastros": 0,
-        "viram_paywall": 1,
-        "iniciaram_checkout": 0,
+        "viram_paywall": 4,
+        "iniciaram_checkout": 3,
         "assinaturas": 0,
         "renovacoes": 0,
         "cancelamentos": 0,
@@ -85,6 +85,11 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
     "uso": {
       "porDia": [
         {
+          "dia": "2026-08-25",
+          "usuarios": 3,
+          "aberturas": 6
+        },
+        {
           "dia": "2026-08-24",
           "usuarios": 3,
           "aberturas": 4
@@ -98,9 +103,9 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       "porSemana": [
         {
           "semana": "2026-08-24",
-          "usuarios_ativos": 3,
-          "aberturas": 4,
-          "aberturas_por_usuario": 1.3
+          "usuarios_ativos": 6,
+          "aberturas": 10,
+          "aberturas_por_usuario": 1.7
         },
         {
           "semana": "2026-08-17",
@@ -123,10 +128,10 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       {
         "de": "abriu_app",
         "para": "cadastro",
-        "antes": 4,
+        "antes": 7,
         "depois": 0,
         "taxa": 0,
-        "perdidos": 4
+        "perdidos": 7
       },
       {
         "de": "cadastro",
@@ -140,25 +145,25 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "de": "ativacao",
         "para": "viu_paywall",
         "antes": 0,
-        "depois": 1,
+        "depois": 2,
         "taxa": null,
         "perdidos": 0
       },
       {
         "de": "viu_paywall",
         "para": "iniciou_checkout",
-        "antes": 1,
-        "depois": 0,
-        "taxa": 0,
+        "antes": 2,
+        "depois": 1,
+        "taxa": 50,
         "perdidos": 1
       },
       {
         "de": "iniciou_checkout",
         "para": "assinou",
-        "antes": 0,
+        "antes": 1,
         "depois": 0,
-        "taxa": null,
-        "perdidos": 0
+        "taxa": 0,
+        "perdidos": 1
       }
     ],
     "fontesExternas": {
