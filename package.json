@@ -12,7 +12,8 @@
     "sync:ios": "node scripts/ios-google-scheme.mjs && cap sync ios",
     "open:android": "cap open android",
     "build:native": "node scripts/build-native.mjs",
-    "verifica:quiz": "node --experimental-strip-types scripts/verifica-quiz.ts"
+    "verifica:quiz": "node --experimental-strip-types scripts/verifica-quiz.ts",
+    "quiz:pdf": "node --experimental-strip-types scripts/quiz-pdf.ts"
   },
   "dependencies": {
     "@capacitor-community/admob": "^8.0.0",
