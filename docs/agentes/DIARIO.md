@@ -3,6 +3,65 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-26 · QA: a primeira assinatura real existe e o funil diz que não
+- Artifact "QA da Semana":
+  https://claude.ai/code/artifact/eacadd3f-193d-41e4-bb7d-3cb4cfa73a0a
+  (primeira rodada deste papel; não havia registro de QA anterior no diário,
+  então nada foi repetido).
+- ACHADO PRINCIPAL, e é notícia boa escondida atrás de um defeito: existe
+  UMA ASSINATURA REAL, paga, no Stripe live. `sub_1U8U8h…`, R$ 29,90 no
+  plano Mensal, criada em 25/08 às 23:52:23, em teste grátis até 01/09,
+  cartão na mão, `user_id` fcd41994 no metadata. É o mesmo cliente do
+  incidente do "quase pagou duas vezes" que já estava comentado no código.
+  Não é a conta do revisor (essa é a anual de 2099, outro usuário).
+- O DEFEITO: `funil_eventos` NUNCA registrou um `assinou` sequer, nem
+  `cadastro`, `renovou`, `cancelou` ou `expirou`. A tabela inteira tem três
+  tipos de evento: abriu_app (15), viu_paywall (4), iniciou_checkout (3).
+  Então o funil da semana mostra `assinaturas 0` com dinheiro real entrando,
+  e o retrato mostra "Assinaturas ativas (banco): 1" contando só o revisor,
+  porque o cliente novo está `trialing` e a contagem filtra `active`.
+- CAUSA PROVÁVEL, não fechada: quem gravou a assinatura no banco foi o
+  `/api/stripe/sync` (chamado pelo app na volta do checkout, 23:52:28), não
+  o webhook. O `assinou` só nasce no webhook. O endpoint ESTÁ cadastrado e
+  habilitado no Stripe (mentorque.com.br/api/stripe/webhook, com os 4
+  eventos certos), então sobra secret errado/ausente na Vercel
+  (`STRIPE_WEBHOOK_SECRET` faltando faz a rota devolver 501) ou entrega
+  falhando. Não deu para ler o log de entregas: a integração do Stripe caiu
+  no meio da sessão e a operação de listar eventos não estava disponível.
+  PARA O RODRIGO: abrir Stripe → Developers → Webhooks → o endpoint → aba de
+  entregas e ver se as de 25/08 saíram 2xx. É o que fecha o diagnóstico.
+- RISCO CONCRETO COM DATA: 01/09 o teste grátis acaba e vira cobrança. Se o
+  webhook está mudo, nem a conversão nem uma falha de cartão chegam ao
+  banco, e a tabela vai continuar dizendo `trialing` para sempre. Se o
+  cliente cancelar, ninguém fica sabendo. Faltam 6 dias.
+- CORRIGIDO (build e tipos passando): `viu_paywall` contava a mesma pessoa
+  várias vezes na mesma sessão. A dedup era por `evento:origem` e a origem
+  ali é o contexto de ENTRADA da mesma tela, então entrar pelo onboarding e
+  voltar pela Biela virava duas pessoas no funil. Gravava até FORA DE ORDEM:
+  ao voltar do checkout a tela remonta sem ctx e escrevia um `viu_paywall`
+  às 23:52:44, depois do `iniciou_checkout` das 23:52:37. Os 4 eventos de
+  paywall da semana são 2 pessoas. Agora vale a primeira entrada da sessão.
+- CORRIGIDO: `/api/funil` fazia `await insert(...)` sem olhar o `error` e
+  respondia `ok` de qualquer jeito. Evento recusado pelo banco sumia sem
+  rastro e a etapa ficava em zero parecendo desinteresse do usuário. Agora
+  loga e devolve 500 (o cliente é fire-and-forget, então nada muda no app).
+- CORRIGIDO: `supabase/funil_eventos.sql` estava três eventos atrás do banco
+  (faltavam `abriu_trilha` e `cadastrou_carro` na restrição). Rodar aquele
+  arquivo como estava recriaria a restrição sem os dois e mataria a ativação
+  em silêncio, justamente pela rota que não conferia erro.
+- RECOMENDADO, não aplicado (mexer em view existente está fora da alçada):
+  `funil_semana` mistura unidades na mesma linha. `visitantes` é gente
+  distinta, `viram_paywall` e `iniciaram_checkout` são eventos. Quem lê o
+  retrato entende funil de pessoas e não é. Pior, a `funil_etapas_28d` que
+  alimenta o /painel já conta pessoas, então as duas views discordam sobre a
+  mesma semana. SQL pronto em `supabase/funil_semana_pessoas.sql`, só somando
+  colunas `_pessoas` sem remover nada.
+- Saúde do código: tipos limpos, build do site e `build:native` passando,
+  lint só com os avisos de `<img>` de sempre (que no export estático são
+  corretos, `next/image` não otimiza lá). 0 erro real em app_erros nos 7d.
+- Fila da próxima rodada anotada no manual; o carro duplicado de 23/08
+  segue aberto e é o candidato natural.
+
 ## 2026-08-25 · Site preparado para ser citado por IA (pedido do dono)
 - Objetivo do dono: que outras IAs encontrem o Mentorque e o ofereçam a quem
   procura solução para o carro. O trabalho é diferente de SEO: buscador

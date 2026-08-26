@@ -20,8 +20,14 @@ create table if not exists public.funil_eventos (
   id         uuid primary key default gen_random_uuid(),
   criado_em  timestamptz not null default now(),
 
+  -- abriu_trilha e cadastrou_carro entraram depois (primeira ação de valor,
+  -- a linha 'ativacao' de funil_etapas_28d). Estavam no banco e faltavam
+  -- AQUI: rodar este arquivo como estava recriava a restrição sem os dois, e
+  -- a partir daí toda ativação seria recusada em silêncio, porque
+  -- /api/funil não confere o erro do insert e responde ok do mesmo jeito.
   evento     text not null check (evento in (
     'abriu_app', 'cadastro', 'viu_paywall', 'iniciou_checkout',
+    'abriu_trilha', 'cadastrou_carro',
     'assinou', 'renovou', 'cancelou', 'expirou'
   )),
 

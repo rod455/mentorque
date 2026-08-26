@@ -26,6 +26,13 @@ export type EventoFunil =
 // Dedup por sessão: reabrir a mesma tela no mesmo pageview não conta de novo.
 const enviados = new Set<string>();
 
+// A chave de dedup é `evento:origem` por padrão, e isso é PROPOSITAL onde a
+// origem faz parte do que está sendo contado (abriu_trilha conta uma vez por
+// trilha, cadastrou_carro uma vez por tipo de cadastro). Onde a origem é só o
+// contexto de ENTRADA da mesma tela, contar por origem infla a etapa: quem
+// chega ao paywall pelo onboarding e volta a ele pela Biela vira duas pessoas
+// na leitura do funil. Esses casos passam `chave` e deduplicam por evento.
+
 // A etiqueta de campanha que a LP (/landing) guardou no aparelho. É ela que
 // liga anúncio a cadastro e a assinatura: sem UTM no evento, mídia paga vira
 // chute. Só existe na web (a LP e o app web dividem a mesma origem); no app
@@ -41,11 +48,14 @@ function utmGuardada(): Record<string, string> | null {
   }
 }
 
-export function funil(evento: EventoFunil, o?: { userId?: string | null; origem?: string; umaVez?: boolean }): void {
+export function funil(
+  evento: EventoFunil,
+  o?: { userId?: string | null; origem?: string; umaVez?: boolean; chave?: string },
+): void {
   try {
     if (typeof window === "undefined") return;
     if (o?.umaVez) {
-      const k = `${evento}:${o?.origem ?? ""}`;
+      const k = o?.chave ?? `${evento}:${o?.origem ?? ""}`;
       if (enviados.has(k)) return;
       enviados.add(k);
     }

@@ -764,7 +764,15 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   // Funil: quem chegou ao paywall (uma vez por sessão, com o contexto de
   // entrada — onboarding, home, revisões…). O início de compra é marcado em
   // cada caminho (Stripe, loja, ofertas), não aqui.
-  useEffect(() => { funil("viu_paywall", { umaVez: true, origem: _ctx ?? "direto", userId: user?.id }); }, [_ctx, user?.id]);
+  //
+  // `chave` fixa porque a dedup padrão é por evento+origem, e aqui a origem é
+  // o contexto de ENTRADA da mesma tela. Sem ela, a mesma pessoa na mesma
+  // sessão contava de novo a cada entrada por um caminho diferente, e ainda
+  // fora de ordem: ao voltar do checkout a tela remonta sem ctx e gravava um
+  // `viu_paywall` DEPOIS do `iniciou_checkout`. Aconteceu em 25/08/2026 (o
+  // mesmo cliente do quase-pagou-duas-vezes): 4 dos eventos de paywall da
+  // semana são 2 pessoas. Agora vale a primeira entrada da sessão.
+  useEffect(() => { funil("viu_paywall", { umaVez: true, chave: "viu_paywall", origem: _ctx ?? "direto", userId: user?.id }); }, [_ctx, user?.id]);
 
   const subscribe = () => {
     if (!user) { go({ name: "auth" }); return; }

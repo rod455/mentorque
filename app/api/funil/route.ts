@@ -66,7 +66,7 @@ export async function POST(req: Request) {
 
   const extra = utm || exp ? { ...(utm ? { utm } : {}), ...(exp ? { exp } : {}) } : null;
 
-  await admin.from("funil_eventos").insert({
+  const { error } = await admin.from("funil_eventos").insert({
     evento,
     anon_id: corta(b?.anonId, 64),
     user_id: userId,
@@ -75,6 +75,16 @@ export async function POST(req: Request) {
     origem: corta(b?.origem, 32),
     extra,
   });
+  // O erro do insert era descartado e a rota respondia ok do mesmo jeito. Um
+  // evento recusado pelo banco (a restrição `evento in (...)` é o caso real:
+  // a lista daqui e a de lá são mantidas à mão em arquivos diferentes) some
+  // sem deixar rastro, e a etapa fica em zero parecendo comportamento das
+  // pessoas. O cliente é fire-and-forget e ignora a resposta, então isto não
+  // muda nada para quem usa o app: serve para a falha aparecer no log.
+  if (error) {
+    console.error("[funil] insert recusado", { evento, motivo: error.message });
+    return NextResponse.json({ error: "insert_falhou" }, { status: 500 });
+  }
   return NextResponse.json({ ok: true });
 }
 
