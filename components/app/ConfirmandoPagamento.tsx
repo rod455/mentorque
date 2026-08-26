@@ -1,6 +1,8 @@
 "use client";
 
+import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/stores";
 import { usePrototype } from "@/lib/app/store";
+import { isNativeApp } from "@/lib/app/wrapper";
 import { useContent } from "./ui";
 
 // O que a pessoa vê ao voltar do checkout.
@@ -58,6 +60,34 @@ export function ConfirmandoPagamento() {
             >
               {t.liberadoBotao}
             </button>
+
+            {/* Só no navegador. Dentro do app, oferecer "baixe o app" é
+                absurdo, e o aviso de fechar e abrir é justamente o que a
+                reconferência ao voltar do segundo plano já resolve aqui. */}
+            {!isNativeApp() && (
+              <div className="mt-6 border-t border-white/10 pt-5 text-left">
+                <p className="font-display text-sm font-semibold text-cream">{t.liberadoAppTitulo}</p>
+                <p className="mt-1.5 text-sm leading-relaxed text-cream/70">{t.liberadoAppCorpo}</p>
+                <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+                  <a
+                    href={PLAY_STORE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 rounded-xl bg-graphite-700 px-4 py-2.5 text-center font-display text-sm font-semibold text-cream ring-1 ring-white/10 transition-colors hover:bg-graphite-600"
+                  >
+                    {t.liberadoAppAndroid}
+                  </a>
+                  <a
+                    href={APP_STORE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 rounded-xl bg-graphite-700 px-4 py-2.5 text-center font-display text-sm font-semibold text-cream ring-1 ring-white/10 transition-colors hover:bg-graphite-600"
+                  >
+                    {t.liberadoAppApple}
+                  </a>
+                </div>
+              </div>
+            )}
           </>
         )}
 

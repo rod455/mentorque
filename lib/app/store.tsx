@@ -316,6 +316,37 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => { refreshSubscription(); }, [refreshSubscription]);
 
+  // Reconferir a assinatura toda vez que o app volta para a frente.
+  //
+  // Sem isto, o app só descobria mudança de assinatura quando o usuário
+  // mudava, ou seja, praticamente só ao abrir do zero. Um app aberto nunca
+  // reconferia nada, e daí saía a queixa de 25/08: o cliente comprou pelo
+  // navegador com o app já aberto, o app continuou achando que ele era do
+  // plano gratuito, e só liberou depois de fechar e abrir.
+  //
+  // Isso vale muito além do checkout. Cobre comprar num aparelho e usar em
+  // outro, cancelar pelo site e voltar ao app, e o teste grátis virando
+  // assinatura enquanto o app dorme em segundo plano.
+  //
+  // `visibilitychange` serve para os dois mundos: no navegador dispara ao
+  // trocar de aba, e dentro do app das lojas a WebView dispara ao voltar do
+  // segundo plano, no iPhone e no Android. Sem plugin nenhum.
+  //
+  // O piso de 10 segundos existe para alternar entre abas não virar uma
+  // consulta por segundo.
+  const ultimaConferida = useRef(0);
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const aoVoltar = () => {
+      if (document.visibilityState !== "visible") return;
+      if (Date.now() - ultimaConferida.current < 10000) return;
+      ultimaConferida.current = Date.now();
+      refreshSubscription();
+    };
+    document.addEventListener("visibilitychange", aoVoltar);
+    return () => document.removeEventListener("visibilitychange", aoVoltar);
+  }, [refreshSubscription]);
+
   // Volta do Stripe Checkout (/app?checkout=success).
   //
   // O QUE DEU ERRADO ANTES, e que um cliente pagou para descobrir em 25/08:

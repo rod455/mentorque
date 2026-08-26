@@ -2453,6 +2453,18 @@ export function getContent(locale: Locale) {
         "All set. Your access is live on this account and on any device where you sign in."
       ),
       liberadoBotao: T("Começar", "Get started"),
+      // Bloco das lojas, só no navegador. Duas coisas ao mesmo tempo: quem
+      // pagou pelo site ainda não tem o app instalado, e quem já tem pode estar
+      // com ele aberto em segundo plano desde antes da compra. O aviso de
+      // fechar e abrir é para as versões que já estão nas lojas, anteriores à
+      // reconferência automática ao voltar para o app.
+      liberadoAppTitulo: T("Leve no celular", "Take it on your phone"),
+      liberadoAppCorpo: T(
+        "Entre com o mesmo e-mail e o Premium vem junto. Se o app já estiver aberto no celular, feche e abra de novo para o acesso aparecer.",
+        "Sign in with the same email and Premium comes with it. If the app is already open on your phone, close it and open it again for the access to show up."
+      ),
+      liberadoAppAndroid: T("Baixar para Android", "Get it on Android"),
+      liberadoAppApple: T("Baixar para iPhone", "Get it for iPhone"),
       demorouTitulo: T("Ainda confirmando", "Still confirming"),
       demorouCorpo: T(
         "O pagamento pode já ter entrado, então NÃO pague de novo. O acesso costuma aparecer em alguns minutos, e você vai receber o recibo por e-mail. Se não liberar, fale com a gente com o e-mail da compra em mãos.",
