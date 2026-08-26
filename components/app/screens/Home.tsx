@@ -88,9 +88,25 @@ export function HomeScreen() {
   useEffect(() => {
     if (!car || car.odometerKm == null) return;
     const DIA = 24 * 60 * 60 * 1000;
+
+    // Carro SEM carimbo: cadastrado antes deste campo existir, importado da
+    // garagem de convidado, ou simplesmente recém-cadastrado. Carimba agora e
+    // começa a contar daqui.
+    //
+    // Era aqui que estava o defeito: a ausência do carimbo virava
+    // `informado = 0`, ou seja, 1º de janeiro de 1970. "Agora menos 1970" é
+    // sempre maior que 30 dias, então o app pedia o km NO DIA do cadastro, e
+    // de novo a cada 3 dias depois de cada "agora não", para sempre — porque
+    // enquanto a pessoa não mudasse o número, o carimbo nunca nascia.
+    if (!car.kmUpdatedAt) {
+      updateVehicle(car.id, { kmUpdatedAt: new Date().toISOString() });
+      return;
+    }
+
     let adiado = 0;
     try { adiado = Number(window.localStorage.getItem(KM_SNOOZE + car.id) ?? 0); } catch { /* sem armazenamento: pergunta */ }
-    const informado = car.kmUpdatedAt ? Date.parse(car.kmUpdatedAt) : 0;
+    const informado = Date.parse(car.kmUpdatedAt);
+    if (Number.isNaN(informado)) return;
     if (Date.now() - informado > 30 * DIA && Date.now() - adiado > 3 * DIA) {
       setKmNovo("");
       setKmErro(null);

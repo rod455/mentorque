@@ -593,7 +593,12 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const addVehicle = useCallback(
     (v: Omit<Vehicle, "id">) => {
       const id = newId();
-      patch((p) => ({ ...p, vehicles: [...p.vehicles, { ...v, id }], activeVehicleId: id }));
+      // Km informado no cadastro TAMBÉM ganha carimbo. Sem isto, o carro
+      // nascia com odômetro e sem data de quando ele foi informado, e o
+      // lembrete mensal da tela inicial lia essa ausência como "informado há
+      // uma eternidade": pedia o km no mesmo dia do cadastro.
+      const carimbo = v.odometerKm != null && !v.kmUpdatedAt ? { kmUpdatedAt: new Date().toISOString() } : {};
+      patch((p) => ({ ...p, vehicles: [...p.vehicles, { ...v, ...carimbo, id }], activeVehicleId: id }));
       return id;
     },
     [patch]
@@ -605,10 +610,17 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
         ...p,
         vehicles: p.vehicles.map((v) => {
           if (v.id !== id) return v;
-          // Km novo ganha carimbo de quando foi informado — é ele que dispara
-          // (e adia) o lembrete mensal de atualizar o km. Centralizado aqui
-          // para valer em toda tela que mexa no odômetro.
-          const carimbo = "odometerKm" in up && up.odometerKm !== v.odometerKm ? { kmUpdatedAt: new Date().toISOString() } : {};
+          // Km informado ganha carimbo de QUANDO foi informado — é ele que
+          // dispara (e adia) o lembrete mensal. Centralizado aqui para valer
+          // em toda tela que mexa no odômetro.
+          //
+          // Vale mesmo quando o número não muda, e isso é o ponto: o campo diz
+          // "quando a pessoa informou", não "quando o valor mudou". Quem abre o
+          // lembrete e confirma os mesmos 98.000 km informou o km de hoje. Com
+          // a regra antiga esse gesto não carimbava nada, e o app voltava a
+          // perguntar três dias depois como se ela não tivesse respondido.
+          const carimbo =
+            "odometerKm" in up && up.odometerKm != null ? { kmUpdatedAt: new Date().toISOString() } : {};
           return { ...v, ...up, ...carimbo };
         }),
       })),
