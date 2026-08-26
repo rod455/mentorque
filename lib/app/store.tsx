@@ -287,6 +287,11 @@ function mergeFeedback(cloud?: FeedbackState, local?: FeedbackState): FeedbackSt
   };
 }
 
+// Piso entre duas reconferências da assinatura ao trazer o app de volta.
+// A diferença entre os dois está explicada no efeito que os usa.
+const ESPERA_SEM_ASSINATURA = 60_000;
+const ESPERA_COM_ASSINATURA = 6 * 60 * 60 * 1000;
+
 export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const [s, setS] = useState<Session>(EMPTY);
   const [sub, setSub] = useState<{ active: boolean; endsAt: string | null; canceling: boolean }>({ active: false, endsAt: null, canceling: false });
@@ -332,20 +337,36 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   // trocar de aba, e dentro do app das lojas a WebView dispara ao voltar do
   // segundo plano, no iPhone e no Android. Sem plugin nenhum.
   //
-  // O piso de 10 segundos existe para alternar entre abas não virar uma
-  // consulta por segundo.
+  // NÃO é uma varredura de tempo em tempo: nada roda com o app parado. Só
+  // roda quando a pessoa TRAZ o app de volta, e as esperas abaixo são um piso
+  // entre duas idas, não um relógio.
+  //
+  // A espera muda conforme o que pode ter mudado:
+  //
+  // - Sem assinatura ativa, a pessoa pode ter acabado de comprar no navegador
+  //   ao lado ou em outro aparelho. Errar aqui é mostrar paywall para quem
+  //   pagou, que é a queixa que originou tudo isso. Um minuto.
+  //
+  // - Com assinatura ativa, o que pode mudar é um cancelamento feito no site,
+  //   e descobrir isso algumas horas depois não muda nada para ninguém: a
+  //   pessoa segue com o acesso que ela pagou. Seis horas.
+  //
+  // Na prática isso é uma consulta por abertura para quem ainda não assina, e
+  // no máximo quatro por dia para quem já assina.
   const ultimaConferida = useRef(0);
   useEffect(() => {
     if (typeof document === "undefined") return;
+    if (!user) return;
     const aoVoltar = () => {
       if (document.visibilityState !== "visible") return;
-      if (Date.now() - ultimaConferida.current < 10000) return;
+      const espera = subActive ? ESPERA_COM_ASSINATURA : ESPERA_SEM_ASSINATURA;
+      if (Date.now() - ultimaConferida.current < espera) return;
       ultimaConferida.current = Date.now();
       refreshSubscription();
     };
     document.addEventListener("visibilitychange", aoVoltar);
     return () => document.removeEventListener("visibilitychange", aoVoltar);
-  }, [refreshSubscription]);
+  }, [refreshSubscription, user, subActive]);
 
   // Volta do Stripe Checkout (/app?checkout=success).
   //
