@@ -1,4 +1,11 @@
+// A extensão ".ts" no import é deliberada: scripts/verifica-quiz.ts roda este
+// arquivo no node puro, e lá o caminho precisa ser explícito. O compilador
+// aceita por causa de `allowImportingTsExtensions` no tsconfig, e com `noEmit`
+// nada disso chega ao pacote gerado.
+import { diasEntre } from "../datas.ts";
 import type { Pergunta } from "./perguntas";
+
+export { diaLocal, diasEntre } from "../datas.ts";
 
 // A regra do quiz diário: qual pergunta sai hoje e o que acontece com a
 // sequência quando a pessoa responde.
@@ -6,28 +13,6 @@ import type { Pergunta } from "./perguntas";
 // Está separada da tela de propósito. É uma regra de data, e regra de data
 // errada aqui destrói o único ativo que o quiz constrói: a sequência de dias.
 // Quem perde 40 dias seguidos por um bug de fuso não volta.
-
-/** Dia local do aparelho em yyyy-mm-dd. */
-export function diaLocal(d = new Date()): string {
-  const p = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
-}
-
-/**
- * Dias inteiros de `a` até `b`, ambos yyyy-mm-dd.
- *
- * Usa meio-dia UTC em vez de meia-noite: meia-noite mais horário de verão
- * (que o Brasil pode voltar a ter, e outros países têm) dá 23 ou 25 horas de
- * diferença, e o arredondamento passa a errar por um dia inteiro. Ao meio-dia
- * sobram 12 horas de folga para os dois lados.
- */
-export function diasEntre(a: string, b: string): number {
-  const t = (s: string) => Date.parse(`${s}T12:00:00Z`);
-  const ta = t(a);
-  const tb = t(b);
-  if (Number.isNaN(ta) || Number.isNaN(tb)) return 0;
-  return Math.round((tb - ta) / 86400000);
-}
 
 export type EstadoQuiz = {
   /** Último dia em que respondeu, yyyy-mm-dd. */
