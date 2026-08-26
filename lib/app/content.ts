@@ -2438,6 +2438,29 @@ export function getContent(locale: Locale) {
       importarNenhum: T("Não levar nenhum", "Do not add any"),
     },
 
+    // Volta do checkout. Textos escritos para NÃO mandar tentar de novo: o
+    // pagamento pode já ter entrado, e foi assim que um cliente quase pagou
+    // duas vezes em 25/08.
+    checkout: {
+      confirmandoTitulo: T("Confirmando seu pagamento", "Confirming your payment"),
+      confirmandoCorpo: T(
+        "Leva alguns segundos. Pode deixar esta tela aberta, não precisa pagar de novo.",
+        "This takes a few seconds. You can leave this screen open, there's no need to pay again."
+      ),
+      liberadoTitulo: T("Premium liberado", "Premium unlocked"),
+      liberadoCorpo: T(
+        "Tudo certo, o acesso já está valendo nesta conta e em qualquer aparelho onde você entrar.",
+        "All set. Your access is live on this account and on any device where you sign in."
+      ),
+      liberadoBotao: T("Começar", "Get started"),
+      demorouTitulo: T("Ainda confirmando", "Still confirming"),
+      demorouCorpo: T(
+        "O pagamento pode já ter entrado, então NÃO pague de novo. O acesso costuma aparecer em alguns minutos, e você vai receber o recibo por e-mail. Se não liberar, fale com a gente com o e-mail da compra em mãos.",
+        "The payment may already have gone through, so do NOT pay again. Access usually appears within a few minutes and you'll get the receipt by email. If it doesn't unlock, contact us with the purchase email at hand."
+      ),
+      demorouBotao: T("Entendi", "Got it"),
+    },
+
     history: {
       title: T("Calendário do carro", "Car calendar"),
       none: T("Nenhum serviço registrado ainda.", "No services logged yet."),

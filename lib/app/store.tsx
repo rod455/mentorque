@@ -39,6 +39,9 @@ type Session = {
   feedback?: FeedbackState;
 };
 
+/** Em que pé está a volta do checkout. `null` = não veio de lá. */
+export type EstadoCheckout = null | "confirmando" | "liberado" | "demorou";
+
 export type FeedbackState = {
   perguntadoEm: string | null; // último pedido (ISO yyyy-mm-dd)
   respondidoEm: string | null; // última resposta (ISO); null = fechou sem responder
@@ -111,6 +114,9 @@ type StoreValue = {
   // Carros feitos como convidado esperando o dono decidir se entram na conta.
   importacaoPendente: ImportacaoPendente | null;
   resolverImportacao: (ids: string[]) => void;
+  /** Volta do checkout: a tela mostra o que está acontecendo. */
+  checkoutVoltando: EstadoCheckout;
+  fecharAvisoCheckout: () => void;
   setName: (name: string) => void;
   setEmail: (email: string) => void;
   setState: (state: string) => void;
@@ -310,25 +316,79 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => { refreshSubscription(); }, [refreshSubscription]);
 
-  // Coming back from Stripe Checkout (/app?checkout=success): the webhook may
-  // take a moment, so re-check a couple times and clean the URL.
+  // Volta do Stripe Checkout (/app?checkout=success).
+  //
+  // O QUE DEU ERRADO ANTES, e que um cliente pagou para descobrir em 25/08:
+  // a versão anterior chamava `refreshSubscription()` logo depois de
+  // sincronizar. Só que na volta do checkout a página recarrega do zero, e a
+  // sessão do Supabase leva alguns segundos para ser restaurada. Nesse
+  // intervalo `user` ainda é null, então a função capturada pelo efeito era a
+  // versão "sem usuário", que simplesmente marca a assinatura como inativa. O
+  // temporizador de 3s repetia a MESMA função velha. Quando a sessão enfim
+  // resolvia, sobrava um único read; se ele demorasse um segundo, a pessoa já
+  // tinha tocado em algo e batido no paywall.
+  //
+  // Foi exatamente isso: pagou 23:52:23, voltou 23:52:27, e às 23:52:34 viu o
+  // paywall de novo e COMEÇOU UM SEGUNDO CHECKOUT. Quase pagou duas vezes.
+  //
+  // Agora: espera a sessão existir, sincroniza com o Stripe e PERGUNTA AO
+  // BANCO até a assinatura aparecer, com teto de tempo. E, principalmente,
+  // avisa a tela em que pé está, porque silêncio depois de pagar é o que faz
+  // alguém pagar de novo.
+  const [checkoutVoltando, setCheckoutVoltando] = useState<EstadoCheckout>(null);
+
+  // Só lê o endereço e limpa. NÃO consome a informação antes da hora: o que
+  // dispara o trabalho é o efeito seguinte, quando a sessão estiver de pé.
   useEffect(() => {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
     if (!params.has("checkout")) return;
     window.history.replaceState({}, "", window.location.pathname);
-    let cancelled = false;
+    setCheckoutVoltando("confirmando");
+  }, []);
+
+  useEffect(() => {
+    if (checkoutVoltando !== "confirmando") return;
+    // Sem sessão restaurada não dá para ler a assinatura de ninguém. Espera.
+    if (!authReady || !user || !supabase) return;
+    let vivo = true;
     (async () => {
-      // Puxa o estado autoritativo do Stripe (não depende do webhook).
+      // Estado autoritativo, direto do Stripe: não depende do webhook chegar.
       try {
-        const token = supabase ? (await supabase.auth.getSession()).data.session?.access_token : undefined;
+        const token = (await supabase.auth.getSession()).data.session?.access_token;
         if (token) await fetch(apiUrl("/api/stripe/sync"), { method: "POST", headers: { authorization: `Bearer ${token}` } });
-      } catch { /* ignore */ }
-      if (!cancelled) refreshSubscription();
+      } catch { /* segue: o banco ainda pode ter a linha pelo webhook */ }
+
+      const limite = Date.now() + 30000;
+      while (vivo) {
+        const { data } = await supabase
+          .from("subscriptions")
+          .select("status, current_period_end, cancel_at_period_end")
+          .eq("user_id", user.id)
+          .maybeSingle();
+        const ativa = !!data && ["active", "trialing"].includes(String(data.status));
+        if (!vivo) return;
+        if (ativa) {
+          setSub({
+            active: true,
+            endsAt: (data?.current_period_end as string | null) ?? null,
+            canceling: !!data?.cancel_at_period_end,
+          });
+          setCheckoutVoltando("liberado");
+          return;
+        }
+        if (Date.now() > limite) {
+          // Não some em silêncio: a tela explica o que fazer.
+          setCheckoutVoltando("demorou");
+          return;
+        }
+        await new Promise((r) => setTimeout(r, 1500));
+      }
     })();
-    const t = setTimeout(refreshSubscription, 3000);
-    return () => { cancelled = true; clearTimeout(t); };
-  }, [refreshSubscription, supabase]);
+    return () => { vivo = false; };
+  }, [checkoutVoltando, authReady, user, supabase]);
+
+  const fecharAvisoCheckout = useCallback(() => setCheckoutVoltando(null), []);
 
   useEffect(() => {
     try {
@@ -635,8 +695,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const es = useMemo(() => (subActive && !s.premium ? { ...s, premium: true } : s), [s, subActive]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s: es, importacaoPendente, resolverImportacao, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
-    [es, importacaoPendente, resolverImportacao, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
+    () => ({ s: es, importacaoPendente, resolverImportacao, checkoutVoltando, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
+    [es, importacaoPendente, resolverImportacao, checkoutVoltando, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

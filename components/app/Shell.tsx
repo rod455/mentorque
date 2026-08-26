@@ -11,6 +11,7 @@ import { ensureConsent, nativeAdMob } from "@/lib/app/admob";
 import { Icon, useContent } from "./ui";
 import { FeedbackSheet } from "./FeedbackSheet";
 import { ImportarGaragem } from "./ImportarGaragem";
+import { ConfirmandoPagamento } from "./ConfirmandoPagamento";
 import { Logo } from "@/components/ui/Logo";
 import { HomeScreen } from "./screens/Home";
 import { SearchScreen } from "./screens/Search";
@@ -268,6 +269,10 @@ function Router() {
           convidado no aparelho. Fica por cima de tudo: a decisão vem antes de
           a pessoa mexer numa garagem que ainda pode mudar. */}
       <ImportarGaragem />
+      {/* Cobre a tela enquanto confirma a compra. Fica ACIMA de tudo de
+          propósito: é o que impede alguém que acabou de pagar de tocar num
+          recurso Premium, bater no paywall e começar um segundo checkout. */}
+      <ConfirmandoPagamento />
       {showTopBar && <TopBar />}
       <main
         ref={mainRef}
