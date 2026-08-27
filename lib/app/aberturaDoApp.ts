@@ -1,0 +1,205 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { useNav, type View } from "./nav";
+import { useAuth } from "./auth";
+import { usePrototype } from "./store";
+import { funil } from "./funil";
+import { vigiarErros } from "./erros";
+import { trackContent } from "./track";
+import { ensureConsent, nativeAdMob } from "./admob";
+import { adsEnabled } from "@/components/app/AdGate";
+import { sincronizarLembrete } from "./lembreteAssinatura";
+import { sincronizarLembreteQuiz } from "./lembreteQuiz";
+import { saidaDoPaywallPermitida } from "./saidaDoPaywall";
+import type { Content } from "./content";
+
+// Tudo o que acontece "de fundo" enquanto o app está aberto.
+//
+// MORAVA DENTRO DO ROTEADOR, e essa era a confusão: o `Router` tinha 258
+// linhas, das quais umas 130 não decidiam tela nenhuma — mediam funil,
+// agendavam lembrete, pediam consentimento de anúncio, ouviam o botão de
+// voltar do Android. Quem ia mexer no roteamento tinha de atravessar tudo
+// isso, e quem ia mexer num lembrete tinha de procurar num arquivo chamado
+// "Shell".
+//
+// Cada gancho aqui é uma preocupação com nome. Nenhum devolve nada: são
+// efeitos, e o valor deles é o que acontece, não o que retorna.
+
+/**
+ * Funil: uma abertura por sessão, e "cadastro" na primeira vez que uma conta
+ * NOVA abre o app.
+ *
+ * POR QUE A JANELA É DE 7 DIAS, e não os 15 minutos de antes: a janela antiga
+ * presumia que criar conta e abrir o app são o mesmo instante, e não são.
+ * Confirmação de e-mail, a pessoa fechando o app no meio, ou simplesmente
+ * voltando à noite já estouravam o prazo. O resultado ficou medido: 9 contas
+ * criadas em agosto e ZERO eventos de cadastro. O cliente que assinou de
+ * verdade criou a conta às 21:18 e abriu o app às 23:53 — nunca teve chance de
+ * ser contado.
+ *
+ * E o marcador local era gravado MESMO quando o evento não saía, então um
+ * aparelho que perdesse a janela uma vez ficava mudo para sempre. Agora só é
+ * gravado quando o evento realmente foi mandado.
+ *
+ * Contagem dobrada não é mais problema do cliente: o índice
+ * `funil_eventos_cadastro_unico` garante um cadastro por conta, no banco. É
+ * isso que permite a janela ser generosa sem medo.
+ */
+export function useFunilDeAbertura() {
+  const { user } = useAuth();
+
+  useEffect(() => {
+    funil("abriu_app", { umaVez: true });
+    vigiarErros();
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    try { if (window.localStorage.getItem("mq-cadastro-ev")) return; } catch { /* segue */ }
+    const criado = Date.parse((user as { created_at?: string }).created_at ?? "");
+    const DIAS = 7 * 24 * 60 * 60 * 1000;
+    if (!Number.isFinite(criado) || Date.now() - criado > DIAS) return;
+    funil("cadastro", { userId: user.id });
+    try { window.localStorage.setItem("mq-cadastro-ev", "1"); } catch { /* ignore */ }
+  }, [user]);
+}
+
+/**
+ * Vindo do onboarding ("Monte seu teste"): abre o paywall com o plano
+ * escolhido, MAS só depois do login.
+ *
+ * Assinar deslogado amarraria a compra a um usuário anônimo do RevenueCat: o
+ * motorista pagaria e o Premium não apareceria na conta dele. Então, sem
+ * sessão, o app manda para a tela de entrar e guarda o plano; assim que o
+ * login acontece, o paywall abre sozinho no plano que ele já tinha escolhido.
+ */
+export function usePlanoPendente() {
+  const { user } = useAuth();
+  const { view, go } = useNav();
+  const [plano, setPlano] = useState<"annual" | "monthly" | null>(null);
+
+  useEffect(() => {
+    try {
+      const p = window.sessionStorage.getItem("mentorque-onboarding-plan");
+      if (p === "annual" || p === "monthly") {
+        window.sessionStorage.removeItem("mentorque-onboarding-plan");
+        setPlano(p);
+      }
+    } catch { /* ignore */ }
+  }, []);
+
+  // Depende de `view` de propósito: a tela de login chama `back()` sozinha ao
+  // entrar, e sem esperar a pilha assentar o paywall seria empurrado antes —
+  // aí o `back()` atrasado derrubaria justamente ele.
+  const pediuLogin = useRef(false);
+  useEffect(() => {
+    if (!plano) return;
+    if (!user) {
+      if (view.name === "auth") return;                          // está logando
+      if (pediuLogin.current) { setPlano(null); return; }         // desistiu do login
+      pediuLogin.current = true;
+      go({ name: "auth" });
+      return;
+    }
+    if (view.name === "auth") return;                            // espera sair do login
+    setPlano(null);
+    go({ name: "subscribe", ctx: `onb-${plano}` });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plano, user, view]);
+}
+
+/**
+ * Consentimento de anúncios (UMP) na abertura do app, e não na hora do
+ * primeiro anúncio: é o que o Google pede, e é o que popula o "Preferências de
+ * anúncios" no Perfil.
+ */
+export function useConsentimentoDeAnuncios() {
+  useEffect(() => {
+    if (!adsEnabled()) return;
+    const plugin = nativeAdMob();
+    if (plugin) void ensureConsent(plugin);
+  }, []);
+}
+
+/**
+ * Os dois lembretes locais, sempre em dia com o estado real.
+ *
+ * O do teste grátis roda a cada mudança de propósito: quem assina hoje precisa
+ * do aviso agendado, quem cancela precisa dele desmarcado (não vai ser
+ * cobrado, então não há o que avisar), e quem desliga a preferência precisa
+ * que ele suma. Reagendar com o mesmo id substitui o anterior, então nunca
+ * empilha.
+ *
+ * O do quiz é reagendado a cada resposta e a cada abertura: é isso que faz o
+ * aviso apontar sempre para o próximo dia ainda não respondido, em vez de
+ * cobrar uma coisa já feita.
+ *
+ * NENHUM DOS DOIS PEDE PERMISSÃO AQUI. Pedir fora de um toque da pessoa é o
+ * caminho mais curto para o "não" definitivo do sistema. Quem liga o
+ * interruptor no Perfil é que dispara o pedido.
+ */
+export function useLembretes(c: Content) {
+  const { s, subscribed, subscriptionEndsAt, subscriptionCanceling } = usePrototype();
+
+  useEffect(() => {
+    void sincronizarLembrete({
+      querLembrete: s.notifications,
+      assinante: subscribed,
+      fimDoPeriodo: subscriptionEndsAt,
+      cancelando: subscriptionCanceling,
+      textos: { titulo: c.profile.avisoTesteTitulo, corpo: c.profile.avisoTesteCorpo },
+    });
+  }, [s.notifications, subscribed, subscriptionEndsAt, subscriptionCanceling, c.profile.avisoTesteTitulo, c.profile.avisoTesteCorpo]);
+
+  useEffect(() => {
+    void sincronizarLembreteQuiz({
+      quer: s.notifications,
+      quiz: s.quiz,
+      textos: { titulo: c.quiz.avisoPushTitulo, corpo: c.quiz.avisoPushCorpo },
+    });
+  }, [s.notifications, s.quiz, c.quiz.avisoPushTitulo, c.quiz.avisoPushCorpo]);
+}
+
+/**
+ * Botão físico e gesto de voltar do Android.
+ *
+ * Volta na navegação do app; na raiz, MINIMIZA em vez de fechar (fechar
+ * perderia o estado da tela e é o que o Android faz de errado por padrão em
+ * WebView). No paywall passa pela porteira das ofertas.
+ */
+export function useBotaoVoltarDoAndroid() {
+  const { view, back, canBack } = useNav();
+
+  useEffect(() => {
+    type Handle = { remove: () => void };
+    const AppPlugin = (window as unknown as {
+      Capacitor?: { Plugins?: { App?: { addListener?: (ev: string, cb: () => void) => Handle | Promise<Handle>; minimizeApp?: () => void } } };
+    }).Capacitor?.Plugins?.App;
+    if (!AppPlugin?.addListener) return;
+    const sub = AppPlugin.addListener("backButton", () => {
+      if (view.name === "subscribe" && !saidaDoPaywallPermitida(null)) return;
+      if (canBack) back();
+      else AppPlugin.minimizeApp?.();
+    });
+    return () => {
+      if (sub && "remove" in sub) (sub as Handle).remove();
+      else (sub as Promise<Handle>)?.then?.((h) => h.remove());
+    };
+  }, [view, canBack, back]);
+}
+
+/**
+ * Métrica de engajamento: registra a abertura de cada conteúdo.
+ *
+ * O Kit do motorista conta como conteúdo ("equipment") de propósito — assim
+ * ele entra no mesmo ranking das aulas e pode mudar de posição no futuro.
+ */
+export function useMetricaDeConteudo(view: View) {
+  useEffect(() => {
+    if (view.name === "content") trackContent(view.id, "open");
+    else if (view.name === "obd2") trackContent("read-obd2", "open");
+    else if (view.name === "equipment") trackContent("equipment", "open");
+    else if (view.name === "equipmentHowTo") trackContent(`equipment-${view.itemId}`, "open");
+  }, [view]);
+}
