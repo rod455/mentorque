@@ -50,8 +50,8 @@ export function perguntasDoQuiz(locale: Locale): Pergunta[] {
       ],
       correta: 1,
       porque: T(
-        "Os 5.000 km viraram lenda no Brasil e vêm de motores e óleos de décadas atrás. Carro moderno com óleo sintético costuma pedir bem mais, e quem manda é o manual do seu modelo. Trocar antes não faz mal ao motor, faz ao seu bolso.",
-        "The 5,000 km rule is folklore from older engines and older oils. A modern car on synthetic oil usually asks for much more, and your model's manual is what decides. Changing sooner doesn't hurt the engine, it hurts your wallet."
+        "O que manda na troca de óleo é o tipo de uso do seu carro. No manual do veículo você encontra a especificação certa, baseada no seu uso. Trocar o óleo antes não faz mal, mas afeta o seu bolso.",
+        "What decides the oil change is how your car is used. The manual has the right spec for your usage. Changing it sooner does no harm, but it does hit your wallet."
       ),
     },
     {
@@ -65,8 +65,8 @@ export function perguntasDoQuiz(locale: Locale): Pergunta[] {
       ],
       correta: 1,
       porque: T(
-        "Em motor com injeção eletrônica, esquentar parado só gasta combustível e demora mais para aquecer do que dirigindo. O certo é sair logo e andar suave nos primeiros minutos, sem esticar marcha, até a temperatura normalizar.",
-        "On a fuel-injected engine, idling to warm up just burns fuel and heats up slower than driving does. Set off right away and drive gently for the first minutes, without revving, until temperature settles."
+        "Aguarde de 10 a 30 segundos para a rotação do motor normalizar. Em motor com injeção eletrônica, esquentar parado só gasta combustível e demora mais para aquecer do que dirigindo. O certo é sair logo e andar suave nos primeiros minutos, sem esticar a marcha, até a temperatura normalizar.",
+        "Wait 10 to 30 seconds for the engine revs to settle. On a fuel-injected engine, idling to warm up just burns fuel and heats up slower than driving does. Set off soon after and drive gently for the first minutes, without revving, until the temperature settles."
       ),
     },
     {
@@ -125,8 +125,8 @@ export function perguntasDoQuiz(locale: Locale): Pergunta[] {
       ],
       correta: 0,
       porque: T(
-        "O etanol tem menos energia por litro, então o carro anda menos com a mesma quantidade. A regra dos 70% compara preço com rendimento: se o litro do etanol custar até cerca de 70% do da gasolina, costuma valer. É estimativa, e varia com o carro e o jeito de dirigir.",
-        "Ethanol carries less energy per liter, so the car goes less far on the same amount. The 70% rule compares price with range: if ethanol costs up to about 70% of gasoline, it usually pays off. It's an estimate, and it varies by car and driving style."
+        "A regra compara preço com rendimento: o etanol tem menos energia por litro, então rende menos, e a conta diz a partir de que preço ele compensa. Só que ela ficou menos precisa, porque a gasolina vendida hoje já vem com etanol na mistura. Serve como ponto de partida, mas a análise certa é feita carro a carro, medindo o consumo com cada combustível.",
+        "The rule compares price with range: ethanol carries less energy per liter, so it goes less far, and the math says from what price it pays off. Except it got less precise, because the gasoline sold today already has ethanol blended in. Use it as a starting point, but the real answer is worked out car by car, measuring consumption on each fuel."
       ),
     },
     {
@@ -260,8 +260,8 @@ export function perguntasDoQuiz(locale: Locale): Pergunta[] {
       ],
       correta: 1,
       porque: T(
-        "A prática vem dos turbos antigos, refrigerados só a óleo, que cozinhavam ao desligar quente. A maioria dos turbos modernos tem refrigeração a água e o carro cuida disso sozinho. Depois de andar forte ou subir serra, um minuto de marcha lenta ainda ajuda.",
-        "The habit comes from older turbos, oil-cooled only, that would coke up when shut down hot. Most modern turbos are water-cooled and the car handles it. After hard driving or a mountain climb, a minute of idling still helps."
+        "Após um uso muito severo, o adequado é andar com o veículo em rotação baixa, permitindo que o ar atmosférico resfrie o motor e o turbo. Um pequeno trecho de 2 a 3 minutos nessa condição já é suficiente.",
+        "After very hard use, the right move is to drive at low revs for a bit, letting outside air cool the engine and the turbo. A short stretch of 2 to 3 minutes like that is enough."
       ),
     },
     {
@@ -315,7 +315,7 @@ export function perguntasDoQuiz(locale: Locale): Pergunta[] {
       pergunta: T("O carro não pegou e a bateria estava fraca. Trocar a bateria sempre resolve?", "The car wouldn't start and the battery was weak. Does replacing it always fix it?"),
       opcoes: [
         T("Sim, é sempre a bateria", "Yes, it's always the battery"),
-        T("Não, o alternador pode estar não carregando", "No, the alternator may not be charging"),
+        T("Não necessariamente, o problema pode ser no alternador também", "Not necessarily, the alternator may be the problem too"),
         T("Sim, se for bateria de mais de 2 anos", "Yes, if the battery is over 2 years old"),
       ],
       correta: 1,
@@ -357,7 +357,7 @@ export function perguntasDoQuiz(locale: Locale): Pergunta[] {
     {
       id: "premium-gasolina",
       aula: "vid-gasolina-e30",
-      pergunta: T("Gasolina aditivada ou premium melhora qualquer carro?", "Does premium or additive gasoline improve any car?"),
+      pergunta: T("Gasolina premium melhora qualquer carro?", "Does premium gasoline improve any car?"),
       opcoes: [
         T("Sim, sempre rende mais", "Yes, it always gives more"),
         T("Depende do que o motor foi projetado para usar", "It depends what the engine was designed for"),
@@ -365,8 +365,8 @@ export function perguntasDoQuiz(locale: Locale): Pergunta[] {
       ],
       correta: 1,
       porque: T(
-        "Combustível de octanagem mais alta resiste mais à detonação, e isso só vira ganho em motor que consegue aproveitar, geralmente turbo ou de compressão alta. Em motor comum, a diferença de desempenho tende a ser pequena perto da diferença de preço.",
-        "Higher-octane fuel resists knock better, and that only becomes a gain in an engine that can exploit it, usually turbo or high-compression. In an ordinary engine, the performance difference tends to be small next to the price difference."
+        "Isso só vira ganho em um motor cuja calibração consegue aproveitar a maior octanagem da gasolina. Caso contrário, é apenas dinheiro jogado no lixo.",
+        "That only becomes a gain in an engine whose calibration can exploit the higher octane. Otherwise it is just money thrown away."
       ),
     },
     {
@@ -420,13 +420,13 @@ export function perguntasDoQuiz(locale: Locale): Pergunta[] {
       pergunta: T("Na estrada, o que gasta mais combustível: ar-condicionado ligado ou janela aberta?", "On the highway, what burns more fuel: A/C on or windows down?"),
       opcoes: [
         T("Ar-condicionado, sempre", "A/C, always"),
-        T("Janela aberta, pela resistência do ar", "Windows down, because of drag"),
+        T("Janela aberta, na maioria dos casos", "Windows down, in most cases"),
         T("Os dois gastam igual", "Both the same"),
       ],
       correta: 1,
       porque: T(
-        "Em velocidade de estrada, janela aberta bagunça o ar em volta do carro e a resistência cresce mais do que o esforço do compressor. Na cidade, em velocidade baixa, a conta se inverte e a janela costuma sair na frente.",
-        "At highway speed, open windows disturb the airflow around the car and drag grows more than the compressor's effort. In town, at low speed, it flips and the window usually wins."
+        "Em velocidade de estrada, a janela aberta bagunça o ar em volta do carro, e a resistência pode crescer mais do que o esforço do compressor. Isso depende do tipo de veículo, da velocidade e de outros fatores. Na cidade, em velocidade baixa, a conta se inverte, e a janela costuma sair na frente.",
+        "At highway speed, an open window disturbs the airflow around the car, and drag can grow more than the compressor's effort. That depends on the type of vehicle, the speed and other factors. In town, at low speed, it flips, and the window usually wins."
       ),
     },
     {
@@ -450,13 +450,13 @@ export function perguntasDoQuiz(locale: Locale): Pergunta[] {
       pergunta: T("Descer a serra em ponto morto economiza combustível?", "Does coasting downhill in neutral save fuel?"),
       opcoes: [
         T("Sim, o motor gasta menos", "Yes, the engine uses less"),
-        T("Não, e ainda tira o freio motor", "No, and it removes engine braking"),
+        T("Não, exceto em raras exceções", "No, apart from rare exceptions"),
         T("Sim, mas só em carro manual", "Yes, but only in a manual"),
       ],
       correta: 1,
       porque: T(
-        "Em carro com injeção, descer engrenado com o pé fora do acelerador costuma cortar o combustível quase por completo, enquanto em ponto morto o motor precisa de combustível para não morrer. E sem freio motor a descida vira responsabilidade só do freio, que esquenta e perde eficiência.",
-        "On a fuel-injected car, coasting in gear off the throttle usually cuts fuel almost entirely, while in neutral the engine needs fuel just to stay alive. And with no engine braking, the descent rests entirely on the brakes, which heat up and fade."
+        "Em carro com injeção eletrônica, descer engrenado com o pé fora do acelerador corta o combustível, enquanto em ponto morto o motor precisa de combustível para se manter em marcha lenta. Entretanto, se a energia consumida pelo freio motor for maior do que a necessária para reacelerar o carro, temos o cenário de exceção. Por fim, sempre desça engrenado, pois, sem freio motor, a descida vira responsabilidade só do freio, que esquenta e perde eficiência.",
+        "On a fuel-injected car, coasting in gear off the throttle cuts fuel, while in neutral the engine needs fuel just to keep idling. That said, if the energy spent on engine braking is greater than what it takes to get back up to speed, you have the exception. Above all, always go down in gear: with no engine braking, the descent rests entirely on the brakes, which heat up and fade."
       ),
     },
     {
@@ -740,8 +740,8 @@ export function perguntasDoQuiz(locale: Locale): Pergunta[] {
       ],
       correta: 1,
       porque: T(
-        "O diesel tem mais energia por litro e o motor trabalha com compressão mais alta, então rende mais. Só que a manutenção costuma custar mais, a peça é mais cara e o preço do combustível varia. Rodar muito por ano é o que costuma fechar a conta.",
-        "Diesel packs more energy per liter and the engine runs higher compression, so it goes further. But maintenance usually costs more, parts are pricier and fuel prices vary. High annual mileage is usually what makes the math work."
+        "O diesel tem mais energia por litro e, por concepção, é mais eficiente termicamente. Só que a manutenção costuma custar mais, a peça é mais cara, e o preço do combustível varia. Rodar muito por ano é o que costuma fechar a conta.",
+        "Diesel packs more energy per liter and, by design, is thermally more efficient. But maintenance usually costs more, parts are pricier, and fuel prices vary. High annual mileage is usually what makes the math work."
       ),
     },
     {
@@ -770,8 +770,8 @@ export function perguntasDoQuiz(locale: Locale): Pergunta[] {
       ],
       correta: 1,
       porque: T(
-        "Trajeto curto não deixa o motor aquecer o suficiente para evaporar a água e o combustível que se acumulam no óleo, e o óleo envelhece mais rápido. Também castiga bateria, que não recarrega direito. É um uso mais severo do que parece.",
-        "Short trips don't let the engine warm enough to evaporate the water and fuel that build up in the oil, so the oil ages faster. They also punish the battery, which never fully recharges. It's harsher use than it looks."
+        "Trajeto curto não deixa o motor aquecer o suficiente para evaporar o combustível que se acumula no óleo, e o óleo envelhece mais rápido. Também castiga a bateria, que não recarrega direito. É um uso mais severo do que parece.",
+        "Short trips don't let the engine warm enough to evaporate the fuel that builds up in the oil, so the oil ages faster. They also punish the battery, which never fully recharges. It's harsher use than it looks."
       ),
     },
     {
@@ -795,28 +795,13 @@ export function perguntasDoQuiz(locale: Locale): Pergunta[] {
       pergunta: T("Dá para colocar um pneu de medida diferente da original?", "Can you fit a tire size different from the original?"),
       opcoes: [
         T("Sim, qualquer um que caiba na roda", "Yes, anything that fits the wheel"),
-        T("Só respeitando carga, velocidade e diâmetro", "Only respecting load, speed rating and overall diameter"),
+        T("Não é o ideal, mas, respeitando carga, velocidade e diâmetro, é aceitável", "Not ideal, but acceptable if load, speed rating and diameter are respected"),
         T("Nunca, tem que ser idêntico", "Never, it must be identical"),
       ],
       correta: 1,
       porque: T(
         "Existe margem, mas ela tem regra. Índices de carga e velocidade abaixo do especificado são risco direto. E mudar o diâmetro total desregula velocímetro, hodômetro e o comportamento dos sistemas de estabilidade, que contam voltas de roda.",
         "There's room, but with rules. Load and speed ratings below spec are a direct risk. And changing the overall diameter throws off the speedometer, odometer and the stability systems, which count wheel rotations."
-      ),
-    },
-    {
-      id: "flutter-turbo",
-      aula: "vid-flutter",
-      pergunta: T("Aquele barulho de 'pomba' ao tirar o pé em carro turbo é sinal de quê?", "That turbo 'fluttering' sound when lifting off means what?"),
-      opcoes: [
-        T("Turbo forte e bem regulado", "A strong, well-tuned turbo"),
-        T("Ar voltando pelo compressor, e não é bom sinal", "Air backing up through the compressor, and not a good sign"),
-        T("Motor pedindo troca de óleo", "The engine asking for an oil change"),
-      ],
-      correta: 1,
-      porque: T(
-        "O som acontece quando o ar comprimido não tem para onde ir e volta pelo compressor. Muita gente busca esse barulho de propósito, mas ele castiga o eixo e as pás do turbo. Válvula de alívio funcionando existe justamente para evitar isso.",
-        "The sound happens when compressed air has nowhere to go and pushes back through the compressor. Many people chase that noise on purpose, but it punishes the turbo's shaft and blades. A working blow-off valve exists precisely to prevent it."
       ),
     },
     {
@@ -862,21 +847,6 @@ export function perguntasDoQuiz(locale: Locale): Pergunta[] {
       porque: T(
         "Em geral é a mesma mecânica com carroceria diferente. O sedã ganha porta-malas maior, fechado e isolado da cabine, o que ajuda em ruído e em segurança da bagagem. O hatch ganha em versatilidade de espaço e em facilidade para manobrar.",
         "It's generally the same mechanicals with a different body. The sedan gains a larger trunk, closed and isolated from the cabin, which helps with noise and luggage security. The hatch gains space versatility and easier maneuvering."
-      ),
-    },
-    {
-      id: "dct-transito",
-      aula: "trait-dct",
-      pergunta: T("Câmbio de dupla embreagem em trânsito parado exige algum cuidado?", "Does a dual-clutch gearbox need extra care in stop-and-go traffic?"),
-      opcoes: [
-        T("Não, é igual ao automático comum", "No, it's just like a conventional automatic"),
-        T("Sim, esquenta mais em rastejamento", "Yes, it heats up more when crawling"),
-        T("Só em subida", "Only on hills"),
-      ],
-      correta: 1,
-      porque: T(
-        "O dupla embreagem é eficiente em movimento, mas no anda e para ele passa muito tempo com a embreagem patinando para o carro rastejar, e isso gera calor. Segurar no freio em vez de deixar rastejar por muito tempo ajuda a vida do conjunto.",
-        "A dual-clutch is efficient on the move, but in stop-and-go it spends a lot of time slipping the clutch to creep, and that makes heat. Holding it on the brake instead of letting it crawl for long stretches helps the assembly's life."
       ),
     },
     {
@@ -930,7 +900,7 @@ export function perguntasDoQuiz(locale: Locale): Pergunta[] {
       pergunta: T("Aerofólio em carro de rua melhora a estabilidade no dia a dia?", "Does a wing on a street car improve everyday stability?"),
       opcoes: [
         T("Sim, sempre gruda o carro no chão", "Yes, it always glues the car to the road"),
-        T("Em velocidade normal, quase nada", "At normal speeds, almost nothing"),
+        T("Em velocidade normal, nada", "At normal speeds, nothing"),
         T("Sim, e melhora o consumo", "Yes, and it improves fuel economy"),
       ],
       correta: 1,

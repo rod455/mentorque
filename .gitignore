@@ -28,3 +28,6 @@ next-env.d.ts
 /.next-native
 /.api-parked
 /.build-native-parked
+
+# Intermediário do npm run quiz:pdf.
+docs/quiz-perguntas.html

@@ -43,7 +43,10 @@ export async function rodar({ nav, ok }) {
       await c.pg.locator("button").filter({ hasText: /manual do seu carro mandar/i }).first().click();
       await c.pg.waitForTimeout(1200);
       const depois = await c.corpo();
-      ok("acertou e explicou", /Acertou/i.test(depois) && /5\.000 km viraram lenda/i.test(depois));
+      // O trecho vem da explicação da pergunta de onboarding (id
+      // `oleo-intervalo`). Se o texto dela mudar, este pedaço muda junto: é o
+      // preço de conferir que a EXPLICAÇÃO apareceu, e não só um "Acertou".
+      ok("acertou e explicou", /Acertou/i.test(depois) && /afeta o seu bolso/i.test(depois));
       ok("explica o combinado uma vez só", /uma por dia, um minuto/i.test(depois));
       const s = await c.sessaoGravada();
       ok("a sequência abriu em 1", s?.quiz?.sequencia === 1, JSON.stringify(s?.quiz ?? null));

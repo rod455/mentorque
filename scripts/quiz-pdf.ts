@@ -100,6 +100,49 @@ const html = `<!doctype html>
 const tmp = SAIDA.replace(/\.pdf$/, ".html");
 writeFileSync(tmp, html, "utf8");
 
+// O markdown sai do MESMO lugar, e é por isso que ele existe aqui embaixo em
+// vez de ser mantido à mão.
+//
+// Ele já ficou parado uma vez: o banco mudou, o .md não, e o arquivo passou a
+// contradizer o app enquanto o próprio cabeçalho dele prometia ser fiel ao
+// código. Documento de revisão que discorda do que o app faz é pior que
+// documento nenhum, porque o revisor aprova um texto que ninguém vai ver.
+function markdown(): string {
+  const bloco = (p: Pergunta, n: number) =>
+    [
+      `### ${n}. ${p.pergunta}`,
+      "",
+      ...p.opcoes.map((o, i) => `- ${i === p.correta ? "**✓**" : `${String.fromCharCode(65 + i)})`} ${o}`),
+      "",
+      `**Por que:** ${p.porque}`,
+      "",
+      `<sub>id \`${p.id}\` · aula \`${p.aula}\`</sub>`,
+      "",
+    ].join("\n");
+
+  return [
+    "# Perguntas do quiz diário",
+    "",
+    "Gerado por `npm run quiz:pdf` a partir de `lib/app/quiz/perguntas.ts`.",
+    "**Não edite este arquivo**: o que vale é o código, e a próxima geração",
+    "apaga qualquer correção feita aqui.",
+    "",
+    "**Como revisar:** o que mais importa não é o estilo, é se a resposta",
+    "marcada como correta está certa e se a explicação não promete demais.",
+    "Cite o `id` da pergunta, e não o número: o número muda quando alguma é",
+    "removida, o id não.",
+    "",
+    `## Português (${pt.length})`,
+    "",
+    ...pt.map((p, i) => bloco(p, i + 1)),
+    `## Inglês (${en.length})`,
+    "",
+    ...en.map((p, i) => bloco(p, i + 1)),
+  ].join("\n");
+}
+
+writeFileSync(SAIDA.replace(/\.pdf$/, ".md"), markdown(), "utf8");
+
 // Tipo mínimo escrito à mão, e não `typeof import("playwright")`: o pacote não
 // está instalado, então referenciar os tipos dele quebraria o `tsc --noEmit`
 // do projeto inteiro por causa de um script auxiliar. O `import()` fica numa
