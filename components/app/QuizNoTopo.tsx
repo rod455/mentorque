@@ -21,10 +21,11 @@ import { useContent } from "./ui";
 //
 // A sequência (🔥 N) só aparece quando existe: "🔥 0" não motiva ninguém,
 // anuncia um zero. E o rótulo escrito some quando o espaço aperta, ficando o
-// símbolo e o foguinho: abaixo de 380px para todo mundo, e em qualquer
-// celular para quem tem 2+ carros. Medido: o rótulo custa 67px, e é
-// exatamente o que falta para o seletor mostrar "Golfinho 2014" inteiro.
-// Chip por cima do sininho, ou carro ilegível, é pior que chip sem texto.
+// símbolo e o foguinho: abaixo de 430px com um carro (a marca por extenso ao
+// lado precisa de ~427px de barra), e abaixo de 480px com o seletor de carro.
+// Medido: o rótulo custa 67px, e é exatamente o que falta para "Golfinho
+// 2014" inteiro num caso e para o lockup não ficar coberto no outro. Chip
+// por cima da marca, ou carro ilegível, é pior que chip sem texto.
 export function ChipDoQuiz() {
   const c = useContent();
   const q = c.quiz;
@@ -53,7 +54,7 @@ export function ChipDoQuiz() {
       }`}
     >
       <span aria-hidden className={feito ? "text-teal" : ""}>{feito ? "✓" : "?"}</span>
-      <span aria-hidden className={divideComSeletor ? "hidden min-[480px]:inline" : "hidden min-[380px]:inline"}>
+      <span aria-hidden className={divideComSeletor ? "hidden min-[480px]:inline" : "hidden min-[430px]:inline"}>
         {q.chipTitulo}
       </span>
       {sequencia > 0 && (

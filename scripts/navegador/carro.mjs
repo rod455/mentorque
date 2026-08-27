@@ -23,6 +23,34 @@ const SESSAO = (vehicles) =>
     quiz: { ultimoDia: dia(0), sequencia: 1, recorde: 1, perdaoEm: null, respostas: 1, acertos: 1 },
   });
 
+// Em cada largura de celular: nada fora da tela E nada por cima de nada.
+//
+// A segunda parte existe por dois defeitos reais que a primeira NÃO pega: o
+// botão do carro vazou por baixo do chip do quiz (botão é elemento de
+// formulário e não encolhe com o pai sem max-w-full), e depois o chip cobriu
+// a marca por extenso no caso de UM carro. Controles visíveis e dentro da
+// tela, então "fora da tela" passava verde com um por cima do outro.
+async function nadaSeAtropela(pg, ok, largura) {
+  await pg.setViewportSize({ width: largura, height: 844 });
+  await pg.waitForTimeout(500);
+  const fora = await controlesForaDaTela(pg, "header");
+  ok(`em ${largura}px a barra de cima cabe inteira`, fora.length === 0, fora.join(" | "));
+  const sobreposto = await pg.evaluate(() => {
+    const els = [...document.querySelectorAll("header button")].map((el) => ({
+      rotulo: (el.getAttribute("aria-label") ?? el.textContent ?? "").slice(0, 20),
+      r: el.getBoundingClientRect(),
+    }));
+    for (let i = 0; i < els.length; i++)
+      for (let j = i + 1; j < els.length; j++) {
+        const a = els[i].r, b = els[j].r;
+        if (a.left < b.right - 1 && b.left < a.right - 1 && a.top < b.bottom - 1 && b.top < a.bottom - 1)
+          return `${els[i].rotulo} sobre ${els[j].rotulo}`;
+      }
+    return null;
+  });
+  ok(`em ${largura}px nenhum controle cobre outro`, sobreposto === null, sobreposto ?? "");
+}
+
 export async function rodar({ nav, ok }) {
   // ---- com três carros -----------------------------------------------------
   {
@@ -61,32 +89,8 @@ export async function rodar({ nav, ok }) {
     await app.recarregar();
     ok("a troca sobrevive à recarga", /Unozinho/.test(await pg.getByRole("button", { name: /Trocar de carro/i }).first().innerText()));
 
-    // Em larguras de celular: nada fora da tela E nada por cima de nada.
-    //
-    // A segunda parte existe por um defeito real que a primeira NÃO pega: o
-    // botão do carro vazava por baixo do chip do quiz (botão é elemento de
-    // formulário e não encolhe com o pai sem max-w-full). Os dois controles
-    // estavam visíveis e dentro da tela, então "fora da tela" passava verde
-    // com um botão tapando o outro.
     for (const largura of [390, 360, 320]) {
-      await pg.setViewportSize({ width: largura, height: 844 });
-      await pg.waitForTimeout(500);
-      const fora = await controlesForaDaTela(pg, "header");
-      ok(`em ${largura}px a barra de cima cabe inteira`, fora.length === 0, fora.join(" | "));
-      const sobreposto = await pg.evaluate(() => {
-        const els = [...document.querySelectorAll("header button")].map((el) => ({
-          rotulo: (el.getAttribute("aria-label") ?? el.textContent ?? "").slice(0, 20),
-          r: el.getBoundingClientRect(),
-        }));
-        for (let i = 0; i < els.length; i++)
-          for (let j = i + 1; j < els.length; j++) {
-            const a = els[i].r, b = els[j].r;
-            if (a.left < b.right - 1 && b.left < a.right - 1 && a.top < b.bottom - 1 && b.top < a.bottom - 1)
-              return `${els[i].rotulo} sobre ${els[j].rotulo}`;
-          }
-        return null;
-      });
-      ok(`em ${largura}px nenhum controle cobre outro`, sobreposto === null, sobreposto ?? "");
+      await nadaSeAtropela(pg, ok, largura);
 
       // O texto no DOM não prova nada: o truncate corta na tela e o innerText
       // continua inteiro. Então aqui a régua é o pixel — o span do ano não
@@ -115,8 +119,30 @@ export async function rodar({ nav, ok }) {
   // ---- com um carro só -----------------------------------------------------
   {
     const app = await abrirApp(nav, { sessao: SESSAO([{ ...CARRO }]), chaves: { "mq-primeiro-quiz-nao": "1" } });
-    ok("com um carro só, o seletor não existe", (await app.pg.getByRole("button", { name: /Trocar de carro/i }).count()) === 0);
-    ok("e a marca volta por extenso", (await app.pg.locator('header img[src*="lockup"]').count()) > 0);
+    const { pg } = app;
+    ok("com um carro só, o seletor não existe", (await pg.getByRole("button", { name: /Trocar de carro/i }).count()) === 0);
+    ok("e a marca volta por extenso", (await pg.locator('header img[src*="lockup"]:visible').count()) > 0);
+
+    // O buraco por onde a regressão de 27/08 passou: as réguas de aperto só
+    // rodavam com 3 carros, onde a marca é o símbolo pequeno. Com um carro a
+    // marca por extenso é o item mais largo da barra, e o chip do quiz a
+    // cobria. Agora: por extenso de 360px para cima, símbolo abaixo, rótulo
+    // escrito do chip só de 430px para cima.
+    for (const largura of [480, 430, 390, 360, 320]) {
+      await nadaSeAtropela(pg, ok, largura);
+      const marca = await pg.evaluate(() => ({
+        lockup: !!document.querySelector('header img[src*="lockup"]')?.checkVisibility(),
+        simbolo: !!document.querySelector('header img[src*="mark"]')?.checkVisibility(),
+      }));
+      ok(`em ${largura}px a marca certa: ${largura >= 360 ? "por extenso" : "símbolo"}`,
+        largura >= 360 ? marca.lockup && !marca.simbolo : marca.simbolo && !marca.lockup,
+        JSON.stringify(marca));
+      const chipTexto = await pg.evaluate(() =>
+        ([...document.querySelectorAll("header button")].find((b) => (b.getAttribute("aria-label") ?? "").includes("Quiz"))?.innerText ?? "").trim());
+      ok(`em ${largura}px o chip ${largura >= 430 ? "mostra" : "esconde"} o rótulo escrito`,
+        largura >= 430 ? /Di[áa]rio|Daily/i.test(chipTexto) : !/Di[áa]rio|Daily/i.test(chipTexto), chipTexto);
+    }
+    ok("nenhum erro de página com um carro", app.erros.length === 0, app.erros[0] ?? "");
     await app.fechar();
   }
 }

@@ -146,16 +146,24 @@ function TopBar() {
   const avatarSrc = s.avatar ?? googlePic ?? null;
   const initial = (s.name || user?.email || "").trim().charAt(0).toUpperCase() || "?";
 
-  // Com o seletor de carro na barra, o lockup inteiro não cabe num 320px ao
-  // lado do carro, do sino e do avatar. A marca encolhe para o símbolo quando
-  // o seletor existe (2+ carros), e volta por extenso quando não.
+  // A marca por extenso só aparece quando cabe DE VERDADE. Com o seletor de
+  // carro (2+ carros) ela vira símbolo sempre. Com um carro só, vira símbolo
+  // abaixo de 360px: desde que o chip do quiz entrou na barra (27/08), o
+  // lockup parou de caber nos celulares estreitos e ficava COBERTO pelo chip.
   const temSeletor = ownedVehicles(s).length >= 2;
 
   return (
     <header className="flex items-center justify-between gap-2 px-5 pb-1 pt-3.5">
       <div className="flex min-w-0 items-center gap-2">
         <button onClick={() => root({ name: "home" })} className="flex shrink-0 items-center" aria-label="Início">
-          <Logo variant={temSeletor ? "mark" : "lockup-dark"} className="h-7 w-auto" priority />
+          {temSeletor ? (
+            <Logo variant="mark" className="h-7 w-auto" priority />
+          ) : (
+            <>
+              <Logo variant="mark" className="h-7 w-auto min-[360px]:hidden" priority />
+              <Logo variant="lockup-dark" className="hidden h-7 w-auto min-[360px]:block" priority />
+            </>
+          )}
         </button>
         {/* O carro ativo, com a lista dos outros. Ver CarroNoTopo. */}
         <CarroNoTopo />
