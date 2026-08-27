@@ -798,6 +798,11 @@ export function getContent(locale: Locale) {
         "Answering a past day counts as study, but doesn't change your streak."
       ),
       historicoForaDeAlcance: T("Fora do período disponível", "Outside the available period"),
+      // A cerca do arquivo: grátis volta 7 dias, Premium volta tudo.
+      historicoPremium: T(
+        "No grátis, o calendário guarda 7 dias. Com o Premium, você volta em todas as perguntas desde o início.",
+        "The free plan keeps 7 days. With Premium, you can go back to every question since the start."
+      ),
       // O resumo é montado em duas metades justamente por causa da concordância:
       // "2 respondidas, 1 certas" está errado, e uma frase única não tem como
       // acertar os dois números ao mesmo tempo.

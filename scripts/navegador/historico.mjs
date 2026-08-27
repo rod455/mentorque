@@ -52,8 +52,18 @@ export async function rodar({ nav, ok }) {
   ok("o calendário abriu", /Perguntas anteriores/i.test(cal));
   ok("tem legenda das três cores", /acertou/.test(cal) && /errou/.test(cal) && /em aberto/.test(cal));
 
+  // A janela do gratis: 7 dias, mas nunca antes de 23/08/2026, que e o
+  // primeiro dia do quiz. O numero esperado depende do dia em que a suite
+  // roda, entao ele e CALCULADO, nao fixado.
+  const INICIO_DO_QUIZ = "2026-08-23";
+  const diasDesdeInicio = Math.round((Date.parse(dia(0)) - Date.parse(INICIO_DO_QUIZ)) / 86400000) + 1;
+  const esperadoGratis = Math.min(7, diasDesdeInicio);
   const naGrade = await pg.getByRole("button", { name: /de (janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro):/i }).count();
-  ok("a grade tem 30 dias", naGrade === 30, `n=${naGrade}`);
+  ok(`a grade do grátis tem ${esperadoGratis} dias`, naGrade === esperadoGratis, `n=${naGrade}`);
+  const temCerca = diasDesdeInicio > 7;
+  const banner = await pg.getByRole("button", { name: /Premium/i }).count();
+  ok(temCerca ? "o convite Premium aparece (há arquivo atrás da cerca)" : "sem arquivo fechado, sem convite Premium",
+    temCerca ? banner > 0 : banner === 0, `banners=${banner}`);
   ok("os dias vêm agrupados por mês, com o mês escrito", /JANEIRO|FEVEREIRO|MARÇO|ABRIL|MAIO|JUNHO|JULHO|AGOSTO|SETEMBRO|OUTUBRO|NOVEMBRO|DEZEMBRO/i.test(cal));
   const marcado = await pg.getByRole("button", { name: /: (acertou|errou)$/i }).count();
   ok("o dia de hoje aparece marcado", marcado === 1, `n=${marcado}`);
@@ -91,4 +101,26 @@ export async function rodar({ nav, ok }) {
 
   ok("nenhum erro de página", app.erros.length === 0, app.erros[0] ?? "");
   await app.fechar();
+
+  // ---- Premium: o arquivo inteiro -------------------------------------------
+  {
+    const b = await abrirApp(nav, {
+      sessao: garagem({
+        premium: true,
+        quiz: {
+          ultimoDia: dia(0), sequencia: 1, recorde: 1, perdaoEm: null, respostas: 1, acertos: 1,
+          historico: [{ dia: dia(0), perguntaId: "tracao-traseira", escolha: 1, acertou: false }],
+        },
+      }),
+      chaves: { "mq-primeiro-quiz-nao": "1" },
+    });
+    await b.pg.getByRole("button", { name: /Pergunta de hoje|Pergunta do dia/i }).first().click();
+    await b.pg.waitForTimeout(1200);
+    await b.pg.getByRole("button", { name: /Ver perguntas anteriores/i }).first().click();
+    await b.pg.waitForTimeout(1200);
+    const grade = await b.pg.getByRole("button", { name: /de (janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro):/i }).count();
+    ok(`Premium vê todos os ${diasDesdeInicio} dias desde 23/08`, grade === diasDesdeInicio, `n=${grade}`);
+    ok("Premium não vê convite de assinatura", (await b.pg.getByRole("button", { name: /Premium/i }).count()) === 0);
+    await b.fechar();
+  }
 }

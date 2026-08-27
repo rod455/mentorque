@@ -286,14 +286,19 @@ export function mesclarQuiz(nuvem?: EstadoQuiz, local?: EstadoQuiz): EstadoQuiz 
 // ---- Qual pergunta sai hoje -------------------------------------------------
 
 /**
- * Primeiro dia da rotação. Todo mundo no mundo vê a MESMA pergunta no mesmo
- * dia, e é só por isso que dá para dizer "62% acertaram hoje" — a frase seria
- * mentira se cada um tivesse a sua.
+ * O primeiro dia do quiz. Antes desta data o quiz não existia: o calendário
+ * não mostra dia anterior, e é daqui que a rotação conta.
  *
- * Mexer nesta data embaralha a rotação de quem já está no meio dela. Depois
- * do lançamento, não se mexe.
+ * Todo mundo no mundo vê a MESMA pergunta no mesmo dia, e é só por isso que
+ * dá para dizer "62% acertaram hoje" — a frase seria mentira se cada um
+ * tivesse a sua.
+ *
+ * Mexer nesta data embaralha a rotação de quem já está no meio dela. Foi
+ * movida uma única vez (01/09 → 23/08, decisão do dono em 27/08, antes de a
+ * 1.2 chegar às lojas). Daqui em diante, não se mexe.
  */
-const EPOCA = "2026-09-01";
+export const INICIO_DO_QUIZ = "2026-08-23";
+const EPOCA = INICIO_DO_QUIZ;
 
 /**
  * A pergunta 1 fica FORA da rotação diária: ela é a do onboarding, respondida

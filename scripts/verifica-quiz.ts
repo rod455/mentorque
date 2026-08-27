@@ -107,20 +107,22 @@ ok("sem perdao, um dia pulado ja mostra zero", sequenciaHoje(h, "2026-09-05") ==
 const banco = Array.from({ length: 65 }, (_, i) => ({
   id: `p${i}`, aula: "x", pergunta: "?", opcoes: ["a", "b"], correta: 0, porque: "",
 }));
-const p1 = perguntaDoDia(banco, "2026-09-01");
-ok("o primeiro dia da rotacao e a pergunta 2 do banco", p1?.id === "p1", `saiu ${p1?.id}`);
+// A data aqui e HARDCODED de proposito: se alguem mexer em INICIO_DO_QUIZ sem
+// querer, este teste quebra em vez de se ajustar em silencio.
+const p1 = perguntaDoDia(banco, "2026-08-23");
+ok("o primeiro dia da rotacao (23/08) e a pergunta 2 do banco", p1?.id === "p1", `saiu ${p1?.id}`);
 ok("a pergunta 1 nunca sai na rotacao diaria",
   Array.from({ length: 200 }, (_, i) => {
     const d = new Date(Date.UTC(2026, 8, 1 + i));
     return perguntaDoDia(banco, d.toISOString().slice(0, 10))?.id;
   }).every((id) => id !== "p0"));
 ok("dias diferentes, perguntas diferentes",
-  perguntaDoDia(banco, "2026-09-01")?.id !== perguntaDoDia(banco, "2026-09-02")?.id);
+  perguntaDoDia(banco, "2026-08-23")?.id !== perguntaDoDia(banco, "2026-08-24")?.id);
 ok("o mesmo dia sempre da a mesma pergunta",
   perguntaDoDia(banco, "2026-10-15")?.id === perguntaDoDia(banco, "2026-10-15")?.id);
 ok("da a volta depois de 64 dias",
-  perguntaDoDia(banco, "2026-09-01")?.id === perguntaDoDia(banco, "2026-11-04")?.id,
-  `${perguntaDoDia(banco, "2026-09-01")?.id} vs ${perguntaDoDia(banco, "2026-11-04")?.id}`);
+  perguntaDoDia(banco, "2026-08-23")?.id === perguntaDoDia(banco, "2026-10-26")?.id,
+  `${perguntaDoDia(banco, "2026-08-23")?.id} vs ${perguntaDoDia(banco, "2026-10-26")?.id}`);
 ok("data anterior a epoca nao quebra", !!perguntaDoDia(banco, "2026-01-05"));
 ok("banco de uma pergunta so nao quebra", perguntaDoDia([banco[0]], "2026-09-10")?.id === "p0");
 

@@ -6,13 +6,14 @@ import { useI18n } from "@/lib/i18n";
 import { useNav } from "@/lib/app/nav";
 import { perguntasDoQuiz } from "@/lib/app/quiz/perguntas";
 import {
+  INICIO_DO_QUIZ,
   QUIZ_ZERADO,
   diaLocal,
   diasEntre,
   perguntaDoDia,
   respostaDe,
 } from "@/lib/app/quiz/sequencia";
-import { AppHeader, useContent } from "../ui";
+import { AppHeader, UpgradeBanner, useContent } from "../ui";
 import { PerguntaRespondida } from "../quiz/PerguntaRespondida";
 
 // O calendário das perguntas.
@@ -29,13 +30,13 @@ import { PerguntaRespondida } from "../quiz/PerguntaRespondida";
 // recompensa é como se sentir enganado.
 
 /**
- * Até onde o calendário deixa voltar.
+ * Até onde o calendário deixa voltar SEM assinatura.
  *
- * Trinta dias é a memória útil: além disso a pergunta deixou de ser "a de
- * terça" e virou catálogo, e o quiz não é catálogo — para isso existem as
- * aulas. Também segura o tamanho da grade num celular.
+ * Sete dias no grátis, tudo desde o primeiro dia do quiz no Premium: decisão
+ * do dono (27/08). A janela curta mantém o hábito diário vivo para todo
+ * mundo, e o arquivo completo vira um dos motivos concretos de assinar.
  */
-const DIAS_PARA_TRAS = 30;
+const DIAS_GRATIS = 7;
 
 export function QuizHistoricoScreen() {
   const c = useContent();
@@ -55,19 +56,32 @@ export function QuizHistoricoScreen() {
     new Intl.DateTimeFormat(locale === "pt" ? "pt-BR" : "en-US", { month: "long", timeZone: "UTC" })
       .format(new Date(`${dia}T12:00:00Z`));
 
-  // Os dias que a grade mostra, do mais antigo para o mais novo, terminando
-  // hoje, agrupados por mês.
+  // A janela que esta pessoa enxerga.
   //
-  // A régua é "os últimos N dias" e não um mês fechado, porque é assim que a
-  // pessoa pensa no assunto ("perdi terça"). Mas os números precisam de mês:
-  // uma fileira que vai 30, 31, 1, 2 sem nada escrito não diz de que primeiro
-  // de qual mês se trata, e um calendário que confunde a data não serve.
+  // Ninguém volta antes de INICIO_DO_QUIZ: o quiz não existia, e mostrar
+  // aqueles dias seria cobrar presença num jogo que não tinha começado.
+  // Dentro disso, Premium vê tudo desde o primeiro dia e o grátis vê os
+  // últimos sete.
+  const premium = s.premium;
+  const primeiroVisivel = useMemo(() => {
+    if (premium) return INICIO_DO_QUIZ;
+    const corte = new Date(new Date(`${hoje}T12:00:00Z`).getTime() - (DIAS_GRATIS - 1) * 86400000)
+      .toISOString()
+      .slice(0, 10);
+    return corte > INICIO_DO_QUIZ ? corte : INICIO_DO_QUIZ;
+  }, [premium, hoje]);
+  // O convite só aparece quando existe de fato algo atrás da cerca. Na
+  // primeira semana do quiz não existe, e convite para nada é ruído.
+  const temArquivoFechado = !premium && primeiroVisivel > INICIO_DO_QUIZ;
+
+  // Os dias da grade, do mais antigo para o mais novo, terminando hoje,
+  // agrupados por mês: uma fileira que vai 30, 31, 1, 2 sem nada escrito não
+  // diz de que primeiro de qual mês se trata.
   const meses = useMemo(() => {
     const grupos: { mes: string; dias: { dia: string; alcancavel: boolean }[] }[] = [];
-    const base = new Date(`${hoje}T12:00:00Z`);
-    for (let i = DIAS_PARA_TRAS - 1; i >= 0; i--) {
-      const d = new Date(base.getTime() - i * 86400000);
-      const dia = d.toISOString().slice(0, 10);
+    const fim = new Date(`${hoje}T12:00:00Z`).getTime();
+    for (let t = new Date(`${primeiroVisivel}T12:00:00Z`).getTime(); t <= fim; t += 86400000) {
+      const dia = new Date(t).toISOString().slice(0, 10);
       // Antes de a pessoa entrar no app não existe "dia perdido": ela não
       // estava aqui. Mostrar aqueles dias como pendência seria cobrar
       // ausência de quem nem tinha instalado.
@@ -78,7 +92,7 @@ export function QuizHistoricoScreen() {
       else grupos.push({ mes, dias: [{ dia, alcancavel }] });
     }
     return grupos;
-  }, [hoje, s.startedAt]);
+  }, [hoje, primeiroVisivel, s.startedAt]);
 
   const abrir = (dia: string) => {
     setEscolhaAgora(null);
@@ -184,6 +198,11 @@ export function QuizHistoricoScreen() {
           {q.historicoLegendaAberto}
         </span>
       </div>
+
+      {/* O arquivo completo é Premium. O convite só existe quando há dias de
+          verdade atrás da cerca, e some sozinho no modo leitor (o UpgradeBanner
+          cuida disso). */}
+      {temArquivoFechado && <UpgradeBanner ctx="quiz-historico" text={q.historicoPremium} />}
 
       {selecionado && perguntaDoRegistro && (
         <div ref={painel} className="mt-5 scroll-mt-4 rounded-2xl bg-graphite-800 p-4 ring-1 ring-white/5">
