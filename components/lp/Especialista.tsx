@@ -21,7 +21,16 @@ import { useEffect, useRef, useState } from "react";
 // bloco desses é engordar o número; o custo de ser pego exagerando é a única
 // coisa que este bloco existe para evitar.
 
-const FOTO = "/equipe/alessandro.jpg";
+// Os nomes de arquivo aceitos para a foto, em ordem de preferência.
+//
+// São três em vez de um porque o arquivo é subido à mão (pelo GitHub ou pela
+// pasta public), e errar a extensão é o engano mais fácil do mundo: a pessoa
+// exporta em PNG, sobe como `alessandro.png`, e a página cai nas iniciais sem
+// dizer por quê. Tentar os três custa nada e evita uma ida e volta.
+//
+// `.jpg` vem primeiro de propósito: é foto de rosto, e JPEG pesa uma fração do
+// PNG para o mesmo resultado numa página que se paga por visita.
+const FOTOS = ["/equipe/alessandro.jpg", "/equipe/alessandro.png", "/equipe/alessandro.jpeg"];
 
 const CREDENCIAIS = [
   {
@@ -51,12 +60,21 @@ export function Especialista() {
   // ouve nada. Sobrava uma moldura vazia. Por isso a checagem também acontece
   // na montagem: `complete` com `naturalWidth` zero é exatamente "já tentei e
   // não veio".
-  const [semFoto, setSemFoto] = useState(false);
+  const [tentativa, setTentativa] = useState(0);
+  const semFoto = tentativa >= FOTOS.length;
+
+  // Avança SE E SOMENTE SE a falha for do arquivo que está sendo tentado
+  // agora. Sem essa trava os dois caminhos de detecção (o `onError` e a
+  // checagem de montagem) contam a mesma falha duas vezes, e o segundo nome da
+  // lista é PULADO. Foi exatamente o que aconteceu: com a foto publicada em
+  // `.png`, a página caía nas iniciais mesmo com o arquivo lá.
+  const avancar = (deIndice: number) => setTentativa((n) => (n === deIndice ? n + 1 : n));
+
   const img = useRef<HTMLImageElement>(null);
   useEffect(() => {
     const el = img.current;
-    if (el?.complete && el.naturalWidth === 0) setSemFoto(true);
-  }, []);
+    if (el?.complete && el.naturalWidth === 0) avancar(tentativa);
+  }, [tentativa]);
 
   return (
     <section className="px-5 py-14 sm:px-8">
@@ -69,13 +87,17 @@ export function Especialista() {
               </span>
             ) : (
               <img
+                // A chave amarra o <img> à tentativa: sem ela o React reusaria
+                // o mesmo elemento ao trocar o src, e o `complete` de dentro do
+                // efeito ainda seria o da imagem anterior.
+                key={FOTOS[tentativa]}
                 ref={img}
-                src={FOTO}
+                src={FOTOS[tentativa]}
                 alt="Alessandro Vila Nova"
                 width={144}
                 height={144}
                 loading="lazy"
-                onError={() => setSemFoto(true)}
+                onError={() => avancar(tentativa)}
                 className="h-32 w-32 rounded-2xl object-cover object-top ring-1 ring-white/10 sm:h-36 sm:w-36"
                 draggable={false}
               />
