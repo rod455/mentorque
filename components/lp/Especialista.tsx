@@ -130,13 +130,6 @@ export function Especialista() {
           ))}
         </div>
 
-        {/* O detalhe que prova o resto. Uma vaga que veio como PRÊMIO de uma
-            seleção é mais difícil de duvidar do que qualquer adjetivo, e é o
-            tipo de coisa que a pessoa consegue conferir se quiser. */}
-        <p className="mt-5 text-left text-sm leading-relaxed text-cream/50">
-          Chegou à Porsche Cup em 2º lugar entre 40 candidatos no curso de engenharia de automobilismo e aquisição de
-          dados da própria categoria. O prêmio da seleção era a vaga na equipe.
-        </p>
       </div>
     </section>
   );
