@@ -31,7 +31,7 @@ export async function rodar({ nav, ok }) {
 
     const gatilho = pg.getByRole("button", { name: /Trocar de carro/i }).first();
     ok("o carro ativo aparece na barra de cima", (await gatilho.count()) > 0);
-    ok("o gatilho mostra o carro selecionado COM o ano", /Golfinho 2014/.test(await gatilho.innerText()), await gatilho.innerText());
+    ok("o gatilho mostra o carro selecionado COM o ano", /Golfinho\s+2014/.test(await gatilho.innerText()), await gatilho.innerText());
 
     await gatilho.click();
     await pg.waitForTimeout(500);
@@ -87,6 +87,25 @@ export async function rodar({ nav, ok }) {
         return null;
       });
       ok(`em ${largura}px nenhum controle cobre outro`, sobreposto === null, sobreposto ?? "");
+
+      // O texto no DOM não prova nada: o truncate corta na tela e o innerText
+      // continua inteiro. Então aqui a régua é o pixel — o span do ano não
+      // pode estar cortado — e o chip do quiz tem que estar sem o rótulo
+      // escrito, que é de onde saem os 67px que o nome do carro precisa.
+      // (Em 320px o ano pode cortar: é o limite físico, e o nome cede antes.)
+      const aperto = await pg.evaluate(() => {
+        const g = document.querySelector('header button[aria-label*="Trocar"]');
+        const ano = [...(g?.querySelectorAll("span") ?? [])].find((s) => /^\d{4}$/.test(s.textContent ?? ""));
+        const chip = [...document.querySelectorAll("header button")].find((b) => (b.getAttribute("aria-label") ?? "").includes("Quiz"));
+        return {
+          anoInteiro: !!ano && ano.scrollWidth <= ano.clientWidth + 1,
+          // innerText, não textContent: o rótulo escondido por CSS continua no
+          // DOM, e textContent o veria mesmo invisível.
+          chipTexto: (chip?.innerText ?? "").trim(),
+        };
+      });
+      if (largura >= 360) ok(`em ${largura}px o ano aparece inteiro, sem corte`, aperto.anoInteiro);
+      ok(`em ${largura}px o chip do quiz cede o rótulo escrito`, !/Di[áa]rio|Daily/i.test(aperto.chipTexto), aperto.chipTexto);
     }
 
     ok("nenhum erro de página", app.erros.length === 0, app.erros[0] ?? "");

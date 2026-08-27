@@ -76,8 +76,12 @@ export function CarroNoTopo() {
         className="flex h-9 min-w-0 max-w-full items-center gap-1.5 rounded-full bg-graphite-800 py-1 pl-1.5 pr-2.5 ring-1 ring-white/10 active:bg-graphite-700"
       >
         <Foto v={ativo} on />
-        <span className="min-w-0 max-w-[7.5rem] truncate font-display text-[13px] font-semibold text-cream">
-          {nomeComAno(ativo)}
+        {/* Nome e ano em pedaços separados de propósito: apertou, o NOME vira
+            "Golf…" e o ano fica inteiro. O ano é o desempate; cortar ele
+            primeiro seria guardar a parte que menos informa. */}
+        <span className="flex min-w-0 max-w-[7.5rem] items-baseline gap-1 font-display text-[13px] font-semibold text-cream">
+          <span className="min-w-0 truncate [flex-shrink:999]">{carName(ativo)}</span>
+          <span className="min-w-0 truncate">{ativo.year}</span>
         </span>
         <span
           aria-hidden
