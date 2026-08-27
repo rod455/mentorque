@@ -8,7 +8,9 @@ import { BASE } from "./base.mjs";
 export const nome = "site";
 export const sobre = "vazamento lateral das páginas do site em telas de celular";
 
-const PAGINAS = ["/", "/sobre", "/termos", "/privacidade"];
+// `/landing` é a LP de tráfego pago. Entra aqui porque é a página cujo corte
+// lateral custa dinheiro na hora: cada visita dela foi comprada.
+const PAGINAS = ["/", "/landing", "/sobre", "/termos", "/privacidade"];
 const LARGURAS = [320, 360, 390, 430];
 
 export async function rodar({ nav, ok }) {

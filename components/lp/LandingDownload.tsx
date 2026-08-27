@@ -6,6 +6,7 @@ import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/stores";
 import { detectPlatform } from "@/lib/app/platform";
 import { PhoneMockup } from "@/components/ui/PhoneMockup";
 import { marcarCliqueDownload, Rastreio } from "./Rastreio";
+import { Especialista } from "./Especialista";
 
 // LP de conversão para tráfego pago (mentorque.com.br/landing).
 //
@@ -199,18 +200,8 @@ export function LandingDownload({ variante }: { variante?: string }) {
         </div>
       </section>
 
-      {/* 5. AUTORIDADE */}
-      <section className="px-5 py-14 sm:px-8">
-        <div className="mx-auto flex max-w-2xl flex-col items-center gap-5 text-center sm:flex-row sm:text-left">
-          <span className="grid h-20 w-20 shrink-0 place-items-center rounded-full bg-amber/15 font-serif text-2xl font-bold text-amber">AV</span>
-          <div>
-            <h2 className="font-serif text-2xl font-bold">Quem te ensina vive disso.</h2>
-            <p className="mt-2 leading-relaxed text-cream/70">
-              Alessandro Vila Nova, engenheiro da Mercedes-Benz nos Estados Unidos. Não é curso genérico de plataforma: é o conhecimento de quem está dentro da indústria, no seu bolso.
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* 5. AUTORIDADE — ver components/lp/Especialista.tsx */}
+      <Especialista />
 
       {/* 5b. DEPOIMENTOS (os mesmos do onboarding do app) */}
       <section className="px-5 py-14 sm:px-8">

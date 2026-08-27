@@ -177,11 +177,16 @@ export const pt = {
       },
     ],
     // Contato direto. O nome e o cargo estão aqui porque são o motivo de a
-    // pessoa clicar: "falar com um especialista" é promessa vaga; "falar com um
-    // engenheiro da Mercedes" é verificável e vale o toque.
+    // pessoa clicar: "falar com um especialista" é promessa vaga; um cargo e um
+    // lugar são conferíveis e valem o toque.
+    //
+    // O nome da montadora saiu daqui por decisão do dono. A frase não perde
+    // força: o que convence é o cargo e a Porsche Cup, não a marca do
+    // empregador — e pendurar o produto no nome de uma montadora que não
+    // patrocina nada é pedir problema de graça.
     contactTitle: "Fale direto com o especialista",
     contactName: "Alessandro Vila Nova",
-    contactRole: "Engenheiro da Mercedes-Benz nos Estados Unidos",
+    contactRole: "Engenheiro automotivo nos EUA · 4 anos na Porsche Cup Brasil",
     contactCta: "Chamar no WhatsApp",
     contactPhoneLabel: "+1 (248) 768-0340",
   },

@@ -171,7 +171,7 @@ export const en: Strings = {
     ],
     contactTitle: "Talk to the expert directly",
     contactName: "Alessandro Vila Nova",
-    contactRole: "Mercedes-Benz engineer in the United States",
+    contactRole: "Automotive engineer in the US · 4 years with Porsche Cup Brazil",
     contactCta: "Message on WhatsApp",
     contactPhoneLabel: "+1 (248) 768-0340",
   },
