@@ -32,12 +32,12 @@ Avisos no celular: lembrete da pergunta do dia e do fim do teste grátis.
 
 Sino de avisos: revisão vencida, cobrança chegando e aula nova num lugar só.
 
-Troca de carro direto na tela inicial, para quem tem mais de um.
+Troca de carro no topo da tela, para quem tem mais de um.
 
 Correções na liberação do Premium depois do pagamento.
 ```
 
-Contagem: 475 caracteres (limite 500).
+Contagem: 481 caracteres (limite 500).
 
 ---
 
@@ -53,8 +53,8 @@ quebra a sua sequência de dias: o que conta é aparecer.
 
 Calendário das perguntas
 Reabriu o quiz depois de responder? A pergunta e a explicação continuam lá.
-E tem um calendário dos últimos 30 dias para rever as respostas antigas e
-responder os dias que passaram em branco. Responder um dia passado conta
+E tem um calendário para rever as respostas antigas e responder os dias que
+passaram em branco. Responder um dia passado conta
 como estudo, mas não muda a sua sequência: essa é de quem apareceu no dia.
 
 Avisos no celular
@@ -67,9 +67,10 @@ Revisão vencida, cobrança a caminho, aula nova: tudo num lugar só, ao lado da
 sua foto de perfil. Cada aviso pode ser dispensado com um toque, mesmo que
 você ainda não tenha resolvido.
 
-Troca de carro na tela inicial
-Quem tem mais de um veículo agora troca entre eles direto do Início, sem
-passar pela garagem.
+Troca de carro no topo da tela
+Quem tem mais de um veículo agora troca entre eles pela barra de cima, em
+qualquer tela principal, sem passar pela garagem. Cada veículo aparece com o
+ano, para bater o olho e saber qual é.
 
 Correções
 Quem assinava pelo site com o app aberto podia continuar vendo o plano
