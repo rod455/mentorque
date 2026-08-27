@@ -14,8 +14,8 @@ import { NextResponse } from "next/server";
 // PRODUÇÃO — quem instala pelas faixas de teste está sempre à frente e não
 // deve ver aviso.
 const LATEST = {
-  android: 2, // 1.0 aprovada na Play (versionCode 2)
-  ios: 1,
+  android: 10, // 1.2 publicada na Play (versionCode 10, android/gradle.properties)
+  ios: 45, // 1.2 publicada na App Store (build 45, conferido pelo dono no App Store Connect)
 };
 
 export function GET() {
