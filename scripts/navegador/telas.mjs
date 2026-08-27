@@ -54,7 +54,8 @@ export async function rodar({ nav, ok }) {
   };
 
   // ---- as cinco abas -------------------------------------------------------
-  ok("Início desenha", /Pergunta d/i.test(await app.tela()));
+  ok("Início desenha", /O que vamos cuidar|Diagnosticar um problema/i.test(await app.tela()));
+  ok("o chip do quiz está na barra de cima", (await pg.getByRole("button", { name: /Quiz Diário/i }).count()) > 0);
   ok("Carros desenha", /Golfinho|Golf GTI/i.test(await aba(/^Carros$/i)));
   ok("Problemas desenha", (await aba(/^Problemas$/i)).length > 80);
   ok("Calendário desenha", (await aba(/^Calendário$/i)).length > 40);

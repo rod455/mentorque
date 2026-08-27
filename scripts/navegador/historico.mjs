@@ -26,7 +26,7 @@ export async function rodar({ nav, ok }) {
   });
 
   // ---- responde a de hoje ---------------------------------------------------
-  await pg.getByRole("button", { name: /Pergunta do dia/i }).first().click();
+  await pg.getByRole("button", { name: /Quiz Diário/i }).first().click();
   await pg.waitForTimeout(1200);
   const perguntaDeHoje = await pg.locator("h2").first().innerText();
   await pg.locator("main >> css=button").nth(1).click();
@@ -36,7 +36,7 @@ export async function rodar({ nav, ok }) {
 
   // ---- reabre: a pergunta continua na tela ----------------------------------
   await app.recarregar();
-  await pg.getByRole("button", { name: /Pergunta de hoje|Pergunta do dia/i }).first().click();
+  await pg.getByRole("button", { name: /Quiz Diário/i }).first().click();
   await pg.waitForTimeout(1500);
   const respondido = await app.tela();
   ok("a resposta sobreviveu à recarga", /já respondeu hoje/i.test(respondido));
@@ -87,12 +87,12 @@ export async function rodar({ nav, ok }) {
   // A prova do dia.
   await pg.getByRole("button", { name: /^Início$/i }).first().click();
   await pg.waitForTimeout(1500);
-  const faixa = await pg.getByRole("button", { name: /Pergunta de hoje|Pergunta do dia/i }).first().innerText();
+  const faixa = await pg.getByRole("button", { name: /Quiz Diário/i }).first().innerText();
   ok("responder o passado NÃO mexeu na sequência", /🔥/.test(faixa) && /\b2\b/.test(faixa) && !/\b3\b/.test(faixa), faixa.replace(/\n/g, " | "));
 
   // ---- e persiste -----------------------------------------------------------
   await app.recarregar();
-  await pg.getByRole("button", { name: /Pergunta de hoje|Pergunta do dia/i }).first().click();
+  await pg.getByRole("button", { name: /Quiz Diário/i }).first().click();
   await pg.waitForTimeout(1200);
   await pg.getByRole("button", { name: /Ver perguntas anteriores/i }).first().click();
   await pg.waitForTimeout(1200);
@@ -114,7 +114,7 @@ export async function rodar({ nav, ok }) {
       }),
       chaves: { "mq-primeiro-quiz-nao": "1" },
     });
-    await b.pg.getByRole("button", { name: /Pergunta de hoje|Pergunta do dia/i }).first().click();
+    await b.pg.getByRole("button", { name: /Quiz Diário/i }).first().click();
     await b.pg.waitForTimeout(1200);
     await b.pg.getByRole("button", { name: /Ver perguntas anteriores/i }).first().click();
     await b.pg.waitForTimeout(1200);

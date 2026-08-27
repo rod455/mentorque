@@ -19,12 +19,13 @@ export async function rodar({ nav, ok }) {
     if (r.url().includes("/api/quiz") && r.method() === "POST") envios.push(r.postData());
   });
 
-  const faixa = pg.getByRole("button", { name: /Pergunta do dia/i }).first();
-  ok("faixa do quiz no Início", (await faixa.count()) > 0);
-  const txtFaixa = await faixa.innerText();
-  ok("o selo mostra a sequência de ontem", /🔥/.test(txtFaixa) && /\b1\b/.test(txtFaixa), txtFaixa.replace(/\n/g, " | "));
+  // A chamada agora é o chip "Quiz Diário" na barra de cima (QuizNoTopo).
+  const chip = pg.getByRole("button", { name: /Quiz Diário/i }).first();
+  ok("chip do quiz na barra de cima", (await chip.count()) > 0);
+  const txtChip = await chip.innerText();
+  ok("o chip mostra a sequência de ontem", /🔥/.test(txtChip) && /\b1\b/.test(txtChip), txtChip.replace(/\n/g, " | "));
 
-  await faixa.click();
+  await chip.click();
   await pg.waitForTimeout(1200);
   const pergunta = await pg.locator("h2").first().innerText();
   ok("a tela do quiz abriu com a pergunta do dia", pergunta.length > 15, pergunta.slice(0, 60));
@@ -44,19 +45,21 @@ export async function rodar({ nav, ok }) {
     !!enviado.dia && !!enviado.perguntaId && typeof enviado.acertou === "boolean" && !!enviado.anonId
   );
 
-  // Volta ao Início: a faixa tem de virar "feita".
+  // Volta ao Início: o chip tem de virar "feito".
   await pg.getByRole("button", { name: /^Início$/i }).first().click();
   await pg.waitForTimeout(1200);
-  const feita = await pg.getByRole("button", { name: /Pergunta de hoje|Pergunta do dia/i }).first().innerText();
-  ok("a faixa virou feita, com o selo em 2", /feita/i.test(feita) && /🔥/.test(feita) && /\b2\b/.test(feita), feita.replace(/\n/g, " | "));
+  const depoisChip = pg.getByRole("button", { name: /Quiz Diário/i }).first();
+  ok("o chip virou feito, com o selo em 2",
+    /feita/i.test((await depoisChip.getAttribute("aria-label")) ?? "") && /🔥/.test(await depoisChip.innerText()) && /\b2\b/.test(await depoisChip.innerText()),
+    ((await depoisChip.getAttribute("aria-label")) ?? "") + " | " + (await depoisChip.innerText()));
 
   await pg.getByRole("button", { name: /^Calendário$/i }).first().click();
   await pg.waitForTimeout(1500);
-  ok("faixa do quiz no Calendário", /Pergunta de hoje: feita|Responda a pergunta do dia/i.test(await app.tela()));
+  ok("o chip aparece também no Calendário", (await pg.getByRole("button", { name: /Quiz Diário/i }).count()) > 0);
 
   // Recarrega e tenta responder de novo.
   await app.recarregar();
-  await pg.getByRole("button", { name: /Pergunta de hoje|Pergunta do dia/i }).first().click();
+  await pg.getByRole("button", { name: /Quiz Diário/i }).first().click();
   await pg.waitForTimeout(1200);
   const tela2 = await app.tela();
   ok("não deixa responder duas vezes no mesmo dia", /já respondeu hoje/i.test(tela2));

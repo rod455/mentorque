@@ -61,11 +61,33 @@ export async function rodar({ nav, ok }) {
     await app.recarregar();
     ok("a troca sobrevive à recarga", /Unozinho/.test(await pg.getByRole("button", { name: /Trocar de carro/i }).first().innerText()));
 
-    // Em 320px nada da barra de cima fica inalcançável.
-    await pg.setViewportSize({ width: 320, height: 844 });
-    await pg.waitForTimeout(500);
-    const fora = await controlesForaDaTela(pg, "header");
-    ok("em 320px a barra de cima cabe inteira", fora.length === 0, fora.join(" | "));
+    // Em larguras de celular: nada fora da tela E nada por cima de nada.
+    //
+    // A segunda parte existe por um defeito real que a primeira NÃO pega: o
+    // botão do carro vazava por baixo do chip do quiz (botão é elemento de
+    // formulário e não encolhe com o pai sem max-w-full). Os dois controles
+    // estavam visíveis e dentro da tela, então "fora da tela" passava verde
+    // com um botão tapando o outro.
+    for (const largura of [390, 360, 320]) {
+      await pg.setViewportSize({ width: largura, height: 844 });
+      await pg.waitForTimeout(500);
+      const fora = await controlesForaDaTela(pg, "header");
+      ok(`em ${largura}px a barra de cima cabe inteira`, fora.length === 0, fora.join(" | "));
+      const sobreposto = await pg.evaluate(() => {
+        const els = [...document.querySelectorAll("header button")].map((el) => ({
+          rotulo: (el.getAttribute("aria-label") ?? el.textContent ?? "").slice(0, 20),
+          r: el.getBoundingClientRect(),
+        }));
+        for (let i = 0; i < els.length; i++)
+          for (let j = i + 1; j < els.length; j++) {
+            const a = els[i].r, b = els[j].r;
+            if (a.left < b.right - 1 && b.left < a.right - 1 && a.top < b.bottom - 1 && b.top < a.bottom - 1)
+              return `${els[i].rotulo} sobre ${els[j].rotulo}`;
+          }
+        return null;
+      });
+      ok(`em ${largura}px nenhum controle cobre outro`, sobreposto === null, sobreposto ?? "");
+    }
 
     ok("nenhum erro de página", app.erros.length === 0, app.erros[0] ?? "");
     await app.fechar();

@@ -12,7 +12,6 @@ import type { ServicePart, ServiceRecord, SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Autocomplete, Card, Chip, Icon, inputCls, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
-import { FaixaDoQuiz } from "../FaixaDoQuiz";
 import { ConviteDeAviso } from "../ConviteDeAviso";
 import { QUIZ_ZERADO, diaLocal, sequenciaHoje } from "@/lib/app/quiz/sequencia";
 
@@ -200,11 +199,9 @@ export function HistoryScreen() {
         }
       />
 
-      {/* Pergunta do dia no calendário. Quem entra aqui veio ver o que o carro
-          precisa nos próximos dias, ou seja, já está no modo "o que vem por
-          aí" — é o contexto certo para um hábito diário e para o convite de
-          notificação logo abaixo. */}
-      <FaixaDoQuiz compacta />
+      {/* A chamada do quiz subiu para a barra de cima (QuizNoTopo), que este
+          ecrã também tem. O convite de aviso fica: o contexto "o que vem por
+          aí" continua sendo o certo para ele. */}
       <ConviteDeAviso momento="calendario" sequencia={sequenciaDoQuiz} />
 
       {upcoming}

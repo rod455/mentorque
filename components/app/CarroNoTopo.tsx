@@ -57,11 +57,15 @@ export function CarroNoTopo() {
 
   return (
     <div ref={raiz} className="relative min-w-0">
+      {/* O `max-w-full` não é enfeite: botão é elemento de formulário, e mesmo
+          em display:flex a largura auto dele é "do tamanho do conteúdo", não
+          "cabe no pai". Sem o teto, quando a barra aperta o invólucro encolhe
+          e o botão NÃO acompanha: ele vazava por baixo do chip do quiz. */}
       <button
         onClick={() => setAberto((a) => !a)}
         aria-expanded={aberto}
         aria-label={`${c.home.switchCar}: ${carName(ativo)}`}
-        className="flex h-9 min-w-0 items-center gap-1.5 rounded-full bg-graphite-800 py-1 pl-1.5 pr-2.5 ring-1 ring-white/10 active:bg-graphite-700"
+        className="flex h-9 min-w-0 max-w-full items-center gap-1.5 rounded-full bg-graphite-800 py-1 pl-1.5 pr-2.5 ring-1 ring-white/10 active:bg-graphite-700"
       >
         <Foto v={ativo} on />
         <span className="min-w-0 max-w-[7.5rem] truncate font-display text-[13px] font-semibold text-cream">

@@ -756,6 +756,8 @@ export function getContent(locale: Locale) {
     quiz: {
       titulo: T("Pergunta do dia", "Question of the day"),
       abrirHome: T("Pergunta do dia", "Question of the day"),
+      // O chip da barra de cima. Curto porque divide a linha com o carro e o sininho.
+      chipTitulo: T("Quiz Diário", "Daily Quiz"),
       abrirHomeSub: T("Um minuto. Vale a sequência.", "One minute. Keeps your streak."),
       acertou: T("Acertou!", "Correct!"),
       errou: T("Não é essa", "Not this one"),

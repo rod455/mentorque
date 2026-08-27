@@ -18,6 +18,7 @@ import { Icon, useContent } from "./ui";
 import { Logo } from "@/components/ui/Logo";
 import { SinoDeAvisos } from "./Avisos";
 import { CarroNoTopo } from "./CarroNoTopo";
+import { ChipDoQuiz } from "./QuizNoTopo";
 import { Sobreposicoes } from "./Sobreposicoes";
 import { telaDaView } from "./telas";
 
@@ -160,6 +161,8 @@ function TopBar() {
         <CarroNoTopo />
       </div>
       <div className="flex shrink-0 items-center gap-2">
+        {/* A chamada do quiz, sempre à vista. Ver QuizNoTopo. */}
+        <ChipDoQuiz />
         <SinoDeAvisos />
         <button
           onClick={() => root({ name: "profile" })}

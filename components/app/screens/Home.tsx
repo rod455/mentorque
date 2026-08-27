@@ -12,7 +12,6 @@ import { openStorePage, useUpdateAvailable } from "@/lib/app/appUpdate";
 import { sellsInApp } from "@/lib/app/wrapper";
 import { Button } from "@/components/ui/Button";
 import { useContent, Card, Icon, inputCls, Sheet, Thumb } from "../ui";
-import { FaixaDoQuiz } from "../FaixaDoQuiz";
 import { HealthPill } from "./Cars";
 import { FipeLine } from "./CarHub";
 import { CommonProblems } from "./Symptoms";
@@ -231,10 +230,7 @@ export function HomeScreen() {
         </button>
       )}
 
-      {/* Pergunta do dia. Fica aqui, e não no topo, porque o hábito se constrói
-          na terceira tela que a pessoa vê todo dia — e porque acima dela mora o
-          que resolve o problema de quem abriu o app COM um problema. */}
-      <FaixaDoQuiz />
+      {/* A chamada do quiz subiu para a barra de cima (QuizNoTopo). */}
 
       {/* Busca (abre a tela de busca) */}
       <button
