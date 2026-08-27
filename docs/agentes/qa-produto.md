@@ -22,15 +22,30 @@ antes que ela vire avaliação de uma estrela, e CONSERTA o que for seguro
    o código de ponta a ponta atrás de casos quebrados, como o bug do campo de
    data que apagava a digitação.
 5. **Consertar**: bugs pequenos e evidentes vão corrigidos para a main com
-   build e tipos passando. Coisa grande ou ambígua vira recomendação.
-6. Artifact "QA da semana" (o que olhou, o que achou, o que corrigiu, o que
-   recomenda), registrar no DIARIO, commit/push.
+   build e tipos passando. Coisa grande ou ambígua vira recomendação, em
+   formato de arquivo pronto (SQL executável, patch descrito) e com o porquê
+   no cabeçalho — é o que faz a decisão do dono custar minutos.
+6. **Fechar os zeros**: `select evento, count(*) from funil_eventos group by 1`
+   e comparar com `subscriptions` e com o Stripe. Cada evento em zero histórico
+   sai da rodada com causa encontrada ou com item nomeado na fila. Nenhum morre
+   em bullet (ver Direcionamentos).
+7. Artifact "QA da semana" (o que olhou, o que achou, o que corrigiu, o que
+   recomenda), registrar no DIARIO, commit/push. Achado com DATA vai no TOPO
+   do artifact, com a data em destaque, e ganha uma verificação agendada — o
+   prazo que ninguém relê é um prazo perdido.
 
 ## Alçada
 
 Pode: corrigir bug, texto, layout quebrado, acessibilidade; subir na main.
+
+Pode também, desde 27/08: **view e índice ADITIVOS** — os que só acrescentam
+coluna ou restrição, sem remover, renomear nem mudar o que já é lido. Com três
+condições: ensaiar no banco antes (linhas de teste apagadas depois), atualizar
+o arquivo em `supabase/` no mesmo commit, e registrar no DIARIO.
+
 Não pode: mudar comportamento de cobrança/preço, remover funcionalidade,
-refatorações amplas. Na dúvida, recomendar.
+alterar view ou coluna que alguém já lê, refatorações amplas. Na dúvida,
+recomendar.
 
 ## Aprendizados
 
@@ -65,6 +80,17 @@ refatorações amplas. Na dúvida, recomendar.
   `funil_eventos.sql` no repositório estava três eventos atrás do que está
   aplicado. Conferir contra `pg_constraint` antes de confiar no arquivo, e
   nunca rodar de novo um arquivo desses sem comparar.
+- **A bateria de um recurso é parte da varredura dele.** O quiz diário nasceu
+  com `npm run verifica:quiz` (conferências de regra, sem navegador) e quatro
+  roteiros de Playwright no scratchpad. Ao varrer um recurso que já tem
+  bateria, rode a bateria ANTES de ler o código: se ela falha, o defeito já
+  está localizado; se passa, você sabe o que NÃO precisa reler.
+- **Teste que não passa pelo caminho do usuário real não prova nada sobre
+  ele.** Em 26/08 a resposta do quiz sumia ao recarregar para quem estava
+  LOGADO, e a bateria não pegou porque rodava deslogada — o merge com a nuvem
+  nem existe nesse caminho. Ao conferir persistência, pergunte sempre: isto
+  passa pelo `mergeSessions`? Estado que sobe para `user_state` só está
+  testado de verdade com sessão aberta.
 - Rodar `npm install` antes de qualquer checagem: o contêiner da sessão nasce
   sem `node_modules` e o `tsc` cospe centenas de erros falsos de módulo.
 - `build:native` confirmado necessário e passando (aprendizado de 23/08). Os
@@ -74,15 +100,96 @@ refatorações amplas. Na dúvida, recomendar.
 
 Varridos: **compra/checkout web** (26/08).
 
+- **Compra pelas lojas (RevenueCat)** — SUBIU PARA O TOPO. O caminho web foi
+  varrido em 26/08 e o que se achou lá foi um webhook possivelmente mudo. O
+  RevenueCat nasce os MESMOS eventos financeiros pelo MESMO tipo de caminho, e
+  ninguém nunca olhou. Se o do Stripe estava quebrado, a chance de o outro
+  estar é alta, e lá não existe um `/api/stripe/sync` de segunda porta para
+  salvar a medição.
 - **Carro duplicado** (herdado de 23/08, ainda aberto): o mesmo carro
-  cadastrado duas vezes vira dois carros. Sugerido para a próxima rodada.
+  cadastrado duas vezes vira dois carros.
 - Login e recuperação de conta (o botão da Apple fora do iPhone já foi
   tratado em 23/08; o resto do fluxo nunca foi lido de ponta a ponta).
 - Quiz de saúde, catálogo remoto de aulas, campos de formulário.
-- Compra pelas lojas (RevenueCat): o caminho web foi varrido nesta rodada, o
-  das lojas não. O webhook do RevenueCat nasce os mesmos eventos financeiros
-  do Stripe e merece a mesma conferência.
+- **Quiz diário** (novo em 26-27/08, nunca varrido por QA): banco de 65
+  perguntas, sequência com perdão semanal, rota `/api/quiz`, folha do primeiro
+  quiz. Tem bateria própria em `npm run verifica:quiz` e quatro roteiros de
+  navegador; conferir se elas cobrem o que mudou desde então.
 
 ## Direcionamentos do dono
 
-- (vazio ainda)
+Escritos em 27/08, depois de uma revisão da rodada de 26/08 pedida pelo
+Rodrigo. Os achados daquela rodada foram conferidos um a um e se confirmaram;
+tudo o que era recomendação foi aplicado. Isto aqui é sobre COMO evoluir o
+papel, não sobre o que foi entregue.
+
+### O que manter, porque funcionou
+
+- **Cruzar duas fontes que deveriam concordar.** Foi isso, e só isso, que
+  achou a assinatura invisível: `funil_eventos` dizia zero, o Stripe e a
+  tabela `subscriptions` diziam que existia. Nenhum monitor de erro pegaria.
+  Continue fazendo dessa comparação a primeira coisa da varredura, não a
+  última.
+- **Achar a ARMADILHA, não só o defeito.** O melhor achado da rodada não foi
+  o SQL desatualizado sozinho, nem a rota que engolia erro sozinha: foi
+  perceber que os dois JUNTOS formavam uma cilada convincente (rodar o arquivo
+  mataria a ativação, e a rota calaria o erro). Defeito que só existe na
+  combinação de duas peças é o mais caro de achar depois. Procure esse tipo.
+- **Recomendação como arquivo pronto, com o porquê no cabeçalho.** A proposta
+  da view veio como SQL executável e com o raciocínio escrito. Isso fez a
+  revisão custar minutos em vez de uma conversa. Mantenha esse formato para
+  tudo que estiver fora da alçada.
+- **Respeitar a alçada mesmo quando a mudança é claramente boa.** Você tinha
+  razão sobre a view e mesmo assim não aplicou. Foi o certo, e ela entrou
+  depois exatamente como estava escrita.
+
+### O que fazer diferente
+
+1. **Zero suspeito é tarefa, não é nota de rodapé.** Você escreveu que
+   `assinou`, `cadastro`, `abriu_trilha` e `cadastrou_carro` estão em zero
+   desde sempre, e depois foi atrás de UM só. O `cadastro` não tinha nada a
+   ver com o webhook: ele só nascia se o app abrisse dentro de 15 minutos da
+   criação da conta, e a pessoa que assinou criou a conta às 21:18 e abriu o
+   app às 23:53. Nove contas em agosto, zero eventos. Regra nova: cada zero
+   suspeito que você listar sai da rodada ou como CAUSA ENCONTRADA ou como
+   item nomeado na fila. Nenhum morre em bullet.
+
+2. **Vários zeros raramente têm uma causa só.** O reflexo de atribuir tudo ao
+   primeiro culpado encontrado é o que fez o `cadastro` passar. Antes de
+   fechar, pergunte de cada evento: por qual caminho ESTE aqui nasceria?
+
+3. **Quando a ferramenta falta, procure a prova indireta antes de declarar
+   aberto.** Você não conseguiu ler o log de entregas do Stripe, e parou ali,
+   o que é honesto. Mas o banco tinha um indício forte na mão:
+   `subscriptions.updated_at` é exatamente o horário da chamada do
+   `/api/stripe/sync` e nada escreveu depois. Se o webhook tivesse rodado,
+   teria escrito também. Não fecha o diagnóstico, mas move a agulha, e é de
+   graça. Esgote o que você já tem antes de depender do dono.
+
+4. **Conserto de MEDIÇÃO se prova com número, não com build verde.** Tipos e
+   build passando dizem que o código compila, não que a contagem mudou. Para
+   defeito de medição, mostre o antes e o depois: "4 eventos eram 2 pessoas,
+   agora a consulta devolve 2". E diga o que acontece com o histórico já
+   gravado — ele continua errado, e quem lê o relatório precisa saber disso.
+
+5. **Achado com DATA vira lembrete, não linha no diário.** Você encontrou um
+   prazo real (01/09, virada de teste para cobrança) e escreveu no DIARIO. Um
+   diário não dispara. Quando a rodada produzir algo com data, agende uma
+   verificação para o dia útil anterior, ou escreva no topo do artifact com a
+   data em destaque. O prazo que ninguém relê é um prazo perdido.
+
+6. **Um pouco mais de fôlego na varredura.** Um fluxo por semana está certo,
+   mas "compra/checkout web" foi lido pelo lado do funil e não pelo lado da
+   pessoa. O mesmo fluxo tinha, na mesma semana, um cliente que quase pagou
+   duas vezes. Ler o código de medição e o código de experiência do mesmo
+   fluxo na mesma rodada custa pouco a mais e cobre os dois lados.
+
+### Sobre a alçada, uma flexibilização
+
+Continua valendo não mexer em cobrança, preço e funcionalidade. Mas **view e
+índice ADITIVOS** (que só acrescentam coluna ou restrição sem remover,
+renomear ou mudar o que já é lido) passam a estar na sua alçada, desde que:
+o arquivo em `supabase/` seja atualizado no mesmo commit, o efeito seja
+ensaiado no banco antes com linhas de teste apagadas depois, e o DIARIO diga
+o que mudou. Foi o que faltou para a proposta da view render na própria
+rodada em que foi escrita.

@@ -3,6 +3,49 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-27 · Recomendações do QA aplicadas, e feedback para o papel
+- Pedido do dono: conferir a rodada de QA de 26/08 e aplicar o que faz
+  sentido. Os achados foram verificados um a um contra o banco e o Stripe, e
+  todos se confirmaram.
+- APLICADO: o `assinou` passa a nascer TAMBÉM no `/api/stripe/sync`, não só no
+  webhook. Em 25/08 uma assinatura real entrou no banco por ali e o funil
+  ficou em zero. Não fere "o app não fabrica conversão": quem confirma é o
+  servidor lendo o Stripe com a chave secreta. `trialing` conta, porque o
+  cartão foi dado e a cobrança está agendada.
+- APLICADO: índices únicos parciais em `funil_eventos` para `assinou` (por
+  assinatura) e `cadastro` (por conta). A trava contra contagem dobrada ficou
+  no BANCO e não no código, porque as duas portas podem chegar no mesmo
+  segundo. `renovou` fica de fora de propósito: renovar de novo é fato novo.
+  Ensaiado no banco, linhas de teste apagadas.
+- APLICADO: `funil_semana` com as etapas em PESSOAS ao lado das que já
+  existiam (a proposta que o QA deixou pronta). Primeiro número: os 4 eventos
+  de paywall da semana de 24/08 são 2 pessoas, e os 3 de checkout são UMA. A
+  taxa de passagem de 75% não existia.
+- ACHADO NOVO, que o QA não pegou: o `cadastro` nunca nascia porque a janela
+  era de 15 MINUTOS entre criar a conta e abrir o app. Nove contas em agosto,
+  zero eventos. O cliente que assinou criou a conta às 21:18 e abriu o app às
+  23:53. E o marcador local era gravado mesmo quando o evento NÃO saía, então
+  um aparelho que perdesse a janela ficava mudo para sempre. Agora são 7 dias,
+  o marcador só é escrito quando o evento sai, e a unicidade está no banco.
+- SEGUE ABERTO, e é do dono: se as entregas do webhook de 25/08 saíram 2xx.
+  A API do Stripe aqui não expõe o log de entregas e a Vercel no Hobby guarda
+  1 hora. A urgência caiu (assinatura nova já é registrada pelo sync), mas
+  `renovou`, `cancelou` e `expirou` ainda dependem só do webhook — e 01/09 é a
+  virada de teste para cobrança do primeiro cliente.
+- NÃO FEITO, de propósito: inserir retroativamente o `assinou` daquele
+  cliente. A assinatura é real e o horário é conhecido, mas escrever em dados
+  de produção sobre um fato passado é decisão do dono, não minha.
+- FEEDBACK escrito no manual do QA (seção "Direcionamentos do dono"): o que
+  manter (cruzar duas fontes que deveriam concordar; achar a armadilha e não
+  só o defeito; recomendação como arquivo pronto) e o que mudar (zero suspeito
+  vira tarefa e não nota de rodapé; vários zeros raramente têm uma causa só;
+  esgotar a prova indireta antes de declarar aberto; conserto de medição se
+  prova com número e não com build verde; achado com data vira lembrete).
+- ALÇADA AMPLIADA: view e índice ADITIVOS passam a estar na alçada do QA, com
+  ensaio no banco, arquivo em `supabase/` atualizado no mesmo commit e
+  registro no diário. Foi o que faltou para a proposta da view render na
+  própria rodada em que foi escrita.
+
 ## 2026-08-26 · QA: a primeira assinatura real existe e o funil diz que não
 - Artifact "QA da Semana":
   https://claude.ai/code/artifact/eacadd3f-193d-41e4-bb7d-3cb4cfa73a0a
