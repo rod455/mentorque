@@ -58,7 +58,9 @@ export async function rodar({ nav, ok }) {
   ok("o chip do quiz está na barra de cima", (await pg.getByRole("button", { name: /Quiz Diário/i }).count()) > 0);
   ok("Carros desenha", /Golfinho|Golf GTI/i.test(await aba(/^Carros$/i)));
   ok("Problemas desenha", (await aba(/^Problemas$/i)).length > 80);
-  ok("Calendário desenha", (await aba(/^Calendário$/i)).length > 40);
+  // O título nomeia o carro ativo ("Calendário do seu Golfinho"): com o
+  // seletor na barra de cima, ele é a confirmação de qual carro a tela mostra.
+  ok("Calendário desenha, com o carro ativo no título", /Calendário do seu Golfinho/.test(await aba(/^Calendário$/i)));
 
   const estudos = await aba(/^Estudos$/i);
   ok("Estudos desenha", estudos.length > 120, estudos.slice(0, 50).replace(/\n/g, " "));

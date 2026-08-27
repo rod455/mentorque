@@ -930,6 +930,12 @@ export function getContent(locale: Locale) {
 
     history: {
       title: T("Calendário do carro", "Car calendar"),
+      // "Calendário do seu Golfinho": o título nomeia o carro ativo (pedido
+      // do dono, 27/08). Com o seletor na barra de cima, o título é a
+      // confirmação de qual carro a tela inteira está mostrando. Duas formas
+      // por causa do gênero: "do seu" carro, "da sua" moto.
+      titleCar: T("Calendário do seu {carro}", "Your {carro} calendar"),
+      titleMoto: T("Calendário da sua {carro}", "Your {carro} calendar"),
       none: T("Nenhum serviço registrado ainda.", "No services logged yet."),
       add: T("Adicionar serviço", "Add service"),
       all: T("Todos", "All"),

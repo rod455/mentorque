@@ -6,7 +6,7 @@ import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { LIMITS } from "@/lib/app/premium";
 import { nextServiceByTime } from "@/lib/app/health";
 import { pedirFeedback } from "@/lib/app/feedbackPrompt";
-import { formatBRL } from "@/lib/app/content";
+import { carName, formatBRL } from "@/lib/app/content";
 import { resizeImage } from "@/lib/app/image";
 import type { ServicePart, ServiceRecord, SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
@@ -191,7 +191,7 @@ export function HistoryScreen() {
   return (
     <div>
       <AppHeader
-        title={c.history.title}
+        title={(v.type === "moto" ? c.history.titleMoto : c.history.titleCar).replace("{carro}", carName(v))}
         action={
           <button onClick={onAdd} className="grid h-9 w-9 place-items-center rounded-full bg-amber text-graphite" aria-label={c.history.add}>
             <Icon name="plus" className="h-5 w-5" />
