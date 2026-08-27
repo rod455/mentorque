@@ -171,3 +171,15 @@ export function effectiveStorePlatform(): "ios" | "android" | null {
   const ua = detectPlatform();
   return ua === "other" ? null : ua;
 }
+
+/**
+ * Está rodando na máquina de quem desenvolve?
+ *
+ * Serve para uma coisa só: liberar o Premium sem Stripe configurado, para dar
+ * para andar pelas telas pagas em desenvolvimento. É por isso que a checagem é
+ * de HOST e não de variável de ambiente — variável a gente esquece ligada, e
+ * "esqueci ligado" aqui significa dar Premium de graça em produção.
+ */
+export function isLocalDev(): boolean {
+  return typeof window !== "undefined" && /^(localhost|127\.0\.0\.1|\[::1\])/.test(window.location.hostname);
+}

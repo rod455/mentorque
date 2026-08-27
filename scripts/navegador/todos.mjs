@@ -10,7 +10,7 @@
 import { spawn } from "node:child_process";
 import { BASE, abrirNavegador, conferidor } from "./base.mjs";
 
-const SUITES = ["quiz", "historico", "primeiro-quiz", "km", "selo", "avisos", "site"];
+const SUITES = ["telas", "quiz", "historico", "primeiro-quiz", "km", "selo", "avisos", "site"];
 
 const pedidas = process.argv.slice(2);
 const desconhecida = pedidas.find((p) => !SUITES.includes(p));
