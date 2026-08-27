@@ -84,6 +84,20 @@ as telas principais e confere que cada uma desenha, com o console limpo. Erro
 de renderização em React não derruba o app: a tela some e o resto continua.
 Sem essa suíte, um arquivo movido para o lugar errado passa em tudo o mais.
 
+### Quanto conferir por mudança (o regime das duas velocidades)
+
+O custo de uma mudança pequena tem que ser o da mudança, não o da cerimônia.
+Regra combinada com o dono em 27/08, depois de uma tarde em que colocar um ano
+no nome do carro levou uma hora:
+
+- **Mudança localizada** (uma tela, um componente, texto): `npm run conferir`
+  + SÓ a suíte da área tocada (`npm run conferir:navegador carro`, ~30s) +
+  push. **Sem build local**: a Vercel builda a cada push e reclama alto; o tsc
+  pega quase tudo o que o build pegaria. Foto só se a mudança é visual.
+- **Bateria completa + build local** apenas quando: a mudança toca código
+  compartilhado (store, Shell, roteador, base das suítes), antes de release
+  para as lojas, ou quando uma suíte reprova de um jeito que não faz sentido.
+
 ## A disciplina que vale para qualquer conferência daqui
 
 **Prove que ela morde antes de confiar no verde.** Plante o defeito que ela
