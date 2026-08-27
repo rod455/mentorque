@@ -1,17 +1,17 @@
 # Retrato diario da operacao Mentorque
 
-Gerado pelo Analista de Dados (n8n) em 2026-08-26T09:00:06.474Z.
+Gerado pelo Analista de Dados (n8n) em 2026-08-27T09:00:06.560Z.
 NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 
 ## MARKETING (gente chegando)
-- Semana corrente (2026-08-24): aberturas 10, visitantes 6, cadastros 0
+- Semana corrente (2026-08-24): aberturas 18, visitantes 7, cadastros 0
 - Semana anterior (2026-08-17): aberturas 4, visitantes 2, cadastros 0
 - Midia paga: sem gasto no periodo (crescimento organico)
 - Busca Google 28d: 0 cliques, 0 impressoes
 - YouTube: 0 inscritos, 0 views totais, 10 videos recentes
 
 ## ENGAJAMENTO (gente usando e voltando)
-- Semana corrente (2026-08-24): 6 usuarios ativos, 10 aberturas (1.7 por usuario)
+- Semana corrente (2026-08-24): 7 usuarios ativos, 18 aberturas (2.6 por usuario)
 - Semana anterior (2026-08-17): 2 usuarios ativos, 4 aberturas (2 por usuario)
 - Erros no app 7d: 0
 - Play vitals: sem dados de crash ainda
@@ -44,19 +44,23 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 ```json
 {
   "dados": {
-    "geradoEm": "2026-08-26T09:00:05.048Z",
+    "geradoEm": "2026-08-27T09:00:05.099Z",
     "funilSemanas": [
       {
         "semana": "2026-08-24",
-        "aberturas": 10,
-        "visitantes": 6,
+        "aberturas": 18,
+        "visitantes": 7,
         "cadastros": 0,
         "viram_paywall": 4,
         "iniciaram_checkout": 3,
         "assinaturas": 0,
         "renovacoes": 0,
         "cancelamentos": 0,
-        "expirados": 0
+        "expirados": 0,
+        "viram_paywall_pessoas": 2,
+        "iniciaram_checkout_pessoas": 1,
+        "assinaturas_pessoas": 0,
+        "ativaram_pessoas": 0
       },
       {
         "semana": "2026-08-17",
@@ -68,7 +72,11 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "assinaturas": 0,
         "renovacoes": 0,
         "cancelamentos": 0,
-        "expirados": 0
+        "expirados": 0,
+        "viram_paywall_pessoas": 0,
+        "iniciaram_checkout_pessoas": 0,
+        "assinaturas_pessoas": 0,
+        "ativaram_pessoas": 0
       }
     ],
     "assinaturas": {
@@ -84,6 +92,11 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
     },
     "uso": {
       "porDia": [
+        {
+          "dia": "2026-08-26",
+          "usuarios": 2,
+          "aberturas": 8
+        },
         {
           "dia": "2026-08-25",
           "usuarios": 3,
@@ -103,9 +116,9 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       "porSemana": [
         {
           "semana": "2026-08-24",
-          "usuarios_ativos": 6,
-          "aberturas": 10,
-          "aberturas_por_usuario": 1.7
+          "usuarios_ativos": 7,
+          "aberturas": 18,
+          "aberturas_por_usuario": 2.6
         },
         {
           "semana": "2026-08-17",
@@ -128,10 +141,10 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       {
         "de": "abriu_app",
         "para": "cadastro",
-        "antes": 7,
+        "antes": 8,
         "depois": 0,
         "taxa": 0,
-        "perdidos": 7
+        "perdidos": 8
       },
       {
         "de": "cadastro",
