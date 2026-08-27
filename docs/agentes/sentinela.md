@@ -53,6 +53,15 @@ olhada. Falha que some na reconferência é transitória: silêncio.
   rodadas com tudo certo — é lixo preso, não queda em curso. Nesse caso ela
   limpa em SILÊNCIO, sem e-mail de recuperação. Vale como regra geral para
   qualquer agente que guarde estado entre execuções.
+- **Editar workflow no n8n salva um RASCUNHO; o agendador continua executando
+  a versão PUBLICADA até alguém publicar.** Foi o segundo capítulo do defeito
+  dos e-mails: a correção do `delete` foi escrita e "testada" em 27/08 à
+  meia-noite, mas os testes executaram a versão ativa antiga (a execução usa
+  `activeVersionId`, não o rascunho), e o verde foi lido como prova de que a
+  correção funcionava. O e-mail voltou 15 horas depois. A regra que fica:
+  depois de editar, conferir que `activeVersionId` mudou (via
+  `publish_workflow`), e SÓ então validar com execução de produção. Verde de
+  teste sem conferir QUAL versão rodou não prova nada.
 - **Alerta que chega quando está tudo bem é pior que não alertar.** Oito
   e-mails de "voltou ao normal" ensinaram o dono a ignorar o remetente. O
   próximo aviso REAL competiria com essa memória. Silêncio é a promessa do
