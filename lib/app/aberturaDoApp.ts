@@ -66,21 +66,45 @@ export function useFunilDeAbertura() {
 }
 
 /**
- * Vindo do onboarding ("Monte seu teste"): abre o paywall com o plano
- * escolhido, MAS só depois do login.
+ * Vindo do onboarding ("Monte seu teste") ou do LINK DE VENDA: leva à compra
+ * do plano escolhido, MAS só depois do login.
  *
  * Assinar deslogado amarraria a compra a um usuário anônimo do RevenueCat: o
  * motorista pagaria e o Premium não apareceria na conta dele. Então, sem
  * sessão, o app manda para a tela de entrar e guarda o plano; assim que o
- * login acontece, o paywall abre sozinho no plano que ele já tinha escolhido.
+ * login acontece, o destino abre sozinho no plano que ele já tinha escolhido.
+ *
+ * Os dois caminhos, e por que o destino difere:
+ *
+ *   onboarding             → paywall com o plano marcado. A pessoa ainda está
+ *                            conhecendo; o paywall convence.
+ *   /app?assinar=anual     → DIRETO no pagamento. É o link que o dono manda
+ *   /app?assinar=mensal      para quem já foi convencido na conversa; parar
+ *                            no paywall seria vender de novo para quem veio
+ *                            comprar.
  */
 export function usePlanoPendente() {
   const { user } = useAuth();
   const { view, go } = useNav();
+  const { s } = usePrototype();
   const [plano, setPlano] = useState<"annual" | "monthly" | null>(null);
+  // Só o link de venda vai direto ao pagamento; o onboarding para no paywall.
+  const direto = useRef(false);
 
   useEffect(() => {
     try {
+      // O link de venda tem prioridade: quem clicou nele veio comprar agora.
+      // O parâmetro sai da URL na hora (recarregar não pode reabrir compra),
+      // preservando o resto da query, que o funil lê para os UTMs.
+      const url = new URL(window.location.href);
+      const q = url.searchParams.get("assinar");
+      if (q === "anual" || q === "mensal" || q === "annual" || q === "monthly") {
+        url.searchParams.delete("assinar");
+        window.history.replaceState(null, "", url);
+        direto.current = true;
+        setPlano(q === "anual" || q === "annual" ? "annual" : "monthly");
+        return;
+      }
       const p = window.sessionStorage.getItem("mentorque-onboarding-plan");
       if (p === "annual" || p === "monthly") {
         window.sessionStorage.removeItem("mentorque-onboarding-plan");
@@ -104,7 +128,10 @@ export function usePlanoPendente() {
     }
     if (view.name === "auth") return;                            // espera sair do login
     setPlano(null);
-    go({ name: "subscribe", ctx: `onb-${plano}` });
+    // Quem já é Premium não tem o que comprar: o link vira uma abertura
+    // normal do app em vez de um segundo checkout da mesma assinatura.
+    if (direto.current && s.premium) return;
+    go(direto.current ? { name: "checkout", plan: plano } : { name: "subscribe", ctx: `onb-${plano}` });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plano, user, view]);
 }
