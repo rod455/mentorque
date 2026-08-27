@@ -3,6 +3,32 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-27 · Sentinela mandava "voltou ao normal" a cada 12 horas
+- Relato do dono, com print: oito e-mails "[Sentinela] Mentorque voltou ao
+  normal" seguidos, com tudo funcionando. "Se está tudo funcionando, não
+  deveria ficar avisando."
+- CAUSA, confirmada na execução 8366: `suspeita: false` (tudo passou) e
+  `avisar: true` ao mesmo tempo, com a assinatura guardada
+  `Funil e banco (/api/funil):401` — uma falha de 22/08. O
+  `delete sd.assinatura` nunca persistiu.
+- O n8n só persiste a memória do workflow quando enxerga uma ATRIBUIÇÃO.
+  `delete` apaga a chave dentro da execução e ela volta intacta na rodada
+  seguinte. A prova estava no próprio histórico: a gravação da falha durou
+  quatro dias, a limpeza nunca durou uma rodada.
+- CORRIGIDO (v3 do workflow): limpeza por atribuição (`sd.assinatura = ""`),
+  e o carimbo do problema passa a EXPIRAR em 24h. A Sentinela roda a cada 12h
+  e refaz o carimbo a cada rodada durante uma queda real, então carimbo com
+  mais de um dia é lixo preso, não queda em curso: some em silêncio, sem
+  e-mail. É o que faz o defeito não voltar nem se a persistência falhar de
+  novo por outro motivo.
+- CONFERIDO: duas execuções seguidas depois do conserto pararam no "Recuperou?"
+  com `avisar: false`, sem chegar ao nó de e-mail. O estado travado foi
+  limpo sem gerar mais um aviso.
+- APRENDIZADO que vale para todo agente com estado entre execuções: estado
+  guardado precisa de prazo de validade. E alerta que chega quando está tudo
+  bem é pior que não alertar — oito e-mails de nada ensinam o dono a ignorar o
+  remetente, e o próximo aviso REAL compete com essa memória.
+
 ## 2026-08-27 · Recomendações do QA aplicadas, e feedback para o papel
 - Pedido do dono: conferir a rodada de QA de 26/08 e aplicar o que faz
   sentido. Os achados foram verificados um a um contra o banco e o Stripe, e
