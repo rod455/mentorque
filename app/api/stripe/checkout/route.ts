@@ -56,7 +56,22 @@ export async function POST(req: Request) {
       : body?.offer === "exit25"
         ? process.env.STRIPE_EXIT25_COUPON || "EXIT25"
         : null;
-  const session = await stripe.checkout.sessions.create({
+
+  // Cupom vindo do link de venda (/app?assinar=...&cupom=PREMIUM30): o código
+  // é o mesmo que a pessoa digitaria, então resolvê-lo aqui não abre nada que
+  // o campo de digitar já não abrisse. Código inexistente ou inativo cai no
+  // campo de digitar, e a compra segue; a oferta de saída, quando existe, tem
+  // prioridade porque ela é uma negociação já em andamento no app.
+  const cupomCode = typeof body?.cupom === "string" ? body.cupom.trim().toUpperCase() : "";
+  let cupomPromo: string | null = null;
+  if (!exitCoupon && /^[A-Z0-9-]{3,30}$/.test(cupomCode)) {
+    try {
+      const found = await stripe.promotionCodes.list({ code: cupomCode, active: true, limit: 1 });
+      cupomPromo = found.data[0]?.id ?? null;
+    } catch { cupomPromo = null; }
+  }
+
+  const criarSessao = (desconto: { coupon: string } | { promotion_code: string } | null) => stripe.checkout.sessions.create({
     mode: "subscription",
     ui_mode: "embedded", // formulário embutido no app
     customer: customerId,
@@ -93,12 +108,26 @@ export async function POST(req: Request) {
     // o cupom, então não dá para conferir olhando. Cupom de convite nasce
     // restrito ou nasce errado, e o conserto é recriar.
     //
-    // Ofertas de saída entram por `discounts`, e o Stripe não deixa combinar os
-    // dois: ou o cupom já aplicado, ou o campo para digitar um.
-    ...(exitCoupon ? { discounts: [{ coupon: exitCoupon }] } : { allow_promotion_codes: true }),
+    // Ofertas de saída e cupom do link entram por `discounts`, e o Stripe não
+    // deixa combinar os dois: ou o cupom já aplicado, ou o campo para digitar.
+    ...(desconto ? { discounts: [desconto] } : { allow_promotion_codes: true }),
     locale: "pt-BR",
     return_url: `${origin}/app?checkout=success`,
   });
+
+  let session;
+  try {
+    session = await criarSessao(
+      exitCoupon ? { coupon: exitCoupon } : cupomPromo ? { promotion_code: cupomPromo } : null
+    );
+  } catch (e) {
+    // O cupom do link pode ser recusado pelo Stripe mesmo existindo: os cupons
+    // de convite nascem presos ao produto (applies_to), então PREMIUM1MES no
+    // plano anual é erro na criação da sessão. A compra não pode morrer por
+    // causa do desconto: refaz sem ele, com o campo de digitar aberto.
+    if (!cupomPromo) throw e;
+    session = await criarSessao(null);
+  }
 
   return NextResponse.json({ clientSecret: session.client_secret });
 }

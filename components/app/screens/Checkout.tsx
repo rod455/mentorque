@@ -16,7 +16,7 @@ import { AppHeader, Card, LegalLinks, useContent } from "../ui";
 // Fica separado do paywall porque é outra tela e outro estado. O paywall
 // convence; aqui já está convencido e o que resta é não atrapalhar.
 
-export function CheckoutScreen({ plan, offer }: { plan: "monthly" | "annual"; offer?: string }) {
+export function CheckoutScreen({ plan, offer, cupom }: { plan: "monthly" | "annual"; offer?: string; cupom?: string }) {
   const c = useContent();
   const sub = c.subscribe;
   const { setPremium } = usePrototype();
@@ -27,7 +27,7 @@ export function CheckoutScreen({ plan, offer }: { plan: "monthly" | "annual"; of
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const res = await startCheckout(plan, trialPlatform(), offer);
+      const res = await startCheckout(plan, trialPlatform(), offer, cupom);
       if (cancelled) return;
       if (res.clientSecret) { setClientSecret(res.clientSecret); return; }
       // Stripe não configurado: em dev local cai no demo; em produção mostra erro.

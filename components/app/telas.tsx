@@ -77,5 +77,5 @@ export function telaDaView(view: View) {
       case "achievements": return <AchievementsScreen initialTab={view.tab} />;
       case "auth": return <AuthScreen />;
       case "subscribe": return <SubscribeScreen ctx={view.ctx} />;
-      case "checkout": return <CheckoutScreen plan={view.plan} offer={view.offer} />;  }
+      case "checkout": return <CheckoutScreen plan={view.plan} offer={view.offer} cupom={view.cupom} />;  }
 }

@@ -21,8 +21,8 @@ async function authedPost(path: string, body?: unknown): Promise<BillingResult> 
   }
 }
 
-export const startCheckout = (plan: "monthly" | "annual", platform?: string, offer?: string) =>
-  authedPost("/api/stripe/checkout", { plan, platform, offer });
+export const startCheckout = (plan: "monthly" | "annual", platform?: string, offer?: string, cupom?: string) =>
+  authedPost("/api/stripe/checkout", { plan, platform, offer, cupom });
 export const openBillingPortal = () => authedPost("/api/stripe/portal");
 export const cancelSubscription = () => authedPost("/api/stripe/cancel");
 export const reactivateSubscription = () => authedPost("/api/stripe/reactivate");

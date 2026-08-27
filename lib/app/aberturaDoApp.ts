@@ -81,7 +81,8 @@ export function useFunilDeAbertura() {
  *   /app?assinar=anual     → DIRETO no pagamento. É o link que o dono manda
  *   /app?assinar=mensal      para quem já foi convencido na conversa; parar
  *                            no paywall seria vender de novo para quem veio
- *                            comprar.
+ *                            comprar. `&cupom=PREMIUM30` chega ao checkout
+ *                            com o desconto já aplicado (o servidor valida).
  */
 export function usePlanoPendente() {
   const { user } = useAuth();
@@ -90,16 +91,19 @@ export function usePlanoPendente() {
   const [plano, setPlano] = useState<"annual" | "monthly" | null>(null);
   // Só o link de venda vai direto ao pagamento; o onboarding para no paywall.
   const direto = useRef(false);
+  const cupom = useRef<string | undefined>(undefined);
 
   useEffect(() => {
     try {
       // O link de venda tem prioridade: quem clicou nele veio comprar agora.
-      // O parâmetro sai da URL na hora (recarregar não pode reabrir compra),
-      // preservando o resto da query, que o funil lê para os UTMs.
+      // Os parâmetros saem da URL na hora (recarregar não pode reabrir
+      // compra), preservando o resto da query, que o funil lê para os UTMs.
       const url = new URL(window.location.href);
       const q = url.searchParams.get("assinar");
       if (q === "anual" || q === "mensal" || q === "annual" || q === "monthly") {
+        cupom.current = url.searchParams.get("cupom")?.trim().toUpperCase() || undefined;
         url.searchParams.delete("assinar");
+        url.searchParams.delete("cupom");
         window.history.replaceState(null, "", url);
         direto.current = true;
         setPlano(q === "anual" || q === "annual" ? "annual" : "monthly");
@@ -131,7 +135,7 @@ export function usePlanoPendente() {
     // Quem já é Premium não tem o que comprar: o link vira uma abertura
     // normal do app em vez de um segundo checkout da mesma assinatura.
     if (direto.current && s.premium) return;
-    go(direto.current ? { name: "checkout", plan: plano } : { name: "subscribe", ctx: `onb-${plano}` });
+    go(direto.current ? { name: "checkout", plan: plano, cupom: cupom.current } : { name: "subscribe", ctx: `onb-${plano}` });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plano, user, view]);
 }

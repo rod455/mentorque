@@ -50,6 +50,22 @@ export async function rodar({ nav, ok }) {
     await app.fechar();
   }
 
+  // ---- com cupom e UTM: some o que é da compra, fica o que é do funil ------
+  {
+    const app = await abrirApp(nav, {
+      sessao: SESSAO(),
+      chaves: { "mq-primeiro-quiz-nao": "1" },
+      rota: "/app?assinar=anual&cupom=PREMIUM30&utm_source=zap",
+    });
+    await app.pg.waitForTimeout(800);
+    ok("com cupom, também cai na tela de entrar", /Entrar|Salve sua garagem/i.test(await app.tela()));
+    const url = app.pg.url();
+    ok("assinar e cupom somem da URL, o UTM fica",
+      !url.includes("assinar") && !url.includes("cupom") && url.includes("utm_source=zap"), url);
+    ok("nenhum erro de página com cupom", app.erros.length === 0, app.erros[0] ?? "");
+    await app.fechar();
+  }
+
   // ---- valor inválido: o link vira uma abertura normal ---------------------
   {
     const app = await abrirApp(nav, {

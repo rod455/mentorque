@@ -42,7 +42,7 @@ export type View =
   | { name: "achievements"; tab?: "marco" | "momento" }
   | { name: "auth" }
   | { name: "subscribe"; ctx?: string }
-  | { name: "checkout"; plan: "monthly" | "annual"; offer?: string };
+  | { name: "checkout"; plan: "monthly" | "annual"; offer?: string; cupom?: string };
 
 type NavValue = {
   view: View;
