@@ -15,10 +15,12 @@ import {
   sequenciaHoje,
   temPerdao,
   diasEntre,
+  respostaDe,
 } from "@/lib/app/quiz/sequencia";
 import { enviarResposta, placarDoDia, type Placar } from "@/lib/app/quiz/placar";
 import { AppHeader, useContent } from "../ui";
 import { ConviteDeAviso } from "../ConviteDeAviso";
+import { PerguntaRespondida } from "../quiz/PerguntaRespondida";
 
 // A pergunta do dia.
 //
@@ -62,7 +64,20 @@ export function QuizScreen() {
   // `escolha === null` é o que segura a explicação na tela: sem ele, responder
   // trocaria o que a pessoa está lendo pelo aviso de "você já respondeu hoje".
   if (escolha === null && respondeuHoje(estado, hoje)) {
-    return <JaRespondeu onVoltar={back} sequencia={sequenciaHoje(estado, hoje)} />;
+    const r = respostaDe(estado, hoje);
+    // A pergunta que ela respondeu HOJE pode não ser a que a rotação devolve
+    // agora (o banco cresce, o idioma muda). O registro guarda o id e ele manda.
+    const respondida = r ? perguntas.find((p) => p.id === r.perguntaId) ?? pergunta : null;
+    return (
+      <JaRespondeu
+        onVoltar={back}
+        onAnteriores={() => go({ name: "quizHistorico" })}
+        sequencia={sequenciaHoje(estado, hoje)}
+        pergunta={respondida}
+        escolha={r?.escolha ?? null}
+        aoAbrirAula={(aula) => go({ name: "content", id: aula })}
+      />
+    );
   }
 
   const base = antes ?? estado;
@@ -83,35 +98,88 @@ export function QuizScreen() {
         setAntes(estado);
         setEscolha(i);
         const acertou = i === pergunta.correta;
-        responderQuiz(acertou);
+        responderQuiz({ perguntaId: pergunta.id, escolha: i, acertou });
         enviarResposta({ dia: hoje, perguntaId: pergunta.id, acertou, userId: user?.id ?? null });
         // O placar chega depois da resposta, nunca antes: ver "62% acertaram"
         // com as opções na tela entregaria a resposta a quem soubesse ler.
         void placarDoDia(hoje, pergunta.id).then(setPlacar);
       }}
       aoSeguir={back}
+      aoVerAnteriores={() => go({ name: "quizHistorico" })}
       aoAbrirAula={() => go({ name: "content", id: pergunta.aula })}
     />
   );
 }
 
-function JaRespondeu({ onVoltar, sequencia }: { onVoltar: () => void; sequencia: number }) {
+// A tela de quem volta depois de já ter respondido.
+//
+// Antes ela mostrava só a chama e o "volte amanhã", e escondia justamente o que
+// a pessoa veio buscar: qual era a pergunta, o que ela marcou e por quê. Quem
+// reabre um quiz respondido quer reler a explicação, não ser informado de que
+// respondeu. A confirmação vira uma faixa curta em cima e o conteúdo volta.
+//
+// `pergunta` pode ser nula para quem respondeu antes de o histórico existir:
+// nesse caso não há o que remostrar, e a tela cai no formato antigo em vez de
+// inventar uma resposta que não foi gravada.
+function JaRespondeu({
+  onVoltar,
+  onAnteriores,
+  sequencia,
+  pergunta,
+  escolha,
+  aoAbrirAula,
+}: {
+  onVoltar: () => void;
+  onAnteriores: () => void;
+  sequencia: number;
+  pergunta: Pergunta | null;
+  escolha: number | null;
+  aoAbrirAula: (aula: string) => void;
+}) {
   const c = useContent();
   const q = c.quiz;
+  const temRegistro = !!pergunta && escolha !== null;
+
   return (
     <>
       <AppHeader title={q.titulo} />
-      <div className="mt-6 rounded-3xl bg-graphite-800 p-7 text-center ring-1 ring-white/5">
-        <Chama n={sequencia} />
-        <h2 className="mt-4 font-serif text-xl font-bold text-cream">{q.jaRespondeuTitulo}</h2>
-        <p className="mx-auto mt-2 max-w-[18rem] text-sm leading-relaxed text-cream/60">{q.jaRespondeuCorpo}</p>
-        <button
-          onClick={onVoltar}
-          className="mt-6 w-full rounded-xl bg-graphite-700 px-4 py-3 font-display text-sm font-semibold text-cream ring-1 ring-white/10"
-        >
-          {q.seguir}
-        </button>
+
+      <div className="mt-2 flex items-center gap-3 rounded-2xl bg-graphite-800 px-4 py-3 ring-1 ring-white/5">
+        <span aria-hidden className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-amber/15 text-xl">
+          🔥
+        </span>
+        <div className="min-w-0">
+          <p className="font-display text-sm font-semibold text-cream">{q.jaRespondeuTitulo}</p>
+          <p className="text-[13px] leading-snug text-cream/55">
+            {sequencia === 0
+              ? q.sequenciaComecou
+              : sequencia === 1
+                ? q.sequenciaUm
+                : q.sequenciaN.replace("{n}", String(sequencia))}
+          </p>
+        </div>
       </div>
+
+      {temRegistro && (
+        <div className="mt-4">
+          <PerguntaRespondida pergunta={pergunta} escolha={escolha} aoAbrirAula={() => aoAbrirAula(pergunta.aula)} />
+        </div>
+      )}
+
+      <p className="mt-5 text-center text-[13px] leading-relaxed text-cream/50">{q.jaRespondeuCorpo}</p>
+
+      <button
+        onClick={onAnteriores}
+        className="mt-3 w-full rounded-xl bg-graphite-700 px-4 py-3 font-display text-sm font-semibold text-cream ring-1 ring-white/10"
+      >
+        {q.verAnteriores}
+      </button>
+      <button
+        onClick={onVoltar}
+        className="mt-2 w-full rounded-xl px-4 py-3 font-display text-sm font-semibold text-cream/60"
+      >
+        {q.seguir}
+      </button>
     </>
   );
 }
@@ -140,6 +208,7 @@ function QuizDoDia({
   perdoado,
   aoEscolher,
   aoSeguir,
+  aoVerAnteriores,
   aoAbrirAula,
 }: {
   pergunta: Pergunta;
@@ -150,6 +219,7 @@ function QuizDoDia({
   perdoado: boolean;
   aoEscolher: (i: number) => void;
   aoSeguir: () => void;
+  aoVerAnteriores: () => void;
   aoAbrirAula: () => void;
 }) {
   const c = useContent();
@@ -268,6 +338,15 @@ function QuizDoDia({
             className="mt-4 w-full rounded-xl bg-amber px-4 py-3.5 font-display text-[15px] font-semibold text-graphite active:scale-[0.99]"
           >
             {q.seguir}
+          </button>
+          {/* O caminho para o calendário nasce aqui, logo depois de responder:
+              é a hora em que a pessoa está com o assunto na cabeça e pode
+              querer o dia que perdeu. */}
+          <button
+            onClick={aoVerAnteriores}
+            className="mt-2 w-full rounded-xl px-4 py-3 font-display text-sm font-semibold text-cream/60"
+          >
+            {q.verAnteriores}
           </button>
         </div>
       )}

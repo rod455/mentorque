@@ -2469,6 +2469,32 @@ export function getContent(locale: Locale) {
       placarCertos: T("{p}% acertaram hoje", "{p}% got it right today"),
       placarPoucos: T("Você foi um dos primeiros hoje", "You were one of the first today"),
       // Já respondeu.
+      suaResposta: T("sua resposta", "your answer"),
+      verAnteriores: T("Ver perguntas anteriores", "See earlier questions"),
+      // Calendário do quiz.
+      historicoTitulo: T("Perguntas anteriores", "Earlier questions"),
+      historicoVazio: T(
+        "As perguntas que você responder ficam guardadas aqui, e as que passaram continuam disponíveis.",
+        "The questions you answer are kept here, and the ones you missed stay available."
+      ),
+      historicoLegendaAcerto: T("acertou", "correct"),
+      historicoLegendaErro: T("errou", "wrong"),
+      historicoLegendaAberto: T("em aberto", "unanswered"),
+      historicoEscolhaDia: T("Toque num dia para ver ou responder", "Tap a day to see it or answer"),
+      historicoDiaAberto: T("Você não respondeu neste dia", "You didn't answer on this day"),
+      // A frase que evita a decepção de responder o passado esperando sequência.
+      historicoSemSequencia: T(
+        "Responder um dia que passou conta como estudo, mas não muda a sua sequência.",
+        "Answering a past day counts as study, but doesn't change your streak."
+      ),
+      historicoForaDeAlcance: T("Fora do período disponível", "Outside the available period"),
+      // O resumo é montado em duas metades justamente por causa da concordância:
+      // "2 respondidas, 1 certas" está errado, e uma frase única não tem como
+      // acertar os dois números ao mesmo tempo.
+      historicoRespondidaUma: T("1 respondida", "1 answered"),
+      historicoRespondidasN: T("{n} respondidas", "{n} answered"),
+      historicoCertaUma: T("1 certa", "1 correct"),
+      historicoCertasN: T("{n} certas", "{n} correct"),
       jaRespondeuTitulo: T("Você já respondeu hoje", "You've answered today"),
       jaRespondeuCorpo: T("A próxima sai amanhã. Vale a pena não perder.", "The next one is tomorrow. Worth not missing."),
       // Convite para ligar o aviso, mostrado depois de responder.

@@ -31,6 +31,7 @@ import { FuelCompareScreen } from "./screens/FuelCompare";
 import { CarSettingsScreen } from "./screens/CarSettings";
 import { ProfileScreen, SubscribeScreen, CheckoutScreen } from "./screens/Profile";
 import { QuizScreen } from "./screens/Quiz";
+import { QuizHistoricoScreen } from "./screens/QuizHistorico";
 import { GamificationScreen, AchievementsScreen } from "./screens/Gamification";
 import { AuthScreen } from "./screens/Auth";
 import { funil } from "@/lib/app/funil";
@@ -266,6 +267,7 @@ function Router() {
       case "carSettings": return <CarSettingsScreen />;
       case "profile": return <ProfileScreen />;
       case "quiz": return <QuizScreen />;
+      case "quizHistorico": return <QuizHistoricoScreen />;
       case "gamification": return <GamificationScreen />;
       case "achievements": return <AchievementsScreen initialTab={view.tab} />;
       case "auth": return <AuthScreen />;
@@ -445,7 +447,7 @@ const TAB_OF: Record<View["name"], Tab> = {
   symptoms: "problems", symptom: "problems", systemProblems: "problems", equipment: "problems", equipmentHowTo: "problems", checklist: "problems", obd2: "problems",
   history: "history", addService: "history", service: "history",
   learn: "studies", studyTrack: "studies", course: "studies", forYourCar: "studies", savedLessons: "studies", biela: "studies", content: "studies",
-  quiz: "studies",
+  quiz: "studies", quizHistorico: "studies",
   profile: "profile", gamification: "profile", achievements: "profile", auth: "profile", subscribe: "profile", checkout: "profile",
 };
 

@@ -14,6 +14,33 @@ export { diaLocal, diasEntre } from "../datas.ts";
 // errada aqui destrói o único ativo que o quiz constrói: a sequência de dias.
 // Quem perde 40 dias seguidos por um bug de fuso não volta.
 
+/** O que a pessoa respondeu num dia. */
+export type RespostaDoDia = {
+  /** yyyy-mm-dd. */
+  dia: string;
+  /**
+   * Qual pergunta era aquela.
+   *
+   * Guardado, e não recalculado pela data, porque o banco de perguntas cresce.
+   * Uma pergunta nova inserida no meio deslocaria a rotação inteira, e todo
+   * dia já respondido passaria a mostrar OUTRA pergunta com a resposta antiga
+   * ao lado. Aqui o passado fica do jeito que aconteceu.
+   */
+  perguntaId: string;
+  /** Índice da opção escolhida. */
+  escolha: number;
+  acertou: boolean;
+};
+
+/**
+ * Quantos dias de histórico ficam guardados.
+ *
+ * Isto sobe para a nuvem junto com o resto da sessão a cada mudança, então
+ * precisa de teto. Pouco mais de um ano é mais do que qualquer calendário vai
+ * mostrar, e cabe em uns 25 KB.
+ */
+const TETO_DO_HISTORICO = 400;
+
 export type EstadoQuiz = {
   /** Último dia em que respondeu, yyyy-mm-dd. */
   ultimoDia: string | null;
@@ -26,7 +53,21 @@ export type EstadoQuiz = {
   /** Total de respostas e de acertos, para marcos e para o próprio orgulho. */
   respostas: number;
   acertos: number;
+  /** O que foi respondido em cada dia, do mais antigo para o mais novo. */
+  historico?: RespostaDoDia[];
 };
+
+/**
+ * Obriga um objeto literal a citar TODAS as chaves do estado, inclusive as
+ * opcionais.
+ *
+ * Serve de trava contra um defeito que já aconteceu duas vezes por aqui: um
+ * campo novo entra no tipo como opcional, quem monta o estado campo a campo
+ * esquece de copiá-lo, e o compilador fica calado porque opcional pode faltar.
+ * Foi assim que `mesclarQuiz` chegou a calcular o histórico juntado e devolver
+ * um estado sem ele — todo login apagaria o calendário inteiro, em silêncio.
+ */
+type TodasAsChavesDoQuiz = Record<keyof Required<EstadoQuiz>, unknown>;
 
 export const QUIZ_ZERADO: EstadoQuiz = {
   ultimoDia: null,
@@ -35,7 +76,19 @@ export const QUIZ_ZERADO: EstadoQuiz = {
   perdaoEm: null,
   respostas: 0,
   acertos: 0,
+  historico: [],
 };
+
+/** O que foi respondido naquele dia, ou null se o dia está em aberto. */
+export function respostaDe(e: EstadoQuiz, dia: string): RespostaDoDia | null {
+  return (e.historico ?? []).find((r) => r.dia === dia) ?? null;
+}
+
+/** Junta uma resposta ao histórico, sem duplicar o dia e respeitando o teto. */
+function comHistorico(e: EstadoQuiz, r: RespostaDoDia): RespostaDoDia[] {
+  const sem = (e.historico ?? []).filter((x) => x.dia !== r.dia);
+  return [...sem, r].sort((a, b) => a.dia.localeCompare(b.dia)).slice(-TETO_DO_HISTORICO);
+}
 
 /**
  * De quantos em quantos dias a pessoa ganha um perdão.
@@ -86,7 +139,11 @@ export function respondeuHoje(e: EstadoQuiz, hoje: string): boolean {
  * o erro faria a pessoa evitar as perguntas difíceis — justamente as que ela
  * precisa. O acerto entra no total, não na sequência.
  */
-export function aoResponder(e: EstadoQuiz, hoje: string, acertou: boolean): EstadoQuiz {
+export function aoResponder(
+  e: EstadoQuiz,
+  hoje: string,
+  r: { perguntaId: string; escolha: number; acertou: boolean }
+): EstadoQuiz {
   // Idempotente: responder duas vezes no mesmo dia não conta duas vezes. Vale
   // para toque duplo, para a tela remontando e para dois aparelhos ao mesmo
   // tempo com o estado ainda por sincronizar.
@@ -114,7 +171,36 @@ export function aoResponder(e: EstadoQuiz, hoje: string, acertou: boolean): Esta
     recorde: Math.max(e.recorde, sequencia),
     perdaoEm,
     respostas: e.respostas + 1,
-    acertos: e.acertos + (acertou ? 1 : 0),
+    acertos: e.acertos + (r.acertou ? 1 : 0),
+    historico: comHistorico(e, { dia: hoje, ...r }),
+  } satisfies TodasAsChavesDoQuiz;
+}
+
+/**
+ * Responde uma pergunta de um dia PASSADO.
+ *
+ * Conta como estudo, não como presença. Soma no total de respostas e de
+ * acertos e entra no histórico, mas NÃO encosta em `ultimoDia`, `sequencia`
+ * nem `perdaoEm`.
+ *
+ * Isso não é detalhe: a sequência mede aparecer todo dia. Se responder o
+ * passado a alimentasse, bastaria uma tarde preenchendo o mês para exibir 30
+ * dias seguidos que nunca aconteceram, e aí o número que a tela celebra deixa
+ * de significar qualquer coisa — inclusive para quem o construiu de verdade.
+ *
+ * Dia já respondido não é sobrescrito: a primeira resposta é a que valeu.
+ */
+export function aoResponderPassado(
+  e: EstadoQuiz,
+  dia: string,
+  r: { perguntaId: string; escolha: number; acertou: boolean }
+): EstadoQuiz {
+  if (respostaDe(e, dia)) return e;
+  return {
+    ...e,
+    respostas: e.respostas + 1,
+    acertos: e.acertos + (r.acertou ? 1 : 0),
+    historico: comHistorico(e, { dia, ...r }),
   };
 }
 
@@ -167,14 +253,34 @@ export function mesclarQuiz(nuvem?: EstadoQuiz, local?: EstadoQuiz): EstadoQuiz 
           ? local.perdaoEm
           : nuvem.perdaoEm;
 
+  // Histórico: a UNIÃO dos dois, um registro por dia. Aqui somar é o certo,
+  // ao contrário dos totais: são dias diferentes, e cada aparelho pode ter
+  // respondido dias que o outro não tem. Dia presente nos dois fica com o da
+  // nuvem, por ser o que já circulou entre os aparelhos.
+  const porDia = new Map<string, RespostaDoDia>();
+  for (const r of local.historico ?? []) porDia.set(r.dia, r);
+  for (const r of nuvem.historico ?? []) porDia.set(r.dia, r);
+  const historico = [...porDia.values()]
+    .sort((a, b) => a.dia.localeCompare(b.dia))
+    .slice(-TETO_DO_HISTORICO);
+
   return {
     ultimoDia: dias.ultimoDia,
     sequencia: dias.sequencia,
     recorde: Math.max(nuvem.recorde, local.recorde),
     perdaoEm: perdaoMaisNovo,
-    respostas: Math.max(nuvem.respostas, local.respostas),
-    acertos: Math.max(nuvem.acertos, local.acertos),
-  };
+    // Máximo, e não soma: é a mesma pessoa, e somar contaria de novo o que já
+    // estava nos dois lados. O piso é o tamanho do histórico, que só cresce
+    // com dia novo — assim responder um dia passado em outro aparelho não some
+    // do total quando as duas cópias se encontram.
+    respostas: Math.max(nuvem.respostas, local.respostas, historico.length),
+    acertos: Math.max(
+      nuvem.acertos,
+      local.acertos,
+      historico.filter((r) => r.acertou).length
+    ),
+    historico,
+  } satisfies TodasAsChavesDoQuiz;
 }
 
 // ---- Qual pergunta sai hoje -------------------------------------------------

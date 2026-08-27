@@ -137,7 +137,7 @@ export function PrimeiroQuiz() {
                   setEscolha(i);
                   const certo = i === pergunta.correta;
                   // A sequência começa AQUI, acertando ou não.
-                  responderQuiz(certo);
+                  responderQuiz({ perguntaId: pergunta.id, escolha: i, acertou: certo });
                   enviarResposta({ dia: hoje, perguntaId: pergunta.id, acertou: certo, userId: user?.id ?? null });
                 }}
                 disabled={respondeu}
