@@ -31,15 +31,15 @@ export async function rodar({ nav, ok }) {
 
     const gatilho = pg.getByRole("button", { name: /Trocar de carro/i }).first();
     ok("o carro ativo aparece na barra de cima", (await gatilho.count()) > 0);
-    ok("o gatilho mostra o carro selecionado", /Golfinho/.test(await gatilho.innerText()));
+    ok("o gatilho mostra o carro selecionado COM o ano", /Golfinho 2014/.test(await gatilho.innerText()), await gatilho.innerText());
 
     await gatilho.click();
     await pg.waitForTimeout(500);
     const lista = pg.getByRole("menu");
     ok("a lista desce com os OUTROS carros", (await lista.count()) > 0);
     const itens = await lista.getByRole("menuitem").allInnerTexts();
-    ok("os outros dois estão na lista, o ativo não",
-      itens.length === 2 && itens.some((t) => /Unozinho/.test(t)) && itens.some((t) => /Nininha/.test(t)) && !itens.some((t) => /Golfinho/.test(t)),
+    ok("os outros dois estão na lista, com ano, e o ativo não",
+      itens.length === 2 && itens.some((t) => /Unozinho 2008/.test(t)) && itens.some((t) => /Nininha 2019/.test(t)) && !itens.some((t) => /Golfinho/.test(t)),
       JSON.stringify(itens));
 
     await lista.getByRole("menuitem").filter({ hasText: "Unozinho" }).click();

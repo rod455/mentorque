@@ -3,6 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import { activeVehicle, ownedVehicles, usePrototype } from "@/lib/app/store";
 import { carName } from "@/lib/app/content";
+import type { Vehicle } from "@/lib/app/types";
+
+// "Fastback 2025", "Golfinho 2014": apelido ou modelo, sempre com o ano.
+//
+// O ano entrou a pedido do dono (27/08). Ele desempata: quem tem dois carros
+// do mesmo modelo, ou apelidos parecidos, escolhe pelo ano sem abrir a
+// garagem para conferir.
+const nomeComAno = (v: Vehicle) => `${carName(v)} ${v.year}`;
 import { Icon, useContent } from "./ui";
 
 // A troca do carro ativo, na barra de cima.
@@ -64,12 +72,12 @@ export function CarroNoTopo() {
       <button
         onClick={() => setAberto((a) => !a)}
         aria-expanded={aberto}
-        aria-label={`${c.home.switchCar}: ${carName(ativo)}`}
+        aria-label={`${c.home.switchCar}: ${nomeComAno(ativo)}`}
         className="flex h-9 min-w-0 max-w-full items-center gap-1.5 rounded-full bg-graphite-800 py-1 pl-1.5 pr-2.5 ring-1 ring-white/10 active:bg-graphite-700"
       >
         <Foto v={ativo} on />
         <span className="min-w-0 max-w-[7.5rem] truncate font-display text-[13px] font-semibold text-cream">
-          {carName(ativo)}
+          {nomeComAno(ativo)}
         </span>
         <span
           aria-hidden
@@ -97,7 +105,7 @@ export function CarroNoTopo() {
             >
               <Foto v={v} on={false} />
               <span className="min-w-0 flex-1 truncate font-display text-[13px] font-medium text-cream/85">
-                {carName(v)}
+                {nomeComAno(v)}
               </span>
             </button>
           ))}
