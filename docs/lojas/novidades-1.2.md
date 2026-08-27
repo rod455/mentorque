@@ -18,7 +18,7 @@ sem menção a recurso que dependa de aprovação futura.
 
 **Título curto** (aparece na lista de versões, sem limite rígido)
 
-Pergunta do dia, avisos no celular e troca rápida de carro
+Pergunta do dia com calendário, avisos no celular e troca rápida de carro
 
 **Novidades desta versão** (limite: 500 caracteres)
 
@@ -26,8 +26,9 @@ Pergunta do dia, avisos no celular e troca rápida de carro
 Pergunta do dia: uma pergunta rápida sobre o seu carro, com a resposta
 explicada na hora e a sequência de dias que você não perde.
 
-Avisos no celular: agora dá para ser lembrado da pergunta do dia e de quando
-o teste grátis está acabando.
+Calendário: reveja as respostas antigas e responda os dias em branco.
+
+Avisos no celular: lembrete da pergunta do dia e do fim do teste grátis.
 
 Sino de avisos: revisão vencida, cobrança chegando e aula nova num lugar só.
 
@@ -36,7 +37,7 @@ Troca de carro direto na tela inicial, para quem tem mais de um.
 Correções na liberação do Premium depois do pagamento.
 ```
 
-Contagem: 438 caracteres (limite 500).
+Contagem: 475 caracteres (limite 500).
 
 ---
 
@@ -49,6 +50,12 @@ Pergunta do dia
 Uma pergunta rápida sobre o seu carro, todo dia. Você responde, descobre na
 hora se acertou e lê o porquê, com link para a aula completa. Errar não
 quebra a sua sequência de dias: o que conta é aparecer.
+
+Calendário das perguntas
+Reabriu o quiz depois de responder? A pergunta e a explicação continuam lá.
+E tem um calendário dos últimos 30 dias para rever as respostas antigas e
+responder os dias que passaram em branco. Responder um dia passado conta
+como estudo, mas não muda a sua sequência: essa é de quem apareceu no dia.
 
 Avisos no celular
 O app agora consegue avisar quando a pergunta do dia sai e quando o teste
