@@ -12,8 +12,14 @@
     "sync:ios": "node scripts/ios-google-scheme.mjs && cap sync ios",
     "open:android": "cap open android",
     "build:native": "node scripts/build-native.mjs",
-    "verifica:quiz": "node --experimental-strip-types scripts/verifica-quiz.ts",
-    "quiz:pdf": "node --experimental-strip-types scripts/quiz-pdf.ts"
+    "verifica:quiz": "npm run conferir:regras",
+    "quiz:pdf": "node --experimental-strip-types scripts/quiz-pdf.ts",
+    "conferir": "npm run conferir:tipos && npm run conferir:estilo && npm run conferir:regras",
+    "conferir:tipos": "tsc --noEmit",
+    "conferir:estilo": "next lint",
+    "conferir:regras": "node --experimental-strip-types scripts/verifica-quiz.ts",
+    "conferir:navegador": "node scripts/navegador/todos.mjs",
+    "conferir:tudo": "npm run conferir && npm run build && npm run conferir:navegador"
   },
   "dependencies": {
     "@capacitor-community/admob": "^8.0.0",
