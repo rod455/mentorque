@@ -599,14 +599,14 @@ export function perguntasDoQuiz(locale: Locale): Pergunta[] {
       aula: "money-fuel",
       pergunta: T("Rodar sempre na reserva faz mal ao carro?", "Is always driving on reserve bad for the car?"),
       opcoes: [
-        T("Não, tanque é tanque", "No, a tank is a tank"),
-        T("Pode prejudicar a bomba de combustível", "It can harm the fuel pump"),
+        T("Sim, prejudica a bomba de combustível", "Yes, it harms the fuel pump"),
+        T("Não prejudica, mas deve ser analisado carro a carro", "It doesn't harm it, but it has to be checked car by car"),
         T("Só em carro a diesel", "Only in diesel cars"),
       ],
       correta: 1,
       porque: T(
-        "Na maioria dos carros a bomba fica dentro do tanque e usa o próprio combustível para se refrigerar. Andar sempre no fundo deixa ela mais exposta ao calor e mais perto da sujeira que decanta. Não quebra de um dia para o outro, mas encurta a vida.",
-        "On most cars the pump sits inside the tank and uses the fuel itself for cooling. Always running near empty leaves it more exposed to heat and closer to the sediment that settles. It won't fail overnight, but it shortens its life."
+        "A bomba é refrigerada pelo próprio combustível, que passa por dentro dela; por fora, há refrigeração em um reservatório que permanece cheio mesmo com o carro na reserva. Existem alguns carros cujo projeto de bomba não possui esse reservatório externo, e, nesses casos, é interessante não andar sempre na reserva.",
+        "The pump is cooled by the fuel itself, which flows through it; on the outside, it sits in a reservoir that stays full even when the car is on reserve. Some cars have a pump design without that external reservoir, and on those it is worth not always running on reserve."
       ),
     },
     {

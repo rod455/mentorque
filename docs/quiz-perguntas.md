@@ -383,11 +383,11 @@ removida, o id não.
 
 ### 38. Rodar sempre na reserva faz mal ao carro?
 
-- A) Não, tanque é tanque
-- **✓** Pode prejudicar a bomba de combustível
+- A) Sim, prejudica a bomba de combustível
+- **✓** Não prejudica, mas deve ser analisado carro a carro
 - C) Só em carro a diesel
 
-**Por que:** Na maioria dos carros a bomba fica dentro do tanque e usa o próprio combustível para se refrigerar. Andar sempre no fundo deixa ela mais exposta ao calor e mais perto da sujeira que decanta. Não quebra de um dia para o outro, mas encurta a vida.
+**Por que:** A bomba é refrigerada pelo próprio combustível, que passa por dentro dela; por fora, há refrigeração em um reservatório que permanece cheio mesmo com o carro na reserva. Existem alguns carros cujo projeto de bomba não possui esse reservatório externo, e, nesses casos, é interessante não andar sempre na reserva.
 
 <sub>id `combustivel-reserva` · aula `money-fuel`</sub>
 
@@ -1015,11 +1015,11 @@ removida, o id não.
 
 ### 38. Is always driving on reserve bad for the car?
 
-- A) No, a tank is a tank
-- **✓** It can harm the fuel pump
+- A) Yes, it harms the fuel pump
+- **✓** It doesn't harm it, but it has to be checked car by car
 - C) Only in diesel cars
 
-**Por que:** On most cars the pump sits inside the tank and uses the fuel itself for cooling. Always running near empty leaves it more exposed to heat and closer to the sediment that settles. It won't fail overnight, but it shortens its life.
+**Por que:** The pump is cooled by the fuel itself, which flows through it; on the outside, it sits in a reservoir that stays full even when the car is on reserve. Some cars have a pump design without that external reservoir, and on those it is worth not always running on reserve.
 
 <sub>id `combustivel-reserva` · aula `money-fuel`</sub>
 
