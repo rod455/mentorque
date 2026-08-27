@@ -66,6 +66,25 @@ export async function rodar({ nav, ok }) {
     await app.fechar();
   }
 
+  // ---- o atalho: /ALE100 é o link inteiro dobrado --------------------------
+  // Os atalhos moram no next.config.mjs (ATALHOS). Este caso prova a corrente
+  // completa: atalho → redirect com plano, cupom e rastreio → tela de entrar,
+  // com o rastreio sobrevivendo na URL para o funil.
+  {
+    const app = await abrirApp(nav, {
+      sessao: SESSAO(),
+      chaves: { "mq-primeiro-quiz-nao": "1" },
+      rota: "/ALE100",
+    });
+    await app.pg.waitForTimeout(800);
+    ok("o atalho termina na tela de entrar", /Entrar|Salve sua garagem/i.test(await app.tela()));
+    const url = app.pg.url();
+    ok("o atalho deixa só o rastreio na URL",
+      url.includes("utm_campaign=ale100") && !url.includes("assinar") && !url.includes("cupom"), url);
+    ok("nenhum erro de página no atalho", app.erros.length === 0, app.erros[0] ?? "");
+    await app.fechar();
+  }
+
   // ---- valor inválido: o link vira uma abertura normal ---------------------
   {
     const app = await abrirApp(nav, {
