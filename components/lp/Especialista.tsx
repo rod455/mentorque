@@ -117,10 +117,6 @@ export function Especialista() {
               performance na Porsche Cup Brasil, no box, decidindo acerto de carro e estratégia de corrida. Hoje mora
               nos Estados Unidos e trabalha como engenheiro automotivo.
             </p>
-            <p className="mt-3 text-left leading-relaxed text-cream/75">
-              O conteúdo do Mentorque sai daí. Não é curso genérico de plataforma: é o que um engenheiro que mexe com
-              motor de verdade sabe, escrito para quem nunca abriu um capô.
-            </p>
           </div>
         </div>
 
