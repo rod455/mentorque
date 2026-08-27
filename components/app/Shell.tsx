@@ -3,7 +3,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { NavProvider, useNav, type View } from "@/lib/app/nav";
 import { useSwipe } from "@/lib/app/swipe";
-import { usePrototype } from "@/lib/app/store";
+import { ownedVehicles, usePrototype } from "@/lib/app/store";
 import { useAuth } from "@/lib/app/auth";
 import { saidaDoPaywallPermitida } from "@/lib/app/saidaDoPaywall";
 import {
@@ -17,6 +17,7 @@ import {
 import { Icon, useContent } from "./ui";
 import { Logo } from "@/components/ui/Logo";
 import { SinoDeAvisos } from "./Avisos";
+import { CarroNoTopo } from "./CarroNoTopo";
 import { Sobreposicoes } from "./Sobreposicoes";
 import { telaDaView } from "./telas";
 
@@ -144,12 +145,21 @@ function TopBar() {
   const avatarSrc = s.avatar ?? googlePic ?? null;
   const initial = (s.name || user?.email || "").trim().charAt(0).toUpperCase() || "?";
 
+  // Com o seletor de carro na barra, o lockup inteiro não cabe num 320px ao
+  // lado do carro, do sino e do avatar. A marca encolhe para o símbolo quando
+  // o seletor existe (2+ carros), e volta por extenso quando não.
+  const temSeletor = ownedVehicles(s).length >= 2;
+
   return (
-    <header className="flex items-center justify-between px-5 pb-1 pt-3.5">
-      <button onClick={() => root({ name: "home" })} className="flex items-center" aria-label="Início">
-        <Logo variant="lockup-dark" className="h-7 w-auto" priority />
-      </button>
-      <div className="flex items-center gap-2">
+    <header className="flex items-center justify-between gap-2 px-5 pb-1 pt-3.5">
+      <div className="flex min-w-0 items-center gap-2">
+        <button onClick={() => root({ name: "home" })} className="flex shrink-0 items-center" aria-label="Início">
+          <Logo variant={temSeletor ? "mark" : "lockup-dark"} className="h-7 w-auto" priority />
+        </button>
+        {/* O carro ativo, com a lista dos outros. Ver CarroNoTopo. */}
+        <CarroNoTopo />
+      </div>
+      <div className="flex shrink-0 items-center gap-2">
         <SinoDeAvisos />
         <button
           onClick={() => root({ name: "profile" })}
