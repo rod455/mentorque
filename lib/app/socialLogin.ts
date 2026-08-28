@@ -81,10 +81,22 @@ export function appleLoginDisponivel(): boolean {
 
 // O plugin só faz sentido dentro do wrapper. Carregado sob demanda para não
 // entrar no pacote do site.
-let cached: Promise<Plugin> | null = null;
-function loadPlugin(): Promise<Plugin> {
+//
+// O plugin vai DENTRO DE UMA CAIXA, e isso não é preciosismo: o objeto que o
+// Capacitor devolve responde a qualquer propriedade com uma chamada nativa,
+// inclusive `then`. Como objeto com `then` parece promessa para o JavaScript,
+// devolver o plugin cru de dentro de um `async` faz o motor chamar
+// `plugin.then(resolver, rejeitar)` para esperar por uma promessa que não
+// existe. O aparelho responde que não conhece o método e ninguém chama
+// `resolver` nem `rejeitar`: quem esperava pelo login ficava esperando para
+// sempre, sem erro na tela. Achado em 28/08/2026 no gêmeo deste trecho em
+// lib/app/notificacoes.ts, onde o mesmo padrão deixou os lembretes mudos.
+type Caixa = { plugin: Plugin };
+let cached: Promise<Caixa> | null = null;
+function loadPlugin(): Promise<Caixa> {
   if (!cached) {
-    cached = import("@capgo/capacitor-social-login").then(async (mod) => {
+    cached = (async () => {
+      const mod = await import("@capgo/capacitor-social-login");
       const plugin = mod.SocialLogin as unknown as Plugin;
       const ios = nativePlatform() === "ios";
       const google: Record<string, string> = {};
@@ -95,8 +107,8 @@ function loadPlugin(): Promise<Plugin> {
         // No iOS a Apple é nativa (ASAuthorization) e não precisa de nada aqui.
         ...(ios ? { apple: {} } : {}),
       });
-      return plugin;
-    });
+      return { plugin };
+    })();
     // Um erro na inicialização não pode envenenar as tentativas seguintes.
     cached.catch(() => { cached = null; });
   }
@@ -202,7 +214,7 @@ export async function nativeSocialLogin(
 
   let plugin: Plugin;
   try {
-    plugin = await loadPlugin();
+    plugin = (await loadPlugin()).plugin;
   } catch (e) {
     console.warn("[auth] social-login initialize falhou:", e);
     return { error: "login_nativo_indisponivel" };

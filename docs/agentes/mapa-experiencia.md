@@ -16,6 +16,11 @@ Formato de cada tela/fluxo:
 
 ## Estado
 
+v2 em 2026-08-28: primeira rodada semanal do ritual, foco RETENÇÃO. Entrou a
+seção "O que traz a pessoa de volta" (auditoria das superfícies de retorno) e
+a correção do login social ficou registrada no passo 4 da jornada. Próxima
+rodada alterna para CONVERSÃO.
+
 v1 escrita na rodada especial de 2026-08-23 (análise do app inteiro pedida
 pelo dono antes do build único das lojas). A rodada rodou na sessão
 cse_01Lomhspp6q37YTZzgEB4sEz e publicou o artifact "Mapa do app"; o push
@@ -47,8 +52,22 @@ Estado de medição de cada passo (a régua honesta do que sabemos hoje).
 
 ## 4. Abertura → criação de conta
 - Estado: MEDIDO POR HEURÍSTICA. O evento de cadastro é inferido comparando
-  a data de criação da conta com os últimos 15 minutos, não pelo clique
+  a data de criação da conta com a janela de abertura do app, não pelo clique
   exato de criar conta. Serve para o funil, mas não é preciso no limite.
+- CORRIGIDO EM 27/08 (rodada do QA): a janela era de 15 MINUTOS e por isso o
+  evento nunca nascia. Nove contas em agosto, zero eventos. Consequência para
+  quem lê o funil AGORA: a maior quebra do painel (abriu_app → cadastro, 11
+  pessoas viraram 0) é em boa parte régua quebrada, não desinteresse. Antes de
+  desenhar qualquer teste em cima dessa passagem, esperar duas semanas de
+  medição já consertada.
+- CORRIGIDO EM 28/08 (esta rodada): o login social do app das lojas travava
+  para sempre no carregamento do plugin, sem erro na tela. Quem tocasse em
+  "entrar com Google" ou "entrar com Apple" dentro do app ficava esperando
+  sem resposta. Mesmo defeito do lembrete (ver a seção de retenção): o objeto
+  do plugin parece uma promessa para o JavaScript, e a espera nunca terminava.
+  Vale só para o app das lojas; no navegador o caminho é outro e sempre
+  funcionou. Precisa de conferência em aparelho real quando sair o build,
+  porque aqui só dá para provar por leitura de código.
 
 ## 5. Conta → primeiro valor
 - Estado: PARCIAL. Cadastrar o primeiro carro é medido de verdade
@@ -66,6 +85,61 @@ Estado de medição de cada passo (a régua honesta do que sabemos hoje).
   renovou, cancelou e expirou, todos com a origem exata e confirmados no
   servidor (Stripe na web, RevenueCat nas lojas), nunca fabricados no
   cliente.
+
+# O que traz a pessoa de volta (auditoria de retenção, 2026-08-28)
+
+O app não tem push. Isso não é um detalhe técnico, é a moldura de toda a
+retenção: não existe hoje nenhuma forma de falar com quem parou de abrir o
+app. Tudo o que traz de volta está DENTRO do aparelho e depende de a pessoa
+abrir, ou de um lembrete local agendado enquanto ela ainda estava por perto.
+
+## Lembrete local (quiz do dia e fim do teste)
+- Trabalho: ser o único caminho de volta que não depende de a pessoa lembrar
+  sozinha. Dois avisos, um por finalidade: o quiz do dia às 9h e o aviso de
+  que o teste grátis está para acabar.
+- Fricções conhecidas: a permissão do sistema é de UM TIRO (recusou, acabou),
+  então cada pedido é caro; e quem para de abrir o app recebe UM aviso e
+  depois silêncio, por decisão de projeto (nada rearma sozinho).
+- Princípios: efeito de progresso (a sequência do quiz), clareza do próximo
+  passo, timing do pedido (a permissão só é pedida depois de a pessoa
+  responder um quiz, nunca na chegada).
+- Última auditoria: 2026-08-28 · ACHADO: nenhum dos dois avisos jamais saiu.
+  O carregamento do plugin ficava pendente para sempre, então o interruptor
+  do Perfil não reagia ao toque, o convite depois do quiz nunca aparecia e
+  nada era agendado. Corrigido no mesmo dia (lib/app/notificacoes.ts).
+- Apostas em aberto: lembrete-que-chega, fim-do-lembrete-falso.
+
+## Quiz do dia e a sequência
+- Trabalho: dar um motivo de um minuto para abrir o app todo dia, e
+  transformar isso em identidade ("cuido do meu carro").
+- Fricções conhecidas: a sequência só existe dentro do app, então ela puxa
+  quem já voltou e não alcança quem sumiu. O convite de aviso é o que fecharia
+  esse vão, e era justamente ele que não aparecia.
+- Princípios: efeito de progresso, compromisso e consistência.
+- Última auditoria: 2026-08-28 · sem mudança de copy nesta rodada.
+
+## Início: carro, saúde e próximas revisões
+- Trabalho: responder "e agora?" em um olhar para quem abriu sem tarefa na
+  cabeça. O card do carro mostra a nota de saúde; o card de revisões é o
+  primeiro da fila quando existe carro.
+- Fricções conhecidas: com carro incompleto (sem quiz de saúde, sem km ou sem
+  data de compra) o card de revisões vira pedido de dado em vez de entrega de
+  valor. É honesto (sem dado o plano não é preciso), mas é uma tarefa a mais
+  entre a pessoa e a primeira coisa útil.
+- Princípios: clareza do próximo passo, compromisso (pedir o micro antes do
+  macro).
+- Última auditoria: 2026-08-28 · sem mudança nesta rodada; candidato natural
+  a teste quando houver volume.
+
+## O que não dá para medir hoje (e por isso não dá para apostar)
+- uso.coortes está VAZIO no retrato. A retenção por coorte é montada sobre o
+  evento de cadastro, que só voltou a funcionar em 27/08. Ou seja: a pergunta
+  "quem experimentou volta?" não tem resposta legível nenhuma esta semana.
+- Continua sem evento de CONCLUSÃO (trilha, aula, serviço, sintoma), então
+  "valor consumado" segue sem régua, como já estava anotado no passo 5.
+- Consequência prática, e é a razão de esta rodada não propor teste A/B:
+  medir retenção hoje é medir com régua quebrada. Duas semanas de cadastro
+  medido de verdade vêm primeiro.
 
 # Banner de premium: onde o pedido está e onde caberia melhor
 

@@ -38,4 +38,18 @@ experimentos alimentam a seção final.
 
 ## Aprendizados com os nossos experimentos
 
-- (os vereditos do caderno de experimentos escrevem aqui)
+- **2026-08-28, do achado que abriu lembrete-que-chega: elemento que a
+  pessoa TOCA e que não responde é pior que elemento ausente.** O interruptor
+  de avisos do Perfil não reagia ao toque e o convite depois do quiz nunca
+  aparecia. Nenhuma tela vermelha, nenhuma reclamação, nada no funil: um
+  recurso morto some sem fazer barulho. A regra que fica para as próximas
+  rodadas: antes de escrever copy para um elemento que promete algo (aviso,
+  lembrete, envio, agendamento), CONFERIR que a promessa tem como ser
+  cumprida. Copy boa em cima de promessa que não sai é o jeito mais caro de
+  perder confiança, porque a pessoa acredita primeiro.
+- **2026-08-28: "sem erro" não é sinal de que funciona.** O caso de hoje não
+  gerava erro na tela porque a espera simplesmente nunca terminava. Auditoria
+  de jornada que se apoia só em app_erros e no funil não enxerga recurso
+  parado: o funil mostra ausência, e ausência parece desinteresse do usuário.
+  Quando uma etapa der zero absoluto, a primeira hipótese é máquina quebrada,
+  não gente desinteressada.

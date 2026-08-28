@@ -3,6 +3,60 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-28 · CRO (retenção): a máquina de trazer de volta estava desligada
+- Rodada semanal do CRO/BeSci, foco RETENÇÃO (a anterior, de 23/08, foi a
+  especial de conversão e jornada). Artifact "Conversão da semana" publicado.
+- VEREDITOS: nenhum vencido. Os dois experimentos abertos (cta-teste-por-plano
+  e fim-do-lembrete-falso) só se leem a partir de 20/09. Fechar hoje seria
+  achismo. O que entrou foi um acompanhamento honesto em fim-do-lembrete-falso:
+  o interruptor voltou em 25/08 com plugin de verdade e a promessa continuou
+  falsa por outro motivo, então o "depois" dele ainda não existiu.
+- OUVIR O USUÁRIO: zero avaliações nas duas lojas, zero feedback no app. A
+  única voz do usuário nesta semana foi app_erros, e ela disse muita coisa.
+- ACHADO DA RODADA, e é o motor de retenção inteiro: nenhum lembrete local
+  jamais saiu de nenhum aparelho. Causa provada no código do Capacitor 8.5
+  (node_modules/@capacitor/core, createPluginMethodWrapper): o objeto do
+  plugin responde a QUALQUER propriedade com uma chamada nativa, inclusive
+  `then`. Objeto com `then` é promessa para o JavaScript, então devolver o
+  plugin de dentro de uma função `async` faz o motor chamar
+  `plugin.then(resolver, rejeitar)`; o aparelho responde que não conhece o
+  método, e ninguém chama `resolver` nem `rejeitar`. A promessa da carga fica
+  PENDENTE PARA SEMPRE.
+- O estrago, que é silencioso e por isso durou: o interruptor de avisos do
+  Perfil não reagia ao toque (a espera nunca terminava), o convite depois do
+  quiz nunca aparecia, e nem o aviso do quiz das 9h nem o de fim do teste
+  grátis eram agendados. Sem tela vermelha, sem reclamação. A prova estava em
+  app_erros: 5 erros em 7 dias, 3 iOS e 2 Android, todos `.then()`.
+- CORRIGIDO em lib/app/notificacoes.ts: o plugin passa a viajar dentro de uma
+  caixa (`{ plugin }`), que não parece promessa, então nada chama `then` nele.
+  De quebra, o canal do Android só é criado no Android. Tipos, build do site e
+  build:native passando.
+- MESMO DEFEITO ACHADO E CORRIGIDO em lib/app/socialLogin.ts, e este é de
+  CONVERSÃO, não de retenção: `nativeSocialLogin` esperava por `loadPlugin()`,
+  que nunca respondia. Quem tocasse em entrar com Google ou com a Apple dentro
+  do app das lojas ficava esperando sem resposta e sem erro. Vale só para o
+  app das lojas (no navegador o caminho é outro). Varredura feita nos demais
+  plugins (App, Browser, AdMob, Purchases): todos são acessados de função
+  síncrona e nenhum atravessa promessa, então o padrão não se repete.
+  PARA O QA: isto precisa de conferência em aparelho real quando sair o build;
+  aqui só deu para provar por leitura do código do Capacitor.
+- APOSTA DA SEMANA registrada no caderno: [lembrete-que-chega]. Métrica em
+  três partes (erros `.then()` de volta a zero, existir aparelho com permissão
+  concedida, e voltaram_d1_7 das coortes), com leitura contada do BUILD
+  PUBLICADO e não de hoje. A 1.1 ainda está em revisão na Apple.
+- SEM TESTE A/B nesta rodada, de propósito, e seguindo o direcionamento do
+  dono de 23/08. A maior quebra do painel é abriu_app → cadastro (11 pessoas
+  viraram 0), mas o evento de cadastro só voltou a funcionar em 27/08: seria
+  testar em cima de régua quebrada. `uso.coortes` está vazio pelo mesmo
+  motivo, então a pergunta "quem experimentou volta?" não tem resposta
+  legível esta semana. Duas semanas de medição consertada vêm primeiro.
+- MAPA atualizado (v2): seção nova "O que traz a pessoa de volta", com as
+  superfícies de retorno auditadas, e o registro dos dois consertos nos
+  passos 4 e 5 da jornada.
+- APRENDIZADOS gravados: em besci.md, que elemento tocável que não responde é
+  pior que elemento ausente, e que "sem erro" não é sinal de que funciona; em
+  analise-da-operacao.md, que coorte vazia hoje é régua nova, não abandono.
+
 ## 2026-08-27 · Sentinela mandava "voltou ao normal" a cada 12 horas
 - Relato do dono, com print: oito e-mails "[Sentinela] Mentorque voltou ao
   normal" seguidos, com tudo funcionando. "Se está tudo funcionando, não

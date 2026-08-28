@@ -75,3 +75,40 @@ Regras:
 - Início: 2026-08-23 · Ler a partir de: 2026-09-20
 - Antes: sem avaliações nas lojas ainda
 - Veredito: (aberto)
+- Acompanhamento 2026-08-28: o interruptor VOLTOU em 25/08 com plugin nativo
+  de verdade atrás dele, e mesmo assim a promessa continuou falsa, por outro
+  motivo (o plugin nunca carregava; ver lembrete-que-chega). Ou seja: entre
+  23/08 e 28/08 o app esteve nos dois estados que este experimento queria
+  evitar. A leitura de 20/09 só vale se a correção de hoje estiver num build
+  publicado; antes disso, o "depois" ainda não existiu.
+
+## [lembrete-que-chega] O lembrete que estava mudo passa a sair de verdade
+- Estado: ABERTO
+- Tipo: mudanca-direta
+- Alvo no funil: retorno da coorte (retenção, voltaram_d1_7) e, de tabela, a
+  passagem iniciou_checkout → assinou, porque o aviso de fim de teste é o que
+  evita a cobrança surpresa que vira reembolso e nota uma estrela.
+- Tese BeSci: o app não tem push, então o ÚNICO caminho de volta que não
+  depende da pessoa lembrar sozinha é o lembrete local (quiz do dia às 9h e
+  fim do teste grátis). Esses dois avisos são a máquina de hábito inteira do
+  Mentorque hoje, e nenhum deles saía: o carregamento do plugin ficava
+  pendente para sempre, sem erro na tela. O efeito prático era pior que não
+  ter lembrete, porque o app OFERECIA o aviso: o interruptor do Perfil não
+  reagia ao toque e o convite depois do quiz nunca aparecia. Princípio em
+  jogo: efeito de progresso (a sequência do quiz só puxa de volta se alguém
+  lembrar dela) apoiado em clareza do próximo passo. Nada de copy mudou aqui;
+  o que mudou é que a promessa passa a ser cumprida.
+- Métrica: (1) erros `.then()` em app_erros voltam a zero; (2) existir
+  aparelho com permissão concedida, que hoje é impossível por construção;
+  (3) voltaram_d1_7 das coortes de cadastro a partir do build corrigido ·
+  Duração: 4 semanas contadas do build publicado, não de hoje
+- Aprovação: não se aplica (mudança direta, sem variantes)
+- Início: 2026-08-28 · Ler a partir de: 2026-09-26, e só se a correção já
+  estiver num build nas lojas (a 1.1 está em revisão; isto sai na 1.2 ou na
+  seguinte). Sem build publicado, o veredito é INCONCLUSIVO por falta de
+  "depois", não por falta de volume.
+- Antes: zero avisos agendados em qualquer aparelho desde que o recurso
+  nasceu; 5 erros em 7 dias em app_erros (3 iOS, 2 Android), todos
+  `"LocalNotifications.then()" is not implemented`; uso.coortes vazio no
+  retrato, então a régua de retenção também não tem linha para comparar.
+- Veredito: (aberto)

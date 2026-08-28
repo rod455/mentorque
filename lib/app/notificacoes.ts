@@ -54,8 +54,30 @@ export const AVISO = {
 // canal padrão que o usuário não consegue configurar separadamente.
 const CANAL = "mentorque-lembretes";
 
-let plugin: PluginNotificacoes | null = null;
-let carregando: Promise<PluginNotificacoes | null> | null = null;
+// O plugin viaja SEMPRE dentro de uma caixa, nunca solto.
+//
+// Motivo, e é a armadilha que deixava o lembrete inteiro morto até 28/08/2026:
+// o objeto que o Capacitor devolve responde a QUALQUER propriedade com uma
+// chamada nativa, inclusive `then`. Para o JavaScript, objeto com `then` é
+// promessa. Então devolver o plugin de dentro de uma função `async` faz o
+// próprio motor chamar `plugin.then(resolver, rejeitar)` para "esperar" essa
+// promessa que não existe. O aparelho responde que não conhece o método, a
+// rejeição sai por fora do nosso encadeamento (vira linha em app_erros) e,
+// pior, NINGUÉM chama `resolver` nem `rejeitar`: a promessa da carga fica
+// pendente para sempre.
+//
+// O estrago disso é silencioso, que é o que o torna difícil de achar: quem
+// espera por ela nunca recebe resposta nem erro. O interruptor do Perfil não
+// reagia ao toque, o convite depois do quiz nunca aparecia (a pergunta "cabe
+// um convite agora?" ficava sem resposta) e nenhum aviso era agendado. A prova
+// estava em app_erros: 5 erros em 7 dias, iOS e Android, todos `.then()`.
+//
+// A caixa resolve porque um objeto comum não parece promessa: o motor devolve
+// a caixa inteira sem tocar em nada dentro dela.
+type Caixa = { plugin: PluginNotificacoes };
+
+let caixa: Caixa | null = null;
+let carregando: Promise<Caixa | null> | null = null;
 
 /** O aparelho consegue notificar? Falso no navegador. */
 export function notificacoesDisponiveis(): boolean {
@@ -63,37 +85,42 @@ export function notificacoesDisponiveis(): boolean {
 }
 
 // Carrega sob demanda para o plugin não entrar no pacote do site.
-async function carregar(): Promise<PluginNotificacoes | null> {
-  if (plugin) return plugin;
+async function carregar(): Promise<Caixa | null> {
+  if (caixa) return caixa;
   if (!notificacoesDisponiveis()) return null;
   if (!carregando) {
-    carregando = import("@capacitor/local-notifications")
-      .then(async (mod) => {
+    carregando = (async () => {
+      try {
+        const mod = await import("@capacitor/local-notifications");
         const p = mod.LocalNotifications as unknown as PluginNotificacoes;
-        try {
-          // importance 4 = aparece na tela e faz som. Lembrete que não aparece
-          // não é lembrete.
-          await p.createChannel?.({ id: CANAL, name: "Lembretes", description: "Fim de teste grátis e lembretes do app", importance: 4 });
-        } catch {
-          /* iOS não tem canal; Android antigo também não */
+        if (nativePlatform() === "android") {
+          try {
+            // importance 4 = aparece na tela e faz som. Lembrete que não aparece
+            // não é lembrete. Só no Android: canal é conceito de lá, e no iOS a
+            // chamada volta como "não implementado".
+            await p.createChannel?.({ id: CANAL, name: "Lembretes", description: "Fim de teste grátis e lembretes do app", importance: 4 });
+          } catch {
+            /* Android antigo não tem canal */
+          }
         }
-        plugin = p;
-        return p;
-      })
-      .catch(() => null)
-      .finally(() => {
+        caixa = { plugin: p };
+        return caixa;
+      } catch {
+        return null;
+      } finally {
         carregando = null;
-      });
+      }
+    })();
   }
   return carregando;
 }
 
 /** Já temos permissão? Não pede nada, só consulta. */
 export async function permissaoConcedida(): Promise<boolean> {
-  const p = await carregar();
-  if (!p) return false;
+  const c = await carregar();
+  if (!c) return false;
   try {
-    return (await p.checkPermissions()).display === "granted";
+    return (await c.plugin.checkPermissions()).display === "granted";
   } catch {
     return false;
   }
@@ -108,15 +135,15 @@ export async function permissaoConcedida(): Promise<boolean> {
  * inclusive para os avisos que ela realmente ia querer depois.
  */
 export async function pedirPermissao(): Promise<boolean> {
-  const p = await carregar();
-  if (!p) return false;
+  const c = await carregar();
+  if (!c) return false;
   try {
-    const atual = await p.checkPermissions();
+    const atual = await c.plugin.checkPermissions();
     if (atual.display === "granted") return true;
     // "denied" já foi recusado antes: o sistema não pergunta de novo, e insistir
     // só devolve o mesmo não. Quem quiser reverter faz nos ajustes do aparelho.
     if (atual.display === "denied") return false;
-    return (await p.requestPermissions()).display === "granted";
+    return (await c.plugin.requestPermissions()).display === "granted";
   } catch {
     return false;
   }
@@ -128,15 +155,15 @@ export async function pedirPermissao(): Promise<boolean> {
  * do tipo "seu teste acaba em 2 dias" no dia em que ele já acabou.
  */
 export async function agendar(o: { id: number; titulo: string; corpo: string; quando: Date }): Promise<boolean> {
-  const p = await carregar();
-  if (!p) return false;
+  const c = await carregar();
+  if (!c) return false;
   if (!(o.quando instanceof Date) || Number.isNaN(o.quando.getTime()) || o.quando.getTime() <= Date.now()) {
     await cancelar(o.id);
     return false;
   }
   if (!(await permissaoConcedida())) return false;
   try {
-    await p.schedule({
+    await c.plugin.schedule({
       notifications: [
         {
           id: o.id,
@@ -156,10 +183,10 @@ export async function agendar(o: { id: number; titulo: string; corpo: string; qu
 }
 
 export async function cancelar(id: number): Promise<void> {
-  const p = await carregar();
-  if (!p) return;
+  const c = await carregar();
+  if (!c) return;
   try {
-    await p.cancel({ notifications: [{ id }] });
+    await c.plugin.cancel({ notifications: [{ id }] });
   } catch {
     /* nada agendado com esse id: o plugin ignora */
   }

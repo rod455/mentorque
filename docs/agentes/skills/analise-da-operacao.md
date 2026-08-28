@@ -170,3 +170,10 @@ rodada seguinte. Recomendação sem número previsto não aprende nada.
   rode uma vez SEM filtro e olhe os identificadores que voltam, para provar
   que o formato bate. Foi assim que se confirmou que o zero do Mentorque é
   zero de verdade, e não filtro errado.
+- 2026-08-28: `uso.coortes` e `uso.ativacao` chegam VAZIOS no retrato, e isso
+  não quer dizer "ninguém voltou". As duas se apoiam no evento de cadastro,
+  que nunca nasceu até 27/08 por causa da janela de 15 minutos. Enquanto não
+  houver duas semanas de cadastro medido, a pergunta 3 (retenção) fica SEM
+  RESPOSTA, e é assim que se deve escrever no relatório. Vale a mesma regra
+  para a maior quebra do painel hoje (abriu_app → cadastro, 11 para 0): a
+  passagem tem régua nova demais para sustentar teste.
