@@ -11,11 +11,12 @@ import { useEffect, useRef, useState } from "react";
 // pode conferir. Por isso as credenciais vêm em números e nomes próprios, e
 // não em "especialista renomado".
 //
-// O QUE NÃO ENTRA AQUI, por decisão do dono: o nome da empresa atual e da
-// empresa anterior. A afirmação continua verdadeira sem elas ("engenheiro de
-// calibração de powertrain nos Estados Unidos" é o cargo, não a marca), e
-// pendurar o produto no nome de uma montadora que não patrocina nada seria
-// pedir problema por um ganho que o cargo já entrega.
+// O texto é a descrição aprovada pelo dono em 28/08, quase palavra por
+// palavra, e ela REVERTEU uma decisão anterior: os nomes das empresas (IAV,
+// Mercedes-Benz North America, Stellantis) agora ENTRAM, junto com as
+// categorias em que ele segue em pista. A precisão continua sendo a regra:
+// "atende a Mercedes-Benz" é prestação de serviço pela IAV, dito assim mesmo,
+// sem virar "engenheiro da Mercedes".
 //
 // Cada linha daqui sai do currículo, sem arredondar para cima. A tentação num
 // bloco desses é engordar o número; o custo de ser pego exagerando é a única
@@ -34,19 +35,19 @@ const FOTOS = ["/equipe/alessandro.jpg", "/equipe/alessandro.png", "/equipe/ales
 
 const CREDENCIAIS = [
   {
+    destaque: "Powertrain",
+    titulo: "IAV Automotive Engineering",
+    detalhe: "Desenvolvimento para montadoras: hoje Mercedes-Benz North America, antes Stellantis",
+  },
+  {
     destaque: "4 anos",
     titulo: "Porsche Cup Brasil",
     detalhe: "Engenheiro de dados e performance, dentro do box",
   },
   {
-    destaque: "Hoje",
-    titulo: "Estados Unidos",
-    detalhe: "Engenheiro automotivo",
-  },
-  {
-    destaque: "Formação",
-    titulo: "CEFET-MG e PUC Minas",
-    detalhe: "Engenharia mecânica e pós em engenharia automotiva",
+    destaque: "Em pista",
+    titulo: "IMSA Michelin Pilot Challenge",
+    detalhe: "E VP Racing, com GR Supra GT4, Civic TCR e Cayman GT4",
   },
 ];
 
@@ -109,14 +110,28 @@ export function Especialista() {
             <p className="mt-1.5 font-display text-sm font-semibold uppercase tracking-[0.12em] text-amber">
               Alessandro Vila Nova
             </p>
-            {/* Parágrafo à ESQUERDA mesmo no celular, com o título centrado.
+            {/* Parágrafos à ESQUERDA mesmo no celular, com o título centrado.
                 Texto corrido centralizado obriga o olho a procurar o começo de
                 cada linha, e este é o único bloco longo da página. */}
-            <p className="mt-3 text-left leading-relaxed text-cream/75">
-              Engenheiro mecânico com pós em engenharia automotiva. Passou quatro anos como engenheiro de dados e
-              performance na Porsche Cup Brasil, no box, decidindo acerto de carro e estratégia de corrida. Hoje mora
-              nos Estados Unidos e trabalha como engenheiro automotivo.
-            </p>
+            <div className="mt-3 space-y-3 text-left leading-relaxed text-cream/75">
+              <p>
+                Engenheiro mecânico, com pós-graduação em Engenharia Automotiva. Atua pela IAV Automotive Engineering,
+                empresa que presta serviço de desenvolvimento de sistemas de powertrain para montadoras, indo além da
+                calibração. Hoje atende a Mercedes-Benz North America, nos Estados Unidos, e já atendeu a Stellantis
+                (Fiat-Chrysler-PSA), no Brasil.
+              </p>
+              <p>
+                No automobilismo, foram 4 anos como engenheiro de dados e performance na Porsche Cup Brasil, dentro do
+                box, analisando dados vitais do veículo e fazendo o acerto do carro para maximizar o desempenho. Hoje,
+                morando nos Estados Unidos, segue em pista em categorias como IMSA Michelin Pilot Challenge e VP
+                Racing, com carros como Toyota GR Supra GT4, Honda Civic TCR, Alfa Romeo TCR e Porsche Cayman GT4.
+              </p>
+              <p>
+                O conteúdo do Mentorque sai daí. Não é curso genérico de plataforma: é o conhecimento de um engenheiro
+                que trabalha com o desenvolvimento de motores e sistemas automotivos e lida de perto com o mundo do
+                automobilismo, traduzido para quem nunca abriu um capô.
+              </p>
+            </div>
           </div>
         </div>
 
