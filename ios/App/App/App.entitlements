@@ -13,5 +13,12 @@
 	<array>
 		<string>Default</string>
 	</array>
+	<!-- Push (APNs). Entrou em 28/08/2026, DEPOIS de o dono ligar a capacidade
+	     Push Notifications no App ID e regenerar o perfil de assinatura no
+	     Codemagic; nesta ordem, porque entitlement sem capacidade no perfil
+	     derruba o build na hora de assinar. O registro do aparelho e o envio
+	     estão em lib/app/push.ts e docs/push.md. -->
+	<key>aps-environment</key>
+	<string>production</string>
 </dict>
 </plist>
