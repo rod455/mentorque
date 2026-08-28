@@ -3,6 +3,29 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-28 · Correção ao achado do CRO: o login social NUNCA esteve travado
+- O dono testou no aparelho (iPhone, app 1.2 da loja): deslogou e entrou com o
+  Google normalmente. A 1.2 foi buildada em 27/08 17:06 UTC e o conserto só
+  entrou na main em 28/08 11:34, então o teste rodou o código SEM o conserto.
+  Se o defeito existisse ali, o toque ficaria sem resposta.
+- A explicação está no pacote: o @capgo/capacitor-social-login NÃO exporta o
+  proxy cru do Capacitor. `SocialLogin` é `new SocialLoginClient()`, uma
+  classe comum que embrulha o proxy (rawSocialLogin) por dentro. Classe comum
+  não tem `then`, então devolvê-la de função async não arma a armadilha.
+- O achado das NOTIFICAÇÕES continua verdadeiro e provado duas vezes:
+  @capacitor/local-notifications exporta o proxy cru (registerPlugin direto),
+  e os 5 erros `LocalNotifications.then()` em app_erros são a prova de campo.
+  A 1.2 publicada está com os lembretes mudos; o conserto sai no próximo build.
+- O commit b28e577 fica como está: a caixa no socialLogin.ts é inofensiva
+  (embrulhar o que não é thenable não muda comportamento) e a parte de
+  notificacoes.ts é o conserto real.
+- Lição para as rodadas: prova por leitura de código vale como hipótese, e o
+  próprio CRO pediu o teste em aparelho que a derrubou pela metade. Antes de
+  declarar um caminho quebrado, conferir COMO o pacote exporta o objeto
+  (proxy cru ou classe embrulhada), porque a armadilha do `then` só existe no
+  proxy cru. E não deixar a metade errada virar urgência: "login travado
+  custa cadastro por dia" quase virou o motivo de uma release às pressas.
+
 ## 2026-08-28 · CRO (retenção): a máquina de trazer de volta estava desligada
 - Rodada semanal do CRO/BeSci, foco RETENÇÃO (a anterior, de 23/08, foi a
   especial de conversão e jornada). Artifact "Conversão da semana":
