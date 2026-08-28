@@ -117,6 +117,9 @@ workflows:
         script: |
           cd ios/App
           agvtool new-version -all $((${PROJECT_BUILD_NUMBER:-0} + 1))
+          # O número fica no log de propósito: é ele que vai em /api/app/latest
+          # depois que a loja publicar, sem precisar abrir o App Store Connect.
+          echo "Build iOS deste envio (CFBundleVersion): $(agvtool what-version -terse)"
       - name: Compilar .ipa
         script: |
           # Mesmo desenterro de log do ios-testflight: o xcode-project engole a
@@ -256,6 +259,9 @@ workflows:
         script: |
           cd ios/App
           agvtool new-version -all $((${PROJECT_BUILD_NUMBER:-0} + 1))
+          # O número fica no log de propósito: é ele que vai em /api/app/latest
+          # depois que a loja publicar, sem precisar abrir o App Store Connect.
+          echo "Build iOS deste envio (CFBundleVersion): $(agvtool what-version -terse)"
       - name: Compilar .ipa
         script: |
           # `xcode-project` engole a saída do xcodebuild e devolve só "exited

@@ -63,7 +63,22 @@ funcionalidade paga de quem pagou. Sem travessão em texto visível.
 
 ## Aprendizados
 
-- (vazio ainda)
+- **2026-08-28 (feedback do dono): metade do achado da rodada estava errada,
+  e a metade errada quase virou release às pressas.** A rodada declarou o
+  login social travado pelo mesmo defeito dos lembretes, por leitura do
+  código do Capacitor. O dono testou no aparelho (app 1.2 da loja, buildado
+  ANTES do conserto) e o login funcionou. Motivo: o pacote de login não
+  exporta o proxy cru do Capacitor, exporta uma classe comum que o embrulha,
+  e nela a armadilha do `then` não se arma. As regras que ficam:
+  1. leitura de código produz HIPÓTESE, não achado; o rótulo no relatório
+     tem que dizer qual é qual ("provado em campo" vs "inferido por leitura");
+  2. antes de declarar um caminho quebrado por causa do proxy, conferir COMO
+     o pacote exporta o objeto (proxy cru = registerPlugin direto; classe
+     embrulhando = sem armadilha);
+  3. urgência só nasce de prova de campo. Os lembretes tinham prova (5 erros
+     `.then()` em app_erros); o login não tinha nenhuma, e mesmo assim virou
+     "custa cadastro por dia" no relatório. Um item sem prova de campo entra
+     como pedido de teste ao QA, não como perda em andamento.
 
 ## Direcionamentos do dono
 

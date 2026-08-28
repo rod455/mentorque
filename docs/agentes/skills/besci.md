@@ -53,3 +53,12 @@ experimentos alimentam a seção final.
   parado: o funil mostra ausência, e ausência parece desinteresse do usuário.
   Quando uma etapa der zero absoluto, a primeira hipótese é máquina quebrada,
   não gente desinteressada.
+- **2026-08-28 (correção, no mesmo dia): o inverso também vale, e derrubou
+  metade do achado.** O padrão do `then` foi generalizado para o login social
+  sem conferir o pacote, e o teste do dono em aparelho real provou que o
+  login sempre funcionou: o pacote de login embrulha o proxy numa classe
+  comum, sem `then`. Leitura de código é hipótese até passar por aparelho, e
+  a diferença entre os dois casos era visível de antemão: os lembretes tinham
+  prova de campo (erros nos aparelhos), o login não tinha nenhuma. Detalhe
+  técnico que decide: a armadilha só existe em quem exporta o
+  `registerPlugin` cru; classe que embrulha o proxy não a tem.
