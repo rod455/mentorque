@@ -28,16 +28,18 @@ limpos a cada envio.
 - [x] Código do app, tabela, rotas: prontos e no main.
 - [x] Projeto Firebase criado (mentorque-5f8b4) e `google-services.json` em
       `android/app/` (o gradle aplica o plugin do Google sozinho).
-- [ ] Chave APNs `.p8` criada no portal da Apple (Keys) + Key ID + Team ID.
-- [ ] Capacidade Push Notifications no App ID `mentorque.app` + perfil de
-      assinatura REGENERADO e substituído no Codemagic.
-- [ ] `aps-environment` no App.entitlements (código; entra DEPOIS do item
-      acima, senão a assinatura do build quebra).
+- [x] Chave APNs `.p8` criada (28/08, Production, Team Scoped). O Team ID é
+      GGM89XNN4S; o Key ID e o arquivo ficam com o dono, fora do repositório.
+- [x] Capacidade Push Notifications ligada no App ID `mentorque.app` e perfil
+      de assinatura regenerado (28/08). Substituir o .mobileprovision no
+      Codemagic é parte deste passo.
+- [x] `aps-environment` no App.entitlements (entrou DEPOIS do item acima, na
+      ordem que não quebra a assinatura).
 - [ ] Envs na Vercel (Production + redeploy):
       `FCM_CONTA_SERVICO` (JSON da conta de serviço do Firebase),
       `APNS_CHAVE_P8` (conteúdo do arquivo .p8),
       `APNS_KEY_ID`, `APNS_TEAM_ID`.
-- [ ] Build novo nas lojas com o plugin embarcado.
+- [ ] Build novo nas lojas com o plugin embarcado (a 1.3 preparada já leva).
 
 Observações: o app iOS registrado no Firebase e o `GoogleService-Info.plist`
 NÃO são usados neste desenho (registrar não fez mal nenhum; o arquivo não
