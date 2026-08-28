@@ -26,6 +26,11 @@ const config: CapacitorConfig = {
       "@capacitor/app",
       "@capacitor/browser",
       "@capacitor/local-notifications",
+      // Push de verdade, embarcado DESLIGADO (decisão do dono, 28/08). Sem o
+      // google-services.json o build passa (o gradle só aplica o plugin do
+      // Google se o arquivo existir) e o registro falha em silêncio no
+      // aparelho. Os passos para ligar estão em docs/push.md.
+      "@capacitor/push-notifications",
       "@capacitor-community/admob",
       "@revenuecat/purchases-capacitor",
     ],
@@ -38,6 +43,11 @@ const config: CapacitorConfig = {
       "@capacitor/app",
       "@capacitor/browser",
       "@capacitor/local-notifications",
+      // Push embarcado desligado, como no Android. No iPhone ele só passa a
+      // registrar quando a capacidade Push Notifications existir no App ID e
+      // o aps-environment entrar no App.entitlements (docs/push.md); até lá o
+      // register() falha e o catch engole.
+      "@capacitor/push-notifications",
       "@revenuecat/purchases-capacitor",
       "@capgo/capacitor-social-login",
     ],

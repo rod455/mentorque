@@ -11,6 +11,7 @@ import { ensureConsent, nativeAdMob } from "./admob";
 import { adsEnabled } from "@/components/app/AdGate";
 import { sincronizarLembrete } from "./lembreteAssinatura";
 import { sincronizarLembreteQuiz } from "./lembreteQuiz";
+import { sincronizarPush } from "./push";
 import { saidaDoPaywallPermitida } from "./saidaDoPaywall";
 import type { Content } from "./content";
 
@@ -190,6 +191,15 @@ export function useLembretes(c: Content) {
       textos: { titulo: c.quiz.avisoPushTitulo, corpo: c.quiz.avisoPushCorpo },
     });
   }, [s.notifications, s.quiz, c.quiz.avisoPushTitulo, c.quiz.avisoPushCorpo]);
+
+  // O registro de push acompanha o MESMO interruptor dos lembretes: ligado e
+  // com a permissão já concedida, o aparelho registra e o token vai para o
+  // servidor; desligado, o servidor esquece o token. Não pede permissão nunca
+  // (isso é do toque no Perfil) e degrada em silêncio enquanto o console não
+  // está configurado. Ver lib/app/push.ts e docs/push.md.
+  useEffect(() => {
+    void sincronizarPush(s.notifications);
+  }, [s.notifications]);
 }
 
 /**
