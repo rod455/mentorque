@@ -5,47 +5,44 @@ uso voltado ao usuário ainda, para campanhas internas e reengajamento quando
 fizer sentido. Os lembretes do dia a dia (quiz às 9h, fim do teste grátis)
 continuam LOCAIS e não dependem de nada desta página.
 
-## O que já está no código (embarcado desligado)
+## O desenho, e por que ele é assim
 
-- **App**: quando a pessoa está logada e liga os avisos no Perfil, o aparelho
-  registra e manda o token para o servidor; ao desligar, o servidor esquece o
-  token (`lib/app/push.ts`, chamado por `useLembretes`). Nunca pede permissão
-  sozinho: a permissão do sistema é a mesma dos lembretes locais e quem pede
-  é o toque no Perfil.
-- **Banco**: tabela `push_tokens` no Supabase (RLS ligada sem policy: só o
-  servidor lê e escreve). Token é por aparelho, amarrado à conta.
-- **Rotas**: `/api/push/registrar` (autenticada pelo Bearer do Supabase) e
-  `/api/push/enviar` (trancada pela DADOS_CHAVE, uso interno; apaga sozinha
-  os tokens que o FCM devolver como mortos).
-- **Plugin**: `@capacitor/push-notifications` nas listas das duas
-  plataformas. Sem as chaves de console tudo degrada em silêncio, então nada
-  disso muda o comportamento do app publicado.
+Dois transportes, um por plataforma:
 
-## O que só o dono pode fazer (nesta ordem)
+- **Android → Firebase (FCM)**: o app registra e o servidor manda pelo
+  Google. Só precisa do `google-services.json` no repositório (já está).
+- **iPhone → APNs direto**: o servidor fala com a Apple usando a chave `.p8`,
+  sem SDK do Firebase dentro do app. A alternativa exigiria costurar o
+  projeto Xcode à mão, que não dá para compilar e conferir fora de um Mac;
+  falando direto com a Apple, o app não muda nada no iPhone.
 
-1. **Criar o projeto no Firebase** (console.firebase.google.com, gratuito) e
-   registrar o app Android (pacote `app.mentorque`; conferir o id em
-   `android/app/build.gradle`). Baixar o `google-services.json` e colocar em
-   `android/app/google-services.json` (o build já aplica o plugin do Google
-   sozinho quando o arquivo existe).
-2. **iPhone**: no portal da Apple (developer.apple.com → Identifiers), ligar
-   a capacidade Push Notifications no App ID e gerar um perfil de assinatura
-   NOVO, substituindo a cópia guardada no Codemagic (o perfil velho não
-   carrega a capacidade e o build falharia na assinatura). Criar uma APNs
-   Auth Key (.p8) em Keys e subir no Firebase (Configurações do projeto →
-   Cloud Messaging → Apple). Depois disso, e só depois, adicionar ao
-   `ios/App/App/App.entitlements`:
+O registro no app acompanha o interruptor de avisos do Perfil (mesma
+permissão dos lembretes), grava na tabela `push_tokens` do Supabase (RLS sem
+policy: só o servidor toca) e o envio é a rota `/api/push/enviar`, trancada
+pela DADOS_CHAVE e SEM nenhum chamador automático: mensagem a cliente é
+alçada do dono, um pedido por vez. Tokens de aparelhos que desinstalaram são
+limpos a cada envio.
 
-   ```xml
-   <key>aps-environment</key>
-   <string>production</string>
-   ```
+## Estado (28/08/2026)
 
-3. **Vercel**: criar a conta de serviço no Firebase (Configurações →
-   Contas de serviço → Gerar nova chave privada) e colar o JSON inteiro na
-   env `FCM_CONTA_SERVICO`. É segredo: não entra no repositório nunca.
-4. **Release**: build novo nas lojas (o registro do token só existe no app
-   empacotado com o plugin).
+- [x] Código do app, tabela, rotas: prontos e no main.
+- [x] Projeto Firebase criado (mentorque-5f8b4) e `google-services.json` em
+      `android/app/` (o gradle aplica o plugin do Google sozinho).
+- [ ] Chave APNs `.p8` criada no portal da Apple (Keys) + Key ID + Team ID.
+- [ ] Capacidade Push Notifications no App ID `mentorque.app` + perfil de
+      assinatura REGENERADO e substituído no Codemagic.
+- [ ] `aps-environment` no App.entitlements (código; entra DEPOIS do item
+      acima, senão a assinatura do build quebra).
+- [ ] Envs na Vercel (Production + redeploy):
+      `FCM_CONTA_SERVICO` (JSON da conta de serviço do Firebase),
+      `APNS_CHAVE_P8` (conteúdo do arquivo .p8),
+      `APNS_KEY_ID`, `APNS_TEAM_ID`.
+- [ ] Build novo nas lojas com o plugin embarcado.
+
+Observações: o app iOS registrado no Firebase e o `GoogleService-Info.plist`
+NÃO são usados neste desenho (registrar não fez mal nenhum; o arquivo não
+precisa entrar no repositório). Subir a `.p8` no Firebase também é
+dispensável: quem fala com a Apple é o nosso servidor.
 
 ## Como testar quando estiver ligado
 
@@ -55,8 +52,9 @@ curl -X POST https://mentorque.com.br/api/push/enviar \
   -d '{"titulo": "Teste interno", "corpo": "Chegou? Então está de pé.", "userId": "SEU_UUID"}'
 ```
 
-A resposta diz quantos aparelhos receberam e quantos tokens mortos foram
-limpos.
+A resposta diz quantos aparelhos receberam, quantos tokens mortos foram
+limpos e quantos ficaram sem transporte (credencial da plataforma ausente):
+dá para ligar uma perna de cada vez.
 
 ## Limites combinados
 

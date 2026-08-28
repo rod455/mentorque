@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "719441226381",
+    "project_id": "mentorque-5f8b4",
+    "storage_bucket": "mentorque-5f8b4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719441226381:android:0ae269ca5de8bf695d10c4",
+        "android_client_info": {
+          "package_name": "mentorque.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZUybaGDNJPJHjqurepO8tigrdkK40Mhk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
