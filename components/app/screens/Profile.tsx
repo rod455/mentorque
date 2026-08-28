@@ -5,7 +5,7 @@ import { apiPost } from "@/lib/app/apiBase";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/app/auth";
 import { usePrototype } from "@/lib/app/store";
-import { AVISO, cancelar, notificacoesDisponiveis, pedirPermissao } from "@/lib/app/notificacoes";
+import { AVISO, abrirAjustesDeAvisos, bloqueadaPeloSistema, cancelar, notificacoesDisponiveis, pedirPermissao } from "@/lib/app/notificacoes";
 import { resizeImage } from "@/lib/app/image";
 import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
 import { cancelSubscription, deleteAccount, openBillingPortal, reactivateSubscription } from "@/lib/app/billing";
@@ -268,13 +268,24 @@ export function ProfileScreen() {
   //
   // Agora só liga se o sistema tiver dito sim de verdade. Recusa mantém o
   // interruptor desligado, que é a informação honesta: aviso não vai chegar.
+  // Quando o sistema já negou de vez, a folha de permissão não aparece nunca
+  // mais: ligar o interruptor então abre os AJUSTES do aparelho (pedido do
+  // dono, 28/08) e a linha explica o bloqueio. Ao voltar dos ajustes com a
+  // permissão dada, o próximo toque liga de verdade.
+  const [avisosBloqueados, setAvisosBloqueados] = useState(false);
   const toggleNotifications = async (on: boolean) => {
     if (!on) {
       setNotifications(false);
+      setAvisosBloqueados(false);
       await cancelar(AVISO.fimDoTeste);
       return;
     }
-    setNotifications(await pedirPermissao());
+    const ok = await pedirPermissao();
+    setNotifications(ok);
+    if (!ok && (await bloqueadaPeloSistema())) {
+      setAvisosBloqueados(true);
+      abrirAjustesDeAvisos();
+    }
   };
 
   // Profile photo: user's uploaded avatar wins; otherwise the Google picture.
@@ -443,12 +454,6 @@ export function ProfileScreen() {
       {/* Preferências */}
       <SectionTitle>{p.preferences}</SectionTitle>
       <Group>
-        {/* Só onde o aparelho consegue notificar. No navegador não existe
-            agendamento local, então o interruptor prometeria um aviso que nunca
-            sairia — foi exatamente por isso que a versão anterior dele saiu. */}
-        {notificacoesDisponiveis() && (
-          <IconRow icon="alert" tint="bg-teal/15 text-teal" label={p.notifications} right={<Toggle on={s.notifications} onChange={toggleNotifications} />} />
-        )}
         <IconRow icon="book" tint="bg-amber/15 text-amber" label={p.language} right={<LangSwitcher />} />
         <IconRow
           icon="gauge" tint="bg-teal/15 text-teal" label={p.units}
@@ -472,6 +477,17 @@ export function ProfileScreen() {
               {BR_STATES.map((uf) => (<option key={uf} value={uf}>{uf}</option>))}
             </select>
           }
+        />
+        {/* Abaixo de Localização a pedido do dono (28/08), e SEMPRE visível.
+            No app das lojas, o interruptor de verdade: liga pedindo a
+            permissão do sistema, e se o sistema já negou de vez, abre os
+            AJUSTES do aparelho com a linha explicando. No navegador, sem
+            interruptor: toggle que não agenda nada é a promessa falsa que já
+            nos mordeu (fim-do-lembrete-falso). */}
+        <IconRow
+          icon="alert" tint="bg-teal/15 text-teal" label={p.notifications}
+          value={notificacoesDisponiveis() ? (avisosBloqueados ? p.notifBloqueado : p.notificationsSub) : p.notificationsWeb}
+          right={notificacoesDisponiveis() ? <Toggle on={s.notifications} onChange={toggleNotifications} /> : undefined}
         />
       </Group>
 

@@ -115,6 +115,38 @@ async function carregar(): Promise<Caixa | null> {
   return carregando;
 }
 
+/** O sistema negou DE VEZ? (Diferente de "ainda não perguntou".) */
+export async function bloqueadaPeloSistema(): Promise<boolean> {
+  const c = await carregar();
+  if (!c) return false;
+  try {
+    return (await c.plugin.checkPermissions()).display === "denied";
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Abre a tela de avisos do app nos ajustes do APARELHO. Melhor esforço:
+ * quando o sistema já negou a permissão, a folha de pedido não aparece nunca
+ * mais, e o único caminho que resta é a pessoa liberar nos ajustes. O
+ * Capacitor repassa esquemas que não são http para o sistema abrir; se algum
+ * aparelho não aceitar, fica o texto do Perfil explicando o caminho.
+ */
+export function abrirAjustesDeAvisos(): void {
+  const p = nativePlatform();
+  try {
+    if (p === "ios") {
+      window.open("app-settings:", "_blank");
+    } else if (p === "android") {
+      window.open(
+        "intent:#Intent;action=android.settings.APP_NOTIFICATION_SETTINGS;S.android.provider.extra.APP_PACKAGE=mentorque.app;end",
+        "_blank"
+      );
+    }
+  } catch { /* sem ajuda do sistema: o texto do Perfil aponta o caminho */ }
+}
+
 /** Já temos permissão? Não pede nada, só consulta. */
 export async function permissaoConcedida(): Promise<boolean> {
   const c = await carregar();

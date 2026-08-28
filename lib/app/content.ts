@@ -1224,7 +1224,19 @@ export function getContent(locale: Locale) {
       consulting: T("Consultoria e conteúdos exclusivos", "Consulting & exclusive content"),
       language: T("Idioma", "Language"),
       preferences: T("Preferências", "Preferences"),
-      notifications: T("Avisar antes de cobrar", "Warn me before charging"),
+      // O rótulo virou "Notificações" (pedido do dono, 28/08): o interruptor
+      // passou a cobrir o lembrete do quiz, o aviso de cobrança e o push, e
+      // "avisar antes de cobrar" descrevia só um deles.
+      notifications: T("Notificações", "Notifications"),
+      notificationsSub: T("Pergunta do dia e aviso antes de cobrar", "Daily question and a heads-up before charging"),
+      // No navegador a linha aparece, mas sem interruptor: toggle que não
+      // agenda nada é a promessa falsa que já nos mordeu (fim-do-lembrete-
+      // falso, no caderno de experimentos).
+      notificationsWeb: T("Disponível no aplicativo do celular", "Available in the mobile app"),
+      // Quando o SISTEMA já negou: a folha de permissão só aparece uma vez;
+      // depois disso, ligar o interruptor abre os ajustes do aparelho, e este
+      // texto explica o que aconteceu (curto de propósito: a linha trunca).
+      notifBloqueado: T("Bloqueado no aparelho: libere nos ajustes", "Blocked by the device: allow it in settings"),
       // Aviso que sai 2 dias antes do fim do teste. Escrito para ser honesto,
       // não para segurar: diz que a cobrança vem e onde cancelar. Texto de
       // retenção ("não perca seu acesso") no único momento em que a pessoa
