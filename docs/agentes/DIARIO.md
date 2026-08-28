@@ -5,7 +5,8 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
 ## 2026-08-28 · CRO (retenção): a máquina de trazer de volta estava desligada
 - Rodada semanal do CRO/BeSci, foco RETENÇÃO (a anterior, de 23/08, foi a
-  especial de conversão e jornada). Artifact "Conversão da semana" publicado.
+  especial de conversão e jornada). Artifact "Conversão da semana":
+  https://claude.ai/code/artifact/a2161771-1ea5-4a0c-b023-79168e7b6729
 - VEREDITOS: nenhum vencido. Os dois experimentos abertos (cta-teste-por-plano
   e fim-do-lembrete-falso) só se leem a partir de 20/09. Fechar hoje seria
   achismo. O que entrou foi um acompanhamento honesto em fim-do-lembrete-falso:
