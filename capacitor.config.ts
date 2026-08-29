@@ -33,6 +33,8 @@ const config: CapacitorConfig = {
       "@capacitor/push-notifications",
       "@capacitor-community/admob",
       "@revenuecat/purchases-capacitor",
+      // Atribuição de instalação para os anúncios (lib/app/atribuicao.ts).
+      "appsflyer-capacitor-plugin",
     ],
   },
   ios: {
@@ -50,6 +52,8 @@ const config: CapacitorConfig = {
       "@capacitor/push-notifications",
       "@revenuecat/purchases-capacitor",
       "@capgo/capacitor-social-login",
+      // Atribuição SEM ATT no iPhone: SKAdNetwork agregado, ids no Info.plist.
+      "appsflyer-capacitor-plugin",
     ],
   },
   plugins: {

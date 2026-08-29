@@ -12,6 +12,7 @@ import { adsEnabled } from "@/components/app/AdGate";
 import { sincronizarLembrete } from "./lembreteAssinatura";
 import { sincronizarLembreteQuiz } from "./lembreteQuiz";
 import { sincronizarPush } from "./push";
+import { iniciarAtribuicao } from "./atribuicao";
 import { saidaDoPaywallPermitida } from "./saidaDoPaywall";
 import type { Content } from "./content";
 
@@ -53,6 +54,9 @@ export function useFunilDeAbertura() {
   useEffect(() => {
     funil("abriu_app", { umaVez: true });
     vigiarErros();
+    // Atribuição de instalação (AppsFlyer): só no app das lojas, silenciosa,
+    // e aqui porque abrir o app É o evento que ela existe para medir.
+    void iniciarAtribuicao();
   }, []);
 
   useEffect(() => {
