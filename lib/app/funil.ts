@@ -21,7 +21,11 @@ export type EventoFunil =
   | "viu_paywall"
   | "iniciou_checkout"
   | "abriu_trilha"
-  | "cadastrou_carro";
+  | "cadastrou_carro"
+  // Único evento técnico da lista: o desfecho da subida do SDK de atribuição
+  // (lib/app/atribuicao.ts). Ele não mede comportamento de ninguém, mede se a
+  // nossa própria medição está viva no aparelho.
+  | "atribuicao";
 
 // Dedup por sessão: reabrir a mesma tela no mesmo pageview não conta de novo.
 const enviados = new Set<string>();

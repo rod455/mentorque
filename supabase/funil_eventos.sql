@@ -25,9 +25,15 @@ create table if not exists public.funil_eventos (
   -- AQUI: rodar este arquivo como estava recriava a restrição sem os dois, e
   -- a partir daí toda ativação seria recusada em silêncio, porque
   -- /api/funil não confere o erro do insert e responde ok do mesmo jeito.
+  -- 'atribuicao' é o único evento TÉCNICO desta tabela, e entrou por uma
+  -- razão específica (29/08): o SDK de atribuição falha em silêncio de
+  -- propósito, e por isso não havia como responder "o SDK subiu neste
+  -- aparelho?" sem adivinhar. Ele grava o desfecho da inicialização (ok,
+  -- sem-plugin, erro) em `origem`, no máximo uma linha por aparelho por
+  -- desfecho — cresce com INSTALAÇÕES, não com uso.
   evento     text not null check (evento in (
     'abriu_app', 'cadastro', 'viu_paywall', 'iniciou_checkout',
-    'abriu_trilha', 'cadastrou_carro',
+    'abriu_trilha', 'cadastrou_carro', 'atribuicao',
     'assinou', 'renovou', 'cancelou', 'expirou'
   )),
 

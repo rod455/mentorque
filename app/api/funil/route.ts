@@ -20,6 +20,10 @@ const EVENTOS_DO_APP = new Set([
   // Primeira ação de valor: é o que separa "criou conta" de "experimentou
   // de verdade" (ativação real na skill de análise).
   "abriu_trilha", "cadastrou_carro",
+  // Desfecho da inicialização do SDK de atribuição (ok | sem-plugin | erro na
+  // origem). É o único evento técnico da lista: sem ele, o SDK falhando em
+  // silêncio é indistinguível do SDK funcionando. Ver lib/app/atribuicao.ts.
+  "atribuicao",
 ]);
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

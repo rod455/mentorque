@@ -24,6 +24,7 @@
 // a espera para sempre (a lição dos lembretes mudos, 28/08).
 import { APPLE_APP_ID } from "@/lib/stores";
 import { isNativeApp, nativePlatform } from "./wrapper";
+import { funil } from "./funil";
 
 const DEV_KEY = "BdcX8hssR4U7ifDf7reF7n";
 
@@ -47,21 +48,57 @@ async function carregar(): Promise<Caixa | null> {
   }
 }
 
+const MARCA = "mq-atrib";
+
+/**
+ * O desfecho da subida do SDK, gravado no NOSSO funil.
+ *
+ * POR QUE ISSO EXISTE (29/08): silêncio por contrato é a decisão certa para o
+ * motorista e a pior possível para quem opera. Com a 1.4 instalada e o painel
+ * da AppsFlyer vazio, não havia como distinguir "o SDK não subiu" de "o painel
+ * deles ainda não atualizou" — restava adivinhar, e adivinhar antes de ligar
+ * campanha custa dinheiro de verdade.
+ *
+ * O CUSTO É PROPORCIONAL A INSTALAÇÕES, NÃO A USO, e isso foi projetado: a
+ * marca no aparelho e o índice único (evento, anon_id, origem) garantem no
+ * máximo uma linha por aparelho por desfecho. Um aparelho que falha e depois
+ * dá certo grava as duas, o que é exatamente o sinal de falha transitória.
+ */
+function registrar(desfecho: "ok" | "sem-plugin" | "erro"): void {
+  try {
+    const k = `${MARCA}-${desfecho}`;
+    if (window.localStorage.getItem(k)) return;
+    funil("atribuicao", { origem: desfecho });
+    window.localStorage.setItem(k, "1");
+  } catch {
+    // Sem localStorage o índice único do banco segura a duplicata.
+    funil("atribuicao", { origem: desfecho });
+  }
+}
+
 /**
  * Liga a atribuição, uma vez por abertura do app. Silenciosa por contrato:
  * atribuição é infraestrutura de medição, e falha dela não pode custar nada
- * ao motorista (nem tela, nem espera, nem erro).
+ * ao motorista (nem tela, nem espera, nem erro). O que ela não é mais é
+ * INVISÍVEL: o desfecho vai para o nosso funil (ver `registrar`).
  */
 export async function iniciarAtribuicao(): Promise<void> {
   if (iniciado) return;
+  if (!isNativeApp() || !nativePlatform()) return;
   const c = await carregar();
-  if (!c) return;
+  if (!c) {
+    // O app é das lojas mas o plugin não respondeu: ele não entrou no binário.
+    registrar("sem-plugin");
+    return;
+  }
   iniciado = true;
   try {
     // appID é só do iPhone (o id numérico da App Store); o Android ignora.
     await c.plugin.initSDK({ devKey: DEV_KEY, appID: APPLE_APP_ID, isDebug: false });
+    registrar("ok");
   } catch {
     // Sem rede ou SDK indisponível: a próxima abertura tenta de novo.
     iniciado = false;
+    registrar("erro");
   }
 }
