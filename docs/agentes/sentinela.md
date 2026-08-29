@@ -37,6 +37,13 @@ olhada. Falha que some na reconferência é transitória: silêncio.
 
 ## Aprendizados
 
+- **2026-08-29 (segundo caso no mesmo dia): destino padrão precisa de prova
+  de vida.** O formulário de suporte mandava para contato@mentorque.com.br,
+  que nunca teve caixa (domínio sem MX até 28/08). O Resend aceitava o envio
+  e o bounce vinha depois, assíncrono, então até o `res.ok` da rota mentia.
+  Entra na mesma manutenção do workflow: (1) checagem de DNS de que o MX da
+  raiz existe; (2) feedback de teste mensal pelo formulário, conferindo que
+  CHEGA numa caixa real. Aceito pelo transportador não é entregue.
 - **2026-08-29: uptime verde não prova que robô consegue entregar.** O
   webhook do Stripe apontava para o domínio sem www, que responde 308 para o
   com www. As checagens da Sentinela seguem redirect como navegador e ficavam

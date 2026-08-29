@@ -3,6 +3,29 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-29 · O "Fale com a gente" mandava para um endereço que nunca existiu
+- Achado pelo dono ao configurar e-mail corporativo, e a bronca dele procede.
+  O formulário de suporte do app envia pelo Resend para FEEDBACK_TO ou, sem a
+  env, para contato@mentorque.com.br. A env NUNCA existiu na Vercel, e o
+  domínio nunca teve MX até 28/08: toda mensagem de suporte foi aceita pelo
+  Resend, quicou depois em silêncio, e o app disse "enviado" para a pessoa.
+- Por que nenhuma conferência pegou: a rota confere `res.ok` do Resend, mas o
+  Resend aceita o envio NA HORA e o bounce é assíncrono. "O carteiro aceitou"
+  foi tratado como "chegou". Nenhuma rodada provou que ESTE cano mordia
+  (mandar um feedback de teste e ver cair numa caixa real).
+- Recuperação: o painel do Resend guarda os envios com corpo completo (nome,
+  e-mail e mensagem da pessoa). Emails → filtro Bounced = as mensagens
+  perdidas, respondíveis uma a uma. O dono foi orientado a olhar.
+- Correção de causa: o dono está criando os apelidos contato@ e suporte@ no
+  redirecionamento do domínio (ImprovMX → Gmail), o que dá vida ao endereço
+  padrão com ou sem env.
+- PREVENÇÃO DA CLASSE (para a próxima manutenção da Sentinela, junto com o
+  POST no webhook do Stripe): (1) checar por DNS que o MX da raiz existe e
+  aponta para onde esperamos; (2) uma vez por mês, enviar um feedback de
+  teste pelo formulário e conferir que ele CHEGA na caixa. A regra geral:
+  destino padrão de qualquer canal precisa de prova de vida periódica;
+  aceito pelo transportador não é entregue.
+
 ## 2026-08-29 · Webhook do Stripe morria num redirect que só máquina vê
 - E-mail do Stripe ao dono: "trouble sending requests" para
   https://mentorque.com.br/api/stripe/webhook. Causa provada com um fetch: o
