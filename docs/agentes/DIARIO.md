@@ -3,6 +3,29 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-29 · Webhook do Stripe morria num redirect que só máquina vê
+- E-mail do Stripe ao dono: "trouble sending requests" para
+  https://mentorque.com.br/api/stripe/webhook. Causa provada com um fetch: o
+  domínio SEM www responde 308 Permanent Redirect para o COM www. Navegador
+  segue e ninguém nota; o Stripe, de propósito, NÃO segue redirect em
+  webhook, então toda entrega morria na porta. É a explicação do assinou
+  perdido de 25/08 23:52: nunca foi um evento atrasado, era o cano entupido.
+- CORRIGIDO no próprio Stripe: a URL do endpoint (we_1TzkccCOmPpbUXBI...)
+  virou https://www.mentorque.com.br/api/stripe/webhook. Mesmo endpoint,
+  mesma chave de assinatura, nada a mudar na Vercel. Conferido: o www
+  responde a rota direto (405 em GET, que é o esperado), sem redirect.
+- PENDÊNCIAS DO DONO: (1) reenviar pelo painel do Stripe os eventos que
+  falharam há mais de 3 dias (o retry automático desiste; o de 25/08 23:52 é
+  o que importa, reenviar grava o assinou e sincroniza a assinatura pelo cano
+  normal); (2) conferir no painel do RevenueCat se o webhook de lá também
+  aponta para o domínio sem www, porque a mesma parede vale para ele.
+- LIÇÃO PARA A SENTINELA: o verde dela não cobre isso, porque monitor de
+  uptime segue redirect como navegador. Entra na próxima manutenção: um POST
+  sem assinatura no webhook, esperando 400 bad_signature; qualquer 3xx/404/5xx
+  ali é o cano entupido de novo. A regra geral: URL registrada em serviço de
+  terceiro usa SEMPRE o domínio primário (www), porque robô não segue
+  redirect.
+
 ## 2026-08-28 · Correção ao achado do CRO: o login social NUNCA esteve travado
 - O dono testou no aparelho (iPhone, app 1.2 da loja): deslogou e entrou com o
   Google normalmente. A 1.2 foi buildada em 27/08 17:06 UTC e o conserto só

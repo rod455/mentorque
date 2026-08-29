@@ -37,6 +37,17 @@ olhada. Falha que some na reconferência é transitória: silêncio.
 
 ## Aprendizados
 
+- **2026-08-29: uptime verde não prova que robô consegue entregar.** O
+  webhook do Stripe apontava para o domínio sem www, que responde 308 para o
+  com www. As checagens da Sentinela seguem redirect como navegador e ficavam
+  verdes enquanto toda entrega do Stripe morria na porta (robô de webhook não
+  segue redirect). Para a próxima manutenção do workflow: adicionar um POST
+  sem assinatura em https://www.mentorque.com.br/api/stripe/webhook esperando
+  exatamente 400 (bad_signature = a rota foi ALCANÇADA e validou); 3xx, 404 ou
+  5xx ali é alerta. E a regra que evita a classe inteira: URL registrada em
+  serviço de terceiro (Stripe, RevenueCat) usa sempre o domínio primário, hoje
+  o com www.
+
 - **A memória do workflow (`$getWorkflowStaticData`) só persiste o que o n8n
   enxerga como ATRIBUIÇÃO. `delete` não persiste.** Foi este o defeito de
   22 a 26/08: um 401 antigo no `/api/funil` ficou gravado, o
