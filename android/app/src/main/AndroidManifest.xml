@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <!-- tools:replace nas duas regras de backup: o SDK do AppsFlyer declara as
+         dele (appsflyer_backup_rules e appsflyer_data_extraction_rules) e o
+         fusor de manifesto para o build em vez de escolher sozinho.
+
+         Quem ganha é O NOSSO arquivo, de propósito: as nossas regras excluem a
+         sessão do Supabase que mora no localStorage da WebView, e as do SDK
+         não. Deixar as dele vencerem faria a sessão autenticada voltar a
+         viajar no backup da nuvem e na transferência entre aparelhos — um
+         furo de segurança silencioso, que nenhum teste de tela pegaria.
+
+         As regras do AppsFlyer só protegem o id de instalação dele, e perder
+         isso no backup no máximo faz uma reinstalação contar como instalação
+         nova. Custo desprezível perto do outro. -->
     <application
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_rules"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        tools:replace="android:fullBackupContent,android:dataExtractionRules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
