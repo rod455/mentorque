@@ -13,8 +13,18 @@ import { veiculos } from "./conteudo/veiculos";
 // bilingual. Per-model depth is intentionally generic (the exact model-year
 // detail is where Premium / consulting adds value).
 
-// App version shown in the Profile footer.
-export const APP_VERSION = "1.2.0";
+// Versão do app: aparece no rodapé do Perfil, viaja em CADA evento do funil,
+// em cada erro capturado e em cada mensagem de suporte.
+//
+// Ela ficou parada em "1.2.0" durante a 1.3 e a 1.4 inteiras, e isso não é
+// cosmético: em 29/08, tentando descobrir se um iPhone estava rodando a 1.4
+// com o SDK de atribuição, o funil respondeu "1.2.0" para todo mundo e não
+// serviu para nada. Um campo que mente é pior que um campo ausente, porque a
+// gente confia nele.
+//
+// Por isso `npm run conferir` agora reprova se este número divergir do
+// versionName do Android e do MARKETING_VERSION do iOS (scripts/verifica-versoes.mjs).
+export const APP_VERSION = "1.4.0";
 
 export function formatBRL(n: number): string {
   return "R$ " + Math.round(n).toLocaleString("pt-BR");
