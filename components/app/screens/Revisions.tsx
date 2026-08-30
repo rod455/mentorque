@@ -163,7 +163,14 @@ export function RevisionsScreen() {
 
   // Deterministic fallback (also what free users see).
   const detDetail = (it: UpcomingItem): string => {
-    if (it.basis === "km" && it.inKm != null) return it.inKm <= 0 ? r.overdueKm.replace("{n}", Math.abs(it.inKm).toLocaleString()) : r.inKm.replace("{n}", it.inKm.toLocaleString());
+    if (it.basis === "km" && it.inKm != null) {
+      const base = it.inKm <= 0
+        ? r.overdueKm.replace("{n}", Math.abs(it.inKm).toLocaleString())
+        : r.inKm.replace("{n}", it.inKm.toLocaleString());
+      // Sem registro do último serviço, o número é uma estimativa e a tela
+      // precisa dizer isso. Número inventado sem aviso é pior que nenhum.
+      return it.estimado ? `${base} — ${r.planKmEstimado}` : base;
+    }
     if (it.basis === "time" && it.months != null) return r.monthsAgo.replace("{n}", String(it.months));
     return "";
   };

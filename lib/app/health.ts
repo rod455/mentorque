@@ -37,6 +37,30 @@ export const REVISION_RULES: RevisionRule[] = [
   { key: "battery", everyMonths: 48, systems: ["electrical"] },
 ];
 
+/**
+ * O odômetro em que o próximo serviço deste tipo vence.
+ *
+ * A REGRA EXISTE PORQUE A CONTA INGÊNUA MENTE, e mentia feio. Quando não há
+ * registro do último serviço, `último (0) + intervalo` dá o intervalo puro:
+ * num Golf de 98.000 km recém-cadastrado, a troca de óleo "vencia" aos 10.000,
+ * e a tela de Próximas revisões abria com CINCO itens em vermelho — "vencida
+ * há 88.000 km", "há 78.000 km", "há 58.000 km". Para quem acabou de comprar
+ * um usado e cadastrou o carro, é um susto inventado por aritmética.
+ *
+ * Sem registro, a única coisa honesta a dizer é qual é o PRÓXIMO múltiplo do
+ * intervalo acima do km atual, marcado como estimativa. É o mesmo raciocínio
+ * já aplicado à revisão periódica no item 3 de computeHealth: não saber não é
+ * a mesma coisa que estar atrasado.
+ */
+export function proximoKmDoTipo(
+  everyKm: number,
+  ultimoKm: number | null | undefined,
+  kmAtual: number,
+): { dueKm: number; estimado: boolean } {
+  if (typeof ultimoKm === "number" && ultimoKm > 0) return { dueKm: ultimoKm + everyKm, estimado: false };
+  return { dueKm: Math.ceil((kmAtual + 1) / everyKm) * everyKm, estimado: true };
+}
+
 export type Finding = { code: string; severity: "high" | "medium" | "low"; system?: SystemKey; km?: number; months?: number };
 export type SystemStatus = { key: SystemKey; status: "ok" | "attention" | "overdue"; lastKm?: number; lastDate?: string };
 export type Health = { score: number; findings: Finding[]; systems: SystemStatus[]; hasKm: boolean };
@@ -153,7 +177,9 @@ export function computeHealth(vehicle: Vehicle, services: ServiceRecord[], now =
 export type UpcomingItem = {
   key: string;
   basis: "km" | "time" | "history";
-  status: "overdue" | "soon" | "ok";
+  status: "overdue" | "soon" | "ok" | "unknown";
+  /** A previsão por km é ESTIMATIVA: não há registro do último serviço. */
+  estimado?: boolean;
   dueKm?: number; // km at which it's due
   inKm?: number; // km remaining (negative = overdue)
   months?: number; // months since last (for time-based)
@@ -169,11 +195,16 @@ export function computeUpcoming(vehicle: Vehicle, services: ServiceRecord[], now
     const last = lastOfType(services, rule.key) ?? (rule.systems.length ? null : null);
     // km-based
     if (rule.everyKm && hasKm) {
-      const base = last?.km ?? 0;
-      const dueKm = base + rule.everyKm;
+      const { dueKm, estimado } = proximoKmDoTipo(rule.everyKm, last?.km, km!);
       const inKm = dueKm - km!;
-      const status: UpcomingItem["status"] = inKm <= 0 ? "overdue" : inKm <= 2000 ? "soon" : "ok";
-      if (status !== "ok" || !last) items.push({ key: rule.key, basis: "km", status, dueKm, inKm, systems: rule.systems });
+      // Sem registro do último serviço a previsão é uma ESTIMATIVA, e
+      // estimativa nunca aparece como "vencida": ela vira "a confirmar". Dizer
+      // "vencida há 88.000 km" para quem acabou de cadastrar um usado é
+      // inventar um atraso a partir da nossa própria falta de dado.
+      const status: UpcomingItem["status"] = estimado
+        ? (inKm <= 2000 ? "soon" : "unknown")
+        : inKm <= 0 ? "overdue" : inKm <= 2000 ? "soon" : "ok";
+      if (status !== "ok") items.push({ key: rule.key, basis: "km", status, dueKm, inKm, estimado, systems: rule.systems });
     }
     // time-based — anchor on the last service of this type, or (for a car with
     // no such service yet) on the purchase date so newly bought cars still get
@@ -186,8 +217,9 @@ export function computeUpcoming(vehicle: Vehicle, services: ServiceRecord[], now
     }
   }
 
-  // Sort worst-first.
-  const rank = { overdue: 0, soon: 1, ok: 2 } as const;
+  // Sort worst-first. "unknown" (estimativa sem registro) vai depois de tudo o
+  // que é fato: o que a gente sabe pesa mais que o que a gente supõe.
+  const rank = { overdue: 0, soon: 1, ok: 2, unknown: 3 } as const;
   return items.sort((a, b) => rank[a.status] - rank[b.status] || (a.inKm ?? 0) - (b.inKm ?? 0));
 }
 

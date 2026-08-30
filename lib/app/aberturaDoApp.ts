@@ -236,12 +236,20 @@ export function useLembretes(c: Content) {
 /**
  * Botão físico e gesto de voltar do Android.
  *
- * Volta na navegação do app; na raiz, MINIMIZA em vez de fechar (fechar
- * perderia o estado da tela e é o que o Android faz de errado por padrão em
- * WebView). No paywall passa pela porteira das ofertas.
+ * Desfaz o último passo da pessoa, seja ele uma tela empilhada ou uma TROCA DE
+ * ABA. Só quando não há mais passo nenhum o app minimiza (minimiza, não fecha:
+ * fechar perderia o estado da tela, e é o que o Android faz de errado por
+ * padrão em WebView).
+ *
+ * Antes ele minimizava em qualquer tela inicial, porque trocar de aba zera a
+ * pilha: quem ia de Início para Estudos e apertava voltar era jogado para fora
+ * do app. Quem guarda o rastro das abas é o roteador (lib/app/nav.tsx), e é de
+ * lá que vem o `voltarNoAndroid`.
+ *
+ * No paywall passa pela porteira das ofertas.
  */
 export function useBotaoVoltarDoAndroid() {
-  const { view, back, canBack } = useNav();
+  const { view, voltarNoAndroid } = useNav();
 
   useEffect(() => {
     type Handle = { remove: () => void };
@@ -251,14 +259,13 @@ export function useBotaoVoltarDoAndroid() {
     if (!AppPlugin?.addListener) return;
     const sub = AppPlugin.addListener("backButton", () => {
       if (view.name === "subscribe" && !saidaDoPaywallPermitida(null)) return;
-      if (canBack) back();
-      else AppPlugin.minimizeApp?.();
+      if (!voltarNoAndroid()) AppPlugin.minimizeApp?.();
     });
     return () => {
       if (sub && "remove" in sub) (sub as Handle).remove();
       else (sub as Promise<Handle>)?.then?.((h) => h.remove());
     };
-  }, [view, canBack, back]);
+  }, [view, voltarNoAndroid]);
 }
 
 /**

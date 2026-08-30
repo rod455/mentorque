@@ -16,7 +16,7 @@
 import { garagem, dia, abrirApp } from "./base.mjs";
 
 export const nome = "calendario";
-export const sobre = "os lembretes de serviço dizem a data e o km, e o nome não corta em 360px";
+export const sobre = "o plano de revisão diz data e km, não inventa atraso, e cabe em 360px";
 
 const ANDROID_ESTREITO = { width: 360, height: 800 };
 
@@ -87,4 +87,60 @@ export async function rodar({ nav, ok }) {
 
   ok("nenhum erro de página no Calendário", b.erros.length === 0, b.erros[0] ?? "");
   await b.fechar();
+
+  // ---- o susto do usado recém-cadastrado ----------------------------------
+  //
+  // Defeito real, com foto do dono (30/08): um carro com 98.000 km e sem
+  // histórico abria "Próximas revisões" com CINCO itens em vermelho — "vencida
+  // há 88.000 km", "há 78.000 km", "há 58.000 km". Ninguém estava atrasado: a
+  // conta somava o intervalo a um "último serviço" que valia zero por não
+  // existir. Para quem acabou de comprar um usado, é um susto inventado por
+  // aritmética, e é o primeiro contato dela com o app.
+  const u = await abrirApp(nav, {
+    sessao: garagem({
+      startedAt: "2026-01-01",
+      quiz: { ultimoDia: dia(0), sequencia: 3, recorde: 3, perdaoEm: null, respostas: 3, acertos: 2 },
+      vehicles: [{
+        id: "v1", type: "car", make: "Volkswagen", model: "Golf", year: 2024,
+        odometerKm: 98000, kmUpdatedAt: new Date().toISOString(), purchaseDate: dia(-10),
+      }],
+      services: [],
+    }),
+  });
+  await u.pg.setViewportSize(ANDROID_ESTREITO);
+  await u.pg.getByRole("button", { name: /^Carros$/i }).first().click();
+  await u.pg.waitForTimeout(1200);
+  await u.pg.locator('main [role="button"]').first().click();
+  await u.pg.waitForTimeout(1800);
+  const irRevisoes = u.pg.locator("main button, main a").filter({ hasText: /Próximas revisões/i }).first();
+  if (await irRevisoes.count()) { await irRevisoes.click(); await u.pg.waitForTimeout(3000); }
+  const rev = await u.tela();
+
+  ok(
+    "usado sem histórico NÃO abre com revisões vencidas",
+    !/vencida h[áa]/i.test(rev),
+    (rev.match(/vencida h[áa][^\n]*/i) ?? [""])[0],
+  );
+  ok("ele diz que a previsão é a confirmar", /A confirmar/i.test(rev), rev.replace(/\n/g, " | ").slice(0, 160));
+  ok("e avisa que o km é estimado", /estimado/i.test(rev));
+
+  // O nome longo do carro recém-comprado também cabe: "menos de 1 mês" era a
+  // string que estourava o cartão no Android do dono.
+  await u.pg.getByRole("button", { name: /^Carros$/i }).first().click();
+  await u.pg.waitForTimeout(1000);
+  await u.pg.locator('main [role="button"]').first().click();
+  await u.pg.waitForTimeout(2000);
+  const estouro = await u.pg.evaluate(() => {
+    const fora = [];
+    for (const el of Array.from(document.querySelectorAll("main *"))) {
+      if (el.children.length) continue;
+      const t = (el.textContent ?? "").trim();
+      if (t.length < 4) continue;
+      if (el.scrollWidth > el.clientWidth + 1 && el.clientWidth > 0) fora.push(`${t} (${el.scrollWidth}>${el.clientWidth})`);
+    }
+    return fora;
+  });
+  ok("o cartão do carro comprado há dias não corta texto em 360px", estouro.length === 0, estouro.join("; "));
+  ok("nenhum erro de página no carro novo", u.erros.length === 0, u.erros[0] ?? "");
+  await u.fechar();
 }

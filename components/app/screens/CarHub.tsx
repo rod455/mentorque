@@ -159,9 +159,14 @@ function PurchaseLine() {
   return (
     <>
       {months != null ? (
-        <button onClick={() => setOpen(true)} className="mt-0.5 flex items-center gap-1.5 truncate text-xs text-cream/55 hover:text-cream">
-          <Icon name="calendar" className="h-3.5 w-3.5 shrink-0" />
-          <span className="truncate">{c.revisions.ownedFor.replace("{n}", ownedCompact ?? "")}</span>
+        // `min-w-0` no <span> é o que faz o truncate funcionar de verdade: item
+        // de flex tem min-width auto por padrão, então ele se recusa a encolher
+        // e o texto ATRAVESSA a borda em vez de virar reticências. Era o corte
+        // da foto do dono ("Você tem esse carro há menos de 1 mês" passando por
+        // cima do percentual de saúde num Android de 360px).
+        <button onClick={() => setOpen(true)} className="mt-0.5 flex w-full items-start gap-1.5 text-left text-xs leading-snug text-cream/55 hover:text-cream">
+          <Icon name="calendar" className="mt-px h-3.5 w-3.5 shrink-0" />
+          <span className="min-w-0">{c.revisions.ownedForShort.replace("{n}", ownedCompact ?? "")}</span>
         </button>
       ) : (
         // Sem data de compra: chamada em destaque — a data alimenta as revisões por tempo.

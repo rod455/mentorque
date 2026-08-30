@@ -1,7 +1,8 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import type { ServiceRecord, SystemKey } from "./types";
+import { comNovaRaiz, passoDeVolta, type Pilha } from "./navPilha";
 
 // Lightweight in-app router: a stack of views with push/back plus a "root"
 // reset used by the bottom navigation. Params travel with the view.
@@ -52,21 +53,70 @@ type NavValue = {
   go: (v: View) => void; // push
   back: () => void;
   root: (v: View) => void; // reset stack (bottom nav)
+  /**
+   * O voltar do Android. Devolve `false` quando não há mais para onde voltar,
+   * e só aí o app minimiza.
+   *
+   * É SEPARADO do `back` de propósito. O `back` some quando a pilha tem um
+   * item só, e é ele que decide a seta no cabeçalho: fazer o `back` atravessar
+   * abas colocaria uma seta de voltar no topo de toda tela inicial, que não é
+   * o que o desenho pede. O botão físico do Android é outra conversa — ali a
+   * expectativa da pessoa é desfazer o último passo, qualquer que ele tenha
+   * sido, inclusive uma troca de aba.
+   */
+  voltarNoAndroid: () => boolean;
 };
+
+// As regras de pilha moram em ./navPilha.ts, fora do componente, porque o
+// botão físico do Android não existe no navegador e é a única parte do app que
+// nenhuma suíte consegue apertar. Lá elas são conferidas sem navegador.
 
 const Ctx = createContext<NavValue | null>(null);
 
 export function NavProvider({ initial, children }: { initial: View; children: React.ReactNode }) {
-  const [stack, setStack] = useState<View[]>([initial]);
+  // `raizes` é o rastro das telas iniciais já visitadas.
+  //
+  // POR QUE ELE EXISTE: trocar de aba chama `root`, que zera a pilha. Sem
+  // rastro, o botão físico do Android encontrava pilha de tamanho 1 em
+  // qualquer aba e MINIMIZAVA o app — quem foi de Início para Estudos e
+  // apertou voltar era jogado para fora em vez de voltar ao Início. O rastro
+  // guarda de onde a pessoa veio, e o app só sai quando não há mais de onde.
+  const [p, setP] = useState<Pilha>({ views: [initial], raizes: [] });
   const [lastAction, setLastAction] = useState<"go" | "back" | "root">("root");
 
-  const go = useCallback((v: View) => { setLastAction("go"); setStack((s) => [...s, v]); }, []);
-  const back = useCallback(() => { setLastAction("back"); setStack((s) => (s.length > 1 ? s.slice(0, -1) : s)); }, []);
-  const root = useCallback((v: View) => { setLastAction("root"); setStack([v]); }, []);
+  // Espelho do estado para quem precisa DECIDIR antes de mudá-lo. O
+  // `voltarNoAndroid` tem de responder na hora se voltou ou não (é a resposta
+  // que decide entre navegar e minimizar), e ler isso de dentro de um
+  // atualizador de estado devolveria a resposta tarde demais.
+  const agora = useRef(p);
+  useEffect(() => { agora.current = p; }, [p]);
+
+  const go = useCallback((v: View) => { setLastAction("go"); setP((s) => ({ ...s, views: [...s.views, v] })); }, []);
+  const back = useCallback(() => {
+    setLastAction("back");
+    setP((s) => (s.views.length > 1 ? { ...s, views: s.views.slice(0, -1) } : s));
+  }, []);
+  const root = useCallback((v: View) => {
+    setLastAction("root");
+    setP((s) => comNovaRaiz(s, v));
+  }, []);
+
+  const voltarNoAndroid = useCallback((): boolean => {
+    const proximo = passoDeVolta(agora.current);
+    if (!proximo) return false; // primeira tela da sessão: aí sim o app sai de cena
+    setLastAction("back");
+    setP(proximo);
+    return true;
+  }, []);
 
   const value = useMemo<NavValue>(
-    () => ({ view: stack[stack.length - 1], canBack: stack.length > 1, depth: stack.length, lastAction, go, back, root }),
-    [stack, lastAction, go, back, root]
+    () => ({
+      view: p.views[p.views.length - 1],
+      canBack: p.views.length > 1,
+      depth: p.views.length,
+      lastAction, go, back, root, voltarNoAndroid,
+    }),
+    [p, lastAction, go, back, root, voltarNoAndroid]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

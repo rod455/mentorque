@@ -1027,6 +1027,12 @@ export function getContent(locale: Locale) {
       general: T("geral", "general"),
       basedOn: T("Baseado no manual, no seu histórico, no km e no tempo de uso.", "Based on the manual, your history, mileage and time owned."),
       ownedFor: T("Você tem esse carro há {n}", "You've owned this car for {n}"),
+      // Versão curta para o cartão do carro, que divide uma linha com o
+      // percentual de saúde. A longa cabia enquanto o valor era "3 anos"; com
+      // "menos de 1 mês" ela passou da borda no Android de 360px (relatado com
+      // foto pelo dono em 30/08). Ao lado do ícone de calendário, a frase curta
+      // diz a mesma coisa.
+      ownedForShort: T("Com você há {n}", "Yours for {n}"),
       remind: T("Add. ao calendário", "Add to calendar"),
       reminded: T("Adicionado ao calendário", "Added to calendar"),
       didIt: T("Já fiz esse serviço", "I already did this"),
