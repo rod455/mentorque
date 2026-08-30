@@ -12,6 +12,7 @@ import type { ServiceRecord, VehicleType } from "@/lib/app/types";
 import { Button } from "@/components/ui/Button";
 import { useNav } from "@/lib/app/nav";
 import { funil } from "@/lib/app/funil";
+import { pedirConviteDeConta } from "../SalveSuaGaragem";
 import { AppHeader, Card, Chip, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
 import BielaMascote from "@/components/BielaMascote";
 
@@ -334,6 +335,10 @@ export function AddCarScreen({ editId }: { editId?: string }) {
       addVehicle(data);
       // Primeira ação de valor do funil: cadastrou um veículo (ativação real).
       funil("cadastrou_carro", { umaVez: true, origem: type });
+      // Quem está como convidado acaba de criar algo que só existe neste
+      // aparelho. É o melhor (e o único honesto) momento para convidar a criar
+      // conta: a folha some sozinha para quem já tem uma.
+      pedirConviteDeConta();
       root({ name: "car" });
     }
   };

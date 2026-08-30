@@ -5,6 +5,7 @@ import { useI18n } from "@/lib/i18n";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { LIMITS } from "@/lib/app/premium";
 import { nextServiceByTime } from "@/lib/app/health";
+import { planoDosItens, visitaUnica, type PlanoDeItem, type VisitaUnica } from "@/lib/app/planoDeRevisao";
 import { pedirFeedback } from "@/lib/app/feedbackPrompt";
 import { carName, formatBRL } from "@/lib/app/content";
 import { resizeImage } from "@/lib/app/image";
@@ -102,9 +103,16 @@ function UpcomingBlock() {
   const v = activeVehicle(s);
   if (!v) return null;
 
-  const next = s.premium ? nextServiceByTime(v, servicesFor(s, v.id)) : null;
+  const servicos = servicesFor(s, v.id);
+  const next = s.premium ? nextServiceByTime(v, servicos) : null;
   const mine = (s.reminders ?? []).filter((id) => id.startsWith(`${v.id}:`));
   if (!next && mine.length === 0) return null;
+
+  // Quando cada item do calendário cai, em data e em km, e se vale juntar
+  // dois ou três numa ida só à oficina. As contas estão em
+  // lib/app/planoDeRevisao.ts, conferidas por scripts/verifica-revisoes.ts.
+  const planos = planoDosItens(v, servicos, mine.map((id) => id.slice(v.id.length + 1)));
+  const sugestao = visitaUnica(planos);
 
   const nextText = (() => {
     if (!next) return null;
@@ -132,24 +140,129 @@ function UpcomingBlock() {
       )}
 
       {mine.length > 0 && (
-        <div className="space-y-1.5">
-          {mine.map((id) => {
-            const key = id.slice(v.id.length + 1);
-            return (
-              <div key={id} className="flex items-center gap-2.5 rounded-xl bg-graphite-800 px-3.5 py-2.5 ring-1 ring-white/5">
-                <span className="text-sm">🔔</span>
-                <span className="min-w-0 flex-1 truncate text-sm text-cream/85">{r.ruleLabels[key] ?? key}</span>
-                <button onClick={() => go({ name: "addService", preset: { type: key } })} className="shrink-0 rounded-lg bg-amber/15 px-2.5 py-1 text-xs font-medium text-amber ring-1 ring-amber/20">
-                  {r.didIt}
-                </button>
-                <button onClick={() => toggleReminder(v.id, key)} aria-label="remover" className="shrink-0 text-cream/35 hover:text-cream/70">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><path d="M6 6l12 12M18 6 6 18" /></svg>
-                </button>
-              </div>
-            );
-          })}
-        </div>
+        <>
+          {sugestao && <VisitaUnicaCard sugestao={sugestao} />}
+          <div className="space-y-1.5">
+            {mine.map((id) => (
+              <LembreteDeServico
+                key={id}
+                chave={id.slice(v.id.length + 1)}
+                plano={planos.find((p) => p.key === id.slice(v.id.length + 1)) ?? null}
+                onFiz={() => go({ name: "addService", preset: { type: id.slice(v.id.length + 1) } })}
+                onRemover={() => toggleReminder(v.id, id.slice(v.id.length + 1))}
+                avisosLigados={!!s.notifications}
+              />
+            ))}
+          </div>
+        </>
       )}
+    </div>
+  );
+}
+
+/**
+ * Uma linha do calendário, agora dizendo QUANDO cai.
+ *
+ * O TÍTULO NÃO TRUNCA MAIS, e a mudança é estrutural, não de fonte: antes o
+ * nome dividia UMA linha com o botão "Já fiz esse serviço" e o X de remover, e
+ * em tela de 360px (a maioria dos Android) sobrava espaço para "Pneus (rodí…".
+ * Agora o nome tem a linha inteira e as ações descem. Diminuir a fonte
+ * resolveria o corte de hoje e voltaria a cortar no primeiro nome mais longo.
+ */
+function LembreteDeServico({ chave, plano, onFiz, onRemover, avisosLigados }: {
+  chave: string;
+  plano: PlanoDeItem | null;
+  onFiz: () => void;
+  onRemover: () => void;
+  avisosLigados: boolean;
+}) {
+  const c = useContent();
+  const r = c.revisions;
+  const { locale } = useI18n();
+  const nome = r.ruleLabels[chave] ?? chave;
+  const num = (n: number) => Math.abs(n).toLocaleString(locale === "pt" ? "pt-BR" : "en-US");
+  const dia = (iso: string) => {
+    const d = new Date(iso + "T00:00:00");
+    return isNaN(d.getTime()) ? iso : d.toLocaleDateString(locale === "pt" ? "pt-BR" : "en-US");
+  };
+
+  // A frase do "quando", montada das partes que existem. As duas bases são
+  // independentes (o manual diz "a cada X km OU Y meses"), então um item pode
+  // ter as duas, uma, ou nenhuma.
+  const quando = (() => {
+    if (!plano) return null;
+    const partes: string[] = [];
+    if (plano.dataPrevista) {
+      partes.push((plano.vencido ? r.planVencidaData : r.planPara).replace("{data}", dia(plano.dataPrevista)));
+      if (plano.kmRestantes != null) {
+        partes.push(plano.kmRestantes > 0
+          ? r.planEmKm.replace("{n}", num(plano.kmRestantes))
+          : r.planPassouKm.replace("{n}", num(plano.kmRestantes)));
+      }
+    } else if (plano.kmRestantes != null) {
+      partes.push(plano.kmRestantes > 0
+        ? r.planSoKm.replace("{n}", num(plano.kmRestantes))
+        : r.planPassouKm.replace("{n}", num(plano.kmRestantes)).replace(/^e /, ""));
+    }
+    return partes.join(", ");
+  })();
+
+  // De onde vem a regra. É o que transforma "confie em mim" em "o manual diz".
+  const doManual = (() => {
+    if (!plano) return null;
+    const { mesesIntervalo: m, kmIntervalo: km } = plano;
+    if (m && km) return r.planManualAmbos.replace("{meses}", String(m)).replace("{km}", num(km));
+    if (m) return r.planManualMeses.replace("{meses}", String(m));
+    if (km) return r.planManualKm.replace("{km}", num(km));
+    return null;
+  })();
+
+  return (
+    <div className="rounded-xl bg-graphite-800 px-3.5 py-3 ring-1 ring-white/5">
+      <div className="flex items-start gap-2.5">
+        <span className="mt-0.5 text-sm">🔔</span>
+        <span className={`min-w-0 flex-1 font-display text-sm leading-snug ${plano?.vencido ? "text-coral" : "text-cream/90"}`}>{nome}</span>
+        <button onClick={onRemover} aria-label="remover" className="-mt-0.5 shrink-0 p-1 text-cream/35 hover:text-cream/70">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><path d="M6 6l12 12M18 6 6 18" /></svg>
+        </button>
+      </div>
+
+      {quando && <p className="mt-1 pl-[26px] text-[13px] leading-snug text-cream/70">{quando}</p>}
+      {doManual && <p className="mt-0.5 pl-[26px] text-[11px] leading-snug text-cream/40">{doManual}</p>}
+      {plano?.ancora === "compra" && <p className="mt-0.5 pl-[26px] text-[11px] leading-snug text-cream/40">{r.planDesdeCompra}</p>}
+      {plano?.kmEstimado && <p className="mt-0.5 pl-[26px] text-[11px] leading-snug text-cream/40">{r.planKmEstimado}</p>}
+      {plano?.dataPrevista && !plano.vencido && (
+        <p className="mt-1 pl-[26px] text-[11px] leading-snug text-teal/70">
+          {avisosLigados ? r.planAvisamos : r.planAvisosDesligados}
+        </p>
+      )}
+
+      <button onClick={onFiz} className="mt-2.5 ml-[26px] rounded-lg bg-amber/15 px-3 py-1.5 text-xs font-medium text-amber ring-1 ring-amber/20">
+        {r.didIt}
+      </button>
+    </div>
+  );
+}
+
+/** "Leve tudo numa visita só": o dia mais cedo do grupo, nunca o mais tarde. */
+function VisitaUnicaCard({ sugestao }: { sugestao: VisitaUnica }) {
+  const c = useContent();
+  const r = c.revisions;
+  const { locale } = useI18n();
+  const nomes = sugestao.keys.map((k) => r.ruleLabels[k] ?? k);
+  const lista = nomes.length > 1
+    ? `${nomes.slice(0, -1).join(", ")} ${r.visitaE} ${nomes[nomes.length - 1]}`
+    : nomes[0];
+  const d = new Date(sugestao.dia + "T00:00:00");
+  const passou = sugestao.dia < diaLocal();
+  const texto = passou
+    ? r.visitaCorpoVencida.replace("{lista}", lista)
+    : r.visitaCorpo.replace("{lista}", lista).replace("{data}", d.toLocaleDateString(locale === "pt" ? "pt-BR" : "en-US"));
+
+  return (
+    <div className="mb-2 rounded-2xl bg-teal/[0.07] px-3.5 py-3 ring-1 ring-teal/20">
+      <p className="font-display text-sm font-semibold text-cream">{r.visitaTitulo}</p>
+      <p className="mt-1 text-[13px] leading-snug text-cream/70">{texto}</p>
     </div>
   );
 }

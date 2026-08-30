@@ -5,6 +5,7 @@ import { ImportarGaragem } from "./ImportarGaragem";
 import { ConfirmandoPagamento } from "./ConfirmandoPagamento";
 import { PrimeiroQuiz } from "./PrimeiroQuiz";
 import { WelcomeBack } from "./WelcomeBack";
+import { SalveSuaGaragem } from "./SalveSuaGaragem";
 import type { View } from "@/lib/app/nav";
 
 // Tudo o que aparece POR CIMA do app.
@@ -26,7 +27,11 @@ import type { View } from "@/lib/app/nav";
 //      razão do item 1: quem pagou não pode receber um quiz por cima do recibo.
 //   4. FeedbackSheet — montada uma vez, acordada por evento (ver
 //      lib/app/feedbackPrompt.ts).
-//   5. WelcomeBack — a mais baixa e a mais dispensável; qualquer uma das
+//   5. SalveSuaGaragem (z-60) — o convite a criar conta depois do primeiro
+//      carro. Abaixo do PrimeiroQuiz porque quem acabou de cadastrar o carro
+//      pode receber o quiz na mesma abertura, e o quiz é a rotina; o convite
+//      espera a próxima. Some sozinha para quem já tem conta.
+//   6. WelcomeBack — a mais baixa e a mais dispensável; qualquer uma das
 //      outras tem prioridade sobre um convite a cadastrar carro.
 //
 // A ordem no JSX abaixo é a de MONTAGEM (de baixo para cima na lista acima);
@@ -36,6 +41,7 @@ export function Sobreposicoes({ view }: { view: View["name"] }) {
   return (
     <>
       <WelcomeBack currentView={view} />
+      <SalveSuaGaragem />
       <FeedbackSheet />
       <ImportarGaragem />
       <ConfirmandoPagamento />

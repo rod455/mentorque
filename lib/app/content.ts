@@ -207,6 +207,20 @@ export function getContent(locale: Locale) {
       later: T("Faço isso depois", "I'll do it later"),
     },
 
+    // Convite a criar conta logo depois de cadastrar o primeiro carro, para
+    // quem está como convidado. O momento é escolhido: a pessoa acabou de
+    // digitar marca, modelo, ano e km, e é aí que ela mais sente que tem algo
+    // a perder. Convidar antes disso é pedir cadastro por nada.
+    salvarGaragem: {
+      title: T("Salve sua garagem", "Save your garage"),
+      body: T(
+        "Seu {carro} está guardado só neste aparelho. Criando sua conta, ele fica salvo e volta no celular novo, no tablet ou no navegador.",
+        "Your {carro} is stored on this device only. Create your account and it comes back on a new phone, on a tablet or in the browser.",
+      ),
+      cta: T("Criar minha conta", "Create my account"),
+      later: T("Agora não", "Not now"),
+    },
+
     // Tela de busca (aberta pela barra da Home)
     search: {
       ph: T("Buscar problemas ou serviços", "Search problems or services"),
@@ -1043,6 +1057,35 @@ export function getContent(locale: Locale) {
       nextKmHint: T("Atualize o km para saber se precisa fazer antes.", "Update the mileage to see if it's needed sooner."),
       remindersTitle: T("No seu calendário", "On your calendar"),
       remindersEmpty: T("Nada agendado. Adicione em Próximas revisões.", "Nothing scheduled. Add from Upcoming service."),
+      // Cada item do calendário passou a dizer QUANDO cai, em data e em km.
+      // Antes era só o nome da regra e um botão "já fiz", que responde à
+      // pergunta errada: quem abre ali quer saber quando precisa fazer.
+      planPara: T("Prevista para {data}", "Due {data}"),
+      planVencidaData: T("Estava prevista para {data}", "Was due {data}"),
+      planEmKm: T("ou em {n} km", "or in {n} km"),
+      planSoKm: T("Prevista em {n} km", "Due in {n} km"),
+      planPassouKm: T("e o km já passou {n}", "and the mileage is {n} past"),
+      planManualAmbos: T("a cada {meses} meses ou {km} km, segundo o manual", "every {meses} months or {km} km, per the manual"),
+      planManualMeses: T("a cada {meses} meses, segundo o manual", "every {meses} months, per the manual"),
+      planManualKm: T("a cada {km} km, segundo o manual", "every {km} km, per the manual"),
+      planDesdeCompra: T("contado desde a compra do carro", "counted from when you bought the car"),
+      planKmEstimado: T("km estimado: não há registro da última vez", "mileage estimated: no record of the last one"),
+      planAvisamos: T("Avisamos você nesse dia", "We'll remind you that day"),
+      planAvisoTitulo: T("{item} do seu {carro}", "{item} on your {carro}"),
+      planAvisoCorpo: T("É hoje, segundo o plano do seu carro. Vale ligar para a oficina.", "It's due today, per your car's plan. Worth calling the shop."),
+      planAvisosDesligados: T("Ligue as notificações no Perfil para ser avisado", "Turn notifications on in your profile to be reminded"),
+      // A sugestão de resolver tudo numa ida só. O custo de levar o carro não
+      // é o serviço, é o dia sem carro.
+      visitaTitulo: T("Leve tudo numa visita só", "One trip, everything done"),
+      visitaCorpo: T(
+        "{lista} caem por perto. Levando no dia {data} você resolve tudo de uma vez.",
+        "{lista} fall close together. Going on {data} settles them all at once.",
+      ),
+      visitaCorpoVencida: T(
+        "{lista} já estão em cima da hora. Uma ida só resolve as duas.",
+        "{lista} are already due. A single trip settles both.",
+      ),
+      visitaE: T("e", "and"),
       seeAllRevisions: T("Ver próximas revisões", "See upcoming service"),
       previewItems: [
         { item: T("Óleo e filtro: intervalo do seu motor", "Oil and filter: your engine's interval"), when: T("a cada 10.000 km ou 12 meses", "every 10,000 km or 12 months"), note: T("O manual do seu carro pede óleo 5W30 sintético; a oficina costuma oferecer o mineral, mais barato e fora de especificação.", "Your manual calls for 5W30 synthetic; shops often push cheaper mineral oil, out of spec."), cost: "R$ 210–390" },

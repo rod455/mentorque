@@ -3,7 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useNav, type View } from "./nav";
 import { useAuth } from "./auth";
-import { usePrototype } from "./store";
+import { activeVehicle, servicesFor, usePrototype } from "./store";
+import { carName } from "./content";
+import { sincronizarLembretesDeRevisao } from "./lembreteRevisao";
 import { funil } from "./funil";
 import { vigiarErros } from "./erros";
 import { trackContent } from "./track";
@@ -177,6 +179,7 @@ export function useConsentimentoDeAnuncios() {
  */
 export function useLembretes(c: Content) {
   const { s, subscribed, subscriptionEndsAt, subscriptionCanceling } = usePrototype();
+  const veiculo = activeVehicle(s);
 
   useEffect(() => {
     void sincronizarLembrete({
@@ -204,6 +207,30 @@ export function useLembretes(c: Content) {
   useEffect(() => {
     void sincronizarPush(s.notifications);
   }, [s.notifications]);
+
+  // Os serviços que a pessoa pôs no calendário viram aviso no dia previsto.
+  //
+  // A DATA É NOSSA, não dela: ela pôs "troca de óleo" ali justamente porque
+  // não sabe quando é. Reagendado a cada mudança do calendário, do histórico e
+  // do km, porque qualquer um dos três move a data prevista — registrar a
+  // troca de hoje empurra a próxima em doze meses, e o aviso tem que ir junto.
+  useEffect(() => {
+    void sincronizarLembretesDeRevisao({
+      quer: s.notifications,
+      veiculo,
+      servicos: veiculo ? servicesFor(s, veiculo.id) : [],
+      lembretes: s.reminders ?? [],
+      textos: {
+        titulo: c.revisions.planAvisoTitulo,
+        corpo: c.revisions.planAvisoCorpo,
+        nomes: c.revisions.ruleLabels,
+        carro: veiculo ? carName(veiculo) : "",
+      },
+    });
+    // servicesFor devolve um array novo a cada render: quem entra na lista é
+    // s.services, a fonte dele.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [s.notifications, s.reminders, s.services, veiculo?.id, veiculo?.odometerKm, veiculo?.purchaseDate, c.revisions.planAvisoTitulo, c.revisions.planAvisoCorpo]);
 }
 
 /**
