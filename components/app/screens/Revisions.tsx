@@ -76,6 +76,62 @@ function ReminderButton({ vehicleId, itemKey }: { vehicleId: string; itemKey: st
   );
 }
 
+// O convite a cadastrar a última revisão, quando o plano roda em estimativa.
+//
+// Ele é a SAÍDA do estado "km estimado": desde 30/08 um carro sem histórico
+// mostra previsões marcadas "A confirmar", que é honesto mas não resolve. O
+// que resolve é a pessoa contar quando foi a última troca, e este banner é o
+// convite. Aproximado serve, e o texto diz isso: uma âncora imprecisa de
+// verdade planeja melhor que uma estimativa precisa de mentira.
+//
+// O X dispensa POR VEÍCULO e não volta (localStorage): quem disse "não sei"
+// para o Golf não precisa repetir o não a cada visita, mas um segundo carro
+// merece o convite dele. E ele some sozinho quando o primeiro serviço é
+// cadastrado, porque aí a missão dele acabou.
+const BASE_DISPENSADO = "mq-base-revisao";
+
+function BannerUltimaRevisao({ vehicleId }: { vehicleId: string }) {
+  const c = useContent();
+  const r = c.revisions;
+  const { go } = useNav();
+  const chave = `${BASE_DISPENSADO}:${vehicleId}`;
+  const [fechado, setFechado] = useState(true);
+
+  // Começa fechado e abre depois de ler o aparelho: nascer aberto e sumir no
+  // instante seguinte (quando o localStorage responde) é um piscar que parece
+  // defeito. O atraso de um render é invisível; o piscar não.
+  useEffect(() => {
+    try { setFechado(!!window.localStorage.getItem(chave)); } catch { setFechado(false); }
+  }, [chave]);
+
+  if (fechado) return null;
+  const dispensar = () => {
+    setFechado(true);
+    try { window.localStorage.setItem(chave, "1"); } catch { /* modo privado: vale a sessão */ }
+  };
+
+  return (
+    <div className="mb-3 rounded-2xl bg-teal/[0.07] p-4 ring-1 ring-teal/20">
+      <div className="flex items-start gap-2.5">
+        <span className="mt-0.5 text-base">🗓️</span>
+        <div className="min-w-0 flex-1">
+          <p className="font-display text-sm font-semibold text-cream">{r.baseTitulo}</p>
+          <p className="mt-1 text-[13px] leading-snug text-cream/65">{r.baseCorpo}</p>
+        </div>
+        <button onClick={dispensar} aria-label="dispensar" className="-mr-1 -mt-1 shrink-0 p-1.5 text-cream/35 hover:text-cream/70">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><path d="M6 6l12 12M18 6 6 18" /></svg>
+        </button>
+      </div>
+      <button
+        onClick={() => go({ name: "addService", preset: { type: "oil" } })}
+        className="mt-3 ml-[26px] rounded-lg bg-teal/15 px-3 py-1.5 text-xs font-medium text-teal ring-1 ring-teal/30"
+      >
+        {r.baseCta}
+      </button>
+    </div>
+  );
+}
+
 type PlanItem = { item: string; status: "overdue" | "soon" | "ok" | "unknown"; when: string; note?: string; source: "manual" | "general"; serviceType?: string };
 type Plan = { summary: string; items: PlanItem[] };
 
@@ -169,7 +225,8 @@ export function RevisionsScreen() {
         : r.inKm.replace("{n}", it.inKm.toLocaleString());
       // Sem registro do último serviço, o número é uma estimativa e a tela
       // precisa dizer isso. Número inventado sem aviso é pior que nenhum.
-      return it.estimado ? `${base} — ${r.planKmEstimado}` : base;
+      // Parênteses, não travessão: texto visível segue a regra da casa.
+      return it.estimado ? `${base} (${r.planKmEstimado})` : base;
     }
     if (it.basis === "time" && it.months != null) return r.monthsAgo.replace("{n}", String(it.months));
     return "";
@@ -201,6 +258,10 @@ export function RevisionsScreen() {
     <div>
       <AppHeader title={r.title} />
       {ContextCard}
+
+      {/* Sem nenhum serviço registrado, todo o plano é estimativa: convida a
+          cadastrar a última revisão. Cadastrou uma, ele some por conta. */}
+      {services.length === 0 && <BannerUltimaRevisao vehicleId={v.id} />}
 
       {s.premium ? (
         loadingPlan && !plan ? (

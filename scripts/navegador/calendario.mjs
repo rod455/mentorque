@@ -124,6 +124,32 @@ export async function rodar({ nav, ok }) {
   ok("ele diz que a previsão é a confirmar", /A confirmar/i.test(rev), rev.replace(/\n/g, " | ").slice(0, 160));
   ok("e avisa que o km é estimado", /estimado/i.test(rev));
 
+  // ---- o convite a cadastrar a última revisão -----------------------------
+  //
+  // O banner é a saída do estado estimado: sem nenhum serviço registrado, ele
+  // convida a cadastrar a última revisão (aproximada serve). O X dispensa por
+  // veículo e a dispensa SOBREVIVE à recarga — um X que volta ensina a pessoa
+  // a ignorar banner, que é pior do que não ter banner.
+  ok("o convite a cadastrar a última revisão aparece", /última revisão/i.test(rev), rev.replace(/\n/g, " | ").slice(0, 160));
+  const cta = u.pg.locator("main button").filter({ hasText: /Cadastrar última revisão/i }).first();
+  ok("o convite tem o botão de cadastrar", (await cta.count()) > 0);
+
+  const x = u.pg.locator('main [aria-label="dispensar"]').first();
+  ok("o convite tem o X de dispensar", (await x.count()) > 0);
+  if (await x.count()) {
+    await x.click();
+    await u.pg.waitForTimeout(600);
+    ok("o X fecha o convite", !/última revisão\?/i.test(await u.tela()));
+    await u.recarregar();
+    await u.pg.getByRole("button", { name: /^Carros$/i }).first().click();
+    await u.pg.waitForTimeout(1000);
+    await u.pg.locator('main [role="button"]').first().click();
+    await u.pg.waitForTimeout(1500);
+    const rev2 = u.pg.locator("main button, main a").filter({ hasText: /Próximas revisões/i }).first();
+    if (await rev2.count()) { await rev2.click(); await u.pg.waitForTimeout(2500); }
+    ok("a dispensa sobrevive à recarga", !/última revisão\?/i.test(await u.tela()));
+  }
+
   // O nome longo do carro recém-comprado também cabe: "menos de 1 mês" era a
   // string que estourava o cartão no Android do dono.
   await u.pg.getByRole("button", { name: /^Carros$/i }).first().click();

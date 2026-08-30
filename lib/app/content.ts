@@ -1046,6 +1046,15 @@ export function getContent(locale: Locale) {
         tires: T("Pneus (rodízio/troca)", "Tires (rotation/replace)"),
         battery: T("Bateria", "Battery"),
       } as Record<string, string>,
+      // Convite a cadastrar a última revisão, mostrado quando o plano está
+      // rodando em estimativa (nenhum registro de serviço). Dispensável com X,
+      // por veículo, e some sozinho quando o primeiro serviço é cadastrado.
+      baseTitulo: T("Sabe quando foi a última revisão?", "Know when the last service was?"),
+      baseCorpo: T(
+        "Cadastre a última troca de óleo ou revisão, mesmo que de forma aproximada. A partir dela o plano passa a contar com as suas datas, em vez de estimativas.",
+        "Log your last oil change or service, even roughly. From then on the plan runs on your real dates instead of estimates.",
+      ),
+      baseCta: T("Cadastrar última revisão", "Log last service"),
       overdueKm: T("vencida há {n} km", "{n} km overdue"),
       inKm: T("em {n} km", "in {n} km"),
       monthsAgo: T("última há {n} meses", "last done {n} months ago"),
