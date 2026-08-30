@@ -14,8 +14,8 @@ import { NextResponse } from "next/server";
 // PRODUÇÃO — quem instala pelas faixas de teste está sempre à frente e não
 // deve ver aviso.
 const LATEST = {
-  android: 10, // 1.2 publicada na Play (versionCode 10, android/gradle.properties)
-  ios: 45, // 1.2 publicada na App Store (build 45, conferido pelo dono no App Store Connect)
+  android: 12, // 1.4 em produção na Play (versionCode 12, android/gradle.properties)
+  ios: 48, // 1.4 em produção na App Store (build 48, o que o TestFlight mostrava)
 };
 
 export function GET() {

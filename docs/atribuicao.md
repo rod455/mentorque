@@ -27,11 +27,45 @@ fuso São Paulo, apps Android e iOS cadastrados.
    Business Manager) e Google Ads → ativar (pede o link com a conta do
    Google Ads, um código de "link" que aparece lá). Sem isso o AppsFlyer
    mede, mas não conversa com as plataformas de anúncio.
-2. **Rótulos de privacidade da App Store**: no App Store Connect → App
-   Privacy, declarar o que o SDK coleta SEM ATT: identificadores de
-   aparelho não (sem IDFA), mas dados de uso/diagnóstico e endereço IP
-   sim, finalidade "Analytics/Marketing do desenvolvedor", não vinculados
-   à identidade. A Play tem seção equivalente (Segurança dos dados).
+2. **Rótulos de privacidade das lojas.** A primeira versão desta linha dizia
+   "identificadores de aparelho não (sem IDFA)", e estava ERRADA. Sem ATT o
+   app realmente não pega o IDFA, mas identificador de aparelho ele pega:
+   no iPhone o IDFV, e no Android o identificador de publicidade (temos a
+   permissão `AD_ID` no manifesto, usada pelo AdMob e pelo AppsFlyer).
+   Declarar "não coleta identificador" seria declaração falsa para as duas
+   lojas. O que declarar, em cada uma:
+
+   **App Store Connect → App Privacy** (o iPhone não tem AdMob):
+
+   | Dado | Coleta | Finalidade | Vinculado a você | Usado para rastrear |
+   |---|---|---|---|---|
+   | Identificadores → ID do dispositivo (IDFV) | sim | Análise + Publicidade do desenvolvedor | **não** | **não** |
+   | Dados de uso → Interação com o produto | sim | Análise | não | não |
+   | Diagnóstico → Outros dados de diagnóstico | sim | Análise | não | não |
+
+   **Play Console → Segurança dos dados** (o Android tem AdMob junto):
+
+   | Dado | Coleta | Compartilha | Finalidade |
+   |---|---|---|---|
+   | Device or other IDs (ID de publicidade) | sim | **sim** | Publicidade/marketing, Análise, Prevenção de fraude |
+   | App activity → Interações no app | sim | não | Análise |
+   | App info and performance → Diagnóstico | sim | não | Análise |
+
+   E marcar a declaração de **ID de publicidade** no formulário da Play (ela
+   é obrigatória por causa da permissão `AD_ID`).
+
+   POR QUE "usado para rastrear = não" NA APPLE, com um SDK de atribuição
+   dentro: rastreamento, na definição da Apple, é ligar os dados desta
+   pessoa a dados de TERCEIROS no nível do indivíduo, para anúncio ou venda
+   a data broker. Não fazemos isso: não pedimos ATT, não pegamos IDFA, a
+   atribuição do iPhone é o SKAdNetwork (mecanismo da própria Apple, que
+   entrega agregado) e os interruptores de compartilhamento avançado do
+   AppsFlyer com a Meta estão DESLIGADOS.
+
+   DUAS COISAS MUDAM ESSA RESPOSTA, e quem mexer nelas tem de voltar aqui:
+   ligar o "Advanced Matching" na integração da Meta, ou passar a mandar o
+   CUID (o id da conta) para o AppsFlyer. Qualquer uma das duas transforma o
+   dado em vinculado à identidade, e a da Apple passa a exigir ATT.
 3. **Nas campanhas**: Android roda e mede desde o primeiro dia (a
    atribuição do Android independe de SKAN). No iPhone, os números do
    SKAdNetwork chegam agregados e com atraso de 1 a 3 dias, e SÓ para
