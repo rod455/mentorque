@@ -1,10 +1,10 @@
 # Retrato diario da operacao Mentorque
 
-Gerado pelo Analista de Dados (n8n) em 2026-08-29T09:00:06.294Z.
+Gerado pelo Analista de Dados (n8n) em 2026-08-30T09:00:06.365Z.
 NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 
 ## MARKETING (gente chegando)
-- Semana corrente (2026-08-24): aberturas 49, visitantes 11, cadastros 1
+- Semana corrente (2026-08-24): aberturas 64, visitantes 13, cadastros 1
 - Semana anterior (2026-08-17): aberturas 4, visitantes 2, cadastros 0
 - Cadastros 28d via (direto) / (sem campanha): 1
 - Midia paga: sem gasto no periodo (crescimento organico)
@@ -12,19 +12,19 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 - YouTube: 0 inscritos, 0 views totais, 10 videos recentes
 
 ## ENGAJAMENTO (gente usando e voltando)
-- Semana corrente (2026-08-24): 11 usuarios ativos, 49 aberturas (4.5 por usuario)
+- Semana corrente (2026-08-24): 13 usuarios ativos, 64 aberturas (4.9 por usuario)
 - Semana anterior (2026-08-17): 2 usuarios ativos, 4 aberturas (2 por usuario)
 - Retencao, coorte 2026-08-24: 1 cadastrados, 0 voltaram em 1 a 7 dias, 0 em 8 a 30 dias
 - Ativacao, coorte 2026-08-24: 0 de 1 fizeram a primeira acao de valor em 7 dias
-- Erros no app 7d: 8
-  - 5x: "LocalNotifications.then()" is not implemented on ios
+- Erros no app 7d: 12
+  - 9x: "LocalNotifications.then()" is not implemented on ios
   - 3x: "LocalNotifications.then()" is not implemented on android
 - Play vitals: sem dados de crash ainda
 - Avaliacoes nas lojas: 0
 
 ## VENDAS (gente pagando e continuando)
 - Assinaturas ativas (banco): 1 (anuais 1, mensais 0), cancelamento agendado: 0
-- Fundo do funil, Semana corrente: viram paywall 7, iniciaram checkout 4, assinaram 1, cancelaram 0
+- Fundo do funil, Semana corrente: viram paywall 9, iniciaram checkout 4, assinaram 1, cancelaram 0
 - Fundo do funil, Semana anterior: viram paywall 0, iniciaram checkout 0, assinaram 0, cancelaram 0
 - Assinantes, coorte 2026-08-01: 1 assinaram, 0 renovaram, 0 sairam
 - Stripe (live): 0 assinaturas, MRR 0.00, receita 30d 0.00
@@ -50,20 +50,20 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 ```json
 {
   "dados": {
-    "geradoEm": "2026-08-29T09:00:04.851Z",
+    "geradoEm": "2026-08-30T09:00:04.893Z",
     "funilSemanas": [
       {
         "semana": "2026-08-24",
-        "aberturas": 49,
-        "visitantes": 11,
+        "aberturas": 64,
+        "visitantes": 13,
         "cadastros": 1,
-        "viram_paywall": 7,
+        "viram_paywall": 9,
         "iniciaram_checkout": 4,
         "assinaturas": 1,
         "renovacoes": 0,
         "cancelamentos": 0,
         "expirados": 0,
-        "viram_paywall_pessoas": 5,
+        "viram_paywall_pessoas": 7,
         "iniciaram_checkout_pessoas": 2,
         "assinaturas_pessoas": 1,
         "ativaram_pessoas": 0
@@ -95,11 +95,11 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       "2026-08-28": 1
     },
     "erros7d": {
-      "total": 8,
+      "total": 12,
       "top": [
         {
           "mensagem": "\"LocalNotifications.then()\" is not implemented on ios",
-          "total": 5
+          "total": 9
         },
         {
           "mensagem": "\"LocalNotifications.then()\" is not implemented on android",
@@ -109,6 +109,11 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
     },
     "uso": {
       "porDia": [
+        {
+          "dia": "2026-08-29",
+          "usuarios": 5,
+          "aberturas": 15
+        },
         {
           "dia": "2026-08-28",
           "usuarios": 5,
@@ -143,9 +148,9 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       "porSemana": [
         {
           "semana": "2026-08-24",
-          "usuarios_ativos": 11,
-          "aberturas": 49,
-          "aberturas_por_usuario": 4.5
+          "usuarios_ativos": 13,
+          "aberturas": 64,
+          "aberturas_por_usuario": 4.9
         },
         {
           "semana": "2026-08-17",
@@ -194,10 +199,10 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       {
         "de": "abriu_app",
         "para": "cadastro",
-        "antes": 11,
+        "antes": 13,
         "depois": 1,
-        "taxa": 9.1,
-        "perdidos": 10
+        "taxa": 7.7,
+        "perdidos": 12
       },
       {
         "de": "cadastro",
@@ -211,17 +216,17 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "de": "ativacao",
         "para": "viu_paywall",
         "antes": 0,
-        "depois": 5,
+        "depois": 7,
         "taxa": null,
         "perdidos": 0
       },
       {
         "de": "viu_paywall",
         "para": "iniciou_checkout",
-        "antes": 5,
+        "antes": 7,
         "depois": 2,
-        "taxa": 40,
-        "perdidos": 3
+        "taxa": 28.6,
+        "perdidos": 5
       },
       {
         "de": "iniciou_checkout",
