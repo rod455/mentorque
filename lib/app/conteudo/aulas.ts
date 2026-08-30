@@ -1196,7 +1196,7 @@ const lessons: Lesson[] = [
   // Publicados pelo catálogo remoto, SEM build: chegam aos aparelhos por
   // deploy do site. Sem thumb de propósito (a arte entra depois); o player
   // não depende dela.
-  art({ id: "vid-supercharger-turbo", track: "sports", type: "video", system: "engine", traits: ["turbo"], addedAt: "2026-08-29",
+  art({ id: "vid-supercharger-turbo", track: "sports", type: "video", system: "engine", traits: ["turbo"], addedAt: "2026-08-29", thumb: "/learn/vid-supercharger-turbo.png?v=4",
     media: { provider: "youtube", src: "xCgRMK7D_Kw", vertical: true },
     title: T("Supercharger ou turbo: qual é a diferença de verdade", "Supercharger or turbo: the real difference"), related: ["vid-turbo-aspirado", "vid-turbo-pressao", "vid-nitro"],
     body: [
@@ -1207,7 +1207,7 @@ const lessons: Lesson[] = [
     T("Por estar preso à rotação, o supercharger responde na hora: pisou, encheu. O turbo precisa de fluxo de escape para acordar, o famoso lag, que os projetos modernos reduziram muito. Em troca, o turbo aproveita energia quase de graça, e é por isso que virou o padrão de fábrica na era do consumo e das emissões.", "Being tied to engine speed, the supercharger answers instantly: floor it and it's there. The turbo needs exhaust flow to wake up, the famous lag, much reduced in modern designs. In exchange, the turbo recycles nearly free energy, which is why it became the factory standard in the age of fuel economy and emissions."),
     T(">> Na prática: nos carros novos você vai encontrar turbo em quase tudo, e supercharger sobrevivendo onde a resposta imediata importa mais que o consumo, como em alguns V8 americanos. Para entender o que o número de pressão significa, veja [[vid-turbo-pressao|o que é 1 kg de turbo]].", ">> In practice: in new cars you'll find turbos on almost everything, with superchargers surviving where instant response matters more than fuel use, as in some American V8s. To understand what the boost number means, see [[vid-turbo-pressao|what 1 kg of boost is]]."),
   ]}),
-  art({ id: "vid-agua-radiador", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-08-29",
+  art({ id: "vid-agua-radiador", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-08-29", thumb: "/learn/vid-agua-radiador.png?v=4",
     media: { provider: "youtube", src: "3de_ebi5VhE", vertical: true },
     title: T("Água de torneira no radiador: o que acontece de verdade", "Tap water in the radiator: what really happens"), related: ["fund-systems", "diag-smells"],
     body: [
@@ -1219,7 +1219,7 @@ const lessons: Lesson[] = [
     T(">> Na prática: numa emergência, complete com água (de preferência desmineralizada) e siga viagem. Mas trate como curativo: depois, drene e refaça a mistura na concentração que o manual do carro pede.", ">> In practice: in an emergency, top up with water (demineralized if possible) and carry on. But treat it as a band-aid: afterwards, drain and refill the mix at the concentration your owner's manual specifies."),
     T("!! Nunca abra a tampa do radiador com o motor quente: o sistema fica pressurizado e a água sai fervendo em jato. Espere esfriar. Queimadura de radiador é das mais comuns e das mais evitáveis da mecânica.", "!! Never open the radiator cap on a hot engine: the system is pressurized and boiling water sprays out. Let it cool. Radiator burns are among the most common and most avoidable injuries in car care."),
   ]}),
-  art({ id: "vid-abastecer-bolso", track: "money", type: "video", system: "engine", addedAt: "2026-08-29",
+  art({ id: "vid-abastecer-bolso", track: "money", type: "video", system: "engine", addedAt: "2026-08-29", thumb: "/learn/vid-abastecer-bolso.png?v=4",
     media: { provider: "youtube", src: "NgAAz9bOjZ4", vertical: true },
     title: T("Gasolina ou etanol: qual ajuda mais o seu bolso", "Gasoline or ethanol: which helps your wallet more"), related: ["fuel-compare", "vid-etanol-gasolina", "vid-gasolina-e30"],
     body: [
@@ -1230,7 +1230,7 @@ const lessons: Lesson[] = [
     T("Os 70% são média de frota. Motores flex mais novos aproveitam melhor o etanol (ele aceita mais avanço de ignição), e o seu uso, cidade ou estrada, também mexe no número. A régua honesta é a do SEU carro: consumo real com um combustível e com o outro.", "The 70% figure is a fleet average. Newer flex engines make better use of ethanol (it tolerates more ignition advance), and your usage, city or highway, moves the number too. The honest rule is YOUR car's: real consumption on each fuel."),
     T(">> Na prática: a [[fuel-compare|calculadora do app]] faz essa conta com os seus números e os preços do seu posto. Dois tanques medidos e você nunca mais abastece no chute.", ">> In practice: the [[fuel-compare|app's calculator]] runs this math with your numbers and your station's prices. Two measured tanks and you'll never guess at the pump again."),
   ]}),
-  art({ id: "vid-200cv", track: "culture", type: "video", system: "engine", addedAt: "2026-08-29",
+  art({ id: "vid-200cv", track: "culture", type: "video", system: "engine", addedAt: "2026-08-29", thumb: "/learn/vid-200cv.png?v=4",
     media: { provider: "youtube", src: "Y3KhDQxK8nU", vertical: true },
     title: T("200 cv é pouco para um carro?", "Is 200 hp too little for a car?"), related: ["vid-comparar-motores", "vid-cilindrada", "vid-turbo-aspirado"],
     body: [
@@ -1241,7 +1241,7 @@ const lessons: Lesson[] = [
     T("Torque em baixa rotação, câmbio bem escalonado e resposta do acelerador definem a sensação do dia a dia mais que o pico de potência, que só existe lá em cima do conta-giros. Um 200 cv turbo com torque cedo parece mais forte que um 200 cv que só entrega tudo a 7.000 rpm.", "Low-rpm torque, well-spaced gearing and throttle response define everyday feel more than peak power, which only exists at the top of the tach. A 200 hp turbo with early torque feels stronger than a 200 hp engine that only delivers at 7,000 rpm."),
     T(">> Na prática: antes de julgar um carro pela potência, olhe o peso e o torque, e em que rotação ele chega. A ficha técnica inteira conta a história que o número da capa esconde: o jeito certo de ler está em [[vid-comparar-motores|como comparar motores diferentes]].", ">> In practice: before judging a car by its power figure, check weight and torque, and at what rpm it arrives. The full spec sheet tells the story the headline number hides: the right way to read it is in [[vid-comparar-motores|how to compare different engines]]."),
   ]}),
-  art({ id: "vid-carbonizacao-etanol", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-08-29",
+  art({ id: "vid-carbonizacao-etanol", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-08-29", thumb: "/learn/vid-carbonizacao-etanol.png?v=4",
     media: { provider: "youtube", src: "oe5Ll4Ah_mo", vertical: true },
     title: T("Carbonização no pistão: o etanol seria o culpado?", "Carbon on the piston: is ethanol to blame?"), related: ["vid-etanol-gasolina", "vid-e32", "vid-avanco-ignicao"],
     body: [
@@ -1252,7 +1252,7 @@ const lessons: Lesson[] = [
     T("O etanol queima mais limpo que a gasolina e ainda age como solvente: tende a LIMPAR depósito, não a criar. Motor flex carbonizado geralmente está contando outra história: mistura errada, óleo subindo ou uso que nunca deixa o motor trabalhar quente.", "Ethanol burns cleaner than gasoline and even acts as a solvent: it tends to CLEAN deposits, not create them. A carboned-up flex engine is usually telling another story: wrong mixture, oil getting through, or a usage pattern that never lets the engine run hot."),
     T(">> Na prática: carbonização recorrente pede diagnóstico, não troca de combustível. A leitura das velas é o raio-X barato: cor de tijolo é saúde, preto fuligento é mistura ou uso, preto oleoso é óleo passando.", ">> In practice: recurring carbon build-up calls for diagnosis, not a fuel switch. Reading the spark plugs is the cheap X-ray: brick colour is health, sooty black is mixture or usage, oily black is oil getting past."),
   ]}),
-  art({ id: "vid-eletrico-combustao-1", track: "culture", type: "video", system: "engine", addedAt: "2026-08-29",
+  art({ id: "vid-eletrico-combustao-1", track: "culture", type: "video", system: "engine", addedAt: "2026-08-29", thumb: "/learn/vid-eletrico-combustao-1.png?v=4",
     media: { provider: "youtube", src: "-no1zbAFzjk", vertical: true },
     title: T("Elétrico contra combustão, parte 1: a força", "Electric versus combustion, part 1: the muscle"), related: ["vid-eletrico-combustao-2", "cult-ev"],
     body: [
@@ -1263,7 +1263,7 @@ const lessons: Lesson[] = [
     T("A faixa útil do elétrico é tão larga que uma marcha só resolve na maioria dos carros. O de combustão depende do câmbio para multiplicar força e manter o motor na faixa boa, e é ele que dá o ritmo (e a graça, para muita gente) da experiência.", "The electric motor's usable band is so wide that a single gear does the job in most cars. The combustion engine depends on the gearbox to multiply force and stay in its sweet spot, and that gearbox sets the rhythm (and, for many, the charm) of the experience."),
     T(">> Na prática: em arrancada urbana, o elétrico surpreende qualquer um pela resposta imediata. Mas força é só metade da batalha: energia, recarga e custo por km ficam para a [[vid-eletrico-combustao-2|parte 2]].", ">> In practice: in city sprints, the electric's instant response surprises everyone. But muscle is only half the battle: energy, charging and cost per km are in [[vid-eletrico-combustao-2|part 2]]."),
   ]}),
-  art({ id: "vid-eletrico-combustao-2", track: "culture", type: "video", system: "engine", addedAt: "2026-08-29",
+  art({ id: "vid-eletrico-combustao-2", track: "culture", type: "video", system: "engine", addedAt: "2026-08-29", thumb: "/learn/vid-eletrico-combustao-2.png?v=4",
     media: { provider: "youtube", src: "H6tmrmDbz88", vertical: true },
     title: T("Elétrico contra combustão, parte 2: a conta", "Electric versus combustion, part 2: the bill"), related: ["vid-eletrico-combustao-1", "cult-ev"],
     body: [
@@ -1274,7 +1274,7 @@ const lessons: Lesson[] = [
     T("Por quilômetro, a energia elétrica costuma custar uma fração do combustível, e o motor elétrico tem uma fração das peças móveis: sem óleo, sem correia, sem escapamento, freio durando mais por causa da regeneração. Em troca, o preço de entrada é maior e a bateria é o componente caro a proteger.", "Per kilometre, electricity usually costs a fraction of fuel, and the electric motor has a fraction of the moving parts: no oil, no belt, no exhaust, brakes lasting longer thanks to regeneration. In exchange, the entry price is higher and the battery is the expensive component to protect."),
     T(">> Na prática: não existe vencedor universal, existe perfil de uso. Roda muito na cidade e tem onde carregar: o elétrico faz sentido hoje. Vive de estrada e imprevisto: a combustão (ou um híbrido) ainda cobra menos pedágio. Como o elétrico funciona por dentro está em [[cult-ev|como funciona um carro elétrico]].", ">> In practice: there's no universal winner, there's a usage profile. Mostly city driving with a place to charge: the EV makes sense today. A life of highways and surprises: combustion (or a hybrid) still charges less toll. How the EV works inside is in [[cult-ev|how an electric car works]]."),
   ]}),
-  art({ id: "vid-comparar-motores", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-08-29",
+  art({ id: "vid-comparar-motores", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-08-29", thumb: "/learn/vid-comparar-motores.png?v=4",
     media: { provider: "youtube", src: "Y7OFqzMwieM", vertical: true },
     title: T("Como comparar motores diferentes sem cair em pegadinha", "How to compare different engines without getting fooled"), related: ["vid-cilindrada", "vid-tsi", "vid-200cv"],
     body: [
