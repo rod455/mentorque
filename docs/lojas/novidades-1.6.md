@@ -81,8 +81,28 @@ Melhorias internas de estabilidade.
      eles são um por aparelho, e repetir faria a etapa só crescer.
   3. Abrir uma das sete aulas (a da bateria serve) e conferir que aparece o
      texto e a capa quadrada, e não a arte de "vídeo ainda não publicado".
-- Depois de publicar, bumpar `/api/app/latest` para o versionCode que a Play
-  mostrar em Produção e para o build iOS que o log do Codemagic imprimir.
-  ATENÇÃO: o número do Android NÃO sai do gradle.properties; o CI usa o
-  contador do Codemagic e trata o nosso valor só como piso. A 1.5 saiu como
-  51.
+## Os números desta versão, confirmados no log
+
+- **Android: versionCode 52** (linha `versionCode deste envio: 52` do passo
+  "Compilar .aab"). É a única fonte que vale; o "Index" da tela do Codemagic
+  não é o contador, e o número do gradle.properties é só o piso.
+- **iOS: build 52 esperado.** O passo "Número da build (iOS, incremental)"
+  usa o MESMO `PROJECT_BUILD_NUMBER + 1` do Android, então deve bater. Vale
+  confirmar no TestFlight antes de escrever o número em qualquer lugar.
+- Enviadas para análise nas duas lojas em 01/09/2026.
+
+## Bumpar /api/app/latest: SÓ DEPOIS DE APROVAR
+
+`/api/app/latest` alimenta o banner "versão nova disponível" da tela inicial.
+Ele tem que apontar para o que está em **PRODUÇÃO**, não para o que está em
+análise. Bumpar agora acenderia o aviso para todo mundo na 1.5 com a 1.6
+ainda impossível de baixar, que é pior que não avisar.
+
+Quando as duas lojas aprovarem e a versão estiver publicada, trocar para:
+
+```ts
+const LATEST = {
+  android: 52,
+  ios: 52, // conferir no TestFlight/App Store Connect antes
+};
+```
