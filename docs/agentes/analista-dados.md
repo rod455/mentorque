@@ -29,7 +29,18 @@ leem. Não analisa, não opina, não notifica o Rodrigo; entrega matéria-prima.
    grava o próprio erro e não derruba os demais. Cada braço grava um pacote
    por dia na mesa única POST /api/metricas (tabela metricas_diarias), que o
    /api/dados devolve em fontesExternas e o retrato diário resume na seção
-   "Fontes externas". Exceção: o braço de avaliações do Play grava em
+   "Fontes externas".
+
+   AO ESCREVER ESSA SEÇÃO, A IDADE VEM ANTES DO VALOR. O /api/dados devolve
+   `frescorDasFontes` (dias parados por fonte) e `avisoDeColeta` (uma frase,
+   ou null quando está tudo em dia). Regra: se `avisoDeColeta` não for null,
+   ele é a PRIMEIRA linha da seção; e toda fonte com `parada: true` sai como
+   "PARADO há N dias (último: dd/mm)" ANTES do valor, nunca só o valor.
+   Motivo, com data: entre 23/08 e 01/09/2026 a coleta ficou morta e o
+   retrato imprimiu aqueles pacotes como se fossem do dia. O relatório do
+   Diretor quase publicou "Stripe: 0 assinaturas" com dois clientes reais
+   pagando. Dado velho sem idade é pior que dado ausente: o ausente faz
+   perguntar, o velho faz decidir errado. Exceção: o braço de avaliações do Play grava em
    /api/avaliacoes, junto com as da Apple.
 
    Braços e o que cada um coleta:

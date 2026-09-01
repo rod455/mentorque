@@ -1,3 +1,4 @@
+import { avisoDeColeta, frescorDasFontes } from "./frescorDasFontes";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 
 // O agregado da operação num lugar só: alimenta a rota /api/dados (que o
@@ -23,7 +24,11 @@ export async function coletarDadosOperacao() {
     admin.from("subscriptions").select("status, cancel_at_period_end, plan"),
     admin.from("funil_eventos").select("criado_em, plataforma").eq("evento", "cadastro").gte("criado_em", d14),
     admin.from("app_erros").select("criado_em, mensagem, plataforma").gte("criado_em", d7).limit(2000),
-    admin.from("metricas_diarias").select("dia, fonte, dados").gte("dia", d10dias).order("dia", { ascending: false }).limit(120),
+    // SEM filtro de data: o frescor precisa enxergar fonte parada há muito
+    // tempo, e a janela de 10 dias fazia a fonte morta SUMIR em vez de
+    // gritar. O recorte de 10 dias continua existindo, mas em memória,
+    // depois de calcular há quanto tempo cada uma parou.
+    admin.from("metricas_diarias").select("dia, fonte, dados").order("dia", { ascending: false }).limit(400),
     admin.from("uso_diario").select("*").limit(14),
     admin.from("uso_semanal").select("*").limit(8),
     admin.from("retencao_coortes").select("*").limit(8),
@@ -68,8 +73,13 @@ export async function coletarDadosOperacao() {
     .slice(0, 5)
     .map(([mensagem, total]) => ({ mensagem, total }));
 
+  // O frescor sai de TODAS as linhas; a série exibida, só dos últimos 10 dias.
+  const hoje = new Date().toISOString().slice(0, 10);
+  const frescor = frescorDasFontes(metricas ?? [], hoje);
+
   const porFonte: Record<string, { dia: string; dados: Record<string, unknown> }[]> = {};
   for (const m of metricas ?? []) {
+    if (m.dia < d10dias) continue;
     (porFonte[m.fonte] ??= []).push({ dia: m.dia, dados: (m.dados ?? {}) as Record<string, unknown> });
   }
 
@@ -108,6 +118,11 @@ export async function coletarDadosOperacao() {
     // Fontes externas coletadas pelo Analista (metricas_diarias): para cada
     // fonte, o pacote mais recente e a série dos últimos 10 dias.
     fontesExternas: porFonte,
+    // A IDADE de cada fonte, da mais parada para a mais fresca, e uma frase
+    // para quem só lê uma linha. Sem isto, pacote de nove dias atrás era
+    // publicado como se fosse de hoje (ver lib/frescorDasFontes.ts).
+    frescorDasFontes: frescor,
+    avisoDeColeta: avisoDeColeta(frescor),
   };
 }
 

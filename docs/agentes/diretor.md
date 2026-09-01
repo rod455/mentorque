@@ -17,6 +17,11 @@ amostra pequena e o roteiro de diagnóstico). O relatório segue esse método.
    avaliações das lojas, com o JSON bruto no fim). É a fonte primária: um
    `git pull` e está tudo aí. Se o arquivo estiver com mais de 2 dias,
    registrar que a ponte falhou (vira recomendação de conserto).
+   E a idade do ARQUIVO não é a idade do DADO: cada bloco envelhece sozinho.
+   A seção "Fontes externas" traz o aviso de coleta e os dias parados por
+   fonte (campos `avisoDeColeta` e `frescorDasFontes` do /api/dados). Fonte
+   marcada como parada NÃO entra no relatório como número do período: entra
+   como "sem medição desde dd/mm".
 2. **O que mudou no produto**: `git log --oneline` da semana no repositório.
 3. **O time**: docs/agentes/DIARIO.md e os artifacts dos outros agentes
    (QA às quartas, CRO às sextas, Conteúdo às terças, ASO nos dias 1 e 15),
