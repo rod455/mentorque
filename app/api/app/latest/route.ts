@@ -20,6 +20,12 @@ import { NextResponse } from "next/server";
 // justamente por eu ter copiado do arquivo: ninguém na 1.4 recebia o aviso,
 // porque 48 já era maior que 12. O número certo é o que a Play mostra em
 // Produção → Versões → "Códigos de versão".
+// E NÃO É O "Index" DA TELA DO CODEMAGIC TAMBÉM. Em 01/09 a tela dizia
+// "Index: 12" e eu tratei isso como o PROJECT_BUILD_NUMBER, concluindo que o
+// envio ia sair com 14 e ser recusado pela Play. Falso alarme, e o segundo com
+// o mesmo número: o contador é do PROJETO e já estava perto de 51. A linha que
+// responde de verdade é `versionCode deste envio: N`, impressa pelo passo
+// "Compilar .aab" no log do Codemagic.
 const LATEST = {
   android: 51, // 1.5 em produção na Play (código de versão 51, lançada 31/08)
   ios: 51, // 1.5 em produção na App Store (build 51)
