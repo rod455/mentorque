@@ -49,6 +49,35 @@ amostra pequena e o roteiro de diagnóstico). O relatório segue esse método.
 3. Commit e push só de docs/agentes (o Diretor analisa, não mexe em código
    de produto; isso é papel do QA e do CRO).
 
+## Prioridade com prazo não cabe só no relatório
+
+Descoberto em 01/09/2026, e vale para sempre: o relatório é semanal, mas o
+mundo não é.
+
+A prioridade 1 da rodada de 31/08 era conferir duas faturas ANTES que elas
+cobrassem alguém, e a primeira vencia no dia seguinte, às 23h52. O relatório
+estava certo, o prazo estava escrito, e mesmo assim a conferência só aconteceu
+porque o dono perguntou por acaso na segunda-feira de manhã. Um artifact de
+segunda é o veículo errado para um prazo de terça.
+
+A regra que fica:
+
+- Recomendação com PRAZO ANTERIOR À PRÓXIMA RODADA sai do corpo do relatório
+  e vai para o TOPO, com data e hora no próprio título.
+- Se o prazo for em menos de 24 horas, ela vem ANTES do número da semana.
+  Relatório bonito com cliente cobrado errado é relatório que falhou.
+- E o Diretor avisa o Rodrigo POR FORA do artifact (a notificação da rotina
+  serve). Um relatório que ninguém abriu a tempo não protegeu ninguém.
+
+## O placar carrega a prova, não a lembrança
+
+Toda rodada começa pelo placar das prioridades anteriores, e cada item vem
+com o que PROVA o estado dele: número, identificador, commit ou print.
+
+"Build às lojas FEITO" vale pouco. "1.5 em produção nas duas lojas, código de
+versão 51, lançada em 31/08" vale, porque a rodada seguinte confere em dez
+segundos em vez de refazer o trabalho.
+
 ## Alçada
 
 A geral das DIRETRIZES.md. Especificamente para o Diretor: ele NÃO implementa
@@ -118,6 +147,18 @@ o agente do papel certo na rodada seguinte.
   relatório neste estágio. Etapa que nunca recebeu evento não pode aparecer
   como 0 ao lado de uma etapa que recebeu e deu 0. No artifact isso virou
   hachura contra barra; em texto, a regra é sempre escrever "sem medição".
+
+- 2026-09-01: a dúvida do cupom da rodada anterior foi CONFERIDA e está
+  encerrada, com prova nas duas assinaturas. Não reabrir: o fato virou
+  aprendizado permanente na skill (a fatura zerada de abertura do teste não
+  consome o cupom).
+- 2026-09-01: antes de chamar uma etapa de GARGALO, perguntar se ela é um
+  caminho DESENHADO. O relatório de 31/08 chamou de gargalo o fato de 15 das
+  17 pessoas usarem sem criar conta, mas usar como convidado é decisão de
+  produto, está nos Termos e é oferecido de propósito. Onde a pessoa PODE
+  pular a etapa, o número é segmentação, não vazamento. Vira gargalo só se a
+  etapa for obrigatória para a pessoa chegar ao valor, e aí a frase tem que
+  dizer QUAL valor ela não alcança sem passar.
 
 ## Direcionamentos do dono
 

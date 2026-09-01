@@ -3,6 +3,43 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-01 · Placar das prioridades do Diretor: as três fechadas
+
+- PRIORIDADE 1 (conferir as faturas antes de cobrarem alguém): CONFERIDA e
+  ENCERRADA, com prova nas duas assinaturas. A fatura de R$ 0,00 que abre o
+  teste NÃO consome o cupom de 100%. A Upcoming invoice de cada uma mostra
+  subtotal R$ 29,90, o desconto e total R$ 0,00: luizfmviana em 01/09 (cupom
+  "1 mês grátis (lançamento)") e eng.avilanova em 04/09 (cupom do
+  Alessandro). Ninguém foi cobrado errado, e a primeira receita real segue
+  prevista para outubro. O fato virou aprendizado permanente na skill.
+- Susto no caminho, que vale como aprendizado: o painel do Stripe abre no
+  filtro "Active", e assinatura em teste tem status `trialing`. Por um
+  momento pareceu que as duas assinaturas tinham sumido. Elas estavam no
+  filtro "All" o tempo todo.
+- PRIORIDADE 2 (publicar a 1.5): FEITA pelo dono. 1.5 em produção nas duas
+  lojas desde 31/08, código de versão 51 na Play e build 51 na App Store.
+  Ela leva o convite "salve sua garagem", que é a aposta contra a passagem
+  de 12%. A medição dessa passagem é da próxima rodada.
+- PRIORIDADE 3 (consertar o retrato): FEITA, e o diagnóstico era pior que o
+  relatado. O banco mostra que a coleta de fontes externas morreu em 23/08 às
+  21h43: as onze fontes escreveram uma vez e nunca mais. A causa está fora do
+  código (o workflow "Métricas externas" do n8n é desligado por decisão,
+  esperando as chaves, e o Vigia de anomalias, que avisaria de coleta parada,
+  também está desligado).
+- O que ERA nosso foi consertado: /api/dados passou a devolver
+  `frescorDasFontes` (dias parados por fonte) e `avisoDeColeta`. E havia uma
+  segunda armadilha ainda não disparada: a consulta filtrava 10 dias, então
+  em 03/09 o bloco INTEIRO sumiria sozinho, sem distinguir "não há o que
+  coletar" de "a coleta morreu". Commit 437f774.
+- Achado de operação que virou regra no manual do Diretor: relatório semanal
+  é o veículo errado para prazo que vence antes da próxima rodada. A
+  prioridade 1 vencia no dia seguinte ao relatório e só foi conferida porque
+  o dono perguntou por acaso.
+- Também corrigido: o /api/app/latest apontava para a 1.2 e depois para um
+  número tirado do gradle.properties (12), que o CI ignora como valor. O
+  versionCode real vem do contador do Codemagic. Agora aponta para 51 nas
+  duas lojas (commit 42470ac).
+
 ## 2026-08-31 · Diretor: relatório da semana (24 a 30/08)
 - Artifact "Semana Mentorque":
   https://claude.ai/code/artifact/1f36cdce-15be-4417-bf40-0e4ca3ab40f7

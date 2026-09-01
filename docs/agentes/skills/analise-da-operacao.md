@@ -41,6 +41,13 @@ qualquer investimento em aquisição um desperdício.
   isolada não é tendência, é ruído.
 - Série curta ou zerada: dizer isso com clareza. Número ausente NUNCA
   vira número inventado.
+- ORIGEM da amostra antes do tamanho dela. Régua emprestada só vale para
+  quem chegou sozinho. Em 31/08 as 17 pessoas da semana vieram pela mão do
+  dono, sem campanha e sem busca, e mesmo assim a frequência de 4,9 aberturas
+  por pessoa foi comparada com a régua de "acima de 2" e considerada boa.
+  Público que já conhece o fundador se comporta melhor que público de anúncio,
+  sempre. Com amostra assim: publicar o número e dizer de onde veio, sem dar
+  a nota.
 
 ## Roteiro de diagnóstico rápido
 
@@ -62,6 +69,10 @@ semana pós-cadastro; frequência semanal saudável fica acima de 2
 aberturas por usuário ativo. São réguas EMPRESTADAS: valem só para dar
 escala até a nossa própria série existir. A meta real é cada coorte ser
 melhor que a anterior.
+
+E elas valem apenas para gente que chegou por canal. Amostra formada por
+conhecidos do dono não se mede com régua de mercado (ver a regra de ORIGEM
+acima).
 
 ## O painel da empresa: Marketing, Engajamento, Vendas
 
@@ -141,6 +152,19 @@ rodada seguinte. Recomendação sem número previsto não aprende nada.
 
 ## Aprendizados com os nossos dados
 
+- 2026-09-01: cupom de 100% com `duration: once` NÃO é consumido pela fatura
+  de R$ 0,00 que abre o período de teste. Conferido nas duas assinaturas
+  reais, olhando a Upcoming invoice de cada uma: subtotal R$ 29,90, desconto
+  de 100% e total R$ 0,00 (luizfmviana em 01/09, cupom de lançamento;
+  eng.avilanova em 04/09, cupom do Alessandro). Ou seja, quem ouviu "1 mês
+  grátis" recebe mesmo 7 dias de teste MAIS um mês por conta da casa, e a
+  primeira cobrança real cai em outubro. Assunto encerrado; não gastar rodada
+  com ele de novo.
+- 2026-09-01: no painel do Stripe, a aba "Active" NÃO mostra quem está em
+  teste (status `trialing` é outro). Procurar assinatura pelo filtro Active e
+  concluir "não temos nenhuma" é erro fácil e assustador. Usar sempre o filtro
+  "All", e lembrar que fatura mensal recorrente não existe sem assinatura
+  por trás.
 - 2026-08-23: "active_users" do RevenueCat conta APARELHOS que abriram o
   app (SDK, inclui anônimos, testes do dono e TestFlight); contas criadas
   vivem no banco (auth.users, excluindo fake_). Em 23/08: 22 aparelhos
