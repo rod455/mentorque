@@ -3,6 +3,59 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-08-31 · Diretor: relatório da semana (24 a 30/08)
+- Artifact "Semana Mentorque":
+  https://claude.ai/code/artifact/1f36cdce-15be-4417-bf40-0e4ca3ab40f7
+- O app saiu do zero: 17 pessoas e 84 aberturas na semana, contra 2 e 4 na
+  anterior, com 4,9 aberturas por pessoa (a régua emprestada pede acima de
+  2). Não veio de canal nenhum: 0 clique na busca, sem campanha, o único
+  cadastro marcado como acesso direto. É amostra que chegou pela mão do
+  dono, e o relatório diz isso.
+- ACHADO DA RODADA, e é o que muda planejamento: as DUAS assinaturas reais
+  do Stripe carregam cupom de 100% ("1 mês grátis"), MENSAL-LANCAMENTO100 e
+  MENSAL-ALESSANDRO100, os dois `duration: once`. Somando 7 dias de teste
+  mais um mês por conta da casa, a primeira cobrança de verdade cai em
+  OUTUBRO (01/10 e 04/10), não em setembro. Todas as faturas emitidas até
+  hoje somam R$ 0,00 e a conta recebeu R$ 0,00.
+- DÚVIDA REGISTRADA, não fechada: o cupom vale por uma fatura e a fatura de
+  abertura do teste já saiu zerada. Se o Stripe considerar o cupom gasto
+  ali, a fatura de 01/09 20h52 cobra R$ 29,90 de quem ouviu "1 mês grátis".
+  Indício de que não: o desconto continua pendurado nas duas assinaturas.
+  Indício não é prova, então virou a prioridade 1 com data e hora.
+- Segunda assinatura real é NOVA da semana: 28/08 10h20, cupom do
+  Alessandro. A de 25/08 é a que o webhook perdeu; o conserto de 26/08 fez a
+  de 28/08 nascer no funil. Por isso funil diz 1 e Stripe diz 2, e a
+  diferença está explicada.
+- O GARGALO agora tem denominador: 16 das 17 pessoas usaram o app sem criar
+  conta (6% de passagem). E a mídia paga começa nesta segunda, então pagar
+  por instalação com essa passagem é encher balde furado.
+- ACHADO DE MEDIÇÃO: o bloco "onde o funil quebra" do /painel mostra 200% e
+  400% nas passagens cadastro→ativação e ativação→paywall. Não é erro de
+  conta: no nosso app a pessoa usa e vê o paywall ANTES de ter conta, então
+  aquilo não é uma sequência. Enquanto ficar assim, aponta para o lugar
+  errado. No relatório o funil foi desenhado na ordem real, com o cadastro
+  fora da fila.
+- PLACAR das prioridades de 24/08: build às lojas FEITO (saíram 1.2, 1.3 e
+  1.4, e a 1.5 está pronta); YouTube MEIO (8 vídeos do canal viraram aulas
+  em 29/08, mas não dá para confirmar audiência); conta do revisor NÃO
+  FEITA (o retrato ainda diz "ativas: 1, anuais 1, mensais 0", contando o
+  revisor e ignorando os dois clientes em teste).
+- Erros do app: 0 → 12, todos `LocalNotifications.then()` (9 iOS, 3
+  Android). É o defeito que o CRO achou e consertou. PREVISÃO VERIFICÁVEL
+  para 07/09: esses erros vão a zero; se não forem, o conserto não chegou
+  aos aparelhos.
+- Prioridades: (1) conferir as faturas de 01/09 20h52 e 04/09 10h20 antes
+  que cobrem alguém; (2) publicar a 1.5 (que leva o convite "salve sua
+  garagem") antes de subir orçamento de campanha, e medir a passagem contra
+  os 6% de hoje; (3) consertar o retrato, cujas fontes externas pararam em
+  23/08 e que hoje afirma "Stripe: 0 assinaturas" e "iOS 1.1 aguardando
+  revisão" com a 1.4 em produção.
+- Fontes nesta rodada: Stripe AUTORIZADO pela primeira vez e foi a
+  diferença da rodada; banco (Supabase) DEIXOU de responder (falta de
+  permissão), ao contrário de 24/08; /api/funil segue bloqueada; fontes
+  externas do retrato paradas há 8 dias; Web Analytics da Vercel segue
+  desativado.
+
 ## 2026-08-29 · O "Fale com a gente" mandava para um endereço que nunca existiu
 - Achado pelo dono ao configurar e-mail corporativo, e a bronca dele procede.
   O formulário de suporte do app envia pelo Resend para FEEDBACK_TO ou, sem a

@@ -75,6 +75,34 @@ o agente do papel certo na rodada seguinte.
   site não existe como número hoje. Pela Vercel dá para pegar saúde de
   deploy (list_deployments), que é o que o retrato já mostra. Não gastar a
   rodada tentando; se um dia for ativado, o retrato avisa.
+- 2026-08-31: assinatura não é receita. Antes de escrever qualquer número
+  de vendas, abrir a assinatura no Stripe e olhar TRÊS coisas: o cupom
+  (percent_off e duration), o trial_end e as faturas já emitidas. As duas
+  primeiras assinaturas reais do Mentorque tinham cupom de 100% por uma
+  fatura, então o dinheiro só começa um mês depois do fim do teste. Quem
+  contasse "2 assinantes a R$ 29,90" erraria o mês da primeira receita.
+- 2026-08-31: quando a leitura de uma regra de cobrança tiver mais de uma
+  interpretação possível e o resultado cair no cartão de um cliente, o
+  relatório diz o indício, diz que é indício, e transforma a conferência em
+  prioridade com DATA E HORA. Não chutar o desfecho, e não deixar passar.
+- 2026-08-31: a cada rodada, começar pelo PLACAR das prioridades da rodada
+  anterior (feito, meio, não feito), com a prova de cada uma. É o que
+  impede o Diretor de repetir recomendação já cumprida e o que faz a
+  recomendação não cumprida virar peso em vez de sumir.
+- 2026-08-31: conferir a IDADE de cada bloco do retrato, não só a data do
+  arquivo. Em 31/08 o cabeçalho estava fresco (funil e uso do dia) mas o
+  bloco "Fontes externas" estava parado em 23/08, e nessa parte o retrato
+  afirmava "Stripe: 0 assinaturas" com dois clientes reais. Arquivo novo
+  não quer dizer dado novo.
+- 2026-08-31: as integrações desta sessão VARIAM de uma semana para a
+  outra. Em 24/08 o banco respondia e o Stripe não; em 31/08 foi o
+  contrário. Não presumir pelo que funcionou na rodada passada: testar as
+  duas no começo e registrar qual respondeu, porque a capacidade da rodada
+  muda o que dá para afirmar.
+- 2026-08-31: funil só é sequência se o produto for sequência. O nosso
+  deixa a pessoa usar e ver o paywall ANTES de criar conta, então desenhar
+  cadastro no meio da fila produz taxa acima de 100% e aponta para o lugar
+  errado. Desenhar o cadastro fora da fila e dizer por quê.
 - 2026-08-24: distinguir ZERO de SEM MEDIÇÃO é a coisa mais importante do
   relatório neste estágio. Etapa que nunca recebeu evento não pode aparecer
   como 0 ao lado de uma etapa que recebeu e deu 0. No artifact isso virou
