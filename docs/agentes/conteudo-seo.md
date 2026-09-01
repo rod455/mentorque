@@ -132,6 +132,57 @@ preço/planos, tocar em telas de app fora de conteúdo.
   indexar, clique vem depois de impressão. Prometer tráfego para uma data é
   invenção, e invenção é proibida aqui.
 
+## Feedback da rodada de 01/09/2026 (pauta do freio)
+
+**O que mordeu, e é para manter.** Todos os números da pauta foram conferidos
+no código e batem exatamente: 43 Shorts com vídeo (são 50 aulas `type: video`
+menos as 7 sem `media`), 7 aulas marcadas como vídeo sem vídeo com os ids
+certos, e UMA aula com `system: "brakes"` (a `brake-pads`, premium, marcada
+como vídeo sem ter vídeo). Escolher a pauta contando o catálogo em vez de
+achar que freio faltava é o padrão do papel. Idem para os guarda-corpos do
+roteiro e para a decisão de o vídeo virar aula gratuita fora da `brake-pads`.
+
+**1. Achou o buraco e parou no buraco.** A mesma contagem que revelou "1 aula
+de freio" mostra a forma do catálogo inteiro, e ninguém pediu esse número:
+
+| sistema | aulas |
+|---|---|
+| engine | 50 |
+| geral | 37 |
+| electrical | 6 |
+| tires | 5 |
+| suspension | 2 |
+| **brakes** | **1** |
+
+De 101 aulas, **8** falam dos três sistemas que a pessoa SENTE no dia a dia
+(freio, suspensão, pneu). Freio não é um buraco, é sintoma da forma. E a fila
+proposta reforça o viés: o item 2 é uma LP sobre luz de injeção, que é motor
+de novo. Regra: quando um recorte explicar um item, rodar o recorte INTEIRO e
+olhar a distribuição antes de propor a fila.
+
+**2. As 7 aulas que prometem vídeo e entregam arte são mais graves que a
+pauta, e não entraram na fila.** Seis das sete são as de mão (óleo, pastilha,
+scanner, bateria, filtro de ar, palhetas), exatamente as que a pessoa abre em
+pé do lado do carro. A pauta depende de o dono gravar; essas já estão na
+prateleira quebrando promessa hoje. O conserto é barato e é decisão do dono:
+gravar, ou trocar `type` para `article`. Achado desse tamanho vira ITEM DE
+FILA com nome, não observação de rodapé.
+
+**3. Quando a conferência direta está bloqueada, dizer qual é o outro
+caminho.** O relatório disse que não deu para confirmar se a LP está no ar
+porque o proxy recusa o site, e parou aí. Honesto, mas incompleto: existem
+duas outras rotas, a API da Vercel (que o coletor de métricas já usa, e que
+diz se o deploy de produção está READY) e pedir ao dono uma conferência de
+dois segundos. "Bloqueado" é meia frase; a outra metade é quem destrava.
+
+**4. Nenhuma data para reler, nenhum critério.** "Busca segue 0 clique,
+esperado para uma página de uma semana" está certo, mas quando deixa de ser
+esperado? Toda aposta de conteúdo sai com data de releitura e com o que se
+faz em cada desfecho. Dado fresco de 01/09, agora que a coleta voltou: **0
+cliques e 2 impressões em 28 dias, e a ÚNICA consulta é `mentorque`**, a
+marca, na posição 1. Nenhuma impressão para termo de categoria. É o número
+que a próxima rodada tem que reler.
+
 ## Direcionamentos do dono
 
 - (vazio ainda)

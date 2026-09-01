@@ -175,6 +175,24 @@ o agente do papel certo na rodada seguinte.
   A régua honesta de gente, hoje, é a tabela de contas: 10 criadas, 3 do
   próprio time, ou seja 7 pessoas de fora e 2 assinantes. Esse número dá para
   conferir uma a uma, e o outro não.
+  DUAS COISAS PIORAM ESSE ERRO, e as duas são evitáveis:
+  1. **O relatório escreveu a causa ao lado do número e não ligou os dois.**
+     A nota diz "o mais provável é que sejam pessoas convidadas por você,
+     junto com as TRÊS VERSÕES NOVAS publicadas nas lojas". Três lançamentos
+     numa semana é exatamente o que infla `anon_id`: cada instalação escreve
+     um id novo. A explicação estava no próprio parágrafo. Regra: **número
+     que pula na mesma semana de um lançamento é suspeito de MEDIÇÃO antes de
+     ser sinal de crescimento.** A pergunta vem antes da comemoração.
+  2. **A frase "é gente contada uma a uma" afirmou uma conferência que não
+     aconteceu.** Contar uma a uma era possível e barato: `auth.users` tem 10
+     linhas. Nunca escrever que algo foi contado, conferido ou provado sem ter
+     feito; é a única categoria de erro que estraga o relatório inteiro,
+     porque quem lê para de saber o que checar.
+  E o estrago foi estrutural, não uma frase: o título, a tabela do funil
+  (17 → 8 → 2 → 2 → 2), o "4,9 aberturas por pessoa" comparado com a régua
+  emprestada e o "quinze das dezessete usaram sem criar conta" saem todos do
+  mesmo 17. Quando o número do topo do funil é de outra unidade, a coluna
+  inteira é de outra unidade.
 
 ## Direcionamentos do dono
 
