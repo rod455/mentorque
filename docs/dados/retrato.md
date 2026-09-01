@@ -1,19 +1,19 @@
 # Retrato diario da operacao Mentorque
 
-Gerado pelo Analista de Dados (n8n) em 2026-08-31T09:00:06.519Z.
+Gerado pelo Analista de Dados (n8n) em 2026-09-01T09:00:07.298Z.
 NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 
 ## MARKETING (gente chegando)
-- Semana corrente (2026-08-24): aberturas 84, visitantes 17, cadastros 1
-- Semana anterior (2026-08-17): aberturas 4, visitantes 2, cadastros 0
+- Semana corrente (2026-08-31): aberturas 3, visitantes 2, cadastros 0
+- Semana anterior (2026-08-24): aberturas 84, visitantes 17, cadastros 1
 - Cadastros 28d via (direto) / (sem campanha): 1
 - Midia paga: sem gasto no periodo (crescimento organico)
 - Busca Google 28d: 0 cliques, 0 impressoes
 - YouTube: 0 inscritos, 0 views totais, 10 videos recentes
 
 ## ENGAJAMENTO (gente usando e voltando)
-- Semana corrente (2026-08-24): 17 usuarios ativos, 84 aberturas (4.9 por usuario)
-- Semana anterior (2026-08-17): 2 usuarios ativos, 4 aberturas (2 por usuario)
+- Semana corrente (2026-08-31): 2 usuarios ativos, 3 aberturas (1.5 por usuario)
+- Semana anterior (2026-08-24): 17 usuarios ativos, 84 aberturas (4.9 por usuario)
 - Retencao, coorte 2026-08-24: 1 cadastrados, 0 voltaram em 1 a 7 dias, 0 em 8 a 30 dias
 - Ativacao, coorte 2026-08-24: 0 de 1 fizeram a primeira acao de valor em 7 dias
 - Erros no app 7d: 12
@@ -24,8 +24,8 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 
 ## VENDAS (gente pagando e continuando)
 - Assinaturas ativas (banco): 1 (anuais 1, mensais 0), cancelamento agendado: 0
-- Fundo do funil, Semana corrente: viram paywall 12, iniciaram checkout 4, assinaram 1, cancelaram 0
-- Fundo do funil, Semana anterior: viram paywall 0, iniciaram checkout 0, assinaram 0, cancelaram 0
+- Fundo do funil, Semana corrente: viram paywall 0, iniciaram checkout 0, assinaram 0, cancelaram 0
+- Fundo do funil, Semana anterior: viram paywall 12, iniciaram checkout 4, assinaram 1, cancelaram 0
 - Assinantes, coorte 2026-08-01: 1 assinaram, 0 renovaram, 0 sairam
 - Stripe (live): 0 assinaturas, MRR 0.00, receita 30d 0.00
 - RevenueCat: 0 assinaturas, MRR 0 (aviso: active_users = aparelhos, inclui testes)
@@ -50,8 +50,24 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 ```json
 {
   "dados": {
-    "geradoEm": "2026-08-31T09:00:05.145Z",
+    "geradoEm": "2026-09-01T09:00:05.254Z",
     "funilSemanas": [
+      {
+        "semana": "2026-08-31",
+        "aberturas": 3,
+        "visitantes": 2,
+        "cadastros": 0,
+        "viram_paywall": 0,
+        "iniciaram_checkout": 0,
+        "assinaturas": 0,
+        "renovacoes": 0,
+        "cancelamentos": 0,
+        "expirados": 0,
+        "viram_paywall_pessoas": 0,
+        "iniciaram_checkout_pessoas": 0,
+        "assinaturas_pessoas": 0,
+        "ativaram_pessoas": 0
+      },
       {
         "semana": "2026-08-24",
         "aberturas": 84,
@@ -110,6 +126,11 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
     "uso": {
       "porDia": [
         {
+          "dia": "2026-08-31",
+          "usuarios": 2,
+          "aberturas": 3
+        },
+        {
           "dia": "2026-08-30",
           "usuarios": 7,
           "aberturas": 20
@@ -151,6 +172,12 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         }
       ],
       "porSemana": [
+        {
+          "semana": "2026-08-31",
+          "usuarios_ativos": 2,
+          "aberturas": 3,
+          "aberturas_por_usuario": 1.5
+        },
         {
           "semana": "2026-08-24",
           "usuarios_ativos": 17,
@@ -204,10 +231,10 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       {
         "de": "abriu_app",
         "para": "cadastro",
-        "antes": 17,
+        "antes": 19,
         "depois": 1,
-        "taxa": 5.9,
-        "perdidos": 16
+        "taxa": 5.3,
+        "perdidos": 18
       },
       {
         "de": "cadastro",
