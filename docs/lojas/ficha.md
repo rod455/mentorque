@@ -3,6 +3,11 @@
 Pronto para colar. Google Play e App Store separados, porque os limites e a
 forma de indexar são diferentes.
 
+O que está escrito abaixo é o texto NO AR. Propostas ainda não aplicadas ficam
+no fim do arquivo, em "Propostas abertas", com data e raciocínio. Quando o
+Rodrigo colar uma proposta no console, ela sobe para o corpo do arquivo e sai
+de lá.
+
 ## Por que este texto é escrito assim
 
 A ficha da loja não é lida só por gente. Ela é a fonte que um modelo de
@@ -122,3 +127,77 @@ Hoje não existe avaliação nas duas lojas, e por isso nenhum dos textos cita
 nota ou depoimento. Quando aparecerem as primeiras, o agente de ASO e Lojas
 marca as de 4 e 5 estrelas que servem de prova social, e aí entra uma linha
 com a fonte real. Antes disso, qualquer prova social seria fabricada.
+
+---
+
+# Propostas abertas
+
+## 2026-09-01 · O título é o campo mais forte da Play e hoje ele não tem a palavra que as pessoas digitam
+
+**O que muda:** uma linha em cada loja, e a limpeza que ela obriga no campo de
+palavras-chave da Apple.
+
+### Google Play, título (limite 30)
+
+| | Texto | Caracteres |
+|---|---|---|
+| Hoje | `Mentorque: cuidar do carro` | 26 |
+| Proposto | `Mentorque: manutenção do carro` | 30 |
+
+### App Store, nome (limite 30)
+
+Mesma troca, pelo mesmo motivo. Nome, subtítulo e palavras-chave da Apple só
+mudam junto com o envio de uma versão, e a 1.5 já subiu em 31/08, então esta
+parte espera o próximo envio. Na Play o título muda na hora, sem release: dá
+para aplicar a metade da Play hoje e a da Apple depois, e isso até ajuda a
+separar o efeito de cada loja.
+
+### App Store, palavras-chave (limite 100)
+
+| | Campo | Caracteres |
+|---|---|---|
+| Hoje | `manutencao,mecanica,oficina,barulho,painel,obd2,revisao,pneu,freio,motor,diagnostico,gastos` | 91 |
+| Proposto | `mecanica,barulho,painel,obd2,revisao,pneu,freio,motor,diagnostico,gastos,oleo,bateria,suspensao` | 95 |
+
+Saíram `oficina` e `manutencao`, entraram `oleo`, `bateria` e `suspensao`: de
+12 termos para 13, sem estourar o limite.
+
+### O raciocínio
+
+O título é o campo de maior peso na busca da Play, e hoje ele gasta esse peso
+em `cuidar`, que é um verbo que quase ninguém digita na caixa de busca. Quem
+tem um barulho no carro procura por manutenção, revisão, oficina, óleo. A
+troca de `cuidar` por `manutenção` põe no campo mais forte o termo mais
+procurado da categoria, sem perder a marca (o nome continua na frente) e sem
+perder o sentido para quem lê: `manutenção do carro` diz o que o app é com a
+mesma clareza, e ainda usa os 30 caracteres inteiros em vez de 26.
+
+Na Apple a mesma troca tem um efeito de segunda ordem que é onde mora o ganho
+real. A Apple indexa nome, subtítulo e palavras-chave juntos, e repetir termo
+entre eles é caractere jogado fora. Hoje o campo já desperdiça `oficina`, que
+está no subtítulo desde sempre. Com `manutenção` subindo para o nome,
+`manutencao` também vira repetição. As duas remoções liberam espaço para três
+termos que o app atende de verdade e que hoje não estão em lugar nenhum: óleo,
+bateria e suspensão.
+
+Repare no que a proposta NÃO faz: não mexe na descrição curta, que é boa e
+carrega barulho, painel e oficina, e não inventa prova social. Uma coisa por
+rodada, para dar para ler o efeito de cada uma.
+
+### O risco, dito na cara
+
+O nome fica com acento (`manutenção`) e o campo de palavras-chave sempre usou
+forma sem acento. A Apple normaliza acento na busca, então quem digitar
+`manutencao` deveria continuar achando o app pelo nome, mas isso é o que se
+espera, não o que se comprovou. Conferência barata depois de publicar: buscar
+`manutencao` sem acento na App Store BR e ver se o Mentorque aparece. Se não
+aparecer, devolver `manutencao` ao campo de palavras-chave e tirar de lá o
+termo mais fraco.
+
+### Como saber se funcionou
+
+Play Console, Aquisição de usuários, origem "Pesquisa do Google Play": hoje
+esse número é zero contra zero, então qualquer coisa acima de zero já é sinal.
+A leitura honesta só existe a partir de duas rodadas depois da troca, porque a
+Play leva alguns dias para reindexar e o volume é pequeno demais para ler em
+uma semana.

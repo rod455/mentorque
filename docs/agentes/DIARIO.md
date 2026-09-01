@@ -3,6 +3,78 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-01 · ASO & Lojas: o coletor de avaliações estava cego, e o paywall tem depoimento inventado
+- Primeira rodada deste papel (dias 1 e 15). Artifact "Lojas da quinzena":
+  https://claude.ai/code/artifact/8ada176f-b6a6-4600-a8d2-db39e698abda
+- ACHADO DA RODADA, e é o que trava o papel inteiro: o workflow "Analista:
+  avaliações das lojas" (n8n, id alUhElmOXhTjGJTj) rodava todo dia, marcava
+  SUCESSO e devolvia 0 avaliações mesmo que houvesse avaliação no feed. O node
+  HTTP com `fullResponse` entrega o corpo em `data`, e o código lia
+  `resp.body`, que nunca existiu. Caía no fallback `?? resp`, procurava `feed`
+  dentro do envelope da resposta, não achava, e devolvia lista vazia SEMPRE.
+- Prova, não suspeita: a execução 8397 (01/09 10h00) guarda a resposta crua.
+  Replicando o código dela fora do n8n, com o mesmo envelope, o de produção
+  devolve 0 nos dois casos (feed vazio e feed com uma avaliação de 5
+  estrelas) e o corrigido devolve 0 e 1. O defeito é o parser, não a Apple.
+- CORRIGIDO no n8n e publicado (nova versão ativa d05e05b9): o node passou a
+  ler `resp.data ?? resp.body`. Execução de conferência 8398, sucesso, 0
+  avaliações, que agora é um zero de verdade. Nada foi gravado no banco
+  porque o fluxo só faz POST quando há avaliação.
+- Nenhuma avaliação foi perdida: o feed de hoje veio genuinamente vazio (408
+  bytes, sem `entry`). O defeito nunca engoliu avaliação existente, mas teria
+  engolido a primeira que chegasse, em silêncio e com carimbo de sucesso.
+- PONTO CEGO QUE CONTINUA: Google Play não é coletado. O coletor lê só o feed
+  público da Apple, loja BR. O workflow diz que a Play entra quando a
+  credencial da conta de serviço for colada no n8n. Enquanto isso, "zero
+  avaliações" significa "zero na App Store BR", e avaliação na Play não
+  aparece para ninguém do time.
+- Avaliações nesta rodada: nenhuma para responder e nenhuma para virar
+  depoimento da LP. Nada rascunhado, nada marcado.
+- ALERTA PARA O QA, e não é sobre erro de código: o paywall do app mostra dois
+  depoimentos INVENTADOS, com cinco estrelas douradas e nome de pessoa
+  ("Pedro S." e "Juliana M."), em `lib/app/content.ts:1554`, renderizados em
+  `components/app/screens/Subscribe.tsx:627`. A LP já tinha esvaziado os dela
+  de propósito, com comentário explicando que a seção volta sozinha quando
+  houver depoimento real (`lib/i18n/strings.en.ts:142`). A limpeza não chegou
+  ao app, que é justamente o que vai para as lojas. Com 0 avaliações e 2
+  assinantes, aquilo é prova social fabricada na tela onde a pessoa paga.
+- NÃO MEXI de propósito, e o motivo importa: o paywall é superfície do CRO,
+  tem experimento aberto com veredito marcado para 20/09, e o dono decidiu em
+  23/08 que mudança de paywall passa por aprovação dele. Tirar o bloco agora
+  contamina a leitura do experimento. A decisão é do Rodrigo, e a recomendação
+  é tirar, não esperar ficar confortável.
+- POR QUE NINGUÉM AVALIA, com número: o app tem uma máquina de pedir nota bem
+  construída (`lib/app/feedbackPrompt.ts`), neutra, com três bons momentos
+  (primeiro serviço, três aulas, resposta útil da Biela) e carência de 3 dias
+  de uso. Ela está correta e ligada nos três lugares. Só que das 17 pessoas da
+  semana passada sobraram 2 ativas nesta, e a coorte de 24/08 tem 0 voltando
+  em 1 a 7 dias. O conjunto de gente que pode ser convidada a avaliar tem no
+  máximo 2 pessoas. Avaliação aqui é consequência de retenção, não de ASO.
+- PROPOSTA DE FICHA DA QUINZENA (registrada em docs/lojas/ficha.md, seção
+  "Propostas abertas", para o Rodrigo colar nos consoles): trocar o título de
+  `Mentorque: cuidar do carro` (26 de 30) por `Mentorque: manutenção do carro`
+  (30 de 30). O título é o campo de maior peso na busca da Play e hoje gasta
+  esse peso em `cuidar`, verbo que ninguém digita. Na Apple a mesma troca
+  libera `manutencao` e `oficina` do campo de palavras-chave (`oficina` já era
+  desperdício, está no subtítulo), abrindo espaço para `oleo`, `bateria` e
+  `suspensao`: de 12 para 13 termos, 95 de 100 caracteres.
+- Detalhe prático da proposta: na Play o título muda na hora, sem release. Na
+  Apple, nome, subtítulo e palavras-chave só mudam junto com o envio de uma
+  versão, e a 1.5 JÁ SUBIU em 31/08 (build 51), então essa metade espera o
+  próximo envio. Escrevi primeiro que pegaria carona na 1.5 e a rodada do
+  Diretor de hoje, lida no rebase, desmentiu: corrigido aqui, na ficha e no
+  artifact. Vale como aviso: o retrato que li às 9h ainda dizia "iOS 1.1
+  aguardando revisão", nove dias atrasado, e por isso não serve para saber o
+  que está publicado.
+- O retrato continua dizendo "iOS 1.1 WAITING_FOR_REVIEW" com a 1.4 em
+  produção, porque as fontes externas pararam em 23/08 (nono dia). Sem elas
+  não há downloads, nem conversão da ficha, nem Android vitals: a proposta de
+  título terá que ser lida no Play Console à mão até essa coleta voltar.
+- Recomendações: (1) tirar os dois depoimentos inventados do paywall antes de
+  qualquer campanha, decisão do Rodrigo com o CRO; (2) colar a credencial da
+  conta de serviço da Play no n8n, senão metade das avaliações segue invisível;
+  (3) aplicar a troca de título na Play hoje e a da Apple junto com a 1.5.
+
 ## 2026-09-01 · Placar das prioridades do Diretor: as três fechadas
 
 - PRIORIDADE 1 (conferir as faturas antes de cobrarem alguém): CONFERIDA e
