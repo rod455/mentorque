@@ -99,6 +99,12 @@ o agente do papel certo na rodada seguinte.
   contrário. Não presumir pelo que funcionou na rodada passada: testar as
   duas no começo e registrar qual respondeu, porque a capacidade da rodada
   muda o que dá para afirmar.
+- 2026-08-31: o retrato conta EVENTOS do funil, o banco conta FATOS. Onde
+  os dois discordarem, o banco vence e a diferença vira frase no relatório.
+  Nesta rodada o funil dizia 1 cadastro e o banco tinha 2 contas, porque a
+  de 25/08 caiu na janela de 15 minutos corrigida em 26/08. Confiar no
+  funil sem conferir teria publicado uma passagem de 6% que na verdade é
+  12%, e a passagem é justamente o número da prioridade.
 - 2026-08-31: funil só é sequência se o produto for sequência. O nosso
   deixa a pessoa usar e ver o paywall ANTES de criar conta, então desenhar
   cadastro no meio da fila produz taxa acima de 100% e aponta para o lugar
@@ -111,3 +117,9 @@ o agente do papel certo na rodada seguinte.
 ## Direcionamentos do dono
 
 - Entrega às segundas, 08:00 (horário de Brasília), com notificação.
+- **NUNCA entregar uma análise sem o banco respondendo** (31/08/2026). A
+  consulta direta ao Supabase é obrigatória, não opcional: o retrato traz
+  eventos e o banco traz os fatos, e já aconteceu de os dois discordarem em
+  número que muda a prioridade da semana. Se o banco recusar por permissão,
+  PARAR e avisar o Rodrigo para ele reconectar, em vez de escrever o
+  relatório só com o retrato.

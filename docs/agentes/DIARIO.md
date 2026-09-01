@@ -26,9 +26,24 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   Alessandro. A de 25/08 é a que o webhook perdeu; o conserto de 26/08 fez a
   de 28/08 nascer no funil. Por isso funil diz 1 e Stripe diz 2, e a
   diferença está explicada.
-- O GARGALO agora tem denominador: 16 das 17 pessoas usaram o app sem criar
-  conta (6% de passagem). E a mídia paga começa nesta segunda, então pagar
+- O GARGALO agora tem denominador: 15 das 17 pessoas usaram o app sem criar
+  conta (12% de passagem). E a mídia paga começa nesta segunda, então pagar
   por instalação com essa passagem é encher balde furado.
+- CORREÇÃO FEITA NA PRÓPRIA RODADA: o relatório saiu primeiro com 1 cadastro
+  e 6% de passagem, copiando o funil. O dono reconectou o banco no meio da
+  rodada e a conferência mostrou 2 CONTAS criadas na semana (25/08 e 28/08),
+  não 1. O funil perdeu a de 25/08 pela janela de 15 minutos, corrigida em
+  26/08, exatamente o mesmo motivo do `assinou` perdido no mesmo dia. Os
+  dois consertos funcionaram; a diferença é passado conhecido.
+- Fato pequeno e bom que só apareceu com o banco: as DUAS pessoas que
+  criaram conta na semana são as duas que assinaram. Duas pessoas não são
+  taxa de conversão, e o relatório diz isso, mas combina com o resto: quem
+  passa da porta vai longe, e a porta é que está estreita.
+- Os erros de lembrete PARARAM: aconteceram em 27, 28 e 29/08 e nenhum
+  desde então, o que já é sinal de que o conserto chegou aos aparelhos.
+- Onde a pessoa vê o paywall hoje (12 eventos, 8 pessoas): Home 4 pessoas,
+  Biela 2, onboarding anual 2, direto 1, busca 1, sintoma 1. O convite mais
+  visto não é o do onboarding, é o da Home.
 - ACHADO DE MEDIÇÃO: o bloco "onde o funil quebra" do /painel mostra 200% e
   400% nas passagens cadastro→ativação e ativação→paywall. Não é erro de
   conta: no nosso app a pessoa usa e vê o paywall ANTES de ter conta, então
@@ -51,10 +66,13 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   23/08 e que hoje afirma "Stripe: 0 assinaturas" e "iOS 1.1 aguardando
   revisão" com a 1.4 em produção.
 - Fontes nesta rodada: Stripe AUTORIZADO pela primeira vez e foi a
-  diferença da rodada; banco (Supabase) DEIXOU de responder (falta de
-  permissão), ao contrário de 24/08; /api/funil segue bloqueada; fontes
-  externas do retrato paradas há 8 dias; Web Analytics da Vercel segue
-  desativado.
+  diferença da rodada; banco (Supabase) começou recusando por falta de
+  permissão e foi reconectado pelo dono no meio da rodada; /api/funil segue
+  bloqueada; fontes externas do retrato paradas há 8 dias; Web Analytics da
+  Vercel segue desativado.
+- DIRECIONAMENTO DO DONO (31/08), gravado no manual: nunca entregar análise
+  sem o banco respondendo. Se ele não responder, parar e avisar, em vez de
+  analisar só com o retrato.
 
 ## 2026-08-29 · O "Fale com a gente" mandava para um endereço que nunca existiu
 - Achado pelo dono ao configurar e-mail corporativo, e a bronca dele procede.
