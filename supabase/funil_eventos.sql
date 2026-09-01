@@ -79,7 +79,7 @@ create or replace view public.funil_semana
 select
   date_trunc('week', criado_em)::date            as semana,
   count(*) filter (where evento = 'abriu_app')                                    as aberturas,
-  count(distinct coalesce(anon_id, user_id::text))
+  count(distinct public.identidade(anon_id, user_id))
     filter (where evento = 'abriu_app')                                           as visitantes,
   count(*) filter (where evento = 'cadastro')                                     as cadastros,
   count(*) filter (where evento = 'viu_paywall')                                  as viram_paywall,

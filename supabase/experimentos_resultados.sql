@@ -16,7 +16,7 @@ select
   e.value as variante,
   f.evento,
   count(*) as eventos,
-  count(distinct coalesce(f.anon_id, f.user_id::text)) as pessoas
+  count(distinct public.identidade(f.anon_id, f.user_id)) as pessoas
 from public.funil_eventos f, jsonb_each_text(f.extra->'exp') e
 where f.extra ? 'exp'
 group by 1, 2, 3

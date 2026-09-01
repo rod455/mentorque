@@ -17,9 +17,9 @@
 create or replace view public.ativacao_coortes
   with (security_invoker = on) as
 with cadastros as (
-  select coalesce(anon_id, user_id::text) as pessoa, min(criado_em) as cadastrado_em
+  select public.identidade(anon_id, user_id) as pessoa, min(criado_em) as cadastrado_em
   from public.funil_eventos
-  where evento = 'cadastro' and coalesce(anon_id, user_id::text) is not null
+  where evento = 'cadastro' and public.identidade(anon_id, user_id) is not null
   group by 1
 )
 select
@@ -28,7 +28,7 @@ select
   count(*) filter (where exists (
     select 1 from public.funil_eventos e
     where e.evento in ('abriu_trilha', 'cadastrou_carro')
-      and coalesce(e.anon_id, e.user_id::text) = c.pessoa
+      and public.identidade(e.anon_id, e.user_id) = c.pessoa
       and e.criado_em >= c.cadastrado_em
       and e.criado_em <  c.cadastrado_em + interval '8 days'
   )) as ativados_7d
@@ -39,9 +39,9 @@ order by 1 desc;
 create or replace view public.assinaturas_coortes
   with (security_invoker = on) as
 with assinantes as (
-  select coalesce(anon_id, user_id::text) as pessoa, min(criado_em) as assinou_em
+  select public.identidade(anon_id, user_id) as pessoa, min(criado_em) as assinou_em
   from public.funil_eventos
-  where evento = 'assinou' and coalesce(anon_id, user_id::text) is not null
+  where evento = 'assinou' and public.identidade(anon_id, user_id) is not null
   group by 1
 )
 select
@@ -50,12 +50,12 @@ select
   count(*) filter (where exists (
     select 1 from public.funil_eventos e
     where e.evento = 'renovou'
-      and coalesce(e.anon_id, e.user_id::text) = a.pessoa
+      and public.identidade(e.anon_id, e.user_id) = a.pessoa
   )) as renovaram,
   count(*) filter (where exists (
     select 1 from public.funil_eventos e
     where e.evento in ('cancelou', 'expirou')
-      and coalesce(e.anon_id, e.user_id::text) = a.pessoa
+      and public.identidade(e.anon_id, e.user_id) = a.pessoa
   )) as sairam
 from assinantes a
 group by 1

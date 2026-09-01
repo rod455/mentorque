@@ -9,12 +9,12 @@
 
 create or replace view public.funil_etapas_28d
   with (security_invoker = on) as
-select evento, count(distinct coalesce(anon_id, user_id::text)) as pessoas
+select evento, count(distinct public.identidade(anon_id, user_id)) as pessoas
 from public.funil_eventos
 where criado_em >= now() - interval '28 days'
 group by 1
 union all
-select 'ativacao', count(distinct coalesce(anon_id, user_id::text))
+select 'ativacao', count(distinct public.identidade(anon_id, user_id))
 from public.funil_eventos
 where evento in ('abriu_trilha', 'cadastrou_carro')
   and criado_em >= now() - interval '28 days';

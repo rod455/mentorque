@@ -30,7 +30,7 @@
 -- Colunas NOVAS ao lado das que já existem, com sufixo _pessoas. Nada é
 -- removido nem renomeado: /api/funil, o retrato do Analista e o /painel
 -- continuam lendo o que liam, e quem quiser funil comparável usa as novas.
--- A identidade é a mesma de funil_etapas_28d — coalesce(anon_id, user_id) —
+-- A identidade é a mesma de funil_etapas_28d, a função public.identidade,
 -- para as duas views enfim concordarem.
 
 create or replace view public.funil_semana
@@ -38,7 +38,7 @@ create or replace view public.funil_semana
 select
   date_trunc('week', criado_em)::date            as semana,
   count(*) filter (where evento = 'abriu_app')                                    as aberturas,
-  count(distinct coalesce(anon_id, user_id::text))
+  count(distinct public.identidade(anon_id, user_id))
     filter (where evento = 'abriu_app')                                           as visitantes,
   count(*) filter (where evento = 'cadastro')                                     as cadastros,
   count(*) filter (where evento = 'viu_paywall')                                  as viram_paywall,
@@ -48,13 +48,13 @@ select
   count(*) filter (where evento = 'cancelou')                                     as cancelamentos,
   count(*) filter (where evento = 'expirou')                                      as expirados,
   -- Novas: as mesmas etapas medidas em PESSOAS, comparáveis entre si.
-  count(distinct coalesce(anon_id, user_id::text))
+  count(distinct public.identidade(anon_id, user_id))
     filter (where evento = 'viu_paywall')                                         as viram_paywall_pessoas,
-  count(distinct coalesce(anon_id, user_id::text))
+  count(distinct public.identidade(anon_id, user_id))
     filter (where evento = 'iniciou_checkout')                                    as iniciaram_checkout_pessoas,
-  count(distinct coalesce(anon_id, user_id::text))
+  count(distinct public.identidade(anon_id, user_id))
     filter (where evento = 'assinou')                                             as assinaturas_pessoas,
-  count(distinct coalesce(anon_id, user_id::text))
+  count(distinct public.identidade(anon_id, user_id))
     filter (where evento in ('abriu_trilha', 'cadastrou_carro'))                  as ativaram_pessoas
 from public.funil_eventos
 group by 1
