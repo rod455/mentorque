@@ -3,6 +3,28 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-01 · 1.6 aprovada nas duas lojas, e o aviso de versão apontando para ela
+- Aprovada na Play e na App Store no mesmo dia do envio. `/api/app/latest`
+  foi para 52/52: quem está na 1.5 passa a ver o banner de versão nova.
+- **Android 52 é fato**, da linha `versionCode deste envio: 52` no log do
+  Codemagic. **iOS 52 é dedução**, e o arquivo diz de onde ela vem: o passo
+  incremental do iOS usa o mesmo `PROJECT_BUILD_NUMBER + 1`, e a 1.5 saiu com
+  51 quando o piso do gradle era 13, o que prova que aquele 51 veio do
+  CONTADOR e não do piso. Marcado como dedução de propósito; se a App Store
+  mostrar outro número, o conserto é uma linha.
+- **Falso alarme meu, o segundo com o mesmo número.** Tratei o "Index: 12" da
+  tela do Codemagic como se fosse o PROJECT_BUILD_NUMBER, concluí que o envio
+  sairia com versionCode 14 e seria recusado pela Play, e pedi para cancelar
+  a build. O contador é do PROJETO e já estava perto de 51. Eu tinha visto a
+  contradição entre "índice 12" e "1.5 saiu com 51", escrevi que não sabia
+  qual leitura valia, e mesmo assim agi como se a ruim fosse a provável.
+  A regra que fecha isso, agora escrita no gradle.properties e no
+  /api/app/latest: a ÚNICA resposta é a linha `versionCode deste envio: N` do
+  log. O Index da tela não é, e o número do gradle.properties também não é.
+- A partir de agora a cadeia da primeira sessão começa a encher. Antes de ler
+  qualquer taxa dela, lembrar que ela é SEM MEDIÇÃO para tudo que veio antes
+  de 01/09, e o /api/dados diz isso sozinho.
+
 ## 2026-09-01 · 1.6: a primeira sessão deixa de ser caixa preta
 - **Decisão do dono**: subir versão nova em vez de esperar, porque continuar
   sem os eventos da primeira sessão é gastar em anúncio sem saber onde a

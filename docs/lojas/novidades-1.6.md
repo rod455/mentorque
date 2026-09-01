@@ -91,18 +91,19 @@ Melhorias internas de estabilidade.
   confirmar no TestFlight antes de escrever o número em qualquer lugar.
 - Enviadas para análise nas duas lojas em 01/09/2026.
 
-## Bumpar /api/app/latest: SÓ DEPOIS DE APROVAR
+## Bumpar /api/app/latest: FEITO em 01/09/2026
+
+Aprovada nas duas lojas no mesmo dia. `/api/app/latest` foi para 52/52, então
+quem está na 1.5 passa a ver o banner de versão nova. O Android é fato (linha
+do log); o iOS é dedução do mesmo contador, e está marcado como tal no
+arquivo.
+
+### A regra que continua valendo
 
 `/api/app/latest` alimenta o banner "versão nova disponível" da tela inicial.
 Ele tem que apontar para o que está em **PRODUÇÃO**, não para o que está em
 análise. Bumpar agora acenderia o aviso para todo mundo na 1.5 com a 1.6
 ainda impossível de baixar, que é pior que não avisar.
 
-Quando as duas lojas aprovarem e a versão estiver publicada, trocar para:
-
-```ts
-const LATEST = {
-  android: 52,
-  ios: 52, // conferir no TestFlight/App Store Connect antes
-};
-```
+Nunca bumpar com versão em análise: o banner apontaria para algo que ainda
+não dá para baixar, e isso é pior que não avisar.
