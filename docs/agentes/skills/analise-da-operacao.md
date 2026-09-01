@@ -49,6 +49,36 @@ qualquer investimento em aquisição um desperdício.
   mais ao mesmo tempo.
 - **aberturas_por_usuario**: frequência semanal. Perto de 1 = abrem uma
   vez e somem; subindo = hábito se formando.
+- **quebraFunil**: NÃO é mais uma fila única de seis degraus, e o motivo é de
+  unidade. Os eventos têm naturezas diferentes e só se comparam iguais com
+  iguais:
+  - **sessão** (`abriu_app`, `viu_paywall`, `abriu_trilha`): dispara uma vez
+    por sessão, para quem estiver lá. Contar numa janela responde "quantos
+    fizeram isso na janela".
+  - **ato** (`cadastro`, `cadastrou_carro`, `iniciou_checkout`, `assinou`):
+    dispara no INSTANTE em que a coisa acontece e nunca mais. Contar numa
+    janela responde "quantos fizeram isso PELA PRIMEIRA VEZ na janela". Quem
+    já tinha carro cadastrado antes é invisível aqui, para sempre.
+  - **técnico** (`atribuicao`): mede a nossa própria medição. Nunca é degrau.
+
+  Dividir um ato por um evento de sessão é dividir FLUXO de novatos por
+  ESTOQUE de todos. O número existe, é calculável, e não quer dizer nada. Foi
+  exatamente isso que o relatório de 31/08 publicou como 17 → 8 → 2 → 2 → 2.
+  Hoje o `/api/dados` recusa: cada degrau que não pode virar taxa vem com
+  `taxa: null` e `motivo` escrito. **Publicar o motivo é obrigatório**; se o
+  relatório omitir, o leitor preenche o buraco com um zero imaginado.
+  Cada degrau traz também `validoDesde` (a data a partir da qual os DOIS
+  eventos eram mensuráveis) e `ressalvas`. A ressalva que mais pega hoje: o
+  evento `cadastro` só dispara para conta criada há menos de 7 dias, então as
+  9 contas de agosto anteriores ao instrumento nunca foram contadas.
+  A regra é pura, mora em `lib/funilCorreto.ts`, e `npm run conferir:funil`
+  prova que ela recusa o caso real.
+- **estadoDaBase**: a resposta CERTA para "quantos têm carro", que o evento
+  não sabia dar. É estado, não ato: `contas`, `contas_com_carro`,
+  `contas_com_servico`, `contas_ativas_7d/30d`. Confere-se conta a conta.
+  LIMITE que precisa ser escrito toda vez: cobre só quem tem CONTA. Quem usa
+  como convidado guarda o carro no aparelho e não aparece. Escrever "dos
+  usuários" em cima deste número é mentira; o certo é "das contas".
 - **retencao_coortes**: de quem se CADASTROU na semana X (coorte),
   quantos voltaram a abrir o app entre 1 e 7 dias depois (voltaram_d1_7)
   e entre 8 e 30 dias depois (voltaram_d8_30). Comparar coortes entre si

@@ -176,6 +176,7 @@ export default async function Painel({ searchParams }: { searchParams: { chave?:
   const NOME_ETAPA: Record<string, string> = {
     abriu_app: "Abriram o app", cadastro: "Criaram conta", ativacao: "Primeira ação de valor",
     viu_paywall: "Viram o paywall", iniciou_checkout: "Iniciaram checkout", assinou: "Assinaram",
+    abriu_trilha: "Abriram uma trilha", cadastrou_carro: "Cadastraram um carro",
   };
   const quebras = (dados.quebraFunil as any[]) ?? [];
   const comVolume = quebras.filter((q) => q.antes > 0 && q.taxa != null);
@@ -227,16 +228,22 @@ export default async function Painel({ searchParams }: { searchParams: { chave?:
                 {quebras.map((q) => {
                   const pior = q.taxa != null && q.taxa === piorTaxa && q.antes > 0;
                   return (
-                    <div key={q.de} className="flex items-center gap-3 text-sm">
-                      <span className="w-44 shrink-0 text-cream/75">{NOME_ETAPA[q.de]} → {NOME_ETAPA[q.para]}</span>
+                    <div key={`${q.de}-${q.para}`} className="flex flex-col gap-1">
+                      <div className="flex items-center gap-3 text-sm">
+                      <span className="w-44 shrink-0 text-cream/75">{NOME_ETAPA[q.de] ?? q.de} → {NOME_ETAPA[q.para] ?? q.para}</span>
                       <div className="h-2 flex-1 overflow-hidden rounded-full bg-graphite-700">
                         {q.taxa != null && (
                           <div className="h-full rounded-full" style={{ width: `${Math.min(100, q.taxa)}%`, background: pior ? "#C24D26" : "#C8841F" }} />
                         )}
                       </div>
                       <span className="w-28 shrink-0 text-right tabular-nums text-cream/80">
-                        {q.taxa != null ? `${q.taxa}%` : "sem gente"} {pior && <span className="ml-1 rounded-full bg-coral/20 px-2 py-0.5 text-[10px] uppercase tracking-wide text-cream">maior quebra</span>}
+                        {q.taxa != null ? `${q.taxa}%` : "sem medição"} {pior && <span className="ml-1 rounded-full bg-coral/20 px-2 py-0.5 text-[10px] uppercase tracking-wide text-cream">maior quebra</span>}
                       </span>
+                      </div>
+                      {/* Degrau sem taxa NUNCA fica mudo: o motivo aparece do
+                          lado, senão "sem medição" vira paisagem e o leitor
+                          preenche o buraco com um zero imaginado. */}
+                      {q.motivo && <p className="pl-1 text-xs leading-snug text-cream/45">{q.motivo}</p>}
                     </div>
                   );
                 })}

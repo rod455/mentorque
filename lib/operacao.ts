@@ -1,4 +1,12 @@
 import { avisoDeColeta, frescorDasFontes } from "./frescorDasFontes";
+import {
+  CADEIA_ATO,
+  CADEIA_SESSAO,
+  NATUREZA,
+  degrausDaCadeia,
+  janelaDaCadeia,
+  type EventoFunil,
+} from "./funilCorreto";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 
 // O agregado da operação num lugar só: alimenta a rota /api/dados (que o
@@ -41,19 +49,43 @@ export async function coletarDadosOperacao() {
   // A quebra do funil (28 dias, pessoas distintas): quantos por cento passam
   // de cada etapa para a seguinte, e onde está a maior perda. É o mapa de
   // prioridade dos testes A/B do CRO.
-  const { data: etapas28 } = await admin.from("funil_etapas_28d").select("*");
-  const porEtapa = new Map((etapas28 ?? []).map((e) => [e.evento, Number(e.pessoas)]));
-  const CADEIA = ["abriu_app", "cadastro", "ativacao", "viu_paywall", "iniciou_checkout", "assinou"] as const;
-  const quebraFunil = CADEIA.slice(0, -1).map((de, i) => {
-    const para = CADEIA[i + 1];
-    const antes = porEtapa.get(de) ?? 0;
-    const depois = porEtapa.get(para) ?? 0;
-    return {
-      de, para, antes, depois,
-      taxa: antes > 0 ? Math.round((depois / antes) * 1000) / 10 : null,
-      perdidos: Math.max(0, antes - depois),
-    };
+  //
+  // A CADEIA ÚNICA DE SEIS DEGRAUS FOI DESFEITA EM 01/09/2026, e o motivo é
+  // de unidade, não de conta. `abriu_app` e `viu_paywall` disparam uma vez por
+  // SESSÃO, para quem estiver lá; `cadastro`, `iniciou_checkout` e `assinou`
+  // disparam no INSTANTE do ato e nunca mais. Dividir um ato por um evento de
+  // sessão é dividir fluxo de novatos por estoque de todos: sai um número
+  // calculável que não quer dizer nada, e foi assim que o relatório de 31/08
+  // publicou 17 → 8 → 2 → 2 → 2 como se fosse funil.
+  //
+  // Agora são dois trechos comparáveis por dentro, e cada degrau que não pode
+  // virar taxa carrega o MOTIVO em vez de um número. A regra mora em
+  // lib/funilCorreto.ts, que é puro e conferível por `npm run conferir:funil`.
+  //
+  // A pergunta "quantos têm carro", que a etapa `ativacao` tentava responder,
+  // mudou de lugar: ela é ESTADO e está em `estadoDaBase`, conferível conta a
+  // conta, sem depender de o evento existir na época.
+  const { data: estadoDaBase } = await admin.from("estado_da_base").select("*").maybeSingle();
+
+  const desde28 = new Date(Date.now() - 28 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  // A janela pedida é 28 dias, mas ela encolhe até onde os eventos existem.
+  // Recusar tudo seria honesto e inútil: trocaria um número errado por número
+  // nenhum. O encolhimento vai escrito em `janela.aviso`.
+  const janela = janelaDaCadeia([...CADEIA_SESSAO, ...CADEIA_ATO], desde28);
+  const { data: etapas } = await admin.rpc("funil_etapas", { p_desde: janela.desde });
+  const porEtapa = new Map<EventoFunil, number>(
+    ((etapas ?? []) as { evento: string; pessoas: number }[])
+      .filter((e) => e.evento in NATUREZA)
+      .map((e) => [e.evento as EventoFunil, Number(e.pessoas)]),
+  );
+  const comPerdidos = (d: ReturnType<typeof degrausDaCadeia>[number]) => ({
+    ...d,
+    perdidos: d.taxa === null ? null : Math.max(0, d.antes - d.depois),
   });
+  const quebraFunil = [
+    ...degrausDaCadeia(CADEIA_SESSAO, porEtapa, janela.desde),
+    ...degrausDaCadeia(CADEIA_ATO, porEtapa, janela.desde),
+  ].map(comPerdidos);
 
   const ativas = (subs ?? []).filter((s) => s.status === "active");
 
@@ -113,8 +145,17 @@ export async function coletarDadosOperacao() {
     // Testes A/B em curso: eventos e pessoas por experimento e variante
     // (caderno em docs/agentes/experimentos.md).
     experimentos: experimentos ?? [],
-    // Onde o funil quebra (28 dias): taxa de passagem etapa a etapa.
+    // Onde o funil quebra (28 dias): taxa de passagem etapa a etapa, em dois
+    // trechos comparáveis por dentro. Degrau com `taxa: null` traz `motivo`:
+    // é SEM MEDIÇÃO com a razão escrita, nunca um zero mudo.
     quebraFunil,
+    // A janela realmente usada, e o aviso quando ela precisou encurtar.
+    janelaDoFunil: janela,
+    // ESTADO da base, que é o que "ativação" sempre quis dizer e o evento não
+    // sabia responder. Conferível conta a conta. Cobre só quem tem CONTA:
+    // convidado guarda o carro no aparelho e não aparece aqui, e escrever
+    // "dos usuários" em cima deste número é mentira.
+    estadoDaBase: estadoDaBase ?? null,
     // Fontes externas coletadas pelo Analista (metricas_diarias): para cada
     // fonte, o pacote mais recente e a série dos últimos 10 dias.
     fontesExternas: porFonte,

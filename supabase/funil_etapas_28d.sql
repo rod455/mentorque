@@ -21,3 +21,23 @@ where evento in ('abriu_trilha', 'cadastrou_carro')
 
 revoke all on public.funil_etapas_28d from anon, authenticated;
 grant select on public.funil_etapas_28d to service_role;
+
+-- 2026-09-01: a janela de 28 dias soldada dentro desta view virou problema.
+-- Os eventos passaram a ser mensuráveis em 22 e 23/08, e uma janela de 28
+-- dias hoje abre em 04/08: o degrau de baixo ganharia dezoito dias a mais de
+-- contagem que o de cima, e a taxa mediria calendário, não comportamento.
+--
+-- Entrou a função `public.funil_etapas(p_desde date)`, que recebe a janela de
+-- fora. Quem decide o corte é lib/funilCorreto.ts, que sabe desde quando cada
+-- evento existe; o banco só obedece. Esta view continua de pé para não
+-- quebrar quem já lia dela.
+--
+-- create or replace function public.funil_etapas(p_desde date)
+-- returns table (evento text, pessoas bigint) language sql stable as $$
+--   select evento, count(distinct public.identidade(anon_id, user_id))
+--   from public.funil_eventos where criado_em >= p_desde group by 1
+--   union all
+--   select 'ativacao', count(distinct public.identidade(anon_id, user_id))
+--   from public.funil_eventos
+--   where evento in ('abriu_trilha','cadastrou_carro') and criado_em >= p_desde
+-- $$;
