@@ -28,12 +28,10 @@ chaves" e ficou parado no tempo. Em 01/09 eu repeti essa frase para o
 Rodrigo copiando o título, sem conferir, e ela já estava errada havia dias.
 O quadro real, provado na execução 8352 (23/08) e nas de 01/09:
 
-- Dez das onze fontes gravam dado real. Nenhuma chave falta nelas.
-- Falta UMA chave, e só uma: o **developer token do Google Ads** (detalhe na
-  lista abaixo, com a armadilha de onde ele precisa ser colado). A
-  credencial OAuth desse braço já existe e funciona.
+- As onze fontes gravam dado real. Nenhuma chave falta.
 - O workflow ficou parado desde 23/08 por estar desligado, não por
-  credencial nenhuma. Ativado pelo dono em 01/09/2026.
+  credencial nenhuma. Ativado pelo dono em 01/09/2026, e as onze fontes
+  fecharam no mesmo dia.
 
 Antes de escrever "falta a credencial X" em qualquer lugar, abrir a última
 execução no n8n e olhar a resposta. Foi assim que os dois defeitos de 01/09
@@ -139,35 +137,36 @@ nos nós do braço correspondente (a API não permite anexar por fora):
       real: 22 usuários ativos, 22 clientes novos, 0 assinaturas ativas.
 - [x] Vercel: pronto e testado em 2026-08-23 (token de acesso). Dado real:
       20 deploys nos últimos 7 dias, todos prontos, produção saudável.
-- [ ] Google Ads: **a ÚNICA chave que falta em todo o time é esta**, e não é a
-      credencial OAuth. Essa está criada e funciona (id EWoLYhFlqWBc5zhP). O
-      que falta é o **developer token**, que sai do próprio Google Ads: conta
-      gerente → Ferramentas → Configuração → Central de APIs. É de graça, mas
-      passa por aprovação do Google (nível básico costuma sair em dias).
-      **ELE NÃO VAI NA CREDENCIAL, VAI NOS DOIS NÓS.** Esta é a armadilha que
-      custou uma rodada inteira em 01/09: a credencial `googleAdsOAuth2Api`
-      do n8n TEM um campo "Developer Token", mas esse campo só é usado pelo nó
-      oficial do Google Ads. Num nó HTTP Request com credencial predefinida o
-      n8n manda só o OAuth e o token nunca sai de dentro do n8n. Preencher a
-      credencial não muda absolutamente nada, e o erro continua igual, o que
-      faz parecer que o token está errado.
-      Provado assim, e é a conferência para repetir: com o header ausente a
-      API responde `DEVELOPER_TOKEN_PARAMETER_MISSING`; pondo um header
-      `developer-token` com valor inventado, ela passa a responder
-      `DEVELOPER_TOKEN_INVALID`. Mudou de mensagem, então é o header que
-      importa, não o campo da credencial.
-      Os dois nós já estão com o header `developer-token` preparado, com o
-      valor `COLE_AQUI_O_DEVELOPER_TOKEN`. Basta abrir "Google Ads: contas
-      acessiveis" e "Google Ads: custo 7 dias", aba Headers, e trocar pelo
-      token de verdade. Enquanto não trocar, o braço grava
-      `DEVELOPER_TOKEN_INVALID` todo dia, e essa mensagem diz sozinha o que
-      fazer.
-      Antes disso havia um segundo problema empilhado, que escondia o
-      primeiro: a URL usava a **v20, que o Google aposentou**. O erro
-      guardado dizia só "The resource you are requesting could not be found",
-      mas o corpo na execução 8352 era a página 404 em HTML do Google: `The
-      requested URL /v20/customers:listAccessibleCustomers was not found on
-      this server`. Corrigido em 01/09 para **v25** nos dois nós.
+- [x] Google Ads: pronto e conferido em 2026-09-01, depois de TRÊS problemas
+      empilhados. Vale ler inteiro antes de mexer neste braço.
+      **1. A versão da API.** A URL usava a v20, que o Google aposentou. O
+      erro guardado dizia só "The resource you are requesting could not be
+      found", mas o corpo na execução 8352 era a página 404 em HTML do
+      Google: `The requested URL /v20/customers:listAccessibleCustomers was
+      not found on this server`. Hoje está em **v25**.
+      Para escolher a versão quando ela morrer de novo: NÃO confie em bater
+      sem autenticação. A v26 responde 401 sem token (parece viva) e `404
+      Method not found` com token de verdade. Só a execução real prova.
+      **2. O developer token NÃO VAI NA CREDENCIAL, VAI NOS DOIS NÓS.** A
+      credencial `googleAdsOAuth2Api` do n8n TEM um campo "Developer Token",
+      mas esse campo só é usado pelo nó oficial do Google Ads. Num nó HTTP
+      Request com credencial predefinida o n8n manda só o OAuth, e o token
+      nunca sai de dentro do n8n. Preencher a credencial não muda nada e o
+      erro continua idêntico, o que faz parecer token errado. Hoje o header
+      `developer-token` está nos nós "Google Ads: contas acessiveis" e
+      "Google Ads: custo 7 dias".
+      A conferência que resolve isso em um minuto: com o header ausente a API
+      responde `DEVELOPER_TOKEN_PARAMETER_MISSING`; com um header de valor
+      inventado ela passa a responder `DEVELOPER_TOKEN_INVALID`. Mudou de
+      mensagem, então é o header que importa.
+      **3. O primeiro OK veio da conta errada.** `listAccessibleCustomers`
+      devolve SEIS contas (outros projetos e a gerente), e o código pegava
+      `resourceNames[0]`. O braço gravou custo 0 de uma conta que não é a
+      nossa. Entrou o nó "Google Ads: escolhe a conta do Mentorque", que
+      procura o id **6724308347** (672-430-8347, a mesma ligada ao AppsFlyer)
+      e devolve ERRO se ele não estiver na lista, em vez de cair na primeira.
+      Conferido: essa conta se chama "Mentorque" e opera em BRL. O `contaId`
+      agora sai gravado junto com o número.
       COMO ESCOLHER A VERSÃO quando ela morrer de novo (o Google aposenta uma
       por ano): NÃO confie no teste sem autenticação. Bater sem token dá 401
       tanto em versão viva quanto em versão que ainda não existe: a v26
@@ -224,6 +223,19 @@ selecionado, ativar o workflow (botão Active) e conferir a primeira execução.
   INVENTADO no header e ver se a mensagem de erro muda. Se mudou, o header é
   o caminho; se não mudou, o valor está indo por outro lugar (ou não está
   indo).
+- **Conta compartilhada exige escolha explícita, nunca o primeiro da lista.**
+  Aconteceu duas vezes: no AdMob, cuja conta soma os outros apps do Rodrigo,
+  e no Google Ads, onde `listAccessibleCustomers` devolve seis contas e o
+  código pegava a primeira. Os dois braços agora fixam o id do Mentorque e
+  gravam esse id junto com o número. Quando a API devolver uma LISTA, a
+  pergunta certa não é "quantas vieram", é "qual delas é a nossa".
+- **No n8n, salvar não é publicar.** Workflow ativo executa a versão
+  PUBLICADA; o que a API de update salva é rascunho. Em 01/09 o braço do
+  Google Ads foi consertado, a execução manual passou, e a execução de
+  produção continuou gravando o número velho, porque a correção estava só no
+  rascunho. Depois de mexer em workflow ligado: publicar e rodar uma vez em
+  modo produção para conferir. Execução manual verde não prova nada sobre o
+  que vai rodar às 5h30.
 - **Este doc já mentiu sobre o próprio estado.** O título "esperando as
   chaves" ficou parado depois que as chaves chegaram, e em 01/09 eu repeti a
   frase dele para o Rodrigo sem conferir. Doc de estado envelhece; execução
