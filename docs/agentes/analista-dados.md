@@ -21,7 +21,7 @@ leem. Não analisa, não opina, não notifica o Rodrigo; entrega matéria-prima.
    Contents deste repositório). É a fonte primária do Diretor, do CRO e do
    ASO. Primeiro commit real: ed50a29.
 
-## Workflow com as chaves prontas, mas DESLIGADO (falta só ativar)
+## Workflow ligado desde 01/09/2026 (coleta diária às 5h30)
 
 ATENÇÃO A QUEM LER ESTA SEÇÃO: o título antigo aqui era "esperando as
 chaves" e ficou parado no tempo. Em 01/09 eu repeti essa frase para o
@@ -30,9 +30,10 @@ O quadro real, provado na execução 8352 (23/08) e nas de 01/09:
 
 - Dez das onze fontes gravam dado real. Nenhuma chave falta nelas.
 - Falta UMA chave, e só uma: o **developer token do Google Ads** (detalhe na
-  lista abaixo). A credencial OAuth desse braço já existe e funciona.
-- Falta ATIVAR o workflow. É o botão Active, e é o motivo de a coleta estar
-  parada desde 23/08, não credencial nenhuma.
+  lista abaixo, com a armadilha de onde ele precisa ser colado). A
+  credencial OAuth desse braço já existe e funciona.
+- O workflow ficou parado desde 23/08 por estar desligado, não por
+  credencial nenhuma. Ativado pelo dono em 01/09/2026.
 
 Antes de escrever "falta a credencial X" em qualquer lugar, abrir a última
 execução no n8n e olhar a resposta. Foi assim que os dois defeitos de 01/09
@@ -71,7 +72,7 @@ apareceram, e nenhum dos dois era chave.
    - play_console: taxa de crash e ANR por dia (vitals)
    - avaliações do Google Play (últimos 7 dias da API, por isso é diário)
 
-4. **Vigia de anomalias** (diário, 7h30 quando ligar; DESLIGADO)
+4. **Vigia de anomalias** (diário, 7h30; LIGADO desde 01/09/2026)
    https://n8n.vocaboost.com.br/workflow/ljWzGCZ8J0nmlYRf
    Lê /api/dados e o frescor da mesa de métricas depois da coleta e SÓ
    manda e-mail (para os dois endereços do Rodrigo) quando algo foge do
@@ -140,15 +141,27 @@ nos nós do braço correspondente (a API não permite anexar por fora):
       20 deploys nos últimos 7 dias, todos prontos, produção saudável.
 - [ ] Google Ads: **a ÚNICA chave que falta em todo o time é esta**, e não é a
       credencial OAuth. Essa está criada e funciona (id EWoLYhFlqWBc5zhP). O
-      que falta é o **developer token**, no campo "Developer Token" da mesma
-      credencial do n8n. Ele sai do próprio Google Ads: conta gerente →
-      Ferramentas → Configuração → Central de APIs. É de graça, mas passa por
-      aprovação do Google (nível básico costuma sair em dias).
-      Prova, de 01/09: com a URL consertada a API respondeu
-      `DEVELOPER_TOKEN_PARAMETER_MISSING: developer-token parameter is
-      missing.`, gravado hoje na mesa em `metricas_diarias`. Enquanto o token
-      não entrar, essa é a mensagem que o braço vai repetir todo dia, e ela
-      diz sozinha o que fazer.
+      que falta é o **developer token**, que sai do próprio Google Ads: conta
+      gerente → Ferramentas → Configuração → Central de APIs. É de graça, mas
+      passa por aprovação do Google (nível básico costuma sair em dias).
+      **ELE NÃO VAI NA CREDENCIAL, VAI NOS DOIS NÓS.** Esta é a armadilha que
+      custou uma rodada inteira em 01/09: a credencial `googleAdsOAuth2Api`
+      do n8n TEM um campo "Developer Token", mas esse campo só é usado pelo nó
+      oficial do Google Ads. Num nó HTTP Request com credencial predefinida o
+      n8n manda só o OAuth e o token nunca sai de dentro do n8n. Preencher a
+      credencial não muda absolutamente nada, e o erro continua igual, o que
+      faz parecer que o token está errado.
+      Provado assim, e é a conferência para repetir: com o header ausente a
+      API responde `DEVELOPER_TOKEN_PARAMETER_MISSING`; pondo um header
+      `developer-token` com valor inventado, ela passa a responder
+      `DEVELOPER_TOKEN_INVALID`. Mudou de mensagem, então é o header que
+      importa, não o campo da credencial.
+      Os dois nós já estão com o header `developer-token` preparado, com o
+      valor `COLE_AQUI_O_DEVELOPER_TOKEN`. Basta abrir "Google Ads: contas
+      acessiveis" e "Google Ads: custo 7 dias", aba Headers, e trocar pelo
+      token de verdade. Enquanto não trocar, o braço grava
+      `DEVELOPER_TOKEN_INVALID` todo dia, e essa mensagem diz sozinha o que
+      fazer.
       Antes disso havia um segundo problema empilhado, que escondia o
       primeiro: a URL usava a **v20, que o Google aposentou**. O erro
       guardado dizia só "The resource you are requesting could not be found",
@@ -199,10 +212,18 @@ selecionado, ativar o workflow (botão Active) e conferir a primeira execução.
   aparecia na mensagem curta. Quem escreve braço novo: nó que pode falhar por
   motivo de fora usa `fullResponse` + `neverError`, e o nó de normalizar cava
   o motivo dentro de `body.error.details` antes de gravar.
-- **Um erro pode estar escondendo outro.** No Google Ads o 404 do gateway
-  vinha antes do erro de token: consertar a versão não fez o braço funcionar,
-  fez o erro DE VERDADE aparecer. Comemorar o primeiro conserto e ir embora
-  teria deixado o braço quebrado do mesmo jeito.
+- **Um erro pode estar escondendo outro, e foram três empilhados.** No Google
+  Ads: primeiro o 404 do gateway (versão v20 aposentada), depois o developer
+  token que faltava, depois a descoberta de que o campo de developer token da
+  credencial do n8n nem é enviado por nó HTTP Request. Cada conserto não fez
+  o braço funcionar, fez o próximo erro aparecer. Comemorar o primeiro e ir
+  embora teria deixado tudo quebrado do mesmo jeito.
+- **Preencher credencial não é prova de que a credencial é usada.** O n8n
+  aceita campos numa credencial predefinida e ignora os que só o nó oficial
+  daquele serviço lê. O teste que resolve em um minuto: pôr um valor
+  INVENTADO no header e ver se a mensagem de erro muda. Se mudou, o header é
+  o caminho; se não mudou, o valor está indo por outro lugar (ou não está
+  indo).
 - **Este doc já mentiu sobre o próprio estado.** O título "esperando as
   chaves" ficou parado depois que as chaves chegaram, e em 01/09 eu repeti a
   frase dele para o Rodrigo sem conferir. Doc de estado envelhece; execução
