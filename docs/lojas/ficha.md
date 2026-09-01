@@ -196,6 +196,14 @@ termo mais fraco.
 
 ### Como saber se funcionou
 
+ATENÇÃO AO QUE MUDOU EM 01/09: os anúncios do Google Ads começaram no mesmo
+dia. A Play separa a origem (Pesquisa do Google Play é uma linha, tráfego de
+anúncio é outra), então dá para ler, mas com uma ressalva: campanha faz subir
+a busca por MARCA, e busca por marca cai na mesma linha de "Pesquisa do Google
+Play" que a busca por categoria. Se o número subir, olhar os TERMOS antes de
+creditar a troca do título. Quem chegou digitando "mentorque" veio do anúncio,
+não da palavra `manutenção`.
+
 Play Console, Aquisição de usuários, origem "Pesquisa do Google Play": hoje
 esse número é zero contra zero, então qualquer coisa acima de zero já é sinal.
 A leitura honesta só existe a partir de duas rodadas depois da troca, porque a

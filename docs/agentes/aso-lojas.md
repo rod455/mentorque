@@ -92,7 +92,43 @@ loja, responder avaliação diretamente, mexer em preço.
   base de usuários que não existem). Antes de escrever "está limpo", rodar
   `grep -rn "<nome inventado>" --include=*.ts --include=*.tsx .` e contar os
   lugares.
+- **Número do retrato não entra no texto sem você saber o que ele mede.** O
+  relatório de 01/09 escreveu "das 17 pessoas da semana passada" duas vezes.
+  Não eram pessoas: `usuarios_ativos` conta `anon_id`, que é armazenamento de
+  aparelho e nasce de novo a cada instalação ou limpeza de dados. Dentro
+  daqueles 17 havia dois ids de iOS criados com 39 segundos de diferença. A
+  definição correta está em `docs/agentes/skills/analise-da-operacao.md`, e a
+  regra é: escrever "aparelhos", e cruzar toda contagem de gente com a porta
+  de entrada (downloads, cadastros) antes de publicar.
+- **Quando o argumento depende de "quantas pessoas poderiam fazer X", vá
+  contar as pessoas.** O raciocínio de 01/09 ("avaliação é consequência de
+  retenção") estava certo, mas foi sustentado no agregado errado do retrato.
+  A conferência que valia era uma consulta ao banco, e ela deixa o argumento
+  MUITO mais forte: das 7 contas de fora, todas entraram uma vez e não
+  voltaram, e os dois assinantes não acessam desde o dia em que pagaram.
+  Agregado do retrato serve para tendência; para "quem exatamente", tem
+  tabela e dá para conferir uma a uma.
+- **Estado de infraestrutura se confere na execução, não no doc.** O mesmo
+  relatório disse que a Play não é coletada "porque falta colar a credencial
+  da conta de serviço". A credencial existia e respondia 200 desde 23/08. Doc
+  de estado envelhece; execução do n8n não.
+- **Toda proposta precisa da condição de VOLTA ATRÁS, não só a metade
+  arriscada.** A proposta de 01/09 trouxe um teste de reversão bem feito para
+  o acento na Apple, e nenhum para o título da Play. Se a troca não mover
+  nada em duas rodadas, o certo é dizer desde já o que se faz: volta, fica, ou
+  testa outra palavra? Proposta sem critério de saída vira mudança que
+  ninguém revisita.
 
 ## Direcionamentos do dono
 
-- (vazio ainda)
+- **01/09/2026: a prova social fabricada FICA como está, por ora.** O dono
+  leu o inventário completo (nota 4,8, "10.000+ diagnósticos", "5.000+
+  motoristas", os depoimentos do onboarding, do paywall e da
+  LandingDownload) e o risco de política das lojas, e decidiu não mexer
+  agora. Decisão tomada com a informação na mão: **não reabrir como
+  prioridade em toda rodada.** Cabe registrar se o quadro mudar de verdade
+  (avaliação real chegando, recusa de loja, reclamação de usuário), e aí a
+  conversa é nova, não repetida.
+- **01/09/2026: os anúncios do Google Ads começaram.** Toda leitura de
+  aquisição a partir desta data tem tráfego pago misturado. Ver a ressalva
+  sobre busca por marca em `docs/lojas/ficha.md`.
