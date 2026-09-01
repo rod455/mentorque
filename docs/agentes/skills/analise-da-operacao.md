@@ -68,9 +68,19 @@ qualquer investimento em aquisição um desperdício.
   `taxa: null` e `motivo` escrito. **Publicar o motivo é obrigatório**; se o
   relatório omitir, o leitor preenche o buraco com um zero imaginado.
   Cada degrau traz também `validoDesde` (a data a partir da qual os DOIS
-  eventos eram mensuráveis) e `ressalvas`. A ressalva que mais pega hoje: o
-  evento `cadastro` só dispara para conta criada há menos de 7 dias, então as
-  9 contas de agosto anteriores ao instrumento nunca foram contadas.
+  eventos eram mensuráveis) e `ressalvas`, que precisam ser publicadas junto
+  com a taxa.
+  **CADASTRO NÃO SAI DO EVENTO**, e a ressalva diz isso. O evento `cadastro`
+  só dispara para conta criada há menos de 7 dias, e esse buraco nenhum build
+  conserta: a conta de 08/08 continua velha demais, hoje e sempre. A contagem
+  vem de `auth.users`, que tem a data de nascimento do fato gravada e ainda
+  permite tirar as três contas do próprio time. Em 01/09 o evento dizia 1
+  cadastro na janela e a tabela dizia 2; no total, 7 contas de fora contra 1
+  evento. O evento continua existindo porque carrega o que a tabela não sabe:
+  plataforma e a UTM da campanha.
+  **A regra geral, e ela vale para além do funil**: quando existe uma tabela
+  com o fato gravado, contar a tabela ganha do evento. Evento é para o que não
+  deixa rastro em lugar nenhum.
   A regra é pura, mora em `lib/funilCorreto.ts`, e `npm run conferir:funil`
   prova que ela recusa o caso real.
 - **estadoDaBase**: a resposta CERTA para "quantos têm carro", que o evento

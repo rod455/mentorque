@@ -94,9 +94,27 @@ export const MEDIDO_DESDE: Record<EventoFunil, string> = {
  * Eventos com uma trava a mais, além da natureza. Aqui a contagem é
  * estruturalmente incompleta e nenhuma janela conserta.
  */
-export const RESSALVAS: Partial<Record<EventoFunil, string>> = {
+export const RESSALVAS: Partial<Record<EventoFunil, string>> = {};
+
+/**
+ * Eventos cuja contagem NÃO deve sair do evento, porque existe uma tabela que
+ * já guarda o fato melhor.
+ *
+ * A regra, e ela vale para além do funil: quando existe uma tabela com o fato
+ * gravado, contar a tabela ganha do evento. Evento é para o que não deixa
+ * rastro em lugar nenhum.
+ *
+ * O caso que criou a regra (01/09/2026): o evento `cadastro` só dispara para
+ * conta criada há menos de 7 dias. É uma trava deliberada e bem pensada, mas
+ * ela deixa um buraco que NENHUM build conserta: a conta criada em 08/08
+ * continua velha demais para o evento disparar, hoje e sempre. O evento
+ * contava 1 cadastro na janela; `auth.users` contava 2, e 7 no total. O
+ * evento continua existindo porque carrega o que a tabela não sabe:
+ * plataforma e a UTM da campanha.
+ */
+export const FONTE_MELHOR: Partial<Record<EventoFunil, string>> = {
   cadastro:
-    "só dispara para conta criada há menos de 7 dias, então toda conta anterior ao instrumento é invisível (9 contas de agosto ficaram de fora)",
+    "contado em auth.users (função contas_criadas_desde), não no evento: o evento só dispara para conta com menos de 7 dias e perde tudo que veio antes do instrumento",
 };
 
 export type Comparacao =
@@ -191,7 +209,9 @@ export function degrau(
   desde: string,
 ): Degrau {
   const validoDesde = janelaValida([de, para]);
-  const ressalvas = [de, para].map((e) => RESSALVAS[e]).filter((r): r is string => !!r);
+  const ressalvas = [de, para]
+    .flatMap((e) => [RESSALVAS[e], FONTE_MELHOR[e]])
+    .filter((r): r is string => !!r);
   const base = { de, para, antes, depois, validoDesde, ressalvas };
 
   const comp = podeComparar(de, para);

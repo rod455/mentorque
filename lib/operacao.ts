@@ -78,6 +78,14 @@ export async function coletarDadosOperacao() {
       .filter((e) => e.evento in NATUREZA)
       .map((e) => [e.evento as EventoFunil, Number(e.pessoas)]),
   );
+  // CADASTRO NÃO SAI DO EVENTO. O evento só dispara para conta criada há menos
+  // de 7 dias, e esse buraco nenhum build conserta: a conta de 08/08 continua
+  // velha demais, hoje e sempre. `auth.users` tem a data de nascimento do fato
+  // gravada, e ainda dá para tirar as três contas do próprio time, que
+  // inflariam qualquer taxa. Na janela de hoje: o evento dizia 1, a tabela diz
+  // 2. A regra geral está em FONTE_MELHOR, em lib/funilCorreto.ts.
+  const { data: contasDeFora } = await admin.rpc("contas_criadas_desde", { p_desde: janela.desde });
+  if (typeof contasDeFora === "number") porEtapa.set("cadastro", contasDeFora);
   const comPerdidos = (d: ReturnType<typeof degrausDaCadeia>[number]) => ({
     ...d,
     perdidos: d.taxa === null ? null : Math.max(0, d.antes - d.depois),

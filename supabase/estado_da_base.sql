@@ -53,3 +53,21 @@ grant select on public.estado_da_base to service_role;
 -- funil dizia no mesmo dia: 2 pessoas em `cadastrou_carro`. Não é
 -- contradição, são perguntas diferentes: 5 TÊM carro, 2 CADASTRARAM na
 -- janela em que o evento existia.
+
+-- 2026-09-01, segunda leva: CADASTRO deixou de sair do evento.
+--
+-- O evento `cadastro` só dispara para conta criada há menos de 7 dias, e esse
+-- buraco NENHUM build conserta: a conta de 08/08 continua velha demais, hoje e
+-- sempre. Na janela de 22/08 o evento contava 1 e a tabela contava 2; no
+-- total, 7 contas de fora contra 1 evento.
+--
+-- Entrou a view `contas_criadas` (por semana, separando as três contas do
+-- próprio time) e a função `contas_criadas_desde(data)`, que o /api/dados usa
+-- como degrau do funil no lugar do evento. O evento continua existindo porque
+-- carrega o que a tabela não sabe: plataforma e a UTM da campanha.
+--
+-- A REGRA, que vale para além do funil: quando existe uma tabela com o fato
+-- gravado, contar a tabela ganha do evento. Evento é para o que não deixa
+-- rastro em lugar nenhum. Está declarada em FONTE_MELHOR, em
+-- lib/funilCorreto.ts, e `npm run conferir:funil` reprova se alguém apagar a
+-- declaração e voltar a contar pelo evento sem dizer.

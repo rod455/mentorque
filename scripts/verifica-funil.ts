@@ -21,6 +21,7 @@ import {
   CADEIA_SESSAO,
   MEDIDO_DESDE,
   NATUREZA,
+  FONTE_MELHOR,
   RESSALVAS,
   degrau,
   degrausDaCadeia,
@@ -87,16 +88,29 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
   conferir("e o motivo diz que ela mede a medição", !c.ok && /medi/i.test(c.motivo), !c.ok ? c.motivo : "");
 }
 
-// ── a ressalva do cadastro sobrevive à taxa ────────────────────────────────
+// ── a fonte do cadastro viaja junto com a taxa ─────────────────────────────
+//
+// O evento `cadastro` só dispara para conta criada há menos de 7 dias, e esse
+// buraco NENHUM build conserta: a conta de 08/08 continua velha demais, hoje e
+// sempre. Por isso a contagem sai de auth.users. Quem lê a taxa precisa saber
+// disso na mesma linha, senão vai comparar com um número do evento e achar que
+// um dos dois está errado.
 {
   const d = degrau("cadastro", "iniciou_checkout", 4, 2, HOJE);
   conferir("a taxa sai", d.taxa === 50);
   conferir(
-    "e a ressalva dos 7 dias vem junto, porque ela não some com janela boa",
-    d.ressalvas.some((r) => r.includes("7 dias")),
+    "e a fonte de verdade vem junto, porque ela não some com janela boa",
+    d.ressalvas.some((r) => r.includes("auth.users")),
     JSON.stringify(d.ressalvas),
   );
-  conferir("a ressalva do cadastro está declarada", !!RESSALVAS.cadastro);
+  conferir("o cadastro declara que tem fonte melhor que o evento", !!FONTE_MELHOR.cadastro);
+  conferir(
+    "e a declaração explica o buraco dos 7 dias",
+    (FONTE_MELHOR.cadastro ?? "").includes("7 dias"),
+    FONTE_MELHOR.cadastro ?? "",
+  );
+  // Ressalva e fonte melhor são listas diferentes e as duas viajam.
+  conferir("RESSALVAS existe mesmo vazia, para não sumir a ideia", typeof RESSALVAS === "object");
 }
 
 // ── a tabela cobre todo evento, senão a regra tem buraco ───────────────────
