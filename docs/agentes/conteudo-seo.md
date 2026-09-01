@@ -79,10 +79,53 @@ preço/planos, tocar em telas de app fora de conteúdo.
   está liberada no robots e fora do sitemap.
 
 - **Rota nova de site quebra o build do app.** Toda página que só existe no
-  site precisa entrar na lista `SO_NO_SITE` de scripts/build-native.mjs, e
-  a rodada tem que terminar com `npm run build` E `npm run build:native`
-  passando. Verde na Vercel não diz nada sobre o build do app (lição que já
-  estava no DIARIO de 23/08 e vale para este papel também).
+  site precisa entrar na lista `SO_NO_SITE` de scripts/build-native.mjs.
+  Verde na Vercel não diz nada sobre o build do app (lição que já estava no
+  DIARIO de 23/08 e vale para este papel também).
+
+- **Qual conferência rodar, pelo regime do CLAUDE.md.** Rodada de pauta ou
+  de artigo do catálogo é mudança localizada: `npm run conferir` e pronto,
+  sem build local, que a Vercel builda a cada push. Rodada de LP é a
+  exceção que pede os dois builds (`npm run build` e `npm run build:native`),
+  porque rota nova mexe em código compartilhado do empacotamento.
+
+- **Onde o catálogo mora, e como contar buraco nele.** As aulas saíram de
+  `lib/app/content.ts` para `lib/app/conteudo/aulas.ts` (sintomas,
+  equipamentos e serviços têm arquivo próprio no mesmo diretório). Antes de
+  escolher pauta ou artigo, CONTE em vez de achar. O bloco de cada aula vai
+  de um `id: "..."` ao próximo, então dá para varrer o arquivo assim e
+  achar, por exemplo, aula marcada como vídeo que não tem vídeo, ou sistema
+  do carro sem nenhuma aula:
+
+  ```
+  node -e "
+  const fs=require('fs');const s=fs.readFileSync('lib/app/conteudo/aulas.ts','utf8');
+  const idx=[...s.matchAll(/\bid: \"([a-z0-9-]+)\"/g)];
+  for(let i=0;i<idx.length;i++){
+    const b=s.slice(idx[i].index,(idx[i+1]?idx[i+1].index:s.length));
+    if(/type: \"video\"/.test(b) && !/media: \{/.test(b)) console.log(idx[i][1]);
+  }"
+  ```
+
+  Foi assim que a rodada de 01/09 achou o argumento dela: 43 Shorts e nenhum
+  sobre freio, e uma única aula de freio no catálogo inteiro, premium e sem
+  vídeo. Argumento contado convence; argumento sentido, não.
+
+- **A fila pode ser consumida por outra rodada.** O item #2 deixado em 25/08
+  (reescrever `diag-noises`) foi feito pela rodada de IA do mesmo dia, e a
+  rodada seguinte quase o refez. Antes de pegar o próximo da fila, confira
+  no DIARIO e no próprio código se ele ainda está aberto.
+
+- **Gancho de diagnóstico não vai atrás do paywall.** Vídeo ou artigo que
+  serve de porta (a pessoa chegou assustada com um barulho) entra como
+  conteúdo gratuito, mesmo quando existe uma aula premium sobre o mesmo
+  assunto. O passo a passo de execução pode ser premium; o "o que é isso que
+  estou ouvindo" não pode, senão o gancho é desperdiçado.
+
+- **Não dá para conferir o site no ar por esta sessão.** O proxy recusa a
+  conexão com www.mentorque.com.br (403 no CONNECT), do mesmo jeito que já
+  recusa a /api/funil para o Diretor. Conferência de página publicada para
+  no HTML gerado pelo build; dizer "está no ar" sem ter visto é inventar.
 
 - **Expectativa honesta sobre busca**: o sinal para acompanhar nas primeiras
   semanas é INDEXAÇÃO no Search Console, não visita. Impressão vem depois de

@@ -3,6 +3,47 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-01 · Conteúdo & SEO: pauta do freio, e o catálogo não tem freio
+- Artifact "Conteúdo da semana":
+  https://claude.ai/code/artifact/80d35894-28cc-4e20-9fbf-d05d012b50d2
+- ENTREGA DA RODADA (formato b, pauta de gravação), em
+  docs/conteudo/pautas.md, arquivo novo que vai crescer a cada rodada de
+  pauta: "O barulho que o freio faz de propósito". Short 9:16 de 50 a 70s,
+  com roteiro falado por trecho, o que precisa aparecer em cada plano,
+  título, descrição e tags do YouTube, e o trecho de código pronto para
+  colar no catálogo faltando só o id do vídeo.
+- Gancho: o chiado não é o freio quebrando, é uma lingueta de metal fazendo
+  o que foi feita para fazer. E o vídeo não para no "é normal", que seria
+  irresponsável em freio: ele separa TRÊS barulhos (aviso, aviso que já
+  passou, alarme falso), que é a informação que a pessoa não tem.
+- ACHADO QUE ESCOLHEU A PAUTA, contado no próprio código, não por intuição:
+  o catálogo tem 43 Shorts publicados e NENHUM sobre freio (estão todos em
+  fundamentos, cultura, esportivos e economia). Pior: o catálogo inteiro tem
+  UMA aula com system "brakes", a brake-pads, que é premium, é passo a passo
+  de troca e está marcada como vídeo sem ter vídeo. Quem chega com medo do
+  barulho não tem para onde ir de graça.
+- Também contado: 7 aulas estão marcadas como type "video" sem media
+  (oil-change, brake-pads, obd2-scan, diy-battery, diy-airfilter,
+  diy-wipers, cult-history). As seis primeiras são as de mão, justamente as
+  que a pessoa abre em pé do lado do carro. A tela degrada bem (mostra a
+  arte de "vídeo ainda não publicado"), então não é defeito, é buraco.
+- DECISÃO registrada na pauta: quando gravado, o vídeo entra como aula NOVA
+  e GRATUITA da trilha de diagnóstico, não dentro de brake-pads. Prender um
+  gancho de diagnóstico atrás do paywall desperdiça o gancho.
+- Fila anterior corrigida: o item #2 ("reescrever diag-noises") JÁ FOI FEITO
+  na rodada de IA de 25/08. Fila reescrita, ver abaixo.
+- LP da rodada passada: código íntegro na main, conferido no HTML gerado
+  desta rodada (indexável, canonical no domínio certo, no sitemap). NÃO deu
+  para confirmar que está no ar: o proxy desta sessão recusa conexão com
+  www.mentorque.com.br (403 no CONNECT). Fica para quem tem navegador.
+- Busca segue 0 clique e 0 impressão, esperado para página de uma semana, e
+  com a ressalva de que o dado do retrato é de 23/08, anterior à própria LP.
+- CONTINUA DE PÉ, e não é deste papel fazer: pedir indexação da home e da
+  /barulho-no-carro no Search Console, já que o canonical das duas mudou.
+- Próximas: (1) artigo novo e gratuito sobre freio, formato estruturado
+  PT+EN, para preencher o buraco contado acima; (2) LP /luz-de-injecao,
+  que nasce apoiada em 3 Shorts que já existem e no sintoma cel.
+
 ## 2026-09-01 · ASO & Lojas: o coletor de avaliações estava cego, e o paywall tem depoimento inventado
 - Primeira rodada deste papel (dias 1 e 15). Artifact "Lojas da quinzena":
   https://claude.ai/code/artifact/8ada176f-b6a6-4600-a8d2-db39e698abda
