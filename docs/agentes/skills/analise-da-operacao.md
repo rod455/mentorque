@@ -23,8 +23,30 @@ qualquer investimento em aquisição um desperdício.
 
 ## Definições exatas (a régua de uso no /api/dados → uso)
 
-- **usuarios / usuarios_ativos**: pessoas distintas que abriram o app
-  (identidade anônima por aparelho), não contagem de aberturas.
+- **usuarios / usuarios_ativos / visitantes**: NÃO são pessoas. São
+  ARMAZENAMENTOS distintos que abriram o app, e a diferença é grande. A
+  identidade é o `anon_id`, um UUID guardado no localStorage do aparelho
+  (`lib/app/anon.ts`). Ele nasce de novo a cada instalação, a cada limpeza de
+  dados do navegador, a cada janela anônima e a cada reinstalação do app.
+  Uma pessoa testando gera um id novo por rodada.
+  Prova, de 01/09/2026: o retrato disse "17 usuarios ativos" na semana de
+  24/08, e dentro desses 17 havia dois ids de iOS criados com **39 segundos
+  de diferença**, e outro par com 2 minutos. Não são duas pessoas, é um
+  aparelho reinstalando. No mesmo período a App Store registrou ZERO
+  downloads, ou seja, todo iOS ali era TestFlight, que é o dono e os
+  convidados dele.
+  COMO ESCREVER: dizer "17 aparelhos" ou "17 instalações", nunca "17
+  pessoas". Quando precisar de gente de verdade, o número honesto é o de
+  CONTAS criadas (`auth.users`), que dá para conferir uma a uma. Em
+  01/09/2026 eram 10 contas, sendo 3 do próprio time (mentorque.ar,
+  rodrigomoraessilva455, revisor@mentorque.com.br), ou seja, 7 pessoas de
+  fora, das quais 2 assinantes.
+  DOIS DEFEITOS CONHECIDOS desse número, que ainda não foram consertados: um
+  aparelho sem localStorage grava o texto literal `sem-armazenamento` como
+  id, então TODOS eles viram um único "usuário" (em 01/09 essa linha sozinha
+  tinha 20 eventos, de 23/08 a 01/09, em quatro versões diferentes); e existe
+  pelo menos um evento com `anon_id` nulo. O número erra para menos e para
+  mais ao mesmo tempo.
 - **aberturas_por_usuario**: frequência semanal. Perto de 1 = abrem uma
   vez e somem; subindo = hábito se formando.
 - **retencao_coortes**: de quem se CADASTROU na semana X (coorte),
@@ -42,12 +64,19 @@ qualquer investimento em aquisição um desperdício.
 - Série curta ou zerada: dizer isso com clareza. Número ausente NUNCA
   vira número inventado.
 - ORIGEM da amostra antes do tamanho dela. Régua emprestada só vale para
-  quem chegou sozinho. Em 31/08 as 17 pessoas da semana vieram pela mão do
+  quem chegou sozinho. Em 31/08 os 17 APARELHOS da semana vieram pela mão do
   dono, sem campanha e sem busca, e mesmo assim a frequência de 4,9 aberturas
-  por pessoa foi comparada com a régua de "acima de 2" e considerada boa.
+  por aparelho foi comparada com a régua de "acima de 2" e considerada boa.
   Público que já conhece o fundador se comporta melhor que público de anúncio,
   sempre. Com amostra assim: publicar o número e dizer de onde veio, sem dar
   a nota.
+- **Número de gente exige a pergunta "de onde essa gente saiu?".** Foi o dono
+  quem pegou o erro acima, em 01/09, com uma pergunta de uma linha: se não
+  houve download nenhum, como 17 pessoas entraram? A conta não fechava, e não
+  fechava porque o número não era de pessoas. Antes de publicar qualquer
+  contagem de gente, cruzar com a porta de entrada: downloads das lojas,
+  cadastros, cliques de busca. Se o número de dentro é maior que tudo que
+  entrou por fora, ele está medindo outra coisa.
 
 ## Roteiro de diagnóstico rápido
 

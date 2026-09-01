@@ -153,12 +153,28 @@ o agente do papel certo na rodada seguinte.
   aprendizado permanente na skill (a fatura zerada de abertura do teste não
   consome o cupom).
 - 2026-09-01: antes de chamar uma etapa de GARGALO, perguntar se ela é um
-  caminho DESENHADO. O relatório de 31/08 chamou de gargalo o fato de 15 das
-  17 pessoas usarem sem criar conta, mas usar como convidado é decisão de
-  produto, está nos Termos e é oferecido de propósito. Onde a pessoa PODE
-  pular a etapa, o número é segmentação, não vazamento. Vira gargalo só se a
-  etapa for obrigatória para a pessoa chegar ao valor, e aí a frase tem que
-  dizer QUAL valor ela não alcança sem passar.
+  caminho DESENHADO. O relatório de 31/08 chamou de gargalo o fato de 15 dos
+  17 usarem sem criar conta, mas usar como convidado é decisão de produto,
+  está nos Termos e é oferecido de propósito. Onde a pessoa PODE pular a
+  etapa, o número é segmentação, não vazamento. Vira gargalo só se a etapa
+  for obrigatória para a pessoa chegar ao valor, e aí a frase tem que dizer
+  QUAL valor ela não alcança sem passar.
+
+- 2026-09-01: **AQUELES 17 NUNCA FORAM 17 PESSOAS**, e o relatório escreveu
+  "pessoas" duas vezes. São 17 armazenamentos distintos (`anon_id` no
+  localStorage), e uma pessoa gera um id novo a cada instalação, limpeza de
+  dados ou janela anônima. Dentro dos 17 havia dois ids de iOS criados com 39
+  segundos de diferença. No mesmo período a App Store registrou zero
+  downloads e a Play também: era o dono testando, mais TestFlight e o app na
+  web, que abre sem instalar nada.
+  Quem pegou foi o dono, com uma pergunta de uma linha: se não teve download,
+  como essas pessoas entraram? **É a pergunta que o Diretor deveria ter feito
+  sozinho.** Contagem de gente tem que ser cruzada com a porta de entrada
+  antes de virar frase: downloads, cadastros, cliques de busca. Número de
+  dentro maior que tudo que entrou por fora está medindo outra coisa.
+  A régua honesta de gente, hoje, é a tabela de contas: 10 criadas, 3 do
+  próprio time, ou seja 7 pessoas de fora e 2 assinantes. Esse número dá para
+  conferir uma a uma, e o outro não.
 
 ## Direcionamentos do dono
 
