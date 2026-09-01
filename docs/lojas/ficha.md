@@ -35,8 +35,11 @@ Três regras que valem para os dois textos:
 ### Título (30 caracteres)
 
 ```
-Mentorque: cuidar do carro
+Mentorque: manutenção do carro
 ```
+
+Aplicado em 01/09/2026, no lugar de `Mentorque: cuidar do carro`. O motivo e
+o critério de leitura estão em "Propostas aplicadas", no fim deste arquivo.
 
 ### Descrição curta (80 caracteres)
 
@@ -92,6 +95,11 @@ Disponível em português e inglês. Também funciona no navegador, em www.mento
 Mentorque: cuidar do carro
 ```
 
+PENDENTE de troca para `Mentorque: manutenção do carro`, junto com as
+palavras-chave. Na Apple, nome, subtítulo e palavras-chave só mudam com o
+envio de uma versão, então isto entra no próximo build (a 1.5 subiu em
+31/08). A metade da Play já foi aplicada em 01/09.
+
 ### Subtítulo (30 caracteres)
 
 ```
@@ -130,9 +138,20 @@ com a fonte real. Antes disso, qualquer prova social seria fabricada.
 
 ---
 
-# Propostas abertas
+# Propostas aplicadas e abertas
 
 ## 2026-09-01 · O título é o campo mais forte da Play e hoje ele não tem a palavra que as pessoas digitam
+
+**Estado: metade APLICADA.** O título da Play foi trocado pelo dono em
+01/09/2026. Nome e palavras-chave da Apple continuam abertos e entram no
+próximo envio de versão.
+
+**Quando reler, e o que fazer:** duas rodadas depois da troca, ou seja na
+rodada de 01/10/2026. Se a origem "Pesquisa do Google Play" continuar em zero
+ou só trouxer busca por marca, a palavra não é o gargalo e a conclusão é que o
+problema está antes da ficha, na falta de gente chegando. Nesse caso o título
+FICA como está (não se volta para `cuidar`, que era pior pelo mesmo
+raciocínio) e a próxima proposta muda de assunto, não de palavra.
 
 **O que muda:** uma linha em cada loja, e a limpeza que ela obriga no campo de
 palavras-chave da Apple.

@@ -3,6 +3,31 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-01 · Ações do dono, e o manual do ASO reescrito com o que a rodada expôs
+- **Título da Play trocado** para `Mentorque: manutenção do carro` (era
+  `Mentorque: cuidar do carro`). Aplicado pelo dono no console; não depende de
+  versão nova. A metade da Apple (nome, subtítulo e palavras-chave) espera o
+  próximo envio, porque a 1.5 já subiu em 31/08. Data para reler e o que fazer
+  em cada desfecho: `docs/lojas/ficha.md`, seção "Propostas aplicadas".
+- **Anúncios do Google Ads começaram hoje.** Toda leitura de aquisição a
+  partir daqui tem tráfego pago misturado, e campanha faz subir busca por
+  MARCA, que cai na mesma linha de "Pesquisa do Google Play" que a busca por
+  categoria.
+- **Prova social fabricada: o dono decidiu não mexer agora**, com o inventário
+  completo e o risco de política das lojas na mão. Registrado em
+  Direcionamentos: não reabrir como prioridade em toda rodada.
+- **Coleta de métricas e Vigia de anomalias ativados**; as 11 fontes fechando,
+  inclusive o braço de avaliações da Play, que era ponto cego.
+- **Manual do ASO & Lojas reescrito, não acrescentado.** A rodada de hoje
+  acertou o raciocínio e errou quatro fatos conferíveis em menos de um minuto
+  cada, e o motivo era estrutural: as regras estavam no rodapé como
+  "aprendizados" e a rotina no topo. Agora cada conferência é parte do passo
+  que a exige, existe um pré-voo de sete perguntas antes de publicar, uma
+  tabela de "o que cada fonte prova" e um formato obrigatório de proposta com
+  condição de volta atrás. Os `grep` de prova social do manual foram rodados
+  para provar que mordem: acham os 9 depoimentos nos 3 arquivos e os 3 números
+  inventados.
+
 ## 2026-09-01 · Conteúdo & SEO: pauta do freio, e o catálogo não tem freio
 - Artifact "Conteúdo da semana":
   https://claude.ai/code/artifact/80d35894-28cc-4e20-9fbf-d05d012b50d2
