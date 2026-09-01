@@ -3,7 +3,7 @@ import { LegalPage } from "@/components/legal/Legal";
 import { DeleteAccountForm } from "@/components/legal/DeleteAccountForm";
 
 export const metadata: Metadata = {
-  title: "Excluir conta — Mentorque",
+  title: "Excluir conta | Mentorque",
   description:
     "Como excluir sua conta Mentorque e todos os dados associados: pelo próprio app ou por solicitação nesta página.",
   alternates: { canonical: "/excluir-conta" },

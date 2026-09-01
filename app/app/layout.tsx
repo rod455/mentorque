@@ -8,7 +8,7 @@ import { AppBoundary } from "@/components/app/AppBoundary";
 // página — e é lido por rastreadores e pelos revisores das lojas, então nada
 // de "protótipo" aqui.
 export const metadata: Metadata = {
-  title: "Mentorque — cuide do seu carro com confiança",
+  title: "Mentorque: cuide do seu carro com confiança",
   robots: { index: false, follow: false },
 };
 

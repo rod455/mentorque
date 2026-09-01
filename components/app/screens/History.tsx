@@ -683,7 +683,7 @@ export function ServiceDetail({ id }: { id: string }) {
       <Button className="mt-6 w-full" onClick={() => {
         if (!s.premium) { go({ name: "subscribe", ctx: "exportPdf" }); return; }
         const label = typeLabel(r.type);
-        const text = `${label} — ${dateFmt(r.date)} · ${r.km.toLocaleString()} km${r.total != null ? " · " + formatBRL(r.total) : ""}\n${r.parts.map((p) => "• " + p.name).join("\n")}`;
+        const text = `${label}: ${dateFmt(r.date)} · ${r.km.toLocaleString()} km${r.total != null ? " · " + formatBRL(r.total) : ""}\n${r.parts.map((p) => "• " + p.name).join("\n")}`;
         const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a"); a.href = url; a.download = `${label}.txt`; a.click(); URL.revokeObjectURL(url);

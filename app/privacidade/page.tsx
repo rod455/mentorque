@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal/Legal";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidade — Mentorque",
+  title: "Política de Privacidade | Mentorque",
   description:
     "Como o Mentorque coleta, usa, compartilha e protege os seus dados. Seus direitos sob a LGPD e como excluir sua conta e dados.",
   alternates: { canonical: "/privacidade", languages: { "en": "/privacy" } },

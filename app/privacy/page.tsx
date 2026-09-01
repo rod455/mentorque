@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal/Legal";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Mentorque",
+  title: "Privacy Policy | Mentorque",
   description:
     "How Mentorque collects, uses, shares and protects your data. Your rights and how to delete your account and data.",
   alternates: { canonical: "/privacy", languages: { "pt-BR": "/privacidade" } },

@@ -45,7 +45,7 @@ export function CarSettingsScreen() {
   };
 
   const shareLink = async () => {
-    const text = `${vehicleLabel(v)} — ${services.length} ${c.history.title.toLowerCase()}`;
+    const text = `${vehicleLabel(v)}: ${services.length} ${c.history.title.toLowerCase()}`;
     try {
       if (navigator.share) await navigator.share({ title: vehicleLabel(v), text });
       else await navigator.clipboard?.writeText(text);

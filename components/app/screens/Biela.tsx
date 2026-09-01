@@ -328,6 +328,6 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
 function fallbackAnswer(v: ReturnType<typeof activeVehicle>, locale: string): string {
   const car = v ? `${v.make} ${v.model} ${v.year}` : locale === "pt" ? "seu carro" : "your car";
   return locale === "pt"
-    ? `Boa pergunta! Sobre o ${car}: o caminho seguro é começar pelo manual do fabricante e pelos sintomas exatos (barulho, quando acontece, luz no painel). Se for item de segurança — freio, direção — não arrisque: leve a uma oficina de confiança. Me dá mais detalhes que eu te ajudo a afunilar.`
-    : `Great question! About ${car}: the safe path is to start with the maker's manual and the exact symptoms (noise, when it happens, dashboard light). For safety items — brakes, steering — don't risk it: take it to a trusted shop. Give me more detail and I'll help narrow it down.`;
+    ? `Boa pergunta! Sobre o ${car}: o caminho seguro é começar pelo manual do fabricante e pelos sintomas exatos (barulho, quando acontece, luz no painel). Se for item de segurança (freio, direção), não arrisque: leve a uma oficina de confiança. Me dá mais detalhes que eu te ajudo a afunilar.`
+    : `Great question! About ${car}: the safe path is to start with the maker's manual and the exact symptoms (noise, when it happens, dashboard light). For safety items (brakes, steering), don't risk it: take it to a trusted shop. Give me more detail and I'll help narrow it down.`;
 }

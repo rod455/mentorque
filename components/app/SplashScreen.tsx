@@ -48,7 +48,7 @@ export function SplashScreen({ onDone }: { onDone: () => void }) {
         if (leaving && e.target === e.currentTarget) finish();
       }}
       role="img"
-      aria-label="Mentorque — Seu carro na palma da sua mão"
+      aria-label="Mentorque: Seu carro na palma da sua mão"
     >
       <span className="glow" aria-hidden />
 

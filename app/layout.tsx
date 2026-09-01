@@ -43,7 +43,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.mentorque.com.
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Mentorque — aprenda mecânica com um especialista no bolso",
+  title: "Mentorque: aprenda mecânica com um especialista no bolso",
   description:
     "Mentorque é o app de educação em mecânica automotiva do básico ao avançado, com consultoria especializada. Entenda seu carro, economize na oficina e tenha ajuda humana quando travar.",
   applicationName: "Mentorque",
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Mentorque",
-    title: "Mentorque — mecânica do básico ao avançado, com consultoria no bolso",
+    title: "Mentorque: mecânica do básico ao avançado, com consultoria no bolso",
     // Estava dizendo "entre na lista de espera" com o app JÁ publicado nas duas
     // lojas. Descrição desatualizada não é detalhe de vaidade: é o texto que um
     // modelo de linguagem lê para responder "esse app já existe?", e a resposta
@@ -76,7 +76,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mentorque — mecânica do básico ao avançado, com consultoria no bolso",
+    title: "Mentorque: mecânica do básico ao avançado, com consultoria no bolso",
     description:
       "Entenda o que seu carro tem, decida a urgência e chegue na oficina sabendo o que perguntar. Grátis para usar.",
     images: ["/og-image.png"],

@@ -5,7 +5,7 @@ import { LegalPage } from "@/components/legal/Legal";
 // the Portuguese original and the note on Apple guideline 3.1.2(c).
 
 export const metadata: Metadata = {
-  title: "Terms of Use — Mentorque",
+  title: "Terms of Use | Mentorque",
   description:
     "Terms governing the use of the Mentorque app and website, including the rules of the auto-renewing Premium subscription.",
   alternates: { canonical: "/terms", languages: { "pt-BR": "/termos" } },

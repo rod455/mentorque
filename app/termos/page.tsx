@@ -9,7 +9,7 @@ import { LegalPage } from "@/components/legal/Legal";
 // destino desse link; a seção 5 concentra o que a Apple pede por escrito.
 
 export const metadata: Metadata = {
-  title: "Termos de Uso — Mentorque",
+  title: "Termos de Uso | Mentorque",
   description:
     "Condições de uso do aplicativo e do site Mentorque, incluindo as regras da assinatura Premium de renovação automática.",
   alternates: { canonical: "/termos", languages: { en: "/terms" } },

@@ -53,7 +53,7 @@ function Badge({
       {inner}
     </a>
   ) : (
-    <button type="button" className={cls} aria-disabled="true" title={`${store} — ${caption}`}>
+    <button type="button" className={cls} aria-disabled="true" title={`${store}: ${caption}`}>
       {inner}
     </button>
   );
