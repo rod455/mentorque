@@ -3,6 +3,34 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-01 · Não era falta de localStorage, era o `crypto.randomUUID` do Android
+- As primeiras horas da 1.6 em produção mostraram o formato dos ids novos:
+  todo evento vindo de Android traz id no formato do sorteio de reserva
+  (`mtivmchs-pxlw`, tempo em base36 mais aleatório) e o do iPhone veio como
+  UUID de verdade. Conclusão: `crypto.randomUUID` NÃO existe na WebView do
+  Android aqui.
+- Isso CORRIGE o diagnóstico que eu mesmo escrevi de manhã. Eu disse que
+  `sem-armazenamento` era aparelho sem localStorage. Na 1.5, o
+  `crypto.randomUUID()` ficava dentro do MESMO try do localStorage: ele
+  lançava, o catch engolia e todo Android caía no texto fixo. Não era
+  armazenamento faltando, era o sorteio falhando.
+- Também explica a linha com 20 eventos em 9 dias e 4 versões do app: não era
+  um aparelho esquisito, era o Android inteiro colado num id só.
+- A 1.6 conserta por tabela, porque `sorteia()` ganhou try/catch próprio. A
+  lição ficou escrita em `lib/app/anon.ts`: catch que cobre duas operações
+  diferentes transforma dois defeitos em um sintoma, e o sintoma aponta para
+  o lado errado.
+
+## 2026-09-01 · Google Ads: a janela do custo não enxergava hoje
+- O nó "Google Ads: custo 7 dias" usava `DURING LAST_7_DAYS`, e essa janela
+  do GAQL EXCLUI o dia de hoje. Ou seja, gasto do mesmo dia nunca poderia
+  aparecer no retrato, e a primeira pergunta sobre a campanha nova cairia
+  justamente nesse buraco.
+- Trocado por `segments.date BETWEEN` com datas calculadas, workflow
+  publicado (a versão ativa é a publicada, não o rascunho) e rodado em
+  produção. Continua vazio, o que agora é informação de verdade: a conta
+  6724308347 não teve entrega nenhuma, não é a janela escondendo.
+
 ## 2026-09-01 · 1.6 aprovada nas duas lojas, e o aviso de versão apontando para ela
 - Aprovada na Play e na App Store no mesmo dia do envio. `/api/app/latest`
   foi para 52/52: quem está na 1.5 passa a ver o banner de versão nova.

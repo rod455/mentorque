@@ -22,8 +22,26 @@ function sorteia(): string {
   try {
     return crypto.randomUUID();
   } catch {
-    // Ambiente sem crypto (WebView antiga): serve, porque este id não precisa
-    // ser imprevisível, precisa ser diferente do id do aparelho do lado.
+    // Ambiente sem crypto: serve, porque este id não precisa ser
+    // imprevisível, precisa ser diferente do id do aparelho do lado.
+    //
+    // E ISTO NÃO É HIPOTÉTICO, É O ANDROID. Medido em 01/09/2026, nas
+    // primeiras horas da 1.6: todo id vindo de Android tem este formato
+    // (`mtivmchs-pxlw...`, tempo em base36 mais aleatório), e o do iPhone veio
+    // como UUID de verdade. Ou seja, `crypto.randomUUID` NÃO existe na WebView
+    // do Android aqui.
+    //
+    // O QUE ISSO CORRIGE NO DIAGNÓSTICO DE HOJE DE MANHÃ: eu disse que o
+    // `sem-armazenamento` era aparelho sem localStorage. Errado, pelo menos no
+    // Android. Na 1.5 o `crypto.randomUUID()` ficava DENTRO do mesmo try do
+    // localStorage; ele lançava, o catch engolia, e todo Android caía no texto
+    // fixo. Não era armazenamento faltando, era o sorteio falhando, e um
+    // catch grande demais fez as duas causas parecerem uma só.
+    //
+    // Foi por isso que aquela linha tinha 20 eventos em 9 dias e 4 versões:
+    // não era um aparelho esquisito, era o Android inteiro colado num id só.
+    // A lição: catch que cobre duas operações diferentes transforma dois
+    // defeitos em um sintoma, e o sintoma aponta para o lado errado.
     return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
   }
 }
