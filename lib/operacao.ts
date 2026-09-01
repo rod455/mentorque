@@ -1,6 +1,7 @@
 import { avisoDeColeta, frescorDasFontes } from "./frescorDasFontes";
 import {
   CADEIA_ATO,
+  CADEIA_PRIMEIRA_SESSAO,
   CADEIA_SESSAO,
   NATUREZA,
   degrausDaCadeia,
@@ -90,9 +91,20 @@ export async function coletarDadosOperacao() {
     ...d,
     perdidos: d.taxa === null ? null : Math.max(0, d.antes - d.depois),
   });
+  // A primeira sessão tem janela própria: os eventos dela nasceram em 01/09 e
+  // só chegam aos aparelhos com a 1.6. Misturar com a janela dos outros faria
+  // a cadeia parecer vazia em vez de nova.
+  const janelaPrimeira = janelaDaCadeia(CADEIA_PRIMEIRA_SESSAO, desde28);
+  const { data: etapasPrimeira } = await admin.rpc("funil_etapas", { p_desde: janelaPrimeira.desde });
+  const porEtapaPrimeira = new Map<EventoFunil, number>(
+    ((etapasPrimeira ?? []) as { evento: string; pessoas: number }[])
+      .filter((e) => e.evento in NATUREZA)
+      .map((e) => [e.evento as EventoFunil, Number(e.pessoas)]),
+  );
   const quebraFunil = [
     ...degrausDaCadeia(CADEIA_SESSAO, porEtapa, janela.desde),
     ...degrausDaCadeia(CADEIA_ATO, porEtapa, janela.desde),
+    ...degrausDaCadeia(CADEIA_PRIMEIRA_SESSAO, porEtapaPrimeira, janelaPrimeira.desde),
   ].map(comPerdidos);
 
   const ativas = (subs ?? []).filter((s) => s.status === "active");

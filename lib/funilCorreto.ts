@@ -43,6 +43,9 @@ export type EventoFunil =
   | "iniciou_checkout"
   | "abriu_trilha"
   | "cadastrou_carro"
+  | "comecou_onboarding"
+  | "terminou_onboarding"
+  | "abriu_cadastro_de_carro"
   | "assinou"
   | "renovou"
   | "cancelou"
@@ -57,6 +60,12 @@ export const NATUREZA: Record<EventoFunil, Natureza> = {
   abriu_trilha: "sessao",
   cadastro: "ato",
   cadastrou_carro: "ato",
+  // Os três da primeira sessão são atos, e de propósito: eles disparam UMA
+  // vez por aparelho (dedup em localStorage no app, índice único no banco).
+  // Se fossem por sessão, a etapa só cresceria e a taxa viraria ficção.
+  comecou_onboarding: "ato",
+  terminou_onboarding: "ato",
+  abriu_cadastro_de_carro: "ato",
   iniciou_checkout: "ato",
   assinou: "ato",
   renovou: "ato",
@@ -88,6 +97,13 @@ export const MEDIDO_DESDE: Record<EventoFunil, string> = {
   cancelou: "2026-08-22",
   expirou: "2026-08-22",
   atribuicao: "2026-08-30",
+  // Vão no ar com a 1.6. Até a versão chegar aos aparelhos, a cadeia da
+  // primeira sessão fica sem medição, e o funil DIZ isso em vez de mostrar
+  // zero. Quando a 1.6 estiver publicada, esta data continua valendo: ela
+  // marca quando o instrumento passou a existir, não quando alguém o usou.
+  comecou_onboarding: "2026-09-01",
+  terminou_onboarding: "2026-09-01",
+  abriu_cadastro_de_carro: "2026-09-01",
 };
 
 /**
@@ -237,6 +253,27 @@ export function degrau(
  */
 export const CADEIA_SESSAO: EventoFunil[] = ["abriu_app", "viu_paywall"];
 export const CADEIA_ATO: EventoFunil[] = ["cadastro", "iniciou_checkout", "assinou"];
+
+/**
+ * A PRIMEIRA SESSÃO, que até 01/09/2026 era uma caixa preta.
+ *
+ * Entre "abriu o app" e "cadastrou o carro" não havia degrau nenhum: quem
+ * abria e ia embora sumia sem dizer de onde. E os dois consertos possíveis são
+ * opostos. Se as pessoas não CHEGAM ao formulário, o problema é de descoberta
+ * e de motivo; se chegam e DESISTEM, o problema é o formulário. Escolher entre
+ * os dois sem medir é chute caro, ainda mais com anúncio pago rodando.
+ *
+ * Todos atos, um por aparelho, então se comparam entre si. Repare que
+ * `abriu_app` NÃO abre esta cadeia: ele é de sessão, e seria fluxo sobre
+ * estoque de novo. Quem abre é `comecou_onboarding`, que marca o aparelho que
+ * viu o app pela primeira vez.
+ */
+export const CADEIA_PRIMEIRA_SESSAO: EventoFunil[] = [
+  "comecou_onboarding",
+  "terminou_onboarding",
+  "abriu_cadastro_de_carro",
+  "cadastrou_carro",
+];
 
 /** Todos os degraus de uma cadeia, em ordem. */
 export function degrausDaCadeia(

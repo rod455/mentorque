@@ -3,6 +3,35 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-01 · 1.6: a primeira sessão deixa de ser caixa preta
+- **Decisão do dono**: subir versão nova em vez de esperar, porque continuar
+  sem os eventos da primeira sessão é gastar em anúncio sem saber onde a
+  pessoa para.
+- **Três eventos novos**: `comecou_onboarding`, `terminou_onboarding` e
+  `abriu_cadastro_de_carro`. Entre abrir o app e cadastrar o carro não havia
+  degrau nenhum, e os dois consertos possíveis são OPOSTOS: ninguém acha o
+  formulário, ou acha e desiste no meio. Sem o degrau do meio, escolher entre
+  eles era chute.
+- Os três são ATOS, um por aparelho: dedup em localStorage no app
+  (`umaVezPorAparelho`) e índice único no banco como piso. Se fossem por
+  sessão, a etapa só cresceria e a taxa viraria ficção. A saída do onboarding
+  passou a ter um portão único, `sair(origem)`, porque `finishOnboarding` era
+  chamado de cinco lugares e instrumentar os cinco é pedir para um ficar de
+  fora na próxima mexida.
+- **A armadilha das quatro listas** virou conferência. Evento novo precisa
+  estar no tipo do app, no `EVENTOS_DO_APP` da rota, no `check` da tabela e na
+  `NATUREZA` do funil. Esquecer na rota devolve 400 e a métrica some em
+  silêncio; esquecer no banco recusa o insert. `conferir:funil` lê os quatro
+  arquivos e reprova se divergirem, provado plantando o esquecimento em cada
+  um dos três primeiros.
+- Vão junto no build: o conserto do `anon_id` na origem (que de quebra
+  destrava o quiz para aparelho sem armazenamento) e os cinco travessões em
+  texto de tela.
+- Textos de loja e o teste de aparelho em `docs/lojas/novidades-1.6.md`. O
+  teste tem um desenho de propósito: passar o onboarding, abrir o cadastro de
+  carro e SAIR sem salvar, para provar que o degrau novo separa "desistiu no
+  formulário" de "nem chegou lá".
+
 ## 2026-09-01 · Os dois consertos que o dono mandou fazer: identidade no banco e as aulas sem vídeo
 - **Identidade.** `sem-armazenamento` era um texto fixo que virava UMA pessoa
   para todos os aparelhos sem localStorage. Agora existe

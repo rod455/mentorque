@@ -24,6 +24,10 @@ const EVENTOS_DO_APP = new Set([
   // origem). É o único evento técnico da lista: sem ele, o SDK falhando em
   // silêncio é indistinguível do SDK funcionando. Ver lib/app/atribuicao.ts.
   "atribuicao",
+  // A primeira sessão, medida em 01/09/2026: entre abrir o app e cadastrar o
+  // carro não havia degrau nenhum, e quem ia embora sumia sem dizer de onde.
+  // Deduplicados por aparelho no cliente e por índice único no banco.
+  "comecou_onboarding", "terminou_onboarding", "abriu_cadastro_de_carro",
 ]);
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

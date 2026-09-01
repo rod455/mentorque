@@ -281,6 +281,18 @@ export function AddCarScreen({ editId }: { editId?: string }) {
   const { back, root } = useNav();
   const editing = editId ? s.vehicles.find((v) => v.id === editId) ?? null : null;
 
+  // O degrau que separa os dois consertos opostos: quem NUNCA chegou ao
+  // formulário e quem chegou e desistiu no meio. Sem ele, "não cadastrou
+  // carro" é uma só caixa preta, e escolher entre mexer na descoberta ou no
+  // formulário vira chute.
+  //
+  // Só no cadastro NOVO: editar um carro que já existe não é primeira sessão
+  // de ninguém, e contar isso encheria a etapa com quem já é usuário.
+  useEffect(() => {
+    if (editing) return;
+    funil("abriu_cadastro_de_carro", { umaVezPorAparelho: true });
+  }, [editing]);
+
   const [type, setType] = useState<VehicleType>(editing?.type ?? "car");
   const [make, setMake] = useState<string | null>(editing?.make ?? null);
   const [model, setModel] = useState<string | null>(editing?.model ?? null);

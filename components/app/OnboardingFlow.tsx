@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { funil } from "@/lib/app/funil";
 import { usePrototype } from "@/lib/app/store";
 import { useSwipe } from "@/lib/app/swipe";
 import { useAuth } from "@/lib/app/auth";
@@ -31,6 +32,15 @@ export function OnboardingFlow() {
   const { finishOnboarding, setPremium } = usePrototype();
   const { user } = useAuth();
   const [i, setI] = useState(0);
+
+  // O TOPO da primeira sessão. `abriu_app` não serve aqui: ele dispara toda
+  // sessão, para todo mundo, e dividir um ato por ele seria fluxo sobre
+  // estoque (ver lib/funilCorreto.ts). Este marca o aparelho que VIU o
+  // onboarding pela primeira vez, e é com ele que os degraus seguintes se
+  // comparam.
+  useEffect(() => {
+    funil("comecou_onboarding", { umaVezPorAparelho: true });
+  }, []);
   const [carLeaving, setCarLeaving] = useState(false);
   const [plan, setPlan] = useState<"annual" | "monthly">("annual");
   // Onde dá para assinar: web (Stripe) e a loja que tiver chave de compra
@@ -71,10 +81,22 @@ export function OnboardingFlow() {
   const [trialDays, setTrialDays] = useState(7);
   useEffect(() => setTrialDays(trialDaysFor(trialPlatform())), []);
 
+  // A SAÍDA DO ONBOARDING PASSA TODA POR AQUI.
+  //
+  // `finishOnboarding` era chamado de cinco lugares, e instrumentar os cinco
+  // seria pedir para um deles ficar de fora na próxima mexida. Este portão
+  // dispara o evento uma vez por aparelho e carrega COMO a pessoa saiu, que é
+  // a parte útil: quem sai por "agora não" na última página é uma história
+  // diferente de quem sai porque assinou.
+  const sair = (origem: "plano" | "assinou" | "agora-nao" | "sem-venda") => {
+    funil("terminou_onboarding", { umaVezPorAparelho: true, origem });
+    finishOnboarding();
+  };
+
   // Última página: Continuar leva ao paywall/checkout do plano escolhido.
   const finishToPlan = () => {
     try { window.sessionStorage.setItem("mentorque-onboarding-plan", plan); } catch { /* ignore */ }
-    finishOnboarding();
+    sair("plano");
   };
 
   // Onde vende, a última página é a do teste e leva ao paywall (no iOS, direto
@@ -91,10 +113,10 @@ export function OnboardingFlow() {
     try {
       const res = await rc.purchasePackage({ aPackage: pkg });
       if (res && hasActiveEntitlement(res.customerInfo)) setPremium(true);
-      finishOnboarding();
+      sair("assinou");
     } catch {
       // Cancelou ou falhou: entra no app do mesmo jeito, sem travar ninguém.
-      finishOnboarding();
+      sair("agora-nao");
     } finally {
       setBuying(false);
     }
@@ -102,7 +124,7 @@ export function OnboardingFlow() {
 
   const advance = () => {
     if (!last) { setI((v) => v + 1); return; }
-    if (!sells) { finishOnboarding(); return; }
+    if (!sells) { sair("sem-venda"); return; }
     // Comprar deslogado deixaria a assinatura numa conta anônima do RevenueCat:
     // o motorista pagaria e o Premium não apareceria na conta dele, nem em
     // outro aparelho, nem no site. Sem login, o plano escolhido fica guardado e
@@ -144,7 +166,7 @@ export function OnboardingFlow() {
       <div className="flex items-center justify-between px-5 pb-2 pt-5">
         <ProgressDots total={total} index={i} />
         {last ? (
-          <button onClick={finishOnboarding} className="text-xs text-cream/50 hover:text-cream">{trial.notNow}</button>
+          <button onClick={() => sair("agora-nao")} className="text-xs text-cream/50 hover:text-cream">{trial.notNow}</button>
         ) : (
           <LangSwitcher />
         )}

@@ -34,7 +34,9 @@ create table if not exists public.funil_eventos (
   evento     text not null check (evento in (
     'abriu_app', 'cadastro', 'viu_paywall', 'iniciou_checkout',
     'abriu_trilha', 'cadastrou_carro', 'atribuicao',
-    'assinou', 'renovou', 'cancelou', 'expirou'
+    'assinou', 'renovou', 'cancelou', 'expirou',
+    -- A primeira sessão, medida em 01/09/2026.
+    'comecou_onboarding', 'terminou_onboarding', 'abriu_cadastro_de_carro'
   )),
 
   anon_id    text,

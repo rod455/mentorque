@@ -18,6 +18,7 @@
 // Rode com: npm run conferir:funil
 import {
   CADEIA_ATO,
+  CADEIA_PRIMEIRA_SESSAO,
   CADEIA_SESSAO,
   MEDIDO_DESDE,
   NATUREZA,
@@ -30,6 +31,7 @@ import {
   podeComparar,
   type EventoFunil,
 } from "../lib/funilCorreto.ts";
+import { readFileSync } from "node:fs";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -124,11 +126,11 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
 
 // ── as cadeias publicadas são internamente comparáveis ─────────────────────
 {
-  for (const [nome, cadeia] of [["sessão", CADEIA_SESSAO], ["ato", CADEIA_ATO]] as const) {
+  for (const [nome, cadeia] of [["sessão", CADEIA_SESSAO], ["ato", CADEIA_ATO], ["primeira sessão", CADEIA_PRIMEIRA_SESSAO]] as const) {
     const naturezas = new Set(cadeia.map((e) => NATUREZA[e]));
     conferir(`a cadeia de ${nome} tem uma natureza só`, naturezas.size === 1, [...naturezas].join(", "));
   }
-  const todos = [...CADEIA_SESSAO, ...CADEIA_ATO];
+  const todos = [...CADEIA_SESSAO, ...CADEIA_ATO, ...CADEIA_PRIMEIRA_SESSAO];
   conferir("nenhum evento técnico entrou numa cadeia", todos.every((e) => NATUREZA[e] !== "tecnico"));
 
   const degraus = degrausDaCadeia(CADEIA_ATO, new Map([["cadastro", 4], ["iniciou_checkout", 2], ["assinou", 1]]), HOJE);
@@ -163,6 +165,101 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
   const folgada = janelaDaCadeia(CADEIA_SESSAO, "2026-08-25");
   conferir("janela que já cabe não é mexida", folgada.desde === "2026-08-25" && !folgada.encurtada);
   conferir("e não inventa aviso", folgada.aviso === null, String(folgada.aviso));
+}
+
+// ── a cadeia da primeira sessão ────────────────────────────────────────────
+//
+// Ela existe para separar dois consertos OPOSTOS: quem nunca chega ao
+// formulário (problema de descoberta) e quem chega e desiste (problema de
+// formulário). Se ela deixar de ser comparável, volta a ser caixa preta.
+{
+  conferir(
+    "a cadeia da primeira sessão NÃO começa por abriu_app",
+    !CADEIA_PRIMEIRA_SESSAO.includes("abriu_app"),
+    "abriu_app é de sessão: abrir a cadeia com ele é fluxo sobre estoque outra vez",
+  );
+  conferir(
+    "ela abre por comecou_onboarding",
+    CADEIA_PRIMEIRA_SESSAO[0] === "comecou_onboarding",
+    CADEIA_PRIMEIRA_SESSAO[0],
+  );
+  conferir(
+    "ela termina em cadastrou_carro",
+    CADEIA_PRIMEIRA_SESSAO[CADEIA_PRIMEIRA_SESSAO.length - 1] === "cadastrou_carro",
+  );
+  conferir(
+    "ela tem o degrau que separa 'não achou' de 'desistiu'",
+    CADEIA_PRIMEIRA_SESSAO.includes("abriu_cadastro_de_carro"),
+  );
+
+  const pessoas = new Map<EventoFunil, number>([
+    ["comecou_onboarding", 100],
+    ["terminou_onboarding", 60],
+    ["abriu_cadastro_de_carro", 30],
+    ["cadastrou_carro", 24],
+  ]);
+  const ds = degrausDaCadeia(CADEIA_PRIMEIRA_SESSAO, pessoas, "2026-09-01");
+  conferir("os três degraus saem com taxa", ds.every((d) => d.taxa !== null), JSON.stringify(ds.map((d) => d.motivo)));
+  conferir("e as taxas conferem", ds.map((d) => d.taxa).join(",") === "60,50,80", ds.map((d) => d.taxa).join(","));
+
+  // Antes da 1.6 chegar aos aparelhos, a janela de 28 dias abre antes do
+  // instrumento: é SEM MEDIÇÃO, e tem que dizer isso em vez de mostrar zero.
+  const cedo = degrausDaCadeia(CADEIA_PRIMEIRA_SESSAO, new Map(), CEDO);
+  conferir("antes do instrumento, nenhum degrau inventa taxa", cedo.every((d) => d.taxa === null));
+  conferir("e todos trazem motivo", cedo.every((d) => !!d.motivo), JSON.stringify(cedo.map((d) => d.motivo)));
+}
+
+// ── A LISTA DE EVENTOS MORA EM QUATRO LUGARES ──────────────────────────────
+//
+// Esta é a armadilha mais cara do funil, e ela já mordeu: um evento novo
+// declarado no app e esquecido na rota é recusado com 400, e a métrica some em
+// silêncio. Esquecido no `check` do banco, o insert é recusado. Esquecido na
+// NATUREZA, o funil não sabe se pode dividir.
+//
+// A conferência lê os quatro arquivos e exige que digam a mesma coisa.
+{
+  const ler = (caminho: string) => readFileSync(new URL(caminho, import.meta.url), "utf8");
+  const nomes = (texto: string, re: RegExp) =>
+    new Set([...texto.matchAll(re)].map((m) => m[1]));
+
+  const tipoApp = ler("../lib/app/funil.ts");
+  const rota = ler("../app/api/funil/route.ts");
+  const sql = ler("../supabase/funil_eventos.sql");
+
+  // O tipo do app: as alternativas da união EventoFunil.
+  const bloco = tipoApp.slice(tipoApp.indexOf("export type EventoFunil"), tipoApp.indexOf(";", tipoApp.indexOf("export type EventoFunil")));
+  const noApp = nomes(bloco, /\|\s*"([a-z_]+)"/g);
+
+  const blocoRota = rota.slice(rota.indexOf("EVENTOS_DO_APP"), rota.indexOf("]);", rota.indexOf("EVENTOS_DO_APP")));
+  const naRota = nomes(blocoRota, /"([a-z_]+)"/g);
+
+  const blocoSql = sql.slice(sql.indexOf("check (evento in ("), sql.indexOf("))", sql.indexOf("check (evento in (")));
+  const noBanco = nomes(blocoSql, /'([a-z_]+)'/g);
+
+  const naRegra = new Set(Object.keys(NATUREZA));
+
+  conferir("o app declara os três eventos da primeira sessão", ["comecou_onboarding", "terminou_onboarding", "abriu_cadastro_de_carro"].every((e) => noApp.has(e)), [...noApp].join(", "));
+
+  const faltandoNaRota = [...noApp].filter((e) => !naRota.has(e));
+  conferir(
+    "todo evento do app é aceito pela rota /api/funil",
+    faltandoNaRota.length === 0,
+    faltandoNaRota.length ? `${faltandoNaRota.join(", ")} seriam recusados com 400 e a métrica sumiria em silêncio` : "",
+  );
+
+  const faltandoNoBanco = [...noApp].filter((e) => !noBanco.has(e));
+  conferir(
+    "todo evento do app cabe no check do banco",
+    faltandoNoBanco.length === 0,
+    faltandoNoBanco.length ? `${faltandoNoBanco.join(", ")} teriam o insert recusado` : "",
+  );
+
+  const faltandoNaRegra = [...noApp].filter((e) => !naRegra.has(e));
+  conferir(
+    "todo evento do app tem natureza declarada",
+    faltandoNaRegra.length === 0,
+    faltandoNaRegra.length ? `${faltandoNaRegra.join(", ")}: o funil não saberia se pode dividir` : "",
+  );
 }
 
 if (falhas) {

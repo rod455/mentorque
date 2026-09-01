@@ -242,6 +242,28 @@ selecionado, ativar o workflow (botão Active) e conferir a primeira execução.
   no n8n e linha na `metricas_diarias` não. Quando os dois discordarem, quem
   manda é a execução, e o doc é que está errado.
 
+## Aprendizados sobre o funil (01/09/2026)
+
+- **A lista de eventos mora em QUATRO lugares, e esquecer um some em
+  silêncio.** São o tipo `EventoFunil` em `lib/app/funil.ts`, o
+  `EVENTOS_DO_APP` em `app/api/funil/route.ts`, o `check` da tabela em
+  `supabase/funil_eventos.sql` e a `NATUREZA` em `lib/funilCorreto.ts`.
+  Esquecer na rota devolve 400 e a métrica some; esquecer no banco recusa o
+  insert; esquecer na natureza deixa o funil sem saber se pode dividir.
+  `npm run conferir:funil` lê os quatro arquivos e reprova se divergirem, e
+  isso foi provado plantando o esquecimento em cada um.
+- **Evento de SESSÃO e evento de ATO não se dividem.** A regra inteira está em
+  `lib/funilCorreto.ts` e na skill de análise. O caso que a criou: o relatório
+  de 31/08 publicou 17 → 8 → 2 → 2 → 2 como funil.
+- **Quando existe tabela com o fato gravado, a tabela ganha do evento.**
+  Cadastro passou a sair de `auth.users`, porque o evento só dispara para
+  conta com menos de 7 dias e esse buraco nenhum build conserta.
+- **Dedup de evento tem duas escalas, e escolher errado inventa crescimento.**
+  `umaVez` guarda em memória e morre com a sessão, que é certo para "viu o
+  paywall nesta visita". Para "terminou o onboarding", que acontece uma vez na
+  vida, a marca vai no localStorage (`umaVezPorAparelho`) e o piso é um índice
+  único no banco. Contar de novo a cada abertura faria a etapa só crescer.
+
 ## Direcionamentos do dono
 
 - (vazio ainda)

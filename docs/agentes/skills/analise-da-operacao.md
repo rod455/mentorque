@@ -83,6 +83,18 @@ qualquer investimento em aquisição um desperdício.
   deixa rastro em lugar nenhum.
   A regra é pura, mora em `lib/funilCorreto.ts`, e `npm run conferir:funil`
   prova que ela recusa o caso real.
+- **A cadeia da PRIMEIRA SESSÃO** (`comecou_onboarding` →
+  `terminou_onboarding` → `abriu_cadastro_de_carro` → `cadastrou_carro`), que
+  entra com a 1.6. Ela existe para separar dois consertos OPOSTOS: se a pessoa
+  não CHEGA ao formulário de carro, o problema é de descoberta e de motivo; se
+  chega e DESISTE, o problema é o formulário. Sem esse degrau, "não cadastrou
+  carro" é uma caixa preta só, e escolher entre os dois é chute.
+  Os quatro são atos, um por aparelho, então se comparam entre si. Repare que
+  `abriu_app` NÃO abre a cadeia: ele é de sessão, e seria fluxo sobre estoque
+  outra vez.
+  ENQUANTO A 1.6 NÃO CHEGAR AOS APARELHOS, esta cadeia é SEM MEDIÇÃO, e o
+  `/api/dados` diz isso em vez de mostrar zero. Não confundir uma com a outra:
+  a cadeia nascendo vazia não é o funil quebrado.
 - **estadoDaBase**: a resposta CERTA para "quantos têm carro", que o evento
   não sabia dar. É estado, não ato: `contas`, `contas_com_carro`,
   `contas_com_servico`, `contas_ativas_7d/30d`. Confere-se conta a conta.
