@@ -72,6 +72,26 @@ loja, responder avaliação diretamente, mexer em preço.
   LP já tinha esvaziado os depoimentos inventados de propósito
   (`lib/i18n/strings.en.ts`), mas o paywall do app continuou com dois. Quando
   for varrer prova social, varrer o app junto com o site.
+- **E varrer significa `grep` no repositório inteiro, não olhar a tela que
+  você lembrou.** Em 01/09 o relatório desta rodada denunciou só o paywall e
+  disse que "a landing page já resolveu". Errado nos dois lados. Um `grep` por
+  um dos nomes inventados achou TRÊS lugares vivos, e o paywall era o menor
+  deles:
+  - `lib/app/content.ts` → `social` (página 4 do onboarding, antes do
+    cadastro): quatro depoimentos com nome, mais **nota "4,8" com o rótulo
+    "média das avaliações"**, **"10.000+ diagnósticos feitos"** e **"5.000+
+    motoristas"**, tudo sob o título "Avaliações e histórias reais". Com zero
+    avaliações nas duas lojas e sete contas de fora, os três números são
+    inventados, e o rótulo afirma que não são.
+  - `lib/app/content.ts` → `sub.testimonials` (paywall): os dois que o
+    relatório achou.
+  - `components/lp/LandingDownload.tsx` → três depoimentos ainda no ar. A LP
+    que foi esvaziada é outra.
+  Depoimento inventado é ruim; NÚMERO inventado é pior, porque é afirmação
+  verificável e vira risco de política nas duas lojas (declarar avaliação e
+  base de usuários que não existem). Antes de escrever "está limpo", rodar
+  `grep -rn "<nome inventado>" --include=*.ts --include=*.tsx .` e contar os
+  lugares.
 
 ## Direcionamentos do dono
 
