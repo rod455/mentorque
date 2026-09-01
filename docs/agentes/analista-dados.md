@@ -21,7 +21,22 @@ leem. Não analisa, não opina, não notifica o Rodrigo; entrega matéria-prima.
    Contents deste repositório). É a fonte primária do Diretor, do CRO e do
    ASO. Primeiro commit real: ed50a29.
 
-## Workflow pronto, esperando as chaves (DESLIGADO)
+## Workflow com as chaves prontas, mas DESLIGADO (falta só ativar)
+
+ATENÇÃO A QUEM LER ESTA SEÇÃO: o título antigo aqui era "esperando as
+chaves" e ficou parado no tempo. Em 01/09 eu repeti essa frase para o
+Rodrigo copiando o título, sem conferir, e ela já estava errada havia dias.
+O quadro real, provado na execução 8352 (23/08) e nas de 01/09:
+
+- Dez das onze fontes gravam dado real. Nenhuma chave falta nelas.
+- Falta UMA chave, e só uma: o **developer token do Google Ads** (detalhe na
+  lista abaixo). A credencial OAuth desse braço já existe e funciona.
+- Falta ATIVAR o workflow. É o botão Active, e é o motivo de a coleta estar
+  parada desde 23/08, não credencial nenhuma.
+
+Antes de escrever "falta a credencial X" em qualquer lugar, abrir a última
+execução no n8n e olhar a resposta. Foi assim que os dois defeitos de 01/09
+apareceram, e nenhum dos dois era chave.
 
 3. **Métricas externas** (diário, 5h30 quando ligar)
    https://n8n.vocaboost.com.br/workflow/8HswG6ZPdzBSnlPv
@@ -74,6 +89,20 @@ Para fechar o primeiro degrau do funil (instalação → abertura → cadastro):
   Primeiro dado: 0 downloads orgânicos em 21/08, ou seja, os usuários
   ativos até aqui são todos de teste. Pendência de higiene: revogar a
   chave Developer antiga (U25N5Y86SS) no App Store Connect.
+  CONSERTO DE 01/09, e o número que ele destravou: este braço estava
+  gravando "This operation expects the node's input data to contain a binary
+  file" em vez de dado. A causa não era a Apple nem a chave: o nó de
+  descompactar do n8n descobre o formato pela EXTENSÃO do arquivo, e a Apple
+  manda o relatório como `application/a-gzip` SEM nome. Entrou um nó "App
+  Store: nomeia o arquivo" que batiza o binário de `vendas.gz` quando ele vem
+  sem nome. Na primeira rodada depois do conserto, o relatório de 30/08 disse
+  **2 downloads e 2 atualizações**: os primeiros downloads reais fora de
+  teste, que o defeito estava escondendo. É a prova prática de por que erro
+  de coleta não pode ser tratado como paisagem.
+  O nó de normalizar também passou a separar os três casos pelo código HTTP:
+  404 é ZERO transação de verdade, 200 é relatório para ler, e qualquer outro
+  (401, 403, 429) é ESTAMOS CEGOS e vira erro. Zero e sem medição não podem
+  chegar iguais no retrato.
 - Google: aguardando o Play Console gerar os primeiros relatórios
   estatísticos do app (em 23/08 ainda mostrava "Não há relatórios
   mensais disponíveis"); quando existirem, copiar o URI do Cloud Storage
@@ -109,9 +138,35 @@ nos nós do braço correspondente (a API não permite anexar por fora):
       real: 22 usuários ativos, 22 clientes novos, 0 assinaturas ativas.
 - [x] Vercel: pronto e testado em 2026-08-23 (token de acesso). Dado real:
       20 deploys nos últimos 7 dias, todos prontos, produção saudável.
-- [ ] Google Ads: credencial "Google Ads OAuth2 API" (pede também o
-      developer token da conta). Nos 2 nós. Se a API mudar de versão até lá,
-      ajustar o v20 nas URLs.
+- [ ] Google Ads: **a ÚNICA chave que falta em todo o time é esta**, e não é a
+      credencial OAuth. Essa está criada e funciona (id EWoLYhFlqWBc5zhP). O
+      que falta é o **developer token**, no campo "Developer Token" da mesma
+      credencial do n8n. Ele sai do próprio Google Ads: conta gerente →
+      Ferramentas → Configuração → Central de APIs. É de graça, mas passa por
+      aprovação do Google (nível básico costuma sair em dias).
+      Prova, de 01/09: com a URL consertada a API respondeu
+      `DEVELOPER_TOKEN_PARAMETER_MISSING: developer-token parameter is
+      missing.`, gravado hoje na mesa em `metricas_diarias`. Enquanto o token
+      não entrar, essa é a mensagem que o braço vai repetir todo dia, e ela
+      diz sozinha o que fazer.
+      Antes disso havia um segundo problema empilhado, que escondia o
+      primeiro: a URL usava a **v20, que o Google aposentou**. O erro
+      guardado dizia só "The resource you are requesting could not be found",
+      mas o corpo na execução 8352 era a página 404 em HTML do Google: `The
+      requested URL /v20/customers:listAccessibleCustomers was not found on
+      this server`. Corrigido em 01/09 para **v25** nos dois nós.
+      COMO ESCOLHER A VERSÃO quando ela morrer de novo (o Google aposenta uma
+      por ano): NÃO confie no teste sem autenticação. Bater sem token dá 401
+      tanto em versão viva quanto em versão que ainda não existe: a v26
+      responde 401 sem token e `404 Method not found` com token de verdade.
+      A única prova que vale é rodar o workflow e olhar a resposta. Subir uma
+      versão por vez e parar na maior que devolver erro do Google Ads (e não
+      404 do gateway).
+      A lição vale para além do Google Ads: **erro de API guardado sem o
+      corpo da resposta vira mistério**. Nove dias de "not found" pareciam
+      falta de permissão e eram duas outras coisas. Por isso os nós que podem
+      falhar por motivo externo agora usam `fullResponse` + `neverError` e o
+      nó de normalizar cava o motivo de verdade antes de gravar.
 - [x] AdMob: pronto e testado em 2026-08-23 (cliente Mentorque N8N + escopo
       admob.readonly). Dado real: receita diária em USD desde 15/08, cerca
       de US$ 1,64 na última semana.
@@ -137,6 +192,22 @@ selecionado, ativar o workflow (botão Active) e conferir a primeira execução.
 
 - O feed de avaliações da Apple é público e sem chave; o do Play não tem
   equivalente aberto.
+- **Erro de coleta guardado sem o corpo da resposta vira mistério.** Nove
+  dias de `The resource you are requesting could not be found` no braço do
+  Google Ads pareciam falta de permissão e eram, empilhados, uma versão de
+  API aposentada e um developer token que nunca foi preenchido. Nada disso
+  aparecia na mensagem curta. Quem escreve braço novo: nó que pode falhar por
+  motivo de fora usa `fullResponse` + `neverError`, e o nó de normalizar cava
+  o motivo dentro de `body.error.details` antes de gravar.
+- **Um erro pode estar escondendo outro.** No Google Ads o 404 do gateway
+  vinha antes do erro de token: consertar a versão não fez o braço funcionar,
+  fez o erro DE VERDADE aparecer. Comemorar o primeiro conserto e ir embora
+  teria deixado o braço quebrado do mesmo jeito.
+- **Este doc já mentiu sobre o próprio estado.** O título "esperando as
+  chaves" ficou parado depois que as chaves chegaram, e em 01/09 eu repeti a
+  frase dele para o Rodrigo sem conferir. Doc de estado envelhece; execução
+  no n8n e linha na `metricas_diarias` não. Quando os dois discordarem, quem
+  manda é a execução, e o doc é que está errado.
 
 ## Direcionamentos do dono
 

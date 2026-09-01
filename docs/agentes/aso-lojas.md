@@ -38,9 +38,16 @@ loja, responder avaliação diretamente, mexer em preço.
   no n8n e olhar a saída do node `Extrai avaliacoes`: só é zero de verdade se
   o corpo do feed chegou e não tinha `entry` dentro.
 - **O zero cobre só metade das lojas.** O coletor lê apenas o feed público da
-  Apple (loja BR). Google Play não é coletado (falta a credencial da conta de
-  serviço no n8n), então avaliação na Play é ponto cego total. Escrever sempre
-  "zero na App Store BR e sem coleta na Play", nunca "zero nas lojas".
+  Apple (loja BR). A Play hoje é ponto cego, então escrever sempre "zero na
+  App Store BR e sem coleta na Play", nunca "zero nas lojas". CORREÇÃO de
+  01/09: o motivo NÃO é falta de credencial, como estava escrito aqui. A
+  credencial da conta de serviço existe no n8n e funciona: na execução 8352
+  (23/08) o nó "Play: avaliacoes", que chama a androidpublisher com ela,
+  respondeu 200 com corpo vazio (loja sem avaliação, não erro). O problema é
+  de arrumação: esse braço mora no workflow "Analista: metricas externas",
+  que está desligado, e não no de avaliações, que está ligado. Enquanto os
+  dois não forem juntados ou o de métricas não for ativado, a Play não é
+  lida.
 - **O feed da Apple só existe para a loja do país da URL.** A URL do coletor é
   `/br/`. Avaliação feita em outra loja de país não aparece. Com público só do
   Brasil isso não incomoda, mas vira armadilha no dia que houver usuário fora.
