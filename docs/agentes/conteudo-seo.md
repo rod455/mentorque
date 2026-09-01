@@ -185,4 +185,18 @@ que a próxima rodada tem que reler.
 
 ## Direcionamentos do dono
 
-- (vazio ainda)
+- **01/09/2026: as 7 aulas que prometiam vídeo viraram artigo, e o dono quer
+  explicações robustas antes do vídeo.** Decisão dele, com a razão: até
+  gravar, a aula tem que se sustentar sozinha. As sete ganharam corpo de
+  artigo completo (quando fazer, como saber que passou da hora, o que custa
+  adiar, quando levar na oficina) e o passo a passo por nível continua
+  intacto embaixo. Quando o vídeo for gravado, ele volta como REFORÇO, não
+  como a entrega: o `body` não se apaga. A lista priorizada para gravar e o
+  caminho de volta estão em `docs/conteudo/videos-a-gravar.md`.
+- **01/09/2026: os anúncios do Google Ads começaram.** Toda leitura de
+  aquisição a partir daqui tem tráfego pago misturado, e campanha faz subir a
+  busca por MARCA. O dado desta data, para comparar depois: 28 dias, 0
+  cliques, 2 impressões, e a única consulta é `mentorque`.
+- **01/09/2026: a indexação da home e da /barulho-no-carro foi solicitada** no
+  Search Console pelo dono. O pedido que este papel repetia duas rodadas está
+  fechado; a próxima rodada lê o resultado, não repete o pedido.

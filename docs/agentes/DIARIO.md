@@ -3,6 +3,34 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-01 · Os dois consertos que o dono mandou fazer: identidade no banco e as aulas sem vídeo
+- **Identidade.** `sem-armazenamento` era um texto fixo que virava UMA pessoa
+  para todos os aparelhos sem localStorage. Agora existe
+  `public.identidade(anon_id, user_id)`, uma função só, usada por todas as
+  views, e sem armazenamento não é identidade. As views expõem
+  `aberturas_sem_identidade` para o ponto cego não sumir. A semana de 24/08
+  saiu de 17 para 16 e declara 11 aberturas de 84 sem identidade possível. Na
+  origem, cada sessão sem armazenamento sorteia o seu id (mantendo o prefixo),
+  o que de quebra conserta o quiz, que tem índice único por (dia, anon_id) e
+  deixava o primeiro aparelho sem armazenamento bloquear todos os outros.
+- **As 7 aulas que prometiam vídeo** viraram artigo com explicação completa:
+  quando fazer, como saber que passou da hora, o que custa adiar, e quando
+  vale levar na oficina. O passo a passo por nível continua intacto embaixo.
+  Direcionamento do dono: quando o vídeo for gravado, ele volta como REFORÇO
+  e o `body` não se apaga. Lista priorizada em
+  `docs/conteudo/videos-a-gravar.md`, com o caminho de volta em duas linhas.
+- **Três conferências novas**, todas provadas com o defeito plantado antes de
+  entrarem: `conferir:travessao` (o título da home tinha ido para o ar com
+  travessão, contra regra do dono), `conferir:identidade` (o texto fixo
+  voltando a contar como gente, e o prefixo divergindo do banco) e
+  `conferir:catalogo` (aula dizendo vídeo sem ter vídeo, e link `[[id]]`
+  morto). Foi a contagem à mão do agente de Conteúdo que achou as sete;
+  contagem à mão acha uma vez, conferência acha todo dia.
+- Fechados por conferência, sem mudança: a LP `/barulho-no-carro` está no ar,
+  indexável e com canonical certo (peguei pela API da Vercel, que era a rota
+  que o agente não tentou); e o erro `LocalNotifications.then()` do retrato
+  morreu em 29/08, com o commit b28e577 e a 1.3.
+
 ## 2026-09-01 · Ações do dono, e o manual do ASO reescrito com o que a rodada expôs
 - **Título da Play trocado** para `Mentorque: manutenção do carro` (era
   `Mentorque: cuidar do carro`). Aplicado pelo dono no console; não depende de
