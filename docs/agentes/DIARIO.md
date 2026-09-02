@@ -3,6 +3,30 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-02 · O link de venda não vendia depois do login social
+- Relato do dono: clicou em mentorque.com.br/ALE100, caiu na tela de entrar,
+  entrou com o Google e foi parar na tela inicial. Sem pagamento e sem cupom.
+- A causa vale ficar guardada porque volta em qualquer coisa que dependa de
+  estado atravessando um login social: o plano e o cupom saíam da URL na
+  abertura e viviam em `useState`/`useRef`, ou seja, na MEMÓRIA DA PÁGINA. Só
+  que login social na web não é uma tela do app: o navegador sai do nosso
+  domínio, vai ao provedor e volta, e a página inteira recarrega. Pior, os
+  parâmetros já tinham sido apagados da URL logo na abertura (de propósito),
+  então nem a URL de volta lembrava.
+- No app das lojas isso nunca apareceu porque lá o login é nativo e a página
+  não recarrega. Era um defeito que só existia na web, que é justamente onde os
+  links de venda são clicados.
+- A compra pendente passou a morar no armazenamento (`lib/app/vendaPendente.ts`),
+  com validade de 30 minutos e esquecimento na chegada, para consertar sem
+  criar o defeito oposto: pendência eterna despejaria a pessoa num pagamento
+  que ela não pediu, dias depois.
+- A suíte `venda` estava VERDE e conferia só a ida. Ganhou o caso da travessia:
+  atalho com cupom, recarga, e a compra tem que continuar lá. Plantei o defeito
+  antigo e a suíte reprovou em 7 pontos.
+- "Entrar com a Apple" no site continua desligado, e agora com o caminho
+  escrito: `docs/login-apple-web.md`. Falta um Services ID na conta da Apple, e
+  a armadilha é o domínio, que é o do Supabase e não o nosso.
+
 ## 2026-09-02 · O app fecha ao responder o quiz no Android, e o funil confirma
 - Relato de usuário. O nosso próprio funil registrou o mesmo no mesmo dia: um
   Android na 1.6.0 abriu às 12:32:34, respondeu o quiz às 12:32:41 e disparou

@@ -73,6 +73,10 @@ export function googleNativeConfigured(): boolean {
 // Enquanto o Services ID não existir, o botão não aparece fora do iPhone.
 // Botão que some é ruim; botão que leva a um beco sem saída é pior.
 // Para religar depois de configurar: NEXT_PUBLIC_APPLE_WEB=1.
+//
+// O passo a passo está em docs/login-apple-web.md, com a armadilha do domínio
+// escrita por extenso: o domínio do Services ID é o do SUPABASE, não o nosso,
+// porque quem recebe o retorno da Apple é ele.
 const APPLE_WEB_CONFIGURADO = (process.env.NEXT_PUBLIC_APPLE_WEB ?? "").trim() === "1";
 
 export function appleLoginDisponivel(): boolean {

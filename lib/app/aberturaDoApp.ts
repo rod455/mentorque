@@ -9,6 +9,7 @@ import { sincronizarLembretesDeRevisao } from "./lembreteRevisao";
 import { funil } from "./funil";
 import { relatarFechamentoAnterior, vigiarErros } from "./erros";
 import { passo, vigiarPausa } from "./ultimoPasso";
+import { esqueceVenda, guardaVenda, vendaPendente, type VendaPendente } from "./vendaPendente";
 import { trackContent } from "./track";
 import { ensureConsent, nativeAdMob } from "./admob";
 import { adsEnabled } from "@/components/app/AdGate";
@@ -103,56 +104,77 @@ export function usePlanoPendente() {
   const { user } = useAuth();
   const { view, go } = useNav();
   const { s } = usePrototype();
-  const [plano, setPlano] = useState<"annual" | "monthly" | null>(null);
-  // Só o link de venda vai direto ao pagamento; o onboarding para no paywall.
-  const direto = useRef(false);
-  const cupom = useRef<string | undefined>(undefined);
+  const [venda, setVenda] = useState<VendaPendente | null>(null);
 
   useEffect(() => {
     try {
       // O link de venda tem prioridade: quem clicou nele veio comprar agora.
-      // Os parâmetros saem da URL na hora (recarregar não pode reabrir
-      // compra), preservando o resto da query, que o funil lê para os UTMs.
+      // Os parâmetros saem da URL na hora, preservando o resto da query, que o
+      // funil lê para os UTMs.
+      //
+      // E o que sai da URL vai para o ARMAZENAMENTO, não para a memória. Esse
+      // é o conserto de 02/09/2026: login social na web recarrega a página
+      // inteira, e o que estava na memória morre no meio do caminho. O porquê
+      // completo está em lib/app/vendaPendente.ts.
       const url = new URL(window.location.href);
       const q = url.searchParams.get("assinar");
       if (q === "anual" || q === "mensal" || q === "annual" || q === "monthly") {
-        cupom.current = url.searchParams.get("cupom")?.trim().toUpperCase() || undefined;
+        const cupom = url.searchParams.get("cupom")?.trim().toUpperCase() || undefined;
         url.searchParams.delete("assinar");
         url.searchParams.delete("cupom");
         window.history.replaceState(null, "", url);
-        direto.current = true;
-        setPlano(q === "anual" || q === "annual" ? "annual" : "monthly");
+        setVenda(guardaVenda({ plano: q === "anual" || q === "annual" ? "annual" : "monthly", direto: true, cupom }));
         return;
       }
       const p = window.sessionStorage.getItem("mentorque-onboarding-plan");
       if (p === "annual" || p === "monthly") {
         window.sessionStorage.removeItem("mentorque-onboarding-plan");
-        setPlano(p);
+        setVenda(guardaVenda({ plano: p, direto: false }));
+        return;
       }
+      // Nada na URL, e é aqui que a volta do login social é atendida: a
+      // pendência guardada antes de sair do domínio ainda está no aparelho.
+      //
+      // Só sobrescreve quando ACHA alguma coisa, e isso não é detalhe: em modo
+      // privado a gravação não acontece, e um `setVenda(null)` aqui apagaria a
+      // compra que este mesmo efeito acabou de montar em memória se ele rodar
+      // duas vezes (o modo estrito do React remonta os efeitos de propósito).
+      // Não achar nada guardado nunca é motivo para esquecer o que já se sabe.
+      const guardada = vendaPendente();
+      if (guardada) setVenda(guardada);
     } catch { /* ignore */ }
   }, []);
 
   // Depende de `view` de propósito: a tela de login chama `back()` sozinha ao
-  // entrar, e sem esperar a pilha assentar o paywall seria empurrado antes —
+  // entrar, e sem esperar a pilha assentar o paywall seria empurrado antes;
   // aí o `back()` atrasado derrubaria justamente ele.
   const pediuLogin = useRef(false);
   useEffect(() => {
-    if (!plano) return;
+    if (!venda) return;
     if (!user) {
       if (view.name === "auth") return;                          // está logando
-      if (pediuLogin.current) { setPlano(null); return; }         // desistiu do login
+      // Desistiu do login: a pendência morre junto, senão ela ficaria guardada
+      // esperando para empurrar um pagamento na próxima abertura.
+      if (pediuLogin.current) { setVenda(null); esqueceVenda(); return; }
       pediuLogin.current = true;
       go({ name: "auth" });
       return;
     }
     if (view.name === "auth") return;                            // espera sair do login
-    setPlano(null);
+    // Esquecer ANTES de navegar, e não depois: é isso que mantém de pé a regra
+    // de que recarregar a página não reabre compra nenhuma.
+    setVenda(null);
+    esqueceVenda();
     // Quem já é Premium não tem o que comprar: o link vira uma abertura
     // normal do app em vez de um segundo checkout da mesma assinatura.
-    if (direto.current && s.premium) return;
-    go(direto.current ? { name: "checkout", plan: plano, cupom: cupom.current } : { name: "subscribe", ctx: `onb-${plano}` });
+    if (venda.direto && s.premium) return;
+    go(
+      venda.direto
+        ? { name: "checkout", plan: venda.plano, cupom: venda.cupom }
+        : { name: "subscribe", ctx: `onb-${venda.plano}` }
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [plano, user, view]);
+  }, [venda, user, view]);
 }
 
 /**
