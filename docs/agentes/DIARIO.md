@@ -72,6 +72,44 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   Stripe indisponível nesta sessão.
 - Saúde: bateria `conferir` inteira passando (12 conferências), build do site
   e `build:native` verdes.
+## 2026-09-02 · A receita recebida é ZERO, e as três vendas foram com cupom
+- Com o Stripe liberado, a conta fechou. E ela corrige duas coisas que EU e o
+  agente de QA dissemos hoje, as duas na mesma direção: otimistas demais.
+- **As 3 vendas usaram cupom de 100% do primeiro mês.** `MENSAL-ALESSANDRO100`
+  duas vezes (asueyoshi26, eng.avilanova) e `MENSAL-LANCAMENTO100` uma
+  (luizfmviana). Todos `duration: once`.
+- **Ninguém pagou nada ainda. R$ 0,00 de caixa.** Eu escrevi que o luizfmviana
+  tinha pagado R$ 29,90, e o agente de QA escreveu "R$ 29,90 de MRR real, a
+  cobrança entrou". Os dois errados: a fatura dele de 01/09 saiu com subtotal
+  R$ 29,90, desconto R$ 29,90 e **total R$ 0,00**. O cupom foi consumido
+  exatamente nessa primeira cobrança pós-teste.
+- Quem estava certo era o número que os dois ignoraram: `receita 30d = 0,00`.
+  MRR é PROJEÇÃO do plano; recebido é caixa. Ler um pelo outro é o erro, e ele
+  aconteceu duas vezes no mesmo dia, por duas leituras independentes. Por isso
+  o painel agora diz "projeção do plano, não recebido" embaixo do MRR e mostra
+  "Recebido 30d" ao lado.
+- **As datas do primeiro dinheiro de verdade**: 01/10 (luizfmviana, R$ 29,90),
+  04/10 (eng.avilanova) e 09/10 (asueyoshi26). Antes disso, 04/09 e 09/09 são
+  só a virada do teste para o mês de cortesia, e vão sair R$ 0,00.
+- Feito no código, com o dono liberando o caminho de cobrança:
+  - **cupom gravado**: coluna `subscriptions.cupom`, carimbada na metadata da
+    assinatura pela `/api/stripe/checkout` e copiada pelo `upsertSubscription`.
+    As três vendas existentes foram preenchidas na mão a partir do Stripe. O
+    painel ganhou "Vendas com cupom", com a quebra por código.
+  - **escrita de assinatura parou de engolir erro**: `upsertSubscription` lança
+    e o webhook do RevenueCat responde 500. É o 500 que faz o provedor
+    REENVIAR, e o upsert é idempotente, então reenviar é grátis. Antes, um erro
+    de banco de um segundo virava um cliente pagante sem Premium, calado, para
+    sempre. Do lado da loja isso é pior porque não há segunda porta.
+  - **compra da loja não termina mais em silêncio**: quando a loja volta sem
+    erro e sem o direito propagado, abre a confirmação em vez de deixar a
+    pessoa olhando o paywall que ela acabou de pagar. Desistência continua
+    saindo calada (`compraCancelada`).
+  - **`conferir:gravacao` passou a mirar `subscriptions` também.** A versão da
+    manhã mirava só `funil_eventos`, e no MESMO arquivo que ela foi escrita
+    para consertar havia três `upsert` engolindo erro três linhas acima.
+    Conferência que nasce de um padrão precisa mirar onde ele dói mais.
+
 ## 2026-09-02 · As duas fontes de "quem assinou" não batiam, e ninguém comparava
 - Pergunta do dono: "como que não está considerando? tivemos várias compras
   com cupom e todos receberam Premium". Ele estava certo, e o erro era meu: eu

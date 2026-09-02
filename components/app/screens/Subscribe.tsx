@@ -6,7 +6,7 @@ import { usePrototype } from "@/lib/app/store";
 import { stripeConfigured } from "@/lib/app/stripeClient";
 import { trialDaysFor, trialPlatform, type Platform } from "@/lib/app/platform";
 import { iapKey, isLocalDev, isNativeApp, nativePlatform } from "@/lib/app/wrapper";
-import { googleOffer, hasActiveEntitlement, initPurchases, offerPrice, type GoogleOption, type RcPackage } from "@/lib/app/purchases";
+import { compraCancelada, googleOffer, hasActiveEntitlement, initPurchases, offerPrice, type GoogleOption, type RcPackage } from "@/lib/app/purchases";
 import { useNav, type View } from "@/lib/app/nav";
 import { funil } from "@/lib/app/funil";
 import { Button } from "@/components/ui/Button";
@@ -79,7 +79,7 @@ function ComparativoPlanos() {
 export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   const c = useContent();
   const sub = c.subscribe;
-  const { setPremium, subscribed, refreshSubscription } = usePrototype();
+  const { setPremium, subscribed, refreshSubscription, abrirConfirmacaoDeCompra } = usePrototype();
   const { user } = useAuth();
   const { back, go, root } = useNav();
   const [platform, setPlatform] = useState<Platform>("other");
@@ -320,8 +320,27 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
         setPremium(true);
         refreshSubscription();
         back();
+        return;
       }
-    } catch { /* cancelado/erro — permanece na tela */ } finally {
+      // A LOJA VOLTOU SEM ERRO E SEM O DIREITO ATIVO.
+      //
+      // Antes daqui não saía nada: sem liberar, sem avisar e sem sair da tela.
+      // A pessoa tinha acabado de ser cobrada pela Apple ou pela Play e
+      // continuava olhando o paywall, com o botão de assinar do mesmo jeito.
+      // É o desenho exato que em 25/08/2026, na web, fez um cliente começar um
+      // segundo checkout 14 segundos depois de pagar o primeiro.
+      //
+      // O que acontece de verdade neste caso é propagação: a compra entrou e o
+      // direito ainda não chegou. Então a regra é nunca dizer que falhou. A
+      // confirmação pergunta ao banco até a assinatura aparecer, com teto de
+      // tempo, e no fim manda esperar e olhar o e-mail, não tentar de novo.
+      abrirConfirmacaoDeCompra("loja");
+    } catch (err) {
+      // Desistir é escolha da pessoa e sai calado. Qualquer outro erro cai na
+      // confirmação: o dinheiro pode ter entrado, e "deu erro" seria um convite
+      // a pagar duas vezes.
+      if (!compraCancelada(err)) abrirConfirmacaoDeCompra("loja");
+    } finally {
       setIapBusy(false);
     }
   };

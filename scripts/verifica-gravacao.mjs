@@ -15,11 +15,20 @@
 //
 // O QUE ELA PEGA, com a mira estreita de propósito:
 //
-//   PEGA   → gravação em funil_eventos cujo `insert` não desestrutura `error`
-//   IGNORA → lib/funilServidor.ts, que É o escritor compartilhado (ele olha o
-//            erro, tolera duplicado e loga o resto). Passar por ele é a forma
-//            recomendada de gravar: quem usa `eventoDeFunil` nem aparece aqui,
-//            porque não escreve `from("funil_eventos")`.
+//   PEGA   → gravação (insert ou upsert) nas tabelas de TABELAS cujo verbo não
+//            desestrutura `error`
+//   IGNORA → lib/funilServidor.ts, que É o escritor compartilhado do funil (ele
+//            olha o erro, tolera duplicado e loga o resto). Passar por ele é a
+//            forma recomendada de gravar: quem usa `eventoDeFunil` nem aparece
+//            aqui, porque não escreve `from("funil_eventos")`.
+//
+// POR QUE `subscriptions` ENTROU (02/09/2026): a versão de manhã desta mesma
+// conferência mirava só `funil_eventos`, e no MESMO arquivo que ela foi escrita
+// para consertar havia três `upsert` em `subscriptions` engolindo erro, três
+// linhas acima. `funil_eventos` é medição; `subscriptions` é o que libera o
+// Premium. Perder uma medição é ruim; perder uma assinatura paga é um cliente
+// que pagou e ficou sem o que comprou, calado, para sempre. A conferência que
+// nasce de um padrão precisa mirar onde ele dói mais, não só onde foi visto.
 //
 // Duas saídas válidas para quem for reprovado: usar `eventoDeFunil`, ou
 // desestruturar `error` e decidir o que fazer com ele. Silêncio não é opção.
@@ -33,9 +42,12 @@ import { join } from "node:path";
 
 const RAIZ = process.cwd();
 const PASTAS = ["app", "lib"];
-const TABELAS = ["funil_eventos"];
-/** O escritor compartilhado: ele é a solução, não o problema. */
-const ISENTOS = [join("lib", "funilServidor.ts")];
+const TABELAS = ["funil_eventos", "subscriptions"];
+/** Os escritores compartilhados: eles são a solução, não o problema. */
+const ISENTOS = [join("lib", "funilServidor.ts"), join("lib", "subscriptionSync.ts")];
+
+/** Os verbos que GRAVAM. Leitura (`select`) não tem o que perder em silêncio. */
+const VERBOS = [".insert(", ".upsert("];
 
 function arquivos(dir) {
   const saida = [];
@@ -66,7 +78,7 @@ for (const alvo of PASTAS.flatMap(arquivos)) {
       // A gravação inteira cabe numa janela curta: `.insert(` vem logo depois
       // do `from(...)`, e o `const { error } =` logo antes.
       const depois = texto.slice(i, i + 60);
-      if (depois.includes(".insert(")) {
+      if (VERBOS.some((v) => depois.includes(v))) {
         const antes = texto.slice(Math.max(0, i - 140), i);
         const olhaOErro = /\{\s*error\b/.test(antes);
         if (!olhaOErro) {
@@ -83,15 +95,17 @@ for (const alvo of PASTAS.flatMap(arquivos)) {
 }
 
 if (achados.length) {
-  console.error(`\nGravação de funil sem olhar o erro (${achados.length} ocorrência(s)).`);
-  console.error("Insert cujo erro é descartado deixa a etapa em zero parecendo");
-  console.error("comportamento de quem usa o app. Já aconteceu duas vezes.\n");
+  console.error(`\nGravação sem olhar o erro (${achados.length} ocorrência(s)).`);
+  console.error("Em funil_eventos, o erro descartado deixa a etapa em zero parecendo");
+  console.error("comportamento de quem usa o app. Em subscriptions é pior: a pessoa");
+  console.error("pagou e fica sem o Premium, calada. Já aconteceu três vezes.\n");
   for (const a of achados) {
     console.error(`  ${a.arquivo}:${a.linha}  (${a.tabela})`);
   }
-  console.error("\nConserto: use `eventoDeFunil` de lib/funilServidor.ts, ou");
-  console.error("desestruture `error` e decida o que fazer com ele.\n");
+  console.error("\nConserto: use o escritor compartilhado da tabela (eventoDeFunil");
+  console.error("ou upsertSubscription), ou desestruture `error` e decida o que");
+  console.error("fazer com ele. Silêncio não é opção.\n");
   process.exit(1);
 }
 
-console.log("Gravação: todo evento de funil olha se o banco aceitou.");
+console.log("Gravação: funil e assinatura olham se o banco aceitou.");

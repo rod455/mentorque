@@ -38,7 +38,16 @@ export async function POST(req: Request) {
   if (!customerId) {
     const customer = await stripe.customers.create({ email: user.email ?? undefined, metadata: { user_id: user.id } });
     customerId = customer.id;
-    await admin.from("subscriptions").upsert({ user_id: user.id, stripe_customer_id: customerId });
+    // Guardar o cliente do Stripe não é enfeite: é ele que amarra esta conta ao
+    // cadastro de lá. Se esta linha se perde em silêncio, a próxima compra da
+    // MESMA pessoa cria um cliente novo no Stripe, e aí a mesma pessoa passa a
+    // ter duas fichas, dois históricos de cobrança e um /api/stripe/sync que lê
+    // a ficha errada. Falhar aqui é melhor que seguir: nada foi cobrado ainda.
+    const { error } = await admin.from("subscriptions").upsert({ user_id: user.id, stripe_customer_id: customerId });
+    if (error) {
+      console.error("[checkout] cliente do Stripe não gravado:", error.message);
+      return NextResponse.json({ error: "cliente_nao_gravado" }, { status: 500 });
+    }
   }
 
   const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_SITE_URL || "https://mentorque.com.br";
@@ -71,6 +80,23 @@ export async function POST(req: Request) {
     } catch { cupomPromo = null; }
   }
 
+  // O CÓDIGO DO CUPOM VIAJA COM A ASSINATURA, e não só com a sessão.
+  //
+  // Em 02/09/2026 o dono perguntou quantas vendas vieram com cupom e a
+  // resposta não existia do nosso lado: nem o funil nem `subscriptions`
+  // guardavam o código, só o Stripe sabia. Depender do Stripe para uma
+  // pergunta de rotina é não ter a resposta na maioria dos dias.
+  //
+  // A metadata da ASSINATURA é o lugar certo porque ela sobrevive: o
+  // `upsertSubscription` já lê esse objeto em toda porta (webhook, sync,
+  // cancelar, reativar), então o código chega ao nosso banco sem uma chamada
+  // nova. Guardamos o código, não o id do desconto, porque o código é o que
+  // aparece no link de venda e é por ele que a pergunta é feita.
+  //
+  // Fica NULO quando a pessoa digitou o código na tela do Stripe em vez de vir
+  // pelo link, e isso é honesto: aqui só sabemos o que nós aplicamos.
+  const cupomDaVenda = exitCoupon ?? (cupomPromo ? cupomCode : null);
+
   const criarSessao = (desconto: { coupon: string } | { promotion_code: string } | null) => stripe.checkout.sessions.create({
     mode: "subscription",
     ui_mode: "embedded", // formulário embutido no app
@@ -78,7 +104,10 @@ export async function POST(req: Request) {
     line_items: [{ price: priceId, quantity: 1 }],
     client_reference_id: user.id,
     subscription_data: {
-      metadata: { user_id: user.id },
+      // O cupom entra só quando o desconto de fato foi aplicado nesta sessão:
+      // a segunda tentativa (sem desconto) não pode carimbar uma venda como
+      // "veio com cupom" quando o Stripe recusou o cupom.
+      metadata: { user_id: user.id, ...(desconto && cupomDaVenda ? { cupom: cupomDaVenda } : {}) },
       ...(trialDays > 0 ? { trial_period_days: trialDays } : {}),
     },
     // Cartão SEMPRE exigido, mesmo quando a primeira fatura sai zerada.

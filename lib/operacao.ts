@@ -33,7 +33,7 @@ export async function coletarDadosOperacao() {
     admin.from("funil_semana").select("*").limit(12),
     // `stripe_subscription_id` entra na leitura porque é ele que separa venda
     // de cortesia: conta liberada na mão não tem assinatura no Stripe.
-    admin.from("subscriptions").select("status, cancel_at_period_end, plan, stripe_subscription_id"),
+    admin.from("subscriptions").select("status, cancel_at_period_end, plan, stripe_subscription_id, cupom"),
     admin.from("funil_eventos").select("criado_em, plataforma").eq("evento", "cadastro").gte("criado_em", d14),
     admin.from("app_erros").select("criado_em, mensagem, plataforma").gte("criado_em", d7).limit(2000),
     // SEM filtro de data: o frescor precisa enxergar fonte parada há muito
@@ -179,6 +179,20 @@ export async function coletarDadosOperacao() {
       pagantes: pagantes.length,
       emTeste: emTeste.length,
       cortesias: cortesias.length,
+      // Quantas vendas nasceram de um cupom. Em 02/09/2026 eram TODAS, e o
+      // número importa por um motivo que não é vaidade: cupom de 100% adia a
+      // primeira cobrança em um mês inteiro, então venda com cupom entra no
+      // MRR hoje e no caixa só depois. Sem esta linha, "3 assinaturas" e
+      // "R$ 0,00 recebidos" parecem contradição, e não são.
+      comCupom: daLoja.filter((s) => !!s.cupom).length,
+      cupons: Object.entries(
+        daLoja.reduce<Record<string, number>>((acc, s) => {
+          if (s.cupom) acc[String(s.cupom)] = (acc[String(s.cupom)] ?? 0) + 1;
+          return acc;
+        }, {}),
+      )
+        .sort((a, b) => b[1] - a[1])
+        .map(([codigo, total]) => ({ codigo, total })),
       // Assinatura de verdade que a medição não registrou (ou registrou duas
       // vezes). Zero é o normal; qualquer outro número é o painel avisando que
       // ele mesmo está mentindo, em vez de esperar alguém perguntar.

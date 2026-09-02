@@ -152,3 +152,12 @@ grant select on public.assinaturas_conferencia to service_role;
 -- com origem `stripe-retroativo` e o carimbo de tempo REAL da venda, nao o do
 -- dia em que foi gravada. O indice `funil_eventos_assinou_unico` impede que
 -- ela entre duas vezes.
+
+-- Cupom na assinatura, aplicado em 02/09/2026 (ver a coluna em subscriptions).
+--
+-- As tres vendas que ja existiam foram preenchidas na mao a partir do Stripe:
+--   sub_1UBIBn...  MENSAL-ALESSANDRO100
+--   sub_1U9Phe...  MENSAL-ALESSANDRO100
+--   sub_1U8U8h...  MENSAL-LANCAMENTO100
+-- Daqui para a frente quem preenche e a /api/stripe/checkout, carimbando o
+-- codigo na metadata da assinatura, e o upsertSubscription copiando de la.

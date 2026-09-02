@@ -106,3 +106,26 @@ export function hasActiveEntitlement(info?: CustomerInfo): boolean {
   const active = info?.entitlements?.active;
   return !!active && Object.keys(active).length > 0;
 }
+
+/**
+ * A pessoa DESISTIU da compra, ou deu erro de verdade?
+ *
+ * A diferença decide o que a tela faz depois, e tratar as duas como a mesma
+ * coisa é o defeito que este arquivo passou meses tendo: quem fecha a folha da
+ * loja de propósito não quer aviso nenhum e está certo, mas quem bateu num
+ * erro real também não recebia nada, e o silêncio vira "não funcionou, vou
+ * tentar de novo" logo depois de ter sido cobrado.
+ *
+ * O plugin marca desistência de duas formas, e as duas aparecem: um campo
+ * `userCancelled` no erro, e o código 1 do `SKError` da Apple. Na dúvida, o
+ * padrão é dizer que NÃO foi desistência: errar para o lado de mostrar a
+ * confirmação é chato, errar para o outro lado é deixar alguém achando que
+ * pagou à toa.
+ */
+export function compraCancelada(err: unknown): boolean {
+  if (!err || typeof err !== "object") return false;
+  const e = err as { userCancelled?: unknown; code?: unknown; message?: unknown };
+  if (e.userCancelled === true) return true;
+  if (String(e.code) === "1") return true;
+  return /user\s*cancel|cancell?ed by the user/i.test(String(e.message ?? ""));
+}

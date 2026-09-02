@@ -122,6 +122,8 @@ type StoreValue = {
   resolverImportacao: (ids: string[]) => void;
   /** Volta do checkout: a tela mostra o que está acontecendo. */
   checkoutVoltando: EstadoCheckout;
+  /** Abre a confirmação para compra que não veio pelo endereço (a da loja). */
+  abrirConfirmacaoDeCompra: (origem: "stripe" | "loja") => void;
   fecharAvisoCheckout: () => void;
   setName: (name: string) => void;
   setEmail: (email: string) => void;
@@ -415,6 +417,15 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   // alguém pagar de novo.
   const [checkoutVoltando, setCheckoutVoltando] = useState<EstadoCheckout>(null);
 
+  // De onde veio a compra que está sendo confirmada.
+  //
+  // A confirmação nasceu para o checkout do Stripe e agora atende também a
+  // compra pela LOJA (ver `abrirConfirmacaoDeCompra`). A diferença é uma só e
+  // é importante: perguntar ao Stripe sobre uma compra feita na Apple não
+  // devolve nada. O que vale nos dois casos é a pergunta ao NOSSO banco, que é
+  // onde as duas portas escrevem.
+  const origemDaConfirmacao = useRef<"stripe" | "loja">("stripe");
+
   // Só lê o endereço e limpa. NÃO consome a informação antes da hora: o que
   // dispara o trabalho é o efeito seguinte, quando a sessão estiver de pé.
   useEffect(() => {
@@ -422,6 +433,27 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
     const params = new URLSearchParams(window.location.search);
     if (!params.has("checkout")) return;
     window.history.replaceState({}, "", window.location.pathname);
+    origemDaConfirmacao.current = "stripe";
+    setCheckoutVoltando("confirmando");
+  }, []);
+
+  /**
+   * Abre a confirmação para uma compra que NÃO veio pelo endereço.
+   *
+   * Existe para a compra pela loja (Apple e Play). O caminho de lá terminava
+   * em silêncio: quando `purchasePackage` voltava sem erro mas o direito ainda
+   * não tinha propagado, o código não liberava nada, não avisava nada e não
+   * saía da tela. A pessoa acabava de ser cobrada e continuava olhando o
+   * paywall, com o botão de assinar do mesmo jeito. É o desenho exato que em
+   * 25/08/2026 fez um cliente começar um segundo checkout 14 segundos depois
+   * de pagar o primeiro.
+   *
+   * A confirmação já sabe fazer a coisa certa: pergunta ao banco até a
+   * assinatura aparecer, com teto de tempo, e nunca diz "deu erro" quando o
+   * dinheiro pode ter entrado.
+   */
+  const abrirConfirmacaoDeCompra = useCallback((origem: "stripe" | "loja") => {
+    origemDaConfirmacao.current = origem;
     setCheckoutVoltando("confirmando");
   }, []);
 
@@ -432,10 +464,15 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
     let vivo = true;
     (async () => {
       // Estado autoritativo, direto do Stripe: não depende do webhook chegar.
-      try {
-        const token = (await supabase.auth.getSession()).data.session?.access_token;
-        if (token) await fetch(apiUrl("/api/stripe/sync"), { method: "POST", headers: { authorization: `Bearer ${token}` } });
-      } catch { /* segue: o banco ainda pode ter a linha pelo webhook */ }
+      // Compra da LOJA não passa por aqui: o Stripe não sabe de venda da Apple
+      // nem da Play, e a segunda porta de lá é o webhook do RevenueCat, que
+      // escreve na mesma tabela que o laço abaixo consulta.
+      if (origemDaConfirmacao.current === "stripe") {
+        try {
+          const token = (await supabase.auth.getSession()).data.session?.access_token;
+          if (token) await fetch(apiUrl("/api/stripe/sync"), { method: "POST", headers: { authorization: `Bearer ${token}` } });
+        } catch { /* segue: o banco ainda pode ter a linha pelo webhook */ }
+      }
 
       const limite = Date.now() + 30000;
       while (vivo) {
@@ -807,8 +844,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const es = useMemo(() => (subActive && !s.premium ? { ...s, premium: true } : s), [s, subActive]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s: es, importacaoPendente, resolverImportacao, checkoutVoltando, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, responderQuiz, responderQuizPassado, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
-    [es, importacaoPendente, resolverImportacao, checkoutVoltando, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, responderQuiz, responderQuizPassado, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
+    () => ({ s: es, importacaoPendente, resolverImportacao, checkoutVoltando, abrirConfirmacaoDeCompra, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, responderQuiz, responderQuizPassado, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
+    [es, importacaoPendente, resolverImportacao, checkoutVoltando, abrirConfirmacaoDeCompra, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, responderQuiz, responderQuizPassado, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

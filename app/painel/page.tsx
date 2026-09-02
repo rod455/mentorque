@@ -202,6 +202,17 @@ export default async function Painel({ searchParams }: { searchParams: { chave?:
             valor={nf.format(dados.assinaturas.ativas)}
             nota={`${dados.assinaturas.pagantes} pagando, ${dados.assinaturas.emTeste} em teste, ${dados.assinaturas.cortesias} cortesia`}
           />
+          {/* Cupom de 100% adia a primeira cobrança em um mês. Sem esta linha,
+              "assinaturas" e "receita recebida" parecem se contradizer. */}
+          <Tile
+            rotulo="Vendas com cupom"
+            valor={`${nf.format(dados.assinaturas.comCupom)} de ${nf.format(dados.assinaturas.pagantes + dados.assinaturas.emTeste)}`}
+            nota={
+              dados.assinaturas.cupons.length
+                ? dados.assinaturas.cupons.map((c) => `${c.codigo}: ${c.total}`).join(" · ")
+                : "nenhuma venda com desconto"
+            }
+          />
           {/* Só aparece quando há o que consertar. Painel que mente calado é
               pior que painel feio. */}
           {dados.assinaturas.desencontros > 0 && (
@@ -211,7 +222,13 @@ export default async function Painel({ searchParams }: { searchParams: { chave?:
               nota="assinatura real que o funil não registrou (view assinaturas_conferencia)"
             />
           )}
-          <Tile rotulo="MRR (Stripe)" valor={reais(mrrCent)} />
+          {/* MRR é PROJEÇÃO, não caixa. Em 02/09/2026 duas leituras seguidas
+              deste painel concluíram que "a cobrança entrou" porque o MRR era
+              R$ 29,90, quando o recebido de verdade era R$ 0,00: os cupons de
+              100% zeraram as faturas. A nota está aqui para o número não ser
+              lido como dinheiro na conta. */}
+          <Tile rotulo="MRR (Stripe)" valor={reais(mrrCent)} nota="projeção do plano, não recebido" />
+          <Tile rotulo="Recebido 30d" valor={reais(Number(st.receita30dCentavos ?? 0))} nota="faturas pagas de verdade" />
           <Tile rotulo="Anúncios 7d" valor={`US$ ${Number(admob.ganhos7d ?? 0).toFixed(2)}`} nota="AdMob" />
           <Tile rotulo="iOS na Apple" valor={versaoIos ? String(versaoIos.versao) : "?"} nota={versaoIos ? String(versaoIos.estado).replaceAll("_", " ").toLowerCase() : "sem dado"} />
         </div>

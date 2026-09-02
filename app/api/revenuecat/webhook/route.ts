@@ -64,34 +64,50 @@ export async function POST(req: Request) {
       : "monthly";
   const periodEnd = event.expiration_at_ms ? new Date(event.expiration_at_ms).toISOString() : null;
 
-  if (ACTIVE.has(event.type)) {
-    await admin.from("subscriptions").upsert({
+  // ESTA ESCRITA É O DINHEIRO, e falhar nela não pode sair calado.
+  //
+  // Até 02/09/2026 os três upserts abaixo descartavam o erro e a rota
+  // respondia 200 do mesmo jeito. É a linha de `subscriptions` que libera o
+  // Premium: sem ela, a pessoa pagou na Apple ou na Play e continua sem o que
+  // comprou. E o 200 fazia o RevenueCat considerar entregue e nunca reenviar,
+  // então um erro de banco de um segundo virava um cliente pagante sem
+  // Premium, para sempre, sem uma linha em lugar nenhum.
+  //
+  // Aqui isso é pior que no Stripe: lá existe o /api/stripe/sync como segunda
+  // porta, disparado pelo app ao voltar do checkout. Do lado da loja não há
+  // segunda porta nenhuma. Este webhook é a única chance.
+  //
+  // Responder 500 é o que faz o RevenueCat reenviar, e reenviar é seguro: o
+  // upsert é idempotente (não cobra ninguém de novo, não duplica linha) e o
+  // evento de funil é barrado pelo índice de reentrega. O risco de tentar de
+  // novo é nenhum; o risco de calar é um cliente perdido.
+  const gravaAssinatura = async (campos: Record<string, unknown>): Promise<string | null> => {
+    const { error } = await admin.from("subscriptions").upsert({
       user_id: userId,
-      status: "active",
       plan,
       current_period_end: periodEnd,
-      cancel_at_period_end: false,
       updated_at: new Date().toISOString(),
+      ...campos,
     });
+    return error?.message ?? null;
+  };
+
+  let erroDaAssinatura: string | null = null;
+  if (ACTIVE.has(event.type)) {
+    erroDaAssinatura = await gravaAssinatura({ status: "active", cancel_at_period_end: false });
   } else if (event.type === "CANCELLATION") {
     // Desligou a renovação: continua ativo até o fim do período.
-    await admin.from("subscriptions").upsert({
-      user_id: userId,
-      status: "active",
-      plan,
-      current_period_end: periodEnd,
-      cancel_at_period_end: true,
-      updated_at: new Date().toISOString(),
-    });
+    erroDaAssinatura = await gravaAssinatura({ status: "active", cancel_at_period_end: true });
   } else if (event.type === "EXPIRATION") {
-    await admin.from("subscriptions").upsert({
-      user_id: userId,
-      status: "inactive",
-      plan,
-      current_period_end: periodEnd,
-      cancel_at_period_end: false,
-      updated_at: new Date().toISOString(),
-    });
+    erroDaAssinatura = await gravaAssinatura({ status: "inactive", cancel_at_period_end: false });
+  }
+
+  if (erroDaAssinatura) {
+    console.error(`[revenuecat] ${event.type} de ${userId} não gravado:`, erroDaAssinatura);
+    // Sai ANTES do evento de funil: sem a assinatura gravada, medir a venda
+    // seria registrar como concluído um caminho que não se concluiu. O reenvio
+    // grava as duas coisas na ordem certa.
+    return NextResponse.json({ error: "assinatura_nao_gravada" }, { status: 500 });
   }
 
   const passoFunil = FUNIL[event.type];
