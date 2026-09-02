@@ -3,6 +3,75 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-02 · QA: a compra pelas lojas contaria a mesma venda duas vezes
+- Artifact "QA da Semana":
+  https://claude.ai/code/artifact/b104e080-4490-4a88-a9e6-07a366deca63
+- Fluxo varrido: **compra pelas lojas (RevenueCat)**, que era o topo da fila
+  desde 27/08. Lido pelos dois lados, medição e experiência, como pede o
+  direcionamento 6.
+- **PRAZO NOVO, 04/09 às 13h20**: existe um SEGUNDO cliente real,
+  0634d48f (sub_1U9Phe…, mensal R$ 29,90), em teste grátis terminando na
+  sexta. Verificação AGENDADA para 04/09 15h UTC (trigger
+  trig_01QwrDYMNSunEp3oJXKjVT4K), que confere a virada e escreve aqui
+  sozinha. É o direcionamento 5 em prática: diário não dispara, lembrete sim.
+- **Prazo de 01/09 fechado, e bem**: o primeiro cliente virou cobrança às
+  23h52 do dia 1º, período até 01/10. R$ 29,90 de MRR real. A recomendação
+  da rodada passada (segunda porta gravando o `assinou`) já se pagou: o
+  evento do segundo cliente está gravado com origem `stripe-sync`, e sem ela
+  essa venda seria invisível igual à primeira.
+- **Prova indireta sobre o webhook do Stripe** (direcionamento 3): a virada
+  foi escrita no banco 10 segundos depois do fim do teste grátis, de
+  madrugada. Ninguém abre o app nesse segundo exato, então quem escreveu foi
+  o webhook. Ele está VIVO. Marcado como dedução, não como certeza: o log de
+  entregas continua ilegível porque a integração do Stripe pede autorização.
+- **CORRIGIDO, reentrega contando venda em dobro**: o índice
+  `funil_eventos_assinou_unico` casa por `extra->>'sub'`, chave que só o
+  Stripe escreve. A compra pela Apple ou pela Play caía fora dele, e o
+  RevenueCat reenvia quando não recebe 2xx. Índice novo
+  `funil_eventos_rc_evento_unico`, por id do EVENTO e não da assinatura: a
+  reentrega repete o id e é barrada, a renovação do mês seguinte tem id
+  próprio e passa (travar por assinatura apagaria receita, que é por isso que
+  `renovou` fica fora do índice de cima). Aditivo, dentro da alçada de 27/08.
+  Ensaiado antes de subir com as três condições cumpridas: reentrega barrada,
+  renovação nova passando, e as linhas do ensaio desfeitas na mesma transação
+  (conferido depois: 0 linhas de ensaio no banco).
+- **CORRIGIDO, o mesmo defeito pela segunda vez em cinco dias**: o webhook do
+  RevenueCat gravava o evento de funil sem olhar o `error`, igual à
+  `/api/funil` de 26/08. Aqui era pior, porque o evento perdido é o
+  FINANCEIRO e a rota responde 200 de qualquer jeito, então o RevenueCat
+  considera entregue e nunca reenvia. Passou a usar o `eventoDeFunil`, que
+  ganhou `plataforma` opcional: o escritor só sabia dizer "web", e evento de
+  loja precisa dizer ios ou android, senão a leitura por plataforma jura que
+  ninguém compra pelo aplicativo.
+- **CONFERÊNCIA NOVA, `conferir:gravacao`**: achar o mesmo defeito duas vezes
+  é sinal de que ele volta, e "procurar esse padrão" escrito num manual é
+  torcida. Agora gravação em `funil_eventos` que não desestrutura `error`
+  reprova a bateria, apontando arquivo e linha. Provada mordendo antes de
+  entrar, como manda o CLAUDE.md: plantei o insert de volta no webhook, ela
+  reprovou na linha certa, restaurei e ela voltou a passar.
+- **RECOMENDADO, não aplicado** (encosta em cobrança): a compra pela loja
+  pode terminar em silêncio. Se a loja confirma e o direito ainda não
+  propagou, o código não libera, não avisa e não sai da tela: a pessoa foi
+  cobrada e continua olhando o paywall. É o mesmo defeito que quase fez o
+  cliente de 25/08 pagar duas vezes, consertado só do lado da web. Hoje
+  ninguém comprou pela loja ainda, então é de graça. Patch pronto em
+  `docs/agentes/propostas/compra-na-loja-silenciosa.md`.
+- **Zeros, todos com causa** (direcionamentos 1 e 2, nenhum morreu em bullet):
+  `abriu_trilha` e `abriu_cadastro_de_carro` têm instrumentação conferida
+  ponta a ponta e tela alcançável, então é comportamento e não cano entupido;
+  `renovou` porque nenhuma assinatura chegou ao segundo mês (o primeiro
+  renova em 01/10); `cancelou` e `expirou` porque ninguém cancelou.
+- **Erros do retrato, encerrados**: os 12 `LocalNotifications.then()` são
+  todos da versão 1.2.0 e o último é de 29/08, anterior ao conserto da caixa.
+  Zero ocorrência nova. A janela de 7 dias vai continuar mostrando eles até
+  domingo, o que é ruído e não defeito.
+- **Fica para o Analista**: o retrato traz MRR 29,90 e receita 30d 0,00 no
+  mesmo pacote. A assinatura está `active` com período até 01/10, e o Stripe
+  só avança período com fatura paga, então a cobrança entrou. Cheira a
+  defeito do coletor de receita, não de cobrança. Não fechei: integração do
+  Stripe indisponível nesta sessão.
+- Saúde: bateria `conferir` inteira passando (12 conferências), build do site
+  e `build:native` verdes.
 ## 2026-09-02 · O link de venda não vendia depois do login social
 - Relato do dono: clicou em mentorque.com.br/ALE100, caiu na tela de entrar,
   entrou com o Google e foi parar na tela inicial. Sem pagamento e sem cupom.

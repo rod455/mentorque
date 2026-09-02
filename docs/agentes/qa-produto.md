@@ -91,23 +91,46 @@ recomendar.
   nem existe nesse caminho. Ao conferir persistência, pergunte sempre: isto
   passa pelo `mergeSessions`? Estado que sobe para `user_state` só está
   testado de verdade com sessão aberta.
+- **Defeito achado duas vezes vira conferência, não linha de manual.** Em
+  26/08 eu escrevi "procurar esse padrão" sobre insert que descarta `error`.
+  Cinco dias depois o padrão estava em outro arquivo (webhook do RevenueCat),
+  e teria ficado lá. Agora existe `conferir:gravacao`. A regra geral: quando
+  um achado for do tipo que VOLTA, o entregável não é o conserto, é o
+  conserto mais a conferência que impede a volta. E ela só conta depois de
+  provada mordendo, com o defeito plantado de novo.
+- **Conserto de um lado deixa o outro lado para trás.** O padrão da casa se
+  repete: `assinou` ganhou índice de unicidade pensando no Stripe, e a loja
+  ficou de fora; `eventoDeFunil` nasceu resolvendo o caso do Stripe e sabia
+  dizer só "web". Sempre que encontrar um conserto bom, pergunte quem é o
+  OUTRO caminho que faz a mesma coisa e confira se ele foi junto. Foi assim
+  que esta rodada achou os dois defeitos da compra pelas lojas.
+- **O caminho sem segunda porta é o mais perigoso.** A web tem
+  `/api/stripe/sync` salvando o que o webhook perder. A loja não tem nada
+  parecido: se o webhook do RevenueCat falhar, não existe quem conserte. Dar
+  prioridade ao caminho que não tem rede de segurança, mesmo que ele ainda
+  não tenha movimento, porque o defeito lá é silencioso e definitivo.
+- **Erro no retrato pode já estar morto.** Antes de caçar causa, olhar
+  `versao` e `max(criado_em)` em `app_erros`: os 12 de 02/09 eram todos da
+  1.2.0 e paravam em 29/08, com o conserto já no ar. A janela de 7 dias
+  segura o cadáver por dias depois do enterro. Consulta que resolve:
+  `select mensagem, versao, count(*), max(criado_em) from app_erros ... group by 1,2`.
 - Rodar `npm install` antes de qualquer checagem: o contêiner da sessão nasce
   sem `node_modules` e o `tsc` cospe centenas de erros falsos de módulo.
+- Rodar `npm run conferir` (bateria inteira, 12 conferências) no lugar de
+  chamar `tsc` e `lint` na mão: ela já inclui os dois e mais dez.
 - `build:native` confirmado necessário e passando (aprendizado de 23/08). Os
   dois builds continuam verdes nesta rodada.
 
 ## Fila (fluxos ainda não varridos, um por semana)
 
-Varridos: **compra/checkout web** (26/08).
+Varridos: **compra/checkout web** (26/08), **compra pelas lojas via
+RevenueCat** (02/09).
 
-- **Compra pelas lojas (RevenueCat)** — SUBIU PARA O TOPO. O caminho web foi
-  varrido em 26/08 e o que se achou lá foi um webhook possivelmente mudo. O
-  RevenueCat nasce os MESMOS eventos financeiros pelo MESMO tipo de caminho, e
-  ninguém nunca olhou. Se o do Stripe estava quebrado, a chance de o outro
-  estar é alta, e lá não existe um `/api/stripe/sync` de segunda porta para
-  salvar a medição.
-- **Carro duplicado** (herdado de 23/08, ainda aberto): o mesmo carro
-  cadastrado duas vezes vira dois carros.
+- **Carro duplicado** — SUBIU PARA O TOPO. Herdado de 23/08 e já perdeu três
+  rodadas para achados mais urgentes. O mesmo carro cadastrado duas vezes
+  vira dois carros. Com a 1.6 nas duas lojas e anúncio pago entrando, isso
+  deixa de ser incômodo de quem testa e vira primeira impressão de quem
+  chega. Não deixar cair de novo.
 - Login e recuperação de conta (o botão da Apple fora do iPhone já foi
   tratado em 23/08; o resto do fluxo nunca foi lido de ponta a ponta).
 - Quiz de saúde, catálogo remoto de aulas, campos de formulário.

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
+import { eventoDeFunil } from "@/lib/funilServidor";
 
 export const runtime = "nodejs";
 
@@ -13,6 +14,10 @@ const ACTIVE = new Set(["INITIAL_PURCHASE", "RENEWAL", "UNCANCELLATION", "PRODUC
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 type RcEvent = {
+  // Id do EVENTO no RevenueCat (não da assinatura). A reentrega de um webhook
+  // repete o mesmo id, e é isso que permite distinguir "chegou duas vezes" de
+  // "aconteceu duas vezes". Ver o índice único em supabase/funil_eventos.sql.
+  id?: string;
   type?: string;
   app_user_id?: string;
   product_id?: string;
@@ -91,12 +96,26 @@ export async function POST(req: Request) {
 
   const passoFunil = FUNIL[event.type];
   if (passoFunil) {
-    await admin.from("funil_eventos").insert({
-      evento: passoFunil,
-      user_id: userId,
-      plataforma: event.store === "PLAY_STORE" ? "android" : event.store === "APP_STORE" ? "ios" : "loja",
+    // Passa pelo mesmo escritor do lado do Stripe, e não por um insert próprio,
+    // por duas razões que já custaram caro antes:
+    //
+    // 1. O insert daqui NÃO olhava o `error`. É o mesmo padrão que deixou uma
+    //    etapa em zero parecendo desinteresse de quem usa o app (26/08). Aqui
+    //    seria pior: o evento perdido é o FINANCEIRO, e a resposta continua
+    //    200, então o RevenueCat considera entregue e nunca reenvia.
+    // 2. Duplicado é esperado e sai calado; o resto vai para o log.
+    //
+    // `rc_event` é a chave de deduplicação da loja. O índice do `assinou`
+    // existente casa por `extra->>'sub'`, que só o Stripe escreve: reentrega da
+    // Apple ou da Play passava direto e contava a mesma venda de novo. Por id
+    // do evento a proteção vale para os quatro passos, inclusive `renovou`,
+    // onde travar por assinatura apagaria receita (renovar de novo é fato
+    // novo, receber a mesma renovação duas vezes não é).
+    await eventoDeFunil(admin, passoFunil, {
+      userId,
       origem: "revenuecat",
-      extra: { product: productId },
+      plataforma: event.store === "PLAY_STORE" ? "android" : event.store === "APP_STORE" ? "ios" : "loja",
+      extra: { product: productId, ...(event.id ? { rc_event: event.id } : {}) },
     });
   }
 

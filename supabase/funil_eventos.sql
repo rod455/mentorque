@@ -71,6 +71,24 @@ create unique index if not exists funil_eventos_cadastro_unico
   on public.funil_eventos (evento, user_id)
   where evento = 'cadastro' and user_id is not null;
 
+-- Reentrega do webhook da LOJA (RevenueCat), aplicado em 02/09/2026.
+--
+-- O indice do `assinou` acima casa por `extra->>'sub'`, e so o Stripe escreve
+-- essa chave. A compra pela Apple ou pela Play caia FORA dele: a reentrega de
+-- um webhook (que o RevenueCat faz quando nao recebe 2xx) inseria a mesma
+-- venda de novo, sem nada barrando.
+--
+-- A chave aqui e o id do EVENTO, nao o da assinatura, e e de proposito: a
+-- reentrega repete o id, entao ela e barrada; `renovou` de um mes novo tem id
+-- proprio e passa. Por assinatura, travar `renovou` apagaria receita da
+-- leitura, que e justamente por isso que ele fica de fora do indice de cima.
+--
+-- Ensaiado no banco antes de subir: reentrega barrada, renovacao nova passa,
+-- e as linhas do ensaio desfeitas na mesma transacao.
+create unique index if not exists funil_eventos_rc_evento_unico
+  on public.funil_eventos (evento, (extra->>'rc_event'))
+  where extra->>'rc_event' is not null;
+
 create index if not exists funil_eventos_anon
   on public.funil_eventos (anon_id) where anon_id is not null;
 
