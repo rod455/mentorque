@@ -6,6 +6,7 @@ import { adUnit, ensureConsent, initAdMob, nativeAdMob } from "@/lib/app/admob";
 import { detectPlatform } from "@/lib/app/platform";
 import { isNativeApp } from "@/lib/app/wrapper";
 import { useNav } from "@/lib/app/nav";
+import { passo } from "@/lib/app/ultimoPasso";
 import { useContent } from "./ui";
 
 // Anúncio em tela cheia para usuários free. Só chega aqui quem está no app
@@ -31,6 +32,9 @@ export function AdOverlay({ kind, onDone, onCancel }: { kind: "interstitial" | "
     if (!plugin) { setMode("house"); return; }
     (async () => {
       try {
+        // O anúncio é a maior porção de código nativo que o app abre sozinho.
+        // Migalha antes de entrar, para um fechamento aqui ter testemunha.
+        passo(`abriu anúncio (${kind})`);
         // Consentimento (UMP) antes de qualquer requisição de anúncio.
         // `canRequestAds: false` = usuário recusou ou o formulário falhou.
         const info = await ensureConsent(plugin);

@@ -70,7 +70,7 @@ for JSX). Foi o caso de `lib/app/cursos.ts` e
 ## Conferir antes de commitar
 
 ```
-npm run conferir             tipos + estilo + regras       (~5s)
+npm run conferir             tipos + estilo + regras       (~15s)
 npm run conferir:navegador   as 8 suítes num Chromium      (~6min)
 npm run conferir:tudo        os dois mais o build
 ```
@@ -102,6 +102,14 @@ no nome do carro levou uma hora:
 
 **Prove que ela morde antes de confiar no verde.** Plante o defeito que ela
 deveria pegar e veja se ela grita.
+
+E lembre do limite dela: **nenhuma conferência daqui enxerga o lado nativo.**
+Elas rodam num Chromium, e o Chromium não tem plugin do Capacitor. Em 02/09 um
+usuário relatou o app FECHANDO ao responder o quiz no Android, e a suíte
+`quiz` passava inteira, limpa, no mesmo caminho. Quando um defeito só aparece
+no aparelho, a testemunha não é a suíte: é a migalha do último passo
+(`lib/app/ultimoPasso.ts`) virando linha em `app_erros`. Ver
+`docs/qa/app-fecha-no-quiz.md`.
 
 Não é zelo. Aconteceu duas vezes num dia só:
 

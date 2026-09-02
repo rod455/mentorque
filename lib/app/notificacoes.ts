@@ -79,6 +79,76 @@ type Caixa = { plugin: PluginNotificacoes };
 let caixa: Caixa | null = null;
 let carregando: Promise<Caixa | null> | null = null;
 
+/**
+ * Este aparelho já agendou algum aviso alguma vez?
+ *
+ * POR QUE ISTO EXISTE. `cancelar` era chamado em toda resposta do quiz e em
+ * toda abertura do app, inclusive para quem NUNCA ligou os avisos. E cancelar
+ * carrega o plugin, que cria canal de notificação e atravessa a ponte nativa,
+ * tudo para descobrir que não havia nada agendado. Trabalho nativo inútil no
+ * caminho mais quente do app.
+ *
+ * Isso deixou de ser só desperdício em 02/09/2026, quando chegou o relato de
+ * app FECHANDO ao responder o quiz no Android. Não sabemos ainda se a culpa é
+ * daqui, mas trabalho nativo que não precisa acontecer não deve acontecer no
+ * instante em que a pessoa toca na resposta.
+ *
+ * `null` quer dizer "não dá para afirmar" (aparelho sem armazenamento, ou
+ * quem atualizou de uma versão anterior a esta marca). Nesse caso vale o
+ * comportamento antigo: cancela de verdade. Errar para o lado de cancelar um
+ * aviso que não existe é barato; errar para o lado de deixar um aviso vivo
+ * depois de a pessoa desligar o interruptor é quebrar a promessa dela.
+ */
+const JA_AGENDOU = "mq-avisos-ja-agendou";
+
+function jaAgendouAlgumaVez(): boolean | null {
+  try {
+    const v = window.localStorage.getItem(JA_AGENDOU);
+    return v === null ? null : v === "1";
+  } catch {
+    return null;
+  }
+}
+
+function marcaQueAgendou(): void {
+  try {
+    window.localStorage.setItem(JA_AGENDOU, "1");
+  } catch {
+    /* sem armazenamento: volta ao comportamento antigo, que é o seguro */
+  }
+}
+
+/**
+ * Planta a marca na primeira abertura depois da atualização.
+ *
+ * Sem isto a marca nunca nasceria "não" e a economia não valeria para
+ * instalação nova nenhuma, que é justamente o caso comum. O valor sai do
+ * interruptor da pessoa, e é por isso que ele é confiável: quem chega aqui com
+ * os avisos DESLIGADOS não tem aviso agendado, porque nenhum caminho do app
+ * agenda com o interruptor desligado.
+ *
+ * A ASSIMETRIA É DE PROPÓSITO, e é o que protege quem atualiza de versão
+ * antiga: "ligado" grava sempre e por cima, "desligado" só grava se ainda não
+ * houver marca. O motivo é que a sessão é hidratada DEPOIS do primeiro
+ * desenho: um retrato tirado cedo demais mostra o interruptor desligado para
+ * todo mundo. Com a assimetria, esse retrato cedo grava "não", e a hidratação
+ * corrige para "sim" um instante depois. O contrário deixaria alguém com aviso
+ * agendado sem quem o cancelasse.
+ */
+export function semearMarcaDeAgendamento(avisosLigados: boolean): void {
+  try {
+    if (avisosLigados) {
+      window.localStorage.setItem(JA_AGENDOU, "1");
+      return;
+    }
+    if (window.localStorage.getItem(JA_AGENDOU) === null) {
+      window.localStorage.setItem(JA_AGENDOU, "0");
+    }
+  } catch {
+    /* sem armazenamento: segue no comportamento antigo */
+  }
+}
+
 /** O aparelho consegue notificar? Falso no navegador. */
 export function notificacoesDisponiveis(): boolean {
   return isNativeApp() && nativePlatform() !== null;
@@ -208,6 +278,7 @@ export async function agendar(o: { id: number; titulo: string; corpo: string; qu
         },
       ],
     });
+    marcaQueAgendou();
     return true;
   } catch {
     return false;
@@ -215,6 +286,10 @@ export async function agendar(o: { id: number; titulo: string; corpo: string; qu
 }
 
 export async function cancelar(id: number): Promise<void> {
+  // Aparelho que nunca agendou nada não tem o que cancelar, e descobrir isso
+  // pelo plugin custa uma travessia nativa por resposta de quiz. Ver a nota
+  // em `jaAgendouAlgumaVez`.
+  if (jaAgendouAlgumaVez() === false) return;
   const c = await carregar();
   if (!c) return;
   try {

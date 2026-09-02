@@ -18,6 +18,7 @@ import {
   respostaDe,
 } from "@/lib/app/quiz/sequencia";
 import { enviarResposta, placarDoDia, type Placar } from "@/lib/app/quiz/placar";
+import { passo } from "@/lib/app/ultimoPasso";
 import { AppHeader, useContent } from "../ui";
 import { ConviteDeAviso } from "../ConviteDeAviso";
 import { PerguntaRespondida } from "../quiz/PerguntaRespondida";
@@ -95,6 +96,10 @@ export function QuizScreen() {
       perdoado={!!base.ultimoDia && diasEntre(base.ultimoDia, hoje) === 2 && temPerdao(base, hoje)}
       aoEscolher={(i) => {
         if (escolha !== null) return;
+        // Migalha ANTES de qualquer coisa: se o app morrer daqui para a
+        // frente, é isto que sobra para dizer onde. Ver lib/app/ultimoPasso.ts
+        // e o relato de 02/09/2026 de app fechando ao responder no Android.
+        passo("respondeu o quiz");
         setAntes(estado);
         setEscolha(i);
         const acertou = i === pergunta.correta;

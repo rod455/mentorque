@@ -15,6 +15,7 @@
 import { apiPost } from "./apiBase";
 import { APP_VERSION } from "./content";
 import { isNativeApp, nativePlatform } from "./wrapper";
+import { fechamentoAnterior } from "./ultimoPasso";
 
 // Tetos que protegem o servidor de um aparelho em loop de erro: no máximo 10
 // envios por sessão e nunca a mesma mensagem duas vezes.
@@ -23,7 +24,7 @@ let enviados = 0;
 const vistos = new Set<string>();
 let ligado = false;
 
-function reportar(tipo: "erro" | "promessa", mensagem: string, stack?: string, origem?: string): void {
+function reportar(tipo: "erro" | "promessa" | "fechou", mensagem: string, stack?: string, origem?: string): void {
   try {
     if (!mensagem || enviados >= MAX_POR_SESSAO) return;
     const chave = mensagem.slice(0, 120);
@@ -39,6 +40,30 @@ function reportar(tipo: "erro" | "promessa", mensagem: string, stack?: string, o
       versao: APP_VERSION,
     }).catch(() => undefined);
   } catch { /* o coletor jamais pode causar o que coleta */ }
+}
+
+/**
+ * A sessão anterior morreu em uso? Então relata, com o passo em que estava.
+ *
+ * Este é o único relato que nasce de uma AUSÊNCIA: ninguém viu o erro, porque
+ * quando o app fecha o JavaScript vai junto. A migalha de lib/app/ultimoPasso.ts
+ * é o que sobra, e é ela que diz em cima de qual passo o app desapareceu.
+ *
+ * Chamar na abertura, ANTES do primeiro `passo()` desta sessão, senão a
+ * migalha nova apaga a antiga e o fechamento some.
+ */
+export function relatarFechamentoAnterior(): void {
+  try {
+    const f = fechamentoAnterior();
+    if (!f) return;
+    // A mensagem fica ESTÁVEL (sem os segundos) de propósito: é ela que agrupa
+    // no "top" de /api/erros, e um número no meio faria cada fechamento virar
+    // uma linha única, escondendo justamente a repetição que prova o defeito.
+    // O tempo vai no campo do rastro.
+    reportar("fechou", `app fechou sozinho em: ${f.nome}`, `${f.segundos}s depois do passo`, f.nome);
+  } catch {
+    /* o coletor jamais pode causar o que coleta */
+  }
 }
 
 /** Liga os ouvintes globais de erro. Chamar uma vez, na montagem do app. */

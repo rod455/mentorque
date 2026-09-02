@@ -87,11 +87,23 @@ export function pedidosFeitos(): number {
 export async function podeConvidar(hoje = diaLocal()): Promise<boolean> {
   if (typeof window === "undefined") return false;
   if (!notificacoesDisponiveis()) return false;   // navegador: não existe o que pedir
-  if (await permissaoConcedida()) return false;   // já temos
 
+  // AS TRAVAS LOCAIS VÊM PRIMEIRO, e a ordem importa mais do que parece.
+  //
+  // A resposta que mais vale é a do sistema, mas perguntar ao sistema custa
+  // carregar o plugin e atravessar a ponte nativa, e este código roda no
+  // instante em que a pessoa responde o quiz. Quando a trava local já diz não
+  // (três convites feitos, ou um convite há menos de quatro dias), a resposta
+  // do sistema não mudaria nada: o resultado é "não" de qualquer jeito.
+  //
+  // Ou seja, a inversão não muda uma única decisão desta função. Ela só evita
+  // trabalho nativo desnecessário no caminho mais quente do app, e isso passou
+  // a importar com o relato de 02/09/2026 de app fechando ao responder o quiz.
   const r = ler();
   if (r.vezes >= MAXIMO_DE_PEDIDOS) return false;
   if (r.ultimoEm && diasEntre(r.ultimoEm, hoje) < DIAS_ENTRE_PEDIDOS) return false;
+
+  if (await permissaoConcedida()) return false;   // já temos
 
   // Um "não" definitivo do sistema não é distinguível daqui sem tocar no
   // plugin, e `pedirPermissao` já devolve false nesse caso sem abrir caixa

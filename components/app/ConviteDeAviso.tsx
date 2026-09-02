@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePrototype } from "@/lib/app/store";
 import { convidar, podeConvidar, type MomentoDoPedido } from "@/lib/app/pedidoDeAviso";
+import { passo } from "@/lib/app/ultimoPasso";
 import { useContent } from "./ui";
 
 // O convite para ligar o aviso do quiz.
@@ -45,6 +46,9 @@ export function ConviteDeAviso({ momento, sequencia }: { momento: MomentoDoPedid
 
   const aceitar = async () => {
     setFechado(true);
+    // Aqui abre a caixa do SISTEMA, que é código nativo. Se o app sumir na
+    // frente dela, a migalha é a única testemunha.
+    passo("pediu permissão de aviso");
     const concedida = await convidar(momento);
     // O interruptor do Perfil segue o que o sistema respondeu. Sem isto o app
     // ficaria dizendo "avisos ligados" para quem recusou na caixa do sistema.

@@ -7,12 +7,14 @@ import { activeVehicle, servicesFor, usePrototype } from "./store";
 import { carName } from "./content";
 import { sincronizarLembretesDeRevisao } from "./lembreteRevisao";
 import { funil } from "./funil";
-import { vigiarErros } from "./erros";
+import { relatarFechamentoAnterior, vigiarErros } from "./erros";
+import { passo, vigiarPausa } from "./ultimoPasso";
 import { trackContent } from "./track";
 import { ensureConsent, nativeAdMob } from "./admob";
 import { adsEnabled } from "@/components/app/AdGate";
 import { sincronizarLembrete } from "./lembreteAssinatura";
 import { sincronizarLembreteQuiz } from "./lembreteQuiz";
+import { semearMarcaDeAgendamento } from "./notificacoes";
 import { sincronizarPush } from "./push";
 import { iniciarAtribuicao } from "./atribuicao";
 import { saidaDoPaywallPermitida } from "./saidaDoPaywall";
@@ -56,6 +58,12 @@ export function useFunilDeAbertura() {
   useEffect(() => {
     funil("abriu_app", { umaVez: true });
     vigiarErros();
+    // A ORDEM AQUI É REGRA, não gosto: primeiro ler a migalha da sessão
+    // anterior, só depois deixar esta sessão escrever a dela. Invertido, a
+    // abertura apagaria o rastro do fechamento que ela veio justamente contar.
+    relatarFechamentoAnterior();
+    vigiarPausa();
+    passo("abriu o app");
     // Atribuição de instalação (AppsFlyer): só no app das lojas, silenciosa,
     // e aqui porque abrir o app É o evento que ela existe para medir.
     void iniciarAtribuicao();
@@ -180,6 +188,13 @@ export function useConsentimentoDeAnuncios() {
 export function useLembretes(c: Content) {
   const { s, subscribed, subscriptionEndsAt, subscriptionCanceling } = usePrototype();
   const veiculo = activeVehicle(s);
+
+  // Antes de qualquer sincronização: planta a marca de "este aparelho já
+  // agendou aviso?". É ela que evita atravessar a ponte nativa para cancelar
+  // o que nunca existiu. Ver semearMarcaDeAgendamento em notificacoes.ts.
+  useEffect(() => {
+    semearMarcaDeAgendamento(s.notifications);
+  }, [s.notifications]);
 
   useEffect(() => {
     void sincronizarLembrete({

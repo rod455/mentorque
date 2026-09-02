@@ -3,6 +3,26 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-02 · O app fecha ao responder o quiz no Android, e o funil confirma
+- Relato de usuário. O nosso próprio funil registrou o mesmo no mesmo dia: um
+  Android na 1.6.0 abriu às 12:32:34, respondeu o quiz às 12:32:41 e disparou
+  `abriu_app` DE NOVO às 12:32:48. Esse evento deduplica em memória, então sair
+  duas vezes só é possível se o JavaScript tiver morrido e renascido no meio.
+- Descartados com evidência: erro de JavaScript (nenhuma linha em `app_erros`
+  desde 28/08, com o coletor vivo), a rota do quiz (gravou a resposta antes da
+  queda), a tela (a suíte de navegador percorre o caminho inteiro limpa).
+- Suspeito, sem prova: o plugin de notificação local, que é o único código
+  nativo no instante da resposta e que só voltou a ser chamado de verdade em
+  28/08, quando o defeito do `.then()` foi corrigido.
+- Feito, e nenhum dos três é o conserto: uma migalha do último passo que
+  transforma "o app sumiu" numa linha em `app_erros` (`lib/app/ultimoPasso.ts`,
+  conferida por `npm run conferir:migalha`, com três defeitos plantados e
+  acusados); o tratamento de renderizador morto no `MainActivity`, para o app
+  recarregar em vez de desaparecer; e a retirada das duas chamadas nativas
+  desnecessárias do caminho da resposta.
+- Tudo isso só vale com binário novo. Investigação completa em
+  `docs/qa/app-fecha-no-quiz.md`, incluindo o que falta perguntar ao usuário.
+
 ## 2026-09-01 · Não era falta de localStorage, era o `crypto.randomUUID` do Android
 - As primeiras horas da 1.6 em produção mostraram o formato dos ids novos:
   todo evento vindo de Android traz id no formato do sorteio de reserva
