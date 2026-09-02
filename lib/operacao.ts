@@ -28,9 +28,12 @@ export async function coletarDadosOperacao() {
     { data: semanas }, { data: subs }, { data: cadastros }, { data: erros }, { data: metricas },
     { data: usoDiario }, { data: usoSemanal }, { data: coortes },
     { data: ativacao }, { data: assCoortes }, { data: porCampanha },
+    { data: conferencia },
   ] = await Promise.all([
     admin.from("funil_semana").select("*").limit(12),
-    admin.from("subscriptions").select("status, cancel_at_period_end, plan"),
+    // `stripe_subscription_id` entra na leitura porque é ele que separa venda
+    // de cortesia: conta liberada na mão não tem assinatura no Stripe.
+    admin.from("subscriptions").select("status, cancel_at_period_end, plan, stripe_subscription_id"),
     admin.from("funil_eventos").select("criado_em, plataforma").eq("evento", "cadastro").gte("criado_em", d14),
     admin.from("app_erros").select("criado_em, mensagem, plataforma").gte("criado_em", d7).limit(2000),
     // SEM filtro de data: o frescor precisa enxergar fonte parada há muito
@@ -44,6 +47,10 @@ export async function coletarDadosOperacao() {
     admin.from("ativacao_coortes").select("*").limit(8),
     admin.from("assinaturas_coortes").select("*").limit(12),
     admin.from("cadastros_por_campanha").select("*").limit(20),
+    // A conferência entre a fonte da verdade e a medição. Ver a view em
+    // supabase/funil_eventos.sql: ela existe porque as duas divergiram e
+    // ninguém percebeu até alguém perguntar na mão.
+    admin.from("assinaturas_conferencia").select("veredito"),
   ]);
   const { data: experimentos } = await admin.from("experimentos_resultados").select("*").limit(120);
 
@@ -107,7 +114,30 @@ export async function coletarDadosOperacao() {
     ...degrausDaCadeia(CADEIA_PRIMEIRA_SESSAO, porEtapaPrimeira, janelaPrimeira.desde),
   ].map(comPerdidos);
 
-  const ativas = (subs ?? []).filter((s) => s.status === "active");
+  // QUEM É ASSINANTE, E POR QUE A CONTA ESTAVA ERRADA AQUI.
+  //
+  // Este arquivo filtrava só `status === "active"`. O app (lib/app/store.tsx) e
+  // o /api/stripe/sync contam `active` E `trialing`, porque em teste o cartão
+  // já foi dado e a pessoa já tem Premium na mão. Duas definições de assinante
+  // no mesmo produto, e a mais estreita era justamente a que alimentava o
+  // painel: em 02/09/2026 o painel dizia 2 assinaturas enquanto 4 contas
+  // tinham Premium. É o mesmo erro de unidade do funil, em outro lugar.
+  //
+  // E não basta somar: as três coisas abaixo são diferentes e virariam mentira
+  // se ficassem num número só.
+  //
+  //   pagantes  → já teve fatura paga (`active` com assinatura do Stripe)
+  //   emTeste   → `trialing`: vale como assinante, mas ainda não é receita
+  //   cortesias → liberadas na mão, sem Stripe (o revisor das lojas). Nunca
+  //               foram receita e não podem entrar em contagem de venda.
+  const assinantes = (subs ?? []).filter((s) => s.status === "active" || s.status === "trialing");
+  const cortesias = assinantes.filter((s) => !s.stripe_subscription_id);
+  const daLoja = assinantes.filter((s) => !!s.stripe_subscription_id);
+  const emTeste = daLoja.filter((s) => s.status === "trialing");
+  const pagantes = daLoja.filter((s) => s.status === "active");
+  // O que o painel chamava de "ativas": mantido com o mesmo nome para não
+  // quebrar leitura de fora, mas agora com a definição que o app usa.
+  const ativas = assinantes;
 
   const cadastrosPorDia: Record<string, number> = {};
   for (const c of cadastros ?? []) {
@@ -143,6 +173,18 @@ export async function coletarDadosOperacao() {
       cancelando: ativas.filter((s) => s.cancel_at_period_end).length,
       anuais: ativas.filter((s) => s.plan === "annual").length,
       mensais: ativas.filter((s) => s.plan === "monthly").length,
+      // A quebra que impede o número de cima de virar mentira. Sem ela, uma
+      // cortesia do revisor e um teste grátis de sete dias entram na mesma
+      // linha que um cliente pagante, e "assinaturas" deixa de dizer receita.
+      pagantes: pagantes.length,
+      emTeste: emTeste.length,
+      cortesias: cortesias.length,
+      // Assinatura de verdade que a medição não registrou (ou registrou duas
+      // vezes). Zero é o normal; qualquer outro número é o painel avisando que
+      // ele mesmo está mentindo, em vez de esperar alguém perguntar.
+      desencontros: ((conferencia ?? []) as { veredito: string }[]).filter(
+        (c) => c.veredito !== "ok" && c.veredito !== "cortesia, nao e venda",
+      ).length,
     },
     cadastrosPorDia,
     erros7d: { total: (erros ?? []).length, top: topErros },

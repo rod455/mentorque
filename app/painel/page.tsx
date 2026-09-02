@@ -195,7 +195,22 @@ export default async function Painel({ searchParams }: { searchParams: { chave?:
         <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           <Tile rotulo="Usuários ontem" valor={nf.format(Number(usoPorDia.get(ontem) ?? 0))} nota="pessoas distintas (web por ora)" />
           <Tile rotulo="Cadastros ontem" valor={nf.format(dados.cadastrosPorDia[ontem] ?? 0)} />
-          <Tile rotulo="Assinaturas ativas" valor={nf.format(dados.assinaturas.ativas)} nota={`${dados.assinaturas.anuais} anuais, ${dados.assinaturas.mensais} mensais`} />
+          {/* A nota diz a composição porque o número sozinho engana: teste
+              grátis ainda não é receita e cortesia nunca foi venda. */}
+          <Tile
+            rotulo="Assinantes"
+            valor={nf.format(dados.assinaturas.ativas)}
+            nota={`${dados.assinaturas.pagantes} pagando, ${dados.assinaturas.emTeste} em teste, ${dados.assinaturas.cortesias} cortesia`}
+          />
+          {/* Só aparece quando há o que consertar. Painel que mente calado é
+              pior que painel feio. */}
+          {dados.assinaturas.desencontros > 0 && (
+            <Tile
+              rotulo="Vendas sem evento"
+              valor={nf.format(dados.assinaturas.desencontros)}
+              nota="assinatura real que o funil não registrou (view assinaturas_conferencia)"
+            />
+          )}
           <Tile rotulo="MRR (Stripe)" valor={reais(mrrCent)} />
           <Tile rotulo="Anúncios 7d" valor={`US$ ${Number(admob.ganhos7d ?? 0).toFixed(2)}`} nota="AdMob" />
           <Tile rotulo="iOS na Apple" valor={versaoIos ? String(versaoIos.versao) : "?"} nota={versaoIos ? String(versaoIos.estado).replaceAll("_", " ").toLowerCase() : "sem dado"} />

@@ -72,6 +72,37 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   Stripe indisponível nesta sessão.
 - Saúde: bateria `conferir` inteira passando (12 conferências), build do site
   e `build:native` verdes.
+## 2026-09-02 · As duas fontes de "quem assinou" não batiam, e ninguém comparava
+- Pergunta do dono: "como que não está considerando? tivemos várias compras
+  com cupom e todos receberam Premium". Ele estava certo, e o erro era meu: eu
+  respondi olhando o FUNIL, que é a medição, e não `subscriptions`, que é a
+  fonte da verdade sobre quem tem Premium.
+- O que estava desencontrado, em três lugares:
+  1. **O painel contava 2 assinaturas e havia 4 contas com Premium.**
+     `lib/operacao.ts` filtrava `status === 'active'`, enquanto o app
+     (`store.tsx`) e o `/api/stripe/sync` contam `active` E `trialing`. Duas
+     definições de assinante no mesmo produto, e a mais estreita alimentava o
+     painel. Mesmo erro de unidade do funil, em outro lugar.
+  2. **Faltava o `assinou` do único cliente que já pagou de verdade**
+     (luizfmviana, R$ 29,90, ativo até 01/10). Ele assinou em 25/08 23:52,
+     ANTES de a segunda porta (`/api/stripe/sync`) existir. O evento nunca foi
+     gravado e ninguém voltou para gravar. O funil dizia 2 vendas; foram 3.
+  3. **A cortesia do revisor das lojas** (`active`, anual até 2099, sem
+     Stripe) entrava na mesma linha que venda.
+- Consertado: `operacao.ts` passou a usar a definição do app e a quebrar o
+  número em pagantes, em teste e cortesias; o evento de 25/08 foi gravado com
+  origem `stripe-retroativo` e o carimbo de tempo REAL da venda, não o do dia
+  em que foi gravado.
+- **A peça que faltava, e é o pedido de verdade**: a view
+  `assinaturas_conferencia` compara as duas fontes linha a linha e dá um
+  veredito por conta (ok, cortesia, FALTA o evento, DUPLICADO). O painel mostra
+  "Vendas sem evento" só quando o número é maior que zero. Antes disso, a única
+  forma de descobrir uma divergência era alguém perguntar na mão.
+- **Lacuna aberta, e é a pergunta que ainda não tem resposta nossa**: o CUPOM
+  não é gravado em lugar nenhum. Nem em `iniciou_checkout`, nem em `assinou`,
+  nem em `subscriptions`. "Quantas vendas vieram com cupom" hoje só o Stripe
+  responde. Proposta com o dono.
+
 ## 2026-09-02 · O link de venda não vendia depois do login social
 - Relato do dono: clicou em mentorque.com.br/ALE100, caiu na tela de entrar,
   entrou com o Google e foi parar na tela inicial. Sem pagamento e sem cupom.

@@ -113,3 +113,42 @@ group by 1
 order by 1 desc;
 
 revoke all on public.funil_semana from anon, authenticated;
+
+-- Conferencia entre a fonte da verdade e a medicao, aplicada em 02/09/2026.
+--
+-- POR QUE ELA EXISTE. `subscriptions` diz quem tem Premium; `funil_eventos`
+-- diz quantas vendas houve. Ninguem comparava as duas, e elas divergiam: em
+-- 02/09 havia 4 contas com Premium e apenas 2 eventos `assinou`. Faltava
+-- justamente o do UNICO cliente que ja tinha pagado de verdade, porque ele
+-- assinou em 25/08, antes de a segunda porta (/api/stripe/sync) existir.
+--
+-- O veredito separa os tres casos que nao podem virar um numero so: cortesia
+-- liberada na mao (nunca foi venda), evento faltando (a medicao perdeu uma
+-- venda real) e evento duplicado (a medicao inventou uma).
+create or replace view public.assinaturas_conferencia as
+select
+  s.user_id,
+  s.status,
+  s.plan,
+  s.current_period_end,
+  (s.stripe_subscription_id is null) as cortesia_manual,
+  (select count(*) from public.funil_eventos f
+     where f.user_id = s.user_id and f.evento = 'assinou') as eventos_assinou,
+  case
+    when s.stripe_subscription_id is null then 'cortesia, nao e venda'
+    when (select count(*) from public.funil_eventos f
+            where f.user_id = s.user_id and f.evento = 'assinou') = 0 then 'FALTA o evento assinou'
+    when (select count(*) from public.funil_eventos f
+            where f.user_id = s.user_id and f.evento = 'assinou') > 1 then 'evento assinou DUPLICADO'
+    else 'ok'
+  end as veredito
+from public.subscriptions s
+where s.status in ('active', 'trialing');
+
+revoke all on public.assinaturas_conferencia from anon, authenticated;
+grant select on public.assinaturas_conferencia to service_role;
+
+-- Correcao retroativa aplicada junto: a venda de 25/08 (luizfmviana) entrou
+-- com origem `stripe-retroativo` e o carimbo de tempo REAL da venda, nao o do
+-- dia em que foi gravada. O indice `funil_eventos_assinou_unico` impede que
+-- ela entre duas vezes.
