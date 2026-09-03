@@ -1,8 +1,14 @@
 # E-mail de lançamento para a lista de espera
 
-**Não enviado.** Mensagem a cliente é decisão do dono. Os dois bloqueios que
-existiam (o teto do cupom e a landing de pré-lançamento) foram resolvidos em
-03/09; falta o seu aval no texto e o disparo.
+**Disparo agendado para as 20h de 03/09/2026**, a pedido do dono. Os dois
+bloqueios que existiam (o teto do cupom e a landing de pré-lançamento) foram
+resolvidos mais cedo no mesmo dia.
+
+Como sai: o workflow n8n `Mentorque: e-mail de lançamento`
+(`J8VKTlJbXuhqFaT2`) chama `POST /api/email/lancamento` com `disparar: true`.
+A hora é exata porque o agendador do n8n é exato; o cron da Vercel não servia,
+porque no plano atual ele dispara em algum momento DENTRO da hora marcada, e
+"20h" era o pedido.
 
 O texto vive em `lib/email/lancamento.ts`, nos dois idiomas, no mesmo formato
 do e-mail de boas-vindas.
@@ -170,21 +176,54 @@ https://www.mentorque.com.br/app?assinar=mensal&cupom=LANCAMENTO1MES&utm_source=
 
 A versão em inglês está no mesmo arquivo, para a única pessoa com `locale=en`.
 
+## Como o disparo é feito, e as três travas
+
+`POST /api/email/lancamento`, trancada pela `DADOS_CHAVE` como todo agregado da
+operação. Duas formas de chamar:
+
+```
+{"teste": "voce@exemplo.com"}   uma cópia só, sem tocar na lista nem nas marcas
+{"disparar": true}              a lista de verdade
+```
+
+Três travas, cada uma para uma forma diferente de errar:
+
+1. **A chave.** Mandar mensagem a cliente é a porta que menos pode ficar aberta
+   por esquecimento.
+2. **O `disparar: true` no corpo.** Nenhum GET de navegador ou de rastreador
+   manda e-mail para ninguém.
+3. **A marca `waitlist.lancamento_enviado_em`.** É a única que sobrevive ao
+   caso real: o agendamento rodando de novo amanhã, a rede repetindo a chamada,
+   alguém disparando duas vezes na dúvida. Quem tem marca não recebe de novo,
+   nunca. Ela é gravada logo depois de CADA envio, e não uma vez no fim, para
+   que uma interrupção no meio da lista deixe a segunda chamada continuar de
+   onde parou em vez de recomeçar.
+
+Quem já assina sai por consulta ao banco na hora do disparo, e não por uma
+lista escrita antes: entre escrever o e-mail e mandá-lo, alguém pode assinar.
+
+**O número de aulas é contado na hora**, do próprio catálogo e já sem as aulas
+agendadas. O texto nasceu dizendo "101 aulas" e três dias depois eram 103:
+número escrito à mão em e-mail envelhece calado, e este envelhecia contra nós,
+prometendo menos do que o app entrega.
+
 ## Antes de enviar
 
-1. **Você recebe o primeiro.** Disparar para o seu e-mail antes de tudo e abrir
-   no celular: as imagens da faixa vêm do site, e imagem quebrada em e-mail não
-   tem conserto depois de enviado.
+1. **Você recebe o primeiro.** Feito em 03/09 às 18h54, pelo ramo manual do
+   workflow: `{"ok":true,"aulas":103,"cupom":"LANCAMENTO1MES"}`. Abrir no
+   celular, porque as imagens da faixa vêm do site e imagem quebrada em e-mail
+   não tem conserto depois de enviada.
 2. **Clicar no botão de verdade**, até a tela de pagamento, e conferir que o
    desconto aparece aplicado. É o teste que prova o cupom novo de pé.
-3. Conferir se algum dos 17 já assina, para não oferecer desconto a quem já
-   paga:
-   ```sql
-   select w.email from waitlist w
-   join auth.users u on lower(u.email) = lower(w.email)
-   join subscriptions s on s.user_id = u.id
-   where s.status in ('active','trialing');
-   ```
+3. Conferido em 03/09: 18 na lista, 1 já assina, **17 recebem**, sem endereço
+   repetido. O cupom `LANCAMENTO1MES` está ativo, teto 25, zero resgates.
+
+## Depois do disparo, desligar o workflow
+
+O gatilho do n8n é diário, porque ele não tem agendamento de uma vez só. Isso
+não manda o e-mail duas vezes (a marca no banco impede), mas um workflow ativo
+que não serve mais para nada é ruído esperando confundir alguém: **desligar o
+`J8VKTlJbXuhqFaT2` depois de conferir o envio de hoje.**
 
 ## Depois de enviar
 
