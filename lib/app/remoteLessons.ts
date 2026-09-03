@@ -1,7 +1,7 @@
 "use client";
 
 import { apiUrl } from "./apiBase";
-import type { Content } from "./content";
+import { lessonPublicada, type Content } from "./content";
 
 // Catálogo de aulas vindo da rede.
 //
@@ -163,11 +163,24 @@ export function snapshot(): Pacote | null {
  */
 export function serverSnapshot(): Pacote | null { return null; }
 
-/** Converte o pacote bilíngue para o idioma ativo, no formato que o app usa. */
+/**
+ * Converte o pacote bilíngue para o idioma ativo, no formato que o app usa.
+ *
+ * A trava de aula agendada aparece AQUI TAMBÉM, e não é redundância inútil.
+ * Quem decide de verdade é o servidor, que não manda a aula antes do dia (ver
+ * /api/lessons). Mas o app das lojas carrega um catálogo EMBUTIDO NO BINÁRIO, e
+ * esse não passa por servidor nenhum: se um build sair entre a escrita da aula
+ * e a data dela, a aula viaja dentro do aplicativo e apareceria antes da hora.
+ * Este filtro é a única defesa desse caso.
+ *
+ * O preço é conhecido e aceito: aqui a data que vale é a do RELÓGIO DO
+ * APARELHO. Celular adiantado vê a aula um pouco antes, e tudo bem, porque o
+ * texto já estava dentro do aparelho dele de qualquer jeito.
+ */
 export function paraIdioma(p: Pacote, locale: string): Aula[] {
   const i = locale === "pt" ? "pt" : "en";
   const um = (v: Bilingue[] | undefined) => v?.map((t) => t[i]);
-  return p.lessons.map((a) => ({
+  return p.lessons.filter((a) => lessonPublicada(a)).map((a) => ({
     ...a,
     title: a.title[i],
     body: um(a.body),

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createHash } from "node:crypto";
-import { getContent, type Content } from "@/lib/app/content";
+import { getContent, lessonPublicada, type Content } from "@/lib/app/content";
 import type { AulaRemota, Bilingue, CursoRemoto } from "@/lib/app/remoteLessons";
 
 // Catálogo de aulas servido pela rede, para publicar conteúdo sem gerar build.
@@ -45,6 +45,16 @@ function montar(): AulaRemota[] {
   for (const a of pt) {
     const b: Aula | undefined = porId.get(a.id);
     if (!b) continue;
+    // AULA AGENDADA NÃO ENTRA NO PAYLOAD, e o corte é aqui de propósito.
+    //
+    // O servidor é quem sabe a data de verdade. Cortar só no aparelho teria
+    // dois furos: relógio adiantado veria conteúdo antes da hora, e o texto da
+    // aula viajaria pela rede antes de existir, disponível para quem abrisse a
+    // resposta. Aula que ainda não saiu simplesmente não é enviada.
+    //
+    // Isso é o que permite escrever hoje a aula do vídeo que estreia dia 10 e
+    // deixá-la no repositório sem ela vazar no app.
+    if (!lessonPublicada(a)) continue;
     saida.push({
       ...a,
       title: { pt: a.title, en: b.title },

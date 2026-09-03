@@ -38,15 +38,10 @@ export function minPurchaseDate(year: number): string {
   return `${year - 1}-01-01`;
 }
 
-// Conteúdo "Novo": publicado (addedAt) há no máximo 7 dias. Enquanto durar,
-// vai para a 1ª posição do "Para você" com o selo — some antes se o usuário
-// concluir ou salvar a aula.
-export function isNewLesson(l: { addedAt?: string }, now = new Date()): boolean {
-  if (!l.addedAt) return false;
-  const d = new Date(l.addedAt + "T00:00:00");
-  if (isNaN(d.getTime())) return false;
-  return now.getTime() - d.getTime() < 7 * 24 * 60 * 60 * 1000;
-}
+// As duas regras de data de uma aula moram num arquivo folha, sem imports, para
+// poderem ser exercitadas pelo `npm run conferir:agenda` no node puro. Aqui
+// ficam reexportadas para quem já as importava daqui.
+export { isNewLesson, lessonPublicada } from "./regrasDeConteudo";
 
 // Months since an ISO date (yyyy-mm-dd), or null if unset/invalid.
 export function monthsSinceDate(iso?: string, now = new Date()): number | null {

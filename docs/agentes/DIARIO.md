@@ -85,6 +85,36 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   > otimista e passei o enigma adiante em vez de dizer "não sei".
 - Saúde: bateria `conferir` inteira passando (12 conferências), build do site
   e `build:native` verdes.
+## 2026-09-03 · O app ganhou agendamento, e as aulas estreiam junto com o vídeo
+- Pedido do dono: os vídeos do canal são agendados no YouTube (03/09, 10/09 e
+  17/09), e ele quis a aula do app aparecendo junto.
+- **Não existia agendamento.** `addedAt` só controlava o selo "Novo": tudo que
+  entrava no arquivo aparecia no deploy seguinte. Publicar hoje a aula do vídeo
+  de 10/09 mostraria um card cujo player diz "vídeo indisponível", que é pior
+  que não ter card, porque ensina a pessoa que o app promete o que não tem.
+- **A data virou trava, e num campo só.** Aula com `addedAt` no futuro fica
+  escrita no repositório e não sai. Não criei um `publicaEm` ao lado de
+  propósito: duas datas por aula são duas chances de discordarem, e "qual delas
+  manda?" não tem resposta boa.
+- **A trava vive em DOIS lugares, e nenhum é redundante.** No servidor
+  (`/api/lessons`), que é quem sabe a data de verdade e simplesmente não manda
+  a aula, então o texto nem viaja pela rede antes da hora. E no cliente, porque
+  o app da loja carrega um catálogo EMBUTIDO no binário, que não passa por
+  servidor nenhum: se um build sair entre a escrita e a data, só o filtro do
+  cliente segura.
+- **A armadilha do "Novo"**, que teria passado: a conta de novidade é
+  `agora - data`, que fica NEGATIVA no futuro, e negativo é menor que sete
+  dias. Sem trava, a aula agendada seria a MAIS nova de todas e subiria para o
+  topo da Home antes de existir.
+- Quatro aulas novas, amarradas às estreias: `vid-esquentar-parado` e
+  `vid-turbo-desligar-quente` (03/09), `vid-padaria` (10/09) e
+  `vid-agua-torneira-radiador` (17/09).
+- `conferir:agenda` entrou na bateria e guarda as quatro datas: se alguém mudar
+  uma sem mudar o agendamento do YouTube, ela reprova. Provada com três
+  defeitos plantados, incluindo o da data trocada.
+- **E nada disso precisa de build de loja**: o catálogo é remoto
+  (`REMOTO_LIGADO`), então o push para a main já leva as aulas ao app.
+
 ## 2026-09-03 · Os termos de busca responderam: a campanha está vendendo CURSO
 - O dono ligou o nó e a primeira leitura já respondeu, e não era sobre lance.
 - **Três quartos do dinheiro com nome foram para quem procura CURSO de
