@@ -1,5 +1,6 @@
 "use client";
 
+import { anotaRota, type RotaDeAviso } from "./rotaPendente";
 import { isNativeApp, nativePlatform } from "./wrapper";
 
 // Notificações locais do app das lojas.
@@ -29,6 +30,10 @@ type PluginNotificacoes = {
   schedule: (o: { notifications: NotificacaoAgendada[] }) => Promise<unknown>;
   cancel: (o: { notifications: { id: number }[] }) => Promise<void>;
   createChannel?: (c: { id: string; name: string; description?: string; importance: 1 | 2 | 3 | 4 | 5 }) => Promise<void>;
+  addListener: (
+    ev: "localNotificationActionPerformed",
+    cb: (dado: { notification?: { extra?: Record<string, unknown> | null } }) => void
+  ) => Promise<{ remove: () => Promise<void> }>;
 };
 
 type NotificacaoAgendada = {
@@ -38,6 +43,12 @@ type NotificacaoAgendada = {
   schedule: { at: Date; allowWhileIdle?: boolean };
   channelId?: string;
   smallIcon?: string;
+  /**
+   * A carga que volta para o app quando a pessoa TOCA no aviso. É por aqui que
+   * o destino viaja: sem ela, o toque só abre o app, e quem tocou em "responda
+   * a pergunta do dia" cai na tela inicial. Ver lib/app/rotaPendente.ts.
+   */
+  extra?: Record<string, string>;
 };
 
 // Identificadores fixos, um por finalidade.
@@ -78,6 +89,8 @@ type Caixa = { plugin: PluginNotificacoes };
 
 let caixa: Caixa | null = null;
 let carregando: Promise<Caixa | null> | null = null;
+/** O ouvinte de toque já está de pé nesta sessão? Ver `ouvirToqueEmAviso`. */
+let jaOuvindo = false;
 
 /**
  * Este aparelho já agendou algum aviso alguma vez?
@@ -256,7 +269,14 @@ export async function pedirPermissao(): Promise<boolean> {
  * porque o sistema dispararia na hora e a pessoa receberia um aviso atrasado
  * do tipo "seu teste acaba em 2 dias" no dia em que ele já acabou.
  */
-export async function agendar(o: { id: number; titulo: string; corpo: string; quando: Date }): Promise<boolean> {
+export async function agendar(o: {
+  id: number;
+  titulo: string;
+  corpo: string;
+  quando: Date;
+  /** Onde este aviso quer abrir o app quando a pessoa tocar nele. */
+  rota?: RotaDeAviso;
+}): Promise<boolean> {
   const c = await carregar();
   if (!c) return false;
   if (!(o.quando instanceof Date) || Number.isNaN(o.quando.getTime()) || o.quando.getTime() <= Date.now()) {
@@ -275,6 +295,7 @@ export async function agendar(o: { id: number; titulo: string; corpo: string; qu
           // horas, e é justamente aí que o lembrete precisa sair.
           schedule: { at: o.quando, allowWhileIdle: true },
           channelId: CANAL,
+          ...(o.rota ? { extra: { rota: o.rota } } : null),
         },
       ],
     });
@@ -282,6 +303,35 @@ export async function agendar(o: { id: number; titulo: string; corpo: string; qu
     return true;
   } catch {
     return false;
+  }
+}
+
+/**
+ * Ouve o TOQUE num aviso local e anota para onde ele quer levar.
+ *
+ * Registrar uma vez só por sessão, na abertura do app. Não é preciso correr
+ * para chegar antes do toque: o Capacitor retém estes dois eventos até alguém
+ * assinar (`retainUntilConsumed`), justamente porque o caso normal é o app
+ * estar fechado quando a pessoa toca. O porquê inteiro está em
+ * lib/app/rotaPendente.ts.
+ */
+export async function ouvirToqueEmAviso(): Promise<void> {
+  if (jaOuvindo) return;
+  const c = await carregar();
+  if (!c) return;
+  // A trava é gravada DEPOIS de o plugin existir, e não antes: marcar cedo faria
+  // uma primeira chamada que falhou por falta de plugin calar todas as
+  // seguintes.
+  if (jaOuvindo) return;
+  jaOuvindo = true;
+  try {
+    // O ouvinte não é removido nunca, e é de propósito: ele vale enquanto o app
+    // existir, e um toque pode chegar a qualquer momento com o app aberto.
+    await c.plugin.addListener("localNotificationActionPerformed", (dado) => {
+      anotaRota(dado?.notification?.extra?.rota);
+    });
+  } catch {
+    jaOuvindo = false;
   }
 }
 

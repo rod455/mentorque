@@ -15,8 +15,9 @@ import { ensureConsent, nativeAdMob } from "./admob";
 import { adsEnabled } from "@/components/app/AdGate";
 import { sincronizarLembrete } from "./lembreteAssinatura";
 import { sincronizarLembreteQuiz } from "./lembreteQuiz";
-import { semearMarcaDeAgendamento } from "./notificacoes";
-import { sincronizarPush } from "./push";
+import { ouvirToqueEmAviso, semearMarcaDeAgendamento } from "./notificacoes";
+import { ouvirToqueEmPush, sincronizarPush } from "./push";
+import { aoAnotarRota, esqueceRota, rotaPendente } from "./rotaPendente";
 import { iniciarAtribuicao } from "./atribuicao";
 import { saidaDoPaywallPermitida } from "./saidaDoPaywall";
 import type { Content } from "./content";
@@ -175,6 +176,43 @@ export function usePlanoPendente() {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [venda, user, view]);
+}
+
+/**
+ * O toque num aviso abre a tela que o aviso prometeu.
+ *
+ * O DEFEITO, relatado pelo dono em 03/09/2026: tocar no lembrete das 9h abria
+ * o app no Início, e não na pergunta do dia. A causa era a ausência inteira de
+ * ouvinte de toque, dos dois lados (local e push), somada a avisos que não
+ * carregavam destino nenhum.
+ *
+ * A ORDEM DOS DOIS EFEITOS NÃO IMPORTA, e isso é de propósito. O ouvinte não
+ * entrega a rota direto para cá: ele a ANOTA em lib/app/rotaPendente.ts, que
+ * guarda. Então tanto faz o toque chegar antes de este gancho assinar (a
+ * assinatura consome o que já estava anotado) ou depois (o aviso chega). É a
+ * mesma razão de o Capacitor reter estes eventos: no caso normal, o app estava
+ * fechado quando a pessoa tocou.
+ *
+ * `esqueceRota` ANTES de navegar, nunca depois: sem isso o quiz voltaria a se
+ * abrir sozinho a cada remontagem do roteador, e a pessoa não conseguiria sair
+ * dele.
+ */
+export function useRotaDeAviso() {
+  const { go } = useNav();
+
+  useEffect(() => {
+    const consumir = () => {
+      const r = rotaPendente();
+      if (!r) return;
+      esqueceRota();
+      if (r === "quiz") go({ name: "quiz" });
+    };
+    const cancelar = aoAnotarRota(consumir);
+    consumir();
+    void ouvirToqueEmAviso();
+    void ouvirToqueEmPush();
+    return cancelar;
+  }, [go]);
 }
 
 /**

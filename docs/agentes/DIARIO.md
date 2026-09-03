@@ -85,6 +85,47 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   > otimista e passei o enigma adiante em vez de dizer "não sei".
 - Saúde: bateria `conferir` inteira passando (12 conferências), build do site
   e `build:native` verdes.
+## 2026-09-03 · O aviso trazia a pessoa de volta e a largava na porta
+- Relato do dono: tocar no aviso do quiz das 9h abre o app **no Início**, e não
+  na pergunta. Ela precisa achar o chip do quiz no topo e tocar de novo.
+- **A causa era uma ausência completa, não um destino errado**: não havia
+  ouvinte de toque em lugar nenhum do app, nem para o aviso local nem para o
+  push, e os avisos também não carregavam destino. Eram título e corpo. O
+  sistema abria o app, e abrir o app era literalmente tudo o que acontecia.
+- **É o pior lugar para perder uma pessoa.** O aviso já tinha feito a parte
+  difícil, que é convencer alguém a voltar; o que se perdia era o último passo,
+  o mais barato de todos.
+- **A rota viaja no aviso e é anotada na memória, não no disco**
+  (`lib/app/rotaPendente.ts`). A comparação com a compra pendente é o que
+  explica: lá o estado precisava atravessar um recarregamento de página inteiro
+  (login social sai do domínio e volta), aqui não atravessa nada, porque o
+  evento de toque só chega depois de o nosso ouvinte existir. E rota no disco
+  teria um efeito feio: abertura sequestrada dias depois, por causa de um aviso
+  tocado na semana passada.
+- **O que faz funcionar com o app FECHADO**, que é o caso normal: o Capacitor
+  retém `localNotificationActionPerformed` e `pushNotificationActionPerformed`
+  até alguém assinar. Registrar o ouvinte tarde não perde o toque; por isso o
+  módulo GUARDA a rota em vez de só anunciá-la, e quem assina consome o que já
+  estava lá.
+- **O push do servidor aprendeu a mandar destino** (`"rota": "quiz"` no POST de
+  `/api/push/enviar`): `data` no FCM, ao lado do `aps` no APNs. A lista de
+  rotas aceitas é fechada nos dois lados, porque o payload de um push é texto
+  que viaja pelo Google e pela Apple e não deve poder empurrar o app para
+  qualquer tela.
+- **A conferência nova (`conferir:aviso`) deixou passar o defeito na primeira
+  tentativa, e a lição é geral.** Ela procurava `rota: "quiz"` no
+  `lembreteQuiz.ts`; tirei a linha de propósito e ela aprovou, porque o
+  COMENTÁRIO acima explica o conserto citando o mesmo trecho. Estava conferindo
+  a documentação do conserto. Agora ela limpa comentários antes de procurar, e
+  isso valeu virar regra no mapa do código: aqui todo comentário cita código,
+  então conferência de texto sem essa limpeza aprova qualquer coisa. Cinco
+  defeitos plantados depois (aviso sem rota, ouvinte de push trocado, gancho
+  não montado, `esqueceRota` depois do `go`, envio sem `data`) ela grita nos
+  cinco.
+- **Precisa de binário 1.7**, e agora são quatro consertos esperando: a migalha
+  do quiz, o renderizador da WebView no `MainActivity`, a confirmação da compra
+  pelas lojas e este.
+
 ## 2026-09-03 · O app ganhou agendamento, e as aulas estreiam junto com o vídeo
 - Pedido do dono: os vídeos do canal são agendados no YouTube (03/09, 10/09 e
   17/09), e ele quis a aula do app aparecendo junto.

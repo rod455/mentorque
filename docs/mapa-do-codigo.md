@@ -17,6 +17,7 @@ começar lendo em vez de garimpando.
 | o que é guardado na sessão | `lib/app/store.tsx` |
 | a regra da sequência do quiz | `lib/app/quiz/sequencia.ts` (e confira com `npm run conferir:regras`) |
 | um aviso do sininho | `lib/app/avisos.ts` |
+| onde o toque num aviso do celular abre o app | `lib/app/rotaPendente.ts` (e confira com `npm run conferir:aviso`) |
 | o que acontece na abertura do app | `lib/app/aberturaDoApp.ts` |
 | o que aparece por cima de tudo | `components/app/Sobreposicoes.tsx` |
 | as barras de cima e de baixo | `components/app/Shell.tsx` |
@@ -119,6 +120,15 @@ Não é zelo. Aconteceu duas vezes num dia só:
   avisos inteira e a suíte passava sem conferir nada;
 - o comparador do `content.ts` fatiado dizia "zero diferenças", e só valeu
   alguma coisa depois que plantei uma palavra trocada e ele acusou.
+
+E aconteceu de novo em 03/09, de um jeito que vale para toda conferência que
+procure código dentro de arquivo: a `conferir:aviso` buscava `rota: "quiz"` no
+`lembreteQuiz.ts`. Tirei a linha de propósito e ela **aprovou**, porque o
+comentário logo acima explica o conserto citando aquele mesmo trecho. Ela
+estava conferindo a documentação do conserto, não o conserto. Aqui, onde todo
+comentário explica o porquê citando código, isso ia pegar qualquer conferência
+de texto: por isso a `conferir:aviso` limpa comentários antes de procurar, e a
+próxima que ler arquivo tem de fazer o mesmo.
 
 ## O que sabidamente ainda incomoda
 

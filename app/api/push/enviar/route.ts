@@ -37,6 +37,11 @@ export const runtime = "nodejs";
 // Corpo do POST:
 //   { "titulo": "...", "corpo": "...", "userId": "uuid" }   um usuário
 //   { "titulo": "...", "corpo": "...", "todos": true }      todo mundo
+//   { ..., "rota": "quiz" }                                 abre direto no quiz
+//
+// A `rota` é opcional e diz onde o TOQUE abre o app. Sem ela a mensagem abre o
+// app onde ele estava, que é o certo para um recado geral; com ela, o toque
+// leva à tela que a mensagem prometeu. Ver lib/app/rotaPendente.ts.
 //
 // Token que a plataforma devolver como morto (aparelho que desinstalou) é
 // apagado na hora: insistir só suja a lista.
@@ -82,11 +87,21 @@ async function tokenDeAcessoFcm(conta: ContaServico): Promise<string | null> {
   return dado.access_token ?? null;
 }
 
-async function enviarFcm(acesso: string, projeto: string, token: string, titulo: string, corpo: string): Promise<"ok" | "morto" | "erro"> {
+async function enviarFcm(acesso: string, projeto: string, token: string, titulo: string, corpo: string, rota: string): Promise<"ok" | "morto" | "erro"> {
   const res = await fetch(`https://fcm.googleapis.com/v1/projects/${projeto}/messages:send`, {
     method: "POST",
     headers: { "content-type": "application/json", authorization: `Bearer ${acesso}` },
-    body: JSON.stringify({ message: { token, notification: { title: titulo, body: corpo } } }),
+    body: JSON.stringify({
+      message: {
+        token,
+        notification: { title: titulo, body: corpo },
+        // O `data` é o que o app lê no TOQUE, para abrir na tela certa em vez
+        // da inicial. Só entra quando há destino: mensagem sem rota é uma
+        // abertura normal do app, e mandar `data` vazio só confunde. Valores
+        // do FCM são sempre texto.
+        ...(rota ? { data: { rota } } : null),
+      },
+    }),
   });
   if (res.ok) return "ok";
   return res.status === 404 || res.status === 400 ? "morto" : "erro";
@@ -116,7 +131,7 @@ function tokenApns(c: { p8: string; keyId: string; teamId: string }): string {
 
 // O APNs só fala HTTP/2, que o fetch do Node não fala. Uma conexão por
 // chamada da rota, reaproveitada entre os aparelhos do mesmo envio.
-function enviarApns(sessao: import("node:http2").ClientHttp2Session, jwt: string, token: string, titulo: string, corpo: string): Promise<"ok" | "morto" | "erro"> {
+function enviarApns(sessao: import("node:http2").ClientHttp2Session, jwt: string, token: string, titulo: string, corpo: string, rota: string): Promise<"ok" | "morto" | "erro"> {
   return new Promise((resolve) => {
     const req = sessao.request({
       ":method": "POST",
@@ -137,7 +152,9 @@ function enviarApns(sessao: import("node:http2").ClientHttp2Session, jwt: string
     });
     req.on("error", () => resolve("erro"));
     req.setTimeout(10000, () => { req.close(); resolve("erro"); });
-    req.end(JSON.stringify({ aps: { alert: { title: titulo, body: corpo } } }));
+    // No APNs a carga do app fica ao LADO do `aps`, no primeiro nível, e não
+    // dentro dele: o plugin entrega o payload inteiro como `data`.
+    req.end(JSON.stringify({ aps: { alert: { title: titulo, body: corpo } }, ...(rota ? { rota } : null) }));
   });
 }
 
@@ -152,6 +169,12 @@ export async function POST(req: Request) {
   const titulo = typeof body?.titulo === "string" ? body.titulo.trim() : "";
   const corpo = typeof body?.corpo === "string" ? body.corpo.trim() : "";
   if (!titulo || !corpo) return NextResponse.json({ error: "titulo_e_corpo_obrigatorios" }, { status: 400 });
+
+  // Destino opcional. A lista de rotas aceitas é do APP (lib/app/rotaPendente.ts),
+  // e é lá que a filtragem manda: aqui a gente só não deixa passar qualquer
+  // texto do corpo do POST para a bandeja de milhares de aparelhos.
+  const ROTAS = ["quiz"];
+  const rota = typeof body?.rota === "string" && ROTAS.includes(body.rota) ? body.rota : "";
 
   let consulta = admin.from("push_tokens").select("token, platform");
   if (typeof body?.userId === "string" && body.userId) consulta = consulta.eq("user_id", body.userId);
@@ -172,8 +195,8 @@ export async function POST(req: Request) {
   try {
     for (const { token, platform } of linhas) {
       let resultado: "ok" | "morto" | "erro" | "sem" = "sem";
-      if (platform === "android" && conta && acessoFcm) resultado = await enviarFcm(acessoFcm, conta.project_id, token, titulo, corpo);
-      else if (platform === "ios" && sessaoApns && jwtApns) resultado = await enviarApns(sessaoApns, jwtApns, token, titulo, corpo);
+      if (platform === "android" && conta && acessoFcm) resultado = await enviarFcm(acessoFcm, conta.project_id, token, titulo, corpo, rota);
+      else if (platform === "ios" && sessaoApns && jwtApns) resultado = await enviarApns(sessaoApns, jwtApns, token, titulo, corpo, rota);
       if (resultado === "ok") enviados++;
       else if (resultado === "morto") mortos.push(token);
       else if (resultado === "sem") semTransporte++;

@@ -13,6 +13,7 @@ import {
   useLembretes,
   useMetricaDeConteudo,
   usePlanoPendente,
+  useRotaDeAviso,
 } from "@/lib/app/aberturaDoApp";
 import { Icon, useContent } from "./ui";
 import { Logo } from "@/components/ui/Logo";
@@ -67,6 +68,7 @@ function Router() {
   // eles fazem está documentado em lib/app/aberturaDoApp.ts.
   useFunilDeAbertura();
   usePlanoPendente();
+  useRotaDeAviso();
   useConsentimentoDeAnuncios();
   useLembretes(c);
   useBotaoVoltarDoAndroid();

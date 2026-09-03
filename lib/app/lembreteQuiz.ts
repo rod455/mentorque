@@ -69,5 +69,9 @@ export async function sincronizarLembreteQuiz(o: {
     return;
   }
 
-  await agendar({ id: AVISO.quizDoDia, titulo: o.textos.titulo, corpo: o.textos.corpo, quando });
+  // `rota: "quiz"` é o que faz o toque abrir a PERGUNTA, e não a tela inicial.
+  // Até 03/09/2026 o aviso não carregava destino nenhum: ele trazia a pessoa de
+  // volta ao app e a largava no Início, com o chip do quiz esperando um segundo
+  // toque. Ver lib/app/rotaPendente.ts.
+  await agendar({ id: AVISO.quizDoDia, titulo: o.textos.titulo, corpo: o.textos.corpo, quando, rota: "quiz" });
 }

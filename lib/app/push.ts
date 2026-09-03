@@ -23,13 +23,20 @@
 // Os passos de console do dono estão em docs/push.md.
 import { getBrowserSupabase } from "@/lib/supabaseBrowser";
 import { apiUrl } from "@/lib/app/apiBase";
+import { anotaRota } from "./rotaPendente";
 import { isNativeApp, nativePlatform } from "./wrapper";
 
 type Permissao = "prompt" | "prompt-with-rationale" | "granted" | "denied";
 type PluginPush = {
   checkPermissions: () => Promise<{ receive: Permissao }>;
   register: () => Promise<void>;
-  addListener: (ev: string, cb: (dado: { value?: string; error?: string }) => void) => Promise<{ remove: () => Promise<void> }>;
+  addListener: {
+    (ev: "registration", cb: (dado: { value?: string; error?: string }) => void): Promise<{ remove: () => Promise<void> }>;
+    (
+      ev: "pushNotificationActionPerformed",
+      cb: (dado: { notification?: { data?: Record<string, unknown> | null } }) => void
+    ): Promise<{ remove: () => Promise<void> }>;
+  };
 };
 
 // A caixa é obrigatória, não estilo: o plugin cru do Capacitor responde a
@@ -111,4 +118,34 @@ export async function sincronizarPush(querAvisos: boolean): Promise<void> {
     });
     await c.plugin.register();
   } catch { /* console ainda não configurado: fica para quando estiver */ }
+}
+
+/** O ouvinte de toque já está de pé nesta sessão? */
+let jaOuvindo = false;
+
+/**
+ * Ouve o TOQUE num push e anota para onde ele quer levar.
+ *
+ * Gêmeo do `ouvirToqueEmAviso` do aviso local, e existe separado porque são
+ * dois plugins diferentes com dois eventos diferentes. O destino chega no
+ * `data` da mensagem, que o servidor preenche a partir do campo `rota` do POST
+ * (app/api/push/enviar/route.ts).
+ *
+ * Registrado SEMPRE, independente do interruptor de avisos: quem tem um push
+ * na bandeja já recebeu a mensagem, e desligar o interruptor depois não deve
+ * transformar o toque nela numa abertura sem destino.
+ */
+export async function ouvirToqueEmPush(): Promise<void> {
+  if (jaOuvindo) return;
+  const c = await carregar();
+  if (!c) return;
+  if (jaOuvindo) return;
+  jaOuvindo = true;
+  try {
+    await c.plugin.addListener("pushNotificationActionPerformed", (dado) => {
+      anotaRota(dado?.notification?.data?.rota);
+    });
+  } catch {
+    jaOuvindo = false;
+  }
 }
