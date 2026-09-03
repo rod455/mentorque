@@ -1,8 +1,19 @@
-# PROPOSTA: um agente para otimizar a campanha
+# Mídia paga: o plano, e onde ele está
 
-Escrita em 03/09/2026, a pedido do dono. **A recomendação é não criar o agente
-de otimização ainda**, e o motivo não é técnico: falta o sinal contra o qual
-ele otimizaria. O que dá para fazer hoje, e vale, é um vigia de leitura.
+Escrita em 03/09/2026 como proposta, e virou plano em execução no mesmo dia,
+quando o dono mandou fazer tudo. O estado de cada item está marcado.
+
+**A recomendação continua sendo não criar o
+agente que DECIDE ainda**, e o motivo não é técnico: falta o sinal contra o
+qual ele otimizaria. Os itens 1 a 3 existem para construir esse sinal.
+
+| item | estado |
+|---|---|
+| 1. destino mensurável do clique | FEITO do nosso lado, falta 1 clique seu no Google Ads |
+| 2. conversão que signifique dinheiro | metade feita: o `gclid` já viaja e fica guardado. Falta a devolução ao Google |
+| 3. atribuição de instalação | não começado, depende de console |
+| 4. agente que decide | não, e de propósito |
+| vigia de leitura | FEITO, falta 1 clique seu no n8n |
 
 ## O que a campanha fez até agora
 
@@ -119,3 +130,94 @@ Sugestão de linha, no mesmo espírito da que foi dada ao QA em 03/09:
 
 A assimetria é a mesma de sempre: o que só pode diminuir o dano é autonomia
 barata; o que pode aumentar a conta é do dono.
+
+---
+
+# O que já está de pé (03/09/2026)
+
+## Item 1: a etiqueta agora gruda em qualquer página
+
+O vazamento era este: a captura de UTM morava dentro do componente da landing
+de tráfego pago, então **só funcionava em `/landing`**. Clique pago que caísse
+na home, numa página de conteúdo ou direto em `/app` perdia a campanha na
+chegada, em silêncio. Foi por isso que 23 cliques não deixaram um único evento
+etiquetado.
+
+Agora ela mora em `lib/app/campanha.ts`, montada no layout raiz, e vale em toda
+página do site (a do app inclusive). Conferida por `npm run conferir:campanha`,
+que protege duas regras:
+
+- chegada COM etiqueta gruda, e o `gclid` vem junto;
+- **chegada SEM etiqueta não apaga a que já estava lá.** É a regra que quase
+  ninguém lembra e a que mais destrói atribuição: quem clica no anúncio, fecha
+  e volta depois digitando o endereço continua sendo daquela campanha. Sem
+  isso, toda venda vira "direto" e a campanha nunca tem crédito de nada.
+
+**O que falta, e é seu**: apontar o anúncio para uma página que a gente mede.
+
+```
+https://www.mentorque.com.br/app?utm_source=google&utm_medium=cpc&utm_campaign=lancamento
+```
+
+No Google Ads, é o campo "URL final" do anúncio. O `gclid` o Google acrescenta
+sozinho. A partir daí, cada clique vira `abriu_app` etiquetado, e a corrente
+até `assinou` fica visível na `cadastros_por_campanha` e no funil.
+
+## Item 2: o clique do Google viaja até a venda (metade)
+
+O `gclid` sai do aparelho no checkout, é carimbado na metadata da assinatura no
+Stripe e cai na coluna `subscriptions.gclid`. Mesmo caminho do cupom.
+
+Com isso, "quais vendas vieram do anúncio" virou uma consulta:
+
+```sql
+select cupom, gclid, status, current_period_end from subscriptions
+where gclid is not null;
+```
+
+**O que falta**: devolver a conversão ao Google. Precisa de duas coisas, e a
+primeira é sua:
+
+1. **Criar a ação de conversão no Google Ads**, do tipo importação (offline),
+   nome sugerido "Assinatura", moeda BRL, contagem uma por clique. Ela devolve
+   um nome de recurso (`customers/6724308347/conversionActions/NNNN`), que é o
+   que falta para o braço poder postar.
+2. Com esse nome em mãos, eu faço o braço no n8n que lê as assinaturas com
+   `gclid` e ainda não enviadas, posta a conversão com o valor em reais e marca
+   como enviada.
+
+Aí o lance automático passa a perseguir assinatura em vez de toque em botão, e
+é isso que muda o resultado da campanha.
+
+## O vigia: termos de busca, e o desperdício com nome
+
+O braço do Analista ganhou a consulta de `search_term_view`: os 50 termos mais
+caros dos últimos 30 dias, com custo, cliques e conversões, e uma lista
+separada `termosSemConversao` com o gasto que não virou nada. É de onde sai
+toda palavra-chave negativa.
+
+**O que falta, e é um clique seu**: o nó `Google Ads: termos de busca` nasceu
+**desligado**, porque o n8n não deixa colar credencial de Google Ads em nó HTTP
+pela API (a mesma limitação que já apareceu com o developer-token). No n8n:
+
+1. abrir o workflow "Analista: metricas externas";
+2. no nó `Google Ads: termos de busca`, escolher a credencial "Google Ads
+   account" no campo de credencial;
+3. ligar o nó (tirar o "disabled") e publicar.
+
+Enquanto ele estiver desligado, o braço continua funcionando normalmente e
+grava `termosNota` dizendo exatamente isso. O nó de leitura é defensivo de
+propósito: nó desligado no n8n deixa a entrada passar direto, e sem o filtro
+por `searchTermView` a resposta de custo seria lida como se fosse de termos e
+gravaria lixo com cara de dado.
+
+## O que NÃO fiz, e por quê
+
+**O agente que decide.** Enquanto a conversão que o Google enxerga for "tocou
+no botão de download", pôr um agente para otimizar é contratar alguém para
+maximizar o número errado, com mais velocidade e mais convicção. A ordem
+importa: primeiro o sinal, depois quem persegue o sinal.
+
+Quando o item 2 fechar, a alçada sugerida continua a mesma: palavra-chave
+negativa ele faz sozinho (só reduz gasto), e orçamento, lance, pausar e criar
+campanha continuam sendo do dono.

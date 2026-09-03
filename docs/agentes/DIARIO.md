@@ -85,6 +85,42 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   > otimista e passei o enigma adiante em vez de dizer "não sei".
 - Saúde: bateria `conferir` inteira passando (12 conferências), build do site
   e `build:native` verdes.
+## 2026-09-03 · Mídia paga: a etiqueta gruda, e o clique do Google chega na venda
+- O dono mandou fazer tudo o que estava proposto. Feito o que é nosso; o que
+  depende de console ficou com o passo escrito.
+- **Item 1, a etiqueta.** O vazamento era pequeno de escrever e caro de ter: a
+  captura de UTM morava dentro do componente da landing de tráfego pago, então
+  só funcionava em `/landing`. Clique pago que caísse na home ou direto no app
+  perdia a campanha na chegada. Subiu para o layout raiz (`lib/app/campanha.ts`
+  + `CapturaDeCampanha`) e vale em toda página.
+  - A conferência protege a regra que quase ninguém lembra: **chegada SEM
+    etiqueta não pode apagar a que já estava lá.** Quem clica no anúncio, fecha
+    e volta digitando o endereço continua sendo daquela campanha; sem isso toda
+    venda vira "direto" e a campanha nunca tem crédito. Plantei três defeitos
+    (chegada limpa apagando, gclid fora da lista, guardar a query inteira) e ela
+    reprovou nos três.
+- **Item 2, metade.** O `gclid` viaja do aparelho até a coluna
+  `subscriptions.gclid`, pelo mesmo caminho do cupom (metadata da assinatura no
+  Stripe). Falta a ação de conversão no Google Ads, que é console do dono, e aí
+  o braço que devolve a venda para lá é uma consulta.
+- **O vigia.** O braço do Analista ganhou `search_term_view`: os 50 termos mais
+  caros de 30 dias, com uma lista `termosSemConversao` separada, que é de onde
+  sai toda palavra-chave negativa. Custo por campanha diz QUANTO; o termo diz
+  NO QUÊ.
+  - O nó nasceu DESLIGADO porque o n8n recusa colar credencial de Google Ads em
+    nó HTTP pela API (mesma limitação do developer-token). Deixar desligado foi
+    escolha: nó novo sem credencial no meio de um braço que funciona quebraria
+    o braço inteiro.
+  - E a leitura ficou defensiva por causa disso: nó desligado no n8n deixa a
+    entrada PASSAR DIRETO, então sem filtrar por `searchTermView` a resposta de
+    custo seria lida como se fosse de termos e gravaria lixo com cara de dado.
+    Simulei os três casos (desligado, ligado, erro) antes de subir.
+- **Não fiz o agente que decide, e é de propósito.** Enquanto a conversão que o
+  Google enxerga for "tocou no botão de download", pôr um agente para otimizar
+  é contratar alguém para maximizar o número errado com mais velocidade.
+  Primeiro o sinal, depois quem persegue o sinal.
+- Estado e passos em `docs/agentes/propostas/agente-de-midia-paga.md`.
+
 ## 2026-09-03 · A campanha entregou, e o rastro morre no primeiro clique
 - Pedido do dono: avaliar os resultados do Google Ads e se dá para pôr um
   agente para otimizar.
