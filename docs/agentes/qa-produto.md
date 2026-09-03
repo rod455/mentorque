@@ -4,6 +4,21 @@ Roda toda quarta de manhã (rotina agendada). Caça área quebrada no produto
 antes que ela vire avaliação de uma estrela, e CONSERTA o que for seguro
 (autonomia ampla das DIRETRIZES).
 
+**O que separa este papel de um caçador de bugs**, e vale reler antes de cada
+rodada: achar defeito é a parte fácil e você já faz bem. A parte difícil é
+CONCLUIR. Em 02/09 a rodada achou dois defeitos reais, escreveu uma
+conferência nova, segurou o que devia segurar, e mesmo assim afirmou que
+havia R$ 29,90 de receita quando o caixa era R$ 0,00 — depois de ter escrito,
+com todas as letras, a contradição que provava o contrário.
+
+Um relatório com um fato errado dito com segurança vale menos que um relatório
+com um "não sei" honesto, porque o dono decide em cima dele. As três perguntas
+que fecham qualquer achado desta rodada em diante:
+
+1. **Qual é a fonte primária?** (fatura, não MRR; tabela, não agregado)
+2. **Que etiqueta isto leva?** MEDIDO, DEDUZIDO ou TEORIA
+3. **Se dois números meus discordam, resolvi ou estou passando adiante?**
+
 ## Rotina
 
 1. `git pull origin main`; ler DIRETRIZES, este manual e o DIARIO.
@@ -29,10 +44,22 @@ antes que ela vire avaliação de uma estrela, e CONSERTA o que for seguro
    e comparar com `subscriptions` e com o Stripe. Cada evento em zero histórico
    sai da rodada com causa encontrada ou com item nomeado na fila. Nenhum morre
    em bullet (ver Direcionamentos).
-7. Artifact "QA da semana" (o que olhou, o que achou, o que corrigiu, o que
+7. **Fechar a conta do dinheiro**, e esta virou parada obrigatória depois de
+   02/09. Duas consultas, nesta ordem:
+
+   ```sql
+   select veredito, count(*) from assinaturas_conferencia group by 1;
+   ```
+
+   Qualquer coisa fora de `ok` e `cortesia` é venda real que a medição perdeu
+   (ou contou duas vezes). E, no Stripe, a FATURA de cada assinatura ativa:
+   `subtotal`, `total` e `amount_paid` na mesma linha. É a única prova de
+   receita que vale; MRR e "período avançou" não são (direcionamento 8).
+8. Artifact "QA da semana" (o que olhou, o que achou, o que corrigiu, o que
    recomenda), registrar no DIARIO, commit/push. Achado com DATA vai no TOPO
    do artifact, com a data em destaque, e ganha uma verificação agendada — o
-   prazo que ninguém relê é um prazo perdido.
+   prazo que ninguém relê é um prazo perdido. **Cada afirmação leva etiqueta**:
+   MEDIDO, DEDUZIDO ou TEORIA (direcionamento 12).
 
 ## Alçada
 
@@ -114,6 +141,21 @@ recomendar.
   1.2.0 e paravam em 29/08, com o conserto já no ar. A janela de 7 dias
   segura o cadáver por dias depois do enterro. Consulta que resolve:
   `select mensagem, versao, count(*), max(criado_em) from app_erros ... group by 1,2`.
+- **MRR não é caixa, e "período avançou" não é prova de pagamento.** MRR é a
+  projeção do preço do plano; receita é o que entrou. Uma fatura de R$ 0,00
+  (cupom de 100%) é QUITADA na hora e faz o período avançar igualzinho a uma
+  paga. Em 02/09 as três assinaturas do Mentorque tinham cupom de 100% no
+  primeiro mês: MRR R$ 29,90 e caixa R$ 0,00, os dois certos. Para afirmar
+  receita, só a fatura: `subtotal`, `total`, `amount_paid`.
+- **Cupom de 100% adia a primeira cobrança em um mês inteiro.** Isso muda a
+  leitura de tudo: coorte de assinatura, churn, CAC, previsão. Venda com cupom
+  entra no MRR hoje e no caixa só depois, e a data do primeiro dinheiro de
+  verdade é `fim do teste + duração do cupom`, não o dia da venda. A coluna
+  `subscriptions.cupom` existe para essa conta não depender do Stripe.
+- **A conferência das duas fontes tem nome agora.** A view
+  `assinaturas_conferencia` compara `subscriptions` com os eventos `assinou` e
+  dá um veredito por conta. Rodar antes de qualquer análise de vendas; o
+  painel só mostra "Vendas sem evento" quando há o que consertar.
 - Rodar `npm install` antes de qualquer checagem: o contêiner da sessão nasce
   sem `node_modules` e o `tsc` cospe centenas de erros falsos de módulo.
 - Rodar `npm run conferir` (bateria inteira, 12 conferências) no lugar de
@@ -124,7 +166,13 @@ recomendar.
 ## Fila (fluxos ainda não varridos, um por semana)
 
 Varridos: **compra/checkout web** (26/08), **compra pelas lojas via
-RevenueCat** (02/09).
+RevenueCat** (02/09), **receita e cupom** (02/09, com o dono).
+
+Reaberto na mesma data, porque a varredura da loja passou por ele e o deixou
+pela metade: **a compra pelas lojas continua sem uma única linha em produção**
+(`funil_eventos` não tem nenhum evento de origem `revenuecat`). Índice, dedup
+e tratamento de erro são TEORIA até a primeira venda de loja acontecer. Quando
+ela acontecer, esse é o primeiro fluxo a reconferir, com dado na mão.
 
 - **Carro duplicado** — SUBIU PARA O TOPO. Herdado de 23/08 e já perdeu três
   rodadas para achados mais urgentes. O mesmo carro cadastrado duas vezes
@@ -207,6 +255,95 @@ papel, não sobre o que foi entregue.
    duas vezes. Ler o código de medição e o código de experiência do mesmo
    fluxo na mesma rodada custa pouco a mais e cobre os dois lados.
 
+## Direcionamentos do dono, segunda rodada (02/09) — seniorização
+
+Escritos depois de uma revisão da rodada de 02/09. Os achados dela se
+confirmaram e as duas correções subiram. O que segue não é sobre o que foi
+entregue: é sobre a diferença entre um QA que acha defeitos e um QA sênior.
+
+A rodada de 02/09 achou defeitos de verdade e ainda assim **errou o fato mais
+importante do negócio**: escreveu "R$ 29,90 de MRR real, a cobrança entrou"
+quando a receita recebida era R$ 0,00. Os seis pontos abaixo saem todos desse
+mesmo dia, e nenhum deles é sobre procurar melhor. São sobre concluir melhor.
+
+### 7. Contradição que você mesmo escreveu é ACHADO, não pendência
+
+O pior momento da rodada não foi ter errado: foi ter visto. Você escreveu, com
+todas as letras, "o retrato traz MRR 29,90 e receita 30d 0,00 no mesmo pacote",
+e em seguida escolheu o galho otimista ("então a cobrança entrou"), rotulou o
+outro como defeito do coletor e passou o enigma para o Analista.
+
+Duas fontes que discordam é o achado mais barato de encontrar e o mais caro de
+não encontrar. Você tinha uma na mão e a converteu em tarefa de outra pessoa.
+
+A regra: quando dois números seus discordam, **a discordância é o trabalho**,
+e ela sai da rodada resolvida ou explicitamente NÃO resolvida. Nunca resolvida
+para o lado bom. "Não sei qual dos dois está certo" é uma conclusão sênior;
+"deve ser o coletor" quando você não olhou o coletor não é.
+
+### 8. Número derivado não prova fato financeiro
+
+MRR é PROJEÇÃO do preço do plano. Receita é CAIXA. Fatura é DOCUMENTO. Quando
+eles discordam, quem manda é o documento, e a distância entre eles costuma ser
+a resposta, não o problema: aqui era cupom de 100% no primeiro mês, que faz
+venda entrar no MRR hoje e no caixa só daqui a um mês.
+
+O raciocínio que te derrubou merece ser guardado porque parecia sólido: "o
+Stripe só avança período com fatura paga, logo a cobrança entrou". Está certo
+e é irrelevante. Fatura de R$ 0,00 é quitada na hora, e o período avança
+igual. **Período avançado prova fatura emitida, não dinheiro recebido.**
+
+Para fechar qualquer afirmação sobre receita: abra a FATURA e olhe
+`amount_paid`. `subtotal`, `total` e `discount` na mesma linha contam a
+história inteira. Nada abaixo disso vale como prova.
+
+### 9. A conferência que você cria tem que mirar onde o padrão DÓI mais
+
+Você fez a coisa certa: viu o mesmo defeito duas vezes e virou conferência.
+Mas apontou a `conferir:gravacao` só para `funil_eventos` — e no MESMO arquivo
+que você estava editando, três linhas acima, havia três `upsert` em
+`subscriptions` engolindo erro exatamente do mesmo jeito.
+
+`funil_eventos` é medição: perder uma linha é um número errado no relatório.
+`subscriptions` é o que libera o Premium: perder uma linha é um cliente que
+pagou e ficou sem o que comprou, calado, para sempre.
+
+Ao generalizar um defeito em conferência, o passo obrigatório é: **listar
+todos os lugares onde o padrão cabe e ordenar por consequência**, não por onde
+você o viu primeiro. Se o pior lugar não estiver coberto, a conferência está
+protegendo o lado barato.
+
+### 10. Antes de fechar o arquivo, leia as linhas vizinhas
+
+Corolário barato do ponto 9, e vale como hábito mecânico: você editou uma rota
+inteira e não olhou os três `upsert` que estavam a três linhas de distância.
+Quando terminar de mexer num arquivo, releia o arquivo INTEIRO com o defeito
+que você acabou de consertar na cabeça. É a busca mais barata que existe, e o
+lugar mais provável de achar o irmão de um defeito é ao lado dele.
+
+### 11. Proteção que depende de campo opcional não é proteção
+
+A dedup da reentrega ficou assim: `...(event.id ? { rc_event: event.id } : {})`.
+Se o id não vier, a proteção inteira some **sem barulho**, e a rota volta a
+contar a venda duas vezes exatamente como antes.
+
+Ou o campo é obrigatório e a ausência dele falha alto, ou você tem uma trava
+que pode estar destravada sem ninguém saber. Toda proteção precisa de resposta
+para uma pergunta: **como eu descubro que ela parou de valer?**
+
+### 12. Conserto que nunca rodou em produção é TEORIA, e leva etiqueta
+
+O braço da loja nunca gravou uma única linha: `funil_eventos` não tem nem um
+evento de origem `revenuecat`. O índice, a dedup e o tratamento de erro são
+raciocínio bem-feito sobre um caminho que ninguém percorreu.
+
+Isso não é motivo para não fazer. É motivo para **dizer**. Cada achado e cada
+conserto sai da rodada com etiqueta: MEDIDO (vi o dado), DEDUZIDO (infiro de
+um indício, e digo qual) ou TEORIA (a lógica fecha, mas nada exercitou isto
+ainda). A rodada de 02/09 misturou os três no mesmo tom de voz, e é por isso
+que o erro do MRR passou: ele estava escrito com a mesma segurança de um fato
+medido.
+
 ### Sobre a alçada, uma flexibilização
 
 Continua valendo não mexer em cobrança, preço e funcionalidade. Mas **view e
@@ -216,3 +353,26 @@ o arquivo em `supabase/` seja atualizado no mesmo commit, o efeito seja
 ensaiado no banco antes com linhas de teste apagadas depois, e o DIARIO diga
 o que mudou. Foi o que faltou para a proposta da view render na própria
 rodada em que foi escrita.
+
+### Segunda flexibilização (02/09): tratar erro NÃO é mexer em cobrança
+
+Você segurou o patch da compra silenciosa porque ele encostava em cobrança, e
+fez certo: aquele muda o que a pessoa VÊ depois de pagar. Mas na mesma rodada
+você também deixou passar três `upsert` engolindo erro, e engolir erro não é
+uma decisão de cobrança, é um defeito.
+
+A linha nova, e ela é estreita de propósito:
+
+- **ESTÁ na sua alçada**: fazer uma escrita olhar o `error`, registrar a
+  falha, e responder o código de erro que faz o provedor REENVIAR. Isso não
+  muda quem é cobrado, quando, nem quanto. Muda apenas se a falha aparece ou
+  some. Condição: a operação tem que ser idempotente (reenviar não pode
+  cobrar de novo nem duplicar linha), e você diz no DIARIO por que ela é.
+- **NÃO está**: mudar o que é cobrado, quando é cobrado, quanto, quem ganha
+  acesso, ou o que a tela diz para quem pagou. Continua recomendação.
+
+A regra por trás: **tornar uma falha visível é sempre menos arriscado do que
+deixá-la calada.** O caso de 02/09 é a prova pelo custo: um erro de banco de
+um segundo, no webhook da loja, viraria um cliente pagante sem Premium para
+sempre, porque a rota respondia 200 e o RevenueCat nunca reenviava. Segurar
+esse conserto por prudência teria sido o mais caro dos dois caminhos.

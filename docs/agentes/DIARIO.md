@@ -15,10 +15,16 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   trig_01QwrDYMNSunEp3oJXKjVT4K), que confere a virada e escreve aqui
   sozinha. É o direcionamento 5 em prática: diário não dispara, lembrete sim.
 - **Prazo de 01/09 fechado, e bem**: o primeiro cliente virou cobrança às
-  23h52 do dia 1º, período até 01/10. R$ 29,90 de MRR real. A recomendação
+  23h52 do dia 1º, período até 01/10. ~~R$ 29,90 de MRR real.~~ A recomendação
   da rodada passada (segunda porta gravando o `assinou`) já se pagou: o
   evento do segundo cliente está gravado com origem `stripe-sync`, e sem ela
   essa venda seria invisível igual à primeira.
+  > **CORRIGIDO em 02/09, com o Stripe liberado.** Não houve R$ 29,90 de
+  > receita. A fatura de 01/09 saiu com subtotal R$ 29,90, desconto R$ 29,90
+  > e **total R$ 0,00**: o cupom `MENSAL-LANCAMENTO100` (100%, `once`) foi
+  > consumido exatamente nessa primeira cobrança pós-teste. O período avançou
+  > porque a fatura foi QUITADA, e uma fatura de R$ 0,00 é quitada na hora.
+  > "Período avançou" prova cobrança emitida, não dinheiro recebido.
 - **Prova indireta sobre o webhook do Stripe** (direcionamento 3): a virada
   foi escrita no banco 10 segundos depois do fim do teste grátis, de
   madrugada. Ninguém abre o app nesse segundo exato, então quem escreveu foi
@@ -65,13 +71,57 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   todos da versão 1.2.0 e o último é de 29/08, anterior ao conserto da caixa.
   Zero ocorrência nova. A janela de 7 dias vai continuar mostrando eles até
   domingo, o que é ruído e não defeito.
-- **Fica para o Analista**: o retrato traz MRR 29,90 e receita 30d 0,00 no
+- ~~**Fica para o Analista**: o retrato traz MRR 29,90 e receita 30d 0,00 no
   mesmo pacote. A assinatura está `active` com período até 01/10, e o Stripe
   só avança período com fatura paga, então a cobrança entrou. Cheira a
-  defeito do coletor de receita, não de cobrança. Não fechei: integração do
+  defeito do coletor de receita, não de cobrança.~~ Não fechei: integração do
   Stripe indisponível nesta sessão.
+  > **CORRIGIDO em 02/09.** Não havia defeito nenhum no coletor de receita: os
+  > dois números estavam certos e diziam coisas diferentes. MRR é a PROJEÇÃO
+  > do plano; receita 30d é o CAIXA. Com cupom de 100% no primeiro mês, os
+  > dois divergem de propósito, e a divergência era a resposta, não o
+  > problema. O erro de raciocínio está nomeado no manual do papel
+  > (`qa-produto.md`, direcionamento 7): eu vi a contradição, escolhi o galho
+  > otimista e passei o enigma adiante em vez de dizer "não sei".
 - Saúde: bateria `conferir` inteira passando (12 conferências), build do site
   e `build:native` verdes.
+## 2026-09-03 · Devolução ao QA e seniorização do papel
+- As duas afirmações erradas da rodada de 02/09 foram corrigidas NO LUGAR onde
+  foram escritas (com o texto original riscado e a correção embaixo), e não só
+  numa entrada nova. Diário é memória compartilhada: linha errada que fica
+  intacta volta a ser lida como verdade daqui a um mês.
+- O manual do papel ganhou seis direcionamentos novos, todos tirados do mesmo
+  dia, e nenhum é sobre procurar melhor. São sobre CONCLUIR melhor:
+  7. contradição que você mesmo escreveu é achado, não pendência para outro
+     agente. Sai resolvida ou explicitamente não resolvida, nunca resolvida
+     para o lado bom;
+  8. número derivado não prova fato financeiro. "Período avançou" prova fatura
+     emitida, não dinheiro recebido, porque fatura de R$ 0,00 é quitada na
+     hora. Só `amount_paid` fecha afirmação sobre receita;
+  9. conferência nova mira onde o padrão DÓI mais, não onde ele foi visto
+     primeiro. Listar todos os lugares onde ele cabe e ordenar por
+     consequência;
+  10. ao terminar de mexer num arquivo, reler o arquivo inteiro com o defeito
+      recém-consertado na cabeça. O irmão de um defeito mora ao lado dele;
+  11. proteção que depende de campo opcional não é proteção. Toda trava precisa
+      responder "como eu descubro que ela parou de valer?";
+  12. conserto que nunca rodou em produção é TEORIA e leva etiqueta. Cada
+      achado sai como MEDIDO, DEDUZIDO ou TEORIA. Misturar os três no mesmo
+      tom de voz foi o que fez o erro do MRR passar despercebido.
+- **Alçada ampliada, segunda flexibilização**: tratar erro não é mexer em
+  cobrança. Fazer uma escrita olhar o `error`, registrar a falha e responder o
+  código que faz o provedor reenviar passa a estar na alçada, desde que a
+  operação seja idempotente e o DIARIO diga por quê. Mudar o que é cobrado,
+  quando, quanto, ou o que a tela diz para quem pagou, continua recomendação.
+  A regra por trás: tornar falha visível é sempre menos arriscado que deixá-la
+  calada, e 02/09 é a prova pelo custo.
+- A rotina ganhou uma parada obrigatória: fechar a conta do dinheiro
+  (`assinaturas_conferencia` mais a fatura no Stripe) antes de escrever
+  qualquer coisa sobre vendas.
+- Fila: a compra pelas lojas foi REABERTA. Ela foi varrida, mas não tem uma
+  única linha em produção, então tudo o que foi consertado lá é teoria até a
+  primeira venda de loja acontecer.
+
 ## 2026-09-02 · A receita recebida é ZERO, e as três vendas foram com cupom
 - Com o Stripe liberado, a conta fechou. E ela corrige duas coisas que EU e o
   agente de QA dissemos hoje, as duas na mesma direção: otimistas demais.
