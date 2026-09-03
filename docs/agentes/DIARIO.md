@@ -85,6 +85,38 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   > otimista e passei o enigma adiante em vez de dizer "não sei".
 - Saúde: bateria `conferir` inteira passando (12 conferências), build do site
   e `build:native` verdes.
+## 2026-09-03 · A campanha entregou, e o rastro morre no primeiro clique
+- Pedido do dono: avaliar os resultados do Google Ads e se dá para pôr um
+  agente para otimizar.
+- **A campanha rodou**: "Mentorque Lançamento", canal SEARCH, ativa. R$ 44,16,
+  646 impressões, 23 cliques, CTR 3,6%, CPC R$ 1,92. A compra de mídia está
+  saudável; o problema é outro.
+- **Nenhum dos 23 cliques chegou a algo que a gente veja.** Zero cadastros com
+  campanha, zero eventos de funil com UTM. E como o canal é SEARCH, o clique
+  cai numa página NOSSA: aqui zero não é limitação de plataforma, é o rastro
+  terminando.
+- **As "3 conversões" não são o que o nome diz.** A conversão configurada no
+  Google Ads é o `marcarCliqueDownload`: um toque no selo da loja. Não é
+  instalação, não é cadastro, não é venda. R$ 14,72 por toque em botão, sem
+  saber o que veio depois, porque a atribuição de instalação nunca foi fechada.
+- **Consulta do braço levada para o nível de CAMPANHA.** Era `FROM customer` e
+  devolvia só o total do dia: dava para saber que gastou, nunca no quê. Agora
+  vem nome, status e TIPO DE CANAL, e é o tipo que muda a leitura inteira,
+  porque campanha de APP manda para a loja (zero de UTM é esperado) e SEARCH
+  manda para uma página nossa (zero de UTM é vazamento). Sem esse campo eu não
+  teria como distinguir as duas, e a resposta seria chute.
+- **Recomendação: não criar o agente de otimização ainda.** O único sinal
+  disponível é "tocou no botão de download", e o lance automático do Google já
+  otimiza para ele; um agente em cima disso só ficaria bom em comprar toques em
+  botão, mais rápido. É o mesmo erro de unidade do funil e do MRR, em outra
+  roupa: número que não mede o que importa não melhora sendo otimizado, piora,
+  porque passa a ter alguém trabalhando para maximizá-lo.
+- Proposta escrita em `docs/agentes/propostas/agente-de-midia-paga.md`, com a
+  ordem certa (destino mensurável, conversão que signifique dinheiro,
+  atribuição de instalação, e só então o agente), o vigia de leitura que dá
+  para criar já, e a alçada sugerida para quando o agente existir: palavra
+  negativa sozinho, porque só reduz gasto; orçamento e lance com o dono.
+
 ## 2026-09-03 · A LP virou página de app publicado, e o cupom teve que renascer
 - **Cupom: "subir para 25" não existe no Stripe.** `max_redemptions` não é
   editável, nem no cupom nem no código promocional; a própria documentação da

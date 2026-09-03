@@ -62,7 +62,14 @@ apareceram, e nenhum dos dois era chave.
    - stripe: assinaturas ativas, MRR estimado, receita 30d
    - youtube: inscritos, views totais, views dos últimos 10 vídeos
    - meta_ads: gasto, impressões, cliques e instalações por dia (7d)
-   - google_ads: custo, cliques, impressões e conversões por dia (7d)
+   - google_ads: custo, cliques, impressões e conversões por dia (7d) E por
+     CAMPANHA, com nome, status e tipo de canal. A quebra por campanha entrou
+     em 03/09/2026: a consulta era `FROM customer` e devolvia só o total do
+     dia, o que permite saber que gastou e nunca no quê. O tipo de canal é o
+     campo que muda a leitura inteira, porque campanha de APP manda o clique
+     direto para a loja e nunca toca no nosso site (zero de UTM no funil é o
+     esperado), enquanto SEARCH e DISPLAY mandam para uma página nossa, e aí
+     zero de UTM é vazamento.
    - revenuecat: visão geral do projeto (assinaturas, MRR, trials)
    - vercel: deploys da semana e estado do último deploy
    - admob: ganhos e impressões de anúncio por dia (7d)
