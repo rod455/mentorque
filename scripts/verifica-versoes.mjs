@@ -13,6 +13,37 @@
 // Esta conferência existe para o número mentiroso nunca mais passar de um
 // release. Ela compara só major.minor: o APP_VERSION carrega um terceiro
 // dígito que as lojas não usam.
+// ────────────────────────────────────────────────────────────────────────────
+//
+// E EXISTE UM SEGUNDO JEITO DE ERRAR, que esta conferência deixou passar em
+// 03/09/2026 e agora também pega.
+//
+// Naquele dia o build do iPhone foi recusado pela Apple:
+//
+//   CFBundleShortVersionString [1.6] must contain a higher version than that
+//   of the previously approved version [1.6]
+//
+// E esta conferência tinha aprovado, com razão pela regra antiga: os três
+// números concordavam. Todos em 1.6. O que ela não sabia é que 1.6 JÁ TINHA
+// IDO para as lojas, porque concordância prova consistência, não novidade.
+//
+// O estrago não foi só o tempo de CI perdido. A Apple recusou o envio, mas a
+// Play ACEITOU: foi publicado na faixa interna um binário com o conteúdo da
+// 1.7 vestido de 1.6, e o versionCode daquele envio ficou gasto.
+//
+// Por isso a lista abaixo. Ela é escrita à mão, e a manutenção dela é o preço:
+// ao publicar uma versão, acrescente o número aqui. Esquecer é seguro (a
+// conferência apenas deixa de avisar), enquanto o contrário, subir de novo uma
+// versão já publicada, custa um build inteiro.
+const JA_PUBLICADAS = [
+  "1.2",
+  "1.3",
+  "1.4",
+  "1.5",
+  // Aprovada nas duas lojas em 01/09/2026.
+  "1.6",
+];
+
 import { readFileSync } from "node:fs";
 
 const raiz = new URL("..", import.meta.url);
@@ -46,4 +77,20 @@ if (erros.length) {
   process.exit(1);
 }
 
-console.log(`Versões conferem: ${alvo} (app ${app}, Android ${android}, iOS ${ios}).`);
+if (JA_PUBLICADAS.includes(alvo)) {
+  console.error(`Versão ${alvo} JÁ FOI PUBLICADA nas lojas.`);
+  console.error("");
+  console.error("A Apple recusa um envio com nome de versão já aprovado, e o build");
+  console.error("inteiro se perde no fim do caminho. A Play aceita, o que é pior:");
+  console.error("publica conteúdo novo vestido de versão velha e queima o versionCode.");
+  console.error("");
+  console.error("Suba a versão nos três lugares antes de mandar para as lojas:");
+  console.error("  lib/app/content.ts        APP_VERSION");
+  console.error("  android/app/build.gradle  versionName");
+  console.error("  ios/.../project.pbxproj   MARKETING_VERSION (duas ocorrências)");
+  console.error("");
+  console.error("E acrescente a versão publicada à lista JA_PUBLICADAS deste arquivo.");
+  process.exit(1);
+}
+
+console.log(`Versões conferem: ${alvo} (app ${app}, Android ${android}, iOS ${ios}), ainda não publicada.`);

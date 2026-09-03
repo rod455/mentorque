@@ -85,6 +85,34 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   > otimista e passei o enigma adiante em vez de dizer "não sei".
 - Saúde: bateria `conferir` inteira passando (12 conferências), build do site
   e `build:native` verdes.
+## 2026-09-03 · O envio da 1.7 saiu vestido de 1.6, e a Play aceitou
+- O build compilou (o conserto da AppsFlyer valeu) e morreu na publicação:
+  `CFBundleShortVersionString [1.6] must contain a higher version than that of
+  the previously approved version [1.6]`, mais `train version '1.6' is closed`.
+- **A versão nunca tinha sido subida.** Falei em "binário 1.7" a tarde inteira,
+  em quatro consertos diferentes, e não subi o número em lugar nenhum. Os três
+  lugares seguiam em 1.6. Erro meu, e do tipo chato: o trabalho estava certo, só
+  não estava rotulado.
+- **A `conferir:versoes` aprovou, e estava certa pela regra que tinha.** Ela
+  compara os três números ENTRE SI, e eles concordavam: todos em 1.6.
+  Concordância prova consistência, não novidade. Foi um ponto cego de desenho,
+  não uma falha de execução.
+- **A Apple recusou e a Play ACEITOU, e o segundo é pior que o primeiro.** Foi
+  publicado na faixa interna um binário com o conteúdo da 1.7 vestido de 1.6, e
+  o versionCode 54 ficou gasto mesmo com o envio tendo falhado no meio. Por isso
+  o piso do `gradle.properties` subiu para 55: se o contador do Codemagic
+  devolver 54 de novo, a Play recusa.
+- **A conferência ganhou a segunda pergunta**: além de "os três concordam?",
+  agora ela pergunta "esta versão já foi publicada?", contra uma lista escrita à
+  mão (`JA_PUBLICADAS`). Lista à mão tem manutenção, e o preço é aceito porque a
+  assimetria é boa: esquecer de acrescentar só faz a conferência deixar de
+  avisar, enquanto repetir uma versão custa um build inteiro. Provada com o
+  defeito exato de hoje plantado, e o defeito antigo continua sendo pego.
+- **O `/api/app/latest` NÃO foi mexido**, e é de propósito: ele aponta para o
+  que está em PRODUÇÃO nas lojas, e a 1.7 ainda não está. Subir agora acenderia
+  o aviso de "versão nova disponível" para todo mundo, apontando para uma
+  versão que não existe para baixar.
+
 ## 2026-09-03 · O build 1.7 do iPhone caiu num bug de plugin, e o app nem usa Facebook
 - Erro do Codemagic: `AppsFlyerPlugin.swift:665: cannot find 'FBSDKAppLinkUtility'
   in scope`. Passo `Compilar .ipa`, Xcode 26.4.1.
