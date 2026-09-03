@@ -8,6 +8,19 @@ import { lessonPublicada } from "@/lib/app/regrasDeConteudo";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+/**
+ * O teto de tempo da função, e ele PRECISA ser dito.
+ *
+ * O padrão da Vercel neste plano é 10 segundos, e a lista não cabe: são 17
+ * envios, cada um com a pausa que respeita o limite do Resend, e a conta passa
+ * de 13 segundos. Sem esta linha o disparo morreria no meio da lista.
+ *
+ * Morrer no meio não seria catástrofe, porque cada envio é marcado na hora e
+ * uma segunda chamada continuaria de onde parou. Mas contar com isso seria
+ * escolher o remendo em vez do conserto.
+ */
+export const maxDuration = 60;
+
 // O disparo do e-mail de lançamento para a lista de espera.
 //
 // UMA ROTA PARA UMA MENSAGEM SÓ, e é para ser assim. Isto não é uma ferramenta
@@ -50,7 +63,7 @@ const PRECO_MENSAL = "R$ 29,90";
  * longe do teto. Ir mais rápido só traria 429 e uma lista entregue pela
  * metade, que é o pior resultado possível aqui.
  */
-const ESPERA_MS = 500;
+const ESPERA_MS = 350;
 
 const dorme = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
