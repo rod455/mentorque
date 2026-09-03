@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useI18n } from "@/lib/i18n";
-import { WaitlistForm } from "@/components/ui/WaitlistForm";
 import { StoreBadges } from "@/components/ui/StoreBadges";
 import { PhoneMockup } from "@/components/ui/PhoneMockup";
 import BielaNoCarro from "@/components/BielaNoCarro";
@@ -102,18 +101,28 @@ export function Hero() {
 
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-cream/75">{t.hero.subheadline}</p>
 
-          <div id="waitlist" className="mt-8 max-w-xl scroll-mt-28">
-            <WaitlistForm theme="dark" />
+          {/* O DOWNLOAD VIROU O PRIMEIRO GESTO DA PÁGINA, em 03/09/2026.
+              Aqui morava o formulário da lista de espera, e ele fazia sentido
+              enquanto o app não existia. Com ele publicado nas duas lojas, pedir
+              e-mail para avisar de um lançamento que já aconteceu é gastar o
+              melhor lugar da página com um pedido que não leva a nada. */}
+          <div id="baixar" className="mt-8 scroll-mt-28">
+            <StoreBadges />
           </div>
 
           <p className="mt-4 text-sm text-cream/55">{t.hero.ctaNote}</p>
 
-          {/* O convite de "ver funcionando sem baixar" saiu daqui: com o app
-              publicado, o caminho principal é a loja, e um segundo link logo
-              abaixo do cadastro só dividia a atenção. */}
-          <div className="mt-8">
-            <StoreBadges />
-          </div>
+          {/* O caminho de quem está no computador, ou de quem não quer instalar
+              nada agora. Discreto de propósito: a loja continua sendo o destino
+              principal, e este link existe para não perder quem não pode ir
+              até ela neste momento. */}
+          <a
+            href="/app?utm_source=site&utm_campaign=hero-web"
+            className="mt-5 inline-flex items-center gap-1.5 font-display text-sm font-semibold text-amber hover:text-amber-300"
+          >
+            {t.hero.usarNoNavegador}
+            <span aria-hidden>›</span>
+          </a>
         </div>
 
         <div className="relative flex min-w-0 flex-col items-center gap-8">

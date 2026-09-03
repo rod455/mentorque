@@ -85,6 +85,39 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   > otimista e passei o enigma adiante em vez de dizer "não sei".
 - Saúde: bateria `conferir` inteira passando (12 conferências), build do site
   e `build:native` verdes.
+## 2026-09-03 · A LP virou página de app publicado, e o cupom teve que renascer
+- **Cupom: "subir para 25" não existe no Stripe.** `max_redemptions` não é
+  editável, nem no cupom nem no código promocional; a própria documentação da
+  rota de atualização diz que os detalhes do cupom são, por desenho, não
+  editáveis. O caminho é substituir. Criados `MENSAL-LANCAMENTO100-25` (100%,
+  `once`, teto 25) e o código `LANCAMENTO1MES` (teto 25), presos ao produto
+  mensal via `applies_to`, que só pode ser definido na CRIAÇÃO e não volta na
+  leitura. O `PREMIUM1MES` antigo segue ativo com 9 usos porque o MCP do Stripe
+  não expõe a operação que desativa código promocional; convém desativar no
+  painel para não haver dois códigos vivos para a mesma coisa.
+- **A LP foi liberada, e os interruptores viraram junto com o texto.** Essa
+  amarração está escrita em `lib/stores.ts` como regra: virar
+  `APP_STORE_PUBLICADO` sem reescrever a página faria ela anunciar download no
+  meio de "acesso antecipado" e "antes de chegar às lojas".
+  - o formulário de lista de espera saiu do topo e do rodapé, e no lugar dele
+    ficaram os selos das lojas mais um link discreto de usar pelo navegador;
+  - **a barra de "vagas do lote de fundadores" saiu.** Ela estava cheia em 82%,
+    com número inventado, e a frase "encerra no lançamento" virou FALSA quando o
+    lançamento aconteceu. Escassez que a própria página desmente não pressiona
+    ninguém, só ensina o leitor a não acreditar no resto. Isto é coisa
+    diferente dos depoimentos, que o dono decidiu manter em 01/09;
+  - as vantagens de fundador viraram o que o plano gratuito faz de verdade,
+    tirado da tabela de planos do app, e não do que soaria bem;
+  - as duas perguntas do FAQ sobre entrar na lista e sobre quando o app fica
+    disponível viraram "como faço para começar" e "o app já está disponível".
+- **Terceiro buraco na mesma regra, no mesmo dia.** Ontem `lib/email` entrou na
+  conferência do travessão; hoje foi `lib/i18n`, e eram 24 ocorrências nos dois
+  idiomas. É a LANDING, a página que o CLAUDE.md cita por extenso na regra e a
+  que recebe o anúncio pago. A conferência cobria as telas do app e não cobria
+  a porta de entrada. Cada travessão foi trocado pelo que o papel dele pedia
+  (dois pontos em título, vírgula em aposto, parênteses quando era par), não
+  por regra cega. Provada mordendo.
+
 ## 2026-09-03 · Devolução ao QA e seniorização do papel
 - As duas afirmações erradas da rodada de 02/09 foram corrigidas NO LUGAR onde
   foram escritas (com o texto original riscado e a correção embaixo), e não só

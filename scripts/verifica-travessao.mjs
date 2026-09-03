@@ -37,7 +37,12 @@ const TRAVESSAO = "—";
 // e-mail de boas-vindas da lista de espera desde sempre, no texto que chega na
 // caixa de entrada de quem se cadastra. E-mail é o pior lugar para descobrir
 // isso depois: não dá para corrigir o que já foi enviado.
-const TELAS = ["components", "lib/app/conteudo", "lib/email"];
+//
+// `lib/i18n` entrou no mesmo dia, pelo mesmo motivo e com o mesmo espanto: são
+// os textos da LANDING, a página que o CLAUDE.md cita por extenso na regra, e
+// eram 37 linhas com travessão entre os dois idiomas. A conferência cobria as
+// telas do app e não cobria a página que recebe o anúncio pago.
+const TELAS = ["components", "lib/app/conteudo", "lib/email", "lib/i18n"];
 /** Arquivos avulsos de texto de tela. */
 const AVULSOS = ["lib/app/content.ts"];
 /** Em app/, só os campos que viram título e descrição de página. */

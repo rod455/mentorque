@@ -49,7 +49,7 @@ export function Plans() {
                   ))}
                 </ul>
                 <a
-                  href="#waitlist"
+                  href="#baixar"
                   className={`mt-7 inline-flex h-11 items-center justify-center rounded-xl px-5 font-display text-sm font-medium transition-all ${
                     highlight
                       ? "bg-amber text-graphite hover:bg-amber-300 hover:shadow-glow"

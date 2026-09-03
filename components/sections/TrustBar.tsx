@@ -29,24 +29,15 @@ export function TrustBar() {
           </ul>
         </div>
 
-        {/* Scarcity — founder spots filling up (goal gradient, no fixed count) */}
+        {/* Aqui morava uma barra de "vagas do lote de fundadores", cheia em
+            82%, com o aviso de que encerrava no lançamento. Ela saiu em
+            03/09/2026 por duas razões, e a segunda basta: o número era
+            inventado, e a frase virou FALSA quando o lançamento aconteceu.
+            Escassez que a própria página desmente não pressiona ninguém, só
+            ensina o leitor a não acreditar no resto. */}
         <div className="rounded-2xl bg-graphite p-5 ring-1 ring-white/10">
-          <div className="flex items-center justify-between gap-3">
-            <span className="text-sm font-medium text-cream/85">{t.trust.spotsLabel}</span>
-            <span className="text-xs font-medium uppercase tracking-wide text-amber">{t.trust.spotsNote}</span>
-          </div>
-          <div
-            className="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-white/10"
-            role="progressbar"
-            aria-valuenow={82}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-label={t.trust.spotsLabel}
-          >
-            <div className="h-full w-[82%] rounded-full bg-gradient-to-r from-amber-300 to-amber" />
-          </div>
           <a
-            href="#waitlist"
+            href="#baixar"
             className="mt-4 inline-flex h-10 w-full items-center justify-center rounded-xl bg-amber px-4 font-display text-sm font-medium text-graphite transition-all hover:bg-amber-300 hover:shadow-glow"
           >
             {t.nav.cta}

@@ -13,17 +13,18 @@ export const APP_STORE_URL = `https://apps.apple.com/br/app/mentorque/id${APPLE_
 /**
  * A landing já anuncia a App Store?
  *
- * O app FOI aprovado e a ficha existe — este interruptor não é sobre isso. Ele
- * é sobre a landing, que ainda está escrita para o pré-lançamento: "acesso
- * antecipado", "lote de fundadores", "antes de chegar às lojas". Um botão de
- * baixar no meio disso se contradiz, e a página perde os dois discursos de uma
- * vez.
+ * SIM, desde 03/09/2026. Este interruptor nunca foi sobre a loja: o app estava
+ * aprovado e a ficha existia havia dias. Ele era sobre a LANDING, que continuava
+ * escrita para pré-lançamento (acesso antecipado, lote de fundadores, antes de
+ * chegar às lojas). Um botão de baixar no meio daquilo se contradizia, e a
+ * página perdia os dois discursos de uma vez.
  *
- * Fica `false` até a landing ser reescrita para app publicado. Aí basta virar
- * para `true` — o endereço já está aqui, testado, e os selos voltam sozinhos
- * nos dois lugares onde aparecem.
+ * A landing foi reescrita para app publicado no mesmo commit em que isto virou
+ * `true`, e essa amarração é a regra: os dois andam juntos ou a página volta a
+ * mentir. Se algum dia for preciso desligar de novo, o texto tem que voltar
+ * junto.
  */
-export const APP_STORE_PUBLICADO = false;
+export const APP_STORE_PUBLICADO = true;
 
 /**
  * Folha de avaliação, para o "Avaliar o Mentorque" dentro do app.
@@ -53,9 +54,8 @@ export const PLAY_STORE_REVIEW_URL = PLAY_STORE_URL;
 /**
  * O Android já saiu?
  *
- * O app FOI aprovado e a ficha existe — este interruptor, como o da Apple, é
- * sobre a LANDING, que ainda está escrita para o pré-lançamento. Vira `true`
- * junto com a reescrita da página; o endereço aqui já é o real e o app já o usa
- * (o "Avaliar o Mentorque" não depende deste interruptor).
+ * Sim, e o interruptor virou junto com o da Apple em 03/09/2026, pela mesma
+ * razão: ele era sobre a landing, não sobre a loja. O "Avaliar o Mentorque"
+ * dentro do app nunca dependeu dele.
  */
-export const PLAY_STORE_PUBLICADO = false;
+export const PLAY_STORE_PUBLICADO = true;

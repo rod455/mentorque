@@ -4,10 +4,10 @@ export const en: Strings = {
   code: "en",
   label: "EN",
   meta: {
-    title: "Mentorque — understand your car and stop overpaying at the shop",
+    title: "Mentorque: understand your car and stop overpaying at the shop",
     description:
-      "Mentorque teaches you mechanics from basics to advanced, shows the fair price before the shop, and puts a real expert in your pocket. Join the founders list.",
-    ogTitle: "Mentorque — a mechanic expert in your pocket",
+      "Mentorque teaches you mechanics from basics to advanced, shows the fair price before the shop, and puts a real expert in your pocket. Download it free on the App Store and Google Play.",
+    ogTitle: "Mentorque: a mechanic expert in your pocket",
     ogDescription:
       "Guided tracks, symptom-based diagnosis, fair pricing and consulting with someone who's in the industry. Download it free on the App Store.",
   },
@@ -17,21 +17,22 @@ export const en: Strings = {
     consulting: "Consulting",
     plans: "Plans",
     faq: "FAQ",
-    cta: "Join the list",
+    cta: "Get the app",
     toggleLang: "Português",
     skipToContent: "Skip to content",
     menu: "Menu",
   },
   hero: {
-    eyebrow: "Early access · founders batch",
+    eyebrow: "Now on the App Store and Google Play",
     headlines: [
       { a: "Stop overpaying because you don't understand ", b: "your own car." },
       { a: "Mechanics from basics to advanced, ", b: "with an expert in your pocket." },
       { a: "Know what's wrong before the shop does — ", b: "and never be at their mercy again." },
     ],
     subheadline:
-      "Learn to understand your car, find the fair price before approving any work, and talk to a real expert when you get stuck. You don't need to become a mechanic — just stop paying for what you don't understand.",
-    ctaNote: "No spam. Free forever on the base plan — join now and lock in your founder perks.",
+      "Learn to understand your car, find the fair price before approving any work, and talk to a real expert when you get stuck. You don't need to become a mechanic, just stop paying for what you don't understand.",
+    ctaNote: "Free forever on the base plan, and no card to get started.",
+    usarNoNavegador: "Rather not install? Use it in the browser",
     downloadOn: "Download on the",
     comingSoon: "Coming soon to",
     appStore: "App Store",
@@ -46,7 +47,7 @@ export const en: Strings = {
     placeholder: "Your best email",
     button: "Join the waitlist",
     loading: "Sending…",
-    successTitle: "Done — your founder spot is locked in!",
+    successTitle: "Done! Your founder spot is locked in.",
     successBody: "You're in with locked pricing and early access. We'll be the first to tell you when the app opens.",
     again: "Add another email",
     errorRequired: "Please enter your email.",
@@ -56,24 +57,22 @@ export const en: Strings = {
     emailLabel: "Email address",
   },
   trust: {
-    eyebrow: "Why join now",
-    ledBy: "The person teaching you actually works in the auto industry — not just another generic platform course.",
-    foundingTitle: "Join as a founding member",
-    foundingBody: "The first batch comes with perks that don't return after launch.",
+    eyebrow: "Why get it now",
+    ledBy: "The person teaching you actually works in the auto industry, not just another generic platform course.",
+    foundingTitle: "Start on the free plan",
+    foundingBody: "You can genuinely use it without paying. Premium waits for the day you want the rest.",
     perks: [
-      "Founder pricing, locked in forever",
-      "Early access, before it hits the app stores",
-      "Founder badge and perks inside the app",
+      "Your garage, with the car's full service history",
+      "Symptom diagnosis, so you reach the shop already knowing",
+      "Service reminders by date and by mileage",
     ],
-    spotsLabel: "Spots in the 1st founders batch",
-    spotsNote: "almost full · closes at launch",
     pressLabel: "As seen in",
     pressPlaceholders: ["Press", "Partner", "Channel", "Garage"],
   },
   problem: {
     title: "How much have you lost by not understanding your car?",
     intro:
-      "Every time you don't know what's wrong, someone else decides for you — and almost always charges more. Mentorque takes that power away from the shop and gives it back to you.",
+      "Every time you don't know what's wrong, someone else decides for you, and almost always charges more. Mentorque takes that power away from the shop and gives it back to you.",
     items: [
       {
         pain: "You pay whatever they tell you to pay",
@@ -85,7 +84,7 @@ export const en: Strings = {
       },
       {
         pain: "Hours lost hunting random videos",
-        turn: "Structured tracks from basics to advanced, in the voice of someone in the field — the right knowledge, no YouTube digging.",
+        turn: "Structured tracks from basics to advanced, in the voice of someone in the field: the right knowledge, no YouTube digging.",
       },
       {
         pain: "Generic advice that doesn't fit YOUR car",
@@ -95,7 +94,7 @@ export const en: Strings = {
   },
   features: {
     title: "Everything to understand, maintain and decide with confidence",
-    intro: "Learning, tools and human help in one place — built around your vehicle.",
+    intro: "Learning, tools and human help in one place, built around your vehicle.",
     items: [
       {
         icon: "track",
@@ -134,9 +133,9 @@ export const en: Strings = {
     intro: "Four simple steps, from registering your car to expert help.",
     steps: [
       { n: "01", title: "Build your garage", body: "Add make, model and year in 2 minutes. From there, everything in the app is about YOUR car." },
-      { n: "02", title: "See what's going on", body: "Symptom diagnosis, OBD2 and the checklist instantly show what needs attention — and what it should cost." },
+      { n: "02", title: "See what's going on", body: "Symptom diagnosis, OBD2 and the checklist instantly show what needs attention, and what it should cost." },
       { n: "03", title: "Learn at your pace", body: "Follow the tracks from basics to advanced and earn a certificate at every step you complete." },
-      { n: "04", title: "Call an expert", body: "Stuck? Tap into consulting — community, team or 1:1 with the creator — and solve it safely." },
+      { n: "04", title: "Call an expert", body: "Stuck? Tap into consulting (community, team or 1:1 with the creator) and solve it safely." },
     ],
   },
   // Empty on purpose — see the note in strings.pt.ts. Fill `items` in both
@@ -151,7 +150,7 @@ export const en: Strings = {
     eyebrow: "The edge",
     title: "Real human help when a video isn't enough",
     intro:
-      "Content teaches, but every car has its quirk. Mentorque's consulting puts a trusted expert by your side — in three levels, from free to 1:1.",
+      "Content teaches, but every car has its quirk. Mentorque's consulting puts a trusted expert by your side, in three levels, from free to 1:1.",
     tiers: [
       {
         name: "Community",
@@ -178,7 +177,7 @@ export const en: Strings = {
   plans: {
     title: "Plans for every stage",
     intro:
-      "Start free and level up when you need more tools and human help. Final pricing at launch.",
+      "Start free and level up when you need more tools and human help.",
     anchor:
       "A single part replaced for no reason at the shop usually costs more than a whole year of Premium. The app pays for itself the first time you say “no.”",
     items: [
@@ -223,14 +222,14 @@ export const en: Strings = {
         highlight: false,
       },
     ],
-    guarantee: "No card to start. No lock-in. You upgrade to Premium only when it makes sense — and cancel with one tap.",
-    note: "Final pricing and plan structure will be confirmed at launch.",
+    guarantee: "No card to start. No lock-in. You upgrade to Premium only when it makes sense, and cancel with one tap.",
+    note: "There is a free trial to try it out, and each plan's price is shown at checkout. Cancel any time, from the app.",
   },
   benefits: {
     title: "Why join Mentorque",
     items: [
       "Save at the shop by knowing the fair price before you approve any work.",
-      "Actually learn, with structure from basics to advanced — not scattered videos.",
+      "Actually learn, with structure from basics to advanced, not scattered videos.",
       "Get human help when you're stuck, not just an automated chat.",
       "Everything built for your car: make, model and year.",
       "The trust of someone who lives off the auto industry, not marketing.",
@@ -242,8 +241,8 @@ export const en: Strings = {
     intro: "Still unsure? Just reply to the welcome email.",
     items: [
       {
-        q: "Do I have to pay to join the list?",
-        a: "No. Joining the founders list is free and asks for no card. You simply lock in founder pricing and early access for when the app opens.",
+        q: "How do I get started?",
+        a: "Download it from the App Store or Google Play and create your account. The free plan already covers adding your car, keeping its service history and diagnosing a symptom, with no card at all.",
       },
       {
         q: "Is it for people who've never touched a car?",
@@ -251,7 +250,7 @@ export const en: Strings = {
       },
       {
         q: "Does it work for my car or motorcycle?",
-        a: "You register make, model and year, and the content, checklists and tools adapt to your vehicle — car or bike.",
+        a: "You register make, model and year, and the content, checklists and tools adapt to your vehicle, car or bike.",
       },
       {
         q: "Do I have to pay to use it?",
@@ -270,16 +269,16 @@ export const en: Strings = {
         a: "There's a free plan, forever, with intro tracks and community. Advanced features and consulting are on the paid plans.",
       },
       {
-        q: "When will the app be available?",
-        a: "We're wrapping up. Join the founders list to hear first and lock in the early-bird conditions — they don't come back after launch.",
+        q: "Is the app out already?",
+        a: "It is. Mentorque is live on the App Store and on Google Play, and the download buttons are at the top of this page. You can also use it in the browser, with nothing to install.",
       },
     ],
   },
   finalCta: {
-    title: "Get in as a founder. Stay ahead.",
+    title: "Mentorque is on the stores.",
     body:
-      "Founder perks are for the first batch and close at launch: pricing locked in forever, early access and the founder badge in the app. After that, it's full price.",
-    urgency: "Founders batch · closes at launch",
+      "Download it, add your car and see what it is asking for. The free plan has no deadline and asks for no card, and Premium stays there for the day you want the rest.",
+    urgency: "Free to start · no card",
   },
   footer: {
     tagline: "Mechanics from basics to advanced, with expert consulting in your pocket.",

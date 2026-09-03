@@ -1,8 +1,8 @@
 # E-mail de lançamento para a lista de espera
 
-**Não enviado.** Mensagem a cliente é decisão do dono, e além do texto há dois
-bloqueios que precisam ser resolvidos ANTES do disparo, senão o e-mail funciona
-para os primeiros e falha calado para o resto.
+**Não enviado.** Mensagem a cliente é decisão do dono. Os dois bloqueios que
+existiam (o teto do cupom e a landing de pré-lançamento) foram resolvidos em
+03/09; falta o seu aval no texto e o disparo.
 
 O texto vive em `lib/email/lancamento.ts`, nos dois idiomas, no mesmo formato
 do e-mail de boas-vindas.
@@ -28,44 +28,52 @@ where lower(w.email) not in (
 order by w.created_at;
 ```
 
-## Os dois bloqueios
+## Os dois bloqueios, resolvidos em 03/09
 
-### 1. O cupom tem teto de resgates, e ele é menor que a lista
+### 1. O cupom: teto de 25, e por que ele é um cupom NOVO
 
-Situação no Stripe hoje:
+O pedido foi "subir para 25 usos". **Não dá para subir**: no Stripe,
+`max_redemptions` não é editável, nem no cupom nem no código promocional. A
+própria documentação da rota de atualização diz que os detalhes do cupom são,
+por desenho, não editáveis. Então o caminho é substituir.
 
-| código | cupom | o que dá | resgatados | teto | sobram |
-|---|---|---|---|---|---|
-| `PREMIUM1MES` | MENSAL-LANCAMENTO100 | 1 mês grátis, plano mensal | 1 | 10 | **9** |
-| `ALESSANDRO1MES` | MENSAL-ALESSANDRO100 | 1 mês grátis, plano mensal | 2 | 10 | **8** |
-| `PREMIUM30` | ANUAL-LANCAMENTO30 | 30% no primeiro ano, plano anual | 0 | 10 | 10 |
+O que foi criado em 03/09:
 
-São 17 pessoas e 9 resgates. **Do décimo clique em diante o desconto não é
-aplicado**, e o pior é COMO ele falha: o Stripe recusa o código esgotado, a
-nossa rota refaz a sessão sem desconto (de propósito, para a compra não morrer
-por causa do cupom), e a pessoa cai num checkout de R$ 29,90 logo depois de ler
-"por nossa conta". Ninguém recebe erro; só o preço cheio.
+| o quê | id | teto |
+|---|---|---|
+| cupom | `MENSAL-LANCAMENTO100-25` | 25 |
+| código | `LANCAMENTO1MES` | 25 |
 
-**Recomendação**: subir o teto do `PREMIUM1MES` para 25 antes de enviar. Vinte
-e cinco e não dezessete porque alguém encaminha o e-mail, e um resgate a mais
-custa um mês de assinatura enquanto um cupom estourado custa a pessoa.
+100% de desconto, `duration: once`, e **preso ao produto mensal**
+(`applies_to.products`), que é a armadilha registrada na
+`/api/stripe/checkout`: `applies_to` só pode ser definido na CRIAÇÃO, o Stripe
+não devolve esse campo na leitura, e sem ele um código feito para valer
+R$ 29,90 valeria R$ 239,90 no plano anual.
 
-Isso é mexer em cupom, então é sua chamada. Uma linha no painel do Stripe, ou
-eu faço pela API se você autorizar.
+O código antigo `PREMIUM1MES` continua ativo com 9 usos: o MCP do Stripe não
+expõe a operação que desativa código promocional. Ele não atrapalha (dá o mesmo
+benefício, no mesmo plano), mas convém desativar no painel para não existirem
+dois códigos vivos para a mesma coisa.
 
-### 2. A landing ainda está escrita para pré-lançamento
+### 2. A landing: liberada no mesmo commit
 
-`lib/stores.ts` tem `APP_STORE_PUBLICADO = false` e `PLAY_STORE_PUBLICADO =
-false`. Os endereços das lojas já são reais (o e-mail usa eles), mas a página
-inicial do site continua falando em "acesso antecipado", "lote de fundadores" e
-"antes de chegar às lojas".
+`APP_STORE_PUBLICADO` e `PLAY_STORE_PUBLICADO` viraram `true`, e a página foi
+reescrita junto. Os dois andam amarrados de propósito, e está escrito em
+`lib/stores.ts`: virar o interruptor sem reescrever o texto faria a página
+anunciar download no meio de "acesso antecipado" e "antes de chegar às lojas".
 
-O e-mail foi escrito para contornar isso: **nenhum botão dele leva à home**. O
-principal vai direto ao checkout com o cupom, e os outros dois vão às fichas
-das lojas. Mesmo assim, quem for curioso e digitar mentorque.com.br vai ler que
-o app ainda não saiu, no mesmo dia em que recebeu um e-mail dizendo que saiu.
+O que mudou na home:
 
-Não impede o envio. Impede que ele seja bom.
+- o formulário de lista de espera saiu do topo e do rodapé, e no lugar dele
+  ficaram os selos das lojas mais um link discreto de usar pelo navegador;
+- a barra de "vagas do lote de fundadores", cheia em 82%, saiu. O número era
+  inventado e a frase ("encerra no lançamento") virou falsa quando o lançamento
+  aconteceu. Escassez que a própria página desmente não pressiona ninguém, só
+  ensina o leitor a não acreditar no resto;
+- as vantagens de fundador viraram o que o plano gratuito faz de verdade, tirado
+  da tabela de planos do app;
+- as duas perguntas do FAQ sobre "entrar na lista" e "quando o app fica
+  disponível" viraram "como faço para começar" e "o app já está disponível".
 
 ## As duas decisões de conteúdo, e o porquê
 
@@ -112,7 +120,7 @@ botão.
 >
 > **Seu primeiro mês é por nossa conta**
 >
-> O cupom **PREMIUM1MES** já vem aplicado no botão abaixo. Ele cobre o primeiro
+> O cupom **LANCAMENTO1MES** já vem aplicado no botão abaixo. Ele cobre o primeiro
 > mês do plano mensal.
 >
 > [ **Ativar meu mês grátis** ]
@@ -157,21 +165,19 @@ Endereço do botão, com a campanha marcada para o funil separar esta lista de
 qualquer outra origem:
 
 ```
-https://www.mentorque.com.br/app?assinar=mensal&cupom=PREMIUM1MES&utm_source=email&utm_campaign=lista-espera
+https://www.mentorque.com.br/app?assinar=mensal&cupom=LANCAMENTO1MES&utm_source=email&utm_campaign=lista-espera
 ```
 
 A versão em inglês está no mesmo arquivo, para a única pessoa com `locale=en`.
 
 ## Antes de enviar
 
-1. **Subir o teto do `PREMIUM1MES` para 25** (bloqueio 1). Sem isso, nove
-   pessoas recebem uma promessa que o checkout não cumpre.
-2. **Você recebe o primeiro.** Disparar para o seu e-mail antes de tudo e abrir
+1. **Você recebe o primeiro.** Disparar para o seu e-mail antes de tudo e abrir
    no celular: as imagens da faixa vêm do site, e imagem quebrada em e-mail não
    tem conserto depois de enviado.
-3. **Clicar no botão de verdade**, até a tela de pagamento, e conferir que o
-   desconto aparece aplicado. É o teste que prova o bloqueio 1 resolvido.
-4. Conferir se algum dos 18 já assina, para não oferecer desconto a quem já
+2. **Clicar no botão de verdade**, até a tela de pagamento, e conferir que o
+   desconto aparece aplicado. É o teste que prova o cupom novo de pé.
+3. Conferir se algum dos 17 já assina, para não oferecer desconto a quem já
    paga:
    ```sql
    select w.email from waitlist w

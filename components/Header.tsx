@@ -50,7 +50,7 @@ export function Header() {
         <div className="flex items-center gap-3">
           <LangSwitcher />
           <a
-            href="#waitlist"
+            href="#baixar"
             className="hidden h-10 items-center rounded-xl bg-amber px-4 font-display text-sm font-medium text-graphite transition-all hover:bg-amber-300 hover:shadow-glow sm:inline-flex"
           >
             {t.nav.cta}

@@ -2,10 +2,10 @@ export const pt = {
   code: "pt",
   label: "PT",
   meta: {
-    title: "Mentorque — entenda seu carro e pare de pagar caro na oficina",
+    title: "Mentorque: entenda seu carro e pare de pagar caro na oficina",
     description:
-      "Mentorque é o app que te ensina mecânica do básico ao avançado, mostra o preço justo antes da oficina e coloca um especialista de verdade no seu bolso. Entre na lista de fundadores.",
-    ogTitle: "Mentorque — um especialista de mecânica no seu bolso",
+      "Mentorque é o app que te ensina mecânica do básico ao avançado, mostra o preço justo antes da oficina e coloca um especialista de verdade no seu bolso. Baixe grátis na App Store e no Google Play.",
+    ogTitle: "Mentorque: um especialista de mecânica no seu bolso",
     ogDescription:
       "Trilhas guiadas, diagnóstico por sintoma, preço justo e consultoria com quem é da indústria. Baixe grátis na App Store.",
   },
@@ -15,21 +15,22 @@ export const pt = {
     consulting: "Consultoria",
     plans: "Planos",
     faq: "Dúvidas",
-    cta: "Entrar na lista",
+    cta: "Baixar o app",
     toggleLang: "English",
     skipToContent: "Pular para o conteúdo",
     menu: "Menu",
   },
   hero: {
-    eyebrow: "Acesso antecipado · lote de fundadores",
+    eyebrow: "Já disponível na App Store e no Google Play",
     headlines: [
       { a: "Pare de pagar caro por não entender ", b: "do seu próprio carro." },
       { a: "Mecânica do básico ao avançado, ", b: "com um especialista no bolso." },
       { a: "Saiba o que o carro tem antes da oficina — ", b: "e nunca mais seja refém." },
     ],
     subheadline:
-      "Aprenda a entender seu carro, descubra o preço justo antes de fechar serviço e fale com um especialista de verdade quando travar. Você não precisa virar mecânico — só parar de pagar pelo que não entende.",
-    ctaNote: "Sem spam. Grátis pra sempre no plano base — quem entra agora trava as vantagens de fundador.",
+      "Aprenda a entender seu carro, descubra o preço justo antes de fechar serviço e fale com um especialista de verdade quando travar. Você não precisa virar mecânico, só parar de pagar pelo que não entende.",
+    ctaNote: "Grátis para sempre no plano base, e sem cartão para começar.",
+    usarNoNavegador: "Prefere sem instalar? Use pelo navegador",
     downloadOn: "Baixe na",
     comingSoon: "Em breve na",
     appStore: "App Store",
@@ -44,7 +45,7 @@ export const pt = {
     placeholder: "Seu melhor e-mail",
     button: "Entrar na lista de espera",
     loading: "Enviando…",
-    successTitle: "Pronto — seu lugar de fundador está garantido!",
+    successTitle: "Pronto! Seu lugar de fundador está garantido.",
     successBody: "Você entra com preço travado e acesso antecipado. Avisamos em primeira mão quando o app abrir.",
     again: "Cadastrar outro e-mail",
     errorRequired: "Digite seu e-mail.",
@@ -54,24 +55,22 @@ export const pt = {
     emailLabel: "Endereço de e-mail",
   },
   trust: {
-    eyebrow: "Por que entrar agora",
-    ledBy: "Quem te ensina trabalha na indústria automotiva de verdade — não é mais um curso genérico de plataforma.",
-    foundingTitle: "Entre como membro fundador",
-    foundingBody: "O primeiro lote tem vantagens que não voltam depois do lançamento.",
+    eyebrow: "Por que baixar agora",
+    ledBy: "Quem te ensina trabalha na indústria automotiva de verdade, não é mais um curso genérico de plataforma.",
+    foundingTitle: "Comece pelo plano gratuito",
+    foundingBody: "Dá para usar de verdade sem pagar nada. O Premium fica esperando o dia em que você quiser o resto.",
     perks: [
-      "Preço de fundador travado pra sempre",
-      "Acesso antecipado, antes de chegar às lojas",
-      "Selo de fundador e brindes dentro do app",
+      "Sua garagem, com o histórico de serviços do carro",
+      "Diagnóstico por sintoma, para chegar na oficina sabendo",
+      "Lembretes de revisão por data e por quilometragem",
     ],
-    spotsLabel: "Vagas do 1º lote de fundadores",
-    spotsNote: "quase esgotado · encerra no lançamento",
     pressLabel: "Visto em",
     pressPlaceholders: ["Imprensa", "Parceiro", "Canal", "Oficina"],
   },
   problem: {
     title: "Quanto você já perdeu por não entender do seu carro?",
     intro:
-      "Toda vez que você não sabe o que o carro tem, alguém decide por você — e quase sempre cobra a mais. O Mentorque tira esse poder da oficina e devolve pra você.",
+      "Toda vez que você não sabe o que o carro tem, alguém decide por você, e quase sempre cobra a mais. O Mentorque tira esse poder da oficina e devolve pra você.",
     items: [
       {
         pain: "Você paga o que mandarem pagar",
@@ -83,7 +82,7 @@ export const pt = {
       },
       {
         pain: "Horas perdidas caçando vídeo solto",
-        turn: "Trilhas estruturadas do básico ao avançado, na voz de quem é da área — o conhecimento certo, sem garimpo no YouTube.",
+        turn: "Trilhas estruturadas do básico ao avançado, na voz de quem é da área: o conhecimento certo, sem garimpo no YouTube.",
       },
       {
         pain: "Conselho genérico que não serve pro SEU carro",
@@ -94,7 +93,7 @@ export const pt = {
   features: {
     title: "Tudo para entender, manter e decidir com confiança",
     intro:
-      "Aprendizado, ferramentas e ajuda humana no mesmo lugar — pensados para o seu veículo.",
+      "Aprendizado, ferramentas e ajuda humana no mesmo lugar, pensados para o seu veículo.",
     items: [
       {
         icon: "track",
@@ -133,9 +132,9 @@ export const pt = {
     intro: "Quatro passos simples, do cadastro do carro até a ajuda especializada.",
     steps: [
       { n: "01", title: "Monte sua garagem", body: "Cadastre marca, modelo e ano em 2 minutos. A partir daí, tudo no app é sobre o SEU carro." },
-      { n: "02", title: "Veja o que ele tem", body: "Diagnóstico por sintoma, OBD2 e checklist mostram na hora o que precisa de atenção — e quanto deve custar." },
+      { n: "02", title: "Veja o que ele tem", body: "Diagnóstico por sintoma, OBD2 e checklist mostram na hora o que precisa de atenção, e quanto deve custar." },
       { n: "03", title: "Aprenda no seu ritmo", body: "Siga as trilhas do básico ao avançado e ganhe certificado a cada etapa concluída." },
-      { n: "04", title: "Chame um especialista", body: "Travou? Acione a consultoria — comunidade, equipe ou 1:1 com o creator — e resolva com segurança." },
+      { n: "04", title: "Chame um especialista", body: "Travou? Acione a consultoria (comunidade, equipe ou 1:1 com o creator) e resolva com segurança." },
     ],
   },
   // Depoimentos.
@@ -158,7 +157,7 @@ export const pt = {
     eyebrow: "O diferencial",
     title: "Ajuda humana de verdade quando o vídeo não basta",
     intro:
-      "Conteúdo ensina, mas todo carro tem seu detalhe. A consultoria do Mentorque coloca um especialista de confiança ao seu lado — em três níveis, do gratuito ao 1:1.",
+      "Conteúdo ensina, mas todo carro tem seu detalhe. A consultoria do Mentorque coloca um especialista de confiança ao seu lado, em três níveis, do gratuito ao 1:1.",
     tiers: [
       {
         name: "Comunidade",
@@ -238,14 +237,14 @@ export const pt = {
         highlight: false,
       },
     ],
-    guarantee: "Sem cartão pra começar. Sem fidelidade. Você sobe pro Premium só quando fizer sentido — e cancela com um toque.",
-    note: "Os valores e a estrutura final dos planos serão confirmados no lançamento.",
+    guarantee: "Sem cartão pra começar. Sem fidelidade. Você sobe pro Premium só quando fizer sentido, e cancela com um toque.",
+    note: "Tem teste grátis para conhecer, e o valor de cada plano aparece na hora de assinar. Cancele quando quiser, pelo próprio app.",
   },
   benefits: {
     title: "Por que entrar para o Mentorque",
     items: [
       "Economize na oficina sabendo o preço justo antes de fechar serviço.",
-      "Aprenda de verdade, com estrutura do básico ao avançado — não vídeo solto.",
+      "Aprenda de verdade, com estrutura do básico ao avançado, não vídeo solto.",
       "Tenha ajuda humana quando travar, não só um chat automático.",
       "Tudo feito para o seu carro: marca, modelo e ano.",
       "A confiança de quem vive da indústria automotiva, não de marketing.",
@@ -254,11 +253,11 @@ export const pt = {
   },
   faq: {
     title: "Perguntas frequentes",
-    intro: "Se ficar alguma dúvida, é só responder o e-mail de boas-vindas.",
+    intro: "Se ficar alguma dúvida, é só falar com a gente pelo app.",
     items: [
       {
-        q: "Preciso pagar pra entrar na lista?",
-        a: "Não. Entrar na lista de fundadores é grátis e não pede cartão. Você só garante preço travado e acesso antecipado quando o app abrir.",
+        q: "Como faço para começar?",
+        a: "Baixe na App Store ou na Google Play e crie sua conta. O plano gratuito já serve para cadastrar o carro, guardar o histórico de serviços e diagnosticar um sintoma, sem cartão nenhum.",
       },
       {
         q: "É para quem nunca mexeu em carro?",
@@ -266,11 +265,11 @@ export const pt = {
       },
       {
         q: "Funciona para o meu carro ou moto?",
-        a: "Você cadastra marca, modelo e ano, e o conteúdo, checklists e ferramentas se ajustam ao seu veículo — carro ou moto.",
+        a: "Você cadastra marca, modelo e ano, e o conteúdo, checklists e ferramentas se ajustam ao seu veículo, carro ou moto.",
       },
       {
         q: "Preciso pagar para usar?",
-        a: "Não. Baixe na App Store e use de graça: garagem, diagnóstico por sintoma, códigos OBD2, calculadora de combustível e boa parte das aulas. O Premium é opcional.",
+        a: "Não. Baixe nas lojas e use de graça: garagem, histórico de serviços, diagnóstico por sintoma e lembretes de revisão. O Premium abre o plano de revisão do seu carro, a saúde por sistema, o Biela ilimitado e a biblioteca completa de aulas.",
       },
       {
         q: "Preciso comprar algum equipamento para o OBD2?",
@@ -285,16 +284,16 @@ export const pt = {
         a: "Tem um plano gratuito, para sempre, com trilhas introdutórias e comunidade. Recursos avançados e a consultoria ficam nos planos pagos.",
       },
       {
-        q: "Quando o app fica disponível?",
-        a: "Estamos finalizando. Entre na lista de fundadores para ser avisado em primeira mão e garantir as condições de quem chegou cedo — elas não voltam depois do lançamento.",
+        q: "O app já está disponível?",
+        a: "Já. Está publicado na App Store e na Google Play, e os botões de download estão no topo desta página. Também dá para usar pelo navegador, sem instalar nada.",
       },
     ],
   },
   finalCta: {
-    title: "Entre como fundador. Saia na frente.",
+    title: "O Mentorque já está nas lojas.",
     body:
-      "As vantagens de fundador são do primeiro lote e fecham no lançamento: preço travado pra sempre, acesso antecipado e o selo de fundador no app. Depois, vira preço cheio.",
-    urgency: "Lote de fundadores · encerra no lançamento",
+      "Baixe, cadastre seu carro e veja o que ele está pedindo. O plano gratuito não tem prazo e não pede cartão, e o Premium continua ali para o dia em que você quiser o resto.",
+    urgency: "Grátis para começar · sem cartão",
   },
   footer: {
     tagline: "Mecânica do básico ao avançado, com consultoria especializada no bolso.",

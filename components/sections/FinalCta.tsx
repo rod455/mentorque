@@ -2,7 +2,6 @@
 
 import { useI18n } from "@/lib/i18n";
 import { Section } from "@/components/ui/Section";
-import { WaitlistForm } from "@/components/ui/WaitlistForm";
 import { StoreBadges } from "@/components/ui/StoreBadges";
 import { HexMotif } from "@/components/ui/HexMotif";
 
@@ -21,10 +20,10 @@ export function FinalCta() {
         </span>
         <h2 className="mt-5 text-balance text-3xl font-semibold leading-tight sm:text-4xl">{t.finalCta.title}</h2>
         <p className="mt-4 text-lg leading-relaxed text-cream/75">{t.finalCta.body}</p>
-        <div className="mt-8">
-          <WaitlistForm theme="dark" />
-        </div>
-        <div className="mt-8">
+        {/* Um caminho só no fecho da página. Formulário de lista aqui embaixo
+            competia com o download e prometia um aviso de lançamento que já
+            aconteceu. */}
+        <div className="mt-8 flex justify-center">
           <StoreBadges />
         </div>
       </div>
