@@ -44,6 +44,9 @@ export async function upsertSubscription(admin: SupabaseClient, sub: Stripe.Subs
     // /api/stripe/checkout. Sem isto, "quantas vendas vieram com cupom" só o
     // Stripe responde.
     cupom: typeof sub.metadata?.cupom === "string" && sub.metadata.cupom ? sub.metadata.cupom : null,
+    // O clique do Google que originou a venda. É a chave da devolução da
+    // conversão para o Google Ads; sem ela a campanha otimiza no escuro.
+    gclid: typeof sub.metadata?.gclid === "string" && sub.metadata.gclid ? sub.metadata.gclid : null,
     current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
     cancel_at_period_end: !!sub.cancel_at_period_end,
     updated_at: new Date().toISOString(),

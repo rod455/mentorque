@@ -44,14 +44,23 @@ export async function POST(req: Request) {
 
   const userId = typeof b?.userId === "string" && UUID_RE.test(b.userId) ? b.userId : null;
 
-  // UTM da campanha (guardada pela LP no aparelho): só as chaves conhecidas,
-  // cortadas. É o que liga anúncio a cadastro e a assinatura.
+  // UTM da campanha (guardada no aparelho): só as chaves conhecidas, cortadas.
+  // É o que liga anúncio a cadastro e a assinatura.
+  //
+  // `gclid` e `fbclid` entraram em 03/09/2026 e são de outra natureza: a UTM é
+  // para a NOSSA leitura, e o id de clique é o que permite DEVOLVER a conversão
+  // para o anunciante quando a venda acontecer. São mais compridos que uma UTM,
+  // por isso o corte deles é maior.
   let utm: Record<string, string> | null = null;
   if (b?.utm && typeof b.utm === "object") {
     const bruto = b.utm as Record<string, unknown>;
     const limpo: Record<string, string> = {};
     for (const k of ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "v", "em"]) {
       const val = corta(bruto[k], 80);
+      if (val) limpo[k] = val;
+    }
+    for (const k of ["gclid", "fbclid"]) {
+      const val = corta(bruto[k], 200);
       if (val) limpo[k] = val;
     }
     if (Object.keys(limpo).length) utm = limpo;

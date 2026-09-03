@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, Inter, Lora } from "next/font/google";
 import { I18nProvider } from "@/lib/i18n";
 import { GoogleTag } from "@/components/GoogleTag";
+import { CapturaDeCampanha } from "@/components/CapturaDeCampanha";
 import "./globals.css";
 
 const display = Space_Grotesk({
@@ -99,6 +100,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR" className={`${display.variable} ${sans.variable} ${serif.variable}`}>
       <body>
         <GoogleTag />
+        {/* Guarda de onde a pessoa veio, em qualquer página. Ver o porquê em
+            lib/app/campanha.ts: até 03/09/2026 isto só existia na landing de
+            tráfego pago, e clique pago que caísse em outro lugar perdia a
+            campanha na chegada. */}
+        <CapturaDeCampanha />
         <I18nProvider>
           <a
             href="#top"

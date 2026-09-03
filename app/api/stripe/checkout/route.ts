@@ -97,6 +97,18 @@ export async function POST(req: Request) {
   // pelo link, e isso é honesto: aqui só sabemos o que nós aplicamos.
   const cupomDaVenda = exitCoupon ?? (cupomPromo ? cupomCode : null);
 
+  // O ID DO CLIQUE DO GOOGLE VIAJA COM A ASSINATURA.
+  //
+  // Ele chega do aparelho (lib/app/campanha.ts guarda na chegada) e vai para a
+  // metadata, pelo mesmo caminho do cupom: o `upsertSubscription` já lê esse
+  // objeto em toda porta, então o valor chega ao nosso banco sem chamada nova.
+  //
+  // É o elo que faltava para o Google saber que um clique virou VENDA. Hoje ele
+  // só enxerga o toque no botão de download, que é a conversão configurada na
+  // tag, e o lance automático persegue o que enxerga. Ver a coluna `gclid` em
+  // supabase e a proposta em docs/agentes/propostas/agente-de-midia-paga.md.
+  const gclid = typeof body?.gclid === "string" && /^[\w.-]{10,200}$/.test(body.gclid) ? body.gclid : null;
+
   const criarSessao = (desconto: { coupon: string } | { promotion_code: string } | null) => stripe.checkout.sessions.create({
     mode: "subscription",
     ui_mode: "embedded", // formulário embutido no app
@@ -107,7 +119,11 @@ export async function POST(req: Request) {
       // O cupom entra só quando o desconto de fato foi aplicado nesta sessão:
       // a segunda tentativa (sem desconto) não pode carimbar uma venda como
       // "veio com cupom" quando o Stripe recusou o cupom.
-      metadata: { user_id: user.id, ...(desconto && cupomDaVenda ? { cupom: cupomDaVenda } : {}) },
+      metadata: {
+        user_id: user.id,
+        ...(desconto && cupomDaVenda ? { cupom: cupomDaVenda } : {}),
+        ...(gclid ? { gclid } : {}),
+      },
       ...(trialDays > 0 ? { trial_period_days: trialDays } : {}),
     },
     // Cartão SEMPRE exigido, mesmo quando a primeira fatura sai zerada.

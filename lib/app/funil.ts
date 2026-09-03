@@ -14,6 +14,7 @@ import { APP_VERSION } from "./content";
 import { isNativeApp, nativePlatform } from "./wrapper";
 import { anonId } from "./anon";
 import { variantesAtivas } from "./experimentos";
+import { campanhaGuardada } from "./campanha";
 
 export type EventoFunil =
   | "abriu_app"
@@ -73,19 +74,16 @@ function marcaNesteAparelho(evento: string): void {
 // chega ao paywall pelo onboarding e volta a ele pela Biela vira duas pessoas
 // na leitura do funil. Esses casos passam `chave` e deduplicam por evento.
 
-// A etiqueta de campanha que a LP (/landing) guardou no aparelho. É ela que
-// liga anúncio a cadastro e a assinatura: sem UTM no evento, mídia paga vira
-// chute. Só existe na web (a LP e o app web dividem a mesma origem); no app
-// da loja a atribuição de instalação é outro capítulo.
+// A etiqueta de campanha guardada no aparelho. É ela que liga anúncio a
+// cadastro e a assinatura: sem UTM no evento, mídia paga vira chute.
+//
+// Quem guarda é lib/app/campanha.ts, montado no layout RAIZ desde 03/09/2026.
+// Antes disso a captura vivia só na /landing, e clique pago que caísse na home
+// ou direto no app perdia a campanha na chegada. Só existe na web (LP e app web
+// dividem a mesma origem); no app da loja a atribuição de instalação é outro
+// capítulo.
 function utmGuardada(): Record<string, string> | null {
-  try {
-    const bruto = window.localStorage.getItem("mq-utm");
-    if (!bruto) return null;
-    const u = JSON.parse(bruto) as Record<string, string>;
-    return u && typeof u === "object" ? u : null;
-  } catch {
-    return null;
-  }
+  return campanhaGuardada();
 }
 
 export function funil(

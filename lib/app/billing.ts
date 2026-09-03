@@ -1,5 +1,6 @@
 import { getBrowserSupabase } from "@/lib/supabaseBrowser";
 import { apiUrl } from "@/lib/app/apiBase";
+import { gclidGuardado } from "@/lib/app/campanha";
 
 type BillingResult = { url?: string; clientSecret?: string; error?: string };
 
@@ -21,8 +22,12 @@ async function authedPost(path: string, body?: unknown): Promise<BillingResult> 
   }
 }
 
+// O `gclid` vai junto com a compra, e não é rastreio de enfeite: é ele que
+// permite devolver a venda ao Google Ads depois (ver a coluna `gclid` em
+// subscriptions). Sem ele, o Google só fica sabendo dos toques em botão de
+// download, e o lance automático continua otimizando para isso.
 export const startCheckout = (plan: "monthly" | "annual", platform?: string, offer?: string, cupom?: string) =>
-  authedPost("/api/stripe/checkout", { plan, platform, offer, cupom });
+  authedPost("/api/stripe/checkout", { plan, platform, offer, cupom, gclid: gclidGuardado() });
 export const openBillingPortal = () => authedPost("/api/stripe/portal");
 export const cancelSubscription = () => authedPost("/api/stripe/cancel");
 export const reactivateSubscription = () => authedPost("/api/stripe/reactivate");
