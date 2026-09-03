@@ -19,6 +19,8 @@
 // Rode com: npm run conferir:campanha
 import { capturaCampanha, campanhaGuardada, gclidGuardado, leDaUrl } from "../lib/app/campanha.ts";
 
+import { readFileSync } from "node:fs";
+
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
   if (condicao) return;
@@ -93,6 +95,41 @@ const ANUNCIO = "?utm_source=google&utm_medium=cpc&utm_campaign=lancamento&gclid
   capturaCampanha(`?utm_campaign=${"x".repeat(500)}`);
   const v = campanhaGuardada()?.utm_campaign ?? "";
   conferir("campanha comprida demais é cortada", v.length === 120, `ficou com ${v.length}`);
+}
+
+
+// ── 7. o PRIMEIRO evento da visita também sai etiquetado ────────────────────
+//
+// O defeito, medido em 03/09/2026: o `abriu_app` saía SEM etiqueta, e ele é
+// justamente o evento que atribui a chegada. A captura mora no layout raiz e
+// guarda num efeito; o `abriu_app` sai de um efeito lá dentro do Shell. No
+// React o efeito do FILHO roda antes do efeito do PAI, então a ordem real era
+// disparar primeiro e guardar depois.
+//
+// O conserto foi o `funil.ts` ler da URL em vez de só do armazenamento, e é
+// isso que esta conferência protege: se alguém trocar de volta por
+// `campanhaGuardada()`, a atribuição volta a perder a chegada em silêncio, que
+// é o pior jeito de perder.
+//
+// Confere no TEXTO do arquivo, sem comentários. A limpeza não é capricho: neste
+// repositório todo comentário cita código, e sem ela a explicação do conserto
+// satisfaria a busca sozinha (foi o que aconteceu com a conferir:aviso).
+{
+  const semComentarios = (f: string) =>
+    f.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/.*$/gm, " ");
+  const funil = semComentarios(readFileSync(new URL("../lib/app/funil.ts", import.meta.url), "utf8"));
+  const corpo = funil.slice(funil.indexOf("function utmGuardada"), funil.indexOf("export function funil"));
+  conferir(
+    "o funil lê a campanha da URL, não só do armazenamento",
+    /capturaCampanha\s*\(/.test(corpo),
+    "sem isso o primeiro evento da visita sai sem etiqueta"
+  );
+
+  // E a garantia de comportamento por trás disso: com a gaveta vazia, a
+  // primeira leitura já devolve a campanha que está na URL.
+  gaveta.clear();
+  const primeira = capturaCampanha("?utm_source=email&utm_campaign=lista-espera");
+  conferir("com nada guardado, a URL já responde", primeira?.utm_campaign === "lista-espera");
 }
 
 if (falhas) {

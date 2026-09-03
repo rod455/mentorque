@@ -14,7 +14,7 @@ import { APP_VERSION } from "./content";
 import { isNativeApp, nativePlatform } from "./wrapper";
 import { anonId } from "./anon";
 import { variantesAtivas } from "./experimentos";
-import { campanhaGuardada } from "./campanha";
+import { campanhaGuardada, capturaCampanha } from "./campanha";
 
 export type EventoFunil =
   | "abriu_app"
@@ -83,7 +83,24 @@ function marcaNesteAparelho(evento: string): void {
 // dividem a mesma origem); no app da loja a atribuição de instalação é outro
 // capítulo.
 function utmGuardada(): Record<string, string> | null {
-  return campanhaGuardada();
+  // LÊ DA URL, e não só do armazenamento, e isso conserta um defeito medido em
+  // 03/09/2026: o primeiro evento da visita saía SEM ETIQUETA.
+  //
+  // A captura mora no layout raiz e guarda a campanha num efeito. O `abriu_app`
+  // sai de um efeito lá dentro do Shell. E no React o efeito do FILHO roda
+  // antes do efeito do PAI, então na primeira visita a ordem real era: dispara
+  // `abriu_app`, e só depois guarda a campanha. O evento que atribui a chegada
+  // era justamente o único que saía sem ela.
+  //
+  // `capturaCampanha` resolve os dois casos de uma vez e é idempotente: se a
+  // URL trouxer etiqueta, ela guarda e devolve; se não trouxer, devolve o que
+  // já estava guardado. Assim a etiqueta não depende mais de quem roda primeiro,
+  // que é uma garantia que a árvore de componentes não consegue dar.
+  try {
+    return capturaCampanha(window.location.search);
+  } catch {
+    return campanhaGuardada();
+  }
 }
 
 export function funil(
