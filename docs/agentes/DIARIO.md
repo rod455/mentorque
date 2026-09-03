@@ -85,6 +85,32 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   > otimista e passei o enigma adiante em vez de dizer "não sei".
 - Saúde: bateria `conferir` inteira passando (12 conferências), build do site
   e `build:native` verdes.
+## 2026-09-03 · Os termos de busca responderam: a campanha está vendendo CURSO
+- O dono ligou o nó e a primeira leitura já respondeu, e não era sobre lance.
+- **Três quartos do dinheiro com nome foram para quem procura CURSO de
+  mecânica** (R$ 11,89 de R$ 15,78), metade buscando "grátis", "gratuito" ou
+  "certificado". Um dos termos era "curso de mecânico automotivo rj", ou seja,
+  aula presencial no Rio.
+- **O público certo mal aparece**: 42 termos de gente com problema no carro
+  ("carro nao da partida", "carro esquentando o que pode ser", "barulho na
+  direção hidráulica") somaram 66 impressões e 2 cliques. E os dois termos que
+  descrevem literalmente o produto ("aplicativo manutenção carro", "app scanner
+  automotivo gratuito") tiveram 6 impressões e ZERO cliques.
+- **O detalhe que fecha o argumento contra otimizar agora**: as duas conversões
+  vieram justamente dos termos de curso. O lance automático está sendo
+  alimentado pelo público errado, então pedir para ele otimizar é pedir para
+  comprar MAIS "curso de mecânica grátis", porque foi ali que ele viu conversão.
+  Não é o lance que está errado; é a campanha estar posicionada como curso.
+- Negativas sugeridas: `curso`, `certificado`, `senai`, `apostila`,
+  `presencial`. **Não negativar "grátis" nem "gratuito" sozinhos**: "app scanner
+  automotivo gratuito" é público bom e seria cortado junto. A palavra que separa
+  os dois públicos é `curso`, não `grátis`.
+- **Ressalva registrada de propósito**: os termos somam R$ 15,78 e a campanha
+  gastou R$ 44,16. A diferença não é erro de coleta, é o Google omitindo termos
+  de baixo volume por privacidade. A leitura vale para o dinheiro que TEM nome,
+  e é sobre esse pedaço que dá para agir; o resto é invisível por decisão da
+  plataforma. Dizer isso é melhor que fingir que a conta fecha.
+
 ## 2026-09-03 · Mídia paga: a etiqueta gruda, e o clique do Google chega na venda
 - O dono mandou fazer tudo o que estava proposto. Feito o que é nosso; o que
   depende de console ficou com o passo escrito.

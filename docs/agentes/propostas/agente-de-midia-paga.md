@@ -13,7 +13,7 @@ qual ele otimizaria. Os itens 1 a 3 existem para construir esse sinal.
 | 2. conversão que signifique dinheiro | metade feita: o `gclid` já viaja e fica guardado. Falta a devolução ao Google |
 | 3. atribuição de instalação | não começado, depende de console |
 | 4. agente que decide | não, e de propósito |
-| vigia de leitura | FEITO, falta 1 clique seu no n8n |
+| vigia de leitura | FEITO e LIGADO. Primeira leitura no fim deste arquivo |
 
 ## O que a campanha fez até agora
 
@@ -221,3 +221,77 @@ importa: primeiro o sinal, depois quem persegue o sinal.
 Quando o item 2 fechar, a alçada sugerida continua a mesma: palavra-chave
 negativa ele faz sozinho (só reduz gasto), e orçamento, lance, pausar e criar
 campanha continuam sendo do dono.
+
+---
+
+# A primeira leitura dos termos (03/09/2026)
+
+O nó foi ligado e trouxe 50 termos de 30 dias. A resposta apareceu na primeira
+consulta, e ela é sobre PÚBLICO, não sobre lance.
+
+| grupo | termos | custo | cliques | impressões | conversões |
+|---|---|---|---|---|---|
+| quer CURSO de mecânica | 6 | R$ 11,89 | 6 | 13 | **2** |
+| tem um PROBLEMA no carro | 42 | R$ 3,89 | 2 | 66 | 0 |
+| quer APP (o nosso público) | 2 | R$ 0,00 | 0 | 6 | 0 |
+
+**Três quartos do dinheiro com nome foram para quem procura CURSO de mecânica**,
+e metade desses buscando "grátis", "gratuito" ou "certificado":
+
+```
+curso de mecânica automotiva gratuito                          R$ 2,00
+curso mecânica automotiva grátis                               R$ 2,00
+cursos de mecanica de carros                                   R$ 2,00
+cursos online gratuitos com certificado mecanica automotiva    R$ 2,00
+curso mecânico de carro                                        R$ 1,99
+curso de mecânico automotivo rj                                R$ 1,90
+```
+
+Quem procura curso gratuito com certificado não assina R$ 29,90 por mês para
+cuidar do carro. E "curso de mecânico automotivo rj" é alguém querendo aula
+presencial no Rio, que não é nem produto digital.
+
+Enquanto isso, **o público certo mal aparece**. Os 42 termos de gente com
+problema no carro (`carro nao da partida`, `carro esquentando o que pode ser`,
+`barulho na direção hidráulica quando viro o volante`) somaram 66 impressões e
+2 cliques. E os dois termos que descrevem literalmente o produto,
+`aplicativo manutenção carro` e `app scanner automotivo gratuito`, tiveram 6
+impressões e nenhum clique.
+
+## O detalhe que fecha o argumento contra otimizar agora
+
+**As duas conversões vieram dos termos de CURSO**: `cursos de mecanica de
+carros` e `curso mecânico de carro`. Ou seja, o sinal que o lance automático
+está perseguindo está sendo alimentado pelo público errado. Deixar como está e
+pedir ao Google para otimizar é pedir para ele comprar MAIS "curso de mecânica
+grátis", porque foi ali que ele viu conversão.
+
+Não é o lance que está errado. É a campanha estar posicionada como curso.
+
+## Palavras negativas sugeridas
+
+Só reduzem gasto, nunca aumentam. Cortam R$ 11,89 dos R$ 15,78 identificáveis.
+
+```
+curso          (ampla; pega "cursos", "curso de mecânica", "curso grátis")
+certificado
+senai
+apostila
+presencial
+```
+
+**Não negativar "grátis" nem "gratuito" sozinhos**: `app scanner automotivo
+gratuito` é público bom, e o corte levaria ele junto. A palavra que separa os
+dois públicos é `curso`, não `grátis`.
+
+Vale olhar também `pastilha de freio` (R$ 1,90, sem conversão): quem busca o
+nome de uma peça normalmente quer COMPRAR a peça, não entender o carro. Se
+aparecerem outros termos de peça, viram um grupo de negativas próprio.
+
+## Uma ressalva honesta sobre a soma
+
+Os termos somam R$ 15,78 e a campanha gastou R$ 44,16. A diferença não é erro
+de coleta: o Google **omite termos de baixo volume** do relatório de busca, por
+privacidade. Então a leitura acima vale para o dinheiro que TEM nome, e é
+sobre esse pedaço que dá para agir. O resto continua invisível por decisão da
+plataforma, não nossa.
