@@ -1,11 +1,25 @@
 # Novidades da versão 1.7
 
-Versão de CONSERTO. Ao contrário da 1.6, que era de medição e quase não mudava
-o que o motorista vê, esta arruma quatro coisas que a pessoa sente, e três
-delas vieram de relato do dono ou de usuário.
+Versão de CONSERTO por dentro, de EXPERIÊNCIA por fora. Nenhuma tela nova, mas
+quatro pontos em que o app parava de ajudar e agora ajuda.
 
-O que ela NÃO é: nenhuma tela nova, nenhuma função nova. O texto das lojas
-precisa refletir isso, senão promete recurso e entrega remendo.
+## Como escrever o texto destas duas caixas
+
+**O que a gente escreve aqui VAI PARA A LOJA, do jeito que está.** Na App Store
+o "Novidades desta versão" aparece na ficha para qualquer pessoa, inclusive
+quem ainda não baixou, e fica lá até a próxima versão. Não é changelog de
+desenvolvedor: é texto de produto, lido por cliente.
+
+Daí as três regras deste arquivo:
+
+1. **Falar do ganho, não do defeito.** "O lembrete leva direto para a pergunta"
+   e não "corrigimos o redirecionamento do push". A pessoa não sabe o que
+   estava quebrado, e contar o defeito em detalhe só ensina que o app tinha um.
+2. **Descrever o que ela vai sentir usando**, com o verbo na ação dela: tocar,
+   assinar, responder, abrir.
+3. **Nada que não tenha sido conferido.** É ficha de loja, não é o diário. Onde
+   a prova não fecha (o fechamento no Android, cuja causa não está provada), o
+   texto fala do que a rede FAZ, não de uma cura.
 
 ---
 
@@ -14,16 +28,17 @@ precisa refletir isso, senão promete recurso e entrega remendo.
 **Novidades desta versão** (limite: 500 caracteres)
 
 ```
-O aviso da pergunta do dia agora abre direto no quiz. Antes ele abria o app na
-tela inicial e você tinha que procurar a pergunta.
+O lembrete da pergunta do dia agora leva direto para a pergunta. Toque na
+notificação e o quiz abre pronto para responder.
 
-Mais estabilidade na tela do quiz no Android: se o sistema encerrar a página
-por falta de memória, ela se refaz sozinha em vez de fechar o app.
+A tela do quiz ficou mais firme no Android: se o sistema encerrar a página para
+liberar memória, ela se refaz sozinha e você continua de onde estava.
 
-Quem assina pela loja passa a ver a confirmação na hora, em vez de uma tela
-parada.
+Quem assina pela loja passa a ver uma confirmação que acompanha a liberação do
+Premium até ela chegar.
 
-As aulas em vídeo de setembro ganharam capa própria.
+As aulas em vídeo de setembro chegaram com capa própria, e cada uma estreia no
+mesmo dia do vídeo.
 ```
 
 ---
@@ -33,19 +48,23 @@ As aulas em vídeo de setembro ganharam capa própria.
 **Novidades desta versão**
 
 ```
-O aviso da pergunta do dia agora leva direto para a pergunta. Antes ele abria
-o app na tela inicial, e você ainda precisava achar o quiz no topo para
-responder.
+Esta versão deixa o uso de todo dia mais direto.
 
-No Android, a tela do quiz ficou mais firme. Quando o sistema encerra a página
-do app por falta de memória, ela se refaz sozinha e você continua de onde
-estava, em vez de o app fechar.
+O lembrete da pergunta do dia agora leva direto para a pergunta. Toque na
+notificação e o quiz abre pronto para responder, sem parar na tela inicial e
+sem precisar procurar nada.
 
-Quem assina pela loja passa a ver a confirmação assim que a compra é aprovada.
-Antes a tela ficava parada e dava a impressão de que nada tinha acontecido.
+A tela do quiz também ficou mais firme. Quando o sistema precisa liberar
+memória e encerra a página do app, ela se refaz sozinha e você continua de onde
+estava.
 
-As aulas em vídeo de setembro ganharam capa própria, e a aula sobre perder
-força na serra teve a capa refeita.
+Quem assina pela loja passa a ver uma confirmação que acompanha a liberação do
+Premium até ela chegar. Antes a tela ficava parada depois da compra aprovada, e
+dava a impressão de que nada tinha acontecido.
+
+E o conteúdo continua crescendo: as aulas em vídeo de setembro chegaram com
+capa própria, e cada aula nova aparece aqui no mesmo dia em que o vídeo estreia
+no canal.
 ```
 
 ---
