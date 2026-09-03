@@ -1443,7 +1443,7 @@ const lessons: Lesson[] = [
   // Regra que não pode ser esquecida: a data daqui tem que ser a MESMA da
   // estreia no YouTube. Adiantar mostra um card cujo player diz "vídeo
   // indisponível", que é pior do que não ter o card.
-  art({ id: "vid-esquentar-parado", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-09-03", thumb: "https://www.mentorque.com.br/learn/fund-dashboard.png",
+  art({ id: "vid-esquentar-parado", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-09-03", thumb: "https://www.mentorque.com.br/learn/vid-esquentar-parado.png",
     media: { provider: "youtube", src: "9vGwIPpeZAQ", vertical: true },
     title: T("Esquentar o carro parado antes de sair", "Warming the car up parked before driving"), related: ["vid-padaria", "oil-change", "diag-noises"],
     body: [
@@ -1458,7 +1458,7 @@ const lessons: Lesson[] = [
     T("!! A exceção é o frio extremo, abaixo de zero, onde meio minuto parado ajuda o óleo a circular. No Brasil, na esmagadora maioria dos dias, isso não se aplica. E o óleo certo importa mais que a espera: veja [[oil-change|quando trocar o óleo e por quê]].", "!! The exception is extreme cold, below freezing, where half a minute idling helps the oil circulate. In Brazil, on the overwhelming majority of days, that doesn't apply. And the right oil matters more than the wait: see [[oil-change|when to change oil and why]]."),
   ]}),
 
-  art({ id: "vid-turbo-desligar-quente", track: "sports", type: "video", system: "engine", traits: ["turbo"], addedAt: "2026-09-03", thumb: "https://www.mentorque.com.br/learn/vid-turbo-pressao.png",
+  art({ id: "vid-turbo-desligar-quente", track: "sports", type: "video", system: "engine", traits: ["turbo"], addedAt: "2026-09-03", thumb: "https://www.mentorque.com.br/learn/vid-turbo-desligar-quente.png",
     media: { provider: "youtube", src: "BSvLL52Y9xA" },
     title: T("Desligar o turbo quente: mito ou verdade?", "Shutting down a hot turbo: myth or truth?"), related: ["vid-turbo-pressao", "vid-turbo-fabrica", "oil-change"],
     body: [
@@ -1473,7 +1473,7 @@ const lessons: Lesson[] = [
     T("!! O que realmente mata turbo é óleo velho ou de especificação errada, e acelerar forte com o motor ainda frio. Duas coisas que dependem de você todo dia, ao contrário do ritual de desligar. Ver [[oil-change|troca de óleo]] e [[vid-turbo-fabrica|por que o turbo de fábrica não vem no limite]].", "!! What actually kills turbos is old oil or the wrong specification, and hard throttle while the engine is still cold. Two things that depend on you every day, unlike the shutdown ritual. See [[oil-change|oil changes]] and [[vid-turbo-fabrica|why the factory turbo isn't maxed out]]."),
   ]}),
 
-  art({ id: "vid-padaria", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-09-10", thumb: "https://www.mentorque.com.br/learn/fund-fluids.png",
+  art({ id: "vid-padaria", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-09-10", thumb: "https://www.mentorque.com.br/learn/vid-padaria.png",
     media: { provider: "youtube", src: "mtgLqPM8YEM", vertical: true },
     title: T("O erro silencioso de quem só vai à padaria", "The silent mistake of only driving to the bakery"), related: ["vid-esquentar-parado", "oil-change", "battery-care"],
     body: [
@@ -1488,7 +1488,7 @@ const lessons: Lesson[] = [
     T("!! E encurte o intervalo de troca de óleo. O manual traz prazo para uso severo, e percurso curto repetido É uso severo, mesmo com o hodômetro baixo. Trocar por TEMPO, e não só por quilometragem, é o que salva esse motor: [[oil-change|quando trocar o óleo]].", "!! And shorten the oil change interval. The manual lists a severe-use schedule, and repeated short trips ARE severe use, even with a low odometer. Changing by TIME, not just mileage, is what saves this engine: [[oil-change|when to change oil]]."),
   ]}),
 
-  art({ id: "vid-agua-torneira-radiador", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-09-17", thumb: "https://www.mentorque.com.br/learn/diag-superaquecimento.png",
+  art({ id: "vid-agua-torneira-radiador", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-09-17", thumb: "https://www.mentorque.com.br/learn/vid-agua-torneira-radiador.png",
     media: { provider: "youtube", src: "eB4WO9r7yoo", vertical: true },
     title: T("Água de torneira no radiador: o estrago que ela faz", "Tap water in the radiator: the damage it does"), related: ["vid-esquentar-parado", "diag-noises", "oil-change"],
     body: [
