@@ -29,8 +29,15 @@ import { join } from "node:path";
 const RAIZ = process.cwd();
 const TRAVESSAO = "—";
 
-/** Pastas varridas por inteiro: tudo ali é texto de tela. */
-const TELAS = ["components", "lib/app/conteudo"];
+/** Pastas varridas por inteiro: tudo ali é texto que a pessoa lê. */
+//
+// `lib/email` entrou em 03/09/2026, e a falta dela era um buraco na regra e não
+// um esquecimento pequeno: o CLAUDE.md diz "vale para app, LP, e-mails e docs",
+// e a conferência cobria tudo menos e-mail. Dois travessões estavam no
+// e-mail de boas-vindas da lista de espera desde sempre, no texto que chega na
+// caixa de entrada de quem se cadastra. E-mail é o pior lugar para descobrir
+// isso depois: não dá para corrigir o que já foi enviado.
+const TELAS = ["components", "lib/app/conteudo", "lib/email"];
 /** Arquivos avulsos de texto de tela. */
 const AVULSOS = ["lib/app/content.ts"];
 /** Em app/, só os campos que viram título e descrição de página. */

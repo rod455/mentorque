@@ -45,7 +45,7 @@ const COPY: Record<Idioma, Copy> = {
     titulo: "Bem-vindo à garagem!",
     saudacao: "E aí!",
     intro:
-      "Seu lugar na <b>lista de espera</b> está guardado. Assim que abrirmos o acesso, você é avisado em primeira mão — com as vantagens de quem chegou cedo.",
+      "Seu lugar na <b>lista de espera</b> está guardado. Assim que abrirmos o acesso, você é avisado em primeira mão, com as vantagens de quem chegou cedo.",
     destaqueTitulo: "O que você vai encontrar",
     destaque: [
       "Sua garagem organizada: revisões, serviços e lembretes no lugar certo",
@@ -64,7 +64,7 @@ const COPY: Record<Idioma, Copy> = {
     titulo: "Welcome to the garage!",
     saudacao: "Hey there!",
     intro:
-      "Your spot on the <b>waitlist</b> is saved. The moment we open access, you'll be the first to know — with early-bird perks.",
+      "Your spot on the <b>waitlist</b> is saved. The moment we open access, you'll be the first to know, with early-bird perks.",
     destaqueTitulo: "What you'll find",
     destaque: [
       "Your garage, organized: services, history and reminders in one place",
