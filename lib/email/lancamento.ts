@@ -62,6 +62,8 @@ type Copy = {
   depois: string;
   lojasTitulo: string;
   nota: string;
+  gratisTitulo: string;
+  gratis: string;
   assinatura: string;
   rodape: string;
 };
@@ -75,11 +77,13 @@ function copy(locale: Idioma, o: ConviteLancamento): Copy {
       saudacao: "Hey!",
       intro:
         "You joined the Mentorque waitlist when it was still a promise. It is out: the app is live on the <b>App Store</b> and on <b>Google Play</b>, and you are among the first to hear it.",
-      destaqueTitulo: "What changed while you waited",
+      destaqueTitulo: "What you can do in there",
       destaque: [
+        "Add your car and see its service plan, by date and by mileage",
+        "Describe a noise or a dashboard light and get the likely cause, with a fair price before you reach the shop",
+        "Ask Biela anything, any time. He is the mechanic on call",
         "101 hands-on lessons: when to do it, how to tell it is overdue, and what waiting costs later",
-        "Diagnosis by symptom, with the likely cause and a fair price before you reach the shop",
-        "Question of the day: one minute, one question, and the reason behind the answer",
+        "The question of the day: one minute, one question, and the reason behind the answer",
       ],
       ofertaTitulo: "Your first month is on us",
       oferta: `The <b>${o.cupom}</b> coupon is already applied in the button below. It covers the first month of the monthly plan.`,
@@ -88,6 +92,9 @@ function copy(locale: Idioma, o: ConviteLancamento): Copy {
         "Then download the app and sign in with the same account. Premium belongs to the account, not to the device, so it follows you to the phone.",
       lojasTitulo: "Get the app",
       nota: `After the first month it is ${o.precoMensal} per month, and you can cancel any time from the app.`,
+      gratisTitulo: "Want to try the free plan first? No problem",
+      gratis:
+        "Really, no problem. Logging your services, symptom diagnosis and service reminders are all there on the free plan, with no card and no deadline. Download it, use it as long as you like, and the button above stays here for the day you want the rest.",
       assinatura: "Rodrigo, Mentorque",
       rodape: "You received this email because you joined the Mentorque waitlist.",
     };
@@ -99,11 +106,13 @@ function copy(locale: Idioma, o: ConviteLancamento): Copy {
     saudacao: "Oi!",
     intro:
       "Você entrou na lista de espera do Mentorque quando ele ainda era promessa. Ele saiu: está publicado na <b>App Store</b> e na <b>Google Play</b>, e você é uma das primeiras pessoas a saber.",
-    destaqueTitulo: "O que mudou enquanto você esperava",
+    destaqueTitulo: "O que dá para fazer lá dentro",
     destaque: [
+      "Cadastrar seu carro e ver o plano de revisão dele, por data e por quilometragem",
+      "Descrever um barulho ou uma luz no painel e receber a causa provável, com o preço justo antes de você chegar na oficina",
+      "Perguntar qualquer coisa ao Biela, que é o mecânico de plantão, a qualquer hora",
       "101 aulas de mão: quando fazer, como saber que já passou da hora e o que o atraso cobra depois",
-      "Diagnóstico por sintoma, com a causa provável e o preço justo antes de você chegar na oficina",
-      "Pergunta do dia: um minuto, uma pergunta, e a explicação do porquê da resposta",
+      "A pergunta do dia: um minuto, uma pergunta, e a explicação do porquê da resposta",
     ],
     ofertaTitulo: "Seu primeiro mês é por nossa conta",
     oferta: `O cupom <b>${o.cupom}</b> já vem aplicado no botão abaixo. Ele cobre o primeiro mês do plano mensal.`,
@@ -112,6 +121,9 @@ function copy(locale: Idioma, o: ConviteLancamento): Copy {
       "Depois é só baixar o app e entrar com a mesma conta. O Premium é da conta, não do aparelho, então ele vai junto para o celular.",
     lojasTitulo: "Baixar o app",
     nota: `Passado o primeiro mês, são ${o.precoMensal} por mês, e dá para cancelar quando quiser, pelo próprio app.`,
+    gratisTitulo: "Quer testar o grátis antes do Premium? Não tem problema",
+    gratis:
+      "Sério, não tem. Registrar seus serviços, diagnóstico por sintoma e lembretes de revisão estão no plano gratuito, sem cartão e sem prazo. Baixe, use o tempo que quiser, e o botão lá de cima continua aqui para o dia em que você quiser o resto.",
     assinatura: "Rodrigo, Mentorque",
     rodape: "Você recebeu este e-mail porque entrou na lista de espera do Mentorque.",
   };
@@ -199,6 +211,21 @@ export function emailDeLancamento(
           </tr></table>
         </td></tr>
 
+        <!-- A porta do grátis, e ela fica DEPOIS da oferta de propósito.
+             Oferecer o plano gratuito antes do Premium enfraqueceria o convite
+             que é o motivo do e-mail; escondê-lo faria quem não quer assinar
+             agora simplesmente fechar a mensagem. Aqui embaixo ele funciona
+             como rede: quem chegou até o fim sem clicar no botão âmbar ainda
+             encontra um caminho para entrar, em vez de sair de mãos vazias. -->
+        <tr><td style="padding:24px 28px 0 28px">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f2f5f3;border-radius:10px">
+            <tr><td style="padding:18px 20px">
+              <p style="margin:0 0 7px 0;font:700 15px/1.4 -apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:${TEXTO}">${c.gratisTitulo}</p>
+              <p style="margin:0;font:400 14px/1.6 -apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:${TEXTO}">${c.gratis}</p>
+            </td></tr>
+          </table>
+        </td></tr>
+
         <tr><td style="padding:24px 28px 28px 28px">
           <p style="margin:0;font:400 15px/1.6 -apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:${TEXTO}">${c.assinatura}</p>
         </td></tr>
@@ -234,6 +261,9 @@ export function emailDeLancamento(
     semTags(c.depois),
     `App Store: ${APP_STORE}`,
     `Google Play: ${PLAY_STORE}`,
+    "",
+    `${c.gratisTitulo}`,
+    semTags(c.gratis),
     "",
     c.assinatura,
     c.rodape,

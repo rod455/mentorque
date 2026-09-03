@@ -98,12 +98,16 @@ botão.
 > Ele saiu: está publicado na **App Store** e na **Google Play**, e você é uma
 > das primeiras pessoas a saber.
 >
-> **O QUE MUDOU ENQUANTO VOCÊ ESPERAVA**
+> **O QUE DÁ PARA FAZER LÁ DENTRO**
+> - Cadastrar seu carro e ver o plano de revisão dele, por data e por
+>   quilometragem
+> - Descrever um barulho ou uma luz no painel e receber a causa provável, com o
+>   preço justo antes de você chegar na oficina
+> - Perguntar qualquer coisa ao Biela, que é o mecânico de plantão, a qualquer
+>   hora
 > - 101 aulas de mão: quando fazer, como saber que já passou da hora e o que o
 >   atraso cobra depois
-> - Diagnóstico por sintoma, com a causa provável e o preço justo antes de você
->   chegar na oficina
-> - Pergunta do dia: um minuto, uma pergunta, e a explicação do porquê da
+> - A pergunta do dia: um minuto, uma pergunta, e a explicação do porquê da
 >   resposta
 >
 > **Seu primeiro mês é por nossa conta**
@@ -124,7 +128,30 @@ botão.
 > **BAIXAR O APP**
 > [ App Store ]  [ Google Play ]
 >
+> ┌─────────────────────────────────────────────────────────────┐
+> │ **Quer testar o grátis antes do Premium? Não tem problema**  │
+> │                                                             │
+> │ Sério, não tem. Registrar seus serviços, diagnóstico por     │
+> │ sintoma e lembretes de revisão estão no plano gratuito, sem  │
+> │ cartão e sem prazo. Baixe, use o tempo que quiser, e o botão │
+> │ lá de cima continua aqui para o dia em que você quiser o     │
+> │ resto.                                                       │
+> └─────────────────────────────────────────────────────────────┘
+>
 > Rodrigo, Mentorque
+
+**Por que a porta do grátis fica no fim e não no começo**: oferecer o plano
+gratuito antes do Premium enfraqueceria o convite que é o motivo do e-mail, e
+escondê-lo faria quem não quer assinar agora simplesmente fechar a mensagem.
+No fim ele funciona como rede: quem leu tudo e não clicou no botão âmbar ainda
+encontra um caminho para entrar, em vez de sair de mãos vazias.
+
+**E ele é verdade conferida, não gentileza.** O que está escrito ali sai da
+tabela de planos do próprio app (`content.ts`): registrar serviços é completo
+no grátis, diagnóstico por sintoma e lembretes de revisão vêm limitados, e
+saúde por sistema, plano de revisão, Biela ilimitado e a biblioteca completa
+são Premium. Prometer no e-mail um grátis maior do que o do app seria comprar
+uma decepção na primeira abertura.
 
 Endereço do botão, com a campanha marcada para o funil separar esta lista de
 qualquer outra origem:
