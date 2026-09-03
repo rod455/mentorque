@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "node scripts/conserta-appsflyer.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -14,7 +15,7 @@
     "build:native": "node scripts/build-native.mjs",
     "verifica:quiz": "npm run conferir:regras",
     "quiz:pdf": "node --experimental-strip-types scripts/quiz-pdf.ts",
-    "conferir": "npm run conferir:tipos && npm run conferir:estilo && npm run conferir:regras && npm run conferir:revisoes && npm run conferir:navegacao && npm run conferir:frescor && npm run conferir:versoes && npm run conferir:travessao && npm run conferir:identidade && npm run conferir:catalogo && npm run conferir:funil && npm run conferir:migalha && npm run conferir:venda && npm run conferir:campanha && npm run conferir:agenda && npm run conferir:aviso && npm run conferir:gravacao",
+    "conferir": "npm run conferir:tipos && npm run conferir:estilo && npm run conferir:regras && npm run conferir:revisoes && npm run conferir:navegacao && npm run conferir:frescor && npm run conferir:versoes && npm run conferir:travessao && npm run conferir:identidade && npm run conferir:catalogo && npm run conferir:funil && npm run conferir:migalha && npm run conferir:venda && npm run conferir:campanha && npm run conferir:agenda && npm run conferir:aviso && npm run conferir:appsflyer && npm run conferir:gravacao",
     "conferir:tipos": "tsc --noEmit",
     "conferir:estilo": "next lint",
     "conferir:regras": "node --experimental-strip-types scripts/verifica-quiz.ts",
@@ -33,7 +34,8 @@
     "conferir:gravacao": "node scripts/verifica-gravacao.mjs",
     "conferir:campanha": "node --experimental-strip-types scripts/verifica-campanha.ts",
     "conferir:agenda": "node --experimental-strip-types scripts/verifica-agenda.ts",
-    "conferir:aviso": "node --experimental-strip-types scripts/verifica-aviso.ts"
+    "conferir:aviso": "node --experimental-strip-types scripts/verifica-aviso.ts",
+    "conferir:appsflyer": "node scripts/verifica-appsflyer.mjs"
   },
   "dependencies": {
     "@capacitor-community/admob": "^8.0.0",
@@ -49,7 +51,7 @@
     "@stripe/react-stripe-js": "^6.8.0",
     "@stripe/stripe-js": "^9.12.1",
     "@supabase/supabase-js": "^2.45.4",
-    "appsflyer-capacitor-plugin": "^6.18.0",
+    "appsflyer-capacitor-plugin": "6.18.0",
     "framer-motion": "^11.3.24",
     "next": "14.2.5",
     "react": "^18.3.1",

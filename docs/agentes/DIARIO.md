@@ -85,6 +85,46 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   > otimista e passei o enigma adiante em vez de dizer "não sei".
 - Saúde: bateria `conferir` inteira passando (12 conferências), build do site
   e `build:native` verdes.
+## 2026-09-03 · O build 1.7 do iPhone caiu num bug de plugin, e o app nem usa Facebook
+- Erro do Codemagic: `AppsFlyerPlugin.swift:665: cannot find 'FBSDKAppLinkUtility'
+  in scope`. Passo `Compilar .ipa`, Xcode 26.4.1.
+- **O defeito é do plugin da AppsFlyer, e são dois erros na mesma linha.** A
+  guarda pergunta `#if canImport(FacebookCore)`, mas o símbolo usado
+  (`FBSDKAppLinkUtility`) mora em `FBSDKCoreKit`, que é outro módulo. E o
+  arquivo não importa nenhum dos dois: os imports dele são só Foundation,
+  Capacitor e AppsFlyerLib. No dia em que aquela guarda abrir, o que está
+  dentro não compila de jeito nenhum.
+- **Por que abriu agora, se a 1.6 passou.** O `@capgo/capacitor-social-login`
+  traz o SDK do Facebook para o build do iPhone. O alvo da AppsFlyer NÃO
+  declara dependência do Facebook, mas o SwiftPM constrói tudo na mesma pasta e
+  o `canImport` enxerga módulo que esteja no caminho de busca, declarado ou
+  não. Ou seja: a guarda dependia de ORDEM DE BUILD, não de regra. Vinha dando
+  não e passou a dar sim.
+- **NÃO consegui provar qual peça virou a chave, e isso é a lição.** Três coisas
+  se movem sozinhas entre um build e outro: o Codemagic usa `xcode: latest`, o
+  `facebook-ios-sdk` entra por faixa (`upToNextMajor from 18.0.3`) e **não
+  existe `Package.resolved` versionado**. O build nativo não é reproduzível, e
+  foi por isso que uma tarde sem mexer em nada de iOS terminou com o iPhone sem
+  compilar.
+- **O conserto não depende de descobrir qual foi**: a guarda é fechada com uma
+  bandeira que ninguém define (`MENTORQUE_APPLINKS_DO_FACEBOOK`), então o
+  compilador nunca entra ali. O ramo `#else` do próprio plugin continua
+  respondendo "Please install FBSDK First!" para quem chamar. É honesto para
+  nós: o app não tem login com Facebook, e nunca chama essa função.
+- **O remendo mora em `node_modules`, que não é versionado**, então ele ganhou
+  as duas metades que isso exige: um `postinstall`
+  (`scripts/conserta-appsflyer.mjs`), que roda no `npm ci` do Codemagic sem
+  depender de alguém lembrar de um passo no yaml, e uma conferência
+  (`conferir:appsflyer`) que reprova se o remendo sumir. Provado com `npm ci`
+  limpo: o postinstall pegou o plugin recém-baixado.
+- **A versão do plugin saiu do acento** (`^6.18.0` → `6.18.0`). O remendo
+  aponta para um texto exato de um arquivo de terceiro; deixar a versão flutuar
+  seria deixar o remendo apontar para o vazio um dia.
+- **Fica recomendado, e é chamada do dono**: pinar o Xcode no codemagic.yaml e
+  versionar o `Package.resolved`. Não fiz junto porque misturar três mudanças de
+  ambiente com o conserto tornaria o próximo build impossível de ler se ele
+  falhar de novo.
+
 ## 2026-09-03 · O aviso trazia a pessoa de volta e a largava na porta
 - Relato do dono: tocar no aviso do quiz das 9h abre o app **no Início**, e não
   na pergunta. Ela precisa achar o chip do quiz no topo e tocar de novo.
