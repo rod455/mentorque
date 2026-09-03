@@ -44,7 +44,23 @@ const PLAY_STORE = "https://play.google.com/store/apps/details?id=mentorque.app"
  * acabou de ler "por nossa conta". Quem dispara confere o teto antes, e o
  * código fica visível aqui para essa conferência ser possível.
  */
-export type ConviteLancamento = { cupom: string; precoMensal: string };
+export type ConviteLancamento = {
+  cupom: string;
+  precoMensal: string;
+  /**
+   * Quantas aulas estão PUBLICADAS na hora do disparo.
+   *
+   * Vem de fora pelo mesmo motivo do cupom, e por uma razão que já mordeu: o
+   * texto nasceu dizendo "101 aulas" e em três dias o catálogo tinha 103.
+   * Número escrito à mão em e-mail envelhece calado, e este envelheceria
+   * contra nós, prometendo menos do que o app entrega.
+   *
+   * Quem dispara conta do catálogo, já descontando as aulas agendadas para os
+   * próximos vídeos: prometer no e-mail uma aula que ainda não estreou seria a
+   * mesma quebra de promessa que a trava de agendamento existe para evitar.
+   */
+  aulas: number;
+};
 
 export type Idioma = "pt" | "en";
 
@@ -82,7 +98,7 @@ function copy(locale: Idioma, o: ConviteLancamento): Copy {
         "Add your car and see its service plan, by date and by mileage",
         "Describe a noise or a dashboard light and get the likely cause, with a fair price before you reach the shop",
         "Ask Biela anything, any time. He is the mechanic on call",
-        "101 hands-on lessons: when to do it, how to tell it is overdue, and what waiting costs later",
+        `${o.aulas} hands-on lessons: when to do it, how to tell it is overdue, and what waiting costs later`,
         "The question of the day: one minute, one question, and the reason behind the answer",
       ],
       ofertaTitulo: "Your first month is on us",
@@ -111,7 +127,7 @@ function copy(locale: Idioma, o: ConviteLancamento): Copy {
       "Cadastrar seu carro e ver o plano de revisão dele, por data e por quilometragem",
       "Descrever um barulho ou uma luz no painel e receber a causa provável, com o preço justo antes de você chegar na oficina",
       "Perguntar qualquer coisa ao Biela, que é o mecânico de plantão, a qualquer hora",
-      "101 aulas de mão: quando fazer, como saber que já passou da hora e o que o atraso cobra depois",
+      `${o.aulas} aulas de mão: quando fazer, como saber que já passou da hora e o que o atraso cobra depois`,
       "A pergunta do dia: um minuto, uma pergunta, e a explicação do porquê da resposta",
     ],
     ofertaTitulo: "Seu primeiro mês é por nossa conta",
