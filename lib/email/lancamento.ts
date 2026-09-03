@@ -156,12 +156,34 @@ export function linkDaOferta(cupom: string): string {
   return `${SITE}/app?assinar=mensal&cupom=${encodeURIComponent(cupom)}&utm_source=email&utm_campaign=lista-espera`;
 }
 
+/**
+ * O mesmo endereço, pronto para entrar num atributo HTML.
+ *
+ * POR QUE ISTO EXISTE, e é conserto de 03/09/2026: o `href` saía com `&` CRU.
+ * Em HTML, `&` dentro de atributo tem que ser `&amp;`, e o que salvava a gente
+ * era só a tolerância dos navegadores. No dia em que alguma coisa REESCREVE
+ * aquele link, a tolerância acaba: o rastreio de clique do provedor lê o HTML,
+ * extrai a URL e monta outra, e um `&` ambíguo no meio do caminho é exatamente
+ * onde a query se perde.
+ *
+ * E aqui a query não é enfeite: é `assinar` e `cupom`, que são o que abre o
+ * checkout com o mês grátis. Link de venda que perde a query vira link de preço
+ * cheio para quem acabou de ler "por nossa conta".
+ *
+ * O texto puro continua com `&` normal, que é o certo lá: escapar em texto
+ * mostraria `&amp;` para a pessoa.
+ */
+function hrefDaOferta(cupom: string): string {
+  return linkDaOferta(cupom).replace(/&/g, "&amp;");
+}
+
 export function emailDeLancamento(
   locale: Idioma,
   o: ConviteLancamento,
 ): { subject: string; html: string; text: string } {
   const c = copy(locale, o);
-  const link = linkDaOferta(o.cupom);
+  const link = linkDaOferta(o.cupom);      // texto puro
+  const href = hrefDaOferta(o.cupom);      // dentro de atributo HTML
 
   const html = `<!doctype html>
 <html lang="${locale === "pt" ? "pt-BR" : "en"}">
@@ -204,7 +226,7 @@ export function emailDeLancamento(
         <tr><td align="center" style="padding:26px 28px 0 28px">
           <p style="margin:0 0 6px 0;font:700 17px/1.4 Georgia,'Times New Roman',serif;color:${TEXTO}">${c.ofertaTitulo}</p>
           <p style="margin:0 0 18px 0;font:400 15px/1.6 -apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:${TEXTO}">${c.oferta}</p>
-          <a href="${link}" style="display:inline-block;background:${AMBAR};color:${GRAFITE};font:700 15px/1 -apple-system,'Segoe UI',Roboto,Arial,sans-serif;text-decoration:none;padding:15px 34px;border-radius:999px">${c.cta}</a>
+          <a href="${href}" style="display:inline-block;background:${AMBAR};color:${GRAFITE};font:700 15px/1 -apple-system,'Segoe UI',Roboto,Arial,sans-serif;text-decoration:none;padding:15px 34px;border-radius:999px">${c.cta}</a>
           <p style="margin:14px 0 0 0;font:400 13px/1.55 -apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:${SUAVE}">${c.nota}</p>
         </td></tr>
 

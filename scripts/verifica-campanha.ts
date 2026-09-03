@@ -132,6 +132,34 @@ const ANUNCIO = "?utm_source=google&utm_medium=cpc&utm_campaign=lancamento&gclid
   conferir("com nada guardado, a URL já responde", primeira?.utm_campaign === "lista-espera");
 }
 
+
+// ── 8. o link de venda do e-mail aguenta ser reescrito ──────────────────────
+//
+// Defeito de 03/09/2026: o `href` do botão saía com `&` CRU. Em HTML isso é
+// ambíguo dentro de atributo, e a tolerância do navegador escondia o problema
+// até o dia em que alguém REESCREVEU o link. Foi o que o rastreio de clique do
+// provedor fez, e a query se perdeu no caminho.
+//
+// Isso não é detalhe de formatação: a query é `assinar` e `cupom`, ou seja, é
+// o que faz o checkout abrir com o mês grátis. Link de venda sem query vira
+// link de preço cheio para quem acabou de ler "por nossa conta".
+{
+  const { emailDeLancamento, linkDaOferta } = await import("../lib/email/lancamento.ts");
+  const { html, text } = emailDeLancamento("pt", { cupom: "TESTE100", precoMensal: "R$ 29,90", aulas: 99 });
+
+  const botao = html.match(/<a href="([^"]+)"[^>]*>Ativar/);
+  conferir("o botão do e-mail existe", !!botao);
+  const href = botao?.[1] ?? "";
+
+  conferir("o href escapa os & (senão a query se perde ao ser reescrita)", !/&(?!amp;)/.test(href), href);
+  conferir("o href leva o plano", href.includes("assinar=mensal"), href);
+  conferir("o href leva o cupom", href.includes("cupom=TESTE100"), href);
+  conferir("o href leva a campanha", href.includes("utm_campaign=lista-espera"), href);
+
+  // O texto puro é o contrário: ali `&amp;` apareceria na cara da pessoa.
+  conferir("a versão em texto usa & normal", text.includes(linkDaOferta("TESTE100")) && !text.includes("&amp;"));
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) de campanha reprovaram.`);
   process.exit(1);
