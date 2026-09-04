@@ -31,7 +31,38 @@ const CHAVE = "mq-ultimo-passo";
  */
 const JANELA_MS = 3 * 60 * 1000;
 
-type Migalha = { nome: string; t: number; pausado: boolean };
+/**
+ * Quão perto do passo uma "pausa" ainda é suspeita de ser a própria morte.
+ *
+ * O `pausado` existe contra falso positivo, e continua certo: Android recolhe
+ * app parado em segundo plano o tempo todo. Só que ele tinha um buraco, e o
+ * buraco engoliu justamente o caso que a migalha foi criada para pegar.
+ *
+ * Em 04/09/2026, na 1.7.0, o aparelho 70d10f37 respondeu o quiz às 18:27:44 e
+ * reabriu o app às 18:28:04, vinte segundos depois. A janela de três minutos
+ * cobria com folga, e mesmo assim NENHUMA linha saiu em `app_erros`. A hipótese
+ * mais provável é esta: um app que está morrendo some da tela, e sumir da tela
+ * dispara `visibilitychange` de `hidden`. Se o JavaScript ainda tiver um último
+ * suspiro, ele mesmo esfria a migalha e a testemunha se cala sozinha.
+ *
+ * A separação que resolve é temporal, e é honesta: quem manda o app para
+ * segundo plano faz isso SEGUNDOS ou minutos depois do último passo, porque
+ * precisa ler a tela, decidir e tocar. Pausa colada no passo não é gente
+ * saindo do app, é o app desaparecendo.
+ *
+ * Dois segundos é folgado de propósito para o lado do silêncio: quem sair do
+ * app um segundo e meio depois de responder vira relato, e isso é aceitável,
+ * porque perder o defeito é mais caro que uma linha a mais para o QA ler.
+ */
+const PAUSA_COLADA_MS = 2000;
+
+type Migalha = {
+  nome: string;
+  t: number;
+  pausado: boolean;
+  /** Quando a pausa aconteceu. Ausente nas migalhas gravadas antes de 04/09. */
+  pausadoEm?: number;
+};
 
 function ler(): Migalha | null {
   try {
@@ -39,7 +70,12 @@ function ler(): Migalha | null {
     if (!cru) return null;
     const m = JSON.parse(cru) as Partial<Migalha>;
     if (typeof m?.nome !== "string" || typeof m?.t !== "number") return null;
-    return { nome: m.nome, t: m.t, pausado: m.pausado === true };
+    return {
+      nome: m.nome,
+      t: m.t,
+      pausado: m.pausado === true,
+      pausadoEm: typeof m.pausadoEm === "number" ? m.pausadoEm : undefined,
+    };
   } catch {
     return null;
   }
@@ -62,7 +98,9 @@ export function passo(nome: string): void {
 /** O app foi para segundo plano: a migalha esfria e para de acusar. */
 export function esfriaMigalha(): void {
   const m = ler();
-  if (m) gravar({ ...m, pausado: true });
+  // A HORA da pausa é gravada junto, e é ela que separa "a pessoa saiu do app"
+  // de "o app desapareceu da tela porque estava morrendo". Ver PAUSA_COLADA_MS.
+  if (m) gravar({ ...m, pausado: true, pausadoEm: Date.now() });
 }
 
 /**
@@ -79,9 +117,17 @@ export function fechamentoAnterior(): { nome: string; segundos: number } | null 
   } catch {
     /* segue */
   }
-  if (!m || m.pausado) return null;
+  if (!m) return null;
   const ha = Date.now() - m.t;
   if (ha < 0 || ha > JANELA_MS) return null;
+  if (m.pausado) {
+    // Migalha antiga, gravada antes de existir `pausadoEm`: mantém o
+    // comportamento velho e cala, porque sem a hora não dá para distinguir.
+    if (m.pausadoEm === undefined) return null;
+    // Pausa que veio SEGUNDOS depois do passo é a pessoa saindo do app: cala.
+    // Pausa colada no passo é suspeita de ser a morte, e essa fala.
+    if (m.pausadoEm - m.t > PAUSA_COLADA_MS) return null;
+  }
   return { nome: m.nome, segundos: Math.round(ha / 1000) };
 }
 

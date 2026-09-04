@@ -139,7 +139,63 @@ um aviso que o sistema tem licença para adiar. Declarar essa permissão é deci
 do dono: a Play restringe o uso dela e pede justificativa, então não é uma linha
 no manifesto, é um assunto com a loja.
 
-### 04/09, mais tarde: O RASTRO NATIVO APARECEU
+### 04/09, fim do dia: A VERSÃO DO VÍDEO É 1.7.0, E ISSO CORRIGE O QUE VEM ABAIXO
+
+O dono avisou, e o funil confirma sem margem. Aparelho `70d10f37`, o MESMO do
+relato de 02/09, com `versao` gravada em cada evento:
+
+```
+18:26:51  abriu_app            1.7.0  android
+18:27:44  resposta do quiz gravada no servidor (orcamento-perguntas, acertou)
+          ← a morte acontece aqui, e é o que o vídeo mostra
+18:28:04  abriu_app            1.7.0  android   ← 20 s depois
+19:03:42  abriu_app            1.7.0  android
+```
+
+**Duas correções, e as duas são minhas.**
+
+1. ~~O aparelho que quebra roda 1.6.~~ Roda **1.7.0**. Ele tem a migalha e tem a
+   rede do `MainActivity`.
+2. ~~O rastro nativo do Play é o rastro deste crash.~~ **Não é.** A linha do Play
+   é da versão 52 (1.6), de dois dias atrás, 1 evento, e os dados estavam com
+   atualização de quinta 06:00. A quebra de hoje ainda não entrou lá. Pode ser o
+   mesmo defeito e pode não ser; o que existe é uma ocorrência antiga com aquela
+   assinatura, não a prova desta.
+
+O conserto da porta única de permissão continua valendo por mérito próprio, e
+está descrito abaixo, mas **a base de evidência dele ficou mais fraca do que eu
+disse**: ele endereça uma travessia que comprovadamente já matou o app UMA vez,
+na 1.6, não necessariamente a de hoje.
+
+### E A TESTEMUNHA FICOU MUDA, que é o achado mais grave
+
+O app reabriu **20 segundos** depois da resposta, dentro da janela de três
+minutos, na versão que tem a migalha. Mesmo assim `app_erros` não ganhou nenhuma
+linha `fechou`.
+
+A explicação mais provável, e o buraco é de desenho: **um app que morre some da
+tela, e sumir da tela dispara `visibilitychange` de `hidden`.** Se o JavaScript
+tiver um último suspiro, `vigiarPausa` chama `esfriaMigalha()` e a testemunha se
+cala sozinha, exatamente no caso que ela foi criada para pegar. A trava contra
+falso positivo engoliu o verdadeiro positivo.
+
+O conserto separa os dois pelo tempo, que é o que os distingue de verdade: a
+migalha passa a gravar QUANDO foi pausada. Pausa colada no passo (até dois
+segundos) é o app desaparecendo, e continua virando relato; pausa segundos
+depois é a pessoa saindo do app, e segue calada. Migalha antiga, sem essa hora,
+continua calada por compatibilidade.
+
+Conferido com defeito plantado, e a conferência tinha um segundo defeito que
+esse teste revelou: os casos novos estavam DEPOIS do bloco que decide o código
+de saída, então imprimiam FALHA e terminavam em zero. Só apareceu porque eu
+olhei o código de saída em vez de acreditar no texto na tela.
+
+Existe ainda uma segunda explicação possível para o silêncio, que não dá para
+descartar daqui: o `localStorage` da WebView pode não ter gravado em disco nos
+125 ms entre a migalha e a morte do processo. Se, mesmo com este conserto, a
+próxima quebra continuar muda, é por aí.
+
+### 04/09: o rastro nativo da 1.6
 
 Play Console, Android vitals, Falhas e ANRs:
 

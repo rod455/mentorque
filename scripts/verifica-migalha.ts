@@ -108,6 +108,51 @@ function envelhece(segundos: number) {
   conferir("migalha no futuro não acusa nada", fechamentoAnterior() === null);
 }
 
+
+// ── 7. a pausa COLADA no passo continua acusando ────────────────────────────
+//
+// O caso de 04/09/2026, e o motivo de o `pausadoEm` existir. Um app que morre
+// some da tela, e sumir da tela dispara `visibilitychange` de `hidden`. Se o
+// JavaScript tiver um último suspiro, ele mesmo esfria a migalha e a
+// testemunha se cala sozinha, justamente no caso que ela foi criada para
+// pegar. Foi o que aconteceu: o aparelho respondeu o quiz às 18:27:44, reabriu
+// vinte segundos depois, dentro da janela, e nada saiu em `app_erros`.
+//
+// A separação é temporal: pausa colada no passo é o app desaparecendo; pausa
+// segundos depois é gente saindo do app (caso 2, que continua calado).
+{
+  gaveta.clear();
+  passo("respondeu o quiz");
+  esfriaMigalha(); // no mesmo instante, como um app morrendo
+  // Envelhece os DOIS carimbos junto, mantendo a distância entre eles: a
+  // sessão morreu há 7 segundos e a pausa foi colada na morte.
+  {
+    const m = JSON.parse(gaveta.get(CHAVE) as string) as { t: number; pausadoEm: number };
+    gaveta.set(
+      CHAVE,
+      JSON.stringify({ ...m, t: m.t - 7000, pausadoEm: m.pausadoEm - 7000 })
+    );
+  }
+  const f = fechamentoAnterior();
+  conferir("pausa colada no passo ainda vira relato", f !== null, "é o app morrendo, não a pessoa saindo");
+  conferir("e o relato diz o passo certo", f?.nome === "respondeu o quiz", `veio "${f?.nome}"`);
+}
+
+// ── 8. migalha antiga, sem a hora da pausa, continua calada ─────────────────
+//
+// Compatibilidade: aparelho que atualizar o app no meio pode ter uma migalha
+// gravada pelo código velho, sem `pausadoEm`. Sem a hora não dá para
+// distinguir morte de saída, e na dúvida vale o silêncio de antes.
+{
+  gaveta.clear();
+  passo("respondeu o quiz");
+  {
+    const m = JSON.parse(gaveta.get(CHAVE) as string) as { nome: string; t: number };
+    gaveta.set(CHAVE, JSON.stringify({ nome: m.nome, t: m.t - 7000, pausado: true }));
+  }
+  conferir("migalha velha pausada segue calada", fechamentoAnterior() === null);
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) da migalha reprovaram.`);
   process.exit(1);
