@@ -156,6 +156,25 @@ recomendar.
   `assinaturas_conferencia` compara `subscriptions` com os eventos `assinou` e
   dá um veredito por conta. Rodar antes de qualquer análise de vendas; o
   painel só mostra "Vendas sem evento" quando há o que consertar.
+- **Fonte que faltou não é hipótese fechada: é dívida.** Em 02/09 escrevi que
+  MRR 29,90 com receita 0,00 "cheirava a defeito do coletor", porque o Stripe
+  estava indisponível. Em 04/09, com ele de volta, a resposta era o
+  CONTRÁRIO: o coletor estava certo e a receita é zero mesmo, por cupom de
+  100% empilhado com o teste grátis. Dedução feita sem a fonte principal vale
+  para agir, não para arquivar. Quando a fonte voltar, a primeira coisa da
+  rodada é refazer a conferência que ficou faltando, e dizer que a leitura
+  anterior estava errada quando estiver.
+- **MRR não é caixa.** O Stripe calcula MRR pelo preço da assinatura, e o
+  desconto não entra nessa conta: 3 assinantes ativos e R$ 0,00 recebidos
+  convivem sem contradição nenhuma. Ao ler qualquer número de receita,
+  conferir na FATURA (`total` e `amount_paid`), não no MRR nem no status da
+  assinatura. Assinatura ativa prova acesso liberado, não dinheiro entrando.
+- **Cupom e teste grátis empilham, e ninguém soma os dois.** `duration: once`
+  não é gasto numa fatura que já vale R$ 0,00 por causa do teste: ele espera
+  a primeira fatura COM valor, que é a renovação. Sete dias de teste mais um
+  mês de cupom viram 37 dias grátis, e a primeira cobrança real acontece um
+  ciclo depois do que o calendário sugere. Ao olhar prazo de virada, perguntar
+  sempre se existe cupom na assinatura antes de chamar aquilo de receita.
 - Rodar `npm install` antes de qualquer checagem: o contêiner da sessão nasce
   sem `node_modules` e o `tsc` cospe centenas de erros falsos de módulo.
 - Rodar `npm run conferir` (bateria inteira, 12 conferências) no lugar de

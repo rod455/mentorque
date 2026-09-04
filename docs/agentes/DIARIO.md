@@ -3,6 +3,47 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-04 · QA, verificação agendada: a virada deu certo e a receita é zero
+- Não é rodada semanal, é a verificação de prazo que a rodada de 02/09
+  agendou. Escopo pequeno de propósito.
+- **A VIRADA ACONTECEU.** O segundo cliente (0634d48f) saiu do teste grátis
+  às 13h20 e está `active`, com período até 04/10. A escrita no banco saiu 37
+  segundos depois do fim do teste, o que é a segunda ocorrência do mesmo
+  padrão da virada de 01/09 e fecha de vez a dúvida do webhook do Stripe: ele
+  está VIVO. Ninguém abre o app 37 segundos depois do vencimento, duas vezes
+  seguidas, de madrugada e no meio de uma sexta.
+- **EU ESTAVA ERRADO sobre a receita, e o conserto da leitura é este.** Em
+  02/09 escrevi que MRR 29,90 com receita 0,00 cheirava a defeito do coletor.
+  Não é: o coletor está certo e a receita É zero. Com a integração do Stripe
+  de volta, as faturas dizem o que aconteceu.
+- **A CAUSA: cupom de 100% empilhado com o teste grátis.** Os três clientes
+  entraram por convite de 100% (MENSAL-ALESSANDRO100 resgatado 2x,
+  MENSAL-LANCAMENTO100 1x). Esses cupons são `duration: once`, e o `once`
+  não foi gasto na fatura de criação, que já era R$ 0,00 por causa do teste
+  grátis: ele foi gasto na PRIMEIRA fatura com valor, ou seja, na renovação.
+  Resultado nas duas faturas de ciclo já emitidas (01/09 e 04/09):
+  subtotal 2990, desconto 2990, `total` 0, `amount_paid` 0, status paid.
+- **O que isso significa na prática**: teste grátis de 7 dias mais 1 mês de
+  cupom dá 37 dias grátis, e o produto tem hoje 3 assinantes e R$ 0,00 de
+  receita realizada. O MRR de 29,90 por cliente é preço de tabela, não
+  caixa. O Diretor precisa disso antes de reportar MRR na segunda.
+- **Não é defeito de cobrança, e não mexi em nada.** O cupom faz o que promete
+  ("convite: 1 mês grátis"); o que ninguém tinha olhado é que ele empilha com
+  o teste. Cupom e cobrança estão fora da alçada, então isto fica registrado,
+  não consertado. Se a intenção era 1 mês grátis TOTAL, e não 37 dias, quem
+  decide é o dono.
+- **PRÓXIMA DATA, 01/10**: é a primeira fatura que cobra de verdade
+  (fcd41994, R$ 29,90, cupom já gasto). Verificação agendada para o dia
+  (trigger trig_01RDigHJNuudNTKFfZm6dXN1), conferindo se a fatura sai com
+  valor e o que acontece se o cartão recusar, que é um caminho que nunca
+  rodou. Depois vêm 04/10 e por volta de 09/10.
+- **Terceiro cliente novo**, b62df1c8, assinou em 02/09 à tarde (depois da
+  rodada daquela manhã), em teste até 09/09. A fatura dele em 09/09 também
+  vai sair zerada, pelo mesmo cupom, e isso é esperado e não precisa de
+  alarme.
+- Nada corrigido nesta verificação porque nada estava quebrado no código: o
+  achado é de leitura de negócio.
+
 ## 2026-09-04 · Por que o ChatGPT e o Gemini não citam o Mentorque
 
 - **A pergunta do dono:** pesquisou "aplicativo de carro" nos dois e nenhum
