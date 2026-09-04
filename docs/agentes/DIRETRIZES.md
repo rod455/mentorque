@@ -32,6 +32,7 @@ encosta nelas:
 | `concluir-com-prova` | investigar defeito, explicar causa, número estranho |
 | `conferir-que-morde` | criar ou mexer em conferência, e depois de todo conserto |
 | `release-nas-lojas` | versão, build, Codemagic, notas das lojas |
+| `mensagem-a-cliente` | e-mail ou push para cliente, cupom em link, campanha |
 
 **Por que isto foi feito.** O ciclo de aprendizado abaixo depende de o agente
 LEMBRAR de abrir o manual certo, e essa é a parte que falha. Em 03/09 uma
