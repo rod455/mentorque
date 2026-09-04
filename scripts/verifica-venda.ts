@@ -16,6 +16,7 @@
 // pediu, dias depois, com um cupom que ela já esqueceu.
 //
 // Rode com: npm run conferir:venda
+import { readFileSync } from "node:fs";
 import { esqueceVenda, guardaVenda, vendaPendente } from "../lib/app/vendaPendente.ts";
 
 let falhas = 0;
@@ -106,6 +107,46 @@ const CHAVE = "mq-venda-pendente";
 
   gaveta.set(CHAVE, JSON.stringify({ plano: "annual", direto: true }));
   conferir("compra sem carimbo de tempo não vira compra", vendaPendente() === null);
+}
+
+
+// ── a volta do login social: "ainda não sei" não é "não tem sessão" ─────────
+//
+// O DEFEITO, medido em 03/09/2026 com o link do e-mail de lançamento na rua:
+// quem clicava DESLOGADO ia para o login, entrava com o Google e voltava para
+// a tela inicial, sem passar pelo pagamento. Já logado, o mesmo link
+// funcionava. Foi o próprio dono quem isolou os dois casos.
+//
+// A causa: `user` nasce `null` em duas situações diferentes, "não tem sessão"
+// e "ainda não sei". Na volta do login social a página recarrega inteira e a
+// sessão é lida de forma assíncrona; nesse intervalo a pessoa ESTÁ logada e o
+// `user` ainda é nulo. O código concluía "deslogada" e a empurrava de volta
+// para a tela de entrar, e de lá não saía mais: o `back()` do login só roda
+// dentro do clique, e na volta ninguém clica.
+//
+// A conferência é de TEXTO, e é a segunda melhor opção. A primeira seria a
+// suíte de navegador, mas ela precisaria de uma sessão do Supabase forjada
+// para reproduzir o intervalo. Fica anotado como dívida: a suíte de venda hoje
+// confere que o armazenamento sobrevive à recarga e NUNCA confere que o app
+// navega para o pagamento depois, e foi exatamente por isso que ela passou
+// verde com este defeito de pé.
+//
+// Sem comentários, pela lição de 03/09: aqui todo comentário cita código, e
+// busca sem essa limpeza aprova a explicação do conserto em vez do conserto.
+{
+  const semComentarios = (f: string) =>
+    f.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/.*$/gm, " ");
+  const fonte = semComentarios(readFileSync(new URL("../lib/app/aberturaDoApp.ts", import.meta.url), "utf8"));
+  const gancho = fonte.slice(fonte.indexOf("export function usePlanoPendente"), fonte.indexOf("export function useRotaDeAviso"));
+
+  conferir("o gancho pega o `ready` do useAuth", /useAuth\(\)/.test(gancho) && /\bready\b/.test(gancho));
+  conferir(
+    "e ESPERA a sessão antes de decidir que não há usuário",
+    gancho.indexOf("if (!ready) return;") > -1 &&
+      gancho.indexOf("if (!ready) return;") < gancho.indexOf("if (!user)"),
+    "sem isso, quem volta do login social é mandado de volta ao login e fica preso lá"
+  );
+  conferir("o `ready` entra nas dependências do efeito", /\[venda, user, ready, view\]/.test(gancho));
 }
 
 if (falhas) {

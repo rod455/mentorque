@@ -102,7 +102,7 @@ export function useFunilDeAbertura() {
  *                            com o desconto já aplicado (o servidor valida).
  */
 export function usePlanoPendente() {
-  const { user } = useAuth();
+  const { user, ready } = useAuth();
   const { view, go } = useNav();
   const { s } = usePrototype();
   const [venda, setVenda] = useState<VendaPendente | null>(null);
@@ -152,6 +152,26 @@ export function usePlanoPendente() {
   const pediuLogin = useRef(false);
   useEffect(() => {
     if (!venda) return;
+    // ESPERA A SESSÃO SER RESOLVIDA ANTES DE DECIDIR QUALQUER COISA.
+    //
+    // O DEFEITO QUE ISTO CONSERTA, medido em 03/09/2026 com o link do e-mail de
+    // lançamento na rua: quem clicava DESLOGADO ia para o login, entrava com o
+    // Google, e voltava para a tela inicial sem passar pelo pagamento. Logado
+    // já, o mesmo link funcionava.
+    //
+    // A causa é que `user` nasce `null` nas duas situações que NÃO são a mesma
+    // coisa: "não tem sessão" e "ainda não sei". Na volta do login social a
+    // página recarrega inteira e a sessão é lida de forma assíncrona, então
+    // existe um intervalo em que a pessoa ESTÁ logada e o `user` ainda é nulo.
+    // Neste intervalo o código concluía "não está logada" e a empurrava de
+    // volta para a tela de entrar. Aí a sessão chegava, a regra via
+    // `view === "auth"` e ficava esperando alguém sair do login. Ninguém sai: o
+    // `back()` da tela de login só roda dentro do clique nos botões, e na volta
+    // ninguém clica. A compra ficava parada para sempre.
+    //
+    // O `ready` do useAuth existe exatamente para separar os dois casos, e era
+    // só não ter ignorado ele.
+    if (!ready) return;
     if (!user) {
       if (view.name === "auth") return;                          // está logando
       // Desistiu do login: a pendência morre junto, senão ela ficaria guardada
@@ -175,7 +195,7 @@ export function usePlanoPendente() {
         : { name: "subscribe", ctx: `onb-${venda.plano}` }
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [venda, user, view]);
+  }, [venda, user, ready, view]);
 }
 
 /**
