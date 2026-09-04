@@ -3,6 +3,31 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## LEIA ISTO ANTES DE RECONFERIR QUALQUER NÚMERO
+
+Perguntas que JÁ FORAM investigadas e fechadas. Reabrir qualquer uma delas sem
+motivo novo é gastar o tempo do dono para chegar na mesma resposta. Se um número
+aqui parecer estranho, o caminho é ler a entrada citada, não refazer a
+investigação do zero.
+
+Isto existe porque o diário cresce e a resposta boa afunda. Em 04/09 o dono
+cobrou, com razão: "toda vez você confere as mesmas coisas". A conferência que
+ele viu pela terceira vez estava escrita duas vezes ali embaixo.
+
+| Pergunta | Resposta, e desde quando | Onde está |
+|---|---|---|
+| Por que a receita é R$ 0,00 se há assinantes? | Cupom de 100% empilha com o teste grátis: 7 dias mais 1 mês. Não é defeito, o cupom faz o que promete. | 04/09, QA agendado |
+| Os cupons vão continuar zerando a fatura? | Não. São `duration: once`, já foram gastos, e as assinaturas estão com `discounts: []`. | 04/09, QA agendado |
+| Quantos assinantes existem de verdade? | **3 pessoas.** A tabela tem 6 linhas: 2 `inactive` e 1 conta de revisão das lojas (válida até 2099) não são clientes. | 04/09 |
+| Quando entra o primeiro dinheiro? | 01/10, depois 04/10 e por volta de 09/10, R$ 29,90 cada. Verificação já agendada para o dia 01. | 04/09, QA agendado |
+| O webhook do Stripe está vivo? | Está. Duas viradas de teste gravadas em 37 segundos, 01/09 e 04/09. | 04/09, QA agendado |
+| A captura de UTM está quebrada? | Não, nunca esteve. A consulta é que lia o caminho errado: é `extra->'utm'->>'utm_source'`. | 03/09 |
+
+**Como manter:** ao FECHAR uma pergunta que já custou investigação, acrescente a
+linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
+aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
+de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
+
 ## 2026-09-04 · QA, verificação agendada: a virada deu certo e a receita é zero
 - Não é rodada semanal, é a verificação de prazo que a rodada de 02/09
   agendou. Escopo pequeno de propósito.

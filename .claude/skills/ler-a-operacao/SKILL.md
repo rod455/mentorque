@@ -14,6 +14,25 @@ limites conhecidos da série) está em **`docs/agentes/skills/analise-da-operaca
 Leia esse arquivo quando a tarefa for uma análise completa. O que está aqui é o
 que evita errar, e vale mesmo numa resposta de uma linha.
 
+## Antes de investigar: isto já foi respondido?
+
+**Abra a tabela "LEIA ISTO ANTES DE RECONFERIR QUALQUER NÚMERO", no topo do
+`docs/agentes/DIARIO.md`.** É o primeiro passo, não o último.
+
+Esta skill toda empurra para desconfiar e conferir, e isso é certo na primeira
+vez. Na terceira vez é desperdício do tempo do dono, com a agravante de que
+chegar sozinho na mesma resposta parece trabalho e não é.
+
+Em 04/09 o dono cortou: "toda vez você confere as mesmas coisas". Ele estava
+certo. Eu tinha ido ao Stripe reconfirmar que o cupom era `duration: once` e
+que a receita era zero. As duas coisas estavam escritas no diário, uma delas
+por um agente nosso naquela mesma manhã.
+
+Reabrir uma pergunta fechada só se houver **motivo novo**: um dado que
+contradiz, uma data que passou, uma mudança que alguém fez. "Quero ter certeza"
+não é motivo novo. E quando fechar uma pergunta que custou investigação,
+acrescente a linha lá, senão o próximo repete.
+
 ## A regra que resolve metade dos erros
 
 **Antes de dizer um número, diga a si mesmo qual tabela é a VERDADE daquele
