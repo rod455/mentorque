@@ -198,15 +198,64 @@ async function carregar(): Promise<Caixa | null> {
   return carregando;
 }
 
+/**
+ * O estado da permissão, PERGUNTADO UMA VEZ POR VOLTA AO APP.
+ *
+ * ESTA É A ÚNICA TRAVESSIA DA PONTE PARA PERGUNTAR PERMISSÃO, e a razão é um
+ * crash real. Em 02/09/2026 um cliente na 1.6 (código 52) perdeu o app com
+ * `java.lang.NullPointerException` em `com.getcapacitor.Bridge.getPermissionStates`,
+ * registrado nos Android vitals. No Capacitor 8.5.0 aquela função faz, sem
+ * verificar nulo:
+ *
+ *     CapacitorPlugin annotation = plugin.getPluginHandle().getPluginAnnotation();
+ *
+ * Handle nulo ali é NullPointerException no fio principal, e isso MATA O
+ * PROCESSO. O `try/catch` daqui não pega nada nesse caso: quem morre é o
+ * processo, não a promessa. Foi o que a gravação de tela de 04/09 mostrou, com
+ * o diálogo "Mentorque keeps stopping" logo depois de responder o quiz.
+ *
+ * Responder o quiz atravessava essa ponte DUAS vezes seguidas: uma em
+ * `sincronizarLembreteQuiz` e outra dentro de `agendar`. Duas travessias para
+ * descobrir o mesmo fato.
+ *
+ * Guardar é seguro porque a permissão só muda nos ajustes do SISTEMA, e para
+ * chegar lá a pessoa precisa sair do app. Por isso a volta ao primeiro plano
+ * esquece o que foi guardado, e é só isso que precisa ser verdade para o valor
+ * guardado nunca ficar velho.
+ *
+ * Isto NÃO conserta o defeito do Capacitor. Tira o nosso caminho quente de
+ * cima dele, que é o que dá para fazer sem reproduzir a falha.
+ */
+let permissao: Permissao | null = null;
+let ouvindoAVolta = false;
+
+function esqueceQuandoVoltar(): void {
+  if (ouvindoAVolta || typeof document === "undefined") return;
+  ouvindoAVolta = true;
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") permissao = null;
+  });
+}
+
+async function estadoDaPermissao(): Promise<Permissao | null> {
+  if (permissao) return permissao;
+  const c = await carregar();
+  if (!c) return null;
+  esqueceQuandoVoltar();
+  try {
+    permissao = (await c.plugin.checkPermissions()).display;
+    return permissao;
+  } catch {
+    // Falha passageira não vira resposta guardada: sem gravar nada, a próxima
+    // chamada tenta de novo em vez de herdar um "não" que talvez nunca tenha
+    // sido dito.
+    return null;
+  }
+}
+
 /** O sistema negou DE VEZ? (Diferente de "ainda não perguntou".) */
 export async function bloqueadaPeloSistema(): Promise<boolean> {
-  const c = await carregar();
-  if (!c) return false;
-  try {
-    return (await c.plugin.checkPermissions()).display === "denied";
-  } catch {
-    return false;
-  }
+  return (await estadoDaPermissao()) === "denied";
 }
 
 /**
@@ -232,13 +281,7 @@ export function abrirAjustesDeAvisos(): void {
 
 /** Já temos permissão? Não pede nada, só consulta. */
 export async function permissaoConcedida(): Promise<boolean> {
-  const c = await carregar();
-  if (!c) return false;
-  try {
-    return (await c.plugin.checkPermissions()).display === "granted";
-  } catch {
-    return false;
-  }
+  return (await estadoDaPermissao()) === "granted";
 }
 
 /**
@@ -253,12 +296,17 @@ export async function pedirPermissao(): Promise<boolean> {
   const c = await carregar();
   if (!c) return false;
   try {
-    const atual = await c.plugin.checkPermissions();
-    if (atual.display === "granted") return true;
+    const atual = await estadoDaPermissao();
+    if (atual === "granted") return true;
     // "denied" já foi recusado antes: o sistema não pergunta de novo, e insistir
     // só devolve o mesmo não. Quem quiser reverter faz nos ajustes do aparelho.
-    if (atual.display === "denied") return false;
-    return (await c.plugin.requestPermissions()).display === "granted";
+    if (atual === "denied") return false;
+    // A resposta da FOLHA é a permissão nova, então ela substitui o que estava
+    // guardado na hora. Sem isto, quem acabasse de conceder continuaria sendo
+    // tratado como "ainda não perguntei" até sair do app e voltar.
+    const pedida = (await c.plugin.requestPermissions()).display;
+    permissao = pedida;
+    return pedida === "granted";
   } catch {
     return false;
   }

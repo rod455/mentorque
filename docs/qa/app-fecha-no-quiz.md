@@ -139,6 +139,64 @@ um aviso que o sistema tem licença para adiar. Declarar essa permissão é deci
 do dono: a Play restringe o uso dela e pede justificativa, então não é uma linha
 no manifesto, é um assunto com a loja.
 
+### 04/09, mais tarde: O RASTRO NATIVO APARECEU
+
+Play Console, Android vitals, Falhas e ANRs:
+
+```
+com.getcapacitor.Bridge.getPermissionStates
+java.lang.NullPointerException
+Tipo: Falha    Versões afetadas: 52 (1.6)    Usuários afetados: 1    Eventos: 1
+```
+
+**`getPermissionStates` é o que sustenta o `checkPermissions()` de um plugin.**
+E o nosso caminho ao responder o quiz chama exatamente isso:
+
+```
+s.quiz muda → useLembretes → sincronizarLembreteQuiz → permissaoConcedida()
+            → plugin.checkPermissions() → Bridge.getPermissionStates → NPE
+```
+
+E chamava DUAS vezes: `sincronizarLembreteQuiz` perguntava, e `agendar()`
+perguntava de novo logo em seguida. Duas travessias da ponte para descobrir o
+mesmo fato, no instante exato em que o app morre.
+
+**Onde o nulo mora.** `@capacitor/android@8.5.0`, `Bridge.java:1216`:
+
+```java
+CapacitorPlugin annotation = plugin.getPluginHandle().getPluginAnnotation();
+```
+
+Sem verificação de nulo. `getPluginHandle()` nulo, ou anotação nula, é
+NullPointerException no fio principal, e isso mata o processo. Nenhum
+`try/catch` de JavaScript alcança: quem morre é o processo, não a promessa. É
+por isso que o `catch` em volta do `checkPermissions()` nunca reportou nada.
+
+**O que ainda NÃO está provado:** por que o handle está nulo. Um palpite
+razoável é a WebView que já morreu e foi refeita (ver a rede do
+`MainActivity.java`), deixando instância de plugin órfã, mas isso é palpite e
+fica registrado como palpite. A amostra também é pequena: 1 usuário, 1 evento,
+e os dados da Play estavam com atualização de quinta 06:00, ou seja, a quebra
+gravada em vídeo hoje ainda não entrou.
+
+### O conserto que subiu, e o que ele é
+
+Uma porta só para perguntar permissão (`estadoDaPermissao`), com a resposta
+guardada e esquecida quando o app volta ao primeiro plano. Guardar é seguro
+porque a permissão só muda nos ajustes do sistema, e para chegar lá a pessoa
+sai do app.
+
+Efeito: responder o quiz deixa de atravessar a ponte duas vezes e passa a
+atravessar, no máximo, uma vez por volta ao app.
+
+**Isto não conserta o defeito do Capacitor, e não deve ser lido como conserto
+do crash.** Tira o nosso caminho mais quente de cima dele, que é o que dá para
+fazer sem reproduzir a falha. Se as quebras continuarem depois da 1.7 chegar
+nos aparelhos, a causa está em outro lugar e a migalha vai dizer em qual passo.
+
+Conferido pela `conferir:aviso`, com os dois defeitos plantados e acusados: uma
+segunda travessia da ponte, e esquecer de esquecer a resposta na volta.
+
 ### O que ainda falta, e onde está
 
 O rastro nativo. `app_erros` não tem nada depois de 29/08 e todas as linhas de lá

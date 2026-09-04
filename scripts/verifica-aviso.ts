@@ -153,6 +153,32 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
   // 5. o push do servidor sabe mandar destino
   conferir("o envio de push aceita rota", /data:\s*\{\s*rota\s*\}/.test(rotaEnviar), "FCM: o destino vai no `data`");
   conferir("o envio para o iPhone leva a rota ao lado do `aps`", /aps:.*\.\.\.\(rota/.test(rotaEnviar));
+
+  // 6. A PONTE DA PERMISSÃO É ATRAVESSADA NUM LUGAR SÓ.
+  //
+  // `checkPermissions` desce até `com.getcapacitor.Bridge.getPermissionStates`,
+  // que no Capacitor 8.5.0 desreferencia `plugin.getPluginHandle()` sem checar
+  // nulo. Handle nulo ali é NullPointerException no fio principal, ou seja,
+  // MORTE DO PROCESSO, e nenhum `try/catch` de JavaScript pega isso. Aconteceu
+  // com um cliente na 1.6, registrado nos Android vitals em 02/09/2026.
+  //
+  // Cada chamada nova é um bilhete de rifa nesse sorteio, e o caminho do quiz
+  // já tirou dois de uma vez. Por isso existe UMA função guardando a resposta
+  // (`estadoDaPermissao`), e é ela que pode perguntar. A conferência olha o
+  // arquivo SEM COMENTÁRIOS de propósito: este bloco aqui cita o nome da
+  // chamada, e sem a limpeza a própria explicação reprovaria o conserto.
+  const notif = leia("lib/app/notificacoes.ts");
+  const travessias = (notif.match(/plugin\.checkPermissions\(\)/g) ?? []).length;
+  conferir(
+    "a permissão é perguntada ao sistema num lugar só",
+    travessias === 1,
+    `${travessias} chamadas a plugin.checkPermissions(); todas devem passar por estadoDaPermissao()`
+  );
+  conferir(
+    "a resposta guardada é esquecida ao voltar para o app",
+    /visibilitychange/.test(notif) && /permissao = null/.test(notif),
+    "sem isso, quem liberar a permissão nos ajustes continua sendo tratado como negado"
+  );
 }
 
 if (falhas) {
