@@ -82,6 +82,77 @@ descritas acima saíram do instante da resposta:
 Isso não é o conserto: é tirar o suspeito do caminho enquanto ele não é nem
 inocentado nem condenado.
 
+## 04/09/2026: o vídeo, e o que ele fecha
+
+O dono mandou uma gravação de tela de um Android com o defeito acontecendo.
+Treze segundos, e ela responde três perguntas que estavam em aberto.
+
+**O momento exato, quadro a quadro (8 por segundo).** A pessoa toca na opção B.
+A tela responde INTEIRA: o check verde aparece na alternativa, o painel
+"Acertou!" com a explicação, o cartão de sequência com "1 dia seguido" e o botão
+"Seguir". No quadro seguinte, cerca de 125 ms depois, já é a animação de
+fechamento do app, e logo em seguida a tela inicial do Android com o aviso do
+sistema.
+
+Ou seja: **tudo o que é síncrono no toque terminou**, inclusive a atualização de
+estado que desenhou a sequência. A morte é no que vem depois disso, e o que vem
+depois é o efeito com `s.quiz` na lista de dependências, que leva a
+`sincronizarLembreteQuiz`.
+
+**É morte de PROCESSO, não erro de JavaScript, e agora está provado.** O aviso do
+sistema é "Mentorque keeps stopping". Exceção de JavaScript não produz esse
+diálogo: ela derruba a tela e o processo segue vivo. Isso também explica por que
+o `try/catch` em volta de `plugin.schedule`, em `lib/app/notificacoes.ts`, nunca
+pegou nada. Ele não tem como pegar: o que morre é o processo, não a promessa.
+
+**"keeps stopping", e não "has stopped".** O Android usa a primeira forma quando
+o app já quebrou VÁRIAS vezes seguidas. Não é um episódio.
+
+**O aparelho é de um cliente pagante.** Dá para identificar pela gravação, e é a
+assinatura que virou cobrança hoje. Sobe a prioridade: é 1 dos 3 clientes reais.
+
+### O candidato mais óbvio foi conferido e ELIMINADO
+
+A primeira hipótese de qualquer um, e foi a minha: em Android 12 e acima, agendar
+alarme EXATO sem a permissão `SCHEDULE_EXACT_ALARM` lança `SecurityException` no
+código nativo e mata o processo. Bate com tudo: é nativo, é Android novo, é no
+`schedule`, e o nosso `AndroidManifest.xml` realmente **não declara** essa
+permissão (só INTERNET, ACCESS_NETWORK_STATE e AD_ID).
+
+Só que o plugin não deixa isso acontecer. Em
+`@capacitor/local-notifications@8.3.1`, o `LocalNotificationManager.kt` decide
+assim:
+
+```kotlin
+val useExact = localNotification.isExactNotification && canScheduleExactAlarms(alarmManager)
+// canScheduleExactAlarms = SDK < S  ||  alarmManager.canScheduleExactAlarms()
+```
+
+Sem a permissão, ele cai em `setAndAllowWhileIdle`, que é inexato e **não lança**.
+Então essa não é a causa em nenhum build que use 8.3.1. Fica registrado como
+eliminado para a próxima pessoa não gastar a mesma tarde.
+
+**Mas o achado colateral é real e vale saber:** sem `SCHEDULE_EXACT_ALARM`, o
+lembrete diário é agendado como alarme INEXATO. Ele sai, e sai atrasado, às vezes
+bastante. O experimento `lembrete-que-chega`, com veredito em 28/09, está medindo
+um aviso que o sistema tem licença para adiar. Declarar essa permissão é decisão
+do dono: a Play restringe o uso dela e pede justificativa, então não é uma linha
+no manifesto, é um assunto com a loja.
+
+### O que ainda falta, e onde está
+
+O rastro nativo. `app_erros` não tem nada depois de 29/08 e todas as linhas de lá
+são da 1.2.0, ou seja, a migalha do último passo não existe no aparelho que está
+quebrando. A testemunha que a gente plantou só começa a testemunhar quando a 1.7
+chegar nesse celular.
+
+Enquanto isso, o rastro existe em UM lugar: **Play Console, Qualidade, Android
+vitals, Falhas e ANRs**, filtrando pela versão instalada. Em 02/09 o
+`crashPorDia` estava vazio, mas o aparelho quebrou de novo hoje e "keeps
+stopping" é diálogo de crash de processo, que costuma ser reportado. Vale reabrir
+com dois dias a mais de dados. É lá que está o `SecurityException`, o
+`OutOfMemory` ou o que quer que seja, com a linha exata.
+
 ## O que falta, e depende do aparelho
 
 1. **Qual aparelho e qual Android.** Muda a leitura por completo: memória
