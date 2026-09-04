@@ -82,6 +82,39 @@ funcionalidade paga de quem pagou. Sem travessão em texto visível.
 
 ## Direcionamentos do dono
 
+- **2026-09-04: esgote as dimensões que JÁ EXISTEM antes de dizer "não dá para
+  saber".** Antes de recomendar instrumentação nova, corte o que já está na
+  tabela: `plataforma`, `versao`, `origem` e `extra->'utm'`. Recomendação que
+  depende do dono mexer no banco custa uma semana de espera; um `group by` custa
+  nada.
+  - O caso: a rodada de 04/09 concluiu que as 19 pessoas perdidas no onboarding
+    somem "num trecho onde não dá para apontar a página", e a recomendação 1
+    virou criar evento por página, o que exige alterar a restrição CHECK de
+    `funil_eventos`. A coluna `plataforma` já estava na mesma consulta. Cortando
+    por ela: **web 16 começaram e 0 terminaram, Android 21 e 12, iOS 6 e 5.** A
+    perda não está espalhada por cinco páginas, está concentrada numa
+    plataforma, e zero em 16 contra 63% nas lojas não é ruído.
+  - O `terminou_onboarding` também carrega `origem` (`plano`, `assinou`,
+    `agora-nao`, `sem-venda`), que diz COMO a pessoa saiu. Não é a página, mas é
+    muito mais do que nada, e não foi usado.
+
+- **2026-09-04: toda taxa declara a janela REAL de cada degrau, e usa o
+  `lib/funilCorreto.ts`.** Ele existe exatamente para isso, junto da função
+  `funil_etapas(p_desde)`; o `supabase/funil_etapas_28d.sql` explica por que a
+  janela fixa de 28 dias foi abandonada (ela mede calendário, não
+  comportamento).
+  - O caso: a rodada de 04/09 reportou "28 dias" para o `comecou_onboarding`,
+    que só é gravado desde **01/09**. A janela real era de quatro dias. Pior, a
+    taxa de 29,4% dividiu `abriu_cadastro_de_carro` (existe desde 03/09, dois
+    dias) por `terminou_onboarding` (desde 01/09, quatro dias): numerador e
+    denominador com janelas diferentes produzem um número que parece taxa e não
+    é. Dizer 28 dias faz uma amostra de quatro dias parecer madura.
+
+- **2026-09-04: amostra pequena não leva casa decimal.** Com 36 pessoas,
+  escrever 47,2% sugere uma precisão que o dado não tem. Escreva "17 de 36,
+  amostra pequena". O número absoluto ao lado da taxa já é regra da skill
+  `ler-a-operacao`; a casa decimal é o mesmo erro com outra roupa.
+
 - **2026-09-01: a prova social fabricada FICA como está, por ora.** Decisão
   tomada com o inventário completo e o risco de política das lojas na mão
   (registrada primeiro no manual do ASO, e repetida aqui porque as três

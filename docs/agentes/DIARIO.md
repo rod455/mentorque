@@ -179,17 +179,33 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   autor e loja. RESSALVA registrada: a primeira parece ser do próprio dono
   (autor Moraes455, e-mail da conta rodrigomoraessilva455), então não vale como
   voz de cliente até ele confirmar.
-- AUDITORIA DA SEMANA, com a instrumentação nova de 01/09 (28 dias, pessoas):
-  36 começaram o onboarding e 17 terminaram (47,2%, 19 perdidas); dessas 17, 5
-  abriram o cadastro de carro (29,4%); dessas 5, UMA cadastrou. A maior quebra
+- AUDITORIA DA SEMANA, com a instrumentação nova de 01/09 ~~(28 dias, pessoas)~~:
+  36 começaram o onboarding e 17 terminaram ~~(47,2%,~~ 19 perdidas); dessas 17, 5
+  abriram o cadastro de carro ~~(29,4%)~~; dessas 5, UMA cadastrou. A maior quebra
   do funil inteiro é a primeira, e das 36 que começam UMA chega a ter carro
   cadastrado, que é a porta de todo o resto do app.
+  - **CORREÇÃO, 04/09 à tarde: a janela não era de 28 dias, era de QUATRO.** O
+    `comecou_onboarding` só é gravado desde 01/09. E a taxa de 29,4% dividiu
+    dois degraus com janelas diferentes: `abriu_cadastro_de_carro` existe desde
+    03/09 (dois dias) e `terminou_onboarding` desde 01/09 (quatro dias). É o
+    defeito que o `lib/funilCorreto.ts` e a função `funil_etapas(p_desde)`
+    existem para impedir, e nenhum dos dois foi usado. As casas decimais também
+    saem: com 36 pessoas elas sugerem precisão que o dado não tem.
 - O PROBLEMA DE FUNDO: o onboarding tem 5 páginas e a medição só sabe quem
-  entrou e quem saiu. As 19 pessoas somem num trecho onde não dá para apontar
-  a página. Mudar copy agora é chute com nome de aposta. Instrumentar por
+  entrou e quem saiu. ~~As 19 pessoas somem num trecho onde não dá para apontar
+  a página.~~ Mudar copy agora é chute com nome de aposta. Instrumentar por
   página NÃO está na minha alçada: a lista de eventos válidos é uma restrição
   CHECK em funil_eventos, e banco além de tabela nova é do dono. Virou a
   recomendação 1.
+  - **CORREÇÃO, 04/09 à tarde: dava para apontar bem mais do que isso, e sem
+    depender do dono.** A coluna `plataforma` já estava na mesma consulta. Em 14
+    dias: **web 16 começaram e 0 terminaram; Android 21 e 12; iOS 6 e 5.** As 19
+    perdidas não estão espalhadas pelas cinco páginas, estão concentradas numa
+    plataforma. O `terminou_onboarding` ainda carrega `origem` (`plano`,
+    `assinou`, `agora-nao`, `sem-venda`), que diz COMO a pessoa saiu, e também
+    não foi usado. A recomendação de instrumentar por página continua válida,
+    mas deixou de ser a primeira coisa a fazer: ela custa uma semana de espera
+    pelo dono, e o corte por plataforma custava um `group by`.
 - NADA FOI IMPLEMENTADO NO CÓDIGO, e é decisão, não falta de assunto. As duas
   páginas onde eu mexeria estão fechadas: a 5 (montar o teste) tem o
   experimento cta-teste-por-plano com veredito em 20/09, e mexer nela apaga a
