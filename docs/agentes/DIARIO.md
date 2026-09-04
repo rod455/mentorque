@@ -3,6 +3,48 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-04 · Por que o ChatGPT e o Gemini não citam o Mentorque
+
+- **A pergunta do dono:** pesquisou "aplicativo de carro" nos dois e nenhum
+  mencionou a gente.
+- **Como esses assistentes montam essa resposta:** eles buscam e citam, não
+  respondem de memória sobre app novo. Para "melhor aplicativo para cuidar do
+  carro" as fontes que voltam são listas de terceiros (blog da Nakata,
+  Garagem360, Gazeta do Povo, Rodobens) e fichas de loja. Nunca o site do
+  próprio app. Quem está nessas listas é citado.
+- **O achado que ninguém esperava:** buscando "Mentorque aplicativo carro" não
+  volta nada nosso, nem o site nem as fichas das lojas. O único "Mentorque" que
+  aparece é `app.mentorquedu.com`, uma plataforma de educação que já ocupa o
+  nome. Não somos encontráveis nem pelo nome próprio, e existe colisão de marca.
+- **Ressalva de método:** isso NÃO prova que o Google não nos indexou. O
+  operador `site:` não foi respeitado pela ferramenta de busca e o nosso domínio
+  está bloqueado na saída de rede das sessões, então as páginas não puderam ser
+  abertas daqui. Quem sabe da indexação é o Search Console, e ele é do dono.
+- **A causa provável, e não é falta de preparo técnico:** o `robots.ts` libera
+  17 robôs de IA nominalmente, o `llms.txt` é bom, o `/sobre` existe. O problema
+  é tamanho: o site tinha 8 páginas e só 3 de conteúdo. As 105 aulas moram
+  dentro do app, atrás de conta, onde robô nenhum entra. A decisão de manter o
+  acervo fechado continua certa; o que não aconteceu foi publicar topo de funil,
+  que existia em UMA página.
+- **O que subiu:** três guias novos, escolhidos por demanda real de busca e não
+  por gosto. `/luz-da-injecao-acesa` (o ângulo é fixa contra piscando, que quase
+  ninguém explica), `/carro-nao-pega` (o recorte é o som da partida, e quem
+  busca isso está parado na garagem agora) e `/carro-gastando-muita-gasolina` (o
+  ângulo é medir antes de trocar peça). Os quatro guias passaram a dividir
+  estrutura, o sitemap e a suíte `site` leem do mesmo registro, e eles agora
+  linkam uns para os outros: antes cada um era uma ilha ligada só à home.
+- **Um número que quase entrou errado:** os textos mais copiados sobre consumo
+  afirmam que a gasolina passou a ter 35% de etanol. Está errado. Em 14/07/2026
+  o CNPE aprovou de 30% para 32%, por 180 dias, e o E35 seguia em estudo.
+  Copiar a lista dos outros teria publicado o erro deles com a nossa cara.
+- **Recomendações, em ordem de força.** (1) Estar nas listas dos outros é o
+  caminho mais curto para ser citado, e é alçada do dono, porque envolve falar
+  com terceiro. (2) Conferir no Search Console se as páginas estão indexadas e
+  pedir indexação das três novas. (3) Conferir se as fichas das lojas aparecem
+  na busca, porque elas são ativo citável com autoridade que não é nossa.
+- **Expectativa honesta:** mesmo com tudo bem feito, ser citado leva meses. A
+  citação depende de terceiros publicarem e de os buscadores reindexarem.
+
 ## 2026-09-04 · O onboarding da web rodava sem ninguém olhando
 
 - **Correção de uma conclusão minha de hoje de manhã.** Eu disse que o zero de

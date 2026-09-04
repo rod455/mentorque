@@ -1,7 +1,7 @@
 import { GuiaDeSintoma, metadataDoGuia } from "@/components/site/GuiaDeSintoma";
-import { guia } from "@/lib/site/guias/barulho-no-carro";
+import { guia } from "@/lib/site/guias/luz-da-injecao-acesa";
 
-// O conteúdo mora em lib/site/guias/barulho-no-carro.ts e a estrutura em
+// O conteúdo mora em lib/site/guias/luz-da-injecao-acesa.ts e a estrutura em
 // components/site/GuiaDeSintoma.tsx. Ver o comentário de lib/site/guias/tipos.ts
 // para o porquê da separação.
 export const metadata = metadataDoGuia(guia);

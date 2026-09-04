@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { GUIAS } from "@/lib/site/guias";
 
 // Mapa do site para os buscadores.
 //
@@ -24,7 +25,13 @@ type Pagina = { caminho: string; prioridade: number; frequencia: MetadataRoute.S
 
 const PAGINAS: Pagina[] = [
   { caminho: "/", prioridade: 1, frequencia: "weekly" },
-  { caminho: "/barulho-no-carro", prioridade: 0.8, frequencia: "monthly" },
+  // Os guias de sintoma NÃO são listados um a um aqui de propósito.
+  //
+  // Eram, e a lista escrita à mão é o jeito silencioso de perder uma página:
+  // ela sobe, abre, funciona, e simplesmente não entra no mapa que o buscador
+  // lê. Nada dá erro. Agora eles vêm do mesmo registro que as próprias páginas
+  // usam (lib/site/guias), então guia novo entra no sitemap por construção.
+  ...GUIAS.map((g) => ({ caminho: g.caminho, prioridade: 0.8, frequencia: "monthly" as const })),
   // Página de referência do produto: é a que uma IA cita quando alguém
   // pergunta por app de manutenção de carro. Prioridade alta de propósito.
   { caminho: "/sobre", prioridade: 0.9, frequencia: "monthly" },

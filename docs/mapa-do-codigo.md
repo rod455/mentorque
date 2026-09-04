@@ -21,6 +21,24 @@ começar lendo em vez de garimpando.
 | o que acontece na abertura do app | `lib/app/aberturaDoApp.ts` |
 | o que aparece por cima de tudo | `components/app/Sobreposicoes.tsx` |
 | as barras de cima e de baixo | `components/app/Shell.tsx` |
+| o texto de um guia do site (`/barulho-no-carro`) | `lib/site/guias/<caminho>.ts` |
+| criar um guia novo do site | veja abaixo |
+
+### Um guia de sintoma novo no site
+
+São as páginas de tráfego orgânico, a ponte entre quem pesquisa "meu carro está
+fazendo barulho" e o app. Três arquivos e nada mais:
+
+1. `lib/site/guias/<caminho>.ts` com o conteúdo, seguindo o tipo de `tipos.ts`.
+2. uma linha em `lib/site/guias/index.ts`, que é o que coloca o guia no sitemap
+   e nos links dos irmãos.
+3. `app/<caminho>/page.tsx` com as seis linhas de sempre (copie de um existente).
+
+A estrutura toda mora em `components/site/GuiaDeSintoma.tsx`, e as regras de
+conteúdo estão no comentário de lá: sem número inventado, sem preço, sem certeza
+mecânica absoluta, sem depoimento. O `npm run conferir:guias` cobra as que dá
+para cobrar sozinho, e a suíte `site` passa a conferir o guia novo no dia em que
+ele nasce, porque também lê do registro.
 
 ## A regra que faz o mapa funcionar
 
