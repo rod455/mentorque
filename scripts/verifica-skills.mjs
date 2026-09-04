@@ -50,20 +50,24 @@ if (!existsSync(PASTA)) {
   process.exit(0);
 }
 
-// SÓ AS NOSSAS. Skill instalada de fora (`npx skills add`) entra aqui como
-// LINK SIMBÓLICO apontando para `.agents/skills/`, e ela não deve ser julgada
-// por estas regras: os caminhos que ela cita são dela, não do nosso
-// repositório, e o dono dela é outro. Conferir skill de terceiro daria
-// reprovação todo dia por uma coisa que não temos como consertar, e conferência
-// que reprova sem ação possível é conferência que a pessoa aprende a ignorar.
+// SÓ AS NOSSAS. Skill de fora não deve ser julgada por estas regras: os
+// caminhos que ela cita são dela, não do nosso repositório, e o dono dela é
+// outro. Conferir skill de terceiro daria reprovação todo dia por uma coisa que
+// não temos como consertar, e conferência que reprova sem ação possível é
+// conferência que a pessoa aprende a ignorar.
 //
-// A distinção é feita com `lstat`, que NÃO segue o link. O `statSync` comum
-// seguiria e a pasta de fora pareceria nossa.
+// Elas chegam aqui de dois jeitos, e os dois precisam ser reconhecidos:
+//   LINK SIMBÓLICO, quando instaladas com `npx skills add` (apontam para
+//     `.agents/skills/`). O `lstat` não segue o link; o `statSync` seguiria e a
+//     pasta de fora pareceria nossa.
+//   PASTA DE VERDADE com um arquivo `.de-fora` dentro, quando a gente decidiu
+//     TRAZER a skill para o repositório para ela valer nas sessões remotas. O
+//     arquivo guarda origem e commit; ver docs/skills-de-fora.md.
 const tudo = readdirSync(PASTA);
-const deFora = tudo.filter((d) => lstatSync(join(PASTA, d)).isSymbolicLink());
-const skills = tudo.filter(
-  (d) => !lstatSync(join(PASTA, d)).isSymbolicLink() && statSync(join(PASTA, d)).isDirectory()
-);
+const ehDeFora = (d) =>
+  lstatSync(join(PASTA, d)).isSymbolicLink() || existsSync(join(PASTA, d, ".de-fora"));
+const deFora = tudo.filter(ehDeFora);
+const skills = tudo.filter((d) => !ehDeFora(d) && statSync(join(PASTA, d)).isDirectory());
 conferir("existe pelo menos uma skill nossa", skills.length > 0);
 
 for (const skill of skills) {

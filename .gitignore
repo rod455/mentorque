@@ -58,3 +58,15 @@ docs/quiz-perguntas.html
 !/.claude/skills/conferir-que-morde/
 !/.claude/skills/release-nas-lojas/
 !/.claude/skills/mensagem-a-cliente/
+
+# E as de fora que a gente decidiu TRAZER para o repositório, para valerem
+# também nas sessões remotas (que é onde os agentes semanais rodam). Elas vêm
+# sem modificação e com um arquivo `.de-fora` marcando origem e commit; a
+# procedência e o modo de atualizar estão em docs/skills-de-fora.md.
+!/.claude/skills/product-tracking-audit-current-tracking/
+!/.claude/skills/product-tracking-business-case/
+!/.claude/skills/product-tracking-design-tracking-plan/
+!/.claude/skills/product-tracking-generate-implementation-guide/
+!/.claude/skills/product-tracking-implement-tracking/
+!/.claude/skills/product-tracking-instrument-new-feature/
+!/.claude/skills/product-tracking-model-product/
