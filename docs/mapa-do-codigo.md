@@ -72,7 +72,7 @@ for JSX). Foi o caso de `lib/app/cursos.ts` e
 
 ```
 npm run conferir             tipos + estilo + regras       (~15s)
-npm run conferir:navegador   as 8 suítes num Chromium      (~6min)
+npm run conferir:navegador   as 13 suítes num Chromium     (~9min)
 npm run conferir:tudo        os dois mais o build
 ```
 
@@ -84,6 +84,15 @@ de propósito (entraria no build da Vercel e puxaria download de navegador):
 as telas principais e confere que cada uma desenha, com o console limpo. Erro
 de renderização em React não derruba o app: a tela some e o resto continua.
 Sem essa suíte, um arquivo movido para o lugar errado passa em tudo o mais.
+
+**A suíte `erros` confere quem está olhando quando o app quebra.** Ela planta
+um erro de verdade na tela e exige que ele vire relato em `app_erros`, uma vez
+no ONBOARDING e uma vez depois dele. Existe porque o `vigiarErros()` morava
+dentro do Shell, que só nasce depois do onboarding: as cinco primeiras telas da
+vida de um usuário novo, que é onde o dinheiro do anúncio cai, rodavam sem
+coletor. Em 04/09 a tabela vazia foi lida como "nenhum defeito na web" quando
+significava "ninguém estava olhando". O coletor agora liga no `AppBoundary`,
+que é o ponto mais alto do app.
 
 ### Quanto conferir por mudança (o regime das duas velocidades)
 

@@ -60,9 +60,27 @@ Como separar, e é barato:
 - procure erro registrado na janela (`app_erros`);
 - compare com uma população que deveria se comportar igual.
 
-Em 04/09 a web tinha 0 de 10 no onboarding e o app das lojas 5 de 7. Conferi as
-duas hipóteses antes de falar. Era comportamento. Se eu tivesse chutado
-"medição", teria mandado o dono consertar código que estava certo.
+### ~~Em 04/09 a web tinha 0 de 10 no onboarding e o app das lojas 5 de 7. Conferi as duas hipóteses antes de falar. Era comportamento.~~
+
+**Isto estava errado, e o modo de errar é o assunto desta seção.** Escrito em
+04/09 de manhã, desmentido no mesmo dia à tarde. Os números certos eram 16 de 0
+na web contra 17 de 27 nas lojas, e a conclusão "é comportamento" apoiava-se em
+duas provas que não provavam nada:
+
+- **"o portão de emissão é um só, sem caminho de plataforma".** Verdade, e
+  irrelevante: o evento de saída pode simplesmente nunca ser alcançado.
+- **"não há erro em `app_erros`".** Esta era a pior. O `vigiarErros()` era
+  chamado dentro do Shell, e o Shell só existe DEPOIS do onboarding. A tabela
+  estava vazia porque **ninguém estava olhando**, e eu li o silêncio como boa
+  notícia.
+
+**Tabela de erros vazia só é prova se alguém provar que o coletor estava ligado
+naquela tela.** Ausência de registro é ausência de informação até que se mostre
+o contrário, que é a regra da seção anterior aplicada ao próprio instrumento.
+
+A pergunta que teria pego: *o que precisaria ser verdade para esse zero
+significar "está tudo bem"?* Precisava de um coletor de pé naquela tela. Ninguém
+tinha conferido isso. Verificar custou uma leitura de importações.
 
 ## Reproduza antes de consertar
 
@@ -93,6 +111,7 @@ e não só numa entrada nova. E diga o que a conclusão errada tinha de plausív
 1. Pergunte o que você veria se estivesse errado.
 2. Desconfie do instrumento antes do sistema.
 3. Não confunda "não sei" com "não tem".
-4. Separe medição de comportamento com duas checagens baratas.
+4. Separe medição de comportamento com duas checagens baratas, e confira que
+   cada checagem estava mesmo ligada antes de aceitar o silêncio dela.
 5. Reproduza, ou admita que não reproduziu.
 6. Prefira uma pergunta certa a uma hora de dedução.

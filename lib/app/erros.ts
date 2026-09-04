@@ -66,6 +66,24 @@ export function relatarFechamentoAnterior(): void {
   }
 }
 
+/**
+ * A tela quebrou e o AppBoundary segurou.
+ *
+ * ESTE É O ERRO QUE MAIS IMPORTA E O ÚNICO QUE NÃO CHEGAVA AQUI. Erro dentro
+ * do render é capturado pelo boundary, e boundary que captura NÃO deixa o erro
+ * chegar no `window.onerror`: para o navegador não houve erro nenhum. Então a
+ * pessoa via "Algo travou por aqui" e a `app_erros` não ganhava uma linha.
+ *
+ * Descoberto em 04/09/2026 investigando por que a web tinha 16 onboardings
+ * começados e nenhum terminado. A resposta "não há erro registrado" tinha sido
+ * usada como prova de que o problema era de produto, e ela não provava nada:
+ * ninguém estava olhando.
+ */
+export function relatarQuebraDeTela(erro: unknown, componente?: string): void {
+  const e = erro as { message?: string; stack?: string } | undefined;
+  reportar("erro", `tela quebrou: ${e?.message ?? String(erro ?? "sem motivo")}`, e?.stack, componente);
+}
+
 /** Liga os ouvintes globais de erro. Chamar uma vez, na montagem do app. */
 export function vigiarErros(): void {
   if (ligado || typeof window === "undefined") return;

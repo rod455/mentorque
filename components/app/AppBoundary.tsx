@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { relatarQuebraDeTela, vigiarErros } from "@/lib/app/erros";
 
 // Rede de segurança do app dentro da WebView.
 //
@@ -25,6 +26,16 @@ function isChunkError(e: unknown): boolean {
 
 const RELOAD_KEY = "mentorque-chunk-reload";
 
+// Em qual tela a coisa estourou. O rastro do React vem como uma pilha de
+// nomes, do mais interno ao mais externo; o primeiro é o componente que
+// quebrou, e é ele que diz se foi o onboarding, o quiz ou o paywall. A pilha
+// inteira não cabe no campo e nem ajuda: sem ela o relato seria "quebrou em
+// algum lugar", que é quase o silêncio de onde estamos saindo.
+function primeiroComponente(pilha?: string | null): string | undefined {
+  const linha = (pilha ?? "").split("\n").map((l) => l.trim()).find(Boolean);
+  return linha ? linha.replace(/^(at|in)\s+/, "").split(" ")[0] : undefined;
+}
+
 export class AppBoundary extends React.Component<Props, State> {
   state: State = { failed: false };
 
@@ -32,13 +43,31 @@ export class AppBoundary extends React.Component<Props, State> {
   // o app morreu e mostra o aviso de recarregar por cima.
   componentDidMount() {
     (window as unknown as { __mqReady?: () => void }).__mqReady?.();
+    // O VIGIA DE ERROS COMEÇA AQUI, e não mais no Shell.
+    //
+    // Ele morava dentro de `useFunilDeAbertura`, que é montado pelo Shell, e o
+    // Shell só existe depois de `onboarded`. Ou seja: as cinco páginas do
+    // onboarding, que são a primeira coisa que um visitante novo vê e o lugar
+    // onde o dinheiro do anúncio cai, rodavam SEM NINGUÉM OLHANDO. Erro ali não
+    // virava linha em `app_erros`, e a tabela vazia foi lida como "está tudo
+    // bem" em 04/09/2026.
+    //
+    // Aqui é o ponto mais alto do app: cobre onboarding, Shell e o que vier. A
+    // função tem trava própria, então o Shell continuar chamando não duplica
+    // ouvinte nenhum.
+    vigiarErros();
   }
 
   static getDerivedStateFromError(): State {
     return { failed: true };
   }
 
-  componentDidCatch(error: unknown) {
+  componentDidCatch(error: unknown, info: React.ErrorInfo) {
+    // RELATA ANTES DE QUALQUER DECISÃO. O caminho do chunk recarrega a página,
+    // e depois da recarga não sobra nada para contar: era assim que a quebra
+    // mais comum sumia sem deixar rastro.
+    relatarQuebraDeTela(error, primeiroComponente(info.componentStack));
+
     // Chunk velho: uma única recarga automática resolve. O marcador impede
     // laço infinito caso o problema seja outro.
     if (isChunkError(error)) {

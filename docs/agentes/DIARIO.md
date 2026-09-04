@@ -3,6 +3,52 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-04 · O onboarding da web rodava sem ninguém olhando
+
+- **Correção de uma conclusão minha de hoje de manhã.** Eu disse que o zero de
+  conclusões do onboarding na web era "comportamento, não medição", e apoiei
+  isso em `app_erros` estar vazia. A tabela estava vazia porque o
+  `vigiarErros()` era chamado dentro do `useFunilDeAbertura`, montado pelo
+  Shell, e o Shell só existe DEPOIS do onboarding. Ninguém estava olhando. A
+  ausência de registro não era notícia nenhuma.
+- **Os números certos, 14 dias:** web 16 começaram e **0 terminaram**; Android
+  21 e 12; iOS 6 e 5. Nas lojas junto dá 17 de 27, ou 63%. Zero em 16 com essa
+  taxa não é sorte, é sinal.
+- **Quem são os 16:** todos deslogados, quase todos com `gclid` e
+  `utm_source=google`, `utm_medium=cpc`. Gente do anúncio pago. Catorze deles
+  não emitiram NADA além do `comecou_onboarding`, nem `abriu_app`. Dois pares
+  têm o mesmo `gclid` com `anon_id` diferente, e um id veio no formato de
+  aparelho sem armazenamento: navegador embutido de app, provavelmente.
+- **O que foi conferido e NÃO é a causa:** o fluxo da web funciona ponta a
+  ponta. Andei as cinco páginas num Chromium limpo, a 390x844 e a 1280x800, e
+  o `terminou_onboarding:plano` sai nos dois. Também testei a hipótese de
+  quem já terminou entrar no denominador de novo: não entra, a `SplashScreen`
+  segura o tempo da hidratação.
+- **O que subiu:** o coletor de erros liga no `AppBoundary`, o ponto mais alto
+  do app, cobrindo o onboarding. E o `componentDidCatch` passou a RELATAR:
+  erro dentro do render é capturado pelo boundary e por isso nunca chegava no
+  `window.onerror`, então a quebra que mais importa era a única invisível.
+  Suíte nova `conferir:navegador erros`, que planta um erro de verdade e exige
+  o relato. Provada plantando o defeito: sem o conserto ela acusa `relatos=0`
+  no onboarding e continua verde depois dele, que é exatamente a assimetria
+  que escondeu isto por duas semanas.
+- **Recomendação, uma só:** esperar 24h de dados com o coletor de pé antes de
+  mexer em produto. Se aparecer erro de web em `app_erros`, o defeito é nosso e
+  fica identificado com a tela. Se não aparecer nada, aí sim a hipótese vira
+  produto, e a primeira pergunta passa a ser para onde o anúncio do Google
+  aponta: quem cai direto no `/app` encontra cinco páginas e um paywall antes
+  de saber o que o Mentorque faz.
+- **Achado solto:** visitante cujo navegador não manda `pt-BR` recebe o app em
+  inglês. Não afeta o funil (tráfego brasileiro manda), mas a régua do idioma é
+  o cabeçalho do navegador, não o país.
+- **Conversa com a rodada do CRO logo abaixo**, que subiu enquanto isto era
+  investigado. Ele achou a mesma quebra por outro caminho (36 começaram, 17
+  terminaram em 28 dias) e disse a coisa certa: sem evento por página, mudar
+  copy é chute. Some a isso o que está aqui em cima. As 19 perdidas dele não
+  estão espalhadas pelas cinco páginas, estão concentradas numa plataforma: nas
+  lojas passam 63%, na web passa ninguém. Instrumentar por página continua
+  valendo, e a pergunta anterior a ela é por que a web se comporta diferente.
+
 ## 2026-09-04 · CRO (conversão): metade some dentro do onboarding, e não dá para dizer onde
 - Rodada semanal do CRO/BeSci, foco CONVERSÃO (a de 28/08 foi de retenção).
   Artifact "Conversão da semana":
