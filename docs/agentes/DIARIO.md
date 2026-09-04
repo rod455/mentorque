@@ -69,6 +69,36 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
 - Nada corrigido nesta verificação porque nada estava quebrado no código: o
   achado é de leitura de negócio.
 
+## 2026-09-04 · A 1.7 está no ar e fecha ao responder o quiz; 1.8 preparada
+
+- **A 1.7 foi aprovada na Play em 03/09 e está na mão dos usuários.** Em 04/09
+  um cliente pagante gravou a tela do Android fechando ao responder a pergunta
+  do dia, nela. O funil confirma pela coluna `versao`: aparelho `70d10f37`,
+  1.7.0, abriu 18:26:51, gravou a resposta 18:27:44, reabriu 18:28:04.
+- **Duas correções minhas do mesmo dia**, registradas por inteiro em
+  `docs/qa/app-fecha-no-quiz.md`: o aparelho não roda 1.6, e a linha de crash do
+  Play Console (versão 52, 1.6, dois dias antes) NÃO é o rastro desta quebra.
+- **O achado mais grave: a testemunha ficou muda.** O app reabriu 20 segundos
+  depois, dentro da janela, numa versão que tem a migalha, e `app_erros` não
+  ganhou linha. Um app que morre some da tela, e sumir da tela era lido pelo
+  nosso código como "a pessoa saiu do app". A trava contra falso positivo
+  engoliu o verdadeiro positivo.
+- **O que a 1.8 leva:** a porta única de permissão (o quiz atravessava a ponte
+  nativa duas vezes por resposta) e a migalha gravando a HORA da pausa, para
+  pausa colada no passo continuar virando relato. Nenhum dos dois é o conserto
+  do fechamento, e o texto das lojas diz isso sem prometer cura.
+- **Versão subida para 1.8, versionCode 56**, e a 1.7 entrou na lista de já
+  publicadas de `scripts/verifica-versoes.mjs`. Repetir o número agora reprova,
+  e isso foi conferido com o defeito plantado.
+- **Um verde mentiroso foi pego no caminho**, e vale para toda conferência
+  daqui: os casos novos da `conferir:migalha` estavam DEPOIS do bloco que decide
+  o código de saída. Imprimiam FALHA e o script terminava em zero. Só apareceu
+  porque desta vez o código de saída foi conferido, em vez do texto na tela.
+- **Recomendação, uma só:** amanhã, Play Console, Android vitals, filtrando pela
+  1.7. Os dados de hoje estavam com atualização de quinta 06:00 e a quebra ainda
+  não tinha entrado. É de lá que sai o stack trace, e com ele o conserto deixa
+  de ser palpite.
+
 ## 2026-09-04 · Por que o ChatGPT e o Gemini não citam o Mentorque
 
 - **A pergunta do dono:** pesquisou "aplicativo de carro" nos dois e nenhum

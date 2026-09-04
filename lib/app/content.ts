@@ -24,7 +24,7 @@ import { veiculos } from "./conteudo/veiculos";
 //
 // Por isso `npm run conferir` agora reprova se este número divergir do
 // versionName do Android e do MARKETING_VERSION do iOS (scripts/verifica-versoes.mjs).
-export const APP_VERSION = "1.7.0";
+export const APP_VERSION = "1.8.0";
 
 export function formatBRL(n: number): string {
   return "R$ " + Math.round(n).toLocaleString("pt-BR");

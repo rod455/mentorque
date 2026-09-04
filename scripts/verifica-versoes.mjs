@@ -42,6 +42,10 @@ const JA_PUBLICADAS = [
   "1.5",
   // Aprovada nas duas lojas em 01/09/2026.
   "1.6",
+  // Aprovada na Play em 03/09/2026, e é a versão que está na mão dos usuários
+  // AGORA. Foi nela que o app fechou ao responder o quiz em 04/09, no aparelho
+  // de um cliente pagante. Ver docs/qa/app-fecha-no-quiz.md.
+  "1.7",
 ];
 
 import { readFileSync } from "node:fs";
