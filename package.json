@@ -15,7 +15,7 @@
     "build:native": "node scripts/build-native.mjs",
     "verifica:quiz": "npm run conferir:regras",
     "quiz:pdf": "node --experimental-strip-types scripts/quiz-pdf.ts",
-    "conferir": "npm run conferir:tipos && npm run conferir:estilo && npm run conferir:regras && npm run conferir:revisoes && npm run conferir:navegacao && npm run conferir:frescor && npm run conferir:versoes && npm run conferir:travessao && npm run conferir:identidade && npm run conferir:catalogo && npm run conferir:funil && npm run conferir:migalha && npm run conferir:venda && npm run conferir:campanha && npm run conferir:agenda && npm run conferir:aviso && npm run conferir:appsflyer && npm run conferir:skills && npm run conferir:guias && npm run conferir:contexto && npm run conferir:gravacao",
+    "conferir": "npm run conferir:tipos && npm run conferir:estilo && npm run conferir:regras && npm run conferir:revisoes && npm run conferir:navegacao && npm run conferir:frescor && npm run conferir:versoes && npm run conferir:travessao && npm run conferir:identidade && npm run conferir:catalogo && npm run conferir:funil && npm run conferir:migalha && npm run conferir:venda && npm run conferir:campanha && npm run conferir:agenda && npm run conferir:aviso && npm run conferir:appsflyer && npm run conferir:skills && npm run conferir:guias && npm run conferir:contexto && npm run conferir:frota && npm run conferir:gravacao",
     "conferir:tipos": "tsc --noEmit",
     "conferir:estilo": "next lint",
     "conferir:regras": "node --experimental-strip-types scripts/verifica-quiz.ts",
@@ -38,7 +38,8 @@
     "conferir:appsflyer": "node scripts/verifica-appsflyer.mjs",
     "conferir:skills": "node scripts/verifica-skills.mjs",
     "conferir:guias": "node scripts/verifica-guias.mjs",
-    "conferir:contexto": "node --experimental-strip-types scripts/verifica-contexto.ts"
+    "conferir:contexto": "node --experimental-strip-types scripts/verifica-contexto.ts",
+    "conferir:frota": "node --experimental-strip-types scripts/verifica-frota.ts"
   },
   "dependencies": {
     "@capacitor-community/admob": "^8.0.0",

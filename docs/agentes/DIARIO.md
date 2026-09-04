@@ -22,6 +22,7 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 | Quando entra o primeiro dinheiro? | 01/10, depois 04/10 e por volta de 09/10, R$ 29,90 cada. Verificação já agendada para o dia 01. | 04/09, QA agendado |
 | O webhook do Stripe está vivo? | Está. Duas viradas de teste gravadas em 37 segundos, 01/09 e 04/09. | 04/09, QA agendado |
 | A captura de UTM está quebrada? | Não, nunca esteve. A consulta é que lia o caminho errado: é `extra->'utm'->>'utm_source'`. | 03/09 |
+| Quais manuais faltam para a Biela? | O buraco é de MODELO, não de ano: a busca filtra marca e modelo no duro e só ordena por ano. 7 dos 10 carros mais comuns do Brasil não têm manual, e 4 dos 9 carros dos nossos usuários acham zero trecho. | 04/09, `docs/manuais-a-subir.md` |
 
 **Como manter:** ao FECHAR uma pergunta que já custou investigação, acrescente a
 linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a

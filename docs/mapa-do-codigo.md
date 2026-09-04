@@ -11,7 +11,8 @@ começar lendo em vez de garimpando.
 | uma aula, trilha ou categoria | `lib/app/conteudo/aulas.ts` |
 | um sintoma ("barulho ao frear") | `lib/app/conteudo/sintomas.ts` |
 | o kit do motorista | `lib/app/conteudo/equipamentos.ts` |
-| marcas e modelos de carro | `lib/app/conteudo/veiculos.ts` |
+| marcas e modelos de carro | `lib/app/conteudo/veiculos.ts` (e confira com `npm run conferir:frota`) |
+| quais manuais a Biela tem, e quais faltam | `docs/manuais-a-subir.md` |
 | uma tela inteira | `components/app/screens/<NomeDaView>.tsx` |
 | criar uma tela nova | veja o passo a passo abaixo |
 | o que é guardado na sessão | `lib/app/store.tsx` |
@@ -104,6 +105,13 @@ de propósito (entraria no build da Vercel e puxaria download de navegador):
 as telas principais e confere que cada uma desenha, com o console limpo. Erro
 de renderização em React não derruba o app: a tela some e o resto continua.
 Sem essa suíte, um arquivo movido para o lugar errado passa em tudo o mais.
+
+**A `conferir:frota` cobra o catálogo de carros contra a rua.** Em 04/09 a
+lista de "Adicionar carro" tinha sido montada olhando só para o que se vende
+zero km, e dois dos dez carros mais comuns do Brasil (Fiesta e Celta) não
+podiam ser cadastrados. Quem tem um deles digita o nome, não acha, e desiste:
+sem erro, sem relato, sem métrica. A conferência lista a frota com fonte e data
+e reprova se um deles sumir do `veiculos.ts`.
 
 **A suíte `erros` confere quem está olhando quando o app quebra.** Ela planta
 um erro de verdade na tela e exige que ele vire relato em `app_erros`, uma vez

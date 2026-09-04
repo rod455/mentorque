@@ -16,19 +16,30 @@ const makes: Record<"car" | "moto", string[]> = {
   ],
   moto: ["Honda", "Yamaha", "Suzuki", "Royal Enfield", "BMW", "Kawasaki"],
 };
-// Car models by make — the ~150 best-sellers in Brazil (current + recent).
+// Car models by make — os mais vendidos do Brasil, novos E de frota.
+//
+// A lista nasceu olhando só para o que se vende zero km, e isso deixava de
+// fora carro que está na rua às centenas de milhares. Em 04/09/2026, dos dez
+// carros mais comuns da frota brasileira (Gol, Uno, Palio, Strada, Onix,
+// Fiesta, Celta, Fox, HB20, Ka), DOIS não podiam nem ser cadastrados aqui:
+// Fiesta e Celta. Quem tem um deles abria o app, procurava o próprio carro e
+// não achava. É o pior primeiro minuto que existe.
+//
+// A regra que ficou: **modelo fora de linha continua entrando enquanto estiver
+// na rua.** Quem cuida do carro em casa, que é o nosso público, dirige o carro
+// de dez anos, não o do ano. A `npm run conferir:frota` cobra a lista da frota.
 const modelsByMake: Record<string, string[]> = {
-  Volkswagen: ["Polo", "Nivus", "T-Cross", "Virtus", "Gol", "Saveiro", "Amarok", "Taos", "Jetta", "Tera", "Voyage", "Fusca", "Fox", "Up!", "Golf", "Tiguan Allspace", "Passat"],
-  Chevrolet: ["Onix", "Onix Plus", "Tracker", "Spin", "Montana", "S10", "Equinox", "Trailblazer", "Cruze", "Cruze Sport6", "Blazer", "Cobalt", "Prisma", "Joy", "Sonic"],
-  Fiat: ["Strada", "Argo", "Mobi", "Pulse", "Pulse Abarth", "Fastback", "Toro", "Cronos", "Fiorino", "Titano", "Ducato", "Uno", "Palio", "Punto", "Grand Siena", "500"],
+  Volkswagen: ["Polo", "Nivus", "T-Cross", "Virtus", "Gol", "Saveiro", "Amarok", "Taos", "Jetta", "Tera", "Voyage", "Fusca", "Fox", "CrossFox", "SpaceFox", "Parati", "Kombi", "Up!", "Golf", "Tiguan Allspace", "Passat"],
+  Chevrolet: ["Onix", "Onix Plus", "Tracker", "Spin", "Montana", "S10", "Equinox", "Trailblazer", "Cruze", "Cruze Sport6", "Blazer", "Cobalt", "Prisma", "Joy", "Sonic", "Celta", "Corsa", "Classic", "Astra", "Vectra", "Meriva", "Agile"],
+  Fiat: ["Strada", "Argo", "Mobi", "Pulse", "Pulse Abarth", "Fastback", "Toro", "Cronos", "Fiorino", "Titano", "Ducato", "Uno", "Palio", "Palio Weekend", "Siena", "Idea", "Doblò", "Punto", "Grand Siena", "500"],
   Toyota: ["Corolla", "Corolla Cross", "Hilux", "Yaris", "Yaris Sedan", "SW4", "RAV4", "Camry", "Etios", "Etios Sedan"],
-  Hyundai: ["HB20", "HB20S", "HB20X", "Creta", "Tucson", "Santa Fe", "ix35", "Azera", "Kona"],
+  Hyundai: ["HB20", "HB20S", "HB20X", "Creta", "Tucson", "Santa Fe", "ix35", "Azera", "Kona", "i30"],
   Honda: ["HR-V", "City", "City Hatchback", "Civic", "WR-V", "ZR-V", "CR-V", "Fit", "Accord"],
   Jeep: ["Renegade", "Compass", "Commander", "Wrangler", "Gladiator"],
-  Renault: ["Kwid", "Kardian", "Duster", "Oroch", "Sandero", "Logan", "Stepway", "Captur", "Master", "Megane", "Fluence", "Boreal", "Koleos"],
-  Nissan: ["Kicks", "Versa", "Frontier", "Sentra", "March", "Leaf", "Livina", "Grand Livina", "Kait", "GT-R"],
-  Ford: ["Ranger", "Territory", "Bronco", "Bronco Sport", "Maverick", "Mustang", "Ka", "Ka Sedan", "EcoSport"],
-  Peugeot: ["208", "2008", "3008", "5008", "Partner", "Expert", "Boxer", "308", "408"],
+  Renault: ["Kwid", "Kardian", "Duster", "Oroch", "Sandero", "Logan", "Stepway", "Captur", "Master", "Megane", "Fluence", "Boreal", "Koleos", "Clio", "Symbol"],
+  Nissan: ["Kicks", "Versa", "Frontier", "Sentra", "March", "Leaf", "Livina", "Grand Livina", "Kait", "GT-R", "Tiida"],
+  Ford: ["Ranger", "Territory", "Bronco", "Bronco Sport", "Maverick", "Mustang", "Ka", "Ka Sedan", "EcoSport", "Fiesta", "Fiesta Sedan", "Focus"],
+  Peugeot: ["208", "2008", "3008", "5008", "Partner", "Expert", "Boxer", "308", "408", "206", "207", "307"],
   "Citroën": ["C3", "C3 Aircross", "Basalt", "C4 Cactus", "C4 Lounge", "Jumpy", "Jumper"],
   "Caoa Chery": ["Tiggo 2", "Tiggo 3x", "Tiggo 5x", "Tiggo 7", "Tiggo 7 Pro", "Tiggo 8", "Tiggo 8 Pro", "Arrizo 6"],
   BYD: ["Dolphin", "Dolphin Mini", "Dolphin Plus", "Song Plus", "Song Pro", "Yuan Plus", "Yuan Pro", "Seal", "King", "Han", "Tan", "Atto 8"],
