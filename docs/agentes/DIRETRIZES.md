@@ -34,6 +34,13 @@ encosta nelas:
 | `release-nas-lojas` | versão, build, Codemagic, notas das lojas |
 | `mensagem-a-cliente` | e-mail ou push para cliente, cupom em link, campanha |
 
+Além dessas, sete skills de fora (`product-tracking-*`) vivem no repositório
+para valer também em sessão remota. Elas entram quando o assunto é plano de
+eventos, instrumentação ou auditoria do que é medido. Procedência, o que foi
+conferido antes de trazer e como atualizar estão em `docs/skills-de-fora.md`.
+A regra com elas é uma só: não editar. O que fazemos diferente vira skill
+nossa.
+
 **Por que isto foi feito.** O ciclo de aprendizado abaixo depende de o agente
 LEMBRAR de abrir o manual certo, e essa é a parte que falha. Em 03/09 uma
 sessão inteira leu o funil pelo caminho errado da consulta e tirou três
