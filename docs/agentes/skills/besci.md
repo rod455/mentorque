@@ -62,3 +62,19 @@ experimentos alimentam a seção final.
   prova de campo (erros nos aparelhos), o login não tinha nenhuma. Detalhe
   técnico que decide: a armadilha só existe em quem exporta o
   `registerPlugin` cru; classe que embrulha o proxy não a tem.
+- **2026-09-04, a primeira voz de usuário do app, e o vocabulário que ela
+  entrega.** Três avaliações reais, todas cinco estrelas, e nenhuma delas
+  elogia recurso: elas contam desfecho. "economizar na oficina por não ser
+  enrolado", "não sei muito de carros e o premium está me SALVANDO",
+  "exatamente o que eu precisava". A copy do app fala o contrário disso, em
+  nome de recurso ("garagem digital", "histórico completo", "cadastre seu
+  carro"). Regra que fica: quando existir frase de usuário sobre um assunto,
+  ela ganha da frase escrita por nós sobre o mesmo assunto, porque ela já
+  provou que descreve o ganho na cabeça de quem paga. Guardar as frases no
+  mapa vivo, com autor e loja, para não virar paráfrase inventada depois.
+- **2026-09-04: prova social pequena e conferível ganha de prova social
+  grande e inventada.** "3 avaliações, todas 5 estrelas" é verificável na loja
+  em dez segundos; "5.000+ motoristas" não é, e quem duvida de um número
+  desconta a página inteira junto. O erro não é o número ser pequeno, é ele
+  não ter como ser conferido. Vale a mesma régua para selo de verificado, que
+  afirma uma conferência: só existe se alguém realmente conferiu.

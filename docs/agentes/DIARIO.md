@@ -3,6 +3,72 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-04 · CRO (conversão): metade some dentro do onboarding, e não dá para dizer onde
+- Rodada semanal do CRO/BeSci, foco CONVERSÃO (a de 28/08 foi de retenção).
+  Artifact "Conversão da semana":
+  https://claude.ai/code/artifact/f054d04f-886a-49da-abfc-5bc4f3109493
+- VEREDITOS: nenhum vencido. cta-teste-por-plano e fim-do-lembrete-falso se
+  leem em 20/09; lembrete-que-chega em 28/09.
+- ACOMPANHAMENTO de lembrete-que-chega, e a condição de leitura foi cumprida:
+  a correção de 28/08 saiu na 1.5 (31/08) e na 1.6 (01/09), então o relógio
+  começou. A métrica (1) já responde: os erros `.then()` caíram de 12 (02/09)
+  para 7 (04/09) sem ocorrência nova, o desenho de uma janela de 7 dias
+  esvaziando, e o QA já tinha conferido que todos são da 1.2.0. ANOTADO o
+  outro lado, que a métrica não previa: o app fechando ao responder o quiz no
+  Android tem como suspeito sem prova o plugin de notificação, que só voltou a
+  ser chamado por causa deste conserto. Se confirmar, o veredito conta os dois.
+- OUVIR O USUÁRIO, e é a primeira vez que dá para ouvir palavra: chegaram as
+  TRÊS PRIMEIRAS avaliações do app, todas 5 estrelas na App Store. Nenhuma
+  elogia recurso, todas contam desfecho: "economizar na oficina por não ser
+  enrolado", "exatamente o que eu precisava", "não sei muito de carros e o
+  premium está me SALVANDO. suporte muito rápido também". Entraram no mapa com
+  autor e loja. RESSALVA registrada: a primeira parece ser do próprio dono
+  (autor Moraes455, e-mail da conta rodrigomoraessilva455), então não vale como
+  voz de cliente até ele confirmar.
+- AUDITORIA DA SEMANA, com a instrumentação nova de 01/09 (28 dias, pessoas):
+  36 começaram o onboarding e 17 terminaram (47,2%, 19 perdidas); dessas 17, 5
+  abriram o cadastro de carro (29,4%); dessas 5, UMA cadastrou. A maior quebra
+  do funil inteiro é a primeira, e das 36 que começam UMA chega a ter carro
+  cadastrado, que é a porta de todo o resto do app.
+- O PROBLEMA DE FUNDO: o onboarding tem 5 páginas e a medição só sabe quem
+  entrou e quem saiu. As 19 pessoas somem num trecho onde não dá para apontar
+  a página. Mudar copy agora é chute com nome de aposta. Instrumentar por
+  página NÃO está na minha alçada: a lista de eventos válidos é uma restrição
+  CHECK em funil_eventos, e banco além de tabela nova é do dono. Virou a
+  recomendação 1.
+- NADA FOI IMPLEMENTADO NO CÓDIGO, e é decisão, não falta de assunto. As duas
+  páginas onde eu mexeria estão fechadas: a 5 (montar o teste) tem o
+  experimento cta-teste-por-plano com veredito em 20/09, e mexer nela apaga a
+  única leitura que ele vai ter; a 4 (prova social) está sob decisão do dono de
+  01/09. As páginas 1 a 3 estão livres, mas mexer nelas sem saber qual página
+  perde gente é churn, e ainda embaralharia a leitura da proposta da semana.
+- APOSTA DA SEMANA, registrada como PROPOSTO: [prova-social-de-verdade]. A
+  página 4 do onboarding anuncia "Avaliações e histórias reais" e mostra quatro
+  depoimentos com nomes que não existem, nota "4,8" como "média das
+  avaliações", "10.000+ diagnósticos" e "5.000+ motoristas", com selo verde de
+  verificado. As reais chegaram esta semana e são melhores em tudo o que
+  importa: específicas, com nome conferível na loja, e falam do ganho.
+  Proposta: os inventados saem, entram os reais, a nota vira "5,0, 3
+  avaliações na App Store", e os dois números de diagnósticos e de motoristas
+  saem SEM substituto, porque não existe número verdadeiro equivalente.
+- POR QUE ISTO NÃO É REABRIR ASSUNTO ENCERRADO: em 01/09 o dono decidiu manter
+  a prova social fabricada e pediu para não reabrir toda rodada, e na mesma
+  decisão nomeou o que abriria conversa nova, "avaliação real chegando". Foi o
+  que aconteceu. Levado UMA vez; se ele disser não, sai do caderno e não volta.
+  A decisão dele foi copiada para os Direcionamentos do MEU manual, porque
+  morava só no manual do ASO e as três superfícies são do CRO.
+- CORREÇÃO NO MAPA, no lugar onde a mentira estava escrita: o passo 4 dizia
+  que o login social do app estava travado. Está errado, o dono desmentiu em
+  aparelho real em 28/08, e o texto agora está riscado com a correção embaixo.
+  Deixar afirmação errada no mapa vivo é pior que não ter mapa, porque a
+  próxima rodada trata como fato conferido.
+- APRENDIZADOS gravados em besci.md: frase de usuário ganha de frase escrita
+  por nós sobre o mesmo assunto; e prova social pequena e conferível ganha de
+  prova social grande e inventada, porque o problema nunca é o número ser
+  pequeno, é ele não ter como ser conferido.
+- Só documentação mudou nesta rodada, então rodei as conferências que a tocam
+  (travessão, skills, frescor), e não a bateria inteira.
+
 ## 2026-09-02 · QA: a compra pelas lojas contaria a mesma venda duas vezes
 - Artifact "QA da Semana":
   https://claude.ai/code/artifact/b104e080-4490-4a88-a9e6-07a366deca63

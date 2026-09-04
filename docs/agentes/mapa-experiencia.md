@@ -16,10 +16,15 @@ Formato de cada tela/fluxo:
 
 ## Estado
 
+v3 em 2026-09-04: rodada de CONVERSÃO. Entraram "O que o usuário disse"
+(primeiras avaliações reais) e "Onde a conversão quebra hoje" (auditoria do
+onboarding com a instrumentação de 01/09). O passo 4 teve uma afirmação
+ERRADA corrigida no lugar: o login social nunca esteve travado. Próxima
+rodada alterna para RETENÇÃO.
+
 v2 em 2026-08-28: primeira rodada semanal do ritual, foco RETENÇÃO. Entrou a
 seção "O que traz a pessoa de volta" (auditoria das superfícies de retorno) e
-a correção do login social ficou registrada no passo 4 da jornada. Próxima
-rodada alterna para CONVERSÃO.
+a correção do login social ficou registrada no passo 4 da jornada.
 
 v1 escrita na rodada especial de 2026-08-23 (análise do app inteiro pedida
 pelo dono antes do build único das lojas). A rodada rodou na sessão
@@ -60,14 +65,21 @@ Estado de medição de cada passo (a régua honesta do que sabemos hoje).
   pessoas viraram 0) é em boa parte régua quebrada, não desinteresse. Antes de
   desenhar qualquer teste em cima dessa passagem, esperar duas semanas de
   medição já consertada.
-- CORRIGIDO EM 28/08 (esta rodada): o login social do app das lojas travava
-  para sempre no carregamento do plugin, sem erro na tela. Quem tocasse em
-  "entrar com Google" ou "entrar com Apple" dentro do app ficava esperando
-  sem resposta. Mesmo defeito do lembrete (ver a seção de retenção): o objeto
-  do plugin parece uma promessa para o JavaScript, e a espera nunca terminava.
-  Vale só para o app das lojas; no navegador o caminho é outro e sempre
-  funcionou. Precisa de conferência em aparelho real quando sair o build,
-  porque aqui só dá para provar por leitura de código.
+- ~~CORRIGIDO EM 28/08: o login social do app das lojas travava para sempre no
+  carregamento do plugin, sem erro na tela.~~
+  > **ERRADO, e desmentido pelo dono em 28/08 com teste em aparelho real.** O
+  > login social nunca esteve travado. A armadilha do `then` só existe em
+  > pacote que exporta o proxy cru do Capacitor, e o pacote de login exporta
+  > uma classe comum que embrulha o proxy, onde ela não se arma. A afirmação
+  > nasceu de leitura de código sem nenhuma prova de campo, e virou "quebrado"
+  > no relatório em vez de "hipótese para o QA testar". A mudança em si (o
+  > plugin dentro de uma caixa) ficou no código porque é inofensiva, mas ela
+  > não consertou nada. Regra que saiu daí, no manual do papel: leitura de
+  > código produz hipótese; urgência só nasce de prova de campo.
+- MEDIDO DE VERDADE DESDE 01/09: a primeira sessão deixou de ser caixa preta
+  com os eventos comecou_onboarding, terminou_onboarding e
+  abriu_cadastro_de_carro. É com eles que a auditoria de conversão de 04/09
+  passou a trabalhar (seção própria abaixo).
 
 ## 5. Conta → primeiro valor
 - Estado: PARCIAL. Cadastrar o primeiro carro é medido de verdade
@@ -85,6 +97,92 @@ Estado de medição de cada passo (a régua honesta do que sabemos hoje).
   renovou, cancelou e expirou, todos com a origem exata e confirmados no
   servidor (Stripe na web, RevenueCat nas lojas), nunca fabricados no
   cliente.
+- 04/09: o degrau iniciou_checkout → assinou está em 100% (3 de 3) nos 28
+  dias. Não é mérito de copy: as três vendas saíram com cupom de 100% do
+  primeiro mês, então quem chegou ao checkout não tinha o que recusar. O caixa
+  recebido é R$ 0,00 e o primeiro dinheiro de verdade cai em 01/10. Ler esse
+  100% como "o paywall converte" seria o erro de unidade da semana.
+
+# O que o usuário disse (primeiras avaliações, 2026-09-04)
+
+Chegaram as três primeiras avaliações da vida do app, todas cinco estrelas na
+App Store BR (a Play ainda não é coletada, então pode haver mais). Depois de
+semanas lendo só número, esta é a primeira vez que dá para ouvir palavra.
+
+- "Descobri o Mentorque e agora tenho controle dos gastos com meu carro além
+  de economizar na oficina por não ser enrolado" (Moraes455). RESSALVA: o
+  autor parece ser o próprio dono, então não vale como voz de cliente.
+- "Me ajudou demais, exatamente o que eu precisava!" (joserenatom).
+- "não sei muito de carros e o premium está me SALVANDO. suporte muito rápido
+  também" (luana david).
+
+O que isso confirma e o que muda no mapa:
+- A persona 1 ("quer economizar e não ser enganado") sai da hipótese e ganha
+  voz: as palavras usadas são "economizar na oficina", "não ser enrolado",
+  "não sei muito de carros". É esse o vocabulário para a copy, no lugar de
+  nomes de recurso como "garagem digital" e "histórico completo".
+- O PREMIUM foi citado espontaneamente como o que resolve, por alguém que se
+  descreve como leigo. É o argumento mais forte que já tivemos para o pedido
+  de assinatura, e ele não está em lugar nenhum da jornada hoje.
+- "Suporte muito rápido" apareceu sem ninguém perguntar. O atendimento é um
+  ativo de conversão que o app não menciona.
+- Nenhuma reclamação, nenhuma fricção repetida a registrar. Com três
+  avaliações isso não é sinal de que não existe fricção, é ausência de amostra.
+
+# Onde a conversão quebra hoje (auditoria de conversão, 2026-09-04)
+
+Números de 28 dias, pessoas distintas, com a instrumentação nova de 01/09.
+
+    começou o onboarding 36  →  terminou  17   (47,2%, 19 perdidas)
+    terminou             17  →  abriu o cadastro de carro  5   (29,4%)
+    abriu o cadastro      5  →  cadastrou o carro          1   (20%)
+
+A cadeia começa em comecou_onboarding de propósito, e não em abriu_app: o
+`abriu_app` dispara em TODA sessão, para todo mundo, então dividir um pelo
+outro seria ato sobre estoque e produziria um número com cara de taxa que não
+é taxa (a regra está em lib/funilCorreto.ts e na skill ler-a-operacao). Os
+quatro degraus acima são todos de uma vez por aparelho, que é o que os torna
+comparáveis entre si.
+
+Régua de honestidade: 36 pessoas em 28 dias é amostra pequena. Uma pessoa a
+mais ou a menos move a porcentagem em pontos inteiros, então isto é direção e
+não lei, e por isso o número absoluto anda junto da taxa em todo lugar deste
+documento.
+
+A maior quebra do funil inteiro é a primeira: metade das pessoas some DENTRO
+do onboarding. E o degrau seguinte é quase tão ruim, então das 36 que começam,
+UMA chega a ter um carro cadastrado, que é a porta de todo o resto do app.
+
+## O onboarding é uma caixa preta de cinco páginas
+- São 5 páginas (3 cards de apresentação, prova social, montar o teste), e a
+  medição só sabe dizer quem ENTROU e quem SAIU. Não existe evento de página,
+  então as 19 pessoas perdidas sumiram num trecho onde não dá para apontar
+  onde. Qualquer mudança de copy feita agora é chute com nome de aposta.
+- Instrumentar por página não está na alçada deste papel: a lista de eventos
+  válidos é uma restrição CHECK na tabela funil_eventos, e mexer no banco além
+  de tabela nova depende do dono. Virou recomendação.
+
+## Página 4, prova social: inventada, e agora existe a verdadeira
+- Trabalho da página: emprestar a confiança de outras pessoas a quem ainda não
+  usou nada.
+- Fricção conhecida: os quatro depoimentos têm nomes que não existem, a nota
+  "4,8" é apresentada como "média das avaliações" sem avaliação nenhuma por
+  trás, e "10.000+ diagnósticos" e "5.000+ motoristas" convivem com 26 pessoas
+  ativas na semana. O selo verde de verificado ao lado do nome é o detalhe que
+  mais custa: ele afirma uma conferência que ninguém fez.
+- Princípios: prova social (e a regra da skill, que é NUNCA inventar).
+- Última auditoria: 2026-09-04 · Apostas em aberto: prova-social-de-verdade
+  (PROPOSTO, aguardando o dono; ele decidiu em 01/09 manter, e nomeou
+  "avaliação real chegando" como o que abriria conversa nova).
+
+## Página 5, montar o teste: congelada até 20/09
+- É onde o experimento cta-teste-por-plano está aberto, com veredito marcado
+  para 20/09. Mexer nela agora apaga a única leitura que essa aposta ia ter.
+- Fricção registrada para depois: a página pede cartão antes de qualquer valor
+  sentido, e a saída ("Agora não") é um link de 12 pixels no canto de cima,
+  enquanto o botão que leva ao pagamento ocupa a largura toda. Quem não quer
+  assinar precisa procurar a saída. Candidato natural ao próximo teste, quando
+  o veredito de 20/09 liberar a área.
 
 # O que traz a pessoa de volta (auditoria de retenção, 2026-08-28)
 

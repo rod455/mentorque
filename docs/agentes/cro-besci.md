@@ -82,6 +82,22 @@ funcionalidade paga de quem pagou. Sem travessão em texto visível.
 
 ## Direcionamentos do dono
 
+- **2026-09-01: a prova social fabricada FICA como está, por ora.** Decisão
+  tomada com o inventário completo e o risco de política das lojas na mão
+  (registrada primeiro no manual do ASO, e repetida aqui porque as três
+  superfícies são do CRO: página 4 do onboarding, paywall e LP de download).
+  **Não reabrir como prioridade em toda rodada.** O próprio dono nomeou o que
+  abre conversa nova: avaliação real chegando, recusa de loja ou reclamação de
+  usuário. Fora disso, é assunto encerrado e não vira recomendação semanal.
+  - 2026-09-04: a primeira dessas condições disparou (3 avaliações reais na
+    App Store). Levada UMA vez, como aposta prova-social-de-verdade em estado
+    PROPOSTO. Se o dono disser não, sai do caderno e não volta.
+- **2026-09-04: a área de um experimento aberto fica congelada até o veredito.**
+  Vale mesmo quando há algo obviamente melhor a fazer nela: mexer na página 5
+  do onboarding antes de 20/09 apagaria a única leitura que cta-teste-por-plano
+  vai ter. Fricção vista numa área congelada entra no mapa como candidata ao
+  próximo teste, não vira mudança da semana.
+
 - 2026-08-23: papel evoluído para sênior (mapa vivo + caderno de
   experimentos + A/B + foco alternado conversão/retenção). O objetivo é um
   agente que aposta, mede, aprende e acumula, não um auditor de passagem.
