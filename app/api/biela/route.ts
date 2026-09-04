@@ -6,7 +6,83 @@ export const runtime = "nodejs";
 export const maxDuration = 30;
 
 type Turno = { role?: string; content?: string };
-type Body = { question?: string; locale?: string; car?: Car | null; historico?: Turno[] };
+type ServicoResumido = { o?: string; em?: string; km?: number };
+type Contexto = {
+  servicos?: ServicoResumido[];
+  obd2?: string[];
+  sintoma?: { nome?: string; observou?: string[] };
+};
+type Body = {
+  question?: string;
+  locale?: string;
+  car?: Car | null;
+  historico?: Turno[];
+  /** O que já foi feito no carro, o código lido e o sintoma em investigação. */
+  contexto?: Contexto | null;
+};
+
+// Tetos do contexto do carro, revalidados AQUI.
+//
+// O app já poda em lib/app/contextoDoCarro.ts, e isso não basta: esta é a borda
+// pública, e o que chega nela é o que alguém quis mandar. Sem revalidar, um
+// corpo forjado vira um prompt gigante pago por nós, que é a mesma razão pela
+// qual `historicoLimpo` existe logo abaixo.
+const MAX_SERVICOS = 6;
+const MAX_TEXTO = 120;
+const CODIGO_OBD2 = /^[PBCU][0-9A-F]{4}$/i;
+
+const texto = (v: unknown, n = MAX_TEXTO) => (typeof v === "string" ? v.trim().slice(0, n) : "");
+
+/** O contexto do carro, limpo e com teto. Devolve "" quando não sobrar nada. */
+function contextoLimpo(bruto: Contexto | null | undefined, pt: boolean): string {
+  if (!bruto || typeof bruto !== "object") return "";
+  const linhas: string[] = [];
+
+  const servicos = Array.isArray(bruto.servicos) ? bruto.servicos.slice(0, MAX_SERVICOS) : [];
+  const feitos = servicos
+    .map((s) => {
+      const o = texto(s?.o);
+      if (!o) return "";
+      const em = /^\d{4}-\d{2}-\d{2}$/.test(String(s?.em)) ? String(s?.em) : "";
+      const km = Number.isFinite(s?.km) ? `${s?.km} km` : "";
+      return `- ${o}${em ? ` em ${em}` : ""}${km ? `, com ${km}` : ""}`;
+    })
+    .filter(Boolean);
+  if (feitos.length) {
+    linhas.push(
+      pt
+        ? `Serviços já feitos neste carro (mais novo primeiro):\n${feitos.join("\n")}\nUSE ISTO: não recomende o que acabou de ser feito, e cite a data quando ela mudar a resposta.`
+        : `Work already done on this car (newest first):\n${feitos.join("\n")}\nUSE THIS: don't recommend what was just done, and cite the date when it changes the answer.`
+    );
+  }
+
+  const codigos = (Array.isArray(bruto.obd2) ? bruto.obd2 : [])
+    .filter((c) => typeof c === "string" && CODIGO_OBD2.test(c))
+    .slice(0, 3)
+    .map((c) => c.toUpperCase());
+  if (codigos.length) {
+    linhas.push(
+      pt
+        ? `Código de erro lido pelo scanner: ${codigos.join(", ")}. É o dado mais duro que existe aqui: trate como ponto de partida do diagnóstico.`
+        : `Trouble code read by the scanner: ${codigos.join(", ")}. It's the hardest datum available here: treat it as the starting point.`
+    );
+  }
+
+  const nome = texto(bruto.sintoma?.nome, 60);
+  if (nome) {
+    const observou = (Array.isArray(bruto.sintoma?.observou) ? bruto.sintoma?.observou : [])
+      .map((t) => texto(t))
+      .filter(Boolean)
+      .slice(0, 4);
+    linhas.push(
+      pt
+        ? `A pessoa chegou investigando: ${nome}.${observou.length ? ` Observou: ${observou.join("; ")}.` : ""}`
+        : `The person came in investigating: ${nome}.${observou.length ? ` Observed: ${observou.join("; ")}.` : ""}`
+    );
+  }
+
+  return linhas.length ? `\n\n${linhas.join("\n\n")}` : "";
+}
 
 // Memória curta da conversa.
 //
@@ -35,7 +111,7 @@ function historicoLimpo(bruto: Turno[] | undefined): { role: "user" | "assistant
 }
 
 // System prompt: Biela's persona + safety rails. Car context is injected below.
-function systemPrompt(locale: string, car: Car | null): string {
+function systemPrompt(locale: string, car: Car | null, contexto?: Contexto | null): string {
   const pt = locale === "pt";
   const persona = pt
     ? `Você é o Biela, mecânico automotivo do app Mentorque — experiente e direto, respondendo em português do Brasil.
@@ -72,7 +148,7 @@ SAFETY: brakes, steering, airbags and suspension warrant an in-person inspection
     ? (pt ? `\n\nCarro do usuário: ${car.make ?? "?"} ${car.model ?? ""} ${car.year ?? ""}${detalhe ? `, ${detalhe}` : ""}${car.km != null ? `, ${car.km} km` : ""}. Personalize a resposta para esse carro quando fizer diferença.${detalhe ? " A motorização e a versão estão informadas acima: NÃO pergunte qual é, nem responda \'depende da versão\'." : ""}`
           : `\n\nUser's car: ${car.make ?? "?"} ${car.model ?? ""} ${car.year ?? ""}${detalhe ? `, ${detalhe}` : ""}${car.km != null ? `, ${car.km} km` : ""}. Tailor the answer to this car when it matters.${detalhe ? " The engine and trim are given above: do NOT ask which one it is, and don't answer \'it depends on the trim\'." : ""}`)
     : "";
-  return persona + ctx;
+  return persona + ctx + contextoLimpo(contexto, pt);
 }
 
 function basicAnswer(locale: string, car: Car | null): string {
@@ -119,7 +195,7 @@ export async function POST(request: Request) {
     // trechos eram contexto que o modelo ignorava. O que sobrou paga a memória
     // dos três turnos abaixo — a conta por pergunta fica onde estava.
     const manual = await retrieveManualContext(question, car, 5);
-    let system = systemPrompt(locale, car);
+    let system = systemPrompt(locale, car, body.contexto);
     if (manual) {
       system += (locale === "pt"
         ? `\n\nTrechos do manual do carro (use como fonte primária; se não cobrir a dúvida, diga o que é geral):\n${manual}`

@@ -15,6 +15,23 @@ type Sym = {
   price: string;
   observe: string[];
   checklist: string[];
+  /**
+   * O QUE A PESSOA FAZ SOZINHA, antes de ir na oficina.
+   *
+   * A diferença entre isto e o `checklist` é quem executa, e ela é a razão de
+   * o campo existir. `checklist` é o que PEDIR ao mecânico; `testes` é o que
+   * dá para conferir na garagem, de graça, em minutos, sem ferramenta.
+   *
+   * Foi o buraco que apareceu ao comparar o Mentorque com o mercado em
+   * 04/09/2026: a promessa do app é chegar na oficina sabendo, e faltava
+   * justamente o passo anterior a chegar na oficina.
+   *
+   * REGRAS. Nada que exija erguer o carro, mexer em sistema pressurizado ou
+   * pôr a mão perto de peça girando. Cada teste diz o QUE FAZER e o QUE O
+   * RESULTADO SIGNIFICA, senão é tarefa sem conclusão. Opcional: sintoma sem
+   * teste honesto fica sem teste, e isso é melhor que inventar um.
+   */
+  testes?: { faca: string; entao: string }[];
 };
 const symptoms: Sym[] = [
   {
@@ -31,6 +48,10 @@ const symptoms: Sym[] = [
       T("Verificar funcionamento das pinças de freio", "Check the calipers are working freely"),
       T("Pedir orçamento detalhado (peças + mão de obra)", "Ask for an itemized quote (parts + labor)"),
     ],
+    testes: [
+      { faca: T("Com o carro parado e frio, olhe a pastilha pelo vão da roda, usando a lanterna do celular.", "With the car parked and cold, look at the pad through the wheel spokes using your phone light."), entao: T("Material de atrito com menos de três milímetros, ou uma lingueta de metal encostando no disco, é troca marcada, não observação.", "Friction material under three millimetres, or a metal tab touching the rotor, means a booked replacement, not a wait-and-see.") },
+      { faca: T("Depois de rodar, com a mão a um palmo de distância, sinta o calor de cada roda sem encostar.", "After driving, hold your hand a palm away from each wheel and feel the heat without touching."), entao: T("Uma roda muito mais quente que as outras aponta pinça travada, e aí o barulho não some ao soltar o freio.", "One wheel far hotter than the others points to a seized caliper, and then the noise does not stop when you release the brake.") },
+    ],
   },
   {
     id: "cel",
@@ -45,6 +66,10 @@ const symptoms: Sym[] = [
       T("Verificar velas, bobinas e cabos", "Check plugs, coils and wires"),
       T("Checar sonda lambda e sistema de emissão", "Check O2 sensor and emissions system"),
       T("Pedir orçamento detalhado", "Ask for an itemized quote"),
+    ],
+    testes: [
+      { faca: T("Abra e feche a tampa do tanque até ouvir o estalo, e rode alguns dias.", "Open and close the fuel cap until it clicks, then drive for a few days."), entao: T("Se a luz apagar sozinha, era vedação do tanque e não há conserto a fazer. Se continuar acesa, o código precisa ser lido.", "If the light goes out on its own, it was tank sealing and there is nothing to fix. If it stays on, the code needs to be read.") },
+      { faca: T("Repare se a luz está FIXA ou PISCANDO enquanto o motor trabalha.", "Note whether the light is STEADY or FLASHING while the engine runs."), entao: T("Fixa costuma permitir marcar a oficina. Piscando é falha de ignição acontecendo agora: reduza a exigência e evite estrada até o diagnóstico.", "Steady usually allows booking a shop. Flashing means a misfire happening now: ease off and avoid the highway until diagnosed.") },
     ],
   },
   {
@@ -61,6 +86,10 @@ const symptoms: Sym[] = [
       T("Conferir a pressão dos pneus", "Check tire pressure"),
       T("Verificar sensores de mistura", "Check air/fuel sensors"),
     ],
+    testes: [
+      { faca: T("Abasteça até o bico desarmar, zere o hodômetro parcial, rode normal e abasteça de novo no mesmo posto.", "Fill until the nozzle clicks off, reset the trip meter, drive normally, then fill again at the same pump."), entao: T("Divida os quilômetros pelos litros. Duas medições assim, comparadas, dizem se o consumo mudou de verdade ou se é impressão.", "Divide kilometres by litres. Two measurements like this, compared, tell you whether consumption really changed or it is just a feeling.") },
+      { faca: T("Confira a pressão dos pneus com o carro frio, usando o valor da etiqueta da porta do motorista.", "Check tyre pressure cold, using the figure on the driver door label."), entao: T("Pneu abaixo do especificado aumenta o consumo o tempo todo, e é o item mais barato da lista. Use a etiqueta, não o palpite do frentista.", "Underinflated tyres raise consumption all the time, and this is the cheapest item on the list. Use the label, not the attendant guess.") },
+    ],
   },
   {
     id: "hard-start",
@@ -75,6 +104,11 @@ const symptoms: Sym[] = [
       T("Verificar motor de arranque", "Check the starter motor"),
       T("Checar pressão da bomba de combustível", "Check fuel pump pressure"),
       T("Pedir orçamento detalhado", "Ask for an itemized quote"),
+    ],
+    testes: [
+      { faca: T("Acenda a luz interna do carro e gire a chave olhando para ela.", "Turn on the dome light and watch it while you crank the engine."), entao: T("Se ela apagar ou enfraquecer muito na partida, a bateria não está entregando corrente. Se seguir firme, o problema provavelmente não é ela.", "If it dims badly or goes out while cranking, the battery is not delivering current. If it holds steady, the battery is probably not the problem.") },
+      { faca: T("Gire a chave até a posição de contato, sem dar partida, e escute por dois segundos vindo de trás do banco.", "Turn the key to the on position, without cranking, and listen for two seconds toward the back seat."), entao: T("Um zumbido curto é a bomba pressurizando o combustível. Silêncio total, com o painel aceso, joga a suspeita para a bomba ou o relé dela.", "A short hum is the pump pressurising the fuel. Total silence, with the dash lit, moves suspicion to the pump or its relay.") },
+      { faca: T("Balance cada terminal da bateria com a mão, com o carro desligado.", "With the car off, wiggle each battery terminal by hand."), entao: T("Terminal que se mexe, ou com crosta esverdeada, explica sintoma de bateria fraca mesmo com bateria boa. É o conserto mais barato da lista.", "A terminal that moves, or has green crust, explains weak-battery symptoms even with a good battery. It is the cheapest fix on the list.") },
     ],
   },
   {
@@ -119,6 +153,10 @@ const symptoms: Sym[] = [
       T("Testar válvula termostática", "Test the thermostat"),
       T("Checar bomba d'água e ventoinha", "Check water pump and fan"),
       T("Pedir orçamento detalhado", "Ask for an itemized quote"),
+    ],
+    testes: [
+      { faca: T("Com o motor FRIO, olhe o nível no reservatório de expansão, aquele plástico translúcido com marcas de mínimo e máximo.", "With the engine COLD, check the level in the expansion tank, the translucent plastic one with min and max marks."), entao: T("Abaixo do mínimo explica o aquecimento e aponta vazamento, porque esse sistema é fechado e não consome água sozinho. Nunca abra com o motor quente.", "Below minimum explains the overheating and points to a leak, because this system is sealed and does not use water on its own. Never open it hot.") },
+      { faca: T("Repare em QUANDO a temperatura sobe: parado no trânsito ou em subida com o carro andando.", "Note WHEN the temperature climbs: stopped in traffic, or uphill while moving."), entao: T("Subir parado e melhorar andando aponta para a ventoinha. Subir andando aponta mais para circulação, como bomba d\u00e1gua ou válvula termostática.", "Climbing while stopped and improving when moving points to the fan. Climbing while moving points more to circulation, like the water pump or thermostat.") },
     ],
   },
 
@@ -208,6 +246,9 @@ const symptoms: Sym[] = [
     price: "R$ 80–500",
     observe: [T("Gasta mais na borda interna ou externa?", "Wears more on the inner or outer edge?"), T("O volante está centralizado em reta?", "Is the wheel centered when going straight?")],
     checklist: [T("Verificar alinhamento e geometria", "Check alignment and geometry"), T("Inspecionar componentes da suspensão", "Inspect suspension parts"), T("Conferir se o rodízio dos pneus está em dia", "Check whether tire rotation is up to date"), T("Conferir a pressão correta", "Check for correct pressure")],
+    testes: [
+      { faca: T("Passe a mão pela banda de rodagem no sentido do eixo, dos dois lados do pneu.", "Run your hand across the tread along the axle, on both sides of the tyre."), entao: T("Desgaste maior nas bordas aponta pressão baixa; no centro, pressão alta; só de um lado, alinhamento. Cada um manda para um conserto diferente.", "More wear on the edges points to low pressure; in the centre, high pressure; on one side only, alignment. Each sends you to a different fix.") },
+    ],
   },
   {
     id: "tire-pressure-loss",
@@ -230,6 +271,9 @@ const symptoms: Sym[] = [
     price: "R$ 350–900",
     observe: [T("Descarrega da noite pro dia?", "Drains overnight?"), T("A luz da bateria acende andando?", "Does the battery light come on while driving?")],
     checklist: [T("Testar carga da bateria", "Test battery charge"), T("Medir saída do alternador", "Measure alternator output"), T("Procurar fuga de corrente", "Check for parasitic drain"), T("Pedir orçamento detalhado", "Ask for an itemized quote")],
+    testes: [
+      { faca: T("Deixe o carro parado a noite inteira e tente ligar de manhã, sem usar nada antes.", "Leave the car overnight and try to start it in the morning, without using anything first."), entao: T("Falhar só na primeira partida do dia é o padrão de bateria no fim da vida, e costuma ser o aviso que vem semanas antes de deixar na mão.", "Failing only on the first start of the day is the pattern of a battery at end of life, and it is usually the warning that comes weeks before it strands you.") },
+    ],
   },
   {
     id: "lights-dim",
@@ -250,6 +294,9 @@ const symptoms: Sym[] = [
     price: "R$ 120–1.500",
     observe: [T("Sai ar, mas quente?", "Air comes out, but warm?"), T("Faz barulho ao ligar o A/C?", "Any noise when turning on A/C?")],
     checklist: [T("Verificar carga de gás e vazamentos", "Check refrigerant charge and leaks"), T("Testar o compressor", "Test the compressor"), T("Verificar filtro de cabine (sujeira)", "Check the cabin filter (dirt)"), T("Avaliar se precisa de higienização", "Assess whether it needs sanitizing")],
+    testes: [
+      { faca: T("Ligue o ar no máximo e veja se o motor muda de ritmo, e se o ventilador na frente do radiador gira.", "Set the A/C to maximum and see whether the engine note changes and the fan in front of the radiator spins."), entao: T("Sem nenhuma mudança, o compressor pode não estar acionando, o que é assunto elétrico ou de gás. Com mudança e ar fraco, suspeite do filtro de cabine.", "With no change at all, the compressor may not be engaging, which is an electrical or refrigerant matter. With a change but weak airflow, suspect the cabin filter.") },
+    ],
   },
 ];
 

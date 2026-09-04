@@ -5,7 +5,10 @@ import { apiPost, apiUrl } from "@/lib/app/apiBase";
 import { carregarConversa, historicoParaIA, idConversa, limparConversa, salvarConversa, type Msg } from "@/lib/app/bielaChat";
 import { pedirFeedback } from "@/lib/app/feedbackPrompt";
 import { useI18n } from "@/lib/i18n";
-import { activeVehicle, usePrototype } from "@/lib/app/store";
+import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
+import { contextoDoCarro } from "@/lib/app/contextoDoCarro";
+import { codigosConsultados } from "@/lib/app/obd2Consultados";
+import { sintomaEmFoco } from "@/lib/app/sintomaEmFoco";
 import { APP_VERSION, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { isNativeApp, nativePlatform } from "@/lib/app/wrapper";
@@ -166,6 +169,18 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
         locale,
         historico,
         car: v ? { make: v.make, model: v.model, year: v.year, km: v.odometerKm, engine: v.engine, version: v.version } : null,
+        // O QUE JÁ FOI FEITO NO CARRO, e o que a pessoa acabou de consultar.
+        //
+        // Antes daqui a Biela sabia QUAL é o carro e não sabia nada do que
+        // aconteceu com ele: respondia "pode ser bateria" para quem trocou a
+        // bateria há três meses, com a informação guardada na tela ao lado. O
+        // recorte e os tetos moram em lib/app/contextoDoCarro.ts.
+        contexto: contextoDoCarro({
+          servicos: v ? servicesFor(s, v.id) : [],
+          veiculo: v,
+          obd2: codigosConsultados(),
+          sintoma: sintomaEmFoco(),
+        }),
       });
       const data = await res.json();
       setMsgs((m) => [...m, {

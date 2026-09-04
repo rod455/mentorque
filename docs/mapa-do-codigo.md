@@ -21,6 +21,8 @@ começar lendo em vez de garimpando.
 | o que acontece na abertura do app | `lib/app/aberturaDoApp.ts` |
 | o que aparece por cima de tudo | `components/app/Sobreposicoes.tsx` |
 | as barras de cima e de baixo | `components/app/Shell.tsx` |
+| o que a Biela sabe sobre o carro | `lib/app/contextoDoCarro.ts` (e a rota revalida) |
+| um teste de garagem de um sintoma | `lib/app/conteudo/sintomas.ts`, campo `testes` |
 | o texto de um guia do site (`/barulho-no-carro`) | `lib/site/guias/<caminho>.ts` |
 | criar um guia novo do site | veja abaixo |
 

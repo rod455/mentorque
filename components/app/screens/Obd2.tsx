@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
+import { anotaCodigo } from "@/lib/app/obd2Consultados";
 import { AppHeader, Card, PinButton, SeverityDot, UpgradeBanner, inputCls, useContent } from "../ui";
 import { Button } from "@/components/ui/Button";
 import { VideoPlayer } from "../VideoPlayer";
@@ -30,9 +31,17 @@ function Obd2Lookup() {
     setPicked(row);
     setQ(row.code);
     setOpen(false);
+    // A BIELA PASSA A SABER DESTE CÓDIGO.
+    //
+    // Antes, o código só chegava até ela como frase, e apenas quando estava
+    // FORA da tabela. Quem consultava P0300 aqui, lia o significado e depois
+    // perguntava "meu carro está falhando" recebia resposta sem o dado mais
+    // duro que existe sobre o carro. Ver lib/app/obd2Consultados.ts.
+    anotaCodigo(row.code);
   };
 
   const deepen = (code: string, meaning?: string) => {
+    anotaCodigo(code);
     const seed = meaning
       ? t.deepenSeed.replace("{code}", code).replace("{meaning}", meaning)
       : t.deepenSeedUnknown.replace("{code}", code);

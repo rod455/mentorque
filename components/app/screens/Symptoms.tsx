@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
+import { anotaSintoma } from "@/lib/app/sintomaEmFoco";
 import { symptomRecommended } from "@/lib/app/premium";
 import { carName, vehicleLabel } from "@/lib/app/content";
 import { adjustPriceRange, regionFactor, regionLabel, UF_LIST } from "@/lib/app/pricing";
@@ -427,6 +428,32 @@ export function SymptomDetail({ id }: { id: string }) {
 
       <RegionSheet open={regionOpen} onClose={() => setRegionOpen(false)} />
 
+      {/* O QUE A PESSOA FAZ SOZINHA, antes da oficina.
+          Vem ANTES da anamnese de propósito: quem acabou de fazer o teste
+          responde as perguntas do Biela com dado, e não com memória. */}
+      {(sx.testes?.length ?? 0) > 0 && (
+        <Card className="mt-5">
+          <p className="font-display text-[15px] text-cream">{ui.testesTitle}</p>
+          <p className="mt-0.5 text-xs text-cream/55">{ui.testesSub}</p>
+          <ol className="mt-3 space-y-3">
+            {sx.testes!.map((t, i) => (
+              <li key={t.faca} className="flex gap-3">
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-amber/15 font-display text-xs font-bold text-amber">
+                  {i + 1}
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm leading-relaxed text-cream/85">{t.faca}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-cream/60">
+                    <span className="font-display text-xs uppercase tracking-wider text-cream/40">{ui.testesEntao}: </span>
+                    {t.entao}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </Card>
+      )}
+
       {/* Aprofundar com o Biela: mini-anamnese + CTA (premium) */}
       {sx.observe.length > 0 && (
         <Card className="mt-5 ring-amber/20">
@@ -452,7 +479,23 @@ export function SymptomDetail({ id }: { id: string }) {
               </div>
             ))}
           </div>
-          <Button className="mt-4 w-full" onClick={() => go(s.premium ? { name: "biela", seed: bielaSeed() } : { name: "subscribe", ctx: "biela" })}>
+          <Button
+            className="mt-4 w-full"
+            onClick={() => {
+              // O SINTOMA VIRA CONTEXTO, e não só a primeira frase.
+              //
+              // A `bielaSeed()` abaixo continua sendo a mensagem de abertura,
+              // que é boa. Mas ela é uma MENSAGEM, e a memória que a Biela
+              // recebe são três pares: na quarta pergunta a anamnese já saiu do
+              // recorte. Registrado aqui, o sintoma acompanha toda pergunta
+              // enquanto a sessão durar. Ver lib/app/sintomaEmFoco.ts.
+              anotaSintoma(
+                sx.label,
+                sx.observe.map((o, i) => (answers[i] ? `${o} ${answers[i] === "yes" ? ui.yes : ui.no}` : "")).filter(Boolean)
+              );
+              go(s.premium ? { name: "biela", seed: bielaSeed() } : { name: "subscribe", ctx: "biela" });
+            }}
+          >
             {s.premium ? "🐻" : "🔒"} {ui.diagnoseWithBiela}
           </Button>
         </Card>
