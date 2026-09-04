@@ -31,3 +31,30 @@ next-env.d.ts
 
 # Intermediário do npm run quiz:pdf.
 docs/quiz-perguntas.html
+
+# Skills instaladas de fora pelo `npx skills add`.
+#
+# Elas caem em `.agents/skills/` e criam LINK SIMBÓLICO dentro de
+# `.claude/skills/`. Ficam de fora do git por três motivos: são de terceiro e
+# têm dono próprio, link simbólico não atravessa bem de Windows para Linux (que
+# é onde as sessões remotas e o CI rodam), e cada máquina instala o que quer.
+#
+# A consequência aceita: elas NÃO valem nas sessões remotas, só na máquina onde
+# foram instaladas. As nossas, em `.claude/skills/`, são versionadas e valem em
+# todo lugar. A `conferir:skills` pula as de fora e diz quantas ignorou.
+/.agents
+
+# E os links que ela cria dentro de `.claude/skills/`. A regra é INVERTIDA de
+# propósito: ignora tudo ali e libera uma a uma as nossas. Assim, instalação
+# nova de fora fica ignorada sozinha, sem ninguém precisar lembrar de nada.
+#
+# O preço é que uma skill NOSSA precisa de linha aqui para ser versionada, e
+# esquecer isso a tornaria invisível nas sessões remotas. É um jeito silencioso
+# de perder trabalho, então a `conferir:skills` reprova se uma skill nossa
+# estiver sendo ignorada pelo git.
+/.claude/skills/*
+!/.claude/skills/ler-a-operacao/
+!/.claude/skills/concluir-com-prova/
+!/.claude/skills/conferir-que-morde/
+!/.claude/skills/release-nas-lojas/
+!/.claude/skills/mensagem-a-cliente/

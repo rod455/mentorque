@@ -20,7 +20,8 @@
 //   3. todo caminho de arquivo citado no corpo existe de verdade
 //
 // Rode com: npm run conferir:skills
-import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync, statSync, lstatSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { join } from "node:path";
 
 const RAIZ = new URL("..", import.meta.url).pathname;
@@ -49,8 +50,21 @@ if (!existsSync(PASTA)) {
   process.exit(0);
 }
 
-const skills = readdirSync(PASTA).filter((d) => statSync(join(PASTA, d)).isDirectory());
-conferir("existe pelo menos uma skill", skills.length > 0);
+// SÓ AS NOSSAS. Skill instalada de fora (`npx skills add`) entra aqui como
+// LINK SIMBÓLICO apontando para `.agents/skills/`, e ela não deve ser julgada
+// por estas regras: os caminhos que ela cita são dela, não do nosso
+// repositório, e o dono dela é outro. Conferir skill de terceiro daria
+// reprovação todo dia por uma coisa que não temos como consertar, e conferência
+// que reprova sem ação possível é conferência que a pessoa aprende a ignorar.
+//
+// A distinção é feita com `lstat`, que NÃO segue o link. O `statSync` comum
+// seguiria e a pasta de fora pareceria nossa.
+const tudo = readdirSync(PASTA);
+const deFora = tudo.filter((d) => lstatSync(join(PASTA, d)).isSymbolicLink());
+const skills = tudo.filter(
+  (d) => !lstatSync(join(PASTA, d)).isSymbolicLink() && statSync(join(PASTA, d)).isDirectory()
+);
+conferir("existe pelo menos uma skill nossa", skills.length > 0);
 
 for (const skill of skills) {
   const arquivo = join(PASTA, skill, "SKILL.md");
@@ -63,6 +77,28 @@ for (const skill of skills) {
 
   const nome = (cabecalho.match(/^name:\s*(.+)$/m) ?? [])[1]?.trim();
   conferir(`${skill}: o name bate com a pasta`, nome === skill, `name é "${nome}"`);
+
+  // A skill precisa estar VISÍVEL AO GIT, senão ela existe só na máquina de
+  // quem escreveu. O `.gitignore` ignora `.claude/skills/*` e libera as nossas
+  // uma a uma (para instalação de fora ficar ignorada sozinha), então esquecer
+  // a linha de liberação é o jeito silencioso de perder uma skill: ela funciona
+  // para quem escreveu e não existe para mais ninguém.
+  let ignorada = false;
+  try {
+    // `--no-index` é obrigatório: sem ele o `check-ignore` PULA arquivo já
+    // rastreado, e como as nossas skills já estão no git ele responderia "não
+    // ignorada" sempre, testando nada. Descoberto plantando o defeito, que é
+    // exatamente para isso que se planta.
+    execFileSync("git", ["check-ignore", "-q", "--no-index", join(".claude/skills", skill, "SKILL.md")], { cwd: RAIZ });
+    ignorada = true;
+  } catch {
+    /* saída diferente de zero = não está ignorada, que é o certo */
+  }
+  conferir(
+    `${skill}: está versionada (não ignorada pelo git)`,
+    !ignorada,
+    "falta a linha `!/.claude/skills/<nome>/` no .gitignore; sem ela a skill não chega nas sessões remotas"
+  );
 
   const desc = (cabecalho.match(/^description:\s*([\s\S]+?)(?=\n[a-z-]+:|$)/m) ?? [])[1]?.trim() ?? "";
   conferir(
@@ -85,4 +121,5 @@ if (falhas) {
   console.error(`\n${falhas} conferência(s) de skills reprovaram.`);
   process.exit(1);
 }
-console.log(`Skills: ${skills.length} de projeto, todas carregáveis e apontando para arquivo que existe.`);
+const nota = deFora.length ? ` (+${deFora.length} de fora, não conferidas)` : "";
+console.log(`Skills: ${skills.length} nossas, todas carregáveis e apontando para arquivo que existe${nota}.`);
