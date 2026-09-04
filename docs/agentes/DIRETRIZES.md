@@ -20,6 +20,34 @@ o manual dele engorda de decisões, heurísticas e contexto do negócio.
    Rodrigo corrigir algo numa conversa, o agente da rodada seguinte deve
    encontrar essa correção escrita aqui, não redescobrir o erro.
 
+## O método agora carrega sozinho (skills de projeto)
+
+Desde 04/09/2026 o método deixou de depender de alguém lembrar de lê-lo. As
+skills em `.claude/skills/` entram na conversa sozinhas quando o assunto
+encosta nelas:
+
+| skill | entra quando |
+|---|---|
+| `ler-a-operacao` | qualquer número: funil, assinatura, receita, CAC, UTM |
+| `concluir-com-prova` | investigar defeito, explicar causa, número estranho |
+| `conferir-que-morde` | criar ou mexer em conferência, e depois de todo conserto |
+| `release-nas-lojas` | versão, build, Codemagic, notas das lojas |
+
+**Por que isto foi feito.** O ciclo de aprendizado abaixo depende de o agente
+LEMBRAR de abrir o manual certo, e essa é a parte que falha. Em 03/09 uma
+sessão inteira leu o funil pelo caminho errado da consulta e tirou três
+conclusões falsas seguidas; o método que evitaria isso estava escrito em
+`docs/agentes/skills/analise-da-operacao.md` desde agosto, e ninguém mandou
+abrir.
+
+As skills carregam a armadilha (o que faz errar) e apontam para os documentos
+longos quando a tarefa pede o método completo. Elas NÃO substituem os manuais
+de papel: o que cada agente faz continua em `docs/agentes/<papel>.md`.
+
+Ao aprender uma regra nova que valeria para vários papéis, o lugar dela é uma
+skill, não o manual de um papel só. `npm run conferir:skills` reprova se uma
+skill parar de carregar ou passar a apontar para arquivo que não existe mais.
+
 ## Alçada (autonomia ampla, com guarda-corpos)
 
 PODE sem pedir: analisar qualquer dado; editar código do app e do site com
