@@ -26,6 +26,7 @@
  *   node scripts/reembeddar.mjs --sonda     confere a chave e a dimensão, 1 chamada
  *   node scripts/reembeddar.mjs             reembeda tudo o que falta
  *   node scripts/reembeddar.mjs --limite 500   só um pedaço, para provar antes
+ *   node scripts/reembeddar.mjs --devagar     cabe no limite de conta sem cartão
  *
  * Precisa de NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY e
  * VOYAGE_API_KEY no .env.local.
@@ -50,6 +51,21 @@ try {
 const args = process.argv.slice(2);
 const sonda = args.includes("--sonda");
 const limite = Number((args[args.indexOf("--limite") + 1] ?? "").trim()) || null;
+
+// O MODO DEVAGAR, para conta sem forma de pagamento cadastrada.
+//
+// A Voyage aplica 3 requisições por minuto e 10 mil tokens por minuto até
+// alguém cadastrar um cartão, e isso NÃO é uma questão de dinheiro: os tokens
+// grátis continuam valendo depois. Só que com esse teto um lote de 64 trechos
+// (uns 13 mil tokens) já estoura sozinho, e a primeira tentativa aqui bateu em
+// 429 três vezes seguidas e parou.
+//
+// 32 trechos dão perto de 6 mil tokens, e uma requisição a cada 21 segundos
+// dá 2,8 por minuto. Cabe nos dois tetos com folga.
+const devagar = args.includes("--devagar");
+const LOTE = Number((args[args.indexOf("--lote") + 1] ?? "").trim()) || (devagar ? 32 : 64);
+const PAUSA_MS = devagar ? 21000 : 0;
+const espera = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const URL_SUPA = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const CHAVE = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -84,10 +100,11 @@ if (!total) {
 }
 console.log(`${total} trecho(s) sem embedding da Voyage.${limite ? ` Vou fazer ${limite}.` : ""}\n`);
 
-const LOTE = 64;
 let feitos = 0;
 let falhas = 0;
+let falhas429 = 0;
 const alvo = limite ?? total;
+if (devagar) console.log("Modo devagar: 32 por vez, uma requisição a cada 21s. Cabe no limite de conta sem cartão.\n");
 
 while (feitos < alvo) {
   // Sempre a MESMA consulta, sem paginação por offset: como cada volta preenche
@@ -112,12 +129,27 @@ while (feitos < alvo) {
       if (e2) throw e2;
     }
     feitos += pendentes.length;
-    process.stdout.write(`\r  ${feitos}/${alvo} trechos`);
+    falhas = 0;
+    falhas429 = 0;
+    process.stdout.write(`\r  ${feitos}/${alvo} trechos                                   `);
   } catch (e) {
+    // 429 NÃO É FALHA, é a API pedindo para esperar. Desistir aqui foi o erro
+    // da primeira versão: três lotes seguidos batiam no limite e o script
+    // parava, quando bastava respirar. Espera crescente, e o contador de
+    // falhas só sobe em erro que não é de cadência.
+    const limitado = /embeddings 429/.test(e.message);
+    if (limitado) {
+      const s = Math.min(60, 15 * (falhas429 + 1));
+      falhas429++;
+      process.stdout.write(`\r  ${feitos}/${alvo} trechos  (limite de cadência, esperando ${s}s)   `);
+      await espera(s * 1000);
+      continue;
+    }
     falhas++;
     console.error(`\n  ✗ lote falhou: ${e.message}`);
-    if (falhas >= 3) { console.error("Três lotes seguidos falharam. Parando; rode de novo que ele continua daqui."); process.exit(1); }
+    if (falhas >= 3) { console.error("Três lotes seguidos falharam por erro que não é de cadência. Parando; rode de novo que ele continua daqui."); process.exit(1); }
   }
+  if (PAUSA_MS) await espera(PAUSA_MS);
 }
 
 console.log(`\n\nPronto. ${feitos} trecho(s) reembeddados.`);
