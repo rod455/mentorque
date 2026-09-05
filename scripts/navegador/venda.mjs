@@ -27,6 +27,39 @@ const SESSAO = () =>
   });
 
 export async function rodar({ nav, ok }) {
+  // ---- APARELHO NOVO: o link de venda não pode virar onboarding ------------
+  //
+  // O defeito de 05/09/2026, que sobreviveu ao conserto de 02/09 porque era em
+  // outro lugar. Esta suíte não pegou porque TODOS os casos dela sentavam numa
+  // sessão de `garagem()`, que já vem com `onboarded: true`. Ou seja, ela
+  // conferia o link de venda só para quem já usava o app, e nunca para quem
+  // recebe esse link, que é gente de aparelho novo.
+  //
+  // O tratamento inteiro do link mora em `usePlanoPendente`, chamado dentro do
+  // Shell, e o Shell só nasce com `onboarded`. Em aparelho novo nascia o
+  // OnboardingFlow: o plano e o cupom nunca eram lidos da URL, e a pessoa fazia
+  // cinco páginas de apresentação até cair no Início.
+  //
+  // Sem sessão nenhuma de propósito. É a única forma de exercitar o portão.
+  {
+    const app = await abrirApp(nav, { rota: "/app?assinar=mensal&cupom=ALESSANDRO1MES" });
+    const { pg } = app;
+    await pg.waitForTimeout(1200);
+    const tela = await app.tela();
+    ok(
+      "aparelho novo com link de venda NÃO cai no onboarding",
+      !/Quem te ensina|Comece agora|monte seu teste/i.test(tela),
+      tela.slice(0, 80).replace(/\n/g, " ")
+    );
+    ok(
+      "e vai direto para a tela de entrar, que é o passo da compra",
+      /Entrar|Salve sua garagem/i.test(tela),
+      tela.slice(0, 80).replace(/\n/g, " ")
+    );
+    ok("nenhum erro de página no aparelho novo", app.erros.length === 0, app.erros[0] ?? "");
+    await app.fechar();
+  }
+
   // ---- o caminho feliz deslogado: direto para a tela de entrar -------------
   {
     const app = await abrirApp(nav, {

@@ -17,7 +17,7 @@
 //
 // Rode com: npm run conferir:venda
 import { readFileSync } from "node:fs";
-import { esqueceVenda, guardaVenda, vendaPendente } from "../lib/app/vendaPendente.ts";
+import { esqueceVenda, guardaVenda, vendaPendente, veioComprar } from "../lib/app/vendaPendente.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -147,6 +147,46 @@ const CHAVE = "mq-venda-pendente";
     "sem isso, quem volta do login social é mandado de volta ao login e fica preso lá"
   );
   conferir("o `ready` entra nas dependências do efeito", /\[venda, user, ready, view\]/.test(gancho));
+}
+
+// ── O PORTÃO DO ONBOARDING DEIXA PASSAR QUEM VEIO COMPRAR ──────────────────
+//
+// O defeito de 05/09/2026, que sobreviveu ao conserto de 02/09 porque era em
+// outro lugar. Todo o tratamento do link de venda mora em `usePlanoPendente`,
+// que é chamado dentro do Shell. E o Shell só nasce quando `s.onboarded` é
+// verdadeiro. Num aparelho novo, que é o de qualquer pessoa para quem esse
+// link é mandado, nascia o OnboardingFlow: o plano e o cupom nunca eram lidos
+// da URL, e a pessoa fazia cinco páginas de apresentação até cair no Início.
+//
+// O rastro que provou, no minuto do teste do dono: `comecou_onboarding` com
+// utm_campaign = ale100, e o `viu_paywall` seguinte com origem "direto", que é
+// o paywall aberto por conta própria. Se a venda pendente tivesse guiado a
+// navegação, seria "onb-monthly", ou seria o checkout, que nem emite o evento.
+{
+  const semComentarios2 = (f: string) =>
+    f.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/.*$/gm, " ");
+  const portao = semComentarios2(readFileSync(new URL("../app/app/page.tsx", import.meta.url), "utf8"));
+
+  conferir(
+    "o portão do onboarding pergunta se a pessoa veio comprar",
+    /veioComprar\(\)/.test(portao),
+    "sem isto o link de venda vira apresentação de cinco páginas em aparelho novo"
+  );
+  conferir(
+    "e a pergunta vem ANTES de escolher o onboarding",
+    portao.indexOf("veioComprar()") > -1 &&
+      portao.indexOf("veioComprar()") < portao.lastIndexOf("OnboardingFlow"),
+    "perguntar depois do return não muda nada"
+  );
+
+  // E a função em si responde pelas duas fontes: a URL de quem acabou de
+  // clicar, e o armazenamento de quem está voltando do login com a URL limpa.
+  esqueceVenda();
+  conferir("sem link e sem pendência, não veio comprar", veioComprar() === false);
+  guardaVenda({ plano: "monthly", direto: true, cupom: "ALESSANDRO1MES" });
+  conferir("com pendência guardada, veio comprar", veioComprar() === true, "é o caso da volta do login social");
+  esqueceVenda();
+  conferir("consumida a pendência, deixa de valer", veioComprar() === false);
 }
 
 if (falhas) {

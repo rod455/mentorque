@@ -106,3 +106,32 @@ export function esqueceVenda(): void {
     /* nada a esquecer */
   }
 }
+
+/**
+ * Esta pessoa chegou aqui para COMPRAR?
+ *
+ * Duas fontes, e as duas precisam ser olhadas:
+ *
+ *   a URL, quando ela acabou de clicar no link de venda (`/ALE100` vira
+ *   `/app?assinar=mensal&cupom=...`);
+ *
+ *   o armazenamento, quando ela está VOLTANDO do login social e a URL já não
+ *   carrega nada, porque o provedor devolve numa URL limpa.
+ *
+ * POR QUE ISTO EXISTE, se o `usePlanoPendente` já lê as duas. Porque ele mora
+ * dentro do Shell, e o Shell só nasce depois do onboarding. Num aparelho novo
+ * ninguém nunca chegava lá, e o link de venda virava apresentação de cinco
+ * páginas. Esta função é a pergunta que o portão de app/app/page.tsx precisa
+ * fazer ANTES de escolher entre Shell e onboarding, e por isso ela é barata,
+ * pura de efeito e não consome nada: quem consome continua sendo o Shell.
+ */
+export function veioComprar(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const q = new URL(window.location.href).searchParams.get("assinar");
+    if (q === "anual" || q === "mensal" || q === "annual" || q === "monthly") return true;
+  } catch {
+    /* URL estranha: segue para o armazenamento */
+  }
+  return vendaPendente() !== null;
+}
