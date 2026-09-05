@@ -13,7 +13,17 @@
 npm-debug.log*
 
 # local env files
-.env*.local
+#
+# A regra é INVERTIDA de propósito: ignora qualquer coisa que comece com
+# `.env` e libera só o exemplo, que não tem segredo nenhum.
+#
+# Era `.env*.local`, e esse padrão tem um buraco que quase mordeu em
+# 05/09/2026: ele exige que o nome TERMINE em `.local`, então `.env.local.bak`
+# ficava de fora. Fazer cópia de segurança antes de um `vercel env pull` é o
+# passo certo, e ele criava um arquivo com chave de service role solto no
+# repositório, esperando um `git add -A` distraído.
+.env*
+!.env.example
 
 # typescript
 next-env.d.ts
