@@ -173,6 +173,12 @@ const CHAVE = "mq-venda-pendente";
     "sem isto o link de venda vira apresentação de cinco páginas em aparelho novo"
   );
   conferir(
+    "e quem já é premium também passa direto",
+    /s\.premium/.test(portao),
+    "onboarded é recalculado como `onboarded && vehicles.length > 0`, então quem paga e ainda não " +
+      "cadastrou carro voltaria a ver as cinco páginas de venda depois de pagar"
+  );
+  conferir(
     "e a pergunta vem ANTES de escolher o onboarding",
     portao.indexOf("veioComprar()") > -1 &&
       portao.indexOf("veioComprar()") < portao.lastIndexOf("OnboardingFlow"),

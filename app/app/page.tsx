@@ -48,7 +48,21 @@ export default function AppPrototypePage() {
   // `onboarded` NÃO é marcado como feito por baixo do pano. Se a pessoa
   // desistir da compra, ela continua sendo alguém que nunca viu a
   // apresentação, e a próxima abertura mostra o onboarding normalmente.
-  if (!s.onboarded && veioComprar()) return <Shell />;
+  // E O `s.premium` FECHA O BURACO QUE O CONSERTO DE CIMA DEIXAVA ABERTO.
+  //
+  // `onboarded` não é só o que o `finishOnboarding` gravou: na leitura do
+  // armazenamento ele é recalculado como `onboarded && vehicles.length > 0`
+  // (lib/app/store.tsx). Ou seja, quem assina pelo link e ainda não cadastrou
+  // carro continua contando como não-onboardado.
+  //
+  // Sem esta segunda condição, a pessoa pagava, fechava o app, abria de novo e
+  // levava na cara as cinco páginas de apresentação, com a página de "monte seu
+  // teste" no fim. Vender de novo para quem acabou de pagar é pior do que o
+  // defeito original.
+  //
+  // `s` aqui já é a sessão EFETIVA: uma assinatura ativa no Stripe força
+  // `premium`, mesmo que a sessão local ainda não saiba (store.tsx, `es`).
+  if (!s.onboarded && (veioComprar() || s.premium)) return <Shell />;
 
   return s.onboarded ? <Shell /> : <OnboardingFlow />;
 }
