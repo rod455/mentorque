@@ -17,7 +17,7 @@
  *
  * Re-running replaces a manual's chunks for that year (no duplicates); different
  * years of the same model coexist. One bad file doesn't stop the batch.
- * Env: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY
+ * Env: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, VOYAGE_API_KEY
  */
 import { readdirSync, readFileSync } from "node:fs";
 import { join, basename, extname } from "node:path";
@@ -137,7 +137,7 @@ function estruturaDoEnv() {
   }
 }
 
-const { NEXT_PUBLIC_SUPABASE_URL: URL, SUPABASE_SERVICE_ROLE_KEY: KEY, OPENAI_API_KEY: OAI } = process.env;
+const { NEXT_PUBLIC_SUPABASE_URL: URL, SUPABASE_SERVICE_ROLE_KEY: KEY, VOYAGE_API_KEY: OAI } = process.env;
 if (!dry) {
   // Dizer QUAIS faltam, não as três de novo. O ensaio (--dry) não usa nenhuma
   // delas, então quem chega aqui já rodou o ensaio com sucesso e acha que está
@@ -146,7 +146,7 @@ if (!dry) {
   const faltando = [
     !URL && "NEXT_PUBLIC_SUPABASE_URL",
     !KEY && "SUPABASE_SERVICE_ROLE_KEY",
-    !OAI && "OPENAI_API_KEY",
+    !OAI && "VOYAGE_API_KEY",
   ].filter(Boolean);
   if (faltando.length) {
     const estrutura = estruturaDoEnv();
@@ -311,7 +311,7 @@ async function main() {
         continue;
       }
       process.stdout.write(`• ${tag}: ingesting... `);
-      const n = await ingestManual({ supabase, openaiKey: OAI, make, model, year, title, text, replace: true });
+      const n = await ingestManual({ supabase, voyageKey: OAI, make, model, year, title, text, replace: true });
       console.log(`${n} chunks ✓`);
       ok.push(f);
     } catch (e) {

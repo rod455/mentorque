@@ -1,0 +1,110 @@
+// Quem grava e quem procura estão no MESMO espaço vetorial?
+//
+// POR QUE ISTO EXISTE (05/09/2026). A busca de manual tem dois lados que
+// precisam combinar e que moram em arquivos diferentes: a ingestão
+// (scripts/lib/ingest.mjs) vetoriza o manual, e a consulta (lib/rag.ts)
+// vetoriza a pergunta. Se um usar um modelo e o outro usar outro, ou se as
+// dimensões divergirem, NADA QUEBRA DE FORMA VISÍVEL: a busca continua
+// respondendo, só que com trechos errados, e a Biela responde com a mesma
+// segurança de sempre em cima de material que não tem nada a ver.
+//
+// É o pior tipo de defeito que existe aqui: silencioso, plausível, e do outro
+// lado tem alguém decidindo se leva o carro na oficina.
+//
+// O risco não é teórico. Em 05/09 a base inteira trocou de provedor, de OpenAI
+// para Voyage, e nessa troca os dois lados foram editados à mão, em arquivos
+// separados, um .ts e um .mjs. Quem repetir essa cirurgia daqui a um ano vai
+// mexer num e esquecer o outro.
+//
+// O que ela cobra:
+//   1. os dois lados declaram o mesmo endpoint, modelo e dimensão
+//   2. a ingestão manda `input_type: "document"` e a consulta, `"query"`
+//   3. a dimensão declarada é a mesma da coluna criada na migração
+//
+// Rode com: npm run conferir:embedding
+import { readFileSync } from "node:fs";
+import { EMBEDDING as DA_CONSULTA } from "../lib/rag.ts";
+import { EMBEDDING as DA_INGESTAO } from "./lib/ingest.mjs";
+
+let falhas = 0;
+function conferir(nome: string, condicao: boolean, detalhe = "") {
+  if (condicao) return;
+  falhas++;
+  console.error(`FALHA  ${nome}${detalhe ? `\n       ${detalhe}` : ""}`);
+}
+
+console.log("Embedding: quem grava e quem procura falam a mesma língua?");
+
+// ── 1. os dois lados combinam ───────────────────────────────────────────────
+{
+  conferir(
+    "o mesmo endpoint dos dois lados",
+    DA_CONSULTA.endpoint === DA_INGESTAO.endpoint,
+    `consulta ${DA_CONSULTA.endpoint}, ingestão ${DA_INGESTAO.endpoint}`
+  );
+  conferir(
+    "o mesmo modelo dos dois lados",
+    DA_CONSULTA.modelo === DA_INGESTAO.modelo,
+    `consulta ${DA_CONSULTA.modelo}, ingestão ${DA_INGESTAO.modelo}`
+  );
+  conferir(
+    "a mesma dimensão dos dois lados",
+    DA_CONSULTA.dimensoes === DA_INGESTAO.dimensoes,
+    `consulta ${DA_CONSULTA.dimensoes}, ingestão ${DA_INGESTAO.dimensoes}`
+  );
+  if (!falhas) console.log(`  ✓ ${DA_CONSULTA.modelo}, ${DA_CONSULTA.dimensoes} dimensões, nos dois lados`);
+}
+
+// ── 2. o input_type é assimétrico, e tem que ser ────────────────────────────
+//
+// A Voyage prepara espaços diferentes para pergunta e para documento. Trocar
+// os dois tipos, ou usar o mesmo nos dois lados, piora a busca sem quebrar
+// nada. Como isso mora no corpo da requisição e não numa constante, aqui se
+// confere lendo o arquivo, e por isso os comentários saem antes: nesta casa
+// todo comentário cita o código que explica, e uma conferência de texto ingênua
+// aprovaria a documentação do conserto em vez do conserto.
+{
+  const semComentarios = (s: string) =>
+    s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/^\s*\/\/.*$/gm, " ");
+  const consulta = semComentarios(readFileSync(new URL("../lib/rag.ts", import.meta.url), "utf8"));
+  const ingestao = semComentarios(readFileSync(new URL("./lib/ingest.mjs", import.meta.url), "utf8"));
+
+  conferir('a consulta manda input_type "query"', /input_type:\s*"query"/.test(consulta));
+  conferir('a consulta NÃO manda "document"', !/input_type:\s*"document"/.test(consulta));
+  conferir('a ingestão manda input_type "document"', /input_type:\s*"document"/.test(ingestao));
+  conferir('a ingestão NÃO manda "query"', !/input_type:\s*"query"/.test(ingestao));
+
+  // E os dois pedem a dimensão explicitamente, em vez de aceitar o padrão do
+  // provedor, que pode mudar sem aviso e derrubar a inserção em produção.
+  conferir("a consulta declara a dimensão que quer", /output_dimension/.test(consulta));
+  conferir("a ingestão declara a dimensão que quer", /output_dimension/.test(ingestao));
+}
+
+// ── 3. a coluna do banco tem a dimensão declarada ───────────────────────────
+//
+// A migração está guardada no repositório justamente para isto poder ser
+// conferido sem rede. Se alguém trocar o modelo por um de outra dimensão e
+// esquecer a coluna, a gravação estoura no meio de um lote de 28 mil.
+{
+  const migracao = readFileSync(new URL("../supabase/embedding-voyage.sql", import.meta.url), "utf8");
+  const m = migracao.match(/embedding_voyage\s+vector\((\d+)\)/);
+  conferir("a migração declara a coluna embedding_voyage", !!m, "não achei `embedding_voyage vector(N)`");
+  if (m) {
+    conferir(
+      "a coluna tem a mesma dimensão do modelo",
+      Number(m[1]) === DA_CONSULTA.dimensoes,
+      `coluna vector(${m[1]}), modelo ${DA_CONSULTA.dimensoes}`
+    );
+  }
+  conferir(
+    "a busca compara na coluna da Voyage",
+    /embedding_voyage\s*<=>/.test(migracao),
+    "match_manual_chunks precisa comparar em embedding_voyage, não na coluna antiga"
+  );
+}
+
+if (falhas) {
+  console.error(`\n${falhas} conferência(s) do embedding reprovaram.`);
+  process.exit(1);
+}
+console.log("Embedding: ingestão e consulta no mesmo modelo, mesma dimensão, tipos certos.");

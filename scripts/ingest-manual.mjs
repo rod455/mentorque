@@ -10,7 +10,7 @@
  *   node --env-file=.env.local scripts/ingest-manual.mjs --make Chevrolet --model Onix --url "https://...signed..."
  *   node scripts/ingest-manual.mjs --make Chevrolet --model Onix --dry Onix.pdf   # parse+chunk only
  *
- * Env (not needed with --dry): NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY
+ * Env (not needed with --dry): NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, VOYAGE_API_KEY
  * Run supabase/migrations/0002_manuals_rag.sql + 0003_manuals_grants.sql first.
  */
 import { createClient } from "@supabase/supabase-js";
@@ -28,9 +28,9 @@ const file = args.filter((a) => !a.startsWith("--")).find((a) => a !== make && a
 
 if (!make || (!file && !url)) { console.error("Missing --make or a PDF/txt file (or --url). See header for usage."); process.exit(1); }
 
-const { NEXT_PUBLIC_SUPABASE_URL: URL, SUPABASE_SERVICE_ROLE_KEY: KEY, OPENAI_API_KEY: OAI } = process.env;
+const { NEXT_PUBLIC_SUPABASE_URL: URL, SUPABASE_SERVICE_ROLE_KEY: KEY, VOYAGE_API_KEY: OAI } = process.env;
 if (!dry && (!URL || !KEY || !OAI)) {
-  console.error("Missing env: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY (or pass --dry to test parsing).");
+  console.error("Missing env: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, VOYAGE_API_KEY (or pass --dry to test parsing).");
   process.exit(1);
 }
 
@@ -45,7 +45,7 @@ async function main() {
   if (dry) { console.log("\n[--dry] Skipping embeddings/insert."); return; }
 
   const supabase = createClient(URL, KEY, { auth: { persistSession: false } });
-  const n = await ingestManual({ supabase, openaiKey: OAI, make, model, year, title, text, replace: true, log: (m) => console.log(m) });
+  const n = await ingestManual({ supabase, voyageKey: OAI, make, model, year, title, text, replace: true, log: (m) => console.log(m) });
   console.log(`Done. ${n} chunks stored.`);
 }
 
