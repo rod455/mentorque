@@ -30,9 +30,27 @@ const dir = args.find((a) => !a.startsWith("--"));
 if (!dir) { console.error("Usage: node scripts/ingest-folder.mjs [--dry] ./folder"); process.exit(1); }
 
 const { NEXT_PUBLIC_SUPABASE_URL: URL, SUPABASE_SERVICE_ROLE_KEY: KEY, OPENAI_API_KEY: OAI } = process.env;
-if (!dry && (!URL || !KEY || !OAI)) {
-  console.error("Missing env: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY (or pass --dry).");
-  process.exit(1);
+if (!dry) {
+  // Dizer QUAIS faltam, não as três de novo. O ensaio (--dry) não usa nenhuma
+  // delas, então quem chega aqui já rodou o ensaio com sucesso e acha que está
+  // tudo configurado: a lista genérica manda a pessoa reconferir as três, e a
+  // que falta costuma ser uma só.
+  const faltando = [
+    !URL && "NEXT_PUBLIC_SUPABASE_URL",
+    !KEY && "SUPABASE_SERVICE_ROLE_KEY",
+    !OAI && "OPENAI_API_KEY",
+  ].filter(Boolean);
+  if (faltando.length) {
+    console.error(
+      `${faltando.length === 1 ? "Falta esta variável" : "Faltam estas variáveis"} no .env.local: ${faltando.join(", ")}.\n` +
+        `\nPara ver só os NOMES do que já existe lá (sem mostrar valor nenhum):\n` +
+        `  Get-Content .env.local | ForEach-Object { ($_ -split '=')[0] }\n` +
+        `\nO jeito de trazer o que falta, sem copiar segredo à mão:\n` +
+        `  vercel env pull .env.local\n` +
+        `\nOu rode com --dry, que lê os arquivos sem escrever nada e não precisa de chave.`
+    );
+    process.exit(1);
+  }
 }
 
 // "Make_Model_Year.pdf" (or "Make__Model__Year.pdf") -> { make, model, year }.
