@@ -22,6 +22,7 @@ import {
   CADEIA_SESSAO,
   MEDIDO_DESDE,
   NATUREZA,
+  UNIDADE,
   FONTE_MELHOR,
   RESSALVAS,
   degrau,
@@ -59,8 +60,14 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
 }
 
 // ── dois atos se comparam ───────────────────────────────────────────────────
+//
+// O par aqui era `iniciou_checkout → assinou`, e ele ERA a demonstração de que
+// ato com ato vira taxa. Deixou de servir em 05/09/2026, quando entrou a regra
+// do espaço de identidade: aqueles dois são atos, sim, mas um é contado por
+// aparelho e o outro por conta. O exemplo agora é um par que fica do mesmo
+// lado da fronteira, e o par antigo virou o caso de teste da trava nova.
 {
-  const d = degrau("iniciou_checkout", "assinou", 2, 1, HOJE);
+  const d = degrau("cadastro", "iniciou_checkout", 2, 1, HOJE);
   conferir("ato com ato vira taxa", d.taxa === 50, `taxa=${d.taxa}`);
 }
 
@@ -135,7 +142,47 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
 
   const degraus = degrausDaCadeia(CADEIA_ATO, new Map([["cadastro", 4], ["iniciou_checkout", 2], ["assinou", 1]]), HOJE);
   conferir("a cadeia de ato produz um degrau a menos que os eventos", degraus.length === CADEIA_ATO.length - 1);
-  conferir("e todos os degraus dela têm taxa", degraus.every((d) => d.taxa !== null), JSON.stringify(degraus.map((d) => d.motivo)));
+
+  // O PRIMEIRO degrau vira taxa; o SEGUNDO não pode virar, e é resultado, não
+  // falta. `assinou` chega pelo webhook da cobrança e é contado por conta,
+  // enquanto `iniciou_checkout` acontece no aparelho e é contado por anon_id.
+  conferir("cadastro → checkout vira taxa (os dois no aparelho)", degraus[0].taxa === 50, `taxa=${degraus[0].taxa}`);
+  conferir("checkout → assinou NÃO vira taxa", degraus[1].taxa === null, `taxa saiu: ${degraus[1].taxa}`);
+  conferir(
+    "e o motivo fala em aparelho e conta",
+    /APARELHO/.test(degraus[1].motivo ?? "") && /CONTA/.test(degraus[1].motivo ?? ""),
+    degraus[1].motivo ?? "(sem motivo)",
+  );
+}
+
+// ── A FRONTEIRA ENTRE APARELHO E CONTA ─────────────────────────────────────
+//
+// O caso real de 05/09/2026, medido com `funil_canonico` na janela de 01/09:
+//
+//   iniciou_checkout   3 pessoas   3 aparelhos   3 contas
+//   assinou            1 pessoa    0 aparelhos   1 conta
+//
+// A régua oficial (`public.identidade`) usa anon_id com user_id de reserva, e
+// é isso que faz a armadilha ser invisível: os dois números existem, os dois
+// são plausíveis, e a divisão dá 33%. Só que quem assinou não está, e nunca
+// vai estar, dentro da lista de quem iniciou: são chaves de espaços
+// diferentes. Antes desta regra, esse 33% saía impresso.
+{
+  const d = degrau("iniciou_checkout", "assinou", 3, 1, HOJE);
+  conferir("aparelho sobre conta NÃO vira taxa", d.taxa === null, `taxa saiu: ${d.taxa}`);
+  conferir("o motivo nomeia os dois eventos", (d.motivo ?? "").includes("iniciou_checkout") && (d.motivo ?? "").includes("assinou"), d.motivo ?? "");
+  conferir("e explica que são listas de chaves diferentes", /chaves diferentes/.test(d.motivo ?? ""), d.motivo ?? "");
+
+  // A trava é simétrica: não adianta inverter a ordem para escapar dela.
+  const invertido = podeComparar("assinou", "cadastro");
+  conferir("a trava vale nos dois sentidos", invertido.ok === false, JSON.stringify(invertido));
+
+  // E não pode ser tão zelosa a ponto de recusar o que é legítimo.
+  conferir("dois eventos de aparelho continuam comparáveis", podeComparar("cadastro", "iniciou_checkout").ok === true);
+  conferir("dois eventos de conta continuam comparáveis", podeComparar("assinou", "cancelou").ok === true);
+
+  const semUnidade = (Object.keys(NATUREZA) as EventoFunil[]).filter((e) => !UNIDADE[e]);
+  conferir("todo evento declara em que espaço de identidade nasce", semUnidade.length === 0, semUnidade.join(", "));
 }
 
 // ── a janela válida é a mais restritiva ────────────────────────────────────

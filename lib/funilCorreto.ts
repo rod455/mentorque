@@ -54,6 +54,53 @@ export type EventoFunil =
 
 export type Natureza = "sessao" | "ato" | "tecnico";
 
+/**
+ * O ESPAÇO DE IDENTIDADE em que cada evento nasce.
+ *
+ * POR QUE ISTO ENTROU (05/09/2026). A natureza sozinha não bastava, e o
+ * buraco custou uma tarde: o dono cobrou "cada hora você me traz um resultado
+ * do funil", e ele estava certo. A régua oficial é `public.identidade`, que
+ * usa o `anon_id` do aparelho e só cai no `user_id` quando não há aparelho.
+ * Isso é bom para deduplicar, e esconde uma armadilha: DOIS EVENTOS PODEM SER
+ * CONTADOS EM ESPAÇOS DIFERENTES sem que a conta acuse nada.
+ *
+ * O caso real, medido em 05/09 com `funil_canonico`:
+ *
+ *   iniciou_checkout   3 pessoas    3 aparelhos    3 contas
+ *   assinou            1 pessoa     0 aparelhos    1 conta
+ *
+ * `assinou` vem do webhook do Stripe, que não sabe de aparelho nenhum: a
+ * identidade dele é o `user_id`. `iniciou_checkout` acontece no aparelho e a
+ * identidade dele é o `anon_id`. Então quem assinou NUNCA aparece dentro de
+ * quem iniciou: são duas listas de chaves diferentes que por acaso têm
+ * tamanho. Dividir uma pela outra dá 33%, e esse 33% é ficção.
+ *
+ * A regra que sai disso: só se comparam eventos do MESMO espaço. Quando a
+ * cadeia atravessa a fronteira (aparelho vira conta no login), o degrau não
+ * vira taxa, vira motivo.
+ */
+export type Unidade = "aparelho" | "conta";
+
+export const UNIDADE: Record<EventoFunil, Unidade> = {
+  // Nascem no aparelho, antes ou depois do login. A identidade é o anon_id.
+  abriu_app: "aparelho",
+  viu_paywall: "aparelho",
+  abriu_trilha: "aparelho",
+  comecou_onboarding: "aparelho",
+  terminou_onboarding: "aparelho",
+  abriu_cadastro_de_carro: "aparelho",
+  cadastrou_carro: "aparelho",
+  cadastro: "aparelho",
+  iniciou_checkout: "aparelho",
+  atribuicao: "aparelho",
+  // Nascem no webhook da cobrança, que não tem aparelho. A identidade é o
+  // user_id, e por isso eles não se comparam com nada da lista de cima.
+  assinou: "conta",
+  renovou: "conta",
+  cancelou: "conta",
+  expirou: "conta",
+};
+
 export const NATUREZA: Record<EventoFunil, Natureza> = {
   abriu_app: "sessao",
   viu_paywall: "sessao",
@@ -157,6 +204,14 @@ export function podeComparar(de: EventoFunil, para: EventoFunil): Comparacao {
       motivo: `${ato} é um ATO (conta quem fez na janela) e ${sessao} é de SESSÃO (conta todo mundo que passou). Dividir um pelo outro é fluxo sobre estoque`,
     };
   }
+  if (UNIDADE[de] !== UNIDADE[para]) {
+    const aparelho = UNIDADE[de] === "aparelho" ? de : para;
+    const conta = UNIDADE[de] === "conta" ? de : para;
+    return {
+      ok: false,
+      motivo: `${aparelho} é contado por APARELHO (identidade = anon_id) e ${conta} por CONTA (identidade = user_id, porque vem do webhook e não tem aparelho). São duas listas de chaves diferentes: quem está numa nunca aparece dentro da outra, e a taxa entre elas é ficção`,
+    };
+  }
   return { ok: true };
 }
 
@@ -252,6 +307,20 @@ export function degrau(
  * lugar certo de dizer isso é aqui, não numa nota de rodapé.
  */
 export const CADEIA_SESSAO: EventoFunil[] = ["abriu_app", "viu_paywall"];
+
+/**
+ * A cadeia do ato, e ela ATRAVESSA UMA FRONTEIRA no último degrau.
+ *
+ * `cadastro` e `iniciou_checkout` acontecem no aparelho; `assinou` chega pelo
+ * webhook da cobrança, que não sabe de aparelho nenhum. O último degrau
+ * portanto não vira taxa, e isso é resultado, não falta: até 05/09/2026 ele
+ * virava, e publicava uma conversão de checkout para assinatura que dividia
+ * duas listas de chaves diferentes.
+ *
+ * Ele continua na cadeia de propósito. Tirar `assinou` daqui esconderia o
+ * degrau; deixá-lo faz o relatório imprimir o MOTIVO no lugar do número, que
+ * é a única saída honesta enquanto o evento não carregar o aparelho junto.
+ */
 export const CADEIA_ATO: EventoFunil[] = ["cadastro", "iniciou_checkout", "assinou"];
 
 /**

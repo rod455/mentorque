@@ -33,6 +33,42 @@ contradiz, uma data que passou, uma mudança que alguém fez. "Quero ter certeza
 não é motivo novo. E quando fechar uma pergunta que custou investigação,
 acrescente a linha lá, senão o próximo repete.
 
+## Número de funil: existe UMA porta, e escrever SQL na mão não é ela
+
+**Nunca escreva consulta de funil à mão.** Chame a fonte canônica, sempre a
+mesma, com a janela declarada:
+
+| Pergunta | Chame |
+|---|---|
+| quantos passaram por cada etapa | `select * from public.funil_canonico('aaaa-mm-dd')` |
+| quantas contas de FORA foram criadas | `select public.contas_criadas_desde('aaaa-mm-dd')` |
+| quantos TÊM carro, serviço, estão ativos | `select * from public.estado_da_base` |
+| essas duas etapas viram uma taxa? | `degrau()` de `lib/funilCorreto.ts`, nunca uma divisão sua |
+
+Isto existe por causa de 05/09/2026, e a cobrança foi literal: "cada hora você
+me traz um resultado do funil". Em três respostas seguidas eu disse 35 pessoas,
+depois 7 contas, depois 1 cadastro de carro. As três consultas estavam certas e
+nenhuma era comparável com a anterior, porque cada uma escolheu sozinha uma
+régua: uma contou `anon_id`, outra `user_id`, outra recortou por coorte de
+campanha.
+
+A régua já existia (`public.identidade`, `funilCorreto.ts`, `estado_da_base`) e
+não foi ela que falhou: falhei eu, escrevendo SQL na mão em vez de chamar o que
+estava pronto. Regra que depende de lembrança não é regra.
+
+Três consequências práticas:
+
+1. **Diga sempre a janela e a régua junto com o número.** "6 cadastros desde
+   01/09, por identidade" é uma frase completa. "6 cadastros" não é.
+2. **Ato não se conta pelo evento quando existe tabela.** Quem tem carro sai de
+   `estado_da_base`, não de `cadastrou_carro`. Quem criou conta sai de
+   `contas_criadas_desde`, não do evento `cadastro`. A lista completa está em
+   `FONTE_MELHOR`, em `lib/funilCorreto.ts`.
+3. **Cuidado com a fronteira aparelho/conta.** `funil_canonico` traz `pessoas`,
+   `aparelhos` e `contas` lado a lado justamente para denunciá-la: `contas` = 0
+   quer dizer que o evento só existe antes do login, e ele não se divide por um
+   evento de conta. `podeComparar()` recusa sozinho, com motivo.
+
 ## A regra que resolve metade dos erros
 
 **Antes de dizer um número, diga a si mesmo qual tabela é a VERDADE daquele
