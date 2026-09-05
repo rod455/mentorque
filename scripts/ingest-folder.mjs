@@ -73,6 +73,70 @@ try {
   comoCarregou = `o carregador falhou: ${e.message}`;
 }
 
+/**
+ * A ESTRUTURA do .env.local, com nome de variável e NUNCA valor.
+ *
+ * POR QUE (05/09/2026). Depois de um `vercel env pull` que baixou 50
+ * variáveis, duas delas continuavam invisíveis, e dois carregadores
+ * independentes (o `--env-file` do Node e o `@next/env`, que é o do Next)
+ * concordavam nisso. Dois parsers bons discordando do que a Vercel disse ter
+ * escrito aponta para o ARQUIVO, e a única forma de olhar era pedir para o
+ * dono rodar um comando e colar a saída.
+ *
+ * Colar a saída é o problema: o `.env.local` da Vercel tem chave privada .p8 e
+ * JSON de conta de serviço, os dois multilinha. Qualquer comando que fatie por
+ * `=` e imprima o começo da linha vai imprimir PEDAÇO DE CHAVE quando a linha
+ * for a continuação de um valor. Um diagnóstico que vaza segredo para a
+ * conversa é pior que o defeito que ele investiga.
+ *
+ * Aqui o corte é ao contrário: só sai o que casa com `NOME=` no começo da
+ * linha. Todo o resto vira uma marca, sem uma letra do conteúdo, e isso já
+ * responde a pergunta, porque é justamente a linha de continuação que denuncia
+ * valor multilinha mal escrito.
+ */
+function estruturaDoEnv() {
+  try {
+    const caminho = join(import.meta.dirname, "../.env.local");
+    const linhas = readFileSync(caminho, "utf8").split(/\r?\n/);
+    const mapa = linhas.map((l) => {
+      if (!l.trim()) return null;
+      if (l.trimStart().startsWith("#")) return "   (comentário)";
+      const m = l.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=(.*)$/);
+      if (!m) return "   <<< linha que NÃO começa com NOME= (continuação de valor?)";
+      // Só o TAMANHO do valor, nunca o valor. Vazio é o caso que interessa: a
+      // Vercel marca variável como "Sensitive", e o `vercel env pull` traz o
+      // nome dela com o valor em branco, porque o painel não devolve segredo
+      // sensível nem para o dono. O nome aparece na lista de baixadas, o
+      // arquivo fica com a linha, e o carregador lê string vazia, que é
+      // falsa. Daí "eu baixei" e "está faltando" serem verdade ao mesmo tempo.
+      const valor = m[2].trim().replace(/^["']|["']$/g, "");
+      return valor.length ? `   ${m[1]}` : `   ${m[1]}   <<< SEM VALOR (sensível na Vercel?)`;
+    }).filter(Boolean);
+    const soltas = mapa.filter((l) => l.includes("continuação de valor")).length;
+    const vazias = mapa.filter((l) => l.includes("SEM VALOR")).length;
+    return (
+      `\nComo o .env.local está montado (só nomes, nenhum valor):\n` +
+      mapa.join("\n") +
+      (vazias
+        ? `\n\n   ${vazias} variável(is) estão no arquivo COM O VALOR EM BRANCO.\n` +
+          `   Quase sempre é variável marcada como "Sensitive" na Vercel: o painel\n` +
+          `   não devolve o segredo nem para o dono, então o pull traz só o nome.\n` +
+          `   O conserto é colar o valor à mão nessas linhas, pegando na origem\n` +
+          `   (Supabase para a service role, OpenAI para a chave da API), e NÃO\n` +
+          `   rodar o pull de novo, que apagaria tudo outra vez.\n`
+        : "") +
+      (soltas
+        ? `\n   ${soltas} linha(s) não começam com NOME=. É aí que o parser também se\n` +
+          `   perde: valor multilinha precisa estar entre aspas duplas, ou tudo o que\n` +
+          `   vier DEPOIS dele some.\n`
+        : "") +
+      (!vazias && !soltas ? `\n   Todas as linhas estão bem formadas, então o problema não é este.\n` : "")
+    );
+  } catch {
+    return "";
+  }
+}
+
 const { NEXT_PUBLIC_SUPABASE_URL: URL, SUPABASE_SERVICE_ROLE_KEY: KEY, OPENAI_API_KEY: OAI } = process.env;
 if (!dry) {
   // Dizer QUAIS faltam, não as três de novo. O ensaio (--dry) não usa nenhuma
@@ -88,8 +152,7 @@ if (!dry) {
     console.error(
       `${faltando.length === 1 ? "Falta esta variável" : "Faltam estas variáveis"} no .env.local: ${faltando.join(", ")}.\n` +
         `\nCarregando o .env: ${comoCarregou}\n` +
-        `\nPara ver só os NOMES do que já existe lá (sem mostrar valor nenhum):\n` +
-        `  Get-Content .env.local | ForEach-Object { ($_ -split '=')[0] }\n` +
+        estruturaDoEnv() +
         `\nO jeito de trazer o que falta, sem copiar segredo à mão:\n` +
         `  vercel env pull .env.local\n` +
         `\nOu rode com --dry, que lê os arquivos sem escrever nada e não precisa de chave.`
