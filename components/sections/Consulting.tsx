@@ -57,6 +57,7 @@ export function Consulting() {
             </p>
             <p className="mt-2 font-serif text-xl font-semibold text-cream">{t.consulting.contactName}</p>
             <p className="mt-1 text-sm text-cream/65">{t.consulting.contactRole}</p>
+            <p className="mt-0.5 text-sm text-cream/50">{t.consulting.contactTrack}</p>
           </div>
           <a
             href={`https://wa.me/${WHATSAPP_CONSULTORIA}`}

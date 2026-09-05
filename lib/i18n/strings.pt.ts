@@ -183,9 +183,18 @@ export const pt = {
     // força: o que convence é o cargo e a Porsche Cup, não a marca do
     // empregador — e pendurar o produto no nome de uma montadora que não
     // patrocina nada é pedir problema de graça.
+    // A corrida entrou aqui em 05/09, por pedido do dono, para o cartão contar
+    // a mesma história que a LP já conta (components/lp/Especialista.tsx): a
+    // Porsche Cup é passado, e quem lia só a primeira linha ficava com a
+    // impressão de que o automobilismo tinha ficado no Brasil. Ele segue em
+    // pista, agora nos Estados Unidos, e isso é presente, não currículo.
+    //
+    // Duas linhas em vez de uma frase longa porque a segunda tem nome próprio
+    // que ninguém conhece de cabeça: emendar tudo com "·" viraria um borrão.
     contactTitle: "Fale direto com o especialista",
     contactName: "Alessandro Vila Nova",
     contactRole: "Engenheiro automotivo nos EUA · 4 anos na Porsche Cup Brasil",
+    contactTrack: "Hoje em pista na IMSA Michelin Pilot Challenge e na VP Racing",
     contactCta: "Chamar no WhatsApp",
     contactPhoneLabel: "+1 (248) 768-0340",
   },

@@ -171,6 +171,7 @@ export const en: Strings = {
     contactTitle: "Talk to the expert directly",
     contactName: "Alessandro Vila Nova",
     contactRole: "Automotive engineer in the US · 4 years with Porsche Cup Brazil",
+    contactTrack: "Currently racing in the IMSA Michelin Pilot Challenge and VP Racing",
     contactCta: "Message on WhatsApp",
     contactPhoneLabel: "+1 (248) 768-0340",
   },
