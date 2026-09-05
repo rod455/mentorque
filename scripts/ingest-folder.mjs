@@ -29,6 +29,34 @@ const dry = args.includes("--dry");
 const dir = args.find((a) => !a.startsWith("--"));
 if (!dir) { console.error("Usage: node scripts/ingest-folder.mjs [--dry] ./folder"); process.exit(1); }
 
+// O .env.local é lido AQUI, pelo mesmo carregador do Next, sem depender do
+// `--env-file` do Node.
+//
+// O QUE ACONTECEU (05/09/2026). Depois de um `vercel env pull` que listou
+// OPENAI_API_KEY e SUPABASE_SERVICE_ROLE_KEY entre as baixadas, o comando
+// seguinte, com `--env-file=.env.local`, dizia que as duas faltavam. O
+// NEXT_PUBLIC_SUPABASE_URL, no mesmo arquivo, era enxergado.
+//
+// A CAUSA NÃO ESTÁ PROVADA. A suspeita natural é o parser simples do
+// `--env-file` tropeçando em algum valor do arquivo que a Vercel escreve (ele
+// traz o ambiente inteiro, incluindo a chave .p8 do APNS e o JSON da conta de
+// serviço do FCM, os dois multilinha). Só que a tentativa de reproduzir isso
+// aqui FALHOU: um .env.local com chave .p8 entre aspas foi lido sem problema.
+// Então é suspeita, não conclusão, e está escrita assim de propósito.
+//
+// O conserto não depende de saber a causa. `@next/env` é o carregador que o
+// próprio `npm run dev` usa, ou seja, o que já lê esse mesmo arquivo todo dia
+// sem reclamar. Vem junto com o next, não é dependência nova. E `--env-file`
+// continua funcionando para quem já usa, porque o que já está em process.env
+// não é sobrescrito.
+try {
+  const { loadEnvConfig } = await import("@next/env");
+  loadEnvConfig(join(import.meta.dirname, ".."), true);
+} catch {
+  // Sem o carregador, segue com o que estiver no ambiente. A conferência de
+  // variável que falta, logo abaixo, é quem avisa se não deu.
+}
+
 const { NEXT_PUBLIC_SUPABASE_URL: URL, SUPABASE_SERVICE_ROLE_KEY: KEY, OPENAI_API_KEY: OAI } = process.env;
 if (!dry) {
   // Dizer QUAIS faltam, não as três de novo. O ensaio (--dry) não usa nenhuma
