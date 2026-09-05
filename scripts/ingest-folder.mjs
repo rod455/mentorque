@@ -101,6 +101,26 @@ function catalogoDoApp() {
 /** A mesma normalização que match_manual_chunks usa do lado do banco. */
 const normaliza = (s) => String(s).toLowerCase().replace(/[^a-z0-9]/g, "");
 
+/**
+ * Abaixo disto não é manual inteiro, é pedaço.
+ *
+ * O aviso de "empty — scanned?" só pega o caso extremo, zero caractere. O caso
+ * traiçoeiro é o do MEIO, e ele apareceu no primeiro lote de verdade: entre 28
+ * manuais que extraíram de 196 mil a 412 mil caracteres, o Ford Fiesta 2018
+ * extraiu 11.120. Três pedaços contra os 250 dos irmãos.
+ *
+ * Isso entra no banco sem reclamar e é PIOR que não ter: o modelo passa a
+ * contar como coberto, a busca acha os três pedaços, e a Biela responde com
+ * uma confiança que não tem lastro. Manual faltando a gente vê na lista de
+ * cobertura; manual pela metade, não.
+ *
+ * 30 mil caracteres é folgado para baixo de propósito: é cerca de 15 páginas,
+ * menos do que qualquer manual de fábrica e o triplo do arquivo problemático.
+ * A causa costuma ser PDF só de imagem com umas poucas páginas de texto, ou
+ * suplemento em vez do manual.
+ */
+const MINIMO_DE_MANUAL = 30000;
+
 async function main() {
   // Pasta que não existe dava uma pilha de ENOENT do readdirSync, com sete
   // linhas de node:internal e nenhuma pista do que fazer. Quem roda isto está
@@ -123,6 +143,7 @@ async function main() {
 
   const catalogo = catalogoDoApp();
   const foraDoCatalogo = [];
+  const curtos = [];
 
   const supabase = dry ? null : createClient(URL, KEY, { auth: { persistSession: false } });
   const ok = [], skipped = [], failed = [];
@@ -146,9 +167,12 @@ async function main() {
     try {
       const bytes = await bytesFrom({ file: join(dir, f) });
       const text = await extractText(bytes);
+      const curto = text.length > 0 && text.length < MINIMO_DE_MANUAL;
+      if (curto) curtos.push(`${tag} (${text.length} chars)`);
       if (dry) {
         const n = chunk(text).length;
-        console.log(`• ${tag}: ${text.length} chars → ${n} chunks ${n === 0 ? "⚠️ (empty — scanned?)" : ""}`);
+        const alerta = n === 0 ? "⚠️ (vazio — escaneado?)" : curto ? "⚠️ (curto demais para um manual inteiro)" : "";
+        console.log(`• ${tag}: ${text.length} chars → ${n} chunks ${alerta}`);
         ok.push(f);
         continue;
       }
@@ -168,6 +192,15 @@ async function main() {
       `\n⚠️  ${foraDoCatalogo.length} manual(is) de modelo que não está no catálogo: ${foraDoCatalogo.join(", ")}.\n` +
         `    Enquanto o modelo não entrar em lib/app/conteudo/veiculos.ts (e a conferir:frota passar),\n` +
         `    ninguém consegue cadastrar esse carro e o manual fica inalcançável.`
+    );
+  }
+  if (curtos.length) {
+    console.warn(
+      `\n⚠️  ${curtos.length} arquivo(s) com menos de ${MINIMO_DE_MANUAL} caracteres: ${curtos.join(", ")}.\n` +
+        `    Manual de fábrica não é tão curto. Costuma ser PDF só de imagem com poucas\n` +
+        `    páginas de texto, ou suplemento em vez do manual. Subir assim é pior que\n` +
+        `    não subir: o modelo passa a contar como coberto e a Biela responde com\n` +
+        `    confiança que não tem lastro.`
     );
   }
   if (failed.length) process.exitCode = 1;
