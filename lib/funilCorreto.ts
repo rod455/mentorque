@@ -178,6 +178,20 @@ export const RESSALVAS: Partial<Record<EventoFunil, string>> = {};
 export const FONTE_MELHOR: Partial<Record<EventoFunil, string>> = {
   cadastro:
     "contado em auth.users (função contas_criadas_desde), não no evento: o evento só dispara para conta com menos de 7 dias e perde tudo que veio antes do instrumento",
+  // ENTROU EM 05/09/2026, e a falta dele custou uma confusão na cara do dono.
+  //
+  // Eu publiquei uma tabela com "cadastrou_carro: 2" e, na mesma resposta,
+  // "10 veículos cadastrados". Ele leu as duas linhas juntas e perguntou como
+  // é que 2 vira 10. As duas estavam certas e respondiam perguntas diferentes:
+  // 2 é quantos aparelhos cadastraram carro DESDE 03/09, e 10 é quantos
+  // veículos as 7 contas TÊM hoje, somados desde que o app existe.
+  //
+  // A regra já estava escrita em prosa no topo deste arquivo e em
+  // supabase/estado_da_base.sql. O que faltava era ela viajar GRUDADA no
+  // degrau, como a do cadastro já viajava. Prosa não acompanha a tabela que
+  // alguém cola numa resposta; ressalva acompanha.
+  cadastrou_carro:
+    "isto é ATO, e conta só quem cadastrou DENTRO da janela. Para quantos TÊM carro hoje, some as contas em estado_da_base: o ato não enxerga quem cadastrou antes do instrumento (23/08/2026) nem quem usa como convidado, sem conta",
 };
 
 export type Comparacao =

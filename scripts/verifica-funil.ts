@@ -122,6 +122,33 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
   conferir("RESSALVAS existe mesmo vazia, para não sumir a ideia", typeof RESSALVAS === "object");
 }
 
+// ── ATO NÃO RESPONDE "QUANTOS TÊM" ─────────────────────────────────────────
+//
+// O caso, de 05/09/2026: eu publiquei uma tabela com "cadastrou_carro: 2" e,
+// na mesma resposta, "10 veículos cadastrados". O dono leu as duas juntas e
+// perguntou como é que 2 vira 10. As duas estavam certas: 2 é quantos
+// aparelhos cadastraram DENTRO da janela, 10 é quantos veículos as contas TÊM
+// hoje, somados desde antes de o instrumento existir.
+//
+// A regra já estava escrita em prosa aqui e em supabase/estado_da_base.sql. O
+// que faltava era ela viajar GRUDADA no degrau: prosa não acompanha a tabela
+// que alguém cola numa resposta.
+{
+  const d = degrau("abriu_cadastro_de_carro", "cadastrou_carro", 10, 2, "2026-09-03");
+  conferir("a taxa do formulário sai", d.taxa === 20, `taxa=${d.taxa} motivo=${d.motivo}`);
+  conferir(
+    "e ela viaja com o aviso de que ato não é estoque",
+    d.ressalvas.some((r) => r.includes("estado_da_base")),
+    JSON.stringify(d.ressalvas),
+  );
+  conferir("o cadastrou_carro declara que tem fonte melhor", !!FONTE_MELHOR.cadastrou_carro);
+  conferir(
+    "e a declaração diz que é ATO e aponta para onde está o estoque",
+    /ATO/.test(FONTE_MELHOR.cadastrou_carro ?? "") && (FONTE_MELHOR.cadastrou_carro ?? "").includes("estado_da_base"),
+    FONTE_MELHOR.cadastrou_carro ?? "",
+  );
+}
+
 // ── a tabela cobre todo evento, senão a regra tem buraco ───────────────────
 {
   const eventos = Object.keys(NATUREZA) as EventoFunil[];
