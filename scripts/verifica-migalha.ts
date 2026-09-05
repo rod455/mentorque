@@ -153,6 +153,64 @@ function envelhece(segundos: number) {
   conferir("migalha velha pausada segue calada", fechamentoAnterior() === null);
 }
 
+// ── 9. SAIR DA PÁGINA TAMBÉM ESFRIA, e é isto que faltava ──────────────────
+//
+// O caso real, de 05/09/2026. A testemunha mentiu quatro vezes no mesmo
+// minuto, todas na web, todas dizendo "app fechou sozinho em: abriu o app":
+// 69s, 31s, 2s e 38s depois do passo. Cruzando com o funil era um aparelho só,
+// que fez `cadastro` às 11:45:38 e `iniciou_checkout` às 11:45:52. Os 31
+// segundos são a ida ao Google para logar; os 38, a ida ao Stripe para pagar.
+//
+// A causa: `visibilitychange` NÃO dispara em navegação de página inteira. A
+// migalha ficava quente durante o passeio pelo provedor, e a volta era lida
+// como sessão interrompida. A testemunha acusava crash exatamente nos dois
+// momentos em que o produto ganha dinheiro.
+//
+// `pagehide` dispara em qualquer saída ORDENADA e não dispara quando o
+// processo morre, porque não sobra JavaScript para disparar. É essa assimetria
+// que a migalha sempre quis medir, e é por isso que esta conferência exercita
+// `vigiarPausa` de verdade, e não só o `esfriaMigalha` por dentro: o que
+// faltava não era a regra, era o ouvinte.
+{
+  const ouvintes = new Map<string, (() => void)[]>();
+  const registra = (alvo: Map<string, (() => void)[]>) => (nome: string, fn: () => void) => {
+    alvo.set(nome, [...(alvo.get(nome) ?? []), fn]);
+  };
+  const janela = (globalThis as Record<string, unknown>).window as Record<string, unknown>;
+  janela.addEventListener = registra(ouvintes);
+  (globalThis as Record<string, unknown>).document = {
+    addEventListener: registra(ouvintes),
+    visibilityState: "visible",
+  };
+
+  const { vigiarPausa } = await import("../lib/app/ultimoPasso.ts");
+  vigiarPausa();
+
+  conferir("vigiarPausa escuta pagehide", ouvintes.has("pagehide"), [...ouvintes.keys()].join(", "));
+  conferir("e continua escutando visibilitychange", ouvintes.has("visibilitychange"), [...ouvintes.keys()].join(", "));
+
+  // O caso do Google: passo, 31 segundos fora da página, volta. Não é crash.
+  gaveta.clear();
+  passo("abriu o app");
+  for (const fn of ouvintes.get("pagehide") ?? []) fn();
+  {
+    const m = JSON.parse(gaveta.get(CHAVE) as string) as { t: number; pausadoEm: number };
+    gaveta.set(CHAVE, JSON.stringify({ ...m, t: m.t - 31000 }));
+  }
+  conferir("ida ao login e volta NÃO vira relato", fechamentoAnterior() === null, "foi o que encheu a tabela em 05/09");
+
+  // E a trava de sempre continua de pé: morte colada no passo fala, mesmo que
+  // o último suspiro do app tenha alcançado disparar o pagehide.
+  gaveta.clear();
+  passo("respondeu o quiz");
+  for (const fn of ouvintes.get("pagehide") ?? []) fn();
+  {
+    const m = JSON.parse(gaveta.get(CHAVE) as string) as { t: number; pausadoEm: number };
+    gaveta.set(CHAVE, JSON.stringify({ ...m, t: m.t - 7000, pausadoEm: m.pausadoEm - 7000 }));
+  }
+  conferir("morte colada no passo continua falando", fechamentoAnterior() !== null, "o pagehide não pode calar o defeito");
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) da migalha reprovaram.`);
   process.exit(1);

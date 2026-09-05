@@ -131,10 +131,42 @@ export function fechamentoAnterior(): { nome: string; segundos: number } | null 
   return { nome: m.nome, segundos: Math.round(ha / 1000) };
 }
 
-/** Liga o ouvinte que esfria a migalha quando o app sai da frente. */
+/**
+ * Liga os ouvintes que esfriam a migalha quando o app sai da frente.
+ *
+ * SÃO DOIS, e o segundo entrou em 05/09/2026 depois de a testemunha mentir
+ * quatro vezes no mesmo minuto. Os relatos foram estes, todos na web:
+ *
+ *   11:45:08  fechou em "abriu o app", 69s depois
+ *   11:45:38  fechou em "abriu o app", 31s depois
+ *   11:45:40  fechou em "abriu o app",  2s depois
+ *   11:46:18  fechou em "abriu o app", 38s depois
+ *
+ * Cruzando com o funil, era um aparelho só, que fez `cadastro` às 11:45:38 e
+ * `iniciou_checkout` às 11:45:52. Os 31 segundos são a ida ao Google para
+ * logar; os 38, a ida ao Stripe para pagar. Ninguém fechou nada.
+ *
+ * A causa é que `visibilitychange` NÃO dispara em navegação de página inteira.
+ * Sair para o provedor de login e voltar deixa a migalha quente, e a próxima
+ * abertura a lê como sessão interrompida. Ou seja: a testemunha acusava crash
+ * exatamente nos dois momentos em que o produto ganha dinheiro, que também são
+ * os dois que mais mandam a pessoa para fora da página.
+ *
+ * `pagehide` é o discriminador certo, e não por acaso: ele dispara em QUALQUER
+ * saída ordenada da página (navegação, aba fechada, app indo para trás), e não
+ * dispara quando o processo morre, porque não sobra JavaScript para disparar
+ * nada. É essa assimetria que a migalha sempre quis medir.
+ *
+ * Os dois ouvintes convivem sem conflito: `esfriaMigalha` é idempotente para o
+ * que interessa, e a trava do PAUSA_COLADA_MS continua valendo por cima dos
+ * dois. App que morre e alcança disparar `pagehide` no último suspiro esfria a
+ * migalha COLADA no passo, e a regra dos dois segundos faz ela falar assim
+ * mesmo.
+ */
 export function vigiarPausa(): void {
   if (typeof window === "undefined" || typeof document === "undefined") return;
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") esfriaMigalha();
   });
+  window.addEventListener("pagehide", () => esfriaMigalha());
 }
