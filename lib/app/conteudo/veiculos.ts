@@ -31,7 +31,7 @@ const makes: Record<"car" | "moto", string[]> = {
 const modelsByMake: Record<string, string[]> = {
   Volkswagen: ["Polo", "Nivus", "T-Cross", "Virtus", "Gol", "Saveiro", "Amarok", "Taos", "Jetta", "Tera", "Voyage", "Fusca", "Fox", "CrossFox", "SpaceFox", "Parati", "Kombi", "Up!", "Golf", "Tiguan Allspace", "Passat"],
   Chevrolet: ["Onix", "Onix Plus", "Tracker", "Spin", "Montana", "S10", "Equinox", "Trailblazer", "Cruze", "Cruze Sport6", "Blazer", "Cobalt", "Prisma", "Joy", "Sonic", "Celta", "Corsa", "Classic", "Astra", "Vectra", "Meriva", "Agile"],
-  Fiat: ["Strada", "Argo", "Mobi", "Pulse", "Pulse Abarth", "Fastback", "Toro", "Cronos", "Fiorino", "Titano", "Ducato", "Uno", "Palio", "Palio Weekend", "Siena", "Idea", "Doblò", "Punto", "Grand Siena", "500"],
+  Fiat: ["Strada", "Argo", "Mobi", "Pulse", "Pulse Abarth", "Fastback", "Toro", "Cronos", "Fiorino", "Titano", "Ducato", "Uno", "Palio", "Palio Weekend", "Siena", "Idea", "Doblò", "Punto", "Grand Siena", "Bravo", "500"],
   Toyota: ["Corolla", "Corolla Cross", "Hilux", "Yaris", "Yaris Sedan", "SW4", "RAV4", "Camry", "Etios", "Etios Sedan"],
   Hyundai: ["HB20", "HB20S", "HB20X", "Creta", "Tucson", "Santa Fe", "ix35", "Azera", "Kona", "i30"],
   Honda: ["HR-V", "City", "City Hatchback", "Civic", "WR-V", "ZR-V", "CR-V", "Fit", "Accord"],

@@ -19,7 +19,7 @@
  * years of the same model coexist. One bad file doesn't stop the batch.
  * Env: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY
  */
-import { readdirSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join, basename, extname } from "node:path";
 import { createClient } from "@supabase/supabase-js";
 import { bytesFrom, extractText, chunk, ingestManual } from "./lib/ingest.mjs";
@@ -54,10 +54,60 @@ function parseName(fname) {
   return { make, model, year, title: stem };
 }
 
+// O CATÁLOGO DO APP, para avisar sobre manual que ninguém vai alcançar.
+//
+// POR QUE ISTO EXISTE (05/09/2026). A busca (match_manual_chunks) filtra marca
+// e modelo NO DURO: só o ano é aproximado. Então um manual cujo modelo não
+// existe em "Adicionar carro" nunca é consultado por ninguém, e a falha é
+// silenciosa dos dois lados: a ingestão diz "✓ 300 chunks" e a Biela responde
+// no genérico para sempre.
+//
+// Aconteceu no primeiro lote de verdade: dos 27 manuais, o Fiat Bravo não
+// estava no catálogo. O aviso é aqui, ANTES de gastar token de embedding, e é
+// aviso e não recusa: pode haver motivo para subir um manual antes do modelo
+// entrar na lista. Só não pode ser por engano.
+//
+// Repare que o caminho é montado com `join`, e NÃO com `new URL`: a linha do
+// topo faz `const { NEXT_PUBLIC_SUPABASE_URL: URL }`, que sombreia o `URL`
+// global do Node. `new URL(...)` aqui dentro estoura "not a constructor", e na
+// primeira versão o `catch` engolia isso e devolvia `null`, ou seja, o aviso
+// nunca saía para ninguém. Foi pego plantando um modelo inventado no lote de
+// teste e vendo a ingestão aprovar calada.
+function catalogoDoApp() {
+  try {
+    const fonte = readFileSync(join(import.meta.dirname, "../lib/app/conteudo/veiculos.ts"), "utf8");
+    const bloco = fonte.match(/const modelsByMake[^=]*= \{([\s\S]*?)\n\};/);
+    if (!bloco) {
+      console.warn("⚠️  não consegui ler modelsByMake em veiculos.ts: sigo sem conferir o catálogo.");
+      return null;
+    }
+    const chaves = new Set();
+    for (const linha of bloco[1].split("\n")) {
+      const m = linha.match(/^\s*"?([^":]+)"?:\s*\[(.*)\],\s*$/);
+      if (!m) continue;
+      const marca = m[1].replace(/"/g, "").trim();
+      for (const mod of m[2].split(",").map((x) => x.trim().replace(/^"|"$/g, "")).filter(Boolean)) {
+        chaves.add(normaliza(marca) + "|" + normaliza(mod));
+      }
+    }
+    return chaves.size ? chaves : null;
+  } catch (e) {
+    // Reportar em vez de engolir: foi um catch mudo aqui que escondeu o
+    // sombreamento do URL e deixou o aviso desligado sem ninguém saber.
+    console.warn(`⚠️  não consegui ler o catálogo de veículos (${e.message}): sigo sem conferir.`);
+    return null;
+  }
+}
+/** A mesma normalização que match_manual_chunks usa do lado do banco. */
+const normaliza = (s) => String(s).toLowerCase().replace(/[^a-z0-9]/g, "");
+
 async function main() {
   const files = readdirSync(dir).filter((f) => /\.(pdf|txt)$/i.test(f)).sort();
   if (files.length === 0) { console.error(`No .pdf/.txt files in ${dir}`); process.exit(1); }
   console.log(`Found ${files.length} file(s) in ${dir}${dry ? " (dry run)" : ""}.\n`);
+
+  const catalogo = catalogoDoApp();
+  const foraDoCatalogo = [];
 
   const supabase = dry ? null : createClient(URL, KEY, { auth: { persistSession: false } });
   const ok = [], skipped = [], failed = [];
@@ -70,6 +120,14 @@ async function main() {
       continue;
     }
     const tag = `${make} ${model}${year ? " " + year : ""}`;
+    if (catalogo && !catalogo.has(normaliza(make) + "|" + normaliza(model))) {
+      console.warn(
+        `⚠️  "${make} ${model}" não está em lib/app/conteudo/veiculos.ts.\n` +
+          `    A busca filtra marca e modelo no duro, então ninguém vai conseguir\n` +
+          `    cadastrar esse carro e este manual nunca vai ser consultado.`
+      );
+      foraDoCatalogo.push(tag);
+    }
     try {
       const bytes = await bytesFrom({ file: join(dir, f) });
       const text = await extractText(bytes);
@@ -90,6 +148,13 @@ async function main() {
   }
 
   console.log(`\nDone. ${ok.length} ok, ${skipped.length} skipped, ${failed.length} failed.`);
+  if (foraDoCatalogo.length) {
+    console.warn(
+      `\n⚠️  ${foraDoCatalogo.length} manual(is) de modelo que não está no catálogo: ${foraDoCatalogo.join(", ")}.\n` +
+        `    Enquanto o modelo não entrar em lib/app/conteudo/veiculos.ts (e a conferir:frota passar),\n` +
+        `    ninguém consegue cadastrar esse carro e o manual fica inalcançável.`
+    );
+  }
   if (failed.length) process.exitCode = 1;
 }
 
