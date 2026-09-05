@@ -149,12 +149,20 @@ if (!dry) {
     !OAI && "OPENAI_API_KEY",
   ].filter(Boolean);
   if (faltando.length) {
+    const estrutura = estruturaDoEnv();
     console.error(
       `${faltando.length === 1 ? "Falta esta variável" : "Faltam estas variáveis"} no .env.local: ${faltando.join(", ")}.\n` +
         `\nCarregando o .env: ${comoCarregou}\n` +
-        estruturaDoEnv() +
-        `\nO jeito de trazer o que falta, sem copiar segredo à mão:\n` +
-        `  vercel env pull .env.local\n` +
+        estrutura +
+        // O conselho MUDA conforme o que a estrutura mostrou. Mandar rodar o
+        // pull quando o arquivo já veio com valor em branco é mandar repetir o
+        // que causou o problema, e foi o que a mensagem fez uma vez.
+        (estrutura.includes("VALOR EM BRANCO")
+          ? `\nNÃO rode o \`vercel env pull\` de novo: foi ele que trouxe as linhas em branco.\n` +
+            `Se existir um .env.local.bak de antes do pull, o caminho curto é voltar para ele:\n` +
+            `  copy .env.local.bak .env.local\n`
+          : `\nO jeito de trazer o que falta, sem copiar segredo à mão:\n` +
+            `  vercel env pull .env.local\n`) +
         `\nOu rode com --dry, que lê os arquivos sem escrever nada e não precisa de chave.`
     );
     process.exit(1);
