@@ -102,8 +102,23 @@ function catalogoDoApp() {
 const normaliza = (s) => String(s).toLowerCase().replace(/[^a-z0-9]/g, "");
 
 async function main() {
-  const files = readdirSync(dir).filter((f) => /\.(pdf|txt)$/i.test(f)).sort();
-  if (files.length === 0) { console.error(`No .pdf/.txt files in ${dir}`); process.exit(1); }
+  // Pasta que não existe dava uma pilha de ENOENT do readdirSync, com sete
+  // linhas de node:internal e nenhuma pista do que fazer. Quem roda isto está
+  // com a pasta de manuais aberta na tela, não lendo stack trace.
+  let files;
+  try {
+    files = readdirSync(dir).filter((f) => /\.(pdf|txt)$/i.test(f)).sort();
+  } catch (e) {
+    console.error(
+      e.code === "ENOENT"
+        ? `A pasta "${dir}" não existe.\n` +
+          `Passe o caminho onde os PDFs estão de verdade, entre aspas se tiver espaço:\n` +
+          `  node --env-file=.env.local scripts/ingest-folder.mjs --dry "C:\\Users\\voce\\Downloads\\manuais"`
+        : `Não consegui ler a pasta "${dir}": ${e.message}`
+    );
+    process.exit(1);
+  }
+  if (files.length === 0) { console.error(`Nenhum .pdf ou .txt em ${dir}`); process.exit(1); }
   console.log(`Found ${files.length} file(s) in ${dir}${dry ? " (dry run)" : ""}.\n`);
 
   const catalogo = catalogoDoApp();
