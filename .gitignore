@@ -32,6 +32,21 @@ next-env.d.ts
 # Intermediário do npm run quiz:pdf.
 docs/quiz-perguntas.html
 
+# Os PDFs de manual de fábrica, que ficam na máquina de quem faz a ingestão.
+#
+# A pasta mora DENTRO do repositório porque é de lá que o
+# scripts/ingest-folder.mjs é rodado, e isso é uma armadilha: um `git add -A`
+# distraído mandaria dezenas de megabytes de manual de montadora para o
+# GitHub. São arquivos de terceiro, com dono e licença própria, e o que a
+# gente guarda deles é o texto já picado no Supabase, não o original.
+#
+# Nomes no plural e em duas grafias de propósito: a pasta real de hoje é
+# `ManuaisCarro`, e a próxima pessoa vai chamar de outra coisa.
+/ManuaisCarro/
+/manuais/
+/Manuais/
+/manuais-carro/
+
 # Skills instaladas de fora pelo `npx skills add`.
 #
 # Elas caem em `.agents/skills/` e criam LINK SIMBÓLICO dentro de
