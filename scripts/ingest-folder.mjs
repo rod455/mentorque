@@ -49,12 +49,28 @@ if (!dir) { console.error("Usage: node scripts/ingest-folder.mjs [--dry] ./folde
 // sem reclamar. Vem junto com o next, não é dependência nova. E `--env-file`
 // continua funcionando para quem já usa, porque o que já está em process.env
 // não é sobrescrito.
+// O relatório do carregamento, para a mensagem de erro poder explicar. Um
+// `catch` mudo aqui já custou duas rodadas nesta mesma tarde: primeiro
+// escondendo o `URL` sombreado, depois escondendo por que o @next/env não
+// carregou nada. Quando falha, o motivo aparece.
+let comoCarregou = "não tentei";
 try {
-  const { loadEnvConfig } = await import("@next/env");
-  loadEnvConfig(join(import.meta.dirname, ".."), true);
-} catch {
-  // Sem o carregador, segue com o que estiver no ambiente. A conferência de
-  // variável que falta, logo abaixo, é quem avisa se não deu.
+  const raiz = join(import.meta.dirname, "..");
+  // `@next/env` é CommonJS: importado de um .mjs, os nomes vêm dentro de
+  // `default`, e desestruturar direto dá `undefined`. A primeira versão fazia
+  // isso e falhava com "loadEnvConfig is not a function" em toda máquina. Eu
+  // não vi porque testei com `--dry`, que é justamente o modo que não usa
+  // variável nenhuma.
+  const mod = await import("@next/env");
+  const loadEnvConfig = mod.loadEnvConfig ?? mod.default?.loadEnvConfig;
+  if (typeof loadEnvConfig !== "function") throw new Error("@next/env não expôs loadEnvConfig");
+  const r = loadEnvConfig(raiz, true);
+  const lidos = (r?.loadedEnvFiles ?? []).map((f) => f.path);
+  comoCarregou = lidos.length
+    ? `li ${lidos.join(", ")} (a partir de ${raiz})`
+    : `nenhum arquivo .env encontrado em ${raiz}`;
+} catch (e) {
+  comoCarregou = `o carregador falhou: ${e.message}`;
 }
 
 const { NEXT_PUBLIC_SUPABASE_URL: URL, SUPABASE_SERVICE_ROLE_KEY: KEY, OPENAI_API_KEY: OAI } = process.env;
@@ -71,6 +87,7 @@ if (!dry) {
   if (faltando.length) {
     console.error(
       `${faltando.length === 1 ? "Falta esta variável" : "Faltam estas variáveis"} no .env.local: ${faltando.join(", ")}.\n` +
+        `\nCarregando o .env: ${comoCarregou}\n` +
         `\nPara ver só os NOMES do que já existe lá (sem mostrar valor nenhum):\n` +
         `  Get-Content .env.local | ForEach-Object { ($_ -split '=')[0] }\n` +
         `\nO jeito de trazer o que falta, sem copiar segredo à mão:\n` +
