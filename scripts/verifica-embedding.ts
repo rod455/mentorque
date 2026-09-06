@@ -24,7 +24,7 @@
 // Rode com: npm run conferir:embedding
 import { readFileSync } from "node:fs";
 import { EMBEDDING as DA_CONSULTA } from "../lib/rag.ts";
-import { EMBEDDING as DA_INGESTAO } from "./lib/ingest.mjs";
+import { EMBEDDING as DA_INGESTAO, limpaTexto } from "./lib/ingest.mjs";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -101,6 +101,26 @@ console.log("Embedding: quem grava e quem procura falam a mesma língua?");
     /embedding_voyage\s*<=>/.test(migracao),
     "match_manual_chunks precisa comparar em embedding_voyage, não na coluna antiga"
   );
+}
+
+// -- 4. O TEXTO QUE ENTRA NO BANCO ------------------------------------------
+//
+// O caso, de 05/09/2026: no primeiro lote grande, 4 dos 27 manuais foram
+// recusados com `unsupported Unicode escape sequence`. Erro do BANCO, nao do
+// arquivo: o Postgres nao guarda o caractere NUL dentro de texto, e alguns
+// PDFs trazem NUL no meio do conteudo extraido. Um manual inteiro perdido por
+// causa de um byte invisivel, e a mensagem nao fala em PDF nem em NUL, entao
+// ninguem liga uma coisa a outra sem ja ter passado por isso.
+{
+  const NUL = String.fromCharCode(0);
+  const VT = String.fromCharCode(11);
+  const sujo = `Troca do ${NUL}oleo${VT} do motor.\n\nSegundo paragrafo.`;
+  const limpo = limpaTexto(sujo);
+
+  conferir("o NUL sai do texto extraido", !limpo.includes(NUL), "e ele que o Postgres recusa");
+  conferir("os outros controles do bloco C0 tambem saem", !limpo.includes(VT));
+  conferir("a quebra de linha FICA", limpo.includes("\n"), "a picotagem em paragrafos depende dela");
+  conferir("o acento fica intacto", limpo.includes("oleo"), limpo.slice(0, 40));
 }
 
 if (falhas) {

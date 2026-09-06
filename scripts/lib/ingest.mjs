@@ -13,12 +13,33 @@ export async function bytesFrom({ file, url }) {
   return new Uint8Array(readFileSync(file));
 }
 
+/**
+ * Tira do texto extraído o que o Postgres não guarda.
+ *
+ * POR QUE (05/09/2026). No primeiro lote grande, 4 dos 27 manuais falharam com
+ * `unsupported Unicode escape sequence`, que é erro do BANCO, não do arquivo:
+ * o Postgres não aceita o caractere NUL (`\u0000`) dentro de texto, e alguns
+ * PDFs trazem NUL no meio do conteúdo extraído. O manual inteiro era recusado
+ * por causa de um byte invisível.
+ *
+ * Junto com o NUL saem os outros caracteres de controle do bloco C0, que em
+ * texto de manual são sempre lixo de extração. Quebra de linha e tabulação
+ * ficam, porque a picotagem em parágrafos depende delas.
+ *
+ * Isto é limpeza, não conserto de conteúdo: se um PDF vier vazio ou ilegível,
+ * quem avisa continua sendo o aviso de "vazio, escaneado?" e o de "curto
+ * demais para um manual inteiro".
+ */
+export function limpaTexto(texto) {
+  return String(texto).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, "");
+}
+
 export async function extractText(bytes) {
   const isPdf = bytes[0] === 0x25 && bytes[1] === 0x50 && bytes[2] === 0x44 && bytes[3] === 0x46; // "%PDF"
-  if (!isPdf) return Buffer.from(bytes).toString("utf8");
+  if (!isPdf) return limpaTexto(Buffer.from(bytes).toString("utf8"));
   const parser = new PDFParse({ data: bytes });
   try {
-    return (await parser.getText()).text;
+    return limpaTexto((await parser.getText()).text);
   } finally {
     await parser.destroy();
   }
