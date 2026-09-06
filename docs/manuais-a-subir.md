@@ -3,6 +3,58 @@
 Levantado em 04/09/2026, respondendo à pergunta "quais os principais carros das
 frotas de anos anteriores que precisamos subir?".
 
+## O PRIMEIRO LOTE SUBIU (06/09/2026)
+
+27 manuais entraram: Gol (2015, 2018, 2021, 2024), Fox (2015, 2017, 2019, 2021,
+2022), Ka (2014, 2015, 2018, 2020), Fiesta (2010, 2013, 2016), Celta (2008,
+2010, 2012, 2014), Palio (2004, 2006, 2011, 2013), Uno 2013, Fiorino 2013 e
+Bravo 2016.
+
+A base foi de 85 para **112 manuais e 34.609 trechos**, em 80 modelos e 12
+marcas, todos já no espaço vetorial da Voyage.
+
+**Os dez carros mais comuns do Brasil agora têm manual**, os dez. Era 3 de 10
+na manhã de 04/09:
+
+| Carro | Trechos |
+| --- | --- |
+| Volkswagen Fox | 1.482 |
+| Volkswagen Gol | 1.203 |
+| Ford Ka | 892 |
+| Fiat Palio | 851 |
+| Ford Fiesta | 759 |
+| Chevrolet Celta | 506 |
+| Hyundai HB20 | 485 |
+| Fiat Strada | 283 |
+| Chevrolet Onix | 268 |
+| Fiat Uno | 136 |
+
+Dos carros dos nossos usuários, o **Gol 2016 saiu de 0 para 1.203 trechos** e o
+**Ka 2025, do assinante pagante, de 0 para 892**.
+
+### O que ainda acha zero
+
+Três carros de usuários nossos, e a razão é a mesma nos três: marca inteira sem
+nenhum manual.
+
+- **Ford EcoSport 2003** (usuário novo, apareceu depois do levantamento)
+- **Suzuki Vitara 2015**
+- **Mercedes-Benz A200 2022**
+
+Do primeiro time da lista abaixo, falta só **Corsa e Classic**.
+
+### O que o lote ensinou, e já virou conferência
+
+- **Modelo fora do catálogo é manual inalcançável.** O Fiat Bravo não estava em
+  `veiculos.ts`, e a busca filtra marca e modelo no duro. A ingestão passou a
+  avisar antes de gastar embedding.
+- **Manual pela metade é pior que manual faltando.** O Fiesta 2018 extraiu 11
+  mil caracteres contra 300 mil dos irmãos: PDF quase todo em imagem. Ficou de
+  fora, e a ingestão passou a avisar abaixo de 30 mil caracteres.
+- **Byte NUL derruba o manual inteiro.** Quatro arquivos foram recusados pelo
+  Postgres com uma mensagem que não fala em PDF nem em NUL. O texto extraído
+  passou a ser limpo antes de ir para o banco.
+
 A resposta curta é que **a pergunta certa não é o ano, é o modelo**. Explicação
 abaixo, porque isso muda o que vale a pena caçar.
 
