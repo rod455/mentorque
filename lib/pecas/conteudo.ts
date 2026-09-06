@@ -19,7 +19,18 @@
 // TIPO podem usar o alias, porque o `--experimental-strip-types` as apaga
 // antes de o Node tentar resolver; as de VALOR, não.
 import { perguntasDoQuiz } from "../app/quiz/perguntas.ts";
-import type { Secao } from "./chapas";
+import type { Formato, Secao } from "./chapas";
+// O VEREDITO DE QUEM CABE, medido uma vez e versionado.
+//
+// Ele é gerado por `npm run pecas -- --medir`, que desenha cada candidato num
+// Chromium de verdade e anota quem coube. Existe porque passaram a existir dois
+// renderizadores: o script local, em Chromium, e o `next/og` da rota, que é o
+// que o n8n chama. Na primeira chamada real a rota desenhou uma peça que o
+// script tinha recusado, e saiu título por cima das opções.
+//
+// Dois desenhistas com réguas diferentes é dívida. A régua passou a ser uma só,
+// e a rota não mede nada: ela obedece a este arquivo.
+import cabem from "./cabem.json";
 
 export type PecaDeConteudo = {
   secao: Secao;
@@ -70,6 +81,19 @@ export function candidatosDaSemana(quando = new Date()): PecaDeConteudo[][] {
 
   const secoes: Secao[] = ["desafio", "dica", "curiosidade", "pergunta"];
   return secoes.map((secao, i) => daSecao(i).map((q) => monta(secao, q)));
+}
+
+/**
+ * Os candidatos que CABEM na chapa, para uma seção e um formato.
+ *
+ * Quem desenha sem navegador (a rota /api/pecas) precisa desta lista: sem ela
+ * ele aceita texto que não cabe e entrega peça ilegível, que foi exatamente o
+ * que aconteceu na primeira chamada.
+ */
+export function candidatosQueCabem(secao: Secao, formato: Formato, quando = new Date()): PecaDeConteudo[] {
+  const permitidos: string[] = (cabem as Record<string, string[]>)[`${secao}:${formato}`] ?? [];
+  const lista = candidatosDaSemana(quando).find((l) => l[0].secao === secao) ?? [];
+  return lista.filter((p) => permitidos.includes(p.fonte));
 }
 
 /** A primeira opção de cada seção, sem medir se cabe. Para quem só quer ver. */

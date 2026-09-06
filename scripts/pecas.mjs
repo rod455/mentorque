@@ -139,7 +139,7 @@ function valida(conteudo) {
   return erros;
 }
 
-async function gerar(conteudo, { tolerante = false } = {}) {
+async function gerar(conteudo, { tolerante = false, semArquivo = false } = {}) {
   const erros = valida(conteudo);
   if (erros.length) { console.error("Peça recusada:\n  " + erros.join("\n  ")); process.exit(1); }
 
@@ -175,6 +175,7 @@ async function gerar(conteudo, { tolerante = false } = {}) {
       process.exit(1);
     }
 
+    if (semArquivo) { await pg.close(); continue; }
     const arquivo = join(saida, `${conteudo.secao}-${formato}.png`);
     await pg.screenshot({ path: arquivo });
     await pg.close();
@@ -232,6 +233,40 @@ const EXEMPLO = {
   opcoes: ["Tampa do tanque mal fechada", "Sensor de oxigênio", "Falha de combustão", "Todas as anteriores"],
   destaque: "ambar",
 };
+
+// MEDIR QUAIS CANDIDATOS CABEM, e gravar o veredito no repositório.
+//
+// POR QUE ISTO EXISTE (06/09/2026). Passaram a existir DOIS renderizadores: este
+// aqui, em Chromium, para ver localmente, e o `next/og` da rota /api/pecas, que
+// é o que o n8n chama porque Chromium não roda na Vercel. Na primeira chamada
+// real a rota desenhou uma peça que este script tinha recusado, e o resultado
+// foi título por cima das opções.
+//
+// Dois desenhistas com réguas diferentes é dívida. A saída é a medida ser UMA
+// SÓ: aqui, que é onde existe um navegador de verdade, e o veredito vai para um
+// arquivo versionado que os dois lados leem. A rota não mede nada; ela obedece.
+//
+// Rode de novo quando as chapas ou o banco do quiz mudarem.
+if (args.includes("--medir")) {
+  const { candidatosDaSemana } = await import(join(RAIZ, "lib/pecas/conteudo.ts"));
+  const { writeFileSync } = await import("node:fs");
+  const cabem = {};
+  for (const lista of candidatosDaSemana()) {
+    for (const peca of lista) {
+      for (const formato of ["feed", "stories"]) {
+        const r = await gerar({ ...peca, formatos: [formato] }, { tolerante: true, semArquivo: true });
+        const chave = `${peca.secao}:${formato}`;
+        (cabem[chave] ??= []);
+        if (!r.transbordou) cabem[chave].push(peca.fonte);
+      }
+    }
+  }
+  const destino = join(RAIZ, "lib/pecas/cabem.json");
+  writeFileSync(destino, JSON.stringify(cabem, null, 2) + "\n");
+  for (const [k, v] of Object.entries(cabem)) console.log(`  ${k.padEnd(24)} ${v.length} candidato(s) cabem`);
+  console.log(`\nVeredito gravado em ${destino}`);
+  process.exit(0);
+}
 
 // AS QUATRO PEÇAS DA SEMANA, tiradas do que o app já tem escrito.
 // A escolha do conteúdo mora em lib/pecas/conteudo.ts; aqui só se desenha.

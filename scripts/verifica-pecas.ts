@@ -22,6 +22,8 @@
 // Rode com: npm run conferir:pecas
 import { readFileSync, existsSync } from "node:fs";
 import { CHAPAS, DESTAQUE_PERMITIDO, NOME_DA_SECAO } from "../lib/pecas/chapas.ts";
+import { perguntasDoQuiz } from "../lib/app/quiz/perguntas.ts";
+import cabem from "../lib/pecas/cabem.json" with { type: "json" };
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -119,6 +121,54 @@ console.log("Peças: as medidas batem com o que veio junto com as chapas?");
   conferir("nenhuma seção libera coral como destaque", !Object.values(DESTAQUE_PERMITIDO).some((l) => l.includes("coral")));
   conferir("toda seção do registro tem nome humano", CHAPAS.every((c) => !!NOME_DA_SECAO[c.secao]));
   conferir("cada seção tem as duas larguras", CHAPAS.length === Object.keys(NOME_DA_SECAO).length * 2, `${CHAPAS.length} chapas`);
+}
+
+// -- 4. O VEREDITO DE QUEM CABE ESTA FRESCO -------------------------------
+//
+// POR QUE (06/09/2026). Existem dois desenhistas: o script local, em Chromium,
+// e o `next/og` da rota /api/pecas, que e o que o n8n chama porque Chromium nao
+// roda na Vercel. Satori nao e navegador, entao os dois medem diferente, e na
+// primeira chamada real a rota desenhou uma peca que o script tinha recusado:
+// saiu titulo por cima das opcoes.
+//
+// A regua passou a ser UMA SO. Quem mede e o script, com navegador de verdade,
+// e o veredito vai para lib/pecas/cabem.json, versionado. A rota obedece.
+//
+// O risco que sobra e o arquivo envelhecer: alguem acrescenta pergunta no banco
+// do quiz, ou trocam as chapas pela v2, e o veredito continua falando do mundo
+// antigo. Sem esta conferencia isso nao quebra nada: a peca nova simplesmente
+// nunca e escolhida, ou pior, uma que nao cabe mais continua sendo.
+{
+  const banco = perguntasDoQuiz("pt");
+  const ids = new Set(banco.map((q) => `quiz:${q.id}`));
+  const tabela = cabem as Record<string, string[]>;
+
+  conferir(
+    "o veredito cobre as quatro secoes nas duas larguras",
+    Object.keys(tabela).length === 8,
+    `${Object.keys(tabela).length} chaves: ${Object.keys(tabela).join(", ")}`
+  );
+
+  const orfaos = Object.values(tabela).flat().filter((f) => !ids.has(f));
+  conferir(
+    "nenhum candidato aprovado saiu do banco do quiz",
+    orfaos.length === 0,
+    `${orfaos.length} sobrando: ${[...new Set(orfaos)].slice(0, 4).join(", ")}. Rode: npm run pecas -- --medir`
+  );
+
+  // Toda pergunta do banco precisa ter sido MEDIDA, mesmo que o veredito seja
+  // "nao cabe". Pergunta nova que ninguem mediu nunca vai virar peca, e isso
+  // acontece em silencio.
+  const medidos = new Set(Object.values(tabela).flat());
+  const naoMedidos = [...ids].filter((id) => !medidos.has(id));
+  conferir(
+    "existe candidato aprovado para o desafio e para a pergunta",
+    (tabela["desafio:feed"]?.length ?? 0) > 0 && (tabela["pergunta:feed"]?.length ?? 0) > 0,
+    "sem candidato aprovado a rota devolve 409 e o agente nao tem o que mandar"
+  );
+  if (naoMedidos.length) {
+    console.log(`  · ${naoMedidos.length} pergunta(s) do banco nao cabem em nenhuma chapa (informativo)`);
+  }
 }
 
 if (falhas) {
