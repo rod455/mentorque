@@ -37,7 +37,7 @@ const saida = opcao("saida") ?? join(RAIZ, "pecas-geradas");
 
 // A chapa e as cores vêm do registro, que é conferido contra o LEIA-ME pela
 // `npm run conferir:pecas`. Aqui nada é medido de novo.
-const { CHAPAS, CORES, DESTAQUE_PERMITIDO, NOME_DA_SECAO, chapaDe } = await import(
+const { CHAPAS, CORES, DESTAQUE_PERMITIDO, NOME_DA_SECAO, RESPIRO_DO_FEED, chapaDe } = await import(
   join(RAIZ, "lib/pecas/chapas.ts")
 );
 
@@ -62,7 +62,17 @@ function html({ chapa, conteudo }) {
   const i600 = b64(join(RAIZ, "assets/fontes/inter-600.woff2"));
   const cor = CORES[conteudo.destaque ?? "ambar"];
   const z = chapa.texto;
-  const larg = z.x2 - z.x1;
+  // DUAS LARGURAS. A Biela não é um retângulo: em cima da cabeça dela sobra
+  // quadro que o braço estendido come mais embaixo. O título PODE usar a faixa
+  // larga de cima; a citação, o corpo e as opções descem ao lado dela e ficam
+  // sempre na coluna estreita. O porquê completo está em lib/pecas/chapas.ts.
+  //
+  // O `largo` não é escolha de quem chama: é veredito da medição. Título que
+  // não termina antes do corte desce com a largura de cima e encosta na Biela,
+  // então nesse caso ele volta para a coluna estreita, onde pode descer à
+  // vontade. Quem decide é o --medir, e grava em lib/pecas/cabem.ts.
+  const estreito = z.x2 - z.x1;
+  const larg = conteudo.largo ? chapa.titulo.x2 - z.x1 : estreito;
   const alt = z.y2 - z.y1;
   const grande = chapa.formato === "stories";
 
@@ -96,16 +106,22 @@ function html({ chapa, conteudo }) {
     .zona {
       position: absolute; left: ${z.x1}px; top: ${z.y1}px;
       width: ${larg}px; height: ${alt}px; overflow: hidden;
-      padding-top: ${grande ? 0 : 48}px;
+      padding-top: ${grande ? 0 : RESPIRO_DO_FEED}px;
     }
     h1 {
       font-family: "SG", sans-serif; font-weight: 700; text-transform: uppercase;
       color: ${cor}; font-size: ${grande ? 84 : 62}px; line-height: 1.04;
       letter-spacing: -0.01em; text-wrap: balance;
     }
+    /* A citação é a pergunta de quem escreveu, e vem ANTES do título: branco,
+       caixa mista, com aspas. Só a pergunta da comunidade usa. */
+    .citacao { font-family: "IN", sans-serif; font-weight: 400; color: ${CORES.giz};
+        font-size: ${grande ? 44 : 34}px; line-height: 1.3; width: ${estreito}px;
+        margin-bottom: ${grande ? 28 : 20}px; }
     p { font-family: "IN", sans-serif; font-weight: 400; color: ${CORES.giz};
-        font-size: ${grande ? 46 : 34}px; line-height: 1.35; margin-top: ${grande ? 40 : 28}px; }
-    ul { list-style: none; margin-top: ${grande ? 48 : 34}px; }
+        font-size: ${grande ? 46 : 34}px; line-height: 1.35; margin-top: ${grande ? 40 : 28}px;
+        width: ${estreito}px; }
+    ul { list-style: none; margin-top: ${grande ? 48 : 34}px; width: ${estreito}px; }
     li { font-family: "IN", sans-serif; font-weight: 400; color: ${CORES.giz};
          font-size: ${grande ? 44 : 32}px; line-height: 1.25;
          margin-bottom: ${grande ? 34 : 24}px; padding-left: ${grande ? 66 : 50}px; position: relative; }
@@ -116,7 +132,8 @@ function html({ chapa, conteudo }) {
     }
   </style>
   <div class="zona" id="zona">
-    <h1>${escapa(conteudo.titulo)}</h1>
+    ${conteudo.citacao ? `<div class="citacao">“${escapa(conteudo.citacao)}</div>` : ""}
+    <h1 id="titulo">${escapa(conteudo.titulo)}</h1>
     ${conteudo.corpo ? `<p>${escapa(conteudo.corpo)}</p>` : ""}
     ${opcoes ? `<ul>${opcoes}</ul>` : ""}
   </div>`;
@@ -162,8 +179,43 @@ async function gerar(conteudo, { tolerante = false, semArquivo = false } = {}) {
     // encurtar o texto, então aqui a peça é RECUSADA em vez de sair cortada.
     const sobra = await pg.evaluate(() => {
       const z = document.getElementById("zona");
-      return { altura: z.scrollHeight, cabe: z.clientHeight };
+      const t = document.getElementById("titulo");
+      return {
+        altura: z.scrollHeight,
+        cabe: z.clientHeight,
+        largura: z.scrollWidth,
+        cabeLargura: z.clientWidth,
+        // Em coordenadas da própria chapa, porque a janela tem o tamanho dela.
+        fimDoTitulo: Math.ceil(t.getBoundingClientRect().bottom),
+      };
     });
+    // TRANSBORDO NA LARGURA, e não só na altura. Palavra que não quebra e é mais
+    // larga que a coluna sai CORTADA pelo `overflow: hidden`, e a peça parece
+    // pronta: foi assim que saiu uma dica com "BALANCEAMENTC" no lugar de
+    // "BALANCEAMENTO". Medir só a altura deixava isso passar.
+    if (sobra.largura > sobra.cabeLargura) {
+      const aviso =
+        `alguma palavra é mais larga que a coluna: o texto pede ${sobra.largura}px e a coluna tem ${sobra.cabeLargura}px em ${formato}. ` +
+        "Sai cortada, e a saída é outra palavra ou outra peça.";
+      await pg.close();
+      if (tolerante) { await nav.close(); return { transbordou: aviso }; }
+      console.error(`Peça recusada: ${aviso}`);
+      await nav.close();
+      process.exit(1);
+    }
+    // O TÍTULO NÃO PODE PASSAR DO CORTE, quando está na faixa larga: ela acaba
+    // onde a Biela começa. Na coluna estreita a regra não vale, porque essa
+    // largura é livre até embaixo.
+    if (conteudo.largo && sobra.fimDoTitulo > chapa.titulo.y2) {
+      const aviso =
+        `o título termina em y ${sobra.fimDoTitulo} e a faixa larga acaba em ${chapa.titulo.y2} em ${formato}. ` +
+        "Dali para baixo a Biela ocupa: título mais curto é a saída.";
+      await pg.close();
+      if (tolerante) { await nav.close(); return { transbordou: aviso }; }
+      console.error(`Peça recusada: ${aviso}`);
+      await nav.close();
+      process.exit(1);
+    }
     if (sobra.altura > sobra.cabe) {
       const aviso =
         `o texto ocupa ${sobra.altura}px e a zona livre tem ${sobra.cabe}px em ${formato}. ` +
@@ -248,22 +300,54 @@ const EXEMPLO = {
 //
 // Rode de novo quando as chapas ou o banco do quiz mudarem.
 if (args.includes("--medir")) {
-  const { candidatosDaSemana } = await import(join(RAIZ, "lib/pecas/conteudo.ts"));
   const { writeFileSync } = await import("node:fs");
+  const destino = join(RAIZ, "lib/pecas/cabem.ts");
+  // O OVO E A GALINHA: quem mede importa o conteudo.ts, e o conteudo.ts importa
+  // justamente o arquivo que a medição vai escrever. Sem esta semente, apagar o
+  // veredito impede de gerar o veredito. Aconteceu.
+  if (!existsSync(destino)) writeFileSync(destino, "export const CABEM: Record<string, { fonte: string; largo: boolean }[]> = {};\n");
+  const { candidatosDaSemana } = await import(join(RAIZ, "lib/pecas/conteudo.ts"));
   const cabem = {};
   for (const lista of candidatosDaSemana()) {
     for (const peca of lista) {
       for (const formato of ["feed", "stories"]) {
-        const r = await gerar({ ...peca, formatos: [formato] }, { tolerante: true, semArquivo: true });
         const chave = `${peca.secao}:${formato}`;
         (cabem[chave] ??= []);
-        if (!r.transbordou) cabem[chave].push(peca.fonte);
+        // O LARGO PRIMEIRO, e o estreito como saída. Título na faixa larga é
+        // o enquadramento dos exemplos do dono, e é o que faz manchete comprida
+        // caber onde a coluna do braço não deixaria. Quando ele não termina
+        // antes do corte, a peça não é descartada: ela é desenhada na coluna
+        // estreita, que é livre até embaixo. Sem esta segunda tentativa o
+        // desafio perdia 28 dos 45 candidatos que já tinha.
+        const opts = { tolerante: true, semArquivo: true };
+        const largo = await gerar({ ...peca, largo: true, formatos: [formato] }, opts);
+        if (!largo.transbordou) { cabem[chave].push({ fonte: peca.fonte, largo: true }); continue; }
+        const estreito = await gerar({ ...peca, largo: false, formatos: [formato] }, opts);
+        if (!estreito.transbordou) cabem[chave].push({ fonte: peca.fonte, largo: false });
       }
     }
   }
-  const destino = join(RAIZ, "lib/pecas/cabem.json");
-  writeFileSync(destino, JSON.stringify(cabem, null, 2) + "\n");
-  for (const [k, v] of Object.entries(cabem)) console.log(`  ${k.padEnd(24)} ${v.length} candidato(s) cabem`);
+  // GRAVADO COMO MÓDULO, e não como JSON, por um motivo bobo e caro: o Node
+  // exige `with { type: "json" }` em import de JSON e o bundler do Next não
+  // combina com isso. Como este arquivo é lido pelos dois lados, um .ts com
+  // uma constante evita a briga inteira. Ele continua sendo GERADO: não se
+  // edita à mão.
+  const cabeçalho = [
+    "// GERADO por `npm run pecas -- --medir`. Não editar à mão.",
+    "//",
+    "// Quem cabe em cada chapa, medido num Chromium de verdade. A rota",
+    "// /api/pecas desenha sem navegador e não tem como medir, então ela obedece",
+    "// a este arquivo. Rode o --medir de novo quando o banco do quiz mudar ou",
+    "// quando as chapas forem trocadas; a `npm run conferir:pecas` cobra o",
+    "// frescor.",
+    "//",
+    "// `largo` diz se o TÍTULO daquela peça coube na faixa larga do topo da",
+    "// chapa. Quando é falso, ele desce na coluna estreita. Os dois",
+    "// desenhistas leem daqui, para não medirem diferente.",
+    "export const CABEM: Record<string, { fonte: string; largo: boolean }[]> = ",
+  ].join("\n");
+  writeFileSync(destino, `${cabeçalho}${JSON.stringify(cabem, null, 2)};\n`);
+  for (const [k, v] of Object.entries(cabem)) console.log(`  ${k.padEnd(24)} ${String(v.length).padStart(2)} cabem  (${v.filter((p) => p.largo).length} com título largo)`);
   console.log(`\nVeredito gravado em ${destino}`);
   process.exit(0);
 }

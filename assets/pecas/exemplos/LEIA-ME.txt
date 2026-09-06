@@ -1,0 +1,35 @@
+COMO CADA SEÇÃO SE USA, E O ENQUADRAMENTO
+
+Quatro peças que o dono mandou em 06/09/2026 como referência. Elas não
+foram geradas pelo nosso gerador: são o alvo. O que o gerador faz é
+conferido contra elas.
+
+  feed-01-desafio.jpeg ......... pergunta em âmbar, opções com bolinha
+  feed-03-curiosidade.jpeg ..... afirmação em âmbar, corpo em linhas curtas
+  story-02-dica.jpeg ........... ação em âmbar, corpo explicando como fazer
+  story-04-pergunta.jpeg ....... pergunta entre aspas, resposta em âmbar,
+                                 explicação embaixo
+
+O QUE ELAS ENSINARAM, E QUE O LEIA-ME DAS CHAPAS NÃO DIZIA
+
+1. O TÍTULO É MAIS LARGO QUE O CORPO.
+   Nos exemplos de feed a manchete passa bem do limite de coluna que o
+   LEIA-ME das chapas declara. E está certo: aquele limite é o pior caso
+   da chapa inteira, medido na altura em que a Biela avança mais. Em cima
+   da cabeça dela sobra quadro. O corpo, que desce até embaixo, é que
+   precisa respeitar a coluna estreita.
+
+   Virou código em lib/pecas/chapas.ts (`titulo` e `texto`), e a
+   `npm run conferir:pecas` mede a chapa de verdade para provar que as
+   duas faixas estão livres.
+
+2. A PERGUNTA DA COMUNIDADE TEM TRÊS PARTES.
+   Primeiro o que a pessoa perguntou, em branco e caixa mista, com aspas.
+   Depois a resposta, em âmbar e caixa alta. Depois o porquê, em branco.
+   Sem isso a peça é uma pergunta solta sem resposta, que é o contrário
+   do que a seção promete.
+
+3. O CORPO É CURTO.
+   Nos exemplos ele tem cerca de 120 caracteres, quebrado em linhas de
+   quatro ou cinco palavras. As explicações do banco do quiz têm de 150 a
+   280, e é por isso que a curiosidade ainda não fecha nenhuma peça.

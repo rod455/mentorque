@@ -21,9 +21,10 @@
 //
 // Rode com: npm run conferir:pecas
 import { readFileSync, existsSync } from "node:fs";
-import { CHAPAS, DESTAQUE_PERMITIDO, NOME_DA_SECAO } from "../lib/pecas/chapas.ts";
+import { CHAPAS, DESTAQUE_PERMITIDO, NOME_DA_SECAO, RESPIRO_DO_FEED } from "../lib/pecas/chapas.ts";
+import { bordaLivre, perfilDaChapa } from "../lib/pecas/silhueta.ts";
 import { perguntasDoQuiz } from "../lib/app/quiz/perguntas.ts";
-import cabem from "../lib/pecas/cabem.json" with { type: "json" };
+import { CABEM } from "../lib/pecas/cabem.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -107,6 +108,49 @@ console.log("Peças: as medidas batem com o que veio junto com as chapas?");
   }
 }
 
+// ── 2b. as faixas declaradas são livres NA CHAPA DE VERDADE ────────────────
+//
+// POR QUE (06/09/2026). O bloco 2 confere o registro contra o LEIA-ME, que é
+// texto escrito por gente. Ele pega cópia divergente, mas não pega número
+// errado nos dois lugares, e não tem como pegar chapa nova com a Biela em
+// outro lugar: o LEIA-ME já avisa que a v2 vem "mantendo os mesmos nomes de
+// arquivo", ou seja, trocando o desenho por baixo sem trocar nada aqui.
+//
+// Este bloco abre o PNG e mede. É o único que continua valendo depois da
+// troca. Ele também é o que sustenta a FAIXA LARGA do título: ela não sai do
+// LEIA-ME, sai da medição, e sem medir seria chute.
+{
+  const FOLGA = 20;
+  for (const c of CHAPAS) {
+    const caminho = new URL(`../assets/pecas/${c.formato}/${c.arquivo}`, import.meta.url);
+    if (!existsSync(caminho)) continue;
+    const perfil = perfilDaChapa(caminho.pathname);
+    const topo = c.texto.y1 + (c.formato === "feed" ? RESPIRO_DO_FEED : 0);
+
+    const livreEmCima = bordaLivre(perfil, topo, c.titulo.y2);
+    conferir(
+      `${c.secao}/${c.formato}: a faixa larga do título está livre na chapa`,
+      c.titulo.x2 + FOLGA <= livreEmCima,
+      `título declarado até x ${c.titulo.x2}, mas entre y ${topo} e ${c.titulo.y2} a chapa já tem desenho a partir de x ${livreEmCima}`
+    );
+
+    const livreEmbaixo = bordaLivre(perfil, topo, c.texto.y2);
+    conferir(
+      `${c.secao}/${c.formato}: a coluna estreita está livre na chapa`,
+      c.texto.x2 + FOLGA <= livreEmbaixo,
+      `coluna declarada até x ${c.texto.x2}, mas entre y ${topo} e ${c.texto.y2} a chapa já tem desenho a partir de x ${livreEmbaixo}`
+    );
+
+    // A faixa larga só tem razão de existir se for mais larga. Se alguém
+    // igualar as duas, o título volta a ser espremido sem ninguém perceber.
+    conferir(
+      `${c.secao}/${c.formato}: a faixa do título não é mais estreita que a coluna`,
+      c.titulo.x2 >= c.texto.x2,
+      `título ${c.titulo.x2}, coluna ${c.texto.x2}`
+    );
+  }
+}
+
 // ── 3. a régua coral ───────────────────────────────────────────────────────
 //
 // A chapa do desafio já tem régua coral desenhada, e coral significa alerta no
@@ -132,7 +176,7 @@ console.log("Peças: as medidas batem com o que veio junto com as chapas?");
 // saiu titulo por cima das opcoes.
 //
 // A regua passou a ser UMA SO. Quem mede e o script, com navegador de verdade,
-// e o veredito vai para lib/pecas/cabem.json, versionado. A rota obedece.
+// e o veredito vai para lib/pecas/cabem.ts, versionado. A rota obedece.
 //
 // O risco que sobra e o arquivo envelhecer: alguem acrescenta pergunta no banco
 // do quiz, ou trocam as chapas pela v2, e o veredito continua falando do mundo
@@ -141,7 +185,8 @@ console.log("Peças: as medidas batem com o que veio junto com as chapas?");
 {
   const banco = perguntasDoQuiz("pt");
   const ids = new Set(banco.map((q) => `quiz:${q.id}`));
-  const tabela = cabem as Record<string, string[]>;
+  const tabela = CABEM;
+  const fontesDe = (chave: string) => (tabela[chave] ?? []).map((v) => v.fonte);
 
   conferir(
     "o veredito cobre as quatro secoes nas duas larguras",
@@ -149,7 +194,7 @@ console.log("Peças: as medidas batem com o que veio junto com as chapas?");
     `${Object.keys(tabela).length} chaves: ${Object.keys(tabela).join(", ")}`
   );
 
-  const orfaos = Object.values(tabela).flat().filter((f) => !ids.has(f));
+  const orfaos = Object.values(tabela).flat().map((v) => v.fonte).filter((f) => !ids.has(f));
   conferir(
     "nenhum candidato aprovado saiu do banco do quiz",
     orfaos.length === 0,
@@ -159,11 +204,11 @@ console.log("Peças: as medidas batem com o que veio junto com as chapas?");
   // Toda pergunta do banco precisa ter sido MEDIDA, mesmo que o veredito seja
   // "nao cabe". Pergunta nova que ninguem mediu nunca vai virar peca, e isso
   // acontece em silencio.
-  const medidos = new Set(Object.values(tabela).flat());
+  const medidos = new Set(Object.values(tabela).flat().map((v) => v.fonte));
   const naoMedidos = [...ids].filter((id) => !medidos.has(id));
   conferir(
     "existe candidato aprovado para o desafio e para a pergunta",
-    (tabela["desafio:feed"]?.length ?? 0) > 0 && (tabela["pergunta:feed"]?.length ?? 0) > 0,
+    fontesDe("desafio:feed").length > 0 && fontesDe("pergunta:feed").length > 0,
     "sem candidato aprovado a rota devolve 409 e o agente nao tem o que mandar"
   );
   if (naoMedidos.length) {

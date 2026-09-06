@@ -30,16 +30,33 @@ import type { Formato, Secao } from "./chapas";
 //
 // Dois desenhistas com réguas diferentes é dívida. A régua passou a ser uma só,
 // e a rota não mede nada: ela obedece a este arquivo.
-import cabem from "./cabem.json";
+import { CABEM } from "./cabem.ts";
 
 export type PecaDeConteudo = {
   secao: Secao;
+  /**
+   * A pergunta entre aspas, em branco e caixa mista, ANTES do título.
+   *
+   * Só a "pergunta da comunidade" usa. É o formato que o dono mandou de
+   * exemplo: primeiro o que a pessoa perguntou, depois a resposta em destaque,
+   * depois o porquê. Sem isso a peça saía com uma pergunta solta em caixa alta
+   * e nenhuma resposta, que é o contrário do que a seção promete.
+   */
+  citacao?: string;
   titulo: string;
   corpo?: string;
   opcoes?: string[];
   destaque?: "ambar" | "teal";
   /** De onde o texto saiu, para o dono conferir a procedência na aprovação. */
   fonte: string;
+  /**
+   * Se o título cabe na faixa larga do topo da chapa.
+   *
+   * Não é escolha de quem escreve: é veredito da medição, que vem do
+   * `cabem.ts`. Título que não termina antes do corte da faixa larga desceria
+   * por cima da Biela, e nesse caso ele volta para a coluna estreita.
+   */
+  largo?: boolean;
 };
 
 /** A semana do ano, contada de forma estável (segunda-feira como início). */
@@ -76,7 +93,9 @@ export function candidatosDaSemana(quando = new Date()): PecaDeConteudo[][] {
     if (secao === "desafio") return { secao, titulo: q.pergunta, opcoes: q.opcoes, destaque: "ambar", fonte: `quiz:${q.id}` };
     if (secao === "dica") return { secao, titulo: q.opcoes[q.correta], corpo: q.porque, destaque: "teal", fonte: `quiz:${q.id}` };
     if (secao === "curiosidade") return { secao, titulo: q.pergunta, corpo: q.porque, destaque: "ambar", fonte: `quiz:${q.id}` };
-    return { secao, titulo: q.pergunta, destaque: "ambar", fonte: `quiz:${q.id}` };
+    // A pergunta da comunidade tem três partes, como no exemplo do dono: o que
+    // foi perguntado, a resposta em destaque, e o porquê embaixo.
+    return { secao, citacao: q.pergunta, titulo: q.opcoes[q.correta], corpo: q.porque, destaque: "ambar", fonte: `quiz:${q.id}` };
   };
 
   const secoes: Secao[] = ["desafio", "dica", "curiosidade", "pergunta"];
@@ -91,9 +110,12 @@ export function candidatosDaSemana(quando = new Date()): PecaDeConteudo[][] {
  * que aconteceu na primeira chamada.
  */
 export function candidatosQueCabem(secao: Secao, formato: Formato, quando = new Date()): PecaDeConteudo[] {
-  const permitidos: string[] = (cabem as Record<string, string[]>)[`${secao}:${formato}`] ?? [];
+  const permitidos = CABEM[`${secao}:${formato}`] ?? [];
   const lista = candidatosDaSemana(quando).find((l) => l[0].secao === secao) ?? [];
-  return lista.filter((p) => permitidos.includes(p.fonte));
+  return lista.flatMap((p) => {
+    const veredito = permitidos.find((v) => v.fonte === p.fonte);
+    return veredito ? [{ ...p, largo: veredito.largo }] : [];
+  });
 }
 
 /** A primeira opção de cada seção, sem medir se cabe. Para quem só quer ver. */

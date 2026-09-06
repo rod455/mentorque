@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { CORES, DESTAQUE_PERMITIDO, NOME_DA_SECAO, chapaDe, type Formato, type Secao } from "@/lib/pecas/chapas";
+import { CORES, DESTAQUE_PERMITIDO, NOME_DA_SECAO, RESPIRO_DO_FEED, chapaDe, type Formato, type Secao } from "@/lib/pecas/chapas";
 import { candidatosQueCabem } from "@/lib/pecas/conteudo";
 
 // A peça de rede social, desenhada aqui e não num navegador.
@@ -65,6 +65,11 @@ export async function GET(req: Request) {
   const cor = DESTAQUE_PERMITIDO[secao].includes(destaque) ? CORES[destaque] : CORES.ambar;
   const grande = formato === "stories";
   const z = chapa.texto;
+  // A coluna estreita, para tudo que desce ao lado da Biela. O título pode usar
+  // a faixa larga do topo, mas só quando a medição disse que ele cabe lá: essa
+  // é a razão de `largo` vir do cabem.ts e não de um palpite desta rota.
+  const estreito = z.x2 - z.x1;
+  const larguraDoTitulo = peca.largo ? chapa.titulo.x2 - z.x1 : estreito;
   const chapaB64 = readFileSync(join(process.cwd(), "assets/pecas", formato, chapa.arquivo)).toString("base64");
 
   // As opções só entram no feed: no story elas viram a figurinha de quiz do
@@ -81,17 +86,37 @@ export async function GET(req: Request) {
           style={{ position: "absolute", left: 0, top: 0 }}
           alt=""
         />
+        {/*
+          DUAS LARGURAS, e o motivo está em lib/pecas/chapas.ts: a Biela não é
+          um retângulo. O título fica na faixa larga de cima; a citação, o corpo
+          e as opções descem ao lado dela e usam a coluna estreita.
+        */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             position: "absolute",
             left: z.x1,
-            top: z.y1 + (grande ? 0 : 48),
-            width: z.x2 - z.x1,
-            height: z.y2 - z.y1 - (grande ? 0 : 48),
+            top: z.y1 + (grande ? 0 : RESPIRO_DO_FEED),
+            width: larguraDoTitulo,
+            height: z.y2 - z.y1 - (grande ? 0 : RESPIRO_DO_FEED),
           }}
         >
+          {peca.citacao ? (
+            <div
+              style={{
+                display: "flex",
+                fontFamily: "IN",
+                color: CORES.giz,
+                fontSize: grande ? 44 : 34,
+                lineHeight: 1.3,
+                width: estreito,
+                marginBottom: grande ? 28 : 20,
+              }}
+            >
+              {`“${peca.citacao}`}
+            </div>
+          ) : null}
           <div
             style={{
               fontFamily: "SG",
@@ -100,6 +125,12 @@ export async function GET(req: Request) {
               color: cor,
               fontSize: grande ? 84 : 62,
               lineHeight: 1.04,
+              // O MESMO ENTRELETRAS DO SCRIPT. Sem isto o Satori media o título
+              // mais largo que o Chromium e quebrava numa linha a mais, o que
+              // derrubava o corpo para fora da zona: a peça medida como boa
+              // saía estourada. Quem mede é o script, então a rota precisa
+              // desenhar com os mesmos números.
+              letterSpacing: "-0.01em",
             }}
           >
             {peca.titulo}
@@ -112,13 +143,14 @@ export async function GET(req: Request) {
                 fontSize: grande ? 46 : 34,
                 lineHeight: 1.35,
                 marginTop: grande ? 40 : 28,
+                width: estreito,
               }}
             >
               {peca.corpo}
             </div>
           ) : null}
           {opcoes.length ? (
-            <div style={{ display: "flex", flexDirection: "column", marginTop: 34 }}>
+            <div style={{ display: "flex", flexDirection: "column", marginTop: 34, width: estreito }}>
               {opcoes.map((o) => (
                 <div key={o} style={{ display: "flex", alignItems: "flex-start", marginBottom: 24 }}>
                   <div
