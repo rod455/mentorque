@@ -1,27 +1,27 @@
 # Retrato diario da operacao Mentorque
 
-Gerado pelo Analista de Dados (n8n) em 2026-09-05T09:00:04.734Z.
+Gerado pelo Analista de Dados (n8n) em 2026-09-06T09:00:06.554Z.
 NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 
 ## MARKETING (gente chegando)
-- Semana corrente (2026-08-31): aberturas 82, visitantes 35, cadastros 4
+- Semana corrente (2026-08-31): aberturas 110, visitantes 42, cadastros 6
 - Semana anterior (2026-08-24): aberturas 84, visitantes 16, cadastros 1
-- Cadastros 28d via google / lancamento: 3
+- Cadastros 28d via google / lancamento: 5
 - Cadastros 28d via (direto) / (sem campanha): 2
-- Gasto de midia 7d: Meta 0.00 + Google 129.50 = 129.50
-- CAC bruto 7d (gasto total / cadastros da semana): 32.38
+- Gasto de midia 7d: Meta 0.00 + Google 158.76 = 158.76
+- CAC bruto 7d (gasto total / cadastros da semana): 26.46
 - Busca Google 28d: 0 cliques, 3 impressoes
 - YouTube: 0 inscritos, 0 views totais, 10 videos recentes
 
 ## ENGAJAMENTO (gente usando e voltando)
-- Semana corrente (2026-08-31): 35 usuarios ativos, 82 aberturas (2.3 por usuario)
+- Semana corrente (2026-08-31): 42 usuarios ativos, 110 aberturas (2.6 por usuario)
 - Semana anterior (2026-08-24): 16 usuarios ativos, 84 aberturas (5.3 por usuario)
-- Retencao, coorte 2026-08-31: 4 cadastrados, 0 voltaram em 1 a 7 dias, 0 em 8 a 30 dias
+- Retencao, coorte 2026-08-31: 6 cadastrados, 0 voltaram em 1 a 7 dias, 0 em 8 a 30 dias
 - Retencao, coorte 2026-08-24: 1 cadastrados, 0 voltaram em 1 a 7 dias, 0 em 8 a 30 dias
-- Ativacao, coorte 2026-08-31: 1 de 4 fizeram a primeira acao de valor em 7 dias
+- Ativacao, coorte 2026-08-31: 1 de 6 fizeram a primeira acao de valor em 7 dias
 - Ativacao, coorte 2026-08-24: 0 de 1 fizeram a primeira acao de valor em 7 dias
-- Erros no app 7d: 4
-  - 4x: "LocalNotifications.then()" is not implemented on ios
+- Erros no app 7d: 5
+  - 5x: app fechou sozinho em: abriu o app
 - Play vitals: sem dados de crash ainda
 - Avaliacoes nas lojas: 4 (media 5)
   - [google_play 5/5]  (Luana David)
@@ -30,7 +30,7 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 
 ## VENDAS (gente pagando e continuando)
 - Assinaturas ativas (banco): 4 (anuais 1, mensais 3), cancelamento agendado: 0
-- Fundo do funil, Semana corrente: viram paywall 12, iniciaram checkout 2, assinaram 1, cancelaram 0
+- Fundo do funil, Semana corrente: viram paywall 19, iniciaram checkout 3, assinaram 1, cancelaram 0
 - Fundo do funil, Semana anterior: viram paywall 12, iniciaram checkout 4, assinaram 2, cancelaram 0
 - Assinantes, coorte 2026-09-01: 1 assinaram, 0 renovaram, 0 sairam
 - Assinantes, coorte 2026-08-01: 2 assinaram, 0 renovaram, 0 sairam
@@ -40,38 +40,38 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 - Lojas: iOS 1.7 READY_FOR_SALE; iOS 1.6 READY_FOR_SALE; iOS 1.5 READY_FOR_SALE; iOS 1.3 READY_FOR_SALE; iOS 1.2 READY_FOR_SALE
 
 ## Fontes externas (pacote bruto mais recente por fonte)
-- admob (2026-09-05): {"apps":["ca-app-pub-9316035916536420~8094986125"],"nota":"sem linhas do app do Mentorque no periodo","moeda":"USD","porDia":[],"ganhos7d":0,"impressoes7d":0}
-- app_store_connect (2026-09-05): {"versoes":[{"estado":"READY_FOR_SALE","versao":"1.7","criadaEm":"2026-09-03T15:46:58-07:00"},{"estado":"READY_FOR_SALE","versao":"1.6","criadaEm":"2026-09-01T09:26:27-07:00"},{"estado":"READY_FOR_SALE","versao":"1.5","criadaEm":"2026-08-31T03:20:23-07:00"},{"estado":"READY_FOR_SALE","versao":"1.3","criadaEm":"2026-08-29T04:32:52-07:00"},{"estado":"READY_FOR_SALE","versao":"1.2","criadaEm":"2026-0...
-- app_store_downloads (2026-09-05): {"dia":"2026-09-03","atualizacoes":1,"downloadsApp":2,"unidadesPorTipo":{"1F":2,"7F":1}}
-- google_ads (2026-09-05): {"conta":"Mentorque","porDia":[{"dia":"2026-09-01","custo":0,"cliques":0,"conversoes":0,"impressoes":15},{"dia":"2026-09-02","custo":30.84,"cliques":16,"conversoes":3,"impressoes":468},{"dia":"2026-09-03","custo":60.2,"cliques":35,"conversoes":7,"impressoes":683},{"dia":"2026-09-04","custo":35.15,"cliques":21,"conversoes":0,"impressoes":516},{"dia":"2026-09-05","custo":3.31,"cliques":2,"conversoes...
-- meta_ads (2026-09-05): {"conta":"Mentorque Ads","moeda":"BRL","porDia":[],"gasto7d":0}
-- play_console (2026-09-05): {"anrPorDia":[],"crashPorDia":[]}
-- revenuecat (2026-09-05): {"mrr":0,"nota":"active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil","revenue":0,"active_users":118,"active_trials":0,"new_customers":118,"active_subscriptions":0}
-- search_console (2026-09-05): {"porDia":[{"dia":"2026-08-21","cliques":0,"impressoes":0},{"dia":"2026-08-22","cliques":0,"impressoes":1},{"dia":"2026-08-23","cliques":0,"impressoes":0},{"dia":"2026-08-24","cliques":0,"impressoes":0},{"dia":"2026-08-25","cliques":0,"impressoes":1},{"dia":"2026-08-26","cliques":0,"impressoes":0},{"dia":"2026-08-27","cliques":0,"impressoes":0},{"dia":"2026-08-28","cliques":0,"impressoes":0},{"dia...
-- stripe (2026-09-05): {"moeda":"brl","mrrCentavos":5980,"assinaturasAtivas":2,"receita30dCentavos":0}
-- vercel (2026-09-05): {"ultimo":{"alvo":"production","estado":"READY","quando":"2026-09-04T20:36:10.262Z"},"comErro7d":0,"deploys7d":20,"prontos7d":20}
-- youtube (2026-09-05): {"recentes":[{"views":0,"titulo":"Água de Torneira no radiador - você está estregando seu carro!","publicadoEm":"2026-09-03T10:17:27Z"},{"views":0,"titulo":"Erro silencioso de quem vai só na padaria!","publicadoEm":"2026-09-03T10:16:00Z"},{"views":4,"titulo":"Desligar o turbo quente: Mito ou Verdade?","publicadoEm":"2026-09-03T10:12:37Z"},{"views":35,"titulo":"Esquentar o carro parado","publicadoE...
+- admob (2026-09-06): {"apps":["ca-app-pub-9316035916536420~8094986125"],"nota":"sem linhas do app do Mentorque no periodo","moeda":"USD","porDia":[],"ganhos7d":0,"impressoes7d":0}
+- app_store_connect (2026-09-06): {"versoes":[{"estado":"READY_FOR_SALE","versao":"1.7","criadaEm":"2026-09-03T15:46:58-07:00"},{"estado":"READY_FOR_SALE","versao":"1.6","criadaEm":"2026-09-01T09:26:27-07:00"},{"estado":"READY_FOR_SALE","versao":"1.5","criadaEm":"2026-08-31T03:20:23-07:00"},{"estado":"READY_FOR_SALE","versao":"1.3","criadaEm":"2026-08-29T04:32:52-07:00"},{"estado":"READY_FOR_SALE","versao":"1.2","criadaEm":"2026-0...
+- app_store_downloads (2026-09-06): {"dia":"2026-09-04","atualizacoes":5,"downloadsApp":1,"unidadesPorTipo":{"1F":1,"7F":5}}
+- google_ads (2026-09-06): {"conta":"Mentorque","porDia":[{"dia":"2026-09-01","custo":0,"cliques":0,"conversoes":0,"impressoes":15},{"dia":"2026-09-02","custo":30.84,"cliques":16,"conversoes":3,"impressoes":468},{"dia":"2026-09-03","custo":60.2,"cliques":35,"conversoes":7,"impressoes":683},{"dia":"2026-09-04","custo":35.15,"cliques":21,"conversoes":0,"impressoes":516},{"dia":"2026-09-05","custo":30.733756,"cliques":19,"conv...
+- meta_ads (2026-09-06): {"conta":"Mentorque Ads","moeda":"BRL","porDia":[],"gasto7d":0}
+- play_console (2026-09-06): {"anrPorDia":[],"crashPorDia":[]}
+- revenuecat (2026-09-06): {"mrr":0,"nota":"active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil","revenue":0,"active_users":118,"active_trials":0,"new_customers":116,"active_subscriptions":0}
+- search_console (2026-09-06): {"porDia":[{"dia":"2026-08-21","cliques":0,"impressoes":0},{"dia":"2026-08-22","cliques":0,"impressoes":1},{"dia":"2026-08-23","cliques":0,"impressoes":0},{"dia":"2026-08-24","cliques":0,"impressoes":0},{"dia":"2026-08-25","cliques":0,"impressoes":1},{"dia":"2026-08-26","cliques":0,"impressoes":0},{"dia":"2026-08-27","cliques":0,"impressoes":0},{"dia":"2026-08-28","cliques":0,"impressoes":0},{"dia...
+- stripe (2026-09-06): {"moeda":"brl","mrrCentavos":5980,"assinaturasAtivas":2,"receita30dCentavos":0}
+- vercel (2026-09-06): {"ultimo":{"alvo":"production","estado":"READY","quando":"2026-09-06T00:48:51.180Z"},"comErro7d":0,"deploys7d":20,"prontos7d":20}
+- youtube (2026-09-06): {"recentes":[{"views":0,"titulo":"Água de Torneira no radiador - você está estregando seu carro!","publicadoEm":"2026-09-03T10:17:27Z"},{"views":0,"titulo":"Erro silencioso de quem vai só na padaria!","publicadoEm":"2026-09-03T10:16:00Z"},{"views":4,"titulo":"Desligar o turbo quente: Mito ou Verdade?","publicadoEm":"2026-09-03T10:12:37Z"},{"views":35,"titulo":"Esquentar o carro parado","publicadoE...
 
 ## Dados brutos (JSON)
 
 ```json
 {
   "dados": {
-    "geradoEm": "2026-09-05T09:00:03.715Z",
+    "geradoEm": "2026-09-06T09:00:05.037Z",
     "funilSemanas": [
       {
         "semana": "2026-08-31",
-        "aberturas": 82,
-        "visitantes": 35,
-        "cadastros": 4,
-        "viram_paywall": 12,
-        "iniciaram_checkout": 2,
+        "aberturas": 110,
+        "visitantes": 42,
+        "cadastros": 6,
+        "viram_paywall": 19,
+        "iniciaram_checkout": 3,
         "assinaturas": 1,
         "renovacoes": 0,
         "cancelamentos": 0,
         "expirados": 0,
-        "viram_paywall_pessoas": 9,
-        "iniciaram_checkout_pessoas": 2,
+        "viram_paywall_pessoas": 14,
+        "iniciaram_checkout_pessoas": 3,
         "assinaturas_pessoas": 1,
         "ativaram_pessoas": 3,
         "aberturas_sem_identidade": 16
@@ -136,23 +136,29 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       "2026-08-28": 1,
       "2026-09-02": 1,
       "2026-09-04": 2,
-      "2026-09-05": 1
+      "2026-09-05": 3
     },
     "erros7d": {
-      "total": 4,
+      "total": 5,
       "top": [
         {
-          "mensagem": "\"LocalNotifications.then()\" is not implemented on ios",
-          "total": 4
+          "mensagem": "app fechou sozinho em: abriu o app",
+          "total": 5
         }
       ]
     },
     "uso": {
       "porDia": [
         {
-          "dia": "2026-09-05",
+          "dia": "2026-09-06",
           "usuarios": 1,
           "aberturas": 1,
+          "aberturas_sem_identidade": 0
+        },
+        {
+          "dia": "2026-09-05",
+          "usuarios": 11,
+          "aberturas": 28,
           "aberturas_sem_identidade": 0
         },
         {
@@ -226,20 +232,14 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
           "usuarios": 2,
           "aberturas": 4,
           "aberturas_sem_identidade": 1
-        },
-        {
-          "dia": "2026-08-23",
-          "usuarios": 1,
-          "aberturas": 4,
-          "aberturas_sem_identidade": 2
         }
       ],
       "porSemana": [
         {
           "semana": "2026-08-31",
-          "usuarios_ativos": 35,
-          "aberturas": 82,
-          "aberturas_por_usuario": 2.3,
+          "usuarios_ativos": 42,
+          "aberturas": 110,
+          "aberturas_por_usuario": 2.6,
           "aberturas_sem_identidade": 16
         },
         {
@@ -260,7 +260,7 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       "coortes": [
         {
           "coorte": "2026-08-31",
-          "cadastrados": 4,
+          "cadastrados": 6,
           "voltaram_d1_7": 0,
           "voltaram_d8_30": 0
         },
@@ -274,7 +274,7 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       "ativacao": [
         {
           "coorte": "2026-08-31",
-          "cadastrados": 4,
+          "cadastrados": 6,
           "ativados_7d": 1
         },
         {
@@ -305,7 +305,7 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         {
           "origem": "google",
           "campanha": "lancamento",
-          "cadastros_28d": 3
+          "cadastros_28d": 5
         },
         {
           "origem": "(direto)",
@@ -319,80 +319,548 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       {
         "de": "abriu_app",
         "para": "viu_paywall",
-        "antes": 45,
-        "depois": 16,
+        "antes": 52,
+        "depois": 20,
         "validoDesde": "2026-08-22",
         "ressalvas": [],
-        "taxa": 35.6,
+        "taxa": 38.5,
         "motivo": null,
-        "perdidos": 29
+        "perdidos": 32
       },
       {
         "de": "cadastro",
         "para": "iniciou_checkout",
-        "antes": 5,
-        "depois": 4,
+        "antes": 7,
+        "depois": 5,
         "validoDesde": "2026-08-22",
         "ressalvas": [
           "contado em auth.users (função contas_criadas_desde), não no evento: o evento só dispara para conta com menos de 7 dias e perde tudo que veio antes do instrumento"
         ],
-        "taxa": 80,
+        "taxa": 71.4,
         "motivo": null,
-        "perdidos": 1
+        "perdidos": 2
       },
       {
         "de": "iniciou_checkout",
         "para": "assinou",
-        "antes": 4,
+        "antes": 5,
         "depois": 3,
         "validoDesde": "2026-08-22",
         "ressalvas": [],
-        "taxa": 75,
-        "motivo": null,
-        "perdidos": 1
+        "taxa": null,
+        "motivo": "iniciou_checkout é contado por APARELHO (identidade = anon_id) e assinou por CONTA (identidade = user_id, porque vem do webhook e não tem aparelho). São duas listas de chaves diferentes: quem está numa nunca aparece dentro da outra, e a taxa entre elas é ficção",
+        "perdidos": null
       },
       {
         "de": "comecou_onboarding",
         "para": "terminou_onboarding",
-        "antes": 66,
-        "depois": 27,
+        "antes": 84,
+        "depois": 33,
         "validoDesde": "2026-09-01",
         "ressalvas": [],
-        "taxa": 40.9,
+        "taxa": 39.3,
         "motivo": null,
-        "perdidos": 39
+        "perdidos": 51
       },
       {
         "de": "terminou_onboarding",
         "para": "abriu_cadastro_de_carro",
-        "antes": 27,
-        "depois": 9,
+        "antes": 33,
+        "depois": 10,
         "validoDesde": "2026-09-01",
         "ressalvas": [],
-        "taxa": 33.3,
+        "taxa": 30.3,
         "motivo": null,
-        "perdidos": 18
+        "perdidos": 23
       },
       {
         "de": "abriu_cadastro_de_carro",
         "para": "cadastrou_carro",
-        "antes": 9,
+        "antes": 10,
         "depois": 2,
         "validoDesde": "2026-09-01",
-        "ressalvas": [],
-        "taxa": 22.2,
+        "ressalvas": [
+          "isto é ATO, e conta só quem cadastrou DENTRO da janela. Para quantos TÊM carro hoje, some as contas em estado_da_base: o ato não enxerga quem cadastrou antes do instrumento (23/08/2026) nem quem usa como convidado, sem conta"
+        ],
+        "taxa": 20,
         "motivo": null,
-        "perdidos": 7
+        "perdidos": 8
       }
     ],
     "janelaDoFunil": {
       "desde": "2026-08-22",
       "encurtada": true,
-      "aviso": "janela encurtada de 2026-08-08 para 2026-08-22: antes disso estes eventos ainda não eram medidos, e a série seria mais curta do que parece"
+      "aviso": "janela encurtada de 2026-08-09 para 2026-08-22: antes disso estes eventos ainda não eram medidos, e a série seria mais curta do que parece"
     },
     "estadoDaBase": null,
     "fontesExternas": {
+      "play_console": [
+        {
+          "dia": "2026-09-06",
+          "dados": {
+            "anrPorDia": [],
+            "crashPorDia": []
+          }
+        },
+        {
+          "dia": "2026-09-05",
+          "dados": {
+            "anrPorDia": [],
+            "crashPorDia": []
+          }
+        },
+        {
+          "dia": "2026-09-04",
+          "dados": {
+            "anrPorDia": [],
+            "crashPorDia": []
+          }
+        },
+        {
+          "dia": "2026-09-03",
+          "dados": {
+            "anrPorDia": [],
+            "crashPorDia": []
+          }
+        },
+        {
+          "dia": "2026-09-02",
+          "dados": {
+            "anrPorDia": [],
+            "crashPorDia": []
+          }
+        },
+        {
+          "dia": "2026-09-01",
+          "dados": {
+            "anrPorDia": [],
+            "crashPorDia": []
+          }
+        }
+      ],
+      "app_store_connect": [
+        {
+          "dia": "2026-09-06",
+          "dados": {
+            "versoes": [
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.7",
+                "criadaEm": "2026-09-03T15:46:58-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.6",
+                "criadaEm": "2026-09-01T09:26:27-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.5",
+                "criadaEm": "2026-08-31T03:20:23-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.3",
+                "criadaEm": "2026-08-29T04:32:52-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.2",
+                "criadaEm": "2026-08-27T11:09:29-07:00"
+              }
+            ]
+          }
+        },
+        {
+          "dia": "2026-09-05",
+          "dados": {
+            "versoes": [
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.7",
+                "criadaEm": "2026-09-03T15:46:58-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.6",
+                "criadaEm": "2026-09-01T09:26:27-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.5",
+                "criadaEm": "2026-08-31T03:20:23-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.3",
+                "criadaEm": "2026-08-29T04:32:52-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.2",
+                "criadaEm": "2026-08-27T11:09:29-07:00"
+              }
+            ]
+          }
+        },
+        {
+          "dia": "2026-09-04",
+          "dados": {
+            "versoes": [
+              {
+                "estado": "WAITING_FOR_REVIEW",
+                "versao": "1.7",
+                "criadaEm": "2026-09-03T15:46:58-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.6",
+                "criadaEm": "2026-09-01T09:26:27-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.5",
+                "criadaEm": "2026-08-31T03:20:23-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.3",
+                "criadaEm": "2026-08-29T04:32:52-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.2",
+                "criadaEm": "2026-08-27T11:09:29-07:00"
+              }
+            ]
+          }
+        },
+        {
+          "dia": "2026-09-03",
+          "dados": {
+            "versoes": [
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.6",
+                "criadaEm": "2026-09-01T09:26:27-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.5",
+                "criadaEm": "2026-08-31T03:20:23-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.3",
+                "criadaEm": "2026-08-29T04:32:52-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.2",
+                "criadaEm": "2026-08-27T11:09:29-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.1",
+                "criadaEm": "2026-08-21T05:20:14-07:00"
+              }
+            ]
+          }
+        },
+        {
+          "dia": "2026-09-02",
+          "dados": {
+            "versoes": [
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.6",
+                "criadaEm": "2026-09-01T09:26:27-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.5",
+                "criadaEm": "2026-08-31T03:20:23-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.3",
+                "criadaEm": "2026-08-29T04:32:52-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.2",
+                "criadaEm": "2026-08-27T11:09:29-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.1",
+                "criadaEm": "2026-08-21T05:20:14-07:00"
+              }
+            ]
+          }
+        },
+        {
+          "dia": "2026-09-01",
+          "dados": {
+            "versoes": [
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.6",
+                "criadaEm": "2026-09-01T09:26:27-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.5",
+                "criadaEm": "2026-08-31T03:20:23-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.3",
+                "criadaEm": "2026-08-29T04:32:52-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.2",
+                "criadaEm": "2026-08-27T11:09:29-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.1",
+                "criadaEm": "2026-08-21T05:20:14-07:00"
+              }
+            ]
+          }
+        }
+      ],
+      "stripe": [
+        {
+          "dia": "2026-09-06",
+          "dados": {
+            "moeda": "brl",
+            "mrrCentavos": 5980,
+            "assinaturasAtivas": 2,
+            "receita30dCentavos": 0
+          }
+        },
+        {
+          "dia": "2026-09-05",
+          "dados": {
+            "moeda": "brl",
+            "mrrCentavos": 5980,
+            "assinaturasAtivas": 2,
+            "receita30dCentavos": 0
+          }
+        },
+        {
+          "dia": "2026-09-04",
+          "dados": {
+            "moeda": "brl",
+            "mrrCentavos": 2990,
+            "assinaturasAtivas": 1,
+            "receita30dCentavos": 0
+          }
+        },
+        {
+          "dia": "2026-09-03",
+          "dados": {
+            "moeda": "brl",
+            "mrrCentavos": 2990,
+            "assinaturasAtivas": 1,
+            "receita30dCentavos": 0
+          }
+        },
+        {
+          "dia": "2026-09-02",
+          "dados": {
+            "moeda": "brl",
+            "mrrCentavos": 2990,
+            "assinaturasAtivas": 1,
+            "receita30dCentavos": 0
+          }
+        },
+        {
+          "dia": "2026-09-01",
+          "dados": {
+            "moeda": null,
+            "mrrCentavos": 0,
+            "assinaturasAtivas": 0,
+            "receita30dCentavos": 0
+          }
+        }
+      ],
+      "admob": [
+        {
+          "dia": "2026-09-06",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-05",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-04",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-03",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-02",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-01",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        }
+      ],
       "search_console": [
+        {
+          "dia": "2026-09-06",
+          "dados": {
+            "porDia": [
+              {
+                "dia": "2026-08-21",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-22",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-23",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-24",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-25",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-26",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-27",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-28",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-29",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-30",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-31",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-01",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-09-02",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-03",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-04",
+                "cliques": 0,
+                "impressoes": 0
+              }
+            ],
+            "cliques28d": 0,
+            "topConsultas": [
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "mentorque",
+                "impressoes": 2
+              }
+            ],
+            "impressoes28d": 3
+          }
+        },
         {
           "dia": "2026-09-05",
           "dados": {
@@ -759,682 +1227,20 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
           }
         }
       ],
-      "stripe": [
-        {
-          "dia": "2026-09-05",
-          "dados": {
-            "moeda": "brl",
-            "mrrCentavos": 5980,
-            "assinaturasAtivas": 2,
-            "receita30dCentavos": 0
-          }
-        },
-        {
-          "dia": "2026-09-04",
-          "dados": {
-            "moeda": "brl",
-            "mrrCentavos": 2990,
-            "assinaturasAtivas": 1,
-            "receita30dCentavos": 0
-          }
-        },
-        {
-          "dia": "2026-09-03",
-          "dados": {
-            "moeda": "brl",
-            "mrrCentavos": 2990,
-            "assinaturasAtivas": 1,
-            "receita30dCentavos": 0
-          }
-        },
-        {
-          "dia": "2026-09-02",
-          "dados": {
-            "moeda": "brl",
-            "mrrCentavos": 2990,
-            "assinaturasAtivas": 1,
-            "receita30dCentavos": 0
-          }
-        },
-        {
-          "dia": "2026-09-01",
-          "dados": {
-            "moeda": null,
-            "mrrCentavos": 0,
-            "assinaturasAtivas": 0,
-            "receita30dCentavos": 0
-          }
-        }
-      ],
-      "youtube": [
-        {
-          "dia": "2026-09-05",
-          "dados": {
-            "recentes": [
-              {
-                "views": 0,
-                "titulo": "Água de Torneira no radiador - você está estregando seu carro!",
-                "publicadoEm": "2026-09-03T10:17:27Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Erro silencioso de quem vai só na padaria!",
-                "publicadoEm": "2026-09-03T10:16:00Z"
-              },
-              {
-                "views": 4,
-                "titulo": "Desligar o turbo quente: Mito ou Verdade?",
-                "publicadoEm": "2026-09-03T10:12:37Z"
-              },
-              {
-                "views": 35,
-                "titulo": "Esquentar o carro parado",
-                "publicadoEm": "2026-09-03T10:10:14Z"
-              },
-              {
-                "views": 2,
-                "titulo": "SUPERCHARGER OU TURBO",
-                "publicadoEm": "2026-08-28T13:52:12Z"
-              },
-              {
-                "views": 2,
-                "titulo": "Agua de torneira no radiador - Consequencias",
-                "publicadoEm": "2026-08-28T13:50:50Z"
-              },
-              {
-                "views": 1,
-                "titulo": "O que abastecer para ajudar seu bolso? Gasolina ou Etanol?",
-                "publicadoEm": "2026-08-28T13:46:51Z"
-              },
-              {
-                "views": 1,
-                "titulo": "200cv e pouca potencia para um carro?",
-                "publicadoEm": "2026-08-28T13:45:49Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Carbonizacao no pistao - Etanol seria o culpado?",
-                "publicadoEm": "2026-08-28T13:44:46Z"
-              },
-              {
-                "views": 1,
-                "titulo": "Batalha Carro Eletrico vs Combustao - Parte 2",
-                "publicadoEm": "2026-08-28T13:43:09Z"
-              }
-            ],
-            "inscritos": 0,
-            "totalVideos": 2,
-            "viewsTotais": 0
-          }
-        },
-        {
-          "dia": "2026-09-04",
-          "dados": {
-            "recentes": [
-              {
-                "views": 0,
-                "titulo": "Água de Torneira no radiador - você está estregando seu carro!",
-                "publicadoEm": "2026-09-03T10:17:27Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Erro silencioso de quem vai só na padaria!",
-                "publicadoEm": "2026-09-03T10:16:00Z"
-              },
-              {
-                "views": 3,
-                "titulo": "Desligar o turbo quente: Mito ou Verdade?",
-                "publicadoEm": "2026-09-03T10:12:37Z"
-              },
-              {
-                "views": 34,
-                "titulo": "Esquentar o carro parado",
-                "publicadoEm": "2026-09-03T10:10:14Z"
-              },
-              {
-                "views": 2,
-                "titulo": "SUPERCHARGER OU TURBO",
-                "publicadoEm": "2026-08-28T13:52:12Z"
-              },
-              {
-                "views": 2,
-                "titulo": "Agua de torneira no radiador - Consequencias",
-                "publicadoEm": "2026-08-28T13:50:50Z"
-              },
-              {
-                "views": 1,
-                "titulo": "O que abastecer para ajudar seu bolso? Gasolina ou Etanol?",
-                "publicadoEm": "2026-08-28T13:46:51Z"
-              },
-              {
-                "views": 1,
-                "titulo": "200cv e pouca potencia para um carro?",
-                "publicadoEm": "2026-08-28T13:45:49Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Carbonizacao no pistao - Etanol seria o culpado?",
-                "publicadoEm": "2026-08-28T13:44:46Z"
-              },
-              {
-                "views": 1,
-                "titulo": "Batalha Carro Eletrico vs Combustao - Parte 2",
-                "publicadoEm": "2026-08-28T13:43:09Z"
-              }
-            ],
-            "inscritos": 0,
-            "totalVideos": 2,
-            "viewsTotais": 0
-          }
-        },
-        {
-          "dia": "2026-09-03",
-          "dados": {
-            "recentes": [
-              {
-                "views": 0,
-                "titulo": "Água de Torneira no radiador - você está estregando seu carro!",
-                "publicadoEm": "2026-09-03T10:17:27Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Erro silencioso de quem vai só na padaria!",
-                "publicadoEm": "2026-09-03T10:16:00Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Desligar o turbo quente   Mito ou Verdade",
-                "publicadoEm": "2026-09-03T10:12:37Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Esquentar o carro parado",
-                "publicadoEm": "2026-09-03T10:10:14Z"
-              },
-              {
-                "views": 2,
-                "titulo": "SUPERCHARGER OU TURBO",
-                "publicadoEm": "2026-08-28T13:52:12Z"
-              },
-              {
-                "views": 2,
-                "titulo": "Agua de torneira no radiador - Consequencias",
-                "publicadoEm": "2026-08-28T13:50:50Z"
-              },
-              {
-                "views": 1,
-                "titulo": "O que abastecer para ajudar seu bolso? Gasolina ou Etanol?",
-                "publicadoEm": "2026-08-28T13:46:51Z"
-              },
-              {
-                "views": 1,
-                "titulo": "200cv e pouca potencia para um carro?",
-                "publicadoEm": "2026-08-28T13:45:49Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Carbonizacao no pistao - Etanol seria o culpado?",
-                "publicadoEm": "2026-08-28T13:44:46Z"
-              },
-              {
-                "views": 1,
-                "titulo": "Batalha Carro Eletrico vs Combustao - Parte 2",
-                "publicadoEm": "2026-08-28T13:43:09Z"
-              }
-            ],
-            "inscritos": 0,
-            "totalVideos": 2,
-            "viewsTotais": 0
-          }
-        },
-        {
-          "dia": "2026-09-02",
-          "dados": {
-            "recentes": [
-              {
-                "views": 1,
-                "titulo": "SUPERCHARGER OU TURBO",
-                "publicadoEm": "2026-08-28T13:52:12Z"
-              },
-              {
-                "views": 1,
-                "titulo": "Agua de torneira no radiador - Consequencias",
-                "publicadoEm": "2026-08-28T13:50:50Z"
-              },
-              {
-                "views": 0,
-                "titulo": "O que abastecer para ajudar seu bolso? Gasolina ou Etanol?",
-                "publicadoEm": "2026-08-28T13:46:51Z"
-              },
-              {
-                "views": 0,
-                "titulo": "200cv e pouca potencia para um carro?",
-                "publicadoEm": "2026-08-28T13:45:49Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Carbonizacao no pistao - Etanol seria o culpado?",
-                "publicadoEm": "2026-08-28T13:44:46Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Batalha Carro Eletrico vs Combustao - Parte 2",
-                "publicadoEm": "2026-08-28T13:43:09Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Batalha Eletrico vs Combustao - Parte 1",
-                "publicadoEm": "2026-08-28T13:42:29Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Como Comparar Motores diferentes?",
-                "publicadoEm": "2026-08-28T13:40:19Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Curiosidade - Uso do Nitro (Oxido Nitroso)",
-                "publicadoEm": "2026-08-10T02:18:33Z"
-              },
-              {
-                "views": 0,
-                "titulo": "A peca que usa a fisica para ajudar o motor - Ressonador",
-                "publicadoEm": "2026-08-10T02:11:04Z"
-              }
-            ],
-            "inscritos": 0,
-            "totalVideos": 0,
-            "viewsTotais": 0
-          }
-        },
-        {
-          "dia": "2026-09-01",
-          "dados": {
-            "recentes": [
-              {
-                "views": 1,
-                "titulo": "SUPERCHARGER OU TURBO",
-                "publicadoEm": "2026-08-28T13:52:12Z"
-              },
-              {
-                "views": 1,
-                "titulo": "Agua de torneira no radiador - Consequencias",
-                "publicadoEm": "2026-08-28T13:50:50Z"
-              },
-              {
-                "views": 0,
-                "titulo": "O que abastecer para ajudar seu bolso? Gasolina ou Etanol?",
-                "publicadoEm": "2026-08-28T13:46:51Z"
-              },
-              {
-                "views": 0,
-                "titulo": "200cv e pouca potencia para um carro?",
-                "publicadoEm": "2026-08-28T13:45:49Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Carbonizacao no pistao - Etanol seria o culpado?",
-                "publicadoEm": "2026-08-28T13:44:46Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Batalha Carro Eletrico vs Combustao - Parte 2",
-                "publicadoEm": "2026-08-28T13:43:09Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Batalha Eletrico vs Combustao - Parte 1",
-                "publicadoEm": "2026-08-28T13:42:29Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Como Comparar Motores diferentes?",
-                "publicadoEm": "2026-08-28T13:40:19Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Curiosidade - Uso do Nitro (Oxido Nitroso)",
-                "publicadoEm": "2026-08-10T02:18:33Z"
-              },
-              {
-                "views": 0,
-                "titulo": "A peca que usa a fisica para ajudar o motor - Ressonador",
-                "publicadoEm": "2026-08-10T02:11:04Z"
-              }
-            ],
-            "inscritos": 0,
-            "totalVideos": 0,
-            "viewsTotais": 0
-          }
-        }
-      ],
-      "app_store_downloads": [
-        {
-          "dia": "2026-09-05",
-          "dados": {
-            "dia": "2026-09-03",
-            "atualizacoes": 1,
-            "downloadsApp": 2,
-            "unidadesPorTipo": {
-              "1F": 2,
-              "7F": 1
-            }
-          }
-        },
-        {
-          "dia": "2026-09-04",
-          "dados": {
-            "dia": "2026-09-02",
-            "atualizacoes": 1,
-            "downloadsApp": 0,
-            "unidadesPorTipo": {
-              "7F": 1
-            }
-          }
-        },
-        {
-          "dia": "2026-09-03",
-          "dados": {
-            "dia": "2026-09-01",
-            "atualizacoes": 5,
-            "downloadsApp": 0,
-            "unidadesPorTipo": {
-              "3F": 1,
-              "7F": 5
-            }
-          }
-        },
-        {
-          "dia": "2026-09-02",
-          "dados": {
-            "dia": "2026-08-31",
-            "atualizacoes": 2,
-            "downloadsApp": 0,
-            "unidadesPorTipo": {
-              "7F": 2
-            }
-          }
-        },
-        {
-          "dia": "2026-09-01",
-          "dados": {
-            "dia": "2026-08-30",
-            "atualizacoes": 2,
-            "downloadsApp": 2,
-            "unidadesPorTipo": {
-              "1F": 2,
-              "7F": 2
-            }
-          }
-        }
-      ],
-      "play_console": [
-        {
-          "dia": "2026-09-05",
-          "dados": {
-            "anrPorDia": [],
-            "crashPorDia": []
-          }
-        },
-        {
-          "dia": "2026-09-04",
-          "dados": {
-            "anrPorDia": [],
-            "crashPorDia": []
-          }
-        },
-        {
-          "dia": "2026-09-03",
-          "dados": {
-            "anrPorDia": [],
-            "crashPorDia": []
-          }
-        },
-        {
-          "dia": "2026-09-02",
-          "dados": {
-            "anrPorDia": [],
-            "crashPorDia": []
-          }
-        },
-        {
-          "dia": "2026-09-01",
-          "dados": {
-            "anrPorDia": [],
-            "crashPorDia": []
-          }
-        }
-      ],
-      "app_store_connect": [
-        {
-          "dia": "2026-09-05",
-          "dados": {
-            "versoes": [
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.7",
-                "criadaEm": "2026-09-03T15:46:58-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.6",
-                "criadaEm": "2026-09-01T09:26:27-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.5",
-                "criadaEm": "2026-08-31T03:20:23-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.3",
-                "criadaEm": "2026-08-29T04:32:52-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.2",
-                "criadaEm": "2026-08-27T11:09:29-07:00"
-              }
-            ]
-          }
-        },
-        {
-          "dia": "2026-09-04",
-          "dados": {
-            "versoes": [
-              {
-                "estado": "WAITING_FOR_REVIEW",
-                "versao": "1.7",
-                "criadaEm": "2026-09-03T15:46:58-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.6",
-                "criadaEm": "2026-09-01T09:26:27-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.5",
-                "criadaEm": "2026-08-31T03:20:23-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.3",
-                "criadaEm": "2026-08-29T04:32:52-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.2",
-                "criadaEm": "2026-08-27T11:09:29-07:00"
-              }
-            ]
-          }
-        },
-        {
-          "dia": "2026-09-03",
-          "dados": {
-            "versoes": [
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.6",
-                "criadaEm": "2026-09-01T09:26:27-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.5",
-                "criadaEm": "2026-08-31T03:20:23-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.3",
-                "criadaEm": "2026-08-29T04:32:52-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.2",
-                "criadaEm": "2026-08-27T11:09:29-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.1",
-                "criadaEm": "2026-08-21T05:20:14-07:00"
-              }
-            ]
-          }
-        },
-        {
-          "dia": "2026-09-02",
-          "dados": {
-            "versoes": [
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.6",
-                "criadaEm": "2026-09-01T09:26:27-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.5",
-                "criadaEm": "2026-08-31T03:20:23-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.3",
-                "criadaEm": "2026-08-29T04:32:52-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.2",
-                "criadaEm": "2026-08-27T11:09:29-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.1",
-                "criadaEm": "2026-08-21T05:20:14-07:00"
-              }
-            ]
-          }
-        },
-        {
-          "dia": "2026-09-01",
-          "dados": {
-            "versoes": [
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.6",
-                "criadaEm": "2026-09-01T09:26:27-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.5",
-                "criadaEm": "2026-08-31T03:20:23-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.3",
-                "criadaEm": "2026-08-29T04:32:52-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.2",
-                "criadaEm": "2026-08-27T11:09:29-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.1",
-                "criadaEm": "2026-08-21T05:20:14-07:00"
-              }
-            ]
-          }
-        }
-      ],
-      "admob": [
-        {
-          "dia": "2026-09-05",
-          "dados": {
-            "apps": [
-              "ca-app-pub-9316035916536420~8094986125"
-            ],
-            "nota": "sem linhas do app do Mentorque no periodo",
-            "moeda": "USD",
-            "porDia": [],
-            "ganhos7d": 0,
-            "impressoes7d": 0
-          }
-        },
-        {
-          "dia": "2026-09-04",
-          "dados": {
-            "apps": [
-              "ca-app-pub-9316035916536420~8094986125"
-            ],
-            "nota": "sem linhas do app do Mentorque no periodo",
-            "moeda": "USD",
-            "porDia": [],
-            "ganhos7d": 0,
-            "impressoes7d": 0
-          }
-        },
-        {
-          "dia": "2026-09-03",
-          "dados": {
-            "apps": [
-              "ca-app-pub-9316035916536420~8094986125"
-            ],
-            "nota": "sem linhas do app do Mentorque no periodo",
-            "moeda": "USD",
-            "porDia": [],
-            "ganhos7d": 0,
-            "impressoes7d": 0
-          }
-        },
-        {
-          "dia": "2026-09-02",
-          "dados": {
-            "apps": [
-              "ca-app-pub-9316035916536420~8094986125"
-            ],
-            "nota": "sem linhas do app do Mentorque no periodo",
-            "moeda": "USD",
-            "porDia": [],
-            "ganhos7d": 0,
-            "impressoes7d": 0
-          }
-        },
-        {
-          "dia": "2026-09-01",
-          "dados": {
-            "apps": [
-              "ca-app-pub-9316035916536420~8094986125"
-            ],
-            "nota": "sem linhas do app do Mentorque no periodo",
-            "moeda": "USD",
-            "porDia": [],
-            "ganhos7d": 0,
-            "impressoes7d": 0
-          }
-        }
-      ],
       "vercel": [
+        {
+          "dia": "2026-09-06",
+          "dados": {
+            "ultimo": {
+              "alvo": "production",
+              "estado": "READY",
+              "quando": "2026-09-06T00:48:51.180Z"
+            },
+            "comErro7d": 0,
+            "deploys7d": 20,
+            "prontos7d": 20
+          }
+        },
         {
           "dia": "2026-09-05",
           "dados": {
@@ -1503,6 +1309,18 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       ],
       "revenuecat": [
         {
+          "dia": "2026-09-06",
+          "dados": {
+            "mrr": 0,
+            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
+            "revenue": 0,
+            "active_users": 118,
+            "active_trials": 0,
+            "new_customers": 116,
+            "active_subscriptions": 0
+          }
+        },
+        {
           "dia": "2026-09-05",
           "dados": {
             "mrr": 0,
@@ -1564,6 +1382,722 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         }
       ],
       "google_ads": [
+        {
+          "dia": "2026-09-06",
+          "dados": {
+            "conta": "Mentorque",
+            "porDia": [
+              {
+                "dia": "2026-09-01",
+                "custo": 0,
+                "cliques": 0,
+                "conversoes": 0,
+                "impressoes": 15
+              },
+              {
+                "dia": "2026-09-02",
+                "custo": 30.84,
+                "cliques": 16,
+                "conversoes": 3,
+                "impressoes": 468
+              },
+              {
+                "dia": "2026-09-03",
+                "custo": 60.2,
+                "cliques": 35,
+                "conversoes": 7,
+                "impressoes": 683
+              },
+              {
+                "dia": "2026-09-04",
+                "custo": 35.15,
+                "cliques": 21,
+                "conversoes": 0,
+                "impressoes": 516
+              },
+              {
+                "dia": "2026-09-05",
+                "custo": 30.733756,
+                "cliques": 19,
+                "conversoes": 0,
+                "impressoes": 750
+              },
+              {
+                "dia": "2026-09-06",
+                "custo": 1.84,
+                "cliques": 1,
+                "conversoes": 0,
+                "impressoes": 98
+              }
+            ],
+            "termos": [
+              {
+                "custo": 3.65,
+                "termo": "curso mecânica automotiva grátis",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 11
+              },
+              {
+                "custo": 3.45,
+                "termo": "scanner de carro no celular",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 3.2,
+                "termo": "ebook mecanica automotiva",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 3.16,
+                "termo": "carro liga parte eletrica mas nao da partida",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 3.06,
+                "termo": "como escanear o carro pelo celular grátis",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 3
+              },
+              {
+                "custo": 2,
+                "termo": "curso de mecânica automotiva gratuito",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 2,
+                "termo": "cursos de mecanica de carros",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 1,
+                "impressoes": 3
+              },
+              {
+                "custo": 2,
+                "termo": "cursos online gratuitos com certificado mecanica automotiva",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.99,
+                "termo": "curso mecânico de carro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 1,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.99,
+                "termo": "mecânico online perguntas e respostas",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.98,
+                "termo": "troca de oleo de carro quanto tempo",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 3
+              },
+              {
+                "custo": 1.97,
+                "termo": "meu carro acendeu a luz do motor",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.93,
+                "termo": "curso de mecanica de carros",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.9,
+                "termo": "pastilha de freio",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 1.9,
+                "termo": "curso de mecânico automotivo rj",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 1.85,
+                "termo": "carro esquentando mesmo com agua no radiador",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.85,
+                "termo": "curso de mecânico carro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.8,
+                "termo": "quando o carro não dá partida o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 1.78,
+                "termo": "quando o carro está perdendo a força o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.76,
+                "termo": "carro celta falhando o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.76,
+                "termo": "scanner automotivo gratis",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.73,
+                "termo": "sete videocarro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.71,
+                "termo": "porque o carro aquece muito",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.63,
+                "termo": "luz do óleo acendendo o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.6,
+                "termo": "curso mecanica automotiva gratuito",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.57,
+                "termo": "luz do óleo acesa",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.57,
+                "termo": "mecanica gratis",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.56,
+                "termo": "carro não pega na partida",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.56,
+                "termo": "luz da injeção eletrônica",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 5
+              },
+              {
+                "custo": 1.53,
+                "termo": "mecanicos online",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.5,
+                "termo": "mecânica 2000 manual",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 1,
+                "impressoes": 3
+              },
+              {
+                "custo": 1.48,
+                "termo": "carro troca oleo com quantos km",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.46,
+                "termo": "scanner do carro pelo celular",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.43,
+                "termo": "carro perde a força do nada",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 0,
+                "termo": "a luz da ignição acendeu o que pode ser",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 0,
+                "termo": "a luz da injeção acendeu o que pode ser",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 0,
+                "termo": "a luz da injeção eletrônica",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 0,
+                "termo": "a luz da injeção eletrônica acendeu o que fazer",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 0,
+                "termo": "acelero o carro e ele nao desenvolve",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 0,
+                "termo": "acendeu a luz da injeção o que pode ser",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 3
+              },
+              {
+                "custo": 0,
+                "termo": "acendeu luz de injeção",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 0,
+                "termo": "alerta de óleo do motor",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 0,
+                "termo": "anomalia no sistema de injeção eletronica o que fazer",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 0,
+                "termo": "anomalia no sistema de partida do carro",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 0,
+                "termo": "aplicativo de scanner de carro",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 0,
+                "termo": "aplicativo manutenção carro",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 5
+              },
+              {
+                "custo": 0,
+                "termo": "aplicativo obd2 grátis",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 0,
+                "termo": "aplicativo para escanear carro",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 0,
+                "termo": "aplicativo para escanear o carro",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 0,
+                "termo": "aplicativo scanner automotivo para celular",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              }
+            ],
+            "contaId": "6724308347",
+            "custo7d": 158.763756,
+            "porCampanha": [
+              {
+                "id": "24163300275",
+                "nome": "Mentorque Lançamento",
+                "canal": "SEARCH",
+                "custo": 158.763756,
+                "status": "ENABLED",
+                "cliques": 92,
+                "conversoes": 10,
+                "impressoes": 2530
+              }
+            ],
+            "termosSemConversao": [
+              {
+                "custo": 3.65,
+                "termo": "curso mecânica automotiva grátis",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 11
+              },
+              {
+                "custo": 3.45,
+                "termo": "scanner de carro no celular",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 3.2,
+                "termo": "ebook mecanica automotiva",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 3.16,
+                "termo": "carro liga parte eletrica mas nao da partida",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 3.06,
+                "termo": "como escanear o carro pelo celular grátis",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 3
+              },
+              {
+                "custo": 2,
+                "termo": "curso de mecânica automotiva gratuito",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 2,
+                "termo": "cursos online gratuitos com certificado mecanica automotiva",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.99,
+                "termo": "mecânico online perguntas e respostas",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.98,
+                "termo": "troca de oleo de carro quanto tempo",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 3
+              },
+              {
+                "custo": 1.97,
+                "termo": "meu carro acendeu a luz do motor",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.93,
+                "termo": "curso de mecanica de carros",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.9,
+                "termo": "pastilha de freio",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 1.9,
+                "termo": "curso de mecânico automotivo rj",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 1.85,
+                "termo": "carro esquentando mesmo com agua no radiador",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.85,
+                "termo": "curso de mecânico carro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.8,
+                "termo": "quando o carro não dá partida o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 1.78,
+                "termo": "quando o carro está perdendo a força o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.76,
+                "termo": "carro celta falhando o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.76,
+                "termo": "scanner automotivo gratis",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.73,
+                "termo": "sete videocarro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.71,
+                "termo": "porque o carro aquece muito",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.63,
+                "termo": "luz do óleo acendendo o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.6,
+                "termo": "curso mecanica automotiva gratuito",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.57,
+                "termo": "luz do óleo acesa",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.57,
+                "termo": "mecanica gratis",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.56,
+                "termo": "carro não pega na partida",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.56,
+                "termo": "luz da injeção eletrônica",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 5
+              },
+              {
+                "custo": 1.53,
+                "termo": "mecanicos online",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.48,
+                "termo": "carro troca oleo com quantos km",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.46,
+                "termo": "scanner do carro pelo celular",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.43,
+                "termo": "carro perde a força do nada",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              }
+            ]
+          }
+        },
         {
           "dia": "2026-09-05",
           "dados": {
@@ -3284,6 +3818,15 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       ],
       "meta_ads": [
         {
+          "dia": "2026-09-06",
+          "dados": {
+            "conta": "Mentorque Ads",
+            "moeda": "BRL",
+            "porDia": [],
+            "gasto7d": 0
+          }
+        },
+        {
           "dia": "2026-09-05",
           "dados": {
             "conta": "Mentorque Ads",
@@ -3328,72 +3871,506 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
             "gasto7d": 0
           }
         }
+      ],
+      "youtube": [
+        {
+          "dia": "2026-09-06",
+          "dados": {
+            "recentes": [
+              {
+                "views": 0,
+                "titulo": "Água de Torneira no radiador - você está estregando seu carro!",
+                "publicadoEm": "2026-09-03T10:17:27Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Erro silencioso de quem vai só na padaria!",
+                "publicadoEm": "2026-09-03T10:16:00Z"
+              },
+              {
+                "views": 4,
+                "titulo": "Desligar o turbo quente: Mito ou Verdade?",
+                "publicadoEm": "2026-09-03T10:12:37Z"
+              },
+              {
+                "views": 35,
+                "titulo": "Esquentar o carro parado",
+                "publicadoEm": "2026-09-03T10:10:14Z"
+              },
+              {
+                "views": 2,
+                "titulo": "SUPERCHARGER OU TURBO",
+                "publicadoEm": "2026-08-28T13:52:12Z"
+              },
+              {
+                "views": 2,
+                "titulo": "Agua de torneira no radiador - Consequencias",
+                "publicadoEm": "2026-08-28T13:50:50Z"
+              },
+              {
+                "views": 1,
+                "titulo": "O que abastecer para ajudar seu bolso? Gasolina ou Etanol?",
+                "publicadoEm": "2026-08-28T13:46:51Z"
+              },
+              {
+                "views": 1,
+                "titulo": "200cv e pouca potencia para um carro?",
+                "publicadoEm": "2026-08-28T13:45:49Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Carbonizacao no pistao - Etanol seria o culpado?",
+                "publicadoEm": "2026-08-28T13:44:46Z"
+              },
+              {
+                "views": 1,
+                "titulo": "Batalha Carro Eletrico vs Combustao - Parte 2",
+                "publicadoEm": "2026-08-28T13:43:09Z"
+              }
+            ],
+            "inscritos": 0,
+            "totalVideos": 2,
+            "viewsTotais": 0
+          }
+        },
+        {
+          "dia": "2026-09-05",
+          "dados": {
+            "recentes": [
+              {
+                "views": 0,
+                "titulo": "Água de Torneira no radiador - você está estregando seu carro!",
+                "publicadoEm": "2026-09-03T10:17:27Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Erro silencioso de quem vai só na padaria!",
+                "publicadoEm": "2026-09-03T10:16:00Z"
+              },
+              {
+                "views": 4,
+                "titulo": "Desligar o turbo quente: Mito ou Verdade?",
+                "publicadoEm": "2026-09-03T10:12:37Z"
+              },
+              {
+                "views": 35,
+                "titulo": "Esquentar o carro parado",
+                "publicadoEm": "2026-09-03T10:10:14Z"
+              },
+              {
+                "views": 2,
+                "titulo": "SUPERCHARGER OU TURBO",
+                "publicadoEm": "2026-08-28T13:52:12Z"
+              },
+              {
+                "views": 2,
+                "titulo": "Agua de torneira no radiador - Consequencias",
+                "publicadoEm": "2026-08-28T13:50:50Z"
+              },
+              {
+                "views": 1,
+                "titulo": "O que abastecer para ajudar seu bolso? Gasolina ou Etanol?",
+                "publicadoEm": "2026-08-28T13:46:51Z"
+              },
+              {
+                "views": 1,
+                "titulo": "200cv e pouca potencia para um carro?",
+                "publicadoEm": "2026-08-28T13:45:49Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Carbonizacao no pistao - Etanol seria o culpado?",
+                "publicadoEm": "2026-08-28T13:44:46Z"
+              },
+              {
+                "views": 1,
+                "titulo": "Batalha Carro Eletrico vs Combustao - Parte 2",
+                "publicadoEm": "2026-08-28T13:43:09Z"
+              }
+            ],
+            "inscritos": 0,
+            "totalVideos": 2,
+            "viewsTotais": 0
+          }
+        },
+        {
+          "dia": "2026-09-04",
+          "dados": {
+            "recentes": [
+              {
+                "views": 0,
+                "titulo": "Água de Torneira no radiador - você está estregando seu carro!",
+                "publicadoEm": "2026-09-03T10:17:27Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Erro silencioso de quem vai só na padaria!",
+                "publicadoEm": "2026-09-03T10:16:00Z"
+              },
+              {
+                "views": 3,
+                "titulo": "Desligar o turbo quente: Mito ou Verdade?",
+                "publicadoEm": "2026-09-03T10:12:37Z"
+              },
+              {
+                "views": 34,
+                "titulo": "Esquentar o carro parado",
+                "publicadoEm": "2026-09-03T10:10:14Z"
+              },
+              {
+                "views": 2,
+                "titulo": "SUPERCHARGER OU TURBO",
+                "publicadoEm": "2026-08-28T13:52:12Z"
+              },
+              {
+                "views": 2,
+                "titulo": "Agua de torneira no radiador - Consequencias",
+                "publicadoEm": "2026-08-28T13:50:50Z"
+              },
+              {
+                "views": 1,
+                "titulo": "O que abastecer para ajudar seu bolso? Gasolina ou Etanol?",
+                "publicadoEm": "2026-08-28T13:46:51Z"
+              },
+              {
+                "views": 1,
+                "titulo": "200cv e pouca potencia para um carro?",
+                "publicadoEm": "2026-08-28T13:45:49Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Carbonizacao no pistao - Etanol seria o culpado?",
+                "publicadoEm": "2026-08-28T13:44:46Z"
+              },
+              {
+                "views": 1,
+                "titulo": "Batalha Carro Eletrico vs Combustao - Parte 2",
+                "publicadoEm": "2026-08-28T13:43:09Z"
+              }
+            ],
+            "inscritos": 0,
+            "totalVideos": 2,
+            "viewsTotais": 0
+          }
+        },
+        {
+          "dia": "2026-09-03",
+          "dados": {
+            "recentes": [
+              {
+                "views": 0,
+                "titulo": "Água de Torneira no radiador - você está estregando seu carro!",
+                "publicadoEm": "2026-09-03T10:17:27Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Erro silencioso de quem vai só na padaria!",
+                "publicadoEm": "2026-09-03T10:16:00Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Desligar o turbo quente   Mito ou Verdade",
+                "publicadoEm": "2026-09-03T10:12:37Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Esquentar o carro parado",
+                "publicadoEm": "2026-09-03T10:10:14Z"
+              },
+              {
+                "views": 2,
+                "titulo": "SUPERCHARGER OU TURBO",
+                "publicadoEm": "2026-08-28T13:52:12Z"
+              },
+              {
+                "views": 2,
+                "titulo": "Agua de torneira no radiador - Consequencias",
+                "publicadoEm": "2026-08-28T13:50:50Z"
+              },
+              {
+                "views": 1,
+                "titulo": "O que abastecer para ajudar seu bolso? Gasolina ou Etanol?",
+                "publicadoEm": "2026-08-28T13:46:51Z"
+              },
+              {
+                "views": 1,
+                "titulo": "200cv e pouca potencia para um carro?",
+                "publicadoEm": "2026-08-28T13:45:49Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Carbonizacao no pistao - Etanol seria o culpado?",
+                "publicadoEm": "2026-08-28T13:44:46Z"
+              },
+              {
+                "views": 1,
+                "titulo": "Batalha Carro Eletrico vs Combustao - Parte 2",
+                "publicadoEm": "2026-08-28T13:43:09Z"
+              }
+            ],
+            "inscritos": 0,
+            "totalVideos": 2,
+            "viewsTotais": 0
+          }
+        },
+        {
+          "dia": "2026-09-02",
+          "dados": {
+            "recentes": [
+              {
+                "views": 1,
+                "titulo": "SUPERCHARGER OU TURBO",
+                "publicadoEm": "2026-08-28T13:52:12Z"
+              },
+              {
+                "views": 1,
+                "titulo": "Agua de torneira no radiador - Consequencias",
+                "publicadoEm": "2026-08-28T13:50:50Z"
+              },
+              {
+                "views": 0,
+                "titulo": "O que abastecer para ajudar seu bolso? Gasolina ou Etanol?",
+                "publicadoEm": "2026-08-28T13:46:51Z"
+              },
+              {
+                "views": 0,
+                "titulo": "200cv e pouca potencia para um carro?",
+                "publicadoEm": "2026-08-28T13:45:49Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Carbonizacao no pistao - Etanol seria o culpado?",
+                "publicadoEm": "2026-08-28T13:44:46Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Batalha Carro Eletrico vs Combustao - Parte 2",
+                "publicadoEm": "2026-08-28T13:43:09Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Batalha Eletrico vs Combustao - Parte 1",
+                "publicadoEm": "2026-08-28T13:42:29Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Como Comparar Motores diferentes?",
+                "publicadoEm": "2026-08-28T13:40:19Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Curiosidade - Uso do Nitro (Oxido Nitroso)",
+                "publicadoEm": "2026-08-10T02:18:33Z"
+              },
+              {
+                "views": 0,
+                "titulo": "A peca que usa a fisica para ajudar o motor - Ressonador",
+                "publicadoEm": "2026-08-10T02:11:04Z"
+              }
+            ],
+            "inscritos": 0,
+            "totalVideos": 0,
+            "viewsTotais": 0
+          }
+        },
+        {
+          "dia": "2026-09-01",
+          "dados": {
+            "recentes": [
+              {
+                "views": 1,
+                "titulo": "SUPERCHARGER OU TURBO",
+                "publicadoEm": "2026-08-28T13:52:12Z"
+              },
+              {
+                "views": 1,
+                "titulo": "Agua de torneira no radiador - Consequencias",
+                "publicadoEm": "2026-08-28T13:50:50Z"
+              },
+              {
+                "views": 0,
+                "titulo": "O que abastecer para ajudar seu bolso? Gasolina ou Etanol?",
+                "publicadoEm": "2026-08-28T13:46:51Z"
+              },
+              {
+                "views": 0,
+                "titulo": "200cv e pouca potencia para um carro?",
+                "publicadoEm": "2026-08-28T13:45:49Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Carbonizacao no pistao - Etanol seria o culpado?",
+                "publicadoEm": "2026-08-28T13:44:46Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Batalha Carro Eletrico vs Combustao - Parte 2",
+                "publicadoEm": "2026-08-28T13:43:09Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Batalha Eletrico vs Combustao - Parte 1",
+                "publicadoEm": "2026-08-28T13:42:29Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Como Comparar Motores diferentes?",
+                "publicadoEm": "2026-08-28T13:40:19Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Curiosidade - Uso do Nitro (Oxido Nitroso)",
+                "publicadoEm": "2026-08-10T02:18:33Z"
+              },
+              {
+                "views": 0,
+                "titulo": "A peca que usa a fisica para ajudar o motor - Ressonador",
+                "publicadoEm": "2026-08-10T02:11:04Z"
+              }
+            ],
+            "inscritos": 0,
+            "totalVideos": 0,
+            "viewsTotais": 0
+          }
+        }
+      ],
+      "app_store_downloads": [
+        {
+          "dia": "2026-09-06",
+          "dados": {
+            "dia": "2026-09-04",
+            "atualizacoes": 5,
+            "downloadsApp": 1,
+            "unidadesPorTipo": {
+              "1F": 1,
+              "7F": 5
+            }
+          }
+        },
+        {
+          "dia": "2026-09-05",
+          "dados": {
+            "dia": "2026-09-03",
+            "atualizacoes": 1,
+            "downloadsApp": 2,
+            "unidadesPorTipo": {
+              "1F": 2,
+              "7F": 1
+            }
+          }
+        },
+        {
+          "dia": "2026-09-04",
+          "dados": {
+            "dia": "2026-09-02",
+            "atualizacoes": 1,
+            "downloadsApp": 0,
+            "unidadesPorTipo": {
+              "7F": 1
+            }
+          }
+        },
+        {
+          "dia": "2026-09-03",
+          "dados": {
+            "dia": "2026-09-01",
+            "atualizacoes": 5,
+            "downloadsApp": 0,
+            "unidadesPorTipo": {
+              "3F": 1,
+              "7F": 5
+            }
+          }
+        },
+        {
+          "dia": "2026-09-02",
+          "dados": {
+            "dia": "2026-08-31",
+            "atualizacoes": 2,
+            "downloadsApp": 0,
+            "unidadesPorTipo": {
+              "7F": 2
+            }
+          }
+        },
+        {
+          "dia": "2026-09-01",
+          "dados": {
+            "dia": "2026-08-30",
+            "atualizacoes": 2,
+            "downloadsApp": 2,
+            "unidadesPorTipo": {
+              "1F": 2,
+              "7F": 2
+            }
+          }
+        }
       ]
     },
     "frescorDasFontes": [
       {
         "fonte": "admob",
-        "ultimoDia": "2026-09-05",
+        "ultimoDia": "2026-09-06",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "app_store_connect",
-        "ultimoDia": "2026-09-05",
+        "ultimoDia": "2026-09-06",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "app_store_downloads",
-        "ultimoDia": "2026-09-05",
+        "ultimoDia": "2026-09-06",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "google_ads",
-        "ultimoDia": "2026-09-05",
+        "ultimoDia": "2026-09-06",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "meta_ads",
-        "ultimoDia": "2026-09-05",
+        "ultimoDia": "2026-09-06",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "play_console",
-        "ultimoDia": "2026-09-05",
+        "ultimoDia": "2026-09-06",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "revenuecat",
-        "ultimoDia": "2026-09-05",
+        "ultimoDia": "2026-09-06",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "search_console",
-        "ultimoDia": "2026-09-05",
+        "ultimoDia": "2026-09-06",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "stripe",
-        "ultimoDia": "2026-09-05",
+        "ultimoDia": "2026-09-06",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "vercel",
-        "ultimoDia": "2026-09-05",
+        "ultimoDia": "2026-09-06",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "youtube",
-        "ultimoDia": "2026-09-05",
+        "ultimoDia": "2026-09-06",
         "diasParado": 0,
         "parada": false
       }
