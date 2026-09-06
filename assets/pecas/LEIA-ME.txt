@@ -1,0 +1,58 @@
+FUNDOS PADRÃO MENTORQUE — PARA O AGENTE DE GERAÇÃO DE IMAGEM
+
+Oito chapas de fundo, sem nenhum texto além da etiqueta da seção.
+O agente escreve por cima, sempre dentro da zona livre.
+
+  stories/  1080 x 1920 PNG
+  feed/     1080 x 1080 PNG
+
+====================================================================
+ZONA LIVRE — STORIES  (as quatro chapas são iguais nisto)
+====================================================================
+  Texto:      x 70 a 1010   ·   y 300 a 820
+  Figurinha:  x 100 a 980   ·   y 850 a 1180   (enquete, quiz ou link)
+  Proibido:   y 0 a 270      interface do Instagram
+              y 1650 a 1920  interface do Instagram
+              a partir de y 850 à direita de x 400, a Biela ocupa
+
+A etiqueta da seção JÁ ESTÁ desenhada no topo. O agente não repete.
+
+====================================================================
+ZONA LIVRE — FEED  (varia por chapa, a Biela não ficou na mesma altura)
+====================================================================
+  Coluna de texto, y 150 a 940, largura por arquivo:
+
+  01_desafio-da-semana ......... x 60 a 520
+  02_dica-da-semana ............ x 60 a 500
+  03_curiosidade-da-semana ..... x 60 a 405
+  04_pergunta-da-comunidade .... x 60 a 510
+
+  Use SEMPRE o limite da chapa que estiver usando. Se o agente usar
+  520 na chapa 03, o texto encosta na Biela.
+
+====================================================================
+REGRAS DE TEXTO
+====================================================================
+  Branco de giz no corpo. Âmbar #F2A623 no destaque.
+  Teal #0F8A66 só para confirmação. Coral #C24D26 só para alerta.
+  Uma cor de destaque por peça.
+  Caixa alta só em título. Corpo e opções em caixa mista.
+  Se não couber, encurtar o texto — nunca reduzir o corpo da fonte.
+  Nenhum número inventado: preço, temperatura, km e prazo só entram
+  se vierem de fonte ou de validação técnica.
+  Nunca escrever "pergunte ao app". É sempre "pergunta pra Biela".
+
+  Na chapa 01 (desafio) a régua é coral. Como coral significa alerta
+  no nosso sistema, o texto sobreposto nessa chapa usa só branco e
+  âmbar — senão a peça inteira vira aviso de perigo.
+
+====================================================================
+OBSERVAÇÃO TÉCNICA
+====================================================================
+  As chapas de FEED saíram com a Biela mais ao centro do que o
+  planejado, o que estreitou a coluna de texto de ~590 px para
+  ~440 px. Elas funcionam, mas para manchete longa o espaço é curto.
+  Existe uma v2 pedida com a Biela empurrada para a direita; quando
+  ela chegar, é só substituir os arquivos mantendo os mesmos nomes.
+
+  As chapas de STORIES saíram no enquadramento correto.

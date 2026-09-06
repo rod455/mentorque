@@ -95,3 +95,7 @@ docs/quiz-perguntas.html
 !/.claude/skills/product-tracking-implement-tracking/
 !/.claude/skills/product-tracking-instrument-new-feature/
 !/.claude/skills/product-tracking-model-product/
+
+# As peças geradas para aprovação: saída, não fonte. As chapas e as fontes
+# ficam versionadas em assets/; o que sai delas é descartável.
+/pecas-geradas/

@@ -1,0 +1,93 @@
+// As chapas de fundo das peças de rede social, e onde é permitido escrever.
+//
+// POR QUE ISTO É CÓDIGO, e não uma tabela na cabeça de quem gera a peça. As
+// zonas livres não são estética: fora delas o texto some. Nos stories, o topo e
+// o rodapé ficam debaixo da interface do Instagram; nas duas larguras, a Biela
+// ocupa um pedaço da chapa e texto passando por cima dela vira ilegível. Um
+// número errado aqui produz uma peça que PARECE certa no computador e chega
+// cortada no celular de quem lê.
+//
+// Os números saem do `assets/pecas/LEIA-ME.txt`, que veio com as chapas, e a
+// `npm run conferir:pecas` compara os dois: se alguém trocar as chapas por uma
+// versão nova sem atualizar as medidas, a conferência reprova.
+//
+// A OBSERVAÇÃO QUE MAIS IMPORTA, e ela está no LEIA-ME: no feed a coluna de
+// texto tem largura DIFERENTE por chapa, porque a Biela não ficou na mesma
+// altura nas quatro. Usar a largura da chapa 01 na chapa 03 encosta o texto na
+// Biela. Por isso a largura mora em cada chapa, e não numa constante só.
+
+export type Formato = "stories" | "feed";
+
+export type Secao = "desafio" | "dica" | "curiosidade" | "pergunta";
+
+export type Chapa = {
+  secao: Secao;
+  formato: Formato;
+  /** Nome do arquivo dentro de assets/pecas/<formato>/. */
+  arquivo: string;
+  largura: number;
+  altura: number;
+  /** A caixa onde o texto pode entrar, em pixels da própria chapa. */
+  texto: { x1: number; y1: number; x2: number; y2: number };
+  /**
+   * Onde cabe uma figurinha de enquete, quiz ou link. Só nos stories: no feed
+   * não existe figurinha, o post é a imagem.
+   */
+  figurinha?: { x1: number; y1: number; x2: number; y2: number };
+};
+
+/** O rótulo humano de cada seção, para a legenda e para o Telegram. */
+export const NOME_DA_SECAO: Record<Secao, string> = {
+  desafio: "Desafio da semana",
+  dica: "Dica da semana",
+  curiosidade: "Curiosidade da semana",
+  pergunta: "Pergunta da comunidade",
+};
+
+/**
+ * As cores da marca que as peças usam.
+ *
+ * "Uma cor de destaque por peça" é regra do LEIA-ME, e a razão é de leitura:
+ * duas cores de destaque na mesma imagem fazem o olho não saber para onde ir.
+ */
+export const CORES = {
+  giz: "#F4F1EA",
+  ambar: "#F2A623",
+  teal: "#0F8A66",
+  coral: "#C24D26",
+} as const;
+
+/**
+ * A chapa do DESAFIO já tem régua coral desenhada, e coral significa alerta no
+ * nosso sistema. Peça com régua coral mais destaque coral vira aviso de perigo
+ * inteiro, então ali o destaque só pode ser âmbar.
+ */
+export const DESTAQUE_PERMITIDO: Record<Secao, (keyof typeof CORES)[]> = {
+  desafio: ["ambar"],
+  dica: ["ambar", "teal"],
+  curiosidade: ["ambar", "teal"],
+  pergunta: ["ambar", "teal"],
+};
+
+const STORIES_TEXTO = { x1: 70, y1: 300, x2: 1010, y2: 820 };
+const STORIES_FIGURINHA = { x1: 100, y1: 850, x2: 980, y2: 1180 };
+
+export const CHAPAS: Chapa[] = [
+  // ── stories: as quatro chapas têm a mesma zona livre ──────────────────────
+  { secao: "desafio", formato: "stories", arquivo: "FUNDO_STORY_01_desafio-da-semana.png", largura: 1080, altura: 1920, texto: STORIES_TEXTO, figurinha: STORIES_FIGURINHA },
+  { secao: "dica", formato: "stories", arquivo: "FUNDO_STORY_02_dica-da-semana.png", largura: 1080, altura: 1920, texto: STORIES_TEXTO, figurinha: STORIES_FIGURINHA },
+  { secao: "curiosidade", formato: "stories", arquivo: "FUNDO_STORY_03_curiosidade-da-semana.png", largura: 1080, altura: 1920, texto: STORIES_TEXTO, figurinha: STORIES_FIGURINHA },
+  { secao: "pergunta", formato: "stories", arquivo: "FUNDO_STORY_04_pergunta-da-comunidade.png", largura: 1080, altura: 1920, texto: STORIES_TEXTO, figurinha: STORIES_FIGURINHA },
+
+  // ── feed: a largura da coluna MUDA por chapa, ver o comentário do topo ────
+  { secao: "desafio", formato: "feed", arquivo: "FUNDO_FEED_01_desafio-da-semana.png", largura: 1080, altura: 1080, texto: { x1: 60, y1: 150, x2: 520, y2: 940 } },
+  { secao: "dica", formato: "feed", arquivo: "FUNDO_FEED_02_dica-da-semana.png", largura: 1080, altura: 1080, texto: { x1: 60, y1: 150, x2: 500, y2: 940 } },
+  { secao: "curiosidade", formato: "feed", arquivo: "FUNDO_FEED_03_curiosidade-da-semana.png", largura: 1080, altura: 1080, texto: { x1: 60, y1: 150, x2: 405, y2: 940 } },
+  { secao: "pergunta", formato: "feed", arquivo: "FUNDO_FEED_04_pergunta-da-comunidade.png", largura: 1080, altura: 1080, texto: { x1: 60, y1: 150, x2: 510, y2: 940 } },
+];
+
+export function chapaDe(secao: Secao, formato: Formato): Chapa {
+  const c = CHAPAS.find((x) => x.secao === secao && x.formato === formato);
+  if (!c) throw new Error(`não existe chapa de ${secao} em ${formato}`);
+  return c;
+}

@@ -1,0 +1,128 @@
+// As medidas das peças batem com o que veio junto com as chapas?
+//
+// POR QUE ISTO EXISTE (06/09/2026). As zonas livres não são estética: fora
+// delas o texto some. No story, o topo e o rodapé ficam debaixo da interface do
+// Instagram; nas duas larguras, a Biela ocupa parte da chapa. Um número errado
+// aqui produz peça que parece certa no computador e chega cortada no celular.
+//
+// E as chapas vão ser trocadas. O próprio LEIA-ME já avisa que existe uma v2
+// pedida, com a Biela empurrada para a direita, "mantendo os mesmos nomes de
+// arquivo". Quando ela chegar, as larguras de coluna do feed mudam. Se alguém
+// trocar os PNGs e esquecer o `chapas.ts`, nada quebra: sai peça com texto em
+// cima da Biela, e só se descobre olhando.
+//
+// Por isso a fonte da verdade é o `assets/pecas/LEIA-ME.txt`, que vem com as
+// chapas, e esta conferência compara o registro com ele.
+//
+// O que ela cobra:
+//   1. todo arquivo de chapa declarado existe mesmo, e no tamanho declarado
+//   2. as zonas do registro são as mesmas do LEIA-ME
+//   3. a regra da régua coral continua de pé (desafio só aceita âmbar)
+//
+// Rode com: npm run conferir:pecas
+import { readFileSync, existsSync } from "node:fs";
+import { CHAPAS, DESTAQUE_PERMITIDO, NOME_DA_SECAO } from "../lib/pecas/chapas.ts";
+
+let falhas = 0;
+function conferir(nome: string, condicao: boolean, detalhe = "") {
+  if (condicao) return;
+  falhas++;
+  console.error(`FALHA  ${nome}${detalhe ? `\n       ${detalhe}` : ""}`);
+}
+
+const leiame = readFileSync(new URL("../assets/pecas/LEIA-ME.txt", import.meta.url), "utf8");
+
+console.log("Peças: as medidas batem com o que veio junto com as chapas?");
+
+// ── 1. os arquivos existem, e no tamanho que o registro declara ────────────
+//
+// O tamanho sai do cabeçalho do PNG, sem biblioteca: largura e altura são dois
+// inteiros de 32 bits logo depois da assinatura, sempre nas mesmas posições.
+{
+  for (const c of CHAPAS) {
+    const caminho = new URL(`../assets/pecas/${c.formato}/${c.arquivo}`, import.meta.url);
+    if (!existsSync(caminho)) {
+      conferir(`a chapa de ${c.secao} em ${c.formato} existe`, false, c.arquivo);
+      continue;
+    }
+    const b = readFileSync(caminho);
+    const larg = b.readUInt32BE(16);
+    const alt = b.readUInt32BE(20);
+    conferir(
+      `${c.secao}/${c.formato}: o PNG tem o tamanho declarado`,
+      larg === c.largura && alt === c.altura,
+      `arquivo ${larg}x${alt}, registro ${c.largura}x${c.altura}`
+    );
+    conferir(
+      `${c.secao}/${c.formato}: a zona de texto cabe na chapa`,
+      c.texto.x2 <= larg && c.texto.y2 <= alt && c.texto.x1 >= 0 && c.texto.y1 >= 0,
+      JSON.stringify(c.texto)
+    );
+  }
+  if (!falhas) console.log(`  ✓ ${CHAPAS.length} chapas, todas no tamanho declarado`);
+}
+
+// ── 2. o registro é o mesmo LEIA-ME ────────────────────────────────────────
+//
+// Lido do arquivo e não repetido à mão: repetir seria criar uma terceira cópia
+// do número, e a próxima divergência ficaria entre as duas cópias nossas.
+{
+  const numero = (re: RegExp, onde: string) => {
+    const m = leiame.match(re);
+    conferir(`o LEIA-ME ainda declara ${onde}`, !!m, "o formato do arquivo mudou; releia antes de confiar nesta conferência");
+    return m ? Number(m[1]) : NaN;
+  };
+
+  // Stories: "Texto:      x 70 a 1010   ·   y 300 a 820"
+  const sx1 = numero(/Texto:\s+x\s+(\d+)\s+a\s+\d+/, "a coluna de texto do story");
+  const sx2 = numero(/Texto:\s+x\s+\d+\s+a\s+(\d+)/, "o fim da coluna do story");
+  const sy1 = numero(/Texto:[^\n]*y\s+(\d+)\s+a\s+\d+/, "o topo do texto do story");
+  const sy2 = numero(/Texto:[^\n]*y\s+\d+\s+a\s+(\d+)/, "o fim do texto do story");
+
+  for (const c of CHAPAS.filter((x) => x.formato === "stories")) {
+    conferir(
+      `story de ${c.secao}: a zona de texto é a do LEIA-ME`,
+      c.texto.x1 === sx1 && c.texto.x2 === sx2 && c.texto.y1 === sy1 && c.texto.y2 === sy2,
+      `registro ${JSON.stringify(c.texto)}, LEIA-ME x ${sx1} a ${sx2}, y ${sy1} a ${sy2}`
+    );
+  }
+
+  // Feed: a largura MUDA por chapa, e é o erro mais fácil de cometer. Cada
+  // linha do LEIA-ME é "01_desafio-da-semana ... x 60 a 520".
+  const porArquivo: Record<string, number> = {};
+  for (const m of leiame.matchAll(/^\s*(\d{2})_[a-z-]+\s*\.+\s*x\s+\d+\s+a\s+(\d+)/gm)) {
+    porArquivo[m[1]] = Number(m[2]);
+  }
+  conferir("o LEIA-ME lista as larguras do feed por chapa", Object.keys(porArquivo).length === 4, JSON.stringify(porArquivo));
+
+  for (const c of CHAPAS.filter((x) => x.formato === "feed")) {
+    const n = c.arquivo.match(/FUNDO_FEED_(\d{2})_/)?.[1] ?? "";
+    conferir(
+      `feed de ${c.secao}: a coluna termina onde o LEIA-ME manda`,
+      porArquivo[n] === c.texto.x2,
+      `registro x2 ${c.texto.x2}, LEIA-ME ${porArquivo[n]}. A Biela não está na mesma altura nas quatro chapas: usar a largura da chapa errada encosta o texto nela.`
+    );
+  }
+}
+
+// ── 3. a régua coral ───────────────────────────────────────────────────────
+//
+// A chapa do desafio já tem régua coral desenhada, e coral significa alerta no
+// nosso sistema. Destaque coral por cima dela vira aviso de perigo inteiro. É
+// regra do LEIA-ME e some fácil numa refatoração de cores.
+{
+  conferir(
+    "o desafio só aceita âmbar como destaque",
+    DESTAQUE_PERMITIDO.desafio.length === 1 && DESTAQUE_PERMITIDO.desafio[0] === "ambar",
+    JSON.stringify(DESTAQUE_PERMITIDO.desafio)
+  );
+  conferir("nenhuma seção libera coral como destaque", !Object.values(DESTAQUE_PERMITIDO).some((l) => l.includes("coral")));
+  conferir("toda seção do registro tem nome humano", CHAPAS.every((c) => !!NOME_DA_SECAO[c.secao]));
+  conferir("cada seção tem as duas larguras", CHAPAS.length === Object.keys(NOME_DA_SECAO).length * 2, `${CHAPAS.length} chapas`);
+}
+
+if (falhas) {
+  console.error(`\n${falhas} conferência(s) das peças reprovaram.`);
+  process.exit(1);
+}
+console.log("Peças: chapas, zonas livres e regra da régua coral conferem com o LEIA-ME.");
