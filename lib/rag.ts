@@ -67,7 +67,28 @@ export async function retrieveManualContext(query: string, car: CarCtx | null, m
       f_year: car?.year ?? null,
     });
     if (error || !Array.isArray(data) || data.length === 0) return "";
-    return (data as { content: string }[]).map((r, i) => `[${i + 1}] ${r.content}`).join("\n\n");
+    // CADA TRECHO VAI ETIQUETADO COM O MANUAL DE ONDE SAIU.
+    //
+    // POR QUE (06/09/2026). O ano NÃO filtra a busca, só ordena por
+    // proximidade: quem tem um EcoSport 2003 e só tem manual de 2017 na base
+    // recebe o de 2017, e essa é a regra que o dono fixou, porque manual de
+    // outro ano é muito melhor que nenhum manual.
+    //
+    // Só que até aqui a rota jogava fora justamente marca, modelo e ano, que a
+    // consulta já devolvia: a Biela recebia o texto solto e respondia como se
+    // fosse o manual do carro da pessoa. Num EcoSport isso é geração diferente,
+    // com motor diferente. A resposta continua útil, e afirmar que ela é do
+    // manual daquele carro é que não pode.
+    //
+    // Com a etiqueta, o modelo tem como dizer "pelo manual do EcoSport 2017", e
+    // a instrução da /api/biela pede exatamente isso quando o ano não bate.
+    const trechos = data as { content: string; make?: string; model?: string; year?: number | null }[];
+    return trechos
+      .map((r, i) => {
+        const etiqueta = [r.make, r.model, r.year ?? null].filter(Boolean).join(" ");
+        return `[${i + 1}]${etiqueta ? ` (manual ${etiqueta})` : ""} ${r.content}`;
+      })
+      .join("\n\n");
   } catch (err) {
     // A BUSCA FALHA EM SILÊNCIO, e esse silêncio custou caro em 05/09/2026.
     //

@@ -210,16 +210,25 @@ node --env-file=.env.local scripts/ingest-folder.mjs ./manuais
 Subir de novo o mesmo modelo e ano substitui os trechos, não duplica. Anos
 diferentes do mesmo modelo convivem.
 
-## O que ficou aberto (decisão do dono)
+## A regra do ano, decidida em 06/09/2026
 
-**A busca entrega manual de outra geração sem avisar.** Hoje, quem tem um Polo
-2008 recebe trecho do manual do Polo 2024 com a mesma confiança de quem tem o
-2024. O conserto seria um limite de distância de ano (por exemplo, ignorar
-manual com mais de 5 anos de diferença), e ele tem um custo: em vez de resposta
-possivelmente errada, a pessoa passa a receber resposta sem manual nenhum.
+**Não havendo manual do ano exato, a busca usa o ano mais próximo que existe e
+a Biela responde a partir dele.** Decisão do dono, e ela fecha a pergunta que
+estava em aberto aqui.
 
-Não é uma escolha óbvia e não foi feita. Vale decidir junto com a lista de
-compras acima, porque quanto mais gerações antigas subirem, menor o problema.
+O motivo é simples: manual de outro ano é muito melhor que nenhum manual. O
+caso que decidiu foi o Ford EcoSport 2003 de um usuário nosso, cujo manual não
+se acha; sobe o de 2017 e a pessoa passa a ter resposta com base em manual.
+
+A busca já se comportava assim, porque o ano só ordena e não filtra. O que
+faltava era do outro lado: a rota jogava fora marca, modelo e ano, que a
+consulta já devolvia, e a Biela respondia como se o trecho fosse do manual do
+carro da pessoa. Num EcoSport isso é outra geração, com outro motor.
+
+Agora cada trecho vai etiquetado com o manual de onde saiu, e a instrução pede
+que a Biela diga de qual ano falou quando ele não bate com o do carro, avisando
+que detalhes mudam entre os anos. A resposta continua útil; a certeza é que
+passa a ser do tamanho certo. A `npm run conferir:embedding` guarda isso.
 
 ## Como refazer estas contas
 

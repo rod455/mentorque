@@ -197,9 +197,19 @@ export async function POST(request: Request) {
     const manual = await retrieveManualContext(question, car, 5);
     let system = systemPrompt(locale, car, body.contexto);
     if (manual) {
+      // O ANO DO MANUAL VAI JUNTO, E A BIELA TEM DE DIZER QUANDO ELE NÃO BATE.
+      //
+      // A busca não filtra por ano, só ordena pelo mais próximo (decisão do
+      // dono em 06/09/2026): manual de outro ano é muito melhor que nenhum
+      // manual. Mas um EcoSport 2003 recebendo o manual de 2017 é geração
+      // diferente, com motor diferente, e responder aquilo como se fosse o
+      // manual DAQUELE carro é dar certeza que a gente não tem. Dizer de qual
+      // ano veio custa meia linha e devolve à pessoa a chance de desconfiar.
       system += (locale === "pt"
-        ? `\n\nTrechos do manual do carro (use como fonte primária; se não cobrir a dúvida, diga o que é geral):\n${manual}`
-        : `\n\nManual excerpts for this car (use as the primary source; if they don't cover it, say what's general):\n${manual}`);
+        ? `\n\nTrechos do manual do carro (use como fonte primária; se não cobrir a dúvida, diga o que é geral).\n` +
+          `Cada trecho vem etiquetado com o manual de onde saiu. Se o ano do manual for diferente do ano do carro da pessoa, DIGA isso numa frase curta (ex.: "pelo manual do ${car?.model ?? "modelo"} 2017, que é o mais próximo que eu tenho") e avise que detalhes podem mudar entre os anos.\n${manual}`
+        : `\n\nManual excerpts for this car (use as the primary source; if they don't cover it, say what's general).\n` +
+          `Each excerpt is labelled with the manual it came from. If the manual's year differs from the car's year, SAY so in a short sentence and warn that details may differ between years.\n${manual}`);
     }
 
     const res = await fetch("https://api.anthropic.com/v1/messages", {

@@ -123,6 +123,44 @@ console.log("Embedding: quem grava e quem procura falam a mesma língua?");
   conferir("o acento fica intacto", limpo.includes("oleo"), limpo.slice(0, 40));
 }
 
+// -- 5. O TRECHO DIZ DE QUAL MANUAL SAIU ------------------------------------
+//
+// A DECISAO DO DONO, 06/09/2026: nao havendo manual do ano exato, a busca usa o
+// ano mais proximo que existe e a Biela responde a partir dele. Manual de outro
+// ano e muito melhor que nenhum manual, e a busca ja fazia isso, porque o ano
+// so ordena e nao filtra.
+//
+// O que faltava era a honestidade do outro lado. A rota jogava fora marca,
+// modelo e ano, que a consulta ja devolvia, e a Biela respondia como se o
+// trecho fosse do manual do carro da pessoa. Um EcoSport 2003 recebendo o
+// manual de 2017 e outra geracao, com outro motor: a resposta continua util, e
+// afirmar que ela e do manual daquele carro e que nao pode.
+//
+// Sem esta conferencia, alguem "simplifica" o map de volta para so o conteudo e
+// a etiqueta some sem quebrar nada.
+{
+  const semComentarios3 = (f: string) =>
+    f.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/^\s*\/\/.*$/gm, " ");
+  const rag = semComentarios3(readFileSync(new URL("../lib/rag.ts", import.meta.url), "utf8"));
+  const rota = semComentarios3(readFileSync(new URL("../app/api/biela/route.ts", import.meta.url), "utf8"));
+
+  conferir(
+    "o trecho devolvido carrega marca, modelo e ano",
+    /r\.make/.test(rag) && /r\.model/.test(rag) && /r\.year/.test(rag),
+    "sem isso a Biela nao tem como dizer de que manual falou"
+  );
+  conferir(
+    "e a etiqueta entra no texto que vai para o modelo",
+    /manual \$\{etiqueta\}|\$\{etiqueta\}/.test(rag),
+    "devolver os campos e nao usa-los seria pior: parece resolvido e nao esta"
+  );
+  conferir(
+    "a rota manda a Biela avisar quando o ano do manual nao bate",
+    /ano do manual for diferente/.test(rota),
+    "a instrucao em portugues e a que vale para os nossos motoristas"
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) do embedding reprovaram.`);
   process.exit(1);
