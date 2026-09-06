@@ -139,7 +139,7 @@ function valida(conteudo) {
   return erros;
 }
 
-async function gerar(conteudo) {
+async function gerar(conteudo, { tolerante = false } = {}) {
   const erros = valida(conteudo);
   if (erros.length) { console.error("Peça recusada:\n  " + erros.join("\n  ")); process.exit(1); }
 
@@ -165,10 +165,12 @@ async function gerar(conteudo) {
       return { altura: z.scrollHeight, cabe: z.clientHeight };
     });
     if (sobra.altura > sobra.cabe) {
-      console.error(
-        `Peça recusada em ${formato}: o texto ocupa ${sobra.altura}px e a zona livre tem ${sobra.cabe}px.\n` +
-          "  Encurte o texto. Diminuir a fonte é proibido pelo LEIA-ME."
-      );
+      const aviso =
+        `o texto ocupa ${sobra.altura}px e a zona livre tem ${sobra.cabe}px em ${formato}. ` +
+        "Encurtar o texto é a saída; diminuir a fonte é proibido pelo LEIA-ME.";
+      await pg.close();
+      if (tolerante) { await nav.close(); return { transbordou: aviso }; }
+      console.error(`Peça recusada: ${aviso}`);
       await nav.close();
       process.exit(1);
     }
@@ -180,7 +182,7 @@ async function gerar(conteudo) {
     console.log(`  ✓ ${formato}: ${arquivo}`);
   }
   await nav.close();
-  return feitos;
+  return { feitos };
 }
 
 /**
@@ -231,10 +233,54 @@ const EXEMPLO = {
   destaque: "ambar",
 };
 
+// AS QUATRO PEÇAS DA SEMANA, tiradas do que o app já tem escrito.
+// A escolha do conteúdo mora em lib/pecas/conteudo.ts; aqui só se desenha.
+if (args.includes("--semana")) {
+  const { candidatosDaSemana } = await import(join(RAIZ, "lib/pecas/conteudo.ts"));
+  const formatos = (opcao("formatos") ?? "feed,stories").split(",");
+  const todos = [];
+  const semSaida = [];
+  for (const lista of candidatosDaSemana()) {
+    // Anda pelos candidatos até achar um que CABE. Medir é desenhar, então a
+    // tentativa que transborda simplesmente não vira arquivo.
+    let escolhido = null;
+    for (const peca of lista) {
+      const r = await gerar({ ...peca, formatos }, { tolerante: true });
+      if (r.transbordou) { console.log(`  · ${peca.fonte} não cabe (${r.transbordou.split(".")[0]})`); continue; }
+      escolhido = { peca, feitos: r.feitos };
+      break;
+    }
+    if (!escolhido) {
+      // NÃO ABORTA A SEMANA INTEIRA por causa de uma seção. As outras três já
+      // estão prontas e são publicáveis; parar aqui jogaria fora trabalho bom
+      // por causa de uma chapa apertada. O que falta sai no resumo do fim.
+      semSaida.push(NOME_DA_SECAO[lista[0].secao]);
+      continue;
+    }
+    console.log(`${NOME_DA_SECAO[escolhido.peca.secao]}: ${escolhido.peca.fonte}`);
+    todos.push(...escolhido.feitos);
+  }
+  if (args.includes("--telegram")) {
+    console.error("O envio ao Telegram das quatro de uma vez ainda não existe: use --json por peça.");
+    process.exit(1);
+  }
+  console.log(`\n${todos.length} peça(s) geradas em ${saida}`);
+  if (semSaida.length) {
+    console.warn(
+      `\n⚠️  Sem peça esta semana: ${semSaida.join(", ")}.\n` +
+        "   Nenhum texto do banco coube na zona livre dessa chapa. As saídas são\n" +
+        "   escrever um texto curto para a seção ou esperar a v2 das chapas, que o\n" +
+        "   LEIA-ME já anuncia com a Biela empurrada para a direita."
+    );
+    process.exitCode = 1;
+  }
+  process.exit(process.exitCode ?? 0);
+}
+
 const conteudo = args.includes("--exemplo")
   ? EXEMPLO
   : JSON.parse(readFileSync(opcao("json") ?? (() => { console.error("Passe --json peca.json ou --exemplo"); process.exit(1); })(), "utf8"));
 
 console.log(`Gerando: ${NOME_DA_SECAO[conteudo.secao]}`);
-const feitos = await gerar(conteudo);
+const { feitos } = await gerar(conteudo);
 if (args.includes("--telegram")) await paraTelegram(feitos, conteudo);
