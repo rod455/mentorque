@@ -53,6 +53,10 @@ export async function coletarDadosOperacao() {
     admin.from("assinaturas_conferencia").select("veredito"),
   ]);
   const { data: experimentos } = await admin.from("experimentos_resultados").select("*").limit(120);
+  // A porta única das anomalias (supabase/anomalias-da-operacao.sql). A régua
+  // mora no banco pelo mesmo motivo do funil_canonico: consulta escrita à mão
+  // em cada leitor produz um número diferente por leitor.
+  const { data: anomalias } = await admin.rpc("anomalias_da_operacao", { p_dias: 14 });
 
   // A quebra do funil (28 dias, pessoas distintas): quantos por cento passam
   // de cada etapa para a seguinte, e onde está a maior perda. É o mapa de
@@ -232,6 +236,20 @@ export async function coletarDadosOperacao() {
     // convidado guarda o carro no aparelho e não aparece aqui, e escrever
     // "dos usuários" em cima deste número é mentira.
     estadoDaBase: estadoDaBase ?? null,
+    // ANOMALIAS: padrões que valem investigação, contados no servidor.
+    //
+    // POR QUE ISTO ENTROU (07/09/2026). Duas coisas graves ficaram semanas
+    // invisíveis, e nenhuma precisava de dado novo. O Android nunca teve um
+    // evento com conta, em toda a história, e ninguém viu porque o relatório
+    // olhava o total, onde a web cobre o buraco. E quem responde a pergunta do
+    // dia costuma sumir, o que a nossa migalha de fechamento não consegue
+    // acusar: ela só fala na abertura SEGUINTE, então um defeito ruim o
+    // bastante para a pessoa desistir a deixa muda para sempre.
+    //
+    // Esta lista não prova nada sozinha. O valor dela é ser contável e
+    // comparável entre plataformas: "some no Android e não no iPhone" é
+    // achado; "some em todas" é gente terminando o que veio fazer.
+    anomalias: anomalias ?? [],
     // Fontes externas coletadas pelo Analista (metricas_diarias): para cada
     // fonte, o pacote mais recente e a série dos últimos 10 dias.
     fontesExternas: porFonte,

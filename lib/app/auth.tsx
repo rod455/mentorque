@@ -131,17 +131,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // redirecionamento — era justamente o ida-e-volta que nunca fechava, deixando
   // a sessão no site e o app deslogado (ver lib/app/socialLogin.ts).
   //
-  // Fora daí (Android, iPad, ou Google sem client id configurado) sobra o
-  // caminho antigo: abrir o provedor numa aba do sistema e receber o retorno
-  // pelo deep link. Dentro da WebView não dá — o Google recusa WebView embutida
-  // com `disallowed_useragent`.
+  // Fora daí (iPad, ou Google sem client id configurado) sobra o caminho
+  // antigo: abrir o provedor numa aba do sistema e receber o retorno pelo deep
+  // link. Dentro da WebView não dá — o Google recusa WebView embutida com
+  // `disallowed_useragent`.
+  //
+  // O ANDROID ENTROU AQUI EM 07/09/2026, e o motivo é um número: em quatro
+  // semanas e 160 eventos, NENHUM evento do Android carregou conta. iPhone e
+  // web carregam desde 24/08. O Android tinha um caminho de login só, o do
+  // navegador, e ele nunca produziu uma conta. O caminho nativo já estava
+  // inteiro do lado dele (o plugin recebe `webClientId`, que é o que o Android
+  // pede); só este portão, que exigia iOS, o mantinha inalcançável.
+  //
+  // A guarda continua sendo `googleNativeConfigured()`, que no Android depende
+  // de NEXT_PUBLIC_GOOGLE_WEB_CLIENT_ID. SEM a variável nada muda: o Android
+  // segue exatamente como hoje. Isso é de propósito, para esta mudança não
+  // poder quebrar nada sozinha, e para o dia em que a variável entrar ser uma
+  // decisão consciente e não um efeito colateral.
   const signInOAuth = useCallback(async (provider: "google" | "apple"): Promise<Result> => {
     if (!supabase) return { error: "auth_disabled" };
 
     if (isNativeApp()) {
+      // A folha da Apple é ASAuthorization, que só existe no iPhone. A do
+      // Google existe nos dois, e quem decide é ter client id configurado.
       const canNative =
-        nativePlatform() === "ios" &&
-        (provider === "apple" || (googleNativeConfigured() && !isIPad()));
+        provider === "apple"
+          ? nativePlatform() === "ios"
+          : googleNativeConfigured() && !isIPad();
 
       if (canNative) return await nativeSocialLogin(supabase, provider);
 

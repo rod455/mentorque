@@ -56,6 +56,22 @@ export function relatarFechamentoAnterior(): void {
   try {
     const f = fechamentoAnterior();
     if (!f) return;
+    // SÓ NO APP DAS LOJAS, e a razão é que a premissa da migalha não vale na
+    // web. Ela mede "o processo morreu enquanto a pessoa usava", e no app isso
+    // é defeito. No navegador é rotina: fechar a aba, fechar o navegador,
+    // deslizar ele para fora da lista de recentes. Nenhum desses deixa o
+    // JavaScript rodar, e todos deixam a migalha quente.
+    //
+    // Medido em 07/09/2026: dos seis relatos que a migalha produziu desde que
+    // subiu, SEIS eram da web e ZERO do Android, que é a plataforma que ela foi
+    // construída para vigiar. Dois deles vieram depois do conserto do
+    // `pagehide`, o que mostra que não era um buraco a tapar e sim a premissa
+    // errada para aquela plataforma.
+    //
+    // O preço de calar na web é nenhum: nunca houve um relato de lá que fosse
+    // o defeito. O ganho é a `app_erros` voltar a ser sinal, que é a tabela
+    // onde o QA procura o crash do Android.
+    if (!isNativeApp()) return;
     // A mensagem fica ESTÁVEL (sem os segundos) de propósito: é ela que agrupa
     // no "top" de /api/erros, e um número no meio faria cada fechamento virar
     // uma linha única, escondendo justamente a repetição que prova o defeito.
