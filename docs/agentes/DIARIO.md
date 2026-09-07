@@ -18,6 +18,8 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 |---|---|---|
 | Por que a receita é R$ 0,00 se há assinantes? | Cupom de 100% empilha com o teste grátis: 7 dias mais 1 mês. Não é defeito, o cupom faz o que promete. | 04/09, QA agendado |
 | Os cupons vão continuar zerando a fatura? | Não. São `duration: once`, já foram gastos, e as assinaturas estão com `discounts: []`. | 04/09, QA agendado |
+| O cadastro pelo app funciona? | **No iPhone sim, no Android nunca funcionou.** Em 4 semanas e 160 eventos, zero eventos do Android com conta; iPhone e web têm desde 24/08. O portão do login nativo exigia iOS, então sobrava só o caminho do navegador. Conserto no código em 07/09, mas só liga quando o client id do Android for passado. | 07/09, Engenharia |
+| Por que a migalha de fechamento não pega o crash do Android? | Porque ela só fala na ABERTURA SEGUINTE, e quem fecha e desiste não volta. Os seis relatos que ela deu eram todos da web, onde fechar o navegador produz a mesma evidência sem ser defeito. | 07/09, Engenharia |
 | Quantos assinantes existem de verdade? | **3 pessoas.** A tabela tem 6 linhas: 2 `inactive` e 1 conta de revisão das lojas (válida até 2099) não são clientes. | 04/09 |
 | Quando entra o primeiro dinheiro? | 01/10, depois 04/10 e por volta de 09/10, R$ 29,90 cada. Verificação já agendada para o dia 01. | 04/09, QA agendado |
 | O webhook do Stripe está vivo? | Está. Duas viradas de teste gravadas em 37 segundos, 01/09 e 04/09. | 04/09, QA agendado |
@@ -31,6 +33,65 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
+
+## 2026-09-07 · Engenharia: o Android nunca teve uma conta, e a testemunha do crash vigia a plataforma errada
+
+- Rodada nascida da pergunta que o Diretor deixou ABERTA hoje: Android e iPhone
+  terminam melhor o onboarding e geraram zero contas na semana. Fui separar as
+  duas explicações dele e as plataformas se comportam diferente.
+- **O NÚMERO: em quatro semanas e 160 eventos, NENHUM evento do Android
+  carregou conta.** iPhone e web carregam desde 24/08. No iPhone a explicação
+  inocente vale (6 eventos com conta, 2 contas: são usuários que já tinham).
+  No Android não vale.
+- Não é falha de instrumentação, e isso foi conferido: só três eventos carregam
+  conta por desenho (`viu_paywall`, `iniciou_checkout`, `cadastro`). No iPhone o
+  mesmo `viu_paywall` traz conta em 9 de 9; no Android, em 0 de 6. Os aparelhos
+  do Android que viram o paywall estavam DESLOGADOS.
+- **A CAUSA PROVÁVEL, no portão:** `canNative` em lib/app/auth.tsx exigia
+  `nativePlatform() === "ios"`. O Android nunca alcançava o login nativo, mesmo
+  com o caminho dele inteiro do outro lado (o plugin recebe `webClientId`, que é
+  exatamente o que o Android pede). Sobrava só o caminho do navegador, e ele
+  nunca produziu uma conta.
+- Conserto: o portão agora separa por PROVEDOR (a folha da Apple é
+  ASAuthorization e só existe no iPhone; a do Google existe nos dois). A guarda
+  continua sendo o client id, então SEM a variável nada muda. Ligar o Android é
+  decisão consciente, e o que ela exige está no `.env.example`.
+- Assimetria que causou tudo, e vale como lição: o client id do iPhone tem valor
+  de RESERVA no código, com o comentário ao lado explicando por quê ("subir um
+  build sem a variável e descobrir no aparelho que o botão não faz nada"). O
+  Android ficou sem a mesma proteção, e o modo de falha previsto aconteceu nele.
+- **A TESTEMUNHA VIGIA A PLATAFORMA ERRADA.** A migalha de fechamento foi
+  construída para pegar o app fechando no quiz do Android. Desde que subiu
+  produziu SEIS relatos: seis na web, zero no Android. Na web a mesma evidência
+  tem explicação inocente (fechar o navegador não deixa JavaScript rodar), e o
+  ruído caía justamente na `app_erros`, que é onde o QA procura o crash. Agora
+  ela só relata no app das lojas.
+- **E ela é cega por construção para o defeito que caça:** só fala na ABERTURA
+  SEGUINTE. Um fechamento ruim o bastante para a pessoa desistir a deixa muda
+  para sempre. Foi o que houve: os três aparelhos Android na 1.8.0 que
+  responderam o quiz entre 04 e 06/09 nunca mais produziram evento nenhum.
+- Por isso entrou um vigia que não depende de ninguém voltar:
+  `public.anomalias_da_operacao`, lida pelo retrato diário. Porta única, como o
+  `funil_canonico`.
+- **Ela contradisse a suspeita que a motivou**, e isso é o melhor que uma
+  ferramenta dessas faz: "respondeu o quiz e sumiu" aparece no Android (5), no
+  iPhone (4) e na web (2). Espalhado assim parece gente terminando o que veio
+  fazer, não assinatura de crash. Fica como indício comparável, e está escrito
+  assim no SQL.
+- CORREÇÃO MINHA no meio da rodada: afirmei que a 1.8 não estava publicada e
+  que por isso o Android não tinha a migalha. Errado. O dono corrigiu e o dado
+  confirma: Android com 1.8.0 em 9 aparelhos desde 04/09 16:34. Eu inferi da
+  frase "1.8 preparada" no relatório em vez de olhar a coluna `versao`, que
+  estava a uma consulta de distância.
+- Entrou também a lista `docs/agentes/acoes-do-dono.md`, com `npm run acoes`:
+  há quantos dias cada coisa que só o dono faz está parada. O caso que motivou:
+  as negativas do Google Ads estão escritas desde 03/09 e seguem sem aplicar,
+  enquanto a campanha gasta uns R$ 35 por dia num público que o próprio
+  relatório mediu como errado. O relatório é semanal e cobra a semana anterior,
+  então quatro dias parados ainda não tinham chegado a nenhuma cobrança.
+- Conferência nova (`conferir:anomalias` e `conferir:acoes`), com os defeitos
+  plantados e gritando: guarda do nativo removida, função renomeada só no SQL,
+  campo sumido do retrato, data no futuro e coluna faltando.
 
 ## 2026-09-07 · Diretor: relatório da semana (31/08 a 06/09)
 - Artifact "Semana Mentorque":
