@@ -73,6 +73,16 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   Google Play → Proteção da Google Play Store → Assinatura de apps; o SHA-1
   certo é o da "Chave clássica", não o da pós-quântica (Beta). A ação saiu da
   lista. O Google avisa que pode levar de 5 minutos a algumas horas para valer.
+- **A tela de consentimento estava em Testing, não em produção**, com zero test
+  users: nesse estado a caixinha abre e recusa todo mundo. O dono achou que
+  estava em produção; o retrato dizia o contrário. Branding preenchido com os
+  três links do site (home, /privacidade, /termos), sem logo de propósito, que
+  é o que dispara verificação; e "Publish app" confirmado. Com três domínios e
+  só e-mail e perfil, não pede verificação. As duas ações (test users e
+  Supabase) saíram da lista: o Supabase já tinha os dois client ids, o Web e o
+  do iPhone. O do iPhone é de OUTRO projeto do Google Cloud (prefixo
+  `43445984392`); funciona, porque o Supabase aceita qualquer id da lista, mas
+  são dois projetos para manter.
 
 ## 2026-09-07 · Banco: a cota estourou de novo, e a causa era uma coluna que ninguém lia mais
 
