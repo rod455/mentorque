@@ -67,20 +67,28 @@ de ..." }`. O n8n deve mostrar isso ao dono, não tentar de novo.
 ## O fluxo no n8n
 
 Ele existe: **"Mentorque: peças de rede social (Telegram)"**, criado desativado,
-como toda automação nova aqui. Sete nós:
+como toda automação nova aqui:
 
 1. **Telegram: pedido ou botão** ouve `message` e `callback_query`, para a mesma
    entrada servir ao pedido escrito e ao clique no botão.
 2. **Entender o pedido** lê a seção da frase (sem acento, para "curiosidade" e
    "Curiosidade" caírem no mesmo lugar) ou desmonta o callback do botão.
-3. **O texto da peça** chama `/api/pecas?...&json=1` com `neverError`, para o
+3. **Veio de botão?** e **Tirar o relógio do botão** respondem o callback. Sem
+   isso o botão fica girando no Telegram até dar tempo, e parece que travou.
+4. **Montar, aprovar ou explicar** separa os três caminhos.
+5. **O texto da peça** chama `/api/pecas?...&json=1` com `neverError`, para o
    409 chegar como resposta em vez de derrubar a execução.
-4. **Tem candidato?** separa o 200 do 409.
-5. **Montar a legenda** monta a legenda e escapa `&`, `<` e `>`, porque o
+6. **Tem candidato?** separa o 200 do 409.
+7. **Montar a legenda** monta a legenda e escapa `&`, `<` e `>`, porque o
    Telegram lê a legenda como HTML e um `&` solto derruba o envio inteiro.
-6. **A imagem da peça** chama a mesma rota sem `json`, com `Response Format:
+8. **A imagem da peça** chama a mesma rota sem `json`, com `Response Format:
    File`.
-7. **Mandar para aprovação** manda a foto com os botões Aprovar e Outra.
+9. **Mandar para aprovação** manda a foto com os botões Aprovar e Outra.
+
+**Todo nó lê do "Entender o pedido" pelo nome, e não do `$json`.** Depois do
+"Tirar o relógio do botão" o `$json` vira a resposta do Telegram, e quem
+estivesse lendo `$json.secao` ali receberia `undefined`. Isso vale para
+qualquer nó que fique depois de uma junção de caminhos.
 
 **O botão Outra anda por `salto`, e não pela lista de recusadas.** O callback de
 um botão do Telegram tem 64 bytes NO TOTAL, e uma lista de fontes estoura isso
