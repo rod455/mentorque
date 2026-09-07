@@ -115,24 +115,24 @@ na terceira ou quarta recusa. Como a lista de candidatos é versionada e não mu
 durante a conversa, andar por índice dá no mesmo. A `conferir:pecas` cobra as
 duas formas e cobra que elas concordem.
 
-### O que falta para ele rodar
+### Como ele foi ligado, para o dia em que precisar refazer
 
-O fluxo está montado e desativado. Faltam três coisas, todas do dono, porque
-todas envolvem chave:
+O fluxo nasceu desativado, como toda automação nova aqui, e foi ligado em
+07/09/2026 nesta ordem:
 
-1. **Criar o bot no Telegram**, com o @BotFather (`/newbot`). Ele devolve um
-   token. O token não se cola em conversa nem em arquivo do repositório.
-2. **Criar a credencial no n8n**: Credentials, New, "Telegram API", colar o
-   token, salvar com o nome **Telegram Mentorque**.
-3. **Escolher essa credencial nos cinco nós de Telegram** do fluxo (o gatilho e
-   os quatro que mandam mensagem). O fluxo foi criado com o nome certo, mas o
-   n8n não vincula credencial que ainda não existe.
+1. **Bot criado no @BotFather** (`/newbot`), que devolve um token. O token não
+   se cola em conversa nem em arquivo do repositório.
+2. **Credencial "Telegram mentorque"** criada no n8n, do tipo Telegram API.
+3. **A credencial escolhida nos seis nós de Telegram**, o gatilho mais os cinco
+   que falam. O n8n não vincula credencial que ainda não existe, então isso é
+   sempre um passo separado de criar o fluxo.
+4. **Publicar e ativar.** É a ativação que registra o webhook no bot.
 
-Depois disso, ativar. Ativar é o que registra o webhook do bot: enquanto o fluxo
-estiver desativado, mandar mensagem para o bot não faz nada.
-
-Para conversar com o bot, mande `/start` para ele uma vez. Bot do Telegram não
-consegue iniciar conversa.
+**Um bot só tem UM webhook.** Este fluxo usa o mesmo bot dos fluxos antigos do
+Vocaboost, então ativar aqui tirou o webhook de lá. Se algum dia o fluxo de
+aprovação do Vocaboost for religado, os dois vão brigar pelo mesmo bot e o
+último a ativar ganha. A saída, se isso for preciso, é um bot próprio para o
+Mentorque.
 
 ## O enquadramento, que veio dos exemplos
 
