@@ -5,7 +5,7 @@ import { apiPost } from "@/lib/app/apiBase";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/app/auth";
 import { usePrototype } from "@/lib/app/store";
-import { AVISO, abrirAjustesDeAvisos, bloqueadaPeloSistema, cancelar, notificacoesDisponiveis, pedirPermissao } from "@/lib/app/notificacoes";
+import { AVISO, abrirAjustesDeAvisos, cancelar, notificacoesDisponiveis, pedirPermissao, permissaoConcedida } from "@/lib/app/notificacoes";
 import { resizeImage } from "@/lib/app/image";
 import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
 import { cancelSubscription, deleteAccount, openBillingPortal, reactivateSubscription } from "@/lib/app/billing";
@@ -273,19 +273,59 @@ export function ProfileScreen() {
   // dono, 28/08) e a linha explica o bloqueio. Ao voltar dos ajustes com a
   // permissão dada, o próximo toque liga de verdade.
   const [avisosBloqueados, setAvisosBloqueados] = useState(false);
+
+  // O INTERRUPTOR ESPELHA O APARELHO, e não a nossa preferência guardada.
+  //
+  // PEDIDO DO DONO (07/09/2026): "se estiver ligado, não pode mostrar
+  // desligado, não faz sentido". Ele tem razão, e o custo do jeito antigo era
+  // pior do que parecer errado: quando a permissão do sistema sumia (a pessoa
+  // tirava nos ajustes do Android, ou nunca chegou a dar), a preferência
+  // continuava ligada aqui e TODO agendamento desistia em silêncio, porque
+  // `sincronizarLembreteQuiz` sai fora sem permissão. Interruptor ligado,
+  // nenhum aviso agendado, e nada na tela dizendo isso.
+  //
+  // Agora a verdade é o sistema: permissão concedida liga, permissão ausente
+  // desliga e a linha explica que está bloqueado.
+  //
+  // A RECONFERÊNCIA AO VOLTAR não é capricho. Liberar a permissão acontece
+  // FORA do app, nos ajustes do aparelho, e voltar de lá não remonta a tela.
+  // Sem escutar a volta, quem libera continua vendo "bloqueado" até fechar e
+  // abrir o app, que é exatamente quando a pessoa conclui que não funciona.
+  useEffect(() => {
+    if (!notificacoesDisponiveis()) return;
+    let vivo = true;
+    const conferir = async () => {
+      const concedida = await permissaoConcedida();
+      if (!vivo) return;
+      setAvisosBloqueados(!concedida);
+      if (concedida !== s.notifications) setNotifications(concedida);
+    };
+    void conferir();
+    const aoVoltar = () => { if (document.visibilityState === "visible") void conferir(); };
+    document.addEventListener("visibilitychange", aoVoltar);
+    return () => { vivo = false; document.removeEventListener("visibilitychange", aoVoltar); };
+  }, [s.notifications, setNotifications]);
+
   const toggleNotifications = async (on: boolean) => {
     if (!on) {
       setNotifications(false);
       setAvisosBloqueados(false);
       await cancelar(AVISO.fimDoTeste);
+      await cancelar(AVISO.quizDoDia);
       return;
     }
     const ok = await pedirPermissao();
     setNotifications(ok);
-    if (!ok && (await bloqueadaPeloSistema())) {
-      setAvisosBloqueados(true);
-      abrirAjustesDeAvisos();
-    }
+    setAvisosBloqueados(!ok);
+    // QUEM LIGA ESTÁ PEDINDO PARA RECEBER, e é isso que decide o destino.
+    //
+    // Antes só ia para os ajustes quando o sistema já tinha negado de vez.
+    // Nos outros "não" (plugin que não carregou, folha que falhou) o toque não
+    // fazia nada visível: o interruptor voltava sozinho e a pessoa ficava sem
+    // saber o que aconteceu nem o que fazer. Depois do pedido, se a permissão
+    // ainda não existe, o único lugar onde ela pode ser dada é nos ajustes do
+    // aparelho, seja qual for o motivo do não.
+    if (!ok) abrirAjustesDeAvisos();
   };
 
   // Profile photo: user's uploaded avatar wins; otherwise the Google picture.
@@ -488,6 +528,9 @@ export function ProfileScreen() {
           icon="alert" tint="bg-teal/15 text-teal" label={p.notifications}
           value={notificacoesDisponiveis() ? (avisosBloqueados ? p.notifBloqueado : p.notificationsSub) : p.notificationsWeb}
           right={notificacoesDisponiveis() ? <Toggle on={s.notifications} onChange={toggleNotifications} /> : undefined}
+          // Bloqueado nos ajustes: a linha inteira vira o caminho para lá. Ler
+          // "bloqueado" sem ter para onde ir é informação que não serve.
+          onClick={avisosBloqueados ? abrirAjustesDeAvisos : undefined}
         />
       </Group>
 

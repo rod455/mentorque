@@ -253,15 +253,11 @@ async function estadoDaPermissao(): Promise<Permissao | null> {
   }
 }
 
-/** O sistema negou DE VEZ? (Diferente de "ainda não perguntou".) */
-export async function bloqueadaPeloSistema(): Promise<boolean> {
-  return (await estadoDaPermissao()) === "denied";
-}
-
 /**
  * Abre a tela de avisos do app nos ajustes do APARELHO. Melhor esforço:
- * quando o sistema já negou a permissão, a folha de pedido não aparece nunca
- * mais, e o único caminho que resta é a pessoa liberar nos ajustes. O
+ * quando o pedido não termina em permissão, seja qual for o motivo (o sistema
+ * já negou de vez e a folha não aparece mais, o plugin não carregou, a pessoa
+ * recusou agora), os ajustes são o único lugar onde ela ainda pode liberar. O
  * Capacitor repassa esquemas que não são http para o sistema abrir; se algum
  * aparelho não aceitar, fica o texto do Perfil explicando o caminho.
  */

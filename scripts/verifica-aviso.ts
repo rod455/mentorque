@@ -181,6 +181,45 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
   );
 }
 
+// ── o interruptor do Perfil diz a verdade sobre o aparelho ────────────────
+//
+// DOIS PEDIDOS DO DONO (07/09/2026), no mesmo minuto e pela mesma causa:
+// "quando o usuário ativa, precisa ir para configurações, ele que está
+// querendo receber" e "o toggle deve refletir as configurações do aparelho,
+// se estiver ligado, não pode mostrar desligado".
+//
+// O QUE ELE VIU: ligou o interruptor e nada aconteceu. Nem folha de permissão,
+// nem ajustes, nem aviso. O relato veio junto de "a Luana não recebeu nada do
+// quiz hoje", que era outra coisa (ela criou a conta 12:03, depois das 9h, e o
+// primeiro lembrete possível dela é amanhã).
+//
+// O DEFEITO REAL que apareceu no meio: a preferência guardada aqui e a
+// permissão do sistema podiam discordar em silêncio. Com o interruptor ligado
+// e a permissão ausente, TODO agendamento desistia sem dizer nada, porque
+// `sincronizarLembreteQuiz` sai fora sem permissão. Interruptor ligado, nada
+// agendado, nada na tela.
+{
+  const perfil = semComentarios(leia("components/app/screens/Profile.tsx"));
+
+  conferir(
+    "o Perfil pergunta ao sistema qual é a permissão de verdade",
+    /permissaoConcedida\(\)/.test(perfil),
+    "sem consultar o sistema, o interruptor mostra a preferência guardada, que pode estar mentindo"
+  );
+  conferir(
+    "ligar sem permissão leva aos ajustes do aparelho",
+    /if\s*\(\s*!ok\s*\)\s*abrirAjustesDeAvisos\(\)/.test(perfil),
+    "antes só ia para os ajustes quando o sistema já tinha negado de vez; nos outros nãos o toque " +
+      "não fazia nada visível e a pessoa ficava sem saber o que fazer"
+  );
+  conferir(
+    "a tela reconfere a permissão ao voltar dos ajustes",
+    /visibilitychange/.test(perfil),
+    "liberar a permissão acontece FORA do app e voltar de lá não remonta a tela: sem isto quem libera " +
+      "continua vendo bloqueado até fechar e abrir o app"
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) de aviso reprovaram.`);
   process.exit(1);
