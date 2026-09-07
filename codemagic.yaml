@@ -182,8 +182,22 @@ workflows:
         # é o interruptor da venda pelo Play Billing: sem ela, o build do
         # Android sai em modo leitor (sem paywall).
         #
-        # O client id do Google NÃO precisa entrar aqui: ele é público (viaja
-        # dentro do binário) e está fixo em lib/app/socialLogin.ts.
+        # O client id do Google do iPHONE não precisa entrar aqui: está fixo em
+        # lib/app/socialLogin.ts, porque client id é público (viaja dentro do
+        # binário) e o valor fixo elimina o modo de falha mais provável, que é
+        # subir um build sem a variável.
+        #
+        # O DO ANDROID PRECISA, e este comentário dizia o contrário até
+        # 07/09/2026:
+        #   NEXT_PUBLIC_GOOGLE_WEB_CLIENT_ID   client id do tipo "Web
+        #                                      application", o mesmo que está no
+        #                                      provider Google do Supabase
+        #
+        # Sem ela o login nativo do Android não liga e o app cai no caminho do
+        # navegador, que em quatro semanas não produziu UMA conta (160 eventos
+        # do Android, nenhum com conta, contra iPhone e web que têm desde
+        # 24/08). O mesmo valor precisa estar em "Authorized Client IDs" no
+        # provider Google do Supabase, senão o token volta recusado.
         #
         # Stripe NÃO entra: no app nativo o paywall desvia para a compra da
         # Apple antes de qualquer caminho do Stripe, então a tela de checkout
