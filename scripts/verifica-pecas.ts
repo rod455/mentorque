@@ -25,6 +25,7 @@ import { CHAPAS, DESTAQUE_PERMITIDO, ESCALAS_DO_CORPO, NOME_DA_SECAO, RESPIRO_DO
 import { bordaLivre, perfilDaChapa } from "../lib/pecas/silhueta.ts";
 import { perguntasDoQuiz } from "../lib/app/quiz/perguntas.ts";
 import { CABEM } from "../lib/pecas/cabem.ts";
+import { escolhePeca } from "../lib/pecas/conteudo.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -228,6 +229,34 @@ console.log("Peças: as medidas batem com o que veio junto com as chapas?");
 
   if (naoMedidos.length) {
     console.log(`  · ${naoMedidos.length} pergunta(s) do banco nao cabem em nenhuma chapa (informativo)`);
+  }
+}
+
+// -- 5. O "ME MANDA OUTRA" ANDA MESMO ------------------------------------
+//
+// POR QUE (07/09/2026). O fluxo do Telegram tem um botao "Outra", e ele so
+// funciona porque a rota aceita `salto`. Se andar por indice devolvesse a mesma
+// peca, o dono clicaria e nada mudaria: falha muda, sem erro nenhum na tela.
+//
+// Andar por INDICE e nao pela lista de recusadas nao foi preguica: o callback
+// de um botao do Telegram tem 64 bytes NO TOTAL, e uma lista de fontes estoura
+// isso na terceira ou quarta recusa. O preco e que a lista precisa estar
+// estavel durante a conversa, e ela esta: o veredito e versionado.
+{
+  const quando = new Date();
+  for (const secao of ["desafio", "dica"] as const) {
+    const zero = escolhePeca(secao, "feed", { quando });
+    const um = escolhePeca(secao, "feed", { salto: 1, quando });
+    conferir(`${secao}: pedir outra devolve outra peca`, !!zero && !!um && zero.fonte !== um.fonte, `salto 0 ${zero?.fonte}, salto 1 ${um?.fonte}`);
+
+    // Andar ate o fim tem que acabar em nada, e nao repetir para sempre: e o
+    // 409 que faz o n8n avisar o dono em vez de mandar peca repetida.
+    const total = (CABEM[`${secao}:feed`] ?? []).length;
+    conferir(`${secao}: passar do ultimo candidato acaba em nada`, escolhePeca(secao, "feed", { salto: total, quando }) === null, `${total} candidatos`);
+
+    // E o `pular`, que e o caminho preciso, precisa concordar com o indice.
+    const pulandoOZero = escolhePeca(secao, "feed", { pular: [zero!.fonte], quando });
+    conferir(`${secao}: pular a primeira da na mesma que saltar uma`, pulandoOZero?.fonte === um?.fonte, `pulando ${pulandoOZero?.fonte}, saltando ${um?.fonte}`);
   }
 }
 

@@ -11,9 +11,14 @@ Telegram e espera o dono aprovar. Nada é publicado sozinho.
 | **O n8n** | conversa no Telegram, guarda o que foi recusado, manda a imagem |
 | **O dono** | aprova, pede outra, ou pede outra seção |
 
-O Telegram fica no n8n de propósito. O token do bot já mora lá, junto com os
-outros segredos, e assim ele não passa pelo nosso repositório nem pelos envs da
-Vercel. A rota não sabe o que é Telegram, e é bom que não saiba.
+O Telegram fica no n8n de propósito, e o token do bot entra como CREDENCIAL do
+n8n, não escrito dentro de um nó. Credencial fica cifrada e não sai na exportação
+do fluxo; token escrito dentro de um nó de código sai, e vai junto em qualquer
+cópia que alguém fizer do workflow. Existe precedente disso no n8n desta casa,
+nos fluxos antigos do Vocaboost.
+
+Assim o token não passa pelo nosso repositório nem pelos envs da Vercel, e a
+rota não sabe o que é Telegram. É bom que não saiba.
 
 ## A conversa que o dono desenhou
 
@@ -40,6 +45,8 @@ GET /api/pecas?secao=curiosidade&formato=stories
 - `secao`: `desafio`, `dica`, `curiosidade` ou `pergunta`
 - `formato`: `feed` (1080x1080) ou `stories` (1080x1920)
 - `pular`: fontes já recusadas, separadas por vírgula
+- `salto`: quantos candidatos pular, por número. É o que cabe no botão do
+  Telegram, que tem 64 bytes de callback
 
 Devolve `image/png`. **O cabeçalho `x-peca-fonte` diz qual candidato veio**, e é
 ele que o n8n guarda para mandar no `pular` da próxima chamada. Sem isso, pedir
@@ -59,18 +66,46 @@ de ..." }`. O n8n deve mostrar isso ao dono, não tentar de novo.
 
 ## O fluxo no n8n
 
-1. **Telegram Trigger** ouve a mensagem.
-2. **Um nó de código** lê a seção pedida da frase e mantém a lista de fontes já
-   recusadas naquela conversa.
-3. **HTTP Request** para `/api/pecas?...`, com `Response Format: File`.
-4. **Telegram → Send Photo**, com a legenda montada do `json=1` e dois botões de
-   callback: `aprovar` e `outra`.
-5. **Switch** no callback: `outra` volta ao passo 3 com o `pular` acrescido;
-   `aprovar` encerra e avisa que está liberada para publicação.
+Ele existe: **"Mentorque: peças de rede social (Telegram)"**, criado desativado,
+como toda automação nova aqui. Sete nós:
 
-O `x-peca-fonte` sai nos headers da resposta do passo 3. No n8n é
-`{{ $response.headers['x-peca-fonte'] }}` quando "Include Response Headers"
-estiver ligado.
+1. **Telegram: pedido ou botão** ouve `message` e `callback_query`, para a mesma
+   entrada servir ao pedido escrito e ao clique no botão.
+2. **Entender o pedido** lê a seção da frase (sem acento, para "curiosidade" e
+   "Curiosidade" caírem no mesmo lugar) ou desmonta o callback do botão.
+3. **O texto da peça** chama `/api/pecas?...&json=1` com `neverError`, para o
+   409 chegar como resposta em vez de derrubar a execução.
+4. **Tem candidato?** separa o 200 do 409.
+5. **Montar a legenda** monta a legenda e escapa `&`, `<` e `>`, porque o
+   Telegram lê a legenda como HTML e um `&` solto derruba o envio inteiro.
+6. **A imagem da peça** chama a mesma rota sem `json`, com `Response Format:
+   File`.
+7. **Mandar para aprovação** manda a foto com os botões Aprovar e Outra.
+
+**O botão Outra anda por `salto`, e não pela lista de recusadas.** O callback de
+um botão do Telegram tem 64 bytes NO TOTAL, e uma lista de fontes estoura isso
+na terceira ou quarta recusa. Como a lista de candidatos é versionada e não muda
+durante a conversa, andar por índice dá no mesmo. A `conferir:pecas` cobra as
+duas formas e cobra que elas concordem.
+
+### O que falta para ele rodar
+
+O fluxo está montado e desativado. Faltam três coisas, todas do dono, porque
+todas envolvem chave:
+
+1. **Criar o bot no Telegram**, com o @BotFather (`/newbot`). Ele devolve um
+   token. O token não se cola em conversa nem em arquivo do repositório.
+2. **Criar a credencial no n8n**: Credentials, New, "Telegram API", colar o
+   token, salvar com o nome **Telegram Mentorque**.
+3. **Escolher essa credencial nos cinco nós de Telegram** do fluxo (o gatilho e
+   os quatro que mandam mensagem). O fluxo foi criado com o nome certo, mas o
+   n8n não vincula credencial que ainda não existe.
+
+Depois disso, ativar. Ativar é o que registra o webhook do bot: enquanto o fluxo
+estiver desativado, mandar mensagem para o bot não faz nada.
+
+Para conversar com o bot, mande `/start` para ele uma vez. Bot do Telegram não
+consegue iniciar conversa.
 
 ## O enquadramento, que veio dos exemplos
 

@@ -126,6 +126,30 @@ export function candidatosQueCabem(secao: Secao, formato: Formato, quando = new 
   });
 }
 
+/**
+ * A peça a desenhar, com as duas formas de pedir outra.
+ *
+ * `pular` recebe as fontes já recusadas e é o mais preciso: mesmo que a lista
+ * de candidatos mude entre uma chamada e outra, o que foi recusado continua
+ * recusado.
+ *
+ * `salto` recebe só um número, e é o que cabe no botão do Telegram: o callback
+ * de um botão tem 64 bytes NO TOTAL, e uma lista de fontes cresce até estourar
+ * isso na terceira ou quarta recusa. Dentro de uma conversa de aprovação a
+ * lista não muda, então andar por índice dá no mesmo e cabe.
+ *
+ * Devolve `null` quando acabaram os candidatos, e a rota transforma isso em 409
+ * para o n8n avisar o dono em vez de tentar de novo.
+ */
+export function escolhePeca(
+  secao: Secao,
+  formato: Formato,
+  { pular = [], salto = 0, quando = new Date() }: { pular?: string[]; salto?: number; quando?: Date } = {}
+): PecaDeConteudo | null {
+  const restantes = candidatosQueCabem(secao, formato, quando).filter((p) => !pular.includes(p.fonte));
+  return restantes[salto] ?? null;
+}
+
 /** A primeira opção de cada seção, sem medir se cabe. Para quem só quer ver. */
 export function pecasDaSemana(quando = new Date()): PecaDeConteudo[] {
   return candidatosDaSemana(quando).map((lista) => lista[0]);

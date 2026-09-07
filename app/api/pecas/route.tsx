@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { CORES, DESTAQUE_PERMITIDO, NOME_DA_SECAO, RESPIRO_DO_FEED, chapaDe, type Formato, type Secao } from "@/lib/pecas/chapas";
-import { candidatosQueCabem } from "@/lib/pecas/conteudo";
+import { escolhePeca } from "@/lib/pecas/conteudo";
 
 // A peça de rede social, desenhada aqui e não num navegador.
 //
@@ -28,36 +28,29 @@ export const runtime = "nodejs";
 
 const fonte = (arquivo: string) => readFileSync(join(process.cwd(), "assets/fontes", arquivo));
 
-/**
- * Escolhe a peça a desenhar.
- *
- * `pular` é o que faz o "me manda outra" do Telegram funcionar: o n8n devolve
- * as fontes já recusadas e a rota anda para o próximo candidato. Sem isso, pedir
- * outra devolveria a mesma, porque a rotação é determinística de propósito.
- */
-function escolhe(secao: Secao, formato: Formato, pular: string[]) {
-  // Só entram candidatos que CABEM naquela chapa, medidos com navegador de
-  // verdade e gravados em lib/pecas/cabem.json. Esta rota não mede: obedece.
-  return candidatosQueCabem(secao, formato).find((p) => !pular.includes(p.fonte)) ?? null;
-}
+// A escolha da peça mora em lib/pecas/conteudo.ts, e não aqui, para a
+// conferência poder exercitá-la sem carregar o `next/og`. Esta rota só traduz
+// os parâmetros da URL e desenha.
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const secao = (url.searchParams.get("secao") ?? "desafio") as Secao;
   const formato = (url.searchParams.get("formato") ?? "feed") as Formato;
   const pular = (url.searchParams.get("pular") ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+  const salto = Math.max(0, Math.trunc(Number(url.searchParams.get("salto") ?? 0)) || 0);
 
   if (!NOME_DA_SECAO[secao]) return Response.json({ erro: `seção desconhecida: ${secao}` }, { status: 400 });
   if (formato !== "feed" && formato !== "stories") return Response.json({ erro: `formato desconhecido: ${formato}` }, { status: 400 });
 
   const formatoDoDesenho: Formato = formato === "stories" ? "stories" : "feed";
-  const peca = escolhe(secao, formatoDoDesenho, pular);
+  const peca = escolhePeca(secao, formatoDoDesenho, { pular, salto });
   if (!peca) return Response.json({ erro: `acabaram os candidatos de ${NOME_DA_SECAO[secao]}` }, { status: 409 });
 
   // O modo lista existe para o n8n montar a legenda e saber o que recusar
-  // depois, sem ter que adivinhar a partir da imagem.
+  // depois, sem ter que adivinhar a partir da imagem. `salto` sai junto porque
+  // é ele que o botão "outra" precisa devolver acrescido de um.
   if (url.searchParams.get("formato") === "json" || url.searchParams.get("json") === "1") {
-    return Response.json({ nome: NOME_DA_SECAO[secao], ...peca });
+    return Response.json({ nome: NOME_DA_SECAO[secao], formato, salto, ...peca });
   }
 
   const chapa = chapaDe(secao, formato);
