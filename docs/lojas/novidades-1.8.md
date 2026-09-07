@@ -76,3 +76,65 @@ Nada disso conta como novidade de loja.
   fechar, abrir o app de novo em seguida: é essa abertura que manda o relato.
 - Depois de publicar, ler `app_erros` procurando `tipo = 'fechou'`. É a primeira
   versão em que essa linha pode aparecer de verdade.
+
+---
+
+# A SEGUNDA 1.8 (07/09/2026)
+
+**Isto não é a mesma versão de cima.** É um segundo build do Android, enviado e
+publicado em 07/09, com o MESMO nome de versão da 1.8 de 04/09 e conteúdo
+completamente diferente. O nome repetido foi um esquecimento, está explicado no
+`scripts/verifica-versoes.mjs` e no diário, e o repositório já subiu para 1.9.
+
+Fica registrado aqui porque a ficha da loja é o lugar onde essa confusão custa:
+quem colar as notas de cima nesta entrega vai prometer "responder a pergunta do
+dia ficou mais leve", que já foi entregue em 04/09, e não vai contar nada do que
+esta versão realmente faz.
+
+## O que vai NO BINÁRIO
+
+1. **A tela de login percebe que o login aconteceu.** Entrar com o Google no
+   Android completava tudo e a tela continuava pedindo login. A sessão chegava
+   e ninguém olhava para ela.
+2. **O interruptor de avisos diz a verdade sobre o aparelho.** Ele mostra o que
+   o sistema realmente permite, ligar leva aos ajustes quando a permissão ainda
+   não existe, e desligar continua desligando.
+3. **O convite do pós-quiz leva a algum lugar.** Dizer "quero o aviso" quando a
+   permissão não pode ser dada ali abre os ajustes do aparelho.
+4. **O caminho do login nunca fica sem saída.** Invisível para quem usa: quando
+   a folha nativa não existe no aparelho, o pedido cai para o navegador em vez
+   de morrer.
+
+## O que NÃO precisa de binário
+
+Já está no ar pela Vercel: os links dos guias no rodapé do site.
+
+## Notas para a Play, PARA O DONO CONFERIR ANTES DE COLAR
+
+Seguem as três regras: falam do ganho e não do defeito, com o verbo na ação da
+pessoa, e não prometem nada que não tenha sido conferido.
+
+**Novidades desta versão** (limite: 500 caracteres)
+
+```
+Entre com a sua conta do Google e o app abre já logado, direto no seu carro.
+
+Os avisos da pergunta do dia ficaram no seu controle: o interruptor do Perfil
+mostra o que o seu aparelho permite de verdade, e ligar leva você direto para
+onde a permissão é dada.
+
+E ao responder o quiz, aceitar o lembrete de amanhã resolve ali mesmo.
+```
+
+## Depois de publicar
+
+- **Trocar o `android` em `app/api/app/latest/route.ts`.** Ele está em 55, que é
+  a 1.7, desde 03/09: a primeira 1.8 subiu e este número não. Enquanto ele ficar
+  atrás, ninguém vê o aviso de versão nova e todo mundo espera a atualização
+  automática da Play. Como o banner compara o versionCode e não o nome, apontar
+  para o build desta entrega acende o aviso inclusive para quem está na PRIMEIRA
+  1.8, que é o único jeito de separar as duas na mão das pessoas.
+- O número sai de Play Console → Produção → Versões → "Códigos de versão", ou da
+  linha `versionCode deste envio: N` no log do Codemagic. Não sai do
+  `gradle.properties`, que é só piso, nem do "Index" da tela do Codemagic: os
+  dois já produziram erro aqui.
