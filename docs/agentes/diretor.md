@@ -194,6 +194,26 @@ o agente do papel certo na rodada seguinte.
   mesmo 17. Quando o número do topo do funil é de outra unidade, a coluna
   inteira é de outra unidade.
 
+- 2026-09-07: a régua de gente é `auth.users`, e ela paga o preço de ser
+  pequena. O bom dela não é o tamanho, é caber numa consulta que mostra o que
+  CADA conta fez: salvou carro, registrou serviço, voltou noutro dia. Foi
+  assim que a semana virou "8 entraram, 3 salvaram carro, nenhuma voltou", que
+  diz muito mais que qualquer porcentagem sobre 53 armazenamentos.
+- 2026-09-07: antes de afirmar que um campo está vazio, conferir a CHAVE.
+  Procurei carros em `data->'cars'` e o banco devolveu zero para as nove
+  contas, o que quase virou "ninguém salvou carro". A chave é `vehicles`, e a
+  resposta certa é três. Campo ausente e campo vazio devolvem a mesma coisa;
+  só a estrutura distingue. Vale para todo jsonb.
+- 2026-09-07: quando o dinheiro começa a rodar, o custo por conta só é honesto
+  na janela em que a MEDIÇÃO já funcionava. A campanha gastou R$ 194,01 na
+  semana, mas a etiqueta só grudava a partir de 04/09; dividir tudo pelas 7
+  contas atribuídas cobraria da campanha os dias em que ela era invisível.
+  Reportar o pedaço medido e dizer qual é o pedaço.
+- 2026-09-07: promessa de medição feita numa rodada pode não sobreviver à
+  rodada seguinte, e quando o denominador antigo estava errado o certo é dizer
+  que a comparação não vai acontecer, em vez de produzir um número novo em
+  cima de uma base que já se sabe furada.
+
 ## Direcionamentos do dono
 
 - Entrega às segundas, 08:00 (horário de Brasília), com notificação.

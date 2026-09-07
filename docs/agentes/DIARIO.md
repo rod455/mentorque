@@ -23,12 +23,73 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 | O webhook do Stripe está vivo? | Está. Duas viradas de teste gravadas em 37 segundos, 01/09 e 04/09. | 04/09, QA agendado |
 | A captura de UTM está quebrada? | Não, nunca esteve. A consulta é que lia o caminho errado: é `extra->'utm'->>'utm_source'`. | 03/09 |
 | Por que a AppsFlyer diz que tudo é orgânico? | Porque é. O SDK está vivo (54 instalações e 55 ativos chegaram lá). O que falta é o link: os botões de baixar apontam para a ficha crua da loja (`lib/stores.ts`), então o clique do anúncio morre no navegador. 100% das UTM do google/cpc estão em `plataforma = web`, zero no android e no iOS. O conserto é um OneLink, e ele nasce no console da AppsFlyer. | 05/09 |
+| A campanha do Google traz cadastro de verdade? | **Traz.** Na semana de 31/08 a 06/09, 7 das 8 contas novas carregam `google / lancamento`. A atribuição só existe a partir de 04/09, porque a captura de etiqueta subiu para todas as páginas em 03/09. Custo por conta no pedaço medido: R$ 14,71. | 07/09, Diretor |
+| Quantas pessoas o app teve de verdade numa semana? | Contar por `anon_id` NÃO responde isso (é armazenamento, infla a cada instalação). A régua é `auth.users`. Cruzar sempre com a porta de entrada: cliques pagos > anon_id > contas. | 01/09 e 07/09 |
 | Quais manuais faltam para a Biela? | O primeiro lote subiu em 06/09: 112 manuais, 34.609 trechos, e os DEZ carros mais comuns do Brasil passaram a ter manual (era 3 de 10). Gol 2016 e Ka 2025, de usuários nossos, saíram de zero. Faltam Corsa/Classic e as marcas vazias (Suzuki, Mercedes-Benz, e o EcoSport). | 06/09, `docs/manuais-a-subir.md` |
 
 **Como manter:** ao FECHAR uma pergunta que já custou investigação, acrescente a
 linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
+
+## 2026-09-07 · Diretor: relatório da semana (31/08 a 06/09)
+- Artifact "Semana Mentorque":
+  https://claude.ai/code/artifact/fc47b4e6-ac15-4c23-a9ec-fe5a8a743524
+- Banco conferido no começo da rodada, conforme o direcionamento de 31/08.
+- **O NÚMERO: 8 contas novas de gente de fora, contra 2 na semana anterior.**
+  Sete carregam `google / lancamento`; a oitava (02/09) entrou sem etiqueta.
+  É a primeira origem de aquisição que aparece nos dados do produto.
+- CAUSA E EFEITO DATADO: a captura de etiqueta subiu para todas as páginas em
+  03/09 e o primeiro cadastro atribuído é de 04/09. Antes disso a campanha já
+  tinha gasto R$ 91,04 sem nada aparecer do nosso lado.
+- CRUZAMENTO COM A PORTA DE ENTRADA (a conferência que faltou em 31/08, e que
+  agora fecha): 114 cliques pagos > 53 anon_id > 8 contas. Ordem coerente. Na
+  semana passada não fechava, e era esse o sinal de que o 17 media outra coisa.
+  App Store: 0 downloads na semana (1 atualização em 05/09); as 8 contas são
+  todas `plataforma = web`, o que casa com campanha de busca.
+- **AS 8 CONTAS, CONFERIDAS UMA A UMA** (desta vez a frase é literal): 3
+  salvaram carro, 1 registrou serviço (a que assinou), e NENHUMA voltou num
+  segundo dia. Ressalva registrada: só 3 delas já tiveram janela de 3 a 5
+  dias; as outras 5 nasceram em 05 e 06/09 e é cedo. Sinal ruim e ainda
+  pequeno, não provado.
+  - Tropeço meu no caminho, registrado no relatório: a primeira consulta
+    procurou carros em `data->'cars'` e devolveu zero para todo mundo. A
+    chave é `vehicles`. Conferi a estrutura antes de escrever.
+- DINHEIRO: R$ 194,01 gastos (114 cliques, 3.344 impressões, CPC R$ 1,70),
+  contra R$ 0,00 na semana anterior. No pedaço em que a etiqueta já grudava
+  (04 a 06/09), R$ 102,97 compraram 7 contas: **R$ 14,71 por conta**,
+  R$ 51,48 por conta que salvou carro, e nenhuma assinatura.
+- Assinantes: 3 reais (2 `active`, 1 `trialing`), +1 na semana (asueyoshi,
+  02/09, SEM etiqueta de campanha). Receita recebida R$ 0,00. MRR de tabela
+  R$ 89,70; o coletor mostra R$ 59,80 porque não conta quem está em teste.
+- OBSERVAÇÃO PARA O DONO OLHAR, não conclusão: as conversões que o Google
+  registra (toque no botão de baixar) aconteceram em 02 e 03/09 e estão em
+  ZERO todos os dias desde 04/09. A LP mudou em 03/09. Pode ser coincidência
+  ou a ação de conversão ter parado de disparar; se for a segunda, o lance
+  automático está sem sinal desde então.
+- PERGUNTA ABERTA PARA O QA, não respondida aqui: Android (32 começaram, 21
+  terminaram) e iPhone (7 e 6) terminam o onboarding muito melhor que a web
+  (66 e 15) e geraram ZERO contas na semana. Ou quem está no app das lojas já
+  tinha conta, ou o cadastro pelo app não está criando conta. São explicações
+  muito diferentes.
+- PLACAR de 31/08, as três FEITAS, com prova: (1) faturas conferidas, viradas
+  de 01/09 23h52 e 04/09 13h20 com total zero; (2) 1.5 publicada em 31/08
+  (código 51) e a 1.6 e a 1.7 também estão no ar; (3) retrato consertado, as
+  11 fontes com zero dias parados hoje contra 8 dias paradas.
+- PROMESSA QUE NÃO DEU PARA CUMPRIR COMO ESCRITA, e está dito no relatório:
+  eu ia medir a passagem "abriu o app → criou conta" contra os 12% de 31/08.
+  Aquele denominador era de anon_id, então a comparação produziria outro
+  número errado. Trocada pela régua de contas: 2 → 8.
+- Prioridades: (1) descobrir por que o app fecha no quiz do Android, porque a
+  campanha está comprando gente para um app que trava logo no começo e os
+  Android vitals da 1.7 ainda não foram olhados; (2) aplicar as negativas do
+  Google Ads (curso, certificado, senai, apostila, presencial), que estão
+  escritas desde 03/09 enquanto a campanha gasta uns R$ 35 por dia; (3)
+  decidir o que a pessoa recebe no dia seguinte, com o push pronto e
+  desligado desde 28/08, e segurar o orçamento até essa decisão sair.
+- Sem prazo vencendo antes da próxima rodada. Em 09/09 termina o teste do
+  terceiro cliente e a fatura sai zerada pelo cupom, o que já está previsto e
+  não pede alarme.
 
 ## 2026-09-04 · QA, verificação agendada: a virada deu certo e a receita é zero
 - Não é rodada semanal, é a verificação de prazo que a rodada de 02/09
