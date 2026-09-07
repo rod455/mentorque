@@ -36,6 +36,40 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-07 · Release: a segunda 1.8 foi para a Play, e a conferência que pegaria isso estava calada
+
+- O dono enviou um build do Android para a Play com os quatro consertos do dia.
+  Fui conferir como o dado ia distinguir esse build do anterior e a resposta é
+  que não ia: `android/app/build.gradle` seguia em `versionName "1.8"` e o
+  `APP_VERSION` em `"1.8.0"`, os mesmos da versão publicada em 04/09.
+- **O ESTRAGO É CEGUEIRA.** O `funil_eventos.versao` e o `app_erros.versao`
+  carregam o `APP_VERSION`, então um aparelho COM os quatro consertos e um SEM
+  eles respondem "1.8.0" os dois. Não há pergunta que separe. Nos Android vitals
+  do Google continua separável, porque o `versionCode` sobe a cada envio e a
+  Play guarda; a cegueira é só na nossa instrumentação, que é justamente a que a
+  gente consulta.
+- **A CONFERÊNCIA QUE PEGARIA ISSO JÁ EXISTIA.** A `conferir:versoes` reprova
+  quando a versão do repositório já está em `JA_PUBLICADAS`. Ela aprovou porque
+  a `1.8` nunca foi acrescentada à lista quando subiu, em 04/09.
+- E o comentário do próprio arquivo dizia: "Esquecer é seguro (a conferência
+  apenas deixa de avisar), enquanto o contrário, subir de novo uma versão já
+  publicada, custa um build inteiro." **Estava incompleto, e agora dá para
+  dizer por quê.** Esquecer não é seguro: quem esquece de listar a versão
+  publicada também fica sem o aviso de que o repositório PAROU nela. É o mesmo
+  esquecimento produzindo os dois lados do problema, e a lista escrita à mão é
+  o que liga um ao outro.
+- Decisão do dono: a entrega sai como está, e o repositório sobe para 1.9.
+  Trocar agora custaria mais uma rodada de revisão do Google e atrasaria quatro
+  consertos que estão prontos. A 1.8 entrou na lista com o episódio escrito ao
+  lado dela, que é o que sobra para a próxima pessoa.
+- **O que ficou aberto:** a lista continua dependendo de memória, e a 1.9 vai
+  cair na mesma armadilha quando for publicada. O conserto que mata a classe é
+  gravar o `versionCode` junto do nome nos eventos (o `@capacitor/app` está nos
+  dois binários e o `getInfo()` devolve ele), porque ele sobe sozinho a cada
+  envio e não depende de ninguém lembrar de nada. Mexe no esquema do funil, que
+  é instrumentação delicada, então é decisão do dono e não foi feito nesta
+  rodada.
+
 ## 2026-09-07 · SEO: três das quatro páginas de palavra-chave não tinham link a partir da home
 
 - Rodada aberta pelo dono com um retrato do Search Console: três motivos de não

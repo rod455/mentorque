@@ -42,10 +42,27 @@ const JA_PUBLICADAS = [
   "1.5",
   // Aprovada nas duas lojas em 01/09/2026.
   "1.6",
-  // Aprovada na Play em 03/09/2026, e é a versão que está na mão dos usuários
-  // AGORA. Foi nela que o app fechou ao responder o quiz em 04/09, no aparelho
-  // de um cliente pagante. Ver docs/qa/app-fecha-no-quiz.md.
+  // Aprovada na Play em 03/09/2026. Foi nela que o app fechou ao responder o
+  // quiz em 04/09, no aparelho de um cliente pagante. Ver
+  // docs/qa/app-fecha-no-quiz.md.
   "1.7",
+  // Publicada na Play em 04/09/2026, e ESQUECIDA AQUI. Este esquecimento tem
+  // preço, e ele foi cobrado em 07/09: com a lista sem a 1.8, esta conferência
+  // aprovou o repositório parado na 1.8 e um SEGUNDO build foi enviado à Play
+  // com o mesmo nome de versão do que já estava rodando.
+  //
+  // A Play aceitou, como o comentário lá de cima já avisava que ela aceita. O
+  // estrago desta vez não foi versionCode queimado: foi CEGUEIRA. O
+  // `funil_eventos.versao` e o `app_erros.versao` carregam o APP_VERSION, então
+  // um aparelho com os quatro consertos daquele dia e um sem eles respondem a
+  // mesma coisa, "1.8.0", e não há pergunta que separe os dois.
+  //
+  // O comentário acima diz "esquecer é seguro (a conferência apenas deixa de
+  // avisar)". Era o raciocínio certo para o estrago que se conhecia na época, e
+  // ficou incompleto: quem esquece de listar a versão publicada também fica sem
+  // o aviso de que o repositório PAROU nela. Enquanto a lista for escrita à
+  // mão, esta linha aqui é o lembrete de que o preço não é zero.
+  "1.8",
 ];
 
 import { readFileSync } from "node:fs";
