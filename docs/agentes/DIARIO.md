@@ -35,6 +35,45 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-07 · Engenharia: o espelho do interruptor seguia o aparelho demais, e desligar tinha virado impossível
+
+- Rodada curta, e ela existe porque o conserto da rodada anterior, feito neste
+  mesmo dia, TROUXE UM DEFEITO. O dono perguntou "você consegue ver se ele está
+  ligado antes de mandar ligar?", e ir conferir a resposta é que descobriu.
+- **O que eu quebrei:** o espelho forçava o interruptor a seguir a permissão do
+  sistema nos DOIS sentidos. Com a permissão concedida, desligar virou
+  impossível: o toque desligava, o efeito rodava de novo, via o sistema dizendo
+  "concedida" e religava. O interruptor do Perfil é o jeito documentado de parar
+  o lembrete do quiz, e ele tinha parado de parar.
+- Os dois sentidos não são simétricos, e é isso que o conserto reconhece. SEM
+  permissão, ligado é MENTIRA: nada é agendado, o estado não existe no aparelho.
+  COM permissão, desligado é ESCOLHA, e o app não tem o que discutir. Sobram
+  dois casos em que ligar sozinho é certo, e nos dois a pessoa pediu: a primeira
+  olhada (a discordância é resto de estado velho) e a permissão que mudou no
+  aparelho desde a última olhada (ela foi aos ajustes e ligou lá).
+- A regra saiu da tela para `lib/app/espelhoDoAviso.ts` e a conferência a
+  exercita DE VERDADE, com seis casos, em vez de ler o texto do componente.
+  Nenhuma conferência de texto pegaria "o interruptor religa sozinho": era
+  comportamento, não trecho ausente. O caso que teria pego o defeito no mesmo
+  minuto é "com permissão, quem desliga no app CONTINUA desligado".
+- **A resposta à pergunta dele é sim, e o botão que ele pediu já existia.** O
+  `podeConvidar` pergunta ao sistema antes de mostrar qualquer coisa, então o
+  convite nunca aparece para quem já tem a permissão. E o convite do pós-quiz
+  está no ar desde antes: o que ele não viu foi o controle único de
+  `lib/app/pedidoDeAviso.ts` segurando (um a cada 4 dias, três na vida do
+  aparelho, nunca com a permissão já dada). A frase virou a dele, palavra por
+  palavra: "Quer receber a pergunta de amanhã?".
+- O convite tinha o MESMO beco sem saída do interruptor, e aqui é mais comum:
+  o `podeConvidar` não distingue "nunca perguntei" de "já negaram de vez", de
+  propósito, para não atravessar a ponte nativa no instante em que a pessoa
+  responde o quiz (que é o caminho onde o app já fechou na mão de gente). Então
+  o cartão aparece para quem o sistema já negou, o `pedirPermissao` devolve não
+  sem abrir caixa nenhuma, e o cartão sumia sem nada acontecer. Agora vai para
+  os ajustes, como o Perfil.
+- **A lição, e ela é sobre mim:** o pedido do dono ("se estiver ligado, não pode
+  mostrar desligado") descrevia um sentido, e eu implementei os dois. Ler o
+  pedido como uma regra simétrica foi o erro, e ele custou o botão de desligar.
+
 ## 2026-09-07 · Engenharia: o interruptor de avisos mentia, e o portão do login nativo quase apagou o login do Android
 
 - Rodada de relatos do dono, dois no mesmo minuto e com a mesma causa: "mudei o

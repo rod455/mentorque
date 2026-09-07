@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePrototype } from "@/lib/app/store";
+import { abrirAjustesDeAvisos } from "@/lib/app/notificacoes";
 import { convidar, podeConvidar, type MomentoDoPedido } from "@/lib/app/pedidoDeAviso";
 import { passo } from "@/lib/app/ultimoPasso";
 import { useContent } from "./ui";
@@ -52,7 +53,24 @@ export function ConviteDeAviso({ momento, sequencia }: { momento: MomentoDoPedid
     const concedida = await convidar(momento);
     // O interruptor do Perfil segue o que o sistema respondeu. Sem isto o app
     // ficaria dizendo "avisos ligados" para quem recusou na caixa do sistema.
-    if (concedida) setNotifications(true);
+    if (concedida) {
+      setNotifications(true);
+      return;
+    }
+    // QUEM TOCOU EM "QUERO O AVISO" PEDIU PARA RECEBER, e o convite tinha o
+    // mesmo beco sem saída do interruptor do Perfil (relatado pelo dono em
+    // 07/09/2026): quando o pedido não termina em permissão, o cartão sumia e
+    // não acontecia mais nada. A pessoa disse sim e o app não deu resposta.
+    //
+    // E aqui o caso é MAIS comum do que no Perfil, não menos. O `podeConvidar`
+    // não distingue "nunca perguntei" de "já negaram de vez", de propósito:
+    // distinguir custaria atravessar a ponte nativa no instante em que a
+    // pessoa responde o quiz, que é o caminho onde o app já fechou na mão de
+    // gente. Então o convite aparece para quem o sistema já negou, o
+    // `pedirPermissao` devolve não sem abrir caixa nenhuma, e sem isto aqui o
+    // toque não fazia nada visível. Os ajustes do aparelho são o único lugar
+    // onde essa pessoa ainda pode ligar.
+    abrirAjustesDeAvisos();
   };
 
   return (

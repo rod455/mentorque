@@ -837,7 +837,10 @@ export function getContent(locale: Locale) {
       jaRespondeuTitulo: T("Você já respondeu hoje", "You've answered today"),
       jaRespondeuCorpo: T("A próxima sai amanhã. Vale a pena não perder.", "The next one is tomorrow. Worth not missing."),
       // Convite para ligar o aviso, mostrado depois de responder.
-      avisoTitulo: T("Quer o de amanhã no celular?", "Want tomorrow's on your phone?"),
+      // A frase é a do dono, palavra por palavra (07/09/2026). A anterior
+      // ("Quer o de amanhã no celular?") economizava duas palavras e pagava
+      // com a única que importa: o "de amanhã" sozinho não diz de quê.
+      avisoTitulo: T("Quer receber a pergunta de amanhã?", "Want tomorrow's question?"),
       avisoCorpo: T(
         "A gente manda um aviso quando a pergunta do dia sair. Nada além disso.",
         "We'll send one notification when the day's question is out. Nothing else."

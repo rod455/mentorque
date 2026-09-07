@@ -6,6 +6,7 @@ import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/app/auth";
 import { usePrototype } from "@/lib/app/store";
 import { AVISO, abrirAjustesDeAvisos, cancelar, notificacoesDisponiveis, pedirPermissao, permissaoConcedida } from "@/lib/app/notificacoes";
+import { espelhaOAparelho } from "@/lib/app/espelhoDoAviso";
 import { resizeImage } from "@/lib/app/image";
 import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
 import { cancelSubscription, deleteAccount, openBillingPortal, reactivateSubscription } from "@/lib/app/billing";
@@ -284,21 +285,31 @@ export function ProfileScreen() {
   // `sincronizarLembreteQuiz` sai fora sem permissão. Interruptor ligado,
   // nenhum aviso agendado, e nada na tela dizendo isso.
   //
-  // Agora a verdade é o sistema: permissão concedida liga, permissão ausente
-  // desliga e a linha explica que está bloqueado.
+  // MAS O ESPELHO SÓ VALE NUM SENTIDO, e a regra que decide isso mora em
+  // lib/app/espelhoDoAviso.ts, fora daqui, porque ela já errou uma vez: a
+  // primeira versão seguia o sistema nos DOIS sentidos e deixava desligar
+  // impossível. Lá ela é exercitada de verdade pela conferência; aqui ficam
+  // só as duas coisas que a tela sabe fazer, que é perguntar e obedecer.
   //
   // A RECONFERÊNCIA AO VOLTAR não é capricho. Liberar a permissão acontece
   // FORA do app, nos ajustes do aparelho, e voltar de lá não remonta a tela.
   // Sem escutar a volta, quem libera continua vendo "bloqueado" até fechar e
   // abrir o app, que é exatamente quando a pessoa conclui que não funciona.
+  const sistemaAntes = useRef<boolean | null>(null);
   useEffect(() => {
     if (!notificacoesDisponiveis()) return;
     let vivo = true;
     const conferir = async () => {
       const concedida = await permissaoConcedida();
       if (!vivo) return;
-      setAvisosBloqueados(!concedida);
-      if (concedida !== s.notifications) setNotifications(concedida);
+      const veredito = espelhaOAparelho({
+        concedida,
+        ligadoNoApp: s.notifications,
+        sistemaAntes: sistemaAntes.current,
+      });
+      sistemaAntes.current = concedida;
+      setAvisosBloqueados(veredito.bloqueado);
+      if (veredito.ligar !== null) setNotifications(veredito.ligar);
     };
     void conferir();
     const aoVoltar = () => { if (document.visibilityState === "visible") void conferir(); };

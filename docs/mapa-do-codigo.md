@@ -19,6 +19,8 @@ começar lendo em vez de garimpando.
 | a regra da sequência do quiz | `lib/app/quiz/sequencia.ts` (e confira com `npm run conferir:regras`) |
 | um aviso do sininho | `lib/app/avisos.ts` |
 | onde o toque num aviso do celular abre o app | `lib/app/rotaPendente.ts` (e confira com `npm run conferir:aviso`) |
+| quando o interruptor de avisos segue o aparelho e quando não | `lib/app/espelhoDoAviso.ts` (e confira com `npm run conferir:aviso`) |
+| quem pode pedir a permissão de aviso, e quantas vezes | `lib/app/pedidoDeAviso.ts` |
 | o que acontece na abertura do app | `lib/app/aberturaDoApp.ts` |
 | quem decide entre folha nativa e navegador no login social | `lib/app/auth.tsx` e `lib/app/socialLogin.ts` (e confira com `npm run conferir:login`) |
 | o que aparece por cima de tudo | `components/app/Sobreposicoes.tsx` |

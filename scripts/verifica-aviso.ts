@@ -25,6 +25,7 @@
 //
 // Rode com: npm run conferir:aviso
 import { anotaRota, aoAnotarRota, esqueceRota, nomeDeRota, rotaPendente } from "../lib/app/rotaPendente.ts";
+import { espelhaOAparelho } from "../lib/app/espelhoDoAviso.ts";
 import { readFileSync } from "node:fs";
 
 let falhas = 0;
@@ -218,6 +219,67 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
     "liberar a permissão acontece FORA do app e voltar de lá não remonta a tela: sem isto quem libera " +
       "continua vendo bloqueado até fechar e abrir o app"
   );
+
+  // E o convite do pós-quiz não pode ter o beco sem saída que o Perfil tinha.
+  const convite = leia("components/app/ConviteDeAviso.tsx");
+  conferir(
+    "dizer sim no convite do quiz leva aos ajustes quando não vira permissão",
+    /abrirAjustesDeAvisos\(\)/.test(convite),
+    "o convite aparece para quem o sistema já negou (o podeConvidar não distingue, de propósito), " +
+      "e sem isto o cartão sumia sem nada acontecer: a pessoa disse sim e o app não respondeu"
+  );
+}
+
+// ── o espelho: quando o interruptor segue o aparelho, e quando não ─────────
+//
+// A regra exercitada DE VERDADE, e não lida como texto, porque ela já errou
+// uma vez neste mesmo dia. A primeira versão seguia o sistema nos dois
+// sentidos e deixava desligar impossível: o toque desligava, o efeito rodava
+// de novo, via "concedida" e religava na cara da pessoa. Nenhuma conferência
+// de texto pegaria isso; esta pega no primeiro caso de baixo.
+{
+  // SEM PERMISSÃO: ligado é mentira, porque nada é agendado sem permissão.
+  const semPermissaoLigado = espelhaOAparelho({ concedida: false, ligadoNoApp: true, sistemaAntes: true });
+  conferir("sem permissão, o interruptor desliga", semPermissaoLigado.ligar === false);
+  conferir("sem permissão, a linha diz bloqueado", semPermissaoLigado.bloqueado);
+
+  const semPermissaoDesligado = espelhaOAparelho({ concedida: false, ligadoNoApp: false, sistemaAntes: false });
+  conferir(
+    "sem permissão e já desligado, não mexe em nada",
+    semPermissaoDesligado.ligar === null,
+    "regravar a sessão a cada olhada é escrita à toa"
+  );
+
+  // PRIMEIRA OLHADA com permissão: a discordância aqui é resto de estado
+  // velho, não decisão de ninguém. É o caso do pedido do dono.
+  const primeira = espelhaOAparelho({ concedida: true, ligadoNoApp: false, sistemaAntes: null });
+  conferir(
+    "com permissão, o interruptor não mostra desligado na primeira olhada",
+    primeira.ligar === true,
+    "era o pedido: se estiver ligado no aparelho, não pode mostrar desligado"
+  );
+  conferir("com permissão, a linha não diz bloqueado", !primeira.bloqueado);
+
+  // DEPOIS: com permissão, desligado é ESCOLHA, e o app não discute com ela.
+  // ESTE É O CASO QUE A PRIMEIRA VERSÃO QUEBRAVA.
+  const desligouAqui = espelhaOAparelho({ concedida: true, ligadoNoApp: false, sistemaAntes: true });
+  conferir(
+    "com permissão, quem desliga no app CONTINUA desligado",
+    desligouAqui.ligar === null,
+    "seguir o sistema nos dois sentidos religa sozinho e deixa desligar impossível"
+  );
+
+  // A PESSOA LIGOU NOS AJUSTES e voltou: aí ela pediu, fora do app.
+  const ligouNosAjustes = espelhaOAparelho({ concedida: true, ligadoNoApp: false, sistemaAntes: false });
+  conferir(
+    "quem liga a permissão nos ajustes volta com o interruptor ligado",
+    ligouNosAjustes.ligar === true,
+    "é o único jeito de distinguir isto de 'acabei de desligar aqui': os dois retratos são iguais " +
+      "sem a memória do que o sistema disse antes"
+  );
+
+  const jaLigado = espelhaOAparelho({ concedida: true, ligadoNoApp: true, sistemaAntes: true });
+  conferir("com permissão e já ligado, não mexe em nada", jaLigado.ligar === null);
 }
 
 if (falhas) {
