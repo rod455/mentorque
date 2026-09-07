@@ -95,14 +95,20 @@ como toda automação nova aqui:
 3. **Veio de botão?** e **Tirar o relógio do botão** respondem o callback. Sem
    isso o botão fica girando no Telegram até dar tempo, e parece que travou.
 4. **Montar, aprovar ou explicar** separa os três caminhos.
-5. **O texto da peça** chama `/api/pecas?...&json=1` com `neverError`, para o
+5. **O que já foi aprovado** e **Montar a lista do que pular** leem a Data
+   Table e montam o `pular`.
+6. **O texto da peça** chama `/api/pecas?...&json=1` com `neverError`, para o
    409 chegar como resposta em vez de derrubar a execução.
-6. **Tem candidato?** separa o 200 do 409.
-7. **Montar a legenda** monta a legenda e escapa `&`, `<` e `>`, porque o
+7. **Tem candidato?** separa o 200 do 409.
+8. **Montar a legenda** monta a legenda e escapa `&`, `<` e `>`, porque o
    Telegram lê a legenda como HTML e um `&` solto derruba o envio inteiro.
-8. **A imagem da peça** chama a mesma rota sem `json`, com `Response Format:
+9. **A imagem da peça** chama a mesma rota sem `json`, com `Response Format:
    File`.
-9. **Mandar para aprovação** manda a foto com os botões Aprovar e Outra.
+10. **Mandar para aprovação** manda a foto com os botões Aprovar e Outra.
+
+Do outro lado do Switch, **Guardar a aprovação** grava na Data Table ANTES de
+confirmar no Telegram: se a gravação falhar, o dono não recebe um aviso de que
+ficou guardado quando não ficou.
 
 **Todo nó lê do "Entender o pedido" pelo nome, e não do `$json`.** Depois do
 "Tirar o relógio do botão" o `$json` vira a resposta do Telegram, e quem
@@ -114,6 +120,34 @@ um botão do Telegram tem 64 bytes NO TOTAL, e uma lista de fontes estoura isso
 na terceira ou quarta recusa. Como a lista de candidatos é versionada e não muda
 durante a conversa, andar por índice dá no mesmo. A `conferir:pecas` cobra as
 duas formas e cobra que elas concordem.
+
+### Peça aprovada não volta nunca mais
+
+Decisão do dono em 07/09/2026: aprovou, publicou, sai de circulação. O que foi
+aprovado fica na **Data Table `pecas_aprovadas` do n8n**, e vira o parâmetro
+`pular` da rota em toda chamada. O `pular` já existia para exatamente isto.
+
+A chave é **seção mais fonte, não o formato**: aprovar a curiosidade sobre carro
+elétrico no feed tira ela também do story. O mesmo texto duas vezes é repetição
+mesmo saindo em formatos diferentes. A mesma pergunta do quiz pode voltar em
+OUTRA seção, porque ali ela vira outra peça (o desafio mostra a pergunta com as
+opções; a dica mostra a resposta).
+
+Para gravar, o botão Aprovar precisa carregar a fonte da peça mostrada, e não o
+salto. `aprovar:curiosidade:stories:quiz:cambio-automatico-neutro` dá 57 dos 64
+bytes no pior caso do banco. E a fonte tem dois pontos dentro dela, então quem
+lê o callback junta tudo a partir da quarta parte: pegar só a quarta traria
+`quiz`.
+
+**O preço, e ele é real:** essa memória mora no n8n, não no nosso banco. Se
+alguém apagar a Data Table, o histórico do que já foi publicado some e as peças
+voltam a circular. A `npm run conferir` não enxerga isso. Se um dia isso pesar,
+a mudança é criar a tabela no Supabase e uma rota autenticada para gravar.
+
+O caminho foi testado antes de entregar, com dado simulado, em três casos:
+tabela vazia (que é o mais arriscado, porque zero linhas pararia a execução
+inteira sem o `alwaysOutputData`), tabela com linhas de duas seções (para provar
+que a de outra seção não vaza), e a aprovação com a fonte cheia de dois pontos.
 
 ### Como ele foi ligado, para o dia em que precisar refazer
 
