@@ -137,29 +137,36 @@ parece pronta, que é o pior tipo de defeito. Agora largura também reprova.
 
 ## O que está aberto
 
-**O que não cabe é o CORPO, não o título.** A faixa larga resolveu a manchete e
-não resolveu isto: o "porque" do banco do quiz tem de 150 a 280 caracteres, e
-nos exemplos do dono o corpo tem uns 120. A conta é essa, e ela aparece nas duas
-seções que carregam o porquê inteiro.
+**A fonte do corpo encolhe, com limite.** O LEIA-ME das chapas manda encurtar o
+texto e nunca diminuir a fonte, e a regra é boa: no feed o corpo está em 34px
+numa imagem de 1080 que o celular mostra com uns 390 de largura, ou seja, uns
+12px na mão de quem lê. O dono abriu a exceção em 07/09/2026, porque encurtar
+significaria reescrever explicação já revisada.
 
-O que cabe hoje:
+Então o corpo pode encolher até 82% (uns 10px na tela), e só o corpo: o título
+não encolhe nunca, porque é ele que segura a peça de longe. A escala é medida
+como o resto, peça por peça, e a medição pega sempre a MAIOR que couber. A
+`conferir:pecas` reprova qualquer peça abaixo do piso.
 
-| Seção | Feed | Stories |
-| --- | --- | --- |
-| desafio | 43 | 63 |
-| dica | 30 | 2 |
-| pergunta da comunidade | 4 | 0 |
-| curiosidade | **0** | **0** |
+O que cabe hoje, e quantas dessas cabem sem apertar nada:
 
-A pergunta da comunidade caía de 63 para 4 porque ela deixou de ser uma pergunta
-solta e passou a ser pergunta mais resposta mais porquê, como no exemplo. O
-desafio perdeu duas para a conferência de largura, que antes as deixava passar
-cortadas.
+| Seção | Feed | com fonte cheia | Stories | com fonte cheia |
+| --- | --- | --- | --- | --- |
+| desafio | 57 | 43 | 63 | 63 |
+| dica | 55 | 30 | 35 | 2 |
+| pergunta da comunidade | 42 | 4 | 3 | 0 |
+| curiosidade | 16 | 0 | 4 | 0 |
 
-Quatro saídas, e a escolha é do dono: esperar a v2 das chapas que ele já pediu
-(com a Biela empurrada para a direita, o que alarga a coluna), escrever uma
-linha curta por curiosidade, cortar o porquê na primeira frase (o que precisa de
-revisão dele, porque várias começam pelo mito), ou publicar as seções que cabem.
+A curiosidade e a pergunta só existem por causa da escala: o "porque" do banco
+do quiz tem de 150 a 280 caracteres e nos exemplos do dono o corpo tem uns 120.
+
+**Encolher a Biela foi tentado e não deu.** A conta favorecia: a 85% a coluna da
+curiosidade iria de 405 para uns 500. Só que ela está pintada dentro do PNG, sem
+transparência, então encolher significa apagá-la do quadro, remendar o buraco
+com textura e colar a menor por cima. O `scripts/encolhe-biela.mjs` faz isso e
+chega perto, mas sobra régua esticada, emenda no fundo e perna cortada na altura
+da bandeja de giz, onde o que está atrás dela não é quadro liso e sim desenho.
+A saída limpa continua sendo a v2 das chapas, já pedida ao ilustrador.
 
 **A "pergunta da comunidade" não tem fonte própria.** O certo seria vir de
 pergunta feita por gente de verdade, e a conversa com a Biela não fica

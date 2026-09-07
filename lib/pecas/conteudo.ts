@@ -57,6 +57,14 @@ export type PecaDeConteudo = {
    * por cima da Biela, e nesse caso ele volta para a coluna estreita.
    */
   largo?: boolean;
+  /**
+   * O tamanho do corpo, onde 1 é o tamanho cheio.
+   *
+   * Também é veredito da medição. Menor que 1 quer dizer que a peça só coube
+   * com a fonte apertada, dentro do limite que o dono abriu; o piso está em
+   * ESCALAS_DO_CORPO e a conferência reprova quem passar dele.
+   */
+  escala?: number;
 };
 
 /** A semana do ano, contada de forma estável (segunda-feira como início). */
@@ -114,7 +122,7 @@ export function candidatosQueCabem(secao: Secao, formato: Formato, quando = new 
   const lista = candidatosDaSemana(quando).find((l) => l[0].secao === secao) ?? [];
   return lista.flatMap((p) => {
     const veredito = permitidos.find((v) => v.fonte === p.fonte);
-    return veredito ? [{ ...p, largo: veredito.largo }] : [];
+    return veredito ? [{ ...p, largo: veredito.largo, escala: veredito.escala }] : [];
   });
 }
 

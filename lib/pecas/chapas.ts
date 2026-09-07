@@ -54,6 +54,28 @@ export type Chapa = {
   figurinha?: { x1: number; y1: number; x2: number; y2: number };
 };
 
+/**
+ * Os tamanhos de corpo que a peça pode usar, do maior para o menor.
+ *
+ * O LEIA-ME das chapas manda ENCURTAR o texto e nunca diminuir a fonte. A regra
+ * é boa e a razão dela é de leitura, não de gosto: no feed o corpo está em 34px
+ * numa imagem de 1080 que o celular mostra com uns 390 de largura, ou seja, uns
+ * 12px de verdade na mão de quem lê.
+ *
+ * O dono decidiu em 07/09/2026 abrir uma exceção com limite, porque encurtar o
+ * texto significaria reescrever explicação que já passou por revisão, e sem
+ * isso a curiosidade e a pergunta da comunidade não fechavam quase nenhuma
+ * peça. Então a fonte pode encolher, mas só até o PISO desta lista, e a
+ * `conferir:pecas` reprova qualquer peça medida abaixo dele.
+ *
+ * O último valor de cada lista dá uns 10px na tela do celular. Abaixo disso não
+ * é peça apertada, é peça que ninguém lê.
+ *
+ * O título NÃO encolhe: ele é a manchete, e nos exemplos do dono é ele que
+ * segura a peça de longe. Quem encolhe é o corpo, a citação e as opções.
+ */
+export const ESCALAS_DO_CORPO = [1, 0.94, 0.88, 0.82] as const;
+
 /** O rótulo humano de cada seção, para a legenda e para o Telegram. */
 export const NOME_DA_SECAO: Record<Secao, string> = {
   desafio: "Desafio da semana",

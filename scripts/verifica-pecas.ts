@@ -21,7 +21,7 @@
 //
 // Rode com: npm run conferir:pecas
 import { readFileSync, existsSync } from "node:fs";
-import { CHAPAS, DESTAQUE_PERMITIDO, NOME_DA_SECAO, RESPIRO_DO_FEED } from "../lib/pecas/chapas.ts";
+import { CHAPAS, DESTAQUE_PERMITIDO, ESCALAS_DO_CORPO, NOME_DA_SECAO, RESPIRO_DO_FEED } from "../lib/pecas/chapas.ts";
 import { bordaLivre, perfilDaChapa } from "../lib/pecas/silhueta.ts";
 import { perguntasDoQuiz } from "../lib/app/quiz/perguntas.ts";
 import { CABEM } from "../lib/pecas/cabem.ts";
@@ -211,6 +211,21 @@ console.log("Peças: as medidas batem com o que veio junto com as chapas?");
     fontesDe("desafio:feed").length > 0 && fontesDe("pergunta:feed").length > 0,
     "sem candidato aprovado a rota devolve 409 e o agente nao tem o que mandar"
   );
+  // O PISO DA FONTE. O dono abriu a exceção de encolher o corpo, com limite, e
+  // limite sem conferência é intenção. Escala fora da lista, ou abaixo do piso,
+  // significa peça ilegível no celular ou desenho que os dois renderizadores
+  // não sabem reproduzir igual.
+  const piso = ESCALAS_DO_CORPO[ESCALAS_DO_CORPO.length - 1];
+  const apertadas = Object.values(tabela).flat().filter((v) => v.escala < piso || !ESCALAS_DO_CORPO.includes(v.escala as never));
+  conferir(
+    "nenhuma peça foi medida com a fonte abaixo do piso",
+    apertadas.length === 0,
+    `${apertadas.length} fora da régua: ${apertadas.slice(0, 3).map((v) => `${v.fonte}=${v.escala}`).join(", ")}. O piso é ${piso}.`
+  );
+  const cheias = Object.values(tabela).flat().filter((v) => v.escala === 1).length;
+  const total = Object.values(tabela).flat().length;
+  console.log(`  · ${cheias} de ${total} peças cabem com a fonte cheia (informativo)`);
+
   if (naoMedidos.length) {
     console.log(`  · ${naoMedidos.length} pergunta(s) do banco nao cabem em nenhuma chapa (informativo)`);
   }

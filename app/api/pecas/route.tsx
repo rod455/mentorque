@@ -70,6 +70,8 @@ export async function GET(req: Request) {
   // é a razão de `largo` vir do cabem.ts e não de um palpite desta rota.
   const estreito = z.x2 - z.x1;
   const larguraDoTitulo = peca.largo ? chapa.titulo.x2 - z.x1 : estreito;
+  // A ESCALA DO CORPO vem medida, como o `largo`. O título não encolhe nunca.
+  const px = (base: number) => Math.round(base * (peca.escala ?? 1));
   const chapaB64 = readFileSync(join(process.cwd(), "assets/pecas", formato, chapa.arquivo)).toString("base64");
 
   // As opções só entram no feed: no story elas viram a figurinha de quiz do
@@ -108,10 +110,10 @@ export async function GET(req: Request) {
                 display: "flex",
                 fontFamily: "IN",
                 color: CORES.giz,
-                fontSize: grande ? 44 : 34,
+                fontSize: px(grande ? 44 : 34),
                 lineHeight: 1.3,
                 width: estreito,
-                marginBottom: grande ? 28 : 20,
+                marginBottom: px(grande ? 28 : 20),
               }}
             >
               {`“${peca.citacao}`}
@@ -140,9 +142,9 @@ export async function GET(req: Request) {
               style={{
                 fontFamily: "IN",
                 color: CORES.giz,
-                fontSize: grande ? 46 : 34,
+                fontSize: px(grande ? 46 : 34),
                 lineHeight: 1.35,
-                marginTop: grande ? 40 : 28,
+                marginTop: px(grande ? 40 : 28),
                 width: estreito,
               }}
             >
@@ -150,21 +152,21 @@ export async function GET(req: Request) {
             </div>
           ) : null}
           {opcoes.length ? (
-            <div style={{ display: "flex", flexDirection: "column", marginTop: 34, width: estreito }}>
+            <div style={{ display: "flex", flexDirection: "column", marginTop: px(34), width: estreito }}>
               {opcoes.map((o) => (
-                <div key={o} style={{ display: "flex", alignItems: "flex-start", marginBottom: 24 }}>
+                <div key={o} style={{ display: "flex", alignItems: "flex-start", marginBottom: px(24) }}>
                   <div
                     style={{
-                      width: 30,
-                      height: 30,
-                      borderRadius: 15,
+                      width: px(30),
+                      height: px(30),
+                      borderRadius: px(30) / 2,
                       border: `3px solid ${CORES.giz}`,
-                      marginRight: 20,
-                      marginTop: 6,
+                      marginRight: px(20),
+                      marginTop: px(6),
                       flexShrink: 0,
                     }}
                   />
-                  <div style={{ fontFamily: "IN", color: CORES.giz, fontSize: 32, lineHeight: 1.25 }}>{o}</div>
+                  <div style={{ fontFamily: "IN", color: CORES.giz, fontSize: px(32), lineHeight: 1.25 }}>{o}</div>
                 </div>
               ))}
             </div>

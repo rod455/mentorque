@@ -37,7 +37,7 @@ const saida = opcao("saida") ?? join(RAIZ, "pecas-geradas");
 
 // A chapa e as cores vêm do registro, que é conferido contra o LEIA-ME pela
 // `npm run conferir:pecas`. Aqui nada é medido de novo.
-const { CHAPAS, CORES, DESTAQUE_PERMITIDO, NOME_DA_SECAO, RESPIRO_DO_FEED, chapaDe } = await import(
+const { CHAPAS, CORES, DESTAQUE_PERMITIDO, ESCALAS_DO_CORPO, NOME_DA_SECAO, RESPIRO_DO_FEED, chapaDe } = await import(
   join(RAIZ, "lib/pecas/chapas.ts")
 );
 
@@ -75,6 +75,13 @@ function html({ chapa, conteudo }) {
   const larg = conteudo.largo ? chapa.titulo.x2 - z.x1 : estreito;
   const alt = z.y2 - z.y1;
   const grande = chapa.formato === "stories";
+
+  // A ESCALA DO CORPO, e só do corpo. O título fica no tamanho que é, porque é
+  // ele que segura a peça de longe. Quem encolhe é a citação, o corpo e as
+  // opções, e só até o piso de ESCALAS_DO_CORPO. Quem escolhe a escala é a
+  // medição, não quem chama: ela pega a MAIOR que couber.
+  const esc = conteudo.escala ?? 1;
+  const px = (base) => Math.round(base * esc);
 
   // AS OPÇÕES SÓ SÃO DESENHADAS NO FEED.
   //
@@ -116,18 +123,18 @@ function html({ chapa, conteudo }) {
     /* A citação é a pergunta de quem escreveu, e vem ANTES do título: branco,
        caixa mista, com aspas. Só a pergunta da comunidade usa. */
     .citacao { font-family: "IN", sans-serif; font-weight: 400; color: ${CORES.giz};
-        font-size: ${grande ? 44 : 34}px; line-height: 1.3; width: ${estreito}px;
-        margin-bottom: ${grande ? 28 : 20}px; }
+        font-size: ${px(grande ? 44 : 34)}px; line-height: 1.3; width: ${estreito}px;
+        margin-bottom: ${px(grande ? 28 : 20)}px; }
     p { font-family: "IN", sans-serif; font-weight: 400; color: ${CORES.giz};
-        font-size: ${grande ? 46 : 34}px; line-height: 1.35; margin-top: ${grande ? 40 : 28}px;
+        font-size: ${px(grande ? 46 : 34)}px; line-height: 1.35; margin-top: ${px(grande ? 40 : 28)}px;
         width: ${estreito}px; }
-    ul { list-style: none; margin-top: ${grande ? 48 : 34}px; width: ${estreito}px; }
+    ul { list-style: none; margin-top: ${px(grande ? 48 : 34)}px; width: ${estreito}px; }
     li { font-family: "IN", sans-serif; font-weight: 400; color: ${CORES.giz};
-         font-size: ${grande ? 44 : 32}px; line-height: 1.25;
-         margin-bottom: ${grande ? 34 : 24}px; padding-left: ${grande ? 66 : 50}px; position: relative; }
+         font-size: ${px(grande ? 44 : 32)}px; line-height: 1.25;
+         margin-bottom: ${px(grande ? 34 : 24)}px; padding-left: ${px(grande ? 66 : 50)}px; position: relative; }
     li::before {
-      content: ""; position: absolute; left: 0; top: ${grande ? 6 : 4}px;
-      width: ${grande ? 40 : 30}px; height: ${grande ? 40 : 30}px;
+      content: ""; position: absolute; left: 0; top: ${px(grande ? 6 : 4)}px;
+      width: ${px(grande ? 40 : 30)}px; height: ${px(grande ? 40 : 30)}px;
       border: ${grande ? 4 : 3}px solid ${CORES.giz}; border-radius: 50%;
     }
   </style>
@@ -305,7 +312,7 @@ if (args.includes("--medir")) {
   // O OVO E A GALINHA: quem mede importa o conteudo.ts, e o conteudo.ts importa
   // justamente o arquivo que a medição vai escrever. Sem esta semente, apagar o
   // veredito impede de gerar o veredito. Aconteceu.
-  if (!existsSync(destino)) writeFileSync(destino, "export const CABEM: Record<string, { fonte: string; largo: boolean }[]> = {};\n");
+  if (!existsSync(destino)) writeFileSync(destino, "export const CABEM: Record<string, { fonte: string; largo: boolean; escala: number }[]> = {};\n");
   const { candidatosDaSemana } = await import(join(RAIZ, "lib/pecas/conteudo.ts"));
   const cabem = {};
   for (const lista of candidatosDaSemana()) {
@@ -320,10 +327,18 @@ if (args.includes("--medir")) {
         // estreita, que é livre até embaixo. Sem esta segunda tentativa o
         // desafio perdia 28 dos 45 candidatos que já tinha.
         const opts = { tolerante: true, semArquivo: true };
-        const largo = await gerar({ ...peca, largo: true, formatos: [formato] }, opts);
-        if (!largo.transbordou) { cabem[chave].push({ fonte: peca.fonte, largo: true }); continue; }
-        const estreito = await gerar({ ...peca, largo: false, formatos: [formato] }, opts);
-        if (!estreito.transbordou) cabem[chave].push({ fonte: peca.fonte, largo: false });
+        // A MAIOR FONTE QUE COUBER, e a fonte cheia antes de tudo: encolher é a
+        // exceção que o dono abriu, não o caminho normal. Para cada escala,
+        // tenta o título largo e depois o estreito.
+        let achou = null;
+        for (const escala of ESCALAS_DO_CORPO) {
+          for (const largo of [true, false]) {
+            const r = await gerar({ ...peca, largo, escala, formatos: [formato] }, opts);
+            if (!r.transbordou) { achou = { fonte: peca.fonte, largo, escala }; break; }
+          }
+          if (achou) break;
+        }
+        if (achou) cabem[chave].push(achou);
       }
     }
   }
@@ -342,12 +357,16 @@ if (args.includes("--medir")) {
     "// frescor.",
     "//",
     "// `largo` diz se o TÍTULO daquela peça coube na faixa larga do topo da",
-    "// chapa. Quando é falso, ele desce na coluna estreita. Os dois",
-    "// desenhistas leem daqui, para não medirem diferente.",
-    "export const CABEM: Record<string, { fonte: string; largo: boolean }[]> = ",
+    "// chapa. Quando é falso, ele desce na coluna estreita.",
+    "//",
+    "// `escala` é o tamanho do corpo, e 1 é o tamanho cheio. Menor que 1",
+    "// significa que aquela peça só coube com a fonte apertada, dentro do",
+    "// limite que o dono abriu em 07/09/2026. Os dois desenhistas leem daqui,",
+    "// para não medirem diferente.",
+    "export const CABEM: Record<string, { fonte: string; largo: boolean; escala: number }[]> = ",
   ].join("\n");
   writeFileSync(destino, `${cabeçalho}${JSON.stringify(cabem, null, 2)};\n`);
-  for (const [k, v] of Object.entries(cabem)) console.log(`  ${k.padEnd(24)} ${String(v.length).padStart(2)} cabem  (${v.filter((p) => p.largo).length} com título largo)`);
+  for (const [k, v] of Object.entries(cabem)) console.log(`  ${k.padEnd(24)} ${String(v.length).padStart(2)} cabem  (${v.filter((p) => p.escala === 1).length} com a fonte cheia, ${v.filter((p) => p.largo).length} com título largo)`);
   console.log(`\nVeredito gravado em ${destino}`);
   process.exit(0);
 }
