@@ -36,6 +36,50 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-07 · Android: a foto do Google e o toque na câmera, os dois achados em aparelho de verdade
+
+- O dono instalou a segunda 1.8 no Android da Luana. **O login funcionou**, que
+  era o conserto principal daquele build. E apareceram dois defeitos que nenhuma
+  suíte nossa alcança, porque os dois moram no WebView do Android.
+- **A FOTO DO GOOGLE.** O dado estava certo, conferido no banco: as quatro
+  contas Google têm `avatar_url` e `picture`, iguais entre si, com a URL
+  completa do lh3 terminando em `=s96-c`. Quem falhava era o carregamento, e dá
+  para saber disso pela tela: o desenho de quem não tem foto é a INICIAL do
+  nome, e o que apareceu foi um círculo vazio, ou seja, o `<img>` estava lá e
+  quebrou.
+- A hipótese, e ela explica a assimetria: o Android serve a página de
+  `https://localhost` (androidScheme "https"), então a busca da imagem sai com
+  `Referer: https://localhost/`. No iPhone o esquema é `capacitor://`, que não é
+  http, e o WebKit não manda Referer nenhum, que é exatamente onde a foto sempre
+  funcionou. `referrerPolicy="no-referrer"` tira o cabeçalho da jogada.
+- **ISSO NÃO FOI VISTO NUM APARELHO, e está escrito assim no código e no
+  roteiro da 1.9.** Por isso o conserto vem em duas partes: a hipótese, que pode
+  reprovar, e o `onError` caindo para a inicial do nome, que vale com causa ou
+  sem causa. Falhar mostrando a inicial é honesto; falhar mostrando um buraco
+  parece defeito de desenho e não conta nada a ninguém.
+- **O TOQUE NA CÂMERA.** A causa está no Capacitor 8.5.0, lida no fonte
+  (`BridgeWebChromeClient.onShowFileChooser`): ele lê o atributo `capture` do
+  campo e escolhe UM caminho. Com `capture`, `ACTION_IMAGE_CAPTURE`, que é a
+  câmera direta. Sem, `showFilePicker`, que é o seletor de documentos, e foi a
+  tela de "Recentes" que o dono viu. **A ponte não tem o terceiro caminho**, que
+  é oferecer os dois. Então a pergunta virou nossa, com dois campos por trás.
+- Sem plugin novo e sem permissão nova, e isso foi conferido, não suposto: o
+  Capacitor só pede `CAMERA` quando o app DECLARA a permissão no manifesto
+  (`isMediaCaptureSupported`), e o nosso manifesto tem só INTERNET,
+  ACCESS_NETWORK_STATE e AD_ID. O `@capacitor/camera` resolveria também, e
+  custaria dependência nova, permissão na ficha da Play e strings de uso no
+  Info.plist do iPhone, para um problema que o iPhone não tem.
+- **A CONFERÊNCIA REPROVOU CÓDIGO CERTO, e foi o melhor que aconteceu hoje.** A
+  asserção nova do `capture` falhava no código correto: a limpeza de comentários
+  da `verifica-aviso.ts` trata qualquer `/*` como abertura de bloco, e o Perfil
+  tem `accept="image/*"`. Aquele `/*` abria um comentário que só fechava num
+  `*/` lá adiante, e TUDO no meio sumia da conferência, calado, desde antes de
+  hoje. Agora o `/*` só abre bloco depois de espaço ou começo de linha.
+- É a terceira vez que a limpeza de comentários dessa conferência ensina alguma
+  coisa (03/09, 07/09 de manhã, e esta). O padrão comum: conferência que lê
+  texto erra em silêncio, e só um defeito plantado ou uma reprovação estranha
+  traz alguém olhar.
+
 ## 2026-09-07 · Release: a segunda 1.8 foi para a Play, e a conferência que pegaria isso estava calada
 
 - O dono enviou um build do Android para a Play com os quatro consertos do dia.

@@ -126,6 +126,15 @@ onde a permissão é dada.
 E ao responder o quiz, aceitar o lembrete de amanhã resolve ali mesmo.
 ```
 
+## O que a segunda 1.8 NÃO conserta, e já foi visto no aparelho
+
+Os dois relatos vieram do dono com a segunda 1.8 instalada, no Android da
+Luana, e os consertos são da 1.9:
+
+1. **A foto do Google não apareceu**, e no lugar dela ficou um círculo vazio.
+2. **Tocar na câmera abriu a tela de arquivos recentes**, em vez de perguntar
+   entre câmera e galeria como o iPhone faz.
+
 ## Depois de publicar
 
 - **Trocar o `android` em `app/api/app/latest/route.ts`.** Ele está em 55, que é

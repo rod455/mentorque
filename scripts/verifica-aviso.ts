@@ -52,7 +52,20 @@ function conferir(nome: string, condicao: boolean, detalhe = "") {
  * toa, nunca passar à toa, e reprovar à toa traz alguém aqui olhar.
  */
 function semComentarios(fonte: string): string {
-  return fonte.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/.*$/gm, " ");
+  // O `/*` SÓ ABRE COMENTÁRIO QUANDO VEM DEPOIS DE ESPAÇO ou de começo de
+  // linha, e essa exigência é conserto de um defeito desta função, encontrado
+  // em 07/09/2026 ao conferir a foto de perfil.
+  //
+  // O Perfil tem `accept="image/*"`. Sem a exigência, aquele `/*` no meio da
+  // palavra abria um comentário que só fechava no `*/` seguinte, em outro
+  // lugar do arquivo, e TUDO no meio sumia da conferência. O sintoma foi uma
+  // asserção nova reprovando em código correto, o que é o lado bom de errar:
+  // trouxe alguém aqui olhar. O lado ruim é o que já estava acontecendo calado,
+  // porque as asserções que caíam naquele trecho apagado não conferiam nada.
+  //
+  // Em código de verdade um bloco de comentário sempre começa em espaço ou no
+  // início da linha, então a exigência não perde comentário nenhum.
+  return fonte.replace(/(^|\s)\/\*[\s\S]*?\*\//g, "$1 ").replace(/\/\/.*$/gm, " ");
 }
 
 const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${caminho}`, import.meta.url), "utf8"));
@@ -280,6 +293,45 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
 
   const jaLigado = espelhaOAparelho({ concedida: true, ligadoNoApp: true, sistemaAntes: true });
   conferir("com permissão e já ligado, não mexe em nada", jaLigado.ligar === null);
+}
+
+// ── a foto de perfil, e o toque na câmera ──────────────────────────────────
+//
+// DOIS RELATOS DO DONO no aparelho da Luana (07/09/2026), com a segunda 1.8 já
+// instalada: a foto do Google não apareceu, e tocar na câmera abriu a tela de
+// arquivos recentes em vez de perguntar entre câmera e galeria.
+//
+// Os dois são de Android e nenhum tem suíte que alcance: o WebView do aparelho
+// não existe aqui, e a decisão entre câmera e seletor mora em código Java do
+// Capacitor. O que dá para cobrar é que as três ligações que os consertam não
+// sumam, porque cada uma delas, quando faltou, deixou o defeito de pé.
+{
+  const perfil = semComentarios(leia("components/app/screens/Profile.tsx"));
+
+  conferir(
+    "a foto de perfil não é pedida com referrer",
+    /referrerPolicy="no-referrer"/.test(perfil),
+    "o Android serve a página de https://localhost e manda esse Referer na busca da foto; " +
+      "no iPhone o esquema é capacitor:// e não vai Referer nenhum, que é onde a foto sempre funcionou"
+  );
+  conferir(
+    "foto que não carrega vira a inicial do nome",
+    /onError=\{\(\) => setFotoFalhou\(true\)\}/.test(perfil) && /!fotoFalhou/.test(perfil),
+    "sem isto o `<img>` quebrado desenha um buraco vazio, que é o que o dono viu: parece defeito " +
+      "de desenho e não conta nada a ninguém"
+  );
+  conferir(
+    "existe um campo com `capture` para a câmera",
+    /capture="environment"/.test(perfil),
+    "é a única palavra que o BridgeWebChromeClient do Capacitor lê para abrir a câmera em vez do " +
+      "seletor de arquivos; sem ela não há como oferecer a câmera no Android"
+  );
+  conferir(
+    "a escolha entre câmera e galeria só aparece no Android",
+    /nativePlatform\(\) === "android"\) setEscolhendoFoto\(true\)/.test(perfil),
+    "no iPhone o WKWebView já pergunta sozinho: pôr a nossa folha lá trocaria uma pergunta do " +
+      "sistema, que a pessoa reconhece, por uma nossa"
+  );
 }
 
 if (falhas) {

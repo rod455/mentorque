@@ -1370,6 +1370,13 @@ export function getContent(locale: Locale) {
       ],
       driverDefault: T("Motorista", "Driver"),
       changePhoto: T("Trocar foto de perfil", "Change profile photo"),
+      // A escolha entre câmera e galeria, que no Android precisa ser NOSSA: a
+      // ponte do Capacitor só sabe abrir um dos dois, nunca oferecer os dois
+      // (BridgeWebChromeClient.onShowFileChooser). No iPhone o próprio sistema
+      // já pergunta, e lá esta folha não aparece.
+      photoSheetTitle: T("Foto de perfil", "Profile photo"),
+      photoCamera: T("Tirar uma foto", "Take a photo"),
+      photoGallery: T("Escolher da galeria", "Choose from gallery"),
       accountTitle: T("Conta", "Account"),
       connectedWith: T("Conectado com {p}", "Connected with {p}"),
       changePassword: T("Trocar senha", "Change password"),

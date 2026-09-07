@@ -342,6 +342,64 @@ export function ProfileScreen() {
   // Profile photo: user's uploaded avatar wins; otherwise the Google picture.
   const googlePic = (user?.user_metadata?.avatar_url ?? user?.user_metadata?.picture) as string | undefined;
   const avatarSrc = s.avatar ?? googlePic ?? null;
+
+  // A FOTO DO GOOGLE QUE NÃO CARREGAVA NO ANDROID (relato do dono, 07/09/2026,
+  // no aparelho da Luana: círculo vazio no lugar da foto).
+  //
+  // O dado estava certo: a conta dela tem `avatar_url` e `picture`, os dois com
+  // a URL completa do lh3.googleusercontent.com terminando em `=s96-c`. Quem
+  // falhava era o carregamento da imagem, e a assimetria diz por quê. O
+  // WebView do Android serve a página de `https://localhost` (androidScheme
+  // "https"), então a busca da imagem sai com `Referer: https://localhost/`. No
+  // iPhone o esquema é `capacitor://`, que não é http, e o WebKit não manda
+  // Referer nenhum — que é exatamente onde a foto sempre funcionou.
+  //
+  // `no-referrer` tira o cabeçalho da jogada nos dois. É a mitigação de sempre
+  // para foto de perfil do Google servida fora do domínio dele, e não custa
+  // nada: a URL é pública e não depende de referrer para ser autorizada.
+  //
+  // HONESTIDADE SOBRE ESTA LINHA: a explicação acima encaixa no que se
+  // observou, mas não foi vista num aparelho. Por isso ela vem junto do
+  // `onError` abaixo, que é o que garante o resto.
+  //
+  // O `onError` conserta o que É certo, com causa ou sem causa: imagem
+  // quebrada desenhava um buraco vazio, porque o `<img>` existe e o `alt` é
+  // vazio. A inicial do nome já era o desenho para quem não tem foto, e agora
+  // ela também vale para quem tem foto que não carrega. Falhar mostrando a
+  // inicial é honesto; falhar mostrando um círculo vazio parece defeito de
+  // desenho e não conta nada a ninguém.
+  const [fotoFalhou, setFotoFalhou] = useState(false);
+  useEffect(() => { setFotoFalhou(false); }, [avatarSrc]);
+
+  // CÂMERA OU GALERIA, e no Android a escolha tem de ser NOSSA.
+  //
+  // O relato do dono (07/09/2026): tocar na câmera abria a tela de arquivos
+  // recentes, e ele queria o que o iPhone faz, que é perguntar.
+  //
+  // A causa está no Capacitor 8.5.0, em BridgeWebChromeClient.onShowFileChooser:
+  // ele lê `capture` do campo e escolhe UM caminho. Com `capture`, dispara
+  // ACTION_IMAGE_CAPTURE, que é a câmera direta. Sem `capture`, cai em
+  // showFilePicker, que é `fileChooserParams.createIntent()`, o seletor de
+  // documentos, e foi isso que ele viu. A ponte não tem o terceiro caminho,
+  // que é oferecer os dois.
+  //
+  // No iPhone o WKWebView já pergunta sozinho, então lá esta folha não
+  // aparece: ela substituiria por uma pergunta nossa uma pergunta do sistema
+  // que já funciona, e que a pessoa reconhece.
+  //
+  // NENHUMA PERMISSÃO NOVA, e isso não é sorte. O Capacitor só pede CAMERA
+  // quando o app DECLARA essa permissão no manifesto (`isMediaCaptureSupported`
+  // devolve true quando ela não está declarada). O nosso manifesto declara
+  // INTERNET, ACCESS_NETWORK_STATE e AD_ID, e mais nada: a foto sai por
+  // ACTION_IMAGE_CAPTURE, que é o app de câmera do aparelho fazendo o trabalho
+  // e devolvendo o arquivo. Declarar CAMERA para isto seria pedir na ficha da
+  // Play um acesso que o app não usa.
+  const cameraRef = useRef<HTMLInputElement>(null);
+  const [escolhendoFoto, setEscolhendoFoto] = useState(false);
+  const aoTocarNaFoto = () => {
+    if (nativePlatform() === "android") setEscolhendoFoto(true);
+    else avatarRef.current?.click();
+  };
   const pickAvatar = async (file?: File) => {
     if (!file) return;
     try {
@@ -359,11 +417,17 @@ export function ProfileScreen() {
       {/* Topo: foto + nome + e-mail (logado) — ou card de login (deslogado) */}
       {enabled && user ? (
         <div className="flex flex-col items-center pb-1 pt-2 text-center">
-          <button onClick={() => avatarRef.current?.click()} className="relative" aria-label={p.changePhoto}>
+          <button onClick={aoTocarNaFoto} className="relative" aria-label={p.changePhoto}>
             <span className="grid h-24 w-24 place-items-center overflow-hidden rounded-full bg-teal/15 text-teal ring-1 ring-white/10">
-              {avatarSrc ? (
+              {avatarSrc && !fotoFalhou ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={avatarSrc} alt="" className="h-full w-full object-cover" />
+                <img
+                  src={avatarSrc}
+                  alt=""
+                  referrerPolicy="no-referrer"
+                  onError={() => setFotoFalhou(true)}
+                  className="h-full w-full object-cover"
+                />
               ) : (
                 <span className="font-display text-3xl font-semibold text-cream">{displayName[0]?.toUpperCase() ?? "?"}</span>
               )}
@@ -376,7 +440,12 @@ export function ProfileScreen() {
             {displayName}
           </button>
           <p className="mt-0.5 text-sm text-cream/55">{user.email}</p>
+          {/* DOIS campos, e a diferença entre eles é uma palavra: `capture`.
+              É ela que o BridgeWebChromeClient do Capacitor lê para decidir
+              entre a câmera e o seletor de arquivos. Sem os dois campos não há
+              como oferecer a escolha, porque um campo só carrega uma decisão. */}
           <input ref={avatarRef} type="file" accept="image/*" className="hidden" onChange={(e) => pickAvatar(e.target.files?.[0])} />
+          <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => pickAvatar(e.target.files?.[0])} />
         </div>
       ) : enabled ? (
         <Card>
@@ -607,6 +676,28 @@ export function ProfileScreen() {
         <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber/15 font-display text-sm font-bold text-amber">M</span>
         <p className="text-[11px] text-cream/35">{p.version.replace("{v}", APP_VERSION)}</p>
       </div>
+
+      {/* Câmera ou galeria (só no Android: ver o comentário de aoTocarNaFoto).
+          A folha FECHA ANTES de abrir o campo, e não depois. O clique num
+          `input type=file` escondido sai daqui e cai no sistema; deixar a
+          folha de pé por baixo dela significa a pessoa voltar da câmera para
+          uma pergunta que ela já respondeu. */}
+      <Sheet open={escolhendoFoto} onClose={() => setEscolhendoFoto(false)}>
+        <h2 className="font-serif text-xl font-semibold text-cream">{p.photoSheetTitle}</h2>
+        <Button
+          size="lg"
+          className="mt-4 w-full"
+          onClick={() => { setEscolhendoFoto(false); cameraRef.current?.click(); }}
+        >
+          {p.photoCamera}
+        </Button>
+        <button
+          onClick={() => { setEscolhendoFoto(false); avatarRef.current?.click(); }}
+          className="mt-2 w-full rounded-xl bg-graphite-700 px-4 py-3.5 font-display text-[15px] font-semibold text-cream/80 ring-1 ring-white/10 active:scale-[0.99]"
+        >
+          {p.photoGallery}
+        </button>
+      </Sheet>
 
       {/* Editar nome */}
       <Sheet open={editName} onClose={() => setEditName(false)}>
