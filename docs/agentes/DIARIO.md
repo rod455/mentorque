@@ -36,6 +36,43 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-07 · Banco: a cota estourou de novo, e a causa era uma coluna que ninguém lia mais
+
+- O dono trouxe o painel do Supabase: Database Size 0,527 de 0,5 GB (105%),
+  "novamente". Fui olhar tabela por tabela em vez de chutar: `manual_chunks`
+  tinha **475 MB dos 527**, e 422 MB eram TOAST, o armazenamento fora de
+  linha. Tudo o mais (funil, usuários, erros) somava menos de 2 MB.
+- **A causa:** a tabela guardava DUAS colunas de embedding. `embedding
+  vector(1536)`, a da OpenAI abandonada em 05/09 quando a conta ficou sem
+  crédito, com 167 MB em 28.426 linhas que nada mais lia; e
+  `embedding_voyage vector(1024)`, a em uso, com 140 MB em 100% das 35.717
+  linhas. O texto eram 45 MB. A diferença até 475 (~120 MB) eram versões
+  mortas dos 28 mil UPDATEs do backfill da Voyage, que o autovacuum comum não
+  devolve ao disco.
+- Conferido antes de apagar, e não suposto: a `match_manual_chunks` viva no
+  banco compara só em `embedding_voyage`; o código só escreve
+  `embedding_voyage`; e não havia índice em nenhuma das duas colunas (o total de
+  índices da tabela era 2,8 MB).
+- Decisão do dono: apagar a coluna antiga e compactar. Migração
+  `remove_embedding_openai_1536` e `VACUUM (FULL, ANALYZE)`. **Resultado: a
+  tabela foi de 475 MB para 245 MB e o banco inteiro de 527 MB para 259 MB.**
+  Metade da cota livre. O painel do Supabase pode levar até uma hora para
+  mostrar.
+- A ferramenta estourou os 60 segundos dela no meio do VACUUM FULL, e isso não
+  diz nada sobre o banco: fui ver `pg_stat_activity` e
+  `pg_stat_progress_cluster` (vazios) e o tamanho novo, em vez de supor que
+  tinha terminado ou que tinha falhado.
+- **A lição, registrada também em `supabase/embedding-voyage.sql`:** uma troca
+  de provedor de embedding é uma coluna nova E uma coluna velha, e a velha
+  precisa de data para sair. Sem isso ela fica, e 6 KB por trecho vezes trinta
+  mil trechos é a cota inteira. O "novamente" do dono é exatamente isso: da
+  primeira vez o banco cresceu com a ingestão dos 112 manuais em 06/09, e a
+  coluna morta veio junto sem ninguém contar com ela.
+- De passagem, a limpeza da cópia de `resizeImage` na Gamification, que eu
+  tinha sugerido como tarefa separada e o dono mandou para esta sessão: a
+  tela importa a função de `lib/app/image.ts` com o mesmo tamanho e qualidade
+  de antes. Tipos, lint e a suíte `selo` verdes.
+
 ## 2026-09-07 · Produto: o ajuste de foto, como no WhatsApp, para o carro e o perfil
 
 - Pedido do dono, na mesma rodada dos relatos do Android: "usuário escolhe a

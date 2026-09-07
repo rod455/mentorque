@@ -4,38 +4,20 @@ import { useRef, useState } from "react";
 import { usePrototype } from "@/lib/app/store";
 import { useAuth } from "@/lib/app/auth";
 import { uploadUserPhoto, deleteUserPhoto } from "@/lib/app/uploadPhoto";
+import { resizeImage } from "@/lib/app/image";
 import { useNav } from "@/lib/app/nav";
 import { computeStatus, isLived, MILESTONES, PHASES, type GamSession } from "@/lib/app/gamification";
 import { MedalEmblem, PhaseEmblem } from "../Emblem";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Icon, SectionTitle, Sheet, useContent } from "../ui";
 
-// Downscale a picked image to a small JPEG data URL so photos stay tiny in
-// localStorage / cloud sync.
-function resizeImage(file: File, max = 900, quality = 0.72): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const img = new Image();
-      img.onload = () => {
-        const scale = Math.min(1, max / Math.max(img.width, img.height));
-        const w = Math.round(img.width * scale);
-        const h = Math.round(img.height * scale);
-        const canvas = document.createElement("canvas");
-        canvas.width = w;
-        canvas.height = h;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return reject(new Error("no-ctx"));
-        ctx.drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL("image/jpeg", quality));
-      };
-      img.onerror = reject;
-      img.src = reader.result as string;
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
+// A foto do momento encolhe com a MESMA função do resto do app
+// (lib/app/image.ts). Esta tela tinha uma cópia própria dela, linha por linha
+// igual; duas contas iguais em dois lugares são o tipo de coisa que diverge
+// sem ninguém notar. O tamanho (900) e a qualidade (0.72) são os que a cópia
+// usava, passados na chamada para o comportamento não mudar.
+const LADO_DA_FOTO_DO_MOMENTO = 900;
+const QUALIDADE_DA_FOTO_DO_MOMENTO = 0.72;
 
 // Reads the gamification status from the prototype session.
 function useGam(): { status: ReturnType<typeof computeStatus>; s: GamSession } {
@@ -209,7 +191,7 @@ function MomentSheet({ id, emoji, onClose }: { id: string; emoji: string; onClos
     if (!file) return;
     setBusy(true);
     try {
-      const dataUrl = await resizeImage(file);
+      const dataUrl = await resizeImage(file, LADO_DA_FOTO_DO_MOMENTO, QUALIDADE_DA_FOTO_DO_MOMENTO);
       // Logado → Storage (guarda a URL). Convidado/falha → local. Adicionar
       // foto já marca o momento como vivido.
       const url = user ? await uploadUserPhoto(user.id, `moment-${id}`, dataUrl) : null;

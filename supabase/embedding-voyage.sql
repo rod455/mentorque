@@ -71,3 +71,27 @@ $function$;
 --    Só depois de o reembeddar terminar, da busca estar respondendo bem por
 --    alguns dias e de alguém ter comparado algumas respostas com as de antes.
 --    Enquanto a coluna velha existir, voltar atrás é uma migração de dez linhas.
+
+-- ────────────────────────────────────────────────────────────────────────────
+-- A COLUNA ANTIGA FOI APAGADA (07/09/2026, migração `remove_embedding_openai_1536`).
+--
+-- Dois dias depois da troca, o banco passou da cota do plano gratuito: 527 MB
+-- de 500. A tabela manual_chunks tinha 475 MB, e a conta fechava assim:
+--
+--   embedding (OpenAI, 1536)    167 MB   28.426 linhas, nada mais lia
+--   embedding_voyage (1024)     140 MB   35.717 linhas, 100% preenchida
+--   content                      45 MB
+--   versões mortas do TOAST    ~120 MB   os 28 mil UPDATEs do backfill
+--
+-- A `match_manual_chunks` compara só em embedding_voyage, o código só escreve
+-- embedding_voyage, e não havia índice em nenhuma das duas. A coluna antiga era
+-- peso morto desde que a chave da OpenAI acabou. Decisão do dono: apagar e
+-- compactar (VACUUM FULL), porque DROP COLUMN sozinho não devolve espaço em
+-- disco, e é o disco que o Supabase mede.
+--
+-- O que fica de lição: uma troca de provedor de embedding é uma coluna nova E
+-- uma coluna velha, e a velha precisa de data para sair. Sem isso ela fica, e
+-- 6 KB por trecho vezes trinta mil trechos é a cota inteira.
+--
+--   alter table public.manual_chunks drop column if exists embedding;
+--   vacuum (full, analyze) public.manual_chunks;
