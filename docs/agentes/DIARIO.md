@@ -65,6 +65,14 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
 - O README do plugin foi a fonte disso tudo, e vale a pena: ele imprime no
   Logcat (filtro `GoogleProvider`) o SHA-1 e o pacote que o Google viu, para
   comparar com o console. Está no roteiro da 1.9.
+- **Feito pelo dono no mesmo dia, guiado tela a tela:** os dois clientes OAuth
+  do tipo Android existem no Google Cloud, no mesmo projeto do cliente Web
+  (mesmo prefixo de client id), um com o SHA-1 da chave de assinatura do app e
+  outro com o da chave de upload, os dois com o pacote `mentorque.app`. O
+  caminho no Play Console mudou de lugar e vale registrar: Protegido com o
+  Google Play → Proteção da Google Play Store → Assinatura de apps; o SHA-1
+  certo é o da "Chave clássica", não o da pós-quântica (Beta). A ação saiu da
+  lista. O Google avisa que pode levar de 5 minutos a algumas horas para valer.
 
 ## 2026-09-07 · Banco: a cota estourou de novo, e a causa era uma coluna que ninguém lia mais
 
