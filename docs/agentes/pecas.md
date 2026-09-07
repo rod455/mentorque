@@ -20,17 +20,36 @@ nos fluxos antigos do Vocaboost.
 Assim o token não passa pelo nosso repositório nem pelos envs da Vercel, e a
 rota não sabe o que é Telegram. É bom que não saiba.
 
-## A conversa que o dono desenhou
+## Como se pede, e por que tem barra
 
 ```
-dono:    faça uma imagem da Curiosidade da semana
-agente:  [imagem]  Curiosidade da semana
-                   "Carro parado na garagem sofre menos?"
-                   fonte: quiz:carro-parado-tempo
+dono:    /peca feed curiosidade
+agente:  [imagem]  Curiosidade da semana · feed
+                   "Carro elétrico não tem manutenção nenhuma?"
+                   fonte: quiz:eletrico-manutencao · fonte reduzida para caber
                    [Aprovar]  [Outra]
 dono:    Outra
 agente:  [imagem]  ... outro candidato, o anterior não volta
 ```
+
+Seções: `desafio`, `dica`, `curiosidade`, `pergunta`. Formato: `feed` ou
+`story`. Sem dizer o formato, vem o do feed.
+
+**PRECISA SER COMANDO, com barra**, e isso custou meia hora de investigação no
+dia em que o fluxo subiu. O modo privacidade do bot vem ligado, e dentro de um
+grupo ele só recebe mensagem que começa com barra, que responde a ele, ou que
+menciona ele. Frase solta não chega, e não aparece execução nenhuma no n8n:
+parece que o fluxo está quebrado quando o Telegram é que nem entregou.
+
+Em conversa direta com o bot chega tudo, e é por isso que testar no privado
+engana. O jeito de separar as duas coisas é olhar se houve execução no n8n.
+
+**Feed e story trazem assuntos DIFERENTES.** Cada formato tem sua própria lista
+de quem cabe, e a ordem não bate: em 07/09/2026, três das quatro seções
+devolviam peças de assuntos distintos nos dois formatos. Foi decisão do dono
+manter assim, porque parear os dois encolheria muito as opções (a curiosidade
+cairia de 16 para 4, e a pergunta de 42 para 3). Quem quiser o mesmo assunto nos
+dois formatos precisa conferir a `fonte` na legenda.
 
 ## As chamadas
 
