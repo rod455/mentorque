@@ -160,12 +160,24 @@ O gancho do plugin escreve `socialLogin.facebook.include=false` no
 fora e compila um substituto vazio no lugar do provedor. Ou seja, hoje o
 social-login **pode** entrar no Android sem o SDK do Facebook junto.
 
-O que ainda segura: essa chave é global, não por plataforma, então ela mexe
-também no build do iPhone, que hoje funciona (e que tem o
-`scripts/conserta-appsflyer.mjs` justamente contornando o Facebook que vem
-pelo iOS). Trocar o binário das duas lojas de uma vez pede build de verdade e
-teste em aparelho, não conferência de repositório. Enquanto isso não acontecer,
-o Android continua no caminho do navegador.
+**E entrou, em 07/09/2026, por decisão do dono ("vamos fazer na caixinha").**
+A chave `providers` parecia global, e na prática só mexe no Android: o gancho
+do plugin edita o **podspec**, e o projeto do iPhone puxa o plugin por **SPM**
+(`ios/App/CapApp-SPM/Package.swift`), que não lê podspec. O Facebook continua
+entrando no iPhone como sempre entrou, com o `scripts/conserta-appsflyer.mjs`
+em cima; no Android ele fica de fora.
+
+O que a folha nativa exige do lado do Google Cloud, e que nenhum build resolve:
+um cliente OAuth do tipo **Android**, no mesmo projeto do cliente Web, com o
+pacote `mentorque.app` e o **SHA-1** da chave de assinatura. São duas chaves,
+logo dois SHA-1: a de upload (o keystore do Codemagic) e a do **Play App
+Signing** (Play Console → App integrity → App signing key certificate), que é a
+que assina o que chega às pessoas. Sem isso o Google recusa com "Developer
+console is not set up correctly" (Logcat, filtro `GoogleProvider`, imprime o
+SHA-1 e o pacote que ele viu) e o app cai no navegador, como antes.
+
+A tabela de cima fica assim a partir da 1.9: plugins no binário do Android são
+app, browser, admob, revenuecat, social-login e appsflyer.
 
 ### A queda que segura essa distância
 

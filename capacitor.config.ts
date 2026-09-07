@@ -33,6 +33,15 @@ const config: CapacitorConfig = {
       "@capacitor/push-notifications",
       "@capacitor-community/admob",
       "@revenuecat/purchases-capacitor",
+      // A FOLHA NATIVA DO GOOGLE NO ANDROID (decisão do dono, 07/09/2026:
+      // "vamos fazer na caixinha"). Ficou de fora até aqui porque o plugin
+      // arrastava o SDK do Facebook, que derruba o app na abertura sem
+      // `facebook_app_id`. Da 8.3.40 em diante dá para deixar o Facebook de
+      // fora por configuração (`plugins.SocialLogin.providers` abaixo), e é
+      // isso que torna a entrada segura. O que o plugin precisa em tempo de
+      // execução é o NEXT_PUBLIC_GOOGLE_WEB_CLIENT_ID no build
+      // (lib/app/socialLogin.ts); sem ele, o app cai no navegador como antes.
+      "@capgo/capacitor-social-login",
       // Atribuição de instalação para os anúncios (lib/app/atribuicao.ts).
       "appsflyer-capacitor-plugin",
     ],
@@ -59,6 +68,20 @@ const config: CapacitorConfig = {
   plugins: {
     AdMob: {
       appId: "ca-app-pub-9316035916536420~8094986125",
+    },
+    // Quais provedores o social-login compila. `facebook: false` é o que deixa
+    // o SDK do Facebook FORA do binário do Android: o gancho do plugin escreve
+    // `socialLogin.facebook.include=false` no gradle.properties dele durante o
+    // `cap sync`, e o build.gradle compila um substituto vazio no lugar do
+    // provedor. Sem esta linha, o app do Android abre e fecha na hora, por
+    // falta de `facebook_app_id` no strings.xml.
+    //
+    // No iPhone isto NÃO muda nada: o gancho só edita o podspec, e o projeto
+    // do iPhone puxa o plugin por SPM (ios/App/CapApp-SPM/Package.swift). O
+    // Facebook continua entrando lá como sempre entrou, com o remendo do
+    // scripts/conserta-appsflyer.mjs em cima.
+    SocialLogin: {
+      providers: { facebook: false },
     },
     // O app é sempre escuro: força ícones claros nas barras do sistema
     // (o padrão segue o tema do aparelho e some em telas claras).

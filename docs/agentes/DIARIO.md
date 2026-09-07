@@ -36,6 +36,36 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-07 · Android: a folha nativa do Google entra no binário ("vamos fazer na caixinha")
+
+- Decisão do dono, depois de eu explicar em uma frase o que estava na lista
+  dele: o login com Google no Android abre a caixinha do sistema com as contas,
+  como no iPhone, em vez de sair para o Chrome. O caminho do Chrome continua
+  existindo como queda (`conferir:login`), e é ele que funciona hoje.
+- **O risco que eu tinha apontado não existia.** A configuração
+  `plugins.SocialLogin.providers` parecia global, mas o gancho do plugin só
+  edita o **podspec**, e o projeto do iPhone puxa o plugin por **SPM**
+  (`ios/App/CapApp-SPM/Package.swift`), que não lê podspec. Então `facebook:
+  false` deixa o SDK do Facebook fora do Android e não muda nada no iPhone. Foi
+  isso que destravou a entrada: sem o Facebook, não há `facebook_app_id` para
+  faltar e o app não fecha na abertura.
+- Provado daqui, sem SDK do Android: `npm run build:native` e `npx cap sync
+  android` rodaram o gancho (`capacitor:sync:before`), que imprimiu "Facebook:
+  disabled" e escreveu `socialLogin.facebook.include=false` no
+  gradle.properties do plugin; o plugin entrou em `capacitor.settings.gradle` e
+  `capacitor.build.gradle`, que são versionados e vão no commit. O Codemagic
+  faz o mesmo `cap sync android` antes de compilar.
+- **O que o build NÃO resolve, e está na lista do dono:** o Google só abre a
+  caixinha se reconhecer pacote + assinatura. Precisa de um cliente OAuth do
+  tipo Android no mesmo projeto do cliente Web, com `mentorque.app` e os DOIS
+  SHA-1 (chave de upload do Codemagic e chave do Play App Signing). Sem isso
+  recusa com "Developer console is not set up correctly" e o app cai no
+  Chrome, que é o de hoje. E se a tela de consentimento estiver em Testing, as
+  contas de teste precisam estar na lista.
+- O README do plugin foi a fonte disso tudo, e vale a pena: ele imprime no
+  Logcat (filtro `GoogleProvider`) o SHA-1 e o pacote que o Google viu, para
+  comparar com o console. Está no roteiro da 1.9.
+
 ## 2026-09-07 · Banco: a cota estourou de novo, e a causa era uma coluna que ninguém lia mais
 
 - O dono trouxe o painel do Supabase: Database Size 0,527 de 0,5 GB (105%),

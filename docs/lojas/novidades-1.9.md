@@ -33,6 +33,16 @@ Só isto. Se algo não estiver na lista, não veio nesta versão.
    ligação inteira (arquivo entra, ajuste abre, botão recorta, foto vai para o
    carro) roda no navegador em `conferir:navegador foto`.
 
+5. **Entrar com o Google abre a caixinha do sistema no Android**, como no
+   iPhone, em vez de sair para o Chrome (decisão do dono: "vamos fazer na
+   caixinha"). O plugin `@capgo/capacitor-social-login` entrou no binário do
+   Android com o Facebook desligado por configuração, que era o que o segurava
+   fora. Precisa do `NEXT_PUBLIC_GOOGLE_WEB_CLIENT_ID` no build (já está no
+   Codemagic) E de um cliente OAuth do tipo Android no Google Cloud com o
+   pacote e os SHA-1 (lista do dono). **Se o Google não reconhecer a
+   assinatura, o app cai no navegador sozinho**, que é o caminho de hoje e
+   funciona: a folha nunca é beco sem saída (`conferir:login`).
+
 **Nenhuma permissão nova.** O Capacitor só pede `CAMERA` quando o app declara
 essa permissão no manifesto, e o nosso não declara: a foto sai por
 `ACTION_IMAGE_CAPTURE`, que é o app de câmera do aparelho fazendo o trabalho.
@@ -63,7 +73,12 @@ sumam, e isso é tudo o que ela pode fazer.
    tem de virar o avatar.
 5. **No iPhone**, tocar na foto tem de continuar abrindo a folha do SISTEMA, a
    de sempre, e não a nossa.
-6. **O ajuste com os dedos**, nos dois aparelhos: escolher uma foto do celular
+6. **Entrar com o Google no Android** tem de abrir a caixinha do sistema com
+   as contas, sem sair do app. Se abrir o Chrome, o Google não reconheceu
+   pacote + SHA-1: o Logcat com filtro `GoogleProvider` imprime o SHA-1 e o
+   pacote que ele viu, para comparar com o cliente Android do Google Cloud. E
+   nesse caso o login pelo Chrome tem de continuar funcionando, que é a queda.
+7. **O ajuste com os dedos**, nos dois aparelhos: escolher uma foto do celular
    (é 4:3 ou 9:16, então o ajuste TEM de abrir), arrastar com um dedo, fazer
    pinça com dois, e conferir que a moldura nunca mostra borda vazia. Usar a
    foto e conferir que o que ficou no carro é o pedaço que estava na moldura.

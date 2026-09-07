@@ -12,8 +12,11 @@ dependencies {
     implementation project(':capacitor-app')
     implementation project(':capacitor-browser')
     implementation project(':capacitor-local-notifications')
+    implementation project(':capacitor-push-notifications')
     implementation project(':capacitor-community-admob')
     implementation project(':revenuecat-purchases-capacitor')
+    implementation project(':capgo-capacitor-social-login')
+    implementation project(':appsflyer-capacitor-plugin')
 
 }
 
