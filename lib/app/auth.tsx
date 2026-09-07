@@ -159,7 +159,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           ? nativePlatform() === "ios"
           : googleNativeConfigured() && !isIPad();
 
-      if (canNative) return await nativeSocialLogin(supabase, provider);
+      // O CAMINHO NATIVO NÃO PODE VIRAR BECO SEM SAÍDA.
+      //
+      // Ele depende de o plugin estar DENTRO do binário, e quem decide isso é
+      // o capacitor.config.ts, arquivo que esta linha aqui não enxerga. Hoje o
+      // `@capgo/capacitor-social-login` está no `ios.includePlugins` e NÃO
+      // está no do Android. No Android o `import` até resolve, porque é
+      // JavaScript empacotado; o que não existe é o lado nativo, então o
+      // `initialize()` falha e o pedido morre em `login_nativo_indisponivel`.
+      //
+      // Sem esta queda, ligar a NEXT_PUBLIC_GOOGLE_WEB_CLIENT_ID no build do
+      // Android TIRAVA o único caminho de login que o Android tem e não punha
+      // nada no lugar: o portão abria para o nativo, o nativo não existia, e a
+      // pessoa via um erro em vez da tela do Google. Um interruptor que devia
+      // acrescentar um caminho apagava o outro.
+      //
+      // Os dois motivos abaixo são os únicos que o socialLogin.ts devolve
+      // ANTES de a folha abrir, ou seja, sem a pessoa ter visto nada. Depois
+      // que a folha abre, resultado é resultado: desistência é desistência e
+      // erro é erro, e reabrir no navegador seria arrastar de volta quem
+      // acabou de dizer não.
+      const SEM_CAMINHO_NATIVO = ["login_nativo_indisponivel", "google_sem_client_id"];
+      if (canNative) {
+        const r = await nativeSocialLogin(supabase, provider);
+        if (!r.error || !SEM_CAMINHO_NATIVO.includes(r.error)) return r;
+      }
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider,

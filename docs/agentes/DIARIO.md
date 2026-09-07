@@ -18,7 +18,8 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 |---|---|---|
 | Por que a receita é R$ 0,00 se há assinantes? | Cupom de 100% empilha com o teste grátis: 7 dias mais 1 mês. Não é defeito, o cupom faz o que promete. | 04/09, QA agendado |
 | Os cupons vão continuar zerando a fatura? | Não. São `duration: once`, já foram gastos, e as assinaturas estão com `discounts: []`. | 04/09, QA agendado |
-| O cadastro pelo app funciona? | **No iPhone sim, no Android nunca funcionou.** Em 4 semanas e 160 eventos, zero eventos do Android com conta; iPhone e web têm desde 24/08. O portão do login nativo exigia iOS, então sobrava só o caminho do navegador. Conserto no código em 07/09, mas só liga quando o client id do Android for passado. | 07/09, Engenharia |
+| O cadastro pelo app funciona? | **No iPhone sim, no Android nunca funcionou.** Em 4 semanas e 160 eventos, zero eventos do Android com conta; iPhone e web têm desde 24/08. O portão do login nativo exigia iOS, então sobrava só o caminho do navegador. Conserto no código em 07/09, mas o client id NÃO basta: o plugin da folha nativa não está no binário do Android, e essa decisão de build está na lista do dono. | 07/09, Engenharia |
+| Por que o toggle de avisos não fazia nada? | Ele só levava aos ajustes quando o sistema já tinha negado DE VEZ; nos outros nãos o toque era mudo. E a preferência guardada podia discordar da permissão do sistema, estado em que todo agendamento desistia calado. Consertado em 07/09. | 07/09, Engenharia |
 | Por que a migalha de fechamento não pega o crash do Android? | Porque ela só fala na ABERTURA SEGUINTE, e quem fecha e desiste não volta. Os seis relatos que ela deu eram todos da web, onde fechar o navegador produz a mesma evidência sem ser defeito. | 07/09, Engenharia |
 | Quantos assinantes existem de verdade? | **3 pessoas.** A tabela tem 6 linhas: 2 `inactive` e 1 conta de revisão das lojas (válida até 2099) não são clientes. | 04/09 |
 | Quando entra o primeiro dinheiro? | 01/10, depois 04/10 e por volta de 09/10, R$ 29,90 cada. Verificação já agendada para o dia 01. | 04/09, QA agendado |
@@ -33,6 +34,57 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
+
+## 2026-09-07 · Engenharia: o interruptor de avisos mentia, e o portão do login nativo quase apagou o login do Android
+
+- Rodada de relatos do dono, dois no mesmo minuto e com a mesma causa: "mudei o
+  toggle para Ligado e não aconteceu nada, não levou para configurações" e "o
+  toggle deve refletir as configurações do aparelho, se estiver ligado, não pode
+  mostrar desligado".
+- **O interruptor de avisos podia estar ligado com a permissão do sistema
+  ausente, e nesse estado TODO agendamento desistia em silêncio**, porque o
+  `sincronizarLembreteQuiz` sai fora sem permissão. Interruptor ligado, nenhum
+  aviso agendado, e nada na tela dizendo isso. Agora a verdade é o sistema: o
+  Perfil pergunta na montagem e reconfere ao voltar dos ajustes, porque liberar
+  a permissão acontece fora do app e voltar de lá não remonta a tela.
+- O caminho para os ajustes só existia quando o sistema já tinha negado de vez.
+  Em todos os outros nãos o toque não fazia nada visível. Quem liga está pedindo
+  para receber, então agora vai para os ajustes sempre que o pedido não termina
+  em permissão, e a linha bloqueada inteira também abre os ajustes.
+- **O QUASE-ACIDENTE, achado enquanto eu conferia o próximo passo do Android.**
+  Ontem o portão do login nativo foi aberto para o Android, com a
+  `NEXT_PUBLIC_GOOGLE_WEB_CLIENT_ID` como chave, e o dono já a configurou no
+  Codemagic. Só que o `@capgo/capacitor-social-login` NÃO está no
+  `android.includePlugins`: no Android o `import` resolve, o lado nativo não
+  existe, o `initialize()` falha e o pedido morre. **Com a variável no build, o
+  próximo APK teria ficado sem login do Google nenhum**, porque o portão abria
+  para o nativo e o caminho do navegador, o único que o Android tem hoje, nem
+  chegava a ser tentado. Um interruptor que devia somar um caminho apagava o
+  outro.
+- Conserto: o `auth.tsx` cai para o navegador quando o caminho nativo não
+  existe, e só pelos dois motivos que nascem ANTES de a folha abrir. Depois da
+  folha, desistência é desistência. A `npm run conferir:login` lê o `auth.tsx`,
+  o `socialLogin.ts` e o `capacitor.config.ts` juntos, que é a distância por
+  onde o defeito passou.
+- **O motivo documentado para o social-login ficar fora do Android caducou.** O
+  `docs/android-local.md` dizia que ele arrasta o SDK do Facebook, que derruba o
+  app sem `facebook_app_id`. Verdade até a versão 8.3.40 do plugin, que aceita
+  `plugins: { SocialLogin: { providers: { facebook: false } } }` e deixa o SDK
+  de fora. O que ainda segura é que essa chave é global e mexeria também no
+  binário do iPhone, que hoje funciona. Isso virou linha na lista do dono: é
+  decisão de build das duas lojas, com teste em aparelho, não de repositório.
+- Conferências provadas mordendo, uma por defeito plantado: três no Perfil e
+  cinco no login. **Uma delas não mordeu na primeira tentativa** e o registro
+  disso está no `mapa-do-codigo.md`: eu enumerei os motivos de queda no script e
+  conferi contra o código, então um motivo A MAIS no código passava por fora da
+  conferência inteira. Agora ela lê a lista do código e a minha vira só o mínimo
+  exigido.
+- **Recomendo, na ordem:** (1) decidir o social-login no Android, porque sem ele
+  a variável já configurada não liga folha nativa nenhuma; (2) pôr o mesmo
+  client id em "Authorized Client IDs" no provider Google do Supabase, senão a
+  folha nativa morre no último passo com "invalid audience"; (3) gerar o build
+  do Android, que é o que leva o conserto da tela de login (`81bec94`) e este
+  para os aparelhos.
 
 ## 2026-09-07 · Engenharia: o Android nunca teve uma conta, e a testemunha do crash vigia a plataforma errada
 

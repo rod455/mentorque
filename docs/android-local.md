@@ -141,7 +141,40 @@ A escolha de plugins por plataforma está em `capacitor.config.ts`
 (`android.includePlugins` e `ios.includePlugins`). O resto é decidido em tempo
 de execução por `nativePlatform()` e `sellsInApp()`, em `lib/app/wrapper.ts`.
 
-Vale notar por que o social-login fica **fora** do Android: ele arrasta o SDK do
-Facebook, que exige `facebook_app_id` no `strings.xml` e derruba o app na
-inicialização se faltar. No Android o login social segue pelo navegador, com o
-retorno pelo esquema `mentorque://` registrado no `AndroidManifest.xml`.
+### Por que o social-login fica fora do Android
+
+O motivo original: ele arrastava o SDK do Facebook, que exige `facebook_app_id`
+no `strings.xml` e derruba o app na inicialização se faltar. No Android o login
+social segue pelo navegador, com o retorno pelo esquema `mentorque://`
+registrado no `AndroidManifest.xml`.
+
+**Esse motivo caducou, e é bom saber disso antes de repetir a frase.** Da versão
+8.3.40 do plugin em diante dá para desligar o Facebook por configuração:
+
+```ts
+plugins: { SocialLogin: { providers: { facebook: false } } }
+```
+
+O gancho do plugin escreve `socialLogin.facebook.include=false` no
+`gradle.properties` dele, o `build.gradle` deixa a dependência do Facebook de
+fora e compila um substituto vazio no lugar do provedor. Ou seja, hoje o
+social-login **pode** entrar no Android sem o SDK do Facebook junto.
+
+O que ainda segura: essa chave é global, não por plataforma, então ela mexe
+também no build do iPhone, que hoje funciona (e que tem o
+`scripts/conserta-appsflyer.mjs` justamente contornando o Facebook que vem
+pelo iOS). Trocar o binário das duas lojas de uma vez pede build de verdade e
+teste em aparelho, não conferência de repositório. Enquanto isso não acontecer,
+o Android continua no caminho do navegador.
+
+### A queda que segura essa distância
+
+O portão do login nativo mora em `lib/app/auth.tsx` e a lista de plugins mora no
+`capacitor.config.ts`. Nenhum dos dois enxerga o outro, e foi por aí que passou
+um quase-acidente em 07/09/2026: com a `NEXT_PUBLIC_GOOGLE_WEB_CLIENT_ID` no
+build, o portão do Android abriria para uma folha nativa que não existe no
+binário dele, e o login do Android sumiria em vez de ganhar um caminho.
+
+Por isso o `auth.tsx` cai para o navegador quando o caminho nativo não existe, e
+a `npm run conferir:login` cobra essa queda lendo os dois arquivos. Se um dia o
+plugin entrar no Android, nada precisa mudar: a queda vira redundância.
