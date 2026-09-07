@@ -20,6 +20,7 @@ começar lendo em vez de garimpando.
 | um aviso do sininho | `lib/app/avisos.ts` |
 | onde o toque num aviso do celular abre o app | `lib/app/rotaPendente.ts` (e confira com `npm run conferir:aviso`) |
 | quando o interruptor de avisos segue o aparelho e quando não | `lib/app/espelhoDoAviso.ts` (e confira com `npm run conferir:aviso`) |
+| a conta do recorte de foto (carro e perfil) | `lib/app/recorte.ts` (e confira com `npm run conferir:recorte`); a tela é `components/app/AjusteDeFoto.tsx` e a ligação, `npm run conferir:navegador foto` |
 | quem pode pedir a permissão de aviso, e quantas vezes | `lib/app/pedidoDeAviso.ts` |
 | o que acontece na abertura do app | `lib/app/aberturaDoApp.ts` |
 | quem decide entre folha nativa e navegador no login social | `lib/app/auth.tsx` e `lib/app/socialLogin.ts` (e confira com `npm run conferir:login`) |

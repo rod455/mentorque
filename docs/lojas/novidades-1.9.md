@@ -24,6 +24,15 @@ Só isto. Se algo não estiver na lista, não veio nesta versão.
    oferecer os dois. A pergunta agora é nossa, com dois campos por trás. No
    iPhone nada muda: lá o sistema já pergunta.
 
+4. **A pessoa escolhe qual pedaço da foto fica**, no carro e no perfil, como no
+   WhatsApp: a foto atrás de uma moldura fixa, arrasta e aproxima (pinça ou
+   barra), e sai exatamente o que estava dentro. Aparece quando a foto precisa
+   (proporção diferente da moldura, ou maior do que o que é guardado); foto já
+   quadrada e pequena entra direto como sempre entrou. A conta mora em
+   `lib/app/recorte.ts` e a `conferir:recorte` a exercita com números; a
+   ligação inteira (arquivo entra, ajuste abre, botão recorta, foto vai para o
+   carro) roda no navegador em `conferir:navegador foto`.
+
 **Nenhuma permissão nova.** O Capacitor só pede `CAMERA` quando o app declara
 essa permissão no manifesto, e o nosso não declara: a foto sai por
 `ACTION_IMAGE_CAPTURE`, que é o app de câmera do aparelho fazendo o trabalho.
@@ -54,6 +63,11 @@ sumam, e isso é tudo o que ela pode fazer.
    tem de virar o avatar.
 5. **No iPhone**, tocar na foto tem de continuar abrindo a folha do SISTEMA, a
    de sempre, e não a nossa.
+6. **O ajuste com os dedos**, nos dois aparelhos: escolher uma foto do celular
+   (é 4:3 ou 9:16, então o ajuste TEM de abrir), arrastar com um dedo, fazer
+   pinça com dois, e conferir que a moldura nunca mostra borda vazia. Usar a
+   foto e conferir que o que ficou no carro é o pedaço que estava na moldura.
+   A pinça é o único gesto que a conferência de navegador não faz.
 
 ## Antes de enviar
 

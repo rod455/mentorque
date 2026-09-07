@@ -102,6 +102,14 @@ export function getContent(locale: Locale) {
   return {
     ...cat,
 
+    // O ajuste de foto (components/app/AjusteDeFoto.tsx): a pessoa escolhe qual
+    // pedaço da foto fica, como no WhatsApp. Serve ao carro e ao perfil.
+    recorte: {
+      titulo: T("Ajuste a foto", "Adjust the photo"),
+      dica: T("Arraste para posicionar. Aproxime com dois dedos ou pela barra.", "Drag to position. Pinch or use the bar to zoom."),
+      zoom: T("Aproximar", "Zoom"),
+      confirmar: T("Usar esta foto", "Use this photo"),
+    },
     common: {
       free: T("Grátis", "Free"),
       premium: "Premium",

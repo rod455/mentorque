@@ -7,8 +7,15 @@ import { useAuth } from "@/lib/app/auth";
 import { usePrototype } from "@/lib/app/store";
 import { AVISO, abrirAjustesDeAvisos, cancelar, notificacoesDisponiveis, pedirPermissao, permissaoConcedida } from "@/lib/app/notificacoes";
 import { espelhaOAparelho } from "@/lib/app/espelhoDoAviso";
-import { resizeImage } from "@/lib/app/image";
+import { lerImagem, resizeImage, type ImagemLida } from "@/lib/app/image";
+import { precisaDeAjuste } from "@/lib/app/recorte";
+import { AjusteDeFoto } from "../AjusteDeFoto";
 import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
+
+// O lado do avatar guardado. Era o `400` solto na chamada de resizeImage; virou
+// nome porque agora ele decide duas coisas (quando pedir ajuste e o tamanho do
+// recorte) e as duas têm de concordar.
+const LADO_DO_AVATAR = 400;
 import { cancelSubscription, deleteAccount, openBillingPortal, reactivateSubscription } from "@/lib/app/billing";
 import { isLocalDev, isNativeApp, nativePlatform, openExternal, sellsInApp, storeListingUrl } from "@/lib/app/wrapper";
 import { googleOffer, hasActiveEntitlement, initPurchases, offerPrice, type GoogleOption } from "@/lib/app/purchases";
@@ -400,13 +407,23 @@ export function ProfileScreen() {
     if (nativePlatform() === "android") setEscolhendoFoto(true);
     else avatarRef.current?.click();
   };
+  // Logado → sobe pro Storage e guarda só a URL. Convidado/falha → local.
+  const guardarAvatar = async (dataUrl: string) => {
+    const url = user ? await uploadUserPhoto(user.id, "avatar", dataUrl) : null;
+    setAvatar(url ?? dataUrl);
+  };
+  // A foto escolhida esperando o ajuste (qual pedaço fica no círculo). A regra
+  // de quando o ajuste aparece é a mesma da foto do carro: lib/app/recorte.ts.
+  const [ajustandoAvatar, setAjustandoAvatar] = useState<ImagemLida | null>(null);
   const pickAvatar = async (file?: File) => {
     if (!file) return;
     try {
-      const dataUrl = await resizeImage(file, 400, 0.85);
-      // Logado → sobe pro Storage e guarda só a URL. Convidado/falha → local.
-      const url = user ? await uploadUserPhoto(user.id, "avatar", dataUrl) : null;
-      setAvatar(url ?? dataUrl);
+      const lida = await lerImagem(file);
+      if (precisaDeAjuste(lida, { largura: LADO_DO_AVATAR, altura: LADO_DO_AVATAR })) {
+        setAjustandoAvatar(lida);
+        return;
+      }
+      await guardarAvatar(await resizeImage(file, LADO_DO_AVATAR, 0.85));
     } catch { /* ignore */ }
   };
 
@@ -444,8 +461,17 @@ export function ProfileScreen() {
               É ela que o BridgeWebChromeClient do Capacitor lê para decidir
               entre a câmera e o seletor de arquivos. Sem os dois campos não há
               como oferecer a escolha, porque um campo só carrega uma decisão. */}
-          <input ref={avatarRef} type="file" accept="image/*" className="hidden" onChange={(e) => pickAvatar(e.target.files?.[0])} />
-          <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => pickAvatar(e.target.files?.[0])} />
+          <input ref={avatarRef} type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; void pickAvatar(f); }} />
+          <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; void pickAvatar(f); }} />
+          {ajustandoAvatar && (
+            <AjusteDeFoto
+              fonte={ajustandoAvatar}
+              alvo={LADO_DO_AVATAR}
+              redondo
+              onConfirmar={async (foto) => { setAjustandoAvatar(null); await guardarAvatar(foto); }}
+              onCancelar={() => setAjustandoAvatar(null)}
+            />
+          )}
         </div>
       ) : enabled ? (
         <Card>

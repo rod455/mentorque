@@ -36,6 +36,47 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-07 · Produto: o ajuste de foto, como no WhatsApp, para o carro e o perfil
+
+- Pedido do dono, na mesma rodada dos relatos do Android: "usuário escolhe a
+  foto, se for grande, aparece um campo para selecionar qual parte da foto ele
+  quer, da mesma forma que funciona no WhatsApp e no Facebook". Para a foto do
+  carro e a do perfil.
+- **As duas molduras são quadradas** (o carro aparece em caixas de h-12 a h-16
+  com object-cover; o perfil é o círculo), então o recorte é 1:1 nos dois e o
+  que sai é um quadrado. "Se for grande" virou regra: a foto passa pelo ajuste
+  quando NÃO cabe do jeito que está, ou seja, proporção diferente da moldura ou
+  maior do que o que é guardado. Foto já quadrada e pequena entra direto, como
+  sempre entrou, sem tela a mais para não decidir nada.
+- **A conta mora fora da tela**, em `lib/app/recorte.ts`, em funções puras, e é
+  exercitada com números pela `conferir:recorte`. A tela
+  (`components/app/AjusteDeFoto.tsx`) só mede a moldura, ouve os dedos e
+  desenha. Dois jeitos de aproximar: a pinça, que é o gesto que a pessoa
+  espera, e uma barra, para um dedo só, para o navegador de mesa, e para a
+  conferência conseguir mexer no zoom, porque Playwright não faz pinça.
+- **A CONFERÊNCIA MORDEU ANTES DE EU PLANTAR NADA.** A primeira versão da conta
+  arredondava `x` para baixo e o tamanho para cima, cada um por conta própria,
+  e no limite da borda `x + largura` passava da imagem em 1 pixel por erro de
+  ponto flutuante. A varredura de gestos acusou cinco casos. Um pixel a mais
+  pedido ao canvas é uma linha preta na borda da foto pronta, que é exatamente o
+  que a regra da cobertura promete que não acontece, e nenhum teste de texto
+  veria. Agora arredonda para o pixel mais próximo e PRENDE o retângulo dentro
+  da imagem, tamanho primeiro e posição depois.
+- E depois disso, dos cinco defeitos plantados, um não mordeu: a regra que
+  ignorasse a proporção passava, porque o único caso 4:3 da conferência também
+  era maior que o alvo, e o tamanho sozinho já dizia sim. Entrou o caso
+  pequeno e 4:3, que só a proporção pega.
+- **A ligação inteira roda no navegador**, em `conferir:navegador foto`: a foto
+  gerada em PNG cru (800x600 para forçar o ajuste, 200x200 para dispensá-lo)
+  entra pelo campo, a tela abre, a barra e o arrasto mexem na foto, usar
+  recorta um JPEG 800x800 quadrado que vai para o carro e sobrevive à recarga;
+  cancelar preserva a foto de antes. A suíte quebrou duas vezes antes de
+  chegar lá, as duas na própria suíte e não no app: o item da lista de carros
+  é `<div role="button">` (o seletor por tag não o vê), e a folha de escolha
+  tem dois botões `close`, o fundo e o X, e o fundo fica coberto pelo painel.
+- O que só o aparelho responde, e está no roteiro da 1.9: a pinça com dois
+  dedos, e a moldura sem borda vazia durante o gesto.
+
 ## 2026-09-07 · Android: a foto do Google e o toque na câmera, os dois achados em aparelho de verdade
 
 - O dono instalou a segunda 1.8 no Android da Luana. **O login funcionou**, que
