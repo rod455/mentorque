@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/app/auth";
 import { useNav } from "@/lib/app/nav";
 import { appleLoginDisponivel } from "@/lib/app/socialLogin";
@@ -38,7 +38,7 @@ export function AuthScreen() {
   const c = useContent();
   const a = c.auth;
   const { back } = useNav();
-  const { signInEmail, signUpEmail, signInGoogle, signInApple, resetPassword, oauthError } = useAuth();
+  const { user, signInEmail, signUpEmail, signInGoogle, signInApple, resetPassword, oauthError } = useAuth();
   const [mode, setMode] = useState<"in" | "up">("in");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -57,6 +57,32 @@ export function AuthScreen() {
   // servidor faria o botão piscar diferente do que o cliente conclui.
   const [comApple, setComApple] = useState(false);
   useEffect(() => { setComApple(appleLoginDisponivel()); }, []);
+
+  // A TELA FECHA SOZINHA QUANDO A SESSÃO CHEGA.
+  //
+  // O DEFEITO, relatado em 07/09/2026 e confirmado no banco: a pessoa toca em
+  // "entrar com Google" no app do Android, faz todo o processo, e volta para
+  // ESTA MESMA TELA pedindo login de novo. Parece que o login falhou, e não
+  // falhou: em seis segundos a conta nasceu (12:03:14), o funil gravou o
+  // `cadastro` COM a conta ligada (12:03:18) e a nuvem recebeu o carro dela
+  // (12:03:20). Quem não percebeu o login foi a tela.
+  //
+  // A CAUSA está no `doSocial` aqui embaixo: no app nativo o login social
+  // devolve `deferred: true`, porque ele abre o navegador do sistema e volta
+  // na hora, antes de a pessoa ter digitado qualquer coisa. A tela recebe isso
+  // e para. A sessão chega depois, pelo deep link, e ninguém está olhando.
+  //
+  // NA WEB ISSO NUNCA APARECEU, e é por isso que passou: lá a volta do
+  // provedor RECARREGA a página, a tela é remontada do zero e a de login nem
+  // chega a ser desenhada. É um defeito que só existe onde não há recarga.
+  //
+  // Só fecha se a sessão apareceu DEPOIS de a tela abrir. Fechar por já estar
+  // logado ao montar tiraria a tela da frente de quem chegou aqui de
+  // propósito, e o certo nesse caso é ela ficar.
+  const jaEstavaLogado = useRef(!!user);
+  useEffect(() => {
+    if (user && !jaEstavaLogado.current) back();
+  }, [user, back]);
 
   const doSocial = async (provider: "google" | "apple") => {
     if (social) return;

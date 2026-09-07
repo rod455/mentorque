@@ -178,6 +178,34 @@ const CHAVE = "mq-venda-pendente";
     "onboarded é recalculado como `onboarded && vehicles.length > 0`, então quem paga e ainda não " +
       "cadastrou carro voltaria a ver as cinco páginas de venda depois de pagar"
   );
+  // A TELA DE LOGIN PRECISA SE FECHAR SOZINHA quando a sessão chega.
+  //
+  // O DEFEITO (07/09/2026): a pessoa toca em "entrar com Google" no app do
+  // Android, faz todo o processo, e volta para A MESMA TELA pedindo login.
+  // Parece que falhou, e não falhou: em seis segundos a conta nasceu, o funil
+  // gravou o `cadastro` COM a conta ligada, e a nuvem recebeu o carro dela.
+  // Quem não percebeu o login foi a tela.
+  //
+  // A causa: no app nativo o login social devolve `deferred`, porque abre o
+  // navegador do sistema e volta na hora. A tela recebia isso e parava; a
+  // sessão chegava depois, pelo deep link, sem ninguém olhando. NA WEB nunca
+  // apareceu, porque lá a volta do provedor recarrega a página e a tela é
+  // remontada do zero. Defeito que só existe onde não há recarga.
+  {
+    const tela = semComentarios2(readFileSync(new URL("../components/app/screens/Auth.tsx", import.meta.url), "utf8"));
+    conferir(
+      "a tela de login lê a sessão",
+      /useAuth\(\)/.test(tela) && /\buser\b/.test(tela.split("useAuth()")[0] + tela.split("useAuth()")[1]?.slice(0, 200)),
+      "sem ler `user` ela não tem como saber que o login aconteceu"
+    );
+    conferir(
+      "a tela de login se fecha quando a sessão aparece",
+      /if\s*\(\s*user[^)]*\)\s*back\(\)/.test(tela),
+      "o login social nativo devolve `deferred` e a tela para; sem este efeito ela fica pedindo login " +
+        "para quem já entrou, que é indistinguível de o login ter falhado"
+    );
+  }
+
   conferir(
     "e a pergunta vem ANTES de escolher o onboarding",
     portao.indexOf("veioComprar()") > -1 &&
