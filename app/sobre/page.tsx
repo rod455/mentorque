@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/stores";
 import { DEFINICAO_MENTORQUE, jsonLd } from "@/lib/jsonLd";
+import { LINKS_DOS_GUIAS } from "@/lib/site/guias/links";
 
 // mentorque.com.br/sobre — a resposta canônica sobre o produto.
 //
@@ -294,7 +295,13 @@ export default function Page() {
           </p>
           <p className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
             <a href="/" className="underline underline-offset-4 hover:text-cream">Mentorque</a>
-            <a href="/barulho-no-carro" className="underline underline-offset-4 hover:text-cream">Barulho no carro</a>
+            {/* Os guias vêm da lista pelo mesmo motivo do rodapé da home: o
+                caminho escrito aqui à mão era de quando só existia um, e os
+                três seguintes ficaram sem link a partir das duas páginas com
+                mais autoridade do site. */}
+            {LINKS_DOS_GUIAS.map((g) => (
+              <a key={g.caminho} href={g.caminho} className="underline underline-offset-4 hover:text-cream">{g.rotulo}</a>
+            ))}
             <a href="/privacidade" className="underline underline-offset-4 hover:text-cream">Privacidade</a>
             <a href="/termos" className="underline underline-offset-4 hover:text-cream">Termos</a>
           </p>

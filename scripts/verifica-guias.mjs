@@ -37,7 +37,8 @@ function conferir(nome, condicao, detalhe = "") {
 
 // Lê os guias como TEXTO, e isso é decisão, não preguiça: importar TypeScript
 // aqui exigiria compilar, e o que interessa conferir é o texto publicado.
-const arquivos = readdirSync(PASTA).filter((f) => f.endsWith(".ts") && f !== "tipos.ts" && f !== "index.ts");
+const NAO_SAO_GUIAS = new Set(["tipos.ts", "index.ts", "links.ts"]);
+const arquivos = readdirSync(PASTA).filter((f) => f.endsWith(".ts") && !NAO_SAO_GUIAS.has(f));
 conferir("existe pelo menos um guia", arquivos.length > 0);
 
 const registro = readFileSync(join(PASTA, "index.ts"), "utf8");
@@ -132,8 +133,63 @@ for (const arquivo of arquivos) {
   conferir(`${nome}: as respostas respondem`, curtas.length === 0, curtas.map((r) => r.slice(0, 50)).join(" | "));
 }
 
+// ── TODO GUIA TEM LINK A PARTIR DA HOME ─────────────────────────────────────
+//
+// O DEFEITO QUE ISTO PEGA, e ele estava de pé em 07/09/2026. O rodapé, que é o
+// que liga a home aos guias, tinha o `/barulho-no-carro` ESCRITO À MÃO, de
+// quando ele era o único. Os três guias seguintes subiram, entraram no sitemap
+// por construção (o registro cuida disso), abriram, funcionaram, e ficaram sem
+// nenhum link a partir da home: o único caminho até eles era o bloco de irmãos
+// no pé de outro guia.
+//
+// Nada deu erro. O sitemap estava certo, as páginas estavam certas, e três das
+// quatro páginas de palavra-chave do site eram quase órfãs. Para site novo,
+// link interno é metade da chance de a página ser rastreada, e o Search Console
+// não diz "faltou link": diz "detectada, mas não indexada".
+//
+// A lista do rodapé mora separada do registro de propósito (o rodapé é
+// componente de cliente e importar o registro arrastaria o corpo dos guias para
+// o pacote do navegador). Esta conferência é o que torna a separação segura:
+// duas listas que ninguém compara divergem, e foi assim que a primeira divergiu.
+const links = readFileSync(join(PASTA, "links.ts"), "utf8");
+
+// As páginas por onde o robô entra no site. As duas tinham o MESMO caminho
+// escrito à mão, e por isso são cobradas as duas: consertar só uma deixaria a
+// outra sangrando igual.
+const PORTAS = [
+  ["o rodapé da home", "components/sections/Footer.tsx"],
+  ["o rodapé da /sobre", "app/sobre/page.tsx"],
+];
+
+for (const [nome, caminho] of PORTAS) {
+  const fonte = readFileSync(join(RAIZ, caminho), "utf8");
+  conferir(
+    `${nome} lê os guias da lista, e não escreve caminho à mão`,
+    /LINKS_DOS_GUIAS\.map/.test(fonte),
+    `com o caminho escrito em ${caminho}, o próximo guia nasce sem link a partir dali`
+  );
+}
+
+const noRegistro = [...registro.matchAll(/^import \{ guia as \w+ \} from "\.(\/[^"]+)";$/gm)].map((m) => m[1]);
+const naLista = [...links.matchAll(/caminho:\s*"([^"]+)"/g)].map((m) => m[1]);
+
+for (const caminho of noRegistro) {
+  conferir(
+    `${caminho}: tem link no rodapé`,
+    naLista.includes(caminho),
+    "guia publicado e fora de lib/site/guias/links.ts é página sem link a partir da home"
+  );
+}
+for (const caminho of naLista) {
+  conferir(
+    `${caminho}: o link do rodapé aponta para um guia que existe`,
+    noRegistro.includes(caminho),
+    "link para guia que não está no registro é link quebrado no rodapé de todo o site"
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) de guias reprovaram.`);
   process.exit(1);
 }
-console.log(`Guias: ${arquivos.length} no ar, no sitemap, sem preço e sem número solto.`);
+console.log(`Guias: ${arquivos.length} no ar, no sitemap, com link na home, sem preço e sem número solto.`);

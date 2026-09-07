@@ -1,6 +1,7 @@
 "use client";
 
 import { useI18n } from "@/lib/i18n";
+import { LINKS_DOS_GUIAS } from "@/lib/site/guias/links";
 import { Logo } from "@/components/ui/Logo";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
 
@@ -18,10 +19,18 @@ export function Footer() {
     { href: "#plans", label: t.nav.plans },
     { href: "#faq", label: t.nav.faq },
     // Guias de busca: páginas próprias, indexáveis, fora da home. O link daqui
-    // não é enfeite — é por ele que o robô chega até elas a partir da página
-    // com mais autoridade do site. Só aparece em português porque os guias são
+    // não é enfeite: é por ele que o robô chega até elas a partir da página com
+    // mais autoridade do site. Só aparece em português porque os guias são
     // escritos em português.
-    ...(locale === "en" ? [] : [{ href: "/barulho-no-carro", label: "Barulho no carro" }]),
+    //
+    // VÊM DA LISTA, e não escritos aqui, porque escritos aqui já deu errado. O
+    // `/barulho-no-carro` estava fixo nesta linha de quando era o único guia.
+    // Os três seguintes subiram, entraram no sitemap por construção, abriram,
+    // funcionaram e ficaram SEM NENHUM LINK a partir da home: o único caminho
+    // até eles era o bloco de irmãos no pé de outro guia. Para página nova, num
+    // site novo, link interno é metade da chance de ser rastreada, e nada disso
+    // deu erro em lugar nenhum.
+    ...(locale === "en" ? [] : LINKS_DOS_GUIAS.map((g) => ({ href: g.caminho, label: g.rotulo }))),
     // A /sobre vale nos DOIS idiomas: ela não é guia de busca, é a descrição de
     // referência do produto, e é dela que sai o resumo quando alguém pergunta a
     // uma IA se existe app para entender o carro. Sem link a partir da home,

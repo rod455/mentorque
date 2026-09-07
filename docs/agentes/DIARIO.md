@@ -19,6 +19,7 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 | Por que a receita é R$ 0,00 se há assinantes? | Cupom de 100% empilha com o teste grátis: 7 dias mais 1 mês. Não é defeito, o cupom faz o que promete. | 04/09, QA agendado |
 | Os cupons vão continuar zerando a fatura? | Não. São `duration: once`, já foram gastos, e as assinaturas estão com `discounts: []`. | 04/09, QA agendado |
 | O cadastro pelo app funciona? | **No iPhone sim, no Android nunca funcionou.** Em 4 semanas e 160 eventos, zero eventos do Android com conta; iPhone e web têm desde 24/08. O portão do login nativo exigia iOS, então sobrava só o caminho do navegador. Conserto no código em 07/09, mas o client id NÃO basta: o plugin da folha nativa não está no binário do Android, e essa decisão de build está na lista do dono. | 07/09, Engenharia |
+| O sitemap, os canonical e os redirecionamentos do site estão certos? | **Estão**, conferidos um a um em 07/09: 11 URLs no sitemap, todas `www` e 200; canonical de cada página apontando para ela mesma; apex 308 para `www` num pulo; atalhos de venda 307 num pulo para `/app`, que é noindex. O que faltava era link interno, não configuração. | 07/09, SEO |
 | Por que o toggle de avisos não fazia nada? | Ele só levava aos ajustes quando o sistema já tinha negado DE VEZ; nos outros nãos o toque era mudo. E a preferência guardada podia discordar da permissão do sistema, estado em que todo agendamento desistia calado. Consertado em 07/09. | 07/09, Engenharia |
 | Por que a migalha de fechamento não pega o crash do Android? | Porque ela só fala na ABERTURA SEGUINTE, e quem fecha e desiste não volta. Os seis relatos que ela deu eram todos da web, onde fechar o navegador produz a mesma evidência sem ser defeito. | 07/09, Engenharia |
 | Quantos assinantes existem de verdade? | **3 pessoas.** A tabela tem 6 linhas: 2 `inactive` e 1 conta de revisão das lojas (válida até 2099) não são clientes. | 04/09 |
@@ -34,6 +35,46 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
+
+## 2026-09-07 · SEO: três das quatro páginas de palavra-chave não tinham link a partir da home
+
+- Rodada aberta pelo dono com um retrato do Search Console: três motivos de não
+  indexação, "Erro de redirecionamento" e "Página com redirecionamento" (fonte
+  Site) e "Detectada, mas não indexada" (fonte Google).
+- **O QUE ESTÁ CERTO, e foi conferido um a um, para ninguém reabrir isto:** o
+  sitemap tem as 11 URLs, todas em `www` e todas 200; o canonical de cada página
+  indexável aponta para ela mesma em `www`; o apex responde 308 limpo para o
+  `www`, um pulo só; os quatro atalhos de venda (`/ALE100` e irmãos) são 307 de
+  um pulo para `/app`, que é `noindex, nofollow`; nenhuma cadeia, nenhum laço.
+- **O DEFEITO REAL, e ele não aparece em nenhum dos três motivos com esse
+  nome:** o rodapé da home tinha `/barulho-no-carro` ESCRITO À MÃO, de quando
+  ele era o único guia. Os três seguintes subiram, entraram no sitemap por
+  construção, abriram, funcionaram e ficaram sem NENHUM link a partir da home. O
+  único caminho até eles era o bloco de irmãos no pé de outro guia. A `/sobre`,
+  que é a segunda página de mais autoridade, tinha o mesmo caminho fixo no
+  rodapé próprio dela.
+- É o mesmo defeito que o registro `lib/site/guias` foi criado para matar, num
+  lugar que ele não alcançava. O sitemap passou a ler do registro; o rodapé
+  ficou de fora e continuou de lista escrita à mão. Nada deu erro: as páginas
+  abrem, o sitemap está certo, e para site novo link interno é metade da chance
+  de a página ser rastreada. O Search Console não diz "faltou link": diz
+  "detectada, mas não indexada".
+- Conserto: `lib/site/guias/links.ts`, lista leve de caminho e rótulo (o rodapé
+  é componente de cliente e importar o registro arrastaria o corpo dos quatro
+  guias para o pacote do navegador). A `conferir:guias` compara as duas listas
+  nos dois sentidos e cobra que as duas portas leiam dela. Três defeitos
+  plantados, três reprovações.
+- **O QUE EU NÃO CONSIGO RESPONDER DAQUI, e não vale adivinhar:** quais URLs
+  estão em "Erro de redirecionamento". A saída de rede para o domínio é
+  bloqueada neste ambiente e o Search Console não tem porta para agente. Todas
+  as formas de URL que dá para deduzir do código respondem certo. A lista sai em
+  dois toques: no Search Console, tocar na linha do motivo, ou EXPORTAR.
+- Achado de lado, que não é causa dos três motivos mas é sujeira: o projeto tem
+  três domínios `.vercel.app` públicos servindo o site inteiro, e o
+  `mentorque-ten.vercel.app` é ALIAS DE PRODUÇÃO, então não ganha o `noindex`
+  automático que a Vercel dá aos previews. O canonical de lá aponta para o
+  `www`, que é o que segura; some do índice como "página alternativa com tag
+  canônica adequada", que é um motivo diferente dos três do retrato.
 
 ## 2026-09-07 · Engenharia: o espelho do interruptor seguia o aparelho demais, e desligar tinha virado impossível
 
