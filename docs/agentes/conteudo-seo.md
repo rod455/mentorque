@@ -122,15 +122,71 @@ preço/planos, tocar em telas de app fora de conteúdo.
   assunto. O passo a passo de execução pode ser premium; o "o que é isso que
   estou ouvindo" não pode, senão o gancho é desperdiçado.
 
-- **Não dá para conferir o site no ar por esta sessão.** O proxy recusa a
-  conexão com www.mentorque.com.br (403 no CONNECT), do mesmo jeito que já
-  recusa a /api/funil para o Diretor. Conferência de página publicada para
-  no HTML gerado pelo build; dizer "está no ar" sem ter visto é inventar.
+- **Não dá para abrir o site por esta sessão, mas dá para provar que ele
+  está no ar.** O proxy recusa a conexão com www.mentorque.com.br (403 no
+  CONNECT). Isso NÃO é motivo para parar: a API da Vercel responde e diz o
+  estado do deploy de produção. `list_teams` devolve
+  `team_yuqh4yUR9jZyckA6KS3QqgKq`, `list_projects` devolve o projeto
+  `mentorque` (`prj_J84gfQIYgY76qtOyVUrNJARJtam5`) e `list_deployments`
+  mostra `state: READY, target: production` com o commit de cada um. O que
+  ela não faz é ler o HTML servido; para isso, o caminho é pedir ao dono uma
+  olhada de dois segundos. "Bloqueado" é meia frase; a outra metade é quem
+  destrava.
+
+- **Conferência vermelha nesta sessão é suspeita de dependência velha antes
+  de ser notícia.** Em 08/09 o `conferir:appsflyer` reprovou e o relatório
+  chegou a ser escrito dizendo que o portão estava quebrado na main. Não
+  estava: aquela conferência olha um remendo aplicado por `postinstall`
+  dentro de `node_modules`, que não é versionado, e o `node_modules` do
+  contêiner era anterior ao remendo. Rodar o script de postinstall à mão (ou
+  `npm ci`) resolveu e o `conferir` passou inteiro. O teste custa segundos e
+  evita mandar o Diretor caçar defeito que não existe. Reprovou numa
+  conferência que não tem nada a ver com a sua mudança: rode `npm ci` antes
+  de escrever a palavra "defeito".
 
 - **Expectativa honesta sobre busca**: o sinal para acompanhar nas primeiras
   semanas é INDEXAÇÃO no Search Console, não visita. Impressão vem depois de
   indexar, clique vem depois de impressão. Prometer tráfego para uma data é
   invenção, e invenção é proibida aqui.
+
+- **O sinal que separa conteúdo de campanha é a CONSULTA, não o total.**
+  Impressão por `mentorque` é marca, e campanha paga faz marca subir
+  sozinha (o Google Ads começou em 01/09). O que mede este papel é consulta
+  de CATEGORIA: alguém que procurava um problema e não a gente. Em 08/09
+  apareceu a primeira, `carro nao quer pegar`, 1 impressão na posição 80.
+  Ao ler a busca, sempre separe as duas famílias antes de dizer se subiu.
+  As consultas estão no pacote `search_console` do retrato, campo
+  `topConsultas`; o pacote traz consulta e não página, então não dá para
+  atribuir a impressão a um guia específico daqui.
+
+- **Toda aposta de conteúdo sai com data de releitura e com o que se faz em
+  cada desfecho.** "0 clique é esperado numa página de uma semana" está
+  certo e é inútil sozinho, porque não diz quando deixa de ser esperado. A
+  releitura de 06/10 está escrita no artifact de 08/09 com três desfechos, e
+  um deles muda a recomendação do papel de "escrever mais página" para
+  "conseguir a primeira citação de fora". Rodada que só descreve não decide
+  nada.
+
+- **Como escolher conteúdo pelo que o app PERGUNTA, e não pelo que falta.**
+  A contagem por sistema em `aulas.ts` sozinha diz onde há buraco; ela fica
+  muito mais forte cruzada com `sintomas.ts`, que é o que o app pergunta à
+  pessoa. Em 08/09: 47% dos 19 sintomas são de freio, suspensão ou pneu,
+  contra 9% das 104 aulas. Um desequilíbrio desses é melhor argumento que
+  "falta conteúdo de freio", porque descreve uma promessa quebrada e não um
+  gosto. Contas rápidas (use o módulo, não regex: `id:` também casa com
+  curso e categoria, e o `art()` resolve `system` ausente para `geral`):
+
+  ```
+  node --experimental-strip-types -e "
+  import('./lib/app/conteudo/aulas.ts').then(({aulas})=>{
+    const {lessons}=aulas((pt)=>pt); const por={};
+    for(const l of lessons) por[l.system]=(por[l.system]||0)+1;
+    console.log(lessons.length, por);
+  })"
+  ```
+
+  Lembre que `addedAt` no futuro segura a aula: o número do `conferir:catalogo`
+  conta o arquivo, e o que está publicado hoje é menor.
 
 ## Feedback da rodada de 01/09/2026 (pauta do freio)
 

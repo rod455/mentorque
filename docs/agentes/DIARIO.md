@@ -36,6 +36,72 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-08 · Conteúdo & SEO: aula de freio, e o app pergunta o que não sabe ensinar
+- Artifact "Conteúdo da semana":
+  https://claude.ai/code/artifact/12bd9ce0-9d29-40fb-a323-9eb0d21f4137
+- ENTREGA DA RODADA (formato c, artigo do catálogo): aula
+  `diag-freio-avisos`, "Freio: os avisos que vêm antes do barulho".
+  Gratuita, trilha de Diagnóstico, PT+EN, formato estruturado, sem
+  travessão. Ângulo escolhido para não repetir o que existe (a
+  `diag-noises` é barulho por momento, a `diag-vibracao` é vibração por
+  velocidade): o freio avisa MUITO antes de fazer barulho, pelo pedal
+  (altura, curso, firmeza) e pelo reservatório de fluido.
+- A parte que quase ninguém conhece, e é o miolo da aula: conforme a
+  pastilha afina, o pistão avança mais e o espaço extra é preenchido por
+  fluido do reservatório. O nível baixa devagar SEM vazamento nenhum, e o
+  reservatório vira medidor de desgaste. Daí sai a consequência prática:
+  completar sem olhar a pastilha é apagar o aviso, e o fluido volta e
+  transborda no dia da troca.
+- Ligada nos dois sentidos: a `brake-pads` e a `diag-noises` não tinham
+  campo `related` nenhum, e agora apontam para a aula nova. Quem abre a
+  troca ainda pode estar decidindo SE precisa trocar, e essa decisão não
+  pode morar atrás do paywall. Entrou também na trilha "O que o carro diz".
+- O RECORTE INTEIRO, como o feedback de 01/09 pediu. São 104 aulas
+  publicadas (106 no arquivo, 2 agendadas para estrear com vídeo): motor
+  52 (50%), geral 37, elétrica 6, pneus 5, suspensão 2, freios 2. Freio,
+  suspensão e pneu somados são 9 de 104, e um deles é a aula de hoje.
+  Desde 01/09 o catálogo ganhou 3 aulas publicadas, duas de motor e esta,
+  e as duas agendadas (10 e 17/09) também são de motor.
+- ACHADO QUE VALE MAIS QUE A CONTAGEM: o diagnóstico por sintoma é
+  EQUILIBRADO e o acervo não. São 19 sintomas (motor 6, elétrica 4, freios
+  3, suspensão 3, pneus 3), ou seja 47% deles são dos três sistemas
+  sentidos, contra 9% das aulas. **O app pergunta sobre freio, suspensão e
+  pneu quase tanto quanto sobre motor, e não tem para onde mandar a pessoa
+  aprender quando ela responde que sim.** Serve de critério de escolha para
+  quem programar conteúdo novo, não só para este papel.
+- RELEITURA MARCADA DA BUSCA (o feedback deixou o número de 01/09 para
+  reler): era 0 clique e 2 impressões em 28 dias, única consulta
+  `mentorque`. Hoje são 0 cliques e 7 impressões, e as consultas viraram
+  três: `mentorque` (4 impressões, posição 1), a mesma marca com operadores
+  de site (1, posição 1, e isso é ferramenta e não gente) e **`carro nao
+  quer pegar`, 1 impressão na posição 80: a primeira consulta de CATEGORIA
+  da história**. Posição 80 é página 8, não é tráfego, é reconhecimento. O
+  termo bate com o guia `/carro-nao-pega`, que já existe; o pacote traz
+  consulta e não página, então não dá para afirmar daqui que a impressão
+  foi nele e não na home.
+- PRÓXIMA RELEITURA MARCADA PARA 06/10, com o que se faz em cada desfecho
+  escrito no artifact. Ressalva que vale para os três: a campanha do Google
+  começou em 01/09 e campanha faz subir busca por MARCA, então crescer em
+  `mentorque` não conta como resultado de conteúdo.
+- CONFERÊNCIA DESTRAVADA: o proxy desta sessão segue recusando o site, mas
+  a API da Vercel responde e diz que o deploy de produção está READY no
+  commit de hoje. Ou seja, os quatro guias estão no ar. O caminho ficou no
+  manual para as próximas rodadas não pararem no "bloqueado".
+- ALARME FALSO QUE QUASE FOI REPORTADO: o `conferir:appsflyer` reprovou, e
+  este relatório chegou a dizer que o portão estava quebrado na main. Não
+  estava. Aquela conferência olha um remendo aplicado por `postinstall`
+  dentro de `node_modules`, que não é versionado, e o `node_modules` desta
+  sessão era anterior ao remendo. Rodei o `scripts/conserta-appsflyer.mjs`
+  à mão e o `npm run conferir` passa inteiro, exit 0. No CI o remendo entra
+  sozinho, porque lá roda `npm ci`.
+- Próximas: (1) pauta sobre amortecedor (suspensão tem 2 aulas e nenhuma
+  é "o que a suspensão avisa"); (2) guia `/carro-puxando-para-um-lado`,
+  que SUBSTITUI a LP de luz de injeção que eu mesmo tinha proposto, por
+  dois motivos: era motor de novo, e o guia `/luz-da-injecao-acesa` já foi
+  escrito por outra rodada. Puxar para um lado atravessa os três sistemas
+  sentidos de uma vez e o app já tem `brake-pull`, `tire-uneven-wear` e
+  `steering-vibration` para sustentar o texto.
+
 ## 2026-09-07 · Android: a folha nativa do Google entra no binário ("vamos fazer na caixinha")
 
 - Decisão do dono, depois de eu explicar em uma frase o que estava na lista

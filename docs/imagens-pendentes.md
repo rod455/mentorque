@@ -245,3 +245,15 @@ Primeira leva de Shorts próprios, publicada em 08/08/2026. Entraram sem capa
 | `vid-pneu-indices` | Índice de carga e velocidade do pneu |
 | `vid-pneu-medidas` | Ler a medida do pneu (225/45 R17) |
 | `vid-gasolina-e30` | Gasolina com 30% de etanol |
+
+## 10. Aulas novas sem capa · `public/learn/<id>.png` · 600 × 600
+
+Aulas escritas depois do último pacote de arte. Entram sem `thumb` de
+propósito: sem o campo, o card cai no ícone âmbar da trilha, que é limpo.
+Apontar para um arquivo que não existe seria pior, e pior ainda numa aula
+publicada entre dois builds, que chega ao aparelho pelo catálogo remoto (o
+texto viaja pela rede, o arquivo não).
+
+| id | aula |
+|---|---|
+| `diag-freio-avisos` | Freio: os avisos que vêm antes do barulho |
