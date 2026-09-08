@@ -239,6 +239,46 @@ cliques e 2 impressões em 28 dias, e a ÚNICA consulta é `mentorque`**, a
 marca, na posição 1. Nenhuma impressão para termo de categoria. É o número
 que a próxima rodada tem que reler.
 
+## O que mudou nos guias em 08/09/2026, e o que isso cobra de quem escreve
+
+Rodada pedida pelo dono ("vamos evoluir todos os pontos"). O que o próximo guia
+precisa trazer, além do texto:
+
+- **`publicadoEm` e `atualizadoEm`** no registro. Aparecem na página, vão no
+  `lastModified` do sitemap e no `Article` do dado estruturado. Mudou texto,
+  sobe a `atualizadoEm`; mudou só estrutura, não.
+- **`relerEm`** quando o guia carrega fato com validade (o de gasolina vence em
+  10/01/2027). A `conferir:guias` REPROVA quando a data passa; o conserto é
+  reler o fato, corrigir e mover a data.
+- **Link no meio do texto** com `[[/caminho#ancora|texto]]`, nunca no FAQ.
+  Cada guia novo linka pelo menos um irmão onde o assunto aparece, e é linkado
+  de volta. A conferência cobra que caminho e âncora existam.
+- **O caminho do guia entra em `SO_NO_SITE`** (`scripts/build-native.mjs`).
+  Três dos quatro guias viajaram dentro do app por semanas porque só o primeiro
+  estava lá. Agora a conferência compara a lista com o registro.
+- **A imagem de compartilhamento nasce sozinha** em `/og/<caminho>`; nada a
+  fazer.
+
+**FAQ rich result não existe para nós.** Desde agosto de 2023 o Google só
+mostra caixinha de FAQ para sites de governo e saúde. O `FAQPage` fica por ser
+descrição honesta da página, não por resultado. O que descreve um guia para o
+buscador é o `Article` com datas, autor e publicador, e o `BreadcrumbList`.
+
+**A medição por página existe a partir daqui**, em duas metades: a Vercel
+Analytics no site (chave no painel da Vercel, lista do dono) e `topPaginas` no
+coletor do Search Console (n8n, precisa da credencial escolhida no nó, lista do
+dono). É esse o número que o mandato manda acompanhar, e até 08/09 ele não
+existia.
+
+**Próximo guia, escolhido por dado e não por gosto.** A única consulta de
+categoria que o Search Console registrou em 28 dias foi "carro nao quer pegar",
+posição 80, no `/carro-nao-pega`. Partida e bateria são o que apareceu. O
+irmão natural é **bateria do carro descarregando** (por que arria, como testar
+antes de trocar, quando é o alternador), que conversa com o bloco
+`girando-devagar` do guia de partida e com o diagnóstico do app. Volume de
+busca não dá para medir daqui e não foi inventado. A pergunta que decide a
+rodada seguinte: quantas impressões cada guia teve em `topPaginas`.
+
 ## Direcionamentos do dono
 
 - **01/09/2026: as 7 aulas que prometiam vídeo viraram artigo, e o dono quer

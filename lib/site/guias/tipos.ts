@@ -28,9 +28,37 @@ export type Bloco = {
 
 export type Pergunta = { p: string; r: string };
 
+/**
+ * LINK NO MEIO DO TEXTO, com a mesma marcação do catálogo de aulas:
+ * `[[/caminho|texto]]` ou `[[/caminho#ancora|texto]]`. Vale em abertura,
+ * causas, observar, urgência e no bloco de segurança. NÃO vale no FAQ, porque
+ * a resposta do FAQ vira dado estruturado e marcação dentro dele é lixo para o
+ * buscador; a `conferir:guias` reprova se aparecer lá.
+ *
+ * Por que existe (08/09/2026): os guias só se citavam num bloco de lista no
+ * fim da página. O texto da luz da injeção falava de consumo sem apontar o
+ * guia de consumo; o de consumo falava da luz acesa sem apontar o da luz. Link
+ * no meio da frase, onde o assunto aparece, vale mais para o buscador do que
+ * lista no pé, e para a pessoa também: é ali que a dúvida nasce.
+ */
 export type Guia = {
   /** Caminho da página, com barra na frente. É a chave do registro. */
   caminho: string;
+  /**
+   * DATAS, em aaaa-mm-dd. Aparecem na página, vão no `lastModified` do sitemap
+   * e no `Article` do dado estruturado. Existem porque texto que diz "pare o
+   * carro" precisa dizer de quando é, e porque o buscador mostra a data no
+   * resultado. `atualizadoEm` sobe a cada mudança de TEXTO, não de estrutura.
+   */
+  publicadoEm: string;
+  atualizadoEm: string;
+  /**
+   * Fato com validade dentro do guia: a data em que ele precisa ser relido e o
+   * motivo. A conferência REPROVA quando a data passa, de propósito: página
+   * pública com número vencido mente com cara de dado, e o conserto é uma
+   * linha (reler o fato, corrigir, mover a data).
+   */
+  relerEm?: { quando: string; porque: string };
   /** Etiqueta acima do H1. */
   rotulo: string;
   h1: string;

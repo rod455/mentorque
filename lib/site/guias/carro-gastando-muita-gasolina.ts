@@ -25,6 +25,13 @@ import type { Guia } from "./tipos";
 
 export const guia: Guia = {
   caminho: "/carro-gastando-muita-gasolina",
+  publicadoEm: "2026-09-04",
+  atualizadoEm: "2026-09-08",
+  // A mistura de 32% foi aprovada em 14/07/2026 por 180 dias, com uma
+  // prorrogação possível: vence por volta de 10/01/2027. A partir dali o texto
+  // do bloco "combustivel" e a resposta do FAQ precisam ser relidos contra o
+  // que o CNPE decidiu, e a conferência reprova até isso acontecer.
+  relerEm: { quando: "2027-01-10", porque: "a mistura de 32% de etanol valia por 180 dias a partir de 14/07/2026" },
   rotulo: "Guia de diagnóstico",
   h1: "Carro gastando muita gasolina: como descobrir se mudou mesmo",
   tituloSeo: "Carro gastando muita gasolina: causas e como medir | Mentorque",
@@ -97,7 +104,7 @@ export const guia: Guia = {
       causas: [
         "Pressão dos pneus abaixo do especificado. É o item mais barato da lista e um dos que mais influenciam, porque pneu murcho aumenta a resistência ao rolamento o tempo todo.",
         "Filtro de ar sujo, que dificulta a respiração do motor e costuma ser trocado tarde demais.",
-        "Velas de ignição gastas, que fazem a queima ficar incompleta e cobram isso em combustível e em desempenho.",
+        "[[/luz-da-injecao-acesa#piscando|Velas de ignição gastas]], que fazem a queima ficar incompleta e cobram isso em combustível e em desempenho.",
         "Bicos injetores sujos e sensores de mistura fora de faixa, que costumam vir acompanhados de marcha lenta irregular.",
       ],
       observar: [
@@ -143,7 +150,7 @@ export const guia: Guia = {
     itens: [
       "Cheiro de combustível dentro ou ao redor do carro, que pode indicar vazamento.",
       "Mancha de combustível no chão onde o carro fica estacionado.",
-      "Luz da injeção acesa junto com a piora do consumo.",
+      "[[/luz-da-injecao-acesa#fixa|Luz da injeção acesa]] junto com a piora do consumo.",
       "Fumaça preta saindo do escapamento ao acelerar.",
       "Perda de força ou engasgo aparecendo junto com o aumento do gasto.",
     ],

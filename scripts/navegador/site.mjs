@@ -105,4 +105,44 @@ export async function rodar({ nav, ok }) {
     }
     await ctx.close();
   }
+
+  // ── O GUIA RENDERIZADO, não o código do guia ─────────────────────────────
+  //
+  // A `conferir:guias` lê os arquivos; isto aqui abre a página e olha o que a
+  // pessoa e o robô recebem. Três coisas que entraram em 08/09/2026 e que só
+  // existem de verdade se aparecerem no HTML: a data visível, o link no meio
+  // do texto (a marcação `[[...]]` virou `<a>` e não texto cru), e o cartão de
+  // compartilhamento respondendo imagem. Um guia basta: os quatro passam pelo
+  // mesmo componente.
+  {
+    const ctx = await nav.newContext({ viewport: { width: 390, height: 900 } });
+    const pg = await ctx.newPage();
+    const caminho = GUIAS[0];
+    await pg.goto(BASE + caminho, { waitUntil: "networkidle" }).catch(() => {});
+    const visto = await pg.evaluate(() => ({
+      data: !!document.querySelector("main time[datetime]"),
+      publicado: /Publicado em/.test(document.querySelector("main")?.textContent ?? ""),
+      // Pelo atributo que a marcação `[[...]]` produz, e não por "<a> dentro
+      // de <article>": a primeira versão reprovou o guia de barulho, cujo único
+      // link do corpo está no bloco de segurança, que é <section>. E "a[href^='/']"
+      // solto pegaria a lista de outros guias no fim da página, que não é corpo.
+      linkNoCorpo: !!document.querySelector("main a[data-link-no-texto]"),
+      marcacaoCrua: /\[\[/.test(document.querySelector("main")?.textContent ?? ""),
+      article: /"@type":"Article"/.test(document.querySelector("script[type='application/ld+json']")?.textContent ?? ""),
+      og: document.querySelector("meta[property='og:image']")?.getAttribute("content") ?? "",
+    }));
+    ok(`${caminho}: a data de publicação está na página`, visto.data && visto.publicado);
+    ok(`${caminho}: há link para outro guia no meio do texto`, visto.linkNoCorpo);
+    ok(`${caminho}: nenhuma marcação [[...]] saiu crua para a pessoa`, !visto.marcacaoCrua);
+    ok(`${caminho}: o dado estruturado é um Article`, visto.article);
+    ok(`${caminho}: o og:image é o cartão do próprio guia`, visto.og.endsWith(`/og${caminho}`), visto.og);
+    const resp = await pg.request.get(BASE + `/og${caminho}`).catch(() => null);
+    ok(
+      `${caminho}: o cartão de compartilhamento responde uma imagem`,
+      !!resp && resp.status() === 200 && (resp.headers()["content-type"] ?? "").startsWith("image/"),
+      resp ? `${resp.status()} ${resp.headers()["content-type"] ?? ""}` : "sem resposta"
+    );
+    await pg.close();
+    await ctx.close();
+  }
 }

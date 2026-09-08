@@ -40,7 +40,23 @@ nextEnv.loadEnvConfig(root, false, { info: () => {}, error: console.error });
 // (renderizam no servidor sem searchParams), mas são páginas de busca do site,
 // escritas para quem ainda não tem o app. Dentro do binário virariam peso morto
 // com links para as lojas onde a pessoa já está.
-const SO_NO_SITE = ["api", "landing", "painel", "barulho-no-carro", "sobre"];
+// Toda rota que só existe no site entra aqui, senão vai dentro do binário do
+// app como página morta (ou derruba a exportação, no caso das rotas
+// dinâmicas). Os GUIAS precisam estar todos: até 08/09/2026 só o primeiro
+// estava, e os três seguintes viajaram no app sem ninguém notar. A
+// `conferir:guias` compara esta lista com o registro dos guias.
+const SO_NO_SITE = [
+  "api",
+  "landing",
+  "painel",
+  "sobre",
+  // Os guias de sintoma (lib/site/guias) e o cartão de compartilhamento deles.
+  "barulho-no-carro",
+  "luz-da-injecao-acesa",
+  "carro-nao-pega",
+  "carro-gastando-muita-gasolina",
+  "og",
+];
 const PARK = path.join(root, ".build-native-parked");
 // Com `distDir` customizado, `output: "export"` grava o HTML dentro do próprio
 // distDir em vez de `out/`.

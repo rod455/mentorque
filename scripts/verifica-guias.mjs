@@ -133,6 +133,105 @@ for (const arquivo of arquivos) {
   conferir(`${nome}: as respostas respondem`, curtas.length === 0, curtas.map((r) => r.slice(0, 50)).join(" | "));
 }
 
+// ── DATAS, LINKS NO TEXTO, E O QUE SÓ EXISTE NO SITE ────────────────────────
+//
+// Entrou em 08/09/2026, na rodada que evoluiu o SEO. Cada bloco cobra uma
+// ligação que, quando faltou, deixou o defeito de pé sem erro nenhum.
+{
+  const hoje = new Date();
+  hoje.setUTCHours(0, 0, 0, 0);
+  const dataValida = (s) => /^\d{4}-\d{2}-\d{2}$/.test(s ?? "") && !Number.isNaN(new Date(`${s}T00:00:00Z`).getTime());
+  const idsPorGuia = new Map();
+
+  for (const arquivo of arquivos) {
+    const nome = arquivo.replace(/\.ts$/, "");
+    const corpo = semComentarios(readFileSync(join(PASTA, arquivo), "utf8"));
+    const caminho = (corpo.match(/caminho:\s*"([^"]+)"/) ?? [])[1];
+    idsPorGuia.set(caminho, [...corpo.matchAll(/^\s{6}id:\s*"([^"]+)"/gm)].map((m) => m[1]));
+
+    // 1. DATAS. Página que diz "pare o carro" precisa dizer de quando é, e é a
+    //    data que o buscador mostra no resultado e que vai no sitemap.
+    const pub = (corpo.match(/publicadoEm:\s*"([^"]+)"/) ?? [])[1];
+    const atu = (corpo.match(/atualizadoEm:\s*"([^"]+)"/) ?? [])[1];
+    conferir(`${nome}: tem data de publicação válida`, dataValida(pub), `publicadoEm = ${pub}`);
+    conferir(`${nome}: tem data de atualização válida`, dataValida(atu), `atualizadoEm = ${atu}`);
+    if (dataValida(pub) && dataValida(atu)) {
+      conferir(`${nome}: atualizado não vem antes de publicado`, atu >= pub, `${atu} < ${pub}`);
+      conferir(`${nome}: a data de atualização não está no futuro`, new Date(`${atu}T00:00:00Z`) <= hoje, atu);
+    }
+
+    // 2. FATO COM VALIDADE. Reprova quando a data de releitura passou, de
+    //    propósito: o conserto é reler o fato e mover a data, e o custo de não
+    //    fazer isso é uma página pública com número vencido.
+    const reler = (corpo.match(/relerEm:\s*\{\s*quando:\s*"([^"]+)"/) ?? [])[1];
+    if (reler) {
+      conferir(`${nome}: a data de releitura é válida`, dataValida(reler), reler);
+      conferir(
+        `${nome}: o fato com validade ainda vale (reler em ${reler})`,
+        new Date(`${reler}T00:00:00Z`) > hoje,
+        "passou a data: reler o fato contra a fonte, corrigir o texto e mover a data de releitura"
+      );
+    }
+
+    // 3. MARCAÇÃO DE LINK FORA DO FAQ. A resposta do FAQ vira dado estruturado
+    //    e marcação dentro dele é lixo para o buscador.
+    const faq = (corpo.match(/faq:\s*\[([\s\S]*)\]\s*,?\s*\}\s*;?\s*$/) ?? [])[1] ?? "";
+    conferir(`${nome}: sem marcação de link dentro do FAQ`, !/\[\[/.test(faq), "o FAQ vira JSON-LD; link ali vira texto quebrado no buscador");
+  }
+
+  // 4. TODO LINK DO TEXTO APONTA PARA GUIA E ÂNCORA QUE EXISTEM. Link para
+  //    caminho errado é 404 no meio do texto; âncora errada é rolagem para lugar
+  //    nenhum. Os dois passam calados por qualquer leitura de código.
+  let linksNoTexto = 0;
+  for (const arquivo of arquivos) {
+    const nome = arquivo.replace(/\.ts$/, "");
+    const corpo = semComentarios(readFileSync(join(PASTA, arquivo), "utf8"));
+    for (const m of corpo.matchAll(/\[\[([^|\]]+)\|([^\]]+)\]\]/g)) {
+      linksNoTexto++;
+      const [alvo, ancora] = m[1].split("#");
+      conferir(`${nome}: o link "${m[2]}" aponta para um guia que existe (${alvo})`, idsPorGuia.has(alvo));
+      if (ancora) {
+        conferir(
+          `${nome}: a âncora #${ancora} existe em ${alvo}`,
+          (idsPorGuia.get(alvo) ?? []).includes(ancora),
+          `âncoras de ${alvo}: ${(idsPorGuia.get(alvo) ?? []).join(", ")}`
+        );
+      }
+    }
+  }
+  conferir("os guias se citam no meio do texto, não só no rodapé", linksNoTexto >= 4, `${linksNoTexto} links no corpo`);
+
+  // 5. O RENDERIZADOR DESENHA A MARCAÇÃO. Sem isto o texto mostra "[[/x|y]]"
+  //    cru para a pessoa, e a conferência de cima aprovaria.
+  const render = readFileSync(join(RAIZ, "components/site/GuiaDeSintoma.tsx"), "utf8");
+  conferir("o renderizador transforma a marcação em link", /comLinks\(c\)/.test(render) && /comLinks\(s\)/.test(render) && /comLinks\(o\)/.test(render));
+  conferir("a página mostra a data de publicação", /dateTime=\{g\.publicadoEm\}/.test(render));
+  conferir("o dado estruturado do guia é um Article com datas", /"@type":\s*"Article"/.test(render) && /datePublished:\s*g\.publicadoEm/.test(render));
+
+  // 6. O SITEMAP LEVA A DATA. É o `lastModified` que diz ao buscador que a
+  //    página mudou, e ele só existe para quem tem data no registro.
+  // Lido SEM comentários, porque o comentário do próprio sitemap cita
+  // `lastModified` para explicar por que as outras páginas não têm data. Na
+  // primeira prova desta asserção, tirei a linha de código e ela aprovou: o
+  // comentário satisfazia a busca. E a busca é pela LINHA de código, não pela
+  // palavra, pelo mesmo motivo.
+  conferir(
+    "o sitemap leva a data de atualização dos guias",
+    /lastModified:\s*new Date\(/.test(semComentarios(sitemap)) && /atualizadoEm:\s*g\.atualizadoEm/.test(semComentarios(sitemap))
+  );
+
+  // 7. TUDO QUE SÓ EXISTE NO SITE ESTÁ FORA DO BINÁRIO DO APP. Até 08/09/2026
+  //    só o primeiro guia estava na lista, e os outros três viajaram dentro do
+  //    app como páginas mortas. O cartão de compartilhamento (og) é rota
+  //    dinâmica: fora da lista, ele DERRUBA a exportação estática.
+  const nativo = readFileSync(join(RAIZ, "scripts/build-native.mjs"), "utf8");
+  const lista = (nativo.match(/const SO_NO_SITE = \[([\s\S]*?)\];/) ?? [])[1] ?? "";
+  for (const caminho of idsPorGuia.keys()) {
+    conferir(`${caminho}: está fora do binário do app (SO_NO_SITE)`, lista.includes(`"${caminho.slice(1)}"`));
+  }
+  conferir("o cartão de compartilhamento (og) está fora do binário do app", lista.includes('"og"'), "rota dinâmica com desenho derruba o output: export");
+}
+
 // ── TODO GUIA TEM LINK A PARTIR DA HOME ─────────────────────────────────────
 //
 // O DEFEITO QUE ISTO PEGA, e ele estava de pé em 07/09/2026. O rodapé, que é o

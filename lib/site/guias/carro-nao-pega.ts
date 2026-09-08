@@ -17,6 +17,8 @@ import type { Guia } from "./tipos";
 
 export const guia: Guia = {
   caminho: "/carro-nao-pega",
+  publicadoEm: "2026-09-04",
+  atualizadoEm: "2026-09-08",
   rotulo: "Guia de diagnóstico",
   h1: "O carro não pega: descubra o que é pelo som da partida",
   tituloSeo: "Carro não pega: o que pode ser e o que fazer agora | Mentorque",
@@ -28,11 +30,16 @@ export const guia: Guia = {
     "carro não pega de manhã",
     "carro não pega mas tem bateria",
     "carro faz clique e não liga",
+    // A ÚNICA busca de categoria que o Search Console registrou até 07/09/2026
+    // foi "carro nao quer pegar", posição 80. A página dizia "não pega" e "não
+    // liga" e nunca "não quer pegar", que é como muita gente fala. A frase
+    // entrou na abertura, onde a pessoa se reconhece.
+    "carro não quer pegar",
   ],
   chamada: "O carro não pega: o que o som da partida revela",
 
   abertura: [
-    "Se você está com a chave na mão e o carro não liga, comece por aqui: gire a chave e ESCUTE. O som que o carro faz nesse momento é a informação mais valiosa que existe, e ela some assim que alguém chega com um cabo de chupeta e resolve na força.",
+    "Se você está com a chave na mão e o carro não liga, não quer pegar de jeito nenhum, comece por aqui: gire a chave e ESCUTE. O som que o carro faz nesse momento é a informação mais valiosa que existe, e ela some assim que alguém chega com um cabo de chupeta e resolve na força.",
     "Motor girando devagar, um clique seco sem girar nada, motor girando normal mas sem pegar, ou silêncio completo. São quatro sons diferentes que apontam para quatro conjuntos de causas diferentes. Saber qual é o seu evita trocar bateria boa e evita esperar guincho quando o problema era um cabo frouxo.",
   ],
   indiceTitulo: "Que som o seu carro faz ao girar a chave?",
@@ -136,8 +143,8 @@ export const guia: Guia = {
       "Cheiro forte de combustível dentro ou fora do carro: pare de tentar e ventile antes de qualquer coisa.",
       "Cheiro de queimado ou de plástico derretido ao girar a chave.",
       "Fumaça saindo de qualquer lugar, principalmente perto da bateria.",
-      "O carro pegou, mas com a luz vermelha de óleo ou de temperatura acesa: desligue em vez de sair andando.",
-      "Barulho metálico forte na partida, diferente de tudo que o carro fazia antes.",
+      "O carro pegou, mas com a [[/luz-da-injecao-acesa#outras-luzes|luz vermelha de óleo ou de temperatura]] acesa: desligue em vez de sair andando.",
+      "[[/barulho-no-carro#parado|Barulho metálico forte]] na partida, diferente de tudo que o carro fazia antes.",
     ],
   },
 

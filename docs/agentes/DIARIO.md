@@ -36,6 +36,55 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-08 · SEO: os oito pontos da avaliação, e os que só existiam no papel
+
+- O dono pediu para olhar o que o SEO publicou e dizer o que faz sentido e o
+  que pode melhorar; depois, "vamos evoluir todos os pontos". Lido tudo: os
+  quatro guias, a `/sobre`, o renderizador, o mandato, as duas rodadas
+  anteriores e o único dado de busca que a casa guarda.
+- **O NÚMERO, com janela e régua:** Search Console, 28 dias até 07/09, 0
+  cliques e 7 impressões. Cinco são a marca "mentorque" (posição 1). **Uma é
+  "carro nao quer pegar", posição 80**, a primeira consulta de categoria da
+  história do site, num guia que até 07/09 não tinha link a partir da home.
+  Isso ainda não avalia texto: canonical quebrado até 25/08, três guias quase
+  órfãos até 07/09, duas semanas de páginas.
+- **O que faz sentido e ficou:** o ângulo do método (estreitar pelo momento,
+  pelo som, pela luz fixa ou piscando, por medir antes de trocar), as regras de
+  honestidade com conferência, a `/sobre` com "o que não faz".
+- **O que foi feito, todos com conferência provada mordendo (11 defeitos
+  plantados, 11 reprovações, e uma asserção que NÃO mordeu na primeira
+  tentativa, a do sitemap, porque lia o arquivo com o comentário que eu mesmo
+  tinha escrito citando `lastModified`; consertada para ler sem comentário e
+  procurar a linha de código):**
+  1. Datas nos guias (`publicadoEm`, `atualizadoEm`), visíveis na página, no
+     sitemap e no `Article`. O de gasolina ganhou `relerEm` 10/01/2027 e a
+     conferência reprova quando passar.
+  2. Dado estruturado: `Article` + `BreadcrumbList` sobre o grafo compartilhado,
+     e o `FAQPage` fica sem a expectativa errada: FAQ rich result não existe
+     para sites como o nosso desde 2023.
+  3. "Não quer pegar" entrou no `/carro-nao-pega`, que é a frase que a única
+     busca real usou.
+  4. Links no meio do texto (`[[/caminho#ancora|texto]]`), seis entre os
+     quatro guias, com caminho e âncora conferidos.
+  5. Medição: `@vercel/analytics` no site (fora do app), e `topPaginas` no
+     coletor do Search Console do n8n. As duas metades dependem de um clique do
+     dono cada (lista).
+  6. O preço da `/sobre` passou a vir de `content.ts`.
+  7. Cartão de compartilhamento por guia em `/og/<caminho>`, com as fontes da
+     marca, pelo mesmo `next/og` das peças.
+  8. Cadência: o próximo tema está no mandato, escolhido pela única consulta
+     real (partida e bateria).
+- **ACHADO NO CAMINHO, e não estava na avaliação:** `SO_NO_SITE` só tinha o
+  primeiro guia. Os três seguintes viajaram DENTRO do binário do app como
+  páginas mortas desde que nasceram. Nada deu erro; o app só ficou maior. Agora
+  a lista tem os quatro e o `og`, e a conferência compara com o registro. O
+  `og` é rota dinâmica com desenho: fora da lista, ele DERRUBA a exportação
+  estática, então este erro passaria a ser barulhento a partir de hoje.
+- **A ferramenta do n8n não atribui credencial do Google** a nó HTTP (só as
+  genéricas). O nó de páginas entrou sem credencial e com erro tolerado; o
+  `normaliza` devolve `topPaginas: []` e `erroPaginas` até alguém escolher
+  "Google account" no nó. Está na lista com o clique exato.
+
 ## 2026-09-08 · Conteúdo & SEO: aula de freio, e o app pergunta o que não sabe ensinar
 - Artifact "Conteúdo da semana":
   https://claude.ai/code/artifact/12bd9ce0-9d29-40fb-a323-9eb0d21f4137

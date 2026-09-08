@@ -15,6 +15,8 @@ import type { Guia } from "./tipos";
 
 export const guia: Guia = {
   caminho: "/luz-da-injecao-acesa",
+  publicadoEm: "2026-09-04",
+  atualizadoEm: "2026-09-08",
   rotulo: "Guia de diagnóstico",
   h1: "Luz da injeção acesa: o que significa e o que fazer agora",
   tituloSeo: "Luz da injeção acesa: o que significa e o que fazer | Mentorque",
@@ -64,13 +66,13 @@ export const guia: Guia = {
       som: "Acendeu em algum momento e permanece acesa, sem piscar, com o carro andando aparentemente normal.",
       causas: [
         "Sonda lambda ou sistema de emissões, que é uma das origens mais frequentes e costuma aparecer sem sintoma nenhum na direção.",
-        "Sensores de mistura fora da faixa esperada, o que também tende a aumentar o consumo aos poucos.",
+        "Sensores de mistura fora da faixa esperada, o que também tende a [[/carro-gastando-muita-gasolina#manutencao|aumentar o consumo]] aos poucos.",
         "Falha de ignição intermitente que já aconteceu e ficou registrada, mesmo que agora esteja se comportando.",
         "Alguma leitura fora do padrão depois de manutenção recente, principalmente quando alguma peça foi trocada por similar.",
       ],
       observar: [
         "Acendeu depois de abastecer, de uma revisão ou de uma chuva forte?",
-        "O consumo mudou desde que ela acendeu?",
+        "[[/carro-gastando-muita-gasolina#medir|O consumo mudou]] desde que ela acendeu?",
         "Ela apaga sozinha e volta depois de alguns dias?",
       ],
       urgencia: {

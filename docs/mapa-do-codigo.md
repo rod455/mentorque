@@ -37,9 +37,17 @@ São as páginas de tráfego orgânico, a ponte entre quem pesquisa "meu carro e
 fazendo barulho" e o app. Três arquivos e nada mais:
 
 1. `lib/site/guias/<caminho>.ts` com o conteúdo, seguindo o tipo de `tipos.ts`.
+   Com `publicadoEm` e `atualizadoEm` (e `relerEm` se houver fato com validade),
+   e pelo menos um link `[[/irmao#ancora|texto]]` no meio do texto.
 2. uma linha em `lib/site/guias/index.ts`, que é o que coloca o guia no sitemap
-   e nos links dos irmãos.
+   e nos links dos irmãos; e uma em `lib/site/guias/links.ts`, que é o rodapé
+   da home e da `/sobre`.
 3. `app/<caminho>/page.tsx` com as seis linhas de sempre (copie de um existente).
+4. o caminho em `SO_NO_SITE` de `scripts/build-native.mjs`, senão a página
+   viaja dentro do app das lojas.
+
+A `npm run conferir:guias` cobra os quatro e mais as regras de texto. O cartão
+de compartilhamento (`/og/<caminho>`) nasce sozinho.
 
 A estrutura toda mora em `components/site/GuiaDeSintoma.tsx`, e as regras de
 conteúdo estão no comentário de lá: sem número inventado, sem preço, sem certeza

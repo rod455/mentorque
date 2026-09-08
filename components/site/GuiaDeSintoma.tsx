@@ -1,6 +1,42 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/stores";
+import { jsonLd } from "@/lib/jsonLd";
 import { irmaosDe, type Bloco, type Guia } from "@/lib/site/guias";
+
+const SITE = "https://www.mentorque.com.br";
+
+/** "2026-09-08" vira "8 de setembro de 2026", que é como se lê uma data. */
+function dataPorExtenso(iso: string): string {
+  const [a, m, d] = iso.split("-").map(Number);
+  return new Intl.DateTimeFormat("pt-BR", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(
+    new Date(Date.UTC(a, m - 1, d))
+  );
+}
+
+/**
+ * Desenha um texto com a marcação `[[/caminho|texto]]` virando link. É a mesma
+ * convenção do catálogo de aulas, e vive aqui porque é o único lugar onde os
+ * guias viram HTML. Texto sem marcação sai como estava. Ver o comentário em
+ * lib/site/guias/tipos.ts para onde a marcação vale e onde não vale.
+ */
+export function comLinks(texto: string): ReactNode {
+  const partes = texto.split(/(\[\[[^\]]+\]\])/g);
+  if (partes.length === 1) return texto;
+  return partes.map((p, i) => {
+    const m = /^\[\[([^|\]]+)\|([^\]]+)\]\]$/.exec(p);
+    if (!m) return p;
+    return (
+      // O atributo é o que a suíte de navegador procura: "há link no meio do
+      // texto" é uma pergunta sobre a marcação ter virado <a>, e não sobre em
+      // qual seção ele caiu (no guia de barulho ele está no bloco de segurança,
+      // que não é <article>, e a primeira versão da suíte reprovou por isso).
+      <a key={i} href={m[1]} data-link-no-texto="" className="underline decoration-amber/50 underline-offset-4 hover:text-amber">
+        {m[2]}
+      </a>
+    );
+  });
+}
 
 // A estrutura compartilhada dos guias de sintoma (mentorque.com.br/<assunto>).
 //
@@ -43,7 +79,13 @@ export function metadataDoGuia(g: Guia): Metadata {
       title: g.h1,
       description: g.descricaoSeo,
       url: g.caminho,
-      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Mentorque" }],
+      publishedTime: g.publicadoEm,
+      modifiedTime: g.atualizadoEm,
+      // Um cartão por guia, desenhado em app/og/[guia]/route.tsx com o título
+      // dele. Antes os quatro dividiam a imagem genérica da home, e um link
+      // compartilhado no WhatsApp mostrava o mesmo cartão para assuntos
+      // diferentes.
+      images: [{ url: `/og${g.caminho}`, width: 1200, height: 630, alt: g.h1 }],
     },
   };
 }
@@ -77,22 +119,58 @@ function Lojas() {
 export function GuiaDeSintoma({ guia: g }: { guia: Guia }) {
   const irmaos = irmaosDe(g.caminho);
 
-  // FAQPage estruturado: mesma pergunta e mesma resposta que aparecem na tela.
-  // Marcação que não bate com o texto visível é violação de diretriz do Google e
-  // derruba o rich result inteiro, então as duas leem do mesmo array.
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: g.faq.map((f) => ({
-      "@type": "Question",
-      name: f.p,
-      acceptedAnswer: { "@type": "Answer", text: f.r },
-    })),
-  };
+  // O DADO ESTRUTURADO DO GUIA, em três partes, sobre o grafo compartilhado de
+  // lib/jsonLd.ts (aplicativo, organização, site), para o guia declarar o mesmo
+  // publicador que a home e a /sobre.
+  //
+  //   Article: é o que descreve uma página de guia para o buscador: título,
+  //   datas, autor e publicador. Até 08/09/2026 não existia, e as datas eram o
+  //   que mais faltava.
+  //
+  //   BreadcrumbList: Início > este guia. Barato, e é o que faz o resultado
+  //   mostrar o caminho em vez da URL crua.
+  //
+  //   FAQPage: mesma pergunta e mesma resposta da tela, lidas do mesmo array.
+  //   Marcação que não bate com o texto visível é violação de diretriz do
+  //   Google. E uma expectativa corrigida: desde agosto de 2023 o Google só
+  //   mostra rich result de FAQ para sites de governo e saúde, então esta parte
+  //   NÃO vai virar caixinha no resultado para nós. Fica porque é a descrição
+  //   honesta do que a página tem, e porque não custa nada.
+  const dadoEstruturado = jsonLd([
+    {
+      "@type": "Article",
+      "@id": `${SITE}${g.caminho}#artigo`,
+      headline: g.h1,
+      description: g.descricaoSeo,
+      inLanguage: "pt-BR",
+      datePublished: g.publicadoEm,
+      dateModified: g.atualizadoEm,
+      mainEntityOfPage: `${SITE}${g.caminho}`,
+      image: `${SITE}/og${g.caminho}`,
+      author: { "@id": `${SITE}/#org` },
+      publisher: { "@id": `${SITE}/#org` },
+      isPartOf: { "@id": `${SITE}/#site` },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Mentorque", item: SITE },
+        { "@type": "ListItem", position: 2, name: g.h1, item: `${SITE}${g.caminho}` },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: g.faq.map((f) => ({
+        "@type": "Question",
+        name: f.p,
+        acceptedAnswer: { "@type": "Answer", text: f.r },
+      })),
+    },
+  ]);
 
   return (
     <div className="min-h-screen bg-graphite text-cream">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: dadoEstruturado }} />
 
       {/* Cabeçalho próprio: o Header do site é feito de âncoras da home
           (#features, #plans) e numa subpágina levaria a lugar nenhum. Aqui basta
@@ -115,9 +193,20 @@ export function GuiaDeSintoma({ guia: g }: { guia: Guia }) {
         <section className="mx-auto max-w-3xl pb-10 pt-12">
           <p className="font-display text-xs font-semibold uppercase tracking-widest text-amber">{g.rotulo}</p>
           <h1 className="mt-3 font-serif text-4xl font-bold leading-tight sm:text-5xl">{g.h1}</h1>
+          {/* A data é visível de propósito, e não só no dado estruturado: quem
+              lê "pare o carro" tem o direito de saber de quando é o conselho, e
+              o buscador mostra a data que encontra na página. */}
+          <p className="mt-3 text-sm text-cream/45">
+            Publicado em <time dateTime={g.publicadoEm}>{dataPorExtenso(g.publicadoEm)}</time>
+            {g.atualizadoEm !== g.publicadoEm && (
+              <>
+                {" · "}Atualizado em <time dateTime={g.atualizadoEm}>{dataPorExtenso(g.atualizadoEm)}</time>
+              </>
+            )}
+          </p>
           {g.abertura.map((p, i) => (
             <p key={p} className={i === 0 ? "mt-5 text-lg leading-relaxed text-cream/75" : "mt-4 leading-relaxed text-cream/60"}>
-              {p}
+              {comLinks(p)}
             </p>
           ))}
 
@@ -155,7 +244,7 @@ export function GuiaDeSintoma({ guia: g }: { guia: Guia }) {
                 {b.causas.map((c) => (
                   <li key={c} className="flex gap-3 text-sm leading-relaxed text-cream/75">
                     <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber" />
-                    <span>{c}</span>
+                    <span>{comLinks(c)}</span>
                   </li>
                 ))}
               </ul>
@@ -165,11 +254,11 @@ export function GuiaDeSintoma({ guia: g }: { guia: Guia }) {
               </h3>
               <ul className="mt-3 space-y-2 text-sm leading-relaxed text-cream/70">
                 {b.observar.map((o) => (
-                  <li key={o}>{o}</li>
+                  <li key={o}>{comLinks(o)}</li>
                 ))}
               </ul>
 
-              <p className="mt-6 rounded-xl bg-graphite-700/60 p-4 text-sm leading-relaxed text-cream/75">{b.urgencia.texto}</p>
+              <p className="mt-6 rounded-xl bg-graphite-700/60 p-4 text-sm leading-relaxed text-cream/75">{comLinks(b.urgencia.texto)}</p>
             </article>
           ))}
         </section>
@@ -183,7 +272,7 @@ export function GuiaDeSintoma({ guia: g }: { guia: Guia }) {
               {g.pareAgora.itens.map((s) => (
                 <li key={s} className="flex gap-3 text-sm leading-relaxed text-cream/80">
                   <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-coral" />
-                  <span>{s}</span>
+                  <span>{comLinks(s)}</span>
                 </li>
               ))}
             </ul>

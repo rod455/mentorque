@@ -21,7 +21,17 @@ import { GUIAS } from "@/lib/site/guias";
 // da outra no mesmo idioma.
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://www.mentorque.com.br";
 
-type Pagina = { caminho: string; prioridade: number; frequencia: MetadataRoute.Sitemap[number]["changeFrequency"] };
+type Pagina = {
+  caminho: string;
+  prioridade: number;
+  frequencia: MetadataRoute.Sitemap[number]["changeFrequency"];
+  /**
+   * Só os guias carregam data, porque só eles guardam a data no próprio
+   * registro. Inventar `lastModified` para as outras páginas seria mentir
+   * para o buscador, e ele aprende a ignorar sitemap que mente.
+   */
+  atualizadoEm?: string;
+};
 
 const PAGINAS: Pagina[] = [
   { caminho: "/", prioridade: 1, frequencia: "weekly" },
@@ -31,7 +41,7 @@ const PAGINAS: Pagina[] = [
   // ela sobe, abre, funciona, e simplesmente não entra no mapa que o buscador
   // lê. Nada dá erro. Agora eles vêm do mesmo registro que as próprias páginas
   // usam (lib/site/guias), então guia novo entra no sitemap por construção.
-  ...GUIAS.map((g) => ({ caminho: g.caminho, prioridade: 0.8, frequencia: "monthly" as const })),
+  ...GUIAS.map((g) => ({ caminho: g.caminho, prioridade: 0.8, frequencia: "monthly" as const, atualizadoEm: g.atualizadoEm })),
   // Página de referência do produto: é a que uma IA cita quando alguém
   // pergunta por app de manutenção de carro. Prioridade alta de propósito.
   { caminho: "/sobre", prioridade: 0.9, frequencia: "monthly" },
@@ -47,5 +57,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: new URL(p.caminho, SITE).toString(),
     changeFrequency: p.frequencia,
     priority: p.prioridade,
+    ...(p.atualizadoEm ? { lastModified: new Date(`${p.atualizadoEm}T12:00:00Z`) } : {}),
   }));
 }

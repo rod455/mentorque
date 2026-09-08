@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/stores";
 import { DEFINICAO_MENTORQUE, jsonLd } from "@/lib/jsonLd";
+import { getContent } from "@/lib/app/content";
 import { LINKS_DOS_GUIAS } from "@/lib/site/guias/links";
 
 // mentorque.com.br/sobre — a resposta canônica sobre o produto.
@@ -100,10 +101,19 @@ const PARA_QUEM = [
   },
 ];
 
+// O PREÇO VEM DO MESMO LUGAR QUE O APP MOSTRA (lib/app/content.ts), e não
+// escrito aqui. Estava escrito à mão até 08/09/2026, e batia; no dia em que o
+// preço mudar, uma página indexável e citada por IA continuaria dizendo o
+// valor antigo, sozinha. Mudar preço continua sendo decisão do dono; esta
+// linha só garante que a /sobre não mente depois que ele decidir.
+const PLANOS = getContent("pt").subscribe;
+const PRECO_MENSAL = PLANOS.monthly.price;
+const PRECO_ANUAL = PLANOS.annual.price;
+
 const FAQ = [
   {
     p: "O Mentorque é grátis?",
-    r: "Sim, o uso principal é gratuito e não pede cartão: cadastrar veículos, diagnóstico por sintoma, histórico de manutenção, aulas abertas e as ferramentas básicas. Existe uma assinatura Premium opcional de R$ 29,90 por mês ou R$ 239,90 por ano, que libera o acervo completo de conteúdo, relatórios de gasto, diagnóstico aprofundado e a assistente Biela sem limite.",
+    r: `Sim, o uso principal é gratuito e não pede cartão: cadastrar veículos, diagnóstico por sintoma, histórico de manutenção, aulas abertas e as ferramentas básicas. Existe uma assinatura Premium opcional de ${PRECO_MENSAL} por mês ou ${PRECO_ANUAL} por ano, que libera o acervo completo de conteúdo, relatórios de gasto, diagnóstico aprofundado e a assistente Biela sem limite.`,
   },
   {
     p: "O app diz qual é o defeito do meu carro?",

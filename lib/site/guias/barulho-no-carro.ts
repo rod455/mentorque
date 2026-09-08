@@ -18,6 +18,10 @@ import type { Guia } from "./tipos";
 
 export const guia: Guia = {
   caminho: "/barulho-no-carro",
+  // Publicado em 25/08/2026 (diário: "primeira LP de busca"); o histórico do
+  // git começa depois disso, então a data vem do diário, não do commit.
+  publicadoEm: "2026-08-25",
+  atualizadoEm: "2026-09-08",
   rotulo: "Guia de diagnóstico",
   h1: "Barulho no carro: descubra o que pode ser antes de ir na oficina",
   tituloSeo: "Barulho no carro: como descobrir o que pode ser | Mentorque",
@@ -157,7 +161,7 @@ export const guia: Guia = {
       "A maioria dos barulhos permite marcar a oficina com calma. Estes sinais, não. Se algum deles estiver junto com o som, pare em lugar seguro e procure ajuda profissional antes de continuar:",
     itens: [
       "Cheiro de queimado junto com o barulho, principalmente depois de descida longa ou de frear muito.",
-      "Luz vermelha no painel acesa junto com o som: óleo, temperatura ou freio.",
+      "[[/luz-da-injecao-acesa#outras-luzes|Luz vermelha no painel]] acesa junto com o som: óleo, temperatura ou freio.",
       "Pedal de freio afundando mais que o normal ou com sensação de esponja.",
       "Barulho metálico forte vindo de uma roda, que aumenta com a velocidade e não some.",
       "Fumaça, vazamento visível embaixo do carro ou perda súbita de força.",
