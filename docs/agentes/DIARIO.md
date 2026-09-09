@@ -36,6 +36,24 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-09 · Release: a 2.0 foi enviada, o repositório vai para 2.1
+
+- O dono gerou e enviou a 2.0 no mesmo dia em que o "?" flutuante entrou. A
+  2.0 foi acrescentada a `JA_PUBLICADAS` NA HORA, que é a única forma de esta
+  lista não repetir a 1.8. O repositório subiu para 2.1 nos três lugares, e
+  `docs/lojas/novidades-2.1.md` abre vazio, com a obrigação do roteiro antes
+  do build escrita no topo.
+- **Sem sinal ainda da 2.0.** Nenhum aparelho abriu; nada a dizer sobre o
+  build. O que o dado vai mostrar quando abrir: `versao = 2.0.0` no funil e em
+  `app_erros`, e uma conta Google nova pelo Android se a caixinha funcionar.
+- As notas de loja da 2.0 foram escritas para o dono conferir, e falam só do
+  que foi conferido: o "?", o ajuste de foto e entrar com o Google caindo
+  logado. Não falam da foto do Google nem da caixinha, que nenhum aparelho
+  provou. O texto cresce quando o roteiro passar.
+- Dois números continuam sem chegar e travam o aviso de versão nova no app: o
+  `versionCode` da 2.0 (e o da segunda 1.8), que só saem do Play Console ou do
+  log do Codemagic.
+
 ## 2026-09-09 · Android: a caixinha do Google recusou por causa de dois scopes que o plugin já punha sozinho
 
 - Primeiro teste da 1.9 no aparelho da Luana: "Continuar com o Google" caiu

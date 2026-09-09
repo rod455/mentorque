@@ -109,10 +109,35 @@ sumam, e isso é tudo o que ela pode fazer.
   `scripts/verifica-versoes.mjs`. Foi esquecer isto na 1.8 que produziu duas
   versões com o mesmo nome e cegou o funil para a diferença entre elas.
 
-## Notas para as lojas
+## Notas para as lojas, PARA O DONO CONFERIR ANTES DE COLAR
 
-A escrever quando a versão fechar, e seguindo as três regras da `ficha.md`:
-falar do ganho e não do defeito, com o verbo na ação da pessoa, e sem prometer
-nada que não tenha sido conferido em aparelho. **O item 1 do roteiro decide o
-texto**: enquanto a foto não for vista funcionando num Android, a nota não pode
-falar dela.
+A 2.0 foi enviada em 09/09/2026 sem o roteiro de aparelho ter sido rodado
+inteiro. Por isso o texto abaixo fala só do que foi conferido: o ajuste de foto
+e o "?" (suíte de navegador), e entrar com o Google e cair logado (visto no
+aparelho da Luana na 1.8). Ele NÃO fala da foto do Google aparecendo nem da
+caixinha do Google abrindo, porque nenhum dos dois foi visto num aparelho
+ainda. Quando o roteiro passar, o texto pode crescer numa próxima versão.
+
+**Google Play** (limite: 500 caracteres)
+
+```
+Precisa de ajuda? Um botão de dúvida agora fica sempre à mão, em qualquer
+tela, e leva direto para falar com a gente.
+
+Escolha a parte da foto que fica: ao trocar a foto do carro ou do perfil,
+você arrasta e ajusta com os dedos, como no WhatsApp.
+
+Entre com a sua conta do Google e o app abre já logado, direto no seu carro.
+```
+
+**App Store**
+
+```
+Precisa de ajuda? Um botão de dúvida fica sempre à mão, em qualquer tela, e
+leva direto para falar com a gente.
+
+Ao trocar a foto do carro ou do perfil, você escolhe a parte que fica:
+arrasta e ajusta com os dedos.
+
+Entre com a sua conta do Google e o app abre já logado, direto no seu carro.
+```

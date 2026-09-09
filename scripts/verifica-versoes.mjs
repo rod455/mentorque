@@ -68,6 +68,10 @@ const JA_PUBLICADAS = [
   // lista publicada ou não: nome de versão que já viajou com defeito conhecido
   // não volta, senão o número deixa de dizer qual build a pessoa tem.
   "1.9",
+  // Gerada e enviada pelo dono em 09/09/2026, com o conserto dos scopes, o
+  // ajuste de foto, a câmera do Android e o "?" flutuante. Acrescentada no
+  // mesmo dia, na hora, que é a única forma de esta lista não repetir a 1.8.
+  "2.0",
 ];
 
 import { readFileSync } from "node:fs";
