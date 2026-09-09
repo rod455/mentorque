@@ -153,6 +153,30 @@ for (const motivo of MOTIVOS) {
   );
 }
 
+// ── todo desfecho do login nativo que não é sessão é relatado ───────────────
+//
+// 09/09/2026: a caixinha abriu, a Luana escolheu a conta, a caixinha fechou e
+// a tela ficou muda. Nenhum pedido chegou ao Supabase, e o app tinha engolido
+// o motivo porque a mensagem do plugin dizia "cancel". Sem relato, a única
+// testemunha era o Logcat. Agora os três pontos de falha (o plugin recusa, o
+// plugin devolve sem idToken, o Supabase recusa o idToken) mandam a mensagem
+// para app_erros, inclusive o "cancelado", que o README do plugin diz ser o
+// sintoma clássico de SHA-1 ou client id errado.
+{
+  const relatos = (social.match(/relatarLoginNativo\(/g) ?? []).length;
+  conferir(
+    "os três desfechos sem sessão do login nativo são relatados",
+    relatos >= 3,
+    `${relatos} chamadas a relatarLoginNativo em socialLogin.ts; precisam ser 3: plugin recusou, sem idToken, Supabase recusou`
+  );
+  const catchDoPlugin = social.slice(social.indexOf("} catch (e) {", social.indexOf("plugin.login(")), social.indexOf("canceled: true"));
+  conferir(
+    "o 'cancelado' é relatado ANTES de ser engolido",
+    /relatarLoginNativo\(/.test(catchDoPlugin),
+    "relatar depois do return de cancelamento deixa o caso que mais importa sem testemunha"
+  );
+}
+
 // ── o portão do Android ─────────────────────────────────────────────────────
 if (!noAndroid) {
   conferir(

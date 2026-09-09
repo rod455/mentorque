@@ -6,8 +6,15 @@ precisa, antes do build, do roteiro de aparelho escrito (regra do dono, em
 
 ## O que vai NO BINÁRIO
 
-Nada ainda. O primeiro candidato é o que o roteiro da 2.1 reprovar no
-aparelho da Luana (`novidades-2.1.md`, seis passos).
+1. **O login nativo conta por que falhou.** Na 2.0/2.1 a caixinha do Google
+   abre, a conta é escolhida e a tela volta muda: o plugin devolve algo com
+   "cancel", o app engole, e nenhum pedido chega ao Supabase. Agora os três
+   desfechos sem sessão (plugin recusou, sem idToken, Supabase recusou) viram
+   linha em `app_erros` com a mensagem exata, inclusive o "cancelado". Não
+   muda nada na tela; muda o que a gente enxerga. `conferir:login` cobra.
+
+O que mais entrar vem do roteiro da 2.1 no aparelho da Luana
+(`novidades-2.1.md`, seis passos).
 
 ## O que NÃO precisa de binário
 

@@ -43,6 +43,26 @@ function reportar(tipo: "erro" | "promessa" | "fechou", mensagem: string, stack?
 }
 
 /**
+ * O login nativo (folha do Google ou da Apple) terminou sem sessão: relata o
+ * motivo que o plugin ou o Supabase deram, inclusive quando parece que a
+ * pessoa só cancelou.
+ *
+ * Existe desde 09/09/2026, por uma tela muda: a caixinha do Google abriu no
+ * Android, a conta foi escolhida, a caixinha fechou e nada aconteceu. O plugin
+ * tinha devolvido algo com "cancel", o app engoliu como escolha da pessoa, e
+ * nenhum pedido chegou ao Supabase. Sem este relato, o único lugar onde o
+ * motivo existia era o Logcat do aparelho, que ninguém tem à mão. O README do
+ * plugin diz que "cancelado depois de escolher a conta" é o sintoma clássico
+ * de pacote, SHA-1 ou client id não batendo; a mensagem que ele manda junto é
+ * o que separa isso de um cancelamento de verdade.
+ *
+ * A mensagem do plugin não carrega dado da pessoa (nem e-mail, nem nome).
+ */
+export function relatarLoginNativo(provedor: "google" | "apple", motivo: string): void {
+  reportar("erro", `login nativo ${provedor}: ${motivo}`, undefined, `login nativo ${provedor}`);
+}
+
+/**
  * A sessão anterior morreu em uso? Então relata, com o passo em que estava.
  *
  * Este é o único relato que nasce de uma AUSÊNCIA: ninguém viu o erro, porque

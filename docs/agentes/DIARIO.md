@@ -86,6 +86,40 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   suíte de navegador do carro (35s), todas verdes, rodadas de novo depois do
   rebase sobre a 2.1.
 
+## 2026-09-09 · Android: a caixinha abre, a conta é escolhida, e o token nunca chega ao app
+
+- Vídeo do dono, no aparelho da Luana, na 2.0 (o funil registrou `abriu_app
+  2.0.0` às 21:31Z): "Continuar com o Google" abre a caixinha do sistema
+  ("Escolha uma conta para continuar no app Mentorque"), ela escolhe a conta,
+  a caixinha fecha e a tela de login volta SEM mensagem nenhuma.
+- **O que os dados provam:** nenhum pedido de login chegou ao Supabase na
+  janela (o único registro de auth entre 21:20Z e 21:50Z é uma senha errada
+  digitada no site, de outra pessoa), e a conta dela segue com último login em
+  06/09. Ou seja, o `signInWithIdToken` nunca foi chamado: o plugin devolveu
+  algo que o nosso `catch` leu como "cancelou" (`/cancel|1001|user.?closed|
+  dismiss/`) e ficou quieto. Na 1.9 o erro dos scopes aparecia escrito porque
+  não casava com esse padrão.
+- **O que o fonte do plugin diz sobre isso** (`GoogleProvider.java`,
+  `handleSignInError`): `GetCredentialCancellationException` vira "Google
+  Sign-In cancelled by user"; erro de console do desenvolvedor (SHA-1,
+  pacote, client id) vira uma mensagem longa que NÃO contém "cancel" e teria
+  aparecido na tela. E o README avisa, na seção de Android: "USER_CANCELLED
+  depois de escolher a conta ainda pode ser SHA-1 ou client id não batendo".
+  Não dá para fechar a causa daqui: a mensagem exata morreu no `catch`.
+- **Conserto que muda isso:** todo desfecho do login nativo que não é sessão
+  vira linha em `app_erros`, com a mensagem do plugin ou do Supabase, inclusive
+  o "cancelado". Origem `login nativo google`. A mensagem não carrega dado da
+  pessoa. Precisa de build (2.2); no próximo teste o motivo chega sozinho.
+- **O que o dono pode conferir sem build, e é a suspeita número um:** no Google
+  Cloud, os dois clientes Android precisam ter SHA-1 DIFERENTES, um igual ao
+  "certificado da chave de assinatura do app" e outro igual ao "certificado da
+  chave de upload" do Play Console. Se os dois receberam o mesmo SHA-1 (o de
+  upload apareceu primeiro na tela e é o mais fácil de copiar duas vezes), o
+  build da Play, assinado pela outra chave, é recusado exatamente assim.
+- O MCP do Supabase perdeu a permissão no meio da investigação e voltou
+  quando o dono liberou; sem ele, a prova de "nenhum pedido chegou" não
+  existiria.
+
 ## 2026-09-09 · Release: a 2.0 foi enviada, o repositório vai para 2.1
 
 - O dono gerou e enviou a 2.0 no mesmo dia em que o "?" flutuante entrou. A

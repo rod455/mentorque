@@ -20,6 +20,7 @@
 // para o Supabase, que refaz o hash e compara. Sem isso o provedor inventa um
 // nonce próprio e o Supabase responde "invalid nonce".
 
+import { relatarLoginNativo } from "./erros";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { nativePlatform } from "./wrapper";
 
@@ -254,6 +255,15 @@ export async function nativeSocialLogin(
     });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
+    // TODO DESFECHO QUE NÃO É SESSÃO VIRA LINHA EM app_erros, inclusive o
+    // "cancelou". Em 09/09/2026 a Luana escolheu a conta na caixinha, a caixinha
+    // fechou e a tela ficou muda: o plugin devolveu algo com "cancel", o app
+    // engoliu, e nenhum pedido chegou ao Supabase. Ficamos sem saber o motivo,
+    // e o README do plugin diz que "cancelado depois de escolher a conta" é o
+    // sintoma clássico de pacote/SHA-1/client id não batendo. Sem o relato, a
+    // única testemunha seria o Logcat, que ninguém tem à mão. A mensagem do
+    // plugin não carrega dado da pessoa.
+    relatarLoginNativo(provider, msg || "login_falhou");
     // Fechar a folha é uma escolha do usuário, não um defeito: nada de erro
     // vermelho na tela por causa disso.
     if (/cancel|1001|user.?closed|dismiss/i.test(msg)) return { canceled: true };
@@ -262,11 +272,15 @@ export async function nativeSocialLogin(
   }
 
   const idToken = res?.result?.idToken;
-  if (!idToken) return { error: "provedor_sem_id_token" };
+  if (!idToken) {
+    relatarLoginNativo(provider, "provedor_sem_id_token");
+    return { error: "provedor_sem_id_token" };
+  }
 
   const { error } = await supabase.auth.signInWithIdToken({ provider, token: idToken, nonce: rawNonce });
   if (error) {
     console.warn("[auth] signInWithIdToken:", error.message);
+    relatarLoginNativo(provider, `supabase: ${error.message}`);
     return { error: error.message };
   }
 
