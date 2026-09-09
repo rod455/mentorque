@@ -107,6 +107,14 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   genéricas). O nó de páginas entrou sem credencial e com erro tolerado; o
   `normaliza` devolve `topPaginas: []` e `erroPaginas` até alguém escolher
   "Google account" no nó. Está na lista com o clique exato.
+- **ATUALIZAR O FLUXO NÃO PUBLICA O FLUXO (09/09).** O retrato das 06:00 de
+  09/09 veio sem `topPaginas` e sem `erroPaginas`: a coleta rodou o
+  `normaliza` antigo. O `update_workflow` do n8n grava um RASCUNHO
+  (`versionId`) e a rotina agendada roda a versão ativa (`activeVersionId`),
+  que continuava a de antes. Faltava o `publish_workflow`, feito em 09/09 de
+  manhã. Regra para quem mexer em fluxo por ferramenta: depois de atualizar,
+  conferir que `versionId` e `activeVersionId` são o mesmo, senão a mudança
+  parece aplicada e não roda nunca.
 
 ## 2026-09-08 · Conteúdo & SEO: aula de freio, e o app pergunta o que não sabe ensinar
 - Artifact "Conteúdo da semana":
