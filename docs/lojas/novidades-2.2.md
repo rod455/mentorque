@@ -20,9 +20,25 @@ O que mais entrar vem do roteiro da 2.1 no aparelho da Luana
 
 A escrever a cada mudança.
 
-## Roteiro de aparelho
+## Roteiro de aparelho, e ele é obrigatório
 
-A escrever antes do build.
+Escrito em 09/09, antes do build. O build 2.2 sai com a variável
+`NEXT_PUBLIC_GOOGLE_WEB_CLIENT_ID` recriada no Codemagic no mesmo dia (o dono
+apagou e criou de novo com o id do MentorqueWeb), então ninguém sabe se o
+valor anterior estava errado; o que se sabe é que este build carrega o certo.
+
+No aparelho da Luana (Android), na ordem:
+
+1. **Entrar com o Google.** A caixinha do sistema abre, a conta é escolhida e
+   o app cai logado. Se a tela voltar muda, como na 2.1, o passo seguinte é
+   meu, não dela: em `app_erros` tem de existir uma linha "login nativo
+   google: ..." com a mensagem do plugin, com versão 2.2.0. Se a linha não
+   existir, o relato falhou e isso é um segundo defeito.
+2. Os cinco passos restantes do roteiro da 2.1 (foto do perfil, câmera ou
+   galeria, ajuste da foto, o "?", avisos), que nunca foram rodados inteiros.
+
+O que a conferência daqui não alcança: se o login vai funcionar. Sobre esse
+build, até um aparelho abrir, a resposta é "sem sinal ainda".
 
 ## Antes de enviar
 
