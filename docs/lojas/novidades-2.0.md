@@ -1,4 +1,8 @@
-# Novidades da versão 1.9
+# Novidades da versão 2.0
+
+Era a 1.9. O primeiro build dela (08/09) foi para a Play com a caixinha do
+Google quebrada, e o dono decidiu em 09/09 pular direto para a 2.0 em vez de
+reaproveitar o nome. O conteúdo abaixo é o que a 2.0 leva.
 
 Nasceu de teste em aparelho de verdade: o dono instalou a segunda 1.8 no Android
 da Luana e trouxe dois relatos que nenhuma suíte nossa alcança, porque os dois
@@ -94,8 +98,8 @@ sumam, e isso é tudo o que ela pode fazer.
 
 ## Antes de enviar
 
-- O nome da versão já está em 1.9 nos três lugares (`npm run conferir:versoes`).
-- Ao publicar, acrescentar `"1.9"` à lista `JA_PUBLICADAS` em
+- O nome da versão já está em 2.0 nos três lugares (`npm run conferir:versoes`).
+- Ao publicar, acrescentar `"2.0"` à lista `JA_PUBLICADAS` em
   `scripts/verifica-versoes.mjs`. Foi esquecer isto na 1.8 que produziu duas
   versões com o mesmo nome e cegou o funil para a diferença entre elas.
 

@@ -63,6 +63,11 @@ const JA_PUBLICADAS = [
   // o aviso de que o repositório PAROU nela. Enquanto a lista for escrita à
   // mão, esta linha aqui é o lembrete de que o preço não é zero.
   "1.8",
+  // Enviada à Play em 08/09/2026 com a caixinha do Google quebrada (scopes que
+  // o plugin recusa). O dono decidiu pular direto para a 2.0 em 09/09. Fica na
+  // lista publicada ou não: nome de versão que já viajou com defeito conhecido
+  // não volta, senão o número deixa de dizer qual build a pessoa tem.
+  "1.9",
 ];
 
 import { readFileSync } from "node:fs";

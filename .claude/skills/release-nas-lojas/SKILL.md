@@ -89,6 +89,33 @@ Três regras, e elas estão junto com as notas de cada versão em `docs/lojas/`:
 
 Confira o limite de 500 caracteres da Play contando o texto de verdade.
 
+## Plugin nativo entra no binário só depois de ler o caminho dele no fonte
+
+Regra fixada pelo dono em 09/09/2026, depois de um erro que ele chamou de
+infantil, e era. O plugin da folha do Google entrou no Android com o README
+lido para o SHA-1 e SEM ler o caminho do `login` no fonte Java. Lá estava,
+em duas linhas, uma trava: qualquer lista de `scopes` sem uma MainActivity
+modificada é recusada. A 1.9 foi para a Play com a caixinha quebrada, e a
+causa foi achada no dia seguinte no mesmo arquivo que ninguém tinha aberto.
+
+O que passa a valer para qualquer mudança em `capacitor.config.ts`,
+`includePlugins`, `android/` ou `ios/`:
+
+1. **Abrir o fonte nativo do plugin no caminho que o app usa** (o método que
+   o `lib/app/*` chama), e ler até o fim: `call.reject(...)` e `throw` são o
+   mapa das exigências que o README não conta. Grep por `reject(` no
+   diretório `android/src` ou `ios/Sources` do plugin custa um minuto.
+2. **Escrever o roteiro de aparelho ANTES do build**, com o passo exato que
+   exercita o plugin, no `docs/lojas/novidades-<versão>.md`. Build sem
+   roteiro não sai.
+3. **Nunca dizer "nada quebrou" sobre um build que nenhum aparelho abriu.** A
+   frase honesta é "sem sinal ainda": nossas suítes não alcançam o WebView do
+   aparelho, e um `conferir` verde prova o que a conferência olha, não o
+   binário. Quem pergunta "está tudo certo?" merece a distinção explícita.
+4. **Conferência de texto não é prova de plugin.** Ela cobra que a ligação
+   não suma; não cobra que o aparelho aceite. A prova é o item 2, no
+   aparelho, antes de promover a produção.
+
 ## Antes de enviar, e depois
 
 **Antes:** separe no arquivo de notas o que vai NO BINÁRIO do que já está no ar.

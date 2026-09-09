@@ -40,3 +40,9 @@ O custo de uma mudança pequena tem que ser o da mudança, não o da cerimônia.
 Prove que a conferência morde antes de confiar no verde dela: plante o
 defeito que ela deveria pegar e veja se ela grita. Os casos em que isso
 salvou o dia estão em `docs/mapa-do-codigo.md`.
+
+E o que a conferência não alcança, diga que não alcança. Plugin nativo só
+entra no binário depois de ler o caminho dele no fonte (não no README), com o
+roteiro de aparelho escrito antes do build; e sobre um build que nenhum
+aparelho abriu, a resposta é "sem sinal ainda", nunca "nada quebrou"
+(regra do dono, 09/09/2026, em `.claude/skills/release-nas-lojas`).
