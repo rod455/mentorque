@@ -55,6 +55,12 @@ Só isto. Se algo não estiver na lista, não veio nesta versão.
    (lib/app/socialLogin.ts) e a `conferir:login` cobra isso. **Precisa de build
    novo**: o de 08/09 não serve.
 
+6. **Um "?" fixo nas abas leva direto ao formulário de dúvida**, com a tela já
+   rolada até ele (pedido do dono em 09/09/2026, com o exemplo de outro app
+   dele). Some no Perfil, onde cobriria o botão de enviar, e nas telas
+   profundas, onde a pessoa está no meio de uma tarefa. Vale nos dois
+   aparelhos; a suíte de navegador confere o toque de ponta a ponta.
+
 **Nenhuma permissão nova.** O Capacitor só pede `CAMERA` quando o app declara
 essa permissão no manifesto, e o nosso não declara: a foto sai por
 `ACTION_IMAGE_CAPTURE`, que é o app de câmera do aparelho fazendo o trabalho.

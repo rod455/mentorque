@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/app/auth";
 import { usePrototype } from "@/lib/app/store";
 import { AVISO, abrirAjustesDeAvisos, cancelar, notificacoesDisponiveis, pedirPermissao, permissaoConcedida } from "@/lib/app/notificacoes";
 import { espelhaOAparelho } from "@/lib/app/espelhoDoAviso";
+import { ID_FALE_COM_A_GENTE, consumirPedidoDeDuvida } from "@/lib/app/atalhoDeDuvida";
 import { lerImagem, resizeImage, type ImagemLida } from "@/lib/app/image";
 import { precisaDeAjuste } from "@/lib/app/recorte";
 import { AjusteDeFoto } from "../AjusteDeFoto";
@@ -378,6 +379,34 @@ export function ProfileScreen() {
   const [fotoFalhou, setFotoFalhou] = useState(false);
   useEffect(() => { setFotoFalhou(false); }, [avatarSrc]);
 
+  // CHEGOU PELO "?" FLUTUANTE: rola até o formulário de dúvida e para lá.
+  //
+  // O pedido é consumido uma vez (lib/app/atalhoDeDuvida.ts), então quem abre
+  // o Perfil pelo ícone de cima não é arrastado para o fim da tela. O
+  // `requestAnimationFrame` espera a tela pintar: no primeiro instante do
+  // `useEffect` o bloco existe no DOM, mas a rolagem do `<main>` ainda não tem
+  // a altura final, e rolar cedo demais para no lugar errado.
+  //
+  // EM DOIS TEMPOS, porque o formulário mora atrás da linha "Fale com a gente"
+  // e só existe no DOM depois que ela abre (`talk`). O primeiro efeito consome
+  // o pedido e abre a linha; o segundo, que roda quando `talk` vira true, é
+  // que rola. Rolar no primeiro tempo mirava um elemento que ainda não existia,
+  // e foi exatamente isso que a suíte de navegador pegou na primeira versão.
+  const rolarAoAbrir = useRef(false);
+  useEffect(() => {
+    if (!consumirPedidoDeDuvida()) return;
+    rolarAoAbrir.current = true;
+    setTalk(true);
+  }, []);
+  useEffect(() => {
+    if (!talk || !rolarAoAbrir.current) return;
+    rolarAoAbrir.current = false;
+    const id = requestAnimationFrame(() => {
+      document.getElementById(ID_FALE_COM_A_GENTE)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [talk]);
+
   // CÂMERA OU GALERIA, e no Android a escolha tem de ser NOSSA.
   //
   // O relato do dono (07/09/2026): tocar na câmera abria a tela de arquivos
@@ -651,7 +680,12 @@ export function ProfileScreen() {
         />
         {talk && (
           <div className="px-4 py-4">
-            <SupportForm />
+            {/* O `id` é o alvo da rolagem do "?" flutuante (atalhoDeDuvida.ts).
+                O `scroll-mt` deixa o título do bloco visível acima do
+                formulário, em vez de colar a borda no topo. */}
+            <div id={ID_FALE_COM_A_GENTE} className="scroll-mt-14">
+              <SupportForm />
+            </div>
           </div>
         )}
         <IconRow icon="shield" tint="bg-coral/15 text-coral" label={p.privacy} onClick={() => setPrivacy(true)} />

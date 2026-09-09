@@ -101,6 +101,35 @@ export async function rodar({ nav, ok }) {
   const perfil = await aba(/^Perfil$/i);
   ok("Perfil desenha", /Idioma|Language|Conta|Sair/i.test(perfil), perfil.slice(0, 60).replace(/\n/g, " "));
 
+  // ---- o "?" flutuante --------------------------------------------------------
+  // Pedido do dono (09/09/2026): um botão fixo nas abas que leva direto ao
+  // formulário de dúvida, com a tela já rolada até ele. Duas coisas que só o
+  // navegador prova: o botão existe na aba e some no Perfil (onde cobriria o
+  // botão de enviar), e o toque deixa o formulário DENTRO da área visível do
+  // <main>, não só presente no DOM lá embaixo.
+  {
+    const semBotaoNoPerfil = (await pg.getByRole("button", { name: /Dúvidas ou sugestões/i }).count()) === 0;
+    ok("o ? flutuante não aparece no Perfil", semBotaoNoPerfil);
+    await aba(/^Início$/i);
+    const botao = pg.getByRole("button", { name: /Dúvidas ou sugestões/i }).first();
+    ok("o ? flutuante aparece na aba Início", (await botao.count()) === 1);
+    await botao.click();
+    await pg.waitForTimeout(2500);
+    const visto = await pg.evaluate(() => {
+      const main = document.querySelector("main");
+      const alvo = document.getElementById("fale-com-a-gente");
+      if (!main || !alvo) return { temPerfil: false, dentro: false, detalhe: "sem main ou sem bloco" };
+      const m = main.getBoundingClientRect();
+      const a = alvo.getBoundingClientRect();
+      const dentro = a.top >= m.top - 4 && a.top < m.bottom - 120;
+      // A suíte roda DESLOGADA: o Perfil sem sessão mostra o cartão de login,
+      // não "Conta" nem "Sair". O que existe nos dois estados é Idioma.
+      return { temPerfil: /Idioma|Language/i.test(main.textContent ?? ""), dentro, detalhe: `bloco em ${Math.round(a.top)}px, main de ${Math.round(m.top)} a ${Math.round(m.bottom)}` };
+    });
+    ok("o toque no ? abre o Perfil", visto.temPerfil);
+    ok("e a tela rola até o formulário de dúvida", visto.dentro, visto.detalhe);
+  }
+
   ok("nenhum erro de página em nenhuma delas", app.erros.length === 0, app.erros.slice(0, 2).join(" | "));
   await app.fechar();
 
@@ -138,7 +167,7 @@ export async function rodar({ nav, ok }) {
     const card = b.pg.locator("main button").filter({ hasText: /Biela/i });
     if (await card.count()) {
       await card.first().click();
-      await b.pg.waitForTimeout(2500);
+      await b.pg.waitForTimeout(1800);
       const chat = await b.tela();
       ok("a conversa com a Biela desenha", chat.length > 100, chat.slice(0, 60).replace(/\n/g, " "));
       ok("tem campo para escrever", (await b.pg.locator("main textarea, main input[type=text]").count()) > 0);

@@ -1,5 +1,6 @@
 "use client";
 
+import { pedirDuvida } from "@/lib/app/atalhoDeDuvida";
 import { useLayoutEffect, useRef } from "react";
 import { NavProvider, useNav, type View } from "@/lib/app/nav";
 import { useSwipe } from "@/lib/app/swipe";
@@ -127,8 +128,44 @@ function Router() {
       >
         {telaDaView(view)}
       </main>
+      {/* O "?" flutuante só nas cinco abas: no Perfil ele cobriria o botão de
+          enviar do próprio formulário que ele abre, e na Biela cobriria o campo
+          de digitar. Nas telas profundas a pessoa está no meio de uma tarefa. */}
+      {showTopBar && <BotaoDeDuvida />}
       <BottomNav />
     </>
+  );
+}
+
+// O atalho para "Fale com a gente", fixo acima da barra de abas, à direita.
+//
+// Pedido do dono (09/09/2026), com o exemplo de outro app dele: um botão que
+// leva direto ao formulário de dúvida, com a tela já rolada até ele. O
+// deslocamento de baixo é a altura da barra (os mesmos 3.75rem + safe-area de
+// `folgaRodape`) mais um respiro, para o botão nunca encostar nela. O
+// invólucro `fixed` + `app-col` é o mesmo truque da BottomNav: em tela larga a
+// coluna do app é centralizada, e o botão precisa ficar na borda da COLUNA,
+// não da janela.
+function BotaoDeDuvida() {
+  const { root } = useNav();
+  const c = useContent();
+  return (
+    <div className="pointer-events-none fixed inset-x-0 bottom-[calc(3.75rem+max(env(safe-area-inset-bottom),8px)+0.75rem)] z-30 app-col flex justify-end pr-4">
+      <button
+        onClick={() => {
+          pedirDuvida();
+          // `root`, igual ao ícone da barra de cima: o Perfil é raiz de aba, e
+          // empilhar com `go` deixaria a pessoa voltando para uma aba por cima
+          // de outra.
+          root({ name: "profile" });
+        }}
+        aria-label={c.profile.support.title}
+        title={c.profile.support.title}
+        className="pointer-events-auto grid h-12 w-12 place-items-center rounded-full bg-amber font-display text-xl font-bold text-graphite shadow-card ring-4 ring-graphite active:scale-95"
+      >
+        ?
+      </button>
+    </div>
   );
 }
 
