@@ -175,6 +175,28 @@ recomendar.
   mês de cupom viram 37 dias grátis, e a primeira cobrança real acontece um
   ciclo depois do que o calendário sugere. Ao olhar prazo de virada, perguntar
   sempre se existe cupom na assinatura antes de chamar aquilo de receita.
+- **Defeito que sobrevive a várias rodadas costuma ser um só, mais fundo.** O
+  carro duplicado parecia três defeitos parecidos (cadastro, login,
+  importação) e por isso nunca cabia numa rodada. Era um: a identidade do
+  carro é o `id` do aparelho. Quando um relato reaparece em lugares
+  diferentes, pare de listar os lugares e pergunte o que os três compartilham,
+  porque consertar um por vez não fecha nenhum.
+- **Conferência que procura NOME não prova nada; procure a FORMA.** A da
+  garagem passou verde com o aviso desligado, porque o nome da função seguia
+  no arquivo, usado pelo botão de fechar a folha. O que prova é a forma do
+  efeito: achou, guarda e SAI antes de gravar. Ao escrever conferência de
+  texto, plante também o defeito "o código existe mas não faz efeito", que é
+  o que uma refatoração distraída produz.
+- **Ao consertar dedup, procure o caso que o conserto quebraria.** Juntar
+  carros por marca, modelo e ano fundiria dois Gol 2016 de verdade e
+  esconderia o histórico de um. Existe quase sempre um identificador real
+  (aqui, a placa) que separa o repetido do legítimo. Sem ele, avise em vez de
+  juntar: aviso é reversível, fusão não.
+- **Onde não há ninguém para perguntar, não decida sozinho por dados.** As
+  duas telas ganharam aviso porque têm gente na frente. A fusão automática no
+  login ficou como estava, porque deduplicar ali seria escolher qual carro
+  morre. Deixar de pé com o motivo escrito na conferência vale mais do que
+  consertar: sem isso, o próximo "conserta" achando que foi descuido.
 - Rodar `npm install` antes de qualquer checagem: o contêiner da sessão nasce
   sem `node_modules` e o `tsc` cospe centenas de erros falsos de módulo.
 - Rodar `npm run conferir` (bateria inteira, 12 conferências) no lugar de
@@ -185,7 +207,8 @@ recomendar.
 ## Fila (fluxos ainda não varridos, um por semana)
 
 Varridos: **compra/checkout web** (26/08), **compra pelas lojas via
-RevenueCat** (02/09), **receita e cupom** (02/09, com o dono).
+RevenueCat** (02/09), **receita e cupom** (02/09, com o dono), **garagem e
+carro duplicado** (09/09).
 
 Reaberto na mesma data, porque a varredura da loja passou por ele e o deixou
 pela metade: **a compra pelas lojas continua sem uma única linha em produção**
@@ -193,13 +216,15 @@ pela metade: **a compra pelas lojas continua sem uma única linha em produção*
 e tratamento de erro são TEORIA até a primeira venda de loja acontecer. Quando
 ela acontecer, esse é o primeiro fluxo a reconferir, com dado na mão.
 
-- **Carro duplicado** — SUBIU PARA O TOPO. Herdado de 23/08 e já perdeu três
-  rodadas para achados mais urgentes. O mesmo carro cadastrado duas vezes
-  vira dois carros. Com a 1.6 nas duas lojas e anúncio pago entrando, isso
-  deixa de ser incômodo de quem testa e vira primeira impressão de quem
-  chega. Não deixar cair de novo.
-- Login e recuperação de conta (o botão da Apple fora do iPhone já foi
-  tratado em 23/08; o resto do fluxo nunca foi lido de ponta a ponta).
+- **Os 7 "app fechou sozinho"**, no TOPO, e é dívida de fonte, não de análise.
+  O banco recusou consulta por permissão em 09/09, então não deu para saber se
+  o sétimo relato é web (como os seis de 07/09) ou aparelho de verdade. É uma
+  linha: agrupar `app_erros` por plataforma e versão nos últimos 8 dias.
+  Enquanto não rodar, "são todos da web" é suposição, não resposta.
+- **Login e recuperação de conta** (o botão da Apple fora do iPhone já foi
+  tratado em 23/08; o resto do fluxo nunca foi lido de ponta a ponta). Ganhou
+  urgência: o cadastro pelo Android nunca funcionou até 07/09, então este é o
+  fluxo com o histórico mais acidentado do app.
 - Quiz de saúde, catálogo remoto de aulas, campos de formulário.
 - **Quiz diário** (novo em 26-27/08, nunca varrido por QA): banco de 65
   perguntas, sequência com perdão semanal, rota `/api/quiz`, folha do primeiro

@@ -29,12 +29,62 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 | Por que a AppsFlyer diz que tudo é orgânico? | Porque é. O SDK está vivo (54 instalações e 55 ativos chegaram lá). O que falta é o link: os botões de baixar apontam para a ficha crua da loja (`lib/stores.ts`), então o clique do anúncio morre no navegador. 100% das UTM do google/cpc estão em `plataforma = web`, zero no android e no iOS. O conserto é um OneLink, e ele nasce no console da AppsFlyer. | 05/09 |
 | A campanha do Google traz cadastro de verdade? | **Traz.** Na semana de 31/08 a 06/09, 7 das 8 contas novas carregam `google / lancamento`. A atribuição só existe a partir de 04/09, porque a captura de etiqueta subiu para todas as páginas em 03/09. Custo por conta no pedaço medido: R$ 14,71. | 07/09, Diretor |
 | Quantas pessoas o app teve de verdade numa semana? | Contar por `anon_id` NÃO responde isso (é armazenamento, infla a cada instalação). A régua é `auth.users`. Cruzar sempre com a porta de entrada: cliques pagos > anon_id > contas. | 01/09 e 07/09 |
+| Por que o mesmo carro vira dois? | Porque a identidade do carro é o `id`, e ele nasce no APARELHO: dois cadastros nunca colidem, e toda a dedup do app é por id. Uma causa para os três caminhos. As telas passaram a avisar em 09/09; a fusão no login continua duplicando **de propósito** (deduplicar ali esconderia o histórico de um dos carros). | 09/09, QA |
 | Quais manuais faltam para a Biela? | O primeiro lote subiu em 06/09: 112 manuais, 34.609 trechos, e os DEZ carros mais comuns do Brasil passaram a ter manual (era 3 de 10). Gol 2016 e Ka 2025, de usuários nossos, saíram de zero. Faltam Corsa/Classic e as marcas vazias (Suzuki, Mercedes-Benz, e o EcoSport). | 06/09, `docs/manuais-a-subir.md` |
 
 **Como manter:** ao FECHAR uma pergunta que já custou investigação, acrescente a
 linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
+
+## 2026-09-09 · QA: o carro duplicado tinha uma causa só, e ela é a identidade
+- Artifact "QA da Semana":
+  https://claude.ai/code/artifact/75d78944-8df0-47a6-808a-afe2c4010fdb
+- Fluxo varrido: **garagem e carro duplicado**, aberto desde 23/08 e que já
+  tinha perdido três rodadas para achados mais urgentes.
+- **A CAUSA, e ela é uma só para os três caminhos**: o app identifica carro
+  pelo `id`, e esse id nasce no APARELHO na hora de salvar. Dois cadastros do
+  mesmo carro recebem ids diferentes, sempre, então toda a deduplicação do
+  app (que é por id) nunca teve como funcionar. `addVehicle` concatena sem
+  olhar nada; `mergeById` casa por id, e no login o Gol da nuvem e o Gol do
+  convidado sobrevivem os dois; `resolverImportacao` monta o "já tem" com ids
+  que nunca batem com o carro equivalente. Consertar um caminho por vez
+  jamais resolveria, e é por isso que o relato sobreviveu a três rodadas.
+- **A PLACA é o que impede o conserto de ser pior que o defeito.** Juntar por
+  marca, modelo e ano fundiria dois Gol 2016 de verdade, que existem (casal,
+  pai e filho, frota pequena), escondendo o histórico de um deles. Regra em
+  `lib/app/mesmoCarro.ts`: com placa nos dois, só é o mesmo carro se a placa
+  for a mesma; sem placa, cai em tipo, marca, modelo e ano, tolerando caixa,
+  espaço e acento.
+- **A regra AVISA, nunca junta nem apaga.** O cadastro segura o primeiro
+  toque, diz qual carro já existe e oferece "cadastrar assim mesmo"; a folha
+  de importação marca o carro que a conta já tem. Quem confirma segue.
+- **DEIXADO DE PÉ DE PROPÓSITO**: a fusão automática das garagens no login
+  continua duplicando. Ali não existe ninguém para perguntar, e deduplicar
+  sozinho seria escolher qual carro sobrevive levando junto o histórico do
+  outro. É decisão, não esquecimento, e está escrito no cabeçalho da
+  conferência para o próximo não "consertar" isso achando que é descuido.
+- **A conferência nova quase virou enfeite, e o modo de errar vale mais que o
+  acerto.** `conferir:garagem` passou verde; plantei cinco defeitos de volta e
+  ela pegou quatro. O quinto era o mais provável numa refatoração distraída:
+  o aviso continuar na tela e parar de INTERROMPER a gravação, ou seja, a
+  pessoa vê a folha e o carro é salvo do mesmo jeito. Ela passou porque eu
+  procurava o NOME da função, e o nome segue no arquivo, usado pelo botão de
+  fechar a própria folha. Apertei para exigir a forma inteira (achou, guarda
+  e SAI antes de gravar), replantei nas duas variantes e ela reprovou nas
+  duas. A versão frouxa ficou escrita no arquivo, com o porquê.
+- **EM ABERTO POR FALTA DE FONTE**: o retrato traz 7 relatos de "app fechou
+  sozinho em: abriu o app". Em 07/09 concluiu-se que os seis de então eram
+  todos da web. Um a mais é motivo novo para conferir se o novo também é da
+  web ou se apareceu aparelho de verdade, e **o banco recusou consulta por
+  permissão nesta sessão**. A pergunta que fecha é uma linha, agrupando por
+  plataforma e versão. Primeira coisa da próxima rodada se a fonte voltar.
+- **NÃO reconferi** receita, cupom, webhook nem contagem de assinantes: as
+  cinco estão fechadas na tabela do topo e nenhuma teve motivo novo. A
+  próxima data que importa continua sendo 01/10, já agendada.
+- Saúde: bateria `conferir` inteira (29 conferências), os dois builds e a
+  suíte de navegador do carro (35s), todas verdes, rodadas de novo depois do
+  rebase sobre a 2.1.
 
 ## 2026-09-09 · Release: a 2.0 foi enviada, o repositório vai para 2.1
 
