@@ -1,29 +1,29 @@
 # Retrato diario da operacao Mentorque
 
-Gerado pelo Analista de Dados (n8n) em 2026-09-08T09:00:06.461Z.
+Gerado pelo Analista de Dados (n8n) em 2026-09-09T09:00:11.382Z.
 NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 
 ## MARKETING (gente chegando)
-- Semana corrente (2026-09-07): aberturas 22, visitantes 17, cadastros 3
-- Semana anterior (2026-08-31): aberturas 128, visitantes 52, cadastros 8
+- Semana corrente (sem dados): aberturas 0, visitantes 0, cadastros 0
+- Semana anterior (sem dados): aberturas 0, visitantes 0, cadastros 0
 - Cadastros 28d via google / lancamento: 8
-- Cadastros 28d via (direto) / (sem campanha): 4
-- Gasto de midia 7d: Meta 0.00 + Google 228.25 = 228.25
-- CAC bruto 7d (gasto total / cadastros da semana): 76.08
+- Cadastros 28d via (direto) / (sem campanha): 5
+- Gasto de midia 7d: Meta 0.00 + Google 257.86 = 257.86
+- CAC 7d: gasto sem cadastro atribuivel ainda
 - Busca Google 28d: 0 cliques, 7 impressoes
 - YouTube: 0 inscritos, 0 views totais, 10 videos recentes
 
 ## ENGAJAMENTO (gente usando e voltando)
-- Semana corrente (2026-09-07): 15 usuarios ativos, 20 aberturas (1.3 por usuario)
-- Semana anterior (2026-08-31): 52 usuarios ativos, 130 aberturas (2.5 por usuario)
-- Retencao, coorte 2026-09-07: 3 cadastrados, 0 voltaram em 1 a 7 dias, 0 em 8 a 30 dias
+- Serie de uso ainda vazia (eventos aceitos desde 2026-08-23; apps das lojas emitem a partir do proximo build).
+- Retencao, coorte 2026-09-07: 4 cadastrados, 1 voltaram em 1 a 7 dias, 0 em 8 a 30 dias
 - Retencao, coorte 2026-08-31: 8 cadastrados, 0 voltaram em 1 a 7 dias, 0 em 8 a 30 dias
 - Retencao, coorte 2026-08-24: 1 cadastrados, 0 voltaram em 1 a 7 dias, 1 em 8 a 30 dias
-- Ativacao, coorte 2026-09-07: 0 de 3 fizeram a primeira acao de valor em 7 dias
+- Ativacao, coorte 2026-09-07: 0 de 4 fizeram a primeira acao de valor em 7 dias
 - Ativacao, coorte 2026-08-31: 1 de 8 fizeram a primeira acao de valor em 7 dias
 - Ativacao, coorte 2026-08-24: 0 de 1 fizeram a primeira acao de valor em 7 dias
 - Erros no app 7d: 7
   - 7x: app fechou sozinho em: abriu o app
+- Play vitals: sem dados de crash ainda
 - Avaliacoes nas lojas: 8 (media 5)
   - [google_play 5/5]  (Luiz Fernando Muniz Viana)
   - [google_play 5/5]  (Sorriso da Pele)
@@ -31,104 +31,33 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 
 ## VENDAS (gente pagando e continuando)
 - Assinaturas ativas (banco): 4 (anuais 1, mensais 3), cancelamento agendado: 0
-- Fundo do funil, Semana corrente: viram paywall 5, iniciaram checkout 1, assinaram 0, cancelaram 0
-- Fundo do funil, Semana anterior: viram paywall 25, iniciaram checkout 5, assinaram 1, cancelaram 0
-- Assinantes, coorte 2026-09-01: 1 assinaram, 0 renovaram, 0 sairam
-- Assinantes, coorte 2026-08-01: 2 assinaram, 0 renovaram, 0 sairam
+- Fundo do funil, Semana corrente: viram paywall 0, iniciaram checkout 0, assinaram 0, cancelaram 0
+- Fundo do funil, Semana anterior: viram paywall 0, iniciaram checkout 0, assinaram 0, cancelaram 0
 - Stripe (live): 2 assinaturas, MRR 59.80, receita 30d 0.00
 - RevenueCat: 0 assinaturas, MRR 0 (aviso: active_users = aparelhos, inclui testes)
 - AdMob 7d: 0.00 USD de receita de anuncio
 - Lojas: iOS 1.7 READY_FOR_SALE; iOS 1.6 READY_FOR_SALE; iOS 1.5 READY_FOR_SALE; iOS 1.3 READY_FOR_SALE; iOS 1.2 READY_FOR_SALE
 
 ## Fontes externas (pacote bruto mais recente por fonte)
-- admob (2026-09-08): {"apps":["ca-app-pub-9316035916536420~8094986125"],"nota":"sem linhas do app do Mentorque no periodo","moeda":"USD","porDia":[],"ganhos7d":0,"impressoes7d":0}
-- app_store_connect (2026-09-08): {"versoes":[{"estado":"READY_FOR_SALE","versao":"1.7","criadaEm":"2026-09-03T15:46:58-07:00"},{"estado":"READY_FOR_SALE","versao":"1.6","criadaEm":"2026-09-01T09:26:27-07:00"},{"estado":"READY_FOR_SALE","versao":"1.5","criadaEm":"2026-08-31T03:20:23-07:00"},{"estado":"READY_FOR_SALE","versao":"1.3","criadaEm":"2026-08-29T04:32:52-07:00"},{"estado":"READY_FOR_SALE","versao":"1.2","criadaEm":"2026-0...
-- app_store_downloads (2026-09-08): {"dia":"2026-09-06","nota":"sem transacoes na App Store no dia (a Apple nao gera relatorio quando nao ha nenhuma; exclui TestFlight)","atualizacoes":0,"downloadsApp":0}
-- google_ads (2026-09-08): {"conta":"Mentorque","porDia":[{"dia":"2026-09-01","custo":0,"cliques":0,"conversoes":0,"impressoes":15},{"dia":"2026-09-02","custo":30.84,"cliques":16,"conversoes":3,"impressoes":468},{"dia":"2026-09-03","custo":60.2,"cliques":35,"conversoes":7,"impressoes":683},{"dia":"2026-09-04","custo":35.15,"cliques":21,"conversoes":0,"impressoes":516},{"dia":"2026-09-05","custo":30.733756,"cliques":19,"conv...
-- meta_ads (2026-09-08): {"conta":"Mentorque Ads","moeda":"BRL","porDia":[],"gasto7d":0}
-- play_console (2026-09-08): {"erro":"Bad request - please check your parameters"}
-- revenuecat (2026-09-08): {"mrr":0,"nota":"active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil","revenue":0,"active_users":132,"active_trials":0,"new_customers":130,"active_subscriptions":0}
-- search_console (2026-09-08): {"porDia":[{"dia":"2026-08-21","cliques":0,"impressoes":0},{"dia":"2026-08-22","cliques":0,"impressoes":1},{"dia":"2026-08-23","cliques":0,"impressoes":0},{"dia":"2026-08-24","cliques":0,"impressoes":0},{"dia":"2026-08-25","cliques":0,"impressoes":1},{"dia":"2026-08-26","cliques":0,"impressoes":0},{"dia":"2026-08-27","cliques":0,"impressoes":0},{"dia":"2026-08-28","cliques":0,"impressoes":0},{"dia...
-- stripe (2026-09-08): {"moeda":"brl","mrrCentavos":5980,"assinaturasAtivas":2,"receita30dCentavos":0}
-- vercel (2026-09-08): {"ultimo":{"alvo":"production","estado":"READY","quando":"2026-09-07T21:31:02.061Z"},"comErro7d":0,"deploys7d":20,"prontos7d":20}
-- youtube (2026-09-08): {"recentes":[{"views":0,"titulo":"Água de Torneira no radiador - você está estregando seu carro!","publicadoEm":"2026-09-03T10:17:27Z"},{"views":0,"titulo":"Erro silencioso de quem vai só na padaria!","publicadoEm":"2026-09-03T10:16:00Z"},{"views":4,"titulo":"Desligar o turbo quente: Mito ou Verdade?","publicadoEm":"2026-09-03T10:12:37Z"},{"views":36,"titulo":"Esquentar o carro parado","publicadoE...
+- admob (2026-09-09): {"apps":["ca-app-pub-9316035916536420~8094986125"],"nota":"sem linhas do app do Mentorque no periodo","moeda":"USD","porDia":[],"ganhos7d":0,"impressoes7d":0}
+- app_store_connect (2026-09-09): {"versoes":[{"estado":"READY_FOR_SALE","versao":"1.7","criadaEm":"2026-09-03T15:46:58-07:00"},{"estado":"READY_FOR_SALE","versao":"1.6","criadaEm":"2026-09-01T09:26:27-07:00"},{"estado":"READY_FOR_SALE","versao":"1.5","criadaEm":"2026-08-31T03:20:23-07:00"},{"estado":"READY_FOR_SALE","versao":"1.3","criadaEm":"2026-08-29T04:32:52-07:00"},{"estado":"READY_FOR_SALE","versao":"1.2","criadaEm":"2026-0...
+- app_store_downloads (2026-09-09): {"dia":"2026-09-07","atualizacoes":1,"downloadsApp":2,"unidadesPorTipo":{"1F":2,"7F":1}}
+- google_ads (2026-09-09): {"conta":"Mentorque","porDia":[{"dia":"2026-09-02","custo":30.84,"cliques":16,"conversoes":3,"impressoes":468},{"dia":"2026-09-03","custo":60.2,"cliques":35,"conversoes":7,"impressoes":683},{"dia":"2026-09-04","custo":35.15,"cliques":21,"conversoes":0,"impressoes":516},{"dia":"2026-09-05","custo":30.733756,"cliques":19,"conversoes":0,"impressoes":750},{"dia":"2026-09-06","custo":37.09,"cliques":23...
+- meta_ads (2026-09-09): {"conta":"Mentorque Ads","moeda":"BRL","porDia":[],"gasto7d":0}
+- play_console (2026-09-09): {"anrPorDia":[],"crashPorDia":[]}
+- revenuecat (2026-09-09): {"mrr":0,"nota":"active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil","revenue":0,"active_users":133,"active_trials":0,"new_customers":131,"active_subscriptions":0}
+- search_console (2026-09-09): {"porDia":[{"dia":"2026-08-21","cliques":0,"impressoes":0},{"dia":"2026-08-22","cliques":0,"impressoes":1},{"dia":"2026-08-23","cliques":0,"impressoes":0},{"dia":"2026-08-24","cliques":0,"impressoes":0},{"dia":"2026-08-25","cliques":0,"impressoes":1},{"dia":"2026-08-26","cliques":0,"impressoes":0},{"dia":"2026-08-27","cliques":0,"impressoes":0},{"dia":"2026-08-28","cliques":0,"impressoes":0},{"dia...
+- stripe (2026-09-09): {"moeda":"brl","mrrCentavos":5980,"assinaturasAtivas":2,"receita30dCentavos":0}
+- vercel (2026-09-09): {"ultimo":{"alvo":"production","estado":"READY","quando":"2026-09-08T21:42:02.854Z"},"comErro7d":0,"deploys7d":20,"prontos7d":20}
+- youtube (2026-09-09): {"recentes":[{"views":0,"titulo":"Água de Torneira no radiador - você está estregando seu carro!","publicadoEm":"2026-09-03T10:17:27Z"},{"views":0,"titulo":"Erro silencioso de quem vai só na padaria!","publicadoEm":"2026-09-03T10:16:00Z"},{"views":4,"titulo":"Desligar o turbo quente: Mito ou Verdade?","publicadoEm":"2026-09-03T10:12:37Z"},{"views":36,"titulo":"Esquentar o carro parado","publicadoE...
 
 ## Dados brutos (JSON)
 
 ```json
 {
   "dados": {
-    "geradoEm": "2026-09-08T09:00:04.887Z",
-    "funilSemanas": [
-      {
-        "semana": "2026-09-07",
-        "aberturas": 22,
-        "visitantes": 17,
-        "cadastros": 3,
-        "viram_paywall": 5,
-        "iniciaram_checkout": 1,
-        "assinaturas": 0,
-        "renovacoes": 0,
-        "cancelamentos": 0,
-        "expirados": 0,
-        "viram_paywall_pessoas": 5,
-        "iniciaram_checkout_pessoas": 1,
-        "assinaturas_pessoas": 0,
-        "ativaram_pessoas": 2,
-        "aberturas_sem_identidade": 0
-      },
-      {
-        "semana": "2026-08-31",
-        "aberturas": 128,
-        "visitantes": 52,
-        "cadastros": 8,
-        "viram_paywall": 25,
-        "iniciaram_checkout": 5,
-        "assinaturas": 1,
-        "renovacoes": 0,
-        "cancelamentos": 0,
-        "expirados": 0,
-        "viram_paywall_pessoas": 18,
-        "iniciaram_checkout_pessoas": 5,
-        "assinaturas_pessoas": 1,
-        "ativaram_pessoas": 5,
-        "aberturas_sem_identidade": 16
-      },
-      {
-        "semana": "2026-08-24",
-        "aberturas": 84,
-        "visitantes": 16,
-        "cadastros": 1,
-        "viram_paywall": 12,
-        "iniciaram_checkout": 4,
-        "assinaturas": 2,
-        "renovacoes": 0,
-        "cancelamentos": 0,
-        "expirados": 0,
-        "viram_paywall_pessoas": 7,
-        "iniciaram_checkout_pessoas": 2,
-        "assinaturas_pessoas": 2,
-        "ativaram_pessoas": 2,
-        "aberturas_sem_identidade": 11
-      },
-      {
-        "semana": "2026-08-17",
-        "aberturas": 4,
-        "visitantes": 1,
-        "cadastros": 0,
-        "viram_paywall": 0,
-        "iniciaram_checkout": 0,
-        "assinaturas": 0,
-        "renovacoes": 0,
-        "cancelamentos": 0,
-        "expirados": 0,
-        "viram_paywall_pessoas": 0,
-        "iniciaram_checkout_pessoas": 0,
-        "assinaturas_pessoas": 0,
-        "ativaram_pessoas": 0,
-        "aberturas_sem_identidade": 2
-      }
-    ],
+    "geradoEm": "2026-09-09T09:00:09.597Z",
+    "funilSemanas": [],
     "assinaturas": {
       "ativas": 4,
       "cancelando": 0,
@@ -156,7 +85,8 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       "2026-09-04": 2,
       "2026-09-05": 3,
       "2026-09-06": 2,
-      "2026-09-07": 3
+      "2026-09-07": 3,
+      "2026-09-08": 1
     },
     "erros7d": {
       "total": 7,
@@ -170,9 +100,15 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
     "uso": {
       "porDia": [
         {
+          "dia": "2026-09-09",
+          "usuarios": 0,
+          "aberturas": 0,
+          "aberturas_sem_identidade": 0
+        },
+        {
           "dia": "2026-09-08",
-          "usuarios": 1,
-          "aberturas": 1,
+          "usuarios": 9,
+          "aberturas": 9,
           "aberturas_sem_identidade": 0
         },
         {
@@ -246,49 +182,14 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
           "usuarios": 6,
           "aberturas": 20,
           "aberturas_sem_identidade": 2
-        },
-        {
-          "dia": "2026-08-26",
-          "usuarios": 2,
-          "aberturas": 8,
-          "aberturas_sem_identidade": 0
         }
       ],
-      "porSemana": [
-        {
-          "semana": "2026-09-07",
-          "usuarios_ativos": 15,
-          "aberturas": 20,
-          "aberturas_por_usuario": 1.3,
-          "aberturas_sem_identidade": 0
-        },
-        {
-          "semana": "2026-08-31",
-          "usuarios_ativos": 52,
-          "aberturas": 130,
-          "aberturas_por_usuario": 2.5,
-          "aberturas_sem_identidade": 16
-        },
-        {
-          "semana": "2026-08-24",
-          "usuarios_ativos": 16,
-          "aberturas": 84,
-          "aberturas_por_usuario": 5.3,
-          "aberturas_sem_identidade": 11
-        },
-        {
-          "semana": "2026-08-17",
-          "usuarios_ativos": 1,
-          "aberturas": 4,
-          "aberturas_por_usuario": 4,
-          "aberturas_sem_identidade": 2
-        }
-      ],
+      "porSemana": [],
       "coortes": [
         {
           "coorte": "2026-09-07",
-          "cadastrados": 3,
-          "voltaram_d1_7": 0,
+          "cadastrados": 4,
+          "voltaram_d1_7": 1,
           "voltaram_d8_30": 0
         },
         {
@@ -307,7 +208,7 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       "ativacao": [
         {
           "coorte": "2026-09-07",
-          "cadastrados": 3,
+          "cadastrados": 4,
           "ativados_7d": 0
         },
         {
@@ -323,20 +224,7 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       ]
     },
     "vendas": {
-      "assinaturasCoortes": [
-        {
-          "coorte": "2026-09-01",
-          "assinaram": 1,
-          "renovaram": 0,
-          "sairam": 0
-        },
-        {
-          "coorte": "2026-08-01",
-          "assinaram": 2,
-          "renovaram": 0,
-          "sairam": 0
-        }
-      ]
+      "assinaturasCoortes": []
     },
     "marketing": {
       "cadastrosPorCampanha": [
@@ -348,7 +236,7 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         {
           "origem": "(direto)",
           "campanha": "(sem campanha)",
-          "cadastros_28d": 4
+          "cadastros_28d": 5
         }
       ]
     },
@@ -357,31 +245,31 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       {
         "de": "abriu_app",
         "para": "viu_paywall",
-        "antes": 73,
-        "depois": 29,
+        "antes": 79,
+        "depois": 30,
         "validoDesde": "2026-08-22",
         "ressalvas": [],
-        "taxa": 39.7,
+        "taxa": 38,
         "motivo": null,
-        "perdidos": 44
+        "perdidos": 49
       },
       {
         "de": "cadastro",
         "para": "iniciou_checkout",
-        "antes": 12,
-        "depois": 8,
+        "antes": 13,
+        "depois": 9,
         "validoDesde": "2026-08-22",
         "ressalvas": [
           "contado em auth.users (função contas_criadas_desde), não no evento: o evento só dispara para conta com menos de 7 dias e perde tudo que veio antes do instrumento"
         ],
-        "taxa": 66.7,
+        "taxa": 69.2,
         "motivo": null,
         "perdidos": 4
       },
       {
         "de": "iniciou_checkout",
         "para": "assinou",
-        "antes": 8,
+        "antes": 9,
         "depois": 3,
         "validoDesde": "2026-08-22",
         "ressalvas": [],
@@ -392,24 +280,24 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       {
         "de": "comecou_onboarding",
         "para": "terminou_onboarding",
-        "antes": 138,
-        "depois": 54,
+        "antes": 162,
+        "depois": 58,
         "validoDesde": "2026-09-01",
         "ressalvas": [],
-        "taxa": 39.1,
+        "taxa": 35.8,
         "motivo": null,
-        "perdidos": 84
+        "perdidos": 104
       },
       {
         "de": "terminou_onboarding",
         "para": "abriu_cadastro_de_carro",
-        "antes": 54,
+        "antes": 58,
         "depois": 18,
         "validoDesde": "2026-09-01",
         "ressalvas": [],
-        "taxa": 33.3,
+        "taxa": 31,
         "motivo": null,
-        "perdidos": 36
+        "perdidos": 40
       },
       {
         "de": "abriu_cadastro_de_carro",
@@ -428,7 +316,7 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
     "janelaDoFunil": {
       "desde": "2026-08-22",
       "encurtada": true,
-      "aviso": "janela encurtada de 2026-08-11 para 2026-08-22: antes disso estes eventos ainda não eram medidos, e a série seria mais curta do que parece"
+      "aviso": "janela encurtada de 2026-08-12 para 2026-08-22: antes disso estes eventos ainda não eram medidos, e a série seria mais curta do que parece"
     },
     "estadoDaBase": null,
     "anomalias": [
@@ -441,18 +329,161 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       {
         "anomalia": "respondeu o quiz e sumiu",
         "plataforma": "ios",
-        "quantas": 5,
+        "quantas": 4,
         "detalhe": "sem nenhum evento depois da resposta; indicio, nao prova"
       },
       {
         "anomalia": "respondeu o quiz e sumiu",
         "plataforma": "web",
-        "quantas": 2,
+        "quantas": 3,
         "detalhe": "sem nenhum evento depois da resposta; indicio, nao prova"
       }
     ],
     "fontesExternas": {
+      "meta_ads": [
+        {
+          "dia": "2026-09-09",
+          "dados": {
+            "conta": "Mentorque Ads",
+            "moeda": "BRL",
+            "porDia": [],
+            "gasto7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-08",
+          "dados": {
+            "conta": "Mentorque Ads",
+            "moeda": "BRL",
+            "porDia": [],
+            "gasto7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-07",
+          "dados": {
+            "conta": "Mentorque Ads",
+            "moeda": "BRL",
+            "porDia": [],
+            "gasto7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-06",
+          "dados": {
+            "conta": "Mentorque Ads",
+            "moeda": "BRL",
+            "porDia": [],
+            "gasto7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-05",
+          "dados": {
+            "conta": "Mentorque Ads",
+            "moeda": "BRL",
+            "porDia": [],
+            "gasto7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-04",
+          "dados": {
+            "conta": "Mentorque Ads",
+            "moeda": "BRL",
+            "porDia": [],
+            "gasto7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-03",
+          "dados": {
+            "conta": "Mentorque Ads",
+            "moeda": "BRL",
+            "porDia": [],
+            "gasto7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-02",
+          "dados": {
+            "conta": "Mentorque Ads",
+            "moeda": "BRL",
+            "porDia": [],
+            "gasto7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-01",
+          "dados": {
+            "conta": "Mentorque Ads",
+            "moeda": "BRL",
+            "porDia": [],
+            "gasto7d": 0
+          }
+        }
+      ],
       "youtube": [
+        {
+          "dia": "2026-09-09",
+          "dados": {
+            "recentes": [
+              {
+                "views": 0,
+                "titulo": "Água de Torneira no radiador - você está estregando seu carro!",
+                "publicadoEm": "2026-09-03T10:17:27Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Erro silencioso de quem vai só na padaria!",
+                "publicadoEm": "2026-09-03T10:16:00Z"
+              },
+              {
+                "views": 4,
+                "titulo": "Desligar o turbo quente: Mito ou Verdade?",
+                "publicadoEm": "2026-09-03T10:12:37Z"
+              },
+              {
+                "views": 36,
+                "titulo": "Esquentar o carro parado",
+                "publicadoEm": "2026-09-03T10:10:14Z"
+              },
+              {
+                "views": 2,
+                "titulo": "SUPERCHARGER OU TURBO",
+                "publicadoEm": "2026-08-28T13:52:12Z"
+              },
+              {
+                "views": 2,
+                "titulo": "Agua de torneira no radiador - Consequencias",
+                "publicadoEm": "2026-08-28T13:50:50Z"
+              },
+              {
+                "views": 1,
+                "titulo": "O que abastecer para ajudar seu bolso? Gasolina ou Etanol?",
+                "publicadoEm": "2026-08-28T13:46:51Z"
+              },
+              {
+                "views": 1,
+                "titulo": "200cv e pouca potencia para um carro?",
+                "publicadoEm": "2026-08-28T13:45:49Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Carbonizacao no pistao - Etanol seria o culpado?",
+                "publicadoEm": "2026-08-28T13:44:46Z"
+              },
+              {
+                "views": 1,
+                "titulo": "Batalha Carro Eletrico vs Combustao - Parte 2",
+                "publicadoEm": "2026-08-28T13:43:09Z"
+              }
+            ],
+            "inscritos": 0,
+            "totalVideos": 0,
+            "viewsTotais": 0
+          }
+        },
         {
           "dia": "2026-09-08",
           "dados": {
@@ -934,81 +965,1302 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
           }
         }
       ],
-      "meta_ads": [
+      "app_store_connect": [
+        {
+          "dia": "2026-09-09",
+          "dados": {
+            "versoes": [
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.7",
+                "criadaEm": "2026-09-03T15:46:58-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.6",
+                "criadaEm": "2026-09-01T09:26:27-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.5",
+                "criadaEm": "2026-08-31T03:20:23-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.3",
+                "criadaEm": "2026-08-29T04:32:52-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.2",
+                "criadaEm": "2026-08-27T11:09:29-07:00"
+              }
+            ]
+          }
+        },
         {
           "dia": "2026-09-08",
           "dados": {
-            "conta": "Mentorque Ads",
-            "moeda": "BRL",
-            "porDia": [],
-            "gasto7d": 0
+            "versoes": [
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.7",
+                "criadaEm": "2026-09-03T15:46:58-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.6",
+                "criadaEm": "2026-09-01T09:26:27-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.5",
+                "criadaEm": "2026-08-31T03:20:23-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.3",
+                "criadaEm": "2026-08-29T04:32:52-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.2",
+                "criadaEm": "2026-08-27T11:09:29-07:00"
+              }
+            ]
           }
         },
         {
           "dia": "2026-09-07",
           "dados": {
-            "conta": "Mentorque Ads",
-            "moeda": "BRL",
-            "porDia": [],
-            "gasto7d": 0
+            "versoes": [
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.7",
+                "criadaEm": "2026-09-03T15:46:58-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.6",
+                "criadaEm": "2026-09-01T09:26:27-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.5",
+                "criadaEm": "2026-08-31T03:20:23-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.3",
+                "criadaEm": "2026-08-29T04:32:52-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.2",
+                "criadaEm": "2026-08-27T11:09:29-07:00"
+              }
+            ]
           }
         },
         {
           "dia": "2026-09-06",
           "dados": {
-            "conta": "Mentorque Ads",
-            "moeda": "BRL",
-            "porDia": [],
-            "gasto7d": 0
+            "versoes": [
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.7",
+                "criadaEm": "2026-09-03T15:46:58-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.6",
+                "criadaEm": "2026-09-01T09:26:27-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.5",
+                "criadaEm": "2026-08-31T03:20:23-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.3",
+                "criadaEm": "2026-08-29T04:32:52-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.2",
+                "criadaEm": "2026-08-27T11:09:29-07:00"
+              }
+            ]
           }
         },
         {
           "dia": "2026-09-05",
           "dados": {
-            "conta": "Mentorque Ads",
-            "moeda": "BRL",
-            "porDia": [],
-            "gasto7d": 0
+            "versoes": [
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.7",
+                "criadaEm": "2026-09-03T15:46:58-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.6",
+                "criadaEm": "2026-09-01T09:26:27-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.5",
+                "criadaEm": "2026-08-31T03:20:23-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.3",
+                "criadaEm": "2026-08-29T04:32:52-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.2",
+                "criadaEm": "2026-08-27T11:09:29-07:00"
+              }
+            ]
           }
         },
         {
           "dia": "2026-09-04",
           "dados": {
-            "conta": "Mentorque Ads",
-            "moeda": "BRL",
-            "porDia": [],
-            "gasto7d": 0
+            "versoes": [
+              {
+                "estado": "WAITING_FOR_REVIEW",
+                "versao": "1.7",
+                "criadaEm": "2026-09-03T15:46:58-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.6",
+                "criadaEm": "2026-09-01T09:26:27-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.5",
+                "criadaEm": "2026-08-31T03:20:23-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.3",
+                "criadaEm": "2026-08-29T04:32:52-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.2",
+                "criadaEm": "2026-08-27T11:09:29-07:00"
+              }
+            ]
           }
         },
         {
           "dia": "2026-09-03",
           "dados": {
-            "conta": "Mentorque Ads",
-            "moeda": "BRL",
-            "porDia": [],
-            "gasto7d": 0
+            "versoes": [
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.6",
+                "criadaEm": "2026-09-01T09:26:27-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.5",
+                "criadaEm": "2026-08-31T03:20:23-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.3",
+                "criadaEm": "2026-08-29T04:32:52-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.2",
+                "criadaEm": "2026-08-27T11:09:29-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.1",
+                "criadaEm": "2026-08-21T05:20:14-07:00"
+              }
+            ]
           }
         },
         {
           "dia": "2026-09-02",
           "dados": {
-            "conta": "Mentorque Ads",
-            "moeda": "BRL",
-            "porDia": [],
-            "gasto7d": 0
+            "versoes": [
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.6",
+                "criadaEm": "2026-09-01T09:26:27-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.5",
+                "criadaEm": "2026-08-31T03:20:23-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.3",
+                "criadaEm": "2026-08-29T04:32:52-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.2",
+                "criadaEm": "2026-08-27T11:09:29-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.1",
+                "criadaEm": "2026-08-21T05:20:14-07:00"
+              }
+            ]
           }
         },
         {
           "dia": "2026-09-01",
           "dados": {
-            "conta": "Mentorque Ads",
-            "moeda": "BRL",
-            "porDia": [],
-            "gasto7d": 0
+            "versoes": [
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.6",
+                "criadaEm": "2026-09-01T09:26:27-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.5",
+                "criadaEm": "2026-08-31T03:20:23-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.3",
+                "criadaEm": "2026-08-29T04:32:52-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.2",
+                "criadaEm": "2026-08-27T11:09:29-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "1.1",
+                "criadaEm": "2026-08-21T05:20:14-07:00"
+              }
+            ]
+          }
+        }
+      ],
+      "vercel": [
+        {
+          "dia": "2026-09-09",
+          "dados": {
+            "ultimo": {
+              "alvo": "production",
+              "estado": "READY",
+              "quando": "2026-09-08T21:42:02.854Z"
+            },
+            "comErro7d": 0,
+            "deploys7d": 20,
+            "prontos7d": 20
+          }
+        },
+        {
+          "dia": "2026-09-08",
+          "dados": {
+            "ultimo": {
+              "alvo": "production",
+              "estado": "READY",
+              "quando": "2026-09-07T21:31:02.061Z"
+            },
+            "comErro7d": 0,
+            "deploys7d": 20,
+            "prontos7d": 20
+          }
+        },
+        {
+          "dia": "2026-09-07",
+          "dados": {
+            "ultimo": {
+              "alvo": "production",
+              "estado": "READY",
+              "quando": "2026-09-06T17:13:03.053Z"
+            },
+            "comErro7d": 0,
+            "deploys7d": 20,
+            "prontos7d": 20
+          }
+        },
+        {
+          "dia": "2026-09-06",
+          "dados": {
+            "ultimo": {
+              "alvo": "production",
+              "estado": "READY",
+              "quando": "2026-09-06T00:48:51.180Z"
+            },
+            "comErro7d": 0,
+            "deploys7d": 20,
+            "prontos7d": 20
+          }
+        },
+        {
+          "dia": "2026-09-05",
+          "dados": {
+            "ultimo": {
+              "alvo": "production",
+              "estado": "READY",
+              "quando": "2026-09-04T20:36:10.262Z"
+            },
+            "comErro7d": 0,
+            "deploys7d": 20,
+            "prontos7d": 20
+          }
+        },
+        {
+          "dia": "2026-09-04",
+          "dados": {
+            "ultimo": {
+              "alvo": "production",
+              "estado": "READY",
+              "quando": "2026-09-04T00:15:03.923Z"
+            },
+            "comErro7d": 0,
+            "deploys7d": 20,
+            "prontos7d": 20
+          }
+        },
+        {
+          "dia": "2026-09-03",
+          "dados": {
+            "ultimo": {
+              "alvo": "production",
+              "estado": "READY",
+              "quando": "2026-09-03T10:15:06.649Z"
+            },
+            "comErro7d": 0,
+            "deploys7d": 20,
+            "prontos7d": 20
+          }
+        },
+        {
+          "dia": "2026-09-02",
+          "dados": {
+            "ultimo": {
+              "alvo": "production",
+              "estado": "READY",
+              "quando": "2026-09-01T21:00:09.822Z"
+            },
+            "comErro7d": 0,
+            "deploys7d": 20,
+            "prontos7d": 20
+          }
+        },
+        {
+          "dia": "2026-09-01",
+          "dados": {
+            "ultimo": {
+              "alvo": "production",
+              "estado": "READY",
+              "quando": "2026-09-01T20:46:16.812Z"
+            },
+            "comErro7d": 0,
+            "deploys7d": 20,
+            "prontos7d": 20
+          }
+        }
+      ],
+      "stripe": [
+        {
+          "dia": "2026-09-09",
+          "dados": {
+            "moeda": "brl",
+            "mrrCentavos": 5980,
+            "assinaturasAtivas": 2,
+            "receita30dCentavos": 0
+          }
+        },
+        {
+          "dia": "2026-09-08",
+          "dados": {
+            "moeda": "brl",
+            "mrrCentavos": 5980,
+            "assinaturasAtivas": 2,
+            "receita30dCentavos": 0
+          }
+        },
+        {
+          "dia": "2026-09-07",
+          "dados": {
+            "moeda": "brl",
+            "mrrCentavos": 5980,
+            "assinaturasAtivas": 2,
+            "receita30dCentavos": 0
+          }
+        },
+        {
+          "dia": "2026-09-06",
+          "dados": {
+            "moeda": "brl",
+            "mrrCentavos": 5980,
+            "assinaturasAtivas": 2,
+            "receita30dCentavos": 0
+          }
+        },
+        {
+          "dia": "2026-09-05",
+          "dados": {
+            "moeda": "brl",
+            "mrrCentavos": 5980,
+            "assinaturasAtivas": 2,
+            "receita30dCentavos": 0
+          }
+        },
+        {
+          "dia": "2026-09-04",
+          "dados": {
+            "moeda": "brl",
+            "mrrCentavos": 2990,
+            "assinaturasAtivas": 1,
+            "receita30dCentavos": 0
+          }
+        },
+        {
+          "dia": "2026-09-03",
+          "dados": {
+            "moeda": "brl",
+            "mrrCentavos": 2990,
+            "assinaturasAtivas": 1,
+            "receita30dCentavos": 0
+          }
+        },
+        {
+          "dia": "2026-09-02",
+          "dados": {
+            "moeda": "brl",
+            "mrrCentavos": 2990,
+            "assinaturasAtivas": 1,
+            "receita30dCentavos": 0
+          }
+        },
+        {
+          "dia": "2026-09-01",
+          "dados": {
+            "moeda": null,
+            "mrrCentavos": 0,
+            "assinaturasAtivas": 0,
+            "receita30dCentavos": 0
+          }
+        }
+      ],
+      "search_console": [
+        {
+          "dia": "2026-09-09",
+          "dados": {
+            "porDia": [
+              {
+                "dia": "2026-08-21",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-22",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-23",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-24",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-25",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-26",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-27",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-28",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-29",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-30",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-31",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-01",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-09-02",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-03",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-04",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-05",
+                "cliques": 0,
+                "impressoes": 4
+              },
+              {
+                "dia": "2026-09-06",
+                "cliques": 0,
+                "impressoes": 0
+              }
+            ],
+            "cliques28d": 0,
+            "topConsultas": [
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "\"mentorque\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
+                "impressoes": 1
+              },
+              {
+                "cliques": 0,
+                "posicao": 80,
+                "consulta": "carro nao quer pegar",
+                "impressoes": 1
+              },
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "mentorque",
+                "impressoes": 4
+              }
+            ],
+            "impressoes28d": 7
+          }
+        },
+        {
+          "dia": "2026-09-08",
+          "dados": {
+            "porDia": [
+              {
+                "dia": "2026-08-21",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-22",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-23",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-24",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-25",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-26",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-27",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-28",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-29",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-30",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-31",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-01",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-09-02",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-03",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-04",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-05",
+                "cliques": 0,
+                "impressoes": 4
+              }
+            ],
+            "cliques28d": 0,
+            "topConsultas": [
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "\"mentorque\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
+                "impressoes": 1
+              },
+              {
+                "cliques": 0,
+                "posicao": 80,
+                "consulta": "carro nao quer pegar",
+                "impressoes": 1
+              },
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "mentorque",
+                "impressoes": 4
+              }
+            ],
+            "impressoes28d": 7
+          }
+        },
+        {
+          "dia": "2026-09-07",
+          "dados": {
+            "porDia": [
+              {
+                "dia": "2026-08-21",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-22",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-23",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-24",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-25",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-26",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-27",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-28",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-29",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-30",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-31",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-01",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-09-02",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-03",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-04",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-05",
+                "cliques": 0,
+                "impressoes": 4
+              }
+            ],
+            "cliques28d": 0,
+            "topConsultas": [
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "\"mentorque\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
+                "impressoes": 1
+              },
+              {
+                "cliques": 0,
+                "posicao": 80,
+                "consulta": "carro nao quer pegar",
+                "impressoes": 1
+              },
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "mentorque",
+                "impressoes": 4
+              }
+            ],
+            "impressoes28d": 7
+          }
+        },
+        {
+          "dia": "2026-09-06",
+          "dados": {
+            "porDia": [
+              {
+                "dia": "2026-08-21",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-22",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-23",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-24",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-25",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-26",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-27",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-28",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-29",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-30",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-31",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-01",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-09-02",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-03",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-04",
+                "cliques": 0,
+                "impressoes": 0
+              }
+            ],
+            "cliques28d": 0,
+            "topConsultas": [
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "mentorque",
+                "impressoes": 2
+              }
+            ],
+            "impressoes28d": 3
+          }
+        },
+        {
+          "dia": "2026-09-05",
+          "dados": {
+            "porDia": [
+              {
+                "dia": "2026-08-21",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-22",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-23",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-24",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-25",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-26",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-27",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-28",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-29",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-30",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-31",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-01",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-09-02",
+                "cliques": 0,
+                "impressoes": 0
+              }
+            ],
+            "cliques28d": 0,
+            "topConsultas": [
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "mentorque",
+                "impressoes": 2
+              }
+            ],
+            "impressoes28d": 3
+          }
+        },
+        {
+          "dia": "2026-09-04",
+          "dados": {
+            "porDia": [
+              {
+                "dia": "2026-08-21",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-22",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-23",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-24",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-25",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-26",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-27",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-28",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-29",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-30",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-31",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-01",
+                "cliques": 0,
+                "impressoes": 1
+              }
+            ],
+            "cliques28d": 0,
+            "topConsultas": [
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "mentorque",
+                "impressoes": 2
+              }
+            ],
+            "impressoes28d": 3
+          }
+        },
+        {
+          "dia": "2026-09-03",
+          "dados": {
+            "porDia": [
+              {
+                "dia": "2026-08-21",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-22",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-23",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-24",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-25",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-26",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-27",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-28",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-29",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-30",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-31",
+                "cliques": 0,
+                "impressoes": 0
+              }
+            ],
+            "cliques28d": 0,
+            "topConsultas": [
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "mentorque",
+                "impressoes": 2
+              }
+            ],
+            "impressoes28d": 2
+          }
+        },
+        {
+          "dia": "2026-09-02",
+          "dados": {
+            "porDia": [
+              {
+                "dia": "2026-08-21",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-22",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-23",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-24",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-25",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-26",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-27",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-28",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-29",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-30",
+                "cliques": 0,
+                "impressoes": 0
+              }
+            ],
+            "cliques28d": 0,
+            "topConsultas": [
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "mentorque",
+                "impressoes": 2
+              }
+            ],
+            "impressoes28d": 2
+          }
+        },
+        {
+          "dia": "2026-09-01",
+          "dados": {
+            "porDia": [
+              {
+                "dia": "2026-08-21",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-22",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-23",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-24",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-25",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-08-26",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-27",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-28",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-29",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-30",
+                "cliques": 0,
+                "impressoes": 0
+              }
+            ],
+            "cliques28d": 0,
+            "topConsultas": [
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "mentorque",
+                "impressoes": 2
+              }
+            ],
+            "impressoes28d": 2
           }
         }
       ],
       "app_store_downloads": [
+        {
+          "dia": "2026-09-09",
+          "dados": {
+            "dia": "2026-09-07",
+            "atualizacoes": 1,
+            "downloadsApp": 2,
+            "unidadesPorTipo": {
+              "1F": 2,
+              "7F": 1
+            }
+          }
+        },
         {
           "dia": "2026-09-08",
           "dados": {
@@ -1100,81 +2352,1142 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
           }
         }
       ],
-      "stripe": [
+      "play_console": [
+        {
+          "dia": "2026-09-09",
+          "dados": {
+            "anrPorDia": [],
+            "crashPorDia": []
+          }
+        },
         {
           "dia": "2026-09-08",
           "dados": {
-            "moeda": "brl",
-            "mrrCentavos": 5980,
-            "assinaturasAtivas": 2,
-            "receita30dCentavos": 0
+            "erro": "Bad request - please check your parameters"
           }
         },
         {
           "dia": "2026-09-07",
           "dados": {
-            "moeda": "brl",
-            "mrrCentavos": 5980,
-            "assinaturasAtivas": 2,
-            "receita30dCentavos": 0
+            "anrPorDia": [],
+            "crashPorDia": []
           }
         },
         {
           "dia": "2026-09-06",
           "dados": {
-            "moeda": "brl",
-            "mrrCentavos": 5980,
-            "assinaturasAtivas": 2,
-            "receita30dCentavos": 0
+            "anrPorDia": [],
+            "crashPorDia": []
           }
         },
         {
           "dia": "2026-09-05",
           "dados": {
-            "moeda": "brl",
-            "mrrCentavos": 5980,
-            "assinaturasAtivas": 2,
-            "receita30dCentavos": 0
+            "anrPorDia": [],
+            "crashPorDia": []
           }
         },
         {
           "dia": "2026-09-04",
           "dados": {
-            "moeda": "brl",
-            "mrrCentavos": 2990,
-            "assinaturasAtivas": 1,
-            "receita30dCentavos": 0
+            "anrPorDia": [],
+            "crashPorDia": []
           }
         },
         {
           "dia": "2026-09-03",
           "dados": {
-            "moeda": "brl",
-            "mrrCentavos": 2990,
-            "assinaturasAtivas": 1,
-            "receita30dCentavos": 0
+            "anrPorDia": [],
+            "crashPorDia": []
           }
         },
         {
           "dia": "2026-09-02",
           "dados": {
-            "moeda": "brl",
-            "mrrCentavos": 2990,
-            "assinaturasAtivas": 1,
-            "receita30dCentavos": 0
+            "anrPorDia": [],
+            "crashPorDia": []
           }
         },
         {
           "dia": "2026-09-01",
           "dados": {
-            "moeda": null,
-            "mrrCentavos": 0,
-            "assinaturasAtivas": 0,
-            "receita30dCentavos": 0
+            "anrPorDia": [],
+            "crashPorDia": []
+          }
+        }
+      ],
+      "admob": [
+        {
+          "dia": "2026-09-09",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-08",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-07",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-06",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-05",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-04",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-03",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-02",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        },
+        {
+          "dia": "2026-09-01",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        }
+      ],
+      "revenuecat": [
+        {
+          "dia": "2026-09-09",
+          "dados": {
+            "mrr": 0,
+            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
+            "revenue": 0,
+            "active_users": 133,
+            "active_trials": 0,
+            "new_customers": 131,
+            "active_subscriptions": 0
+          }
+        },
+        {
+          "dia": "2026-09-08",
+          "dados": {
+            "mrr": 0,
+            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
+            "revenue": 0,
+            "active_users": 132,
+            "active_trials": 0,
+            "new_customers": 130,
+            "active_subscriptions": 0
+          }
+        },
+        {
+          "dia": "2026-09-07",
+          "dados": {
+            "mrr": 0,
+            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
+            "revenue": 0,
+            "active_users": 123,
+            "active_trials": 0,
+            "new_customers": 121,
+            "active_subscriptions": 0
+          }
+        },
+        {
+          "dia": "2026-09-06",
+          "dados": {
+            "mrr": 0,
+            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
+            "revenue": 0,
+            "active_users": 118,
+            "active_trials": 0,
+            "new_customers": 116,
+            "active_subscriptions": 0
+          }
+        },
+        {
+          "dia": "2026-09-05",
+          "dados": {
+            "mrr": 0,
+            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
+            "revenue": 0,
+            "active_users": 118,
+            "active_trials": 0,
+            "new_customers": 118,
+            "active_subscriptions": 0
+          }
+        },
+        {
+          "dia": "2026-09-04",
+          "dados": {
+            "mrr": 0,
+            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
+            "revenue": 0,
+            "active_users": 108,
+            "active_trials": 0,
+            "new_customers": 108,
+            "active_subscriptions": 0
+          }
+        },
+        {
+          "dia": "2026-09-03",
+          "dados": {
+            "mrr": 0,
+            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
+            "revenue": 0,
+            "active_users": 83,
+            "active_trials": 0,
+            "new_customers": 83,
+            "active_subscriptions": 0
+          }
+        },
+        {
+          "dia": "2026-09-02",
+          "dados": {
+            "mrr": 0,
+            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
+            "revenue": 0,
+            "active_users": 73,
+            "active_trials": 0,
+            "new_customers": 73,
+            "active_subscriptions": 0
+          }
+        },
+        {
+          "dia": "2026-09-01",
+          "dados": {
+            "mrr": 0,
+            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
+            "revenue": 0,
+            "active_users": 72,
+            "active_trials": 0,
+            "new_customers": 72,
+            "active_subscriptions": 0
           }
         }
       ],
       "google_ads": [
+        {
+          "dia": "2026-09-09",
+          "dados": {
+            "conta": "Mentorque",
+            "porDia": [
+              {
+                "dia": "2026-09-02",
+                "custo": 30.84,
+                "cliques": 16,
+                "conversoes": 3,
+                "impressoes": 468
+              },
+              {
+                "dia": "2026-09-03",
+                "custo": 60.2,
+                "cliques": 35,
+                "conversoes": 7,
+                "impressoes": 683
+              },
+              {
+                "dia": "2026-09-04",
+                "custo": 35.15,
+                "cliques": 21,
+                "conversoes": 0,
+                "impressoes": 516
+              },
+              {
+                "dia": "2026-09-05",
+                "custo": 30.733756,
+                "cliques": 19,
+                "conversoes": 0,
+                "impressoes": 750
+              },
+              {
+                "dia": "2026-09-06",
+                "custo": 37.09,
+                "cliques": 23,
+                "conversoes": 0,
+                "impressoes": 912
+              },
+              {
+                "dia": "2026-09-07",
+                "custo": 32.6,
+                "cliques": 21,
+                "conversoes": 0,
+                "impressoes": 632
+              },
+              {
+                "dia": "2026-09-08",
+                "custo": 29.62,
+                "cliques": 20,
+                "conversoes": 0,
+                "impressoes": 652
+              },
+              {
+                "dia": "2026-09-09",
+                "custo": 1.63,
+                "cliques": 1,
+                "conversoes": 0,
+                "impressoes": 28
+              }
+            ],
+            "termos": [
+              {
+                "custo": 6.67,
+                "termo": "scanner de carro no celular",
+                "cliques": 4,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 10
+              },
+              {
+                "custo": 3.65,
+                "termo": "curso mecânica automotiva grátis",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 16
+              },
+              {
+                "custo": 3.43,
+                "termo": "mecânico online perguntas e respostas",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 6
+              },
+              {
+                "custo": 3.23,
+                "termo": "mecânica 2000 manual",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 1,
+                "impressoes": 4
+              },
+              {
+                "custo": 3.2,
+                "termo": "ebook mecanica automotiva",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 3.16,
+                "termo": "carro liga parte eletrica mas nao da partida",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 3.06,
+                "termo": "como escanear o carro pelo celular grátis",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 12
+              },
+              {
+                "custo": 2.96,
+                "termo": "mecânico online",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 13
+              },
+              {
+                "custo": 2,
+                "termo": "curso de mecânica automotiva gratuito",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 2,
+                "termo": "cursos de mecanica de carros",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 1,
+                "impressoes": 3
+              },
+              {
+                "custo": 2,
+                "termo": "cursos online gratuitos com certificado mecanica automotiva",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.99,
+                "termo": "curso mecânico de carro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 1,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.98,
+                "termo": "troca de oleo de carro quanto tempo",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 3
+              },
+              {
+                "custo": 1.97,
+                "termo": "meu carro acendeu a luz do motor",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.93,
+                "termo": "curso de mecanica de carros",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.9,
+                "termo": "pastilha de freio",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 1.9,
+                "termo": "curso de mecânico automotivo rj",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 1.85,
+                "termo": "carro esquentando mesmo com agua no radiador",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.85,
+                "termo": "curso de mecânico carro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.8,
+                "termo": "quando o carro não dá partida o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 5
+              },
+              {
+                "custo": 1.79,
+                "termo": "hilux não pega na partida",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.78,
+                "termo": "quando o carro está perdendo a força o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.76,
+                "termo": "carro celta falhando o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.76,
+                "termo": "scanner automotivo gratis",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.73,
+                "termo": "escanear carro pelo celular android",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.73,
+                "termo": "scanner automotivo para celular",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 6
+              },
+              {
+                "custo": 1.73,
+                "termo": "sete videocarro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.71,
+                "termo": "porque o carro aquece muito",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.69,
+                "termo": "luz da pressão do óleo piscando",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.67,
+                "termo": "carro parou do nada o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.64,
+                "termo": "curso de mecânica presencial",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.63,
+                "termo": "car scanner gratuito",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.63,
+                "termo": "carro falhando em baixa rotação",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.63,
+                "termo": "luz do óleo acendendo o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 3
+              },
+              {
+                "custo": 1.6,
+                "termo": "curso mecanica automotiva gratuito",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.57,
+                "termo": "luz do óleo acesa",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.57,
+                "termo": "mecanica gratis",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.56,
+                "termo": "carro não pega na partida",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 5
+              },
+              {
+                "custo": 1.56,
+                "termo": "luz da injeção eletrônica",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 13
+              },
+              {
+                "custo": 1.53,
+                "termo": "mecanicos online",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.51,
+                "termo": "carro nao liga o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 12
+              },
+              {
+                "custo": 1.51,
+                "termo": "como escanear carro pelo celular",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 6
+              },
+              {
+                "custo": 1.5,
+                "termo": "carro falhando ao acelerar",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.48,
+                "termo": "carro troca oleo com quantos km",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.46,
+                "termo": "scanner do carro pelo celular",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.43,
+                "termo": "carro perde a força do nada",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.35,
+                "termo": "carro automático não quer pegar",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.27,
+                "termo": "carro parou de funcionar do nada",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 0,
+                "termo": "a luz da ignição acendeu o que pode ser",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 0,
+                "termo": "a luz da injeção acendeu o que pode ser",
+                "cliques": 0,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              }
+            ],
+            "contaId": "6724308347",
+            "custo7d": 257.86375599999997,
+            "porCampanha": [
+              {
+                "id": "24163300275",
+                "nome": "Mentorque Lançamento",
+                "canal": "SEARCH",
+                "custo": 257.86375599999997,
+                "status": "ENABLED",
+                "cliques": 156,
+                "conversoes": 10,
+                "impressoes": 4641
+              }
+            ],
+            "termosSemConversao": [
+              {
+                "custo": 6.67,
+                "termo": "scanner de carro no celular",
+                "cliques": 4,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 10
+              },
+              {
+                "custo": 3.65,
+                "termo": "curso mecânica automotiva grátis",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 16
+              },
+              {
+                "custo": 3.43,
+                "termo": "mecânico online perguntas e respostas",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 6
+              },
+              {
+                "custo": 3.2,
+                "termo": "ebook mecanica automotiva",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 3.16,
+                "termo": "carro liga parte eletrica mas nao da partida",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 3.06,
+                "termo": "como escanear o carro pelo celular grátis",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 12
+              },
+              {
+                "custo": 2.96,
+                "termo": "mecânico online",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 13
+              },
+              {
+                "custo": 2,
+                "termo": "curso de mecânica automotiva gratuito",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 2,
+                "termo": "cursos online gratuitos com certificado mecanica automotiva",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.98,
+                "termo": "troca de oleo de carro quanto tempo",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 3
+              },
+              {
+                "custo": 1.97,
+                "termo": "meu carro acendeu a luz do motor",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.93,
+                "termo": "curso de mecanica de carros",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.9,
+                "termo": "pastilha de freio",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 1.9,
+                "termo": "curso de mecânico automotivo rj",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 1.85,
+                "termo": "carro esquentando mesmo com agua no radiador",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.85,
+                "termo": "curso de mecânico carro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.8,
+                "termo": "quando o carro não dá partida o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 5
+              },
+              {
+                "custo": 1.79,
+                "termo": "hilux não pega na partida",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.78,
+                "termo": "quando o carro está perdendo a força o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.76,
+                "termo": "carro celta falhando o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.76,
+                "termo": "scanner automotivo gratis",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.73,
+                "termo": "escanear carro pelo celular android",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.73,
+                "termo": "scanner automotivo para celular",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 6
+              },
+              {
+                "custo": 1.73,
+                "termo": "sete videocarro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.71,
+                "termo": "porque o carro aquece muito",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.69,
+                "termo": "luz da pressão do óleo piscando",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.67,
+                "termo": "carro parou do nada o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.64,
+                "termo": "curso de mecânica presencial",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.63,
+                "termo": "car scanner gratuito",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.63,
+                "termo": "carro falhando em baixa rotação",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.63,
+                "termo": "luz do óleo acendendo o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 3
+              },
+              {
+                "custo": 1.6,
+                "termo": "curso mecanica automotiva gratuito",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.57,
+                "termo": "luz do óleo acesa",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.57,
+                "termo": "mecanica gratis",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.56,
+                "termo": "carro não pega na partida",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 5
+              },
+              {
+                "custo": 1.56,
+                "termo": "luz da injeção eletrônica",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 13
+              },
+              {
+                "custo": 1.53,
+                "termo": "mecanicos online",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.51,
+                "termo": "carro nao liga o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 12
+              },
+              {
+                "custo": 1.51,
+                "termo": "como escanear carro pelo celular",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 6
+              },
+              {
+                "custo": 1.5,
+                "termo": "carro falhando ao acelerar",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.48,
+                "termo": "carro troca oleo com quantos km",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.46,
+                "termo": "scanner do carro pelo celular",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.43,
+                "termo": "carro perde a força do nada",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.35,
+                "termo": "carro automático não quer pegar",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.27,
+                "termo": "carro parou de funcionar do nada",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              }
+            ]
+          }
+        },
         {
           "dia": "2026-09-08",
           "dados": {
@@ -5221,1374 +7534,72 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
             "custo7d": 0
           }
         }
-      ],
-      "app_store_connect": [
-        {
-          "dia": "2026-09-08",
-          "dados": {
-            "versoes": [
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.7",
-                "criadaEm": "2026-09-03T15:46:58-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.6",
-                "criadaEm": "2026-09-01T09:26:27-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.5",
-                "criadaEm": "2026-08-31T03:20:23-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.3",
-                "criadaEm": "2026-08-29T04:32:52-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.2",
-                "criadaEm": "2026-08-27T11:09:29-07:00"
-              }
-            ]
-          }
-        },
-        {
-          "dia": "2026-09-07",
-          "dados": {
-            "versoes": [
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.7",
-                "criadaEm": "2026-09-03T15:46:58-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.6",
-                "criadaEm": "2026-09-01T09:26:27-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.5",
-                "criadaEm": "2026-08-31T03:20:23-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.3",
-                "criadaEm": "2026-08-29T04:32:52-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.2",
-                "criadaEm": "2026-08-27T11:09:29-07:00"
-              }
-            ]
-          }
-        },
-        {
-          "dia": "2026-09-06",
-          "dados": {
-            "versoes": [
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.7",
-                "criadaEm": "2026-09-03T15:46:58-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.6",
-                "criadaEm": "2026-09-01T09:26:27-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.5",
-                "criadaEm": "2026-08-31T03:20:23-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.3",
-                "criadaEm": "2026-08-29T04:32:52-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.2",
-                "criadaEm": "2026-08-27T11:09:29-07:00"
-              }
-            ]
-          }
-        },
-        {
-          "dia": "2026-09-05",
-          "dados": {
-            "versoes": [
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.7",
-                "criadaEm": "2026-09-03T15:46:58-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.6",
-                "criadaEm": "2026-09-01T09:26:27-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.5",
-                "criadaEm": "2026-08-31T03:20:23-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.3",
-                "criadaEm": "2026-08-29T04:32:52-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.2",
-                "criadaEm": "2026-08-27T11:09:29-07:00"
-              }
-            ]
-          }
-        },
-        {
-          "dia": "2026-09-04",
-          "dados": {
-            "versoes": [
-              {
-                "estado": "WAITING_FOR_REVIEW",
-                "versao": "1.7",
-                "criadaEm": "2026-09-03T15:46:58-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.6",
-                "criadaEm": "2026-09-01T09:26:27-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.5",
-                "criadaEm": "2026-08-31T03:20:23-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.3",
-                "criadaEm": "2026-08-29T04:32:52-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.2",
-                "criadaEm": "2026-08-27T11:09:29-07:00"
-              }
-            ]
-          }
-        },
-        {
-          "dia": "2026-09-03",
-          "dados": {
-            "versoes": [
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.6",
-                "criadaEm": "2026-09-01T09:26:27-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.5",
-                "criadaEm": "2026-08-31T03:20:23-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.3",
-                "criadaEm": "2026-08-29T04:32:52-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.2",
-                "criadaEm": "2026-08-27T11:09:29-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.1",
-                "criadaEm": "2026-08-21T05:20:14-07:00"
-              }
-            ]
-          }
-        },
-        {
-          "dia": "2026-09-02",
-          "dados": {
-            "versoes": [
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.6",
-                "criadaEm": "2026-09-01T09:26:27-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.5",
-                "criadaEm": "2026-08-31T03:20:23-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.3",
-                "criadaEm": "2026-08-29T04:32:52-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.2",
-                "criadaEm": "2026-08-27T11:09:29-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.1",
-                "criadaEm": "2026-08-21T05:20:14-07:00"
-              }
-            ]
-          }
-        },
-        {
-          "dia": "2026-09-01",
-          "dados": {
-            "versoes": [
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.6",
-                "criadaEm": "2026-09-01T09:26:27-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.5",
-                "criadaEm": "2026-08-31T03:20:23-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.3",
-                "criadaEm": "2026-08-29T04:32:52-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.2",
-                "criadaEm": "2026-08-27T11:09:29-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.1",
-                "criadaEm": "2026-08-21T05:20:14-07:00"
-              }
-            ]
-          }
-        }
-      ],
-      "admob": [
-        {
-          "dia": "2026-09-08",
-          "dados": {
-            "apps": [
-              "ca-app-pub-9316035916536420~8094986125"
-            ],
-            "nota": "sem linhas do app do Mentorque no periodo",
-            "moeda": "USD",
-            "porDia": [],
-            "ganhos7d": 0,
-            "impressoes7d": 0
-          }
-        },
-        {
-          "dia": "2026-09-07",
-          "dados": {
-            "apps": [
-              "ca-app-pub-9316035916536420~8094986125"
-            ],
-            "nota": "sem linhas do app do Mentorque no periodo",
-            "moeda": "USD",
-            "porDia": [],
-            "ganhos7d": 0,
-            "impressoes7d": 0
-          }
-        },
-        {
-          "dia": "2026-09-06",
-          "dados": {
-            "apps": [
-              "ca-app-pub-9316035916536420~8094986125"
-            ],
-            "nota": "sem linhas do app do Mentorque no periodo",
-            "moeda": "USD",
-            "porDia": [],
-            "ganhos7d": 0,
-            "impressoes7d": 0
-          }
-        },
-        {
-          "dia": "2026-09-05",
-          "dados": {
-            "apps": [
-              "ca-app-pub-9316035916536420~8094986125"
-            ],
-            "nota": "sem linhas do app do Mentorque no periodo",
-            "moeda": "USD",
-            "porDia": [],
-            "ganhos7d": 0,
-            "impressoes7d": 0
-          }
-        },
-        {
-          "dia": "2026-09-04",
-          "dados": {
-            "apps": [
-              "ca-app-pub-9316035916536420~8094986125"
-            ],
-            "nota": "sem linhas do app do Mentorque no periodo",
-            "moeda": "USD",
-            "porDia": [],
-            "ganhos7d": 0,
-            "impressoes7d": 0
-          }
-        },
-        {
-          "dia": "2026-09-03",
-          "dados": {
-            "apps": [
-              "ca-app-pub-9316035916536420~8094986125"
-            ],
-            "nota": "sem linhas do app do Mentorque no periodo",
-            "moeda": "USD",
-            "porDia": [],
-            "ganhos7d": 0,
-            "impressoes7d": 0
-          }
-        },
-        {
-          "dia": "2026-09-02",
-          "dados": {
-            "apps": [
-              "ca-app-pub-9316035916536420~8094986125"
-            ],
-            "nota": "sem linhas do app do Mentorque no periodo",
-            "moeda": "USD",
-            "porDia": [],
-            "ganhos7d": 0,
-            "impressoes7d": 0
-          }
-        },
-        {
-          "dia": "2026-09-01",
-          "dados": {
-            "apps": [
-              "ca-app-pub-9316035916536420~8094986125"
-            ],
-            "nota": "sem linhas do app do Mentorque no periodo",
-            "moeda": "USD",
-            "porDia": [],
-            "ganhos7d": 0,
-            "impressoes7d": 0
-          }
-        }
-      ],
-      "vercel": [
-        {
-          "dia": "2026-09-08",
-          "dados": {
-            "ultimo": {
-              "alvo": "production",
-              "estado": "READY",
-              "quando": "2026-09-07T21:31:02.061Z"
-            },
-            "comErro7d": 0,
-            "deploys7d": 20,
-            "prontos7d": 20
-          }
-        },
-        {
-          "dia": "2026-09-07",
-          "dados": {
-            "ultimo": {
-              "alvo": "production",
-              "estado": "READY",
-              "quando": "2026-09-06T17:13:03.053Z"
-            },
-            "comErro7d": 0,
-            "deploys7d": 20,
-            "prontos7d": 20
-          }
-        },
-        {
-          "dia": "2026-09-06",
-          "dados": {
-            "ultimo": {
-              "alvo": "production",
-              "estado": "READY",
-              "quando": "2026-09-06T00:48:51.180Z"
-            },
-            "comErro7d": 0,
-            "deploys7d": 20,
-            "prontos7d": 20
-          }
-        },
-        {
-          "dia": "2026-09-05",
-          "dados": {
-            "ultimo": {
-              "alvo": "production",
-              "estado": "READY",
-              "quando": "2026-09-04T20:36:10.262Z"
-            },
-            "comErro7d": 0,
-            "deploys7d": 20,
-            "prontos7d": 20
-          }
-        },
-        {
-          "dia": "2026-09-04",
-          "dados": {
-            "ultimo": {
-              "alvo": "production",
-              "estado": "READY",
-              "quando": "2026-09-04T00:15:03.923Z"
-            },
-            "comErro7d": 0,
-            "deploys7d": 20,
-            "prontos7d": 20
-          }
-        },
-        {
-          "dia": "2026-09-03",
-          "dados": {
-            "ultimo": {
-              "alvo": "production",
-              "estado": "READY",
-              "quando": "2026-09-03T10:15:06.649Z"
-            },
-            "comErro7d": 0,
-            "deploys7d": 20,
-            "prontos7d": 20
-          }
-        },
-        {
-          "dia": "2026-09-02",
-          "dados": {
-            "ultimo": {
-              "alvo": "production",
-              "estado": "READY",
-              "quando": "2026-09-01T21:00:09.822Z"
-            },
-            "comErro7d": 0,
-            "deploys7d": 20,
-            "prontos7d": 20
-          }
-        },
-        {
-          "dia": "2026-09-01",
-          "dados": {
-            "ultimo": {
-              "alvo": "production",
-              "estado": "READY",
-              "quando": "2026-09-01T20:46:16.812Z"
-            },
-            "comErro7d": 0,
-            "deploys7d": 20,
-            "prontos7d": 20
-          }
-        }
-      ],
-      "search_console": [
-        {
-          "dia": "2026-09-08",
-          "dados": {
-            "porDia": [
-              {
-                "dia": "2026-08-21",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-22",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-23",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-24",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-25",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-26",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-27",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-28",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-29",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-30",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-31",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-01",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-09-02",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-03",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-04",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-05",
-                "cliques": 0,
-                "impressoes": 4
-              }
-            ],
-            "cliques28d": 0,
-            "topConsultas": [
-              {
-                "cliques": 0,
-                "posicao": 1,
-                "consulta": "\"mentorque\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
-                "impressoes": 1
-              },
-              {
-                "cliques": 0,
-                "posicao": 80,
-                "consulta": "carro nao quer pegar",
-                "impressoes": 1
-              },
-              {
-                "cliques": 0,
-                "posicao": 1,
-                "consulta": "mentorque",
-                "impressoes": 4
-              }
-            ],
-            "impressoes28d": 7
-          }
-        },
-        {
-          "dia": "2026-09-07",
-          "dados": {
-            "porDia": [
-              {
-                "dia": "2026-08-21",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-22",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-23",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-24",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-25",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-26",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-27",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-28",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-29",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-30",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-31",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-01",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-09-02",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-03",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-04",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-05",
-                "cliques": 0,
-                "impressoes": 4
-              }
-            ],
-            "cliques28d": 0,
-            "topConsultas": [
-              {
-                "cliques": 0,
-                "posicao": 1,
-                "consulta": "\"mentorque\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
-                "impressoes": 1
-              },
-              {
-                "cliques": 0,
-                "posicao": 80,
-                "consulta": "carro nao quer pegar",
-                "impressoes": 1
-              },
-              {
-                "cliques": 0,
-                "posicao": 1,
-                "consulta": "mentorque",
-                "impressoes": 4
-              }
-            ],
-            "impressoes28d": 7
-          }
-        },
-        {
-          "dia": "2026-09-06",
-          "dados": {
-            "porDia": [
-              {
-                "dia": "2026-08-21",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-22",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-23",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-24",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-25",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-26",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-27",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-28",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-29",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-30",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-31",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-01",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-09-02",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-03",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-04",
-                "cliques": 0,
-                "impressoes": 0
-              }
-            ],
-            "cliques28d": 0,
-            "topConsultas": [
-              {
-                "cliques": 0,
-                "posicao": 1,
-                "consulta": "mentorque",
-                "impressoes": 2
-              }
-            ],
-            "impressoes28d": 3
-          }
-        },
-        {
-          "dia": "2026-09-05",
-          "dados": {
-            "porDia": [
-              {
-                "dia": "2026-08-21",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-22",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-23",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-24",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-25",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-26",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-27",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-28",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-29",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-30",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-31",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-01",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-09-02",
-                "cliques": 0,
-                "impressoes": 0
-              }
-            ],
-            "cliques28d": 0,
-            "topConsultas": [
-              {
-                "cliques": 0,
-                "posicao": 1,
-                "consulta": "mentorque",
-                "impressoes": 2
-              }
-            ],
-            "impressoes28d": 3
-          }
-        },
-        {
-          "dia": "2026-09-04",
-          "dados": {
-            "porDia": [
-              {
-                "dia": "2026-08-21",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-22",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-23",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-24",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-25",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-26",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-27",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-28",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-29",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-30",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-31",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-01",
-                "cliques": 0,
-                "impressoes": 1
-              }
-            ],
-            "cliques28d": 0,
-            "topConsultas": [
-              {
-                "cliques": 0,
-                "posicao": 1,
-                "consulta": "mentorque",
-                "impressoes": 2
-              }
-            ],
-            "impressoes28d": 3
-          }
-        },
-        {
-          "dia": "2026-09-03",
-          "dados": {
-            "porDia": [
-              {
-                "dia": "2026-08-21",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-22",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-23",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-24",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-25",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-26",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-27",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-28",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-29",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-30",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-31",
-                "cliques": 0,
-                "impressoes": 0
-              }
-            ],
-            "cliques28d": 0,
-            "topConsultas": [
-              {
-                "cliques": 0,
-                "posicao": 1,
-                "consulta": "mentorque",
-                "impressoes": 2
-              }
-            ],
-            "impressoes28d": 2
-          }
-        },
-        {
-          "dia": "2026-09-02",
-          "dados": {
-            "porDia": [
-              {
-                "dia": "2026-08-21",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-22",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-23",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-24",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-25",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-26",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-27",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-28",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-29",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-30",
-                "cliques": 0,
-                "impressoes": 0
-              }
-            ],
-            "cliques28d": 0,
-            "topConsultas": [
-              {
-                "cliques": 0,
-                "posicao": 1,
-                "consulta": "mentorque",
-                "impressoes": 2
-              }
-            ],
-            "impressoes28d": 2
-          }
-        },
-        {
-          "dia": "2026-09-01",
-          "dados": {
-            "porDia": [
-              {
-                "dia": "2026-08-21",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-22",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-23",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-24",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-25",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-26",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-27",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-28",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-29",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-30",
-                "cliques": 0,
-                "impressoes": 0
-              }
-            ],
-            "cliques28d": 0,
-            "topConsultas": [
-              {
-                "cliques": 0,
-                "posicao": 1,
-                "consulta": "mentorque",
-                "impressoes": 2
-              }
-            ],
-            "impressoes28d": 2
-          }
-        }
-      ],
-      "revenuecat": [
-        {
-          "dia": "2026-09-08",
-          "dados": {
-            "mrr": 0,
-            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
-            "revenue": 0,
-            "active_users": 132,
-            "active_trials": 0,
-            "new_customers": 130,
-            "active_subscriptions": 0
-          }
-        },
-        {
-          "dia": "2026-09-07",
-          "dados": {
-            "mrr": 0,
-            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
-            "revenue": 0,
-            "active_users": 123,
-            "active_trials": 0,
-            "new_customers": 121,
-            "active_subscriptions": 0
-          }
-        },
-        {
-          "dia": "2026-09-06",
-          "dados": {
-            "mrr": 0,
-            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
-            "revenue": 0,
-            "active_users": 118,
-            "active_trials": 0,
-            "new_customers": 116,
-            "active_subscriptions": 0
-          }
-        },
-        {
-          "dia": "2026-09-05",
-          "dados": {
-            "mrr": 0,
-            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
-            "revenue": 0,
-            "active_users": 118,
-            "active_trials": 0,
-            "new_customers": 118,
-            "active_subscriptions": 0
-          }
-        },
-        {
-          "dia": "2026-09-04",
-          "dados": {
-            "mrr": 0,
-            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
-            "revenue": 0,
-            "active_users": 108,
-            "active_trials": 0,
-            "new_customers": 108,
-            "active_subscriptions": 0
-          }
-        },
-        {
-          "dia": "2026-09-03",
-          "dados": {
-            "mrr": 0,
-            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
-            "revenue": 0,
-            "active_users": 83,
-            "active_trials": 0,
-            "new_customers": 83,
-            "active_subscriptions": 0
-          }
-        },
-        {
-          "dia": "2026-09-02",
-          "dados": {
-            "mrr": 0,
-            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
-            "revenue": 0,
-            "active_users": 73,
-            "active_trials": 0,
-            "new_customers": 73,
-            "active_subscriptions": 0
-          }
-        },
-        {
-          "dia": "2026-09-01",
-          "dados": {
-            "mrr": 0,
-            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
-            "revenue": 0,
-            "active_users": 72,
-            "active_trials": 0,
-            "new_customers": 72,
-            "active_subscriptions": 0
-          }
-        }
-      ],
-      "play_console": [
-        {
-          "dia": "2026-09-08",
-          "dados": {
-            "erro": "Bad request - please check your parameters"
-          }
-        },
-        {
-          "dia": "2026-09-07",
-          "dados": {
-            "anrPorDia": [],
-            "crashPorDia": []
-          }
-        },
-        {
-          "dia": "2026-09-06",
-          "dados": {
-            "anrPorDia": [],
-            "crashPorDia": []
-          }
-        },
-        {
-          "dia": "2026-09-05",
-          "dados": {
-            "anrPorDia": [],
-            "crashPorDia": []
-          }
-        },
-        {
-          "dia": "2026-09-04",
-          "dados": {
-            "anrPorDia": [],
-            "crashPorDia": []
-          }
-        },
-        {
-          "dia": "2026-09-03",
-          "dados": {
-            "anrPorDia": [],
-            "crashPorDia": []
-          }
-        },
-        {
-          "dia": "2026-09-02",
-          "dados": {
-            "anrPorDia": [],
-            "crashPorDia": []
-          }
-        },
-        {
-          "dia": "2026-09-01",
-          "dados": {
-            "anrPorDia": [],
-            "crashPorDia": []
-          }
-        }
       ]
     },
     "frescorDasFontes": [
       {
         "fonte": "admob",
-        "ultimoDia": "2026-09-08",
+        "ultimoDia": "2026-09-09",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "app_store_connect",
-        "ultimoDia": "2026-09-08",
+        "ultimoDia": "2026-09-09",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "app_store_downloads",
-        "ultimoDia": "2026-09-08",
+        "ultimoDia": "2026-09-09",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "google_ads",
-        "ultimoDia": "2026-09-08",
+        "ultimoDia": "2026-09-09",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "meta_ads",
-        "ultimoDia": "2026-09-08",
+        "ultimoDia": "2026-09-09",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "play_console",
-        "ultimoDia": "2026-09-08",
+        "ultimoDia": "2026-09-09",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "revenuecat",
-        "ultimoDia": "2026-09-08",
+        "ultimoDia": "2026-09-09",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "search_console",
-        "ultimoDia": "2026-09-08",
+        "ultimoDia": "2026-09-09",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "stripe",
-        "ultimoDia": "2026-09-08",
+        "ultimoDia": "2026-09-09",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "vercel",
-        "ultimoDia": "2026-09-08",
+        "ultimoDia": "2026-09-09",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "youtube",
-        "ultimoDia": "2026-09-08",
+        "ultimoDia": "2026-09-09",
         "diasParado": 0,
         "parada": false
       }
