@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { usePrototype } from "@/lib/app/store";
+import { carroIgualNaGaragem } from "@/lib/app/mesmoCarro";
 import { useContent } from "./ui";
 
 // Pergunta de importação da garagem do convidado.
@@ -18,7 +19,7 @@ import { useContent } from "./ui";
 // Começa com tudo DESMARCADO por decisão do dono: o padrão é a conta continuar
 // como está, e o que entra é o que a pessoa afirmou ser dela.
 export function ImportarGaragem() {
-  const { importacaoPendente, resolverImportacao } = usePrototype();
+  const { s, importacaoPendente, resolverImportacao } = usePrototype();
   const c = useContent();
   const t = c.importar;
   const [marcados, setMarcados] = useState<string[]>([]);
@@ -39,6 +40,11 @@ export function ImportarGaragem() {
           {importacaoPendente.veiculos.map((v) => {
             const n = importacaoPendente.servicos.filter((r) => r.vehicleId === v.id).length;
             const marcado = marcados.includes(v.id);
+            // A conta já tem um carro assim? A dedup da importação é por `id`,
+            // e o id nasce no aparelho, então o carro equivalente da conta
+            // nunca casa: marcar aqui produzia dois iguais na garagem, calado.
+            // Continua sendo escolha da pessoa, agora informada.
+            const repetido = !!carroIgualNaGaragem(s.vehicles, v);
             return (
               <li key={v.id}>
                 <button
@@ -67,6 +73,11 @@ export function ImportarGaragem() {
                       {v.year}
                       {v.plate ? ` · ${v.plate}` : ""} · {n === 0 ? t.semServico : `${n} ${n === 1 ? t.servico : t.servicos}`}
                     </span>
+                    {repetido && (
+                      <span className="mt-1 inline-block rounded-md bg-amber/15 px-1.5 py-0.5 text-[11px] font-medium text-amber">
+                        {t.jaTem}
+                      </span>
+                    )}
                   </span>
                 </button>
               </li>

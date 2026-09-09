@@ -421,6 +421,16 @@ export function getContent(locale: Locale) {
       addPhoto: T("Adicionar foto", "Add photo"),
       changePhoto: T("Trocar foto", "Change photo"),
       needModel: T("Escolha marca, modelo e ano.", "Pick make, model and year."),
+      // Aviso de carro repetido. Não é erro: quem tem dois iguais de verdade
+      // confirma e segue. O texto diz o que já existe, para a pessoa reconhecer
+      // o carro dela em vez de decidir no escuro.
+      duplicadoTitulo: T("Esse carro já está na garagem", "This car is already in your garage"),
+      duplicadoCorpo: T(
+        "Você já tem {carro} cadastrado. Se for outro veículo igual, pode cadastrar assim mesmo. Se for o mesmo, cancele e use o que já existe.",
+        "You already have {carro} saved. If this is a second, identical vehicle, go ahead. If it is the same one, cancel and use the existing car.",
+      ),
+      duplicadoSeguir: T("Cadastrar assim mesmo", "Add it anyway"),
+      duplicadoCancelar: T("Cancelar", "Cancel"),
     },
 
     carHub: {
@@ -777,6 +787,10 @@ export function getContent(locale: Locale) {
       semServico: T("sem histórico", "no history"),
       importar: T("Levar os marcados", "Add the checked ones"),
       importarNenhum: T("Não levar nenhum", "Do not add any"),
+      // Selo no carro que a conta já tem. A tela listava tudo igual, então
+      // marcar o carro repetido produzia dois iguais na garagem sem aviso
+      // nenhum. Dizer antes é o que evita o arrependimento depois.
+      jaTem: T("já está na sua conta", "already in your account"),
     },
 
     // Quiz diário. O tom aqui decide se a pessoa volta amanhã: a explicação

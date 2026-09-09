@@ -8,7 +8,8 @@ import { computeQuizHealth } from "@/lib/app/healthQuiz";
 import { LIMITS, economySaved } from "@/lib/app/premium";
 import { formatBRL, vehicleLabel } from "@/lib/app/content";
 import { AvatarPickerSheet } from "../AvatarPicker";
-import type { ServiceRecord, VehicleType } from "@/lib/app/types";
+import type { ServiceRecord, Vehicle, VehicleType } from "@/lib/app/types";
+import { carroIgualNaGaragem } from "@/lib/app/mesmoCarro";
 import { Button } from "@/components/ui/Button";
 import { useNav } from "@/lib/app/nav";
 import { funil } from "@/lib/app/funil";
@@ -329,6 +330,29 @@ export function AddCarScreen({ editId }: { editId?: string }) {
 
   const valid = !!(make && model && year);
 
+  // Já existe um carro assim na garagem?
+  //
+  // O app identificava carro pelo `id` gerado no aparelho, então cadastrar o
+  // mesmo carro duas vezes sempre produziu dois carros, sem uma palavra. O
+  // relato é de 23/08/2026 e a garagem duplicada é a primeira coisa que a
+  // pessoa vê ao abrir o app.
+  //
+  // Isto AVISA, não bloqueia: dois Gol 2016 de verdade existem (casal, pai e
+  // filho, frota pequena), e a placa já separa esse caso em `mesmoCarro`. Quem
+  // confirma segue e cadastra. Só o primeiro toque é segurado.
+  const [jaExiste, setJaExiste] = useState<Vehicle | null>(null);
+
+  const gravar = (data: Omit<Vehicle, "id">) => {
+    addVehicle(data);
+    // Primeira ação de valor do funil: cadastrou um veículo (ativação real).
+    funil("cadastrou_carro", { umaVez: true, origem: type });
+    // Quem está como convidado acaba de criar algo que só existe neste
+    // aparelho. É o melhor (e o único honesto) momento para convidar a criar
+    // conta: a folha some sozinha para quem já tem uma.
+    pedirConviteDeConta();
+    root({ name: "car" });
+  };
+
   const save = () => {
     if (!valid) return;
     const data = {
@@ -344,14 +368,9 @@ export function AddCarScreen({ editId }: { editId?: string }) {
       updateVehicle(editing.id, data);
       back();
     } else {
-      addVehicle(data);
-      // Primeira ação de valor do funil: cadastrou um veículo (ativação real).
-      funil("cadastrou_carro", { umaVez: true, origem: type });
-      // Quem está como convidado acaba de criar algo que só existe neste
-      // aparelho. É o melhor (e o único honesto) momento para convidar a criar
-      // conta: a folha some sozinha para quem já tem uma.
-      pedirConviteDeConta();
-      root({ name: "car" });
+      const igual = carroIgualNaGaragem(s.vehicles, data);
+      if (igual && !jaExiste) { setJaExiste(igual); return; }
+      gravar(data);
     }
   };
 
@@ -561,6 +580,22 @@ export function AddCarScreen({ editId }: { editId?: string }) {
           </Button>
         </div>
       </div>
+
+      {/* Carro repetido: avisa e deixa seguir. Fechar a folha equivale a
+          cancelar, e cancelar volta ao formulário com tudo preenchido, para
+          quem se enganou não perder o que digitou. */}
+      <Sheet open={!!jaExiste} onClose={() => setJaExiste(null)}>
+        <h2 className="font-serif text-xl font-bold text-cream">{a.duplicadoTitulo}</h2>
+        <p className="mt-2 text-sm leading-relaxed text-cream/70">
+          {a.duplicadoCorpo.replace("{carro}", jaExiste ? vehicleLabel(jaExiste) : "")}
+        </p>
+        <Button className="mt-5 w-full" onClick={save}>
+          {a.duplicadoSeguir}
+        </Button>
+        <Button variant="ghost" className="mt-2 w-full" onClick={() => setJaExiste(null)}>
+          {a.duplicadoCancelar}
+        </Button>
+      </Sheet>
 
       {/* Janela de avatares / foto */}
       <AvatarPickerSheet
