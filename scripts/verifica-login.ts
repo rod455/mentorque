@@ -135,6 +135,24 @@ for (const motivo of MOTIVOS) {
   );
 }
 
+// ── a folha do Google no Android não manda `scopes` ─────────────────────────
+//
+// O plugin (GoogleProvider.java, 8.3.40) recusa QUALQUER lista de scopes se a
+// MainActivity não implementar a interface dele, e acrescenta profile e email
+// sozinho. A 1.9 mandava ["profile", "email"] e a Luana viu "You CANNOT use
+// scopes without modifying the main activity" (09/09/2026). A conferência lê o
+// trecho do login do Google sem comentários e cobra que o ramo do Android não
+// carregue scopes.
+{
+  const trecho = social.slice(social.indexOf("provider === \"apple\""), social.indexOf("plugin.login(") + 400);
+  const ramoAndroid = (trecho.match(/nativePlatform\(\)\s*===\s*"android"\s*\?\s*(\{[^}]*\})/) ?? [])[1] ?? "";
+  conferir(
+    "no Android, o login do Google não manda scopes",
+    ramoAndroid.length > 0 && !/scopes/.test(ramoAndroid),
+    ramoAndroid ? `ramo do Android: ${ramoAndroid}` : "não há ramo do Android nas opções do login do Google"
+  );
+}
+
 // ── o portão do Android ─────────────────────────────────────────────────────
 if (!noAndroid) {
   conferir(

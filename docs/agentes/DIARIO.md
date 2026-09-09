@@ -36,6 +36,29 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-09 · Android: a caixinha do Google recusou por causa de dois scopes que o plugin já punha sozinho
+
+- Primeiro teste da 1.9 no aparelho da Luana: "Continuar com o Google" caiu
+  na mensagem de erro "You CANNOT use scopes without modifying the main
+  activity. Please follow the docs!". O caminho por e-mail continuou
+  funcionando; a queda para o navegador não acontece nesse caso porque o erro
+  vem do `login`, não do `initialize`, e é assim de propósito.
+- **Causa lida no fonte do plugin, não deduzida:** `GoogleProvider.java`
+  (8.3.40), linha 476: `if (scopesArray != null)` e a activity não implementa
+  `ModifiedMainActivityForSocialLoginPlugin` → recusa. Nas linhas logo acima
+  ele adiciona `profile` e `email` por conta própria. A gente mandava
+  `["profile", "email"]`: a lista só servia para ligar a trava.
+- Conserto de uma linha: no Android o login do Google não manda `scopes`; no
+  iPhone segue igual, porque lá funciona. A alternativa, modificar a
+  MainActivity, só faz sentido para scopes além de perfil e e-mail, que não
+  usamos.
+- Conferência: `conferir:login` lê o ramo do Android das opções do login e
+  reprova se ele carregar `scopes`. Provada com o código da 1.9 plantado de
+  volta.
+- **Precisa de build novo.** O de 08/09 tem a caixinha quebrada. Se a 1.9 não
+  chegou a produção, dá para subir outro build com o mesmo nome; se chegou, a
+  próxima é 1.10 e a 1.9 entra em `JA_PUBLICADAS`.
+
 ## 2026-09-08 · SEO: os oito pontos da avaliação, e os que só existiam no papel
 
 - O dono pediu para olhar o que o SEO publicou e dizer o que faz sentido e o

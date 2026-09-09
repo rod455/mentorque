@@ -241,7 +241,16 @@ export async function nativeSocialLogin(
       options:
         provider === "apple"
           ? { scopes: ["email", "name"], nonce: hashedNonce }
-          : { scopes: ["profile", "email"], nonce: hashedNonce },
+          : nativePlatform() === "android"
+            // SEM `scopes` NO ANDROID, e o motivo está no fonte do plugin
+            // (GoogleProvider.java, 8.3.40): qualquer lista de scopes, mesmo
+            // vazia, faz ele exigir uma MainActivity modificada, e recusa com
+            // "You CANNOT use scopes without modifying the main activity". Foi
+            // a tela que a Luana viu na 1.9 (09/09/2026). E `profile` e `email`
+            // ele já acrescenta sozinho, linhas acima da recusa: a lista que a
+            // gente mandava só servia para ligar a trava.
+            ? { nonce: hashedNonce }
+            : { scopes: ["profile", "email"], nonce: hashedNonce },
     });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);

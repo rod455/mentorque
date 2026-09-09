@@ -43,6 +43,14 @@ Só isto. Se algo não estiver na lista, não veio nesta versão.
    assinatura, o app cai no navegador sozinho**, que é o caminho de hoje e
    funciona: a folha nunca é beco sem saída (`conferir:login`).
 
+   **O primeiro build da 1.9 (08/09) tinha isto quebrado**, visto no aparelho
+   da Luana em 09/09: "You CANNOT use scopes without modifying the main
+   activity". O plugin recusa qualquer lista de `scopes` no Android sem uma
+   MainActivity modificada, e acrescenta `profile` e `email` sozinho; a gente
+   mandava justamente esses dois. O Android deixou de mandar `scopes`
+   (lib/app/socialLogin.ts) e a `conferir:login` cobra isso. **Precisa de build
+   novo**: o de 08/09 não serve.
+
 **Nenhuma permissão nova.** O Capacitor só pede `CAMERA` quando o app declara
 essa permissão no manifesto, e o nosso não declara: a foto sai por
 `ACTION_IMAGE_CAPTURE`, que é o app de câmera do aparelho fazendo o trabalho.
