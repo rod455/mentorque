@@ -72,6 +72,10 @@ const JA_PUBLICADAS = [
   // ajuste de foto, a câmera do Android e o "?" flutuante. Acrescentada no
   // mesmo dia, na hora, que é a única forma de esta lista não repetir a 1.8.
   "2.0",
+  // Aprovada nas DUAS lojas em 09/09/2026, no mesmo dia em que foi gerada. É a
+  // primeira versão a chegar ao iPhone desde a 1.7 (03/09). Acrescentada na
+  // hora da aprovação.
+  "2.1",
 ];
 
 import { readFileSync } from "node:fs";
