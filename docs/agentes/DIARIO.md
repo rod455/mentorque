@@ -37,6 +37,24 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-10 · Engenharia: a 2.3 falou, e o login mudo do Android é certificado não cadastrado
+- Linha em `app_erros` às 10:10 UTC, versão 2.3.0: pacote `mentorque.app`,
+  client id `1009695078013-eom7ist1...`, mensagem de baixo "activity is
+  cancelled by the user.", e `signingSha1=E5:1C:71:4E:AF:82:E6:58:E7:6A:46:96:
+  E0:81:3E:50:5C:91:71:CC`.
+- **A causa, provada pela linha**: o app instalado no aparelho está assinado
+  por um certificado que não está em nenhum dos dois clientes Android do
+  Google Cloud (os cadastrados terminam em `17:DF` e `B4:4D:41`). Pacote e
+  client id estavam certos desde a 2.0. Dois dias e quatro builds (2.0 a 2.3)
+  para chegar aqui, porque o plugin devolvia uma frase fixa; a partir de agora
+  a linha diz a SHA-1 na primeira tentativa.
+- **Conserto**: cadastrar essa SHA-1 no Google Cloud (cliente Android, mesmo
+  projeto, pacote `mentorque.app`). Sem build: a checagem é do Google, na hora
+  de emitir o token. Passado ao dono em 10/09.
+- Fica em aberto de onde veio a SHA-1 que o dono cadastrou como "do Play"
+  (`A9:95...`). A que assina o app instalado é a `E5:1C...`, e é ela que o
+  Play Console deveria mostrar como certificado da chave de assinatura do app.
+
 ## 2026-09-10 · Engenharia: a 2.2 trouxe a testemunha, e ela fala pouco; a 2.3 faz ela falar
 - **O que o aparelho disse.** A 2.2 reprovou o login do Google igual à 2.0 e
   à 2.1 (caixinha, conta, Entrar, tela muda), mas pela primeira vez com linha

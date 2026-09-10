@@ -45,6 +45,22 @@ remendo compila no Gradle do Codemagic (aqui só a sintaxe do Java foi
 conferida, com um parser; o build é a prova). Sobre esse build, até um
 aparelho abrir, a resposta é "sem sinal ainda".
 
+## O que o aparelho disse (10/09, 10:10 UTC)
+
+Passo 1 reprovou igual, e a linha veio inteira, versão 2.3.0:
+
+    Google Sign-In cancelled by user (activity is cancelled by the user.)
+    package=mentorque.app
+    signingSha1=E5:1C:71:4E:AF:82:E6:58:E7:6A:46:96:E0:81:3E:50:5C:91:71:CC
+    webClientId=1009695078013-eom7ist1
+
+Pacote certo, client id certo, e a SHA-1 do certificado que assinou o app
+instalado NÃO é nenhuma das duas cadastradas no Google Cloud (upload termina
+em `17:DF`, a outra em `B4:4D:41`). É o primeiro caso do roteiro: o conserto
+é cadastrar essa SHA-1 num cliente Android do mesmo projeto, e não precisa
+de build, porque a checagem é do lado do Google. Os outros passos não foram
+rodados.
+
 ## Antes de enviar
 
 - Versão 2.3 nos três lugares (`npm run conferir:versoes`).
