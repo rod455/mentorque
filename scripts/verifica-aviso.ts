@@ -27,6 +27,7 @@
 import { anotaRota, aoAnotarRota, esqueceRota, nomeDeRota, rotaPendente } from "../lib/app/rotaPendente.ts";
 import { espelhaOAparelho } from "../lib/app/espelhoDoAviso.ts";
 import { quandoAvisarCarroParado } from "../lib/app/carroParado.ts";
+import { proximoAvisoDeVencida } from "../lib/app/revisaoVencida.ts";
 import { QUIZ_ZERADO } from "../lib/app/quiz/sequencia.ts";
 import { readFileSync } from "node:fs";
 
@@ -371,6 +372,27 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
   const cars = leia("components/app/screens/Cars.tsx");
   conferir("o cadastro do carro pede o convite de aviso", /pedirConviteNoCarro\(\)/.test(cars));
   conferir("e a garagem mostra o convite com o texto do carro", /<ConviteDeAviso[\s\S]*momento="carro"/.test(cars) && /conviteAvisoCorpo/.test(cars));
+}
+
+// ── revisão vencida vira aviso, um item por vez, sem repetir em 30 dias ────
+//
+// 10/09/2026. A situação "overdue" existia desde agosto e só ordenava aulas.
+{
+  const agora = new Date("2026-09-10T15:00:00");
+  const r = proximoAvisoDeVencida({ vencidos: ["v1:oil", "v1:brakes"], avisados: {}, agora });
+  conferir("o primeiro vencido é avisado às 9h de amanhã", !!r && r.chave === "v1:oil" && r.quando.getDate() === 11 && r.quando.getHours() === 9);
+  const r2 = proximoAvisoDeVencida({ vencidos: ["v1:oil", "v1:brakes"], avisados: { "v1:oil": "2026-09-01" }, agora });
+  conferir("item avisado há menos de 30 dias cede a vez ao próximo", !!r2 && r2.chave === "v1:brakes");
+  const r3 = proximoAvisoDeVencida({ vencidos: ["v1:oil"], avisados: { "v1:oil": "2026-08-01" }, agora });
+  conferir("depois de 30 dias o mesmo item volta a avisar", !!r3 && r3.chave === "v1:oil");
+  conferir("todos avisados há pouco: nada", proximoAvisoDeVencida({ vencidos: ["v1:oil"], avisados: { "v1:oil": "2026-09-09" }, agora }) === null);
+  conferir("sem vencido, nada", proximoAvisoDeVencida({ vencidos: [], avisados: {}, agora }) === null);
+
+  const abertura = leia("lib/app/aberturaDoApp.ts");
+  conferir("a abertura sincroniza o aviso de revisão vencida", /sincronizarLembreteRevisaoVencida\(\{/.test(abertura));
+  const vencida = leia("lib/app/lembreteRevisaoVencida.ts");
+  conferir("o aviso nasce da saúde do carro (overdue), não do calendário", /computeUpcoming\(/.test(vencida) && /"overdue"/.test(vencida));
+  conferir("o dia do agendamento é marcado, senão reagenda para amanhã todo dia", /marcar\(proximo\.chave/.test(vencida));
 }
 
 if (falhas) {

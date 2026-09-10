@@ -61,6 +61,8 @@ export const AVISO = {
   quizDoDia: 2,
   // Cadastrou o carro e sumiu: um aviso dois dias depois (lembreteCarroParado.ts).
   carroParado: 3,
+  // Revisão vencida pela saúde do carro, um item por vez (lembreteRevisaoVencida.ts).
+  revisaoVencida: 4,
 } as const;
 
 // Canal do Android. Sem canal declarado, o Android 8+ joga a notificação num

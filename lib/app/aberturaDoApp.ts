@@ -16,6 +16,7 @@ import { adsEnabled } from "@/components/app/AdGate";
 import { sincronizarLembrete } from "./lembreteAssinatura";
 import { sincronizarLembreteQuiz } from "./lembreteQuiz";
 import { sincronizarLembreteCarroParado } from "./lembreteCarroParado";
+import { sincronizarLembreteRevisaoVencida } from "./lembreteRevisaoVencida";
 import { computeHealth } from "./health";
 import { ouvirToqueEmAviso, semearMarcaDeAgendamento } from "./notificacoes";
 import { ouvirToqueEmPush, sincronizarPush } from "./push";
@@ -352,6 +353,24 @@ export function useLembretes(c: Content) {
     // s.services, a fonte dele.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [s.notifications, s.reminders, s.services, veiculo?.id, veiculo?.odometerKm, veiculo?.purchaseDate, c.revisions.planAvisoTitulo, c.revisions.planAvisoCorpo]);
+
+  // Revisão que a saúde do carro diz que VENCEU vira aviso, um item por vez,
+  // às 9h de amanhã, sem repetir o mesmo item em 30 dias. Não depende de a
+  // pessoa ter posto nada no calendário. Ver lib/app/lembreteRevisaoVencida.ts.
+  useEffect(() => {
+    void sincronizarLembreteRevisaoVencida({
+      quer: s.notifications,
+      veiculo,
+      servicos: veiculo ? servicesFor(s, veiculo.id) : [],
+      textos: {
+        titulo: c.revisions.vencidaAvisoTitulo,
+        corpo: c.revisions.vencidaAvisoCorpo,
+        nomes: c.revisions.ruleLabels,
+        carro: veiculo ? carName(veiculo) : "",
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [s.notifications, s.services, veiculo?.id, veiculo?.odometerKm, veiculo?.purchaseDate, c.revisions.vencidaAvisoTitulo]);
 }
 
 /**
