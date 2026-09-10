@@ -40,6 +40,19 @@ No aparelho da Luana (Android), na ordem:
 O que a conferência daqui não alcança: se o login vai funcionar. Sobre esse
 build, até um aparelho abrir, a resposta é "sem sinal ainda".
 
+## O que o aparelho disse (10/09)
+
+Passo 1 reprovou do mesmo jeito da 2.1: caixinha, conta, Entrar, tela muda.
+Mas desta vez a `app_erros` recebeu a linha, às 00:04 UTC, versão 2.2.0:
+
+    login nativo google: Google Sign-In cancelled by user
+
+É a frase fixa do plugin para `GetCredentialCancellationException`; a mensagem
+que o Android mandou, o pacote, a SHA-1 e o client id ficam só no Logcat. A
+2.3 remenda o plugin para essas quatro coisas virem na mesma linha
+(`scripts/conserta-social-login.mjs`). Os outros cinco passos não foram
+rodados.
+
 ## Antes de enviar
 
 - Versão 2.2 nos três lugares (`npm run conferir:versoes`).

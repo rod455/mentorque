@@ -21,7 +21,7 @@
 // precisa mudar; a queda vira redundância, que é o estado saudável dela.
 //
 // Rode com: npm run conferir:login
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -175,6 +175,36 @@ for (const motivo of MOTIVOS) {
     /relatarLoginNativo\(/.test(catchDoPlugin),
     "relatar depois do return de cancelamento deixa o caso que mais importa sem testemunha"
   );
+}
+
+// ── o "cancelado" do Google no Android diz o que o Google viu ───────────────
+//
+// 10/09/2026: a 2.2 relatou "Google Sign-In cancelled by user" e nada mais,
+// porque o plugin devolve essa frase fixa e deixa a mensagem de verdade, o
+// pacote, a SHA-1 e o client id só no Logcat. O remendo mora em node_modules
+// (scripts/conserta-social-login.mjs, no postinstall), e remendo fora do
+// repositório some sem avisar: versão nova do plugin, postinstall retirado,
+// upstream reescrito. Aqui o defeito volta em dois segundos, não no aparelho
+// da Luana depois de um build.
+{
+  const alvo = "node_modules/@capgo/capacitor-social-login/android/src/main/java/ee/forgr/capacitor/social/login/GoogleProvider.java";
+  const caminho = new URL(`../${alvo}`, import.meta.url);
+  if (existsSync(caminho)) {
+    const java = readFileSync(caminho, "utf8");
+    const rejeicao = java.slice(java.indexOf("instanceof GetCredentialCancellationException"), java.indexOf("instanceof NoCredentialException"));
+    conferir(
+      "no Android, o 'cancelado' do Google carrega a mensagem de baixo, o pacote, a SHA-1 e o client id",
+      rejeicao.includes("errorMessage") && rejeicao.includes("getSigningCertificateSha1(context)") && rejeicao.includes("getPackageName()") && rejeicao.includes("clientId"),
+      "ou o postinstall não rodou, ou o plugin mudou de forma: leia scripts/conserta-social-login.mjs e rode `node scripts/conserta-social-login.mjs`"
+    );
+    conferir(
+      "a rejeição muda do plugin não voltou",
+      !rejeicao.includes('call.reject("Google Sign-In cancelled by user", USER_CANCELLED_CODE, e);'),
+      "com ela, a app_erros volta a receber só a frase fixa e cada build vira um chute"
+    );
+  } else {
+    console.log("Login: plugin do login social não instalado nesta máquina; o remendo do 'cancelado' fica sem conferir.");
+  }
 }
 
 // ── o portão do Android ─────────────────────────────────────────────────────

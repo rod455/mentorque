@@ -37,6 +37,42 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-10 · Engenharia: a 2.2 trouxe a testemunha, e ela fala pouco; a 2.3 faz ela falar
+- **O que o aparelho disse.** A 2.2 reprovou o login do Google igual à 2.0 e
+  à 2.1 (caixinha, conta, Entrar, tela muda), mas pela primeira vez com linha
+  em `app_erros`, às 00:04 UTC, versão 2.2.0: `login nativo google: Google
+  Sign-In cancelled by user`. Não é "[28444] Developer console", nem "[16]
+  Account reauth failed": o plugin testa essas duas frases ANTES e teria
+  devolvido outra coisa. É `GetCredentialCancellationException`, e o plugin
+  responde a ela com uma frase fixa.
+- **O que a frase fixa esconde.** Lendo `GoogleProvider.java` (8.3.40, e o
+  8.5.7 é igual nesse ponto): a mensagem que o Android mandou vai só para o
+  Logcat, junto com o pacote, a SHA-1 do certificado que assinou o app
+  instalado e o client id usado. São as quatro coisas que decidem esse caso.
+  O relato público mais comum desse "activity is cancelled by the user" é
+  client id do tipo Android no lugar do Web; o README do plugin diz que
+  USER_CANCELLED depois de escolher a conta pode ser pacote, SHA-1 ou client
+  id não batendo.
+- **O que dá para descartar daqui.** Propagação do Google: os dois clientes
+  Android foram criados em 07/09 às 21:23 UTC, dois dias antes do teste. O
+  pacote: `applicationId` é `mentorque.app`, o mesmo dos dois clientes. As
+  SHA-1 cadastradas são duas e diferentes. O client id que o dono recriou no
+  Codemagic é o que o Supabase usa com segredo no login pelo navegador, e
+  cliente com segredo é do tipo Web. O que sobra sem prova: a SHA-1 do app
+  que está no aparelho e o valor que o build embutiu de fato.
+- **O conserto é fazer a testemunha falar, não mais um chute.**
+  `scripts/conserta-social-login.mjs`, no `postinstall` como o da AppsFlyer,
+  troca a rejeição fixa do plugin pela mesma rejeição com a mensagem de baixo,
+  o pacote, a SHA-1 e o começo do client id. Código de erro e tela não mudam.
+  O Gradle compila o plugin direto de `node_modules`, então o `npm ci` do
+  Codemagic aplica. `conferir:login` cobra o remendo; provado: antes de rodar o
+  remendo, reprovou com as duas faltas; depois, passou; a sintaxe do Java foi
+  conferida com um parser. O que não foi conferido: o Gradle compilando de
+  verdade. Isso só o build diz.
+- **Repositório vai para 2.3**, `"2.2"` entra em `JA_PUBLICADAS`. Roteiro de
+  aparelho escrito em `docs/lojas/novidades-2.3.md`, com a leitura de cada
+  desfecho possível da linha.
+
 ## 2026-09-09 · QA: o carro duplicado tinha uma causa só, e ela é a identidade
 - Artifact "QA da Semana":
   https://claude.ai/code/artifact/75d78944-8df0-47a6-808a-afe2c4010fdb

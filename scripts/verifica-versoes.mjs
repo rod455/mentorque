@@ -76,6 +76,10 @@ const JA_PUBLICADAS = [
   // primeira versão a chegar ao iPhone desde a 1.7 (03/09). Acrescentada na
   // hora da aprovação.
   "2.1",
+  // Gerada e enviada em 09/09/2026 com o relato do login nativo ligado. Foi ela
+  // que trouxe a primeira testemunha do login mudo do Android: "Google Sign-In
+  // cancelled by user", e nada mais. Acrescentada em 10/09, ao abrir a 2.3.
+  "2.2",
 ];
 
 import { readFileSync } from "node:fs";
