@@ -80,6 +80,10 @@ const JA_PUBLICADAS = [
   // que trouxe a primeira testemunha do login mudo do Android: "Google Sign-In
   // cancelled by user", e nada mais. Acrescentada em 10/09, ao abrir a 2.3.
   "2.2",
+  // Gerada e enviada em 10/09/2026 com o "cancelado" do Google falando. Foi a
+  // linha dela que mostrou a SHA-1 não cadastrada, e a mesma 2.3 logou no
+  // Android às 10:19 UTC depois do cadastro. Acrescentada ao abrir a 2.4.
+  "2.3",
 ];
 
 import { readFileSync } from "node:fs";

@@ -18,7 +18,7 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 |---|---|---|
 | Por que a receita é R$ 0,00 se há assinantes? | Cupom de 100% empilha com o teste grátis: 7 dias mais 1 mês. Não é defeito, o cupom faz o que promete. | 04/09, QA agendado |
 | Os cupons vão continuar zerando a fatura? | Não. São `duration: once`, já foram gastos, e as assinaturas estão com `discounts: []`. | 04/09, QA agendado |
-| O cadastro pelo app funciona? | **No iPhone sim, no Android nunca funcionou.** Em 4 semanas e 160 eventos, zero eventos do Android com conta; iPhone e web têm desde 24/08. O portão do login nativo exigia iOS, então sobrava só o caminho do navegador. Conserto no código em 07/09, mas o client id NÃO basta: o plugin da folha nativa não está no binário do Android, e essa decisão de build está na lista do dono. | 07/09, Engenharia |
+| O cadastro pelo app funciona? | **Nos dois, desde 10/09.** No Android nunca tinha funcionado (4 semanas, 160 eventos, zero com conta). A causa final, provada pela linha da 2.3: o certificado que assina o app no Play (SHA-1 `E5:1C...`) não estava cadastrado no Google Cloud. Cadastrado em 10/09 pela manhã, a mesma 2.3 logou às 10:19 UTC. | 10/09, Engenharia |
 | O sitemap, os canonical e os redirecionamentos do site estão certos? | **Estão**, conferidos um a um em 07/09: 11 URLs no sitemap, todas `www` e 200; canonical de cada página apontando para ela mesma; apex 308 para `www` num pulo; atalhos de venda 307 num pulo para `/app`, que é noindex. O que faltava era link interno, não configuração. | 07/09, SEO |
 | Por que o toggle de avisos não fazia nada? | Ele só levava aos ajustes quando o sistema já tinha negado DE VEZ; nos outros nãos o toque era mudo. E a preferência guardada podia discordar da permissão do sistema, estado em que todo agendamento desistia calado. Consertado em 07/09. | 07/09, Engenharia |
 | Por que a migalha de fechamento não pega o crash do Android? | Porque ela só fala na ABERTURA SEGUINTE, e quem fecha e desiste não volta. Os seis relatos que ela deu eram todos da web, onde fechar o navegador produz a mesma evidência sem ser defeito. | 07/09, Engenharia |
@@ -29,13 +29,43 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 | Por que a AppsFlyer diz que tudo é orgânico? | Porque é. O SDK está vivo (54 instalações e 55 ativos chegaram lá). O que falta é o link: os botões de baixar apontam para a ficha crua da loja (`lib/stores.ts`), então o clique do anúncio morre no navegador. 100% das UTM do google/cpc estão em `plataforma = web`, zero no android e no iOS. O conserto é um OneLink, e ele nasce no console da AppsFlyer. | 05/09 |
 | A campanha do Google traz cadastro de verdade? | **Traz.** Na semana de 31/08 a 06/09, 7 das 8 contas novas carregam `google / lancamento`. A atribuição só existe a partir de 04/09, porque a captura de etiqueta subiu para todas as páginas em 03/09. Custo por conta no pedaço medido: R$ 14,71. | 07/09, Diretor |
 | Quantas pessoas o app teve de verdade numa semana? | Contar por `anon_id` NÃO responde isso (é armazenamento, infla a cada instalação). A régua é `auth.users`. Cruzar sempre com a porta de entrada: cliques pagos > anon_id > contas. | 01/09 e 07/09 |
-| Por que o mesmo carro vira dois? | Porque a identidade do carro é o `id`, e ele nasce no APARELHO: dois cadastros nunca colidem, e toda a dedup do app é por id. Uma causa para os três caminhos. As telas passaram a avisar em 09/09; a fusão no login continua duplicando **de propósito** (deduplicar ali esconderia o histórico de um dos carros). | 09/09, QA |
+| Por que o mesmo carro vira dois? | Porque a identidade do carro é o `id`, e ele nasce no APARELHO: dois cadastros nunca colidem, e toda a dedup do app é por id. Uma causa para os três caminhos. As telas passaram a avisar em 09/09; em 10/09 a folha de importação passou a PERGUNTAR o que fazer com o carro repetido (juntar num só, só o da conta, só o deste aparelho), por decisão do dono. Vai na 2.4. | 10/09, Engenharia |
 | Quais manuais faltam para a Biela? | O primeiro lote subiu em 06/09: 112 manuais, 34.609 trechos, e os DEZ carros mais comuns do Brasil passaram a ter manual (era 3 de 10). Gol 2016 e Ka 2025, de usuários nossos, saíram de zero. Faltam Corsa/Classic e as marcas vazias (Suzuki, Mercedes-Benz, e o EcoSport). | 06/09, `docs/manuais-a-subir.md` |
 
 **Como manter:** ao FECHAR uma pergunta que já custou investigação, acrescente a
 linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
+
+## 2026-09-10 · Engenharia: o Android logou; o carro repetido vira pergunta; vai para 2.4
+- **Login do Google no Android FECHADO.** O dono cadastrou a SHA-1 `E5:1C...`
+  no cliente Android do Google Cloud e a mesma 2.3 entrou: sessão no
+  Supabase às 10:19 UTC, provider google, Android 8.1 (SM-G610M). Primeiro
+  login nativo do Android desde que o app existe. Dois dias e quatro builds,
+  e a lição está na regra do dono de 09/09: o dado que decidia (a SHA-1 que o
+  aparelho enxerga) só apareceu quando o binário passou a relatar em vez de
+  o app engolir. Sai da lista do dono; a linha do topo foi atualizada.
+- **Carro repetido: o dono decidiu perguntar.** O QA de 09/09 tinha deixado
+  a fusão duplicando de propósito, porque juntar ou apagar sozinho escolheria
+  qual carro sobrevive. Em 10/09 o dono pediu que a pessoa escolha, "igual
+  quando tem carros diferentes". Feito na folha de importação: o carro que a
+  conta já tem deixa de ser caixa de marcar e vira três respostas (juntar num
+  só, só o da conta, só o deste aparelho), com o que cada uma faz escrito
+  embaixo. Regra pura em `lib/app/importacao.ts`: juntar reaponta histórico
+  e lembretes para o carro da conta e preenche o que ela deixou em branco
+  (km: o informado por último); trocar tira o carro da conta com o histórico
+  dele; escolha órfã vira "levar", que não perde nada. `conferir:garagem`
+  exercita cada resposta; plantei três defeitos (juntar sem reapontar,
+  trocar sem apagar, folha mandando tudo como levar) e os três reprovaram.
+  O que a conferência não alcança: a folha na tela, que a suíte de navegador
+  não abre. Roteiro em `novidades-2.4.md`.
+- **iPhone, os "fechou sozinho".** Três relatos na 2.1, todos "abriu o app":
+  09/09 às 18:29 e 21:40 UTC (9s e 17s, dia da aprovação) e um novo em 10/09
+  às 19:04 UTC, 75s depois de abrir. Nenhum erro de JavaScript do iOS no
+  período. Não dá para separar crash de fechar o app à mão só com a migalha;
+  se vier um quarto fora de dia de teste, a fonte é o App Store Connect
+  (Crashes), que a nossa instrumentação não alcança.
+- Repositório vai para 2.4; `"2.3"` entra em `JA_PUBLICADAS`.
 
 ## 2026-09-10 · Engenharia: a 2.3 falou, e o login mudo do Android é certificado não cadastrado
 - Linha em `app_erros` às 10:10 UTC, versão 2.3.0: pacote `mentorque.app`,

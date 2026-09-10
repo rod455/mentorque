@@ -24,7 +24,7 @@ import { veiculos } from "./conteudo/veiculos";
 //
 // Por isso `npm run conferir` agora reprova se este número divergir do
 // versionName do Android e do MARKETING_VERSION do iOS (scripts/verifica-versoes.mjs).
-export const APP_VERSION = "2.3.0";
+export const APP_VERSION = "2.4.0";
 
 export function formatBRL(n: number): string {
   return "R$ " + Math.round(n).toLocaleString("pt-BR");
@@ -786,11 +786,25 @@ export function getContent(locale: Locale) {
       servicos: T("serviços no histórico", "services logged"),
       semServico: T("sem histórico", "no history"),
       importar: T("Levar os marcados", "Add the checked ones"),
+      confirmar: T("Confirmar", "Confirm"),
       importarNenhum: T("Não levar nenhum", "Do not add any"),
-      // Selo no carro que a conta já tem. A tela listava tudo igual, então
-      // marcar o carro repetido produzia dois iguais na garagem sem aviso
-      // nenhum. Dizer antes é o que evita o arrependimento depois.
-      jaTem: T("já está na sua conta", "already in your account"),
+      // O carro do aparelho é o mesmo que a conta já tem: a pessoa escolhe.
+      repetido: T("A sua conta já tem este carro. O que fazer?", "Your account already has this car. What should we do?"),
+      juntar: T("Juntar num só", "Merge into one"),
+      juntarExplica: T(
+        "O que foi feito neste aparelho entra no carro da conta. Nada é apagado.",
+        "What was done on this device goes into the account's car. Nothing is deleted."
+      ),
+      soDaConta: T("Só o da conta", "Keep the account's"),
+      soDaContaExplica: T(
+        "O que foi feito neste aparelho não vai.",
+        "What was done on this device is not added."
+      ),
+      soDoAparelho: T("Só o deste aparelho", "Keep this device's"),
+      soDoAparelhoExplica: T(
+        "O carro da conta sai, com o histórico dele.",
+        "The account's car is removed, along with its history."
+      ),
     },
 
     // Quiz diário. O tom aqui decide se a pessoa volta amanhã: a explicação

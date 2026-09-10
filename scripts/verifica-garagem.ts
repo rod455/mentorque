@@ -22,13 +22,18 @@
 // qualquer outro lugar: os comentários destes dois arquivos CITAM o nome da
 // função ao explicar o porquê, e satisfariam a busca sozinhos.
 //
-// O QUE ELA NÃO CONFERE, de propósito: que o merge da nuvem deixou de
-// duplicar. Ele NÃO deixou, e isso é decisão registrada: unir dois carros
-// esconderia o histórico de um deles. Ver o DIARIO de 09/09.
+// E, desde 10/09/2026, o que a folha FAZ com a resposta para o carro que a
+// conta já tem (`lib/app/importacao.ts`): juntar num só, ficar só com o da
+// conta, ficar só com o deste aparelho. Até 09/09 o merge continuava
+// duplicando de propósito, porque juntar ou apagar sozinho escolheria qual
+// carro sobrevive; em 10/09 o dono decidiu que a pessoa escolhe, e a regra
+// pura é conferida aqui com cada resposta.
 //
 // Rode com: npm run conferir:garagem
 import { readFileSync } from "node:fs";
 import { mesmoCarro, carroIgualNaGaragem } from "../lib/app/mesmoCarro.ts";
+import { aplicarImportacao, juntarCarros } from "../lib/app/importacao.ts";
+import type { ServiceRecord, Vehicle } from "../lib/app/types.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -117,13 +122,90 @@ conferir(
 
 const importar = semComentarios(readFileSync("components/app/ImportarGaragem.tsx", "utf8"));
 conferir(
-  "a folha de importação marca o carro que a conta já tem",
+  "a folha de importação reconhece o carro que a conta já tem",
   importar.includes("carroIgualNaGaragem("),
-  "sem isso, marcar o repetido produz dois iguais sem uma palavra",
+  "sem isso, o repetido vira caixa de marcar e produz dois iguais sem uma palavra",
 );
+conferir(
+  "e para ele oferece as três respostas: juntar, só o da conta, só o deste aparelho",
+  /acao:\s*"juntar"/.test(importar) && /acao:\s*"trocar"/.test(importar) && /acao:\s*"levar"/.test(importar),
+  "a pergunta existe no texto e a resposta não chega ao store: a folha decide sozinha de novo",
+);
+const store = semComentarios(readFileSync("lib/app/store.tsx", "utf8"));
+conferir(
+  "o store aplica a resposta pela regra pura, não por lista de ids",
+  store.includes("aplicarImportacao(") && !/resolverImportacao\s*=\s*useCallback\(\(ids: string\[\]\)/.test(store),
+  "sem isso, juntar e trocar chegam ao store e viram 'levar', duplicando de novo",
+);
+
+// --- o que cada resposta faz com a garagem (lib/app/importacao.ts) ---
+
+const conta: { vehicles: Vehicle[]; services: ServiceRecord[]; reminders: string[]; activeVehicleId: string | null } = {
+  vehicles: [
+    { id: "nuvem-gol", type: "car" as const, make: "Volkswagen", model: "Gol", year: 2016, plate: undefined, odometerKm: 50_000, kmUpdatedAt: "2026-08-01T00:00:00.000Z" },
+    { id: "nuvem-uno", type: "car" as const, make: "Fiat", model: "Uno", year: 2012, plate: "ABC1D23" },
+  ],
+  services: [
+    { id: "s-nuvem-1", vehicleId: "nuvem-gol", type: "oil", date: "2026-07-01", km: 48_000, parts: [] },
+    { id: "s-nuvem-2", vehicleId: "nuvem-uno", type: "brakes", date: "2026-06-01", km: 90_000, parts: [] },
+  ],
+  reminders: ["nuvem-gol:oil", "nuvem-uno:tires"],
+  activeVehicleId: "nuvem-gol",
+};
+const pendente: { veiculos: Vehicle[]; servicos: ServiceRecord[]; lembretes: string[] } = {
+  veiculos: [
+    { id: "ap-gol", type: "car" as const, make: "volkswagen", model: "GOL", year: 2016, plate: "XYZ9K88", engine: "1.6", odometerKm: 52_000, kmUpdatedAt: "2026-09-01T00:00:00.000Z", nickname: "Golzinho" },
+    { id: "ap-onix", type: "car" as const, make: "Chevrolet", model: "Onix", year: 2020, plate: undefined },
+  ],
+  servicos: [
+    { id: "s-ap-1", vehicleId: "ap-gol", type: "tires", date: "2026-08-20", km: 51_000, parts: [] },
+    { id: "s-ap-2", vehicleId: "ap-onix", type: "oil", date: "2026-08-25", km: 30_000, parts: [] },
+  ],
+  lembretes: ["ap-gol:brakes", "ap-onix:oil"],
+};
+const ids = (vs: { id: string }[]) => vs.map((v) => v.id).sort().join(",");
+
+{
+  const r = aplicarImportacao(conta, pendente, []);
+  conferir("lista vazia deixa a conta intacta", ids(r.vehicles) === ids(conta.vehicles) && r.services.length === 2 && r.reminders.length === 2);
+}
+{
+  const r = aplicarImportacao(conta, pendente, [{ id: "ap-onix", acao: "levar" }]);
+  conferir("levar: o carro diferente entra como carro novo, com histórico e lembrete", ids(r.vehicles) === "ap-onix,nuvem-gol,nuvem-uno" && r.services.some((s) => s.id === "s-ap-2") && r.reminders.includes("ap-onix:oil"));
+  conferir("levar: o carro ativo não muda quando a garagem já tinha carro", r.activeVehicleId === "nuvem-gol");
+  conferir("levar: id que não está no pendente é ignorado", aplicarImportacao(conta, pendente, [{ id: "fantasma", acao: "levar" }]).vehicles.length === 2);
+}
+{
+  const r = aplicarImportacao(conta, pendente, [{ id: "ap-gol", acao: "juntar", noCarro: "nuvem-gol" }]);
+  const gol = r.vehicles.find((v) => v.id === "nuvem-gol")!;
+  conferir("juntar: continua UM Gol, e é o da conta", ids(r.vehicles) === "nuvem-gol,nuvem-uno" && gol.make === "Volkswagen");
+  conferir("juntar: o histórico do aparelho passa a apontar para o carro da conta", r.services.filter((s) => s.vehicleId === "nuvem-gol").length === 2 && !r.services.some((s) => s.vehicleId === "ap-gol"));
+  conferir("juntar: o lembrete do aparelho vem junto, no id da conta", r.reminders.includes("nuvem-gol:brakes") && !r.reminders.includes("ap-gol:brakes") && r.reminders.includes("nuvem-gol:oil"));
+  conferir("juntar: o aparelho preenche o que a conta deixou em branco", gol.plate === "XYZ9K88" && gol.engine === "1.6" && gol.nickname === "Golzinho");
+  conferir("juntar: o km informado por último manda", gol.odometerKm === 52_000);
+  conferir("juntar: nada da conta é apagado", r.services.some((s) => s.id === "s-nuvem-1") && r.services.some((s) => s.id === "s-nuvem-2"));
+}
+{
+  const r = aplicarImportacao(conta, pendente, [{ id: "ap-gol", acao: "trocar", noLugarDe: "nuvem-gol" }]);
+  conferir("trocar: o carro da conta sai e o do aparelho entra no lugar", ids(r.vehicles) === "ap-gol,nuvem-uno");
+  conferir("trocar: o histórico do carro que saiu vai junto, o do que entrou fica", !r.services.some((s) => s.id === "s-nuvem-1") && r.services.some((s) => s.id === "s-ap-1") && r.services.some((s) => s.id === "s-nuvem-2"));
+  conferir("trocar: lembretes idem", !r.reminders.includes("nuvem-gol:oil") && r.reminders.includes("ap-gol:brakes") && r.reminders.includes("nuvem-uno:tires"));
+  conferir("trocar: o carro ativo acompanha a troca", r.activeVehicleId === "ap-gol");
+  conferir("trocar: o outro carro da conta não é tocado", r.vehicles.some((v) => v.id === "nuvem-uno"));
+}
+{
+  const r = aplicarImportacao(conta, pendente, [{ id: "ap-gol", acao: "juntar", noCarro: "sumiu" }]);
+  conferir("juntar num carro que não existe mais vira levar, que não perde nada", ids(r.vehicles) === "ap-gol,nuvem-gol,nuvem-uno");
+}
+{
+  const a = juntarCarros(conta.vehicles[0], { ...pendente.veiculos[0], year: 2017, model: "Polo" });
+  conferir("juntarCarros: a identidade é a da conta", a.id === "nuvem-gol" && a.model === "Gol" && a.year === 2016);
+  const semData = juntarCarros({ ...conta.vehicles[0], kmUpdatedAt: undefined, odometerKm: 60_000 }, { ...pendente.veiculos[0], kmUpdatedAt: undefined });
+  conferir("juntarCarros: sem data nos dois, o km maior fica (odômetro não anda para trás)", semData.odometerKm === 60_000);
+}
 
 if (falhas) {
   console.error(`\nGaragem: ${falhas} conferência(s) reprovada(s).`);
   process.exit(1);
 }
-console.log("\nGaragem: carro repetido é reconhecido, e as duas telas avisam antes.");
+console.log("\nGaragem: carro repetido é reconhecido, as duas telas avisam antes, e a folha pergunta o que fazer com ele.");

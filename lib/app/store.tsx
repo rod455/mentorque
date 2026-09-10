@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { apiUrl } from "@/lib/app/apiBase";
 import { newId, type ServiceRecord, type Vehicle } from "./types";
+import { aplicarImportacao, type EscolhaDeImportacao } from "./importacao";
 import { useAuth } from "./auth";
 import { getBrowserSupabase } from "@/lib/supabaseBrowser";
 import { trackContent } from "./track";
@@ -119,7 +120,7 @@ type StoreValue = {
   s: Session;
   // Carros feitos como convidado esperando o dono decidir se entram na conta.
   importacaoPendente: ImportacaoPendente | null;
-  resolverImportacao: (ids: string[]) => void;
+  resolverImportacao: (escolhas: EscolhaDeImportacao[]) => void;
   /** Volta do checkout: a tela mostra o que está acontecendo. */
   checkoutVoltando: EstadoCheckout;
   /** Abre a confirmação para compra que não veio pelo endereço (a da loja). */
@@ -586,27 +587,13 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   // Resposta do dono à pergunta acima. Lista vazia = não importar nada: a conta
   // fica exatamente como estava na nuvem, e o que o convidado fez neste
   // aparelho não sobe. É uma escolha, não um acidente — a tela não fecha sem
-  // que um dos dois botões seja tocado.
-  const resolverImportacao = useCallback((ids: string[]) => {
+  // que um dos dois botões seja tocado. Para o carro que a conta JÁ TEM, a
+  // resposta pode ser juntar num só ou trocar; a regra mora em importacao.ts.
+  const resolverImportacao = useCallback((escolhas: EscolhaDeImportacao[]) => {
     const pend = importacaoPendente;
     setImportacaoPendente(null);
-    if (!pend) return;
-    const escolhidos = new Set(ids);
-    const veiculos = pend.veiculos.filter((v) => escolhidos.has(v.id));
-    if (!veiculos.length) return;
-    patch((p) => {
-      const jaTem = new Set(p.vehicles.map((v) => v.id));
-      const novos = veiculos.filter((v) => !jaTem.has(v.id));
-      return {
-        ...p,
-        vehicles: [...p.vehicles, ...novos],
-        services: [...p.services, ...pend.servicos.filter((r) => escolhidos.has(r.vehicleId))],
-        reminders: [...new Set([...p.reminders, ...pend.lembretes.filter((r) => escolhidos.has(r.split(":")[0]))])],
-        // Garagem vazia até aqui: o primeiro importado vira o ativo, senão a
-        // Home abriria sem carro selecionado tendo carro na garagem.
-        activeVehicleId: p.activeVehicleId ?? novos[0]?.id ?? null,
-      };
-    });
+    if (!pend || !escolhas.length) return;
+    patch((p) => aplicarImportacao(p, pend, escolhas));
   }, [importacaoPendente, patch]);
 
   // Ao sair da conta, o aparelho volta a zero.

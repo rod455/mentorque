@@ -61,6 +61,10 @@ em `17:DF`, a outra em `B4:4D:41`). É o primeiro caso do roteiro: o conserto
 de build, porque a checagem é do lado do Google. Os outros passos não foram
 rodados.
 
+**Fechado às 10:19 UTC do mesmo dia**: com a SHA-1 cadastrada, a mesma 2.3
+logou com o Google num Android 8.1 (sessão criada no Supabase, provider
+google). Primeiro login nativo do Android desde que o app existe.
+
 ## Antes de enviar
 
 - Versão 2.3 nos três lugares (`npm run conferir:versoes`).

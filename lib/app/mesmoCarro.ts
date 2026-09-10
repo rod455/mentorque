@@ -22,9 +22,11 @@
 //   · com placa nos dois: só é o mesmo carro se a placa for a mesma;
 //   · sem placa em algum dos dois: cai em tipo, marca, modelo e ano.
 //
-// Isto responde "parecem o mesmo carro", e é usado para AVISAR, nunca para
-// juntar ou apagar registro. Unir dois carros esconderia o histórico de um
-// deles, e histórico é o que a pessoa veio guardar aqui.
+// Isto responde "parecem o mesmo carro", e é usado para AVISAR e PERGUNTAR,
+// nunca para juntar ou apagar sozinho. Unir dois carros por conta própria
+// esconderia o histórico de um deles, e histórico é o que a pessoa veio
+// guardar aqui. Quando é a pessoa que responde (folha de importação, desde
+// 10/09/2026), o que acontece com os dois carros está em importacao.ts.
 import type { Vehicle } from "./types";
 
 /** Comparação de texto tolerante: sem espaço sobrando, sem caixa, sem acento. */
