@@ -54,6 +54,16 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
 - Fica em aberto de onde veio a SHA-1 que o dono cadastrou como "do Play"
   (`A9:95...`). A que assina o app instalado é a `E5:1C...`, e é ela que o
   Play Console deveria mostrar como certificado da chave de assinatura do app.
+- **Fechando o "em aberto por falta de fonte" do QA de 09/09** (os 7
+  fechamentos), com a consulta que ele não pôde rodar, agrupada por
+  plataforma e versão: 6 web 1.8.0 (05 e 06/09, os mesmos de 07/09), 1
+  Android 1.8.0 em 07/09 às 20:13 UTC, e desde então 2 iOS 2.1.0 em 09/09
+  (18:29 e 21:40 UTC), 9s e 17s depois de abrir. O Android e os dois iOS
+  caem em cima de sessões de teste conhecidas (a Luana na 1.8 do Android em
+  07/09 à noite; a 2.1 do iPhone no dia da aprovação), e fechar o app à mão
+  para reinstalar deixa a migalha quente do mesmo jeito. Não é sinal de
+  público: nenhum relato de aparelho fora dos dias de teste. Segue vigiado
+  pelo retrato, sem ação.
 
 ## 2026-09-10 · Engenharia: a 2.2 trouxe a testemunha, e ela fala pouco; a 2.3 faz ela falar
 - **O que o aparelho disse.** A 2.2 reprovou o login do Google igual à 2.0 e
