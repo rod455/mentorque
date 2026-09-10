@@ -37,6 +37,43 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-10 · Engenharia: os cinco momentos de recorrência entram na 2.4
+- **O pedido do dono**: "como evoluir o app e garantir mais pessoas acessando
+  com recorrência", com três ideias (push em momentos de dor, comparar
+  regiões ao registrar serviço, curso de mecânica para clientes robustos,
+  seção de limpeza e manutenção básica). A leitura dos números antes de
+  propor (retrato de 10/09, `estado_da_base`): 23 contas, 10 com carro, 4
+  com serviço, coortes de 31/08 e 07/09 com 1 em 8 voltando na primeira
+  semana e 1 em 5 fazendo a primeira ação de valor; UM aparelho com token de
+  push. Conclusão: o problema não é entrada, é a segunda visita, e push de
+  servidor não é alavanca enquanto ninguém deu a permissão.
+- **Os cinco, todos com aviso LOCAL** (dispara sem servidor, e é o que a
+  base de um aparelho permite): (1) cadastrou o carro e sumiu, aviso dois
+  dias depois, e a permissão pedida logo depois do cadastro; (2) registrou
+  serviço com valor, o app responde a faixa da região e o valor vira dado em
+  `precos_observados`, sem ninguém dentro; (3) revisão vencida vira aviso,
+  um item por vez, 30 dias entre repetições; (4) trilha em ritmo, uma aula
+  por dia às 9h, com a trilha "Mecânica de verdade"; (5) cuidados básicos,
+  duas aulas em lista e a trilha "Cuidados básicos". Cinco commits, um por
+  momento, cada um com a conferência provada plantando defeito (onze
+  defeitos plantados, onze pegos). Roteiro de aparelho em
+  `novidades-2.4.md`.
+- **O que cada um vai medir**, no retrato que já existe: ativação em 7 dias
+  (1), retenção 1 a 7 dias (1 e 3), contas com serviço (2), aulas vistas (4 e
+  5). Com 5 a 8 cadastros por semana não há teste A/B: é soltar e ler a
+  coorte seguinte.
+- **Paywall do Android, pergunta do dono ("eliminar para o usuário entrar
+  sem sensação de que precisa pagar")**: respondido com números, decisão é
+  dele. Nos 28 dias: onboarding começado 59 no Android, 12 no iOS, 148 na
+  web; carro cadastrado 4, 2 e 4 aparelhos. A queda antes do carro é de 93%
+  em TODAS as plataformas, não é do Android. O paywall do Android já está
+  ligado (14 vistas em 11 aparelhos) e nunca vendeu; o do iOS idem (0
+  vendas, 2 checkouts); as 3 vendas são da web. Recomendação registrada na
+  resposta: não tirar o paywall de uma plataforma só; tirar a página de
+  plano de dentro do onboarding nas três (ela aparece antes de a pessoa ver
+  o produto) e medir `cadastrou_carro / comecou_onboarding` por plataforma.
+  Preço e plano são alçada do dono: nada mudou.
+
 ## 2026-09-10 · Engenharia: o Android logou; o carro repetido vira pergunta; vai para 2.4
 - **Login do Google no Android FECHADO.** O dono cadastrou a SHA-1 `E5:1C...`
   no cliente Android do Google Cloud e a mesma 2.3 entrou: sessão no
