@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/Button";
 import { AppHeader, Autocomplete, Card, Chip, Icon, inputCls, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
 import { ConviteDeAviso } from "../ConviteDeAviso";
 import { QUIZ_ZERADO, diaLocal, sequenciaHoje } from "@/lib/app/quiz/sequencia";
+import { consumirComparacao, faixaDaRegiao, guardarComparacao, observarPreco, posicaoNaFaixa } from "@/lib/app/precos";
 
 const hojeISO = () => new Date().toISOString().slice(0, 10);
 
@@ -275,6 +276,8 @@ export function HistoryScreen() {
   const { go } = useNav();
   const v = activeVehicle(s);
   const [filter, setFilter] = useState<string>("all");
+  // A comparação do serviço que acabou de ser salvo, uma vez, no topo.
+  const [comparacao] = useState(() => consumirComparacao());
   if (!v) {
     return (
       <div>
@@ -316,6 +319,8 @@ export function HistoryScreen() {
           ecrã também tem. O convite de aviso fica: o contexto "o que vem por
           aí" continua sendo o certo para ele. */}
       <ConviteDeAviso momento="calendario" sequencia={sequenciaDoQuiz} />
+
+      {comparacao && <ComparacaoDaRegiao tipo={comparacao.tipo} valor={comparacao.valor} uf={s.state} cidade={s.city} />}
 
       {upcoming}
 
@@ -366,6 +371,36 @@ export function HistoryScreen() {
         </>
       )}
     </div>
+  );
+}
+
+// Quanto esse serviço costuma custar na região, logo depois de registrar.
+//
+// Faixa de referência (lib/app/precos.ts), e o cartão diz isso na última
+// linha: não é média observada, ainda. O que ele NÃO faz é julgar a oficina:
+// "acima da faixa" vem com os motivos honestos (peça original, carro caro de
+// manter) e uma ação para a próxima vez, não com "você foi enganado".
+function ComparacaoDaRegiao({ tipo, valor, uf, cidade }: { tipo: string; valor: number; uf: string | null; cidade: string | null }) {
+  const c = useContent();
+  const typeLabel = useTypeLabel();
+  const h = c.history;
+  const faixa = faixaDaRegiao(tipo, uf, cidade);
+  if (!faixa) return null;
+  const posicao = posicaoNaFaixa(valor, faixa);
+  const servico = typeLabel(tipo);
+  const linhaFaixa = (faixa.regiao ? h.comparacaoFaixa.replace("{regiao}", faixa.regiao) : h.comparacaoFaixaSemRegiao)
+    .replace("{min}", formatBRL(faixa.min))
+    .replace("{max}", formatBRL(faixa.max));
+  const linhaValor = (posicao === "dentro" ? h.comparacaoDentro : posicao === "abaixo" ? h.comparacaoAbaixo : h.comparacaoAcima).replace("{valor}", formatBRL(valor));
+  return (
+    <Card className="mb-3" data-comparacao-regiao={posicao}>
+      <p className="font-display text-[15px] font-semibold text-cream">
+        {(faixa.regiao ? h.comparacaoTitulo : h.comparacaoTituloSemRegiao).replace("{servico}", servico)}
+      </p>
+      <p className="mt-1.5 text-sm leading-relaxed text-cream/80">{linhaFaixa}</p>
+      <p className={`mt-1 text-sm leading-relaxed ${posicao === "acima" ? "text-amber" : posicao === "abaixo" ? "text-teal" : "text-cream/80"}`}>{linhaValor}</p>
+      <p className="mt-2 text-xs leading-snug text-cream/45">{h.comparacaoNota}</p>
+    </Card>
   );
 }
 
@@ -472,6 +507,15 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
       services.slice(1).forEach((svc) => addService(rec(svc, false)));
     } else {
       services.forEach((svc, i) => addService(rec(svc, i === 0)));
+      // Serviço novo com valor: a tela seguinte responde quanto isso costuma
+      // custar na região, e o valor vira dado (sem ninguém dentro). Só na
+      // primeira gravação, não na edição, e só para tipo com referência.
+      const valorPago = total ? parseInt(total, 10) : NaN;
+      const tipo = services[0]?.type;
+      if (tipo && Number.isFinite(valorPago) && valorPago > 0 && faixaDaRegiao(tipo, s.state, s.city)) {
+        guardarComparacao({ tipo, valor: valorPago });
+        observarPreco({ tipo, valor: valorPago, uf: s.state, cidade: s.city, tipoVeiculo: v.type, ano: v.year });
+      }
     }
     // Depois de salvar, vai para o histórico — não para a tela anterior.
     //

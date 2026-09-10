@@ -1013,6 +1013,31 @@ export function getContent(locale: Locale) {
 
     history: {
       title: T("Calendário do carro", "Car calendar"),
+      // A comparação com a região, logo depois de registrar um serviço com
+      // valor. Faixa de referência, e a tela diz isso. Ver lib/app/precos.ts.
+      comparacaoTitulo: T("{servico} na sua região", "{servico} in your area"),
+      comparacaoTituloSemRegiao: T("{servico}: quanto costuma custar", "{servico}: what it usually costs"),
+      comparacaoFaixa: T(
+        "Em {regiao}, costuma ficar entre {min} e {max}.",
+        "In {regiao}, it usually runs between {min} and {max}."
+      ),
+      comparacaoFaixaSemRegiao: T(
+        "No Brasil, costuma ficar entre {min} e {max}. Informe seu estado no Perfil para a faixa da sua região.",
+        "In Brazil, it usually runs between {min} and {max}. Set your state in the Profile for your area's range."
+      ),
+      comparacaoDentro: T("Você pagou {valor}: dentro da faixa.", "You paid {valor}: within the range."),
+      comparacaoAbaixo: T(
+        "Você pagou {valor}: abaixo da faixa. Bom negócio, ou vale conferir o que foi feito.",
+        "You paid {valor}: below the range. A good deal, or worth checking what was done."
+      ),
+      comparacaoAcima: T(
+        "Você pagou {valor}: acima da faixa. Pode ser peça original ou carro mais caro de manter; na próxima, vale pedir dois orçamentos.",
+        "You paid {valor}: above the range. Could be original parts or a pricier car to maintain; next time, get two quotes."
+      ),
+      comparacaoNota: T(
+        "Faixa de referência do Mentorque. Ela vai virar dado real com os registros de todo mundo, sem nome nem placa.",
+        "Mentorque reference range. It will become real data from everyone's records, with no names or plates."
+      ),
       // "Calendário do seu Golfinho": o título nomeia o carro ativo (pedido
       // do dono, 27/08). Com o seletor na barra de cima, o título é a
       // confirmação de qual carro a tela inteira está mostrando. Duas formas
@@ -1096,6 +1121,13 @@ export function getContent(locale: Locale) {
       reminded: T("Adicionado ao calendário", "Added to calendar"),
       didIt: T("Já fiz esse serviço", "I already did this"),
       statusLabels: { overdue: T("Vencida", "Overdue"), soon: T("Em breve", "Soon"), ok: T("Em dia", "OK"), unknown: T("A confirmar", "To confirm") },
+      // O aviso de revisão vencida, um item por vez, às 9h do dia seguinte.
+      // Sem cobrança: diz o que venceu e o que dá para fazer com isso.
+      vencidaAvisoTitulo: T("{item} do {carro} venceu", "{item} on your {carro} is overdue"),
+      vencidaAvisoCorpo: T(
+        "Passou do prazo do manual. Toque para ver o que fazer e quanto costuma custar na sua região.",
+        "Past the manual's interval. Tap to see what to do and what it usually costs in your area."
+      ),
       ruleLabels: {
         oil: T("Troca de óleo", "Oil change"),
         airfilter: T("Filtro de ar", "Air filter"),
