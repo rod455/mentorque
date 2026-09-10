@@ -37,6 +37,31 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-10 · Engenharia: Instagram, comentou X e recebe a mensagem no Direct
+- **Pedido do dono**: quem comenta "padaria" num post recebe a mensagem A no
+  Direct, quem comenta "todos os dias" recebe a B. Confirmado que é
+  Instagram (WhatsApp não tem comentário em post e o comentário não traz
+  número).
+- **O desenho, todo oficial**: resposta privada da Meta (uma por
+  comentário, em até 7 dias). Fluxo `Instagram: comentario vira mensagem no
+  Direct` no n8n (id `dY9UPGPghiPYrO0S`), publicado: GET faz a verificação
+  da Meta (token `mq-ig-7f3a9c2e51`), POST recebe os comentários, um nó de
+  código extrai e normaliza (sem acento, sem caixa), a tabela
+  `instagram_regras` diz palavra, texto e post (`*` = todos), duas travas na
+  tabela `instagram_enviados` (nunca duas respostas ao mesmo comentário,
+  nunca duas à mesma pessoa no mesmo post), a resposta vai pela Graph API
+  com token Bearer numa credencial que só o dono cria, e o resultado
+  (enviado ou erro) fica registrado. Comentário da própria conta é ignorado.
+- **Nada sai sem o dono**: as duas regras nasceram com `ativa` desligada e
+  o texto prefixado "RASCUNHO". Mensagem a cliente é alçada dele; os links
+  já levam `utm_source=instagram&utm_medium=direct&utm_campaign=...`.
+- **Provado o que dava**: as duas entradas rodaram com dado fixado
+  (execuções 8499 e 8500, sucesso); o acesso de fora ao n8n é bloqueado
+  neste ambiente, então o aperto de mão real com a Meta só o console dela
+  mostra. Limite honesto: para o público em geral, a Meta exige revisão do
+  app nas permissões de mensagem; com contas que têm papel no app funciona
+  na hora, e é assim que o teste sai.
+
 ## 2026-09-10 · Engenharia: os cinco momentos de recorrência entram na 2.4
 - **O pedido do dono**: "como evoluir o app e garantir mais pessoas acessando
   com recorrência", com três ideias (push em momentos de dor, comparar
