@@ -1639,6 +1639,18 @@ const courses: Course[] = [
     order: ["vid-pneu-medidas", "vid-pneu-indices", "tire-care", "tire-calibragem"],
   },
   {
+    // Para quem quer mais do que "o que fazer": entender o carro por dentro e
+    // pôr a mão. Pedido do dono em 10/09/2026 ("curso específico de mecânica
+    // automotiva, para clientes mais robustos"). Só aulas que já existem, na
+    // ordem em que uma coisa explica a outra: sistemas e fluidos, o motor por
+    // dentro, o câmbio, as quatro mãos na massa, e por fim ler o carro e ler
+    // um orçamento.
+    id: "course-mechanic", icon: "engine", level: "avancado",
+    title: T("Mecânica de verdade", "Real mechanics"),
+    goal: T("Para quem quer entender o carro por dentro: sistemas, fluidos, motor, câmbio, e as mãos na massa, do óleo à pastilha.", "For those who want to understand the car from the inside: systems, fluids, engine, gearbox, and hands-on work from oil to brake pads."),
+    order: ["fund-systems", "fund-fluids", "basics", "vid-cilindrada", "vid-tres-cilindros", "vid-avanco-ignicao", "gearbox-tipos", "oil-change", "diy-airfilter", "brake-pads", "diag-noises", "read-obd2", "obd2-scan", "money-quote"],
+  },
+  {
     id: "course-buy", icon: "check", level: "intermediario",
     title: T("Comprar bem", "Buying smart"),
     goal: T("O que olhar antes do preço, o checklist do usado, o orçamento sem golpe e a decisão consertar × trocar.", "What to inspect before the price, the used-car checklist, honest quotes and the fix × replace call."),

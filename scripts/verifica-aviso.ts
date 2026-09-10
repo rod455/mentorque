@@ -28,6 +28,7 @@ import { anotaRota, aoAnotarRota, esqueceRota, nomeDeRota, rotaPendente } from "
 import { espelhaOAparelho } from "../lib/app/espelhoDoAviso.ts";
 import { quandoAvisarCarroParado } from "../lib/app/carroParado.ts";
 import { proximoAvisoDeVencida } from "../lib/app/revisaoVencida.ts";
+import { proximaAulaDaTrilha, quandoAvisarTrilha } from "../lib/app/ritmoDaTrilha.ts";
 import { QUIZ_ZERADO } from "../lib/app/quiz/sequencia.ts";
 import { readFileSync } from "node:fs";
 
@@ -393,6 +394,31 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
   const vencida = leia("lib/app/lembreteRevisaoVencida.ts");
   conferir("o aviso nasce da saúde do carro (overdue), não do calendário", /computeUpcoming\(/.test(vencida) && /"overdue"/.test(vencida));
   conferir("o dia do agendamento é marcado, senão reagenda para amanhã todo dia", /marcar\(proximo\.chave/.test(vencida));
+}
+
+// ── a trilha em ritmo: uma aula por dia, às 9h, a próxima não vista ────────
+//
+// 10/09/2026. As trilhas eram uma lista; agora têm horário e próximo passo.
+{
+  const aulas = [{ id: "a" }, { id: "b" }, { id: "c" }] as never[];
+  const trilha = { id: "t", order: ["a", "b", "c"] } as never;
+  const p1 = proximaAulaDaTrilha(trilha, aulas, []);
+  conferir("sem nada visto, a primeira aula é a 1 de 3", !!p1 && (p1.aula as { id: string }).id === "a" && p1.n === 1 && p1.total === 3);
+  const p2 = proximaAulaDaTrilha(trilha, aulas, ["a", "c"]);
+  conferir("a próxima é a primeira NÃO vista, e a conta é das vistas", !!p2 && (p2.aula as { id: string }).id === "b" && p2.n === 3);
+  conferir("trilha concluída não tem próxima", proximaAulaDaTrilha(trilha, aulas, ["a", "b", "c"]) === null);
+  conferir("antes das 9h, avisa hoje às 9h", quandoAvisarTrilha(new Date("2026-09-10T07:00:00")).getDate() === 10);
+  conferir("depois das 9h, avisa amanhã às 9h", quandoAvisarTrilha(new Date("2026-09-10T09:00:01")).getDate() === 11);
+
+  conferir("trilha é uma rota conhecida", nomeDeRota("trilha") === "trilha");
+  const abertura = leia("lib/app/aberturaDoApp.ts");
+  conferir("a abertura sincroniza o aviso da trilha", /sincronizarLembreteTrilha\(\{/.test(abertura));
+  conferir("o toque no aviso da trilha abre a trilha", /r === "trilha"[\s\S]{0,120}name: "course"/.test(abertura));
+  const learn = leia("components/app/screens/Learn.tsx");
+  conferir("a tela da trilha tem o interruptor do ritmo", /setTrilhaEmRitmo\(courseId\)/.test(learn) && /setTrilhaEmRitmo\(null\)/.test(learn));
+  conferir("dizer 'quero' sem permissão leva aos ajustes quando não vira permissão", /pedirPermissao\(\)[\s\S]{0,200}abrirAjustesDeAvisos\(\)/.test(learn));
+  const store = leia("lib/app/store.tsx");
+  conferir("a trilha em ritmo sobrevive ao login (está no merge)", /trilhaEmRitmo: cloud\.trilhaEmRitmo \?\? local\.trilhaEmRitmo/.test(store));
 }
 
 if (falhas) {

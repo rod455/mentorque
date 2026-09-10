@@ -8,6 +8,8 @@ import { carName } from "@/lib/app/content";
 import { courseItems, courseProgress } from "@/lib/app/cursos";
 import { useNav } from "@/lib/app/nav";
 import { funil } from "@/lib/app/funil";
+import { abrirAjustesDeAvisos, notificacoesDisponiveis, pedirPermissao, permissaoConcedida } from "@/lib/app/notificacoes";
+import { passo } from "@/lib/app/ultimoPasso";
 import { AppHeader, Icon, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
 import { ItemRow, typeLabel } from "../estudos/ItemDeAula";
 
@@ -343,6 +345,8 @@ export function CourseScreen({ id }: { id: string }) {
         )}
       </div>
 
+      <RitmoDaTrilha courseId={course.id} concluida={!next} />
+
       {/* Sequência (sugerida, nunca trancada: qualquer aula abre) */}
       <div className="mt-4 space-y-2">
         {items.map((l, i) => {
@@ -368,6 +372,68 @@ export function CourseScreen({ id }: { id: string }) {
       </div>
 
       {!s.premium && <UpgradeBanner ctx="learn" text={c.paywalls.learn.title} />}
+    </div>
+  );
+}
+
+// Uma aula por dia, às 9h: o interruptor da trilha em ritmo.
+//
+// QUEM TOCA EM "QUERO" PEDIU PARA RECEBER, então aqui a permissão do sistema
+// é pedida na hora, fora do controle de convites (pedidoDeAviso.ts), pelo
+// mesmo motivo do interruptor do Perfil: não é o app pedindo, é a pessoa. E
+// pelo mesmo motivo, quando o pedido não vira permissão, o caminho é abrir os
+// ajustes do aparelho, não um cartão que some sem nada acontecer.
+function RitmoDaTrilha({ courseId, concluida }: { courseId: string; concluida: boolean }) {
+  const c = useContent();
+  const { s, setTrilhaEmRitmo, setNotifications } = usePrototype();
+  const [disponivel, setDisponivel] = useState(false);
+  useEffect(() => {
+    setDisponivel(notificacoesDisponiveis());
+  }, []);
+  if (!disponivel || concluida) return null;
+
+  const ligadaAqui = s.trilhaEmRitmo?.courseId === courseId;
+  const ligadaEmOutra = !!s.trilhaEmRitmo && !ligadaAqui;
+
+  const ligar = async () => {
+    setTrilhaEmRitmo(courseId);
+    passo("ligou a trilha em ritmo");
+    if (await permissaoConcedida()) {
+      setNotifications(true);
+      return;
+    }
+    const ok = await pedirPermissao();
+    if (ok) {
+      setNotifications(true);
+      return;
+    }
+    abrirAjustesDeAvisos();
+  };
+
+  return (
+    <div className="mt-3 rounded-2xl bg-amber/[0.07] p-4 ring-1 ring-amber/20" data-ritmo-da-trilha={ligadaAqui ? "ligado" : "desligado"}>
+      <p className="font-display text-[15px] font-semibold text-cream">{c.learn.ritmoTitulo}</p>
+      <p className="mt-1 text-sm leading-relaxed text-cream/65">{ligadaEmOutra ? c.learn.ritmoTroca : c.learn.ritmoCorpo}</p>
+      <div className="mt-3 flex items-center gap-2">
+        {ligadaAqui ? (
+          <>
+            <span className="flex-1 text-sm font-medium text-teal">✓ {c.learn.ritmoLigado}</span>
+            <button
+              onClick={() => setTrilhaEmRitmo(null)}
+              className="rounded-xl bg-graphite-700 px-4 py-2.5 font-display text-sm font-medium text-cream/70 ring-1 ring-white/10"
+            >
+              {c.learn.ritmoParar}
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={ligar}
+            className="flex-1 rounded-xl bg-amber px-4 py-2.5 font-display text-sm font-semibold text-graphite active:scale-[0.99]"
+          >
+            {c.learn.ritmoLigar}
+          </button>
+        )}
+      </div>
     </div>
   );
 }

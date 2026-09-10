@@ -1215,6 +1215,19 @@ export function getContent(locale: Locale) {
       coursesTitle: T("Trilhas", "Tracks"),
       coursesSub: T("Sequências com começo, meio e fim", "Sequences with a start, middle and end"),
       courseProgress: T("{n} de {total} aulas", "{n} of {total} lessons"),
+      // A trilha em ritmo: uma aula por dia, às 9h, como aviso. Ver
+      // lib/app/ritmoDaTrilha.ts e a tela da trilha.
+      ritmoTitulo: T("Uma aula por dia", "One lesson a day"),
+      ritmoCorpo: T(
+        "Às 9h, a próxima aula desta trilha chega como aviso. Cinco minutos, no seu ritmo.",
+        "At 9am, the next lesson in this track arrives as a notification. Five minutes, at your pace."
+      ),
+      ritmoLigar: T("Quero", "Yes, please"),
+      ritmoLigado: T("Ligado nesta trilha", "On for this track"),
+      ritmoParar: T("Parar", "Stop"),
+      ritmoTroca: T("Você já recebe outra trilha assim. Ligar esta troca a outra.", "You already get another track this way. Turning this on replaces it."),
+      ritmoAvisoTitulo: T("Aula {n} de {total}: {aula}", "Lesson {n} of {total}: {aula}"),
+      ritmoAvisoCorpo: T("{trilha}. Cinco minutos, no seu ritmo.", "{trilha}. Five minutes, at your pace."),
       courseStart: T("Começar", "Start"),
       courseContinue: T("Continuar", "Continue"),
       courseDoneBadge: T("Concluída", "Completed"),

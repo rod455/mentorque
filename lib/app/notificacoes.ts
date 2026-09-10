@@ -63,6 +63,8 @@ export const AVISO = {
   carroParado: 3,
   // Revisão vencida pela saúde do carro, um item por vez (lembreteRevisaoVencida.ts).
   revisaoVencida: 4,
+  // A trilha em ritmo: uma aula por dia, às 9h (lembreteTrilha.ts).
+  trilha: 5,
 } as const;
 
 // Canal do Android. Sem canal declarado, o Android 8+ joga a notificação num

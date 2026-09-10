@@ -43,6 +43,11 @@ type Session = {
   // único ativo que o quiz constrói: quem tem 60 dias seguidos e troca de
   // celular não pode perder isso. Sobe para `user_state` junto com o resto.
   quiz?: EstadoQuiz;
+  // A trilha que a pessoa pediu para receber em ritmo: uma aula por dia, às
+  // 9h, como aviso. Uma por vez, de propósito: duas trilhas em ritmo são dois
+  // avisos por manhã, e é assim que aviso vira aviso desligado. Mora na
+  // sessão porque é uma escolha, e escolha acompanha a conta.
+  trilhaEmRitmo?: { courseId: string; desde: string } | null;
 };
 
 /** Em que pé está a volta do checkout. `null` = não veio de lá. */
@@ -77,6 +82,7 @@ const EMPTY: Session = {
   avatar: null,
   feedback: undefined,
   quiz: undefined,
+  trilhaEmRitmo: null,
 };
 
 // Today as yyyy-mm-dd (client-side only).
@@ -146,6 +152,7 @@ type StoreValue = {
   toggleReminder: (vehicleId: string, itemKey: string) => void; // lembrete de revisão
   setMomentPhoto: (id: string, dataUrl: string | null) => void;
   setNotifications: (v: boolean) => void;
+  setTrilhaEmRitmo: (courseId: string | null) => void; // uma aula por dia desta trilha
   setUnits: (v: "metric" | "imperial") => void;
   setAvatar: (dataUrl: string | null) => void;
   patchFeedback: (parte: Partial<FeedbackState>) => void; // registra o pedido de nota
@@ -254,6 +261,7 @@ export function mergeSessions(cloud: Session, local: Session): Session {
     // A sequência do quiz sobrevive à troca de aparelho. Regra em
     // quiz/sequencia.ts, conferida por `npm run verifica:quiz`.
     quiz: mesclarQuiz(cloud.quiz, local.quiz),
+    trilhaEmRitmo: cloud.trilhaEmRitmo ?? local.trilhaEmRitmo ?? null,
   } satisfies TodasAsChavesDaSessao;
 }
 
@@ -783,6 +791,10 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   );
 
   const setNotifications = useCallback((v: boolean) => patch((p) => ({ ...p, notifications: v })), [patch]);
+  const setTrilhaEmRitmo = useCallback(
+    (courseId: string | null) => patch((p) => ({ ...p, trilhaEmRitmo: courseId ? { courseId, desde: todayISO() } : null })),
+    [patch]
+  );
   const setUnits = useCallback((v: "metric" | "imperial") => patch((p) => ({ ...p, units: v })), [patch]);
   const setAvatar = useCallback((dataUrl: string | null) => patch((p) => ({ ...p, avatar: dataUrl })), [patch]);
 
@@ -834,8 +846,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const es = useMemo(() => (subActive && !s.premium ? { ...s, premium: true } : s), [s, subActive]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s: es, importacaoPendente, resolverImportacao, checkoutVoltando, abrirConfirmacaoDeCompra, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, responderQuiz, responderQuizPassado, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
-    [es, importacaoPendente, resolverImportacao, checkoutVoltando, abrirConfirmacaoDeCompra, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setUnits, setAvatar, patchFeedback, responderQuiz, responderQuizPassado, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
+    () => ({ s: es, importacaoPendente, resolverImportacao, checkoutVoltando, abrirConfirmacaoDeCompra, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setTrilhaEmRitmo, setUnits, setAvatar, patchFeedback, responderQuiz, responderQuizPassado, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
+    [es, importacaoPendente, resolverImportacao, checkoutVoltando, abrirConfirmacaoDeCompra, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setTrilhaEmRitmo, setUnits, setAvatar, patchFeedback, responderQuiz, responderQuizPassado, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

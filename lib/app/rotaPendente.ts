@@ -28,14 +28,14 @@
 // por isso que este arquivo guarda a rota em vez de só avisar quem estiver
 // ouvindo: quando o aviso chega, a tela pode ainda não estar montada.
 
-export type RotaDeAviso = "quiz";
+export type RotaDeAviso = "quiz" | "trilha";
 
 // Lista fechada, e é a fronteira de confiança deste arquivo. O que chega aqui
 // vem de fora do app: do payload de um push, que é escrito no servidor e viaja
 // pelo Google e pela Apple. Nome que não estiver nesta lista é ignorado, então
 // nenhum payload consegue empurrar o app para uma tela que a gente não
 // escolheu de propósito.
-const CONHECIDAS: readonly string[] = ["quiz"];
+const CONHECIDAS: readonly string[] = ["quiz", "trilha"];
 
 let pendente: RotaDeAviso | null = null;
 const ouvintes = new Set<() => void>();

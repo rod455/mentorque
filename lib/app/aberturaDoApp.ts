@@ -17,6 +17,7 @@ import { sincronizarLembrete } from "./lembreteAssinatura";
 import { sincronizarLembreteQuiz } from "./lembreteQuiz";
 import { sincronizarLembreteCarroParado } from "./lembreteCarroParado";
 import { sincronizarLembreteRevisaoVencida } from "./lembreteRevisaoVencida";
+import { sincronizarLembreteTrilha } from "./lembreteTrilha";
 import { computeHealth } from "./health";
 import { ouvirToqueEmAviso, semearMarcaDeAgendamento } from "./notificacoes";
 import { ouvirToqueEmPush, sincronizarPush } from "./push";
@@ -222,6 +223,11 @@ export function usePlanoPendente() {
  */
 export function useRotaDeAviso() {
   const { go } = useNav();
+  const { s } = usePrototype();
+  // A trilha em ritmo é lida na hora do toque, não na montagem: o aviso pode
+  // chegar antes de a sessão estar carregada.
+  const trilha = useRef(s.trilhaEmRitmo?.courseId ?? null);
+  trilha.current = s.trilhaEmRitmo?.courseId ?? null;
 
   useEffect(() => {
     const consumir = () => {
@@ -229,6 +235,9 @@ export function useRotaDeAviso() {
       if (!r) return;
       esqueceRota();
       if (r === "quiz") go({ name: "quiz" });
+      // O aviso da trilha abre A TRILHA, não a aula: a tela da trilha já mostra
+      // "continuar" na próxima não vista, e é dela que a pessoa sai para a aula.
+      if (r === "trilha") go(trilha.current ? { name: "course", id: trilha.current } : { name: "learn" });
     };
     const cancelar = aoAnotarRota(consumir);
     consumir();
@@ -371,6 +380,19 @@ export function useLembretes(c: Content) {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [s.notifications, s.services, veiculo?.id, veiculo?.odometerKm, veiculo?.purchaseDate, c.revisions.vencidaAvisoTitulo]);
+
+  // A trilha em ritmo: uma aula por dia, às 9h, a próxima não vista. Reagendada
+  // a cada aula vista, como o quiz. Ver lib/app/lembreteTrilha.ts.
+  useEffect(() => {
+    void sincronizarLembreteTrilha({
+      quer: s.notifications,
+      inscricao: s.trilhaEmRitmo,
+      courses: c.courses,
+      lessons: c.lessons,
+      seen: s.seenLessons ?? [],
+      textos: { titulo: c.learn.ritmoAvisoTitulo, corpo: c.learn.ritmoAvisoCorpo },
+    });
+  }, [s.notifications, s.trilhaEmRitmo, s.seenLessons, c.courses, c.lessons, c.learn.ritmoAvisoTitulo, c.learn.ritmoAvisoCorpo]);
 }
 
 /**
