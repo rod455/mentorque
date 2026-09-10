@@ -375,6 +375,28 @@ export function getContent(locale: Locale) {
 
     cars: {
       title: T("Meus Carros", "My Cars"),
+      // O aviso de "cadastrou e sumiu", dois dias depois do cadastro. Curto,
+      // com o que existe de concreto (os pontos de atenção do carro dela), e
+      // sem cobrança. Ver lib/app/lembreteCarroParado.ts.
+      avisoParadoTitulo: T("Seu {carro} está cadastrado", "Your {carro} is registered"),
+      avisoParadoCorpo: T(
+        "Ele tem {n} pontos de atenção para a idade dele. Dois minutos e você sabe o que fazer primeiro.",
+        "It has {n} attention points for its age. Two minutes and you know what to do first."
+      ),
+      avisoParadoCorpoUm: T(
+        "Ele tem 1 ponto de atenção para a idade dele. Dois minutos e você sabe o que fazer primeiro.",
+        "It has 1 attention point for its age. Two minutes and you know what to do first."
+      ),
+      avisoParadoCorpoSemPontos: T(
+        "Registre a última revisão e o app avisa a próxima no dia certo.",
+        "Log the last service and the app reminds you of the next one on the right day."
+      ),
+      // O convite de aviso logo depois do cadastro do carro.
+      conviteAvisoTitulo: T("Quer que a gente avise?", "Want us to remind you?"),
+      conviteAvisoCorpo: T(
+        "Quando o {carro} precisar de algo, como revisão vencendo ou km para atualizar, você recebe um aviso. Nada além disso.",
+        "When your {carro} needs something, like a service coming due or mileage to update, you get a notification. Nothing else."
+      ),
       emptyTitle: T("Sua garagem está vazia", "Your garage is empty"),
       emptyBody: T("Adicione seu primeiro carro para começar.", "Add your first car to get started."),
       add: T("Adicionar carro", "Add car"),

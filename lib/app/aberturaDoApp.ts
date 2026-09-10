@@ -15,6 +15,8 @@ import { ensureConsent, nativeAdMob } from "./admob";
 import { adsEnabled } from "@/components/app/AdGate";
 import { sincronizarLembrete } from "./lembreteAssinatura";
 import { sincronizarLembreteQuiz } from "./lembreteQuiz";
+import { sincronizarLembreteCarroParado } from "./lembreteCarroParado";
+import { computeHealth } from "./health";
 import { ouvirToqueEmAviso, semearMarcaDeAgendamento } from "./notificacoes";
 import { ouvirToqueEmPush, sincronizarPush } from "./push";
 import { aoAnotarRota, esqueceRota, rotaPendente } from "./rotaPendente";
@@ -293,6 +295,30 @@ export function useLembretes(c: Content) {
       textos: { titulo: c.quiz.avisoPushTitulo, corpo: c.quiz.avisoPushCorpo },
     });
   }, [s.notifications, s.quiz, c.quiz.avisoPushTitulo, c.quiz.avisoPushCorpo]);
+
+  // Cadastrou o carro e sumiu: um aviso dois dias depois, se até lá não houver
+  // serviço nem quiz. O corpo fala do que existe de concreto: os pontos de
+  // atenção que a saúde do carro já calcula. Ver lib/app/lembreteCarroParado.ts.
+  useEffect(() => {
+    const servicosDoCarro = veiculo ? servicesFor(s, veiculo.id) : [];
+    const pontos = veiculo ? computeHealth(veiculo, servicosDoCarro).findings.filter((f) => f.severity !== "low").length : 0;
+    const nome = veiculo ? carName(veiculo) : "";
+    const corpo = pontos === 0
+      ? c.cars.avisoParadoCorpoSemPontos
+      : pontos === 1
+        ? c.cars.avisoParadoCorpoUm
+        : c.cars.avisoParadoCorpo.replace("{n}", String(pontos));
+    void sincronizarLembreteCarroParado({
+      quer: s.notifications,
+      veiculo,
+      servicosDoCarro,
+      quiz: s.quiz,
+      textos: { titulo: c.cars.avisoParadoTitulo.replace("{carro}", nome), corpo },
+    });
+    // servicesFor devolve um array novo a cada render: quem entra na lista é
+    // s.services, a fonte dele.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [s.notifications, s.services, s.quiz, veiculo?.id, veiculo?.createdAt, veiculo?.odometerKm, c.cars.avisoParadoTitulo]);
 
   // O registro de push acompanha o MESMO interruptor dos lembretes: ligado e
   // com a permissão já concedida, o aparelho registra e o token vai para o

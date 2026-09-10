@@ -25,6 +25,10 @@ export type Vehicle = {
   soldAt?: string; // ISO yyyy-mm-dd
   quiz?: Record<string, string>; // Health-quiz answers (questionId -> optionKey)
   fuelPrefs?: FuelPrefs; // Etanol × Gasolina calculator inputs (per vehicle)
+  // Quando o carro foi cadastrado (ISO, carimbado pelo store). Existe desde
+  // 10/09/2026 para o aviso de "cadastrou e sumiu": carro sem esta data é de
+  // antes e não recebe esse aviso.
+  createdAt?: string;
 };
 
 // Saved inputs of the Etanol × Gasolina calculator, so the user only fills

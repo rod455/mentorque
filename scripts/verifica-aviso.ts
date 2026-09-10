@@ -26,6 +26,8 @@
 // Rode com: npm run conferir:aviso
 import { anotaRota, aoAnotarRota, esqueceRota, nomeDeRota, rotaPendente } from "../lib/app/rotaPendente.ts";
 import { espelhaOAparelho } from "../lib/app/espelhoDoAviso.ts";
+import { quandoAvisarCarroParado } from "../lib/app/carroParado.ts";
+import { QUIZ_ZERADO } from "../lib/app/quiz/sequencia.ts";
 import { readFileSync } from "node:fs";
 
 let falhas = 0;
@@ -332,6 +334,43 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
     "no iPhone o WKWebView já pergunta sozinho: pôr a nossa folha lá trocaria uma pergunta do " +
       "sistema, que a pessoa reconhece, por uma nossa"
   );
+}
+
+// ── cadastrou o carro e sumiu: um aviso dois dias depois ──────────────────
+//
+// 10/09/2026. É onde a coorte morre (1 em 8 volta na primeira semana), e até
+// aqui nada do app falava com quem cadastrava o carro e não fazia mais nada.
+// A regra é pura e as perguntas são as de sempre: quando avisa, quando NÃO
+// avisa (fez algo, passou a hora, carro de antes), e se alguém chama.
+{
+  const dia = (s: string) => new Date(s);
+  const carro = { createdAt: "2026-09-10T15:30:00" };
+  const base = { veiculo: carro, servicosDoCarro: [], quiz: undefined };
+
+  const quando = quandoAvisarCarroParado({ ...base, agora: dia("2026-09-10T16:00:00") });
+  conferir("dois dias depois do cadastro, às 9h", !!quando && quando.getDate() === 12 && quando.getHours() === 9 && quando.getMinutes() === 0);
+  conferir(
+    "quem registrou um serviço no carro não recebe",
+    quandoAvisarCarroParado({ ...base, servicosDoCarro: [{ id: "s", vehicleId: "v", type: "oil", date: "2026-09-10", km: 1, parts: [] }], agora: dia("2026-09-10T16:00:00") }) === null
+  );
+  conferir(
+    "quem respondeu o quiz alguma vez não recebe",
+    quandoAvisarCarroParado({ ...base, quiz: { ...QUIZ_ZERADO, respostas: 1 }, agora: dia("2026-09-10T16:00:00") }) === null
+  );
+  conferir(
+    "passou a hora e não voltou: silêncio, nada de amanhã",
+    quandoAvisarCarroParado({ ...base, agora: dia("2026-09-12T09:30:00") }) === null
+  );
+  conferir("carro de antes desta versão (sem data) não recebe", quandoAvisarCarroParado({ ...base, veiculo: {}, agora: dia("2026-09-10T16:00:00") }) === null);
+  conferir("sem carro, nada", quandoAvisarCarroParado({ ...base, veiculo: null, agora: dia("2026-09-10T16:00:00") }) === null);
+
+  const store = leia("lib/app/store.tsx");
+  conferir("o cadastro carimba a data do carro", /createdAt:\s*v\.createdAt \?\? new Date\(\)\.toISOString\(\)/.test(store), "sem a data, a regra devolve null para todo carro e o aviso nunca existe");
+  const abertura = leia("lib/app/aberturaDoApp.ts");
+  conferir("a abertura sincroniza o aviso do carro parado", /sincronizarLembreteCarroParado\(\{/.test(abertura), "regra escrita e não chamada é o defeito silencioso de sempre");
+  const cars = leia("components/app/screens/Cars.tsx");
+  conferir("o cadastro do carro pede o convite de aviso", /pedirConviteNoCarro\(\)/.test(cars));
+  conferir("e a garagem mostra o convite com o texto do carro", /<ConviteDeAviso[\s\S]*momento="carro"/.test(cars) && /conviteAvisoCorpo/.test(cars));
 }
 
 if (falhas) {

@@ -28,7 +28,26 @@ import { notificacoesDisponiveis, pedirPermissao, permissaoConcedida } from "./n
 // promessa na cara dela.
 
 /** De onde veio o convite. Serve para saber qual deles converte. */
-export type MomentoDoPedido = "quiz" | "calendario";
+export type MomentoDoPedido = "quiz" | "calendario" | "carro";
+const MOMENTOS: readonly MomentoDoPedido[] = ["quiz", "calendario", "carro"];
+
+// O convite logo depois do cadastro do carro (10/09/2026).
+//
+// A pessoa acabou de fazer a primeira coisa de valor, e é o momento em que a
+// coorte morre: 7 em 8 não voltam na primeira semana. O cadastro acontece
+// numa tela e a garagem aparece na seguinte, então o pedido viaja numa marca
+// de módulo, como o convite de conta (SalveSuaGaragem) e o atalho de dúvida:
+// quem cadastra deixa o pedido, a garagem consome ao montar. Vale para UMA
+// montagem, e o `podeConvidar` continua mandando (quatro dias, três na vida).
+let conviteNoCarro = false;
+export function pedirConviteNoCarro(): void {
+  conviteNoCarro = true;
+}
+export function consumirConviteNoCarro(): boolean {
+  const r = conviteNoCarro;
+  conviteNoCarro = false;
+  return r;
+}
 
 const CHAVE = "mq-pedido-aviso";
 
@@ -53,7 +72,7 @@ function ler(): Registro {
     return {
       vezes: typeof r?.vezes === "number" && r.vezes >= 0 ? r.vezes : 0,
       ultimoEm: typeof r?.ultimoEm === "string" ? r.ultimoEm : null,
-      ultimoMomento: r?.ultimoMomento === "quiz" || r?.ultimoMomento === "calendario" ? r.ultimoMomento : null,
+      ultimoMomento: MOMENTOS.includes(r?.ultimoMomento as MomentoDoPedido) ? (r!.ultimoMomento as MomentoDoPedido) : null,
     };
   } catch {
     // Sem armazenamento, o registro nasce zerado a cada sessão. É o lado

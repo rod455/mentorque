@@ -26,7 +26,18 @@ import { useContent } from "./ui";
 /** De quantos dias de sequência em diante o convite usa o argumento dela. */
 const SEQUENCIA_PARA_ARGUMENTO = 2;
 
-export function ConviteDeAviso({ momento, sequencia }: { momento: MomentoDoPedido; sequencia: number }) {
+export function ConviteDeAviso({
+  momento,
+  sequencia,
+  titulo,
+  corpo,
+}: {
+  momento: MomentoDoPedido;
+  sequencia: number;
+  /** Texto próprio do momento (o do carro fala do carro, não do quiz). */
+  titulo?: string;
+  corpo?: string;
+}) {
   const c = useContent();
   const q = c.quiz;
   const { setNotifications } = usePrototype();
@@ -75,9 +86,9 @@ export function ConviteDeAviso({ momento, sequencia }: { momento: MomentoDoPedid
 
   return (
     <div className="mt-3 rounded-2xl bg-amber/[0.07] p-5 ring-1 ring-amber/20">
-      <p className="font-display text-[15px] font-semibold text-cream">{q.avisoTitulo}</p>
+      <p className="font-display text-[15px] font-semibold text-cream">{titulo ?? q.avisoTitulo}</p>
       <p className="mt-1.5 text-sm leading-relaxed text-cream/65">
-        {comSequencia ? q.avisoCorpoSequencia.replace("{n}", String(sequencia)) : q.avisoCorpo}
+        {corpo ?? (comSequencia ? q.avisoCorpoSequencia.replace("{n}", String(sequencia)) : q.avisoCorpo)}
       </p>
       <div className="mt-4 flex gap-2">
         <button

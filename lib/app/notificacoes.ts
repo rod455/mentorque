@@ -59,6 +59,8 @@ type NotificacaoAgendada = {
 export const AVISO = {
   fimDoTeste: 1,
   quizDoDia: 2,
+  // Cadastrou o carro e sumiu: um aviso dois dias depois (lembreteCarroParado.ts).
+  carroParado: 3,
 } as const;
 
 // Canal do Android. Sem canal declarado, o Android 8+ joga a notificação num

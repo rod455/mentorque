@@ -641,7 +641,10 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
       // lembrete mensal da tela inicial lia essa ausência como "informado há
       // uma eternidade": pedia o km no mesmo dia do cadastro.
       const carimbo = v.odometerKm != null && !v.kmUpdatedAt ? { kmUpdatedAt: new Date().toISOString() } : {};
-      patch((p) => ({ ...p, vehicles: [...p.vehicles, { ...v, ...carimbo, id }], activeVehicleId: id }));
+      // E a data do cadastro, que é o relógio do aviso de "cadastrou e sumiu"
+      // (lib/app/lembreteCarroParado.ts).
+      const nascido = { createdAt: v.createdAt ?? new Date().toISOString() };
+      patch((p) => ({ ...p, vehicles: [...p.vehicles, { ...v, ...carimbo, ...nascido, id }], activeVehicleId: id }));
       return id;
     },
     [patch]

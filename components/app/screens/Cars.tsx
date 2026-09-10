@@ -14,6 +14,10 @@ import { Button } from "@/components/ui/Button";
 import { useNav } from "@/lib/app/nav";
 import { funil } from "@/lib/app/funil";
 import { pedirConviteDeConta } from "../SalveSuaGaragem";
+import { ConviteDeAviso } from "../ConviteDeAviso";
+import { consumirConviteNoCarro, pedirConviteNoCarro } from "@/lib/app/pedidoDeAviso";
+import { useAuth } from "@/lib/app/auth";
+import { carName } from "@/lib/app/content";
 import { AppHeader, Card, Chip, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
 import BielaMascote from "@/components/BielaMascote";
 
@@ -62,6 +66,11 @@ export function CarsScreen() {
   const { go, root } = useNav();
   const [editNickId, setEditNickId] = useState<string | null>(null);
   const [nickInput, setNickInput] = useState("");
+  // O convite de aviso logo depois do cadastro. Só para quem já tem conta: o
+  // convidado recebe a folha "Salve sua garagem" nesse mesmo instante, e dois
+  // pedidos em cima do mesmo cadastro é o jeito de perder os dois.
+  const { user } = useAuth();
+  const [convidarAviso] = useState(() => consumirConviteNoCarro());
 
   const openNick = (id: string, current?: string) => { setNickInput(current ?? ""); setEditNickId(id); };
   const saveNick = () => {
@@ -94,6 +103,17 @@ export function CarsScreen() {
       )}
 
       {owned.length > 0 && <ArrivalBanner />}
+
+      {convidarAviso && user && owned[0] && (
+        <div className="mb-3">
+          <ConviteDeAviso
+            momento="carro"
+            sequencia={0}
+            titulo={c.cars.conviteAvisoTitulo}
+            corpo={c.cars.conviteAvisoCorpo.replace("{carro}", carName(owned[owned.length - 1]))}
+          />
+        </div>
+      )}
 
       {owned.length === 0 ? (
         // Garagem vazia — mascote centralizado, sem caixa/contorno (estilo Bloom)
@@ -350,6 +370,8 @@ export function AddCarScreen({ editId }: { editId?: string }) {
     // aparelho. É o melhor (e o único honesto) momento para convidar a criar
     // conta: a folha some sozinha para quem já tem uma.
     pedirConviteDeConta();
+    // E, para quem já tem conta, o convite de aviso na garagem que vem a seguir.
+    pedirConviteNoCarro();
     root({ name: "car" });
   };
 
