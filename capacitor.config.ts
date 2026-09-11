@@ -83,6 +83,17 @@ const config: CapacitorConfig = {
     SocialLogin: {
       providers: { facebook: false },
     },
+    // O ícone do aviso na barra do Android (11/09/2026). Sem isto o plugin
+    // cai em `android.R.drawable.ic_dialog_info`, o "i" genérico que o dono
+    // viu no aparelho da Luana ("parece uma notificação qualquer"). O nome é o
+    // de um drawable em android/app/src/main/res/drawable-*/ (silhueta branca
+    // da marca; o Android pinta com `iconColor`). Lido em
+    // LocalNotificationManager.kt, getDefaultSmallIcon. O ícone grande (a
+    // marca âmbar) vai por aviso, em lib/app/notificacoes.ts.
+    LocalNotifications: {
+      smallIcon: "ic_stat_mentorque",
+      iconColor: "#F2A623",
+    },
     // O app é sempre escuro: força ícones claros nas barras do sistema
     // (o padrão segue o tema do aparelho e some em telas claras).
     SystemBars: {

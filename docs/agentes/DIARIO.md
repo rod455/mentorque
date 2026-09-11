@@ -37,6 +37,24 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-11 · Engenharia: o aviso do Android ganha a marca no lugar do "i" genérico
+- Foto do dono: o aviso do quiz na Samsung da Luana saía com o ícone de
+  informação do sistema. Lido no fonte do plugin (LocalNotificationManager.kt,
+  getDefaultSmallIcon): sem `smallIcon` no config, ou com nome sem drawable,
+  ele cai em `android.R.drawable.ic_dialog_info`, em silêncio.
+- Feito: a marca rasterizada em PNG nas cinco densidades (silhueta branca
+  para a barra, que o Android pinta com `iconColor` âmbar; e a marca âmbar
+  sobre grafite como ícone grande), `smallIcon` e `iconColor` no config do
+  plugin, os três campos por aviso no `agendar`, e o `meta-data` do Firebase
+  no manifesto para o push com o app fechado usar o mesmo ícone e cor.
+  `conferir:aviso` cobra nome no config, nome no agendamento e arquivo em
+  cada densidade, porque nada disso dá erro de compilação quando falta.
+- Sobre a data "10/09/2026" no aviso da foto: o plugin não define o `when`,
+  então o Android mostra a hora em que o aviso foi entregue. O do quiz saiu
+  às 9h de 10/09 e ficou na bandeja até a manhã seguinte. Não é defeito.
+- O que a conferência não alcança: o ícone renderizado no aparelho. Passo 14
+  do roteiro da 2.4.
+
 ## 2026-09-11 · Engenharia: no Android, o onboarding termina no cadastro do carro
 - Pedido do dono, com uma premissa a corrigir: "já que tiramos o paywall do
   Android". Ninguém tirou. O paywall do Android está ligado desde a 1.9 e

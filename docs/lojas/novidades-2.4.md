@@ -49,6 +49,13 @@ Aberta em 10/09/2026, com o login do Google no Android funcionando na 2.3
    `onboarding-termina-no-carro-android`). iPhone e web seguem iguais, e é a
    comparação entre eles que vai dizer. `conferir:funil` cobre a ligação.
 
+8. **O aviso no Android tem a cara do Mentorque.** Foto do dono em 11/09: o
+   aviso do quiz saía com o "i" genérico do sistema. Agora a barra mostra a
+   silhueta da marca pintada de âmbar e o aviso aberto traz a marca âmbar
+   sobre grafite à direita; o push do Firebase usa o mesmo ícone e cor.
+   Drawables em `android/app/src/main/res/drawable-*/`. `conferir:aviso`
+   cobra o nome no config, no agendamento e os arquivos nas cinco densidades.
+
 ## O que NÃO precisa de binário
 
 - A tabela `precos_observados` já existe no Supabase e a rota `/api/precos`
@@ -103,6 +110,10 @@ e de um aparelho onde esse mesmo carro seja cadastrado sem login:
     de plano; "Cadastrar meu primeiro carro" abre o formulário do carro, e
     voltar dele cai na Home. "Agora não" no topo cai na Home. No iPhone, a
     página de plano continua sendo a última.
+14. **Ícone do aviso no Android**: o aviso do quiz (ou qualquer outro) sai
+    com a marca do Mentorque na barra de status, em âmbar, e com a marca
+    âmbar sobre grafite à direita quando a bandeja é aberta. Se sair o "i"
+    genérico, o drawable não entrou no build.
 
 O que a conferência daqui não alcança: a folha em si. A suíte de navegador
 não a abre (ela só aparece ao entrar numa conta com garagem, com carro de

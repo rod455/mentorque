@@ -42,7 +42,11 @@ type NotificacaoAgendada = {
   body: string;
   schedule: { at: Date; allowWhileIdle?: boolean };
   channelId?: string;
+  // Ícones do Android (nomes de drawable) e a cor com que a barra pinta o
+  // pequeno. O iPhone ignora os três. Ver LocalNotification.kt no plugin.
   smallIcon?: string;
+  largeIcon?: string;
+  iconColor?: string;
   /**
    * A carga que volta para o app quando a pessoa TOCA no aviso. É por aqui que
    * o destino viaja: sem ela, o toque só abre o app, e quem tocou em "responda
@@ -345,6 +349,14 @@ export async function agendar(o: {
           // horas, e é justamente aí que o lembrete precisa sair.
           schedule: { at: o.quando, allowWhileIdle: true },
           channelId: CANAL,
+          // A cara do aviso no Android (11/09/2026): a marca âmbar à direita
+          // e a silhueta branca na barra, pintada de âmbar. Sem isto o aviso
+          // saía com o "i" genérico do sistema. Os drawables moram em
+          // android/app/src/main/res/drawable-*/; o iPhone ignora os três
+          // campos e usa o ícone do app, como sempre.
+          smallIcon: "ic_stat_mentorque",
+          largeIcon: "ic_aviso_mentorque",
+          iconColor: "#F2A623",
           ...(o.rota ? { extra: { rota: o.rota } } : null),
         },
       ],

@@ -36,6 +36,17 @@
             android:name="com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT"
             android:value="true"
         />
+        <!-- Push (Firebase): com o app fechado quem monta a notificação é o
+             Firebase, e ele lê o ícone e a cor daqui, não do plugin. Os
+             mesmos drawables dos avisos locais (ver capacitor.config.ts). -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_mentorque"
+        />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/amber"
+        />
 
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation|density"

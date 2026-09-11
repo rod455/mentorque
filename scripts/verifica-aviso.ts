@@ -30,7 +30,7 @@ import { quandoAvisarCarroParado } from "../lib/app/carroParado.ts";
 import { proximoAvisoDeVencida } from "../lib/app/revisaoVencida.ts";
 import { proximaAulaDaTrilha, quandoAvisarTrilha } from "../lib/app/ritmoDaTrilha.ts";
 import { QUIZ_ZERADO } from "../lib/app/quiz/sequencia.ts";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -419,6 +419,34 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
   conferir("dizer 'quero' sem permissão leva aos ajustes quando não vira permissão", /pedirPermissao\(\)[\s\S]{0,200}abrirAjustesDeAvisos\(\)/.test(learn));
   const store = leia("lib/app/store.tsx");
   conferir("a trilha em ritmo sobrevive ao login (está no merge)", /trilhaEmRitmo: cloud\.trilhaEmRitmo \?\? local\.trilhaEmRitmo/.test(store));
+}
+
+// ── o aviso tem a cara do Mentorque, não o "i" do sistema ─────────────────
+//
+// 11/09/2026, foto do aparelho da Luana: o aviso do quiz saía com o ícone
+// genérico de informação, porque o plugin cai em android.R.drawable.ic_dialog_info
+// quando não acha o drawable configurado. Três coisas têm de bater e nenhuma
+// dá erro de compilação quando falta: o nome no config, o mesmo nome no
+// agendamento, e o arquivo PNG nas cinco densidades. Nome certo sem arquivo
+// volta ao "i" em silêncio; por isso a conferência abre a pasta.
+{
+  const config = leia("capacitor.config.ts");
+  const notif = leia("lib/app/notificacoes.ts");
+  const manifesto = readFileSync(new URL("../android/app/src/main/AndroidManifest.xml", import.meta.url), "utf8");
+  const NOME_PEQUENO = "ic_stat_mentorque";
+  const NOME_GRANDE = "ic_aviso_mentorque";
+  conferir("o config do plugin aponta o ícone pequeno e a cor", new RegExp(`smallIcon:\\s*"${NOME_PEQUENO}"`).test(config) && /iconColor:\s*"#F2A623"/.test(config));
+  conferir("cada aviso agendado leva os dois ícones", new RegExp(`smallIcon:\\s*"${NOME_PEQUENO}"`).test(notif) && new RegExp(`largeIcon:\\s*"${NOME_GRANDE}"`).test(notif));
+  conferir("o push do Firebase usa o mesmo ícone e a mesma cor", /default_notification_icon[\s\S]{0,80}@drawable\/ic_stat_mentorque/.test(manifesto) && /default_notification_color[\s\S]{0,80}@color\/amber/.test(manifesto));
+  for (const d of ["mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"]) {
+    for (const nome of [NOME_PEQUENO, NOME_GRANDE]) {
+      conferir(
+        `o drawable ${nome} existe em ${d}`,
+        existsSync(new URL(`../android/app/src/main/res/drawable-${d}/${nome}.png`, import.meta.url)),
+        "nome configurado sem arquivo volta ao 'i' genérico em silêncio",
+      );
+    }
+  }
 }
 
 if (falhas) {
