@@ -37,6 +37,21 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-11 · Engenharia: o portão de permissão de aviso passa a ser medido (antes do build da 2.4)
+- O achado do CRO de hoje era meu para fechar, e antes do build: cinco
+  máquinas de recorrência atrás de uma permissão que ninguém media. Entram
+  quatro eventos no funil (`convite_aviso`, `aceitou_convite_aviso`,
+  `permissao_aviso_concedida`, `permissao_aviso_negada`), com a origem de
+  onde o pedido nasceu (quiz, calendario, carro, perfil, trilha), declarados
+  nos quatro lugares que a conferência do funil exige (tipo do app, rota,
+  restrição do banco, regras de natureza) e a restrição recriada no banco.
+  Natureza: o convite mostrado é de sessão; aceitar e o desfecho são atos.
+  Medido desde 11/09, na regra da 1.6: a data é do instrumento.
+- `conferir:aviso` cobra que os três lugares que pedem a permissão relatem o
+  desfecho. A leitura que o CRO pediu passa a existir: convites mostrados,
+  aceitos e permissões concedidas, por origem, por aparelho.
+- Também escritas as notas das lojas da 2.4, só com o que a bateria alcança.
+
 ## 2026-09-11 · Engenharia: o aviso do Android ganha a marca no lugar do "i" genérico
 - Foto do dono: o aviso do quiz na Samsung da Luana saía com o ícone de
   informação do sistema. Lido no fonte do plugin (LocalNotificationManager.kt,

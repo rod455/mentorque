@@ -36,7 +36,10 @@ create table if not exists public.funil_eventos (
     'abriu_trilha', 'cadastrou_carro', 'atribuicao',
     'assinou', 'renovou', 'cancelou', 'expirou',
     -- A primeira sessão, medida em 01/09/2026.
-    'comecou_onboarding', 'terminou_onboarding', 'abriu_cadastro_de_carro'
+    'comecou_onboarding', 'terminou_onboarding', 'abriu_cadastro_de_carro',
+    -- O portão de permissão de aviso, medido em 11/09/2026 (a restrição foi
+    -- recriada no banco nesse dia: funil_eventos_evento_check).
+    'convite_aviso', 'aceitou_convite_aviso', 'permissao_aviso_concedida', 'permissao_aviso_negada'
   )),
 
   anon_id    text,

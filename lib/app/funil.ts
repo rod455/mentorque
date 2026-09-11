@@ -31,6 +31,15 @@ export type EventoFunil =
   | "comecou_onboarding"
   | "terminou_onboarding"
   | "abriu_cadastro_de_carro"
+  // O PORTÃO DE PERMISSÃO DE AVISO, medido em 11/09/2026. Os cinco momentos
+  // de recorrência da 2.4 dependem da mesma permissão do sistema, e até aqui
+  // nada dizia se alguém a dava: o CRO apontou que as cinco máquinas podiam
+  // estar mudas sem nada no retrato mudar de cor. `origem` carrega de onde
+  // veio o pedido (quiz, calendario, carro, perfil, trilha).
+  | "convite_aviso"
+  | "aceitou_convite_aviso"
+  | "permissao_aviso_concedida"
+  | "permissao_aviso_negada"
   // Único evento técnico da lista: o desfecho da subida do SDK de atribuição
   // (lib/app/atribuicao.ts). Ele não mede comportamento de ninguém, mede se a
   // nossa própria medição está viva no aparelho.

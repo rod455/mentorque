@@ -5,6 +5,7 @@ import { usePrototype } from "@/lib/app/store";
 import { abrirAjustesDeAvisos } from "@/lib/app/notificacoes";
 import { convidar, podeConvidar, type MomentoDoPedido } from "@/lib/app/pedidoDeAviso";
 import { passo } from "@/lib/app/ultimoPasso";
+import { funil } from "@/lib/app/funil";
 import { useContent } from "./ui";
 
 // O convite para ligar o aviso do quiz.
@@ -48,9 +49,15 @@ export function ConviteDeAviso({
   // vale vem do sistema (já concedida? já negada?), não do nosso registro.
   useEffect(() => {
     let vivo = true;
-    void podeConvidar().then((r) => { if (vivo) setCabe(r); });
+    void podeConvidar().then((r) => {
+      if (!vivo) return;
+      setCabe(r);
+      // O portão medido (11/09/2026): quantas vezes o convite aparece, de
+      // onde, e o que acontece depois. Uma vez por momento por sessão.
+      if (r) funil("convite_aviso", { origem: momento, umaVez: true, chave: momento });
+    });
     return () => { vivo = false; };
-  }, []);
+  }, [momento]);
 
   if (!cabe || fechado) return null;
 
@@ -61,7 +68,9 @@ export function ConviteDeAviso({
     // Aqui abre a caixa do SISTEMA, que é código nativo. Se o app sumir na
     // frente dela, a migalha é a única testemunha.
     passo("pediu permissão de aviso");
+    funil("aceitou_convite_aviso", { origem: momento });
     const concedida = await convidar(momento);
+    funil(concedida ? "permissao_aviso_concedida" : "permissao_aviso_negada", { origem: momento });
     // O interruptor do Perfil segue o que o sistema respondeu. Sem isto o app
     // ficaria dizendo "avisos ligados" para quem recusou na caixa do sistema.
     if (concedida) {

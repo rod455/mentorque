@@ -449,6 +449,24 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
   }
 }
 
+// ── o portão de permissão é medido, em todos os lugares onde ele é pedido ──
+//
+// 11/09/2026, achado do CRO: os cinco momentos de recorrência da 2.4 dependem
+// da mesma permissão do sistema e nenhum evento dizia se alguém a dava. Três
+// lugares pedem a permissão (o convite, o interruptor do Perfil, o "Quero"
+// da trilha) e os três têm de relatar o desfecho; um lugar mudo é uma
+// máquina que parece desligada no retrato sem estar.
+{
+  const convite = leia("components/app/ConviteDeAviso.tsx");
+  const perfil = leia("components/app/screens/Profile.tsx");
+  const learn = leia("components/app/screens/Learn.tsx");
+  const desfecho = /funil\(\s*\w+\s*\?\s*"permissao_aviso_concedida"\s*:\s*"permissao_aviso_negada"/;
+  conferir("o convite relata que apareceu e que foi aceito", /funil\("convite_aviso"/.test(convite) && /funil\("aceitou_convite_aviso"/.test(convite));
+  conferir("o convite relata o desfecho da permissão", desfecho.test(convite));
+  conferir("o interruptor do Perfil relata o desfecho da permissão", desfecho.test(perfil) && /origem: "perfil"/.test(perfil));
+  conferir("o 'Quero' da trilha relata o desfecho da permissão", desfecho.test(learn) && /origem: "trilha"/.test(learn));
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) de aviso reprovaram.`);
   process.exit(1);

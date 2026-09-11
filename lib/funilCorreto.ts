@@ -46,6 +46,10 @@ export type EventoFunil =
   | "comecou_onboarding"
   | "terminou_onboarding"
   | "abriu_cadastro_de_carro"
+  | "convite_aviso"
+  | "aceitou_convite_aviso"
+  | "permissao_aviso_concedida"
+  | "permissao_aviso_negada"
   | "assinou"
   | "renovou"
   | "cancelou"
@@ -91,6 +95,11 @@ export const UNIDADE: Record<EventoFunil, Unidade> = {
   abriu_cadastro_de_carro: "aparelho",
   cadastrou_carro: "aparelho",
   cadastro: "aparelho",
+  // O portão de permissão de aviso é do aparelho: a permissão é do sistema.
+  convite_aviso: "aparelho",
+  aceitou_convite_aviso: "aparelho",
+  permissao_aviso_concedida: "aparelho",
+  permissao_aviso_negada: "aparelho",
   iniciou_checkout: "aparelho",
   atribuicao: "aparelho",
   // Nascem no webhook da cobrança, que não tem aparelho. A identidade é o
@@ -113,6 +122,12 @@ export const NATUREZA: Record<EventoFunil, Natureza> = {
   comecou_onboarding: "ato",
   terminou_onboarding: "ato",
   abriu_cadastro_de_carro: "ato",
+  // O convite mostrado é de sessão (a tela pode aparecer de novo em outra
+  // visita); aceitar e a resposta do sistema são atos.
+  convite_aviso: "sessao",
+  aceitou_convite_aviso: "ato",
+  permissao_aviso_concedida: "ato",
+  permissao_aviso_negada: "ato",
   iniciou_checkout: "ato",
   assinou: "ato",
   renovou: "ato",
@@ -151,6 +166,12 @@ export const MEDIDO_DESDE: Record<EventoFunil, string> = {
   comecou_onboarding: "2026-09-01",
   terminou_onboarding: "2026-09-01",
   abriu_cadastro_de_carro: "2026-09-01",
+  // Vão no ar com a 2.4. Mesma regra da 1.6: a data marca quando o
+  // instrumento passou a existir, não quando alguém o usou.
+  convite_aviso: "2026-09-11",
+  aceitou_convite_aviso: "2026-09-11",
+  permissao_aviso_concedida: "2026-09-11",
+  permissao_aviso_negada: "2026-09-11",
 };
 
 /**

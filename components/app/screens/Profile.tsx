@@ -6,6 +6,7 @@ import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/app/auth";
 import { usePrototype } from "@/lib/app/store";
 import { AVISO, abrirAjustesDeAvisos, cancelar, notificacoesDisponiveis, pedirPermissao, permissaoConcedida } from "@/lib/app/notificacoes";
+import { funil } from "@/lib/app/funil";
 import { espelhaOAparelho } from "@/lib/app/espelhoDoAviso";
 import { ID_FALE_COM_A_GENTE, consumirPedidoDeDuvida } from "@/lib/app/atalhoDeDuvida";
 import { lerImagem, resizeImage, type ImagemLida } from "@/lib/app/image";
@@ -334,6 +335,7 @@ export function ProfileScreen() {
       return;
     }
     const ok = await pedirPermissao();
+    funil(ok ? "permissao_aviso_concedida" : "permissao_aviso_negada", { origem: "perfil" });
     setNotifications(ok);
     setAvisosBloqueados(!ok);
     // QUEM LIGA ESTÁ PEDINDO PARA RECEBER, e é isso que decide o destino.

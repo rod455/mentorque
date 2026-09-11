@@ -28,6 +28,10 @@ const EVENTOS_DO_APP = new Set([
   // carro não havia degrau nenhum, e quem ia embora sumia sem dizer de onde.
   // Deduplicados por aparelho no cliente e por índice único no banco.
   "comecou_onboarding", "terminou_onboarding", "abriu_cadastro_de_carro",
+  // O portão de permissão de aviso (11/09/2026): os cinco momentos de
+  // recorrência da 2.4 dependem dele, e sem estes quatro ninguém saberia se
+  // alguém deu a permissão. Ver lib/app/funil.ts.
+  "convite_aviso", "aceitou_convite_aviso", "permissao_aviso_concedida", "permissao_aviso_negada",
 ]);
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

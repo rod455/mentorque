@@ -56,6 +56,13 @@ Aberta em 10/09/2026, com o login do Google no Android funcionando na 2.3
    Drawables em `android/app/src/main/res/drawable-*/`. `conferir:aviso`
    cobra o nome no config, no agendamento e os arquivos nas cinco densidades.
 
+9. **O portão de permissão de aviso passa a ser medido.** Achado do CRO de
+   11/09: os cinco momentos dependem da mesma permissão e nada dizia se
+   alguém a dava. Quatro eventos novos no funil (`convite_aviso`,
+   `aceitou_convite_aviso`, `permissao_aviso_concedida`,
+   `permissao_aviso_negada`), com a origem (quiz, calendário, carro, perfil,
+   trilha). Tabela e rota já aceitam; `conferir:aviso` cobra os três lugares.
+
 ## O que NÃO precisa de binário
 
 - A tabela `precos_observados` já existe no Supabase e a rota `/api/precos`
@@ -120,6 +127,39 @@ não a abre (ela só aparece ao entrar numa conta com garagem, com carro de
 convidado no aparelho), então a ligação da folha com o store é conferida no
 fonte e a regra é conferida pura. A tela, só o roteiro acima prova. Sobre
 esse build, até um aparelho abrir: sem sinal ainda.
+
+## Notas para as lojas, PARA O DONO CONFERIR ANTES DE COLAR
+
+Falam só do que a bateria alcança (as telas e a regra); o que depende do
+aparelho (o aviso chegar, o ícone) fica de fora até o roteiro passar. Ganho,
+não defeito; verbo na ação da pessoa.
+
+**Google Play** (limite: 500 caracteres)
+
+```
+Registrou um serviço com o valor? O app mostra quanto ele costuma custar na
+sua região e se você pagou dentro da faixa.
+
+Uma aula por dia: escolha uma trilha e receba a próxima aula todo dia às 9h.
+Novas trilhas "Mecânica de verdade" e "Cuidados básicos", com o check de 15
+minutos a cada 15 dias e a limpeza que protege o carro.
+
+Ao entrar na conta, se o mesmo carro já estiver lá, você escolhe: juntar num
+só, ficar com um ou com o outro.
+```
+
+**App Store**
+
+```
+Registrou um serviço com o valor? O app mostra quanto ele costuma custar na
+sua região e se você pagou dentro da faixa.
+
+Uma aula por dia: escolha uma trilha e receba a próxima aula todo dia às 9h.
+Novas trilhas "Mecânica de verdade" e "Cuidados básicos".
+
+Ao entrar na conta, se o mesmo carro já estiver lá, você escolhe: juntar num
+só, ficar com um ou com o outro.
+```
 
 ## Antes de enviar
 

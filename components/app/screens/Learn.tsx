@@ -403,6 +403,7 @@ function RitmoDaTrilha({ courseId, concluida }: { courseId: string; concluida: b
       return;
     }
     const ok = await pedirPermissao();
+    funil(ok ? "permissao_aviso_concedida" : "permissao_aviso_negada", { origem: "trilha" });
     if (ok) {
       setNotifications(true);
       return;
