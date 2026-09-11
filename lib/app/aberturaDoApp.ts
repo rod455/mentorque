@@ -105,6 +105,27 @@ export function useFunilDeAbertura() {
  *                            comprar. `&cupom=PREMIUM30` chega ao checkout
  *                            com o desconto já aplicado (o servidor valida).
  */
+/**
+ * O onboarding pediu para abrir uma tela ao terminar.
+ *
+ * Hoje só existe um destino: o formulário do carro, que é a última página do
+ * onboarding no Android desde 11/09/2026 ("Cadastrar meu primeiro carro").
+ * Viaja pelo sessionStorage pelo mesmo motivo do plano: o Shell só nasce
+ * depois que o onboarding morre, e um `go` dado antes disso se perde.
+ * Consumido uma vez; lista fechada, como as rotas de aviso.
+ */
+export function useDestinoDoOnboarding() {
+  const { go } = useNav();
+  useEffect(() => {
+    try {
+      const d = window.sessionStorage.getItem("mentorque-onboarding-destino");
+      if (!d) return;
+      window.sessionStorage.removeItem("mentorque-onboarding-destino");
+      if (d === "addCar") go({ name: "addCar" });
+    } catch { /* ignore */ }
+  }, [go]);
+}
+
 export function usePlanoPendente() {
   const { user, ready } = useAuth();
   const { view, go } = useNav();

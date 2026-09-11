@@ -6,7 +6,7 @@ import { usePrototype } from "@/lib/app/store";
 import { useSwipe } from "@/lib/app/swipe";
 import { useAuth } from "@/lib/app/auth";
 import { trialDaysFor, trialPlatform } from "@/lib/app/platform";
-import { isNativeApp, sellsInApp } from "@/lib/app/wrapper";
+import { isNativeApp, nativePlatform, sellsInApp } from "@/lib/app/wrapper";
 import { hasActiveEntitlement, initPurchases, type RcPackage } from "@/lib/app/purchases";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
@@ -24,6 +24,15 @@ function CheckDot() {
 
 // 0.1 — Onboarding (5 páginas): 3 cards de apresentação + prova social +
 // monte seu teste. Termina no app (Home) ou no paywall, conforme a escolha.
+//
+// NO ANDROID, desde 11/09/2026, a última página não é a do teste: é
+// "Cadastre o seu primeiro carro", e o botão abre o formulário do carro.
+// Decisão do dono, para ver se mais gente preenche: nos 28 dias até 10/09, de
+// 59 aparelhos que começaram o onboarding no Android, 4 cadastraram carro. O
+// paywall continua existindo (banner, recursos trancados); o que sai do
+// onboarding é a página de plano. iPhone e web seguem como estavam, e é a
+// comparação entre plataformas que vai dizer se valeu (experimento
+// onboarding-termina-no-carro-android em docs/agentes/experimentos.md).
 export function OnboardingFlow() {
   const c = useContent();
   const cards = c.splash.cards;
@@ -54,6 +63,14 @@ export function OnboardingFlow() {
   useEffect(() => {
     setSells(sellsInApp());
   }, []);
+  // Android termina no cadastro do carro (ver o comentário do componente).
+  // Lido num efeito, como o `sells`: na renderização do servidor não existe
+  // plataforma, e um chute errado aqui trocaria a última página no primeiro
+  // quadro.
+  const [paraOCarro, setParaOCarro] = useState(false);
+  useEffect(() => {
+    setParaOCarro(nativePlatform() === "android");
+  }, []);
 
   // No iOS a compra é da Apple: carregamos as ofertas já aqui para o botão
   // "Continuar" abrir a folha de pagamento na hora, em vez de levar o
@@ -74,9 +91,11 @@ export function OnboardingFlow() {
       } catch { /* sem ofertas: cai no fluxo antigo */ }
     })();
   }, []);
-  const total = cards.length + (sells ? 2 : 1); // 3 cards + social (+ teste onde vende)
+  // 3 cards + social (+ teste onde vende; no Android, + a página do carro)
+  const total = cards.length + (paraOCarro || sells ? 2 : 1);
   const last = i === total - 1;
   const card = i < cards.length ? cards[i] : null;
+  const paginaDoCarro = paraOCarro && last;
 
   const [trialDays, setTrialDays] = useState(7);
   useEffect(() => setTrialDays(trialDaysFor(trialPlatform())), []);
@@ -88,9 +107,18 @@ export function OnboardingFlow() {
   // dispara o evento uma vez por aparelho e carrega COMO a pessoa saiu, que é
   // a parte útil: quem sai por "agora não" na última página é uma história
   // diferente de quem sai porque assinou.
-  const sair = (origem: "plano" | "assinou" | "agora-nao" | "sem-venda") => {
+  const sair = (origem: "plano" | "assinou" | "agora-nao" | "sem-venda" | "carro") => {
     funil("terminou_onboarding", { umaVezPorAparelho: true, origem });
     finishOnboarding();
+  };
+
+  // "Cadastrar meu primeiro carro": o onboarding acaba e o app abre direto no
+  // formulário do carro. O destino viaja pelo sessionStorage como o plano
+  // (mentorque-onboarding-plan): o Shell nasce depois que este componente
+  // morre, e quem lê é useDestinoDoOnboarding em lib/app/aberturaDoApp.ts.
+  const sairParaOCarro = () => {
+    try { window.sessionStorage.setItem("mentorque-onboarding-destino", "addCar"); } catch { /* ignore */ }
+    sair("carro");
   };
 
   // Última página: Continuar leva ao paywall/checkout do plano escolhido.
@@ -124,6 +152,7 @@ export function OnboardingFlow() {
 
   const advance = () => {
     if (!last) { setI((v) => v + 1); return; }
+    if (paraOCarro) { sairParaOCarro(); return; }
     if (!sells) { sair("sem-venda"); return; }
     // Comprar deslogado deixaria a assinatura numa conta anônima do RevenueCat:
     // o motorista pagaria e o Premium não apareceria na conta dele, nem em
@@ -202,6 +231,27 @@ export function OnboardingFlow() {
           <div className="space-y-2.5">
             <Button size="lg" className="w-full" onClick={onContinue} disabled={carLeaving}>
               {c.splash.next}
+            </Button>
+          </div>
+        </div>
+      ) : paginaDoCarro ? (
+        /* Última página no Android: cadastre o seu primeiro carro */
+        <div className="flex flex-1 flex-col px-6 pb-8" data-pagina-do-carro>
+          <div className="flex flex-1 flex-col items-center justify-center text-center">
+            <div className="mb-8 flex min-h-[16rem] items-center justify-center">
+              <img
+                src="/onboarding/cena-garagem.png"
+                alt="Biela na garagem com o conversível Mentorque"
+                className="w-[280px] max-w-full select-none"
+                draggable={false}
+              />
+            </div>
+            <h1 className="text-balance font-display text-[26px] font-bold leading-tight text-cream">{c.splash.carro.title}</h1>
+            <p className="mx-auto mt-3 max-w-xs text-pretty text-sm text-cream/70">{c.splash.carro.sub}</p>
+          </div>
+          <div className="space-y-2.5">
+            <Button size="lg" className="w-full" onClick={onContinue}>
+              {c.splash.carro.cta}
             </Button>
           </div>
         </div>

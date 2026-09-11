@@ -14,6 +14,7 @@ import {
   useLembretes,
   useMetricaDeConteudo,
   usePlanoPendente,
+  useDestinoDoOnboarding,
   useRotaDeAviso,
 } from "@/lib/app/aberturaDoApp";
 import { Icon, useContent } from "./ui";
@@ -69,6 +70,7 @@ function Router() {
   // eles fazem está documentado em lib/app/aberturaDoApp.ts.
   useFunilDeAbertura();
   usePlanoPendente();
+  useDestinoDoOnboarding();
   useRotaDeAviso();
   useConsentimentoDeAnuncios();
   useLembretes(c);

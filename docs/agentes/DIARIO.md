@@ -37,6 +37,25 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-11 · Engenharia: no Android, o onboarding termina no cadastro do carro
+- Pedido do dono, com uma premissa a corrigir: "já que tiramos o paywall do
+  Android". Ninguém tirou. O paywall do Android está ligado desde a 1.9 e
+  nunca vendeu; ontem eu recomendei tirar a página de plano de DENTRO do
+  onboarding, nas três plataformas, e deixei como decisão dele. A decisão
+  veio hoje, para o Android: a última página vira "Cadastre o seu primeiro
+  carro", o botão abre o formulário, e a página de plano sai do onboarding
+  ali. iPhone e web seguem iguais, e viram a comparação.
+- Feito: página nova no `OnboardingFlow` (só quando `nativePlatform()` é
+  android), destino gravado no sessionStorage como o plano, gancho
+  `useDestinoDoOnboarding` na abertura, `terminou_onboarding` ganha a origem
+  `carro`. Conferido em `conferir:funil` (os três elos da ligação), provado
+  plantando defeito. A suíte de navegador roda como web e não alcança isto;
+  roteiro no passo 13 da 2.4.
+- Experimento registrado no caderno do CRO
+  (`onboarding-termina-no-carro-android`), com o "antes": Android, 28 dias
+  até 10/09, 59 começaram e 4 cadastraram carro, por aparelho. Leitura duas
+  semanas depois de a 2.4 estar na Play, por plataforma, sem casa decimal.
+
 ## 2026-09-11 · CRO (retenção): cinco máquinas novas atrás de um portão sem medida
 - Rodada semanal do CRO/BeSci, foco RETENÇÃO (a de 04/09 foi de conversão).
   Artifact "Conversão da semana":

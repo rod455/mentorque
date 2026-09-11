@@ -342,6 +342,12 @@ export function getContent(locale: Locale) {
           { quote: T("O melhor app de carro que já usei. O histórico e o Biela são certeiros.", "Best car app I've used. The history and Biela are spot on."), name: "Patrícia L." },
         ],
       },
+      // Última página no Android (11/09/2026): em vez do plano, o carro.
+      carro: {
+        title: T("Cadastre o seu primeiro carro", "Add your first car"),
+        sub: T("Marca, modelo e ano. Um minuto, e o app começa a trabalhar para ele.", "Make, model and year. One minute, and the app starts working for it."),
+        cta: T("Cadastrar meu primeiro carro", "Add my first car"),
+      },
       // Página 5 — monte seu teste
       trial: {
         notNow: T("Agora não", "Not now"),

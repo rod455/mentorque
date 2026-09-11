@@ -42,6 +42,13 @@ Aberta em 10/09/2026, com o login do Google no Android funcionando na 2.3
    que junta as duas com pneus, fluidos, palhetas e calendário. Conteúdo
    novo: o dono revisa (ids `care-fortnight` e `care-cleaning`).
 
+7. **No Android, o onboarding termina em "Cadastrar meu primeiro carro".**
+   A página de plano sai do onboarding só no Android; o botão da última
+   página abre direto o formulário do carro. Pedido do dono em 11/09, para
+   ver se mais gente preenche (experimento
+   `onboarding-termina-no-carro-android`). iPhone e web seguem iguais, e é a
+   comparação entre eles que vai dizer. `conferir:funil` cobre a ligação.
+
 ## O que NÃO precisa de binário
 
 - A tabela `precos_observados` já existe no Supabase e a rota `/api/precos`
@@ -91,6 +98,11 @@ e de um aparelho onde esse mesmo carro seja cadastrado sem login:
     a trilha. Abrir outra trilha: o texto diz que ligar esta troca a outra.
 12. As duas aulas novas abrem, os links dentro delas abrem, e a lista de
     passos aparece com o botão de concluir.
+13. **Onboarding no Android** (instalação limpa, ou apagar os dados do app):
+    depois da prova social vem "Cadastre o seu primeiro carro", sem página
+    de plano; "Cadastrar meu primeiro carro" abre o formulário do carro, e
+    voltar dele cai na Home. "Agora não" no topo cai na Home. No iPhone, a
+    página de plano continua sendo a última.
 
 O que a conferência daqui não alcança: a folha em si. A suíte de navegador
 não a abre (ela só aparece ao entrar numa conta com garagem, com carro de

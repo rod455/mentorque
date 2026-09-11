@@ -160,6 +160,36 @@ Regras:
   este veredito pede a quebra por origem em vez de repetir o total.
 - Veredito: (aberto)
 
+## [onboarding-termina-no-carro-android] A última página do onboarding é "Cadastrar meu primeiro carro"
+- Estado: ABERTO (entra no aparelho com a 2.4; até lá, sem leitura)
+- Tipo: mudanca-direta, só no Android
+- Alvo no funil: a maior quebra que existe, `comecou_onboarding` para
+  `cadastrou_carro`. Nos 28 dias até 10/09, por aparelho: Android 59 começaram
+  e 4 cadastraram; iPhone 12 e 2; web 148 e 4. A queda é de mais de 90% nas
+  três, e o Android é onde há volume para ler.
+- Tese BeSci: o onboarding terminava numa página de plano (teste grátis)
+  antes de a pessoa ter visto o produto, e o "Agora não" jogava na Home
+  vazia. Duas quebras de clareza do próximo passo numa tela só: pedir
+  compromisso antes de entregar valor, e não dizer o que fazer a seguir. A
+  mudança (pedido do dono, 11/09): no Android a última página vira "Cadastre
+  o seu primeiro carro", e o botão abre direto o formulário. A página de
+  plano sai do onboarding; o paywall continua onde já estava (banner,
+  recursos trancados, o "+" da garagem cheia).
+  - Por que só no Android: foi o pedido, e vira a comparação. iPhone e web
+    seguem com a página de plano, então a diferença entre plataformas na
+    mesma janela é a leitura mais próxima de um A/B que a base permite.
+  - O que NÃO muda: preço, plano, limite, o paywall em si.
+- Métrica: por aparelho e por plataforma, na mesma janela,
+  `abriu_cadastro_de_carro / comecou_onboarding` e
+  `cadastrou_carro / comecou_onboarding`. Mais `terminou_onboarding` com
+  origem `carro` (novo) contra `agora-nao`. Sem casa decimal · Duração mínima
+  de leitura: 2 semanas depois de a 2.4 estar na Play
+- Aprovação: pedido do dono em 2026-09-11
+- Início: quando a 2.4 for publicada na Play · Ler a partir de: 2 semanas depois
+- Antes: Android, 28 dias até 10/09, 59 começaram, 4 cadastraram carro
+  (aparelhos)
+- Veredito: (aberto)
+
 ## [prova-social-de-verdade] As avaliações reais entram no lugar das inventadas
 - Estado: PROPOSTO
 - Tipo: mudanca-direta (não é A/B: não há dúvida honesta entre duas versões,

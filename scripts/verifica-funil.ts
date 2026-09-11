@@ -336,6 +336,37 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
   );
 }
 
+// ── no Android, o onboarding termina no cadastro do carro (11/09/2026) ─────
+//
+// Pedido do dono: a última página é "Cadastrar meu primeiro carro" e o toque
+// abre o formulário. A ligação tem três elos que podem sumir um sem o outro:
+// o onboarding grava o destino e sai com origem "carro"; a abertura consome o
+// destino e vai para o formulário; o Shell chama o gancho. Sem qualquer um
+// dos três, a pessoa toca em "Cadastrar" e cai na Home, que é exatamente o
+// que o experimento não pode ter. A suíte de navegador roda como web e não
+// alcança o Android, então a ligação é conferida no texto.
+{
+  const sem = (f: string) => f.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/.*$/gm, " ");
+  const onboarding = sem(readFileSync(new URL("../components/app/OnboardingFlow.tsx", import.meta.url), "utf8"));
+  const abertura = sem(readFileSync(new URL("../lib/app/aberturaDoApp.ts", import.meta.url), "utf8"));
+  const shell = sem(readFileSync(new URL("../components/app/Shell.tsx", import.meta.url), "utf8"));
+  conferir(
+    "o onboarding do Android termina no carro: grava o destino e sai com origem 'carro'",
+    /nativePlatform\(\)\s*===\s*"android"/.test(onboarding) && /"mentorque-onboarding-destino",\s*"addCar"/.test(onboarding) && /sair\("carro"\)/.test(onboarding),
+    "sem o destino gravado, 'Cadastrar meu primeiro carro' leva à Home",
+  );
+  conferir(
+    "a abertura consome o destino e abre o formulário do carro",
+    /"mentorque-onboarding-destino"/.test(abertura) && /go\(\{ name: "addCar" \}\)/.test(abertura),
+  );
+  conferir("o Shell chama o gancho do destino", /useDestinoDoOnboarding\(\)/.test(shell));
+  conferir(
+    "o botão da última página diz o que faz",
+    /splash\.carro\.cta/.test(onboarding),
+    "regra da casa: um controle diz exatamente o que vai acontecer",
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) de funil reprovaram.`);
   process.exit(1);
