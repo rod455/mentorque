@@ -51,7 +51,44 @@ async function nadaSeAtropela(pg, ok, largura) {
   ok(`em ${largura}px nenhum controle cobre outro`, sobreposto === null, sobreposto ?? "");
 }
 
+// O limite do plano grátis avisa ANTES do toque.
+//
+// O que precisa ser verdade: com a garagem cheia no plano grátis, a tela de
+// Carros explica que o próximo passo é o Premium e o "+" diz isso no rótulo.
+// Com a garagem NÃO cheia, nada disso aparece, porque aviso que sobra em cima
+// de quem ainda pode cadastrar é ruído.
+//
+// Por que esta conferência existe: até 11/09/2026 o "+" no limite navegava
+// para o paywall calado, e quem tocasse esperando um formulário caía numa tela
+// de venda sem explicação.
+async function oLimiteAvisaAntes(nav, ok, { carros, cheia }) {
+  const app = await abrirApp(nav, { sessao: SESSAO(carros), chaves: { "mq-primeiro-quiz-nao": "1" } });
+  const { pg } = app;
+  await pg.getByRole("button", { name: /^Carros$/i }).first().click();
+  await pg.waitForTimeout(700);
+
+  const aviso = await pg.getByText(/plano grátis guarda \d+ carros/i).count();
+  const rotulo = await pg.getByRole("button", { name: /Adicionar carro \(Premium\)/i }).count();
+  const rotuloSimples = await pg.getByRole("button", { name: /^Adicionar carro$/i }).count();
+
+  if (cheia) {
+    ok("garagem cheia: a tela explica o limite antes do toque", aviso > 0);
+    ok("garagem cheia: o + diz que leva ao Premium", rotulo > 0);
+  } else {
+    ok("garagem com vaga: nenhum aviso de limite sobra na tela", aviso === 0);
+    ok("garagem com vaga: o + continua dizendo só adicionar carro", rotuloSimples > 0 && rotulo === 0);
+  }
+  ok(`nenhum erro de página na garagem ${cheia ? "cheia" : "com vaga"}`, app.erros.length === 0, app.erros[0] ?? "");
+  await app.fechar();
+}
+
 export async function rodar({ nav, ok }) {
+  // ---- o limite do plano grátis --------------------------------------------
+  // Dois carros é o teto do plano grátis (LIMITS.freeCars), então a mesma
+  // suíte roda os dois lados da fronteira: com 2 avisa, com 1 fica quieta.
+  await oLimiteAvisaAntes(nav, ok, { carros: FROTA.slice(0, 2), cheia: true });
+  await oLimiteAvisaAntes(nav, ok, { carros: FROTA.slice(0, 1), cheia: false });
+
   // ---- com três carros -----------------------------------------------------
   {
     const app = await abrirApp(nav, { sessao: SESSAO(FROTA), chaves: { "mq-primeiro-quiz-nao": "1" } });

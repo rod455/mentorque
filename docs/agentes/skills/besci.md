@@ -78,3 +78,18 @@ experimentos alimentam a seção final.
   desconta a página inteira junto. O erro não é o número ser pequeno, é ele
   não ter como ser conferido. Vale a mesma régua para selo de verificado, que
   afirma uma conferência: só existe se alguém realmente conferiu.
+- **2026-09-11: botão que não diz o que faz transforma oferta em emboscada.**
+  Na garagem cheia do plano grátis, o "+" navegava para o paywall sem uma
+  palavra: a pessoa tocava esperando um formulário e recebia uma tela de venda.
+  O destino não era o problema, a surpresa era. A regra: quando um controle
+  leva a uma oferta, ele diz isso ANTES do toque, e o motivo aparece na tela
+  onde a pessoa está, não na tela para onde ela vai. Vale para qualquer parede
+  de plano: o que irrita não é o limite existir, é descobri-lo de repente.
+- **2026-09-11: o usuário que aparece sozinho vale mais que a persona que a
+  gente desenhou.** Quatro personas foram escritas por hipótese em 23/08.
+  A quinta chegou sem ser convidada, escrita pelos próprios usuários em três
+  avaliações de conta de empresa ("controle de frota", "os carros aqui da
+  clínica"). Nenhum dado do banco apontava para ela, porque não existe campo
+  que a identifique. Lição de método: ler texto livre de avaliação com a
+  pergunta "quem é esta pessoa?", e não só "ela gostou?". O sinal de segmento
+  novo costuma chegar como palavra antes de chegar como número.

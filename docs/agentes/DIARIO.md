@@ -37,6 +37,66 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-11 · CRO (retenção): cinco máquinas novas atrás de um portão sem medida
+- Rodada semanal do CRO/BeSci, foco RETENÇÃO (a de 04/09 foi de conversão).
+  Artifact "Conversão da semana":
+  https://claude.ai/code/artifact/fc1013e2-8ed2-4802-90e8-840efd381622
+- AS TRÊS CORREÇÕES DO DONO sobre a rodada passada foram aplicadas já nesta, e
+  estão escritas no mapa para valerem daqui em diante: janela real de cada
+  degrau (o "28 dias" era de quatro), amostra pequena sem casa decimal ("17 de
+  36", não 47,2%), e esgotar as dimensões que a tabela já tem antes de pedir
+  instrumentação nova. A terceira é a que mais dói: `plataforma` estava na
+  mesma consulta e respondia a pergunta que eu declarei impossível.
+- VEREDITOS: nenhum vencido. cta-teste-por-plano e fim-do-lembrete-falso em
+  20/09, lembrete-que-chega em 28/09. prova-social-de-verdade segue PROPOSTO,
+  sem resposta; registrado aqui como pendência e NÃO reapresentado como
+  recomendação, conforme o direcionamento de 01/09.
+- OUVIR O USUÁRIO, e é o achado da semana: 8 avaliações, todas 5 estrelas,
+  sendo 5 novas da Play. TRÊS são de conta com nome de EMPRESA, e duas
+  descrevem o uso por extenso: "usamos para gerências as manutenções e dúvidas
+  dos carros aqui da clínica" e "Ajuda a tomar decisões e ter controle de
+  frota". Entrou no mapa como PERSONA 5, e ela é diferente das outras quatro:
+  não é hipótese nossa, é gente que apareceu sozinha e escreveu. Nenhum campo
+  do banco identifica esse perfil hoje, o que denunciou foi o nome do autor na
+  loja e o texto livre.
+- AUDITORIA DE RETENÇÃO, sem reauditar o que a engenharia acabou de construir:
+  as cinco máquinas de recorrência da 2.4 dependem todas da MESMA permissão do
+  sistema, e não existe evento de convite mostrado, convite aceito nem
+  permissão concedida. É o modo de falha de 28/08 numa escala cinco vezes
+  maior: podem estar todas mudas sem que nada no retrato mude de cor.
+- O TETO QUE DÁ PARA CALCULAR SEM INSTRUMENTAÇÃO NOVA (a regra do dono
+  aplicada): o convite só existe em três lugares, e o caminho do carro alcança
+  no máximo quem tem carro, que são 10 contas. O número de aparelhos que hoje
+  podem receber qualquer um dos cinco avisos é de UM DÍGITO. Não é motivo para
+  não soltar, é motivo para não ler a coorte seguinte como veredito das cinco.
+- ANOTADO PARA QUEM FOR LER A 2.4: a App Store está na 2.1. Nenhum dos cinco
+  momentos chegou a usuário nenhum, então todo número de retenção desta semana
+  é ANTERIOR a eles.
+- REGISTRADO, sem mexer: a régua do portão (3 convites por aparelho na vida, 4
+  dias entre eles) foi desenhada quando havia dois avisos e agora serve cinco.
+  Com 1,6 abertura por usuário, a maioria dos aparelhos tem UMA chance na
+  prática, e quem chega primeiro leva. Qual momento merece gastá-la é pergunta
+  de CRO que hoje ninguém responde.
+- APOSTA DA SEMANA, implementada: [limite-de-carros-com-aviso]. Quem já tem os
+  2 carros do plano grátis tocava no "+" da garagem esperando um formulário e
+  caía no paywall sem uma palavra. Agora a tela diz ANTES do toque que o plano
+  grátis guarda 2 carros e que adicionar outro passa pelo Premium, e o rótulo
+  do botão diz para onde leva. O destino continua o mesmo. Limite, preço,
+  plano e conteúdo do paywall: nada mudou, é alçada do dono.
+  - Por que esta e não uma sexta máquina de retenção: a engenharia acabou de
+    construir cinco, e empilhar uma sexta na mesma semana não gera aprendizado
+    nenhum. Esta é a parede que a persona 5 bate primeiro.
+- CONFERÊNCIA PROVADA MORDENDO, como manda o CLAUDE.md: a suíte `carro` ganhou
+  os dois lados da fronteira (garagem cheia avisa, garagem com vaga fica
+  quieta). Plantei o defeito antigo de volta e ela reprovou nos dois pontos
+  certos; restaurado, voltou a passar. Bateria `conferir` inteira verde e tipos
+  limpos; sem build local, que é o regime das duas velocidades para mudança
+  localizada.
+- APRENDIZADOS em besci.md: botão que não diz o que faz transforma oferta em
+  emboscada; e o usuário que aparece sozinho vale mais que a persona que a
+  gente desenhou, porque segmento novo chega como palavra antes de chegar como
+  número.
+
 ## 2026-09-10 · Engenharia: Instagram, comentou X e recebe a mensagem no Direct
 - **Pedido do dono**: quem comenta "padaria" num post recebe a mensagem A no
   Direct, quem comenta "todos os dias" recebe a B. Confirmado que é

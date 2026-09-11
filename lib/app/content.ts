@@ -400,6 +400,17 @@ export function getContent(locale: Locale) {
       emptyTitle: T("Sua garagem está vazia", "Your garage is empty"),
       emptyBody: T("Adicione seu primeiro carro para começar.", "Add your first car to get started."),
       add: T("Adicionar carro", "Add car"),
+      // Quem já usou os 2 carros do plano grátis tocava no "+" esperando um
+      // formulário e caía no paywall sem uma palavra. Botão que não diz o que
+      // faz transforma oferta em emboscada, e quem bate primeiro nesta parede
+      // é justamente quem tem vários carros (3 das 8 avaliações de setembro
+      // são de empresa, usando o app para frota). O destino continua o mesmo:
+      // o que muda é a pessoa saber antes de tocar.
+      addLimite: T("Adicionar carro (Premium)", "Add car (Premium)"),
+      limiteAviso: T(
+        "O plano grátis guarda {n} carros. Para adicionar outro, o próximo passo é o Premium.",
+        "The free plan holds {n} cars. To add another, the next step is Premium."
+      ),
       health: T("Saúde", "Health"),
       noKm: T("km não informado", "mileage not set"),
       alertOverdue: T("Revisão vencida", "Service overdue"),

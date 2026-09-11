@@ -89,11 +89,21 @@ export function CarsScreen() {
       <AppHeader
         title={c.cars.title}
         action={
-          <button onClick={onAdd} className="grid h-9 w-9 place-items-center rounded-full bg-amber text-graphite" aria-label={c.cars.add}>
+          <button onClick={onAdd} className="grid h-9 w-9 place-items-center rounded-full bg-amber text-graphite" aria-label={atLimit ? c.cars.addLimite : c.cars.add}>
             <Icon name="plus" className="h-5 w-5" />
           </button>
         }
       />
+
+      {/* No limite do plano grátis, o "+" leva ao paywall. Dizer isso ANTES do
+          toque é o que separa uma oferta de uma emboscada: o botão é o mesmo,
+          o destino é o mesmo, e a pessoa sabe onde está pisando. Só aparece
+          para quem já tem a garagem cheia, então não atrapalha ninguém. */}
+      {atLimit && owned.length > 0 && (
+        <p className="mb-3 rounded-2xl bg-graphite-800 px-4 py-3 text-xs leading-relaxed text-cream/70 ring-1 ring-white/[0.06]">
+          {c.cars.limiteAviso.replace("{n}", String(LIMITS.freeCars))}
+        </p>
+      )}
 
       {s.premium && totalSaved > 0 && (
         <div className="mb-3 flex items-center gap-2.5 rounded-2xl bg-teal/10 px-4 py-3 ring-1 ring-teal/20">

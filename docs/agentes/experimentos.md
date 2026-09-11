@@ -126,6 +126,40 @@ Regras:
   desta aposta tem que contar os dois lados, não só o lembrete que passou a
   sair. Investigação em docs/qa/app-fecha-no-quiz.md.
 
+## [limite-de-carros-com-aviso] O "+" da garagem diz que o próximo passo é o Premium
+- Estado: ABERTO
+- Tipo: mudanca-direta
+- Alvo no funil: não é um degrau do funil de venda, é a confiança na tela de
+  garagem. O que se espera mover é a volta de quem tem mais de um carro, e o
+  que NÃO se quer é ganhar visita de paywall às custas de gente irritada.
+- Tese BeSci: hoje, quem já tem os 2 carros do plano grátis toca no "+" da
+  garagem esperando um formulário e cai direto no paywall, sem uma palavra de
+  explicação. Isso é o oposto de clareza do próximo passo: o controle não diz o
+  que faz, e a tela que aparece parece emboscada em vez de oferta. A regra da
+  casa para copy vale para botão também: um controle diz exatamente o que vai
+  acontecer. A mudança é dizer ANTES, na própria garagem, que o plano grátis
+  guarda 2 carros e que adicionar outro passa pelo Premium. O destino continua
+  o mesmo; o que muda é a pessoa saber onde está pisando.
+  - Por que agora, e é a novidade da semana: 3 das 8 avaliações são de
+    EMPRESA usando o app para frota ("controle de frota", "os carros aqui da
+    clínica"). Esse é o perfil que bate nessa parede primeiro e é também o que
+    tem mais motivo estrutural para voltar. Tratar mal a parede dele é caro.
+  - O que NÃO muda, de propósito: o limite (2 carros, `LIMITS.freeCars`), o
+    preço, o plano e o conteúdo do paywall. Preço e plano são do dono, e o
+    paywall tem experimento aberto em outra área.
+- Métrica: qualitativa e honesta, porque não existe evento nesta tela. O que se
+  observa é avaliação ou mensagem de suporte reclamando de "achei que ia
+  cadastrar e caiu na assinatura", que hoje é o desfecho previsível, e a
+  ausência disso é o sinal · Duração: até a próxima leitura de avaliações
+- Aprovação: não se aplica (texto e ênfase, sem variantes, sem tocar em plano)
+- Início: 2026-09-11 · Ler a partir de: 2026-10-09
+- Antes: nenhuma explicação em tela; o toque no "+" navega para o paywall com
+  `ctx: "cars"`. O evento `viu_paywall` guarda a origem, então a quebra por
+  `cars` EXISTE no banco, mas o retrato publicado não a mostra: o que ele traz
+  é o total da semana (15 vistas, todas as origens juntas). Quem for fechar
+  este veredito pede a quebra por origem em vez de repetir o total.
+- Veredito: (aberto)
+
 ## [prova-social-de-verdade] As avaliações reais entram no lugar das inventadas
 - Estado: PROPOSTO
 - Tipo: mudanca-direta (não é A/B: não há dúvida honesta entre duas versões,

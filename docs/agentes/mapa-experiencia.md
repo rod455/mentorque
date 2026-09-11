@@ -16,6 +16,13 @@ Formato de cada tela/fluxo:
 
 ## Estado
 
+v4 em 2026-09-11: rodada de RETENÇÃO. Entraram a auditoria do portão que as
+cinco máquinas de recorrência da 2.4 compartilham, a persona 5 (empresa
+cuidando dos carros do trabalho, vinda das avaliações da Play) e a correção
+das três regras de leitura que o dono passou sobre a rodada anterior (janela
+real, sem casa decimal, esgotar as dimensões existentes). Próxima rodada
+alterna para CONVERSÃO.
+
 v3 em 2026-09-04: rodada de CONVERSÃO. Entraram "O que o usuário disse"
 (primeiras avaliações reais) e "Onde a conversão quebra hoje" (auditoria do
 onboarding com a instrumentação de 01/09). O passo 4 teve uma afirmação
@@ -103,6 +110,28 @@ Estado de medição de cada passo (a régua honesta do que sabemos hoje).
   recebido é R$ 0,00 e o primeiro dinheiro de verdade cai em 01/10. Ler esse
   100% como "o paywall converte" seria o erro de unidade da semana.
 
+# O que o usuário disse (atualizado em 2026-09-11)
+
+Oito avaliações, todas cinco estrelas: 5 na Play e 3 na App Store. As cinco
+novas são da Play, que passou a ser coletada.
+
+- "para quem gosta de melhoramento automotivo é o melhor que tem"
+  (Luiz Fernando Muniz Viana). Persona 3, entusiasta.
+- "usamos para gerências as manutenções e dúvidas dos carros aqui da clínica"
+  (Sorriso da Pele). EMPRESA.
+- "Ajuda a tomar decisões e ter controle de frota. Eu também uso para meu carro
+  particular" (Mindmill Brasil). EMPRESA, e diz a palavra frota.
+- "me fez economizar quase 40% quando tive um problema no carro. bom que é
+  grátis para 1 carro" (Triplyze). Economia com número, e o limite do plano
+  grátis citado espontaneamente (o limite real é 2).
+- "Aplicativo sensacional para estudos e identificação de problemas no carro"
+  (Luana David).
+
+O que muda: a persona 5 (empresa pequena cuidando dos carros do trabalho)
+entra no mapa, e ela não é hipótese, é gente que escreveu. Ver a seção de
+personas. O resto confirma o que já estava escrito em 04/09: ninguém elogia
+recurso, todo mundo conta desfecho, e a palavra que mais aparece é economia.
+
 # O que o usuário disse (primeiras avaliações, 2026-09-04)
 
 Chegaram as três primeiras avaliações da vida do app, todas cinco estrelas na
@@ -153,6 +182,20 @@ A maior quebra do funil inteiro é a primeira: metade das pessoas some DENTRO
 do onboarding. E o degrau seguinte é quase tão ruim, então das 36 que começam,
 UMA chega a ter um carro cadastrado, que é a porta de todo o resto do app.
 
+## CORREÇÃO de 2026-09-11: os números acima estavam mal apresentados
+O dono corrigiu três coisas na leitura de 04/09, e elas valem para todo este
+documento daqui em diante:
+1. A janela dizia "28 dias" e era de QUATRO: `comecou_onboarding` só existe
+   desde 01/09. Toda taxa declara a janela real de cada degrau, e degraus com
+   janelas diferentes não se dividem (o `abriu_cadastro_de_carro` nasceu em
+   03/09, dois dias depois do outro lado da conta).
+2. Amostra pequena não leva casa decimal: "17 de 36", não "47,2%".
+3. Antes de dizer "não dá para saber", esgotar as dimensões que a tabela já
+   tem. Era o caso: cortando por `plataforma`, a perda não estava espalhada
+   por cinco páginas, estava concentrada numa delas (web 16 começaram e 0
+   terminaram; Android 21 e 12; iOS 6 e 5). A recomendação de criar evento por
+   página era cara e desnecessária.
+
 ## O onboarding é uma caixa preta de cinco páginas
 - São 5 páginas (3 cards de apresentação, prova social, montar o teste), e a
   medição só sabe dizer quem ENTROU e quem SAIU. Não existe evento de página,
@@ -183,6 +226,46 @@ UMA chega a ter um carro cadastrado, que é a porta de todo o resto do app.
   enquanto o botão que leva ao pagamento ocupa a largura toda. Quem não quer
   assinar precisa procurar a saída. Candidato natural ao próximo teste, quando
   o veredito de 20/09 liberar a área.
+
+# Retenção em 2026-09-11: cinco máquinas novas atrás de um portão sem medida
+
+A semana de 04 a 11/09 mudou o mapa de retenção inteiro. A engenharia
+construiu CINCO momentos de recorrência (cadastrou o carro e sumiu, serviço com
+valor virando faixa da região, revisão vencida, trilha em ritmo, cuidados
+básicos), todos como aviso LOCAL, todos entrando na 2.4.
+
+## O que esta auditoria acrescenta, e não repete
+Não vale reauditar o que acabou de ser construído e documentado. O que o CRO
+tem a dizer é sobre a condição que as cinco compartilham.
+
+- **As cinco dependem da MESMA permissão do sistema, e ninguém mede essa
+  permissão.** Não existe evento de "convite mostrado", "convite aceito" nem
+  "permissão concedida". Cinco máquinas de retenção podem estar todas mudas na
+  2.4 sem que nada no retrato mude de cor, que é exatamente o modo de falha de
+  28/08 voltando numa escala cinco vezes maior.
+- **Dimensões existentes conferidas antes de pedir instrumentação nova**
+  (regra do dono de 04/09): `plataforma`, `versao`, `origem`, `extra->'utm'` e
+  os nove eventos do funil. Nenhuma responde a pergunta da permissão. O sinal
+  mais próximo que existe é indireto e mora no aparelho, não no banco
+  (`mq-avisos-ja-agendou`, em lib/app/notificacoes.ts).
+- **O teto que dá para calcular sem instrumentação nova**: o convite só aparece
+  em três lugares (depois do quiz, no calendário e depois do cadastro do
+  carro). O caminho do carro alcança no máximo quem cadastrou carro, e a base
+  toda tem 10 contas com carro (estado da base, 10/09). Ou seja, o número de
+  aparelhos que hoje podem receber QUALQUER um dos cinco avisos é de um dígito.
+  Não é motivo para não soltar; é motivo para não ler a coorte seguinte como
+  veredito das cinco.
+- **A régua do portão é apertada de propósito e ninguém revisou isso desde que
+  eram dois avisos**: 3 convites por aparelho na vida, 4 dias entre eles. Com
+  1,6 abertura por usuário na semana, a maioria dos aparelhos tem UMA chance na
+  prática. Qual dos três momentos merece gastá-la é uma pergunta de CRO que
+  hoje ninguém responde, porque quem chega primeiro leva.
+
+## O que a 2.4 ainda não é
+A App Store está na 2.1 (retrato de 11/09). Nenhum dos cinco momentos chegou a
+usuário nenhum ainda. Qualquer número de retenção desta semana é ANTERIOR a
+eles, e lê-los como efeito da 2.4 seria o erro de janela que o dono já corrigiu
+uma vez.
 
 # O que traz a pessoa de volta (auditoria de retenção, 2026-08-28)
 
@@ -294,6 +377,39 @@ combustível) não devem ganhar oferta nenhuma.
 
 Sem volume para clusterizar de verdade, então são HIPÓTESES, não segmentos
 estatísticos. Cada uma se apoia num dado que o banco já guarda hoje.
+
+**A de número 5 é diferente das outras quatro: ela não é hipótese, é gente que
+apareceu sozinha e escreveu.** Ver a seção das avaliações logo abaixo.
+
+5. **Empresa pequena cuidando dos carros do trabalho.** Não estava previsto em
+   lugar nenhum, e é o achado de 11/09: TRÊS das oito avaliações são de conta
+   com nome de empresa, e duas descrevem o uso por extenso. "usamos para
+   gerências as manutenções e dúvidas dos carros aqui da clínica" (Sorriso da
+   Pele) e "Ajuda a tomar decisões e ter controle de frota. Eu também uso para
+   meu carro particular" (Mindmill Brasil).
+   - Por que importa para retenção mais que qualquer outra: dono de um carro
+     só volta quando tem problema, e problema é raro. Quem cuida de vários
+     carros tem motivo de volta o ano inteiro, e é o perfil que sustenta
+     frequência. As coortes atuais (1 em 6 e 1 em 8 voltando na primeira
+     semana) são dominadas por carro único.
+   - Onde ele bate primeiro: no teto de 2 carros do plano grátis
+     (`LIMITS.freeCars`). Uma avaliação já cita o limite como característica
+     ("bom que é grátis para 1 carro", Triplyze, que também tem nome de
+     empresa; o número real é 2, não 1, o que sugere que a pessoa entendeu do
+     texto da loja e não do app).
+   - O que foi feito em 11/09: só a parte que é de texto e de alçada do CRO. A
+     tela de garagem passou a dizer, ANTES do toque, que o plano grátis guarda
+     2 carros e que adicionar outro passa pelo Premium (aposta
+     limite-de-carros-com-aviso). Nada de plano, preço ou limite mudou: isso é
+     decisão do dono.
+   - O que ainda não existe e é decisão do dono: qualquer tratamento de frota
+     (vários carros por conta com visão consolidada, usuários por empresa,
+     ficha nas lojas falando com esse público). Fica como oportunidade
+     registrada, não como recomendação disfarçada.
+   - Sinal para reconhecer no banco: hoje NENHUM. Não há campo de uso
+     profissional nem de empresa; o que denunciou foi o nome do autor na loja e
+     o texto livre. Se o dono quiser perseguir este perfil, o primeiro passo é
+     ter como identificá-lo.
 
 1. **Quer economizar e não ser enganado** (a persona padrão): chegou com um
    problema concreto e quer saber se o preço da oficina faz sentido.
