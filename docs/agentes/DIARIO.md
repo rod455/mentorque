@@ -54,6 +54,28 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   `push`, sem dado da pessoa). Ouvinte de `registrationError` lido no fonte
   do plugin. `conferir:aviso` confere as cinco saídas e reprovou com o
   ouvinte trocado. É binário (2.5); na 2.4 o silêncio continua.
+- A CAUSA, achada em seguida, no fonte e não no chute: o dono repetiu o
+  teste logado, com a permissão ligada no Perfil e nos Ajustes do iPhone, e
+  de novo nada. `ios/App/App/AppDelegate.swift` era o modelo do Capacitor,
+  sem `didRegisterForRemoteNotificationsWithDeviceToken`. O plugin de push
+  só fica sabendo do token pela notificação
+  `capacitorDidRegisterForRemoteNotifications` (addObserver em
+  `PushNotificationsPlugin.swift`, linhas 40 a 48), e no Capacitor ninguém
+  a publica (grep no fonte: só a definição em CAPNotifications.swift). Ou
+  seja: `register()` resolvia, a Apple entregava o token ao AppDelegate, e
+  ele morria ali. Nenhuma das cinco saídas do item anterior pegaria isso,
+  porque não é erro: é um evento que nunca chega. Desde 28/08, nenhum
+  iPhone gravou token; o push do iPhone da jornada nunca teve como sair.
+- Segundo achado no caminho: o `Package.swift` do iPhone commitado estava
+  sem o plugin de push e sem a AppsFlyer. O Codemagic roda `cap sync ios` e
+  regenera (a AppsFlyer funciona no iPhone, então o build tinha o pacote
+  certo), mas o arquivo no repositório mentia. Regenerado com
+  `npx cap update ios` e commitado.
+- Conserto: os dois métodos no AppDelegate (repasse do token e da recusa),
+  como o README do plugin manda e o fonte confirma. `conferir:aviso`
+  confere o AppDelegate e o Package.swift; reprovou com o AppDelegate
+  antigo. Binário: a 2.5. Sobre o iPhone registrar token com a 2.5: sem
+  sinal ainda, e é o primeiro item do roteiro de aparelho.
 
 ## 2026-09-12 · Engenharia: "Atualizar" no iPhone ficava carregando apps.apple.com
 - Relato do dono, com foto: tocou em Atualizar no banner de versão nova e

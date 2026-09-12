@@ -33,6 +33,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    // PUSH: o token da Apple chega AQUI, e só aqui. O plugin do Capacitor não
+    // vê este método; ele escuta a notificação `capacitorDidRegister...`
+    // (PushNotificationsPlugin.swift, addObserver no load), e ninguém no
+    // Capacitor a publica: é o app que tem que repassar. Sem estas duas
+    // funções, `register()` no JavaScript resolve, a Apple entrega o token,
+    // e o plugin nunca dispara `registration`. Foi exatamente o silêncio de
+    // 12/09/2026: avisos ligados no iPhone do dono, token nenhum no banco,
+    // desde o primeiro build com push (28/08). Ver lib/app/push.ts.
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        NotificationCenter.default.post(name: .capacitorDidRegisterForRemoteNotifications, object: deviceToken)
+    }
+
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        NotificationCenter.default.post(name: .capacitorDidFailToRegisterForRemoteNotifications, object: error)
+    }
+
     func application(_ application: UIApplication,
                      configurationForConnecting connectingSceneSession: UISceneSession,
                      options: UIScene.ConnectionOptions) -> UISceneConfiguration {

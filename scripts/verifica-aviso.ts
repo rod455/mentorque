@@ -184,6 +184,28 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
   conferir("permissão do sistema não concedida vira relato", /permissao !== "granted"[\s\S]{0,200}relatarPush\(/.test(push));
   conferir("register() que lança vira relato", /catch \(e\) \{[\s\S]{0,300}relatarPush\(`register\(\)/.test(push));
 
+  // 5c. NO IPHONE, O TOKEN DA APPLE PRECISA SER REPASSADO AO PLUGIN.
+  //     O plugin só escuta a notificação capacitorDidRegisterForRemoteNotifications
+  //     (PushNotificationsPlugin.swift), e quem a publica é o AppDelegate do
+  //     app. Sem isso, register() resolve, a Apple entrega o token, e o
+  //     plugin nunca dispara "registration". Foi o silêncio de 12/09/2026:
+  //     desde o primeiro build com push (28/08) nenhum iPhone gravou token.
+  const appDelegate = leia("ios/App/App/AppDelegate.swift");
+  conferir(
+    "o AppDelegate repassa o token da Apple ao plugin",
+    /didRegisterForRemoteNotificationsWithDeviceToken[\s\S]{0,200}\.capacitorDidRegisterForRemoteNotifications/.test(appDelegate),
+    "sem o post, o token morre no AppDelegate e o registro cala para sempre"
+  );
+  conferir(
+    "o AppDelegate repassa a recusa da Apple ao plugin",
+    /didFailToRegisterForRemoteNotificationsWithError[\s\S]{0,200}\.capacitorDidFailToRegisterForRemoteNotifications/.test(appDelegate)
+  );
+  // E o plugin tem que estar no pacote do iPhone. O Codemagic roda `cap sync
+  // ios`, que regenera este arquivo, mas o que está no repositório é o que
+  // se lê; se divergir do includePlugins, alguém vai se enganar.
+  const pacote = leia("ios/App/CapApp-SPM/Package.swift");
+  conferir("o pacote do iPhone inclui o plugin de push", /CapacitorPushNotifications/.test(pacote), "rode `npx cap update ios` e commite o Package.swift");
+
   // 6. A PONTE DA PERMISSÃO É ATRAVESSADA NUM LUGAR SÓ.
   //
   // `checkPermissions` desce até `com.getcapacitor.Bridge.getPermissionStates`,

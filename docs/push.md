@@ -40,6 +40,15 @@ limpos a cada envio.
       12/09/2026. O Android já recebeu um push de verdade nesse dia (pela
       jornada); o iPhone segue sem token gravado, então sem sinal.
 - [x] Build novo nas lojas com o plugin embarcado (desde a 1.3).
+- [ ] **iPhone: o token nunca chegou ao plugin até a 2.4.** Achado em
+      12/09/2026, com o dono logado, avisos ligados no Perfil e nos Ajustes,
+      e token nenhum: o `AppDelegate.swift` era o modelo do Capacitor e não
+      tinha `didRegisterForRemoteNotificationsWithDeviceToken`. O plugin só
+      fica sabendo do token pela notificação
+      `capacitorDidRegisterForRemoteNotifications`, e é o app que a publica
+      (fonte: `PushNotificationsPlugin.swift`). Entrou na 2.5 com os dois
+      métodos (token e recusa). Sem sinal até um iPhone com a 2.5 gravar a
+      linha `ios` em `push_tokens`; é o primeiro item do roteiro de aparelho.
 - [x] Um chamador automático, o primeiro e único: a jornada de recorrência
       (`app/api/cron/jornada`, aprovada pelo dono em 12/09/2026) manda push
       com o mesmo texto do e-mail onde há token. O transporte saiu da rota

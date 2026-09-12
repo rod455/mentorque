@@ -60,6 +60,19 @@ achar entra aqui.
     `register()` lançou, servidor devolveu erro). `conferir:aviso` confere
     as cinco. Roteiro de aparelho: ligar avisos logado e ver o token em
     `push_tokens`; ligar deslogado e ver a linha "sem sessão" em `app_erros`.
+11. **O push do iPhone NUNCA registrou token, e agora registra** (12/09, a
+    causa do item 10). O `AppDelegate.swift` não repassava o token da Apple
+    ao plugin: o plugin só escuta a notificação
+    `capacitorDidRegisterForRemoteNotifications` e é o app que a publica
+    (lido em `PushNotificationsPlugin.swift`). Sem isso, `register()`
+    resolvia, a Apple entregava o token, e o plugin nunca disparava
+    `registration`. Vale desde o primeiro build com push (28/08). Entraram
+    os dois métodos no AppDelegate, e o `Package.swift` do iPhone foi
+    regenerado (`npx cap update ios`): o commitado estava sem o push e sem a
+    AppsFlyer, embora o Codemagic regenere no build. `conferir:aviso`
+    confere os dois. **Este é o item que mais pede roteiro de aparelho**:
+    iPhone com a 2.5, logado, ligar avisos no Perfil, e a linha `ios`
+    aparecer em `push_tokens`. Depois, um push de teste pela rota manual.
 
 ## O que NÃO precisa de binário
 
