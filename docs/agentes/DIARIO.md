@@ -105,6 +105,16 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
 - **As quatro chaves de push estão na Vercel** (tela do dono, 12/09), ao
   contrário do que `docs/push.md` dizia. O que falta para o iPhone é um
   token gravado: ninguém com iPhone ligou os avisos ainda.
+- **Instagram, diagnóstico de 12/09 (17h37)**, feito pelo Graph com o token
+  do dono, via n8n: a Página 1303827686140932 está assinada no app (campo
+  `feed`), o Instagram 17841434740033242 tem 3 posts recentes e 5
+  comentários hoje (entre eles "Quero a dica" e "Turbo"), e NENHUM chegou ao
+  webhook: o campo `comments` não está assinado no app. A resposta privada,
+  tentada direto para o comentário "Quero a dica", voltou "(#3) Application
+  does not have the capability to make this API call": falta o produto
+  Messenger com a API de mensagens do Instagram, e o token precisa de
+  `instagram_manage_messages`. Passos na lista de ações. O post de hoje pede
+  "comenta TURBO"; a regra ativa é "QUERO A DICA".
 - **A 2.4 foi aprovada na Apple em 12/09** (dono). As duas lojas estão com a
   2.4; `"2.4"` já está em `JA_PUBLICADAS`.
 - **Limites registrados**: abertura de e-mail não se mede; "mexeu no app
