@@ -50,6 +50,17 @@ separá-los sem criar campanha nova:
 https://www.mentorque.com.br/?utm_source=youtube&utm_medium=social&utm_campaign=canal
 ```
 
+## O /app no navegador fechou para quem não tem conta (12/09/2026)
+
+Decisão do dono: o caminho da web sai, usuário precisa baixar o app. No
+domínio de produção, quem chega ao `/app` sem conta vê "O Mentorque é um
+app" com os selos das lojas; quem já tem conta (inclusive quem paga pelo
+Stripe) entra por Google, Apple ou e-mail e continua. O link "use pelo
+navegador" saiu da home. Regra em `lib/app/porteiraDaWeb.ts`, conferida por
+`npm run conferir:porteira`. Consequência para a medição: `comecou_onboarding`
+na web deve cair a quase zero, e "quanto o anúncio trouxe" passa a ser lido
+na loja, onde a etiqueta não atravessa (seção abaixo).
+
 ## Para onde os links apontam, e por que NÃO é o /app
 
 Todos apontam para a home, e isso é decisão medida, não gosto.

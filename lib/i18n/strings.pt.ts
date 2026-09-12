@@ -9,6 +9,15 @@ export const pt = {
     ogDescription:
       "Trilhas guiadas, diagnóstico por sintoma, preço justo e consultoria com quem é da indústria. Baixe grátis na App Store.",
   },
+  // A porteira do /app no navegador (12/09/2026): sem conta, baixe o app.
+  porteira: {
+    title: "O Mentorque é um app",
+    body: "Os avisos de revisão, a pergunta do dia e o lembrete do seu carro só existem no aplicativo. Baixe grátis e continue de lá.",
+    jaTemConta: "Já tem conta? Entre por aqui.",
+    google: "Google",
+    apple: "Apple",
+    email: "Entrar com e-mail e senha",
+  },
   nav: {
     features: "Recursos",
     how: "Como funciona",
@@ -30,7 +39,6 @@ export const pt = {
     subheadline:
       "Aprenda a entender seu carro, descubra o preço justo antes de fechar serviço e fale com um especialista de verdade quando travar. Você não precisa virar mecânico, só parar de pagar pelo que não entende.",
     ctaNote: "Grátis para sempre no plano base, e sem cartão para começar.",
-    usarNoNavegador: "Prefere sem instalar? Use pelo navegador",
     downloadOn: "Baixe na",
     comingSoon: "Em breve na",
     appStore: "App Store",

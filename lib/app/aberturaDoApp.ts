@@ -122,6 +122,9 @@ export function useDestinoDoOnboarding() {
       if (!d) return;
       window.sessionStorage.removeItem("mentorque-onboarding-destino");
       if (d === "addCar") go({ name: "addCar" });
+      // "Entrar com e-mail" na porteira da web (12/09/2026): o app abre já na
+      // tela de login. Ver app/app/page.tsx e lib/app/porteiraDaWeb.ts.
+      if (d === "auth") go({ name: "auth" });
     } catch { /* ignore */ }
   }, [go]);
 }

@@ -23,7 +23,9 @@ achar entra aqui.
 
 ## O que NÃO precisa de binário
 
-A escrever.
+- **A porteira da web** (12/09): no site em produção, `/app` sem conta mostra
+  "baixe o app" com os selos; quem tem conta entra. Vai no deploy da Vercel;
+  o app das lojas não muda (`lib/app/porteiraDaWeb.ts`).
 
 ## Roteiro de aparelho
 

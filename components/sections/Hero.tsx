@@ -112,17 +112,11 @@ export function Hero() {
 
           <p className="mt-4 text-sm text-cream/55">{t.hero.ctaNote}</p>
 
-          {/* O caminho de quem está no computador, ou de quem não quer instalar
-              nada agora. Discreto de propósito: a loja continua sendo o destino
-              principal, e este link existe para não perder quem não pode ir
-              até ela neste momento. */}
-          <a
-            href="/app?utm_source=site&utm_campaign=hero-web"
-            className="mt-5 inline-flex items-center gap-1.5 font-display text-sm font-semibold text-amber hover:text-amber-300"
-          >
-            {t.hero.usarNoNavegador}
-            <span aria-hidden>›</span>
-          </a>
+          {/* Aqui morou, de 03/09 a 12/09/2026, o link "use pelo navegador".
+              Saiu por decisão do dono: o caminho da web não tem recorrência
+              nenhuma (sem aviso, sem push), e virou a maior porta em número
+              sem ninguém voltar. A loja é o único destino, e o /app no
+              navegador só abre para quem já tem conta (lib/app/porteiraDaWeb.ts). */}
         </div>
 
         <div className="relative flex min-w-0 flex-col items-center gap-8">

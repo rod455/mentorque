@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePrototype } from "@/lib/app/store";
+import { useAuth } from "@/lib/app/auth";
+import { isNativeApp } from "@/lib/app/wrapper";
+import { porteiraFechada } from "@/lib/app/porteiraDaWeb";
 import { veioComprar } from "@/lib/app/vendaPendente";
 import { OnboardingFlow } from "@/components/app/OnboardingFlow";
+import { BaixeOApp } from "@/components/app/BaixeOApp";
 import { Shell } from "@/components/app/Shell";
 import { SplashScreen } from "@/components/app/SplashScreen";
 
@@ -11,9 +15,33 @@ import { SplashScreen } from "@/components/app/SplashScreen";
 // run onboarding until the activation loop completes, then the app shell.
 export default function AppPrototypePage() {
   const { s } = usePrototype();
+  const { user, ready } = useAuth();
   const [splashDone, setSplashDone] = useState(false);
+  // A porteira da web (12/09/2026): no site em produção, sem conta, o app
+  // não abre: "baixe o app". Decidida num efeito porque depende de `window`.
+  // `entrando` é quem tocou em "entrar com e-mail": a tela de login do app
+  // abre (destino "auth", lido em useDestinoDoOnboarding). Ver
+  // lib/app/porteiraDaWeb.ts.
+  const [hostname, setHostname] = useState<string | null>(null);
+  const [entrando, setEntrando] = useState(false);
+  useEffect(() => {
+    setHostname(window.location.hostname);
+  }, []);
 
   if (!splashDone) return <SplashScreen onDone={() => setSplashDone(true)} />;
+
+  if (hostname === null || !ready) return null;
+  if (!entrando && porteiraFechada({ nativo: isNativeApp(), hostname, temConta: !!user })) {
+    return (
+      <BaixeOApp
+        onEntrarComEmail={() => {
+          try { window.sessionStorage.setItem("mentorque-onboarding-destino", "auth"); } catch { /* ignore */ }
+          setEntrando(true);
+        }}
+      />
+    );
+  }
+  if (entrando && !user) return <Shell />;
 
   // QUEM VEIO PELO LINK DE VENDA NÃO PASSA PELO ONBOARDING.
   //

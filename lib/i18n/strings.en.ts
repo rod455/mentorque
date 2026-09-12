@@ -11,6 +11,14 @@ export const en: Strings = {
     ogDescription:
       "Guided tracks, symptom-based diagnosis, fair pricing and consulting with someone who's in the industry. Download it free on the App Store.",
   },
+  porteira: {
+    title: "Mentorque is an app",
+    body: "Service reminders, the question of the day and your car's nudges only exist in the app. Download it for free and continue there.",
+    jaTemConta: "Already have an account? Sign in here.",
+    google: "Google",
+    apple: "Apple",
+    email: "Sign in with email and password",
+  },
   nav: {
     features: "Features",
     how: "How it works",
@@ -32,7 +40,6 @@ export const en: Strings = {
     subheadline:
       "Learn to understand your car, find the fair price before approving any work, and talk to a real expert when you get stuck. You don't need to become a mechanic, just stop paying for what you don't understand.",
     ctaNote: "Free forever on the base plan, and no card to get started.",
-    usarNoNavegador: "Rather not install? Use it in the browser",
     downloadOn: "Download on the",
     comingSoon: "Coming soon to",
     appStore: "App Store",

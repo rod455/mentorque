@@ -37,6 +37,30 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-12 · Engenharia: a porteira da web, por decisão do dono
+- **A pergunta que abriu isto**: "como eles estão acessando o app na web?
+  deveria ser só pelas lojas". O app era uma página do site (`/app`), com o
+  link "use pelo navegador" na home desde 03/09, e a maior porta em número:
+  182 onboardings e 15 contas em 28 dias (Android 64 e 1; iPhone 14 e 2), e
+  as três únicas vendas (Stripe). Três contas de 11/09, todas do anúncio e
+  pela web, fizeram o onboarding, cadastraram o carro e nunca voltaram.
+- **Decisão do dono**: "vamos tirar o caminho da web. Usuário precisa baixar
+  o app." Registrado que a web era a única porta que vendia; a decisão é
+  dele e foi tomada com esse número na mesa.
+- **Feito**: no domínio de produção, `/app` sem conta mostra "O Mentorque é um
+  app" com os selos das lojas. Quem já tem conta (19 Google, 5 Apple, 3
+  e-mail, entre elas as que pagam) entra por ali e continua na web. O link
+  de venda (`?assinar=`) sobrevive ao login. Localhost, prévias da Vercel e
+  o app das lojas não mudam, que é o que mantém as suítes de navegador de
+  pé. O link "use pelo navegador" saiu da home. `conferir:porteira` cobre a
+  regra (os dois lados) e a ligação; provado plantando dois defeitos.
+- **O que vai mudar nos números, para ninguém ler errado**: `comecou_onboarding`
+  e `cadastro` na web caem a quase zero a partir de hoje; a conta do anúncio
+  passa a depender da loja, onde a etiqueta não atravessa (docs/utms.md). O
+  Stripe só vende para quem já tinha conta; venda nova é Apple ou Play.
+- **Deixado de fora, de propósito**: nada de e-mail para as três de ontem
+  sem o texto e o sim do dono (mensagem a cliente).
+
 ## 2026-09-12 · A 2.4 está na Play; a Apple analisa; o repositório vai para 2.5
 - Dono: 2.4 enviada, aprovada na Play em 12/09, em análise na Apple. `"2.4"`
   entra em `JA_PUBLICADAS` no mesmo dia, o repositório sobe para 2.5 e a
