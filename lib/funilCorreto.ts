@@ -50,6 +50,9 @@ export type EventoFunil =
   | "aceitou_convite_aviso"
   | "permissao_aviso_concedida"
   | "permissao_aviso_negada"
+  | "viu_aula"
+  | "consultou_sintoma"
+  | "registrou_servico"
   | "assinou"
   | "renovou"
   | "cancelou"
@@ -100,6 +103,10 @@ export const UNIDADE: Record<EventoFunil, Unidade> = {
   aceitou_convite_aviso: "aparelho",
   permissao_aviso_concedida: "aparelho",
   permissao_aviso_negada: "aparelho",
+  // Valor consumado (12/09/2026): nasce no aparelho, com ou sem conta.
+  viu_aula: "aparelho",
+  consultou_sintoma: "aparelho",
+  registrou_servico: "aparelho",
   iniciou_checkout: "aparelho",
   atribuicao: "aparelho",
   // Nascem no webhook da cobrança, que não tem aparelho. A identidade é o
@@ -128,6 +135,12 @@ export const NATUREZA: Record<EventoFunil, Natureza> = {
   aceitou_convite_aviso: "ato",
   permissao_aviso_concedida: "ato",
   permissao_aviso_negada: "ato",
+  // Valor consumado repete de propósito: a mesma pessoa vê dez aulas e
+  // registra seis serviços. São de sessão, e "quantas pessoas" sai do
+  // distinct do funil_canonico, nunca da contagem de eventos.
+  viu_aula: "sessao",
+  consultou_sintoma: "sessao",
+  registrou_servico: "sessao",
   iniciou_checkout: "ato",
   assinou: "ato",
   renovou: "ato",
@@ -172,6 +185,10 @@ export const MEDIDO_DESDE: Record<EventoFunil, string> = {
   aceitou_convite_aviso: "2026-09-11",
   permissao_aviso_concedida: "2026-09-11",
   permissao_aviso_negada: "2026-09-11",
+  // Valor consumado: no ar na web em 12/09; nas lojas, com a 2.5.
+  viu_aula: "2026-09-12",
+  consultou_sintoma: "2026-09-12",
+  registrou_servico: "2026-09-12",
 };
 
 /**

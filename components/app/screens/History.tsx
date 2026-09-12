@@ -1,5 +1,7 @@
 "use client";
 
+import { funil } from "@/lib/app/funil";
+
 import { useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
@@ -525,6 +527,8 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
     // serviço tinha sido registrado — parecia que o salvamento falhou. O
     // histórico é o destino que faz sentido para todos os caminhos: é onde o
     // serviço recém-criado aparece.
+    // Valor consumado: serviço registrado (novo, não edição), com ou sem valor.
+    if (!editing) funil("registrou_servico", { origem: total ? "com-valor" : "sem-valor" });
     root({ name: "history" });
 
     // Primeiro serviço registrado, e num dia diferente do cadastro.

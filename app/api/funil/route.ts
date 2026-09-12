@@ -32,6 +32,9 @@ const EVENTOS_DO_APP = new Set([
   // recorrência da 2.4 dependem dele, e sem estes quatro ninguém saberia se
   // alguém deu a permissão. Ver lib/app/funil.ts.
   "convite_aviso", "aceitou_convite_aviso", "permissao_aviso_concedida", "permissao_aviso_negada",
+  // Valor consumado (12/09/2026): aula vista, sintoma consultado, serviço
+  // registrado. Ver lib/app/funil.ts.
+  "viu_aula", "consultou_sintoma", "registrou_servico",
 ]);
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

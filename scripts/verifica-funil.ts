@@ -370,6 +370,17 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
   );
 }
 
+// ── valor consumado (12/09/2026): os três eventos SAEM das telas ────────────
+{
+  const sem = (t: string) => t.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/.*$/gm, " ");
+  const aula = sem(readFileSync(new URL("../components/app/screens/Content.tsx", import.meta.url), "utf8"));
+  const sintoma = sem(readFileSync(new URL("../components/app/screens/Symptoms.tsx", import.meta.url), "utf8"));
+  const servico = sem(readFileSync(new URL("../components/app/screens/History.tsx", import.meta.url), "utf8"));
+  conferir("abrir uma aula emite viu_aula com o id da aula", /funil\("viu_aula",\s*\{[^}]*origem: id/.test(aula));
+  conferir("abrir um sintoma emite consultou_sintoma com o id", /funil\("consultou_sintoma",\s*\{[^}]*origem: id/.test(sintoma));
+  conferir("salvar um serviço novo emite registrou_servico dizendo se tem valor", /funil\("registrou_servico",\s*\{[^}]*com-valor/.test(servico) && /if \(!editing\) funil\("registrou_servico"/.test(servico));
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) de funil reprovaram.`);
   process.exit(1);

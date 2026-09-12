@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { funil } from "@/lib/app/funil";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { anotaSintoma } from "@/lib/app/sintomaEmFoco";
 import { symptomRecommended } from "@/lib/app/premium";
@@ -320,6 +321,8 @@ export function SymptomDetail({ id }: { id: string }) {
   const [needAd, setNeedAd] = useState(false);
   useEffect(() => {
     registerContentOpen();
+    // Valor consumado: um sintoma específico foi consultado.
+    funil("consultou_sintoma", { umaVez: true, origem: id });
     if (adsEnabled() && !s.premium && canShowAd()) {
       markAdShown();
       setNeedAd(true);

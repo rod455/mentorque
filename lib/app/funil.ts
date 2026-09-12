@@ -40,6 +40,16 @@ export type EventoFunil =
   | "aceitou_convite_aviso"
   | "permissao_aviso_concedida"
   | "permissao_aviso_negada"
+  // VALOR CONSUMADO, medido em 12/09/2026. A revisão de retenção do CRO
+  // encontrou 253 pessoas e 11 voltando, e nenhuma régua do que quem voltou
+  // FEZ: abrir trilha não é ver aula, abrir a tela de sintomas não é
+  // consultar um, e cadastrar carro não é registrar serviço. Sem estes três,
+  // "primeiro valor" não tem medida e nenhuma aposta de retenção tem leitura.
+  // `origem` carrega o id da aula ou do sintoma; no serviço, "com-valor" ou
+  // "sem-valor" (o valor pago é o que alimenta a comparação de preço).
+  | "viu_aula"
+  | "consultou_sintoma"
+  | "registrou_servico"
   // Único evento técnico da lista: o desfecho da subida do SDK de atribuição
   // (lib/app/atribuicao.ts). Ele não mede comportamento de ninguém, mede se a
   // nossa própria medição está viva no aparelho.

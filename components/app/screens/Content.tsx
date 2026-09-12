@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { funil } from "@/lib/app/funil";
 import { usePrototype } from "@/lib/app/store";
 import { useNav } from "@/lib/app/nav";
 import { courseOf } from "@/lib/app/cursos";
@@ -130,6 +131,8 @@ export function ContentScreen({ id }: { id: string }) {
   const [needAd, setNeedAd] = useState(false);
   useEffect(() => {
     registerContentOpen();
+    // Valor consumado: a aula foi ABERTA. Uma vez por aula por sessão.
+    funil("viu_aula", { umaVez: true, origem: id });
     if (adsEnabled() && !s.premium && canShowAd()) {
       markAdShown();
       setNeedAd(true);
