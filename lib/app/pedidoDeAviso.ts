@@ -28,8 +28,26 @@ import { notificacoesDisponiveis, pedirPermissao, permissaoConcedida } from "./n
 // promessa na cara dela.
 
 /** De onde veio o convite. Serve para saber qual deles converte. */
-export type MomentoDoPedido = "quiz" | "calendario" | "carro";
-const MOMENTOS: readonly MomentoDoPedido[] = ["quiz", "calendario", "carro"];
+export type MomentoDoPedido = "quiz" | "calendario" | "carro" | "onboarding";
+const MOMENTOS: readonly MomentoDoPedido[] = ["quiz", "calendario", "carro", "onboarding"];
+
+// O convite ao terminar o onboarding (12/09/2026, revisão de retenção do CRO).
+//
+// Avisos ligados em 3 de 28 contas, e o convite só aparecia depois de um
+// quiz ou de um carro: quem não fazia nenhum dos dois nunca via o pedido, e
+// era justamente quem sumia. Terminar a apresentação é o primeiro "sim"
+// pequeno da pessoa; o Início consome a marca ao nascer e faz o convite com
+// um motivo concreto (a próxima revisão do carro dela, quando há carro).
+// Mesma trava de sempre: quatro dias entre convites, três na vida.
+let conviteNoOnboarding = false;
+export function pedirConviteNoOnboarding(): void {
+  conviteNoOnboarding = true;
+}
+export function consumirConviteNoOnboarding(): boolean {
+  const r = conviteNoOnboarding;
+  conviteNoOnboarding = false;
+  return r;
+}
 
 // O convite logo depois do cadastro do carro (10/09/2026).
 //

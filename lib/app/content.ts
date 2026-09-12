@@ -177,6 +177,14 @@ export function getContent(locale: Locale) {
       revisionsCard: T("Próximas revisões", "Upcoming service"),
       completeCarCard: T("Complete os dados do carro", "Finish your car's info"),
       completeCarWhy: T("Faltam dados para revisões precisas", "Missing data for a precise service plan"),
+      // O convite de aviso logo depois do onboarding (12/09/2026): motivo
+      // concreto, e o carro pelo nome quando já existe.
+      conviteAvisoTitulo: T("Quer que a gente avise a próxima revisão do {carro}?", "Want a heads-up before the {carro}'s next service?"),
+      conviteAvisoTituloSemCarro: T("Quer que a gente avise quando o seu carro precisar de algo?", "Want a heads-up when your car needs something?"),
+      conviteAvisoCorpo: T(
+        "Revisão vencendo, km para atualizar, a pergunta do dia. Um aviso por vez, nada além disso.",
+        "A service coming due, mileage to update, the daily question. One notification at a time, nothing else."
+      ),
       forYouSub: T("Baseado no seu nível e no seu carro", "Based on your level and your car"),
       memoriesTitle: T("Memórias", "Memories"),
       seeAll: T("Ver todas", "See all"),

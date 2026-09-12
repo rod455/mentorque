@@ -469,6 +469,16 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
   conferir("o 'Quero' da trilha relata o desfecho da permissão", desfecho.test(learn) && /origem: "trilha"/.test(learn));
 }
 
+// ── o convite ao terminar o onboarding (12/09/2026) ─────────────────────────
+{
+  const pedido = leia("lib/app/pedidoDeAviso.ts");
+  const onboarding = leia("components/app/OnboardingFlow.tsx");
+  const home = leia("components/app/screens/Home.tsx");
+  conferir("existe o momento 'onboarding' do pedido de aviso", /"onboarding"/.test(pedido) && /pedirConviteNoOnboarding/.test(pedido));
+  conferir("sair do onboarding no app das lojas deixa a marca do convite", /isNativeApp\(\)\) pedirConviteNoOnboarding\(\)/.test(onboarding));
+  conferir("o Início consome a marca e faz o convite com motivo concreto", /consumirConviteNoOnboarding\(\)/.test(home) && /momento="onboarding"/.test(home) && /conviteAvisoTitulo/.test(home));
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) de aviso reprovaram.`);
   process.exit(1);

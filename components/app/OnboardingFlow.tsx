@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { funil } from "@/lib/app/funil";
+import { pedirConviteNoOnboarding } from "@/lib/app/pedidoDeAviso";
 import { usePrototype } from "@/lib/app/store";
 import { useSwipe } from "@/lib/app/swipe";
 import { useAuth } from "@/lib/app/auth";
@@ -109,6 +110,9 @@ export function OnboardingFlow() {
   // diferente de quem sai porque assinou.
   const sair = (origem: "plano" | "assinou" | "agora-nao" | "sem-venda" | "carro") => {
     funil("terminou_onboarding", { umaVezPorAparelho: true, origem });
+    // O convite de aviso no Início que vem a seguir (só no app das lojas; na
+    // web `podeConvidar` diz não sozinho). Ver lib/app/pedidoDeAviso.ts.
+    if (isNativeApp()) pedirConviteNoOnboarding();
     finishOnboarding();
   };
 

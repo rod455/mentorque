@@ -13,6 +13,8 @@ import { sellsInApp } from "@/lib/app/wrapper";
 import { Button } from "@/components/ui/Button";
 import { useContent, Card, Icon, inputCls, Sheet, Thumb } from "../ui";
 import { HealthPill } from "./Cars";
+import { ConviteDeAviso } from "../ConviteDeAviso";
+import { consumirConviteNoOnboarding } from "@/lib/app/pedidoDeAviso";
 import { FipeLine } from "./CarHub";
 import { CommonProblems } from "./Symptoms";
 
@@ -150,6 +152,10 @@ export function HomeScreen() {
   );
   const livedMoments = memories.filter((m) => m.cat === "momento").length;
 
+  // O convite de aviso logo depois do onboarding (12/09/2026). Lido uma vez,
+  // na montagem: a marca é de módulo e some ao ser consumida.
+  const [convidarNoOnboarding] = useState(() => consumirConviteNoOnboarding());
+
   const quick: { art: string; label: string; tint: string; go: () => void }[] = [
     { art: "diagnose", label: h.qDiagnose, tint: "bg-coral/15", go: () => root({ name: "symptoms" }) },
     { art: "log-service", label: h.qService, tint: "bg-teal/15", go: () => go({ name: "addService" }) },
@@ -177,6 +183,15 @@ export function HomeScreen() {
           </span>
           <span className="shrink-0 rounded-full bg-teal px-3.5 py-1.5 text-xs font-bold text-graphite">{h.updateCta}</span>
         </button>
+      )}
+
+      {convidarNoOnboarding && (
+        <ConviteDeAviso
+          momento="onboarding"
+          sequencia={0}
+          titulo={car ? h.conviteAvisoTitulo.replace("{carro}", vehicleLabel(car)) : h.conviteAvisoTituloSemCarro}
+          corpo={h.conviteAvisoCorpo}
+        />
       )}
 
       {/* Herói */}
