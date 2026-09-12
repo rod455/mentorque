@@ -115,8 +115,9 @@ export function Hero() {
           {/* Aqui morou, de 03/09 a 12/09/2026, o link "use pelo navegador".
               Saiu por decisão do dono: o caminho da web não tem recorrência
               nenhuma (sem aviso, sem push), e virou a maior porta em número
-              sem ninguém voltar. A loja é o único destino, e o /app no
-              navegador só abre para quem já tem conta (lib/app/porteiraDaWeb.ts). */}
+              sem ninguém voltar. A loja é o único destino. O /app continua
+              existindo e abrindo para quem digita o endereço; o que não pode
+              é o site levar até lá (scripts/verifica-caminho.ts confere). */}
         </div>
 
         <div className="relative flex min-w-0 flex-col items-center gap-8">

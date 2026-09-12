@@ -9,15 +9,6 @@ export const pt = {
     ogDescription:
       "Trilhas guiadas, diagnóstico por sintoma, preço justo e consultoria com quem é da indústria. Baixe grátis na App Store.",
   },
-  // A porteira do /app no navegador (12/09/2026): sem conta, baixe o app.
-  porteira: {
-    title: "O Mentorque é um app",
-    body: "Os avisos de revisão, a pergunta do dia e o lembrete do seu carro só existem no aplicativo. Baixe grátis e continue de lá.",
-    jaTemConta: "Já tem conta? Entre por aqui.",
-    google: "Google",
-    apple: "Apple",
-    email: "Entrar com e-mail e senha",
-  },
   nav: {
     features: "Recursos",
     how: "Como funciona",

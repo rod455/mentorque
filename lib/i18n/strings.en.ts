@@ -11,14 +11,6 @@ export const en: Strings = {
     ogDescription:
       "Guided tracks, symptom-based diagnosis, fair pricing and consulting with someone who's in the industry. Download it free on the App Store.",
   },
-  porteira: {
-    title: "Mentorque is an app",
-    body: "Service reminders, the question of the day and your car's nudges only exist in the app. Download it for free and continue there.",
-    jaTemConta: "Already have an account? Sign in here.",
-    google: "Google",
-    apple: "Apple",
-    email: "Sign in with email and password",
-  },
   nav: {
     features: "Features",
     how: "How it works",

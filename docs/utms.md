@@ -50,16 +50,19 @@ separá-los sem criar campanha nova:
 https://www.mentorque.com.br/?utm_source=youtube&utm_medium=social&utm_campaign=canal
 ```
 
-## O /app no navegador fechou para quem não tem conta (12/09/2026)
+## O site não leva mais ao /app (12/09/2026)
 
-Decisão do dono: o caminho da web sai, usuário precisa baixar o app. No
-domínio de produção, quem chega ao `/app` sem conta vê "O Mentorque é um
-app" com os selos das lojas; quem já tem conta (inclusive quem paga pelo
-Stripe) entra por Google, Apple ou e-mail e continua. O link "use pelo
-navegador" saiu da home. Regra em `lib/app/porteiraDaWeb.ts`, conferida por
-`npm run conferir:porteira`. Consequência para a medição: `comecou_onboarding`
-na web deve cair a quase zero, e "quanto o anúncio trouxe" passa a ser lido
-na loja, onde a etiqueta não atravessa (seção abaixo).
+Decisão do dono: "quero que exista o /app mas só consiga acessar se digitar
+completamente. Tire todas as rotas que levam até lá, mas continua existindo a
+rota." O link "use pelo navegador" saiu da home, e nenhuma página do site
+aponta para o `/app`; a rota continua existindo, sem porteira, para quem
+digita o endereço (e para os atalhos de venda, como `/ALE100`, e o botão do
+e-mail de lançamento, que o dono manda na conversa). Conferido por `npm run
+conferir:caminho`. Por algumas horas do mesmo dia houve uma porteira que
+fechava o `/app` para quem não tinha conta; saiu por esta decisão.
+Consequência para a medição: `comecou_onboarding` na web deve cair a quase
+zero, e "quanto o anúncio trouxe" passa a ser lido na loja, onde a etiqueta
+não atravessa (seção abaixo).
 
 ## Para onde os links apontam, e por que NÃO é o /app
 

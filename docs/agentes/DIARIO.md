@@ -37,27 +37,33 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
-## 2026-09-12 · Engenharia: a porteira da web, por decisão do dono
+## 2026-09-12 · Engenharia: o site não leva mais ao /app (a porteira durou horas)
 - **A pergunta que abriu isto**: "como eles estão acessando o app na web?
   deveria ser só pelas lojas". O app era uma página do site (`/app`), com o
   link "use pelo navegador" na home desde 03/09, e a maior porta em número:
   182 onboardings e 15 contas em 28 dias (Android 64 e 1; iPhone 14 e 2), e
   as três únicas vendas (Stripe). Três contas de 11/09, todas do anúncio e
   pela web, fizeram o onboarding, cadastraram o carro e nunca voltaram.
-- **Decisão do dono**: "vamos tirar o caminho da web. Usuário precisa baixar
-  o app." Registrado que a web era a única porta que vendia; a decisão é
-  dele e foi tomada com esse número na mesa.
-- **Feito**: no domínio de produção, `/app` sem conta mostra "O Mentorque é um
-  app" com os selos das lojas. Quem já tem conta (19 Google, 5 Apple, 3
-  e-mail, entre elas as que pagam) entra por ali e continua na web. O link
-  de venda (`?assinar=`) sobrevive ao login. Localhost, prévias da Vercel e
-  o app das lojas não mudam, que é o que mantém as suítes de navegador de
-  pé. O link "use pelo navegador" saiu da home. `conferir:porteira` cobre a
-  regra (os dois lados) e a ligação; provado plantando dois defeitos.
+- **Primeira decisão do dono**: "vamos tirar o caminho da web. Usuário
+  precisa baixar o app." Publicada como porteira: no domínio de produção,
+  `/app` sem conta mostrava "baixe o app" com os selos das lojas.
+- **Segunda decisão, no mesmo dia, que é a que vale**: "quero que exista o
+  /app mas só consiga acessar se digitar completamente. Tire todas as rotas
+  que levam até lá, mas continua existindo a rota." A porteira saiu inteira
+  (tela, regra, textos, `conferir:porteira`); o `/app` abre como antes para
+  quem digita, com ou sem conta. O que ficou: o link "use pelo navegador"
+  fora da home, e nenhuma página do site apontando para o `/app`. Os atalhos
+  de venda (`/ALE100`) e o botão do e-mail de lançamento continuam, porque
+  não estão em página nenhuma: são links que o dono manda na conversa.
+- **Conferência**: `conferir:caminho` varre o site (43 arquivos) atrás de
+  qualquer destino `/app` e confere que a rota existe sem porteira; provado
+  plantando dois defeitos (link no Hero; porteira na página), os dois
+  reprovaram.
 - **O que vai mudar nos números, para ninguém ler errado**: `comecou_onboarding`
-  e `cadastro` na web caem a quase zero a partir de hoje; a conta do anúncio
-  passa a depender da loja, onde a etiqueta não atravessa (docs/utms.md). O
-  Stripe só vende para quem já tinha conta; venda nova é Apple ou Play.
+  e `cadastro` na web caem, mas não a zero: quem digita o endereço, quem
+  tem o link guardado e quem vem pelo atalho de venda continua entrando. A
+  conta do anúncio passa a depender da loja, onde a etiqueta não atravessa
+  (docs/utms.md).
 - **Deixado de fora, de propósito**: nada de e-mail para as três de ontem
   sem o texto e o sim do dono (mensagem a cliente).
 

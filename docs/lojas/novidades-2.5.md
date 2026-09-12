@@ -23,9 +23,10 @@ achar entra aqui.
 
 ## O que NÃO precisa de binário
 
-- **A porteira da web** (12/09): no site em produção, `/app` sem conta mostra
-  "baixe o app" com os selos; quem tem conta entra. Vai no deploy da Vercel;
-  o app das lojas não muda (`lib/app/porteiraDaWeb.ts`).
+- **O site não leva mais ao /app** (12/09): o link "use pelo navegador" saiu
+  da home e nenhuma página aponta para o `/app`; a rota continua existindo
+  para quem digita. Foi no deploy da Vercel; o app das lojas não muda
+  (`scripts/verifica-caminho.ts`).
 
 ## Roteiro de aparelho
 
