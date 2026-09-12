@@ -37,6 +37,24 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-12 · Engenharia: bateria completa da 2.5 antes do Codemagic
+- O dono perguntou "está tudo certo para subirmos?". Regra das duas
+  velocidades: release pede bateria completa e build local. `npm run
+  conferir` verde; `conferir:navegador` (683 s) reprovou três casos da
+  suíte `km` sem folha nenhuma aberta: o card de revisões do Início passou
+  a dizer "Estimado. Confirme a última troca" e o detector da suíte
+  (`/Confirme|km atual|Salvar km/`) casou com o card. Detector preso ao
+  botão "Salvar km", que só a folha tem: sete de sete. A regra do km não
+  mudou; a suíte media vocabulário, não a folha. `build:native` passou
+  (native/app, 48 MB).
+- Versões: 2.5 nos três lugares, ainda não publicada. Roteiro de aparelho
+  e notas das lojas em `docs/lojas/novidades-2.5.md`. Universal links
+  ficam para a 2.6 (precisam do SHA-256 do Play).
+- O que a bateria não alcança e só o aparelho prova: token de push do
+  iPhone (nunca funcionou; AppDelegate consertado hoje), saída para a App
+  Store, três manhãs, e as duas variantes dos A/B no app das lojas. Sobre
+  o binário: sem sinal ainda.
+
 ## 2026-09-12 · Engenharia: o iPhone do dono ligou avisos e nenhum token apareceu
 - O dono desligou e ligou os avisos no iPhone às 19h de Brasília. Conferido:
   `push_tokens` continua com 1 linha, Android, de outra conta. Nos logs da
