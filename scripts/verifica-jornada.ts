@@ -225,7 +225,7 @@ console.log("Jornada: quem recebe o quê, e quando.");
   conferir("a lista com e-mails só sai para quem tem a chave", /chamador === "chave" \? candidatos/.test(cron));
   conferir("o e-mail sai com List-Unsubscribe de um clique", /List-Unsubscribe-Post/.test(cron));
   const vercel = readFileSync(new URL("../vercel.json", import.meta.url), "utf8");
-  conferir("a Vercel agenda o cron todo dia às 9h de Brasília (12h UTC)", /"\/api\/cron\/jornada"[\s\S]{0,60}"0 12 \* \* \*"/.test(vercel));
+  conferir("a Vercel agenda o cron todo dia às 8h de Brasília (11h UTC), pedido do dono em 12/09", /"\/api\/cron\/jornada"[\s\S]{0,60}"0 11 \* \* \*"/.test(vercel));
   const sair = leia("app/api/jornada/sair/route.ts");
   conferir("sair confere a assinatura e grava a saída", /assinaturaConfere\(/.test(sair) && /jornada_saidas/.test(sair) && /export async function POST/.test(sair));
   const push = leia("app/api/push/enviar/route.ts");

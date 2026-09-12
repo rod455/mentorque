@@ -17,7 +17,7 @@ export const maxDuration = 60;
 // A jornada de recorrência: o cron diário.
 //
 // Aprovada pelo dono em 12/09/2026 (docs/agentes/propostas/jornada-de-recorrencia.md).
-// Toda manhã, 9h de Brasília, lê o estado de cada conta, pergunta à decisão
+// Toda manhã, 8h de Brasília (dono, 12/09), lê o estado de cada conta, pergunta à decisão
 // pura (lib/jornada/decisao.ts) qual e-mail cabe hoje, monta o texto
 // (lib/jornada/emails.ts), manda por e-mail e, onde houver token, por push
 // com a mesma mensagem, e grava o envio.

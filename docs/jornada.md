@@ -12,7 +12,7 @@ operação: o que existe, onde mora, como testar e como ligar.
 | a decisão | `lib/jornada/decisao.ts` | pura: recebe o retrato de uma conta e a data, devolve qual e-mail cabe hoje, ou nenhum |
 | os textos | `lib/jornada/emails.ts` | um texto por chave, personalizado pelo carro; o molde HTML; a versão push |
 | o link de sair | `lib/jornada/saida.ts` e `app/api/jornada/sair` | assinado por pessoa; grava em `jornada_saidas` |
-| o cron | `app/api/cron/jornada` | todo dia às 9h de Brasília (`vercel.json`); decide, manda, grava |
+| o cron | `app/api/cron/jornada` | todo dia às 8h de Brasília (`vercel.json`); decide, manda, grava |
 | o transporte de push | `lib/push/transporte.ts` | FCM (Android) e APNs (iPhone); a rota manual `/api/push/enviar` usa o mesmo |
 | as tabelas | `supabase/jornada.sql` | `jornada_envios` (trava de envio dobrado) e `jornada_saidas` |
 | a conferência | `npm run conferir:jornada` | decisão caso a caso, textos e ligações; provada com defeito plantado |
@@ -61,7 +61,7 @@ instalado, o link abre o navegador, não o app, porque não há universal link
 
 Em 12/09/2026 o dono mandou "faça tudo que precisa e deixe funcionando". O
 cron ENVIA por padrão desde então; a primeira rodada de verdade é a manhã
-seguinte ao deploy, às 9h de Brasília. O freio é `JORNADA_PAUSADA=sim` na
+seguinte ao deploy. Desde 13/09, às 8h de Brasília (no plano atual da Vercel, em algum momento entre 8h e 9h). O freio é `JORNADA_PAUSADA=sim` na
 Vercel (Production, com redeploy): com ele o cron roda em ensaio e não manda
 nada.
 
@@ -75,7 +75,7 @@ Os endereços "ocultar meu e-mail" da Apple (`privaterelay.appleid.com`) ficam
 de fora até o domínio estar no relay da Apple; `JORNADA_APPLE_RELAY=sim`
 libera. E-mail para eles sem o cadastro volta, e devolução suja o domínio.
 
-**Rodar agora, sem esperar as 9h**: no n8n, o fluxo "Mentorque: jornada
+**Rodar agora, sem esperar as 8h**: no n8n, o fluxo "Mentorque: jornada
 agora" (manual, não publicado de propósito) chama o mesmo cron com a chave
 de dados. Repetir não manda dobrado. Foi assim que a primeira rodada saiu,
 em 12/09 às 14h33 de Brasília: 18 e-mails.
