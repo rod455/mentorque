@@ -23,6 +23,7 @@
 // Os passos de console do dono estão em docs/push.md.
 import { getBrowserSupabase } from "@/lib/supabaseBrowser";
 import { apiUrl } from "@/lib/app/apiBase";
+import { relatarPush } from "./erros";
 import { anotaRota } from "./rotaPendente";
 import { isNativeApp, nativePlatform } from "./wrapper";
 
@@ -32,6 +33,7 @@ type PluginPush = {
   register: () => Promise<void>;
   addListener: {
     (ev: "registration", cb: (dado: { value?: string; error?: string }) => void): Promise<{ remove: () => Promise<void> }>;
+    (ev: "registrationError", cb: (dado: { error?: string }) => void): Promise<{ remove: () => Promise<void> }>;
     (
       ev: "pushNotificationActionPerformed",
       cb: (dado: { notification?: { data?: Record<string, unknown> | null } }) => void
@@ -71,10 +73,17 @@ async function carregar(): Promise<Caixa | null> {
 // abertura. Token novo (o FCM troca quando quer) passa porque difere.
 const MARCA = "mq-push-token";
 
+// O silêncio deste caminho tem que ser contado (12/09/2026, iPhone do dono:
+// avisos ligados, token nenhum no banco, e de fora não dava para saber por
+// quê). Cada saída sem registro relata o motivo em app_erros, sem dado da
+// pessoa. Ver relatarPush em lib/app/erros.ts.
 async function entregar(token: string, remover: boolean): Promise<void> {
   const supabase = getBrowserSupabase();
   const sessao = supabase ? (await supabase.auth.getSession()).data.session?.access_token : undefined;
-  if (!sessao) return;
+  if (!sessao) {
+    if (!remover) relatarPush("token pronto, mas sem sessão: avisos ligados sem entrar na conta");
+    return;
+  }
   try {
     const res = await fetch(apiUrl("/api/push/registrar"), {
       method: "POST",
@@ -86,8 +95,13 @@ async function entregar(token: string, remover: boolean): Promise<void> {
         if (remover) window.localStorage.removeItem(MARCA);
         else window.localStorage.setItem(MARCA, token);
       } catch { /* modo privado */ }
+    } else {
+      relatarPush(`/api/push/registrar devolveu ${res.status}`);
     }
-  } catch { /* offline: a próxima abertura tenta de novo */ }
+  } catch {
+    // offline: a próxima abertura tenta de novo
+    relatarPush("sem rede ao registrar o token");
+  }
 }
 
 /**
@@ -110,14 +124,28 @@ export async function sincronizarPush(querAvisos: boolean): Promise<void> {
   }
 
   try {
-    if ((await c.plugin.checkPermissions()).receive !== "granted") return;
+    const permissao = (await c.plugin.checkPermissions()).receive;
+    if (permissao !== "granted") {
+      relatarPush(`interruptor ligado, mas a permissão do sistema está "${permissao}"`);
+      return;
+    }
     const ouvinte = await c.plugin.addListener("registration", (dado) => {
       const token = dado.value ?? "";
       if (token && token !== anterior) void entregar(token, false);
       void ouvinte.remove();
     });
+    // A Apple (ou o Google) recusou o registro: sem isto o único lugar onde o
+    // motivo existia era o console do Xcode. Lido no fonte do plugin
+    // (PushNotificationsPlugin.swift, didFailToRegisterForRemoteNotificationsWithError).
+    const falha = await c.plugin.addListener("registrationError", (dado) => {
+      relatarPush(`o sistema recusou o registro: ${dado.error ?? "sem motivo"}`);
+      void falha.remove();
+    });
     await c.plugin.register();
-  } catch { /* console ainda não configurado: fica para quando estiver */ }
+  } catch (e) {
+    // console ainda não configurado: fica para quando estiver
+    relatarPush(`register() lançou: ${e instanceof Error ? e.message : String(e)}`);
+  }
 }
 
 /** O ouvinte de toque já está de pé nesta sessão? */

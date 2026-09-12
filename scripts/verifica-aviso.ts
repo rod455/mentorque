@@ -175,6 +175,15 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
   conferir("o envio de push aceita rota", /data:\s*\{\s*rota\s*\}/.test(rotaEnviar), "FCM: o destino vai no `data`");
   conferir("o envio para o iPhone leva a rota ao lado do `aps`", /aps:.*\.\.\.\(rota/.test(rotaEnviar));
 
+  // 5b. O REGISTRO DO TOKEN NÃO CALA (12/09/2026: avisos ligados no iPhone do
+  //     dono, token nenhum no banco, e nenhum jeito de saber por quê).
+  const erros = leia("lib/app/erros.ts");
+  conferir("existe relatarPush", /export function relatarPush\(/.test(erros));
+  conferir("o registro recusado pelo sistema vira relato", /addListener\(\s*"registrationError"[\s\S]{0,200}relatarPush\(/.test(push), "o motivo da Apple só existia no console do Xcode");
+  conferir("token sem sessão vira relato", /if \(!sessao\) \{[\s\S]{0,200}relatarPush\(/.test(push));
+  conferir("permissão do sistema não concedida vira relato", /permissao !== "granted"[\s\S]{0,200}relatarPush\(/.test(push));
+  conferir("register() que lança vira relato", /catch \(e\) \{[\s\S]{0,300}relatarPush\(`register\(\)/.test(push));
+
   // 6. A PONTE DA PERMISSÃO É ATRAVESSADA NUM LUGAR SÓ.
   //
   // `checkPermissions` desce até `com.getcapacitor.Bridge.getPermissionStates`,

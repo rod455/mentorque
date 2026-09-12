@@ -52,6 +52,14 @@ achar entra aqui.
    no binário da 2.5; na 2.4 o botão continua abrindo a página. Roteiro
    de aparelho: tocar em "Avaliar o Mentorque" no Perfil do iPhone e ver a
    App Store abrir, não uma aba branca.
+10. **O registro de push relata por que não registrou** (12/09). O dono
+    desligou e ligou os avisos no iPhone, nenhum token entrou no banco, e o
+    aparelho nem chamou o servidor; `lib/app/push.ts` calava de propósito.
+    Agora cada saída sem token vira linha em `app_erros` com origem `push`
+    (sem sessão, permissão do sistema negada, Apple recusou o registro,
+    `register()` lançou, servidor devolveu erro). `conferir:aviso` confere
+    as cinco. Roteiro de aparelho: ligar avisos logado e ver o token em
+    `push_tokens`; ligar deslogado e ver a linha "sem sessão" em `app_erros`.
 
 ## O que NÃO precisa de binário
 

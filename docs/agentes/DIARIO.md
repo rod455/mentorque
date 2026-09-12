@@ -37,6 +37,24 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-12 · Engenharia: o iPhone do dono ligou avisos e nenhum token apareceu
+- O dono desligou e ligou os avisos no iPhone às 19h de Brasília. Conferido:
+  `push_tokens` continua com 1 linha, Android, de outra conta. Nos logs da
+  Vercel das últimas 2h, nenhuma chamada a `/api/push/registrar` (só /app,
+  /api/funil, /api/lessons e /api/app/latest). `app_erros` vazia nas 3h.
+  O único evento iOS da hora é um `abriu_app` sem sessão às 19h08, mas isso
+  não prova deslogado: o `abriu_app` sai antes de a sessão voltar (outro
+  iPhone do dia mostra o mesmo, e 22 segundos depois um evento logado).
+- O que dá para afirmar: o aparelho não chamou o servidor. O que NÃO dá:
+  por quê. `lib/app/push.ts` calava em todas as saídas (sem sessão,
+  permissão do sistema não concedida, Apple recusou o registro, register()
+  lançou, servidor devolveu erro), de propósito, para embarcar antes das
+  chaves. Perguntado ao dono se o Perfil do iPhone mostra a conta dele.
+- Conserto: cada saída sem token vira `relatarPush` em app_erros (origem
+  `push`, sem dado da pessoa). Ouvinte de `registrationError` lido no fonte
+  do plugin. `conferir:aviso` confere as cinco saídas e reprovou com o
+  ouvinte trocado. É binário (2.5); na 2.4 o silêncio continua.
+
 ## 2026-09-12 · Engenharia: "Atualizar" no iPhone ficava carregando apps.apple.com
 - Relato do dono, com foto: tocou em Atualizar no banner de versão nova e
   ficou numa tela branca com "apps.apple.com" carregando, dentro do app.

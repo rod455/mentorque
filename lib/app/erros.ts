@@ -63,6 +63,20 @@ export function relatarLoginNativo(provedor: "google" | "apple", motivo: string)
 }
 
 /**
+ * O registro de push não chegou ao servidor: relata o porquê.
+ *
+ * Existe desde 12/09/2026, por um silêncio: o dono desligou e ligou os avisos
+ * no iPhone, nenhum token apareceu no banco, e o aparelho nem chamou
+ * /api/push/registrar. lib/app/push.ts degradava em silêncio de propósito
+ * (para embarcar antes das chaves), e de fora era impossível dizer se faltou
+ * sessão, permissão do sistema, ou se a Apple recusou o registro. Sem dado da
+ * pessoa: só o motivo.
+ */
+export function relatarPush(motivo: string): void {
+  reportar("erro", `push: ${motivo}`, undefined, "push");
+}
+
+/**
  * A sessão anterior morreu em uso? Então relata, com o passo em que estava.
  *
  * Este é o único relato que nasce de uma AUSÊNCIA: ninguém viu o erro, porque
