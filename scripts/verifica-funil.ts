@@ -33,6 +33,7 @@ import {
   type EventoFunil,
 } from "../lib/funilCorreto.ts";
 import { readFileSync } from "node:fs";
+import { varianteDe } from "../lib/app/sorteio.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -388,6 +389,23 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
   const ids = [...codigo.matchAll(/^\s*"([a-z0-9-]+)":\s*\[/gm)].map((m) => m[1]);
   for (const id of ids) {
     conferir(`o experimento "${id}" está no caderno com estado ABERTO`, new RegExp(`## \\[${id}\\][^\n]*\n- Estado: ABERTO`).test(caderno), "teste ligado sem registro é aprendizado nenhum (manual do CRO)");
+  }
+
+  // Dois testes ao mesmo tempo têm que ser sorteios independentes. Em
+  // 12/09/2026 o hash sem mistura final dava a MESMA variante nos dois para
+  // 100% dos aparelhos: quem via o onboarding curto era exatamente quem via
+  // o cadastro curto, e a leitura de um carregava o efeito do outro.
+  const anons = Array.from({ length: 4000 }, (_, i) => `aparelho-${i}-${(i * 2654435761) >>> 0}`);
+  const sorteio = (id: string) => anons.map((a) => varianteDe(id, a, ["a", "b"]));
+  const x = sorteio("teste-x");
+  const y = sorteio("teste-y");
+  const bDeX = x.filter((v) => v === "b").length / anons.length;
+  const iguais = x.filter((v, i) => v === y[i]).length / anons.length;
+  conferir("um teste A/B divide os aparelhos perto de 50/50", bDeX > 0.45 && bDeX < 0.55, `b = ${(bDeX * 100).toFixed(1)}%`);
+  conferir("dois testes ao mesmo tempo são sorteios independentes (concordância perto de 50%)", iguais > 0.45 && iguais < 0.55, `concordância = ${(iguais * 100).toFixed(1)}%`);
+  for (const id of ids) {
+    const s = sorteio(id).filter((v) => v === "b").length / anons.length;
+    conferir(`o experimento "${id}" divide perto de 50/50`, s > 0.45 && s < 0.55, `b = ${(s * 100).toFixed(1)}%`);
   }
 }
 

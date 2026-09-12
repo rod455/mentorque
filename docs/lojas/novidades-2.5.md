@@ -36,6 +36,14 @@ achar entra aqui.
    `registrou_servico`), 12/09. Na web já saem; nas lojas, com a 2.5.
 6. **O card de revisões do Início abre o calendário estimado** com km ou
    data de compra, em vez de mandar ao quiz (12/09).
+7. **Teste A/B `cadastro-em-duas-etapas`** (12/09): metade dos aparelhos vê
+   o formulário do carro só com marca, modelo e ano; a barra "Diagnóstico do
+   carro: n de 5" na tela do carro pede o resto. Na web já roda; na loja,
+   onde está a quebra (3 de 19), só com este binário.
+8. **Teste A/B `onboarding-curto`** (12/09): metade dos aparelhos vê três
+   páginas de onboarding em vez de cinco, sem a prova social. Ler as duas
+   apostas em `docs/agentes/experimentos.md` duas semanas depois da 2.5 nas
+   lojas.
 
 ## O que NÃO precisa de binário
 

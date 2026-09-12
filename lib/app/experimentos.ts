@@ -14,6 +14,9 @@
 // teste ativo por área da jornada; ao encerrar, a variante vencedora vira o
 // padrão e o experimento SAI daqui.
 import { anonId } from "./anon";
+// O sorteio em si (hash com mistura final) mora em sorteio.ts, puro, para a
+// conferência medir que dois testes ao mesmo tempo são independentes.
+import { varianteDe } from "./sorteio.ts";
 
 // id do experimento -> variantes possíveis. Vazio = nenhum teste ativo.
 // Exemplo: "paywall-titulo": ["a", "b"]
@@ -22,13 +25,12 @@ export const EXPERIMENTOS: Record<string, string[]> = {
   // formulário de sempre (sete campos); B = só marca, modelo e ano, e o
   // resto vira a barra "Diagnóstico do carro" na tela do carro.
   "cadastro-em-duas-etapas": ["a", "b"],
+  // Aprovado pelo dono em 12/09/2026. A = cinco páginas (três de
+  // apresentação, prova social, última). B = três: a dor, como resolve, e a
+  // última (o carro no Android; o teste onde vende). A prova social fica de
+  // fora da B.
+  "onboarding-curto": ["a", "b"],
 };
-
-function hash(s: string): number {
-  let h = 5381;
-  for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
-  return h;
-}
 
 // A variante desta pessoa neste experimento ("a" se o teste não existir,
 // para o código chamador nunca quebrar quando um teste for encerrado).
@@ -36,7 +38,7 @@ export function variante(id: string): string {
   const vs = EXPERIMENTOS[id];
   if (!vs || vs.length === 0) return "a";
   try {
-    return vs[hash(id + ":" + anonId()) % vs.length];
+    return varianteDe(id, anonId(), vs);
   } catch {
     return vs[0];
   }

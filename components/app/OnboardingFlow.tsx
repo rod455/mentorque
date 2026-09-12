@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { variante } from "@/lib/app/experimentos";
 import { funil } from "@/lib/app/funil";
 import { pedirConviteNoOnboarding } from "@/lib/app/pedidoDeAviso";
 import { usePrototype } from "@/lib/app/store";
@@ -34,9 +35,19 @@ function CheckDot() {
 // onboarding é a página de plano. iPhone e web seguem como estavam, e é a
 // comparação entre plataformas que vai dizer se valeu (experimento
 // onboarding-termina-no-carro-android em docs/agentes/experimentos.md).
+//
+// TESTE A/B `onboarding-curto` (aprovado pelo dono em 12/09/2026): na variante
+// B são três páginas, não cinco. Dois cards (a dor e como resolve) e a última
+// página; a prova social fica de fora. Motivo: na web 4 em 5 desistiam dentro
+// das cinco páginas de promessa, e no Android 4 em 10. Lido num efeito, como
+// a plataforma, para o servidor não chutar variante.
 export function OnboardingFlow() {
   const c = useContent();
-  const cards = c.splash.cards;
+  const [curto, setCurto] = useState(false);
+  useEffect(() => {
+    setCurto(variante("onboarding-curto") === "b");
+  }, []);
+  const cards = curto ? c.splash.curto.cards : c.splash.cards;
   const social = c.splash.social;
   const trial = c.splash.trial;
   const { finishOnboarding, setPremium } = usePrototype();
@@ -92,11 +103,13 @@ export function OnboardingFlow() {
       } catch { /* sem ofertas: cai no fluxo antigo */ }
     })();
   }, []);
-  // 3 cards + social (+ teste onde vende; no Android, + a página do carro)
-  const total = cards.length + (paraOCarro || sells ? 2 : 1);
+  // 3 cards + social (+ teste onde vende; no Android, + a página do carro).
+  // Na variante curta: 2 cards, sem social, + a última página.
+  const total = cards.length + (curto ? 0 : 1) + (paraOCarro || sells ? 1 : 0);
   const last = i === total - 1;
   const card = i < cards.length ? cards[i] : null;
   const paginaDoCarro = paraOCarro && last;
+  const paginaSocial = !curto && i === cards.length;
 
   const [trialDays, setTrialDays] = useState(7);
   useEffect(() => setTrialDays(trialDaysFor(trialPlatform())), []);
@@ -259,7 +272,7 @@ export function OnboardingFlow() {
             </Button>
           </div>
         </div>
-      ) : i === cards.length ? (
+      ) : paginaSocial ? (
         /* Página 4 — prova social (formato Bloom: cards sobrepostos, sem scroll) */
         <div className="flex flex-1 flex-col overflow-y-auto px-6 pb-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <h1 className="mt-1 font-serif text-[28px] font-bold leading-tight text-cream">{social.title}</h1>

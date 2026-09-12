@@ -37,6 +37,42 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-12 · Engenharia: os seis itens da revisão de retenção, aplicados
+- O dono pediu a revisão ("usuário fica 1 dia e não volta"; o CRO entregou
+  `docs/agentes/propostas/retencao-primeiro-dia.md`: 253 pessoas desde
+  04/09, 11 voltaram) e mandou "aplicar todos os testes propostos". Seis
+  commits pequenos, cada um com a sua conferência, na ordem da proposta:
+  1. Eventos de conclusão `viu_aula`, `consultou_sintoma`,
+     `registrou_servico` (com ou sem valor). "Primeiro valor" ganha régua.
+  2. Convite de aviso ao terminar o onboarding no app das lojas, com o carro
+     pelo nome quando há carro.
+  3. O card de revisões do Início abre o calendário estimado (por km ou
+     data de compra) em vez de mandar ao quiz; "estimado pelo km" escrito.
+  4. Teste A/B `cadastro-em-duas-etapas`: metade vê o formulário do carro
+     só com marca, modelo e ano; a barra "Diagnóstico do carro: n de 5" na
+     tela do carro pede o resto e diz o que cada dado destrava.
+  5. Teste A/B `onboarding-curto`: metade vê três páginas (a dor, como
+     resolve, a última) em vez de cinco, sem a prova social inventada.
+  6. O lembrete do quiz cobre três manhãs e ligar avisos confirma na tela.
+- Na web tudo já roda; nas lojas, com a 2.5 (fila em
+  `docs/lojas/novidades-2.5.md`). Os dois testes estão em
+  `docs/agentes/experimentos.md` como ABERTO, leitura duas semanas depois
+  de a 2.5 estar nas duas lojas.
+- DEFEITO ACHADO ao ligar o segundo teste: o sorteio de variante (djb2 sem
+  mistura final) dava a MESMA variante nos dois testes para 100% dos
+  aparelhos; dois testes ao mesmo tempo eram um só e a leitura de cada um
+  carregaria o efeito do outro. Corrigido com a mistura final do murmur3 em
+  `lib/app/sorteio.ts`; `conferir:funil` passa a medir a concordância entre
+  dois testes (perto de 50%) e reprovou com o hash antigo plantado (0%).
+  Quem foi sorteado na web nas horas entre os dois commits pode ter trocado
+  de variante; gente de menos para pesar.
+- O que a conferência não alcança: o onboarding curto e o cadastro curto no
+  app das lojas só existem depois do binário da 2.5, e o roteiro de aparelho
+  precisa cobrir as duas variantes (forçar pelo `mq-anon-id` do aparelho).
+- Prova de aparelho feita no navegador com dois ids: A mostra cinco páginas
+  com a prova social; B mostra "Carro dá prejuízo em silêncio", "Aqui o
+  carro tem calendário e preço justo" e "Monte seu teste".
+
 ## 2026-09-12 · Engenharia: a jornada de recorrência por e-mail e push, construída
 - **Decisão do dono**: "vamos criar tudo que foi proposto de email. Já vamos
   deixar o push pronto também", sobre a proposta do mesmo dia

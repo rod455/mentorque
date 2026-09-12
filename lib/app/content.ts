@@ -334,6 +334,14 @@ export function getContent(locale: Locale) {
       ],
       start: T("Começar", "Get started"),
       next: T("Continuar", "Continue"),
+      // Variante B do experimento onboarding-curto (12/09/2026): duas páginas
+      // em vez de três, a dor e como resolve, e a prova social fica de fora.
+      curto: {
+        cards: [
+          { icon: "diagnose", title: T("Carro dá prejuízo em silêncio", "Cars cost you quietly"), body: T("Revisão que atrasa vira conserto. Orçamento sem base vira preço alto. Quase todo mundo descobre isso tarde demais.", "A late service becomes a repair. A quote with no reference becomes a high price. Most people find out too late.") },
+          { icon: "calendar", title: T("Aqui o carro tem calendário e preço justo", "Here your car gets a calendar and fair prices"), body: T("Cadastre o carro e ele ganha as próximas revisões com data, o preço de cada serviço na sua região e a Biela para tirar dúvidas.", "Add your car and it gets upcoming services with dates, the price of each service in your region and Biela to answer questions.") },
+        ],
+      },
       // Página 4 — prova social
       social: {
         title: T("Amado por motoristas de todo o Brasil", "Loved by drivers everywhere"),

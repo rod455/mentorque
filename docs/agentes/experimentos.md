@@ -63,6 +63,38 @@ Regras:
 - Início: 2026-09-12 na web; nas lojas, com a 2.5 · Ler a partir de: 2 semanas
   depois de a 2.5 estar nas duas lojas
 - Antes: 3 de 19 na loja (16%); 8 de 13 na web
+- Nota de 12/09: o sorteio mudou no mesmo dia, horas depois de este teste
+  entrar. O hash antigo dava a mesma variante deste teste e do
+  `onboarding-curto` para 100% dos aparelhos (os dois seriam um só); a
+  mistura final em `lib/app/sorteio.ts` corrige e `conferir:funil` mede.
+  Quem foi sorteado na web nessas horas pode ter trocado de variante; é
+  gente de menos para pesar, e a leitura de verdade começa com a 2.5.
+- Veredito: (aberto)
+
+## [onboarding-curto] O onboarding tem três páginas, não cinco
+- Estado: ABERTO
+- Tipo: teste-ab
+- Alvo no funil: comecou_onboarding → terminou_onboarding. Desde 04/09: web
+  184 → 41 (22%), Android 45 → 28 (62%), iPhone 9 → 9. Na loja, 4 em 10
+  desistem dentro das páginas de apresentação, antes de ver o produto.
+- Tese BeSci: fricção (cinco páginas de promessa, nenhuma de entrega) e a
+  prova social inventada que não convence (aprendizado de 04/09: prova
+  pequena e conferível ganha da grande e inventada). A = as cinco páginas
+  de sempre: três cards de apresentação, prova social e a última página.
+  B = três páginas: um card com a dor ("Carro dá prejuízo em silêncio"),
+  um com como resolve (calendário, preço justo, Biela) e a última página,
+  que é a mesma da A (o carro no Android, o teste onde vende). A prova
+  social fica de fora da B. Nada muda no que acontece depois do onboarding.
+- Métrica: taxa comecou_onboarding → terminou_onboarding por variante (view
+  experimentos_resultados), separando loja e web; e, como segunda leitura,
+  comecou_onboarding → cadastrou_carro, porque um onboarding mais curto que
+  entrega gente que não cadastra o carro não vale nada · Duração: 2 semanas,
+  ou até 40 começos por variante na loja
+- Aprovação: aprovada pelo dono em 2026-09-12 ("Vamos aplicar todos os
+  testes propostos")
+- Início: 2026-09-12 na web; nas lojas, com a 2.5 · Ler a partir de: 2 semanas
+  depois de a 2.5 estar nas duas lojas
+- Antes: Android 62%, iPhone 100% (9 pessoas), web 22%
 - Veredito: (aberto)
 
 
