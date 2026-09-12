@@ -67,7 +67,7 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   textos conferidos; envio, sem sinal ainda.
 - **Ensaio contra as contas reais, fora do ar** (a decisão rodada em cima
   do `user_state` de hoje, sem enviar nada): 24 das 27 contas receberiam
-  algo na primeira manhã: 7 `d5`, 4 `d0`, 4 `d9`, 2 `d2`, 1 `d14`, 4
+  algo na primeira manhã: 7 `d5`, 2 `d0`, 4 `d9`, 4 `d2`, 1 `d14`, 4
   `sumiu-30`, 2 `sumiu-14`. Nenhum gatilho de revisão: as 4 contas com
   serviço não têm item vencido nem chegando. Dois ajustes saíram do ensaio:
   o `d0` só sai no dia ou no seguinte (uma conta de 3 dias recebia "sua
