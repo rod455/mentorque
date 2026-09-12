@@ -147,67 +147,72 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
   const [familia, item] = e.chave.split(":");
 
   // ---- cadência ----
+  // A ordem de cada texto, pedida pelo dono em 12/09 ("mais apelativos,
+  // explore a dor"): a pergunta que incomoda, o que custa deixar como está,
+  // como o Mentorque resolve, e UMA ação.
   if (e.chave === "d0") {
     if (!carro) {
       return {
-        assunto: "Sua conta no Mentorque está pronta. Falta o carro.",
-        preheader: "Leva um minuto: marca, modelo e ano.",
-        titulo: "Conta pronta. Falta o carro.",
+        assunto: "Não sabe quando é a próxima revisão do seu carro? A gente sabe.",
+        preheader: "Cadastre o carro em um minuto e o Mentorque avisa antes de vencer.",
+        titulo: "Quando foi a última troca de óleo?",
         saudacao: oi,
         paragrafos: [
-          "O Mentorque lembra você da revisão antes de vencer, compara o preço do serviço com a sua região e responde o que o mecânico disse.",
-          "Tudo isso começa com o seu carro cadastrado, e leva um minuto: marca, modelo e ano.",
+          "Se você precisou pensar, esse é o sinal. A manutenção do carro vive na memória, e a memória falha justamente quando o motor cobra. Revisão atrasada não avisa: ela aparece na oficina, com preço de conserto em vez de preço de manutenção.",
+          "O Mentorque tira isso da sua cabeça. Você cadastra o carro (marca, modelo e ano, um minuto) e ele monta o calendário de tudo o que vence, por km e por data, e avisa antes.",
         ],
-        cta: { texto: "Cadastrar o meu carro", url: link("addCar") },
-        push: { titulo: "Falta o carro", corpo: "Cadastre o seu carro e o calendário de revisão nasce. Leva um minuto." },
+        cta: { texto: "Cadastrar o meu carro em 1 minuto", url: link("addCar") },
+        push: { titulo: "Quando foi a última troca de óleo?", corpo: "Se precisou pensar, cadastre o carro: o Mentorque avisa antes de vencer." },
       };
     }
     const itens = itensDoCalendario(p, carro, agora, hoje);
     return {
-      assunto: `Sua conta está pronta. O ${nome} já tem calendário.`,
-      preheader: "Revisão vencida, km parado e serviço registrado viram lembrete.",
-      titulo: `O ${nome} já está na garagem`,
+      assunto: `O ${nome} entrou na garagem. Agora ele não te pega de surpresa.`,
+      preheader: "Troca de óleo, fluido de freio, correia: cada item com data e km.",
+      titulo: `O ${nome} está vigiado`,
       saudacao: oi,
       paragrafos: [
-        `A partir de agora, revisão vencida, km parado e serviço registrado viram lembrete. Você não precisa lembrar de nada: o app lembra por você.`,
-        itens.length ? "O que já dá para ver no calendário:" : "Registre a última revisão que você lembra, e o calendário passa a ter data.",
+        `Carro sem calendário só avisa quando quebra. A partir de hoje o ${nome} tem um: troca de óleo, fluido de freio, correia, bateria, cada item com data e km, e o aviso chega antes de vencer, não depois.`,
+        itens.length ? "O que já dá para ver:" : "Falta só uma coisa: a data da última revisão que você lembra, mesmo aproximada. Com ela, o calendário passa a ter data de verdade.",
       ],
-      destaque: itens.length ? { titulo: "Próximos 90 dias", itens } : undefined,
-      cta: { texto: `Ver o calendário do ${nome}`, url: link("history") },
-      push: { titulo: `O ${nome} já tem calendário`, corpo: "Revisão, km e serviço viram lembrete. Abra e veja o que vem." },
+      destaque: itens.length ? { titulo: "Vence primeiro", itens } : undefined,
+      cta: { texto: itens.length ? `Ver o calendário do ${nome}` : "Registrar a última revisão", url: link(itens.length ? "history" : "addService") },
+      push: { titulo: `O ${nome} está vigiado`, corpo: itens.length ? itens[0] : "Registre a última revisão e o calendário ganha data." },
     };
   }
 
   if (e.chave === "d2") {
     if (!carro) {
       return {
-        assunto: "Sem o carro, o Mentorque é só o quiz",
-        preheader: "Com ele, é o calendário do seu carro.",
-        titulo: "Sem carro, sem calendário",
+        assunto: "Não sabe quando é a próxima revisão do seu carro?",
+        preheader: "A maioria descobre na oficina. É o jeito mais caro.",
+        titulo: "Descobrir na oficina sai caro",
         saudacao: oi,
         paragrafos: [
-          "Você criou a conta há dois dias e ainda não cadastrou o carro. Sem ele o app não tem o que lembrar: nem troca de óleo, nem fluido de freio, nem correia.",
-          "Com o carro cadastrado, cada um desses itens ganha data e km, e vira aviso antes de vencer.",
+          "A maioria das pessoas descobre que a revisão venceu na oficina, quando a troca de óleo já virou retífica ou a pastilha comeu o disco. É o jeito mais caro de descobrir.",
+          "Você criou a conta, mas ainda não cadastrou o carro, e sem ele o Mentorque não tem o que vigiar. Com o carro na garagem, cada item ganha data e km e o app avisa antes: sem planilha, sem lembrar, sem susto.",
         ],
         cta: { texto: "Cadastrar o meu carro", url: link("addCar") },
-        push: { titulo: "Sem carro, sem calendário", corpo: "Cadastre o seu carro e cada revisão ganha data e km." },
+        push: { titulo: "Quando é a próxima revisão?", corpo: "Cadastre o carro e o Mentorque avisa antes de vencer. Um minuto." },
       };
     }
     const itens = itensDoCalendario(p, carro, agora, hoje);
     return {
-      assunto: `O que o ${nome} precisa nos próximos 90 dias`,
+      assunto: `Não sabe quando é a próxima revisão do ${nome}? Está aqui.`,
       preheader: "Data e km de cada item, pela régua do manual.",
-      titulo: `Os próximos 90 dias do ${nome}`,
+      titulo: `A próxima revisão do ${nome}`,
       saudacao: oi,
       paragrafos: itens.length
-        ? ["Pela régua do manual e pelo que você registrou, é isto que vence primeiro:"]
+        ? [
+            "Revisão atrasada não avisa. Ela aparece na oficina, com preço de conserto. Pela régua do manual e pelo que você registrou, é isto que vence primeiro:",
+          ]
         : [
-            `Ainda não temos a data da última revisão do ${nome}, então o calendário está em branco.`,
-            "Registre o último serviço que você lembra, mesmo aproximado. Com uma data, o app calcula todas as outras.",
+            `O ${nome} está na garagem, mas o calendário ainda está em branco: falta a data da última revisão.`,
+            "Registre a última que você lembra, mesmo aproximada. Com uma data, o Mentorque calcula todas as outras e avisa antes de vencer. Sem isso, você volta a descobrir na oficina.",
           ],
       destaque: itens.length ? { titulo: "Vence primeiro", itens } : undefined,
       cta: { texto: itens.length ? "Ver o calendário" : "Registrar a última revisão", url: link(itens.length ? "history" : "addService") },
-      push: { titulo: `Os próximos 90 dias do ${nome}`, corpo: itens.length ? itens[0] : "Registre a última revisão e o calendário nasce." },
+      push: { titulo: `A próxima revisão do ${nome}`, corpo: itens.length ? itens[0] : "Registre a última revisão e o calendário nasce." },
     };
   }
 
@@ -215,38 +220,40 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
     const faixa = regiao;
     const onde = faixa?.regiao ? ` em ${faixa.regiao}` : " perto de você";
     return {
-      assunto: `Quanto custa uma troca de óleo${onde}?`,
-      preheader: "A faixa antes de você fechar o serviço.",
-      titulo: "O preço antes de fechar",
+      assunto: "Quanto você pagou na última troca de óleo? Sabe se foi caro?",
+      preheader: `A faixa${onde}, antes de você fechar o próximo serviço.`,
+      titulo: "Caro ou justo? Dá para saber",
       saudacao: oi,
       paragrafos: [
+        "A maioria paga o que a oficina pede, porque não tem com o que comparar. É assim que a troca de óleo de duzentos vira quatrocentos e cinquenta sem ninguém perceber.",
         faixa
-          ? `Numa oficina independente, troca de óleo com filtro costuma ficar entre <b>${reais(faixa.min)} e ${reais(faixa.max)}</b>${faixa.regiao ? ` em ${faixa.regiao}` : ""}. É referência, não tabela: carro, óleo e oficina mudam o número.`
+          ? `Numa oficina independente${faixa.regiao ? ` em ${faixa.regiao}` : ""}, troca de óleo com filtro costuma ficar entre <b>${reais(faixa.min)} e ${reais(faixa.max)}</b>. É referência, não tabela: carro, óleo e oficina mudam o número.`
           : "Numa oficina independente, troca de óleo com filtro tem uma faixa de preço conhecida. É referência, não tabela: carro, óleo e oficina mudam o número.",
         carro
-          ? `Registre o último serviço do ${nome} com o valor, e no próximo você compara na hora com a sua região.`
-          : "Cadastre o carro e registre o último serviço com o valor. No próximo, você compara na hora com a sua região.",
+          ? `O que muda o jogo é registrar o que você pagou no ${nome}. No próximo serviço, o Mentorque compara na hora com a sua região e diz se ficou dentro, abaixo ou acima.`
+          : "O que muda o jogo é ter o carro cadastrado e registrar o que você pagou. No próximo serviço, o Mentorque compara na hora com a sua região e diz se ficou dentro, abaixo ou acima.",
       ],
-      cta: { texto: carro ? "Registrar um serviço" : "Cadastrar o meu carro", url: link(carro ? "addService" : "addCar") },
-      push: { titulo: "Quanto custa uma troca de óleo?", corpo: "Registre o último serviço e compare com a sua região." },
+      cta: { texto: carro ? "Registrar o último serviço" : "Cadastrar o meu carro", url: link(carro ? "addService" : "addCar") },
+      push: { titulo: "Pagou caro na última troca de óleo?", corpo: "Registre o serviço e o Mentorque compara com a sua região." },
     };
   }
 
   if (e.chave === "d9") {
     const comManual = !!carro && p.temManual;
     return {
-      assunto: comManual ? `O manual do ${nome} está na Biela` : "Pergunte à Biela antes de aceitar o orçamento",
-      preheader: "A mecânica de plantão responde o que o mecânico disse.",
-      titulo: comManual ? `O manual do ${nome}, aberto` : "Antes de aceitar o orçamento",
+      assunto: "O mecânico disse que precisa trocar. Precisa mesmo?",
+      preheader: comManual ? `A Biela responde com o manual do ${nome} aberto.` : "Pergunte à Biela antes de aceitar o orçamento.",
+      titulo: "Precisa mesmo trocar?",
       saudacao: oi,
       paragrafos: [
-        "A Biela é a mecânica de plantão do Mentorque. Cole o orçamento, descreva o barulho, pergunte se aquela peça precisava mesmo ser trocada.",
+        "Todo mundo já saiu da oficina com a sensação de ter pago por uma peça que não precisava, e sem saber o suficiente para discutir na hora.",
+        "A Biela é a mecânica de plantão do Mentorque. Cole o orçamento, descreva o barulho, pergunte se aquela peça precisava mesmo ser trocada. Ela responde em português claro e diz o que merece um segundo orçamento.",
         comManual
-          ? `Ela responde com o manual do ${nome} aberto: intervalo de troca, tipo de óleo, o que a fábrica recomenda para o seu carro, não para um carro qualquer.`
-          : "Ela responde em português claro, com o que costuma ser normal e o que merece um segundo orçamento.",
+          ? `E responde com o manual do ${nome} aberto: intervalo de troca, tipo de óleo, o que a fábrica recomenda para o seu carro, não para um carro qualquer.`
+          : "Antes de fechar, vale uma pergunta. Depois de pagar, não tem mais o que fazer.",
       ],
-      cta: { texto: "Perguntar à Biela", url: link("biela") },
-      push: { titulo: comManual ? `O manual do ${nome} está na Biela` : "Pergunte à Biela", corpo: "Cole o orçamento e pergunte se a peça precisava mesmo ser trocada." },
+      cta: { texto: "Perguntar à Biela antes de fechar", url: link("biela") },
+      push: { titulo: "Precisa mesmo trocar?", corpo: "Cole o orçamento na Biela antes de fechar. Ela diz o que merece segundo orçamento." },
     };
   }
 
@@ -256,11 +263,13 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
       const idade = agora.getFullYear() - carro.year;
       if (t.has("oldCar")) {
         return {
-          assunto: `O ${nome} tem ${idade} anos: o que costuma aparecer nessa idade`,
-          preheader: "Cinco itens que envelhecem calados.",
+          assunto: `O ${nome} tem ${idade} anos. Sabe o que costuma falhar nessa idade?`,
+          preheader: "Cinco itens que envelhecem calados e escolhem o pior dia.",
           titulo: `${idade} anos de estrada`,
           saudacao: oi,
-          paragrafos: ["Carro com mais de dez anos não é problema; é carro que pede atenção em pontos que o novo não pede. Os que mais aparecem:"],
+          paragrafos: [
+            "Carro com mais de dez anos não é problema. É carro que avisa pouco: bateria, correia e coxim envelhecem calados, e o dia em que falham nunca é um dia bom. Os que mais aparecem:",
+          ],
           destaque: {
             titulo: "Vale olhar",
             itens: [
@@ -271,17 +280,18 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
               "Fluido de freio: absorve água com o tempo e o pedal fica esponjoso",
             ],
           },
+          nota: "O quiz de um minuto por dia ensina a reconhecer os sinais antes de virar conserto. Prefere o app no celular?",
           cta: { texto: "Responder o quiz de hoje", url: link("quiz") },
-          push: { titulo: `${idade} anos de ${carro.model}`, corpo: "Bateria, correia, coxins: o que aparece nessa idade. Um minuto no quiz de hoje.", rota: "quiz" },
+          push: { titulo: `${idade} anos de ${carro.model}: o que falha nessa idade?`, corpo: "Bateria, correia, coxins. Um minuto no quiz de hoje ensina a ver os sinais.", rota: "quiz" },
         };
       }
       if (t.has("highKm")) {
         return {
-          assunto: `Acima de 100 mil km: o que o ${nome} passa a pedir`,
+          assunto: `O ${nome} passou dos 100 mil km. Sabe o que ele passa a pedir?`,
           preheader: "Quatro itens que chegam junto com a quilometragem.",
           titulo: "Depois dos 100 mil",
           saudacao: oi,
-          paragrafos: ["A partir dos 100 mil km alguns itens saem da lista de \"um dia\" e entram na de \"agora\":"],
+          paragrafos: ["A partir dos 100 mil km alguns itens saem da lista de \"um dia\" e entram na de \"agora\". Quem não sabe descobre no guincho:"],
           destaque: {
             titulo: "Vale olhar",
             itens: [
@@ -291,17 +301,21 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
               "Embreagem: patina em subida antes de falhar de vez",
             ],
           },
+          nota: "O quiz de um minuto por dia ensina a reconhecer os sinais antes de virar conserto. Prefere o app no celular?",
           cta: { texto: "Responder o quiz de hoje", url: link("quiz") },
           push: { titulo: "Depois dos 100 mil km", corpo: "Correia, velas, amortecedores: o que passa a pedir atenção. Quiz de hoje em um minuto.", rota: "quiz" },
         };
       }
     }
     return {
-      assunto: "Luz acesa, barulho novo: o que fazer antes de ir à oficina",
-      preheader: "Os quatro guias, e o quiz de um minuto.",
-      titulo: "Antes de ir à oficina",
+      assunto: "Luz acesa no painel. Parar ou seguir?",
+      preheader: "Os quatro guias para não chegar na oficina no escuro.",
+      titulo: "Parar ou seguir?",
       saudacao: oi,
-      paragrafos: ["Quatro situações que assustam e quase sempre têm explicação simples. Cada guia diz o que olhar antes de gastar:"],
+      paragrafos: [
+        "Luz da injeção, barulho novo, carro que custa a pegar: são as situações que mais assustam e mais rendem orçamento inflado, porque a pessoa chega na oficina sem saber o que é.",
+        "Os guias dizem o que olhar antes de gastar:",
+      ],
       destaque: {
         titulo: "Os guias",
         itens: [
@@ -311,8 +325,9 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
           `<a href="${SITE}/carro-gastando-muita-gasolina" style="color:${TEXTO}">Carro gastando muita gasolina</a>`,
         ],
       },
+      nota: "E o quiz de um minuto por dia ensina a reconhecer os sinais antes de virar conserto. Prefere o app no celular?",
       cta: { texto: "Responder o quiz de hoje", url: link("quiz") },
-      push: { titulo: "Luz acesa, barulho novo?", corpo: "O que olhar antes de ir à oficina. E o quiz de hoje leva um minuto.", rota: "quiz" },
+      push: { titulo: "Luz acesa no painel. Parar ou seguir?", corpo: "O que olhar antes de ir à oficina. Quiz de hoje em um minuto.", rota: "quiz" },
     };
   }
 
@@ -326,17 +341,17 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
         ? `há ${u.months} meses`
         : "";
     return {
-      assunto: `${rotulo} do ${nome} passou do ponto`,
-      preheader: "Pelo que você registrou, este item já venceu.",
-      titulo: `${rotulo}: venceu`,
+      assunto: `${rotulo} do ${nome} venceu. Cada semana a mais custa mais caro.`,
+      preheader: "Pelo que você registrou, este item já passou do ponto.",
+      titulo: `${rotulo}: passou do ponto`,
       saudacao: oi,
       paragrafos: [
-        `Pelo último registro, ${rotulo.toLowerCase()} do ${nome} venceu${detalhe ? ` ${detalhe}` : ""}.`,
-        CUSTO_DO_ATRASO[item] ? `Vale não deixar: ${CUSTO_DO_ATRASO[item]}.` : "Vale não deixar para o mês que vem.",
+        `Pelo último registro, ${rotulo.toLowerCase()} do ${nome} venceu${detalhe ? ` ${detalhe}` : ""}. ${CUSTO_DO_ATRASO[item] ? `${CUSTO_DO_ATRASO[item].charAt(0).toUpperCase()}${CUSTO_DO_ATRASO[item].slice(1)}.` : ""}`,
+        "Quanto mais tempo passa, mais o conserto cresce: o que hoje é manutenção vira reparo. Este é o aviso que a oficina não manda.",
         "Se já fez e não registrou, marque no app e o calendário se ajusta sozinho.",
       ],
       cta: { texto: `Ver a saúde do ${nome}`, url: link("health") },
-      push: { titulo: `${rotulo} do ${nome} venceu`, corpo: CUSTO_DO_ATRASO[item] ? `${CUSTO_DO_ATRASO[item].charAt(0).toUpperCase()}${CUSTO_DO_ATRASO[item].slice(1)}.` : "Já fez? Marque no app." },
+      push: { titulo: `${rotulo} do ${nome} venceu`, corpo: CUSTO_DO_ATRASO[item] ? `${CUSTO_DO_ATRASO[item].charAt(0).toUpperCase()}${CUSTO_DO_ATRASO[item].slice(1)}.` : "Cada semana a mais custa mais caro. Já fez? Marque no app." },
     };
   }
 
@@ -350,13 +365,13 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
         ? `vence em ${kmBr(plano.kmRestantes)}, aos ${kmBr(plano.kmPrevisto ?? 0)}`
         : "vence em breve";
     return {
-      assunto: `${rotulo} do ${nome} ${quando.split(",")[0]}`,
-      preheader: "Dá tempo de escolher a oficina com calma.",
+      assunto: `${rotulo} do ${nome} ${quando.split(",")[0]}. Dá tempo de pagar menos.`,
+      preheader: "Quem escolhe a oficina com calma paga o preço de manutenção, não o de emergência.",
       titulo: `${rotulo}: chegando`,
       saudacao: oi,
       paragrafos: [
         `Pela régua do manual e pelo que você informou, ${rotulo.toLowerCase()} do ${nome} ${quando}.`,
-        "Avisar antes é para dar tempo de pedir dois orçamentos e, se outro item cair perto, juntar tudo numa ida só. O calendário sugere a data.",
+        "Avisar antes é para você escolher a oficina com calma e pedir dois orçamentos, em vez de aceitar o primeiro quando o carro já parou. Se outro item cair perto, o calendário sugere juntar tudo numa ida só.",
       ],
       cta: { texto: "Ver o calendário", url: link("revisions") },
       push: { titulo: `${rotulo} do ${nome} está chegando`, corpo: `${quando.charAt(0).toUpperCase()}${quando.slice(1)}. Dá tempo de pedir dois orçamentos.` },
@@ -376,17 +391,17 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
           ? "Ficou dentro da faixa. Preço justo pelo que se vê na região."
           : "Ficou acima da faixa. Na próxima, peça dois orçamentos antes de fechar; a diferença costuma pagar o trabalho.";
       return {
-        assunto: `Você pagou ${reais(total)} em ${rotulo.toLowerCase()}. Na região, a faixa é ${reais(faixa.min)} a ${reais(faixa.max)}`,
-        preheader: leitura,
-        titulo: "Comparado com a região",
+        assunto: `Você pagou ${reais(total)} em ${rotulo.toLowerCase()}. Foi caro?`,
+        preheader: `Na região, a faixa é ${reais(faixa.min)} a ${reais(faixa.max)}. ${leitura.split(".")[0]}.`,
+        titulo: "Foi caro?",
         saudacao: oi,
         paragrafos: [
           `${rotulo} do ${nome}, registrado em ${dataBr(s.date)}: <b>${reais(total)}</b>. ${faixa.regiao ? `Em ${faixa.regiao}` : "Na sua região"}, costuma ficar entre ${reais(faixa.min)} e ${reais(faixa.max)}.`,
           leitura,
-          "A faixa é referência de oficina independente. Quanto mais serviços registrados, mais ela vira dado de verdade.",
+          "É assim que o Mentorque te protege do orçamento inflado: cada serviço registrado vira comparação na hora, e quanto mais gente registra, mais a faixa vira dado de verdade.",
         ],
         cta: { texto: `Ver o histórico do ${nome}`, url: link("history") },
-        push: { titulo: `${rotulo}: ${reais(total)}`, corpo: `Na região, a faixa é ${reais(faixa.min)} a ${reais(faixa.max)}. ${leitura.split(".")[0]}.` },
+        push: { titulo: `${rotulo}: ${reais(total)}. Foi caro?`, corpo: `Na região, a faixa é ${reais(faixa.min)} a ${reais(faixa.max)}. ${leitura.split(".")[0]}.` },
       };
     }
   }
@@ -394,32 +409,32 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
   if (e.chave === "parado-2" || e.chave === "parado-7") {
     const semana = e.chave === "parado-7";
     return {
-      assunto: semana ? `Uma semana, e o ${nome} continua em branco` : `O ${nome} está cadastrado, mas ainda não conta nada`,
+      assunto: semana ? `Uma semana, e o ${nome} continua sem calendário` : `O ${nome} está na garagem, mas ainda não te protege`,
       preheader: "Um serviço registrado, e o calendário nasce.",
-      titulo: semana ? "Ainda em branco" : "Cadastrado, e agora?",
+      titulo: semana ? "Ainda sem calendário" : "Cadastrado, mas sem calendário",
       saudacao: oi,
       paragrafos: [
-        `O ${nome} está na garagem, mas sem nenhum serviço registrado o app não sabe quando foi a última troca de óleo, e sem isso não tem como avisar a próxima.`,
-        "Registre o último serviço que você lembra, mesmo aproximado. Ou responda o quiz de um minuto: ele já diz por onde começar.",
+        `Sem um serviço registrado, o app não sabe quando foi a última troca de óleo do ${nome}, e sem isso não tem como te avisar a próxima. É o carro cadastrado que ainda não conta nada, e revisão que ninguém vigia vence na oficina.`,
+        "Registre o último serviço que você lembra, mesmo aproximado. Dez segundos, e o calendário nasce. Ou responda o quiz de um minuto: ele já diz por onde começar.",
       ],
       cta: { texto: "Registrar o último serviço", url: link("addService") },
-      push: { titulo: semana ? `O ${nome} continua em branco` : `O ${nome} ainda não conta nada`, corpo: "Registre o último serviço que você lembra e o calendário nasce." },
+      push: { titulo: semana ? `O ${nome} continua sem calendário` : `O ${nome} ainda não te protege`, corpo: "Registre o último serviço que você lembra e o calendário nasce." },
     };
   }
 
   if (e.chave === "km" && carro) {
     const desde = carro.kmUpdatedAt ? diasEntre(carro.kmUpdatedAt.slice(0, 10), hoje) : null;
     return {
-      assunto: `Quantos km o ${nome} tem hoje?`,
-      preheader: "O calendário por km depende desse número.",
+      assunto: `Quantos km o ${nome} tem hoje? Sem isso, a troca de óleo passa despercebida`,
+      preheader: "Óleo, filtro e correia vencem por km.",
       titulo: "Atualize o km",
       saudacao: oi,
       paragrafos: [
-        `A última vez que você informou o km do ${nome} foi há ${desde ?? "mais de 45"} dias${typeof carro.odometerKm === "number" ? `, com ${kmBr(carro.odometerKm)}` : ""}.`,
-        "Troca de óleo, filtro e correia vencem por km. Sem o número atual, o calendário fica cego para eles.",
+        `A última vez que você informou o km do ${nome} foi há ${desde ?? "mais de 45"} dias${typeof carro.odometerKm === "number" ? `, com ${kmBr(carro.odometerKm)}` : ""}. Desde então o carro rodou, e o calendário não sabe quanto.`,
+        "Troca de óleo, filtro e correia vencem por km. Sem o número atual, o aviso chega tarde ou não chega. Dez segundos para atualizar.",
       ],
       cta: { texto: "Atualizar o km", url: link("car") },
-      push: { titulo: `Quantos km o ${nome} tem hoje?`, corpo: "O calendário por km depende desse número. Leva dez segundos." },
+      push: { titulo: `Quantos km o ${nome} tem hoje?`, corpo: "Sem o km atual, a troca de óleo passa despercebida. Dez segundos." },
     };
   }
 
@@ -428,13 +443,13 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
     if (carro) {
       const pendentes = itensDoCalendario(p, carro, agora, hoje, 30, 1000);
       return {
-        assunto: `O ${nome} está sem novidade há ${tempo}`,
-        preheader: pendentes.length ? "Tem coisa pendente no calendário." : "Nada venceu. O quiz de hoje leva um minuto.",
-        titulo: `${tempo.charAt(0).toUpperCase()}${tempo.slice(1)} sem novidade`,
+        assunto: pendentes.length ? `O ${nome} anda sem vigia há ${tempo}, e tem coisa pendente` : `O ${nome} anda sem vigia há ${tempo}`,
+        preheader: pendentes.length ? "O calendário andou enquanto você não olhava." : "Nada venceu. Mas o calendário só protege com o km em dia.",
+        titulo: `${tempo.charAt(0).toUpperCase()}${tempo.slice(1)} sem vigia`,
         saudacao: oi,
         paragrafos: pendentes.length
           ? [`Faz ${tempo} que o ${nome} não recebe registro nenhum. Enquanto isso, o calendário andou:`]
-          : [`Faz ${tempo} que o ${nome} não recebe registro nenhum. Nada venceu nesse tempo, e isso já é notícia boa.`, "O quiz de hoje leva um minuto e mantém a sequência."],
+          : [`Faz ${tempo} que o ${nome} não recebe registro nenhum. Nada venceu nesse tempo, e isso é notícia boa.`, "Mas o calendário só te protege com o km em dia: dez segundos para atualizar, ou um minuto no quiz de hoje para manter a sequência."],
         destaque: pendentes.length ? { titulo: "Pendente", itens: pendentes } : undefined,
         cta: pendentes.length ? { texto: "Ver o calendário", url: link("history") } : { texto: "Responder o quiz de hoje", url: link("quiz") },
         push: pendentes.length
@@ -443,15 +458,16 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
       };
     }
     return {
-      assunto: `Faz ${tempo} que você não aparece por aqui`,
-      preheader: "O quiz do dia leva um minuto.",
+      assunto: `Faz ${tempo} que o Mentorque não te vê. E o seu carro?`,
+      preheader: "Alguma coisa venceu e ninguém avisou.",
       titulo: `${tempo.charAt(0).toUpperCase()}${tempo.slice(1)} sem aparecer`,
       saudacao: oi,
       paragrafos: [
-        `Faz ${tempo} que você não abre o Mentorque. O quiz do dia leva um minuto, e cadastrar o carro leva outro: com ele, o app passa a avisar a revisão antes de vencer.`,
+        `Faz ${tempo} que você não abre o Mentorque. Nesse tempo, alguma coisa venceu no seu carro e ninguém avisou, porque ele não está cadastrado.`,
+        "Um minuto para cadastrar, e o app passa a vigiar por você: revisão, km, o que vence primeiro. O quiz do dia leva outro minuto.",
       ],
-      cta: { texto: "Responder o quiz de hoje", url: link("quiz") },
-      push: { titulo: `${tempo.charAt(0).toUpperCase()}${tempo.slice(1)} sem aparecer`, corpo: "O quiz do dia leva um minuto.", rota: "quiz" },
+      cta: { texto: "Cadastrar o meu carro", url: link("addCar") },
+      push: { titulo: `${tempo.charAt(0).toUpperCase()}${tempo.slice(1)} sem aparecer. E o seu carro?`, corpo: "Cadastre o carro em um minuto e o app vigia por você." },
     };
   }
 
@@ -459,11 +475,11 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
   if (familia === "sazonal" && carro && item) {
     if (item.startsWith("ferias")) {
       return {
-        assunto: `Antes de pegar a estrada com o ${nome}: seis itens em cinco minutos`,
-        preheader: "O que conferir antes da viagem.",
+        assunto: `Vai viajar com o ${nome}? Estrada cobra o que a cidade perdoa.`,
+        preheader: "Seis itens em cinco minutos, antes de sair.",
         titulo: "Antes da viagem",
         saudacao: oi,
-        paragrafos: ["Estrada cobra o que a cidade perdoa. Cinco minutos na garagem, antes de sair:"],
+        paragrafos: ["Pneu murcho, óleo baixo e palheta gasta passam despercebidos na cidade. Na estrada, a 110 por hora com a família dentro, cada um vira susto. Cinco minutos na garagem antes de sair:"],
         destaque: {
           titulo: "Seis itens",
           itens: [
@@ -476,16 +492,16 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
           ],
         },
         cta: { texto: `Ver a saúde do ${nome}`, url: link("health") },
-        push: { titulo: `Viagem com o ${nome}?`, corpo: "Seis itens em cinco minutos antes de pegar a estrada." },
+        push: { titulo: `Viagem com o ${nome}?`, corpo: "Estrada cobra o que a cidade perdoa. Seis itens em cinco minutos." },
       };
     }
     if (item.startsWith("chuva")) {
       return {
-        assunto: `Chuva chegando: pneu e palheta do ${nome}`,
-        preheader: "Aquaplanagem começa no pneu careca.",
+        assunto: `Chuva chegando: o ${nome} aquaplana com pneu careca`,
+        preheader: "Três itens para olhar esta semana.",
         titulo: "Chuva chegando",
         saudacao: oi,
-        paragrafos: ["As primeiras chuvas fortes do ano pegam o carro do jeito que o verão deixou. Três coisas para olhar esta semana:"],
+        paragrafos: ["As primeiras chuvas fortes do ano pegam o carro do jeito que o verão deixou: pneu no limite, palheta rabiscando, farol fraco. Aquaplanagem não avisa. Três coisas para olhar esta semana:"],
         destaque: {
           titulo: "Três itens",
           itens: [
@@ -495,18 +511,18 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
           ],
         },
         cta: { texto: `Ver a saúde do ${nome}`, url: link("health") },
-        push: { titulo: "Chuva chegando", corpo: `Pneu e palheta do ${nome}: vale olhar esta semana.` },
+        push: { titulo: "Chuva chegando", corpo: `Pneu careca aquaplana. Olhe pneu e palheta do ${nome} esta semana.` },
       };
     }
     if (item.startsWith("ipva")) {
       return {
-        assunto: `IPVA do ${nome}: janeiro é o mês de olhar o calendário do seu estado`,
+        assunto: `Janeiro pesa no bolso. Não deixe o IPVA do ${nome} virar multa.`,
         preheader: "Placa, parcelas e desconto à vista mudam por estado.",
         titulo: "Janeiro é mês de IPVA",
         saudacao: oi,
         paragrafos: [
-          "Cada estado publica o calendário pelo final da placa, com desconto para quem paga à vista. Vale conferir a data do seu antes que a primeira parcela passe.",
-          `E já que o ${nome} está na sua mão: é uma boa hora para registrar o km atual e conferir o que vence no primeiro trimestre.`,
+          "Cada estado publica o calendário pelo final da placa, com desconto para quem paga à vista e multa para quem deixa passar. Vale conferir a sua data antes que a primeira parcela vença.",
+          `E já que o ${nome} está na sua mão: é uma boa hora para registrar o km atual e ver o que vence no primeiro trimestre.`,
         ],
         cta: { texto: "Atualizar o km", url: link("car") },
         push: { titulo: "Janeiro é mês de IPVA", corpo: `Confira o calendário do seu estado e atualize o km do ${nome}.` },
