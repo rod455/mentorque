@@ -432,17 +432,24 @@ export function HomeScreen() {
                   <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{c.equipmentUi.cardTitle}</p>
                 </button>
               );
-              // 1ª posição: com carro cadastrado, "Próximas revisões". Se
-              // faltar dado (quiz de saúde, km ou data de compra), o card
-              // pede para completar — sem dados o plano não fica preciso.
+              // 1ª posição: com carro cadastrado, "Próximas revisões".
+              //
+              // ATÉ 12/09/2026 o card exigia quiz de saúde, km E data de compra,
+              // e sem os três mandava a pessoa para o quiz em vez do calendário:
+              // com carro incompleto, o Início pedia dado em vez de entregar. A
+              // revisão de retenção do CRO apontou isto como a primeira tela
+              // depois do carro que não entrega. Agora: com km OU data de
+              // compra, o calendário abre já (estimado, e a tela diz que é
+              // estimado e pede a última troca); só sem nenhum dos dois o card
+              // pede o km, que é o dado que mais destrava, na tela do carro.
               const carComplete =
                 !!car && !!(car.quiz && Object.keys(car.quiz).length) && car.odometerKm != null && !!car.purchaseDate;
+              const daParaEstimar = !!car && (car.odometerKm != null || !!car.purchaseDate);
               const revisionsCard = car ? (
                 <button
                   key="revisions"
                   onClick={() => {
-                    if (carComplete) root({ name: "revisions" });
-                    else if (!(car.quiz && Object.keys(car.quiz).length) || !car.purchaseDate) go({ name: "healthQuiz" });
+                    if (daParaEstimar) root({ name: "revisions" });
                     else go({ name: "car" });
                   }}
                   className="flex w-36 shrink-0 flex-col self-start text-left"
@@ -450,14 +457,15 @@ export function HomeScreen() {
                   <div className="relative grid aspect-square place-items-center overflow-hidden rounded-2xl bg-graphite ring-1 ring-amber/45">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/learn/revisions.png?v=4" alt="" className="h-full w-full object-contain" draggable={false} />
-                    {!carComplete && (
+                    {!daParaEstimar && (
                       <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-amber font-display text-sm font-bold text-graphite">!</span>
                     )}
                   </div>
                   <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">
-                    {carComplete ? h.revisionsCard : h.completeCarCard}
+                    {daParaEstimar ? h.revisionsCard : h.completeCarCard}
                   </p>
-                  {!carComplete && <p className="line-clamp-2 text-[11px] leading-snug text-amber/80">{h.completeCarWhy}</p>}
+                  {daParaEstimar && !carComplete && <p className="line-clamp-2 text-[11px] leading-snug text-amber/80">{h.estimadoPeloKm}</p>}
+                  {!daParaEstimar && <p className="line-clamp-2 text-[11px] leading-snug text-amber/80">{h.completeCarWhy}</p>}
                 </button>
               ) : null;
               return [

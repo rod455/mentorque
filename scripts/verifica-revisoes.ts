@@ -6,6 +6,7 @@
 // sobre o NÚMERO pega, e é o tipo que custa caro em confiança.
 //
 // Rode com: npm run conferir:revisoes
+import { readFileSync } from "node:fs";
 import {
   planoDoItem,
   planoDosItens,
@@ -160,6 +161,13 @@ conferir("somarMeses recusa data inválida", somarMeses("nem-data", 3) === null)
     { key: "battery", dataPrevista: "2028-11-01", ...base },
   ];
   conferir("visita única: itens a dois anos de distância não se juntam", visitaUnica(p, 90) === null);
+}
+
+// ── a primeira tela depois do carro entrega (12/09/2026) ────────────────────
+{
+  const home = readFileSync(new URL("../components/app/screens/Home.tsx", import.meta.url), "utf8").replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/.*$/gm, " ");
+  conferir("com km ou data de compra, o card do Início abre o calendário, não o quiz", /daParaEstimar\) root\(\{ name: "revisions" \}\)/.test(home) && !/go\(\{ name: "healthQuiz" \}\)/.test(home.slice(home.indexOf("revisionsCard"), home.indexOf("revisionsCard") + 1500)));
+  conferir("e diz que é estimado quando o carro está incompleto", /estimadoPeloKm/.test(home));
 }
 
 if (falhas) {

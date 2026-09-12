@@ -175,8 +175,9 @@ export function getContent(locale: Locale) {
       newBadge: T("Novo", "New"),
       pinnedTitle: T("Fixados", "Pinned"),
       revisionsCard: T("Próximas revisões", "Upcoming service"),
-      completeCarCard: T("Complete os dados do carro", "Finish your car's info"),
-      completeCarWhy: T("Faltam dados para revisões precisas", "Missing data for a precise service plan"),
+      completeCarCard: T("Informe o km do carro", "Set the car's mileage"),
+      completeCarWhy: T("Com o km, o calendário nasce", "With the mileage, the calendar comes alive"),
+      estimadoPeloKm: T("Estimado. Confirme a última troca", "Estimated. Confirm the last service"),
       // O convite de aviso logo depois do onboarding (12/09/2026): motivo
       // concreto, e o carro pelo nome quando já existe.
       conviteAvisoTitulo: T("Quer que a gente avise a próxima revisão do {carro}?", "Want a heads-up before the {carro}'s next service?"),
