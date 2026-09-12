@@ -35,10 +35,10 @@ limpos a cada envio.
       Codemagic é parte deste passo.
 - [x] `aps-environment` no App.entitlements (entrou DEPOIS do item acima, na
       ordem que não quebra a assinatura).
-- [ ] Envs na Vercel (Production + redeploy):
-      `FCM_CONTA_SERVICO` (JSON da conta de serviço do Firebase),
-      `APNS_CHAVE_P8` (conteúdo do arquivo .p8),
-      `APNS_KEY_ID`, `APNS_TEAM_ID`.
+- [x] Envs na Vercel (Production): `FCM_CONTA_SERVICO`, `APNS_CHAVE_P8`,
+      `APNS_KEY_ID`, `APNS_TEAM_ID`, as quatro vistas na tela do dono em
+      12/09/2026. O Android já recebeu um push de verdade nesse dia (pela
+      jornada); o iPhone segue sem token gravado, então sem sinal.
 - [x] Build novo nas lojas com o plugin embarcado (desde a 1.3).
 - [x] Um chamador automático, o primeiro e único: a jornada de recorrência
       (`app/api/cron/jornada`, aprovada pelo dono em 12/09/2026) manda push

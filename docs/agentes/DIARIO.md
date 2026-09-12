@@ -98,7 +98,15 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   app das lojas em vez do navegador, foram para a fila da 2.5 (binário).
 - **Relay da Apple cadastrado pelo dono em 12/09**: `mentorque.com.br` e
   `contato@mentorque.com.br` em Sign in with Apple for Email Communication,
-  SPF verificado nos dois. Falta só `JORNADA_APPLE_RELAY=sim` na Vercel.
+  SPF verificado nos dois; `JORNADA_APPLE_RELAY=sim` na Vercel com redeploy
+  às 17h20. Rodada de confirmação às 17h23 de Brasília: as 4 contas com
+  e-mail oculto receberam (2 `d2`, 2 `sumiu-30`), a Resend aceitou. Se a
+  Apple devolver, aparece no painel da Resend como bounce.
+- **As quatro chaves de push estão na Vercel** (tela do dono, 12/09), ao
+  contrário do que `docs/push.md` dizia. O que falta para o iPhone é um
+  token gravado: ninguém com iPhone ligou os avisos ainda.
+- **A 2.4 foi aprovada na Apple em 12/09** (dono). As duas lojas estão com a
+  2.4; `"2.4"` já está em `JA_PUBLICADAS`.
 - **Limites registrados**: abertura de e-mail não se mede; "mexeu no app
   hoje" lê o `updated_at` do estado e o dia do quiz, então quem abre e não
   muda nada não conta como ativo; quem usa o app das lojas e clica cai no
