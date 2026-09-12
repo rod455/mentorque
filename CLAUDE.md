@@ -9,16 +9,21 @@ organização. Este arquivo aqui só carrega o que precisa valer em toda sessão
 
 ## O regime das duas velocidades (custo da conferência)
 
-O custo de uma mudança pequena tem que ser o da mudança, não o da cerimônia.
+O custo de uma mudança tem que ser o da mudança, não o da cerimônia. Regra
+do dono (12/09/2026): "crie projetos menores e não faça uma bateria 360
+sempre". Duas mudanças pequenas levaram 40 minutos por causa da bateria.
 
-- **Mudança localizada** (uma tela, um componente, texto): `npm run conferir`
-  + só a suíte de navegador da área tocada (ex.: `npm run conferir:navegador
-  carro`, ~30s) + push. Sem build local: a Vercel builda a cada push. Foto de
-  conferência só se a mudança é visual.
-- **Bateria completa (`conferir:navegador`, ~7min) + build local** apenas
-  quando a mudança toca código compartilhado (store, Shell, roteador, base
-  das suítes), antes de release para as lojas, ou quando uma suíte reprova
-  sem fazer sentido.
+- **Padrão, para qualquer mudança**: `npm run conferir` (tsc, lint e as
+  conferências de script, uns 2 minutos) + só a suíte de navegador da área
+  tocada (ex.: `npm run conferir:navegador telas`, ~1 min) + push. Vale
+  também para código compartilhado (store, Shell, roteador, abertura):
+  o tsc pega o que quebra de tipo, e a Vercel builda a cada push e reclama
+  alto. Sem build local. Foto só se a mudança é visual.
+- **Bateria completa (`conferir:navegador`, ~11 min) + build local** só
+  antes de release para as lojas, ou quando uma suíte reprova sem fazer
+  sentido. Nunca "por via das dúvidas".
+- Fatiar o trabalho: cada pedido vira UM commit pequeno com a sua
+  conferência, publicado na hora; não juntar três pedidos numa bateria só.
 - Playwright fica fora das dependências de propósito: `npm i --no-save
   playwright` (Chromium em `/opt/pw-browsers/chromium` no ambiente remoto).
 

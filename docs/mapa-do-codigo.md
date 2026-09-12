@@ -138,17 +138,11 @@ que é o ponto mais alto do app.
 
 ### Quanto conferir por mudança (o regime das duas velocidades)
 
-O custo de uma mudança pequena tem que ser o da mudança, não o da cerimônia.
-Regra combinada com o dono em 27/08, depois de uma tarde em que colocar um ano
-no nome do carro levou uma hora:
-
-- **Mudança localizada** (uma tela, um componente, texto): `npm run conferir`
-  + SÓ a suíte da área tocada (`npm run conferir:navegador carro`, ~30s) +
-  push. **Sem build local**: a Vercel builda a cada push e reclama alto; o tsc
-  pega quase tudo o que o build pegaria. Foto só se a mudança é visual.
-- **Bateria completa + build local** apenas quando: a mudança toca código
-  compartilhado (store, Shell, roteador, base das suítes), antes de release
-  para as lojas, ou quando uma suíte reprova de um jeito que não faz sentido.
+A regra vale de `CLAUDE.md`, e desde 12/09/2026 é esta: para qualquer
+mudança, `npm run conferir` mais a suíte de navegador da área tocada, e
+push. Bateria completa e build local só antes de release para as lojas ou
+quando uma suíte reprova sem fazer sentido. O dono cortou a bateria 360 por
+padrão depois de duas mudanças pequenas levarem 40 minutos.
 
 ## A disciplina que vale para qualquer conferência daqui
 
