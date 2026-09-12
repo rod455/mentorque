@@ -1427,6 +1427,9 @@ export function getContent(locale: Locale) {
       // "avisar antes de cobrar" descrevia só um deles.
       notifications: T("Notificações", "Notifications"),
       notificationsSub: T("Pergunta do dia e aviso antes de cobrar", "Daily question and a heads-up before charging"),
+      // Ligar responde na tela (12/09/2026): quando sai o próximo aviso.
+      avisosLigadosHoje: T("Avisos ligados. O próximo sai hoje às 9h", "Notifications on. The next one goes out today at 9am"),
+      avisosLigadosAmanha: T("Avisos ligados. O próximo sai amanhã às 9h", "Notifications on. The next one goes out tomorrow at 9am"),
       // No navegador a linha aparece, mas sem interruptor: toggle que não
       // agenda nada é a promessa falsa que já nos mordeu (fim-do-lembrete-
       // falso, no caderno de experimentos).

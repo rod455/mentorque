@@ -2,6 +2,10 @@
 
 import { AVISO, agendar, cancelar, notificacoesDisponiveis, permissaoConcedida } from "./notificacoes";
 import { QUIZ_ZERADO, respondeuHoje, type EstadoQuiz } from "./quiz/sequencia";
+import { manhasDoQuiz } from "./manhasDoQuiz";
+
+/** Os três ids do quiz, um por manhã. */
+export const AVISOS_DO_QUIZ = [AVISO.quizDoDia, AVISO.quizDoDia2, AVISO.quizDoDia3] as const;
 
 // O aviso do quiz na bandeja do celular.
 //
@@ -54,7 +58,7 @@ export async function sincronizarLembreteQuiz(o: {
   if (!notificacoesDisponiveis()) return;
 
   if (!o.quer) {
-    await cancelar(AVISO.quizDoDia);
+    for (const id of AVISOS_DO_QUIZ) await cancelar(id);
     return;
   }
 
@@ -63,15 +67,18 @@ export async function sincronizarLembreteQuiz(o: {
   // do sistema. Quem convida é o ConviteDeAviso, depois do quiz.
   if (!(await permissaoConcedida())) return;
 
-  const quando = quandoAvisarQuiz(o.quiz ?? QUIZ_ZERADO);
-  if (!quando) {
-    await cancelar(AVISO.quizDoDia);
-    return;
-  }
+  // TRÊS MANHÃS, não uma (aprovado pelo dono em 12/09/2026, em
+  // lib/app/manhasDoQuiz.ts): quem some recebe três avisos e depois o
+  // silêncio; quem responde todo dia continua vendo um por dia, porque cada
+  // abertura e cada resposta cancelam os três e refazem a lista.
+  const manhas = manhasDoQuiz(o.quiz ?? QUIZ_ZERADO);
+  for (const id of AVISOS_DO_QUIZ) await cancelar(id);
 
   // `rota: "quiz"` é o que faz o toque abrir a PERGUNTA, e não a tela inicial.
   // Até 03/09/2026 o aviso não carregava destino nenhum: ele trazia a pessoa de
   // volta ao app e a largava no Início, com o chip do quiz esperando um segundo
   // toque. Ver lib/app/rotaPendente.ts.
-  await agendar({ id: AVISO.quizDoDia, titulo: o.textos.titulo, corpo: o.textos.corpo, quando, rota: "quiz" });
+  for (let i = 0; i < manhas.length; i++) {
+    await agendar({ id: AVISOS_DO_QUIZ[i], titulo: o.textos.titulo, corpo: o.textos.corpo, quando: manhas[i], rota: "quiz" });
+  }
 }

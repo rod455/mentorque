@@ -6,6 +6,9 @@ import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/app/auth";
 import { usePrototype } from "@/lib/app/store";
 import { AVISO, abrirAjustesDeAvisos, cancelar, notificacoesDisponiveis, pedirPermissao, permissaoConcedida } from "@/lib/app/notificacoes";
+import { AVISOS_DO_QUIZ } from "@/lib/app/lembreteQuiz";
+import { quandoSaiOProximo } from "@/lib/app/manhasDoQuiz";
+import { QUIZ_ZERADO } from "@/lib/app/quiz/sequencia";
 import { funil } from "@/lib/app/funil";
 import { espelhaOAparelho } from "@/lib/app/espelhoDoAviso";
 import { ID_FALE_COM_A_GENTE, consumirPedidoDeDuvida } from "@/lib/app/atalhoDeDuvida";
@@ -283,6 +286,7 @@ export function ProfileScreen() {
   // dono, 28/08) e a linha explica o bloqueio. Ao voltar dos ajustes com a
   // permissão dada, o próximo toque liga de verdade.
   const [avisosBloqueados, setAvisosBloqueados] = useState(false);
+  const [ligadoAgora, setLigadoAgora] = useState<string | null>(null);
 
   // O INTERRUPTOR ESPELHA O APARELHO, e não a nossa preferência guardada.
   //
@@ -331,13 +335,19 @@ export function ProfileScreen() {
       setNotifications(false);
       setAvisosBloqueados(false);
       await cancelar(AVISO.fimDoTeste);
-      await cancelar(AVISO.quizDoDia);
+      for (const id of AVISOS_DO_QUIZ) await cancelar(id);
+      setLigadoAgora(null);
       return;
     }
     const ok = await pedirPermissao();
     funil(ok ? "permissao_aviso_concedida" : "permissao_aviso_negada", { origem: "perfil" });
     setNotifications(ok);
     setAvisosBloqueados(!ok);
+    // LIGAR RESPONDE NA TELA (dono, 12/09/2026): com a permissão já dada, o
+    // toque não mostrava nada e o dono achou que não tinha funcionado. A
+    // linha diz quando sai o próximo aviso, que é a única prova que a tela
+    // consegue dar antes de o aviso existir.
+    setLigadoAgora(ok ? (quandoSaiOProximo(s.quiz ?? QUIZ_ZERADO) === "hoje" ? p.avisosLigadosHoje : p.avisosLigadosAmanha) : null);
     // QUEM LIGA ESTÁ PEDINDO PARA RECEBER, e é isso que decide o destino.
     //
     // Antes só ia para os ajustes quando o sistema já tinha negado de vez.
@@ -663,7 +673,7 @@ export function ProfileScreen() {
             nos mordeu (fim-do-lembrete-falso). */}
         <IconRow
           icon="alert" tint="bg-teal/15 text-teal" label={p.notifications}
-          value={notificacoesDisponiveis() ? (avisosBloqueados ? p.notifBloqueado : p.notificationsSub) : p.notificationsWeb}
+          value={notificacoesDisponiveis() ? (avisosBloqueados ? p.notifBloqueado : ligadoAgora ?? p.notificationsSub) : p.notificationsWeb}
           right={notificacoesDisponiveis() ? <Toggle on={s.notifications} onChange={toggleNotifications} /> : undefined}
           // Bloqueado nos ajustes: a linha inteira vira o caminho para lá. Ler
           // "bloqueado" sem ter para onde ir é informação que não serve.

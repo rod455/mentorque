@@ -4,9 +4,9 @@ Aberta em 12/09/2026, com a 2.4 aprovada na Play e em análise na Apple.
 O roteiro de aparelho da 2.4 (14 passos) ainda não foi rodado; o que ele
 achar entra aqui.
 
-## Aprovado pelo dono, a fazer
+## Aprovado pelo dono, feito em 12/09 (entra no binário da 2.5)
 
-1. **O lembrete do quiz cobre três manhãs, não uma.** Aprovado em 12/09/2026,
+1. **FEITO 12/09.** **O lembrete do quiz cobre três manhãs, não uma.** Aprovado em 12/09/2026,
    depois de o dono ficar dias sem aviso no iPhone. Hoje
    `lib/app/lembreteQuiz.ts` agenda UM aviso para as próximas 9h e só
    reagenda quando a pessoa abre o app ou responde: quem some recebe um e
@@ -26,9 +26,16 @@ achar entra aqui.
    assinatura do Play, que fica no Play Console) e intent-filter no Android;
    e o app, ao abrir por link, ler o `ir=` como a página da web lê
    (`lib/app/destinoDoLink.ts`). É binário nas duas lojas.
-3. **Ligar o interruptor de avisos responde na tela.** "Avisos ligados. O
+3. **FEITO 12/09.** **Ligar o interruptor de avisos responde na tela.** "Avisos ligados. O
    próximo sai amanhã às 9h." Hoje, com a permissão já dada, o toque não
    mostra nada, e o dono achou que não tinha funcionado (12/09).
+
+4. **Convite de aviso ao terminar o onboarding** (12/09, revisão de retenção):
+   o Início nasce com o convite, com o carro pelo nome. `lib/app/pedidoDeAviso.ts`.
+5. **Eventos de valor consumado** (`viu_aula`, `consultou_sintoma`,
+   `registrou_servico`), 12/09. Na web já saem; nas lojas, com a 2.5.
+6. **O card de revisões do Início abre o calendário estimado** com km ou
+   data de compra, em vez de mandar ao quiz (12/09).
 
 ## O que NÃO precisa de binário
 

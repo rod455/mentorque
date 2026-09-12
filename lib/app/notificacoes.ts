@@ -69,6 +69,10 @@ export const AVISO = {
   revisaoVencida: 4,
   // A trilha em ritmo: uma aula por dia, às 9h (lembreteTrilha.ts).
   trilha: 5,
+  // O quiz cobre três manhãs (12/09/2026): a segunda e a terceira têm ids
+  // próprios, fixos, para serem canceladas e refeitas a cada abertura.
+  quizDoDia2: 6,
+  quizDoDia3: 7,
 } as const;
 
 // Canal do Android. Sem canal declarado, o Android 8+ joga a notificação num

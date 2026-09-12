@@ -24,6 +24,7 @@
 // no checklist de release.
 //
 // Rode com: npm run conferir:aviso
+import { manhasDoQuiz, quandoSaiOProximo } from "../lib/app/manhasDoQuiz.ts";
 import { anotaRota, aoAnotarRota, esqueceRota, nomeDeRota, rotaPendente } from "../lib/app/rotaPendente.ts";
 import { espelhaOAparelho } from "../lib/app/espelhoDoAviso.ts";
 import { quandoAvisarCarroParado } from "../lib/app/carroParado.ts";
@@ -477,6 +478,26 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
   conferir("existe o momento 'onboarding' do pedido de aviso", /"onboarding"/.test(pedido) && /pedirConviteNoOnboarding/.test(pedido));
   conferir("sair do onboarding no app das lojas deixa a marca do convite", /isNativeApp\(\)\) pedirConviteNoOnboarding\(\)/.test(onboarding));
   conferir("o Início consome a marca e faz o convite com motivo concreto", /consumirConviteNoOnboarding\(\)/.test(home) && /momento="onboarding"/.test(home) && /conviteAvisoTitulo/.test(home));
+}
+
+// ── o quiz cobre três manhãs (aprovado pelo dono em 12/09/2026) ─────────────
+{
+  const as8 = new Date("2026-09-12T08:00:00");
+  const as10 = new Date("2026-09-12T10:00:00");
+  const semResposta = manhasDoQuiz(QUIZ_ZERADO, as8);
+  conferir("sem resposta, às 8h: três manhãs, começando hoje", semResposta.length === 3 && semResposta[0].getDate() === 12 && semResposta[2].getDate() === 14, semResposta.map((d) => d.toISOString()).join(" "));
+  conferir("todas às 9h", semResposta.every((d) => d.getHours() === 9 && d.getMinutes() === 0));
+  const respondeu = { ...QUIZ_ZERADO, ultimoDia: "2026-09-12", respostas: 1, historico: [{ dia: "2026-09-12", perguntaId: "x", escolha: 0, acertou: true }] };
+  const depois = manhasDoQuiz(respondeu, as8);
+  conferir("respondeu hoje: o de hoje sai da lista, a primeira é amanhã", depois[0].getDate() === 13 && depois.length === 3, depois.map((d) => d.toISOString()).join(" "));
+  conferir("às 10h sem resposta, a primeira é amanhã", manhasDoQuiz(QUIZ_ZERADO, as10)[0].getDate() === 13);
+  conferir("a confirmação diz 'hoje' antes das 9h e 'amanhã' depois", quandoSaiOProximo(QUIZ_ZERADO, as8) === "hoje" && quandoSaiOProximo(QUIZ_ZERADO, as10) === "amanha");
+  const lembrete = leia("lib/app/lembreteQuiz.ts");
+  const notificacoes = leia("lib/app/notificacoes.ts");
+  const perfil = leia("components/app/screens/Profile.tsx");
+  conferir("o agendador usa as três manhãs com três ids fixos", /manhasDoQuiz\(/.test(lembrete) && /AVISOS_DO_QUIZ\[i\]/.test(lembrete) && /quizDoDia2: 6/.test(notificacoes) && /quizDoDia3: 7/.test(notificacoes));
+  conferir("desligar cancela os três", /for \(const id of AVISOS_DO_QUIZ\) await cancelar\(id\)/.test(lembrete) && /for \(const id of AVISOS_DO_QUIZ\) await cancelar\(id\)/.test(perfil));
+  conferir("ligar avisos responde na tela com o próximo horário", /avisosLigadosHoje/.test(perfil) && /avisosLigadosAmanha/.test(perfil) && /ligadoAgora \?\? p\.notificationsSub/.test(perfil));
 }
 
 if (falhas) {
