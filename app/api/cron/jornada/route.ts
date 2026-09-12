@@ -24,30 +24,52 @@ export const maxDuration = 60;
 //
 // TRÊS TRAVAS, e cada uma responde a um jeito diferente de errar:
 //
-//   1. ENSAIO POR PADRÃO. Sem JORNADA_ATIVA=sim na Vercel, o cron roda
-//      inteiro, decide para todo mundo e NÃO manda nada: devolve a lista do
-//      que mandaria. Mensagem a cliente é alçada do dono; ligar a chave é o
-//      ato dele. `?ensaio=1` força o ensaio mesmo com a chave ligada.
+//   1. O FREIO. Nasceu em ensaio por padrão (JORNADA_ATIVA=sim para enviar);
+//      em 12/09 o dono mandou "faça tudo que precisa e deixe funcionando", e
+//      o padrão virou ENVIAR, com JORNADA_PAUSADA=sim na Vercel como freio.
+//      `?ensaio=1` força o ensaio numa chamada: decide para todo mundo e não
+//      manda nada, devolve a lista do que mandaria.
+//      O que substitui a cópia de prova antes do disparo, já que ninguém
+//      conseguiu mandá-la daqui: na primeira vez que cada e-mail sai para
+//      alguém, o dono recebe a mesma cópia, na mesma manhã, e todo dia com
+//      envio recebe o resumo do que saiu (para quem, qual chave, qual
+//      assunto). O endereço é o FEEDBACK_TO, o mesmo do resumo da Biela.
 //   2. A CHAVE DO CRON. A Vercel manda `Authorization: Bearer $CRON_SECRET`;
 //      sem ela, ou com a DADOS_CHAVE para uma rodada manual, nada roda.
 //   3. A TRAVA NO BANCO. jornada_envios tem índice único (user_id, dia): duas
 //      rodadas no mesmo dia não mandam duas vezes, e a decisão lê os envios
 //      antes de escolher.
 //
-// O que fica de fora, de propósito: conta sem e-mail, e qualquer regra de
+// O que fica de fora, de propósito: conta sem e-mail; os endereços do "ocultar
+// meu e-mail" da Apple (privaterelay.appleid.com) enquanto o domínio não
+// estiver cadastrado no relay dela (JORNADA_APPLE_RELAY=sim libera), porque
+// e-mail para eles VOLTA e devolução suja o domínio; e qualquer regra de
 // oferta ou preço (não existe nenhuma aqui, e não entra sem o dono).
 
 const FROM = process.env.JORNADA_FROM ?? process.env.WAITLIST_FROM ?? "Mentorque <contato@mentorque.com.br>";
+const DONO = process.env.FEEDBACK_TO ?? "contato@mentorque.com.br";
+const APPLE_RELAY = "@privaterelay.appleid.com";
 const PAUSA_MS = 600; // dois por segundo é o teto do Resend
 
 function hojeEmBrasilia(agora = new Date()): string {
   return agora.toLocaleDateString("en-CA", { timeZone: "America/Sao_Paulo" });
 }
 
-function autorizado(req: Request): boolean {
+// Quem pode chamar, e o que cada um vê.
+//
+// A Vercel manda `Authorization: Bearer $CRON_SECRET` QUANDO a variável
+// existe. Sem ela, a chamada do cron chega sem cabeçalho nenhum, e uma porta
+// que exigisse a chave rejeitaria o próprio cron: a jornada ficaria muda
+// para sempre sem ninguém saber. Por isso, sem CRON_SECRET, a chamada do cron
+// da Vercel (agente `vercel-cron`) passa, como no resumo da Biela. Repetir a
+// chamada não manda nada dobrado: a decisão lê os envios e o banco tem o
+// índice único. O que fica só para quem tem chave é a LISTA (e-mail
+// mascarado, carro no assunto); sem chave a resposta traz só os números.
+function quemChama(req: Request): "chave" | "cron" | "ninguem" {
+  if (chaveDadosOk(req)) return "chave";
   const segredo = process.env.CRON_SECRET;
-  if (segredo && req.headers.get("authorization") === `Bearer ${segredo}`) return true;
-  return chaveDadosOk(req);
+  if (segredo) return req.headers.get("authorization") === `Bearer ${segredo}` ? "cron" : "ninguem";
+  return /vercel-cron/i.test(req.headers.get("user-agent") ?? "") ? "cron" : "ninguem";
 }
 
 type Estado = {
@@ -166,13 +188,16 @@ const mascara = (email: string) => {
 };
 
 export async function GET(req: Request) {
-  if (!autorizado(req)) return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
+  const chamador = quemChama(req);
+  if (chamador === "ninguem") return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
   const admin = getSupabaseAdmin();
   if (!admin) return NextResponse.json({ ok: false, error: "banco_nao_configurado" }, { status: 501 });
 
   const url = new URL(req.url);
   const ensaioForcado = url.searchParams.get("ensaio") === "1";
-  const ativa = process.env.JORNADA_ATIVA === "sim" && !ensaioForcado;
+  const pausada = process.env.JORNADA_PAUSADA === "sim";
+  const ativa = !pausada && !ensaioForcado;
+  const relayLiberado = process.env.JORNADA_APPLE_RELAY === "sim";
   const limite = Math.min(40, Math.max(1, Number(url.searchParams.get("limite") ?? 40) || 40));
   const chaveResend = process.env.RESEND_API_KEY ?? null;
   const hoje = hojeEmBrasilia();
@@ -188,6 +213,12 @@ export async function GET(req: Request) {
   const candidatos: { userId: string; email: string; chave: string; familia: string; motivo: string; assunto: string; push: boolean }[] = [];
   const erros: { userId: string; chave: string; erro: string }[] = [];
   const escolhas: { p: PessoaDaJornada; e: Escolha }[] = [];
+  // Chaves que já saíram para alguém antes de hoje: a primeira vez de cada
+  // uma rende uma cópia para o dono.
+  const chavesJaVistas = new Set<string>();
+  for (const p of pessoas) for (const env of p.envios) if (env.dia < hoje) chavesJaVistas.add(env.chave);
+  const copiasParaODono: { chave: string; assunto: string; html: string; text: string }[] = [];
+  let puladosAppleRelay = 0;
   for (const p of pessoas) {
     let e: Escolha | null = null;
     try {
@@ -210,6 +241,10 @@ export async function GET(req: Request) {
     }
     candidatos.push({ userId: p.userId, email: mascara(p.email), chave: e.chave, familia: e.familia, motivo: e.motivo, assunto: mensagem.assunto, push: comToken.has(p.userId) });
     if (!ativa) continue;
+    if (!relayLiberado && p.email.toLowerCase().endsWith(APPLE_RELAY)) {
+      puladosAppleRelay++;
+      continue;
+    }
 
     if (!chaveResend) {
       erros.push({ userId: p.userId, chave: e.chave, erro: "resend_nao_configurado" });
@@ -221,9 +256,16 @@ export async function GET(req: Request) {
       break;
     }
     const canais: string[] = [];
-    const erroEmail = await enviarEmail(chaveResend, p.email, renderEmail(mensagem, sairUrl), sairUrl);
+    const pronto = renderEmail(mensagem, sairUrl);
+    const erroEmail = await enviarEmail(chaveResend, p.email, pronto, sairUrl);
     if (erroEmail) erros.push({ userId: p.userId, chave: e.chave, erro: `email: ${erroEmail}` });
-    else { enviados++; canais.push("email"); }
+    else {
+      enviados++;
+      canais.push("email");
+      if (!chavesJaVistas.has(e.chave) && !copiasParaODono.some((c) => c.chave === e.chave)) {
+        copiasParaODono.push({ chave: e.chave, assunto: pronto.assunto, html: pronto.html, text: pronto.text });
+      }
+    }
 
     if (comToken.has(p.userId)) {
       try {
@@ -241,18 +283,39 @@ export async function GET(req: Request) {
     await new Promise((r) => setTimeout(r, PAUSA_MS));
   }
 
+  // O dono vê o que saiu: uma cópia de cada e-mail que saiu pela primeira vez
+  // e o resumo do dia. Só em modo envio e só quando aconteceu alguma coisa.
+  let copiasEnviadas = 0;
+  let resumoEnviado = false;
+  if (ativa && chaveResend && (enviados > 0 || erros.length > 0)) {
+    for (const c of copiasParaODono) {
+      const erro = await enviarEmail(chaveResend, DONO, { assunto: `[cópia da jornada: ${c.chave}] ${c.assunto}`, html: c.html, text: c.text }, "https://www.mentorque.com.br");
+      if (!erro) copiasEnviadas++;
+      await new Promise((r) => setTimeout(r, PAUSA_MS));
+    }
+    const linhas = candidatos.map((c) => `<li>${c.email} · <b>${c.chave}</b> · ${c.assunto}${c.push ? " · push" : ""}</li>`).join("");
+    const linhasDeErro = erros.map((x) => `<li>${x.chave}: ${x.erro}</li>`).join("");
+    const resumoHtml = `<p>Jornada de ${hoje}: <b>${enviados}</b> e-mail(s) enviado(s), ${pushEnviados} push, ${puladosAppleRelay} pulado(s) por e-mail oculto da Apple, ${erros.length} erro(s).</p><ul>${linhas}</ul>${linhasDeErro ? `<p>Erros:</p><ul>${linhasDeErro}</ul>` : ""}<p>Para pausar: JORNADA_PAUSADA=sim na Vercel. Manual em docs/jornada.md.</p>`;
+    const resumoText = `Jornada de ${hoje}: ${enviados} e-mail(s), ${pushEnviados} push, ${puladosAppleRelay} pulado(s) por e-mail oculto da Apple, ${erros.length} erro(s).\n` + candidatos.map((c) => `- ${c.email} · ${c.chave} · ${c.assunto}`).join("\n");
+    const erro = await enviarEmail(chaveResend, DONO, { assunto: `Jornada de hoje: ${enviados} e-mail(s), ${erros.length} erro(s)`, html: resumoHtml, text: resumoText }, "https://www.mentorque.com.br");
+    resumoEnviado = !erro;
+  }
+
   return NextResponse.json({
     ok: true,
     hoje,
     modo: ativa ? "envio" : "ensaio",
+    puladosAppleRelay,
+    copiasParaODono: copiasEnviadas,
+    resumoParaODono: resumoEnviado,
     contas: pessoas.length,
     escolhidos: escolhas.length,
     limite,
     enviados,
     pushEnviados,
     push: pushConfigurado(),
-    candidatos,
-    erros,
+    candidatos: chamador === "chave" ? candidatos : candidatos.length,
+    erros: chamador === "chave" ? erros : erros.length,
   });
 }
 

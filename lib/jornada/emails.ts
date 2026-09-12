@@ -4,7 +4,8 @@
 // TEXTOS APROVADOS EM LISTA pelo dono em 12/09/2026 (assuntos e a dor de cada
 // e-mail, em docs/agentes/propostas/jornada-de-recorrencia.md). O corpo
 // completo é rascunho dele para revisar: mensagem a cliente é alçada do dono,
-// e é por isso que o cron nasce em ensaio e só envia com JORNADA_ATIVA=sim.
+// e é por isso que ele recebe uma cópia de cada e-mail na primeira vez que ele
+// sai, e o resumo de cada manhã; JORNADA_PAUSADA=sim na Vercel é o freio.
 //
 // Regras que valem para todos e são conferidas por `conferir:jornada`:
 //   - português natural, sem travessão;

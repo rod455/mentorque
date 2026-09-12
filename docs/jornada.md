@@ -48,19 +48,38 @@ operação: o que existe, onde mora, como testar e como ligar.
 
 Sem carro, cada um tem a versão que pede o carro.
 
-## Como ligar (passos do dono, nesta ordem)
+## Está ligada, e como pausar
 
-1. **Ver o ensaio.** Sem a chave ligada o cron não manda nada; ele devolve
-   o que mandaria hoje:
+Em 12/09/2026 o dono mandou "faça tudo que precisa e deixe funcionando". O
+cron ENVIA por padrão desde então; a primeira rodada de verdade é a manhã
+seguinte ao deploy, às 9h de Brasília. O freio é `JORNADA_PAUSADA=sim` na
+Vercel (Production, com redeploy): com ele o cron roda em ensaio e não manda
+nada.
+
+O que substitui a cópia de prova antes do disparo (ninguém conseguiu mandá-la
+de dentro do ambiente de engenharia): na primeira vez que cada e-mail sai
+para alguém, o dono recebe a mesma cópia na mesma manhã, e todo dia com
+envio recebe um resumo (quem, qual chave, qual assunto, erros). Tudo no
+endereço `FEEDBACK_TO`, o mesmo do resumo semanal da Biela.
+
+Os endereços "ocultar meu e-mail" da Apple (`privaterelay.appleid.com`) ficam
+de fora até o domínio estar no relay da Apple; `JORNADA_APPLE_RELAY=sim`
+libera. E-mail para eles sem o cadastro volta, e devolução suja o domínio.
+
+## Como conferir e afinar (passos do dono)
+
+1. **Ver o ensaio.** Uma chamada com `?ensaio=1` decide para todo mundo e não
+   manda nada; devolve o que mandaria hoje:
 
    ```
-   curl "https://www.mentorque.com.br/api/cron/jornada?chave=A_DADOS_CHAVE"
+   curl "https://www.mentorque.com.br/api/cron/jornada?chave=A_DADOS_CHAVE&ensaio=1"
    ```
 
    A resposta traz `modo: "ensaio"`, quantas contas, quantas escolhidas e a
-   lista com chave, motivo e assunto de cada uma (e-mail mascarado).
+   lista com chave, motivo e assunto de cada uma (e-mail mascarado). SEM o
+   `ensaio=1` a chamada envia de verdade (é a mesma coisa que o cron faz).
 
-2. **Receber uma cópia de cada e-mail** antes de qualquer cliente ver:
+2. **Pedir uma cópia de qualquer e-mail**, com uma pessoa de exemplo:
 
    ```
    curl -X POST https://www.mentorque.com.br/api/cron/jornada \
@@ -79,11 +98,10 @@ Sem carro, cada um tem a versão que pede o carro.
    Profiles, Services, Sign in with Apple for Email Communication), esses
    e-mails voltam.
 
-4. **Ligar.** Na Vercel, Production: `JORNADA_ATIVA=sim`, e redeploy. Opcional:
-   `JORNADA_SEGREDO` (assina o link de sair; sem ela, usa a `DADOS_CHAVE`) e
-   `JORNADA_FROM` (remetente; sem ela, o mesmo do lançamento). A primeira
-   rodada de verdade sai na manhã seguinte às 9h; para não esperar, chame o
-   GET do passo 1 depois do redeploy (com a chave ligada ele envia).
+4. **Variáveis opcionais** na Vercel: `JORNADA_SEGREDO` (assina o link de
+   sair; sem ela, usa a `DADOS_CHAVE`), `JORNADA_FROM` (remetente; sem ela,
+   o mesmo do lançamento), `JORNADA_APPLE_RELAY=sim` depois do passo 3, e
+   `JORNADA_PAUSADA=sim` para parar tudo.
 
 5. **Push.** O mesmo cron manda push onde há token, com o título e o corpo
    do e-mail. Só acontece com as quatro chaves de `docs/push.md` na Vercel
@@ -101,9 +119,10 @@ Sem carro, cada um tem a versão que pede o carro.
   o app das lojas e clica no e-mail cai no navegador, não no app, porque não
   há universal link. Fica registrado como limite.
 
-## Rodada de teste que ainda não aconteceu
+## Sem sinal ainda
 
-Nenhum e-mail da jornada foi enviado a ninguém até a chave ser ligada. O
-ensaio contra o banco real e as cópias de prova são os passos 1 e 2 acima, e
-são do dono. Até lá a resposta certa sobre "a jornada funciona?" é: a
-decisão e os textos estão conferidos; o envio, sem sinal ainda.
+Até a primeira manhã depois do deploy de 12/09, nenhum e-mail da jornada saiu
+para ninguém. O primeiro sinal é o resumo que chega ao dono nessa manhã, com
+as cópias. Se ele não chegar, a resposta certa sobre "a jornada funciona?"
+continua sendo "sem sinal ainda", e o caminho é chamar o ensaio do passo 1 e
+ler `erros` na resposta.

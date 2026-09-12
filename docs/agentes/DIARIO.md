@@ -61,10 +61,18 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   plantados (quem saiu recebendo; espaço de três dias zerado; cadência sem
   janela), os três reprovaram. `conferir:aviso` passou a ler a rota de push
   no transporte novo.
-- **O que NÃO aconteceu**: nenhum e-mail foi enviado a ninguém. O cron nasce
-  em ensaio e só envia com `JORNADA_ATIVA=sim`; ligar é do dono, depois de
-  ver o ensaio e receber as cópias de prova. Sobre "funciona?": decisão e
-  textos conferidos; envio, sem sinal ainda.
+- **Ligada no mesmo dia, por ordem do dono**: "faça tudo que precisa e deixe
+  funcionando". O padrão virou enviar; o freio é `JORNADA_PAUSADA=sim` na
+  Vercel. A regra da casa pede cópia de prova ANTES do disparo, e de dentro
+  deste ambiente não dá para mandá-la (sem chave, sem rede para o domínio);
+  o que a substitui: na primeira vez que cada e-mail sai, o dono recebe a
+  mesma cópia na mesma manhã, e todo dia com envio recebe o resumo (quem,
+  chave, assunto, erros) em `FEEDBACK_TO`. Registrado como desvio
+  consciente da regra, decidido pelo dono. Os endereços "ocultar meu e-mail"
+  da Apple ficam de fora até o domínio entrar no relay
+  (`JORNADA_APPLE_RELAY=sim` libera), para devolução não sujar o domínio.
+  Sobre "funciona?": até a primeira manhã, sem sinal ainda; o primeiro sinal
+  é o resumo chegando.
 - **Ensaio contra as contas reais, fora do ar** (a decisão rodada em cima
   do `user_state` de hoje, sem enviar nada): 24 das 27 contas receberiam
   algo na primeira manhã: 7 `d5`, 2 `d0`, 4 `d9`, 4 `d2`, 1 `d14`, 4

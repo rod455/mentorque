@@ -185,11 +185,15 @@ console.log("Jornada: quem recebe o quê, e quando.");
 // ── as ligações ─────────────────────────────────────────────────────────────
 {
   const cron = leia("app/api/cron/jornada/route.ts");
-  conferir("o cron nasce em ensaio: só envia com JORNADA_ATIVA=sim", /JORNADA_ATIVA/.test(cron) && /=== "sim"/.test(cron));
+  conferir("o cron tem o freio JORNADA_PAUSADA e o ensaio forçado", /JORNADA_PAUSADA/.test(cron) && /ensaio.*=== "1"/.test(cron));
+  conferir("os e-mails ocultos da Apple ficam de fora até o relay estar cadastrado", /privaterelay\.appleid\.com/.test(cron) && /JORNADA_APPLE_RELAY/.test(cron));
+  conferir("o dono recebe a cópia de cada e-mail na primeira vez e o resumo do dia", /copiasParaODono/.test(cron) && /Jornada de hoje/.test(cron));
   conferir("o cron consulta a decisão e monta o texto", /escolherEmail\(/.test(cron) && /montarMensagem\(/.test(cron));
   conferir("o cron manda push pelo mesmo transporte", /enviarPush\(/.test(cron));
   conferir("o cron grava o envio", /from\("jornada_envios"\)\.insert/.test(cron));
-  conferir("o cron exige a chave", /CRON_SECRET/.test(cron) && /chaveDadosOk/.test(cron));
+  conferir("o cron reconhece a chave e a chamada da Vercel", /CRON_SECRET/.test(cron) && /chaveDadosOk/.test(cron) && /vercel-cron/.test(cron));
+  conferir("sem CRON_SECRET, a chamada do cron da Vercel passa (senão a jornada fica muda)", /if \(segredo\) return[\s\S]{0,200}vercel-cron/.test(cron));
+  conferir("a lista com e-mails só sai para quem tem a chave", /chamador === "chave" \? candidatos/.test(cron));
   conferir("o e-mail sai com List-Unsubscribe de um clique", /List-Unsubscribe-Post/.test(cron));
   const vercel = readFileSync(new URL("../vercel.json", import.meta.url), "utf8");
   conferir("a Vercel agenda o cron todo dia às 9h de Brasília (12h UTC)", /"\/api\/cron\/jornada"[\s\S]{0,60}"0 12 \* \* \*"/.test(vercel));

@@ -18,8 +18,9 @@ construção:
   até três dias depois do marco (senão as 27 contas antigas levariam cinco
   e-mails em rajada no dia de ligar), e "vencida" exige um serviço daquele
   tipo registrado (a data de compra sozinha produzia "vencido há 30 meses").
-- Nada foi enviado a ninguém: o cron nasce em ensaio e só envia com
-  `JORNADA_ATIVA=sim`, que é o ato do dono.
+- Ligada no mesmo dia, por ordem do dono ("faça tudo que precisa e deixe
+  funcionando"). O freio é `JORNADA_PAUSADA=sim` na Vercel. O dono recebe a
+  cópia de cada e-mail na primeira vez que ele sai, e o resumo de cada manhã.
 
 O texto original da proposta segue abaixo, como foi aprovado.
 
