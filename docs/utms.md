@@ -64,6 +64,14 @@ Consequência para a medição: `comecou_onboarding` na web deve cair a quase
 zero, e "quanto o anúncio trouxe" passa a ser lido na loja, onde a etiqueta
 não atravessa (seção abaixo).
 
+## Os e-mails da jornada (12/09/2026)
+
+Todo link da jornada de recorrência (`docs/jornada.md`) leva
+`utm_source=email&utm_medium=jornada&utm_campaign=jornada&utm_content=<chave>`,
+com a chave do e-mail (`d2`, `vencida-oil`, `sumiu-14`). É a única exceção à
+regra abaixo de apontar para a home: quem recebe já tem conta, e o link é
+direto, como o do e-mail de lançamento.
+
 ## Para onde os links apontam, e por que NÃO é o /app
 
 Todos apontam para a home, e isso é decisão medida, não gosto.

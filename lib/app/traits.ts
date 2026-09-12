@@ -11,7 +11,9 @@
 // de saúde e o histórico de serviços.
 
 import type { ServiceRecord, Vehicle } from "./types";
-import { computeUpcoming } from "./health";
+// `.ts` explícito para `node --experimental-strip-types` abrir este módulo
+// sem empacotador (a jornada de e-mails, em lib/jornada, é conferida assim).
+import { computeUpcoming } from "./health.ts";
 
 export type Trait =
   | "turbo"

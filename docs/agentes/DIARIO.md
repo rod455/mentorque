@@ -37,6 +37,38 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-12 · Engenharia: a jornada de recorrência por e-mail e push, construída
+- **Decisão do dono**: "vamos criar tudo que foi proposto de email. Já vamos
+  deixar o push pronto também", sobre a proposta do mesmo dia
+  (`docs/agentes/propostas/jornada-de-recorrencia.md`).
+- **O mapa que desenhou a proposta**: 27 contas, todas com e-mail; 13 com
+  carro; 4 com serviço; UMA pessoa com token de push (Android) e as chaves
+  de push ausentes na Vercel; convidado não tem e-mail. Logo: e-mail é o
+  canal das contas, o aviso local é o canal do aparelho, e o push do
+  servidor fica pronto para o dia em que houver chave e token.
+- **Construído**: decisão pura (`lib/jornada/decisao.ts`: saída, atividade
+  hoje, um a cada três dias, gatilho > cadência > sazonal), textos com o
+  carro da pessoa (`lib/jornada/emails.ts`, 21 variações), link de sair
+  assinado, cron diário às 9h de Brasília, tabelas `jornada_envios` (índice
+  único por pessoa e dia) e `jornada_saidas`, transporte de push extraído
+  para `lib/push/transporte.ts`. Manual em `docs/jornada.md`.
+- **Duas regras que a construção acrescentou**: a cadência só sai até três
+  dias depois do marco (sem isso, ligar hoje mandaria cinco e-mails em
+  rajada para cada conta antiga); e "vencida" exige serviço daquele tipo
+  registrado (o teste de fumaça produziu "óleo vencido há 30 meses" a
+  partir da data de compra de um carro sem registro nenhum).
+- **Conferência**: `conferir:jornada`, dezenas de asserções sobre a decisão, 21 variações de texto e as ligações; três defeitos
+  plantados (quem saiu recebendo; espaço de três dias zerado; cadência sem
+  janela), os três reprovaram. `conferir:aviso` passou a ler a rota de push
+  no transporte novo.
+- **O que NÃO aconteceu**: nenhum e-mail foi enviado a ninguém. O cron nasce
+  em ensaio e só envia com `JORNADA_ATIVA=sim`; ligar é do dono, depois de
+  ver o ensaio e receber as cópias de prova. Sobre "funciona?": decisão e
+  textos conferidos; envio, sem sinal ainda.
+- **Limites registrados**: abertura de e-mail não se mede; quem usa o app das
+  lojas e clica cai no navegador (sem universal link); as quatro contas
+  Apple com e-mail escondido só recebem com o domínio no relay da Apple.
+
 ## 2026-09-12 · Engenharia: o site não leva mais ao /app (a porteira durou horas)
 - **A pergunta que abriu isto**: "como eles estão acessando o app na web?
   deveria ser só pelas lojas". O app era uma página do site (`/app`), com o

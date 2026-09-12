@@ -15,7 +15,7 @@
     "build:native": "node scripts/build-native.mjs",
     "verifica:quiz": "npm run conferir:regras",
     "quiz:pdf": "node --experimental-strip-types scripts/quiz-pdf.ts",
-    "conferir": "npm run conferir:tipos && npm run conferir:estilo && npm run conferir:regras && npm run conferir:revisoes && npm run conferir:navegacao && npm run conferir:frescor && npm run conferir:versoes && npm run conferir:travessao && npm run conferir:identidade && npm run conferir:catalogo && npm run conferir:funil && npm run conferir:migalha && npm run conferir:venda && npm run conferir:campanha && npm run conferir:agenda && npm run conferir:aviso && npm run conferir:login && npm run conferir:recorte && npm run conferir:appsflyer && npm run conferir:skills && npm run conferir:guias && npm run conferir:contexto && npm run conferir:frota && npm run conferir:embedding && npm run conferir:pecas && npm run conferir:anomalias && npm run conferir:acoes && npm run conferir:gravacao && npm run conferir:garagem && npm run conferir:precos && npm run conferir:caminho",
+    "conferir": "npm run conferir:tipos && npm run conferir:estilo && npm run conferir:regras && npm run conferir:revisoes && npm run conferir:navegacao && npm run conferir:frescor && npm run conferir:versoes && npm run conferir:travessao && npm run conferir:identidade && npm run conferir:catalogo && npm run conferir:funil && npm run conferir:migalha && npm run conferir:venda && npm run conferir:campanha && npm run conferir:agenda && npm run conferir:aviso && npm run conferir:login && npm run conferir:recorte && npm run conferir:appsflyer && npm run conferir:skills && npm run conferir:guias && npm run conferir:contexto && npm run conferir:frota && npm run conferir:embedding && npm run conferir:pecas && npm run conferir:anomalias && npm run conferir:acoes && npm run conferir:gravacao && npm run conferir:garagem && npm run conferir:precos && npm run conferir:caminho && npm run conferir:jornada",
     "conferir:tipos": "tsc --noEmit",
     "conferir:estilo": "next lint",
     "conferir:regras": "node --experimental-strip-types scripts/verifica-quiz.ts",
@@ -51,7 +51,8 @@
     "pecas": "node --experimental-strip-types scripts/pecas.mjs",
     "conferir:garagem": "node --experimental-strip-types scripts/verifica-garagem.ts",
     "conferir:precos": "node --experimental-strip-types scripts/verifica-precos.ts",
-    "conferir:caminho": "node --experimental-strip-types scripts/verifica-caminho.ts"
+    "conferir:caminho": "node --experimental-strip-types scripts/verifica-caminho.ts",
+    "conferir:jornada": "node --experimental-strip-types scripts/verifica-jornada.ts"
   },
   "dependencies": {
     "@capacitor-community/admob": "^8.0.0",

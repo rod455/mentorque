@@ -30,6 +30,8 @@ começar lendo em vez de garimpando.
 | um teste de garagem de um sintoma | `lib/app/conteudo/sintomas.ts`, campo `testes` |
 | o texto de um guia do site (`/barulho-no-carro`) | `lib/site/guias/<caminho>.ts` |
 | criar um guia novo do site | veja abaixo |
+| qual e-mail da jornada sai para quem, e quando | `lib/jornada/decisao.ts` (e confira com `npm run conferir:jornada`); os textos em `lib/jornada/emails.ts`; o manual em `docs/jornada.md` |
+| o transporte de push (FCM e APNs) | `lib/push/transporte.ts`; a rota manual é `app/api/push/enviar`, o chamador automático é `app/api/cron/jornada` |
 
 ### Um guia de sintoma novo no site
 

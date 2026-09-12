@@ -27,6 +27,11 @@ achar entra aqui.
   da home e nenhuma página aponta para o `/app`; a rota continua existindo
   para quem digita. Foi no deploy da Vercel; o app das lojas não muda
   (`scripts/verifica-caminho.ts`).
+- **A jornada de recorrência por e-mail e push** (12/09): cron diário que
+  decide, por conta, qual e-mail cabe hoje (cadência de 14 dias, gatilhos
+  pelo estado do carro, sazonais) e manda push onde há token. Nasce em
+  ensaio; só envia com `JORNADA_ATIVA=sim` na Vercel. Manual em
+  `docs/jornada.md`; conferida por `conferir:jornada`.
 
 ## Roteiro de aparelho
 

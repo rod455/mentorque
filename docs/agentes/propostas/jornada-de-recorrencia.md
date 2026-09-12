@@ -5,8 +5,23 @@ garantir a recorrência das pessoas. Crie uma jornada de emails de cadência,
 com principais pontos de dor do cliente que podem fazer ele voltar. Quem tiver
 carro cadastrado, use as informações para criar jornadas personalizadas."
 
-É proposta. Nada aqui foi construído nem enviado. Mensagem a cliente é alçada
-do dono: os textos abaixo são rascunhos para ele aprovar, mudar ou vetar.
+**Aprovada pelo dono em 12/09/2026 ("vamos criar tudo que foi proposto de
+email. Já vamos deixar o push pronto também") e construída no mesmo dia.**
+O manual de operação, com o passo a passo para ligar, está em
+`docs/jornada.md`. O que ficou como estava proposto e o que mudou na
+construção:
+
+- Tudo do item 2 (cadência), do item 3 (gatilhos e sazonais) e do item 5
+  (motor, trava, medição) está no código. O push do item 4 ficou PRONTO no
+  mesmo motor: sai onde há token e chave, com o texto do e-mail.
+- Duas regras entraram na construção, além das propostas: a cadência só sai
+  até três dias depois do marco (senão as 27 contas antigas levariam cinco
+  e-mails em rajada no dia de ligar), e "vencida" exige um serviço daquele
+  tipo registrado (a data de compra sozinha produzia "vencido há 30 meses").
+- Nada foi enviado a ninguém: o cron nasce em ensaio e só envia com
+  `JORNADA_ATIVA=sim`, que é o ato do dono.
+
+O texto original da proposta segue abaixo, como foi aprovado.
 
 ## 1. Quem dá para alcançar, e por onde
 

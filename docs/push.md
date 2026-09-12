@@ -39,7 +39,12 @@ limpos a cada envio.
       `FCM_CONTA_SERVICO` (JSON da conta de serviço do Firebase),
       `APNS_CHAVE_P8` (conteúdo do arquivo .p8),
       `APNS_KEY_ID`, `APNS_TEAM_ID`.
-- [ ] Build novo nas lojas com o plugin embarcado (a 1.3 preparada já leva).
+- [x] Build novo nas lojas com o plugin embarcado (desde a 1.3).
+- [x] Um chamador automático, o primeiro e único: a jornada de recorrência
+      (`app/api/cron/jornada`, aprovada pelo dono em 12/09/2026) manda push
+      com o mesmo texto do e-mail onde há token. O transporte saiu da rota
+      para `lib/push/transporte.ts`; a rota manual continua igual. Ver
+      `docs/jornada.md`.
 
 Observações: o app iOS registrado no Firebase e o `GoogleService-Info.plist`
 NÃO são usados neste desenho (registrar não fez mal nenhum; o arquivo não

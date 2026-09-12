@@ -133,7 +133,9 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
   const abertura = leia("lib/app/aberturaDoApp.ts");
   const shell = leia("components/app/Shell.tsx");
   const push = leia("lib/app/push.ts");
-  const rotaEnviar = leia("app/api/push/enviar/route.ts");
+  // O transporte saiu da rota para lib/push/transporte.ts em 12/09/2026 (a
+  // jornada de e-mail e push usa o mesmo caminho); é lá que a rota viaja.
+  const rotaEnviar = leia("lib/push/transporte.ts");
 
   // 1. o aviso local carrega destino
   conferir(
