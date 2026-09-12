@@ -65,9 +65,20 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   em ensaio e só envia com `JORNADA_ATIVA=sim`; ligar é do dono, depois de
   ver o ensaio e receber as cópias de prova. Sobre "funciona?": decisão e
   textos conferidos; envio, sem sinal ainda.
-- **Limites registrados**: abertura de e-mail não se mede; quem usa o app das
-  lojas e clica cai no navegador (sem universal link); as quatro contas
-  Apple com e-mail escondido só recebem com o domínio no relay da Apple.
+- **Ensaio contra as contas reais, fora do ar** (a decisão rodada em cima
+  do `user_state` de hoje, sem enviar nada): 24 das 27 contas receberiam
+  algo na primeira manhã: 7 `d5`, 4 `d0`, 4 `d9`, 2 `d2`, 1 `d14`, 4
+  `sumiu-30`, 2 `sumiu-14`. Nenhum gatilho de revisão: as 4 contas com
+  serviço não têm item vencido nem chegando. Dois ajustes saíram do ensaio:
+  o `d0` só sai no dia ou no seguinte (uma conta de 3 dias recebia "sua
+  conta está pronta"), e o manual da Biela passou a casar por marca e
+  modelo sem o ano (a tabela guarda um ano por manual; Gol 2016 ficava
+  "sem manual" com o de 2015 na prateleira).
+- **Limites registrados**: abertura de e-mail não se mede; "mexeu no app
+  hoje" lê o `updated_at` do estado e o dia do quiz, então quem abre e não
+  muda nada não conta como ativo; quem usa o app das lojas e clica cai no
+  navegador (sem universal link); as quatro contas Apple com e-mail
+  escondido só recebem com o domínio no relay da Apple.
 
 ## 2026-09-12 · Engenharia: o site não leva mais ao /app (a porteira durou horas)
 - **A pergunta que abriu isto**: "como eles estão acessando o app na web?

@@ -245,7 +245,10 @@ function cadencia(p: PessoaDaJornada, hoje: string): Escolha | null {
   if (dias < 0) return null;
   const carro = carroPrincipal(p);
   for (const m of MARCOS_DA_CADENCIA) {
-    if (dias < m.dia || dias > m.dia + JANELA_DA_CADENCIA) continue;
+    // O "sua conta está pronta" só faz sentido no dia ou no seguinte; três
+    // dias depois já é notícia velha. Os outros marcos têm a janela cheia.
+    const janela = m.chave === "d0" ? 1 : JANELA_DA_CADENCIA;
+    if (dias < m.dia || dias > m.dia + janela) continue;
     if (jaRecebeu(p, m.chave)) continue;
     // O do dia 5 pede o primeiro serviço; quem já registrou não precisa.
     if (m.chave === "d5" && p.servicos.length > 0) continue;

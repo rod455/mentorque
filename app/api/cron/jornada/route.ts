@@ -62,16 +62,18 @@ type Estado = {
 
 type Manual = { make: string; model: string; year_from: number | null; year_to: number | null };
 
+// Marca e modelo bastam, e o ano fica de fora de propósito: a tabela guarda
+// um ano por manual (Gol 2015, 2018, 2021, 2024), e a Biela responde para um
+// Gol 2016 com o manual mais próximo. Exigir o ano exato aqui diria "sem
+// manual" para quase todo mundo que tem.
 function temManualPara(manuais: Manual[], v: Vehicle | null): boolean {
   if (!v) return false;
   const make = v.make.trim().toLowerCase();
   const model = v.model.trim().toLowerCase();
-  return manuais.some((m) =>
-    m.make.trim().toLowerCase() === make &&
-    (model.startsWith(m.model.trim().toLowerCase()) || m.model.trim().toLowerCase().startsWith(model)) &&
-    (m.year_from === null || v.year >= m.year_from) &&
-    (m.year_to === null || v.year <= m.year_to),
-  );
+  return manuais.some((m) => {
+    const mm = m.model.trim().toLowerCase();
+    return m.make.trim().toLowerCase() === make && (model.startsWith(mm) || mm.startsWith(model));
+  });
 }
 
 /** Lê tudo de que a decisão precisa, para todas as contas. */

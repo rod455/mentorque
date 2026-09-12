@@ -84,6 +84,8 @@ console.log("Jornada: quem recebe o quê, e quando.");
 {
   const nova = pessoa({ contaCriadaEm: HOJE, ultimaAtividade: diasAtras(1) });
   conferir("conta criada hoje, sem carro: d0", chave(nova) === "d0", `veio ${chave(nova)}`);
+  const dia3semNada = pessoa({ contaCriadaEm: diasAtras(3) });
+  conferir("conta de 3 dias que não recebeu o d0: pula para o d2 ('conta pronta' é notícia velha)", chave(dia3semNada) === "d2", `veio ${chave(dia3semNada)}`);
   const dia2 = pessoa({ contaCriadaEm: diasAtras(2), envios: [{ chave: "d0", dia: diasAtras(2) }] });
   conferir("dia 2 com d0 há 2 dias: espera (um a cada três dias)", chave(dia2) === null, `veio ${chave(dia2)}`);
   const dia3 = pessoa({ contaCriadaEm: diasAtras(3), envios: [{ chave: "d0", dia: diasAtras(3) }] });
