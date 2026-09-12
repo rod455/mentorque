@@ -96,6 +96,9 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   onboarding e `useDestinoDoOnboarding` navega para qualquer tela da lista
   fechada (`lib/app/destinoDoLink.ts`). Universal links, para o link abrir o
   app das lojas em vez do navegador, foram para a fila da 2.5 (binário).
+- **Relay da Apple cadastrado pelo dono em 12/09**: `mentorque.com.br` e
+  `contato@mentorque.com.br` em Sign in with Apple for Email Communication,
+  SPF verificado nos dois. Falta só `JORNADA_APPLE_RELAY=sim` na Vercel.
 - **Limites registrados**: abertura de e-mail não se mede; "mexeu no app
   hoje" lê o `updated_at` do estado e o dia do quiz, então quem abre e não
   muda nada não conta como ativo; quem usa o app das lojas e clica cai no
