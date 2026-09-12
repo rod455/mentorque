@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePrototype } from "@/lib/app/store";
 import { veioComprar } from "@/lib/app/vendaPendente";
+import { destinoDoLink } from "@/lib/app/destinoDoLink";
 import { OnboardingFlow } from "@/components/app/OnboardingFlow";
 import { Shell } from "@/components/app/Shell";
 import { SplashScreen } from "@/components/app/SplashScreen";
@@ -12,6 +13,15 @@ import { SplashScreen } from "@/components/app/SplashScreen";
 export default function AppPrototypePage() {
   const { s } = usePrototype();
   const [splashDone, setSplashDone] = useState(false);
+  // O `ir=` da URL (os e-mails da jornada, 12/09/2026): a tela pedida vai
+  // para o mesmo bolso do destino do onboarding, e o Shell navega ao nascer.
+  // Ver lib/app/destinoDoLink.ts e useDestinoDoOnboarding.
+  useEffect(() => {
+    try {
+      const d = destinoDoLink(window.location.search);
+      if (d) window.sessionStorage.setItem("mentorque-onboarding-destino", d);
+    } catch { /* ignore */ }
+  }, []);
 
   if (!splashDone) return <SplashScreen onDone={() => setSplashDone(true)} />;
 

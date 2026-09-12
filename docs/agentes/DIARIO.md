@@ -82,6 +82,11 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   conta está pronta"), e o manual da Biela passou a casar por marca e
   modelo sem o ano (a tabela guarda um ano por manual; Gol 2016 ficava
   "sem manual" com o de 2015 na prateleira).
+- **O botão cai na tela certa** (pedido do dono no mesmo dia): cada link
+  leva `ir=<tela>`; `app/app/page.tsx` guarda o destino no bolso do
+  onboarding e `useDestinoDoOnboarding` navega para qualquer tela da lista
+  fechada (`lib/app/destinoDoLink.ts`). Universal links, para o link abrir o
+  app das lojas em vez do navegador, foram para a fila da 2.5 (binário).
 - **Limites registrados**: abertura de e-mail não se mede; "mexeu no app
   hoje" lê o `updated_at` do estado e o dia do quiz, então quem abre e não
   muda nada não conta como ativo; quem usa o app das lojas e clica cai no

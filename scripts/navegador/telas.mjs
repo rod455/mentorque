@@ -177,4 +177,29 @@ export async function rodar({ nav, ok }) {
     ok("nenhum erro de página na Biela", b.erros.length === 0, b.erros[0] ?? "");
     await b.fechar();
   }
+
+  // ---- o `ir=` da URL: o botão do e-mail cai na tela certa ----------------
+  // Pedido do dono em 12/09/2026 para a jornada de e-mails. A página guarda o
+  // destino e o Shell navega ao nascer (lib/app/destinoDoLink.ts).
+  {
+    const b = await abrirApp(nav, {
+      sessao: SESSAO(),
+      chaves: { "mq-primeiro-quiz-nao": "1" },
+      rota: "/app?utm_source=email&utm_campaign=jornada&ir=history",
+    });
+    const t = await b.tela();
+    ok("`?ir=history` abre o calendário do carro, não o Início", /Calendário do/i.test(t) && !/O que vamos cuidar/i.test(t), t.slice(0, 80).replace(/\n/g, " "));
+    ok("nenhum erro de página com `ir=`", b.erros.length === 0, b.erros[0] ?? "");
+    await b.fechar();
+  }
+  {
+    const b = await abrirApp(nav, {
+      sessao: SESSAO(),
+      chaves: { "mq-primeiro-quiz-nao": "1" },
+      rota: "/app?ir=checkout",
+    });
+    const t = await b.tela();
+    ok("`?ir=` fora da lista é ignorado: fica no Início", /O que vamos cuidar|Diagnosticar um problema/i.test(t), t.slice(0, 80).replace(/\n/g, " "));
+    await b.fechar();
+  }
 }

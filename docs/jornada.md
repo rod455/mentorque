@@ -48,6 +48,15 @@ operação: o que existe, onde mora, como testar e como ligar.
 
 Sem carro, cada um tem a versão que pede o carro.
 
+**O botão cai na tela certa.** Pedido do dono em 12/09: o link de cada e-mail
+leva `ir=<tela>` (`addCar`, `history`, `addService`, `revisions`, `health`,
+`biela`, `quiz`, `car`), a página do app guarda o destino e o Shell navega ao
+nascer, mesmo para quem ainda vai passar pelo onboarding. A lista fechada
+está em `lib/app/destinoDoLink.ts`; `conferir:jornada` confere que todo
+botão tem destino. Limite que fica: no celular com o app das lojas
+instalado, o link abre o navegador, não o app, porque não há universal link
+(fila da 2.5).
+
 ## Está ligada, e como pausar
 
 Em 12/09/2026 o dono mandou "faça tudo que precisa e deixe funcionando". O

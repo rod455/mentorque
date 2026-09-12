@@ -13,6 +13,7 @@ import { esqueceVenda, guardaVenda, vendaPendente, type VendaPendente } from "./
 import { trackContent } from "./track";
 import { ensureConsent, nativeAdMob } from "./admob";
 import { adsEnabled } from "@/components/app/AdGate";
+import { destinoValido } from "@/lib/app/destinoDoLink";
 import { sincronizarLembrete } from "./lembreteAssinatura";
 import { sincronizarLembreteQuiz } from "./lembreteQuiz";
 import { sincronizarLembreteCarroParado } from "./lembreteCarroParado";
@@ -121,7 +122,10 @@ export function useDestinoDoOnboarding() {
       const d = window.sessionStorage.getItem("mentorque-onboarding-destino");
       if (!d) return;
       window.sessionStorage.removeItem("mentorque-onboarding-destino");
-      if (d === "addCar") go({ name: "addCar" });
+      // "addCar" vem da última página do onboarding no Android; os outros
+      // nomes vêm do `ir=` da URL (os e-mails da jornada, 12/09/2026). A
+      // lista fechada é a de lib/app/destinoDoLink.ts.
+      if (destinoValido(d)) go({ name: d });
     } catch { /* ignore */ }
   }, [go]);
 }

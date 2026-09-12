@@ -18,6 +18,7 @@ import {
   type PessoaDaJornada,
 } from "../lib/jornada/decisao.ts";
 import { montarMensagem, renderEmail, linkDoApp } from "../lib/jornada/emails.ts";
+import { DESTINOS_DO_LINK, destinoDoLink } from "../lib/app/destinoDoLink.ts";
 import type { ServiceRecord, Vehicle } from "../lib/app/types";
 
 let falhas = 0;
@@ -171,6 +172,8 @@ console.log("Jornada: quem recebe o quê, e quando.");
     conferir(`${rotulo}: sem travessão`, !travessao.test(tudo));
     conferir(`${rotulo}: sem preço de plano nem oferta`, !precoDePlano.test(tudo), tudo.match(precoDePlano)?.[0]);
     conferir(`${rotulo}: o link leva a etiqueta da jornada`, m.cta.url.includes("utm_source=email") && m.cta.url.includes("utm_campaign=jornada") && m.cta.url.includes("utm_content="), m.cta.url);
+    const ir = new URL(m.cta.url).searchParams.get("ir");
+    conferir(`${rotulo}: o botão cai numa tela de dentro do app`, ir !== null && (DESTINOS_DO_LINK as readonly string[]).includes(ir), `ir=${ir}; o dono pediu botão que leva para dentro do app, não para a tela inicial`);
     conferir(`${rotulo}: push curto`, m.push.titulo.length <= 70 && m.push.corpo.length <= 160, `${m.push.titulo.length}/${m.push.corpo.length}`);
     if (carroDoCaso && !["d5", "d9", "d14"].includes(c.chave) && !c.chave.startsWith("sumiu") && !c.chave.startsWith("preco")) {
       conferir(`${rotulo}: fala do carro pelo nome`, m.assunto.includes("Gol"), m.assunto);
@@ -180,6 +183,16 @@ console.log("Jornada: quem recebe o quê, e quando.");
     conferir(`${rotulo}: um botão só`, (r.html.match(/border-radius:999px/g) ?? []).length === 1);
   }
   conferir("a etiqueta não carrega dois-pontos", !linkDoApp("vencida:oil").includes("%3A") && linkDoApp("vencida:oil").includes("utm_content=vencida-oil"), linkDoApp("vencida:oil"));
+}
+
+// ── o destino do botão, da URL até a tela ───────────────────────────────────
+{
+  conferir("`?ir=addCar` vira o destino addCar", destinoDoLink("?utm_source=email&ir=addCar") === "addCar");
+  conferir("tela fora da lista é ignorada", destinoDoLink("?ir=checkout") === null && destinoDoLink("?ir=") === null);
+  const pagina = leia("app/app/page.tsx");
+  conferir("a página do app lê o `ir=` da URL e guarda o destino", /destinoDoLink\(window\.location\.search\)/.test(pagina) && /mentorque-onboarding-destino/.test(pagina));
+  const abertura = leia("lib/app/aberturaDoApp.ts");
+  conferir("o Shell navega para qualquer destino da lista, não só addCar", /destinoValido\(d\)[\s\S]{0,40}go\(\{ name: d \}\)/.test(abertura));
 }
 
 // ── as ligações ─────────────────────────────────────────────────────────────

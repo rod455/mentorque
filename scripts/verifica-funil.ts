@@ -357,7 +357,10 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
   );
   conferir(
     "a abertura consome o destino e abre o formulário do carro",
-    /"mentorque-onboarding-destino"/.test(abertura) && /go\(\{ name: "addCar" \}\)/.test(abertura),
+    // Desde 12/09/2026 o gancho navega para qualquer destino da lista fechada
+    // de lib/app/destinoDoLink.ts (os e-mails da jornada usam o mesmo bolso), e
+    // "addCar" está nela; a conferência do destino fica em conferir:jornada.
+    /"mentorque-onboarding-destino"/.test(abertura) && /destinoValido\(d\)[\s\S]{0,40}go\(\{ name: d \}\)/.test(abertura) && /"addCar"/.test(readFileSync(new URL("../lib/app/destinoDoLink.ts", import.meta.url), "utf8")),
   );
   conferir("o Shell chama o gancho do destino", /useDestinoDoOnboarding\(\)/.test(shell));
   conferir(

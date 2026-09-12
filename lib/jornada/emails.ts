@@ -29,6 +29,7 @@ import { planoDosItens } from "../app/planoDeRevisao.ts";
 import { faixaDaRegiao, posicaoNaFaixa } from "../app/faixaDePreco.ts";
 import { vehicleTraits } from "../app/traits.ts";
 import { nomeDoCarro, type Escolha, type PessoaDaJornada } from "./decisao.ts";
+import type { DestinoDoLink } from "../app/destinoDoLink.ts";
 
 // Endereço FIXO, como nos outros e-mails: imagem quebrada não tem conserto
 // depois de enviada.
@@ -82,10 +83,16 @@ const CUSTO_DO_ATRASO: Record<string, string> = {
   battery: "bateria no fim escolhe o pior dia para falhar",
 };
 
-/** Link para o app com a etiqueta da jornada. */
-export function linkDoApp(chave: string): string {
+/**
+ * Link para o app com a etiqueta da jornada e, quando há, a TELA em que o
+ * botão cai (`ir=`, lido por app/app/page.tsx e lib/app/destinoDoLink.ts).
+ * Pedido do dono em 12/09/2026: o botão leva para dentro do app, na tela do
+ * que o e-mail pediu, e não para a tela inicial.
+ */
+export function linkDoApp(chave: string, ir?: DestinoDoLink): string {
   const conteudo = chave.replace(/[^a-z0-9-]/gi, "-").toLowerCase();
   const u = new URL(`${SITE}/app`);
+  if (ir) u.searchParams.set("ir", ir);
   u.searchParams.set("utm_source", "email");
   u.searchParams.set("utm_medium", "jornada");
   u.searchParams.set("utm_campaign", "jornada");
@@ -135,7 +142,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
   const carro = e.carro;
   const nome = carro ? nomeDoCarro(carro) : null;
   const oi = saudacao(p);
-  const link = () => linkDoApp(e.chave);
+  const link = (ir: DestinoDoLink) => linkDoApp(e.chave, ir);
   const regiao = faixaDaRegiao("oil", p.uf, p.cidade);
   const [familia, item] = e.chave.split(":");
 
@@ -151,7 +158,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
           "O Mentorque lembra você da revisão antes de vencer, compara o preço do serviço com a sua região e responde o que o mecânico disse.",
           "Tudo isso começa com o seu carro cadastrado, e leva um minuto: marca, modelo e ano.",
         ],
-        cta: { texto: "Cadastrar o meu carro", url: link() },
+        cta: { texto: "Cadastrar o meu carro", url: link("addCar") },
         push: { titulo: "Falta o carro", corpo: "Cadastre o seu carro e o calendário de revisão nasce. Leva um minuto." },
       };
     }
@@ -166,7 +173,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
         itens.length ? "O que já dá para ver no calendário:" : "Registre a última revisão que você lembra, e o calendário passa a ter data.",
       ],
       destaque: itens.length ? { titulo: "Próximos 90 dias", itens } : undefined,
-      cta: { texto: `Ver o calendário do ${nome}`, url: link() },
+      cta: { texto: `Ver o calendário do ${nome}`, url: link("history") },
       push: { titulo: `O ${nome} já tem calendário`, corpo: "Revisão, km e serviço viram lembrete. Abra e veja o que vem." },
     };
   }
@@ -182,7 +189,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
           "Você criou a conta há dois dias e ainda não cadastrou o carro. Sem ele o app não tem o que lembrar: nem troca de óleo, nem fluido de freio, nem correia.",
           "Com o carro cadastrado, cada um desses itens ganha data e km, e vira aviso antes de vencer.",
         ],
-        cta: { texto: "Cadastrar o meu carro", url: link() },
+        cta: { texto: "Cadastrar o meu carro", url: link("addCar") },
         push: { titulo: "Sem carro, sem calendário", corpo: "Cadastre o seu carro e cada revisão ganha data e km." },
       };
     }
@@ -199,7 +206,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
             "Registre o último serviço que você lembra, mesmo aproximado. Com uma data, o app calcula todas as outras.",
           ],
       destaque: itens.length ? { titulo: "Vence primeiro", itens } : undefined,
-      cta: { texto: itens.length ? "Ver o calendário" : "Registrar a última revisão", url: link() },
+      cta: { texto: itens.length ? "Ver o calendário" : "Registrar a última revisão", url: link(itens.length ? "history" : "addService") },
       push: { titulo: `Os próximos 90 dias do ${nome}`, corpo: itens.length ? itens[0] : "Registre a última revisão e o calendário nasce." },
     };
   }
@@ -220,7 +227,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
           ? `Registre o último serviço do ${nome} com o valor, e no próximo você compara na hora com a sua região.`
           : "Cadastre o carro e registre o último serviço com o valor. No próximo, você compara na hora com a sua região.",
       ],
-      cta: { texto: carro ? "Registrar um serviço" : "Cadastrar o meu carro", url: link() },
+      cta: { texto: carro ? "Registrar um serviço" : "Cadastrar o meu carro", url: link(carro ? "addService" : "addCar") },
       push: { titulo: "Quanto custa uma troca de óleo?", corpo: "Registre o último serviço e compare com a sua região." },
     };
   }
@@ -238,7 +245,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
           ? `Ela responde com o manual do ${nome} aberto: intervalo de troca, tipo de óleo, o que a fábrica recomenda para o seu carro, não para um carro qualquer.`
           : "Ela responde em português claro, com o que costuma ser normal e o que merece um segundo orçamento.",
       ],
-      cta: { texto: "Perguntar à Biela", url: link() },
+      cta: { texto: "Perguntar à Biela", url: link("biela") },
       push: { titulo: comManual ? `O manual do ${nome} está na Biela` : "Pergunte à Biela", corpo: "Cole o orçamento e pergunte se a peça precisava mesmo ser trocada." },
     };
   }
@@ -264,7 +271,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
               "Fluido de freio: absorve água com o tempo e o pedal fica esponjoso",
             ],
           },
-          cta: { texto: "Responder o quiz de hoje", url: link() },
+          cta: { texto: "Responder o quiz de hoje", url: link("quiz") },
           push: { titulo: `${idade} anos de ${carro.model}`, corpo: "Bateria, correia, coxins: o que aparece nessa idade. Um minuto no quiz de hoje.", rota: "quiz" },
         };
       }
@@ -284,7 +291,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
               "Embreagem: patina em subida antes de falhar de vez",
             ],
           },
-          cta: { texto: "Responder o quiz de hoje", url: link() },
+          cta: { texto: "Responder o quiz de hoje", url: link("quiz") },
           push: { titulo: "Depois dos 100 mil km", corpo: "Correia, velas, amortecedores: o que passa a pedir atenção. Quiz de hoje em um minuto.", rota: "quiz" },
         };
       }
@@ -304,7 +311,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
           `<a href="${SITE}/carro-gastando-muita-gasolina" style="color:${TEXTO}">Carro gastando muita gasolina</a>`,
         ],
       },
-      cta: { texto: "Responder o quiz de hoje", url: link() },
+      cta: { texto: "Responder o quiz de hoje", url: link("quiz") },
       push: { titulo: "Luz acesa, barulho novo?", corpo: "O que olhar antes de ir à oficina. E o quiz de hoje leva um minuto.", rota: "quiz" },
     };
   }
@@ -328,7 +335,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
         CUSTO_DO_ATRASO[item] ? `Vale não deixar: ${CUSTO_DO_ATRASO[item]}.` : "Vale não deixar para o mês que vem.",
         "Se já fez e não registrou, marque no app e o calendário se ajusta sozinho.",
       ],
-      cta: { texto: `Ver a saúde do ${nome}`, url: link() },
+      cta: { texto: `Ver a saúde do ${nome}`, url: link("health") },
       push: { titulo: `${rotulo} do ${nome} venceu`, corpo: CUSTO_DO_ATRASO[item] ? `${CUSTO_DO_ATRASO[item].charAt(0).toUpperCase()}${CUSTO_DO_ATRASO[item].slice(1)}.` : "Já fez? Marque no app." },
     };
   }
@@ -351,7 +358,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
         `Pela régua do manual e pelo que você informou, ${rotulo.toLowerCase()} do ${nome} ${quando}.`,
         "Avisar antes é para dar tempo de pedir dois orçamentos e, se outro item cair perto, juntar tudo numa ida só. O calendário sugere a data.",
       ],
-      cta: { texto: "Ver o calendário", url: link() },
+      cta: { texto: "Ver o calendário", url: link("revisions") },
       push: { titulo: `${rotulo} do ${nome} está chegando`, corpo: `${quando.charAt(0).toUpperCase()}${quando.slice(1)}. Dá tempo de pedir dois orçamentos.` },
     };
   }
@@ -378,7 +385,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
           leitura,
           "A faixa é referência de oficina independente. Quanto mais serviços registrados, mais ela vira dado de verdade.",
         ],
-        cta: { texto: `Ver o histórico do ${nome}`, url: link() },
+        cta: { texto: `Ver o histórico do ${nome}`, url: link("history") },
         push: { titulo: `${rotulo}: ${reais(total)}`, corpo: `Na região, a faixa é ${reais(faixa.min)} a ${reais(faixa.max)}. ${leitura.split(".")[0]}.` },
       };
     }
@@ -395,7 +402,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
         `O ${nome} está na garagem, mas sem nenhum serviço registrado o app não sabe quando foi a última troca de óleo, e sem isso não tem como avisar a próxima.`,
         "Registre o último serviço que você lembra, mesmo aproximado. Ou responda o quiz de um minuto: ele já diz por onde começar.",
       ],
-      cta: { texto: "Registrar o último serviço", url: link() },
+      cta: { texto: "Registrar o último serviço", url: link("addService") },
       push: { titulo: semana ? `O ${nome} continua em branco` : `O ${nome} ainda não conta nada`, corpo: "Registre o último serviço que você lembra e o calendário nasce." },
     };
   }
@@ -411,7 +418,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
         `A última vez que você informou o km do ${nome} foi há ${desde ?? "mais de 45"} dias${typeof carro.odometerKm === "number" ? `, com ${kmBr(carro.odometerKm)}` : ""}.`,
         "Troca de óleo, filtro e correia vencem por km. Sem o número atual, o calendário fica cego para eles.",
       ],
-      cta: { texto: "Atualizar o km", url: link() },
+      cta: { texto: "Atualizar o km", url: link("car") },
       push: { titulo: `Quantos km o ${nome} tem hoje?`, corpo: "O calendário por km depende desse número. Leva dez segundos." },
     };
   }
@@ -429,7 +436,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
           ? [`Faz ${tempo} que o ${nome} não recebe registro nenhum. Enquanto isso, o calendário andou:`]
           : [`Faz ${tempo} que o ${nome} não recebe registro nenhum. Nada venceu nesse tempo, e isso já é notícia boa.`, "O quiz de hoje leva um minuto e mantém a sequência."],
         destaque: pendentes.length ? { titulo: "Pendente", itens: pendentes } : undefined,
-        cta: pendentes.length ? { texto: "Ver o calendário", url: link() } : { texto: "Responder o quiz de hoje", url: link() },
+        cta: pendentes.length ? { texto: "Ver o calendário", url: link("history") } : { texto: "Responder o quiz de hoje", url: link("quiz") },
         push: pendentes.length
           ? { titulo: `${nome}: tem coisa pendente`, corpo: pendentes[0] }
           : { titulo: `${tempo.charAt(0).toUpperCase()}${tempo.slice(1)} sem o ${nome}`, corpo: "Nada venceu. O quiz de hoje leva um minuto.", rota: "quiz" },
@@ -443,7 +450,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
       paragrafos: [
         `Faz ${tempo} que você não abre o Mentorque. O quiz do dia leva um minuto, e cadastrar o carro leva outro: com ele, o app passa a avisar a revisão antes de vencer.`,
       ],
-      cta: { texto: "Responder o quiz de hoje", url: link() },
+      cta: { texto: "Responder o quiz de hoje", url: link("quiz") },
       push: { titulo: `${tempo.charAt(0).toUpperCase()}${tempo.slice(1)} sem aparecer`, corpo: "O quiz do dia leva um minuto.", rota: "quiz" },
     };
   }
@@ -468,7 +475,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
             "Documentos e o kit de estrada no porta-malas",
           ],
         },
-        cta: { texto: `Ver a saúde do ${nome}`, url: link() },
+        cta: { texto: `Ver a saúde do ${nome}`, url: link("health") },
         push: { titulo: `Viagem com o ${nome}?`, corpo: "Seis itens em cinco minutos antes de pegar a estrada." },
       };
     }
@@ -487,7 +494,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
             "Faróis e lanternas: chuva de dia é farol baixo aceso",
           ],
         },
-        cta: { texto: `Ver a saúde do ${nome}`, url: link() },
+        cta: { texto: `Ver a saúde do ${nome}`, url: link("health") },
         push: { titulo: "Chuva chegando", corpo: `Pneu e palheta do ${nome}: vale olhar esta semana.` },
       };
     }
@@ -501,7 +508,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
           "Cada estado publica o calendário pelo final da placa, com desconto para quem paga à vista. Vale conferir a data do seu antes que a primeira parcela passe.",
           `E já que o ${nome} está na sua mão: é uma boa hora para registrar o km atual e conferir o que vence no primeiro trimestre.`,
         ],
-        cta: { texto: "Atualizar o km", url: link() },
+        cta: { texto: "Atualizar o km", url: link("car") },
         push: { titulo: "Janeiro é mês de IPVA", corpo: `Confira o calendário do seu estado e atualize o km do ${nome}.` },
       };
     }

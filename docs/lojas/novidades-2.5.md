@@ -17,7 +17,16 @@ achar entra aqui.
    silêncio. Três é o meio do caminho entre "um e acabou" e perseguir.
    `conferir:aviso` ganha o caso: sem resposta por três dias, três avisos;
    respondeu hoje, o de hoje sai da lista.
-2. **Ligar o interruptor de avisos responde na tela.** "Avisos ligados. O
+2. **Universal links e App Links** (pedido do dono em 12/09, ao pedir botão
+   de e-mail que abre dentro do app): hoje o link `mentorque.com.br/app?ir=`
+   abre a tela certa na web, mas no celular com o app instalado abre o
+   navegador. Para abrir o app: `.well-known/apple-app-site-association` no
+   site (Team ID GGM89XNN4S, bundle `mentorque.app`) e Associated Domains no
+   iOS; `.well-known/assetlinks.json` (precisa do SHA-256 do certificado de
+   assinatura do Play, que fica no Play Console) e intent-filter no Android;
+   e o app, ao abrir por link, ler o `ir=` como a página da web lê
+   (`lib/app/destinoDoLink.ts`). É binário nas duas lojas.
+3. **Ligar o interruptor de avisos responde na tela.** "Avisos ligados. O
    próximo sai amanhã às 9h." Hoje, com a permissão já dada, o toque não
    mostra nada, e o dono achou que não tinha funcionado (12/09).
 
