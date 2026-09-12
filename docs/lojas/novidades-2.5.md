@@ -17,8 +17,11 @@ achar entra aqui.
    silêncio. Três é o meio do caminho entre "um e acabou" e perseguir.
    `conferir:aviso` ganha o caso: sem resposta por três dias, três avisos;
    respondeu hoje, o de hoje sai da lista.
-2. **Universal links e App Links** (pedido do dono em 12/09, ao pedir botão
-   de e-mail que abre dentro do app): hoje o link `mentorque.com.br/app?ir=`
+2. **NÃO VAI NA 2.5, fica para a 2.6.** **Universal links e App Links**
+   (pedido do dono em 12/09, ao pedir botão de e-mail que abre dentro do
+   app). Precisa do SHA-256 do certificado de assinatura do Play, que só o
+   dono tem, e de Associated Domains no iOS; entrar com isso pela metade
+   seria uma versão a mais sem o link funcionar. O que era: hoje o link `mentorque.com.br/app?ir=`
    abre a tela certa na web, mas no celular com o app instalado abre o
    navegador. Para abrir o app: `.well-known/apple-app-site-association` no
    site (Team ID GGM89XNN4S, bundle `mentorque.app`) e Associated Domains no
@@ -86,7 +89,107 @@ achar entra aqui.
   decisão do dono; `JORNADA_PAUSADA=sim` na Vercel é o freio. Manual em
   `docs/jornada.md`; conferida por `conferir:jornada`.
 
-## Roteiro de aparelho
+## Roteiro de aparelho, e ele é obrigatório
 
-A escrever antes do build. Já se sabe um passo: ligar avisos, responder o
-quiz, não abrir o app por dois dias, e ver o aviso das 9h nos dois dias.
+Escrito antes do build (12/09). O que a bateria daqui alcança: as telas e
+as regras puras, no Chromium. O que ela NÃO alcança e só o aparelho prova:
+o token de push do iPhone, a saída para a App Store, os avisos das três
+manhãs, e as duas variantes dos testes A/B no app das lojas. Sobre este
+build, até um aparelho abrir: sem sinal ainda.
+
+**No iPhone, primeiro, porque é o que nunca funcionou:**
+
+1. **Token de push** (item 11): iPhone com a 2.5, entrar na conta, Perfil,
+   ligar os avisos (se já estavam ligados, desligar e ligar). Em até um
+   minuto, `select platform, updated_at from push_tokens` mostra uma linha
+   `ios`. Se não mostrar, `select * from app_erros where origem = 'push'`
+   diz o motivo (item 10). Depois, um push de teste pela rota manual
+   `/api/push/enviar` chega com o app fechado, e o toque abre a tela pedida.
+2. **Saída para a loja** (item 9): Perfil, "Avaliar o Mentorque". Abre o
+   app da App Store na folha de avaliação, não uma aba branca. O banner de
+   versão nova só aparece quando houver build acima do instalado; não dá
+   para testar até a próxima.
+3. **Três manhãs** (item 1): ligar avisos, responder o quiz de hoje, e ver
+   nos Ajustes de notificação (ou esperando) que há aviso às 9h de amanhã e
+   de depois de amanhã. Ao ligar, a tela diz "Avisos ligados. O próximo sai
+   amanhã às 9h" (ou "hoje", antes das 9h). Não abrir o app por dois dias:
+   o aviso das 9h chega nos dois.
+
+**No Android (instalação limpa, ou apagar os dados do app):**
+
+4. **Onboarding**: a primeira tela é a mesma dos dois testes; a variante
+   depende do aparelho. Ou são cinco páginas com a prova social, ou são
+   três ("Carro dá prejuízo em silêncio", "Aqui o carro tem calendário e
+   preço justo", "Cadastre o seu primeiro carro"). Para ver a outra
+   variante: apagar os dados do app e abrir de novo (o sorteio é pelo id
+   anônimo do aparelho, que nasce de novo). As duas terminam em "Cadastrar
+   meu primeiro carro" e o botão abre o formulário.
+5. **Convite de aviso ao terminar o onboarding** (item 4): ao cair no
+   Início, o cartão "Quer que a gente avise?" está lá, antes do resto; com
+   carro cadastrado, com o nome do carro. "Quero" abre a caixa do sistema.
+6. **Cadastro em duas etapas** (item 7): o formulário do carro ou pede sete
+   campos, ou pede só tipo, marca, modelo e ano com a frase "Km, motor e
+   foto você completa depois, na tela do carro" e salva com os três. Na tela do carro, o cartão
+   "Diagnóstico do Gol: n de 5" com os botões do que falta; cada botão abre
+   a tela certa (km e motor: editar carro; compra: revisões; quiz: saúde;
+   foto: a folha da foto). Preencher um dado sobe o n.
+7. **O Início entrega** (item 6): carro com km e sem quiz. O cartão de
+   revisões diz "Estimado pelo km" e o toque abre o calendário, não o quiz.
+8. **Eventos de valor** (item 5): abrir uma aula, consultar um sintoma,
+   registrar um serviço com valor. Em `funil_eventos` aparecem `viu_aula`,
+   `consultou_sintoma` e `registrou_servico` com `origem com-valor`, com
+   `plataforma android`.
+9. **Regressões da 2.4**: login do Google entra; o aviso do quiz sai com a
+   marca âmbar na barra; a folha "Levar para a sua conta?" continua.
+
+## Notas para as lojas, PARA O DONO CONFERIR ANTES DE COLAR
+
+Falam só do que a bateria alcança. O push do iPhone fica de fora até o
+roteiro passar: contar um conserto que nenhum aparelho provou é a regra
+três quebrada. Ganho, não defeito; verbo na ação da pessoa.
+
+**Google Play** (limite: 500 caracteres; este tem 409)
+
+```
+Cadastrar o carro ficou mais rápido: marca, modelo e ano bastam. Km, motor
+e foto você informa quando quiser, e o app mostra o que cada dado destrava.
+
+Na tela do carro, "Diagnóstico do carro" diz o que falta para o calendário
+ficar completo.
+
+Sem a data da última troca, o app já estima as próximas revisões pelo km.
+
+Ligou os avisos? A tela confirma na hora, e o lembrete do quiz cobre três
+manhãs seguidas.
+```
+
+**App Store**
+
+```
+Cadastrar o carro ficou mais rápido: marca, modelo e ano bastam. Km, motor
+e foto você informa quando quiser, e o app mostra o que cada dado destrava.
+
+Na tela do carro, "Diagnóstico do carro" diz o que falta para o calendário
+ficar completo.
+
+Sem a data da última troca, o app já estima as próximas revisões pelo km.
+
+Ligou os avisos? A tela confirma na hora, e o lembrete do quiz cobre três
+manhãs seguidas. Avaliar o app abre a App Store direto.
+```
+
+Ressalva das notas: "marca, modelo e ano bastam" só é verdade para metade
+dos aparelhos (teste A/B). Se o dono preferir não prometer na ficha o que
+metade não vê, tirar o primeiro parágrafo e deixar os outros três.
+
+## Antes de enviar
+
+- Versão 2.5 nos três lugares: conferido em 12/09 (`conferir:versoes`
+  diz "2.5, ainda não publicada").
+- Ao publicar, acrescentar `"2.5"` à lista `JA_PUBLICADAS`, no mesmo dia.
+- Na Apple, criar a versão 2.5 no App Store Connect e enviar para revisão;
+  subir o build não basta. A 2.4 aprovada pode ainda não ter aparecido na
+  loja quando a 2.5 subir; isso não impede o envio.
+- `/api/app/latest` só depois da aprovação, com o número do log
+  ("versionCode deste envio: N"), nunca com o "Index" da tela.
+- Universal links (item 2) ficam para a 2.6; precisam do SHA-256 do Play.
