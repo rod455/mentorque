@@ -82,6 +82,15 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   conta está pronta"), e o manual da Biela passou a casar por marca e
   modelo sem o ano (a tabela guarda um ano por manual; Gol 2016 ficava
   "sem manual" com o de 2015 na prateleira).
+- **Primeira rodada de verdade: 12/09, 17:33 UTC**, por ordem do dono
+  ("vamos enviar o e-mail agora, não precisa esperar até amanhã"). Disparada
+  pelo n8n (fluxo "Mentorque: jornada agora", que chama o cron com a chave
+  de dados; a chave fica lá, nunca aqui). `jornada_envios` do dia: 18
+  e-mails (7 `d5`, 4 `d2`, 3 `sumiu-14`, 1 `d0`, 1 `d9`, 1 `d14`, 1
+  `sumiu-30`), e UM deles saiu também por push (Android): sinal de que a
+  chave do FCM está na Vercel, ao contrário do que `docs/push.md` dizia; o
+  iPhone segue sem sinal. Os 4 endereços Apple relay ficaram de fora. O
+  cron amanhã às 9h não repete para ninguém desses (um a cada três dias).
 - **O botão cai na tela certa** (pedido do dono no mesmo dia): cada link
   leva `ir=<tela>`; `app/app/page.tsx` guarda o destino no bolso do
   onboarding e `useDestinoDoOnboarding` navega para qualquer tela da lista

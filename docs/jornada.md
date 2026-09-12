@@ -75,6 +75,11 @@ Os endereços "ocultar meu e-mail" da Apple (`privaterelay.appleid.com`) ficam
 de fora até o domínio estar no relay da Apple; `JORNADA_APPLE_RELAY=sim`
 libera. E-mail para eles sem o cadastro volta, e devolução suja o domínio.
 
+**Rodar agora, sem esperar as 9h**: no n8n, o fluxo "Mentorque: jornada
+agora" (manual, não publicado de propósito) chama o mesmo cron com a chave
+de dados. Repetir não manda dobrado. Foi assim que a primeira rodada saiu,
+em 12/09 às 14h33 de Brasília: 18 e-mails.
+
 ## Como conferir e afinar (passos do dono)
 
 1. **Ver o ensaio.** Uma chamada com `?ensaio=1` decide para todo mundo e não
