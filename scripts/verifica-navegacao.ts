@@ -12,6 +12,7 @@
 // Rode com: npm run conferir:navegacao
 import { comNovaRaiz, passoDeVolta, LIMITE_DE_RAIZES, type Pilha } from "../lib/app/navPilha.ts";
 import type { View } from "../lib/app/nav.ts";
+import { comoSair } from "../lib/app/saidaDoApp.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -23,6 +24,21 @@ function conferir(nome: string, condicao: boolean, detalhe = "") {
 const v = (name: string) => ({ name } as unknown as View);
 const inicio: Pilha = { views: [v("home")], raizes: [] };
 const topo = (p: Pilha) => p.views[p.views.length - 1].name;
+
+// ── sair do app para a loja (dono, 12/09/2026: "Atualizar" no iPhone ficou
+// carregando apps.apple.com para sempre, dentro do app) ─────────────────────
+{
+  const ficha = "https://apps.apple.com/br/app/mentorque/id6797291865";
+  const avaliar = "https://apps.apple.com/app/id6797291865?action=write-review";
+  const play = "https://play.google.com/store/apps/details?id=mentorque.app";
+  const ios = comoSair(ficha, "ios");
+  conferir("no iPhone a ficha da App Store vai pelo esquema itms-apps, não pela aba", ios.url === "itms-apps://apps.apple.com/br/app/mentorque/id6797291865" && !ios.pelaAba, JSON.stringify(ios));
+  const nota = comoSair(avaliar, "ios");
+  conferir("no iPhone a folha de avaliação também vai pelo itms-apps", nota.url.startsWith("itms-apps://") && nota.url.endsWith("?action=write-review") && !nota.pelaAba, JSON.stringify(nota));
+  conferir("no Android a Play continua pela aba do sistema", comoSair(play, "android").pelaAba);
+  conferir("na web nada muda", comoSair(ficha, null).pelaAba && comoSair(ficha, null).url === ficha);
+  conferir("no iPhone qualquer outro endereço continua pela aba (política de pagamentos)", comoSair("https://mentorque.com.br/privacidade", "ios").pelaAba);
+}
 
 // ── o caso que motivou o conserto ───────────────────────────────────────────
 {

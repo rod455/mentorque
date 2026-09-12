@@ -4,6 +4,7 @@
 // site e funciona normalmente no app após o login.
 import { APP_STORE_REVIEW_URL, PLAY_STORE_REVIEW_URL } from "@/lib/stores";
 import { detectPlatform } from "@/lib/app/platform";
+import { comoSair } from "./saidaDoApp.ts";
 
 export function isNativeApp(): boolean {
   if (typeof window === "undefined") return false;
@@ -68,14 +69,20 @@ export function isIPad(): boolean {
 // checkout do Stripe — DENTRO do app da loja, o que viola a política de
 // pagamentos do Google Play. Por isso qualquer saída do app passa por aqui,
 // que usa o plugin Browser (aba do sistema) quando disponível.
+//
+// Exceção: a loja da Apple no iPhone não vai pela aba (ficaria a página da
+// ficha carregando dentro do app, caso do dono em 12/09); vai pelo esquema
+// `itms-apps://`, que abre o app da App Store. A regra é pura, em
+// lib/app/saidaDoApp.ts.
 export function openExternal(url: string): void {
   if (typeof window === "undefined") return;
+  const saida = comoSair(url, nativePlatform());
   const browser = capacitor()?.Plugins?.Browser;
-  if (browser) {
-    void browser.open({ url }).catch(() => window.open(url, "_blank", "noopener,noreferrer"));
+  if (browser && saida.pelaAba) {
+    void browser.open({ url: saida.url }).catch(() => window.open(saida.url, "_blank", "noopener,noreferrer"));
     return;
   }
-  window.open(url, "_blank", "noopener,noreferrer");
+  window.open(saida.url, "_blank", "noopener,noreferrer");
 }
 
 // Fecha a aba do sistema aberta por `openExternal` (fim do fluxo de OAuth).

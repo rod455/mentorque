@@ -44,6 +44,14 @@ achar entra aqui.
    páginas de onboarding em vez de cinco, sem a prova social. Ler as duas
    apostas em `docs/agentes/experimentos.md` duas semanas depois da 2.5 nas
    lojas.
+9. **"Atualizar" e "Avaliar" no iPhone abrem o app da App Store** (12/09).
+   O dono tocou em Atualizar e ficou numa tela branca com apps.apple.com
+   carregando dentro do app: a saída ia pelo Safari embutido, que não vira
+   a loja. Agora a ficha da Apple sai pelo esquema `itms-apps://`
+   (`lib/app/saidaDoApp.ts`, conferido em `conferir:navegacao`). Só vale
+   no binário da 2.5; na 2.4 o botão continua abrindo a página. Roteiro
+   de aparelho: tocar em "Avaliar o Mentorque" no Perfil do iPhone e ver a
+   App Store abrir, não uma aba branca.
 
 ## O que NÃO precisa de binário
 

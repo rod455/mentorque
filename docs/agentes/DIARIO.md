@@ -37,6 +37,27 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-12 · Engenharia: "Atualizar" no iPhone ficava carregando apps.apple.com
+- Relato do dono, com foto: tocou em Atualizar no banner de versão nova e
+  ficou numa tela branca com "apps.apple.com" carregando, dentro do app.
+- Lido no fonte, não no README: toda saída do app passa pelo plugin Browser
+  (`openExternal`), que no iPhone é o Safari embutido e só aceita http e
+  https (`Browser.swift`, linha 19). A ficha da loja dentro de um Safari
+  embutido não vira a App Store; fica a página. O que abre o app da App
+  Store é o esquema `itms-apps://`, e o Capacitor entrega esse esquema ao
+  sistema quando a WebView abre janela nova (`createWebViewWith` chama
+  `UIApplication.shared.open`).
+- Conserto: `lib/app/saidaDoApp.ts` (pura) decide como sair; no iPhone,
+  endereço em apps.apple.com vai por `window.open` com `itms-apps://`, o
+  resto continua pela aba (política de pagamentos). Vale também para
+  "Avaliar o Mentorque". `conferir:navegacao` ganhou os casos e reprovou
+  com o conserto desligado.
+- O que a conferência não alcança: é binário (2.5). Na 2.4 o botão continua
+  abrindo a página. Sobre o toque no aparelho com a 2.5: sem sinal ainda;
+  entra no roteiro (Perfil, "Avaliar o Mentorque", tem que abrir a App
+  Store). Por que ficou carregando para sempre, e não mostrou a página, eu
+  não sei e não vou chutar; o conserto tira o Safari embutido do caminho.
+
 ## 2026-09-12 · Engenharia: os seis itens da revisão de retenção, aplicados
 - O dono pediu a revisão ("usuário fica 1 dia e não volta"; o CRO entregou
   `docs/agentes/propostas/retencao-primeiro-dia.md`: 253 pessoas desde
