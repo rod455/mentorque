@@ -37,6 +37,21 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-12 · Engenharia: o lembrete do quiz que cala depois de um aviso (fila da 2.5)
+- Relato do dono: dias sem o aviso do quiz no iPhone, com o interruptor
+  ligado; desligar e ligar não mostrou nada. Banco: última resposta em
+  09/09, avisos ligados, login hoje às 10:02. Não é defeito, é a regra de
+  `lembreteQuiz.ts`: um aviso por vez, reagendado só na abertura ou na
+  resposta. Quem some recebe um e depois silêncio, e quem some é quem mais
+  precisava. O toque no interruptor com permissão já dada não abre nada, e
+  o app não confirma em tela.
+- Decisão do dono (12/09): fazer, mais para a frente. Fica na fila da 2.5
+  (`docs/lojas/novidades-2.5.md`): três manhãs de aviso em vez de uma, e a
+  linha de confirmação ao ligar. Não entra na 2.4, que está fechada.
+- O que ainda pode estar somando no iPhone dele, e eu não vejo: Resumo
+  Programado ou um Foco sem o Mentorque na lista. Teste honesto pedido:
+  amanhã às 9h, sem abrir o app antes, o aviso tem de chegar.
+
 ## 2026-09-11 · Engenharia: o portão de permissão de aviso passa a ser medido (antes do build da 2.4)
 - O achado do CRO de hoje era meu para fechar, e antes do build: cinco
   máquinas de recorrência atrás de uma permissão que ninguém media. Entram
