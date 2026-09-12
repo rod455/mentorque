@@ -84,6 +84,10 @@ const JA_PUBLICADAS = [
   // linha dela que mostrou a SHA-1 não cadastrada, e a mesma 2.3 logou no
   // Android às 10:19 UTC depois do cadastro. Acrescentada ao abrir a 2.4.
   "2.3",
+  // Enviada em 11/09/2026 com os cinco momentos de recorrência, o carro
+  // repetido, o onboarding do Android no carro e o ícone do aviso. Aprovada
+  // na Play em 12/09; Apple em análise no mesmo dia. Acrescentada em 12/09.
+  "2.4",
 ];
 
 import { readFileSync } from "node:fs";

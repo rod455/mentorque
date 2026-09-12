@@ -37,6 +37,17 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-12 · A 2.4 está na Play; a Apple analisa; o repositório vai para 2.5
+- Dono: 2.4 enviada, aprovada na Play em 12/09, em análise na Apple. `"2.4"`
+  entra em `JA_PUBLICADAS` no mesmo dia, o repositório sobe para 2.5 e a
+  fila da 2.5 (lembrete do quiz em três manhãs, confirmação ao ligar) vira a
+  versão aberta. O experimento `onboarding-termina-no-carro-android` ganha a
+  data de início (12/09) e a de leitura (26/09).
+- Roteiro de aparelho da 2.4 (14 passos) ainda não rodado; até um aparelho
+  abrir, sobre o binário a resposta segue "sem sinal ainda". O
+  `/api/app/latest` só sobe depois de a Apple aprovar e com o número do log
+  do Codemagic (skill de release).
+
 ## 2026-09-12 · Engenharia: o lembrete do quiz que cala depois de um aviso (fila da 2.5)
 - Relato do dono: dias sem o aviso do quiz no iPhone, com o interruptor
   ligado; desligar e ligar não mostrou nada. Banco: última resposta em

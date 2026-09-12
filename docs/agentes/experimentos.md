@@ -161,7 +161,7 @@ Regras:
 - Veredito: (aberto)
 
 ## [onboarding-termina-no-carro-android] A última página do onboarding é "Cadastrar meu primeiro carro"
-- Estado: ABERTO (entra no aparelho com a 2.4; até lá, sem leitura)
+- Estado: ABERTO (2.4 na Play desde 12/09; iPhone segue com a página de plano)
 - Tipo: mudanca-direta, só no Android
 - Alvo no funil: a maior quebra que existe, `comecou_onboarding` para
   `cadastrou_carro`. Nos 28 dias até 10/09, por aparelho: Android 59 começaram
@@ -185,7 +185,7 @@ Regras:
   origem `carro` (novo) contra `agora-nao`. Sem casa decimal · Duração mínima
   de leitura: 2 semanas depois de a 2.4 estar na Play
 - Aprovação: pedido do dono em 2026-09-11
-- Início: quando a 2.4 for publicada na Play · Ler a partir de: 2 semanas depois
+- Início: 2026-09-12 (2.4 aprovada na Play) · Ler a partir de: 2026-09-26
 - Antes: Android, 28 dias até 10/09, 59 começaram, 4 cadastraram carro
   (aparelhos)
 - Veredito: (aberto)

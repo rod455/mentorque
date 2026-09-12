@@ -1,9 +1,8 @@
-# Novidades da versão 2.5 (fila, ainda não aberta)
+# Novidades da versão 2.5
 
-A 2.4 está fechada e conferida (11/09/2026). O que entra aqui é o que o dono
-aprovou para a versão seguinte; o repositório continua em 2.4 até ela ser
-enviada. Ao abrir a 2.5: versão nos três lugares, `"2.4"` em
-`JA_PUBLICADAS`, e o roteiro de aparelho escrito antes do build.
+Aberta em 12/09/2026, com a 2.4 aprovada na Play e em análise na Apple.
+O roteiro de aparelho da 2.4 (14 passos) ainda não foi rodado; o que ele
+achar entra aqui.
 
 ## Aprovado pelo dono, a fazer
 
