@@ -19,11 +19,17 @@ export async function rodar({ nav, ok }) {
       quiz: { ultimoDia: dia(0), sequencia: 1, recorde: 1, perdaoEm: null, respostas: 1, acertos: 1 },
     });
 
+  // "Pediu" é a FOLHA de km aberta, e o que só a folha tem é o botão "Salvar
+  // km". Até 12/09/2026 o detector era `/Confirme|km atual|Salvar km/` e
+  // reprovou três casos sem folha nenhuma: o card de revisões do Início
+  // passou a dizer "Estimado. Confirme a última troca", e o "Confirme" casou.
+  // Detector que casa com texto de qualquer card não mede a folha, mede o
+  // vocabulário do app.
   const abrir = async (sessao) => {
     const app = await abrirApp(nav, { sessao });
     const corpo = await app.corpo();
     const s = await app.sessaoGravada();
-    return { ...app, corpo, carimbo: s?.vehicles?.[0]?.kmUpdatedAt ?? null, pediu: /Confirme|km atual|Salvar km/i.test(corpo) };
+    return { ...app, corpo, carimbo: s?.vehicles?.[0]?.kmUpdatedAt ?? null, pediu: /Salvar km/i.test(corpo) };
   };
 
   // 1. Carro RECÉM-CADASTRADO (sem carimbo): não pode pedir o km.
