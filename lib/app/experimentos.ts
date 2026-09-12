@@ -17,7 +17,12 @@ import { anonId } from "./anon";
 
 // id do experimento -> variantes possíveis. Vazio = nenhum teste ativo.
 // Exemplo: "paywall-titulo": ["a", "b"]
-export const EXPERIMENTOS: Record<string, string[]> = {};
+export const EXPERIMENTOS: Record<string, string[]> = {
+  // Aprovado pelo dono em 12/09/2026 (docs/agentes/experimentos.md). A = o
+  // formulário de sempre (sete campos); B = só marca, modelo e ano, e o
+  // resto vira a barra "Diagnóstico do carro" na tela do carro.
+  "cadastro-em-duas-etapas": ["a", "b"],
+};
 
 function hash(s: string): number {
   let h = 5381;

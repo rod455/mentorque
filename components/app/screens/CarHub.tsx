@@ -34,6 +34,21 @@ export function CarHub() {
 
   const score = computeQuizHealth(v.quiz ?? {}, v).score;
 
+  // A BARRA "DIAGNÓSTICO DO CARRO" (12/09/2026, revisão de retenção). Dos 17
+  // carros na nuvem, 5 tinham data de compra, 5 o quiz de saúde e 4 um
+  // serviço: o cadastro termina pela metade e o app pede o resto em pedidos
+  // soltos. Aqui vira uma trilha curta: cinco dados, o que cada um destrava,
+  // um toque leva ao lugar certo. Some quando os cinco existem.
+  const d = c.carHub.diagnostico;
+  const passos: { feito: boolean; rotulo: string; ganho: string; ir: () => void }[] = [
+    { feito: v.odometerKm != null && v.odometerKm > 0, rotulo: d.km, ganho: d.kmGanho, ir: () => go({ name: "addCar", editId: v.id }) },
+    { feito: !!v.purchaseDate, rotulo: d.compra, ganho: d.compraGanho, ir: () => go({ name: "revisions" }) },
+    { feito: !!(v.quiz && Object.keys(v.quiz).length), rotulo: d.quiz, ganho: d.quizGanho, ir: () => go({ name: "healthQuiz" }) },
+    { feito: !!v.engine?.trim(), rotulo: d.motor, ganho: d.motorGanho, ir: () => go({ name: "addCar", editId: v.id }) },
+    { feito: !!v.photo, rotulo: d.foto, ganho: d.fotoGanho, ir: () => setAvatarSheet(true) },
+  ];
+  const feitos = passos.filter((p) => p.feito).length;
+
   const cards: { icon: string; title: string; sub: string; view: View; accent: string }[] = [
     { icon: "gauge", title: c.carHub.cards.health, sub: c.carHub.cards.healthSub, view: { name: "health" }, accent: "bg-teal/15 text-teal" },
     { icon: "diagnose", title: c.carHub.cards.problem, sub: c.carHub.cards.problemSub, view: { name: "symptoms" }, accent: "bg-coral/15 text-coral" },
@@ -93,6 +108,30 @@ export function CarHub() {
           <HealthPill score={score} />
         </button>
       </Card>
+
+      {feitos < passos.length && (
+        <Card className="mt-3">
+          <div className="flex items-baseline justify-between gap-2">
+            <p className="font-display text-[15px] font-semibold text-cream">{d.titulo.replace("{carro}", carName(v)).replace("{n}", String(feitos)).replace("{total}", String(passos.length))}</p>
+            <span className="text-xs text-cream/50">{d.sub}</span>
+          </div>
+          <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-graphite-700">
+            <div className="h-full rounded-full bg-amber transition-all" style={{ width: `${Math.round((feitos / passos.length) * 100)}%` }} />
+          </div>
+          <div className="mt-3 space-y-1.5">
+            {passos.filter((p) => !p.feito).map((p) => (
+              <button key={p.rotulo} onClick={p.ir} className="flex w-full items-center gap-2 rounded-xl bg-graphite-800 px-3 py-2 text-left ring-1 ring-white/5 active:scale-[0.99]">
+                <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full ring-1 ring-amber/50 text-[10px] text-amber">+</span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-sm text-cream">{p.rotulo}</span>
+                  <span className="block text-[11px] text-cream/50">{p.ganho}</span>
+                </span>
+                <span className="text-cream/40">›</span>
+              </button>
+            ))}
+          </div>
+        </Card>
+      )}
 
       <div className="mt-3 grid grid-cols-2 gap-3">
         {cards.map((card) => (

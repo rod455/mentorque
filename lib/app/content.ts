@@ -469,6 +469,8 @@ export function getContent(locale: Locale) {
       addPhoto: T("Adicionar foto", "Add photo"),
       changePhoto: T("Trocar foto", "Change photo"),
       needModel: T("Escolha marca, modelo e ano.", "Pick make, model and year."),
+      // Variante B do cadastro em duas etapas (12/09/2026).
+      curtoDepois: T("Km, motor e foto você completa depois, na tela do carro.", "Mileage, engine and photo can come later, on the car's screen."),
       // Aviso de carro repetido. Não é erro: quem tem dois iguais de verdade
       // confirma e segue. O texto diz o que já existe, para a pessoa reconhecer
       // o carro dela em vez de decidir no escuro.
@@ -485,6 +487,22 @@ export function getContent(locale: Locale) {
       km: T("km atual", "current km"),
       editKm: T("Atualizar km", "Update km"),
       updateKmTitle: T("Atualizar quilometragem", "Update mileage"),
+      // A barra "Diagnóstico do carro" (12/09/2026): cinco dados e o que cada
+      // um destrava. Some quando os cinco existem.
+      diagnostico: {
+        titulo: T("Diagnóstico do {carro}: {n} de {total}", "{carro} check-up: {n} of {total}"),
+        sub: T("Cada dado destrava uma parte", "Each detail unlocks a part"),
+        km: T("O km atual do painel", "Current mileage"),
+        kmGanho: T("Destrava o calendário por km", "Unlocks the mileage calendar"),
+        compra: T("Quando você comprou o carro", "When you bought the car"),
+        compraGanho: T("Destrava as revisões por tempo", "Unlocks the time-based schedule"),
+        quiz: T("O quiz de saúde, dois minutos", "The health quiz, two minutes"),
+        quizGanho: T("Destrava a nota de saúde e as recomendações", "Unlocks the health score and recommendations"),
+        motor: T("A versão ou o motor", "The version or engine"),
+        motorGanho: T("A Biela responde com o manual certo", "Biela answers with the right manual"),
+        foto: T("Uma foto do carro", "A photo of the car"),
+        fotoGanho: T("A garagem com a sua cara", "Your garage, your look"),
+      },
       health: T("Saúde", "Health"),
       cards: {
         health: T("Saúde do carro", "Car health"),

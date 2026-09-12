@@ -381,6 +381,16 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
   conferir("salvar um serviço novo emite registrou_servico dizendo se tem valor", /funil\("registrou_servico",\s*\{[^}]*com-valor/.test(servico) && /if \(!editing\) funil\("registrou_servico"/.test(servico));
 }
 
+// ── testes A/B: todo id ligado no código está registrado no caderno ───────
+{
+  const codigo = readFileSync(new URL("../lib/app/experimentos.ts", import.meta.url), "utf8");
+  const caderno = readFileSync(new URL("../docs/agentes/experimentos.md", import.meta.url), "utf8");
+  const ids = [...codigo.matchAll(/^\s*"([a-z0-9-]+)":\s*\[/gm)].map((m) => m[1]);
+  for (const id of ids) {
+    conferir(`o experimento "${id}" está no caderno com estado ABERTO`, new RegExp(`## \\[${id}\\][^\n]*\n- Estado: ABERTO`).test(caderno), "teste ligado sem registro é aprendizado nenhum (manual do CRO)");
+  }
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) de funil reprovaram.`);
   process.exit(1);

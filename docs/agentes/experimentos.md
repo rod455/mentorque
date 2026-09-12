@@ -41,6 +41,31 @@ Regras:
 
 ## Experimentos
 
+## [cadastro-em-duas-etapas] O formulário do carro pede só marca, modelo e ano
+- Estado: ABERTO
+- Tipo: teste-ab
+- Alvo no funil: abriu_cadastro_de_carro → cadastrou_carro. Na loja
+  (Android e iPhone), de 04 a 12/09: 19 abriram, 3 cadastraram. É a maior
+  quebra do produto depois do onboarding, e sem carro não existe calendário,
+  saúde nem aviso.
+- Tese BeSci: fricção e efeito de progresso (pedir o micro antes do macro).
+  A = o formulário de sempre: tipo, busca de marca e modelo, ano, versão ou
+  motor, km e foto, tudo numa tela. B = só tipo, marca, modelo e ano; o
+  botão salva assim que os três existem, e km, motor e foto viram a barra
+  "Diagnóstico do carro: n de 5" na tela do carro, que também pede data de
+  compra e quiz de saúde, com o que cada dado destrava. A barra aparece
+  para as duas variantes; o que muda é só o tamanho do formulário.
+- Métrica: taxa abriu_cadastro_de_carro → cadastrou_carro por variante
+  (view experimentos_resultados), no app das lojas · Duração: 2 semanas, ou
+  até 40 aberturas por variante
+- Aprovação: aprovada pelo dono em 2026-09-12 ("Vamos aplicar todos os
+  testes propostos")
+- Início: 2026-09-12 na web; nas lojas, com a 2.5 · Ler a partir de: 2 semanas
+  depois de a 2.5 estar nas duas lojas
+- Antes: 3 de 19 na loja (16%); 8 de 13 na web
+- Veredito: (aberto)
+
+
 ## [cta-teste-por-plano] O botão do teste diz o que o clique faz
 - Estado: ABERTO
 - Tipo: mudanca-direta

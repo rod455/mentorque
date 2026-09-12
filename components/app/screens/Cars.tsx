@@ -16,6 +16,7 @@ import { funil } from "@/lib/app/funil";
 import { pedirConviteDeConta } from "../SalveSuaGaragem";
 import { ConviteDeAviso } from "../ConviteDeAviso";
 import { consumirConviteNoCarro, pedirConviteNoCarro } from "@/lib/app/pedidoDeAviso";
+import { variante } from "@/lib/app/experimentos";
 import { useAuth } from "@/lib/app/auth";
 import { carName } from "@/lib/app/content";
 import { AppHeader, Card, Chip, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
@@ -324,6 +325,16 @@ export function AddCarScreen({ editId }: { editId?: string }) {
     funil("abriu_cadastro_de_carro", { umaVezPorAparelho: true });
   }, [editing]);
 
+  // TESTE A/B "cadastro-em-duas-etapas" (aprovado pelo dono em 12/09/2026).
+  // Na loja, 5 em 6 pessoas que abrem este formulário não terminam. A
+  // variante B pede só marca, modelo e ano; motor, km e foto ficam para a
+  // barra "Diagnóstico do carro" na tela do carro (CarHub). Lido num efeito
+  // para o primeiro quadro não depender do sorteio; edição nunca encurta.
+  const [curto, setCurto] = useState(false);
+  useEffect(() => {
+    setCurto(!editing && variante("cadastro-em-duas-etapas") === "b");
+  }, [editing]);
+
   const [type, setType] = useState<VehicleType>(editing?.type ?? "car");
   const [make, setMake] = useState<string | null>(editing?.make ?? null);
   const [model, setModel] = useState<string | null>(editing?.model ?? null);
@@ -548,6 +559,7 @@ export function AddCarScreen({ editId }: { editId?: string }) {
           </Field>
         )}
 
+        {!curto && (<>
         <Field label={a.engine}>
           <div className="relative">
             <input
@@ -600,7 +612,9 @@ export function AddCarScreen({ editId }: { editId?: string }) {
             <span className="text-cream/40">›</span>
           </button>
         </Field>
+        </>)}
 
+        {curto && valid && <p className="text-xs text-cream/45">{a.curtoDepois}</p>}
         {!valid && <p className="text-xs text-cream/45">{a.needModel}</p>}
 
         <div className="flex gap-2">
