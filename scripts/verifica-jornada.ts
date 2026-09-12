@@ -81,6 +81,22 @@ console.log("Jornada: quem recebe o quê, e quando.");
   conferir("carro só com data de compra (30 meses) NÃO vira 'vencida'", !(chave(soCompra) ?? "").startsWith("vencida:"), `veio ${chave(soCompra)}; sem registro do serviço, 'vencido' é invenção`);
 }
 
+// ── o e-mail só fala do que a pessoa registrou ──────────────────────────────
+{
+  const carroSoCompra = gol({ purchaseDate: diasAtras(900) });
+  const p = pessoa({ contaCriadaEm: HOJE, ultimaAtividade: diasAtras(1), veiculos: [carroSoCompra], carroPrincipalId: "v1" });
+  const m = montarMensagem({ chave: "d0", familia: "cadencia", motivo: "teste", carro: carroSoCompra }, p, HOJE);
+  const tudo = [...m.paragrafos, ...(m.destaque?.itens ?? [])].join("\n");
+  conferir("carro só com data de compra: o e-mail NÃO diz 'já venceu'", !/já venceu/.test(tudo), tudo.slice(0, 200));
+  conferir("e pede o que falta para o diagnóstico completo", /diagnóstico completo/.test(tudo) && /última troca de óleo/.test(tudo) && /quiz de saúde/.test(tudo), tudo.slice(0, 300));
+  conferir("com tudo faltando, o botão leva ao carro", /ir=car&/.test(m.cta.url) || /ir=car$/.test(new URL(m.cta.url).search) || new URL(m.cta.url).searchParams.get("ir") === "car", m.cta.url);
+  const registrado = pessoa({ contaCriadaEm: HOJE, ultimaAtividade: diasAtras(1), veiculos: [gol()], carroPrincipalId: "v1", servicos: [oleo(500)] });
+  const m2 = montarMensagem({ chave: "d0", familia: "cadencia", motivo: "teste", carro: gol() }, registrado, HOJE);
+  conferir("óleo registrado há 500 dias: o e-mail diz 'já venceu' e aponta o que falta registrar", /Troca de óleo: já venceu/.test((m2.destaque?.itens ?? []).join("\n")) && /Sem registro ainda/.test((m2.destaque?.itens ?? []).join("\n")), (m2.destaque?.itens ?? []).join(" | "));
+  const compra340 = pessoa({ veiculos: [gol({ purchaseDate: diasAtras(340) })], carroPrincipalId: "v1" });
+  conferir("data de compra há 340 dias, sem serviço: NÃO vira 'chegando'", !(chave(compra340) ?? "").startsWith("chegando:"), `veio ${chave(compra340)}`);
+}
+
 // ── a cadência e a janela dela ──────────────────────────────────────────────
 {
   const nova = pessoa({ contaCriadaEm: HOJE, ultimaAtividade: diasAtras(1) });

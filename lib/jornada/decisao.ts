@@ -185,10 +185,12 @@ function gatilho(p: PessoaDaJornada, hoje: string, agora: Date): Escolha | null 
     }
 
     // Revisão chegando: data prevista dentro de 30 dias, ou km previsto a
-    // menos de 1.000 km, sem ser estimativa e sem já ter vencido.
+    // menos de 1.000 km, e SÓ a partir do que a pessoa registrou (regra do
+    // dono, 12/09): data ancorada num serviço registrado, km sem estimativa.
+    // A data da compra sozinha não vira "vence em 25 dias".
     for (const plano of planoDosItens(carro, servicos, chaves, agora)) {
       if (plano.vencido) continue;
-      const porData = plano.dataPrevista !== null && diasEntre(hoje, plano.dataPrevista) >= 0 && diasEntre(hoje, plano.dataPrevista) <= CHEGANDO_DIAS;
+      const porData = plano.dataPrevista !== null && plano.ancora === "servico" && diasEntre(hoje, plano.dataPrevista) >= 0 && diasEntre(hoje, plano.dataPrevista) <= CHEGANDO_DIAS;
       const porKm = plano.kmRestantes !== null && !plano.kmEstimado && plano.kmRestantes >= 0 && plano.kmRestantes <= CHEGANDO_KM;
       if (!porData && !porKm) continue;
       const chave = `chegando:${plano.key}`;

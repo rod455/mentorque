@@ -117,24 +117,62 @@ function servicosDoCarro(p: PessoaDaJornada, carro: Vehicle): ServiceRecord[] {
   return p.servicos.filter((s) => s.vehicleId === carro.id);
 }
 
-/** "Troca de óleo: até 15/11/2026, ou aos 45.000 km". Só o que tem previsão. */
+/**
+ * "Troca de óleo: até 15/11/2026, ou aos 45.000 km". Só o que a PESSOA
+ * registrou. Regra do dono (12/09): antes de dizer "venceu", olhar que dado
+ * o cliente pôs no app. Um item ancorado na data da compra, ou com km
+ * estimado (sem registro da última troca), não ganha data nem "já venceu":
+ * entra numa linha só, "sem registro ainda", pedindo a última troca. A
+ * cópia de prova mostrou "Troca de óleo: já venceu" para um carro sem
+ * serviço nenhum, e isso é a conta do app falando como se fosse fato.
+ */
 function itensDoCalendario(p: PessoaDaJornada, carro: Vehicle, agora: Date, hoje: string, dias = 90, km = 3000): string[] {
   const chaves = REVISION_RULES.map((r) => r.key);
   const linhas: string[] = [];
+  const semRegistro: string[] = [];
   for (const plano of planoDosItens(carro, servicosDoCarro(p, carro), chaves, agora)) {
-    const porData = plano.dataPrevista !== null && diasEntre(hoje, plano.dataPrevista) <= dias;
-    const porKm = plano.kmRestantes !== null && !plano.kmEstimado && plano.kmRestantes <= km;
-    if (!porData && !porKm && !plano.vencido) continue;
+    const rotulo = NOME_DO_ITEM[plano.key] ?? plano.key;
+    const dataRegistrada = plano.dataPrevista !== null && plano.ancora === "servico";
+    const kmRegistrado = plano.kmRestantes !== null && !plano.kmEstimado;
+    if (!dataRegistrada && !kmRegistrado) {
+      semRegistro.push(rotulo);
+      continue;
+    }
+    const porData = dataRegistrada && diasEntre(hoje, plano.dataPrevista!) <= dias;
+    const porKm = kmRegistrado && plano.kmRestantes! <= km;
+    const venceu = (dataRegistrada && plano.dataPrevista! < hoje) || (kmRegistrado && plano.kmRestantes! <= 0);
+    if (!porData && !porKm && !venceu) continue;
     const partes: string[] = [];
-    if (plano.vencido) partes.push("já venceu");
+    if (venceu) partes.push("já venceu");
     else {
-      if (porData && plano.dataPrevista) partes.push(`até ${dataBr(plano.dataPrevista)}`);
+      if (porData) partes.push(`até ${dataBr(plano.dataPrevista!)}`);
       if (porKm && plano.kmPrevisto !== null) partes.push(`aos ${kmBr(plano.kmPrevisto)}`);
     }
-    linhas.push(`${NOME_DO_ITEM[plano.key] ?? plano.key}: ${partes.join(", ou ")}`);
+    linhas.push(`${rotulo}: ${partes.join(", ou ")}`);
+  }
+  if (linhas.length && semRegistro.length) {
+    linhas.push(`Sem registro ainda: ${semRegistro.slice(0, 3).join(", ").toLowerCase()}. Informe a última troca e eles entram no calendário.`);
   }
   return linhas;
 }
+
+/**
+ * O que a pessoa ainda não pôs no app, e que trava o diagnóstico completo.
+ * Pedido do dono (12/09): em vez de inventar "venceu", pedir para terminar o
+ * preenchimento de A, B e C. Ordem: o que mais destrava o calendário primeiro.
+ */
+export function oQueFalta(p: PessoaDaJornada, carro: Vehicle): string[] {
+  const tipos = new Set(servicosDoCarro(p, carro).map((x) => x.type));
+  const falta: string[] = [];
+  if (!(typeof carro.odometerKm === "number" && carro.odometerKm > 0)) falta.push("O km atual do painel");
+  for (const k of ["oil", "brakefluid", "timing"]) {
+    if (!tipos.has(k)) falta.push(`A data da última ${(NOME_DO_ITEM[k] ?? k).toLowerCase()}, mesmo aproximada`);
+  }
+  if (!carro.quiz || Object.keys(carro.quiz).length === 0) falta.push("O quiz de saúde do carro, dois minutos");
+  return falta;
+}
+
+const DIAGNOSTICO = (nome: string) => `Para o diagnóstico completo do ${nome}, falta pouco:`;
 
 // ---- cada e-mail ---------------------------------------------------------------
 
@@ -166,6 +204,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
       };
     }
     const itens = itensDoCalendario(p, carro, agora, hoje);
+    const falta = oQueFalta(p, carro);
     return {
       assunto: `O ${nome} entrou na garagem. Agora ele não te pega de surpresa.`,
       preheader: "Troca de óleo, fluido de freio, correia: cada item com data e km.",
@@ -173,11 +212,11 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
       saudacao: oi,
       paragrafos: [
         `Carro sem calendário só avisa quando quebra. A partir de hoje o ${nome} tem um: troca de óleo, fluido de freio, correia, bateria, cada item com data e km, e o aviso chega antes de vencer, não depois.`,
-        itens.length ? "O que já dá para ver:" : "Falta só uma coisa: a data da última revisão que você lembra, mesmo aproximada. Com ela, o calendário passa a ter data de verdade.",
+        itens.length ? "O que já dá para ver:" : falta.length ? `O calendário só fica exato com o que você informa. ${DIAGNOSTICO(nome ?? "carro")}` : "O calendário está montado. Cada item avisa antes de vencer.",
       ],
-      destaque: itens.length ? { titulo: "Vence primeiro", itens } : undefined,
-      cta: { texto: itens.length ? `Ver o calendário do ${nome}` : "Registrar a última revisão", url: link(itens.length ? "history" : "addService") },
-      push: { titulo: `O ${nome} está vigiado`, corpo: itens.length ? itens[0] : "Registre a última revisão e o calendário ganha data." },
+      destaque: itens.length ? { titulo: "Vence primeiro", itens } : falta.length ? { titulo: "Falta preencher", itens: falta } : undefined,
+      cta: itens.length ? { texto: `Ver o calendário do ${nome}`, url: link("history") } : { texto: `Completar o cadastro do ${nome}`, url: link("car") },
+      push: { titulo: `O ${nome} está vigiado`, corpo: itens.length ? itens[0] : falta.length ? `Falta pouco para o diagnóstico completo: ${falta[0].toLowerCase()}.` : "O calendário está montado." },
     };
   }
 
@@ -197,9 +236,10 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
       };
     }
     const itens = itensDoCalendario(p, carro, agora, hoje);
+    const falta = oQueFalta(p, carro);
     return {
-      assunto: `Não sabe quando é a próxima revisão do ${nome}? Está aqui.`,
-      preheader: "Data e km de cada item, pela régua do manual.",
+      assunto: itens.length ? `Não sabe quando é a próxima revisão do ${nome}? Está aqui.` : `Não sabe quando é a próxima revisão do ${nome}? Falta pouco para saber.`,
+      preheader: itens.length ? "Data e km de cada item, pela régua do manual." : "Três dados, e o calendário fica exato.",
       titulo: `A próxima revisão do ${nome}`,
       saudacao: oi,
       paragrafos: itens.length
@@ -207,12 +247,12 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
             "Revisão atrasada não avisa. Ela aparece na oficina, com preço de conserto. Pela régua do manual e pelo que você registrou, é isto que vence primeiro:",
           ]
         : [
-            `O ${nome} está na garagem, mas o calendário ainda está em branco: falta a data da última revisão.`,
-            "Registre a última que você lembra, mesmo aproximada. Com uma data, o Mentorque calcula todas as outras e avisa antes de vencer. Sem isso, você volta a descobrir na oficina.",
+            `Revisão atrasada não avisa. Ela aparece na oficina, com preço de conserto. O ${nome} está na garagem, mas o calendário ainda não tem com o que contar.`,
+            DIAGNOSTICO(nome ?? "carro"),
           ],
-      destaque: itens.length ? { titulo: "Vence primeiro", itens } : undefined,
-      cta: { texto: itens.length ? "Ver o calendário" : "Registrar a última revisão", url: link(itens.length ? "history" : "addService") },
-      push: { titulo: `A próxima revisão do ${nome}`, corpo: itens.length ? itens[0] : "Registre a última revisão e o calendário nasce." },
+      destaque: itens.length ? { titulo: "Vence primeiro", itens } : falta.length ? { titulo: "Falta preencher", itens: falta } : undefined,
+      cta: itens.length ? { texto: "Ver o calendário", url: link("history") } : { texto: `Completar o cadastro do ${nome}`, url: link("car") },
+      push: { titulo: `A próxima revisão do ${nome}`, corpo: itens.length ? itens[0] : `Falta pouco: ${(falta[0] ?? "a última revisão").toLowerCase()}.` },
     };
   }
 
@@ -408,6 +448,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
 
   if (e.chave === "parado-2" || e.chave === "parado-7") {
     const semana = e.chave === "parado-7";
+    const falta = carro ? oQueFalta(p, carro) : [];
     return {
       assunto: semana ? `Uma semana, e o ${nome} continua sem calendário` : `O ${nome} está na garagem, mas ainda não te protege`,
       preheader: "Um serviço registrado, e o calendário nasce.",
@@ -415,9 +456,10 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
       saudacao: oi,
       paragrafos: [
         `Sem um serviço registrado, o app não sabe quando foi a última troca de óleo do ${nome}, e sem isso não tem como te avisar a próxima. É o carro cadastrado que ainda não conta nada, e revisão que ninguém vigia vence na oficina.`,
-        "Registre o último serviço que você lembra, mesmo aproximado. Dez segundos, e o calendário nasce. Ou responda o quiz de um minuto: ele já diz por onde começar.",
+        DIAGNOSTICO(nome ?? "carro"),
       ],
-      cta: { texto: "Registrar o último serviço", url: link("addService") },
+      destaque: falta.length ? { titulo: "Falta preencher", itens: falta } : undefined,
+      cta: { texto: `Completar o cadastro do ${nome}`, url: link("car") },
       push: { titulo: semana ? `O ${nome} continua sem calendário` : `O ${nome} ainda não te protege`, corpo: "Registre o último serviço que você lembra e o calendário nasce." },
     };
   }
@@ -442,6 +484,7 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
     const tempo = e.chave === "sumiu-30" ? "um mês" : "duas semanas";
     if (carro) {
       const pendentes = itensDoCalendario(p, carro, agora, hoje, 30, 1000);
+      const falta = oQueFalta(p, carro);
       return {
         assunto: pendentes.length ? `O ${nome} anda sem vigia há ${tempo}, e tem coisa pendente` : `O ${nome} anda sem vigia há ${tempo}`,
         preheader: pendentes.length ? "O calendário andou enquanto você não olhava." : "Nada venceu. Mas o calendário só protege com o km em dia.",
@@ -449,9 +492,11 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
         saudacao: oi,
         paragrafos: pendentes.length
           ? [`Faz ${tempo} que o ${nome} não recebe registro nenhum. Enquanto isso, o calendário andou:`]
-          : [`Faz ${tempo} que o ${nome} não recebe registro nenhum. Nada venceu nesse tempo, e isso é notícia boa.`, "Mas o calendário só te protege com o km em dia: dez segundos para atualizar, ou um minuto no quiz de hoje para manter a sequência."],
-        destaque: pendentes.length ? { titulo: "Pendente", itens: pendentes } : undefined,
-        cta: pendentes.length ? { texto: "Ver o calendário", url: link("history") } : { texto: "Responder o quiz de hoje", url: link("quiz") },
+          : falta.length
+            ? [`Faz ${tempo} que o ${nome} não recebe registro nenhum, e o calendário ainda não tem com o que contar.`, DIAGNOSTICO(nome ?? "carro")]
+            : [`Faz ${tempo} que o ${nome} não recebe registro nenhum. Nada venceu nesse tempo, e isso é notícia boa.`, "Mas o calendário só te protege com o km em dia: dez segundos para atualizar, ou um minuto no quiz de hoje para manter a sequência."],
+        destaque: pendentes.length ? { titulo: "Pendente", itens: pendentes } : falta.length ? { titulo: "Falta preencher", itens: falta } : undefined,
+        cta: pendentes.length ? { texto: "Ver o calendário", url: link("history") } : falta.length ? { texto: `Completar o cadastro do ${nome}`, url: link("car") } : { texto: "Responder o quiz de hoje", url: link("quiz") },
         push: pendentes.length
           ? { titulo: `${nome}: tem coisa pendente`, corpo: pendentes[0] }
           : { titulo: `${tempo.charAt(0).toUpperCase()}${tempo.slice(1)} sem o ${nome}`, corpo: "Nada venceu. O quiz de hoje leva um minuto.", rota: "quiz" },
