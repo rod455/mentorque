@@ -37,6 +37,28 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-13 · Engenharia: análise de orçamento por foto, no ar na web
+- O dono aprovou os quatro itens da proposta dos R$ 10 milhões
+  (orçamento por foto, triagem por perguntas, relatório compartilhável,
+  gastos por categoria) e decidiu: 2 análises por mês no gratuito; as
+  perguntas da triagem ele revisa por id; relatório resumido grátis e
+  completo no Premium; combustível grátis. O primeiro item saiu hoje.
+- O que existe: `lib/orcamento/analise.ts` (puro: molde do pedido, leitura
+  de resposta suja, comparação com as faixas, limite), `app/api/orcamento`
+  (Bearer para o Premium pela tabela `subscriptions`, contagem em
+  `orcamentos_analisados`, imagem ao modelo, registro sem a foto), a tela
+  `Orcamento.tsx` e os três pontos de entrada (checklist do sintoma,
+  serviço novo, Biela). Evento `analisou_orcamento` com origem; restrição
+  do banco recriada (migração `funil_eventos_orcamento`).
+- Conferência: `conferir:orcamento` (26 casos) reprovou com o limite
+  trocado para 3 e com a comparação desligada; a suíte de navegador
+  `orcamento` (16 casos) prova a tela com a rota simulada nos três
+  desfechos, mais o salvar no histórico pré-preenchido.
+- O que a conferência não alcança: a resposta do modelo de verdade (sem
+  chave no ambiente de conferência) e a câmera no WebView das lojas. O
+  primeiro se prova em produção com uma análise de engenharia; o segundo,
+  no roteiro da 2.6 (`docs/lojas/novidades-2.6.md`).
+
 ## 2026-09-13 · Engenharia: primeira rodada automática da jornada
 - Lembrete agendado disparou às 9h11 de Brasília. Em `jornada_envios`, dia
   13/09: 3 e-mails `d0` (contas novas de 12/09), só e-mail, sem push (nenhum

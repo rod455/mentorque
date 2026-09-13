@@ -659,6 +659,19 @@ export function ChecklistScreen({ symptomId }: { symptomId: string }) {
         </button>
       )}
 
+      {/* Orçamento por foto (13/09/2026): a saída natural do checklist é a
+          oficina entregar um orçamento, e este é o lugar de entendê-lo. */}
+      <button
+        onClick={() => go({ name: "orcamento", origem: "checklist", symptomId: sx.id })}
+        className="mt-4 flex w-full items-center gap-3 rounded-2xl bg-amber/10 px-4 py-3.5 text-left ring-1 ring-amber/25 hover:ring-amber/50"
+      >
+        <span className="text-2xl">📷</span>
+        <span>
+          <span className="block text-sm font-medium text-cream">{c.orcamento.entrada}</span>
+          <span className="block text-xs text-cream/60">{c.orcamento.entradaSub}</span>
+        </span>
+      </button>
+
       <div className="mt-4 space-y-3">
         <Field label={c.checklist.shop}>
           <input value={shop} onChange={(e) => setShop(e.target.value)} placeholder={c.checklist.shopPh} className={inputCls} />

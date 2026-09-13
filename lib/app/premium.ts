@@ -6,6 +6,9 @@ export const LIMITS = {
   freeCars: 2,
   freeServices: 20,
   freeParts: 3,
+  // Análises de orçamento por foto por mês (decisão do dono, 13/09/2026). O
+  // servidor é quem conta (lib/orcamento/analise.ts); aqui é só o texto.
+  freeOrcamentosMes: 2,
 };
 
 // Rough "money saved" indicator for the Premium listing. Derived, transparent:

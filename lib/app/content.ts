@@ -292,6 +292,10 @@ export function getContent(locale: Locale) {
         title: T("Recomendações para o seu {car}", "Recommendations for your {car}"),
         benefits: [T("Sintomas comuns no seu modelo/ano/km", "Symptoms common on your model/year/km"), T("Prioridade do que olhar primeiro", "Priority of what to check first")],
       },
+      orcamento: {
+        title: T("Analise quantos orçamentos quiser", "Analyze as many quotes as you want"),
+        benefits: [T("Sem limite de fotos de orçamento por mês", "No monthly limit on quote photos"), T("Cada linha explicada e comparada com a sua região", "Every line explained and compared with your region"), T("As perguntas certas antes de aprovar", "The right questions before you approve")],
+      },
       checklist: {
         title: T("Checklists completos e em PDF", "Complete checklists, in PDF"),
         benefits: [T("Checklist específico para o sintoma + modelo", "Symptom + model specific checklist"), T("Ilimitados e exportáveis em PDF", "Unlimited and PDF-exportable"), T("Compare vários orçamentos", "Compare multiple quotes")],
@@ -757,6 +761,43 @@ export function getContent(locale: Locale) {
       howTo: T("Como usar", "How to use"),
       howToSteps: T("Passo a passo", "Step by step"),
       howToSafety: T("Cuidados de segurança", "Safety notes"),
+    },
+
+    // A análise de orçamento por foto (13/09/2026). Os textos falam em
+    // "entender" e "perguntar", nunca em "enganar": é a regra dos dois
+    // projetos e da nossa ficha. O limite (2 por mês) é decisão do dono.
+    orcamento: {
+      title: T("Entenda o orçamento", "Understand the quote"),
+      entrada: T("Tirar foto do orçamento e entender cada linha", "Snap the quote and understand every line"),
+      entradaCurta: T("Analisar orçamento por foto", "Analyze a quote photo"),
+      entradaSub: T("A Biela explica para que serve cada item e o que perguntar antes de aprovar.", "Biela explains what each item is for and what to ask before approving."),
+      intro: T("Tire uma foto do orçamento da oficina, ou escolha uma da galeria. A Biela lê cada linha, explica para que serve, compara com a faixa da sua região quando houver referência e monta as perguntas para você fazer antes de aprovar.", "Take a photo of the shop's quote, or pick one from the gallery. Biela reads every line, explains what it's for, compares with your region's range when there is a reference and lists the questions to ask before approving."),
+      escolher: T("Tirar foto ou escolher da galeria", "Take a photo or pick from gallery"),
+      trocar: T("Trocar foto", "Change photo"),
+      analisar: T("Analisar orçamento", "Analyze quote"),
+      analisando: T("A Biela está lendo o orçamento...", "Biela is reading the quote..."),
+      gratisRestantes: T("{n} análises grátis restantes neste mês", "{n} free analyses left this month"),
+      gratisUltima: T("Última análise grátis deste mês", "Last free analysis this month"),
+      limite: T("Você usou as {n} análises grátis deste mês. Com o Premium, analise quantos orçamentos quiser.", "You used this month's {n} free analyses. With Premium, analyze as many quotes as you want."),
+      limiteCta: T("Analisar sem limite", "Analyze without limits"),
+      falhou: T("Não deu para analisar agora. Tente de novo em instantes; se a foto estiver escura ou tremida, tire outra.", "Couldn't analyze right now. Try again in a moment; if the photo is dark or blurry, take another."),
+      ilegivel: T("Não encontrei um orçamento legível nesta foto. Tente com mais luz, o papel inteiro na tela e sem sombra.", "I couldn't find a readable quote in this photo. Try with more light, the whole sheet in frame and no shadow."),
+      resumo: T("O que este orçamento faz", "What this quote does"),
+      itens: T("Linha a linha", "Line by line"),
+      total: T("Total lido", "Total read"),
+      oficina: T("Oficina", "Shop"),
+      faixa: T("Na sua região: {min} a {max}", "In your region: {min} to {max}"),
+      faixaSemRegiao: T("Referência: {min} a {max}", "Reference: {min} to {max}"),
+      posicao: { abaixo: T("abaixo da faixa", "below the range"), dentro: T("dentro da faixa", "within the range"), acima: T("acima da faixa", "above the range") },
+      atencao: T("Vale perguntar", "Worth asking"),
+      perguntas: T("Perguntas para fazer na oficina", "Questions to ask the shop"),
+      alerta: T("Item de segurança", "Safety item"),
+      salvar: T("Salvar no histórico", "Save to history"),
+      perguntarBiela: T("Perguntar mais à Biela", "Ask Biela more"),
+      bielaSeed: T("Sobre este orçamento:", "About this quote:"),
+      outra: T("Analisar outro orçamento", "Analyze another quote"),
+      aviso: T("A Biela explica e sugere perguntas; ela não sabe se o serviço é necessário sem ver o carro. As faixas são referência, não tabela. A foto não fica guardada.", "Biela explains and suggests questions; it can't tell if the work is needed without seeing the car. Ranges are a reference, not a price list. The photo is not stored."),
+      tipo: { peca: T("peça", "part"), servico: T("serviço", "service"), mao_de_obra: T("mão de obra", "labor"), outro: T("outro", "other") },
     },
 
     checklist: {

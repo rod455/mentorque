@@ -50,6 +50,11 @@ export type EventoFunil =
   | "viu_aula"
   | "consultou_sintoma"
   | "registrou_servico"
+  // A análise de orçamento por foto (13/09/2026): é o wedge que os dois
+  // projetos de R$ 10 milhões apontam, e a leitura dele é "quem analisou
+  // volta e paga?". `origem` diz de onde a pessoa veio (checklist, servico,
+  // biela). Só sai quando o modelo devolveu uma análise, legível ou não.
+  | "analisou_orcamento"
   // Único evento técnico da lista: o desfecho da subida do SDK de atribuição
   // (lib/app/atribuicao.ts). Ele não mede comportamento de ninguém, mede se a
   // nossa própria medição está viva no aparelho.

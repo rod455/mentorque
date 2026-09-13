@@ -659,6 +659,22 @@ export function AddServiceScreen({ preset, editId }: { preset?: Partial<ServiceR
           <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={(e) => onPhoto(e.target.files?.[0])} />
         </Field>
 
+        {/* Orçamento por foto (13/09/2026): quem está registrando um serviço
+            muitas vezes tem o orçamento na mão; a análise volta pré-preenchendo
+            este formulário. Só no serviço novo: editar já tem os dados. */}
+        {!editing && (
+          <button
+            onClick={() => go({ name: "orcamento", origem: "servico" })}
+            className="flex w-full items-center gap-3 rounded-2xl bg-amber/10 px-4 py-3.5 text-left ring-1 ring-amber/25 hover:ring-amber/50"
+          >
+            <span className="text-2xl">📷</span>
+            <span>
+              <span className="block text-sm font-medium text-cream">{c.orcamento.entrada}</span>
+              <span className="block text-xs text-cream/60">{c.orcamento.entradaSub}</span>
+            </span>
+          </button>
+        )}
+
         <div className="flex gap-2">
           <Button variant="ghost" className="flex-1" onClick={back}>{c.common.cancel}</Button>
           <Button className="flex-1" disabled={!valid} onClick={save}>{c.common.save}</Button>

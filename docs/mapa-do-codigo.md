@@ -31,6 +31,7 @@ começar lendo em vez de garimpando.
 | o texto de um guia do site (`/barulho-no-carro`) | `lib/site/guias/<caminho>.ts` |
 | criar um guia novo do site | veja abaixo |
 | qual e-mail da jornada sai para quem, e quando | `lib/jornada/decisao.ts` (e confira com `npm run conferir:jornada`); os textos em `lib/jornada/emails.ts`; o manual em `docs/jornada.md` |
+| a análise de orçamento por foto (o pedido ao modelo, a leitura, o limite do gratuito) | `lib/orcamento/analise.ts` (e confira com `npm run conferir:orcamento`); a rota é `app/api/orcamento`, a tela `components/app/screens/Orcamento.tsx`, a suíte `conferir:navegador orcamento` |
 | o transporte de push (FCM e APNs) | `lib/push/transporte.ts`; a rota manual é `app/api/push/enviar`, o chamador automático é `app/api/cron/jornada` |
 
 ### Um guia de sintoma novo no site

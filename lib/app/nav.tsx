@@ -16,6 +16,10 @@ export type View =
   | { name: "symptom"; id: string }
   | { name: "systemProblems"; system: SystemKey }
   | { name: "checklist"; symptomId: string }
+  // A análise de orçamento por foto (13/09/2026). `origem` é de onde a pessoa
+  // veio (checklist, servico, biela), para o funil; `symptomId` pré-preenche
+  // o histórico quando ela veio de um sintoma.
+  | { name: "orcamento"; origem?: string; symptomId?: string }
   | { name: "obd2" }
   | { name: "health" }
   | { name: "healthQuiz" }

@@ -306,6 +306,19 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
         </div>
       )}
 
+      {/* Orçamento por foto (13/09/2026): antes do portão do Premium de
+          propósito, porque o gratuito tem duas análises por mês, e "esse
+          orçamento está caro?" é uma das sugestões desta tela há semanas. */}
+      {msgs.length <= 1 && (
+        <button
+          onClick={() => go({ name: "orcamento", origem: "biela" })}
+          className="mb-2 flex w-full items-center gap-3 rounded-2xl bg-amber/10 px-4 py-3 text-left ring-1 ring-amber/25 hover:ring-amber/50"
+        >
+          <span className="text-xl">📷</span>
+          <span className="text-sm font-medium text-cream">{c.orcamento.entradaCurta}</span>
+        </button>
+      )}
+
       {gated ? (
         <div className="mb-2 rounded-2xl bg-amber/10 p-4 text-center ring-1 ring-amber/25">
           <p className="text-sm text-cream/85">{c.biela.freeOver}</p>
