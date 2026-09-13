@@ -47,7 +47,9 @@ create table if not exists public.funil_eventos (
     -- nesse dia: migração funil_eventos_orcamento).
     'analisou_orcamento',
     -- Caderno de gastos, medido em 13/09/2026 (migração funil_eventos_abastecimento).
-    'registrou_abastecimento'
+    'registrou_abastecimento',
+    -- Modo motorista de aplicativo, medido em 13/09/2026 (migração funil_eventos_ganho).
+    'lancou_ganho'
   )),
 
   anon_id    text,

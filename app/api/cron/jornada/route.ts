@@ -6,7 +6,7 @@ import { escolherEmail, type Escolha, type PessoaDaJornada } from "@/lib/jornada
 import { montarMensagem, renderEmail } from "@/lib/jornada/emails";
 import { linkDeSaida } from "@/lib/jornada/saida";
 import { enviarPush, pushConfigurado } from "@/lib/push/transporte";
-import type { Abastecimento, ServiceRecord, Vehicle } from "@/lib/app/types";
+import type { Abastecimento, Ganho, ServiceRecord, Vehicle } from "@/lib/app/types";
 import { mesAnterior } from "@/lib/app/resumoDoMes";
 
 export const runtime = "nodejs";
@@ -77,6 +77,8 @@ type Estado = {
   vehicles?: Vehicle[];
   services?: ServiceRecord[];
   abastecimentos?: Abastecimento[];
+  motoristaDeApp?: boolean;
+  ganhos?: Ganho[];
   activeVehicleId?: string | null;
   quiz?: { respostas?: number; ultimoDia?: string | null } | null;
   name?: string | null;
@@ -149,6 +151,8 @@ async function carregarPessoas(admin: SupabaseClient, hoje: string): Promise<{ p
       carroPrincipalId: d.activeVehicleId ?? null,
       servicos,
       abastecimentos: Array.isArray(d.abastecimentos) ? d.abastecimentos : [],
+      motoristaDeApp: d.motoristaDeApp === true,
+      ganhos: Array.isArray(d.ganhos) ? d.ganhos : [],
       quizRespostas: d.quiz?.respostas ?? 0,
       ultimaAtividade,
       temManual: temManualPara(listaDeManuais, principal),

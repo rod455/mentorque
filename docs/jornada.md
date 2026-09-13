@@ -48,7 +48,7 @@ operação: o que existe, onde mora, como testar e como ligar.
 | chegando:item | vence em 30 dias ou 1.000 km; a cada 60 dias | Troca de óleo do Gol 2016 vence em 25 dias |
 | preco:serviço | serviço com valor registrado há até 10 dias; uma vez | Você pagou R$ 280 em troca de óleo. Na região, a faixa é R$ 160 a R$ 490 |
 | vence:data | IPVA, licenciamento, seguro ou CNH a 30 dias ou menos, ainda não vencida; a cada 60 dias | IPVA do Gol 2016 vence em 12 dias (R$ 1.200) |
-| mes:aaaa-mm | dias 1 a 3 do mês, para quem tem lançamento no mês fechado ou data cadastrada; uma vez por mês | Agosto do Gol 2016: R$ 380 |
+| mes:aaaa-mm | dias 1 a 3 do mês, para quem tem lançamento no mês fechado ou data cadastrada; uma vez por mês. Com o modo motorista ligado, traz ganhou, sobrou e lucro por km | Agosto do Gol 2016: R$ 380 |
 | parado-2, parado-7 | carro cadastrado, zero serviço e zero quiz | O Gol 2016 está cadastrado, mas ainda não conta nada |
 | km | km sem atualizar há 45 dias | Quantos km o Gol 2016 tem hoje? |
 | sumiu-14, sumiu-30 | sem atividade | O Gol 2016 está sem novidade há duas semanas |

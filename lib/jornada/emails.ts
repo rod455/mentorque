@@ -31,6 +31,7 @@ import { vehicleTraits } from "../app/traits.ts";
 import { datasDoCarro } from "../app/datasDoCarro.ts";
 import { custoPorKm } from "../app/combustivel.ts";
 import { mesAnterior, nomeDoMes, resumoDoMes } from "../app/resumoDoMes.ts";
+import { contaDoMes } from "../app/motorista.ts";
 import { nomeDoCarro, type Escolha, type PessoaDaJornada } from "./decisao.ts";
 import type { DestinoDoLink } from "../app/destinoDoLink.ts";
 
@@ -571,6 +572,14 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
     if (r.combustivel > 0) linhas.push(`Combustível: ${reais(r.combustivel)}${r.litros > 0 ? ` (${r.litros.toLocaleString("pt-BR")} litros)` : ""}`);
     if (r.servicos > 0) linhas.push(`Serviços e peças: ${reais(r.servicos)}`);
     if (porKm != null) linhas.push(`Custo por km em combustível: R$ ${porKm.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+    // Modo motorista (peça 4): o lucro por km, quando o mês teve ganho.
+    if (p.motoristaDeApp) {
+      const conta = contaDoMes({ ganhos: (p.ganhos ?? []).filter((g) => g.vehicleId === carro.id), abastecimentos, servicos, mes: item, hoje });
+      if (conta.ganhou > 0) {
+        linhas.push(`Ganhou com o aplicativo: ${reais(conta.ganhou)} em ${conta.km.toLocaleString("pt-BR")} km, ${conta.dias} dia${conta.dias === 1 ? "" : "s"}`);
+        if (conta.sobrou != null && conta.lucroPorKm != null) linhas.push(`Sobrou: ${reais(conta.sobrou)} (R$ ${conta.lucroPorKm.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} de lucro por km)`);
+      }
+    }
     const vence = [
       ...datasDoCarro(carro, agora).filter((d) => d.dias >= 0 && d.dias <= 30).map((d) => `${NOME_DA_DATA[d.tipo] ?? d.tipo}: ${dataBr(d.em)}${d.valor != null ? ` (${reais(d.valor)})` : ""}`),
       ...itensDoCalendario(p, carro, agora, hoje, 30, 1000),

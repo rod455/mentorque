@@ -835,6 +835,50 @@ export function getContent(locale: Locale) {
     resumoDoMes: {
       titulo: T("{mes} do {carro}: {valor}", "{carro} in {mes}: {valor}"),
       sub: T("Combustível {combustivel} · serviços {servicos} · toque para ver o histórico", "Fuel {combustivel} · services {servicos} · tap to see the history"),
+      // Com o modo motorista ligado e ganho no mês (peça 4).
+      subMotorista: T("Ganhou {ganhou} · sobrou {sobrou} · {lucro} por km", "Earned {ganhou} · kept {sobrou} · {lucro} per km"),
+    },
+
+    // O modo motorista de aplicativo (13/09/2026, peça 4 da rotina). O card
+    // do Início troca "custo do carro" por "hoje: ganhou, custou, sobrou".
+    // Nunca inventa custo: sem dois abastecimentos, diz que falta.
+    motorista: {
+      perfilRotulo: T("Trabalho com o carro por aplicativo", "I drive for an app with this car"),
+      perfilSub: T("O Início mostra o que o dia rendeu", "Home shows what the day earned"),
+      cardTitulo: T("Hoje com o {carro}", "Today with the {carro}"),
+      cardConta: T("Ganhou {ganhou} · custou {custou} · sobrou {sobrou}", "Earned {ganhou} · cost {custou} · kept {sobrou}"),
+      cardSemCusto: T("Ganhou {ganhou} · {km} km · registre dois abastecimentos e o custo aparece", "Earned {ganhou} · {km} km · log two fill-ups and the cost shows up"),
+      cardVazioTitulo: T("Quanto o {carro} rendeu hoje?", "How much did the {carro} earn today?"),
+      cardVazioSub: T("Lance o que recebeu e os km. A conta do dia sai na hora.", "Log what you received and the km. The day's math comes back at once."),
+      cardCta: T("Lançar o dia", "Log the day"),
+      cardCtaAbasteci: T("Abasteci", "Filled up"),
+      titulo: T("O dia de trabalho", "The work day"),
+      intro: T("O que o aplicativo pagou e quantos km você rodou. Só isso.", "What the app paid and how many km you drove. That's it."),
+      valor: T("Recebido no dia (R$)", "Received today (R$)"),
+      valorPh: T("ex.: 240", "e.g. 240"),
+      km: T("Km rodados no dia", "Km driven today"),
+      kmPh: T("ex.: 180", "e.g. 180"),
+      data: T("Data", "Date"),
+      salvar: T("Salvar o dia", "Save the day"),
+      valorInvalido: T("Digite o que recebeu, em reais.", "Type what you received."),
+      kmInvalido: T("Digite os km rodados, em números.", "Type the km driven in numbers."),
+      devolucaoTitulo: T("Registrado. O dia do {carro}:", "Saved. The {carro}'s day:"),
+      sobrou: T("sobrou", "kept"),
+      ganhouCustou: T("Ganhou {ganhou} · custou {custou}", "Earned {ganhou} · cost {custou}"),
+      lucroPorKm: T("{valor} de lucro por km", "{valor} profit per km"),
+      custoPorKm: T("Custo por km: {valor} ({detalhe})", "Cost per km: {valor} ({detalhe})"),
+      soCombustivel: T("só combustível, sem reserva de manutenção ainda", "fuel only, no maintenance reserve yet"),
+      comReserva: T("combustível {combustivel} + reserva de manutenção {reserva}", "fuel {combustivel} + maintenance reserve {reserva}"),
+      semCusto: T("Ganhou {ganhou} em {km} km. O custo aparece depois de dois abastecimentos registrados.", "Earned {ganhou} over {km} km. The cost shows up after two logged fill-ups."),
+      mes: T("Este mês: ganhou {ganhou}, sobrou {sobrou}", "This month: earned {ganhou}, kept {sobrou}"),
+      pronto: T("Pronto", "Done"),
+      verHistorico: T("Ver no histórico", "See in history"),
+      apagar: T("Apagar este dia", "Delete this day"),
+      apagado: T("Dia apagado.", "Day deleted."),
+      naoEncontrado: T("Esse dia não está mais aqui.", "That day is no longer here."),
+      linha: T("Dia de trabalho", "Work day"),
+      linhaKm: T("{km} km rodados", "{km} km driven"),
+      semCarro: T("Cadastre o carro para lançar o dia.", "Add the car to log the day."),
     },
 
     // O caderno de gastos (13/09/2026): o abastecimento em três toques, com

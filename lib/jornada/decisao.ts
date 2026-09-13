@@ -29,7 +29,7 @@
 // (saúde), `planoDosItens` (calendário), `FAIXAS_NACIONAIS` (preço). O
 // e-mail e o aviso local no aparelho falam do mesmo item pela mesma régua.
 
-import type { Abastecimento, ServiceRecord, Vehicle } from "../app/types";
+import type { Abastecimento, Ganho, ServiceRecord, Vehicle } from "../app/types";
 import { diasEntre } from "../app/datas.ts";
 import { datasDoCarro } from "../app/datasDoCarro.ts";
 import { mesAnterior, resumoDoMes } from "../app/resumoDoMes.ts";
@@ -52,6 +52,9 @@ export type PessoaDaJornada = {
   servicos: ServiceRecord[];
   /** Os abastecimentos (caderno de gastos, 13/09/2026); contas antigas não têm. */
   abastecimentos?: Abastecimento[];
+  /** Modo motorista de aplicativo (13/09/2026): o interruptor e os dias de trabalho. */
+  motoristaDeApp?: boolean;
+  ganhos?: Ganho[];
   /** Total de respostas do quiz (o `quiz.respostas` do estado). */
   quizRespostas: number;
   /** Último dia em que o estado mudou ou o quiz foi respondido, yyyy-mm-dd. */

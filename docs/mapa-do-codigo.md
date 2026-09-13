@@ -34,6 +34,8 @@ começar lendo em vez de garimpando.
 | a análise de orçamento por foto (o pedido ao modelo, a leitura, o limite do gratuito) | `lib/orcamento/analise.ts` (e confira com `npm run conferir:orcamento`); a rota é `app/api/orcamento`, a tela `components/app/screens/Orcamento.tsx`, a suíte `conferir:navegador orcamento` |
 | as contas do abastecimento (custo por km, consumo, semana e mês) | `lib/app/combustivel.ts` (e confira com `npm run conferir:combustivel`); a tela é `components/app/screens/Abastecimento.tsx`, o card do Início mora em `Home.tsx`, a suíte é `conferir:navegador combustivel` |
 | as datas do carro (IPVA, licenciamento, seguro, CNH) e os avisos delas | `lib/app/datasDoCarro.ts` (puro, `npm run conferir:datas`); os avisos em `lib/app/lembreteDatas.ts`; a tela em `components/app/DatasDoCarro.tsx`; a suíte `conferir:navegador datas` |
+| o mês fechado do carro (card do Início e e-mail `mes` da jornada) | `lib/app/resumoDoMes.ts` (puro); o card em `Home.tsx`; a chave em `lib/jornada/decisao.ts`, o texto em `lib/jornada/emails.ts`, conferidos por `npm run conferir:jornada` |
+| o modo motorista de aplicativo (ganhou, custou, sobrou; lucro por km) | `lib/app/motorista.ts` (puro, `npm run conferir:motorista`); a tela `components/app/screens/Ganhos.tsx`; o interruptor em `Profile.tsx`; o card em `Home.tsx`; a suíte `conferir:navegador motorista` |
 | o transporte de push (FCM e APNs) | `lib/push/transporte.ts`; a rota manual é `app/api/push/enviar`, o chamador automático é `app/api/cron/jornada` |
 
 ### Um guia de sintoma novo no site

@@ -78,6 +78,26 @@ das lojas.
      janela do resumo, data vencida virando e-mail, resumo antes do gatilho).
    - Roteiro de aparelho: entre os dias 1 e 7, com um abastecimento no mês
      anterior, o card do mês aparece no Início abaixo da data a vencer.
+5. **O modo motorista de aplicativo** (13/09, peça 4 da rotina, como modo:
+   o público principal segue decisão do dono). No Perfil, abaixo dos
+   avisos, o interruptor "Trabalho com o carro por aplicativo". Ligado, o
+   card "Custo do carro" do Início vira "Hoje com o Gol 2016: ganhou R$ 240
+   · custou R$ 121 · sobrou R$ 119", com dois botões, "Lançar o dia" e
+   "Abasteci". A tela do dia pede o que o aplicativo pagou e os km rodados;
+   ao salvar, devolve o que sobrou, o lucro por km e de onde veio o custo
+   (combustível dos abastecimentos mais a reserva de manutenção dos
+   serviços dos últimos 12 meses, quando há 500 km registrados). Sem dois
+   abastecimentos, a conta diz que o custo ainda falta; nunca inventa. O
+   histórico lista os dias; o resumo do mês (card e e-mail) ganha a linha
+   do lucro por km. O km rodado no dia NÃO carimba o odômetro.
+   - Onde mora: `lib/app/motorista.ts` (puro), `Ganhos.tsx`, o card em
+     `Home.tsx`, o interruptor em `Profile.tsx`, as linhas em
+     `History.tsx`. Evento `lancou_ganho` (restrição do banco recriada,
+     migração `funil_eventos_ganho`). Conferido por `conferir:motorista` e
+     pela suíte `conferir:navegador motorista`.
+   - Roteiro de aparelho: ligar o interruptor no Perfil, voltar ao Início e
+     ver o card trocar; lançar um dia e ver a conta; desligar o interruptor
+     e ver o card do custo voltar.
 
 ## Roteiro de aparelho, e ele é obrigatório
 

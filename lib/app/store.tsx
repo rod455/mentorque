@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { apiUrl } from "@/lib/app/apiBase";
-import { newId, type Abastecimento, type ServiceRecord, type Vehicle } from "./types";
+import { newId, type Abastecimento, type Ganho, type ServiceRecord, type Vehicle } from "./types";
 import { aplicarImportacao, type EscolhaDeImportacao } from "./importacao";
 import { useAuth } from "./auth";
 import { getBrowserSupabase } from "@/lib/supabaseBrowser";
@@ -24,6 +24,10 @@ type Session = {
   activeVehicleId: string | null;
   services: ServiceRecord[];
   abastecimentos: Abastecimento[]; // caderno de gastos (13/09/2026): o lançamento de rotina
+  // Modo motorista de aplicativo (13/09/2026, peça 4 da rotina): o interruptor
+  // do Perfil e os dias de trabalho (ganhou, km rodado). Sobem com o resto.
+  motoristaDeApp: boolean;
+  ganhos: Ganho[];
   claimedMilestones: string[]; // badges the user marks by hand
   momentPhotos: Record<string, string>; // momento id → foto (data URL)
   seenLessons: string[]; // aulas concluídas pelo usuário
@@ -72,6 +76,8 @@ const EMPTY: Session = {
   activeVehicleId: null,
   services: [],
   abastecimentos: [],
+  motoristaDeApp: false,
+  ganhos: [],
   claimedMilestones: [],
   momentPhotos: {},
   seenLessons: [],
@@ -148,6 +154,10 @@ type StoreValue = {
   // Caderno de gastos (13/09/2026): registrar carimba o km do carro.
   addAbastecimento: (rec: Omit<Abastecimento, "id">) => string;
   removeAbastecimento: (id: string) => void;
+  // Modo motorista (13/09/2026): o dia de trabalho e o interruptor.
+  addGanho: (rec: Omit<Ganho, "id">) => string;
+  removeGanho: (id: string) => void;
+  setMotoristaDeApp: (v: boolean) => void;
   removeService: (id: string) => void;
   toggleMilestone: (id: string) => void;
   markLessonSeen: (id: string) => void; // alterna concluído/não concluído
@@ -185,6 +195,8 @@ function migrate(parsed: any): Session {
     if (!Array.isArray(sess.pinnedLessons)) sess.pinnedLessons = [];
     if (!Array.isArray(sess.reminders)) sess.reminders = [];
     if (!Array.isArray(sess.abastecimentos)) sess.abastecimentos = [];
+    if (!Array.isArray(sess.ganhos)) sess.ganhos = [];
+    if (typeof sess.motoristaDeApp !== "boolean") sess.motoristaDeApp = false;
     if (!sess.startedAt) sess.startedAt = todayISO();
     return sess;
   }
@@ -254,6 +266,8 @@ export function mergeSessions(cloud: Session, local: Session): Session {
     activeVehicleId: local.activeVehicleId ?? cloud.activeVehicleId ?? null,
     services: mergeById(cloud.services ?? [], local.services ?? []),
     abastecimentos: mergeById(cloud.abastecimentos ?? [], local.abastecimentos ?? []),
+    ganhos: mergeById(cloud.ganhos ?? [], local.ganhos ?? []),
+    motoristaDeApp: cloud.motoristaDeApp ?? local.motoristaDeApp ?? false,
     claimedMilestones: [...new Set([...(cloud.claimedMilestones ?? []), ...(local.claimedMilestones ?? [])])],
     momentPhotos: { ...(local.momentPhotos ?? {}), ...(cloud.momentPhotos ?? {}) },
     seenLessons: [...new Set([...(cloud.seenLessons ?? []), ...(local.seenLessons ?? [])])],
@@ -306,6 +320,7 @@ function semOsPendentes(local: Session, p: ImportacaoPendente): Session {
     vehicles: (local.vehicles ?? []).filter((v) => !ids.has(v.id)),
     services: (local.services ?? []).filter((r) => !ids.has(r.vehicleId)),
     abastecimentos: (local.abastecimentos ?? []).filter((r) => !ids.has(r.vehicleId)),
+    ganhos: (local.ganhos ?? []).filter((r) => !ids.has(r.vehicleId)),
     reminders: (local.reminders ?? []).filter((r) => !ids.has(r.split(":")[0])),
     // Carro ativo que não entrou não pode seguir apontado: a Home abriria
     // lendo um carro que não está na garagem.
@@ -695,8 +710,9 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
         const vehicles = p.vehicles.filter((v) => v.id !== id);
         const services = p.services.filter((r) => r.vehicleId !== id);
         const abastecimentos = (p.abastecimentos ?? []).filter((r) => r.vehicleId !== id);
+        const ganhos = (p.ganhos ?? []).filter((r) => r.vehicleId !== id);
         const activeVehicleId = p.activeVehicleId === id ? vehicles[0]?.id ?? null : p.activeVehicleId;
-        return { ...p, vehicles, services, abastecimentos, activeVehicleId };
+        return { ...p, vehicles, services, abastecimentos, ganhos, activeVehicleId };
       }),
     [patch]
   );
@@ -742,6 +758,18 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
     [patch]
   );
   const removeAbastecimento = useCallback((id: string) => patch((p) => ({ ...p, abastecimentos: (p.abastecimentos ?? []).filter((r) => r.id !== id) })), [patch]);
+
+  // O dia de trabalho não carimba o km: o km aqui é rodado no dia, não o do painel.
+  const addGanho = useCallback(
+    (rec: Omit<Ganho, "id">) => {
+      const id = newId();
+      patch((p) => ({ ...p, ganhos: [{ ...rec, id }, ...(p.ganhos ?? [])] }));
+      return id;
+    },
+    [patch]
+  );
+  const removeGanho = useCallback((id: string) => patch((p) => ({ ...p, ganhos: (p.ganhos ?? []).filter((r) => r.id !== id) })), [patch]);
+  const setMotoristaDeApp = useCallback((v: boolean) => patch((p) => ({ ...p, motoristaDeApp: v })), [patch]);
 
   const toggleMilestone = useCallback(
     (id: string) =>
@@ -875,8 +903,8 @@ export function PrototypeProvider({ children }: { children: React.ReactNode }) {
   const es = useMemo(() => (subActive && !s.premium ? { ...s, premium: true } : s), [s, subActive]);
 
   const value = useMemo<StoreValue>(
-    () => ({ s: es, importacaoPendente, resolverImportacao, checkoutVoltando, abrirConfirmacaoDeCompra, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, addAbastecimento, removeAbastecimento, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setTrilhaEmRitmo, setUnits, setAvatar, patchFeedback, responderQuiz, responderQuizPassado, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
-    [es, importacaoPendente, resolverImportacao, checkoutVoltando, abrirConfirmacaoDeCompra, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, addAbastecimento, removeAbastecimento, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setTrilhaEmRitmo, setUnits, setAvatar, patchFeedback, responderQuiz, responderQuizPassado, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
+    () => ({ s: es, importacaoPendente, resolverImportacao, checkoutVoltando, abrirConfirmacaoDeCompra, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, addAbastecimento, removeAbastecimento, addGanho, removeGanho, setMotoristaDeApp, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setTrilhaEmRitmo, setUnits, setAvatar, patchFeedback, responderQuiz, responderQuizPassado, subscribed: subActive, subscriptionEndsAt: sub.endsAt, subscriptionCanceling: sub.canceling, refreshSubscription, finishOnboarding, reset }),
+    [es, importacaoPendente, resolverImportacao, checkoutVoltando, abrirConfirmacaoDeCompra, fecharAvisoCheckout, setName, setEmail, setState, setCity, setPremium, addVehicle, updateVehicle, removeVehicle, setActiveVehicle, addService, updateService, removeService, addAbastecimento, removeAbastecimento, addGanho, removeGanho, setMotoristaDeApp, toggleMilestone, markLessonSeen, toggleLessonSaved, toggleLessonPinned, moveLessonPinned, toggleReminder, setMomentPhoto, setNotifications, setTrilhaEmRitmo, setUnits, setAvatar, patchFeedback, responderQuiz, responderQuizPassado, subActive, sub.endsAt, sub.canceling, refreshSubscription, finishOnboarding, reset]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
@@ -903,6 +931,12 @@ export function activeVehicle(s: Session): Vehicle | null {
   // vendidos, mantém o selecionado para o histórico seguir acessível.
   return ownedVehicles(s)[0] ?? active ?? s.vehicles[0] ?? null;
 }
+/** Os dias de trabalho de um carro, do mais novo para o mais velho. */
+export function ganhosFor(s: Session, vehicleId: string | null | undefined): Ganho[] {
+  if (!vehicleId) return [];
+  return (s.ganhos ?? []).filter((g) => g.vehicleId === vehicleId).sort((a, b) => b.date.localeCompare(a.date));
+}
+
 /** Os abastecimentos de um carro, do mais novo para o mais velho. */
 export function abastecimentosFor(s: Session, vehicleId: string | null | undefined): Abastecimento[] {
   if (!vehicleId) return [];

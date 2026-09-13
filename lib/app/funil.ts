@@ -59,6 +59,10 @@ export type EventoFunil =
   // A régua nova de retenção é "pessoas com abastecimento em duas semanas
   // seguidas", e ela sai daqui. `origem` diz de onde veio (inicio, historico).
   | "registrou_abastecimento"
+  // O dia de trabalho (13/09/2026, modo motorista de aplicativo): a leitura
+  // da peça é "quem ligou o interruptor lança o dia em cinco dias de uma
+  // semana?". O interruptor mora no estado da conta; o lançamento sai daqui.
+  | "lancou_ganho"
   // Único evento técnico da lista: o desfecho da subida do SDK de atribuição
   // (lib/app/atribuicao.ts). Ele não mede comportamento de ninguém, mede se a
   // nossa própria medição está viva no aparelho.

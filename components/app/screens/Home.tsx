@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { abastecimentosFor, activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
+import { abastecimentosFor, activeVehicle, ganhosFor, servicesFor, usePrototype } from "@/lib/app/store";
 import { custoPorKm, gastoDaSemana } from "@/lib/app/combustivel";
+import { contaDoDia, contaDoMes } from "@/lib/app/motorista";
 import { brlCentavos } from "./Abastecimento";
 import { dataParaOInicio } from "@/lib/app/datasDoCarro";
 import { mesAnterior, nomeDoMes, resumoDoMes } from "@/lib/app/resumoDoMes";
@@ -73,12 +74,54 @@ function typeIcon(t: string) {
 // 0.0 — Início (dashboard estilo Bloom)
 // O card "Custo do carro": com abastecimento, a semana e o custo por km; sem,
 // o convite ao primeiro lançamento. Sempre com o botão de abastecer.
+// Com o modo motorista ligado (peça 4 da rotina), o card do custo vira a
+// conta do dia: ganhou, custou, sobrou. Sem lançamento hoje, convida. Sem
+// dois abastecimentos, mostra o ganho e diz que o custo ainda falta.
+function DiaDoMotorista({ vehicleId, nome }: { vehicleId: string; nome: string }) {
+  const c = useContent();
+  const t = c.motorista;
+  const { s } = usePrototype();
+  const { go } = useNav();
+  const hoje = new Date().toISOString().slice(0, 10);
+  const conta = contaDoDia({ ganhos: ganhosFor(s, vehicleId), abastecimentos: abastecimentosFor(s, vehicleId), servicos: servicesFor(s, vehicleId), hoje });
+  const lancouHoje = conta.dias > 0;
+  return (
+    <div className="mt-3 rounded-2xl bg-graphite-800 px-4 py-3.5 ring-1 ring-white/[0.06]" data-dia-do-motorista>
+      <div className="flex items-center gap-3">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-amber/15 text-xl">🚕</span>
+        <span className="min-w-0 flex-1">
+          {!lancouHoje ? (
+            <>
+              <span className="block font-display text-[15px] font-semibold text-cream">{t.cardVazioTitulo.replace("{carro}", nome)}</span>
+              <span className="block text-xs text-cream/55">{t.cardVazioSub}</span>
+            </>
+          ) : (
+            <>
+              <span className="block text-[11px] uppercase tracking-wide text-cream/45">{t.cardTitulo.replace("{carro}", nome)}</span>
+              <span className="block font-display text-[15px] text-cream">
+                {conta.custou != null && conta.sobrou != null
+                  ? t.cardConta.replace("{ganhou}", formatBRL(conta.ganhou)).replace("{custou}", formatBRL(conta.custou)).replace("{sobrou}", formatBRL(conta.sobrou))
+                  : t.cardSemCusto.replace("{ganhou}", formatBRL(conta.ganhou)).replace("{km}", conta.km.toLocaleString("pt-BR"))}
+              </span>
+            </>
+          )}
+        </span>
+      </div>
+      <div className="mt-3 flex gap-2">
+        <button onClick={() => go({ name: "ganhos", origem: "inicio" })} className="flex-1 rounded-full bg-amber px-3.5 py-1.5 text-xs font-bold text-graphite">{t.cardCta}</button>
+        <button onClick={() => go({ name: "abastecimento", origem: "inicio" })} className="flex-1 rounded-full bg-teal px-3.5 py-1.5 text-xs font-bold text-graphite">{t.cardCtaAbasteci}</button>
+      </div>
+    </div>
+  );
+}
+
 function CustoDoCarro({ vehicleId, nome }: { vehicleId: string; nome: string }) {
   const c = useContent();
   const t = c.combustivel;
   const { s } = usePrototype();
   const { go } = useNav();
   const lista = abastecimentosFor(s, vehicleId);
+  if (s.motoristaDeApp) return <DiaDoMotorista vehicleId={vehicleId} nome={nome} />;
   const semana = gastoDaSemana(lista);
   const porKm = custoPorKm(lista);
   const abrir = () => go({ name: "abastecimento", origem: "inicio" });
@@ -142,8 +185,15 @@ function ResumoDoMesCard({ car }: { car: Vehicle }) {
   const hoje = new Date().toISOString().slice(0, 10);
   if (Number(hoje.slice(8, 10)) > 7) return null;
   const mes = mesAnterior(hoje);
-  const r = resumoDoMes({ abastecimentos: abastecimentosFor(s, car.id), servicos: servicesFor(s, car.id), mes });
+  const abastecimentos = abastecimentosFor(s, car.id);
+  const servicos = servicesFor(s, car.id);
+  const r = resumoDoMes({ abastecimentos, servicos, mes });
   if (r.lancamentos === 0 || r.total <= 0) return null;
+  // Modo motorista (peça 4): a linha do lucro por km, quando o mês teve ganho.
+  const conta = s.motoristaDeApp ? contaDoMes({ ganhos: ganhosFor(s, car.id), abastecimentos, servicos, mes }) : null;
+  const sub = conta && conta.ganhou > 0 && conta.sobrou != null && conta.lucroPorKm != null
+    ? c.resumoDoMes.subMotorista.replace("{ganhou}", formatBRL(conta.ganhou)).replace("{sobrou}", formatBRL(conta.sobrou)).replace("{lucro}", brlCentavos(conta.lucroPorKm))
+    : c.resumoDoMes.sub.replace("{combustivel}", formatBRL(r.combustivel)).replace("{servicos}", formatBRL(r.servicos));
   return (
     <button onClick={() => root({ name: "history" })} className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-4 py-3.5 text-left ring-1 ring-white/[0.06]" data-resumo-do-mes>
       <span className="text-xl">📊</span>
@@ -151,7 +201,7 @@ function ResumoDoMesCard({ car }: { car: Vehicle }) {
         <span className="block font-display text-[15px] font-semibold text-cream">
           {c.resumoDoMes.titulo.replace("{mes}", nomeDoMes(mes)).replace("{carro}", carName(car)).replace("{valor}", formatBRL(r.total))}
         </span>
-        <span className="block text-xs text-cream/60">{c.resumoDoMes.sub.replace("{combustivel}", formatBRL(r.combustivel)).replace("{servicos}", formatBRL(r.servicos))}</span>
+        <span className="block text-xs text-cream/60">{sub}</span>
       </span>
     </button>
   );

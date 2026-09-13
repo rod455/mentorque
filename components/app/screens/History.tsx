@@ -4,9 +4,9 @@ import { funil } from "@/lib/app/funil";
 
 import { useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { abastecimentosFor, activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
+import { abastecimentosFor, activeVehicle, ganhosFor, servicesFor, usePrototype } from "@/lib/app/store";
 import { gastoDoMes } from "@/lib/app/combustivel";
-import type { Abastecimento } from "@/lib/app/types";
+import type { Abastecimento, Ganho } from "@/lib/app/types";
 import { LIMITS } from "@/lib/app/premium";
 import { nextServiceByTime } from "@/lib/app/health";
 import { planoDosItens, visitaUnica, type PlanoDeItem, type VisitaUnica } from "@/lib/app/planoDeRevisao";
@@ -308,10 +308,13 @@ export function HistoryScreen() {
   const combustivel = abastecimentosFor(s, v.id);
   const mesAtual = new Date().toISOString().slice(0, 7);
   const servicosDoMes = all.filter((r) => r.date.startsWith(mesAtual) && r.total != null).reduce((acc, r) => acc + (r.total ?? 0), 0);
-  type Entrada = { data: string; km: number; servico?: ServiceRecord; abastecimento?: Abastecimento };
+  // Modo motorista (13/09/2026): os dias de trabalho entram na mesma lista.
+  const dias = s.motoristaDeApp ? ganhosFor(s, v.id) : [];
+  type Entrada = { data: string; km: number; servico?: ServiceRecord; abastecimento?: Abastecimento; ganho?: Ganho };
   const entradas: Entrada[] = [
     ...list.map((r) => ({ data: r.date, km: r.km, servico: r })),
     ...(filter === "all" ? combustivel.map((a) => ({ data: a.date, km: a.km, abastecimento: a })) : []),
+    ...(filter === "all" ? dias.map((g) => ({ data: g.date, km: 0, ganho: g })) : []),
   ].sort((a, b) => b.data.localeCompare(a.data) || b.km - a.km);
   const upcoming = <UpcomingBlock />;
   const usedTypes = Array.from(new Set(all.map((r) => r.type)));
@@ -402,6 +405,14 @@ export function HistoryScreen() {
                   <span className="block text-xs text-cream/50">{dateFmt(e.abastecimento.date)} · {e.abastecimento.km.toLocaleString()} km</span>
                 </span>
                 <span className="shrink-0 text-sm text-cream/70">{formatBRL(e.abastecimento.valor)}</span>
+              </button>
+            ) : e.ganho ? (
+              <button key={e.ganho.id} onClick={() => go({ name: "ganhos", id: e.ganho!.id })} className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/5 hover:ring-white/15" data-ganho>
+                <span className="min-w-0 flex-1">
+                  <span className="truncate font-display text-[15px] text-cream">🚕 {c.motorista.linha}</span>
+                  <span className="block text-xs text-cream/50">{dateFmt(e.ganho.date)} · {c.motorista.linhaKm.replace("{km}", e.ganho.km.toLocaleString("pt-BR"))}</span>
+                </span>
+                <span className="shrink-0 text-sm text-teal">+{formatBRL(e.ganho.valor)}</span>
               </button>
             ) : null)}
           </div>

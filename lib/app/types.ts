@@ -84,6 +84,20 @@ export type Abastecimento = {
   combustivel: Combustivel;
 };
 
+// O dia de quem trabalha com o carro por aplicativo (modo motorista,
+// 13/09/2026, peça 4 da rotina). Dois números: o que o aplicativo pagou e
+// quantos km o dia rodou. O custo do dia sai do custo por km (combustível
+// dos abastecimentos, mais a reserva de manutenção dos serviços), e a conta
+// "ganhou, custou, sobrou" é a que decide se a corrida valeu. O km aqui é
+// rodado no dia, não o do painel: não carimba o odômetro.
+export type Ganho = {
+  id: string;
+  vehicleId: string;
+  date: string; // ISO yyyy-mm-dd
+  valor: number; // recebido no dia, em reais
+  km: number; // km rodados no dia
+};
+
 // Severity used across problems / attention points (red / amber / teal).
 export type Severity = "high" | "medium" | "low";
 

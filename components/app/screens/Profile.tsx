@@ -144,7 +144,7 @@ export function ProfileScreen() {
   const g = c.gamification;
   const { locale } = useI18n();
   const { user, enabled, signOut, resetPassword } = useAuth();
-  const { s, setName, setState, setPremium, setNotifications, setUnits, setAvatar, subscribed, subscriptionEndsAt, subscriptionCanceling, refreshSubscription, reset } = usePrototype();
+  const { s, setName, setState, setPremium, setNotifications, setMotoristaDeApp, setUnits, setAvatar, subscribed, subscriptionEndsAt, subscriptionCanceling, refreshSubscription, reset } = usePrototype();
   const { go, root } = useNav();
 
   const [busyPlan, setBusyPlan] = useState(false);
@@ -678,6 +678,15 @@ export function ProfileScreen() {
           // Bloqueado nos ajustes: a linha inteira vira o caminho para lá. Ler
           // "bloqueado" sem ter para onde ir é informação que não serve.
           onClick={avisosBloqueados ? abrirAjustesDeAvisos : undefined}
+        />
+        {/* Modo motorista de aplicativo (13/09/2026, peça 4 da rotina). Aqui
+            e não no onboarding, de propósito: a chegada é área congelada e o
+            interruptor não muda posicionamento (decisão de público é do
+            dono). Ligado, o card do Início vira "ganhou, custou, sobrou". */}
+        <IconRow
+          icon="car" tint="bg-amber/15 text-amber" label={c.motorista.perfilRotulo}
+          value={c.motorista.perfilSub}
+          right={<Toggle on={s.motoristaDeApp} onChange={setMotoristaDeApp} />}
         />
       </Group>
 

@@ -128,7 +128,7 @@ Regras:
 - Veredito: (não começou)
 
 ## [modo-motorista-de-app] Ganhou, custou, sobrou: a conta do dia de quem trabalha com o carro
-- Estado: PROPOSTO (aprovada como modo; o público principal é decisão do dono)
+- Estado: ABERTO (web desde 13/09, como modo; lojas com a 2.6; o público principal segue decisão do dono)
 - Tipo: mudanca-direta
 - Alvo no funil: uso diário de um público que a ficha já mira.
 - Tese BeSci: clareza do próximo passo (a conta que decide se a corrida
@@ -139,7 +139,9 @@ Regras:
   uma semana · Duração: 4 semanas
 - Aprovação: aprovada pelo dono em 2026-09-13; a decisão de público fica
   pendente
-- Início: (não começou) · Ler a partir de: 4 semanas depois do início
+- Início: 2026-09-13 · Ler a partir de: 2026-10-11. Como ler: contas com
+  `motoristaDeApp = true` no `user_state`, e dias distintos com evento
+  `lancou_ganho` por semana; a régua é cinco em sete
 - Antes: nenhum dado de ganho; custo por km só de serviços, no Premium
 - Veredito: (não começou)
 

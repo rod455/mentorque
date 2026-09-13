@@ -55,6 +55,7 @@ export type EventoFunil =
   | "registrou_servico"
   | "analisou_orcamento"
   | "registrou_abastecimento"
+  | "lancou_ganho"
   | "assinou"
   | "renovou"
   | "cancelou"
@@ -111,6 +112,7 @@ export const UNIDADE: Record<EventoFunil, Unidade> = {
   registrou_servico: "aparelho",
   analisou_orcamento: "aparelho",
   registrou_abastecimento: "aparelho",
+  lancou_ganho: "aparelho",
   iniciou_checkout: "aparelho",
   atribuicao: "aparelho",
   // Nascem no webhook da cobrança, que não tem aparelho. A identidade é o
@@ -147,6 +149,7 @@ export const NATUREZA: Record<EventoFunil, Natureza> = {
   registrou_servico: "sessao",
   analisou_orcamento: "sessao",
   registrou_abastecimento: "sessao",
+  lancou_ganho: "sessao",
   iniciou_checkout: "ato",
   assinou: "ato",
   renovou: "ato",
@@ -198,6 +201,7 @@ export const MEDIDO_DESDE: Record<EventoFunil, string> = {
   // Orçamento por foto: no ar na web em 13/09; nas lojas, com a 2.6.
   analisou_orcamento: "2026-09-13",
   registrou_abastecimento: "2026-09-13",
+  lancou_ganho: "2026-09-13",
 };
 
 /**

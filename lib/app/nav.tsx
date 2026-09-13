@@ -29,6 +29,9 @@ export type View =
   // O abastecimento (13/09/2026, caderno de gastos). `origem` para o funil;
   // `id` abre um lançamento existente para ver e apagar.
   | { name: "abastecimento"; origem?: string; id?: string }
+  // O dia de trabalho de quem roda por aplicativo (13/09/2026, modo
+  // motorista). Mesmo desenho do abastecimento: `origem` e `id`.
+  | { name: "ganhos"; origem?: string; id?: string }
   | { name: "service"; id: string }
   | { name: "revisions" }
   | { name: "learn" }

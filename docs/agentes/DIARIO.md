@@ -92,7 +92,23 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   desfaz com cópia de segurança, nunca com checkout de arquivo sujo.
 - O primeiro `mes` possível sai em 01/10; o `vence` já sai amanhã para
   quem tiver data a 30 dias. Web no ar pelo push; o card, nas lojas com a
-  2.6. Peça 4 (modo motorista) é a próxima.
+  2.6.
+- Peça 4 construída como MODO (o público principal segue decisão do dono,
+  e o interruptor não muda posicionamento): `Session.motoristaDeApp` e
+  `ganhos` (dia de trabalho: recebido e km rodados, sem carimbar o
+  odômetro), `lib/app/motorista.ts` puro (custo do dia = km × custo por km;
+  custo por km = combustível dos abastecimentos + reserva de manutenção,
+  que só entra com serviço com valor e 500 km registrados em 12 meses; sem
+  dois abastecimentos NÃO há custo, e a conta diz que falta), o interruptor
+  no Perfil abaixo dos avisos, o card do Início trocando "custo do carro"
+  por "hoje: ganhou, custou, sobrou" com "Lançar o dia" e "Abasteci", a
+  tela `Ganhos.tsx` com a devolução na hora, as linhas no histórico, o
+  lucro por km no card e no e-mail do mês. Evento `lancou_ganho`
+  (restrição do banco recriada: `funil_eventos_ganho`). `conferir:motorista`
+  (37 casos, reprovou com a trava dos 500 km tirada e com custo inventado
+  sem abastecimento) e a suíte `motorista` (17 casos, dois deles provando
+  que sem abastecimento a conta não inventa custo). A leitura, em 11/10:
+  contas com o interruptor ligado e cinco dias de lançamento por semana.
 
 ## 2026-09-13 · Engenharia: a foto das memórias (e do perfil) quebrada era o bucket
 - Relato do dono, com foto: o card "Primeira viagem" com o ícone de imagem
