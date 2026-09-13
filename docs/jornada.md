@@ -133,10 +133,13 @@ em 12/09 às 14h33 de Brasília: 18 e-mails.
   o app das lojas e clica no e-mail cai no navegador, não no app, porque não
   há universal link. Fica registrado como limite.
 
-## Sem sinal ainda
+## O primeiro sinal, e como ler os próximos
 
-Até a primeira manhã depois do deploy de 12/09, nenhum e-mail da jornada saiu
-para ninguém. O primeiro sinal é o resumo que chega ao dono nessa manhã, com
-as cópias. Se ele não chegar, a resposta certa sobre "a jornada funciona?"
-continua sendo "sem sinal ainda", e o caminho é chamar o ensaio do passo 1 e
-ler `erros` na resposta.
+A primeira rodada automática saiu em 13/09/2026: a Vercel chamou o cron às
+8h47 de Brasília (o plano atual dispara em algum momento da hora) e três
+e-mails `d0` saíram, um para cada conta nova do dia anterior; zero saídas.
+Antes disso, 12/09 teve a rodada manual pelo n8n (22 e-mails, 1 push no
+Android). Se numa manhã não houver linha em `jornada_envios`, lembre que
+quem recebeu há menos de três dias não recebe de novo, então zero pode ser
+legítimo; o caminho é chamar o ensaio do passo 1 e ler `erros` na resposta,
+e olhar o log do cron na Vercel (projeto, Cron Jobs, `/api/cron/jornada`).

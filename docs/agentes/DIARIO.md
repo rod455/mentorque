@@ -37,6 +37,14 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-13 · Engenharia: primeira rodada automática da jornada
+- Lembrete agendado disparou às 9h11 de Brasília. Em `jornada_envios`, dia
+  13/09: 3 e-mails `d0` (contas novas de 12/09), só e-mail, sem push (nenhum
+  token novo). `jornada_saidas`: 0. No log da Vercel, o cron rodou às 8h47
+  de Brasília com 200. A jornada está viva sem mão humana; o resumo do dia
+  foi para o FEEDBACK_TO. Zero em outras chaves é legítimo: quem recebeu em
+  12/09 só volta a caber a partir de 15/09.
+
 ## 2026-09-12 · Engenharia: bateria completa da 2.5 antes do Codemagic
 - O dono perguntou "está tudo certo para subirmos?". Regra das duas
   velocidades: release pede bateria completa e build local. `npm run
