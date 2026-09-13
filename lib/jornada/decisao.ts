@@ -29,8 +29,10 @@
 // (saúde), `planoDosItens` (calendário), `FAIXAS_NACIONAIS` (preço). O
 // e-mail e o aviso local no aparelho falam do mesmo item pela mesma régua.
 
-import type { ServiceRecord, Vehicle } from "../app/types";
+import type { Abastecimento, ServiceRecord, Vehicle } from "../app/types";
 import { diasEntre } from "../app/datas.ts";
+import { datasDoCarro } from "../app/datasDoCarro.ts";
+import { mesAnterior, resumoDoMes } from "../app/resumoDoMes.ts";
 import { computeUpcoming, REVISION_RULES } from "../app/health.ts";
 import { planoDosItens } from "../app/planoDeRevisao.ts";
 import { FAIXAS_NACIONAIS } from "../app/faixaDePreco.ts";
@@ -48,6 +50,8 @@ export type PessoaDaJornada = {
   /** Id do carro em uso no app, quando há mais de um. */
   carroPrincipalId?: string | null;
   servicos: ServiceRecord[];
+  /** Os abastecimentos (caderno de gastos, 13/09/2026); contas antigas não têm. */
+  abastecimentos?: Abastecimento[];
   /** Total de respostas do quiz (o `quiz.respostas` do estado). */
   quizRespostas: number;
   /** Último dia em que o estado mudou ou o quiz foi respondido, yyyy-mm-dd. */
@@ -62,7 +66,7 @@ export type PessoaDaJornada = {
   envios: Envio[];
 };
 
-export type Familia = "cadencia" | "gatilho" | "sazonal";
+export type Familia = "cadencia" | "gatilho" | "sazonal" | "resumo";
 
 export type Escolha = {
   chave: string;
@@ -99,6 +103,11 @@ export const CHEGANDO_KM = 1000;
 export const CHEGANDO_A_CADA_DIAS = 60;
 /** Serviço com valor registrado há até tantos dias vira comparação. */
 export const PRECO_ATE_DIAS = 10;
+/** Data do carro (IPVA, seguro...) a tantos dias vira e-mail; de novo só depois de tantos. */
+export const VENCE_DATA_DIAS = 30;
+export const VENCE_A_CADA_DIAS = 60;
+/** O resumo do mês sai do dia 1 ao dia 3 do mês seguinte. */
+export const JANELA_DO_RESUMO = 3;
 /** Km sem atualização há tantos dias. */
 export const KM_PARADO_DIAS = 45;
 /** Sumiu do app: os dois marcos e a repetição. */
@@ -158,7 +167,28 @@ export function escolherEmail(p: PessoaDaJornada, hoje: string, agora = new Date
   for (const e of p.envios) if (!ultimoDia || e.dia > ultimoDia) ultimoDia = e.dia;
   if (ultimoDia && diasEntre(ultimoDia, hoje) < ESPACO_MINIMO_DIAS) return null;
 
-  return gatilho(p, hoje, agora) ?? cadencia(p, hoje) ?? sazonal(p, hoje);
+  // O resumo do mês ganha da cadência e do sazonal nos três primeiros dias
+  // do mês, mas perde do gatilho: coisa vencida é mais urgente que balanço.
+  return gatilho(p, hoje, agora) ?? resumo(p, hoje) ?? cadencia(p, hoje) ?? sazonal(p, hoje);
+}
+
+/**
+ * O mês fechado do carro (peça 3 da rotina, 13/09/2026): só para quem tem o
+ * que resumir, um lançamento no mês (abastecimento ou serviço com valor) ou
+ * uma data cadastrada. Resumo vazio é spam. Uma vez por mês.
+ */
+function resumo(p: PessoaDaJornada, hoje: string): Escolha | null {
+  const dia = Number(hoje.slice(8, 10));
+  if (dia < 1 || dia > JANELA_DO_RESUMO) return null;
+  const mes = mesAnterior(hoje);
+  const chave = `mes:${mes}`;
+  if (jaRecebeu(p, chave)) return null;
+  const carro = carroPrincipal(p);
+  if (!carro) return null;
+  const r = resumoDoMes({ abastecimentos: (p.abastecimentos ?? []).filter((a) => a.vehicleId === carro.id), servicos: servicosDoCarro(p, carro), mes });
+  const temDatas = datasDoCarro(carro).length > 0;
+  if (r.lancamentos === 0 && !temDatas) return null;
+  return { chave, familia: "resumo", motivo: `${mes}: ${r.lancamentos} lançamento(s), R$ ${r.total}${temDatas ? ", com datas" : ""}`, carro };
 }
 
 function gatilho(p: PessoaDaJornada, hoje: string, agora: Date): Escolha | null {
@@ -196,6 +226,18 @@ function gatilho(p: PessoaDaJornada, hoje: string, agora: Date): Escolha | null 
       const chave = `chegando:${plano.key}`;
       if (recebeuHaMenosDe(p, chave, CHEGANDO_A_CADA_DIAS, hoje)) continue;
       return { chave, familia: "gatilho", motivo: `${plano.key} vence em breve no ${nomeDoCarro(carro)}`, carro, item: plano.key };
+    }
+
+    // As datas do carro (peça 2 da rotina, 13/09/2026): IPVA, licenciamento,
+    // seguro ou CNH a 30 dias ou menos, ainda não vencida. Uma vez por data
+    // a cada 60 dias, então a mesma data anual vira um e-mail por ano. O
+    // aviso local do aparelho cobre 30, 7 e 1 dia; o e-mail é o de 30 para
+    // quem não tem o aparelho por perto.
+    for (const d of datasDoCarro(carro, agora)) {
+      if (d.dias < 0 || d.dias > VENCE_DATA_DIAS) continue;
+      const chave = `vence:${d.tipo}`;
+      if (recebeuHaMenosDe(p, chave, VENCE_A_CADA_DIAS, hoje)) continue;
+      return { chave, familia: "gatilho", motivo: `${d.tipo} do ${nomeDoCarro(carro)} vence em ${d.dias} dias`, carro, item: d.tipo };
     }
 
     // Serviço com valor, registrado há pouco, de um tipo que tem faixa: a

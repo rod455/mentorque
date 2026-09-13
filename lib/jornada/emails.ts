@@ -28,6 +28,9 @@ import { computeUpcoming, REVISION_RULES } from "../app/health.ts";
 import { planoDosItens } from "../app/planoDeRevisao.ts";
 import { faixaDaRegiao, posicaoNaFaixa } from "../app/faixaDePreco.ts";
 import { vehicleTraits } from "../app/traits.ts";
+import { datasDoCarro } from "../app/datasDoCarro.ts";
+import { custoPorKm } from "../app/combustivel.ts";
+import { mesAnterior, nomeDoMes, resumoDoMes } from "../app/resumoDoMes.ts";
 import { nomeDoCarro, type Escolha, type PessoaDaJornada } from "./decisao.ts";
 import type { DestinoDoLink } from "../app/destinoDoLink.ts";
 
@@ -57,6 +60,21 @@ export type Mensagem = {
   cta: { texto: string; url: string };
   nota?: string;
   push: { titulo: string; corpo: string; rota?: RotaDoToque };
+};
+
+/** As datas do carro, como o app as chama. */
+export const NOME_DA_DATA: Record<string, string> = {
+  ipva: "IPVA",
+  licenciamento: "Licenciamento",
+  seguro: "Seguro",
+  cnh: "CNH",
+};
+/** O que acontece se passar, sem número inventado. */
+const CONSEQUENCIA_DA_DATA: Record<string, string> = {
+  ipva: "Atrasou, entra multa e juros, e o licenciamento trava junto.",
+  licenciamento: "Sem o licenciamento em dia, o carro pode ser apreendido numa blitz.",
+  seguro: "Sem renovar, um dia sem cobertura já é risco demais.",
+  cnh: "CNH vencida há mais de 30 dias é infração gravíssima; a renovação leva dias.",
 };
 
 /** Nomes dos itens do calendário, em português, como o app mostra. */
@@ -513,6 +531,69 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
       ],
       cta: { texto: "Cadastrar o meu carro", url: link("addCar") },
       push: { titulo: `${tempo.charAt(0).toUpperCase()}${tempo.slice(1)} sem aparecer. E o seu carro?`, corpo: "Cadastre o carro em um minuto e o app vigia por você." },
+    };
+  }
+
+  // ---- as datas do carro (peça 2 da rotina, 13/09/2026) ----
+  // Aversão à perda com honestidade: multa e juros são reais, mas o valor da
+  // multa muda por estado e por data, então o e-mail não inventa número.
+  if (familia === "vence" && carro && item) {
+    const d = datasDoCarro(carro, agora).find((x) => x.tipo === item);
+    const tipo = NOME_DA_DATA[item] ?? item;
+    const dias = d?.dias ?? 0;
+    const quando = dias === 0 ? "hoje" : dias === 1 ? "amanhã" : `em ${dias} dias`;
+    const valor = d?.valor != null ? ` (${reais(d.valor)})` : "";
+    const consequencia = CONSEQUENCIA_DA_DATA[item] ?? "Passou da data, vira multa e dor de cabeça.";
+    return {
+      assunto: `${tipo} do ${nome} vence ${quando}${valor}`,
+      preheader: consequencia,
+      titulo: `${tipo}: vence ${quando}`,
+      saudacao: oi,
+      paragrafos: [
+        `Você deixou anotado no Mentorque: o ${tipo.toLowerCase()} do ${nome} vence ${quando}${d ? `, dia ${dataBr(d.em)}` : ""}${valor}. ${consequencia}`,
+        "As outras datas do carro estão no calendário, junto das revisões. Se o valor ou a data mudaram, ajuste lá e o aviso acompanha.",
+      ],
+      cta: { texto: `Ver as datas do ${nome}`, url: link("revisions") },
+      push: { titulo: `${tipo} do ${nome} vence ${quando}`, corpo: consequencia },
+    };
+  }
+
+  // ---- o mês fechado (peça 3 da rotina, 13/09/2026) ----
+  // Efeito de progresso: o mês fechado é um marco. Só sai para quem tem o
+  // que resumir (decisao.ts), e diz o que ficou sem registrar sem cobrar.
+  if (familia === "mes" && carro && item) {
+    const abastecimentos = (p.abastecimentos ?? []).filter((a) => a.vehicleId === carro.id);
+    const servicos = servicosDoCarro(p, carro);
+    const r = resumoDoMes({ abastecimentos, servicos, mes: item });
+    const mesNome = nomeDoMes(item);
+    const porKm = custoPorKm(abastecimentos);
+    const linhas: string[] = [];
+    if (r.combustivel > 0) linhas.push(`Combustível: ${reais(r.combustivel)}${r.litros > 0 ? ` (${r.litros.toLocaleString("pt-BR")} litros)` : ""}`);
+    if (r.servicos > 0) linhas.push(`Serviços e peças: ${reais(r.servicos)}`);
+    if (porKm != null) linhas.push(`Custo por km em combustível: R$ ${porKm.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+    const vence = [
+      ...datasDoCarro(carro, agora).filter((d) => d.dias >= 0 && d.dias <= 30).map((d) => `${NOME_DA_DATA[d.tipo] ?? d.tipo}: ${dataBr(d.em)}${d.valor != null ? ` (${reais(d.valor)})` : ""}`),
+      ...itensDoCalendario(p, carro, agora, hoje, 30, 1000),
+    ];
+    const semRegistro: string[] = [];
+    if (r.combustivel === 0) semRegistro.push("nenhum abastecimento no mês (o custo por km depende dele)");
+    if (carro.kmUpdatedAt && diasEntre(carro.kmUpdatedAt.slice(0, 10), hoje) > 30) semRegistro.push("o km do painel está há mais de um mês sem atualizar");
+    return {
+      assunto: r.total > 0 ? `${mesNome} do ${nome}: ${reais(r.total)}` : `${mesNome} do ${nome}: o que vem por aí`,
+      preheader: vence.length ? `Nos próximos 30 dias: ${vence[0]}.` : "O mês fechado, e o que vence nos próximos 30 dias.",
+      titulo: `${mesNome} do ${nome}`,
+      saudacao: oi,
+      paragrafos: [
+        r.total > 0
+          ? `Em ${mesNome.toLowerCase()} o ${nome} custou ${reais(r.total)} pelo que você registrou${r.lancamentos > 1 ? `, em ${r.lancamentos} lançamentos` : ""}.`
+          : `Em ${mesNome.toLowerCase()} não entrou nenhum gasto do ${nome} no Mentorque.`,
+        ...(semRegistro.length ? [`Ficou de fora: ${semRegistro.join("; ")}.`] : []),
+      ],
+      destaque: linhas.length
+        ? { titulo: "O mês em números", itens: [...linhas, ...(vence.length ? [`Nos próximos 30 dias: ${vence.slice(0, 3).join("; ")}`] : [])] }
+        : vence.length ? { titulo: "Nos próximos 30 dias", itens: vence.slice(0, 4) } : undefined,
+      cta: { texto: r.total > 0 ? `Ver o histórico do ${nome}` : "Registrar o próximo abastecimento", url: link("history") },
+      push: { titulo: r.total > 0 ? `${mesNome} do ${nome}: ${reais(r.total)}` : `${mesNome} do ${nome} fechou`, corpo: vence.length ? `Nos próximos 30 dias: ${vence[0]}` : "Veja o mês em números." },
     };
   }
 

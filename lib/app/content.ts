@@ -830,6 +830,13 @@ export function getContent(locale: Locale) {
       avisoCorpo: T("Abra o Mentorque para ver o valor e as outras datas.", "Open Mentorque to see the amount and the other dates."),
     },
 
+    // O resumo do mês (13/09/2026, peça 3 da rotina): o card no Início na
+    // primeira semana do mês, para quem teve lançamento no mês fechado.
+    resumoDoMes: {
+      titulo: T("{mes} do {carro}: {valor}", "{carro} in {mes}: {valor}"),
+      sub: T("Combustível {combustivel} · serviços {servicos} · toque para ver o histórico", "Fuel {combustivel} · services {servicos} · tap to see the history"),
+    },
+
     // O caderno de gastos (13/09/2026): o abastecimento em três toques, com
     // custo por km na hora. Onde entra e por quê: docs/agentes/propostas/
     // rotina-do-carro.md. Grátis, por decisão do dono.

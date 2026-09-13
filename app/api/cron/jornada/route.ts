@@ -6,7 +6,8 @@ import { escolherEmail, type Escolha, type PessoaDaJornada } from "@/lib/jornada
 import { montarMensagem, renderEmail } from "@/lib/jornada/emails";
 import { linkDeSaida } from "@/lib/jornada/saida";
 import { enviarPush, pushConfigurado } from "@/lib/push/transporte";
-import type { ServiceRecord, Vehicle } from "@/lib/app/types";
+import type { Abastecimento, ServiceRecord, Vehicle } from "@/lib/app/types";
+import { mesAnterior } from "@/lib/app/resumoDoMes";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -75,6 +76,7 @@ function quemChama(req: Request): "chave" | "cron" | "ninguem" {
 type Estado = {
   vehicles?: Vehicle[];
   services?: ServiceRecord[];
+  abastecimentos?: Abastecimento[];
   activeVehicleId?: string | null;
   quiz?: { respostas?: number; ultimoDia?: string | null } | null;
   name?: string | null;
@@ -146,6 +148,7 @@ async function carregarPessoas(admin: SupabaseClient, hoje: string): Promise<{ p
       veiculos,
       carroPrincipalId: d.activeVehicleId ?? null,
       servicos,
+      abastecimentos: Array.isArray(d.abastecimentos) ? d.abastecimentos : [],
       quizRespostas: d.quiz?.respostas ?? 0,
       ultimaAtividade,
       temManual: temManualPara(listaDeManuais, principal),
@@ -324,6 +327,9 @@ export async function GET(req: Request) {
 // quebrada e texto torto não têm conserto depois de enviados.
 //
 //   POST { "teste": "voce@exemplo.com", "chave": "d2", "comCarro": true }
+//
+// Chaves com item: "vencida:oil", "chegando:oil", "preco", "vence:ipva" e
+// "mes" (o mês fechado; "mes:2026-08" escolhe outro).
 export async function POST(req: Request) {
   if (!chaveDadosOk(req)) return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
   const chaveResend = process.env.RESEND_API_KEY;
@@ -335,8 +341,20 @@ export async function POST(req: Request) {
 
   const hoje = hojeEmBrasilia();
   const comCarro = body?.comCarro !== false;
-  const carro: Vehicle = { id: "v1", type: "car", make: "Volkswagen", model: "Gol", year: 2016, engine: "1.0", odometerKm: 84300, kmUpdatedAt: "2026-07-10T12:00:00Z", purchaseDate: "2024-03-10", createdAt: "2026-09-05T12:00:00Z" };
-  const servico: ServiceRecord = { id: "s1", vehicleId: "v1", type: "oil", date: hoje, km: 84300, total: 280, parts: [] };
+  const [familia, item] = chave.split(":");
+  const mes = familia === "mes" ? item || mesAnterior(hoje) : "";
+  const emDias = (dias: number) => new Date(Date.UTC(+hoje.slice(0, 4), +hoje.slice(5, 7) - 1, +hoje.slice(8, 10) + dias)).toISOString().slice(0, 10);
+  const carro: Vehicle = {
+    id: "v1", type: "car", make: "Volkswagen", model: "Gol", year: 2016, engine: "1.0", odometerKm: 84300, kmUpdatedAt: "2026-07-10T12:00:00Z", purchaseDate: "2024-03-10", createdAt: "2026-09-05T12:00:00Z",
+    datas: familia === "vence" ? { [item || "ipva"]: { em: emDias(12), valor: 1200 } } : undefined,
+  };
+  const servico: ServiceRecord = { id: "s1", vehicleId: "v1", type: "oil", date: familia === "mes" ? `${mes}-18` : hoje, km: 84300, total: 280, parts: [] };
+  const abastecimentos: Abastecimento[] = familia === "mes"
+    ? [
+        { id: "a1", vehicleId: "v1", date: `${mes}-05`, km: 83600, valor: 180, litros: 30, combustivel: "gasolina" },
+        { id: "a2", vehicleId: "v1", date: `${mes}-21`, km: 84000, valor: 200, litros: 33, combustivel: "gasolina" },
+      ]
+    : [];
   const pessoa: PessoaDaJornada = {
     userId: "00000000-0000-0000-0000-000000000000",
     email: para,
@@ -344,7 +362,8 @@ export async function POST(req: Request) {
     contaCriadaEm: hoje,
     veiculos: comCarro ? [carro] : [],
     carroPrincipalId: comCarro ? "v1" : null,
-    servicos: comCarro && chave.startsWith("preco") ? [servico] : [],
+    servicos: comCarro && (familia === "preco" || familia === "mes") ? [servico] : [],
+    abastecimentos: comCarro ? abastecimentos : [],
     quizRespostas: 0,
     ultimaAtividade: null,
     temManual: true,
@@ -353,13 +372,12 @@ export async function POST(req: Request) {
     saiu: false,
     envios: [],
   };
-  const [familia, item] = chave.split(":");
   const escolha: Escolha = {
-    chave: familia === "preco" ? "preco:s1" : chave,
-    familia: /^d\d+$/.test(chave) ? "cadencia" : familia === "sazonal" ? "sazonal" : "gatilho",
+    chave: familia === "preco" ? "preco:s1" : familia === "mes" ? `mes:${mes}` : chave,
+    familia: /^d\d+$/.test(chave) ? "cadencia" : familia === "sazonal" ? "sazonal" : familia === "mes" ? "resumo" : "gatilho",
     motivo: "cópia de prova",
     carro: comCarro ? carro : null,
-    item: familia === "vencida" || familia === "chegando" ? item : undefined,
+    item: familia === "vencida" || familia === "chegando" || familia === "vence" ? item : familia === "mes" ? mes : undefined,
     servico: familia === "preco" ? servico : undefined,
   };
   let mensagem;

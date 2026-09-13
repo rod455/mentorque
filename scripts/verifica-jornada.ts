@@ -234,6 +234,33 @@ console.log("Jornada: quem recebe o quê, e quando.");
   conferir("o banco tem a trava 'nunca dois no mesmo dia'", /unique index[\s\S]{0,80}\(user_id, dia\)/.test(sql));
 }
 
+// ── as datas do carro e o mês fechado (peças 2 e 3 da rotina, 13/09/2026) ──
+{
+  const golComDatas = gol({ datas: { ipva: { em: diasAtras(-12), valor: 1200 }, seguro: { em: diasAtras(-40) } } });
+  const p = pessoa({ veiculos: [golComDatas], carroPrincipalId: "v1", contaCriadaEm: diasAtras(60) });
+  conferir("IPVA a 12 dias vira vence:ipva", chave(p) === "vence:ipva", String(chave(p)));
+  conferir("seguro a 40 dias ainda não", chave(pessoa({ veiculos: [gol({ datas: { seguro: { em: diasAtras(-40) } } })], carroPrincipalId: "v1", contaCriadaEm: diasAtras(60) })) !== "vence:seguro");
+  conferir("data vencida não vira e-mail (o aviso é antes)", chave(pessoa({ veiculos: [gol({ datas: { ipva: { em: diasAtras(3) } } })], carroPrincipalId: "v1", contaCriadaEm: diasAtras(60) })) !== "vence:ipva");
+  conferir("a mesma data não repete em 60 dias", chave(pessoa({ ...p, envios: [{ chave: "vence:ipva", dia: diasAtras(10) }] })) !== "vence:ipva");
+  const mVence = montarMensagem({ chave: "vence:ipva", familia: "gatilho", motivo: "teste", carro: golComDatas, item: "ipva" }, p, HOJE);
+  conferir("o e-mail da data diz o tipo, o carro, os dias e o valor", /IPVA do .*Gol.* vence em 12 dias \(R\$ 1\.200\)/.test(mVence.assunto), mVence.assunto);
+  conferir("e não inventa o valor da multa", !/multa de R\$|R\$ [\d.,]+ de multa/i.test(mVence.paragrafos.join(" ")), mVence.paragrafos.join(" "));
+  conferir("o botão leva ao calendário", /ir=revisions/.test(mVence.cta.url));
+
+  const abast = (dias: number, km: number, valor: number) => ({ id: `a${dias}`, vehicleId: "v1", date: diasAtras(dias, "2026-09-02"), km, valor, litros: 30, combustivel: "gasolina" as const });
+  const comMes = pessoa({ veiculos: [gol()], carroPrincipalId: "v1", contaCriadaEm: diasAtras(60), abastecimentos: [abast(20, 83000, 180), abast(5, 83300, 200)] });
+  conferir("dia 2 do mês, com abastecimento em agosto, sai mes:2026-08", chave(comMes, "2026-09-02") === "mes:2026-08", String(chave(comMes, "2026-09-02")));
+  conferir("no dia 5 já não sai", chave(comMes, "2026-09-05") !== "mes:2026-08");
+  conferir("quem já recebeu não recebe de novo", chave(pessoa({ ...comMes, envios: [{ chave: "mes:2026-08", dia: "2026-09-01" }] }), "2026-09-02") !== "mes:2026-08");
+  conferir("sem lançamento e sem data, não sai (resumo vazio é spam)", chave(pessoa({ veiculos: [gol()], carroPrincipalId: "v1", contaCriadaEm: diasAtras(60) }), "2026-09-02") !== "mes:2026-08");
+  conferir("com data cadastrada, sai mesmo sem lançamento", chave(pessoa({ veiculos: [golComDatas], carroPrincipalId: "v1", contaCriadaEm: diasAtras(60), ultimaAtividade: "2026-08-20", envios: [{ chave: "vence:ipva", dia: "2026-08-30" }] }), "2026-09-02") === "mes:2026-08");
+  conferir("o gatilho ganha do resumo no mesmo dia", chave(pessoa({ ...comMes, servicos: [{ ...oleo(2, 320), date: diasAtras(2, "2026-09-02") }] }), "2026-09-02") === "preco:s2", String(chave(pessoa({ ...comMes, servicos: [{ ...oleo(2, 320), date: diasAtras(2, "2026-09-02") }] }), "2026-09-02")));
+  const mMes = montarMensagem({ chave: "mes:2026-08", familia: "resumo", motivo: "teste", carro: gol() }, comMes, "2026-09-02");
+  conferir("o resumo diz o mês, o carro e o total", /Agosto do .*Gol.*: R\$ 380/.test(mMes.assunto), mMes.assunto);
+  conferir("e traz combustível e custo por km", /Combustível: R\$ 380/.test(mMes.destaque?.itens.join(" | ") ?? "") && /R\$ 0,67/.test(mMes.destaque?.itens.join(" | ") ?? ""), mMes.destaque?.itens.join(" | "));
+  conferir("o cron manda os abastecimentos para a decisão", /abastecimentos: Array\.isArray\(d\.abastecimentos\)/.test(leia("app/api/cron/jornada/route.ts")));
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) da jornada reprovaram.`);
   process.exit(1);

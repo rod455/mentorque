@@ -114,7 +114,7 @@ Regras:
 - Veredito: (aberto)
 
 ## [resumo-mensal] O mês do carro fechado, por e-mail, push e no Início
-- Estado: PROPOSTO (aprovada, entra depois das datas)
+- Estado: ABERTO (web desde 13/09; o card do Início nas lojas com a 2.6)
 - Tipo: mudanca-direta
 - Alvo no funil: retorno nos três dias depois do envio.
 - Tese BeSci: efeito de progresso (o mês fechado é um marco). Chave `mes`
@@ -123,7 +123,7 @@ Regras:
 - Métrica: abertura nos 3 dias seguintes ao envio contra a média; saídas
   da jornada · Duração: 2 meses
 - Aprovação: aprovada pelo dono em 2026-09-13
-- Início: (não começou) · Ler a partir de: dois envios
+- Início: 2026-09-13 (primeiro envio possível em 01/10) · Ler a partir de: dois envios
 - Antes: a jornada não tem resumo; o e-mail `km` é o mais perto disso
 - Veredito: (não começou)
 

@@ -22,7 +22,13 @@ operação: o que existe, onde mora, como testar e como ligar.
 - Quem saiu não recebe nada. Quem mexeu no app hoje não recebe hoje.
 - Um e-mail a cada três dias por pessoa; nunca dois no mesmo dia (índice
   único no banco).
-- Gatilho ganha de cadência, cadência ganha de sazonal.
+- Gatilho ganha do resumo do mês, que ganha de cadência, que ganha de
+  sazonal. O resumo (`mes`) só existe nos três primeiros dias do mês e só
+  para quem tem o que resumir: lançamento no mês fechado ou data do carro.
+  Resumo vazio é spam.
+- A data do carro (`vence`) só vira e-mail ANTES de vencer, a 30 dias ou
+  menos; depois de vencida, o aviso do aparelho e o card do Início cobrem.
+  O e-mail nunca inventa valor de multa.
 - A cadência (d0, d2, d5, d9, d14) só sai até três dias depois do marco.
   Conta antiga nunca recebe a cadência em rajada; ela entra pelos gatilhos.
 - "Vencida" só com um serviço daquele tipo registrado. Data de compra sem
@@ -41,6 +47,8 @@ operação: o que existe, onde mora, como testar e como ligar.
 | vencida:item | item vencido, com registro; a cada 30 dias | Troca de óleo do Gol 2016 passou do ponto |
 | chegando:item | vence em 30 dias ou 1.000 km; a cada 60 dias | Troca de óleo do Gol 2016 vence em 25 dias |
 | preco:serviço | serviço com valor registrado há até 10 dias; uma vez | Você pagou R$ 280 em troca de óleo. Na região, a faixa é R$ 160 a R$ 490 |
+| vence:data | IPVA, licenciamento, seguro ou CNH a 30 dias ou menos, ainda não vencida; a cada 60 dias | IPVA do Gol 2016 vence em 12 dias (R$ 1.200) |
+| mes:aaaa-mm | dias 1 a 3 do mês, para quem tem lançamento no mês fechado ou data cadastrada; uma vez por mês | Agosto do Gol 2016: R$ 380 |
 | parado-2, parado-7 | carro cadastrado, zero serviço e zero quiz | O Gol 2016 está cadastrado, mas ainda não conta nada |
 | km | km sem atualizar há 45 dias | Quantos km o Gol 2016 tem hoje? |
 | sumiu-14, sumiu-30 | sem atividade | O Gol 2016 está sem novidade há duas semanas |
@@ -102,7 +110,8 @@ em 12/09 às 14h33 de Brasília: 18 e-mails.
    ```
 
    Chaves para testar: `d0`, `d2`, `d5`, `d9`, `d14`, `vencida:oil`,
-   `chegando:oil`, `preco`, `parado-2`, `km`, `sumiu-14`,
+   `chegando:oil`, `preco`, `vence:ipva`, `mes` (o mês fechado, com dois
+   abastecimentos e um serviço de exemplo), `parado-2`, `km`, `sumiu-14`,
    `sazonal:ferias-12-2026`. `"comCarro": false` mostra a versão sem carro.
    A cópia não grava envio nem toca em conta nenhuma.
 

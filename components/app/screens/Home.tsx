@@ -5,6 +5,7 @@ import { abastecimentosFor, activeVehicle, servicesFor, usePrototype } from "@/l
 import { custoPorKm, gastoDaSemana } from "@/lib/app/combustivel";
 import { brlCentavos } from "./Abastecimento";
 import { dataParaOInicio } from "@/lib/app/datasDoCarro";
+import { mesAnterior, nomeDoMes, resumoDoMes } from "@/lib/app/resumoDoMes";
 import { quandoVence } from "../DatasDoCarro";
 import type { Vehicle } from "@/lib/app/types";
 import { personalScore, vehicleSituations, vehicleTraits } from "@/lib/app/traits";
@@ -129,6 +130,28 @@ function DataAVencer({ car }: { car: Vehicle }) {
           {t.homeTitulo.replace("{tipo}", t.tipos[d.tipo]).replace("{carro}", carName(car)).replace("{quando}", quandoVence(d.dias, t))}
         </span>
         <span className="block text-xs text-cream/60">{d.valor != null ? t.homeSubValor.replace("{valor}", formatBRL(d.valor)) : t.homeSub}</span>
+      </span>
+    </button>
+  );
+}
+
+function ResumoDoMesCard({ car }: { car: Vehicle }) {
+  const c = useContent();
+  const { s } = usePrototype();
+  const { root } = useNav();
+  const hoje = new Date().toISOString().slice(0, 10);
+  if (Number(hoje.slice(8, 10)) > 7) return null;
+  const mes = mesAnterior(hoje);
+  const r = resumoDoMes({ abastecimentos: abastecimentosFor(s, car.id), servicos: servicesFor(s, car.id), mes });
+  if (r.lancamentos === 0 || r.total <= 0) return null;
+  return (
+    <button onClick={() => root({ name: "history" })} className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-4 py-3.5 text-left ring-1 ring-white/[0.06]" data-resumo-do-mes>
+      <span className="text-xl">📊</span>
+      <span className="min-w-0 flex-1">
+        <span className="block font-display text-[15px] font-semibold text-cream">
+          {c.resumoDoMes.titulo.replace("{mes}", nomeDoMes(mes)).replace("{carro}", carName(car)).replace("{valor}", formatBRL(r.total))}
+        </span>
+        <span className="block text-xs text-cream/60">{c.resumoDoMes.sub.replace("{combustivel}", formatBRL(r.combustivel)).replace("{servicos}", formatBRL(r.servicos))}</span>
       </span>
     </button>
   );
@@ -359,6 +382,10 @@ export function HomeScreen() {
       {/* A data do carro a 30 dias ou menos (ou já vencida). Fora dessa
           janela, nada: card permanente de data distante é ruído. */}
       {car && <DataAVencer car={car} />}
+
+      {/* O mês fechado, na primeira semana do mês, só para quem teve
+          lançamento nele (peça 3 da rotina). Some no dia 8. */}
+      {car && <ResumoDoMesCard car={car} />}
 
       {/* Fixados — conteúdos que o usuário usa com frequência (📌 nas aulas);
           setinhas reordenam (o próprio usuário escolhe o que fica na frente) */}

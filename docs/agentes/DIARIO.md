@@ -74,6 +74,25 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   aviso: a lista de rotas é fechada e o toque cai no Início, onde o card
   está. Ligar avisos ao salvar a primeira data também ficou de fora nesta
   rodada (o convite tem momentos fixos); candidato para a próxima.
+- Peça 3 construída: `lib/app/resumoDoMes.ts` puro (mês anterior, soma de
+  combustível e serviços do mês fechado), o card do mês no Início na
+  primeira semana (só com lançamento), e a jornada com duas chaves novas:
+  `mes` (dias 1 a 3, família "resumo", só para quem tem lançamento ou data;
+  o e-mail traz combustível, serviços, custo por km e o que vence em 30
+  dias) e `vence:data` (30 dias antes, a cada 60, nunca depois de vencida,
+  sem inventar valor de multa). Ordem: gatilho, resumo, cadência, sazonal.
+  A cópia de prova (`POST teste`) aceita `vence:ipva` e `mes`.
+  `conferir:jornada` reprovou com três defeitos plantados (janela 5 dias,
+  vencida virando e-mail, resumo na frente do gatilho). Dois testes novos
+  nasceram frouxos e foram apertados: um casava "R$ 1.200 ... multa" (o
+  valor era do IPVA, legítimo) e outro datava o serviço em relação a hoje,
+  não ao dia avaliado. Tropeço meu: um `git checkout` do arquivo, para
+  desfazer um defeito plantado, apagou a mudança inteira antes do commit;
+  recuperada do registro da sessão. Lição gravada: defeito plantado se
+  desfaz com cópia de segurança, nunca com checkout de arquivo sujo.
+- O primeiro `mes` possível sai em 01/10; o `vence` já sai amanhã para
+  quem tiver data a 30 dias. Web no ar pelo push; o card, nas lojas com a
+  2.6. Peça 4 (modo motorista) é a próxima.
 
 ## 2026-09-13 · Engenharia: a foto das memórias (e do perfil) quebrada era o bucket
 - Relato do dono, com foto: o card "Primeira viagem" com o ícone de imagem

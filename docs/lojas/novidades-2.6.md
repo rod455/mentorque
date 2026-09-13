@@ -63,6 +63,21 @@ das lojas.
    - Roteiro de aparelho: informar uma data para daqui a 8 dias com os avisos
      ligados; amanhã às 9h chega "vence em 7 dias"; tocar abre o Início com
      o card da data. Trocar a data: o aviso antigo some e o novo entra.
+4. **O mês do carro fechado** (13/09, peça 3 da rotina). Na primeira semana
+   do mês, o Início mostra o card "Agosto do Gol 2016: R$ 380" (combustível
+   e serviços do mês fechado), tocando abre o histórico; só aparece quando
+   houve lançamento. A parte que não vai no binário: a jornada por e-mail e
+   push ganhou duas chaves, `mes` (dias 1 a 3, o resumo com custo por km e
+   o que vence nos próximos 30 dias, só para quem tem lançamento ou data) e
+   `vence` (IPVA, licenciamento, seguro ou CNH a 30 dias, uma vez a cada 60,
+   nunca depois de vencida). Gatilho ganha do resumo; resumo ganha da
+   cadência.
+   - Onde mora: `lib/app/resumoDoMes.ts` (puro), o card em `Home.tsx`, as
+     chaves em `lib/jornada/decisao.ts` e os textos em `lib/jornada/emails.ts`.
+     Conferido por `conferir:jornada` (provado com três defeitos plantados:
+     janela do resumo, data vencida virando e-mail, resumo antes do gatilho).
+   - Roteiro de aparelho: entre os dias 1 e 7, com um abastecimento no mês
+     anterior, o card do mês aparece no Início abaixo da data a vencer.
 
 ## Roteiro de aparelho, e ele é obrigatório
 

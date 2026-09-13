@@ -44,7 +44,9 @@ sempre". Duas mudanças pequenas levaram 40 minutos por causa da bateria.
 
 Prove que a conferência morde antes de confiar no verde dela: plante o
 defeito que ela deveria pegar e veja se ela grita. Os casos em que isso
-salvou o dia estão em `docs/mapa-do-codigo.md`.
+salvou o dia estão em `docs/mapa-do-codigo.md`. Defeito plantado se desfaz
+com cópia de segurança do arquivo, nunca com `git checkout` de arquivo
+ainda não commitado (13/09: apagou uma peça inteira antes do commit).
 
 E o que a conferência não alcança, diga que não alcança. Plugin nativo só
 entra no binário depois de ler o caminho dele no fonte (não no README), com o
