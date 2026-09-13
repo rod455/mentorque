@@ -11,6 +11,7 @@
 // Rode com: npm run conferir:datas
 import { readFileSync } from "node:fs";
 import { ANTECEDENCIAS, avisosDasDatas, dataParaOInicio, datasDoCarro, diasAte, estadoDaData, idsDosAvisosDeData, TIPOS_DE_DATA } from "../lib/app/datasDoCarro.ts";
+import { CALENDARIOS, finalDaPlaca, sugestaoDeData, ufsComCalendario } from "../lib/app/calendarioDaPlaca.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -67,6 +68,44 @@ conferir("vencida há mais de 60 dias sai do Início", dataParaOInicio({ datas: 
   conferir("o Diagnóstico do carro tem o passo das datas", /rotulo: d\.datas, ganho: d\.datasGanho/.test(leia("components/app/screens/CarHub.tsx")));
   const home = leia("components/app/screens/Home.tsx");
   conferir("o Início mostra a data a vencer, depois do custo do carro", home.indexOf("<DataAVencer car={car} />") > home.indexOf("<CustoDoCarro ") && /dataParaOInicio\(car\)/.test(home));
+}
+
+// ── 5. pelo final da placa (13/09/2026) ─────────────────────────────────────
+{
+  conferir("o final da placa antiga é o último dígito", finalDaPlaca("ABC-1234") === "4");
+  conferir("o final da placa Mercosul também (ABC1D23 → 3)", finalDaPlaca("ABC1D23") === "3");
+  conferir("placa sem dígito não tem final", finalDaPlaca("ABCDEFG") === null && finalDaPlaca("") === null && finalDaPlaca(undefined) === null);
+
+  const sp3 = sugestaoDeData({ uf: "SP", final: "3", tipo: "ipva", hoje: "2026-01-05" });
+  conferir("SP final 3, em 05/01/2026: o IPVA é a data exata do calendário (14/01)", sp3?.em === "2026-01-14" && sp3.estimada === false && sp3.baseAno === 2026, JSON.stringify(sp3));
+  const sp3dep = sugestaoDeData({ uf: "SP", final: "3", tipo: "ipva", hoje: "2026-09-13" });
+  conferir("depois de vencer, projeta o mesmo dia no ano seguinte e marca como estimada", sp3dep?.em === "2027-01-14" && sp3dep.estimada === true && sp3dep.baseAno === 2026, JSON.stringify(sp3dep));
+  const spLic = sugestaoDeData({ uf: "SP", final: "7", tipo: "licenciamento", hoje: "2026-09-13" });
+  conferir("SP final 7, licenciamento: último dia de outubro, exato", spLic?.em === "2026-10-31" && spLic.estimada === false, JSON.stringify(spLic));
+  const spLic1 = sugestaoDeData({ uf: "SP", final: "1", tipo: "licenciamento", hoje: "2026-09-13" });
+  conferir("SP final 1, licenciamento já passou em julho: projeta julho de 2027, estimada", spLic1?.em === "2027-07-31" && spLic1.estimada === true, JSON.stringify(spLic1));
+  conferir("no próprio dia do vencimento ainda é exata", sugestaoDeData({ uf: "SP", final: "0", tipo: "ipva", hoje: "2026-01-30" })?.estimada === false);
+  conferir("estado sem calendário: null", sugestaoDeData({ uf: "AC", final: "3", tipo: "ipva", hoje: "2026-09-13" }) === null);
+  conferir("final inválido: null", sugestaoDeData({ uf: "SP", final: "x", tipo: "ipva", hoje: "2026-09-13" }) === null && sugestaoDeData({ uf: "SP", final: "", tipo: "ipva", hoje: "2026-09-13" }) === null);
+  conferir("a sigla aceita minúscula", sugestaoDeData({ uf: "sp", final: "3", tipo: "ipva", hoje: "2026-01-05" })?.em === "2026-01-14");
+  conferir("SP está entre os estados com calendário dos dois tipos", ufsComCalendario("ipva").includes("SP") && ufsComCalendario("licenciamento").includes("SP"));
+  for (const cal of CALENDARIOS) {
+    const finais = Object.keys(cal.porFinal).sort().join("");
+    conferir(`${cal.uf} ${cal.tipo} ${cal.ano} cobre os dez finais`, finais === "0123456789", finais);
+    conferir(`${cal.uf} ${cal.tipo} ${cal.ano}: toda data é do ano e é válida`, Object.values(cal.porFinal).every((d) => d.startsWith(`${cal.ano}-`) && !Number.isNaN(Date.parse(d))), JSON.stringify(cal.porFinal));
+    conferir(`${cal.uf} ${cal.tipo} ${cal.ano} tem fonte`, /^https:\/\//.test(cal.fonte));
+  }
+  conferir("a data lida carrega a marca de estimada", datasDoCarro({ datas: { ipva: { em: "2027-01-14", estimada: true } } }, hoje)[0]?.estimada === true);
+  conferir("e o aviso também", avisosDasDatas({ datas: { ipva: { em: "2027-01-14", estimada: true } } }, 8, hoje).every((a) => a.estimada === true));
+
+  const tela = leia("components/app/DatasDoCarro.tsx");
+  conferir("a folha pede estado e final e sugere pelo calendário", /data-pela-placa/.test(tela) && /sugestaoDeData\(\{ uf, final: f, tipo: aberta/.test(tela));
+  conferir("a linha oferece a sugestão com um toque quando estado e final já existem", /data-sugestao-da-placa/.test(tela) && /gravar\(tipo, \{ em: sug\.em/.test(tela));
+  conferir("a data estimada só fica marcada se a pessoa não mexeu nela", /sugestao\.em === em && sugestao\.estimada/.test(tela));
+  conferir("sem calendário, a folha diz quais estados existem", /data-sem-calendario/.test(tela) && /ufsComCalendario\(aberta\)/.test(tela));
+  conferir("o aviso do aparelho pede para conferir a data estimada", /corpoEstimada/.test(leia("lib/app/lembreteDatas.ts")) && /avisoCorpoEstimada/.test(leia("lib/app/aberturaDoApp.ts")));
+  conferir("o e-mail da data estimada diz que é estimada e pede para conferir", /d\?\.estimada[\s\S]{0,200}estimada pelo calendário/.test(leia("lib/jornada/emails.ts")));
+  conferir("o Início marca a data estimada", /d\.estimada \? `\$\{t\.estimadaLinha\}/.test(leia("components/app/screens/Home.tsx")));
 }
 
 if (falhas) {

@@ -109,6 +109,27 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   sem abastecimento) e a suíte `motorista` (17 casos, dois deles provando
   que sem abastecimento a conta não inventa custo). A leitura, em 11/10:
   contas com o interruptor ligado e cinco dias de lançamento por semana.
+- O dono perguntou de onde vêm as datas de IPVA e seguro (resposta: só do
+  que a pessoa digita) e mandou "fazer a automatização do IPVA e final da
+  placa". Construído: `lib/app/calendarioDaPlaca.ts`, uma tabela por
+  estado, tipo e ano com a fonte de cada calendário, e `sugestaoDeData`
+  (exata quando o calendário do ano ainda tem a data à frente; estimada,
+  projetando o dia do último calendário conhecido, quando já passou). A
+  folha das datas pede estado e final da placa (o cadastro do carro nunca
+  pediu placa, e a área é congelada pelo A/B), guarda os dois e sugere; a
+  linha passa a oferecer a próxima data com "Usar". A estimativa é marcada
+  no calendário, no Início, no aviso do aparelho e no e-mail da jornada,
+  pedindo para conferir no Detran. Dados: IPVA de SP (exato, por final),
+  MG (pares de finais em fevereiro), RS (data única 30/04) e SC (fim do
+  mês do final); licenciamento de SP (julho a dezembro) e RJ (julho a
+  setembro). RJ e PR ficaram de fora do IPVA: o proxy bloqueia os sites das
+  Fazendas e as fontes legíveis discordam do dia por final; o agente de
+  pesquisa que abri para os 27 estados caiu por limite da API. Pedido ao
+  dono: a tabela de RJ e PR, ou liberar o domínio das Fazendas no proxy.
+  `conferir:datas` ganhou 23 casos (a projeção, o dia do vencimento, a
+  tabela completa por final, as ligações), reprovou com a projeção sem a
+  marca de estimada e com um final faltando na tabela; a suíte `datas`
+  ganhou 12 (de "Usar" à folha sem calendário).
 
 ## 2026-09-13 · Engenharia: a foto das memórias (e do perfil) quebrada era o bucket
 - Relato do dono, com foto: o card "Primeira viagem" com o ícone de imagem

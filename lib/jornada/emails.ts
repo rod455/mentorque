@@ -551,7 +551,9 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
       titulo: `${tipo}: vence ${quando}`,
       saudacao: oi,
       paragrafos: [
-        `Você deixou anotado no Mentorque: o ${tipo.toLowerCase()} do ${nome} vence ${quando}${d ? `, dia ${dataBr(d.em)}` : ""}${valor}. ${consequencia}`,
+        d?.estimada
+          ? `Pelo final da placa, o ${tipo.toLowerCase()} do ${nome} vence ${quando}, perto de ${dataBr(d.em)}${valor}. A data é estimada pelo calendário do ano passado: confira no Detran ou na Fazenda do seu estado e ajuste no app se mudou. ${consequencia}`
+          : `Você deixou anotado no Mentorque: o ${tipo.toLowerCase()} do ${nome} vence ${quando}${d ? `, dia ${dataBr(d.em)}` : ""}${valor}. ${consequencia}`,
         "As outras datas do carro estão no calendário, junto das revisões. Se o valor ou a data mudaram, ajuste lá e o aviso acompanha.",
       ],
       cta: { texto: `Ver as datas do ${nome}`, url: link("revisions") },

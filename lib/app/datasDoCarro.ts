@@ -30,7 +30,7 @@ export function diasAte(iso: string, hoje = new Date()): number {
   return Math.round((meiaNoite(iso).getTime() - h.getTime()) / DIA);
 }
 
-export type DataLida = { tipo: TipoDeData; em: string; valor?: number; dias: number };
+export type DataLida = { tipo: TipoDeData; em: string; valor?: number; dias: number; estimada?: boolean };
 
 /** As datas informadas do carro, da mais próxima para a mais distante. */
 export function datasDoCarro(v: Pick<Vehicle, "datas"> | null | undefined, hoje = new Date()): DataLida[] {
@@ -39,7 +39,7 @@ export function datasDoCarro(v: Pick<Vehicle, "datas"> | null | undefined, hoje 
   for (const tipo of TIPOS_DE_DATA) {
     const d: DataDoCarro | undefined = datas[tipo];
     if (!d || !/^\d{4}-\d{2}-\d{2}$/.test(d.em)) continue;
-    lista.push({ tipo, em: d.em, valor: d.valor, dias: diasAte(d.em, hoje) });
+    lista.push({ tipo, em: d.em, valor: d.valor, dias: diasAte(d.em, hoje), ...(d.estimada ? { estimada: true } : {}) });
   }
   return lista.sort((a, b) => a.dias - b.dias);
 }
@@ -49,7 +49,7 @@ export function dataParaOInicio(v: Pick<Vehicle, "datas"> | null | undefined, ho
   return datasDoCarro(v, hoje).find((d) => d.dias <= JANELA_DO_INICIO && d.dias >= -60) ?? null;
 }
 
-export type AvisoDeData = { id: number; tipo: TipoDeData; diasAntes: (typeof ANTECEDENCIAS)[number]; quando: Date; em: string };
+export type AvisoDeData = { id: number; tipo: TipoDeData; diasAntes: (typeof ANTECEDENCIAS)[number]; quando: Date; em: string; estimada?: boolean };
 
 /**
  * Os avisos a agendar para as datas do carro: para cada data, um aviso 30,
@@ -65,7 +65,7 @@ export function avisosDasDatas(v: Pick<Vehicle, "datas"> | null | undefined, bas
       quando.setDate(quando.getDate() - diasAntes);
       quando.setHours(HORA_DO_AVISO, 0, 0, 0);
       if (quando.getTime() <= agora.getTime()) return;
-      avisos.push({ id: base + i * ANTECEDENCIAS.length + k, tipo: d.tipo, diasAntes, quando, em: d.em });
+      avisos.push({ id: base + i * ANTECEDENCIAS.length + k, tipo: d.tipo, diasAntes, quando, em: d.em, ...(d.estimada ? { estimada: true } : {}) });
     });
   }
   return avisos.sort((a, b) => a.quando.getTime() - b.quando.getTime());

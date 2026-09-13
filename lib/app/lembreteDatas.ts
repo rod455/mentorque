@@ -16,7 +16,7 @@ import type { TipoDeData, Vehicle } from "./types";
 export async function sincronizarLembreteDatas(o: {
   quer: boolean;
   veiculo: Vehicle | null;
-  textos: { titulo: string; tituloAmanha: string; corpo: string; nomes: Record<TipoDeData, string>; carro: string };
+  textos: { titulo: string; tituloAmanha: string; corpo: string; corpoEstimada: string; nomes: Record<TipoDeData, string>; carro: string };
   agora?: Date;
 }): Promise<void> {
   if (!notificacoesDisponiveis()) return;
@@ -34,6 +34,7 @@ export async function sincronizarLembreteDatas(o: {
     const titulo = a.diasAntes === 1
       ? o.textos.tituloAmanha.replace("{tipo}", nome).replace("{carro}", o.textos.carro)
       : o.textos.titulo.replace("{tipo}", nome).replace("{carro}", o.textos.carro).replace("{n}", String(a.diasAntes));
-    await agendar({ id: a.id, titulo, corpo: o.textos.corpo, quando: a.quando });
+    // Data estimada pelo final da placa: o aviso pede para conferir.
+    await agendar({ id: a.id, titulo, corpo: a.estimada ? o.textos.corpoEstimada : o.textos.corpo, quando: a.quando });
   }
 }

@@ -828,6 +828,25 @@ export function getContent(locale: Locale) {
       avisoTitulo: T("{tipo} do {carro} vence em {n} dias", "{carro} {tipo} due in {n} days"),
       avisoAmanha: T("{tipo} do {carro} vence amanhã", "{carro} {tipo} due tomorrow"),
       avisoCorpo: T("Abra o Mentorque para ver o valor e as outras datas.", "Open Mentorque to see the amount and the other dates."),
+      avisoCorpoEstimada: T("Data estimada pelo final da placa. Confira no Detran e ajuste no app.", "Date estimated from the plate's last digit. Check with the DMV and adjust in the app."),
+      // Pelo final da placa (13/09/2026): estado e final uma vez, e o app
+      // sugere IPVA e licenciamento pelo calendário do estado. Estimada
+      // quando o calendário do ano ainda não saiu.
+      placaTitulo: T("Pelo final da placa", "From the plate's last digit"),
+      placaSub: T("Informe o estado e o final da placa. O app sugere a data pelo calendário do estado.", "Set the state and the plate's last digit. The app suggests the date from the state calendar."),
+      uf: T("Estado", "State"),
+      ufSelecione: T("Selecione", "Select"),
+      finalDaPlaca: T("Final da placa", "Plate's last digit"),
+      finalPh: T("ex.: 3", "e.g. 3"),
+      sugerir: T("Sugerir a data", "Suggest the date"),
+      sugestaoExata: T("Final {final} em {uf}: vence {data}, pelo calendário de {ano}.", "Digit {final} in {uf}: due {data}, per the {ano} calendar."),
+      sugestaoEstimada: T("Final {final} em {uf}: costuma vencer perto de {data}. O calendário de {ano} ainda não saiu; a data é estimada pelo de {base}. Confira e ajuste se mudar.", "Digit {final} in {uf}: usually due around {data}. The {ano} calendar is not out yet; the date is estimated from {base}. Check and adjust if it changes."),
+      semCalendario: T("Ainda não temos o calendário de {uf} para isto. Informe a data pelo site do Detran ou da Fazenda.", "We don't have the {uf} calendar for this yet. Enter the date from the DMV or tax site."),
+      linhaSugestao: T("Pela placa: {data}{estimada}", "From the plate: {data}{estimada}"),
+      estimadaCurta: T(" (estimada)", " (estimated)"),
+      usar: T("Usar", "Use"),
+      estimadaLinha: T("estimada pela placa", "estimated from the plate"),
+      ufsCobertas: T("Calendários que o app já conhece: {ufs}.", "Calendars the app already knows: {ufs}."),
     },
 
     // O resumo do mês (13/09/2026, peça 3 da rotina): o card no Início na

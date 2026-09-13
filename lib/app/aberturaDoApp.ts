@@ -418,6 +418,7 @@ export function useLembretes(c: Content) {
         titulo: c.datasDoCarro.avisoTitulo,
         tituloAmanha: c.datasDoCarro.avisoAmanha,
         corpo: c.datasDoCarro.avisoCorpo,
+        corpoEstimada: c.datasDoCarro.avisoCorpoEstimada,
         nomes: c.datasDoCarro.tipos,
         carro: veiculo ? carName(veiculo) : "",
       },

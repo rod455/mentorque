@@ -63,6 +63,19 @@ das lojas.
    - Roteiro de aparelho: informar uma data para daqui a 8 dias com os avisos
      ligados; amanhã às 9h chega "vence em 7 dias"; tocar abre o Início com
      o card da data. Trocar a data: o aviso antigo some e o novo entra.
+   - **Pelo final da placa** (13/09, pedido do dono): na folha do IPVA e do
+     licenciamento, estado e final da placa uma vez; o app sugere a data
+     pelo calendário do estado (`lib/app/calendarioDaPlaca.ts`) e a pessoa
+     confirma com um toque; depois disso, a linha oferece a próxima data
+     com "Usar". Estados na tabela: IPVA de SP, MG, RS e SC; licenciamento
+     de SP e RJ. Quando o calendário do ano ainda não saiu (os estados
+     publicam em dezembro), a data é projetada do ano anterior e marcada
+     como estimada no calendário, no Início, no aviso e no e-mail, pedindo
+     para conferir. Sem calendário do estado, a folha diz quais existem e
+     a pessoa digita. Conferido em `conferir:datas` e na suíte `datas`.
+   - Roteiro de aparelho: no calendário, tocar em IPVA, escolher SP e o
+     final 7, "Sugerir a data": vem 20/01 estimada; salvar; a linha do
+     licenciamento passa a oferecer 31/10 com "Usar".
 4. **O mês do carro fechado** (13/09, peça 3 da rotina). Na primeira semana
    do mês, o Início mostra o card "Agosto do Gol 2016: R$ 380" (combustível
    e serviços do mês fechado), tocando abre o histórico; só aparece quando

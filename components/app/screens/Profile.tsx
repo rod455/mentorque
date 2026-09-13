@@ -34,7 +34,7 @@ import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
 import { AppHeader, Card, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
 
-const BR_STATES = ["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"];
+import { BR_STATES } from "@/lib/app/ufs";
 
 // "Avaliar o app" vai para a ficha da loja da plataforma (ver
 // `storeListingUrl`); no navegador cai no site.

@@ -53,4 +53,51 @@ export async function rodar({ nav, ok }) {
   const h2 = await app2.corpo();
   ok("data distante fica fora do Início; a vencida entra", !/Seguro do/.test(h2) && /CNH do motorista do .* venceu há 3 dias/.test(h2));
   await app2.fechar();
+
+  // 6. Pelo final da placa (13/09/2026): com estado e placa guardados, as
+  //    linhas do IPVA e do licenciamento oferecem a data com um toque; a
+  //    folha sugere pelo calendário; sem calendário, diz quais existem.
+  const app3 = await abrirApp(nav, { sessao: garagem({ quiz: sessao.quiz, state: "SP", vehicles: [{ ...sessao.vehicles[0], plate: "ABC1D27" }] }), rota: "/app?ir=revisions" });
+  const p3 = app3.pg;
+  const c3 = await app3.corpo();
+  ok("SP, final 7: a linha do licenciamento oferece 31/10 pela placa", (await p3.locator('[data-sugestao-da-placa="licenciamento"]').count()) === 1 && /Pela placa: 31\/10\/\d{4}/.test(c3), c3.slice(c3.indexOf("Licenciamento"), c3.indexOf("Licenciamento") + 60).replace(/\n+/g, " | "));
+  ok("e a do IPVA oferece um dia de janeiro", /Pela placa: \d\d\/01\/\d{4}/.test(c3));
+  ok("seguro e CNH não têm sugestão (não há calendário)", (await p3.locator('[data-sugestao-da-placa="seguro"]').count()) === 0 && (await p3.locator('[data-sugestao-da-placa="cnh"]').count()) === 0);
+  await p3.locator('[data-sugestao-da-placa="ipva"]').getByRole("button", { name: /^Usar$/i }).click();
+  await p3.waitForTimeout(500);
+  const s3 = await app3.sessaoGravada();
+  ok("Usar grava o IPVA no carro (20 de janeiro, final 7 em SP)", /-01-20$/.test(s3?.vehicles?.[0]?.datas?.ipva?.em ?? ""), JSON.stringify(s3?.vehicles?.[0]?.datas));
+  ok("e a linha some, porque a data já está lá", (await p3.locator('[data-sugestao-da-placa="ipva"]').count()) === 0);
+  await p3.locator('[data-data-do-carro="seguro"]').click();
+  await p3.waitForTimeout(500);
+  ok("a folha do seguro não tem o bloco da placa", (await p3.locator("[data-pela-placa]").count()) === 0);
+  await p3.locator('button[aria-label="close"]').last().click();
+  await p3.waitForTimeout(400);
+  await p3.locator('[data-data-do-carro="licenciamento"]').click();
+  await p3.waitForTimeout(500);
+  ok("a folha do licenciamento vem com estado e final preenchidos", (await p3.locator("[data-pela-placa] select").inputValue()) === "SP" && (await p3.locator("[data-pela-placa] input").inputValue()) === "7");
+  await p3.getByRole("button", { name: /Sugerir a data/i }).click();
+  await p3.waitForTimeout(400);
+  ok("sugerir explica a data pelo calendário", /Final 7 em SP: vence 31\/10\/\d{4}, pelo calendário de \d{4}/.test(await app3.corpo()));
+  await p3.getByRole("button", { name: /^Salvar$/i }).click();
+  await p3.waitForTimeout(600);
+  ok("salvar grava o licenciamento", /-10-31$/.test((await app3.sessaoGravada())?.vehicles?.[0]?.datas?.licenciamento?.em ?? ""));
+  await p3.locator('button[aria-label="close"]').last().click();
+  await p3.waitForTimeout(400);
+  await app3.fechar();
+
+  const app4 = await abrirApp(nav, { sessao: garagem({ quiz: sessao.quiz }), rota: "/app?ir=revisions" });
+  const p4 = app4.pg;
+  ok("sem estado e sem placa, nenhuma linha oferece data", (await p4.locator("[data-sugestao-da-placa]").count()) === 0);
+  await p4.locator('[data-data-do-carro="ipva"]').click();
+  await p4.waitForTimeout(500);
+  await p4.locator("[data-pela-placa] select").selectOption("AC");
+  await p4.locator("[data-pela-placa] input").fill("3");
+  await p4.getByRole("button", { name: /Sugerir a data/i }).click();
+  await p4.waitForTimeout(400);
+  const c4 = await app4.corpo();
+  ok("estado sem calendário: a folha diz e lista os que existem", /Ainda não temos o calendário de AC/.test(c4) && /Calendários que o app já conhece: .*SP/.test(c4));
+  const s4 = await app4.sessaoGravada();
+  ok("o estado e o final ficaram guardados para a próxima vez", s4?.state === "AC" && s4?.vehicles?.[0]?.finalDaPlaca === "3");
+  await app4.fechar();
 }

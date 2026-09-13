@@ -172,7 +172,7 @@ function DataAVencer({ car }: { car: Vehicle }) {
         <span className="block font-display text-[15px] font-semibold text-cream">
           {t.homeTitulo.replace("{tipo}", t.tipos[d.tipo]).replace("{carro}", carName(car)).replace("{quando}", quandoVence(d.dias, t))}
         </span>
-        <span className="block text-xs text-cream/60">{d.valor != null ? t.homeSubValor.replace("{valor}", formatBRL(d.valor)) : t.homeSub}</span>
+        <span className="block text-xs text-cream/60">{d.estimada ? `${t.estimadaLinha} · ` : ""}{d.valor != null ? t.homeSubValor.replace("{valor}", formatBRL(d.valor)) : t.homeSub}</span>
       </span>
     </button>
   );

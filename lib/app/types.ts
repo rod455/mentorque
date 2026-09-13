@@ -33,10 +33,18 @@ export type Vehicle = {
   // licenciamento, seguro e CNH, informadas uma vez, com o valor quando a
   // pessoa souber. Viram avisos 30, 7 e 1 dia antes e entram no calendário.
   datas?: Partial<Record<TipoDeData, DataDoCarro>>;
+  // O final da placa (um dígito), pedido na folha das datas para sugerir o
+  // IPVA e o licenciamento pelo calendário do estado (13/09/2026). Quando a
+  // placa inteira existe, o final sai dela; este campo cobre quem não quer
+  // informar a placa toda.
+  finalDaPlaca?: string;
 };
 
 export type TipoDeData = "ipva" | "licenciamento" | "seguro" | "cnh";
-export type DataDoCarro = { em: string; valor?: number }; // em: ISO yyyy-mm-dd
+// `estimada`: veio do calendário do estado pelo final da placa, projetado de
+// um ano anterior (lib/app/calendarioDaPlaca.ts); tudo o que mostra a data
+// avisa que é estimada e pede para conferir.
+export type DataDoCarro = { em: string; valor?: number; estimada?: boolean }; // em: ISO yyyy-mm-dd
 
 // Saved inputs of the Etanol × Gasolina calculator, so the user only fills
 // prices on a new station visit. Consumptions in km/l; prices in R$/l.
