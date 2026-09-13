@@ -235,7 +235,7 @@ const TAB_OF: Record<View["name"], Tab> = {
   home: "home", search: "home",
   cars: "cars", addCar: "cars", car: "cars", health: "cars", healthQuiz: "cars", system: "cars", revisions: "cars", carSettings: "cars",
   symptoms: "problems", symptom: "problems", systemProblems: "problems", equipment: "problems", equipmentHowTo: "problems", checklist: "problems", obd2: "problems", orcamento: "problems",
-  history: "history", addService: "history", service: "history",
+  history: "history", addService: "history", service: "history", abastecimento: "history",
   learn: "studies", studyTrack: "studies", course: "studies", forYourCar: "studies", savedLessons: "studies", biela: "studies", content: "studies",
   quiz: "studies", quizHistorico: "studies",
   profile: "profile", gamification: "profile", achievements: "profile", auth: "profile", subscribe: "profile", checkout: "profile",

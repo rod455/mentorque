@@ -7,6 +7,7 @@ import { CarsScreen, AddCarScreen } from "./screens/Cars";
 import { CarHub } from "./screens/CarHub";
 import { SymptomsScreen, SymptomDetail, SystemProblemsScreen, ChecklistScreen } from "./screens/Symptoms";
 import { OrcamentoScreen } from "./screens/Orcamento";
+import { AbastecimentoScreen } from "./screens/Abastecimento";
 import { HealthScreen, HealthQuizScreen, SystemDetail } from "./screens/Health";
 import { HistoryScreen, AddServiceScreen, ServiceDetail } from "./screens/History";
 import { RevisionsScreen } from "./screens/Revisions";
@@ -55,6 +56,7 @@ export function telaDaView(view: View) {
       case "system": return <SystemDetail system={view.system} />;
       case "history": return <HistoryScreen />;
       case "addService": return <AddServiceScreen preset={view.preset} editId={view.editId} />;
+      case "abastecimento": return <AbastecimentoScreen origem={view.origem} id={view.id} />;
       case "service": return <ServiceDetail id={view.id} />;
       case "revisions": return <RevisionsScreen />;
       case "learn": return <LearnScreen />;

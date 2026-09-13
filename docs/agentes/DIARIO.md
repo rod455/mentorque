@@ -38,6 +38,31 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-13 · Engenharia e CRO: a rotina do carro, peça 1 no ar
+- O dono perguntou como o app se sai nos três critérios (problema
+  recorrente, mercado mensurável, monetização clara) e depois "como resolver
+  dores mais recorrentes". A resposta: a recorrência não vem da mecânica,
+  vem do dinheiro e das datas. Quatro peças aprovadas: caderno de gastos,
+  datas do carro, resumo mensal, modo motorista de aplicativo. O CRO decidiu
+  o lugar de cada uma em `docs/agentes/propostas/rotina-do-carro.md` e as
+  quatro estão no caderno de experimentos como mudança direta, com a régua
+  nova de rotina: pessoas com lançamento em duas semanas seguidas.
+- Peça 1 construída: `Abastecimento` no store (sobe para a nuvem com o
+  resto), `lib/app/combustivel.ts` puro (custo por km com dois pontos e o
+  primeiro tanque de fora; consumo; semana e mês; km só para frente), a
+  tela com a devolução na hora, o card "Custo do carro" no Início abaixo do
+  carro, as linhas no histórico com a soma do mês grátis, combustível no
+  relatório Premium, evento `registrou_abastecimento` (restrição do banco
+  recriada). Registrar carimba o km e a data do km: quem abastece pelo app
+  não recebe mais a pergunta mensal.
+- Conferência: `conferir:combustivel` (28 casos) reprovou com o primeiro
+  tanque contando; a suíte de navegador `combustivel` (17 casos) prova do
+  card até apagar no histórico. Tropeço útil: a folha do primeiro quiz
+  abre por cima do Início e engole o toque no card; a suíte semeia o quiz
+  respondido, como a de km já fazia. O `.next` velho do build nativo
+  derrubou o servidor de desenvolvimento de novo (`rm -rf .next`).
+- Web no ar pelo push; lojas na 2.6. Sobre o app das lojas: sem sinal ainda.
+
 ## 2026-09-13 · Engenharia: a foto das memórias (e do perfil) quebrada era o bucket
 - Relato do dono, com foto: o card "Primeira viagem" com o ícone de imagem
   quebrada no círculo, "igual estava acontecendo com a foto do perfil".

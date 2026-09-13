@@ -30,6 +30,23 @@ das lojas.
      dias: quem analisou volta e registra serviço mais que quem não analisou?
    - **Universal links** ficam aqui também (vindos da 2.5), quando o dono
      mandar o SHA-256 do Play.
+2. **O caderno de gastos: abastecimento em três toques** (13/09, peça 1 da
+   rotina do carro, `docs/agentes/propostas/rotina-do-carro.md`). Card
+   "Custo do carro" no Início, abaixo do card do carro: sem lançamento,
+   convida; com, mostra a semana e o custo por km. A tela pede valor, km do
+   painel e litros (opcional); ao salvar, devolve custo por km, consumo e o
+   mês, e carimba o km do carro (quem abastece pelo app não recebe a
+   pergunta mensal de km). O histórico lista os abastecimentos junto dos
+   serviços, com a soma do mês grátis no topo; o relatório de gastos
+   (Premium) passa a incluir combustível. Grátis por decisão do dono.
+   - Onde mora: `lib/app/combustivel.ts` (puro), `Abastecimento.tsx`, o
+     card em `Home.tsx`, as linhas em `History.tsx`. Evento
+     `registrou_abastecimento`. Conferido por `conferir:combustivel` (contas
+     e ligações, provado com defeito plantado) e pela suíte
+     `conferir:navegador combustivel` (17 casos).
+   - Roteiro de aparelho: no app das lojas, registrar dois abastecimentos e
+     ver o custo por km no segundo; abrir o app no dia seguinte e NÃO
+     receber a folha mensal de km (o abastecimento carimbou).
 
 ## Roteiro de aparelho, e ele é obrigatório
 

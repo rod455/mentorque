@@ -4,7 +4,9 @@ import { funil } from "@/lib/app/funil";
 
 import { useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
+import { abastecimentosFor, activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
+import { gastoDoMes } from "@/lib/app/combustivel";
+import type { Abastecimento } from "@/lib/app/types";
 import { LIMITS } from "@/lib/app/premium";
 import { nextServiceByTime } from "@/lib/app/health";
 import { planoDosItens, visitaUnica, type PlanoDeItem, type VisitaUnica } from "@/lib/app/planoDeRevisao";
@@ -300,6 +302,17 @@ export function HistoryScreen() {
 
   const all = servicesFor(s, v.id);
   const list = filter === "all" ? all : all.filter((r) => r.type === filter);
+  // O caderno de gastos (13/09/2026): os abastecimentos entram na mesma lista,
+  // com a própria etiqueta, e a soma do mês fica grátis no topo. O relatório
+  // por categoria continua no Premium.
+  const combustivel = abastecimentosFor(s, v.id);
+  const mesAtual = new Date().toISOString().slice(0, 7);
+  const servicosDoMes = all.filter((r) => r.date.startsWith(mesAtual) && r.total != null).reduce((acc, r) => acc + (r.total ?? 0), 0);
+  type Entrada = { data: string; km: number; servico?: ServiceRecord; abastecimento?: Abastecimento };
+  const entradas: Entrada[] = [
+    ...list.map((r) => ({ data: r.date, km: r.km, servico: r })),
+    ...(filter === "all" ? combustivel.map((a) => ({ data: a.date, km: a.km, abastecimento: a })) : []),
+  ].sort((a, b) => b.data.localeCompare(a.data) || b.km - a.km);
   const upcoming = <UpcomingBlock />;
   const usedTypes = Array.from(new Set(all.map((r) => r.type)));
   const sequenciaDoQuiz = sequenciaHoje(s.quiz ?? QUIZ_ZERADO, diaLocal());
@@ -326,7 +339,16 @@ export function HistoryScreen() {
 
       {upcoming}
 
-      {all.length === 0 ? (
+      {combustivel.length > 0 && (
+        <div className="mb-3 flex items-center gap-3 rounded-2xl bg-graphite-800 px-4 py-3 ring-1 ring-white/[0.06]" data-faixa-do-mes>
+          <span className="min-w-0 flex-1 text-sm text-cream/80">
+            {c.combustivel.faixaMes.replace("{combustivel}", formatBRL(gastoDoMes(combustivel))).replace("{servicos}", formatBRL(servicosDoMes))}
+          </span>
+          <button onClick={() => go({ name: "abastecimento", origem: "historico" })} className="shrink-0 rounded-full bg-teal px-3.5 py-1.5 text-xs font-bold text-graphite">{c.combustivel.cardCta}</button>
+        </div>
+      )}
+
+      {all.length === 0 && combustivel.length === 0 ? (
         <Card className="mt-2 text-center">
           <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-graphite-700 text-cream/60">
             <Icon name="clock" className="h-6 w-6" />
@@ -338,7 +360,7 @@ export function HistoryScreen() {
         </Card>
       ) : (
         <>
-          {s.premium && <SpendReport services={all} />}
+          {s.premium && <SpendReport services={all} abastecimentos={combustivel} />}
           {usedTypes.length > 1 && (
             <div className="mb-3 flex flex-wrap gap-2">
               <Chip active={filter === "all"} onClick={() => setFilter("all")}>{c.history.all}</Chip>
@@ -357,18 +379,31 @@ export function HistoryScreen() {
           )}
 
           <div className="space-y-2">
-            {list.map((r) => (
-              <button key={r.id} onClick={() => go({ name: "service", id: r.id })} className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/5 hover:ring-white/15">
+            {entradas.map((e) => e.servico ? (
+              <button key={e.servico.id} onClick={() => go({ name: "service", id: e.servico!.id })} className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/5 hover:ring-white/15">
                 <span className="min-w-0 flex-1">
                   <span className="flex items-center gap-2">
-                    <span className="truncate font-display text-[15px] text-cream">{typeLabel(r.type)}</span>
-                    {r.system && <span className="shrink-0 rounded bg-white/5 px-1.5 py-0.5 text-[10px] text-cream/55">{c.health.systemLabels[r.system]}</span>}
+                    <span className="truncate font-display text-[15px] text-cream">{typeLabel(e.servico.type)}</span>
+                    {e.servico.system && <span className="shrink-0 rounded bg-white/5 px-1.5 py-0.5 text-[10px] text-cream/55">{c.health.systemLabels[e.servico.system]}</span>}
                   </span>
-                  <span className="block text-xs text-cream/50">{dateFmt(r.date)} · {r.km.toLocaleString()} km</span>
+                  <span className="block text-xs text-cream/50">{dateFmt(e.servico.date)} · {e.servico.km.toLocaleString()} km</span>
                 </span>
-                {r.total != null && <span className="shrink-0 text-sm text-cream/70">{formatBRL(r.total)}</span>}
+                {e.servico.total != null && <span className="shrink-0 text-sm text-cream/70">{formatBRL(e.servico.total)}</span>}
               </button>
-            ))}
+            ) : e.abastecimento ? (
+              <button key={e.abastecimento.id} onClick={() => go({ name: "abastecimento", id: e.abastecimento!.id })} className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/5 hover:ring-white/15" data-abastecimento>
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-center gap-2">
+                    <span className="truncate font-display text-[15px] text-cream">⛽ {c.combustivel.linha}</span>
+                    <span className="shrink-0 rounded bg-white/5 px-1.5 py-0.5 text-[10px] text-cream/55">
+                      {c.combustivel.tipos[e.abastecimento.combustivel]}{e.abastecimento.litros ? ` · ${c.combustivel.linhaLitros.replace("{n}", e.abastecimento.litros.toLocaleString("pt-BR"))}` : ""}
+                    </span>
+                  </span>
+                  <span className="block text-xs text-cream/50">{dateFmt(e.abastecimento.date)} · {e.abastecimento.km.toLocaleString()} km</span>
+                </span>
+                <span className="shrink-0 text-sm text-cream/70">{formatBRL(e.abastecimento.valor)}</span>
+              </button>
+            ) : null)}
           </div>
         </>
       )}
@@ -765,15 +800,18 @@ export function ServiceDetail({ id }: { id: string }) {
 }
 
 // Premium spending report: per-year bars + average per km.
-function SpendReport({ services }: { services: ServiceRecord[] }) {
+function SpendReport({ services, abastecimentos = [] }: { services: ServiceRecord[]; abastecimentos?: Abastecimento[] }) {
   const c = useContent();
   const withTotal = services.filter((r) => r.total != null);
   const byYear = new Map<string, number>();
   for (const r of withTotal) byYear.set(r.date.slice(0, 4), (byYear.get(r.date.slice(0, 4)) ?? 0) + (r.total ?? 0));
+  // Combustível entra no relatório (caderno de gastos, 13/09/2026): é a
+  // maior linha de gasto de quase todo carro, e sem ela o custo por km mentia.
+  for (const a of abastecimentos) byYear.set(a.date.slice(0, 4), (byYear.get(a.date.slice(0, 4)) ?? 0) + a.valor);
   const years = [...byYear.entries()].sort((a, b) => a[0].localeCompare(b[0]));
   const max = Math.max(1, ...years.map(([, v]) => v));
-  const kms = services.map((r) => r.km).filter((k) => k > 0);
-  const totalSpend = withTotal.reduce((a, r) => a + (r.total ?? 0), 0);
+  const kms = [...services.map((r) => r.km), ...abastecimentos.map((a) => a.km)].filter((k) => k > 0);
+  const totalSpend = withTotal.reduce((a, r) => a + (r.total ?? 0), 0) + abastecimentos.reduce((a, x) => a + x.valor, 0);
   const kmRange = kms.length > 1 ? Math.max(...kms) - Math.min(...kms) : 0;
   const perKm = kmRange > 0 ? totalSpend / kmRange : 0;
 

@@ -26,6 +26,9 @@ export type View =
   | { name: "system"; system: SystemKey }
   | { name: "history" }
   | { name: "addService"; preset?: Partial<ServiceRecord>; editId?: string }
+  // O abastecimento (13/09/2026, caderno de gastos). `origem` para o funil;
+  // `id` abre um lançamento existente para ver e apagar.
+  | { name: "abastecimento"; origem?: string; id?: string }
   | { name: "service"; id: string }
   | { name: "revisions" }
   | { name: "learn" }

@@ -37,6 +37,8 @@ const EVENTOS_DO_APP = new Set([
   "viu_aula", "consultou_sintoma", "registrou_servico",
   // Orçamento por foto (13/09/2026). Ver lib/app/funil.ts.
   "analisou_orcamento",
+  // Caderno de gastos (13/09/2026). Ver lib/app/funil.ts.
+  "registrou_abastecimento",
 ]);
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

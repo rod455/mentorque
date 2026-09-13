@@ -55,6 +55,10 @@ export type EventoFunil =
   // volta e paga?". `origem` diz de onde a pessoa veio (checklist, servico,
   // biela). Só sai quando o modelo devolveu uma análise, legível ou não.
   | "analisou_orcamento"
+  // O abastecimento (13/09/2026, caderno de gastos): o lançamento de rotina.
+  // A régua nova de retenção é "pessoas com abastecimento em duas semanas
+  // seguidas", e ela sai daqui. `origem` diz de onde veio (inicio, historico).
+  | "registrou_abastecimento"
   // Único evento técnico da lista: o desfecho da subida do SDK de atribuição
   // (lib/app/atribuicao.ts). Ele não mede comportamento de ninguém, mede se a
   // nossa própria medição está viva no aparelho.

@@ -60,6 +60,23 @@ export type ServiceRecord = {
 
 export type ServicePart = { name: string; value?: number };
 
+// Um abastecimento: o lançamento mais frequente da vida de um carro.
+//
+// Existe desde 13/09/2026 (caderno de gastos, docs/agentes/propostas/
+// rotina-do-carro.md): três campos, valor pago, litros e km do painel. O km
+// carimba o odômetro do carro (é o dado que mais falta no calendário), e a
+// soma dos lançamentos devolve custo por km e consumo. Sem posto, sem nota.
+export type Combustivel = "gasolina" | "etanol" | "diesel" | "gnv" | "outro";
+export type Abastecimento = {
+  id: string;
+  vehicleId: string;
+  date: string; // ISO yyyy-mm-dd
+  km: number; // km do painel na hora
+  valor: number; // total pago, em reais
+  litros?: number; // opcional: sem ele, sem consumo, mas com custo por km
+  combustivel: Combustivel;
+};
+
 // Severity used across problems / attention points (red / amber / teal).
 export type Severity = "high" | "medium" | "low";
 

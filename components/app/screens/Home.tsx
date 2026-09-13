@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
+import { abastecimentosFor, activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
+import { custoPorKm, gastoDaSemana } from "@/lib/app/combustivel";
+import { brlCentavos } from "./Abastecimento";
 import { personalScore, vehicleSituations, vehicleTraits } from "@/lib/app/traits";
 import type { ServiceRecord } from "@/lib/app/types";
 import { computeQuizHealth } from "@/lib/app/healthQuiz";
 import { computeStatus, MILESTONES } from "@/lib/app/gamification";
-import { isNewLesson, vehicleLabel } from "@/lib/app/content";
+import { formatBRL, isNewLesson, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { openStorePage, useUpdateAvailable } from "@/lib/app/appUpdate";
 import { sellsInApp } from "@/lib/app/wrapper";
@@ -65,6 +67,46 @@ function typeIcon(t: string) {
 }
 
 // 0.0 — Início (dashboard estilo Bloom)
+// O card "Custo do carro": com abastecimento, a semana e o custo por km; sem,
+// o convite ao primeiro lançamento. Sempre com o botão de abastecer.
+function CustoDoCarro({ vehicleId, nome }: { vehicleId: string; nome: string }) {
+  const c = useContent();
+  const t = c.combustivel;
+  const { s } = usePrototype();
+  const { go } = useNav();
+  const lista = abastecimentosFor(s, vehicleId);
+  const semana = gastoDaSemana(lista);
+  const porKm = custoPorKm(lista);
+  const abrir = () => go({ name: "abastecimento", origem: "inicio" });
+  return (
+    <div className="mt-3 rounded-2xl bg-graphite-800 px-4 py-3.5 ring-1 ring-white/[0.06]" data-custo-do-carro>
+      <div className="flex items-center gap-3">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-teal/15 text-xl">⛽</span>
+        <span className="min-w-0 flex-1">
+          {lista.length === 0 ? (
+            <>
+              <span className="block font-display text-[15px] font-semibold text-cream">{t.cardVazioTitulo.replace("{carro}", nome)}</span>
+              <span className="block text-xs text-cream/55">{t.cardVazioSub}</span>
+            </>
+          ) : (
+            <>
+              <span className="block text-[11px] uppercase tracking-wide text-cream/45">{t.cardTitulo}</span>
+              <span className="block font-display text-[15px] text-cream">
+                {t.cardSemana.replace("{valor}", formatBRL(semana))}
+                {porKm != null ? ` · ${t.cardPorKm.replace("{valor}", brlCentavos(porKm))}` : ""}
+              </span>
+              {porKm == null && <span className="block text-xs text-cream/55">{t.cardFaltaUm}</span>}
+            </>
+          )}
+        </span>
+        <button onClick={abrir} className="shrink-0 rounded-full bg-teal px-3.5 py-1.5 text-xs font-bold text-graphite">
+          {lista.length === 0 ? t.cardCtaVazio : t.cardCta}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export function HomeScreen() {
   const c = useContent();
   const h = c.home;
@@ -280,6 +322,12 @@ export function HomeScreen() {
           </Card>
         </button>
       )}
+
+      {/* Custo do carro (caderno de gastos, 13/09/2026). Abaixo do carro e
+          ACIMA das revisões de propósito: é a ação de menor esforço da tela
+          e a que alimenta o resto (o km). Onde entra e por quê:
+          docs/agentes/propostas/rotina-do-carro.md. */}
+      {car && <CustoDoCarro vehicleId={car.id} nome={vehicleLabel(car)} />}
 
       {/* Fixados — conteúdos que o usuário usa com frequência (📌 nas aulas);
           setinhas reordenam (o próprio usuário escolhe o que fica na frente) */}

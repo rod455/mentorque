@@ -45,7 +45,9 @@ create table if not exists public.funil_eventos (
     'viu_aula', 'consultou_sintoma', 'registrou_servico',
     -- Orçamento por foto, medido em 13/09/2026 (restrição recriada no banco
     -- nesse dia: migração funil_eventos_orcamento).
-    'analisou_orcamento'
+    'analisou_orcamento',
+    -- Caderno de gastos, medido em 13/09/2026 (migração funil_eventos_abastecimento).
+    'registrou_abastecimento'
   )),
 
   anon_id    text,
