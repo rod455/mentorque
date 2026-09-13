@@ -71,6 +71,77 @@ Regras:
   gente de menos para pesar, e a leitura de verdade começa com a 2.5.
 - Veredito: (aberto)
 
+## [caderno-de-gastos] O abastecimento em três toques, com custo por km na hora
+- Estado: ABERTO
+- Tipo: mudanca-direta
+- Alvo no funil: a rotina. Hoje "voltou" é qualquer abertura, e 11 de 253
+  voltaram algum dia. A régua nova é "pessoas com lançamento em duas
+  semanas seguidas", que não existe ainda (zero, por construção).
+- Tese BeSci: compromisso e consistência. O problema do carro é episódico;
+  o dinheiro do carro é semanal. Um lançamento de três campos (valor,
+  litros, km) devolve na hora custo por km, consumo e gasto do mês, e
+  carimba o km, que é o dado que mais falta no calendário. Card "Custo do
+  carro" no Início, abaixo do card do carro; folha de abastecimento;
+  histórico com a etiqueta. Grátis (decisão do dono, 13/09). Onde cada
+  coisa entra e por quê: docs/agentes/propostas/rotina-do-carro.md.
+- Métrica: pessoas com abastecimento em duas semanas seguidas; idade média
+  do km carimbado · Duração: 4 semanas
+- Aprovação: aprovada pelo dono em 2026-09-13 ("vamos fazer o que você
+  propôs")
+- Início: 2026-09-13 na web; nas lojas, com a 2.6 · Ler a partir de:
+  2026-10-11
+- Antes: zero lançamentos (a peça não existia); km carimbado com mais de
+  30 dias na maioria dos carros
+- Veredito: (aberto)
+
+## [datas-do-carro] IPVA, licenciamento, seguro e CNH no calendário, com aviso
+- Estado: PROPOSTO (aprovada, entra depois do caderno de gastos)
+- Tipo: mudanca-direta
+- Alvo no funil: avisos ligados (3 de 28 contas) e retorno no mês de um
+  vencimento.
+- Tese BeSci: aversão à perda com honestidade (multa e juros são reais).
+  As datas entram no calendário de revisões que já existe, no card
+  "Diagnóstico do carro" como passo, no Início só a 30 dias do vencimento,
+  e viram avisos locais em 30, 7 e 1 dia. Lugar e razão:
+  docs/agentes/propostas/rotina-do-carro.md.
+- Métrica: avisos ligados por origem `datas`; abertura no mês de
+  vencimento contra os outros meses · Duração: um ciclo de IPVA (janeiro
+  a março) para a leitura forte; 4 semanas para a fraca
+- Aprovação: aprovada pelo dono em 2026-09-13
+- Início: (não começou) · Ler a partir de: 4 semanas depois do início
+- Antes: nenhuma data cadastrável; avisos ligados em 3 de 28 contas
+- Veredito: (não começou)
+
+## [resumo-mensal] O mês do carro fechado, por e-mail, push e no Início
+- Estado: PROPOSTO (aprovada, entra depois das datas)
+- Tipo: mudanca-direta
+- Alvo no funil: retorno nos três dias depois do envio.
+- Tese BeSci: efeito de progresso (o mês fechado é um marco). Chave `mes`
+  na jornada no dia 1, só para quem tem lançamento ou data; card no Início
+  na primeira semana. Lugar e razão: docs/agentes/propostas/rotina-do-carro.md.
+- Métrica: abertura nos 3 dias seguintes ao envio contra a média; saídas
+  da jornada · Duração: 2 meses
+- Aprovação: aprovada pelo dono em 2026-09-13
+- Início: (não começou) · Ler a partir de: dois envios
+- Antes: a jornada não tem resumo; o e-mail `km` é o mais perto disso
+- Veredito: (não começou)
+
+## [modo-motorista-de-app] Ganhou, custou, sobrou: a conta do dia de quem trabalha com o carro
+- Estado: PROPOSTO (aprovada como modo; o público principal é decisão do dono)
+- Tipo: mudanca-direta
+- Alvo no funil: uso diário de um público que a ficha já mira.
+- Tese BeSci: clareza do próximo passo (a conta que decide se a corrida
+  valeu). Interruptor no Perfil; o card "Custo do carro" vira "hoje:
+  ganhou, custou, sobrou"; lucro por km no resumo mensal. Lugar e razão:
+  docs/agentes/propostas/rotina-do-carro.md.
+- Métrica: pessoas com o interruptor ligado e lançamento em cinco dias de
+  uma semana · Duração: 4 semanas
+- Aprovação: aprovada pelo dono em 2026-09-13; a decisão de público fica
+  pendente
+- Início: (não começou) · Ler a partir de: 4 semanas depois do início
+- Antes: nenhum dado de ganho; custo por km só de serviços, no Premium
+- Veredito: (não começou)
+
 ## [onboarding-curto] O onboarding tem três páginas, não cinco
 - Estado: ABERTO
 - Tipo: teste-ab
