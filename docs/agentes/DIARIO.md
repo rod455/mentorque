@@ -30,6 +30,7 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 | A campanha do Google traz cadastro de verdade? | **Traz.** Na semana de 31/08 a 06/09, 7 das 8 contas novas carregam `google / lancamento`. A atribuição só existe a partir de 04/09, porque a captura de etiqueta subiu para todas as páginas em 03/09. Custo por conta no pedaço medido: R$ 14,71. | 07/09, Diretor |
 | Quantas pessoas o app teve de verdade numa semana? | Contar por `anon_id` NÃO responde isso (é armazenamento, infla a cada instalação). A régua é `auth.users`. Cruzar sempre com a porta de entrada: cliques pagos > anon_id > contas. | 01/09 e 07/09 |
 | Por que o mesmo carro vira dois? | Porque a identidade do carro é o `id`, e ele nasce no APARELHO: dois cadastros nunca colidem, e toda a dedup do app é por id. Uma causa para os três caminhos. As telas passaram a avisar em 09/09; em 10/09 a folha de importação passou a PERGUNTAR o que fazer com o carro repetido (juntar num só, só o da conta, só o deste aparelho), por decisão do dono. Vai na 2.4. | 10/09, Engenharia |
+| Por que a foto do momento (ou do perfil) aparece quebrada? | O bucket `Avatars` do Storage estava privado e o app grava a URL pública: 400 em toda foto enviada logado. Ligado em 13/09 (`avatars_bucket_publico`); o retrato está em `supabase/storage_avatars.sql`. Se voltar a acontecer, conferir `select public from storage.buckets where id = 'Avatars'` antes de qualquer outra coisa. | 13/09, Engenharia |
 | Quais manuais faltam para a Biela? | O primeiro lote subiu em 06/09: 112 manuais, 34.609 trechos, e os DEZ carros mais comuns do Brasil passaram a ter manual (era 3 de 10). Gol 2016 e Ka 2025, de usuários nossos, saíram de zero. Faltam Corsa/Classic e as marcas vazias (Suzuki, Mercedes-Benz, e o EcoSport). | 06/09, `docs/manuais-a-subir.md` |
 
 **Como manter:** ao FECHAR uma pergunta que já custou investigação, acrescente a
@@ -37,7 +38,41 @@ linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
 
+## 2026-09-13 · Engenharia: a foto das memórias (e do perfil) quebrada era o bucket
+- Relato do dono, com foto: o card "Primeira viagem" com o ícone de imagem
+  quebrada no círculo, "igual estava acontecendo com a foto do perfil".
+- Conferido no banco, não no chute: o bucket `Avatars` do Storage estava
+  com `public = false`, e o app grava a URL PÚBLICA (getPublicUrl) na
+  sessão. A rota `/object/public/` responde 400 para bucket privado, mesmo
+  com a policy `avatars_public_read` existindo desde o início. O único
+  objeto do bucket era a foto do momento do dono, subida às 16h03 de
+  Brasília: o upload funcionava, a leitura não. Foto de perfil enviada pelo
+  app passava pelo mesmo caminho, e por isso o Perfil já tinha o `onError`
+  caindo para a inicial.
+- Conserto: migração `avatars_bucket_publico` liga o interruptor (o desenho
+  sempre foi leitura pública por URL não listável, com o UUID na pasta);
+  `supabase/storage_avatars.sql` vira o retrato do que tem que existir. Na
+  tela, o card do momento ganha `onError` para o emblema e `no-referrer`,
+  como o Perfil. O que a rede daqui não alcança: abrir a URL para ver o 200
+  (o proxy bloqueia o domínio do Supabase e o do site); a prova é o dono
+  abrir Memórias de novo. A foto que ele já subiu não precisa ser
+  reenviada: a URL guardada é a mesma, só passou a responder.
+
 ## 2026-09-13 · Engenharia: análise de orçamento por foto, no ar na web
+- Prova em produção (19h23 UTC), pelo n8n, com o orçamento sintético em
+  `public/provas/orcamento-prova.jpg`: 200, sete linhas lidas com os
+  valores certos, oficina e total, faixa de Campinas/SP, "atenção" pedindo a
+  marca da pastilha e a checagem dos discos, e nenhuma frase acusando a
+  oficina. As linhas de prova em `app_erros` e em `orcamentos_analisados`
+  foram apagadas. A rede deste ambiente passou a bloquear o domínio do site
+  no meio do dia, e a prova foi feita pelo n8n por isso (fluxo "Mentorque:
+  prova do orçamento por foto", não publicado).
+- O que a prova ensinou e já mudou: o modelo marcou óleo, filtro e mão de
+  obra com `oil`, e a comparação linha a linha dizia "abaixo da faixa" para
+  cada uma, o que é mentira útil para ninguém: a faixa é do serviço inteiro.
+  `compararComFaixas` passou a somar as linhas do mesmo serviço e a
+  comparar a soma, com `somaDoServico` na tela ("Serviço completo: R$
+  285"). `conferir:orcamento` ganhou o caso.
 - O dono aprovou os quatro itens da proposta dos R$ 10 milhões
   (orçamento por foto, triagem por perguntas, relatório compartilhável,
   gastos por categoria) e decidiu: 2 análises por mês no gratuito; as

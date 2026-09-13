@@ -788,6 +788,7 @@ export function getContent(locale: Locale) {
       oficina: T("Oficina", "Shop"),
       faixa: T("Na sua região: {min} a {max}", "In your region: {min} to {max}"),
       faixaSemRegiao: T("Referência: {min} a {max}", "Reference: {min} to {max}"),
+      somaDoServico: T("Serviço completo: {valor}", "Whole service: {valor}"),
       posicao: { abaixo: T("abaixo da faixa", "below the range"), dentro: T("dentro da faixa", "within the range"), acima: T("acima da faixa", "above the range") },
       atencao: T("Vale perguntar", "Worth asking"),
       perguntas: T("Perguntas para fazer na oficina", "Questions to ask the shop"),

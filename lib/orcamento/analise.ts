@@ -44,9 +44,11 @@ export type ItemDoOrcamento = {
   atencao?: string;
   /** Chave de FAIXAS_NACIONAIS quando o item é um serviço com referência. */
   servico?: string;
-  /** Preenchido pela comparação, não pelo modelo. */
+  /** Preenchido pela comparação, não pelo modelo, e só na primeira linha de cada serviço. */
   faixa?: FaixaDaRegiao;
   posicao?: PosicaoNaFaixa;
+  /** O que foi comparado com a faixa: a soma das linhas deste serviço. */
+  somaDoServico?: number;
 };
 
 export type Analise = {
@@ -131,18 +133,32 @@ export function normalizarAnalise(bruto: unknown): Analise | null {
 }
 
 /**
- * Põe a faixa da região em cada item que tem serviço com referência e valor.
+ * Põe a faixa da região no serviço, somando as linhas dele.
+ *
  * A comparação é nossa, não do modelo: o modelo não conhece as faixas e não
- * deve inventar "está caro".
+ * deve inventar "está caro". E ela é POR SERVIÇO, não por linha: a faixa de
+ * "troca de óleo" é do serviço inteiro (óleo, filtro e mão de obra). Na
+ * primeira prova em produção (13/09/2026) o modelo marcou as três linhas com
+ * `oil`, e cada uma sozinha caía "abaixo da faixa", o que é mentira útil
+ * para ninguém. Agora as linhas do mesmo serviço são somadas, e a faixa vai
+ * na primeira delas, com `somaDoServico` dizendo quanto foi comparado.
  */
 export function compararComFaixas(a: Analise, uf?: string | null, cidade?: string | null): Analise {
+  const somas = new Map<string, number>();
+  for (const it of a.itens) {
+    if (!it.servico || it.valor == null || it.valor <= 0) continue;
+    somas.set(it.servico, (somas.get(it.servico) ?? 0) + it.valor);
+  }
+  const jaMarcado = new Set<string>();
   return {
     ...a,
     itens: a.itens.map((it) => {
-      if (!it.servico || it.valor == null || it.valor <= 0) return it;
+      if (!it.servico || it.valor == null || it.valor <= 0 || jaMarcado.has(it.servico)) return it;
       const faixa = faixaDaRegiao(it.servico, uf, cidade);
       if (!faixa) return it;
-      return { ...it, faixa, posicao: posicaoNaFaixa(it.valor, faixa) };
+      jaMarcado.add(it.servico);
+      const soma = Math.round((somas.get(it.servico) ?? it.valor) * 100) / 100;
+      return { ...it, faixa, posicao: posicaoNaFaixa(soma, faixa), somaDoServico: soma };
     }),
   };
 }

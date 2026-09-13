@@ -200,6 +200,9 @@ export function OrcamentoScreen({ origem }: { origem?: string; symptomId?: strin
                         {it.explicacao && <p className="mt-1 text-xs text-cream/65">{it.explicacao}</p>}
                         {it.faixa && it.posicao && (
                           <p className="mt-1 text-xs text-teal/90">
+                            {it.somaDoServico != null && it.valor != null && it.somaDoServico !== it.valor
+                              ? `${o.somaDoServico.replace("{valor}", formatBRL(it.somaDoServico))} · `
+                              : ""}
                             {(it.faixa.regiao ? o.faixa : o.faixaSemRegiao).replace("{min}", formatBRL(it.faixa.min)).replace("{max}", formatBRL(it.faixa.max))} · {o.posicao[it.posicao]}
                           </p>
                         )}

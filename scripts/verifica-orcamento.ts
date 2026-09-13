@@ -68,6 +68,22 @@ if (lido) {
   conferir("item com serviço conhecido e valor ganha a faixa da região", comparado.itens[0].faixa?.min === esperada.min && comparado.itens[0].faixa?.max === esperada.max);
   conferir("e a posição na faixa", ["abaixo", "dentro", "acima"].includes(comparado.itens[0].posicao ?? ""));
   conferir("item sem serviço conhecido não ganha faixa", comparado.itens[2].faixa === undefined);
+
+  // A comparação é por SERVIÇO, somando as linhas (prova em produção de
+  // 13/09: óleo, filtro e mão de obra marcados `oil`, cada um "abaixo").
+  const tresLinhas = normalizarAnalise({
+    resumo: "x",
+    itens: [
+      { descricao: "Óleo 5w30", tipo: "peca", valor: 180, explicacao: "", servico: "oil" },
+      { descricao: "Filtro de óleo", tipo: "peca", valor: 45, explicacao: "", servico: "oil" },
+      { descricao: "Mão de obra", tipo: "mao_de_obra", valor: 60, explicacao: "", servico: "oil" },
+      { descricao: "Pastilhas", tipo: "peca", valor: 220, explicacao: "", servico: "brakes" },
+    ],
+  })!;
+  const porServico = compararComFaixas(tresLinhas, null, null);
+  conferir("as linhas do mesmo serviço são somadas antes de comparar", porServico.itens[0].somaDoServico === 285 && porServico.itens[0].posicao === "dentro", JSON.stringify(porServico.itens[0]));
+  conferir("a faixa vai só na primeira linha do serviço", porServico.itens[1].faixa === undefined && porServico.itens[2].faixa === undefined);
+  conferir("outro serviço tem a própria soma", porServico.itens[3].somaDoServico === 220 && porServico.itens[3].faixa !== undefined);
   conferir("o serviço principal é o de maior valor com referência", servicoPrincipal(comparado) === "brakes");
   const notas = notasParaHistorico(comparado);
   conferir("as notas para o histórico levam as linhas com valor", /Troca de óleo 5w30: R\$ 280/.test(notas) && notas.length <= 1500, notas.slice(0, 80));
