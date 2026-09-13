@@ -120,7 +120,7 @@ export function AchievementsScreen({ initialTab }: { initialTab?: "marco" | "mom
           const inner = (
             <>
               {photo ? (
-                <img src={photo} alt="" className="h-14 w-14 shrink-0 rounded-full object-cover ring-2 ring-amber/40" />
+                <FotoDoMomento src={photo} emoji={m.emoji} earned={got} />
               ) : (
                 <MedalEmblem emoji={m.emoji} size={56} earned={got} />
               )}
@@ -169,6 +169,29 @@ export function AchievementsScreen({ initialTab }: { initialTab?: "marco" | "mom
         {moment && <MomentSheet id={moment.id} emoji={moment.emoji} onClose={() => setOpenMoment(null)} />}
       </Sheet>
     </div>
+  );
+}
+
+// A foto do momento no card, com o emblema como rede.
+//
+// POR QUE (13/09/2026): o dono viu o card "Primeira viagem" com o ícone de
+// imagem quebrada dentro do círculo. A causa estava no Storage (o bucket
+// Avatars ficou privado e o app grava a URL pública, que responde 400), e foi
+// consertada lá. Mas imagem quebrada nunca deveria virar um "?" na tela: se a
+// URL falhar por qualquer motivo (rede, link antigo), o emblema volta, como o
+// Perfil já faz com a foto do Google. `no-referrer` pelo mesmo motivo do
+// Perfil: o WebView do Android manda Referer https://localhost/.
+function FotoDoMomento({ src, emoji, earned }: { src: string; emoji: string; earned: boolean }) {
+  const [falhou, setFalhou] = useState(false);
+  if (falhou) return <MedalEmblem emoji={emoji} size={56} earned={earned} />;
+  return (
+    <img
+      src={src}
+      alt=""
+      referrerPolicy="no-referrer"
+      onError={() => setFalhou(true)}
+      className="h-14 w-14 shrink-0 rounded-full object-cover ring-2 ring-amber/40"
+    />
   );
 }
 
@@ -222,7 +245,7 @@ function MomentSheet({ id, emoji, onClose }: { id: string; emoji: string; onClos
 
       <div className="mt-4 aspect-video w-full overflow-hidden rounded-2xl ring-1 ring-white/10">
         {photo ? (
-          <img src={photo} alt="" className="h-full w-full object-cover" />
+          <img src={photo} alt="" referrerPolicy="no-referrer" className="h-full w-full object-cover" />
         ) : (
           <div className="relative h-full w-full bg-graphite">
             {/* eslint-disable-next-line @next/next/no-img-element */}
