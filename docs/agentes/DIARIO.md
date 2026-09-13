@@ -62,6 +62,18 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   respondido, como a de km já fazia. O `.next` velho do build nativo
   derrubou o servidor de desenvolvimento de novo (`rm -rf .next`).
 - Web no ar pelo push; lojas na 2.6. Sobre o app das lojas: sem sinal ainda.
+- Peça 2 construída em seguida: `Vehicle.datas` (IPVA, licenciamento,
+  seguro, CNH, com valor opcional), `lib/app/datasDoCarro.ts` puro (dias
+  inteiros, três avisos por data só no futuro, ids fixos 8 a 19, o Início
+  só a 30 dias ou vencida há até 60), `lembreteDatas.ts` sincronizado na
+  abertura e a cada mudança de data, o card no calendário de revisões, o
+  card no Início abaixo do custo do carro, o sexto passo do Diagnóstico.
+  `conferir:datas` reprovou com as antecedências trocadas; a suíte `datas`
+  (11 casos) prova do calendário ao Início. O gatilho da jornada por e-mail
+  fica para a peça 3, que mexe na jornada de qualquer jeito. Sem rota no
+  aviso: a lista de rotas é fechada e o toque cai no Início, onde o card
+  está. Ligar avisos ao salvar a primeira data também ficou de fora nesta
+  rodada (o convite tem momentos fixos); candidato para a próxima.
 
 ## 2026-09-13 · Engenharia: a foto das memórias (e do perfil) quebrada era o bucket
 - Relato do dono, com foto: o card "Primeira viagem" com o ícone de imagem

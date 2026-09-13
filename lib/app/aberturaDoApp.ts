@@ -18,6 +18,7 @@ import { sincronizarLembrete } from "./lembreteAssinatura";
 import { sincronizarLembreteQuiz } from "./lembreteQuiz";
 import { sincronizarLembreteCarroParado } from "./lembreteCarroParado";
 import { sincronizarLembreteRevisaoVencida } from "./lembreteRevisaoVencida";
+import { sincronizarLembreteDatas } from "./lembreteDatas";
 import { sincronizarLembreteTrilha } from "./lembreteTrilha";
 import { computeHealth } from "./health";
 import { ouvirToqueEmAviso, semearMarcaDeAgendamento } from "./notificacoes";
@@ -405,6 +406,24 @@ export function useLembretes(c: Content) {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [s.notifications, s.services, veiculo?.id, veiculo?.odometerKm, veiculo?.purchaseDate, c.revisions.vencidaAvisoTitulo]);
+
+  // As datas do carro (13/09/2026): IPVA, licenciamento, seguro e CNH avisam
+  // 30, 7 e 1 dia antes, às 9h. Refeitos a cada abertura e a cada mudança
+  // de data. Ver lib/app/lembreteDatas.ts.
+  useEffect(() => {
+    void sincronizarLembreteDatas({
+      quer: s.notifications,
+      veiculo,
+      textos: {
+        titulo: c.datasDoCarro.avisoTitulo,
+        tituloAmanha: c.datasDoCarro.avisoAmanha,
+        corpo: c.datasDoCarro.avisoCorpo,
+        nomes: c.datasDoCarro.tipos,
+        carro: veiculo ? carName(veiculo) : "",
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [s.notifications, veiculo?.id, JSON.stringify(veiculo?.datas ?? null), c.datasDoCarro.avisoTitulo]);
 
   // A trilha em ritmo: uma aula por dia, às 9h, a próxima não vista. Reagendada
   // a cada aula vista, como o quiz. Ver lib/app/lembreteTrilha.ts.

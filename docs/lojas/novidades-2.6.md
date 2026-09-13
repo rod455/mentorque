@@ -47,6 +47,22 @@ das lojas.
    - Roteiro de aparelho: no app das lojas, registrar dois abastecimentos e
      ver o custo por km no segundo; abrir o app no dia seguinte e NÃO
      receber a folha mensal de km (o abastecimento carimbou).
+3. **As datas do carro: IPVA, licenciamento, seguro e CNH** (13/09, peça 2
+   da rotina). No calendário de revisões, o card "Datas do carro" com as
+   quatro linhas; tocar informa a data e o valor opcional. No Início, a
+   data a 30 dias ou menos (ou vencida há até 60) como card; fora disso,
+   nada. No "Diagnóstico do carro", o sexto passo. Avisos locais 30, 7 e 1
+   dia antes, às 9h, ids fixos 8 a 19, refeitos a cada abertura e a cada
+   mudança de data; só do carro ativo. Sem rota no aviso de propósito (a
+   lista de rotas é fechada): o toque abre o Início, onde o card já espera.
+   - Onde mora: `lib/app/datasDoCarro.ts` (puro), `lib/app/lembreteDatas.ts`,
+     `components/app/DatasDoCarro.tsx`, o card em `Home.tsx`. Conferido por
+     `conferir:datas` (provado com as antecedências trocadas) e pela suíte
+     `conferir:navegador datas`. O gatilho da jornada por e-mail (30 dias
+     antes) entra com o resumo mensal, peça 3.
+   - Roteiro de aparelho: informar uma data para daqui a 8 dias com os avisos
+     ligados; amanhã às 9h chega "vence em 7 dias"; tocar abre o Início com
+     o card da data. Trocar a data: o aviso antigo some e o novo entra.
 
 ## Roteiro de aparelho, e ele é obrigatório
 

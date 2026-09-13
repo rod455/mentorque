@@ -9,6 +9,7 @@ import { carName, formatMonths, minPurchaseDate, monthsSinceDate } from "@/lib/a
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Card, DateField, Icon, inputCls, PremiumBadge, SectionTitle, Sheet, UpgradeBanner, useContent } from "../ui";
+import { DatasDoCarro } from "../DatasDoCarro";
 
 const statusTone: Record<string, string> = { overdue: "text-coral", soon: "text-amber", ok: "text-teal", unknown: "text-cream/50" };
 
@@ -258,6 +259,10 @@ export function RevisionsScreen() {
     <div>
       <AppHeader title={r.title} />
       {ContextCard}
+
+      {/* As datas do carro (13/09/2026): no calendário, não numa tela nova.
+          Quem abre o calendário vê o carro inteiro, mecânica e papelada. */}
+      <DatasDoCarro v={v} />
 
       {/* Sem nenhum serviço registrado, todo o plano é estimativa: convida a
           cadastrar a última revisão. Cadastrou uma, ele some por conta. */}

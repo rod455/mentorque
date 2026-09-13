@@ -514,6 +514,8 @@ export function getContent(locale: Locale) {
         motorGanho: T("A Biela responde com o manual certo", "Biela answers with the right manual"),
         foto: T("Uma foto do carro", "A photo of the car"),
         fotoGanho: T("A garagem com a sua cara", "Your garage, your look"),
+        datas: T("As datas do carro (IPVA, seguro, CNH)", "The car's dates (tax, insurance, license)"),
+        datasGanho: T("Aviso 30, 7 e 1 dia antes de vencer", "A heads-up 30, 7 and 1 day before"),
       },
       health: T("Saúde", "Health"),
       cards: {
@@ -799,6 +801,33 @@ export function getContent(locale: Locale) {
       outra: T("Analisar outro orçamento", "Analyze another quote"),
       aviso: T("A Biela explica e sugere perguntas; ela não sabe se o serviço é necessário sem ver o carro. As faixas são referência, não tabela. A foto não fica guardada.", "Biela explains and suggests questions; it can't tell if the work is needed without seeing the car. Ranges are a reference, not a price list. The photo is not stored."),
       tipo: { peca: T("peça", "part"), servico: T("serviço", "service"), mao_de_obra: T("mão de obra", "labor"), outro: T("outro", "other") },
+    },
+
+    // As datas do carro (13/09/2026, peça 2 da rotina): IPVA, licenciamento,
+    // seguro e CNH, no calendário de revisões, no Início a 30 dias, e como
+    // aviso 30, 7 e 1 dia antes. Onde entra e por quê: docs/agentes/propostas/
+    // rotina-do-carro.md.
+    datasDoCarro: {
+      titulo: T("Datas do carro", "Car dates"),
+      sub: T("Informe uma vez. O app avisa 30, 7 e 1 dia antes.", "Set them once. The app warns 30, 7 and 1 day before."),
+      tipos: { ipva: T("IPVA", "Vehicle tax"), licenciamento: T("Licenciamento", "Registration"), seguro: T("Seguro", "Insurance"), cnh: T("CNH do motorista", "Driver's license") },
+      informar: T("Informar", "Set"),
+      venceEm: T("vence em {n} dias", "due in {n} days"),
+      venceAmanha: T("vence amanhã", "due tomorrow"),
+      venceHoje: T("vence hoje", "due today"),
+      venceu: T("venceu há {n} dias", "overdue by {n} days"),
+      valor: T("Valor (opcional, R$)", "Amount (optional, R$)"),
+      valorPh: T("ex.: 1200", "e.g. 1200"),
+      data: T("Vence em", "Due on"),
+      salvar: T("Salvar", "Save"),
+      remover: T("Remover esta data", "Remove this date"),
+      salvo: T("Data guardada. Você recebe aviso 30, 7 e 1 dia antes, com os avisos ligados.", "Date saved. You'll get a heads-up 30, 7 and 1 day before, with notifications on."),
+      homeTitulo: T("{tipo} do {carro} {quando}", "{carro} {tipo} {quando}"),
+      homeSub: T("Toque para ver todas as datas", "Tap to see every date"),
+      homeSubValor: T("{valor} · toque para ver todas as datas", "{valor} · tap to see every date"),
+      avisoTitulo: T("{tipo} do {carro} vence em {n} dias", "{carro} {tipo} due in {n} days"),
+      avisoAmanha: T("{tipo} do {carro} vence amanhã", "{carro} {tipo} due tomorrow"),
+      avisoCorpo: T("Abra o Mentorque para ver o valor e as outras datas.", "Open Mentorque to see the amount and the other dates."),
     },
 
     // O caderno de gastos (13/09/2026): o abastecimento em três toques, com

@@ -29,7 +29,14 @@ export type Vehicle = {
   // 10/09/2026 para o aviso de "cadastrou e sumiu": carro sem esta data é de
   // antes e não recebe esse aviso.
   createdAt?: string;
+  // As datas do carro (13/09/2026, peça 2 da rotina do carro): IPVA,
+  // licenciamento, seguro e CNH, informadas uma vez, com o valor quando a
+  // pessoa souber. Viram avisos 30, 7 e 1 dia antes e entram no calendário.
+  datas?: Partial<Record<TipoDeData, DataDoCarro>>;
 };
+
+export type TipoDeData = "ipva" | "licenciamento" | "seguro" | "cnh";
+export type DataDoCarro = { em: string; valor?: number }; // em: ISO yyyy-mm-dd
 
 // Saved inputs of the Etanol × Gasolina calculator, so the user only fills
 // prices on a new station visit. Consumptions in km/l; prices in R$/l.

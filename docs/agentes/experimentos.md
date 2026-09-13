@@ -95,7 +95,7 @@ Regras:
 - Veredito: (aberto)
 
 ## [datas-do-carro] IPVA, licenciamento, seguro e CNH no calendário, com aviso
-- Estado: PROPOSTO (aprovada, entra depois do caderno de gastos)
+- Estado: ABERTO (web desde 13/09; lojas com a 2.6)
 - Tipo: mudanca-direta
 - Alvo no funil: avisos ligados (3 de 28 contas) e retorno no mês de um
   vencimento.
@@ -108,9 +108,10 @@ Regras:
   vencimento contra os outros meses · Duração: um ciclo de IPVA (janeiro
   a março) para a leitura forte; 4 semanas para a fraca
 - Aprovação: aprovada pelo dono em 2026-09-13
-- Início: (não começou) · Ler a partir de: 4 semanas depois do início
+- Início: 2026-09-13 na web; nas lojas, com a 2.6 · Ler a partir de:
+  2026-10-11
 - Antes: nenhuma data cadastrável; avisos ligados em 3 de 28 contas
-- Veredito: (não começou)
+- Veredito: (aberto)
 
 ## [resumo-mensal] O mês do carro fechado, por e-mail, push e no Início
 - Estado: PROPOSTO (aprovada, entra depois das datas)

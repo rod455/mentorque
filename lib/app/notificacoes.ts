@@ -73,6 +73,10 @@ export const AVISO = {
   // próprios, fixos, para serem canceladas e refeitas a cada abertura.
   quizDoDia2: 6,
   quizDoDia3: 7,
+  // As datas do carro (13/09/2026): quatro datas vezes três antecedências,
+  // ids 8 a 19, fixos por (tipo, antecedência). Ver lib/app/datasDoCarro.ts.
+  // O próximo id livre é 20.
+  datasDoCarro: 8,
 } as const;
 
 // Canal do Android. Sem canal declarado, o Android 8+ joga a notificação num

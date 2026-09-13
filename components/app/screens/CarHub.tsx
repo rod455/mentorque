@@ -46,6 +46,9 @@ export function CarHub() {
     { feito: !!(v.quiz && Object.keys(v.quiz).length), rotulo: d.quiz, ganho: d.quizGanho, ir: () => go({ name: "healthQuiz" }) },
     { feito: !!v.engine?.trim(), rotulo: d.motor, ganho: d.motorGanho, ir: () => go({ name: "addCar", editId: v.id }) },
     { feito: !!v.photo, rotulo: d.foto, ganho: d.fotoGanho, ir: () => setAvatarSheet(true) },
+    // As datas do carro (13/09/2026): o sexto passo, e o que mais dá motivo
+    // para ligar os avisos.
+    { feito: !!(v.datas && Object.keys(v.datas).length), rotulo: d.datas, ganho: d.datasGanho, ir: () => go({ name: "revisions" }) },
   ];
   const feitos = passos.filter((p) => p.feito).length;
 

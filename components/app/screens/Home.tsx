@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import { abastecimentosFor, activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { custoPorKm, gastoDaSemana } from "@/lib/app/combustivel";
 import { brlCentavos } from "./Abastecimento";
+import { dataParaOInicio } from "@/lib/app/datasDoCarro";
+import { quandoVence } from "../DatasDoCarro";
+import type { Vehicle } from "@/lib/app/types";
 import { personalScore, vehicleSituations, vehicleTraits } from "@/lib/app/traits";
 import type { ServiceRecord } from "@/lib/app/types";
 import { computeQuizHealth } from "@/lib/app/healthQuiz";
 import { computeStatus, MILESTONES } from "@/lib/app/gamification";
-import { formatBRL, isNewLesson, vehicleLabel } from "@/lib/app/content";
+import { carName, formatBRL, isNewLesson, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { openStorePage, useUpdateAvailable } from "@/lib/app/appUpdate";
 import { sellsInApp } from "@/lib/app/wrapper";
@@ -104,6 +107,30 @@ function CustoDoCarro({ vehicleId, nome }: { vehicleId: string; nome: string }) 
         </button>
       </div>
     </div>
+  );
+}
+
+function DataAVencer({ car }: { car: Vehicle }) {
+  const c = useContent();
+  const t = c.datasDoCarro;
+  const { root } = useNav();
+  const d = dataParaOInicio(car);
+  if (!d) return null;
+  const vencida = d.dias < 0;
+  return (
+    <button
+      onClick={() => root({ name: "revisions" })}
+      className={`mt-3 flex w-full items-center gap-3 rounded-2xl px-4 py-3.5 text-left ring-1 ${vencida ? "bg-red-500/10 ring-red-400/30" : "bg-amber/10 ring-amber/25"}`}
+      data-data-a-vencer
+    >
+      <span className="text-xl">📅</span>
+      <span className="min-w-0 flex-1">
+        <span className="block font-display text-[15px] font-semibold text-cream">
+          {t.homeTitulo.replace("{tipo}", t.tipos[d.tipo]).replace("{carro}", carName(car)).replace("{quando}", quandoVence(d.dias, t))}
+        </span>
+        <span className="block text-xs text-cream/60">{d.valor != null ? t.homeSubValor.replace("{valor}", formatBRL(d.valor)) : t.homeSub}</span>
+      </span>
+    </button>
   );
 }
 
@@ -328,6 +355,10 @@ export function HomeScreen() {
           e a que alimenta o resto (o km). Onde entra e por quê:
           docs/agentes/propostas/rotina-do-carro.md. */}
       {car && <CustoDoCarro vehicleId={car.id} nome={vehicleLabel(car)} />}
+
+      {/* A data do carro a 30 dias ou menos (ou já vencida). Fora dessa
+          janela, nada: card permanente de data distante é ruído. */}
+      {car && <DataAVencer car={car} />}
 
       {/* Fixados — conteúdos que o usuário usa com frequência (📌 nas aulas);
           setinhas reordenam (o próprio usuário escolhe o que fica na frente) */}
