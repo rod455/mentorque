@@ -44,6 +44,10 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   de Brasília com 200. A jornada está viva sem mão humana; o resumo do dia
   foi para o FEEDBACK_TO. Zero em outras chaves é legítimo: quem recebeu em
   12/09 só volta a caber a partir de 15/09.
+- Correção do dono: a 2.4 saiu com build 63, não 74. `/api/app/latest`
+  ficou um dia em 74/74, e nesse dia todo aparelho na 2.4 viu o banner de
+  versão nova apontando para nada. Agora 63/63. A lição já estava escrita
+  no próprio arquivo: o número sai da loja, não da memória.
 
 ## 2026-09-12 · Engenharia: bateria completa da 2.5 antes do Codemagic
 - O dono perguntou "está tudo certo para subirmos?". Regra das duas

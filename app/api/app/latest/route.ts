@@ -27,9 +27,14 @@ import { NextResponse } from "next/server";
 // responde de verdade é `versionCode deste envio: N`, impressa pelo passo
 // "Compilar .aab" no log do Codemagic.
 const LATEST = {
-  // CONFIRMADO pelo dono em 12/09/2026: a 2.4 saiu com versionCode 74 nas
-  // duas lojas ("ambos são 74, eles estão sincronizados"). Antes: 1.7 = 55.
-  android: 74, // 2.4 em produção na Play, aprovada em 12/09
+  // A 2.4 saiu com build 63 nas duas lojas. CORRIGIDO pelo dono em
+  // 13/09/2026: em 12/09 ele tinha dito 74 ("ambos são 74"), e por um dia o
+  // banner de versão nova acendeu para todo mundo na 2.4, apontando para um
+  // build que a loja não tinha (é o caso "número ALTO demais" descrito
+  // abaixo, acontecendo). O número que vale é o da loja, em Produção,
+  // "Códigos de versão", e não o que alguém lembra de cabeça.
+  // Antes: 1.7 = 55.
+  android: 63, // 2.4 em produção na Play, aprovada em 12/09
   // NÃO ATUALIZADO DE PROPÓSITO, e a assimetria é a razão.
   //
   // O dono confirmou a 1.7 na PLAY. Sobre a App Store não houve confirmação, e
@@ -46,7 +51,7 @@ const LATEST = {
   // Para atualizar: App Store Connect, na versão em "Pronta para venda", o
   // número de build (CFBundleVersion). Não é o "Index" da tela do Codemagic,
   // que já causou dois falsos alarmes aqui.
-  ios: 74, // 2.4 em produção na App Store, aprovada em 12/09 (antes: 1.6 = 52)
+  ios: 63, // 2.4 em produção na App Store, aprovada em 12/09 (antes: 1.6 = 52)
 };
 
 export function GET() {
