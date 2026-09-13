@@ -1,6 +1,6 @@
 # Retrato diario da operacao Mentorque
 
-Gerado pelo Analista de Dados (n8n) em 2026-09-12T09:00:20.562Z.
+Gerado pelo Analista de Dados (n8n) em 2026-09-13T09:00:20.110Z.
 NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 
 ## MARKETING (gente chegando)
