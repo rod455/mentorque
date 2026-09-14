@@ -79,7 +79,7 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 | A campanha do Google traz cadastro de verdade? | **Traz.** Na semana de 31/08 a 06/09, 7 das 8 contas novas carregam `google / lancamento`. A atribuição só existe a partir de 04/09, porque a captura de etiqueta subiu para todas as páginas em 03/09. Custo por conta no pedaço medido: R$ 14,71. | 07/09, Diretor |
 | Quantas pessoas o app teve de verdade numa semana? | Contar por `anon_id` NÃO responde isso (é armazenamento, infla a cada instalação). A régua é `auth.users`. Cruzar sempre com a porta de entrada: cliques pagos > anon_id > contas. | 01/09 e 07/09 |
 | Por que o mesmo carro vira dois? | Porque a identidade do carro é o `id`, e ele nasce no APARELHO: dois cadastros nunca colidem, e toda a dedup do app é por id. Uma causa para os três caminhos. As telas passaram a avisar em 09/09; em 10/09 a folha de importação passou a PERGUNTAR o que fazer com o carro repetido (juntar num só, só o da conta, só o deste aparelho), por decisão do dono. Vai na 2.4. | 10/09, Engenharia |
-| Por que o retrato diário de 12, 13 e 14/09 diz 0 assinaturas e funil vazio? | Porque o `/api/dados` respondeu 504 (estourou o teto de 15 segundos) às 6h nesses três dias e o Analista gravou o erro como se fosse dado. Num dia normal a rota leva uns 8 segundos: estava colada no teto. Os três retratos são inválidos; a tabela `subscriptions` continua com os mesmos assinantes. Em 14/09 o teto foi a 60 s, a rota passou a devolver os tempos por consulta (`tempos`) e o Analista passou a falhar em vez de gravar zeros. | 14/09, Engenharia |
+| Por que o retrato diário de 12, 13 e 14/09 diz 0 assinaturas, "série de uso vazia" e funil sem dados? | Porque a camada de API da Supabase (PostgREST) respondia 504 a parte das 12 consultas que o `/api/dados` disparava de uma vez (fila de conexões pequena), a rota seguia com aquelas seções vazias e, quando a soma passava de 15 s, a Vercel derrubava a função inteira. O Postgres em si responde em milissegundos. Os três retratos são inválidos; `subscriptions` continua com os mesmos assinantes. Conserto de 14/09: 3 consultas por vez com nova tentativa em 504, campo `falhas` no JSON, teto de 60 s, e o Analista falha em vez de gravar zeros. E `estadoDaBase` era nulo em TODOS os retratos desde 01/09 por falta de permissão em `auth.users` (migração `estado_da_base_como_dono`). | 14/09, Engenharia |
 | Por que a foto do momento (ou do perfil) aparece quebrada? | O bucket `Avatars` do Storage estava privado e o app grava a URL pública: 400 em toda foto enviada logado. Ligado em 13/09 (`avatars_bucket_publico`); o retrato está em `supabase/storage_avatars.sql`. Se voltar a acontecer, conferir `select public from storage.buckets where id = 'Avatars'` antes de qualquer outra coisa. | 13/09, Engenharia |
 | O retrato está vazio ou zerado, é queda de verdade? | **Conferir o JSON antes de acreditar.** Em 12, 13 e 14/09 o retrato saiu com tudo zerado porque `/api/dados` estourou o teto de 15s e o arquivo guardou `"error": {"code": "504"}` no lugar dos dados. Zero no retrato pode ser ausência de resposta, não medição. O jeito rápido: `git show <sha>:docs/dados/retrato.md \| grep '"error"'`. | 14/09, Diretor |
 | Quais manuais faltam para a Biela? | O primeiro lote subiu em 06/09: 112 manuais, 34.609 trechos, e os DEZ carros mais comuns do Brasil passaram a ter manual (era 3 de 10). Gol 2016 e Ka 2025, de usuários nossos, saíram de zero. Faltam Corsa/Classic e as marcas vazias (Suzuki, Mercedes-Benz, e o EcoSport). | 06/09, `docs/manuais-a-subir.md` |
@@ -127,11 +127,28 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   alguma coisa do lado do banco nessas horas (banco acordando depois da
   madrugada, manutenção da Supabase por volta das 6h). Suspeita, não
   conclusão.
-- O que a conferência não alcança: a hora lenta é às 6h. Só o retrato de
-  amanhã diz se 60 s bastam e mostra os `tempos` daquela hora. Se
-  apontar uma consulta, o conserto é índice ou materialização, com
-  EXPLAIN antes; se todas vierem lentas juntas, é o banco, e a resposta
-  é aquecer antes (uma chamada às 5h55) ou aceitar o teto de 60 s.
+- ~~O que a conferência não alcança: a hora lenta é às 6h.~~ Com o Supabase
+  reconectado pelo dono, a causa apareceu nos logs, e não era hora nem
+  banco. **As consultas levam milissegundos no Postgres** (EXPLAIN: a
+  view mais pesada, 14 ms; a tabela de eventos tem 1.079 linhas). Quem
+  falha é a camada de API (PostgREST): o log de borda mostra `504` para 8
+  das 12 consultas disparadas de uma vez às 6h, 4 às 7h30, 6 às 11h17, e a
+  rota SEGUIA com aquelas seções vazias, sem avisar. É o "Timed out
+  acquiring connection from connection pool" do PostgREST: 12 pedidos
+  simultâneos numa fila pequena. Os retratos de 12 e 13/09 com "série de
+  uso vazia" e "funil sem dados" eram isso, não ausência de uso.
+- Segundo defeito, deste desde 01/09: `estado_da_base` e
+  `contas_criadas_desde` liam `auth.users` como service_role, que não tem
+  SELECT nela, e respondiam 403 em toda chamada ("permission denied for
+  table users" no log do Postgres, duas vezes por rodada). `estadoDaBase`
+  foi nulo em TODOS os retratos desde que nasceu, e o cadastro do funil
+  caía no evento, que subconta. Migração `estado_da_base_como_dono`: a view
+  sem security_invoker e a função SECURITY DEFINER, as duas só para o
+  service_role, devolvendo contagens.
+- Conserto na rota: no máximo 3 consultas por vez, até 3 tentativas com
+  pausa quando a API responde 503/504, e o campo `falhas` no JSON com o
+  erro de cada consulta (seção com falha é buraco, não zero). Terceira
+  medição depois disso: ver abaixo.
 
 ## 2026-09-13 · Engenharia e CRO: a rotina do carro, peça 1 no ar
 - O dono perguntou como o app se sai nos três critérios (problema

@@ -25,8 +25,14 @@
 -- A regra de o que pode ser dividido por o que mora em lib/funilCorreto.ts, é
 -- pura, e `npm run conferir:funil` prova que ela recusa o caso real.
 
+-- 14/09/2026 (migração estado_da_base_como_dono): security_invoker DESLIGADO.
+-- Com ele ligado, a view rodava como service_role, que não lê auth.users, e
+-- respondia 403 desde 01/09 ("permission denied for table users" no log do
+-- Postgres); o retrato publicava estadoDaBase nulo. Roda como o dono
+-- (postgres); só o service_role tem GRANT, e ela devolve contagens. A função
+-- contas_criadas_desde(date) virou SECURITY DEFINER pelo mesmo motivo.
 create or replace view public.estado_da_base
-  with (security_invoker = on) as
+  with (security_invoker = off) as
 select
   (select count(*) from auth.users)                                   as contas,
   count(*)                                                            as contas_com_estado,
