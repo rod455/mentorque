@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { chaveDadosOk, negada } from "@/lib/chaveDados";
+import { comTentativas, transitorio } from "@/lib/transitorio";
 
 export const runtime = "nodejs";
 // Teto de duracao: funcao pendurada segura memoria provisionada (e cota).
@@ -96,7 +97,14 @@ export async function POST(req: Request) {
 
   const extra = utm || exp ? { ...(utm ? { utm } : {}), ...(exp ? { exp } : {}) } : null;
 
-  const { error } = await admin.from("funil_eventos").insert({
+  // TENTA DE NOVO quando a ponte engasga (14/09/2026). Seis eventos de seis
+  // pessoas foram perdidos entre 12 e 14/09 com "Gateway Timeout" e "Bad
+  // Gateway": a requisicao chegava aqui e morria no caminho do banco. O
+  // cliente e fire-and-forget e marca `umaVezPorAparelho` ANTES de enviar,
+  // entao o evento perdido nao volta nunca mais naquele aparelho. Recusa do
+  // banco (chave repetida, evento fora da lista) NAO tenta de novo: a regra
+  // de quem e quem esta em lib/transitorio.ts, conferida por conferir:funil.
+  const linha = {
     evento,
     anon_id: corta(b?.anonId, 64),
     user_id: userId,
@@ -104,7 +112,9 @@ export async function POST(req: Request) {
     versao: corta(b?.versao, 16),
     origem: corta(b?.origem, 32),
     extra,
-  });
+  };
+  const resposta = await comTentativas(() => admin.from("funil_eventos").insert(linha));
+  const { error } = resposta;
   // O erro do insert era descartado e a rota respondia ok do mesmo jeito. Um
   // evento recusado pelo banco (a restrição `evento in (...)` é o caso real:
   // a lista daqui e a de lá são mantidas à mão em arquivos diferentes) some
@@ -112,7 +122,10 @@ export async function POST(req: Request) {
   // pessoas. O cliente é fire-and-forget e ignora a resposta, então isto não
   // muda nada para quem usa o app: serve para a falha aparecer no log.
   if (error) {
-    console.error("[funil] insert recusado", { evento, motivo: error.message });
+    // `passageiro: true` quer dizer que as tres tentativas foram embora na
+    // ponte; `false` e recusa do banco, e ai o conserto e outro (lista de
+    // eventos, chave repetida).
+    console.error("[funil] insert recusado", { evento, motivo: error.message, passageiro: transitorio(resposta) });
     return NextResponse.json({ error: "insert_falhou" }, { status: 500 });
   }
   return NextResponse.json({ ok: true });

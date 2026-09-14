@@ -9,6 +9,7 @@ import {
   type EventoFunil,
 } from "./funilCorreto";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
+import { comTentativas, transitorio } from "@/lib/transitorio";
 
 // O agregado da operação num lugar só: alimenta a rota /api/dados (que o
 // Analista de Dados coleta todo dia) e o painel /painel (que o Rodrigo abre
@@ -37,18 +38,14 @@ export async function coletarDadosOperacao() {
   const tempos: Record<string, number> = {};
   const falhas: Record<string, string> = {};
   const POR_VEZ = 3;
-  const TENTATIVAS = 3;
   type Resposta = { data: unknown; error: { message?: string; code?: string } | null; status?: number };
-  const passageiro = (r: Resposta) => !!r.error && (r.status === 503 || r.status === 504 || r.error.code === "PGRST003" || /timed out|acquiring connection/i.test(r.error.message ?? ""));
+  // A regra de "vale tentar de novo" mora em lib/transitorio.ts e vale para o
+  // /api/funil tambem: uma ponte, uma regra.
   const medir = async <T extends Resposta>(nome: string, fabrica: () => PromiseLike<T>): Promise<T> => {
     const inicio = Date.now();
-    let r = await fabrica();
-    for (let tentativa = 2; tentativa <= TENTATIVAS && passageiro(r); tentativa++) {
-      await new Promise((ok) => setTimeout(ok, 300 * tentativa));
-      r = await fabrica();
-    }
+    const r = await comTentativas(fabrica, { pausaMs: 300 });
     tempos[nome] = Date.now() - inicio;
-    if (r.error) falhas[nome] = `${r.status ?? ""} ${r.error.code ?? ""} ${r.error.message ?? ""}`.trim();
+    if (r.error) falhas[nome] = `${r.status ?? ""} ${r.error.code ?? ""} ${r.error.message ?? ""}${transitorio(r) ? " (passageiro, tentou 3x)" : ""}`.trim();
     return r;
   };
   // Poucas por vez: é a pilha da API que engasga, não o banco.

@@ -34,6 +34,7 @@ import {
 } from "../lib/funilCorreto.ts";
 import { readFileSync } from "node:fs";
 import { varianteDe } from "../lib/app/sorteio.ts";
+import { comTentativas, transitorio } from "../lib/transitorio.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -407,6 +408,56 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
     const s = sorteio(id).filter((v) => v === "b").length / anons.length;
     conferir(`o experimento "${id}" divide perto de 50/50`, s > 0.45 && s < 0.55, `b = ${(s * 100).toFixed(1)}%`);
   }
+}
+
+// ── 6. o evento não pode se perder na ponte (14/09/2026) ────────────────────
+//
+// O Diretor achou seis `comecou_onboarding` de seis pessoas recusados entre
+// 12 e 14/09 com "Gateway Timeout" e "Bad Gateway". O cliente é
+// fire-and-forget e marca o aparelho ANTES de enviar: o evento perdido não
+// volta. O que esta parte protege é a LINHA entre engasgo da ponte (tenta de
+// novo) e recusa do banco (não tenta, seria repetir o erro três vezes).
+{
+  const erro = (o: { message?: string; code?: string; status?: number }) =>
+    ({ error: { message: o.message, code: o.code }, status: o.status });
+
+  // Os dois casos REAIS dos registros da Vercel, escritos como vieram.
+  conferir('"Gateway Timeout" é passageiro (caso real de 12 e 13/09)', transitorio(erro({ message: "Gateway Timeout" })));
+  conferir('"Bad Gateway" é passageiro (caso real de 14/09)', transitorio(erro({ message: "Bad Gateway" })));
+  conferir("fila de conexão cheia é passageira", transitorio(erro({ code: "PGRST003", message: "Timed out acquiring connection from connection pool" })));
+  conferir("504 e 502 são passageiros", transitorio(erro({ status: 504, message: "x" })) && transitorio(erro({ status: 502, message: "x" })));
+  conferir("conexão caída é passageira", transitorio(erro({ message: "fetch failed" })));
+
+  // E o outro lado: recusa do banco NÃO pode virar três tentativas.
+  conferir("chave repetida NÃO é passageira (a dedup funcionando)", !transitorio(erro({ code: "23505", message: 'duplicate key value violates unique constraint "funil_eventos_cadastro_unico"' })));
+  conferir("evento fora da lista NÃO é passageiro", !transitorio(erro({ code: "23514", message: 'new row for relation "funil_eventos" violates check constraint "funil_eventos_evento_check"' })));
+  conferir("sem erro nenhum não é passageiro", !transitorio({ error: null, status: 201 }) && !transitorio(null));
+
+  // A repetição em si: quantas vezes chamou, e parou quando devia.
+  const roda = async (respostas: { error: { message?: string; code?: string } | null; status?: number }[]) => {
+    let chamadas = 0;
+    const r = await comTentativas(() => { const i = Math.min(chamadas++, respostas.length - 1); return Promise.resolve(respostas[i]); }, { dormir: async () => undefined });
+    return { chamadas, r };
+  };
+  const ok = { error: null, status: 201 };
+  const engasgo = { error: { message: "Gateway Timeout" }, status: 504 };
+  const recusa = { error: { code: "23505", message: "duplicate key" }, status: 409 };
+
+  const primeira = await roda([ok]);
+  conferir("passando de primeira, chama uma vez só", primeira.chamadas === 1, `chamou ${primeira.chamadas}`);
+  const naSegunda = await roda([engasgo, ok]);
+  conferir("engasgou e passou na segunda: duas chamadas e sem erro", naSegunda.chamadas === 2 && !naSegunda.r.error, `chamou ${naSegunda.chamadas}`);
+  const semPassar = await roda([engasgo]);
+  conferir("engasgo sempre: para em três tentativas e devolve o erro", semPassar.chamadas === 3 && !!semPassar.r.error, `chamou ${semPassar.chamadas}`);
+  const recusou = await roda([recusa]);
+  conferir("recusa do banco: uma chamada só, sem insistir", recusou.chamadas === 1, `chamou ${recusou.chamadas}`);
+
+  // As ligações: a rota usa a regra, e usa a FÁBRICA (promessa já começada
+  // não dá para repetir).
+  const rota = readFileSync(new URL("../app/api/funil/route.ts", import.meta.url), "utf8");
+  conferir("a rota do funil tenta de novo o insert", /comTentativas\(\(\) => admin\.from\("funil_eventos"\)\.insert\(linha\)\)/.test(rota));
+  conferir("e o registro diz se foi engasgo ou recusa", /passageiro: transitorio\(resposta\)/.test(rota));
+  conferir("o /api/dados usa a MESMA regra, sem cópia local", /comTentativas\(fabrica/.test(readFileSync(new URL("../lib/operacao.ts", import.meta.url), "utf8")));
 }
 
 if (falhas) {
