@@ -74,7 +74,26 @@ direto, como o do e-mail de lançamento.
 
 ## Para onde os links apontam, e por que NÃO é o /app
 
-Todos apontam para a home, e isso é decisão medida, não gosto.
+~~Todos apontam para a home~~, e isso é decisão medida, não gosto.
+
+**CORRIGIDO EM 14/09/2026: o anúncio pago NUNCA voltou para a home.** A
+decisão abaixo foi escrita em 03/09 e ficou só aqui; o console do Google Ads
+continuou com a URL final no `/app`. A prova está no banco, nos últimos 7
+dias: dos 144 `comecou_onboarding` da web, **138 carregam
+`google / cpc / lancamento`**, e o site não tem nenhum link para o `/app`
+(`conferir:caminho`), então eles só podem ter chegado lá pelo próprio
+anúncio. O desfecho desses 138: 31 terminaram o onboarding, 8 cadastraram
+carro e 7 criaram conta. Cinco por cento.
+
+Isto também explica por que `comecou_onboarding` na web NÃO caiu depois de
+12/09, quando os links do site saíram: tirar o link de dentro de casa não
+muda para onde o anúncio aponta. Eram 20 por dia antes e continuaram 20 por
+dia depois.
+
+A lição, e ela vale para toda decisão de campanha: **decisão que mora num
+console de terceiro não está feita quando é escrita aqui.** Ou ela vira
+linha em `docs/agentes/acoes-do-dono.md`, com a idade contando, ou ela
+envelhece calada enquanto o dinheiro continua indo para o lugar errado.
 
 Em 03/09/2026 o anúncio de busca passou a apontar para `/app` com etiqueta, e o
 resultado do primeiro dia foi: **10 aparelhos começaram o onboarding na web e
