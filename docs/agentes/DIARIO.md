@@ -147,8 +147,13 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   service_role, devolvendo contagens.
 - Conserto na rota: no máximo 3 consultas por vez, até 3 tentativas com
   pausa quando a API responde 503/504, e o campo `falhas` no JSON com o
-  erro de cada consulta (seção com falha é buraco, não zero). Terceira
-  medição depois disso: ver abaixo.
+  erro de cada consulta (seção com falha é buraco, não zero). Medido
+  depois do deploy (21:55 UTC, primeira chamada da versão nova): 2,0 s de
+  ponta a ponta, 1,2 s dentro da rota, `falhas` vazio, as 12 consultas
+  inteiras, `estadoDaBase` com 30 contas (16 com carro, 4 com serviço, 9
+  ativas em 7 dias) e o cadastro do funil em 22 pela `auth.users`, contra
+  20 pelo evento. Amanhã às 6h15 a conferência agendada lê o retrato das
+  6h e fecha o caso, ou reabre.
 
 ## 2026-09-13 · Engenharia e CRO: a rotina do carro, peça 1 no ar
 - O dono perguntou como o app se sai nos três critérios (problema
