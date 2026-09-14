@@ -84,6 +84,14 @@ apareceram, e nenhum dos dois era chave.
    padrão: erros disparando, uso caindo forte, cancelamentos, crash acima
    de 2%, deploy quebrado, fonte muda há 2+ dias ou coleta parada. Dia
    normal é silêncio. Testado em 2026-08-23 (dia normal, nenhum e-mail).
+   Desde 14/09/2026 ele confere o ENTREGÁVEL e não só a porta (nó "Busca o
+   retrato", que lê o arquivo cru no GitHub): se o retrato de hoje não foi
+   gerado, ou se ele tem `"error"` dentro do JSON bruto, o aviso sai. Mais
+   duas leituras novas do /api/dados: `falhas` (quais consultas voltaram
+   com buraco) e `tempos.total` acima de 10 s (a rota ficando lenta ANTES
+   de virar 504). Provado nos dois sentidos em 14/09: apontado para o
+   retrato íntegro de 11/09 acusou só a idade, e no de hoje acusou só o
+   erro.
 
 ## Downloads reais das lojas (metade construída)
 

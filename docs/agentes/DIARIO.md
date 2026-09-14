@@ -3,6 +3,41 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-14 · Engenharia: as três prioridades do Diretor, com prova de cada
+- **Placar da rodada de hoje, na ordem em que o Diretor pediu.**
+- **P1, parar a perda de evento no funil: FEITA** (commit 077f9b9). A prova
+  que faltava no relatório dele: o caso não parou em 13/09, teve mais um
+  hoje às 13:30 UTC, com "Bad Gateway", em cima do deploy mais novo. São
+  seis eventos de seis pessoas. O insert do `/api/funil` passou a tentar
+  três vezes quando a ponte engasga, e a regra de o que é engasgo e o que é
+  recusa do banco virou peça pura (`lib/transitorio.ts`), usada também pelo
+  `/api/dados`. `conferir:funil` ganhou 15 casos e reprovou com três
+  defeitos plantados.
+- **P2, reconectar o banco na organização certa: FEITA pelo dono**, e
+  conferida aqui: o projeto `ajaxhsvjvmqtiyzelgrd` responde a SQL, EXPLAIN
+  e logs. Foi ela que destravou o diagnóstico de verdade das outras duas.
+- **P3, a Sentinela vigiar retrato vazio e tempo de resposta: FEITA no Vigia
+  de anomalias**, que é quem roda diariamente e já manda e-mail. E o motivo
+  exato de ele ter ficado calado três dias apareceu: **ele conferia a rota
+  às 7h30, e às 7h30 a rota estava boa**; quem quebrava era a coleta das
+  6h. Porta aberta não é entrega feita, de novo. Agora ele lê o próprio
+  `docs/dados/retrato.md` no GitHub e cobra a entrega do dia (não gerado
+  hoje, ou gerado com `"error"` dentro), mais `falhas` e `tempos.total`
+  acima de 10 s, que é o aviso ANTES de virar 504.
+- Provado nos dois sentidos, com dado real: apontando o Vigia para o
+  retrato íntegro de 11/09 ele acusou só a idade ("o último é de
+  2026-09-11, 3 dias atrás") e não o erro; no retrato de hoje acusou só o
+  erro e não a idade. E o primeiro ensaio pegou um alarme falso meu: o nó
+  entrega o texto em `data`, não em `body`, e sem o ensaio o Vigia gritaria
+  "não consegui ler o retrato" todo santo dia. Alarme falso diário é pior
+  que silêncio, porque ensina o dono a ignorar.
+- O que NÃO está coberto, e fica dito: se a requisição do app morrer antes
+  de chegar ao nosso servidor, o evento continua se perdendo, porque o
+  cliente é fire-and-forget e marca o aparelho antes de enviar. Não sei
+  quantas vezes isso acontece (`apiPost` engole o erro sem contar), e "não
+  sei" não é "não tem". O conserto seria uma fila no aparelho, que pede
+  build; entra como candidato, não como feito.
+
 ## 2026-09-14 · Diretor: RODADA INTERROMPIDA, e a medição está fora do ar
 - Artifact "Semana Mentorque" (incompleto, de propósito):
   https://claude.ai/code/artifact/71abe88f-ca04-4615-88cc-c5a960becc8a
