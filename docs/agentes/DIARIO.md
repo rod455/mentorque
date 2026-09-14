@@ -3,6 +3,50 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-14 · Engenharia: a 2.6 preparada, e a 2.5 já tinha viajado sem ninguém anotar
+- O dono perguntou se estava tudo certo para subir a versão nova. A primeira
+  coisa que a pergunta encontrou não foi um defeito de código, foi uma
+  **mentira da conferência**: `conferir:versoes` respondia "2.5, ainda não
+  publicada", e a 2.5 estava na Apple em WAITING_FOR_REVIEW desde 13/09
+  11:20 (Pacífico) e já rodando em Android (61 eventos de `2.5.0` entre 13
+  e 14/09). A prova veio do banco (`metricas_diarias`, fonte
+  `app_store_connect`, e `funil_eventos`), não da lembrança de ninguém.
+  Um build gerado hoje teria morrido no fim do caminho, com a Apple
+  recusando o nome repetido. É exatamente o estrago da 1.8, e a linha da
+  ação do dono que mandava anotar estava aberta desde 07/09.
+- **"2.5" entrou na lista `JA_PUBLICADAS`** com a prova junto, e a linha
+  saiu de `acoes-do-dono.md` (11 na lista agora). A conferência foi provada
+  nos dois sentidos: com a versão em 2.5 ela REPROVOU ("JÁ FOI PUBLICADA"),
+  e depois de subir para 2.6 ela aprovou.
+- **A versão subiu para 2.6 nos três lugares.** O motivo não é escolha, é
+  aritmética: 28 arquivos de `lib/app` e `components/app` mudaram depois de
+  as notas da 2.5 serem escritas (orçamento por foto, caderno de gastos,
+  datas do carro, resumo do mês, modo motorista, calendário da placa).
+  Mandar isso chamando de 2.5 cegaria `funil_eventos.versao` e
+  `app_erros.versao` para a diferença entre os dois binários, que é o mesmo
+  estrago da 1.8 em outra roupa.
+- **Bateria completa, porque é release de loja** (a regra das duas
+  velocidades manda): cadeia `conferir` inteira verde de ponta a ponta, 18
+  suítes de navegador em 828 s sem reprovação, e build local limpo. A
+  bateria pegou UMA regressão minha de hoje: `conferir:gravacao` reprovou
+  na rota do funil, porque o `{ error }` tinha saído de perto do `insert`
+  quando entrou o tentar de novo. Consertei o código em vez de afrouxar a
+  regra, e a conferência do funil foi reapertada junto.
+- Nada nativo mudou desde o build da 2.5: a última mexida em `ios/` foi o
+  AppDelegate de 12/09, que já viajou. Então a 2.6 não acrescenta exigência
+  de plugin, mas HERDA a que a 2.5 nunca cumpriu: o token de push do
+  iPhone continua sem nenhum aparelho para provar. Isso está escrito no
+  roteiro da 2.6, com a consulta ao banco que responde.
+- **O que a conferência NÃO alcança, e por isso não digo que está tudo
+  certo:** a câmera dentro do WebView, o token de push do iPhone, os avisos
+  locais das datas, e as duas variantes dos testes A/B no app das lojas.
+  Sobre o binário da 2.6: sem sinal ainda, porque ele nem existe.
+- Decisão que é do dono: na Apple não cabem duas versões na fila. Ou espera
+  a 2.5 ser aprovada, ou retira a 2.5 e manda a 2.6, que carrega tudo o que
+  a 2.5 carrega. E fica a pergunta de se a 2.5 está na faixa de produção da
+  Play, porque se estiver, o `/api/app/latest` está apontando para a 2.4 e
+  ninguém está sendo avisado da versão nova.
+
 ## 2026-09-14 · Engenharia: as três prioridades do Diretor, com prova de cada
 - **Placar da rodada de hoje, na ordem em que o Diretor pediu.**
 - **P1, parar a perda de evento no funil: FEITA** (commit 077f9b9). A prova

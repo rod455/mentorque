@@ -113,8 +113,7 @@ export async function POST(req: Request) {
     origem: corta(b?.origem, 32),
     extra,
   };
-  const resposta = await comTentativas(() => admin.from("funil_eventos").insert(linha));
-  const { error } = resposta;
+  const { error, status } = await comTentativas(() => admin.from("funil_eventos").insert(linha));
   // O erro do insert era descartado e a rota respondia ok do mesmo jeito. Um
   // evento recusado pelo banco (a restrição `evento in (...)` é o caso real:
   // a lista daqui e a de lá são mantidas à mão em arquivos diferentes) some
@@ -125,7 +124,7 @@ export async function POST(req: Request) {
     // `passageiro: true` quer dizer que as tres tentativas foram embora na
     // ponte; `false` e recusa do banco, e ai o conserto e outro (lista de
     // eventos, chave repetida).
-    console.error("[funil] insert recusado", { evento, motivo: error.message, passageiro: transitorio(resposta) });
+    console.error("[funil] insert recusado", { evento, motivo: error.message, passageiro: transitorio({ error, status }) });
     return NextResponse.json({ error: "insert_falhou" }, { status: 500 });
   }
   return NextResponse.json({ ok: true });

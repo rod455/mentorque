@@ -455,8 +455,8 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
   // As ligações: a rota usa a regra, e usa a FÁBRICA (promessa já começada
   // não dá para repetir).
   const rota = readFileSync(new URL("../app/api/funil/route.ts", import.meta.url), "utf8");
-  conferir("a rota do funil tenta de novo o insert", /comTentativas\(\(\) => admin\.from\("funil_eventos"\)\.insert\(linha\)\)/.test(rota));
-  conferir("e o registro diz se foi engasgo ou recusa", /passageiro: transitorio\(resposta\)/.test(rota));
+  conferir("a rota do funil tenta de novo o insert", /const \{ error, status \} = await comTentativas\(\(\) => admin\.from\("funil_eventos"\)\.insert\(linha\)\)/.test(rota));
+  conferir("e o registro diz se foi engasgo ou recusa", /passageiro: transitorio\(\{ error, status \}\)/.test(rota));
   conferir("o /api/dados usa a MESMA regra, sem cópia local", /comTentativas\(fabrica/.test(readFileSync(new URL("../lib/operacao.ts", import.meta.url), "utf8")));
 }
 

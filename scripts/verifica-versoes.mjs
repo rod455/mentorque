@@ -88,6 +88,20 @@ const JA_PUBLICADAS = [
   // repetido, o onboarding do Android no carro e o ícone do aviso. Aprovada
   // na Play em 12/09; Apple em análise no mesmo dia. Acrescentada em 12/09.
   "2.4",
+  // Gerada pelo dono no Codemagic em 13/09/2026 e ACRESCENTADA AQUI SÓ EM
+  // 14/09, com um dia de atraso. A prova de que ela viajou não veio de
+  // ninguém avisar, veio do banco: `metricas_diarias` de 14/09, fonte
+  // `app_store_connect`, traz a 2.5 em WAITING_FOR_REVIEW criada em
+  // 13/09 11:20 (hora do Pacífico), e `funil_eventos` tem 61 eventos de
+  // `2.5.0` no Android entre 13 e 14/09, mais 6 no iPhone em 13/09.
+  //
+  // O PREÇO DO DIA DE ATRASO, e é o motivo desta nota existir: durante ele
+  // esta conferência respondia "2.5, ainda não publicada", que é exatamente
+  // a luz verde que ela existe para não dar. Um build gerado nesse dia teria
+  // morrido no fim do caminho, com a Apple recusando o nome repetido.
+  // A regra continua a mesma desde a 1.8: acrescentar NA HORA do envio, não
+  // na hora da aprovação.
+  "2.5",
 ];
 
 import { readFileSync } from "node:fs";

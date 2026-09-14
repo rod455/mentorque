@@ -1,8 +1,16 @@
 # Novidades da versão 2.6
 
-Aberta em 13/09/2026, com a 2.5 pronta para o Codemagic. Tudo o que entra
-aqui já roda na web pelo deploy da Vercel; o binário só importa para o app
-das lojas.
+Aberta em 13/09/2026. Tudo o que entra aqui já roda na web pelo deploy da
+Vercel; o binário só importa para o app das lojas.
+
+**Onde a 2.5 está (conferido no banco em 14/09/2026, não na lembrança):** o
+dono gerou a 2.5 no Codemagic em 13/09. Na Apple ela está em
+WAITING_FOR_REVIEW desde 13/09 11:20 (hora do Pacífico), e no Android já
+roda em aparelhos (61 eventos de `2.5.0` entre 13 e 14/09). Ou seja: **a 2.6
+é a próxima, e ela carrega tudo o que a 2.5 carrega, mais o que está aqui.**
+Na Apple não dá para ter duas versões em análise ao mesmo tempo, então
+mandar a 2.6 significa esperar a 2.5 ser aprovada ou retirar a 2.5 da fila.
+Decisão do dono.
 
 ## O que vai NO BINÁRIO
 
@@ -126,3 +134,86 @@ dentro do WebView e a resposta do modelo de verdade (a suíte simula a rota).
 3. **Limite**: deslogado, na terceira análise do mês a tela oferece o
    Premium. Logado com Premium, a terceira passa.
 4. **Salvar no histórico** chega ao formulário com oficina e total.
+
+## O que vem junto da 2.5 e AINDA NÃO teve roteiro de aparelho
+
+A 2.6 carrega tudo isto. Enquanto nenhum aparelho abrir, a resposta sobre
+cada um é "sem sinal ainda", nunca "funcionou". O roteiro completo da 2.5
+está em `docs/lojas/novidades-2.5.md`; estes são os que ainda não foram
+rodados e que mais pesam:
+
+1. **O token de push do iPhone** (o item 11 da 2.5, e o que nunca funcionou
+   desde 28/08). iPhone com a versão nova, logado, Perfil, ligar os avisos.
+   Em até um minuto, `select platform, updated_at from push_tokens` mostra
+   uma linha `ios`. Se não mostrar,
+   `select * from app_erros where origem = 'push'` diz o motivo. É plugin
+   nativo, e a regra do dono de 09/09 manda o roteiro vir antes do build:
+   está aqui, e o fonte do plugin já foi lido
+   (`PushNotificationsPlugin.swift`, o `addObserver` da notificação
+   `capacitorDidRegisterForRemoteNotifications`).
+2. **"Avaliar" e "Atualizar" abrem a App Store** (item 9 da 2.5): Perfil,
+   "Avaliar o Mentorque", a App Store abre, não uma aba branca.
+3. **As três manhãs do aviso do quiz** (item 1 da 2.5): ligar avisos,
+   responder o quiz e não abrir o app por dois dias; o aviso das 9h chega
+   nos dois.
+4. **As duas variantes dos testes A/B** (itens 7 e 8 da 2.5) no app das
+   lojas: onboarding de três ou cinco páginas, e o formulário do carro
+   curto ou completo. Para ver a outra variante, apagar os dados do app.
+
+## Notas para as lojas, PARA O DONO CONFERIR ANTES DE COLAR
+
+Ganho, não defeito; verbo na ação da pessoa; nada que não tenha sido
+conferido.
+
+**IMPORTANTE, e é a regra três:** o primeiro parágrafo promete a foto do
+orçamento. A leitura do modelo foi provada em produção pela web em 13/09,
+mas a CÂMERA dentro do app das lojas não. Se os passos 1 e 2 do roteiro
+acima não passarem no aparelho, tirar esse parágrafo antes de colar.
+
+**Google Play** (limite: 500 caracteres)
+
+```
+Agora o Mentorque cuida também do dinheiro do carro.
+
+Recebeu um orçamento da oficina? Tire uma foto e veja item por item, com a faixa de preço da sua região.
+
+Registre o abastecimento em três toques e descubra quanto seu carro custa por km.
+
+Guarde IPVA, licenciamento, seguro e CNH: o app avisa 30, 7 e 1 dia antes, e sugere a data pelo final da placa.
+
+No começo do mês, o resumo do que o carro custou.
+```
+
+**App Store**
+
+```
+Agora o Mentorque cuida também do dinheiro do carro.
+
+Recebeu um orçamento da oficina? Tire uma foto e veja item por item, com a faixa de preço da sua região, e as perguntas para fazer antes de aprovar.
+
+Registre o abastecimento em três toques e descubra quanto seu carro custa por km.
+
+Guarde IPVA, licenciamento, seguro e CNH: o app avisa 30, 7 e 1 dia antes, e sugere a data pelo final da placa.
+
+No começo do mês, o resumo do que o carro custou.
+
+Trabalha com o carro por aplicativo? Ligue o modo no Perfil e veja quanto sobrou no dia.
+```
+
+## Antes de enviar
+
+- Versão 2.6 nos três lugares: conferido em 14/09 (`conferir:versoes` diz
+  "2.6, ainda não publicada"). A 2.5 entrou na lista `JA_PUBLICADAS` no
+  mesmo dia, com a prova do banco.
+- Na Apple, a 2.5 está em análise. Duas versões não ficam na fila ao mesmo
+  tempo: ou esperar a aprovação da 2.5, ou retirá-la e mandar a 2.6 no
+  lugar (ela carrega tudo o que a 2.5 carrega).
+- Ao enviar a 2.6, acrescentar `"2.6"` à lista `JA_PUBLICADAS` NA HORA do
+  envio, não na hora da aprovação. Foi o atraso de um dia nisso, na 2.5,
+  que deixou a conferência dando luz verde para um nome já usado.
+- `/api/app/latest` só depois da aprovação, com o número do log
+  ("versionCode deste envio: N"), nunca com o "Index" da tela. Hoje ele
+  aponta para a 2.4, build 63.
+- Pergunta aberta para o dono: a 2.5 está na faixa de PRODUÇÃO da Play ou
+  só na interna? Se estiver em produção, o banner de versão nova está
+  apontando para a 2.4 e quem tem 2.4 não está sendo avisado.
