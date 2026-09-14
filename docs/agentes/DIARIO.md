@@ -116,9 +116,22 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   traz dados, em vez de gravar zeros; o arquivo de ontem fica e o Vigia
   avisa. Os três retratos inválidos ficam no histórico do git com esta
   entrada como correção.
+- Medido depois do deploy, com os `tempos` ligados: primeira chamada da
+  versão nova 1,6 s (dentro da rota 1,0 s), chamada quente 1,3 s (0,7 s),
+  chamada depois de 8 minutos parada 3,2 s (1,2 s; o resto é a função
+  acordando). Cada consulta leva uns 600 ms em paralelo, nenhuma se
+  destaca. Isto corrige a frase acima: "8 segundos num dia normal" eram
+  duas medições (13/09 10:30 e hoje 11:16), e as três seguintes deram 1 a
+  3 s. Os 8 s e os mais de 15 s são anomalia de horário, não o custo
+  normal da rota, e a suspeita das views perde força. O que sobra:
+  alguma coisa do lado do banco nessas horas (banco acordando depois da
+  madrugada, manutenção da Supabase por volta das 6h). Suspeita, não
+  conclusão.
 - O que a conferência não alcança: a hora lenta é às 6h. Só o retrato de
-  amanhã diz se 60 s bastam e mostra os `tempos`. Se o log apontar a view,
-  o conserto é índice ou materialização, com EXPLAIN antes.
+  amanhã diz se 60 s bastam e mostra os `tempos` daquela hora. Se
+  apontar uma consulta, o conserto é índice ou materialização, com
+  EXPLAIN antes; se todas vierem lentas juntas, é o banco, e a resposta
+  é aquecer antes (uma chamada às 5h55) ou aceitar o teto de 60 s.
 
 ## 2026-09-13 · Engenharia e CRO: a rotina do carro, peça 1 no ar
 - O dono perguntou como o app se sai nos três critérios (problema
