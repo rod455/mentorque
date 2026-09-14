@@ -3,6 +3,55 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-14 · Diretor: RODADA INTERROMPIDA, e a medição está fora do ar
+- Artifact "Semana Mentorque" (incompleto, de propósito):
+  https://claude.ai/code/artifact/71abe88f-ca04-4615-88cc-c5a960becc8a
+- **A semana NÃO foi fechada**, pelo direcionamento do dono de 31/08: sem o
+  banco respondendo, o Diretor para e avisa. Hoje valeu em dobro, porque o
+  retrato também está quebrado. Fechar a semana com as duas fontes fora do ar
+  seria inventar.
+- **INCIDENTE 1, o mais grave, e estava de pé sem ninguém ver: o funil está
+  PERDENDO EVENTO.** Erros de execução da Vercel, 7 dias: `[funil] insert
+  recusado { evento: 'comecou_onboarding', motivo: 'Gateway Timeout' }`, 5
+  ocorrências de 5 pessoas distintas, rota /api/funil, de 12/09 11:00 a 13/09
+  13:15. Evento não gravado não volta.
+- **INCIDENTE 2: /api/dados estoura o teto de 15s desde 12/09.** 4
+  ocorrências, a última HOJE às 10:30. Consequência direta: o retrato saiu
+  VAZIO em 12, 13 e 14/09. Conferido arquivo por arquivo no git: íntegro até
+  11/09, com `"error": {"code": "504"}` dentro do JSON nos três seguintes.
+- **O retrato de hoje afirma zero assinaturas, zero cadastros, zero de tudo.**
+  Nada disso é verdade. Em 11/09 eram 4 assinaturas no banco, 3 no Stripe,
+  MRR de tabela R$ 89,70, 45 usuários ativos e 11 fontes coletando. É o pior
+  tipo de erro de medição: não parece erro, parece notícia.
+- **NINGUÉM PERCEBEU.** 106 commits na semana, três deles depois do retrato
+  começar a sair vazio, e nenhuma entrada do diário menciona o problema. A
+  Sentinela não avisou porque ela confere se a rota RESPONDE, e ela responde;
+  quem está mudo é a gravação e a agregação. Mesma lição do webhook do
+  Stripe, em outra roupa.
+- SUSPEITA, escrita como suspeita: nenhuma das duas rotas mudou de código. O
+  que mudou foi volume e variedade (vários tipos de evento novos entraram esta
+  semana, o tráfego pago continua, e em 07/09 já houve aperto de cota por uma
+  coluna de embedding). A leitura provável é agregação lenta estourando o teto
+  e escrita disputando espaço. Confirmar no banco: tamanho da tabela, índices
+  únicos parciais de 27/08, e qual consulta está lenta.
+- **INCIDENTE 3: o Supabase desta sessão aponta para OUTRA CONTA do dono.** O
+  `list_projects` devolve Inglês20minutos e bolaonacopa; o projeto Mentorque
+  (ajaxhsvjvmqtiyzelgrd) não aparece. Não é falta de permissão dentro do
+  projeto, é organização errada autorizada. Stripe também pede autorização
+  nova e não dá para autorizar de dentro de rotina.
+- SINAL PARCIAL da semana (4 dos 7 dias, do retrato íntegro de 11/09, SEM
+  conferência no banco, e por isso não é fechamento): 6 contas novas contra 8;
+  gasto R$ 227,29 contra R$ 194,01; ZERO assinaturas novas contra 1;
+  frequência 1,6 contra 2,5 aberturas por usuário; 12 erros contra 6.
+- BOA NOTÍCIA, com o tamanho certo: apareceu o PRIMEIRO RETORNO de coorte da
+  história. 1 das 6 contas novas voltou entre o 1º e o 7º dia, e 1 das 8 da
+  semana anterior também. São duas pessoas, não é tendência, e foi na semana
+  em que a jornada de e-mail foi ligada (18 e-mails em 12/09, 3 em 13/09).
+- Prioridades: (1) parar a perda de evento no funil, que é a única com custo
+  crescente por hora; (2) reconectar o banco na organização certa; (3) a
+  Sentinela passar a vigiar retrato vazio e tempo de resposta da rota de
+  dados, porque porta aberta não é entrega feita.
+
 ## LEIA ISTO ANTES DE RECONFERIR QUALQUER NÚMERO
 
 Perguntas que JÁ FORAM investigadas e fechadas. Reabrir qualquer uma delas sem
@@ -32,6 +81,7 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 | Por que o mesmo carro vira dois? | Porque a identidade do carro é o `id`, e ele nasce no APARELHO: dois cadastros nunca colidem, e toda a dedup do app é por id. Uma causa para os três caminhos. As telas passaram a avisar em 09/09; em 10/09 a folha de importação passou a PERGUNTAR o que fazer com o carro repetido (juntar num só, só o da conta, só o deste aparelho), por decisão do dono. Vai na 2.4. | 10/09, Engenharia |
 | Por que o retrato diário de 12, 13 e 14/09 diz 0 assinaturas e funil vazio? | Porque o `/api/dados` respondeu 504 (estourou o teto de 15 segundos) às 6h nesses três dias e o Analista gravou o erro como se fosse dado. Num dia normal a rota leva uns 8 segundos: estava colada no teto. Os três retratos são inválidos; a tabela `subscriptions` continua com os mesmos assinantes. Em 14/09 o teto foi a 60 s, a rota passou a devolver os tempos por consulta (`tempos`) e o Analista passou a falhar em vez de gravar zeros. | 14/09, Engenharia |
 | Por que a foto do momento (ou do perfil) aparece quebrada? | O bucket `Avatars` do Storage estava privado e o app grava a URL pública: 400 em toda foto enviada logado. Ligado em 13/09 (`avatars_bucket_publico`); o retrato está em `supabase/storage_avatars.sql`. Se voltar a acontecer, conferir `select public from storage.buckets where id = 'Avatars'` antes de qualquer outra coisa. | 13/09, Engenharia |
+| O retrato está vazio ou zerado, é queda de verdade? | **Conferir o JSON antes de acreditar.** Em 12, 13 e 14/09 o retrato saiu com tudo zerado porque `/api/dados` estourou o teto de 15s e o arquivo guardou `"error": {"code": "504"}` no lugar dos dados. Zero no retrato pode ser ausência de resposta, não medição. O jeito rápido: `git show <sha>:docs/dados/retrato.md \| grep '"error"'`. | 14/09, Diretor |
 | Quais manuais faltam para a Biela? | O primeiro lote subiu em 06/09: 112 manuais, 34.609 trechos, e os DEZ carros mais comuns do Brasil passaram a ter manual (era 3 de 10). Gol 2016 e Ka 2025, de usuários nossos, saíram de zero. Faltam Corsa/Classic e as marcas vazias (Suzuki, Mercedes-Benz, e o EcoSport). | 06/09, `docs/manuais-a-subir.md` |
 
 **Como manter:** ao FECHAR uma pergunta que já custou investigação, acrescente a

@@ -214,6 +214,26 @@ o agente do papel certo na rodada seguinte.
   que a comparação não vai acontecer, em vez de produzir um número novo em
   cima de uma base que já se sabe furada.
 
+- 2026-09-14: quando as fontes caem, a rodada não vira relatório menor, vira
+  INCIDENTE. Foi o que aconteceu hoje: banco fora, retrato vazio há três dias
+  e funil perdendo evento. O entregável deixou de ser "a semana" e passou a
+  ser "o que está quebrado, com prova, e o que destrava". Um relatório semanal
+  honesto sobre uma semana que não dá para medir vale menos que um aviso no
+  mesmo dia sobre dado se perdendo agora.
+- 2026-09-14: a fonte que sobra é a que salva a rodada. Com banco e retrato
+  fora, quem respondeu foi a Vercel: `get_runtime_errors` deu as duas rotas,
+  a contagem, as pessoas afetadas e as datas exatas. Antes de declarar que
+  não dá para saber nada, varrer TODAS as integrações da sessão; erro de
+  produção costuma explicar melhor que dashboard.
+- 2026-09-14: retrato vazio não se distingue de operação parada pela leitura
+  do resumo, só pelo JSON. Conferir `"error"` dentro do bloco bruto ANTES de
+  usar qualquer número dele, e conferir os arquivos dos dias anteriores no
+  git para achar desde quando. Foi assim que três dias cegos apareceram.
+- 2026-09-14: quando o relatório não fecha, dizer POR QUE ele não fecha vale
+  mais que preencher. E os sinais parciais que existirem entram marcados como
+  parciais, com o recorte de dias na própria tabela, nunca soltos no meio do
+  texto onde viram número da semana na cabeça de quem lê.
+
 ## Direcionamentos do dono
 
 - Entrega às segundas, 08:00 (horário de Brasília), com notificação.
