@@ -209,6 +209,15 @@ selecionado, ativar o workflow (botão Active) e conferir a primeira execução.
 
 ## Aprendizados
 
+- **2026-09-14: resposta de erro gravada como retrato vale menos que retrato
+  nenhum.** De 12 a 14/09 o `/api/dados` respondeu 504 (estourou o teto de
+  15 s da Vercel) e o workflow do retrato, com `neverError`, tratou o corpo
+  `{error: 504}` como dado: três retratos dizendo 0 assinaturas e funil
+  vazio, e ninguém viu até o Vigia gritar no terceiro dia. Agora o nó
+  "Monta retrato" FALHA quando a resposta não tem `assinaturas` nem
+  `erros7d`; o arquivo de ontem fica e o Vigia avisa. A rota passou a
+  devolver `tempos` (ms por consulta): quem for investigar lentidão lê isso
+  no JSON bruto do retrato antes de qualquer hipótese.
 - O feed de avaliações da Apple é público e sem chave; o do Play não tem
   equivalente aberto.
 - **Erro de coleta guardado sem o corpo da resposta vira mistério.** Nove

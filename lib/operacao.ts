@@ -20,6 +20,19 @@ export async function coletarDadosOperacao() {
   const admin = getSupabaseAdmin();
   if (!admin) return null;
 
+  // Os tempos de cada consulta (14/09/2026). A rota levava uns 8 segundos
+  // num dia normal e estourou o teto de 15 nas manhãs de 12, 13 e 14/09 sem
+  // que ninguém soubesse QUAL consulta pesava. Vai no JSON e no log da
+  // Vercel quando passa de 5 segundos: é a evidência para o próximo conserto.
+  const t0 = Date.now();
+  const tempos: Record<string, number> = {};
+  const medir = async <T,>(nome: string, p: PromiseLike<T>): Promise<T> => {
+    const inicio = Date.now();
+    const r = await p;
+    tempos[nome] = Date.now() - inicio;
+    return r;
+  };
+
   const d14 = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString();
   const d7 = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const d10dias = new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
@@ -30,33 +43,34 @@ export async function coletarDadosOperacao() {
     { data: ativacao }, { data: assCoortes }, { data: porCampanha },
     { data: conferencia },
   ] = await Promise.all([
-    admin.from("funil_semana").select("*").limit(12),
+    medir("funil_semana", admin.from("funil_semana").select("*").limit(12)),
     // `stripe_subscription_id` entra na leitura porque é ele que separa venda
     // de cortesia: conta liberada na mão não tem assinatura no Stripe.
-    admin.from("subscriptions").select("status, cancel_at_period_end, plan, stripe_subscription_id, cupom"),
-    admin.from("funil_eventos").select("criado_em, plataforma").eq("evento", "cadastro").gte("criado_em", d14),
-    admin.from("app_erros").select("criado_em, mensagem, plataforma").gte("criado_em", d7).limit(2000),
+    medir("subscriptions", admin.from("subscriptions").select("status, cancel_at_period_end, plan, stripe_subscription_id, cupom")),
+    medir("cadastros", admin.from("funil_eventos").select("criado_em, plataforma").eq("evento", "cadastro").gte("criado_em", d14)),
+    medir("app_erros", admin.from("app_erros").select("criado_em, mensagem, plataforma").gte("criado_em", d7).limit(2000)),
     // SEM filtro de data: o frescor precisa enxergar fonte parada há muito
     // tempo, e a janela de 10 dias fazia a fonte morta SUMIR em vez de
     // gritar. O recorte de 10 dias continua existindo, mas em memória,
     // depois de calcular há quanto tempo cada uma parou.
-    admin.from("metricas_diarias").select("dia, fonte, dados").order("dia", { ascending: false }).limit(400),
-    admin.from("uso_diario").select("*").limit(14),
-    admin.from("uso_semanal").select("*").limit(8),
-    admin.from("retencao_coortes").select("*").limit(8),
-    admin.from("ativacao_coortes").select("*").limit(8),
-    admin.from("assinaturas_coortes").select("*").limit(12),
-    admin.from("cadastros_por_campanha").select("*").limit(20),
+    medir("metricas_diarias", admin.from("metricas_diarias").select("dia, fonte, dados").order("dia", { ascending: false }).limit(400)),
+    medir("uso_diario", admin.from("uso_diario").select("*").limit(14)),
+    medir("uso_semanal", admin.from("uso_semanal").select("*").limit(8)),
+    medir("retencao_coortes", admin.from("retencao_coortes").select("*").limit(8)),
+    medir("ativacao_coortes", admin.from("ativacao_coortes").select("*").limit(8)),
+    medir("assinaturas_coortes", admin.from("assinaturas_coortes").select("*").limit(12)),
+    medir("cadastros_por_campanha", admin.from("cadastros_por_campanha").select("*").limit(20)),
     // A conferência entre a fonte da verdade e a medição. Ver a view em
     // supabase/funil_eventos.sql: ela existe porque as duas divergiram e
     // ninguém percebeu até alguém perguntar na mão.
-    admin.from("assinaturas_conferencia").select("veredito"),
+    medir("assinaturas_conferencia", admin.from("assinaturas_conferencia").select("veredito")),
   ]);
-  const { data: experimentos } = await admin.from("experimentos_resultados").select("*").limit(120);
+  tempos.paralelo = Date.now() - t0;
+  const { data: experimentos } = await medir("experimentos", admin.from("experimentos_resultados").select("*").limit(120));
   // A porta única das anomalias (supabase/anomalias-da-operacao.sql). A régua
   // mora no banco pelo mesmo motivo do funil_canonico: consulta escrita à mão
   // em cada leitor produz um número diferente por leitor.
-  const { data: anomalias } = await admin.rpc("anomalias_da_operacao", { p_dias: 14 });
+  const { data: anomalias } = await medir("anomalias", admin.rpc("anomalias_da_operacao", { p_dias: 14 }));
 
   // A quebra do funil (28 dias, pessoas distintas): quantos por cento passam
   // de cada etapa para a seguinte, e onde está a maior perda. É o mapa de
@@ -77,14 +91,14 @@ export async function coletarDadosOperacao() {
   // A pergunta "quantos têm carro", que a etapa `ativacao` tentava responder,
   // mudou de lugar: ela é ESTADO e está em `estadoDaBase`, conferível conta a
   // conta, sem depender de o evento existir na época.
-  const { data: estadoDaBase } = await admin.from("estado_da_base").select("*").maybeSingle();
+  const { data: estadoDaBase } = await medir("estado_da_base", admin.from("estado_da_base").select("*").maybeSingle());
 
   const desde28 = new Date(Date.now() - 28 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
   // A janela pedida é 28 dias, mas ela encolhe até onde os eventos existem.
   // Recusar tudo seria honesto e inútil: trocaria um número errado por número
   // nenhum. O encolhimento vai escrito em `janela.aviso`.
   const janela = janelaDaCadeia([...CADEIA_SESSAO, ...CADEIA_ATO], desde28);
-  const { data: etapas } = await admin.rpc("funil_etapas", { p_desde: janela.desde });
+  const { data: etapas } = await medir("funil_etapas", admin.rpc("funil_etapas", { p_desde: janela.desde }));
   const porEtapa = new Map<EventoFunil, number>(
     ((etapas ?? []) as { evento: string; pessoas: number }[])
       .filter((e) => e.evento in NATUREZA)
@@ -96,7 +110,7 @@ export async function coletarDadosOperacao() {
   // gravada, e ainda dá para tirar as três contas do próprio time, que
   // inflariam qualquer taxa. Na janela de hoje: o evento dizia 1, a tabela diz
   // 2. A regra geral está em FONTE_MELHOR, em lib/funilCorreto.ts.
-  const { data: contasDeFora } = await admin.rpc("contas_criadas_desde", { p_desde: janela.desde });
+  const { data: contasDeFora } = await medir("contas_criadas_desde", admin.rpc("contas_criadas_desde", { p_desde: janela.desde }));
   if (typeof contasDeFora === "number") porEtapa.set("cadastro", contasDeFora);
   const comPerdidos = (d: ReturnType<typeof degrausDaCadeia>[number]) => ({
     ...d,
@@ -106,7 +120,7 @@ export async function coletarDadosOperacao() {
   // só chegam aos aparelhos com a 1.6. Misturar com a janela dos outros faria
   // a cadeia parecer vazia em vez de nova.
   const janelaPrimeira = janelaDaCadeia(CADEIA_PRIMEIRA_SESSAO, desde28);
-  const { data: etapasPrimeira } = await admin.rpc("funil_etapas", { p_desde: janelaPrimeira.desde });
+  const { data: etapasPrimeira } = await medir("funil_etapas_primeira", admin.rpc("funil_etapas", { p_desde: janelaPrimeira.desde }));
   const porEtapaPrimeira = new Map<EventoFunil, number>(
     ((etapasPrimeira ?? []) as { evento: string; pessoas: number }[])
       .filter((e) => e.evento in NATUREZA)
@@ -169,8 +183,13 @@ export async function coletarDadosOperacao() {
     (porFonte[m.fonte] ??= []).push({ dia: m.dia, dados: (m.dados ?? {}) as Record<string, unknown> });
   }
 
+  tempos.total = Date.now() - t0;
+  if (tempos.total > 5000) console.warn("dados: consulta lenta", JSON.stringify(tempos));
+
   return {
     geradoEm: new Date().toISOString(),
+    // Quanto cada consulta levou, em ms (14/09/2026). Ver o comentário no topo.
+    tempos,
     funilSemanas: semanas ?? [],
     assinaturas: {
       ativas: ativas.length,

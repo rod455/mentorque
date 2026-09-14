@@ -30,6 +30,7 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 | A campanha do Google traz cadastro de verdade? | **Traz.** Na semana de 31/08 a 06/09, 7 das 8 contas novas carregam `google / lancamento`. A atribuição só existe a partir de 04/09, porque a captura de etiqueta subiu para todas as páginas em 03/09. Custo por conta no pedaço medido: R$ 14,71. | 07/09, Diretor |
 | Quantas pessoas o app teve de verdade numa semana? | Contar por `anon_id` NÃO responde isso (é armazenamento, infla a cada instalação). A régua é `auth.users`. Cruzar sempre com a porta de entrada: cliques pagos > anon_id > contas. | 01/09 e 07/09 |
 | Por que o mesmo carro vira dois? | Porque a identidade do carro é o `id`, e ele nasce no APARELHO: dois cadastros nunca colidem, e toda a dedup do app é por id. Uma causa para os três caminhos. As telas passaram a avisar em 09/09; em 10/09 a folha de importação passou a PERGUNTAR o que fazer com o carro repetido (juntar num só, só o da conta, só o deste aparelho), por decisão do dono. Vai na 2.4. | 10/09, Engenharia |
+| Por que o retrato diário de 12, 13 e 14/09 diz 0 assinaturas e funil vazio? | Porque o `/api/dados` respondeu 504 (estourou o teto de 15 segundos) às 6h nesses três dias e o Analista gravou o erro como se fosse dado. Num dia normal a rota leva uns 8 segundos: estava colada no teto. Os três retratos são inválidos; a tabela `subscriptions` continua com os mesmos assinantes. Em 14/09 o teto foi a 60 s, a rota passou a devolver os tempos por consulta (`tempos`) e o Analista passou a falhar em vez de gravar zeros. | 14/09, Engenharia |
 | Por que a foto do momento (ou do perfil) aparece quebrada? | O bucket `Avatars` do Storage estava privado e o app grava a URL pública: 400 em toda foto enviada logado. Ligado em 13/09 (`avatars_bucket_publico`); o retrato está em `supabase/storage_avatars.sql`. Se voltar a acontecer, conferir `select public from storage.buckets where id = 'Avatars'` antes de qualquer outra coisa. | 13/09, Engenharia |
 | Quais manuais faltam para a Biela? | O primeiro lote subiu em 06/09: 112 manuais, 34.609 trechos, e os DEZ carros mais comuns do Brasil passaram a ter manual (era 3 de 10). Gol 2016 e Ka 2025, de usuários nossos, saíram de zero. Faltam Corsa/Classic e as marcas vazias (Suzuki, Mercedes-Benz, e o EcoSport). | 06/09, `docs/manuais-a-subir.md` |
 
@@ -37,6 +38,37 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 linha aqui com a data. Ao descobrir que uma linha destas está errada, corrija-a
 aqui e na entrada de origem, com o texto antigo riscado. Esta tabela não é fonte
 de verdade sobre os números de hoje: ela diz o que já foi respondido e onde ler.
+
+## 2026-09-14 · Engenharia: o Vigia ficou cego porque o /api/dados estourou o teto
+- O dono mandou a foto do e-mail "Vigia Mentorque: 1 alerta": "o /api/dados
+  nao respondeu como esperado: o vigia esta cego". Conferido em três
+  lugares antes de concluir: o log da Vercel (`GET /api/dados 504, Task
+  timed out after 15 seconds`, às 10:30 UTC), a execução do Vigia no n8n
+  (o nó da rota levou 16,8 s e recebeu o 504) e o histórico do retrato no
+  repositório: os retratos de 12, 13 e 14/09 (6h) trazem
+  `"dados": {"error": {"code": "504"}}` e por isso dizem 0 assinaturas e
+  funil vazio. Até 11/09 a rota respondia. O Vigia de 12 e 13/09 (7h30)
+  passou: a rota respondeu em 8 s (medido na execução de 13/09) e
+  reproduzida agora, 11:17 UTC, em 8 s de novo.
+- Conclusão que a prova sustenta: a rota está COLADA no teto (8 s num dia
+  normal contra 15 de limite) e qualquer manhã mais lenta do banco a
+  derruba; é o que aconteceu às 6h por três dias seguidos. O que NÃO sei:
+  qual das quinze consultas pesa, porque a integração do Supabase perdeu a
+  permissão de rodar SQL nesta sessão (EXPLAIN negado). Suspeitas pela
+  leitura: `retencao_coortes` (subconsultas correlacionadas sobre
+  funil_eventos com função por linha) e `anomalias_da_operacao` (lateral
+  por anon_id); as duas crescem com a tabela, que ganhou eventos novos em
+  12/09. Suspeita, não conclusão.
+- Feito: (1) o teto do `/api/dados` foi de 15 para 60 s; (2) a rota mede
+  cada consulta e devolve `tempos` no JSON, e escreve no log da Vercel
+  quando passa de 5 s, para o próximo conserto ter evidência; (3) o
+  Analista (n8n, "Monta retrato") passou a falhar quando o /api/dados não
+  traz dados, em vez de gravar zeros; o arquivo de ontem fica e o Vigia
+  avisa. Os três retratos inválidos ficam no histórico do git com esta
+  entrada como correção.
+- O que a conferência não alcança: a hora lenta é às 6h. Só o retrato de
+  amanhã diz se 60 s bastam e mostra os `tempos`. Se o log apontar a view,
+  o conserto é índice ou materialização, com EXPLAIN antes.
 
 ## 2026-09-13 · Engenharia e CRO: a rotina do carro, peça 1 no ar
 - O dono perguntou como o app se sai nos três critérios (problema

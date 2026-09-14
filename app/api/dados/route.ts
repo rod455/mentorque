@@ -4,7 +4,11 @@ import { chaveDadosOk, negada } from "@/lib/chaveDados";
 
 export const runtime = "nodejs";
 // Teto de duracao: funcao pendurada segura memoria provisionada (e cota).
-export const maxDuration = 15;
+// Era 15 e a rota estourou nas manhãs de 12, 13 e 14/09/2026 (num dia normal
+// ela leva uns 8 segundos): o Analista gravou três retratos com zeros e o
+// Vigia ficou cego. 60 dá folga para a manhã lenta; os tempos por consulta
+// vão no JSON (`tempos`) e no log quando passam de 5 segundos.
+export const maxDuration = 60;
 
 // O retrato diário da operação, consolidado numa rota só. É a matéria-prima
 // do Analista de Dados (n8n). TRANCADA pela chave dos dados: agregados de
