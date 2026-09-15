@@ -174,17 +174,45 @@ export function GuiaDeSintoma({ guia: g }: { guia: Guia }) {
 
       {/* Cabeçalho próprio: o Header do site é feito de âncoras da home
           (#features, #plans) e numa subpágina levaria a lugar nenhum. Aqui basta
-          o caminho de volta, que também é o link interno que o robô segue. */}
-      <header className="border-b border-white/5 px-5 py-4 sm:px-8">
-        <div className="mx-auto flex max-w-3xl items-center justify-between gap-4">
-          <a href="/" className="flex items-center gap-2.5" aria-label="Mentorque">
+          o caminho de volta, que também é o link interno que o robô segue.
+
+          BARRA FIXA COM AS LOJAS (pedido do dono, 15/09/2026). Estas quatro
+          páginas são o destino do anúncio de busca, e até aqui a única saída
+          para as lojas ficava no fim do guia: quem lê metade e desiste não
+          via nenhuma. Agora a barra acompanha a rolagem.
+
+          O QUE ELA PRECISA AGUENTAR, e é por isso que os tamanhos são estes:
+          a suíte `conferir:navegador site` confere vazamento lateral a 320px,
+          e uma barra com marca e dois botões é justamente o tipo de linha que
+          estoura. Em 320px cabem o símbolo (28px) e os dois botões curtos; a
+          palavra "Mentorque" só aparece a partir de `sm`, onde sobra espaço.
+          O símbolo sozinho continua sendo a marca, e o link continua indo
+          para a home. */}
+      <header className="sticky top-0 z-40 border-b border-white/5 bg-graphite/95 px-5 py-3 backdrop-blur sm:px-8">
+        <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
+          <a href="/" className="flex shrink-0 items-center gap-2.5" aria-label="Mentorque">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo/mark.svg" alt="" className="h-7 w-7" />
-            <span className="font-display text-sm font-semibold text-cream/80">Mentorque</span>
+            <span className="hidden font-display text-sm font-semibold text-cream/80 sm:inline">Mentorque</span>
           </a>
-          <a href="/" className="text-sm text-cream/55 transition-colors hover:text-cream">
-            Ver o app
-          </a>
+          <div className="flex shrink-0 items-center gap-2">
+            <a
+              href={PLAY_STORE_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex h-9 items-center rounded-lg bg-amber px-3 font-display text-xs font-semibold text-graphite transition-colors hover:bg-amber-300"
+            >
+              Google Play
+            </a>
+            <a
+              href={APP_STORE_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex h-9 items-center rounded-lg bg-graphite-700 px-3 font-display text-xs font-semibold text-cream ring-1 ring-white/15 transition-colors hover:bg-graphite-600"
+            >
+              App Store
+            </a>
+          </div>
         </div>
       </header>
 
@@ -227,7 +255,7 @@ export function GuiaDeSintoma({ guia: g }: { guia: Guia }) {
         {/* 2. OS BLOCOS */}
         <section className="mx-auto max-w-3xl space-y-6 py-6">
           {g.blocos.map((b) => (
-            <article key={b.id} id={b.id} className="scroll-mt-6 rounded-2xl bg-graphite-800 p-6 ring-1 ring-white/5 sm:p-7">
+            <article key={b.id} id={b.id} className="scroll-mt-20 rounded-2xl bg-graphite-800 p-6 ring-1 ring-white/5 sm:p-7">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <h2 className="font-serif text-2xl font-bold leading-snug">{b.quando}</h2>
                 <span className={`shrink-0 rounded-full px-3 py-1 font-display text-[11px] font-semibold uppercase tracking-wider ring-1 ${TOM[b.urgencia.tom]}`}>

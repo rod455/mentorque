@@ -142,6 +142,57 @@ export async function rodar({ nav, ok }) {
       !!resp && resp.status() === 200 && (resp.headers()["content-type"] ?? "").startsWith("image/"),
       resp ? `${resp.status()} ${resp.headers()["content-type"] ?? ""}` : "sem resposta"
     );
+
+    // A BARRA FIXA COM AS LOJAS (15/09/2026, pedido do dono). Estes quatro
+    // guias são o destino do anúncio de busca, e a barra é a única saída para
+    // a loja que quem lê metade e desiste chega a ver. Três perguntas, e a
+    // primeira é a que uma conferência de texto não responderia: ela CONTINUA
+    // no topo depois de rolar? `position: sticky` morre em silêncio quando um
+    // pai ganha `overflow` ou `transform`, e a página segue funcionando.
+    const barra = await pg.evaluate(() => {
+      // MESMA BLINDAGEM DA MEDIDA DE CORTE LATERAL, pelo mesmo motivo: sem a
+      // folha de estilo, `position: sticky` não existe e esta conferência
+      // acusaria a barra de ter saído do lugar quando o que faltou foi o CSS.
+      // Aconteceu comigo em 15/09, com um servidor de desenvolvimento meu
+      // disputando o `.next` com o da suíte.
+      const semEstilo = ![...document.styleSheets].some((f) => {
+        try { return f.cssRules.length > 0; } catch { return true; }
+      });
+      if (semEstilo) return { semEstilo: true };
+      return { lojas: [...document.querySelectorAll("header a[target='_blank']")].map((a) => a.getAttribute("href") ?? "") };
+    });
+    // A rolagem e a espera ficam FORA do evaluate: a página rola suave, e
+    // medir 120ms depois do pedido lia o meio do caminho (a primeira versão
+    // desta conferência reprovou por isso, com a barra certa).
+    await pg.evaluate(() => window.scrollTo(0, 1200));
+    await pg.waitForTimeout(600);
+    Object.assign(barra, await pg.evaluate(() => {
+      const r = document.querySelector("header").getBoundingClientRect();
+      return { grudou: Math.round(r.top) === 0 && r.height > 0, rolou: window.scrollY > 400 };
+    }));
+    ok(
+      `${caminho}: a barra do topo continua no lugar depois de rolar`,
+      barra.semEstilo ? false : barra.grudou && barra.rolou,
+      barra.semEstilo ? "a página abriu SEM CSS; derrube os servidores de desenvolvimento e rode de novo" : JSON.stringify(barra)
+    );
+    ok(
+      `${caminho}: a barra leva às duas lojas`,
+      barra.lojas.some((h) => h.includes("play.google.com")) && barra.lojas.some((h) => h.includes("apps.apple.com")),
+      barra.lojas.join(" | ")
+    );
+
+    // E a âncora do índice não pode cair atrás da barra: o `scroll-mt` do bloco
+    // tem que ser maior que a altura dela, senão o título some embaixo.
+    await pg.evaluate(() => window.scrollTo(0, 0));
+    await pg.locator('nav[aria-label="Índice do guia"] a').first().click();
+    await pg.waitForTimeout(700);
+    const folga = await pg.evaluate(() => {
+      const h = document.querySelector("header").getBoundingClientRect();
+      const a = document.querySelector("article[id]").getBoundingClientRect();
+      return Math.round(a.top - h.bottom);
+    });
+    ok(`${caminho}: o índice não joga o bloco atrás da barra`, folga >= 0, `folga de ${folga}px`);
+
     await pg.close();
     await ctx.close();
   }
