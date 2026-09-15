@@ -6,6 +6,13 @@ import { escolherEmail, type Escolha, type PessoaDaJornada } from "@/lib/jornada
 import { montarMensagem, renderEmail } from "@/lib/jornada/emails";
 import { linkDeSaida } from "@/lib/jornada/saida";
 import { enviarPush, pushConfigurado } from "@/lib/push/transporte";
+import {
+  escolherPush,
+  JANELA_DO_TETO as JANELA_DO_TETO_APARELHO,
+  TEXTOS as TEXTOS_DO_APARELHO,
+  type AparelhoDaJornada,
+  type EnvioAoAparelho,
+} from "@/lib/jornada/aparelho";
 import type { Abastecimento, Ganho, ServiceRecord, Vehicle } from "@/lib/app/types";
 import { mesAnterior } from "@/lib/app/resumoDoMes";
 
@@ -311,6 +318,19 @@ export async function GET(req: Request) {
     resumoEnviado = !erro;
   }
 
+  // ── a jornada de quem BAIXOU o app e não criou conta (15/09/2026) ─────────
+  //
+  // Freio PRÓPRIO, e é de propósito que ele não é o mesmo do e-mail. Mandar
+  // mensagem a cliente é alçada do dono (CLAUDE.md), e esta jornada fala com
+  // gente que a outra nunca alcançou: enquanto JORNADA_APARELHO não for "sim",
+  // ela roda inteira, calcula, aparece no JSON e no resumo, e NÃO MANDA NADA.
+  // O dono lê o que sairia antes de qualquer coisa sair.
+  //
+  // JORNADA_PAUSADA continua valendo por cima das duas: é o freio de mão.
+  const aparelhoLiberado = process.env.JORNADA_APARELHO === "sim";
+  const aparelhoAtiva = ativa && aparelhoLiberado;
+  const aparelho = await jornadaDoAparelho(admin, hoje, aparelhoAtiva, limite);
+
   return NextResponse.json({
     ok: true,
     hoje,
@@ -326,7 +346,111 @@ export async function GET(req: Request) {
     push: pushConfigurado(),
     candidatos: chamador === "chave" ? candidatos : candidatos.length,
     erros: chamador === "chave" ? erros : erros.length,
+    aparelhos: {
+      modo: aparelhoAtiva ? "envio" : aparelhoLiberado ? "ensaio (jornada pausada)" : "ensaio (JORNADA_APARELHO não está 'sim')",
+      ...aparelho,
+      candidatos: chamador === "chave" ? aparelho.candidatos : aparelho.candidatos.length,
+    },
   });
+}
+
+/**
+ * A jornada dos aparelhos sem conta: quem recebe push hoje, e manda.
+ *
+ * Separada da de cima porque não compartilha nada com ela: outro público
+ * (aparelho, não conta), outro canal (só push, porque não há e-mail), outra
+ * tabela de envios e outro freio. O que ela compartilha é a data e a regra de
+ * nunca dois no mesmo dia.
+ *
+ * O ESTADO DE QUEM NÃO TEM CONTA MORA NO APARELHO. Aqui só existem os eventos
+ * do funil, e é com eles que a decisão é tomada. Ver lib/jornada/aparelho.ts.
+ */
+async function jornadaDoAparelho(
+  admin: SupabaseClient,
+  hoje: string,
+  ativa: boolean,
+  limite: number,
+): Promise<{ aparelhos: number; escolhidos: number; enviados: number; candidatos: { anonId: string; chave: string; motivo: string; titulo: string }[]; erros: string[] }> {
+  const erros: string[] = [];
+  const candidatos: { anonId: string; chave: string; motivo: string; titulo: string }[] = [];
+
+  // Só aparelho com token E sem conta. Quem criou conta depois é atendido pela
+  // jornada de cima, pelo e-mail, e o filtro aqui é o que impede o abraço
+  // duplo no mesmo dia.
+  const { data: tokens, error: erroTokens } = await admin
+    .from("push_tokens")
+    .select("anon_id")
+    .is("user_id", null)
+    .not("anon_id", "is", null);
+  if (erroTokens) return { aparelhos: 0, escolhidos: 0, enviados: 0, candidatos, erros: [`tokens: ${erroTokens.message.slice(0, 120)}`] };
+
+  const anons = [...new Set((tokens ?? []).map((t) => t.anon_id as string))];
+  if (!anons.length) return { aparelhos: 0, escolhidos: 0, enviados: 0, candidatos, erros };
+
+  const desde = new Date(`${hoje}T12:00:00Z`);
+  desde.setUTCDate(desde.getUTCDate() - JANELA_DO_TETO_APARELHO - 1);
+  const [eventos, envios] = await Promise.all([
+    admin.from("funil_eventos").select("anon_id, evento, criado_em").in("anon_id", anons),
+    admin.from("jornada_envios_aparelho").select("anon_id, chave, dia").in("anon_id", anons).gte("dia", desde.toISOString().slice(0, 10)),
+  ]);
+  for (const r of [eventos, envios]) if (r.error) return { aparelhos: anons.length, escolhidos: 0, enviados: 0, candidatos, erros: [`banco: ${r.error.message.slice(0, 120)}`] };
+
+  // O dia de cada evento, no fuso de Brasília, que é o mesmo de `hoje`.
+  const porAparelho = new Map<string, Record<string, string>>();
+  for (const e of eventos.data ?? []) {
+    const id = e.anon_id as string;
+    if (!id) continue;
+    const dia = hojeEmBrasilia(new Date(e.criado_em as string));
+    const atual = porAparelho.get(id) ?? {};
+    const anterior = atual[e.evento as string];
+    if (!anterior || dia > anterior) atual[e.evento as string] = dia;
+    porAparelho.set(id, atual);
+  }
+  const enviosDe = new Map<string, EnvioAoAparelho[]>();
+  for (const e of envios.data ?? []) {
+    const l = enviosDe.get(e.anon_id as string) ?? [];
+    l.push({ chave: e.chave as string, dia: e.dia as string });
+    enviosDe.set(e.anon_id as string, l);
+  }
+
+  const escolhas: { ap: AparelhoDaJornada; chave: string; motivo: string }[] = [];
+  for (const anonId of anons) {
+    const ap: AparelhoDaJornada = {
+      anonId,
+      plataforma: "android",
+      eventos: porAparelho.get(anonId) ?? {},
+      envios: enviosDe.get(anonId) ?? [],
+    };
+    const e = escolherPush(ap, hoje);
+    if (e) escolhas.push({ ap, chave: e.chave, motivo: e.motivo });
+  }
+
+  let enviados = 0;
+  for (const { ap, chave, motivo } of escolhas.slice(0, limite)) {
+    const texto = TEXTOS_DO_APARELHO[chave];
+    if (!texto) {
+      erros.push(`${chave}: sem texto`);
+      continue;
+    }
+    candidatos.push({ anonId: `${ap.anonId.slice(0, 8)}…`, chave, motivo, titulo: texto.titulo });
+    if (!ativa) continue;
+    try {
+      // Sem rota no toque de propósito: a lista de ROTAS_DO_TOQUE é fechada e
+      // não tem destino de criar conta. O toque abre o app, onde o convite de
+      // salvar a garagem já espera. Abrir a lista é mudança de cliente, ou
+      // seja, build, e fica para quando houver um.
+      const r = await enviarPush(admin, { anonId: ap.anonId }, { titulo: texto.titulo, corpo: texto.corpo });
+      if (r.enviados > 0) {
+        enviados += r.enviados;
+        const { error } = await admin.from("jornada_envios_aparelho").insert({ anon_id: ap.anonId, chave, dia: hoje });
+        if (error) erros.push(`${chave}: registro: ${error.message.slice(0, 120)}`);
+      }
+    } catch (err) {
+      erros.push(`${chave}: push: ${String(err).slice(0, 120)}`);
+    }
+  }
+
+  return { aparelhos: anons.length, escolhidos: escolhas.length, enviados, candidatos, erros };
 }
 
 // Uma cópia de prova para um endereço, com uma pessoa de exemplo. Não toca em
