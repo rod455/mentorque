@@ -1526,8 +1526,13 @@ export function getContent(locale: Locale) {
         T("Como faço a revisão em dia?", "How do I keep service up to date?"),
       ],
       disclaimer: T("O Biela orienta, mas não substitui uma inspeção presencial em itens de segurança (freio, direção, airbag).", "Biela guides you, but doesn't replace an in-person inspection for safety items (brakes, steering, airbags)."),
-      freeLeft: T("{n} perguntas grátis restantes hoje", "{n} free questions left today"),
-      freeOver: T("O Biela é um recurso Premium. Assine para conversar à vontade com o seu mecânico de IA.", "Biela is a Premium feature. Subscribe to chat freely with your AI mechanic."),
+      // 15/09/2026: a Biela entrou no gratuito com cinco perguntas por mês, e
+      // os dois textos abaixo estavam errados para o mundo novo. O "hoje" do
+      // saldo virou "neste mês", que é a janela que o servidor conta, e o
+      // "recurso Premium" virou o que de fato acontece: as grátis acabaram.
+      // Texto que diz uma janela e código que conta outra é reclamação certa.
+      freeLeft: T("{n} perguntas grátis restantes neste mês", "{n} free questions left this month"),
+      freeOver: T("Suas perguntas grátis deste mês acabaram. No Premium a conversa com a Biela não tem limite.", "You've used your free questions this month. With Premium, chatting with Biela has no limit."),
       premiumCta: T("Conversar sem limites", "Chat without limits"),
       offlineNote: T("(Respondendo em modo básico, a IA completa com os manuais está sendo conectada.)", "(Answering in basic mode, the full AI with manuals is being connected.)"),
     },

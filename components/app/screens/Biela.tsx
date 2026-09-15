@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { apiPost, apiUrl } from "@/lib/app/apiBase";
+import { anonId } from "@/lib/app/anon";
+import { getBrowserSupabase } from "@/lib/supabaseBrowser";
 import { carregarConversa, historicoParaIA, idConversa, limparConversa, salvarConversa, type Msg } from "@/lib/app/bielaChat";
 import { pedirFeedback } from "@/lib/app/feedbackPrompt";
 import { useI18n } from "@/lib/i18n";
@@ -22,7 +24,21 @@ import { AppHeader, Chip, Icon, useContent } from "../ui";
 // repositório, e é uma das mais caras de operar (chama API, guarda conversa,
 // tem limite por assinatura).
 
-const FREE_BIELA_QUESTIONS = 0; // Biela é sempre Premium (sem perguntas grátis)
+// A BIELA NO GRATUITO (15/09/2026, decisão do dono: "vamos colocar o biela no
+// free para as pessoas utilizarem", cinco por mês).
+//
+// O NÚMERO NÃO MORA MAIS AQUI, e essa é a mudança que importa. Até hoje era
+// `const FREE_BIELA_QUESTIONS = 0` com um `useState(0)` contando do lado de
+// cá, e isso só funcionava porque o número era zero: contador em estado de
+// React zera a cada abertura do app, então "cinco por mês" seria "cinco por
+// abertura". Quem conta é o servidor (lib/biela/limite.ts e a tabela
+// biela_perguntas), e a tela só mostra o que ele responder.
+//
+// `restantes` nasce nulo, que aqui significa "ainda não perguntei ao
+// servidor", e não "acabou". Enquanto for nulo a tela deixa perguntar: a
+// recusa de verdade vem do 429 da rota, que é quem tem a contagem. Tratar
+// desconhecido como esgotado trancaria a Biela para todo mundo na primeira
+// abertura, que é o defeito mais caro que esta tela poderia ter.
 
 // Id anônimo do aparelho — o mesmo que o Perfil já usa nas mensagens de
 // suporte. Serve só para agrupar votos do mesmo celular; não identifica conta.
@@ -50,7 +66,7 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
   const [msgs, setMsgs] = useState<Msg[]>(() => [...abertura(), ...carregarConversa(idChat)]);
   const [input, setInput] = useState(seed ?? "");
   const [busy, setBusy] = useState(false);
-  const [used, setUsed] = useState(0);
+  const [restantes, setRestantes] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [motivoDe, setMotivoDe] = useState<number | null>(null); // índice da resposta esperando motivo
@@ -76,7 +92,7 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idChat]);
 
-  const gated = !s.premium && used >= FREE_BIELA_QUESTIONS;
+  const gated = !s.premium && restantes !== null && restantes <= 0;
 
   // O 👍 ARMA o pedido de nota; quem dispara é o silêncio.
   //
@@ -162,12 +178,19 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
     const historico = historicoParaIA(msgs);
     setMsgs((m) => [...m, { role: "user", text }]);
     setBusy(true);
-    if (!s.premium) setUsed((n) => n + 1);
     try {
+      const sb = getBrowserSupabase();
+      const token = sb ? (await sb.auth.getSession()).data.session?.access_token : undefined;
       const res = await apiPost("/api/biela", {
         question: text,
         locale,
         historico,
+        // A identidade é o que o limite conta. A conta pelo Bearer (e só assim
+        // o Premium vale), o aparelho pelo anonId de quem ainda não abriu
+        // conta, que é justamente quem esta mudança veio atender.
+        anonId: anonId(),
+        plataforma: isNativeApp() ? nativePlatform() ?? "nativo" : "web",
+        versao: APP_VERSION,
         car: v ? { make: v.make, model: v.model, year: v.year, km: v.odometerKm, engine: v.engine, version: v.version } : null,
         // O QUE JÁ FOI FEITO NO CARRO, e o que a pessoa acabou de consultar.
         //
@@ -181,8 +204,16 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
           obd2: codigosConsultados(),
           sintoma: sintomaEmFoco(),
         }),
-      });
+      }, token ? { authorization: `Bearer ${token}` } : {});
+      // 429: as cinco do mês acabaram. A pergunta que a pessoa digitou fica na
+      // tela (ela não some do nada) e a folha do Premium toma o lugar do campo.
+      if (res.status === 429) {
+        setRestantes(0);
+        setBusy(false);
+        return;
+      }
       const data = await res.json();
+      if (typeof data.restantes === "number") setRestantes(data.restantes);
       setMsgs((m) => [...m, {
         role: "biela", text: data.answer, note: data.mode === "ai" ? undefined : c.biela.offlineNote,
         pergunta: text, modo: data.mode, comManual: data.usedManual,
@@ -326,6 +357,13 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
         </div>
       ) : (
         <>
+          {/* Quantas sobraram, e SÓ depois de o servidor ter respondido uma vez
+              (`restantes` nulo é "não perguntei ainda", não "zero"). Dizer o
+              saldo é metade do ponto de a Biela ser grátis: quem não sabe que
+              tem não usa. */}
+          {!s.premium && restantes !== null && (
+            <p className="mb-1.5 text-center text-xs text-cream/50">{c.biela.freeLeft.replace("{n}", String(restantes))}</p>
+          )}
           <div className="mb-2 flex items-end gap-2">
             <textarea
               ref={inputRef}

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { retrieveManualContext, type CarCtx as Car } from "@/lib/rag";
+import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
+import { LIMITE_GRATIS_POR_MES, mesDe, podePerguntar, restantes } from "@/lib/biela/limite";
 
 export const runtime = "nodejs";
 // Teto de duracao: funcao pendurada segura memoria provisionada (e cota).
@@ -19,6 +21,10 @@ type Body = {
   historico?: Turno[];
   /** O que já foi feito no carro, o código lido e o sintoma em investigação. */
   contexto?: Contexto | null;
+  /** Identidade do aparelho, para o limite do gratuito de quem não tem conta. */
+  anonId?: string;
+  plataforma?: string;
+  versao?: string;
 };
 
 // Tetos do contexto do carro, revalidados AQUI.
@@ -172,6 +178,47 @@ export async function POST(request: Request) {
   const historico = historicoLimpo(body.historico);
   if (!question) return NextResponse.json({ ok: false, error: "empty_question" }, { status: 422 });
 
+  // ── QUEM É, E QUANTAS JÁ FEZ (15/09/2026) ────────────────────────────────
+  //
+  // A Biela entrou no gratuito com cinco perguntas por mês (decisão do dono).
+  // Até hoje esta rota não conferia nada: sem sessão, sem Premium, sem
+  // contagem, sem teto. O único freio era o `FREE_BIELA_QUESTIONS = 0` da
+  // tela, e portão que mora no cliente é enfeite: o contador dele vivia num
+  // `useState` que zerava a cada abertura do app.
+  //
+  // O molde é o do orçamento por foto: a conta pelo Bearer (e só assim o
+  // Premium vale), senão o aparelho. Ver lib/biela/limite.ts.
+  const admin = getSupabaseAdmin();
+  const bearer = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ?? "";
+  let userId: string | null = null;
+  if (admin && bearer) {
+    const { data } = await admin.auth.getUser(bearer).catch(() => ({ data: { user: null } }));
+    userId = data?.user?.id ?? null;
+  }
+  const anonId = typeof body.anonId === "string" && body.anonId.trim() ? body.anonId.trim().slice(0, 64) : null;
+
+  let premium = false;
+  let feitas = 0;
+  const mes = mesDe();
+  if (admin) {
+    if (!userId && !anonId) return NextResponse.json({ ok: false, error: "sem_identidade" }, { status: 400 });
+    if (userId) {
+      const { data: sub } = await admin.from("subscriptions").select("status").eq("user_id", userId).maybeSingle();
+      premium = sub?.status === "active" || sub?.status === "trialing";
+    }
+    if (!premium) {
+      const q = admin.from("biela_perguntas").select("id", { count: "exact", head: true }).eq("mes", mes);
+      const { count } = userId ? await q.eq("user_id", userId) : await q.eq("anon_id", anonId!);
+      feitas = count ?? 0;
+      if (!podePerguntar(feitas, premium)) {
+        return NextResponse.json(
+          { ok: false, error: "limite", limite: LIMITE_GRATIS_POR_MES, feitas, restantes: 0 },
+          { status: 429 },
+        );
+      }
+    }
+  }
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
 
   // No AI key configured yet → answer in "basic" mode so the chat still works.
@@ -251,12 +298,43 @@ export async function POST(request: Request) {
     const answer = Array.isArray(data.content)
       ? data.content.filter((b: { type: string }) => b.type === "text").map((b: { text: string }) => b.text).join("\n").trim()
       : "";
+    // A PERGUNTA SÓ CONTA AQUI, depois de a chamada ter dado certo.
+    //
+    // Diferente do orçamento por foto, que conta mesmo quando a imagem era
+    // ilegível: lá a chamada saiu e foi paga do mesmo jeito. Aqui o caminho de
+    // falha é o `catch` abaixo, e ele só existe quando a chamada NÃO
+    // completou. Cobrar uma das cinco por uma resposta enlatada que a pessoa
+    // não pediu seria tirar dela o que ela não usou.
+    if (admin && !premium) {
+      const { error } = await admin.from("biela_perguntas").insert({
+        mes,
+        user_id: userId,
+        anon_id: userId ? null : anonId,
+        premium,
+        usou_manual: !!manual,
+        plataforma: typeof body.plataforma === "string" ? body.plataforma.slice(0, 16) : null,
+        versao: typeof body.versao === "string" ? body.versao.slice(0, 16) : null,
+      });
+      // Falha ao gravar NÃO derruba a resposta: a pessoa já tem o texto dela.
+      // Mas fica no registro, porque contagem que não grava é limite que não
+      // existe, e isso some em silêncio.
+      if (error) console.error("[biela] não gravei a pergunta para o limite", { motivo: error.message });
+      else feitas += 1;
+    }
+
     // `usedManual` vai junto para o registro do voto: quando alguém marca a
     // resposta como ruim, saber se ela veio do manual do carro ou de
     // conhecimento geral é a primeira coisa a olhar.
-    return NextResponse.json({ ok: true, mode: "ai", answer: answer || basicAnswer(locale, car), usedManual: !!manual });
+    return NextResponse.json({
+      ok: true,
+      mode: "ai",
+      answer: answer || basicAnswer(locale, car),
+      usedManual: !!manual,
+      restantes: restantes(feitas, premium),
+    });
   } catch (err) {
     console.warn("[biela] AI call failed, falling back:", err);
-    return NextResponse.json({ ok: true, mode: "basic", answer: basicAnswer(locale, car) });
+    // Não conta: a chamada não completou, então a pessoa não gastou nada.
+    return NextResponse.json({ ok: true, mode: "basic", answer: basicAnswer(locale, car), restantes: restantes(feitas, premium) });
   }
 }
