@@ -3,6 +3,34 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-15 · Engenharia: o retrato voltou inteiro, e o caso do /api/dados fecha
+- Conferência agendada por mim ontem, cumprida hoje. O retrato das 6h
+  (09:00:06 UTC) saiu COM DADOS pela primeira vez desde 11/09: zero
+  ocorrências de `"error"` no JSON, `falhas: {}`, e o `estadoDaBase`
+  preenchido (30 contas, 16 com carro, 4 com serviço, 9 ativas em 7 dias),
+  que era nulo em todos os retratos desde 01/09.
+- **Quanto levou, e qual consulta pesou: nenhuma.** 1.319 ms dentro da rota,
+  dos quais 788 ms no bloco paralelo. A mais lenta foi `funil_semana` com
+  532 ms. Não há consulta pesada para consertar; o que havia era a fila de
+  conexões da API da Supabase estourando com 12 pedidos de uma vez, e três
+  por vez resolveu. A suspeita de ontem sobre as views (`retencao_coortes`,
+  `anomalias_da_operacao`) está descartada por medição: 14 ms e 5 ms no
+  EXPLAIN, 179 ms e menos na rota.
+- O Analista levou 6,4 s de ponta a ponta (execução 8560), contra 19 a 21 s
+  nos dias quebrados. A Vercel registrou `GET /api/dados 200` às 09:00:02 e
+  nenhum aviso de `dados: consulta lenta`, que só sai acima de 5 s.
+- Sem ocorrência nova dos dois erros de produção desde os consertos: o
+  estouro de teto parou em 14/09 10:30 e a perda de evento do funil em
+  14/09 13:30. **Dez horas de silêncio não são prova**, porque a perda de
+  evento acontecia umas duas vezes por dia; a leitura honesta vem no fim
+  da semana.
+- O que ainda não aconteceu: o Vigia roda 07:30 de Brasília (10:30 UTC) e
+  hoje ainda não rodou quando esta conferência foi feita, às 09:16. As
+  conferências novas dele (retrato do dia, erro dentro do JSON, `falhas`,
+  tempo acima de 10 s) foram provadas à mão ontem nos dois sentidos, mas a
+  primeira rodada AGENDADA delas é a de hoje. Check-in remarcado para
+  depois dela.
+
 ## 2026-09-14 · Engenharia: a 2.6 preparada, e a 2.5 já tinha viajado sem ninguém anotar
 - O dono perguntou se estava tudo certo para subir a versão nova. A primeira
   coisa que a pergunta encontrou não foi um defeito de código, foi uma
@@ -158,7 +186,7 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 | A campanha do Google traz cadastro de verdade? | **Traz.** Na semana de 31/08 a 06/09, 7 das 8 contas novas carregam `google / lancamento`. A atribuição só existe a partir de 04/09, porque a captura de etiqueta subiu para todas as páginas em 03/09. Custo por conta no pedaço medido: R$ 14,71. | 07/09, Diretor |
 | Quantas pessoas o app teve de verdade numa semana? | Contar por `anon_id` NÃO responde isso (é armazenamento, infla a cada instalação). A régua é `auth.users`. Cruzar sempre com a porta de entrada: cliques pagos > anon_id > contas. | 01/09 e 07/09 |
 | Por que o mesmo carro vira dois? | Porque a identidade do carro é o `id`, e ele nasce no APARELHO: dois cadastros nunca colidem, e toda a dedup do app é por id. Uma causa para os três caminhos. As telas passaram a avisar em 09/09; em 10/09 a folha de importação passou a PERGUNTAR o que fazer com o carro repetido (juntar num só, só o da conta, só o deste aparelho), por decisão do dono. Vai na 2.4. | 10/09, Engenharia |
-| Por que o retrato diário de 12, 13 e 14/09 diz 0 assinaturas, "série de uso vazia" e funil sem dados? | Porque a camada de API da Supabase (PostgREST) respondia 504 a parte das 12 consultas que o `/api/dados` disparava de uma vez (fila de conexões pequena), a rota seguia com aquelas seções vazias e, quando a soma passava de 15 s, a Vercel derrubava a função inteira. O Postgres em si responde em milissegundos. Os três retratos são inválidos; `subscriptions` continua com os mesmos assinantes. Conserto de 14/09: 3 consultas por vez com nova tentativa em 504, campo `falhas` no JSON, teto de 60 s, e o Analista falha em vez de gravar zeros. E `estadoDaBase` era nulo em TODOS os retratos desde 01/09 por falta de permissão em `auth.users` (migração `estado_da_base_como_dono`). | 14/09, Engenharia |
+| Por que o retrato diário de 12, 13 e 14/09 diz 0 assinaturas, "série de uso vazia" e funil sem dados? | Porque a camada de API da Supabase (PostgREST) respondia 504 a parte das 12 consultas que o `/api/dados` disparava de uma vez (fila de conexões pequena), a rota seguia com aquelas seções vazias e, quando a soma passava de 15 s, a Vercel derrubava a função inteira. O Postgres em si responde em milissegundos. Os três retratos são inválidos; `subscriptions` continua com os mesmos assinantes. Conserto de 14/09: 3 consultas por vez com nova tentativa em 504, campo `falhas` no JSON, teto de 60 s, e o Analista falha em vez de gravar zeros. **RESOLVIDO, conferido em 15/09:** o retrato das 6h saiu inteiro, `falhas: {}`, 1,3 s dentro da rota, nenhuma consulta pesada (a mais lenta, 532 ms). E `estadoDaBase` era nulo em TODOS os retratos desde 01/09 por falta de permissão em `auth.users` (migração `estado_da_base_como_dono`). | 14/09, Engenharia |
 | Por que a foto do momento (ou do perfil) aparece quebrada? | O bucket `Avatars` do Storage estava privado e o app grava a URL pública: 400 em toda foto enviada logado. Ligado em 13/09 (`avatars_bucket_publico`); o retrato está em `supabase/storage_avatars.sql`. Se voltar a acontecer, conferir `select public from storage.buckets where id = 'Avatars'` antes de qualquer outra coisa. | 13/09, Engenharia |
 | O retrato está vazio ou zerado, é queda de verdade? | **Conferir o JSON antes de acreditar.** Em 12, 13 e 14/09 o retrato saiu com tudo zerado porque `/api/dados` estourou o teto de 15s e o arquivo guardou `"error": {"code": "504"}` no lugar dos dados. Zero no retrato pode ser ausência de resposta, não medição. O jeito rápido: `git show <sha>:docs/dados/retrato.md \| grep '"error"'`. | 14/09, Diretor |
 | Quais manuais faltam para a Biela? | O primeiro lote subiu em 06/09: 112 manuais, 34.609 trechos, e os DEZ carros mais comuns do Brasil passaram a ter manual (era 3 de 10). Gol 2016 e Ka 2025, de usuários nossos, saíram de zero. Faltam Corsa/Classic e as marcas vazias (Suzuki, Mercedes-Benz, e o EcoSport). | 06/09, `docs/manuais-a-subir.md` |
