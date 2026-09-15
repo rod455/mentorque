@@ -149,6 +149,28 @@ aqui.
      `user_id` sem virar duas. Se ela não ganhar, `app_erros` com origem
      `push` diz o motivo.
 
+7. **A Biela entra no gratuito: cinco perguntas por mês** (15/09, decisão do
+   dono). Até a 2.5 ela era Premium fechada e quem não assinava via só o
+   paywall. Agora qualquer pessoa, com conta ou sem, pergunta cinco vezes por
+   mês, e a tela mostra quantas sobraram.
+   - **Quem conta é o servidor**, não o app. O contador antigo vivia em estado
+     de React e zerava a cada abertura, o que com limite zero nunca apareceu e
+     com limite cinco viraria "cinco por abertura". A rota agora identifica
+     pela conta (Bearer) ou pelo aparelho (`anon_id`), lê o Premium da tabela
+     `subscriptions` e conta em `biela_perguntas`.
+   - Onde mora: `lib/biela/limite.ts` (puro), `app/api/biela`,
+     `components/app/screens/Biela.tsx`, a migração
+     `supabase/biela_perguntas.sql`. Conferido por `conferir:biela`, provado
+     com seis defeitos plantados.
+   - **O número é do dono e muda numa linha:** `LIMITE_GRATIS_POR_MES` em
+     `lib/biela/limite.ts`.
+   - **Roteiro de aparelho:** no app das lojas, SEM assinar, fazer seis
+     perguntas à Biela. As cinco primeiras respondem e o contador desce de 5
+     até 0 na linha acima do campo; a sexta não sai e a folha do Premium toma
+     o lugar do campo. Fechar e reabrir o app NÃO devolve perguntas (era
+     exatamente isso que o contador antigo fazia). Conferir no banco:
+     `select count(*) from biela_perguntas where mes = '2026-09'`.
+
 ## Roteiro de aparelho, e ele é obrigatório
 
 Escrito antes do build. O que a bateria não alcança: a câmera do aparelho
@@ -211,6 +233,8 @@ Registre o abastecimento em três toques e descubra quanto seu carro custa por k
 Guarde IPVA, licenciamento, seguro e CNH: o app avisa 30, 7 e 1 dia antes, e sugere a data pelo final da placa.
 
 No começo do mês, o resumo do que o carro custou.
+
+E agora você tem 5 perguntas por mês, de graça, com a Biela, a nossa mecânica de IA.
 ```
 
 **App Store**
@@ -227,7 +251,15 @@ Guarde IPVA, licenciamento, seguro e CNH: o app avisa 30, 7 e 1 dia antes, e sug
 No começo do mês, o resumo do que o carro custou.
 
 Trabalha com o carro por aplicativo? Ligue o modo no Perfil e veja quanto sobrou no dia.
+
+E agora você tem 5 perguntas por mês, de graça, com a Biela, a nossa mecânica de IA.
 ```
+
+**A linha da Biela é nova (15/09) e é a que mais atrai desta versão**, porque é
+a única que dá algo que antes era pago. Ela diz o número de propósito: "grátis"
+sem número é a promessa que a pessoa preenche sozinha para mais, e depois
+reclama. A regra 2 da ficha manda dizer o que o app não faz, e cinco é o que
+ele faz.
 
 ## Antes de enviar
 
