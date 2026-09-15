@@ -3,14 +3,21 @@
 Aberta em 13/09/2026. Tudo o que entra aqui já roda na web pelo deploy da
 Vercel; o binário só importa para o app das lojas.
 
-**Onde a 2.5 está (conferido no banco em 14/09/2026, não na lembrança):** o
-dono gerou a 2.5 no Codemagic em 13/09. Na Apple ela está em
-WAITING_FOR_REVIEW desde 13/09 11:20 (hora do Pacífico), e no Android já
-roda em aparelhos (61 eventos de `2.5.0` entre 13 e 14/09). Ou seja: **a 2.6
-é a próxima, e ela carrega tudo o que a 2.5 carrega, mais o que está aqui.**
-Na Apple não dá para ter duas versões em análise ao mesmo tempo, então
-mandar a 2.6 significa esperar a 2.5 ser aprovada ou retirar a 2.5 da fila.
-Decisão do dono.
+**Onde a 2.5 está (reconferido no banco em 15/09/2026 às 10h20, não na
+lembrança):** o dono gerou a 2.5 no Codemagic em 13/09.
+
+**A Apple APROVOU a 2.5.** O retrato de `app_store_connect` de hoje traz
+`2.5` em READY_FOR_SALE; o de ontem trazia a mesma versão em
+WAITING_FOR_REVIEW. Ou seja, a aprovação caiu entre 14 e 15/09. **A fila da
+Apple está livre e a trava que existia aqui deixou de existir:** não é mais
+preciso esperar nem retirar nada.
+
+No Android a 2.5 roda em aparelhos desde 13/09 (66 eventos de `2.5.0`, o
+último hoje às 09:55). Continua em aberto se ela está na faixa de PRODUÇÃO
+da Play ou só na interna, e isso não trava o build, só o `/api/app/latest`.
+
+A 2.6 é a próxima, e ela carrega tudo o que a 2.5 carrega, mais o que está
+aqui.
 
 ## O que vai NO BINÁRIO
 
@@ -202,12 +209,21 @@ Trabalha com o carro por aplicativo? Ligue o modo no Perfil e veja quanto sobrou
 
 ## Antes de enviar
 
-- Versão 2.6 nos três lugares: conferido em 14/09 (`conferir:versoes` diz
-  "2.6, ainda não publicada"). A 2.5 entrou na lista `JA_PUBLICADAS` no
-  mesmo dia, com a prova do banco.
-- Na Apple, a 2.5 está em análise. Duas versões não ficam na fila ao mesmo
-  tempo: ou esperar a aprovação da 2.5, ou retirá-la e mandar a 2.6 no
-  lugar (ela carrega tudo o que a 2.5 carrega).
+- Versão 2.6 nos três lugares: reconferido em 15/09 (`conferir:versoes` diz
+  "2.6 (app 2.6.0, Android 2.6, iOS 2.6), ainda não publicada"). A 2.5 está
+  na lista `JA_PUBLICADAS`, com a prova do banco.
+- Na Apple, a 2.5 foi APROVADA (READY_FOR_SALE no retrato de 15/09). A fila
+  está livre; nada a esperar nem a retirar.
+- Conferência de 15/09, antes do build: `npm run conferir` inteiro passou
+  (código 0), a bateria de navegador passou inteira (18 suítes, 344 passos,
+  804 s) e o `npm run build` local passou (código 0). Nenhuma dependência
+  mudou desde a 2.5: o diff de `package.json` e `package-lock.json` desde
+  13/09 é só de scripts. Em `android/` e `ios/` mudaram apenas os dois
+  números de versão. Nenhum plugin nativo entrou ou mudou, então a regra do
+  dono de 09/09 (ler o fonte do plugin antes do build) não tem alvo novo
+  nesta versão.
+- O que a conferência NÃO alcança continua sendo o roteiro de aparelho
+  acima. Verde aqui prova o que a suíte olha, não o binário.
 - Ao enviar a 2.6, acrescentar `"2.6"` à lista `JA_PUBLICADAS` NA HORA do
   envio, não na hora da aprovação. Foi o atraso de um dia nisso, na 2.5,
   que deixou a conferência dando luz verde para um nome já usado.
