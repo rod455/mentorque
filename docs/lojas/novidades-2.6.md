@@ -127,6 +127,28 @@ aqui.
      ver o card trocar; lançar um dia e ver a conta; desligar o interruptor
      e ver o card do custo voltar.
 
+6. **O push passa a alcançar quem não criou conta** (15/09, decisão do dono,
+   depois de o Vigia acusar "token pronto, mas sem sessão"). Até a 2.5 o
+   registro do token exigia sessão, e como no Android ninguém tem conta (26
+   aparelhos em 5 dias, zero eventos com `user_id`), o push não alcançava uma
+   única pessoa: a tabela tinha 1 token, de 11/09. Agora o dono da linha é a
+   conta quando há sessão e o próprio aparelho quando não há.
+   - Não muda nada na tela. O que muda é que ligar os avisos passa a valer
+     para quem ainda não abriu conta.
+   - Onde mora: `lib/app/push.ts`, `app/api/push/registrar`, a migração
+     `supabase/push_anonimo.sql`. Conferido por `conferir:push`, provado com
+     quatro defeitos plantados.
+   - A outra metade (a jornada que fala com esses aparelhos) é servidor e já
+     está no ar, PARADA: só sai com `JORNADA_APARELHO=sim` na Vercel.
+   - **Roteiro de aparelho, e é o mais importante desta versão:** no app das
+     lojas, SEM entrar na conta, Perfil, ligar os avisos e aceitar a
+     permissão. Em até um minuto,
+     `select platform, anon_id, user_id from push_tokens order by updated_at desc`
+     mostra uma linha com `user_id` nulo e `anon_id` preenchido. Depois,
+     criar conta no mesmo aparelho e conferir que a MESMA linha ganhou o
+     `user_id` sem virar duas. Se ela não ganhar, `app_erros` com origem
+     `push` diz o motivo.
+
 ## Roteiro de aparelho, e ele é obrigatório
 
 Escrito antes do build. O que a bateria não alcança: a câmera do aparelho
