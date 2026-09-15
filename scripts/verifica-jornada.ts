@@ -14,7 +14,9 @@ import { readFileSync } from "node:fs";
 import {
   escolherEmail,
   ESPACO_MINIMO_DIAS,
+  JANELA_DO_TETO,
   MARCOS_DA_CADENCIA,
+  TETO_POR_JANELA,
   type PessoaDaJornada,
 } from "../lib/jornada/decisao.ts";
 import { montarMensagem, renderEmail, linkDoApp } from "../lib/jornada/emails.ts";
@@ -73,6 +75,55 @@ console.log("Jornada: quem recebe o quê, e quando.");
   conferir(`recebeu há ${ESPACO_MINIMO_DIAS} dias: pode`, chave({ ...vencida, envios: [{ chave: "d9", dia: diasAtras(ESPACO_MINIMO_DIAS) }] }) === "vencida:oil");
   conferir("a mesma 'vencida:oil' não repete em 30 dias", chave({ ...vencida, envios: [{ chave: "vencida:oil", dia: diasAtras(10) }] }) !== "vencida:oil");
   conferir("depois de 30 dias, repete", chave({ ...vencida, envios: [{ chave: "vencida:oil", dia: diasAtras(31) }] }) === "vencida:oil");
+}
+
+// ── o teto de 30 dias (15/09/2026) ──────────────────────────────────────────
+// Veio da leitura do protótipo de oficina, que exige limite de contatos por
+// cliente. Aqui havia espaçamento de 3 dias e carência POR CHAVE, mas nenhum
+// teto no total: quem tem chave sobrando (cada item de revisão, cada data do
+// carro, cada marco de "sumiu") podia receber 10 e-mails num mês. O caso que
+// custa caro é o que ninguém relata, porque a pessoa não reclama, sai.
+{
+  const vencida = pessoa({ veiculos: [gol()], carroPrincipalId: "v1", servicos: [oleo(500)] });
+  // Seis envios espaçados de 3 em 3, o último há 3 dias: passa no espaçamento.
+  const seisDias = [3, 6, 9, 12, 15, 18];
+  const envios = (quantos: number, extra: { chave: string; dia: string }[] = []) =>
+    seisDias.slice(0, quantos).map((d, i) => ({ chave: `x${i}`, dia: diasAtras(d) })).concat(extra);
+
+  conferir(
+    `${TETO_POR_JANELA - 1} e-mails em ${JANELA_DO_TETO} dias: ainda cabe mais um`,
+    chave({ ...vencida, envios: envios(TETO_POR_JANELA - 1) }) === "vencida:oil",
+    `veio ${chave({ ...vencida, envios: envios(TETO_POR_JANELA - 1) })}`,
+  );
+  conferir(
+    `${TETO_POR_JANELA} e-mails em ${JANELA_DO_TETO} dias: nada mais, nem com revisão vencida`,
+    chave({ ...vencida, envios: envios(TETO_POR_JANELA) }) === null,
+    `veio ${chave({ ...vencida, envios: envios(TETO_POR_JANELA) })}`,
+  );
+  // A janela é móvel: o que saiu antes dela não ocupa vaga. Sem isto, o teto
+  // viraria um limite de vida inteira e calaria a jornada para sempre.
+  const comVelhos = envios(TETO_POR_JANELA - 1, [
+    { chave: "antigo1", dia: diasAtras(JANELA_DO_TETO + 1) },
+    { chave: "antigo2", dia: diasAtras(JANELA_DO_TETO + 10) },
+  ]);
+  conferir(
+    `envio de mais de ${JANELA_DO_TETO} dias não ocupa vaga no teto`,
+    chave({ ...vencida, envios: comVelhos }) === "vencida:oil",
+    `veio ${chave({ ...vencida, envios: comVelhos })}`,
+  );
+  // E o teto não pode comer a cadência, que é o motivo de a jornada existir:
+  // os cinco marcos cabem nos primeiros 14 dias com uma vaga de sobra.
+  const naCadencia = pessoa({
+    contaCriadaEm: diasAtras(14),
+    ultimaAtividade: diasAtras(1),
+    envios: [
+      { chave: "d0", dia: diasAtras(14) },
+      { chave: "d2", dia: diasAtras(11) },
+      { chave: "d5", dia: diasAtras(8) },
+      { chave: "d9", dia: diasAtras(5) },
+    ],
+  });
+  conferir("o teto não corta o último marco da cadência (d14)", chave(naCadencia) === "d14", `veio ${chave(naCadencia)}`);
 }
 
 // ── vencido só com registro ─────────────────────────────────────────────────

@@ -14,6 +14,8 @@
 //      usando é ruído, e ruído ensina a ignorar o remetente.
 //   2. Um e-mail a cada três dias, no máximo. Cadência, gatilho e sazonal
 //      disputam a mesma vaga; não se somam.
+//   2b. E seis em trinta dias, no total. O espaçamento sozinho não é teto:
+//      a carência de 30 ou 60 dias é por chave, e chave sobra.
 //   3. Gatilho ganha de cadência, cadência ganha de sazonal. O gatilho fala
 //      do carro DESSA pessoa neste ponto (revisão vencida, km parado); a
 //      cadência fala do que o app faz; o sazonal fala do calendário. Quanto
@@ -88,6 +90,21 @@ export type Escolha = {
 
 /** Mínimo de dias entre dois e-mails para a mesma pessoa. */
 export const ESPACO_MINIMO_DIAS = 3;
+/**
+ * Teto de e-mails numa janela móvel, contando qualquer família.
+ *
+ * O espaçamento de 3 dias sozinho deixa passar 10 e-mails num mês para quem
+ * tem chave suficiente, porque a carência de 30 ou 60 dias é POR CHAVE e não
+ * no total: cada item de revisão, cada data do carro e cada marco de "sumiu"
+ * é uma chave diferente. Nenhuma conta de hoje chega perto disso, mas a regra
+ * permitia, e quem recebe demais não reclama, sai.
+ *
+ * Seis cabe a cadência inteira dos primeiros dias (d0, d2, d5, d9 e d14 são
+ * cinco) e ainda deixa uma vaga para gatilho. A janela é móvel de propósito:
+ * contada por mês do calendário, ela liberaria uma rajada na virada.
+ */
+export const TETO_POR_JANELA = 6;
+export const JANELA_DO_TETO = 30;
 /** A cadência só sai até este número de dias depois do marco. */
 export const JANELA_DA_CADENCIA = 3;
 /** Os marcos da cadência, em dias depois de a conta nascer. */
@@ -165,10 +182,16 @@ export function escolherEmail(p: PessoaDaJornada, hoje: string, agora = new Date
   if (p.saiu) return null;
   if (p.ultimaAtividade === hoje) return null;
 
-  // Um a cada três dias, contando qualquer família.
+  // Um a cada três dias, e no máximo seis em trinta, contando qualquer família.
   let ultimoDia: string | null = null;
-  for (const e of p.envios) if (!ultimoDia || e.dia > ultimoDia) ultimoDia = e.dia;
+  let naJanela = 0;
+  for (const e of p.envios) {
+    if (!ultimoDia || e.dia > ultimoDia) ultimoDia = e.dia;
+    const desde = diasEntre(e.dia, hoje);
+    if (desde >= 0 && desde < JANELA_DO_TETO) naJanela++;
+  }
   if (ultimoDia && diasEntre(ultimoDia, hoje) < ESPACO_MINIMO_DIAS) return null;
+  if (naJanela >= TETO_POR_JANELA) return null;
 
   // O resumo do mês ganha da cadência e do sazonal nos três primeiros dias
   // do mês, mas perde do gatilho: coisa vencida é mais urgente que balanço.
