@@ -17,11 +17,24 @@ export const sobre = "vazamento lateral das páginas do site em telas de celular
 // entre as que alguém olha em 320px. Guia novo passa a ser conferido no dia em
 // que nasce, que é justamente quando o corte lateral costuma entrar.
 const PASTA_GUIAS = new URL("../../lib/site/guias", import.meta.url).pathname;
-const GUIAS = readdirSync(PASTA_GUIAS)
-  .filter((f) => f.endsWith(".ts") && f !== "tipos.ts" && f !== "index.ts")
-  .map((f) => (readFileSync(join(PASTA_GUIAS, f), "utf8").match(/caminho:\s*"([^"]+)"/) ?? [])[1])
-  .filter(Boolean)
-  .sort();
+// A LISTA SAI DE PÉ, NÃO DE NOME (15/09/2026). O filtro por nome de arquivo é
+// uma lista de exceções, e lista de exceções envelhece: `links.ts` não é guia,
+// é o registro de links da home, e o primeiro `caminho:` de dentro dele é o do
+// guia de barulho. Resultado: `/barulho-no-carro` entrava DUAS vezes e a suíte
+// media o mesmo guia duas vezes achando que eram dois. Ninguém viu porque
+// medir de novo passa de novo.
+//
+// O `Set` é o que resolve de verdade: qualquer arquivo futuro que por acaso
+// tenha um `caminho:` dentro deixa de inflar a lista. O filtro por nome fica,
+// só para não abrir arquivo à toa.
+const GUIAS = [
+  ...new Set(
+    readdirSync(PASTA_GUIAS)
+      .filter((f) => f.endsWith(".ts") && !["tipos.ts", "index.ts", "links.ts"].includes(f))
+      .map((f) => (readFileSync(join(PASTA_GUIAS, f), "utf8").match(/caminho:\s*"([^"]+)"/) ?? [])[1])
+      .filter(Boolean),
+  ),
+].sort();
 
 // `/landing` é a LP de tráfego pago. Entra aqui porque é a página cujo corte
 // lateral custa dinheiro na hora: cada visita dela foi comprada.
@@ -112,8 +125,9 @@ export async function rodar({ nav, ok }) {
   // pessoa e o robô recebem. Três coisas que entraram em 08/09/2026 e que só
   // existem de verdade se aparecerem no HTML: a data visível, o link no meio
   // do texto (a marcação `[[...]]` virou `<a>` e não texto cru), e o cartão de
-  // compartilhamento respondendo imagem. Um guia basta: os quatro passam pelo
-  // mesmo componente.
+  // compartilhamento respondendo imagem. Um guia basta AQUI: o que está sendo
+  // conferido é o componente, e ele é o mesmo para todos. A conferência da
+  // barra, logo abaixo, roda em todos, e o comentário dela explica por quê.
   {
     const ctx = await nav.newContext({ viewport: { width: 390, height: 900 } });
     const pg = await ctx.newPage();
@@ -143,12 +157,32 @@ export async function rodar({ nav, ok }) {
       resp ? `${resp.status()} ${resp.headers()["content-type"] ?? ""}` : "sem resposta"
     );
 
-    // A BARRA FIXA COM AS LOJAS (15/09/2026, pedido do dono). Estes quatro
-    // guias são o destino do anúncio de busca, e a barra é a única saída para
-    // a loja que quem lê metade e desiste chega a ver. Três perguntas, e a
-    // primeira é a que uma conferência de texto não responderia: ela CONTINUA
-    // no topo depois de rolar? `position: sticky` morre em silêncio quando um
-    // pai ganha `overflow` ou `transform`, e a página segue funcionando.
+    await pg.close();
+    await ctx.close();
+  }
+
+  // A BARRA FIXA COM AS LOJAS (15/09/2026, pedido do dono). Os guias são o
+  // destino do anúncio de busca, e a barra é a única saída para a loja que
+  // quem lê metade e desiste chega a ver. Três perguntas, e a primeira é a que
+  // uma conferência de texto não responderia: ela CONTINUA no topo depois de
+  // rolar? `position: sticky` morre em silêncio quando um pai ganha `overflow`
+  // ou `transform`, e a página segue funcionando.
+  //
+  // ISTO RODA EM TODOS OS GUIAS, e o bloco de cima não (16 linhas acima:
+  // "um guia basta"). A diferença não é capricho. Lá em cima o que se confere
+  // é o COMPONENTE, igual para todos. Aqui metade do que se confere é do
+  // CONTEÚDO de cada guia: a folga da âncora depende do índice daquele guia, e
+  // `position: sticky` morre por causa de um pai com `overflow`, que um bloco
+  // novo pode trazer sem ninguém perceber.
+  //
+  // E o custo de descobrir isso foi baixo por acaso: em 15/09 o agente de SEO
+  // publicou o quinto guia horas depois de a barra entrar, e a suíte aprovou
+  // sem nunca ter olhado a barra dele. Amostra de um vira ponto cego assim que
+  // alguém acrescenta o segundo.
+  for (const caminho of GUIAS) {
+    const ctx = await nav.newContext({ viewport: { width: 390, height: 900 } });
+    const pg = await ctx.newPage();
+    await pg.goto(BASE + caminho, { waitUntil: "networkidle" }).catch(() => {});
     const barra = await pg.evaluate(() => {
       // MESMA BLINDAGEM DA MEDIDA DE CORTE LATERAL, pelo mesmo motivo: sem a
       // folha de estilo, `position: sticky` não existe e esta conferência
