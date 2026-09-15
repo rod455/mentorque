@@ -51,6 +51,14 @@ Do DIARIO tirar duas coisas: qual versão está publicada em cada loja, e quais
 decisões do dono estão em pé (a seção "Direcionamentos do dono" aqui embaixo
 é o resumo, o DIARIO é o original).
 
+**2a. Responder é entrega, não rascunho solto**
+Os rascunhos moram em `docs/lojas/respostas.md`, prontos para colar, com a
+contagem de caracteres contra o limite da loja (Play: 350). Antes de rascunhar,
+conferir `respondido` no banco, não a memória: `select autor, loja, respondido
+from lojas_avaliacoes order by coletado_em`. O dono marca `respondido = true`
+ao colar; enquanto ele não marcar, a avaliação reaparece aqui, e isso é de
+propósito.
+
 **2. Avaliações, e o zero tem que ser provado**
 As coletadas estão na tabela `lojas_avaliacoes` (e resumidas no retrato).
 Antes de escrever qualquer número, inclusive zero: abrir a última execução do
@@ -188,6 +196,28 @@ sem saber o que ela custou.
   vazia, olhar retenção antes de propor mexer no pedido: baixar a carência
   para forçar volume traz nota de quem ainda não tem opinião, que é como se
   ganha 3 estrelas.
+- **15/09/2026, o conserto de 01/09 rendeu na manhã seguinte, e o feed da Apple
+  entrega uma vez a cada muitas.** A primeira execução depois do conserto
+  (8420, 02/09) gravou as 3 avaliações da App Store. Desde então o feed
+  respondeu 200 com envelope VAZIO em todos os dias, inclusive hoje, e as 3
+  avaliações continuam existindo na loja. Ou seja: feed vazio da Apple não diz
+  nada sobre a loja, e o dia em que ele enche é sorte. Jeito rápido de ler 15
+  dias sem abrir execução por execução: na lista de execuções, a que gravou
+  dura 1,6 s e as vazias duram 0,2 s, porque só a que tem avaliação faz o POST.
+- **A Play tem janela de 7 dias e a Apple não tem janela nenhuma.** A API da
+  Play só devolve os últimos 7 dias, então avaliação não coletada na semana
+  some para sempre; por isso o coletor é diário. O feed da Apple é "mostRecent"
+  e deveria devolver sempre as mesmas últimas avaliações, o que torna o
+  envelope vazio um defeito do feed, não ausência de avaliação.
+- **Limite de plano se lê em `lib/app/premium.ts`, não no texto da ficha.** O
+  bloco PREÇO dizia "cadastro de veículos" (lê-se ilimitado) e o app para em 2
+  (`LIMITS.freeCars`). Ninguém tinha conferido o texto contra o código desde
+  que a ficha nasceu. Vale para o resto: `freeServices: 20`, `freeParts: 3`,
+  `freeOrcamentosMes: 2`.
+- **Média de nota é frágil enquanto a amostra é pequena, e isso é argumento,
+  não observação.** Com 8 avaliações, uma nota 1 leva a média de 5,00 para
+  4,56. É o que justifica gastar uma rodada com honestidade de expectativa em
+  vez de atração: evitar uma decepção vale mais que atrair dois downloads.
 - **Campo de palavra-chave da Apple não repete o que já está no nome e no
   subtítulo.** A Apple indexa os três juntos, e termo repetido é caractere
   jogado fora. Foi assim que `oficina` ficou ocupando espaço à toa desde a

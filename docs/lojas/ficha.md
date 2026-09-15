@@ -97,8 +97,16 @@ Mentorque: cuidar do carro
 
 PENDENTE de troca para `Mentorque: manutenção do carro`, junto com as
 palavras-chave. Na Apple, nome, subtítulo e palavras-chave só mudam com o
-envio de uma versão, então isto entra no próximo build (a 1.5 subiu em
-31/08). A metade da Play já foi aplicada em 01/09.
+envio de uma versão. A metade da Play já foi aplicada em 01/09.
+
+**A janela é a 2.6, e ela está aberta agora (15/09).** A 2.5 foi aprovada e
+saiu da fila, a 2.6 está pronta e ainda não foi enviada
+(`docs/lojas/novidades-2.6.md`). Nome e palavras-chave se digitam na mesma
+tela do envio, então isto custa dois minutos SE for lembrado na hora. Se a 2.6
+subir sem essa troca, a metade da Apple espera mais uma versão inteira. E já
+perdeu envio: a 1.6 foi aprovada nas duas lojas em 01/09 e a 2.5 foi aprovada
+em 15/09, as duas sem levar o nome novo junto. Não é urgente, é só barato
+agora e caro depois.
 
 ### Subtítulo (30 caracteres)
 
@@ -129,12 +137,19 @@ um modelo de linguagem lê, então o texto continua valendo.
 
 ---
 
-## O que atualizar quando houver avaliação de verdade
+## Prova social: chegou, e continua fora dos textos de loja
 
-Hoje não existe avaliação nas duas lojas, e por isso nenhum dos textos cita
-nota ou depoimento. Quando aparecerem as primeiras, o agente de ASO e Lojas
-marca as de 4 e 5 estrelas que servem de prova social, e aí entra uma linha
-com a fonte real. Antes disso, qualquer prova social seria fabricada.
+**Atualizado em 15/09/2026.** Já existem 8 avaliações, todas 5 estrelas (5 na
+Play, 3 na App Store). Os textos exatos e quais servem de depoimento para a LP
+estão em `docs/lojas/respostas.md`.
+
+O que mudou: a LP pode encher a seção de depoimentos, que estava vazia de
+propósito, com frase real e nome real.
+
+O que NÃO mudou: nenhum texto de loja cita nota. Com 8 avaliações, uma nota 1
+derruba a média de 5,00 para 4,56, e ficha que anuncia nota precisa de nova
+revisão para desanunciar. Citar nota entra quando o volume aguentar uma nota
+ruim sem virar mentira, não antes.
 
 ---
 
@@ -228,3 +243,90 @@ esse número é zero contra zero, então qualquer coisa acima de zero já é sin
 A leitura honesta só existe a partir de duas rodadas depois da troca, porque a
 Play leva alguns dias para reindexar e o volume é pequeno demais para ler em
 uma semana.
+
+---
+
+## 2026-09-15 · O texto diz que o grátis cadastra veículos; o app para no segundo
+
+**Estado: ABERTA.** Vale para a Play (aplicável na hora) e para a App Store
+(entra junto com o próximo envio, hoje a 2.6).
+
+### A troca, em tabela
+
+Campo: descrição completa, bloco PREÇO. Limite de 4000 caracteres, hoje em
+2086, então espaço não é problema.
+
+| | Texto | Caracteres |
+|---|---|---|
+| Hoje | `O uso principal é gratuito e não pede cartão: cadastro de veículos, diagnóstico por sintoma, histórico de manutenção, aulas abertas e ferramentas básicas.` | 154 |
+| Proposto (Play) | `O uso principal é gratuito e não pede cartão: até 2 carros na garagem, diagnóstico por sintoma, 20 serviços no histórico, aulas abertas e ferramentas básicas. Na versão gratuita do Android aparecem anúncios.` | 207 |
+| Proposto (App Store) | igual, sem a frase dos anúncios (a Apple não tem AdMob no app) | 158 |
+
+E a linha seguinte, que hoje não diz o que o Premium resolve:
+
+| | Texto |
+|---|---|
+| Hoje | `...libera o acervo completo de conteúdo, relatórios de gasto, diagnóstico aprofundado e a assistente Biela sem limite.` |
+| Proposto | `...libera garagem sem limite, o acervo completo de conteúdo, relatórios de gasto, diagnóstico aprofundado e a assistente Biela sem limite.` |
+
+Os números não são estimativa, saem de `lib/app/premium.ts`: `freeCars: 2`,
+`freeServices: 20`, `freeParts: 3`.
+
+### O raciocínio
+
+"Cadastro de veículos" lê-se como ilimitado. O app para no terceiro carro. Quem
+baixa para organizar os carros da família ou da empresa descobre isso depois de
+cadastrar, que é o pior momento possível: já investiu trabalho.
+
+Isso não é teoria. **Uma avaliação desta quinzena já repete a informação errada
+em público**: a Triplyze escreveu "bom que é grátis para 1 carro". A pessoa
+gostou e mesmo assim saiu com a conta errada na cabeça, para menos. Duas das
+cinco avaliações da Play falam em vários carros, frota e clínica. É o público
+que mais esbarra no limite e é exatamente quem a ficha não avisa.
+
+A regra 2 desta ficha já mandava fazer isso desde o começo: "o que o app NÃO faz
+aparece, porque download frustrado vira nota 1 estrela". A regra estava escrita
+e o bloco PREÇO nunca foi conferido contra o código.
+
+O motivo de ser AGORA, e não numa rodada qualquer: são 8 avaliações, todas 5
+estrelas. Uma nota 1 leva a média de 5,00 para 4,56; duas levam para 4,20. Com
+amostra deste tamanho, evitar uma decepção vale mais do que atrair dois
+downloads, e o custo dessa prevenção é uma frase.
+
+### O que a proposta NÃO faz
+
+Não mexe em preço nem em plano: os R$ 29,90 e R$ 239,90 ficam iguais, e o
+limite de 2 carros já existe no app hoje. Isto é descrever o que já é, não
+mudar o que é. Não mexe no título, que foi a proposta de 01/09 e ainda está em
+leitura. Não cita nota nem depoimento na loja. E não entra no campo de
+palavras-chave, embora `frota` seja candidato para a próxima rodada: hoje o
+campo da Apple está proposto em 95 de 100 e não cabe sem tirar outro termo.
+
+### O risco, dito na cara
+
+Dizer "até 2 carros" pode afastar quem tem três e fecharia assinatura. É um
+risco real, e a resposta honesta é que essa pessoa descobre o limite de
+qualquer jeito, dez minutos depois, e aí já está irritada. O outro risco é a
+frase dos anúncios: ela precisa bater com a declaração de anúncios no console
+da Play. Conferência barata, uma tela: Play Console, Ficha da loja, seção
+Anúncios, tem que estar marcado "Contém anúncios". Se estiver desmarcado, o
+erro é a declaração, não a frase.
+
+### Como saber se funcionou
+
+Este é um conserto de expectativa, não de aquisição, então a métrica não é
+instalação: é a ausência de uma nota baixa com a palavra "grátis", "pago" ou
+"limite" dentro. A leitura é por exceção e roda sozinha nas próximas rodadas,
+porque toda avaliação nova passa por aqui. Se o volume de instalação cair de
+forma visível na mesma semana, aí sim a frase espantou gente, e isso aparece no
+Play Console em Aquisição.
+
+### A condição de volta atrás
+
+Se até a rodada de 15/10/2026 aparecer queda clara de instalação sem outra
+explicação (campanha parada, versão nova, feriado), a frase dos anúncios sai
+primeiro, que é a mais fácil de espantar, e o "até 2 carros" fica. O limite de
+carros não volta a ser escondido: esconder foi o erro que esta proposta
+conserta. Se aparecer nota baixa reclamando de limite mesmo COM o aviso, o
+problema deixa de ser o texto e passa a ser o produto, e a conversa muda de
+dono: vira assunto do CRO, não da ficha.

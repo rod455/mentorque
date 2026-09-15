@@ -3,6 +3,78 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-15 · ASO & Lojas: as 8 primeiras avaliações, e o feed da Apple que fala uma vez a cada muitas
+- Segunda rodada deste papel. Artifact "Lojas da quinzena":
+  https://claude.ai/artifact/CKg35yL9VaXnCKVxjrXAUz
+- **Chegaram as primeiras avaliações: 8, todas 5 estrelas** (5 na Play, 3 na
+  App Store), de 7 autores, porque Luana David aparece nas duas lojas. As 8
+  estavam com `respondido = false` no banco, nenhuma respondida desde 02/09.
+- **Os 7 rascunhos de resposta estão em `docs/lojas/respostas.md`**, medidos
+  contra o limite de cada loja (a Play corta em 350; a maior das minhas tem
+  302). Ao colar, marcar `respondido = true`, senão a próxima rodada escreve
+  tudo de novo. A oitava não tem rascunho de propósito, pelo motivo abaixo.
+- **PERGUNTA PARA O DONO, e é o único bloqueio desta rodada:** a avaliação
+  "Economia no bolso" da App Store é de `Moraes455`. O nome bate com o
+  sobrenome do dono e o número com o e-mail dele. Se for ele, a recomendação é
+  apagar pela própria conta que escreveu: avaliação do desenvolvedor no
+  próprio app é manipulação de avaliação nas regras das duas lojas. Não
+  rascunhei resposta porque empresa respondendo à avaliação que ela mesma
+  escreveu não se desfaz depois. Se for homônimo, escrevo na próxima rodada.
+- **O conserto de 01/09 rendeu na manhã seguinte, com prova:** a primeira
+  execução depois dele (8420, 02/09, 10h) gravou as 3 avaliações da App
+  Store, que o parser antigo teria descartado em silêncio.
+- **ACHADO DA RODADA: o feed público da Apple entregou UMA vez em 15 dias.**
+  Em 02/09 veio com as 3; em todos os 13 dias seguintes, inclusive hoje
+  (execução 8561), respondeu 200 com o envelope VAZIO, 409 bytes, sem
+  `entry`, enquanto as 3 avaliações continuam publicadas na loja. Feed vazio
+  da Apple não diz nada sobre a loja. Jeito rápido de ler 15 dias sem abrir
+  execução por execução: a que gravou dura 1,6 s e as vazias duram 0,2 s,
+  porque só a que tem avaliação faz o POST.
+- Consequência prática: avaliação nova na App Store pode ficar semanas sem
+  chegar até nós, e responder três semanas depois não é responder. RECOMENDO
+  passar a coleta da Apple para a API do App Store Connect, que já tem
+  credencial viva no workflow "Analista: metricas externas" (é ela que traz
+  as versões todo dia). É obra do Analista, não deste papel, e por isso fica
+  como recomendação e não como conserto.
+- **A Play está saudável, e isso também foi provado:** o braço
+  `Play: avaliacoes` rodou hoje às 8h30 (execução 8559) e devolveu vazio
+  porque não houve avaliação nova nos últimos 7 dias, que é toda a janela que
+  a API da Play oferece. Lá, avaliação não coletada na semana some para
+  sempre. Correção ao relatório de 01/09, que dizia faltar a credencial da
+  Play: ela existe e funciona, e está registrado no manual desde então.
+- **4 depoimentos REAIS liberados para a LP**, com texto exato, nome e
+  contexto, em `docs/lojas/respostas.md`. A seção `social.items` de
+  `strings.pt.ts` e `.en.ts` está vazia de propósito desde agosto esperando
+  exatamente isso. Ressalva registrada: o "economizei quase 40%" da Triplyze
+  só pode aparecer como fala da pessoa, entre aspas e com nome; virar título
+  de página transforma experiência de usuário em promessa da empresa.
+- Varredura de prova social fabricada feita com `grep`, como manda o manual: o
+  inventário continua o mesmo de 01/09 (onboarding, paywall e
+  `LandingDownload.tsx`). NÃO reabri como prioridade, respeitando o
+  direcionamento do dono. Registro só o fato novo: o "4,8" inventado com
+  rótulo "média das avaliações" agora é menor que a média real, que é 5,0.
+- **PROPOSTA DA QUINZENA: a ficha promete garagem ilimitada no grátis.** O
+  bloco PREÇO diz "cadastro de veículos" e o app para em 2
+  (`LIMITS.freeCars`, em `lib/app/premium.ts`). Ninguém tinha conferido o
+  texto contra o código desde que a ficha nasceu. A prova de que confunde
+  está numa avaliação desta quinzena: a Triplyze escreveu, elogiando, "bom
+  que é grátis para 1 carro". Proposta em `docs/lojas/ficha.md`, com critério
+  de volta atrás em 15/10.
+- O argumento de por que agora: com 8 avaliações, UMA nota 1 leva a média de
+  5,00 para 4,56 e duas levam para 4,20. Com amostra deste tamanho, evitar uma
+  decepção vale mais que atrair dois downloads, e custa uma frase. A regra 2
+  da própria ficha ("o que o app NÃO faz aparece") já mandava fazer isso.
+- **JANELA ABERTA HOJE:** a metade da Apple da proposta de 01/09 (nome e
+  palavras-chave) só muda junto com envio de versão. A 2.5 foi aprovada, a
+  fila está livre e a 2.6 está pronta e ainda não foi enviada. São dois
+  minutos na mesma tela do envio. Já passou batido em dois envios à Apple: a
+  1.6 (aprovada em 01/09) e a 2.5 (aprovada hoje).
+- Nada de tendência de reclamação para o QA nesta rodada: não existe nenhuma
+  nota de 1 a 3 até hoje, nas duas lojas.
+- Recomendações: (1) colar as 7 respostas, a mais antiga espera desde 02/09;
+  (2) levar nome e palavras-chave da Apple junto com a 2.6; (3) trocar o feed
+  público da Apple pela API do App Store Connect na coleta de avaliações.
+
 ## 2026-09-15 · Engenharia: o retrato voltou inteiro, e o caso do /api/dados fecha
 - Conferência agendada por mim ontem, cumprida hoje. O retrato das 6h
   (09:00:06 UTC) saiu COM DADOS pela primeira vez desde 11/09: zero
