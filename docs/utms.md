@@ -23,7 +23,7 @@ Tudo em minúsculas, sem acento e sem espaço. Sempre.
 | `utm_source` | de onde veio | `instagram`, `youtube`, `google`, `email` |
 | `utm_medium` | de que natureza | `social` (orgânico), `cpc` (pago), vazio no e-mail |
 | `utm_campaign` | de qual esforço | `bio`, `lancamento`, `lista-espera` |
-| `utm_content` | de qual peça, quando houver mais de uma | `stories`, `reels`, `post-freio` |
+| `utm_content` | de qual peça, quando houver mais de uma | `stories`, `reels`, `post-freio`, e nos guias: `barulho`, `nao-pega`, `injecao`, `gasolina` |
 
 A distinção que mais vale é `social` contra `cpc`: é ela que separa o que a
 gente ganhou do que a gente comprou, e sem isso o CAC vira ficção.
@@ -48,6 +48,45 @@ separá-los sem criar campanha nova:
 
 ```
 https://www.mentorque.com.br/?utm_source=youtube&utm_medium=social&utm_campaign=canal
+```
+
+**Google Ads, campanha de busca** (o link que faltava nesta lista, e foi por
+isso que ninguém viu que ele tinha ficado no `/app`):
+
+```
+https://www.mentorque.com.br/?utm_source=google&utm_medium=cpc&utm_campaign=lancamento
+```
+
+As três etiquetas são exatamente as que já estão gravadas nos eventos desde
+04/09. Não trocar nenhuma, senão a série parte em duas e a comparação com as
+semanas anteriores morre.
+
+**Onde colar no Google Ads, e isto evita o erro se repetir.** Em vez de
+pendurar as etiquetas na URL final de cada anúncio, use o campo
+**"Sufixo do URL final"** no nível da campanha:
+
+```
+URL final:            https://www.mentorque.com.br/
+Sufixo do URL final:  utm_source=google&utm_medium=cpc&utm_campaign=lancamento
+```
+
+Assim a etiqueta acompanha qualquer troca de página no futuro, e a URL final
+fica sendo só o destino. O `gclid` continua entrando sozinho pela marcação
+automática do Google; é ele que permite devolver a conversão quando a venda
+acontecer, então não desligar.
+
+**Sempre com `www`.** O domínio sem `www` responde com um desvio, e desvio
+entre origens já matou chamada nossa antes (a Biela, em 02/09).
+
+**Por sintoma, se um dia separar os grupos de anúncio.** Os quatro guias
+respondem a busca e têm os dois botões de loja, o que a home também tem. Não
+foi medido ainda contra a home, então é teste, não recomendação:
+
+```
+https://www.mentorque.com.br/barulho-no-carro?utm_source=google&utm_medium=cpc&utm_campaign=lancamento&utm_content=barulho
+https://www.mentorque.com.br/carro-nao-pega?utm_source=google&utm_medium=cpc&utm_campaign=lancamento&utm_content=nao-pega
+https://www.mentorque.com.br/luz-da-injecao-acesa?utm_source=google&utm_medium=cpc&utm_campaign=lancamento&utm_content=injecao
+https://www.mentorque.com.br/carro-gastando-muita-gasolina?utm_source=google&utm_medium=cpc&utm_campaign=lancamento&utm_content=gasolina
 ```
 
 ## O site não leva mais ao /app (12/09/2026)
