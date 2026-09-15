@@ -71,6 +71,18 @@ Regras:
   gente de menos para pesar, e a leitura de verdade começa com a 2.5.
 - Veredito: (aberto)
 
+> **AVISO DE LEITURA, posto em 15/09/2026.** As quatro apostas da rotina do
+> carro (caderno de gastos, datas, resumo mensal, modo motorista) estão no ar
+> NA WEB desde 13/09 e a adoção medida hoje é **zero em tudo**: 0 de 30 contas
+> com abastecimento, 0 com data do carro, 0 com o modo motorista. Isso NÃO é
+> veredito, é falta de exposição, e confundir os dois seria matar quatro
+> apostas boas sem teste. Os motivos, nesta ordem: as quatro só chegam às
+> lojas com a 2.6, que ainda não foi enviada, e é lá que estão as pessoas; e
+> na web quem chega vem do anúncio, cai no /app e 95% não termina o
+> onboarding (docs/utms.md). **O relógio de cada uma começa no dia em que a
+> 2.6 for aprovada, não em 13/09.** Ao ler qualquer uma delas, primeiro
+> conferir a data de aprovação da 2.6 e somar as semanas a partir dali.
+
 ## [caderno-de-gastos] O abastecimento em três toques, com custo por km na hora
 - Estado: ABERTO
 - Tipo: mudanca-direta
