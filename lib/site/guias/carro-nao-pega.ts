@@ -18,7 +18,7 @@ import type { Guia } from "./tipos";
 export const guia: Guia = {
   caminho: "/carro-nao-pega",
   publicadoEm: "2026-09-04",
-  atualizadoEm: "2026-09-08",
+  atualizadoEm: "2026-09-15",
   rotulo: "Guia de diagnóstico",
   h1: "O carro não pega: descubra o que é pelo som da partida",
   tituloSeo: "Carro não pega: o que pode ser e o que fazer agora | Mentorque",
@@ -64,7 +64,7 @@ export const guia: Guia = {
         rotulo: "Atenção",
         tom: "media",
         texto:
-          "Chupeta resolve o dia, não o problema. Se o alternador não estiver recarregando, o carro morre de novo assim que você desligar. Vale testar carga da bateria e do alternador antes de simplesmente comprar bateria nova.",
+          "Chupeta resolve o dia, não o problema. Se o alternador não estiver recarregando, o carro morre de novo assim que você desligar. Vale testar carga da bateria e do alternador antes de simplesmente comprar bateria nova. Quando isso já virou rotina, o recorte certo é [[/bateria-do-carro-descarregando#depois-da-chupeta|por que ela vive arriando]].",
       },
     },
     {

@@ -22,4 +22,5 @@ export const LINKS_DOS_GUIAS: LinkDeGuia[] = [
   { caminho: "/luz-da-injecao-acesa", rotulo: "Luz da injeção acesa" },
   { caminho: "/carro-nao-pega", rotulo: "Carro não pega" },
   { caminho: "/carro-gastando-muita-gasolina", rotulo: "Carro gastando gasolina" },
+  { caminho: "/bateria-do-carro-descarregando", rotulo: "Bateria descarregando" },
 ];

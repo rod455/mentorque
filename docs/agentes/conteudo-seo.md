@@ -83,11 +83,17 @@ preço/planos, tocar em telas de app fora de conteúdo.
   Verde na Vercel não diz nada sobre o build do app (lição que já estava no
   DIARIO de 23/08 e vale para este papel também).
 
-- **Qual conferência rodar, pelo regime do CLAUDE.md.** Rodada de pauta ou
-  de artigo do catálogo é mudança localizada: `npm run conferir` e pronto,
-  sem build local, que a Vercel builda a cada push. Rodada de LP é a
-  exceção que pede os dois builds (`npm run build` e `npm run build:native`),
-  porque rota nova mexe em código compartilhado do empacotamento.
+- **Qual conferência rodar: `npm run conferir` e pronto, SEMPRE, inclusive
+  em rodada de guia.** Esta regra já esteve errada aqui. Ela dizia que
+  rodada de LP era a exceção que pedia os dois builds, e em 15/09 eu rodei
+  os dois por causa dela, gastando minutos que o dono pediu explicitamente
+  para não gastar ("crie projetos menores e não faça uma bateria 360
+  sempre", 12/09, no CLAUDE.md). O motivo da exceção deixou de existir: a
+  `conferir:guias` confere o `SO_NO_SITE` guia a guia, que é exatamente o
+  que o `build:native` pegaria, e o `tsc` pega o resto. Build local só antes
+  de release para as lojas. Aprendizado maior que o item: quando uma
+  conferência nova cobre o motivo de uma cerimônia, a cerimônia sai do
+  manual junto, senão ela sobrevive por inércia.
 
 - **Onde o catálogo mora, e como contar buraco nele.** As aulas saíram de
   `lib/app/content.ts` para `lib/app/conteudo/aulas.ts` (sintomas,
@@ -158,6 +164,16 @@ preço/planos, tocar em telas de app fora de conteúdo.
   As consultas estão no pacote `search_console` do retrato, campo
   `topConsultas`; o pacote traz consulta e não página, então não dá para
   atribuir a impressão a um guia específico daqui.
+
+- **Cada superfície tem o SEU critério de escolha, e misturá-los produz
+  proposta ruim.** Guia do site se escolhe por DEMANDA DE BUSCA; aula do
+  catálogo se escolhe pelo EQUILÍBRIO do acervo contra o que o app pergunta.
+  Em 08/09 eu acertei o segundo (aula de freio, pelo recorte) e usei o mesmo
+  argumento para propor um guia de "carro puxando para um lado", que não
+  tinha sinal de procura nenhum. A rodada de 15/09 descartou essa proposta e
+  escolheu bateria, que é o irmão da única família de consultas que existe.
+  Antes de propor guia, olhe `topConsultas`; antes de propor aula, rode o
+  recorte por sistema.
 
 - **Toda aposta de conteúdo sai com data de releitura e com o que se faz em
   cada desfecho.** "0 clique é esperado numa página de uma semana" está

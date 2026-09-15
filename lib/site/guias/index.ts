@@ -6,6 +6,7 @@
 // que demora muito mais para ser descoberta, sem dar erro nenhum: o site
 // funciona, a página abre, e ninguém a encontra.
 import { guia as barulho } from "./barulho-no-carro";
+import { guia as bateria } from "./bateria-do-carro-descarregando";
 import { guia as gasolina } from "./carro-gastando-muita-gasolina";
 import { guia as naoPega } from "./carro-nao-pega";
 import { guia as injecao } from "./luz-da-injecao-acesa";
@@ -19,7 +20,7 @@ export type { Bloco, Guia, Pergunta } from "./tipos";
  * A ordem é a de publicação, e ela aparece na lista "outros guias" do rodapé
  * de cada página. Guia novo entra no fim.
  */
-export const GUIAS: Guia[] = [barulho, injecao, naoPega, gasolina];
+export const GUIAS: Guia[] = [barulho, injecao, naoPega, gasolina, bateria];
 
 /** Os outros guias, para o bloco de links internos de um deles. */
 export function irmaosDe(caminho: string): Guia[] {

@@ -55,6 +55,7 @@ const SO_NO_SITE = [
   "luz-da-injecao-acesa",
   "carro-nao-pega",
   "carro-gastando-muita-gasolina",
+  "bateria-do-carro-descarregando",
   "og",
 ];
 const PARK = path.join(root, ".build-native-parked");

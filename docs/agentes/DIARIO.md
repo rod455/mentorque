@@ -75,6 +75,62 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   (2) levar nome e palavras-chave da Apple junto com a 2.6; (3) trocar o feed
   público da Apple pela API do App Store Connect na coleta de avaliações.
 
+## 2026-09-15 · Conteúdo & SEO: a busca virou família, e o 5º guia é de bateria
+- Artifact "Conteúdo da semana":
+  https://claude.ai/artifact/TaQ7svo2v52TzDYff65EFP
+- ENTREGA DA RODADA (formato a, guia de palavra-chave):
+  `/bateria-do-carro-descarregando`, irmão direto do `/carro-nao-pega`.
+  O recorte é outro de propósito: o de partida responde "não liga AGORA",
+  com a pessoa na garagem; este responde o que faz a pessoa voltar a
+  procurar DEPOIS da chupeta, que é "por que ela vive arriando?".
+- O método é o mesmo que funcionou no de barulho: estreitar em vez de
+  listar peça. Aqui quem estreita é QUANDO ela arria, e isso separa quase
+  sozinho os três suspeitos que se confundem (bateria no fim, alternador
+  não recarregando, consumo parasita). Cinco blocos: dias parado, de um dia
+  para o outro, só de manhã, luz acesa andando, e pega na chupeta e arria
+  de novo. Trocar bateria quando era um dos outros dois é o erro mais caro
+  do assunto, e só aparece quando a bateria nova arria também.
+- O NÚMERO QUE DECIDIU, e é a releitura que o feedback mandou acompanhar.
+  Search Console, janela de 28 dias: 01/09 tinha 2 impressões e 1 consulta
+  (só marca); 08/09, 7 impressões e 1 consulta de categoria; hoje, **24
+  impressões e 6 consultas de categoria**. Cliques seguem em 0 nas três.
+- As 8 consultas listadas somam 15 das 24 impressões, então isto é o topo
+  da lista e não a decomposição completa. Marca: `mentorque` 4 imp pos 1 e
+  a variante com operadores 1 imp pos 1. Categoria: `carro da partida mas
+  não pega` 4 imp pos 71, `nao pega` 2 imp pos 53, `carro não pega` 1 imp
+  pos 42, `carro nao quer pegar` 1 imp pos 80, `luz do motor acesa` 1 imp
+  pos 54, e `luz injeção vermelha` **1 imp pos 19**, que é a primeira
+  consulta de categoria a chegar na página 2.
+- Leitura: a família de partida é a maior (4 consultas, 8 impressões) e o
+  `/carro-nao-pega`, de 04/09, é quem responde por ela. É o primeiro sinal
+  concreto de que um guia atraiu busca de categoria.
+- CONTINUA SEM RESPOSTA, e a ação não é deste papel: qual PÁGINA recebeu
+  cada impressão. O campo `topPaginas` ainda não existe no pacote do
+  coletor; o manual registrou em 08/09 que depende de credencial escolhida
+  no nó do n8n, e está na lista do dono.
+- CORREÇÃO DE RUMO, minha: a fila de 08/09 propunha
+  `/carro-puxando-para-um-lado`, com o argumento de atravessar os três
+  sistemas que o catálogo ignora. O argumento é verdadeiro e é o argumento
+  ERRADO para esta superfície. Guia de site se escolhe por demanda de
+  busca; equilíbrio de sistema é critério do catálogo do app, e foi lá que
+  ele se aplicou certo (aula de freio, 08/09). O critério de releitura que
+  eu mesmo escrevi previa "mais guias, um por rodada" se aparecessem novas
+  consultas de categoria, e ele disparou três semanas antes de 06/10.
+- ACHADO DE PROCESSO, e ele custa tempo do dono: rodei os DOIS builds (site
+  e app) porque meu manual mandava, e isso virou cerimônia desnecessária. A
+  `conferir:guias` já confere o SO_NO_SITE guia a guia (linha 230), que é
+  exatamente o que o `build:native` pegaria. Manual corrigido para o regime
+  do CLAUDE.md: `npm run conferir` e pronto, também em rodada de guia.
+- Conferências: `npm run conferir` inteiro exit 0, com `npm ci` antes (a
+  armadilha do node_modules velho que registrei em 08/09). O guia sai
+  indexável, com canonical certo, no sitemap com `lastModified` e com
+  `Article` nos dados estruturados, conferido no HTML gerado.
+- Próximas: (1) pauta do amortecedor, aberta desde 08/09 e formato certo
+  para a semana que vem; (2) artigo do catálogo sobre suspensão, fechando o
+  mesmo ciclo do freio. O recorte do catálogo não mudou: 107 aulas
+  publicadas, suspensão com 2 e nenhuma sobre o que ela avisa, e freio mais
+  suspensão mais pneu em 9 de 107.
+
 ## 2026-09-15 · Engenharia: o retrato voltou inteiro, e o caso do /api/dados fecha
 - Conferência agendada por mim ontem, cumprida hoje. O retrato das 6h
   (09:00:06 UTC) saiu COM DADOS pela primeira vez desde 11/09: zero
