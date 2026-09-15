@@ -151,7 +151,16 @@ function enviarApns(sessao: import("node:http2").ClientHttp2Session, jwt: string
 
 // ---- o envio ----------------------------------------------------------------
 
-export type Alvo = { userId: string } | { todos: true };
+// O alvo do envio. `anonId` existe desde 15/09/2026, quando o token passou a
+// poder ser do APARELHO e não só da conta (ver supabase/push_anonimo.sql).
+//
+// E ATENÇÃO AO `todos`: ele sempre significou "toda linha da tabela", e a
+// tabela mudou de tamanho debaixo dele. Antes alcançava só quem tinha conta (1
+// aparelho em 15/09); agora alcança também quem só baixou o app. É o que o
+// dono pediu, e está escrito aqui porque um alvo que cresce em silêncio é
+// exatamente o tipo de coisa que manda mensagem para mais gente do que quem
+// apertou o botão imaginava.
+export type Alvo = { userId: string } | { anonId: string } | { todos: true };
 export type ResultadoDoPush = { enviados: number; mortos: number; semTransporte: number; aparelhos: number };
 
 /** Há credencial de alguma plataforma? Serve para o ensaio dizer "push desligado". */
@@ -172,6 +181,9 @@ export async function enviarPush(
   const rota = msg.rota && (ROTAS_DO_TOQUE as readonly string[]).includes(msg.rota) ? msg.rota : "";
   let consulta = admin.from("push_tokens").select("token, platform");
   if ("userId" in alvo) consulta = consulta.eq("user_id", alvo.userId);
+  // Aparelho sem conta: só as linhas que AINDA não têm conta. Quem criou conta
+  // depois é alcançado pelo userId, e sem este filtro receberia os dois.
+  else if ("anonId" in alvo) consulta = consulta.eq("anon_id", alvo.anonId).is("user_id", null);
   const { data: linhas, error } = await consulta;
   if (error) throw new Error("erro_ao_ler_tokens");
   if (!linhas?.length) return { enviados: 0, mortos: 0, semTransporte: 0, aparelhos: 0 };

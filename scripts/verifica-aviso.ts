@@ -180,7 +180,14 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
   const erros = leia("lib/app/erros.ts");
   conferir("existe relatarPush", /export function relatarPush\(/.test(erros));
   conferir("o registro recusado pelo sistema vira relato", /addListener\(\s*"registrationError"[\s\S]{0,200}relatarPush\(/.test(push), "o motivo da Apple só existia no console do Xcode");
-  conferir("token sem sessão vira relato", /if \(!sessao\) \{[\s\S]{0,200}relatarPush\(/.test(push));
+  // 15/09/2026: "sem sessão" DEIXOU de ser saída sem registro. O aparelho
+  // virou dono possível do token (decisão do dono, depois de o Vigia mostrar
+  // que no Android ninguém tem conta), então quem não tem sessão agora
+  // registra pelo anon_id. A única saída silenciosa que sobrou é o aparelho
+  // sem identidade nenhuma, e a intenção desta linha continua a mesma: nenhum
+  // caminho sai daqui sem dizer por quê. O comportamento novo tem a sua
+  // própria conferência em npm run conferir:push.
+  conferir("aparelho sem dono nenhum vira relato", /if \(!dono\) \{[\s\S]{0,300}relatarPush\(/.test(push));
   conferir("permissão do sistema não concedida vira relato", /permissao !== "granted"[\s\S]{0,200}relatarPush\(/.test(push));
   conferir("register() que lança vira relato", /catch \(e\) \{[\s\S]{0,300}relatarPush\(`register\(\)/.test(push));
 

@@ -23,6 +23,7 @@
 // Os passos de console do dono estão em docs/push.md.
 import { getBrowserSupabase } from "@/lib/supabaseBrowser";
 import { apiUrl } from "@/lib/app/apiBase";
+import { anonId, ehIdentidade } from "./anon";
 import { relatarPush } from "./erros";
 import { anotaRota } from "./rotaPendente";
 import { isNativeApp, nativePlatform } from "./wrapper";
@@ -69,31 +70,82 @@ async function carregar(): Promise<Caixa | null> {
   return carregando;
 }
 
-// O último token entregue ao servidor, para não repetir o POST a cada
-// abertura. Token novo (o FCM troca quando quer) passa porque difere.
+// O último registro entregue ao servidor, para não repetir o POST a cada
+// abertura. Guarda "dono|token", e o DONO faz parte da marca de propósito.
+//
+// Antes aqui morava só o token, e isso escondia um defeito que só aparecia
+// depois (15/09/2026): quem usava o app sem conta registrava o aparelho,
+// criava conta mais tarde, e o token continuava o MESMO. A comparação por
+// token dizia "já entreguei" e a linha do banco ficava anônima para sempre,
+// com a pessoa logada recebendo a jornada de quem não tem conta. Com o dono
+// na marca, o login muda a marca e força uma reentrega.
+//
+// Marca em formato antigo (só o token, sem "|") também força uma reentrega,
+// que é o que faz quem já tinha o app registrar o anon_id sem fazer nada.
 const MARCA = "mq-push-token";
+
+function leMarca(): { dono: string; token: string } | null {
+  try {
+    const v = window.localStorage.getItem(MARCA);
+    if (!v) return null;
+    const i = v.indexOf("|");
+    return i > 0 ? { dono: v.slice(0, i), token: v.slice(i + 1) } : null;
+  } catch {
+    return null;
+  }
+}
+
+/** O token guardado, em qualquer um dos dois formatos. Só para o "esqueça". */
+function tokenGuardado(): string | null {
+  try {
+    const v = window.localStorage.getItem(MARCA);
+    if (!v) return null;
+    const i = v.indexOf("|");
+    return i > 0 ? v.slice(i + 1) : v;
+  } catch {
+    return null;
+  }
+}
 
 // O silêncio deste caminho tem que ser contado (12/09/2026, iPhone do dono:
 // avisos ligados, token nenhum no banco, e de fora não dava para saber por
 // quê). Cada saída sem registro relata o motivo em app_erros, sem dado da
 // pessoa. Ver relatarPush em lib/app/erros.ts.
+//
+// O DONO do registro (15/09/2026, decisão do dono): a conta quando há sessão,
+// senão o próprio aparelho. Até esta data, sem sessão não se registrava nada,
+// e como no Android ninguém tem conta o push não alcançava uma única pessoa.
 async function entregar(token: string, remover: boolean): Promise<void> {
   const supabase = getBrowserSupabase();
-  const sessao = supabase ? (await supabase.auth.getSession()).data.session?.access_token : undefined;
-  if (!sessao) {
-    if (!remover) relatarPush("token pronto, mas sem sessão: avisos ligados sem entrar na conta");
+  const sessao = supabase ? (await supabase.auth.getSession()).data.session : null;
+  const bearer = sessao?.access_token;
+  const anon = anonId();
+  const temIdentidade = ehIdentidade(anon);
+  const dono = sessao?.user?.id ?? (temIdentidade ? anon : null);
+
+  if (!dono) {
+    // Aparelho sem armazenamento e sem conta: o id dele morre quando o app
+    // fecha, então a linha no banco nasceria órfã. Ver lib/app/anon.ts.
+    if (!remover) relatarPush("aparelho sem identidade e sem conta: não há para quem mandar");
     return;
   }
+
+  const marca = leMarca();
+  if (!remover && marca && marca.token === token && marca.dono === dono) return;
+
   try {
     const res = await fetch(apiUrl("/api/push/registrar"), {
       method: "POST",
-      headers: { "content-type": "application/json", authorization: `Bearer ${sessao}` },
-      body: JSON.stringify({ token, platform: nativePlatform(), remover }),
+      headers: {
+        "content-type": "application/json",
+        ...(bearer ? { authorization: `Bearer ${bearer}` } : {}),
+      },
+      body: JSON.stringify({ token, platform: nativePlatform(), remover, anonId: temIdentidade ? anon : undefined }),
     });
     if (res.ok) {
       try {
         if (remover) window.localStorage.removeItem(MARCA);
-        else window.localStorage.setItem(MARCA, token);
+        else window.localStorage.setItem(MARCA, `${dono}|${token}`);
       } catch { /* modo privado */ }
     } else {
       relatarPush(`/api/push/registrar devolveu ${res.status}`);
@@ -115,11 +167,9 @@ export async function sincronizarPush(querAvisos: boolean): Promise<void> {
   const c = await carregar();
   if (!c) return;
 
-  let anterior: string | null = null;
-  try { anterior = window.localStorage.getItem(MARCA); } catch { /* segue */ }
-
   if (!querAvisos) {
-    if (anterior) await entregar(anterior, true);
+    const guardado = tokenGuardado();
+    if (guardado) await entregar(guardado, true);
     return;
   }
 
@@ -129,9 +179,12 @@ export async function sincronizarPush(querAvisos: boolean): Promise<void> {
       relatarPush(`interruptor ligado, mas a permissão do sistema está "${permissao}"`);
       return;
     }
+    // Quem decide se já entregou é o `entregar`, porque a comparação depende
+    // do DONO e descobrir o dono é assíncrono (a sessão). Aqui só chega o
+    // token cru; lá ele para cedo quando a marca bate.
     const ouvinte = await c.plugin.addListener("registration", (dado) => {
       const token = dado.value ?? "";
-      if (token && token !== anterior) void entregar(token, false);
+      if (token) void entregar(token, false);
       void ouvinte.remove();
     });
     // A Apple (ou o Google) recusou o registro: sem isto o único lugar onde o

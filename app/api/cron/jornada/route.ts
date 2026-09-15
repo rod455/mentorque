@@ -127,7 +127,10 @@ async function carregarPessoas(admin: SupabaseClient, hoje: string): Promise<{ p
     l.push({ chave: e.chave, dia: e.dia });
     enviosDe.set(e.user_id, l);
   }
-  const comToken = new Set((tokens.data ?? []).map((t) => t.user_id as string));
+  // `user_id` é anulável desde 15/09/2026 (o token pode ser do aparelho). Sem
+  // o filtro, um `null` entraria neste conjunto: hoje não casaria com ninguém,
+  // mas é lixo esperando alguém comparar errado.
+  const comToken = new Set((tokens.data ?? []).map((t) => t.user_id as string | null).filter((id): id is string => !!id));
   const listaDeManuais = (manuais.data ?? []) as Manual[];
 
   const pessoas: PessoaDaJornada[] = [];

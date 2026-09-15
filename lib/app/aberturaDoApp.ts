@@ -305,6 +305,7 @@ export function useConsentimentoDeAnuncios() {
  */
 export function useLembretes(c: Content) {
   const { s, subscribed, subscriptionEndsAt, subscriptionCanceling } = usePrototype();
+  const { user, ready } = useAuth();
   const veiculo = activeVehicle(s);
 
   // Antes de qualquer sincronização: planta a marca de "este aparelho já
@@ -361,9 +362,17 @@ export function useLembretes(c: Content) {
   // servidor; desligado, o servidor esquece o token. Não pede permissão nunca
   // (isso é do toque no Perfil) e degrada em silêncio enquanto o console não
   // está configurado. Ver lib/app/push.ts e docs/push.md.
+  //
+  // `user?.id` ESTÁ NA LISTA de propósito (15/09/2026): desde que o token
+  // passou a poder ser do aparelho, criar conta muda o dono do registro, e sem
+  // rodar de novo aqui a linha ficaria anônima para sempre. O `ready` separa
+  // "ainda carregando a sessão" de "não tem sessão", que é a mesma armadilha
+  // do plano pendente logo acima; sem ele, a primeira passada rodaria com
+  // `user` nulo por carregamento e registraria como aparelho quem tem conta.
   useEffect(() => {
+    if (!ready) return;
     void sincronizarPush(s.notifications);
-  }, [s.notifications]);
+  }, [s.notifications, user?.id, ready]);
 
   // Os serviços que a pessoa pôs no calendário viram aviso no dia previsto.
   //
