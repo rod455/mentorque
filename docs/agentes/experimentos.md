@@ -39,6 +39,45 @@ Regras:
   reabrir quando a mídia ligar. Nunca fechar no achismo.
 - Veredito fechado vira aprendizado na skill besci.md quando ensina algo.
 
+## Os três níveis de um número (15/09/2026)
+
+Todo número que entra em "Antes" ou em "Veredito" é de um destes três níveis,
+e o nível tem que estar dito. Eles não se substituem, e o de cima não prova o
+de baixo.
+
+1. **Atividade.** Quantas pessoas foram EXPOSTAS à mudança: viram a tela,
+   receberam o e-mail, caíram na variante B. Não diz nada sobre ter
+   funcionado. Diz se o experimento chegou a acontecer.
+2. **Conversão observada.** Quantas, entre as expostas, fizeram a coisa.
+   É associação, e só. "Assinou depois de receber" não é "assinou por causa
+   de". A pessoa que ia assinar de qualquer jeito também aparece aqui.
+3. **Incremento estimado.** A diferença contra o grupo comparável: a variante
+   A do sorteio, ou o mesmo período antes da mudança. É o único nível que
+   sustenta a palavra FUNCIONOU.
+
+As regras que saem disso:
+
+- **Veredito FUNCIONOU ou NAO FUNCIONOU exige nível 3.** Com nível 1 ou 2 o
+  veredito honesto é INCONCLUSIVO, e o texto diz qual nível faltou.
+- **Atividade zero não é veredito, é diagnóstico de exposição.** Foi o caso
+  dos quatro experimentos da rotina do carro em 15/09: adoção zero porque
+  estavam presos atrás da 2.6, que não saiu. Isso não é "não funcionou", é
+  "ninguém viu". Fechar ali teria enterrado quatro apostas por engano.
+- **Nunca atribuir receita inteira a um contato.** Assinatura que aconteceu
+  depois de um e-mail não é "assinatura trazida pelo e-mail". Se quiser dizer
+  que o e-mail trouxe, precisa do nível 3, e sem ele o número vai escrito
+  como "assinou depois de", que é o que de fato se sabe.
+- **Custo e receita separados.** Quando o custo não foi informado, a margem
+  fica "não calculada", e não zero.
+
+A régua veio do protótipo de oficina que o dono mandou em 15/09, seção 8, que
+separa atividade de conversão observada de estimativa incremental e proíbe
+chamar orçamento aprovado de "receita recuperada". O documento era de outro
+produto; a disciplina serve para este.
+
+Esta régua é convenção escrita, não tem conferência automática atrás dela. A
+única coisa que a faz valer é quem escreve o veredito.
+
 ## Experimentos
 
 ## [cadastro-em-duas-etapas] O formulário do carro pede só marca, modelo e ano
