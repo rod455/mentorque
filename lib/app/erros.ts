@@ -12,6 +12,7 @@
 // Capacitor) não passa por aqui — esse aparece nos Android vitals e no App
 // Store Connect. Se um dia precisarmos de mais, a troca por Sentry é isolada
 // neste arquivo.
+import { anonId } from "./anon";
 import { apiPost } from "./apiBase";
 import { APP_VERSION } from "./content";
 import { isNativeApp, nativePlatform } from "./wrapper";
@@ -38,6 +39,16 @@ function reportar(tipo: "erro" | "promessa" | "fechou", mensagem: string, stack?
       origem: (origem ?? (typeof location !== "undefined" ? location.pathname : "")).slice(0, 200),
       plataforma: isNativeApp() ? nativePlatform() ?? "nativo" : "web",
       versao: APP_VERSION,
+      // QUEM RELATOU, nem que seja só o aparelho (17/09/2026, recomendação da
+      // QA de 16/09). Esta tabela não tinha nenhuma coluna de identidade, e o
+      // buraco apareceu em 15/09: dez ocorrências do mesmo erro de push e
+      // nenhum jeito de saber se eram dez pessoas ou duas reabrindo o app. As
+      // duas leituras pedem reações opostas, e a diferença entre elas é este
+      // campo.
+      //
+      // É o MESMO id do funil, não um novo: nada passa a ser guardado sobre
+      // ninguém que já não fosse. Ver lib/app/anon.ts.
+      anonId: anonId(),
     }).catch(() => undefined);
   } catch { /* o coletor jamais pode causar o que coleta */ }
 }

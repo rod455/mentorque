@@ -96,12 +96,75 @@ supabase.auth.onAuthStateChange((evento, session) => {
 `precisaTrocarSenha` for verdadeiro: dois campos iguais, `updatePassword`, e
 uma confirmação. Ela não pode ser pulável, senão volta ao problema de hoje.
 
-**A decisão, que é do dono**: no app da loja, mandar o link para `/app` na web
+~~**A decisão, que é do dono**: no app da loja, mandar o link para `/app` na web
 deixa o app nativo de fora. As duas saídas são um deep link
 (`mentorque://auth-callback`, que o OAuth já usa e o app já sabe receber) ou
 assumir que a recuperação acontece na web e o app pede para a pessoa entrar
 com a senha nova depois. A primeira é melhor para quem usa o app; a segunda é
-mais simples e não mexe em configuração de provedor.
+mais simples e não mexe em configuração de provedor.~~
+
+## CORREÇÃO (17/09/2026): a decisão acima é uma escolha falsa
+
+Fui conferir para levar a pergunta ao dono e ela se dissolveu. **O caminho do
+deep link não mexe em configuração de provedor nenhuma, porque ele já está
+construído, cadastrado e rodando em produção.**
+
+O que existe hoje, e não foi feito para a recuperação de senha, mas serve
+inteiro para ela:
+
+- `NATIVE_AUTH_REDIRECT` (`wrapper.ts:31`) é `${APP_ORIGIN}/auth-bridge`, uma
+  página https comum que passa na validação do GoTrue. Ela nasceu porque o
+  GoTrue **recusa** `mentorque://` na lista de Redirect URLs, e o comentário
+  dela conta essa história.
+- `app/auth-bridge/page.tsx` repassa **query e fragmento inteiros** para o
+  esquema próprio, e o comentário dela diz por quê: "serve tanto para PKCE
+  (`?code=`) quanto para o fluxo implícito (`#access_token=`)". Um link de
+  recuperação é exatamente um desses dois.
+- `auth.tsx:104` já escuta o deep link, e `completeOAuth` já trata as duas
+  formas (`exchangeCodeForSession` e `setSession`).
+
+A prova de que essa ponte funciona não é leitura de código: **29 das 32 contas
+do banco não têm senha**, ou seja, entraram por login social, que é o fluxo que
+atravessa essa mesma ponte.
+
+Então o conserto é menor do que esta proposta imaginava. O defeito do item 3 é
+uma linha: `emailRedirectUrl()` (`wrapper.ts:109`) devolve `${APP_ORIGIN}/app`
+quando é app nativo, e deveria devolver `NATIVE_AUTH_REDIRECT`, como o login
+social já faz.
+
+## CORREÇÃO 2: a peça 2 do patch não vai disparar no app das lojas
+
+`PASSWORD_RECOVERY` é um evento que o supabase-js emite quando ELE mesmo
+encontra o token na URL, pelo `detectSessionInUrl`. No caminho nativo quem cria
+a sessão somos nós, chamando `exchangeCodeForSession` ou `setSession` na mão, e
+esses emitem `SIGNED_IN`. Ou seja: escutar só o evento funciona na web e falha
+calado no app, que é justamente onde o defeito é pior.
+
+O que carrega a intenção nos dois caminhos é a própria URL: o link de
+recuperação traz `type=recovery`. Então a peça 2 tem que ser as duas coisas:
+
+- na web, o evento `PASSWORD_RECOVERY` do `onAuthStateChange`;
+- no nativo, ler `type` da URL do deep link dentro do `completeOAuth` e ligar o
+  `precisaTrocarSenha` ali.
+
+Uma conferência que morde isso: plantar a remoção do `type=recovery` e ver a
+suíte reprovar. Sem ela, este é o tipo de defeito que passa no navegador e só
+aparece no aparelho de alguém.
+
+## O tamanho do estrago, medido (17/09/2026)
+
+Antes de tratar como urgência, fui ao banco:
+
+| | |
+|---|---|
+| Contas | 32 |
+| Contas **com senha** (as únicas que podem esquecer uma) | **3** |
+| Pediram recuperação alguma vez | **1**, em 09/09 |
+
+As outras 29 entraram por Google ou Apple e não têm senha para esquecer. O
+defeito é real e a tela mente, mas ele alcança três pessoas hoje, e uma esbarrou
+nele. Isso não segura um envio de versão; cresce junto com a base de login por
+e-mail.
 
 ## Como conferir depois
 

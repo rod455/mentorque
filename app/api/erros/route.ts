@@ -33,6 +33,10 @@ export async function POST(req: Request) {
     origem: corta(b?.origem, 200),
     plataforma: corta(b?.plataforma, 16),
     versao: corta(b?.versao, 16),
+    // O aparelho que relatou (17/09/2026, recomendação da QA). Sem ele,
+    // "dez ocorrências" pode ser dez pessoas ou uma insistindo, e as duas
+    // leituras pedem reações opostas. É o mesmo id do funil.
+    anon_id: corta(b?.anonId, 200),
   });
   return NextResponse.json({ ok: true });
 }

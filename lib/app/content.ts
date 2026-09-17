@@ -733,7 +733,23 @@ export function getContent(locale: Locale) {
       or: T("ou", "or"),
       orEmail: T("ou entre com e-mail", "or use your e-mail"),
       forgot: T("Esqueci minha senha", "Forgot my password"),
-      resetSent: T("Enviamos um link para redefinir sua senha.", "We sent a link to reset your password."),
+      // 17/09/2026: ESTE TEXTO MENTIA, e a QA achou na varredura de login.
+      //
+      // Ele dizia "Enviamos um link para redefinir sua senha", e não existe
+      // nenhuma tela para redefinir senha no app nem no site: há exatamente um
+      // `updateUser` no repositório inteiro, e ele grava NOME no login social.
+      // O link chega e funciona, só que ele cria uma sessão, e a senha antiga
+      // continua sendo a única válida.
+      //
+      // Enquanto a redefinição de verdade não existe (proposta em
+      // docs/agentes/propostas/recuperar-senha-nao-recupera.md), o texto passa
+      // a dizer o que de fato acontece. Descrever um recurso que não existe é
+      // o que vira avaliação de uma estrela, porque a pessoa conclui que o app
+      // está quebrado em vez de concluir que falta o recurso.
+      resetSent: T(
+        "Enviamos um link de acesso para o seu e-mail. Ele entra na sua conta sem pedir senha.",
+        "We sent a sign-in link to your email. It gets you into your account without a password.",
+      ),
       resetNeedEmail: T("Digite seu e-mail acima primeiro.", "Enter your e-mail above first."),
       tagline: T("Salve sua garagem e cuide do seu carro de qualquer aparelho.", "Save your garage and care for your car from any device."),
       toSignUp: T("Não tem conta? Criar conta", "No account? Create one"),

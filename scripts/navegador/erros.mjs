@@ -77,6 +77,19 @@ export async function rodar({ nav, ok }) {
       relatos.length > 0 && relatos.every((r) => !!r.plataforma),
       JSON.stringify(relatos.map((r) => r.plataforma))
     );
+    // E DE QUE APARELHO (17/09/2026, recomendação da QA de 16/09). Sem o id,
+    // "dez ocorrências" pode ser dez pessoas ou uma reabrindo o app, e as duas
+    // leituras pedem reações opostas. Aconteceu em 15/09, com dez relatos do
+    // mesmo erro de push e nenhum jeito de saber qual das duas era.
+    //
+    // Mesmo `length > 0` da asserção acima, pelo mesmo motivo: `every` em
+    // lista vazia responde verdadeiro e aprova o caso em que nada foi
+    // relatado.
+    ok(
+      "o relato diz de que aparelho veio",
+      relatos.length > 0 && relatos.every((r) => !!r.anonId),
+      JSON.stringify(relatos.map((r) => r.anonId))
+    );
     await fechar();
   }
 
