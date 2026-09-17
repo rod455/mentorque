@@ -415,6 +415,97 @@ ainda). A rodada de 02/09 misturou os três no mesmo tom de voz, e é por isso
 que o erro do MRR passou: ele estava escrito com a mesma segurança de um fato
 medido.
 
+## Terceira rodada (17/09) — a prescrição vale o que vale a prova
+
+O dono pediu este retorno depois da rodada de 16/09, a do "esqueci minha
+senha". A revisão é da engenharia, e ela começa pelo que não precisa mudar.
+
+**O diagnóstico daquela rodada é o melhor que este papel já produziu.** Um
+`grep` por `updateUser` no repositório inteiro, com um único resultado que é de
+outra coisa, não é indício: é prova conclusiva de que o recurso não existe. Foi
+certo segurar o patch (login não reproduzido não se aplica), foi certo dizer
+onde não enxerga, e as etiquetas MEDIDO, DEDUZIDO e TEORIA foram respeitadas de
+verdade, não só escritas. A dívida de fonte da semana anterior foi paga com
+dado que desmentiu a própria leitura antiga, que é a coisa mais difícil de
+fazer e a mais valiosa.
+
+O que segue é sobre a outra metade do documento.
+
+### 13. A prescrição precisa da mesma prova que o diagnóstico
+
+Na mesma rodada, o achado foi provado com uma busca conclusiva e o **patch foi
+escrito sem abrir o código que faria o conserto funcionar**. Deu dois erros no
+mesmo documento.
+
+A proposta entregou ao dono uma decisão ("deep link, que mexe em configuração
+de provedor, ou web, mais simples?") cuja premissa era falsa: o deep link já
+estava construído, cadastrado e rodando. Existe uma página `/auth-bridge`, que
+nasceu porque o GoTrue recusa `mentorque://` na validação, que repassa query e
+fragmento inteiros, e um ouvinte em `auth.tsx` que já trata as duas formas. Não
+havia escolha para fazer, e o conserto era uma linha.
+
+Tempo do dono gasto numa decisão que não existia é pior que achado não
+reportado, porque ele vem com a autoridade de uma pergunta legítima.
+
+**A régua, e ela é a mesma do `concluir-com-prova` aplicada ao outro lado:**
+antes de escrever "o patch é assim", pergunte o que precisaria ser verdade para
+o patch funcionar, e vá conferir cada uma dessas coisas. Diagnóstico responde
+"o que está quebrado"; prescrição responde "o que fará isto funcionar", e as
+duas perguntas pedem prova, não só a primeira.
+
+### 14. "Vale reler X antes de fazer isto" é uma chamada de ferramenta, não uma frase
+
+Este é o mais afiado, porque a própria proposta escreveu, sobre o conserto
+gêmeo do login social:
+
+> O item 3 é o mesmo formato do defeito que já mordeu esta casa no OAuth (o
+> comentário está em `lib/app/socialLogin.ts`). Vale reler aquele conserto
+> antes de fazer este.
+
+A resposta inteira estava naquele arquivo. O documento **sabia** que o vizinho
+existia, **mandou o leitor** ir ler, e não leu. Isso é delegar a própria
+verificação para quem recebe o relatório.
+
+Toda vez que a frase "vale olhar", "vale reler", "provavelmente existe algo
+parecido em" aparecer no rascunho, ela é um pedido de leitura que você mesmo
+tem que atender antes de publicar. Se depois de ler ainda valer citar, cite
+com o que você encontrou lá dentro.
+
+É o ponto 10 (ler as linhas vizinhas) um andar acima: o irmão de um defeito
+mora ao lado dele, e **o irmão de um conserto também**.
+
+### 15. Evento de biblioteca: confira o que o DISPARA no SEU caminho
+
+A peça 2 do patch mandava escutar `PASSWORD_RECOVERY` no `onAuthStateChange`.
+Esse evento só é emitido quando o supabase-js encontra o token na URL sozinho,
+pelo `detectSessionInUrl`. No app das lojas quem cria a sessão somos nós, na
+mão, e o evento que sai daí é `SIGNED_IN`.
+
+Ou seja: o patch funcionaria no navegador e falharia calado no aparelho, que é
+exatamente onde o defeito que ele conserta é pior. E o código que mostra isso
+estava aberto na mesma rodada, porque a proposta cita o `onAuthStateChange`
+duas linhas acima.
+
+Nome de evento não é contrato. Antes de depender de um, ache quem o emite e
+confirme que o SEU caminho passa por lá. O caminho feliz da documentação
+raramente é o caminho do app nativo desta casa.
+
+### 16. Achado sem tamanho medido faz tudo parecer urgente
+
+A rodada descreveu o estrago em ordem de gravidade e não disse para quantas
+pessoas. Uma consulta responde: 32 contas, **3 com senha**, e **1 pedido de
+recuperação em toda a história**. As outras 29 entraram por Google ou Apple e
+não têm senha para esquecer.
+
+Isso não diminui o achado, muda o que fazer com ele: é um defeito que cresce
+junto com o login por e-mail e que não segura um envio de versão. Sem o número,
+ele chega ao dono com o mesmo peso de um defeito que atinge todo mundo, e quem
+lê não tem como saber a diferença.
+
+A habilidade `ler-a-operacao` já está disponível para este papel. **Todo achado
+de fluxo sai com o tamanho da população afetada**, medido, ou com a frase
+dizendo que não deu para medir e por quê.
+
 ### Sobre a alçada, uma flexibilização
 
 Continua valendo não mexer em cobrança, preço e funcionalidade. Mas **view e
