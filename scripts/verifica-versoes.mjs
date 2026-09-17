@@ -114,6 +114,13 @@ const JA_PUBLICADAS = [
   // lembrar de ler no momento do envio. Enquanto não houver algo que cobre
   // isto sozinho, o terceiro atraso vira o quarto.
   "2.6",
+  // Enviada em 16/09/2026 (build 66) e aprovada nas duas lojas em 17/09.
+  // ACRESCENTADA NA HORA do aviso do dono, e não no dia seguinte: é a
+  // primeira vez em quatro releases que isto não atrasa. Os três anteriores
+  // (1.8, 2.5 e 2.6) passaram um dia com a lista mentindo "ainda não
+  // publicada", que é exatamente a luz verde que esta conferência existe para
+  // não dar.
+  "2.7",
 ];
 
 import { readFileSync } from "node:fs";

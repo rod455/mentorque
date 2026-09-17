@@ -34,27 +34,29 @@ const LATEST = {
   // abaixo, acontecendo). O número que vale é o da loja, em Produção,
   // "Códigos de versão", e não o que alguém lembra de cabeça.
   // Antes: 1.7 = 55.
-  // 17/09/2026: o dono avisou que "a versão 66 já está nas lojas". O número é
-  // dele, como manda a nota acima (o que vale é a Play em Produção, não o
-  // arquivo nem o Codemagic), e a 2.6 tem lastro no banco: 23 eventos de
-  // `2.6.0` em 9 aparelhos Android desde 15/09.
-  // Antes: 2.4 = 63, 1.7 = 55.
-  android: 66, // 2.6 na Play
-  // 17/09/2026: SOLTO, com a confirmação do dono ("66 msm") depois de eu ter
-  // segurado e mostrado o que me fazia duvidar.
+  // 17/09/2026, fim do dia: 2.7, build 67, aprovada nas duas lojas. O número
+  // é do dono, como manda a nota acima (o que vale é a Play em Produção, não
+  // o arquivo nem o Codemagic).
+  // Antes: 2.6 = 66, 2.4 = 63, 1.7 = 55.
+  android: 67, // 2.7 na Play
+  // A LIÇÃO DESTE CAMPO, que vale mais que o número: em 12/09 ele foi para 74
+  // pela lembrança de alguém, e o banner acendeu para todo mundo na 2.4
+  // apontando para um build que a loja não tinha. O erro tem lados de custo
+  // bem diferentes. Número BAIXO demais: ninguém vê o banner, e o app segue
+  // funcionando. Número ALTO demais: todo iPhone passa a ver "versão nova
+  // disponível", vai à loja, não encontra nada, e o aviso vira mentira. Na
+  // dúvida, o número fica atrás.
   //
-  // O que me fazia duvidar, registrado porque quem ler isto daqui a um mês
-  // merece saber: o retrato de `app_store_connect` de 17/09, colhido às 6h,
-  // trazia a 2.6 em WAITING_FOR_REVIEW e a 2.5 como a última READY_FOR_SALE.
-  // A explicação que concilia as duas coisas é a aprovação ter caído depois
-  // da coleta, e quem tem a tela do App Store Connect na frente é o dono.
+  // COMO A DÚVIDA SE RESOLVE, e é de graça: o retrato de `app_store_connect`
+  // das 6h do dia seguinte diz em que estado cada versão está. Ele é colhido
+  // uma vez por dia, então não enxerga uma aprovação da tarde; por isso ele
+  // serve para CONFERIR no dia seguinte, não para contestar na hora.
   //
-  // A DÚVIDA SE RESOLVE SOZINHA AMANHÃ, e de graça: o retrato das 6h de 18/09
-  // vai dizer se a 2.6 está em READY_FOR_SALE. Se não estiver, este número
-  // volta para 63 na hora, porque aí o banner está mandando todo iPhone
-  // procurar o que a loja não tem (foi o que houve em 12/09, com 74).
-  // Antes: 2.4 = 63, 1.6 = 52.
-  ios: 66, // 2.6 na App Store, confirmada pelo dono em 17/09
+  // Para atualizar: App Store Connect, na versão em "Pronta para venda", o
+  // número de build (CFBundleVersion). Não é o "Index" da tela do Codemagic,
+  // que já causou dois falsos alarmes aqui.
+  // Antes: 2.6 = 66, 2.4 = 63, 1.6 = 52.
+  ios: 67, // 2.7 na App Store, aprovada em 17/09
 };
 
 export function GET() {
