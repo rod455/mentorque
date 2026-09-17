@@ -197,6 +197,32 @@ recomendar.
   login ficou como estava, porque deduplicar ali seria escolher qual carro
   morre. Deixar de pé com o motivo escrito na conferência vale mais do que
   consertar: sem isso, o próximo "conserta" achando que foi descuido.
+- **O manual muda entre rodadas: releia o preâmbulo ANTES de escrever.** Em
+  16/09 publiquei o artifact sem as etiquetas do direcionamento 12 e sem a
+  conta do dinheiro do passo 7, porque tinha lido a Fila e os Aprendizados e
+  passado batido pelo topo, que era novo. Ler o manual é o primeiro item da
+  rotina justamente porque ele engorda; ler só as partes que eu já conhecia
+  derruba o propósito.
+- **Leia o que a tela PROMETE, não só o que o código faz.** A varredura de um
+  fluxo tem que comparar as duas pontas: a frase que a pessoa vê e o caminho
+  que existe para cumpri-la. O "esqueci minha senha" foi achado assim, e o
+  defeito não aparece olhando só o código (a função existe e funciona) nem só
+  a tela (a mensagem é correta em si). Ele mora na distância entre as duas.
+  Boa varredura: pegar cada frase de promessa da tela e perguntar onde está o
+  código que a cumpre.
+- **Conserto consertado não é conserto entregue.** O erro mais frequente de
+  16/09 já tinha conserto no repositório desde 15/09, e mesmo assim continuava
+  acontecendo, porque estava na 2.6 e a loja mais nova era a 2.5. Ao ler um
+  erro do retrato, comparar TRÊS coisas e não duas: a versão que emitiu, a
+  versão publicada (`conferir:versoes` diz se a do repo saiu) e a data do
+  conserto. "Morto" é conserto publicado; "represado" é conserto que ainda não
+  alcança ninguém, e os dois pedem frases diferentes no relatório.
+- **`app_erros` não tem identidade, e isso muda leitura.** A tabela tem
+  mensagem, plataforma, versão e data, e mais nada. Contagem de ocorrência
+  nunca vira contagem de gente ali. Para saber se o número é grande, cruze com
+  as aberturas daquela versão em `funil_eventos` (a régua `public.identidade`):
+  10 erros numa versão com 14 identidades é uma coisa, numa com 300 é outra.
+  Diga sempre qual dos dois você mediu.
 - Rodar `npm install` antes de qualquer checagem: o contêiner da sessão nasce
   sem `node_modules` e o `tsc` cospe centenas de erros falsos de módulo.
 - Rodar `npm run conferir` (bateria inteira, 12 conferências) no lugar de
@@ -208,7 +234,7 @@ recomendar.
 
 Varridos: **compra/checkout web** (26/08), **compra pelas lojas via
 RevenueCat** (02/09), **receita e cupom** (02/09, com o dono), **garagem e
-carro duplicado** (09/09).
+carro duplicado** (09/09), **login e recuperação de conta** (16/09).
 
 Reaberto na mesma data, porque a varredura da loja passou por ele e o deixou
 pela metade: **a compra pelas lojas continua sem uma única linha em produção**
@@ -216,15 +242,16 @@ pela metade: **a compra pelas lojas continua sem uma única linha em produção*
 e tratamento de erro são TEORIA até a primeira venda de loja acontecer. Quando
 ela acontecer, esse é o primeiro fluxo a reconferir, com dado na mão.
 
-- **Os 7 "app fechou sozinho"**, no TOPO, e é dívida de fonte, não de análise.
-  O banco recusou consulta por permissão em 09/09, então não deu para saber se
-  o sétimo relato é web (como os seis de 07/09) ou aparelho de verdade. É uma
-  linha: agrupar `app_erros` por plataforma e versão nos últimos 8 dias.
-  Enquanto não rodar, "são todos da web" é suposição, não resposta.
-- **Login e recuperação de conta** (o botão da Apple fora do iPhone já foi
-  tratado em 23/08; o resto do fluxo nunca foi lido de ponta a ponta). Ganhou
-  urgência: o cadastro pelo Android nunca funcionou até 07/09, então este é o
-  fluxo com o histórico mais acidentado do app.
+- **Os fechamentos do iOS 2.1**, no TOPO. A dívida de fonte foi paga em 16/09
+  e a resposta é que eles são de APARELHO, não da web: 3 relatos numa versão
+  com 14 aberturas de 4 identidades. Nenhum na 2.5 desde 13/09, o que sugere
+  que a migração resolve, mas é amostra pequena. Reconferir quando a base
+  tiver migrado: se sumir, fecha; se continuar, é crash de abertura no iOS e
+  vira prioridade.
+- **A recuperação de senha, depois que o dono escolher o desenho.** O achado
+  de 16/09 tem patch pronto em `docs/agentes/propostas/`; o que falta é a
+  decisão entre deep link e web. Escolhida a saída, o resto é pequeno e volta
+  para cá.
 - Quiz de saúde, catálogo remoto de aulas, campos de formulário.
 - **Quiz diário** (novo em 26-27/08, nunca varrido por QA): banco de 65
   perguntas, sequência com perdão semanal, rota `/api/quiz`, folha do primeiro

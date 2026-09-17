@@ -3,6 +3,67 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-16 · QA: o "esqueci minha senha" não redefine senha nenhuma
+- Artifact "QA da Semana":
+  https://claude.ai/artifact/GHFAzoSBaMfznrWm15jfB6
+- Fluxo varrido: **login e recuperação de conta**, que estava na fila e nunca
+  tinha sido lido de ponta a ponta.
+- **A TELA PROMETE O QUE O CÓDIGO NÃO TEM.** Ao tocar em "Esqueci minha
+  senha", o app responde "Enviamos um link para redefinir sua senha". O link
+  funciona, mas só cria sessão: a senha antiga continua valendo e **não existe
+  nenhuma tela para digitar uma nova**. A prova é uma busca só no repositório
+  inteiro: há exatamente um `updateUser`, em `lib/app/socialLogin.ts`, e ele
+  grava o NOME no login social. Nada escuta `PASSWORD_RECOVERY`, nada trata
+  `type=recovery`.
+- **O estrago**: quem esqueceu a senha ganha um login temporário, não uma
+  recuperação. Na próxima vez que precisar entrar, a senha que ela não sabe
+  continua sendo a única válida, e ela pede o link de novo. Para sempre.
+- **Agravante no app das lojas**: `emailRedirectUrl()` devolve o endereço da
+  WEB mesmo dentro do app nativo, então o link abre o navegador, a sessão
+  nasce lá e o app no celular continua deslogado. É o mesmo formato do defeito
+  que já mordeu no login social, e o comentário daquele conserto segue em
+  `lib/app/socialLogin.ts`.
+- **NÃO consertei, e o motivo é a skill `concluir-com-prova`**: é
+  funcionalidade nova em AUTENTICAÇÃO e o passo que importa (o clique no link
+  do e-mail) não é reproduzível desta sessão. Conserto de login às cegas é
+  aposta com nome de conserto. Patch com as três peças e a decisão que sobra
+  para o dono em `docs/agentes/propostas/recuperar-senha-nao-recupera.md`.
+- **DÍVIDA DE FONTE DA SEMANA PASSADA, PAGA, e ela me desmente.** O banco
+  voltou. Dos 6 relatos de "app fechou sozinho" nos últimos 10 dias, **5 são
+  de aparelho e 1 é da web**: iOS 2.1 com 3, iOS 2.4 com 1, Android 1.8 com 1,
+  web 1.8 com 1. A leitura de 07/09 ("todos da web") valia para os relatos
+  daquela época, não para estes. A concentração é no iOS 2.1, que tem 14
+  aberturas de 4 identidades distintas na janela: 3 fechamentos ali não é
+  ruído. Desde a 2.5 (13/09), zero fechamentos novos, o que é direção e não
+  prova, porque a amostra é pequena.
+- **O erro mais frequente está CONSERTADO E REPRESADO.** 10 dos 17 erros são a
+  mesma mensagem, todos do Android 2.5: token de push pronto sem sessão. O
+  conserto é de 15/09 (decisão do dono: o registro passa a pertencer ao
+  aparelho quando não há conta) e está na 2.6. **A 2.6 não está publicada**, e
+  a loja mais nova é a 2.5, que é justamente a que emite. Não é erro morto que
+  a janela de 7 dias ainda mostra: é erro vivo com conserto pronto esperando
+  publicação. Os 3 aparelhos Android já na 2.6 não emitiram nenhum, o que com
+  3 aparelhos serve de direção e de nada mais.
+- **Limite da fonte, e ele muda leitura**: `app_erros` não tem NENHUMA coluna
+  de identidade. "10 ocorrências" pode ser uma pessoa insistindo ou dez
+  pessoas, e as duas pedem reações opostas. Recomendado ao Analista.
+- **NÃO reconferi** receita, cupom, webhook nem assinantes: fechadas na tabela
+  e sem motivo novo. A verificação da primeira cobrança real segue agendada
+  para 01/10.
+- **Conta do dinheiro (parada obrigatória do manual)**: `assinaturas_conferencia`
+  devolve 3 `ok` e 1 `cortesia, nao e venda`. Nada fora dessas duas, ou seja,
+  nenhuma venda perdida pela medição e nenhuma em dobro. A segunda metade
+  (abrir a fatura e olhar `amount_paid`) NÃO rodou: a integração do Stripe
+  pede autorização nesta sessão. Como a primeira cobrança real é 01/10 e a
+  verificação está agendada, isso não muda decisão desta semana.
+- Saúde: bateria `conferir` inteira, build do site e `build:native`, todos
+  verdes. Nenhuma linha de código mudou nesta rodada.
+- **Correção de rota minha**: publiquei o artifact sem as etiquetas MEDIDO,
+  DEDUZIDO e TEORIA do direcionamento 12, e sem a conta do dinheiro. Reli o
+  manual, republiquei com as duas coisas. Fica a nota de que o preâmbulo novo
+  do manual (as três perguntas) tem que ser lido ANTES de escrever, não
+  depois.
+
 ## 2026-09-15 · ASO & Lojas: as 8 primeiras avaliações, e o feed da Apple que fala uma vez a cada muitas
 - Segunda rodada deste papel. Artifact "Lojas da quinzena":
   https://claude.ai/artifact/CKg35yL9VaXnCKVxjrXAUz
@@ -317,6 +378,8 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 | Por que o retrato diário de 12, 13 e 14/09 diz 0 assinaturas, "série de uso vazia" e funil sem dados? | Porque a camada de API da Supabase (PostgREST) respondia 504 a parte das 12 consultas que o `/api/dados` disparava de uma vez (fila de conexões pequena), a rota seguia com aquelas seções vazias e, quando a soma passava de 15 s, a Vercel derrubava a função inteira. O Postgres em si responde em milissegundos. Os três retratos são inválidos; `subscriptions` continua com os mesmos assinantes. Conserto de 14/09: 3 consultas por vez com nova tentativa em 504, campo `falhas` no JSON, teto de 60 s, e o Analista falha em vez de gravar zeros. **RESOLVIDO, conferido em 15/09:** o retrato das 6h saiu inteiro, `falhas: {}`, 1,3 s dentro da rota, nenhuma consulta pesada (a mais lenta, 532 ms). E `estadoDaBase` era nulo em TODOS os retratos desde 01/09 por falta de permissão em `auth.users` (migração `estado_da_base_como_dono`). | 14/09, Engenharia |
 | Por que a foto do momento (ou do perfil) aparece quebrada? | O bucket `Avatars` do Storage estava privado e o app grava a URL pública: 400 em toda foto enviada logado. Ligado em 13/09 (`avatars_bucket_publico`); o retrato está em `supabase/storage_avatars.sql`. Se voltar a acontecer, conferir `select public from storage.buckets where id = 'Avatars'` antes de qualquer outra coisa. | 13/09, Engenharia |
 | O retrato está vazio ou zerado, é queda de verdade? | **Conferir o JSON antes de acreditar.** Em 12, 13 e 14/09 o retrato saiu com tudo zerado porque `/api/dados` estourou o teto de 15s e o arquivo guardou `"error": {"code": "504"}` no lugar dos dados. Zero no retrato pode ser ausência de resposta, não medição. O jeito rápido: `git show <sha>:docs/dados/retrato.md \| grep '"error"'`. | 14/09, Diretor |
+| O "esqueci minha senha" funciona? | **Não redefine nada.** O link só cria sessão; não existe tela de nova senha nem um `updateUser({password})` no código todo. Quem esquece a senha fica pedindo link para sempre, e no app da loja a sessão ainda nasce no navegador. Patch pronto, não aplicado (autenticação, sem reprodução possível). | 16/09, QA, `docs/agentes/propostas/recuperar-senha-nao-recupera.md` |
+| Os "app fechou sozinho" são da web? | **Não, os atuais são de aparelho**: 5 de 6 nos 10 dias até 16/09 (iOS 2.1 com 3, iOS 2.4 com 1, Android 1.8 com 1). A leitura de 07/09 valia para os relatos daquela época. Zero na 2.5 desde 13/09. | 16/09, QA |
 | Quais manuais faltam para a Biela? | O primeiro lote subiu em 06/09: 112 manuais, 34.609 trechos, e os DEZ carros mais comuns do Brasil passaram a ter manual (era 3 de 10). Gol 2016 e Ka 2025, de usuários nossos, saíram de zero. Faltam Corsa/Classic e as marcas vazias (Suzuki, Mercedes-Benz, e o EcoSport). | 06/09, `docs/manuais-a-subir.md` |
 
 **Como manter:** ao FECHAR uma pergunta que já custou investigação, acrescente a
