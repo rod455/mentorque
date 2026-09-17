@@ -34,24 +34,37 @@ const LATEST = {
   // abaixo, acontecendo). O número que vale é o da loja, em Produção,
   // "Códigos de versão", e não o que alguém lembra de cabeça.
   // Antes: 1.7 = 55.
-  android: 63, // 2.4 em produção na Play, aprovada em 12/09
-  // NÃO ATUALIZADO DE PROPÓSITO, e a assimetria é a razão.
+  // 17/09/2026: o dono avisou que "a versão 66 já está nas lojas". O número é
+  // dele, como manda a nota acima (o que vale é a Play em Produção, não o
+  // arquivo nem o Codemagic), e a 2.6 tem lastro no banco: 23 eventos de
+  // `2.6.0` em 9 aparelhos Android desde 15/09.
+  // Antes: 2.4 = 63, 1.7 = 55.
+  android: 66, // 2.6 na Play
+  // SEGURADO EM 17/09/2026, e a assimetria é a razão. Este número NÃO
+  // acompanhou o Android de propósito.
   //
-  // O dono confirmou a 1.7 na PLAY. Sobre a App Store não houve confirmação, e
-  // a 1.7 é justamente a versão cujo envio para a Apple foi recusado em 03/09
-  // (nome de versão repetido), então supor que ela está publicada lá seria
-  // supor o contrário do último fato conhecido.
+  // O dono disse que a 66 está "nas lojas", no plural. A última medição diz
+  // outra coisa sobre a Apple: o retrato de `app_store_connect` de HOJE
+  // (17/09, colhido às 6h) traz a 2.6 em WAITING_FOR_REVIEW, criada em 16/09
+  // 03:41 do Pacífico, e a versão em READY_FOR_SALE ainda é a 2.5. Pode ser
+  // que a Apple tenha aprovado depois da coleta; o retrato não saberia.
   //
-  // O erro tem lados de custo bem diferentes. Número BAIXO demais: ninguém vê
-  // o banner, e o app segue funcionando. Número ALTO demais: todo mundo passa
-  // a ver "versão nova disponível" para uma versão que a loja não tem, e a
-  // pessoa vai à App Store, não encontra nada, e o aviso vira mentira. Na
-  // dúvida, o número fica atrás.
+  // O erro tem lados de custo bem diferentes, e é isso que decide enquanto há
+  // dúvida. Número BAIXO demais: ninguém vê o banner, e o app segue
+  // funcionando. Número ALTO demais: todo iPhone passa a ver "versão nova
+  // disponível", a pessoa vai à App Store, não encontra nada, e o aviso vira
+  // mentira. Na dúvida, o número fica atrás.
   //
-  // Para atualizar: App Store Connect, na versão em "Pronta para venda", o
+  // E NÃO É HIPÓTESE NESTA CASA: em 12/09 este campo foi para 74 pela
+  // lembrança de alguém e o banner acendeu para todo mundo na 2.4, apontando
+  // para um build que a loja não tinha. A nota do Android acima é a cicatriz
+  // disso.
+  //
+  // Para soltar: App Store Connect, na versão em "Pronta para venda", o
   // número de build (CFBundleVersion). Não é o "Index" da tela do Codemagic,
-  // que já causou dois falsos alarmes aqui.
-  ios: 63, // 2.4 em produção na App Store, aprovada em 12/09 (antes: 1.6 = 52)
+  // que já causou dois falsos alarmes aqui. Confirmado isso, este número vira
+  // 66 numa linha.
+  ios: 63, // 2.5 é o que está em produção na App Store; 2.6 em análise (17/09)
 };
 
 export function GET() {

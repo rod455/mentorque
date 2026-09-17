@@ -102,6 +102,18 @@ const JA_PUBLICADAS = [
   // A regra continua a mesma desde a 1.8: acrescentar NA HORA do envio, não
   // na hora da aprovação.
   "2.5",
+  // Enviada pelo dono em 16/09/2026 e ACRESCENTADA AQUI EM 17/09, de novo com
+  // um dia de atraso, pelo terceiro release seguido. A prova, do banco e não
+  // da lembrança: `metricas_diarias` de 17/09, fonte `app_store_connect`,
+  // traz a 2.6 em WAITING_FOR_REVIEW criada em 16/09 03:41 (Pacífico), e
+  // `funil_eventos` tem 23 eventos de `2.6.0` em 9 aparelhos Android desde
+  // 15/09, mais 1 no iPhone em 16/09.
+  //
+  // O ATRASO SE REPETE PORQUE A REGRA MORA NO LUGAR ERRADO: ela está escrita
+  // na nota da 2.5 e em docs/lojas, ou seja, em texto que alguém precisa
+  // lembrar de ler no momento do envio. Enquanto não houver algo que cobre
+  // isto sozinho, o terceiro atraso vira o quarto.
+  "2.6",
 ];
 
 import { readFileSync } from "node:fs";
