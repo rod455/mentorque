@@ -45,7 +45,7 @@ function Obd2Lookup() {
     const seed = meaning
       ? t.deepenSeed.replace("{code}", code).replace("{meaning}", meaning)
       : t.deepenSeedUnknown.replace("{code}", code);
-    go(s.premium ? { name: "biela", seed } : { name: "subscribe", ctx: "obd2" });
+    go({ name: "biela", seed });
   };
 
   return (

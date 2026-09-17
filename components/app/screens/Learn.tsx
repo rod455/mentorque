@@ -54,7 +54,7 @@ function BielaCard() {
   const { go } = useNav();
   return (
     <button
-      onClick={() => go(s.premium ? { name: "biela" } : { name: "subscribe", ctx: "biela" })}
+      onClick={() => go({ name: "biela" })}
       className="flex w-full items-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-br from-amber/20 to-amber/5 p-4 text-left ring-1 ring-amber/25 hover:ring-amber/45"
     >
       <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-2xl bg-graphite-900/40">
@@ -62,10 +62,11 @@ function BielaCard() {
         <img src="/biela/biela-idle.png" alt="" className="h-full w-full object-contain" />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="flex items-center gap-2">
-          <span className="font-display text-base font-semibold text-cream">{c.biela.cardTitle}</span>
-          <PremiumBadge />
-        </span>
+        {/* O selo Premium saiu em 17/09/2026, junto com o portão que ele
+            anunciava. A Biela passou a ter cinco perguntas por mês no
+            gratuito (decisão do dono, 15/09), e selo de Premium num recurso
+            aberto afasta justamente quem ele deveria atrair. */}
+        <span className="font-display text-base font-semibold text-cream">{c.biela.cardTitle}</span>
         <span className="mt-0.5 block text-sm text-cream/70">{c.biela.cardSub}</span>
       </span>
       <span className="shrink-0 text-amber">›</span>

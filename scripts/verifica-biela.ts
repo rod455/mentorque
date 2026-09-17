@@ -138,6 +138,47 @@ console.log("Biela: o limite do gratuito, e quem o segura.");
   );
 }
 
+// ── as PORTAS de entrada, que é onde o defeito de 17/09 morava ──────────────
+//
+// A conferência original olhou a rota, o limite, a tela e os textos, e deixou
+// passar o que o dono viu no aparelho: a Biela continuava mostrando paywall.
+// O motivo é o erro clássico da casa, o de conferir o meio do caminho e não o
+// fim. Eu abri a porta DENTRO da sala e deixei SETE fechaduras do lado de
+// fora, cada uma em uma tela, todas na forma
+// `go(s.premium ? { name: "biela" } : { name: "subscribe" })`. Quem não
+// assinava nunca chegava ao chat para descobrir que tinha cinco perguntas.
+//
+// Conferência de texto porque o alvo é navegação espalhada por sete arquivos,
+// e o elo que ela cobra é exatamente o que manteve o defeito de pé.
+{
+  const telas = [
+    "components/app/screens/Learn.tsx",
+    "components/app/screens/Equipment.tsx",
+    "components/app/screens/Symptoms.tsx",
+    "components/app/screens/Search.tsx",
+    "components/app/screens/Obd2.tsx",
+  ];
+  for (const caminho of telas) {
+    const fonte = leia(caminho);
+    const portao = /s\.premium\s*[\s\S]{0,40}?\{\s*name:\s*"biela"/.test(fonte);
+    conferir(
+      `${caminho.split("/").pop()}: a entrada da Biela NÃO passa por Premium`,
+      !portao,
+      "quem não assina tem cinco perguntas por mês e precisa CHEGAR na tela para usá-las",
+    );
+  }
+  // O selo e o cadeado são a promessa visual do portão. Sobreviver a ele é
+  // dizer "é pago" numa tela que é grátis, que afasta quem devia entrar.
+  conferir(
+    "o card da Biela em Estudos não tem mais selo de Premium",
+    !/\{c\.biela\.cardTitle\}[\s\S]{0,120}<PremiumBadge \/>/.test(leia("components/app/screens/Learn.tsx")),
+  );
+  conferir(
+    "o botão de diagnóstico não mostra mais cadeado",
+    !/s\.premium \? "🐻" : "🔒"/.test(leia("components/app/screens/Symptoms.tsx")),
+  );
+}
+
 // ── os textos ───────────────────────────────────────────────────────────────
 {
   const content = readFileSync(new URL("../lib/app/content.ts", import.meta.url), "utf8");

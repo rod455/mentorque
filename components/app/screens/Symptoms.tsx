@@ -50,7 +50,7 @@ function AskBielaRow({ seed, label }: { seed: string; label: string }) {
   const { go } = useNav();
   return (
     <button
-      onClick={() => go(s.premium ? { name: "biela", seed } : { name: "subscribe", ctx: "biela" })}
+      onClick={() => go({ name: "biela", seed })}
       className="flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-amber/15 to-amber/5 px-3.5 py-3.5 text-left ring-1 ring-amber/25 hover:ring-amber/45"
     >
       <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-graphite-900/40">
@@ -125,11 +125,10 @@ export function SymptomsScreen() {
               type="button"
               onMouseDown={(e) => e.preventDefault()}
               onClick={() =>
-                go(
-                  s.premium
-                    ? { name: "biela", seed: (v ? `Meu ${carName(v)} ` : "Meu carro ") + `está com: ${q}. O que pode ser e o que devo fazer?` }
-                    : { name: "subscribe", ctx: "biela" }
-                )
+                go({
+                  name: "biela",
+                  seed: (v ? `Meu ${carName(v)} ` : "Meu carro ") + `está com: ${q}. O que pode ser e o que devo fazer?`,
+                })
               }
               className="mt-1 flex w-full items-center gap-2.5 rounded-lg bg-amber/10 px-3 py-2.5 text-left ring-1 ring-amber/20 hover:ring-amber/40"
             >
@@ -496,10 +495,10 @@ export function SymptomDetail({ id }: { id: string }) {
                 sx.label,
                 sx.observe.map((o, i) => (answers[i] ? `${o} ${answers[i] === "yes" ? ui.yes : ui.no}` : "")).filter(Boolean)
               );
-              go(s.premium ? { name: "biela", seed: bielaSeed() } : { name: "subscribe", ctx: "biela" });
+              go({ name: "biela", seed: bielaSeed() });
             }}
           >
-            {s.premium ? "🐻" : "🔒"} {ui.diagnoseWithBiela}
+            🐻 {ui.diagnoseWithBiela}
           </Button>
         </Card>
       )}

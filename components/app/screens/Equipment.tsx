@@ -54,7 +54,7 @@ export function EquipmentScreen() {
 
       {/* Tie-in com o Biela */}
       <button
-        onClick={() => go(s.premium ? { name: "biela", seed: e.bielaSeed } : { name: "subscribe", ctx: "biela" })}
+        onClick={() => go({ name: "biela", seed: e.bielaSeed })}
         className="mt-6 flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-amber/15 to-amber/5 px-3.5 py-3.5 text-left ring-1 ring-amber/25 hover:ring-amber/45"
       >
         <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-graphite-900/40">

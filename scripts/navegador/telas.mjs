@@ -134,23 +134,65 @@ export async function rodar({ nav, ok }) {
   await app.fechar();
 
   // ---- o paywall -----------------------------------------------------------
-  // Saiu de Profile.tsx para Subscribe.tsx. Chega-se a ele por uma aula
-  // trancada, que é o caminho real de quem não assina.
+  // Saiu de Profile.tsx para Subscribe.tsx. O caminho é a faixa de convite
+  // que o Estudos mostra para quem não assina (UpgradeBanner).
+  //
+  // ANTES ELE VINHA PELO CARD DA BIELA, e ninguém sabia: este bloco procurava
+  // `main button` com o texto "Premium", e quem casava era o selo do card da
+  // Biela, não uma aula trancada (o comentário aqui dizia "aula trancada" e
+  // estava errado desde sempre). Em 17/09/2026 a Biela entrou no gratuito, o
+  // selo saiu, e este teste acusou "não achei aula trancada" — a conferência
+  // certa reprovando pelo motivo errado.
+  //
+  // A faixa é caminho de verdade: ela só existe para quem NÃO assina, e o
+  // único destino dela é o paywall. Sem `Premium` no seletor, para não voltar
+  // a pescar o primeiro rótulo que por acaso tenha a palavra.
   {
     const b = await abrirApp(nav, { sessao: SESSAO(), chaves: { "mq-primeiro-quiz-nao": "1" } });
     await b.pg.getByRole("button", { name: /^Estudos$/i }).first().click();
     await b.pg.waitForTimeout(1500);
-    const trancada = b.pg.locator("main button").filter({ hasText: /Premium/i });
-    if (await trancada.count()) {
-      await trancada.first().click();
+    const convite = b.pg.locator("main button").filter({ hasText: /Biblioteca completa|Full library/i });
+    if (await convite.count()) {
+      await convite.first().click();
       await b.pg.waitForTimeout(2000);
       const pay = await b.tela();
       ok("o paywall desenha", /Premium/i.test(pay) && pay.length > 200, pay.slice(0, 60).replace(/\n/g, " "));
       ok("o paywall traz o comparativo de planos", /Grátis|Free/i.test(pay));
     } else {
-      ok("o paywall desenha", false, "não achei aula trancada para chegar nele");
+      ok("o paywall desenha", false, "não achei a faixa de convite do Estudos para chegar nele");
     }
     ok("nenhum erro de página no paywall", b.erros.length === 0, b.erros[0] ?? "");
+    await b.fechar();
+  }
+
+  // ---- a Biela É GRÁTIS, e quem não assina TEM QUE CHEGAR nela -------------
+  // O defeito de 17/09/2026, relatado pelo dono no aparelho: a Biela entrou no
+  // gratuito com cinco perguntas por mês e continuava mostrando paywall,
+  // porque sete telas ainda mandavam quem não assina para o `subscribe`. A
+  // conferência de texto (conferir:biela) cobra que os portões não voltem;
+  // esta aqui cobra o que a pessoa sente, que é abrir o chat.
+  {
+    const b = await abrirApp(nav, { sessao: SESSAO(), chaves: { "mq-primeiro-quiz-nao": "1" } });
+    await b.pg.getByRole("button", { name: /^Estudos$/i }).first().click();
+    await b.pg.waitForTimeout(1500);
+    const card = b.pg.locator("main button").filter({ hasText: /Fala com o Biela|Chat with Biela/i });
+    if (await card.count()) {
+      await card.first().click();
+      await b.pg.waitForTimeout(2000);
+      const tela = await b.tela();
+      ok(
+        "sem assinatura, o card da Biela abre o CHAT e não o paywall",
+        !/Grátis[\s\S]{0,400}Premium/i.test(tela) && /Biela/i.test(tela),
+        tela.slice(0, 90).replace(/\n/g, " "),
+      );
+      ok(
+        "e o campo de escrever está lá",
+        (await b.pg.locator("main textarea").count()) > 0,
+        "sem campo, a pessoa chegou na tela e continua sem poder perguntar",
+      );
+    } else {
+      ok("sem assinatura, o card da Biela abre o CHAT e não o paywall", false, "não achei o card da Biela no Estudos");
+    }
     await b.fechar();
   }
 

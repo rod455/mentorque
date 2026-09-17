@@ -28,7 +28,7 @@ export function SearchScreen() {
   const hasResults = problemHits.length + serviceHits.length > 0;
   const bielaSeed = (v ? `Meu ${carName(v)} ` : "Meu carro ") + `está com: ${q}. O que pode ser e o que devo fazer?`;
   // Sem premium, a Biela leva pro paywall; com premium, abre o chat.
-  const askBiela = () => go(s.premium ? { name: "biela", seed: bielaSeed } : { name: "subscribe", ctx: "search" });
+  const askBiela = () => go({ name: "biela", seed: bielaSeed });
 
   return (
     <div>

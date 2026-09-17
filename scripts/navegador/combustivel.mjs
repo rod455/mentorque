@@ -19,6 +19,41 @@ export async function rodar({ nav, ok }) {
   const corpo0 = await app.corpo();
   ok("o Início convida ao primeiro abastecimento", /Quanto o .* custa por km\?/.test(corpo0));
   ok("o card fica abaixo do card do carro", corpo0.indexOf("Seu carro") < corpo0.indexOf("custa por km"));
+
+  // O CARD CABE NA TELA SEM ESPREMER O TEXTO (17/09/2026).
+  //
+  // Relatado pelo dono no aparelho, na 2.6: o título vinha com uma palavra por
+  // linha. O botão morava DENTRO da linha do texto com `shrink-0`, e o título
+  // do card vazio interpola o nome inteiro do carro ("Quanto o Mercedes-Benz
+  // A200 2022 custa por km?"), então num celular estreito sobrava quase nada
+  // para a coluna do texto.
+  //
+  // POR QUE NENHUMA CONFERÊNCIA PEGOU: `min-w-0 flex-1` deixa a coluna
+  // encolher até quase zero SEM estourar o card para o lado. O defeito não é
+  // vazamento lateral, que é o que a suíte do site mede; é coluna estreita, e
+  // isso só aparece medindo a largura dela. As 17 outras conferências desta
+  // suíte olham conta e navegação, nenhuma olhava forma.
+  //
+  // O piso é 55% do card: com o botão em linha própria a coluna fica com a
+  // largura inteira, e 55% reprova qualquer volta ao layout de antes.
+  for (const largura of [320, 390]) {
+    await pg.setViewportSize({ width: largura, height: 844 });
+    await pg.waitForTimeout(250);
+    const m = await pg.evaluate(() => {
+      const card = document.querySelector("[data-custo-do-carro]");
+      if (!card) return null;
+      const texto = card.querySelector("span.min-w-0");
+      if (!texto) return null;
+      return { card: Math.round(card.getBoundingClientRect().width), texto: Math.round(texto.getBoundingClientRect().width) };
+    });
+    ok(
+      `em ${largura}px, a coluna do texto do card não fica espremida`,
+      !!m && m.texto >= m.card * 0.55,
+      m ? `texto ${m.texto}px de um card de ${m.card}px (${Math.round((m.texto / m.card) * 100)}%)` : "card não encontrado",
+    );
+  }
+  await pg.setViewportSize({ width: 390, height: 844 });
+  await pg.waitForTimeout(250);
   await pg.getByRole("button", { name: /Registrar abastecimento/i }).click();
   await pg.waitForTimeout(800);
   ok("abre a tela de abastecimento", /Valor, litros e o km do painel/.test(await app.corpo()));

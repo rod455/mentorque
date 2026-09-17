@@ -146,10 +146,21 @@ function CustoDoCarro({ vehicleId, nome }: { vehicleId: string; nome: string }) 
             </>
           )}
         </span>
-        <button onClick={abrir} className="shrink-0 rounded-full bg-teal px-3.5 py-1.5 text-xs font-bold text-graphite">
-          {lista.length === 0 ? t.cardCtaVazio : t.cardCta}
-        </button>
       </div>
+      {/* O BOTÃO EM LINHA PRÓPRIA (17/09/2026), como o card do motorista logo
+          acima já fazia. Ele morava DENTRO da linha do texto, com `shrink-0`,
+          e num celular de 390px isso esmagava a coluna do texto: o título do
+          card vazio interpola o nome inteiro do carro ("Quanto o Mercedes-Benz
+          A200 2022 custa por km?"), e sobrava largura para uma palavra por
+          linha. Relatado pelo dono no aparelho, na 2.6.
+
+          `min-w-0 flex-1` deixa a coluna encolher até quase nada sem estourar
+          o card para o lado, então o defeito não aparece como corte lateral:
+          aparece como texto em coluna estreita, que nenhuma medida de
+          vazamento pega. Quem pega é medir a largura da coluna. */}
+      <button onClick={abrir} className="mt-3 w-full rounded-full bg-teal px-3.5 py-2 text-xs font-bold text-graphite" data-abastecer>
+        {lista.length === 0 ? t.cardCtaVazio : t.cardCta}
+      </button>
     </div>
   );
 }
