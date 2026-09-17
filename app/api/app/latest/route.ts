@@ -40,31 +40,21 @@ const LATEST = {
   // `2.6.0` em 9 aparelhos Android desde 15/09.
   // Antes: 2.4 = 63, 1.7 = 55.
   android: 66, // 2.6 na Play
-  // SEGURADO EM 17/09/2026, e a assimetria é a razão. Este número NÃO
-  // acompanhou o Android de propósito.
+  // 17/09/2026: SOLTO, com a confirmação do dono ("66 msm") depois de eu ter
+  // segurado e mostrado o que me fazia duvidar.
   //
-  // O dono disse que a 66 está "nas lojas", no plural. A última medição diz
-  // outra coisa sobre a Apple: o retrato de `app_store_connect` de HOJE
-  // (17/09, colhido às 6h) traz a 2.6 em WAITING_FOR_REVIEW, criada em 16/09
-  // 03:41 do Pacífico, e a versão em READY_FOR_SALE ainda é a 2.5. Pode ser
-  // que a Apple tenha aprovado depois da coleta; o retrato não saberia.
+  // O que me fazia duvidar, registrado porque quem ler isto daqui a um mês
+  // merece saber: o retrato de `app_store_connect` de 17/09, colhido às 6h,
+  // trazia a 2.6 em WAITING_FOR_REVIEW e a 2.5 como a última READY_FOR_SALE.
+  // A explicação que concilia as duas coisas é a aprovação ter caído depois
+  // da coleta, e quem tem a tela do App Store Connect na frente é o dono.
   //
-  // O erro tem lados de custo bem diferentes, e é isso que decide enquanto há
-  // dúvida. Número BAIXO demais: ninguém vê o banner, e o app segue
-  // funcionando. Número ALTO demais: todo iPhone passa a ver "versão nova
-  // disponível", a pessoa vai à App Store, não encontra nada, e o aviso vira
-  // mentira. Na dúvida, o número fica atrás.
-  //
-  // E NÃO É HIPÓTESE NESTA CASA: em 12/09 este campo foi para 74 pela
-  // lembrança de alguém e o banner acendeu para todo mundo na 2.4, apontando
-  // para um build que a loja não tinha. A nota do Android acima é a cicatriz
-  // disso.
-  //
-  // Para soltar: App Store Connect, na versão em "Pronta para venda", o
-  // número de build (CFBundleVersion). Não é o "Index" da tela do Codemagic,
-  // que já causou dois falsos alarmes aqui. Confirmado isso, este número vira
-  // 66 numa linha.
-  ios: 63, // 2.5 é o que está em produção na App Store; 2.6 em análise (17/09)
+  // A DÚVIDA SE RESOLVE SOZINHA AMANHÃ, e de graça: o retrato das 6h de 18/09
+  // vai dizer se a 2.6 está em READY_FOR_SALE. Se não estiver, este número
+  // volta para 63 na hora, porque aí o banner está mandando todo iPhone
+  // procurar o que a loja não tem (foi o que houve em 12/09, com 74).
+  // Antes: 2.4 = 63, 1.6 = 52.
+  ios: 66, // 2.6 na App Store, confirmada pelo dono em 17/09
 };
 
 export function GET() {
