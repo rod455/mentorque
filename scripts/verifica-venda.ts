@@ -213,6 +213,66 @@ const CHAVE = "mq-venda-pendente";
     "perguntar depois do return não muda nada"
   );
 
+  // ── O PORTÃO DE CONTA DENTRO DO PAYWALL (18/09/2026) ──────────────────────
+  //
+  // O achado do CRO, provado por ele no navegador: os seis caminhos de compra
+  // desviavam para o login ANTES de emitir evento, então quem não tem conta
+  // sumia sem rastro, e o zero de `iniciou_checkout` não separava "não quis"
+  // de "foi barrado pela conta". Pior: a pessoa criava a conta e voltava para
+  // a tela inicial, tendo que achar o paywall de novo sozinha, enquanto o
+  // mecanismo que resolve isso já existia e era usado só pelo link de venda.
+  //
+  // Conferência de texto porque o alvo é um componente de tela com seis
+  // caminhos assíncronos que dependem de loja. O elo que ela cobra é o que,
+  // quando faltou, deixou o defeito de pé: o portão ser UM só, e ele fazer as
+  // três coisas.
+  {
+    const paywall = semComentarios2(readFileSync(new URL("../components/app/screens/Subscribe.tsx", import.meta.url), "utf8"));
+
+    conferir(
+      "o portão de conta do paywall é um só",
+      (paywall.match(/if \(!user\) return paraLogin\(/g) ?? []).length === 6,
+      `achei ${(paywall.match(/if \(!user\) return paraLogin\(/g) ?? []).length} de 6; ` +
+        "portão copiado é portão que esquece uma das três coisas em um dos caminhos",
+    );
+    conferir(
+      "nenhum caminho desvia para o login sem passar por ele",
+      !/if \(!user\) \{[^}]*go\(\{ name: "auth" \}\)/.test(paywall),
+      "era assim que os seis estavam, e era por isso que a tentativa não existia",
+    );
+    conferir(
+      "o portão REGISTRA a tentativa de quem não tem conta",
+      /const paraLogin = [\s\S]{0,200}funil\("tentou_assinar", \{[^}]*\}\)/.test(paywall),
+      "sem isto o fundo do funil continua parecendo parado",
+    );
+    // UMA VEZ POR SESSÃO, e não a cada toque. É o que torna a razão
+    // `viu_paywall` → `tentou_assinar` legítima: os dois passam a ser eventos
+    // de sessão, medidos pela mesma régua. Sem o `umaVez`, quem toca em três
+    // botões vira três tentativas e a razão passa de um.
+    conferir(
+      "e uma vez por sessão, como o viu_paywall",
+      /funil\("tentou_assinar", \{ umaVez: true, chave: "tentou_assinar"/.test(paywall),
+      "natureza declarada como 'sessao' em lib/funilCorreto.ts exige a marca aqui",
+    );
+    conferir(
+      "e GUARDA a compra para devolver a pessoa depois do login",
+      /guardaVenda\(\{ plano, direto: false \}\)/.test(paywall),
+    );
+    // `direto: false` não é detalhe de estilo: é o que separa navegação de
+    // cobrança. Com `true`, quem criasse a conta cairia direto no pagamento,
+    // e isso é decisão do dono, não de uma rodada de CRO.
+    conferir(
+      "e NUNCA com `direto: true`, que mandaria direto ao pagamento",
+      !/guardaVenda\(\{[^}]*direto: true[^}]*\}\)/.test(paywall),
+      "de dentro do app a pessoa volta ao paywall e escolhe de novo; ir ao checkout é do link de venda",
+    );
+    conferir(
+      "o evento novo está na lista fechada da rota",
+      /"tentou_assinar"/.test(semComentarios2(readFileSync(new URL("../app/api/funil/route.ts", import.meta.url), "utf8"))),
+      "sem estar na lista, a rota recusa com evento_invalido e o registro some",
+    );
+  }
+
   // E a função em si responde pelas duas fontes: a URL de quem acabou de
   // clicar, e o armazenamento de quem está voltando do login com a URL limpa.
   esqueceVenda();

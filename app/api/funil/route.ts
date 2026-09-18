@@ -18,6 +18,10 @@ export const maxDuration = 10;
 // fonte dos relatórios dos agentes e de qualquer painel.
 const EVENTOS_DO_APP = new Set([
   "abriu_app", "cadastro", "viu_paywall", "iniciou_checkout",
+  // A tentativa de compra de quem NÃO tem conta (18/09/2026). Ver
+  // lib/app/funil.ts: sem ela o zero de `iniciou_checkout` não separa "não
+  // quis" de "foi barrado pela conta".
+  "tentou_assinar",
   // Primeira ação de valor: é o que separa "criou conta" de "experimentou
   // de verdade" (ativação real na skill de análise).
   "abriu_trilha", "cadastrou_carro",

@@ -49,7 +49,12 @@ create table if not exists public.funil_eventos (
     -- Caderno de gastos, medido em 13/09/2026 (migração funil_eventos_abastecimento).
     'registrou_abastecimento',
     -- Modo motorista de aplicativo, medido em 13/09/2026 (migração funil_eventos_ganho).
-    'lancou_ganho'
+    'lancou_ganho',
+    -- A tentativa de compra de quem NÃO tem conta, medida em 18/09/2026
+    -- (migração funil_tentou_assinar). Achado do CRO: os seis caminhos do
+    -- paywall desviavam para o login ANTES de emitir evento, então o zero de
+    -- `iniciou_checkout` não separava "não quis" de "foi barrado pela conta".
+    'tentou_assinar'
   )),
 
   anon_id    text,

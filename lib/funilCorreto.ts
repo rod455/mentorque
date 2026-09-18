@@ -41,6 +41,7 @@ export type EventoFunil =
   | "cadastro"
   | "viu_paywall"
   | "iniciou_checkout"
+  | "tentou_assinar"
   | "abriu_trilha"
   | "cadastrou_carro"
   | "comecou_onboarding"
@@ -114,6 +115,7 @@ export const UNIDADE: Record<EventoFunil, Unidade> = {
   registrou_abastecimento: "aparelho",
   lancou_ganho: "aparelho",
   iniciou_checkout: "aparelho",
+  tentou_assinar: "aparelho",
   atribuicao: "aparelho",
   // Nascem no webhook da cobrança, que não tem aparelho. A identidade é o
   // user_id, e por isso eles não se comparam com nada da lista de cima.
@@ -151,6 +153,16 @@ export const NATUREZA: Record<EventoFunil, Natureza> = {
   registrou_abastecimento: "sessao",
   lancou_ganho: "sessao",
   iniciou_checkout: "ato",
+  // DE SESSÃO, e não ato, porque a razão que ele existe para permitir é
+  // `viu_paywall` → `tentou_assinar`, e `viu_paywall` é de sessão. Comparar um
+  // ato com uma sessão é justamente o erro que o comentário do topo deste
+  // arquivo descreve: fluxo de novatos dividido por estoque de todos.
+  //
+  // E ele NÃO é um ato de verdade: tocar em assinar sem ter conta é coisa que
+  // a mesma pessoa faz de novo amanhã, diferente de `cadastro`, que acontece
+  // uma vez na vida. Quem emite passa `umaVez` com chave própria, então ele
+  // sai no máximo uma vez por sessão, igual ao `viu_paywall`.
+  tentou_assinar: "sessao",
   assinou: "ato",
   renovou: "ato",
   cancelou: "ato",
@@ -174,6 +186,7 @@ export const MEDIDO_DESDE: Record<EventoFunil, string> = {
   cadastro: "2026-08-22",
   viu_paywall: "2026-08-22",
   iniciou_checkout: "2026-08-22",
+  tentou_assinar: "2026-09-18",
   abriu_trilha: "2026-08-23",
   cadastrou_carro: "2026-08-23",
   assinou: "2026-08-22",

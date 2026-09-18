@@ -12,7 +12,7 @@ import { funil } from "@/lib/app/funil";
 // A tela de entrar precisa saber que a pessoa veio de um botão de assinar.
 // Sem isso ela recebe quem pediu um teste grátis com a frase de quem está
 // sendo convidado a criar conta. Ver lib/app/vendaPendente.ts.
-import { marcaVeioAssinar } from "@/lib/app/vendaPendente";
+import { guardaVenda, marcaVeioAssinar } from "@/lib/app/vendaPendente";
 import { Button } from "@/components/ui/Button";
 import { Card, Icon, LegalLinks, useContent } from "../ui";
 
@@ -105,10 +105,33 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   // `viu_paywall` DEPOIS do `iniciou_checkout`. Aconteceu em 25/08/2026 (o
   // mesmo cliente do quase-pagou-duas-vezes): 4 dos eventos de paywall da
   // semana são 2 pessoas. Agora vale a primeira entrada da sessão.
+  // O PORTÃO DE CONTA, num lugar só, e ele faz três coisas (18/09/2026, a
+  // partir do achado do CRO).
+  //
+  // 1. REGISTRA A TENTATIVA. Os seis caminhos de compra desviavam para o login
+  //    ANTES de emitir qualquer evento, então quem não tem conta sumia sem
+  //    deixar rastro. Era por isso que o fundo do funil parecia parado: o zero
+  //    de `iniciou_checkout` não separava "não quis" de "foi barrado".
+  // 2. MARCA O TEXTO da tela de entrar, que já existia.
+  // 3. GUARDA A COMPRA PENDENTE com `direto: false`, que é o que devolve a
+  //    pessoa ao PAYWALL depois do login, e não ao pagamento. Ninguém é
+  //    cobrado por isso: `aberturaDoApp` lê o `direto` e só manda ao checkout
+  //    quem veio do link de venda. Sem isto, quem criava a conta voltava para
+  //    a tela inicial e tinha que achar o paywall sozinho.
+  //
+  // O mecanismo inteiro já existia e era usado só pelo link de venda; o
+  // caminho de dentro do app não o usava. Ver lib/app/vendaPendente.ts.
+  const paraLogin = (origem: string, plano: "annual" | "monthly") => {
+    funil("tentou_assinar", { umaVez: true, chave: "tentou_assinar", origem });
+    marcaVeioAssinar();
+    guardaVenda({ plano, direto: false });
+    go({ name: "auth" });
+  };
+
   useEffect(() => { funil("viu_paywall", { umaVez: true, chave: "viu_paywall", origem: _ctx ?? "direto", userId: user?.id }); }, [_ctx, user?.id]);
 
   const subscribe = () => {
-    if (!user) { marcaVeioAssinar(); go({ name: "auth" }); return; }
+    if (!user) return paraLogin(`web-${plan}`, plan);
     funil("iniciou_checkout", { origem: `web-${plan}`, userId: user.id });
     if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; } // demo só em dev
     go({ name: "checkout", plan }); // checkout embutido (com teste grátis)
@@ -196,7 +219,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   // paywall quando o entitlement chega.
   const buyGoogleOffer = async (opt: GoogleOption | null) => {
     if (!opt || iapBusy) return;
-    if (!user) { marcaVeioAssinar(); go({ name: "auth" }); return; }
+    if (!user) return paraLogin(`oferta-${opt.id.split(":").pop()}`, "annual");
     funil("iniciou_checkout", { origem: `oferta-${opt.id.split(":").pop()}`, userId: user.id });
     setIapBusy(true);
     try {
@@ -219,7 +242,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   // comprado como qualquer pacote.
   const buyExitPackage = async (pkg: RcPackage | null) => {
     if (!pkg || iapBusy) return;
-    if (!user) { marcaVeioAssinar(); go({ name: "auth" }); return; }
+    if (!user) return paraLogin(`oferta-${pkg.identifier}`, "annual");
     funil("iniciou_checkout", { origem: `oferta-${pkg.identifier}`, userId: user.id });
     setIapBusy(true);
     try {
@@ -243,7 +266,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
       void buyExitPackage(exitPkgs.p10 ?? exitPkgs.p25);
       return;
     }
-    if (!user) { marcaVeioAssinar(); go({ name: "auth" }); return; }
+    if (!user) return paraLogin("web-exit10", "annual");
     funil("iniciou_checkout", { origem: "web-exit10", userId: user.id });
     if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; }
     go({ name: "checkout", plan: "annual", offer: "exit10" });
@@ -266,7 +289,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
       void buyExitPackage(exitPkgs.p25 ?? exitPkgs.p10);
       return;
     }
-    if (!user) { marcaVeioAssinar(); go({ name: "auth" }); return; }
+    if (!user) return paraLogin("web-exit25", "annual");
     funil("iniciou_checkout", { origem: "web-exit25", userId: user.id });
     if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; }
     go({ name: "checkout", plan: "annual", offer: "exit25" });
@@ -314,7 +337,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   const buyNative = async () => {
     const pkg = plan === "monthly" ? iap?.monthly ?? iap?.annual : iap?.annual ?? iap?.monthly;
     if (!pkg || iapBusy) return;
-    if (!user) { marcaVeioAssinar(); go({ name: "auth" }); return; }
+    if (!user) return paraLogin(`loja-${plan}`, plan);
     funil("iniciou_checkout", { origem: `loja-${plan}`, userId: user.id });
     setIapBusy(true);
     try {

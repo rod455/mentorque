@@ -21,6 +21,14 @@ export type EventoFunil =
   | "cadastro"
   | "viu_paywall"
   | "iniciou_checkout"
+  // A TENTATIVA DE COMPRA DE QUEM NÃO TEM CONTA (18/09/2026, achado do CRO,
+  // provado no navegador). `iniciou_checkout` nasce DEPOIS do portão de conta
+  // nos seis caminhos do paywall, então ele nunca mediu "quis comprar": mediu
+  // "quem já tinha conta começou a pagar". Como o paywall é contado por
+  // aparelho e quase todo mundo que chega é convidado, o fundo do funil
+  // parecia parado. Este evento é emitido NO portão, antes do desvio, e é o
+  // que separa "viu e desistiu" de "quis e foi barrado pela conta".
+  | "tentou_assinar"
   | "abriu_trilha"
   | "cadastrou_carro"
   // A PRIMEIRA SESSÃO, medida em 01/09/2026. Entre "abriu o app" e
