@@ -172,4 +172,50 @@ export async function rodar({ nav, ok }) {
     ok("nenhum erro de página com valor inválido", app.erros.length === 0, app.erros[0] ?? "");
     await app.fechar();
   }
+
+  // ---- O LOGIN SABE QUE A PESSOA VEIO COMPRAR -------------------------------
+  //
+  // Provado no navegador em 18/09/2026: num aparelho sem conta, tocar em
+  // "Começar 7 dias grátis" no paywall leva à tela de entrar SEM gravar evento
+  // nenhum (o `iniciou_checkout` só nasce para quem já tem conta), e essa tela
+  // dizia "Salve sua garagem", que é o convite de quem está criando conta e
+  // não a frase de quem acabou de pedir um teste grátis.
+  //
+  // Os dois lados da fronteira: vindo do paywall, o texto fala do teste; indo
+  // à tela de entrar por conta própria, continua o texto de sempre.
+  {
+    const app = await abrirApp(nav, { sessao: SESSAO(), chaves: { "mq-primeiro-quiz-nao": "1" } });
+    const { pg } = app;
+    await pg.getByRole("button", { name: /Teste o Premium|Premium/i }).first().click().catch(() => {});
+    await pg.waitForTimeout(1500);
+    await pg.getByRole("button", { name: /Começar 7 dias grátis/i }).first().click().catch(() => {});
+    await pg.waitForTimeout(1500);
+    const tela = await app.tela();
+    ok("do paywall, a tela de entrar fala do teste grátis", /teste gr[áa]tis/i.test(tela), tela.slice(0, 120));
+    ok("e não usa mais o convite genérico de salvar a garagem", !/Salve sua garagem e cuide/i.test(tela));
+    ok("nenhum erro de página vindo do paywall", app.erros.length === 0, app.erros[0] ?? "");
+    await app.fechar();
+  }
+
+  {
+    // O lado negativo, e ele é medido onde DÁ para medir: num aparelho que
+    // nunca tocou em assinar, a marca não existe. Alcançar a tela de entrar
+    // por um caminho que não seja de compra não é trivial para quem não tem
+    // carro nem conta, então a conferência olha a marca em vez de fingir que
+    // chegou lá. Isto morde do mesmo jeito: marca sempre ligada reprova aqui.
+    const app = await abrirApp(nav, { sessao: SESSAO(), chaves: { "mq-primeiro-quiz-nao": "1" } });
+    const { pg } = app;
+    const antes = await pg.evaluate(() => window.localStorage.getItem("mq-veio-assinar"));
+    ok("aparelho que não tocou em assinar não carrega a marca", antes === null, String(antes));
+    await pg.getByRole("button", { name: /Teste o Premium|Premium/i }).first().click().catch(() => {});
+    await pg.waitForTimeout(1200);
+    const noPaywall = await pg.evaluate(() => window.localStorage.getItem("mq-veio-assinar"));
+    ok("ver o paywall ainda não é ter tocado em assinar", noPaywall === null, String(noPaywall));
+    await pg.getByRole("button", { name: /Começar 7 dias grátis/i }).first().click().catch(() => {});
+    await pg.waitForTimeout(1200);
+    const depois = await pg.evaluate(() => window.localStorage.getItem("mq-veio-assinar"));
+    ok("tocar em assinar sem conta deixa a marca", depois !== null, String(depois));
+    ok("nenhum erro de página no caminho da marca", app.erros.length === 0, app.erros[0] ?? "");
+    await app.fechar();
+  }
 }

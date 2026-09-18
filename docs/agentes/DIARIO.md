@@ -3,6 +3,63 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-18 · CRO (conversão): o fundo do funil tem um portão que não deixa rastro
+- Rodada semanal do CRO/BeSci, foco CONVERSÃO (a de 11/09 foi de retenção).
+  Artifact "Conversão da semana":
+  https://claude.ai/artifact/XQN24XQxia8EPcPftbR9iq
+- VEREDITOS: nenhum vencido. cta-teste-por-plano e fim-do-lembrete-falso vencem
+  em 20/09, depois de amanhã, e ficam para a rodada de 25/09; não antecipei
+  dois dias para não repetir o erro de janela de 04/09. Os dois testes de
+  onboarding se leem duas semanas depois da 2.5 nas duas lojas (por volta de
+  15/09), então também não.
+- LEITURA PARCIAL dos dois testes A/B, registrada no caderno como leitura e
+  NÃO como veredito, seguindo a régua dos três níveis:
+  - cadastro-em-duas-etapas: abriu o cadastro 10 em A e 10 em B; cadastrou 3 em
+    A e 5 em B. Direção a favor de B, com duas pessoas de diferença e um quarto
+    do alvo de amostra (40 aberturas por variante).
+  - onboarding-curto: começaram 70 em A e 71 em B; terminaram 18 em A e 25 em
+    B. Só que a segunda leitura, cadastrou_carro, está EMPATADA em 4 e 4, que é
+    exatamente o risco que a métrica previu. E os números do retrato vêm com
+    loja e web somadas, enquanto o desenho pede as duas separadas.
+- ACHADO DA RODADA, PROVADO NO NAVEGADOR e não lido no código: num aparelho sem
+  conta, abrir o paywall grava `viu_paywall:home` e tocar em "Começar 7 dias
+  grátis" leva à tela de entrar SEM GRAVAR NADA. O `iniciou_checkout` nasce
+  depois do `if (!user)`, então ele mede "quem já tinha conta começou a pagar",
+  não "quem tentou comprar". São seis caminhos de compra no paywall, todos com
+  o mesmo portão.
+- O QUE ISSO CORRIGE NA LEITURA: a semana de 14/09 tem 11 paywall e 0 checkout,
+  e nos quatro grupos de variante dos dois testes o `iniciou_checkout` não
+  aparece uma vez sequer. Esse zero não separa "não quis" de "não tinha conta".
+  `viu_paywall` conta APARELHOS e a base tem 34 contas, então a maior parte de
+  quem vê o paywall é convidado, que é justamente quem o portão apaga.
+- NÃO É DEFEITO DE COBRANÇA, e isso foi conferido antes de escrever: a suíte
+  `venda` passa inteira, o link de venda leva ao login, guarda plano e cupom e
+  atravessa a recarga do login social. O buraco é do caminho de DENTRO do app.
+- APOSTA DA SEMANA, implementada: [login-sabe-que-veio-comprar]. A tela de
+  entrar passou a reconhecer quem veio de um botão de assinar e a dizer que a
+  conta é o passo que falta para o teste começar, no lugar do convite genérico
+  de salvar a garagem. Marca de meia hora no aparelho, só para o TEXTO: não
+  leva ninguém ao pagamento, não guarda plano nem cupom.
+- CONFERÊNCIA PROVADA MORDENDO: a suíte `venda` ganhou quatro conferências
+  novas (o texto certo vindo do paywall, o genérico fora, e a marca ausente
+  antes e presente depois do toque). Plantei o defeito antigo de volta e ela
+  reprovou em três pontos; restaurei e voltou a passar. Bateria `conferir`
+  inteira verde, tipos limpos, sem build local.
+  - Uma das conferências que escrevi primeiro passava SEM alcançar a tela de
+    entrar, ou seja, passava à toa. Troquei por uma que mede o que dá para
+    medir de verdade (a marca no armazenamento) em vez de fingir cobertura.
+- RECOMENDADO, não feito, e os dois mexem em coisa que não é minha: contar a
+  tentativa do convidado (hoje ela não existe em lugar nenhum, e criar evento
+  novo mexe na restrição CHECK do funil) e devolver a pessoa ao pagamento
+  depois do login, reusando o `guardaVenda` que o caminho do link já usa.
+- INCONSISTÊNCIA REGISTRADA para quem cuidar disso: quem chega pelo LINK de
+  venda também cai no login, e lá a frase continua a genérica, porque aquele
+  caminho usa a compra pendente e não a marca nova.
+- APRENDIZADOS em besci.md: passo sem evento é passo sem dono (ao ler zero num
+  degrau, perguntar quem aquele evento é capaz de contar antes de interpretar);
+  e prova de campo é barata quando existe suíte de navegador, que é a ordem
+  certa depois do erro de 28/08.
+
 ## 2026-09-16 · QA: o "esqueci minha senha" não redefine senha nenhuma
 - Artifact "QA da Semana":
   https://claude.ai/artifact/GHFAzoSBaMfznrWm15jfB6

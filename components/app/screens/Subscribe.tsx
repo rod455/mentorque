@@ -9,6 +9,10 @@ import { iapKey, isLocalDev, isNativeApp, nativePlatform } from "@/lib/app/wrapp
 import { compraCancelada, googleOffer, hasActiveEntitlement, initPurchases, offerPrice, type GoogleOption, type RcPackage } from "@/lib/app/purchases";
 import { useNav, type View } from "@/lib/app/nav";
 import { funil } from "@/lib/app/funil";
+// A tela de entrar precisa saber que a pessoa veio de um botão de assinar.
+// Sem isso ela recebe quem pediu um teste grátis com a frase de quem está
+// sendo convidado a criar conta. Ver lib/app/vendaPendente.ts.
+import { marcaVeioAssinar } from "@/lib/app/vendaPendente";
 import { Button } from "@/components/ui/Button";
 import { Card, Icon, LegalLinks, useContent } from "../ui";
 
@@ -104,7 +108,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   useEffect(() => { funil("viu_paywall", { umaVez: true, chave: "viu_paywall", origem: _ctx ?? "direto", userId: user?.id }); }, [_ctx, user?.id]);
 
   const subscribe = () => {
-    if (!user) { go({ name: "auth" }); return; }
+    if (!user) { marcaVeioAssinar(); go({ name: "auth" }); return; }
     funil("iniciou_checkout", { origem: `web-${plan}`, userId: user.id });
     if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; } // demo só em dev
     go({ name: "checkout", plan }); // checkout embutido (com teste grátis)
@@ -192,7 +196,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   // paywall quando o entitlement chega.
   const buyGoogleOffer = async (opt: GoogleOption | null) => {
     if (!opt || iapBusy) return;
-    if (!user) { go({ name: "auth" }); return; }
+    if (!user) { marcaVeioAssinar(); go({ name: "auth" }); return; }
     funil("iniciou_checkout", { origem: `oferta-${opt.id.split(":").pop()}`, userId: user.id });
     setIapBusy(true);
     try {
@@ -215,7 +219,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   // comprado como qualquer pacote.
   const buyExitPackage = async (pkg: RcPackage | null) => {
     if (!pkg || iapBusy) return;
-    if (!user) { go({ name: "auth" }); return; }
+    if (!user) { marcaVeioAssinar(); go({ name: "auth" }); return; }
     funil("iniciou_checkout", { origem: `oferta-${pkg.identifier}`, userId: user.id });
     setIapBusy(true);
     try {
@@ -239,7 +243,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
       void buyExitPackage(exitPkgs.p10 ?? exitPkgs.p25);
       return;
     }
-    if (!user) { go({ name: "auth" }); return; }
+    if (!user) { marcaVeioAssinar(); go({ name: "auth" }); return; }
     funil("iniciou_checkout", { origem: "web-exit10", userId: user.id });
     if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; }
     go({ name: "checkout", plan: "annual", offer: "exit10" });
@@ -262,7 +266,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
       void buyExitPackage(exitPkgs.p25 ?? exitPkgs.p10);
       return;
     }
-    if (!user) { go({ name: "auth" }); return; }
+    if (!user) { marcaVeioAssinar(); go({ name: "auth" }); return; }
     funil("iniciou_checkout", { origem: "web-exit25", userId: user.id });
     if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; }
     go({ name: "checkout", plan: "annual", offer: "exit25" });
@@ -310,7 +314,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   const buyNative = async () => {
     const pkg = plan === "monthly" ? iap?.monthly ?? iap?.annual : iap?.annual ?? iap?.monthly;
     if (!pkg || iapBusy) return;
-    if (!user) { go({ name: "auth" }); return; }
+    if (!user) { marcaVeioAssinar(); go({ name: "auth" }); return; }
     funil("iniciou_checkout", { origem: `loja-${plan}`, userId: user.id });
     setIapBusy(true);
     try {

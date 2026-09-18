@@ -16,6 +16,49 @@ Formato de cada tela/fluxo:
 
 ## Estado
 
+v5 em 2026-09-18: rodada de CONVERSÃO. O achado é o portão de conta no fundo
+do funil, provado no navegador, e ele explica por que "iniciou_checkout" dá
+zero sem que isso queira dizer desinteresse. Próxima rodada alterna para
+RETENÇÃO.
+
+# O fundo do funil tem um portão que não deixa rastro (2026-09-18)
+
+PROVADO NO NAVEGADOR, não lido no código, e a distinção importa porque em
+28/08 eu já errei generalizando leitura de código sem prova de campo.
+
+O roteiro, num aparelho sem conta: abrir o paywall pelo Início grava
+`viu_paywall` com origem `home`; tocar em "Começar 7 dias grátis" leva à tela
+de entrar e **não grava evento nenhum**. O `iniciou_checkout` nasce depois do
+`if (!user)`, então ele mede "quem JÁ TINHA CONTA começou a pagar", e não
+"quem tentou comprar". São seis caminhos de compra no paywall (Stripe web,
+loja, e as quatro ofertas de saída), todos com o mesmo portão.
+
+O que isso muda na leitura dos números:
+- Na semana de 14/09, 11 viram o paywall e 0 iniciaram checkout. Esse zero
+  NÃO separa "não quis" de "não tinha conta". Nos quatro grupos de variante
+  dos dois testes de onboarding, `iniciou_checkout` não aparece uma vez
+  sequer.
+- A base tem 34 contas, e `viu_paywall` conta APARELHOS. A maior parte de quem
+  vê o paywall é convidado, ou seja, exatamente quem o portão torna invisível.
+- Não é defeito de cobrança: a suíte `venda` passa inteira, o link de venda
+  leva ao login, guarda plano e cupom e atravessa a recarga do login social.
+  O buraco é do caminho de DENTRO do app, que não guarda nada.
+
+O que foi feito em 18/09 (aposta login-sabe-que-veio-comprar): a tela de
+entrar passou a reconhecer quem veio de um botão de assinar e a dizer que a
+conta é o passo que falta para o teste começar, em vez do convite genérico de
+salvar a garagem. É texto e contexto, não mexe em cobrança.
+
+O que NÃO foi feito, de propósito, e virou recomendação: contar a tentativa do
+convidado (hoje ela não existe em lugar nenhum) e devolver a pessoa ao
+pagamento depois do login, reusando o `guardaVenda` que o caminho do link já
+usa. Os dois mexem em fluxo de dinheiro ou em série do funil, e nenhum dos
+dois é decisão de uma rodada de CRO sozinha.
+
+Inconsistência registrada para quem cuidar disso: quem chega pelo LINK de
+venda (`/app?assinar=...`) também cai no login, e lá a frase continua sendo a
+genérica, porque aquele caminho usa a compra pendente e não a marca nova.
+
 v4 em 2026-09-11: rodada de RETENÇÃO. Entraram a auditoria do portão que as
 cinco máquinas de recorrência da 2.4 compartilham, a persona 5 (empresa
 cuidando dos carros do trabalho, vinda das avaliações da Play) e a correção

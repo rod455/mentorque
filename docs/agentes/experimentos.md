@@ -80,6 +80,40 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 
 ## Experimentos
 
+## [login-sabe-que-veio-comprar] Quem toca em assinar chega num login que explica
+- Estado: ABERTO
+- Tipo: mudanca-direta
+- Alvo no funil: viu_paywall → iniciou_checkout. Na semana de 14/09: 11 viram o
+  paywall e ZERO iniciaram checkout; na de 07/09, 25 e 2. Nos quatro grupos de
+  variante dos dois testes de onboarding, `iniciou_checkout` não aparece
+  nenhuma vez.
+- O QUE FOI PROVADO NO NAVEGADOR (não é leitura de código): num aparelho sem
+  conta, abrir o paywall pelo Início grava `viu_paywall:home`, e tocar em
+  "Começar 7 dias grátis" leva à tela de entrar SEM gravar nada. A tela que
+  recebe a pessoa diz "Salve sua garagem e cuide do seu carro de qualquer
+  aparelho", que é a frase de quem está sendo convidado a criar conta, não a de
+  quem acabou de pedir um teste grátis. Roteiro em
+  `Subscribe.tsx`: seis caminhos de compra, todos com o mesmo
+  `if (!user) { go auth }`.
+- Tese BeSci: clareza do próximo passo, e é o mesmo princípio do "+" da garagem
+  de 11/09. A pessoa disse sim para uma coisa e a tela seguinte fala de outra.
+  Quem não entende por que está sendo parado desiste ali, e ninguém fica
+  sabendo, porque esse passo não deixa rastro no funil. A mudança é a tela de
+  entrar reconhecer de onde a pessoa veio: em vez da frase genérica, dizer que
+  a conta é o passo que falta para começar o teste.
+- Métrica: a honesta é indireta, e isto precisa estar dito. `iniciou_checkout`
+  só nasce para quem JÁ tem conta, então esta mudança não move esse número por
+  construção; o que ela pode mover é `cadastro` entre quem viu o paywall. É
+  nível 1 e 2 na régua dos três níveis, nunca nível 3, porque não há variante
+  comparável · Duração: 4 semanas
+- Aprovação: não se aplica (texto, sem variantes, sem tocar em preço, plano ou
+  cobrança)
+- Início: 2026-09-18 · Ler a partir de: 2026-10-16
+- Antes: 11 viram paywall e 0 iniciaram checkout na semana de 14/09; 57 e 9 na
+  janela desde 22/08. Nenhum número separa "não quis" de "não tinha conta",
+  e essa é a lacuna que fica registrada para quem for ler o veredito.
+- Veredito: (aberto)
+
 ## [cadastro-em-duas-etapas] O formulário do carro pede só marca, modelo e ano
 - Estado: ABERTO
 - Tipo: teste-ab
@@ -108,6 +142,15 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   mistura final em `lib/app/sorteio.ts` corrige e `conferir:funil` mede.
   Quem foi sorteado na web nessas horas pode ter trocado de variante; é
   gente de menos para pesar, e a leitura de verdade começa com a 2.5.
+- Leitura parcial de 2026-09-18, e NÃO é veredito: pela régua dos três níveis
+  isto é nível 3 (há variante comparável), mas a amostra está em um quarto do
+  alvo. Abriu o cadastro: 10 em A e 10 em B. Cadastrou: **3 em A, 5 em B**. A
+  direção favorece B, e é só direção: duas pessoas de diferença com dez por
+  braço viram qualquer porcentagem que se queira. O critério de parada do
+  próprio experimento é 40 aberturas por variante, e a data de leitura é duas
+  semanas depois de a 2.5 estar nas duas lojas, o que aconteceu por volta de
+  15/09. Não fecha hoje, e fechar hoje seria o erro que o aviso de leitura
+  abaixo existe para impedir.
 - Veredito: (aberto)
 
 > **AVISO DE LEITURA, posto em 15/09/2026.** As quatro apostas da rotina do
@@ -220,6 +263,15 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Início: 2026-09-12 na web; nas lojas, com a 2.5 · Ler a partir de: 2 semanas
   depois de a 2.5 estar nas duas lojas
 - Antes: Android 62%, iPhone 100% (9 pessoas), web 22%
+- Leitura parcial de 2026-09-18, e NÃO é veredito: começaram 70 em A e 71 em B;
+  terminaram **18 em A e 25 em B**. Direção a favor de B, sete pessoas de
+  diferença, e os números do retrato vêm somados (loja e web juntas), enquanto
+  o desenho do teste pede as duas separadas. A segunda leitura combinada,
+  cadastrou_carro, está EMPATADA: 4 em A e 4 em B. Isso é justamente o risco
+  que a métrica previu, "um onboarding mais curto que entrega gente que não
+  cadastra o carro não vale nada", e é o motivo de não fechar por causa da
+  primeira linha. Falta separar loja de web e chegar aos 40 começos por
+  variante na loja.
 - Veredito: (aberto)
 
 

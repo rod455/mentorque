@@ -135,3 +135,66 @@ export function veioComprar(): boolean {
   }
   return vendaPendente() !== null;
 }
+
+// ---------------------------------------------------------------------------
+// A marca de "eu estava tentando assinar quando me pediram conta".
+//
+// PROVADO NO NAVEGADOR EM 18/09/2026, e é o motivo desta marca existir: num
+// aparelho sem conta, tocar em "Começar 7 dias grátis" no paywall leva à tela
+// de entrar sem gravar evento nenhum, e essa tela diz "Salve sua garagem e
+// cuide do seu carro de qualquer aparelho". É a frase certa para quem está
+// sendo convidado a criar conta, e a errada para quem acabou de pedir um teste
+// grátis: a pessoa disse sim para uma coisa e a tela seguinte fala de outra.
+//
+// Esta marca serve SÓ PARA O TEXTO. Ela não leva ninguém ao pagamento e não
+// guarda plano nem cupom; quem faz isso é a compra pendente aqui de cima, que
+// é do caminho do link de venda. Separar as duas é de propósito: mudar o que
+// acontece DEPOIS do login num fluxo de dinheiro é decisão de quem cuida do
+// pagamento, e está registrado como recomendação.
+//
+// Mesma validade da compra pendente, pelo mesmo motivo: meia hora atravessa um
+// login social; uma semana faria a tela de entrar falar de assinatura para
+// quem já esqueceu que tocou naquele botão.
+const CHAVE_VEIO_ASSINAR = "mq-veio-assinar";
+
+/** Marca que a pessoa foi parada no login vindo de um botão de assinar. */
+export function marcaVeioAssinar(): void {
+  try {
+    window.localStorage.setItem(CHAVE_VEIO_ASSINAR, String(Date.now()));
+  } catch {
+    /* sem armazenamento: a tela de entrar fica com o texto de sempre */
+  }
+}
+
+/**
+ * A pessoa chegou ao login vindo de um botão de assinar, há pouco?
+ *
+ * Não consome a marca de propósito: o login social recarrega a página inteira
+ * e a tela de entrar pode ser desenhada mais de uma vez na mesma tentativa.
+ * Consumir na primeira leitura faria o texto certo aparecer e sumir no meio do
+ * caminho. Quem apaga é o prazo.
+ */
+export function veioAssinar(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const bruto = window.localStorage.getItem(CHAVE_VEIO_ASSINAR);
+    if (!bruto) return false;
+    const t = Number(bruto);
+    if (!Number.isFinite(t) || Date.now() - t > VALIDADE_MS) {
+      window.localStorage.removeItem(CHAVE_VEIO_ASSINAR);
+      return false;
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** Apaga a marca. Chamada quando a conta existe e o assunto acabou. */
+export function esqueceVeioAssinar(): void {
+  try {
+    window.localStorage.removeItem(CHAVE_VEIO_ASSINAR);
+  } catch {
+    /* nada a fazer */
+  }
+}

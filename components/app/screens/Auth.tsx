@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/app/auth";
 import { useNav } from "@/lib/app/nav";
 import { appleLoginDisponivel } from "@/lib/app/socialLogin";
+import { veioAssinar } from "@/lib/app/vendaPendente";
 import { Button } from "@/components/ui/Button";
 import { Card, useContent } from "../ui";
 
@@ -133,7 +134,13 @@ export function AuthScreen() {
   return (
     <div>
       <BackButton onClick={back} />
-      <Hero tagline={a.tagline} />
+      {/* Quem chegou aqui de um botão de assinar recebe a frase do que ELA
+          pediu, e não o convite genérico de criar conta. A pessoa tocou em
+          "Começar 7 dias grátis" e a tela seguinte falava de salvar a garagem:
+          quem não entende por que foi parado desiste, e esse passo não deixa
+          rastro no funil (o `iniciou_checkout` só nasce para quem já tem
+          conta). Ver lib/app/vendaPendente.ts. */}
+      <Hero tagline={veioAssinar() ? a.taglineAssinar : a.tagline} />
 
       <Card>
         {/* Social */}

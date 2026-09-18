@@ -93,3 +93,18 @@ experimentos alimentam a seção final.
   que a identifique. Lição de método: ler texto livre de avaliação com a
   pergunta "quem é esta pessoa?", e não só "ela gostou?". O sinal de segmento
   novo costuma chegar como palavra antes de chegar como número.
+- **2026-09-18: passo sem evento é passo sem dono.** O fundo do funil tinha um
+  portão de conta que não gravava nada: quem tocava em "Começar 7 dias grátis"
+  sem estar logado ia para o login e sumia da medição, porque o
+  `iniciou_checkout` nasce depois do `if (!user)`. Semanas de "ninguém inicia
+  checkout" conviviam com gente tentando comprar. A regra: ao ler zero num
+  degrau, perguntar ANTES de interpretar quem exatamente aquele evento é capaz
+  de contar, e onde ele nasce no código. Um degrau que só conta um tipo de
+  pessoa faz o outro tipo desaparecer, e desaparecido parece desinteressado.
+- **2026-09-18: prova de campo é barata quando existe suíte de navegador.** A
+  diferença entre "o código sugere" e "eu vi acontecer" custou quinze minutos:
+  abrir o app como convidado, tocar no botão e olhar o que sai na rede. Depois
+  do erro de 28/08 (login social declarado quebrado por leitura), esta virou a
+  ordem certa: hipótese pelo código, prova pelo navegador, e só então o
+  relatório. O roteiro vira conferência no mesmo dia, para o achado não
+  precisar ser redescoberto.

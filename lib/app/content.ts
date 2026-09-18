@@ -752,6 +752,12 @@ export function getContent(locale: Locale) {
       ),
       resetNeedEmail: T("Digite seu e-mail acima primeiro.", "Enter your e-mail above first."),
       tagline: T("Salve sua garagem e cuide do seu carro de qualquer aparelho.", "Save your garage and care for your car from any device."),
+      // Para quem chegou aqui tocando em assinar. A conta é o passo que falta,
+      // e dizer isso é o que evita a pessoa achar que foi parada à toa.
+      taglineAssinar: T(
+        "Falta só a conta para começar seu teste grátis. É ela que guarda sua assinatura em qualquer aparelho.",
+        "Just one account away from starting your free trial. It keeps your subscription on any device."
+      ),
       toSignUp: T("Não tem conta? Criar conta", "No account? Create one"),
       toSignIn: T("Já tem conta? Entrar", "Have an account? Sign in"),
       submitSignIn: T("Entrar", "Sign in"),
