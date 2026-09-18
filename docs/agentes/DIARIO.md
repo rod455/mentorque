@@ -3,6 +3,33 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-18 · Engenharia: a porta da web é a que traz conta, e a recomendação de fechá-la estava errada
+- O dono perguntou como ainda chega gente pela web. A resposta curta: **a URL
+  final do anúncio do Google continua no `/app`**, e é a única porta possível,
+  porque `conferir:caminho` prova que os 45 arquivos do site não linkam o
+  `/app` desde 12/09. A ação está aberta na lista do dono desde 14/09.
+- Medido em 18/09, janela de 7 dias, régua declarada. `comecou_onboarding` por
+  aparelho: **145 na web contra 40 nas lojas**, e todos os dias da série têm 17
+  a 28 aparelhos web carregando `google / lancamento`. Nada mudou desde 15/09.
+- **A CORREÇÃO, e é ela que importa.** A recomendação de 14/09 era trocar a URL
+  para a home, com o argumento de que a web converte mal. A medição de hoje
+  desmente isso no número que decide: pela régua canônica
+  (`contas_criadas_desde`), foram **14 contas de fora em 7 dias**, e o evento
+  `cadastro` diz de onde: **10 da web pelo google, 2 do Android**. Trocar a URL
+  fecharia a porta que traz a maioria das contas.
+- O que continua verdade, e não é pouco: a web termina muito pior o onboarding
+  (33 de 145, 23%, contra 26 de 40, 65%) e conta de web não recebe push, que é
+  a alavanca de recorrência que acabou de ser construída.
+- **A pergunta que ninguém mediu, e que decide:** quanto vale uma conta de web
+  contra uma de loja depois de 30 dias. Sem isso, trocar a URL é trocar volume
+  conhecido por qualidade suposta. A ação do dono foi reescrita de "trocar"
+  para "decidir", com o contra-argumento na mesma linha.
+- Lição de método: a recomendação de 14/09 saiu de uma leitura de conversão de
+  onboarding ("só 7 viraram conta, 5%") e não da contagem de contas pela fonte
+  canônica. Quatro dias depois, a mesma pergunta com a régua certa inverte a
+  conclusão. É o caso exato da skill: antes de dizer um número, dizer qual
+  tabela é a verdade dele.
+
 ## 2026-09-18 · CRO (conversão): o fundo do funil tem um portão que não deixa rastro
 - Rodada semanal do CRO/BeSci, foco CONVERSÃO (a de 11/09 foi de retenção).
   Artifact "Conversão da semana":
