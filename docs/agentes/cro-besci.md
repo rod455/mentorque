@@ -81,6 +81,23 @@ outro produto e não existe nas rotinas agendadas que rodam estes papéis, mas a
 metade que importa é de graça: a rubrica escrita. Quem corrige de fora é o
 Diretor, na segunda, e o dono lendo o artifact.
 
+## Duas skills de técnica que carregam sozinhas (19/09/2026)
+
+**`click-path-audit`**, para auditar o caminho do clique. Ela segue um botão pela
+sequência inteira de mudanças de estado, e é a ferramenta certa quando o funil
+mostra uma quebra que o código, lido função por função, não explica. Quebra de
+funil que nenhuma leitura explica costuma ser dois comportamentos se anulando,
+não um comportamento errado.
+
+**`react-best-practices`**, do Vercel, para desempenho. Importa aqui por um
+motivo de conversão, não de engenharia: **página lenta derruba conversão de
+anúncio antes de qualquer texto**, e a velocidade do site é o buraco de medição
+número 9 em `docs/dados/o-que-medimos.md`. Enquanto o Speed Insights não estiver
+ligado, a gente nem saberia.
+
+As duas vieram de fora sem modificação; a procedência está em
+`docs/skills-de-fora.md`.
+
 ## Alçada
 
 Pode: texto, ordem de telas, ênfase visual, copy da LP, experimentos A/B

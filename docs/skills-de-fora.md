@@ -22,6 +22,12 @@ repositório engorda.
 | `product-tracking-*` (7) | [accoil/product-tracking-skills](https://github.com/accoil/product-tracking-skills) | MIT |
 | as 16 de anúncio e medição do Google | [google/skills](https://github.com/google/skills) | Apache 2.0 |
 | as 4 de direção visual | [leonxlnx/taste-skill](https://github.com/leonxlnx/taste-skill) | MIT |
+| `react-best-practices` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | MIT |
+| `click-path-audit` | [affaan-m/ECC](https://github.com/affaan-m/ECC) | MIT |
+
+Commits de 19/09/2026, segunda leva: `react-best-practices` veio do
+`063bee94c3f4df8453406c830b0a7df0f2860278` e `click-path-audit` do
+`07756cee15788a54506031462794ad645719b028`.
 
 Commit trazido das `product-tracking-*`:
 `341f8cf47d8b5dda550222152377c50aee34c723`, em 04/09/2026.
@@ -110,6 +116,48 @@ conferência de onde cabe escrever. Melhorar aquilo é mexer em tipografia e
 composição no nosso código, ou trocar as chapas. Nenhuma skill de prompt toca
 nisso.
 
+**Por que só DUAS do ECC, e por que o arnês dele não entra nunca (19/09/2026).**
+O dono viu um post sobre o `affaan-m/ECC`, que se anuncia como "o sistema
+operacional para arneses de agente": 292 skills, 68 agentes, 94 comandos. O
+catálogo foi explorado inteiro antes de qualquer decisão, e os números contam a
+história:
+
+- **819 arquivos executáveis.** Compare com as do Google: 72 arquivos, todos
+  `.md`. Das 292 skills, 272 são markdown puro e 20 trazem código;
+- **os ganchos dele rodam em TODA chamada de ferramenta.** O `hooks.json`
+  registra gatilho em `Bash`, `Write`, `Edit` e um casador `.*`, e cada um
+  executa um trecho minificado que procura a raiz do plugin em seis lugares e
+  então carrega e roda scripts (`observe-runner.js`, `governance-capture.js`);
+- **ele baixa e roda artefatos de um registro próprio**, `registry.nasiko.dev`,
+  e fala com `compute.itomarkets.com`. Não é acusação: é exatamente o tipo de
+  superfície que a regra desta casa já mandava recusar.
+
+Dos 68 agentes, a maioria esmagadora é revisor ou resolvedor de build de
+linguagem que não usamos (C++, C#, Dart, Django, Flutter, Go, Java, Kotlin, PHP,
+Rust, Swift, Vue, Cisco IOS). Das 292 skills, tem HIPAA, VLAN de homelab, DeFi,
+procurement de energia e Perl.
+
+**E a pergunta que o dono fez, que é a certa: dá para evoluir os nossos agentes
+com o material deles?** Para os papéis de marketing, NÃO, e o número mostra por
+quê: o `seo` deles tem 4.320 bytes de checklist genérico ("corrija bloqueio
+técnico antes de otimizar conteúdo"); o nosso `cro-besci.md` tem 15.185 e o
+`midia-paga.md` tem 28.135, cheios do que aconteceu NESTA casa. Misturar
+genérico com específico dilui o específico, e o específico é o que vale.
+
+Onde valeu foi onde eles tinham **técnica que a gente não tem**, e não opinião
+sobre o nosso negócio:
+
+- **`click-path-audit`**: seguir cada botão pela sequência inteira de mudanças de
+  estado, para achar o defeito em que duas funções funcionam sozinhas e se
+  anulam juntas. É exatamente o formato dos defeitos de compra que o QA
+  encontrou em setembro;
+- **`react-best-practices`**: e aqui a decisão mudou no meio do caminho. A skill
+  do ECC chama-se `react-performance` e é **adaptação declarada** da do Vercel
+  Labs. Pegar a adaptação de um terceiro de uma skill de um quarto deixa a
+  atualização duplamente indireta, então veio **a original do Vercel**: MIT,
+  autor `vercel`, 72 regras em arquivo separado, de quem faz o Next.js e hospeda
+  a gente.
+
 ## O que foi conferido antes de trazer
 
 Skill carrega sozinha e roda com a permissão do agente, então revisar é
@@ -136,6 +184,18 @@ Nas de direção visual (19/09):
 - **O que elas fazem é escrever prompt melhor, não desenhar melhor.** Quem
   desenha continua sendo o modelo de imagem de quem chamar; a skill dá a direção
   de arte. Vale saber disso antes de esperar milagre.
+
+Nas duas de técnica (19/09), a segunda leva:
+
+- **`react-best-practices`: 77 arquivos, e só um não é `.md`** (o
+  `metadata.json`, que é dado e não executa). 424 KB, com 72 regras em arquivo
+  separado, o que também torna barato desligar uma regra que não sirva.
+- **`click-path-audit`: dois arquivos**, o `SKILL.md` e o `.de-fora`. Zero
+  endereço citado, zero executável.
+- Os endereços citados na do Vercel são todos documentação: MDN, `react.dev`,
+  `nextjs.org`, `vercel.com`, webpack, vite, esbuild. O resto é `example.com` em
+  exemplo de código.
+- Licença MIT nas duas.
 
 Nas do Google (19/09):
 

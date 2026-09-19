@@ -89,6 +89,26 @@ outro produto e não existe nas rotinas agendadas que rodam estes papéis, mas a
 metade que importa é de graça: a rubrica escrita. Quem corrige de fora é o
 Diretor, na segunda, e o dono lendo o artifact.
 
+## Duas skills de técnica que carregam sozinhas (19/09/2026)
+
+Elas moram em `.claude/skills/` e sobem sozinhas quando o assunto encostar. Não
+precisa invocar, mas vale saber que existem e o que cada uma resolve.
+
+**`click-path-audit`**, para a varredura dirigida de fluxo. Ela ensina a seguir
+um botão pela sequência INTEIRA de mudanças de estado, em vez de ler cada função
+isolada. O defeito que ela caça é o que esta casa já produziu mais de uma vez:
+duas funções que funcionam sozinhas e se anulam quando chamadas em sequência.
+Use quando a leitura estática não achou nada e o comportamento continua errado.
+
+**`react-best-practices`**, do Vercel, para quando a varredura encostar em
+desempenho. São 72 regras em arquivo separado, organizadas por prioridade, e a
+primeira família delas (cascata de requisição) é a que mais dói numa landing que
+recebe anúncio pago.
+
+Vieram de fora sem modificação. A regra de convivência está em
+`docs/skills-de-fora.md`: se alguma parte não servir aqui, não se edita lá
+dentro, escreve-se uma skill NOSSA dizendo o que fazemos diferente.
+
 ## Alçada
 
 Pode: corrigir bug, texto, layout quebrado, acessibilidade; subir na main.

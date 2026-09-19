@@ -125,6 +125,15 @@ docs/quiz-perguntas.html
 !/.claude/skills/imagegen-frontend-web/
 !/.claude/skills/imagegen-frontend-mobile/
 
+# Duas de técnica, trazidas em 19/09/2026 depois de explorar o catálogo do ECC.
+# Do catálogo dele (292 skills) vieram UMA, e mesmo assim não a de React: a de
+# React é a ORIGINAL do Vercel Labs, porque a do ECC é adaptação dela e pegar
+# adaptação de terceiro faz a atualização ficar duplamente indireta. O arnês do
+# ECC (ganchos e scripts) NÃO entrou e não vai entrar; o porquê está em
+# docs/skills-de-fora.md.
+!/.claude/skills/react-best-practices/
+!/.claude/skills/click-path-audit/
+
 # As peças geradas para aprovação: saída, não fonte. As chapas e as fontes
 # ficam versionadas em assets/; o que sai delas é descartável.
 /pecas-geradas/
