@@ -94,6 +94,31 @@ for (const [nome, ua, toques, esperado] of APARELHOS) {
   );
 }
 
+// ── 4. o atalho curto da bio carrega a etiqueta ────────────────────────────
+//
+// A pergunta do dono foi exatamente esta: "coloco o /baixar limpo?". O atalho
+// existe para a resposta ser "coloque /ig", que é curto de ler E etiquetado de
+// medir. Se o atalho perder a etiqueta, o link continua levando à loja e volta
+// a chegar anônimo, que é o defeito original com outra roupa.
+{
+  const config = leia("next.config.mjs");
+  const social = config.match(/ATALHOS_SOCIAIS = \[[\s\S]*?\];/)?.[0] ?? "";
+  conferir("o atalho de Instagram existe", /de: "ig"/.test(social), "é o link que vai na bio");
+  conferir("e ele diz que a origem é instagram", /origem: "instagram"/.test(social));
+  conferir(
+    "o atalho aponta para o /baixar com etiqueta",
+    /\/baixar\?utm_source=\$\{origem\}/.test(config) &&
+      /utm_medium=\$\{meio\}/.test(config) &&
+      /utm_campaign=\$\{campanha\}/.test(config),
+    "sem os três utm_ o clique chega sem nome no funil, que é o problema que a página veio resolver",
+  );
+  conferir(
+    "o atalho é temporário",
+    /\.\.\.social|permanent: false/.test(config),
+    "atalho permanente fica gravado no navegador da pessoa para sempre e a gente perde o direito de mudar o destino",
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) do link inteligente reprovaram.`);
   process.exit(1);

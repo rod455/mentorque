@@ -33,6 +33,19 @@ gente ganhou do que a gente comprou, e sem isso o CAC vira ficção.
 **Instagram, link da bio** (o principal, cole no perfil):
 
 ```
+mentorque.com.br/ig
+```
+
+É atalho curto de propósito: ele redireciona para
+`/baixar?utm_source=instagram&utm_medium=social&utm_campaign=bio`, então é curto
+para quem lê e etiquetado para quem mede. O mesmo vale para o YouTube:
+`mentorque.com.br/yt`.
+
+**Nunca cole o `/baixar` limpo.** Ele manda a pessoa para a loja certa do mesmo
+jeito e chega SEM NOME no funil, que é exatamente o problema que a página veio
+resolver. O link comprido continua valendo se você precisar dele inteiro:
+
+```
 https://www.mentorque.com.br/baixar?utm_source=instagram&utm_medium=social&utm_campaign=bio
 ```
 

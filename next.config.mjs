@@ -21,6 +21,21 @@ const ATALHOS = [
   { de: "ANUAL30", para: "/app?assinar=anual&cupom=PREMIUM30" },
 ];
 
+// Atalhos de rede social: o link curto que vai na bio, com a etiqueta embutida.
+//
+// POR QUE (19/09/2026, pergunta do dono: "coloco o /baixar limpo?"). Não: o
+// `/baixar` sozinho manda a pessoa para a loja certa e chega SEM NOME no
+// funil, que é o problema que ele foi criado para resolver. Mas link comprido
+// cheio de `utm_` na bio é feio e convida a pessoa a apagar o rabo dele.
+//
+// O atalho resolve os dois: ele é curto para quem lê e carrega a etiqueta para
+// quem mede. Mesma ideia dos atalhos de venda acima, temporários pelo mesmo
+// motivo (atalho permanente fica gravado no navegador para sempre).
+const ATALHOS_SOCIAIS = [
+  { de: "ig", origem: "instagram", meio: "social", campanha: "bio" },
+  { de: "yt", origem: "youtube", meio: "social", campanha: "descricao" },
+];
+
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -40,13 +55,21 @@ const nextConfig = {
         // Só no site: o export estático não suporta redirect (e o app da
         // loja não é lugar de link de venda).
         async redirects() {
-          return ATALHOS.flatMap(({ de, para }) => {
+          const venda = ATALHOS.flatMap(({ de, para }) => {
             const destino = `${para}&utm_source=atalho&utm_campaign=${de.toLowerCase()}`;
             return [
               { source: `/${de}`, destination: destino, permanent: false },
               { source: `/${de.toLowerCase()}`, destination: destino, permanent: false },
             ];
           });
+          const social = ATALHOS_SOCIAIS.flatMap(({ de, origem, meio, campanha }) => {
+            const destino = `/baixar?utm_source=${origem}&utm_medium=${meio}&utm_campaign=${campanha}`;
+            return [
+              { source: `/${de}`, destination: destino, permanent: false },
+              { source: `/${de.toUpperCase()}`, destination: destino, permanent: false },
+            ];
+          });
+          return [...venda, ...social];
         },
       }),
 };
