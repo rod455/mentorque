@@ -115,6 +115,16 @@ docs/quiz-perguntas.html
 !/.claude/skills/ima-sdk-client-side/
 !/.claude/skills/ima-dai-sdk/
 
+# As de direção visual (19/09/2026), do leonxlnx/taste-skill. Só quatro das
+# treze: a de frontend, a de marca e as duas de referência de tela. As variantes
+# de estilo (brutalist, minimalist, soft) ficaram de fora de propósito: a marca
+# do Mentorque já está decidida, e skill que impõe gosto genérico brigaria com
+# ela sem ninguém perceber.
+!/.claude/skills/taste-skill/
+!/.claude/skills/brandkit/
+!/.claude/skills/imagegen-frontend-web/
+!/.claude/skills/imagegen-frontend-mobile/
+
 # As peças geradas para aprovação: saída, não fonte. As chapas e as fontes
 # ficam versionadas em assets/; o que sai delas é descartável.
 /pecas-geradas/

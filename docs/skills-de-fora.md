@@ -21,11 +21,14 @@ repositório engorda.
 |---|---|---|
 | `product-tracking-*` (7) | [accoil/product-tracking-skills](https://github.com/accoil/product-tracking-skills) | MIT |
 | as 16 de anúncio e medição do Google | [google/skills](https://github.com/google/skills) | Apache 2.0 |
+| as 4 de direção visual | [leonxlnx/taste-skill](https://github.com/leonxlnx/taste-skill) | MIT |
 
 Commit trazido das `product-tracking-*`:
 `341f8cf47d8b5dda550222152377c50aee34c723`, em 04/09/2026.
 Commit trazido das do Google: `18152e0d310e4d7047e9c2ec25a37b0d22d6893e`, em
-19/09/2026. Cada pasta tem um arquivo `.de-fora` com a origem e o commit.
+19/09/2026. Commit trazido das de direção visual:
+`e79ca9ec7e071eb3a3b623c4fb752e853fc3ed58`, também em 19/09/2026. Cada pasta tem
+um arquivo `.de-fora` com a origem e o commit.
 
 **Por que essas sete.** O buraco que elas endereçam é real e medido: em 03/09 o
 funil respondeu meia verdade três vezes seguidas, e em 04/09 descobrimos que
@@ -56,6 +59,30 @@ cobrem três coisas que a operação já precisa:
   Não usamos, e vieram só para o conjunto do Google ficar inteiro. Se
   incomodarem, saem sem dó.
 
+**Por que só quatro das treze de direção visual, e o que elas fazem.** O dono
+viu no Instagram um post sobre a "Taste Skill" e perguntou como a gente aprende
+isso para gerar imagem melhor. O repositório tem treze skills e elas fazem três
+coisas diferentes, que o post junta numa só:
+
+- **`taste-skill`**: regra de design para INTERFACE (página, LP, tela). Não gera
+  imagem nenhuma; muda como o frontend é escrito;
+- **`brandkit`**: direção de arte para imagem de MARCA (quadro de identidade,
+  logo, mockup, apresentação);
+- **`imagegen-frontend-web`** e **`-mobile`**: geram imagem de REFERÊNCIA de
+  tela, uma por seção, para depois alguém construir.
+
+As outras nove ficaram de fora e a razão é a mesma que vale para as do Google:
+`brutalist`, `minimalist` e `soft` impõem um gosto genérico, e a marca do
+Mentorque já está decidida (grafite, creme, âmbar, e o app é escuro por padrão).
+Skill que briga com a marca sem ninguém perceber é pior do que skill nenhuma.
+
+**O que elas NÃO consertam, e isso importa mais que o que consertam:** as peças
+de rede social do Mentorque não são imagem de IA. Elas são a nossa rota
+escrevendo texto por cima das chapas da marca (`lib/pecas/chapas.ts`), com
+conferência de onde cabe escrever. Melhorar aquilo é mexer em tipografia e
+composição no nosso código, ou trocar as chapas. Nenhuma skill de prompt toca
+nisso.
+
 ## O que foi conferido antes de trazer
 
 Skill carrega sozinha e roda com a permissão do agente, então revisar é
@@ -69,6 +96,19 @@ Nas `product-tracking-*` (04/09):
   analytics** (Plausible e afins), não envio de dado nosso para lugar nenhum.
 - Licença MIT, compatível com o uso aqui.
 - 1,1 MB em 82 arquivos, quase tudo markdown de referência.
+
+Nas de direção visual (19/09):
+
+- **Quatro arquivos, todos `.md`**, somando 196 KB. Nenhum script, nenhum
+  gancho. O `scripts/` do repositório de origem existe, mas é só para montar o
+  README (badge de patrocinador, conversão de imagem) e ficou de fora.
+- Os endereços citados são **documentação de sistema de design**: Apple, MDN,
+  Atlassian, Carbon da IBM, o design system do governo americano e o do britânico.
+  Nada aponta para fora disso e nada manda enviar dado nosso.
+- Licença MIT.
+- **O que elas fazem é escrever prompt melhor, não desenhar melhor.** Quem
+  desenha continua sendo o modelo de imagem de quem chamar; a skill dá a direção
+  de arte. Vale saber disso antes de esperar milagre.
 
 Nas do Google (19/09):
 
