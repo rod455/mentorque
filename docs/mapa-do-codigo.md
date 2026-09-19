@@ -191,6 +191,36 @@ quando a conferência tem uma lista, ela lê a lista DO CÓDIGO e a lista escrit
 no script vira só o mínimo exigido. Conferência que enumera de cabeça só pega
 falta, nunca sobra.
 
+## Medir a página de verdade: o Chrome DevTools (19/09/2026)
+
+O `.mcp.json` na raiz liga o **`chrome-devtools-mcp`**, que é oficial do time do
+Chrome DevTools. Ele abre o nosso Chromium e entrega o que as nossas suítes NÃO
+entregam: rastro de desempenho (LCP, CLS, TTFB), cascata de rede e console.
+
+**Para que serve aqui, e não é engenharia, é conversão.** Página que pula ou
+demora derruba anúncio pago antes de qualquer texto. A velocidade do site é o
+buraco de medição número 9 em `docs/dados/o-que-medimos.md`, e a skill
+`react-best-practices` que trouxemos no mesmo dia vira palpite sem isso.
+
+**As opções do `.mcp.json` foram provadas, não copiadas de README:**
+
+| opção | por quê |
+|---|---|
+| `--executablePath /opt/pw-browsers/chromium` | não existe Chrome de verdade aqui, só o Chromium do Playwright. Ele suporta oficialmente só Chrome, e com o nosso funcionou |
+| `--headless --isolated` | sessão remota não tem tela, e perfil temporário evita estado grudado entre medições |
+| `--no-pageIdRouting` | sem isso, toda chamada exige um `pageId` e a primeira prova falhou por isso |
+| `--usageStatistics false` | **desligado de propósito**: por padrão ele manda estatística de uso para o Google |
+| `--chromeArg=--no-sandbox` | contêiner. E tem que ser com `=`, senão o `--no-` vira negação de opção |
+
+**O que ele NÃO resolve.** Rastro com `reload: true` contra
+`www.mentorque.com.br` morre com `net::ERR_ABORTED`, provavelmente no proxy de
+saída deste ambiente. Medição séria se faz contra o build local
+(`npm run build && npm start`), e aí funciona.
+
+**E a armadilha que já mordeu:** o rastro sem `--viewport` mede em largura de
+COMPUTADOR. Na primeira medição isso quase produziu uma conclusão errada, porque
+o defeito investigado era só de celular. Sempre diga em que largura mediu.
+
 ## O que sabidamente ainda incomoda
 
 - **`lib/app/store.tsx`, 841 linhas**, com o `PrototypeProvider` de 495 num

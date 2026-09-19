@@ -114,6 +114,56 @@ export async function rodar({ nav, ok }) {
             ? "rolagem lateral " + achados.fora.join(" | ")
             : achados.fora.join(" | ")
       );
+      // ── A MANCHETE NÃO PODE ESTOURAR O TRILHO DELA ──────────────────────
+      //
+      // Só na home, e só porque ali mora um carrossel: três frases giram no
+      // mesmo lugar e NÃO têm a mesma altura. Se a mais alta passar do
+      // `min-height` do trilho, a caixa cresce quando ela entra e empurra tudo
+      // que vem abaixo, botões de loja inclusive. A pessoa vê a página pular.
+      //
+      // Isto entrou em 19/09/2026 depois de o rastro do Chrome DevTools medir
+      // CLS 0,19 na home (acima de 0,10 já é ruim). A causa estava medida: no
+      // celular a terceira frase ocupava 142px contra um trilho de 120px. O
+      // defeito já existia com o trilho em 136px, estourando por 6px, e uma
+      // mudança visual do mesmo dia baixou para 120px e triplicou o estouro.
+      //
+      // Nenhuma conferência daqui pegava isso: a página não vaza para o lado,
+      // não tem rolagem lateral e nenhum texto some. Ela só PULA, e pulo não
+      // aparece em foto nem em asserção de texto.
+      if (caminho === "/") {
+        const trilho = await pg.evaluate(() => {
+          const h1 = document.querySelector("h1");
+          if (!h1) return null;
+          const caixa = h1.parentElement;
+          return {
+            minima: Math.round(parseFloat(getComputedStyle(caixa).minHeight) || 0),
+            alturas: [Math.round(h1.getBoundingClientRect().height)],
+          };
+        });
+
+        if (trilho) {
+          // Clica em cada bolinha e mede a frase que entrou. Fica FORA do
+          // evaluate porque a troca é animada e medir cedo lê o meio do
+          // caminho, que foi o erro da primeira versão da conferência da barra.
+          const bolinhas = await pg.locator('[aria-label^="Ir para a frase"]').count();
+          for (let i = 0; i < bolinhas; i++) {
+            await pg.locator('[aria-label^="Ir para a frase"]').nth(i).click();
+            await pg.waitForTimeout(650);
+            const alt = await pg.evaluate(() =>
+              Math.round(document.querySelector("h1").getBoundingClientRect().height)
+            );
+            trilho.alturas.push(alt);
+          }
+          const maior = Math.max(...trilho.alturas);
+          ok(
+            `/ @ ${largura}px: a manchete mais alta cabe no trilho (sem pulo)`,
+            maior <= trilho.minima,
+            `trilho ${trilho.minima}px, frase mais alta ${maior}px` +
+              (maior > trilho.minima ? `, ESTOURA ${maior - trilho.minima}px` : "")
+          );
+        }
+      }
+
       await pg.close();
     }
     await ctx.close();

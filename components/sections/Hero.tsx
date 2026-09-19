@@ -69,8 +69,32 @@ export function Hero() {
           </motion.p>
 
           {/* headline carousel */}
+          {/* A ALTURA MÍNIMA PRECISA CABER A FRASE MAIS ALTA, E ISSO FOI MEDIDO
+              (19/09/2026). As três frases giram aqui dentro e não têm a mesma
+              altura: no celular a terceira ocupa 142px contra 106px das outras.
+              Se o trilho for menor que ela, a caixa cresce quando ela entra e
+              empurra tudo que vem abaixo, botões de loja inclusive. Isso é o
+              CLS, o pulo da página, e foi medido em 0,19 com o rastro do
+              Chrome DevTools, quando acima de 0,10 já é ruim.
+
+              Os valores não são gosto, são medida, e são DOIS porque a frase
+              quebra diferente conforme a largura:
+
+                até 359px  -> a frase mais alta ocupa 177px  (trilho 11.25rem)
+                360 a 639  -> ocupa 142px                    (trilho 9rem)
+                640 para cima -> ocupa 149px                 (trilho 9.5rem)
+
+              Um número só para tudo obrigaria 180px em todo celular, jogando
+              fora quase 40px de tela nos aparelhos comuns, que é o espaço que
+              faz o botão de loja aparecer sem rolar.
+
+              Quem mexer no TEXTO da manchete precisa medir de novo, porque
+              frase mais longa volta a estourar. A conferência que pega isso
+              roda em quatro larguras dentro de scripts/navegador/site.mjs, e
+              foi ela que achou o caso de 320px que este comentário quase não
+              teve. */}
           <div
-            className="min-h-[7.5rem] sm:min-h-[9.5rem]"
+            className="min-h-[11.25rem] min-[360px]:min-h-[9rem] sm:min-h-[9.5rem]"
             role="group"
             aria-roledescription="carousel"
             aria-label={t.hero.carouselLabel}
