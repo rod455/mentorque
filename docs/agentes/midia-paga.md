@@ -257,6 +257,36 @@ scanner entraram em 19/09.
 O dono perguntou no mesmo dia em que o papel nasceu se a visibilidade é só do
 Google. A resposta medida, para o agente não precisar descobrir de novo:
 
+**ATUALIZADO ÀS 18h30 DE 19/09, e isto muda a leitura.** O dono disse ter cinco
+campanhas ativas: uma no Google e quatro no Meta, de instalação no Android, e
+mostrou o nome de uma delas: "APP | Android | Instalações | BR". A coleta, lida
+no mesmo minuto, enxerga **uma conta só** (`act_1071232758617319`, "Mentorque
+Ads") com **uma campanha só**: "Lançamento Mentorque", ativa, objetivo
+`OUTCOME_APP_PROMOTION`, R$ 20 por dia, criada hoje, com um conjunto que otimiza
+por `APP_INSTALLS`. O nome que ele mostrou não existe nessa conta.
+
+São duas explicações possíveis, e elas pedem ações opostas:
+
+1. **as quatro campanhas estão em OUTRA conta de anúncio**, que o token não
+   enxerga. Nesse caso a nossa coleta vai dizer "zero" para sempre enquanto o
+   dinheiro sai, que é o pior tipo de cegueira: a que responde com confiança;
+2. **ou elas acabaram de ser criadas** e ainda não veicularam. Nesse caso o
+   gasto aparece nos próximos dias sozinho.
+
+A pergunta que separa as duas é uma só, e é do dono: qual o identificador da
+conta no Gerenciador de Anúncios? Se não for `act_1071232758617319`, o token
+está olhando para o lugar errado. Entrou na lista dele.
+
+**E a leitura que vale desde já: campanha de INSTALAÇÃO é cega para nós.** O
+clique vai direto para a Play Store e nunca toca em página nossa, então não há
+UTM, não há evento e não há como calcular custo por conta medida, que é o número
+deste papel. Vai dar para ver quanto saiu e quantas instalações o Meta diz ter
+entregue, e nada além disso. As três saídas, em ordem de custo: ler a aquisição
+no Play Console (grátis, manual, do dono), ler o Install Referrer dentro do app e
+mandar para o funil (nosso, barato, precisa de build), ou AppsFlyer/SDK do Meta
+(mais caro, mais completo). Enquanto nenhuma existir, **qualquer conclusão sobre
+o Meta que passe de "gastou X" é invenção.**
+
 **Meta Ads: conectado, coletado e ZERO gasto.** A conta "Mentorque Ads" (BRL)
 responde todo dia desde 22/08, sem erro nenhum na coleta, e nos 21 dias o gasto
 foi zero e a lista de dias veio vazia. Isso não é coleta quebrada, é conta sem
