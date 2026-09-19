@@ -286,6 +286,28 @@ desperdício com nome que o relatório achou era exatamente esse público.
    dinheiro sai, que é o pior tipo de cegueira: a que responde com confiança.
    Está na lista do dono.
 
+**O QUE EXISTE E O QUE RODA NÃO SÃO A MESMA COISA, NO META TAMBÉM
+(19/09, 15h58).** Descendo até o nível de anúncio, o conjunto "Lançamento
+Mentorque" tem TRÊS anúncios: dois ativos ("Chegar na oficina com nome" e "Você
+liga o carro e...") e um em rascunho ("Só ir na padaria"). E um dos ativos
+carrega o aviso **"Edições não publicadas"**, que quer dizer que o que está no
+ar é a versão ANTIGA dele, não a que o dono editou.
+
+Três lições, e as três são a mesma:
+
+- **rascunho não existe para a API**, não veicula e não gasta. A coleta dizendo
+  "uma campanha, um conjunto" estava certa, e quem contava quatro estava
+  contando rascunho junto;
+- **edição não publicada é pior que rascunho**, porque o anúncio aparece ativo e
+  entrega a versão velha. Ninguém avisa;
+- **o seletor de data do Gerenciador engana**: a tela estava em março de 2026,
+  e por isso toda coluna de resultado aparecia com traço. Antes de dizer "não
+  teve resultado", confira a janela que a tela está mostrando.
+
+É a mesma armadilha do n8n, onde `update_workflow` salva rascunho e só
+`publish_workflow` coloca no ar. Painel de anúncio, fluxo de automação e
+repositório têm todos a mesma pegadinha: escrever não é publicar.
+
 **E a leitura que vale desde já: campanha de INSTALAÇÃO é cega para nós.** O
 clique vai direto para a Play Store e nunca toca em página nossa, então não há
 UTM, não há evento e não há como calcular custo por conta medida, que é o número
