@@ -175,7 +175,23 @@ async function carregarPessoas(admin: SupabaseClient, hoje: string): Promise<{ p
   return { pessoas, comToken };
 }
 
-async function enviarEmail(chave: string, para: string, m: { assunto: string; html: string; text: string }, sairUrl: string): Promise<string | null> {
+// O id do e-mail no Resend volta daqui, e a etiqueta vai junto.
+//
+// POR QUE OS DOIS (19/09/2026). O webhook de eventos (/api/email/eventos) diz
+// "o e-mail X foi aberto", e sem guardar o id do envio esse X não liga em nada.
+// A ETIQUETA resolve a outra metade: com ela dá para dizer QUAL e-mail ninguém
+// abre (`d2`, `vencida-oil`, `mes`), em vez de só "os e-mails vão mal". O
+// Resend só aceita letra, número, hífen e sublinhado em etiqueta, então os dois
+// pontos da chave viram hífen.
+type EnvioFeito = { id: string | null; erro: string | null };
+
+async function enviarEmail(
+  chave: string,
+  para: string,
+  m: { assunto: string; html: string; text: string },
+  sairUrl: string,
+  etiqueta: string,
+): Promise<EnvioFeito> {
   try {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -186,16 +202,20 @@ async function enviarEmail(chave: string, para: string, m: { assunto: string; ht
         subject: m.assunto,
         html: m.html,
         text: m.text,
+        tags: [{ name: "chave", value: etiqueta.replace(/[^a-zA-Z0-9_-]/g, "-").slice(0, 80) }],
         headers: {
           "List-Unsubscribe": `<${sairUrl}>, <mailto:contato@mentorque.com.br?subject=Sair>`,
           "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
         },
       }),
     });
-    if (res.ok) return null;
-    return `${res.status} ${await res.text().catch(() => "")}`.slice(0, 300);
+    if (res.ok) {
+      const corpo = (await res.json().catch(() => ({}))) as { id?: string };
+      return { id: typeof corpo.id === "string" ? corpo.id : null, erro: null };
+    }
+    return { id: null, erro: `${res.status} ${await res.text().catch(() => "")}`.slice(0, 300) };
   } catch (err) {
-    return String(err).slice(0, 300);
+    return { id: null, erro: String(err).slice(0, 300) };
   }
 }
 
@@ -274,10 +294,12 @@ export async function GET(req: Request) {
     }
     const canais: string[] = [];
     const pronto = renderEmail(mensagem, sairUrl);
-    const erroEmail = await enviarEmail(chaveResend, p.email, pronto, sairUrl);
-    if (erroEmail) erros.push({ userId: p.userId, chave: e.chave, erro: `email: ${erroEmail}` });
+    const envio = await enviarEmail(chaveResend, p.email, pronto, sairUrl, e.chave);
+    let emailId: string | null = null;
+    if (envio.erro) erros.push({ userId: p.userId, chave: e.chave, erro: `email: ${envio.erro}` });
     else {
       enviados++;
+      emailId = envio.id;
       canais.push("email");
       if (!chavesJaVistas.has(e.chave) && !copiasParaODono.some((c) => c.chave === e.chave)) {
         copiasParaODono.push({ chave: e.chave, assunto: pronto.assunto, html: pronto.html, text: pronto.text });
@@ -294,7 +316,7 @@ export async function GET(req: Request) {
     }
 
     if (canais.length) {
-      const { error } = await admin.from("jornada_envios").insert({ user_id: p.userId, chave: e.chave, dia: hoje, canais });
+      const { error } = await admin.from("jornada_envios").insert({ user_id: p.userId, chave: e.chave, dia: hoje, canais, email_id: emailId });
       if (error) erros.push({ userId: p.userId, chave: e.chave, erro: `registro: ${error.message.slice(0, 120)}` });
     }
     await new Promise((r) => setTimeout(r, PAUSA_MS));
@@ -306,7 +328,7 @@ export async function GET(req: Request) {
   let resumoEnviado = false;
   if (ativa && chaveResend && (enviados > 0 || erros.length > 0)) {
     for (const c of copiasParaODono) {
-      const erro = await enviarEmail(chaveResend, DONO, { assunto: `[cópia da jornada: ${c.chave}] ${c.assunto}`, html: c.html, text: c.text }, "https://www.mentorque.com.br");
+      const { erro } = await enviarEmail(chaveResend, DONO, { assunto: `[cópia da jornada: ${c.chave}] ${c.assunto}`, html: c.html, text: c.text }, "https://www.mentorque.com.br", "copia-ao-dono");
       if (!erro) copiasEnviadas++;
       await new Promise((r) => setTimeout(r, PAUSA_MS));
     }
@@ -314,7 +336,7 @@ export async function GET(req: Request) {
     const linhasDeErro = erros.map((x) => `<li>${x.chave}: ${x.erro}</li>`).join("");
     const resumoHtml = `<p>Jornada de ${hoje}: <b>${enviados}</b> e-mail(s) enviado(s), ${pushEnviados} push, ${puladosAppleRelay} pulado(s) por e-mail oculto da Apple, ${erros.length} erro(s).</p><ul>${linhas}</ul>${linhasDeErro ? `<p>Erros:</p><ul>${linhasDeErro}</ul>` : ""}<p>Para pausar: JORNADA_PAUSADA=sim na Vercel. Manual em docs/jornada.md.</p>`;
     const resumoText = `Jornada de ${hoje}: ${enviados} e-mail(s), ${pushEnviados} push, ${puladosAppleRelay} pulado(s) por e-mail oculto da Apple, ${erros.length} erro(s).\n` + candidatos.map((c) => `- ${c.email} · ${c.chave} · ${c.assunto}`).join("\n");
-    const erro = await enviarEmail(chaveResend, DONO, { assunto: `Jornada de hoje: ${enviados} e-mail(s), ${erros.length} erro(s)`, html: resumoHtml, text: resumoText }, "https://www.mentorque.com.br");
+    const { erro } = await enviarEmail(chaveResend, DONO, { assunto: `Jornada de hoje: ${enviados} e-mail(s), ${erros.length} erro(s)`, html: resumoHtml, text: resumoText }, "https://www.mentorque.com.br", "resumo-ao-dono");
     resumoEnviado = !erro;
   }
 
@@ -518,6 +540,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: String(err).slice(0, 200) }, { status: 400 });
   }
   const sairUrl = linkDeSaida(pessoa.userId) ?? "https://www.mentorque.com.br";
-  const erro = await enviarEmail(chaveResend, para, renderEmail(mensagem, sairUrl), sairUrl);
+  const { erro } = await enviarEmail(chaveResend, para, renderEmail(mensagem, sairUrl), sairUrl, `teste-${chave}`);
   return NextResponse.json(erro ? { ok: false, erro } : { ok: true, teste: para, chave: escolha.chave, assunto: mensagem.assunto, push: mensagem.push });
 }

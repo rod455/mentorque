@@ -257,25 +257,34 @@ scanner entraram em 19/09.
 O dono perguntou no mesmo dia em que o papel nasceu se a visibilidade é só do
 Google. A resposta medida, para o agente não precisar descobrir de novo:
 
-**ATUALIZADO ÀS 18h30 DE 19/09, e isto muda a leitura.** O dono disse ter cinco
-campanhas ativas: uma no Google e quatro no Meta, de instalação no Android, e
-mostrou o nome de uma delas: "APP | Android | Instalações | BR". A coleta, lida
-no mesmo minuto, enxerga **uma conta só** (`act_1071232758617319`, "Mentorque
-Ads") com **uma campanha só**: "Lançamento Mentorque", ativa, objetivo
-`OUTCOME_APP_PROMOTION`, R$ 20 por dia, criada hoje, com um conjunto que otimiza
-por `APP_INSTALLS`. O nome que ele mostrou não existe nessa conta.
+**O RETRATO DAS CAMPANHAS EM 19/09 ÀS 18h45, e ele levou três idas e vindas
+para ficar certo.** O dono disse ter cinco campanhas ativas e mostrou o painel.
+Lendo o painel junto com a coleta:
 
-São duas explicações possíveis, e elas pedem ações opostas:
+| onde | campanha | estado | orçamento |
+|---|---|---|---|
+| Google | Mentorque Lançamento (busca) | **pausada pelo dono** | R$ 30/dia |
+| Google | APP, Android, Instalações, BR | **pendente, grupos em análise** | R$ 20/dia |
+| Meta | Lançamento Mentorque (promoção de app) | ativa, criada hoje, sem entrega | R$ 20/dia |
+| Meta | as outras três | **não aparecem na conta que o nosso token lê** | |
 
-1. **as quatro campanhas estão em OUTRA conta de anúncio**, que o token não
-   enxerga. Nesse caso a nossa coleta vai dizer "zero" para sempre enquanto o
-   dinheiro sai, que é o pior tipo de cegueira: a que responde com confiança;
-2. **ou elas acabaram de ser criadas** e ainda não veicularam. Nesse caso o
-   gasto aparece nos próximos dias sozinho.
+**A razão da pausa é do dono, e ela é um direcionamento**: a campanha de busca
+estava trazendo gente desqualificada. Isso fecha a pergunta que a rodada 1
+deixou aberta ("quem pausou e por quê") e confirma a direção das negativas: o
+desperdício com nome que o relatório achou era exatamente esse público.
 
-A pergunta que separa as duas é uma só, e é do dono: qual o identificador da
-conta no Gerenciador de Anúncios? Se não for `act_1071232758617319`, o token
-está olhando para o lugar errado. Entrou na lista dele.
+**Duas coisas ficam de lição para este papel:**
+
+1. **`porCampanha` é a lista de quem GASTOU, não a lista do que existe.** A
+   consulta do Google filtra por data e só devolve campanha com entrega na
+   janela; a do Meta idem. Campanha pendente de análise, criada hoje ou pausada
+   antes de gastar é invisível nas duas. Quando o dono falar de uma campanha que
+   não está na coleta, a primeira hipótese é essa, e não erro dele.
+2. **A conta do Meta precisa ser confirmada.** O token lê
+   `act_1071232758617319` ("Mentorque Ads") e vê uma campanha. Se as outras três
+   estiverem em outra conta, a coleta vai dizer "zero" para sempre enquanto o
+   dinheiro sai, que é o pior tipo de cegueira: a que responde com confiança.
+   Está na lista do dono.
 
 **E a leitura que vale desde já: campanha de INSTALAÇÃO é cega para nós.** O
 clique vai direto para a Play Store e nunca toca em página nossa, então não há

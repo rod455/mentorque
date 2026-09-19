@@ -64,13 +64,14 @@ export async function coletarDadosOperacao() {
 
   const d14 = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString();
   const d7 = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const d30 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
   const d10dias = new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
   const [
     { data: semanas }, { data: subs }, { data: cadastros }, { data: erros }, { data: metricas },
     { data: usoDiario }, { data: usoSemanal }, { data: coortes },
     { data: ativacao }, { data: assCoortes }, { data: porCampanha },
-    { data: conferencia },
+    { data: conferencia }, { data: emailEnvios }, { data: emailEventos },
   ] = await emFila([
     () => medir("funil_semana", () => admin.from("funil_semana").select("*").limit(12)),
     // `stripe_subscription_id` entra na leitura porque é ele que separa venda
@@ -93,6 +94,13 @@ export async function coletarDadosOperacao() {
     // supabase/funil_eventos.sql: ela existe porque as duas divergiram e
     // ninguém percebeu até alguém perguntar na mão.
     () => medir("assinaturas_conferencia", () => admin.from("assinaturas_conferencia").select("veredito")),
+    // O QUE ACONTECE COM O E-MAIL DEPOIS DE SAIR (19/09/2026). A jornada manda
+    // até 6 por pessoa em 30 dias e a gente só sabia que saíram. Entregue,
+    // aberto e clicado chegam pelo webhook do Resend (/api/email/eventos), e
+    // aqui viram taxa por chave: é assim que se descobre QUAL e-mail ninguém
+    // abre, em vez de "os e-mails vão mal".
+    () => medir("jornada_envios", () => admin.from("jornada_envios").select("chave, dia, email_id").gte("dia", d30).limit(3000)),
+    () => medir("email_eventos", () => admin.from("email_eventos").select("id_externo, tipo, chave, criado_em").gte("criado_em", d30).limit(5000)),
   ]);
   tempos.paralelo = Date.now() - t0;
   const { data: experimentos } = await medir("experimentos", () => admin.from("experimentos_resultados").select("*").limit(120));
@@ -155,6 +163,46 @@ export async function coletarDadosOperacao() {
       .filter((e) => e.evento in NATUREZA)
       .map((e) => [e.evento as EventoFunil, Number(e.pessoas)]),
   );
+  // ── O que aconteceu com os e-mails da jornada (19/09/2026) ───────────────
+  const envios = (emailEnvios ?? []) as { chave: string; dia: string; email_id: string | null }[];
+  const eventos = (emailEventos ?? []) as { id_externo: string; tipo: string; chave: string | null }[];
+  const porEmail = new Map<string, Set<string>>();
+  for (const e of eventos) {
+    const s = porEmail.get(e.id_externo) ?? new Set<string>();
+    s.add(e.tipo);
+    porEmail.set(e.id_externo, s);
+  }
+  const contaPorChave: Record<string, { enviados: number; comId: number; entregues: number; abertos: number; clicados: number; problemas: number }> = {};
+  for (const env of envios) {
+    const c = (contaPorChave[env.chave] ??= { enviados: 0, comId: 0, entregues: 0, abertos: 0, clicados: 0, problemas: 0 });
+    c.enviados++;
+    if (!env.email_id) continue;
+    c.comId++;
+    const tipos = porEmail.get(env.email_id);
+    if (!tipos) continue;
+    if (tipos.has("delivered")) c.entregues++;
+    if (tipos.has("opened")) c.abertos++;
+    if (tipos.has("clicked")) c.clicados++;
+    if (tipos.has("bounced") || tipos.has("complained") || tipos.has("failed")) c.problemas++;
+  }
+  const taxa = (parte: number, todo: number) => (todo > 0 ? Math.round((parte / todo) * 1000) / 10 : null);
+  const resumoDeEmail = {
+    enviados: envios.length,
+    // Envio SEM id do Resend é envio anterior a 19/09/2026, quando o id passou
+    // a ser guardado. Ele nunca vai ter evento, e contá-lo no denominador
+    // afundaria a taxa para sempre.
+    semId: envios.filter((e) => !e.email_id).length,
+    semEventos: envios.filter((e) => e.email_id && !porEmail.has(e.email_id)).length,
+    porChave: Object.entries(contaPorChave)
+      .map(([chave, c]) => ({
+        chave,
+        ...c,
+        taxaAbertura: taxa(c.abertos, c.comId),
+        taxaClique: taxa(c.clicados, c.comId),
+      }))
+      .sort((a, b) => b.enviados - a.enviados),
+  };
+
   const quebraFunil = [
     ...degrausDaCadeia(CADEIA_SESSAO, porEtapa, janela.desde),
     ...degrausDaCadeia(CADEIA_ATO, porEtapa, janela.desde),
@@ -284,6 +332,15 @@ export async function coletarDadosOperacao() {
     },
     cadastrosPorDia,
     erros7d: { total: (erros ?? []).length, top: topErros },
+    // E-MAIL DA JORNADA, 30 dias: o que saiu e o que aconteceu depois.
+    //
+    // As taxas são sobre ENVIADOS, e a de clique é sobre enviados também (e não
+    // sobre abertos), porque abertura de e-mail é medida por imagem carregada e
+    // quem bloqueia imagem some do denominador. Ler clique/aberto infla a taxa
+    // exatamente nas listas mais técnicas. `semEventos` é o aviso honesto: se
+    // todos os envios estiverem aí, o webhook não está ligado e as taxas
+    // abaixo são zero por falta de instrumento, não por falta de leitor.
+    email30d: resumoDeEmail,
     // A régua de uso: pessoas distintas (não aberturas), retenção por coorte
     // de cadastro e frequência. Definições na skill do time
     // (docs/agentes/skills/analise-da-operacao.md).
