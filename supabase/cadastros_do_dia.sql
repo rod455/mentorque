@@ -46,7 +46,23 @@ as $$
 $$;
 
 -- Só o painel (e a chave de serviço) enxergam; app e anônimos, nunca.
-revoke all on function public.cadastros_do_dia(date) from anon, authenticated;
+--
+-- REVOGAR DE `public` É O QUE IMPORTA, E ISSO FOI DESCOBERTO TARDE (19/09/2026).
+-- Estas duas linhas existiam desde o começo revogando só de `anon` e
+-- `authenticated`, e NUNCA tiveram efeito nenhum: no Postgres toda função nasce
+-- com EXECUTE concedido ao pseudo-papel PUBLIC, e `anon` herda por ali. Tirar de
+-- `anon` sem tirar de PUBLIC não tira nada.
+--
+-- O estrago: `anon` é a chave PÚBLICA, que vai dentro do app e do site. Qualquer
+-- um que a extraísse podia chamar /rest/v1/rpc/cadastros_no_periodo com um
+-- intervalo largo e receber o e-mail de TODOS os cadastrados. A função é
+-- SECURITY DEFINER e lê auth.users.
+--
+-- Como conferir que funcionou, porque "rodou sem erro" não prova:
+--   select proname, array_to_string(proacl, ' | ') from pg_proc ...
+-- Enquanto aparecer `=X/postgres` com o lado esquerdo VAZIO, PUBLIC executa.
+revoke all on function public.cadastros_do_dia(date) from public, anon, authenticated;
+grant execute on function public.cadastros_do_dia(date) to service_role;
 
 -- ─ Variante por período (também JÁ APLICADA no banco) ─
 -- Uso:  select * from cadastros_no_periodo('2026-07-21', '2026-07-30');
@@ -87,4 +103,6 @@ as $$
   order by u.created_at desc;
 $$;
 
-revoke all on function public.cadastros_no_periodo(date, date) from anon, authenticated;
+-- Mesma correção da irmã acima: sem tirar de `public`, não tira de ninguém.
+revoke all on function public.cadastros_no_periodo(date, date) from public, anon, authenticated;
+grant execute on function public.cadastros_no_periodo(date, date) to service_role;

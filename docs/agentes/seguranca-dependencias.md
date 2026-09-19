@@ -134,6 +134,53 @@ caso em que este papel avisa na hora, porque o relógio corre contra.
 
 ## Aprendizados
 
-Vazio por enquanto. A primeira rodada é a linha de base: ela vai achar um monte
-de coisa de uma vez, e o trabalho dela é separar o que é dívida velha do que é
-risco vivo, sem transformar as duas na mesma lista de pânico.
+### A primeira varredura achou e-mail de cliente exposto (19/09/2026)
+
+Aconteceu antes da primeira rodada do papel, quando o dono perguntou se o agente
+já tinha olhado o projeto todo e a resposta foi não. Os advisors do Supabase
+foram chamados à mão, ali mesmo, e acharam.
+
+**O que estava aberto.** As funções `cadastros_do_dia(date)` e
+`cadastros_no_periodo(date, date)` são `SECURITY DEFINER`, leem `auth.users` e
+devolvem **e-mail e nome de todo cadastrado**. As duas estavam executáveis pelo
+papel `anon`, que é a chave PÚBLICA, a que vai dentro do app e do site. Qualquer
+pessoa que a extraísse (é trivial) podia chamar
+`/rest/v1/rpc/cadastros_no_periodo` com um intervalo largo e receber a lista
+inteira.
+
+**A parte que ensina mais que o buraco.** O arquivo `supabase/cadastros_do_dia.sql`
+JÁ TINHA, desde que as funções nasceram, as linhas:
+
+```sql
+revoke all on function public.cadastros_do_dia(date) from anon, authenticated;
+```
+
+E elas nunca fizeram nada. No Postgres, toda função nasce com `EXECUTE`
+concedido ao pseudo-papel **`PUBLIC`**, e `anon` herda por ali. Revogar de `anon`
+sem revogar de `PUBLIC` não revoga coisa alguma. **A mitigação estava escrita,
+parecia certa, passava em qualquer leitura de código, e era decorativa.**
+
+É o mesmo padrão do travessão achado no mesmo dia: a defesa existia, ninguém
+tinha testado se ela mordia.
+
+**Três regras que saem daí, e valem para toda rodada:**
+
+1. **Permissão se confere no estado, não no comando.** "Rodou sem erro" não prova
+   nada. O que prova:
+   ```sql
+   select proname, array_to_string(proacl, ' | ') from pg_proc ...
+   ```
+   Enquanto aparecer `=X/postgres` com o lado esquerdo VAZIO, `PUBLIC` executa.
+   Ou, mais direto: `has_function_privilege('anon', oid, 'EXECUTE')`.
+2. **`SECURITY DEFINER` que lê `auth.users` é a combinação mais perigosa da
+   casa.** Toda rodada, liste as funções que o `anon` consegue executar e
+   confira quais são `SECURITY DEFINER`. As nossas em `SECURITY INVOKER` estão
+   protegidas pelo RLS, mas as `DEFINER` passam por cima de tudo.
+3. **O aviso "RLS ligado e sem política" NÃO é buraco, é o contrário.** Ele sai
+   como INFO em 16 tabelas nossas e significa que ninguém lê nada por ali.
+   Reportar aquilo como "16 tabelas expostas" seria a lista de pânico que este
+   manual manda evitar, e ainda esconderia o achado de verdade no meio.
+
+**O que ficou sem resposta:** não deu para saber se alguém chegou a chamar as
+funções. Os registros de requisição não foram alcançáveis pela ferramenta usada,
+e a retenção do painel é curta. A frase honesta é "não sei", não "ninguém usou".
