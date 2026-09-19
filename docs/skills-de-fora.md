@@ -76,6 +76,33 @@ As outras nove ficaram de fora e a razão é a mesma que vale para as do Google:
 Mentorque já está decidida (grafite, creme, âmbar, e o app é escuro por padrão).
 Skill que briga com a marca sem ninguém perceber é pior do que skill nenhuma.
 
+**O VEREDITO DO DONO, depois de duas rodadas na LP (19/09/2026).** Elas foram
+testadas na home no mesmo dia em que chegaram, primeiro em modo PRESERVAR e
+depois em modo REFORMA, e o dono reprovou as duas:
+
+- **modo preservar**: "não vi nenhuma diferença entre o que foi proposto e o
+  original". Ele estava certo, e a medição confirma: mais da metade do que mudou
+  era movimento (invisível em foto) e o resto era milímetro, sendo o maior delta
+  32px de respiro no topo. A própria tabela da skill manda, nesse modo, igualar
+  o que já existe. Quem pede preservação recebe polimento invisível;
+- **modo reforma**: uma home alternativa inteira em `/nova`, com a manchete indo
+  de 149px para 271px de altura, dobra de uma coluna, celular falso removido e
+  ritmo de claro e escuro. Resposta: "ainda não vi nenhuma melhoria. Pode
+  descartar. Vamos continuar com a atual". A página e a pasta foram apagadas.
+
+**A lição, e ela vale mais que as skills:** a comparação que motivou o teste era
+injusta e ninguém tinha percebido. O post de Instagram que o dono viu mostra uma
+página nascendo DO ZERO, com a direção de arte entregue pronta dentro do prompt
+(fundo `#f5f5f7`, título de 72 a 92px, peso 800). Do nada para alguma coisa,
+qualquer resultado parece um salto. Redesenhar uma marca já decidida, com texto
+que tem histórico de teste, nunca vai produzir aquele "antes e depois", e
+prometer que vai é vender ilusão.
+
+Então: **não reabrir isto na LP sem um motivo novo.** O que faltava nas duas
+versões não era gosto, era matéria-prima. A dobra mostra um celular FALSO
+montado com `div`, e nenhuma skill de direção visual conserta a falta de uma
+captura real do app.
+
 **O que elas NÃO consertam, e isso importa mais que o que consertam:** as peças
 de rede social do Mentorque não são imagem de IA. Elas são a nossa rota
 escrevendo texto por cima das chapas da marca (`lib/pecas/chapas.ts`), com
