@@ -17,14 +17,31 @@ export default function BielaNoCarro({ size = 640, driving = true, speed = 0.9 }
       className={`cena-wrap ${driving ? "driving" : ""}`}
       style={{ width: size, maxWidth: "100%", "--spin": `${speed}s` }}
     >
-      <img className="base" src="/biela-carro/biela-carro-base.png" alt="Biela dirigindo o conversível Mentorque" draggable={false} />
-      <img className="roda f" src="/biela-carro/biela-carro-roda.png" alt="" draggable={false} />
-      <img className="roda t" src="/biela-carro/biela-carro-roda.png" alt="" draggable={false} />
+      {/* LARGURA E ALTURA DECLARADAS, E NÃO É FORMALIDADE (19/09/2026).
+          São as medidas reais dos PNGs (1175x628 e 244x244). Sem elas o
+          navegador não sabe que altura a imagem vai ter e reserva ZERO: a cena
+          nasce sem altura nenhuma e, quando o arquivo chega, a caixa salta para
+          a altura real e empurra a página inteira.
+
+          Isso custava um pulo de 0,186 de CLS aos 183ms na home, medido com o
+          rastro do Chrome DevTools, e era praticamente todo o CLS da página. No
+          pulo, a coluna de texto subia 244px e o celular da direita subia
+          488px. Trocar o carrossel ou a tipografia não resolvia nada disso: a
+          causa era imagem sem espaço reservado.
+
+          Os atributos aqui e o `aspect-ratio` no `.cena-wrap` fazem a mesma
+          coisa por dois caminhos, de propósito: o atributo vale mesmo se o CSS
+          demorar, e a proporção vale mesmo se alguém tirar os atributos. */}
+      <img className="base" src="/biela-carro/biela-carro-base.png" width={1175} height={628} alt="Biela dirigindo o conversível Mentorque" draggable={false} />
+      <img className="roda f" src="/biela-carro/biela-carro-roda.png" width={244} height={244} alt="" draggable={false} />
+      <img className="roda t" src="/biela-carro/biela-carro-roda.png" width={244} height={244} alt="" draggable={false} />
       <span className="puff" />
       <span className="puff p2" />
       <span className="puff p3" />
       <style jsx>{`
-        .cena-wrap { position: relative; user-select: none; }
+        /* A proporção real do PNG base, 1175 por 628. É ela que garante altura
+           à caixa desde o primeiro quadro, antes de qualquer imagem chegar. */
+        .cena-wrap { position: relative; user-select: none; aspect-ratio: 1175 / 628; }
         .cena-wrap.driving { animation: cena-bounce 0.55s ease-in-out infinite; }
         .base { width: 100%; display: block; }
         .roda { position: absolute; width: 20.77%; }

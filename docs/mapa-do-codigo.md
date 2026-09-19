@@ -221,6 +221,32 @@ saída deste ambiente. Medição séria se faz contra o build local
 COMPUTADOR. Na primeira medição isso quase produziu uma conclusão errada, porque
 o defeito investigado era só de celular. Sempre diga em que largura mediu.
 
+### O localhost MENTE sobre CLS, e isso custou uma caçada inteira
+
+Medido em 19/09/2026, mesma página, mesmo minuto, mesma largura de 1440px:
+
+| onde | CLS |
+|---|---|
+| `www.mentorque.com.br` | **0,000**, zero pulos |
+| `npm start` no localhost | **0,186** |
+
+O pulo local é um só, aos ~190ms, e nele TODAS as alturas saltam de quase zero
+para o valor real de uma vez (um `svg` de 0 para 288px, o celular falso de 27
+para 493px, uma seção de 0 para 65px). É a assinatura de primeira pintura antes
+do estilo assentar, e na Vercel, com CDN servindo o CSS, isso não acontece.
+
+**A regra que sai disso: CLS só vale medido em PRODUÇÃO.** LCP e TTFB locais
+servem para comparar antes e depois de uma mudança, porque o erro é o mesmo dos
+dois lados. CLS local, não: ele inventa um problema que o usuário não tem, e
+perseguir aquilo é trabalho jogado fora.
+
+**Como medir produção daqui:** o Playwright não atravessa o proxy de saída deste
+ambiente (`ERR_TUNNEL_CONNECTION_FAILED`, mesmo passando `proxy:`). O servidor
+MCP atravessa. O caminho que funciona é `navigate_page` com o parâmetro
+`initScript` instalando um `PerformanceObserver` de `layout-shift`, e depois
+`evaluate_script` para ler o que ele juntou. Rastro com `reload: true` contra
+produção falha com `net::ERR_ABORTED`, então não use reload lá.
+
 ## O que sabidamente ainda incomoda
 
 - **`lib/app/store.tsx`, 841 linhas**, com o `PrototypeProvider` de 495 num
