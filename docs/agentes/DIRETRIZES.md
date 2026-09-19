@@ -128,6 +128,8 @@ os sete papéis ao mesmo tempo.
 | Conteúdo & SEO | Rotina Claude | semanal (ter 08h) | conteudo-seo.md |
 | Mídia paga | Rotina Claude | semanal (qui 08h) | midia-paga.md |
 | ASO & Lojas | Rotina Claude | dias 1 e 15 (08h) | aso-lojas.md |
+| Guardião das conferências | Rotina Claude | semanal (sáb 08h) | guardiao-conferencias.md |
+| Segurança e dependências | Rotina Claude | semanal (dom 08h) | seguranca-dependencias.md |
 
 ## Mexeu em workflow do n8n? Publique, senão não vale (19/09/2026)
 
