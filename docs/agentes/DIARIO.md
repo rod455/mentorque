@@ -3,6 +3,33 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-19 · Engenharia: o e-mail da jornada deixou de ser carta no escuro, e o webhook está armado (provado)
+- **O buraco**: a jornada manda até 6 e-mails por pessoa em 30 dias e a gente
+  sabia UMA coisa sobre eles, que saíram. Entregue, aberto, clicado, devolvido,
+  spam: nada. Máquina de retenção sem medição pode estar caindo em caixa de spam
+  há uma semana, e o sintoma (silêncio) é igual ao de "ninguém quis".
+- **O que entrou**: o envio guarda o `id` do Resend em `jornada_envios.email_id`
+  e leva a etiqueta da chave (`d2`, `vencida-oil`, `mes`); a rota
+  `/api/email/eventos` recebe os eventos com assinatura Svix conferida; a tabela
+  `email_eventos` guarda uma linha por (e-mail, tipo); o retrato publica
+  `email30d` com taxa por chave.
+- **Três decisões com nome**: o webhook FALHA FECHADO (sem segredo, recusa
+  tudo); a taxa de clique é sobre ENVIADOS e não sobre abertos, porque abertura
+  depende de imagem carregada e dividir clique por aberto infla a taxa justo nas
+  listas que bloqueiam imagem; e nada de endereço nem de conteúdo é guardado.
+- **PROVADO, e não suposto**: o dono criou o webhook e colou o
+  `RESEND_WEBHOOK_SECRET` na Vercel. Variável nova só vale no deploy seguinte,
+  então saiu um commit vazio; depois um POST sem assinatura recebeu **401
+  `sem_assinatura`**, e não 501. Os dois códigos são a prova: 501 seria a função
+  sem enxergar o segredo, 401 é a rota conferindo assinatura com o segredo no
+  ar. A prova rodou por um fluxo temporário do n8n que gravou o veredito em
+  `app_erros`; o fluxo foi arquivado e a linha apagada na sequência.
+- Os primeiros eventos de verdade chegam com a jornada das 9h de amanhã.
+- **O inventário do que dá para medir** virou `docs/dados/o-que-medimos.md`: o
+  que já entra sozinho todo dia e os nove buracos em ordem de quanto doem, com
+  custo e dono de cada um. O primeiro é de onde vem cada INSTALAÇÃO, que ficou
+  urgente agora que as campanhas novas mandam o clique direto para a loja.
+
 ## 2026-09-19 · Engenharia: link inteligente de download, e três linhas saíram da lista do dono
 - **O dono fez três coisas e elas saíram da lista**: ligou o Web Analytics da
   Vercel (o componente já estava no site desde 08/09, então a medição por
