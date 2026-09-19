@@ -33,6 +33,25 @@ gente ganhou do que a gente comprou, e sem isso o CAC vira ficção.
 **Instagram, link da bio** (o principal, cole no perfil):
 
 ```
+https://www.mentorque.com.br/baixar?utm_source=instagram&utm_medium=social&utm_campaign=bio
+```
+
+**Por que `/baixar` e não a home (19/09/2026).** O `/baixar` é o link
+inteligente: ele lê o aparelho e manda iPhone para a App Store e Android para o
+Google Play, que é o que a pessoa espera de um link de bio. Antes de mandar, ele
+guarda a etiqueta e registra o evento `clicou_baixar`. Mandar direto para a
+ficha da loja funcionaria para a pessoa e seria invisível para nós: loja não
+conta de onde o clique veio, e é por isso que `instagram` nunca apareceu uma
+única vez no funil. Quem cai de computador vê os dois botões.
+
+Isto NÃO substitui o OneLink da AppsFlyer, que continua na lista do dono: o
+OneLink liga o clique à INSTALAÇÃO; o `/baixar` liga o clique à ORIGEM. São
+perguntas diferentes, e a segunda é a que estava sem resposta nenhuma.
+
+Se quiser levar para a home em vez da loja (uma campanha que explica antes de
+pedir download), o link de sempre continua valendo:
+
+```
 https://www.mentorque.com.br/?utm_source=instagram&utm_medium=social&utm_campaign=bio
 ```
 

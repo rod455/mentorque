@@ -3,6 +3,40 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-19 · Engenharia: link inteligente de download, e três linhas saíram da lista do dono
+- **O dono fez três coisas e elas saíram da lista**: ligou o Web Analytics da
+  Vercel (o componente já estava no site desde 08/09, então a medição por
+  página começa a contar nas próximas visitas), escolheu a credencial do Google
+  no nó "Search Console: top páginas" do n8n, e a quarta linha caiu sozinha:
+  **já existe token de push de iPhone** (1 iOS desde 17/09, contra 5 Android).
+  A ação de 12/09 pedia exatamente isso e estava velha; foi conferida no banco
+  antes de apagar.
+- **O que ele perguntou, e virou código**: dá para ter um link que manda iPhone
+  para a App Store e Android para o Google Play? Dá, e ele faz mais do que
+  isso. A página `/baixar` lê o aparelho, manda para a loja certa, e ANTES de
+  mandar guarda a etiqueta da campanha e emite `clicou_baixar`.
+- **O buraco que isso fecha**: loja não conta de onde o clique veio. Em todos os
+  eventos desde 23/08 as origens são google (563), atalho (14) e email (8), e
+  `instagram` não aparece uma única vez. Link de bio indo direto para a ficha da
+  loja funciona para a pessoa e é invisível para nós, então post que deu certo e
+  post que não deu produzem o mesmo dado: nenhum.
+- Evento novo `clicou_baixar` (aparelho, sessão, medido desde 19/09), com a
+  restrição do banco recriada na migração `funil_clicou_baixar` e a lista
+  fechada de `/api/funil` atualizada. Sem os três lugares, a rota recusa com 400
+  e o clique some em silêncio.
+- **NÃO substitui o OneLink da AppsFlyer**, que continua parado na lista: o
+  OneLink liga o clique à INSTALAÇÃO, o `/baixar` liga o clique à ORIGEM.
+- `conferir:baixar` nova, com os textos de navegador de verdade, inclusive os do
+  navegador de dentro do Instagram (iOS e Android). Dois defeitos plantados: pôr
+  o teste de iOS antes do de Android manda todo Android para a App Store (a
+  conferência pega os dois casos), e tirar o evento do caminho deixa a página
+  funcionando e muda (pega também).
+- A `conferir:caminho` pegou um erro meu na primeira versão: eu tinha posto um
+  link "abrir no navegador" para o `/app`, contra a decisão do dono de 12/09 de
+  que nenhuma página do site leva até lá. Saiu.
+- O link da bio em `docs/utms.md` passou a ser o `/baixar`, e a linha da lista do
+  dono foi atualizada com o endereço pronto para colar.
+
 ## 2026-09-19 · Mídia paga (rodada 1): o desperdício mudou de assunto, e a lista de termos não era de 7 dias
 - Primeira rodada do papel, criado hoje. Artifact "Mídia da semana":
   https://claude.ai/artifact/GEmSp1PXWcYNxB9ipcKd5Y

@@ -54,7 +54,14 @@ create table if not exists public.funil_eventos (
     -- (migração funil_tentou_assinar). Achado do CRO: os seis caminhos do
     -- paywall desviavam para o login ANTES de emitir evento, então o zero de
     -- `iniciou_checkout` não separava "não quis" de "foi barrado pela conta".
-    'tentou_assinar'
+    'tentou_assinar',
+    -- O clique no link inteligente de download, medido em 19/09/2026
+    -- (migração funil_clicou_baixar). O link da bio do Instagram mandava a
+    -- pessoa direto para a loja, e a loja não conta de onde ela veio: clique
+    -- de Instagram era invisível no funil. A página /baixar é a parada do
+    -- meio, guarda a etiqueta, emite este evento e só então manda para a
+    -- loja certa pelo aparelho.
+    'clicou_baixar'
   )),
 
   anon_id    text,

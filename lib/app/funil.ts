@@ -29,6 +29,10 @@ export type EventoFunil =
   // parecia parado. Este evento é emitido NO portão, antes do desvio, e é o
   // que separa "viu e desistiu" de "quis e foi barrado pela conta".
   | "tentou_assinar"
+  // O CLIQUE NO LINK INTELIGENTE DE DOWNLOAD (19/09/2026). A loja não conta de
+  // onde a pessoa veio, então clique de Instagram era invisível: a página
+  // /baixar guarda a etiqueta, emite isto e só então manda para a loja certa.
+  | "clicou_baixar"
   | "abriu_trilha"
   | "cadastrou_carro"
   // A PRIMEIRA SESSÃO, medida em 01/09/2026. Entre "abriu o app" e

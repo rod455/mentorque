@@ -22,6 +22,11 @@ const EVENTOS_DO_APP = new Set([
   // lib/app/funil.ts: sem ela o zero de `iniciou_checkout` não separa "não
   // quis" de "foi barrado pela conta".
   "tentou_assinar",
+  // O clique no link inteligente de download (19/09/2026). Vem do SITE, não do
+  // app das lojas, e é o único caso em que isso é o esperado: a página /baixar
+  // existe justamente para o clique de rede social deixar rastro antes de a
+  // pessoa sumir dentro da loja, que não conta de onde ela veio.
+  "clicou_baixar",
   // Primeira ação de valor: é o que separa "criou conta" de "experimentou
   // de verdade" (ativação real na skill de análise).
   "abriu_trilha", "cadastrou_carro",
