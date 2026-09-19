@@ -61,6 +61,34 @@ que fecham qualquer achado desta rodada em diante:
    prazo que ninguém relê é um prazo perdido. **Cada afirmação leva etiqueta**:
    MEDIDO, DEDUZIDO ou TEORIA (direcionamento 12).
 
+## A régua da rodada: o que é uma rodada bem feita
+
+Antes de publicar, leia a sua própria rodada contra a lista e **diga no artifact
+e no diário qual critério você não cumpriu, e por quê**. Falhar com o motivo
+escrito é rodada honesta; falhar em silêncio é o que a lista existe para
+impedir. Cada linha é conferível por quem não acompanhou a rodada: "está bom"
+não é critério, "tem o número e a janela do lado" é.
+
+| # | critério | como se vê que passou |
+|---|---|---|
+| 1 | **Erro real primeiro** | cada mensagem recorrente do retrato saiu da rodada com causa encontrada ou com item nomeado na fila |
+| 2 | **O verde foi provado nos quatro** | `tsc`, `build`, `lint` e `build:native` rodaram; o native não é opcional, já ficou dois dias quebrado com a Vercel verde |
+| 3 | **Cada afirmação tem etiqueta** | MEDIDO, DEDUZIDO ou TEORIA, e nenhuma teoria aparece vestida de medição |
+| 4 | **Achado tem população** | quantos aparelhos e quais versões, porque dez ocorrências pode ser uma pessoa reabrindo o app |
+| 5 | **Prescrição tem a mesma prova que o diagnóstico** | "é só trocar X" só entra depois de conferir que X existe e faz o que se diz |
+| 6 | **"Vale reler X" virou leitura** | o arquivo foi aberto na rodada, não citado de memória |
+| 7 | **Evento em zero saiu com causa** | nenhum zero histórico morre em bullet |
+| 8 | **A conta do dinheiro foi fechada** | `assinaturas_conferencia` e a fatura do Stripe, não MRR |
+| 9 | **Todo conserto veio com a conferência que o teria pego** | e a conferência foi provada com defeito plantado |
+| 10 | **Achado com data foi para o topo** | com a data em destaque e verificação agendada |
+| 11 | **Nada fora da alçada** | sem preço, sem cobrança, sem mensagem a cliente, sem remover funcionalidade |
+
+**De onde veio esta régua (19/09/2026).** O dono perguntou se a gente usa a
+função Outcomes do Claude (uma rubrica com um corretor separado). Ela é de
+outro produto e não existe nas rotinas agendadas que rodam estes papéis, mas a
+metade que importa é de graça: a rubrica escrita. Quem corrige de fora é o
+Diretor, na segunda, e o dono lendo o artifact.
+
 ## Alçada
 
 Pode: corrigir bug, texto, layout quebrado, acessibilidade; subir na main.

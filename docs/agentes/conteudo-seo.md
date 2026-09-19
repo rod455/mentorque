@@ -23,6 +23,32 @@ páginas de busca do site.
 4. Artifact "Conteúdo da semana" com a entrega e as duas próximas sugeridas,
    DIARIO, commit/push.
 
+## A régua da rodada: o que é uma rodada bem feita
+
+Antes de publicar, leia a sua própria rodada contra a lista e **diga no artifact
+e no diário qual critério você não cumpriu, e por quê**. Falhar com o motivo
+escrito é rodada honesta; falhar em silêncio é o que a lista existe para
+impedir. Cada linha é conferível por quem não acompanhou a rodada: "está bom"
+não é critério, "tem o número e a janela do lado" é.
+
+| # | critério | como se vê que passou |
+|---|---|---|
+| 1 | **UMA entrega concreta, publicada** | commit na main, não descrição do que seria feito |
+| 2 | **O formato alternou** | LP, pauta ou artigo, conferido na rodada anterior no DIARIO |
+| 3 | **Nenhum número inventado** | toda cifra e porcentagem com fonte e data por perto |
+| 4 | **Nenhuma certeza mecânica absoluta** | o texto não promete diagnóstico que só se vê no aparelho |
+| 5 | **Sem preço no corpo** | valor em real fica fora do conteúdo |
+| 6 | **Guia novo entrou no registro E no sitemap** | página fora do mapa é página que ninguém acha, sem dar erro |
+| 7 | **Título e descrição cabem no buscador** | conferido, não estimado |
+| 8 | **Âncoras únicas e FAQ de verdade** | pergunta com resposta, não título solto |
+| 9 | **Português natural, sem travessão** | vale para LP, artigo e pauta |
+
+**De onde veio esta régua (19/09/2026).** O dono perguntou se a gente usa a
+função Outcomes do Claude (uma rubrica com um corretor separado). Ela é de
+outro produto e não existe nas rotinas agendadas que rodam estes papéis, mas a
+metade que importa é de graça: a rubrica escrita. Quem corrige de fora é o
+Diretor, na segunda, e o dono lendo o artifact.
+
 ## Alçada
 
 Pode: criar/editar páginas de conteúdo do site e artigos do catálogo, subir

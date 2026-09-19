@@ -85,6 +85,37 @@ Relatórios em português natural, sem travessão (—), números com comparaç�
 contra o período anterior, e SEMPRE terminando com no máximo 3 recomendações
 priorizadas. Ruído é inimigo: só notificar o Rodrigo com substância.
 
+## A régua de cada papel, e quem corrige (19/09/2026)
+
+Todo manual tem uma seção **"A régua da rodada"**: a lista do que é uma rodada
+bem feita, em critérios que alguém de fora consegue conferir. "Está bom" não é
+critério; "tem o número e a janela do lado" é.
+
+Duas obrigações saem disso, e elas valem para todos:
+
+1. **Antes de publicar, a rodada se mede contra a própria régua** e diz, no
+   artifact e no diário, qual critério não cumpriu e por quê. Falhar com o
+   motivo escrito é rodada honesta; falhar em silêncio é o que a régua existe
+   para impedir.
+2. **O Diretor corrige de fora, na segunda.** Autoavaliação tem o defeito de
+   quem se avalia, então quem lê a semana inteira dá o veredito de cada rodada
+   contra a régua daquele papel. E na primeira segunda do mês ele faz o
+   trabalho mais lento: lê o mês inteiro, acha o que se repete e **propõe a
+   mudança no manual** para o dono aprovar.
+
+**Por que não é automático.** O dono perguntou sobre a função Outcomes do
+Claude, que é exatamente isto com um corretor de máquina: rubrica escrita, um
+agente separado corrigindo, e o trabalho refeito até passar. Ela existe em
+outro produto (agentes gerenciados pela API) e não nas rotinas agendadas que
+rodam estes papéis. A rubrica, que é a metade que faz o trabalho melhorar, não
+depende de produto nenhum: depende de estar escrita.
+
+**A memória também não é automática aqui, e isso é escolha.** O que os agentes
+aprendem vira linha no manual, com commit e motivo, e não memória opaca que se
+escreve sozinha: o dono lê, discorda e apaga quando quiser. O preço é que
+alguém precisa escrever a lição; a vantagem é que ela é auditável e vale para
+os sete papéis ao mesmo tempo.
+
 ## O time
 
 | Papel | Onde roda | Cadência | Manual |

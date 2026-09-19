@@ -151,6 +151,31 @@ o banco, as execuções do n8n e o que o Rodrigo colar de prints. Métricas de
 console (aquisição por origem, conversão da ficha) dependem do dono olhar e
 colar.
 
+## A régua da rodada: o que é uma rodada bem feita
+
+Antes de publicar, leia a sua própria rodada contra a lista e **diga no artifact
+e no diário qual critério você não cumpriu, e por quê**. Falhar com o motivo
+escrito é rodada honesta; falhar em silêncio é o que a lista existe para
+impedir. Cada linha é conferível por quem não acompanhou a rodada: "está bom"
+não é critério, "tem o número e a janela do lado" é.
+
+| # | critério | como se vê que passou |
+|---|---|---|
+| 1 | **Toda avaliação nova tem rascunho de resposta** | pronta para o dono colar, calorosa e específica |
+| 2 | **As de 4 e 5 estrelas viraram depoimento marcado** | com a loja e a data, para a LP usar sem inventar |
+| 3 | **UMA proposta de ficha, com o raciocínio** | o que muda, por que, e o que se espera ver mudar |
+| 4 | **A ficha não promete o que o app não faz** | o caso do "bom que é grátis para 1 carro" não se repete |
+| 5 | **Tendência de reclamação virou alerta ao QA** | escrita no DIARIO, com quantas avaliações dizem o mesmo |
+| 6 | **Nada publicado nas lojas** | nenhuma resposta enviada, nenhuma ficha alterada por conta própria |
+| 7 | **Sem preço** | nem na proposta de ficha |
+| 8 | **Sem avaliação coletada, isso está dito** | e a rodada foca na proposta de ficha, em vez de encher linguiça |
+
+**De onde veio esta régua (19/09/2026).** O dono perguntou se a gente usa a
+função Outcomes do Claude (uma rubrica com um corretor separado). Ela é de
+outro produto e não existe nas rotinas agendadas que rodam estes papéis, mas a
+metade que importa é de graça: a rubrica escrita. Quem corrige de fora é o
+Diretor, na segunda, e o dono lendo o artifact.
+
 ## Alçada
 
 Pode: rascunhar, propor, marcar depoimentos, consultar o banco e as execuções.

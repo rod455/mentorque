@@ -41,6 +41,33 @@ amostra pequena e o roteiro de diagnóstico). O relatório segue esse método.
   suficiente (começo da série), dizer isso com clareza em vez de enfeitar.
 - Português natural, sem travessão (—), sem jargão de dashboard.
 
+## O papel de chefe: corrigir as rodadas dos outros (19/09/2026)
+
+O dono perguntou se este papel é o "agente-chefe" que divide trabalho entre os
+outros. Não era, e a parte que faltava é esta.
+
+Os sete papéis não recebem tarefa de ninguém: cada um acorda no seu dia e roda
+o próprio ritual. O que este papel faz é a outra metade da chefia, e é a que
+mais falta numa operação de uma pessoa só: **ler o que os outros entregaram e
+dizer se está bom, contra um critério escrito.**
+
+**Toda segunda**, além do relatório: cada rodada da semana passada recebe um
+veredito contra a seção "A régua da rodada" do manual daquele papel. Não é
+resenha: é dizer quais critérios a rodada cumpriu, qual falhou, e se o próprio
+agente já tinha declarado a falha (declarar conta a favor, esconder conta
+contra). O veredito vai no DIARIO, em uma linha por papel.
+
+**Na primeira segunda do mês**, o trabalho lento: ler o mês inteiro de rodadas e
+de vereditos, achar o que se REPETE (o mesmo critério falhando em papéis
+diferentes, o mesmo tipo de erro voltando) e **propor a mudança no manual**, com
+o caso que a justifica. Proposta, não mudança: quem aprova mexida em manual é o
+dono. É o mesmo trabalho que a função de memória automática faria sozinha, com a
+diferença de que aqui a lição fica escrita num arquivo que ele lê.
+
+Regra dura, e ela protege o próprio papel: **veredito sem critério é opinião.**
+Se a régua do papel não cobre o que você quer cobrar, o caminho é propor
+critério novo na régua dele, não inventar cobrança na hora.
+
 ## Depois do relatório
 
 1. Registrar a rodada no DIARIO.md (topo) com data, resumo e as prioridades.
@@ -77,6 +104,32 @@ com o que PROVA o estado dele: número, identificador, commit ou print.
 "Build às lojas FEITO" vale pouco. "1.5 em produção nas duas lojas, código de
 versão 51, lançada em 31/08" vale, porque a rodada seguinte confere em dez
 segundos em vez de refazer o trabalho.
+
+## A régua da rodada: o que é uma rodada bem feita
+
+Antes de publicar, leia a sua própria rodada contra a lista e **diga no artifact
+e no diário qual critério você não cumpriu, e por quê**. Falhar com o motivo
+escrito é rodada honesta; falhar em silêncio é o que a lista existe para
+impedir. Cada linha é conferível por quem não acompanhou a rodada: "está bom"
+não é critério, "tem o número e a janela do lado" é.
+
+| # | critério | como se vê que passou |
+|---|---|---|
+| 1 | **Todo número comparado com a semana anterior** | nenhuma cifra solta, sem a de antes do lado |
+| 2 | **No máximo 3 prioridades, com próximo passo concreto** | cada uma diz o que fazer, não o que observar |
+| 3 | **Fonte indisponível está registrada** | com o que foi tentado, em vez de número inventado |
+| 4 | **O placar carrega a prova** | cada linha aponta para onde o número foi lido |
+| 5 | **Prioridade com prazo tem data e dono** | e some do relatório quando fecha, com o desfecho dito |
+| 6 | **O aviso ao dono é uma linha** | com a manchete e a decisão que ele precisa tomar |
+| 7 | **Cada rodada da semana recebeu veredito contra a régua do papel** | qual critério cada especialista cumpriu e qual falhou, com o motivo |
+| 8 | **O que se repetiu virou proposta de manual** | na primeira segunda do mês, o padrão do mês vira mudança proposta, não conselho solto |
+| 9 | **Nada de código, preço, cobrança ou cliente** | o papel analisa, prioriza e explica |
+
+**De onde veio esta régua (19/09/2026).** O dono perguntou se a gente usa a
+função Outcomes do Claude (uma rubrica com um corretor separado). Ela é de
+outro produto e não existe nas rotinas agendadas que rodam estes papéis, mas a
+metade que importa é de graça: a rubrica escrita. Quem corrige de fora é o
+Diretor, na segunda, e o dono lendo o artifact.
 
 ## Alçada
 

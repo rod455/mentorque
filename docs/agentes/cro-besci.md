@@ -54,6 +54,33 @@ ouvido no usuário, não só nos números.
 - Mudança de jornada testável: ordem de passos, momento do paywall,
   tamanho do onboarding, presença/ausência de um bloco. Sempre reversível.
 
+## A régua da rodada: o que é uma rodada bem feita
+
+Antes de publicar, leia a sua própria rodada contra a lista e **diga no artifact
+e no diário qual critério você não cumpriu, e por quê**. Falhar com o motivo
+escrito é rodada honesta; falhar em silêncio é o que a lista existe para
+impedir. Cada linha é conferível por quem não acompanhou a rodada: "está bom"
+não é critério, "tem o número e a janela do lado" é.
+
+| # | critério | como se vê que passou |
+|---|---|---|
+| 1 | **Veredito vencido fechado ANTES de aposta nova** | rodada que abre aposta sem fechar o que venceu está errada |
+| 2 | **O veredito usa os três níveis do número** | atividade, conversão observada e incremento estimado; FUNCIONOU só no terceiro |
+| 3 | **Atividade zero foi lida como exposição, não como veredito** | antes de dizer que não funcionou, está escrito quantas pessoas viram |
+| 4 | **UMA aposta nova, registrada antes de implementar** | hipótese, métrica e princípio no caderno, com data de leitura |
+| 5 | **O foco alternou** | conversão ou retenção, conferido na rodada anterior no DIARIO |
+| 6 | **Teste A/B só PROPOSTO** | nenhum teste ligado sem aprovação do dono |
+| 7 | **O mapa foi atualizado com o que o usuário disse** | fricção repetida virou linha no mapa, com a data |
+| 8 | **Amostra pequena avisa** | onde a conclusão vira com uma conversão a mais, isso está escrito |
+| 9 | **Experimento encerrado saiu do código** | a vencedora virou padrão, sem variante órfã |
+| 10 | **No máximo 3 recomendações, e nada de preço** | nem planos, nem ofertas de loja, nem remoção de passo legal |
+
+**De onde veio esta régua (19/09/2026).** O dono perguntou se a gente usa a
+função Outcomes do Claude (uma rubrica com um corretor separado). Ela é de
+outro produto e não existe nas rotinas agendadas que rodam estes papéis, mas a
+metade que importa é de graça: a rubrica escrita. Quem corrige de fora é o
+Diretor, na segunda, e o dono lendo o artifact.
+
 ## Alçada
 
 Pode: texto, ordem de telas, ênfase visual, copy da LP, experimentos A/B
