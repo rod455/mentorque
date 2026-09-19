@@ -79,6 +79,10 @@ de ser notícia.
 4. **O desperdício com nome**: os termos de busca com custo e sem desfecho,
    agrupados por assunto. Termo solto não é achado; agrupamento é.
 5. **Uma proposta por rodada, no máximo**, com o número do lado.
+5.1. **Ler a própria rodada contra a régua** da seção "A régua da rodada",
+   e dizer no artifact e no diário qual critério não foi cumprido, e por quê.
+   Rodada que passa nos doze diz isso em uma linha; rodada que falha em um diz
+   qual, o que é informação e não vergonha.
 6. Artifact "Mídia da semana" + entrada no DIARIO.md + ações no
    `acoes-do-dono.md` quando depender do console.
 7. **Gravar o relatório, gerar o PDF e dar push**, que é o que vira o e-mail:
@@ -88,6 +92,39 @@ de ser notícia.
    npm run relatorio:pdf      # 2. gera o .pdf ao lado, com a chapa da marca
    git add docs/agentes/relatorios/ && git commit && git push
    ```
+
+## A régua da rodada: o que é uma rodada bem feita
+
+Antes de publicar qualquer coisa, leia a sua própria rodada contra a lista
+abaixo e **diga em voz alta, no artifact e no diário, qual critério você não
+cumpriu e por quê**. Falhar um critério com o motivo escrito é rodada honesta;
+falhar em silêncio é o que esta lista existe para impedir.
+
+Cada linha é conferível por alguém que não acompanhou a rodada. "Está bom" não
+é critério; "tem o número e a janela do lado" é.
+
+| # | critério | como se vê que passou |
+|---|---|---|
+| 1 | **A manchete é o maior número da semana** | a primeira linha do relatório é o que mais mudou dinheiro ou desfecho, com a consequência em número |
+| 2 | **Todo número tem janela e régua** | nenhuma cifra aparece sem dizer de que período é e de onde saiu |
+| 3 | **A conta do papel está fechada** | custo dividido pelas contas medidas no nosso banco, e não pela conversão do Google |
+| 4 | **A semana anterior está do lado** | toda medida central tem o valor da janela anterior para comparar |
+| 5 | **Amostra pequena avisa** | onde a conclusão vira com uma ou duas contas a mais, isso está escrito |
+| 6 | **O desperdício tem nome e grupo** | termos agrupados por assunto, com o custo do grupo, nunca termo solto |
+| 7 | **O que ficou aberto na semana passada recebeu desfecho** | cada recomendação anterior está fechada, ou tem o custo acumulado da espera |
+| 8 | **No máximo uma proposta nova, e ela tem número** | uma só, com o que ganha ou arrisca do lado |
+| 9 | **Toda ação diz de quem é e quando vale** | o que depende do console está na lista do dono, com o gatilho se depender do estado da campanha |
+| 10 | **O que a medição não alcança está dito** | os limites aparecem, e os que têm conserto conhecido viram item com dono |
+| 11 | **O PDF se sustenta sozinho** | quem é de fora entende sem abrir repositório, artifact nem lista interna |
+| 12 | **Nada fora da alçada foi tocado** | nenhuma escrita em conta de anúncio, nenhuma mudança de instrumento compartilhado de pé |
+
+**De onde veio esta régua (19/09/2026).** O dono perguntou se a gente usa a
+função Outcomes do Claude, que é uma rubrica com um agente separado corrigindo
+o trabalho contra ela. Essa função é de outro produto (agentes gerenciados pela
+API) e não existe nas rotinas agendadas que rodam estes papéis. O que dá para
+fazer sem infraestrutura nova é o que está aqui: a rubrica escrita, e a própria
+rodada se medindo contra ela antes de publicar. Quem corrige de fora, por
+enquanto, é o dono lendo o artifact e as conferências do repositório.
 
 ## O relatório vai por e-mail, em PDF, e por isso ele tem contrato
 
