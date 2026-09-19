@@ -25,7 +25,7 @@ export const pt = {
     headlines: [
       { a: "Pare de pagar caro por não entender ", b: "do seu próprio carro." },
       { a: "Mecânica do básico ao avançado, ", b: "com um especialista no bolso." },
-      { a: "Saiba o que o carro tem antes da oficina — ", b: "e nunca mais seja refém." },
+      { a: "Saiba o que o carro tem antes da oficina, ", b: "e nunca mais seja refém." },
     ],
     subheadline:
       "Aprenda a entender seu carro, descubra o preço justo antes de fechar serviço e fale com um especialista de verdade quando travar. Você não precisa virar mecânico, só parar de pagar pelo que não entende.",

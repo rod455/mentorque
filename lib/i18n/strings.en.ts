@@ -27,7 +27,7 @@ export const en: Strings = {
     headlines: [
       { a: "Stop overpaying because you don't understand ", b: "your own car." },
       { a: "Mechanics from basics to advanced, ", b: "with an expert in your pocket." },
-      { a: "Know what's wrong before the shop does — ", b: "and never be at their mercy again." },
+      { a: "Know what's wrong before the shop does, ", b: "and never be at their mercy again." },
     ],
     subheadline:
       "Learn to understand your car, find the fair price before approving any work, and talk to a real expert when you get stuck. You don't need to become a mechanic, just stop paying for what you don't understand.",

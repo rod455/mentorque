@@ -115,7 +115,30 @@ function ehFrase(literal) {
   const antes = literal.slice(0, i).replace(/\s+$/, "");
   const depois = literal.slice(i + 1).replace(/^\s+/, "");
   const temLetra = (s) => /\p{L}{2}/u.test(s);
-  return temLetra(antes) && temLetra(depois);
+
+  // Frase inteira dentro de um literal só.
+  if (temLetra(antes) && temLetra(depois)) return true;
+
+  // FRASE PARTIDA EM DOIS LITERAIS VIZINHOS (19/09/2026). O travessão fica
+  // PENDURADO na ponta, com texto de um lado e nada do outro, e a mira antiga
+  // exigia letra dos dois lados DO MESMO literal. A manchete da home estava
+  // assim desde sempre, com a conferência verde:
+  //
+  //   { a: "Saiba o que o carro tem antes da oficina — ", b: "e nunca mais..." }
+  //
+  // Na tela os dois campos são renderizados colados, então a pessoa lê o
+  // travessão no meio da frase. Foi a manchete que gira na primeira dobra,
+  // ou seja, o texto mais visto do site inteiro.
+  //
+  // O traço sozinho como campo vazio (`?? "—"`) e o separador entre duas
+  // variáveis (`" — "`) continuam de fora: nos dois casos não há letra de lado
+  // nenhum. O preço desta linha é um falso positivo possível, um literal que
+  // seja prefixo de valor ("Mentorque — " antes de uma variável). Medido em
+  // 19/09/2026 nas quatro pastas varridas: zero casos assim.
+  if (temLetra(antes) && depois === "") return true;
+  if (antes === "" && temLetra(depois)) return true;
+
+  return false;
 }
 
 const achados = [];
