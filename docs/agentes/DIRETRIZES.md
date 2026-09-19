@@ -98,5 +98,19 @@ priorizadas. Ruído é inimigo: só notificar o Rodrigo com substância.
 | Mídia paga | Rotina Claude | semanal (qui 08h) | midia-paga.md |
 | ASO & Lojas | Rotina Claude | dias 1 e 15 (08h) | aso-lojas.md |
 
+## Mexeu em workflow do n8n? Publique, senão não vale (19/09/2026)
+
+A ferramenta `update_workflow` salva um RASCUNHO. O workflow continua rodando a
+versão publicada, e a execução manual também: ela roda verde, com o
+comportamento antigo, e nada avisa que o seu conserto ficou de fora.
+
+Foi o que aconteceu com o Vigia de anomalias. O conserto do alarme sobre erro
+já morto foi escrito às 12h11 de 19/09, dado como feito, e às 16h58 a versão
+ativa ainda era a antiga: o aviso falso sairia de novo no dia seguinte.
+
+Então: depois de `update_workflow`, `publish_workflow`, SEMPRE. E confira com
+`get_workflow_details` que `versionId` e `activeVersionId` são iguais, porque
+essa igualdade é a única prova de que o que você escreveu é o que roda.
+
 Só o Diretor notifica o Rodrigo por padrão; os especialistas publicam
 artifact e registram no diário, e o Diretor consolida na segunda.

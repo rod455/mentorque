@@ -10,8 +10,9 @@ destrava o papel:
 
 - a etiqueta de campanha gruda em qualquer página desde 03/09, então o clique
   pago chega ao funil com nome;
-- o Analista coleta google_ads e meta_ads todo dia desde 22/08, **com quebra
-  por campanha e por TERMO DE BUSCA**, com custo, cliques e impressões;
+- o Analista coleta google_ads todo dia desde 22/08, **com quebra por campanha
+  e por TERMO DE BUSCA**, com custo, cliques e impressões (o meta_ads também é
+  coletado, mas leia antes "Meta e Instagram" mais abaixo);
 - e existe desfecho medido do nosso lado: em 7 dias, 10 das 14 contas novas
   carregam `google / lancamento`.
 
@@ -31,7 +32,9 @@ que ninguém estava fazendo. É essa conta que justifica o papel.
 
 | pergunta | fonte |
 |---|---|
-| quanto custou, por campanha e por termo | `metricas_diarias`, fonte `google_ads` e `meta_ads` |
+| quanto custou no Google, por campanha e por termo | `metricas_diarias`, fonte `google_ads` |
+| quanto custou no Meta, por campanha e por anúncio | `metricas_diarias`, fonte `meta_ads` |
+| quanto rendeu um post do Instagram | **não existe fonte**, ver "Meta e Instagram" |
 | quantas contas de fora nasceram | `public.contas_criadas_desde('aaaa-mm-dd')` |
 | de qual campanha veio cada conta | evento `cadastro` com `extra->'utm'->>'utm_source'` |
 | quantos passaram por cada etapa | `public.funil_canonico('aaaa-mm-dd')` |
@@ -148,6 +151,44 @@ celular" somam R$ 30 e também não deram conta nenhuma. O app NÃO lê o carro 
 Bluetooth (o OBD2 é a pessoa digitando o código). Ou seja, essa intenção não é
 atendida, e quem clica descobre isso na primeira tela. É candidato a negativa
 tanto quanto o "curso", com a diferença de que ninguém tinha olhado.
+
+## Meta e Instagram: o que dá para ver, e o que não dá (19/09/2026)
+
+O dono perguntou no mesmo dia em que o papel nasceu se a visibilidade é só do
+Google. A resposta medida, para o agente não precisar descobrir de novo:
+
+**Meta Ads: conectado, coletado e ZERO gasto.** A conta "Mentorque Ads" (BRL)
+responde todo dia desde 22/08, sem erro nenhum na coleta, e nos 21 dias o gasto
+foi zero e a lista de dias veio vazia. Isso não é coleta quebrada, é conta sem
+veiculação: a chamada de conta devolve o nome certo, e a de resultados devolve
+lista vazia porque não houve entrega. **Campanha que nunca rodou não tem
+número, e isso não se escreve como "o Meta vai mal".**
+
+**A quebra por anúncio entrou em 19/09.** Até então a coleta pedia só o total
+da conta por dia. Com gasto zero ninguém tinha percebido, e no primeiro dia de
+gasto a pergunta "qual criativo trouxe gente" ficaria sem resposta por uma
+semana inteira. Agora vem `porCampanha` e `porAnuncio` (e `truncado`, que
+avisa quando a página de 500 linhas encheu). Como a conta nunca teve uma linha
+de verdade, o agrupamento foi provado fora do n8n, com resposta sintética de
+quatro linhas: a soma fecha por dia, por campanha e por anúncio, e o defeito
+plantado (trocar o `+=` por `=`) derruba a prova em quatro pontos. Ainda assim,
+**a primeira semana com gasto de verdade é o teste que vale**.
+
+**Instagram orgânico: não existe medição nenhuma.** Não há fonte de post no
+`metricas_diarias`, então alcance, salvamento e visita ao perfil não chegam
+aqui. O que existe no n8n é o fluxo de comentário virando mensagem no Direct,
+que é atendimento, não medição, e que continua esperando passos do dono desde
+10/09.
+
+**E nenhum clique de Instagram jamais chegou ao funil.** Em todos os eventos
+desde 23/08, as etiquetas de origem são `google` (563), `atalho` (14) e `email`
+(8). `instagram` não aparece nem uma vez. O link com etiqueta já está pronto em
+`docs/utms.md`; enquanto ele não estiver no perfil, post que funciona e post
+que não funciona produzem exatamente o mesmo dado, que é nenhum.
+
+Então, até segunda ordem: **este papel acompanha o Google com número, e o Meta
+e o Instagram com honestidade sobre o que não é medido.** Recomendar aumento de
+investimento em Instagram sem a etiqueta no perfil é recomendar às cegas.
 
 ## Direcionamentos do dono
 

@@ -61,7 +61,15 @@ apareceram, e nenhum dos dois era chave.
    - search_console: cliques e impressões por dia (28d) + top 20 consultas
    - stripe: assinaturas ativas, MRR estimado, receita 30d
    - youtube: inscritos, views totais, views dos últimos 10 vídeos
-   - meta_ads: gasto, impressões, cliques e instalações por dia (7d)
+   - meta_ads: gasto, impressões, cliques e instalações por dia (7d) E por
+     CAMPANHA e por ANÚNCIO. A quebra por anúncio entrou em 19/09/2026, pelo
+     mesmo motivo da do Google: a consulta pedia só o total da conta, e total
+     de conta diz que saiu dinheiro sem dizer qual criativo trouxe gente. No
+     Google o lugar onde o desperdício aparece é o termo de busca; no Meta é
+     o anúncio. Atenção ao campo `truncado`: a coleta traz uma página de 500
+     linhas, e com dia e anúncio isso cobre uns 70 anúncios ativos. Hoje a
+     conta "Mentorque Ads" está conectada e com gasto ZERO em todos os dias
+     desde 22/08, então essa quebra nunca viu linha de verdade
    - google_ads: custo, cliques, impressões e conversões por dia (7d) E por
      CAMPANHA, com nome, status e tipo de canal. A quebra por campanha entrou
      em 03/09/2026: a consulta era `FROM customer` e devolvia só o total do
