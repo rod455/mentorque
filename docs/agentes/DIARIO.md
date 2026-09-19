@@ -3,6 +3,75 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-19 · Mídia paga (rodada 1): o desperdício mudou de assunto, e a lista de termos não era de 7 dias
+- Primeira rodada do papel, criado hoje. Artifact "Mídia da semana":
+  https://claude.ai/artifact/GEmSp1PXWcYNxB9ipcKd5Y
+- **A CAMPANHA ESTÁ PAUSADA.** A leitura das 17h24, direto da conta, traz
+  `status: PAUSED`; na coleta de 18/09 às 08h30 ainda era `ENABLED`, e o gasto
+  de hoje parou em R$ 12,83 com 8 cliques contra os R$ 30 por dia das últimas
+  duas semanas. Quem pausou e por quê só existe no console, então fica como
+  pergunta para o dono, não como diagnóstico. Todos os números abaixo são de
+  antes da pausa.
+- **A conta da semana**, janela de 12 a 18/09 (7 dias cheios) contra 5 a 11/09:
+  custo R$ 214,30 contra R$ 221,78; cliques 147 nos dois; CPC R$ 1,46 contra
+  R$ 1,51; contas de fora 12 nos dois, sendo **10 com a etiqueta contra 8**.
+  **Custo por desfecho medido: R$ 21,43, contra R$ 27,72**, 23% melhor. Amostra
+  pequena: são duas contas de diferença, direção e não lei. Na vida inteira da
+  campanha são R$ 575,10, 374 cliques e 20 contas etiquetadas, R$ 28,76 cada.
+- **CORREÇÃO QUE MUDA A LEITURA, e ela desmente o estado que eu mesmo escrevi de
+  manhã.** A lista `termos` da coleta não é de 7 dias: é de **30 dias e
+  acumulada** (o nó pede `segments.date BETWEEN hoje menos 30 dias AND hoje`,
+  LIMIT 50). Prova que não depende de ler o nó: os mesmos três termos aparecem
+  com custo idêntico (R$ 3,23, R$ 2,00, R$ 1,99) em duas coletas separadas por
+  sete dias, o que numa janela que anda é impossível. Consequência: a projeção
+  "R$ 128 por mês em curso", escrita no manual hoje de manhã, está errada por um
+  fator de quatro. O certo é uns R$ 27 por mês. As negativas continuam certas; o
+  tamanho do prêmio é outro.
+- **O ACHADO DA RODADA: o desperdício mudou de assunto.** Comparando a coleta de
+  hoje com a de 12/09, o grupo de "scanner pelo celular" foi de R$ 22,38 para
+  R$ 38,53 (mais R$ 16,15 na semana) e passou o de "curso", que andou R$ 4,66.
+  Em 05/09 eram R$ 6,66 contra R$ 20,52, ou seja a ordem inverteu. A negativa
+  que está parada há mais tempo na lista já não é a mais cara.
+- **Fora desses dois grupos não apareceu nada que valha negativa nova**, e isso
+  também é resposta: o grupo de intenção de oficina (tabela de preço de serviço,
+  Mecânica 2000, HaynesPro) soma R$ 8,35 em 30 dias, pouco demais para pagar o
+  risco de recortar a campanha. E "mecânico online" e "mecânico virtual"
+  (R$ 18,49) NÃO são desperdício: é exatamente o que a Biela faz. Ficou escrito
+  na ação do dono para ninguém cortar por engano.
+- **UMA PROPOSTA, e ela é a metade retroativa de uma linha que já estava na
+  lista.** Todo cadastro com a etiqueta do Google carrega o `gclid`: 10 de 10 na
+  última semana, 8 de 8 na anterior, 20 de 20 desde 23/08. Dá para importar
+  essas 20 contas como conversão offline (prazo de 90 dias, e o clique mais
+  antigo é de 03/09). O Google não recebe sinal desde 04/09, então R$ 575,10
+  foram gastos com o lance decidido às cegas enquanto o desfecho estava guardado
+  aqui. Passo pronto no `acoes-do-dono.md`; a planilha eu monto quando pedirem,
+  e de propósito NÃO commitei gclid de usuário no repositório.
+- **MEXI NO COLETOR E DESFIZ NA MESMA HORA, com a prova do porquê.** Tentei
+  subir o teto de termos de 50 para 200. O fluxo rodou VERDE e a linha de
+  `google_ads` não foi gravada: a rota `/api/metricas` recusou com **413
+  `pacote_grande`** (o `MAX_DADOS` é 20.000 bytes e o pacote de 50 termos já
+  ocupa 15.310). O nó de gravação segue em frente no erro, as outras dez fontes
+  gravaram normalmente e nada gritou. Voltei ao texto anterior, publiquei,
+  conferi `versionId` igual a `activeVersionId` e rodei de novo: a linha voltou a
+  gravar às 17h24, com os mesmos 50 termos e os mesmos 15.310 bytes. Saldo no
+  coletor: zero, de propósito.
+- **A lição de conferência**: execução verde do n8n não prova gravação. O que
+  prova é o `coletado_em` da linha em `metricas_diarias`, comparado com o das
+  outras fontes do mesmo dia. Foi exatamente assim que o 413 apareceu.
+- O conserto para 120 termos existe e é barato, mas é do Analista: parar de
+  guardar `termosSemConversao`, que é 100% derivável de `termos` e não tem
+  leitor nenhum em código, libera 6.942 bytes.
+- **Meta e Instagram, sem novidade e sem invenção**: Meta segue conectado, com
+  gasto zero e lista de dias vazia (conta sem veiculação, não coleta quebrada),
+  e a quebra por anúncio que entrou hoje já aparece na coleta, ainda vazia.
+  Instagram continua com zero eventos: desde 23/08 as origens são google (563),
+  atalho (14) e email (8).
+- APRENDIZADOS gravados em `midia-paga.md`: as duas janelas do pacote de
+  google_ads, o teto de 23% do dinheiro com nome, o gclid em todo cadastro
+  etiquetado, e a regra de que termo não tem desfecho medido e sim intenção
+  legível (o argumento de uma negativa é a intenção que o app não atende, nunca
+  um zero que a medição não sabe produzir).
+
 ## 2026-09-18 · Engenharia: a porta da web é a que traz conta, e a recomendação de fechá-la estava errada
 - O dono perguntou como ainda chega gente pela web. A resposta curta: **a URL
   final do anúncio do Google continua no `/app`**, e é a única porta possível,
@@ -464,6 +533,7 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 | O retrato está vazio ou zerado, é queda de verdade? | **Conferir o JSON antes de acreditar.** Em 12, 13 e 14/09 o retrato saiu com tudo zerado porque `/api/dados` estourou o teto de 15s e o arquivo guardou `"error": {"code": "504"}` no lugar dos dados. Zero no retrato pode ser ausência de resposta, não medição. O jeito rápido: `git show <sha>:docs/dados/retrato.md \| grep '"error"'`. | 14/09, Diretor |
 | O "esqueci minha senha" funciona? | **Não redefine nada.** O link só cria sessão; não existe tela de nova senha nem um `updateUser({password})` no código todo. Quem esquece a senha fica pedindo link para sempre, e no app da loja a sessão ainda nasce no navegador. Patch pronto, não aplicado (autenticação, sem reprodução possível). | 16/09, QA, `docs/agentes/propostas/recuperar-senha-nao-recupera.md` |
 | Os "app fechou sozinho" são da web? | **Não, os atuais são de aparelho**: 5 de 6 nos 10 dias até 16/09 (iOS 2.1 com 3, iOS 2.4 com 1, Android 1.8 com 1). A leitura de 07/09 valia para os relatos daquela época. Zero na 2.5 desde 13/09. | 16/09, QA |
+| A lista de termos de busca do Google Ads é de quantos dias? | **De 30, e acumulada**, os 50 mais caros (`segments.date BETWEEN hoje menos 30 dias AND hoje`), enquanto `porDia`, `porCampanha` e `custo7d` são de 8 datas com a de hoje pela metade. Ler termo como "gasto da semana" superestima em umas quatro vezes; o gasto da semana num assunto é a diferença entre duas coletas. E os 50 termos cobrem só 23% do dinheiro: subir o teto esbarra no `MAX_DADOS` de 20.000 bytes da rota `/api/metricas` (413 `pacote_grande`, testado e desfeito). | 19/09, Mídia paga |
 | Quais manuais faltam para a Biela? | O primeiro lote subiu em 06/09: 112 manuais, 34.609 trechos, e os DEZ carros mais comuns do Brasil passaram a ter manual (era 3 de 10). Gol 2016 e Ka 2025, de usuários nossos, saíram de zero. Faltam Corsa/Classic e as marcas vazias (Suzuki, Mercedes-Benz, e o EcoSport). | 06/09, `docs/manuais-a-subir.md` |
 
 **Como manter:** ao FECHAR uma pergunta que já custou investigação, acrescente a

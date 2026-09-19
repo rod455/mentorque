@@ -183,18 +183,23 @@ Campanha única: **Mentorque Lançamento**, canal SEARCH, ativa, conta
 | custo por conta medida | **R$ 21,73** |
 
 **O desperdício com nome, medido em 19/09:** treze termos em volta de "curso",
-"aula", "ebook" e "certificado" somam cerca de **R$ 32 em 7 dias**, sem uma
-única conta. São aproximadamente R$ 128 por mês comprando gente que quer
-aprender a ser mecânico, e não gente que tem um carro com problema.
+"aula", "ebook" e "certificado" somam **R$ 33,12**, e onze termos de "scanner de
+carro pelo celular" somam **R$ 38,53**. Nenhum dos dois assuntos é atendido pelo
+app: quem quer aprender mecânica não quer um app que cuida do carro dele, e o
+app NÃO lê o carro por Bluetooth (o OBD2 é a pessoa digitando o código).
 
-As negativas estão escritas em `acoes-do-dono.md` desde 03/09 e nunca foram
-aplicadas: `curso`, `certificado`, `senai`, `apostila`, `presencial`.
+As negativas de curso estão em `acoes-do-dono.md` desde 03/09 e nunca foram
+aplicadas: `curso`, `certificado`, `senai`, `apostila`, `presencial`. As de
+scanner entraram em 19/09.
 
-**O outro grupo, e esse é mais sutil:** os termos de "scanner de carro pelo
-celular" somam R$ 30 e também não deram conta nenhuma. O app NÃO lê o carro por
-Bluetooth (o OBD2 é a pessoa digitando o código). Ou seja, essa intenção não é
-atendida, e quem clica descobre isso na primeira tela. É candidato a negativa
-tanto quanto o "curso", com a diferença de que ninguém tinha olhado.
+> **CORRIGIDO na tarde de 19/09, e a correção é de janela, não de conclusão.**
+> Os dois valores acima foram escritos de manhã como se fossem "7 dias". São de
+> **30 dias**, acumulados, o que na prática é o total desde que a campanha
+> começou a gastar (02/09). A projeção que saiu daqui, "R$ 128 por mês em
+> curso", está errada por um fator de quatro: o certo é uns R$ 27 por mês. A
+> conclusão não muda (as duas negativas continuam certas), o tamanho do prêmio
+> muda muito. Como isso foi descoberto e como não cair de novo está nos
+> Aprendizados, logo abaixo.
 
 ## Meta e Instagram: o que dá para ver, e o que não dá (19/09/2026)
 
@@ -233,6 +238,81 @@ que não funciona produzem exatamente o mesmo dado, que é nenhum.
 Então, até segunda ordem: **este papel acompanha o Google com número, e o Meta
 e o Instagram com honestidade sobre o que não é medido.** Recomendar aumento de
 investimento em Instagram sem a etiqueta no perfil é recomendar às cegas.
+
+## Aprendizados
+
+### A lista de termos é de 30 DIAS e é acumulada (19/09/2026)
+
+O pacote de `google_ads` mistura duas janelas, e nada no nome dos campos avisa:
+
+| campo | janela de verdade |
+|---|---|
+| `porDia`, `porCampanha`, `custo7d` | de hoje menos 7 até hoje, ou seja OITO datas, com a de hoje pela metade |
+| `termos`, `termosSemConversao` | de hoje menos 30 até hoje, os 50 mais caros, **acumulado** |
+
+Como isso se prova sem pedir nada a ninguém: os mesmos três termos aparecem com
+custo idêntico (R$ 3,23, R$ 2,00 e R$ 1,99) em duas coletas separadas por sete
+dias. Numa janela que anda, custo idêntico é impossível. A consulta que fecha a
+prova está no nó "Google Ads: termos de busca" do fluxo "Analista: metricas
+externas": `segments.date BETWEEN hoje menos 30 dias AND hoje`.
+
+Duas consequências práticas:
+
+1. **Nunca diga "em 7 dias" sobre um número de termo.** Diga "acumulado desde o
+   início da campanha", que é o que ele é enquanto a campanha for mais nova que
+   30 dias.
+2. **O gasto da semana num assunto é a DIFERENÇA entre duas coletas**, a de hoje
+   menos a de sete dias atrás. Foi assim que apareceu o achado da rodada 1: o
+   grupo de scanner saiu de R$ 22,38 para R$ 38,53 em uma semana, enquanto o de
+   curso andou R$ 4,66. Cuidado com a diferença NEGATIVA: com teto de 50 termos,
+   um grupo encolhe na lista quando outro empurra os termos dele para fora, e
+   isso não é queda de gasto.
+
+E a janela de custo também engana: `custo7d` traz oito datas, com a de hoje
+incompleta. Para comparar duas semanas, some o `porDia` você mesmo, só com dias
+cheios. Em 19/09 o `custo7d` dizia R$ 227,13 e a semana cheia de 12 a 18/09 era
+R$ 214,30.
+
+### Só 23% do dinheiro tem nome, e subir o teto esbarra na rota (19/09/2026)
+
+Os 50 termos mais caros somam R$ 132,99 de R$ 575,10 gastos. O resto é cauda de
+termos de um clique, e ela não é guardada.
+
+Tentei subir o teto para 200 termos na tarde de 19/09. O fluxo rodou VERDE e a
+linha de `google_ads` não foi gravada: a rota `/api/metricas` recusou com **413
+`pacote_grande`**, porque `MAX_DADOS` é 20.000 bytes e o pacote de 50 termos já
+ocupa 15.310. O nó de gravação segue em frente no erro, então as outras dez
+fontes gravaram normalmente e nada gritou. **Voltei ao estado anterior na hora,
+publiquei e conferi pela linha no banco, não pelo verde da execução.**
+
+Duas lições, e a segunda é a que vale para sempre:
+
+- o conserto existe e é barato: `termosSemConversao` é 100% derivável de
+  `termos` (é o filtro `conversoes === 0 && custo > 0`), não tem nenhum leitor
+  em código, e são 6.942 bytes. Sem ela cabem uns 120 termos no mesmo teto. Mexe
+  no `jsCode` do nó "Google Ads: normaliza", que é instrumento do Analista.
+- **execução verde do n8n não prova gravação.** Confira a linha em
+  `metricas_diarias` pelo `coletado_em`, comparando com as outras fontes do
+  mesmo dia. Foi assim que o 413 apareceu.
+
+### Todo cadastro com etiqueta do Google traz o gclid (19/09/2026)
+
+`extra->'utm'` guarda `utm_source`, `utm_medium`, `utm_campaign`, `em` e
+**`gclid`**. Nos 20 cadastros etiquetados desde 23/08, o gclid está em todos,
+sem exceção. É isso que torna possível devolver o desfecho ao Google por
+importação de conversão offline (prazo de 90 dias a partir do clique). O
+`gclid` também já viaja até `subscriptions.gclid`, pelo caminho do cupom, então
+o mesmo mecanismo serve depois para "assinou".
+
+### Termo de busca não tem desfecho medido, tem intenção legível
+
+Dá para medir quanto um termo custou, e dá para medir quantas contas a campanha
+trouxe. Não dá para dizer qual termo trouxe qual conta: a etiqueta guarda a
+campanha, nunca a palavra digitada. Então **o argumento de uma negativa é a
+intenção que o app não atende, e não um zero medido**. Dizer "esses termos não
+deram nenhuma conta" é verdade sem valor: nenhum termo deu conta nenhuma,
+porque essa ligação não existe na medição. A importação por gclid é o que
+passaria a criar essa ligação.
 
 ## Direcionamentos do dono
 
