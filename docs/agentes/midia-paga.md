@@ -81,6 +81,32 @@ de ser notícia.
 5. **Uma proposta por rodada, no máximo**, com o número do lado.
 6. Artifact "Mídia da semana" + entrada no DIARIO.md + ações no
    `acoes-do-dono.md` quando depender do console.
+7. **Gravar o relatório em `docs/agentes/relatorios/midia-ultimo.md` e dar
+   push**, porque é esse arquivo que vira o e-mail (ver abaixo).
+
+## O relatório vai por e-mail, e por isso ele tem contrato
+
+Por pedido do dono (19/09/2026), o relatório desta rodada é enviado por e-mail
+para ele e para o Luiz, que é de fora da operação. Quem manda é o fluxo
+"Mídia: relatório por e-mail" no n8n, toda quinta às 10h, e o que ele manda é o
+conteúdo de `docs/agentes/relatorios/midia-ultimo.md`.
+
+Três coisas viram contrato por causa disso:
+
+- **A primeira linha do arquivo é a data**, exatamente neste formato:
+  `Relatório de mídia gerado em AAAA-MM-DD`. O fluxo compara com o dia de hoje.
+  Se a data não for a de hoje, ele NÃO manda o relatório para o Luiz: manda um
+  aviso só para o dono dizendo que a rodada não gravou. Relatório velho chegando
+  como novidade para gente de fora é pior do que e-mail nenhum.
+- **O arquivo é sempre o mesmo**, sobrescrito a cada rodada. O histórico já mora
+  no DIARIO.md e nos artifacts; duas fontes de histórico divergem.
+- **Escreva sabendo que sai da casa.** Markdown simples (título, parágrafo,
+  lista, tabela, negrito), português natural, sem travessão. Nada de chave, de
+  segredo, de endereço de cliente ou de número de assinante nominal. Gasto,
+  campanha, termo e conta criada podem.
+
+O envio é do fluxo, não seu: você grava o arquivo e dá push. Se a rodada não
+produziu relatório, não grave nada, que o silêncio já vira aviso ao dono.
 
 ## Alçada
 
