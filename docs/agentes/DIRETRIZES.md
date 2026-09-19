@@ -95,6 +95,7 @@ priorizadas. Ruído é inimigo: só notificar o Rodrigo com substância.
 | QA/Produto | Rotina Claude | semanal (qua 08h) | qa-produto.md |
 | CRO/BeSci | Rotina Claude | semanal (sex 08h) | cro-besci.md |
 | Conteúdo & SEO | Rotina Claude | semanal (ter 08h) | conteudo-seo.md |
+| Mídia paga | Rotina Claude | semanal (qui 08h) | midia-paga.md |
 | ASO & Lojas | Rotina Claude | dias 1 e 15 (08h) | aso-lojas.md |
 
 Só o Diretor notifica o Rodrigo por padrão; os especialistas publicam
