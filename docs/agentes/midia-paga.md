@@ -28,6 +28,24 @@ que ninguém estava fazendo. É essa conta que justifica o papel.
 5. `docs/dados/retrato.md` (os números do dia, já coletados)
 6. `docs/agentes/acoes-do-dono.md` (o que está parado esperando o console)
 
+E as skills do Google que moram no repositório desde 19/09 (procedência em
+`docs/skills-de-fora.md`). Elas não se leem de cabo a rabo: carregam sozinhas
+quando o assunto encosta. Vale saber que existem:
+
+| quando a pergunta for | a skill |
+|---|---|
+| por que a conversão não entra, por que a impressão se perde | `google-ads-api-account-diagnostics` |
+| ler a conta do Google Ads direto, sem esperar a coleta | `google-ads-api-mcp-setup` |
+| credencial, token de desenvolvedor, primeiro script | `google-ads-api-quickstart` |
+| mandar "criou conta" para o Google como conversão | `data-manager-api-event-ingestion` |
+| subir público de gente que já é cliente | `data-manager-api-audience-ingestion` |
+| anúncio DENTRO do app (AdMob) | `google-mobile-ads-*`, e isso é assunto de produto |
+
+**Elas ensinam a API do Google, não a nossa régua.** Quando uma delas disser
+"conversão" e a nossa medição disser outra coisa, a régua é a de
+`.claude/skills/ler-a-operacao`. Documentação de fornecedor descreve o produto
+dele; quem sabe o que é desfecho aqui é a gente.
+
 ## De onde sai cada número, e não invente outro caminho
 
 | pergunta | fonte |

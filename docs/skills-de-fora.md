@@ -20,9 +20,12 @@ repositório engorda.
 | skill | origem | licença |
 |---|---|---|
 | `product-tracking-*` (7) | [accoil/product-tracking-skills](https://github.com/accoil/product-tracking-skills) | MIT |
+| as 16 de anúncio e medição do Google | [google/skills](https://github.com/google/skills) | Apache 2.0 |
 
-Commit trazido: `341f8cf47d8b5dda550222152377c50aee34c723`, em 04/09/2026.
-Cada pasta tem um arquivo `.de-fora` com a origem e esse commit.
+Commit trazido das `product-tracking-*`:
+`341f8cf47d8b5dda550222152377c50aee34c723`, em 04/09/2026.
+Commit trazido das do Google: `18152e0d310e4d7047e9c2ec25a37b0d22d6893e`, em
+19/09/2026. Cada pasta tem um arquivo `.de-fora` com a origem e o commit.
 
 **Por que essas sete.** O buraco que elas endereçam é real e medido: em 03/09 o
 funil respondeu meia verdade três vezes seguidas, e em 04/09 descobrimos que
@@ -30,10 +33,35 @@ funil respondeu meia verdade três vezes seguidas, e em 04/09 descobrimos que
 eventos antes de instrumentar, auditam o que já é medido e modelam a jornada em
 degraus. É disciplina de medição, que é exatamente o que faltou.
 
+**Por que as 16 do Google, e quais NÃO vieram.** O repositório
+`google/skills` tem 146 skills, e 127 delas são de Google Cloud (GKE, AlloyDB,
+Spark, arquitetura de solução). Nenhuma fala da nossa casa, e skill carrega
+sozinha por descrição: trazer as 127 seria encher toda sessão de assunto que
+não é nosso. Vieram as 14 de `skills/ads` e as 2 de `skills/analytics`, que
+cobrem três coisas que a operação já precisa:
+
+- **Google Ads** (`google-ads-api-quickstart`, `google-ads-api-mcp-setup`,
+  `google-ads-api-account-diagnostics`): hoje o agente de Mídia paga lê o gasto
+  pela coleta do n8n e **não tem credencial de API**. A de MCP é o caminho para
+  ele passar a ler a conta direto, e a de diagnóstico endereça exatamente o
+  quadro de 19/09: conversão zerada e parcela de impressão perdida.
+- **Data Manager API** (`data-manager-api-setup`, `-event-ingestion`,
+  `-audience-ingestion`): é por aí que se manda uma conversão offline para o
+  Google. É a ação que está parada na lista do dono desde 07/09, trocar a
+  conversão de "tocou em baixar" para "criou conta".
+- **Google Mobile Ads** (`google-mobile-ads-*`, 6): o Android gratuito mostra
+  anúncio, então essas são de produto, não de mídia. A `-validate` serve de
+  auditoria antes de release.
+- **IMA SDK** (`ima-sdk-client-side`, `ima-dai-sdk`): anúncio dentro de vídeo.
+  Não usamos, e vieram só para o conjunto do Google ficar inteiro. Se
+  incomodarem, saem sem dó.
+
 ## O que foi conferido antes de trazer
 
 Skill carrega sozinha e roda com a permissão do agente, então revisar é
-obrigatório e não formalidade:
+obrigatório e não formalidade.
+
+Nas `product-tracking-*` (04/09):
 
 - **`hooks/hooks.json` do upstream está vazio** (`{"hooks": {}}`). Nada é
   executado automaticamente, que era a parte que preocupava.
@@ -41,6 +69,21 @@ obrigatório e não formalidade:
   analytics** (Plausible e afins), não envio de dado nosso para lugar nenhum.
 - Licença MIT, compatível com o uso aqui.
 - 1,1 MB em 82 arquivos, quase tudo markdown de referência.
+
+Nas do Google (19/09):
+
+- **Nenhum arquivo executável.** As 16 pastas somam 596 KB em **72 arquivos, e
+  todos são `.md`**. Não há script, não há `hooks/`, não há gancho: a parte de
+  `plugins/` do repositório de origem é só de Cloud e ficou de fora.
+- **Todo endereço citado é do Google ou de repositório público de pacote**:
+  `developers.google.com`, `googleads.googleapis.com`, `github.com`, Maven,
+  NuGet, OpenUPM. Nada aponta para fora desse conjunto, e nenhuma skill manda
+  enviar dado nosso para lugar nenhum.
+- **A de MCP instala servidor, e isso é o que mais pede leitura.** Ela ensina a
+  instalar o servidor MCP oficial do Google Ads e exige cinco credenciais que
+  esta casa não tem. Ou seja, ela não faz nada sozinha: sem token, ela para no
+  primeiro passo e manda pedir credencial ao dono, que é o comportamento certo.
+- Licença Apache 2.0, compatível com o uso aqui.
 
 Só as skills vieram. Os `agents/` e `hooks/` do repositório de origem ficaram de
 fora de propósito: agente e gancho de terceiro rodando no nosso projeto é uma
@@ -62,6 +105,10 @@ que existam aqui daria reprovação diária sem ação possível.
 com `npx skills add` fica ignorada sozinha, sem virar commit por acidente.
 
 ## Como atualizar
+
+A origem muda, o resto é igual: `accoil/product-tracking-skills` para as de
+medição de produto, `google/skills` para as de anúncio (e lá as pastas ficam em
+`skills/ads/<nome>` e `skills/analytics/<nome>`).
 
 ```bash
 git clone --depth 1 https://github.com/accoil/product-tracking-skills.git /tmp/pts

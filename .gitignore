@@ -96,6 +96,25 @@ docs/quiz-perguntas.html
 !/.claude/skills/product-tracking-instrument-new-feature/
 !/.claude/skills/product-tracking-model-product/
 
+# As do google/skills (19/09/2026): as de anúncio e as de medição. As de Google
+# Cloud do mesmo repositório NÃO vieram, são 127 e nenhuma fala da nossa casa.
+!/.claude/skills/google-ads-api-quickstart/
+!/.claude/skills/google-ads-api-mcp-setup/
+!/.claude/skills/google-ads-api-account-diagnostics/
+!/.claude/skills/data-manager-api-setup/
+!/.claude/skills/data-manager-api-event-ingestion/
+!/.claude/skills/data-manager-api-audience-ingestion/
+!/.claude/skills/google-analytics-data-api-basics/
+!/.claude/skills/google-analytics-admin-api-basics/
+!/.claude/skills/google-mobile-ads-get-started/
+!/.claude/skills/google-mobile-ads-banner/
+!/.claude/skills/google-mobile-ads-interstitial/
+!/.claude/skills/google-mobile-ads-rewarded/
+!/.claude/skills/google-mobile-ads-validate/
+!/.claude/skills/google-mobile-ads-android-migrate-to-next-gen/
+!/.claude/skills/ima-sdk-client-side/
+!/.claude/skills/ima-dai-sdk/
+
 # As peças geradas para aprovação: saída, não fonte. As chapas e as fontes
 # ficam versionadas em assets/; o que sai delas é descartável.
 /pecas-geradas/

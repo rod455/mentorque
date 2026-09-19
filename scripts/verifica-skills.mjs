@@ -70,6 +70,44 @@ const deFora = tudo.filter(ehDeFora);
 const skills = tudo.filter((d) => !ehDeFora(d) && statSync(join(PASTA, d)).isDirectory());
 conferir("existe pelo menos uma skill nossa", skills.length > 0);
 
+/**
+ * O git ignora este caminho?
+ *
+ * `--no-index` é obrigatório: sem ele o `check-ignore` PULA arquivo já
+ * rastreado, e como as skills já estão no git ele responderia "não ignorada"
+ * sempre, testando nada. Descoberto plantando o defeito, que é exatamente para
+ * isso que se planta.
+ */
+function ignoradaPeloGit(caminho) {
+  try {
+    execFileSync("git", ["check-ignore", "-q", "--no-index", caminho], { cwd: RAIZ });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// ── A skill TRAZIDA que o git ignora não existe para os agentes (19/09/2026) ──
+//
+// O conteúdo delas não é julgado aqui, e continua não sendo: o dono é outro. Mas
+// se a skill CHEGA aos agentes é problema nosso, não do upstream, e o modo de
+// falhar é silencioso do mesmo jeito que o das nossas: a regra de
+// `.claude/skills/` ignora tudo e libera uma a uma, então trazer dezesseis
+// pastas e esquecer uma linha no `.gitignore` deixa aquela skill funcionando na
+// máquina de quem trouxe e inexistente na sessão remota, que é justamente o
+// lugar onde os agentes semanais rodam. Foi por isso que elas foram trazidas.
+//
+// Pego uma vez: as 16 do google/skills entraram em 19/09 com 16 linhas escritas
+// à mão no `.gitignore`.
+for (const skill of deFora) {
+  if (lstatSync(join(PASTA, skill)).isSymbolicLink()) continue; // link é instalação local, e fica ignorado de propósito
+  conferir(
+    `${skill} (de fora): está versionada, senão não chega na sessão remota`,
+    !ignoradaPeloGit(join(".claude/skills", skill, "SKILL.md")),
+    "falta a linha `!/.claude/skills/<nome>/` no .gitignore; ela foi TRAZIDA para valer nas sessões remotas, e ignorada ela vale só na máquina de quem trouxe"
+  );
+}
+
 for (const skill of skills) {
   const arquivo = join(PASTA, skill, "SKILL.md");
   if (!existsSync(arquivo)) {
@@ -87,17 +125,7 @@ for (const skill of skills) {
   // uma a uma (para instalação de fora ficar ignorada sozinha), então esquecer
   // a linha de liberação é o jeito silencioso de perder uma skill: ela funciona
   // para quem escreveu e não existe para mais ninguém.
-  let ignorada = false;
-  try {
-    // `--no-index` é obrigatório: sem ele o `check-ignore` PULA arquivo já
-    // rastreado, e como as nossas skills já estão no git ele responderia "não
-    // ignorada" sempre, testando nada. Descoberto plantando o defeito, que é
-    // exatamente para isso que se planta.
-    execFileSync("git", ["check-ignore", "-q", "--no-index", join(".claude/skills", skill, "SKILL.md")], { cwd: RAIZ });
-    ignorada = true;
-  } catch {
-    /* saída diferente de zero = não está ignorada, que é o certo */
-  }
+  const ignorada = ignoradaPeloGit(join(".claude/skills", skill, "SKILL.md"));
   conferir(
     `${skill}: está versionada (não ignorada pelo git)`,
     !ignorada,
@@ -125,5 +153,5 @@ if (falhas) {
   console.error(`\n${falhas} conferência(s) de skills reprovaram.`);
   process.exit(1);
 }
-const nota = deFora.length ? ` (+${deFora.length} de fora, não conferidas)` : "";
+const nota = deFora.length ? ` (+${deFora.length} de fora, conferidas só quanto a chegar na sessão remota)` : "";
 console.log(`Skills: ${skills.length} nossas, todas carregáveis e apontando para arquivo que existe${nota}.`);
