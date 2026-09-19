@@ -1,6 +1,7 @@
 "use client";
 
 import { useI18n } from "@/lib/i18n";
+import { funil } from "@/lib/app/funil";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { IconCommunity, IconDiagnose, IconConsult } from "@/lib/icons";
@@ -59,10 +60,28 @@ export function Consulting() {
             <p className="mt-1 text-sm text-cream/65">{t.consulting.contactRole}</p>
             <p className="mt-0.5 text-sm text-cream/50">{t.consulting.contactTrack}</p>
           </div>
+          {/* O CLIQUE DEIXA RASTRO ANTES DE A PESSOA SUMIR (19/09/2026).
+              Este botão é a ÚNICA porta de "falar com gente" do site inteiro, e
+              ele era cego: levava ao WhatsApp e não emitia evento nenhum. Sem
+              isso, "ninguém quer consultoria" e "ninguém acha o botão" são a
+              mesma cara no painel, e levam a decisões opostas.
+
+              `umaVez` com chave própria porque isto é evento de SESSÃO: a mesma
+              pessoa clicando duas vezes não são duas pessoas interessadas.
+
+              O try/catch existe porque medição nunca pode segurar a navegação:
+              se o envio falhar, a pessoa vai para o WhatsApp do mesmo jeito. */}
           <a
             href={`https://wa.me/${WHATSAPP_CONSULTORIA}`}
             target="_blank"
             rel="noreferrer"
+            onClick={() => {
+              try {
+                funil("clicou_consultoria", { umaVez: true, chave: "consultoria:whatsapp" });
+              } catch {
+                /* medição não segura a navegação */
+              }
+            }}
             className="inline-flex h-12 shrink-0 items-center gap-2.5 rounded-xl bg-amber px-6 font-display text-base font-medium text-graphite transition-all hover:bg-amber-300 hover:shadow-glow active:translate-y-px"
           >
             <WhatsAppGlyph />

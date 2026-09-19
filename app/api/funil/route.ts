@@ -27,6 +27,10 @@ const EVENTOS_DO_APP = new Set([
   // existe justamente para o clique de rede social deixar rastro antes de a
   // pessoa sumir dentro da loja, que não conta de onde ela veio.
   "clicou_baixar",
+  // O clique na consultoria (19/09/2026). Também vem do SITE, pelo mesmo
+  // motivo do de cima: o botão manda a pessoa para o WhatsApp e ela some da
+  // nossa medição no instante seguinte. O evento é o último rastro que fica.
+  "clicou_consultoria",
   // Primeira ação de valor: é o que separa "criou conta" de "experimentou
   // de verdade" (ativação real na skill de análise).
   "abriu_trilha", "cadastrou_carro",

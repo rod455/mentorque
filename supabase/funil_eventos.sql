@@ -61,7 +61,15 @@ create table if not exists public.funil_eventos (
     -- de Instagram era invisível no funil. A página /baixar é a parada do
     -- meio, guarda a etiqueta, emite este evento e só então manda para a
     -- loja certa pelo aparelho.
-    'clicou_baixar'
+    'clicou_baixar',
+    -- O clique no botão de consultoria, medido em 19/09/2026 (migração
+    -- funil_aceita_clicou_consultoria). É a ÚNICA porta de "falar com gente"
+    -- do site inteiro, e ela era cega: o botão leva ao WhatsApp e não emitia
+    -- nada. Sem isso, "ninguém quer consultoria" e "ninguém acha o botão" são
+    -- a mesma cara no painel e levam a decisões opostas. Entrou quando o dono
+    -- perguntou se valia montar atendimento automático por voz, e a resposta
+    -- honesta era que não dava para saber.
+    'clicou_consultoria'
   )),
 
   anon_id    text,

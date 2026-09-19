@@ -33,6 +33,13 @@ export type EventoFunil =
   // onde a pessoa veio, então clique de Instagram era invisível: a página
   // /baixar guarda a etiqueta, emite isto e só então manda para a loja certa.
   | "clicou_baixar"
+  // O CLIQUE NA CONSULTORIA (19/09/2026). É a ÚNICA porta de "falar com gente"
+  // do site inteiro, e ela era cega: o botão leva ao WhatsApp e não emitia
+  // nada. Sem isso, "ninguém quer consultoria" e "ninguém acha o botão" são a
+  // mesma cara no painel e levam a decisões opostas. Entrou quando o dono
+  // perguntou se valia montar atendimento automático por voz: a resposta
+  // honesta era que não dava para saber.
+  | "clicou_consultoria"
   | "abriu_trilha"
   | "cadastrou_carro"
   // A PRIMEIRA SESSÃO, medida em 01/09/2026. Entre "abriu o app" e

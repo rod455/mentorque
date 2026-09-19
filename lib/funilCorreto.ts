@@ -62,6 +62,7 @@ export type EventoFunil =
   | "cancelou"
   | "expirou"
   | "clicou_baixar"
+  | "clicou_consultoria"
   | "atribuicao";
 
 export type Natureza = "sessao" | "ato" | "tecnico";
@@ -118,6 +119,7 @@ export const UNIDADE: Record<EventoFunil, Unidade> = {
   iniciou_checkout: "aparelho",
   tentou_assinar: "aparelho",
   clicou_baixar: "aparelho",
+  clicou_consultoria: "aparelho",
   atribuicao: "aparelho",
   // Nascem no webhook da cobrança, que não tem aparelho. A identidade é o
   // user_id, e por isso eles não se comparam com nada da lista de cima.
@@ -170,6 +172,7 @@ export const NATUREZA: Record<EventoFunil, Natureza> = {
   cancelou: "ato",
   expirou: "ato",
   clicou_baixar: "sessao",
+  clicou_consultoria: "sessao",
   atribuicao: "tecnico",
 };
 
@@ -198,6 +201,7 @@ export const MEDIDO_DESDE: Record<EventoFunil, string> = {
   expirou: "2026-08-22",
   atribuicao: "2026-08-30",
   clicou_baixar: "2026-09-19",
+  clicou_consultoria: "2026-09-19",
   // Vão no ar com a 1.6. Até a versão chegar aos aparelhos, a cadeia da
   // primeira sessão fica sem medição, e o funil DIZ isso em vez de mostrar
   // zero. Quando a 1.6 estiver publicada, esta data continua valendo: ela
