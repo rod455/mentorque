@@ -328,6 +328,52 @@ deram nenhuma conta" é verdade sem valor: nenhum termo deu conta nenhuma,
 porque essa ligação não existe na medição. A importação por gclid é o que
 passaria a criar essa ligação.
 
+## O retorno da rodada 1 (19/09/2026), e o que muda na rodada 2
+
+A rodada 1 foi lida linha por linha. O que ela acertou fica escrito para não se
+perder, e o que faltou vira regra, na mesma linguagem das outras.
+
+**O que ficou bom e é para manter.** A correção do próprio número, com prova que
+não depende de ler o coletor (os mesmos três termos com custo idêntico em duas
+coletas separadas por sete dias), é o padrão da casa: quem corrige o próprio
+erro com evidência independente ganha crédito, não perde. A ressalva de amostra
+("são duas contas de diferença") veio junto do número, como tem que vir. E o
+experimento no coletor terminou onde começou, com saldo zero e registro. As
+duas afirmações centrais foram reconferidas depois: gclid em 20 de 20 cadastros
+etiquetados, e a campanha com `status: PAUSED` hoje contra `ENABLED` ontem.
+
+**1. A manchete é o maior número da página, não o achado mais interessante.**
+A campanha pausada é a notícia da semana, e ela entrou como observação antes da
+conta. Pausada, a porta que trouxe 10 das 12 contas de fora está fechada: pela
+própria régua da rodada, são uns R$ 30 por dia que deixam de comprar cerca de
+uma conta e meia por dia. Isso é a primeira linha do relatório, com a
+consequência em número. "O desperdício mudou de assunto" é excelente e é a
+segunda.
+
+**2. Recomendação tem que respeitar o estado do instrumento.** Negativa em
+campanha pausada não economiza nada enquanto ela estiver pausada, e "uns R$ 65
+por mês no ritmo de hoje" descreve um ritmo que parou anteontem. A recomendação
+continua certa; o que falta é o gatilho: "antes de religar". Toda ação que
+depende de a campanha estar rodando nasce com essa condição escrita.
+
+**3. O PDF tem que se sustentar sozinho.** O relatório manda o leitor ao artifact
+"Mídia da semana" e à lista de ações do dono. O Luiz não abre nenhum dos dois.
+Quem recebe de fora não tem repositório, não tem artifact e não tem contexto: o
+que não couber no PDF não existe para ele. Referência interna, quando for
+mesmo necessária, vira frase ("o detalhe fica com o Rodrigo").
+
+**4. Instrumento compartilhado se mexe com saldo zero, e o conserto tem dono.**
+O coletor é do Analista. Experimentar nele e desfazer na mesma rodada, com o
+registro do porquê, está dentro; deixar mudança de pé, não. O conserto dos 120
+termos (parar de guardar `termosSemConversao` e liberar 6.942 bytes) é
+recomendação ao Analista com o número do lado, e não trabalho deste papel.
+
+**5. O que a medição não alcança vira item com dono, não parágrafo.** "Setenta e
+sete por cento do dinheiro não tem nome" é o limite mais importante do
+relatório, e hoje mora só numa lista de ressalvas. Limite que ninguém pode
+consertar fica na ressalva; limite que tem conserto conhecido e barato vira
+linha com dono e com o ganho estimado.
+
 ## Direcionamentos do dono
 
 - **2026-09-19, ao criar o papel: acompanhar de perto e PROPOR melhoria.** O

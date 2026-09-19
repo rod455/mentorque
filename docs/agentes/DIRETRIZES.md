@@ -112,5 +112,13 @@ Então: depois de `update_workflow`, `publish_workflow`, SEMPRE. E confira com
 `get_workflow_details` que `versionId` e `activeVersionId` são iguais, porque
 essa igualdade é a única prova de que o que você escreveu é o que roda.
 
+E o irmão dessa armadilha, achado pelo agente de Mídia no mesmo dia: **execução
+verde do n8n não prova gravação.** Ele subiu o teto de termos do coletor, o
+fluxo rodou verde, e a linha de `google_ads` simplesmente não foi gravada: a
+rota recusou o pacote com 413 porque ele passou de 20.000 bytes, e o nó de
+gravação segue em frente no erro. As outras dez fontes gravaram, nada gritou. O
+que prova gravação é o `coletado_em` da linha no banco, comparado com o das
+outras fontes do mesmo dia.
+
 Só o Diretor notifica o Rodrigo por padrão; os especialistas publicam
 artifact e registram no diário, e o Diretor consolida na segunda.
