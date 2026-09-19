@@ -66,6 +66,39 @@ console.log("Anomalias: o vigia da operação continua ligado?");
   // SQL, some uma pergunta que ninguém mais vai fazer sozinho.
   conferir("a anomalia da plataforma sem conta continua no SQL", sql.includes("plataforma sem nenhuma conta"));
   conferir("a anomalia do quiz continua no SQL", sql.includes("respondeu o quiz e sumiu"));
+
+  // ── O CONTRATO COM O VIGIA (19/09/2026) ───────────────────────────────────
+  //
+  // O DEFEITO: de 15 a 19/09 o Vigia mandou todo dia "um erro está se
+  // repetindo: 10x push: token pronto, mas sem sessão". O erro tinha PARADO em
+  // 15/09, quando a 2.6 levou o conserto; as ocorrências velhas é que
+  // continuavam dentro da janela de 7 dias. A frase estava no presente e o
+  // dado era do passado.
+  //
+  // O Vigia passou a exigir que a última ocorrência seja de ontem ou de hoje,
+  // e quem entrega esse `ultimo` é esta rota. Se o campo sumir daqui, o Vigia
+  // volta a alertar sobre erro morto, e ele NÃO tem como perceber: a regra
+  // dele trata campo ausente como "alerta", de propósito, para não calar por
+  // falta de dado. Ou seja, quebrar este contrato falha para o lado barulhento
+  // e ninguém liga os dois fatos.
+  //
+  // Alarme que repete sobre coisa já consertada ensina o dono a ignorar o
+  // Vigia, e aí o próximo alarme de verdade passa batido.
+  conferir(
+    "cada erro do retrato diz QUANDO foi a última vez",
+    /ultimo: d\.ultimo\.slice\(0, 10\)/.test(operacao),
+    "sem `ultimo` o Vigia não consegue separar erro vivo de erro já consertado",
+  );
+  conferir(
+    "e em quantos aparelhos, e em quais versões",
+    /aparelhos: d\.aparelhos\.size/.test(operacao) && /versoes: \[\.\.\.d\.versoes\]/.test(operacao),
+    "dez ocorrências pode ser uma pessoa reabrindo o app; e erro só em versão velha é base que não atualizou, não defeito de pé",
+  );
+  conferir(
+    "a consulta busca as colunas que isso exige",
+    /from\("app_erros"\)\.select\("criado_em, mensagem, plataforma, versao, anon_id"\)/.test(operacao),
+    "o resumo não inventa coluna que a consulta não trouxe",
+  );
 }
 
 // ── 2. o relato de fechamento é só do app das lojas ────────────────────────

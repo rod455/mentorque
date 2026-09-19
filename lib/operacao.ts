@@ -77,7 +77,7 @@ export async function coletarDadosOperacao() {
     // de cortesia: conta liberada na mão não tem assinatura no Stripe.
     () => medir("subscriptions", () => admin.from("subscriptions").select("status, cancel_at_period_end, plan, stripe_subscription_id, cupom")),
     () => medir("cadastros", () => admin.from("funil_eventos").select("criado_em, plataforma").eq("evento", "cadastro").gte("criado_em", d14)),
-    () => medir("app_erros", () => admin.from("app_erros").select("criado_em, mensagem, plataforma").gte("criado_em", d7).limit(2000)),
+    () => medir("app_erros", () => admin.from("app_erros").select("criado_em, mensagem, plataforma, versao, anon_id").gte("criado_em", d7).limit(2000)),
     // SEM filtro de data: o frescor precisa enxergar fonte parada há muito
     // tempo, e a janela de 10 dias fazia a fonte morta SUMIR em vez de
     // gritar. O recorte de 10 dias continua existindo, mas em memória,
@@ -193,14 +193,40 @@ export async function coletarDadosOperacao() {
   }
 
   const errosPorMensagem: Record<string, number> = {};
+  // ALÉM DO TOTAL, QUANDO FOI A ÚLTIMA VEZ E EM QUANTOS APARELHOS (19/09/2026).
+  //
+  // O DEFEITO QUE ISSO CONSERTA: o Vigia diz "um erro está se repetindo: 10x"
+  // lendo só este total de 7 dias, no presente. O erro do push parou em 15/09,
+  // quando a 2.6 levou o conserto, e o alarme continuou saindo todo dia até
+  // 19/09 porque as ocorrências velhas seguiam dentro da janela. Alarme que
+  // repete sobre coisa já consertada é o jeito mais rápido de ensinar o dono a
+  // ignorar o Vigia, e aí o próximo alarme de verdade passa batido.
+  //
+  // `ultimo` é o que responde "ainda está acontecendo?"; `aparelhos` é o que
+  // separa dez pessoas de uma reabrindo o app (a coluna nasceu em 17/09); e
+  // `versoes` diz se o erro só existe em versão velha, que é o caso quando o
+  // conserto já saiu e a base ainda não atualizou.
+  const detalhe: Record<string, { total: number; ultimo: string; aparelhos: Set<string>; versoes: Set<string> }> = {};
   for (const e of erros ?? []) {
     const m = String(e.mensagem).slice(0, 120);
+    const d = (detalhe[m] ??= { total: 0, ultimo: "", aparelhos: new Set(), versoes: new Set() });
+    d.total += 1;
+    const quando = String(e.criado_em ?? "");
+    if (quando > d.ultimo) d.ultimo = quando;
+    if (e.anon_id) d.aparelhos.add(String(e.anon_id));
+    if (e.versao) d.versoes.add(String(e.versao));
     errosPorMensagem[m] = (errosPorMensagem[m] ?? 0) + 1;
   }
-  const topErros = Object.entries(errosPorMensagem)
-    .sort((a, b) => b[1] - a[1])
+  const topErros = Object.entries(detalhe)
+    .sort((a, b) => b[1].total - a[1].total)
     .slice(0, 5)
-    .map(([mensagem, total]) => ({ mensagem, total }));
+    .map(([mensagem, d]) => ({
+      mensagem,
+      total: d.total,
+      ultimo: d.ultimo.slice(0, 10),
+      aparelhos: d.aparelhos.size,
+      versoes: [...d.versoes].sort(),
+    }));
 
   // O frescor sai de TODAS as linhas; a série exibida, só dos últimos 10 dias.
   const hoje = new Date().toISOString().slice(0, 10);
