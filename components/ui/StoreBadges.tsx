@@ -41,7 +41,7 @@ function Badge({
     </span>
   );
   const cls =
-    "inline-flex h-12 items-center rounded-xl bg-graphite-700 px-4 ring-1 ring-white/10 transition-colors hover:bg-graphite-600 focus-visible:outline-none";
+    "inline-flex h-12 items-center rounded-xl bg-graphite-700 px-4 ring-1 ring-white/10 transition-[background-color,transform] duration-200 hover:bg-graphite-600 active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none";
   return href ? (
     <a
       href={href}

@@ -34,7 +34,7 @@ export function Hero() {
   const current = headlines[index];
 
   return (
-    <section id="top" className="relative overflow-hidden bg-graphite px-5 pb-20 pt-28 sm:px-8 sm:pt-32">
+    <section id="top" className="relative overflow-hidden bg-graphite px-5 pb-20 pt-24 sm:px-8 sm:pt-24">
       {/* quiet brand motif + warm glow, no decorative stripes */}
       <div aria-hidden className="pointer-events-none absolute inset-0 hex-field opacity-60" />
       <div
@@ -53,13 +53,24 @@ export function Hero() {
           isso não vira rolagem, vira corte. */}
       <div className="relative mx-auto grid w-full max-w-content items-center gap-14 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="min-w-0">
-          <p className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs font-medium uppercase tracking-[0.14em] text-amber ring-1 ring-white/10">
+          {/* A ENTRADA É ENCADEADA, E O MOTIVO É HIERARQUIA (19/09/2026).
+              Os três blocos aparecem na ordem em que precisam ser lidos:
+              onde estamos, o que prometemos, o que fazer. Não é enfeite: sem a
+              ordem, os três chegam juntos e o olho escolhe sozinho por onde
+              começar, que costuma ser o botão. Quem pede menos movimento não vê
+              nada disso (`useReducedMotion`), e a página continua inteira. */}
+          <motion.p
+            initial={reduce ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs font-medium uppercase tracking-[0.14em] text-amber ring-1 ring-white/10"
+          >
             {t.hero.eyebrow}
-          </p>
+          </motion.p>
 
           {/* headline carousel */}
           <div
-            className="min-h-[8.5rem] sm:min-h-[10.5rem]"
+            className="min-h-[7.5rem] sm:min-h-[9.5rem]"
             role="group"
             aria-roledescription="carousel"
             aria-label={t.hero.carouselLabel}
@@ -75,7 +86,7 @@ export function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={reduce ? undefined : { opacity: 0, y: -10 }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="text-balance text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-[3.4rem]"
+                className="text-balance text-[2.15rem] font-bold leading-[1.03] tracking-[-0.022em] sm:text-5xl lg:text-[3.1rem]"
               >
                 <span className="text-cream">{current.a}</span>
                 <span className="text-amber">{current.b}</span>
@@ -99,18 +110,35 @@ export function Hero() {
             ))}
           </div>
 
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-cream/75">{t.hero.subheadline}</p>
+          <motion.p
+            initial={reduce ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-6 max-w-[54ch] text-[1.0625rem] leading-[1.65] text-cream/70"
+          >
+            {t.hero.subheadline}
+          </motion.p>
 
           {/* O DOWNLOAD VIROU O PRIMEIRO GESTO DA PÁGINA, em 03/09/2026.
               Aqui morava o formulário da lista de espera, e ele fazia sentido
               enquanto o app não existia. Com ele publicado nas duas lojas, pedir
               e-mail para avisar de um lançamento que já aconteceu é gastar o
               melhor lugar da página com um pedido que não leva a nada. */}
-          <div id="baixar" className="mt-8 scroll-mt-28">
+          <motion.div
+            id="baixar"
+            initial={reduce ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-8 scroll-mt-28"
+          >
             <StoreBadges />
-          </div>
-
-          <p className="mt-4 text-sm text-cream/55">{t.hero.ctaNote}</p>
+            {/* A NOTA FICA, contra a regra da skill de direção visual, que manda
+                tirar qualquer linha miúda embaixo do botão. Aqui ela não é
+                enfeite: é o que responde "vai me custar alguma coisa?" no exato
+                ponto em que a pessoa decide tocar. Tirar isso é decisão de CRO
+                com medição, não de gosto. */}
+            <p className="mt-4 text-sm text-cream/55">{t.hero.ctaNote}</p>
+          </motion.div>
 
           {/* Aqui morou, de 03/09 a 12/09/2026, o link "use pelo navegador".
               Saiu por decisão do dono: o caminho da web não tem recorrência
