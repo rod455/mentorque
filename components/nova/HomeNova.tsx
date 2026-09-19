@@ -225,9 +225,14 @@ function Conta() {
   return (
     <section className="bg-cream text-ink">
       <div className="mx-auto max-w-content px-5 py-24 sm:px-8 sm:py-32">
-        <motion.div {...entrada(0)} className="max-w-[24ch]">
+        {/* A LARGURA MORA NO h2, NÃO NO EMBRULHO (19/09/2026). `ch` resolve
+            contra o tamanho de fonte do PRÓPRIO elemento, então `max-w-[24ch]`
+            numa div de texto corrido vale uns 190px e transforma o título numa
+            coluna de sete linhas. No h2, com a fonte grande, vale o que a
+            gente quis dizer: umas 24 letras por linha. */}
+        <motion.div {...entrada(0)}>
           <Sobrescrita escuro={false}>{t.trust.eyebrow}</Sobrescrita>
-          <h2 className="font-display text-[clamp(2rem,5vw,3.4rem)] font-extrabold leading-[1.02] tracking-[-0.035em]">
+          <h2 className="max-w-[20ch] font-display text-[clamp(2rem,5vw,3.4rem)] font-extrabold leading-[1.02] tracking-[-0.035em]">
             {t.problem.title}
           </h2>
         </motion.div>
@@ -265,9 +270,9 @@ function Ferramentas() {
   return (
     <section className="bg-graphite">
       <div className="mx-auto max-w-content px-5 py-24 sm:px-8 sm:py-32">
-        <motion.div {...entrada(0)} className="max-w-[26ch]">
+        <motion.div {...entrada(0)}>
           <Sobrescrita>{t.nav.features}</Sobrescrita>
-          <h2 className="font-display text-[clamp(2rem,5vw,3.4rem)] font-extrabold leading-[1.02] tracking-[-0.035em] text-cream">
+          <h2 className="max-w-[20ch] font-display text-[clamp(2rem,5vw,3.4rem)] font-extrabold leading-[1.02] tracking-[-0.035em] text-cream">
             {t.features.title}
           </h2>
         </motion.div>
@@ -313,9 +318,9 @@ function Passos() {
   return (
     <section className="border-y border-graphite-700 bg-graphite-900">
       <div className="mx-auto max-w-content px-5 py-24 sm:px-8 sm:py-32">
-        <motion.div {...entrada(0)} className="max-w-[24ch]">
+        <motion.div {...entrada(0)}>
           <Sobrescrita>{t.nav.how}</Sobrescrita>
-          <h2 className="font-display text-[clamp(2rem,5vw,3.4rem)] font-extrabold leading-[1.02] tracking-[-0.035em] text-cream">
+          <h2 className="max-w-[18ch] font-display text-[clamp(2rem,5vw,3.4rem)] font-extrabold leading-[1.02] tracking-[-0.035em] text-cream">
             {t.how.title}
           </h2>
         </motion.div>
@@ -345,9 +350,9 @@ function Planos() {
   return (
     <section className="bg-cream text-ink">
       <div className="mx-auto max-w-content px-5 py-24 sm:px-8 sm:py-32">
-        <motion.div {...entrada(0)} className="max-w-[22ch]">
+        <motion.div {...entrada(0)}>
           <Sobrescrita escuro={false}>{t.nav.plans}</Sobrescrita>
-          <h2 className="font-display text-[clamp(2rem,5vw,3.4rem)] font-extrabold leading-[1.02] tracking-[-0.035em]">
+          <h2 className="max-w-[18ch] font-display text-[clamp(2rem,5vw,3.4rem)] font-extrabold leading-[1.02] tracking-[-0.035em]">
             {t.plans.title}
           </h2>
         </motion.div>
@@ -410,9 +415,9 @@ function Duvidas() {
   return (
     <section className="bg-graphite">
       <div className="mx-auto max-w-content px-5 py-24 sm:px-8 sm:py-32">
-        <motion.div {...entrada(0)} className="max-w-[20ch]">
+        <motion.div {...entrada(0)}>
           <Sobrescrita>{t.nav.faq}</Sobrescrita>
-          <h2 className="font-display text-[clamp(2rem,5vw,3.4rem)] font-extrabold leading-[1.02] tracking-[-0.035em] text-cream">
+          <h2 className="max-w-[14ch] font-display text-[clamp(2rem,5vw,3.4rem)] font-extrabold leading-[1.02] tracking-[-0.035em] text-cream">
             {t.faq.title}
           </h2>
         </motion.div>
