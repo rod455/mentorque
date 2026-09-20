@@ -22,6 +22,7 @@
 //
 // Rode com: npm run conferir:login
 import { existsSync, readFileSync } from "node:fs";
+import { destinoDaPonte } from "../lib/app/pontePraApp.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -262,10 +263,24 @@ if (!noAndroid) {
   // E esta morde o item 3 da proposta: o link abria o NAVEGADOR e o app do
   // celular continuava deslogado, que é o mesmo formato do defeito que já
   // mordeu esta casa no login social.
+  //
+  // A asserção mudou de forma na tarde de 20/09, junto com a regra: ela exigia
+  // `if (isNativeApp()) return NATIVE_AUTH_REDIRECT`, e o `isNativeApp` saiu de
+  // lá de propósito. Ele responde "de onde o pedido saiu", e a pergunta certa é
+  // "onde a pessoa vai abrir". O que a conferência guarda agora é o destino.
   conferir(
-    "no app nativo o link do e-mail volta pela ponte, não para o site",
-    /isNativeApp\(\)\)\s*return\s+NATIVE_AUTH_REDIRECT/.test(wrapper),
-    "voltando para /app o link abre o navegador e o app no celular segue deslogado",
+    "em produção TODO link de e-mail volta pela ponte, e não para o site",
+    /emProducao\s*\?\s*NATIVE_AUTH_REDIRECT/.test(wrapper) && !/isNativeApp\(\)\)\s*return\s+NATIVE_AUTH_REDIRECT/.test(wrapper),
+    "decidindo por isNativeApp, quem pede pelo site cai no navegador mesmo tendo o app",
+  );
+
+  // A ponte tem que ter reserva. Sem ela, quem não tem o app instalado fica
+  // numa tela parada segurando um link de recuperação que só vale uma vez.
+  const ponte = leia("app/auth-bridge/page.tsx");
+  conferir(
+    "a ponte segue para a web sozinha se nenhum app atender",
+    /reserva/.test(ponte) && /setTimeout/.test(ponte) && /visibilitychange/.test(ponte),
+    "sem relógio e sem o cancelamento por visibilidade, ou ela trava ou ela atropela o app que abriu",
   );
 
   // O e-mail que a pessoa ACABOU de digitar tem que chegar ao formulário de
@@ -273,6 +288,37 @@ if (!noAndroid) {
   // porta e não tem paciência para digitar o endereço de novo — e o endereço é
   // a única forma de a gente responder. A ordem importa: `emailInicial` na
   // frente, porque quem não entrou ainda não tem `s.email` nenhum.
+  // A REGRA DA PONTE, exercitada de verdade (20/09/2026). Ela é pura, então
+  // aqui não se lê texto: roda-se.
+  //
+  // O fragmento é o ponto que merece atenção. No fluxo implícito, que é o
+  // nosso, a credencial INTEIRA vai depois do `#`, e é lá que mora o
+  // `type=recovery` que faz a tela de senha nova aparecer. Uma ponte que
+  // repassa só a query "funciona" em toda leitura de código e entrega uma
+  // sessão vazia no aparelho.
+  const cauda = { search: "?nada=1", hash: "#access_token=abc&type=recovery" };
+
+  const noPc = destinoDaPonte({ plataforma: "other", ...cauda });
+  conferir(
+    "no computador a ponte vai direto para a web, sem tentar o esquema",
+    noPc.tipo === "web" && noPc.url.startsWith("/app"),
+    "tentar mentorque:// onde não existe app nenhum termina em página de erro",
+  );
+
+  for (const plataforma of ["ios", "android"] as const) {
+    const d = destinoDaPonte({ plataforma, ...cauda });
+    conferir(
+      `no ${plataforma} a ponte tenta o app com a web de reserva`,
+      d.tipo === "app" && d.url.startsWith("mentorque://auth-callback") && d.reserva.startsWith("/app"),
+      "sem reserva, quem não tem o app fica preso numa tela parada",
+    );
+    conferir(
+      `no ${plataforma} query e fragmento vão inteiros para os dois lados`,
+      d.tipo === "app" && d.url.endsWith(cauda.hash) && d.url.includes(cauda.search) && d.reserva.endsWith(cauda.hash),
+      "perder o # é perder a recuperação inteira, e em silêncio",
+    );
+  }
+
   conferir(
     "o formulário de suporte prefere o e-mail digitado na tela anterior",
     /useState\(\s*emailInicial[\s\S]{0,20}\|\|\s*s\.email/.test(leia("components/app/SuporteForm.tsx")),

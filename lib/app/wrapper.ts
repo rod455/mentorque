@@ -106,21 +106,36 @@ export function onDeepLink(handler: (url: string) => void): () => void {
 // URL de retorno para os links enviados por e-mail (confirmação de conta,
 // redefinição de senha). Sempre https e absoluta: esses links podem ser
 // abertos em outro aparelho, onde o deep link não resolveria.
-// NO APP NATIVO O RETORNO É A PONTE, NÃO O SITE (20/09/2026).
 //
-// Isto devolvia `${APP_ORIGIN}/app` inclusive no app das lojas, e o efeito era
-// o defeito que já mordeu esta casa no login social: o link abria o NAVEGADOR,
-// a sessão nascia lá, e o app no celular continuava deslogado. A pessoa fazia
-// tudo certo e nada mudava na tela onde ela estava.
+// TODO LINK DE E-MAIL VOLTA PELA PONTE (20/09/2026).
 //
-// A ponte (`/auth-bridge`) é uma página https comum que passa na validação de
-// Redirect URL do GoTrue (ele RECUSA `mentorque://`) e repassa query e
-// fragmento inteiros para o esquema próprio. Ela já existe, já está cadastrada
-// e já roda em produção: 38 das 42 contas do banco entraram por ela, no login
-// social. Não é caminho novo, é o caminho que já funciona.
+// Primeiro passo, de manhã: isto devolvia `${APP_ORIGIN}/app` inclusive DENTRO
+// do app das lojas, e o efeito era o defeito que já mordeu esta casa no login
+// social — o link abria o NAVEGADOR, a sessão nascia lá, e o app no celular
+// continuava deslogado. Passou a devolver a ponte quando `isNativeApp()`.
+//
+// Segundo passo, depois de o dono provar o fluxo no aparelho: "em vez de mandar
+// para a web, quero que sempre direcione para o app que o usuário tem. Vamos
+// utilizar o mínimo possível do aplicativo web."
+//
+// O `isNativeApp()` saiu daqui porque ele responde a pergunta ERRADA. Ele diz
+// de onde o pedido SAIU, e quem pede pelo site também pode ter o app instalado.
+// Quem sabe onde a pessoa quer terminar é o APARELHO QUE ABRE O LINK, e quem
+// pergunta isso a ele é a ponte (lib/app/pontePraApp.ts): computador segue para
+// a web, celular tenta o app com a web de reserva.
+//
+// A ponte é uma página https comum que passa na validação de Redirect URL do
+// GoTrue (ele RECUSA `mentorque://`) e repassa query e fragmento inteiros para
+// o esquema próprio. Não é caminho novo: 38 das 42 contas do banco entraram por
+// ela, no login social.
+//
+// FORA DE PRODUÇÃO O RETORNO CONTINUA LOCAL. A ponte é um endereço fixo de
+// produção, e mandar o link de um `localhost:3000` ou de uma prévia da Vercel
+// para lá tiraria o teste de dentro do que está sendo testado.
 export function emailRedirectUrl(): string {
-  if (isNativeApp()) return NATIVE_AUTH_REDIRECT;
-  return typeof window !== "undefined" ? `${window.location.origin}/app` : `${APP_ORIGIN}/app`;
+  if (typeof window === "undefined") return NATIVE_AUTH_REDIRECT;
+  const emProducao = /(^|\.)mentorque\.com\.br$/.test(window.location.hostname);
+  return emProducao ? NATIVE_AUTH_REDIRECT : `${window.location.origin}/app`;
 }
 
 // Chave pública do RevenueCat da loja onde o app está rodando.
