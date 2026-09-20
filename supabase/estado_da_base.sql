@@ -77,3 +77,46 @@ grant select on public.estado_da_base to service_role;
 -- rastro em lugar nenhum. Está declarada em FONTE_MELHOR, em
 -- lib/funilCorreto.ts, e `npm run conferir:funil` reprova se alguém apagar a
 -- declaração e voltar a contar pelo evento sem dizer.
+
+-- 2026-09-20: A FUNÇÃO ABAIXO EXISTIA SÓ NO BANCO.
+--
+-- Ela é citada três vezes em comentário deste repositório desde 01/09, e a
+-- definição dela não estava em lugar nenhum. Quem quisesse saber o que ela faz
+-- tinha que abrir o painel.
+--
+-- É o mesmo defeito que custou duas rodadas nos modelos de e-mail do Supabase
+-- na semana passada: conhecimento que mora onde nenhum script nosso lê é
+-- conhecimento que a gente descobre errado depois. E aqui pesa mais, porque
+-- esta função é `security definer` e lê `auth.users`, ou seja, a tabela com o
+-- e-mail de todo mundo.
+--
+-- Achada por `npm run conferir:banco`, que na estreia cobriu duas funções e
+-- não cobria esta, justamente porque ela não estava aqui.
+--
+-- O texto abaixo é o que está NO BANCO hoje, lido de `pg_get_functiondef`,
+-- não reescrito de memória.
+create or replace function public.contas_criadas_desde(p_desde date)
+returns bigint
+language sql
+stable
+security definer
+-- `pg_temp` por último. Não nomeado, ele seria pesquisado PRIMEIRO, e numa
+-- função que roda como o dono isso é sequestro de nome. Esta nasceu certa; as
+-- duas de cadastros_do_dia.sql só ficaram em 20/09.
+set search_path = public, auth, pg_temp
+as $$
+  select count(*) from auth.users
+  where created_at >= p_desde
+    and email not in (
+      'mentorque.ar@gmail.com',
+      'rodrigomoraessilva455@gmail.com',
+      'revisor@mentorque.com.br'
+    )
+$$;
+
+-- A mesma trava das outras: `from public` é o que importa, porque
+-- `create function` dá EXECUTE ao papel PUBLIC sozinho, e tirar só de `anon` e
+-- `authenticated` não tira nada. Foi exatamente esse engano que deixou a lista
+-- de e-mail alcançável pela chave pública até 19/09/2026.
+revoke all on function public.contas_criadas_desde(date) from public, anon, authenticated;
+grant execute on function public.contas_criadas_desde(date) to service_role;

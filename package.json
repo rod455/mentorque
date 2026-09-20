@@ -15,7 +15,7 @@
     "build:native": "node scripts/build-native.mjs",
     "verifica:quiz": "npm run conferir:regras",
     "quiz:pdf": "node --experimental-strip-types scripts/quiz-pdf.ts",
-    "conferir": "npm run conferir:tipos && npm run conferir:estilo && npm run conferir:regras && npm run conferir:revisoes && npm run conferir:navegacao && npm run conferir:frescor && npm run conferir:versoes && npm run conferir:travessao && npm run conferir:identidade && npm run conferir:catalogo && npm run conferir:funil && npm run conferir:migalha && npm run conferir:venda && npm run conferir:campanha && npm run conferir:agenda && npm run conferir:aviso && npm run conferir:login && npm run conferir:recorte && npm run conferir:appsflyer && npm run conferir:skills && npm run conferir:guias && npm run conferir:contexto && npm run conferir:frota && npm run conferir:embedding && npm run conferir:pecas && npm run conferir:anomalias && npm run conferir:acoes && npm run conferir:gravacao && npm run conferir:garagem && npm run conferir:precos && npm run conferir:caminho && npm run conferir:jornada && npm run conferir:push && npm run conferir:biela && npm run conferir:orcamento && npm run conferir:combustivel && npm run conferir:datas && npm run conferir:motorista && npm run conferir:relatorio && npm run conferir:baixar && npm run conferir:email && npm run conferir:imagem",
+    "conferir": "npm run conferir:tipos && npm run conferir:estilo && npm run conferir:regras && npm run conferir:revisoes && npm run conferir:navegacao && npm run conferir:frescor && npm run conferir:versoes && npm run conferir:travessao && npm run conferir:identidade && npm run conferir:catalogo && npm run conferir:funil && npm run conferir:migalha && npm run conferir:venda && npm run conferir:campanha && npm run conferir:agenda && npm run conferir:aviso && npm run conferir:login && npm run conferir:recorte && npm run conferir:appsflyer && npm run conferir:skills && npm run conferir:guias && npm run conferir:contexto && npm run conferir:frota && npm run conferir:embedding && npm run conferir:pecas && npm run conferir:anomalias && npm run conferir:acoes && npm run conferir:gravacao && npm run conferir:garagem && npm run conferir:precos && npm run conferir:caminho && npm run conferir:jornada && npm run conferir:push && npm run conferir:biela && npm run conferir:orcamento && npm run conferir:combustivel && npm run conferir:datas && npm run conferir:motorista && npm run conferir:relatorio && npm run conferir:baixar && npm run conferir:email && npm run conferir:imagem && npm run conferir:banco",
     "conferir:tipos": "tsc --noEmit",
     "conferir:estilo": "next lint",
     "conferir:regras": "node --experimental-strip-types scripts/verifica-quiz.ts",
@@ -62,6 +62,7 @@
     "relatorio:pdf": "node --experimental-strip-types scripts/relatorio-pdf.ts",
     "conferir:relatorio": "node --experimental-strip-types scripts/verifica-relatorio.ts",
     "conferir:baixar": "node --experimental-strip-types scripts/verifica-baixar.ts",
+    "conferir:banco": "node scripts/verifica-banco.mjs",
     "conferir:imagem": "node scripts/verifica-imagem.mjs",
     "conferir:email": "node --experimental-strip-types scripts/verifica-email.ts"
   },

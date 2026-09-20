@@ -23,7 +23,7 @@ returns table (
 )
 language sql
 security definer
-set search_path = public, auth
+set search_path = public, auth, pg_temp
 as $$
   select
     (u.created_at at time zone 'America/Sao_Paulo')::timestamp(0) as horario_brasilia,
@@ -80,7 +80,7 @@ returns table (
 )
 language sql
 security definer
-set search_path = public, auth
+set search_path = public, auth, pg_temp
 as $$
   select
     u.id,
