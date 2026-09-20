@@ -42,7 +42,7 @@ const TRAVESSAO = "—";
 // os textos da LANDING, a página que o CLAUDE.md cita por extenso na regra, e
 // eram 37 linhas com travessão entre os dois idiomas. A conferência cobria as
 // telas do app e não cobria a página que recebe o anúncio pago.
-const TELAS = ["components", "lib/app/conteudo", "lib/email", "lib/i18n"];
+const TELAS = ["components", "lib/app/conteudo", "lib/email", "lib/i18n", "emails"];
 /** Arquivos avulsos de texto de tela. */
 const AVULSOS = ["lib/app/content.ts"];
 /** Em app/, só os campos que viram título e descrição de página. */
@@ -59,7 +59,13 @@ function arquivos(dir) {
   for (const item of itens) {
     const caminho = join(dir, item);
     if (statSync(join(RAIZ, caminho)).isDirectory()) saida.push(...arquivos(caminho));
-    else if (/\.(ts|tsx)$/.test(item)) saida.push(caminho);
+    // O `.html` entrou em 20/09/2026, e faltava por um motivo que não é
+    // desculpa: os modelos de e-mail de autenticação (emails/supabase/) são
+    // HTML colado à mão no painel do Supabase, e por não serem TypeScript
+    // ficavam fora de toda conferência desta casa. Um deles carregava um
+    // travessão na linha que a pessoa lê, desde 06/09, e a conferência passava
+    // verde porque nem abria o arquivo.
+    else if (/\.(ts|tsx|html)$/.test(item)) saida.push(caminho);
   }
   return saida;
 }
@@ -143,7 +149,37 @@ function ehFrase(literal) {
 
 const achados = [];
 
+/**
+ * HTML não é código, e tratar como código não funciona (20/09/2026).
+ *
+ * A primeira versão desta extensão só acrescentou `.html` à lista de
+ * extensões, e a conferência passou VERDE sobre um travessão que estava lá.
+ * Duas razões, e as duas ensinam:
+ *
+ *   1. em TypeScript a frase mora entre ASPAS, e é isso que `literais()`
+ *      procura. Em HTML a frase mora ENTRE TAGS, e não tem aspas nenhuma;
+ *   2. o `semComentarios` corta a linha no `//`, e todo endereço de imagem do
+ *      e-mail tem `https://`. Metade de cada linha desaparecia antes de
+ *      qualquer leitura.
+ *
+ * Então HTML entra por outro caminho: tira comentário `<!-- -->`, tira as
+ * tags, e o que sobra é a frase que a pessoa lê na caixa de entrada.
+ */
+function textoDeHtml(fonte) {
+  return fonte
+    .replace(/<!--[\s\S]*?-->/g, " ")
+    .split("\n")
+    .map((linha) => linha.replace(/<[^>]*>/g, " "));
+}
+
 function olhar(alvo, sóMetadados) {
+  if (alvo.endsWith(".html")) {
+    textoDeHtml(readFileSync(join(RAIZ, alvo), "utf8")).forEach((linha, i) => {
+      if (!linha.includes(TRAVESSAO)) return;
+      if (ehFrase(linha)) achados.push({ arquivo: alvo, linha: i + 1, trecho: linha.trim().slice(0, 95) });
+    });
+    return;
+  }
   const linhas = semComentarios(readFileSync(join(RAIZ, alvo), "utf8"));
   linhas.forEach((linha, i) => {
     if (!linha.includes(TRAVESSAO)) return;
