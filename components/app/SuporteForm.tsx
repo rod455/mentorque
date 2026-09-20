@@ -32,14 +32,22 @@ function deviceId(): string {
 
 export type TipoDeSuporte = "doubt" | "suggestion" | "bug";
 
-export function SuporteForm({ tipoInicial = "doubt", mensagemInicial = "" }: { tipoInicial?: TipoDeSuporte; mensagemInicial?: string }) {
+export function SuporteForm({ tipoInicial = "doubt", mensagemInicial = "", emailInicial = "" }: { tipoInicial?: TipoDeSuporte; mensagemInicial?: string; emailInicial?: string }) {
   const c = useContent();
   const p = c.profile;
   const { locale } = useI18n();
   const { s } = usePrototype();
   const [supType, setSupType] = useState<TipoDeSuporte>(tipoInicial);
   const [supMsg, setSupMsg] = useState(mensagemInicial);
-  const [supEmail, setSupEmail] = useState(s.email ?? "");
+  // `emailInicial` na frente do armazenamento (20/09/2026, pedido do dono).
+  //
+  // Quem abre isto pela tela de "instruções enviadas" ACABOU de digitar o
+  // e-mail dele na tela anterior, e o campo aparecia vazio pedindo de novo. Pior
+  // que chato: é a única forma de a gente responder, e quem está travado na
+  // porta é quem tem menos paciência para redigitar. O armazenamento (`s.email`)
+  // continua valendo para quem abre o formulário pelo Perfil, onde não há nada
+  // digitado antes.
+  const [supEmail, setSupEmail] = useState(emailInicial.trim() || s.email || "");
   const [supErr, setSupErr] = useState(false);
   const [supStatus, setSupStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 

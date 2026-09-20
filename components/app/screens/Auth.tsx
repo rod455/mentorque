@@ -152,7 +152,7 @@ export function AuthScreen() {
         <BackButton onClick={back} />
         <Hero tagline={a.confirmTitle} />
         <Card className="text-sm text-cream/80">{a.confirmBody.replace("{email}", email)}</Card>
-        <NaoChegou motivo="confirmacao" />
+        <NaoChegou motivo="confirmacao" email={email} />
         <Button variant="ghost" className="mt-4 w-full" onClick={back}>{a.guestNote}</Button>
       </div>
     );
@@ -172,7 +172,7 @@ export function AuthScreen() {
               <p className="text-sm leading-relaxed text-cream/80">
                 {a.resetSentBody.replace("{email}", recEnviado)}
               </p>
-              <NaoChegou motivo="senha" />
+              <NaoChegou motivo="senha" email={recEnviado} />
               <Button variant="ghost" className="mt-4 w-full" onClick={voltar}>{a.backToSignIn}</Button>
             </>
           ) : (
@@ -299,7 +299,12 @@ export function AuthScreen() {
 // quer que alguém resolva. E o tipo vai como "bug", não como "dúvida": e-mail
 // que não chega é defeito nosso, e quem lê a caixa de suporte precisa ver isso
 // separado das perguntas.
-function NaoChegou({ motivo }: { motivo: "confirmacao" | "senha" }) {
+// O `email` aqui é OBRIGATÓRIO de propósito (20/09/2026). A primeira versão
+// deste ajuste deixou ele opcional, e eu esqueci de passá-lo justamente no
+// caso que o dono tinha apontado, o da senha. O `npm run conferir` passou
+// verde: prop opcional é prop que o tsc nunca cobra. Obrigatório, o compilador
+// reprova o esquecimento antes de qualquer tela.
+function NaoChegou({ motivo, email }: { motivo: "confirmacao" | "senha"; email: string }) {
   const c = useContent();
   const a = c.auth;
   const [aberto, setAberto] = useState(false);
@@ -318,6 +323,7 @@ function NaoChegou({ motivo }: { motivo: "confirmacao" | "senha" }) {
           <SuporteForm
             tipoInicial="bug"
             mensagemInicial={motivo === "senha" ? a.msgSenhaNaoChegou : a.msgConfirmacaoNaoChegou}
+            emailInicial={email}
           />
         </div>
       </Sheet>

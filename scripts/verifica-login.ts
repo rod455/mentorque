@@ -267,6 +267,17 @@ if (!noAndroid) {
     /isNativeApp\(\)\)\s*return\s+NATIVE_AUTH_REDIRECT/.test(wrapper),
     "voltando para /app o link abre o navegador e o app no celular segue deslogado",
   );
+
+  // O e-mail que a pessoa ACABOU de digitar tem que chegar ao formulário de
+  // "não chegou" (dono, 20/09/2026). Quem abre aquela folha está travado na
+  // porta e não tem paciência para digitar o endereço de novo — e o endereço é
+  // a única forma de a gente responder. A ordem importa: `emailInicial` na
+  // frente, porque quem não entrou ainda não tem `s.email` nenhum.
+  conferir(
+    "o formulário de suporte prefere o e-mail digitado na tela anterior",
+    /useState\(\s*emailInicial[\s\S]{0,20}\|\|\s*s\.email/.test(leia("components/app/SuporteForm.tsx")),
+    "caindo primeiro no armazenamento, o campo aparece vazio para quem não entrou",
+  );
 }
 
 if (falhas) {
