@@ -48,7 +48,6 @@ export function AuthScreen() {
   const [showPw, setShowPw] = useState(false);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
-  const [notice, setNotice] = useState("");
   const [confirmSent, setConfirmSent] = useState(false);
   // No iPhone o login social acontece dentro do app (folha nativa da Apple /
   // do Google) e pode demorar alguns segundos entre autorizar e a sessão
@@ -88,7 +87,7 @@ export function AuthScreen() {
 
   const doSocial = async (provider: "google" | "apple") => {
     if (social) return;
-    setErr(""); setNotice(""); setSocialErr(""); setSocial(provider);
+    setErr(""); setSocialErr(""); setSocial(provider);
     try {
       const res = provider === "google" ? await signInGoogle() : await signInApple();
       if (res.canceled || res.deferred) return;
@@ -102,7 +101,7 @@ export function AuthScreen() {
   };
 
   const submit = async () => {
-    setErr(""); setNotice(""); setBusy(true);
+    setErr(""); setBusy(true);
     try {
       const res = mode === "in"
         ? await signInEmail(email, password)
@@ -113,12 +112,38 @@ export function AuthScreen() {
     } catch { setErr(a.errGeneric); } finally { setBusy(false); }
   };
 
-  const forgot = async () => {
-    setErr(""); setNotice("");
+  // "ESQUECI MINHA SENHA" GANHOU TELA PRÓPRIA (20/09/2026).
+  //
+  // Como era, e por que estava errado: o toque disparava o envio ali mesmo, na
+  // tela de login. Quem não tinha digitado o e-mail levava um "Digite seu
+  // e-mail acima primeiro" em vermelho, que é pedir de volta exatamente o que a
+  // pessoa ia fazer, e ainda por cima em forma de erro. Quem tinha digitado via
+  // uma linha verde pequena embaixo do botão e não tinha certeza de que algo
+  // havia acontecido.
+  //
+  // Pedido do dono, em três partes, e as três são a mesma ideia: UM passo de
+  // cada vez, com confirmação explícita.
+  //
+  //   1. tela separada pedindo só o e-mail;
+  //   2. o que já estava digitado vai junto, e a pessoa só confirma;
+  //   3. no fim, um aviso claro dizendo para QUAL endereço as instruções foram.
+  //
+  // O e-mail vive num estado só (`email`), compartilhado pelas duas telas, e é
+  // isso que faz a parte 2 sair de graça: não há o que "levar", ele já está lá.
+  const [recuperando, setRecuperando] = useState(false);
+  const [recEnviado, setRecEnviado] = useState("");
+
+  const pedirRecuperacao = async () => {
+    setErr("");
     if (!email.trim()) { setErr(a.resetNeedEmail); return; }
-    const res = await resetPassword(email);
-    if (res.error) setErr(a.errGeneric);
-    else setNotice(a.resetSent);
+    setBusy(true);
+    try {
+      const res = await resetPassword(email);
+      if (res.error) { setErr(a.errGeneric); return; }
+      // Guarda o endereço USADO, não o campo: se a pessoa continuar digitando
+      // depois, o aviso continuaria dizendo para onde foi de verdade.
+      setRecEnviado(email.trim());
+    } finally { setBusy(false); }
   };
 
   if (confirmSent) {
@@ -129,6 +154,53 @@ export function AuthScreen() {
         <Card className="text-sm text-cream/80">{a.confirmBody.replace("{email}", email)}</Card>
         <NaoChegou motivo="confirmacao" />
         <Button variant="ghost" className="mt-4 w-full" onClick={back}>{a.guestNote}</Button>
+      </div>
+    );
+  }
+
+  if (recuperando) {
+    const voltar = () => { setRecuperando(false); setRecEnviado(""); setErr(""); };
+    return (
+      <div>
+        {/* O voltar daqui vai para o LOGIN, não para fora do app: a pessoa
+            entrou nesta tela a partir de lá e é para lá que ela quer voltar. */}
+        <BackButton onClick={voltar} />
+        <Hero tagline={recEnviado ? a.resetSentTitle : a.forgotTitle} />
+        <Card>
+          {recEnviado ? (
+            <>
+              <p className="text-sm leading-relaxed text-cream/80">
+                {a.resetSentBody.replace("{email}", recEnviado)}
+              </p>
+              <NaoChegou motivo="senha" />
+              <Button variant="ghost" className="mt-4 w-full" onClick={voltar}>{a.backToSignIn}</Button>
+            </>
+          ) : (
+            <>
+              <p className="text-sm leading-relaxed text-cream/70">{a.forgotBody}</p>
+              <div className="relative mt-4">
+                <MailIcon className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-cream/40" />
+                <input
+                  type="email"
+                  autoComplete="email"
+                  autoFocus
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); setErr(""); }}
+                  onKeyDown={(e) => { if (e.key === "Enter" && email.trim()) void pedirRecuperacao(); }}
+                  placeholder={a.emailPh}
+                  className={`${field} pl-11 pr-4`}
+                />
+              </div>
+              {err && <p className="mt-2 text-xs text-coral">{err}</p>}
+              <Button size="lg" className="mt-4 w-full" disabled={busy || !email.trim()} onClick={pedirRecuperacao}>
+                {busy ? a.working : a.forgotSend}
+              </Button>
+              <button onClick={voltar} className="mt-3 w-full text-center text-sm font-medium text-cream/60">
+                {a.backToSignIn}
+              </button>
+            </>
+          )}
+        </Card>
       </div>
     );
   }
@@ -187,15 +259,6 @@ export function AuthScreen() {
           </div>
 
           {err && <p className="text-xs text-coral">{err}</p>}
-          {notice && (
-            <>
-              <p className="text-xs text-teal">{notice}</p>
-              {/* A mesma saída do aviso de confirmação, pelo mesmo motivo: o
-                  link que não chega é o fim da linha para quem já esqueceu a
-                  senha. */}
-              <NaoChegou motivo="senha" />
-            </>
-          )}
 
           <Button size="lg" className="w-full" disabled={busy || !email || !password} onClick={submit}>
             {busy ? a.working : mode === "in" ? a.submitSignIn : a.submitSignUp}
@@ -203,13 +266,13 @@ export function AuthScreen() {
         </div>
 
         {mode === "in" && (
-          <button onClick={forgot} className="mt-3 w-full text-center text-sm font-medium text-amber/85 hover:text-amber">
+          <button onClick={() => { setErr(""); setRecuperando(true); }} className="mt-3 w-full text-center text-sm font-medium text-amber/85 hover:text-amber">
             {a.forgot}
           </button>
         )}
       </Card>
 
-      <button onClick={() => { setMode(mode === "in" ? "up" : "in"); setErr(""); setNotice(""); }} className="mt-4 w-full text-center text-sm font-medium text-cream/70 hover:text-cream">
+      <button onClick={() => { setMode(mode === "in" ? "up" : "in"); setErr(""); }} className="mt-4 w-full text-center text-sm font-medium text-cream/70 hover:text-cream">
         {mode === "in" ? a.toSignUp : a.toSignIn}
       </button>
       <button onClick={back} className="mt-2 w-full text-center text-xs text-cream/45 hover:text-cream/70">{a.guestNote}</button>

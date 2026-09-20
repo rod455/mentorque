@@ -783,6 +783,25 @@ export function getContent(locale: Locale) {
       // depois de ele mesmo cair na tela "Confira seu e-mail" e ela não dizer
       // o que fazer. O spam vem primeiro porque resolve a maioria dos casos
       // sem ninguém precisar escrever para nós.
+      // A TELA PRÓPRIA DE RECUPERAÇÃO (20/09/2026), pedida pelo dono. Antes o
+      // toque disparava o envio na própria tela de login, e quem não tinha
+      // digitado o e-mail levava um erro vermelho pedindo de volta o que ia
+      // fazer. Agora é um passo de cada vez, com confirmação explícita.
+      forgotTitle: T("Esqueci minha senha", "Forgot my password"),
+      forgotBody: T(
+        "Digite o e-mail da sua conta. Enviamos um link para você escolher uma senha nova.",
+        "Type your account email. We will send a link for you to choose a new password.",
+      ),
+      forgotSend: T("Enviar instruções", "Send instructions"),
+      backToSignIn: T("Voltar para entrar", "Back to sign in"),
+      resetSentTitle: T("Instruções enviadas", "Instructions sent"),
+      // O endereço aparece por extenso de propósito: é o que deixa a pessoa
+      // perceber na hora que digitou errado, em vez de esperar um e-mail que
+      // nunca vai chegar.
+      resetSentBody: T(
+        "Enviamos as instruções para {email}. Abra o link e escolha a senha nova.",
+        "We sent the instructions to {email}. Open the link and choose your new password.",
+      ),
       checkSpam: T("Confira também a caixa de spam.", "Check your spam folder too."),
       didNotArrive: T("Não chegou?", "Didn't arrive?"),
       didNotArriveTitle: T("O e-mail não chegou", "The email didn't arrive"),
