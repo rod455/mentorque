@@ -4,7 +4,8 @@ Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
 ## 2026-09-20 · Segurança (rodada 1): o Next tem três críticas, e a atualização que existe fecha uma
-- Primeira rodada semanal do papel. Artifact "Segurança da semana" publicado.
+- Primeira rodada semanal do papel. Artifact "Segurança da semana":
+  https://claude.ai/artifact/QFNNwtGWrqyFAeeSKWjHMC
 - **O ACHADO DA RODADA, e o que ele tem de desconfortável.** O `next` está em
   **14.2.5** e carrega **três falhas críticas**. Subir para **14.2.35** (o
   remendo que o `npm audit` oferece, sem virar versão maior) **fecha uma**:
