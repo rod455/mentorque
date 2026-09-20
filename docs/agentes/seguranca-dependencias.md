@@ -132,6 +132,18 @@ rodar `npm audit fix`, tocar em cobrança, preço ou dado de cliente. Não notif
 o dono direto, **exceto** se achar segredo exposto no repositório: esse é o único
 caso em que este papel avisa na hora, porque o relógio corre contra.
 
+## Direcionamentos do dono
+
+**Proteção contra senha vazada: DECIDIDO, não trazer de novo (20/09/2026).** O
+advisor `auth_leaked_password_protection` do Supabase vai aparecer como WARN em
+toda rodada, porque a checagem contra o HaveIBeenPwned está desligada. O dono
+olhou e decidiu não ligar. A razão de registrar aqui é simples: achado que já
+foi decidido e volta toda semana treina o leitor a ignorar o relatório inteiro,
+e aí o achado que importa passa batido junto.
+
+Se um dia isso mudar (por exemplo, se aparecer conta invadida), o assunto
+reabre com o caso do lado, não com o aviso repetido.
+
 ## Aprendizados
 
 ### A primeira varredura achou e-mail de cliente exposto (19/09/2026)
