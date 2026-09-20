@@ -3,6 +3,110 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-20 · Segurança (rodada 1): o Next tem três críticas, e a atualização que existe fecha uma
+- Primeira rodada semanal do papel. Artifact "Segurança da semana" publicado.
+- **O ACHADO DA RODADA, e o que ele tem de desconfortável.** O `next` está em
+  **14.2.5** e carrega **três falhas críticas**. Subir para **14.2.35** (o
+  remendo que o `npm audit` oferece, sem virar versão maior) **fecha uma**:
+  - *Authorization Bypass in Middleware* (`<14.2.25`): **não alcança a gente**,
+    e a prova está no `middleware.ts`. O nosso middleware só põe cabeçalho de
+    CORS; quem passasse por cima dele perderia o cabeçalho, não ganharia
+    permissão. Quem confere permissão é cada rota, pelo `Authorization`.
+  - *RCE em servidor Windows* (`<15.5.24`): não alcança, a Vercel roda Linux.
+    **E o remendo de 14.2.35 não cobre essa faixa.**
+  - *RCE na API de otimização de imagem com AVIF* (`<15.5.24`): é a que
+    incomoda. O `next.config.mjs` liga AVIF de propósito
+    (`formats: ["image/avif", "image/webp"]`) e o endpoint `/_next/image`
+    existe em qualquer build da Vercel. **Também não é coberta por 14.2.35.**
+- **O que a atualização REALMENTE compra**, e isso sim vale: as altas da faixa
+  14.2.x, entre elas envenenamento de cache (`<14.2.10`), um desvio de
+  autorização (`<14.2.15`) e as negações de serviço por Server Components
+  (`<14.2.34` e `<14.2.35`). Não é pouco. Só não é "resolvido".
+- **A frase que NÃO se pode dizer depois de subir**: "atualizei o Next, está
+  resolvido". Várias altas só têm conserto na linha 15.x (`<15.5.16`,
+  `<15.5.21`, `<15.5.24`), e sair da 14 é mudança de versão maior, que é outro
+  projeto, com outro custo.
+- **Mitigação barata para a de AVIF, sem atualizar nada**: tirar `"image/avif"`
+  do `formats`. Custa quase nada porque **`next/image` não é usado em lugar
+  nenhum do repositório** (zero ocorrências), então nenhuma tela muda. NÃO fiz:
+  está fora da alçada deste papel, que cobre cabeçalho de segurança e não
+  entrega de imagem.
+- **Os três baldes do `npm audit`**: 18 falhas no total. **4 chegam em produção**
+  (1 crítica e 2 altas, todas do `next`/`postcss`; 1 média no `qs`) e **14 são
+  só de desenvolvimento**, contadas e não listadas.
+  - E o caminho até nós desmonta duas das quatro: o `postcss` 8.4.31 vem
+    **preso dentro do `next`** e roda no build, sobre o NOSSO css, e os avisos
+    dele são sobre `sourceMappingURL` em css de terceiro, que a gente não
+    processa. O `nanoid` vem dentro desse mesmo `postcss`. O `qs` 6.15.3 vem
+    dentro do SDK do `stripe`, que o usa para MONTAR o corpo do que a gente
+    manda, e os avisos são sobre INTERPRETAR entrada de atacante.
+- **DESFECHO FECHADO, o achado de 19/09 segurou.** As funções
+  `cadastros_do_dia` e `cadastros_no_periodo` (`SECURITY DEFINER`, leem
+  `auth.users`) foram conferidas **no estado, não no comando**, como o manual
+  manda: `has_function_privilege('anon', ...)` devolve **false** nas duas, e em
+  `contas_criadas_desde` também. A lista de e-mail de todo cadastrado não está
+  mais ao alcance da chave pública.
+- **A camada seguinte dessas mesmas funções, que ninguém tinha olhado.** As
+  duas têm `search_path=public, auth`, **sem `pg_temp`**. No Postgres, quando
+  `pg_temp` não é nomeado, ele é pesquisado PRIMEIRO. Numa função
+  `SECURITY DEFINER` isso é a porta clássica de sequestro de nome. **Não é
+  buraco hoje**: para explorar, a pessoa precisa criar objeto temporário E
+  executar a função, e quem pode as duas coisas é `service_role`, que já manda
+  em tudo. O `contas_criadas_desde` já nasceu com `pg_temp` no fim; as outras
+  duas não. Conserto de uma linha cada, e a recomendação é que ele pegue carona
+  na próxima migração que tocar nessas funções, não numa migração de domingo.
+- **Os outros avisos do Supabase, traduzidos**: os 5 de `search_path` mutável
+  (`identidade`, `funil_canonico`, `funil_etapas`, `anomalias_da_operacao`,
+  `match_manual_chunks`) são todos `SECURITY INVOKER`, SQL simples, lendo
+  tabelas sob RLS. Não dão nada a quem já não tinha: o aviso é higiene, não
+  risco. O `vector` em `public` idem. E os **16 INFO de "RLS ligado e sem
+  política" continuam sendo o contrário de buraco**, como o manual já fixou.
+- **Senha vazada**: decidido pelo dono em 20/09, não volta. Registrado para
+  ninguém trazer de novo.
+- **Segredo escapando: nenhum.** A varredura dos 63 commits da semana bateu em
+  3 linhas com forma de segredo e as 3 são modelo, não valor
+  (`.env.example:8` e duas de documentação de skill de fora). Não cito valor
+  nem de placeholder, por regra.
+- **O `.gitignore` continua mordendo, e isso foi PROVADO, não lido.** Quatro
+  commits da semana mexeram no arquivo (todos liberando `.claude/skills/`, longe
+  do bloco de `.env`). `git check-ignore` confirma: `.env`, `.env.local`,
+  **`.env.local.bak`** (o quase acidente de 05/09), `.env.production` e
+  `.env.local.backup2` são ignorados, e só `.env.example` é rastreável.
+- **Permissões, o inventário do mês.** Repositório: **um colaborador só**, o
+  dono, como admin. n8n: **17 credenciais**, todas no projeto pessoal dele,
+  ninguém de fora. Mas os **65 fluxos** contam outra história: a maioria é de
+  **outro produto (Vocaboost) e de um cliente (Dermato)**, e **cinco estão
+  ATIVOS** sem relação com o Mentorque, entre eles um chamado
+  **"TEMP — Página QR Evolution (reconnect 2)"**, ativo desde 12/07, e um
+  "Dermato — QR ao vivo" que, pela própria descrição, serve uma página pública
+  de pareamento de WhatsApp protegida só por uma chave no endereço. Não confirmei
+  o comportamento pela rede (ver limites). Virou pergunta na lista do dono, não
+  diagnóstico, e **não desliguei nada**: fluxo do Dermato é o consultório de
+  alguém.
+- **Parado na lista do dono**: girar as chaves em texto puro dos fluxos do n8n
+  do Vocaboost está **há 13 dias** (entrou em 07/09).
+- **O LIMITE DESTA VARREDURA.** Ela alcançou: árvore do `package-lock.json`,
+  diff dos últimos 7 dias, advisors do Supabase (os dois tipos), estado das
+  permissões de função no banco, colaboradores do repositório e credenciais do
+  n8n. Ela **não** alcançou: a rede até o nosso próprio site (o proxy desta
+  sessão recusa `mentorque.com.br`, então o `/_next/image` não foi conferido ao
+  vivo, só lido no config); os pacotes SPM do build nativo, que entram por faixa
+  e não têm `Package.resolved` versionado; o binário que está nas lojas; o
+  WebView do aparelho; e os apps conectados na Meta, no Google e no Codemagic,
+  que não têm ferramenta nesta sessão e continuam por olhar.
+- **Sobra da disciplina de plantar defeito, e é para o Guardião**: plantei
+  travessão na prosa nova destes dois documentos e a `conferir:travessao`
+  passou verde. Ela varre as frases das telas, do conteúdo e dos títulos de
+  página, e **não varre `docs/`**. A regra do dono de escrever sem travessão
+  vale também para docs, e ali não há ninguém conferindo. O defeito foi
+  desfeito por cópia de segurança, como manda o CLAUDE.md.
+- **Contra a própria régua**: cumpri 1 a 5 e 7 a 9. O 6 não se aplica (nenhuma
+  dependência trocada). **O que ficou devendo**: o achado de AVIF diz o que a
+  falha PERMITE, mas eu não consegui confirmar que o endpoint responde em
+  produção, então ele é leitura de configuração e não medição, e está escrito
+  assim. E o inventário de permissões ficou pela metade por falta de ferramenta,
+  com as partes que faltam nomeadas.
+
 ## 2026-09-19 · Engenharia: o e-mail da jornada deixou de ser carta no escuro, e o webhook está armado (provado)
 - **O buraco**: a jornada manda até 6 e-mails por pessoa em 30 dias e a gente
   sabia UMA coisa sobre eles, que saíram. Entregue, aberto, clicado, devolvido,

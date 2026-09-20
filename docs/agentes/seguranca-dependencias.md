@@ -146,6 +146,50 @@ reabre com o caso do lado, não com o aviso repetido.
 
 ## Aprendizados
 
+### Quatro regras da rodada 1 (20/09/2026)
+
+**1. "Produção" no `npm audit` é a árvore, não o caminho.** O `--omit=dev`
+separa por QUEM PEDIU o pacote, e isso não é a mesma pergunta que "quem alimenta
+a entrada dele". Na rodada 1, três das quatro falhas ditas de produção
+desmontaram ao perguntar isso: o `postcss` vem preso dentro do `next` e roda no
+BUILD, sobre o nosso css; o `nanoid` vem dentro desse mesmo `postcss`; e o `qs`
+vem dentro do SDK do `stripe`, que o usa para MONTAR o que a gente manda, sendo
+que os avisos dele são sobre INTERPRETAR entrada de atacante. Antes de chamar
+uma falha de produção de achado, siga o caminho até uma entrada que um
+desconhecido controla. Se não existir esse caminho, diga isso, que é informação
+melhor que o número da gravidade.
+
+**2. Atualizar não é fechar: confira a FAIXA de cada aviso contra a versão que
+você recomenda.** O `fixAvailable` do `npm audit` propõe a maior correção sem
+virar versão maior, e isso pode deixar crítica aberta. Em 20/09 o `next` 14.2.5
+tinha três críticas e o remendo oferecido (14.2.35) fechava UMA: as outras duas
+só têm conserto na linha 15.x. Recomendar a subida está certo; dizer "resolvido"
+depois dela estaria errado. A frase honesta nomeia o que ficou aberto e por quê.
+
+**3. `search_path` fixo sem `pg_temp` ainda deixa `pg_temp` na frente.** É a
+pegadinha irmã da de 19/09 (mitigação escrita que não mordia). No Postgres,
+quando `pg_temp` não é nomeado na lista, ele é pesquisado PRIMEIRO, então uma
+função `SECURITY DEFINER` com `search_path=public, auth` continua sequestrável
+por nome. Toda rodada, olhe o `proconfig` das funções `SECURITY DEFINER` e
+confira se `pg_temp` está lá, no FIM. Achado em `cadastros_do_dia` e
+`cadastros_no_periodo`; o `contas_criadas_desde` já nasceu certo.
+
+**4. O n8n não é só nosso, e é aí que mora a permissão esquecida.** São 65
+fluxos na mesma instância, a maioria de outro produto (Vocaboost) e de um
+cliente (Dermato), com fluxos ATIVOS que não têm nada a ver com o Mentorque,
+inclusive um com "TEMP" no nome ativo desde julho. Credencial a gente lista e
+conta; fluxo ativo de terceiro é o que realmente mantém porta aberta. Na rodada
+mensal de permissão, liste os fluxos ATIVOS, não só as credenciais, e leve a
+pergunta ao dono sem desligar nada: fluxo de cliente é consultório de alguém.
+
+### O que esta sessão não alcança pela rede (20/09/2026)
+
+O proxy de saída do ambiente remoto recusa `mentorque.com.br`. Então achado que
+dependa de bater no nosso próprio site (conferir se `/_next/image` responde, por
+exemplo) sai como LEITURA DE CONFIGURAÇÃO, e tem que estar escrito assim.
+Não gaste a rodada tentando de novo, e não deixe a leitura de config passar por
+medição.
+
 ### A primeira varredura achou e-mail de cliente exposto (19/09/2026)
 
 Aconteceu antes da primeira rodada do papel, quando o dono perguntou se o agente
