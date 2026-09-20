@@ -222,8 +222,55 @@ if (!noAndroid) {
   console.log(`Login: ${PLUGIN} está nos dois binários; a queda para o navegador vira redundância.`);
 }
 
+// ── A RECUPERAÇÃO DE SENHA FECHA O CICLO? (20/09/2026) ──────────────────────
+//
+// Por que estas quatro asserções existem. Até hoje, "Esqueci minha senha"
+// mandava um e-mail, o link criava sessão, e a senha antiga continuava sendo a
+// única válida. Para sempre. O QA achou em 16/09 e escreveu a proposta; o
+// conserto entrou hoje. Nenhuma conferência desta casa pegava isso, porque
+// nada estava QUEBRADO: o e-mail saía, o link funcionava, a sessão nascia. O
+// que faltava era a última tela, e falta de tela não dá erro em lugar nenhum.
+{
+  const recuperacao = leia("lib/app/recuperacao.ts");
+  const novaSenha = leia("components/app/NovaSenha.tsx");
+  const sobreposicoes = leia("components/app/Sobreposicoes.tsx");
+  const wrapper = leia("lib/app/wrapper.ts");
+
+  conferir(
+    "existe um updateUser({ password }) alcançável",
+    /updateUser\(\s*\{\s*password/.test(auth),
+    "sem ele a tela promete redefinir senha e o app só cria uma sessão temporária",
+  );
+
+  conferir(
+    "a tela de senha nova está montada nas sobreposições",
+    /<NovaSenha\s*\/>/.test(sobreposicoes) && novaSenha.includes("definirSenha"),
+    "o updateUser pode existir e não ter caminho de dedo até ele",
+  );
+
+  // Esta é a que morde o defeito do APP DAS LOJAS, que é o pior dos dois.
+  // `PASSWORD_RECOVERY` só é emitido quando o supabase-js encontra o token na
+  // URL sozinho. No nativo quem cria a sessão somos nós, e isso emite
+  // `SIGNED_IN`. Escutar só o evento passa no navegador e falha calado no
+  // aparelho de alguém.
+  conferir(
+    "a recuperação é reconhecida pelos DOIS caminhos, evento e URL",
+    /PASSWORD_RECOVERY/.test(auth) && /type.*recovery|recovery/.test(recuperacao) && /ehLinkDeRecuperacao/.test(auth),
+    "só o evento funciona na web e falha em silêncio no app das lojas",
+  );
+
+  // E esta morde o item 3 da proposta: o link abria o NAVEGADOR e o app do
+  // celular continuava deslogado, que é o mesmo formato do defeito que já
+  // mordeu esta casa no login social.
+  conferir(
+    "no app nativo o link do e-mail volta pela ponte, não para o site",
+    /isNativeApp\(\)\)\s*return\s+NATIVE_AUTH_REDIRECT/.test(wrapper),
+    "voltando para /app o link abre o navegador e o app no celular segue deslogado",
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) de login reprovaram.`);
   process.exit(1);
 }
-console.log("Login: o portão do nativo nunca fecha a porta do navegador.");
+console.log("Login: o portão do nativo nunca fecha a porta do navegador, e a recuperação de senha fecha o ciclo.");

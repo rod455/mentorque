@@ -143,7 +143,7 @@ export function ProfileScreen() {
   const p = c.profile;
   const g = c.gamification;
   const { locale } = useI18n();
-  const { user, enabled, signOut, resetPassword } = useAuth();
+  const { user, enabled, signOut, pedirTrocaDeSenha } = useAuth();
   const { s, setName, setState, setPremium, setNotifications, setMotoristaDeApp, setUnits, setAvatar, subscribed, subscriptionEndsAt, subscriptionCanceling, refreshSubscription, reset } = usePrototype();
   const { go, root } = useNav();
 
@@ -237,7 +237,6 @@ export function ProfileScreen() {
   const [premiumOpen, setPremiumOpen] = useState(false);
   const [editName, setEditName] = useState(false);
   const [nameInput, setNameInput] = useState(s.name ?? "");
-  const [pwSent, setPwSent] = useState(false);
   const avatarRef = useRef<HTMLInputElement>(null);
 
   // Name shown at the top: user's name → Google name → email prefix.
@@ -246,11 +245,17 @@ export function ProfileScreen() {
   const provider = (user?.app_metadata?.provider as string | undefined) ?? "email";
   const providerLabel = provider === "google" ? "Google" : provider === "apple" ? "Apple" : "e-mail";
 
-  const changePassword = async () => {
-    if (!user?.email) return;
-    const r = await resetPassword(user.email);
-    if (!r.error) setPwSent(true);
-  };
+  // ELE MANDAVA E-MAIL E DIZIA "LINK ENVIADO ✓" (consertado em 20/09/2026).
+  //
+  // O botão se chamava "Trocar senha" e chamava o MESMO `resetPassword` do
+  // "Esqueci minha senha": mandava um e-mail e escrevia que tinha enviado. Não
+  // trocava senha nenhuma, e como não existia tela para digitar a nova, o
+  // caminho não fechava em lugar nenhum.
+  //
+  // Agora abre a tela de verdade. A pessoa já está logada aqui, então não faz
+  // sentido passar por e-mail: ela confirma a senha de hoje e escolhe a nova,
+  // na hora, no aparelho onde ela está.
+  const changePassword = () => pedirTrocaDeSenha();
   // Sair da conta leva para a Home, em vez de deixar o motorista no Perfil.
   //
   // Todo o bloco da conta (trocar senha, sair, excluir) vive dentro de
@@ -732,7 +737,7 @@ export function ProfileScreen() {
                 <span className="min-w-0 flex-1 font-display text-[15px] text-cream">{p.connectedWith.replace("{p}", providerLabel)}</span>
               </div>
             ) : (
-              <IconRow icon="shield" tint="bg-teal/15 text-teal" label={p.changePassword} action={pwSent ? p.passwordSent : undefined} onClick={pwSent ? undefined : changePassword} />
+              <IconRow icon="shield" tint="bg-teal/15 text-teal" label={p.changePassword} onClick={changePassword} />
             )}
             <IconRow icon="user" tint="bg-graphite-700 text-cream/60" label={c.auth.signOut} onClick={leave} />
             <IconRow icon="alert" tint="bg-coral/15 text-coral" label={p.deleteAccount} danger onClick={removeAccount} />

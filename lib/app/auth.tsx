@@ -15,11 +15,17 @@ import {
   openExternal,
 } from "./wrapper";
 import { googleNativeConfigured, nativeSocialLogin } from "./socialLogin";
+import { ehLinkDeRecuperacao } from "./recuperacao";
 
 // `canceled`: o usuário fechou a folha do provedor — não é erro, a tela não
 // deve piscar vermelho nem seguir adiante.
 // `deferred`: o login continua FORA do app (aba do sistema) e termina no deep
 // link. A tela de login precisa continuar de pé até o retorno.
+// Por que a tela precisa saber COMO foi aberta: quem chegou pelo link do
+// e-mail não sabe a senha antiga (o link é a prova de posse), e quem pediu no
+// Perfil sabe e tem que provar. Um booleano não distinguia os dois.
+export type ModoSenha = "recuperacao" | "troca" | null;
+
 type Result = { error?: string; needsConfirm?: boolean; canceled?: boolean; deferred?: boolean };
 
 type AuthValue = {
@@ -31,6 +37,21 @@ type AuthValue = {
   signInGoogle: () => Promise<Result>;
   signInApple: () => Promise<Result>;
   resetPassword: (email: string) => Promise<Result>;
+  // A REDEFINIÇÃO DE VERDADE (20/09/2026). Até aqui `resetPassword` era tudo o
+  // que existia, e ele só MANDA O E-MAIL: o link criava sessão e a senha
+  // antiga continuava sendo a única válida, para sempre. Achado do QA em
+  // 16/09, proposta em docs/agentes/propostas/recuperar-senha-nao-recupera.md.
+  definirSenha: (nova: string) => Promise<Result>;
+  // Troca com o dedo do dono da conta: confere a senha atual antes. Usada pelo
+  // Perfil, onde a pessoa JÁ está logada e não deveria precisar de e-mail.
+  trocarSenha: (atual: string, nova: string) => Promise<Result>;
+  // Verdadeiro quando a pessoa chegou por um link de recuperação e ainda não
+  // definiu a senha nova. Enquanto for verdadeiro, a tela de nova senha fica
+  // de pé e não é pulável: pular devolve o defeito de hoje.
+  modoSenha: ModoSenha;
+  // Abre a mesma tela a pedido (Perfil), sem link de e-mail nenhum.
+  pedirTrocaDeSenha: () => void;
+  encerrarTrocaDeSenha: () => void;
   signOut: () => Promise<void>;
   // Falha do retorno OAuth no app nativo. Sem isto o usuário voltava para a
   // tela de login sem nenhuma explicação — parecia que tinha dado certo.
@@ -88,11 +109,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(!supabase); // if disabled, we're "ready" (guest)
   const [oauthError, setOauthError] = useState("");
+  const [modoSenha, setModoSenha] = useState<ModoSenha>(null);
 
   useEffect(() => {
     if (!supabase) return;
     supabase.auth.getSession().then(({ data }) => { setUser(data.session?.user ?? null); setReady(true); });
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => setUser(session?.user ?? null));
+    // O PRIMEIRO ARGUMENTO ERA DESCARTADO, e era ele que carregava a intenção.
+    // `PASSWORD_RECOVERY` é emitido quando o próprio supabase-js encontra o
+    // token na URL (`detectSessionInUrl`). Este é o caminho da WEB; o do app
+    // nativo está no ouvinte de deep link, logo abaixo, e precisa dos dois.
+    const { data: sub } = supabase.auth.onAuthStateChange((evento, session) => {
+      setUser(session?.user ?? null);
+      if (evento === "PASSWORD_RECOVERY") setModoSenha("recuperacao");
+    });
     return () => sub.subscription.unsubscribe();
   }, [supabase]);
 
@@ -103,7 +132,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!supabase) return;
     return onDeepLink((url) => {
       if (!url.startsWith(NATIVE_AUTH_CALLBACK)) return;
-      void completeOAuth(supabase, url).then(setOauthError);
+      // Lido ANTES de completar: a URL é o único lugar onde a intenção de
+      // recuperação sobrevive no caminho nativo. Aqui a sessão é criada por
+      // nós, e isso emite `SIGNED_IN`, nunca `PASSWORD_RECOVERY`.
+      const recuperando = ehLinkDeRecuperacao(url);
+      void completeOAuth(supabase, url).then((erro) => {
+        setOauthError(erro);
+        if (!erro && recuperando) setModoSenha("recuperacao");
+      });
     });
   }, [supabase]);
 
@@ -211,11 +247,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return error ? { error: error.message } : {};
   }, [supabase]);
 
-  const signOut = useCallback(async () => { await supabase?.auth.signOut(); }, [supabase]);
+  // A senha nova, no caminho de RECUPERAÇÃO: quem chegou pelo link do e-mail
+  // não sabe a antiga, e o próprio link é a prova de posse do e-mail.
+  const definirSenha = useCallback(async (nova: string): Promise<Result> => {
+    if (!supabase) return { error: "auth_disabled" };
+    const { error } = await supabase.auth.updateUser({ password: nova });
+    if (error) return { error: error.message };
+    setModoSenha(null);
+    return {};
+  }, [supabase]);
+
+  // A senha nova, no caminho de TROCA pelo Perfil.
+  //
+  // Aqui a antiga é conferida, e não é formalidade: `updateUser` sozinho troca
+  // a senha de quem estiver com o aparelho na mão, sem provar nada. O Supabase
+  // tem uma opção de painel que exige reautenticação, e depender de uma caixa
+  // marcada em painel é depender de algo que ninguém vê no código. Conferir
+  // aqui vale nas duas configurações.
+  const trocarSenha = useCallback(async (atual: string, nova: string): Promise<Result> => {
+    if (!supabase) return { error: "auth_disabled" };
+    const email = user?.email;
+    if (!email) return { error: "sem_email" };
+    const { error: erroAtual } = await supabase.auth.signInWithPassword({ email, password: atual });
+    if (erroAtual) return { error: "senha_atual_errada" };
+    const { error } = await supabase.auth.updateUser({ password: nova });
+    if (error) return { error: error.message };
+    setModoSenha(null);
+    return {};
+  }, [supabase, user]);
+
+  const pedirTrocaDeSenha = useCallback(() => setModoSenha("troca"), []);
+  const encerrarTrocaDeSenha = useCallback(() => setModoSenha(null), []);
+
+  const signOut = useCallback(async () => {
+    setModoSenha(null);
+    await supabase?.auth.signOut();
+  }, [supabase]);
 
   const value = useMemo<AuthValue>(
-    () => ({ user, ready, enabled: !!supabase, signUpEmail, signInEmail, signInGoogle, signInApple, resetPassword, signOut, oauthError, clearOauthError: () => setOauthError("") }),
-    [user, ready, supabase, signUpEmail, signInEmail, signInGoogle, signInApple, resetPassword, signOut, oauthError]
+    () => ({ user, ready, enabled: !!supabase, signUpEmail, signInEmail, signInGoogle, signInApple, resetPassword, definirSenha, trocarSenha, modoSenha, pedirTrocaDeSenha, encerrarTrocaDeSenha, signOut, oauthError, clearOauthError: () => setOauthError("") }),
+    [user, ready, supabase, signUpEmail, signInEmail, signInGoogle, signInApple, resetPassword, definirSenha, trocarSenha, modoSenha, pedirTrocaDeSenha, encerrarTrocaDeSenha, signOut, oauthError]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

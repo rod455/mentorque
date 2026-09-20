@@ -106,8 +106,20 @@ export function onDeepLink(handler: (url: string) => void): () => void {
 // URL de retorno para os links enviados por e-mail (confirmação de conta,
 // redefinição de senha). Sempre https e absoluta: esses links podem ser
 // abertos em outro aparelho, onde o deep link não resolveria.
+// NO APP NATIVO O RETORNO É A PONTE, NÃO O SITE (20/09/2026).
+//
+// Isto devolvia `${APP_ORIGIN}/app` inclusive no app das lojas, e o efeito era
+// o defeito que já mordeu esta casa no login social: o link abria o NAVEGADOR,
+// a sessão nascia lá, e o app no celular continuava deslogado. A pessoa fazia
+// tudo certo e nada mudava na tela onde ela estava.
+//
+// A ponte (`/auth-bridge`) é uma página https comum que passa na validação de
+// Redirect URL do GoTrue (ele RECUSA `mentorque://`) e repassa query e
+// fragmento inteiros para o esquema próprio. Ela já existe, já está cadastrada
+// e já roda em produção: 38 das 42 contas do banco entraram por ela, no login
+// social. Não é caminho novo, é o caminho que já funciona.
 export function emailRedirectUrl(): string {
-  if (isNativeApp()) return `${APP_ORIGIN}/app`;
+  if (isNativeApp()) return NATIVE_AUTH_REDIRECT;
   return typeof window !== "undefined" ? `${window.location.origin}/app` : `${APP_ORIGIN}/app`;
 }
 

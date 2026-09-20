@@ -746,10 +746,39 @@ export function getContent(locale: Locale) {
       // a dizer o que de fato acontece. Descrever um recurso que não existe é
       // o que vira avaliação de uma estrela, porque a pessoa conclui que o app
       // está quebrado em vez de concluir que falta o recurso.
+      // 20/09/2026: A REDEFINIÇÃO PASSOU A EXISTIR, e o texto volta a prometer
+      // o que acontece. O que o comentário acima descreve foi consertado: o
+      // link agora abre a tela de senha nova (components/app/NovaSenha.tsx),
+      // nos dois caminhos, web e app das lojas.
       resetSent: T(
-        "Enviamos um link de acesso para o seu e-mail. Ele entra na sua conta sem pedir senha.",
-        "We sent a sign-in link to your email. It gets you into your account without a password.",
+        "Enviamos um link para o seu e-mail. Ao abrir, você escolhe uma senha nova.",
+        "We sent a link to your email. Open it and choose a new password.",
       ),
+      // A tela de senha nova, nos dois modos.
+      newPasswordTitle: T("Escolha uma senha nova", "Choose a new password"),
+      newPasswordBody: T(
+        "Você chegou pelo link do e-mail. Defina a senha que vai usar da próxima vez.",
+        "You arrived through the email link. Set the password you will use next time.",
+      ),
+      changePasswordTitle: T("Trocar a senha", "Change your password"),
+      changePasswordBody: T(
+        "Confirme a senha de hoje e escolha a nova.",
+        "Confirm your current password and choose a new one.",
+      ),
+      currentPassword: T("Senha atual", "Current password"),
+      currentPasswordWrong: T("A senha atual não confere.", "That current password is not right."),
+      newPassword: T("Senha nova", "New password"),
+      repeatPassword: T("Repita a senha nova", "Repeat the new password"),
+      passwordTooShort: T("A senha precisa de 6 caracteres ou mais.", "The password needs 6 characters or more."),
+      passwordsDiffer: T("As duas senhas não são iguais.", "The two passwords do not match."),
+      savePassword: T("Salvar senha", "Save password"),
+      saving: T("Salvando…", "Saving…"),
+      passwordDoneTitle: T("Senha trocada", "Password changed"),
+      passwordDoneBody: T(
+        "Pronto. Use a senha nova na próxima vez que entrar, em qualquer aparelho.",
+        "Done. Use the new password next time you sign in, on any device.",
+      ),
+      passwordDoneCta: T("Continuar", "Continue"),
       resetNeedEmail: T("Digite seu e-mail acima primeiro.", "Enter your e-mail above first."),
       tagline: T("Salve sua garagem e cuide do seu carro de qualquer aparelho.", "Save your garage and care for your car from any device."),
       // Para quem chegou aqui tocando em assinar. A conta é o passo que falta,

@@ -1,4 +1,35 @@
-# PROPOSTA, não aplicada: "Esqueci minha senha" não redefine senha nenhuma
+# APLICADA em 20/09/2026: "Esqueci minha senha" não redefinia senha nenhuma
+
+> **Estado: feita.** O dono perguntou "o esqueci senha está funcionando?", a
+> resposta foi não, e ele mandou fechar todas as portas. O conserto seguiu esta
+> proposta, INCLUSIVE as duas autocorreções dela, que foram as partes mais
+> valiosas do documento:
+>
+> - a "decisão do dono" sobre deep link se dissolveu sozinha, porque a ponte já
+>   existia e já rodava (CORREÇÃO 1);
+> - escutar só o evento `PASSWORD_RECOVERY` funcionaria na web e falharia
+>   calado no app das lojas (CORREÇÃO 2). A detecção ficou nos dois caminhos.
+>
+> **O que entrou:** `lib/app/recuperacao.ts` (detecção pura pela URL),
+> `components/app/NovaSenha.tsx` (a tela que faltava), `definirSenha` e
+> `trocarSenha` no `lib/app/auth.tsx`, e o `emailRedirectUrl()` voltando pela
+> ponte no app nativo.
+>
+> **Uma porta que esta proposta não viu:** o botão "Trocar senha" do Perfil
+> chamava o MESMO `resetPassword`, ou seja, mandava e-mail e escrevia "link
+> enviado". Ele não trocava senha nenhuma. Agora abre a mesma tela, com a senha
+> atual conferida antes.
+>
+> **A conferência entrou em `scripts/verifica-login.ts`**, com quatro asserções,
+> e as quatro foram provadas plantando o defeito que cada uma existe para pegar.
+> A quarta reprova exatamente o estado em que o código estava antes deste
+> conserto.
+>
+> **O que continua sem prova, e é o passo que decide:** ninguém abriu o link num
+> aparelho. O roteiro está no fim deste documento e vale inteiro. A frase
+> honesta sobre o app das lojas é "sem sinal ainda".
+
+## O texto original da proposta, preservado
 
 Achado da rodada de QA de 16/09/2026, na varredura do fluxo de login e
 recuperação de conta. Não apliquei porque o conserto é funcionalidade nova em

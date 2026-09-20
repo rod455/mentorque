@@ -4,6 +4,7 @@ import { FeedbackSheet } from "./FeedbackSheet";
 import { ImportarGaragem } from "./ImportarGaragem";
 import { ConfirmandoPagamento } from "./ConfirmandoPagamento";
 import { PrimeiroQuiz } from "./PrimeiroQuiz";
+import { NovaSenha } from "./NovaSenha";
 import { WelcomeBack } from "./WelcomeBack";
 import { SalveSuaGaragem } from "./SalveSuaGaragem";
 import type { View } from "@/lib/app/nav";
@@ -46,6 +47,9 @@ export function Sobreposicoes({ view }: { view: View["name"] }) {
       <ImportarGaragem />
       <ConfirmandoPagamento />
       <PrimeiroQuiz />
+      {/* Por último de propósito: quando ela aparece, é a única coisa que
+          importa na tela, e ela cobre tudo. */}
+      <NovaSenha />
     </>
   );
 }
