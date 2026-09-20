@@ -38,10 +38,28 @@ const ATALHOS_SOCIAIS = [
 
 const nextConfig = {
   reactStrictMode: true,
+  // O OTIMIZADOR DE IMAGEM FOI DESLIGADO INTEIRO (20/09/2026).
+  //
+  // Achado da primeira rodada do agente de segurança. O `next` 14.2.5 carrega
+  // uma crítica de execução remota na API de imagem que só tem conserto na
+  // linha 15, e a configuração daqui ligava `image/avif` de propósito.
+  //
+  // O TAMANHO REAL DO RISCO, que vale registrar para ninguém se assustar nem
+  // relaxar demais: sem `remotePatterns` nem `domains`, o `/_next/image` recusa
+  // endereço de fora. Ou seja, para explorar, o arquivo malicioso teria que ser
+  // servido pelo NOSSO site. É estreito, mas não é fechado.
+  //
+  // O que fecha de verdade é não ter otimizador nenhum, e isso aqui custa ZERO:
+  // `next/image` não é importado em lugar nenhum do repositório (conferido, e a
+  // conferência em scripts/verifica-imagem.mjs guarda isso). Todas as imagens
+  // são `<img>` comum servida de `public/`. O `formats` saiu junto porque sem
+  // otimizador ele não decide mais nada.
+  //
+  // Se um dia alguém precisar do `next/image`, a conferência reprova e este
+  // comentário é o lugar de reabrir a conversa: aí a decisão passa a ser entre
+  // subir para a linha 15 ou viver sem AVIF.
   images: {
-    formats: ["image/avif", "image/webp"],
-    // A exportação estática não tem servidor para otimizar imagem.
-    unoptimized: native,
+    unoptimized: true,
   },
   ...(native
     ? {
