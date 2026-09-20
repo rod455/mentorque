@@ -7,6 +7,20 @@ de saber o que está no ar é abrir o painel, e um texto perdido não volta.
 
 Sempre que editar um template lá, atualize o arquivo aqui.
 
+**E a pergunta que ninguém consegue responder daqui: o painel está com ISTO?**
+Não existe conferência possível, porque nenhum script nosso lê o conteúdo do
+painel. Em 20/09/2026 o dono criou uma conta de teste e recebeu o modelo DE
+FÁBRICA do Supabase, em inglês, com estes arquivos versionados aqui desde
+06/09. Ou seja: o trabalho estava feito e nunca tinha sido colado, e ninguém
+tinha como saber. Quando colar, **diga no commit que colou, com a data**. É o
+único registro que existe.
+
+**O texto de `redefinir-senha.html` só passou a ser verdade em 20/09/2026.** Ele
+diz "toque no botão abaixo para escolher uma nova", e até aquele dia não havia
+tela nenhuma para escolher senha: o link criava sessão e a senha antiga
+continuava valendo. O conserto está em `components/app/NovaSenha.tsx`. Se algum
+dia aquela tela sair, este e-mail volta a mentir.
+
 | Arquivo | Template no painel | Assunto sugerido |
 |---|---|---|
 | `confirmar-cadastro.html` | Confirm signup | Confirme seu e-mail no Mentorque |
