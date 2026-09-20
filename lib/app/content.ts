@@ -779,6 +779,26 @@ export function getContent(locale: Locale) {
         "Done. Use the new password next time you sign in, on any device.",
       ),
       passwordDoneCta: T("Continuar", "Continue"),
+      // A saída de quem o e-mail não alcança (20/09/2026), pedida pelo dono
+      // depois de ele mesmo cair na tela "Confira seu e-mail" e ela não dizer
+      // o que fazer. O spam vem primeiro porque resolve a maioria dos casos
+      // sem ninguém precisar escrever para nós.
+      checkSpam: T("Confira também a caixa de spam.", "Check your spam folder too."),
+      didNotArrive: T("Não chegou?", "Didn't arrive?"),
+      didNotArriveTitle: T("O e-mail não chegou", "The email didn't arrive"),
+      didNotArriveBody: T(
+        "Conte para a gente e resolvemos. A mensagem já vai escrita; é só enviar.",
+        "Tell us and we will sort it out. The message is already written, just send it.",
+      ),
+      // Já escritas porque quem está travado na porta não quer redigir nada.
+      msgConfirmacaoNaoChegou: T(
+        "O e-mail de confirmação de conta não chegou.",
+        "The account confirmation email did not arrive.",
+      ),
+      msgSenhaNaoChegou: T(
+        "O e-mail para redefinir a senha não chegou.",
+        "The password reset email did not arrive.",
+      ),
       resetNeedEmail: T("Digite seu e-mail acima primeiro.", "Enter your e-mail above first."),
       tagline: T("Salve sua garagem e cuide do seu carro de qualquer aparelho.", "Save your garage and care for your car from any device."),
       // Para quem chegou aqui tocando em assinar. A conta é o passo que falta,

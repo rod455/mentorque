@@ -16,6 +16,7 @@ import { lerImagem, resizeImage, type ImagemLida } from "@/lib/app/image";
 import { precisaDeAjuste } from "@/lib/app/recorte";
 import { AjusteDeFoto } from "../AjusteDeFoto";
 import { uploadUserPhoto } from "@/lib/app/uploadPhoto";
+import { SuporteForm } from "../SuporteForm";
 
 // O lado do avatar guardado. Era o `400` solto na chamada de resizeImage; virou
 // nome porque agora ele decide duas coisas (quando pedir ajuste e o tamanho do
@@ -710,7 +711,7 @@ export function ProfileScreen() {
                 O `scroll-mt` deixa o título do bloco visível acima do
                 formulário, em vez de colar a borda no topo. */}
             <div id={ID_FALE_COM_A_GENTE} className="scroll-mt-14">
-              <SupportForm />
+              <SuporteForm />
             </div>
           </div>
         )}
@@ -850,91 +851,6 @@ export function ProfileScreen() {
 }
 
 // 3.1.E — Fale com a gente: formulário inline (expande no Perfil).
-function SupportForm() {
-  const c = useContent();
-  const p = c.profile;
-  const { locale } = useI18n();
-  const { s } = usePrototype();
-  const [supType, setSupType] = useState<"doubt" | "suggestion" | "bug">("doubt");
-  const [supMsg, setSupMsg] = useState("");
-  const [supEmail, setSupEmail] = useState(s.email ?? "");
-  const [supErr, setSupErr] = useState(false);
-  const [supStatus, setSupStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-
-  const sendSupport = async () => {
-    if (!supMsg.trim()) return setSupErr(true);
-    setSupStatus("sending");
-    try {
-      // `apiPost`, não `fetch` com JSON.
-      //
-      // `content-type: application/json` numa chamada entre origens obriga o
-      // navegador a mandar antes um OPTIONS, e o registro em apiBase.ts conta
-      // que essa verificação morria dentro da WebView do iPhone — as chamadas
-      // não chegavam NEM como OPTIONS. O middleware hoje responde CORS, mas o
-      // canal por onde o usuário reclama do app é o último que pode depender
-      // disso: se ele falhar, ninguém avisa, porque avisar é justamente o que
-      // ele deixou de fazer.
-      const res = await apiPost("/api/feedback", {
-        type: supType,
-        message: supMsg.trim(),
-        name: s.name || undefined,
-        email: (supEmail || s.email || "").trim() || undefined,
-        userId: deviceId(),
-        locale,
-      });
-      if (!res.ok) throw new Error("send_failed");
-      setSupStatus("sent");
-      setSupMsg("");
-    } catch {
-      setSupStatus("error");
-    }
-  };
-
-  return (
-    <div>
-      <p className="text-sm text-cream/60">{p.support.subtitle}</p>
-      <div className="mt-3 grid grid-cols-3 gap-2">
-        {([["doubt", p.support.doubt], ["suggestion", p.support.suggestion], ["bug", p.support.bug]] as const).map(([key, label]) => {
-          const active = supType === key;
-          return (
-            <button
-              key={key}
-              onClick={() => setSupType(key)}
-              className={`rounded-xl px-2 py-2 text-sm font-medium ring-1 transition-colors ${active ? "bg-amber text-graphite ring-amber" : "bg-graphite-700 text-cream/70 ring-white/10"}`}
-            >
-              {label}
-            </button>
-          );
-        })}
-      </div>
-      {supStatus === "sent" ? (
-        <div className="mt-3 rounded-xl bg-teal/10 px-3.5 py-3 text-sm text-teal ring-1 ring-teal/20">{p.support.sent}</div>
-      ) : (
-        <>
-          <textarea
-            value={supMsg}
-            onChange={(e) => { setSupMsg(e.target.value); setSupErr(false); }}
-            rows={5}
-            placeholder={p.support.messagePh}
-            className={`mt-3 resize-none ${inputCls}`}
-          />
-          <input
-            value={supEmail}
-            onChange={(e) => setSupEmail(e.target.value)}
-            type="email"
-            placeholder={p.support.emailPh}
-            className={`mt-2 ${inputCls}`}
-          />
-          {supErr && <p className="mt-1 text-xs text-coral">{p.support.empty}</p>}
-          {supStatus === "error" && <p className="mt-1 text-xs text-coral">{p.support.error}</p>}
-          <Button size="lg" className="mt-3 w-full" disabled={supStatus === "sending"} onClick={sendSupport}>
-            {supStatus === "sending" ? p.support.sending : p.support.send}
-          </Button>
-        </>
-      )}
-    </div>
-  );
-}
 
 // 3.1.B — Assinatura (contextual paywall + detailed Free vs Premium)
 // Verde de "incluído" (círculo com check).

@@ -6,7 +6,8 @@ import { useNav } from "@/lib/app/nav";
 import { appleLoginDisponivel } from "@/lib/app/socialLogin";
 import { veioAssinar } from "@/lib/app/vendaPendente";
 import { Button } from "@/components/ui/Button";
-import { Card, useContent } from "../ui";
+import { Card, Sheet, useContent } from "../ui";
+import { SuporteForm } from "../SuporteForm";
 
 // Field base — dark input; icon slots via pl-11 / pr-11.
 const field =
@@ -126,6 +127,7 @@ export function AuthScreen() {
         <BackButton onClick={back} />
         <Hero tagline={a.confirmTitle} />
         <Card className="text-sm text-cream/80">{a.confirmBody.replace("{email}", email)}</Card>
+        <NaoChegou motivo="confirmacao" />
         <Button variant="ghost" className="mt-4 w-full" onClick={back}>{a.guestNote}</Button>
       </div>
     );
@@ -185,7 +187,15 @@ export function AuthScreen() {
           </div>
 
           {err && <p className="text-xs text-coral">{err}</p>}
-          {notice && <p className="text-xs text-teal">{notice}</p>}
+          {notice && (
+            <>
+              <p className="text-xs text-teal">{notice}</p>
+              {/* A mesma saída do aviso de confirmação, pelo mesmo motivo: o
+                  link que não chega é o fim da linha para quem já esqueceu a
+                  senha. */}
+              <NaoChegou motivo="senha" />
+            </>
+          )}
 
           <Button size="lg" className="w-full" disabled={busy || !email || !password} onClick={submit}>
             {busy ? a.working : mode === "in" ? a.submitSignIn : a.submitSignUp}
@@ -208,6 +218,50 @@ export function AuthScreen() {
 }
 
 // Small floating back arrow (the hero replaces the usual header).
+// "NÃO CHEGOU?", a saída para quem o e-mail não alcança (20/09/2026).
+//
+// PEDIDO DO DONO, e ele nasce de um teste real: ele criou uma conta de teste,
+// caiu na tela "Confira seu e-mail" e a tela não dizia o que fazer se o e-mail
+// não aparecesse. Duas coisas resolvem quase todos os casos:
+//
+//   1. lembrar do SPAM, que é onde e-mail automático costuma parar;
+//   2. e, se mesmo assim não chegar, um caminho para falar com a gente.
+//
+// O segundo item é o que importa, e ele estava fechado: o formulário de "Fale
+// com a gente" morava dentro do Perfil, que só existe DEPOIS do login. Ou seja,
+// a pessoa travada na porta era exatamente a única sem como bater nela. Por
+// isso o formulário foi extraído para components/app/SuporteForm.tsx.
+//
+// A mensagem já vem escrita porque quem está travado não quer redigir nada: ele
+// quer que alguém resolva. E o tipo vai como "bug", não como "dúvida": e-mail
+// que não chega é defeito nosso, e quem lê a caixa de suporte precisa ver isso
+// separado das perguntas.
+function NaoChegou({ motivo }: { motivo: "confirmacao" | "senha" }) {
+  const c = useContent();
+  const a = c.auth;
+  const [aberto, setAberto] = useState(false);
+  return (
+    <>
+      <p className="mt-3 text-xs leading-relaxed text-cream/55">
+        {a.checkSpam}{" "}
+        <button onClick={() => setAberto(true)} className="font-medium text-amber underline underline-offset-2">
+          {a.didNotArrive}
+        </button>
+      </p>
+      <Sheet open={aberto} onClose={() => setAberto(false)}>
+        <h3 className="font-display text-lg font-bold text-cream">{a.didNotArriveTitle}</h3>
+        <p className="mt-1 text-sm text-cream/60">{a.didNotArriveBody}</p>
+        <div className="mt-4">
+          <SuporteForm
+            tipoInicial="bug"
+            mensagemInicial={motivo === "senha" ? a.msgSenhaNaoChegou : a.msgConfirmacaoNaoChegou}
+          />
+        </div>
+      </Sheet>
+    </>
+  );
+}
+
 function BackButton({ onClick }: { onClick: () => void }) {
   return (
     <div className="pt-4">
