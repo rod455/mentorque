@@ -3,6 +3,98 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-21 · Diretor: relatório da semana (14 a 20/09) e o primeiro veredito das rodadas
+- Artifact "Semana Mentorque":
+  https://claude.ai/artifact/NNypGsQD1yxTGt5whCsgaa
+- Banco conferido no começo, conforme o direcionamento de 31/08.
+- **O NÚMERO: 17 contas novas, contra 11.** Maior número desde que o produto
+  existe, e o custo por conta caiu de R$ 19,49 para R$ 15,27.
+- **A VIRADA DO DIA 19, e é o achado da rodada.** Até 18/09 as contas vinham
+  da web com `google / lancamento` (6 na semana). De 19/09 em diante, nenhuma:
+  passaram a vir do Android SEM ETIQUETA (3 em 19/09, 3 em 20/09, e mais 7
+  hoje). Causa provável, com quatro indícios e sem prova direta: a campanha de
+  instalação da Meta entrou em 19/09 (R$ 28,18, 22 instalações relatadas) e a
+  do Google, "APP | Android | Instalações | BR", apareceu em 20/09 (R$ 44,30,
+  299 cliques); o RevenueCat foi de 175 para 220 aparelhos em três dias; e a
+  App Store ficou em 1 a 2 downloads por dia, então não é iPhone. A prova
+  direta não existe porque a atribuição de instalação nunca foi fechada.
+- **FECHA A PERGUNTA DO MÍDIA PAGA (19/09):** ele procurou na conta da Meta as
+  campanhas com "APP", "Android" e "Instalações" no nome e não achou. Estão no
+  GOOGLE, com esse nome exato, e apareceram na coleta de hoje. Pode sair da
+  lista do dono.
+- Gasto R$ 259,56 (Google 231,38 + Meta 28,18) contra R$ 214,35. ZERO
+  assinatura nova, pela terceira semana: o último assinante é de 02/09, são
+  19 dias e 35 contas nesse período. Receita segue R$ 0,00; primeira cobrança
+  real em 01/10, verificação já agendada.
+- ARMADILHA REGISTRADA: o retrato mostra "CAC bruto 7d" de R$ 66,28, que
+  divide 7 dias de gasto pelos cadastros da semana CORRENTE, e hoje a semana
+  corrente tem só a segunda-feira. O número da semana fechada é R$ 15,27.
+- CONFERI ANTES DE ESCREVER: `comecou_onboarding` deu 189 e
+  `terminou_onboarding` deu 64 nas DUAS semanas, número idêntico, o que parece
+  defeito de consulta. Conferido dia a dia: as distribuições são diferentes e
+  as somas caem no mesmo lugar por coincidência. É real.
+- PLACAR de 14/09, as três FEITAS com prova: (1) a perda de evento no funil
+  parou, e agora dá para afirmar, uma única recusa em 7 dias e é a de 14/09
+  13h30, antes do conserto (erros de execução da Vercel); (2) a rota destravou
+  (teto para 60 s, retrato de hoje sem `error`, 11 fontes com zero dias
+  parados); (3) banco reconectado. A leitura de 7 dias que a Engenharia deixou
+  em aberto em 15/09 ("dez horas de silêncio não são prova") está fechada aqui.
+
+### VEREDITOS DAS RODADAS DA SEMANA (papel de chefe, primeira vez)
+Ressalva que vale para os seis: as réguas nasceram em 19/09, e quatro destas
+rodadas são anteriores. Só Mídia paga e Segurança tinham a régua na mão.
+- **Segurança (20/09)**: cumpriu 1 a 5 e 7 a 9; o 6 não se aplica. DECLAROU as
+  próprias falhas (AVIF é leitura de configuração e não medição; inventário de
+  permissões pela metade, com o que faltou nomeado). Achou a mitigação barata
+  e não aplicou por estar fora da alçada, que é o certo. De brinde, achou que a
+  `conferir:travessao` não varre `docs/`, e provou plantando o defeito. Nada a
+  cobrar.
+- **Mídia paga (19/09)**: cumpriu 1 a 10 e 12; o 11 eu conferi abrindo o
+  relatório e ele se sustenta sozinho. Destaque: desmentiu o próprio estado
+  escrito horas antes (a lista de termos é de 30 dias, não 7), derrubando por
+  quatro a projeção que ele mesmo publicara. FALHOU o autoexame: a régua manda
+  dizer qual critério não foi cumprido, e nem o relatório nem o diário trazem
+  esse parágrafo. Atenuante: a régua nasceu no mesmo dia.
+- **CRO (18/09)**: cumpriu 1 a 6, 8 e 10; o 9 não se aplica. Entregou o achado
+  mais valioso da semana (o portão que apaga a tentativa do convidado) e
+  cumpriu o critério 3 de forma exemplar. FALHOU o 7: não há registro de ter
+  atualizado o mapa. Pode ter feito sem escrever; contra a régua vale o
+  registro.
+- **QA (16/09)**: cumpriu 1, 2, 4, 5, 10 e 11; o 7 e o 9 não se aplicam.
+  DECLAROU duas falhas: publicou sem as etiquetas MEDIDO/DEDUZIDO/TEORIA e
+  republicou, e fechou só metade da conta do dinheiro porque o Stripe pedia
+  autorização. O critério 4 está impecável (5 relatos de aparelho e 1 de web,
+  por versão, com o aviso de que 3 aparelhos são direção e nada mais).
+- **ASO e Lojas (15/09)**: cumpriu 1 a 7; o 8 não se aplica. Sem falha
+  identificada. Achado forte e barato de provar: o feed da Apple entregou uma
+  vez em 15 dias, e a prova é a duração da execução (1,6 s quando grava contra
+  0,2 s vazia). A proposta de ficha tem critério de volta atrás com data.
+- **Conteúdo e SEO (15/09)**: cumpriu 1 a 4, 6, 7 e 9; nada a ressalvar no 5 e
+  no 8. Mudou de ideia com número na mão (trocou a pauta da fila porque o
+  critério do site é demanda de busca) e devolveu tempo ao dono ao registrar
+  que rodava dois builds por cerimônia.
+- PADRÃO QUE JÁ DÁ PARA VER, e que fica anotado para a proposta de manual da
+  primeira segunda de outubro: dos dois papéis que tinham a régua, um declarou
+  o autoexame e o outro não. O critério do autoexame é o que menos se cumpre
+  sozinho, porque é o único que não produz entrega.
+
+### A MINHA RODADA CONTRA A MINHA RÉGUA
+- Cumpri 1 a 7 e 9. O 8 NÃO SE APLICA: hoje é a terceira segunda do mês.
+- FALHEI no 7, e o motivo está no artifact: o veredito saiu do que está escrito
+  no DIARIO e eu abri só UM dos seis relatórios (o de Mídia paga, porque tinha
+  critério que só dava para julgar lá dentro). Nos outros cinco, critério que
+  se cumpra dentro do artifact e não apareça no diário eu contei como não
+  registrado, e isso pode ser injusto. Da próxima vez: ou abro os seis, ou digo
+  antes que o veredito é sobre o registro.
+- Imprecisão menor no 1: o gasto da semana anterior (R$ 214,35) é a janela de
+  7 dias até 14/09, não a semana exata, porque o pacote do coletor só guarda
+  8 dias.
+- Prioridades: (1) contar a tentativa de compra de quem não tem conta, porque
+  o degrau da venda não tem medição e são 19 dias sem assinante; (2) não subir
+  orçamento das campanhas de app enquanto elas forem invisíveis, e fechar antes
+  o OneLink (16 dias parado) e a conversão "criou conta" (14 dias); (3) vinte
+  minutos na lista do dono, que tem 15 linhas e a mais velha parada há 18 dias.
+
 ## 2026-09-20 · Segurança (rodada 1): o Next tem três críticas, e a atualização que existe fecha uma
 - Primeira rodada semanal do papel. Artifact "Segurança da semana":
   https://claude.ai/artifact/QFNNwtGWrqyFAeeSKWjHMC

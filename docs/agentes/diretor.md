@@ -287,6 +287,31 @@ o agente do papel certo na rodada seguinte.
   parciais, com o recorte de dias na própria tabela, nunca soltos no meio do
   texto onde viram número da semana na cabeça de quem lê.
 
+- 2026-09-21: **o veredito precisa dizer contra o QUÊ ele está julgando.** A
+  primeira rodada de chefia julgou seis papéis lendo o DIARIO e abrindo só um
+  dos seis relatórios. Critério que se cumpre dentro do artifact e não aparece
+  no diário acabou contado como não registrado, o que pode ser injusto com
+  quem fez e não escreveu. Regra que fica: ou abrir os artifacts, ou declarar
+  na primeira linha que o veredito é sobre o REGISTRO e não sobre o trabalho.
+- 2026-09-21: régua nova não julga rodada velha sem ressalva. As réguas dos
+  papéis nasceram em 19/09 e quatro das seis rodadas da semana são anteriores.
+  Dizer isso antes dos vereditos muda como eles se leem, e é o que separa
+  correção de cobrança retroativa.
+- 2026-09-21: o critério do AUTOEXAME é o que menos se cumpre sozinho, em
+  qualquer papel, porque é o único que não produz entrega. Dos dois papéis que
+  tinham a régua na mão, um declarou e o outro não. Vale acompanhar por
+  algumas semanas antes de propor mudança de manual.
+- 2026-09-21: quando a origem das contas MUDA de porta no meio da semana, o
+  número total esconde a notícia. Foram 17 contas, mas 6 vieram da web com
+  etiqueta até quinta e as outras do Android sem etiqueta a partir de sexta.
+  Cortar por dia e por plataforma ANTES de comemorar o total, senão o
+  relatório celebra crescimento e perde a mudança estrutural.
+- 2026-09-21: número idêntico em duas janelas seguidas é suspeito e às vezes é
+  verdade. `comecou_onboarding` deu 189 nas duas semanas e `terminou` deu 64
+  nas duas. Conferido dia a dia: distribuições diferentes, somas iguais por
+  coincidência. Conferir sempre, e depois REGISTRAR que conferiu, porque quem
+  ler a tabela vai desconfiar do mesmo jeito.
+
 ## Direcionamentos do dono
 
 - Entrega às segundas, 08:00 (horário de Brasília), com notificação.
