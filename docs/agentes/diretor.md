@@ -124,6 +124,14 @@ não é critério, "tem o número e a janela do lado" é.
 | 7 | **Cada rodada da semana recebeu veredito contra a régua do papel** | qual critério cada especialista cumpriu e qual falhou, com o motivo |
 | 8 | **O que se repetiu virou proposta de manual** | na primeira segunda do mês, o padrão do mês vira mudança proposta, não conselho solto |
 | 9 | **Nada de código, preço, cobrança ou cliente** | o papel analisa, prioriza e explica |
+| 10 | **Toda prioridade foi procurada no `git log` da janela antes de ser escrita** | a prioridade cita o commit que a resolveria, ou diz que procurou e não achou |
+
+**De onde veio o critério 10 (21/09/2026).** Da própria rodada de 21/09, em que
+a Prioridade 1 pedia um conserto que tinha subido três dias antes, na quinta da
+mesma janela. A fonte 2 deste manual já mandava ler o `git log`; o que a rodada
+fez foi CONTAR os commits ("90 mudanças no repositório") sem ler nenhum. Contar
+não é ler, e nenhum critério separava as duas coisas. Ver a seção "Retorno do
+dono sobre a rodada de 21/09/2026".
 
 **De onde veio esta régua (19/09/2026).** O dono perguntou se a gente usa a
 função Outcomes do Claude (uma rubrica com um corretor separado). Ela é de
@@ -312,6 +320,75 @@ o agente do papel certo na rodada seguinte.
   coincidência. Conferir sempre, e depois REGISTRAR que conferiu, porque quem
   ler a tabela vai desconfiar do mesmo jeito.
 
+## Retorno do dono sobre a rodada de 21/09/2026
+
+Ele pediu a leitura da rodada e os comentários. O que segue foi conferido no
+código e no banco antes de ser escrito, não é impressão.
+
+**O elogio primeiro, porque ele é específico.** O que esta rodada fez de melhor
+não foi o número: foi ter se recusado a escrever "a conversão despencou" sobre
+um zero que não media o que parecia medir, e ter dito por quê. E o autoexame do
+critério 7, admitindo ter julgado cinco papéis pelo registro sem abrir os
+relatórios, é o tipo de coisa que a maioria dos relatórios esconde.
+
+### A correção que manda: a Prioridade 1 já estava pronta há três dias
+
+O relatório abre a Prioridade 1 com "passar a contar a tentativa de compra de
+quem não tem conta", e o próximo passo diz "o CRO recomendou e não pôde fazer,
+porque criar evento novo mexe na restrição do funil, que é do banco. Pôr isso na
+fila do QA ou da Engenharia para esta semana".
+
+**Isso foi feito em 18/09**, no commit `3437991`, no mesmo dia da rodada do CRO
+que o relatório elogia. O evento `tentou_assinar` está nos cinco lugares que um
+evento de funil exige, a trava `funil_eventos_evento_check` do banco já o
+aceita, e o portão do paywall (`Subscribe.tsx`) o emite antes de desviar para o
+login, nos seis caminhos, além de devolver a pessoa ao paywall depois.
+
+Provado dirigindo o app como convidado em 21/09: tocar em "Começar 7 dias
+grátis" dispara `tentou_assinar` com `userId: null` e `origem: web-annual`.
+
+**E a consequência disso muda a notícia da semana, para pior.** Entre 14 e
+21/09 o banco tem 24 `viu_paywall` de 23 pessoas, **zero `tentou_assinar` e zero
+`iniciou_checkout`**. Com a medição de pé desde 18/09, esse zero deixou de ser
+buraco e virou fato: ninguém encostou em nenhum botão de compra, nem logado nem
+deslogado. O relatório escreveu "o degrau da venda não tem medição hoje". A
+frase verdadeira é mais dura: **a medição existe, e o degrau está vazio.**
+
+### As outras três, menores, mesmo formato
+
+- **O veredito de Segurança** diz "achou a mitigação barata e não a aplicou por
+  estar fora da alçada". Correto no momento em que foi escrito. As três
+  recomendações dela foram aplicadas em 20 e 21/09 (`f9631be`, `c2505dc`,
+  `0068e2f`), e a terceira achou de quebra uma função `security definer` que
+  lia `auth.users` e existia SÓ no banco.
+- **O "esqueci minha senha"** aparece como promessa quebrada aberta. Foi
+  consertado em 20/09, dentro da janela do relatório, e o dono confirmou o
+  fluxo funcionando no aparelho em 21/09.
+- **O CAC bruto 7d de R$ 66,28**: a ressalva está certa e o conserto é do
+  retrato, não do relatório. Vale virar linha, não parágrafo de cuidado.
+
+### A causa comum das quatro, que é o que vale mudar
+
+O relatório lê os RELATÓRIOS dos outros agentes e não lê o REPOSITÓRIO. As
+quatro correções acima estavam em commit da própria semana analisada. Um agente
+recomenda em segunda-feira o que já subiu na quinta.
+
+**E não falta regra nenhuma.** A fonte 2 deste manual já diz, desde sempre: "o
+que mudou no produto: `git log --oneline` da semana no repositório". A rodada
+usou o git, mas só para CONTAR: "90 mudanças no repositório" está na tabela. O
+conteúdo dos 90 commits não foi lido, e era onde estavam as quatro coisas.
+
+Contar commit não é ler commit, e a diferença não aparece em nenhum critério da
+régua. Por isso a mudança não é regra nova, é critério novo, e ele vale mais que
+uma regra porque o autoexame cobra:
+
+> **Critério 10: toda prioridade foi procurada no `git log` da janela antes de
+> ser escrita.** Prova: a prioridade cita o commit que a resolveria ou diz que
+> procurou e não achou.
+
+Um relatório que cobra o que já está pronto gasta a semana do dono e queima a
+credibilidade do resto, que nesta rodada estava certo.
+
 ## Direcionamentos do dono
 
 - Entrega às segundas, 08:00 (horário de Brasília), com notificação.
@@ -321,3 +398,8 @@ o agente do papel certo na rodada seguinte.
   número que muda a prioridade da semana. Se o banco recusar por permissão,
   PARAR e avisar o Rodrigo para ele reconectar, em vez de escrever o
   relatório só com o retrato.
+- **Ler o repositório antes de recomendar** (21/09/2026). Ver a seção "Retorno
+  do dono sobre a rodada de 21/09/2026". As fontes da rodada listam banco,
+  retrato, Google Ads, Meta, Vercel e git, mas o git entrou só como contagem de
+  mudanças; o CONTEÚDO dos commits da janela não foi lido, e foi ali que
+  estavam quatro correções.
