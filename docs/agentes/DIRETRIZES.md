@@ -1,4 +1,4 @@
-# Time de agentes do Mentorque — diretrizes gerais
+# Time de agentes do Mentorque: diretrizes gerais
 
 Este diretório é a MEMÓRIA INSTITUCIONAL do time de agentes. Modelos de IA não
 aprendem sozinhos entre uma rodada e outra; o que aprende é este diretório.
@@ -71,7 +71,7 @@ Na dúvida entre fazer e recomendar: recomendar, com o raciocínio.
 
 ## Fontes de dados (a verdade única)
 
-- **Funil**: GET https://www.mentorque.com.br/api/funil — semanas com
+- **Funil**: GET https://www.mentorque.com.br/api/funil, com semanas de
   aberturas, visitantes, cadastros, paywall, checkouts, assinaturas, churn.
   Detalhe fino na tabela `funil_eventos` (Supabase, via painel do Rodrigo).
 - **Receita web**: Stripe (integração conectada nas sessões).

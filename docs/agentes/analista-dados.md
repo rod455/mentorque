@@ -1,4 +1,4 @@
-# Analista de Dados — manual do papel
+# Analista de Dados: manual do papel
 
 O coletor do time. Trabalho mecânico e diário no n8n: buscar dados nas
 fontes, normalizar e gravar onde os agentes pensantes (Diretor, CRO, ASO)

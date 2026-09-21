@@ -170,8 +170,8 @@ rodadas são anteriores. Só Mídia paga e Segurança tinham a régua na mão.
   ninguém de fora. Mas os **65 fluxos** contam outra história: a maioria é de
   **outro produto (Vocaboost) e de um cliente (Dermato)**, e **cinco estão
   ATIVOS** sem relação com o Mentorque, entre eles um chamado
-  **"TEMP — Página QR Evolution (reconnect 2)"**, ativo desde 12/07, e um
-  "Dermato — QR ao vivo" que, pela própria descrição, serve uma página pública
+  **"TEMP — Página QR Evolution (reconnect 2)"**, ativo desde 12/07, e um <!-- travessao-ok: nome do fluxo no n8n, copiado como está -->
+  "Dermato — QR ao vivo" que, pela própria descrição, serve uma página pública <!-- travessao-ok: nome do fluxo no n8n, copiado como está -->
   de pareamento de WhatsApp protegida só por uma chave no endereço. Não confirmei
   o comportamento pela rede (ver limites). Virou pergunta na lista do dono, não
   diagnóstico, e **não desliguei nada**: fluxo do Dermato é o consultório de
@@ -3472,7 +3472,7 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   deveria ficar avisando."
 - CAUSA, confirmada na execução 8366: `suspeita: false` (tudo passou) e
   `avisar: true` ao mesmo tempo, com a assinatura guardada
-  `Funil e banco (/api/funil):401` — uma falha de 22/08. O
+  `Funil e banco (/api/funil):401` Uma falha de 22/08. O
   `delete sd.assinatura` nunca persistiu.
 - O n8n só persiste a memória do workflow quando enxerga uma ATRIBUIÇÃO.
   `delete` apaga a chave dentro da execução e ela volta intacta na rodada
@@ -3489,7 +3489,7 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   limpo sem gerar mais um aviso.
 - APRENDIZADO que vale para todo agente com estado entre execuções: estado
   guardado precisa de prazo de validade. E alerta que chega quando está tudo
-  bem é pior que não alertar — oito e-mails de nada ensinam o dono a ignorar o
+  bem é pior que não alertar: oito e-mails de nada ensinam o dono a ignorar o
   remetente, e o próximo aviso REAL compete com essa memória.
 
 ## 2026-08-27 · Recomendações do QA aplicadas, e feedback para o papel

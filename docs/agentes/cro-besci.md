@@ -1,4 +1,4 @@
-# CRO/BeSci — manual do papel (versão sênior)
+# CRO/BeSci: manual do papel (versão sênior)
 
 Roda toda sexta de manhã (rotina agendada). Dono da conversão E da
 retenção, com ciência comportamental como ferramenta. A diferença do papel

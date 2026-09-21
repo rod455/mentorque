@@ -1,6 +1,6 @@
-# Mentorque — Imagens
+# Mentorque: imagens
 
-> **Status (05/08/2026):** COMPLETO — 98/98 imagens instaladas.
+> **Status (05/08/2026):** COMPLETO, 98/98 imagens instaladas.
 > As 43 capas de Estudos foram substituidas pela versao v4 (mesmo estilo giz
 > dos demais pacotes). As 3 avulsas chegaram. A `memories/accessory.png` foi
 > recuperada separando-a da `fullTank.png`, onde as duas artes vieram na
@@ -22,14 +22,14 @@ onde deveria entrar arte. Os IDs são os nomes exatos de arquivo esperados.
   arredondamento come as quinas.
 - Fundo: transparente, ou o grafite do app `#16181D`.
 - Paleta: âmbar `#F2A623`, teal `#0F8A66`, coral `#C24D26`, creme `#F4F2EC`.
-- **Sem texto dentro da imagem** — o título já aparece embaixo.
+- **Sem texto dentro da imagem**: o título já aparece embaixo.
 
 ---
 
-## 1. Memórias — 24 imagens · `public/memories/<id>.png` · 600 × 600
+## 1. Memórias: 24 imagens · `public/memories/<id>.png` · 600 × 600
 
 Placeholder de cada conquista quando o usuário ainda não subiu foto.
-Renderiza a 112 px na Home e 56 px (circular) na tela de conquistas — a arte
+Renderiza a 112 px na Home e 56 px (circular) na tela de conquistas, e a arte
 precisa **funcionar dentro de um círculo** também.
 
 ### Marcos automáticos (11)
@@ -66,10 +66,10 @@ precisa **funcionar dentro de um círculo** também.
 
 ---
 
-## 2. Problemas comuns — 19 imagens · `public/problems/<id>.png` · 600 × 600
+## 2. Problemas comuns: 19 imagens · `public/problems/<id>.png` · 600 × 600
 
 Renderiza a 144 px (mesmo card do "Para você"). Hoje 19 sintomas dividem
-apenas 5 ícones, então os cards se repetem visualmente — é o espaço com
+apenas 5 ícones, então os cards se repetem visualmente: é o espaço com
 maior ganho.
 
 | id | sintoma |
@@ -100,10 +100,10 @@ maior ganho.
 
 ---
 
-## 3. Ações rápidas — 4 imagens · `public/actions/<id>.png` · 256 × 256
+## 3. Ações rápidas: 4 imagens · `public/actions/<id>.png` · 256 × 256
 
 Renderiza a 56 px, dentro de um quadrado colorido. Arte precisa ser legível
-bem pequena — traço grosso, silhueta forte.
+bem pequena: traço grosso, silhueta forte.
 
 | id | rótulo | cor do fundo |
 |---|---|---|
@@ -114,7 +114,7 @@ bem pequena — traço grosso, silhueta forte.
 
 ---
 
-## 4. Subsistemas — 5 imagens · `public/systems/<key>.png` · 256 × 256
+## 4. Subsistemas: 5 imagens · `public/systems/<key>.png` · 256 × 256
 
 Grade "Ou explore por sistema" na aba Problemas. Vou subir o chip de 44 px
 para 64 px, igualando o card do Kit do motorista (que já tem imagem).
@@ -131,7 +131,7 @@ para 64 px, igualando o card do Kit do motorista (que já tem imagem).
 
 ---
 
-## 5. Trilhas de conhecimento — 9 imagens · `public/tracks/<id>.png` · 256 × 256
+## 5. Trilhas de conhecimento: 9 imagens · `public/tracks/<id>.png` · 256 × 256
 
 Grade da aba Estudos, mesmo chip de 44 px (subir para 64 px).
 
@@ -149,7 +149,7 @@ Grade da aba Estudos, mesmo chip de 44 px (subir para 64 px).
 
 ---
 
-## 6. Conteúdos sem capa — 11 imagens · `public/learn/<id>.png` · 600 × 600
+## 6. Conteúdos sem capa: 11 imagens · `public/learn/<id>.png` · 600 × 600
 
 São as aulas de personalização criadas por último. Mesmo estilo do pacote
 de capas que já subimos.
@@ -170,7 +170,7 @@ de capas que já subimos.
 
 ---
 
-## 7. Kit do motorista — 22 imagens · `public/kit/<id>.png` · 256 × 256
+## 7. Kit do motorista: 22 imagens · `public/kit/<id>.png` · 256 × 256
 
 Lista de equipamentos, hoje 100% emoji, chip de 44 px.
 
@@ -190,14 +190,14 @@ Lista de equipamentos, hoje 100% emoji, chip de 44 px.
 
 ---
 
-## 8. Avulsas — 4 imagens
+## 8. Avulsas: 4 imagens
 
 | arquivo | tamanho | onde |
 |---|---|---|
 | `public/learn/revisions.png` | 600 × 600 | Card "Próximas revisões" no carrossel "Para você" (hoje ícone de calendário) |
 | `public/learn/_video-placeholder.png` | 1200 × 675 | Espaço do vídeo dentro das aulas que ainda não têm vídeo |
 | `public/memories/_empty-photo.png` | 1200 × 675 | Estado vazio da foto do Momento |
-| `public/badges/badge-anual.png` | 600 × 600 | Escudo dourado "ANUAL" do plano — **pendente do seu lado**, só recebi colado inline |
+| `public/badges/badge-anual.png` | 600 × 600 | Escudo dourado "ANUAL" do plano, **pendente do seu lado**, só recebi colado inline |
 
 ---
 
@@ -216,19 +216,19 @@ Lista de equipamentos, hoje 100% emoji, chip de 44 px.
 
 ## Prioridade sugerida
 
-1. **Problemas comuns (19)** — hoje 19 cards com só 5 ícones repetidos, é o
+1. **Problemas comuns (19)**: hoje 19 cards com só 5 ícones repetidos, é o
    que mais chama atenção na Home e na aba Problemas.
-2. **Conteúdos sem capa (11)** — quebram a consistência do carrossel que já
+2. **Conteúdos sem capa (11)**: quebram a consistência do carrossel que já
    tem capa.
-3. **Memórias (24)** — muita superfície, mas o usuário só vê as conquistadas.
-4. **Trilhas (9) + Subsistemas (5)** — grades de navegação.
-5. **Kit (22)** — tela mais interna, menor impacto.
-6. **Ações rápidas (4)** — ícones de linha funcionam bem a 56 px; é o pacote
+3. **Memórias (24)**: muita superfície, mas o usuário só vê as conquistadas.
+4. **Trilhas (9) + Subsistemas (5)**: grades de navegação.
+5. **Kit (22)**: tela mais interna, menor impacto.
+6. **Ações rápidas (4)**: ícones de linha funcionam bem a 56 px; é o pacote
    mais opcional.
 
 ---
 
-## 9. Capas dos vídeos do canal — 10 imagens · `public/learn/<id>.png` · 600 × 600
+## 9. Capas dos vídeos do canal: 10 imagens · `public/learn/<id>.png` · 600 × 600
 
 Primeira leva de Shorts próprios, publicada em 08/08/2026. Entraram sem capa
 (caem no ícone genérico). Mesmo estilo giz dos demais pacotes.

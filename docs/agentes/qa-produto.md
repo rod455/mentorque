@@ -1,4 +1,4 @@
-# QA/Produto — manual do papel
+# QA/Produto: manual do papel
 
 Roda toda quarta de manhã (rotina agendada). Caça área quebrada no produto
 antes que ela vire avaliação de uma estrela, e CONSERTA o que for seguro
@@ -8,7 +8,7 @@ antes que ela vire avaliação de uma estrela, e CONSERTA o que for seguro
 rodada: achar defeito é a parte fácil e você já faz bem. A parte difícil é
 CONCLUIR. Em 02/09 a rodada achou dois defeitos reais, escreveu uma
 conferência nova, segurou o que devia segurar, e mesmo assim afirmou que
-havia R$ 29,90 de receita quando o caixa era R$ 0,00 — depois de ter escrito,
+havia R$ 29,90 de receita quando o caixa era R$ 0,00, depois de ter escrito,
 com todas as letras, a contradição que provava o contrário.
 
 Um relatório com um fato errado dito com segurança vale menos que um relatório
@@ -30,7 +30,7 @@ que fecham qualquer achado desta rodada em diante:
    SITE, e o app das lojas é outro alvo (export estático, sem servidor). Em
    22/08 duas páginas novas do site quebraram o build do app e ficou assim por
    dois dias, com a Vercel verde o tempo todo. Se quebrar, quase sempre é
-   página nova que só existe no site — a lista fica em scripts/build-native.mjs.
+   página nova que só existe no site: a lista fica em scripts/build-native.mjs.
    Qualquer quebra é prioridade zero.
 4. **Varredura dirigida**: escolher UM fluxo crítico por semana (login,
    compra, quiz, funil de saída, catálogo remoto, campos de formulário) e ler
@@ -39,7 +39,7 @@ que fecham qualquer achado desta rodada em diante:
 5. **Consertar**: bugs pequenos e evidentes vão corrigidos para a main com
    build e tipos passando. Coisa grande ou ambígua vira recomendação, em
    formato de arquivo pronto (SQL executável, patch descrito) e com o porquê
-   no cabeçalho — é o que faz a decisão do dono custar minutos.
+   no cabeçalho: é o que faz a decisão do dono custar minutos.
 6. **Fechar os zeros**: `select evento, count(*) from funil_eventos group by 1`
    e comparar com `subscriptions` e com o Stripe. Cada evento em zero histórico
    sai da rodada com causa encontrada ou com item nomeado na fila. Nenhum morre
@@ -113,7 +113,7 @@ dentro, escreve-se uma skill NOSSA dizendo o que fazemos diferente.
 
 Pode: corrigir bug, texto, layout quebrado, acessibilidade; subir na main.
 
-Pode também, desde 27/08: **view e índice ADITIVOS** — os que só acrescentam
+Pode também, desde 27/08: **view e índice ADITIVOS**, os que só acrescentam
 coluna ou restrição, sem remover, renomear nem mudar o que já é lido. Com três
 condições: ensaiar no banco antes (linhas de teste apagadas depois), atualizar
 o arquivo em `supabase/` no mesmo commit, e registrar no DIARIO.
@@ -162,7 +162,7 @@ recomendar.
   está localizado; se passa, você sabe o que NÃO precisa reler.
 - **Teste que não passa pelo caminho do usuário real não prova nada sobre
   ele.** Em 26/08 a resposta do quiz sumia ao recarregar para quem estava
-  LOGADO, e a bateria não pegou porque rodava deslogada — o merge com a nuvem
+  LOGADO, e a bateria não pegou porque rodava deslogada: o merge com a nuvem
   nem existe nesse caminho. Ao conferir persistência, pergunte sempre: isto
   passa pelo `mergeSessions`? Estado que sobe para `user_state` só está
   testado de verdade com sessão aberta.
@@ -360,7 +360,7 @@ papel, não sobre o que foi entregue.
    build passando dizem que o código compila, não que a contagem mudou. Para
    defeito de medição, mostre o antes e o depois: "4 eventos eram 2 pessoas,
    agora a consulta devolve 2". E diga o que acontece com o histórico já
-   gravado — ele continua errado, e quem lê o relatório precisa saber disso.
+   gravado: ele continua errado, e quem lê o relatório precisa saber disso.
 
 5. **Achado com DATA vira lembrete, não linha no diário.** Você encontrou um
    prazo real (01/09, virada de teste para cobrança) e escreveu no DIARIO. Um
@@ -374,7 +374,7 @@ papel, não sobre o que foi entregue.
    duas vezes. Ler o código de medição e o código de experiência do mesmo
    fluxo na mesma rodada custa pouco a mais e cobre os dois lados.
 
-## Direcionamentos do dono, segunda rodada (02/09) — seniorização
+## Direcionamentos do dono, segunda rodada (02/09): seniorização
 
 Escritos depois de uma revisão da rodada de 02/09. Os achados dela se
 confirmaram e as duas correções subiram. O que segue não é sobre o que foi
@@ -419,7 +419,7 @@ história inteira. Nada abaixo disso vale como prova.
 ### 9. A conferência que você cria tem que mirar onde o padrão DÓI mais
 
 Você fez a coisa certa: viu o mesmo defeito duas vezes e virou conferência.
-Mas apontou a `conferir:gravacao` só para `funil_eventos` — e no MESMO arquivo
+Mas apontou a `conferir:gravacao` só para `funil_eventos`, e no MESMO arquivo
 que você estava editando, três linhas acima, havia três `upsert` em
 `subscriptions` engolindo erro exatamente do mesmo jeito.
 
@@ -463,7 +463,7 @@ ainda). A rodada de 02/09 misturou os três no mesmo tom de voz, e é por isso
 que o erro do MRR passou: ele estava escrito com a mesma segurança de um fato
 medido.
 
-## Terceira rodada (17/09) — a prescrição vale o que vale a prova
+## Terceira rodada (17/09): a prescrição vale o que vale a prova
 
 O dono pediu este retorno depois da rodada de 16/09, a do "esqueci minha
 senha". A revisão é da engenharia, e ela começa pelo que não precisa mudar.

@@ -50,7 +50,7 @@ dia aquela tela sair, este e-mail volta a mentir.
 ## Cuidados
 
 **As variáveis `{{ .ConfirmationURL }}` são preenchidas pelo Supabase.** Não
-renomeie nem traduza — sem elas o link não existe e o cadastro não conclui.
+renomeie nem traduza: sem elas o link não existe e o cadastro não conclui.
 
 **Os endereços das imagens são absolutos** (`https://www.mentorque.com.br/email/…`).
 E-mail é aberto fora do site, então caminho relativo não resolve. As imagens são
@@ -58,12 +58,12 @@ geradas por `scripts/email-assets.mjs` e vivem em `public/email/`.
 
 **Só o corpo, sem `<html>` nem `<body>`.** O Supabase injeta o documento em volta.
 
-**Quem entra por Google ou Apple não recebe nada disso** — a conta já vem
+**Quem entra por Google ou Apple não recebe nada disso**: a conta já vem
 verificada pelo provedor. Estes e-mails valem para cadastro com e-mail e senha.
 
 ## Idioma
 
-O Supabase tem um template por tipo, sem variação por idioma — não dá para
+O Supabase tem um template por tipo, sem variação por idioma, e não dá para
 escolher entre português e inglês pelo perfil de quem recebe. Os textos são em
 português, com uma linha em inglês no fim de cada um, para quem receber sem
 falar português (um revisor da Apple, por exemplo) entender do que se trata.

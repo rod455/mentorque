@@ -42,7 +42,19 @@ const TRAVESSAO = "—";
 // os textos da LANDING, a página que o CLAUDE.md cita por extenso na regra, e
 // eram 37 linhas com travessão entre os dois idiomas. A conferência cobria as
 // telas do app e não cobria a página que recebe o anúncio pago.
-const TELAS = ["components", "lib/app/conteudo", "lib/email", "lib/i18n", "emails"];
+//
+// `docs` entrou em 21/09/2026, e a falta era do mesmo tamanho das anteriores.
+// O CLAUDE.md diz, desde sempre, "vale para app, LP, e-mails E DOCS", e a
+// conferência cobria tudo menos docs. Eram 68 linhas com travessão em 12
+// arquivos, entre eles os manuais que os agentes leem antes de cada rodada.
+//
+// Quem achou foi o agente de segurança, fora do escopo dele, e provou plantando
+// o defeito. Ficou na lista sem dono até o dono mandar executar.
+//
+// Por que docs importa, se não é tela: é o texto que ensina a escrever o resto.
+// Manual com travessão é manual que produz travessão, e a regra existe para o
+// que sai daqui, não para o que fica.
+const TELAS = ["components", "lib/app/conteudo", "lib/email", "lib/i18n", "emails", "docs"];
 /** Arquivos avulsos de texto de tela. */
 const AVULSOS = ["lib/app/content.ts"];
 /** Em app/, só os campos que viram título e descrição de página. */
@@ -65,7 +77,7 @@ function arquivos(dir) {
     // ficavam fora de toda conferência desta casa. Um deles carregava um
     // travessão na linha que a pessoa lê, desde 06/09, e a conferência passava
     // verde porque nem abria o arquivo.
-    else if (/\.(ts|tsx|html)$/.test(item)) saida.push(caminho);
+    else if (/\.(ts|tsx|html|md)$/.test(item)) saida.push(caminho);
   }
   return saida;
 }
@@ -172,7 +184,67 @@ function textoDeHtml(fonte) {
     .map((linha) => linha.replace(/<[^>]*>/g, " "));
 }
 
+/**
+ * Markdown entra por um terceiro caminho, e pelos mesmos motivos do HTML.
+ *
+ * Em TypeScript a frase mora entre aspas; em HTML, entre tags; em markdown ela
+ * é a linha inteira. O que precisa sair antes de ler:
+ *
+ *   - BLOCO DE CÓDIGO (```). É onde moram os exemplos de código dos manuais, e
+ *     código citado não é frase que alguém lê. Foi assim que a mira ficou
+ *     estreita nas outras pastas, e aqui o risco é maior: os manuais dos
+ *     agentes são metade prosa e metade exemplo;
+ *   - CÓDIGO NA LINHA (`assim`), pelo mesmo motivo, em escala menor;
+ *   - LINHA DE SEPARAÇÃO DE TABELA (|---|---|), que é desenho e não texto.
+ *
+ * O traço sozinho de célula vazia numa tabela continua passando, porque o
+ * `ehFrase` já exige letra de algum lado e ali não há.
+ */
+function textoDeMarkdown(fonte) {
+  let dentroDeBloco = false;
+  return fonte.split("\n").map((linha) => {
+    if (/^\s*```/.test(linha)) {
+      dentroDeBloco = !dentroDeBloco;
+      return "";
+    }
+    if (dentroDeBloco) return "";
+    if (/^\s*\|?[\s:|-]+\|[\s:|-]*$/.test(linha)) return "";
+
+    // A LINHA ESTÁ CITANDO O CARACTERE, não usando ele.
+    //
+    // Sem isto a conferência proibiria escrever a própria regra: o CLAUDE.md,
+    // o DIRETRIZES.md e o manual do Diretor todos dizem "sem travessão (—)", e
+    // essa frase precisa mostrar qual caractere é. A forma `(—)` é curta,
+    // inconfundível e não serve para escrever frase nenhuma.
+    if (linha.includes("(" + TRAVESSAO + ")")) return "";
+
+    // A SAÍDA DE EMERGÊNCIA, e ela é estreita de propósito.
+    //
+    // Existe uma coisa que o conserto não pode tocar: NOME DE FORA. O diário
+    // registra um fluxo do n8n chamado "TEMP — Página QR Evolution", e trocar
+    // aquele travessão por dois pontos falsifica um registro para agradar uma
+    // regra de estilo nossa. O nome é o que é.
+    //
+    // Então a exceção tem que ser escrita, na própria linha, com o motivo:
+    //   ... "TEMP — Página QR" ... <!-- travessao-ok: nome de fluxo no n8n -->
+    //
+    // É comentário de markdown, então não aparece para ninguém que lê o
+    // documento, e aparece inteiro para quem lê o arquivo. Quem usar isso para
+    // escapar de prosa comum está mentindo por escrito, e fica registrado.
+    if (/<!--\s*travessao-ok\b/.test(linha)) return "";
+
+    return linha.replace(/`[^`]*`/g, " ");
+  });
+}
+
 function olhar(alvo, sóMetadados) {
+  if (alvo.endsWith(".md")) {
+    textoDeMarkdown(readFileSync(join(RAIZ, alvo), "utf8")).forEach((linha, i) => {
+      if (!linha.includes(TRAVESSAO)) return;
+      if (ehFrase(linha)) achados.push({ arquivo: alvo, linha: i + 1, trecho: linha.trim().slice(0, 95) });
+    });
+    return;
+  }
   if (alvo.endsWith(".html")) {
     textoDeHtml(readFileSync(join(RAIZ, alvo), "utf8")).forEach((linha, i) => {
       if (!linha.includes(TRAVESSAO)) return;

@@ -3,7 +3,7 @@
 Roteiro para compilar o `.aab` na sua máquina, em `C:\Apps\Mentorque`.
 
 O app é **empacotado**: telas, estilos, imagens e lógica viram arquivos que
-entram dentro do binário. Não existe `server.url` — o Android nunca carrega o
+entram dentro do binário. Não existe `server.url`: o Android nunca carrega o
 site para desenhar a interface. Por isso o passo `build:native` é obrigatório:
 sem ele o `cap sync` não acha o que copiar e o build morre com
 `Could not find the web assets directory`.
@@ -58,7 +58,7 @@ Para conferir que pegou, o `build:native` diz na primeira linha:
 Se aparecer `AVISO — faltam variáveis`, o `.env.local` não está na raiz do
 projeto ou tem nome errado.
 
-As quatro, e o que cada uma faz — a terceira é a que mais dá problema:
+As quatro, e o que cada uma faz (a terceira é a que mais dá problema):
 
 | Variável | Para quê |
 |---|---|
@@ -71,14 +71,14 @@ As quatro, e o que cada uma faz — a terceira é a que mais dá problema:
 **A chave da Play é o interruptor da venda no Android.** Vazia (ou ausente), o
 app compila em "modo leitor": sem paywall, sem banner de upgrade, exatamente
 como a versão publicada hoje. Com a chave, o paywall de compra aparece sozinho
-— nenhuma tela muda de código. Pegue em RevenueCat → Project → API keys, no app
+Nenhuma tela muda de código. Pegue em RevenueCat → Project → API keys, no app
 da Google Play.
 
 Como é variável de **build**, trocá-la exige recompilar: `npm run android:studio`
 de novo. Não adianta editar o `.env.local` e só reabrir o Android Studio.
 
 `NEXT_PUBLIC_SITE_URL` errado gera um app que abre normalmente e não responde
-nada: Biela muda, FIPE, revisões — tudo depende dela. Não é o endereço do
+nada: Biela muda, FIPE, revisões, tudo depende dela. Não é o endereço do
 Supabase nem o id do pacote.
 
 ## 3. Gerar o pacote e sincronizar
@@ -89,7 +89,7 @@ npm run android:studio
 ```
 
 O `android:studio` faz as duas coisas: gera o app estático e copia para
-`android/app/src/main/assets/public`. No fim ele lista os plugins — no Android
+`android/app/src/main/assets/public`. No fim ele lista os plugins, e no Android
 têm que ser **3**: `@capacitor/app`, `@capacitor/browser` e
 `@capacitor-community/admob`.
 
@@ -110,7 +110,7 @@ número da build; no Android Studio, quem incrementa é você.
 1. **File → Open** → `C:\Apps\Mentorque\android` (a pasta `android`, não a raiz)
 2. Espere o Gradle sincronizar
 3. **Build → Generate Signed Bundle / APK → Android App Bundle**
-4. Escolha o keystore `.jks` (o mesmo de sempre — perder essa chave significa
+4. Escolha o keystore `.jks` (o mesmo de sempre, e perder essa chave significa
    não conseguir mais atualizar o app na Play)
 5. Variant **release**
 
@@ -126,7 +126,7 @@ de instalar e conferir no aparelho.
 
 ## O que é diferente do iPhone
 
-Mesmo código, comportamento diferente em tempo de execução — nenhum dos dois
+Mesmo código, comportamento diferente em tempo de execução, e nenhum dos dois
 projetos mexe no outro:
 
 | | Android | iPhone |

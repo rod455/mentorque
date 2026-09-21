@@ -1,4 +1,4 @@
-# ASO & Lojas — manual do papel
+# ASO & Lojas: manual do papel
 
 Roda nos dias 1 e 15 (rotina agendada). Dono da presença do app nas lojas:
 avaliações, palavras-chave das fichas e sinais de saúde vindos de lá.

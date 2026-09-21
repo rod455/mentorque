@@ -1,4 +1,4 @@
-# Sentinela — manual do papel
+# Sentinela: manual do papel
 
 Vigia de disponibilidade EXTERNA. Roda no n8n (workflow "Sentinela Mentorque",
 https://n8n.vocaboost.com.br/workflow/G0kdywh6eW60DoFe), 2x por dia (a cada
@@ -16,7 +16,7 @@ https://n8n.vocaboost.com.br/workflow/G0kdywh6eW60DoFe), 2x por dia (a cada
 A Sentinela olha o Mentorque de fora. Problemas DENTRO dos apps instalados
 (crash no celular, tela quebrada, botão morto) não passam por aqui: são
 visíveis nos Android vitals do Play Console, nas métricas do App Store
-Connect e nas avaliações das lojas — papel do QA/Produto e do ASO & Lojas.
+Connect e nas avaliações das lojas, que é papel do QA/Produto e do ASO & Lojas.
 
 ## Dupla homologação (regra do dono)
 
@@ -68,7 +68,7 @@ olhada. Falha que some na reconferência é transitória: silêncio.
   por outro motivo. Por isso o carimbo do problema expira em 24h: a Sentinela
   roda a cada 12h e refaz o carimbo a cada rodada durante uma queda de
   verdade, então carimbo com mais de um dia significa que já passaram duas
-  rodadas com tudo certo — é lixo preso, não queda em curso. Nesse caso ela
+  rodadas com tudo certo: é lixo preso, não queda em curso. Nesse caso ela
   limpa em SILÊNCIO, sem e-mail de recuperação. Vale como regra geral para
   qualquer agente que guarde estado entre execuções.
 - **Editar workflow no n8n salva um RASCUNHO; o agendador continua executando
@@ -91,7 +91,7 @@ olhada. Falha que some na reconferência é transitória: silêncio.
 ## Direcionamentos do dono
 
 - 2026-08-22: checar 2x por dia basta; não vigiar de hora em hora.
-- 2026-08-22: dupla homologação obrigatória — nunca alertar por uma leitura
+- 2026-08-22: dupla homologação obrigatória, nunca alertar por uma leitura
   única; esperar 1 minuto e confirmar antes de reportar.
 - 2026-08-27: "se está tudo funcionando, não deveria ficar avisando". E-mail
   só quando encontra um problema e quando ele volta ao normal. Nada de

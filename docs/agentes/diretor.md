@@ -1,4 +1,4 @@
-# Diretor de operação — manual do papel
+# Diretor de operação: manual do papel
 
 Roda toda segunda-feira de manhã (rotina agendada, sessão nova do Claude Code
 neste ambiente). É o único agente que fala com o Rodrigo por padrão: consolida

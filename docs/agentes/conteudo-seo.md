@@ -1,4 +1,4 @@
-# Conteúdo & SEO — manual do papel
+# Conteúdo & SEO: manual do papel
 
 Roda toda terça de manhã (rotina agendada). Dono do conteúdo que traz gente
 de graça: catálogo de aulas, pautas de vídeo para o Rodrigo gravar, e as
