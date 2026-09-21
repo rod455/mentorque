@@ -87,6 +87,40 @@ export type EventoFunil =
   // nossa própria medição está viva no aparelho.
   | "atribuicao";
 
+// QUEM É A PESSOA, sem cada chamada ter que lembrar de dizer (21/09/2026).
+//
+// O DEFEITO, medido no banco antes de consertar: dos 18 tipos de evento, só
+// QUATRO carregavam `user_id`. `cadastro`, `iniciou_checkout` e `assinou`
+// tinham 100%, `viu_paywall` tinha 51%, e os outros catorze tinham ZERO. Entre
+// os zerados estão `abriu_app` (471 eventos), `comecou_onboarding` (526),
+// `viu_aula`, `consultou_sintoma`, `registrou_servico`: ou seja, tudo que
+// descreve alguém USANDO o app.
+//
+// A CONSEQUÊNCIA, que é o que dói: sem `user_id`, retenção é contada por
+// ARMAZENAMENTO DE NAVEGADOR. Quem usou no site e depois instalou o app conta
+// como duas chegadas, e a segunda parece alguém que nunca voltou. Com duas
+// campanhas de instalação no ar desde 19/09, isso infla o denominador e derruba
+// a taxa. A retenção real por pessoa é melhor que a medida, e ninguém sabe
+// quanto.
+//
+// POR QUE ACONTECEU, e é o tipo de coisa que nenhuma revisão pega: a assinatura
+// de `funil()` aceita `userId` como OPÇÃO. Quem escreveu `cadastro` e
+// `iniciou_checkout` tinha o usuário na mão e passou; quem escreveu `viu_aula`
+// não tinha, e não passar era silencioso e parecia certo. Oito das trinta
+// chamadas passavam.
+//
+// O CONSERTO NÃO É PASSAR NAS TRINTA. Isso conserta hoje e volta a quebrar na
+// chamada trinta e um. O funil passa a saber sozinho: o AuthProvider avisa aqui
+// toda vez que a sessão muda, e cada evento pega daqui quando o chamador não
+// disser nada. Chamada nova nasce certa sem o autor precisar saber que isto
+// existe.
+let usuarioDaSessao: string | null = null;
+
+/** Chamado pelo AuthProvider a cada mudança de sessão. Sessão nula limpa. */
+export function marcaUsuarioDoFunil(id: string | null): void {
+  usuarioDaSessao = id;
+}
+
 // Dedup por sessão: reabrir a mesma tela no mesmo pageview não conta de novo.
 const enviados = new Set<string>();
 
@@ -178,7 +212,10 @@ export function funil(
     void apiPost("/api/funil", {
       evento,
       anonId: anonId(),
-      userId: o?.userId ?? null,
+      // O que o chamador disser ganha; o `undefined` de quem não disse nada cai
+      // na sessão. `null` explícito continua sendo "não identifique", que é o
+      // que o `clicou_baixar` da página pública precisa.
+      userId: o?.userId !== undefined ? o.userId : usuarioDaSessao,
       plataforma: isNativeApp() ? nativePlatform() ?? "nativo" : "web",
       versao: APP_VERSION,
       origem: o?.origem ?? null,

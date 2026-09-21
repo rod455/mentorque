@@ -460,6 +460,41 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
   conferir("o /api/dados usa a MESMA regra, sem cópia local", /comTentativas\(fabrica/.test(readFileSync(new URL("../lib/operacao.ts", import.meta.url), "utf8")));
 }
 
+// ── O EVENTO SABE QUEM É A PESSOA? (21/09/2026) ────────────────────────────
+//
+// Medido no banco antes de existir esta conferência: dos 18 tipos de evento,
+// catorze chegavam com `user_id` NULO em 100% das linhas, incluindo
+// `abriu_app` (471) e `comecou_onboarding` (526). Sem isso, retenção é contada
+// por armazenamento de navegador: quem usou no site e depois instalou o app
+// vira duas pessoas, e a segunda parece alguém que nunca voltou.
+//
+// A causa era a assinatura: `userId` é OPÇÃO de `funil()`, e não passar era
+// silencioso. Oito das trinta chamadas passavam. Por isso o conserto não foi
+// passar nas trinta (isso quebra de novo na trinta e um): o funil pergunta
+// sozinho, e estas três asserções guardam as três peças dessa ligação.
+{
+  const funilTs = readFileSync(new URL("../lib/app/funil.ts", import.meta.url), "utf8");
+  const authTsx = readFileSync(new URL("../lib/app/auth.tsx", import.meta.url), "utf8");
+
+  conferir(
+    "o evento cai na sessão quando o chamador não diz quem é",
+    /userId:\s*o\?\.userId\s*!==\s*undefined\s*\?\s*o\.userId\s*:\s*usuarioDaSessao/.test(funilTs),
+    "com `?? null` no lugar, toda chamada que esquecer o userId volta a gravar anônimo",
+  );
+
+  conferir(
+    "e `null` explícito continua significando 'não identifique'",
+    /o\?\.userId\s*!==\s*undefined/.test(funilTs),
+    "usando `??`, o null da página pública seria trocado pela sessão sem ninguém pedir",
+  );
+
+  conferir(
+    "o AuthProvider avisa o funil a cada mudança de sessão",
+    /marcaUsuarioDoFunil\(user\?\.id\s*\?\?\s*null\)/.test(authTsx) && /from "\.\/funil"/.test(authTsx),
+    "sem este aviso a peça existe e nunca é preenchida, que é pior que não ter",
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) de funil reprovaram.`);
   process.exit(1);

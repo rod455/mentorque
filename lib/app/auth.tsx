@@ -16,6 +16,7 @@ import {
 } from "./wrapper";
 import { googleNativeConfigured, nativeSocialLogin } from "./socialLogin";
 import { ehLinkDeRecuperacao } from "./recuperacao";
+import { marcaUsuarioDoFunil } from "./funil";
 
 // `canceled`: o usuário fechou a folha do provedor — não é erro, a tela não
 // deve piscar vermelho nem seguir adiante.
@@ -110,6 +111,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(!supabase); // if disabled, we're "ready" (guest)
   const [oauthError, setOauthError] = useState("");
   const [modoSenha, setModoSenha] = useState<ModoSenha>(null);
+
+  // O FUNIL PRECISA SABER QUEM É, e ele não é um componente para receber por
+  // propriedade (21/09/2026). Sem isto, catorze dos dezoito tipos de evento
+  // chegavam ao banco sem `user_id`, e retenção passava a ser contada por
+  // armazenamento de navegador em vez de por pessoa. A história inteira está em
+  // lib/app/funil.ts, no comentário de `marcaUsuarioDoFunil`.
+  //
+  // Fica no MESMO lugar onde o `user` é decidido, de propósito: uma sessão que
+  // muda sem avisar o funil é o defeito voltando por outra porta.
+  useEffect(() => { marcaUsuarioDoFunil(user?.id ?? null); }, [user]);
 
   useEffect(() => {
     if (!supabase) return;
