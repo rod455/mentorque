@@ -296,6 +296,43 @@ selecionado, ativar o workflow (botão Active) e conferir a primeira execução.
   vida, a marca vai no localStorage (`umaVezPorAparelho`) e o piso é um índice
   único no banco. Contar de novo a cada abertura faria a etapa só crescer.
 
+## O CAC dividia janelas de tamanhos diferentes (21/09/2026)
+
+Achado pelo Diretor na rodada de 21/09, e conserto aplicado no mesmo dia no
+workflow `Analista: retrato diário` (n8n `3iP9vS2KQJ6E9cHD`, nó "Monta
+retrato"), publicado.
+
+**O que estava errado.** A linha do retrato dizia:
+
+    CAC bruto 7d (gasto total / cadastros da semana): 66.28
+
+O numerador eram **7 dias corridos** de gasto (`meta.gasto7d + gads.custo7d`) e
+o denominador eram os cadastros da **semana corrente** (`s0.cadastros`), que na
+segunda-feira de manhã tem UM dia dentro. Sete dias de gasto sobre um dia de
+cadastro. Em 21/09 deu 66.28 quando a conta com as duas janelas do mesmo
+tamanho dá 18.94.
+
+Não é erro de arredondamento: é a diferença entre "o anúncio está caro" e "o
+anúncio está no preço". E o retrato diz "NAO editar a mao" no topo, então quem
+lê confia.
+
+**O que ficou.** O denominador virou a **última semana FECHADA** (`s1`), que é
+uma janela de 7 dias como o numerador. As duas ainda não são a MESMA janela (o
+gasto é corrido até hoje, a semana é fechada até domingo), e o rótulo diz isso
+por extenso em vez de esconder. A semana corrente continua aparecendo, com o
+aviso de que está aberta e não serve de denominador.
+
+**A regra que vale para além desta linha:** antes de publicar qualquer divisão,
+perguntar de que TAMANHO é a janela de cima e de que tamanho é a de baixo. Toda
+razão no retrato é uma pergunta sobre duas janelas, e a metade que envelhece
+sem avisar é sempre a de baixo.
+
+**O que continua diferente e não é defeito:** o Diretor calculou 15.27 para a
+mesma semana e aqui sai 18.94. São fontes diferentes: ele conta CONTAS na
+tabela, o retrato conta o EVENTO `cadastro`. A regra FONTE_MELHOR
+(`lib/funilCorreto.ts`) já diz que a tabela ganha do evento quando as duas
+existem. Trocar a fonte desta linha é outro conserto, maior, e não foi feito.
+
 ## Direcionamentos do dono
 
 - (vazio ainda)
