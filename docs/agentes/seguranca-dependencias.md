@@ -134,6 +134,18 @@ caso em que este papel avisa na hora, porque o relógio corre contra.
 
 ## Direcionamentos do dono
 
+- **NÃO girar as chaves em texto puro do n8n** (22/09/2026). Ele decidiu manter
+  as chaves atuais. O motivo dele: Vocaboost e Dermato foram desligados como
+  produto, só o Mentorque está de pé, e sem outra operação viva não há de quem
+  confundir. Perguntado com o tamanho do estrago na mão (a `DADOS_CHAVE` abre
+  dez portas, três delas de MENSAGEM A CLIENTE), ele manteve a decisão.
+  **Não reabrir com o mesmo argumento.** O que reabre é FATO NOVO: chave usada
+  por quem não devia, cobrança estranha numa das contas de IA, ou mais alguém
+  com acesso ao n8n.
+- **O item sai da lista do dono** e esta linha passa a ser a resposta quando
+  a varredura semanal encontrar as chaves de novo. Encontrar não é achado:
+  achado é mudança.
+
 **Proteção contra senha vazada: DECIDIDO, não trazer de novo (20/09/2026).** O
 advisor `auth_leaked_password_protection` do Supabase vai aparecer como WARN em
 toda rodada, porque a checagem contra o HaveIBeenPwned está desligada. O dono

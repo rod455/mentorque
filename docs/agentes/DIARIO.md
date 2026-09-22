@@ -3,6 +3,27 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-22 · Decisão do dono: as chaves do n8n ficam como estão
+
+- **Desfecho do item que estava na lista dele desde 07/09** (girar as chaves em
+  texto puro nos fluxos do n8n: Anthropic, OpenAI, `service_role` do Supabase,
+  token do bot). Ele decidiu **manter as chaves atuais** e a linha saiu da
+  lista. A razão registrada: Vocaboost e Dermato foram desligados como produto,
+  só o Mentorque está de pé, e sem outra operação viva não há confusão possível.
+- A decisão foi tomada com o tamanho do estrago na mão. Antes dela ficou escrito
+  que a `DADOS_CHAVE` não é só leitura: ela tranca dez portas, e três delas
+  mandam mensagem para cliente (`/api/email/lancamento`, `/api/push/enviar`,
+  `/api/cron/jornada`). Ele manteve mesmo assim, e está no manual do Segurança
+  como direcionamento, com o que reabre e o que não reabre.
+- **O que eu conferi antes de escrever, e não bate com a premissa.** Medido hoje
+  na instância: os produtos podem estar desligados como negócio, mas **os
+  fluxos continuam LIGADOS no n8n**. Os cinco que não são do Mentorque estavam
+  ativos em 20/09 e continuam ativos em 22/09, sem nenhuma mudança de estado.
+  Dois deles rodam sozinhos toda semana e têm cobrança de IA atrás.
+- Isso não muda a decisão sobre as chaves, que é dele e está tomada. Muda o que
+  a lista dele diz: o item dos cinco fluxos continua aberto e ganhou um dado
+  novo, que é a data de hoje.
+
 ## 2026-09-21 · Diretor: relatório da semana (14 a 20/09) e o primeiro veredito das rodadas
 - Artifact "Semana Mentorque":
   https://claude.ai/artifact/NNypGsQD1yxTGt5whCsgaa
