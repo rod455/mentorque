@@ -125,6 +125,7 @@ não é critério, "tem o número e a janela do lado" é.
 | 8 | **O que se repetiu virou proposta de manual** | na primeira segunda do mês, o padrão do mês vira mudança proposta, não conselho solto |
 | 9 | **Nada de código, preço, cobrança ou cliente** | o papel analisa, prioriza e explica |
 | 10 | **Toda prioridade foi procurada no `git log` da janela antes de ser escrita** | a prioridade cita o commit que a resolveria, ou diz que procurou e não achou |
+| 11 | **Todo ZERO foi conferido contra a versão que a pessoa usa** | o relatório diz que o evento existe no binário publicado, ou trata o zero como buraco de medição |
 
 **De onde veio o critério 10 (21/09/2026).** Da própria rodada de 21/09, em que
 a Prioridade 1 pedia um conserto que tinha subido três dias antes, na quinta da
@@ -353,6 +354,35 @@ grátis" dispara `tentou_assinar` com `userId: null` e `origem: web-annual`.
 buraco e virou fato: ninguém encostou em nenhum botão de compra, nem logado nem
 deslogado. O relatório escreveu "o degrau da venda não tem medição hoje". A
 frase verdadeira é mais dura: **a medição existe, e o degrau está vazio.**
+
+### CORREÇÃO (22/09/2026): o parágrafo acima está ERRADO, e o erro é meu
+
+Fica de pé, riscado, porque o raciocínio que levou a ele é o que precisa não
+se repetir.
+
+`tentou_assinar` subiu em **18/09** (commit `3437991`). A versão que está nas
+lojas é a **2.7.0, aprovada em 17/09** (commit `01e6a75`), um dia ANTES. Ou
+seja, **o binário das lojas não consegue emitir esse evento.**
+
+E é no binário que a coisa acontece. Dos 29 `viu_paywall` desde 14/09:
+
+| Onde | Vezes |
+|---|---|
+| App (Android e iOS) | **28** |
+| Web | **1** |
+
+Então a medição existe em **um** dos 29 casos. O zero não é fato, é buraco,
+exatamente como o CRO tinha escrito e eu "corrigi" para pior.
+
+**O erro de método, e ele já me pegou duas vezes no mesmo dia** (a outra foi
+dizer que a atribuição da AppsFlyer não funcionava, com prova de duas semanas
+antes): li um ZERO como fato sem perguntar se a medição conseguia produzir
+outro número.
+
+**Regra que fica, e vale para qualquer agente:** antes de ler zero como
+resultado, conferir se a VERSÃO QUE A PESSOA USA consegue emitir aquele
+evento. Um evento que subiu depois da versão publicada mede zero por
+construção, e o zero dele parece igualzinho a um zero de verdade.
 
 ### As outras três, menores, mesmo formato
 
