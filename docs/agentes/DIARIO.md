@@ -57,6 +57,48 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   guia, escolhido pela releitura de 06/10 e não por gosto agora, para não
   repetir o erro de 15/09.
 
+## 2026-09-22 · O "erro de redirecionamento" do Search Console não é defeito
+
+O dono exportou as listas e depois mandou a inspeção da URL, dizendo que
+pediu indexação e o erro continuou. Medido pela Vercel, que é o caminho que o
+proxy desta sessão não bloqueia:
+
+| O que | Resposta |
+|---|---|
+| Domínios na Vercel | apex redireciona para `www` com 308, verificado; o `www` sem redirecionamento. Sem laço |
+| `mentorque.com.br/barulho-no-carro` | 308, e o `location` MANTÉM o caminho |
+| `www.mentorque.com.br/barulho-no-carro` | 200, HTML completo |
+| Canonical da página | aponta para ela mesma, na versão `www` |
+| Meta robots | nenhum |
+| Sitemap | lista a versão `www`, não o apex |
+
+**A conclusão, e ela muda a pergunta.** A URL inspecionada é a CÓPIA, não a
+original. O Google não indexa URL que redireciona: ele segue e indexa o
+destino. Pedir indexação de um endereço que responde 308 é pedir uma coisa
+que não existe, e vai dar o mesmo resultado para sempre.
+
+A prova de que é isso está no outro arquivo do próprio dono: o `/` do mesmo
+domínio sem `www` foi classificado como "Página com redirecionamento", que é
+o certo. O `/barulho-no-carro` caiu em "Erro de redirecionamento" na mesma
+estrutura, mesmo domínio, mesmo 308, com rastreamento de 01/09. Duas
+classificações para a mesma causa, e o painel ainda mostra "Sitemaps: erro
+temporário de processamento". Cara de tropeço daquele dia, não de
+configuração, porque a configuração foi lida e está correta.
+
+**O que ficou para ele:** inspecionar `https://www.mentorque.com.br/barulho-no-carro`,
+que é a URL do nosso sitemap e a que precisa estar indexada. E parar de
+tentar validar os dois relatórios: os dois listam URLs do domínio sem `www`,
+que existem para redirecionar, e nenhum vai passar nunca.
+
+**A lição de método:** a linha estava na lista dele desde 07/09 pedindo "a
+lista de URLs, que é o único dado que não dá para deduzir do código". Estava
+certo pela metade. A lista era necessária e não era suficiente: o que
+respondeu foi LER A CONFIGURAÇÃO DE DOMÍNIO e BUSCAR AS DUAS URLS. As duas
+coisas estavam disponíveis o tempo todo pelo MCP da Vercel, e ninguém tentou
+em quinze dias porque o proxy recusa `mentorque.com.br` e a gente parou na
+primeira porta fechada. Quando um caminho de rede falha, procurar o segundo
+caminho antes de mandar o trabalho para o dono.
+
 ## 2026-09-22 · Quatro fluxos desligados, e a atribuição da AppsFlyer está de pé
 
 **Os fluxos.** O dono autorizou: desligar todos os cinco que não são do
