@@ -57,6 +57,44 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   guia, escolhido pela releitura de 06/10 e não por gosto agora, para não
   repetir o erro de 15/09.
 
+## 2026-09-22 · A queda do Android vitals parou, e "parou" não é "consertamos"
+
+O dono mandou o Android vitals e perguntou se já estava resolvido. A queda é
+`com.getcapacitor.Bridge.getPermissionStates`, `NullPointerException`: **1
+usuário, 3 eventos, última ocorrência por volta de 05/09**.
+
+**O que prova que o caminho está de pé hoje.** O `getPermissionStates` é o que
+roda quando o app pergunta o estado da permissão de aviso. Na 2.7.0 Android,
+que é a da loja desde 17/09, com 61 aparelhos desde 18/09:
+
+| Evento | Vezes | Último |
+|---|---|---|
+| `convite_aviso` | 17 | hoje |
+| `permissao_aviso_concedida` | 6 | hoje |
+| `aceitou_convite_aviso` | 4 | hoje |
+
+O `permissao_aviso_concedida` só nasce DEPOIS que o pedido nativo volta. O
+trecho exato que dava NullPointerException completou seis vezes hoje.
+
+**O que NÃO dá para dizer, e é o ponto.** O commit mais provável de ter
+arrumado isso é o `61c3493` ("A folha nativa do Google entra no binário do
+Android"), que é o formato de defeito que esta casa conhece: plugin no
+JavaScript e ausente no binário, ponte quebra ao perguntar permissão dele. Só
+que ele entrou em **07/09** e a última queda foi em **05/09**. **O erro parou
+dois dias ANTES de o conserto chegar.** Então ele parou sozinho, e o conserto
+posterior só tornou improvável que volte.
+
+A frase certa é "parou, e a versão da loja exercita o mesmo caminho sem cair",
+não "achamos e consertamos".
+
+**Ressalva de honestidade:** os eventos de permissão só existem desde a 2.4
+(11/09). Eles provam que o caminho funciona HOJE; não provam que estava
+quebrado antes, porque não havia medição na 1.7.
+
+**Fechado com critério de reabrir escrito:** 1 usuário, 3 eventos, 17 dias sem
+repetir, caminho conferido com volume real. Se voltar na 2.7 ou acima, é
+informação nova e aí vale o stack trace.
+
 ## 2026-09-22 · O "erro de redirecionamento" do Search Console não é defeito
 
 O dono exportou as listas e depois mandou a inspeção da URL, dizendo que
