@@ -57,6 +57,39 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   guia, escolhido pela releitura de 06/10 e não por gosto agora, para não
   repetir o erro de 15/09.
 
+## 2026-09-22 · A URL do anúncio saiu do /app, e o aviso que segurava a decisão está velho
+
+O dono decidiu e executou: a URL final do anúncio saiu do `/app` e passou a
+mandar para as lojas e para a LP. A linha estava parada há 8 dias com um
+aviso preso nela ("NÃO trocar antes de ler: em 18/09 a medição virou contra a
+própria recomendação"), porque naquela data 10 das 14 contas novas nasciam na
+web.
+
+**Fui medir depois da decisão, e o aviso é que estava velho.** Contas novas
+por plataforma, por dia:
+
+| Janela | Web | App (Android e iOS) |
+|---|---|---|
+| 10 a 18/09, nove dias | **10** | 2 |
+| 19 a 22/09, quatro dias | **1** | **21** |
+
+A virada é do dia 19, que é exatamente quando as duas campanhas de instalação
+entraram no ar. Só o dia 21 teve 10 contas no Android. E o volume dobrou: 22
+contas em quatro dias contra 12 nos nove anteriores.
+
+**A lição, e ela vale para toda a lista.** O aviso de 18/09 estava certo no dia
+em que foi escrito e virou mentira quatro dias depois, sem ninguém mexer nele.
+Aviso preso numa lista de espera envelhece junto com a espera, e quanto mais
+tempo a linha fica parada, maior a chance de o motivo dela já não valer.
+
+**Regra que fica:** linha da lista do dono que carrega um "não faça antes de
+ler X" precisa da data de X ao lado. Quando a linha passar de duas semanas
+parada, remedir o X antes de repetir a recomendação.
+
+**Também fechado nesta rodada:** a leitura dos sete e-mails da jornada no
+celular. O dono leu e disse que estão certos. Era o único item da lista sem
+desfazer, porque os textos já saem para cliente todo dia às 9h.
+
 ## 2026-09-22 · A queda do Android vitals parou, e "parou" não é "consertamos"
 
 O dono mandou o Android vitals e perguntou se já estava resolvido. A queda é
