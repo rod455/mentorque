@@ -3,6 +3,52 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-22 · Quatro fluxos desligados, e a atribuição da AppsFlyer está de pé
+
+**Os fluxos.** O dono autorizou: desligar todos os cinco que não são do
+Mentorque, menos o Conteúdo/SEO do Vocaboost. Feito, e conferido no estado
+depois, não no comando:
+
+| Fluxo | Estado |
+|---|---|
+| Vocaboost, Conteúdo Orgânico (IG/FB) | desligado |
+| Dermato, Recepção WhatsApp (IA) | desligado |
+| Dermato, QR ao vivo (pareamento) | desligado |
+| TEMP, Página QR Evolution (reconnect 2) | desligado, depois de 72 dias no ar |
+| Vocaboost, Conteúdo/SEO (Blog) | **continua ligado**, por decisão dele |
+
+Dos 39 fluxos do Vocaboost, agora só o Conteúdo/SEO está ativo. Dos 3 do
+Dermato, nenhum. `Inactive` no n8n não apaga nada e volta com um clique.
+
+**O que o desligamento do Dermato para, e vale estar escrito:** aquele fluxo
+respondia o WhatsApp do consultório da cliente. Se o número ainda recebe
+mensagem, ninguém responde automaticamente a partir de agora. O dono
+autorizou sabendo disso; fica aqui porque é efeito em terceiro.
+
+**A ATRIBUIÇÃO ESTÁ FUNCIONANDO, e eu estava errado.** O dono mandou o painel
+da AppsFlyer, janela de 18 a 20/09:
+
+| Media source | Instalações |
+|---|---|
+| Facebook Ads | 13 |
+| Organic | 10 |
+
+Ou seja, a integração com a Meta reporta, e o item que estava na lista dele
+como "OneLink parado há 16 dias" já estava feito. **Eu afirmei o contrário com
+base num registro de 05/09**, escrito duas semanas antes de as campanhas
+existirem, e sem medir nada. Prova velha usada como prova atual.
+
+**O que continua de pé, e agora tem um número do lado.** A falha do SDK segue
+real: na 2.7.0, que é a que está na loja, **15 de 61 aparelhos Android (25%)
+nunca subiram o SDK**, com a última falha em 21/09. No iPhone, zero em 24.
+
+E há um encaixe entre as duas coisas: o painel da Meta relatou **22
+instalações** em 19 e 20/09, e a AppsFlyer conta **13** pelo Facebook Ads em 18
+a 20. Painel de plataforma e MMP sempre discordam um pouco, mas 25% dos Android
+nunca abrindo o SDK é uma explicação concreta para a AppsFlyer contar menos.
+Isso é hipótese com aritmética do lado, não conclusão: falta ver os dois
+painéis na mesma janela.
+
 ## 2026-09-22 · Decisão do dono: as chaves do n8n ficam como estão
 
 - **Desfecho do item que estava na lista dele desde 07/09** (girar as chaves em
