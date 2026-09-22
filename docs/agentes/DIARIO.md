@@ -3,6 +3,60 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-22 · Conteúdo & SEO: o canal ensinou qual formato de Short o público segura
+- Artifact "Conteúdo da semana":
+  https://claude.ai/artifact/Ty23BSyicWq3NDZayCWxnP
+- ENTREGA DA RODADA (formato b, pauta de gravação): Pauta 02, "O amortecedor
+  não amortece", em docs/conteudo/pautas.md. Short 9:16 de 45 a 60s, com
+  roteiro por trecho, o que precisa aparecer em cada plano, cuidados, texto
+  do YouTube e o trecho pronto para o catálogo.
+- ACHADO DA RODADA, e é o primeiro dado de audiência que este papel tem.
+  Em 19/09, entre 13h26 e 13h29, CINCO vídeos subiram no mesmo lote. Views
+  na coleta de 22/09: 895 (perde força na serra), 553 (a pergunta que muda
+  a conversa na oficina), 122 (o número no pneu não é a pressão), 99
+  (etanol ou gasolina, a conta dos 70%) e 14 (poça embaixo do carro, quando
+  é normal e quando é vazamento). Mesmo canal, mesma base, minutos de
+  diferença, **64 vezes entre o primeiro e o último**. Um segundo par
+  confirma: em 03/09, com dois minutos de diferença, "Esquentar o carro
+  parado" fez 515 e "Desligar o turbo quente" fez 4.
+- O QUE DÁ PARA CONCLUIR: dentro de um lote tudo o mais está constante,
+  então a diferença está no vídeo em si. O QUE SERIA INVENÇÃO: dizer qual
+  pedaço. Título, capa, primeiros segundos e assunto mudam juntos, e o
+  pacote do coletor traz só views, sem retenção, sem CTR e sem impressões.
+  Dez vídeos é amostra pequena e distribuição de vídeo é irregular. É
+  direção, não lei, e está escrito assim na pauta.
+- O padrão, como hipótese: ganharam o fenômeno que a pessoa já SENTIU e
+  nunca teve explicado, e UMA coisa concreta para fazer, em assunto de
+  todo mundo. Perderam a estrutura de TRIAGEM ("quando é A, quando é B") e
+  o assunto de nicho, que só serve a quem tem aquela peça.
+- REGRA NOVA nas pautas: um Short entrega UMA ideia, sobre algo que a
+  pessoa já sentiu no próprio carro. Lista de três casos é estrutura de
+  artigo e de guia, não de Short: no texto funciona, porque quem lê está
+  procurando o caso dele; no vídeo, pede que a pessoa espere a vez dela.
+- CORREÇÃO DA PAUTA 01, feita antes de gravar e por isso de custo zero: o
+  miolo dela são "três barulhos e o que cada um quer dizer", que é
+  exatamente a forma do vídeo de 14 views. O gancho continua bom e não
+  muda; o meio passa a entregar UMA ideia (a lingueta que chia de
+  propósito) e o terceiro caso vai para a descrição e para a aula. O aviso
+  está datado no topo da pauta e o roteiro original ficou inteiro, porque
+  ele segue sendo a fonte do texto da aula.
+- Por que suspensão na pauta nova: 108 aulas publicadas e a suspensão tem
+  2, nenhuma sobre o que ela avisa. Freio mais suspensão mais pneu seguem
+  em 9 de 108, contra 54 só de motor. O recorte não mudou desde 08/09.
+- AUTOAVALIAÇÃO CONTRA A RÉGUA do manual: seis critérios se aplicam a uma
+  rodada de pauta e os seis foram cumpridos. Três não se aplicam (registro
+  e sitemap de guia, metadados de busca, âncoras e FAQ), porque não existem
+  num roteiro de vídeo. Observação registrada no manual: a régua nasceu em
+  19/09 escrita para a rodada de guia, e marcar quais linhas valem por
+  formato evita que a próxima rodada de pauta finja ter passado em
+  critério que ela nem podia tocar.
+- Busca, para acompanhar: 28 dias, 0 cliques e 36 impressões, contra 24 na
+  semana passada. A releitura marcada segue em 06/10.
+- Próximas: (1) artigo do catálogo sobre suspensão, fechando o ciclo do
+  Short com a lista completa, que é onde a lista funciona; (2) o próximo
+  guia, escolhido pela releitura de 06/10 e não por gosto agora, para não
+  repetir o erro de 15/09.
+
 ## 2026-09-22 · Quatro fluxos desligados, e a atribuição da AppsFlyer está de pé
 
 **Os fluxos.** O dono autorizou: desligar todos os cinco que não são do

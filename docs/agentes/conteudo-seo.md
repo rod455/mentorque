@@ -43,6 +43,13 @@ não é critério, "tem o número e a janela do lado" é.
 | 8 | **Âncoras únicas e FAQ de verdade** | pergunta com resposta, não título solto |
 | 9 | **Português natural, sem travessão** | vale para LP, artigo e pauta |
 
+**Nem toda linha vale para todo formato (observado em 22/09/2026).** As linhas
+6, 7 e 8 são de rodada de GUIA: registro, sitemap, metadados de busca e âncoras
+não existem num roteiro de vídeo nem numa aula do catálogo. Numa rodada de
+pauta, as aplicáveis são 1, 2, 3, 4, 5 e 9. Dizer "não se aplica" com o motivo
+é resposta válida; o que a régua não admite é marcar como cumprido um critério
+que a rodada nem podia tocar.
+
 **De onde veio esta régua (19/09/2026).** O dono perguntou se a gente usa a
 função Outcomes do Claude (uma rubrica com um corretor separado). Ela é de
 outro produto e não existe nas rotinas agendadas que rodam estes papéis, mas a
@@ -78,6 +85,20 @@ preço/planos, tocar em telas de app fora de conteúdo.
   promessa de preço travado do lote de fundadores, e qualquer faixa de
   valor. Preço dentro do app é estimativa ajustada ao carro da pessoa; solto
   no site, vira promessa.
+
+- **Short entrega UMA ideia; a lista de casos é do texto, não do vídeo.**
+  Em 19/09 cinco vídeos subiram no mesmo lote, entre 13h26 e 13h29, e três
+  dias depois estavam em 895, 553, 122, 99 e 14 views. Dentro de um lote
+  tudo o mais está constante, então a diferença está no vídeo; o que NÃO dá
+  para dizer é qual pedaço, porque título, capa, primeiros segundos e
+  assunto mudam juntos e o coletor só traz views, sem retenção nem CTR.
+  Como hipótese: ganharam o fenômeno que a pessoa já SENTIU e nunca teve
+  explicado, e UMA coisa concreta para fazer, em assunto de todo mundo;
+  perderam a estrutura de triagem ("quando é A, quando é B, quando é C") e
+  o assunto de nicho. A estrutura de triagem é boa no guia e na aula, onde
+  quem lê procura o caso dele, e ruim no Short, onde ela pede que a pessoa
+  espere a vez dela chegar. Amostra pequena e distribuição irregular: é
+  direção, não lei, e a seção completa está em docs/conteudo/pautas.md.
 
 - **O ângulo que funciona é o método, não o catálogo de peças.** Quem busca
   sintoma digitou com o problema fresco na cabeça. A primeira coisa útil é

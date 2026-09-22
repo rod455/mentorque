@@ -17,11 +17,226 @@ Regras que valem para toda pauta deste arquivo:
 
 ---
 
+## O que a audiência do canal ensinou (22/09/2026)
+
+Até aqui estas pautas foram escritas no escuro: o canal tinha 0 view e não
+havia com o que comparar. Agora há, e o dado chegou num formato raro. Em
+**19/09 cinco vídeos subiram no mesmo lote, entre 13h26 e 13h29**, e três dias
+depois estavam assim (views acumuladas na coleta de 22/09):
+
+| views | título |
+|---|---|
+| 895 | Por que o carro perde força na serra? O que acontece com o motor em altitude |
+| 553 | A pergunta que muda a conversa na oficina antes de aprovar o orçamento |
+| 122 | O número no pneu não é a pressão do seu carro, onde está a certa |
+| 99 | Etanol ou gasolina? A conta dos 70% e por que ela pode estar errada pro seu carro |
+| 14 | Poça embaixo do carro: quando é normal e quando é vazamento |
+
+Mesmo dia, mesmo canal, mesma base de inscritos, minutos de diferença, e **64
+vezes entre o primeiro e o último**. Um segundo par confirma a mesma forma: em
+03/09, com dois minutos de diferença, "Esquentar o carro parado" fez 515 e
+"Desligar o turbo quente: Mito ou Verdade?" fez 4.
+
+**O que dá para concluir, e é pouco mas é sólido:** dentro de um lote, tudo o
+mais está constante, então a diferença está no vídeo em si. **O que NÃO dá para
+concluir:** qual pedaço do vídeo. Título, capa, primeiros segundos e assunto
+mudam juntos, e o pacote do coletor traz só views, sem retenção, sem CTR e sem
+impressões. Quem diz que "o título causou" está inventando. Some-se a isso que
+dez vídeos é amostra pequena e que distribuição de vídeo é irregular por
+natureza: um pegar o feed desloca tudo. **Isto é direção, não lei.**
+
+O padrão que aparece, dito como hipótese:
+
+- **Ganharam**: um fenômeno que a pessoa já SENTIU e nunca teve explicado
+  (perder força na serra), e UMA coisa concreta para fazer (a pergunta na
+  oficina). Assunto de todo mundo, não de um nicho.
+- **Perderam**: a estrutura de TRIAGEM, "quando é A, quando é B, quando é C"
+  (a poça embaixo do carro, 14), e o assunto de nicho, que só serve a quem tem
+  aquela peça (turbo, 4 e 2).
+
+**A regra que fica para as próximas pautas**: um Short entrega UMA ideia, e ela
+precisa explicar algo que a pessoa já sentiu no próprio carro. Lista de três
+casos é estrutura de artigo e de guia, não de Short. No texto ela funciona,
+porque quem lê está procurando o caso dele; no vídeo ela pede que a pessoa
+espere a vez dela chegar, e ela não espera.
+
+Quando houver retenção e CTR na coleta, esta seção volta a ser lida: é o que
+separa título de conteúdo, e hoje ela não separa.
+
+---
+
+## Pauta 02 · O amortecedor não amortece
+
+**Formato**: Short vertical (9:16), 45 a 60 segundos.
+**Trilha de destino**: Diagnóstico (gratuita).
+**Status**: pronta para gravar. Não gravada.
+
+### Por que esta, e por que agora
+
+- **Suspensão é o segundo maior buraco do catálogo.** São 108 aulas publicadas
+  e a suspensão tem **2**: uma sobre não cortar molas e outra sobre vibração
+  por velocidade. Nenhuma sobre o que a suspensão avisa. Somando os três
+  sistemas que a pessoa sente dirigindo, freio, suspensão e pneu, são 9 de 108,
+  contra 54 só de motor.
+- **O assunto passa no teste que o lote de 19/09 sugere**: é um fenômeno que
+  praticamente todo motorista já sentiu (o carro continua balançando depois da
+  lombada) e nunca teve explicado, e não depende de a pessoa ter uma peça
+  específica. Não é nicho.
+- Conversa com `suspension-bounce` e `suspension-noise` no diagnóstico do app,
+  e com a aula `diag-vibracao`.
+
+### O gancho
+
+> "O amortecedor não amortece. Quem absorve o buraco é a mola. O trabalho dele
+> é outro: impedir que a mola continue pulando depois."
+
+Contraintuitivo, verdadeiro, e está no nome da peça, que é justamente o que faz
+a frase grudar. É a mesma família do gancho que ganhou em 19/09: explicar uma
+coisa que a pessoa convive com e nunca parou para entender.
+
+### A ideia única
+
+Amortecedor gasto não deixa o carro duro, deixa o carro MOLE. E mole não é
+questão de conforto: roda que fica pulando é roda que passa parte do tempo sem
+apoiar no chão, e pneu sem apoio não freia nem faz curva. É por isso que a peça
+morre sem ninguém perceber: ela não quebra de uma vez, ela vai soltando, o
+motorista se acostuma um pouquinho por mês, e só percebe depois de trocar.
+
+Uma ideia só. Nada de "os cinco sinais de amortecedor gasto": essa é a
+estrutura que fez 14 views.
+
+### Roteiro
+
+**0 a 6s, o gancho**
+> O amortecedor não amortece. Quem absorve o buraco é a mola. Olha só.
+
+*Na tela*: a mão apertando e soltando uma mola (de caneta serve, e é honesto
+porque é analogia declarada), a mola pulando sozinha várias vezes.
+
+**6 a 20s, o trabalho verdadeiro**
+> Se fosse só a mola, o carro passava na lombada e ficava pulando assim, várias
+> vezes. Quem manda a mola parar na primeira é o amortecedor. Ele não amacia
+> nada: ele FREIA o movimento da mola. É por isso que o nome em inglês é
+> "damper", que quer dizer amortecedor de OSCILAÇÃO, não de impacto.
+
+*Na tela*: mesma mola, agora com a outra mão segurando o movimento na volta.
+
+**20 a 40s, por que isso importa**
+> Aí está o problema: quando ele vai morrendo, o carro não fica duro, fica
+> MOLE. E carro mole não é só desconforto. Roda que continua pulando é roda que
+> passa parte do tempo sem apoiar direito no chão, e pneu sem apoio não freia e
+> não faz curva. Você perde freio sem nunca ter mexido no freio.
+
+*Na tela*: se der, o carro passando numa lombada e continuando a flutuar.
+Se não der, cartela com a frase "mole, não duro".
+
+**40 a 60s, o fecho e a única ação**
+> E por que quase ninguém percebe? Porque ele não quebra, ele vai soltando. Um
+> pouquinho por mês, e você se acostuma junto. Quem nota é sempre depois de
+> trocar. O teste que dá para fazer hoje: empurre o canto do carro para baixo
+> com força e solte. Se ele subir e parar, tudo bem. Se ficar balançando, vale
+> olhar. E não é veredito, é motivo para pedir a inspeção.
+
+*Na tela*: `mentorque.com.br/barulho-no-carro#buraco`.
+
+### O que precisa aparecer
+
+| Precisa | Por quê |
+|---|---|
+| Uma mola pequena na mão | É o plano que sustenta a ideia inteira, e cabe em qualquer mesa |
+| A mesma mola sendo freada pela outra mão | É a demonstração do que o amortecedor faz, sem precisar de peça |
+| Um amortecedor de verdade, se houver | Bom, não obrigatório. A analogia da mola já entrega |
+| O teste de empurrar o canto do carro | É a única ação do vídeo, precisa ser vista |
+
+Se não houver amortecedor à mão, o vídeo se sustenta com a mola e o carro. Não
+vale mostrar peça de outro carro dizendo que é do seu, nem usar imagem de banco
+para fingir a lombada.
+
+### Cuidados
+
+- **Não prometa distância de frenagem.** Existe número publicado sobre isso e
+  ele varia com pneu, piso, velocidade e carro. Sem medição nossa, a frase é "o
+  pneu apoia pior", nunca "você para X metros depois".
+- **O teste de empurrar o canto é indício, não laudo.** Amortecedor moderno
+  pode estar gasto e ainda passar nele. O roteiro diz isso com todas as letras.
+- **Nada de mandar trocar aos pares sem contexto.** É a prática recomendada,
+  e no Short não cabe explicar; isso fica para o artigo.
+
+### Texto do YouTube
+
+**Título** (na ordem de preferência):
+
+1. O amortecedor não amortece
+2. Por que o carro continua balançando depois da lombada
+3. A peça que morre sem ninguém perceber
+
+**Descrição**:
+
+> O nome engana: quem absorve o buraco é a mola. O amortecedor existe para
+> impedir que ela continue pulando depois, e é por isso que, quando ele vai
+> embora, o carro não fica duro, fica mole. Neste vídeo eu mostro isso com uma
+> mola na mão e explico por que roda que fica pulando perde apoio no chão.
+>
+> Guia de barulho no carro, separado por quando o som aparece:
+> https://www.mentorque.com.br/barulho-no-carro
+>
+> Mentorque é um app para você entender o seu carro e chegar na oficina
+> sabendo o que perguntar. Grátis para começar, no Android e no iPhone.
+
+**Tags**: amortecedor, suspensão do carro, carro balançando, amortecedor
+gasto, manutenção de carro, mecânica para leigos, mentorque
+
+### Depois de publicar
+
+Entra como aula nova e gratuita da trilha de diagnóstico. Trecho pronto para
+`lib/app/conteudo/aulas.ts`, faltando o id do YouTube e a data:
+
+```ts
+art({ id: "vid-amortecedor", track: "diagnosis", type: "video", system: "suspension",
+  addedAt: "AAAA-MM-DD", thumb: "/learn/vid-amortecedor.png",
+  media: { provider: "youtube", src: "COLE_O_ID_AQUI", vertical: true },
+  title: T("O amortecedor não amortece", "The shock absorber doesn't absorb"),
+  related: ["diag-vibracao", "diag-noises", "vid-cortar-molas"],
+  body: [
+  T("O nome engana. Quem absorve o buraco é a mola: ela comprime e devolve. O trabalho do amortecedor é o oposto de amaciar, é FREAR o movimento da mola para que ela pare na primeira vez em vez de ficar oscilando.", "The name misleads. The spring is what absorbs the bump: it compresses and pushes back. The shock's job is the opposite of cushioning, it DAMPS the spring's movement so it settles on the first try instead of oscillating."),
+  T("## Por que ele morre sem ninguém perceber", "## Why it dies unnoticed"),
+  T("Amortecedor quase nunca quebra de uma vez. Ele vai perdendo firmeza ao longo de meses, e o motorista se acostuma na mesma velocidade em que a peça piora. Por isso quase todo mundo só percebe o quanto estava ruim depois de trocar.", "A shock rarely fails all at once. It loses firmness over months, and the driver adapts at the same pace the part declines. That's why most people only realize how bad it was after replacing it."),
+  T("## E por que isso não é só conforto", "## And why this isn't just comfort"),
+  T("Quando ele vai embora o carro não fica duro, fica mole. Roda que continua pulando passa parte do tempo sem apoiar direito no chão, e pneu que não apoia não freia nem faz curva com a mesma eficiência. É perder freio sem ter mexido no freio.", "As it goes, the car doesn't get stiff, it gets floaty. A wheel that keeps bouncing spends part of the time not properly loaded on the road, and a tire without load neither brakes nor corners as well. It's losing braking without touching the brakes."),
+  T(">> O teste que dá para fazer hoje: empurre o canto do carro para baixo com força e solte. Subiu e parou, tudo bem; ficou balançando, vale inspecionar. Indício, não laudo: amortecedor moderno pode estar gasto e ainda passar nesse teste. Se além disso aparecer estalo em buraco, o recorte está em [[diag-noises|que barulho é esse?]].", ">> The test you can run today: push down hard on a corner of the car and let go. If it rises and settles, fine; if it keeps bouncing, worth inspecting. An indication, not a verdict: a modern shock can be worn and still pass. If there's also a knock over bumps, the guide is in [[diag-noises|what's that noise?]]."),
+  T("!! Suspensão é o que mantém o pneu no chão, então ela é item de segurança e não de conforto. Carro que flutua depois de ondulação, que mergulha muito na frenagem ou que 'salta' em curva pede inspeção, não adaptação.", "!! The suspension is what keeps the tire on the road, so it's a safety item, not a comfort one. A car that floats after dips, dives hard under braking or skips through corners needs inspection, not adaptation."),
+]}),
+```
+
+---
+
 ## Pauta 01 · O barulho que o freio faz de propósito
 
 **Formato**: Short vertical (9:16), 50 a 70 segundos.
 **Trilha de destino**: Diagnóstico (gratuita).
 **Status**: pronta para gravar. Não gravada.
+
+> **CORREÇÃO DE 22/09/2026, antes de gravar.** Esta pauta foi escrita em 01/09,
+> quando o canal não tinha view nenhuma para consultar. O lote de 19/09 (ver a
+> seção "O que a audiência do canal ensinou", acima) sugere que a estrutura de
+> TRIAGEM, que é exatamente a dos "três barulhos" abaixo, é a que menos segura
+> o público: o vídeo com essa forma fez 14 views no mesmo lote em que outro fez
+> 895.
+>
+> **O gancho continua bom** e não muda: "esse chiado não é o seu freio
+> quebrando, é uma peça de metal fazendo o que ela foi feita para fazer" é da
+> mesma família dos que ganharam. O que muda é o meio.
+>
+> **Como gravar**: entregue UMA ideia, a lingueta que chia de propósito, e
+> pare nela. Dos três barulhos, fica só o contraste que fecha o raciocínio (o
+> chiado que avisa contra o raspar seco de metal, que é o aviso já perdido). O
+> "alarme falso" da pastilha nova sai do vídeo e vai para a descrição do
+> YouTube e para a aula, onde a lista funciona porque quem lê está procurando o
+> caso dele. Isso encurta o Short para uns 40 segundos, o que é ganho e não
+> perda.
+>
+> O roteiro original fica abaixo inteiro, porque ele continua sendo a fonte do
+> texto da aula. O que mudou é o recorte do que vai para a câmera.
 
 ### Por que esta, e por que agora
 
