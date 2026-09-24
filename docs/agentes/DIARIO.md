@@ -3,6 +3,61 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-23 · QA: dois números do retrato não podem ser lidos como resultado
+- Artifact "QA da Semana":
+  https://claude.ai/artifact/Bmps6hvr11WManGiPwRHBV
+- Semana sem defeito de código. O que há são duas medidas que chegam ao
+  relatório de segunda parecendo queda, e nenhuma das duas é queda.
+- **ACHADO 1, a coorte da semana corrente ainda está ENCHENDO.** O retrato diz
+  "ativação, coorte de 21/09: 0 de 15" e isso é uma coorte de dois dias. A
+  prova não é raciocínio, é o histórico do próprio retrato no git: a coorte de
+  14/09 foi lida como **2 de 8** no dia 19, **2 de 11** no dia 20, **3 de 16**
+  no dia 21 e estabilizou aí. O denominador cresce enquanto a semana está
+  aberta; o numerador, enquanto a janela de 7 dias de cada pessoa não fecha.
+  Medida hoje, a coorte de 21/09 já tem 18 cadastrados, não 15.
+- Das quatro coortes de ativação que o retrato exibe, só DUAS podem ser lidas.
+  Na retenção é pior: a janela de 8 a 30 dias não fechou em nenhuma das
+  quatro, e as quatro aparecem com zero. O retrato já tem esse aviso para o
+  CAC ("a semana corrente ainda está aberta, não serve de denominador") e não
+  tem para ativação nem retenção.
+- **CORRIGIDO na fonte, dentro da alçada de view ADITIVA**: `ativacao_coortes`
+  ganhou `semana_fechada` e `janela_fechada`; `retencao_coortes` ganhou
+  `semana_fechada`, `d1_7_fechada` e `d8_30_fechada`. As contas: a semana
+  fecha em coorte+7, a janela de 7 dias em coorte+14 (a última pessoa entra em
+  coorte+6 e o filtro é `< cadastrado_em + 8 days`), a de 8 a 30 em coorte+37.
+  Ensaiado antes de aplicar, colunas antigas conferidas uma a uma sem mudança
+  de nome, ordem ou valor, e os dois arquivos de `supabase/` atualizados no
+  mesmo commit.
+- **ACHADO 2, o fundo do funil soma um app que não pode vender.** Dos 33
+  `viu_paywall` dos últimos 9 dias, **28 são Android, 4 iOS e 1 web**. O
+  Android roda em modo leitor por decisão de projeto: a tela de assinatura
+  aparece e emite `viu_paywall`, mas não tem botão de compra, porque convite
+  de compra por fora é o que a política do Play proíbe. Então
+  `iniciou_checkout` zero é ESTRUTURAL, e uma taxa de paywall para checkout
+  somando as três plataformas não mede nada: 85% do denominador vem de onde o
+  numerador não pode existir.
+- Não é defeito de código, é defeito de LEITURA, e a documentação ajudava a
+  errar: `docs/android-local.md` dizia que o modo leitor é "sem paywall". A
+  tela aparece; o que não existe é a compra. Frase corrigida, com os números
+  do lado.
+- **CONFERÊNCIA NOVA, `conferir:coorte`**: as colunas moram no banco e o
+  registro delas em `supabase/`. Em 26/08 esta casa descobriu o arquivo do
+  funil três eventos atrás do aplicado. Agora reprova se as views de coorte
+  não declararem as colunas de maturidade. Provada mordendo com dois defeitos
+  plantados, incluindo a armadilha da casa (deixar só o COMENTÁRIO citando a
+  coluna e tirar o SQL). Limite declarado no cabeçalho: ela lê o ARQUIVO, não
+  o banco.
+- **Paradas obrigatórias**: a conta do dinheiro fecha (3 `ok` e 1 cortesia; a
+  fatura do Stripe não foi aberta, integração pede autorização nesta sessão).
+  Os zeros têm todos causa conhecida e nenhum é novo.
+- **ITEM DO TOPO DA FILA, FECHADO E A FAVOR**: os fechamentos do iOS 2.1
+  sumiram. Zero no iOS nos últimos 8 dias. Em 16/09 eu marquei isso como
+  direção; agora é medido. Restam 2 fechamentos no Android 2.7 (22/09), pouco
+  para investigar e o bastante para acompanhar.
+- **Uma linha da tabela do topo estava velha e eu corrigi em vez de
+  reinvestigar**: o "esqueci minha senha" foi consertado em 20/09 e a linha
+  ainda dizia que o patch não tinha sido aplicado.
+
 ## 2026-09-22 · Conteúdo & SEO: o canal ensinou qual formato de Short o público segura
 - Artifact "Conteúdo da semana":
   https://claude.ai/artifact/Ty23BSyicWq3NDZayCWxnP
@@ -1023,7 +1078,7 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 | Por que o retrato diário de 12, 13 e 14/09 diz 0 assinaturas, "série de uso vazia" e funil sem dados? | Porque a camada de API da Supabase (PostgREST) respondia 504 a parte das 12 consultas que o `/api/dados` disparava de uma vez (fila de conexões pequena), a rota seguia com aquelas seções vazias e, quando a soma passava de 15 s, a Vercel derrubava a função inteira. O Postgres em si responde em milissegundos. Os três retratos são inválidos; `subscriptions` continua com os mesmos assinantes. Conserto de 14/09: 3 consultas por vez com nova tentativa em 504, campo `falhas` no JSON, teto de 60 s, e o Analista falha em vez de gravar zeros. **RESOLVIDO, conferido em 15/09:** o retrato das 6h saiu inteiro, `falhas: {}`, 1,3 s dentro da rota, nenhuma consulta pesada (a mais lenta, 532 ms). E `estadoDaBase` era nulo em TODOS os retratos desde 01/09 por falta de permissão em `auth.users` (migração `estado_da_base_como_dono`). | 14/09, Engenharia |
 | Por que a foto do momento (ou do perfil) aparece quebrada? | O bucket `Avatars` do Storage estava privado e o app grava a URL pública: 400 em toda foto enviada logado. Ligado em 13/09 (`avatars_bucket_publico`); o retrato está em `supabase/storage_avatars.sql`. Se voltar a acontecer, conferir `select public from storage.buckets where id = 'Avatars'` antes de qualquer outra coisa. | 13/09, Engenharia |
 | O retrato está vazio ou zerado, é queda de verdade? | **Conferir o JSON antes de acreditar.** Em 12, 13 e 14/09 o retrato saiu com tudo zerado porque `/api/dados` estourou o teto de 15s e o arquivo guardou `"error": {"code": "504"}` no lugar dos dados. Zero no retrato pode ser ausência de resposta, não medição. O jeito rápido: `git show <sha>:docs/dados/retrato.md \| grep '"error"'`. | 14/09, Diretor |
-| O "esqueci minha senha" funciona? | **Não redefine nada.** O link só cria sessão; não existe tela de nova senha nem um `updateUser({password})` no código todo. Quem esquece a senha fica pedindo link para sempre, e no app da loja a sessão ainda nasce no navegador. Patch pronto, não aplicado (autenticação, sem reprodução possível). | 16/09, QA, `docs/agentes/propostas/recuperar-senha-nao-recupera.md` |
+| O "esqueci minha senha" funciona? | ~~Não redefine nada, patch pronto e não aplicado.~~ **CONSERTADO em 20/09**, por ordem do dono, seguindo a proposta e as duas autocorreções dela: `lib/app/recuperacao.ts`, a tela `NovaSenha.tsx`, `definirSenha`/`trocarSenha` no auth e o `emailRedirectUrl()` voltando pela ponte no app nativo. De quebra, o "Trocar senha" do Perfil chamava o MESMO `resetPassword` e também não trocava nada. Falta a prova de aparelho: ninguém abriu o link num celular. | 16/09 achado (QA), 20/09 conserto, `docs/agentes/propostas/recuperar-senha-nao-recupera.md` |
 | Os "app fechou sozinho" são da web? | **Não, os atuais são de aparelho**: 5 de 6 nos 10 dias até 16/09 (iOS 2.1 com 3, iOS 2.4 com 1, Android 1.8 com 1). A leitura de 07/09 valia para os relatos daquela época. Zero na 2.5 desde 13/09. | 16/09, QA |
 | A lista de termos de busca do Google Ads é de quantos dias? | **De 30, e acumulada**, os 50 mais caros (`segments.date BETWEEN hoje menos 30 dias AND hoje`), enquanto `porDia`, `porCampanha` e `custo7d` são de 8 datas com a de hoje pela metade. Ler termo como "gasto da semana" superestima em umas quatro vezes; o gasto da semana num assunto é a diferença entre duas coletas. E os 50 termos cobrem só 23% do dinheiro: subir o teto esbarra no `MAX_DADOS` de 20.000 bytes da rota `/api/metricas` (413 `pacote_grande`, testado e desfeito). | 19/09, Mídia paga |
 | Quantas pessoas voltaram ao app num dia posterior ao primeiro? | **21 de 253, 8,3%**, em 22/09. Separado: quem criou conta 6 de 50 (12,0%), convidado 15 de 203 (7,4%). Sequência mais longa: 7 dias com conta, 25 convidado. **O 253 é ARMAZENAMENTO DE NAVEGADOR, não gente** (a régua `identidade` cai no `anon_id` porque evento de uso não carrega pessoa), então 8,3% é PISO e a taxa real por pessoa é melhor. Mais 29 aberturas sem identidade nenhuma, declaradas. A view canônica `retencao_coortes` dá outro número (3 de 50 em D1-7) porque ancora em QUEM CRIOU CONTA e na data do CADASTRO, não no primeiro uso: perguntas diferentes, mesma ordem de grandeza. Só melhora com build novo, que leva o `user_id` nos eventos. | 22/09 |

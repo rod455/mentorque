@@ -251,6 +251,23 @@ recomendar.
   passado batido pelo topo, que era novo. Ler o manual é o primeiro item da
   rotina justamente porque ele engorda; ler só as partes que eu já conhecia
   derruba o propósito.
+- **Coorte da semana corrente NÃO é resultado, é obra em andamento.** O
+  denominador cresce até a semana fechar e o numerador até a janela de cada
+  pessoa fechar. A coorte de 14/09 foi lida como 2 de 8, depois 2 de 11,
+  depois 3 de 16, em três dias. Antes de citar qualquer coorte, pergunte se a
+  janela dela fechou; as views agora respondem sozinhas (`semana_fechada`,
+  `janela_fechada`, `d1_7_fechada`, `d8_30_fechada`).
+- **O histórico do retrato no git é uma fonte, e é barata.** Para provar que
+  um número se move, não é preciso teoria: `git log -- docs/dados/retrato.md`
+  e ler a mesma linha em dias diferentes. Foi isso que transformou "acho que a
+  coorte enche" em prova em dois minutos. Vale para qualquer suspeita de
+  número que muda sozinho.
+- **Taxa entre duas etapas exige que as duas sejam POSSÍVEIS na mesma
+  população.** O Android é 85% de quem chega ao paywall e não tem botão de
+  compra (modo leitor, política do Play). Somar as três plataformas numa taxa
+  de conversão produz um número sem significado, pelo mesmo motivo que misturar
+  eventos com pessoas produzia em 26/08. Antes de dividir, pergunte se o
+  numerador pode nascer em todo o denominador.
 - **Leia o que a tela PROMETE, não só o que o código faz.** A varredura de um
   fluxo tem que comparar as duas pontas: a frase que a pessoa vê e o caminho
   que existe para cumpri-la. O "esqueci minha senha" foi achado assim, e o
@@ -290,12 +307,14 @@ pela metade: **a compra pelas lojas continua sem uma única linha em produção*
 e tratamento de erro são TEORIA até a primeira venda de loja acontecer. Quando
 ela acontecer, esse é o primeiro fluxo a reconferir, com dado na mão.
 
-- **Os fechamentos do iOS 2.1**, no TOPO. A dívida de fonte foi paga em 16/09
-  e a resposta é que eles são de APARELHO, não da web: 3 relatos numa versão
-  com 14 aberturas de 4 identidades. Nenhum na 2.5 desde 13/09, o que sugere
-  que a migração resolve, mas é amostra pequena. Reconferir quando a base
-  tiver migrado: se sumir, fecha; se continuar, é crash de abertura no iOS e
-  vira prioridade.
+- ~~Os fechamentos do iOS 2.1~~ **FECHADO em 23/09**: sumiram. Zero no iOS em
+  8 dias, depois de a base migrar. A suspeita de 16/09 era direção e virou
+  medida. Sobraram 2 no Android 2.7, que ficam só em acompanhamento.
+- **Os 2 fechamentos do Android 2.7**, em acompanhamento, não em investigação.
+  Dois relatos em 8 dias é pouco para caçar causa e o bastante para reparar se
+  virar tendência. Se passar de 5 numa semana, vira varredura.
+- **Quiz diário**, que tem bateria própria e nunca passou por QA. É o maior
+  recurso do app sem uma varredura dedicada.
 - **A recuperação de senha, depois que o dono escolher o desenho.** O achado
   de 16/09 tem patch pronto em `docs/agentes/propostas/`; o que falta é a
   decisão entre deep link e web. Escolhida a saída, o resto é pequeno e volta

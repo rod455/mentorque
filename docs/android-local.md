@@ -69,10 +69,19 @@ As quatro, e o que cada uma faz (a terceira é a que mais dá problema):
 | `NEXT_PUBLIC_REVENUECAT_ANDROID_KEY` | liga a venda pelo Play Billing (`goog_…`) |
 
 **A chave da Play é o interruptor da venda no Android.** Vazia (ou ausente), o
-app compila em "modo leitor": sem paywall, sem banner de upgrade, exatamente
+app compila em "modo leitor": sem botão de compra e sem preço, exatamente
 como a versão publicada hoje. Com a chave, o paywall de compra aparece sozinho
 Nenhuma tela muda de código. Pegue em RevenueCat → Project → API keys, no app
 da Google Play.
+
+> **Cuidado ao LER o funil (nota do QA, 23/09/2026).** Modo leitor não é "sem
+> paywall": a tela de assinatura APARECE (Biela, comparativo de planos, entrar
+> ou reconferir acesso) e emite `viu_paywall` igual às outras plataformas. O
+> que não existe lá é o botão de compra. Consequência para quem lê números:
+> nos 9 dias até 23/09 houve 28 `viu_paywall` no Android contra 4 no iOS e 1 na
+> web, e `iniciou_checkout` zero. **Esse zero é estrutural, não comportamento.**
+> Taxa de paywall para checkout somando Android com as outras plataformas não
+> significa nada enquanto o Android não vender.
 
 Como é variável de **build**, trocá-la exige recompilar: `npm run android:studio`
 de novo. Não adianta editar o `.env.local` e só reabrir o Android Studio.
