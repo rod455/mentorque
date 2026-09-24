@@ -385,7 +385,60 @@ incompleta. Para comparar duas semanas, some o `porDia` você mesmo, só com dia
 cheios. Em 19/09 o `custo7d` dizia R$ 227,13 e a semana cheia de 12 a 18/09 era
 R$ 214,30.
 
-### Só 23% do dinheiro tem nome, e subir o teto esbarra na rota (19/09/2026)
+### `porDia` é o total da CONTA, não da campanha (24/09/2026)
+
+Com uma campanha só, essa diferença não aparecia. Com três, ela decide a conta
+inteira. O normalizador soma todas as campanhas em cada dia de `porDia`; quem
+separa é `porCampanha`, e a janela dele são as oito datas de sempre.
+
+Como fazer a conta por campanha sem errar:
+
+- **gasto diário da conta**: some `porDia`, escolhendo só dias cheios;
+- **gasto da campanha na janela**: leia `porCampanha` da coleta mais nova;
+- **confira que fecha**: a soma de `porCampanha` tem que bater com a soma de
+  `porDia` nas mesmas datas. Em 24/09 deu R$ 163,59 mais R$ 105,52 igual a
+  R$ 269,11, que é exatamente a soma de 17 a 24/09. Se não bater, pare.
+- **campanha nova dentro da janela**: enquanto a campanha for mais nova que a
+  janela, o `porCampanha` dela é a vida inteira dela, e dá para tratar como
+  acumulado.
+
+### Quando a etiqueta some, a assinatura é esta (24/09/2026)
+
+O rastro com nome cai a zero e, no mesmo dia, aparece um rastro sem nome do
+mesmo tamanho. Foi assim que a troca da URL final do anúncio apareceu, sem que
+ninguém precisasse abrir o painel:
+
+| dia | `comecou_onboarding` com etiqueta | `clicou_baixar` sem nome |
+|---|---|---|
+| 18/09 | 21 | 0 |
+| 20/09 | **0** | **24** |
+
+**A conferência semanal que nasce daqui**: contar, por dia, os eventos de funil
+com `utm` e sem `utm`. Um degrau nessas duas séries em sentidos opostos é troca
+de URL, de destino ou de campanha, nunca queda de desempenho. Zero absoluto em
+todas as contas novas é suspeita de instrumento antes de ser notícia, e a regra
+do `ler-a-operacao` vale aqui inteira.
+
+E a causa provável tem nome na casa: `docs/utms.md` já dizia **"nunca cole o
+`/baixar` limpo"**. Quando um anúncio passa a mandar para uma página nossa sem
+os parâmetros, a pessoa chega, clica, vai para a loja e some da atribuição.
+
+### Campanha de instalação apaga o número deste papel (24/09/2026)
+
+Quando o dinheiro migra para campanha de loja, o custo por desfecho MEDIDO por
+campanha deixa de existir, porque não há etiqueta para carregar. Em 24/09 isso
+era 55% do gasto.
+
+O que NÃO fazer: trocar em silêncio pelo custo por conta do conjunto e seguir
+como se fosse a mesma coisa. Ele é um número canônico e honesto (gasto total
+dividido pelas contas de fora do banco), mas responde outra pergunta: ele mede
+a operação, não a campanha. **Diga qual dos dois está na mesa, sempre.**
+
+E não confunda instalação com conta: em 17 a 23/09 as plataformas contaram
+perto de 197 instalações enquanto nasceram 44 contas. São réguas diferentes, de
+donos diferentes, e não se dividem uma pela outra.
+
+### Só 21% do dinheiro tem nome, e subir o teto esbarra na rota (19 e 24/09/2026)
 
 Os 50 termos mais caros somam R$ 132,99 de R$ 575,10 gastos. O resto é cauda de
 termos de um clique, e ela não é guardada.
@@ -406,6 +459,12 @@ Duas lições, e a segunda é a que vale para sempre:
 - **execução verde do n8n não prova gravação.** Confira a linha em
   `metricas_diarias` pelo `coletado_em`, comparando com as outras fontes do
   mesmo dia. Foi assim que o 413 apareceu.
+
+**Em 24/09 piorou, e agora dá para medir a piora.** A lista dos 50 cresceu
+R$ 8,37 enquanto a busca gastava R$ 84,73: nove de cada dez reais novos foram
+para termos fora da lista. A cobertura caiu de 23% para 21% (R$ 141,36 de
+R$ 660,87 gastos na busca desde 02/09). Quanto mais tempo a campanha roda, mais
+a lista fica presa no acumulado antigo e menos ela enxerga o dinheiro novo.
 
 ### Todo cadastro com etiqueta do Google traz o gclid (19/09/2026)
 

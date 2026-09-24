@@ -1,124 +1,150 @@
-Relatório de mídia gerado em 2026-09-19
+Relatório de mídia gerado em 2026-09-24
 
 # Mídia da semana
 
-Primeira rodada do agente de Mídia paga. Janela medida: 12 a 18 de setembro,
-sete dias cheios, comparada com 5 a 11 de setembro. Uma campanha só, a
-Mentorque Lançamento, no Google, canal de busca. O relatório completo, com as
-tabelas, está no artifact "Mídia da semana".
+Janela medida: 17 a 23 de setembro, sete dias cheios, comparada com 10 a 16 de
+setembro. Foi a semana em que a operação de mídia mudou de forma: saiu de uma
+campanha de busca sozinha e passou a ter três campanhas, duas delas comprando
+instalação de aplicativo.
 
-## Antes de tudo: a campanha está pausada neste momento
+## A manchete: nasceram 44 contas, contra 10 na semana anterior
 
-A leitura de hoje às 17h24, feita direto na conta, traz a campanha com o estado
-"pausada". Ontem às 08h30 ela ainda estava ativa, e o gasto de hoje parou em
-R$ 12,83 com 8 cliques, contra os R$ 30 por dia das últimas duas semanas.
-
-Quem pausou e por quê é informação que só existe no console do Google, então
-fica registrado como pergunta e não como diagnóstico. Todos os números abaixo
-são de antes da pausa.
-
-## A conta da semana
-
-| Medida | 12 a 18/09 | 5 a 11/09 |
+| Medida | 17 a 23/09 | 10 a 16/09 |
 |---|---|---|
-| Custo | R$ 214,30 | R$ 221,78 |
-| Cliques | 147 | 147 |
-| Custo por clique | R$ 1,46 | R$ 1,51 |
-| Contas novas de fora | 12 | 12 |
-| Dessas, com a etiqueta da campanha | 10 | 8 |
-| **Custo por conta que a gente mede** | **R$ 21,43** | **R$ 27,72** |
+| Gasto total em mídia | R$ 365,33 | R$ 211,38 |
+| Cliques | 1.038 | 148 |
+| **Contas novas de fora** | **44** | **10** |
+| **Custo por conta** | **R$ 8,30** | **R$ 21,14** |
 
-O número que importa é o último: o dinheiro gasto dividido pelas contas que
-realmente nasceram com a etiqueta daquela campanha, contadas no nosso banco e
-não no relatório do Google. Ele melhorou 23% na semana.
+O gasto subiu 73% e as contas subiram quatro vezes e meia. O custo por conta
+caiu para menos da metade. As contas vêm da régua canônica do banco, que conta
+gente de fora da equipe, e o gasto é a soma do que o Google e o Meta cobraram.
 
-Ressalva honesta: são duas contas de diferença. Com dez contas, uma a mais ou a
-menos mexe o resultado em uns dois reais. Isso é direção, não é lei.
+Só que tem um porém grande, e ele é o segundo assunto deste relatório: **não
+dá mais para provar de qual campanha cada conta veio.**
 
-Na vida inteira da campanha, que começou a gastar em 2 de setembro: R$ 575,10,
-374 cliques e 20 contas com a etiqueta, o que dá R$ 28,76 por conta.
+## O que está rodando, e quanto cada uma custou
 
-**O Google continua contando zero conversão.** As duas coisas são verdade ao
-mesmo tempo: o sinal que ele recebia morreu em 4 de setembro, e gente chegou
-assim mesmo. Zero no relatório do Google não quer dizer que a campanha não traz
-ninguém; quer dizer que ele está decidindo quanto pagar por clique sem saber o
-que deu certo, que é um problema diferente e mais caro.
+| Campanha | Onde | Gasto | Cliques | Custo por clique |
+|---|---|---|---|---|
+| Mentorque Lançamento (busca) | Google | R$ 163,59 | 107 | R$ 1,53 |
+| APP, Android, Instalações | Google | R$ 105,52 | 566 | R$ 0,19 |
+| Lançamento Mentorque (instalação) | Meta | R$ 97,01 | 368 | R$ 0,26 |
 
-## Onde o dinheiro está indo embora
+As duas de instalação nasceram no dia 19 e já respondem por 55% do dinheiro. O
+clique delas custa oito vezes menos que o da busca, o que é normal: comprar
+instalação é mais barato que comprar intenção de busca.
 
-A campanha é de busca, então cada real comprou uma intenção que alguém digitou.
-Agrupando por assunto, desde o início da campanha:
+No Meta, um anúncio só carrega quase tudo: "Você liga o carro e espera parado"
+levou R$ 96,32 dos R$ 97,01, com 367 dos 368 cliques. Os outros três anúncios
+do conjunto praticamente não entregaram.
 
-| Assunto | Acumulado | Na última semana | O app atende? |
+**As plataformas dizem ter entregue perto de 197 instalações na janela** (97
+contadas pelo Google, 100 pelo Meta), enquanto nasceram 44 contas no nosso
+banco. Instalação não é conta: quem baixa e não cria conta não aparece aqui, e
+cada plataforma conta pela régua dela. A nossa régua é a conta.
+
+## O que quebrou na medição, e é o achado da semana
+
+**Desde o dia 19, nenhuma conta nova carrega etiqueta de campanha.** Nenhuma,
+em cinco dias e 34 contas. Antes disso, a etiqueta estava em quase todas.
+
+São duas causas somadas, e as duas são consequência de decisões boas:
+
+1. **As campanhas de instalação são cegas por construção.** O clique vai direto
+   para a Play Store e nunca passa por uma página nossa, então não existe
+   etiqueta para carregar. Isso é esperado e foi avisado quando elas entraram.
+2. **A campanha de busca também ficou cega, e essa não era para ficar.** A URL
+   final do anúncio passou a ser a página de download sem a etiqueta colada
+   nela. O efeito aparece no dia 20: os cliques continuam chegando na nossa
+   página, continuam tocando no botão de baixar, e chegam sem nome. Foram 62
+   toques no botão que leva à Play Store entre os dias 20 e 23, todos sem nome,
+   contra praticamente nenhum sem nome antes disso.
+
+O preço disso em número: a busca gastou **R$ 84,73 do dia 20 ao 24** e não é
+possível dizer se ela trouxe uma conta ou dez. Nos dois últimos dias em que a
+medição ainda funcionava, dias 17 e 18, ela estava em **R$ 15,24 por conta**,
+melhor que os R$ 21,43 da semana passada. Esse número deixou de existir.
+
+## Onde o dinheiro da busca está indo embora
+
+Agrupando por assunto o que as pessoas digitaram antes de clicar, acumulado
+desde o início da campanha:
+
+| Assunto | Acumulado | Cresceu na semana | O app atende? |
 |---|---|---|---|
-| Scanner pelo celular | R$ 38,53 | R$ 16,15 | não |
-| Aprender mecânica | R$ 33,12 | R$ 4,66 | não |
-| Sintoma do carro | R$ 34,50 | caiu da lista | sim |
-| Mecânico online | R$ 18,49 | R$ 8,10 | sim |
-| Ferramenta de oficina | R$ 8,35 | R$ 3,39 | não, e é pouco |
+| Scanner pelo celular | R$ 41,39 | R$ 2,86 | não |
+| Sintoma do carro | R$ 37,25 | R$ 2,75 | sim |
+| Aprender mecânica | R$ 34,57 | R$ 1,45 | não |
+| Mecânico online | R$ 21,45 | R$ 2,96 | sim |
 
-**O achado da semana é que o desperdício mudou de assunto.** Em 5 de setembro,
-"curso de mecânica" era R$ 20,52 e "scanner pelo celular" era R$ 6,66. Hoje são
-R$ 33,12 e R$ 38,53. O grupo de scanner cresceu quatro vezes mais rápido e
-passou o de curso. Quem procura scanner quer ler o carro por Bluetooth, e o app
-não faz isso: o código de erro é a pessoa digitando. Quem clica descobre isso na
-primeira tela.
+A semana foi curta para a busca, porque ela ficou pausada parte do dia 19 e
+depois passou a gastar cerca de R$ 21 por dia, em vez de R$ 30. Por isso os
+grupos andaram pouco.
 
-Fora desses dois grupos não apareceu nada que justifique uma palavra negativa
-nova. E vale o aviso ao contrário: "mecânico online" e "mecânico virtual" não
-são desperdício, é exatamente o que a Biela faz.
-
-## Uma correção, e ela é minha
-
-O estado escrito de manhã, quando este papel nasceu, projetava R$ 128 por mês
-de gasto no grupo de curso. Está errado por um fator de quatro: o certo é uns
-R$ 27 por mês. A lista de termos que a coleta guarda não é de sete dias, é de
-trinta e é acumulada, e eu li como se fosse semanal.
-
-A conclusão não muda (as duas listas de palavra negativa continuam certas), mas
-o tamanho do prêmio muda muito, e quem decide merece o número certo.
-
-## O que está parado esperando o console
-
-1. **Negativas de scanner** (scanner, obd2, bluetooth, elm327). É a mais urgente:
-   R$ 16,15 só na última semana, uns R$ 65 por mês no ritmo de hoje.
-2. **Negativas de curso** (curso, certificado, senai, apostila, presencial), na
-   lista desde 3 de setembro. Custou uns R$ 12,60 desde então, cerca de 90
-   centavos por dia.
-3. **A conversão "criou conta"**, na lista desde 7 de setembro. É a raiz do zero
-   acima.
+**Uma ressalva que cresceu e precisa ser dita:** a lista guarda só os 50 termos
+mais caros, e ela cresceu R$ 8,37 enquanto a busca gastava R$ 84,73. Ou seja,
+nove de cada dez reais novos foram para termos que não entram na lista. Hoje
+apenas 21% do dinheiro da busca tem nome.
 
 ## A proposta da semana, e é uma só
 
-**Importar as 20 contas já medidas como conversão, usando o identificador de
-clique que já está guardado.**
+**Colar a etiqueta na URL final do anúncio de busca.**
 
-Todo cadastro que chega pelo anúncio guarda o identificador do clique que o
-trouxe: 10 de 10 na última semana, 8 de 8 na anterior, 20 de 20 desde que a
-etiqueta existe. Ou seja, o desfecho de verdade já está aqui, ligado ao clique
-que o pagou. Falta mandar de volta para o Google.
+Hoje a URL é a página de download limpa. Bastaria ela terminar com a etiqueta
+de campanha (a convenção da casa já define exatamente qual) para que cada
+clique pago voltasse a chegar com nome. É um campo no painel do Google Ads, sem
+custo e sem risco: etiqueta não muda lance, orçamento nem público.
 
-O ganho não é o número no relatório, é o lance. Foram R$ 575,10 gastos com o
-Google decidindo às cegas, enquanto 20 desfechos reais esperavam no nosso banco.
-Com a importação, a mesma verba passa a ser decidida com 20 exemplos do que é
-uma conta, em vez de nenhum. O prazo de 90 dias cobre tudo, porque o clique mais
-antigo é de 3 de setembro.
+O que isso devolve: o custo por clique-que-foi-para-a-loja, por campanha, que
+hoje não existe. Com R$ 21 por dia saindo na busca, são uns R$ 640 por mês
+comprando cliques que a gente não consegue separar do tráfego que chega
+sozinho.
 
-O passo a passo está na lista de ações do dono, e a planilha o agente monta na
-hora em que for pedida.
+O que isso **não** devolve: a conta em si. Quem instala pela loja cria a conta
+dentro do aplicativo, e a etiqueta fica no navegador, do lado de fora. Fechar
+esse pedaço depende de ler o identificador de instalação dentro do app, que é
+trabalho de engenharia com uma versão nova, não um campo no painel.
+
+Antes de mexer, vale confirmar no painel qual é a URL final de hoje. A evidência
+aqui é forte e converge, mas quem enxerga o campo é quem abre a conta.
+
+## O que ficou aberto, e o que fechou
+
+**Fechou: o link etiquetado do Instagram entrou no ar.** No dia 19 apareceram
+os primeiros cliques com etiqueta de Instagram na história do funil, seis até
+agora. É pouco volume, mas o instrumento funciona, e antes disso o Instagram
+era invisível.
+
+**Fechou: a pergunta de quem pausou a busca no dia 19.** Foi decisão do dono,
+por trazer gente desqualificada, e a campanha voltou a rodar no dia 20.
+
+**Continua esperando o painel:**
+
+- as palavras negativas de scanner, na lista desde o dia 19. Custaram mais
+  R$ 2,86 desde então, e R$ 41,39 no acumulado;
+- as palavras negativas de curso, na lista desde 3 de setembro. R$ 14,05 desde
+  que a linha entrou;
+- devolver ao Google as 20 contas já medidas, pelo identificador de clique. Vale
+  dizer com honestidade que essa ideia perdeu força esta semana: ela treinaria
+  a campanha de busca, que agora manda para a loja, e os cliques em questão já
+  têm três semanas.
 
 ## O que este relatório não alcança
 
-- **Setenta e sete por cento do dinheiro não tem nome.** A coleta guarda os 50
-  termos mais caros, que somam R$ 132,99 de R$ 575,10. O resto é uma cauda de
-  termos de um clique que não é guardada. O conserto é barato e está escrito.
-- **Termo de busca não tem desfecho medido.** Dá para saber quanto cada termo
-  custou e quantas contas a campanha trouxe, mas não qual termo trouxe qual
-  conta. Quando este relatório chama um grupo de desperdício, o argumento é a
-  intenção que o app não atende, não um zero medido.
-- **Meta e Instagram.** O Meta está conectado, coletado e com gasto zero desde
-  22 de agosto, o que é conta sem veiculação e não medição quebrada. O Instagram
-  orgânico não tem medição nenhuma, e nenhum clique de Instagram jamais chegou
-  ao funil: das origens registradas desde 23 de agosto, são google 563, atalho
-  14 e email 8. Recomendar investir mais ou menos em Instagram hoje seria
-  recomendar às cegas.
+- **A conta por campanha, que é o número principal deste papel, não existe
+  nesta janela.** Só dá para dizer o custo por conta do conjunto todo. Isso é
+  consequência direta do que está descrito acima, e a proposta da semana
+  recupera metade.
+- **Instalação de loja não tem origem.** Enquanto o aplicativo não ler o
+  identificador de instalação, qualquer frase sobre qual campanha trouxe uma
+  conta de celular é chute.
+- **Instagram orgânico continua sem medição de alcance.** O link já tem
+  etiqueta; o que falta é a permissão que libera os números de cada post.
+
+## Como esta rodada se mede
+
+O papel tem uma lista de doze critérios de rodada bem feita. Esta rodada cumpre
+onze. O que não cumpriu foi fechar a conta de custo por desfecho medido por
+campanha, e o motivo é exatamente o achado da semana: a etiqueta parou de
+chegar. Fica dito em vez de disfarçado.

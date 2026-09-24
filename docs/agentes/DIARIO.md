@@ -3,6 +3,78 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-24 · Mídia paga (rodada 2): 44 contas a R$ 8,30, e a etiqueta parou de chegar no dia 19
+- Artifact "Mídia da semana":
+  https://claude.ai/artifact/H49EM3cYfvAdiTNn6YLBFU
+  Relatório e PDF em `docs/agentes/relatorios/`, com a data de hoje na primeira
+  linha, que é o que libera o e-mail das 10h para o Luiz.
+- **A MANCHETE, janela de 17 a 23/09 contra 10 a 16/09**: gasto de R$ 365,33
+  contra R$ 211,38 (mais 73%), **44 contas de fora contra 10** pela régua
+  canônica, **custo por conta de R$ 8,30 contra R$ 21,14**. Três campanhas no
+  ar: busca no Google (R$ 163,59, 107 cliques, CPC R$ 1,53), instalação Android
+  no Google (R$ 105,52, 566 cliques, CPC R$ 0,19) e instalação no Meta
+  (R$ 97,01, 368 cliques, CPC R$ 0,26). As duas de instalação nasceram no dia 19
+  e já levam 55% do dinheiro.
+- **O ACHADO: desde 19/09 nenhuma conta nova carrega etiqueta.** Zero em 34
+  contas. Duas causas somadas: campanha de loja é cega por construção (previsto,
+  está no manual), e **a busca também ficou cega, e essa não era para ficar**. A
+  URL final do anúncio virou o `/baixar` limpo, exatamente o que `docs/utms.md`
+  proíbe com todas as letras.
+- **A assinatura da quebra, e ela é limpa:** `comecou_onboarding` com etiqueta
+  cai de 21 (18/09) para 0 (20/09), e no MESMO dia aparecem 24 `clicou_baixar`
+  sem nome, do tamanho dos cliques da campanha (uns 12 por dia). Foram 62 toques
+  anônimos rumo à Play Store de 20 a 23/09. A evidência converge de três lados
+  (hora da virada, volume e tipo de página), e mesmo assim a prova final é olhar
+  o campo no painel, que é passo do dono.
+- **O preço**: a busca gastou R$ 84,73 de 20 a 24/09 sem que dê para dizer se
+  trouxe uma conta ou dez. Nos dias 17 e 18, os últimos em que a medição
+  funcionava, ela estava em **R$ 15,24 por conta**, melhor que os R$ 21,43 da
+  rodada 1. O número morreu no meio da melhora.
+- **PROPOSTA DA SEMANA, uma só, e é um campo no painel**: colar a etiqueta na
+  URL final da busca (`?utm_source=google&utm_medium=cpc&utm_campaign=lancamento`).
+  Não mexe em lance, orçamento, público nem região. Devolve o custo por
+  clique-para-a-loja por campanha, uns R$ 640 por mês que hoje não dá para
+  separar do tráfego que chega sozinho. **NÃO devolve a conta**: quem instala
+  pela loja cria conta dentro do app, e a etiqueta fica no navegador. Está na
+  lista do dono.
+- **O buraco maior, e o dono dele é a Engenharia**: instalação de loja não tem
+  origem. O conserto conhecido é ler o Install Referrer dentro do app e mandar
+  para o funil, e precisa de versão nova. Enquanto não existir, qualquer frase
+  sobre qual campanha trouxe uma conta de celular é chute, e 55% do dinheiro
+  está nesse escuro.
+- **FECHOU: o link etiquetado do Instagram entrou no ar.** No dia 19 apareceram
+  os primeiros `clicou_baixar` com `instagram / bio` da história do funil, seis
+  até agora. Volume pequeno, instrumento funcionando.
+- **FECHOU: quem pausou a busca em 19/09.** Decisão do dono, por gente
+  desqualificada; voltou a rodar no dia 20. A pergunta que a rodada 1 deixou
+  aberta está respondida.
+- **CONTINUA PARADO, com o custo da espera**: negativas de scanner, 5 dias,
+  mais R$ 2,86 (R$ 41,39 acumulados); negativas de curso, 21 dias, R$ 14,05
+  desde que a linha entrou. Não repito as duas como recomendação nova.
+- **A importação por gclid perdeu força, e é honesto dizer**: ela treinaria a
+  busca, que agora manda para a loja, e os 20 cliques já têm três semanas.
+  Continua na lista, com prioridade menor. Anotado na própria linha.
+- **Meta, primeira semana com gasto de verdade, e a quebra por anúncio serviu**:
+  um anúncio só ("Você liga o carro e espera parado") levou R$ 96,32 dos
+  R$ 97,01 e 367 dos 368 cliques. A quebra entrou na coleta em 19/09, uma semana
+  antes de existir gasto. A coleta lê `act_1071232758617319` e vê essa campanha;
+  se as outras três que o dono mencionou estiverem em outra conta, continuamos
+  cegos para elas, e essa linha NÃO está na lista do dono apesar de o manual
+  dizer que está.
+- **Instalação não é conta**: as plataformas contaram perto de 197 instalações
+  na janela (97 pelo Google, 100 pelo Meta) enquanto nasceram 44 contas. Réguas
+  diferentes, donos diferentes, não se dividem uma pela outra.
+- **A RÉGUA DA RODADA: cumpre 11 dos 12.** O que falha é o critério 3, fechar o
+  custo por desfecho medido POR CAMPANHA, e o motivo é o próprio achado. O que
+  existe é o custo por conta do conjunto, que é canônico e está declarado como
+  tal, não disfarçado de número do papel.
+- APRENDIZADOS em `midia-paga.md`: `porDia` é o total da CONTA e não da campanha
+  (com a conferência de que a soma de `porCampanha` tem que bater); a assinatura
+  de etiqueta perdida (rastro com nome caindo e rastro sem nome do mesmo tamanho
+  subindo no mesmo dia), que vira conferência semanal; campanha de instalação
+  apaga o número deste papel e isso se declara em vez de substituir em silêncio;
+  e a cobertura dos termos caiu de 23% para 21%, com a piora medida.
+
 ## 2026-09-23 · QA: dois números do retrato não podem ser lidos como resultado
 - Artifact "QA da Semana":
   https://claude.ai/artifact/Bmps6hvr11WManGiPwRHBV
