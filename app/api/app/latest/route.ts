@@ -38,7 +38,12 @@ const LATEST = {
   // é do dono, como manda a nota acima (o que vale é a Play em Produção, não
   // o arquivo nem o Codemagic).
   // Antes: 2.6 = 66, 2.4 = 63, 1.7 = 55.
-  android: 67, // 2.7 na Play
+  // 25/09/2026: 2.8, build 68. O dono avisou, e desta vez a conferência não
+  // dependeu da palavra de ninguém, porque a fonte do Play no retrato não traz
+  // versão: 30 APARELHOS ANDROID já reportaram `versao = 2.8.0` no nosso
+  // próprio funil, o mais recente às 07h31 daquele dia.
+  // Antes: 2.7 = 67, 2.6 = 66, 2.4 = 63, 1.7 = 55.
+  android: 68, // 2.8 na Play
   // A LIÇÃO DESTE CAMPO, que vale mais que o número: em 12/09 ele foi para 74
   // pela lembrança de alguém, e o banner acendeu para todo mundo na 2.4
   // apontando para um build que a loja não tinha. O erro tem lados de custo
@@ -56,7 +61,26 @@ const LATEST = {
   // número de build (CFBundleVersion). Não é o "Index" da tela do Codemagic,
   // que já causou dois falsos alarmes aqui.
   // Antes: 2.6 = 66, 2.4 = 63, 1.6 = 52.
-  ios: 67, // 2.7 na App Store, aprovada em 17/09
+  // 25/09/2026: 2.8, build 68. Conferido na fonte que a nota acima manda usar,
+  // e não de cabeça: o App Store Connect responde READY_FOR_SALE para a 2.8
+  // desde 24/09.
+  ios: 68, // 2.8 na App Store, READY_FOR_SALE desde 24/09
+  // A QUAL VERSÃO DE MARKETING OS DOIS NÚMEROS ACIMA CORRESPONDEM (25/09/2026).
+  //
+  // Existe porque neste dia o banner NÃO acendeu, e a causa não era loja nem
+  // cache: a troca do número aqui simplesmente não tinha sido feita. Uma
+  // substituição de texto não casou, falhou calada, e o commit foi empurrado
+  // dizendo que o banner estava aceso. Passei meia hora investigando a borda
+  // da Vercel antes de abrir o arquivo.
+  //
+  // Não é campo decorativo: `npm run conferir:versoes` exige que ele seja igual
+  // à ÚLTIMA entrada de `JA_PUBLICADAS`. Ou seja, acrescentar uma versão à
+  // lista de publicadas e esquecer de acender o banner passa a reprovar, que é
+  // exatamente o par de passos que se separou hoje.
+  //
+  // O app ignora este campo (lê só `android`/`ios`), então ele não muda nada
+  // para quem consome.
+  versao: "2.8",
 };
 
 export function GET() {

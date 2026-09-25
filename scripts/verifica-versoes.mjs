@@ -178,4 +178,44 @@ if (JA_PUBLICADAS.includes(alvo)) {
   process.exit(1);
 }
 
+// ── O BANNER APONTA PARA A ÚLTIMA VERSÃO PUBLICADA? (25/09/2026) ───────────
+//
+// O CASO, e ele é pequeno e humilhante. A 2.8 foi aprovada, entrou em
+// JA_PUBLICADAS, o repositório abriu a 2.9, tudo verde. E o banner de "versão
+// nova disponível" continuou em 67, porque a troca do número em
+// app/api/app/latest/route.ts não foi feita: uma substituição de texto não
+// casou, falhou CALADA, e o commit foi empurrado dizendo que tinha acendido.
+//
+// O dono descobriu do jeito mais caro possível: abrindo o próprio app e não
+// vendo o aviso. Antes de achar a causa, meia hora foi gasta investigando
+// cache de borda da Vercel, porque a resposta do endereço era coerente com um
+// cache velho e coerente também com "ninguém trocou o número".
+//
+// Os dois passos são UM só na prática e estavam separados: acrescentar a
+// versão à lista de publicadas e acender o banner para ela. Agora o segundo
+// não pode ficar para trás sem reprovar.
+const rota = ler("app/api/app/latest/route.ts");
+const mRota = rota.match(/versao:\s*"([\d.]+)"/);
+const ultimaPublicada = JA_PUBLICADAS[JA_PUBLICADAS.length - 1];
+
+if (!mRota) {
+  console.error("Versões: não achei o campo `versao` em app/api/app/latest/route.ts.");
+  console.error("Ele existe para amarrar o banner à última versão publicada.");
+  process.exit(1);
+}
+if (mRota[1] !== ultimaPublicada) {
+  console.error(`Banner de versão nova aponta para ${mRota[1]}, e a última publicada é ${ultimaPublicada}.`);
+  console.error("");
+  console.error("Quem está na versão anterior NÃO vê o aviso de atualizar, e o app");
+  console.error("deles segue com defeitos já corrigidos. Abra");
+  console.error("app/api/app/latest/route.ts e troque os TRÊS campos:");
+  console.error("  android  o versionCode da Play em Produção, Códigos de versão");
+  console.error("  ios      o número de build no App Store Connect, Pronta para venda");
+  console.error(`  versao   "${ultimaPublicada}"`);
+  console.error("");
+  console.error("Os dois primeiros são números de BUILD e não a versão de marketing.");
+  process.exit(1);
+}
+
 console.log(`Versões conferem: ${alvo} (app ${app}, Android ${android}, iOS ${ios}), ainda não publicada.`);
+console.log(`Banner: aponta para a ${mRota[1]}, que é a última publicada.`);
