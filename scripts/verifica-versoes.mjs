@@ -121,6 +121,12 @@ const JA_PUBLICADAS = [
   // publicada", que é exatamente a luz verde que esta conferência existe para
   // não dar.
   "2.7",
+  // Build 68, aprovada nas duas lojas e CONFERIDA em 25/09 de dois jeitos
+  // independentes, porque a fonte do Play no retrato não traz versão: o
+  // App Store Connect responde READY_FOR_SALE desde 24/09, e 30 aparelhos
+  // Android já reportaram `2.8.0` no próprio funil. Acrescentada na hora do
+  // aviso do dono, como a 2.7.
+  "2.8",
 ];
 
 import { readFileSync } from "node:fs";
