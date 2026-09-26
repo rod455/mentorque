@@ -1,33 +1,33 @@
 # Retrato diario da operacao Mentorque
 
-Gerado pelo Analista de Dados (n8n) em 2026-09-25T09:00:07.837Z.
+Gerado pelo Analista de Dados (n8n) em 2026-09-26T09:00:06.731Z.
 NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 
 ## MARKETING (gente chegando)
-- Semana corrente (2026-09-21): aberturas 168, visitantes 123, cadastros 33
+- Semana corrente (2026-09-21): aberturas 230, visitantes 161, cadastros 38
 - Semana anterior (2026-09-14): aberturas 97, visitantes 68, cadastros 14
-- Cadastros 28d via (direto) / (sem campanha): 47
+- Cadastros 28d via (direto) / (sem campanha): 51
 - Cadastros 28d via google / lancamento: 20
-- Gasto de midia 7d: Meta 112.11 + Google 259.49 = 371.60
-- CAC bruto (gasto dos ultimos 7 dias / cadastros da ultima semana FECHADA, 2026-09-14): 26.54
-- A semana corrente tem 33 cadastros e ainda esta aberta: nao serve de denominador
+- Gasto de midia 7d: Meta 133.02 + Google 249.45 = 382.47
+- CAC bruto (gasto dos ultimos 7 dias / cadastros da ultima semana FECHADA, 2026-09-14): 27.32
+- A semana corrente tem 38 cadastros e ainda esta aberta: nao serve de denominador
 - Busca Google 28d: 0 cliques, 36 impressoes
-- YouTube: 6 inscritos, 3022 views totais, 10 videos recentes
+- YouTube: 6 inscritos, 3963 views totais, 10 videos recentes
 
 ## ENGAJAMENTO (gente usando e voltando)
-- Semana corrente (2026-09-21): 116 usuarios ativos, 159 aberturas (1.4 por usuario)
+- Semana corrente (2026-09-21): 154 usuarios ativos, 221 aberturas (1.4 por usuario)
 - Semana anterior (2026-09-14): 76 usuarios ativos, 106 aberturas (1.4 por usuario)
-- Retencao, coorte 2026-09-21: 31 cadastrados, 4 voltaram em 1 a 7 dias, 0 em 8 a 30 dias
+- Retencao, coorte 2026-09-21: 36 cadastrados, 5 voltaram em 1 a 7 dias, 0 em 8 a 30 dias
 - Retencao, coorte 2026-09-14: 16 cadastrados, 0 voltaram em 1 a 7 dias, 0 em 8 a 30 dias
 - Retencao, coorte 2026-09-07: 11 cadastrados, 1 voltaram em 1 a 7 dias, 1 em 8 a 30 dias
 - Retencao, coorte 2026-08-31: 8 cadastrados, 1 voltaram em 1 a 7 dias, 0 em 8 a 30 dias
-- Ativacao, coorte 2026-09-21: 0 de 31 fizeram a primeira acao de valor em 7 dias
+- Ativacao, coorte 2026-09-21: 0 de 36 fizeram a primeira acao de valor em 7 dias
 - Ativacao, coorte 2026-09-14: 3 de 16 fizeram a primeira acao de valor em 7 dias
 - Ativacao, coorte 2026-09-07: 6 de 11 fizeram a primeira acao de valor em 7 dias
 - Ativacao, coorte 2026-08-31: 1 de 8 fizeram a primeira acao de valor em 7 dias
-- Erros no app 7d: 11
+- Erros no app 7d: 14
   - 5x: login nativo google: Google Sign-In cancelled by user ([16] Cancelled by user.) package=mentorque.app signingSha1=E5:1C:
-  - 2x: app fechou sozinho em: abriu o app
+  - 4x: app fechou sozinho em: abriu o app
   - 1x: push: sem rede ao registrar o token
 - Play vitals: sem dados de crash ainda
 - Avaliacoes nas lojas: 12 (media 5)
@@ -37,7 +37,7 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 
 ## VENDAS (gente pagando e continuando)
 - Assinaturas ativas (banco): 4 (anuais 1, mensais 3), cancelamento agendado: 0
-- Fundo do funil, Semana corrente: viram paywall 28, iniciaram checkout 5, assinaram 0, cancelaram 0
+- Fundo do funil, Semana corrente: viram paywall 37, iniciaram checkout 5, assinaram 0, cancelaram 0
 - Fundo do funil, Semana anterior: viram paywall 17, iniciaram checkout 0, assinaram 0, cancelaram 0
 - Assinantes, coorte 2026-09-01: 1 assinaram, 0 renovaram, 0 sairam
 - Assinantes, coorte 2026-08-01: 2 assinaram, 0 renovaram, 0 sairam
@@ -47,65 +47,65 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 - Lojas: iOS 2.8 READY_FOR_SALE; iOS 2.7 READY_FOR_SALE; iOS 2.6 READY_FOR_SALE; iOS 2.5 READY_FOR_SALE; iOS 2.4 READY_FOR_SALE
 
 ## Fontes externas (pacote bruto mais recente por fonte)
-- admob (2026-09-25): {"apps":["ca-app-pub-9316035916536420~8094986125"],"nota":"sem linhas do app do Mentorque no periodo","moeda":"USD","porDia":[],"ganhos7d":0,"impressoes7d":0}
-- app_store_connect (2026-09-25): {"versoes":[{"estado":"READY_FOR_SALE","versao":"2.8","criadaEm":"2026-09-24T03:55:45-07:00"},{"estado":"READY_FOR_SALE","versao":"2.7","criadaEm":"2026-09-17T09:06:08-07:00"},{"estado":"READY_FOR_SALE","versao":"2.6","criadaEm":"2026-09-16T03:41:57-07:00"},{"estado":"READY_FOR_SALE","versao":"2.5","criadaEm":"2026-09-13T11:20:33-07:00"},{"estado":"READY_FOR_SALE","versao":"2.4","criadaEm":"2026-0...
-- app_store_downloads (2026-09-25): {"dia":"2026-09-23","nota":"sem transacoes na App Store no dia (a Apple nao gera relatorio quando nao ha nenhuma; exclui TestFlight)","atualizacoes":0,"downloadsApp":0}
-- google_ads (2026-09-25): {"conta":"Mentorque","porDia":[{"dia":"2026-09-18","custo":29.66,"cliques":20,"conversoes":0,"impressoes":588},{"dia":"2026-09-19","custo":17.9,"cliques":11,"conversoes":0,"impressoes":494},{"dia":"2026-09-20","custo":62.997851,"cliques":289,"conversoes":22,"impressoes":3913},{"dia":"2026-09-21","custo":41.026298,"cliques":131,"conversoes":34,"impressoes":1082},{"dia":"2026-09-22","custo":40.50876...
-- meta_ads (2026-09-25): {"conta":"Mentorque Ads","moeda":"BRL","contas":[{"id":"act_1071232758617319","nome":"Mentorque Ads","moeda":"BRL"}],"porDia":[{"dia":"2026-09-19","gasto":10.24,"cliques":35,"impressoes":668,"instalacoes":12},{"dia":"2026-09-20","gasto":17.99,"cliques":43,"impressoes":1402,"instalacoes":10},{"dia":"2026-09-21","gasto":30.74,"cliques":96,"impressoes":2891,"instalacoes":24},{"dia":"2026-09-22","gast...
-- play_console (2026-09-25): {"anrPorDia":[],"crashPorDia":[]}
-- revenuecat (2026-09-25): {"mrr":4,"nota":"active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil","revenue":4,"active_users":337,"active_trials":0,"new_customers":334,"active_subscriptions":1}
-- search_console (2026-09-25): {"porDia":[{"dia":"2026-08-28","cliques":0,"impressoes":0},{"dia":"2026-08-29","cliques":0,"impressoes":0},{"dia":"2026-08-30","cliques":0,"impressoes":0},{"dia":"2026-08-31","cliques":0,"impressoes":0},{"dia":"2026-09-01","cliques":0,"impressoes":1},{"dia":"2026-09-02","cliques":0,"impressoes":0},{"dia":"2026-09-03","cliques":0,"impressoes":0},{"dia":"2026-09-04","cliques":0,"impressoes":0},{"dia...
-- stripe (2026-09-25): {"moeda":"brl","mrrCentavos":8970,"assinaturasAtivas":3,"receita30dCentavos":0}
-- vercel (2026-09-25): {"ultimo":{"alvo":"production","estado":"READY","quando":"2026-09-24T11:17:47.714Z"},"comErro7d":0,"deploys7d":20,"prontos7d":20}
-- youtube (2026-09-25): {"recentes":[{"views":617,"titulo":"A pergunta que muda a conversa na oficina antes de aprovar o orçamento","publicadoEm":"2026-09-19T13:29:15Z"},{"views":17,"titulo":"Poça embaixo do carro: quando é normal e quando é vazamento","publicadoEm":"2026-09-19T13:28:32Z"},{"views":101,"titulo":"Etanol ou gasolina? A conta dos 70% e por que ela pode estar errada pro seu carro","publicadoEm":"2026-09-19T1...
+- admob (2026-09-26): {"apps":["ca-app-pub-9316035916536420~8094986125"],"nota":"sem linhas do app do Mentorque no periodo","moeda":"USD","porDia":[],"ganhos7d":0,"impressoes7d":0}
+- app_store_connect (2026-09-26): {"versoes":[{"estado":"READY_FOR_SALE","versao":"2.8","criadaEm":"2026-09-24T03:55:45-07:00"},{"estado":"READY_FOR_SALE","versao":"2.7","criadaEm":"2026-09-17T09:06:08-07:00"},{"estado":"READY_FOR_SALE","versao":"2.6","criadaEm":"2026-09-16T03:41:57-07:00"},{"estado":"READY_FOR_SALE","versao":"2.5","criadaEm":"2026-09-13T11:20:33-07:00"},{"estado":"READY_FOR_SALE","versao":"2.4","criadaEm":"2026-0...
+- app_store_downloads (2026-09-26): {"dia":"2026-09-24","atualizacoes":6,"downloadsApp":1,"unidadesPorTipo":{"1F":1,"7F":6}}
+- google_ads (2026-09-26): {"conta":"Mentorque","porDia":[{"dia":"2026-09-19","custo":17.9,"cliques":11,"conversoes":0,"impressoes":494},{"dia":"2026-09-20","custo":62.753299,"cliques":289,"conversoes":22,"impressoes":3913},{"dia":"2026-09-21","custo":40.862916999999996,"cliques":130,"conversoes":33,"impressoes":1071},{"dia":"2026-09-22","custo":39.634831000000005,"cliques":93,"conversoes":21,"impressoes":628},{"dia":"2026-...
+- meta_ads (2026-09-26): {"conta":"Mentorque Ads","moeda":"BRL","contas":[{"id":"act_1071232758617319","nome":"Mentorque Ads","moeda":"BRL"}],"porDia":[{"dia":"2026-09-19","gasto":10.24,"cliques":35,"impressoes":668,"instalacoes":12},{"dia":"2026-09-20","gasto":17.99,"cliques":43,"impressoes":1402,"instalacoes":10},{"dia":"2026-09-21","gasto":30.74,"cliques":96,"impressoes":2891,"instalacoes":24},{"dia":"2026-09-22","gast...
+- play_console (2026-09-26): {"anrPorDia":[],"crashPorDia":[]}
+- revenuecat (2026-09-26): {"mrr":4,"nota":"active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil","revenue":4,"active_users":389,"active_trials":0,"new_customers":385,"active_subscriptions":1}
+- search_console (2026-09-26): {"porDia":[{"dia":"2026-08-29","cliques":0,"impressoes":0},{"dia":"2026-08-30","cliques":0,"impressoes":0},{"dia":"2026-08-31","cliques":0,"impressoes":0},{"dia":"2026-09-01","cliques":0,"impressoes":1},{"dia":"2026-09-02","cliques":0,"impressoes":0},{"dia":"2026-09-03","cliques":0,"impressoes":0},{"dia":"2026-09-04","cliques":0,"impressoes":0},{"dia":"2026-09-05","cliques":0,"impressoes":4},{"dia...
+- stripe (2026-09-26): {"moeda":"brl","mrrCentavos":8970,"assinaturasAtivas":3,"receita30dCentavos":0}
+- vercel (2026-09-26): {"ultimo":{"alvo":"production","estado":"READY","quando":"2026-09-25T10:52:13.203Z"},"comErro7d":0,"deploys7d":20,"prontos7d":20}
+- youtube (2026-09-26): {"recentes":[{"views":800,"titulo":"A pergunta que muda a conversa na oficina antes de aprovar o orçamento","publicadoEm":"2026-09-19T13:29:15Z"},{"views":17,"titulo":"Poça embaixo do carro: quando é normal e quando é vazamento","publicadoEm":"2026-09-19T13:28:32Z"},{"views":104,"titulo":"Etanol ou gasolina? A conta dos 70% e por que ela pode estar errada pro seu carro","publicadoEm":"2026-09-19T1...
 
 ## Dados brutos (JSON)
 
 ```json
 {
   "dados": {
-    "geradoEm": "2026-09-25T09:00:05.947Z",
+    "geradoEm": "2026-09-26T09:00:05.289Z",
     "tempos": {
-      "cadastros": 522,
-      "funil_semana": 525,
-      "subscriptions": 565,
-      "uso_diario": 305,
-      "uso_semanal": 44,
-      "app_erros": 529,
-      "retencao_coortes": 181,
-      "ativacao_coortes": 60,
-      "metricas_diarias": 600,
-      "assinaturas_coortes": 44,
-      "cadastros_por_campanha": 29,
-      "email_eventos": 42,
-      "jornada_envios": 50,
-      "assinaturas_conferencia": 482,
-      "paralelo": 1608,
-      "experimentos": 74,
-      "anomalias": 81,
-      "estado_da_base": 319,
-      "funil_etapas": 44,
-      "contas_criadas_desde": 52,
-      "funil_etapas_primeira": 39,
-      "total": 2233
+      "cadastros": 644,
+      "subscriptions": 656,
+      "funil_semana": 662,
+      "app_erros": 68,
+      "uso_diario": 73,
+      "uso_semanal": 49,
+      "ativacao_coortes": 58,
+      "metricas_diarias": 246,
+      "cadastros_por_campanha": 44,
+      "assinaturas_conferencia": 40,
+      "assinaturas_coortes": 219,
+      "jornada_envios": 55,
+      "email_eventos": 61,
+      "retencao_coortes": 422,
+      "paralelo": 1159,
+      "experimentos": 79,
+      "anomalias": 99,
+      "estado_da_base": 206,
+      "funil_etapas": 45,
+      "contas_criadas_desde": 75,
+      "funil_etapas_primeira": 44,
+      "total": 1740
     },
     "falhas": {},
     "funilSemanas": [
       {
         "semana": "2026-09-21",
-        "aberturas": 168,
-        "visitantes": 123,
-        "cadastros": 33,
-        "viram_paywall": 28,
+        "aberturas": 230,
+        "visitantes": 161,
+        "cadastros": 38,
+        "viram_paywall": 37,
         "iniciaram_checkout": 5,
         "assinaturas": 0,
         "renovacoes": 0,
         "cancelamentos": 0,
         "expirados": 0,
-        "viram_paywall_pessoas": 28,
+        "viram_paywall_pessoas": 36,
         "iniciaram_checkout_pessoas": 4,
         "assinaturas_pessoas": 0,
-        "ativaram_pessoas": 64,
+        "ativaram_pessoas": 77,
         "aberturas_sem_identidade": 0
       },
       {
@@ -213,8 +213,7 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
     },
     "cadastrosPorDia": {
       "2026-09-17": 2,
-      "2026-09-11": 1,
-      "2026-09-12": 3,
+      "2026-09-12": 2,
       "2026-09-13": 1,
       "2026-09-14": 1,
       "2026-09-15": 1,
@@ -225,11 +224,11 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       "2026-09-21": 12,
       "2026-09-22": 4,
       "2026-09-23": 12,
-      "2026-09-24": 2,
-      "2026-09-25": 3
+      "2026-09-25": 8,
+      "2026-09-24": 2
     },
     "erros7d": {
-      "total": 11,
+      "total": 14,
       "top": [
         {
           "mensagem": "login nativo google: Google Sign-In cancelled by user ([16] Cancelled by user.) package=mentorque.app signingSha1=E5:1C:",
@@ -242,11 +241,12 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         },
         {
           "mensagem": "app fechou sozinho em: abriu o app",
-          "total": 2,
-          "ultimo": "2026-09-22",
-          "aparelhos": 2,
+          "total": 4,
+          "ultimo": "2026-09-26",
+          "aparelhos": 3,
           "versoes": [
-            "2.7.0"
+            "2.7.0",
+            "2.8.0"
           ]
         },
         {
@@ -279,26 +279,37 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       ]
     },
     "email30d": {
-      "enviados": 159,
+      "enviados": 184,
       "semId": 75,
       "semEventos": 1,
       "porChave": [
         {
           "chave": "d0",
-          "enviados": 48,
-          "comId": 35,
-          "entregues": 34,
+          "enviados": 53,
+          "comId": 40,
+          "entregues": 39,
           "abertos": 6,
           "clicados": 2,
           "problemas": 0,
-          "taxaAbertura": 17.1,
-          "taxaClique": 5.7
+          "taxaAbertura": 15,
+          "taxaClique": 5
         },
         {
           "chave": "d2",
-          "enviados": 30,
-          "comId": 16,
-          "entregues": 15,
+          "enviados": 42,
+          "comId": 28,
+          "entregues": 27,
+          "abertos": 1,
+          "clicados": 0,
+          "problemas": 1,
+          "taxaAbertura": 3.6,
+          "taxaClique": 0
+        },
+        {
+          "chave": "d5",
+          "enviados": 26,
+          "comId": 9,
+          "entregues": 8,
           "abertos": 0,
           "clicados": 0,
           "problemas": 1,
@@ -306,21 +317,10 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
           "taxaClique": 0
         },
         {
-          "chave": "d5",
-          "enviados": 23,
-          "comId": 6,
-          "entregues": 6,
-          "abertos": 0,
-          "clicados": 0,
-          "problemas": 0,
-          "taxaAbertura": 0,
-          "taxaClique": 0
-        },
-        {
           "chave": "d9",
-          "enviados": 20,
-          "comId": 6,
-          "entregues": 6,
+          "enviados": 22,
+          "comId": 8,
+          "entregues": 8,
           "abertos": 0,
           "clicados": 0,
           "problemas": 0,
@@ -329,24 +329,24 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         },
         {
           "chave": "sumiu-14",
-          "enviados": 18,
-          "comId": 8,
-          "entregues": 8,
+          "enviados": 19,
+          "comId": 9,
+          "entregues": 9,
           "abertos": 1,
           "clicados": 0,
           "problemas": 0,
-          "taxaAbertura": 12.5,
+          "taxaAbertura": 11.1,
           "taxaClique": 0
         },
         {
           "chave": "d14",
-          "enviados": 12,
-          "comId": 10,
-          "entregues": 10,
+          "enviados": 13,
+          "comId": 11,
+          "entregues": 11,
           "abertos": 2,
           "clicados": 0,
           "problemas": 0,
-          "taxaAbertura": 20,
+          "taxaAbertura": 18.2,
           "taxaClique": 0
         },
         {
@@ -381,15 +381,32 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
           "problemas": 0,
           "taxaAbertura": 0,
           "taxaClique": 0
+        },
+        {
+          "chave": "vence:seguro",
+          "enviados": 1,
+          "comId": 1,
+          "entregues": 1,
+          "abertos": 0,
+          "clicados": 0,
+          "problemas": 0,
+          "taxaAbertura": 0,
+          "taxaClique": 0
         }
       ]
     },
     "uso": {
       "porDia": [
         {
+          "dia": "2026-09-26",
+          "usuarios": 7,
+          "aberturas": 9,
+          "aberturas_sem_identidade": 0
+        },
+        {
           "dia": "2026-09-25",
-          "usuarios": 4,
-          "aberturas": 5,
+          "usuarios": 42,
+          "aberturas": 58,
           "aberturas_sem_identidade": 0
         },
         {
@@ -463,19 +480,13 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
           "usuarios": 13,
           "aberturas": 17,
           "aberturas_sem_identidade": 0
-        },
-        {
-          "dia": "2026-09-12",
-          "usuarios": 13,
-          "aberturas": 17,
-          "aberturas_sem_identidade": 0
         }
       ],
       "porSemana": [
         {
           "semana": "2026-09-21",
-          "usuarios_ativos": 116,
-          "aberturas": 159,
+          "usuarios_ativos": 154,
+          "aberturas": 221,
           "aberturas_por_usuario": 1.4,
           "aberturas_sem_identidade": 0
         },
@@ -518,8 +529,8 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       "coortes": [
         {
           "coorte": "2026-09-21",
-          "cadastrados": 31,
-          "voltaram_d1_7": 4,
+          "cadastrados": 36,
+          "voltaram_d1_7": 5,
           "voltaram_d8_30": 0,
           "semana_fechada": false,
           "d1_7_fechada": false,
@@ -565,7 +576,7 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       "ativacao": [
         {
           "coorte": "2026-09-21",
-          "cadastrados": 31,
+          "cadastrados": 36,
           "ativados_7d": 0,
           "semana_fechada": false,
           "janela_fechada": false
@@ -621,7 +632,7 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         {
           "origem": "(direto)",
           "campanha": "(sem campanha)",
-          "cadastros_28d": 47
+          "cadastros_28d": 51
         },
         {
           "origem": "google",
@@ -635,15 +646,15 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "abriu_app",
-        "eventos": 142,
-        "pessoas": 100
+        "eventos": 182,
+        "pessoas": 124
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "abriu_cadastro_de_carro",
-        "eventos": 76,
-        "pessoas": 76
+        "eventos": 98,
+        "pessoas": 98
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -656,64 +667,64 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "aceitou_convite_aviso",
-        "eventos": 3,
-        "pessoas": 3
+        "eventos": 7,
+        "pessoas": 7
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "analisou_orcamento",
-        "eventos": 1,
-        "pessoas": 1
+        "eventos": 2,
+        "pessoas": 2
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "atribuicao",
-        "eventos": 77,
-        "pessoas": 77
+        "eventos": 100,
+        "pessoas": 100
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "cadastro",
-        "eventos": 23,
-        "pessoas": 23
+        "eventos": 25,
+        "pessoas": 25
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "cadastrou_carro",
-        "eventos": 36,
-        "pessoas": 36
-      },
-      {
-        "experimento": "cadastro-em-duas-etapas",
-        "variante": "a",
-        "evento": "clicou_baixar",
-        "eventos": 46,
+        "eventos": 43,
         "pessoas": 43
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
+        "evento": "clicou_baixar",
+        "eventos": 48,
+        "pessoas": 45
+      },
+      {
+        "experimento": "cadastro-em-duas-etapas",
+        "variante": "a",
         "evento": "comecou_onboarding",
-        "eventos": 191,
-        "pessoas": 191
+        "eventos": 223,
+        "pessoas": 223
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "consultou_sintoma",
-        "eventos": 44,
-        "pessoas": 21
+        "eventos": 49,
+        "pessoas": 25
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "convite_aviso",
-        "eventos": 16,
-        "pessoas": 13
+        "eventos": 20,
+        "pessoas": 17
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -726,8 +737,8 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "permissao_aviso_concedida",
-        "eventos": 4,
-        "pessoas": 4
+        "eventos": 8,
+        "pessoas": 8
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -740,43 +751,50 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "registrou_servico",
-        "eventos": 3,
-        "pessoas": 3
+        "eventos": 6,
+        "pessoas": 5
+      },
+      {
+        "experimento": "cadastro-em-duas-etapas",
+        "variante": "a",
+        "evento": "tentou_assinar",
+        "eventos": 1,
+        "pessoas": 1
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "terminou_onboarding",
-        "eventos": 97,
-        "pessoas": 97
+        "eventos": 121,
+        "pessoas": 121
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "viu_aula",
-        "eventos": 44,
-        "pessoas": 21
+        "eventos": 57,
+        "pessoas": 24
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "viu_paywall",
-        "eventos": 22,
-        "pessoas": 22
+        "eventos": 28,
+        "pessoas": 27
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "abriu_app",
-        "eventos": 132,
-        "pessoas": 96
+        "eventos": 152,
+        "pessoas": 108
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "abriu_cadastro_de_carro",
-        "eventos": 78,
-        "pessoas": 78
+        "eventos": 89,
+        "pessoas": 89
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -796,50 +814,50 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "atribuicao",
-        "eventos": 82,
-        "pessoas": 82
+        "eventos": 94,
+        "pessoas": 94
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "cadastro",
-        "eventos": 25,
-        "pessoas": 25
+        "eventos": 28,
+        "pessoas": 28
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "cadastrou_carro",
-        "eventos": 49,
-        "pessoas": 48
+        "eventos": 55,
+        "pessoas": 54
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "clicou_baixar",
-        "eventos": 54,
-        "pessoas": 52
+        "eventos": 55,
+        "pessoas": 53
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "comecou_onboarding",
-        "eventos": 176,
-        "pessoas": 176
+        "eventos": 194,
+        "pessoas": 194
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "consultou_sintoma",
-        "eventos": 24,
-        "pessoas": 15
+        "eventos": 28,
+        "pessoas": 18
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "convite_aviso",
-        "eventos": 20,
-        "pessoas": 15
+        "eventos": 21,
+        "pessoas": 16
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -859,8 +877,8 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "registrou_abastecimento",
-        "eventos": 1,
-        "pessoas": 1
+        "eventos": 2,
+        "pessoas": 2
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -873,36 +891,36 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "terminou_onboarding",
-        "eventos": 93,
-        "pessoas": 93
+        "eventos": 105,
+        "pessoas": 105
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "viu_aula",
-        "eventos": 36,
-        "pessoas": 17
+        "eventos": 39,
+        "pessoas": 19
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "viu_paywall",
-        "eventos": 26,
-        "pessoas": 25
+        "eventos": 27,
+        "pessoas": 26
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "abriu_app",
-        "eventos": 134,
-        "pessoas": 95
+        "eventos": 155,
+        "pessoas": 107
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "abriu_cadastro_de_carro",
-        "eventos": 76,
-        "pessoas": 76
+        "eventos": 88,
+        "pessoas": 88
       },
       {
         "experimento": "onboarding-curto",
@@ -915,29 +933,36 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "aceitou_convite_aviso",
-        "eventos": 4,
-        "pessoas": 4
+        "eventos": 6,
+        "pessoas": 6
+      },
+      {
+        "experimento": "onboarding-curto",
+        "variante": "a",
+        "evento": "analisou_orcamento",
+        "eventos": 1,
+        "pessoas": 1
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "atribuicao",
-        "eventos": 76,
-        "pessoas": 76
+        "eventos": 88,
+        "pessoas": 88
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "cadastro",
-        "eventos": 31,
-        "pessoas": 31
+        "eventos": 34,
+        "pessoas": 34
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "cadastrou_carro",
-        "eventos": 46,
-        "pessoas": 46
+        "eventos": 52,
+        "pessoas": 52
       },
       {
         "experimento": "onboarding-curto",
@@ -950,22 +975,22 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "comecou_onboarding",
-        "eventos": 189,
-        "pessoas": 189
+        "eventos": 208,
+        "pessoas": 208
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "consultou_sintoma",
-        "eventos": 26,
-        "pessoas": 14
+        "eventos": 29,
+        "pessoas": 16
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "convite_aviso",
-        "eventos": 18,
-        "pessoas": 14
+        "eventos": 21,
+        "pessoas": 17
       },
       {
         "experimento": "onboarding-curto",
@@ -978,8 +1003,8 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "permissao_aviso_concedida",
-        "eventos": 4,
-        "pessoas": 4
+        "eventos": 6,
+        "pessoas": 6
       },
       {
         "experimento": "onboarding-curto",
@@ -992,43 +1017,50 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "registrou_servico",
-        "eventos": 9,
-        "pessoas": 4
+        "eventos": 11,
+        "pessoas": 5
+      },
+      {
+        "experimento": "onboarding-curto",
+        "variante": "a",
+        "evento": "tentou_assinar",
+        "eventos": 1,
+        "pessoas": 1
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "terminou_onboarding",
-        "eventos": 94,
-        "pessoas": 94
+        "eventos": 106,
+        "pessoas": 106
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "viu_aula",
-        "eventos": 36,
-        "pessoas": 16
+        "eventos": 38,
+        "pessoas": 17
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "viu_paywall",
-        "eventos": 22,
-        "pessoas": 22
+        "eventos": 26,
+        "pessoas": 26
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "abriu_app",
-        "eventos": 140,
-        "pessoas": 101
+        "eventos": 179,
+        "pessoas": 125
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "abriu_cadastro_de_carro",
-        "eventos": 78,
-        "pessoas": 78
+        "eventos": 99,
+        "pessoas": 99
       },
       {
         "experimento": "onboarding-curto",
@@ -1041,8 +1073,8 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "aceitou_convite_aviso",
-        "eventos": 3,
-        "pessoas": 3
+        "eventos": 5,
+        "pessoas": 5
       },
       {
         "experimento": "onboarding-curto",
@@ -1055,50 +1087,50 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "atribuicao",
-        "eventos": 83,
-        "pessoas": 83
+        "eventos": 106,
+        "pessoas": 106
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "cadastro",
-        "eventos": 17,
-        "pessoas": 17
+        "eventos": 19,
+        "pessoas": 19
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "cadastrou_carro",
-        "eventos": 39,
-        "pessoas": 38
-      },
-      {
-        "experimento": "onboarding-curto",
-        "variante": "b",
-        "evento": "clicou_baixar",
-        "eventos": 49,
+        "eventos": 46,
         "pessoas": 45
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
+        "evento": "clicou_baixar",
+        "eventos": 52,
+        "pessoas": 48
+      },
+      {
+        "experimento": "onboarding-curto",
+        "variante": "b",
         "evento": "comecou_onboarding",
-        "eventos": 178,
-        "pessoas": 178
+        "eventos": 209,
+        "pessoas": 209
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "consultou_sintoma",
-        "eventos": 42,
-        "pessoas": 22
+        "eventos": 48,
+        "pessoas": 27
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "convite_aviso",
-        "eventos": 18,
-        "pessoas": 14
+        "eventos": 20,
+        "pessoas": 16
       },
       {
         "experimento": "onboarding-curto",
@@ -1111,75 +1143,75 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "permissao_aviso_concedida",
-        "eventos": 5,
-        "pessoas": 5
+        "eventos": 7,
+        "pessoas": 7
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "registrou_abastecimento",
-        "eventos": 1,
-        "pessoas": 1
+        "eventos": 2,
+        "pessoas": 2
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "registrou_servico",
-        "eventos": 3,
-        "pessoas": 3
+        "eventos": 4,
+        "pessoas": 4
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "terminou_onboarding",
-        "eventos": 96,
-        "pessoas": 96
+        "eventos": 120,
+        "pessoas": 120
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "viu_aula",
-        "eventos": 44,
-        "pessoas": 22
+        "eventos": 58,
+        "pessoas": 26
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "viu_paywall",
-        "eventos": 26,
-        "pessoas": 25
+        "eventos": 29,
+        "pessoas": 27
       }
     ],
     "quebraFunil": [
       {
         "de": "abriu_app",
         "para": "viu_paywall",
-        "antes": 306,
-        "depois": 87,
+        "antes": 344,
+        "depois": 94,
         "validoDesde": "2026-08-22",
         "ressalvas": [],
-        "taxa": 28.4,
+        "taxa": 27.3,
         "motivo": null,
-        "perdidos": 219
+        "perdidos": 250
       },
       {
         "de": "cadastro",
         "para": "iniciou_checkout",
-        "antes": 73,
-        "depois": 12,
+        "antes": 77,
+        "depois": 11,
         "validoDesde": "2026-08-22",
         "ressalvas": [
           "contado em auth.users (função contas_criadas_desde), não no evento: o evento só dispara para conta com menos de 7 dias e perde tudo que veio antes do instrumento"
         ],
-        "taxa": 16.4,
+        "taxa": 14.3,
         "motivo": null,
-        "perdidos": 61
+        "perdidos": 66
       },
       {
         "de": "iniciou_checkout",
         "para": "assinou",
-        "antes": 12,
-        "depois": 2,
+        "antes": 11,
+        "depois": 1,
         "validoDesde": "2026-08-22",
         "ressalvas": [],
         "taxa": null,
@@ -1189,74 +1221,134 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       {
         "de": "comecou_onboarding",
         "para": "terminou_onboarding",
-        "antes": 639,
-        "depois": 287,
+        "antes": 690,
+        "depois": 324,
         "validoDesde": "2026-09-01",
         "ressalvas": [],
-        "taxa": 44.9,
+        "taxa": 47,
         "motivo": null,
-        "perdidos": 352
+        "perdidos": 366
       },
       {
         "de": "terminou_onboarding",
         "para": "abriu_cadastro_de_carro",
-        "antes": 287,
-        "depois": 194,
+        "antes": 324,
+        "depois": 228,
         "validoDesde": "2026-09-01",
         "ressalvas": [],
-        "taxa": 67.6,
+        "taxa": 70.4,
         "motivo": null,
-        "perdidos": 93
+        "perdidos": 96
       },
       {
         "de": "abriu_cadastro_de_carro",
         "para": "cadastrou_carro",
-        "antes": 194,
-        "depois": 96,
+        "antes": 228,
+        "depois": 109,
         "validoDesde": "2026-09-01",
         "ressalvas": [
           "isto é ATO, e conta só quem cadastrou DENTRO da janela. Para quantos TÊM carro hoje, some as contas em estado_da_base: o ato não enxerga quem cadastrou antes do instrumento (23/08/2026) nem quem usa como convidado, sem conta"
         ],
-        "taxa": 49.5,
+        "taxa": 47.8,
         "motivo": null,
-        "perdidos": 98
+        "perdidos": 119
       }
     ],
     "janelaDoFunil": {
-      "desde": "2026-08-28",
+      "desde": "2026-08-29",
       "encurtada": false,
       "aviso": null
     },
     "estadoDaBase": {
-      "contas": 82,
-      "contas_com_estado": 79,
-      "contas_com_carro": 54,
+      "contas": 87,
+      "contas_com_estado": 84,
+      "contas_com_carro": 59,
       "contas_com_servico": 9,
-      "contas_ativas_7d": 45,
-      "contas_ativas_30d": 70
+      "contas_ativas_7d": 47,
+      "contas_ativas_30d": 75
     },
     "anomalias": [
       {
         "anomalia": "respondeu o quiz e sumiu",
         "plataforma": "android",
-        "quantas": 20,
+        "quantas": 23,
         "detalhe": "sem nenhum evento depois da resposta; indicio, nao prova"
       },
       {
         "anomalia": "respondeu o quiz e sumiu",
         "plataforma": "web",
-        "quantas": 4,
+        "quantas": 3,
         "detalhe": "sem nenhum evento depois da resposta; indicio, nao prova"
       },
       {
         "anomalia": "respondeu o quiz e sumiu",
         "plataforma": "ios",
-        "quantas": 3,
+        "quantas": 2,
         "detalhe": "sem nenhum evento depois da resposta; indicio, nao prova"
       }
     ],
     "fontesExternas": {
       "youtube": [
+        {
+          "dia": "2026-09-26",
+          "dados": {
+            "recentes": [
+              {
+                "views": 800,
+                "titulo": "A pergunta que muda a conversa na oficina antes de aprovar o orçamento",
+                "publicadoEm": "2026-09-19T13:29:15Z"
+              },
+              {
+                "views": 17,
+                "titulo": "Poça embaixo do carro: quando é normal e quando é vazamento",
+                "publicadoEm": "2026-09-19T13:28:32Z"
+              },
+              {
+                "views": 104,
+                "titulo": "Etanol ou gasolina? A conta dos 70% e por que ela pode estar errada pro seu carro",
+                "publicadoEm": "2026-09-19T13:27:53Z"
+              },
+              {
+                "views": 122,
+                "titulo": "O número no pneu não é a pressão do seu carro — onde está a certa",
+                "publicadoEm": "2026-09-19T13:27:24Z"
+              },
+              {
+                "views": 1175,
+                "titulo": "Por que o carro perde força na serra? O que acontece com o motor em altitude",
+                "publicadoEm": "2026-09-19T13:26:18Z"
+              },
+              {
+                "views": 811,
+                "titulo": "Água de Torneira no radiador - você está estregando seu carro!",
+                "publicadoEm": "2026-09-17T03:00:09Z"
+              },
+              {
+                "views": 2,
+                "titulo": "Erro silencioso de quem vai só na padaria!",
+                "publicadoEm": "2026-09-10T03:00:39Z"
+              },
+              {
+                "views": 4,
+                "titulo": "Desligar o turbo quente: Mito ou Verdade?",
+                "publicadoEm": "2026-09-03T10:12:37Z"
+              },
+              {
+                "views": 1223,
+                "titulo": "Esquentar o carro parado",
+                "publicadoEm": "2026-09-03T10:10:14Z"
+              },
+              {
+                "views": 2,
+                "titulo": "SUPERCHARGER OU TURBO",
+                "publicadoEm": "2026-08-28T13:52:12Z"
+              }
+            ],
+            "inscritos": 6,
+            "totalVideos": 9,
+            "viewsTotais": 3963
+          }
+        },
         {
           "dia": "2026-09-25",
           "dados": {
@@ -1856,69 +1948,22 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
             "totalVideos": 3,
             "viewsTotais": 40
           }
-        },
-        {
-          "dia": "2026-09-15",
-          "dados": {
-            "recentes": [
-              {
-                "views": 0,
-                "titulo": "Erro silencioso de quem vai só na padaria!",
-                "publicadoEm": "2026-09-10T03:00:39Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Água de Torneira no radiador - você está estregando seu carro!",
-                "publicadoEm": "2026-09-03T10:17:27Z"
-              },
-              {
-                "views": 4,
-                "titulo": "Desligar o turbo quente: Mito ou Verdade?",
-                "publicadoEm": "2026-09-03T10:12:37Z"
-              },
-              {
-                "views": 36,
-                "titulo": "Esquentar o carro parado",
-                "publicadoEm": "2026-09-03T10:10:14Z"
-              },
-              {
-                "views": 2,
-                "titulo": "SUPERCHARGER OU TURBO",
-                "publicadoEm": "2026-08-28T13:52:12Z"
-              },
-              {
-                "views": 2,
-                "titulo": "Agua de torneira no radiador - Consequencias",
-                "publicadoEm": "2026-08-28T13:50:50Z"
-              },
-              {
-                "views": 1,
-                "titulo": "O que abastecer para ajudar seu bolso? Gasolina ou Etanol?",
-                "publicadoEm": "2026-08-28T13:46:51Z"
-              },
-              {
-                "views": 1,
-                "titulo": "200cv e pouca potencia para um carro?",
-                "publicadoEm": "2026-08-28T13:45:49Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Carbonizacao no pistao - Etanol seria o culpado?",
-                "publicadoEm": "2026-08-28T13:44:46Z"
-              },
-              {
-                "views": 1,
-                "titulo": "Batalha Carro Eletrico vs Combustao - Parte 2",
-                "publicadoEm": "2026-08-28T13:43:09Z"
-              }
-            ],
-            "inscritos": 0,
-            "totalVideos": 3,
-            "viewsTotais": 40
-          }
         }
       ],
       "vercel": [
+        {
+          "dia": "2026-09-26",
+          "dados": {
+            "ultimo": {
+              "alvo": "production",
+              "estado": "READY",
+              "quando": "2026-09-25T10:52:13.203Z"
+            },
+            "comErro7d": 0,
+            "deploys7d": 20,
+            "prontos7d": 20
+          }
+        },
         {
           "dia": "2026-09-25",
           "dados": {
@@ -2048,22 +2093,18 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
             "deploys7d": 20,
             "prontos7d": 20
           }
-        },
-        {
-          "dia": "2026-09-15",
-          "dados": {
-            "ultimo": {
-              "alvo": "production",
-              "estado": "READY",
-              "quando": "2026-09-15T00:28:39.224Z"
-            },
-            "comErro7d": 0,
-            "deploys7d": 20,
-            "prontos7d": 20
-          }
         }
       ],
       "stripe": [
+        {
+          "dia": "2026-09-26",
+          "dados": {
+            "moeda": "brl",
+            "mrrCentavos": 8970,
+            "assinaturasAtivas": 3,
+            "receita30dCentavos": 0
+          }
+        },
         {
           "dia": "2026-09-25",
           "dados": {
@@ -2153,18 +2194,218 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
             "assinaturasAtivas": 3,
             "receita30dCentavos": 0
           }
-        },
-        {
-          "dia": "2026-09-15",
-          "dados": {
-            "moeda": "brl",
-            "mrrCentavos": 8970,
-            "assinaturasAtivas": 3,
-            "receita30dCentavos": 0
-          }
         }
       ],
       "search_console": [
+        {
+          "dia": "2026-09-26",
+          "dados": {
+            "porDia": [
+              {
+                "dia": "2026-08-29",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-30",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-08-31",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-01",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-09-02",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-03",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-04",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-05",
+                "cliques": 0,
+                "impressoes": 4
+              },
+              {
+                "dia": "2026-09-06",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-07",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-09-08",
+                "cliques": 0,
+                "impressoes": 5
+              },
+              {
+                "dia": "2026-09-09",
+                "cliques": 0,
+                "impressoes": 3
+              },
+              {
+                "dia": "2026-09-10",
+                "cliques": 0,
+                "impressoes": 2
+              },
+              {
+                "dia": "2026-09-11",
+                "cliques": 0,
+                "impressoes": 5
+              },
+              {
+                "dia": "2026-09-12",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-09-13",
+                "cliques": 0,
+                "impressoes": 3
+              },
+              {
+                "dia": "2026-09-14",
+                "cliques": 0,
+                "impressoes": 2
+              },
+              {
+                "dia": "2026-09-15",
+                "cliques": 0,
+                "impressoes": 2
+              },
+              {
+                "dia": "2026-09-16",
+                "cliques": 0,
+                "impressoes": 5
+              },
+              {
+                "dia": "2026-09-17",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-18",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-19",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-09-20",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-21",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-09-22",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-09-23",
+                "cliques": 0,
+                "impressoes": 0
+              }
+            ],
+            "cliques28d": 0,
+            "topPaginas": [],
+            "erroPaginas": "Forbidden - perhaps check your credentials?",
+            "topConsultas": [
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "\"mentorque\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
+                "impressoes": 1
+              },
+              {
+                "cliques": 0,
+                "posicao": 76,
+                "consulta": "carro da partida e nao pega",
+                "impressoes": 1
+              },
+              {
+                "cliques": 0,
+                "posicao": 71.3,
+                "consulta": "carro da partida mas não pega",
+                "impressoes": 4
+              },
+              {
+                "cliques": 0,
+                "posicao": 80,
+                "consulta": "carro nao quer pegar",
+                "impressoes": 1
+              },
+              {
+                "cliques": 0,
+                "posicao": 65,
+                "consulta": "carro não pega",
+                "impressoes": 2
+              },
+              {
+                "cliques": 0,
+                "posicao": 72,
+                "consulta": "carro não quer pegar o que pode ser",
+                "impressoes": 1
+              },
+              {
+                "cliques": 0,
+                "posicao": 54,
+                "consulta": "luz do motor acesa",
+                "impressoes": 1
+              },
+              {
+                "cliques": 0,
+                "posicao": 19,
+                "consulta": "luz injeção vermelha",
+                "impressoes": 1
+              },
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "mentorque",
+                "impressoes": 3
+              },
+              {
+                "cliques": 0,
+                "posicao": 52.5,
+                "consulta": "nao pega",
+                "impressoes": 2
+              },
+              {
+                "cliques": 0,
+                "posicao": 76,
+                "consulta": "o carro nao pega",
+                "impressoes": 1
+              }
+            ],
+            "impressoes28d": 36
+          }
+        },
         {
           "dia": "2026-09-25",
           "dados": {
@@ -4215,185 +4456,21 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
             ],
             "impressoes28d": 27
           }
-        },
-        {
-          "dia": "2026-09-15",
-          "dados": {
-            "porDia": [
-              {
-                "dia": "2026-08-21",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-22",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-23",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-24",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-25",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-08-26",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-27",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-28",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-29",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-30",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-08-31",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-01",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-09-02",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-03",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-04",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-05",
-                "cliques": 0,
-                "impressoes": 4
-              },
-              {
-                "dia": "2026-09-06",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-09-07",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-09-08",
-                "cliques": 0,
-                "impressoes": 5
-              },
-              {
-                "dia": "2026-09-09",
-                "cliques": 0,
-                "impressoes": 3
-              },
-              {
-                "dia": "2026-09-10",
-                "cliques": 0,
-                "impressoes": 2
-              },
-              {
-                "dia": "2026-09-11",
-                "cliques": 0,
-                "impressoes": 5
-              },
-              {
-                "dia": "2026-09-12",
-                "cliques": 0,
-                "impressoes": 1
-              }
-            ],
-            "cliques28d": 0,
-            "topPaginas": [],
-            "erroPaginas": "Credentials not found",
-            "topConsultas": [
-              {
-                "cliques": 0,
-                "posicao": 1,
-                "consulta": "\"mentorque\" -site:reddit.com -site:twitter.com -site:x.com -site:wykop.pl -site:tripadvisor.com -site:youtube.com -site:yelp.com -site:booking.com -site:facebook.com -site:instagram.com -site:tiktok.com",
-                "impressoes": 1
-              },
-              {
-                "cliques": 0,
-                "posicao": 71.3,
-                "consulta": "carro da partida mas não pega",
-                "impressoes": 4
-              },
-              {
-                "cliques": 0,
-                "posicao": 80,
-                "consulta": "carro nao quer pegar",
-                "impressoes": 1
-              },
-              {
-                "cliques": 0,
-                "posicao": 42,
-                "consulta": "carro não pega",
-                "impressoes": 1
-              },
-              {
-                "cliques": 0,
-                "posicao": 54,
-                "consulta": "luz do motor acesa",
-                "impressoes": 1
-              },
-              {
-                "cliques": 0,
-                "posicao": 19,
-                "consulta": "luz injeção vermelha",
-                "impressoes": 1
-              },
-              {
-                "cliques": 0,
-                "posicao": 1,
-                "consulta": "mentorque",
-                "impressoes": 4
-              },
-              {
-                "cliques": 0,
-                "posicao": 52.5,
-                "consulta": "nao pega",
-                "impressoes": 2
-              }
-            ],
-            "impressoes28d": 24
-          }
         }
       ],
       "revenuecat": [
+        {
+          "dia": "2026-09-26",
+          "dados": {
+            "mrr": 4,
+            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
+            "revenue": 4,
+            "active_users": 389,
+            "active_trials": 0,
+            "new_customers": 385,
+            "active_subscriptions": 1
+          }
+        },
         {
           "dia": "2026-09-25",
           "dados": {
@@ -4513,21 +4590,16 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
             "new_customers": 164,
             "active_subscriptions": 0
           }
-        },
-        {
-          "dia": "2026-09-15",
-          "dados": {
-            "mrr": 0,
-            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
-            "revenue": 0,
-            "active_users": 162,
-            "active_trials": 0,
-            "new_customers": 159,
-            "active_subscriptions": 0
-          }
         }
       ],
       "play_console": [
+        {
+          "dia": "2026-09-26",
+          "dados": {
+            "anrPorDia": [],
+            "crashPorDia": []
+          }
+        },
         {
           "dia": "2026-09-25",
           "dados": {
@@ -4597,16 +4669,138 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
             "anrPorDia": [],
             "crashPorDia": []
           }
-        },
-        {
-          "dia": "2026-09-15",
-          "dados": {
-            "anrPorDia": [],
-            "crashPorDia": []
-          }
         }
       ],
       "meta_ads": [
+        {
+          "dia": "2026-09-26",
+          "dados": {
+            "conta": "Mentorque Ads",
+            "moeda": "BRL",
+            "contas": [
+              {
+                "id": "act_1071232758617319",
+                "nome": "Mentorque Ads",
+                "moeda": "BRL"
+              }
+            ],
+            "porDia": [
+              {
+                "dia": "2026-09-19",
+                "gasto": 10.24,
+                "cliques": 35,
+                "impressoes": 668,
+                "instalacoes": 12
+              },
+              {
+                "dia": "2026-09-20",
+                "gasto": 17.99,
+                "cliques": 43,
+                "impressoes": 1402,
+                "instalacoes": 10
+              },
+              {
+                "dia": "2026-09-21",
+                "gasto": 30.74,
+                "cliques": 96,
+                "impressoes": 2891,
+                "instalacoes": 24
+              },
+              {
+                "dia": "2026-09-22",
+                "gasto": 22.04,
+                "cliques": 105,
+                "impressoes": 2274,
+                "instalacoes": 26
+              },
+              {
+                "dia": "2026-09-23",
+                "gasto": 16.01,
+                "cliques": 89,
+                "impressoes": 1534,
+                "instalacoes": 28
+              },
+              {
+                "dia": "2026-09-24",
+                "gasto": 15.11,
+                "cliques": 66,
+                "impressoes": 1292,
+                "instalacoes": 12
+              },
+              {
+                "dia": "2026-09-25",
+                "gasto": 20.89,
+                "cliques": 102,
+                "impressoes": 1565,
+                "instalacoes": 42
+              }
+            ],
+            "gasto7d": 133.02,
+            "truncado": false,
+            "campanhas": [
+              {
+                "nome": "Lançamento Mentorque",
+                "criada": "2026-09-19",
+                "status": "ACTIVE",
+                "objetivo": "OUTCOME_APP_PROMOTION",
+                "conjuntos": [
+                  {
+                    "nome": "Lançamento Mentorque",
+                    "estadoReal": "ACTIVE",
+                    "otimizaPor": "APP_INSTALLS",
+                    "orcamentoDiario": null
+                  }
+                ],
+                "estadoReal": "ACTIVE",
+                "orcamentoDiario": 20
+              }
+            ],
+            "contaLida": "act_1071232758617319",
+            "porAnuncio": [
+              {
+                "nome": "Você liga o carro e espera parado",
+                "gasto": 132.27,
+                "cliques": 535,
+                "campanha": "Lançamento Mentorque",
+                "impressoes": 11553,
+                "instalacoes": 152
+              },
+              {
+                "nome": "Só ir na padaria",
+                "gasto": 0.37,
+                "cliques": 1,
+                "campanha": "Lançamento Mentorque",
+                "impressoes": 34,
+                "instalacoes": 2
+              },
+              {
+                "nome": "Carro perde força na serra",
+                "gasto": 0.27,
+                "cliques": 0,
+                "campanha": "Lançamento Mentorque",
+                "impressoes": 27,
+                "instalacoes": 0
+              },
+              {
+                "nome": "Chegar na oficina com nome",
+                "gasto": 0.11,
+                "cliques": 0,
+                "campanha": "Lançamento Mentorque",
+                "impressoes": 12,
+                "instalacoes": 0
+              }
+            ],
+            "porCampanha": [
+              {
+                "nome": "Lançamento Mentorque",
+                "gasto": 133.02,
+                "cliques": 536,
+                "impressoes": 11626,
+                "instalacoes": 154
+              }
+            ]
+          }
+        },
         {
           "dia": "2026-09-25",
           "dados": {
@@ -5298,18 +5492,861 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
             "porDia": [],
             "gasto7d": 0
           }
-        },
-        {
-          "dia": "2026-09-15",
-          "dados": {
-            "conta": "Mentorque Ads",
-            "moeda": "BRL",
-            "porDia": [],
-            "gasto7d": 0
-          }
         }
       ],
       "google_ads": [
+        {
+          "dia": "2026-09-26",
+          "dados": {
+            "conta": "Mentorque",
+            "porDia": [
+              {
+                "dia": "2026-09-19",
+                "custo": 17.9,
+                "cliques": 11,
+                "conversoes": 0,
+                "impressoes": 494
+              },
+              {
+                "dia": "2026-09-20",
+                "custo": 62.753299,
+                "cliques": 289,
+                "conversoes": 22,
+                "impressoes": 3913
+              },
+              {
+                "dia": "2026-09-21",
+                "custo": 40.862916999999996,
+                "cliques": 130,
+                "conversoes": 33,
+                "impressoes": 1071
+              },
+              {
+                "dia": "2026-09-22",
+                "custo": 39.634831000000005,
+                "cliques": 93,
+                "conversoes": 21,
+                "impressoes": 628
+              },
+              {
+                "dia": "2026-09-23",
+                "custo": 43.880759,
+                "cliques": 91,
+                "conversoes": 20,
+                "impressoes": 583
+              },
+              {
+                "dia": "2026-09-24",
+                "custo": 21.098239,
+                "cliques": 58,
+                "conversoes": 16,
+                "impressoes": 821
+              },
+              {
+                "dia": "2026-09-25",
+                "custo": 21.974197,
+                "cliques": 83,
+                "conversoes": 22,
+                "impressoes": 1123
+              },
+              {
+                "dia": "2026-09-26",
+                "custo": 1.347727,
+                "cliques": 5,
+                "conversoes": 1,
+                "impressoes": 104
+              }
+            ],
+            "termos": [
+              {
+                "custo": 10.95,
+                "termo": "scanner de carro no celular",
+                "cliques": 7,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 1,
+                "impressoes": 28
+              },
+              {
+                "custo": 6.49,
+                "termo": "curso mecânica automotiva grátis",
+                "cliques": 4,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 1,
+                "impressoes": 28
+              },
+              {
+                "custo": 6.32,
+                "termo": "mecânico online perguntas e respostas",
+                "cliques": 4,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 12
+              },
+              {
+                "custo": 5.91,
+                "termo": "como escanear o carro pelo celular grátis",
+                "cliques": 4,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 32
+              },
+              {
+                "custo": 4.74,
+                "termo": "scanner do carro pelo celular",
+                "cliques": 3,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 4.32,
+                "termo": "mecânico online",
+                "cliques": 3,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 29
+              },
+              {
+                "custo": 3.6,
+                "termo": "curso de mecânica automotiva gratuito",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 9
+              },
+              {
+                "custo": 3.24,
+                "termo": "quando a luz da injeção fica acesa",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 3.23,
+                "termo": "mecânica 2000 manual",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 1,
+                "impressoes": 4
+              },
+              {
+                "custo": 3.21,
+                "termo": "luz de injeção eletrônica acesa e não apaga",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 14
+              },
+              {
+                "custo": 3.2,
+                "termo": "ebook mecanica automotiva",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 3.16,
+                "termo": "carro liga parte eletrica mas nao da partida",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 3.16,
+                "termo": "aula de mecânica básica",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 3
+              },
+              {
+                "custo": 3.08,
+                "termo": "troca de embreagem em bh",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 3.06,
+                "termo": "curso mecânico automotivo",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 7
+              },
+              {
+                "custo": 3.02,
+                "termo": "como escanear o carro pelo celular",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 54
+              },
+              {
+                "custo": 2.98,
+                "termo": "escanear seu carro pelo celular",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 2.98,
+                "termo": "scanner automotivo para celular",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 27
+              },
+              {
+                "custo": 2.96,
+                "termo": "mecanico online tirar duvidas",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 7
+              },
+              {
+                "custo": 2.95,
+                "termo": "escanear carro pelo celular android",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 8
+              },
+              {
+                "custo": 2.7,
+                "termo": "mecanico online",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 15
+              },
+              {
+                "custo": 2.64,
+                "termo": "mecânico virtual",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 2.58,
+                "termo": "como escanear meu carro pelo celular",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 6
+              },
+              {
+                "custo": 2.51,
+                "termo": "mecânico online grátis",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 8
+              },
+              {
+                "custo": 2,
+                "termo": "cursos de mecanica de carros",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 1,
+                "impressoes": 6
+              },
+              {
+                "custo": 2,
+                "termo": "cursos online gratuitos com certificado mecanica automotiva",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.99,
+                "termo": "curso mecânico de carro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 1,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.98,
+                "termo": "troca de oleo de carro quanto tempo",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 3
+              },
+              {
+                "custo": 1.97,
+                "termo": "meu carro acendeu a luz do motor",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.93,
+                "termo": "curso de mecanica de carros",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 3
+              },
+              {
+                "custo": 1.9,
+                "termo": "pastilha de freio",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 6
+              },
+              {
+                "custo": 1.9,
+                "termo": "curso de mecânico automotivo rj",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 1.85,
+                "termo": "carro esquentando mesmo com agua no radiador",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.85,
+                "termo": "curso de mecânico carro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.8,
+                "termo": "quando o carro não dá partida o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 9
+              },
+              {
+                "custo": 1.79,
+                "termo": "hilux não pega na partida",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.78,
+                "termo": "quando o carro está perdendo a força o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.77,
+                "termo": "como escanear um carro com celular",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.76,
+                "termo": "carro celta falhando o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.76,
+                "termo": "scanner automotivo gratis",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 1.75,
+                "termo": "escanear carro com celular",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.74,
+                "termo": "tabela de preços de serviços mecânicos automotivos 2026",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 5
+              },
+              {
+                "custo": 1.74,
+                "termo": "como regular a marcha lenta do onix",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.73,
+                "termo": "sete videocarro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.71,
+                "termo": "porque o carro aquece muito",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.71,
+                "termo": "curso de mecânica",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 16
+              },
+              {
+                "custo": 1.69,
+                "termo": "fumaça branca no escapamento do carro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 5
+              },
+              {
+                "custo": 1.69,
+                "termo": "luz da pressão do óleo piscando",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.68,
+                "termo": "carro perde força em alta rotação",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.68,
+                "termo": "curso de mecânica online grátis",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              }
+            ],
+            "contaId": "6724308347",
+            "custo7d": 249.45196900000002,
+            "porCampanha": [
+              {
+                "id": "24273898063",
+                "nome": "APP | Android | Instalações | BR",
+                "canal": "MULTI_CHANNEL",
+                "custo": 145.15196899999998,
+                "status": "ENABLED",
+                "cliques": 692,
+                "conversoes": 130,
+                "impressoes": 6779
+              },
+              {
+                "id": "24163300275",
+                "nome": "Mentorque Lançamento",
+                "canal": "SEARCH",
+                "custo": 104.3,
+                "status": "ENABLED",
+                "cliques": 68,
+                "conversoes": 5,
+                "impressoes": 1958
+              }
+            ],
+            "termosSemConversao": [
+              {
+                "custo": 6.32,
+                "termo": "mecânico online perguntas e respostas",
+                "cliques": 4,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 12
+              },
+              {
+                "custo": 5.91,
+                "termo": "como escanear o carro pelo celular grátis",
+                "cliques": 4,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 32
+              },
+              {
+                "custo": 4.74,
+                "termo": "scanner do carro pelo celular",
+                "cliques": 3,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 4.32,
+                "termo": "mecânico online",
+                "cliques": 3,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 29
+              },
+              {
+                "custo": 3.6,
+                "termo": "curso de mecânica automotiva gratuito",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 9
+              },
+              {
+                "custo": 3.24,
+                "termo": "quando a luz da injeção fica acesa",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 3.21,
+                "termo": "luz de injeção eletrônica acesa e não apaga",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 14
+              },
+              {
+                "custo": 3.2,
+                "termo": "ebook mecanica automotiva",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 3.16,
+                "termo": "carro liga parte eletrica mas nao da partida",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 3.16,
+                "termo": "aula de mecânica básica",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 3
+              },
+              {
+                "custo": 3.08,
+                "termo": "troca de embreagem em bh",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 3.06,
+                "termo": "curso mecânico automotivo",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 7
+              },
+              {
+                "custo": 3.02,
+                "termo": "como escanear o carro pelo celular",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 54
+              },
+              {
+                "custo": 2.98,
+                "termo": "escanear seu carro pelo celular",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 2.98,
+                "termo": "scanner automotivo para celular",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 27
+              },
+              {
+                "custo": 2.96,
+                "termo": "mecanico online tirar duvidas",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 7
+              },
+              {
+                "custo": 2.95,
+                "termo": "escanear carro pelo celular android",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 8
+              },
+              {
+                "custo": 2.7,
+                "termo": "mecanico online",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 15
+              },
+              {
+                "custo": 2.64,
+                "termo": "mecânico virtual",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 2.58,
+                "termo": "como escanear meu carro pelo celular",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 6
+              },
+              {
+                "custo": 2.51,
+                "termo": "mecânico online grátis",
+                "cliques": 2,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 8
+              },
+              {
+                "custo": 2,
+                "termo": "cursos online gratuitos com certificado mecanica automotiva",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.98,
+                "termo": "troca de oleo de carro quanto tempo",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 3
+              },
+              {
+                "custo": 1.97,
+                "termo": "meu carro acendeu a luz do motor",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.93,
+                "termo": "curso de mecanica de carros",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 3
+              },
+              {
+                "custo": 1.9,
+                "termo": "pastilha de freio",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 6
+              },
+              {
+                "custo": 1.9,
+                "termo": "curso de mecânico automotivo rj",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 1.85,
+                "termo": "carro esquentando mesmo com agua no radiador",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.85,
+                "termo": "curso de mecânico carro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.8,
+                "termo": "quando o carro não dá partida o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 9
+              },
+              {
+                "custo": 1.79,
+                "termo": "hilux não pega na partida",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.78,
+                "termo": "quando o carro está perdendo a força o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.77,
+                "termo": "como escanear um carro com celular",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.76,
+                "termo": "carro celta falhando o que pode ser",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.76,
+                "termo": "scanner automotivo gratis",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              },
+              {
+                "custo": 1.75,
+                "termo": "escanear carro com celular",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.74,
+                "termo": "tabela de preços de serviços mecânicos automotivos 2026",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 5
+              },
+              {
+                "custo": 1.74,
+                "termo": "como regular a marcha lenta do onix",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.73,
+                "termo": "sete videocarro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.71,
+                "termo": "porque o carro aquece muito",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 1
+              },
+              {
+                "custo": 1.71,
+                "termo": "curso de mecânica",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 16
+              },
+              {
+                "custo": 1.69,
+                "termo": "fumaça branca no escapamento do carro",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 5
+              },
+              {
+                "custo": 1.69,
+                "termo": "luz da pressão do óleo piscando",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.68,
+                "termo": "carro perde força em alta rotação",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 2
+              },
+              {
+                "custo": 1.68,
+                "termo": "curso de mecânica online grátis",
+                "cliques": 1,
+                "campanha": "Mentorque Lançamento",
+                "conversoes": 0,
+                "impressoes": 4
+              }
+            ]
+          }
+        },
         {
           "dia": "2026-09-25",
           "dados": {
@@ -13885,867 +14922,21 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
               }
             ]
           }
-        },
-        {
-          "dia": "2026-09-15",
-          "dados": {
-            "conta": "Mentorque",
-            "porDia": [
-              {
-                "dia": "2026-09-08",
-                "custo": 29.62,
-                "cliques": 20,
-                "conversoes": 0,
-                "impressoes": 652
-              },
-              {
-                "dia": "2026-09-09",
-                "custo": 29.67,
-                "cliques": 20,
-                "conversoes": 0,
-                "impressoes": 521
-              },
-              {
-                "dia": "2026-09-10",
-                "custo": 30.92,
-                "cliques": 22,
-                "conversoes": 0,
-                "impressoes": 569
-              },
-              {
-                "dia": "2026-09-11",
-                "custo": 31.15,
-                "cliques": 22,
-                "conversoes": 0,
-                "impressoes": 698
-              },
-              {
-                "dia": "2026-09-12",
-                "custo": 30.3,
-                "cliques": 22,
-                "conversoes": 0,
-                "impressoes": 494
-              },
-              {
-                "dia": "2026-09-13",
-                "custo": 31.13,
-                "cliques": 22,
-                "conversoes": 0,
-                "impressoes": 555
-              },
-              {
-                "dia": "2026-09-14",
-                "custo": 30,
-                "cliques": 21,
-                "conversoes": 0,
-                "impressoes": 693
-              },
-              {
-                "dia": "2026-09-15",
-                "custo": 1.56,
-                "cliques": 1,
-                "conversoes": 0,
-                "impressoes": 29
-              }
-            ],
-            "termos": [
-              {
-                "custo": 8.09,
-                "termo": "scanner de carro no celular",
-                "cliques": 5,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 19
-              },
-              {
-                "custo": 4.86,
-                "termo": "mecânico online perguntas e respostas",
-                "cliques": 3,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 8
-              },
-              {
-                "custo": 4.32,
-                "termo": "mecânico online",
-                "cliques": 3,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 20
-              },
-              {
-                "custo": 4.17,
-                "termo": "como escanear o carro pelo celular grátis",
-                "cliques": 3,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 16
-              },
-              {
-                "custo": 3.65,
-                "termo": "curso mecânica automotiva grátis",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 20
-              },
-              {
-                "custo": 3.24,
-                "termo": "quando a luz da injeção fica acesa",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 3.23,
-                "termo": "mecânica 2000 manual",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 1,
-                "impressoes": 4
-              },
-              {
-                "custo": 3.2,
-                "termo": "ebook mecanica automotiva",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 3.16,
-                "termo": "carro liga parte eletrica mas nao da partida",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 3.16,
-                "termo": "aula de mecânica básica",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 3
-              },
-              {
-                "custo": 2.98,
-                "termo": "scanner automotivo para celular",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 17
-              },
-              {
-                "custo": 2.64,
-                "termo": "mecânico virtual",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 2.58,
-                "termo": "como escanear meu carro pelo celular",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 3
-              },
-              {
-                "custo": 2,
-                "termo": "curso de mecânica automotiva gratuito",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 4
-              },
-              {
-                "custo": 2,
-                "termo": "cursos de mecanica de carros",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 1,
-                "impressoes": 3
-              },
-              {
-                "custo": 2,
-                "termo": "cursos online gratuitos com certificado mecanica automotiva",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.99,
-                "termo": "curso mecânico de carro",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 1,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.98,
-                "termo": "troca de oleo de carro quanto tempo",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 3
-              },
-              {
-                "custo": 1.97,
-                "termo": "meu carro acendeu a luz do motor",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.93,
-                "termo": "curso de mecanica de carros",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.9,
-                "termo": "pastilha de freio",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 5
-              },
-              {
-                "custo": 1.9,
-                "termo": "curso de mecânico automotivo rj",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 4
-              },
-              {
-                "custo": 1.85,
-                "termo": "carro esquentando mesmo com agua no radiador",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.85,
-                "termo": "curso de mecânico carro",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.8,
-                "termo": "quando o carro não dá partida o que pode ser",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 8
-              },
-              {
-                "custo": 1.79,
-                "termo": "hilux não pega na partida",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.78,
-                "termo": "quando o carro está perdendo a força o que pode ser",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.76,
-                "termo": "carro celta falhando o que pode ser",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.76,
-                "termo": "scanner automotivo gratis",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.73,
-                "termo": "escanear carro pelo celular android",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 3
-              },
-              {
-                "custo": 1.73,
-                "termo": "sete videocarro",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.71,
-                "termo": "porque o carro aquece muito",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.69,
-                "termo": "luz da pressão do óleo piscando",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.67,
-                "termo": "carro parou do nada o que pode ser",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.65,
-                "termo": "como escanear o carro pelo celular",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 42
-              },
-              {
-                "custo": 1.64,
-                "termo": "curso de mecânica presencial",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.63,
-                "termo": "car scanner gratuito",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 3
-              },
-              {
-                "custo": 1.63,
-                "termo": "carro falhando em baixa rotação",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 6
-              },
-              {
-                "custo": 1.63,
-                "termo": "luz do óleo acendendo o que pode ser",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 3
-              },
-              {
-                "custo": 1.6,
-                "termo": "curso mecanica automotiva gratuito",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.59,
-                "termo": "como escanear o carro no celular",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 3
-              },
-              {
-                "custo": 1.58,
-                "termo": "fiesta fraco sem força",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.57,
-                "termo": "luz do óleo acesa",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.57,
-                "termo": "meu corsa classic está falhando",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.57,
-                "termo": "mecanica gratis",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.56,
-                "termo": "carro não pega na partida",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 6
-              },
-              {
-                "custo": 1.56,
-                "termo": "luz da injeção eletrônica",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 21
-              },
-              {
-                "custo": 1.54,
-                "termo": "luz do oleo acendeu o que pode ser",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.54,
-                "termo": "aula de mecanica de carro",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.54,
-                "termo": "livro de mecanica de carros",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 3
-              }
-            ],
-            "contaId": "6724308347",
-            "custo7d": 214.35000000000002,
-            "porCampanha": [
-              {
-                "id": "24163300275",
-                "nome": "Mentorque Lançamento",
-                "canal": "SEARCH",
-                "custo": 214.35000000000002,
-                "status": "ENABLED",
-                "cliques": 150,
-                "conversoes": 0,
-                "impressoes": 4211
-              }
-            ],
-            "termosSemConversao": [
-              {
-                "custo": 8.09,
-                "termo": "scanner de carro no celular",
-                "cliques": 5,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 19
-              },
-              {
-                "custo": 4.86,
-                "termo": "mecânico online perguntas e respostas",
-                "cliques": 3,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 8
-              },
-              {
-                "custo": 4.32,
-                "termo": "mecânico online",
-                "cliques": 3,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 20
-              },
-              {
-                "custo": 4.17,
-                "termo": "como escanear o carro pelo celular grátis",
-                "cliques": 3,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 16
-              },
-              {
-                "custo": 3.65,
-                "termo": "curso mecânica automotiva grátis",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 20
-              },
-              {
-                "custo": 3.24,
-                "termo": "quando a luz da injeção fica acesa",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 3.2,
-                "termo": "ebook mecanica automotiva",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 3.16,
-                "termo": "carro liga parte eletrica mas nao da partida",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 3.16,
-                "termo": "aula de mecânica básica",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 3
-              },
-              {
-                "custo": 2.98,
-                "termo": "scanner automotivo para celular",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 17
-              },
-              {
-                "custo": 2.64,
-                "termo": "mecânico virtual",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 2.58,
-                "termo": "como escanear meu carro pelo celular",
-                "cliques": 2,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 3
-              },
-              {
-                "custo": 2,
-                "termo": "curso de mecânica automotiva gratuito",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 4
-              },
-              {
-                "custo": 2,
-                "termo": "cursos online gratuitos com certificado mecanica automotiva",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.98,
-                "termo": "troca de oleo de carro quanto tempo",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 3
-              },
-              {
-                "custo": 1.97,
-                "termo": "meu carro acendeu a luz do motor",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.93,
-                "termo": "curso de mecanica de carros",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.9,
-                "termo": "pastilha de freio",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 5
-              },
-              {
-                "custo": 1.9,
-                "termo": "curso de mecânico automotivo rj",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 4
-              },
-              {
-                "custo": 1.85,
-                "termo": "carro esquentando mesmo com agua no radiador",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.85,
-                "termo": "curso de mecânico carro",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.8,
-                "termo": "quando o carro não dá partida o que pode ser",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 8
-              },
-              {
-                "custo": 1.79,
-                "termo": "hilux não pega na partida",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.78,
-                "termo": "quando o carro está perdendo a força o que pode ser",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.76,
-                "termo": "carro celta falhando o que pode ser",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.76,
-                "termo": "scanner automotivo gratis",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.73,
-                "termo": "escanear carro pelo celular android",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 3
-              },
-              {
-                "custo": 1.73,
-                "termo": "sete videocarro",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.71,
-                "termo": "porque o carro aquece muito",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.69,
-                "termo": "luz da pressão do óleo piscando",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.67,
-                "termo": "carro parou do nada o que pode ser",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.65,
-                "termo": "como escanear o carro pelo celular",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 42
-              },
-              {
-                "custo": 1.64,
-                "termo": "curso de mecânica presencial",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.63,
-                "termo": "car scanner gratuito",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 3
-              },
-              {
-                "custo": 1.63,
-                "termo": "carro falhando em baixa rotação",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 6
-              },
-              {
-                "custo": 1.63,
-                "termo": "luz do óleo acendendo o que pode ser",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 3
-              },
-              {
-                "custo": 1.6,
-                "termo": "curso mecanica automotiva gratuito",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.59,
-                "termo": "como escanear o carro no celular",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 3
-              },
-              {
-                "custo": 1.58,
-                "termo": "fiesta fraco sem força",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.57,
-                "termo": "luz do óleo acesa",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.57,
-                "termo": "meu corsa classic está falhando",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.57,
-                "termo": "mecanica gratis",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.56,
-                "termo": "carro não pega na partida",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 6
-              },
-              {
-                "custo": 1.56,
-                "termo": "luz da injeção eletrônica",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 21
-              },
-              {
-                "custo": 1.54,
-                "termo": "luz do oleo acendeu o que pode ser",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.54,
-                "termo": "aula de mecanica de carro",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.54,
-                "termo": "livro de mecanica de carros",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 3
-              }
-            ]
-          }
         }
       ],
       "app_store_downloads": [
+        {
+          "dia": "2026-09-26",
+          "dados": {
+            "dia": "2026-09-24",
+            "atualizacoes": 6,
+            "downloadsApp": 1,
+            "unidadesPorTipo": {
+              "1F": 1,
+              "7F": 6
+            }
+          }
+        },
         {
           "dia": "2026-09-25",
           "dados": {
@@ -14850,20 +15041,41 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
               "7F": 5
             }
           }
-        },
-        {
-          "dia": "2026-09-15",
-          "dados": {
-            "dia": "2026-09-13",
-            "atualizacoes": 9,
-            "downloadsApp": 0,
-            "unidadesPorTipo": {
-              "7F": 9
-            }
-          }
         }
       ],
       "app_store_connect": [
+        {
+          "dia": "2026-09-26",
+          "dados": {
+            "versoes": [
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "2.8",
+                "criadaEm": "2026-09-24T03:55:45-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "2.7",
+                "criadaEm": "2026-09-17T09:06:08-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "2.6",
+                "criadaEm": "2026-09-16T03:41:57-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "2.5",
+                "criadaEm": "2026-09-13T11:20:33-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "2.4",
+                "criadaEm": "2026-09-12T04:10:51-07:00"
+              }
+            ]
+          }
+        },
         {
           "dia": "2026-09-25",
           "dados": {
@@ -15183,41 +15395,22 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
               }
             ]
           }
-        },
-        {
-          "dia": "2026-09-15",
-          "dados": {
-            "versoes": [
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "2.5",
-                "criadaEm": "2026-09-13T11:20:33-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "2.4",
-                "criadaEm": "2026-09-12T04:10:51-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "2.1",
-                "criadaEm": "2026-09-09T05:35:32-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.7",
-                "criadaEm": "2026-09-03T15:46:58-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "1.6",
-                "criadaEm": "2026-09-01T09:26:27-07:00"
-              }
-            ]
-          }
         }
       ],
       "admob": [
+        {
+          "dia": "2026-09-26",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        },
         {
           "dia": "2026-09-25",
           "dados": {
@@ -15347,86 +15540,73 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
             "ganhos7d": 0,
             "impressoes7d": 0
           }
-        },
-        {
-          "dia": "2026-09-15",
-          "dados": {
-            "apps": [
-              "ca-app-pub-9316035916536420~8094986125"
-            ],
-            "nota": "sem linhas do app do Mentorque no periodo",
-            "moeda": "USD",
-            "porDia": [],
-            "ganhos7d": 0,
-            "impressoes7d": 0
-          }
         }
       ]
     },
     "frescorDasFontes": [
       {
         "fonte": "admob",
-        "ultimoDia": "2026-09-25",
+        "ultimoDia": "2026-09-26",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "app_store_connect",
-        "ultimoDia": "2026-09-25",
+        "ultimoDia": "2026-09-26",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "app_store_downloads",
-        "ultimoDia": "2026-09-25",
+        "ultimoDia": "2026-09-26",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "google_ads",
-        "ultimoDia": "2026-09-25",
+        "ultimoDia": "2026-09-26",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "meta_ads",
-        "ultimoDia": "2026-09-25",
+        "ultimoDia": "2026-09-26",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "play_console",
-        "ultimoDia": "2026-09-25",
+        "ultimoDia": "2026-09-26",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "revenuecat",
-        "ultimoDia": "2026-09-25",
+        "ultimoDia": "2026-09-26",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "search_console",
-        "ultimoDia": "2026-09-25",
+        "ultimoDia": "2026-09-26",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "stripe",
-        "ultimoDia": "2026-09-25",
+        "ultimoDia": "2026-09-26",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "vercel",
-        "ultimoDia": "2026-09-25",
+        "ultimoDia": "2026-09-26",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "youtube",
-        "ultimoDia": "2026-09-25",
+        "ultimoDia": "2026-09-26",
         "diasParado": 0,
         "parada": false
       }
