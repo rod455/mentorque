@@ -29,6 +29,16 @@
 -- O QUE ELA NÃO É: prova. "Respondeu e sumiu" também é o que faz quem terminou
 -- o que veio fazer. O valor está em ser CONTÁVEL e comparável entre
 -- plataformas: se o Android some e o iPhone não, a diferença é o achado.
+--
+-- ATUALIZAÇÃO DE 27/09/2026, e ela corrige o parágrafo acima. "Comparável
+-- entre plataformas" era a intenção certa e a execução errada: a anomalia 2
+-- saía em número ABSOLUTO, e número absoluto não compara plataforma de
+-- tamanhos diferentes. Ela passou vinte dias gritando "28 no Android contra 2
+-- no iPhone", que com denominador vira 24,1% contra 14,3% sobre 116 respostas
+-- e 14. Pior: 24% é ABAIXO da média das ações do Android. A anomalia 2 foi
+-- reescrita comparando cada ação com a BASE da própria plataforma, e o texto
+-- inteiro da troca está nela. A lição, para a próxima que alguém escrever
+-- aqui: anomalia é sempre uma razão, nunca uma contagem.
 
 create or replace function public.anomalias_da_operacao(p_dias int default 14)
 returns table(
@@ -58,31 +68,96 @@ as $function$
 
   union all
 
-  -- 2. Respondeu o quiz e nunca mais produziu evento.
+  -- 2. A ação depois da qual a pessoa some MAIS do que o normal.
   --
-  -- É a impressão digital do app fechando na pergunta do dia, VISTA DE FORA,
-  -- sem depender da migalha nem de a pessoa voltar. Indício, não prova: quem
-  -- terminou o que veio fazer também some. Por isso sai por plataforma, que é
-  -- onde a comparação vira achado.
+  -- ESTA LINHA SUBSTITUIU "respondeu o quiz e sumiu" EM 27/09/2026, e a troca
+  -- é a lição, não o SQL.
+  --
+  -- A versão antiga perguntava quantas pessoas responderam o quiz e nunca mais
+  -- produziram evento. Ela nasceu em 07/09 de uma suspeita boa (um usuário
+  -- relatou o app FECHANDO na pergunta do dia no Android) e contava um número
+  -- ABSOLUTO, sem denominador e sem base de comparação. O resultado: ela
+  -- gritava "28 no Android contra 2 no iPhone" todo santo dia, e o número
+  -- parecia enorme. Medido direito, não era nada:
+  --
+  --   1. BASE DIFERENTE. 28 de 116 respostas no Android (24,1%) contra 2 de 14
+  --      no iPhone (14,3%). A diferença gritante era o tamanho das duas
+  --      plataformas, não o comportamento delas. Catorze respostas de iPhone
+  --      não sustentam comparação nenhuma.
+  --   2. E 24% NÃO É ALTO AQUI. Comparando o quiz com TODAS as outras ações do
+  --      Android na mesma janela, ele fica no meio de baixo da tabela:
+  --
+  --        viu_paywall        44,4%      cadastrou_carro   26,2%
+  --        cadastro           32,6%      RESPONDEU O QUIZ  23,7%
+  --        comecou_onboarding 27,2%      viu_aula          22,1%
+  --
+  --      Cerca de um quarto de QUALQUER coisa que se faça no Android é a
+  --      última coisa que aquele aparelho faz. Isso é a nossa retenção, não um
+  --      fechamento de app.
+  --
+  -- Alarme que grita todo dia sobre coisa que não é defeito ensina o dono a
+  -- ignorar o vigia, e aí o próximo alarme de verdade passa batido. A mesma
+  -- frase já está escrita em scripts/verifica-anomalias.ts desde 19/09, sobre
+  -- outro caso. Por isso a pergunta não foi apagada: foi CALIBRADA.
+  --
+  -- O quiz continua entrando na conta como mais uma ação. Se um dia ele passar
+  -- da base da plataforma, aparece aqui sozinho, e aí sim vale investigar.
+  --
+  -- A RÉGUA: pelo menos 20 ocorrências (senão é ruído) e pelo menos 15 pontos
+  -- acima da base DAQUELA plataforma (cada uma tem a sua: web perde gente numa
+  -- velocidade que o app nem sonha).
+  --
+  -- O QUE FICA DE FORA, e é honesto dizer: ação que é terminal POR PROJETO.
+  -- `clicou_baixar` é 94,3% na web e está certíssimo, porque a pessoa clica e
+  -- vai para a loja; `assinou` e `iniciou_checkout` mandam para fora também.
+  -- Deixá-las dentro encheria o alarme de acerto com cara de erro.
   select
-    'respondeu o quiz e sumiu'::text,
-    coalesce(p.plataforma, 'desconhecida'),
-    count(*),
-    'sem nenhum evento depois da resposta; indicio, nao prova'::text
-  from public.quiz_respostas q
-  left join lateral (
-    select f.plataforma
-    from public.funil_eventos f
-    where f.anon_id = q.anon_id
-    order by f.criado_em desc
-    limit 1
-  ) p on true
-  where q.criado_em >= now() - (p_dias || ' days')::interval
-    and not exists (
-      select 1 from public.funil_eventos f
-      where f.anon_id = q.anon_id and f.criado_em > q.criado_em
-    )
-  group by coalesce(p.plataforma, 'desconhecida')
+    'acao que costuma ser a ultima'::text,
+    m.plataforma,
+    count(*) filter (where m.ultima),
+    'de ' || count(*) || ' vezes de ' || m.evento || ' (' ||
+      round(100.0 * count(*) filter (where m.ultima) / count(*), 1) || '%), ' ||
+      'base da plataforma ' || b.pct_base || '%; indicio, nao prova'
+  from (
+    select a.anon_id, a.criado_em, a.evento, a.plataforma,
+      not exists (
+        select 1 from public.funil_eventos f2
+        where f2.anon_id = a.anon_id and f2.criado_em > a.criado_em
+      ) as ultima
+    from (
+      select f.anon_id, f.criado_em, f.evento, f.plataforma
+      from public.funil_eventos f
+      where f.criado_em >= now() - (p_dias || ' days')::interval
+        and f.anon_id is not null and f.plataforma is not null
+        and f.evento not in ('clicou_baixar', 'clicou_consultoria', 'assinou', 'iniciou_checkout')
+      union all
+      select q.anon_id, q.criado_em, 'respondeu o quiz',
+        (select f.plataforma from public.funil_eventos f
+          where f.anon_id = q.anon_id order by f.criado_em desc limit 1)
+      from public.quiz_respostas q
+      where q.criado_em >= now() - (p_dias || ' days')::interval and q.anon_id is not null
+    ) a
+    where a.plataforma is not null
+  ) m
+  join (
+    select a.plataforma,
+      round(100.0 * count(*) filter (where a.ultima) / count(*), 1) as pct_base
+    from (
+      select f.plataforma, f.anon_id, f.criado_em,
+        not exists (
+          select 1 from public.funil_eventos f2
+          where f2.anon_id = f.anon_id and f2.criado_em > f.criado_em
+        ) as ultima
+      from public.funil_eventos f
+      where f.criado_em >= now() - (p_dias || ' days')::interval
+        and f.anon_id is not null and f.plataforma is not null
+        and f.evento not in ('clicou_baixar', 'clicou_consultoria', 'assinou', 'iniciou_checkout')
+    ) a
+    group by a.plataforma
+  ) b on b.plataforma = m.plataforma
+  group by m.plataforma, m.evento, b.pct_base
+  having count(*) >= 20
+     and 100.0 * count(*) filter (where m.ultima) / count(*) >= b.pct_base + 15
 
   union all
 

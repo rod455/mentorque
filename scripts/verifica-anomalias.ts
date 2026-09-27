@@ -65,7 +65,50 @@ console.log("Anomalias: o vigia da operação continua ligado?");
   // As duas anomalias que motivaram tudo isto. Se alguém apagar uma delas do
   // SQL, some uma pergunta que ninguém mais vai fazer sozinho.
   conferir("a anomalia da plataforma sem conta continua no SQL", sql.includes("plataforma sem nenhuma conta"));
-  conferir("a anomalia do quiz continua no SQL", sql.includes("respondeu o quiz e sumiu"));
+
+  // ── A ANOMALIA DO QUIZ VIROU OUTRA COISA (27/09/2026) ─────────────────────
+  //
+  // A antiga contava quantas pessoas responderam o quiz e nunca mais
+  // produziram evento, em número ABSOLUTO. Ela gritava "28 no Android contra 2
+  // no iPhone" todo dia. Medido com denominador, era 24,1% contra 14,3% (sobre
+  // 116 respostas e 14), e comparado com as outras ações do Android o quiz
+  // ficava ABAIXO da média: viu_paywall 44,4%, cadastro 32,6%, quiz 23,7%.
+  // Um quarto de qualquer coisa que se faça no Android é a última coisa que
+  // aquele aparelho faz. Isso é a nossa retenção, não app fechando.
+  //
+  // A pergunta não foi apagada, foi calibrada: o quiz continua entrando na
+  // conta e aparece sozinho no dia em que passar da base da plataforma dele.
+  //
+  // O QUE ESTA CONFERÊNCIA PROTEGE é justamente a calibração, porque é ela que
+  // se perde numa edição distraída. Sem denominador e sem base, a linha volta
+  // a ser o alarme que grita todo dia sobre coisa que não é defeito, e a casa
+  // já sabe o preço disso: está escrito logo abaixo, no contrato com o Vigia.
+  conferir("a anomalia calibrada continua no SQL", sql.includes("acao que costuma ser a ultima"));
+  conferir(
+    "ela compara com a BASE da plataforma, não com zero",
+    /pct_base/.test(sql) && /\+ 15/.test(sql),
+    "sem a base, 24% vira achado e 24% é o normal desta casa"
+  );
+  conferir(
+    "ela exige volume mínimo",
+    /having count\(\*\) >= 20/.test(sql),
+    "sem piso, três ocorrências viram anomalia e o alarme toca por ruído"
+  );
+  conferir(
+    "ela publica o denominador no detalhe",
+    /'de ' \|\| count\(\*\) \|\| ' vezes de '/.test(sql),
+    "número sem denominador foi exatamente o defeito da versão antiga: quem lê não tem como saber se é muito"
+  );
+  conferir(
+    "o quiz continua ENTRANDO na conta",
+    sql.includes("'respondeu o quiz'"),
+    "calibrar não é apagar a pergunta: se um dia o quiz passar da base, ele tem que aparecer sozinho"
+  );
+  conferir(
+    "ação terminal por projeto fica de fora",
+    /not in \('clicou_baixar', 'clicou_consultoria', 'assinou', 'iniciou_checkout'\)/.test(sql),
+    "clicou_baixar é 94% na web e está CERTO: a pessoa vai para a loja. Dentro da conta, ele enche o alarme de acerto com cara de erro"
+  );
 
   // AS DUAS DE 27/09/2026, e elas nasceram juntas de propósito.
   //
