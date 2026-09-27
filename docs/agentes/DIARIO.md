@@ -578,6 +578,113 @@ rodadas são anteriores. Só Mídia paga e Segurança tinham a régua na mão.
   o OneLink (16 dias parado) e a conversão "criou conta" (14 dias); (3) vinte
   minutos na lista do dono, que tem 15 linhas e a mais velha parada há 18 dias.
 
+## 2026-09-27 · Segurança (rodada 2): as três recomendações foram feitas, e o quinto fluxo que ficou ligado paga um artigo por semana para jogar fora
+- Artifact "Segurança da semana" (rodada 2) publicado. Semana grande: 37 commits.
+- **TUDO da rodada 1 fechou desfecho, e conferido no estado, não no commit.**
+  - `next` 14.2.5 para **14.2.35**: confirmado no `package.json` e no
+    `package-lock.json`.
+  - **O otimizador de imagem foi mais longe do que eu recomendei, e melhor.** Eu
+    pedi para tirar `"image/avif"` do `formats`; entrou `unoptimized: true`, que
+    desliga o otimizador inteiro. **E agora dá para provar o que semana passada
+    era só leitura de config:** no fonte da versão instalada,
+    `node_modules/next/dist/server/next-server.js:167`, o manipulador de imagem
+    faz `render404` e RETORNA quando `imagesConfig.unoptimized` é verdadeiro,
+    antes de validar parâmetro e antes de tocar no otimizador. O caminho até a
+    crítica de AVIF deixou de existir no servidor Node. Fica de pé o limite
+    honesto: esse é o caminho do servidor Node, e o otimizador da Vercel é
+    infraestrutura dela, que eu não leio daqui.
+  - **`pg_temp`**: as três funções `SECURITY DEFINER` agora têm
+    `search_path=public, auth, pg_temp`, e `anon` e `authenticated` continuam sem
+    executar nenhuma delas.
+  - **A conferência de travessão passou a varrer `docs/`** (3537688), e ela
+    morde: plantei travessão no `DIARIO.md` e ela reprovou apontando a linha 3.
+    Semana passada o mesmo defeito passou verde. Desfeito por cópia de segurança.
+- **O ACHADO DA RODADA, e ele é o desfecho incompleto de 20/09.** Eu tinha
+  apontado CINCO fluxos ativos sem relação com o Mentorque. Quatro foram
+  desligados (599c95c). O quinto, **"Conteúdo/SEO (Blog)" do Vocaboost**, continua
+  **ativo** e continua **disparando**.
+  - **O que ele faz, lido na execução e não na descrição**: dispara terça e sexta
+    às 9h, monta o prompt, **a chamada de IA termina com SUCESSO** (39,8s, 797
+    tokens de entrada e 3.963 de saída na rodada de 25/09) e o nó seguinte,
+    `Salvar & publicar`, morre com `getaddrinfo ENOTFOUND` no Supabase do
+    Vocaboost. **O endereço não resolve em DNS: aquele projeto não existe mais.**
+  - **Então ele paga o artigo e joga fora, duas vezes por semana.** Quatro
+    falhas seguidas visíveis: 15, 18, 22 e 25/09.
+  - **O dinheiro é pequeno e eu não vou inflar isso.** São milhares de tokens por
+    rodada, duas vezes por semana; não é o motivo para agir. O motivo é que um
+    fluxo de produto morto está armado, falhando, e ninguém olha. Está na lista
+    do dono. **Não desliguei**: desligar fluxo não é da minha alçada, e foi assim
+    que os outros quatro saíram.
+- **O FURO NA PREMISSA DA DECISÃO DAS CHAVES, e o que eu NÃO estou fazendo com
+  ele.** O dono decidiu em 22/09 não girar as chaves em texto puro do n8n, e a
+  razão escrita foi que "Vocaboost e Dermato foram desligados como produto, só o
+  Mentorque está de pé, e sem outra operação viva não há de quem confundir".
+  **Existe operação viva de Vocaboost**: é o fluxo acima. Isso é fato sobre a
+  PREMISSA, e o manual é claro sobre o que reabre o assunto (chave usada por quem
+  não devia, cobrança estranha, mais alguém com acesso ao n8n). Nada disso
+  aconteceu, então **eu não estou reabrindo a decisão e não repito o argumento**.
+  Registro o furo porque o dono decidiu com essa frase na mão, e ela tem um
+  buraco. E registro também o que corta para o outro lado: o nó desse fluxo
+  carrega uma chave `service_role` em texto puro que aponta para um projeto
+  **que não existe mais**, então aquela chave específica hoje não abre nada.
+  Localização apenas, sem valor em lugar nenhum, como manda a regra.
+- **Sem PushNotification, e o motivo está escrito**: a regra de avisar na hora
+  vale para segredo exposto NO REPOSITÓRIO. Este está no n8n, o dono já o
+  conhece desde 22/09, e aponta para projeto apagado.
+- **Dependências: o número não mudou e o conteúdo mudou.** Continuam 18 falhas,
+  4 em produção (1 crítica, 2 altas, 1 média) e **14 só de desenvolvimento**. É
+  armadilha de leitura: parece que nada andou, mas o `next` subiu 30 versões
+  menores. O que sobra são exatamente as duas críticas que eu disse que 14.2.35
+  não fecharia (RCE em servidor Windows e a de AVIF), e o `fixAvailable` agora
+  aponta para **`next` 16.3.6, que é versão maior**. As duas continuam sem
+  alcançar a gente: a Vercel roda Linux, e o otimizador está desligado com prova
+  no fonte. `postcss`, `nanoid` e `qs` seguem sem caminho de entrada de estranho,
+  como a regra 1 do manual já explicou.
+- **Segredo escapando: nenhum nos 37 commits da semana, e o zero foi provado.**
+  A varredura devolveu zero, então plantei as cinco formas (`sk_live`, `whsec_`,
+  JWT, token da Meta e `SERVICE_ROLE` com valor) numa CÓPIA do diff e ela pegou
+  as cinco. O `.gitignore` não foi tocado na semana e `git check-ignore` confirma
+  que `.env.local.bak` continua ignorado.
+- **Supabase: os avisos estão idênticos aos de 20/09**, nos dois tipos, e por isso
+  não viram linha nova. Nada sumiu também.
+- **ACHADO NOVO, do tamanho certo: a única view da casa sem
+  `security_invoker = on`.** Com views novas entrando esta semana, olhei as 13 do
+  `public`. Onze nascem com `security_invoker = on`. O `estado_da_base` tem `off`
+  **de propósito e documentado** (migração `estado_da_base_como_dono`, 14/09). E
+  **`assinaturas_conferencia`** (`supabase/funil_eventos.sql:161`) foi criada
+  **sem cláusula nenhuma**, então herda `off` e roda como o dono, passando por
+  cima do RLS de `subscriptions` e `funil_eventos`.
+  - **Não é buraco hoje**, e conferi no estado: `anon` e `authenticated` não leem
+    nenhuma das 13, e essa tem `grant select` só para `service_role`.
+  - **É a mesma forma do erro de 19/09 ao contrário**: trinta linhas acima, no
+    mesmo arquivo, um comentário diz "a view NÃO fura o RLS" sobre a view
+    vizinha, que ganhou a opção. Esta não ganhou, e o comentário do arquivo passa
+    a valer para ela também aos olhos de quem lê.
+  - **O que ela carrega torna o futuro concreto**: `user_id`, `status`, `plan` e
+    `current_period_end`. O dia em que alguém der `select` nela para
+    `authenticated`, para um painel, todo mundo logado lê a assinatura de todo
+    mundo.
+  - **A metade que vale mais que o conserto**: nenhuma conferência olha isso. A
+    `verifica-banco.mjs` confere `pg_temp` em função `SECURITY DEFINER` e para
+    ali. O pedido é que ela passe a exigir `security_invoker` EXPLÍCITO em toda
+    view, de modo que omissão reprove e um `off` deliberado tenha que ser escrito
+    como `off`, com o motivo do lado, que é o caso do `estado_da_base`.
+- **Permissões: não fiz o inventário completo, de propósito.** Ele é mensal e a
+  primeira rodada do mês foi a de 20/09. O que conferi foi o desfecho dos fluxos,
+  acima. Os nove fluxos ativos hoje são oito do Mentorque mais o de Vocaboost.
+- **O LIMITE DESTA VARREDURA.** Alcançou: a árvore do `package-lock.json`, o
+  fonte do `next` instalado, o diff de 7 dias, os advisors nos dois tipos, o
+  estado de permissão de função E de view no banco, e os fluxos e execuções do
+  n8n. **Não alcançou**: a rede até o nosso site (o proxy segue recusando
+  `mentorque.com.br`), o otimizador de imagem da própria Vercel, os pacotes SPM
+  do build nativo, o binário que está nas lojas, o WebView do aparelho, e os
+  apps conectados na Meta, no Google e no Codemagic.
+- **Contra a régua**: cumpri 1 a 5 e 7 a 9. O 6 não se aplica (nenhuma
+  dependência trocada por mim). **O que ficou devendo**: no achado de AVIF eu
+  fechei o buraco de leitura da semana passada para o servidor Node, mas o
+  otimizador da Vercel continua sendo camada que eu não leio, e isso segue
+  escrito como limite e não como prova.
+
 ## 2026-09-20 · Segurança (rodada 1): o Next tem três críticas, e a atualização que existe fecha uma
 - Primeira rodada semanal do papel. Artifact "Segurança da semana":
   https://claude.ai/artifact/QFNNwtGWrqyFAeeSKWjHMC

@@ -158,6 +158,47 @@ reabre com o caso do lado, não com o aviso repetido.
 
 ## Aprendizados
 
+### Cinco regras da rodada 2 (27/09/2026)
+
+**1. Execução vermelha do n8n NÃO prova que não gastou.** É a irmã da regra da
+casa "execução verde não prova gravação", e ela morde no sentido contrário. O
+fluxo "Conteúdo/SEO (Blog)" do Vocaboost aparece como `error` em todas as
+execuções, e por isso é fácil arquivar como "quebrado, tanto faz". Lendo a
+execução por dentro, o nó de IA termina com **sucesso** (milhares de tokens de
+saída) e a morte é no nó SEGUINTE, o de gravar. Ou seja: paga e joga fora. Toda
+rodada, num fluxo que falha, leia ONDE ele morre, não só que morreu.
+
+**2. Desfecho se fecha no estado, nunca no commit.** Título de commit é intenção.
+Nas três recomendações da rodada 1 valeu a pena conferir: duas bateram, e a do
+otimizador de imagem foi **além** do pedido (entrou `unoptimized: true`, não só a
+remoção do AVIF). Dizer isso importa tanto quanto achar o que falhou. E quando
+sobrou um item do lote (quatro de cinco fluxos desligados), o que fecha o desfecho
+é ir contar, não confiar no número do commit.
+
+**3. Número igual não é semana igual.** O `npm audit` devolveu exatamente
+18 falhas e 4 em produção nas duas rodadas, e parece que nada andou. Andou: o
+`next` subiu 30 versões menores, e o que sobra são as duas críticas cujo conserto
+só existe na linha 15 ou acima. A contagem do `npm audit` é por PACOTE, não por
+aviso, então ela fica igual enquanto o pacote continua na lista. Compare a lista
+de avisos e o `fixAvailable`, não o total.
+
+**4. Toda view precisa de `security_invoker` EXPLÍCITO.** Sem cláusula, a view
+herda `off` e roda como o dono, passando por cima do RLS. Foi achado em
+`assinaturas_conferencia`, trinta linhas abaixo de um comentário que promete o
+contrário sobre a view vizinha. Não era buraco (só `service_role` lê), mas é
+exatamente a forma do erro de 19/09: o arquivo diz uma coisa e um objeto faz
+outra. Toda rodada, liste as views do `public` com o `security_invoker` e o
+`has_table_privilege` de `anon` e `authenticated` do lado.
+
+**5. Quando a premissa de uma decisão do dono tem furo, registre o furo sem
+reabrir a decisão.** A decisão de não girar as chaves do n8n foi tomada sobre a
+frase "sem outra operação viva não há de quem confundir", e existia operação viva
+de Vocaboost. O manual já diz o que reabre o assunto, e "a premissa tinha um
+buraco" não está na lista. Então: escreva o furo, não repita a recomendação, e
+escreva também o que corta para o outro lado (aqui: a chave daquele fluxo aponta
+para um projeto que já não existe). Relatório que só junta o que reforça a própria
+tese é advocacia, não varredura.
+
 ### Quatro regras da rodada 1 (20/09/2026)
 
 **1. "Produção" no `npm audit` é a árvore, não o caminho.** O `--omit=dev`
