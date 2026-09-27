@@ -180,6 +180,28 @@ no aparelho, a testemunha não é a suíte: é a migalha do último passo
 (`lib/app/ultimoPasso.ts`) virando linha em `app_erros`. Ver
 `docs/qa/app-fecha-no-quiz.md`.
 
+**E a testemunha precisa TER O QUE DIZER, que é outra coisa (27/09/2026).** Ela
+passou 25 dias relatando "app fechou sozinho em: **abriu o app**", sempre a
+mesma frase, porque o app tinha cinco chamadas de `passo()` e nenhuma no
+onboarding, no cadastro do carro ou no paywall. O dono chegou a perguntar se
+não era melhor desligar o relato. Não era: os cinco relatos de 22 a 26/09
+estavam todos nos dois primeiros minutos de vida no app, e três dos quatro
+aparelhos morreram na tela de cadastro do carro. A migalha agora sai do
+roteador (`useMigalhaDaTela`, em `aberturaDoApp.ts`), um lugar só, e toda tela
+nova entra sozinha. **Instrumento que sempre responde a mesma coisa não está
+mentindo: está cego, e o sintoma dos dois é igual.**
+
+> **⚠️ NUNCA importe `@capacitor/core` para perguntar se está no app nativo.**
+> `isNativeApp()` (`lib/app/capacitorPresente.ts`) decide pela PRESENÇA de
+> `window.Capacitor`, e carregar o pacote na web publica esse objeto: importar
+> para perguntar faz a resposta virar sim. Em 27/09 isso ligou o **modo leitor
+> no site inteiro** por um `await import("@capacitor/core")` dentro da migalha.
+> Nenhum convite de assinatura em lugar nenhum, na web, que é uma das duas
+> plataformas que conseguem vender. `tsc` verde, todas as conferências de linha
+> de comando verdes: o código estava certo e a consequência era de outro
+> arquivo. Quem pegou foi a suíte `telas`, em "o paywall desenha". Hoje o
+> `conferir:migalha` pega em dois segundos.
+
 Não é zelo. Aconteceu duas vezes num dia só:
 
 - o detector de corte lateral ficou **cego** por causa de uma exceção que eu

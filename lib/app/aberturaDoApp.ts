@@ -490,6 +490,42 @@ export function useBotaoVoltarDoAndroid() {
  * O Kit do motorista conta como conteúdo ("equipment") de propósito — assim
  * ele entra no mesmo ranking das aulas e pode mudar de posição no futuro.
  */
+/**
+ * Cada tela que a pessoa abre vira migalha. É o conserto da testemunha cega.
+ *
+ * POR QUE (27/09/2026). A `app_erros` acumulava relatos de "app fechou sozinho
+ * em: **abriu o app**", sempre a mesma frase, e o dono perguntou se não era
+ * melhor parar de mandar. Olhando os cinco relatos de 22 a 26/09, todos os
+ * aparelhos estavam nos DOIS PRIMEIROS MINUTOS de vida no app e três dos
+ * quatro morreram na tela de cadastro do carro. A testemunha sabia disso e
+ * não conseguia dizer, porque o app inteiro tinha CINCO chamadas de `passo()`:
+ *
+ *     abriu o app · abriu anúncio · pediu permissão de aviso
+ *     ligou a trilha em ritmo · respondeu o quiz
+ *
+ * O onboarding, o cadastro do carro, o paywall, a Biela, o histórico: nenhum
+ * gravava. Ela só conhecia cinco lugares e na prática sempre respondia o
+ * primeiro, porque é o único que fica no caminho de quem acabou de instalar.
+ * O "7s depois do passo" também não media o que parecia: media desde a
+ * ABERTURA, não desde a última ação.
+ *
+ * A saída NÃO foi espalhar `passo()` por dezenas de telas. Seria a mesma
+ * dívida de novo, só que maior: cada tela nova nasceria muda e ninguém
+ * lembraria. Aqui é UM lugar, ligado ao roteador, e toda tela que existir
+ * daqui para frente entra sozinha.
+ *
+ * A ORDEM CONTRA A QUAL ELE NÃO PODE SER MOVIDO: este gancho tem que ser
+ * chamado DEPOIS de `useFunilDeAbertura()`, que é quem lê a migalha da sessão
+ * anterior antes de qualquer escrita nova. Invertido, a primeira tela apagaria
+ * o rastro do fechamento que o app abriu justamente para contar.
+ * `npm run conferir:migalha` cobra essa ordem no fonte do Shell.
+ */
+export function useMigalhaDaTela(view: View) {
+  useEffect(() => {
+    passo(`tela: ${view.name}`);
+  }, [view.name]);
+}
+
 export function useMetricaDeConteudo(view: View) {
   useEffect(() => {
     if (view.name === "content") trackContent(view.id, "open");

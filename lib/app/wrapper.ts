@@ -6,10 +6,15 @@ import { APP_STORE_REVIEW_URL, PLAY_STORE_REVIEW_URL } from "@/lib/stores";
 import { detectPlatform } from "@/lib/app/platform";
 import { comoSair } from "./saidaDoApp.ts";
 
-export function isNativeApp(): boolean {
-  if (typeof window === "undefined") return false;
-  return !!(window as unknown as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor;
-}
+// A definição saiu daqui em 27/09/2026 e virou `lib/app/capacitorPresente.ts`.
+// Ela é regra pura e estava presa atrás dos atalhos de caminho deste arquivo,
+// fora do alcance de conferência de linha de comando. O porquê inteiro, e a
+// armadilha que a fez sair (carregar o `@capacitor/core` na web publica
+// `window.Capacitor`, e esta função decide pela PRESENÇA dele), está escrito lá.
+// Reexportado para nenhum chamador precisar mudar.
+export { isNativeApp } from "./capacitorPresente.ts";
+// E importada também, porque este arquivo a usa (ver `sellsInApp`).
+import { isNativeApp } from "./capacitorPresente.ts";
 
 // Origem de produção do app. Precisa bater com `server.url` do
 // capacitor.config.ts — é para cá que voltam os links de e-mail (confirmação

@@ -13,6 +13,7 @@ import {
   useFunilDeAbertura,
   useLembretes,
   useMetricaDeConteudo,
+  useMigalhaDaTela,
   usePlanoPendente,
   useDestinoDoOnboarding,
   useRotaDeAviso,
@@ -69,6 +70,10 @@ function Router() {
   // Os efeitos de fundo. Cada um é uma preocupação com nome própria; o que
   // eles fazem está documentado em lib/app/aberturaDoApp.ts.
   useFunilDeAbertura();
+  // DEPOIS do de cima, sempre. Ele lê a migalha da sessão anterior; este
+  // escreve a desta. Trocados, a primeira tela apaga o fechamento que o app
+  // abriu para contar. A ordem é cobrada por `npm run conferir:migalha`.
+  useMigalhaDaTela(view);
   usePlanoPendente();
   useDestinoDoOnboarding();
   useRotaDeAviso();

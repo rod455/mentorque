@@ -29,3 +29,25 @@ revoke all on public.app_erros from anon, authenticated;
 grant select, insert, update, delete on public.app_erros to service_role;
 
 create index if not exists app_erros_criado on public.app_erros (criado_em);
+
+-- AS DUAS COLUNAS QUE FALTAVAM NESTE ARQUIVO (trazidas em 27/09/2026).
+--
+-- As duas já existiam no BANCO e não existiam aqui, que é a armadilha desta
+-- casa desde 26/08, quando o arquivo do funil foi encontrado três eventos
+-- atrás do aplicado. Quem lesse este arquivo para entender a tabela veria uma
+-- tabela que não é a que está no ar.
+--
+-- `anon_id` (17/09/2026, recomendação da QA de 16/09): sem ele, "dez
+-- ocorrências do mesmo erro" pode ser dez pessoas ou uma reabrindo o app, e as
+-- duas leituras pedem reações opostas. É o MESMO id do funil (lib/app/anon.ts),
+-- então nada passou a ser guardado sobre ninguém que já não fosse.
+--
+-- `aparelho` (27/09/2026): modelo, versão do sistema, memória aproximada e
+-- núcleos, montados em lib/app/aparelho.ts a partir do `navigator`. Nasceu do
+-- relato de "app fechou sozinho", que é o único desta tabela que fala de
+-- RECURSO da máquina: sem ele, "morre na tela de cadastro do carro" e "morre
+-- na tela de cadastro do carro num Android de 2GB" são a mesma linha e pedem
+-- consertos diferentes. Descreve o hardware, não a pessoa: modelo e memória
+-- aproximada são iguais para milhões de aparelhos.
+alter table public.app_erros add column if not exists anon_id text;
+alter table public.app_erros add column if not exists aparelho text;

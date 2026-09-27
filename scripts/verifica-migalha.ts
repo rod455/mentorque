@@ -16,8 +16,25 @@
 //   3. faz muito tempo: cala
 //   4. acusa UMA vez só: a migalha é consumida na leitura
 //
+// E DESDE 27/09/2026, o que faltava e é o coração do assunto:
+//
+//   5. a migalha SABE DIZER ONDE. Até este dia o app inteiro tinha cinco
+//      chamadas de `passo()`, e nenhuma no onboarding, no cadastro do carro ou
+//      no paywall. A testemunha respondia "abriu o app" sempre, porque era o
+//      único passo no caminho de quem acabou de instalar. Ela não estava
+//      mentindo: estava cega, e o dono chegou a perguntar se não era melhor
+//      desligar o relato. O conserto foi ligar a migalha ao ROTEADOR, um lugar
+//      só, para toda tela que existir daqui para frente entrar sozinha.
+//   6. a ORDEM no Shell, que é a regra que o conserto podia quebrar: quem lê a
+//      migalha da sessão anterior roda ANTES de quem escreve a desta.
+//   7. o ouvinte de pausa do ANDROID está ligado. Os dois antigos são eventos
+//      de navegador, e a pergunta da migalha é sobre o aplicativo.
+//   8. o relato diz EM QUE APARELHO (lib/app/aparelho.ts).
+//
 // Rode com: npm run conferir:migalha
+import { readFileSync } from "node:fs";
 import { fechamentoAnterior, esfriaMigalha, passo } from "../lib/app/ultimoPasso.ts";
+import { descreveAparelho } from "../lib/app/aparelho.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -211,8 +228,176 @@ function envelhece(segundos: number) {
   conferir("morte colada no passo continua falando", fechamentoAnterior() !== null, "o pagehide não pode calar o defeito");
 }
 
+// ── 10. A MIGALHA SABE DIZER ONDE ───────────────────────────────────────────
+//
+// A conferência que faltava, e a falta dela custou 25 dias de relatos inúteis.
+// Tudo acima prova QUANDO a testemunha fala e quando cala. Nada provava que
+// ela tem o que dizer. O app inteiro tinha cinco `passo()`, nenhum nas telas
+// que a pessoa nova atravessa, e por isso todo relato de 05 a 26/09 saiu com a
+// mesma frase: "app fechou sozinho em: abriu o app".
+//
+// Ela olha o FONTE porque o que se conserta aqui é ligação, não regra: o
+// roteador precisa alimentar a migalha, e o Shell precisa fazer isso na ordem
+// certa. Nenhum dos dois cabe no navegador de mentira lá de cima.
+const leia = (caminho: string) => readFileSync(new URL(`../${caminho}`, import.meta.url), "utf8");
+
+/** O fonte sem comentário nenhum, para as perguntas sobre o que o motor executa. */
+function semComentarios(fonte: string): string {
+  return fonte.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+}
+{
+  const abertura = leia("lib/app/aberturaDoApp.ts");
+  const shell = leia("components/app/Shell.tsx");
+
+  conferir(
+    "existe um gancho que grava migalha a cada tela",
+    /export function useMigalhaDaTela\(/.test(abertura),
+    "sem ele a migalha volta a conhecer só os cinco lugares que alguém lembrou de instrumentar à mão"
+  );
+  conferir(
+    "e ele grava o nome da TELA, não um rótulo fixo",
+    /passo\(`tela: \$\{view\.name\}`\)/.test(abertura),
+    "um rótulo fixo é o mesmo que nada: o relato precisa nomear onde a pessoa estava"
+  );
+  conferir(
+    "o Shell liga o gancho de verdade",
+    /useMigalhaDaTela\(view\)/.test(shell),
+    "o gancho pode existir e ninguém chamar, que é o mesmo que não existir"
+  );
+
+  // ── A ORDEM, que é a regra que este conserto podia atropelar ──────────────
+  //
+  // `useFunilDeAbertura` LÊ a migalha da sessão anterior; `useMigalhaDaTela`
+  // ESCREVE a desta. Os dois são efeitos do mesmo componente, então a ordem de
+  // declaração é a ordem de execução. Invertidos, a primeira tela apaga o
+  // rastro do fechamento que o app abriu justamente para contar, e o sintoma
+  // seria a tabela ficar VAZIA: silêncio, que ninguém investiga.
+  const iAbertura = shell.indexOf("useFunilDeAbertura()");
+  const iMigalha = shell.indexOf("useMigalhaDaTela(view)");
+  conferir(
+    "a leitura da migalha antiga vem ANTES da escrita da nova",
+    iAbertura >= 0 && iMigalha > iAbertura,
+    `useFunilDeAbertura em ${iAbertura}, useMigalhaDaTela em ${iMigalha}. Trocados, o fechamento nunca mais é relatado e a tabela fica muda.`
+  );
+}
+
+// ── 11. O OUVINTE DE PAUSA DO ANDROID ───────────────────────────────────────
+//
+// Os dois ouvintes de 05/09 são `visibilitychange` e `pagehide`, eventos de
+// NAVEGADOR. A pergunta da migalha ("o app saiu de propósito ou morreu?") é
+// sobre o APLICATIVO, e quem responde isso no Android é o ciclo de vida da
+// Activity. Numa WebView do Capacitor a Activity pode ir para trás sem o
+// documento virar `hidden`.
+{
+  const fonte = leia("lib/app/ultimoPasso.ts");
+  conferir(
+    "a pausa escuta o estado do app no Capacitor",
+    /addListener\(\s*["']appStateChange["']/.test(fonte),
+    "sem isto a testemunha usa só sinal de navegador para decidir sobre um aplicativo"
+  );
+  conferir(
+    "e esse ouvinte esfria a migalha quando o app sai da frente",
+    /isActive[\s\S]{0,80}esfriaMigalha\(\)/.test(fonte),
+    "escutar sem agir é decoração"
+  );
+  conferir(
+    "o ouvinte nativo não sobe na web",
+    /if \(!isNativeApp\(\)\) return;/.test(fonte),
+    "na web o plugin responde em cima do próprio visibilitychange, e os dois disputariam o mesmo pausadoEm"
+  );
+
+  // ── A ARMADILHA QUE QUASE DERRUBOU A VENDA NO SITE (27/09/2026) ───────────
+  //
+  // A primeira versão do ouvinte perguntava "estamos no app nativo?" assim:
+  //
+  //     const { Capacitor } = await import("@capacitor/core");
+  //     if (!Capacitor.isNativePlatform()) return;
+  //
+  // Correto em si, e desastroso por causa de OUTRO arquivo. `wrapper.ts:9`
+  // decide pela PRESENÇA de `window.Capacitor`, não perguntando nada:
+  //
+  //     return !!(window as ...).Capacitor;
+  //
+  // Carregar o `@capacitor/core` na web PUBLICA esse objeto. Importar o pacote
+  // para perguntar se estamos no app nativo fazia o app nativo passar a
+  // existir: `isNativeApp()` virava true no navegador, `sellsInApp()` virava
+  // false, e o site inteiro entrava em modo leitor, SEM NENHUM convite de
+  // assinatura. Na web, que é uma das duas plataformas que conseguem vender.
+  //
+  // Quem pegou foi a suíte `telas` ("o paywall desenha"), depois de 11 minutos
+  // de navegador. Esta linha pega em dois segundos, e por isso ela existe:
+  // conferência de fonte não substitui a de navegador, mas falha mais cedo e
+  // diz o porquê, que é o que faltou aqui.
+  // SEM OS COMENTÁRIOS, e isso não é zelo: a primeira versão desta linha
+  // reprovou o arquivo CERTO, porque o comentário que explica a armadilha cita
+  // `await import("@capacitor/core")` para contar o que não se deve fazer. É a
+  // segunda vez no mesmo dia que uma conferência lê um comentário como código
+  // (a outra foi a de banco, com "SECURITY DEFINER" dentro de um comentário).
+  // Conferência que procura texto tem que olhar só o que o motor executa.
+  conferir(
+    "a migalha NÃO carrega o @capacitor/core",
+    !/@capacitor\/core/.test(semComentarios(fonte)),
+    'importar o core na web publica `window.Capacitor`, e `isNativeApp()` de wrapper.ts:9 decide pela PRESENÇA dele. O site inteiro entra em modo leitor e some todo convite de assinatura. Use `isNativeApp()`, que só olha a janela.'
+  );
+}
+
+// ── 12. O RELATO DIZ EM QUE APARELHO ────────────────────────────────────────
+//
+// "Morre na tela de cadastro do carro" e "morre na tela de cadastro do carro
+// num Android de 2GB" pedem consertos diferentes, e até 27/09 eram a mesma
+// linha. Os casos abaixo são user agents REAIS de WebView do Android, com as
+// três formas que aparecem na prática (com Build, com `; wv`, e limpo).
+{
+  const casos: [string, Parameters<typeof descreveAparelho>[0], RegExp][] = [
+    [
+      "Android com Build e wv",
+      { ua: "Mozilla/5.0 (Linux; Android 10; SM-G960F Build/QP1A.190711.020; wv) AppleWebKit/537.36", memoriaGb: 4, nucleos: 8 },
+      /^Android 10 · SM-G960F · 4GB · 8 nucleos$/,
+    ],
+    [
+      "Android limpo, modelo com espaços e parênteses",
+      { ua: "Mozilla/5.0 (Linux; Android 11; moto g(8) power lite) AppleWebKit/537.36", memoriaGb: 2, nucleos: 8 },
+      /^Android 11 · moto g\(8\) power lite · 2GB · 8 nucleos$/,
+    ],
+    [
+      "iPhone, que não publica modelo",
+      { ua: "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15", nucleos: 6 },
+      /^iPhone · iOS 17\.5\.1 · 6 nucleos$/,
+    ],
+    [
+      // O Chrome novo troca o modelo por "K" quando anonimiza o user agent.
+      // "Android 13 · K" seria uma linha com cara de dado e sem dado nenhum.
+      "Android com user agent anonimizado",
+      { ua: "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36", memoriaGb: 8, nucleos: 8 },
+      /^Android 10 · 8GB · 8 nucleos$/,
+    ],
+    ["navegador de mesa", { ua: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36", nucleos: 10 }, /^web · 10 nucleos$/],
+    ["sem user agent nenhum", { ua: "" }, /^$/],
+  ];
+  for (const [nome, sinais, esperado] of casos) {
+    const saiu = descreveAparelho(sinais);
+    conferir(`aparelho, ${nome}`, esperado.test(saiu), `veio "${saiu}"`);
+  }
+
+  // A MEMÓRIA É O CAMPO QUE IMPORTA para o defeito que motivou tudo isto, e é
+  // o único que pode faltar sem o resto faltar: o WebKit não implementa
+  // `deviceMemory`. Faltando, a linha sai sem ela em vez de sair quebrada.
+  const semMemoria = descreveAparelho({ ua: "Mozilla/5.0 (Linux; Android 13; SM-A135M) AppleWebKit/537.36", nucleos: 8 });
+  conferir("aparelho sem memória informada não inventa número", semMemoria === "Android 13 · SM-A135M · 8 nucleos", `veio "${semMemoria}"`);
+
+  // E a ligação: de nada adianta a função existir se o relato não a manda, ou
+  // se a rota joga o campo fora.
+  const erros = leia("lib/app/erros.ts");
+  const rota = leia("app/api/erros/route.ts");
+  conferir("o coletor manda o aparelho junto", /aparelho:\s*aparelhoAtual\(\)/.test(erros));
+  conferir("a rota grava o aparelho", /aparelho:\s*corta\(b\?\.aparelho/.test(rota), "sem isto o campo chega ao servidor e morre lá");
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) da migalha reprovaram.`);
   process.exit(1);
 }
-console.log("Migalha: fechamento em uso é relatado uma vez; app em segundo plano fica calado.");
+console.log(
+  "Migalha: fechamento em uso é relatado uma vez, app em segundo plano fica calado,\n" +
+    "e o relato agora diz em QUAL TELA e em QUE APARELHO."
+);

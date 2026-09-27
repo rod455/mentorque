@@ -19,6 +19,12 @@
 // memória mata app em segundo plano o tempo todo, e isso é normal do Android,
 // não é o defeito que estamos caçando. O que interessa é morrer EM USO.
 
+// A ÚNICA porta daqui para o Capacitor, e ela olha `window.Capacitor` sem
+// carregar o pacote. Está num módulo sozinho por causa disso e para caber na
+// conferência de linha de comando; o porquê inteiro está lá dentro. Extensão
+// explícita porque o `node --experimental-strip-types` precisa dela.
+import { isNativeApp } from "./capacitorPresente.ts";
+
 const CHAVE = "mq-ultimo-passo";
 
 /**
@@ -169,4 +175,67 @@ export function vigiarPausa(): void {
     if (document.visibilityState === "hidden") esfriaMigalha();
   });
   window.addEventListener("pagehide", () => esfriaMigalha());
+  void vigiarPausaNativa();
+}
+
+/**
+ * O TERCEIRO OUVINTE, e é o único que é do Android (27/09/2026).
+ *
+ * POR QUE ELE FALTAVA. Os dois de cima são eventos de NAVEGADOR. A pergunta
+ * que a migalha faz ("o app saiu da frente de propósito, ou morreu?") é uma
+ * pergunta sobre o APLICATIVO, e quem responde isso no Android é o ciclo de
+ * vida da Activity, não o DOM. `visibilitychange` numa WebView do Capacitor
+ * acompanha a WebView, que nem sempre acompanha o app: dá para a Activity ir
+ * para segundo plano sem o documento virar `hidden`.
+ *
+ * `App.addListener('appStateChange')` é o sinal do próprio sistema, e é ele
+ * que separa as duas coisas sem depender de como a WebView se comporta naquele
+ * aparelho.
+ *
+ * O QUE ISTO **NÃO** EXPLICA, e vale dizer para ninguém tratar como conserto
+ * do defeito: em 27/09 os relatos de fechamento da 2.8.0 eram 2 aparelhos em
+ * 73 que chegaram ao cadastro de carro. Se o ouvinte de DOM falhasse sempre,
+ * os 73 relatariam, porque todo mundo manda o app para trás uma hora. Então o
+ * que estes 2,7% são continua em aberto; o que muda aqui é a testemunha passar
+ * a usar o sinal certo da plataforma que ela vigia.
+ *
+ * ⚠️ NÃO IMPORTE `@capacitor/core` AQUI. A primeira versão disto fazia
+ * `const { Capacitor } = await import("@capacitor/core")` para perguntar
+ * `isNativePlatform()`, e isso quase derrubou a venda no site inteiro.
+ *
+ * O motivo é uma linha de `lib/app/wrapper.ts:9`:
+ *
+ *     export function isNativeApp(): boolean {
+ *       return !!(window as ...).Capacitor;      // PRESENÇA, não pergunta
+ *     }
+ *
+ * Ela decide pela EXISTÊNCIA de `window.Capacitor`, e carregar o
+ * `@capacitor/core` na web publica esse objeto. Ou seja: importar o pacote
+ * para perguntar se estamos no app nativo faz o app nativo passar a existir.
+ * Com isso `isNativeApp()` virava true no navegador, `sellsInApp()` virava
+ * false, e o site inteiro entrava em MODO LEITOR: nenhum convite de assinatura
+ * em lugar nenhum. Na web, que é uma das duas plataformas que conseguem
+ * vender, porque no Android não há botão de compra.
+ *
+ * Quem pegou foi a suíte `telas`, em "o paywall desenha": ela chega ao paywall
+ * pela faixa de convite do Estudos, e a faixa tinha sumido. Nenhuma conferência
+ * de linha de comando via isso, e o `tsc` muito menos: o código estava certo,
+ * a consequência é que era de outro arquivo.
+ *
+ * A porta certa é a `isNativeApp()` mesmo, que só OLHA a janela e não carrega
+ * nada. Depois dela, importar o `@capacitor/app` é seguro: se estamos no app,
+ * o Capacitor já está lá de qualquer jeito.
+ */
+async function vigiarPausaNativa(): Promise<void> {
+  // Sem esta guarda o plugin também responderia na web, em cima do próprio
+  // visibilitychange, e os dois ouvintes disputariam o mesmo `pausadoEm`.
+  if (!isNativeApp()) return;
+  try {
+    const { App } = await import("@capacitor/app");
+    await App.addListener("appStateChange", ({ isActive }) => {
+      if (!isActive) esfriaMigalha();
+    });
+  } catch {
+    /* sem plugin: os dois ouvintes de DOM continuam de pé */
+  }
 }

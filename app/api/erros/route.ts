@@ -37,6 +37,13 @@ export async function POST(req: Request) {
     // "dez ocorrências" pode ser dez pessoas ou uma insistindo, e as duas
     // leituras pedem reações opostas. É o mesmo id do funil.
     anon_id: corta(b?.anonId, 200),
+    // EM QUE APARELHO (27/09/2026). Modelo, versão do sistema, memória
+    // aproximada e núcleos, montados em lib/app/aparelho.ts. Existe pelo
+    // relato de "app fechou sozinho", que é o único da tabela que fala de
+    // RECURSO da máquina: sem isto, "morre na tela do cadastro" e "morre na
+    // tela do cadastro num Android de 2GB" são a mesma linha, e pedem
+    // consertos diferentes. Não identifica ninguém.
+    aparelho: corta(b?.aparelho, 120),
   });
   return NextResponse.json({ ok: true });
 }

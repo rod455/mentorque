@@ -67,6 +67,25 @@ console.log("Anomalias: o vigia da operação continua ligado?");
   conferir("a anomalia da plataforma sem conta continua no SQL", sql.includes("plataforma sem nenhuma conta"));
   conferir("a anomalia do quiz continua no SQL", sql.includes("respondeu o quiz e sumiu"));
 
+  // AS DUAS DE 27/09/2026, e elas nasceram juntas de propósito.
+  //
+  // O dono perguntou se não era melhor parar de mandar o relato de "app fechou
+  // sozinho", porque ele dizia sempre a mesma coisa. A resposta foi não, e o
+  // motivo está nestas duas linhas: o relato é a testemunha de DENTRO, que só
+  // fala se a pessoa reabrir o app, e a outra é a mesma pergunta vista de
+  // FORA, que não depende de ninguém voltar.
+  //
+  // Se alguém apagar a de fora achando que a de dentro basta, volta o buraco
+  // de projeto que está escrito no cabeçalho deste arquivo desde 07/09: quem o
+  // app derruba e não volta não existe em lugar nenhum.
+  conferir("a anomalia do cadastro de carro continua no SQL", sql.includes("abriu o cadastro de carro e sumiu"));
+  conferir("a anomalia do fechamento continua no SQL", sql.includes("'app fechou sozinho'"));
+  conferir(
+    "o fechamento sai com a VERSÃO no detalhe",
+    /string_agg\(distinct coalesce\(a\.versao/.test(sql),
+    'sem a versão não dá para responder "já passou e foi para o próximo build?", que é a primeira pergunta que alguém faz ao ver o número'
+  );
+
   // ── O CONTRATO COM O VIGIA (19/09/2026) ───────────────────────────────────
   //
   // O DEFEITO: de 15 a 19/09 o Vigia mandou todo dia "um erro está se

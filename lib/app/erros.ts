@@ -17,6 +17,7 @@ import { apiPost } from "./apiBase";
 import { APP_VERSION } from "./content";
 import { isNativeApp, nativePlatform } from "./wrapper";
 import { fechamentoAnterior } from "./ultimoPasso";
+import { aparelhoAtual } from "./aparelho";
 
 // Tetos que protegem o servidor de um aparelho em loop de erro: no máximo 10
 // envios por sessão e nunca a mesma mensagem duas vezes.
@@ -49,6 +50,10 @@ function reportar(tipo: "erro" | "promessa" | "fechou", mensagem: string, stack?
       // É o MESMO id do funil, não um novo: nada passa a ser guardado sobre
       // ninguém que já não fosse. Ver lib/app/anon.ts.
       anonId: anonId(),
+      // EM QUE APARELHO (27/09/2026). Ver lib/app/aparelho.ts para o porquê e
+      // para o limite: modelo e memória só existem de verdade no Android.
+      // Descreve o hardware, não a pessoa.
+      aparelho: aparelhoAtual(),
     }).catch(() => undefined);
   } catch { /* o coletor jamais pode causar o que coleta */ }
 }

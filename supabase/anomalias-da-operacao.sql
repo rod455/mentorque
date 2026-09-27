@@ -84,6 +84,66 @@ as $function$
     )
   group by coalesce(p.plataforma, 'desconhecida')
 
+  union all
+
+  -- 3. Abriu o cadastro do carro e sumiu.
+  --
+  -- POR QUE ENTROU (27/09/2026). O dono perguntou se não era melhor parar de
+  -- mandar o relato de "app fechou sozinho", porque ele dizia sempre a mesma
+  -- coisa. Olhando os cinco relatos de 22 a 26/09, os quatro aparelhos estavam
+  -- nos DOIS PRIMEIROS MINUTOS de vida no app, e três dos quatro morreram na
+  -- tela de cadastro do carro. Dois nunca cadastraram nada e foram embora.
+  --
+  -- Isto aqui é a MESMA pergunta vista de fora, e é a forma da anomalia 2:
+  -- não depende da migalha, não depende de o aparelho voltar, e não depende de
+  -- a testemunha estar funcionando. Se o cadastro de carro derruba gente, o
+  -- número sobe aqui mesmo que o relato nunca chegue.
+  --
+  -- Indício, não prova, pelo mesmo motivo de sempre: quem abre o cadastro e
+  -- desiste por vontade própria também some. O valor é ser contável e
+  -- comparável entre plataformas, que é onde vira achado.
+  select
+    'abriu o cadastro de carro e sumiu'::text,
+    coalesce(e.plataforma, 'desconhecida'),
+    count(distinct e.anon_id),
+    'sem nenhum evento depois de abrir o cadastro; indicio, nao prova'::text
+  from public.funil_eventos e
+  where e.evento = 'abriu_cadastro_de_carro'
+    and e.criado_em >= now() - (p_dias || ' days')::interval
+    and e.anon_id is not null
+    and not exists (
+      select 1 from public.funil_eventos f
+      where f.anon_id = e.anon_id and f.criado_em > e.criado_em
+    )
+  group by coalesce(e.plataforma, 'desconhecida')
+
+  union all
+
+  -- 4. O app fechou sozinho, contado por versão.
+  --
+  -- Isto NÃO é dado novo: a `app_erros` guarda esses relatos desde que a
+  -- migalha subiu. É que eles só apareciam como mais uma linha no meio do
+  -- retrato diário, e uma linha no meio de trinta não acorda ninguém. Aqui
+  -- eles passam pela porta que o retrato já lê como ANOMALIA.
+  --
+  -- A versão vai no detalhe porque é ela que responde a pergunta que o dono
+  -- fez ("já passou e foi para o próximo build?"). Em 27/09 a resposta era
+  -- não: três dos cinco relatos eram da 2.8.0, que estava nas lojas.
+  --
+  -- O LIMITE, e ele é do instrumento, não da consulta: o relato só nasce na
+  -- ABERTURA SEGUINTE. Quem o app derruba e não volta nunca vira número aqui,
+  -- então isto é PISO, não taxa. É por isso que a anomalia 3 existe ao lado.
+  select
+    'app fechou sozinho'::text,
+    coalesce(a.plataforma, 'desconhecida'),
+    count(*),
+    'versoes: ' || string_agg(distinct coalesce(a.versao, '?'), ', ')
+      || '; PISO, nao taxa: so conta quem reabriu o app'
+  from public.app_erros a
+  where a.mensagem like 'app fechou sozinho%'
+    and a.criado_em >= now() - (p_dias || ' days')::interval
+  group by coalesce(a.plataforma, 'desconhecida')
+
   order by 1, 3 desc
 $function$;
 
