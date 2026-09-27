@@ -579,7 +579,9 @@ rodadas são anteriores. Só Mídia paga e Segurança tinham a régua na mão.
   minutos na lista do dono, que tem 15 linhas e a mais velha parada há 18 dias.
 
 ## 2026-09-27 · Segurança (rodada 2): as três recomendações foram feitas, e o quinto fluxo que ficou ligado paga um artigo por semana para jogar fora
-- Artifact "Segurança da semana" (rodada 2) publicado. Semana grande: 37 commits.
+- Artifact "Segurança da semana" (rodada 2):
+  https://claude.ai/artifact/UbAuWTsw1tVHzVpCJsWZws
+- Semana grande: 37 commits.
 - **TUDO da rodada 1 fechou desfecho, e conferido no estado, não no commit.**
   - `next` 14.2.5 para **14.2.35**: confirmado no `package.json` e no
     `package-lock.json`.
