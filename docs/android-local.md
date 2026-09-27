@@ -141,10 +141,19 @@ projetos mexe no outro:
 | | Android | iPhone |
 |---|---|---|
 | Anúncios | sim (AdMob) | nunca |
-| Vende assinatura | não (modo leitor, política do Play Billing) | sim (compra da Apple) |
+| Vende assinatura | ainda não: falta a chave no build, **não falta código** (ver `docs/lojas/venda-no-android.md`) | sim (compra da Apple) |
 | Onboarding | 4 telas, sem oferta de Premium | 5 telas, com a oferta |
-| Login social | pelo navegador, volta por `mentorque://` | folha nativa, sem sair do app |
-| Plugins no binário | app, browser, admob | app, browser, revenuecat, social-login |
+| Login social | folha nativa desde 07/09/2026 (`@capgo/capacitor-social-login`) | folha nativa, sem sair do app |
+| Plugins no binário | app, browser, admob, push, **revenuecat**, social-login, appsflyer | app, browser, revenuecat, social-login |
+
+<!-- Três linhas desta tabela estavam velhas em 27/09/2026, e as três diziam
+     que o Android tinha MENOS do que tem: o RevenueCat já viaja no binário
+     desde que entrou no `includePlugins`, o login social deixou de ser pelo
+     navegador em 07/09, e "não vende" soava como decisão de projeto quando é
+     só uma variável de build que falta. Documentação velha aqui não é detalhe:
+     em 23/09 o QA registrou que a frase "modo leitor é sem paywall", que
+     também morava neste arquivo, ajudou a ler o funil errado. A fonte de
+     verdade dos plugins é `capacitor.config.ts` → `android.includePlugins`. -->
 
 A escolha de plugins por plataforma está em `capacitor.config.ts`
 (`android.includePlugins` e `ios.includePlugins`). O resto é decidido em tempo

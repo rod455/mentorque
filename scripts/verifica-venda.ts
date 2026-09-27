@@ -283,8 +283,90 @@ const CHAVE = "mq-venda-pendente";
   conferir("consumida a pendência, deixa de valer", veioComprar() === false);
 }
 
+// ── OS IDENTIFICADORES DA PLAY BATEM COM O QUE O APP PROCURA ────────────────
+//
+// POR QUE ISTO EXISTE (27/09/2026). O dono decidiu ligar a venda no Android, e
+// a trava é só a chave no build: o código está pronto há semanas. O trabalho
+// que sobra é digitar nomes no painel da Google Play, e é aí que esta ligação
+// costuma quebrar.
+//
+// O MODO DE FALHA, e ele é traiçoeiro: se uma oferta for criada com id
+// diferente do que o app procura, o RevenueCat devolve a lista de pacotes
+// VAZIA. O paywall abre sem preço e sem botão, que é **visualmente idêntico ao
+// modo leitor**. Não dá erro, não gera relato, e a conclusão natural de quem
+// olha é "a chave não pegou" — investigando o lugar errado.
+//
+// A defesa possível daqui é modesta e vale: garantir que exista UM lugar onde
+// os nomes estão escritos para copiar, e que esse lugar não se afaste do
+// código. Renomear uma oferta no `Subscribe.tsx` sem atualizar o documento (ou
+// o contrário) passa a reprovar.
+//
+// O QUE ELA NÃO ALCANÇA, e isso se diz: o painel da Play. Se o nome estiver
+// certo aqui e errado lá, só o roteiro de aparelho pega, e é por isso que ele
+// está escrito no fim do documento.
+{
+  const leia = (caminho: string) => readFileSync(new URL(`../${caminho}`, import.meta.url), "utf8");
+  const doc = leia("docs/lojas/venda-no-android.md");
+  const subscribe = leia("components/app/screens/Subscribe.tsx");
+  const perfil = leia("components/app/screens/Profile.tsx");
+  const compras = leia("lib/app/purchases.ts");
+
+  // As ofertas do Google que o app procura pelo nome, e onde cada uma é pedida.
+  const ofertas: [string, string, string][] = [
+    ["exit10", "Subscribe.tsx", subscribe],
+    ["exit25", "Subscribe.tsx", subscribe],
+    ["save30", "Profile.tsx", perfil],
+  ];
+  for (const [id, onde, fonte] of ofertas) {
+    conferir(
+      `a oferta ${id} continua sendo pedida em ${onde}`,
+      new RegExp(`googleOffer\\([^)]*"${id}"\\)`).test(fonte),
+      "se o código parou de pedir, o documento está mandando criar oferta que ninguém usa"
+    );
+    // NA LINHA DA TABELA, e não em qualquer lugar do documento. A primeira
+    // versão desta linha só perguntava se o nome aparecia no texto, e não
+    // mordeu o defeito plantado: trocar a linha da TABELA deixava o nome vivo
+    // na prosa do roteiro de aparelho, três seções abaixo. A tabela é a que
+    // alguém copia para o painel da Play; a prosa não.
+    conferir(
+      `e a TABELA do documento manda criar a oferta ${id}`,
+      new RegExp("^\\|\\s*`" + id + "`\\s*\\|", "m").test(doc),
+      "sem o nome na tabela de identificadores, ele é digitado de memória no painel da Play e sai diferente"
+    );
+  }
+
+  // Os dois tipos de pacote do RevenueCat. Se alguém trocar por identificador
+  // próprio no código, o offering montado pelo documento para de casar.
+  for (const tipo of ["MONTHLY", "ANNUAL"]) {
+    conferir(
+      `o app continua procurando o pacote ${tipo}`,
+      subscribe.includes(`"${tipo}"`) || perfil.includes(`"${tipo}"`),
+      "o documento manda arrastar o plano base para esse tipo no offering"
+    );
+  }
+
+  // A chave é o interruptor, e o documento inteiro se apoia nisso.
+  conferir(
+    "a venda no Android continua dependendo SÓ da chave",
+    /NEXT_PUBLIC_REVENUECAT_ANDROID_KEY/.test(leia("lib/app/wrapper.ts")),
+    "se o interruptor mudar de lugar, o passo 3 do documento passa a mandar configurar coisa nenhuma"
+  );
+
+  // A compra de OFERTA não pode virar compra de pacote: `purchasePackage`
+  // nunca seleciona uma oferta de elegibilidade "determinada pelo
+  // desenvolvedor", então os três descontos sumiriam em silêncio.
+  conferir(
+    "a oferta é comprada com purchaseSubscriptionOption",
+    /purchaseSubscriptionOption/.test(subscribe) && /purchaseSubscriptionOption/.test(compras),
+    "com purchasePackage os descontos exit10, exit25 e save30 nunca são aplicados, e ninguém percebe: a compra funciona, só sai pelo preço cheio"
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) da compra pendente reprovaram.`);
   process.exit(1);
 }
-console.log("Compra pendente: atravessa o login social, e some depois de usada ou velha.");
+console.log(
+  "Compra pendente: atravessa o login social, e some depois de usada ou velha.\n" +
+    "Venda no Android: os identificadores do documento batem com os que o app procura."
+);
