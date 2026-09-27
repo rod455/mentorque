@@ -71,7 +71,20 @@ export function CarsScreen() {
   // convidado recebe a folha "Salve sua garagem" nesse mesmo instante, e dois
   // pedidos em cima do mesmo cadastro é o jeito de perder os dois.
   const { user } = useAuth();
-  const [convidarAviso] = useState(() => consumirConviteNoCarro());
+  // A marca do convite só é consumida quando EXISTE conta para vê-lo.
+  //
+  // Antes ela era consumida ao montar, sem olhar a conta, e o convite só é
+  // desenhado para quem tem conta: então quem cadastrava o carro como
+  // convidado queimava o melhor momento do pedido sem ver convite nenhum, e
+  // criar a conta cinco minutos depois já não trazia o momento de volta.
+  // Convidado é o caso comum aqui, porque o app oferece explorar sem cadastrar
+  // e só pede a conta depois, com a folha "Salve sua garagem" em cima deste
+  // mesmo cadastro. Medido em 25/09: 28 convites para cerca de 367 aparelhos
+  // que começaram o onboarding, e um em quatro aceita quando é convidado.
+  const [convidarAviso, setConvidarAviso] = useState(false);
+  useEffect(() => {
+    if (consumirConviteNoCarro(!!user)) setConvidarAviso(true);
+  }, [user]);
 
   const openNick = (id: string, current?: string) => { setNickInput(current ?? ""); setEditNickId(id); };
   const saveNick = () => {

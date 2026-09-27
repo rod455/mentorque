@@ -16,6 +16,57 @@ Formato de cada tela/fluxo:
 
 ## Estado
 
+v6 em 2026-09-25: rodada de RETENÇÃO, e ela fecha um ciclo. A pergunta aberta
+em 11/09 ("quantos aparelhos têm permissão de aviso?") ganhou resposta porque a
+instrumentação pedida foi implementada em 19/09. Os dois primeiros vereditos do
+caderno também fecharam. Próxima rodada alterna para CONVERSÃO.
+
+# O portão de permissão, agora com número (2026-09-25)
+
+Em 11/09 registrei que as cinco máquinas de recorrência dependiam todas da
+mesma permissão e que ninguém a media, e que o teto calculável era de um
+dígito. A instrumentação subiu em 19/09 (`convite_aviso`,
+`aceitou_convite_aviso`, `permissao_aviso_concedida`, `permissao_aviso_negada`).
+O que ela diz:
+
+    começaram o onboarding    ~367 aparelhos
+    viram o convite             28
+    aceitaram                    7
+    permissão concedida          9
+
+Três leituras, nesta ordem de importância:
+- **O gargalo não é o convite, é quem chega a vê-lo.** Um em quatro aceita
+  quando é convidado, o que é uma taxa boa. Só que 28 de ~367 viram convite.
+- **Concedidas (9) passam de aceites (7)**, então existe pelo menos um caminho
+  fora do convite que funciona: o interruptor do Perfil. Ele é hoje a única
+  porta que não depende de a pessoa estar no momento certo.
+- **RESSALVA DE JANELA, critério 11 do Diretor**: os quatro eventos subiram no
+  código em 19/09 e só alcançaram as lojas com a 2.8, aprovada em 24/09. Esses
+  números vêm quase todos da web e de um dia de loja. São PISO, não retrato da
+  base, e quem for reler confere quantos dias de loja a janela tem.
+
+## O buraco que isso expôs, e que virou a aposta da semana
+O convite do carro é o melhor momento do pedido, porque é o único em que a
+promessa é concreta e pessoal. Só que a marca que leva o pedido do cadastro
+até a garagem era consumida ao montar a tela, sem olhar se havia conta, e o
+convite só é desenhado para quem tem conta. Quem cadastrava o carro como
+convidado queimava o momento sem ver convite nenhum. Corrigido em 25/09
+(aposta convite-do-carro-nao-queima-com-convidado), com conferência própria
+(`npm run conferir:convite`).
+
+## O que a retenção diz nesta semana, sem enfeite
+- Coorte de 14/09: 16 cadastrados, **0 voltaram em 1 a 7 dias**. Coorte
+  fechada, sem ressalva de enchimento.
+- Coorte de 07/09: 11 cadastrados, 1 voltou. Coorte de 31/08: 8, 1 voltou.
+- Coorte de 21/09: 31 cadastrados, 4 voltaram, e ela AINDA ENCHE, então não é
+  resultado (a régua nova das views de 24/09 diz isso sozinha agora).
+- Ativação caiu de 6 em 11 (coorte de 07/09) para 3 em 16 (coorte de 14/09),
+  enquanto a aquisição dobrava e a mídia subia para R$ 371 na semana. Duas
+  leituras cabem, e nenhuma está provada: público pago mais frio chegando, ou
+  produto igual com gente diferente. O que NÃO cabe é dizer que o produto
+  piorou, porque as coortes antigas também voltavam perto de zero.
+
+
 v5 em 2026-09-18: rodada de CONVERSÃO. O achado é o portão de conta no fundo
 do funil, provado no navegador, e ele explica por que "iniciou_checkout" dá
 zero sem que isso queira dizer desinteresse. Próxima rodada alterna para

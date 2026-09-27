@@ -80,6 +80,44 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 
 ## Experimentos
 
+## [convite-do-carro-nao-queima-com-convidado] O melhor momento do pedido para de ser gasto à toa
+- Estado: ABERTO
+- Tipo: mudanca-direta
+- Alvo no funil: o portão de permissão de aviso, medido desde 19/09 pelos
+  eventos `convite_aviso`, `aceitou_convite_aviso` e `permissao_aviso_concedida`.
+- O NÚMERO QUE ABRIU ISTO, e ele responde a pergunta que ficou de 11/09: na
+  janela medida, 28 aparelhos viram o convite, 7 aceitaram e 9 acabaram com
+  permissão concedida, contra cerca de 367 que começaram o onboarding. Um em
+  quatro aceita quando é convidado; o gargalo não é o convite, é quem chega a
+  vê-lo.
+- Tese BeSci: timing do pedido. O melhor instante para pedir a permissão é logo
+  depois de cadastrar o carro, porque é o único em que a promessa é concreta e
+  pessoal ("quando o SEU carro precisar de algo"). Esse pedido viaja numa marca
+  de módulo que a garagem CONSOME ao montar, mas o convite só é desenhado para
+  quem tem conta. Resultado: quem cadastra o carro como convidado queima a
+  marca sem ver convite nenhum, e se criar a conta cinco minutos depois aquele
+  momento já foi embora. E convidado é o caso comum: o app oferece "explorar
+  sem cadastrar" e só pede a conta depois, com a folha "Salve sua garagem" em
+  cima do mesmo cadastro de carro.
+  - A mudança: a marca só é consumida quando existe conta para ver o convite.
+    Sem conta, ela fica de pé e o convite aparece quando a conta chegar.
+  - O que NÃO muda: as três travas do pedido continuam iguais (quatro dias
+    entre convites, três na vida, nunca depois de um não do sistema), e o
+    convidado continua sem receber dois pedidos ao mesmo tempo, porque sem
+    conta nada é mostrado.
+- Métrica: `convite_aviso` por semana, e a razão `aceitou_convite_aviso` sobre
+  `convite_aviso`, que hoje é 7 de 28 · Duração: 4 semanas
+- Aprovação: não se aplica (momento do pedido, sem variantes, sem tocar em
+  preço, plano ou cobrança)
+- Início: 2026-09-25 · Ler a partir de: 2026-10-23
+- Antes: 28 convites, 7 aceites e 9 permissões concedidas na janela desde
+  19/09. RESSALVA DE JANELA, na régua do critério 11: os quatro eventos subiram
+  no código em 19/09 e só alcançaram as lojas com a 2.8, aprovada em 24/09.
+  Então esses números vêm quase todos da web e de um dia de loja, e valem como
+  PISO, não como retrato da base. Quem for ler o veredito confere antes quantos
+  dias de loja a janela tem de verdade.
+- Veredito: (aberto)
+
 ## [login-sabe-que-veio-comprar] Quem toca em assinar chega num login que explica
 - Estado: ABERTO
 - Tipo: mudanca-direta
@@ -276,7 +314,7 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 
 
 ## [cta-teste-por-plano] O botão do teste diz o que o clique faz
-- Estado: ABERTO
+- Estado: FECHADO
 - Tipo: mudanca-direta
 - Alvo no funil: cadastro → viu paywall → iniciou checkout
 - Tese BeSci: o CTA da última página do onboarding dizia sempre
@@ -291,10 +329,28 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Início: 2026-08-23 · Ler a partir de: 2026-09-20
 - Antes: série do funil nasceu em 23/08, sem base anterior. Leitura será
   contra as semanas seguintes, sem comparação retroativa.
-- Veredito: (aberto)
+- **Veredito (2026-09-25): INCONCLUSIVO, e não por falta de volume.** Este
+  experimento nasceu sem como ser fechado, e isso é o aprendizado dele.
+  - O número que existe: cadastro → iniciou_checkout está em 12 de 73 na janela
+    desde 22/08. Não há "antes": a série do funil nasceu no mesmo dia da
+    mudança, então não existe período comparável, e como é mudança direta
+    também não existe variante. Pela régua dos três níveis isto é nível 2, e
+    nível 2 nunca sustenta FUNCIONOU nem NAO FUNCIONOU.
+  - Pior que isso: a tela onde ele vive mudou duas vezes desde então, por dois
+    testes A/B aprovados em 12/09. O `onboarding-curto` tira páginas do mesmo
+    fluxo e o `onboarding-termina-no-carro-android` TROCOU a última página no
+    Android, que é exatamente onde este CTA estava. O efeito do CTA e o efeito
+    dos dois testes estão somados e não têm como ser separados.
+  - E o degrau de chegada subconta por construção: o `iniciou_checkout` só
+    nasce para quem já tem conta (achado de 18/09). O `tentou_assinar` que
+    conserta isso subiu em 18/09, quase um mês depois desta mudança.
+  - O que FICA: a mudança continua no código e não há motivo para desfazer.
+    Nomear o que o botão faz é correção de clareza, não aposta: "Começar teste
+    grátis" no anual e "Assinar agora" no mensal descreve o que acontece, e
+    isso se defende sem número.
 
 ## [fim-do-lembrete-falso] Promessa de aviso vira controle de cancelamento
-- Estado: ABERTO
+- Estado: FECHADO (reabrir para leitura depois de 01/10)
 - Tipo: mudanca-direta
 - Alvo no funil: confiança no fundo do funil (checkout → assinou) e churn
 - Tese BeSci: o interruptor "Lembrar antes do teste terminar" (onboarding e
@@ -308,7 +364,21 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Aprovação: não se aplica (correção de promessa falsa)
 - Início: 2026-08-23 · Ler a partir de: 2026-09-20
 - Antes: sem avaliações nas lojas ainda
-- Veredito: (aberto)
+- **Veredito (2026-09-25): INCONCLUSIVO, porque o risco que ele previne ainda
+  não pôde acontecer.**
+  - A métrica era avaliações citando cobrança e churn no primeiro ciclo. Hoje:
+    12 avaliações, todas cinco estrelas, NENHUMA citando cobrança; zero
+    cancelamentos; coortes de assinante 08/01 e 09/01 com 0 saídas.
+  - Só que a primeira cobrança de verdade é 01/10. Nenhum assinante chegou ao
+    fim do teste com dinheiro saindo, então "ninguém reclamou de cobrança
+    surpresa" é a ausência do EVENTO, não a prova de que o conserto evitou
+    alguma coisa. Pela régua dos três níveis, nível 1.
+  - Reabrir para leitura depois de 01/10, quando as três cobranças de R$ 29,90
+    tiverem acontecido. Aí a mesma métrica passa a poder dizer algo.
+  - O que FICA: o interruptor que prometia aviso sem agendar nada saiu, e o
+    texto de controle ("Cancele quando quiser pelo Perfil") continua no
+    código e é verdadeiro. Como correção de promessa falsa, ela se sustenta
+    sem número.
 - Acompanhamento 2026-08-28: o interruptor VOLTOU em 25/08 com plugin nativo
   de verdade atrás dele, e mesmo assim a promessa continuou falsa, por outro
   motivo (o plugin nunca carregava; ver lembrete-que-chega). Ou seja: entre

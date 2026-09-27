@@ -33,39 +33,17 @@ const MOMENTOS: readonly MomentoDoPedido[] = ["quiz", "calendario", "carro", "on
 
 // O convite ao terminar o onboarding (12/09/2026, revisão de retenção do CRO).
 //
-// Avisos ligados em 3 de 28 contas, e o convite só aparecia depois de um
-// quiz ou de um carro: quem não fazia nenhum dos dois nunca via o pedido, e
-// era justamente quem sumia. Terminar a apresentação é o primeiro "sim"
-// pequeno da pessoa; o Início consome a marca ao nascer e faz o convite com
-// um motivo concreto (a próxima revisão do carro dela, quando há carro).
-// Mesma trava de sempre: quatro dias entre convites, três na vida.
-let conviteNoOnboarding = false;
-export function pedirConviteNoOnboarding(): void {
-  conviteNoOnboarding = true;
-}
-export function consumirConviteNoOnboarding(): boolean {
-  const r = conviteNoOnboarding;
-  conviteNoOnboarding = false;
-  return r;
-}
-
-// O convite logo depois do cadastro do carro (10/09/2026).
-//
-// A pessoa acabou de fazer a primeira coisa de valor, e é o momento em que a
-// coorte morre: 7 em 8 não voltam na primeira semana. O cadastro acontece
-// numa tela e a garagem aparece na seguinte, então o pedido viaja numa marca
-// de módulo, como o convite de conta (SalveSuaGaragem) e o atalho de dúvida:
-// quem cadastra deixa o pedido, a garagem consome ao montar. Vale para UMA
-// montagem, e o `podeConvidar` continua mandando (quatro dias, três na vida).
-let conviteNoCarro = false;
-export function pedirConviteNoCarro(): void {
-  conviteNoCarro = true;
-}
-export function consumirConviteNoCarro(): boolean {
-  const r = conviteNoCarro;
-  conviteNoCarro = false;
-  return r;
-}
+// As marcas dos convites (onboarding e carro) moram em ./marcasDeConvite, e o
+// reexporte aqui mantém quem já as importava deste arquivo. Elas saíram daqui
+// porque são estado puro, sem dependência nenhuma, e neste arquivo ficavam
+// presas atrás do plugin de notificação, fora do alcance de conferência de
+// linha de comando. Ver lib/app/marcasDeConvite.ts.
+export {
+  pedirConviteNoOnboarding,
+  consumirConviteNoOnboarding,
+  pedirConviteNoCarro,
+  consumirConviteNoCarro,
+} from "./marcasDeConvite";
 
 const CHAVE = "mq-pedido-aviso";
 

@@ -3,6 +3,62 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-25 · CRO (retenção): o portão de permissão ganhou número, e dois vereditos fecharam
+- Rodada semanal do CRO/BeSci, foco RETENÇÃO (a de 18/09 foi de conversão).
+  Artifact "Conversão da semana":
+  https://claude.ai/artifact/WqSbEVbYtPR8ht4XkiJ4yc
+- **DOIS VEREDITOS FECHADOS**, os primeiros do caderno, e os dois INCONCLUSIVO
+  por motivos diferentes que valem mais que o rótulo:
+  - `cta-teste-por-plano`: inconclusivo e NÃO por falta de volume. Ele nasceu
+    sem como ser fechado. Sem variante e sem "antes" (a série do funil nasceu
+    no mesmo dia da mudança), nenhum número futuro poderia dizer FUNCIONOU. E a
+    tela onde ele vivia foi mexida duas vezes desde então pelos dois testes A/B
+    de 12/09, um deles trocando exatamente a última página no Android. O degrau
+    de chegada ainda subconta por construção (o `iniciou_checkout` só nasce
+    para quem tem conta). A mudança FICA no código: nomear o que o botão faz é
+    correção de clareza, e correção se defende pelo argumento.
+  - `fim-do-lembrete-falso`: inconclusivo porque o risco que ele previne ainda
+    não pôde acontecer. São 12 avaliações, nenhuma citando cobrança, e zero
+    cancelamentos, mas a primeira cobrança de verdade é 01/10. Ausência do
+    evento não é prova de conserto. Marcado para reler depois de 01/10.
+- **O CICLO DE 11/09 FECHOU, e é o achado da rodada.** Naquela semana registrei
+  que as cinco máquinas de recorrência dependiam todas da mesma permissão e que
+  ninguém a media. A instrumentação subiu em 19/09, e agora ela responde:
+  cerca de 367 aparelhos começaram o onboarding, 28 viram o convite, 7
+  aceitaram e 9 acabaram com permissão concedida.
+  - O gargalo NÃO é o convite: um em quatro aceita quando é convidado. O
+    gargalo é quem chega a vê-lo, 28 de ~367.
+  - Concedidas (9) passam de aceites (7), então o interruptor do Perfil também
+    funciona e é a única porta que não depende do momento certo.
+  - RESSALVA DE JANELA, na régua do critério 11: os eventos subiram em 19/09 e
+    só alcançaram as lojas com a 2.8, aprovada em 24/09. Os números vêm quase
+    todos da web e de um dia de loja, então são PISO e não retrato da base.
+- **APOSTA DA SEMANA, implementada**: [convite-do-carro-nao-queima-com-convidado].
+  O convite depois do cadastro do carro é o melhor momento do pedido, e a marca
+  que o leva do cadastro até a garagem era consumida ao montar a tela, sem
+  olhar se havia conta. Como o convite só é desenhado para quem tem conta, quem
+  cadastrava o carro como CONVIDADO queimava o momento sem ver convite nenhum.
+  Agora a marca só é gasta quando existe quem a veja.
+- **CONFERÊNCIA NOVA, `npm run conferir:convite`, provada mordendo**: sete
+  conferências sobre as cinco regras da marca. Tirei a guarda e ela reprovou
+  nos dois pontos certos; devolvi e voltou a passar. Para ela existir, as
+  marcas saíram de `pedidoDeAviso.ts` para `lib/app/marcasDeConvite.ts`: são
+  estado puro, sem dependência, e no arquivo antigo ficavam presas atrás do
+  plugin de notificação, fora do alcance de conferência de linha de comando. O
+  arquivo antigo reexporta, então nenhum chamador mudou.
+- **RETENÇÃO SEM ENFEITE**: coorte de 14/09 fechada com 16 cadastrados e ZERO
+  voltando em 1 a 7 dias. A de 21/09 tem 31 e 4, mas ainda enche, então não é
+  resultado. Ativação caiu de 6 em 11 para 3 em 16 enquanto a aquisição dobrava
+  e a mídia subia para R$ 371 na semana. Duas leituras cabem e nenhuma está
+  provada (público pago mais frio, ou produto igual com gente diferente); o que
+  NÃO cabe é dizer que o produto piorou, porque as coortes antigas também
+  voltavam perto de zero.
+- APRENDIZADOS em besci.md: aposta que nasce sem como ser fechada não é aposta,
+  é correção, e o rótulo tem que dizer isso no dia do registro; e veredito não
+  se lê antes de o risco poder acontecer.
+- Bateria `conferir` inteira verde (a nova incluída), tipos limpos, suíte
+  `carro` passando. Sem build local, que é o regime das duas velocidades.
+
 ## 2026-09-24 · Mídia paga (rodada 2): 44 contas a R$ 8,30, e a etiqueta parou de chegar no dia 19
 - Artifact "Mídia da semana":
   https://claude.ai/artifact/H49EM3cYfvAdiTNn6YLBFU

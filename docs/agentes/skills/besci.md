@@ -108,3 +108,20 @@ experimentos alimentam a seção final.
   ordem certa: hipótese pelo código, prova pelo navegador, e só então o
   relatório. O roteiro vira conferência no mesmo dia, para o achado não
   precisar ser redescoberto.
+- **2026-09-25, dos dois primeiros vereditos fechados: aposta que nasce sem
+  como ser fechada não é aposta, é correção, e o rótulo tem que dizer isso no
+  dia em que ela é registrada.** O `cta-teste-por-plano` foi registrado com
+  "leitura contra as semanas seguintes, sem comparação retroativa", o que já
+  era admitir que não haveria nível 3: sem variante e sem antes, nenhum número
+  futuro poderia dizer FUNCIONOU. Um mês depois, a tela onde ele vivia tinha
+  sido mexida por dois testes A/B, e o degrau de chegada subcontava por
+  construção. A regra: ao registrar, escrever a frase "o que poderia fechar
+  este veredito é X"; se não existir X, marcar como CORREÇÃO e não gastar
+  quatro semanas esperando um número que não vem. Correção boa se defende pelo
+  argumento (nomear o que o botão faz, tirar promessa falsa), não pelo dado.
+- **2026-09-25: veredito não se lê antes de o risco poder acontecer.** O
+  `fim-do-lembrete-falso` protegia contra cobrança surpresa, e na data de
+  leitura nenhum assinante tinha sido cobrado ainda (a primeira cobrança real
+  é 01/10). Zero reclamação ali é ausência do evento, não prova de conserto.
+  Ao marcar a data de leitura de qualquer aposta defensiva, marcar a data em
+  que o risco passa a ser possível, e ler DEPOIS dela.
