@@ -14,7 +14,10 @@ const makes: Record<"car" | "moto", string[]> = {
     "Nissan", "Ford", "Peugeot", "Citroën", "Caoa Chery", "BYD", "Mitsubishi", "Kia",
     "Ram", "GWM", "Volvo", "BMW", "Mercedes-Benz", "Audi", "Land Rover", "Suzuki",
   ],
-  moto: ["Honda", "Yamaha", "Suzuki", "Royal Enfield", "BMW", "Kawasaki"],
+  moto: [
+    "Honda", "Yamaha", "Suzuki", "Haojue", "Shineray", "Dafra", "Royal Enfield",
+    "BMW", "Kawasaki", "Harley-Davidson", "Triumph", "KTM", "Ducati", "Kasinski",
+  ],
 };
 // Car models by make — os mais vendidos do Brasil, novos E de frota.
 //
@@ -55,13 +58,90 @@ const modelsByMake: Record<string, string[]> = {
   Suzuki: ["Jimny", "Jimny Sierra", "S-Cross", "Vitara"],
 };
 // Motorcycle models by make (kept separate so the car search never lists motos).
+//
+// POR QUE ESTA LISTA CRESCEU DE 37 PARA O QUE ESTÁ AQUI (27/09/2026). Chegou
+// um "Quero cadastrar minha moto" pelo suporte. O seletor Carro/Moto existe e
+// funciona desde sempre, mas o catálogo tinha SEIS marcas e 37 modelos contra
+// 24 marcas e 235 modelos de carro: era vitrine de concessionária, o mesmo
+// defeito que a nota do catálogo de carro acima descreve e manda não repetir.
+// O banco concordava: 68 veículos cadastrados, NENHUM do tipo moto.
+//
+// O erro mais caro era de NOME, não de cobertura. A moto mais comum do Brasil
+// é a família CG, e ela estava aqui só como "CG 160". Ninguém chama a própria
+// moto assim: no tanque está escrito TITAN, FAN, START ou CARGO. Quem digitava
+// "Titan" recebia "Nenhum carro encontrado" e ia embora. Por isso as variantes
+// entram pelo nome do tanque, e não pela cilindrada: a busca é por substring,
+// então "CG 160" continua achando as quatro.
+//
+// Mesma regra do catálogo de carro: modelo fora de linha continua entrando
+// enquanto estiver na rua. A CG 125 saiu de linha há mais de uma década e são
+// milhões delas rodando. `npm run conferir:frota` cobra as duas listas.
+//
+// Acentos ficam de fora de propósito ("Tenere", não "Ténéré"): o campo é uma
+// busca por substring e ninguém digita acento no teclado do celular.
 const motoModelsByMake: Record<string, string[]> = {
-  Honda: ["CG 160", "Biz", "Pop 110", "Bros 160", "XRE 300", "CB 300", "CB 500", "PCX", "Elite 125", "ADV"],
-  Yamaha: ["Fazer 250", "Factor 150", "YBR 150", "Crosser 150", "MT-03", "MT-07", "NMAX", "Lander 250", "XTZ 250"],
-  Suzuki: ["Intruder 150", "GSX-S750", "Burgman", "DR 160", "GSX-R1000"],
-  "Royal Enfield": ["Meteor 350", "Hunter 350", "Classic 350", "Bullet 350", "Himalayan"],
-  BMW: ["G 310", "F 850 GS", "R 1250 GS", "S 1000 RR"],
-  Kawasaki: ["Ninja 400", "Z400", "Versys 650", "Ninja 650"],
+  Honda: [
+    "CG 160 Titan", "CG 160 Fan", "CG 160 Start", "CG 160 Cargo",
+    "CG 150 Titan", "CG 150 Fan", "CG 150 Sport",
+    "CG 125 Titan", "CG 125 Fan", "CG 125 Cargo",
+    "Biz 125", "Biz 110i", "Biz 100",
+    "Pop 110i", "Pop 100",
+    "Bros 160", "Bros 150", "Bros 125",
+    "XRE 300", "XRE 190",
+    "CB 300F Twister", "CB 300R", "CB 250F Twister",
+    "CB 500F", "CB 500X", "CB 650R", "CBR 500R", "CBR 650R", "Hornet 600",
+    "Falcon NX4", "Tornado XR 250",
+    "PCX", "ADV", "Elite 125", "SH 300i",
+    "Shadow 750", "Africa Twin",
+  ],
+  Yamaha: [
+    "Factor 150", "Factor 125", "YBR 125", "YBR 150",
+    "Fazer 250", "Fazer 150", "Fazer 600",
+    "Crosser 150", "Lander 250", "Tenere 250", "Tenere 700",
+    "XTZ 125", "XTZ 250",
+    "NMAX 160", "Neo 125", "Fluo 125",
+    "MT-03", "MT-07", "MT-09", "R3", "R15", "XJ6",
+    "Virago 250", "Midnight Star 950",
+  ],
+  Suzuki: [
+    "Yes 125", "Intruder 125", "Intruder 150",
+    "Burgman 125", "Burgman 400",
+    "DR 160", "V-Strom 650", "V-Strom 1000",
+    "GSX-S750", "GSX-R750", "GSX-R1000", "Bandit 650", "Boulevard M800",
+  ],
+  Haojue: ["DK 150", "DK 160", "Master Ride 150", "Chopper Road 150", "NK 150", "Lindy 125"],
+  Shineray: ["Jet 50", "Phoenix 50", "Worker 125", "XY 50Q", "SHI 175"],
+  Dafra: ["Citycom 300", "Horizon 150", "Next 250", "Speed 150", "Riva 150", "Apache 150"],
+  "Royal Enfield": [
+    "Meteor 350", "Hunter 350", "Classic 350", "Bullet 350", "Himalayan",
+    "Interceptor 650", "Continental GT 650",
+  ],
+  BMW: [
+    "G 310 R", "G 310 GS", "F 750 GS", "F 850 GS", "F 900 R",
+    "R 1250 GS", "R 1300 GS", "S 1000 RR", "S 1000 XR",
+  ],
+  Kawasaki: [
+    "Ninja 300", "Ninja 400", "Ninja 650", "Ninja ZX-10R",
+    "Z400", "Z650", "Z900", "Versys 650", "Versys 1000", "Vulcan S",
+  ],
+  "Harley-Davidson": [
+    "Iron 883", "Forty-Eight", "Sportster S", "Street 750",
+    "Fat Boy", "Heritage Classic", "Road King", "Pan America",
+  ],
+  Triumph: [
+    "Street Triple", "Speed Triple", "Trident 660", "Bonneville T100",
+    "Bonneville T120", "Tiger 660", "Tiger 900", "Scrambler 900",
+    "Speed 400", "Scrambler 400 X",
+  ],
+  KTM: [
+    "Duke 200", "Duke 390", "Duke 790", "Duke 890",
+    "Adventure 390", "Adventure 790", "Adventure 890", "RC 390",
+  ],
+  Ducati: [
+    "Monster 797", "Monster 937", "Scrambler Icon", "Panigale V2",
+    "Panigale V4", "Multistrada V4", "Diavel", "Hypermotard 950",
+  ],
+  Kasinski: ["Mirage 250", "Comet 250", "Win 110", "Prima 150", "Seta 125"],
 };
 const years = Array.from({ length: 27 }, (_, i) => 2026 - i);
 

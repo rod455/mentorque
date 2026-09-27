@@ -11,7 +11,7 @@ começar lendo em vez de garimpando.
 | uma aula, trilha ou categoria | `lib/app/conteudo/aulas.ts` |
 | um sintoma ("barulho ao frear") | `lib/app/conteudo/sintomas.ts` |
 | o kit do motorista | `lib/app/conteudo/equipamentos.ts` |
-| marcas e modelos de carro | `lib/app/conteudo/veiculos.ts` (e confira com `npm run conferir:frota`) |
+| marcas e modelos de carro E DE MOTO | `lib/app/conteudo/veiculos.ts` (e confira com `npm run conferir:frota`); a tela é `components/app/screens/Cars.tsx` e a suíte, `conferir:navegador moto` |
 | quais manuais a Biela tem, e quais faltam | `docs/manuais-a-subir.md` |
 | uma tela inteira | `components/app/screens/<NomeDaView>.tsx` |
 | criar uma tela nova | veja o passo a passo abaixo |
@@ -113,7 +113,7 @@ for JSX). Foi o caso de `lib/app/cursos.ts` e
 
 ```
 npm run conferir             tipos + estilo + regras       (~15s)
-npm run conferir:navegador   as 13 suítes num Chromium     (~9min)
+npm run conferir:navegador   as 19 suítes num Chromium     (~11min)
 npm run conferir:tudo        os dois mais o build
 ```
 
@@ -126,12 +126,29 @@ as telas principais e confere que cada uma desenha, com o console limpo. Erro
 de renderização em React não derruba o app: a tela some e o resto continua.
 Sem essa suíte, um arquivo movido para o lugar errado passa em tudo o mais.
 
-**A `conferir:frota` cobra o catálogo de carros contra a rua.** Em 04/09 a
+**A `conferir:frota` cobra o catálogo contra a rua.** Em 04/09 a
 lista de "Adicionar carro" tinha sido montada olhando só para o que se vende
 zero km, e dois dos dez carros mais comuns do Brasil (Fiesta e Celta) não
 podiam ser cadastrados. Quem tem um deles digita o nome, não acha, e desiste:
 sem erro, sem relato, sem métrica. A conferência lista a frota com fonte e data
 e reprova se um deles sumir do `veiculos.ts`.
+
+**E em 27/09 a mesma história se repetiu inteira com MOTO, ao lado da
+conferência que existia para evitá-la.** A `conferir:frota` só olhava
+`modelsByMake` e `makes.car`, então o catálogo de moto seguiu com 6 marcas e 37
+modelos contra 24 e 235 de carro, sem nenhum nome de tanque: a moto mais comum
+do país estava lá como "CG 160", e quem digitava "Titan" ou "Fan" não achava
+nada. O banco concordava, 68 veículos cadastrados e NENHUM do tipo moto, e o
+relato veio pelo suporte ("Quero cadastrar minha moto"). **A lição que fica: uma
+conferência cobre o caso que alguém escreveu nela, não o assunto dela.** Quando
+um recurso tem dois lados (carro e moto, iPhone e Android, logado e convidado),
+pergunte de qual deles a conferência está falando.
+
+**A suíte `moto` dirige o cadastro que nenhuma outra dirigia.** A suíte `carro`
+semeia uma moto pronta no localStorage, o que prova que o app DESENHA uma moto,
+não que alguém consegue cadastrar uma. A `moto` escolhe o tipo, busca pelo nome
+do tanque, salva e confere o `type` GRAVADO. É a única que pega um `save()` que
+grava tudo como carro, coisa que o `tsc` aceita e todo script de texto ignora.
 
 **A suíte `erros` confere quem está olhando quando o app quebra.** Ela planta
 um erro de verdade na tela e exige que ele vire relato em `app_erros`, uma vez

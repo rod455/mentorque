@@ -34,6 +34,7 @@ próprio Playwright resolve. Para apontar outro: `CHROMIUM=/caminho/do/chromium`
 | `selo.mjs` | o selo do foguinho nos três estados |
 | `avisos.mjs` | o sino, o X que dispensa, e os botões alcançáveis em tela estreita |
 | `site.mjs` | vazamento lateral das páginas do site em 320/360/390/430px |
+| `moto.mjs` | cadastrar uma moto: escolher o tipo, achar pelo nome do tanque, e o `type` que fica GRAVADO |
 
 ## Escrever uma nova
 

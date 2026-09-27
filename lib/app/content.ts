@@ -460,6 +460,18 @@ export function getContent(locale: Locale) {
       manualEntry: T("Não encontrou? Digitar manualmente", "Can't find it? Enter manually"),
       backToSearch: T("← Voltar para a busca", "← Back to search"),
       noCarMatch: T("Nenhum carro encontrado.", "No car found."),
+      // A TELA COM O BOTÃO "MOTO" ESCOLHIDO (27/09/2026).
+      //
+      // Existe porque ela dizia "carro" do título até a mensagem de busca
+      // vazia, mesmo com Moto marcado. Quem escolhia Moto, digitava "Titan" e
+      // lia "Nenhum CARRO encontrado" tinha toda a razão de entender que moto
+      // não cabia aqui, e foi o que chegou pelo suporte. O seletor funcionava;
+      // o texto desmentia o seletor.
+      titleMoto: T("Adicionar moto", "Add motorcycle"),
+      editTitleMoto: T("Editar moto", "Edit motorcycle"),
+      motoField: T("Moto (marca e modelo)", "Motorcycle (make and model)"),
+      motoFieldPh: T("Digite a marca ou o modelo (ex.: Titan, Biz...)", "Type the make or model (e.g. Titan, Biz...)"),
+      noMotoMatch: T("Nenhuma moto encontrada.", "No motorcycle found."),
       model: T("Modelo", "Model"),
       modelPh: T("Digite o modelo", "Type the model"),
       year: T("Ano", "Year"),
@@ -483,10 +495,12 @@ export function getContent(locale: Locale) {
       needModel: T("Escolha marca, modelo e ano.", "Pick make, model and year."),
       // Variante B do cadastro em duas etapas (12/09/2026).
       curtoDepois: T("Km, motor e foto você completa depois, na tela do carro.", "Mileage, engine and photo can come later, on the car's screen."),
+      curtoDepoisMoto: T("Km, motor e foto você completa depois, na tela da moto.", "Mileage, engine and photo can come later, on the motorcycle's screen."),
       // Aviso de carro repetido. Não é erro: quem tem dois iguais de verdade
       // confirma e segue. O texto diz o que já existe, para a pessoa reconhecer
       // o carro dela em vez de decidir no escuro.
       duplicadoTitulo: T("Esse carro já está na garagem", "This car is already in your garage"),
+      duplicadoTituloMoto: T("Essa moto já está na garagem", "This motorcycle is already in your garage"),
       duplicadoCorpo: T(
         "Você já tem {carro} cadastrado. Se for outro veículo igual, pode cadastrar assim mesmo. Se for o mesmo, cancele e use o que já existe.",
         "You already have {carro} saved. If this is a second, identical vehicle, go ahead. If it is the same one, cancel and use the existing car.",

@@ -430,6 +430,22 @@ export function AddCarScreen({ editId }: { editId?: string }) {
     }
   };
 
+  // A tela inteira segue o botão escolhido (27/09/2026). Antes ela dizia
+  // "carro" em toda parte mesmo com Moto marcado, e a mensagem de busca vazia
+  // ("Nenhum carro encontrado") contradizia o seletor que a pessoa tinha
+  // acabado de usar. Um objeto só, e não um `type === "moto" ?` espalhado por
+  // seis lugares: quem esquecesse um deixaria a tela meio carro, meio moto.
+  const ehMoto = type === "moto";
+  const t = {
+    title: ehMoto ? a.titleMoto : a.title,
+    editTitle: ehMoto ? a.editTitleMoto : a.editTitle,
+    field: ehMoto ? a.motoField : a.carField,
+    fieldPh: ehMoto ? a.motoFieldPh : a.carFieldPh,
+    noMatch: ehMoto ? a.noMotoMatch : a.noCarMatch,
+    curtoDepois: ehMoto ? a.curtoDepoisMoto : a.curtoDepois,
+    duplicadoTitulo: ehMoto ? a.duplicadoTituloMoto : a.duplicadoTitulo,
+  };
+
   const modelsMap = type === "moto" ? c.motoModelsByMake : c.modelsByMake;
   const models = make ? modelsMap[make] ?? [] : [];
   const makeMatches = c.makes[type].filter(
@@ -459,7 +475,7 @@ export function AddCarScreen({ editId }: { editId?: string }) {
     <div>
       {/* Sem anúncio aqui: cadastrar o carro é a primeira ação útil do app e
           não pode ficar atrás de um vídeo de 8 segundos. */}
-      <AppHeader title={editing ? a.editTitle : a.title} />
+      <AppHeader title={editing ? t.editTitle : t.title} />
 
       <div className="space-y-5 pb-4">
         <div className="grid grid-cols-2 gap-2">
@@ -477,14 +493,14 @@ export function AddCarScreen({ editId }: { editId?: string }) {
 
         {!manualMode ? (
           /* Campo único: busca combinada marca + modelo */
-          <Field label={a.carField}>
+          <Field label={t.field}>
             <div className="relative">
               <input
                 value={query}
                 onChange={(e) => { setQuery(e.target.value); setMake(null); setModel(null); setComboOpen(true); }}
                 onFocus={() => setComboOpen(true)}
                 onBlur={() => setTimeout(() => setComboOpen(false), 150)}
-                placeholder={a.carFieldPh}
+                placeholder={t.fieldPh}
                 autoComplete="off"
                 className={inputCls}
               />
@@ -504,7 +520,7 @@ export function AddCarScreen({ editId }: { editId?: string }) {
                       </button>
                     ))
                   ) : (
-                    <div className="px-3 py-2 text-sm text-cream/50">{a.noCarMatch}</div>
+                    <div className="px-3 py-2 text-sm text-cream/50">{t.noMatch}</div>
                   )}
                 </div>
               )}
@@ -627,7 +643,7 @@ export function AddCarScreen({ editId }: { editId?: string }) {
         </Field>
         </>)}
 
-        {curto && valid && <p className="text-xs text-cream/45">{a.curtoDepois}</p>}
+        {curto && valid && <p className="text-xs text-cream/45">{t.curtoDepois}</p>}
         {!valid && <p className="text-xs text-cream/45">{a.needModel}</p>}
 
         <div className="flex gap-2">
@@ -644,7 +660,7 @@ export function AddCarScreen({ editId }: { editId?: string }) {
           cancelar, e cancelar volta ao formulário com tudo preenchido, para
           quem se enganou não perder o que digitou. */}
       <Sheet open={!!jaExiste} onClose={() => setJaExiste(null)}>
-        <h2 className="font-serif text-xl font-bold text-cream">{a.duplicadoTitulo}</h2>
+        <h2 className="font-serif text-xl font-bold text-cream">{t.duplicadoTitulo}</h2>
         <p className="mt-2 text-sm leading-relaxed text-cream/70">
           {a.duplicadoCorpo.replace("{carro}", jaExiste ? vehicleLabel(jaExiste) : "")}
         </p>
