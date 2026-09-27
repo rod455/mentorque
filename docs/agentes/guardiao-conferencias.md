@@ -33,19 +33,32 @@ Antes de tudo: `git pull origin main`, e confira que a árvore está **limpa**
 (`git status --short` vazio). Plantar defeito com trabalho não commitado por
 perto é como o repositório já perdeu uma peça inteira, em 13/09.
 
-1. **Pegue as próximas 5 ou 6 conferências da fila** (a fila está no fim deste
+E antes de plantar o primeiro defeito: **rode a conferência limpa e confirme
+que ela dá 0.** Sem isso não dá para distinguir mordida de ambiente quebrado.
+Em 26/09/2026 a `conferir:tipos` deu saída 2 numa árvore limpa, com centenas de
+"Cannot find module 'next/server'" e "Cannot find name 'process'": o contêiner
+remoto vem sem `node_modules`, e faltava `npm ci`. Uma linha de erro dessas não
+é o repositório doente, é dependência faltando, e uma rodada inteira poderia
+ter sido escrita em cima disso.
+
+1. **Confira se a fila está completa**: compare a tabela do fim deste manual com
+   os `conferir:` do `package.json`. Conferência nova não se acrescenta aqui
+   sozinha, e o que não está na fila nunca é provado.
+2. **Pegue as próximas 5 ou 6 conferências da fila** (a fila está no fim deste
    manual, com a data da última prova de cada uma). Rodízio: a que foi provada
    há mais tempo vai primeiro.
-2. **Para cada uma, responda primeiro no papel**: que defeito ela existe para
+3. **Para cada uma, responda primeiro no papel**: que defeito ela existe para
    pegar? Se você não consegue escrever essa frase, a conferência não tem
    propósito claro e isso já é o achado.
-3. **Plante esse defeito** e rode a conferência sozinha, sem passar por `tail`
+4. **Plante esse defeito** e rode a conferência sozinha, sem passar por `tail`
    ou `grep`, para ler o **código de saída de verdade**.
-4. **Desfaça pela cópia do arquivo.**
-5. Anote: mordeu (saída 1) ou não mordeu (saída 0).
-6. Para cada uma que não mordeu, **conserte a mira**, meça o estrago antes de
+5. **Desfaça pela cópia do arquivo.**
+6. Anote: mordeu (saída diferente de zero) ou não mordeu (saída 0). Não é
+   sempre 1: o `tsc` reprova com 2, e o que a corrente do `conferir` enxerga é
+   "zero ou não zero".
+7. Para cada uma que não mordeu, **conserte a mira**, meça o estrago antes de
    alargar, e prove de novo.
-7. Registre no DIARIO, atualize a fila aqui, commit e push só de `docs/` e dos
+8. Registre no DIARIO, atualize a fila aqui, commit e push só de `docs/` e dos
    scripts de conferência que você tiver consertado.
 
 ## Plantar defeito sem quebrar o repositório
@@ -129,21 +142,16 @@ segunda.
 
 ## Fila das conferências, com a data da última prova
 
-Rodízio por data mais antiga. "nunca" quer dizer que ela nunca foi testada
-contra o defeito dela, que é o estado de quase todas em 19/09/2026.
+Rodízio por data mais antiga, e desde 26/09/2026 a tabela está NESSA ordem: as
+"nunca" em cima, porque são as mais atrasadas de todas, e as provadas embaixo,
+da mais antiga para a mais nova. A próxima rodada pega as seis primeiras linhas
+e pronto. Antes as provadas ficavam em cima e a fila dizia o contrário do que a
+regra dela mandava.
+
+"nunca" quer dizer que ela nunca foi testada contra o defeito dela.
 
 | conferência | última prova | mordeu? |
 |---|---|---|
-| `conferir:travessao` | 19/09/2026 | sim, depois de consertada |
-| `conferir:relatorio` | 19/09/2026 | sim |
-| `conferir:email` | 19/09/2026 | sim, 3 defeitos plantados |
-| `conferir:baixar` | 19/09/2026 | sim |
-| `conferir:tipos` | nunca | |
-| `conferir:estilo` | nunca | |
-| `conferir:regras` | nunca | |
-| `conferir:versoes` | nunca | |
-| `conferir:identidade` | nunca | |
-| `conferir:catalogo` | nunca | |
 | `conferir:funil` | nunca | |
 | `conferir:revisoes` | nunca | |
 | `conferir:navegacao` | nunca | |
@@ -175,12 +183,76 @@ contra o defeito dela, que é o estado de quase todas em 19/09/2026.
 | `conferir:combustivel` | nunca | |
 | `conferir:datas` | nunca | |
 | `conferir:motorista` | nunca | |
+| `conferir:banco` | nunca | |
+| `conferir:imagem` | nunca | |
+| `conferir:coorte` | nunca | |
+| `conferir:travessao` | 19/09/2026 | sim, depois de consertada |
+| `conferir:relatorio` | 19/09/2026 | sim |
+| `conferir:email` | 19/09/2026 | sim, 3 defeitos plantados |
+| `conferir:baixar` | 19/09/2026 | sim |
+| `conferir:tipos` | 26/09/2026 | sim, saída 2 |
+| `conferir:estilo` | 26/09/2026 | sim, em regra de erro |
+| `conferir:versoes` | 26/09/2026 | sim, 3 defeitos plantados |
+| `conferir:regras` | 26/09/2026 | não na borda do perdão, consertada |
+| `conferir:identidade` | 26/09/2026 | não no defeito de origem, consertada |
+| `conferir:catalogo` | 26/09/2026 | não no campo `related`, consertada |
+
+As três últimas linhas "nunca" (`banco`, `imagem`, `coorte`) entraram em
+26/09/2026: elas já rodavam na corrente do `conferir` havia dias e não estavam
+nesta fila. **Conferência nova nasce fora do rodízio**, porque quem a escreve
+não vem aqui acrescentar a linha. Enquanto isso não for automático, a primeira
+coisa de toda rodada é comparar esta tabela com os `conferir:` do
+`package.json`: em 26/09 eram 46 scripts `conferir:`, menos `conferir:tudo` e
+`conferir:navegador`, que dá as 44 linhas desta tabela.
 
 A `conferir:navegador` (a suíte de navegador) fica de fora do rodízio normal: ela
 custa build de produção e uns 11 minutos. Prove uma suíte dela por mês, não por
 semana.
 
 ## Aprendizados
+
+**A conferência que confere uma CÓPIA da regra fica verde para sempre
+(26/09/2026).** A `conferir:identidade` nasceu do defeito de 01/09, em que todo
+aparelho sem armazenamento recebia o mesmo texto fixo e virava uma pessoa só no
+relatório. Plantei de volta exatamente esse defeito e ela aprovou, saída 0.
+
+O motivo estava escrito nela, em comentário, com todas as letras: "anonId() usa
+window, que não existe aqui. Em vez de simular um navegador, a conferência
+replica a regra do caminho de exceção". Ela sorteava o id à mão e conferia o
+próprio sorteio. **Cópia de regra não apodrece junto com o código**: o código
+pode voltar ao defeito de origem que a cópia continua certa, e verde.
+
+E a premissa que justificava a cópia era falsa, o que é a parte que vale levar
+para as próximas: `window` não existir no node não era o obstáculo, era o
+GATILHO. `window.localStorage` lança, o `catch` de `anonId()` pega, e o caminho
+de exceção roda ali exatamente como roda no aparelho. Não precisava de
+navegador nenhum. Então: **quando uma conferência explicar por que não chama a
+função de verdade, teste a explicação antes de aceitar.** Metade das vezes o
+ambiente que "não dá" é justamente o que reproduz o caso.
+
+**O terceiro caso do mesmo padrão: a conferência olha um campo e a pessoa vê a
+tela (26/09/2026).** A `conferir:catalogo` validava o link `[[id|texto]]` do
+corpo e ignorava o `related`, que carrega id de aula igual e vira os cards de
+"Continue por aqui". Um id morto ali não quebra nada: `Content.tsx` faz
+`.filter(l => !!l)` e o card simplesmente não aparece. Achei um de pé,
+`vid-padaria` apontando para `battery-care`, que não existe em lugar nenhum.
+
+É o mesmo padrão do travessão em 19/09, pela terceira vez. Vale virar pergunta
+fixa: **que outros campos guardam a mesma coisa que este que eu confiro?** Id
+de aula mora em `related` e no corpo; texto visível mora em `{a, b}` e em
+título concatenado.
+
+**A borda é o que prende o número (26/09/2026).** A `conferir:regras` conferia
+que o perdão do quiz NÃO existe no dia 2 e existe no dia 7. Medindo com o valor
+plantado, ela aceitava 3, 4, 5, 6 e 7: a regra dos sete dias podia virar três
+sem reprovar. Duas afirmações nas duas pontas deixam o meio inteiro solto. Quem
+confere constante numérica precisa de um par colado: **na véspera não, no dia
+sim.**
+
+**Medir o estrago é rápido e muda a decisão.** Antes de alargar a
+`conferir:catalogo` para o `related`, contei: 165 referências em 56 aulas, UMA
+morta, ZERO auto-referências. Um conserto e nenhum falso positivo, e por isso o
+alargamento entrou no mesmo commit. A contagem levou um comando.
 
 **A primeira conferência provada desta casa falhou (19/09/2026).** A
 `conferir:travessao` não via frase partida em dois campos. O padrão que isso

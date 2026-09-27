@@ -3,6 +3,71 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-26 · Guardião das conferências (rodada 1): seis provadas, três estavam cegas
+- Artifact "Conferências da semana":
+  https://claude.ai/artifact/94SXJ5Ti2KJ96mhh5cDvpW
+- **Seis conferências provadas com defeito plantado**, todas com o código de
+  saída lido direto, sem cano. Morderam na primeira: `conferir:tipos` (saída 2,
+  não 1), `conferir:estilo` (saída 1, em regra de erro) e `conferir:versoes`
+  (saída 1 em três defeitos diferentes: um dos três lugares para trás, versão
+  já publicada, banner apontando para a versão velha). **Três não morderam** e
+  foram consertadas e provadas de novo.
+- **A pior, e ela é a lição da rodada: `conferir:identidade` não pegava o
+  defeito que a fez nascer.** Plantei de volta o `efemero = SEM_ARMAZENAMENTO`
+  de 01/09, aquele que colava todo aparelho sem armazenamento numa pessoa só no
+  relatório, e ela aprovou, saída 0. Ela não chamava `anonId()`: sorteava o id à
+  mão e conferia o próprio sorteio. Cópia de regra não apodrece com o código,
+  então fica verde para sempre. E a desculpa escrita nela ("window não existe
+  aqui") era falsa: `window` faltando é o GATILHO do caminho de exceção, não o
+  obstáculo. Agora chama a função de verdade e morde cinco defeitos, incluindo o
+  de origem.
+- **`conferir:catalogo` conferia um campo e a tela mostra dois.** O link
+  `[[id|texto]]` do corpo era validado; o `related`, que vira os cards de
+  "Continue por aqui", não. Terceira vez que aparece o mesmo padrão nesta casa,
+  depois do travessão partido em `{a, b}`.
+- **ACHADO DE PÉ, e era pequeno: `vid-padaria` apontava para `battery-care`,
+  que não existe em lugar nenhum do repositório.** Não quebrava nada, porque
+  `Content.tsx` filtra o id que não resolve; a pessoa via dois cards onde
+  deveria ver três. Apontei para `diy-battery` ("Trocar a bateria"), que é a
+  única aula de bateria e o destino óbvio de uma aula sobre percurso curto.
+- **`conferir:regras` deixava a regra dos sete dias virar três.** Ela afirmava
+  que o perdão do quiz não existe no dia 2 e existe no dia 7, e nada no meio.
+  Medindo com o valor plantado, 3, 4, 5, 6 e 7 passavam todos. Entrou o par que
+  prende o número: na véspera não, no dia sim.
+- **A fila estava incompleta.** `conferir:banco`, `conferir:imagem` e
+  `conferir:coorte` já rodavam na corrente do `conferir` e não estavam no
+  rodízio. Conferência nova nasce fora da fila, porque quem escreve não vem
+  acrescentar a linha. A tabela agora bate exatamente com o `package.json` (44
+  linhas) e passou a ser ordenada com as "nunca" em cima, que é o que a regra do
+  rodízio sempre mandou e a tabela contrariava.
+- **A armadilha do ambiente, que quase virou uma rodada inteira errada**: o
+  contêiner remoto veio sem `node_modules`, e a `conferir:tipos` deu saída 2 numa
+  árvore limpa, com centenas de "Cannot find module 'next/server'". Isso não é
+  repositório doente, é `npm ci` faltando. Virou primeiro passo do manual: rodar
+  a conferência limpa e exigir 0 antes de plantar qualquer coisa.
+- **Contra a minha régua, o critério que NÃO cumpri é o da suíte de navegador.**
+  O manual pede uma suíte de navegador provada por mês, e setembro vai fechar
+  sem nenhuma: ela custa build de produção e uns 11 minutos, e o tempo desta
+  rodada foi para os três consertos. Fica como primeira tarefa de 03/10, antes
+  das seis da fila. Os outros oito critérios foram cumpridos: árvore limpa antes
+  de plantar, o defeito escrito antes de cada plantio, saída lida sem cano,
+  desfeito por cópia com a árvore voltando limpa, conserto provado mordendo,
+  medição antes de alargar (165 referências de `related`, 1 morta, 0 falso
+  positivo), fila com a data de hoje e `npm run conferir` inteiro em 0 antes do
+  push.
+- **O que esta rodada NÃO alcança, e isso se diz**: nada aqui prova plugin
+  nativo nem comportamento de aparelho. As conferências rodam em node e em
+  Chromium, e Chromium não tem plugin do Capacitor. Sobre qualquer coisa que só
+  aparece no celular, a resposta continua sendo o roteiro manual e a migalha do
+  último passo, não o verde daqui.
+- **RECOMENDAÇÕES (3)**: (1) quem escrever conferência nova acrescente a linha
+  na fila do Guardião no mesmo commit, senão ela nunca é provada; (2) o padrão
+  "confere um campo, a pessoa vê o todo" já apareceu três vezes, vale o QA
+  procurá-lo de propósito nas conferências que ainda não passaram por aqui; (3)
+  conferência que replica a regra em vez de chamar a função é candidata número
+  um a estar cega, e o comentário que explica por que não chama costuma ser o
+  lugar onde a premissa falsa está escrita.
+
 ## 2026-09-25 · CRO (retenção): o portão de permissão ganhou número, e dois vereditos fecharam
 - Rodada semanal do CRO/BeSci, foco RETENÇÃO (a de 18/09 foi de conversão).
   Artifact "Conversão da semana":
@@ -58,6 +123,7 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   se lê antes de o risco poder acontecer.
 - Bateria `conferir` inteira verde (a nova incluída), tipos limpos, suíte
   `carro` passando. Sem build local, que é o regime das duas velocidades.
+
 
 ## 2026-09-24 · Mídia paga (rodada 2): 44 contas a R$ 8,30, e a etiqueta parou de chegar no dia 19
 - Artifact "Mídia da semana":

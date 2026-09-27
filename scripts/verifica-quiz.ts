@@ -80,6 +80,17 @@ ok("perdao gasto continua marcado no dia antigo", e.perdaoEm === "2026-09-05");
 // Passados 7 dias do perdao anterior, ganha outro.
 ok("perdao volta depois de 7 dias", temPerdao(e, "2026-09-12"));
 
+// A VESPERA, e e ela que prende o numero (26/09/2026).
+//
+// As linhas acima olham o dia 2 (nao tem perdao) e o dia 7 (tem), e deixam o
+// meio solto. Medido plantando cada valor em DIAS_POR_PERDAO e rodando esta
+// conferencia sozinha: 3, 4, 5 e 6 passavam verde, ou seja, a regra dos sete
+// dias podia virar tres sem ninguem saber. So <=2 e >=8 reprovavam.
+//
+// Um perdao que volta cedo demais nao da erro: da sequencia inflada, calada,
+// que e o mesmo jeito de errar que este arquivo inteiro existe para pegar.
+ok("na vespera dos 7 dias o perdao ainda NAO voltou", !temPerdao(e, "2026-09-11"));
+
 // ---- dois dias pulados nao tem perdao --------------------------------------
 let f: EstadoQuiz = aoResponder(QUIZ_ZERADO, "2026-09-01", resp(true));
 f = aoResponder(f, "2026-09-02", resp(true));

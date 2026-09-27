@@ -16,7 +16,7 @@
 // lado só, o banco volta a contar aparelho sem identidade como pessoa.
 //
 // Rode com: npm run conferir:identidade
-import { SEM_ARMAZENAMENTO, ehIdentidade } from "../lib/app/anon.ts";
+import { SEM_ARMAZENAMENTO, _esqueceEfemero, anonId, ehIdentidade } from "../lib/app/anon.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -60,19 +60,43 @@ function conferir(nome: string, condicao: boolean, detalhe = "") {
 
 // ── o id da sessão: estável por dentro, diferente por fora ──────────────────
 //
-// anonId() usa window, que não existe aqui. Em vez de simular um navegador,
-// a conferência replica a regra do caminho de exceção, que é o que importa:
-// um sorteio por sessão, com o prefixo na frente.
+// AQUI SE CHAMA A FUNÇÃO DE VERDADE, e a história de por que vale a pena
+// (26/09/2026, Guardião das conferências).
+//
+// Até hoje este bloco dizia: "anonId() usa window, que não existe aqui. Em vez
+// de simular um navegador, a conferência replica a regra do caminho de
+// exceção". Ele sorteava `${SEM_ARMAZENAMENTO}-${crypto.randomUUID()}` à mão e
+// conferia o resultado do próprio sorteio.
+//
+// O preço disso foi medido plantando o defeito ORIGINAL de 01/09, o que fez
+// esta conferência nascer: `efemero = SEM_ARMAZENAMENTO`, o texto fixo de novo,
+// todo aparelho sem armazenamento colado num id só. A conferência passou
+// VERDE, saída 0. Ela conferia uma CÓPIA da regra, e cópia de regra não
+// apodrece junto com o código: fica verde para sempre, olhando para si mesma.
+//
+// E a premissa nem era verdadeira. `window` não existir aqui não é o obstáculo,
+// é o gatilho: `window.localStorage` lança ReferenceError no node, o catch de
+// `anonId()` pega, e o caminho de exceção roda exatamente como roda no
+// aparelho sem armazenamento. Não precisa de navegador nenhum. O
+// `_esqueceEfemero()`, que já existia "só para as conferências", é o que separa
+// uma sessão da outra.
 {
-  const sessao = () => `${SEM_ARMAZENAMENTO}-${crypto.randomUUID()}`;
-  const a = sessao();
-  const b = sessao();
+  _esqueceEfemero();
+  const a = anonId();
+  _esqueceEfemero();
+  const b = anonId();
   conferir("duas sessões não recebem o mesmo id", a !== b, `${a} / ${b}`);
   conferir("as duas seguem fora da contagem de gente", !ehIdentidade(a) && !ehIdentidade(b));
   conferir(
     "o prefixo sobrevive ao sufixo",
     a.startsWith(SEM_ARMAZENAMENTO) && b.startsWith(SEM_ARMAZENAMENTO),
   );
+  conferir(
+    "o id tem sufixo de sessão, e não é o texto fixo cru",
+    a !== SEM_ARMAZENAMENTO && a.length > SEM_ARMAZENAMENTO.length + 1,
+    `saiu "${a}"; se voltar a ser o texto cru, dois aparelhos viram uma pessoa só`,
+  );
+  conferir("dentro da mesma sessão o id é estável", anonId() === b, `${anonId()} / ${b}`);
 }
 
 // ── o que NÃO pode acontecer: um id de verdade ser descartado ───────────────

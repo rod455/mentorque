@@ -68,6 +68,40 @@ const { lessons } = aulas((pt: string) => pt);
   conferir("nenhuma aula se linka para ela mesma", proprios.length === 0, proprios.join(", "));
 }
 
+// ── 3b. o MESMO beco, no outro campo: `related` ─────────────────────────────
+//
+// O bloco de cima confere o link [[id|texto]] do corpo. O `related` carrega
+// id de aula igual, aparece na tela como "Continue por aqui", e não era
+// conferido por ninguém (achado do Guardião em 26/09/2026, plantando um id
+// morto ali e vendo esta conferência aprovar, saída 0).
+//
+// Some do mesmo jeito silencioso das sete aulas de vídeo que fizeram este
+// arquivo nascer: Content.tsx faz `.map(...).filter(l => !!l)`, então o id que
+// não resolve não quebra tela nenhuma, só deixa de virar card. A pessoa vê
+// dois "Continue por aqui" onde deveria ver três, e nada avisa.
+//
+// A MEDIÇÃO ANTES DE ALARGAR, que é o que autoriza esta regra: 165
+// referências de `related` em 56 aulas, UMA morta (`vid-padaria` apontava
+// para `battery-care`, que não existe em lugar nenhum do repositório) e ZERO
+// auto-referências. Um conserto, nenhum falso positivo.
+{
+  const existe = new Set(lessons.map((l) => l.id));
+  const mortos: string[] = [];
+  const proprios: string[] = [];
+  for (const l of lessons) {
+    for (const id of l.related ?? []) {
+      if (!existe.has(id)) mortos.push(`${l.id} aponta para ${id}, que não existe`);
+      else if (id === l.id) proprios.push(l.id);
+    }
+  }
+  conferir(
+    "todo id de `related` leva a uma aula existente",
+    mortos.length === 0,
+    mortos.join("\n       "),
+  );
+  conferir("nenhuma aula se lista no próprio `related`", proprios.length === 0, proprios.join(", "));
+}
+
 // ── 4. id único ─────────────────────────────────────────────────────────────
 {
   const vistos = new Set<string>();

@@ -1563,7 +1563,7 @@ const lessons: Lesson[] = [
 
   art({ id: "vid-padaria", track: "fundamentals", type: "video", system: "engine", addedAt: "2026-09-10", thumb: "https://www.mentorque.com.br/learn/vid-padaria.png",
     media: { provider: "youtube", src: "mtgLqPM8YEM", vertical: true },
-    title: T("O erro silencioso de quem só vai à padaria", "The silent mistake of only driving to the bakery"), related: ["vid-esquentar-parado", "oil-change", "battery-care"],
+    title: T("O erro silencioso de quem só vai à padaria", "The silent mistake of only driving to the bakery"), related: ["vid-esquentar-parado", "oil-change", "diy-battery"],
     body: [
     T("Carro que só faz percurso curto envelhece mais rápido do que carro que roda muito. Parece contraditório, e é o motivo de tanto carro com pouca quilometragem chegar na oficina com problema de carro velho.", "A car that only does short trips ages faster than one that covers a lot of ground. It sounds contradictory, and it's why so many low-mileage cars arrive at the shop with old-car problems."),
     T("## O motor nunca chega na temperatura de trabalho", "## The engine never reaches working temperature"),
