@@ -146,6 +146,52 @@ console.log("Anomalias: o vigia da operação continua ligado?");
   //
   // Alarme que repete sobre coisa já consertada ensina o dono a ignorar o
   // Vigia, e aí o próximo alarme de verdade passa batido.
+  // ── O DENOMINADOR DOS ALARMES (28/09/2026) ────────────────────────────────
+  //
+  // O Vigia mandou "Erros no app dispararam: 22 em 7 dias (mais comum: 11x em
+  // 6 aparelhos)". Os dois números estavam certos e o alarme estava errado,
+  // porque faltava o de baixo: eram 262 aparelhos Android ativos na janela, e
+  // os 11 relatos eram DOIS aparelhos em loop. Por aparelho não disparou nada.
+  //
+  // É o mesmo defeito da anomalia do quiz (26/09) e da taxa do convite no
+  // relatório do Diretor (28/09): contagem publicada sem o de baixo. A régua
+  // do funil ganhou a regra em lib/funilCorreto.ts; aqui é o alarme.
+  {
+    const sqlAtivos = leia("supabase/aparelhos-ativos.sql");
+    const nomeAtivos = sqlAtivos.match(/create or replace function public\.(\w+)/)?.[1] ?? "";
+    conferir("o SQL declara a função do denominador", !!nomeAtivos);
+    conferir(
+      "o retrato chama a função pelo nome que o SQL declara",
+      !!nomeAtivos && operacao.includes(`"${nomeAtivos}"`),
+      "renomear um lado só transforma a porta em decoração, igual ao caso das anomalias acima",
+    );
+    conferir(
+      "o denominador é DISTINCT na janela, e não soma de dias",
+      /count\(distinct f\.anon_id\)/.test(sqlAtivos),
+      "somar os dias conta a mesma pessoa até sete vezes, e denominador inflado mente tanto quanto nenhum",
+    );
+    conferir(
+      "ele sai por plataforma",
+      /group by coalesce\(f\.plataforma/.test(sqlAtivos),
+      "erro que só existe no Android dividido pelo total das três plataformas some",
+    );
+    conferir(
+      "o retrato publica os aparelhos ATIVOS junto dos erros",
+      /aparelhosAtivos:/.test(operacao),
+      "sem o de baixo no mesmo lugar, quem lê tem a contagem e não tem como saber se é muito",
+    );
+    conferir(
+      "e publica quantos aparelhos tiveram erro",
+      /aparelhosComErro:/.test(operacao),
+      "o total de relatos nao separa dez pessoas de uma em loop",
+    );
+    conferir(
+      "a janela do denominador é a MESMA dos erros (7 dias)",
+      /aparelhos_ativos", \{ p_dias: 7 \}/.test(operacao),
+      "denominador de outra janela é pior que nenhum, porque parece certo",
+    );
+  }
+
   conferir(
     "cada erro do retrato diz QUANDO foi a última vez",
     /ultimo: d\.ultimo\.slice\(0, 10\)/.test(operacao),

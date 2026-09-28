@@ -30,6 +30,9 @@ import {
   janelaDaCadeia,
   janelaValida,
   podeComparar,
+  plataformasDaTaxa,
+  plataformasDe,
+  SO_NA_PLATAFORMA,
   type EventoFunil,
 } from "../lib/funilCorreto.ts";
 import { readFileSync } from "node:fs";
@@ -495,8 +498,118 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
   );
 }
 
+// ── A PLATAFORMA NO DENOMINADOR (28/09/2026) ────────────────────────────────
+//
+// POR QUE ESTA SEÇÃO EXISTE. Em três dias, três instrumentos diferentes
+// erraram do mesmo jeito, e nenhum por descuido de quem escreveu:
+//
+//   26/09  a anomalia do quiz, "28 no Android contra 2 no iPhone", que com
+//          denominador vira 24,1% contra 14,3% e some;
+//   28/09  o Vigia, "22 erros em 7 dias", com 11 sendo DOIS aparelhos em loop;
+//   28/09  o relatório do Diretor, "28 de ~367 veem o convite de aviso", com
+//          337 daqueles 367 na WEB, onde o convite não pode existir.
+//
+// O terceiro é o que esta régua passa a impedir: `podeConvidar()` começa com
+// `notificacoesDisponiveis()`, que é `isNativeApp() && nativePlatform()`. O
+// denominador honesto são 446 aparelhos nativos, não 783.
+{
+  // A lista bate com o mundo: conferida contra o banco em 28/09.
+  conferir("o convite de aviso é marcado como nativo", plataformasDe("convite_aviso").join("/") === "android/ios");
+  conferir("o clique de baixar é marcado como web", plataformasDe("clicou_baixar").join("/") === "web");
+  conferir("a atribuição é marcada como nativa", plataformasDe("atribuicao").join("/") === "android/ios");
+  conferir(
+    "evento sem trava vale em todas",
+    plataformasDe("cadastrou_carro").join("/") === "android/ios/web",
+    "marcar de menos esconde plataforma; marcar de mais recusa taxa legítima",
+  );
+
+  // A TAXA QUE O DIRETOR PUBLICOU JÁ ERA RECUSÁVEL ANTES DESTA REGRA, e isso
+  // é o achado maior: `comecou_onboarding` é ATO e `convite_aviso` é de
+  // SESSÃO, então a régua a recusava desde sempre por fluxo sobre estoque. Ela
+  // foi publicada assim mesmo. Ou seja, o problema não era só a régua não
+  // saber de plataforma: era ninguém passar a taxa pela régua antes de
+  // escrever. Guardado aqui para a régua nova não levar crédito que não é dela.
+  {
+    const r = podeComparar("comecou_onboarding", "convite_aviso");
+    conferir(
+      "onboarding → convite de aviso é recusado",
+      r.ok === false,
+      "é a taxa de 28/09 do relatório do Diretor, 28 de ~367",
+    );
+    conferir(
+      "e a recusa mais antiga (ato contra sessão) vem primeiro",
+      r.ok === false && /ATO|SESSÃO/.test(r.motivo),
+      r.ok === false ? r.motivo : "veio ok",
+    );
+  }
+
+  // O MESMO DEFEITO num par que chega até a regra nova: os dois são de sessão
+  // e por aparelho, e só a plataforma difere.
+  {
+    const r = podeComparar("viu_aula", "convite_aviso");
+    conferir(
+      "denominador mais largo que o numerador é recusado",
+      r.ok === false,
+      "viu_aula acontece nas três plataformas e o convite só nas duas lojas: somar a web infla o de baixo",
+    );
+    conferir(
+      "e o motivo diz onde a taxa VALE",
+      r.ok === false && /RECORTADA em android\/ios/.test(r.motivo),
+      r.ok === false ? r.motivo : "veio ok",
+    );
+  }
+
+  // E A REGRA NÃO PODE VIRAR UM MURO. Este par é o que mais interessa no
+  // convite, e os DOIS são nativos: a taxa vive dentro das duas lojas e é
+  // legítima. A primeira versão desta regra recusava, porque olhava a trava em
+  // vez de olhar a DIFERENÇA entre as travas; esta conferência pegou antes de
+  // subir.
+  conferir(
+    "aceitou → permissão concedida continua valendo (os dois são nativos)",
+    podeComparar("aceitou_convite_aviso", "permissao_aviso_concedida").ok === true,
+    "taxa entre dois eventos presos às MESMAS plataformas é legítima: ela vive ali dentro",
+  );
+  conferir(
+    "e dois eventos sem trava nenhuma continuam comparáveis",
+    podeComparar("viu_aula", "consultou_sintoma").ok === true,
+  );
+
+  // Sem interseção nenhuma não existe taxa, e o motivo tem que dizer isso.
+  {
+    const r = podeComparar("clicou_baixar", "convite_aviso");
+    conferir("web contra nativo não vira taxa nenhuma", r.ok === false);
+    conferir(
+      "e o motivo diz que não existe plataforma em comum",
+      r.ok === false && /não existe plataforma/.test(r.motivo),
+      r.ok === false ? r.motivo : "veio ok",
+    );
+  }
+
+  conferir("a interseção de dois nativos são as duas lojas", plataformasDaTaxa("convite_aviso", "atribuicao").join("/") === "android/ios");
+  conferir("a interseção de web com nativo é vazia", plataformasDaTaxa("clicou_baixar", "convite_aviso").length === 0);
+
+  // A FRONTEIRA QUE IMPEDE O ARQUIVO DE APODRECER: a lista só carrega fato
+  // PERMANENTE de plataforma. "O Android não vende" é configuração (a ausência
+  // da chave do RevenueCat no build) e cai no dia em que a chave entrar, então
+  // mora na ressalva em prosa. Misturar os dois faria a régua mentir no dia da
+  // virada, e ninguém iria lembrar de vir aqui.
+  conferir(
+    "o paywall NÃO é marcado como preso a plataforma",
+    SO_NA_PLATAFORMA.viu_paywall === undefined,
+    "o modo leitor do Android é configuração, não plataforma: vai na ressalva, senão a régua mente no dia em que a chave entrar",
+  );
+  conferir(
+    "e a ressalva do paywall diz o que está acontecendo",
+    /modo leitor/.test(RESSALVAS.viu_paywall ?? ""),
+    "sem ela, quem somar as três plataformas numa taxa de checkout não tem como saber",
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) de funil reprovaram.`);
   process.exit(1);
 }
-console.log("Funil: taxa só sai quando os dois degraus são da mesma natureza e a janela cobre os dois.");
+console.log(
+  "Funil: taxa só sai quando os dois degraus são da mesma natureza, a janela cobre os dois\n" +
+    "e existe plataforma em que os dois possam acontecer.",
+);

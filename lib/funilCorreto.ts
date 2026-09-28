@@ -235,7 +235,79 @@ export const MEDIDO_DESDE: Record<EventoFunil, string> = {
  * Eventos com uma trava a mais, além da natureza. Aqui a contagem é
  * estruturalmente incompleta e nenhuma janela conserta.
  */
-export const RESSALVAS: Partial<Record<EventoFunil, string>> = {};
+export type Plataforma = "android" | "ios" | "web";
+
+/**
+ * Onde um evento CONSEGUE acontecer. Ausente = em todas.
+ *
+ * POR QUE ISTO EXISTE (28/09/2026), e o motivo é que três instrumentos
+ * diferentes erraram do mesmo jeito em três dias seguidos:
+ *
+ *   26/09  a anomalia do quiz gritava "28 no Android contra 2 no iPhone",
+ *          que com denominador vira 24,1% contra 14,3% sobre 116 respostas
+ *          e 14, ou seja, o tamanho das plataformas e não o comportamento;
+ *   28/09  o Vigia alertou "22 erros em 7 dias" com 11 sendo DOIS aparelhos
+ *          em loop, num dia com 50 aparelhos ativos;
+ *   28/09  o relatório do Diretor disse "28 de ~367 veem o convite de
+ *          aviso", e 337 daqueles 367 estavam na WEB, onde o convite NÃO
+ *          PODE existir: `podeConvidar()` começa com `notificacoesDisponiveis()`,
+ *          que é `isNativeApp() && nativePlatform() !== null`.
+ *
+ * Nenhum dos três foi descuido de quem escreveu. Foi a régua que permitiu, e
+ * por isso o conserto é aqui e não em cada leitor. **Dividir um evento preso a
+ * uma plataforma por um denominador que inclui as outras é sempre ficção.**
+ *
+ * Tirando a web daquele denominador: 47 de 446 aparelhos nativos, 10,5%. E o
+ * achado que estava escondido no meio é a diferença entre as duas lojas, 27,6%
+ * no iPhone contra 9,4% no Android.
+ *
+ * A LISTA SÓ CARREGA FATO PERMANENTE DE PLATAFORMA, e essa fronteira é o que
+ * impede o arquivo de apodrecer. Notificação não existe em navegador e não vai
+ * passar a existir para nós; `clicou_baixar` mora em `components/site/`, que a
+ * loja não serve. Já "o Android não vende" é CONFIGURAÇÃO (a ausência da chave
+ * do RevenueCat no build), muda no dia em que a chave entrar, e por isso está
+ * na ressalva de `viu_paywall`, em prosa, e não aqui.
+ *
+ * Conferida contra o banco em 28/09: os eventos de aviso e `atribuicao` têm
+ * ZERO registro em web desde sempre; `clicou_baixar` tem 108 em web e zero nas
+ * duas lojas.
+ */
+export const SO_NA_PLATAFORMA: Partial<Record<EventoFunil, Plataforma[]>> = {
+  // `podeConvidar` para em `notificacoesDisponiveis()` no navegador.
+  convite_aviso: ["android", "ios"],
+  aceitou_convite_aviso: ["android", "ios"],
+  permissao_aviso_concedida: ["android", "ios"],
+  permissao_aviso_negada: ["android", "ios"],
+  // A AppsFlyer é plugin nativo: `iniciarAtribuicao` não faz nada na web.
+  atribuicao: ["android", "ios"],
+  // Moram em components/site e components/sections, que são páginas do site.
+  clicou_baixar: ["web"],
+  clicou_consultoria: ["web"],
+};
+
+/** As plataformas em que este evento pode acontecer (todas, se não houver trava). */
+export function plataformasDe(e: EventoFunil): Plataforma[] {
+  return SO_NA_PLATAFORMA[e] ?? ["android", "ios", "web"];
+}
+
+/**
+ * O denominador honesto para uma taxa entre dois eventos.
+ *
+ * Devolve as plataformas em que os DOIS podem acontecer. Contar o de baixo
+ * fora disso infla o denominador com gente que nunca teve como aparecer em
+ * cima, e o resultado é um número que parece medida e não é.
+ */
+export function plataformasDaTaxa(de: EventoFunil, para: EventoFunil): Plataforma[] {
+  const a = plataformasDe(de);
+  return plataformasDe(para).filter((p) => a.includes(p));
+}
+
+export const RESSALVAS: Partial<Record<EventoFunil, string>> = {
+  // CONFIGURAÇÃO, não plataforma, e por isso em prosa: no dia em que a chave
+  // NEXT_PUBLIC_REVENUECAT_ANDROID_KEY entrar no build, esta frase cai.
+  viu_paywall:
+    "no Android o paywall APARECE e não tem botão de compra (modo leitor, sem a chave do RevenueCat no build), e 85% das exibições vêm de lá. Taxa de paywall para checkout somando as tres plataformas mede um denominador que não converte por construção",
+};
 
 /**
  * Eventos cuja contagem NÃO deve sair do evento, porque existe uma tabela que
@@ -296,6 +368,44 @@ export function podeComparar(de: EventoFunil, para: EventoFunil): Comparacao {
       motivo: `${ato} é um ATO (conta quem fez na janela) e ${sessao} é de SESSÃO (conta todo mundo que passou). Dividir um pelo outro é fluxo sobre estoque`,
     };
   }
+  // A PLATAFORMA (28/09/2026). Dividir um evento preso a uma plataforma por um
+  // denominador que inclui as outras enche o de baixo com gente que nunca teve
+  // como aparecer em cima. Foi assim que "28 de ~367 veem o convite" nasceu,
+  // com 337 daqueles 367 na web, onde o convite não pode existir.
+  //
+  // Sem interseção nenhuma a taxa é impossível; com interseção parcial ela é
+  // possível SÓ ali, e é isso que o motivo manda fazer.
+  {
+    const comuns = plataformasDaTaxa(de, para);
+    if (comuns.length === 0) {
+      return {
+        ok: false,
+        motivo: `${de} acontece em ${plataformasDe(de).join("/")} e ${para} em ${plataformasDe(para).join("/")}: não existe plataforma onde os dois possam acontecer, então não existe taxa`,
+      };
+    }
+    // O QUE DECIDE É A DIFERENÇA ENTRE OS DOIS, e não a trava em si. Esta
+    // distinção saiu de um defeito na primeira versão desta regra, pego pela
+    // conferência antes de subir: ela recusava `aceitou_convite_aviso` contra
+    // `permissao_aviso_concedida`, que são os DOIS nativos. Taxa entre dois
+    // eventos presos às MESMAS plataformas é legítima: ela simplesmente vive
+    // ali dentro, e o denominador não tem excesso nenhum.
+    //
+    // O que não pode é os conjuntos DIFERIREM, e nos dois sentidos: com o
+    // de baixo mais largo, o denominador enche de quem não podia aparecer em
+    // cima (foi o "28 de ~367" do relatório de 28/09); com o de cima mais
+    // largo, o numerador conta gente que o denominador nunca viu, e a taxa
+    // pode até passar de 100%.
+    const pDe = plataformasDe(de);
+    const pPara = plataformasDe(para);
+    if (pDe.length !== pPara.length || !pDe.every((p) => pPara.includes(p))) {
+      const largo = pDe.length > pPara.length ? de : para;
+      return {
+        ok: false,
+        motivo: `${de} acontece em ${pDe.join("/")} e ${para} em ${pPara.join("/")}. Os dois lados não cobrem a mesma população, e a taxa só vale RECORTADA em ${comuns.join("/")}: fora dali ${largo} conta gente que o outro lado não tinha como ter`,
+      };
+    }
+  }
+
   if (UNIDADE[de] !== UNIDADE[para]) {
     const aparelho = UNIDADE[de] === "aparelho" ? de : para;
     const conta = UNIDADE[de] === "conta" ? de : para;

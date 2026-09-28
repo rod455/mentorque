@@ -108,6 +108,15 @@ export async function coletarDadosOperacao() {
   // mora no banco pelo mesmo motivo do funil_canonico: consulta escrita à mão
   // em cada leitor produz um número diferente por leitor.
   const { data: anomalias } = await medir("anomalias", () => admin.rpc("anomalias_da_operacao", { p_dias: 14 }));
+  // O DENOMINADOR DOS ALARMES (28/09/2026), pela mesma porta e pelo mesmo
+  // motivo. O Vigia mandou "Erros no app dispararam: 22 em 7 dias (mais
+  // comum: 11x em 6 aparelhos)". Os dois números estavam certos e o alarme
+  // estava errado: faltava o de baixo. Eram 262 aparelhos Android ativos na
+  // mesma janela, e os 11 relatos eram DOIS aparelhos em loop.
+  //
+  // A janela é 7, igual à de `erros7d`, de propósito: denominador de outra
+  // janela é pior que nenhum, porque parece certo.
+  const { data: ativos } = await medir("aparelhos_ativos", () => admin.rpc("aparelhos_ativos", { p_dias: 7 }));
 
   // A quebra do funil (28 dias, pessoas distintas): quantos por cento passam
   // de cada etapa para a seguinte, e onde está a maior perda. É o mapa de
@@ -331,7 +340,20 @@ export async function coletarDadosOperacao() {
       ).length,
     },
     cadastrosPorDia,
-    erros7d: { total: (erros ?? []).length, top: topErros },
+    erros7d: {
+      total: (erros ?? []).length,
+      top: topErros,
+      // POR APARELHO, E COM O DE BAIXO (28/09/2026). Sem isto o leitor tem
+      // "6 aparelhos" e nenhuma forma de saber se é 6 de 262 ou 6 de 6. A
+      // regra que isto serve está em supabase/aparelhos-ativos.sql, e é a
+      // mesma que virou régua no funil: alarme é sempre uma razão, nunca uma
+      // contagem.
+      aparelhosComErro: new Set((erros ?? []).map((e) => String((e as { anon_id?: string }).anon_id ?? "")).filter(Boolean)).size,
+      aparelhosAtivos: ((ativos ?? []) as { plataforma: string; aparelhos: number }[]).reduce(
+        (acc, l) => ({ ...acc, [l.plataforma]: Number(l.aparelhos) }),
+        {} as Record<string, number>,
+      ),
+    },
     // E-MAIL DA JORNADA, 30 dias: o que saiu e o que aconteceu depois.
     //
     // As taxas são sobre ENVIADOS, e a de clique é sobre enviados também (e não
