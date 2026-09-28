@@ -377,10 +377,21 @@ export function AddCarScreen({ editId }: { editId?: string }) {
     return () => ctl.abort();
   }, [type, make, model, year]);
   const verQ = engine.trim().toLowerCase();
+  // SEM CORTE AQUI, e isso é o conserto de 28/09/2026.
+  //
+  // Havia um `.slice(0, 12)` nesta linha, e ele escondeu o carro de uma pessoa
+  // de verdade: ela cadastrava um Creta Ultimate 2.0 22/23, a rota devolvia
+  // `Creta Ultimate 2.0 16V Flex Aut.` na posição 29 de 29, e a lista da tela
+  // parava no décimo segundo item, "Creta Limited 1.0 TB 12V Flex Aut.". Era
+  // exatamente a última linha da foto que ela mandou.
+  //
+  // Dois tetos para a mesma lista, e o de baixo menor que o de cima, é sempre
+  // assim que acaba: quem mexe num não sabe do outro. Agora quem limita é só a
+  // rota (`MAX_VERSOES`), a caixa já rola sozinha (`max-h-56 overflow-auto`), e
+  // `npm run conferir:versoes-do-carro` reprova se um corte novo aparecer aqui.
   const verMatches = versions
     .filter((v) => !verQ || v.toLowerCase().includes(verQ))
-    .filter((v) => v.toLowerCase() !== verQ)
-    .slice(0, 12);
+    .filter((v) => v.toLowerCase() !== verQ);
 
   const valid = !!(make && model && year);
 

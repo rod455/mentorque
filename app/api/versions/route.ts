@@ -1,5 +1,12 @@
 export const maxDuration = 15;
 import { NextResponse } from "next/server";
+import {
+  LOTE_DE_ANO,
+  MAX_VERSOES,
+  ORCAMENTO_DE_ANO_MS,
+  TETO_PARA_FILTRAR_POR_ANO,
+  versaoServeParaOAno,
+} from "@/lib/app/versoesDoCarro";
 
 // Versões disponíveis de um marca+modelo(+ano), via tabela FIPE pública
 // (parallelum.com.br). Cache agressivo: o catálogo muda raramente.
@@ -49,27 +56,43 @@ export async function GET(req: Request) {
     let matches = (resp.modelos ?? []).filter((m) => norm(m.nome).includes(nmodel));
     if (matches.length === 0) return NextResponse.json({ versions: [] });
 
-    // 3) Filtro por ano (melhor esforço; se falhar, devolve sem filtrar).
-    if (year && matches.length <= 20) {
-      const checked = await Promise.all(
-        matches.map(async (m) => {
-          try {
-            const anos = await fj<{ codigo: string }[]>(
-              `${FIPE}/${type}/marcas/${brand.codigo}/modelos/${m.codigo}/anos`
-            );
-            // Códigos "2022-1"; "32000-..." é zero-km (vale para o ano corrente).
-            return anos.some((a) => a.codigo.startsWith(String(year))) ? m : null;
-          } catch {
-            return m;
-          }
-        })
-      );
-      const filtered = checked.filter((m): m is NonNullable<typeof m> => !!m);
-      if (filtered.length > 0) matches = filtered;
+    // 3) Filtro por ano, em lotes e com prazo. NA DÚVIDA, MANTÉM.
+    //
+    // O teto era 20 e isso desligava o filtro justamente nos carros populares:
+    // o Creta tem 29 versões e o Gol mais de 30, então os dois recebiam a
+    // lista inteira, de todos os anos desde os anos 90. Ver a explicação e a
+    // regra em lib/app/versoesDoCarro.ts.
+    //
+    // O que muda além do número: versão cuja conferência falhou ou não coube
+    // no prazo NÃO é mais descartada em silêncio. Códigos são "2022-1";
+    // "32000-..." é zero-km e vale para o ano corrente.
+    if (year && matches.length <= TETO_PARA_FILTRAR_POR_ANO) {
+      const prazo = Date.now() + ORCAMENTO_DE_ANO_MS;
+      const anosDe = async (m: { codigo: number }): Promise<string[] | null> => {
+        if (Date.now() > prazo) return null;
+        try {
+          const anos = await fj<{ codigo: string }[]>(
+            `${FIPE}/${type}/marcas/${brand.codigo}/modelos/${m.codigo}/anos`
+          );
+          return anos.map((a) => a.codigo);
+        } catch {
+          return null;
+        }
+      };
+
+      const checked: (typeof matches)[number][] = [];
+      for (let i = 0; i < matches.length; i += LOTE_DE_ANO) {
+        const lote = matches.slice(i, i + LOTE_DE_ANO);
+        const anos = await Promise.all(lote.map(anosDe));
+        lote.forEach((m, k) => {
+          if (versaoServeParaOAno(anos[k], year)) checked.push(m);
+        });
+      }
+      if (checked.length > 0) matches = checked;
     }
 
     return NextResponse.json(
-      { versions: matches.map((m) => m.nome).slice(0, 30) },
+      { versions: matches.map((m) => m.nome).slice(0, MAX_VERSOES) },
       { headers: { "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=604800" } }
     );
   } catch {

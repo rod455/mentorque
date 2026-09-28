@@ -12,6 +12,7 @@ começar lendo em vez de garimpando.
 | um sintoma ("barulho ao frear") | `lib/app/conteudo/sintomas.ts` |
 | o kit do motorista | `lib/app/conteudo/equipamentos.ts` |
 | marcas e modelos de carro E DE MOTO | `lib/app/conteudo/veiculos.ts` (e confira com `npm run conferir:frota`); a tela é `components/app/screens/Cars.tsx` e a suíte, `conferir:navegador moto` |
+| a lista de VERSÃO / MOTOR (vem da FIPE, não do nosso catálogo) | `app/api/versions/route.ts`, com as regras e os tetos em `lib/app/versoesDoCarro.ts` (e confira com `npm run conferir:versoes-do-carro`) |
 | quais manuais a Biela tem, e quais faltam | `docs/manuais-a-subir.md` |
 | uma tela inteira | `components/app/screens/<NomeDaView>.tsx` |
 | criar uma tela nova | veja o passo a passo abaixo |
@@ -143,6 +144,28 @@ relato veio pelo suporte ("Quero cadastrar minha moto"). **A lição que fica: u
 conferência cobre o caso que alguém escreveu nela, não o assunto dela.** Quando
 um recurso tem dois lados (carro e moto, iPhone e Android, logado e convidado),
 pergunte de qual deles a conferência está falando.
+
+**E em 28/09, o MESMO desfecho por um terceiro caminho, que não era catálogo.**
+Uma pessoa cadastrando um Creta Ultimate 2.0 22/23 mandou foto da lista de
+versões e escreveu "não tem ele aqui". A gente tinha: a FIPE tem, e o nosso
+`/api/versions` devolvia `Creta Ultimate 2.0 16V Flex Aut.` na posição **29 de
+29**. A tela cortava em 12, e o décimo segundo item era exatamente a última
+linha da foto. Havia três cortes, e nenhum sabia dos outros: a tela em 12, a
+rota em 30 (o Gol voltava com exatos 30, cortado), e o filtro por ano só rodava
+para modelos com até 20 versões, ou seja, **se desligava justamente nos carros
+populares**, que são os que mais precisam dele.
+
+> **A regra que ficou, e ela vale para qualquer lista de escolha do app: na
+> dúvida, MOSTRA.** O custo de exibir uma opção a mais é a pessoa rolar mais um
+> pouco. O custo de esconder a dela é ela ir embora achando que o carro não cabe
+> aqui, sem erro, sem relato e sem aparecer em métrica nenhuma. Hoje versão cuja
+> conferência de ano falhou ou estourou o prazo é MANTIDA, e os tetos moram num
+> arquivo só (`lib/app/versoesDoCarro.ts`), porque dois tetos para a mesma lista
+> com o de baixo menor que o de cima é exatamente como este defeito nasceu.
+
+Três relatos, três lugares diferentes, o mesmo desfecho: **a pessoa procura o
+carro dela, não acha, e some sem deixar rastro.** É o defeito mais caro que
+este app tem, e o mais silencioso.
 
 **A suíte `moto` dirige o cadastro que nenhuma outra dirigia.** A suíte `carro`
 semeia uma moto pronta no localStorage, o que prova que o app DESENHA uma moto,
