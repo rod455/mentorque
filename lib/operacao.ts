@@ -9,6 +9,7 @@ import {
   type EventoFunil,
 } from "./funilCorreto";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
+import { linhaDeAtivacao, linhaDeRetencao } from "./retratoLegivel";
 import { comTentativas, transitorio } from "@/lib/transitorio";
 
 // O agregado da operação num lugar só: alimenta a rota /api/dados (que o
@@ -370,6 +371,18 @@ export async function coletarDadosOperacao() {
       porDia: usoDiario ?? [],
       porSemana: usoSemanal ?? [],
       coortes: coortes ?? [],
+      // AS LINHAS PRONTAS, COM A RESSALVA DENTRO (28/09/2026).
+      //
+      // As views ganharam as colunas de maturidade em 23/09 e elas nunca
+      // chegaram a quem lê: em 25 e 28/09 duas rodadas publicaram coorte
+      // aberta como resultado. O texto do retrato é montado no n8n, então
+      // mandar a COLUNA não bastava: alguém tem que lembrar de imprimir. A
+      // frase pronta não depende de ninguém lembrar.
+      //
+      // Onde a janela não fechou, o lugar do número é ocupado pelo motivo. A
+      // regra e o porquê estão em lib/retratoLegivel.ts.
+      linhasRetencao: ((coortes ?? []) as Parameters<typeof linhaDeRetencao>[0][]).map(linhaDeRetencao),
+      linhasAtivacao: ((ativacao ?? []) as Parameters<typeof linhaDeAtivacao>[0][]).map(linhaDeAtivacao),
       // Ativação real: % da coorte que fez a primeira ação de valor
       // (abriu trilha ou cadastrou carro) em até 7 dias do cadastro.
       ativacao: ativacao ?? [],
