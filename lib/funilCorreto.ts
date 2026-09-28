@@ -53,6 +53,7 @@ export type EventoFunil =
   | "permissao_aviso_negada"
   | "viu_aula"
   | "consultou_sintoma"
+  | "perguntou_biela"
   | "registrou_servico"
   | "analisou_orcamento"
   | "registrou_abastecimento"
@@ -112,6 +113,7 @@ export const UNIDADE: Record<EventoFunil, Unidade> = {
   // Valor consumado (12/09/2026): nasce no aparelho, com ou sem conta.
   viu_aula: "aparelho",
   consultou_sintoma: "aparelho",
+  perguntou_biela: "aparelho",
   registrou_servico: "aparelho",
   analisou_orcamento: "aparelho",
   registrou_abastecimento: "aparelho",
@@ -152,6 +154,7 @@ export const NATUREZA: Record<EventoFunil, Natureza> = {
   // distinct do funil_canonico, nunca da contagem de eventos.
   viu_aula: "sessao",
   consultou_sintoma: "sessao",
+  perguntou_biela: "sessao",
   registrou_servico: "sessao",
   analisou_orcamento: "sessao",
   registrou_abastecimento: "sessao",
@@ -218,6 +221,9 @@ export const MEDIDO_DESDE: Record<EventoFunil, string> = {
   // Valor consumado: no ar na web em 12/09; nas lojas, com a 2.5.
   viu_aula: "2026-09-12",
   consultou_sintoma: "2026-09-12",
+  // A Biela como porta de entrada (28/09/2026): no ar na web hoje; nas
+  // lojas, com a 2.9.
+  perguntou_biela: "2026-09-28",
   registrou_servico: "2026-09-12",
   // Orçamento por foto: no ar na web em 13/09; nas lojas, com a 2.6.
   analisou_orcamento: "2026-09-13",

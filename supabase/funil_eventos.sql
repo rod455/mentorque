@@ -43,6 +43,9 @@ create table if not exists public.funil_eventos (
     -- Valor consumado, medido em 12/09/2026 (restrição recriada no banco
     -- nesse dia: migração funil_eventos_de_conclusao).
     'viu_aula', 'consultou_sintoma', 'registrou_servico',
+    -- A Biela como porta de entrada, medida em 28/09/2026 (migração
+    -- funil_eventos_perguntou_biela).
+    'perguntou_biela',
     -- Orçamento por foto, medido em 13/09/2026 (restrição recriada no banco
     -- nesse dia: migração funil_eventos_orcamento).
     'analisou_orcamento',

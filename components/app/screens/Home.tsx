@@ -362,20 +362,24 @@ export function HomeScreen() {
           <h2 className="max-w-[15rem] font-serif text-2xl font-bold leading-tight text-cream">
             {hasCar ? h.heroTitle : h.heroTitleEmpty}
           </h2>
+          {/* QUEM NÃO TEM CARRO COMEÇA PERGUNTANDO, NÃO CADASTRANDO
+              (28/09/2026). A ordem anterior mandava direto para o formulário,
+              que é o maior vazamento do produto: cinco em seis que o abrem nas
+              lojas não terminam. O porquê inteiro está em `heroTitleEmpty`,
+              em lib/app/content.ts. O cadastro continua a um toque, aqui
+              embaixo, e volta a ser o botão grande assim que existir um carro. */}
           <button
-            onClick={() => (hasCar ? root({ name: "symptoms" }) : go({ name: "addCar" }))}
+            onClick={() => (hasCar ? root({ name: "symptoms" }) : go({ name: "biela" }))}
             className="mt-3 w-full rounded-full bg-amber py-3.5 text-center font-display text-[15px] font-semibold text-graphite active:scale-[0.99]"
           >
             {hasCar ? h.heroCta : h.heroCtaEmpty}
           </button>
-          {/* Cadastrar o carro não pode parecer obrigatório: problemas, aulas
-              e códigos OBD2 funcionam sem nenhum veículo na garagem. */}
           {!hasCar && (
             <button
-              onClick={() => root({ name: "symptoms" })}
+              onClick={() => go({ name: "addCar", origem: "inicio" })}
               className="mt-2 w-full py-1.5 text-center text-[13px] text-cream/60 hover:text-cream"
             >
-              {h.heroSkipEmpty}
+              {h.heroSecEmpty}
             </button>
           )}
         </div>

@@ -36,18 +36,34 @@ que a loja não entrega.
    consumida ao montar a tela, sem olhar se havia conta. Como o convite só é
    desenhado para quem tem conta, quem cadastrava como convidado queimava o
    momento sem ver convite nenhum.
+5. **A porta de entrada inverteu: pergunta primeiro, cadastro depois**
+   (28/09, decisão do dono). O Início de quem não tem carro dizia "Vamos
+   cadastrar o seu primeiro carro", com o botão grande indo ao formulário e um
+   "Explorar sem cadastrar" em 13px e 60% de opacidade. A primeira coisa que o
+   app pedia era trabalho.
+   - Os números dessa ordem: **cinco em seis** que abrem o formulário nas lojas
+     não terminam, `comecou_onboarding` é a **última ação de 78,7%** na web
+     (base 54,9% da plataforma), e é a mesma tela onde se concentram os
+     fechamentos. Era o maior vazamento do produto, e estava na porta.
+   - Agora o botão grande é **"Perguntar para o Biela"**, e o cadastro fica logo
+     abaixo, a um toque: a troca é de ORDEM, não de esconder o cadastro.
+   - Depois da resposta, e **só** depois dela, aparece o convite: *"Essa
+     resposta serve para qualquer carro. Me diga qual é o seu e eu respondo
+     pelo manual dele."* Ele não trava nada: a pessoa segue podendo perguntar.
+   - **O custo já estava tampado** e não muda: cinco perguntas por mês no
+     gratuito, contadas no servidor por conta ou por aparelho.
 
 ### Vai no binário e ninguém vê (medição)
 
-5. **A migalha do fechamento passa a dizer EM QUAL TELA** (27/09). Ela passou
+6. **A migalha do fechamento passa a dizer EM QUAL TELA** (27/09). Ela passou
    25 dias relatando "app fechou sozinho em: abriu o app", sempre a mesma
    frase, porque o app inteiro tinha cinco chamadas de `passo()` e nenhuma no
    onboarding, no cadastro do carro ou no paywall. Agora ela sai do roteador,
    um lugar só, e toda tela entra sozinha.
-6. **O sinal de pausa passa a ser o do Android** (27/09). Os dois ouvintes
+7. **O sinal de pausa passa a ser o do Android** (27/09). Os dois ouvintes
    antigos são eventos de navegador, e a pergunta da migalha é sobre o
    aplicativo: entrou o `appStateChange` do Capacitor.
-7. **O relato de erro diz em que aparelho aconteceu** (27/09): modelo, versão
+8. **O relato de erro diz em que aparelho aconteceu** (27/09): modelo, versão
    do sistema, memória aproximada e núcleos, tirados do `navigator`, sem plugin
    nativo. "Morre na tela de cadastro" e "morre na tela de cadastro num Android
    de 2GB" pedem consertos diferentes.
@@ -60,12 +76,13 @@ que a loja não entrega.
 - A aula `vid-padaria` apontava para `battery-care`, que não existe; agora
   aponta para `diy-battery`. O catálogo de aulas é servido por `/api/lessons` e
   **substitui o embutido**, então já valeu no push.
-- As anomalias novas no banco e a coluna `app_erros.aparelho`.
+- As anomalias novas no banco, a coluna `app_erros.aparelho` e o evento
+  `perguntou_biela` (a restrição do banco foi recriada em 28/09).
 
 ## O plugin nativo desta versão, lido no FONTE
 
 Nenhum plugin entrou ou saiu: `capacitor.config.ts`, `android/` e `ios/` não
-foram tocados. Mas o item 6 **chama um caminho que o app nunca chamou**, e a
+foram tocados. Mas o item 7 **chama um caminho que o app nunca chamou**, e a
 regra do dono de 09/09 vale igual. Lido em 28/09:
 
 - **Android**, `node_modules/@capacitor/app/android/.../AppPlugin.java:36`: o
@@ -104,6 +121,9 @@ a falar de moto com você, do título ao resultado da busca.
 
 E ao informar a versão do seu carro, você vê todas as opções do seu ano na
 lista.
+
+Chegou agora? Pergunte ao Biela antes de cadastrar qualquer coisa: descreva o
+barulho ou a luz do painel e ele já te responde.
 ```
 
 **O que ficou DE FORA da nota, de propósito:** os três itens de medição e o
@@ -138,9 +158,23 @@ WebView do aparelho**, e a suíte `moto` roda em Chromium de mesa.
 4. **A busca vazia fala de moto.** Com Moto escolhido, digitar um nome que não
    existe (ex.: "zzzz") e conferir que a mensagem diz **"Nenhuma moto
    encontrada"**.
+5. **A porta de entrada, com a garagem VAZIA.** A suíte `porta` já dirige este
+   caminho em Chromium, com a rota do Biela dublada; o que só o aparelho prova
+   é a resposta de verdade.
+   1. instalar limpo (ou limpar os dados do app) e chegar ao Início **sem
+      carro**: o título tem que ser uma pergunta e o botão grande, "Perguntar
+      para o Biela";
+   2. conferir que **"Ou cadastrar meu carro"** está logo abaixo, a um toque;
+   3. tocar no botão grande, **descrever um sintoma de verdade** (ex.: "barulho
+      ao frear") e ler a resposta. **É o passo que decide**, e ele não é
+      técnico: a pergunta é se essa resposta, sem o app saber qual é o carro,
+      valeria o seu cadastro;
+   4. conferir que o convite **"Essa resposta serve para qualquer carro"**
+      aparece só DEPOIS da resposta, e que o botão dele abre o cadastro;
+   5. e que dá para continuar perguntando sem cadastrar nada.
 
-**O que NÃO dá para provar no aparelho, e por isso não se promete:** os itens 5
-e 7 (a tela na migalha e o aparelho no relato) só aparecem quando houver um
+**O que NÃO dá para provar no aparelho, e por isso não se promete:** os itens 6
+e 8 (a tela na migalha e o aparelho no relato) só aparecem quando houver um
 fechamento de verdade. A verificação deles é olhar `app_erros` uns dias depois
 do build e conferir que a coluna `origem` deixou de dizer sempre "abriu o app"
 e que a coluna `aparelho` vem preenchida.

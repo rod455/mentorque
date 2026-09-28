@@ -319,7 +319,7 @@ function PremiumCarDetail({ services, systems }: { services: ServiceRecord[]; sy
 }
 
 // 1.2 — Adicionar carro (also reused for editing via editId)
-export function AddCarScreen({ editId }: { editId?: string }) {
+export function AddCarScreen({ editId, origem }: { editId?: string; origem?: string }) {
   const c = useContent();
   const a = c.addCar;
   const { s, addVehicle, updateVehicle } = usePrototype();
@@ -333,10 +333,14 @@ export function AddCarScreen({ editId }: { editId?: string }) {
   //
   // Só no cadastro NOVO: editar um carro que já existe não é primeira sessão
   // de ninguém, e contar isso encheria a etapa com quem já é usuário.
+  //
+  // E DE ONDE a pessoa chegou (28/09/2026): com a troca de ordem do Início, o
+  // cadastro passou a ser alcançado por dois caminhos, e "a Biela primeiro
+  // trouxe mais cadastro?" só tem resposta se o evento disser qual deles foi.
   useEffect(() => {
     if (editing) return;
-    funil("abriu_cadastro_de_carro", { umaVezPorAparelho: true });
-  }, [editing]);
+    funil("abriu_cadastro_de_carro", { umaVezPorAparelho: true, origem });
+  }, [editing, origem]);
 
   // TESTE A/B "cadastro-em-duas-etapas" (aprovado pelo dono em 12/09/2026).
   // Na loja, 5 em 6 pessoas que abrem este formulário não terminam. A

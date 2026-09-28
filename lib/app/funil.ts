@@ -68,6 +68,11 @@ export type EventoFunil =
   // "sem-valor" (o valor pago é o que alimenta a comparação de preço).
   | "viu_aula"
   | "consultou_sintoma"
+  // A pergunta feita ao Biela (28/09/2026). Ela vira degrau de funil porque
+  // passou a ser a PRIMEIRA ação oferecida a quem não tem carro: sem ela,
+  // "a Biela primeiro trouxe mais gente?" não tem como ser respondido.
+  // `origem` diz de onde a pessoa chegou ao Biela.
+  | "perguntou_biela"
   | "registrou_servico"
   // A análise de orçamento por foto (13/09/2026): é o wedge que os dois
   // projetos de R$ 10 milhões apontam, e a leitura dele é "quem analisou

@@ -10,7 +10,11 @@ export type View =
   | { name: "home" }
   | { name: "search" }
   | { name: "cars" }
-  | { name: "addCar"; editId?: string }
+  // `origem` diz DE ONDE a pessoa chegou ao cadastro, e existe desde
+  // 28/09/2026 para responder a única pergunta que a troca de ordem do Início
+  // levanta: quem pergunta ao Biela primeiro acaba cadastrando? Vai junto no
+  // evento `abriu_cadastro_de_carro`.
+  | { name: "addCar"; editId?: string; origem?: string }
   | { name: "car" }
   | { name: "symptoms" }
   | { name: "symptom"; id: string }

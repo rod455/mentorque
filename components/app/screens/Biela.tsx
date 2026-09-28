@@ -13,6 +13,7 @@ import { codigosConsultados } from "@/lib/app/obd2Consultados";
 import { sintomaEmFoco } from "@/lib/app/sintomaEmFoco";
 import { APP_VERSION, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
+import { funil } from "@/lib/app/funil";
 import { isNativeApp, nativePlatform } from "@/lib/app/wrapper";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Chip, Icon, useContent } from "../ui";
@@ -171,6 +172,15 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
   const ask = async (question: string) => {
     const text = question.trim();
     if (!text || busy || gated) return;
+    // A PERGUNTA VIRA DEGRAU DE FUNIL (28/09/2026), e ela precisou virar porque
+    // a Biela passou a ser a primeira ação oferecida a quem não tem carro. Sem
+    // este evento, "a Biela primeiro trouxe mais gente?" não teria resposta: o
+    // app inteiro não media uma única pergunta feita a ela.
+    //
+    // `origem` separa quem chegou SEM carro (o caminho novo) de quem já tem,
+    // que é a comparação que interessa. De sessão, como os outros eventos de
+    // valor consumado: a mesma pessoa pergunta cinco vezes por mês.
+    funil("perguntou_biela", { umaVez: true, origem: v ? "com-carro" : "sem-carro" });
     desarmar(); // ainda está resolvendo algo: o próximo 👍 arma de novo
     setInput("");
     // Recortado ANTES de empilhar a pergunta nova: `historicoParaIA` só junta
@@ -327,6 +337,26 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
         )}
         </div>
       </div>
+
+      {/* O CONVITE A CADASTRAR O CARRO, DEPOIS DA RESPOSTA (28/09/2026).
+          É a outra metade da troca de ordem do Início: perguntar primeiro,
+          pedir o carro depois de entregar. Três condições, e cada uma tem
+          motivo:
+            `!v`             quem já tem carro não precisa ser convidado;
+            `msgs.length>1`  antes da primeira resposta a pessoa não recebeu
+                             nada, e convidar ali é o pedágio de volta;
+            `!gated`         quem bateu no limite do mês recebe a oferta do
+                             Premium, e dois convites empilhados viram ruído.
+          Não bloqueia: ela pode continuar perguntando sem cadastrar nada. */}
+      {!v && msgs.length > 1 && !gated && (
+        <div className="mb-2 rounded-2xl bg-teal/10 p-4 ring-1 ring-teal/25">
+          <p className="font-display text-sm font-semibold text-cream">{c.biela.semCarroTitulo}</p>
+          <p className="mt-1 text-sm leading-relaxed text-cream/75">{c.biela.semCarroCorpo}</p>
+          <Button className="mt-3 w-full" onClick={() => go({ name: "addCar", origem: "biela" })}>
+            {c.biela.semCarroCta}
+          </Button>
+        </div>
+      )}
 
       {/* Sugestões (só no início) */}
       {msgs.length <= 1 && !gated && (

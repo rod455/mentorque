@@ -49,6 +49,8 @@ const EVENTOS_DO_APP = new Set([
   // Valor consumado (12/09/2026): aula vista, sintoma consultado, serviço
   // registrado. Ver lib/app/funil.ts.
   "viu_aula", "consultou_sintoma", "registrou_servico",
+  // A Biela como porta de entrada (28/09/2026). Ver lib/app/funil.ts.
+  "perguntou_biela",
   // Orçamento por foto (13/09/2026). Ver lib/app/funil.ts.
   "analisou_orcamento",
   // Caderno de gastos (13/09/2026). Ver lib/app/funil.ts.

@@ -144,9 +144,26 @@ export function getContent(locale: Locale) {
       afternoon: T("Boa tarde", "Good afternoon"),
       evening: T("Boa noite", "Good evening"),
       driver: T("motorista", "driver"),
-      heroTitleEmpty: T("Vamos cadastrar o seu primeiro carro", "Let's add your first car"),
-      heroCtaEmpty: T("Cadastrar meu carro", "Add my car"),
-      heroSkipEmpty: T("Explorar sem cadastrar →", "Explore without adding a car →"),
+      // A PRIMEIRA TELA DE QUEM NÃO TEM CARRO VIROU UMA PERGUNTA (28/09/2026).
+      //
+      // Ela dizia "Vamos cadastrar o seu primeiro carro", com o botão grande
+      // indo para o formulário e um "Explorar sem cadastrar" em 13px e 60% de
+      // opacidade. Ou seja: a primeira coisa que o app pedia era trabalho, e a
+      // saída era um sussurro.
+      //
+      // O QUE OS NÚMEROS DIZIAM DESSA ORDEM: cinco em seis que abrem o
+      // formulário nas lojas não terminam; `comecou_onboarding` é a ÚLTIMA ação
+      // de 78,7% na web (contra base de 54,9% da plataforma); e é a mesma tela
+      // onde se concentram os fechamentos do app. Era o maior vazamento do
+      // produto, e estava na porta de entrada.
+      //
+      // A troca é de ORDEM, não de recurso: perguntar primeiro, e pedir o carro
+      // depois da resposta, como quem melhora o que a pessoa acabou de receber.
+      // O carro deixa de ser o preço da entrada. Ver `bielaSemCarro` no bloco
+      // da Biela, que é a outra metade disto.
+      heroTitleEmpty: T("O que está acontecendo com o seu carro?", "What's going on with your car?"),
+      heroCtaEmpty: T("Perguntar para o Biela", "Ask Biela"),
+      heroSecEmpty: T("Ou cadastrar meu carro →", "Or add my car →"),
       heroTitle: T("O que vamos cuidar hoje?", "What shall we care for today?"),
       heroCta: T("Diagnosticar um problema", "Diagnose a problem"),
       searchPh: T("Buscar problemas ou serviços", "Search problems or services"),
@@ -1621,6 +1638,23 @@ export function getContent(locale: Locale) {
       intro: T("Oi! Sou o Biela 🐻 Manjo tudo de mecânica. Me conta o que está acontecendo com o seu carro que eu te ajudo: pode perguntar de barulho, revisão, orçamento, o que for.", "Hi! I'm Biela 🐻 I know cars inside out. Tell me what's going on and I'll help: noises, service, quotes, anything."),
       inputPh: T("Pergunte ao Biela...", "Ask Biela..."),
       send: T("Enviar", "Send"),
+      // O CONVITE QUE PEDE O CARRO DEPOIS DA RESPOSTA (28/09/2026).
+      //
+      // É a outra metade da troca de ordem do Início (ver `heroTitleEmpty`).
+      // Aparece só para quem NÃO tem carro na garagem, e só depois de uma
+      // resposta: até ali a pessoa não recebeu nada, e pedir cadastro antes de
+      // entregar é exatamente o que fazia cinco em seis irem embora.
+      //
+      // O texto não diz "cadastre para continuar", porque não é verdade: ela
+      // continua podendo perguntar. Ele diz o que MUDA se ela cadastrar, e o
+      // que muda é real (a rota do Biela usa marca, modelo, ano, motorização e
+      // o manual daquele carro quando existe).
+      semCarroTitulo: T("Essa resposta serve para qualquer carro", "This answer fits any car"),
+      semCarroCorpo: T(
+        "Me diga qual é o seu e eu respondo pelo manual dele, com o que já foi feito e o que está vencendo.",
+        "Tell me which one is yours and I'll answer from its manual, with what's been done and what's due.",
+      ),
+      semCarroCta: T("Cadastrar meu carro", "Add my car"),
       novaConversa: T("Nova conversa", "New chat"),
       thinking: T("Biela está pensando...", "Biela is thinking..."),
       suggestions: [

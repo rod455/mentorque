@@ -44,7 +44,7 @@ export function telaDaView(view: View) {
       case "home": return <HomeScreen />;
       case "search": return <SearchScreen />;
       case "cars": return <CarsScreen />;
-      case "addCar": return <AddCarScreen editId={view.editId} />;
+      case "addCar": return <AddCarScreen editId={view.editId} origem={view.origem} />;
       case "car": return <CarHub />;
       case "symptoms": return <SymptomsScreen />;
       case "symptom": return <SymptomDetail id={view.id} />;
