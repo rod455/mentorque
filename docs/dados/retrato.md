@@ -1,47 +1,51 @@
 # Retrato diario da operacao Mentorque
 
-Gerado pelo Analista de Dados (n8n) em 2026-09-28T09:00:08.910Z.
+Gerado pelo Analista de Dados (n8n) em 2026-09-28T23:54:46.205Z.
 NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
+COMO LER: linha marcada PARCIAL ou AINDA NAO DA PARA LER nao e resultado,
+e so cresce ate a janela fechar. Auditoria das medidas em
+docs/dados/auditoria-das-medidas.md.
 
 ## MARKETING (gente chegando)
-- Semana corrente (2026-09-28): aberturas 7, visitantes 7, cadastros 2
-- Semana anterior (2026-09-21): aberturas 330, visitantes 214, cadastros 51
-- Cadastros 28d via (direto) / (sem campanha): 66
-- Cadastros 28d via google / lancamento: 20
+- Semana corrente (PARCIAL, ainda enche) (2026-09-28): aberturas 38, visitantes 36, cadastros 7
+- Semana anterior (FECHADA) (2026-09-21): aberturas 330, visitantes 214, cadastros 51
+- Cadastros 28d via (direto) / (sem campanha): 71 (78% dos 91)
+- Cadastros 28d via google / lancamento: 20 (22% dos 91)
 - Gasto de midia 7d: Meta 138.96 + Google 214.22 = 353.18
 - CAC bruto (gasto dos ultimos 7 dias / cadastros da ultima semana FECHADA, 2026-09-21): 6.93
-- A semana corrente tem 2 cadastros e ainda esta aberta: nao serve de denominador
+- A semana corrente tem 7 cadastros e ainda esta aberta: nao serve de denominador
 - Busca Google 28d: 0 cliques, 37 impressoes
-- YouTube: 6 inscritos, 4765 views totais, 10 videos recentes
+- YouTube (acumulado desde o canal existir, NAO e janela): 6 inscritos, 4765 views totais, 10 videos recentes
 
 ## ENGAJAMENTO (gente usando e voltando)
-- Semana corrente (2026-09-28): 5 usuarios ativos, 5 aberturas (1 por usuario)
-- Semana anterior (2026-09-21): 209 usuarios ativos, 323 aberturas (1.5 por usuario)
-- Retencao, coorte 2026-09-21: 51 cadastrados, 5 voltaram em 1 a 7 dias, 0 em 8 a 30 dias
-- Retencao, coorte 2026-09-14: 16 cadastrados, 0 voltaram em 1 a 7 dias, 0 em 8 a 30 dias
-- Retencao, coorte 2026-09-07: 11 cadastrados, 1 voltaram em 1 a 7 dias, 1 em 8 a 30 dias
-- Retencao, coorte 2026-08-31: 8 cadastrados, 1 voltaram em 1 a 7 dias, 0 em 8 a 30 dias
-- Ativacao, coorte 2026-09-21: 2 de 51 fizeram a primeira acao de valor em 7 dias
+- Semana corrente (PARCIAL, ainda enche) (2026-09-28): 35 usuarios ativos, 36 aberturas (1 por usuario)
+- Semana anterior (FECHADA) (2026-09-21): 209 usuarios ativos, 323 aberturas (1.5 por usuario)
+- Retencao, coorte 2026-09-28: 5 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-10-12; hoje sao 0, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-11-04; hoje sao 0, PISO)
+- Retencao, coorte 2026-09-21: 51 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-10-05; hoje sao 6, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-10-28; hoje sao 0, PISO)
+- Retencao, coorte 2026-09-14: 16 cadastrados, 0 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-10-21; hoje sao 1, PISO)
+- Retencao, coorte 2026-09-07: 11 cadastrados, 1 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-10-14; hoje sao 1, PISO)
+- Ativacao, coorte 2026-09-28: AINDA NAO DA PARA LER (a janela fecha em 2026-10-12; hoje sao 0 de 5, PISO)
+- Ativacao, coorte 2026-09-21: AINDA NAO DA PARA LER (a janela fecha em 2026-10-05; hoje sao 2 de 51, PISO)
 - Ativacao, coorte 2026-09-14: 3 de 16 fizeram a primeira acao de valor em 7 dias
 - Ativacao, coorte 2026-09-07: 6 de 11 fizeram a primeira acao de valor em 7 dias
-- Ativacao, coorte 2026-08-31: 1 de 8 fizeram a primeira acao de valor em 7 dias
-- Erros no app 7d: 22
-  - 11x: app fechou sozinho em: abriu o app
-  - 5x: login nativo google: Google Sign-In cancelled by user ([16] Cancelled by user.) package=mentorque.app signingSha1=E5:1C:
-  - 1x: login nativo google: Google Sign-In cancelled by user (User cancelled the selector) package=mentorque.app signingSha1=E5
+- Erros no app 7d: 23 relatos, em 16 de 322 aparelhos ativos (5.0%) [ativos: Android 264, iOS 11, web 47]
+  - 11x em 6 aparelho(s): app fechou sozinho em: abriu o app
+  - 5x em 5 aparelho(s): login nativo google: Google Sign-In cancelled by user ([16] Cancelled by user.) package=mentorque.app signingSha1=E5:1C:
+  - 1x em 1 aparelho(s): login nativo google: Google Sign-In cancelled by user (User cancelled the selector) package=mentorque.app signingSha1=E5
 - Play vitals: sem dados de crash ainda
 - Avaliacoes nas lojas: 12 (media 5)
+  - [app_store 5/5] Excelente (matthewsmc0)
   - [app_store 5/5] Aprendizado (aminoru)
   - [app_store 5/5] Bastante Útil (munizluiz)
-  - [app_store 5/5] Ajuda com a economia! (Biiaes)
 
 ## VENDAS (gente pagando e continuando)
 - Assinaturas ativas (banco): 4 (anuais 1, mensais 3), cancelamento agendado: 0
-- Fundo do funil, Semana corrente: viram paywall 1, iniciaram checkout 0, assinaram 0, cancelaram 0
-- Fundo do funil, Semana anterior: viram paywall 45, iniciaram checkout 5, assinaram 0, cancelaram 0
-- Assinantes, coorte 2026-09-01: 1 assinaram, 0 renovaram, 0 sairam
-- Assinantes, coorte 2026-08-01: 2 assinaram, 0 renovaram, 0 sairam
-- Stripe (live): 3 assinaturas, MRR 89.70, receita 30d 0.00
+- Fundo do funil, Semana corrente (PARCIAL, ainda enche): viram paywall 2, iniciaram checkout 0, assinaram 0, cancelaram 0
+- Fundo do funil, Semana anterior (FECHADA): viram paywall 45, iniciaram checkout 5, assinaram 0, cancelaram 0
+  - RESSALVA: no Android o paywall aparece e NAO tem botao de compra (modo leitor). O checkout so pode nascer no iPhone e na web: nao leia paywall->checkout somando as tres.
+- Assinantes, coorte 2026-09-01: 1 assinaram, 0 renovaram, 0 sairam (renovacao de um mensal so pode aparecer 1 mes depois da coorte)
+- Assinantes, coorte 2026-08-01: 2 assinaram, 0 renovaram, 0 sairam (renovacao de um mensal so pode aparecer 1 mes depois da coorte)
+- Stripe (live): 3 assinaturas, MRR 89.70, receita 30d 0.00 (MRR e o contratado por mes; receita 30d e o COBRADO, e fica zero enquanto a primeira cobranca nao roda)
 - RevenueCat: 1 assinaturas, MRR 4 (aviso: active_users = aparelhos, inclui testes)
 - AdMob 7d: 0.00 USD de receita de anuncio
 - Lojas: iOS 2.8 READY_FOR_SALE; iOS 2.7 READY_FOR_SALE; iOS 2.6 READY_FOR_SALE; iOS 2.5 READY_FOR_SALE; iOS 2.4 READY_FOR_SALE
@@ -64,48 +68,49 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 ```json
 {
   "dados": {
-    "geradoEm": "2026-09-28T09:00:06.950Z",
+    "geradoEm": "2026-09-28T23:54:45.106Z",
     "tempos": {
-      "subscriptions": 395,
-      "cadastros": 439,
-      "metricas_diarias": 280,
-      "uso_diario": 138,
-      "uso_semanal": 57,
-      "retencao_coortes": 65,
-      "app_erros": 959,
-      "ativacao_coortes": 435,
-      "assinaturas_coortes": 63,
-      "cadastros_por_campanha": 48,
-      "assinaturas_conferencia": 50,
-      "jornada_envios": 61,
-      "funil_semana": 1982,
-      "email_eventos": 778,
-      "paralelo": 2247,
-      "experimentos": 94,
-      "anomalias": 194,
-      "estado_da_base": 238,
-      "funil_etapas": 51,
-      "contas_criadas_desde": 40,
-      "funil_etapas_primeira": 48,
-      "total": 2925
+      "cadastros": 139,
+      "funil_semana": 222,
+      "app_erros": 83,
+      "subscriptions": 225,
+      "uso_semanal": 64,
+      "uso_diario": 99,
+      "retencao_coortes": 71,
+      "assinaturas_coortes": 53,
+      "cadastros_por_campanha": 50,
+      "ativacao_coortes": 146,
+      "metricas_diarias": 283,
+      "assinaturas_conferencia": 56,
+      "jornada_envios": 80,
+      "email_eventos": 92,
+      "paralelo": 598,
+      "experimentos": 78,
+      "anomalias": 131,
+      "aparelhos_ativos": 31,
+      "estado_da_base": 171,
+      "funil_etapas": 37,
+      "contas_criadas_desde": 45,
+      "funil_etapas_primeira": 50,
+      "total": 1161
     },
     "falhas": {},
     "funilSemanas": [
       {
         "semana": "2026-09-28",
-        "aberturas": 7,
-        "visitantes": 7,
-        "cadastros": 2,
-        "viram_paywall": 1,
+        "aberturas": 38,
+        "visitantes": 36,
+        "cadastros": 7,
+        "viram_paywall": 2,
         "iniciaram_checkout": 0,
         "assinaturas": 0,
         "renovacoes": 0,
         "cancelamentos": 0,
         "expirados": 0,
-        "viram_paywall_pessoas": 1,
+        "viram_paywall_pessoas": 2,
         "iniciaram_checkout_pessoas": 0,
         "assinaturas_pessoas": 0,
-        "ativaram_pessoas": 3,
+        "ativaram_pessoas": 14,
         "aberturas_sem_identidade": 0
       },
       {
@@ -230,7 +235,6 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
     },
     "cadastrosPorDia": {
       "2026-09-17": 2,
-      "2026-09-14": 1,
       "2026-09-15": 1,
       "2026-09-16": 1,
       "2026-09-18": 3,
@@ -243,10 +247,10 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       "2026-09-25": 8,
       "2026-09-24": 2,
       "2026-09-27": 10,
-      "2026-09-28": 2
+      "2026-09-28": 7
     },
     "erros7d": {
-      "total": 22,
+      "total": 23,
       "top": [
         {
           "mensagem": "app fechou sozinho em: abriu o app",
@@ -295,51 +299,57 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
             "2.8.0"
           ]
         }
-      ]
+      ],
+      "aparelhosComErro": 16,
+      "aparelhosAtivos": {
+        "android": 264,
+        "web": 47,
+        "ios": 11
+      }
     },
     "email30d": {
-      "enviados": 230,
+      "enviados": 261,
       "semId": 75,
       "semEventos": 2,
       "porChave": [
         {
           "chave": "d0",
-          "enviados": 64,
-          "comId": 51,
-          "entregues": 50,
-          "abertos": 7,
+          "enviados": 74,
+          "comId": 61,
+          "entregues": 59,
+          "abertos": 9,
           "clicados": 2,
           "problemas": 0,
-          "taxaAbertura": 13.7,
-          "taxaClique": 3.9
+          "taxaAbertura": 14.8,
+          "taxaClique": 3.3
         },
         {
           "chave": "d2",
-          "enviados": 56,
-          "comId": 42,
-          "entregues": 40,
+          "enviados": 61,
+          "comId": 47,
+          "entregues": 45,
           "abertos": 4,
           "clicados": 0,
           "problemas": 1,
-          "taxaAbertura": 9.5,
+          "taxaAbertura": 8.5,
           "taxaClique": 0
         },
         {
           "chave": "d5",
-          "enviados": 36,
-          "comId": 19,
-          "entregues": 18,
-          "abertos": 0,
+          "enviados": 46,
+          "comId": 29,
+          "entregues": 28,
+          "abertos": 2,
           "clicados": 0,
           "problemas": 1,
-          "taxaAbertura": 0,
+          "taxaAbertura": 6.9,
           "taxaClique": 0
         },
         {
           "chave": "d9",
-          "enviados": 24,
-          "comId": 10,
-          "entregues": 10,
+          "enviados": 27,
+          "comId": 13,
+          "entregues": 12,
           "abertos": 0,
           "clicados": 0,
           "problemas": 0,
@@ -348,24 +358,24 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         },
         {
           "chave": "sumiu-14",
-          "enviados": 24,
+          "enviados": 25,
+          "comId": 15,
+          "entregues": 15,
+          "abertos": 2,
+          "clicados": 0,
+          "problemas": 0,
+          "taxaAbertura": 13.3,
+          "taxaClique": 0
+        },
+        {
+          "chave": "d14",
+          "enviados": 16,
           "comId": 14,
           "entregues": 14,
           "abertos": 2,
           "clicados": 0,
           "problemas": 0,
           "taxaAbertura": 14.3,
-          "taxaClique": 0
-        },
-        {
-          "chave": "d14",
-          "enviados": 15,
-          "comId": 13,
-          "entregues": 13,
-          "abertos": 2,
-          "clicados": 0,
-          "problemas": 0,
-          "taxaAbertura": 15.4,
           "taxaClique": 0
         },
         {
@@ -411,6 +421,17 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
           "problemas": 0,
           "taxaAbertura": 0,
           "taxaClique": 0
+        },
+        {
+          "chave": "preco:8edb27dd-16e1-480c-ab9e-1ef6e0d1dc40",
+          "enviados": 1,
+          "comId": 1,
+          "entregues": 1,
+          "abertos": 0,
+          "clicados": 0,
+          "problemas": 0,
+          "taxaAbertura": 0,
+          "taxaClique": 0
         }
       ]
     },
@@ -418,8 +439,8 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       "porDia": [
         {
           "dia": "2026-09-28",
-          "usuarios": 5,
-          "aberturas": 5,
+          "usuarios": 35,
+          "aberturas": 36,
           "aberturas_sem_identidade": 0
         },
         {
@@ -504,8 +525,8 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       "porSemana": [
         {
           "semana": "2026-09-28",
-          "usuarios_ativos": 5,
-          "aberturas": 5,
+          "usuarios_ativos": 35,
+          "aberturas": 36,
           "aberturas_por_usuario": 1,
           "aberturas_sem_identidade": 0
         },
@@ -554,9 +575,18 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       ],
       "coortes": [
         {
+          "coorte": "2026-09-28",
+          "cadastrados": 5,
+          "voltaram_d1_7": 0,
+          "voltaram_d8_30": 0,
+          "semana_fechada": false,
+          "d1_7_fechada": false,
+          "d8_30_fechada": false
+        },
+        {
           "coorte": "2026-09-21",
           "cadastrados": 51,
-          "voltaram_d1_7": 5,
+          "voltaram_d1_7": 6,
           "voltaram_d8_30": 0,
           "semana_fechada": true,
           "d1_7_fechada": false,
@@ -566,7 +596,7 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
           "coorte": "2026-09-14",
           "cadastrados": 16,
           "voltaram_d1_7": 0,
-          "voltaram_d8_30": 0,
+          "voltaram_d8_30": 1,
           "semana_fechada": true,
           "d1_7_fechada": true,
           "d8_30_fechada": false
@@ -599,7 +629,78 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
           "d8_30_fechada": false
         }
       ],
+      "linhasRetencao": [
+        {
+          "texto": "Retencao, coorte 2026-09-28: 5 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-10-12; hoje sao 0, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-11-04; hoje sao 0, PISO)",
+          "legivel": false,
+          "motivo": "janela(s) em aberto: 1 a 7 dias e 8 a 30 dias"
+        },
+        {
+          "texto": "Retencao, coorte 2026-09-21: 51 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-10-05; hoje sao 6, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-10-28; hoje sao 0, PISO)",
+          "legivel": false,
+          "motivo": "janela(s) em aberto: 1 a 7 dias e 8 a 30 dias"
+        },
+        {
+          "texto": "Retencao, coorte 2026-09-14: 16 cadastrados, 0 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-10-21; hoje sao 1, PISO)",
+          "legivel": false,
+          "motivo": "janela(s) em aberto: 8 a 30 dias"
+        },
+        {
+          "texto": "Retencao, coorte 2026-09-07: 11 cadastrados, 1 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-10-14; hoje sao 1, PISO)",
+          "legivel": false,
+          "motivo": "janela(s) em aberto: 8 a 30 dias"
+        },
+        {
+          "texto": "Retencao, coorte 2026-08-31: 8 cadastrados, 1 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-10-07; hoje sao 0, PISO)",
+          "legivel": false,
+          "motivo": "janela(s) em aberto: 8 a 30 dias"
+        },
+        {
+          "texto": "Retencao, coorte 2026-08-24: 1 cadastrados, 0 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-09-30; hoje sao 1, PISO)",
+          "legivel": false,
+          "motivo": "janela(s) em aberto: 8 a 30 dias"
+        }
+      ],
+      "linhasAtivacao": [
+        {
+          "texto": "Ativacao, coorte 2026-09-28: AINDA NAO DA PARA LER (a janela fecha em 2026-10-12; hoje sao 0 de 5, PISO)",
+          "legivel": false,
+          "motivo": "a janela de 7 dias fecha em 2026-10-12"
+        },
+        {
+          "texto": "Ativacao, coorte 2026-09-21: AINDA NAO DA PARA LER (a janela fecha em 2026-10-05; hoje sao 2 de 51, PISO)",
+          "legivel": false,
+          "motivo": "a janela de 7 dias fecha em 2026-10-05"
+        },
+        {
+          "texto": "Ativacao, coorte 2026-09-14: 3 de 16 fizeram a primeira acao de valor em 7 dias",
+          "legivel": true,
+          "motivo": ""
+        },
+        {
+          "texto": "Ativacao, coorte 2026-09-07: 6 de 11 fizeram a primeira acao de valor em 7 dias",
+          "legivel": true,
+          "motivo": ""
+        },
+        {
+          "texto": "Ativacao, coorte 2026-08-31: 1 de 8 fizeram a primeira acao de valor em 7 dias",
+          "legivel": true,
+          "motivo": ""
+        },
+        {
+          "texto": "Ativacao, coorte 2026-08-24: 0 de 1 fizeram a primeira acao de valor em 7 dias",
+          "legivel": true,
+          "motivo": ""
+        }
+      ],
       "ativacao": [
+        {
+          "coorte": "2026-09-28",
+          "cadastrados": 5,
+          "ativados_7d": 0,
+          "semana_fechada": false,
+          "janela_fechada": false
+        },
         {
           "coorte": "2026-09-21",
           "cadastrados": 51,
@@ -658,7 +759,7 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         {
           "origem": "(direto)",
           "campanha": "(sem campanha)",
-          "cadastros_28d": 66
+          "cadastros_28d": 71
         },
         {
           "origem": "google",
@@ -672,15 +773,15 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "abriu_app",
-        "eventos": 250,
-        "pessoas": 155
+        "eventos": 264,
+        "pessoas": 163
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "abriu_cadastro_de_carro",
-        "eventos": 126,
-        "pessoas": 126
+        "eventos": 132,
+        "pessoas": 132
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -707,50 +808,50 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "atribuicao",
-        "eventos": 133,
-        "pessoas": 132
+        "eventos": 140,
+        "pessoas": 139
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "cadastro",
-        "eventos": 32,
-        "pessoas": 32
+        "eventos": 33,
+        "pessoas": 33
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "cadastrou_carro",
-        "eventos": 55,
-        "pessoas": 55
+        "eventos": 59,
+        "pessoas": 59
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "clicou_baixar",
-        "eventos": 50,
-        "pessoas": 47
+        "eventos": 51,
+        "pessoas": 48
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "comecou_onboarding",
-        "eventos": 260,
-        "pessoas": 260
+        "eventos": 271,
+        "pessoas": 271
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "consultou_sintoma",
-        "eventos": 71,
-        "pessoas": 35
+        "eventos": 75,
+        "pessoas": 38
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "convite_aviso",
-        "eventos": 28,
-        "pessoas": 24
+        "eventos": 29,
+        "pessoas": 25
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -758,6 +859,13 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "evento": "iniciou_checkout",
         "eventos": 2,
         "pessoas": 2
+      },
+      {
+        "experimento": "cadastro-em-duas-etapas",
+        "variante": "a",
+        "evento": "perguntou_biela",
+        "eventos": 1,
+        "pessoas": 1
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -791,15 +899,15 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "terminou_onboarding",
-        "eventos": 152,
-        "pessoas": 152
+        "eventos": 160,
+        "pessoas": 160
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "viu_aula",
-        "eventos": 87,
-        "pessoas": 33
+        "eventos": 88,
+        "pessoas": 34
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -812,15 +920,15 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "abriu_app",
-        "eventos": 190,
-        "pessoas": 134
+        "eventos": 207,
+        "pessoas": 146
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "abriu_cadastro_de_carro",
-        "eventos": 113,
-        "pessoas": 113
+        "eventos": 124,
+        "pessoas": 124
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -840,50 +948,50 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "atribuicao",
-        "eventos": 120,
-        "pessoas": 120
+        "eventos": 132,
+        "pessoas": 132
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "cadastro",
-        "eventos": 36,
-        "pessoas": 36
+        "eventos": 40,
+        "pessoas": 40
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "cadastrou_carro",
-        "eventos": 73,
-        "pessoas": 71
+        "eventos": 80,
+        "pessoas": 78
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "clicou_baixar",
-        "eventos": 56,
-        "pessoas": 54
+        "eventos": 57,
+        "pessoas": 55
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "comecou_onboarding",
-        "eventos": 226,
-        "pessoas": 226
+        "eventos": 242,
+        "pessoas": 242
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "consultou_sintoma",
-        "eventos": 38,
-        "pessoas": 20
+        "eventos": 41,
+        "pessoas": 21
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "convite_aviso",
-        "eventos": 25,
-        "pessoas": 20
+        "eventos": 27,
+        "pessoas": 22
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -891,6 +999,13 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "evento": "iniciou_checkout",
         "eventos": 3,
         "pessoas": 2
+      },
+      {
+        "experimento": "cadastro-em-duas-etapas",
+        "variante": "b",
+        "evento": "perguntou_biela",
+        "eventos": 1,
+        "pessoas": 1
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -924,36 +1039,36 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "terminou_onboarding",
-        "eventos": 131,
-        "pessoas": 131
+        "eventos": 144,
+        "pessoas": 144
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "viu_aula",
-        "eventos": 46,
-        "pessoas": 25
+        "eventos": 49,
+        "pessoas": 26
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "viu_paywall",
-        "eventos": 29,
+        "eventos": 30,
         "pessoas": 28
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "abriu_app",
-        "eventos": 185,
-        "pessoas": 127
+        "eventos": 199,
+        "pessoas": 135
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "abriu_cadastro_de_carro",
-        "eventos": 107,
-        "pessoas": 107
+        "eventos": 114,
+        "pessoas": 114
       },
       {
         "experimento": "onboarding-curto",
@@ -980,36 +1095,36 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "atribuicao",
-        "eventos": 108,
-        "pessoas": 108
+        "eventos": 115,
+        "pessoas": 115
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "cadastro",
-        "eventos": 40,
-        "pessoas": 40
+        "eventos": 42,
+        "pessoas": 42
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "cadastrou_carro",
-        "eventos": 66,
-        "pessoas": 65
+        "eventos": 71,
+        "pessoas": 70
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "clicou_baixar",
-        "eventos": 54,
-        "pessoas": 53
+        "eventos": 55,
+        "pessoas": 54
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "comecou_onboarding",
-        "eventos": 236,
-        "pessoas": 236
+        "eventos": 248,
+        "pessoas": 248
       },
       {
         "experimento": "onboarding-curto",
@@ -1022,8 +1137,8 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "convite_aviso",
-        "eventos": 25,
-        "pessoas": 20
+        "eventos": 26,
+        "pessoas": 21
       },
       {
         "experimento": "onboarding-curto",
@@ -1031,6 +1146,13 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "evento": "iniciou_checkout",
         "eventos": 3,
         "pessoas": 2
+      },
+      {
+        "experimento": "onboarding-curto",
+        "variante": "a",
+        "evento": "perguntou_biela",
+        "eventos": 1,
+        "pessoas": 1
       },
       {
         "experimento": "onboarding-curto",
@@ -1064,36 +1186,36 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "terminou_onboarding",
-        "eventos": 126,
-        "pessoas": 126
+        "eventos": 134,
+        "pessoas": 134
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "viu_aula",
-        "eventos": 45,
-        "pessoas": 23
+        "eventos": 48,
+        "pessoas": 24
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "viu_paywall",
-        "eventos": 27,
+        "eventos": 28,
         "pessoas": 27
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "abriu_app",
-        "eventos": 255,
-        "pessoas": 162
+        "eventos": 272,
+        "pessoas": 174
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "abriu_cadastro_de_carro",
-        "eventos": 132,
-        "pessoas": 132
+        "eventos": 142,
+        "pessoas": 142
       },
       {
         "experimento": "onboarding-curto",
@@ -1120,50 +1242,50 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "atribuicao",
-        "eventos": 145,
-        "pessoas": 144
+        "eventos": 157,
+        "pessoas": 156
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "cadastro",
-        "eventos": 28,
-        "pessoas": 28
+        "eventos": 31,
+        "pessoas": 31
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "cadastrou_carro",
-        "eventos": 62,
-        "pessoas": 61
+        "eventos": 68,
+        "pessoas": 67
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "clicou_baixar",
-        "eventos": 52,
-        "pessoas": 48
+        "eventos": 53,
+        "pessoas": 49
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "comecou_onboarding",
-        "eventos": 250,
-        "pessoas": 250
+        "eventos": 265,
+        "pessoas": 265
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "consultou_sintoma",
-        "eventos": 64,
-        "pessoas": 34
+        "eventos": 71,
+        "pessoas": 38
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "convite_aviso",
-        "eventos": 28,
-        "pessoas": 24
+        "eventos": 30,
+        "pessoas": 26
       },
       {
         "experimento": "onboarding-curto",
@@ -1171,6 +1293,13 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "evento": "iniciou_checkout",
         "eventos": 2,
         "pessoas": 2
+      },
+      {
+        "experimento": "onboarding-curto",
+        "variante": "b",
+        "evento": "perguntou_biela",
+        "eventos": 1,
+        "pessoas": 1
       },
       {
         "experimento": "onboarding-curto",
@@ -1204,15 +1333,15 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "terminou_onboarding",
-        "eventos": 157,
-        "pessoas": 157
+        "eventos": 170,
+        "pessoas": 170
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "viu_aula",
-        "eventos": 88,
-        "pessoas": 35
+        "eventos": 89,
+        "pessoas": 36
       },
       {
         "experimento": "onboarding-curto",
@@ -1226,26 +1355,28 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       {
         "de": "abriu_app",
         "para": "viu_paywall",
-        "antes": 397,
+        "antes": 417,
         "depois": 100,
         "validoDesde": "2026-08-22",
-        "ressalvas": [],
-        "taxa": 25.2,
+        "ressalvas": [
+          "no Android o paywall APARECE e não tem botão de compra (modo leitor, sem a chave do RevenueCat no build), e 85% das exibições vêm de lá. Taxa de paywall para checkout somando as tres plataformas mede um denominador que não converte por construção"
+        ],
+        "taxa": 24,
         "motivo": null,
-        "perdidos": 297
+        "perdidos": 317
       },
       {
         "de": "cadastro",
         "para": "iniciou_checkout",
-        "antes": 93,
+        "antes": 99,
         "depois": 11,
         "validoDesde": "2026-08-22",
         "ressalvas": [
           "contado em auth.users (função contas_criadas_desde), não no evento: o evento só dispara para conta com menos de 7 dias e perde tudo que veio antes do instrumento"
         ],
-        "taxa": 11.8,
+        "taxa": 11.1,
         "motivo": null,
-        "perdidos": 82
+        "perdidos": 88
       },
       {
         "de": "iniciou_checkout",
@@ -1261,37 +1392,37 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       {
         "de": "comecou_onboarding",
         "para": "terminou_onboarding",
-        "antes": 759,
-        "depois": 381,
+        "antes": 786,
+        "depois": 402,
         "validoDesde": "2026-09-01",
         "ressalvas": [],
-        "taxa": 50.2,
+        "taxa": 51.1,
         "motivo": null,
-        "perdidos": 378
+        "perdidos": 384
       },
       {
         "de": "terminou_onboarding",
         "para": "abriu_cadastro_de_carro",
-        "antes": 381,
-        "depois": 280,
+        "antes": 402,
+        "depois": 297,
         "validoDesde": "2026-09-01",
         "ressalvas": [],
-        "taxa": 73.5,
+        "taxa": 73.9,
         "motivo": null,
-        "perdidos": 101
+        "perdidos": 105
       },
       {
         "de": "abriu_cadastro_de_carro",
         "para": "cadastrou_carro",
-        "antes": 280,
-        "depois": 138,
+        "antes": 297,
+        "depois": 149,
         "validoDesde": "2026-09-01",
         "ressalvas": [
           "isto é ATO, e conta só quem cadastrou DENTRO da janela. Para quantos TÊM carro hoje, some as contas em estado_da_base: o ato não enxerga quem cadastrou antes do instrumento (23/08/2026) nem quem usa como convidado, sem conta"
         ],
-        "taxa": 49.3,
+        "taxa": 50.2,
         "motivo": null,
-        "perdidos": 142
+        "perdidos": 148
       }
     ],
     "janelaDoFunil": {
@@ -1300,18 +1431,18 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       "aviso": null
     },
     "estadoDaBase": {
-      "contas": 103,
-      "contas_com_estado": 99,
-      "contas_com_carro": 74,
+      "contas": 109,
+      "contas_com_estado": 104,
+      "contas_com_carro": 79,
       "contas_com_servico": 11,
-      "contas_ativas_7d": 50,
-      "contas_ativas_30d": 89
+      "contas_ativas_7d": 48,
+      "contas_ativas_30d": 94
     },
     "anomalias": [
       {
         "anomalia": "abriu o cadastro de carro e sumiu",
         "plataforma": "android",
-        "quantas": 3,
+        "quantas": 4,
         "detalhe": "sem nenhum evento depois de abrir o cadastro; indicio, nao prova"
       },
       {
@@ -1323,14 +1454,20 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       {
         "anomalia": "acao que costuma ser a ultima",
         "plataforma": "web",
-        "quantas": 98,
-        "detalhe": "de 125 vezes de comecou_onboarding (78.4%), base da plataforma 55.3%; indicio, nao prova"
+        "quantas": 85,
+        "detalhe": "de 107 vezes de comecou_onboarding (79.4%), base da plataforma 55.2%; indicio, nao prova"
       },
       {
         "anomalia": "acao que costuma ser a ultima",
         "plataforma": "android",
-        "quantas": 21,
-        "detalhe": "de 47 vezes de viu_paywall (44.7%), base da plataforma 17.1%; indicio, nao prova"
+        "quantas": 20,
+        "detalhe": "de 59 vezes de cadastro (33.9%), base da plataforma 17.2%; indicio, nao prova"
+      },
+      {
+        "anomalia": "acao que costuma ser a ultima",
+        "plataforma": "android",
+        "quantas": 16,
+        "detalhe": "de 44 vezes de viu_paywall (36.4%), base da plataforma 17.2%; indicio, nao prova"
       },
       {
         "anomalia": "app fechou sozinho",
@@ -15951,6 +16088,14 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
       {
         "loja": "app_store",
         "nota": 5,
+        "titulo": "Excelente",
+        "texto": "Tem me ajudado bastante, muito bom!",
+        "autor": "matthewsmc0",
+        "versao": "1.6"
+      },
+      {
+        "loja": "app_store",
+        "nota": 5,
         "titulo": "Aprendizado",
         "texto": "Eu não conheço nada sobre carro e mecânica, e com os videos do app tenho aprendido cada vez mais. Os conteúdos são muito interessantes para o dia a dia, exemplo, resfriar o turbo antes de desligar o motor.",
         "autor": "aminoru",
@@ -15971,14 +16116,6 @@ NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
         "texto": "Consegui economizar na revisão do carro graças a informação do app!",
         "autor": "Biiaes",
         "versao": "1.7"
-      },
-      {
-        "loja": "app_store",
-        "nota": 5,
-        "titulo": "Excelente",
-        "texto": "Tem me ajudado bastante, muito bom!",
-        "autor": "matthewsmc0",
-        "versao": "1.6"
       },
       {
         "loja": "google_play",
