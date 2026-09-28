@@ -217,5 +217,48 @@ if (mRota[1] !== ultimaPublicada) {
   process.exit(1);
 }
 
+// ── O PISO DO versionCode PASSOU O QUE JÁ FOI PUBLICADO? (28/09/2026) ──────
+//
+// A Play RECUSA um versionCode menor ou igual ao maior já enviado, e um número
+// recusado fica queimado do mesmo jeito. O CI calcula
+// `PROJECT_BUILD_NUMBER + 1` e usa `mentorqueVersionCode` do gradle.properties
+// como PISO, exatamente para o caso de o contador do Codemagic estar atrás
+// (ver o passo "Compilar .aab" no codemagic.yaml, onde isso está escrito).
+//
+// O PROBLEMA QUE ESTA CONFERÊNCIA PEGA: o piso é o único número deste
+// repositório que ninguém precisa tocar para o build passar, então ele
+// envelhece sozinho. Em 28/09, preparando a 2.9, ele estava em **56** enquanto
+// a 2.8 já tinha saído com **68**: o piso não protegia mais nada, e a rede que
+// existe para salvar um envio queimado estava doze números atrás do chão.
+//
+// Ele não precisa ser exato, precisa ser MAIOR que o publicado. Errar para
+// cima é de graça no Android (o número só precisa crescer); errar para baixo
+// custa um build e um número queimado.
+const gradle = ler("android/gradle.properties");
+const mPiso = gradle.match(/mentorqueVersionCode=(\d+)/);
+const mAndroid = rota.match(/android:\s*(\d+)/);
+
+if (!mPiso || !mAndroid) {
+  console.error("Versões: não achei o piso do versionCode ou o build publicado do Android.");
+  console.error("  piso:      mentorqueVersionCode em android/gradle.properties");
+  console.error("  publicado: campo `android` em app/api/app/latest/route.ts");
+  process.exit(1);
+}
+const piso = Number(mPiso[1]);
+const publicado = Number(mAndroid[1]);
+if (piso <= publicado) {
+  console.error(`Piso do versionCode é ${piso}, e a Play já tem o ${publicado} publicado.`);
+  console.error("");
+  console.error("A Play recusa versionCode menor ou igual ao maior já enviado, e o");
+  console.error("número recusado fica QUEIMADO. O piso existe para salvar o envio");
+  console.error("quando o contador do Codemagic está atrás; com ele abaixo do que já");
+  console.error("está publicado, ele não salva nada.");
+  console.error("");
+  console.error(`Abra android/gradle.properties e ponha mentorqueVersionCode=${publicado + 1}`);
+  console.error("ou mais. Errar para cima é de graça: o número só precisa crescer.");
+  process.exit(1);
+}
+
 console.log(`Versões conferem: ${alvo} (app ${app}, Android ${android}, iOS ${ios}), ainda não publicada.`);
 console.log(`Banner: aponta para a ${mRota[1]}, que é a última publicada.`);
+console.log(`versionCode: piso ${piso}, acima do ${publicado} que já está na Play.`);
