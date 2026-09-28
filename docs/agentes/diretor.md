@@ -419,9 +419,37 @@ uma regra porque o autoexame cobra:
 Um relatório que cobra o que já está pronto gasta a semana do dono e queima a
 credibilidade do resto, que nesta rodada estava certo.
 
+- 2026-09-28: **coorte só se lê quando a janela fecha**, e desde 23/09 as views
+  dizem isso sozinhas (`semana_fechada`, `d1_7_fechada`, `d8_30_fechada`, obra
+  do QA). O relatório mostra as fechadas na tabela e a que ainda enche em linha
+  apagada, com o rótulo. Nunca comparar coorte madura com coorte de dois dias:
+  o denominador cresce enquanto a semana está aberta e o numerador enquanto a
+  janela de cada pessoa não fecha.
+- 2026-09-28: promessa feita em conversa tem que virar arquivo NA MESMA
+  RODADA. Em 21/09 eu disse ao dono que ia gravar o direcionamento de retenção
+  no manual e a conversa acabou antes; passou uma semana. Registro que depende
+  de eu lembrar na semana seguinte é registro que não existe.
+- 2026-09-28: antes de chamar um zero de resultado, perguntar se a plataforma
+  onde ele foi medido PODE produzir o número. O `iniciou_checkout` zerado tem
+  85% do denominador no Android, que roda em modo leitor por decisão de projeto
+  e não tem botão de compra (política da Play). Eu tinha atribuído o zero só ao
+  portão do convidado, que é a metade menor. Zero estrutural não é zero de
+  comportamento.
+- 2026-09-28: quando o custo por conta CAI e o volume sobe, o instinto é
+  acelerar, e é justamente aí que a retenção precisa entrar antes. Nesta semana
+  o custo caiu de R$ 15,59 para R$ 6,42 com a última coorte fechada voltando
+  zero. Barato para comprar gente que não volta continua sendo caro.
+
 ## Direcionamentos do dono
 
 - Entrega às segundas, 08:00 (horário de Brasília), com notificação.
+- **RETENÇÃO É A MÉTRICA, não assinatura** (21/09/2026, registrado com uma
+  semana de atraso em 28/09). Palavras dele: "isso é a melhor métrica,
+  retenção. Não precisamos focar tanto em assinaturas nesse momento". O
+  relatório passa a abrir pela retenção das coortes FECHADAS, e assinatura
+  vira linha de acompanhamento e não manchete. O argumento que sustenta:
+  com três assinantes e receita zero até outubro, assinatura é ruído; e
+  enquanto ninguém volta, dinheiro de anúncio compra visita e não cliente.
 - **NUNCA entregar uma análise sem o banco respondendo** (31/08/2026). A
   consulta direta ao Supabase é obrigatória, não opcional: o retrato traz
   eventos e o banco traz os fatos, e já aconteceu de os dois discordarem em
