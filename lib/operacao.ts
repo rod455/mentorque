@@ -1,3 +1,4 @@
+import { alarmeDeErros, classeDoErro, contaDeErros, linhaDeErros } from "./alarmeDeErros";
 import { avisoDeColeta, frescorDasFontes } from "./frescorDasFontes";
 import {
   CADEIA_ATO,
@@ -290,6 +291,25 @@ export async function coletarDadosOperacao() {
   const hoje = new Date().toISOString().slice(0, 10);
   const frescor = frescorDasFontes(metricas ?? [], hoje);
 
+  // A LEITURA DOS ERROS, PRONTA, COM A DECISÃO DE ALARME DENTRO (29/09/2026).
+  //
+  // Por que a decisão sai daqui e não do nó do Vigia: em 28/09 a casa provou
+  // que alarme é razão e não contagem, pôs o denominador no banco e no retrato,
+  // e o Vigia continuou disparando em `total >= 20`. A régua que fica só na
+  // fonte não chega a quem lê. Regra e porquê em lib/alarmeDeErros.ts.
+  //
+  // `piorDefeito` é o primeiro do `top` que É defeito: sem isso o e-mail
+  // apontaria para "Google Sign-In cancelled by user", que é a pessoa
+  // desistindo do login, e mandaria o dono caçar um defeito que não existe.
+  const contagemDeErros = contaDeErros(
+    (erros ?? []) as { mensagem?: string | null; anon_id?: string | null }[],
+  );
+  const ativosPorPlataforma = ((ativos ?? []) as { plataforma: string; aparelhos: number }[]).reduce(
+    (acc, l) => ({ ...acc, [l.plataforma]: Number(l.aparelhos) }),
+    {} as Record<string, number>,
+  );
+  const piorDefeito = topErros.find((t) => classeDoErro(t.mensagem) === "defeito") ?? null;
+
   const porFonte: Record<string, { dia: string; dados: Record<string, unknown> }[]> = {};
   for (const m of metricas ?? []) {
     if (m.dia < d10dias) continue;
@@ -349,11 +369,19 @@ export async function coletarDadosOperacao() {
       // regra que isto serve está em supabase/aparelhos-ativos.sql, e é a
       // mesma que virou régua no funil: alarme é sempre uma razão, nunca uma
       // contagem.
-      aparelhosComErro: new Set((erros ?? []).map((e) => String((e as { anon_id?: string }).anon_id ?? "")).filter(Boolean)).size,
-      aparelhosAtivos: ((ativos ?? []) as { plataforma: string; aparelhos: number }[]).reduce(
-        (acc, l) => ({ ...acc, [l.plataforma]: Number(l.aparelhos) }),
-        {} as Record<string, number>,
-      ),
+      aparelhosComErro: contagemDeErros.aparelhos,
+      aparelhosAtivos: ativosPorPlataforma,
+      // DESISTÊNCIA NÃO É DEFEITO (29/09/2026). Dos 16 aparelhos com "erro" em
+      // 7 dias, SETE eram gente fechando a tela de login do Google. Contados
+      // junto, o alarme mede a nossa própria instrumentação: separados, são 9
+      // aparelhos com defeito de verdade.
+      porClasse: contagemDeErros.porClasse,
+      aparelhosComDefeito: contagemDeErros.porClasse.defeito.aparelhos,
+      // A FRASE PRONTA e a DECISÃO, pelo mesmo motivo das coortes: mandar o
+      // número cru obriga quem lê a lembrar da ressalva, e em cinco dias
+      // ninguém lembrou cinco vezes.
+      linha: linhaDeErros(contagemDeErros, ativosPorPlataforma, hoje),
+      alarme: alarmeDeErros(contagemDeErros, ativosPorPlataforma, hoje, piorDefeito),
     },
     // E-MAIL DA JORNADA, 30 dias: o que saiu e o que aconteceu depois.
     //
