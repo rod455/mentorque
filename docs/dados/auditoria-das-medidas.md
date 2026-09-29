@@ -90,24 +90,77 @@ baixo.
 As três têm conferência com defeito plantado: `conferir:funil`,
 `conferir:anomalias` e `conferir:legivel`.
 
-## O que falta, e onde
+## O passo do n8n: feito e conferido (29/09/2026)
 
-**Um passo no n8n, e ele é o que fecha o assunto.** O texto do retrato é
-montado lá, não aqui. `/api/dados` já entrega as frases prontas em
-`usoRegua.linhasRetencao` e `usoRegua.linhasAtivacao`; o nó do Analista
-precisa IMPRIMIR essas frases em vez de remontar as dele a partir dos números
-crus. É o mesmo tipo de passo que o retrato já deu com o CAC em 24/09.
+O nó do Analista passou a imprimir as frases prontas, e **as quatro linhas do
+retrato de hoje saem com a ressalva dentro**:
 
-Enquanto isso não for feito, as linhas de coorte do retrato continuam saindo
-do jeito antigo. **A conferência não alcança o n8n**, e por isso isto está
-escrito aqui em vez de estar num teste.
+```
+- Retencao, coorte 2026-09-21: 51 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER
+  (fecha em 2026-10-05; hoje sao 6, PISO), 8 a 30 dias AINDA NAO DA PARA LER
+  (fecha em 2026-10-28; hoje sao 0, PISO)
+- Ativacao, coorte 2026-09-21: AINDA NAO DA PARA LER (a janela fecha em
+  2026-10-05; hoje sao 2 de 51, PISO)
+```
 
-**O que segue aberto na lista acima**, e não foi tocado hoje:
-- a semana corrente ao lado da fechada, sem a ressalva que o CAC tem (3 linhas);
-- os cadastros por origem sem total e sem o aviso da etiqueta quebrada;
-- "0 renovaram" numa coorte cuja renovação ainda não chegou;
-- Stripe com MRR e receita 30d que se contradizem sem explicação;
-- YouTube sem janela.
+No caminho apareceu a armadilha que fez tudo isso demorar cinco dias, agora em
+forma de ferramenta: **no n8n, salvar não é publicar.** O fluxo guarda a versão
+salva (`versionId`) separada da que roda no agendamento (`activeVersionId`), e
+`update_workflow` mexe só na primeira. A alteração de 28/09 estava salva, a
+chamada voltou sem aviso nenhum, e o fluxo das 6h ia rodar o código velho. É o
+mesmo defeito do documento inteiro, desta vez contra mim: conserto que não
+chega ao consumidor. Está escrito em `docs/mapa-do-codigo.md`.
 
-Nenhum deles é difícil. Todos são a mesma coisa: **a frase precisa carregar o
-que a torna legível, e a frase mora no n8n.**
+As outras linhas da lista acima também foram fechadas no mesmo nó: a semana
+corrente diz `(PARCIAL, ainda enche)` nos três lugares, a anterior diz
+`(FECHADA)`, os cadastros por origem trazem a fração do total, o Stripe explica
+por que MRR e receita 30d parecem se contradizer, a coorte de assinantes diz
+que renovação de mensal só aparece um mês depois, e o YouTube diz que é
+acumulado e não janela.
+
+## O alarme, que era a peça que ainda estava solta (29/09/2026)
+
+A auditoria consertou o retrato e **não consertou o Vigia**, que é o único que
+manda e-mail para o dono às 7h30. Ele continuou disparando em
+`erros7d.total >= 20`, e o retrato de 28/09 trazia 23. O alarme ia sair na
+manhã seguinte pela terceira vez na semana, com o número que a própria
+auditoria acabou de provar que não mede nada.
+
+Corrigido: a DECISÃO de avisar agora mora em `lib/alarmeDeErros.ts`, junto da
+regra, e sai pronta em `erros7d.alarme`. O nó imprime.
+
+Ao fazer isso, dois achados novos, e os dois estavam escondidos dentro da
+contagem:
+
+1. **Desistência não é defeito.** Dos 16 aparelhos com "erro" em 7 dias, SETE
+   eram gente fechando a tela de login do Google. Contados junto, o alarme mede
+   a nossa própria instrumentação. Separados: 8 aparelhos com defeito de
+   verdade, 2,5% dos ativos. Nada para acordar ninguém.
+2. **A razão é mais nova que a série.** A coluna `anon_id` de `app_erros` só
+   começou a ser preenchida em 19/09. Como a janela é de 7 dias, "aparelhos com
+   erro" só virou medida inteira em **26/09**. Lida sem isso, a série sobe de
+   0,7% (22/09) para 2,8% (28/09) e parece uma piora de quatro vezes; boa parte
+   da subida é a janela **enchendo** de linhas que sabem dizer de que aparelho
+   vieram. É a armadilha das coortes, no mesmo mês, num instrumento diferente.
+
+O teto ficou em 10% de aparelhos com defeito, e está escrito no código que ele
+é **provisório**: com três pontos maduros (1,7%, 2,3% e 2,8%) não dá para
+calibrar nada. O método para recalibrar a partir de 03/10 está anotado junto da
+constante.
+
+`conferir:alarme`, com seis defeitos plantados, todos mordidos.
+
+## O que segue aberto
+
+- **Desistência de login ainda é GRAVADA como erro** pelo app. O leitor já a
+  separa, mas a origem continua suja, e quem olhar a tabela crua vê 22 erros
+  onde há 14. O conserto é no app e **precisa de build**: fica para o primeiro
+  depois da 2.9, para não mexer numa versão já conferida.
+- A quebra da etiqueta da busca desde 19/09 aparece agora como fração (22% dos
+  cadastros chegam com etiqueta), mas o retrato ainda não diz que a etiqueta
+  quebrou. Isso é coleta, não leitura.
+
+## O placar, refeito
+
+**Antes:** 7 legíveis, 4 piso, 4 cegos, 1 confuso, 1 sem janela.
+**Depois:** 17 legíveis, e as que não dão para ler dizem por que e desde quando.

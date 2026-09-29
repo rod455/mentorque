@@ -253,6 +253,46 @@ quando a conferência tem uma lista, ela lê a lista DO CÓDIGO e a lista escrit
 no script vira só o mínimo exigido. Conferência que enumera de cabeça só pega
 falta, nunca sobra.
 
+## Conserto que não muda o consumidor não é conserto (28 e 29/09/2026)
+
+Esta é a lição mais cara de setembro, e ela apareceu cinco vezes em uma semana,
+sempre com o mesmo formato: **alguém arrumou o dado na fonte, a fonte ficou
+certa, e quem lê continuou lendo errado porque ninguém avisou o leitor.**
+
+- 23/09 o QA pôs `d1_7_fechada`, `d8_30_fechada` e `janela_fechada` nas views
+  de coorte. As colunas existem desde então. **O retrato nunca passou a
+  imprimi-las.** Em 25/09 o CRO publicou "coorte de 14/09 FECHADA, zero
+  voltando" (a `d1_7` era `false`), e em 28/09 o Diretor abriu o relatório da
+  semana com "a última coorte fechada voltou ZERO". A retenção virou a métrica
+  da operação em cima de um número que não existia;
+- 28/09 a casa provou que **alarme é sempre uma razão, nunca uma contagem**, e
+  escreveu isso no SQL do denominador, no `/api/dados` e na linha do retrato. O
+  **Vigia**, que é o único que manda e-mail para o dono, continuou disparando em
+  `erros7d.total >= 20`. Ia sair de novo na manhã seguinte.
+
+A regra que ficou, e vale para toda rodada daqui: **toda vez que você arrumar um
+dado, diga quem lê aquele dado e prove que o leitor mudou.** Se o leitor não
+mudou, o achado continua ABERTO, por mais certo que esteja o conserto.
+
+O jeito de não depender de ninguém lembrar: **a fonte manda a frase pronta, e o
+leitor só imprime.** É o que fazem `lib/retratoLegivel.ts` (coortes) e
+`lib/alarmeDeErros.ts` (erros): a ressalva, o denominador e até a DECISÃO de
+avisar saem de `/api/dados` prontos, e o nó do n8n não recalcula nada.
+
+> **⚠️ No n8n, salvar NÃO é publicar (28/09/2026).** O fluxo tem duas versões: a
+> que você salvou (`versionId`) e a que roda no agendamento (`activeVersionId`).
+> `update_workflow` mexe só na primeira. Eu reescrevi o nó do retrato, a
+> chamada voltou `appliedOperations: 1` sem aviso nenhum, e **o fluxo das 6h
+> continuou rodando o código velho.** Depois de qualquer `update_workflow`:
+> chame `publish_workflow` e confira que os dois ids bateram. O sintoma é
+> cruel, porque o painel mostra o código novo.
+
+E o que a conferência não alcança continua não alcançando: **nenhum
+`npm run conferir` enxerga dentro do n8n.** O que dá para provar daqui é que a
+frase certa SAI por `/api/dados` (`conferir:legivel`, `conferir:alarme`); que o
+nó IMPRIME é passo de painel, e a prova dele é rodar o fluxo e ler o que ele
+gravou.
+
 ## Medir a página de verdade: o Chrome DevTools (19/09/2026)
 
 O `.mcp.json` na raiz liga o **`chrome-devtools-mcp`**, que é oficial do time do
