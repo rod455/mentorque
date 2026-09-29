@@ -64,6 +64,72 @@ preço/planos, tocar em telas de app fora de conteúdo.
 
 ## Aprendizados
 
+- **⚠️ A "lição do canal" de 22 e 29/09 está ERRADA, e a correção é de
+  29/09/2026.** Duas rodadas seguidas concluíram, a partir das views do
+  YouTube, que existe um padrão de gancho: "vídeo que pega distribuição
+  continua pegando, o que não pegou morreu", e daí "a decisão que importa é a
+  de antes de publicar". A série diária do banco mostra outra coisa.
+
+  Os oito vídeos da tabela **saltaram todos no MESMO dia, 21/09**, e o tamanho
+  do salto de cada um é exatamente o que separou os "que pegaram" dos "que
+  morreram":
+
+  | vídeo | 20/09 | 21/09 |
+  |---|---|---|
+  | Perde força na serra | 61 | 836 |
+  | Água de torneira | 31 | 724 |
+  | A pergunta na oficina | 1 | 540 |
+  | Esquentar o carro parado | 36 | 479 |
+  | O número no pneu | 10 | 99 |
+  | Etanol ou gasolina | 36 | 85 |
+  | Poça embaixo do carro | 4 | 9 |
+  | Erro silencioso | 0 | 2 |
+
+  São cerca de 2.600 views num dia só. **No mesmo 20 e 21/09 entrou no ar a
+  campanha "APP | Android | Instalações | BR" (canal MULTI_CHANNEL, que serve
+  no YouTube)**, que saiu de R$ 0,17 e 30 impressões para R$ 44,30 e 3.619
+  impressões. Não está provado que uma coisa causou a outra, e é exatamente
+  por isso que a conclusão de gancho não se sustenta: existe uma explicação
+  concorrente que bate no dia e não foi descartada.
+
+  E o contraexemplo mata a regra por dentro: **"Esquentar o carro parado"
+  ficou em 34 → 36 views durante DEZESSETE dias** (04 a 20/09) e hoje é o
+  maior do canal, com 3.169. "Não existe deixa rodar que ele aparece" foi
+  escrito sobre o vídeo que fez exatamente isso.
+
+  **A regra que fica: view de YouTube desta casa não é sinal de conteúdo
+  enquanto pago e orgânico não vierem separados.** O coletor traz só o total.
+  Enquanto não trouxer `trafficSourceType` (ou enquanto a campanha de app
+  estiver rodando), a rodada não conclui nada sobre título, capa ou gancho, e
+  escreve que não dá para concluir. É a mesma regra do resto da casa: número
+  publicado sem o que o torna legível vira decisão errada
+  (`docs/dados/auditoria-das-medidas.md`).
+
+- **⚠️ Duas rodadas em cada três não produzem nada indexável, e isso precisa
+  estar na conta (29/09/2026).** O catálogo (109 aulas) vive DENTRO do app: não
+  tem rota no site, não está no sitemap, e o Google não o enxerga. Indexável
+  mesmo são os 5 guias em `app/<sintoma>/`, e **o último subiu em 15/09**. O
+  rodízio a → b → c faz com que só uma rodada em três produza página. Se a
+  meta da cadeira é busca, o rodízio é o que está segurando, e isso é decisão
+  do dono, não ajuste silencioso: leve a pergunta a ele em vez de mudar o
+  rodízio sozinho.
+
+- **A lista de demanda mais rica que esta casa tem não está sendo usada
+  (29/09/2026).** O Search Console deu 37 impressões em 28 dias. Os **termos de
+  pesquisa do Google Ads**, no mesmo período, trazem cerca de 50 buscas reais
+  com custo e conversão ao lado ("carro liga parte elétrica mas não dá
+  partida", "luz de injeção eletrônica acesa e não apaga", "fumaça branca no
+  escapamento", "carro esquentando mesmo com água no radiador", "quando o
+  carro está perdendo a força"). São perguntas que a casa está PAGANDO para
+  responder e que dizem qual guia escrever. Estão em
+  `fontesExternas.google_ads.termos` no retrato, e `termosSemConversao` é a
+  lista de quem clicou e não virou nada, que é ainda mais direta.
+
+- **O Biela já recebeu 46 perguntas de verdade em 12 dias, e o texto delas não
+  é guardado.** `biela_perguntas` conta, mas não armazena o que foi perguntado.
+  Se o dono quiser usar as perguntas reais como pauta, isso é decisão dele
+  (é dado de cliente), e hoje a resposta honesta é: não temos o texto.
+
 - **Ordem do rodízio, para quem chegar depois**: a rodada de 25/08 foi a
   primeira e usou o formato (a), LP de palavra-chave. A sequência combinada
   é a → b → c → a. Confira sempre a última entrega no DIARIO antes de
