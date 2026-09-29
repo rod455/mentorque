@@ -257,3 +257,4 @@ texto viaja pela rede, o arquivo não).
 | id | aula |
 |---|---|
 | `diag-freio-avisos` | Freio: os avisos que vêm antes do barulho |
+| `diag-suspensao-avisos` | Suspensão: o que ela avisa antes de virar conta |

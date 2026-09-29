@@ -86,6 +86,16 @@ preço/planos, tocar em telas de app fora de conteúdo.
   valor. Preço dentro do app é estimativa ajustada ao carro da pessoa; solto
   no site, vira promessa.
 
+- **Vídeo que não pega nos primeiros dias não se recupera, e isso decide
+  onde gastar esforço.** Uma semana depois do lote de 19/09, os que tinham
+  pegado seguiram crescendo (515 → 3169, 895 → 1770, 742 → 1113, 553 → 963)
+  e os que não pegaram renderam de 1 a 9 views na semana inteira (122 → 123,
+  99 → 108, 14 → 20, 4 → 5). Nenhum se recuperou, e a distância dentro do
+  lote passou de 64 para cerca de 88 vezes sem ninguém publicar nada. A
+  consequência para este papel: toda a alavanca está ANTES de publicar, no
+  assunto e no gancho. Não existe "deixa rodar que ele aparece", então
+  também não existe motivo para gastar rodada mexendo em vídeo publicado.
+
 - **Short entrega UMA ideia; a lista de casos é do texto, não do vídeo.**
   Em 19/09 cinco vídeos subiram no mesmo lote, entre 13h26 e 13h29, e três
   dias depois estavam em 895, 553, 122, 99 e 14 views. Dentro de um lote
@@ -163,6 +173,15 @@ preço/planos, tocar em telas de app fora de conteúdo.
   Foi assim que a rodada de 01/09 achou o argumento dela: 43 Shorts e nenhum
   sobre freio, e uma única aula de freio no catálogo inteiro, premium e sem
   vídeo. Argumento contado convence; argumento sentido, não.
+
+- **O par Short mais aula é o formato padrão deste papel para um sistema
+  vazio.** Funcionou duas vezes seguidas, e a divisão é sempre a mesma: o
+  Short pega UMA ideia contraintuitiva sobre algo que a pessoa já sentiu, e
+  a aula gratuita carrega a lista completa de sinais, que é onde lista
+  funciona. Freio: Pauta 01 mais `diag-freio-avisos`. Suspensão: Pauta 02
+  mais `diag-suspensao-avisos`. Ao escrever a aula, guarde de propósito
+  para ela o que não coube no Short (na de suspensão foi a troca aos pares)
+  e diga isso no comentário, senão a próxima rodada acha que é repetição.
 
 - **A fila pode ser consumida por outra rodada.** O item #2 deixado em 25/08
   (reescrever `diag-noises`) foi feito pela rodada de IA do mesmo dia, e a
