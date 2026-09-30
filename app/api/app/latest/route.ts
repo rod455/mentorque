@@ -43,7 +43,18 @@ const LATEST = {
   // versão: 30 APARELHOS ANDROID já reportaram `versao = 2.8.0` no nosso
   // próprio funil, o mais recente às 07h31 daquele dia.
   // Antes: 2.7 = 67, 2.6 = 66, 2.4 = 63, 1.7 = 55.
-  android: 68, // 2.8 na Play
+  // 30/09/2026: 2.9, build 69. Aprovada nas DUAS lojas (a Play primeiro, a
+  // Apple hoje). O número é do dono, como manda a nota acima, e bate com o
+  // menor valor possível: a 2.8 saiu com 68 e o código só pode crescer.
+  //
+  // A Play não precisou da palavra de ninguém: o nosso próprio funil tem 84
+  // APARELHOS ANDROID reportando `versao = 2.9.0` desde 28/09, o mais recente
+  // hoje às 22h08. No iPhone a prova ainda não existe do lado de cá (1
+  // aparelho em 29/09, que é TestFlight), porque a coleta do
+  // `app_store_connect` é das 6h e a aprovação saiu depois: às 6h de hoje ela
+  // ainda respondia WAITING_FOR_REVIEW. Confere amanhã, sozinha.
+  // Antes: 2.8 = 68, 2.7 = 67, 2.6 = 66, 2.4 = 63, 1.7 = 55.
+  android: 69, // 2.9 na Play
   // A LIÇÃO DESTE CAMPO, que vale mais que o número: em 12/09 ele foi para 74
   // pela lembrança de alguém, e o banner acendeu para todo mundo na 2.4
   // apontando para um build que a loja não tinha. O erro tem lados de custo
@@ -64,7 +75,15 @@ const LATEST = {
   // 25/09/2026: 2.8, build 68. Conferido na fonte que a nota acima manda usar,
   // e não de cabeça: o App Store Connect responde READY_FOR_SALE para a 2.8
   // desde 24/09.
-  ios: 68, // 2.8 na App Store, READY_FOR_SALE desde 24/09
+  // 30/09/2026: 2.9, build 69, aprovada pela Apple hoje. Número do dono.
+  // A FONTE QUE ESTA NOTA MANDA USAR AINDA NÃO CONFIRMA, e está dito de
+  // propósito: o retrato do `app_store_connect` é colhido às 6h e, naquela
+  // hora, a 2.9 estava em WAITING_FOR_REVIEW. A aprovação veio depois. Como a
+  // própria nota acima já dizia, ele serve para CONFERIR no dia seguinte, não
+  // para contestar na hora. Se amanhã o retrato não trouxer a 2.9 em
+  // READY_FOR_SALE, este número é o primeiro lugar a olhar.
+  // Antes: 2.8 = 68, 2.6 = 66, 2.4 = 63, 1.6 = 52.
+  ios: 69, // 2.9 na App Store, aprovada em 30/09
   // A QUAL VERSÃO DE MARKETING OS DOIS NÚMEROS ACIMA CORRESPONDEM (25/09/2026).
   //
   // Existe porque neste dia o banner NÃO acendeu, e a causa não era loja nem
@@ -80,7 +99,7 @@ const LATEST = {
   //
   // O app ignora este campo (lê só `android`/`ios`), então ele não muda nada
   // para quem consome.
-  versao: "2.8",
+  versao: "2.9",
 };
 
 export function GET() {

@@ -127,7 +127,44 @@ const JA_PUBLICADAS = [
   // Android já reportaram `2.8.0` no próprio funil. Acrescentada na hora do
   // aviso do dono, como a 2.7.
   "2.8",
+  // Build 69, aprovada na Play primeiro e pela Apple em 30/09/2026.
+  // Acrescentada na hora do aviso do dono, como a 2.7 e a 2.8.
+  //
+  // A PROVA DO ANDROID NÃO DEPENDEU DE NINGUÉM: 84 aparelhos já reportavam
+  // `versao = 2.9.0` no nosso próprio funil desde 28/09, o mais recente às
+  // 22h08 de 30/09. A do iPhone ainda NÃO existe do lado de cá, e isso está
+  // escrito de propósito: a coleta do `app_store_connect` é das 6h e, naquela
+  // hora, a 2.9 respondia WAITING_FOR_REVIEW. A aprovação veio depois. O
+  // retrato de amanhã confere sozinho; se não trouxer READY_FOR_SALE, o campo
+  // `ios` de app/api/app/latest/route.ts é o primeiro lugar a olhar.
+  "2.9",
 ];
+
+// O BUILD DE CADA VERSÃO PUBLICADA (30/09/2026).
+//
+// POR QUE ESTE MAPA NASCEU, e nasceu de um defeito plantado que PASSOU VERDE.
+// Ao publicar a 2.9 eu plantei "o campo `android` ficou em 68 enquanto a
+// `versao` virou 2.9" e esta conferência aprovou. O estrago desse estado é
+// silencioso e é exatamente o de 25/09: o repositório declara a versão nova
+// publicada, a lista concorda, o campo `versao` concorda, e o banner CONTINUA
+// APAGADO, porque quem está na 2.8 tem o build 68 e o aviso só acende para
+// quem está abaixo do número. Ninguém é chamado para atualizar e nada reprova.
+//
+// A conferência de 25/09 amarrou `versao` à lista. Faltava amarrar o NÚMERO,
+// que é o único campo que o app de fato lê.
+//
+// O preço é escrever o build aqui também, e a duplicação é de propósito: é a
+// mesma ideia dos três lugares da versão de marketing, onde dois arquivos
+// discordando é o que denuncia o esquecimento de um deles.
+const BUILD_PUBLICADO = {
+  "1.6": 52,
+  "1.7": 55,
+  "2.4": 63,
+  "2.6": 66,
+  "2.7": 67,
+  "2.8": 68,
+  "2.9": 69,
+};
 
 import { readFileSync } from "node:fs";
 
@@ -214,6 +251,51 @@ if (mRota[1] !== ultimaPublicada) {
   console.error(`  versao   "${ultimaPublicada}"`);
   console.error("");
   console.error("Os dois primeiros são números de BUILD e não a versão de marketing.");
+  process.exit(1);
+}
+
+// ── E O NÚMERO DO BANNER É O DA ÚLTIMA PUBLICADA? (30/09/2026) ─────────────
+//
+// O campo `versao` acima é decorativo para o app: ele lê `android` e `ios`.
+// Então declarar a 2.9 publicada com o build da 2.8 nos dois campos deixa o
+// banner APAGADO e tudo verde, que foi o defeito plantado que passou em
+// 30/09. Aqui o número é cobrado contra o mapa `BUILD_PUBLICADO`.
+const buildEsperado = BUILD_PUBLICADO[ultimaPublicada];
+// Os dois campos são lidos AQUI, e não reaproveitados da conferência do piso
+// logo abaixo: a primeira versão desta checagem usava a variável daquele
+// bloco, que só é declarada depois, e o script inteiro passou a morrer com
+// `Cannot access 'mAndroid' before initialization`. Três defeitos plantados
+// disseram "mordeu" enquanto o verdadeiro estava no original derrubado.
+// Conferência que derruba sem imprimir falha não provou nada.
+const mAndroidBanner = rota.match(/android:\s*(\d+)/);
+const mIos = rota.match(/ios:\s*(\d+)/);
+if (buildEsperado === undefined) {
+  console.error(`Não sei com que build a ${ultimaPublicada} foi publicada.`);
+  console.error("");
+  console.error("Acrescente a linha em BUILD_PUBLICADO, no topo deste arquivo:");
+  console.error(`  "${ultimaPublicada}": <o codigo da Play em Producao, Codigos de versao>,`);
+  console.error("");
+  console.error("Sem isso o banner pode ficar apagado com tudo verde: o app lê");
+  console.error("`android` e `ios`, e o campo `versao` não muda nada para quem consome.");
+  process.exit(1);
+}
+if (!mIos || !mAndroidBanner) {
+  console.error("Versões: não achei os campos `android`/`ios` em app/api/app/latest/route.ts.");
+  process.exit(1);
+}
+const erradosDoBanner = [];
+if (Number(mAndroidBanner[1]) !== buildEsperado) erradosDoBanner.push(`android está ${mAndroidBanner[1]}, e a ${ultimaPublicada} saiu com ${buildEsperado}`);
+if (Number(mIos[1]) !== buildEsperado) erradosDoBanner.push(`ios está ${mIos[1]}, e a ${ultimaPublicada} saiu com ${buildEsperado}`);
+if (erradosDoBanner.length) {
+  console.error(`Banner diz ${ultimaPublicada}, mas aponta para build de outra versão:`);
+  for (const e of erradosDoBanner) console.error(`  - ${e}`);
+  console.error("");
+  console.error("O app lê `android` e `ios`, não o campo `versao`. Com o número");
+  console.error("atrasado, QUEM ESTÁ NA VERSÃO ANTERIOR NÃO VÊ O AVISO, e nada");
+  console.error("reprova: é o silêncio de 25/09 em outra forma.");
+  console.error("");
+  console.error("Se o build da loja for outro, corrija nos DOIS lugares: o campo");
+  console.error("da rota e a linha em BUILD_PUBLICADO deste arquivo.");
   process.exit(1);
 }
 

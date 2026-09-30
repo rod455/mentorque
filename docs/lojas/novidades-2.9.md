@@ -4,7 +4,19 @@ Aberta em 25/09/2026, logo depois de a 2.8 ser aprovada. Tudo o que entra aqui
 **já roda na web** pelo deploy da Vercel; o binário só importa para o app das
 lojas.
 
-**Onde a 2.8 está:** aprovada em 24/09, build 68, nas duas lojas.
+> **PUBLICADA, build 69, nas duas lojas.** A Play primeiro (84 aparelhos já
+> reportavam `2.9.0` no nosso funil em 28/09) e a Apple em **30/09/2026**. O
+> banner de versão nova foi aceso no mesmo commit em que esta linha foi
+> escrita, e o repositório abriu a 3.0.
+>
+> Uma ressalva honesta sobre a prova do iPhone: do lado de cá ela ainda não
+> existe. A coleta do `app_store_connect` é das 6h e naquela hora a 2.9
+> respondia `WAITING_FOR_REVIEW`; a aprovação veio depois. O retrato de amanhã
+> confere sozinho. Se não trouxer `READY_FOR_SALE`, o campo `ios` de
+> `app/api/app/latest/route.ts` é o primeiro lugar a olhar.
+
+**Onde a 2.8 está:** aprovada em 24/09, build 68, nas duas lojas. Ainda são
+**159 aparelhos Android** nela, que é exatamente quem o banner vai chamar.
 
 ## O que vai NO BINÁRIO, e o que já está no ar
 
