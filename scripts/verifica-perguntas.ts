@@ -182,6 +182,25 @@ console.log("Biela: a pergunta vira tema sem virar medida da nossa própria tela
 
   const vazio = linhaDePerguntas(quadroDeTemas([]), "2026-09-30");
   conferir("sem nenhuma etiqueta, diz desde quando grava", vazio.legivel === false && vazio.texto.includes(ETIQUETA_DESDE), vazio.texto);
+
+  // AS LINHAS ANTIGAS PRECISAM APARECER COMO ANTIGAS.
+  //
+  // Na primeira execução de verdade a frase saiu "50 em 30 dias, 1 com
+  // palavras da pessoa e 0 de atalho": os três números certos e a frase
+  // enganando, porque 49 eram de antes de a etiqueta existir. Quem lesse
+  // rápido concluiria que quase ninguém escreve as próprias perguntas.
+  const comVelhas = quadroDeTemas([
+    { origem: "livre", tema: "motor" },
+    ...Array.from({ length: 49 }, () => ({ origem: null, tema: null })),
+  ]);
+  const l2 = linhaDePerguntas(comVelhas, "2026-09-30");
+  conferir("a fatia sem etiqueta é dita", /49 ainda SEM ETIQUETA/.test(l2.texto), l2.texto);
+  conferir("e diz que ela não cresce mais", /nao cresce mais/.test(l2.texto), l2.texto);
+  conferir(
+    "e as antigas NÃO viram atalho nem palavra da pessoa",
+    /1 com palavras da pessoa e 0 de atalho/.test(l2.texto),
+    l2.texto,
+  );
 }
 
 // ── 6. O RETRATO PUBLICA, E A ROTA GRAVA A ETIQUETA E NÃO O TEXTO ───────────

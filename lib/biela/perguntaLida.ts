@@ -233,7 +233,22 @@ export function linhaDePerguntas(
     };
   }
 
-  const base = `Perguntas ao Biela: ${quadro.total} em 30 dias, ${daPessoa} com palavras da pessoa e ${atalho} de atalho da tela (atalho NAO e demanda, e a ordem dos nossos botoes). Temas do que a pessoa escreveu: ${topo || "nenhum"}`;
+  // AS ANTIGAS PRECISAM APARECER COMO ANTIGAS (30/09/2026).
+  //
+  // Na primeira vez que esta frase rodou de verdade ela saiu assim: "50 em 30
+  // dias, 1 com palavras da pessoa e 0 de atalho". Os três números estavam
+  // certos e a frase enganava, porque 49 daquelas 50 são de ANTES de a
+  // etiqueta existir e entram como origem desconhecida. Lido rápido, parece
+  // que quase ninguém escreve as próprias perguntas.
+  //
+  // É o mesmo defeito que esta casa passou a semana consertando, agora dentro
+  // do conserto: número publicado sem o que o torna legível. A fatia sem
+  // etiqueta sai dita, com a data a partir da qual ela para de crescer.
+  const semEtiqueta = quadro.total - daPessoa - atalho - (quadro.porOrigem.continuacao ?? 0);
+  const velhas = semEtiqueta > 0
+    ? `, e ${semEtiqueta} ainda SEM ETIQUETA (anteriores a ${ETIQUETA_DESDE}, e esse numero nao cresce mais)`
+    : "";
+  const base = `Perguntas ao Biela: ${quadro.total} em 30 dias, ${daPessoa} com palavras da pessoa e ${atalho} de atalho da tela (atalho NAO e demanda, e a ordem dos nossos botoes)${velhas}. Temas do que a pessoa escreveu: ${topo || "nenhum"}`;
 
   if (daPessoa < MINIMO_PARA_LER_TEMA) {
     return {

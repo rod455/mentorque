@@ -476,9 +476,12 @@ export async function coletarDadosOperacao() {
       etiquetaDesde: ETIQUETA_DESDE,
       quadro: quadroDoBiela,
       linha: linhaDePerguntas(quadroDoBiela, hoje),
+      // SÓ AS QUE TÊM ETIQUETA. As linhas anteriores a 29/09 não foram
+      // classificadas, e contá-las aqui faria "50 do gratuito" parecer o
+      // recorte novo quando 49 delas são do mundo velho.
       premium: {
-        com: ((bielaEtiquetas ?? []) as { premium?: boolean }[]).filter((p) => p.premium).length,
-        sem: ((bielaEtiquetas ?? []) as { premium?: boolean }[]).filter((p) => !p.premium).length,
+        com: ((bielaEtiquetas ?? []) as { premium?: boolean; origem?: string | null }[]).filter((p) => p.origem && p.premium).length,
+        sem: ((bielaEtiquetas ?? []) as { premium?: boolean; origem?: string | null }[]).filter((p) => p.origem && !p.premium).length,
       },
       votos: {
         total: votosDoBiela.length,
