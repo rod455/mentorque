@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { retrieveManualContext, type CarCtx as Car } from "@/lib/rag";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { LIMITE_GRATIS_POR_MES, mesDe, podePerguntar, restantes } from "@/lib/biela/limite";
+import { lerPergunta } from "@/lib/biela/perguntaLida";
 
 export const runtime = "nodejs";
 // Teto de duracao: funcao pendurada segura memoria provisionada (e cota).
@@ -207,7 +208,17 @@ export async function POST(request: Request) {
       premium = sub?.status === "active" || sub?.status === "trialing";
     }
     if (!premium) {
-      const q = admin.from("biela_perguntas").select("id", { count: "exact", head: true }).eq("mes", mes);
+      // `premium = false` no filtro desde 29/09/2026, e não é detalhe.
+      //
+      // A partir de hoje a tabela também guarda a pergunta de quem é Premium,
+      // para o quadro de temas medir quem mais usa o Biela. Sem este filtro,
+      // quem cancelasse o Premium herdaria as próprias perguntas de assinante
+      // como se fossem do mês grátis, e abriria o mês seguinte já no limite.
+      const q = admin
+        .from("biela_perguntas")
+        .select("id", { count: "exact", head: true })
+        .eq("mes", mes)
+        .eq("premium", false);
       const { count } = userId ? await q.eq("user_id", userId) : await q.eq("anon_id", anonId!);
       feitas = count ?? 0;
       if (!podePerguntar(feitas, premium)) {
@@ -305,13 +316,32 @@ export async function POST(request: Request) {
     // falha é o `catch` abaixo, e ele só existe quando a chamada NÃO
     // completou. Cobrar uma das cinco por uma resposta enlatada que a pessoa
     // não pediu seria tirar dela o que ela não usou.
-    if (admin && !premium) {
+    // TAMBÉM PARA QUEM É PREMIUM, DESDE 29/09/2026.
+    //
+    // Esta gravação nasceu como CONTADOR do limite do gratuito, e por isso
+    // pulava o assinante: ele não tem limite. Só que a partir de hoje ela é
+    // também o que diz o que o motorista pergunta, e deixar o assinante de
+    // fora é medir a curiosidade de quem ainda não pagou e chamar isso de "os
+    // nossos usuários". Quem mais usa é justamente quem não tem limite.
+    //
+    // O limite continua igual: a contagem do gratuito filtra `premium = false`
+    // logo acima, então a linha do assinante entra no quadro de temas e não
+    // conta contra ninguém. Sem esse filtro, quem cancelasse o Premium
+    // herdaria as próprias perguntas como se fossem do mês grátis.
+    if (admin) {
+      const { origem, tema } = lerPergunta(question);
       const { error } = await admin.from("biela_perguntas").insert({
         mes,
         user_id: userId,
         anon_id: userId ? null : anonId,
         premium,
         usou_manual: !!manual,
+        // DUAS ETIQUETAS, NUNCA O TEXTO. A política de privacidade promete
+        // que o texto da pergunta só fica guardado quando a pessoa toca em
+        // 👍 ou 👎; mudar essa promessa é decisão do dono. A régua e o porquê
+        // de `origem` andar junto de `tema` estão em lib/biela/perguntaLida.ts.
+        origem,
+        tema,
         plataforma: typeof body.plataforma === "string" ? body.plataforma.slice(0, 16) : null,
         versao: typeof body.versao === "string" ? body.versao.slice(0, 16) : null,
       });

@@ -1,4 +1,5 @@
 import { alarmeDeErros, classeDoErro, contaDeErros, linhaDeErros } from "./alarmeDeErros";
+import { ETIQUETA_DESDE, lerPergunta, linhaDePerguntas, quadroDeTemas } from "./biela/perguntaLida";
 import { avisoDeColeta, frescorDasFontes } from "./frescorDasFontes";
 import {
   CADEIA_ATO,
@@ -119,6 +120,33 @@ export async function coletarDadosOperacao() {
   // A janela é 7, igual à de `erros7d`, de propósito: denominador de outra
   // janela é pior que nenhum, porque parece certo.
   const { data: ativos } = await medir("aparelhos_ativos", () => admin.rpc("aparelhos_ativos", { p_dias: 7 }));
+
+  // O QUE O MOTORISTA PERGUNTA AO BIELA (29/09/2026), a pedido do dono:
+  // "vamos começar a usar as perguntas, relevante para conseguirmos entender
+  // melhor nossos usuários".
+  //
+  // Duas fontes, e elas medem coisas diferentes de propósito:
+  //
+  //   `biela_perguntas` traz as ETIQUETAS (origem e tema) de TODA pergunta,
+  //   desde 29/09. É o quadro que vai crescer, e não guarda texto nenhum.
+  //
+  //   `biela_votos` traz o texto das perguntas em que a pessoa tocou no
+  //   polegar, que é o único lugar onde ele fica guardado hoje (a política de
+  //   privacidade promete exatamente isso). A etiqueta é derivada AQUI, na
+  //   leitura, e só a etiqueta sai da rota: o texto do cliente não viaja para
+  //   o retrato nem para o repositório. É o histórico que existia antes de a
+  //   gravação começar, e é o que permite ler alguma coisa hoje em vez de
+  //   daqui a um mês.
+  // Uma de cada vez, e não em `emFila`: as duas devolvem colunas diferentes, e
+  // o `emFila` infere UM tipo só para a lista inteira. Forçar as duas no mesmo
+  // molde só para economizar uma ida ao banco é trocar clareza por nada: as
+  // duas consultas são pequenas e a rota já tem o `tempos` para provar isso.
+  const { data: bielaEtiquetas } = await medir("biela_perguntas", () =>
+    admin.from("biela_perguntas").select("origem, tema, premium, criado_em").gte("criado_em", d30).limit(3000),
+  );
+  const { data: bielaVotos } = await medir("biela_votos", () =>
+    admin.from("biela_votos").select("voto, pergunta, criado_em").limit(500),
+  );
 
   // A quebra do funil (28 dias, pessoas distintas): quantos por cento passam
   // de cada etapa para a seguinte, e onde está a maior perda. É o mapa de
@@ -310,6 +338,22 @@ export async function coletarDadosOperacao() {
   );
   const piorDefeito = topErros.find((t) => classeDoErro(t.mensagem) === "defeito") ?? null;
 
+  // O QUADRO DO BIELA, e ele sai em DUAS metades que não se somam.
+  //
+  // `quadro` são as etiquetas gravadas desde 29/09: vai crescer e é o que
+  // vale daqui para a frente. `votos` é o histórico, derivado na hora do texto
+  // que só existe onde a pessoa tocou no polegar. As duas medem populações
+  // diferentes (toda pergunta contra só quem votou), então somá-las seria
+  // exatamente o erro que a régua do funil passou a recusar em 28/09.
+  //
+  // O TEXTO DO CLIENTE NÃO SAI DAQUI. `lerPergunta` recebe a frase e devolve
+  // duas etiquetas; a frase morre nesta função.
+  const quadroDoBiela = quadroDeTemas(
+    (bielaEtiquetas ?? []) as { origem?: string | null; tema?: string | null }[],
+  );
+  const votosDoBiela = (bielaVotos ?? []) as { voto?: string | null; pergunta?: string | null }[];
+  const quadroDosVotos = quadroDeTemas(votosDoBiela.map((v) => lerPergunta(v.pergunta)));
+
   const porFonte: Record<string, { dia: string; dados: Record<string, unknown> }[]> = {};
   for (const m of metricas ?? []) {
     if (m.dia < d10dias) continue;
@@ -414,6 +458,38 @@ export async function coletarDadosOperacao() {
       // Ativação real: % da coorte que fez a primeira ação de valor
       // (abriu trilha ou cadastrou carro) em até 7 dias do cadastro.
       ativacao: ativacao ?? [],
+    },
+    // O QUE O MOTORISTA PERGUNTA AO BIELA (29/09/2026).
+    //
+    // `quadro` e `linha` vêm das etiquetas gravadas na rota, sem texto nenhum.
+    // `votos` é o histórico que existe porque a política de privacidade já
+    // permitia guardar a pergunta de quem toca no polegar; a etiqueta dele é
+    // derivada na leitura e o texto não viaja.
+    //
+    // `semNegativo` é o aviso mais importante desta seção: em seis semanas
+    // NENHUM 👎 foi registrado, e isso não quer dizer que ninguém desgostou.
+    // A tela só grava o voto negativo depois que a pessoa escolhe um motivo
+    // (components/app/screens/Biela.tsx), então quem toca no polegar para
+    // baixo e fecha não deixa rastro. Ler "24 de 24 positivos" como aprovação
+    // é ler o funil da nossa própria tela.
+    biela: {
+      etiquetaDesde: ETIQUETA_DESDE,
+      quadro: quadroDoBiela,
+      linha: linhaDePerguntas(quadroDoBiela, hoje),
+      premium: {
+        com: ((bielaEtiquetas ?? []) as { premium?: boolean }[]).filter((p) => p.premium).length,
+        sem: ((bielaEtiquetas ?? []) as { premium?: boolean }[]).filter((p) => !p.premium).length,
+      },
+      votos: {
+        total: votosDoBiela.length,
+        positivos: votosDoBiela.filter((v) => v.voto === "up").length,
+        negativos: votosDoBiela.filter((v) => v.voto === "down").length,
+        semNegativo:
+          votosDoBiela.length > 0 && votosDoBiela.every((v) => v.voto !== "down")
+            ? "NENHUM voto negativo registrado. A tela so grava o 👎 depois que a pessoa escolhe um motivo, entao 👎 sem motivo nao deixa rastro: isto NAO e aprovacao de 100%."
+            : "",
+        quadro: quadroDosVotos,
+      },
     },
     // Vendas: coorte mensal de quem assinou e o que aconteceu depois.
     vendas: { assinaturasCoortes: assCoortes ?? [] },

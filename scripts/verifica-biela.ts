@@ -64,7 +64,18 @@ console.log("Biela: o limite do gratuito, e quem o segura.");
   );
   conferir(
     "a rota CONTA no banco antes de chamar a API",
-    /from\("biela_perguntas"\)\.select\("id", \{ count: "exact", head: true \}\)\.eq\("mes", mes\)/.test(rota),
+    /from\("biela_perguntas"\)[\s\S]{0,200}\.select\("id", \{ count: "exact", head: true \}\)[\s\S]{0,120}\.eq\("mes", mes\)/.test(rota),
+  );
+  // O FILTRO QUE SUBSTITUIU O PULO (29/09/2026). Até hoje a linha do assinante
+  // simplesmente não existia, e era isso que protegia a contagem do gratuito.
+  // Agora ela existe, porque o quadro de temas do Biela precisa de quem mais
+  // usa, e quem mais usa é justamente quem não tem limite. O que impede a
+  // confusão passou a ser este filtro: sem ele, quem cancelar o Premium abre o
+  // mês seguinte já no teto, com as próprias perguntas de assinante contra si.
+  conferir(
+    "e a contagem do gratuito ignora a pergunta feita no Premium",
+    /\.eq\("mes", mes\)[\s\S]{0,80}\.eq\("premium", false\)/.test(rota),
+    "sem isto, cancelar o Premium faz a pessoa herdar as proprias perguntas como se fossem do mes gratis",
   );
   conferir(
     "e recusa com 429 quando o mês acabou",
@@ -81,9 +92,24 @@ console.log("Biela: o limite do gratuito, e quem o segura.");
     /const data = await res\.json\(\)[\s\S]{0,900}from\("biela_perguntas"\)\.insert/.test(rota),
     "gravar antes cobraria uma das cinco por uma chamada que pode falhar",
   );
+  // 29/09/2026: ESTA LINHA DIZIA O CONTRÁRIO, e a mudança é do dono ("vamos
+  // começar a usar as perguntas, relevante para conseguirmos entender melhor
+  // nossos usuários"). O assinante era pulado porque a tabela só servia para
+  // contar o limite; agora ela também é o que diz o que o motorista pergunta,
+  // e deixar de fora quem não tem limite é medir a curiosidade de quem ainda
+  // não pagou e chamar isso de "os nossos usuários".
+  //
+  // O limite não afrouxou: quem o segura agora é o `.eq("premium", false)` da
+  // contagem, conferido logo acima.
   conferir(
-    "o Premium não gera linha de contagem",
-    /if \(admin && !premium\) \{[\s\S]{0,120}from\("biela_perguntas"\)\.insert/.test(rota),
+    "toda pergunta gera linha, inclusive a de quem é Premium",
+    /if \(admin\) \{[\s\S]{0,400}from\("biela_perguntas"\)\.insert/.test(rota),
+    "sem a linha do assinante, o quadro de temas mede so quem ainda nao pagou",
+  );
+  conferir(
+    "e a linha carrega as duas etiquetas, nunca o texto",
+    /origem,\s*\n\s*tema,/.test(rota) && !/pergunta:\s*question/.test(rota.replace(/^\s*\/\/.*$/gm, "")),
+    "a politica de privacidade promete que o texto so fica guardado quando a pessoa vota",
   );
   conferir(
     "falha ao gravar NÃO derruba a resposta, mas vira registro",
