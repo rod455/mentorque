@@ -1,13 +1,13 @@
 # Retrato diario da operacao Mentorque
 
-Gerado pelo Analista de Dados (n8n) em 2026-09-30T09:00:07.438Z.
+Gerado pelo Analista de Dados (n8n) em 2026-09-30T12:07:16.853Z.
 NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 COMO LER: linha marcada PARCIAL ou AINDA NAO DA PARA LER nao e resultado,
 e so cresce ate a janela fechar. Auditoria das medidas em
 docs/dados/auditoria-das-medidas.md.
 
 ## MARKETING (gente chegando)
-- Semana corrente (PARCIAL, ainda enche) (2026-09-28): aberturas 99, visitantes 80, cadastros 19
+- Semana corrente (PARCIAL, ainda enche) (2026-09-28): aberturas 122, visitantes 86, cadastros 19
 - Semana anterior (FECHADA) (2026-09-21): aberturas 330, visitantes 214, cadastros 51
 - Cadastros 28d via (direto) / (sem campanha): 83 (81% dos 103)
 - Cadastros 28d via google / lancamento: 20 (19% dos 103)
@@ -16,9 +16,10 @@ docs/dados/auditoria-das-medidas.md.
 - A semana corrente tem 19 cadastros e ainda esta aberta: nao serve de denominador
 - Busca Google 28d: 0 cliques, 37 impressoes
 - YouTube (acumulado desde o canal existir, NAO e janela): 8 inscritos, 8557 views totais, 10 videos recentes
+  - RESSALVA: estas views NAO separam pago de organico, e ha campanha de app rodando no YouTube desde 20/09. Nao leia gancho nem titulo a partir daqui.
 
 ## ENGAJAMENTO (gente usando e voltando)
-- Semana corrente (PARCIAL, ainda enche) (2026-09-28): 79 usuarios ativos, 97 aberturas (1.2 por usuario)
+- Semana corrente (PARCIAL, ainda enche) (2026-09-28): 85 usuarios ativos, 120 aberturas (1.4 por usuario)
 - Semana anterior (FECHADA) (2026-09-21): 209 usuarios ativos, 323 aberturas (1.5 por usuario)
 - Retencao, coorte 2026-09-28: 17 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-10-12; hoje sao 0, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-11-04; hoje sao 0, PISO)
 - Retencao, coorte 2026-09-21: 51 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-10-05; hoje sao 6, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-10-28; hoje sao 0, PISO)
@@ -28,16 +29,21 @@ docs/dados/auditoria-das-medidas.md.
 - Ativacao, coorte 2026-09-21: AINDA NAO DA PARA LER (a janela fecha em 2026-10-05; hoje sao 2 de 51, PISO)
 - Ativacao, coorte 2026-09-14: 3 de 16 fizeram a primeira acao de valor em 7 dias
 - Ativacao, coorte 2026-09-07: 6 de 11 fizeram a primeira acao de valor em 7 dias
-- Erros no app: 25 relatos no app em 7 dias; 18 de defeito em 10 aparelho(s); 6 de desistencia (a pessoa fechou o login, NAO e falha); 1 de ambiente (sem rede). 10 de 302 aparelhos ativos com defeito (3.3%) [ativos: android 263, web 28, ios 11]
-  - Sem alarme, e o motivo: 10 de 302 aparelhos com defeito (3.3%), abaixo do teto de 10%
+- Erros no app: 30 relatos no app em 7 dias; 23 de defeito em 11 aparelho(s); 5 de desistencia (a pessoa fechou o login, NAO e falha); 2 de ambiente (sem rede). 11 de 291 aparelhos ativos com defeito (3.8%) [ativos: android 254, web 26, ios 11]
+  - Sem alarme, e o motivo: 11 de 291 aparelhos com defeito (3.8%), abaixo do teto de 10%
   - 9x em 4 aparelho(s): app fechou sozinho em: abriu o app
-  - 5x em 5 aparelho(s): login nativo google: Google Sign-In cancelled by user ([16] Cancelled by user.) package=mentorque.app signingSha1=E5:1C:
-  - 2x em 2 aparelho(s): push: interruptor ligado, mas a permissão do sistema está "prompt"
+  - 6x em 3 aparelho(s): app fechou sozinho em: tela: home
+  - 4x em 4 aparelho(s): login nativo google: Google Sign-In cancelled by user ([16] Cancelled by user.) package=mentorque.app signingSha1=E5:1C:
+- Perguntas ao Biela: 50 em 30 dias, 1 com palavras da pessoa e 0 de atalho da tela (atalho NAO e demanda, e a ordem dos nossos botoes). Temas do que a pessoa escreveu: motor 1. AINDA NAO DA PARA LER O RANKING (sao 1 perguntas com palavras da pessoa, abaixo do minimo de 20; hoje e 2026-09-30, PISO)
+  - Temas, PALAVRAS DA PESSOA: motor 1
+  - Etiquetadas: 0 de quem e Premium, 50 do gratuito (a etiqueta comecou em 2026-09-29)
+  - Votos no polegar: 24 (24 positivos, 0 negativos). NENHUM voto negativo registrado. A tela so grava o 👎 depois que a pessoa escolhe um motivo, entao 👎 sem motivo nao deixa rastro: isto NAO e aprovacao de 100%.
+  - Historico pelos votos (so quem votou, amostra torta de proposito): combustivel 4, eletrica 2, ar_condicionado 1, arrefecimento 1, direcao 1, limpeza 1
 - Play vitals: sem dados de crash ainda
 - Avaliacoes nas lojas: 12 (media 5)
-  - [app_store 5/5] Excelente (matthewsmc0)
   - [app_store 5/5] Aprendizado (aminoru)
-  - [app_store 5/5] Bastante Útil (munizluiz)
+  - [app_store 5/5] Ajuda com a economia! (Biiaes)
+  - [app_store 5/5] Excelente (matthewsmc0)
 
 ## VENDAS (gente pagando e continuando)
 - Assinaturas ativas (banco): 3 (anuais 0, mensais 3), cancelamento agendado: 0
@@ -69,38 +75,40 @@ docs/dados/auditoria-das-medidas.md.
 ```json
 {
   "dados": {
-    "geradoEm": "2026-09-30T09:00:05.486Z",
+    "geradoEm": "2026-09-30T12:07:14.649Z",
     "tempos": {
-      "subscriptions": 486,
-      "cadastros": 531,
-      "app_erros": 74,
-      "funil_semana": 575,
-      "uso_diario": 51,
-      "uso_semanal": 46,
-      "ativacao_coortes": 57,
-      "assinaturas_coortes": 39,
-      "cadastros_por_campanha": 39,
-      "retencao_coortes": 161,
-      "metricas_diarias": 262,
-      "assinaturas_conferencia": 42,
-      "jornada_envios": 83,
-      "email_eventos": 67,
-      "paralelo": 861,
-      "experimentos": 95,
-      "anomalias": 172,
+      "subscriptions": 564,
+      "cadastros": 603,
+      "funil_semana": 678,
+      "app_erros": 137,
+      "uso_diario": 53,
+      "retencao_coortes": 124,
+      "uso_semanal": 156,
+      "metricas_diarias": 276,
+      "ativacao_coortes": 51,
+      "assinaturas_coortes": 51,
+      "cadastros_por_campanha": 57,
+      "assinaturas_conferencia": 47,
+      "jornada_envios": 70,
+      "email_eventos": 76,
+      "paralelo": 1013,
+      "experimentos": 89,
+      "anomalias": 186,
       "aparelhos_ativos": 47,
-      "estado_da_base": 252,
-      "funil_etapas": 52,
+      "biela_perguntas": 43,
+      "biela_votos": 40,
+      "estado_da_base": 161,
+      "funil_etapas": 48,
       "contas_criadas_desde": 54,
-      "funil_etapas_primeira": 48,
-      "total": 1598
+      "funil_etapas_primeira": 50,
+      "total": 1749
     },
     "falhas": {},
     "funilSemanas": [
       {
         "semana": "2026-09-28",
-        "aberturas": 99,
-        "visitantes": 80,
+        "aberturas": 122,
+        "visitantes": 86,
         "cadastros": 19,
         "viram_paywall": 7,
         "iniciaram_checkout": 0,
@@ -111,7 +119,7 @@ docs/dados/auditoria-das-medidas.md.
         "viram_paywall_pessoas": 7,
         "iniciaram_checkout_pessoas": 0,
         "assinaturas_pessoas": 0,
-        "ativaram_pessoas": 33,
+        "ativaram_pessoas": 35,
         "aberturas_sem_identidade": 0
       },
       {
@@ -251,7 +259,7 @@ docs/dados/auditoria-das-medidas.md.
       "2026-09-30": 2
     },
     "erros7d": {
-      "total": 25,
+      "total": 30,
       "top": [
         {
           "mensagem": "app fechou sozinho em: abriu o app",
@@ -263,10 +271,19 @@ docs/dados/auditoria-das-medidas.md.
           ]
         },
         {
+          "mensagem": "app fechou sozinho em: tela: home",
+          "total": 6,
+          "ultimo": "2026-09-30",
+          "aparelhos": 3,
+          "versoes": [
+            "2.9.0"
+          ]
+        },
+        {
           "mensagem": "login nativo google: Google Sign-In cancelled by user ([16] Cancelled by user.) package=mentorque.app signingSha1=E5:1C:",
-          "total": 5,
+          "total": 4,
           "ultimo": "2026-09-29",
-          "aparelhos": 5,
+          "aparelhos": 4,
           "versoes": [
             "2.7.0",
             "2.8.0",
@@ -284,99 +301,90 @@ docs/dados/auditoria-das-medidas.md.
           ]
         },
         {
-          "mensagem": "login nativo google: Google Sign-In failed: [16] Account reauth failed. The plugin cleared Credential Manager credential",
-          "total": 1,
-          "ultimo": "2026-09-23",
-          "aparelhos": 1,
+          "mensagem": "push: sem rede ao registrar o token",
+          "total": 2,
+          "ultimo": "2026-09-30",
+          "aparelhos": 2,
           "versoes": [
-            "2.7.0"
-          ]
-        },
-        {
-          "mensagem": "\"LocalNotifications.then()\" is not implemented on ios",
-          "total": 1,
-          "ultimo": "2026-09-26",
-          "aparelhos": 0,
-          "versoes": [
-            "1.2.0"
+            "2.9.0"
           ]
         }
       ],
-      "aparelhosComErro": 16,
+      "aparelhosComErro": 17,
       "aparelhosAtivos": {
-        "android": 263,
-        "web": 28,
+        "android": 254,
+        "web": 26,
         "ios": 11
       },
       "porClasse": {
         "defeito": {
-          "relatos": 18,
-          "aparelhos": 10
+          "relatos": 23,
+          "aparelhos": 11
         },
         "desistencia": {
-          "relatos": 6,
-          "aparelhos": 6
+          "relatos": 5,
+          "aparelhos": 5
         },
         "ambiente": {
-          "relatos": 1,
-          "aparelhos": 1
+          "relatos": 2,
+          "aparelhos": 2
         }
       },
-      "aparelhosComDefeito": 10,
+      "aparelhosComDefeito": 11,
       "linha": {
-        "texto": "Erros no app: 25 relatos no app em 7 dias; 18 de defeito em 10 aparelho(s); 6 de desistencia (a pessoa fechou o login, NAO e falha); 1 de ambiente (sem rede). 10 de 302 aparelhos ativos com defeito (3.3%) [ativos: android 263, web 28, ios 11]",
+        "texto": "Erros no app: 30 relatos no app em 7 dias; 23 de defeito em 11 aparelho(s); 5 de desistencia (a pessoa fechou o login, NAO e falha); 2 de ambiente (sem rede). 11 de 291 aparelhos ativos com defeito (3.8%) [ativos: android 254, web 26, ios 11]",
         "legivel": true,
         "motivo": ""
       },
       "alarme": {
         "deveAvisar": false,
         "texto": "",
-        "silencio": "10 de 302 aparelhos com defeito (3.3%), abaixo do teto de 10%"
+        "silencio": "11 de 291 aparelhos com defeito (3.8%), abaixo do teto de 10%"
       }
     },
     "email30d": {
-      "enviados": 289,
+      "enviados": 323,
       "semId": 75,
-      "semEventos": 2,
+      "semEventos": 3,
       "porChave": [
         {
           "chave": "d0",
-          "enviados": 81,
-          "comId": 68,
-          "entregues": 66,
-          "abertos": 12,
+          "enviados": 92,
+          "comId": 79,
+          "entregues": 77,
+          "abertos": 14,
           "clicados": 2,
-          "problemas": 1,
-          "taxaAbertura": 17.6,
-          "taxaClique": 2.9
+          "problemas": 2,
+          "taxaAbertura": 17.7,
+          "taxaClique": 2.5
         },
         {
           "chave": "d2",
-          "enviados": 67,
-          "comId": 53,
-          "entregues": 51,
-          "abertos": 4,
+          "enviados": 73,
+          "comId": 59,
+          "entregues": 57,
+          "abertos": 5,
           "clicados": 0,
           "problemas": 1,
-          "taxaAbertura": 7.5,
+          "taxaAbertura": 8.5,
           "taxaClique": 0
         },
         {
           "chave": "d5",
-          "enviados": 49,
-          "comId": 32,
-          "entregues": 31,
-          "abertos": 2,
+          "enviados": 59,
+          "comId": 42,
+          "entregues": 40,
+          "abertos": 3,
           "clicados": 0,
           "problemas": 1,
-          "taxaAbertura": 6.3,
+          "taxaAbertura": 7.1,
           "taxaClique": 0
         },
         {
           "chave": "d9",
-          "enviados": 33,
-          "comId": 19,
-          "entregues": 18,
+          "enviados": 39,
+          "comId": 25,
+          "entregues": 24,
           "abertos": 0,
           "clicados": 0,
           "problemas": 1,
@@ -396,13 +404,13 @@ docs/dados/auditoria-das-medidas.md.
         },
         {
           "chave": "d14",
-          "enviados": 19,
-          "comId": 17,
-          "entregues": 17,
+          "enviados": 20,
+          "comId": 18,
+          "entregues": 18,
           "abertos": 2,
           "clicados": 0,
           "problemas": 0,
-          "taxaAbertura": 11.8,
+          "taxaAbertura": 11.1,
           "taxaClique": 0
         },
         {
@@ -477,8 +485,8 @@ docs/dados/auditoria-das-medidas.md.
       "porDia": [
         {
           "dia": "2026-09-30",
-          "usuarios": 5,
-          "aberturas": 6,
+          "usuarios": 13,
+          "aberturas": 29,
           "aberturas_sem_identidade": 0
         },
         {
@@ -563,9 +571,9 @@ docs/dados/auditoria-das-medidas.md.
       "porSemana": [
         {
           "semana": "2026-09-28",
-          "usuarios_ativos": 79,
-          "aberturas": 97,
-          "aberturas_por_usuario": 1.2,
+          "usuarios_ativos": 85,
+          "aberturas": 120,
+          "aberturas_por_usuario": 1.4,
           "aberturas_sem_identidade": 0
         },
         {
@@ -776,6 +784,95 @@ docs/dados/auditoria-das-medidas.md.
         }
       ]
     },
+    "biela": {
+      "etiquetaDesde": "2026-09-29",
+      "quadro": {
+        "daPessoa": [
+          {
+            "tema": "motor",
+            "total": 1
+          }
+        ],
+        "deAtalho": [],
+        "porOrigem": {
+          "desconhecida": 49,
+          "sintoma": 1
+        },
+        "total": 50
+      },
+      "linha": {
+        "texto": "Perguntas ao Biela: 50 em 30 dias, 1 com palavras da pessoa e 0 de atalho da tela (atalho NAO e demanda, e a ordem dos nossos botoes). Temas do que a pessoa escreveu: motor 1. AINDA NAO DA PARA LER O RANKING (sao 1 perguntas com palavras da pessoa, abaixo do minimo de 20; hoje e 2026-09-30, PISO)",
+        "legivel": false,
+        "motivo": "so 1 perguntas com palavras da pessoa (minimo 20)"
+      },
+      "premium": {
+        "com": 0,
+        "sem": 50
+      },
+      "votos": {
+        "total": 24,
+        "positivos": 24,
+        "negativos": 0,
+        "semNegativo": "NENHUM voto negativo registrado. A tela so grava o 👎 depois que a pessoa escolhe um motivo, entao 👎 sem motivo nao deixa rastro: isto NAO e aprovacao de 100%.",
+        "quadro": {
+          "daPessoa": [
+            {
+              "tema": "combustivel",
+              "total": 4
+            },
+            {
+              "tema": "eletrica",
+              "total": 2
+            },
+            {
+              "tema": "ar_condicionado",
+              "total": 1
+            },
+            {
+              "tema": "arrefecimento",
+              "total": 1
+            },
+            {
+              "tema": "direcao",
+              "total": 1
+            },
+            {
+              "tema": "limpeza",
+              "total": 1
+            },
+            {
+              "tema": "motor",
+              "total": 1
+            },
+            {
+              "tema": "outro",
+              "total": 1
+            },
+            {
+              "tema": "pneus",
+              "total": 1
+            }
+          ],
+          "deAtalho": [
+            {
+              "tema": "freios",
+              "total": 8
+            },
+            {
+              "tema": "motor",
+              "total": 2
+            }
+          ],
+          "porOrigem": {
+            "sugerida": 10,
+            "livre": 7,
+            "sintoma": 6,
+            "continuacao": 1
+          },
+          "total": 24
+        }
+      }
+    },
     "vendas": {
       "assinaturasCoortes": [
         {
@@ -811,7 +908,7 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "abriu_app",
-        "eventos": 297,
+        "eventos": 313,
         "pessoas": 181
       },
       {
@@ -944,8 +1041,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "viu_aula",
-        "eventos": 98,
-        "pessoas": 40
+        "eventos": 101,
+        "pessoas": 41
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -958,15 +1055,15 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "abriu_app",
-        "eventos": 235,
-        "pessoas": 167
+        "eventos": 242,
+        "pessoas": 172
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "abriu_cadastro_de_carro",
-        "eventos": 144,
-        "pessoas": 144
+        "eventos": 149,
+        "pessoas": 149
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -986,8 +1083,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "atribuicao",
-        "eventos": 153,
-        "pessoas": 153
+        "eventos": 157,
+        "pessoas": 157
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -1000,8 +1097,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "cadastrou_carro",
-        "eventos": 94,
-        "pessoas": 91
+        "eventos": 96,
+        "pessoas": 93
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -1014,22 +1111,22 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "comecou_onboarding",
-        "eventos": 270,
-        "pessoas": 270
+        "eventos": 274,
+        "pessoas": 274
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "consultou_sintoma",
-        "eventos": 49,
-        "pessoas": 24
+        "eventos": 51,
+        "pessoas": 25
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "convite_aviso",
-        "eventos": 33,
-        "pessoas": 27
+        "eventos": 34,
+        "pessoas": 28
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -1042,8 +1139,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "perguntou_biela",
-        "eventos": 3,
-        "pessoas": 3
+        "eventos": 4,
+        "pessoas": 4
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -1063,8 +1160,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "registrou_servico",
-        "eventos": 13,
-        "pessoas": 8
+        "eventos": 17,
+        "pessoas": 9
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -1077,8 +1174,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "terminou_onboarding",
-        "eventos": 166,
-        "pessoas": 166
+        "eventos": 170,
+        "pessoas": 170
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -1098,15 +1195,15 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "abriu_app",
-        "eventos": 224,
-        "pessoas": 153
+        "eventos": 226,
+        "pessoas": 155
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "abriu_cadastro_de_carro",
-        "eventos": 132,
-        "pessoas": 132
+        "eventos": 134,
+        "pessoas": 134
       },
       {
         "experimento": "onboarding-curto",
@@ -1133,8 +1230,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "atribuicao",
-        "eventos": 133,
-        "pessoas": 133
+        "eventos": 135,
+        "pessoas": 135
       },
       {
         "experimento": "onboarding-curto",
@@ -1147,8 +1244,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "cadastrou_carro",
-        "eventos": 81,
-        "pessoas": 79
+        "eventos": 82,
+        "pessoas": 80
       },
       {
         "experimento": "onboarding-curto",
@@ -1161,8 +1258,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "comecou_onboarding",
-        "eventos": 268,
-        "pessoas": 268
+        "eventos": 269,
+        "pessoas": 269
       },
       {
         "experimento": "onboarding-curto",
@@ -1189,8 +1286,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "perguntou_biela",
-        "eventos": 4,
-        "pessoas": 4
+        "eventos": 5,
+        "pessoas": 5
       },
       {
         "experimento": "onboarding-curto",
@@ -1224,8 +1321,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "terminou_onboarding",
-        "eventos": 152,
-        "pessoas": 152
+        "eventos": 154,
+        "pessoas": 154
       },
       {
         "experimento": "onboarding-curto",
@@ -1245,15 +1342,15 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "abriu_app",
-        "eventos": 308,
-        "pessoas": 195
+        "eventos": 329,
+        "pessoas": 198
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "abriu_cadastro_de_carro",
-        "eventos": 160,
-        "pessoas": 160
+        "eventos": 163,
+        "pessoas": 163
       },
       {
         "experimento": "onboarding-curto",
@@ -1280,8 +1377,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "atribuicao",
-        "eventos": 178,
-        "pessoas": 177
+        "eventos": 180,
+        "pessoas": 179
       },
       {
         "experimento": "onboarding-curto",
@@ -1294,8 +1391,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "cadastrou_carro",
-        "eventos": 78,
-        "pessoas": 77
+        "eventos": 79,
+        "pessoas": 78
       },
       {
         "experimento": "onboarding-curto",
@@ -1308,22 +1405,22 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "comecou_onboarding",
-        "eventos": 292,
-        "pessoas": 292
+        "eventos": 295,
+        "pessoas": 295
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "consultou_sintoma",
-        "eventos": 78,
-        "pessoas": 41
+        "eventos": 80,
+        "pessoas": 42
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "convite_aviso",
-        "eventos": 34,
-        "pessoas": 30
+        "eventos": 35,
+        "pessoas": 31
       },
       {
         "experimento": "onboarding-curto",
@@ -1357,8 +1454,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "registrou_servico",
-        "eventos": 6,
-        "pessoas": 6
+        "eventos": 10,
+        "pessoas": 7
       },
       {
         "experimento": "onboarding-curto",
@@ -1371,15 +1468,15 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "terminou_onboarding",
-        "eventos": 192,
-        "pessoas": 192
+        "eventos": 194,
+        "pessoas": 194
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "viu_aula",
-        "eventos": 100,
-        "pessoas": 43
+        "eventos": 103,
+        "pessoas": 44
       },
       {
         "experimento": "onboarding-curto",
@@ -1393,15 +1490,15 @@ docs/dados/auditoria-das-medidas.md.
       {
         "de": "abriu_app",
         "para": "viu_paywall",
-        "antes": 452,
+        "antes": 457,
         "depois": 105,
         "validoDesde": "2026-08-22",
         "ressalvas": [
           "no Android o paywall APARECE e não tem botão de compra (modo leitor, sem a chave do RevenueCat no build), e 85% das exibições vêm de lá. Taxa de paywall para checkout somando as tres plataformas mede um denominador que não converte por construção"
         ],
-        "taxa": 23.2,
+        "taxa": 23,
         "motivo": null,
-        "perdidos": 347
+        "perdidos": 352
       },
       {
         "de": "cadastro",
@@ -1430,37 +1527,37 @@ docs/dados/auditoria-das-medidas.md.
       {
         "de": "comecou_onboarding",
         "para": "terminou_onboarding",
-        "antes": 828,
-        "depois": 440,
+        "antes": 832,
+        "depois": 444,
         "validoDesde": "2026-09-01",
         "ressalvas": [],
-        "taxa": 53.1,
+        "taxa": 53.4,
         "motivo": null,
         "perdidos": 388
       },
       {
         "de": "terminou_onboarding",
         "para": "abriu_cadastro_de_carro",
-        "antes": 440,
-        "depois": 333,
+        "antes": 444,
+        "depois": 338,
         "validoDesde": "2026-09-01",
         "ressalvas": [],
-        "taxa": 75.7,
+        "taxa": 76.1,
         "motivo": null,
-        "perdidos": 107
+        "perdidos": 106
       },
       {
         "de": "abriu_cadastro_de_carro",
         "para": "cadastrou_carro",
-        "antes": 333,
-        "depois": 168,
+        "antes": 338,
+        "depois": 170,
         "validoDesde": "2026-09-01",
         "ressalvas": [
           "isto é ATO, e conta só quem cadastrou DENTRO da janela. Para quantos TÊM carro hoje, some as contas em estado_da_base: o ato não enxerga quem cadastrou antes do instrumento (23/08/2026) nem quem usa como convidado, sem conta"
         ],
-        "taxa": 50.5,
+        "taxa": 50.3,
         "motivo": null,
-        "perdidos": 165
+        "perdidos": 168
       }
     ],
     "janelaDoFunil": {
@@ -1473,14 +1570,14 @@ docs/dados/auditoria-das-medidas.md.
       "contas_com_estado": 115,
       "contas_com_carro": 91,
       "contas_com_servico": 13,
-      "contas_ativas_7d": 54,
+      "contas_ativas_7d": 50,
       "contas_ativas_30d": 106
     },
     "anomalias": [
       {
         "anomalia": "abriu o cadastro de carro e sumiu",
         "plataforma": "android",
-        "quantas": 5,
+        "quantas": 6,
         "detalhe": "sem nenhum evento depois de abrir o cadastro; indicio, nao prova"
       },
       {
@@ -1492,25 +1589,25 @@ docs/dados/auditoria-das-medidas.md.
       {
         "anomalia": "acao que costuma ser a ultima",
         "plataforma": "web",
-        "quantas": 57,
-        "detalhe": "de 76 vezes de comecou_onboarding (75.0%), base da plataforma 49.4%; indicio, nao prova"
+        "quantas": 55,
+        "detalhe": "de 72 vezes de comecou_onboarding (76.4%), base da plataforma 50.7%; indicio, nao prova"
       },
       {
         "anomalia": "acao que costuma ser a ultima",
         "plataforma": "android",
         "quantas": 24,
-        "detalhe": "de 70 vezes de cadastro (34.3%), base da plataforma 16.9%; indicio, nao prova"
+        "detalhe": "de 70 vezes de cadastro (34.3%), base da plataforma 16.5%; indicio, nao prova"
       },
       {
         "anomalia": "acao que costuma ser a ultima",
         "plataforma": "android",
         "quantas": 16,
-        "detalhe": "de 45 vezes de viu_paywall (35.6%), base da plataforma 16.9%; indicio, nao prova"
+        "detalhe": "de 44 vezes de viu_paywall (36.4%), base da plataforma 16.5%; indicio, nao prova"
       },
       {
         "anomalia": "app fechou sozinho",
         "plataforma": "android",
-        "quantas": 13,
+        "quantas": 18,
         "detalhe": "versoes: 2.7.0, 2.8.0, 2.9.0; PISO, nao taxa: so conta quem reabriu o app"
       },
       {
@@ -16334,18 +16431,26 @@ docs/dados/auditoria-das-medidas.md.
       {
         "loja": "app_store",
         "nota": 5,
-        "titulo": "Excelente",
-        "texto": "Tem me ajudado bastante, muito bom!",
-        "autor": "matthewsmc0",
-        "versao": "1.6"
-      },
-      {
-        "loja": "app_store",
-        "nota": 5,
         "titulo": "Aprendizado",
         "texto": "Eu não conheço nada sobre carro e mecânica, e com os videos do app tenho aprendido cada vez mais. Os conteúdos são muito interessantes para o dia a dia, exemplo, resfriar o turbo antes de desligar o motor.",
         "autor": "aminoru",
         "versao": "2.4"
+      },
+      {
+        "loja": "app_store",
+        "nota": 5,
+        "titulo": "Ajuda com a economia!",
+        "texto": "Consegui economizar na revisão do carro graças a informação do app!",
+        "autor": "Biiaes",
+        "versao": "1.7"
+      },
+      {
+        "loja": "app_store",
+        "nota": 5,
+        "titulo": "Excelente",
+        "texto": "Tem me ajudado bastante, muito bom!",
+        "autor": "matthewsmc0",
+        "versao": "1.6"
       },
       {
         "loja": "app_store",
@@ -16356,12 +16461,12 @@ docs/dados/auditoria-das-medidas.md.
         "versao": "1.7"
       },
       {
-        "loja": "app_store",
+        "loja": "google_play",
         "nota": 5,
-        "titulo": "Ajuda com a economia!",
-        "texto": "Consegui economizar na revisão do carro graças a informação do app!",
-        "autor": "Biiaes",
-        "versao": "1.7"
+        "titulo": null,
+        "texto": "usamos para gerências as manutenções e dúvidas dos carros aqui da clínica",
+        "autor": "Sorriso da Pele",
+        "versao": null
       },
       {
         "loja": "google_play",
@@ -16391,14 +16496,6 @@ docs/dados/auditoria-das-medidas.md.
         "loja": "google_play",
         "nota": 5,
         "titulo": null,
-        "texto": "usamos para gerências as manutenções e dúvidas dos carros aqui da clínica",
-        "autor": "Sorriso da Pele",
-        "versao": null
-      },
-      {
-        "loja": "google_play",
-        "nota": 5,
-        "titulo": null,
         "texto": "Aplicativo sensacional para estudos e identificação de problemas no carro.",
         "autor": "Luana David",
         "versao": "1.7"
@@ -16406,9 +16503,9 @@ docs/dados/auditoria-das-medidas.md.
       {
         "loja": "app_store",
         "nota": 5,
-        "titulo": "Economia no bolso",
-        "texto": "Descobri o Mentorque e agora tenho controle dos gastos com meu carro além de economizar na oficina por não ser enrolado. \n\nAmo esse app",
-        "autor": "Moraes455",
+        "titulo": "Mt bom",
+        "texto": "Me ajudou demais, exatamente o que eu precisava!",
+        "autor": "joserenatom",
         "versao": "1.0"
       }
     ]
