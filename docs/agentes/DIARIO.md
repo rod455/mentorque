@@ -3,6 +3,68 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-09-30 · QA/Produto: existe uma assinatura de loja há seis dias que o banco não conhece
+- Artifact "QA da semana":
+  https://claude.ai/artifact/DQ5BgWtmmnha61jhqAQ8KA
+- **PRECISA DO DONO, e é o único achado com alguém possivelmente prejudicado
+  agora.** O RevenueCat saiu de zero para 1 assinatura ativa em 25/09 e segue
+  assim. No banco, as 3 assinaturas ativas são TODAS do Stripe: nenhuma linha
+  com identificador de loja, e `funil_eventos` continua sem um único evento de
+  origem `revenuecat`. A `assinaturas_conferencia` dá 3 vereditos `ok` e nada
+  fora, e isso não contradiz nada: ela compara o que chegou, e esta venda não
+  existe de nenhum dos dois lados de cá. MEDIDO o descompasso; DEDUZIDO que,
+  se for compra de gente de verdade, a pessoa pagou e está sem Premium há
+  seis dias, porque quem libera o acesso é a tabela do banco. A favor de ser
+  real: o pacote traz receita, não só assinatura em teste. Contra: só o iPhone
+  vende hoje e o volume dele é pequeno.
+- Em 02/09 este papel escreveu que o caminho da loja é o mais perigoso porque
+  não tem segunda porta: se o webhook do RevenueCat falhar, não existe nada
+  parecido com o `/api/stripe/sync` para salvar depois. Aquilo ficou como
+  TEORIA por não haver venda de loja nenhuma. Agora há uma, e o sintoma é
+  exatamente o previsto.
+- **O que fecha isso não está no repositório**: RevenueCat, Integrations,
+  Webhooks, e ver se o endpoint existe e o que ele respondeu nos últimos seis
+  dias. Entregando com erro, o reenvio resolve. Nunca cadastrado, então
+  nenhuma venda de loja jamais chegou aqui, e isso precisa estar resolvido
+  ANTES de ligar a venda no Android.
+- **ALARME DESARMADO, e eu quase reportei o contrário do que os dados dizem.**
+  A 2.9 (Android, produção desde 28/09) parecia fechar sozinha três vezes
+  mais: 8 fechamentos em 5 aparelhos em dois dias, um aparelho com quatro
+  numa hora, e a taxa de aparelhos com fechamento saltando de 2,9% na 2.8
+  para 8,3% na 2.9. O que segurou a conclusão: **a 2.9 ganhou um terceiro
+  ouvinte na migalha de fechamento, o sinal nativo do Android, na mesma
+  versão em que foi publicada.** A testemunha mudou junto com o app, e
+  comparar as duas taxas vira comparar dois instrumentos.
+- A saída foi achar uma medida que NÃO passa pela migalha: se o app morresse
+  mais, a WebView recarregaria mais, e cada recarregamento emite abertura
+  nova. Aberturas por aparelho no Android, 14 dias: 2.7 com 1,50 (122
+  aparelhos), 2.8 com 1,55 (118), 2.9 com **1,47** (59). A 2.9 recarrega
+  igual ou menos. Não há regressão, e o aparelho que abriu dez vezes numa
+  hora é o mesmo fenômeno da 2.8, que teve um com dezoito. A 2.9 pode seguir
+  para as lojas por este critério.
+- CORRIGIDO no repositório: a migalha passou a registrar COMO concluiu
+  (`sem-pausa` ou `pausa-colada`), e o coletor leva isso no rastro.
+  Ouvinte novo mexe no segundo grupo e não no primeiro, então o primeiro
+  continua comparável entre versões. Mexidos: `lib/app/ultimoPasso.ts`,
+  `lib/app/erros.ts`, `scripts/verifica-migalha.ts`.
+- **A conferência que eu escrevi e o erro que cometi nela.** Três asserções
+  para o campo novo, três defeitos plantados. Duas morderam. A terceira passou
+  verde com o defeito na frente pelo motivo mais clássico daqui: eu procurava
+  o NOME do campo, e o nome continuava no arquivo, numa variável local. Em vez
+  de apertar a regex, **apaguei a asserção**, porque o compilador já reprova
+  esse caso sozinho. E antes disso quase registrei que nenhuma das três
+  mordia: meu filtro procurava um símbolo que aquele script não imprime.
+- SAÚDE: `npm run conferir` inteira passa, tipos limpos. Erros de 7 dias em
+  3,3%. Avaliações 12, média 5.
+- FONTES QUE FALTARAM, declaradas no artifact: o painel do RevenueCat não tem
+  integração nesta sessão (não vi o webhook nem o cliente por trás da
+  assinatura); a fatura do Stripe pede autorização, e a primeira cobrança real
+  é amanhã, 01/10, com verificação já agendada; crash nativo de Android não é
+  reproduzível daqui, porque as suítes rodam num Chromium sem Capacitor.
+- Próxima varredura da fila: **quiz diário**, o maior recurso do app sem
+  varredura dedicada. Mas se o webhook da loja se confirmar quebrado, a
+  compra pelas lojas volta na frente, agora com dado na mão.
+
 ## 2026-09-29 · Conteúdo & SEO: aula de suspensão, e vídeo que não pegou não se recupera
 - Artifact "Conteúdo da semana":
   https://claude.ai/artifact/VJkykmykButzE9eBG2yJWB
@@ -1533,6 +1595,8 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 | A lista de termos de busca do Google Ads é de quantos dias? | **De 30, e acumulada**, os 50 mais caros (`segments.date BETWEEN hoje menos 30 dias AND hoje`), enquanto `porDia`, `porCampanha` e `custo7d` são de 8 datas com a de hoje pela metade. Ler termo como "gasto da semana" superestima em umas quatro vezes; o gasto da semana num assunto é a diferença entre duas coletas. E os 50 termos cobrem só 23% do dinheiro: subir o teto esbarra no `MAX_DADOS` de 20.000 bytes da rota `/api/metricas` (413 `pacote_grande`, testado e desfeito). | 19/09, Mídia paga |
 | Quantas pessoas voltaram ao app num dia posterior ao primeiro? | **21 de 253, 8,3%**, em 22/09. Separado: quem criou conta 6 de 50 (12,0%), convidado 15 de 203 (7,4%). Sequência mais longa: 7 dias com conta, 25 convidado. **O 253 é ARMAZENAMENTO DE NAVEGADOR, não gente** (a régua `identidade` cai no `anon_id` porque evento de uso não carrega pessoa), então 8,3% é PISO e a taxa real por pessoa é melhor. Mais 29 aberturas sem identidade nenhuma, declaradas. A view canônica `retencao_coortes` dá outro número (3 de 50 em D1-7) porque ancora em QUEM CRIOU CONTA e na data do CADASTRO, não no primeiro uso: perguntas diferentes, mesma ordem de grandeza. Só melhora com build novo, que leva o `user_id` nos eventos. | 22/09 |
 | Quantos carros cadastrados existem? | **38 de usuário de verdade**, em 22/09, em 37 contas de fora (63% das 59). A tabela `user_state` tem 42 no total, e 4 são do TIME, em 2 contas nossas. Zero repetidos dentro da mesma conta (conferido). TRÊS armadilhas, e eu caí na terceira: (1) `estado_da_base` responde CONTAS COM CARRO, não carros; (2) o evento `cadastrou_carro` dá 67 APARELHOS, que é armazenamento de navegador, infla a cada instalação e é teto inflado, não contagem; (3) **o total cru inclui o time**, como o 62 de `auth.users` contra os 59 de `contas_criadas_desde`. Carro de convidado vive no aparelho e nunca chega ao banco. | 22/09, corrigida no mesmo dia |
+| A alta de "app fechou sozinho" na 2.9 do Android é regressão? | **Não.** A 2.9 ganhou um TERCEIRO ouvinte na migalha de fechamento (o sinal nativo do Android) na mesma versão em que foi publicada: a taxa de 2,9% na 2.8 para 8,3% na 2.9 compara dois instrumentos, não duas versões. A medida que não passa pela migalha (aberturas por aparelho no Android, 14 dias, porque recarregamento de WebView emite abertura) diz o contrário: 2.7 com 1,50, 2.8 com 1,55, 2.9 com 1,47. Desde então a migalha carrega COMO concluiu, e `sem-pausa` continua comparável entre versões. | 30/09, QA |
+| Existe venda pelas lojas chegando ao banco? | **Não, e em 25/09 apareceu uma que não chegou.** O RevenueCat tem 1 assinatura ativa desde 25/09; as 3 do banco são todas do Stripe e `funil_eventos` segue sem nenhum evento de origem `revenuecat`. A `assinaturas_conferencia` não acusa, porque compara o que chegou. O que fecha é o painel do RevenueCat (Integrations, Webhooks), fora do repositório. Enquanto isso não for respondido, índice, dedup e tratamento de erro do caminho da loja continuam TEORIA. | 30/09, QA |
 | Quais manuais faltam para a Biela? | O primeiro lote subiu em 06/09: 112 manuais, 34.609 trechos, e os DEZ carros mais comuns do Brasil passaram a ter manual (era 3 de 10). Gol 2016 e Ka 2025, de usuários nossos, saíram de zero. Faltam Corsa/Classic e as marcas vazias (Suzuki, Mercedes-Benz, e o EcoSport). | 06/09, `docs/manuais-a-subir.md` |
 
 **Como manter:** ao FECHAR uma pergunta que já custou investigação, acrescente a

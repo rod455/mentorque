@@ -391,6 +391,28 @@ function semComentarios(fonte: string): string {
   const rota = leia("app/api/erros/route.ts");
   conferir("o coletor manda o aparelho junto", /aparelho:\s*aparelhoAtual\(\)/.test(erros));
   conferir("a rota grava o aparelho", /aparelho:\s*corta\(b\?\.aparelho/.test(rota), "sem isto o campo chega ao servidor e morre lá");
+
+  // COMO a migalha concluiu (30/09/2026). A 2.9 ganhou o ouvinte nativo na
+  // mesma versão em que foi publicada, e por isso não deu para saber se a alta
+  // dos relatos era o app piorando ou a testemunha enxergando mais. O campo
+  // separa os dois grupos: um ouvinte novo mexe em `pausa-colada` e não em
+  // `sem-pausa`, então `sem-pausa` continua comparável entre versões.
+  // NÃO confiro aqui que o tipo de retorno declara `como`: o compilador já
+  // reprova isso sozinho (tirar o campo do tipo quebra o `return`, tirar dos
+  // dois quebra o `f.como` em erros.ts), e a primeira versão desta asserção
+  // passou verde com o defeito plantado porque casava com a declaração da
+  // variável local, não com o tipo. Conferência não vale para repetir o
+  // compilador, e quando repete costuma repetir mal.
+  conferir(
+    "e o coletor leva o `como` no rastro",
+    /\$\{f\.como\}/.test(erros),
+    "o campo existir sem viajar até app_erros não serve para nada",
+  );
+  conferir(
+    "o `como` NÃO entra na mensagem, que precisa agrupar",
+    !/app fechou sozinho em:[^`]*\$\{f\.como\}/.test(erros),
+    "mensagem com o campo dentro quebra o agrupamento do top de erros",
+  );
 }
 
 if (falhas) {

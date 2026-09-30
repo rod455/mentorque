@@ -115,7 +115,7 @@ export function esfriaMigalha(): void {
  * Consome a migalha: chamar duas vezes na mesma abertura devolve null na
  * segunda, senão o mesmo fechamento viraria dois relatos.
  */
-export function fechamentoAnterior(): { nome: string; segundos: number } | null {
+export function fechamentoAnterior(): { nome: string; segundos: number; como: "sem-pausa" | "pausa-colada" } | null {
   if (typeof window === "undefined") return null;
   const m = ler();
   try {
@@ -126,6 +126,20 @@ export function fechamentoAnterior(): { nome: string; segundos: number } | null 
   if (!m) return null;
   const ha = Date.now() - m.t;
   if (ha < 0 || ha > JANELA_MS) return null;
+  // COMO a migalha concluiu, e isso existe por causa de 30/09/2026.
+  //
+  // A 2.9 ganhou o terceiro ouvinte (o nativo do Android) na MESMA versão em
+  // que foi publicada. Resultado: a taxa de relatos por aparelho saltou de
+  // 2,9% para 8,3% e não havia como saber se o app piorou ou se a testemunha
+  // passou a enxergar mais. Foi preciso achar uma medida que não passasse pela
+  // migalha (aberturas por aparelho, que ficou igual) para responder.
+  //
+  // Mudar o instrumento e a versão no mesmo envio cega a comparação. Com este
+  // campo, a próxima vez separa sozinha: `sem-pausa` é "nenhum ouvinte viu o
+  // app sair", `pausa-colada` é "um ouvinte viu, colado demais no passo para
+  // ser a pessoa saindo". Um ouvinte novo mexe no segundo grupo, não no
+  // primeiro, então o primeiro continua comparável entre versões.
+  const como: "sem-pausa" | "pausa-colada" = m.pausado ? "pausa-colada" : "sem-pausa";
   if (m.pausado) {
     // Migalha antiga, gravada antes de existir `pausadoEm`: mantém o
     // comportamento velho e cala, porque sem a hora não dá para distinguir.
@@ -134,7 +148,7 @@ export function fechamentoAnterior(): { nome: string; segundos: number } | null 
     // Pausa colada no passo é suspeita de ser a morte, e essa fala.
     if (m.pausadoEm - m.t > PAUSA_COLADA_MS) return null;
   }
-  return { nome: m.nome, segundos: Math.round(ha / 1000) };
+  return { nome: m.nome, segundos: Math.round(ha / 1000), como };
 }
 
 /**

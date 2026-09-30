@@ -126,7 +126,9 @@ export function relatarFechamentoAnterior(): void {
     // no "top" de /api/erros, e um número no meio faria cada fechamento virar
     // uma linha única, escondendo justamente a repetição que prova o defeito.
     // O tempo vai no campo do rastro.
-    reportar("fechou", `app fechou sozinho em: ${f.nome}`, `${f.segundos}s depois do passo`, f.nome);
+    // O `como` entra no RASTRO, nunca na mensagem: a mensagem agrupa no top de
+    // /api/erros e precisa continuar estável (ver acima).
+    reportar("fechou", `app fechou sozinho em: ${f.nome}`, `${f.segundos}s depois do passo (${f.como})`, f.nome);
   } catch {
     /* o coletor jamais pode causar o que coleta */
   }

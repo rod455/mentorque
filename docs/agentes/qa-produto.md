@@ -288,6 +288,30 @@ recomendar.
   as aberturas daquela versão em `funil_eventos` (a régua `public.identidade`):
   10 erros numa versão com 14 identidades é uma coisa, numa com 300 é outra.
   Diga sempre qual dos dois você mediu.
+- **Instrumento novo na mesma versão do app cega a comparação entre versões.**
+  Em 30/09 a 2.9 do Android parecia fechar sozinha três vezes mais (2,9% dos
+  aparelhos na 2.8 contra 8,3% na 2.9), e o que tinha mudado era a migalha:
+  ela ganhou um TERCEIRO ouvinte, o sinal nativo do Android, na mesma versão.
+  Comparar as duas taxas era comparar dois instrumentos. Antes de chamar de
+  regressão qualquer salto logo depois de um envio, pergunte o que mudou na
+  MEDIÇÃO naquele envio, e leia o diff do coletor, não só o número.
+- **Quando a testemunha é suspeita, ache uma medida que não passe por ela.**
+  A saída para a 2.9 não foi discutir a migalha: foi lembrar que app que morre
+  recarrega a WebView, e recarregamento emite `abriu_app`. Aberturas por
+  aparelho (1,50 na 2.7, 1,55 na 2.8, 1,47 na 2.9) responderam a mesma
+  pergunta por um caminho que o ouvinte novo não toca. Medida independente
+  vale mais que ressalva bem escrita: ela fecha, a ressalva só adia.
+- **Conferência não existe para repetir o compilador.** Das três asserções que
+  escrevi para o campo novo da migalha, a terceira passou verde com o defeito
+  plantado porque casava com uma variável LOCAL de mesmo nome. Apertar a regex
+  era o reflexo; o certo foi apagar a asserção, porque `tsc` já reprova aquele
+  caso sozinho. Conferência que duplica o compilador costuma duplicar mal, e
+  dá uma segurança que não é dela.
+- **Desconfie do seu próprio instrumento antes do sistema.** Ainda na mesma
+  rodada, quase registrei que nenhuma das três asserções mordia: meu filtro
+  procurava um símbolo que aquele script não imprime (ele escreve `FALHA`).
+  Ao plantar defeito, confira ANTES como o script reprovado fala, e prefira
+  ler o código de saída a caçar marca no texto.
 - Rodar `npm install` antes de qualquer checagem: o contêiner da sessão nasce
   sem `node_modules` e o `tsc` cospe centenas de erros falsos de módulo.
 - Rodar `npm run conferir` (bateria inteira, 12 conferências) no lugar de
@@ -307,12 +331,28 @@ pela metade: **a compra pelas lojas continua sem uma única linha em produção*
 e tratamento de erro são TEORIA até a primeira venda de loja acontecer. Quando
 ela acontecer, esse é o primeiro fluxo a reconferir, com dado na mão.
 
+**A venda aconteceu, e continua não chegando (30/09).** O RevenueCat tem 1
+assinatura ativa desde 25/09 e o banco não sabe dela: as 3 ativas são todas do
+Stripe e o funil segue sem evento de origem `revenuecat`. Isto é o cenário que
+a nota acima previa, com o agravante de haver possivelmente alguém pagando sem
+Premium. O passo que fecha está FORA do repositório (RevenueCat, Integrations,
+Webhooks) e é do dono. Assim que ele responder, este fluxo entra na frente da
+fila, com dado de produção pela primeira vez.
+
 - ~~Os fechamentos do iOS 2.1~~ **FECHADO em 23/09**: sumiram. Zero no iOS em
   8 dias, depois de a base migrar. A suspeita de 16/09 era direção e virou
   medida. Sobraram 2 no Android 2.7, que ficam só em acompanhamento.
 - **Os 2 fechamentos do Android 2.7**, em acompanhamento, não em investigação.
   Dois relatos em 8 dias é pouco para caçar causa e o bastante para reparar se
-  virar tendência. Se passar de 5 numa semana, vira varredura.
+  virar tendência. Se passar de 5 numa semana, vira varredura. **Em 30/09 a
+  2.9 passou de 5 e NÃO virou varredura**, porque o salto era do instrumento
+  novo (ver Aprendizados); o gatilho vale para relato contado pelo mesmo
+  instrumento das semanas anteriores. Daqui para a frente, contar só o
+  `sem-pausa`, que é o grupo que os ouvintes novos não mexem.
+- **Um ou dois aparelhos por versão abrem o app muitas vezes sem conseguir
+  fazer nada** (dezoito aberturas num aparelho da 2.8, dez num da 2.9). Isso
+  ficou de fora da rodada de 30/09 porque não era a pergunta, e é a pergunta
+  que sobrou: não é regressão, mas também não é normal.
 - **Quiz diário**, que tem bateria própria e nunca passou por QA. É o maior
   recurso do app sem uma varredura dedicada.
 - **A recuperação de senha, depois que o dono escolher o desenho.** O achado
