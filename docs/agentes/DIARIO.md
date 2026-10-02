@@ -74,6 +74,42 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   fechado é revisado para baixo; e desperdício com nome só existe em campanha de
   busca, com o substituto mais barato nomeado.
 
+## 2026-10-02 (tarde) · O `renovou` passou a dizer quanto entrou, e ciclo vencido deixou de passar calado
+- O dono perguntou se dava para arrumar os dois pontos que ficaram abertos.
+  Dava, e o primeiro nem precisava dele.
+- **QUANTO ENTROU.** A nota de 01/10 dizia: "quem responde quanto entrou e a
+  fatura, e para ela chegar o Rodrigo precisa acrescentar `invoice.paid` a
+  lista do endpoint". A primeira metade (preco de plano nao e caixa) continua
+  certa; a segunda era UMA saida, nao a unica. A assinatura que chega no evento
+  carrega `latest_invoice`, e a fatura pode ser BUSCADA na hora da virada, com
+  a chave que a casa ja tem. **Nada de painel, nada de evento novo.**
+- O `renovou` passa a carregar `pagoCentavos`, `moeda` e o id da fatura, e so
+  de fatura PAGA: `open` e `draft` sao promessa, `void` e fatura que deixou de
+  existir. Zero continua sendo resposta legitima (cupom de 100%, o caso de
+  01/09) e e DIFERENTE de ausente, que sai como `semValor`. Juntar os dois
+  faria receita sumir com cara de cortesia. A busca nunca lanca.
+- **A PROVA QUE DEIXOU DE EXISTIR.** As duas renovacoes que iam validar o
+  conserto (04/10 e 09/10) foram canceladas em 02/10. Nao da para fabricar uma
+  renovacao; da para garantir que a proxima nao passe calada.
+- `cicloVencido` acusa assinatura que o banco acha ATIVA e cujo ciclo ja
+  venceu. Numa renovacao o webhook empurraria o ciclo; numa falha de pagamento
+  marcaria `past_due`. As duas passam pela MESMA entrega, entao ciclo vencido
+  com status ativo significa que nenhuma chegou. Folga de um dia, porque alarme
+  no minuto exato grita todo mes a toa. Publicado em `vendas.ciclosVencidos`,
+  impresso no retrato e no Vigia.
+- **A CONFERENCIA ANTIGA REPROVOU A MUDANCA e estava certa**: ela exigia que o
+  `renovou` nao carimbasse valor NENHUM. O invariante nasceu certo e ficou pela
+  metade, porque o proibido e o PRECO DO PLANO, nao o dinheiro da fatura. Agora
+  ela nomeia o que nao pode entrar e cobra que o valor venha de
+  `fatura.centavos` e que a ausencia seja dita.
+- Oito defeitos plantados. UM passou verde e o achado e meu: fazer a busca da
+  fatura voltar a lancar DERRUBOU o script, e script derrubado nao imprime
+  FALHA nenhuma. Pareceu prova e nao era; a assercao passou a capturar o
+  lancamento e ai mordeu. **E a segunda vez hoje que esse mesmo engano aparece.**
+- O QUE CONTINUA SEM PROVA, com todas as letras: nenhuma renovacao passou por
+  este codigo, e nao ha nenhuma marcada. O que mudou nao e a prova, e a rede:
+  se falhar, a gente descobre no dia seguinte em vez de um mes depois.
+
 ## 2026-10-02 · A venda de Play de 25/09 virou Premium, e o Android vende desde a 2.7
 - A pedido do dono, analise dos dois achados do QA (30/09 e 01/10). O print do
   painel do RevenueCat derrubou a hipotese da vespera: o `app_user_id` da compra
