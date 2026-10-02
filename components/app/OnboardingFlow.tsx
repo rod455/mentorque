@@ -150,9 +150,28 @@ export function OnboardingFlow() {
   // abre a folha de pagamento da Apple sem passar por outra tela. Se a compra
   // não estiver disponível (ofertas ainda carregando, Android, web), segue o
   // caminho antigo pelo paywall.
+  // A COMPRA PRECISA SABER DE QUEM É (02/10/2026), e este `user.id` no lugar
+  // do `null` é o conserto da venda perdida de 25/09.
+  //
+  // O QUE ACONTECIA: esta linha chamava `initPurchases(null)`. O `configured` é
+  // de módulo e já tinha virado `true` no carregamento das ofertas, lá acima,
+  // que também passa `null` (e ali está certo: naquele momento ainda pode não
+  // haver conta). Com `userId` nulo, `initPurchases` pula o `configure` E pula
+  // o `logIn`, então a folha da Apple abria com a identidade ANÔNIMA que o
+  // RevenueCat gerou, mesmo com a pessoa logada aqui.
+  //
+  // O resultado é o que o QA encontrou em 30/09: o RevenueCat registra a
+  // assinatura numa conta anônima, o webhook chega com um `app_user_id` que não
+  // é UUID, e o Premium nunca liga, porque quem libera é a linha de
+  // `subscriptions`. O guarda logo abaixo (`iap && user`) já impedia comprar
+  // deslogado; o furo era comprar LOGADO.
+  //
+  // `initPurchases(user.id)` faz o `logIn`, e o RevenueCat passa a compra da
+  // identidade anônima para a conta. A rede do outro lado está em
+  // lib/loja/vendaSemConta.ts, para as versões que não vão atualizar.
   const buyNow = async () => {
     const pkg = plan === "monthly" ? iap?.monthly ?? iap?.annual : iap?.annual ?? iap?.monthly;
-    const rc = pkg ? await initPurchases(null) : null;
+    const rc = pkg ? await initPurchases(user?.id ?? null) : null;
     if (!pkg || !rc) { finishToPlan(); return; }
     setBuying(true);
     try {

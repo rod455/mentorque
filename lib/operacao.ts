@@ -1,5 +1,6 @@
 import { alarmeDeErros, classeDoErro, contaDeErros, linhaDeErros } from "./alarmeDeErros";
 import { ETIQUETA_DESDE, lerPergunta, linhaDePerguntas, quadroDeTemas } from "./biela/perguntaLida";
+import { ORIGEM_VENDA_SEM_CONTA, linhaDeVendaSemConta } from "./loja/vendaSemConta";
 import { avisoDeColeta, frescorDasFontes } from "./frescorDasFontes";
 import {
   CADEIA_ATO,
@@ -146,6 +147,23 @@ export async function coletarDadosOperacao() {
   );
   const { data: bielaVotos } = await medir("biela_votos", () =>
     admin.from("biela_votos").select("voto, pergunta, criado_em").limit(500),
+  );
+
+  // VENDA DE LOJA QUE CHEGOU SEM CONTA (02/10/2026).
+  //
+  // Zero é o normal. Qualquer número acima de zero significa que alguém pagou
+  // na Apple ou na Play e NÃO recebeu o Premium, e por isso esta linha não tem
+  // limiar: diferente de erro de app, onde a régua é razão, venda perdida não
+  // tem denominador que a torne aceitável.
+  //
+  // A janela é 30 dias, e não 7, porque o caso de 25/09 passou cinco dias sem
+  // ninguém saber. Quem acha isso em 7 dias é sorte de calendário.
+  const { count: vendasSemConta } = await medir("vendas_sem_conta", () =>
+    admin
+      .from("app_erros")
+      .select("id", { count: "exact", head: true })
+      .eq("origem", ORIGEM_VENDA_SEM_CONTA)
+      .gte("criado_em", d30),
   );
 
   // A quebra do funil (28 dias, pessoas distintas): quantos por cento passam
@@ -495,7 +513,15 @@ export async function coletarDadosOperacao() {
       },
     },
     // Vendas: coorte mensal de quem assinou e o que aconteceu depois.
-    vendas: { assinaturasCoortes: assCoortes ?? [] },
+    vendas: {
+      assinaturasCoortes: assCoortes ?? [],
+      // A VENDA DE LOJA QUE NÃO VIROU PREMIUM (02/10/2026). Zero é o normal e
+      // é dito como normal; acima de zero é dinheiro no chão, com o
+      // `app_user_id` guardado em `app_erros` para recuperar no painel do
+      // RevenueCat. Regra e frase em lib/loja/vendaSemConta.ts.
+      semConta: vendasSemConta ?? 0,
+      linhaSemConta: linhaDeVendaSemConta(vendasSemConta ?? 0),
+    },
     // Marketing: de onde vieram os cadastros dos últimos 28 dias (UTM da LP).
     // Cruzado com o gasto de meta_ads/google_ads, vira CAC por campanha.
     marketing: { cadastrosPorCampanha: porCampanha ?? [] },

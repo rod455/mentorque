@@ -49,13 +49,29 @@ export async function upsertSubscription(admin: SupabaseClient, sub: Stripe.Subs
     status: sub.status,
     price_id: price?.id ?? null,
     plan: planForPrice(price?.id),
-    // O cupom que originou a venda, carimbado na metadata da assinatura pela
-    // /api/stripe/checkout. Sem isto, "quantas vendas vieram com cupom" só o
-    // Stripe responde.
-    cupom: typeof sub.metadata?.cupom === "string" && sub.metadata.cupom ? sub.metadata.cupom : null,
-    // O clique do Google que originou a venda. É a chave da devolução da
-    // conversão para o Google Ads; sem ela a campanha otimiza no escuro.
-    gclid: typeof sub.metadata?.gclid === "string" && sub.metadata.gclid ? sub.metadata.gclid : null,
+    // O CUPOM E O GCLID SÓ ENTRAM QUANDO EXISTEM (02/10/2026), e a diferença
+    // entre isto e o que havia aqui é apagar ou não apagar dado de venda.
+    //
+    // O QUE ESTAVA ESCRITO: `cupom: ... ? sub.metadata.cupom : null`. Ou seja,
+    // metadata sem cupom gravava NULL por cima do que já estava na linha. Este
+    // upsert roda a cada webhook, inclusive na renovação, então qualquer valor
+    // que não viesse da metadata era apagado no evento seguinte.
+    //
+    // O QA pegou o sintoma em 01/10, de passagem: as três assinaturas têm
+    // `cupom` nulo, e o diário de 02/09 registra os três códigos preenchidos à
+    // mão a partir do Stripe. A conclusão dele: preenchimento retroativo em
+    // coluna que um upsert idempotente governa não sobrevive ao próximo
+    // webhook. Certa, e o conserto não é parar de preencher à mão: é o upsert
+    // deixar de afirmar ausência quando o que ele tem é desconhecimento.
+    //
+    // O `gclid` é a parte que dói mais, porque é a chave da devolução da
+    // conversão ao Google Ads: apagado, a campanha otimiza no escuro.
+    //
+    // Chave omitida em `upsert` não é tocada no UPDATE do conflito, e no INSERT
+    // entra como o padrão da coluna. É exatamente o que se quer: quem sabe
+    // escreve, quem não sabe cala.
+    ...(typeof sub.metadata?.cupom === "string" && sub.metadata.cupom ? { cupom: sub.metadata.cupom } : {}),
+    ...(typeof sub.metadata?.gclid === "string" && sub.metadata.gclid ? { gclid: sub.metadata.gclid } : {}),
     current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
     cancel_at_period_end: !!sub.cancel_at_period_end,
     updated_at: new Date().toISOString(),

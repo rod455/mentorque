@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { eventoDeFunil } from "@/lib/funilServidor";
+import { ehVendaComDinheiro, identidadeUsavel, relatoDeVendaSemConta } from "@/lib/loja/vendaSemConta";
 
 export const runtime = "nodejs";
 
@@ -11,7 +12,6 @@ export const runtime = "nodejs";
 // Supabase (definido no Purchases.configure), então o Premium liberado aqui
 // vale em todos os aparelhos e na web.
 const ACTIVE = new Set(["INITIAL_PURCHASE", "RENEWAL", "UNCANCELLATION", "PRODUCT_CHANGE", "NON_RENEWING_PURCHASE"]);
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 type RcEvent = {
   // Id do EVENTO no RevenueCat (não da assinatura). A reentrega de um webhook
@@ -48,8 +48,38 @@ export async function POST(req: Request) {
   try { event = (await req.json())?.event as RcEvent; } catch { /* below */ }
   if (!event?.type) return NextResponse.json({ error: "invalid" }, { status: 400 });
 
+  // IDENTIDADE INÚTIL NÃO SAI MAIS CALADA (02/10/2026).
+  //
+  // O QUE ESTAVA AQUI: `return NextResponse.json({ ok: true, skipped:
+  // "anonymous_user" })`. Uma compra paga na Apple ou na Play chegava com o id
+  // anônimo do RevenueCat, a rota respondia 200, o RevenueCat considerava
+  // entregue e nunca reenviava, e não sobrava uma linha em lugar nenhum. É o
+  // mesmo defeito que esta casa consertou em 02/09 nos upserts, sobrevivendo
+  // no único caminho que ninguém tinha olhado porque nunca havia acontecido
+  // uma venda de loja.
+  //
+  // Em 25/09 aconteceu: o RevenueCat saiu de zero para uma assinatura ativa e
+  // o banco segue sem nenhuma. O QA achou em 30/09, pelo descompasso entre as
+  // duas fontes, e não por nada que tenha gritado.
+  //
+  // O 200 CONTINUA, e é escolha: o id anônimo não vira UUID em reentrega
+  // nenhuma, então devolver erro faria o RevenueCat bater nesta porta por
+  // horas para nada. O que muda é que a venda perdida passa a existir, em
+  // `app_erros`, com o `app_user_id` que permite achá-la no painel e ligar o
+  // Premium na mão. A regra e o texto moram em lib/loja/vendaSemConta.ts.
   const userId = event.app_user_id ?? "";
-  if (!UUID_RE.test(userId)) return NextResponse.json({ ok: true, skipped: "anonymous_user" });
+  if (!identidadeUsavel(userId)) {
+    if (ehVendaComDinheiro(event.type)) {
+      const relato = relatoDeVendaSemConta(event);
+      // Falhar aqui não pode derrubar a resposta, mas tem de aparecer no log:
+      // é o relato de uma venda perdida, e perder o relato da perda é o único
+      // jeito de isto ficar pior do que estava.
+      const { error } = await admin.from("app_erros").insert(relato);
+      if (error) console.error("[revenuecat] venda sem conta NAO registrada:", error.message, relato.mensagem);
+      else console.error("[revenuecat] VENDA SEM CONTA registrada:", relato.mensagem);
+    }
+    return NextResponse.json({ ok: true, skipped: "anonymous_user" });
+  }
 
   const productId = (event.product_id ?? "").toLowerCase();
   // No Google o produto chega como "assinatura:planoBase" (ex.:
