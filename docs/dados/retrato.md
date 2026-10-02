@@ -1,6 +1,6 @@
 # Retrato diario da operacao Mentorque
 
-Gerado pelo Analista de Dados (n8n) em 2026-10-02T11:18:02.775Z.
+Gerado pelo Analista de Dados (n8n) em 2026-10-02T11:54:30.453Z.
 NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 COMO LER: linha marcada PARCIAL ou AINDA NAO DA PARA LER nao e resultado,
 e so cresce ate a janela fechar. Auditoria das medidas em
@@ -46,10 +46,10 @@ docs/dados/auditoria-das-medidas.md.
   - [app_store 5/5] Excelente (matthewsmc0)
 
 ## VENDAS (gente pagando e continuando)
-- Assinaturas ativas (banco): 2 (anuais 0, mensais 2), cancelamento agendado: 2
+- Assinaturas ativas (banco): 3 (anuais 0, mensais 3), cancelamento agendado: 2
 - Fundo do funil, Semana corrente (PARCIAL, ainda enche): viram paywall 25, iniciaram checkout 0, assinaram 0, cancelaram 2
 - Fundo do funil, Semana anterior (FECHADA): viram paywall 45, iniciaram checkout 5, assinaram 0, cancelaram 0
-  - A LOJA VENDEU E O BANCO NAO SABE: o RevenueCat diz 1 assinatura(s) ativa(s) e o banco conhece 0 de loja. Sao 1 pessoa(s) que pagaram na Apple ou na Play e NAO tem Premium, porque quem libera o acesso e a linha de subscriptions. Conferir o webhook em RevenueCat, Integrations, Webhooks, e ligar o Premium na mao em Customers.
+  - Loja conferida: RevenueCat 1 e banco 1: batem
   - Vendas de loja sem conta (30d): nenhuma. Toda compra da Apple ou da Play chegou com conta e virou Premium
 - Assinantes, coorte 2026-09-01: 1 assinaram, 0 renovaram, 1 sairam (renovacao de um mensal so pode aparecer 1 mes depois da coorte)
 - Assinantes, coorte 2026-08-01: 2 assinaram, 0 renovaram, 2 sairam (renovacao de um mensal so pode aparecer 1 mes depois da coorte)
@@ -76,34 +76,34 @@ docs/dados/auditoria-das-medidas.md.
 ```json
 {
   "dados": {
-    "geradoEm": "2026-10-02T11:18:01.266Z",
+    "geradoEm": "2026-10-02T11:54:29.400Z",
     "tempos": {
-      "subscriptions": 416,
-      "cadastros": 422,
-      "funil_semana": 435,
-      "app_erros": 67,
-      "uso_diario": 60,
-      "uso_semanal": 46,
-      "ativacao_coortes": 58,
-      "retencao_coortes": 124,
-      "metricas_diarias": 220,
-      "assinaturas_coortes": 65,
-      "cadastros_por_campanha": 37,
-      "assinaturas_conferencia": 55,
-      "jornada_envios": 85,
-      "email_eventos": 93,
-      "paralelo": 750,
-      "experimentos": 88,
-      "anomalias": 165,
-      "aparelhos_ativos": 39,
-      "biela_perguntas": 35,
-      "biela_votos": 43,
-      "vendas_sem_conta": 29,
-      "estado_da_base": 213,
-      "funil_etapas": 53,
-      "contas_criadas_desde": 36,
-      "funil_etapas_primeira": 47,
-      "total": 1519
+      "subscriptions": 427,
+      "cadastros": 443,
+      "funil_semana": 446,
+      "app_erros": 90,
+      "uso_diario": 73,
+      "uso_semanal": 86,
+      "retencao_coortes": 100,
+      "assinaturas_coortes": 93,
+      "ativacao_coortes": 120,
+      "metricas_diarias": 292,
+      "cadastros_por_campanha": 57,
+      "assinaturas_conferencia": 66,
+      "jornada_envios": 70,
+      "email_eventos": 66,
+      "paralelo": 835,
+      "experimentos": 92,
+      "anomalias": 156,
+      "aparelhos_ativos": 46,
+      "biela_perguntas": 73,
+      "biela_votos": 48,
+      "vendas_sem_conta": 39,
+      "estado_da_base": 127,
+      "funil_etapas": 72,
+      "contas_criadas_desde": 54,
+      "funil_etapas_primeira": 39,
+      "total": 1606
     },
     "falhas": {},
     "funilSemanas": [
@@ -228,13 +228,13 @@ docs/dados/auditoria-das-medidas.md.
       }
     ],
     "assinaturas": {
-      "ativas": 2,
+      "ativas": 3,
       "cancelando": 2,
       "anuais": 0,
-      "mensais": 2,
+      "mensais": 3,
       "pagantes": 2,
       "emTeste": 0,
-      "cortesias": 0,
+      "cortesias": 1,
       "comCupom": 0,
       "cupons": [],
       "desencontros": 0
@@ -339,92 +339,81 @@ docs/dados/auditoria-das-medidas.md.
       }
     },
     "email30d": {
-      "enviados": 363,
+      "enviados": 403,
       "semId": 75,
       "semEventos": 3,
       "porChave": [
         {
           "chave": "d0",
-          "enviados": 95,
-          "comId": 82,
-          "entregues": 80,
-          "abertos": 14,
+          "enviados": 102,
+          "comId": 89,
+          "entregues": 87,
+          "abertos": 16,
           "clicados": 2,
           "problemas": 2,
-          "taxaAbertura": 17.1,
-          "taxaClique": 2.4
+          "taxaAbertura": 18,
+          "taxaClique": 2.2
         },
         {
           "chave": "d2",
-          "enviados": 81,
-          "comId": 67,
-          "entregues": 65,
-          "abertos": 6,
+          "enviados": 88,
+          "comId": 74,
+          "entregues": 72,
+          "abertos": 7,
           "clicados": 0,
           "problemas": 1,
-          "taxaAbertura": 9,
+          "taxaAbertura": 9.5,
           "taxaClique": 0
         },
         {
           "chave": "d5",
-          "enviados": 63,
-          "comId": 46,
-          "entregues": 44,
+          "enviados": 69,
+          "comId": 52,
+          "entregues": 50,
           "abertos": 3,
           "clicados": 0,
           "problemas": 1,
-          "taxaAbertura": 6.5,
+          "taxaAbertura": 5.8,
           "taxaClique": 0
         },
         {
           "chave": "d9",
-          "enviados": 48,
-          "comId": 34,
-          "entregues": 33,
-          "abertos": 0,
+          "enviados": 50,
+          "comId": 36,
+          "entregues": 35,
+          "abertos": 1,
           "clicados": 0,
           "problemas": 1,
-          "taxaAbertura": 0,
+          "taxaAbertura": 2.8,
           "taxaClique": 0
         },
         {
           "chave": "sumiu-14",
-          "enviados": 29,
-          "comId": 19,
-          "entregues": 19,
+          "enviados": 32,
+          "comId": 22,
+          "entregues": 21,
           "abertos": 2,
           "clicados": 0,
           "problemas": 0,
-          "taxaAbertura": 10.5,
+          "taxaAbertura": 9.1,
           "taxaClique": 0
         },
         {
           "chave": "d14",
-          "enviados": 21,
-          "comId": 19,
-          "entregues": 19,
+          "enviados": 23,
+          "comId": 21,
+          "entregues": 21,
           "abertos": 3,
           "clicados": 0,
           "problemas": 0,
-          "taxaAbertura": 15.8,
-          "taxaClique": 0
-        },
-        {
-          "chave": "sumiu-30",
-          "enviados": 7,
-          "comId": 2,
-          "entregues": 2,
-          "abertos": 2,
-          "clicados": 0,
-          "problemas": 0,
-          "taxaAbertura": 100,
+          "taxaAbertura": 14.3,
           "taxaClique": 0
         },
         {
           "chave": "sazonal:chuva-2026",
-          "enviados": 6,
-          "comId": 6,
-          "entregues": 6,
+          "enviados": 13,
+          "comId": 13,
+          "entregues": 13,
           "abertos": 0,
           "clicados": 0,
           "problemas": 0,
@@ -433,13 +422,24 @@ docs/dados/auditoria-das-medidas.md.
         },
         {
           "chave": "mes:2026-09",
-          "enviados": 5,
-          "comId": 5,
-          "entregues": 5,
+          "enviados": 10,
+          "comId": 10,
+          "entregues": 10,
+          "abertos": 3,
+          "clicados": 0,
+          "problemas": 0,
+          "taxaAbertura": 30,
+          "taxaClique": 0
+        },
+        {
+          "chave": "sumiu-30",
+          "enviados": 8,
+          "comId": 3,
+          "entregues": 3,
           "abertos": 2,
           "clicados": 0,
           "problemas": 0,
-          "taxaAbertura": 40,
+          "taxaAbertura": 66.7,
           "taxaClique": 0
         },
         {
@@ -933,11 +933,11 @@ docs/dados/auditoria-das-medidas.md.
         "legivel": true,
         "motivo": ""
       },
-      "assinaturasDeLoja": 0,
+      "assinaturasDeLoja": 1,
       "lojaConferida": {
-        "deveAvisar": true,
-        "texto": "A LOJA VENDEU E O BANCO NAO SABE: o RevenueCat diz 1 assinatura(s) ativa(s) e o banco conhece 0 de loja. Sao 1 pessoa(s) que pagaram na Apple ou na Play e NAO tem Premium, porque quem libera o acesso e a linha de subscriptions. Conferir o webhook em RevenueCat, Integrations, Webhooks, e ligar o Premium na mao em Customers.",
-        "silencio": ""
+        "deveAvisar": false,
+        "texto": "",
+        "silencio": "RevenueCat 1 e banco 1: batem"
       }
     },
     "marketing": {
@@ -1654,8 +1654,8 @@ docs/dados/auditoria-das-medidas.md.
       {
         "anomalia": "acao que costuma ser a ultima",
         "plataforma": "web",
-        "quantas": 26,
-        "detalhe": "de 35 vezes de comecou_onboarding (74.3%), base da plataforma 46.8%; indicio, nao prova"
+        "quantas": 23,
+        "detalhe": "de 32 vezes de comecou_onboarding (71.9%), base da plataforma 44.6%; indicio, nao prova"
       },
       {
         "anomalia": "acao que costuma ser a ultima",
