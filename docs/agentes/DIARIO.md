@@ -3,6 +3,56 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-02 (noite) · A leitura das rodadas de 01 e 02/10: três erros diferentes com a mesma cara
+- Pedido do dono: ler o que os agentes disseram ontem e hoje, dizer o que
+  precisa evoluir, e arrumar. Quatro rodadas lidas (QA agendado e ASO em 01/10,
+  CRO e Mídia em 02/10), mais as duas de engenharia de hoje.
+- **O GARGALO NÃO É A QUALIDADE DAS RODADAS, É A FILA.** Treze itens parados na
+  lista do dono, o mais velho há 29 dias, e a semana inteira de agentes travada
+  neles. Agrupados por painel eram SEIS destinos, e CINCO dos treze estavam no
+  mesmo console do Google Ads: uma sessão de vinte minutos fechava cinco. A fila
+  não era grande, era mal apresentada. `npm run acoes` passa a agrupar por
+  painel, com a coluna `Onde` etiquetada na tabela (não adivinhada no texto) e
+  um bloco separado para o que passou de 21 dias.
+- **O MESMO ERRO EM TRÊS PAPÉIS DIFERENTES, e nenhum veredito individual
+  enxergaria**: o QA achou um `renovou` que nunca existiu, a Mídia leu gasto de
+  oito datas como ritmo diário de uma campanha que já tinha parado, e o CRO usou
+  dez aparelhos de iPhone como braço de controle. São três caras de **número que
+  parece medida e é artefato do nosso instrumento**, que é a doença de setembro
+  inteiro. O Diretor ganhou o CRUZAMENTO DA SEMANA no manual por causa disso.
+- **A MELHOR FRASE DAS DUAS SEMANAS É DO ASO, SOBRE ELE MESMO**: "a régua mede o
+  que eu entrego, não se o que entreguei chegou a acontecer". Duas rodadas
+  corretas, 12 respostas prontas, zero publicadas em 29 dias. Virou obrigação de
+  DIRETRIZES para os dez papéis, junto com a regra dos 21 dias e a de procurar
+  no diário antes de "levantar" algo (a pergunta do Moraes455 foi levantada duas
+  vezes, por dois papéis, sem uma saber da outra).
+- **ACHADO NOVO DESTA LEITURA, e ninguém tinha visto: o relatório de mídia desta
+  semana não chegou ao Luiz.** O e-mail disparava quinta às 10h e só aceitava
+  relatório do dia; a rodada atrasou e gravou na sexta. O dono recebeu o aviso
+  da trava, o Luiz não recebeu nada, e o relatório de 02/10 está no repositório
+  sem ter sido enviado. Agora são duas tentativas (quinta e sexta, 16h), janela
+  de dois dias, dedup pela data do relatório e aviso de falha só na última
+  tentativa. Publicado e conferido: `versionId` e `activeVersionId` iguais
+  (295238cb).
+- **TRÊS CONFERÊNCIAS NOVAS OU APERTADAS, 34 defeitos plantados**, e quatro
+  buracos achados pelos plantios, os quatro meus: `2026-02-31` passava verde
+  porque o JavaScript lê como 03/03; linha cuja data virasse texto desaparecia
+  da lista com o total continuando parecido com certo; a trava do "pelo menos
+  sete rodadas do Claude" deixava mover um papel para o n8n e fugir da régua em
+  silêncio; e a régua de parada de campanha, com os números REAIS de 24/09, não
+  disparava (queda de 67% contra limiar de 70%), porque a média de três dias
+  dilui o fim. Ganhou um segundo gatilho: o dinheiro secar nos dois últimos dias.
+- **O QUE ESTA NOITE NÃO ALCANÇA**: o fluxo novo do e-mail não foi executado,
+  porque executar mandaria o relatório de hoje para o Luiz, e mensagem para fora
+  da operação é decisão do dono. A lógica está publicada; a prova é quinta 09/10,
+  ou um disparo que ele mandar.
+- **O QUE DEPENDE DELE, em ordem de dinheiro por dia**: uma sessão no Google Ads
+  (5 itens, o mais antigo de 03/09), `invoice.paid` no endpoint do Stripe (uma
+  caixa que troca uma tela por mês por nada), as duas chaves de resposta a
+  avaliação (que trocam 12 colagens por um disparo), e a tela de aquisição do
+  Play Console, que é o instrumento que duas rodadas diferentes pediram na mesma
+  semana sem uma saber da outra.
+
 ## 2026-10-02 · O e-mail de quem cancelou: a casa sabia QUE saíram e não sabia POR QUÊ
 - Pedido do dono: "um e-mail para comunicar quem cancelar a assinatura, com uma
   pesquisa de satisfação e perguntando os principais motivos, para a gente

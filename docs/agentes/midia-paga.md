@@ -130,16 +130,31 @@ enquanto, é o dono lendo o artifact e as conferências do repositório.
 
 Por pedido do dono (19/09/2026), o relatório desta rodada é enviado por e-mail
 para ele e para o Luiz, que é de fora da operação. Quem manda é o fluxo
-"Mídia: relatório por e-mail" no n8n, toda quinta às 10h: ele busca os dois
-arquivos no repositório, manda um corpo curto e **anexa o PDF**.
+"Mídia: relatório por e-mail" no n8n, **quinta e sexta às 16h**: ele busca os
+dois arquivos no repositório, manda um corpo curto e **anexa o PDF**.
+
+**POR QUE DUAS TENTATIVAS, E NÃO UMA (02/10/2026).** O desenho antigo era quinta
+às 10h, aceitando só relatório do DIA. Em 01/10 o gatilho da rodada disparou às
+11h03 e a rodada só gravou o relatório na sexta às 10h33: o dono recebeu o aviso
+de "não gravou" e o Luiz não recebeu nada, nem na sexta. **O relatório de 02/10
+existe no repositório e nunca foi enviado.** A trava fez o certo; o calendário
+fez errado, porque rodada atrasada perdia a semana inteira. Agora são duas
+tentativas, a janela aceita hoje ou ontem, e não manda duas vezes o mesmo
+relatório (a dedup é pela data DO RELATÓRIO, guardada no estado do fluxo). O
+aviso de falha sai só na sexta: avisar na quinta que a rodada não gravou, quando
+ela ainda pode gravar na sexta, é alarme falso, e alarme falso é o jeito de o
+verdadeiro ser ignorado.
+
+Isso não é licença para atrasar: a rodada continua sendo de quinta. O que mudou
+é que o atraso de uma rodada deixou de custar a semana de quem lê.
 
 O que vira contrato por causa disso:
 
 - **A primeira linha do arquivo é a data**, exatamente neste formato:
-  `Relatório de mídia gerado em AAAA-MM-DD`. O fluxo compara com o dia de hoje.
-  Se a data não for a de hoje, ele NÃO manda nada para o Luiz: manda um aviso
-  só para o dono dizendo que a rodada não gravou. Relatório velho chegando como
-  novidade para gente de fora é pior do que e-mail nenhum.
+  `Relatório de mídia gerado em AAAA-MM-DD`. O fluxo aceita a data de hoje ou de
+  ontem, e nada mais velho: relatório velho chegando como novidade para gente de
+  fora é pior do que e-mail nenhum. Fora da janela, o Luiz não recebe nada e o
+  dono recebe o aviso.
 - **Sem o .pdf commitado, nada sai.** O fluxo não improvisa corpo de e-mail a
   partir do markdown: ou vai o PDF, ou vai o aviso ao dono. Gerar e esquecer de
   commitar dá no mesmo que não gerar.
