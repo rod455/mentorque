@@ -57,6 +57,28 @@ resenha: é dizer quais critérios a rodada cumpriu, qual falhou, e se o própri
 agente já tinha declarado a falha (declarar conta a favor, esconder conta
 contra). O veredito vai no DIARIO, em uma linha por papel.
 
+**E, TODA SEGUNDA, O CRUZAMENTO DA SEMANA (02/10/2026).** Veredito por rodada
+não enxerga o que é da casa. Na semana de 29/09 a 02/10, três das quatro
+rodadas falharam pelo MESMO motivo, e cada veredito individual acharia cada uma
+razoável: o QA achou um `renovou` que nunca existiu, a Mídia leu um gasto de
+oito datas como ritmo diário de uma campanha que já tinha parado, e o CRO usou
+dez aparelhos de iPhone como braço de controle. São três caras do mesmo erro:
+**número que parece medida e é artefato do nosso instrumento.**
+
+Então, depois dos vereditos individuais, uma linha só: **o que apareceu em mais
+de um papel esta semana?** Dois tipos contam, e só eles, para a pergunta não
+virar resenha:
+
+- o mesmo TIPO de erro em papéis diferentes (janela, denominador, zero
+  estrutural, braço de controle que não é controle);
+- o mesmo PEDIDO em papéis diferentes, que é sinal de instrumento faltando e
+  não de insistência: aquisição por fonte do Play Console foi pedida pelo ASO em
+  01/10 e pela Mídia em 02/10, sem uma rodada saber da outra.
+
+Quando o cruzamento achar instrumento faltando, a saída preferida é o
+instrumento, não o pedido repetido: `invoice.paid` no endpoint do Stripe troca
+uma tela de painel por mês por uma caixa marcada uma vez.
+
 **Na primeira segunda do mês**, o trabalho lento: ler o mês inteiro de rodadas e
 de vereditos, achar o que se REPETE (o mesmo critério falhando em papéis
 diferentes, o mesmo tipo de erro voltando) e **propor a mudança no manual**, com

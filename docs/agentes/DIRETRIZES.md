@@ -102,6 +102,33 @@ Duas obrigações saem disso, e elas valem para todos:
    contra a régua daquele papel. E na primeira segunda do mês ele faz o
    trabalho mais lento: lê o mês inteiro, acha o que se repete e **propõe a
    mudança no manual** para o dono aprovar.
+3. **Recomendação que depende do dono sai da rodada como LINHA NA LISTA DELE**
+   (`acoes-do-dono.md`), com o destino etiquetado. Não vale explicar no diário
+   nem no artifact: os dois são lugares onde se explica, e o que depende do
+   dono envelhece calado.
+4. **A rodada ABRE fechando o desfecho do que ela mesma pediu antes.** Item
+   parado há mais de 21 dias não volta como recomendação repetida: volta com o
+   CUSTO DE HOJE, ou com a proposta de fechar o item. A `npm run acoes` separa
+   esses em bloco próprio para quem levantou não ter como não ver.
+
+**De onde saem a 3 e a 4 (02/10/2026).** As duas nasceram da mesma leitura, e o
+caso é do agente de ASO, que o encontrou em si mesmo: em 15/09 ele entregou 7
+rascunhos de resposta a avaliação e explicou no diário e no artifact que colar
+custava dois minutos. Duas semanas depois, as 12 avaliações seguiam sem
+resposta, a mais antiga de 02/09. Duas rodadas CORRETAS produziram zero
+respostas públicas. A frase dele vale para todo mundo aqui: **a régua mede o que
+eu entrego, não se o que entreguei chegou a acontecer.**
+
+A segunda metade do caso é de Mídia: a etiqueta na URL da busca esperou oito
+dias na lista e virou proposta condicionada, porque a campanha que ela ia medir
+parou antes de alguém chegar nela. Recomendação velha não é só recomendação
+esquecida: é recomendação que pode ter deixado de ser verdade.
+
+E o irmão disso, que também é regra: **antes de "levantar" alguma coisa,
+procure no `DIARIO.md` e na lista se já foi levantada.** A pergunta sobre a
+avaliação `Moraes455` foi levantada pelo CRO em 04/09 e pelo ASO em 15/09, sem
+que o segundo soubesse da primeira. Se já foi levantada, o trabalho não é
+repetir: é mudar o endereço.
 
 **Por que não é automático.** O dono perguntou sobre a função Outcomes do
 Claude, que é exatamente isto com um corretor de máquina: rubrica escrita, um
