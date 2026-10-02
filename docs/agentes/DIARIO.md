@@ -3,6 +3,77 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-02 · Mídia paga (rodada 3): a busca parou de entregar no dia 24, e foi no dia em que eu propus consertar a etiqueta dela
+- Artifact "Mídia da semana":
+  https://claude.ai/artifact/TjDUdWwCHSiiCGzFgoFrc7
+  Relatório e PDF em `docs/agentes/relatorios/`, datados de hoje.
+- **CADÊNCIA**: o gatilho disparou quinta 01/10 às 11h03 e a rodada rodou sexta
+  02/10 às 10h33. O e-mail de quinta às 10h saiu antes, com o arquivo de 24/09,
+  então o dono recebeu o aviso de "rodada não gravou" em vez do relatório. A
+  trava funcionou como projetada; quem atrasou foi a rodada.
+- **A CONTA, janela de 24 a 30/09 contra 17 a 23/09**: gasto de R$ 280,68 contra
+  R$ 356,45 (21% menos), **47 contas de fora contra 44**, **custo por conta de
+  R$ 5,97 contra R$ 8,10**. Terceira queda seguida: R$ 21,14, R$ 8,10, R$ 5,97.
+- **Por campanha** (coleta de 02/10): APP Android no Google R$ 151,83 com 502
+  cliques e CPC R$ 0,30; instalação no Meta R$ 132,11 com 685 cliques e CPC
+  R$ 0,19; **busca R$ 4,00 com 2 cliques**. A soma por campanha fecha com a soma
+  por dia nas duas leituras, conferido.
+- **O ACHADO: a busca parou de entregar em 24/09 sem ser pausada.** Status
+  ENABLED, R$ 5,67 em oito dias contra uns R$ 20 por dia até o dia 23. As
+  impressões caem antes do gasto e provam que não é dinheiro saindo devagar:
+  1.958, 668, 98 e 70 em quatro leituras. Segunda prova independente: os grupos
+  de termo ficaram congelados no mesmo centavo entre 24/09 e 02/10.
+- **A causa é de painel e eu não invento**: orçamento cortado, lance baixo,
+  negativas aplicadas de forma ampla, ou a campanha de instalação atendendo as
+  mesmas buscas. Registro o que chama atenção sem chamar de prova: as impressões
+  da campanha de instalação subiram de 6.779 para 11.984 no mesmo período. O
+  número que resolveria é a parcela de impressões perdida por orçamento e por
+  classificação, que existe no painel e a coleta não busca. Pedido na lista.
+- **O MEU ERRO, e ele custou uma proposta inteira.** Em 24/09 eu disse que a
+  busca gastava R$ 20 por dia e propus etiquetar a URL final dela com argumento
+  de R$ 640 por mês. Ela tinha parado naquele mesmo dia: o `porCampanha` mostrava
+  R$ 163,59 porque a janela dele são oito datas e o dinheiro estava nas
+  primeiras. A aritmética que pegaria estava na minha frente: a conta gastou
+  R$ 18,78 no dia 24 enquanto a campanha de instalação corria a R$ 21 por dia,
+  o que já dava zero para a busca. Virou aprendizado no manual, com o passo a
+  passo, e a ação foi CONDICIONADA em vez de repetida ("só vale se a busca voltar
+  a entregar").
+- **CORREÇÃO DE NÚMERO PUBLICADO**: a semana de 17 a 23/09 saiu como R$ 268,32
+  no Google e hoje a mesma janela lê R$ 259,43. O Google revisa dia fechado para
+  baixo (crédito de clique inválido), R$ 8,89 nesta. O custo por conta daquela
+  semana passa de R$ 8,30 para R$ 8,10. Regra nova no manual: citar a data da
+  leitura e RECALCULAR a semana anterior em vez de copiar o que foi publicado.
+- **INSTALAÇÃO NÃO É CONTA, e agora tem número**: 195 instalações contadas pelo
+  Google mais 194 pelo Meta, contra 47 contas no banco. Cerca de **uma conta a
+  cada oito instalações**, lido como ordem de grandeza porque a soma mistura
+  réguas de donos diferentes e pode contar a mesma pessoa duas vezes. Esse
+  degrau é maior do que qualquer coisa que compra de mídia melhore. Das 47, são
+  41 Android e 2 iPhone; **nenhuma na web**, que três semanas atrás era tudo.
+- **O DESPERDÍCIO COM NOME NÃO ANDOU, e não é mérito**: R$ 0,00 nos grupos de
+  curso, scanner e mecânico online, porque a campanha que gera termo parou. E a
+  consequência estrutural: **98% do dinheiro foi para campanha de instalação, que
+  não tem termo de busca nenhum**. O critério 6 da régua deixou de ser
+  alcançável com os instrumentos de hoje, e isso está dito em vez de disfarçado.
+- **PROPOSTA DA SEMANA, uma só, uma tela e custo zero**: o dono abrir o relatório
+  de aquisição do Play Console agrupado por fonte de tráfego, que separa Google
+  Ads, Facebook e orgânico. Divide os R$ 280,68 entre as duas campanhas de
+  instalação e, de brinde, diz quanto da instalação é orgânica. É a mais barata
+  das três saídas que o manual já listava; as outras são o Install Referrer
+  (Engenharia, precisa de versão) e um medidor de atribuição (gasto novo).
+- **ESTADO DA LISTA DO DONO**: as duas listas de negativa (curso desde 03/09,
+  scanner desde 19/09) custaram R$ 0,00 nesta semana, e não por terem sido
+  aplicadas: a campanha parou. Continuam na lista, porque se ela voltar as duas
+  voltam a valer. A importação por gclid perdeu força pela segunda semana, pelo
+  mesmo motivo.
+- **A RÉGUA: cumpre 10 dos 12.** Falham o 3 (custo por desfecho medido por
+  campanha, por falta de etiqueta, segunda semana) e o 6 (desperdício com nome,
+  que só cobre 2% do dinheiro). Nos dois o limite é do instrumento.
+- APRENDIZADOS em `midia-paga.md`: a janela de oito datas esconde parada recente,
+  com a aritmética que pega; impressão cai antes do gasto; termo congelado é
+  prova de campanha parada; número de plataforma tem data de leitura e dia
+  fechado é revisado para baixo; e desperdício com nome só existe em campanha de
+  busca, com o substituto mais barato nomeado.
+
 ## 2026-10-01 · QA agendado: o primeiro dinheiro real entrou, e o funil não registrou
 - Verificação agendada em 04/09 para o dia da PRIMEIRA COBRANÇA REAL. Não é
   rodada semanal: só a cobrança.

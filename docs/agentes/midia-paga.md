@@ -402,6 +402,58 @@ Como fazer a conta por campanha sem errar:
   janela, o `porCampanha` dela é a vida inteira dela, e dá para tratar como
   acumulado.
 
+### A janela de 8 datas esconde uma parada recente (02/10/2026)
+
+**O erro foi meu e custou uma proposta inteira.** Em 24/09 escrevi que a busca
+gastava uns R$ 20 por dia e propus colar a etiqueta na URL final dela, com o
+argumento de R$ 640 por mês. A busca tinha parado de entregar NAQUELE MESMO DIA.
+O `porCampanha` dizia R$ 163,59 porque a janela dele são as oito datas
+anteriores, e o dinheiro todo estava nas primeiras.
+
+A aritmética que teria pego, e ela cabe em duas linhas: **subtraia o ritmo
+diário da campanha nova do total da conta no último dia cheio. Se sobrar zero
+ou negativo, a campanha antiga parou.** Em 24/09 a conta gastou R$ 18,78 no dia
+enquanto a campanha de instalação corria a uns R$ 21 por dia. Já era zero, e
+estava na minha frente.
+
+Então, toda rodada, antes de dizer qualquer coisa sobre uma campanha:
+
+1. leia `porCampanha` de DUAS coletas (hoje e a de sete dias atrás);
+2. compare o total da conta no último dia cheio com o ritmo diário de cada
+   campanha que você acha que está rodando;
+3. e confira a direção com as impressões, que caem antes do gasto. Na busca
+   elas foram 1.958, 668, 98 e 70 em quatro leituras: isso não é orçamento
+   gasto devagar, é anúncio que não entra mais no leilão.
+
+**Termo congelado é a segunda prova.** Os grupos de termo ficaram no mesmo
+centavo entre 24/09 e 02/10 (curso R$ 34,57, scanner R$ 41,39). Valor
+acumulado que não anda em oito dias é campanha que não entregou, e serve como
+conferência independente do gasto.
+
+### Número de plataforma de anúncio tem data de leitura (02/10/2026)
+
+O Google revisa dias já fechados PARA BAIXO, por crédito de clique inválido. A
+semana de 17 a 23/09 saiu no relatório como R$ 268,32 e oito dias depois a mesma
+janela lia R$ 259,43, R$ 8,89 a menos (3,3%). O custo por conta daquela semana
+passou de R$ 8,30 para R$ 8,10.
+
+Duas regras: **cite a data da leitura junto do número**, e, ao repetir a semana
+anterior numa comparação, **recalcule em vez de copiar o que você publicou**. Se
+a diferença passar de uns 5%, diga que houve revisão em vez de deixar dois
+números diferentes circulando para a mesma janela.
+
+### O desperdício com nome só existe em campanha de busca (02/10/2026)
+
+Campanha de instalação e de canal múltiplo não têm termo de busca: o
+`search_term_view` não devolve linha para elas. Quando o dinheiro migra para
+esse tipo de campanha, o critério 6 da régua deixa de ser alcançável, e em 02/10
+isso já era 98% do gasto.
+
+Não disfarce: diga que o desperdício com nome cobre X% do dinheiro desta
+semana. O substituto mais barato que existe para esse tipo de campanha é o
+relatório de aquisição do Play Console, que separa instalação por fonte
+(Google Ads, Facebook, orgânico) e é tela do dono, não coleta nossa.
+
 ### Quando a etiqueta some, a assinatura é esta (24/09/2026)
 
 O rastro com nome cai a zero e, no mesmo dia, aparece um rastro sem nome do
