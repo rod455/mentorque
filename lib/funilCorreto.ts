@@ -303,10 +303,28 @@ export function plataformasDaTaxa(de: EventoFunil, para: EventoFunil): Plataform
 }
 
 export const RESSALVAS: Partial<Record<EventoFunil, string>> = {
-  // CONFIGURAÇÃO, não plataforma, e por isso em prosa: no dia em que a chave
-  // NEXT_PUBLIC_REVENUECAT_ANDROID_KEY entrar no build, esta frase cai.
+  // ESTA FRASE DIZIA O CONTRÁRIO ATÉ 02/10/2026, E ESTAVA ERRADA.
+  //
+  // O que estava escrito: "no Android o paywall APARECE e não tem botão de
+  // compra (modo leitor, sem a chave do RevenueCat no build)". Eu escrevi isso
+  // em 28/09 e repeti em três lugares, inclusive na linha do paywall no
+  // retrato diário, onde virou a explicação oficial do `iniciou_checkout` zero.
+  //
+  // O QUE OS DADOS DIZEM: o Android tem `iniciou_checkout` com origem
+  // `loja-monthly` e `loja-annual` desde 23/09, nas versões 2.7 e 2.8. Esse
+  // evento é emitido DEPOIS do `if (!pkg) return` do `buyNative`
+  // (components/app/screens/Subscribe.tsx), e `pkg` só existe quando o plugin
+  // configurou com chave. Ou seja: a chave está no build desde a 2.7, o botão
+  // existe, e em 25/09 uma compra de Play foi concluída de verdade.
+  //
+  // A LIÇÃO, e é a mesma da semana de 28/09 com o sinal trocado: ressalva é
+  // afirmação sobre o mundo e envelhece como qualquer outra. Esta nasceu certa
+  // (o Android foi modo leitor por semanas), ninguém avisou que tinha caído, e
+  // ela passou a EXPLICAR um zero que já não existia. Ressalva sem data de
+  // validade nem dono vira a mentira mais difícil de achar, porque todo mundo
+  // a repete achando que está sendo cuidadoso.
   viu_paywall:
-    "no Android o paywall APARECE e não tem botão de compra (modo leitor, sem a chave do RevenueCat no build), e 85% das exibições vêm de lá. Taxa de paywall para checkout somando as tres plataformas mede um denominador que não converte por construção",
+    "a maior parte das exibições vem do Android. O Android VENDE desde a 2.7 (há `iniciou_checkout` de loja desde 23/09 e uma compra concluída em 25/09), então o denominador não é mais estrutural; o que ainda não bate é a venda de loja chegar ao banco, conferido em vendas.lojaConferida",
 };
 
 /**

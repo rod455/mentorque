@@ -598,10 +598,29 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
     SO_NA_PLATAFORMA.viu_paywall === undefined,
     "o modo leitor do Android é configuração, não plataforma: vai na ressalva, senão a régua mente no dia em que a chave entrar",
   );
+  // ESTA ASSERÇÃO COBRAVA "modo leitor" ATÉ 02/10/2026, e o mundo virou.
+  //
+  // Ela existia para garantir que a ressalva explicasse o `iniciou_checkout`
+  // zero do Android. Só que o Android passou a VENDER na 2.7: há
+  // `iniciou_checkout` com origem `loja-monthly` e `loja-annual` desde 23/09 e
+  // uma compra de Play concluída em 25/09. A ressalva seguiu dizendo "não tem
+  // botão de compra" e virou a explicação oficial de um zero que já não
+  // existia.
+  //
+  // A LIÇÃO, e é por isso que esta nota é longa: conferência que exige um TEXTO
+  // fixo envelhece junto com o texto. O que ela tem de cobrar é que a ressalva
+  // continue existindo e continue apontando para onde se confere o fato, não
+  // que ela repita uma frase. Por isso agora o que se exige é a ausência da
+  // afirmação velha e a presença do lugar onde a verdade é medida.
   conferir(
-    "e a ressalva do paywall diz o que está acontecendo",
-    /modo leitor/.test(RESSALVAS.viu_paywall ?? ""),
-    "sem ela, quem somar as três plataformas numa taxa de checkout não tem como saber",
+    "a ressalva do paywall não afirma mais o modo leitor do Android",
+    !/modo leitor|não tem botão de compra|nao tem botao de compra/i.test(RESSALVAS.viu_paywall ?? ""),
+    `${RESSALVAS.viu_paywall}; o Android vende desde a 2.7 e a frase virou explicação de um zero que não existe mais`,
+  );
+  conferir(
+    "e ela aponta para onde o fato é conferido hoje",
+    /lojaConferida/.test(RESSALVAS.viu_paywall ?? ""),
+    "sem apontar para a conferência, a ressalva vira opinião que ninguém sabe como contestar",
   );
 }
 

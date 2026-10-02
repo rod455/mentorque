@@ -100,6 +100,56 @@ export function relatoDeVendaSemConta(e: EventoDaLoja): RelatoDeVenda {
 }
 
 /**
+ * A CONFERÊNCIA QUE FALTAVA (02/10/2026): o RevenueCat e o banco batem?
+ *
+ * POR QUE ELA EXISTE, e dói que não existisse. A venda perdida de 25/09 estava
+ * visível no retrato desde 26/09, em dois números impressos a poucas linhas um
+ * do outro: a fonte `revenuecat` dizia `active_subscriptions: 1` e as
+ * assinaturas do banco eram todas do Stripe. Oito dias assim. Ninguém comparou,
+ * porque comparar era trabalho de quem lia, e quem lê tem outras trinta linhas.
+ *
+ * Não precisa de chave nova nem de rede: os dois números já chegam ao retrato
+ * todo dia. O que faltava era a subtração.
+ *
+ * `noBanco` conta só assinatura SEM `stripe_subscription_id`, que é como a
+ * linha de uma compra de loja se parece aqui: o webhook do RevenueCat não
+ * escreve id de Stripe nenhum. Comparar com o total das assinaturas esconderia
+ * exatamente o buraco, porque as do Stripe tapariam a conta.
+ */
+export function conferenciaDaLoja(
+  rcAtivas: number | null | undefined,
+  noBanco: number,
+): { deveAvisar: boolean; texto: string; silencio: string } {
+  if (rcAtivas == null || !Number.isFinite(Number(rcAtivas))) {
+    return {
+      deveAvisar: false,
+      texto: "",
+      silencio: "sem leitura do RevenueCat hoje: a coleta de metricas externas nao trouxe active_subscriptions",
+    };
+  }
+  const rc = Number(rcAtivas);
+  const faltando = rc - noBanco;
+  if (faltando > 0) {
+    return {
+      deveAvisar: true,
+      texto:
+        `A LOJA VENDEU E O BANCO NAO SABE: o RevenueCat diz ${rc} assinatura(s) ativa(s) e o banco conhece ${noBanco} de loja.` +
+        ` Sao ${faltando} pessoa(s) que pagaram na Apple ou na Play e NAO tem Premium, porque quem libera o acesso e a linha de` +
+        ` subscriptions. Conferir o webhook em RevenueCat, Integrations, Webhooks, e ligar o Premium na mao em Customers.`,
+      silencio: "",
+    };
+  }
+  if (faltando < 0) {
+    return {
+      deveAvisar: false,
+      texto: "",
+      silencio: `o banco tem ${noBanco} assinatura(s) de loja e o RevenueCat ${rc}: sobra nossa, provavelmente assinatura que expirou la e segue ativa aqui`,
+    };
+  }
+  return { deveAvisar: false, texto: "", silencio: `RevenueCat ${rc} e banco ${noBanco}: batem` };
+}
+
+/**
  * A frase do retrato sobre vendas de loja perdidas.
  *
  * Qualquer número acima de zero é incidente, e por isso não há limiar aqui:

@@ -28,6 +28,33 @@ sozinhos: nenhuma tela muda de código.
 
 O plugin já viaja no binário da 2.8 que está na Play, inerte.
 
+> ## ⚠️ ISTO FICOU VELHO, E A CORREÇÃO É DE 02/10/2026
+>
+> **O Android já vende, e vende desde a 2.7.** A frase "inerte" acima
+> descrevia 27/09 e deixou de ser verdade antes disso, sem ninguém avisar.
+>
+> O que os dados dizem, e não é inferência: `funil_eventos` tem
+> `iniciou_checkout` com origem `loja-monthly` e `loja-annual` vindo de
+> **android** nas versões **2.7.0 (23/09)** e **2.8.0 (25/09)**. Esse evento é
+> emitido DEPOIS do `if (!pkg) return` do `buyNative`
+> (`components/app/screens/Subscribe.tsx`), e `pkg` só existe quando o plugin
+> configurou com chave. Ou seja: a chave está no build, as ofertas carregam, o
+> botão aparece. E em **25/09 uma compra de Play foi concluída**: o RevenueCat
+> registra a assinatura e US$ 4 gastos.
+>
+> Então os passos de 1 a 4 da lista abaixo estão feitos. **O que falta é o
+> webhook**: a compra de 25/09 nunca chegou ao nosso banco, e por isso a
+> pessoa pagou e segue sem Premium. A conferência que denuncia isso todo dia
+> agora existe (`vendas.lojaConferida` no retrato), e ela compara o
+> `active_subscriptions` do RevenueCat com as assinaturas de loja do banco.
+>
+> **A lição, que vale mais que o conserto:** este documento, a ressalva do
+> paywall no `funilCorreto.ts` e a linha do retrato diziam a mesma coisa errada
+> ao mesmo tempo, com confiança, porque uma foi copiada da outra. Afirmação
+> sobre o estado do mundo precisa de data e de um jeito de ser medida, senão
+> vira a mentira mais difícil de achar: a que todo mundo repete achando que
+> está sendo cuidadoso.
+
 ## O que falta, e por que nada disso sou eu que faço
 
 Tudo o que resta está na lista de "nunca sem o dono" do `CLAUDE.md`: preço e

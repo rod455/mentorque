@@ -1,6 +1,6 @@
 import { alarmeDeErros, classeDoErro, contaDeErros, linhaDeErros } from "./alarmeDeErros";
 import { ETIQUETA_DESDE, lerPergunta, linhaDePerguntas, quadroDeTemas } from "./biela/perguntaLida";
-import { ORIGEM_VENDA_SEM_CONTA, linhaDeVendaSemConta } from "./loja/vendaSemConta";
+import { ORIGEM_VENDA_SEM_CONTA, conferenciaDaLoja, linhaDeVendaSemConta } from "./loja/vendaSemConta";
 import { avisoDeColeta, frescorDasFontes } from "./frescorDasFontes";
 import {
   CADEIA_ATO,
@@ -521,6 +521,20 @@ export async function coletarDadosOperacao() {
       // RevenueCat. Regra e frase em lib/loja/vendaSemConta.ts.
       semConta: vendasSemConta ?? 0,
       linhaSemConta: linhaDeVendaSemConta(vendasSemConta ?? 0),
+      // A SUBTRAÇÃO QUE FALTAVA (02/10/2026). A venda perdida de 25/09 esteve
+      // visível no retrato por oito dias, em dois números impressos a poucas
+      // linhas um do outro: a fonte `revenuecat` dizia `active_subscriptions:
+      // 1` e as assinaturas do banco eram todas do Stripe. Ninguém comparou,
+      // porque comparar era trabalho de quem lê.
+      //
+      // `assinaturasDeLoja` conta as ativas SEM `stripe_subscription_id`, que
+      // é como a linha de uma compra de loja se parece aqui. Comparar com o
+      // total esconderia o buraco: as do Stripe tapariam a conta.
+      assinaturasDeLoja: ativas.filter((s) => !s.stripe_subscription_id).length,
+      lojaConferida: conferenciaDaLoja(
+        (((porFonte.revenuecat ?? [])[0]?.dados ?? {}) as { active_subscriptions?: number }).active_subscriptions,
+        ativas.filter((s) => !s.stripe_subscription_id).length,
+      ),
     },
     // Marketing: de onde vieram os cadastros dos últimos 28 dias (UTM da LP).
     // Cruzado com o gasto de meta_ads/google_ads, vira CAC por campanha.

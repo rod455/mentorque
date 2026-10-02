@@ -29,6 +29,7 @@
 import { readFileSync } from "node:fs";
 import {
   ORIGEM_VENDA_SEM_CONTA,
+  conferenciaDaLoja,
   ehVendaComDinheiro,
   identidadeUsavel,
   linhaDeVendaSemConta,
@@ -148,11 +149,83 @@ console.log("Loja: a compra chega ao Premium, e quando não chega, deixa rastro?
   );
 }
 
+// ── 6b. A SUBTRAÇÃO QUE FALTAVA: RevenueCat contra o banco ──────────────────
+//
+// O CASO REAL, e ele é o motivo desta régua existir: de 25/09 a 02/10 a fonte
+// `revenuecat` do retrato disse `active_subscriptions: 1` todos os dias, e as
+// assinaturas do banco eram todas do Stripe. Os dois números foram impressos
+// lado a lado por OITO DIAS e ninguém subtraiu, porque subtrair era trabalho
+// de quem lê.
+{
+  const perdida = conferenciaDaLoja(1, 0);
+  conferir("1 no RevenueCat e 0 no banco dispara", perdida.deveAvisar === true, perdida.silencio);
+  conferir("e diz quantas pessoas", /1 pessoa\(s\) que pagaram/.test(perdida.texto), perdida.texto);
+  conferir("e diz onde mexer", /Integrations, Webhooks/.test(perdida.texto), perdida.texto);
+
+  conferir("1 e 1 não dispara", conferenciaDaLoja(1, 1).deveAvisar === false);
+  conferir("0 e 0 não dispara", conferenciaDaLoja(0, 0).deveAvisar === false);
+  conferir("e o silêncio diz que batem", /batem/.test(conferenciaDaLoja(2, 2).silencio));
+
+  // Sobra nossa não é venda perdida: assinatura que expirou no RevenueCat e
+  // segue ativa aqui é outro problema, e gritar "alguém pagou" sobre ela
+  // ensinaria a ignorar o alarme.
+  const sobra = conferenciaDaLoja(0, 1);
+  conferir("banco com mais que o RevenueCat NÃO grita que alguém pagou", sobra.deveAvisar === false, sobra.texto);
+  conferir("mas o motivo fica dito", /sobra nossa/.test(sobra.silencio), sobra.silencio);
+
+  // Sem leitura não é zero. É a regra da casa desde 28/09: ausência de medida
+  // não pode virar afirmação sobre o mundo.
+  const semLeitura = conferenciaDaLoja(null, 0);
+  conferir("sem leitura do RevenueCat não dispara", semLeitura.deveAvisar === false);
+  conferir("e diz que está sem leitura", /sem leitura do RevenueCat/.test(semLeitura.silencio), semLeitura.silencio);
+  conferir("e lixo no lugar do número também cala", conferenciaDaLoja(NaN, 0).deveAvisar === false);
+}
+
+// ── 6c. A RESSALVA DO PAYWALL NÃO PODE MAIS DIZER MODO LEITOR ───────────────
+//
+// Ela nasceu certa em 28/09 e envelheceu: o Android tem `iniciou_checkout` de
+// loja desde 23/09 e uma compra concluída em 25/09. Ressalva que explica um
+// zero que já não existe é a mentira mais difícil de achar, porque todo mundo
+// a repete achando que está sendo cuidadoso.
+{
+  const funil = readFileSync(new URL("../lib/funilCorreto.ts", import.meta.url), "utf8");
+  // O RECORTE É DENTRO DO BLOCO `RESSALVAS`, e não no arquivo inteiro: a chave
+  // `viu_paywall` aparece em mais de um mapa ali (UNIDADE, por exemplo), e a
+  // primeira versão desta asserção pegou o valor errado, "aparelho", e
+  // reprovou um texto correto. É a mesma armadilha de 03/09 com outra cara:
+  // procurar um nome num arquivo grande acha o primeiro, não o certo.
+  const bloco = funil.match(/export const RESSALVAS[\s\S]*?\n\};/)?.[0] ?? "";
+  const ressalva = bloco.match(/viu_paywall:\s*\n?\s*"([^"]+)"/)?.[1] ?? "";
+  conferir("achei o bloco RESSALVAS", !!bloco);
+  conferir("achei a ressalva do paywall", !!ressalva, bloco.slice(0, 80));
+  conferir(
+    "a ressalva NÃO diz mais que o Android não tem botão de compra",
+    !/modo leitor|não tem botão de compra|nao tem botao de compra/i.test(ressalva),
+    ressalva,
+  );
+  conferir("e diz que o Android vende", /VENDE/.test(ressalva), ressalva);
+}
+
 // ── 7. O RETRATO PUBLICA ────────────────────────────────────────────────────
 {
   const operacao = semComentarios(readFileSync(new URL("../lib/operacao.ts", import.meta.url), "utf8"));
   conferir("o retrato conta as vendas sem conta", /ORIGEM_VENDA_SEM_CONTA/.test(operacao));
   conferir("e publica a frase pronta", /linhaSemConta: linhaDeVendaSemConta\(/.test(operacao));
+  conferir("e a conferencia contra o RevenueCat", /lojaConferida: conferenciaDaLoja\(/.test(operacao));
+  // A ASSERÇÃO OLHA O ARGUMENTO, e não uma linha vizinha parecida.
+  //
+  // A primeira versão conferia só que existia `assinaturasDeLoja: ativas.filter(...)`.
+  // Plantei `ativas.length` DENTRO da chamada de `conferenciaDaLoja`, que é o
+  // número que de fato decide o alarme, e ela aprovou: a linha vizinha
+  // continuava lá, certinha. Conferir um lugar parecido com o que importa é o
+  // mesmo que não conferir.
+  const chamada = operacao.match(/conferenciaDaLoja\([\s\S]{0,400}?\n      \),/)?.[0] ?? "";
+  conferir("achei a chamada da conferência da loja", !!chamada);
+  conferir(
+    "e ela recebe só as assinaturas SEM stripe",
+    /ativas\.filter\(\(s\) => !s\.stripe_subscription_id\)\.length,?\s*\n?\s*\)/.test(chamada),
+    `${chamada.slice(-90)}; comparar com o total esconde o buraco, porque as do Stripe tapam a conta`,
+  );
   conferir("a janela é de 30 dias", /vendas_sem_conta[\s\S]{0,300}d30/.test(operacao), "em 7 dias o caso de 25/09 teria passado batido");
 }
 
