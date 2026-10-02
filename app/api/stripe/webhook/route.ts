@@ -3,7 +3,7 @@ import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { upsertSubscription, cicloNoBanco } from "@/lib/subscriptionSync";
-import { fimDoCiclo, viradaDeCiclo } from "@/lib/ciclo";
+import { faturaDaVirada, fimDoCiclo, viradaDeCiclo } from "@/lib/ciclo";
 import { eventoDeFunil } from "@/lib/funilServidor";
 
 export const runtime = "nodejs";
@@ -95,16 +95,32 @@ export async function POST(req: Request) {
           // entrega o banco já guarda o ciclo novo, então não há virada e não
           // há evento. Por isso o `cicloNoBanco` é lido antes do upsert.
           //
-          // NÃO CARREGA VALOR de propósito. O que existe aqui é o preço do
-          // plano, e preço não é caixa: um cupom de 100% produz exatamente
-          // este evento com fatura de R$ 0,00, que foi o que aconteceu na
-          // virada de 01/09. Quem responde "quanto entrou" é a fatura, e para
-          // ela chegar o Rodrigo precisa acrescentar `invoice.paid` à lista do
-          // endpoint. Até lá este evento diz que o ciclo virou, e só.
+          // O VALOR ENTRA AQUI DESDE 02/10/2026, e a nota antiga deste bloco
+          // dizia que ele não entraria. Ela dizia: "o que existe aqui é o
+          // preço do plano, e preço não é caixa; quem responde quanto entrou é
+          // a fatura, e para ela chegar o Rodrigo precisa acrescentar
+          // `invoice.paid` à lista do endpoint".
+          //
+          // A primeira metade continua certa: preço de plano não é caixa, e um
+          // cupom de 100% produz esta mesma virada com fatura de R$ 0,00. A
+          // segunda metade era UMA saída, e não a única: a assinatura que
+          // chega no evento carrega `latest_invoice`, e a fatura pode ser
+          // BUSCADA agora, com a chave que esta casa já tem. Nada de painel,
+          // nada de evento novo, a mesma entrega que já funciona mais uma
+          // pergunta.
+          //
+          // `pagoCentavos` é dinheiro RECEBIDO. Zero é resposta legítima
+          // (cortesia, cupom de 100%); ausente é "não deu para saber", e as
+          // duas coisas não podem virar a mesma no caminho, senão receita some
+          // com cara de cortesia. Por isso o campo só entra quando existe.
+          const fatura = await faturaDaVirada(sub, (id) => stripe.invoices.retrieve(id));
           await funil("renovou", sub.metadata?.user_id, {
             sub: sub.id,
             ciclo: fimDoCiclo(sub),
             status: sub.status,
+            ...(fatura
+              ? { pagoCentavos: fatura.centavos, moeda: fatura.moeda, fatura: fatura.fatura }
+              : { semValor: "fatura nao lida" }),
           });
         }
         if (event.type === "customer.subscription.updated" && prev?.cancel_at_period_end === false && sub.cancel_at_period_end) {

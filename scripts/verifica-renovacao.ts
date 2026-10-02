@@ -26,7 +26,7 @@
 //
 // Rode com: npm run conferir:renovacao
 import { readFileSync } from "node:fs";
-import { fimDoCiclo, viradaDeCiclo } from "../lib/ciclo.ts";
+import { cicloVencido, faturaDaVirada, fimDoCiclo, linhaDeCiclosVencidos, viradaDeCiclo } from "../lib/ciclo.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -173,10 +173,35 @@ function semComentarios(fonte: string): string {
   // R$ 0,00, e foi o que aconteceu em 01/09. Carimbar valor aqui faria o funil
   // afirmar dinheiro que ninguém confirmou.
   const extraDoRenovou = /funil\(\s*["']renovou["'][^;]*?\{([\s\S]*?)\}\s*\)/.exec(rota)?.[1] ?? "";
+  // ESTA ASSERÇÃO DIZIA "não carimba valor NENHUM" ATÉ 02/10/2026.
+  //
+  // Ela nasceu certa: o que a rota tinha em mãos era PREÇO DE PLANO, e preço
+  // não é caixa (um cupom de 100% produz a mesma virada com fatura de R$
+  // 0,00). A conclusão de 01/10 foi que, para saber quanto entrou, o dono
+  // precisaria acrescentar `invoice.paid` ao endpoint.
+  //
+  // Era uma saída, não a única: a assinatura carrega `latest_invoice`, e a
+  // fatura passou a ser BUSCADA na hora da virada, com a chave que a casa já
+  // tem. Então agora o evento PODE carregar dinheiro, desde que seja o
+  // `amount_paid` de uma fatura PAGA.
+  //
+  // O que continua proibido é o preço do plano, que é o erro original. Por
+  // isso a asserção deixou de ser "nenhum valor" e passou a nomear o que não
+  // pode entrar.
   conferir(
-    "o `renovou` da web não carimba valor nenhum",
-    extraDoRenovou !== "" && !/valor|preco|price|amount|unit_amount/i.test(extraDoRenovou),
+    "o `renovou` não carimba PREÇO DE PLANO",
+    extraDoRenovou !== "" && !/\bprice\b|unit_amount|precoDoPlano|planPrice/i.test(extraDoRenovou),
     `o extra saiu com: ${extraDoRenovou.replace(/\s+/g, " ").trim() || "(não achei o extra)"}`
+  );
+  conferir(
+    "e o valor que ele carrega vem da FATURA",
+    /pagoCentavos: fatura\.centavos/.test(extraDoRenovou),
+    "sem isto o evento volta a dizer que o ciclo virou e nada sobre quanto entrou"
+  );
+  conferir(
+    "e quando a fatura não é lida, isso é DITO em vez de virar zero",
+    /semValor/.test(extraDoRenovou),
+    "ausente e zero nao podem virar a mesma coisa: receita sumiria com cara de cortesia"
   );
   conferir(
     "e diz de qual assinatura e de qual ciclo ele fala",
@@ -193,3 +218,78 @@ console.log(
   "Renovação: a virada de ciclo entra no funil uma vez só, reentrega e correção\n" +
     "para trás não inventam receita, e a leitura do ciclo antigo vem antes da escrita."
 );
+
+// ── QUANTO ENTROU, E O CICLO QUE VENCEU SEM NINGUEM MEXER (02/10/2026) ─────
+{
+  console.log("Quanto entrou, e o ciclo que vencia sem ninguem olhar:");
+
+  // A FATURA. `amount_paid` e dinheiro recebido; so fatura PAGA conta, porque
+  // `open` e `draft` sao promessa e `void` e fatura que deixou de existir.
+  const subComFatura = { latest_invoice: "in_123" } as unknown as Parameters<typeof faturaDaVirada>[0];
+  const paga = await faturaDaVirada(subComFatura, async () => ({ status: "paid", amount_paid: 2990, currency: "BRL" }));
+  conferir("fatura paga vira centavos", paga?.centavos === 2990, JSON.stringify(paga));
+  conferir("e a moeda sai minuscula", paga?.moeda === "brl", JSON.stringify(paga));
+  conferir("e o id da fatura viaja junto", paga?.fatura === "in_123", JSON.stringify(paga));
+
+  // O CUPOM DE 100%: zero e resposta legitima, e precisa ser DIFERENTE de "nao
+  // sei". Foi o que aconteceu na virada de 01/09.
+  const cortesia = await faturaDaVirada(subComFatura, async () => ({ status: "paid", amount_paid: 0, currency: "brl" }));
+  conferir("cortesia e zero, e nao ausencia", cortesia?.centavos === 0, JSON.stringify(cortesia));
+
+  for (const estado of ["open", "draft", "void", "uncollectible"]) {
+    const f = await faturaDaVirada(subComFatura, async () => ({ status: estado, amount_paid: 2990, currency: "brl" }));
+    conferir(`fatura ${estado} NAO vira receita`, f === null, JSON.stringify(f));
+  }
+
+  // NUNCA LANCA: perder o valor e ruim, perder o `renovou` por causa do valor
+  // seria trocar um problema por outro pior.
+  // O `try` aqui NAO e zelo: sem ele, uma versao de `faturaDaVirada` que
+  // volte a lancar derruba o script inteiro, e script derrubado nao imprime
+  // FALHA nenhuma. Foi o que aconteceu ao plantar este defeito em 02/10:
+  // conferencia que morre nao provou nada, so pareceu ter provado.
+  let explodiu: unknown = "nao rodou";
+  try {
+    explodiu = await faturaDaVirada(subComFatura, async () => { throw new Error("stripe fora do ar"); });
+  } catch {
+    explodiu = "LANCOU";
+  }
+  conferir("erro ao buscar a fatura nao derruba nada", explodiu === null, String(explodiu));
+  const semFatura = await faturaDaVirada({} as Parameters<typeof faturaDaVirada>[0], async () => ({ status: "paid", amount_paid: 1 }));
+  conferir("assinatura sem latest_invoice devolve nulo", semFatura === null);
+  const objeto = await faturaDaVirada(
+    { latest_invoice: { id: "in_obj" } } as unknown as Parameters<typeof faturaDaVirada>[0],
+    async (id) => ({ status: "paid", amount_paid: 500, currency: "brl", id }) as never,
+  );
+  conferir("latest_invoice como objeto tambem e lido", objeto?.fatura === "in_obj", JSON.stringify(objeto));
+
+  // O CICLO VENCIDO. A folga de um dia existe porque o webhook chega minutos
+  // depois da virada, e alarme que dispara no minuto exato grita todo mes a toa.
+  conferir("ciclo de ontem ainda nao e vencido (folga)", cicloVencido("2026-10-01T00:00:00Z", "2026-10-02") === false);
+  conferir("ciclo de tres dias atras e vencido", cicloVencido("2026-09-29T00:00:00Z", "2026-10-02") === true);
+  conferir("ciclo futuro nao e vencido", cicloVencido("2026-11-01T00:00:00Z", "2026-10-02") === false);
+  conferir("sem ciclo nao inventa vencimento", cicloVencido(null, "2026-10-02") === false);
+  conferir("lixo no lugar da data nao vira alarme", cicloVencido("nao e data", "2026-10-02") === false);
+
+  const nenhuma = linhaDeCiclosVencidos([]);
+  conferir("sem ciclo vencido o alarme cala", nenhuma.deveAvisar === false);
+  conferir("e diz por que calou", /nenhuma assinatura ativa/.test(nenhuma.silencio), nenhuma.silencio);
+
+  const uma = linhaDeCiclosVencidos([{ fim: "2026-09-29T00:00:00Z" }, { fim: "2026-09-20T00:00:00Z" }]);
+  conferir("com ciclo vencido o alarme dispara", uma.deveAvisar === true);
+  conferir("e diz quantas", /CICLO VENCIDO: 2/.test(uma.texto), uma.texto);
+  conferir("e aponta a mais antiga", /mais antigo em 2026-09-20/.test(uma.texto), uma.texto);
+
+  const operacao = readFileSync(new URL("../lib/operacao.ts", import.meta.url), "utf8");
+  conferir("o retrato publica os ciclos vencidos", /ciclosVencidos: linhaDeCiclosVencidos\(/.test(operacao));
+  conferir(
+    "e le o fim do ciclo do banco para isso",
+    /select\("status[^"]*current_period_end"\)/.test(operacao),
+    "sem a coluna na consulta, a regua recebe undefined e nunca acusa nada",
+  );
+}
+
+if (falhas) {
+  console.error(`\n${falhas} conferência(s) da renovação reprovaram.`);
+  process.exit(1);
+}
+console.log("Renovação: o valor vem da fatura paga, e ciclo vencido com status ativo grita.");

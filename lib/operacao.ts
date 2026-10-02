@@ -1,6 +1,7 @@
 import { alarmeDeErros, classeDoErro, contaDeErros, linhaDeErros } from "./alarmeDeErros";
 import { ETIQUETA_DESDE, lerPergunta, linhaDePerguntas, quadroDeTemas } from "./biela/perguntaLida";
 import { ORIGEM_VENDA_SEM_CONTA, conferenciaDaLoja, linhaDeVendaSemConta } from "./loja/vendaSemConta";
+import { cicloVencido, linhaDeCiclosVencidos } from "./ciclo";
 import { avisoDeColeta, frescorDasFontes } from "./frescorDasFontes";
 import {
   CADEIA_ATO,
@@ -80,7 +81,7 @@ export async function coletarDadosOperacao() {
     () => medir("funil_semana", () => admin.from("funil_semana").select("*").limit(12)),
     // `stripe_subscription_id` entra na leitura porque é ele que separa venda
     // de cortesia: conta liberada na mão não tem assinatura no Stripe.
-    () => medir("subscriptions", () => admin.from("subscriptions").select("status, cancel_at_period_end, plan, stripe_subscription_id, cupom")),
+    () => medir("subscriptions", () => admin.from("subscriptions").select("status, cancel_at_period_end, plan, stripe_subscription_id, cupom, current_period_end")),
     () => medir("cadastros", () => admin.from("funil_eventos").select("criado_em, plataforma").eq("evento", "cadastro").gte("criado_em", d14)),
     () => medir("app_erros", () => admin.from("app_erros").select("criado_em, mensagem, plataforma, versao, anon_id").gte("criado_em", d7).limit(2000)),
     // SEM filtro de data: o frescor precisa enxergar fonte parada há muito
@@ -531,6 +532,16 @@ export async function coletarDadosOperacao() {
       // é como a linha de uma compra de loja se parece aqui. Comparar com o
       // total esconderia o buraco: as do Stripe tapariam a conta.
       assinaturasDeLoja: ativas.filter((s) => !s.stripe_subscription_id).length,
+      // CICLO VENCIDO COM STATUS ATIVO (02/10/2026). O conserto do `renovou`
+      // de 01/10 e teoria em producao, e os tres assinantes sairam em 02/10,
+      // entao as duas renovacoes que iam prova-lo nao vao acontecer. Nao da
+      // para fabricar uma renovacao; da para garantir que a proxima nao passe
+      // em silencio. Regra em lib/ciclo.ts.
+      ciclosVencidos: linhaDeCiclosVencidos(
+        ativas
+          .filter((s) => cicloVencido(s.current_period_end as string | null, hoje))
+          .map((s) => ({ fim: s.current_period_end as string | null })),
+      ),
       lojaConferida: conferenciaDaLoja(
         (((porFonte.revenuecat ?? [])[0]?.dados ?? {}) as { active_subscriptions?: number }).active_subscriptions,
         ativas.filter((s) => !s.stripe_subscription_id).length,
