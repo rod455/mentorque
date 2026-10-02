@@ -153,7 +153,7 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Veredito: (aberto)
 
 ## [cadastro-em-duas-etapas] O formulário do carro pede só marca, modelo e ano
-- Estado: ABERTO
+- Estado: FECHADO (venceu B, promovida em 02/10/2026)
 - Tipo: teste-ab
 - Alvo no funil: abriu_cadastro_de_carro → cadastrou_carro. Na loja
   (Android e iPhone), de 04 a 12/09: 19 abriram, 3 cadastraram. É a maior
@@ -189,7 +189,24 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   semanas depois de a 2.5 estar nas duas lojas, o que aconteceu por volta de
   15/09. Não fecha hoje, e fechar hoje seria o erro que o aviso de leitura
   abaixo existe para impedir.
-- Veredito: (aberto)
+- **Veredito (2026-10-02): FUNCIONOU.** É o primeiro FUNCIONOU do caderno, e
+  ele tem o nível 3 que a régua exige.
+  - Quem abriu o formulário: **173 em A e 173 em B**, denominador idêntico, o
+    que já é sinal de que o sorteio dividiu direito. Quem cadastrou o carro:
+    **78 em A (45 de cada 100) e 108 em B (62 de cada 100)**.
+  - São 30 pessoas de diferença com 173 por braço. A diferença é de cerca de
+    17 pontos com erro padrão de pouco mais de 5, ou seja, mais de três vezes
+    o erro: não é ruído. E a amostra passou com folga o critério de parada do
+    próprio experimento, que era 40 aberturas por variante.
+  - RESSALVA HONESTA: a métrica pedia a leitura separada da loja, e o retrato
+    entrega loja e web somadas. Isso não derruba a comparação, porque o
+    sorteio é por aparelho e aleatório, então a mistura de plataforma cai nos
+    dois braços igual (os denominadores iguais apoiam isso). O que fica sem
+    resposta é ONDE funcionou melhor, não SE funcionou.
+  - CONSEQUÊNCIA, feita na mesma rodada: a variante B virou o padrão e o
+    experimento SAIU do código, como manda a regra. O formulário de cadastro
+    pede marca, modelo e ano; o resto segue na barra "Diagnóstico do carro".
+- Estado final: FECHADO, vencedora promovida em 02/10/2026.
 
 > **AVISO DE LEITURA, posto em 15/09/2026.** As quatro apostas da rotina do
 > carro (caderno de gastos, datas, resumo mensal, modo motorista) estão no ar
@@ -301,16 +318,29 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Início: 2026-09-12 na web; nas lojas, com a 2.5 · Ler a partir de: 2 semanas
   depois de a 2.5 estar nas duas lojas
 - Antes: Android 62%, iPhone 100% (9 pessoas), web 22%
-- Leitura parcial de 2026-09-18, e NÃO é veredito: começaram 70 em A e 71 em B;
-  terminaram **18 em A e 25 em B**. Direção a favor de B, sete pessoas de
-  diferença, e os números do retrato vêm somados (loja e web juntas), enquanto
-  o desenho do teste pede as duas separadas. A segunda leitura combinada,
-  cadastrou_carro, está EMPATADA: 4 em A e 4 em B. Isso é justamente o risco
-  que a métrica previu, "um onboarding mais curto que entrega gente que não
-  cadastra o carro não vale nada", e é o motivo de não fechar por causa da
-  primeira linha. Falta separar loja de web e chegar aos 40 começos por
-  variante na loja.
-- Veredito: (aberto)
+- **Veredito (2026-10-02): INCONCLUSIVO, e ele continua rodando.** O degrau do
+  meio favorece B, o degrau que decide está empatado, e é esse o desenho.
+  - Terminar o onboarding: **181 de 302 em A (60 de cada 100) e 218 de 325 em
+    B (67 de cada 100)**. Sete pontos de diferença com erro padrão de perto de
+    4, ou seja, menos de duas vezes o erro. Direção a favor de B, sem força
+    para fechar.
+  - Cadastrar o carro, que é a segunda leitura e a que decide: **94 de 302 em A
+    e 92 de 325 em B**. Empate. O texto desta aposta já dizia, quando foi
+    escrita, que "um onboarding mais curto que entrega gente que não cadastra o
+    carro não vale nada". Foi exatamente o que aconteceu: B passa mais gente
+    pela apresentação e entrega o mesmo número de carros.
+  - POR QUE NÃO FECHO E NÃO PROMOVO NINGUÉM: duas razões, e a segunda é do
+    dono. A primeira é que inconclusivo com amostra crescendo é o caso em que
+    esperar é a decisão certa. A segunda é que promover B apagaria a página de
+    prova social do onboarding, que é a página que o dono decidiu MANTER em
+    01/09; o veredito de um teste não é o lugar de desfazer uma decisão dele
+    pela porta de trás. Qual das duas vira padrão é pergunta para ele, e está
+    no artifact.
+  - Ressalva que continua: o retrato soma loja e web, e o desenho pedia as
+    duas separadas. A randomização protege a comparação; o que falta é saber
+    onde.
+- Ler de novo a partir de: 2026-10-23
+
 
 
 ## [cta-teste-por-plano] O botão do teste diz o que o clique faz
@@ -379,6 +409,30 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
     texto de controle ("Cancele quando quiser pelo Perfil") continua no
     código e é verdadeiro. Como correção de promessa falsa, ela se sustenta
     sem número.
+- **RELEITURA de 2026-10-02, a que ficou marcada para depois de 01/10, e a
+  notícia é dura.** A primeira cobrança real passou em 01/10 (ciclo adiantado
+  e status `active`, medido no banco pelo QA). E das TRÊS assinaturas pagantes
+  que o produto teve, as três cancelaram: o retrato de hoje mostra 2 ativas
+  com 2 cancelamentos agendados, e as coortes de assinante mostram 1 saída na
+  de 01/09 e 2 na de 08/01.
+  - O que o número NÃO diz, e é o mais importante: por que cancelaram. As três
+    entraram com cupom de 100% do primeiro mês, então a primeira cobrança de
+    verdade foi a primeira vez que o produto pediu dinheiro a elas. Cancelar
+    quando o mês de graça acaba é o comportamento clássico de coorte de cupom,
+    e não tem como ser separado do efeito desta aposta com n igual a 3.
+  - A metade da métrica que ERA desta aposta: zero avaliações citando
+    cobrança, zero reclamação de cobrança surpresa, nenhuma nota de uma
+    estrela (são 12 avaliações, todas cinco). O medo que ela existia para
+    evitar não apareceu. E o lado do controle funcionou no sentido literal:
+    as três acharam o caminho de cancelar e usaram, sem precisar falar com
+    ninguém, que era exatamente o que o texto prometia.
+  - **Veredito final: INCONCLUSIVO para o efeito, com n igual a 3 e coorte de
+    cupom.** Não reabre mais: três pessoas nunca vão fechar esta pergunta.
+    Ela só volta se houver coorte pagante que não venha de cupom.
+  - FICA REGISTRADO como fato de negócio, separado desta aposta: **100% da
+    primeira coorte pagante cancelou na virada para dinheiro.** Isso é assunto
+    do Diretor e do dono, não deste caderno, e é o número mais importante da
+    semana.
 - Acompanhamento 2026-08-28: o interruptor VOLTOU em 25/08 com plugin nativo
   de verdade atrás dele, e mesmo assim a promessa continuou falsa, por outro
   motivo (o plugin nunca carregava; ver lembrete-que-chega). Ou seja: entre
@@ -387,7 +441,7 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   publicado; antes disso, o "depois" ainda não existiu.
 
 ## [lembrete-que-chega] O lembrete que estava mudo passa a sair de verdade
-- Estado: ABERTO
+- Estado: FECHADO (conserto confirmado, efeito inconclusivo)
 - Tipo: mudanca-direta
 - Alvo no funil: retorno da coorte (retenção, voltaram_d1_7) e, de tabela, a
   passagem iniciou_checkout → assinou, porque o aviso de fim de teste é o que
@@ -415,7 +469,28 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   nasceu; 5 erros em 7 dias em app_erros (3 iOS, 2 Android), todos
   `"LocalNotifications.then()" is not implemented`; uso.coortes vazio no
   retrato, então a régua de retenção também não tem linha para comparar.
-- Veredito: (aberto)
+- **Veredito (2026-10-02): a correção está CONFIRMADA, o efeito na retenção é
+  INCONCLUSIVO, e as duas metades precisam ser ditas separadas.**
+  - Métrica (1), erros `.then()` de volta a zero: CUMPRIDA. Não há uma única
+    ocorrência nova; os relatos de erro de hoje são outros (app fechando na
+    abertura e desistência de login).
+  - Métrica (2), existir aparelho com permissão concedida: CUMPRIDA, e agora
+    com número, porque a instrumentação do portão subiu em 19/09. São 10 e 11
+    aparelhos com `permissao_aviso_concedida` nos dois braços medidos. Antes
+    desta correção era impossível por construção, então aqui o conserto está
+    provado: a máquina que estava muda passou a poder falar.
+  - Métrica (3), retorno das coortes: INCONCLUSIVO. As coortes que poderiam
+    mostrar isso estão marcadas como AINDA NAO DA PARA LER no retrato, e as
+    duas fechadas que existem mostram 0 de 16 e 1 de 11. Não há braço
+    comparável (é mudança direta), então nível 3 não existe para esta metade.
+  - A pergunta de 04/09 sobre o app fechar no quiz NÃO se confirmou contra o
+    plugin: os fechamentos de hoje são na abertura e na Home, e a investigação
+    do QA seguiu outro caminho. Fica registrado que não se confirmou, não que
+    foi descartado.
+  - O que isso ensina, e é o aprendizado: aposta de CONSERTO fecha quando a
+    máquina volta a funcionar, e aposta de EFEITO fecha com comparação. Juntar
+    as duas numa só aposta produz um veredito que não cabe numa palavra.
+- Estado final: FECHADO em 02/10/2026.
 - Acompanhamento 2026-09-04: a condição de leitura foi CUMPRIDA. A correção de
   28/08 saiu na 1.5 (31/08) e na 1.6 (01/09), então o relógio das 4 semanas
   começou de verdade e a leitura passa a valer a partir de 28/09. Métrica (1)
@@ -465,7 +540,7 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Veredito: (aberto)
 
 ## [onboarding-termina-no-carro-android] A última página do onboarding é "Cadastrar meu primeiro carro"
-- Estado: ABERTO (2.4 na Play desde 12/09; iPhone segue com a página de plano)
+- Estado: FECHADO (inconclusivo por falta de braço comparável)
 - Tipo: mudanca-direta, só no Android
 - Alvo no funil: a maior quebra que existe, `comecou_onboarding` para
   `cadastrou_carro`. Nos 28 dias até 10/09, por aparelho: Android 59 começaram
@@ -492,7 +567,24 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Início: 2026-09-12 (2.4 aprovada na Play) · Ler a partir de: 2026-09-26
 - Antes: Android, 28 dias até 10/09, 59 começaram, 4 cadastraram carro
   (aparelhos)
-- Veredito: (aberto)
+- **Veredito (2026-10-02): INCONCLUSIVO, e não por falta de tempo: a
+  comparação que ele foi desenhado para permitir não existe mais.**
+  - A ideia era comparar Android (sem página de plano) contra iPhone e web (com
+    ela) na mesma janela. Só que a base virou Android quase pura: dos 284
+    aparelhos ativos, **266 são Android, 10 são iPhone e 8 são web**. Dez
+    aparelhos não formam braço de comparação para nada.
+  - O degrau alvo MELHOROU muito, e isso é fato: `comecou_onboarding` para
+    `cadastrou_carro` está em 197 de 871 na janela do funil, perto de 23 de
+    cada 100, contra os 4 de 59 do Android no "antes" (7 de cada 100).
+  - Só que esse ganho tem pelo menos quatro donos possíveis na mesma janela: a
+    página de plano saindo do onboarding (esta aposta), o formulário curto
+    (que tem A/B próprio e venceu), o `onboarding-curto`, e o conserto do
+    certificado que fez o cadastro do Android funcionar em 10/09. Um deles tem
+    prova isolada; esta aposta não tem.
+  - Fica a lição de desenho: experimento que depende de uma plataforma servir
+    de controle morre quando a distribuição da base muda. A distribuição não é
+    nossa para controlar, então controle de plataforma não é controle.
+- Estado final: FECHADO em 02/10/2026, sem crédito atribuído.
 
 ## [prova-social-de-verdade] As avaliações reais entram no lugar das inventadas
 - Estado: PROPOSTO

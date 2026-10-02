@@ -95,6 +95,22 @@ async function perguntarPrimeiro(nav, ok) {
   const noCadastro = await app.corpo();
   ok("o convite leva ao cadastro de carro", /Adicionar carro/i.test(noCadastro), noCadastro.slice(0, 60).replace(/\n/g, " "));
 
+  // O FORMULÁRIO CURTO É O PADRÃO desde 02/10/2026, e esta é a conferência que
+  // pega a volta dele. Ele venceu o A/B "cadastro-em-duas-etapas" (108 de 173
+  // contra 78 de 173), e o teste saiu do código: sem sorteio, todo aparelho
+  // novo tem que ver a versão curta. Se alguém devolver os sete campos por
+  // padrão, estas duas linhas reprovam.
+  const campos = await pg.evaluate(() =>
+    [...document.querySelectorAll("label, input, button")]
+      .filter((e) => e.checkVisibility?.())
+      .map((e) => (e.textContent || e.getAttribute("placeholder") || "").trim())
+      .join(" | ")
+      .toLowerCase());
+  // "ano" NÃO entra nesta asserção de propósito: ele só aparece depois de a
+  // pessoa escolher o modelo, e foi esta conferência que me corrigiu nisso.
+  ok("o cadastro novo pede marca e modelo", /marca/.test(campos) && /modelo/.test(campos), campos.slice(0, 160));
+  ok("e NÃO pede km nem foto de entrada", !/quil[oó]metr|\bkm\b/.test(campos) && !/foto/.test(campos), campos.slice(0, 200));
+
   ok("nenhum erro de página no caminho inteiro", app.erros.length === 0, app.erros[0] ?? "");
   await app.fechar();
 }

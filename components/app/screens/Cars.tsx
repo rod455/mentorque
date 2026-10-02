@@ -16,7 +16,6 @@ import { funil } from "@/lib/app/funil";
 import { pedirConviteDeConta } from "../SalveSuaGaragem";
 import { ConviteDeAviso } from "../ConviteDeAviso";
 import { consumirConviteNoCarro, pedirConviteNoCarro } from "@/lib/app/pedidoDeAviso";
-import { variante } from "@/lib/app/experimentos";
 import { useAuth } from "@/lib/app/auth";
 import { carName } from "@/lib/app/content";
 import { AppHeader, Card, Chip, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
@@ -342,15 +341,19 @@ export function AddCarScreen({ editId, origem }: { editId?: string; origem?: str
     funil("abriu_cadastro_de_carro", { umaVezPorAparelho: true, origem });
   }, [editing, origem]);
 
-  // TESTE A/B "cadastro-em-duas-etapas" (aprovado pelo dono em 12/09/2026).
-  // Na loja, 5 em 6 pessoas que abrem este formulário não terminam. A
-  // variante B pede só marca, modelo e ano; motor, km e foto ficam para a
-  // barra "Diagnóstico do carro" na tela do carro (CarHub). Lido num efeito
-  // para o primeiro quadro não depender do sorteio; edição nunca encurta.
-  const [curto, setCurto] = useState(false);
-  useEffect(() => {
-    setCurto(!editing && variante("cadastro-em-duas-etapas") === "b");
-  }, [editing]);
+  // O FORMULÁRIO CURTO É O PADRÃO desde 02/10/2026, e não é mais sorteio.
+  //
+  // Ele venceu o teste A/B "cadastro-em-duas-etapas" com folga: de 173
+  // aparelhos que abriram o formulário em cada braço, 108 cadastraram o carro
+  // com a versão curta contra 78 com a versão de sete campos. A diferença é de
+  // 17 pontos com erro padrão de pouco mais de 5, ou seja, mais de três vezes
+  // o erro. O veredito está em docs/agentes/experimentos.md.
+  //
+  // Pede marca, modelo e ano; motor, km e foto ficam para a barra "Diagnóstico
+  // do carro" na tela do carro (CarHub). Edição nunca encurta: quem abre para
+  // editar quer mexer no que já existe.
+
+  const curto = !editing;
 
   const [type, setType] = useState<VehicleType>(editing?.type ?? "car");
   const [make, setMake] = useState<string | null>(editing?.make ?? null);

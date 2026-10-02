@@ -16,6 +16,54 @@ Formato de cada tela/fluxo:
 
 ## Estado
 
+v7 em 2026-10-02: rodada de CONVERSÃO, e é a rodada de prestar contas. CINCO
+vereditos vencidos foram fechados, incluindo o primeiro FUNCIONOU do caderno
+(formulário curto de cadastro de carro, promovido a padrão no mesmo dia) e a
+releitura pós primeira cobrança. Próxima rodada alterna para RETENÇÃO.
+
+# O funil de conversão em 2026-10-02
+
+A janela do funil, com os degraus comparáveis entre si (todos uma vez por
+aparelho):
+
+    começou o onboarding      871
+    terminou                  482   (55 de cada 100)
+    abriu o cadastro de carro 383   (79 de cada 100)
+    cadastrou o carro         197   (51 de cada 100)
+
+Comparando com o que este mapa registrou em 18/09, quando os mesmos degraus
+davam 34, 35 e 33 de cada 100: o caminho até o carro deixou de ser o buraco
+que era. De começar o onboarding a ter carro cadastrado são hoje 197 de 871,
+perto de 23 de cada 100, contra 7 de cada 100 no Android antes de 10/09.
+
+**A quem dar o crédito, e o que não dá para atribuir.** Quatro coisas caíram na
+mesma janela: o formulário curto (que tem A/B próprio e VENCEU, com 108 de 173
+contra 78 de 173), a saída da página de plano do onboarding no Android, o
+onboarding de três páginas (empatado no degrau que decide) e o conserto do
+certificado que fez o cadastro do Android funcionar em 10/09. Uma delas tem
+prova isolada; as outras dividem o resto sem recibo.
+
+# O fundo do funil, e o número mais importante da semana
+
+A primeira cobrança real do produto passou em 01/10. E das TRÊS assinaturas
+pagantes que o Mentorque já teve, as três cancelaram: 2 ativas com
+cancelamento agendado e as coortes de assinante mostrando 1 saída na de 01/09
+e 2 na de 08/01.
+
+- As três entraram com cupom de 100% do primeiro mês, então 01/10 foi a
+  primeira vez que o produto pediu dinheiro a elas. Cancelar quando o mês de
+  graça acaba é comportamento de coorte de cupom, e com n igual a 3 não dá
+  para separar isso de mais nada.
+- Nenhuma delas reclamou: zero avaliações citando cobrança, nenhuma nota de
+  uma estrela, nenhum pedido de reembolso registrado. O caminho de cancelar
+  funcionou sem ninguém precisar falar com a gente, que era o que o texto
+  prometia.
+- O degrau de venda está em 10 de 125 (cadastro para iniciou_checkout) e ZERO
+  assinaturas na janela. Com a ressalva de sempre, que o `iniciou_checkout` só
+  nasce para quem tem conta, e o `tentou_assinar` que conserta isso só
+  alcançou as lojas na 2.8.
+
+
 v6 em 2026-09-25: rodada de RETENÇÃO, e ela fecha um ciclo. A pergunta aberta
 em 11/09 ("quantos aparelhos têm permissão de aviso?") ganhou resposta porque a
 instrumentação pedida foi implementada em 19/09. Os dois primeiros vereditos do

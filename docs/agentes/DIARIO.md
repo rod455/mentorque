@@ -3,6 +3,74 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-02 · CRO (conversão): cinco vereditos fechados, e o primeiro FUNCIONOU
+- Rodada semanal do CRO/BeSci, foco CONVERSÃO (a de 25/09 foi de retenção).
+  Artifact "Conversão da semana":
+  https://claude.ai/artifact/TQqZfKTE8wEZYjNtxPHNgx
+- **O PRIMEIRO FUNCIONOU DO CADERNO: `cadastro-em-duas-etapas`.** De 173
+  aparelhos que abriram o formulário em cada braço (denominador idêntico, o que
+  já diz que o sorteio dividiu direito), **108 cadastraram o carro com o
+  formulário curto contra 78 com o de sete campos**. São 17 pontos de diferença
+  com erro padrão de pouco mais de 5, mais de três vezes o erro, e a amostra
+  passou quatro vezes o critério de parada do próprio teste.
+  - A vencedora FOI PROMOVIDA no mesmo dia e o experimento saiu do código, como
+    manda a regra. O id fica anotado como encerrado em `experimentos.ts`,
+    porque reaproveitar id encerrado misturaria exposição velha com nova.
+  - Ressalva honesta: a métrica pedia loja e web separadas e o retrato entrega
+    somadas. A randomização protege a comparação; o que fica sem resposta é
+    ONDE funcionou melhor, não SE funcionou.
+- **`onboarding-curto`: INCONCLUSIVO, e continua rodando.** Terminar o
+  onboarding favorece B (218 de 325 contra 181 de 302), mas isso é menos de
+  duas vezes o erro padrão. E o degrau que DECIDE está empatado: 92 carros
+  cadastrados contra 94. O texto da aposta já avisava, quando foi escrita, que
+  onboarding curto que não entrega carro não vale nada.
+  - NÃO promovi ninguém, por duas razões, e a segunda é do dono: inconclusivo
+    com amostra crescendo pede espera, e promover B apagaria a página de prova
+    social do onboarding, que ele decidiu MANTER em 01/09. Veredito de teste
+    não é lugar de desfazer decisão do dono pela porta de trás. A escolha está
+    no artifact como pergunta para ele.
+- **`onboarding-termina-no-carro-android`: INCONCLUSIVO por falta de braço.**
+  Ele comparava Android contra iPhone e web, e hoje a base é 266 aparelhos
+  Android, 10 iPhone e 8 web. Dez aparelhos não são controle de nada. O degrau
+  alvo melhorou muito (7 para 23 de cada 100 de onboarding a carro
+  cadastrado), mas quatro mudanças caíram na mesma janela e só uma tem prova
+  isolada. Fechado sem crédito atribuído.
+- **`lembrete-que-chega`: conserto CONFIRMADO, efeito INCONCLUSIVO.** As duas
+  metades precisam ser ditas separadas. Erros `.then()` em zero e 10 a 11
+  aparelhos com permissão concedida: a máquina que estava muda passou a poder
+  falar, e isso está provado. Retorno das coortes: sem braço comparável e com
+  as coortes marcadas AINDA NAO DA PARA LER. A suspeita de 04/09 contra o
+  plugin no fechamento do quiz NÃO se confirmou (os fechamentos de hoje são na
+  abertura e na Home); fica registrado que não se confirmou, não que foi
+  descartado.
+- **`fim-do-lembrete-falso`, releitura pós 01/10, e é o número mais importante
+  da semana: das TRÊS assinaturas pagantes que o produto já teve, as três
+  cancelaram.** Duas ativas com cancelamento agendado, e as coortes mostram 1
+  saída na de 01/09 e 2 na de 08/01.
+  - O que o número não diz é por quê. As três entraram com cupom de 100% do
+    primeiro mês, então 01/10 foi a primeira vez que o produto pediu dinheiro
+    a elas, e cancelar quando o mês de graça acaba é comportamento de coorte de
+    cupom. Com n igual a 3 não separa de mais nada: INCONCLUSIVO, e não reabre.
+  - A metade que era da aposta: zero avaliações citando cobrança, nenhuma nota
+    de uma estrela, nenhum pedido de reembolso. O medo que ela existia para
+    evitar não apareceu, e as três acharam o caminho de cancelar sem falar com
+    ninguém, que era o que o texto prometia.
+  - FICA SEPARADO como fato de negócio, para o Diretor e o dono: 100% da
+    primeira coorte pagante cancelou na virada para dinheiro.
+- CONFERÊNCIA NOVA na suíte `porta`, provada mordendo: o cadastro novo tem que
+  pedir marca e modelo e NÃO pedir km nem foto. Pus o formulário longo de volta
+  como padrão e ela reprovou; devolvi e passou. Ela também me corrigiu no
+  caminho: eu tinha escrito que o campo de ano apareceria junto, e ele só
+  aparece depois de escolher o modelo. A asserção foi ajustada ao que a tela
+  faz, não ao que eu supunha.
+- APRENDIZADOS em besci.md: tirar campo de formulário é a alavanca mais barata
+  que existe; o mesmo encurtamento num formulário e numa apresentação dá
+  resultados opostos, porque fricção tirada de passo que a pessoa atravessa
+  rende e de passo que ela suporta só desloca a desistência; e controle de
+  plataforma não é controle, porque a distribuição da base não é nossa.
+- Bateria `conferir` inteira verde, tipos limpos, suítes `carro` e `porta`
+  passando. Sem build local, que é o regime das duas velocidades.
+
 ## 2026-10-02 · Mídia paga (rodada 3): a busca parou de entregar no dia 24, e foi no dia em que eu propus consertar a etiqueta dela
 - Artifact "Mídia da semana":
   https://claude.ai/artifact/TjDUdWwCHSiiCGzFgoFrc7

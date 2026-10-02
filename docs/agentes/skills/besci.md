@@ -125,3 +125,25 @@ experimentos alimentam a seção final.
   é 01/10). Zero reclamação ali é ausência do evento, não prova de conserto.
   Ao marcar a data de leitura de qualquer aposta defensiva, marcar a data em
   que o risco passa a ser possível, e ler DEPOIS dela.
+- **2026-10-02, do primeiro FUNCIONOU do caderno: tirar campo do formulário é
+  a alavanca mais barata que existe.** O cadastro de carro passou a pedir só
+  marca, modelo e ano, e o resto virou uma barra de progresso na tela do carro.
+  De 173 aparelhos que abriram o formulário em cada braço, 108 cadastraram com
+  a versão curta contra 78 com a de sete campos. Mais de três vezes o erro
+  padrão, com a amostra quatro vezes acima do alvo. O princípio da fricção não
+  é teoria: cada campo a mais tem preço, e aqui o preço foram 30 pessoas em 173
+  que não ficaram com carro nenhum. Regra prática que fica: antes de escrever
+  copy nova para uma tela que converte mal, contar os campos dela.
+- **2026-10-02: o mesmo encurtamento que funciona num formulário pode não
+  funcionar numa apresentação, e o motivo é o degrau que se mede.** O
+  onboarding de três páginas passou mais gente pela apresentação (218 de 325
+  contra 181 de 302) e entregou o MESMO número de carros cadastrados (92
+  contra 94). Fricção retirada de um passo que a pessoa precisa atravessar
+  rende; fricção retirada de um passo que ela só precisa suportar desloca a
+  desistência para o passo seguinte. Ao desenhar o teste, a métrica tem que
+  ser o desfecho, nunca a passagem.
+- **2026-10-02: controle de plataforma não é controle.** O teste da última
+  página do onboarding no Android usava iPhone e web como comparação. Quando o
+  veredito venceu, a base era 266 aparelhos Android, 10 iPhone e 8 web: o braço
+  de controle havia evaporado. A distribuição da base não é nossa para
+  controlar, então nenhum desenho de experimento pode depender dela.

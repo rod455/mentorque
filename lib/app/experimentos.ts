@@ -21,10 +21,11 @@ import { varianteDe } from "./sorteio.ts";
 // id do experimento -> variantes possíveis. Vazio = nenhum teste ativo.
 // Exemplo: "paywall-titulo": ["a", "b"]
 export const EXPERIMENTOS: Record<string, string[]> = {
-  // Aprovado pelo dono em 12/09/2026 (docs/agentes/experimentos.md). A = o
-  // formulário de sempre (sete campos); B = só marca, modelo e ano, e o
-  // resto vira a barra "Diagnóstico do carro" na tela do carro.
-  "cadastro-em-duas-etapas": ["a", "b"],
+  // ENCERRADO em 02/10/2026: a variante B venceu (108 de 173 cadastraram o
+  // carro contra 78 de 173, mais de três vezes o erro padrão) e virou o
+  // padrão em AddCarScreen. Fica anotado aqui porque o id não pode voltar:
+  // reaproveitar um id encerrado misturaria exposição velha com nova na view
+  // experimentos_resultados.
   // Aprovado pelo dono em 12/09/2026. A = cinco páginas (três de
   // apresentação, prova social, última). B = três: a dor, como resolve, e a
   // última (o carro no Android; o teste onde vende). A prova social fica de
