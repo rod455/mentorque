@@ -4,6 +4,7 @@ import { ORIGEM_VENDA_SEM_CONTA, conferenciaDaLoja, linhaDeVendaSemConta } from 
 import { cicloVencido, linhaDeCiclosVencidos } from "./ciclo";
 import { CHAVE_DO_ENVIO_DE_SAIDA } from "./email/saida";
 import { linhaDeMotivos } from "./email/motivoDaSaida";
+import { FONTES_DE_GASTO, linhaDeGasto, type DiaDeGasto } from "./midiaLegivel";
 import { avisoDeColeta, frescorDasFontes } from "./frescorDasFontes";
 import {
   CADEIA_ATO,
@@ -614,6 +615,20 @@ export async function coletarDadosOperacao() {
     // publicado como se fosse de hoje (ver lib/frescorDasFontes.ts).
     frescorDasFontes: frescor,
     avisoDeColeta: avisoDeColeta(frescor),
+    // O GASTO DE ANÚNCIO COM A JANELA DENTRO DA FRASE (02/10/2026).
+    //
+    // Em 24/09 o agente de Mídia leu "uns R$ 20 por dia" de um total de oito
+    // datas cujo dinheiro estava todo nas primeiras, e propôs uma ação de R$ 640
+    // por mês sobre uma campanha que tinha parado naquele dia. O total estava
+    // certo; a janela escondia a parada. A frase pronta diz o ritmo das duas
+    // pontas, a data da leitura (plataforma revisa dia fechado para baixo) e,
+    // quando o ritmo despenca, que isso parece parada e não economia. Regra em
+    // lib/midiaLegivel.ts.
+    gastoLegivel: FONTES_DE_GASTO.map((f) => {
+      const pacote = (porFonte[f] ?? [])[0];
+      const dados = (pacote?.dados ?? {}) as { porDia?: DiaDeGasto[] };
+      return { fonte: f, ...linhaDeGasto(f, dados.porDia ?? [], pacote?.dia ?? "sem coleta") };
+    }),
   };
 }
 
