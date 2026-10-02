@@ -1,44 +1,44 @@
 # Retrato diario da operacao Mentorque
 
-Gerado pelo Analista de Dados (n8n) em 2026-10-02T09:00:07.688Z.
+Gerado pelo Analista de Dados (n8n) em 2026-10-02T11:18:02.775Z.
 NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 COMO LER: linha marcada PARCIAL ou AINDA NAO DA PARA LER nao e resultado,
 e so cresce ate a janela fechar. Auditoria das medidas em
 docs/dados/auditoria-das-medidas.md.
 
 ## MARKETING (gente chegando)
-- Semana corrente (PARCIAL, ainda enche) (2026-09-28): aberturas 196, visitantes 139, cadastros 32
+- Semana corrente (PARCIAL, ainda enche) (2026-09-28): aberturas 206, visitantes 146, cadastros 33
 - Semana anterior (FECHADA) (2026-09-21): aberturas 330, visitantes 214, cadastros 51
-- Cadastros 28d via (direto) / (sem campanha): 95 (83% dos 115)
-- Cadastros 28d via google / lancamento: 20 (17% dos 115)
+- Cadastros 28d via (direto) / (sem campanha): 96 (83% dos 116)
+- Cadastros 28d via google / lancamento: 20 (17% dos 116)
 - Gasto de midia 7d: Meta 132.11 + Google 155.83 = 287.94
 - CAC bruto (gasto dos ultimos 7 dias / cadastros da ultima semana FECHADA, 2026-09-21): 5.65
-- A semana corrente tem 32 cadastros e ainda esta aberta: nao serve de denominador
+- A semana corrente tem 33 cadastros e ainda esta aberta: nao serve de denominador
 - Busca Google 28d: 0 cliques, 38 impressoes
 - YouTube (acumulado desde o canal existir, NAO e janela): 8 inscritos, 12402 views totais, 10 videos recentes
   - RESSALVA: estas views NAO separam pago de organico, e ha campanha de app rodando no YouTube desde 20/09. Nao leia gancho nem titulo a partir daqui.
 
 ## ENGAJAMENTO (gente usando e voltando)
-- Semana corrente (PARCIAL, ainda enche) (2026-09-28): 138 usuarios ativos, 194 aberturas (1.4 por usuario)
+- Semana corrente (PARCIAL, ainda enche) (2026-09-28): 145 usuarios ativos, 204 aberturas (1.4 por usuario)
 - Semana anterior (FECHADA) (2026-09-21): 209 usuarios ativos, 323 aberturas (1.5 por usuario)
-- Retencao, coorte 2026-09-28: 30 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-10-12; hoje sao 2, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-11-04; hoje sao 0, PISO)
-- Retencao, coorte 2026-09-21: 51 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-10-05; hoje sao 7, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-10-28; hoje sao 1, PISO)
+- Retencao, coorte 2026-09-28: 31 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-10-12; hoje sao 3, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-11-04; hoje sao 0, PISO)
+- Retencao, coorte 2026-09-21: 51 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-10-05; hoje sao 7, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-10-28; hoje sao 2, PISO)
 - Retencao, coorte 2026-09-14: 16 cadastrados, 0 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-10-21; hoje sao 1, PISO)
 - Retencao, coorte 2026-09-07: 11 cadastrados, 1 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-10-14; hoje sao 1, PISO)
-- Ativacao, coorte 2026-09-28: AINDA NAO DA PARA LER (a janela fecha em 2026-10-12; hoje sao 0 de 30, PISO)
+- Ativacao, coorte 2026-09-28: AINDA NAO DA PARA LER (a janela fecha em 2026-10-12; hoje sao 0 de 31, PISO)
 - Ativacao, coorte 2026-09-21: AINDA NAO DA PARA LER (a janela fecha em 2026-10-05; hoje sao 2 de 51, PISO)
 - Ativacao, coorte 2026-09-14: 3 de 16 fizeram a primeira acao de valor em 7 dias
 - Ativacao, coorte 2026-09-07: 6 de 11 fizeram a primeira acao de valor em 7 dias
-- Erros no app: 28 relatos no app em 7 dias; 23 de defeito em 11 aparelho(s); 3 de desistencia (a pessoa fechou o login, NAO e falha); 2 de ambiente (sem rede). 11 de 284 aparelhos ativos com defeito (3.9%) [ativos: android 267, web 9, ios 8]
+- Erros no app: 28 relatos no app em 7 dias; 23 de defeito em 11 aparelho(s); 3 de desistencia (a pessoa fechou o login, NAO e falha); 2 de ambiente (sem rede). 11 de 284 aparelhos ativos com defeito (3.9%) [ativos: android 266, ios 10, web 8]
   - Sem alarme, e o motivo: 11 de 284 aparelhos com defeito (3.9%), abaixo do teto de 10%
   - 9x em 4 aparelho(s): app fechou sozinho em: abriu o app
   - 6x em 3 aparelho(s): app fechou sozinho em: tela: home
   - 2x em 2 aparelho(s): login nativo google: Google Sign-In cancelled by user ([16] Cancelled by user.) package=mentorque.app signingSha1=E5:1C:
-- Perguntas ao Biela: 57 em 30 dias, 7 com palavras da pessoa e 0 de atalho da tela (atalho NAO e demanda, e a ordem dos nossos botoes), e 49 ainda SEM ETIQUETA (anteriores a 2026-09-29, e esse numero nao cresce mais). Temas do que a pessoa escreveu: outro 4, motor 2, eletrica 1. AINDA NAO DA PARA LER O RANKING (sao 7 perguntas com palavras da pessoa, abaixo do minimo de 20; hoje e 2026-10-02, PISO)
-  - Temas, PALAVRAS DA PESSOA: outro 4, motor 2, eletrica 1
-  - Etiquetadas: 0 de quem e Premium, 8 do gratuito (a etiqueta comecou em 2026-09-29)
-  - Votos no polegar: 24 (24 positivos, 0 negativos). NENHUM voto negativo registrado. A tela so grava o 👎 depois que a pessoa escolhe um motivo, entao 👎 sem motivo nao deixa rastro: isto NAO e aprovacao de 100%.
-  - Historico pelos votos (so quem votou, amostra torta de proposito): combustivel 4, eletrica 2, ar_condicionado 1, arrefecimento 1, direcao 1, limpeza 1
+- Perguntas ao Biela: 59 em 30 dias, 9 com palavras da pessoa e 0 de atalho da tela (atalho NAO e demanda, e a ordem dos nossos botoes), e 49 ainda SEM ETIQUETA (anteriores a 2026-09-29, e esse numero nao cresce mais). Temas do que a pessoa escreveu: outro 6, motor 2, eletrica 1. AINDA NAO DA PARA LER O RANKING (sao 9 perguntas com palavras da pessoa, abaixo do minimo de 20; hoje e 2026-10-02, PISO)
+  - Temas, PALAVRAS DA PESSOA: outro 6, motor 2, eletrica 1
+  - Etiquetadas: 2 de quem e Premium, 8 do gratuito (a etiqueta comecou em 2026-09-29)
+  - Votos no polegar: 26 (26 positivos, 0 negativos). NENHUM voto negativo registrado. A tela so grava o 👎 depois que a pessoa escolhe um motivo, entao 👎 sem motivo nao deixa rastro: isto NAO e aprovacao de 100%.
+  - Historico pelos votos (so quem votou, amostra torta de proposito): combustivel 4, outro 3, eletrica 2, ar_condicionado 1, arrefecimento 1, direcao 1
 - Play vitals: sem dados de crash ainda
 - Avaliacoes nas lojas: 12 (media 5)
   - [app_store 5/5] Aprendizado (aminoru)
@@ -46,12 +46,13 @@ docs/dados/auditoria-das-medidas.md.
   - [app_store 5/5] Excelente (matthewsmc0)
 
 ## VENDAS (gente pagando e continuando)
-- Assinaturas ativas (banco): 3 (anuais 0, mensais 3), cancelamento agendado: 0
-- Fundo do funil, Semana corrente (PARCIAL, ainda enche): viram paywall 23, iniciaram checkout 0, assinaram 0, cancelaram 0
+- Assinaturas ativas (banco): 2 (anuais 0, mensais 2), cancelamento agendado: 2
+- Fundo do funil, Semana corrente (PARCIAL, ainda enche): viram paywall 25, iniciaram checkout 0, assinaram 0, cancelaram 2
 - Fundo do funil, Semana anterior (FECHADA): viram paywall 45, iniciaram checkout 5, assinaram 0, cancelaram 0
-  - RESSALVA: no Android o paywall aparece e NAO tem botao de compra (modo leitor). O checkout so pode nascer no iPhone e na web: nao leia paywall->checkout somando as tres.
-- Assinantes, coorte 2026-09-01: 1 assinaram, 0 renovaram, 0 sairam (renovacao de um mensal so pode aparecer 1 mes depois da coorte)
-- Assinantes, coorte 2026-08-01: 2 assinaram, 0 renovaram, 0 sairam (renovacao de um mensal so pode aparecer 1 mes depois da coorte)
+  - A LOJA VENDEU E O BANCO NAO SABE: o RevenueCat diz 1 assinatura(s) ativa(s) e o banco conhece 0 de loja. Sao 1 pessoa(s) que pagaram na Apple ou na Play e NAO tem Premium, porque quem libera o acesso e a linha de subscriptions. Conferir o webhook em RevenueCat, Integrations, Webhooks, e ligar o Premium na mao em Customers.
+  - Vendas de loja sem conta (30d): nenhuma. Toda compra da Apple ou da Play chegou com conta e virou Premium
+- Assinantes, coorte 2026-09-01: 1 assinaram, 0 renovaram, 1 sairam (renovacao de um mensal so pode aparecer 1 mes depois da coorte)
+- Assinantes, coorte 2026-08-01: 2 assinaram, 0 renovaram, 2 sairam (renovacao de um mensal so pode aparecer 1 mes depois da coorte)
 - Stripe (live): 3 assinaturas, MRR 89.70, receita 30d 29.90 (MRR e o contratado por mes; receita 30d e o COBRADO, e fica zero enquanto a primeira cobranca nao roda)
 - RevenueCat: 1 assinaturas, MRR 4 (aviso: active_users = aparelhos, inclui testes)
 - AdMob 7d: 0.00 USD de receita de anuncio
@@ -75,51 +76,52 @@ docs/dados/auditoria-das-medidas.md.
 ```json
 {
   "dados": {
-    "geradoEm": "2026-10-02T09:00:05.669Z",
+    "geradoEm": "2026-10-02T11:18:01.266Z",
     "tempos": {
-      "subscriptions": 469,
-      "cadastros": 539,
-      "funil_semana": 590,
-      "app_erros": 124,
-      "uso_semanal": 73,
-      "uso_diario": 97,
-      "ativacao_coortes": 51,
-      "retencao_coortes": 104,
-      "assinaturas_coortes": 47,
-      "cadastros_por_campanha": 43,
-      "metricas_diarias": 294,
-      "assinaturas_conferencia": 52,
-      "jornada_envios": 83,
-      "email_eventos": 95,
-      "paralelo": 929,
-      "experimentos": 112,
-      "anomalias": 172,
-      "aparelhos_ativos": 119,
-      "biela_perguntas": 61,
-      "biela_votos": 51,
-      "estado_da_base": 207,
-      "funil_etapas": 52,
-      "contas_criadas_desde": 47,
-      "funil_etapas_primeira": 53,
-      "total": 1838
+      "subscriptions": 416,
+      "cadastros": 422,
+      "funil_semana": 435,
+      "app_erros": 67,
+      "uso_diario": 60,
+      "uso_semanal": 46,
+      "ativacao_coortes": 58,
+      "retencao_coortes": 124,
+      "metricas_diarias": 220,
+      "assinaturas_coortes": 65,
+      "cadastros_por_campanha": 37,
+      "assinaturas_conferencia": 55,
+      "jornada_envios": 85,
+      "email_eventos": 93,
+      "paralelo": 750,
+      "experimentos": 88,
+      "anomalias": 165,
+      "aparelhos_ativos": 39,
+      "biela_perguntas": 35,
+      "biela_votos": 43,
+      "vendas_sem_conta": 29,
+      "estado_da_base": 213,
+      "funil_etapas": 53,
+      "contas_criadas_desde": 36,
+      "funil_etapas_primeira": 47,
+      "total": 1519
     },
     "falhas": {},
     "funilSemanas": [
       {
         "semana": "2026-09-28",
-        "aberturas": 196,
-        "visitantes": 139,
-        "cadastros": 32,
-        "viram_paywall": 23,
+        "aberturas": 206,
+        "visitantes": 146,
+        "cadastros": 33,
+        "viram_paywall": 25,
         "iniciaram_checkout": 0,
         "assinaturas": 0,
         "renovacoes": 0,
-        "cancelamentos": 0,
-        "expirados": 0,
-        "viram_paywall_pessoas": 22,
+        "cancelamentos": 2,
+        "expirados": 1,
+        "viram_paywall_pessoas": 23,
         "iniciaram_checkout_pessoas": 0,
         "assinaturas_pessoas": 0,
-        "ativaram_pessoas": 61,
+        "ativaram_pessoas": 63,
         "aberturas_sem_identidade": 0
       },
       {
@@ -226,11 +228,11 @@ docs/dados/auditoria-das-medidas.md.
       }
     ],
     "assinaturas": {
-      "ativas": 3,
-      "cancelando": 0,
+      "ativas": 2,
+      "cancelando": 2,
       "anuais": 0,
-      "mensais": 3,
-      "pagantes": 3,
+      "mensais": 2,
+      "pagantes": 2,
       "emTeste": 0,
       "cortesias": 0,
       "comCupom": 0,
@@ -238,7 +240,7 @@ docs/dados/auditoria-das-medidas.md.
       "desencontros": 0
     },
     "cadastrosPorDia": {
-      "2026-09-18": 3,
+      "2026-09-18": 2,
       "2026-09-19": 3,
       "2026-09-20": 3,
       "2026-09-21": 12,
@@ -252,7 +254,7 @@ docs/dados/auditoria-das-medidas.md.
       "2026-09-29": 9,
       "2026-09-30": 3,
       "2026-10-01": 7,
-      "2026-10-02": 5
+      "2026-10-02": 6
     },
     "erros7d": {
       "total": 28,
@@ -306,9 +308,9 @@ docs/dados/auditoria-das-medidas.md.
       ],
       "aparelhosComErro": 16,
       "aparelhosAtivos": {
-        "android": 267,
-        "web": 9,
-        "ios": 8
+        "android": 266,
+        "ios": 10,
+        "web": 8
       },
       "porClasse": {
         "defeito": {
@@ -326,7 +328,7 @@ docs/dados/auditoria-das-medidas.md.
       },
       "aparelhosComDefeito": 11,
       "linha": {
-        "texto": "Erros no app: 28 relatos no app em 7 dias; 23 de defeito em 11 aparelho(s); 3 de desistencia (a pessoa fechou o login, NAO e falha); 2 de ambiente (sem rede). 11 de 284 aparelhos ativos com defeito (3.9%) [ativos: android 267, web 9, ios 8]",
+        "texto": "Erros no app: 28 relatos no app em 7 dias; 23 de defeito em 11 aparelho(s); 3 de desistencia (a pessoa fechou o login, NAO e falha); 2 de ambiente (sem rede). 11 de 284 aparelhos ativos com defeito (3.9%) [ativos: android 266, ios 10, web 8]",
         "legivel": true,
         "motivo": ""
       },
@@ -401,10 +403,10 @@ docs/dados/auditoria-das-medidas.md.
           "enviados": 21,
           "comId": 19,
           "entregues": 19,
-          "abertos": 2,
+          "abertos": 3,
           "clicados": 0,
           "problemas": 0,
-          "taxaAbertura": 10.5,
+          "taxaAbertura": 15.8,
           "taxaClique": 0
         },
         {
@@ -512,8 +514,8 @@ docs/dados/auditoria-das-medidas.md.
       "porDia": [
         {
           "dia": "2026-10-02",
-          "usuarios": 4,
-          "aberturas": 4,
+          "usuarios": 13,
+          "aberturas": 14,
           "aberturas_sem_identidade": 0
         },
         {
@@ -598,8 +600,8 @@ docs/dados/auditoria-das-medidas.md.
       "porSemana": [
         {
           "semana": "2026-09-28",
-          "usuarios_ativos": 138,
-          "aberturas": 194,
+          "usuarios_ativos": 145,
+          "aberturas": 204,
           "aberturas_por_usuario": 1.4,
           "aberturas_sem_identidade": 0
         },
@@ -649,8 +651,8 @@ docs/dados/auditoria-das-medidas.md.
       "coortes": [
         {
           "coorte": "2026-09-28",
-          "cadastrados": 30,
-          "voltaram_d1_7": 2,
+          "cadastrados": 31,
+          "voltaram_d1_7": 3,
           "voltaram_d8_30": 0,
           "semana_fechada": false,
           "d1_7_fechada": false,
@@ -660,7 +662,7 @@ docs/dados/auditoria-das-medidas.md.
           "coorte": "2026-09-21",
           "cadastrados": 51,
           "voltaram_d1_7": 7,
-          "voltaram_d8_30": 1,
+          "voltaram_d8_30": 2,
           "semana_fechada": true,
           "d1_7_fechada": false,
           "d8_30_fechada": false
@@ -704,12 +706,12 @@ docs/dados/auditoria-das-medidas.md.
       ],
       "linhasRetencao": [
         {
-          "texto": "Retencao, coorte 2026-09-28: 30 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-10-12; hoje sao 2, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-11-04; hoje sao 0, PISO)",
+          "texto": "Retencao, coorte 2026-09-28: 31 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-10-12; hoje sao 3, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-11-04; hoje sao 0, PISO)",
           "legivel": false,
           "motivo": "janela(s) em aberto: 1 a 7 dias e 8 a 30 dias"
         },
         {
-          "texto": "Retencao, coorte 2026-09-21: 51 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-10-05; hoje sao 7, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-10-28; hoje sao 1, PISO)",
+          "texto": "Retencao, coorte 2026-09-21: 51 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-10-05; hoje sao 7, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-10-28; hoje sao 2, PISO)",
           "legivel": false,
           "motivo": "janela(s) em aberto: 1 a 7 dias e 8 a 30 dias"
         },
@@ -736,7 +738,7 @@ docs/dados/auditoria-das-medidas.md.
       ],
       "linhasAtivacao": [
         {
-          "texto": "Ativacao, coorte 2026-09-28: AINDA NAO DA PARA LER (a janela fecha em 2026-10-12; hoje sao 0 de 30, PISO)",
+          "texto": "Ativacao, coorte 2026-09-28: AINDA NAO DA PARA LER (a janela fecha em 2026-10-12; hoje sao 0 de 31, PISO)",
           "legivel": false,
           "motivo": "a janela de 7 dias fecha em 2026-10-12"
         },
@@ -769,7 +771,7 @@ docs/dados/auditoria-das-medidas.md.
       "ativacao": [
         {
           "coorte": "2026-09-28",
-          "cadastrados": 30,
+          "cadastrados": 31,
           "ativados_7d": 0,
           "semana_fechada": false,
           "janela_fechada": false
@@ -817,7 +819,7 @@ docs/dados/auditoria-das-medidas.md.
         "daPessoa": [
           {
             "tema": "outro",
-            "total": 4
+            "total": 6
           },
           {
             "tema": "motor",
@@ -831,24 +833,24 @@ docs/dados/auditoria-das-medidas.md.
         "deAtalho": [],
         "porOrigem": {
           "desconhecida": 49,
-          "sintoma": 3,
-          "livre": 4,
+          "sintoma": 4,
+          "livre": 5,
           "continuacao": 1
         },
-        "total": 57
+        "total": 59
       },
       "linha": {
-        "texto": "Perguntas ao Biela: 57 em 30 dias, 7 com palavras da pessoa e 0 de atalho da tela (atalho NAO e demanda, e a ordem dos nossos botoes), e 49 ainda SEM ETIQUETA (anteriores a 2026-09-29, e esse numero nao cresce mais). Temas do que a pessoa escreveu: outro 4, motor 2, eletrica 1. AINDA NAO DA PARA LER O RANKING (sao 7 perguntas com palavras da pessoa, abaixo do minimo de 20; hoje e 2026-10-02, PISO)",
+        "texto": "Perguntas ao Biela: 59 em 30 dias, 9 com palavras da pessoa e 0 de atalho da tela (atalho NAO e demanda, e a ordem dos nossos botoes), e 49 ainda SEM ETIQUETA (anteriores a 2026-09-29, e esse numero nao cresce mais). Temas do que a pessoa escreveu: outro 6, motor 2, eletrica 1. AINDA NAO DA PARA LER O RANKING (sao 9 perguntas com palavras da pessoa, abaixo do minimo de 20; hoje e 2026-10-02, PISO)",
         "legivel": false,
-        "motivo": "so 7 perguntas com palavras da pessoa (minimo 20)"
+        "motivo": "so 9 perguntas com palavras da pessoa (minimo 20)"
       },
       "premium": {
-        "com": 0,
+        "com": 2,
         "sem": 8
       },
       "votos": {
-        "total": 24,
-        "positivos": 24,
+        "total": 26,
+        "positivos": 26,
         "negativos": 0,
         "semNegativo": "NENHUM voto negativo registrado. A tela so grava o 👎 depois que a pessoa escolhe um motivo, entao 👎 sem motivo nao deixa rastro: isto NAO e aprovacao de 100%.",
         "quadro": {
@@ -856,6 +858,10 @@ docs/dados/auditoria-das-medidas.md.
             {
               "tema": "combustivel",
               "total": 4
+            },
+            {
+              "tema": "outro",
+              "total": 3
             },
             {
               "tema": "eletrica",
@@ -882,10 +888,6 @@ docs/dados/auditoria-das-medidas.md.
               "total": 1
             },
             {
-              "tema": "outro",
-              "total": 1
-            },
-            {
               "tema": "pneus",
               "total": 1
             }
@@ -902,11 +904,11 @@ docs/dados/auditoria-das-medidas.md.
           ],
           "porOrigem": {
             "sugerida": 10,
-            "livre": 7,
-            "sintoma": 6,
+            "livre": 8,
+            "sintoma": 7,
             "continuacao": 1
           },
-          "total": 24
+          "total": 26
         }
       }
     },
@@ -916,22 +918,34 @@ docs/dados/auditoria-das-medidas.md.
           "coorte": "2026-09-01",
           "assinaram": 1,
           "renovaram": 0,
-          "sairam": 0
+          "sairam": 1
         },
         {
           "coorte": "2026-08-01",
           "assinaram": 2,
           "renovaram": 0,
-          "sairam": 0
+          "sairam": 2
         }
-      ]
+      ],
+      "semConta": 0,
+      "linhaSemConta": {
+        "texto": "Vendas de loja sem conta (30d): nenhuma. Toda compra da Apple ou da Play chegou com conta e virou Premium",
+        "legivel": true,
+        "motivo": ""
+      },
+      "assinaturasDeLoja": 0,
+      "lojaConferida": {
+        "deveAvisar": true,
+        "texto": "A LOJA VENDEU E O BANCO NAO SABE: o RevenueCat diz 1 assinatura(s) ativa(s) e o banco conhece 0 de loja. Sao 1 pessoa(s) que pagaram na Apple ou na Play e NAO tem Premium, porque quem libera o acesso e a linha de subscriptions. Conferir o webhook em RevenueCat, Integrations, Webhooks, e ligar o Premium na mao em Customers.",
+        "silencio": ""
+      }
     },
     "marketing": {
       "cadastrosPorCampanha": [
         {
           "origem": "(direto)",
           "campanha": "(sem campanha)",
-          "cadastros_28d": 95
+          "cadastros_28d": 96
         },
         {
           "origem": "google",
@@ -945,15 +959,15 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "abriu_app",
-        "eventos": 351,
-        "pessoas": 206
+        "eventos": 357,
+        "pessoas": 209
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "abriu_cadastro_de_carro",
-        "eventos": 172,
-        "pessoas": 172
+        "eventos": 173,
+        "pessoas": 173
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -980,8 +994,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "atribuicao",
-        "eventos": 183,
-        "pessoas": 182
+        "eventos": 184,
+        "pessoas": 183
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -1008,8 +1022,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "comecou_onboarding",
-        "eventos": 321,
-        "pessoas": 321
+        "eventos": 323,
+        "pessoas": 323
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -1036,8 +1050,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "perguntou_biela",
-        "eventos": 3,
-        "pessoas": 3
+        "eventos": 4,
+        "pessoas": 4
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -1071,8 +1085,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "terminou_onboarding",
-        "eventos": 203,
-        "pessoas": 203
+        "eventos": 204,
+        "pessoas": 204
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -1085,22 +1099,22 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "a",
         "evento": "viu_paywall",
-        "eventos": 41,
-        "pessoas": 38
+        "eventos": 42,
+        "pessoas": 39
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "abriu_app",
-        "eventos": 278,
-        "pessoas": 194
+        "eventos": 282,
+        "pessoas": 197
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "abriu_cadastro_de_carro",
-        "eventos": 170,
-        "pessoas": 170
+        "eventos": 173,
+        "pessoas": 173
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -1120,22 +1134,22 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "atribuicao",
-        "eventos": 179,
-        "pessoas": 179
+        "eventos": 182,
+        "pessoas": 182
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "cadastro",
-        "eventos": 56,
-        "pessoas": 56
+        "eventos": 57,
+        "pessoas": 57
       },
       {
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "cadastrou_carro",
-        "eventos": 109,
-        "pessoas": 106
+        "eventos": 111,
+        "pessoas": 108
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -1148,8 +1162,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "comecou_onboarding",
-        "eventos": 301,
-        "pessoas": 301
+        "eventos": 304,
+        "pessoas": 304
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -1162,7 +1176,7 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "convite_aviso",
-        "eventos": 41,
+        "eventos": 42,
         "pessoas": 35
       },
       {
@@ -1183,8 +1197,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "permissao_aviso_concedida",
-        "eventos": 10,
-        "pessoas": 10
+        "eventos": 11,
+        "pessoas": 11
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -1204,8 +1218,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "registrou_servico",
-        "eventos": 20,
-        "pessoas": 11
+        "eventos": 21,
+        "pessoas": 12
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -1218,8 +1232,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "terminou_onboarding",
-        "eventos": 192,
-        "pessoas": 192
+        "eventos": 195,
+        "pessoas": 195
       },
       {
         "experimento": "cadastro-em-duas-etapas",
@@ -1232,22 +1246,22 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "viu_paywall",
-        "eventos": 44,
+        "eventos": 45,
         "pessoas": 41
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "abriu_app",
-        "eventos": 260,
-        "pessoas": 179
+        "eventos": 265,
+        "pessoas": 182
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "abriu_cadastro_de_carro",
-        "eventos": 157,
-        "pessoas": 157
+        "eventos": 160,
+        "pessoas": 160
       },
       {
         "experimento": "onboarding-curto",
@@ -1274,22 +1288,22 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "atribuicao",
-        "eventos": 159,
-        "pessoas": 159
+        "eventos": 162,
+        "pessoas": 162
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "cadastro",
-        "eventos": 57,
-        "pessoas": 57
+        "eventos": 58,
+        "pessoas": 58
       },
       {
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "cadastrou_carro",
-        "eventos": 94,
-        "pessoas": 92
+        "eventos": 96,
+        "pessoas": 94
       },
       {
         "experimento": "onboarding-curto",
@@ -1302,8 +1316,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "comecou_onboarding",
-        "eventos": 299,
-        "pessoas": 299
+        "eventos": 302,
+        "pessoas": 302
       },
       {
         "experimento": "onboarding-curto",
@@ -1316,7 +1330,7 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "convite_aviso",
-        "eventos": 34,
+        "eventos": 35,
         "pessoas": 28
       },
       {
@@ -1337,8 +1351,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "permissao_aviso_concedida",
-        "eventos": 7,
-        "pessoas": 7
+        "eventos": 8,
+        "pessoas": 8
       },
       {
         "experimento": "onboarding-curto",
@@ -1351,8 +1365,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "registrou_servico",
-        "eventos": 14,
-        "pessoas": 7
+        "eventos": 15,
+        "pessoas": 8
       },
       {
         "experimento": "onboarding-curto",
@@ -1365,8 +1379,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "terminou_onboarding",
-        "eventos": 178,
-        "pessoas": 178
+        "eventos": 181,
+        "pessoas": 181
       },
       {
         "experimento": "onboarding-curto",
@@ -1379,22 +1393,22 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "a",
         "evento": "viu_paywall",
-        "eventos": 34,
+        "eventos": 35,
         "pessoas": 31
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "abriu_app",
-        "eventos": 369,
-        "pessoas": 221
+        "eventos": 374,
+        "pessoas": 224
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "abriu_cadastro_de_carro",
-        "eventos": 185,
-        "pessoas": 185
+        "eventos": 186,
+        "pessoas": 186
       },
       {
         "experimento": "onboarding-curto",
@@ -1421,8 +1435,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "atribuicao",
-        "eventos": 203,
-        "pessoas": 202
+        "eventos": 204,
+        "pessoas": 203
       },
       {
         "experimento": "onboarding-curto",
@@ -1449,8 +1463,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "comecou_onboarding",
-        "eventos": 323,
-        "pessoas": 323
+        "eventos": 325,
+        "pessoas": 325
       },
       {
         "experimento": "onboarding-curto",
@@ -1477,8 +1491,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "perguntou_biela",
-        "eventos": 3,
-        "pessoas": 3
+        "eventos": 4,
+        "pessoas": 4
       },
       {
         "experimento": "onboarding-curto",
@@ -1519,8 +1533,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "terminou_onboarding",
-        "eventos": 217,
-        "pessoas": 217
+        "eventos": 218,
+        "pessoas": 218
       },
       {
         "experimento": "onboarding-curto",
@@ -1533,36 +1547,36 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "viu_paywall",
-        "eventos": 51,
-        "pessoas": 48
+        "eventos": 52,
+        "pessoas": 49
       }
     ],
     "quebraFunil": [
       {
         "de": "abriu_app",
         "para": "viu_paywall",
-        "antes": 489,
-        "depois": 114,
+        "antes": 493,
+        "depois": 115,
         "validoDesde": "2026-08-22",
         "ressalvas": [
-          "no Android o paywall APARECE e não tem botão de compra (modo leitor, sem a chave do RevenueCat no build), e 85% das exibições vêm de lá. Taxa de paywall para checkout somando as tres plataformas mede um denominador que não converte por construção"
+          "a maior parte das exibições vem do Android. O Android VENDE desde a 2.7 (há `iniciou_checkout` de loja desde 23/09 e uma compra concluída em 25/09), então o denominador não é mais estrutural; o que ainda não bate é a venda de loja chegar ao banco, conferido em vendas.lojaConferida"
         ],
         "taxa": 23.3,
         "motivo": null,
-        "perdidos": 375
+        "perdidos": 378
       },
       {
         "de": "cadastro",
         "para": "iniciou_checkout",
-        "antes": 124,
+        "antes": 125,
         "depois": 10,
         "validoDesde": "2026-08-22",
         "ressalvas": [
           "contado em auth.users (função contas_criadas_desde), não no evento: o evento só dispara para conta com menos de 7 dias e perde tudo que veio antes do instrumento"
         ],
-        "taxa": 8.1,
+        "taxa": 8,
         "motivo": null,
-        "perdidos": 114
+        "perdidos": 115
       },
       {
         "de": "iniciou_checkout",
@@ -1578,37 +1592,37 @@ docs/dados/auditoria-das-medidas.md.
       {
         "de": "comecou_onboarding",
         "para": "terminou_onboarding",
-        "antes": 866,
-        "depois": 478,
+        "antes": 871,
+        "depois": 482,
         "validoDesde": "2026-09-01",
         "ressalvas": [],
-        "taxa": 55.2,
+        "taxa": 55.3,
         "motivo": null,
-        "perdidos": 388
+        "perdidos": 389
       },
       {
         "de": "terminou_onboarding",
         "para": "abriu_cadastro_de_carro",
-        "antes": 478,
-        "depois": 379,
+        "antes": 482,
+        "depois": 383,
         "validoDesde": "2026-09-01",
         "ressalvas": [],
-        "taxa": 79.3,
+        "taxa": 79.5,
         "motivo": null,
         "perdidos": 99
       },
       {
         "de": "abriu_cadastro_de_carro",
         "para": "cadastrou_carro",
-        "antes": 379,
-        "depois": 195,
+        "antes": 383,
+        "depois": 197,
         "validoDesde": "2026-09-01",
         "ressalvas": [
           "isto é ATO, e conta só quem cadastrou DENTRO da janela. Para quantos TÊM carro hoje, some as contas em estado_da_base: o ato não enxerga quem cadastrou antes do instrumento (23/08/2026) nem quem usa como convidado, sem conta"
         ],
-        "taxa": 51.5,
+        "taxa": 51.4,
         "motivo": null,
-        "perdidos": 184
+        "perdidos": 186
       }
     ],
     "janelaDoFunil": {
@@ -1617,12 +1631,12 @@ docs/dados/auditoria-das-medidas.md.
       "aviso": null
     },
     "estadoDaBase": {
-      "contas": 134,
-      "contas_com_estado": 128,
-      "contas_com_carro": 104,
+      "contas": 135,
+      "contas_com_estado": 129,
+      "contas_com_carro": 105,
       "contas_com_servico": 13,
-      "contas_ativas_7d": 50,
-      "contas_ativas_30d": 119
+      "contas_ativas_7d": 49,
+      "contas_ativas_30d": 120
     },
     "anomalias": [
       {
@@ -1640,14 +1654,14 @@ docs/dados/auditoria-das-medidas.md.
       {
         "anomalia": "acao que costuma ser a ultima",
         "plataforma": "web",
-        "quantas": 28,
-        "detalhe": "de 37 vezes de comecou_onboarding (75.7%), base da plataforma 48.1%; indicio, nao prova"
+        "quantas": 26,
+        "detalhe": "de 35 vezes de comecou_onboarding (74.3%), base da plataforma 46.8%; indicio, nao prova"
       },
       {
         "anomalia": "acao que costuma ser a ultima",
         "plataforma": "android",
-        "quantas": 21,
-        "detalhe": "de 60 vezes de viu_paywall (35.0%), base da plataforma 16.2%; indicio, nao prova"
+        "quantas": 20,
+        "detalhe": "de 61 vezes de viu_paywall (32.8%), base da plataforma 16.2%; indicio, nao prova"
       },
       {
         "anomalia": "app fechou sozinho",
