@@ -3,6 +3,86 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-01 · QA agendado: o primeiro dinheiro real entrou, e o funil não registrou
+- Verificação agendada em 04/09 para o dia da PRIMEIRA COBRANÇA REAL. Não é
+  rodada semanal: só a cobrança.
+- **A COBRANÇA PASSOU.** MEDIDO no banco: a assinatura `sub_1U8U8h…` do cliente
+  fcd41994 teve o `current_period_end` movido de 01/10 23:52:23 para 01/11
+  23:52:23, gravado às 23:53:13, e o `status` seguiu `active`. Nada de
+  `past_due` nem `unpaid`, nos três assinantes.
+- DEDUZIDO, e é o passo que sustenta a frase acima: o Stripe só adianta o ciclo
+  de uma assinatura de cobrança automática quando a fatura do ciclo novo é
+  paga; cartão recusado deixa a assinatura em `past_due` com o ciclo onde
+  estava. Ciclo adiantado mais status `active` é fatura paga.
+- **O VALOR NÃO ESTÁ MEDIDO, e essa é a parte que o Diretor queria.** A
+  integração do Stripe não está autorizada nesta sessão, e o repositório não
+  guarda valor pago em lugar nenhum: nem `subscriptions`, nem `funil_eventos`,
+  nem o retrato. O MRR do painel é preço de plano multiplicado por assinante,
+  que é número derivado e não prova fato financeiro (direcionamento 8). Uma
+  fatura de R$ 0,00 adiantaria o ciclo exatamente do mesmo jeito, e foi o que
+  aconteceu na virada de 01/09 com o cupom de 100%. Então: **o ciclo virou e a
+  fatura foi paga; se foram R$ 29,90 ou R$ 0,00, não sei daqui.** Quem fecha
+  isso é o painel do Stripe, em duas telas.
+- **ACHADO, e é o motivo de esta verificação ter valido a pena: o funil não
+  registrou a renovação, porque ele nunca soube registrar nenhuma.** O webhook
+  do Stripe escrevia `assinou`, `cancelou` e `expirou`, e NUNCA escreveu
+  `renovou`. O único `renovou` do projeto morava no gêmeo do RevenueCat, e a
+  loja nunca vendeu. Em `funil_eventos` há três eventos financeiros no total,
+  os três `assinou`, o mais novo de 02/09.
+- O sintoma era o pior possível, porque não parecia sintoma: `renovacoes 0` no
+  painel, com `funilCorreto.ts` declarando `renovou` mensurável desde 22/08.
+  Zero que lê como "ninguém renovou" quando significa "ninguém mediu". É a
+  quarta vez que esta casa tropeça no zero estrutural, e a primeira no
+  dinheiro. A contradição estava escrita no nosso próprio código desde o
+  começo (direcionamento 7).
+- CORRIGIDO e publicado (`c7a20c3`), dentro da alçada pela flexibilização de
+  02/09: tornar uma falha visível não é mexer em cobrança. Não muda quem é
+  cobrado, quando, quanto, nem quem ganha acesso; muda se o fato aparece ou
+  some. Quem escreve o `renovou` da web agora é a VIRADA DE CICLO, não a
+  fatura, e isso é escolha de engenharia e não preferência: o endpoint do
+  Stripe está cadastrado com QUATRO eventos (os três de subscription e o
+  checkout), então um `case "invoice.paid"` nunca seria chamado. A virada chega
+  na entrega que já funciona, e a prova de que funciona é que foi ela que
+  atualizou o banco às 23:53:13.
+- A dedup existe SEM índice novo: o ciclo gravado é lido ANTES do upsert, então
+  na reentrega do webhook o banco já tem o ciclo novo, não há virada e não há
+  evento. Reentrega, assinatura nova e correção de data para trás não viram
+  receita inventada. Por isso a ordem (leitura antes da escrita) virou
+  asserção: invertida, nenhuma renovação é registrada e o sintoma é silêncio.
+- O evento da web NÃO carrega valor, de propósito. O que a rota tem em mãos é
+  preço de plano, e um cupom de 100% produz esta mesma virada com fatura de
+  R$ 0,00. Carimbar valor ali faria o funil afirmar dinheiro que ninguém
+  confirmou.
+- CONFERÊNCIA NOVA `conferir:renovacao`, sete defeitos plantados e os sete
+  reprovando: `>` virando `!==`, folga do arredondamento removida, ciclo lido
+  só do objeto ignorando o item, ordem da leitura e da escrita invertida,
+  escrita do `renovou` apagada, valor carimbado no evento, e `renovou`
+  encadeado com `cancelou`. A regra mora em `lib/ciclo.ts`, sem banco nem rede,
+  para a conferência exercitá-la de verdade em vez de procurar texto no fonte.
+- **ISTO É TEORIA EM PRODUÇÃO**, com todas as letras (direcionamento 12):
+  nenhuma renovação passou por este código. As próximas são 04/10 e por volta
+  de 09/10, e são elas que provam. Se em 04/10 não aparecer um `renovou` para
+  `sub_1U9Phe…`, o conserto está errado e o diagnóstico também.
+- PARA O RODRIGO, duas coisas no painel do Stripe e nenhuma delas é minha:
+  (1) a fatura do ciclo de 01/10 desta assinatura, para saber se entrou
+  R$ 29,90 ou R$ 0,00, que é o primeiro caixa real do produto; (2)
+  acrescentar `invoice.paid` à lista de eventos do endpoint, que é o que
+  permitiria o funil guardar o VALOR e não só a virada. Com isso feito, dá para
+  acrescentar o evento da fatura depois, e aí "quanto entrou" passa a ser
+  pergunta de banco.
+- O de 04/10 (`0634d48f`) e o de ~09/10 (`b62df1c8`) seguem `active` com os
+  ciclos onde deviam estar.
+- DE PASSAGEM, sem investigar: `subscriptions.cupom` está nulo nas três
+  assinaturas, e o diário de 02/09 registra os três códigos preenchidos na mão
+  a partir do Stripe. O `upsertSubscription` é dono da coluna e escreve
+  `null` quando a metadata não tem cupom, e as três assinaturas são anteriores
+  ao carimbo na metadata. Ou seja: **preenchimento retroativo na mão em coluna
+  que um upsert idempotente governa não sobrevive ao próximo webhook.** Não
+  mexi: é dado de produção sobre fato passado, e a fonte do cupom é o Stripe.
+- A assinatura de loja de 25/09 do achado de ontem continua sem contrapartida:
+  as três ativas são todas do Stripe e `funil_eventos` segue sem nenhum evento
+  de origem `revenuecat`.
+
 ## 2026-09-30 · QA/Produto: existe uma assinatura de loja há seis dias que o banco não conhece
 - Artifact "QA da semana":
   https://claude.ai/artifact/DQ5BgWtmmnha61jhqAQ8KA
@@ -1580,7 +1660,8 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 | Por que o toggle de avisos não fazia nada? | Ele só levava aos ajustes quando o sistema já tinha negado DE VEZ; nos outros nãos o toque era mudo. E a preferência guardada podia discordar da permissão do sistema, estado em que todo agendamento desistia calado. Consertado em 07/09. | 07/09, Engenharia |
 | Por que a migalha de fechamento não pega o crash do Android? | Porque ela só fala na ABERTURA SEGUINTE, e quem fecha e desiste não volta. Os seis relatos que ela deu eram todos da web, onde fechar o navegador produz a mesma evidência sem ser defeito. | 07/09, Engenharia |
 | Quantos assinantes existem de verdade? | **3 pessoas.** A tabela tem 6 linhas: 2 `inactive` e 1 conta de revisão das lojas (válida até 2099) não são clientes. | 04/09 |
-| Quando entra o primeiro dinheiro? | 01/10, depois 04/10 e por volta de 09/10, R$ 29,90 cada. Verificação já agendada para o dia 01. | 04/09, QA agendado |
+| Quando entra o primeiro dinheiro? | ~~01/10, depois 04/10 e por volta de 09/10, R$ 29,90 cada. Verificação já agendada para o dia 01.~~ **A primeira cobrança passou em 01/10**: o ciclo de `sub_1U8U8h…` foi de 01/10 para 01/11 às 23:53:13 e o status seguiu `active`, o que no Stripe só acontece com a fatura do ciclo novo paga. **O VALOR não está medido** (R$ 29,90 ou R$ 0,00 adiantariam o ciclo igual, e nada no repositório guarda valor pago): isso só o painel do Stripe responde. Próximas em 04/10 e ~09/10. | 04/09 e 01/10, QA agendado |
+| O funil registra renovação? | **Não registrava nenhuma, em nenhum lugar, até 01/10.** O webhook do Stripe escrevia `assinou`, `cancelou` e `expirou`; o único `renovou` do projeto era o do RevenueCat, e a loja nunca vendeu. Então `renovacoes 0` significava "ninguém mediu", não "ninguém renovou", com `funilCorreto.ts` declarando o evento mensurável desde 22/08. Desde 01/10 quem escreve é a virada de ciclo em `/api/stripe/webhook` (o endpoint tem quatro eventos e não recebe `invoice.*`), sem valor no evento, com dedup pela leitura do ciclo antes do upsert. **TEORIA até 04/10**: nenhuma renovação passou pelo código ainda. | 01/10, QA agendado |
 | O webhook do Stripe está vivo? | Está. Duas viradas de teste gravadas em 37 segundos, 01/09 e 04/09. | 04/09, QA agendado |
 | A captura de UTM está quebrada? | Não, nunca esteve. A consulta é que lia o caminho errado: é `extra->'utm'->>'utm_source'`. | 03/09 |
 | Por que a AppsFlyer diz que tudo é orgânico? | Porque é. O SDK está vivo (54 instalações e 55 ativos chegaram lá). O que falta é o link: os botões de baixar apontam para a ficha crua da loja (`lib/stores.ts`), então o clique do anúncio morre no navegador. 100% das UTM do google/cpc estão em `plataforma = web`, zero no android e no iOS. O conserto é um OneLink, e ele nasce no console da AppsFlyer. | 05/09 |

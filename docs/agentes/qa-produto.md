@@ -288,6 +288,37 @@ recomendar.
   as aberturas daquela versão em `funil_eventos` (a régua `public.identidade`):
   10 erros numa versão com 14 identidades é uma coisa, numa com 300 é outra.
   Diga sempre qual dos dois você mediu.
+- **Antes de escrever o `case` do webhook, descubra a QUE o endpoint está
+  inscrito.** Em 01/10 o conserto certo do `renovou` era claramente a fatura
+  (`invoice.paid`), que é quem sabe quanto entrou. O endpoint do Stripe está
+  cadastrado com QUATRO eventos, e nenhum é de fatura: o `case` teria ficado
+  ali, bonito e conferido, esperando uma entrega que nunca chega. Quem salvou
+  foi uma linha do diário de 26/08 ("com os 4 eventos certos"). A regra geral:
+  **código que reage a entrega de terceiro não vale nada sem saber o que o
+  terceiro manda, e isso mora no painel, não no repositório.** Quando a
+  entrega certa não está inscrita, procure o fato na entrega que JÁ chega (a
+  virada de ciclo chegava; a prova é que foi ela que atualizou o banco), e diga
+  o que a troca custou em precisão.
+- **Dedup boa não precisa de índice: precisa de ordem.** O `renovou` dedupa
+  porque o ciclo gravado é lido ANTES de o novo ser escrito, então a reentrega
+  do webhook não encontra virada nenhuma. Nenhuma tabela nova, nenhuma chave
+  única, nenhuma corrida. O preço é que a ORDEM virou regra invisível, e regra
+  invisível pede asserção: invertida, nada é registrado e o sintoma é silêncio,
+  que ninguém investiga. Quando a correção de um dado depende de ler o estado
+  anterior, a ordem é parte do conserto e entra na conferência junto.
+- **"Mensurável desde" não é o mesmo que "medido".** `funilCorreto.ts` declara
+  `renovou` mensurável desde 22/08 e nada no caminho que vende escrevia esse
+  evento. A tabela de datas descreve a INTENÇÃO; só o banco diz o que existe. Ao
+  ler qualquer zero num evento financeiro, procure QUEM escreve aquele evento
+  antes de concluir qualquer coisa sobre comportamento de gente: `grep` pelo
+  nome do evento no código custa dez segundos e nesta casa já economizou duas
+  conclusões erradas.
+- **Preenchimento retroativo na mão não sobrevive em coluna que um upsert
+  governa.** Os três cupons preenchidos na mão em 02/09 estavam nulos em
+  01/10: o `upsertSubscription` é dono da coluna e escreve `null` quando a
+  metadata não tem cupom, e as três assinaturas são anteriores ao carimbo. Antes
+  de propor conserto de dado na mão, pergunte quem mais escreve naquela coluna
+  e quando.
 - **Instrumento novo na mesma versão do app cega a comparação entre versões.**
   Em 30/09 a 2.9 do Android parecia fechar sozinha três vezes mais (2,9% dos
   aparelhos na 2.8 contra 8,3% na 2.9), e o que tinha mudado era a migalha:
