@@ -15,6 +15,75 @@ preço, nunca pedir que a pessoa mude a nota.
 
 ---
 
+## ESTADO EM 01/10/2026: nada foi colado ainda
+
+As **12** avaliações estão com `respondido = false` no banco, inclusive as 8 da
+rodada passada, cujos rascunhos estão prontos aqui embaixo desde 15/09. A mais
+antiga espera resposta desde 02/09, ou seja 29 dias.
+
+Não reescrevi nenhuma delas: rascunho entregue não se rascunha de novo. O que
+entra hoje são as 4 que chegaram em 17/09. Para destravar o que não é meu, as
+linhas entraram em `docs/agentes/acoes-do-dono.md`, que é a lista que conta
+idade todo dia; o diário sozinho não cobrou, e a prova disso são os 29 dias.
+
+---
+
+## Rodada de 01/10/2026: as 4 novas, todas da App Store
+
+Chegaram juntas na coleta de 17/09, com versões 1.6, 1.7, 1.7 e 2.4, o que quer
+dizer que foram escritas ao longo de semanas e só apareceram no feed de uma vez.
+Como são da App Store, não valem os 350 caracteres da Play.
+
+**aminoru**, "Aprendizado" (5 estrelas, versão 2.4)
+> Eu não conheço nada sobre carro e mecânica, e com os videos do app tenho aprendido cada vez mais. Os conteúdos são muito interessantes para o dia a dia, exemplo, resfriar o turbo antes de desligar o motor.
+
+```
+Obrigado, e que bom que você citou justamente o turbo: é o tipo de detalhe que todo mundo ouve falar e quase ninguém explica direito. Começar sem conhecer nada de mecânica é exatamente o ponto de partida que a gente imagina ao escrever cada aula. Se topar um assunto que ficou confuso, escreve pela tela Fale com a gente, que a gente melhora a explicação.
+```
+
+**Biiaes**, "Ajuda com a economia!" (5 estrelas, versão 1.7)
+> Consegui economizar na revisão do carro graças a informação do app!
+
+```
+Essa é a notícia que a gente gosta de receber. Chegar na revisão sabendo o que vai ser feito e quanto custa muda a conversa inteira, e o dinheiro que sobra é seu. Obrigado por contar, e se numa próxima revisão aparecer algo estranho no orçamento, pode usar o app para conferir antes de aprovar.
+```
+
+**matthewsmc0**, "Excelente" (5 estrelas, versão 1.6)
+> Tem me ajudado bastante, muito bom!
+
+```
+Obrigado! Fico feliz que esteja ajudando no dia a dia. Se em algum momento faltar alguma coisa ou você quiser sugerir um assunto, escreve pela tela Fale com a gente dentro do app: a gente lê tudo.
+```
+
+**munizluiz**, "Bastante Útil" (5 estrelas, versão 1.7)
+> Me ajudou com a Manu tem os do meu carro, consegui economizar. Muito bom para gerenciar revisões e troca de óleo e coisas do tipo.
+
+```
+Obrigado! Revisão e troca de óleo são as duas coisas que mais passam batido e mais custam depois, então organizar isso num lugar só já paga o trabalho. Se quiser acompanhar gasto por carro ou mais de um carro, está tudo ali no histórico. Qualquer dúvida, é só chamar pela tela Fale com a gente.
+```
+
+### Duas observações sobre QUEM escreveu
+
+- **munizluiz é quase certamente o mesmo Luiz Fernando Muniz Viana da Play**
+  (muniz + luiz), e **luana david** também aparece nas duas lojas. Então as 12
+  avaliações são de **10 autores distintos**, e tirando o Moraes455, **9 pessoas
+  de fora**. Isso não muda a nota, muda o tamanho do sinal.
+- Nada disso vai na resposta pública. Reconhecer em público que a gente cruzou
+  o nome de alguém entre duas lojas é estranho, mesmo sendo verdade.
+
+### Depoimentos REAIS liberados para a LP nesta rodada
+
+| Texto exato | Nome | Contexto | Por que este |
+|---|---|---|---|
+| "Eu não conheço nada sobre carro e mecânica, e com os videos do app tenho aprendido cada vez mais" | aminoru | App Store | O público-alvo se descrevendo. Pode ser cortado nesta primeira frase sem distorcer nada. |
+| "Consegui economizar na revisão do carro graças a informação do app!" | Biiaes | App Store | Desfecho concreto, sem número inventado, numa frase só. O melhor da safra. |
+| "Muito bom para gerenciar revisões e troca de óleo" | munizluiz | App Store | Diz o que o app faz com as palavras de quem usa. Cortado numa frase completa. |
+
+**matthewsmc0** fica de fora: "muito bom" não conta história nenhuma e enche a
+LP de elogio genérico, que é o que faz depoimento real parecer inventado.
+
+---
+
 ## Rodada de 15/09/2026: as 8 primeiras avaliações
 
 Nenhuma delas tinha sido respondida (`respondido = false` nas 8). Todas são 5

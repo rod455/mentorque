@@ -221,14 +221,43 @@ sem saber o que ela custou.
   vazia, olhar retenção antes de propor mexer no pedido: baixar a carência
   para forçar volume traz nota de quem ainda não tem opinião, que é como se
   ganha 3 estrelas.
-- **15/09/2026, o conserto de 01/09 rendeu na manhã seguinte, e o feed da Apple
-  entrega uma vez a cada muitas.** A primeira execução depois do conserto
-  (8420, 02/09) gravou as 3 avaliações da App Store. Desde então o feed
-  respondeu 200 com envelope VAZIO em todos os dias, inclusive hoje, e as 3
-  avaliações continuam existindo na loja. Ou seja: feed vazio da Apple não diz
-  nada sobre a loja, e o dia em que ele enche é sorte. Jeito rápido de ler 15
-  dias sem abrir execução por execução: na lista de execuções, a que gravou
-  dura 1,6 s e as vazias duram 0,2 s, porque só a que tem avaliação faz o POST.
+- **01/10/2026, a lição mais cara deste papel até agora: recomendação não é
+  entrega, e o diário não cobra ninguém.** Em 15/09 eu entreguei 7 rascunhos de
+  resposta e disse que a janela da 2.6 custava dois minutos. Duas semanas
+  depois: as 12 avaliações seguem com `respondido = false`, a mais antiga há 29
+  dias, e passaram QUATRO envios à Apple (2.6, 2.7, 2.8 e 2.9) sem o nome novo.
+  Nada disso é culpa do dono: eu escrevi no lugar que ninguém relê. Existe
+  `docs/agentes/acoes-do-dono.md`, que conta idade de cada item todo dia, e eu
+  não usei. **Regra nova: toda recomendação que depende do dono termina a rodada
+  como LINHA NA LISTA DELE, não como parágrafo no diário.** O diário é onde se
+  explica; a lista é onde se cobra.
+- **Pergunta aberta repetida é pergunta mal endereçada.** O caso do Moraes455
+  foi levantado pelo CRO em 04/09 ("não vale como voz de cliente até ele
+  confirmar") e eu levantei de novo em 15/09, sem saber. Duas rodadas, mesma
+  pergunta, zero resposta, porque nenhuma das duas virou linha de lista. Antes
+  de "levantar" algo, procurar no DIARIO se já foi levantado, e se já foi, o
+  trabalho não é repetir: é mudar o endereço.
+- **O feed da Apple é em RAJADA, não "uma vez".** Correção do que eu escrevi em
+  15/09: ele entregou em 02/09 (3 avaliações) e em 17/09 (4 avaliações), ou seja
+  duas rajadas em 30 dias, sempre em lote. E o lote vem velho: em 17/09 chegaram
+  avaliações das versões 1.6 e 1.7, escritas no começo de setembro, com umas
+  duas semanas de atraso. Para responder em tempo de parecer atendimento, a
+  coleta tem que ser a API do App Store Connect; o feed público serve para saber
+  que existem, não para conversar com quem escreveu.
+- **Antes de escalar tendência de erro para o QA, ler a tabela "LEIA ISTO ANTES
+  DE RECONFERIR" do DIARIO.** Em 01/10 o retrato mostrava 9 relatos de "app
+  fechou sozinho em: abriu o app" e a alta na 2.9 do Android, e os dois já
+  estavam investigados e fechados (16/09 e 30/09): a alta é instrumento novo, não
+  regressão. Alarme repetido de coisa fechada gasta o tempo do dono e ensina ele
+  a ignorar o papel.
+- **15/09/2026, o conserto de 01/09 rendeu na manhã seguinte.** A primeira execução depois do conserto
+  (8420, 02/09) gravou as 3 avaliações da App Store. Nos 13 dias seguintes o
+  feed respondeu 200 com envelope VAZIO enquanto as 3 continuavam publicadas na
+  loja, o que prova que envelope vazio não diz nada sobre a loja. (A leitura de
+  que ele entregaria "uma vez" foi corrigida em 01/10: são rajadas.) Jeito
+  rápido de ler muitos dias sem abrir execução por execução: na lista de
+  execuções, a que gravou dura 1,6 s e as vazias duram 0,2 s, porque só a que
+  tem avaliação faz o POST.
 - **A Play tem janela de 7 dias e a Apple não tem janela nenhuma.** A API da
   Play só devolve os últimos 7 dias, então avaliação não coletada na semana
   some para sempre; por isso o coletor é diário. O feed da Apple é "mostRecent"

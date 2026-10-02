@@ -99,14 +99,18 @@ PENDENTE de troca para `Mentorque: manutenção do carro`, junto com as
 palavras-chave. Na Apple, nome, subtítulo e palavras-chave só mudam com o
 envio de uma versão. A metade da Play já foi aplicada em 01/09.
 
-**A janela é a 2.6, e ela está aberta agora (15/09).** A 2.5 foi aprovada e
-saiu da fila, a 2.6 está pronta e ainda não foi enviada
-(`docs/lojas/novidades-2.6.md`). Nome e palavras-chave se digitam na mesma
-tela do envio, então isto custa dois minutos SE for lembrado na hora. Se a 2.6
-subir sem essa troca, a metade da Apple espera mais uma versão inteira. E já
-perdeu envio: a 1.6 foi aprovada nas duas lojas em 01/09 e a 2.5 foi aprovada
-em 15/09, as duas sem levar o nome novo junto. Não é urgente, é só barato
-agora e caro depois.
+**PERDEU QUATRO ENVIOS, e isso está medido (01/10).** O retrato de hoje mostra
+2.5, 2.6, 2.7, 2.8 e 2.9 todas em READY_FOR_SALE na App Store. Ou seja, desde
+que esta linha foi escrita em 01/09 passaram quatro envios à Apple e o nome não
+pegou carona em nenhum. Em 15/09 eu escrevi que a janela da 2.6 estava aberta e
+custava dois minutos; a 2.6 subiu sem isso, e depois a 2.7, a 2.8 e a 2.9.
+
+A lição não é sobre a Apple, é sobre onde eu escrevi o pedido: recomendação que
+vive no diário e no artifact não é cobrada por ninguém. Agora é linha em
+`docs/agentes/acoes-do-dono.md`, que conta idade todo dia. Enquanto não for
+feito, o nome na App Store continua sendo `cuidar do carro` e o da Play
+`manutenção do carro`, e as duas lojas dizem coisas diferentes sobre o mesmo
+app.
 
 ### Subtítulo (30 caracteres)
 
@@ -158,15 +162,22 @@ ruim sem virar mentira, não antes.
 ## 2026-09-01 · O título é o campo mais forte da Play e hoje ele não tem a palavra que as pessoas digitam
 
 **Estado: metade APLICADA.** O título da Play foi trocado pelo dono em
-01/09/2026. Nome e palavras-chave da Apple continuam abertos e entram no
-próximo envio de versão.
+01/09/2026. Nome e palavras-chave da Apple continuam abertos.
 
-**Quando reler, e o que fazer:** duas rodadas depois da troca, ou seja na
-rodada de 01/10/2026. Se a origem "Pesquisa do Google Play" continuar em zero
-ou só trouxer busca por marca, a palavra não é o gargalo e a conclusão é que o
-problema está antes da ficha, na falta de gente chegando. Nesse caso o título
-FICA como está (não se volta para `cuidar`, que era pior pelo mesmo
-raciocínio) e a próxima proposta muda de assunto, não de palavra.
+**VEREDITO DE 01/10/2026, na data marcada: NÃO DEU PARA LER, e a causa não é
+falta de tempo.** O número combinado (Play Console, Aquisição de usuários,
+origem "Pesquisa do Google Play") só existe dentro do console, e este papel não
+entra em console. Conferido no pacote bruto do coletor de hoje: `play_console`
+devolve `{"anrPorDia":[],"crashPorDia":[]}` e nada de aquisição. O
+`search_console` que o retrato traz é da WEB (0 clique e 37 impressões em 28
+dias), não da busca da Play.
+
+Pela regra escrita em 01/09, o desfecho é o mesmo em qualquer dos dois casos: o
+título **FICA** como está, porque voltar para `cuidar` seria pior pelo mesmo
+raciocínio, e a proposta desta quinzena muda de assunto em vez de mexer na
+mesma palavra. A leitura continua pendurada numa única tela que só o dono abre,
+e por isso virou uma linha em `docs/agentes/acoes-do-dono.md` com o caminho
+exato, em vez de uma recomendação que envelhece no diário.
 
 **O que muda:** uma linha em cada loja, e a limpeza que ela obriga no campo de
 palavras-chave da Apple.
@@ -248,8 +259,11 @@ uma semana.
 
 ## 2026-09-15 · O texto diz que o grátis cadastra veículos; o app para no segundo
 
-**Estado: ABERTA.** Vale para a Play (aplicável na hora) e para a App Store
-(entra junto com o próximo envio, hoje a 2.6).
+**Estado: ABERTA, e sem sinal de ter sido aplicada (conferido em 01/10).** Vale
+para a Play (aplicável na hora) e para a App Store (entra junto com o próximo
+envio). Entrou na lista do dono em 01/10, porque duas semanas no diário não
+moveram nada. O prazo de volta atrás de 15/10 só começa a contar do dia em que
+a frase entrar no ar, não da data em que foi proposta.
 
 ### A troca, em tabela
 
@@ -330,3 +344,93 @@ carros não volta a ser escondido: esconder foi o erro que esta proposta
 conserta. Se aparecer nota baixa reclamando de limite mesmo COM o aviso, o
 problema deixa de ser o texto e passa a ser o produto, e a conversa muda de
 dono: vira assunto do CRO, não da ficha.
+
+---
+
+## 2026-10-01 · A palavra que os usuários mais repetem não está em nenhum campo forte
+
+**Estado: ABERTA.** Só Google Play, e muda na hora, sem envio de versão.
+
+### A troca, em tabela
+
+Campo: descrição curta da Play. Limite de 80 caracteres. É o segundo campo de
+maior peso na busca da Play e é o trecho que mais viaja para fora da loja
+(aparece na listagem, no compartilhamento e no que um modelo de linguagem lê).
+
+| | Texto | Caracteres |
+|---|---|---|
+| Hoje | `Entenda o barulho, a luz do painel e o orçamento antes de ir na oficina.` | 72 |
+| Proposto | `Entenda o barulho, a luz do painel e o orçamento antes da oficina, e economize.` | 79 |
+
+Se o console reclamar do tamanho, a alternativa com o mesmo sentido e um
+caractere a menos é `Entenda o barulho, o painel e o orçamento antes de ir na
+oficina, e economize.` (78), que troca "a luz do painel" por "o painel".
+
+### O raciocínio
+
+Agora existe voz de usuário suficiente para contar palavra, e foi o que eu fiz
+nas 12 avaliações. Dois temas empatam na frente:
+
+| Tema | Quantas avaliações | Quem |
+|---|---|---|
+| Economia (economizar, economia, gastos) | 4, sendo 3 de gente de fora | Triplyze, Biiaes, munizluiz, e o Moraes455 |
+| Revisão e manutenção | 3 | Sorriso da Pele, Biiaes, munizluiz |
+| Aprender (estudo, vídeo, conteúdo) | 2 | aminoru, Luana David |
+| Mais de um carro (frota, clínica) | 2 | Mindmill Brasil, Sorriso da Pele |
+
+Dos dois empatados, **manutenção já está no campo mais forte que existe**, o
+título, desde 01/09. **Economia não está em nenhum campo indexado com peso**:
+aparece só no meio da descrição completa, em "para quem quer economizar sem ser
+enganado na oficina". A descrição curta, que é o segundo campo mais forte, fala
+de sintoma (barulho, painel) e de orçamento, e não fala do desfecho.
+
+E o desfecho é o que a pessoa escreve quando ela mesma resume o app: "consegui
+economizar na revisão", "me fez economizar quase 40%", "Economia no bolso". Elas
+não escrevem "entendi o barulho". Entender é o meio; economizar é o motivo.
+
+A troca é deliberadamente a MENOR possível: a linha de hoje continua inteira,
+na mesma ordem, e ganha duas palavras no fim. Nenhum substantivo indexado sai
+(barulho, painel, orçamento e oficina ficam todos), então não há como esta
+mudança piorar a busca por sintoma. O único custo de texto é "a luz do painel"
+virar "antes da oficina" em vez de "antes de ir na oficina", que é a mesma
+coisa dita com uma palavra a menos.
+
+### O que a proposta NÃO faz
+
+Não toca no título (a proposta de 01/09, que fica como está pelo veredito de
+hoje). Não toca na descrição completa, onde mora a proposta de 15/09 sobre o
+limite de 2 carros, que continua aberta e independente desta. Não cita nota nem
+depoimento na loja. Não promete porcentagem: "economize" sem número é desfecho
+possível, "economize 40%" seria promessa da empresa em cima da experiência de
+uma pessoa.
+
+### O risco, dito na cara
+
+"Economize" é palavra de anúncio, e ficha que soa anúncio atrai quem quer
+desconto e cupom, não quem quer entender o carro. Esse risco é real e é o motivo
+de a palavra entrar NO FIM da frase, depois de a linha já ter dito o que o app
+faz: quem lê os primeiros 60 caracteres continua recebendo a definição, não a
+promessa. Se o efeito for atrair expectativa errada, ele aparece como avaliação
+reclamando de preço ou de "não economizei nada", e essa leitura é a mesma da
+proposta de 15/09.
+
+### Como saber se funcionou, e o que atrapalha a leitura
+
+A tela é Play Console, Ficha da loja, taxa de conversão da ficha (visitante que
+vira instalação), comparando os 14 dias antes e os 14 depois da troca. A
+descrição curta mexe em duas coisas ao mesmo tempo, busca e conversão, e a
+conversão é a que dá para ler em duas semanas.
+
+O que atrapalha, e precisa estar escrito antes de alguém comemorar: desde 20/09
+a campanha de busca manda para a loja, e tráfego pago entra na mesma taxa de
+conversão que o orgânico. Se a conversão subir junto com uma mudança de
+campanha, não credite ao texto. O jeito de separar é olhar a conversão por
+origem, na mesma tela.
+
+### A condição de volta atrás
+
+Se a taxa de conversão da ficha cair nos 14 dias depois da troca, volta a linha
+de hoje, que está preservada na tabela acima para isso. Se ficar igual, FICA: a
+palavra não custou nada e passa a trabalhar na busca. Se subir, a leitura segue
+sendo frágil pelo motivo do parágrafo anterior, e o que vale como confirmação é
+a conversão por origem orgânica, não a média.

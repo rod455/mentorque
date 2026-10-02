@@ -83,6 +83,86 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   as três ativas são todas do Stripe e `funil_eventos` segue sem nenhum evento
   de origem `revenuecat`.
 
+## 2026-10-01 · ASO & Lojas: 12 avaliações 5 estrelas, nenhuma respondida, e o erro é meu
+- Terceira rodada deste papel. Artifact "Lojas da quinzena":
+  https://claude.ai/artifact/VPDqC2ct6Z5pv36hWm7h9b
+- **A MANCHETE É UMA FALHA MINHA, não do dono.** Em 15/09 entreguei 7 rascunhos
+  de resposta e escrevi que levar o nome novo para a Apple custava dois minutos
+  na tela do envio. Duas semanas depois o banco diz: as **12** avaliações
+  seguem com `respondido = false`, a mais antiga desde 02/09 (29 dias), e a App
+  Store subiu 2.6, 2.7, 2.8 e 2.9, todas READY_FOR_SALE, nenhuma com o nome
+  novo. Eu escrevi o pedido no diário e no artifact, que são lugares onde se
+  EXPLICA, e existe `docs/agentes/acoes-do-dono.md`, criada em 07/09 justamente
+  porque o que depende do dono envelhece calado. Não usei.
+- **CORRIGIDO HOJE, e virou regra do manual:** toda recomendação que depende do
+  dono termina a rodada como LINHA NA LISTA DELE. Entraram três, com o texto
+  exato: (1) colar as 12 respostas e marcar `respondido`; (2) trocar nome e
+  palavras-chave na próxima tela de envio à Apple; (3) abrir a tela de aquisição
+  do Play Console e colar dois números. `npm run conferir:acoes` passou, 12 na
+  lista.
+- O caso que mede o tamanho do problema: a pergunta sobre a avaliação
+  `Moraes455` ser do dono foi levantada pelo CRO em 04/09 e por mim em 15/09,
+  sem que eu soubesse da primeira. Duas rodadas, mesma pergunta, zero resposta,
+  porque nenhuma das duas virou linha de lista. Aprendizado gravado: antes de
+  "levantar" algo, procurar no DIARIO se já foi levantado; se já foi, o trabalho
+  não é repetir, é mudar o endereço.
+- **4 avaliações novas, todas da App Store**, coletadas juntas em 17/09
+  (versões 1.6, 1.7, 1.7 e 2.4): aminoru ("Aprendizado", cita resfriar o turbo
+  antes de desligar o motor), Biiaes ("Consegui economizar na revisão"),
+  munizluiz ("gerenciar revisões e troca de óleo") e matthewsmc0 ("muito bom").
+  Rascunhos em `docs/lojas/respostas.md`. **Não reescrevi os 7 anteriores**:
+  rascunho entregue não se rascunha de novo.
+- **3 depoimentos novos liberados para a LP**, com texto exato e corte sugerido.
+  O matthewsmc0 ficou de fora: elogio genérico na LP é o que faz depoimento
+  verdadeiro parecer inventado.
+- PRECISÃO SOBRE O TAMANHO DO SINAL: 12 avaliações, **10 autores**. `munizluiz`
+  é quase certamente o mesmo Luiz Fernando Muniz Viana da Play, e `luana david`
+  aparece nas duas lojas. Tirando o Moraes455, são 9 pessoas de fora.
+- **VEREDITO DO TÍTULO, que vencia hoje: NÃO DEU PARA LER.** O combinado era a
+  origem "Pesquisa do Google Play" no Play Console, e esse número não existe
+  fora do console. Conferido no pacote bruto de hoje: `play_console` devolve
+  `{"anrPorDia":[],"crashPorDia":[]}`, nada de aquisição; o `search_console` do
+  retrato é da WEB. Pela regra escrita em 01/09 o desfecho é o mesmo nos dois
+  casos: o título FICA e a proposta nova muda de assunto. A leitura virou linha
+  na lista do dono.
+- **CORREÇÃO DO QUE EU ESCREVI EM 15/09:** o feed da Apple não entrega "uma vez
+  a cada muitas", entrega em RAJADA: duas vezes em 30 dias (3 avaliações em
+  02/09, 4 em 17/09), sempre em lote. O que continua verdade, e agora com número:
+  o lote vem com ~2 semanas de atraso (as de 17/09 citam 1.6 e 1.7, escritas no
+  começo do mês). A recomendação de trocar o feed pela API do App Store Connect
+  segue de pé, pelo motivo certo: responder três semanas depois não é atender.
+- **NENHUM ALERTA PARA O QA, e quase mandei um errado.** O retrato traz 9
+  relatos de "app fechou sozinho em: abriu o app" e a alta na 2.9 do Android.
+  Fui à tabela "LEIA ISTO ANTES DE RECONFERIR" antes de escalar: as duas já
+  estão fechadas (16/09 e 30/09), e a alta da 2.9 é instrumento novo medindo
+  melhor, não regressão. Também não há nenhuma avaliação abaixo de 5 estrelas.
+- **PROPOSTA DA QUINZENA: a palavra que os usuários mais repetem não está em
+  campo forte nenhum.** Contei o vocabulário das 12: economia aparece em 4 (3 de
+  fora), revisão e manutenção em 3, aprender em 2, mais de um carro em 2. Dos
+  dois empatados, manutenção já está no TÍTULO desde 01/09; economia só aparece
+  no meio da descrição completa. Proposta: a descrição curta da Play (80
+  caracteres, segundo campo de maior peso, muda sem release) passa de
+  `Entenda o barulho, a luz do painel e o orçamento antes de ir na oficina.`
+  (72) para `Entenda o barulho, a luz do painel e o orçamento antes da oficina,
+  e economize.` (79). É a linha de hoje inteira mais duas palavras: nenhum
+  substantivo indexado sai. Risco, leitura (conversão da ficha, 14 dias antes
+  contra 14 depois, contaminada pelo tráfego pago que vai para a loja desde
+  20/09) e volta atrás estão em `docs/lojas/ficha.md`.
+- A proposta de 15/09 (o limite de 2 carros no texto do grátis) continua ABERTA,
+  sem sinal de ter sido aplicada. O prazo de volta atrás de 15/10 só conta do
+  dia em que a frase entrar no ar.
+- **AUTOEXAME CONTRA A RÉGUA:** cumpri 1 a 7; o 8 não se aplica (há avaliação
+  coletada). A falha da rodada não está na régua, e é a mais importante: **a
+  régua mede o que eu entrego, não se o que entreguei chegou a acontecer.** Duas
+  rodadas de trabalho correto não produziram UMA resposta pública. Proponho uma
+  linha nova para a régua deste papel, já gravada no manual: *toda recomendação
+  que depende do dono saiu da rodada como linha na lista dele*.
+- Recomendações: (1) vinte minutos colando as 12 respostas, o item mais barato e
+  mais antigo; (2) nome e palavras-chave da Apple no próximo envio, já foram
+  quatro; (3) uma tela do Play Console, sem a qual toda proposta de ficha é
+  decidida no escuro e nenhuma pode ser julgada depois.
+
+
 ## 2026-09-30 · QA/Produto: existe uma assinatura de loja há seis dias que o banco não conhece
 - Artifact "QA da semana":
   https://claude.ai/artifact/DQ5BgWtmmnha61jhqAQ8KA
