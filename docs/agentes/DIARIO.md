@@ -74,6 +74,66 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   fechado é revisado para baixo; e desperdício com nome só existe em campanha de
   busca, com o substituto mais barato nomeado.
 
+## 2026-10-02 · A venda de Play de 25/09 virou Premium, e o Android vende desde a 2.7
+- A pedido do dono, analise dos dois achados do QA (30/09 e 01/10). O print do
+  painel do RevenueCat derrubou a hipotese da vespera: o `app_user_id` da compra
+  perdida e `14e31832-c6ca-444b-aa3d-c86efc5686ff`, um UUID de verdade. **A
+  compra saiu COM identidade**, entao o conserto do onboarding (feito em 01/10,
+  e que era defeito real) NAO era a causa deste caso.
+- **MEDIDO**: a conta existe; a pessoa fez 24 eventos em 25/09, das 00h50 as
+  01h36 (11 sintomas, 5 aulas, 1 orcamento); estava no **Android 2.8.0**; chegou
+  a `iniciou_checkout` com origem `loja-monthly`; o RevenueCat registra US$ 4
+  gastos; `subscriptions` nao tinha linha nenhuma. **E ela nao abriu o app desde
+  entao.**
+- **O ACHADO QUE CONTRADIZ O QUE A CASA ACREDITAVA: o Android vende desde a
+  2.7.** `funil_eventos` tem `iniciou_checkout` de loja vindo de android em
+  23/09 (2.7.0) e 25/09 (2.8.0). Esse evento e emitido DEPOIS do
+  `if (!pkg) return` do `buyNative`, e `pkg` so existe quando o plugin
+  configurou com chave. A chave esta no build, o botao aparece, e uma compra de
+  Play foi concluida.
+- **A RESSALVA DO PAYWALL ESTAVA FALSA EM TRES LUGARES**, e fui eu que a
+  escrevi em 28/09: `RESSALVAS.viu_paywall`, a linha do retrato e
+  `docs/lojas/venda-no-android.md` diziam "no Android o paywall aparece e NAO
+  tem botao de compra (modo leitor)". Nasceu certa, o mundo virou na 2.7,
+  ninguem avisou, e ela passou a EXPLICAR um zero que ja nao existia. **Ressalva
+  e afirmacao sobre o mundo e envelhece como qualquer outra**: sem data e sem um
+  jeito de ser medida, vira a mentira mais dificil de achar, porque todo mundo
+  repete achando que esta sendo cuidadoso. A `conferir:funil` exigia o texto
+  antigo e reprovou a correcao, que e o trabalho dela; passou a cobrar a
+  ausencia da afirmacao velha e a presenca do lugar onde o fato e medido.
+- **A SUBTRACAO QUE FALTAVA, e era de graca.** De 25/09 a 02/10 o retrato
+  imprimiu todo dia `revenuecat.active_subscriptions: 1` e assinaturas do banco
+  todas do Stripe. Oito dias com os dois numeros lado a lado e ninguem subtraiu,
+  porque subtrair era trabalho de quem le. Agora `/api/dados` publica
+  `vendas.lojaConferida` e o Vigia manda e-mail por ela.
+- CORRIGIDO e no ar, alem disso: o webhook do RevenueCat nao perde mais venda
+  com identidade inutil (vira linha em `app_erros` com o `app_user_id` para
+  recuperar), e o `upsertSubscription` nao apaga mais `cupom` e `gclid` quando
+  a metadata nao os traz (achado do QA de 01/10).
+- **PREMIUM LIGADO A MAO**, autorizado pelo dono nesta conversa: linha em
+  `subscriptions` com `active`, mensal, ciclo ate 25/10 (um mes da compra). Nao
+  cobra ninguem; so entrega o que ja foi pago. Se o webhook voltar, o RevenueCat
+  corrige a linha; se nao voltar, o acesso cai em 25/10 e a conferencia nova
+  volta a gritar, entao o erro nao fica escondido.
+- **PROVA DO LACO INTEIRO**: antes da escrita o retrato saia com "A LOJA VENDEU
+  E O BANCO NAO SABE: RevenueCat 1 e banco 0"; depois, rodando o mesmo fluxo,
+  "Loja conferida: RevenueCat 1 e banco 1: batem". O alarme grita no problema
+  real e se cala pelo motivo certo.
+- `conferir:loja` com treze defeitos plantados. DOIS passaram verde e os dois
+  achados sao meus: um plantio inalcancavel (replantado, mordeu) e um buraco
+  real, em que a conferencia olhava uma linha vizinha em vez do argumento que
+  decide o alarme.
+- **O QUE CONTINUA ABERTO, e e a causa**: nao sabemos POR QUE a compra nao
+  chegou. Webhook nao cadastrado, segredo errado ou erro de entrega, so o painel
+  responde. Ficou na lista do dono.
+- DE PASSAGEM, dois fatos que o retrato trouxe e ninguem foi buscar: a receita
+  30d do Stripe passou de R$ 0,00 para **R$ 29,90**, o que responde a pergunta
+  que o QA deixou aberta ontem sobre a primeira cobranca real; e **os tres
+  assinantes do Stripe sairam hoje** (dois `cancelou` as 09h10 e 10h40, um
+  `expirou` as 10h40, com 14 segundos entre os dois ultimos). Com isso o
+  conserto do `renovou` de ontem perdeu a prova: as renovacoes de 04/10 e 09/10
+  nao vao acontecer.
+
 ## 2026-10-01 · QA agendado: o primeiro dinheiro real entrou, e o funil não registrou
 - Verificação agendada em 04/09 para o dia da PRIMEIRA COBRANÇA REAL. Não é
   rodada semanal: só a cobrança.
