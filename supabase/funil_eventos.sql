@@ -13,6 +13,15 @@
 --     São o fato financeiro, confirmados pela loja/processador. A rota do app
 --     RECUSA esses quatro de propósito: ninguém fabrica conversão via fetch.
 --
+-- ATENÇÃO À LINHA DE CIMA, que foi meia verdade por quarenta dias e ensinou a
+-- ler o funil errado (achado do QA em 01/10/2026): o `renovou` existia só no
+-- webhook do RevenueCat, e a loja nunca vendeu. No Stripe, que é quem vende,
+-- NADA escrevia `renovou`. A primeira cobrança real do produto caiu em
+-- 01/10/2026 e não deixou uma linha aqui. Desde então quem escreve o `renovou`
+-- da web é a VIRADA DE CICLO reconhecida em /api/stripe/webhook (o endpoint
+-- está cadastrado com quatro eventos e não recebe `invoice.*`), e por isso o
+-- evento da web não carrega valor: quem sabe quanto entrou é a fatura.
+--
 -- anon_id: identidade anônima criada no aparelho antes do login (localStorage)
 -- para o funil enxergar "abriu → cadastrou" como a mesma pessoa. Não é PII.
 

@@ -1,6 +1,7 @@
 import type Stripe from "stripe";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { planForPrice } from "@/lib/stripe";
+import { fimDoCiclo } from "@/lib/ciclo";
 
 // Grava/atualiza a linha de `subscriptions` a partir de um objeto de assinatura
 // do Stripe. Fonte única usada pelo webhook e pelas rotas de checkout/cancel/
@@ -24,15 +25,23 @@ import { planForPrice } from "@/lib/stripe";
 // A regra vale só para `subscriptions`. Evento de funil é métrica e continua
 // silencioso e tolerante (ver lib/funilServidor.ts): perder uma medição é
 // ruim, perder uma assinatura paga é outra categoria de problema.
+/** O `current_period_end` que o banco guarda hoje para esta assinatura, em segundos. */
+export async function cicloNoBanco(admin: SupabaseClient, subId: string): Promise<number | null> {
+  const { data } = await admin
+    .from("subscriptions")
+    .select("current_period_end")
+    .eq("stripe_subscription_id", subId)
+    .maybeSingle();
+  const t = data?.current_period_end ? Date.parse(String(data.current_period_end)) : NaN;
+  return Number.isFinite(t) ? Math.round(t / 1000) : null;
+}
+
 export async function upsertSubscription(admin: SupabaseClient, sub: Stripe.Subscription, fallbackUserId?: string | null) {
   const userId = sub.metadata?.user_id || fallbackUserId;
   if (!userId) return;
   const item = sub.items.data[0];
   const price = item?.price;
-  // current_period_end migrou do objeto subscription para o item nas versões novas.
-  const periodEnd =
-    (item as { current_period_end?: number } | undefined)?.current_period_end ??
-    (sub as unknown as { current_period_end?: number }).current_period_end;
+  const periodEnd = fimDoCiclo(sub);
   const { error } = await admin.from("subscriptions").upsert({
     user_id: userId,
     stripe_customer_id: typeof sub.customer === "string" ? sub.customer : sub.customer.id,
