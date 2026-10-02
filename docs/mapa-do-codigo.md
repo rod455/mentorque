@@ -39,6 +39,7 @@ começar lendo em vez de garimpando.
 | o mês fechado do carro (card do Início e e-mail `mes` da jornada) | `lib/app/resumoDoMes.ts` (puro); o card em `Home.tsx`; a chave em `lib/jornada/decisao.ts`, o texto em `lib/jornada/emails.ts`, conferidos por `npm run conferir:jornada` |
 | o modo motorista de aplicativo (ganhou, custou, sobrou; lucro por km) | `lib/app/motorista.ts` (puro, `npm run conferir:motorista`); a tela `components/app/screens/Ganhos.tsx`; o interruptor em `Profile.tsx`; o card em `Home.tsx`; a suíte `conferir:navegador motorista` |
 | o transporte de push (FCM e APNs) | `lib/push/transporte.ts`; a rota manual é `app/api/push/enviar`, o chamador automático é `app/api/cron/jornada` |
+| o e-mail de quem cancelou e a pergunta do motivo | `lib/email/saida.ts` (texto e links assinados) e `lib/email/motivoDaSaida.ts` (a assinatura e, no mesmo arquivo, como LER o que chegar). O disparo é `app/api/email/saida` (armado, nunca automático: disparar é do dono), o clique cai em `app/api/jornada/motivo`, a resposta aparece em `vendas.porQueCancelaram` do `/api/dados`, e tudo isso se confere com `npm run conferir:saida` |
 
 ### Um guia de sintoma novo no site
 

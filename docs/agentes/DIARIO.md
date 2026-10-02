@@ -3,6 +3,52 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-02 · O e-mail de quem cancelou: a casa sabia QUE saíram e não sabia POR QUÊ
+- Pedido do dono: "um e-mail para comunicar quem cancelar a assinatura, com uma
+  pesquisa de satisfação e perguntando os principais motivos, para a gente
+  continuar evoluindo". O contexto que deu urgência: os três assinantes do
+  Stripe saíram hoje, e `cancelou` não tem campo de motivo.
+- **ARMADO, NÃO DISPARADO.** `app/api/email/saida` existe com as três travas da
+  skill (chave dos dados, `disparar: true` explícito, e a marca por
+  destinatário gravada DEPOIS DE CADA envio, não no fim do laço). Nenhum e-mail
+  saiu para ninguém. Disparar é alçada do dono, e cada disparo é uma decisão
+  dele, não uma permissão que ficou valendo.
+- **A FORMA, e cada escolha tem motivo**: texto simples, sem botão e sem banner,
+  porque peça gráfica vai para a aba Promoções e um e-mail de cancelamento que
+  cai em Promoções não é lido; NENHUMA oferta, porque desconto na saída
+  transforma pedido de opinião em negociação e aí a resposta deixa de ser
+  verdade (e preço é do dono); a data do fim do acesso só aparece quando está no
+  FUTURO, porque "até 04/10" para quem perdeu o acesso ontem é a pior forma de
+  abrir um e-mail pedindo sinceridade.
+- **A RESPOSTA É UM TOQUE**, e cada motivo é um link assinado COM o motivo
+  dentro do HMAC. Sem isso, trocar `m=preco` por `m=problema` no endereço vira
+  ruído, e ruído numa pesquisa de seis respostas é tudo.
+- **O PREÇO DE GRAVAR EM GET, dito em vez de escondido**: clique de e-mail é
+  GET, e servidor corporativo e antivírus abrem TODOS os links da mensagem. Em
+  vez de adivinhar robô na gravação, a casa guarda tudo e reconhece a varredura
+  NA LEITURA (`respostasLegiveis`): seis motivos diferentes da mesma pessoa em
+  menos de 30 segundos não é opinião, é antivírus, e o descarte é CONTADO em vez
+  de sumir. Era esse o erro de setembro, duas vezes: publicar número que media a
+  própria instrumentação.
+- **O CONSUMIDOR MUDOU, que é a regra da semana.** `linhaDeMotivos` existia e
+  não chegava a lugar nenhum: o retrato agora publica `vendas.porQueCancelaram`,
+  com o DENOMINADOR vindo da contagem da chave `saida-pesquisa` em
+  `jornada_envios` (a mesma fonte que marca o envio, e não uma contagem
+  paralela), e com o lugar do ranking ocupado pelo motivo enquanto houver menos
+  de 10 respostas.
+- `conferir:saida` com **19 defeitos plantados**. Um passou verde e o achado é
+  meu: a conferência aceitava "ou o log, ou a falha na resposta" para o estado
+  pior de todos, enviado-e-não-marcado. As duas servem a gente diferente (o log
+  é o que a Vercel guarda, a falha é o que quem disparou vê na hora), então
+  viraram duas afirmações, e as duas mordem. De passagem, dois buracos do mesmo
+  tipo do `conferir:loja` de ontem foram tampados antes de existir: a
+  conferência afirmava que a consulta de quem-já-recebeu EXISTE sem afirmar que
+  alguém usa o resultado dela, e aceitava `const conhecido = MOTIVOS.some(...)`
+  sem exigir que o `if` o usasse.
+- **O QUE ESTA CONFERÊNCIA NÃO ALCANÇA**: nenhum e-mail foi entregue, aberto ou
+  clicado. O que está provado é a FORMA. A entrega se prova com a cópia de prova
+  no celular do dono, que é o primeiro passo do roteiro e ainda não aconteceu.
+
 ## 2026-10-02 · CRO (conversão): cinco vereditos fechados, e o primeiro FUNCIONOU
 - Rodada semanal do CRO/BeSci, foco CONVERSÃO (a de 25/09 foi de retenção).
   Artifact "Conversão da semana":

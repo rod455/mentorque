@@ -2,6 +2,8 @@ import { alarmeDeErros, classeDoErro, contaDeErros, linhaDeErros } from "./alarm
 import { ETIQUETA_DESDE, lerPergunta, linhaDePerguntas, quadroDeTemas } from "./biela/perguntaLida";
 import { ORIGEM_VENDA_SEM_CONTA, conferenciaDaLoja, linhaDeVendaSemConta } from "./loja/vendaSemConta";
 import { cicloVencido, linhaDeCiclosVencidos } from "./ciclo";
+import { CHAVE_DO_ENVIO_DE_SAIDA } from "./email/saida";
+import { linhaDeMotivos } from "./email/motivoDaSaida";
 import { avisoDeColeta, frescorDasFontes } from "./frescorDasFontes";
 import {
   CADEIA_ATO,
@@ -165,6 +167,18 @@ export async function coletarDadosOperacao() {
       .select("id", { count: "exact", head: true })
       .eq("origem", ORIGEM_VENDA_SEM_CONTA)
       .gte("criado_em", d30),
+  );
+
+  // POR QUE AS PESSOAS CANCELAM (02/10/2026), a pedido do dono: "um e-mail
+  // para comunicar quem cancelar a assinatura, com uma pesquisa de satisfação e
+  // perguntando os principais motivos, para a gente continuar evoluindo".
+  //
+  // Guarda TODO clique, inclusive os seis seguidos de um antivírus que abre
+  // todos os links da mensagem. A varredura é descartada NA LEITURA, por
+  // `respostasLegiveis`, onde dá para olhar o conjunto. Regra e porquê em
+  // lib/email/motivoDaSaida.ts.
+  const { data: motivosDeSaida } = await medir("saida_motivos", () =>
+    admin.from("saida_motivos").select("user_id, motivo, criado_em").gte("criado_em", d30).limit(2000),
   );
 
   // A quebra do funil (28 dias, pessoas distintas): quantos por cento passam
@@ -541,6 +555,20 @@ export async function coletarDadosOperacao() {
         ativas
           .filter((s) => cicloVencido(s.current_period_end as string | null, hoje))
           .map((s) => ({ fim: s.current_period_end as string | null })),
+      ),
+      // POR QUE CANCELARAM (02/10/2026). A casa sabia QUE os três assinantes
+      // saíram em 02/10 e não sabia POR QUÊ, e enquanto isso não existir toda
+      // conversa sobre churn é palpite.
+      //
+      // O denominador é a contagem de e-mails de saída ENVIADOS, pela chave em
+      // `jornada_envios`: "3 disseram que ficou caro" não diz se é 3 de 4 ou 3
+      // de 300. É a mesma regra do alarme de erros, e é por isso que o número
+      // de baixo vem da mesma fonte que marca o envio, e não de uma contagem
+      // paralela. Abaixo do mínimo, o lugar do ranking é ocupado pelo motivo de
+      // não dar para ler. Regra em lib/email/motivoDaSaida.ts.
+      porQueCancelaram: linhaDeMotivos(
+        (motivosDeSaida ?? []) as Parameters<typeof linhaDeMotivos>[0],
+        envios.filter((e) => e.chave === CHAVE_DO_ENVIO_DE_SAIDA).length,
       ),
       lojaConferida: conferenciaDaLoja(
         (((porFonte.revenuecat ?? [])[0]?.dados ?? {}) as { active_subscriptions?: number }).active_subscriptions,
