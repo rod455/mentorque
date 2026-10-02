@@ -1,13 +1,13 @@
 # Retrato diario da operacao Mentorque
 
-Gerado pelo Analista de Dados (n8n) em 2026-10-02T11:54:30.453Z.
+Gerado pelo Analista de Dados (n8n) em 2026-10-02T12:05:21.657Z.
 NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 COMO LER: linha marcada PARCIAL ou AINDA NAO DA PARA LER nao e resultado,
 e so cresce ate a janela fechar. Auditoria das medidas em
 docs/dados/auditoria-das-medidas.md.
 
 ## MARKETING (gente chegando)
-- Semana corrente (PARCIAL, ainda enche) (2026-09-28): aberturas 206, visitantes 146, cadastros 33
+- Semana corrente (PARCIAL, ainda enche) (2026-09-28): aberturas 207, visitantes 146, cadastros 33
 - Semana anterior (FECHADA) (2026-09-21): aberturas 330, visitantes 214, cadastros 51
 - Cadastros 28d via (direto) / (sem campanha): 96 (83% dos 116)
 - Cadastros 28d via google / lancamento: 20 (17% dos 116)
@@ -19,7 +19,7 @@ docs/dados/auditoria-das-medidas.md.
   - RESSALVA: estas views NAO separam pago de organico, e ha campanha de app rodando no YouTube desde 20/09. Nao leia gancho nem titulo a partir daqui.
 
 ## ENGAJAMENTO (gente usando e voltando)
-- Semana corrente (PARCIAL, ainda enche) (2026-09-28): 145 usuarios ativos, 204 aberturas (1.4 por usuario)
+- Semana corrente (PARCIAL, ainda enche) (2026-09-28): 145 usuarios ativos, 205 aberturas (1.4 por usuario)
 - Semana anterior (FECHADA) (2026-09-21): 209 usuarios ativos, 323 aberturas (1.5 por usuario)
 - Retencao, coorte 2026-09-28: 31 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-10-12; hoje sao 3, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-11-04; hoje sao 0, PISO)
 - Retencao, coorte 2026-09-21: 51 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-10-05; hoje sao 7, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-10-28; hoje sao 2, PISO)
@@ -51,9 +51,10 @@ docs/dados/auditoria-das-medidas.md.
 - Fundo do funil, Semana anterior (FECHADA): viram paywall 45, iniciaram checkout 5, assinaram 0, cancelaram 0
   - Loja conferida: RevenueCat 1 e banco 1: batem
   - Vendas de loja sem conta (30d): nenhuma. Toda compra da Apple ou da Play chegou com conta e virou Premium
+  - Ciclos: nenhuma assinatura ativa com ciclo vencido
 - Assinantes, coorte 2026-09-01: 1 assinaram, 0 renovaram, 1 sairam (renovacao de um mensal so pode aparecer 1 mes depois da coorte)
 - Assinantes, coorte 2026-08-01: 2 assinaram, 0 renovaram, 2 sairam (renovacao de um mensal so pode aparecer 1 mes depois da coorte)
-- Stripe (live): 3 assinaturas, MRR 89.70, receita 30d 29.90 (MRR e o contratado por mes; receita 30d e o COBRADO, e fica zero enquanto a primeira cobranca nao roda)
+- Stripe (live): 3 assinaturas, MRR 89.70, receita 30d 29.90 (MRR e o contratado por mes; receita 30d e o COBRADO)
 - RevenueCat: 1 assinaturas, MRR 4 (aviso: active_users = aparelhos, inclui testes)
 - AdMob 7d: 0.00 USD de receita de anuncio
 - Lojas: iOS 2.9 READY_FOR_SALE; iOS 2.8 READY_FOR_SALE; iOS 2.7 READY_FOR_SALE; iOS 2.6 READY_FOR_SALE; iOS 2.5 READY_FOR_SALE
@@ -76,40 +77,40 @@ docs/dados/auditoria-das-medidas.md.
 ```json
 {
   "dados": {
-    "geradoEm": "2026-10-02T11:54:29.400Z",
+    "geradoEm": "2026-10-02T12:05:20.216Z",
     "tempos": {
-      "subscriptions": 427,
-      "cadastros": 443,
-      "funil_semana": 446,
-      "app_erros": 90,
-      "uso_diario": 73,
-      "uso_semanal": 86,
-      "retencao_coortes": 100,
-      "assinaturas_coortes": 93,
-      "ativacao_coortes": 120,
-      "metricas_diarias": 292,
-      "cadastros_por_campanha": 57,
-      "assinaturas_conferencia": 66,
-      "jornada_envios": 70,
-      "email_eventos": 66,
-      "paralelo": 835,
-      "experimentos": 92,
-      "anomalias": 156,
-      "aparelhos_ativos": 46,
-      "biela_perguntas": 73,
-      "biela_votos": 48,
-      "vendas_sem_conta": 39,
-      "estado_da_base": 127,
-      "funil_etapas": 72,
-      "contas_criadas_desde": 54,
-      "funil_etapas_primeira": 39,
-      "total": 1606
+      "subscriptions": 522,
+      "cadastros": 584,
+      "app_erros": 78,
+      "funil_semana": 645,
+      "uso_diario": 81,
+      "uso_semanal": 55,
+      "retencao_coortes": 139,
+      "ativacao_coortes": 123,
+      "metricas_diarias": 278,
+      "assinaturas_coortes": 47,
+      "cadastros_por_campanha": 46,
+      "assinaturas_conferencia": 73,
+      "jornada_envios": 908,
+      "email_eventos": 940,
+      "paralelo": 1809,
+      "experimentos": 115,
+      "anomalias": 167,
+      "aparelhos_ativos": 42,
+      "biela_perguntas": 64,
+      "biela_votos": 59,
+      "vendas_sem_conta": 388,
+      "estado_da_base": 254,
+      "funil_etapas": 66,
+      "contas_criadas_desde": 47,
+      "funil_etapas_primeira": 57,
+      "total": 3083
     },
     "falhas": {},
     "funilSemanas": [
       {
         "semana": "2026-09-28",
-        "aberturas": 206,
+        "aberturas": 207,
         "visitantes": 146,
         "cadastros": 33,
         "viram_paywall": 25,
@@ -514,8 +515,8 @@ docs/dados/auditoria-das-medidas.md.
       "porDia": [
         {
           "dia": "2026-10-02",
-          "usuarios": 13,
-          "aberturas": 14,
+          "usuarios": 14,
+          "aberturas": 15,
           "aberturas_sem_identidade": 0
         },
         {
@@ -601,7 +602,7 @@ docs/dados/auditoria-das-medidas.md.
         {
           "semana": "2026-09-28",
           "usuarios_ativos": 145,
-          "aberturas": 204,
+          "aberturas": 205,
           "aberturas_por_usuario": 1.4,
           "aberturas_sem_identidade": 0
         },
@@ -934,6 +935,11 @@ docs/dados/auditoria-das-medidas.md.
         "motivo": ""
       },
       "assinaturasDeLoja": 1,
+      "ciclosVencidos": {
+        "deveAvisar": false,
+        "texto": "",
+        "silencio": "nenhuma assinatura ativa com ciclo vencido"
+      },
       "lojaConferida": {
         "deveAvisar": false,
         "texto": "",
@@ -1106,7 +1112,7 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "cadastro-em-duas-etapas",
         "variante": "b",
         "evento": "abriu_app",
-        "eventos": 282,
+        "eventos": 283,
         "pessoas": 197
       },
       {
@@ -1400,7 +1406,7 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "abriu_app",
-        "eventos": 374,
+        "eventos": 375,
         "pessoas": 224
       },
       {
