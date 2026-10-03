@@ -366,11 +366,28 @@ estar escrito NA proposta. Não muda o custo (a descrição curta continua mudan
 sem release) nem a direção (economia é a palavra que 4 das 12 avaliações
 repetem), muda a expectativa.
 
-**O QUE AINDA FALTA, e é uma tela só:** a quebra por ORIGEM. Sem ela, a
-condição de volta atrás acima continua sem o seu melhor critério, que é a
-conversão da origem orgânica, e o veredito do título de 01/09 continua sem
-denominador. Em Estatísticas, o relatório abre agrupado por País / região, e a
-dimensão de origem é outra escolha no mesmo seletor.
+**A QUEBRA POR ORIGEM FOI LIDA NO MESMO DIA, E ELA NÃO EXISTE COMO A GENTE
+SUPUNHA.** Em Estatísticas, a dimensão "Origem do tráfego" tem **exatamente duas
+origens**: `Pagas e diretas` e `Não atribuído`. Não há linha de "Pesquisa do
+Google Play", que é a que este arquivo vinha pedindo desde 01/09. Em 29/09 foram
+48 pagas e diretas contra 6 não atribuídas, num total de 54 no dia.
+
+Três consequências, e elas valem mais que a proposta que as gerou:
+
+1. **O veredito do título de 01/09 está ENCERRADO, e não adiado.** A leitura que
+   ele esperava não existe neste painel e não vai existir. Pela regra escrita em
+   01/09, sem leitura o título FICA. Não volta como pendência em rodada nenhuma.
+2. **A condição de volta atrás da descrição curta perde o critério fino** (a
+   conversão da origem orgânica) e fica com a média, 29,1% hoje, com a ressalva
+   de contaminação por tráfego pago escrita acima. É uma leitura mais fraca, e
+   está dito que é.
+3. **O ALVO DESTE PAPEL MUDA.** A busca orgânica da loja, se existe, está dentro
+   de "Não atribuído": no máximo uns 11% da aquisição do dia. Somado aos três
+   quartos de instalação que não passam pela ficha, o retrato é que **a loja hoje
+   é quase inteiramente um destino de anúncio**. Enquanto isso durar, a alavanca
+   da ficha é a CONVERSÃO de quem o anúncio manda, não a descoberta orgânica:
+   as primeiras imagens, a primeira frase e a nota, e não a caça a palavra-chave.
+   Isso não torna o trabalho de palavra inútil, põe ele atrás na fila.
 
 ### A condição de volta atrás
 

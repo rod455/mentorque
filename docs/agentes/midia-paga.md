@@ -327,11 +327,29 @@ repositório têm todos a mesma pegadinha: escrever não é publicar.
 clique vai direto para a Play Store e nunca toca em página nossa, então não há
 UTM, não há evento e não há como calcular custo por conta medida, que é o número
 deste papel. Vai dar para ver quanto saiu e quantas instalações o Meta diz ter
-entregue, e nada além disso. As três saídas, em ordem de custo: ler a aquisição
-no Play Console (grátis, manual, do dono), ler o Install Referrer dentro do app e
-mandar para o funil (nosso, barato, precisa de build), ou AppsFlyer/SDK do Meta
-(mais caro, mais completo). Enquanto nenhuma existir, **qualquer conclusão sobre
-o Meta que passe de "gastou X" é invenção.**
+entregue, e nada além disso. As três saídas eram, em ordem de custo: ler a
+aquisição no Play Console (grátis, manual, do dono), ler o Install Referrer
+dentro do app e mandar para o funil (nosso, barato, precisa de build), ou
+AppsFlyer/SDK do Meta (mais caro, mais completo). Enquanto nenhuma existir,
+**qualquer conclusão sobre o Meta que passe de "gastou X" é invenção.**
+
+**A SAÍDA MAIS BARATA MORREU EM 03/10/2026, e agora é fato medido e não
+suposição.** O dono abriu o relatório de aquisição do Play Console, em
+Estatísticas, com a dimensão "Origem do tráfego", e ela tem **exatamente duas
+origens**: `Pagas e diretas` e `Não atribuído`. Não existe linha de Google Ads,
+não existe linha de Meta, não existe linha de busca orgânica da loja. Em 29/09
+foram 48 pagas e diretas contra 6 não atribuídas.
+
+Então **o Play Console não divide anunciante**, e a tela que este papel pediu em
+02/10 e que o Diretor tratou como a prioridade mais barata do mês não responde a
+pergunta que ela ia responder. Isso fecha o item e muda o preço da decisão: o
+custo por desfecho por campanha (critério 3) passa a depender de uma das duas
+saídas CARAS, e a escolha entre elas é do dono, porque uma precisa de versão
+nova do app e a outra é gasto novo.
+
+Enquanto ele não decidir, a rodada declara o critério 3 inalcançável SEM propor
+a tela de novo: ela foi lida e não serve. Repetir vira a recomendação que
+envelhece calada, que é o que DIRETRIZES proíbe desde 02/10.
 
 **Meta Ads: conectado, coletado e ZERO gasto.** A conta "Mentorque Ads" (BRL)
 responde todo dia desde 22/08, sem erro nenhum na coleta, e nos 21 dias o gasto
@@ -672,8 +690,15 @@ com nome) falham por falta de etiqueta, com 98% do dinheiro em campanha de
 instalação que não carrega termo. Declarar está certo; o que falta é a
 consequência. **Régua com critério inalcançável por instrumento precisa mudar de
 instrumento ou mudar de régua, e essa decisão é desta rodada, não da próxima.**
-A saída mais barata já está na lista do dono, a tela de aquisição por fonte do
-Play Console. Ponha prazo: se ela voltar lida, o critério 3 volta a ser
-alcançável e você diz como; se em duas rodadas ela não voltar, proponha a
-reescrita dos dois critérios para o que o instrumento de hoje mede, com o limite
-escrito no lugar da nota.
+A saída mais barata estava na lista do dono, a tela de aquisição por fonte do
+Play Console. **Ela voltou lida no mesmo dia e NÃO serve**: a dimensão "Origem
+do tráfego" do Play tem duas origens só, `Pagas e diretas` e `Não atribuído`, e
+não separa Google de Meta. Isso não invalida o que está escrito acima, cumpre a
+parte difícil dele: o prazo que eu ia te pedir já venceu, com resposta.
+
+Então a rodada de 09/10 deve a consequência, e ela é uma só: **propor ao dono a
+escolha entre as duas saídas caras, com o preço de cada uma na mesma frase**, ou
+propor a reescrita dos critérios 3 e 6 para o que o instrumento de hoje mede.
+O que não cabe mais é declarar os dois inalcançáveis e seguir. Duas semanas de
+"o limite é do instrumento" com o instrumento mapeado vira escolha adiada, não
+limite.

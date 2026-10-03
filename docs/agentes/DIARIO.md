@@ -3,6 +3,47 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-03 (noite, 7) · A origem do trafego do Play tem DUAS linhas, e isso encerra um veredito e encarece uma decisao
+
+- O dono foi até o fim das telas. A dimensão "Origem do tráfego", em
+  Estatísticas, tem **exatamente duas origens**: `Pagas e diretas` e
+  `Não atribuído`. Em 29/09, **48 contra 6**, total de 54 no dia. Não existe
+  linha de Google Ads, de Meta nem de busca orgânica da loja.
+- **OS DOIS ITENS DO PLAY CONSOLE SAEM DA LISTA, e os dois saem com resposta**,
+  que é diferente de sair por desistência. A tela foi aberta, a dimensão foi
+  trocada, os canais foram todos marcados, e a lista tem dois.
+- **PARA O ASO: o veredito do título de 01/09 está ENCERRADO.** A leitura que
+  ele esperava (aquisição pela origem "Pesquisa do Google Play") não existe
+  neste painel e não vai existir. Pela regra escrita em 01/09, sem leitura o
+  título FICA. Não volta como pendência em rodada nenhuma, e isso está no manual
+  dele para ninguém reabrir.
+- **E O ALVO DAQUELE PAPEL MUDOU, com três números apontando para o mesmo
+  lugar**: três quartos das instalações não passam pela ficha, a origem orgânica
+  é no máximo 11% do dia, e a conversão da ficha é 29,1%. **A loja hoje é quase
+  inteiramente um destino de anúncio.** Enquanto a aquisição for ~90% paga, a
+  alavanca da ficha é a CONVERSÃO de quem o anúncio manda (primeiras imagens,
+  primeira frase, nota), não a caça a palavra-chave, que mexe num décimo. Toda
+  proposta de ficha passa a declarar o tamanho do alcance dela, e existe gatilho
+  escrito para o alvo voltar ao orgânico.
+- **PARA A MÍDIA: a saída mais barata morreu, e isso encarece a decisão em vez
+  de adiá-la.** O Play Console NÃO divide anunciante, então o custo por desfecho
+  por campanha (critério 3) passa a depender de uma das duas saídas caras: o
+  Install Referrer (nosso, precisa de versão nova do app) ou um medidor de
+  atribuição (gasto novo). As duas são decisão do dono.
+- **E ISSO COBRA A MINHA PRÓPRIA DEVOLUTIVA DE HOJE.** Eu escrevi para o papel
+  de Mídia, horas atrás: "se ela voltar lida, o critério 3 volta a ser
+  alcançável e você diz como; se em duas rodadas ela não voltar, proponha a
+  reescrita". Ela voltou lida no mesmo dia e não serve. O retorno foi corrigido
+  no manual com o desfecho, e a rodada de 09/10 deve a consequência: propor a
+  escolha entre as duas saídas caras COM O PREÇO na mesma frase, ou propor a
+  reescrita dos critérios 3 e 6. Declarar inalcançável e seguir deixou de ser
+  opção, porque o instrumento agora está mapeado.
+- **O QUE ESTA LEITURA NÃO ALCANÇA**: `Pagas e diretas` junta anúncio com link
+  direto, então nem a fatia paga total é limpa; e `Não atribuído` é um balde,
+  não um canal. Qualquer frase sobre "o orgânico" a partir daqui é teto, não
+  medida.
+- Lista do dono: de 13 para 11 itens. O Play Console sai inteiro da lista.
+
 ## 2026-10-03 (noite, 6) · Tres quartos das instalacoes nao passam pela ficha, e a conversao da loja finalmente tem numero
 
 - O dono abriu o Play Console e mandou as telas. A metade da leitura que

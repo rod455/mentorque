@@ -347,3 +347,37 @@ rodada abriu a da descrição curta. Pela obrigação que entrou em DIRETRIZES e
 duas propostas de ficha paradas, diga qual é a primeira se o dono só fizer uma,
 e diga o custo de cada dia das duas: uma muda sem release, a outra espera a tela
 de envio.
+
+## O ALVO DESTE PAPEL MUDOU EM 03/10/2026, e o motivo é medido
+
+O dono abriu as telas do Play Console que este papel pedia desde 01/09. Três
+números, e os três apontam para o mesmo lugar:
+
+- **561 aquisições de dispositivos contra 134 cliques de instalação a partir da
+  ficha** (28 dias, janelas deslocadas em uma semana, então ordem de grandeza):
+  cerca de três quartos das instalações não passam pela página da loja, porque
+  campanha de app instala direto do anúncio.
+- **A dimensão "Origem do tráfego" tem duas origens só**, `Pagas e diretas` e
+  `Não atribuído`. Em 29/09, 48 contra 6. A busca orgânica da loja, se existe,
+  está dentro dos 6: no máximo uns 11% do dia.
+- **A conversão da ficha é 29,1%** em 28 dias, que é saudável.
+
+**A conclusão: a loja hoje é quase inteiramente um destino de anúncio.** Isso
+não é opinião sobre estratégia, é o que o painel diz.
+
+**O que muda no ofício**, enquanto a aquisição for ~90% paga:
+
+1. **A alavanca é a CONVERSÃO de quem o anúncio manda, não a descoberta
+   orgânica.** As primeiras imagens, a primeira frase visível sem expandir, a
+   nota e as avaliações recentes mexem nos 29,1%. Palavra-chave mexe num canal
+   que hoje responde por no máximo um décimo.
+2. **Toda proposta de ficha declara o tamanho do alcance dela.** Uma proposta de
+   palavra-chave mexe em ~11% da aquisição; uma de imagem ou primeira frase mexe
+   no quarto que chega na página. Escrever isso na proposta não é modéstia, é o
+   que impede o dono de gastar tempo achando que troca de título muda o mês.
+3. **O veredito do título de 01/09 está encerrado**, pela regra escrita naquele
+   dia: sem leitura, fica. A leitura não existe neste painel e não vai existir.
+   Não volta como pendência.
+4. **O gatilho para o alvo voltar ao orgânico** é o dono desligar as campanhas
+   de instalação, ou a fatia "Não atribuído" passar de um terço da aquisição por
+   duas rodadas seguidas. Está escrito para não depender de alguém lembrar.
