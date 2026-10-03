@@ -154,6 +154,13 @@ export function emailTermineOCadastro(d: ConviteDeCadastro): EmailPronto {
   <p style="margin:0 0 20px">${esc(fim)}</p>
   <p style="margin:0 0 6px">Rodrigo, Mentorque</p>
 </td></tr>
+<tr><td align="center" style="padding:6px 28px 0 28px">
+  <!-- A Biela, igual aos outros e-mails da casa. A imagem vem do site
+       (conferida no ar em 03/10: 200 e image/png), e o alt existe porque
+       muita gente lê com imagem desligada: sem ele fica um retângulo vazio
+       sem explicação. -->
+  <img src="${SITE}/email/biela.png" width="112" alt="Biela, a assistente do Mentorque" style="display:block;border:0;margin:4px auto 0 auto">
+</td></tr>
 <tr><td style="padding:14px 28px 26px 28px">
   <p style="margin:0;color:${SUAVE};font-size:12px">
     ${sair ? `<a href="${esc(sair)}" style="color:${SUAVE}">Não quero mais receber e-mails</a>` : "Para não receber mais e-mails, é só responder este."}

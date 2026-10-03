@@ -76,6 +76,17 @@ console.log("Cadastro: o convite do mês grátis sai uma vez, para quem deve, e 
   );
   conferir("tem um jeito de sair da lista", /não receber mais e-mails/.test(e.texto), e.texto.slice(-200));
 
+  // A BIELA, como nos outros e-mails da casa (pedido do dono, 03/10). Imagem
+  // de e-mail sem `alt` vira retângulo vazio para quem lê com imagem
+  // desligada, que é muita gente no celular com dados móveis.
+  conferir("a imagem da Biela está no e-mail", /email\/biela\.png/.test(e.html), "pedido do dono: igual aos outros");
+  conferir("e ela tem texto alternativo", /biela\.png"[^>]*alt="[^"]{5,}"/.test(e.html), "sem alt, quem le com imagem desligada ve um retangulo vazio");
+  conferir(
+    "a imagem vem do nosso site, não de lugar nenhum",
+    /src="https:\/\/www\.mentorque\.com\.br\/email\/biela\.png"/.test(e.html),
+    "caminho relativo em e-mail nao resolve: o leitor nao sabe qual e o site",
+  );
+
   // UM BOTÃO SÓ. Dois botões grandes dividem o clique entre assinar e baixar, e
   // o que precisa acontecer primeiro é assinar com o cupom.
   const botoes = (e.html.match(/display:block;padding:14px/g) ?? []).length;
