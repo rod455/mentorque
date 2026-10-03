@@ -335,6 +335,43 @@ porque toda avaliação nova passa por aqui. Se o volume de instalação cair de
 forma visível na mesma semana, aí sim a frase espantou gente, e isso aparece no
 Play Console em Aquisição.
 
+### A LINHA DE BASE, LIDA EM 03/10/2026 (e o que ela muda na proposta)
+
+O dono abriu as telas. Os números, todos do Play Console:
+
+| o quê | número | onde foi lido |
+|---|---|---|
+| taxa de conversão da ficha | **29,1%** (28 dias) | Páginas de detalhes do app, tabela da página padrão |
+| a mesma, janela maior | 27,93% (90 dias) | visão geral de Crescimento |
+| visitantes da ficha | 484 (28 dias) / 868 na página padrão | Páginas de detalhes do app |
+| cliques de instalação de usuários únicos | 134 (28 dias) | idem |
+| aquisições de dispositivos | 561 (28 dias) | visão geral de Crescimento |
+| primeiros acessos por dispositivo | 158 (28 dias) | idem |
+| público de instalação em 29/09 | 403 aparelhos, **98,51% Brasil** | Estatísticas, por país |
+
+**A base de comparação para a troca da descrição curta é 29,1%**, e é contra ela
+que os 14 dias depois vão ser lidos. Antes dela existir, a condição de volta
+atrás escrita acima não tinha contra o que medir.
+
+**E UM ACHADO QUE ENCOLHE ESTA PROPOSTA, sem derrubá-la.** 561 aquisições
+contra 134 cliques de instalação a partir da ficha, nas duas janelas de 28 dias
+que o painel oferece (deslocadas em uma semana, então isso é ordem de grandeza e
+não conta exata): **cerca de três quartos das instalações não passam pela
+ficha.** Campanha de app instala direto do anúncio. Então título, descrição
+curta e palavras-chave mexem no quarto que chega na página, e não no todo.
+
+Consequência prática para quem escrever a próxima proposta de ficha: o tamanho
+do efeito possível é um quarto do que a conta ingênua sugeriria, e isso precisa
+estar escrito NA proposta. Não muda o custo (a descrição curta continua mudando
+sem release) nem a direção (economia é a palavra que 4 das 12 avaliações
+repetem), muda a expectativa.
+
+**O QUE AINDA FALTA, e é uma tela só:** a quebra por ORIGEM. Sem ela, a
+condição de volta atrás acima continua sem o seu melhor critério, que é a
+conversão da origem orgânica, e o veredito do título de 01/09 continua sem
+denominador. Em Estatísticas, o relatório abre agrupado por País / região, e a
+dimensão de origem é outra escolha no mesmo seletor.
+
 ### A condição de volta atrás
 
 Se até a rodada de 15/10/2026 aparecer queda clara de instalação sem outra

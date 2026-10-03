@@ -3,6 +3,48 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-03 (noite, 6) · Tres quartos das instalacoes nao passam pela ficha, e a conversao da loja finalmente tem numero
+
+- O dono abriu o Play Console e mandou as telas. A metade da leitura que
+  faltava desde 01/09 existe agora, e ela trouxe um achado que ninguem tinha
+  procurado.
+- **OS NÚMEROS, todos do Play Console**: taxa de conversão da ficha **29,1%** em
+  28 dias (27,93% na janela de 90); 484 visitantes da ficha e **134 cliques de
+  instalação** em 28 dias; **561 aquisições de dispositivos** e **158 primeiros
+  acessos** em 28 dias; e, em Estatísticas, **403 aparelhos com o app instalado
+  em 29/09, 98,51% no Brasil** (os outros são 2 no Irã, 1 no Chile, 1 na
+  Alemanha, ou seja ruído).
+- **O ACHADO: 561 aquisições contra 134 cliques de instalação a partir da
+  ficha.** Cerca de três quartos das instalações NÃO passam pela página da
+  loja, porque campanha de app instala direto do anúncio. As duas janelas de 28
+  dias que o painel oferece estão deslocadas em uma semana, então isto é ordem
+  de grandeza e não conta exata, e está escrito assim em `docs/lojas/ficha.md`.
+- **O QUE ISSO MUDA, e não é pequeno**: título, descrição curta e palavras-chave
+  mexem no quarto que chega na página. Toda proposta de ficha deste papel vinha
+  sendo dimensionada como se mexesse no todo. Não derruba a proposta da
+  descrição curta (continua barata, continua na direção certa), encolhe a
+  expectativa dela, e isso passa a ter que estar escrito NA proposta.
+- **E A SEGUNDA LEITURA, que precisa de cuidado antes de virar achado**: 561
+  aquisições e 158 primeiros acessos na mesma janela. Se as duas medirem os
+  mesmos aparelhos, 72% de quem instala nunca abre, e como o banco tem 139
+  contas em 30 dias, quase todo mundo que ABRE cria conta. A escada ficaria
+  1.870 impressões, 561 instalações, 158 primeiros acessos, 139 contas. NÃO
+  tratei como achado fechado: falta confirmar que "primeiros acessos por
+  dispositivo" cobre o mesmo conjunto de aparelhos das aquisições.
+- **O que isso corrige, se confirmar**: a casa vinha dizendo "uma conta a cada
+  oito instalações", número costurado somando a instalação que o Google conta
+  com a que a Meta conta, que contam a mesma pessoa duas vezes. Esta leitura é
+  de um instrumento só, sobre os mesmos aparelhos, e aponta o gargalo para
+  outro lugar: entre instalar e abrir, não no cadastro.
+- **A LINHA DE BASE DA DESCRIÇÃO CURTA PASSA A EXISTIR**: 29,1%. A condição de
+  volta atrás escrita em 01/10 não tinha contra o que medir até hoje. Gravada
+  em `docs/lojas/ficha.md` junto com o resto.
+- **O QUE AINDA FALTA, e é uma tela**: a quebra por ORIGEM. O relatório de
+  Estatísticas abre agrupado por País / região e a origem é outra escolha no
+  mesmo seletor. Sem ela não há veredito do título de 01/09 nem divisão dos
+  R$ 280,68 entre Google e Meta. Os dois itens do Play Console na lista do dono
+  passam a ser a MESMA tela.
+
 ## 2026-10-03 (noite, 5) · Os dois itens de prazo saem da lista: um resolvido, um recusado, e o recusado NÃO VOLTA
 
 - Decisão do dono em 03/10, nas palavras dele: **"Pode tirar da lista o bolão
