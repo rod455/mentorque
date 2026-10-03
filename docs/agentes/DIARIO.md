@@ -33,6 +33,42 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-03 (noite, 16) · Eu inferi a causa da ausencia, o dono me corrigiu, e a evidencia aponta para outro lugar
+
+- **O ERRO E MEU E E O DA CASA.** Eu vi que `googleadwords_int` nao aparecia no
+  relatorio de parceiros e CONCLUI que a integracao nao estava ligada. O dono
+  respondeu que nao mexeu em nada e mostrou a tela: parceiro **Active**, link ID
+  preenchido, nos dois apps. **Eu inferi causa a partir de ausencia**, que e
+  exatamente o erro que esta casa persegue desde agosto. Zero nao diz por que.
+- **A EVIDENCIA NOVA, do pacote de `google_ads` de hoje**: a campanha
+  `APP | Android | Instalações | BR` (id 24273898063) e `MULTI_CHANNEL`, que e o
+  canal das campanhas de app, esta `ENABLED`, gastou **R$ 151,17** com **484
+  cliques**, 13.383 impressoes e **235 conversoes** em 7 dias. A outra,
+  `Mentorque Lançamento`, e SEARCH e gastou R$ 4,00 com 2 cliques.
+- **ENTAO O GOOGLE ACHA QUE ESTA ENTREGANDO**, e a AppsFlyer atribui zero a ele.
+  A contradicao e real e precisa de causa, nao de palpite.
+- **AS HIPOTESES, e cada uma com o teste que a separa**:
+  1. **link ID repetido entre os dois apps.** A documentacao da AppsFlyer e
+     explicita: Android e iPhone precisam de link IDs SEPARADOS. O print que o
+     dono mandou e do app do iPhone (`id6797291865`) com o ID `15D69FA...`. Se o
+     Android estiver com o MESMO ID, o Google reivindica para um app so. **Teste:
+     abrir a mesma tela no app Android e comparar as duas strings.** E a
+     hipotese de cima porque e a unica que explica zero exato com integracao
+     ativa;
+  2. **link criado em outra conta do Google Ads.** Sao seis contas no seletor, e
+     quem gasta e a `Mentorque` (672-430-8347), conferido no coletor. Teste: no
+     Google Ads, Gerenciador de dados, ver em qual conta esta o vinculo;
+  3. **janela anterior ao vinculo.** Teste: baixar o relatorio de parceiros so
+     dos ultimos 2 dias.
+- **E UMA QUARTA, que explica PARTE e nao o zero**: o Google conta instalacao
+  quando a Play reporta, e a AppsFlyer so ve a instalacao quando o SDK sobe, ou
+  seja no primeiro ABRIR. Com 23% que nunca sobem o SDK e o degrau de instalacao
+  para primeiro acesso que o Play mostrou, e esperado o Google contar bem mais
+  que a AppsFlyer. **Esperado contar mais; nao esperado contar zero.**
+- Registrado antes de qualquer conserto, porque a rodada de Midia vai ter que
+  ler estes dois numeros lado a lado e a diferenca entre "conta mais" e "conta
+  zero" e o que separa limite de instrumento de defeito.
+
 ## 2026-10-03 (noite, 15) · O Google Ads na AppsFlyer nao e app: build novo nao resolve, e o vinculo nao e retroativo
 
 - Pergunta do dono: "voce disse que o Ads nao chega. Precisamos fazer algo ou so
