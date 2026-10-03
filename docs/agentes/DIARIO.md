@@ -3,6 +3,27 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-03 (noite, 3) · As negativas de scanner foram aplicadas, e a prova delas só vem se a busca voltar
+
+- O dono aplicou as negativas de scanner no Google Ads (`scanner`, `obd2`,
+  `bluetooth`, `elm327`) e avisou na conversa. A linha saiu da lista, pela regra
+  do arquivo: concluiu, apaga a linha e escreve o desfecho aqui.
+- **O QUE ESTÁ MEDIDO: nada ainda, e isso precisa estar dito.** O que a casa vê
+  do Google Ads é termo de busca com gasto; a lista de negativas do painel não
+  entra em nenhum coletor. Então o desfecho aqui é RELATO do dono, não medida
+  nossa, e fica marcado como relato.
+- **E A PROVA QUE VIRIA É FRACA POR OUTRO MOTIVO, que não é o relato dele**: a
+  campanha de busca parou de entregar em 24/09 sem ser pausada, e os onze termos
+  de scanner já estavam em R$ 0,00 na rodada de 02/10 por causa disso. Com a
+  campanha parada, R$ 0,00 na semana que vem não distingue "negativa aplicada"
+  de "campanha morta". A prova real é a primeira semana em que a busca voltar a
+  entregar: se os termos de scanner continuarem em zero com a campanha gastando
+  de novo, a negativa está de pé.
+- Fica como pergunta da próxima rodada de Mídia, junto com a parcela de
+  impressões perdida: a busca voltou? Se voltou, os termos de scanner somam
+  quanto?
+- A lista do dono passa de 17 para 16 itens, e o Google Ads de 5 para 4.
+
 ## 2026-10-03 (noite, 2) · Sete vereditos foram escritos no manual de cada papel, porque no diário eles não chegavam
 
 - Pedido do dono: "vamos dar os feedbacks das melhorias em cada agente", depois
