@@ -3,6 +3,29 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-03 (noite, 5) · Os dois itens de prazo saem da lista: um resolvido, um recusado, e o recusado NÃO VOLTA
+
+- Decisão do dono em 03/10, nas palavras dele: **"Pode tirar da lista o bolão
+  (não vou desativar, vamos ignorar sua sugestão) e estou resolvendo a parte da
+  conta de pagamentos, não precisa me avisar. Coloque resolvido."**
+- **Verificação da forma de pagamento do Play Console: RESOLVIDO por ele.** Sai
+  da lista. Não há como esta casa conferir: o `play_console` do retrato traz só
+  ANR e crash, e o aviso da página inicial não está em nenhum coletor. Fica como
+  relato dele, que é a mesma marca que as negativas de scanner levaram hoje.
+- **Pagamento externo do app do bolão: RECUSADO, e o assunto está encerrado.**
+  O risco levantado em 03/10 continua escrito aqui (compra de conteúdo digital
+  consumido dentro do app tem que passar pelo faturamento do Play, a punição é
+  na CONTA e não no app, e a conta está sob revisão por causa da verificação).
+  Ele leu, decidiu não agir, e a decisão é dele: é a conta dele, é o app dele e
+  é o risco dele.
+- **NÃO VOLTA, e isto é instrução para os papéis.** Vale a regra que o caderno
+  do CRO já tinha e que serve para todo mundo: se o dono disser não, sai do
+  caderno e não volta. Nenhuma rodada de ASO, de Segurança ou do Diretor levanta
+  o pagamento externo do bolão de novo. Se o mundo mudar (notificação do Google
+  sobre a conta, aviso de violação, o app voltando a vender), aí é fato novo e
+  entra como fato novo, não como a mesma recomendação repetida.
+- A lista do dono vai de 15 para 13 itens, e o bloco COM PRAZO fica vazio.
+
 ## 2026-10-03 (noite, 4) · O cupom tem as 25 vagas inteiras, e o `invoice.paid` que o dono ia marcar comprava menos do que o item prometia
 
 - Pedido do dono: detalhar os dois itens do Stripe e fechar. Ele mandou o print
