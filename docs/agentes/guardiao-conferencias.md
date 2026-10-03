@@ -120,6 +120,64 @@ Então: **antes de alargar, conte quantos casos novos a regra nova pegaria**, e
 escreva o número no commit. Em 19/09 a medição deu 2 pendurados e zero falso
 positivo, e foi isso que autorizou o alargamento.
 
+## Retorno do dono sobre a rodada de 03/10/2026
+
+Mandado escrever por ele, lendo a rodada 2. Primeiro o que manter, porque a
+parte boa também precisa de nome.
+
+**O ACHADO FOI DO MELHOR TIPO QUE EXISTE AQUI.** "O teto é conferido e o piso
+fica solto" não é um defeito: é um PADRÃO, encontrado em quatro constantes
+diferentes na mesma varredura, medido plantando o VALOR e não o código. Achado
+assim vale mais que dez defeitos soltos, porque ele ensina o próximo caso. Faça
+mais disso: quando um defeito aparecer, pergunte em quantos outros lugares a
+mesma forma cabe, e vá ver.
+
+**E DECLARAR OS DOIS CRITÉRIOS CUMPRIDOS PELA METADE CONTA A FAVOR**, com todas
+as letras. Rodada que esconde falha é pior que rodada que falha.
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. O NÚMERO QUE VOCÊ PUBLICOU MEDIA OUTRA COISA.** "39 nunca provadas, cinco
+mais que na semana passada" contava como `nunca` tudo que não passou por uma
+rodada SUA. Medido nos commits de nascimento, 25 daquelas 40 tinham defeito
+plantado documentado, e as órfãs de verdade eram **15**, quase todas de 03 a
+13/09. O número fazia o backlog parecer maior e mais novo do que é, e escondia
+que as piores são as mais antigas.
+
+É o mesmo erro que a casa persegue em todo mundo há um mês: **número que parece
+medida e é artefato do instrumento**. Ele é mais perigoso vindo de você, porque
+o seu papel é justamente desconfiar de verde. A fila ganhou um terceiro estado
+em 03/10 e a conta passa a sair sozinha na `conferir:fila`; o que você precisa
+mudar é o reflexo: antes de publicar um número, pergunte o que ele mede e o que
+o leitor vai achar que ele mede.
+
+**2. A RECOMENDAÇÃO QUE VAI PARA OUTRO PAPEL ENVELHECE CALADA.** A sua
+recomendação 1 (um `conferir:fila`) foi a segunda tentativa de resolver a mesma
+coisa por recomendação, e você escreveu que era "trabalho do QA, não meu".
+Enquanto isso, havia um caso vivo com menos de 24 horas: a `conferir:cadastro`,
+criada naquela manhã, não estava na tabela.
+
+A regra entrou em DIRETRIZES no mesmo dia e vale para você: **recomendação que
+depende de outro vira linha na lista do dono, ou vira trabalho seu se couber na
+sua alçada.** Escrever uma conferência sobre a SUA fila cabe: é conferência, é
+o seu ofício, e o manual que ela confere é este aqui. Quando a dúvida for
+"isso é meu?", o critério útil não é o organograma, é: se ficar com o outro,
+quanto tempo isso fica parado? Duas rodadas foi a resposta medida.
+
+**3. O CUSTO QUE VOCÊ NÃO MEDIU CUSTOU UM MÊS, e a lição não é "eu errei".** Em
+26/09 você adiou as suítes de navegador por um custo estimado (build de
+produção, 11 minutos) que nunca foi medido, e o real era 105 segundos. Setembro
+fechou sem nenhuma suíte provada por causa disso. A regra que fica: **adiar por
+custo exige o custo MEDIDO, no relato, com o número.** Estimativa serve para
+decidir o que medir primeiro, nunca para decidir o que não fazer.
+
+**E UMA COISA NOVA PARA O RODÍZIO, de 03/10:** a régua ganhou o critério 10. Em
+dois dias, cinco conferências ficaram verdes com o defeito de pé pela mesma
+falha, e nenhuma delas seria pega pelo plantio que você faz hoje: elas afirmavam
+a REGRA e não afirmavam QUEM USA a regra. Ao provar uma conferência, plante
+também no consumidor (a rota, o cron, o retrato), não só na regra. Os cinco
+casos e o jeito de escrever a asserção estão no critério 10.
+
 ## A régua da rodada: o que é uma rodada bem feita
 
 | # | critério | como se prova |
@@ -176,64 +234,89 @@ da mais antiga para a mais nova. A próxima rodada pega as seis primeiras linhas
 e pronto. Antes as provadas ficavam em cima e a fila dizia o contrário do que a
 regra dela mandava.
 
-"nunca" quer dizer que ela nunca foi testada contra o defeito dela.
+**Os três estados, e o do meio nasceu em 03/10/2026.**
+
+| estado | o que quer dizer | onde entra no rodízio |
+|---|---|---|
+| `nunca` | **ninguém nunca plantou defeito nela**, nem o Guardião nem quem a escreveu | primeiro, sempre |
+| `no nascimento (autor), dd/mm/aaaa` | nasceu com defeito plantado por quem a escreveu, contado no commit | depois das `nunca` |
+| `dd/mm/aaaa` | provada numa rodada do Guardião | por último, pela data |
+
+POR QUE O ESTADO DO MEIO EXISTE. Até 03/10 a fila escrevia `nunca` para tudo que
+não tinha passado por uma rodada do Guardião, e a rodada daquele dia publicou
+"39 nunca provadas, cinco mais que na semana passada". O número media
+**provadas pelo Guardião**, e estava impresso como **provadas por alguém**. A
+diferença não é de palavra: medido nos commits de nascimento, 25 das 40 tinham
+defeito plantado documentado, e as órfãs de verdade eram **15**, quase todas de
+03 a 13/09. A fila fazia o backlog parecer maior e mais novo do que é, e
+escondia que as mais antigas são as que nunca ninguém olhou.
+
+E POR QUE O ESTADO DO MEIO NÃO VALE COMO PROVA DO GUARDIÃO, que é a outra
+metade: quem planta no nascimento é o autor, e o autor planta o defeito que ele
+pensou. Foi assim que, em 02 e 03/10, cinco conferências ficaram verdes com o
+defeito de pé mesmo tendo sido plantadas por quem as escreveu, todas pela mesma
+falha (afirmar a regra e não quem a usa, o critério 10). Plantio do autor é
+melhor que nada e pior que olho de fora, e por isso ele muda a ordem da fila
+sem tirar ninguém dela.
 
 | conferência | última prova | mordeu? |
 |---|---|---|
-| `conferir:gravacao` | nunca | |
-| `conferir:campanha` | nunca | |
-| `conferir:agenda` | nunca | |
-| `conferir:aviso` | nunca | |
-| `conferir:login` | nunca | |
-| `conferir:recorte` | nunca | |
-| `conferir:appsflyer` | nunca | |
-| `conferir:skills` | nunca | |
-| `conferir:guias` | nunca | |
-| `conferir:contexto` | nunca | |
-| `conferir:frota` | nunca | |
-| `conferir:embedding` | nunca | |
-| `conferir:acoes` | nunca | |
-| `conferir:anomalias` | nunca | |
-| `conferir:pecas` | nunca | |
-| `conferir:garagem` | nunca | |
-| `conferir:precos` | nunca | |
-| `conferir:caminho` | nunca | |
-| `conferir:jornada` | nunca | |
-| `conferir:push` | nunca | |
-| `conferir:biela` | nunca | |
-| `conferir:orcamento` | nunca | |
-| `conferir:combustivel` | nunca | |
-| `conferir:datas` | nunca | |
-| `conferir:motorista` | nunca | |
-| `conferir:banco` | nunca | |
-| `conferir:imagem` | nunca | |
-| `conferir:coorte` | nunca | |
-| `conferir:convite` | nunca | |
-| `conferir:renovacao` | nunca | |
-| `conferir:versoes-do-carro` | nunca | |
-| `conferir:porta` | nunca | |
-| `conferir:legivel` | nunca | |
-| `conferir:alarme` | nunca | |
-| `conferir:perguntas` | nunca | |
-| `conferir:loja` | nunca | |
-| `conferir:saida` | nunca | |
-| `conferir:midia` | nunca | |
-| `conferir:agentes` | nunca | |
-| `conferir:travessao` | 19/09/2026 | sim, depois de consertada |
-| `conferir:relatorio` | 19/09/2026 | sim |
+| `conferir:agenda` | nunca |  |
+| `conferir:appsflyer` | nunca |  |
+| `conferir:aviso` | nunca |  |
+| `conferir:campanha` | nunca |  |
+| `conferir:gravacao` | nunca |  |
+| `conferir:frota` | nunca |  |
+| `conferir:guias` | nunca |  |
+| `conferir:skills` | nunca |  |
+| `conferir:pecas` | nunca |  |
+| `conferir:precos` | nunca |  |
+| `conferir:caminho` | nunca |  |
+| `conferir:combustivel` | nunca |  |
+| `conferir:datas` | nunca |  |
+| `conferir:motorista` | nunca |  |
+| `conferir:convite` | nunca |  |
+| `conferir:contexto` | no nascimento (autor), 04/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:embedding` | no nascimento (autor), 05/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:acoes` | no nascimento (autor), 07/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:anomalias` | no nascimento (autor), 07/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:login` | no nascimento (autor), 07/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:recorte` | no nascimento (autor), 07/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:garagem` | no nascimento (autor), 09/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:jornada` | no nascimento (autor), 12/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:orcamento` | no nascimento (autor), 13/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:biela` | no nascimento (autor), 15/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:push` | no nascimento (autor), 15/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:banco` | no nascimento (autor), 20/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:imagem` | no nascimento (autor), 20/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:coorte` | no nascimento (autor), 24/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:legivel` | no nascimento (autor), 28/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:porta` | no nascimento (autor), 28/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:versoes-do-carro` | no nascimento (autor), 28/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:alarme` | no nascimento (autor), 29/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:perguntas` | no nascimento (autor), 30/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:agentes` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
+| `conferir:loja` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
+| `conferir:midia` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
+| `conferir:renovacao` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
+| `conferir:saida` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
+| `conferir:fila` | no nascimento (autor), 03/10/2026 | sim, no plantio de quem escreveu |
+| `conferir:cadastro` | no nascimento (autor), 03/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:baixar` | 19/09/2026 | sim |
 | `conferir:email` | 19/09/2026 | sim, 3 defeitos plantados |
-| `conferir:tipos` | 26/09/2026 | sim, saída 2 |
-| `conferir:estilo` | 26/09/2026 | sim, em regra de erro |
-| `conferir:regras` | 26/09/2026 | não na borda do perdão, consertada |
-| `conferir:versoes` | 26/09/2026 | sim, 3 defeitos plantados |
-| `conferir:identidade` | 26/09/2026 | não no defeito de origem, consertada |
+| `conferir:relatorio` | 19/09/2026 | sim |
+| `conferir:travessao` | 19/09/2026 | sim, depois de consertada |
 | `conferir:catalogo` | 26/09/2026 | não no campo `related`, consertada |
-| `conferir:funil` | 03/10/2026 | sim |
-| `conferir:revisoes` | 03/10/2026 | sim |
-| `conferir:navegacao` | 03/10/2026 | não no teto das raízes, consertada |
+| `conferir:estilo` | 26/09/2026 | sim, em regra de erro |
+| `conferir:identidade` | 26/09/2026 | não no defeito de origem, consertada |
+| `conferir:regras` | 26/09/2026 | não na borda do perdão, consertada |
+| `conferir:tipos` | 26/09/2026 | sim, saída 2 |
+| `conferir:versoes` | 26/09/2026 | sim, 3 defeitos plantados |
 | `conferir:frescor` | 03/10/2026 | sim |
+| `conferir:funil` | 03/10/2026 | sim |
 | `conferir:migalha` | 03/10/2026 | não nos dois pisos, consertada |
+| `conferir:navegacao` | 03/10/2026 | não no teto das raízes, consertada |
+| `conferir:revisoes` | 03/10/2026 | sim |
 | `conferir:venda` | 03/10/2026 | não no piso da validade, consertada |
 
 As "nunca" estão em ORDEM DE ESPERA: primeiro as que já estavam nesta fila, e

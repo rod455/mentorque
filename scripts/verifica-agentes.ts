@@ -205,9 +205,46 @@ const diretrizes = ler("docs/agentes/DIRETRIZES.md");
     "plantar so na regra e exatamente o defeito que a licao descreve",
   );
   conferir(
+    "a skill manda conferir verde ANTES e DEPOIS do plantio",
+    /ja estava vermelha/.test(skill) && /ficou vermelha depois/.test(skill),
+    "sem isso, MORDEU pode ser so a falha antiga respondendo ao defeito novo (03/10, tres vezes no mesmo laco)",
+  );
+  conferir(
     "o título da seção conta certo quantos jeitos existem",
-    /## Os cinco jeitos de passar verde/.test(skill),
+    /## Os seis jeitos de passar verde/.test(skill),
     "a skill tinha quatro e ganhou o quinto: titulo que nao bate com o conteudo e o primeiro sinal de doc apodrecendo",
+  );
+}
+
+
+// ── 7. O RETORNO DO DONO AO GUARDIÃO NÃO PODE SUMIR ────────────────────────
+//
+// Ele mandou escrever o retorno da rodada de 03/10 no manual, que é onde o
+// agente lê antes de cada rodada. Retorno que mora só no diário ou no chat é
+// retorno que não chega: é a mesma regra que DIRETRIZES ganhou no mesmo dia
+// sobre recomendação que depende de outro.
+{
+  const manualDoGuardiao = ler("docs/agentes/guardiao-conferencias.md");
+  conferir("o retorno do dono está no manual do Guardião", /## Retorno do dono sobre a rodada/.test(manualDoGuardiao));
+
+  // SÓ A SEÇÃO DO RETORNO, e não o manual inteiro. Duas das frases cobradas
+  // aqui ("39 nunca provadas" e "105 segundos") existem também nos
+  // Aprendizados, então procurar no arquivo todo deixava apagar o caso de
+  // dentro do retorno e ficar verde. Plantado em 03/10, passou verde, e é o
+  // critério 10 aplicado ao próprio texto: afirmar o lugar que decide.
+  const secao = (manualDoGuardiao.split(/^## Retorno do dono sobre a rodada[^\n]*$/m)[1] ?? "")
+    .split(/^## /m)[0]!
+    .replace(/\s+/g, " ");
+  conferir("a seção do retorno tem conteúdo", secao.length > 400, `${secao.length} caracteres`);
+  conferir(
+    "e cobra as três coisas, com o caso de cada uma DENTRO dela",
+    /39 nunca provadas/.test(secao) && /envelhece calada/i.test(secao) && /105 segundos/.test(secao),
+    "retorno sem o caso que o gerou e opiniao, e opiniao nao muda rodada nenhuma",
+  );
+  conferir(
+    "e diz o que MANTER, não só o que consertar",
+    /do melhor tipo que existe aqui/i.test(secao),
+    "retorno so com o que esta errado ensina a esconder, nao a melhorar",
   );
 }
 

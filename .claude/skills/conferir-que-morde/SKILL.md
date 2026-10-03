@@ -22,7 +22,7 @@ Vale plantar mais de um formato do mesmo defeito. Ao consertar a espera pela
 sessão no link de venda, plantei dois: tirar a espera, e esperar **depois** de
 já ter decidido. A segunda é a que alguém faria sem querer numa refatoração.
 
-## Os cinco jeitos de passar verde sem conferir nada
+## Os seis jeitos de passar verde sem conferir nada
 
 ### 1. A exceção que cega
 
@@ -99,6 +99,29 @@ com os argumentos que decidem é uso:
 
 É a irmã da regra da semana: **conserto na fonte que não muda o consumidor não
 é conserto**, e conferência que não olha o consumidor não é conferência.
+
+
+### 6. O plantio que não vale porque ela já estava vermelha
+
+Não é jeito de a CONFERÊNCIA passar verde: é jeito de o PLANTIO mentir que ela
+morde. Aconteceu em 03/10, três vezes no mesmo laço.
+
+Eu plantei defeito num manual, o laço imprimiu MORDEU três vezes, e a
+conferência estava reprovando ANTES de qualquer plantio, por uma asserção minha
+com caixa errada (`/envelhece calada/` contra um texto em maiúsculas). Cada
+plantio recebia a falha antiga como se fosse resposta ao defeito novo.
+
+**O laço de plantio tem três passos, não um:**
+
+```js
+if (rodar() !== 0) throw new Error("ja estava vermelha: plantio nao vale nada");
+// planta, roda, desfaz pela copia
+if (rodar() !== 0) throw new Error("ficou vermelha depois: alguma copia nao voltou");
+```
+
+Verde ANTES prova que a falha veio do defeito. Verde DEPOIS prova que a cópia
+voltou inteira. Sem os dois, "MORDEU" é só "estava vermelha", e é o tipo de
+engano que faz confiar numa conferência que não olha nada.
 
 ## O limite que nenhuma conferência daqui atravessa
 
