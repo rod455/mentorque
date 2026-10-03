@@ -33,6 +33,50 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-03 (noite, 14) · 23% dos Android nunca sobem o SDK, e a casa nao sabia por que porque o catch jogava fora
+
+- O dono ligou a credencial e perguntou duas coisas: se a visao dos downloads
+  esta completa, e se o codigo do app precisa melhorar. As duas respostas sairam
+  da mesma medicao.
+- **O NUMERO, medido agora no banco: 407 aparelhos Android em 21 dias, 313
+  subiram o SDK, 92 NUNCA subiram. 23,1%.** Em 22/09 eram 25%, com a 2.7.0. Por
+  versao, 2.9.0 esta em 23% e 2.8.0 em 14%. **Duas versoes passaram e o numero
+  nao andou.**
+- **E UM FATO QUE MUDA A HIPOTESE: `sem-plugin` e ZERO.** O plugin esta no
+  binario em todos os aparelhos. O que falha e o `initSDK`, de verdade, e nao a
+  falta da biblioteca, que era o problema da 2.6.
+- **POR QUE NINGUEM CONSERTOU EM DUAS VERSOES: o `catch` jogava o erro fora.**
+  A casa sabia que 23% falhavam e nao tinha como saber por que, porque o
+  diagnostico era descartado na linha seguinte a da falha. Nao ha o que
+  investigar quando o instrumento nao guarda a causa.
+- **DOIS CONSERTOS, e eles sao pequenos**:
+  1. **O motivo viaja.** `motivoDaFalha` virou regra pura em
+     `lib/app/motivoDaFalha.ts` (sem import nenhum, para a conferencia
+     exercitar de verdade) e vira um slug `erro:<causa>` que cabe nos 32
+     caracteres que a rota do funil aceita em `origem`. Nao e classificacao
+     fina: e o bastante para a proxima rodada ver a DISTRIBUICAO e aí sim
+     classificar com dado na mao.
+  2. **Tres tentativas na mesma abertura**, com espera crescente. O desenho
+     antigo tentava uma vez e deixava a proxima abertura tentar de novo, so que
+     o aparelho medio abre 1,5 vez (medido pelo QA em 30/09): na pratica era
+     uma tentativa na vida do aparelho.
+- **E UM DETALHE QUE EVITA MEDIR A COISA ERRADA**: a falha so e registrada
+  DEPOIS de todas as tentativas. Gravar a falha da primeira faria o aparelho que
+  deu certo na terceira contar como falha, e a conta de 23% passaria a medir
+  "tropecou" em vez de "nao subiu".
+- **NOVE DEFEITOS PLANTADOS, NOVE MORDIDAS**, com verde antes e depois.
+- **ISTO SO CHEGA AO USUARIO NUM BUILD NOVO**, e foi conferido no fonte antes de
+  ser dito: `capacitor.config.ts` NAO tem `server.url`, o app roda inteiro de
+  dentro do binario. Entao este conserto entra na 3.0 e nao vai ao ar hoje. A
+  regra da casa manda conferir isso antes de afirmar que algo precisa de build,
+  e desta vez precisa mesmo.
+- **E A RESPOSTA SOBRE A VISAO COMPLETA E NAO**, com tres buracos nomeados: o
+  Google Ads nao ligado no console da AppsFlyer (clique, ja na lista), os 23%
+  que nao sobem o SDK (build), e o iPhone, que por decisao de 29/08 nao pede ATT
+  e portanto so tem SKAdNetwork agregado, sem instalacao por campanha. O
+  terceiro nao e defeito: e escolha registrada, e o preco dela e nao saber qual
+  campanha trouxe iPhone.
+
 ## 2026-10-03 (noite, 13) · O coletor da AppsFlyer existe, e a leitura do CSV ficou onde da para conferir
 
 - O dono gerou o token da Pull API e guardou no n8n como credencial Bearer

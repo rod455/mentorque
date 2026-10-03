@@ -18,6 +18,7 @@
 //
 // Rode com: npm run conferir:midia
 import { AVISO_GOOGLE, colunas, leParceiros, montaPacote, numero } from "../lib/appsflyer.ts";
+import { motivoDaFalha } from "../lib/app/motivoDaFalha.ts";
 import {
   DIAS_DA_PONTA,
   FONTES_DE_GASTO,
@@ -304,6 +305,67 @@ console.log("Mídia: a frase do gasto esconde campanha que parou de entregar?");
     "e o teto de tamanho mede o pacote, nao o CSV",
     /JSON\.stringify\(pacote\)\.length > MAX_DADOS/.test(rota),
     "medir o CSV faria o relatorio crescer ate a rota recusar uma coleta boa",
+  );
+}
+
+// ── A SUBIDA DO SDK DA APPSFLYER, NO APARELHO (03/10/2026) ─────────────────
+//
+// POR QUE ISTO EXISTE. Todo numero que a AppsFlyer entrega depende de o SDK ter
+// subido no aparelho, e MEDIDO em 03/10 ele nao sobe em 23,1% dos Android (94
+// de 407 em 21 dias). Em 22/09 eram 25%: duas versoes passaram sem mudar nada,
+// porque o `catch` jogava o motivo fora e ninguem tinha o que investigar.
+//
+// O QUE ELA NAO ALCANCA: se o SDK sobe de verdade no aparelho. Isso e aparelho,
+// e a prova e a proporcao de `origem = ok` cair depois do proximo build. Aqui
+// se prova que o motivo VIAJA e que ele cabe na coluna.
+{
+  console.log("AppsFlyer no aparelho: a falha diz por que falhou?");
+
+  const fonte = readFileSync(new URL("../lib/app/atribuicao.ts", import.meta.url), "utf8");
+
+  // O MOTIVO CABE NA COLUNA. A rota do funil corta `origem` em 32; um motivo
+  // mais longo chegaria cortado ao meio e dois erros diferentes virariam o
+  // mesmo valor no banco, que e agrupar errado com cara de agrupar certo.
+  const longo = motivoDaFalha(new Error("TypeError: Cannot read properties of undefined (reading 'initSDK') at AppsFlyerPlugin"));
+  conferir("o motivo cabe nos 32 da coluna origem", longo.length <= 32, `${longo} (${longo.length})`);
+  conferir("e comeca com erro:", longo.startsWith("erro:"), longo);
+  conferir("e o slug nao tem espaco nem acento", /^erro:[a-z0-9-]+$/.test(longo), longo);
+  conferir("erro sem mensagem nao vira string vazia", motivoDaFalha(undefined) === "erro:sem-mensagem", motivoDaFalha(undefined));
+  conferir("e dois erros diferentes dao motivos diferentes",
+    motivoDaFalha(new Error("network")) !== motivoDaFalha(new Error("timeout")),
+    `${motivoDaFalha(new Error("network"))} vs ${motivoDaFalha(new Error("timeout"))}`);
+
+  // A MARCA NO APARELHO AGRUPA POR FAMILIA. Se a chave fosse o texto inteiro,
+  // um aparelho que falha com duas mensagens gravaria duas linhas, e o custo
+  // passaria a crescer com a variedade de erro em vez de com o numero de
+  // aparelhos, que e o oposto do que a marca existe para garantir.
+  conferir(
+    "a marca no aparelho usa a familia do desfecho, nao a mensagem",
+    /desfecho\.split\(":"\)\[0\]/.test(fonte),
+    "sem isso, um aparelho com dois erros diferentes grava duas linhas",
+  );
+
+  // TENTA MAIS DE UMA VEZ NA MESMA ABERTURA. O aparelho medio abre 1,5 vez, e o
+  // desenho antigo tentava uma vez por abertura: na pratica, uma na vida.
+  conferir("tenta mais de uma vez", /const TENTATIVAS = [2-9]/.test(fonte), "uma tentativa por abertura e uma tentativa na vida do aparelho");
+  conferir("e espera entre as tentativas", /ESPERA_BASE_MS/.test(fonte) && /await espera\(/.test(fonte));
+  // E SO GRAVA O DESFECHO FINAL. Registrar a falha da primeira tentativa faria
+  // o aparelho que deu certo na terceira aparecer como falha, e a conta de 23%
+  // passaria a medir "tropecou" em vez de "nao subiu".
+  conferir(
+    "e so registra a falha depois de todas as tentativas",
+    /for \(let tentativa = 1; tentativa <= TENTATIVAS/.test(fonte) && /ultimo = motivoDaFalha\(e\)/.test(fonte),
+    "gravar a falha dentro do laco faz quem deu certo na terceira contar como falha",
+  );
+  conferir(
+    "e o sucesso sai do laco na hora",
+    /registrar\("ok"\);\s*\n\s*return;/.test(fonte),
+    "sem o return, o laco tentaria de novo depois de ter dado certo",
+  );
+  conferir(
+    "e o `iniciado` volta a falso para a proxima abertura tentar",
+    /iniciado = false;\s*\n\s*registrar\(ultimo\);/.test(fonte),
+    "sem isso o aparelho que falhou nunca mais tenta",
   );
 }
 

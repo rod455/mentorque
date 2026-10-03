@@ -25,6 +25,7 @@
 import { APPLE_APP_ID } from "@/lib/stores";
 import { isNativeApp, nativePlatform } from "./wrapper";
 import { funil } from "./funil";
+import { motivoDaFalha } from "./motivoDaFalha";
 
 const DEV_KEY = "BdcX8hssR4U7ifDf7reF7n";
 
@@ -51,6 +52,28 @@ async function carregar(): Promise<Caixa | null> {
 const MARCA = "mq-atrib";
 
 /**
+ * Quantas vezes tentar subir o SDK na MESMA abertura, e por que mais de uma.
+ *
+ * MEDIDO EM 03/10/2026: 23,1% dos aparelhos Android (94 de 407, janela de 21
+ * dias) NUNCA subiram o SDK. Em 22/09 eram 25%, então duas versões passaram sem
+ * mudar nada. Nenhum caso foi `sem-plugin`, ou seja o plugin ESTÁ no binário em
+ * todos: o que falha é o `initSDK`, e falha de verdade.
+ *
+ * O desenho antigo tentava UMA vez por abertura e deixava a próxima abertura
+ * tentar de novo. O problema é que o aparelho médio abre 1,5 vez (medido pelo
+ * QA em 30/09), então "a próxima abertura" quase nunca chega: na prática era
+ * uma tentativa na vida do aparelho. Três tentativas com espera crescente
+ * custam uns 7 segundos de trabalho de fundo, silencioso, e cobrem a falha
+ * transitória, que é a hipótese mais provável para algo que falha em um quinto
+ * dos aparelhos e funciona nos outros quatro quintos.
+ */
+const TENTATIVAS = 3;
+const ESPERA_BASE_MS = 2500;
+
+const espera = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
+
+/**
  * O desfecho da subida do SDK, gravado no NOSSO funil.
  *
  * POR QUE ISSO EXISTE (29/08): silêncio por contrato é a decisão certa para o
@@ -64,9 +87,14 @@ const MARCA = "mq-atrib";
  * máximo uma linha por aparelho por desfecho. Um aparelho que falha e depois
  * dá certo grava as duas, o que é exatamente o sinal de falha transitória.
  */
-function registrar(desfecho: "ok" | "sem-plugin" | "erro"): void {
+function registrar(desfecho: string): void {
   try {
-    const k = `${MARCA}-${desfecho}`;
+    // A CHAVE É A FAMÍLIA, não o texto inteiro: `erro:timeout` e `erro:rede`
+    // no mesmo aparelho são a mesma notícia ("este aparelho não sobe"), e
+    // guardar uma linha por mensagem faria o custo crescer com a variedade de
+    // erro em vez de com o número de aparelhos, que é o oposto do que esta
+    // marca foi feita para garantir.
+    const k = `${MARCA}-${desfecho.split(":")[0]}`;
     if (window.localStorage.getItem(k)) return;
     funil("atribuicao", { origem: desfecho });
     window.localStorage.setItem(k, "1");
@@ -92,13 +120,24 @@ export async function iniciarAtribuicao(): Promise<void> {
     return;
   }
   iniciado = true;
-  try {
-    // appID é só do iPhone (o id numérico da App Store); o Android ignora.
-    await c.plugin.initSDK({ devKey: DEV_KEY, appID: APPLE_APP_ID, isDebug: false });
-    registrar("ok");
-  } catch {
-    // Sem rede ou SDK indisponível: a próxima abertura tenta de novo.
-    iniciado = false;
-    registrar("erro");
+  let ultimo = "erro:sem-mensagem";
+  for (let tentativa = 1; tentativa <= TENTATIVAS; tentativa++) {
+    try {
+      // appID é só do iPhone (o id numérico da App Store); o Android ignora.
+      await c.plugin.initSDK({ devKey: DEV_KEY, appID: APPLE_APP_ID, isDebug: false });
+      registrar("ok");
+      return;
+    } catch (e) {
+      // O MOTIVO SÓ É GRAVADO NO FIM, e isso é de propósito: registrar a falha
+      // da primeira tentativa faria o aparelho que deu certo na terceira
+      // aparecer como falha no número, e aí a conta de 23% mediria "tropeçou"
+      // em vez de "não subiu". Uma linha por aparelho, com o desfecho final.
+      ultimo = motivoDaFalha(e);
+      if (tentativa < TENTATIVAS) await espera(ESPERA_BASE_MS * tentativa);
+    }
   }
+  // Sem rede ou SDK indisponível depois de todas: a próxima abertura tenta de
+  // novo, e agora o diagnóstico viaja junto.
+  iniciado = false;
+  registrar(ultimo);
 }
