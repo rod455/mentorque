@@ -55,7 +55,16 @@ dizer se está bom, contra um critério escrito.**
 veredito contra a seção "A régua da rodada" do manual daquele papel. Não é
 resenha: é dizer quais critérios a rodada cumpriu, qual falhou, e se o próprio
 agente já tinha declarado a falha (declarar conta a favor, esconder conta
-contra). O veredito vai no DIARIO, em uma linha por papel.
+contra).
+
+**ONDE O VEREDITO É ESCRITO (03/10/2026, e isto mudou).** Ele vai no MANUAL
+daquele papel, em seção datada `## Retorno do dono sobre a rodada de dd/mm/aaaa`,
+e o DIARIO leva uma linha por papel com o resumo. Até 03/10 o veredito ia só
+para o diário, e o resultado foi medido: os seis vereditos de 28/09 não estavam
+em nenhum dos seis manuais, então nenhum agente os leu antes da rodada seguinte.
+O manual é o que a rodada abre lendo; o diário é o que o leitor de depois lê. A
+`npm run conferir:agentes` reprova quando uma rodada do diário fica mais de dez
+dias sem veredito no manual dela, e isso vale como cobrança sobre este papel.
 
 **E, TODA SEGUNDA, O CRUZAMENTO DA SEMANA (02/10/2026).** Veredito por rodada
 não enxerga o que é da casa. Na semana de 29/09 a 02/10, três das quatro
@@ -483,3 +492,64 @@ credibilidade do resto, que nesta rodada estava certo.
   retrato, Google Ads, Meta, Vercel e git, mas o git entrou só como contagem de
   mudanças; o CONTEÚDO dos commits da janela não foi lido, e foi ali que
   estavam quatro correções.
+
+## Retorno do dono sobre a rodada de 28/09/2026
+
+Mandado escrever por ele em 03/10, junto com os dos outros seis papéis, depois
+de ele perguntar se a casa havia dado retorno a todo mundo esta semana. A
+resposta medida era uma rodada de oito. A sua vem primeiro porque metade do que
+está aqui é trabalho seu. O veredito é sobre o REGISTRO no diário e sobre o que
+foi medido desde então, que é o mesmo limite que você declara nas suas rodadas.
+
+Primeiro o que manter.
+
+**VOCÊ DECLAROU DUAS FALHAS SUAS NA MESMA RODADA, e as duas doíam.** O
+direcionamento de 21/09 ficou uma semana sem virar arquivo porque "a conversa
+acabou antes", e você escreveu isso junto com a regra que nasce dele: promessa
+feita em conversa tem que virar arquivo na mesma rodada. E a correção do zero do
+`iniciou_checkout` veio do QA contra o que você havia publicado, com o número
+que te desmente no corpo (85% do denominador vem de onde o numerador não pode
+existir). Chefe que registra ter sido corrigido pelo time é o que faz o resto do
+time registrar também.
+
+**E O PLACAR COM DESFECHO, NÃO COM LEMBRANÇA.** "ANDOU PARA TRÁS, o gasto subiu
+33%" é a frase mais útil do relatório, porque ela transforma prioridade em
+dívida com tamanho.
+
+Agora o que precisa melhorar, em três pontos, e o primeiro é o maior da semana.
+
+**1. OS SEIS VEREDITOS QUE VOCÊ ESCREVEU NÃO CHEGARAM A NENHUM DOS SEIS.**
+Medido em 03/10: nenhum dos papéis julgados em 28/09 tinha aquele veredito no
+manual dele. Estavam todos no diário, que é lugar onde se explica, não lugar
+onde se cobra. É a frase do ASO aplicada a você, e ela é dele sobre ele mesmo:
+**a régua mede o que eu entrego, não se o que entreguei chegou a acontecer.**
+Seis vereditos corretos, zero mudança de comportamento garantida, porque o
+agente abre a rodada lendo o manual.
+
+A partir de agora o veredito de cada rodada é escrito NO MANUAL DO PAPEL, em
+seção datada, e o diário carrega o resumo. O manual é o que a rodada seguinte
+lê; o diário é o que o leitor de depois lê. A `conferir:agentes` passou a
+reprovar quando uma rodada fica mais de dez dias sem veredito no manual dela,
+então isso deixou de depender de alguém lembrar.
+
+**2. O CRUZAMENTO DA SEMANA NASCEU DE UMA LEITURA QUE NÃO FOI A SUA.** Em 02/10
+o dono pediu a leitura das rodadas de dois dias e ela achou o mesmo TIPO de erro
+em três papéis (QA, Mídia e CRO): número que parece medida e é artefato do nosso
+instrumento. Nenhum veredito individual enxergaria, porque o cruzamento não está
+dentro de nenhuma rodada, está entre elas. A seção entrou no seu manual em 02/10
+e a rodada de 05/10 é a primeira que a deve.
+
+E há um limite seu que o cruzamento cobra: veredito dado só sobre o registro no
+diário não alcança número publicado só no artifact, e os três erros daquele tipo
+eram números. **Na leitura profunda do mês, abra o artifact das rodadas cujo
+número central decide uma prioridade sua.** Não todos, e não toda semana: os que
+mandam na sua lista de prioridades.
+
+**3. A FILA PARADA É ITEM DO SEU RELATÓRIO, E ELA FOI APRESENTADA DO JEITO QUE
+NÃO ANDA.** Em 28/09 o placar disse "lista parada PARCIAL" com as duas negativas
+há 25 e 9 dias. Em 02/10 a mesma lista, com treze itens, foi agrupada por painel
+e virou SEIS destinos, com cinco dos treze no mesmo console do Google Ads: uma
+sessão de vinte minutos fechava cinco. A fila não era grande, era mal
+apresentada, e apresentá-la é trabalho de quem fala com o dono toda segunda. O
+`npm run acoes` agora agrupa sozinho e imprime a sessão mais barata; o relatório
+passa a levar esse bloco, não a contagem.

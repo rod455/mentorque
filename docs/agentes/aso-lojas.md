@@ -296,3 +296,54 @@ sem saber o que ela custou.
 - **01/09/2026: o título da Play foi trocado** para `Mentorque: manutenção do
   carro`. A metade da Apple (nome, subtítulo e palavras-chave) espera o
   próximo envio de versão.
+
+## Retorno do dono sobre a rodada de 01/10/2026
+
+Mandado escrever por ele em 03/10, para os sete papéis que rodaram desde 27/09.
+
+Primeiro o que manter, e no seu caso é mais que uma rodada boa.
+
+**A MELHOR FRASE DAS DUAS SEMANAS É SUA, SOBRE VOCÊ MESMO: "a régua mede o que
+eu entrego, não se o que entreguei chegou a acontecer."** Ela virou obrigação em
+DIRETRIZES para os dez papéis em 02/10, e em 03/10 foi usada contra o Diretor,
+contra a Mídia e contra o Conteúdo. Uma frase sua está consertando a casa
+inteira. Abrir a rodada chamando a manchete de falha SUA, com o dono
+explicitamente fora da culpa, é a coisa mais difícil desta lista e você fez sem
+ninguém pedir.
+
+**E O CONSERTO VEIO NA MESMA RODADA, não na seguinte**: três linhas na lista do
+dono, com o texto exato, e `conferir:acoes` rodado. Mantenha também o que você
+NÃO fez: não reescreveu os 7 rascunhos antigos, e não escalou o alarme do
+Android para o QA porque leu antes a tabela "LEIA ISTO ANTES DE RECONFERIR" e
+viu os dois casos fechados. Essa tabela existe para poupar uma rodada, e poupou.
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. A SUA PRÓPRIA REGRA AINDA NÃO FECHA O SEU CASO, PORQUE A SAÍDA NÃO É
+COLAGEM.** As 12 respostas viraram linha na lista, que é o certo, e continuam
+sem sair. Em 02/10 a casa mediu o motivo: rascunho para colar não cola. Doze
+respostas prontas desde 15/09, zero publicadas em 29 dias, duas rodadas
+corretas. A saída estrutural entrou na lista no dia seguinte e não foi você quem
+a propôs: as duas chaves de resposta a avaliação, para o dono disparar uma vez e
+as 12 saírem, pelo mesmo desenho do e-mail de cancelamento. O padrão a levar:
+**quando a sua entrega depende de trabalho manual repetido do dono, a
+recomendação certa não é "cole", é "me dê a chave e eu armo".** Vale para
+responder avaliação, para trocar ficha e para qualquer coisa que se repita.
+
+**2. O INSTRUMENTO DO SEU VEREDITO ENTROU NA LISTA NO DIA EM QUE O VEREDITO
+VENCEU, TRINTA DIAS TARDE.** A regra de 01/09 salvou a rodada (sem leitura, o
+título FICA) e esse desenho é bom. Mas a tela de aquisição do Play Console era
+necessária desde 01/09 e só virou linha em 01/10. No meio disso, dois papéis
+diferentes pediram a mesma tela na mesma semana sem uma saber da outra. A regra:
+**o instrumento que o seu veredito vai precisar entra na lista do dono no dia em
+que você MARCA o veredito, não no dia em que ele vence.** Vale agora para a
+descrição curta: diga hoje qual leitura a julga, e ponha a leitura na lista
+junto com a proposta.
+
+**3. PROPOSTA NOVA COM PROPOSTA ANTIGA EM ABERTO.** O limite de 2 carros no
+texto do grátis, proposto em 15/09, segue sem sinal de ter sido aplicado, e a
+rodada abriu a da descrição curta. Pela obrigação que entrou em DIRETRIZES em
+02/10, a rodada começa fechando o desfecho do que ela mesma pediu antes. Com
+duas propostas de ficha paradas, diga qual é a primeira se o dono só fizer uma,
+e diga o custo de cada dia das duas: uma muda sem release, a outra espera a tela
+de envio.

@@ -293,3 +293,58 @@ tinha testado se ela mordia.
 **O que ficou sem resposta:** não deu para saber se alguém chegou a chamar as
 funções. Os registros de requisição não foram alcançáveis pela ferramenta usada,
 e a retenção do painel é curta. A frase honesta é "não sei", não "ninguém usou".
+
+## Retorno do dono sobre a rodada de 27/09/2026 (rodada 2)
+
+Mandado escrever por ele em 03/10, para os sete papéis que rodaram desde 27/09.
+
+Primeiro o que manter.
+
+**VOCÊ FECHOU AS TRÊS RECOMENDAÇÕES CONFERINDO O ESTADO, NÃO O COMMIT, e no caso
+do AVIF foi além do que a casa costuma aceitar como prova.** Ler o
+`node_modules/next/dist/server/next-server.js:167` e mostrar que o manipulador
+faz `render404` e RETORNA antes de tocar no otimizador é a mesma disciplina que
+a casa escreveu para plugin nativo, ler o caminho no fonte e não no README, e
+você chegou nela sozinho. E manteve o limite honesto: o otimizador da Vercel é
+camada que você não lê daqui.
+
+**E O ZERO PROVADO.** A varredura de segredo devolveu zero e, em vez de publicar
+o zero, você plantou as cinco formas numa CÓPIA do diff e mostrou que ela pega
+as cinco. Zero provado vale mais que zero relatado, e esta casa passou setembro
+inteiro tropeçando em zeros que mediam outra coisa.
+
+**E O FURO NA PREMISSA REGISTRADO SEM REABRIR A DECISÃO.** Existe operação viva
+de Vocaboost, o que contraria a frase com que o dono decidiu em 22/09, e você
+registrou o fato, registrou o que corta para o outro lado (a chave aponta para
+projeto apagado), disse que não está reabrindo e não repetiu o argumento.
+Localização apenas, sem valor. É exatamente o que o manual pede.
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. O PEDIDO MAIS VALIOSO DA SUA RODADA FOI PARA OUTRO PAPEL E SEGUE SEM
+DONO.** Você escreveu que nenhuma conferência olha `security_invoker` e pediu
+que a `verifica-banco.mjs` passasse a exigi-lo explícito em toda view. Seis dias
+depois, conferido hoje: a `assinaturas_conferencia` continua sem cláusula em
+`supabase/funil_eventos.sql`, e a `verifica-banco.mjs` continua parando no
+`pg_temp` das funções, com um comentário que tira as views da regra dela por
+outro motivo (sequestro de nome), que não é o seu. A regra entrou em DIRETRIZES
+em 02/10 e é sua também: **recomendação que depende de outro vira linha na lista
+do dono, ou vira trabalho seu se couber na sua alçada.** Escrever uma asserção
+sobre permissão de banco, numa conferência que já existe, é o seu ofício e
+cabia. O critério não é o organograma, é quanto tempo a coisa fica parada se
+ficar com o outro.
+
+**2. O QUINTO FLUXO É O DESFECHO INCOMPLETO DO SEU PRÓPRIO ACHADO, E A FORMA DO
+PEDIDO É A CAUSA.** Em 20/09 você apontou cinco fluxos; quatro foram desligados
+e o quinto ficou, disparando duas vezes por semana. Uma recomendação com cinco
+itens dentro fecha quatro e perde um sem ninguém perceber, porque o item que
+sobra não tem linha própria para envelhecer. **Achado com N itens vira N linhas
+na lista, nunca uma linha com N dentro.** Hoje o quinto está sozinho na lista,
+com o id do fluxo, que é como ele deveria ter nascido.
+
+**3. O INVENTÁRIO MENSAL DE PERMISSÕES PRECISA DE DATA, NÃO DE CADÊNCIA.** Você
+pulou de propósito, porque "ele é mensal e a primeira rodada do mês foi a de
+20/09", e isso é defensável. O problema é que "mensal" sem data não é promessa, é
+um lembrete que depende de alguém contar as semanas. Diga a data da próxima na
+rodada em que você pula, e trate essa data como qualquer outro desfecho que este
+papel cobra dos outros.

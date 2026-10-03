@@ -444,3 +444,53 @@ rodada seguinte: quantas impressões cada guia teve em `topPaginas`.
 - **01/09/2026: a indexação da home e da /barulho-no-carro foi solicitada** no
   Search Console pelo dono. O pedido que este papel repetia duas rodadas está
   fechado; a próxima rodada lê o resultado, não repete o pedido.
+
+## Retorno do dono sobre a rodada de 29/09/2026
+
+Mandado escrever por ele em 03/10, para os sete papéis que rodaram desde 27/09.
+O veredito é sobre o registro no diário e sobre o que foi medido desde então.
+
+Primeiro o que manter.
+
+**A SEGUNDA LIÇÃO DO CANAL É DO MELHOR TIPO QUE EXISTE AQUI: um padrão, medido
+no mesmo lote uma semana depois, com a consequência dita em uma frase.** Os que
+pegaram continuaram crescendo e os que não pegaram morreram, e a distância
+dentro do lote de 19/09 foi de 64 para cerca de 88 vezes sozinha, sem ninguém
+publicar nada. "Não existe deixa rodar que ele aparece" muda o que se faz na
+segunda de manhã, e é o oposto do que o instinto manda fazer, que é publicar
+mais.
+
+**E PERGUNTAR SE AS DUAS PAUTAS JÁ ESCRITAS CONTINUAM DE PÉ ANTES DE ESCREVER A
+TERCEIRA.** "Escrever roteiro para uma fila que não anda é produzir estoque" é a
+mesma lição que o ASO aprendeu doendo em 01/10, e você chegou nela sozinho,
+antes de ela virar regra da casa.
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. DUAS RODADAS SEGUIDAS CONCLUÍRAM SOBRE O CANAL SEM O INSTRUMENTO QUE
+DECIDIRIA, e ele é uma tela.** Views é a única métrica que o coletor traz, e é a
+que mais compõe com a distribuição: vídeo que pegou recebe mais porque pegou.
+Retenção e clique por impressão, que separam "o assunto estava errado" de "a
+capa estava errada", existem no YouTube Studio e nunca foram pedidos. Você
+escreveu "direção, não lei", que é honesto, e parou aí. O passo que falta é o
+que o ASO passou a fazer: **o instrumento que o seu veredito vai precisar entra
+na lista do dono no dia em que você percebe que ele falta.** Enquanto não
+entrar, a conclusão do canal vai ser a mesma frase repetida com números maiores.
+
+**2. ZERO CLIQUES EM 28 DIAS, E A ÚNICA SAÍDA DA RODADA FOI RELER EM 06/10.**
+Trinta e sete impressões, posições 53 a 80, sete consultas distintas para o
+mesmo problema e a página que responde já existe. Reler pode ser a decisão
+certa; o que falta é a regra de desfecho escrita ANTES, como o ASO fez com o
+título em 01/09: **o que muda se a leitura de 06/10 disser a mesma coisa?**
+Leitura cujos dois resultados levam à mesma ação não é ponto de decisão, é
+adiamento com data. Escreva o critério antes de reler: posição mediana, número
+de impressões, ou a página sai da fila de busca e vira outra coisa.
+
+**3. O BURACO DO CATÁLOGO VOCÊ ACHOU, MEDIU TRÊS VEZES E NÃO FECHOU, E ELE É
+SEU.** Freio, suspensão e pneu somam 10 de 109 aulas, e nas três semanas desde
+que o recorte apareceu as duas únicas aulas que entraram nesses sistemas foram
+as suas duas. O rodízio de formato (artigo, guia, pauta) é escolha deste papel,
+não do dono: fechar o buraco não depende de ninguém. Pela regra dos 21 dias que
+entrou em DIRETRIZES, achado repetido pela terceira vez ou traz o custo
+acumulado ou vira plano com data. Aqui dá para ter os dois: diga quantas aulas
+faltam para o recorte parar de aparecer, e em quantas rodadas elas saem.

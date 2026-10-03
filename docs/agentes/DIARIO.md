@@ -3,6 +3,67 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-03 (noite, 2) · Sete vereditos foram escritos no manual de cada papel, porque no diário eles não chegavam
+
+- Pedido do dono: "vamos dar os feedbacks das melhorias em cada agente", depois
+  de a pergunta anterior ("arrumamos tudo e demos feedback para todos essa
+  semana?") ter sido medida e respondida com NÃO.
+- **O NÚMERO QUE ABRIU ISTO: oito rodadas entre 27/09 e 03/10, e UM manual com
+  retorno desta semana.** O do Guardião, que só tinha porque ele pediu hoje.
+  Fora dele, as seções de retorno existentes eram de 18/09 (CRO) e 21/09
+  (Diretor). Conteúdo, QA, ASO, Mídia e Segurança não tinham nenhuma.
+- **E O CASO QUE EXPLICA O PORQUÊ: os seis vereditos que o Diretor escreveu em
+  28/09 estavam todos no diário e nenhum no manual do papel julgado.** Seis
+  vereditos corretos, nenhuma garantia de mudança, porque o agente abre a
+  rodada lendo o MANUAL. É a frase do ASO virada contra o nosso trabalho de
+  corrigir: a régua mede o que eu entrego, não se o que entreguei chegou a
+  acontecer.
+- **SETE RETORNOS ESCRITOS**, cada um no manual do papel, cada um com as duas
+  metades (o que manter primeiro, e depois os pontos de melhora com o caso
+  medido dentro): Diretor (28/09), Conteúdo & SEO (29/09), QA/Produto (01/10,
+  cobrindo também 30/09), ASO & Lojas (01/10), Mídia paga (02/10), CRO (02/10)
+  e Segurança (27/09). O do Guardião já estava escrito de manhã, então são oito
+  de oito papéis do Claude.
+- O que cada um levou, em uma linha: o Diretor, que veredito vai para o manual
+  e que o cruzamento da semana nasceu de uma leitura que não foi a dele; o
+  Conteúdo, que duas rodadas concluíram sobre o canal sem pedir a tela que
+  decidiria (retenção e clique por impressão); o QA, que o primeiro dos dois
+  pontos deixados para o dono nem precisava dele; o ASO, que a saída das 12
+  respostas não é colagem, é a chave; a Mídia, que o relatório da semana não
+  chegou ao leitor e a rodada não soube; o CRO, que dez aparelhos de iPhone não
+  são braço de controle e o número estava lá no dia em que a aposta abriu; a
+  Segurança, que o pedido mais valioso da rodada dela (exigir `security_invoker`
+  explícito em toda view) segue sem dono seis dias depois, conferido hoje.
+- **A OBRIGAÇÃO 5 DE DIRETRIZES**: o veredito de uma rodada é escrito no manual
+  do papel, em seção datada, e o diário leva o resumo. O manual do Diretor
+  ganhou o parágrafo que diz onde, substituindo "o veredito vai no DIARIO, em
+  uma linha por papel".
+- **A TRAVA, e ela foi desenhada para NÃO apodrecer**: a `conferir:agentes`
+  compara a data da rodada mais nova de cada papel no diário com a data do
+  retorno mais novo no manual dele, e reprova acima de dez dias. Ela não olha o
+  relógio, de propósito: conferência que olha o relógio fica vermelha sozinha
+  num domingo e ensina a afrouxar o número. Esta só fica vermelha quando alguém
+  acrescenta uma rodada e não escreve o veredito, que é o momento em que ela
+  deve gritar. A folga de dez dias é a cadência (rodada semanal, veredito na
+  segunda), não cortesia.
+- **SETE DEFEITOS PLANTADOS, SETE MORDIDAS**, com verde conferido ANTES e
+  DEPOIS de cada um, que é a lição de 03/10 de manhã: retorno apagado de um
+  manual, veredito 31 dias atrás da rodada, retorno sem a metade do "o que
+  manter", retorno com um ponto só, obrigação 5 fora de DIRETRIZES, manual do
+  Diretor sem o parágrafo do onde, e a frase "Cinco obrigações" anunciando
+  número diferente da lista.
+- **ACHADO DE PASSAGEM, do tipo que esta casa persegue**: a frase que apresenta
+  as obrigações dizia "Duas obrigações saem disso" com QUATRO itens embaixo.
+  Envelheceu nas duas vezes em que a lista cresceu, sem ninguém notar. Agora
+  existe asserção que compara o número escrito com a contagem dos itens.
+- **O QUE ISTO NÃO ALCANÇA, declarado no fonte**: se o veredito é JUSTO (é do
+  dono) e se o agente mudou por causa dele (aparece na rodada seguinte). E duas
+  cegueiras da conferência: rodada cujo título do diário não comece com
+  `data · Papel` fica invisível para ela, e papel que parou de rodar não tem
+  veredito a cobrar.
+- `npm run conferir` inteira verde. Sem suíte de navegador e sem build: a
+  mudança é de documentação e de um script de conferência.
+
 ## 2026-10-03 (noite) · A divida velha foi assumida, e o estado "nunca" deixou de existir
 - Decisão do dono, lendo a rodada do Guardião: "as que têm mais de 15 dias, já
   foi. Vamos corrigir e garantir que estamos tendo uma visão clara a partir de

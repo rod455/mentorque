@@ -270,3 +270,57 @@ justamente onde um número sem régua vira decisão.
   fora para dentro (anúncio → loja → download → conta → valor → premium)
   e construir o caminho para personas: hipóteses de perfis, sinais que já
   coletamos para diferenciá-los e personalização quando houver volume.
+
+## Retorno do dono sobre a rodada de 02/10/2026 (conversão)
+
+Mandado escrever por ele em 03/10, para os sete papéis que rodaram desde 27/09.
+
+Primeiro o que manter.
+
+**O PRIMEIRO FUNCIONOU DO CADERNO, E ELE VEIO LIMPO.** Denominador idêntico nos
+dois braços, 173 e 173, o que já prova que o sorteio dividiu direito; 108 contra
+78 carros cadastrados; 17 pontos de diferença a mais de três vezes o erro
+padrão; e a amostra passou quatro vezes o critério de parada do próprio teste.
+Promovida no mesmo dia, experimento tirado do código e o id marcado como
+encerrado para não misturar exposição velha com nova. É assim que um caderno de
+apostas ganha direito de existir.
+
+**E A RECUSA QUE VALE MAIS QUE A PROMOÇÃO: "veredito de teste não é lugar de
+desfazer decisão do dono pela porta de trás."** Promover B em `onboarding-curto`
+apagaria a página de prova social que ele decidiu manter em 01/09, e você levou
+a escolha para ele em vez de deixar o resultado decidir sozinho. Essa frase vale
+para os dez papéis.
+
+**MANTENHA TAMBÉM**: separar "conserto CONFIRMADO, efeito INCONCLUSIVO" em duas
+metades; registrar que a suspeita de 04/09 NÃO se confirmou, em vez de dizer que
+foi descartada; deixar o fato de negócio separado para o Diretor, que as três
+assinaturas pagantes cancelaram na virada para dinheiro; e deixar a conferência
+nova te corrigir no caminho, ajustando a asserção ao que a tela faz e não ao que
+você supunha.
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. DEZ APARELHOS DE IPHONE NÃO SÃO BRAÇO DE CONTROLE, E O NÚMERO ESTAVA LÁ NO
+DIA EM QUE A APOSTA ABRIU.** O `onboarding-termina-no-carro-android` comparava
+Android contra iPhone e web com 266, 10 e 8. Fechar sem crédito atribuído é o
+desfecho certo, e custou semanas de uma aposta. O aprendizado que você escreveu
+está certo, controle de plataforma não é controle porque a distribuição da base
+não é nossa, e precisa virar passo do ritual um degrau antes: **ao abrir a
+aposta, escreva o denominador esperado de cada braço com o número de HOJE, e
+recuse a aposta cujo braço menor não chega ao critério de parada.**
+
+**2. QUATRO MUDANÇAS CAÍRAM NA MESMA JANELA E SÓ UMA TEM PROVA ISOLADA.** Isso
+não é erro de leitura, é calendário, e o calendário é negociável: quem decide
+quando uma mudança entra é você e o dono. A regra barata: **a aposta declara qual
+degrau ela mede, e quando outra mudança toca esse degrau dentro da janela, isso
+é dito NO DIA, não no veredito.** Dito no dia, o dono escolhe entre esperar e
+perder a leitura; dito no veredito, ele só recebe a perda.
+
+**3. A MÉTRICA PEDIA LOJA E WEB SEPARADAS, O RETRATO ENTREGA SOMADAS, E A
+SEPARAÇÃO EXISTE NO DADO.** É a segunda rodada em que a medida que a aposta pede
+não é a medida que o retrato dá, e o funil sabe a plataforma de cada conta: a
+Mídia leu 41 Android, 2 iPhone e nenhuma web na mesma semana, e o QA leu 28 de
+33 `viu_paywall` no Android. Pela regra de 02/10, isto é recomendação que cabe na
+sua alçada em vez de virar nota de ressalva: separe o degrau por plataforma no
+retrato, ou diga por que não dá. Ressalva honesta repetida duas vezes vira
+instrumento que ninguém conserta.

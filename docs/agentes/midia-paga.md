@@ -620,3 +620,60 @@ linha com dono e com o ganho estimado.
 Português natural, sem travessão. Número sempre com a janela e a régua junto.
 Recomendação sempre com o valor que ela economiza ou arrisca. E nunca
 apresentar como fato o que é direção com amostra pequena.
+
+## Retorno do dono sobre a rodada de 02/10/2026
+
+Mandado escrever por ele em 03/10, para os sete papéis que rodaram desde 27/09.
+
+Primeiro o que manter.
+
+**A SUA AUTOCORREÇÃO É A MELHOR DA CASA, porque ela trouxe a aritmética que
+teria pego o erro.** Em 24/09 você propôs etiquetar a busca com argumento de
+R$ 640 por mês, e ela tinha parado naquele mesmo dia; em 02/10 você publicou o
+erro com a conta que estava na sua frente: a conta gastou R$ 18,78 no dia 24
+enquanto a campanha de instalação corria a R$ 21 por dia, o que já dava zero
+para a busca. E não repetiu a proposta: condicionou, "só vale se a busca voltar
+a entregar". Erro publicado com o método que o pegaria é a única forma de erro
+que ensina.
+
+**A CORREÇÃO DE NÚMERO JÁ PUBLICADO, com a causa e a regra nova.** R$ 268,32
+virou R$ 259,43 porque o Google revisa dia fechado para baixo, e a regra que
+nasceu disso, citar a data da leitura e RECALCULAR a semana anterior em vez de
+copiar, vale para todo papel que publica número de plataforma.
+
+**E DUAS PROVAS INDEPENDENTES PARA O ACHADO**: impressão caindo antes do gasto,
+e grupo de termo congelado no mesmo centavo, com a recusa explícita de inventar
+a causa de painel. Mantenha também ter declarado o critério 6 inalcançável em
+vez de disfarçar.
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. O RELATÓRIO DESTA SEMANA NÃO CHEGOU AO LUIZ, E A RODADA NÃO SOUBE.** O
+gatilho disparou quinta 01/10 às 11h03, a rodada rodou sexta às 10h33, e o
+e-mail de quinta às 10h saiu antes, com o arquivo de 24/09. Você registrou que a
+trava funcionou e que quem atrasou foi a rodada, o que está certo, e parou ali:
+ninguém olhou se o relatório da semana chegou ao leitor dele. Quem achou foi a
+leitura do dono naquela noite, e o relatório de 02/10 está no repositório sem
+ter sido enviado. **É o caso do ASO dentro da sua casa.** O fluxo agora tenta
+duas vezes, quinta e sexta às 16h, com janela de dois dias; o que é seu é o
+último passo do ritual: confirmar a entrega pela execução do n8n e dizer na
+rodada que ela chegou, ou que não chegou.
+
+**2. A BUSCA PAROU EM 24/09 E VOCÊ VIU EM 02/10, com o sinal dentro de dados que
+você já coleta.** Impressões de 1.958 para 70 numa campanha ENABLED não é
+leitura de rodada, é condição. O ritual da quinta é seu, então isto cabe inteiro
+na sua alçada: uma linha que compare a impressão da campanha com a média dos 7
+dias anteriores e grite abaixo de um limiar. A diferença entre achar uma parada
+em oito dias e em um dia é o que a casa paga por semana de busca morta.
+
+**3. DEZ DE DOZE, DUAS SEMANAS SEGUIDAS, E OS DOIS QUE FALHAM SÃO O MESMO
+INSTRUMENTO.** O critério 3 (custo por desfecho por campanha) e o 6 (desperdício
+com nome) falham por falta de etiqueta, com 98% do dinheiro em campanha de
+instalação que não carrega termo. Declarar está certo; o que falta é a
+consequência. **Régua com critério inalcançável por instrumento precisa mudar de
+instrumento ou mudar de régua, e essa decisão é desta rodada, não da próxima.**
+A saída mais barata já está na lista do dono, a tela de aquisição por fonte do
+Play Console. Ponha prazo: se ela voltar lida, o critério 3 volta a ser
+alcançável e você diz como; se em duas rodadas ela não voltar, proponha a
+reescrita dos dois critérios para o que o instrumento de hoje mede, com o limite
+escrito no lugar da nota.

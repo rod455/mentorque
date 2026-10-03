@@ -85,7 +85,7 @@ const diretrizes = ler("docs/agentes/DIRETRIZES.md");
   );
 }
 
-// ── 3. AS QUATRO OBRIGAÇÕES QUE VALEM PARA TODOS ───────────────────────────
+// ── 3. AS CINCO OBRIGAÇÕES QUE VALEM PARA TODOS ────────────────────────────
 //
 // As duas primeiras são de 19/09 (medir-se contra a régua, e o Diretor
 // corrigindo de fora). As duas de 02/10 nasceram do caso do ASO: duas rodadas
@@ -111,6 +111,21 @@ const diretrizes = ler("docs/agentes/DIRETRIZES.md");
     "antes de levantar algo, procurar se já foi levantado",
     /antes de "levantar"/i.test(diretrizes),
     "a mesma pergunta foi levantada por dois papeis em 04/09 e 15/09, sem uma saber da outra",
+  );
+
+  // E A FRASE QUE APRESENTA A LISTA CONTA CERTO QUANTAS SÃO. Em 03/10 ela dizia
+  // "Duas obrigações saem disso" com QUATRO itens embaixo: ela envelheceu na
+  // segunda e na terceira vez que a lista cresceu, sem ninguém notar. Título que
+  // não bate com o conteúdo é o primeiro sinal de doc apodrecendo, e é o mesmo
+  // defeito que a skill `conferir-que-morde` já pega no título dela.
+  const NUMERO: Record<string, number> = { Uma: 1, Duas: 2, Três: 3, Quatro: 4, Cinco: 5, Seis: 6, Sete: 7 };
+  const anuncio = diretrizes.match(/^(\w+) obrigações saem disso/m)?.[1] ?? "";
+  const bloco = diretrizes.split(/^\w+ obrigações saem disso[^\n]*$/m)[1]?.split(/^\*\*/m)[0] ?? "";
+  const itens = (bloco.match(/^\d+\. \*\*/gm) ?? []).length;
+  conferir(
+    "e a frase que apresenta as obrigações conta certo quantas são",
+    NUMERO[anuncio] === itens,
+    `a frase diz "${anuncio}" (${NUMERO[anuncio] ?? "?"}) e a lista tem ${itens} itens`,
   );
 }
 
@@ -270,8 +285,115 @@ const diretrizes = ler("docs/agentes/DIRETRIZES.md");
   );
 }
 
+// ── 9. TODA RODADA TEM VEREDITO NO MANUAL DO PAPEL ─────────────────────────
+//
+// POR QUE ISTO EXISTE (03/10/2026). O dono perguntou se a casa havia dado
+// retorno a todos os agentes na semana. Medido: oito rodadas entre 27/09 e
+// 03/10 e UM manual com retorno desta semana, o do Guardião, que só tinha
+// porque ele pediu. Os seis vereditos que o Diretor escreveu em 28/09 estavam
+// todos no DIARIO e nenhum no manual do papel julgado, então nenhum dos seis
+// leu o veredito antes da rodada seguinte. Virou a obrigação 5 de DIRETRIZES.
+//
+// O DESENHO IMPORTA, e é o que faz esta conferência não apodrecer: ela NÃO
+// compara com o dia de hoje. Ela compara a data da rodada mais nova no diário
+// com a data do retorno mais novo no manual. Conferência que olha o relógio
+// fica vermelha sozinha num domingo e ensina a afrouxar o número; esta só fica
+// vermelha quando alguém acrescenta uma rodada ao diário e não escreve o
+// veredito dela, que é exatamente o momento em que ela deve gritar.
+//
+// A FOLGA DE DEZ DIAS é a cadência, não cortesia: as rodadas são semanais e o
+// veredito sai na segunda, então o vão normal entre uma rodada e o retorno
+// anterior chega a sete ou oito dias. Dez deixa o ritmo passar e pega duas
+// segundas puladas.
+//
+// O QUE ELA NÃO ALCANÇA, e são três coisas:
+//
+//   1. se o veredito é JUSTO (isso é do dono) e se o agente mudou por causa
+//      dele (isso aparece na rodada seguinte);
+//   2. rodada cujo título do diário NÃO comece com `data · Papel`, porque é
+//      assim que ela acha as rodadas. Uma entrada escrita como "Rodada do CRO"
+//      fica invisível aqui, e a conferência diria 0 dias de atraso com o
+//      veredito faltando. A convenção é a que as 60 entradas de rodada já
+//      usam, e quebrá-la não reprova nada: é um buraco declarado, não coberto;
+//   3. papel que PAROU de rodar. Sem rodada nova, não há veredito a cobrar, e a
+//      linha impressa diz "nenhuma rodada no diário" sem reprovar. Quem olha
+//      para papel parado é o Diretor na leitura do mês.
+{
+  const diario = ler("docs/agentes/DIARIO.md");
+  const linhas = [...diretrizes.matchAll(/^\|([^|\n]+)\|([^|\n]+)\|[^|\n]+\|\s*([a-z0-9-]+\.md)\s*\|/gm)]
+    .map((m) => ({ papel: m[1]!.trim(), onde: m[2]!.trim(), manual: m[3]! }))
+    .filter((l) => /Rotina Claude/i.test(l.onde) && existsSync(`${RAIZ}docs/agentes/${l.manual}`));
+
+  const DIA = 86400000;
+  const resumo: string[] = [];
+
+  for (const l of linhas) {
+    // O apelido com que o papel assina no diário é a primeira palavra do nome
+    // dele na tabela: "QA/Produto" assina "QA agendado" e "QA/Produto";
+    // "Segurança e dependências" assina "Segurança (rodada 2)". Derivado da
+    // tabela de propósito: uma segunda lista de nomes aqui seria regra copiada,
+    // que é o erro que a seção 5 deste arquivo existe para pegar.
+    const apelido = l.papel.split(/[\s/]/)[0]!;
+    const rodadas = [...diario.matchAll(new RegExp(`^## (\\d{4})-(\\d{2})-(\\d{2}) · ${apelido}`, "gmu"))].map(
+      (m) => Date.UTC(+m[1]!, +m[2]! - 1, +m[3]!),
+    );
+    if (rodadas.length === 0) {
+      resumo.push(`${l.manual}: nenhuma rodada no diário`);
+      continue;
+    }
+    const ultimaRodada = Math.max(...rodadas);
+
+    const retornos = [...ler(`docs/agentes/${l.manual}`).matchAll(
+      /^## Retorno do dono sobre a rodada de (\d{2})\/(\d{2})\/(\d{4})/gm,
+    )].map((m) => Date.UTC(+m[3]!, +m[2]! - 1, +m[1]!));
+
+    conferir(
+      `${l.manual} tem retorno do dono sobre alguma rodada`,
+      retornos.length > 0,
+      "veredito que mora so no diario nao chega a quem ele deveria mudar (obrigacao 5 de DIRETRIZES)",
+    );
+    if (retornos.length === 0) continue;
+
+    const ultimoRetorno = Math.max(...retornos);
+    const atraso = Math.round((ultimaRodada - ultimoRetorno) / DIA);
+    conferir(
+      `o veredito de ${l.manual} acompanha a última rodada dele`,
+      atraso <= 10,
+      `rodada de ${new Date(ultimaRodada).toISOString().slice(0, 10)} e retorno de ` +
+        `${new Date(ultimoRetorno).toISOString().slice(0, 10)}: ${atraso} dias sem veredito no manual`,
+    );
+    resumo.push(`${l.manual}: ${atraso} dia(s)`);
+
+    // E O RETORNO TEM QUE TER AS DUAS METADES. Retorno só com o que está errado
+    // ensina a esconder, não a melhorar, e foi o dono quem pediu as duas ao
+    // ler a rodada do Guardião. A seção cobrada é a MAIS NOVA, não o arquivo:
+    // procurar no manual inteiro passaria verde com a seção de hoje vazia e a
+    // de setembro respondendo por ela.
+    const todas = ler(`docs/agentes/${l.manual}`).split(/^## Retorno do dono sobre a rodada de /m);
+    const maisNova = todas[todas.length - 1]!.split(/^## /m)[0]!;
+    conferir(
+      `o retorno de ${l.manual} diz o que MANTER, não só o que consertar`,
+      /o que manter/i.test(maisNova),
+      "retorno so com o que esta errado ensina a esconder",
+    );
+    conferir(
+      `e cobra pelo menos dois pontos, com a seção cheia`,
+      maisNova.replace(/\s+/g, " ").length > 800 && /\*\*1\./.test(maisNova) && /\*\*2\./.test(maisNova),
+      `${maisNova.replace(/\s+/g, " ").length} caracteres na seção mais nova`,
+    );
+  }
+
+  conferir("a obrigação 5 está escrita em DIRETRIZES", /VEREDITO DE UMA RODADA É ESCRITO NO MANUAL/.test(diretrizes));
+  conferir(
+    "e o manual do Diretor diz onde o veredito é escrito",
+    /ONDE O VEREDITO É ESCRITO/.test(ler("docs/agentes/diretor.md")),
+    "a obrigacao vale para todos, mas quem escreve o veredito e ele",
+  );
+  console.log(`       ATRASO DO VEREDITO, POR PAPEL: ${resumo.join("; ")}.`);
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) do time de agentes reprovaram.`);
   process.exit(1);
 }
-console.log("Agentes: manuais no lugar, todos com régua, as quatro obrigações escritas e a lista de destinos batendo com o código.");
+console.log("Agentes: manuais no lugar, todos com régua, as cinco obrigações escritas, veredito no manual de cada papel e a lista de destinos batendo com o código.");

@@ -676,3 +676,68 @@ deixá-la calada.** O caso de 02/09 é a prova pelo custo: um erro de banco de
 um segundo, no webhook da loja, viraria um cliente pagante sem Premium para
 sempre, porque a rota respondia 200 e o RevenueCat nunca reenviava. Segurar
 esse conserto por prudência teria sido o mais caro dos dois caminhos.
+
+## Retorno do dono sobre a rodada de 01/10/2026 (e a de 30/09)
+
+Mandado escrever por ele em 03/10, para os sete papéis que rodaram desde 27/09.
+São duas rodadas num retorno só porque elas são o mesmo fio: a varredura de
+30/09 achou a venda de loja que o banco não conhecia, e a verificação agendada
+de 01/10 achou que o funil nunca soube escrever `renovou`.
+
+Primeiro o que manter.
+
+**A VENDA DE 25/09 FOI ACHADA POR VOCÊ, SEIS DIAS DEPOIS, E POR MAIS NINGUÉM.**
+Ela só virou Premium em 03/10, e o caminho inteiro até a causa (o webhook
+cadastrado no apex, que redireciona) começou no descompasso que você mediu. E
+você já tinha escrito a previsão em 02/09: "o caminho da loja é o mais perigoso
+porque não tem segunda porta". Previsão escrita, confirmada e citada é a coisa
+mais rara deste caderno.
+
+**O ALARME QUE VOCÊ NÃO DEU VALE TANTO QUANTO O QUE VOCÊ DEU.** A 2.9 parecia
+fechar sozinha três vezes mais, e o que segurou a conclusão foi perceber que a
+testemunha mudou junto com o app: um ouvinte novo na mesma versão. Depois você
+foi atrás de uma medida que não passa pela migalha, aberturas por aparelho, e
+ela respondeu. Essa é a doença que a casa perseguiu o mês inteiro, e você foi o
+único que a pegou ANTES de publicar o número.
+
+**E DECLARAR O CONSERTO COMO TEORIA EM PRODUÇÃO**, com a data que o prova
+(04/10) e com o que significa se o `renovou` não aparecer: "o conserto está
+errado e o diagnóstico também".
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. O PRIMEIRO DOS DOIS PONTOS QUE VOCÊ DEIXOU PARA O DONO NEM PRECISAVA
+DELE.** Você fechou 01/10 com duas coisas no painel do Stripe: ler a fatura e
+marcar `invoice.paid`. No dia seguinte o dono perguntou se dava para arrumar, e
+dava: o código que lê o valor da fatura entrou em 02/10 sem ele tocar em nada.
+Só a caixa do evento é dele. A regra que entrou em DIRETRIZES no mesmo dia vale
+aqui: **recomendação que depende de outro vira linha na lista do dono, OU vira
+trabalho seu se couber na sua alçada**, e escrever o código que guarda o valor
+quando o evento chegar cabia. O critério útil não é "de quem é o painel", é: se
+ficar com o outro, quanto tempo isso fica parado?
+
+**2. O ZERO ESTRUTURAL É A QUARTA VEZ, E A SUA RÉGUA AINDA NÃO TEM LINHA PARA
+ELE.** `renovacoes 0` lido como "ninguém renovou" quando significava "ninguém
+mediu", com o `funilCorreto.ts` declarando a métrica mensurável desde 22/08.
+Você mesmo escreveu o direcionamento 7 (contradição que você mesmo escreveu é
+achado) e o 8 (número derivado não prova fato financeiro), e mesmo assim o zero
+viveu cinco semanas. O que falta é um passo no ritual, não um direcionamento
+novo: **antes de publicar qualquer zero, pergunte quem ESCREVE aquele número, e
+vá ver se esse escritor existe.** É uma pergunta de trinta segundos que teria
+fechado isto em agosto.
+
+**3. A ASSERÇÃO QUE VOCÊ APAGOU ERA A QUE OLHAVA O CONSUMIDOR.** Das três que
+você plantou na migalha, a terceira passou verde porque procurava o NOME do
+campo e o nome continuava numa variável local; você apagou em vez de apertar,
+com o argumento de que o compilador reprova sozinho. Dois dias depois, cinco
+conferências desta casa ficaram verdes com o defeito de pé pela mesma família:
+afirmavam a REGRA e não afirmavam QUEM USA a regra. Virou o critério 10 do
+Guardião. Apagar asserção pode ser certo; o que não pode é apagar sem escrever
+QUAL erro de compilação cobre aquele caso, com o nome dele, do lado. Sem isso o
+próximo leitor repõe uma asserção mais fraca, ou nenhuma.
+
+**E UMA COISA DE FILA, que não é falha e precisa de data:** o quiz diário é "o
+maior recurso do app sem varredura dedicada" desde 30/09 e já cedeu a vez duas
+vezes para a compra pelas lojas, com razão nas duas. A compra pelas lojas tem
+desfecho desde 03/10: venda recuperada, webhook no `www`, Premium ativo. Marque
+a data do quiz na fila.

@@ -91,7 +91,7 @@ Todo manual tem uma seção **"A régua da rodada"**: a lista do que é uma roda
 bem feita, em critérios que alguém de fora consegue conferir. "Está bom" não é
 critério; "tem o número e a janela do lado" é.
 
-Duas obrigações saem disso, e elas valem para todos:
+Cinco obrigações saem disso, e elas valem para todos:
 
 1. **Antes de publicar, a rodada se mede contra a própria régua** e diz, no
    artifact e no diário, qual critério não cumpriu e por quê. Falhar com o
@@ -110,6 +110,21 @@ Duas obrigações saem disso, e elas valem para todos:
    parado há mais de 21 dias não volta como recomendação repetida: volta com o
    CUSTO DE HOJE, ou com a proposta de fechar o item. A `npm run acoes` separa
    esses em bloco próprio para quem levantou não ter como não ver.
+5. **O VEREDITO DE UMA RODADA É ESCRITO NO MANUAL DO PAPEL**, em seção datada
+   (`## Retorno do dono sobre a rodada de dd/mm/aaaa`), e não só no diário. O
+   diário é onde se explica para quem vem depois; o manual é o que o agente
+   abre antes da rodada seguinte. Veredito que mora só no diário não chega a
+   quem ele deveria mudar.
+
+**De onde sai a 5 (03/10/2026), e é a obrigação 3 virada contra nós.** O dono
+perguntou se a casa havia dado retorno a todos os agentes na semana. Medido:
+oito rodadas entre 27/09 e 03/10, e UM manual com retorno desta semana, o do
+Guardião, que só tem porque ele pediu. Os seis vereditos que o Diretor escreveu
+em 28/09 estavam todos no diário e nenhum no manual do papel julgado. É a frase
+do ASO outra vez, agora sobre o nosso próprio trabalho de corrigir: a régua mede
+o que eu entrego, não se o que entreguei chegou a acontecer. A
+`npm run conferir:agentes` passou a reprovar quando uma rodada registrada no
+diário fica mais de dez dias sem veredito no manual daquele papel.
 
 **De onde saem a 3 e a 4 (02/10/2026).** As duas nasceram da mesma leitura, e o
 caso é do agente de ASO, que o encontrou em si mesmo: em 15/09 ele entregou 7
