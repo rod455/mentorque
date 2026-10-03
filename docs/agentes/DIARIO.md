@@ -33,6 +33,36 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-03 (noite, 15) · O Google Ads na AppsFlyer nao e app: build novo nao resolve, e o vinculo nao e retroativo
+
+- Pergunta do dono: "voce disse que o Ads nao chega. Precisamos fazer algo ou so
+  rodar um build novo ja vamos resolver?". **O build NAO resolve**, e a pergunta
+  e justa porque eu juntei dois problemas independentes na mesma frase.
+- **O GOOGLE ADS AUSENTE E VINCULO DE CONSOLE, ZERO CODIGO.** Ele e rede
+  autoatribuida: a AppsFlyer avisa o Google de uma instalacao e o Google
+  responde se reivindica. Sem o vinculo nao ha a quem perguntar, e nenhuma
+  versao do app muda isso.
+- **E O LADO DO APARELHO JA ESTA PRONTO, conferido no fonte e nao no README**:
+  o `build.gradle` do `appsflyer-capacitor-plugin` traz
+  `com.android.installreferrer:installreferrer:2.2`, que e a biblioteca pela
+  qual a atribuicao do Google chega no Android. Era a unica hipotese que faria o
+  build ser necessario, e ela caiu na leitura.
+- **O CAMINHO TEM DUAS PONTAS**, e saber disso evita uma segunda viagem: no
+  Google Ads, Ferramentas e configuracoes > Gerenciador de dados > fonte
+  "Analise de apps de terceiros" > criar um **link ID** com a AppsFlyer como
+  provedora, com **IDs separados para Android e iPhone**; e na AppsFlyer,
+  Collaborate > Partner Marketplace > Google Ads > "Activate partner" + o link
+  ID. A fonte aparece como `googleadwords_int`.
+- **E A PARTE QUE CUSTA DINHEIRO POR DIA: NAO E RETROATIVO.** Rede
+  autoatribuida nao preenche o passado. Tudo instalado antes do vinculo fica
+  dentro de `Organic` para sempre. Entao cada dia parado nao e um dia de atraso,
+  e um dia que nunca vai ter resposta. Isso entrou na linha da lista e no manual
+  da Midia, para voltar junto com a recomendacao toda vez.
+- **O QUE O BUILD RESOLVE E OUTRA COISA**: os 23,1% de Android que nunca sobem o
+  SDK. Vale para TODAS as fontes, inclusive a Meta, e sai na 3.0. Os dois
+  consertos sao independentes: com o Google ligado e sem o build, a divisao ja
+  funciona sobre os 77% que reportam, e como PROPORCAO ela e valida.
+
 ## 2026-10-03 (noite, 14) · 23% dos Android nunca sobem o SDK, e a casa nao sabia por que porque o catch jogava fora
 
 - O dono ligou a credencial e perguntou duas coisas: se a visao dos downloads

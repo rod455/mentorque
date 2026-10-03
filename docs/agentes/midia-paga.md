@@ -792,3 +792,40 @@ usuários leais contra 26,92% do orgânico. **Campanha de instalação costuma s
 acusada de trazer lixo, e aqui ela traz gente que volta MAIS que o orgânico.**
 Esse número vale mais que o custo por instalação na hora de decidir orçamento, e
 ele só existe porque o relatório traz `Loyal Users` do lado de `Installs`.
+
+### Ligar o Google Ads na AppsFlyer nao e app, e nao e retroativo (03/10/2026)
+
+**A pergunta do dono foi "precisamos fazer algo ou so rodar um build novo ja
+vamos resolver?", e a resposta e que sao dois problemas independentes que eu
+tinha juntado na mesma frase.**
+
+**O Google Ads ausente do relatorio e vinculo de console, zero codigo.** Ele e
+rede autoatribuida: a AppsFlyer avisa o Google de uma instalacao e o Google
+responde se reivindica. Sem o vinculo, nao ha a quem perguntar. O caminho tem
+DUAS pontas, e saber disso evita uma segunda viagem:
+
+1. no **Google Ads**: Ferramentas e configuracoes > Gerenciador de dados >
+   conectar a fonte "Analise de apps de terceiros" > criar um **link ID** com a
+   AppsFlyer como provedora. **Android e iPhone precisam de link IDs separados**;
+2. na **AppsFlyer**: Collaborate > Partner Marketplace > Google Ads > ligar
+   "Activate partner" e colar o link ID.
+
+A fonte aparece no relatorio como `googleadwords_int`.
+
+**O LADO DO APARELHO JA ESTA PRONTO, e isso foi conferido no fonte e nao no
+README**: o `node_modules/appsflyer-capacitor-plugin/android/build.gradle` traz
+`com.android.installreferrer:installreferrer:2.2`, que e a biblioteca pela qual
+a atribuicao do Google chega no Android. Build novo nao muda nada neste item.
+
+**E A PARTE QUE CUSTA DINHEIRO POR DIA: nao e retroativo.** Rede autoatribuida
+nao preenche o passado. Tudo que foi instalado antes do vinculo fica dentro de
+`Organic` para sempre, e a divisao entre Google e Meta so vale do dia do
+vinculo em diante. Entao cada dia parado nao e um dia de atraso, e um dia que
+nunca vai ter resposta. Esta frase entra na recomendacao toda vez que este item
+voltar.
+
+**O QUE O BUILD RESOLVE, que e outra coisa**: os 23,1% de aparelhos Android que
+nunca sobem o SDK (medido em 03/10, 92 de 407 em 21 dias). Isso e codigo de app,
+sai na 3.0, e vale para TODAS as fontes, inclusive a Meta. Os dois consertos sao
+independentes: com o Google ligado e sem o build, a divisao ja funciona sobre os
+77% que reportam, e como proporcao ela e valida.
