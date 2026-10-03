@@ -96,7 +96,16 @@ export async function POST(req: Request) {
     pacote = lido.ok
       ? { ok: true, instalacoes: lido.total, de: lido.de, ate: lido.ate, dias: lido.dias,
           arquivo: typeof dados.arquivo === "string" ? dados.arquivo : null }
-      : { ok: false, naoLi: lido.formatoDesconhecido, cabecalho: lido.cabecalho,
+      : { ok: false,
+          // O MOTIVO DE QUEM FALHOU PRIMEIRO GANHA (03/10/2026). Na primeira
+          // execução o coletor gravou `naoLi: "arquivo vazio"` quando a causa
+          // real era `Credentials not found` na listagem do bucket: o erro
+          // estava no pacote e a rota não o publicava, então o relato final
+          // dizia o sintoma e escondia a causa. Erro de listagem manda.
+          naoLi: typeof dados.erroDaListagem === "string" && dados.erroDaListagem
+            ? `a listagem do bucket falhou: ${dados.erroDaListagem}`
+            : lido.formatoDesconhecido,
+          cabecalho: lido.cabecalho,
           arquivo: typeof dados.arquivo === "string" ? dados.arquivo : null,
           arquivos: Array.isArray(dados.arquivos) ? dados.arquivos.slice(0, 40) : undefined };
   }

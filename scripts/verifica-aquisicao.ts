@@ -261,10 +261,46 @@ const PACOTES = {
   conferir("a rota importa o leitor do Play", /from "@\/lib\/playRelatorios"/.test(rotaPlay));
   conferir("e le o CSV na fonte play_downloads", /fonte === "play_downloads"/.test(rotaPlay) && /leInstalacoes\(csv\)/.test(rotaPlay));
   conferir(
+    "e o erro da LISTAGEM ganha do sintoma na hora de explicar",
+    /a listagem do bucket falhou/.test(rotaPlay) && /dados\.erroDaListagem/.test(rotaPlay),
+    "na primeira execucao real a rota gravou 'arquivo vazio' e a causa era 'Credentials not found'",
+  );
+  conferir(
     "e grava `naoLi` com o cabecalho quando nao reconhece",
-    /naoLi: lido\.formatoDesconhecido/.test(rotaPlay) && /cabecalho: lido\.cabecalho/.test(rotaPlay),
+    /: lido\.formatoDesconhecido/.test(rotaPlay) && /cabecalho: lido\.cabecalho/.test(rotaPlay),
     "sem isso o mes que a rota nao entendeu vira instalacao zero no retrato",
   );
+}
+
+// ── A LISTA DE FONTES ESTA EM DOIS LUGARES (03/10/2026) ────────────────────
+//
+// POR QUE ISTO EXISTE, e o caso tem menos de uma hora: o `appsflyer` entrou no
+// `Set` da rota `/api/metricas` e NAO entrou na clausula `check` da tabela. A
+// rota aceitou o pacote, o banco recusou, e a resposta foi 500
+// `gravacao_falhou`. O coletor teria gravado nada todo dia, em silencio, se a
+// execucao nao tivesse sido conferida na hora.
+//
+// E a mesma forma da lista de destinos da `acoes-do-dono`, que a
+// `conferir:agentes` ja cobre: duas copias da mesma lista divergem caladas. O
+// teste e a intersecao EXATA, nos dois sentidos.
+{
+  const rota = readFileSync(new URL("../app/api/metricas/route.ts", import.meta.url), "utf8");
+  const sql = readFileSync(new URL("../supabase/metricas_diarias.sql", import.meta.url), "utf8");
+
+  const doCodigo = [...(rota.match(/const FONTES = new Set\(\[([\s\S]*?)\]\)/)?.[1] ?? "").matchAll(/"([a-z_]+)"/g)].map((m) => m[1]!);
+  const doBanco = [...(sql.match(/check \(fonte in \(([\s\S]*?)\)\)/)?.[1] ?? "").matchAll(/'([a-z_]+)'/g)].map((m) => m[1]!);
+
+  conferir("a lista de fontes existe no codigo", doCodigo.length >= 10, doCodigo.join(", "));
+  conferir("e existe no arquivo de esquema", doBanco.length >= 10, doBanco.join(", "));
+  const soNoCodigo = doCodigo.filter((f) => !doBanco.includes(f));
+  const soNoBanco = doBanco.filter((f) => !doCodigo.includes(f));
+  conferir(
+    "e as duas listas de fontes sao a MESMA",
+    soNoCodigo.length === 0 && soNoBanco.length === 0,
+    `so no codigo: ${soNoCodigo.join(", ") || "nenhuma"}; so no banco: ${soNoBanco.join(", ") || "nenhuma"}. ` +
+      "fonte so no codigo e 500 gravacao_falhou todo dia, em silencio",
+  );
+  conferir("e a appsflyer esta nas duas", doCodigo.includes("appsflyer") && doBanco.includes("appsflyer"));
 }
 
 if (falhas) {

@@ -41,6 +41,13 @@ export type LeituraDeParceiros = {
   semCusto: boolean;
 };
 
+// LIMITE CONHECIDO DO TRANSPORTE (03/10/2026): o CSV chega pelo n8n como texto
+// e o acento se perde no caminho. Na primeira coleta real, "Lançamento
+// Mentorque" foi gravado como "Lan?amento Mentorque". Os NÚMEROS não são
+// afetados (eles são ASCII), e o nome da campanha é rótulo, não chave. Fica
+// dito porque no dia em que alguém agrupar por nome de campanha, duas grafias
+// da mesma campanha viram duas linhas.
+
 /** O rótulo que a AppsFlyer usa para o que ela não atribuiu a ninguém. */
 export const FONTE_ORGANICA = "Organic";
 

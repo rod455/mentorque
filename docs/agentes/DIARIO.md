@@ -33,6 +33,50 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-03 (noite, 22) · A coleta foi EXECUTADA, e a execucao achou o que nenhuma leitura de codigo acharia
+
+- Em vez de dizer "roda amanha as 05:30", rodei. Duas execucoes do coletor, e as
+  duas acharam coisa.
+- **A APPSFLYER ESTA PROVADA, com dado real no banco** (`fonte: appsflyer`,
+  dia 03/10): Android com **Facebook Ads 133 instalacoes, 432 sessoes e 47
+  leais**, e **Organic 53 com 14 leais**; iPhone com 3 organicas. Total 189, com
+  133 pagas. **Os tres avisos viajaram dentro do pacote**, inclusive o do Google
+  Ads. Deixou de ser teoria em producao.
+- **E A PRIMEIRA EXECUCAO FALHOU COM 500 `gravacao_falhou`, por uma SEGUNDA
+  COPIA DA LISTA DE FONTES que ninguem lembrava.** A rota valida a fonte contra
+  um `Set` em TypeScript; a tabela valida contra uma clausula `check` propria. O
+  `appsflyer` entrou no codigo e nao no banco, a rota aceitou e o banco recusou.
+  **Sem rodar, isso gravaria nada todo dia, em silencio**, e o pacote nunca
+  apareceria. Nenhuma leitura de codigo acharia: o defeito mora entre dois
+  arquivos que ninguem le junto.
+  - Migracao aplicada (`metricas_diarias_aceita_appsflyer`), arquivo de esquema
+    atualizado, e a `conferir:aquisicao` passou a comparar as duas listas nos
+    dois sentidos, com plantio de cada lado. E a mesma forma da lista de
+    destinos da `acoes-do-dono`, que ja tinha conferencia; faltava esta.
+- **O CONSERTO DO `play_console` FUNCIONOU EM PRODUCAO, e ele respondeu a
+  pergunta**: o pacote agora diz `crash: {estado: "sem-linha", motivo: "a
+  resposta nao trouxe o campo rows"}` e carrega a frase **"NAO E ZERO MEDIDO"**.
+  Ou seja, a API responde e NAO publica metrica. Nao e falta de permissao, e
+  supressao por volume, como a hipotese dizia. Agora esta medido em vez de
+  suposto.
+- **O BUCKET DO PLAY AINDA NAO ABRE**: `Credentials not found` nos dois nos. O
+  dono precisa escolher a credencial `Google Service Account account` neles.
+  A falha degradou como projetada: gravou o pacote dizendo que nao leu.
+  - **E ISSO EXPOS UM DEFEITO MEU**: a rota gravou `naoLi: "arquivo vazio"`
+    quando a causa real estava no pacote, em `erroDaListagem`. O sintoma
+    escondia a causa. Consertado: erro de listagem ganha na hora de explicar, e
+    tem assercao.
+- **E O MAIS IMPORTANTE: o `googleadwords_int` CONTINUA AUSENTE com o dia de
+  HOJE dentro da janela.** Isso MATA a hipotese da janela, que era a mais barata
+  das tres. Sobram duas: o vinculo estar numa conta do Google Ads que nao e a
+  `Mentorque` (672-430-8347), ou o Google reivindicar e PERDER no ultimo toque
+  para a Meta, que teve 685 cliques contra 484 dele.
+- **LIMITE DE TRANSPORTE, registrado**: o nome da campanha chegou como
+  "Lan?amento Mentorque". O acento se perde entre a Pull API e o n8n. Os numeros
+  nao sao afetados (sao ASCII) e o nome e rotulo, nao chave, mas fica dito
+  porque no dia em que alguem agrupar por nome de campanha, duas grafias viram
+  duas linhas.
+
 ## 2026-10-03 (noite, 21) · O coletor de instalacao do Play existe, e a permissao que falta e de CONTA, nao de app
 
 - O dono abriu "Fazer o download de relatorios > Estatisticas" e passou os
