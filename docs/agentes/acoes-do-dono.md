@@ -38,6 +38,23 @@ Os destinos válidos: `google-ads`, `play-console`, `app-store`, `lojas` (as
 avaliações, que ficam nos dois consoles), `meta`, `n8n`, `revenuecat`,
 `stripe`.
 
+**Prazo, quando existir (03/10/2026).** Escreva `PRAZO AAAA-MM-DD` no começo do
+texto da ação. A `npm run acoes` imprime esses itens num bloco ANTES de tudo,
+ordenados pelo que vence primeiro, e a conferência reprova quem escrever a
+palavra PRAZO sem uma data que o calendário tenha ("PRAZO: fim do mês" não
+passa).
+
+Por que ele existe: no dia em que a lista virou sessão, entrou um item com 28
+dias de prazo, cujo vencimento tira os nove apps do Google Play. Ordenado por
+idade, ele aparecia por último, atrás de uma negativa de Google Ads que espera
+há 29 dias e custa uns R$ 65 por mês. **Idade não é urgência**: a lista media
+quanto tempo uma coisa esperou, e não o que acontece se ela não for feita.
+
+A data aqui é lida do TEXTO, e isso contradiz de propósito a regra do destino
+logo acima. A diferença é real: destino é classificação, que é palpite e
+apodrece quando o texto muda; prazo é um dado literal em formato fixo, que a
+conferência obriga a existir.
+
 **A regra dos 21 dias (02/10/2026).** Item parado há mais de três semanas não
 volta ao relatório como recomendação repetida: volta com o CUSTO DE HOJE, ou
 com a decisão de não fazer. A `npm run acoes` separa esses em bloco próprio
@@ -61,3 +78,4 @@ alguém não entrou num console de terceiro castiga a pessoa errada.
 | 2026-10-01 | play-console | **Abrir o Play Console em Aquisição de usuários, origem "Pesquisa do Google Play", e colar os 30 dias**, mais a taxa de conversão da ficha. É uma tela | Sem isso não existe veredito possível para a troca de título de 01/09 nem para a proposta de descrição curta de hoje: aquisição por origem e conversão da ficha NÃO vêm em nenhum coletor (o `play_console` do retrato traz só ANR e crash, conferido no pacote de hoje). Enquanto a tela não for aberta, toda proposta de ficha da Play é decidida no escuro e nenhuma pode ser julgada | ASO e Lojas |
 | 2026-10-02 | stripe | **Acrescentar `invoice.paid` à lista de eventos do endpoint do Stripe** (Desenvolvedores > Webhooks > o endpoint de produção > editar eventos). Uma caixa marcada, sem mexer em cobrança, preço ou plano | É o que transforma "quanto entrou" em pergunta de banco. Hoje o endpoint tem quatro eventos (três de assinatura e o checkout) e NENHUM traz valor pago, então toda vez que alguém quer saber o caixa real alguém precisa abrir duas telas do painel: foi assim em 01/10, na primeira cobrança do produto, e vai ser assim todo mês. Com o evento ligado, o `renovou` passa a carregar o valor da fatura (o código que lê a fatura já está no ar desde 02/10, e hoje ele depende de buscar a fatura na mão) | QA e Produto |
 | 2026-10-02 | lojas | **Gerar as duas chaves de resposta a avaliação**: na Play, uma conta de serviço com a permissão de responder avaliações (Play Console > Configuração > Acesso à API); na Apple, uma chave do App Store Connect com acesso a Customer Reviews. Me mande o caminho delas, não o conteúdo, e eu armo a rota de resposta | Rascunho para colar não cola: são 12 respostas prontas desde 15/09 e nenhuma foi publicada em 29 dias, em duas rodadas corretas do agente de ASO. Com as chaves, a resposta sai pelo mesmo desenho do e-mail de cancelamento: eu preparo e deixo armado, você dispara uma vez e as 12 saem, e a marca no banco impede sair duas vezes. Enquanto isso não existir, a lista vai continuar pedindo colagem manual | Esta rodada |
+| 2026-10-03 | play-console | **PRAZO 2026-10-31: resolver a verificação da forma de pagamento no Play Console**, ou o perfil de desenvolvedor e os 9 apps saem do Google Play. O primeiro passo é abrir "Mais detalhes" no aviso vermelho da página inicial e ler o motivo exato. A conta bancária precisa ser PJ, no CNPJ da AppFactory.RLM, com a razão social batendo com o perfil de pagamentos: conta pessoa física em perfil de organização é reprovada, e o tipo do perfil NÃO dá para trocar depois de criado (trocar exigiria outra conta de desenvolvedor e republicar os 9 apps do zero) | É a única coisa aberta na operação que acaba com o produto em vez de custar dinheiro. Tira do ar os 9 apps, inclusive o Mentorque, que acabou de registrar a primeira venda de loja (25/09, recuperada em 03/10). Também trava o repasse do dinheiro que a Play já tem para pagar, e deixa a 3.0 sem para onde ir. Vinte e oito dias de prazo, e verificação de documento de empresa costuma levar dias em cada rodada de correção, então o relógio real é mais curto que o do aviso | Esta rodada |

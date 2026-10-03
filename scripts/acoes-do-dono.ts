@@ -28,7 +28,7 @@ const CAMINHO = "docs/agentes/acoes-do-dono.md";
 const texto = readFileSync(new URL(`../${CAMINHO}`, import.meta.url), "utf8");
 const soConferir = process.argv.includes("--conferir");
 
-type Acao = { desde: string; onde: string; dias: number; acao: string; porque: string; quem: string };
+type Acao = { desde: string; onde: string; dias: number; acao: string; porque: string; quem: string; prazo: string | null };
 
 /** Os painéis onde o dono resolve. Fora desta lista, a conferência reprova. */
 const DESTINOS = ["google-ads", "play-console", "app-store", "lojas", "meta", "n8n", "revenuecat", "stripe"] as const;
@@ -54,6 +54,24 @@ const NOME_DO_DESTINO: Record<string, string> = {
  * com a decisão de não fazer.
  */
 const DIAS_PARA_REPRECIFICAR = 21;
+
+/**
+ * O prazo, quando a ação tem um.
+ *
+ * POR QUE (03/10/2026, no mesmo dia em que a lista virou sessão). Entrou um
+ * item novo com 28 dias de prazo: resolver a verificação de pagamento no Play
+ * Console, ou o perfil e os nove apps saem da loja em 31/10. Ordenado por
+ * idade, ele aparece por último, atrás de uma negativa de Google Ads que espera
+ * há 29 dias e custa uns R$ 65 por mês. **Idade não é urgência**: a lista media
+ * quanto tempo uma coisa esperou, e não o que acontece se ela não for feita.
+ *
+ * Aqui a data é LIDA DO TEXTO, e isso contradiz a regra que o destino seguiu
+ * dois parágrafos acima. A diferença é real: destino é classificação, que é
+ * palpite e apodrece quando o texto muda; prazo é um dado literal num formato
+ * fixo, e a conferência reprova quem escrever "PRAZO" sem uma data que o
+ * calendário tenha. Um "PRAZO: fim do mês" não passa.
+ */
+const MOLDE_DO_PRAZO = /PRAZO (\d{4}-\d{2}-\d{2})/;
 
 const hoje = new Date();
 hoje.setUTCHours(0, 0, 0, 0);
@@ -106,7 +124,20 @@ for (const linha of texto.split("\n")) {
   if (dias < 0) problemas.push(`data no futuro: ${desde} (${acao.slice(0, 40)})`);
   if (!acao) problemas.push(`ação sem texto na linha de ${desde}`);
   if (!quem) problemas.push(`falta quem levantou, na linha de ${desde}`);
-  acoes.push({ desde, onde, dias, acao, porque, quem });
+  // O PRAZO, quando houver. Escrever a palavra sem a data reprova: "PRAZO: fim
+  // do mês" não dá para contar, e prazo que não dá para contar não ordena nada.
+  const prazo = acao.match(MOLDE_DO_PRAZO)?.[1] ?? null;
+  if (/\bPRAZO\b/i.test(acao) && !prazo) {
+    problemas.push(`a ação de ${desde} fala em PRAZO sem uma data no formato AAAA-MM-DD: ${acao.slice(0, 60)}`);
+  }
+  if (prazo) {
+    const d2 = new Date(`${prazo}T00:00:00Z`);
+    if (Number.isNaN(d2.getTime()) || d2.toISOString().slice(0, 10) !== prazo) {
+      problemas.push(`prazo que o calendário não tem: ${prazo} (${acao.slice(0, 40)})`);
+    }
+  }
+
+  acoes.push({ desde, onde, dias, acao, porque, quem, prazo });
 }
 
 if (soConferir) {
@@ -141,6 +172,25 @@ const esperaDe = (dias: number) => (dias === 0 ? "entrou hoje" : `há ${idadeDe(
 const porDestino = new Map<string, Acao[]>();
 for (const a of acoes) porDestino.set(a.onde, [...(porDestino.get(a.onde) ?? []), a]);
 const sessoes = [...porDestino.entries()].sort((x, y) => y[1][0]!.dias - x[1][0]!.dias);
+
+// ── O QUE TEM PRAZO VEM PRIMEIRO, E NÃO O QUE ESPEROU MAIS ────────────────
+//
+// Idade mede quanto tempo uma coisa esperou. Prazo mede o que acontece se ela
+// não for feita. São perguntas diferentes, e a segunda ganha: em 03/10 entrou
+// um item que, se vencer, tira os nove apps da Play, e por idade ele apareceria
+// por último, atrás de uma lista de negativas que custa uns R$ 65 por mês.
+const comPrazo = acoes
+  .filter((a) => a.prazo)
+  .map((a) => ({ ...a, faltam: Math.round((new Date(`${a.prazo}T00:00:00Z`).getTime() - hoje.getTime()) / 86400000) }))
+  .sort((x, y) => x.faltam - y.faltam);
+if (comPrazo.length) {
+  console.log(`\nCOM PRAZO (${comPrazo.length}), e prazo não espera idade:\n`);
+  for (const a of comPrazo) {
+    const quanto = a.faltam < 0 ? `VENCEU HÁ ${-a.faltam} DIA(S)` : a.faltam === 0 ? "VENCE HOJE" : `faltam ${a.faltam} dia(s)`;
+    console.log(`  ${quanto}  (${NOME_DO_DESTINO[a.onde] ?? a.onde})  ${a.acao.slice(0, 110)}`);
+    console.log(`      ${a.porque.slice(0, 200)}\n`);
+  }
+}
 
 console.log(`\nPARADO ESPERANDO O DONO: ${acoes.length} item(ns) em ${sessoes.length} painel(is).\n`);
 console.log(`Por painel, do mais atrasado para o mais novo. Abrir UM fecha todos os dele:\n`);
