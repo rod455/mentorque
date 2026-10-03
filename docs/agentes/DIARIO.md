@@ -41,10 +41,32 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   painel do RevenueCat, e na mesma tela olhar o histórico de entregas de 25/09 e
   reenviar o evento se o painel deixar. Mesmo endpoint, mesmo header, nada a
   mudar na Vercel.
-- O QUE ISTO NÃO PROVA: que a troca resolve. A prova é a próxima compra de loja
-  cair sozinha no banco, ou o reenvio do evento de 25/09 gravar. O detector já
-  está de pé desde 02/10 (`vendas.lojaConferida` compara RevenueCat e banco todo
-  dia), então se continuar entupido a gente descobre em um dia e não em cinco.
+- **RESOLVIDO NO MESMO DIA, e com prova.** O dono acrescentou o `www` no painel e
+  mandou dois eventos de volta. Os dois entraram:
+  - 10h12m50, evento `5ABC9190`: um `expirou` de teste de agosto. Primeira
+    entrega do RevenueCat aceita na história do projeto.
+  - 10h16m26, evento `5E586D5F`, que é a COMPRA DE 25/09: gravou `assinou` em
+    `funil_eventos` e a assinatura do cliente virou `active`, mensal, até
+    25/10 01h00, **escrita pelo webhook** e não mais pela minha mão. Sem linha em
+    `app_erros`: a identidade veio válida.
+  - O log da Vercel confirma os dois com 200. O painel do RevenueCat ainda
+    mostrava "Failure" na linha de 25/09 depois do reenvio, e o banco é que
+    manda: se ele tentar de novo, o índice de reentrega barra o evento repetido
+    e o upsert não duplica nada.
+- **DE QUEBRA, A PRIMEIRA PROVA REAL DA LEITURA DO PRODUTO DO GOOGLE.** O produto
+  chegou como `annual100:monthly`: o nome da assinatura contém "annual" e o plano
+  base é mensal. Farejar a string inteira teria gravado este cliente como anual.
+  A regra de ler o que vem depois dos dois-pontos estava escrita desde o conserto
+  do Google e nunca tinha sido exercitada por uma venda de verdade.
+- O QUE CONTINUA VALENDO: as outras duas falhas de 24/08 ficam como estão. São
+  compras de teste do aparelho do dono, e reenviar uma `INITIAL_PURCHASE` delas
+  gravaria assinatura ATIVA com ciclo de agosto, fazendo o retrato gritar por
+  dois motivos de uma vez (ciclo vencido ativo, e uma assinatura de loja a mais
+  do que o RevenueCat tem).
+- SOBRA UMA SUJEIRINHA, e é decisão do dono: o `expirou` de 10h12 é de um teste
+  de agosto e conta como cancelamento no funil sem nunca ter sido cliente. Uma
+  linha. Apagar ou deixar o histórico como aconteceu são as duas opções, e
+  nenhuma é urgente.
 
 ## 2026-10-02 (noite) · A leitura das rodadas de 01 e 02/10: três erros diferentes com a mesma cara
 - Pedido do dono: ler o que os agentes disseram ontem e hoje, dizer o que
