@@ -829,3 +829,54 @@ nunca sobem o SDK (medido em 03/10, 92 de 407 em 21 dias). Isso e codigo de app,
 sai na 3.0, e vale para TODAS as fontes, inclusive a Meta. Os dois consertos sao
 independentes: com o Google ligado e sem o build, a divisao ja funciona sobre os
 77% que reportam, e como proporcao ela e valida.
+
+### ONDE O DINHEIRO DO GOOGLE REALMENTE VAI: 96% em YouTube e Display (03/10/2026)
+
+O dono exportou os cards da visao geral do Google Ads, semana de 26/09 a 02/10.
+A quebra por REDE nunca tinha sido lida nesta casa, e ela muda a conversa:
+
+| Rede | Cliques | Custo | CPC |
+|---|---|---|---|
+| YouTube | 360 | R$ 120,14 | R$ 0,33 |
+| Rede de Display | 111 | R$ 27,33 | R$ 0,25 |
+| Pesquisa do Google | 6 | R$ 5,20 | R$ 0,87 |
+| Parceiros de pesquisa | 3 | R$ 0,49 | R$ 0,16 |
+
+**R$ 147,47 de R$ 153,16, ou 96%, saiu em YouTube e Display.** A campanha
+`APP | Android | Instalações | BR` e MULTI_CHANNEL e o Google escolhe onde
+servir; ele escolheu video.
+
+**O QUE ISSO CORRIGE NA LEITURA DESTE PAPEL:**
+
+1. **O criterio 6 (desperdicio com nome) nao esta inalcancavel por falta de
+   etiqueta: ele e inaplicavel por NATUREZA do canal.** Nao existe termo de
+   busca em anuncio de video. Dizer "o limite e do instrumento" era impreciso; o
+   certo e que 96% do dinheiro corre num canal onde desperdicio nao se chama por
+   palavra, se chama por publico e por criativo.
+2. **As duas listas de negativa valem sobre 3,7% do dinheiro.** Elas continuam
+   certas, e o tamanho delas precisa ser dito junto, senao a lista do dono
+   carrega um item que parece grande e e pequeno.
+3. **`Interações` nao e clique**: 4.516 interacoes contra 478 cliques na mesma
+   semana, nove para um. Em campanha de video o Google conta visualizacao
+   engajada como interacao. Toda conta de "custo por interacao" neste papel tem
+   que dizer qual das duas esta usando.
+
+**E A CONSEQUENCIA PARA A ATRIBUICAO, que e a investigacao aberta**: campanha de
+video gera muita reivindicacao VIEW-THROUGH (viu, nao clicou, instalou depois).
+A janela de view-through da integracao do Google na AppsFlyer esta em **1 dia**
+(o padrao recomendado por eles), enquanto a de clique esta em 30. Entao
+reivindicacao de video com mais de um dia e RECUSADA pela AppsFlyer por desenho.
+Isso explica um vao grande entre o que o Google conta e o que a AppsFlyer
+atribui. **Nao explica zero exato**, e por isso continua hipotese, nao causa.
+
+**A CAMPANHA DE APP NAO PAROU**: gasto diario entre R$ 18,45 e R$ 26,36 nos sete
+dias, sem queda. Quem parou foi a de busca, e agora com o grupo de anuncios
+nomeado: `Sintomas` foi de R$ 68,41 para **R$ 0,00** e
+`Perguntar/aprender (IA + trilhas)` de R$ 26,11 para **R$ 0,00** contra a semana
+anterior. Os dez termos de busca da semana somam R$ 0,00 e zero clique, e
+NENHUM deles e de curso ou de scanner: sao todos relevantes (manutencao de
+carro, manual, tabela). **As negativas aplicadas em 03/10 nao tem no que morder
+enquanto a busca nao voltar**, que e o que ja estava escrito como prova fraca.
+
+**SO SMARTPHONE**: R$ 152,44 em smartphones, R$ 0,72 em tablets, R$ 0,00 em
+computador e TV. Nao ha desperdicio de dispositivo para cortar.

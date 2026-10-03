@@ -33,6 +33,38 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-03 (noite, 17) · 96% do dinheiro do Google esta em YouTube e Display, e ninguem aqui sabia
+
+- O dono exportou os cards da visao geral do Google Ads (26/09 a 02/10). A
+  quebra por REDE nunca tinha sido lida nesta casa.
+- **YouTube R$ 120,14 (360 cliques), Display R$ 27,33 (111), Pesquisa do Google
+  R$ 5,20 (6), parceiros R$ 0,49 (3). Ou seja: R$ 147,47 de R$ 153,16, 96%, em
+  video e display.** A campanha de app e MULTI_CHANNEL e o Google escolheu onde
+  servir; ele escolheu video.
+- **ISSO CORRIGE TRES LEITURAS DESTE MES**:
+  1. o criterio 6 da regua de Midia (desperdicio com nome) nao e inalcancavel
+     por falta de etiqueta, e **inaplicavel por natureza do canal**: nao existe
+     termo de busca em anuncio de video;
+  2. as duas listas de negativa, que o dono aplicou hoje e que estao na lista
+     dele desde 03/09, valem sobre **3,7% do dinheiro**. Continuam certas, e o
+     tamanho delas precisa estar escrito do lado;
+  3. `Interações` nao e clique: 4.516 contra 478 na mesma semana, nove para um,
+     porque em video o Google conta visualizacao engajada.
+- **E DA UMA HIPOTESE COM FUNDAMENTO PARA A ATRIBUICAO ZERO**: campanha de video
+  produz muita reivindicacao view-through, e a janela de view-through da
+  integracao do Google na AppsFlyer esta em **1 dia** contra 30 da de clique.
+  Reivindicacao de video com mais de um dia e recusada por desenho. Explica um
+  vao grande; **nao explica zero exato**, entao segue hipotese.
+- **A CAMPANHA DE APP NAO PAROU**: R$ 18,45 a R$ 26,36 por dia, sem queda. Quem
+  parou foi a de busca, agora com o grupo nomeado: `Sintomas` de R$ 68,41 para
+  R$ 0,00 e `Perguntar/aprender (IA + trilhas)` de R$ 26,11 para R$ 0,00.
+- **E A PROVA DE QUE AS NEGATIVAS NAO TEM NO QUE MORDER**: os dez termos de
+  busca da semana somam R$ 0,00 e zero clique, e nenhum e de curso ou scanner.
+  Sao todos relevantes. Era o que estava escrito como prova fraca em 03/10, e
+  agora tem numero.
+- Tudo em `midia-paga.md`, para a rodada de 09/10 abrir com isso em vez de
+  repetir a conversa de palavra-chave.
+
 ## 2026-10-03 (noite, 16) · Eu inferi a causa da ausencia, o dono me corrigiu, e a evidencia aponta para outro lugar
 
 - **O ERRO E MEU E E O DA CASA.** Eu vi que `googleadwords_int` nao aparecia no
