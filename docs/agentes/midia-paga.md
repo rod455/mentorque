@@ -747,3 +747,48 @@ a ser alcançável por um caminho que já estava pago. Se não estiver feita, co
 a linha. E em qualquer um dos dois casos, declarar a ressalva medida em 22/09:
 25% dos aparelhos Android da 2.7.0 nunca subiram o SDK, então a AppsFlyer conta
 por baixo e a divisão vale como PROPORÇÃO, não como total.
+
+### O relatorio de parceiros da AppsFlyer, e o zero que nao e resultado (03/10/2026)
+
+**ONDE**: console da AppsFlyer, menu `Export > Aggregated Data Export`,
+relatório **"Partners (media sources)"**, com o período e o **app** escolhidos no
+topo. O seletor de app aceita UM por vez, e esquecer disso custou um arquivo:
+o primeiro export saiu do iPhone, com 3 instalações, e pareceu atribuição
+quebrada. Baixe os dois, Android e iPhone, sempre.
+
+**O QUE O ARQUIVO TRAZ**, e é a régua deste papel numa linha por campanha:
+`Media Source (pid)`, `Campaign (c)`, `Installs`, `Sessions`, `Loyal Users`,
+`Total Cost`, `Average eCPI`.
+
+**A PRIMEIRA LEITURA, Android, 26/09 a 03/10**: Facebook Ads com 124
+instalações, 397 sessões e 42 leais (33,87%); Organic com 52 instalações e 14
+leais (26,92%). 176 em 8 dias, 22 por dia, e a Meta responde por 70%.
+
+**E A ARMADILHA QUE ESTE RELATÓRIO CARREGA, que precisa ser dita toda vez que
+ele for citado: o Google Ads não aparece, e isso NÃO quer dizer que ele não
+trouxe ninguém.** O Google é rede autoatribuída: a AppsFlyer só enxerga
+instalação dele depois que a integração é ligada no console. Enquanto não for,
+as instalações dele caem dentro de `Organic`, misturadas com orgânico de
+verdade. **Ler esse zero como desempenho seria afirmar que R$ 151,83 não
+trouxeram ninguém, e o dado não diz isso: ele não foi perguntado.**
+
+É o quinto zero estrutural desta casa, e o primeiro pego antes de virar
+conclusão publicada.
+
+**O QUE DÁ PARA PUBLICAR ENQUANTO A LIGAÇÃO NÃO EXISTE**, e só isto:
+
+- custo por instalação da **Meta**, porque ela tem as duas pontas: gasto do
+  painel dividido pelas instalações do relatório, declarando que as janelas do
+  gasto e da instalação não são idênticas;
+- a **proporção** entre Meta e orgânico-mais-Google, nunca entre Meta e Google;
+- o **cruzamento de confiança**: o painel da Meta disse 194 instalações na
+  semana e a AppsFlyer conta 124, uns 64%, que bate com os 25% de aparelhos
+  Android que nunca sobem o SDK (medido em 22/09) mais a diferença normal entre
+  painel de plataforma e MMP. Discordância desse tamanho é esperada; muito maior
+  que isso é que viraria investigação.
+
+**E UM ACHADO DE NEGÓCIO PARA NÃO SE PERDER**: o tráfego da Meta tem 33,87% de
+usuários leais contra 26,92% do orgânico. **Campanha de instalação costuma ser
+acusada de trazer lixo, e aqui ela traz gente que volta MAIS que o orgânico.**
+Esse número vale mais que o custo por instalação na hora de decidir orçamento, e
+ele só existe porque o relatório traz `Loyal Users` do lado de `Installs`.

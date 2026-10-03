@@ -33,6 +33,65 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-03 (noite, 12) · A Meta trouxe 124 instalacoes e o Google trouxe ZERO, e esse zero e estrutural
+
+- O dono baixou o relatório de parceiros do app **Android**, janela de 26/09 a
+  03/10 (o anterior era do iPhone, com 3 instalações, e o seletor de app era a
+  causa). Duas linhas, e elas respondem a pergunta de duas semanas:
+
+  | Fonte | Campanha | Instalações | Sessões | Leais | Leais/Inst. |
+  |---|---|---|---|---|---|
+  | Facebook Ads | Lançamento Mentorque | **124** | 397 | 42 | 33,87% |
+  | Organic | - | **52** | 0 | 14 | 26,92% |
+
+  São 176 instalações em 8 dias, 22 por dia, e a Meta responde por 70% delas.
+- **E O GOOGLE ADS NÃO TEM LINHA. ZERO. E esse zero é ESTRUTURAL, não é
+  resultado.** O Google Ads é rede autoatribuída: a AppsFlyer só enxerga
+  instalação dele quando a integração está ligada no console, e ela não está.
+  Então "zero" aqui significa **"não conectado"**, e NÃO "não trouxe ninguém".
+  As instalações do Google estão quase certamente dentro das 52 orgânicas,
+  misturadas com orgânico de verdade.
+- **É A QUINTA VEZ QUE ESTA CASA TROPEÇA NO ZERO ESTRUTURAL**, e a primeira em
+  que ele foi reconhecido ANTES de virar conclusão publicada. As quatro
+  anteriores: `renovacoes 0`, `iniciou_checkout 0`, `funil_eventos` sem evento
+  de RevenueCat, e a etiqueta da busca em 20/09. O passo do ritual que o retorno
+  do QA ganhou hoje ("antes de publicar qualquer zero, pergunte quem ESCREVE
+  aquele número") é o que pegou este.
+- **ENTÃO A DIVISÃO DOS R$ 280,68 AINDA NÃO SAI, e agora sabemos exatamente por
+  quê.** O que dá para dizer com o que existe:
+  - **Meta: R$ 132,11 na semana contra 124 instalações em 8 dias, uns R$ 1,07
+    por instalação.** Ordem de grandeza, porque as janelas estão deslocadas em um
+    dia e o gasto é de 7 dias contra instalação de 8.
+  - **Google: desconhecido**, escondido nas 52 orgânicas. R$ 151,83 sem
+    denominador.
+- **CRUZAMENTO QUE DÁ CONFIANÇA NA LEITURA**: o painel da Meta relatou 194
+  instalações na semana e a AppsFlyer conta 124, ou seja 64%. Bate com a falha
+  medida em 22/09, de 25% dos aparelhos Android nunca subirem o SDK, mais a
+  diferença normal entre painel de plataforma e MMP. Os dois números discordam
+  do jeito esperado, e não de um jeito que peça investigação.
+- **ACHADO DE NEGÓCIO, e é bom: o tráfego da Meta NÃO é lixo.** 42 usuários
+  leais em 124 instalações (33,87%) contra 14 em 52 orgânicas (26,92%). A
+  campanha de instalação traz gente que volta MAIS que o orgânico. Era o medo
+  natural de campanha de instalação e ele não se confirmou.
+- **E UMA LEITURA MINHA DE HORAS ATRÁS FICA CONTESTADA**: eu li do Play que 561
+  aquisições produziram 158 primeiros acessos e disse que 72% nunca abriam o
+  app. Aqui, 124 instalações da Meta produziram **397 sessões**, 3,2 por
+  instalação. Os dois não podem estar certos do mesmo jeito. Não resolvo isso
+  hoje: fica escrito que a leitura de 72% está CONTESTADA por um segundo
+  instrumento e precisa de uma terceira medida antes de virar prioridade. Era
+  exatamente por isso que ela não tinha sido fechada como achado.
+- **ESTRANHEZA DO ARQUIVO, registrada e não interpretada**: a linha orgânica traz
+  0 sessões e 14 usuários leais ao mesmo tempo, o que é contraditório. Pode ser
+  que o relatório não conte sessão para orgânico. Não tiro conclusão de sessão
+  orgânica enquanto isso não for entendido.
+- O item da lista continua: ligar o Google Ads no Collaborate é o que transforma
+  as 52 orgânicas em duas linhas e fecha o critério 3 de verdade.
+- **E A PERGUNTA DA API FOI RESPONDIDA PELO PRÓPRIO CONSOLE**: a página
+  `Export > API Access` mostra a aba **Pull API** disponível, com Raw Data
+  Report e Aggregated Report, e a instrução "peça a um usuário admin o token da
+  Pull API". O dono É admin. Então a porta está aberta neste plano, e o coletor
+  deixa de ser hipótese: falta o token, que é a metade dele porque é chave.
+
 ## 2026-10-03 (noite, 11) · O primeiro export veio com 3 instalacoes, e o motivo e o seletor de app
 
 - O dono baixou os dois relatórios de parceiros, janela de 26/09 a 03/10. O
