@@ -161,6 +161,25 @@ console.log("Cadastro: o convite do mês grátis sai uma vez, para quem deve, e 
     /vehicles/.test(rota) && /from\("user_state"\)/.test(rota),
     "evento so enxerga quem cadastrou DEPOIS de a medicao existir; estado enxerga todo mundo",
   );
+  // A QUARTA REGRA, QUE NÃO ERA DAS TRÊS TRAVAS E CUSTOU CARO (03/10/2026).
+  //
+  // "Nunca dois e-mails no mesmo dia" existe desde 12/09, escrita no banco como
+  // índice único `(user_id, dia)` e no código da jornada. Esta rota nasceu sem
+  // ela, porque eu copiei as três travas de /api/email/saida e não olhei o que
+  // a jornada já protegia. No primeiro disparo, 8 das 32 pessoas receberam um
+  // e-mail da jornada às 11h47 e este às 12h34. O índice recusou a marca e foi
+  // assim que o erro apareceu: DEPOIS do envio.
+  conferir(
+    "quem já recebeu algo HOJE fica para a próxima rodada",
+    /\.eq\("dia", hoje\)/.test(rota) && /\.\.\.recebeuHoje,/.test(rota),
+    "a regra de um por dia e do banco e da jornada, e esta rota passou por fora dela com gente de verdade do outro lado",
+  );
+  conferir(
+    "e quantos foram adiados por isso aparece na resposta",
+    /adiadosPorJaTeremRecebidoHoje/.test(rota),
+    "numero que prova a regra respeitada nao pode ficar escondido",
+  );
+
   conferir(
     "o resultado das consultas pula a pessoa de verdade",
     /if \(fora\.has\(userId\)\) continue;/.test(rota),

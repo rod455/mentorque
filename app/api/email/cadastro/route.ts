@@ -164,14 +164,31 @@ export async function POST(req: Request) {
       .map((e) => String(e.user_id)),
   );
 
-  const [{ data: jaRecebeu }, { data: saiuDaLista }, { data: assinantes }] = await Promise.all([
+  const [{ data: jaRecebeu }, { data: hojeJa }, { data: saiuDaLista }, { data: assinantes }] = await Promise.all([
     admin.from("jornada_envios").select("user_id").eq("chave", CHAVE_DO_ENVIO),
+    // QUEM JÁ RECEBEU ALGO HOJE (03/10/2026), e isto nasceu de um erro meu com
+    // gente de verdade do outro lado.
+    //
+    // No primeiro disparo, 8 das 32 pessoas tinham recebido um e-mail da
+    // jornada às 11h47 e receberam este às 12h34: **dois e-mails nossos em 47
+    // minutos**. A regra "nunca dois no mesmo dia" existe desde 12/09, está
+    // escrita no banco como índice único `(user_id, dia)` e no código da
+    // jornada, e esta rota passou por fora dela, porque eu copiei as três
+    // travas de /api/email/saida sem conferir a quarta regra que a jornada já
+    // tinha. O índice recusou a marca e foi assim que o erro apareceu: ele
+    // avisou DEPOIS do envio, que é o único momento em que não adianta mais.
+    //
+    // Agora a regra é consultada ANTES. Quem já recebeu qualquer e-mail hoje
+    // fica para a próxima rodada, e isso aparece na resposta em vez de sumir.
+    admin.from("jornada_envios").select("user_id").eq("dia", hoje),
     admin.from("jornada_saidas").select("user_id"),
     admin.from("subscriptions").select("user_id, status").in("status", ["active", "trialing"]),
   ]);
+  const recebeuHoje = new Set((hojeJa ?? []).map((r) => String(r.user_id)));
   const fora = new Set([
     ...comCarro,
     ...(jaRecebeu ?? []).map((r) => String(r.user_id)),
+    ...recebeuHoje,
     ...(saiuDaLista ?? []).map((r) => String(r.user_id)),
     ...(assinantes ?? []).map((r) => String(r.user_id)),
   ]);
@@ -221,5 +238,15 @@ export async function POST(req: Request) {
     await dorme(ESPERA_MS);
   }
 
-  return NextResponse.json({ ok: true, ...resultado, candidatos: alvos.length, tetoDoCupom: cupons, ficaramDeFora: sobraram });
+  return NextResponse.json({
+    ok: true,
+    ...resultado,
+    candidatos: alvos.length,
+    tetoDoCupom: cupons,
+    ficaramDeFora: sobraram,
+    // Quantos ficaram para a próxima rodada por já terem recebido um e-mail
+    // hoje. Dito, e não escondido: é o número que prova que a regra de um por
+    // dia foi respeitada neste disparo.
+    adiadosPorJaTeremRecebidoHoje: recebeuHoje.size,
+  });
 }
