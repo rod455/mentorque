@@ -3,7 +3,7 @@ import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { upsertSubscription, cicloNoBanco } from "@/lib/subscriptionSync";
-import { faturaDaVirada, fimDoCiclo, viradaDeCiclo } from "@/lib/ciclo";
+import { faturaDaVirada, fimDoCiclo, valorDoCheckout, viradaDeCiclo } from "@/lib/ciclo";
 import { eventoDeFunil } from "@/lib/funilServidor";
 
 export const runtime = "nodejs";
@@ -45,7 +45,17 @@ export async function POST(req: Request) {
         if (session.subscription) {
           const sub = await stripe.subscriptions.retrieve(session.subscription as string);
           await upsertSubscription(admin, sub, session.client_reference_id);
-          await funil("assinou", session.client_reference_id ?? sub.metadata?.user_id, { sub: sub.id });
+          // O VALOR DA PRIMEIRA COBRANÇA, desde 03/10/2026. A renovação já
+          // dizia quanto entrou; esta não dizia, e é o mês 1 de todo cliente.
+          // Vem da própria sessão, que já chega com tudo: nenhum evento novo no
+          // painel. O porquê e a regra moram em `lib/ciclo.ts`.
+          const pago = valorDoCheckout(session);
+          await funil("assinou", session.client_reference_id ?? sub.metadata?.user_id, {
+            sub: sub.id,
+            ...(pago
+              ? { pagoCentavos: pago.centavos, moeda: pago.moeda, ...(pago.fatura ? { fatura: pago.fatura } : {}) }
+              : { semValor: "checkout nao pago" }),
+          });
         }
         break;
       }

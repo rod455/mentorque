@@ -26,7 +26,7 @@
 //
 // Rode com: npm run conferir:renovacao
 import { readFileSync } from "node:fs";
-import { cicloVencido, faturaDaVirada, fimDoCiclo, linhaDeCiclosVencidos, viradaDeCiclo } from "../lib/ciclo.ts";
+import { cicloVencido, faturaDaVirada, fimDoCiclo, linhaDeCiclosVencidos, valorDoCheckout, viradaDeCiclo } from "../lib/ciclo.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -210,6 +210,64 @@ function semComentarios(fonte: string): string {
   );
 }
 
+// ── O VALOR DA PRIMEIRA COBRANCA (03/10/2026) ──────────────────────────────
+//
+// A renovacao ja dizia quanto entrou; a PRIMEIRA cobranca nao dizia, e e o mes
+// 1 de todo cliente. Em 13 assinaturas, nenhum primeiro pagamento tem valor no
+// funil. O valor vem da propria sessao do checkout, que ja chega com tudo.
+{
+  console.log("O valor da primeira cobranca, que vem do checkout:");
+
+  const pago = valorDoCheckout({ payment_status: "paid", amount_total: 2990, currency: "BRL", invoice: "in_1" });
+  conferir("checkout pago vira centavos", pago?.centavos === 2990, JSON.stringify(pago));
+  conferir("e a moeda sai minuscula", pago?.moeda === "brl", JSON.stringify(pago));
+  conferir("e o id da fatura viaja junto", pago?.fatura === "in_1", JSON.stringify(pago));
+
+  // CUPOM DE 100%: o Stripe marca `no_payment_required`, e isso e ZERO MEDIDO.
+  // Tratar como ausente faria o mes de cortesia sumir junto com o mes que
+  // ninguem conseguiu ler, que e a confusao que o `semValor` existe para
+  // evitar. E a campanha de 03/10 oferece exatamente um cupom de 100%, entao
+  // este caso e o PROXIMO a acontecer, nao um caso de laboratorio.
+  const cortesia = valorDoCheckout({ payment_status: "no_payment_required", amount_total: 0, currency: "brl" });
+  conferir("cortesia e zero, e nao ausencia", cortesia?.centavos === 0, JSON.stringify(cortesia));
+  conferir("e sem fatura no objeto o campo nao aparece", cortesia?.fatura === undefined, JSON.stringify(cortesia));
+
+  // E O QUE NAO PODE VIRAR RECEITA.
+  conferir("checkout nao pago nao vira valor", valorDoCheckout({ payment_status: "unpaid", amount_total: 2990 }) === null);
+  conferir("sem payment_status nao vira valor", valorDoCheckout({ amount_total: 2990 }) === null);
+  conferir(
+    "valor ausente nao vira zero",
+    valorDoCheckout({ payment_status: "paid", amount_total: null }) === null,
+    "zero medido e ausencia nao podem virar a mesma coisa no caminho",
+  );
+  conferir("valor negativo nao passa", valorDoCheckout({ payment_status: "paid", amount_total: -1 }) === null);
+  conferir(
+    "fatura como objeto nao vira id de mentira",
+    valorDoCheckout({ payment_status: "paid", amount_total: 100, invoice: { id: "in_x" } })?.fatura === undefined,
+  );
+
+  // A LIGACAO NA ROTA, que e onde o buraco morava: regra consertada na fonte
+  // que o consumidor nao usa nao e conserto, e foi assim que cinco
+  // conferencias desta casa ficaram verdes com o defeito de pe em 03/10.
+  const rota = readFileSync(new URL("../app/api/stripe/webhook/route.ts", import.meta.url), "utf8");
+  conferir("a rota importa a regra do valor do checkout", /import \{[^}]*valorDoCheckout[^}]*\} from "@\/lib\/ciclo"/.test(rota));
+  conferir(
+    "e a chama na sessao do checkout",
+    /const pago = valorDoCheckout\(session\)/.test(rota),
+    "sem isto o mes 1 continua sem caixa, com a regra escrita e ninguem usando",
+  );
+  conferir(
+    "e o `assinou` carrega o valor quando ele existe",
+    /funil\("assinou"[\s\S]{0,400}pagoCentavos: pago\.centavos/.test(rota),
+    "a regra pode estar certa e o evento sair vazio do mesmo jeito",
+  );
+  conferir(
+    "e diz `semValor` quando nao da para saber",
+    /semValor: "checkout nao pago"/.test(rota),
+    "evento sem campo nenhum nao distingue cortesia de leitura falhada",
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) da renovação reprovaram.`);
   process.exit(1);
@@ -235,6 +293,11 @@ console.log(
   // sei". Foi o que aconteceu na virada de 01/09.
   const cortesia = await faturaDaVirada(subComFatura, async () => ({ status: "paid", amount_paid: 0, currency: "brl" }));
   conferir("cortesia e zero, e nao ausencia", cortesia?.centavos === 0, JSON.stringify(cortesia));
+
+  // FATURA PAGA SEM VALOR: ausencia, nao cortesia. Mesma armadilha achada no
+  // `valorDoCheckout` em 03/10, plantada aqui porque o codigo era o mesmo.
+  const semValor = await faturaDaVirada(subComFatura, async () => ({ status: "paid", amount_paid: null, currency: "brl" }));
+  conferir("fatura paga sem amount_paid nao vira zero", semValor === null, JSON.stringify(semValor));
 
   for (const estado of ["open", "draft", "void", "uncollectible"]) {
     const f = await faturaDaVirada(subComFatura, async () => ({ status: estado, amount_paid: 2990, currency: "brl" }));

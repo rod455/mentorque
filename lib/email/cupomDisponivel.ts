@@ -23,6 +23,10 @@
 // Enquanto for 0, a conta subestima o gasto, e subestimar aqui erra para o
 // lado de oferecer demais. Está dito para ninguém confundir estimativa com
 // medida.
+//
+// LIDO EM 03/10/2026: zero resgates no cupom de teto 25. A estimativa e a
+// medida coincidem hoje, e o `LEITURA_DO_PAINEL` guarda a data para que o
+// retrato diga de onde o numero veio em vez de deixar o leitor supor.
 
 /** O cupom da campanha, o mesmo do lançamento. */
 export const CUPOM_DA_CAMPANHA = "LANCAMENTO1MES";
@@ -41,12 +45,28 @@ export const PRECO_MENSAL = "R$ 29,90";
 export const TETO_DO_CUPOM = 25;
 
 /**
- * Quantos resgates já tinham sido gastos antes de a contagem existir.
+ * A leitura do painel do Stripe: quando foi lida e quanto dizia.
  *
- * Lido UMA vez no painel do Stripe e escrito aqui. Zero significa "ninguém
- * leu ainda", e não "ninguém usou".
+ * `null` é "ninguém leu ainda". Objeto é "alguém leu, nesta data, e deu este
+ * número", INCLUSIVE quando o número é zero. A primeira versão disto era uma
+ * constante solta em 0 e o comentário dela precisava explicar que zero queria
+ * dizer "não lido": duas coisas diferentes no mesmo valor, que é como um dado
+ * medido e a falta dele viram a mesma frase no retrato.
+ *
+ * LIDO EM 03/10/2026, no painel, pelo dono: Product catalog > Coupons, a linha
+ * de 100% off once com teto 25, em **0/25**. É o cupom `MENSAL-LANCAMENTO100-25`
+ * criado em 03/09 junto com o código `LANCAMENTO1MES`, os dois com teto 25
+ * (`docs/lancamento/email-lista-de-espera.md`); os outros "1 mês grátis" do
+ * painel têm teto 10 e são os do lançamento, com 3 resgates somados, que são as
+ * três assinaturas pagantes de setembro.
+ *
+ * Então as 25 vagas estão INTEIRAS, e o e-mail de 03/10 para 32 pessoas ainda
+ * não produziu resgate nenhum.
  */
-export const USOS_ANTES_DA_CONTAGEM = 0;
+export const LEITURA_DO_PAINEL: { em: string; resgates: number } | null = { em: "03/10/2026", resgates: 0 };
+
+/** Quantos resgates já tinham sido gastos antes de a contagem do banco existir. */
+export const USOS_ANTES_DA_CONTAGEM = LEITURA_DO_PAINEL?.resgates ?? 0;
 
 export type OfertaDeCupom = { cupom: string; precoMensal: string };
 
@@ -78,10 +98,9 @@ export function linhaDoCupom(resgatesContados: number): string {
   const usados = USOS_ANTES_DA_CONTAGEM + Math.max(0, resgatesContados);
   const restam = Math.max(0, TETO_DO_CUPOM - usados);
   const base = `Cupom ${CUPOM_DA_CAMPANHA}: ${usados} de ${TETO_DO_CUPOM} usados, ${restam} vaga(s)`;
-  const ressalva =
-    USOS_ANTES_DA_CONTAGEM === 0
-      ? ". CONTA POR BAIXO: so enxerga resgate que virou assinatura nossa depois de 02/10, e o que foi gasto antes nao esta aqui (USOS_ANTES_DA_CONTAGEM = 0). O numero do painel do Stripe e que manda"
-      : "";
+  const ressalva = LEITURA_DO_PAINEL
+    ? `. Painel do Stripe lido em ${LEITURA_DO_PAINEL.em}: ${LEITURA_DO_PAINEL.resgates} de ${TETO_DO_CUPOM}. Daquele dia para ca a conta e a do banco`
+    : ". CONTA POR BAIXO: so enxerga resgate que virou assinatura nossa depois de 02/10, e o que foi gasto antes nao esta aqui (ninguem leu o painel ainda). O numero do painel do Stripe e que manda";
   if (restam === 0) {
     return `${base}. A OFERTA PAROU DE SAIR nos e-mails novos, e a decisao e do dono: criar cupom novo (o teto nao sobe, so criando outro) ou encerrar a campanha${ressalva}`;
   }

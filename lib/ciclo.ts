@@ -100,12 +100,55 @@ export async function faturaDaVirada(
     // fatura que deixou de existir: contar qualquer uma delas seria afirmar
     // caixa que ninguém recebeu.
     if (!f || f.status !== "paid") return null;
-    const centavos = Number(f.amount_paid);
-    if (!Number.isFinite(centavos) || centavos < 0) return null;
+    // Mesma armadilha do `valorDoCheckout`, achada em 03/10 e consertada aqui
+    // junto: `Number(null)` e 0, entao fatura paga sem `amount_paid` viraria
+    // cortesia de R$ 0,00 em vez de "nao deu para saber".
+    const centavos = f.amount_paid;
+    if (typeof centavos !== "number" || !Number.isFinite(centavos) || centavos < 0) return null;
     return { centavos, moeda: String(f.currency ?? "brl").toLowerCase(), fatura: id };
   } catch {
     return null;
   }
+}
+
+// ── O VALOR DA PRIMEIRA COBRANÇA (03/10/2026) ──────────────────────────────
+//
+// POR QUE ISTO EXISTE. A virada de ciclo carrega o valor desde 02/10, então a
+// RENOVAÇÃO está medida. A primeira cobrança não estava: o
+// `checkout.session.completed` escrevia `assinou` só com o id da assinatura, e
+// o mês 1 de todo cliente ficava sem caixa. Em 13 assinaturas, nenhum primeiro
+// pagamento tem valor no funil.
+//
+// E A ALTERNATIVA QUE A LISTA DO DONO PEDIA ERA MAIS CARA E DAVA MENOS. O item
+// aberto em 02/10 pedia a ele marcar `invoice.paid` no painel do Stripe. Lido o
+// código em 03/10: a rota não tem `case "invoice.paid"`, então a caixa marcada
+// entregaria evento que o `switch` ignora; e um handler escrito sem dedup pelo
+// id da fatura escreveria `renovou` duas vezes no mesmo mês, inflando receita.
+// O que falta estava na nossa frente: a sessão do checkout JÁ chega com
+// `amount_total`, `currency` e `payment_status`. Nenhum painel, nenhuma entrega
+// nova, a mesma que já funciona.
+//
+// `no_payment_required` É ZERO MEDIDO, NÃO É AUSENTE, e essa distinção é a
+// mesma da fatura: cupom de 100% produz checkout legítimo em que nada foi
+// cobrado. Zero é resposta; ausente é "não deu para saber". Juntar as duas faz
+// receita sumir com cara de cortesia.
+export type ValorDoCheckout = { centavos: number; moeda: string; fatura?: string } | null;
+
+export function valorDoCheckout(sessao: {
+  payment_status?: string | null;
+  amount_total?: number | null;
+  currency?: string | null;
+  invoice?: unknown;
+}): ValorDoCheckout {
+  // `unpaid` é checkout que não pagou: não é zero, é desconhecido.
+  if (sessao.payment_status !== "paid" && sessao.payment_status !== "no_payment_required") return null;
+  // `typeof number` e NAO `Number(...)`, e a conferencia pegou isto antes de
+  // subir: `Number(null)` e 0, entao campo AUSENTE virava zero medido, que e
+  // a confusao que este arquivo inteiro existe para impedir.
+  const centavos = sessao.amount_total;
+  if (typeof centavos !== "number" || !Number.isFinite(centavos) || centavos < 0) return null;
+  const fatura = typeof sessao.invoice === "string" ? sessao.invoice : undefined;
+  return { centavos, moeda: String(sessao.currency ?? "brl").toLowerCase(), ...(fatura ? { fatura } : {}) };
 }
 
 // ── O CICLO QUE VENCEU E NINGUEM MEXEU (02/10/2026) ────────────────────────

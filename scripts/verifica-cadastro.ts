@@ -28,7 +28,7 @@
 import { readFileSync } from "node:fs";
 import { emailTermineOCadastro, linkDoCupom } from "../lib/email/termineOCadastro.ts";
 import { montarMensagem, renderEmail } from "../lib/jornada/emails.ts";
-import { TETO_DO_CUPOM, linhaDoCupom, ofertaDoCupom } from "../lib/email/cupomDisponivel.ts";
+import { LEITURA_DO_PAINEL, TETO_DO_CUPOM, linhaDoCupom, ofertaDoCupom } from "../lib/email/cupomDisponivel.ts";
 
 process.env.JORNADA_SEGREDO ||= "segredo-de-conferencia";
 
@@ -292,10 +292,36 @@ console.log("Cadastro: o convite do mês grátis sai uma vez, para quem deve, e 
     /A OFERTA PAROU DE SAIR/.test(linhaDoCupom(TETO_DO_CUPOM)),
     linhaDoCupom(TETO_DO_CUPOM),
   );
+  const fonteDoCupom = readFileSync(new URL("../lib/email/cupomDisponivel.ts", import.meta.url), "utf8");
+
+  // A LEITURA DO PAINEL, E AS DUAS FRASES QUE ELA DECIDE (03/10/2026).
+  //
+  // Antes, a ressalva do retrato dependia de `USOS_ANTES_DA_CONTAGEM === 0`, e
+  // isso fazia zero LIDO no painel contar a mesma história que zero NÃO LIDO:
+  // a frase seguiria dizendo "o número do painel é que manda" depois de o
+  // painel ter sido lido. Agora quem decide é a leitura existir, e as duas
+  // frases são cobradas com o caso de cada uma.
   conferir(
-    "e diz que a conta é por baixo enquanto ninguém leu o painel",
-    /CONTA POR BAIXO/.test(linhaDoCupom(3)),
+    "a leitura do painel está registrada com data",
+    LEITURA_DO_PAINEL !== null && /^\d{2}\/\d{2}\/\d{4}$/.test(LEITURA_DO_PAINEL.em),
+    `leitura: ${JSON.stringify(LEITURA_DO_PAINEL)}`,
+  );
+  conferir(
+    "e o retrato diz a data de onde o número veio",
+    /Painel do Stripe lido em \d{2}\/\d{2}\/\d{4}/.test(linhaDoCupom(3)),
     linhaDoCupom(3),
+  );
+  // A metade que some quando alguém apaga a leitura: a frase do não lido tem
+  // que voltar sozinha, senão apagar a leitura passa calado.
+  conferir(
+    "e a frase do não lido continua existindo no fonte, para quando a leitura sair",
+    /CONTA POR BAIXO/.test(fonteDoCupom) && /ninguem leu o painel ainda/.test(fonteDoCupom),
+    "sem ela, apagar a leitura faria o retrato afirmar medida que ninguem fez",
+  );
+  conferir(
+    "o número lido não é maior que o teto",
+    (LEITURA_DO_PAINEL?.resgates ?? 0) <= TETO_DO_CUPOM,
+    `${LEITURA_DO_PAINEL?.resgates} de ${TETO_DO_CUPOM}`,
   );
 }
 

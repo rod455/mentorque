@@ -3,6 +3,66 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-03 (noite, 4) · O cupom tem as 25 vagas inteiras, e o `invoice.paid` que o dono ia marcar comprava menos do que o item prometia
+
+- Pedido do dono: detalhar os dois itens do Stripe e fechar. Ele mandou o print
+  do painel e liberou o conector.
+- **O CUPOM, LIDO NO PAINEL: `0/25`.** Product catalog > Coupons, a linha de
+  100% off once com teto 25. É o cupom `MENSAL-LANCAMENTO100-25`, criado em
+  03/09 junto com o código `LANCAMENTO1MES`, os dois com teto 25, conferido em
+  `docs/lancamento/email-lista-de-espera.md`. Os outros "1 mês grátis" do painel
+  têm teto 10 e são os do lançamento: 1/10 e 2/10, três resgates somados, que
+  são as três assinaturas pagantes de setembro. **As 25 vagas estão inteiras**,
+  e o e-mail de 03/10 para 32 pessoas ainda não produziu resgate.
+- **E O ZERO LIDO PRECISAVA DEIXAR DE PARECER O ZERO NÃO LIDO.** O
+  `USOS_ANTES_DA_CONTAGEM` era uma constante em 0 cujo comentário precisava
+  explicar que zero queria dizer "ninguém leu": dado medido e falta de dado no
+  mesmo valor. Virou `LEITURA_DO_PAINEL`, que é `null` para "ninguém leu" e um
+  objeto com data e número para "alguém leu". A linha do retrato passa a dizer
+  de onde o número veio, com a data, e a frase do não lido continua no fonte
+  para voltar sozinha se a leitura sair.
+- **O `invoice.paid`: li a rota antes de mandar o dono marcar a caixa, e o item
+  comprava menos do que prometia.** Três fatos: (1) a virada de ciclo já busca a
+  fatura e carrega o valor desde 02/10, então a RENOVAÇÃO está medida sem o
+  evento; (2) a rota não tem `case "invoice.paid"`, então a caixa marcada
+  entregaria evento que o `switch` ignora, sem quebrar e sem ganhar; (3) um
+  handler escrito sem dedup pelo id da fatura escreveria `renovou` duas vezes no
+  mesmo mês, inflando receita. O que sobra para o evento é dinheiro que entra
+  SEM virada de ciclo (rateio, troca de plano, retentativa), e o produto tem um
+  plano só a R$ 29,90.
+- **O BURACO DE VERDADE ERA OUTRO, E NÃO PRECISAVA DELE: o mês 1.** O
+  `checkout.session.completed` escrevia `assinou` só com o id da assinatura, e
+  em 13 assinaturas nenhum primeiro pagamento tem valor no funil. A sessão do
+  checkout já chega com `amount_total`, `currency` e `payment_status`. A regra
+  nova é `valorDoCheckout` em `lib/ciclo.ts`, sem rede, e a rota passou a
+  carregar `pagoCentavos` no `assinou`. Nenhum painel, nenhuma entrega nova. O
+  item saiu da lista do dono.
+- **`no_payment_required` É ZERO MEDIDO**, e esse caso é o PRÓXIMO a acontecer,
+  não um caso de laboratório: a campanha de 03/10 oferece cupom de 100%, e o
+  checkout dela não cobra nada. Zero é resposta; ausente é "não deu para saber";
+  juntar as duas faz receita sumir com cara de cortesia.
+- **A CONFERÊNCIA PEGOU UM DEFEITO MEU ANTES DE SUBIR, e ele era o da própria
+  lição.** Escrevi `Number(sessao.amount_total)`, e `Number(null)` é 0: campo
+  AUSENTE virava zero medido. A asserção "valor ausente nao vira zero" reprovou
+  na primeira execução. **E a mesma armadilha estava no código de 02/10**, no
+  `faturaDaVirada`, lendo `Number(f.amount_paid)`: fatura paga sem valor viraria
+  cortesia de R$ 0,00. Os dois agora exigem `typeof number`, e os dois têm
+  plantio.
+- **DOZE DEFEITOS PLANTADOS, DOZE MORDIDAS**, com verde antes e depois de cada
+  um. Dois deles precisaram ser refeitos: o plantio trocava `"number"` por
+  `"nunca"` e derrubava TODAS as asserções da seção, o que faz a conferência
+  ficar vermelha sem provar a asserção que interessa. Refeitos com o defeito
+  exato (o código de ontem), cada um derrubou só a sua.
+- **DE PASSAGEM, UM NÚMERO QUE LIA AO CONTRÁRIO**: o doc de lançamento dizia que
+  o código antigo `PREMIUM1MES` "continua ativo com 9 usos", que lê como nove
+  GASTOS. O painel mostra o cupom dele em 1/10: são nove RESTANTES. Corrigido no
+  doc, e a desativação dele, recomendada em 03/09 e nunca feita, virou linha na
+  lista do dono com a data de origem, que é a obrigação 3 aplicada a um caso de
+  um mês atrás.
+- Lista do dono: de 16 para 15 itens, e o painel do Stripe ficou com um só.
+- `npm run conferir` inteira verde. Sem suíte de navegador: a mudança é de rota
+  de servidor e de regra pura.
+
 ## 2026-10-03 (noite, 3) · As negativas de scanner foram aplicadas, e a prova delas só vem se a busca voltar
 
 - O dono aplicou as negativas de scanner no Google Ads (`scanner`, `obd2`,
