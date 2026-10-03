@@ -248,6 +248,28 @@ const diretrizes = ler("docs/agentes/DIRETRIZES.md");
   );
 }
 
+
+// ── 8. A VISÃO DA FILA, A PARTIR DE 03/10 ──────────────────────────────────
+//
+// Decisão do dono: "as que têm mais de 15 dias, já foi; vamos corrigir e
+// garantir que estamos tendo uma visão clara a partir de agora". As duas metades
+// disso moram no manual e a `conferir:fila` cobra a tabela; aqui se cobra que o
+// MANUAL continue explicando as duas, porque número sem a regra ao lado volta a
+// ser lido errado na semana seguinte.
+{
+  const g = ler("docs/agentes/guardiao-conferencias.md").replace(/\s+/g, " ");
+  conferir(
+    "o manual proíbe o estado `nunca` daqui para a frente",
+    /É PROIBIDO A PARTIR DE 03\/10\/2026/.test(g),
+    "sem isso, conferencia nova sem plantio volta a entrar na fila como divida",
+  );
+  conferir(
+    "e o critério 11 manda copiar o número do comando",
+    /Os números publicados saíram de um comando/.test(g) && /Copie a linha. Não conte/.test(g),
+    "a rodada de 03/10 publicou um numero contado a olho que media outra coisa",
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) do time de agentes reprovaram.`);
   process.exit(1);

@@ -191,6 +191,7 @@ casos e o jeito de escrever a asserção estão no critério 10.
 | 7 | **A fila foi atualizada com a data de hoje** | as provadas mudaram de data neste arquivo |
 | 8 | **Nada foi commitado com defeito de pé** | conferido antes do push |
 | 9 | **O que a prova não alcança foi dito** | conferência de plugin nativo e de aparelho não se prova aqui |
+| 11 | **Os números publicados saíram de um comando, não de contagem a olho** | a linha do `npm run conferir:fila` aparece no relato, copiada |
 | 10 | **O defeito foi plantado em QUEM USA a regra, não em quem a define** | existe pelo menos um plantio no consumidor (a rota, o cron, o retrato) por conferência provada, e ele mordeu |
 
 ### O critério 10, e por que ele nasceu (03/10/2026)
@@ -226,6 +227,15 @@ manual.
 chave ou segredo. Não abre PR. Não notifica o dono; o Diretor consolida na
 segunda.
 
+### O critério 11, e por que ele é curto (03/10/2026)
+
+A rodada de 03/10 publicou "39 nunca provadas" contado na mão, e o número media
+outra coisa. A `npm run conferir:fila` imprime a linha pronta, da mesma fonte
+que a tabela, e ela não tem como divergir dela. **Copie a linha. Não conte.**
+
+É a mesma regra que a casa aplica aos retratos desde 28/09: a fonte manda a
+frase pronta e o leitor imprime.
+
 ## Fila das conferências, com a data da última prova
 
 Rodízio por data mais antiga, e desde 26/09/2026 a tabela está NESSA ordem: as
@@ -234,13 +244,34 @@ da mais antiga para a mais nova. A próxima rodada pega as seis primeiras linhas
 e pronto. Antes as provadas ficavam em cima e a fila dizia o contrário do que a
 regra dela mandava.
 
-**Os três estados, e o do meio nasceu em 03/10/2026.**
+**Os quatro estados.** O do meio nasceu em 03/10/2026, e o último é uma
+decisão do dono do mesmo dia.
 
 | estado | o que quer dizer | onde entra no rodízio |
 |---|---|---|
-| `nunca` | **ninguém nunca plantou defeito nela**, nem o Guardião nem quem a escreveu | primeiro, sempre |
-| `no nascimento (autor), dd/mm/aaaa` | nasceu com defeito plantado por quem a escreveu, contado no commit | depois das `nunca` |
-| `dd/mm/aaaa` | provada numa rodada do Guardião | por último, pela data |
+| `nunca` | **ninguém nunca plantou defeito nela** | **não existe mais, e é proibido**: ver abaixo |
+| `no nascimento (autor), dd/mm/aaaa` | nasceu com defeito plantado por quem a escreveu, contado no commit | primeiro, pela data |
+| `dd/mm/aaaa` | provada numa rodada do Guardião, ou por alguém que não é o autor | depois, pela data |
+| `dívida assumida (dd/mm/aaaa)` | nunca provada, e o dono decidiu NÃO cobrar | fora do rodízio |
+
+**`nunca` É PROIBIDO A PARTIR DE 03/10/2026, e a `conferir:fila` reprova.** Não
+é otimismo: é que as duas únicas formas de uma conferência existir sem prova
+foram fechadas no mesmo dia. As antigas viraram dívida assumida por decisão do
+dono ("as que têm mais de 15 dias, já foi"), e as novas nascem com defeito
+plantado, que já era a prática e agora é regra conferida. Quem escrever uma
+conferência nova e não plantar não consegue preencher esta tabela sem reprovar.
+
+**O QUE DÍVIDA ASSUMIDA SIGNIFICA, dito sem maquiagem:** são 14 conferências de
+03 a 13/09 que ninguém nunca testou contra o defeito delas. Elas podem estar
+verdes sobre defeito de pé neste momento e a casa não sabe. A decisão do dono em
+03/10 foi não gastar rodada atrás disso, porque elas estão em produção há um mês
+e o rodízio levaria três semanas que valem mais no que é novo. **O gatilho para
+reabrir uma delas não é o calendário, é o mundo**: no dia em que uma deixar
+passar um defeito, ela é provada naquele dia e volta para a fila com data.
+
+A lista, para ninguém precisar procurar: `agenda`, `appsflyer`, `aviso`,
+`campanha`, `gravacao`, `frota`, `guias`, `skills`, `pecas`, `precos`,
+`caminho`, `combustivel`, `datas`, `motorista`.
 
 POR QUE O ESTADO DO MEIO EXISTE. Até 03/10 a fila escrevia `nunca` para tudo que
 não tinha passado por uma rodada do Guardião, e a rodada daquele dia publicou
@@ -261,21 +292,6 @@ sem tirar ninguém dela.
 
 | conferência | última prova | mordeu? |
 |---|---|---|
-| `conferir:agenda` | nunca |  |
-| `conferir:appsflyer` | nunca |  |
-| `conferir:aviso` | nunca |  |
-| `conferir:campanha` | nunca |  |
-| `conferir:gravacao` | nunca |  |
-| `conferir:frota` | nunca |  |
-| `conferir:guias` | nunca |  |
-| `conferir:skills` | nunca |  |
-| `conferir:pecas` | nunca |  |
-| `conferir:precos` | nunca |  |
-| `conferir:caminho` | nunca |  |
-| `conferir:combustivel` | nunca |  |
-| `conferir:datas` | nunca |  |
-| `conferir:motorista` | nunca |  |
-| `conferir:convite` | nunca |  |
 | `conferir:contexto` | no nascimento (autor), 04/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:embedding` | no nascimento (autor), 05/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:acoes` | no nascimento (autor), 07/09/2026 | sim, no plantio de quem escreveu |
@@ -300,8 +316,8 @@ sem tirar ninguém dela.
 | `conferir:midia` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:renovacao` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:saida` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
-| `conferir:fila` | no nascimento (autor), 03/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:cadastro` | no nascimento (autor), 03/10/2026 | sim, no plantio de quem escreveu |
+| `conferir:fila` | no nascimento (autor), 03/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:baixar` | 19/09/2026 | sim |
 | `conferir:email` | 19/09/2026 | sim, 3 defeitos plantados |
 | `conferir:relatorio` | 19/09/2026 | sim |
@@ -312,12 +328,27 @@ sem tirar ninguém dela.
 | `conferir:regras` | 26/09/2026 | não na borda do perdão, consertada |
 | `conferir:tipos` | 26/09/2026 | sim, saída 2 |
 | `conferir:versoes` | 26/09/2026 | sim, 3 defeitos plantados |
+| `conferir:convite` | 03/10/2026 | sim, cinco de seis (o sexto era alvo inalcançável) |
 | `conferir:frescor` | 03/10/2026 | sim |
 | `conferir:funil` | 03/10/2026 | sim |
 | `conferir:migalha` | 03/10/2026 | não nos dois pisos, consertada |
 | `conferir:navegacao` | 03/10/2026 | não no teto das raízes, consertada |
 | `conferir:revisoes` | 03/10/2026 | sim |
 | `conferir:venda` | 03/10/2026 | não no piso da validade, consertada |
+| `conferir:agenda` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
+| `conferir:appsflyer` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
+| `conferir:aviso` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
+| `conferir:caminho` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
+| `conferir:campanha` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
+| `conferir:combustivel` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
+| `conferir:datas` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
+| `conferir:frota` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
+| `conferir:gravacao` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
+| `conferir:guias` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
+| `conferir:motorista` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
+| `conferir:pecas` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
+| `conferir:precos` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
+| `conferir:skills` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 
 As "nunca" estão em ORDEM DE ESPERA: primeiro as que já estavam nesta fila, e
 no fim as que entraram depois. Uma conferência recém-escrita esperou uma semana;

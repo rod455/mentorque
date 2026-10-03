@@ -90,13 +90,24 @@ const naFila = new Map(linhas.map((l) => [l.nome, l]));
   const NUNCA = /^nunca$/;
   const NASCIMENTO = /^no nascimento \(autor\), (\d{2})\/(\d{2})\/(\d{4})$/;
   const DATA = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+  const DIVIDA = /^dívida assumida \((\d{2})\/(\d{2})\/(\d{4})\)$/;
   for (const l of linhas) {
-    const ok = NUNCA.test(l.estado) || NASCIMENTO.test(l.estado) || DATA.test(l.estado);
-    conferir(`o estado de ${l.nome} está no molde`, ok, `"${l.estado}" não é nunca, nem data, nem nascimento`);
+    const ok = NUNCA.test(l.estado) || NASCIMENTO.test(l.estado) || DATA.test(l.estado) || DIVIDA.test(l.estado);
+    conferir(`o estado de ${l.nome} está no molde`, ok, `"${l.estado}" não é data, nascimento nem dívida assumida`);
+
+    // `NUNCA` É PROIBIDO DESDE 03/10/2026, e esta é a trava que mantém a visão
+    // clara daqui para a frente. As antigas viraram dívida assumida por decisão
+    // do dono; as novas nascem com defeito plantado. Conferência nova sem
+    // plantio não tem estado para escrever aqui sem reprovar, e é esse o ponto.
+    conferir(
+      `${l.nome} não está como "nunca"`,
+      !NUNCA.test(l.estado),
+      "conferencia nova nasce provada, e as velhas viraram divida assumida: nunca deixou de ser um estado valido",
+    );
 
     // Data que o calendário não tem, pelo mesmo motivo da lista do dono: o
     // JavaScript conserta 31/02 sozinho e a ordenação sai torta em silêncio.
-    const m = l.estado.match(NASCIMENTO) ?? l.estado.match(DATA);
+    const m = l.estado.match(NASCIMENTO) ?? l.estado.match(DATA) ?? l.estado.match(DIVIDA);
     if (m) {
       const iso = `${m[3]}-${m[2]}-${m[1]}`;
       const d = new Date(`${iso}T00:00:00Z`);
@@ -125,21 +136,23 @@ const naFila = new Map(linhas.map((l) => [l.nome, l]));
 // Então a ordem não é estética: ela É a regra de seleção. Primeiro as `nunca`,
 // depois as provadas pelo autor, depois as do Guardião.
 {
-  const peso = (e: string) => (/^nunca$/.test(e) ? 1 : /^no nascimento/.test(e) ? 2 : 3);
+  // Dívida assumida sai do rodízio e vai para o fim: ela não é "a próxima a
+  // ser provada", é "a que o dono decidiu não cobrar".
+  const peso = (e: string) => (/^nunca$/.test(e) ? 1 : /^no nascimento/.test(e) ? 2 : /^dívida/.test(e) ? 4 : 3);
   const pesos = linhas.map((l) => peso(l.estado));
   const ordenado = pesos.every((p, i) => i === 0 || pesos[i - 1]! <= p);
   conferir(
-    "as nunca provadas vêm primeiro, depois as do autor, depois as do Guardião",
+    "a ordem é: autor, Guardião, e dívida assumida por último",
     ordenado,
     "a proxima rodada pega as seis primeiras linhas: ordem errada entrega as seis erradas",
   );
 
-  const primeiras = linhas.slice(0, 6).filter((l) => /^nunca$/.test(l.estado)).length;
-  const nunca = linhas.filter((l) => /^nunca$/.test(l.estado)).length;
+  const primeiras = linhas.slice(0, 6).filter((l) => /^no nascimento/.test(l.estado)).length;
+  const doAutor = linhas.filter((l) => /^no nascimento/.test(l.estado)).length;
   conferir(
     "e as seis primeiras são de verdade as mais atrasadas",
-    nunca === 0 || primeiras === Math.min(6, nunca),
-    `${primeiras} das 6 primeiras são "nunca", e existem ${nunca} nunca provadas`,
+    doAutor === 0 || primeiras === Math.min(6, doAutor),
+    `${primeiras} das 6 primeiras são do autor, e existem ${doAutor} nesse estado`,
   );
 }
 
@@ -150,16 +163,32 @@ const naFila = new Map(linhas.map((l) => [l.nome, l]));
 // plantado no nascimento e as órfãs eram 15. O manual precisa explicar os três
 // estados, senão o próximo leitor repete a conta errada.
 {
-  conferir("o manual explica os três estados", /Os três estados/.test(manual));
+  conferir("o manual explica os quatro estados", /Os quatro estados/.test(manual));
+  conferir(
+    "e diz que dívida assumida pode estar verde sobre defeito de pé",
+    /verdes sobre defeito de pé neste momento e a casa não sabe/.test(manualCorrido),
+    "divida assumida sem o risco escrito vira 'esta tudo certo'",
+  );
+  conferir(
+    "e qual é o gatilho para reabrir uma delas",
+    /O gatilho para reabrir uma delas não é o calendário, é o mundo/.test(manualCorrido),
+    "divida sem gatilho de volta e divida esquecida",
+  );
   conferir(
     "e diz por que plantio do autor não vale como prova de fora",
     /o autor planta o defeito que ele pensou/.test(manualCorrido),
     "sem isso o estado novo vira um jeito de dar a conferencia por provada",
   );
-  const nunca = linhas.filter((l) => l.estado === "nunca").length;
+  // A LINHA PRONTA PARA A RODADA COPIAR, e não para contar a olho. A rodada de
+  // 03/10 publicou um número contado na mão que media outra coisa; esta linha
+  // sai do mesmo lugar que a tabela, então ela não tem como divergir dela.
   const nascimento = linhas.filter((l) => /^no nascimento/.test(l.estado)).length;
-  const guardiao = linhas.length - nunca - nascimento;
-  console.log(`       fila: ${linhas.length} conferências, ${nunca} nunca plantadas, ${nascimento} plantadas pelo autor, ${guardiao} provadas pelo Guardião`);
+  const divida = linhas.filter((l) => /^dívida/.test(l.estado)).length;
+  const provadas = linhas.length - nascimento - divida;
+  console.log(
+    `       PARA A RODADA COPIAR: ${linhas.length} conferências, ${provadas} provadas por quem não as escreveu, ` +
+      `${nascimento} só pelo autor no nascimento (a fila de verdade), ${divida} em dívida assumida (fora do rodízio).`,
+  );
 }
 
 if (falhas) {

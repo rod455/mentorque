@@ -3,6 +3,46 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-03 (noite) · A divida velha foi assumida, e o estado "nunca" deixou de existir
+- Decisão do dono, lendo a rodada do Guardião: "as que têm mais de 15 dias, já
+  foi. Vamos corrigir e garantir que estamos tendo uma visão clara a partir de
+  agora."
+- **CATORZE CONFERÊNCIAS VIRARAM DÍVIDA ASSUMIDA**, todas de 03 a 13/09:
+  `agenda`, `appsflyer`, `aviso`, `campanha`, `gravacao`, `frota`, `guias`,
+  `skills`, `pecas`, `precos`, `caminho`, `combustivel`, `datas`, `motorista`.
+  Dito sem maquiagem no manual: elas podem estar verdes sobre defeito de pé
+  neste momento e a casa não sabe. O gatilho para reabrir uma não é o
+  calendário, é o mundo: no dia em que uma deixar passar um defeito, ela é
+  provada naquele dia.
+- **A DÉCIMA QUINTA FOI PROVADA EM VEZ DE ASSUMIDA.** A `conferir:convite` tinha
+  seis dias, dentro do corte, então plantei: cinco de seis defeitos mordendo
+  (convidado queimando a marca, marca não apagada, pedir que não marca,
+  convidado virando o único convidado, consumir devolvendo sempre true). O sexto
+  era alvo inalcançável e está dito: o `podeVer` tem valor padrão, mas o único
+  chamador sempre passa o argumento.
+- **O ESTADO `nunca` PASSOU A SER PROIBIDO, e a `conferir:fila` reprova.** Não é
+  otimismo: as duas portas de entrada foram fechadas no mesmo dia. As velhas
+  viraram dívida assumida por decisão do dono, e as novas nascem com defeito
+  plantado, que já era prática e agora é regra conferida. Conferência nova sem
+  plantio não tem o que escrever na tabela sem reprovar.
+- **A FILA AGORA DIZ A VERDADE EM UMA LINHA**, impressa pelo comando e não
+  contada a olho: 57 conferências, 17 provadas por quem não as escreveu, 26 só
+  pelo autor no nascimento (a fila de verdade), 14 em dívida assumida, fora do
+  rodízio. A régua do Guardião ganhou o critério 11: copiar essa linha, não
+  contar.
+- **DOIS ERROS MEUS NO CAMINHO, os dois no laço de plantio e não nas
+  conferências.** O primeiro: o laço não distinguia "mordeu" de "já estava
+  vermelha", e três MORDEU de um lote não valiam nada. O segundo, pior: ele
+  presumia que falha se escreve `FALHA`, e a `conferir:convite` escreve `✗`;
+  cinco mordidas foram lidas como "derrubou sem falha". O laço agora exige verde
+  ANTES, verde DEPOIS, e reconhece o formato em vez de presumir. Virou o sexto
+  jeito de passar verde na skill.
+- **E UM ERRO DE EDIÇÃO, dito porque quase custou o arquivo:** uma expressão
+  regular montada no shell ficou com escape a mais, casou vazio no começo do
+  arquivo e jogou as catorze linhas dentro do título. O manual estava commitado
+  e a única coisa não commitada nele era a minha corrupção, então restaurar do
+  HEAD não perdeu nada. Refeito com python, sem passar pelo shell.
+
 ## 2026-10-03 · Guardião das conferências (rodada 2): o teto é conferido, o piso fica solto
 - Artifact "Conferências da semana":
   https://claude.ai/artifact/GMjWrfwb2m5ZDRhLXenqcW
