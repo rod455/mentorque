@@ -52,6 +52,10 @@ ter sido escrita em cima disso.
    propósito claro e isso já é o achado.
 4. **Plante esse defeito** e rode a conferência sozinha, sem passar por `tail`
    ou `grep`, para ler o **código de saída de verdade**.
+   E quando a conferência tiver constante numérica (prazo, teto, janela),
+   **plante o VALOR e varra para os dois lados** até achar onde ela passa a
+   reprovar. O vão entre os dois pontos é o tamanho da cegueira, e foi assim
+   que apareceram os quatro pisos soltos de 03/10. Ver "Aprendizados".
 5. **Desfaça pela cópia do arquivo.**
 6. Anote: mordeu (saída diferente de zero) ou não mordeu (saída 0). Não é
    sempre 1: o `tsc` reprova com 2, e o que a corrente do `conferir` enxerga é
@@ -152,12 +156,6 @@ regra dela mandava.
 
 | conferência | última prova | mordeu? |
 |---|---|---|
-| `conferir:funil` | nunca | |
-| `conferir:revisoes` | nunca | |
-| `conferir:navegacao` | nunca | |
-| `conferir:frescor` | nunca | |
-| `conferir:migalha` | nunca | |
-| `conferir:venda` | nunca | |
 | `conferir:gravacao` | nunca | |
 | `conferir:campanha` | nunca | |
 | `conferir:agenda` | nunca | |
@@ -186,30 +184,130 @@ regra dela mandava.
 | `conferir:banco` | nunca | |
 | `conferir:imagem` | nunca | |
 | `conferir:coorte` | nunca | |
+| `conferir:convite` | nunca | |
+| `conferir:renovacao` | nunca | |
+| `conferir:versoes-do-carro` | nunca | |
+| `conferir:porta` | nunca | |
+| `conferir:legivel` | nunca | |
+| `conferir:alarme` | nunca | |
+| `conferir:perguntas` | nunca | |
+| `conferir:loja` | nunca | |
+| `conferir:saida` | nunca | |
+| `conferir:midia` | nunca | |
+| `conferir:agentes` | nunca | |
 | `conferir:travessao` | 19/09/2026 | sim, depois de consertada |
 | `conferir:relatorio` | 19/09/2026 | sim |
-| `conferir:email` | 19/09/2026 | sim, 3 defeitos plantados |
 | `conferir:baixar` | 19/09/2026 | sim |
+| `conferir:email` | 19/09/2026 | sim, 3 defeitos plantados |
 | `conferir:tipos` | 26/09/2026 | sim, saída 2 |
 | `conferir:estilo` | 26/09/2026 | sim, em regra de erro |
-| `conferir:versoes` | 26/09/2026 | sim, 3 defeitos plantados |
 | `conferir:regras` | 26/09/2026 | não na borda do perdão, consertada |
+| `conferir:versoes` | 26/09/2026 | sim, 3 defeitos plantados |
 | `conferir:identidade` | 26/09/2026 | não no defeito de origem, consertada |
 | `conferir:catalogo` | 26/09/2026 | não no campo `related`, consertada |
+| `conferir:funil` | 03/10/2026 | sim |
+| `conferir:revisoes` | 03/10/2026 | sim |
+| `conferir:navegacao` | 03/10/2026 | não no teto das raízes, consertada |
+| `conferir:frescor` | 03/10/2026 | sim |
+| `conferir:migalha` | 03/10/2026 | não nos dois pisos, consertada |
+| `conferir:venda` | 03/10/2026 | não no piso da validade, consertada |
 
-As três últimas linhas "nunca" (`banco`, `imagem`, `coorte`) entraram em
-26/09/2026: elas já rodavam na corrente do `conferir` havia dias e não estavam
-nesta fila. **Conferência nova nasce fora do rodízio**, porque quem a escreve
-não vem aqui acrescentar a linha. Enquanto isso não for automático, a primeira
-coisa de toda rodada é comparar esta tabela com os `conferir:` do
-`package.json`: em 26/09 eram 46 scripts `conferir:`, menos `conferir:tudo` e
-`conferir:navegador`, que dá as 44 linhas desta tabela.
+As "nunca" estão em ORDEM DE ESPERA: primeiro as que já estavam nesta fila, e
+no fim as que entraram depois. Uma conferência recém-escrita esperou uma semana;
+as de cima esperam desde 19/09, e o rodízio é por quem espera mais.
 
-A `conferir:navegador` (a suíte de navegador) fica de fora do rodízio normal: ela
-custa build de produção e uns 11 minutos. Prove uma suíte dela por mês, não por
+**Conferência nova nasce fora do rodízio**, porque quem a escreve não vem aqui
+acrescentar a linha. Em 26/09 faltavam três (`banco`, `imagem`, `coorte`). Em
+03/10 faltavam ONZE de uma vez (`convite`, `renovacao`, `versoes-do-carro`,
+`porta`, `legivel`, `alarme`, `perguntas`, `loja`, `saida`, `midia`,
+`agentes`): a casa escreveu onze conferências em uma semana e nenhuma entrou na
+fila sozinha. A recomendação de 26/09, de acrescentar a linha no mesmo commit,
+não pegou, e repetir a recomendação não vai resolver. Enquanto não houver algo
+que cobre isto sozinho, a primeira coisa de toda rodada é comparar esta tabela
+com os `conferir:` do `package.json`. Em 03/10 eram 57 scripts `conferir:`,
+menos `conferir:tudo` e `conferir:navegador`, que dá as 55 linhas desta tabela.
+
+E a comparação se faz com um comando, não com estes números, que envelhecem em
+uma semana (eram 46 e 44 em 26/09):
+
+```bash
+node -e "const p=require('./package.json');const fs=require('fs');
+const pkg=Object.keys(p.scripts).filter(k=>k.startsWith('conferir:')).map(k=>k.slice(9))
+  .filter(n=>!['tudo','navegador'].includes(n));
+const fila=[...fs.readFileSync('docs/agentes/guardiao-conferencias.md','utf8')
+  .matchAll(/^\| \`conferir:([a-z-]+)\`/gm)].map(m=>m[1]);
+console.log('faltando na fila:', pkg.filter(n=>!fila.includes(n)).join(', ')||'nenhuma');"
+```
+
+A `conferir:navegador` (a suíte de navegador) fica de fora do rodízio normal:
+a bateria inteira leva uns 11 minutos. Prove uma suíte dela por mês, não por
 semana.
 
+**E ela NÃO custa build de produção, ao contrário do que este manual dizia
+até 03/10/2026.** `scripts/navegador/todos.mjs` sobe `npm run dev` sozinho
+quando não há servidor de pé. Quem exige build é a `conferir:tudo`, que é outra
+coisa. Uma suíte sozinha custou 105 segundos medidos, não 11 minutos, e foi essa
+frase errada que fez setembro fechar sem nenhuma suíte provada: eu adiei por um
+custo que não existia. Vale a lição geral, que é a mesma do caso `anonId`: o
+custo que justifica não fazer algo também é uma afirmação, e também se mede.
+
 ## Aprendizados
+
+**O TETO É CONFERIDO, O PISO FICA SOLTO (03/10/2026). O achado mais útil até
+agora, porque apareceu em quatro lugares de uma vez.**
+
+Toda conferência de número aqui tem um lado que incomoda e um lado que cala. O
+lado que incomoda é o falso positivo: pendência eterna, migalha que acusa
+demais, rastro que cresce sem parar. Esse lado todo mundo lembra de conferir,
+porque já deu errado e já encheu alguém de ruído. O outro lado é a testemunha
+que emudece e o link que para de vender, e esse lado não incomoda ninguém:
+ele só desaparece. Então ficou sem asserção nenhuma em:
+
+| constante | certo | passava verde com |
+|---|---|---|
+| `JANELA_MS` (migalha) | 3 min | 8s, 20s, 30s, 45s |
+| `PAUSA_COLADA_MS` (migalha) | 2000ms | 0, 1, 50, 200, 1000, 1499 |
+| `VALIDADE_MS` (venda) | 30 min | 60s, 4 min |
+| `LIMITE_DE_RAIZES` (navegação) | 20 | 3, 7, 10, 50 |
+
+E cada um desses valores reabre um defeito que já aconteceu nesta casa.
+`JANELA_MS` em 8 segundos devolve o buraco de 04/09, em que o aparelho reabriu
+o app vinte segundos depois e nada saiu em `app_erros`. `PAUSA_COLADA_MS` em
+zero faz o app que morre com um último suspiro calar de novo. `VALIDADE_MS` em
+um minuto é o relato de 02/09, a pessoa voltando do Google sem pagamento e sem
+cupom.
+
+**O método, que vale para qualquer conferência de constante:** não plante
+defeito no código, **plante o VALOR**, e varra para os dois lados até achar onde
+a conferência passa a reprovar. O vão entre os dois pontos de reprovação é o
+tamanho exato da cegueira, e aparece em uma tabela de cinco linhas.
+
+**E o piso se escreve a partir do REQUISITO, não do valor de hoje.** Pinar
+"a constante é 2000" transforma a conferência numa segunda cópia da constante,
+e aí qualquer ajuste legítimo reprova e todo mundo passa a ignorar a
+conferência. O piso certo é a frase que explica para que a constante existe,
+e com folga: "uma pausa de 1,5s ainda é o app morrendo" (está escrita no
+próprio `ultimoPasso.ts`, em cima da constante, e nunca tinha sido cobrada),
+"um minuto depois do fechamento a testemunha ainda fala", "cinco minutos de
+login lento ainda levam ao pagamento", "oito abas visitadas dão oito voltas".
+Nenhuma delas reprova um ajuste razoável; todas reprovam o valor quebrado.
+
+**Asserção escrita em termos da própria constante não confere a constante
+(03/10/2026).** A `conferir:navegacao` montava o laço com `LIMITE_DE_RAIZES * 3`
+e comparava com `LIMITE_DE_RAIZES`. Os dois lados andam junto: o teto podia
+virar 3 que ela passava. Ela prova que o corte FUNCIONA, e é incapaz de dizer
+que ele está no lugar certo. É parente do caso `anonId` de 26/09: lá a
+conferência copiava a regra, aqui ela cita a constante. **Sempre que uma
+asserção mencionar a constante que ela confere, pergunte o que sobra dela
+quando a constante muda.** O conserto é exigir comportamento, em número
+escrito à mão: oito abas, oito voltas.
+
+**O custo que justifica não fazer algo também é uma afirmação (03/10/2026).**
+Em 26/09 declarei que a suíte de navegador custava build de produção e 11
+minutos, e por isso setembro fechou sem nenhuma provada. Ela não custa build:
+o `todos.mjs` sobe o `npm run dev` sozinho, e uma suíte sozinha levou 105
+segundos medidos. Eu adiei um mês por um custo que nunca medi. Antes de pular
+uma tarefa por ser cara, meça o preço dela uma vez.
 
 **A conferência que confere uma CÓPIA da regra fica verde para sempre
 (26/09/2026).** A `conferir:identidade` nasceu do defeito de 01/09, em que todo

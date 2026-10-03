@@ -94,6 +94,35 @@ const CHAVE = "mq-venda-pendente";
   conferir("e sai da gaveta ao ser recusada", gaveta.get(CHAVE) === undefined);
 }
 
+// ── 5b. E O PISO DA VALIDADE, que faltava ───────────────────────────────────
+//
+// Achado do Guardião em 03/10/2026, plantando o valor em vez do código. A
+// validade era conferida só por cima, pela linha dos 45 minutos, o que prende
+// o TETO contra a pendência eterna. Por baixo, `VALIDADE_MS` podia cair para
+// 60 segundos sem reprovar nada aqui.
+//
+// E um minuto não atravessa um login de verdade. O caminho é sair do nosso
+// domínio, escolher a conta no Google, às vezes digitar a senha, às vezes
+// esperar o código de dois fatores, e voltar. Quem passa de um minuto nisso
+// volta para o app sem pagamento e sem cupom, que é literalmente o relato de
+// 02/09 que fez este arquivo existir.
+//
+// Cinco minutos é o piso honesto: folgado para um login lento e muito longe do
+// teto de meia hora, então ele não vira uma segunda definição da constante.
+{
+  gaveta.clear();
+  gaveta.set(
+    CHAVE,
+    JSON.stringify({ plano: "annual", direto: true, cupom: "PREMIUM30", t: Date.now() - 5 * 60 * 1000 }),
+  );
+  const v = vendaPendente();
+  conferir(
+    "compra de 5 minutos atrás ainda leva ao pagamento (login lento)",
+    v !== null && v.cupom === "PREMIUM30",
+    "se isto reprovar, VALIDADE_MS encolheu e o link de venda para de vender para quem demora no login",
+  );
+}
+
 // ── 6. gaveta vazia ou suja não vira compra ─────────────────────────────────
 {
   gaveta.clear();

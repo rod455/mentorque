@@ -76,6 +76,36 @@ function envelhece(segundos: number) {
   conferir("o relato diz há quanto tempo", f?.segundos === 7, `veio ${f?.segundos}`);
 }
 
+// ── 1b. O PISO DA JANELA: o caso de 04/09 tem que caber nela ────────────────
+//
+// Achado do Guardião em 03/10/2026, e o jeito de achar foi plantar o valor em
+// vez do código. A janela era conferida só por cima: migalha velha cala, o que
+// prende o TETO. Por baixo não havia nada, e `JANELA_MS` podia cair para 8
+// segundos sem reprovar nenhuma linha deste arquivo.
+//
+// Oito segundos reabriria exatamente o buraco que fez esta conferência nascer:
+// o aparelho 70d10f37 respondeu o quiz às 18:27:44 e reabriu o app às
+// 18:28:04, VINTE segundos depois. Com a janela em 8, aquele fechamento ficaria
+// fora dela e a testemunha calaria de novo, verde.
+//
+// O piso é o caso do relato COM FOLGA, e a folga é o ponto. Uma janela de
+// exatamente vinte segundos pegaria aquele aparelho por um fio e perderia
+// qualquer pessoa um segundo mais lenta, e a pessoa é mais lenta: ela destrava
+// o telefone, procura o ícone e volta. Um minuto é a medida honesta disso, e
+// continua muito abaixo dos três minutos, então não vira uma segunda definição
+// da constante.
+{
+  gaveta.clear();
+  passo("respondeu o quiz");
+  envelhece(60);
+  const f = fechamentoAnterior();
+  conferir(
+    "fechamento de 1 minuto atrás ainda é relatado (o caso de 04/09, com folga)",
+    f !== null,
+    "se isto reprovar, JANELA_MS encolheu para perto do caso que a migalha existe para pegar",
+  );
+}
+
 // ── 2. estava em segundo plano: cala ────────────────────────────────────────
 //
 // O caso que mais geraria ruído. Android recolhe app parado em segundo plano o
@@ -153,6 +183,42 @@ function envelhece(segundos: number) {
   const f = fechamentoAnterior();
   conferir("pausa colada no passo ainda vira relato", f !== null, "é o app morrendo, não a pessoa saindo");
   conferir("e o relato diz o passo certo", f?.nome === "respondeu o quiz", `veio "${f?.nome}"`);
+}
+
+// ── 7b. O PISO DA COLA: 1,5 segundo ainda é colado ──────────────────────────
+//
+// O caso de cima usa distância ZERO entre o passo e a pausa, o mesmo
+// instante. Isso prova que a trava existe, e não prova o tamanho dela:
+// medido em 03/10/2026, com `PAUSA_COLADA_MS` em 0, 1 ou 50 milissegundos
+// este arquivo passava inteiro, verde.
+//
+// E zero é o buraco de volta. Um app que morre e alcança disparar `pagehide`
+// no último suspiro grava a pausa alguns milissegundos depois do passo, não no
+// mesmo milissegundo. Com a trava em zero, esse app volta a calar, que é
+// exatamente o defeito de 04/09.
+//
+// O piso aqui não é invenção: está escrito no próprio lib/app/ultimoPasso.ts,
+// em cima da constante. "Quem sair do app um segundo e meio depois de
+// responder vira relato, e isso é aceitável, porque perder o defeito é mais
+// caro que uma linha a mais para o QA ler." Esta é a linha que cobra isso.
+{
+  gaveta.clear();
+  passo("respondeu o quiz");
+  esfriaMigalha();
+  {
+    const m = JSON.parse(gaveta.get(CHAVE) as string) as { t: number; pausadoEm: number };
+    // A pausa chegou 1,5s DEPOIS do passo, e os dois envelhecem 7s juntos.
+    gaveta.set(
+      CHAVE,
+      JSON.stringify({ ...m, t: m.t - 7000, pausadoEm: m.pausadoEm - 7000 + 1500 }),
+    );
+  }
+  const f = fechamentoAnterior();
+  conferir(
+    "pausa 1,5s depois do passo ainda conta como colada",
+    f !== null,
+    "se isto reprovar, PAUSA_COLADA_MS encolheu e o app que morre com um último suspiro volta a calar",
+  );
 }
 
 // ── 8. migalha antiga, sem a hora da pausa, continua calada ─────────────────

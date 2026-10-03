@@ -3,6 +3,78 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-03 · Guardião das conferências (rodada 2): o teto é conferido, o piso fica solto
+- Artifact "Conferências da semana":
+  https://claude.ai/artifact/GMjWrfwb2m5ZDRhLXenqcW
+- **Sete provadas: a suíte de navegador `venda` mais as seis da fila** (`funil`,
+  `revisoes`, `navegacao`, `frescor`, `migalha`, `venda`). Todas as sete
+  morderam o primeiro defeito plantado, código de saída lido direto, sem cano.
+  Foi varrendo as CONSTANTES que apareceu o buraco.
+- **O ACHADO DA RODADA, e ele apareceu em quatro lugares de uma vez: o teto é
+  conferido e o piso fica solto.** Toda conferência de número aqui prende o
+  lado que incomoda (pendência eterna, migalha que acusa demais, rastro que
+  cresce sem parar) e deixa livre o lado que só desaparece (a testemunha que
+  emudece, o link que para de vender). Medido plantando o VALOR, não o código:
+  - `JANELA_MS` da migalha, certo em 3 min, passava verde com 8s, 20s, 30s e 45s.
+    Oito segundos reabre o buraco de 04/09, em que o aparelho reabriu o app
+    vinte segundos depois do quiz e nada saiu em `app_erros`.
+  - `PAUSA_COLADA_MS`, certo em 2000ms, passava com 0, 1, 50, 200, 1000 e 1499.
+    Em zero, o app que morre com um último suspiro volta a calar, que é o
+    defeito exato que a constante foi criada para fechar. E o requisito estava
+    ESCRITO em cima dela desde sempre ("quem sair do app um segundo e meio
+    depois de responder vira relato"), sem nunca ter sido cobrado.
+  - `VALIDADE_MS` da venda, certo em 30 min, passava com 60s e 4 min. Um minuto
+    não atravessa um login com dois fatores, e aí volta o relato de 02/09: a
+    pessoa chega do Google sem pagamento e sem cupom.
+  - `LIMITE_DE_RAIZES` da navegação, certo em 20, passava com 3, 7, 10 e 50.
+- **Por que a navegação era cega de um jeito diferente, e isso é parente do
+  caso `anonId` de 26/09**: a asserção era escrita em termos da própria
+  constante (laço com `LIMITE * 3`, comparação com `LIMITE`), então os dois
+  lados andavam junto e o valor nunca podia estar errado. Ela provava que o
+  corte FUNCIONA e era incapaz de dizer que ele está no lugar certo. Consertada
+  exigindo comportamento com número escrito à mão: oito abas visitadas, oito
+  voltas antes de minimizar.
+- **Os quatro consertos, provados mordendo e com zero falso positivo no código
+  limpo**: 14 valores quebrados passaram a reprovar (JANELA 8/20/30/45s,
+  PAUSA 0/50/1000/1499ms, VALIDADE 60s/4min, RAIZES 3/7, mais os dois extremos
+  que já reprovavam). E cada piso foi escrito a partir do REQUISITO com folga,
+  não do valor de hoje, para não virar uma segunda cópia da constante e começar
+  a reprovar ajuste legítimo.
+- **EU ERREI EM 26/09 e o erro custou um mês.** Declarei que a suíte de
+  navegador custava build de produção e 11 minutos, e adiei por isso. Ela não
+  custa build: o `scripts/navegador/todos.mjs` sobe o `npm run dev` sozinho, e
+  a suíte `venda` levou **105 segundos** medidos. Setembro fechou sem nenhuma
+  suíte provada por causa de um custo que eu nunca medi. Corrigido no manual.
+- **A FILA ESTÁ CRESCENDO MAIS RÁPIDO DO QUE EU PROVO, e esse é o número que o
+  Diretor precisa ver.** Em 26/09 havia 34 nunca provadas; provei 6, e entraram
+  ONZE novas (`convite`, `renovacao`, `versoes-do-carro`, `porta`, `legivel`,
+  `alarme`, `perguntas`, `loja`, `saida`, `midia`, `agentes`). Saldo: 39 nunca
+  provadas, cinco MAIS que na semana passada. A seis por semana contra onze
+  novas, esta fila nunca esvazia. A recomendação de 26/09, de acrescentar a
+  linha no mesmo commit, não pegou, e repetir não vai resolver.
+- **Contra a minha régua, dois critérios cumpridos pela metade, e eu digo quais:**
+  (1) `funil` e `revisoes` levaram UM formato de defeito cada, enquanto
+  `migalha`, `venda` e `navegacao` levaram a varredura inteira; a prova delas é
+  mais fina que a das outras e elas voltam para a fila com essa ressalva. (2) As
+  onze novas foram para o FIM das nunca, por ordem de espera, o que as deixa a
+  umas cinco semanas de serem provadas; é a ordem certa pela regra do rodízio e
+  é exposição real, porque conferência recém-escrita é a que ninguém nunca viu
+  morder. Os outros sete critérios foram cumpridos.
+- **O que esta rodada NÃO alcança**: a suíte de navegador roda em Chromium, e
+  Chromium não tem plugin do Capacitor. Nada aqui prova lado nativo nem
+  comportamento de aparelho; para isso continua valendo a migalha do último
+  passo e o roteiro manual. E a própria `conferir:navegacao` existe porque o
+  botão físico do Android não é apertável por navegador nenhum.
+- **RECOMENDAÇÕES (3)**: (1) a fila do Guardião devia ser conferida por uma
+  conferência, não por mim: um `conferir:fila` que reprova quando existe
+  `conferir:X` sem linha na tabela resolveria de uma vez o que duas
+  recomendações seguidas não resolveram, e é trabalho do QA, não meu; (2) ao
+  escrever conferência de constante, escreva as DUAS pontas na hora, porque o
+  piso é o lado que protege o usuário e é sempre o que falta; (3) as onze
+  conferências novas de setembro para outubro não foram provadas por ninguém
+  contra o defeito delas, e se o QA quiser antecipar isso vale mais que esperar
+  o rodízio chegar nelas em novembro.
+
 ## 2026-10-03 · A venda perdida de 25/09 morreu numa parede que a casa já conhecia há 27 dias
 - O dono abriu o painel do RevenueCat e mandou a foto. O webhook ESTÁ cadastrado
   e ativo, o que derruba a primeira hipótese. O que a foto mostrou foi outra

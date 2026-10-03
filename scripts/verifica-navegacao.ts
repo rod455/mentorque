@@ -95,6 +95,36 @@ conferir("na primeira tela, voltar minimiza", passoDeVolta(inicio) === null);
   conferir("voltar sempre termina em minimizar", q === null, `parou depois de ${passos} passos`);
 }
 
+// ── O TETO TEM QUE CABER UMA SESSÃO DE VERDADE ──────────────────────────────
+//
+// Achado do Guardião em 03/10/2026. As duas linhas de cima provam que o teto
+// FUNCIONA, e não conseguem dizer que ele está no lugar certo: as duas são
+// escritas em termos de `LIMITE_DE_RAIZES` (o laço usa `LIMITE * 3` e a
+// asserção compara com `LIMITE`), então os dois lados andam junto com a
+// constante. Plantado o valor 3 em vez de 20, este arquivo passava inteiro.
+//
+// E 3 é o defeito de 30/08 em câmera lenta: quem passeia por quatro abas perde
+// as raízes mais antigas, e o voltar minimiza antes de devolver a pessoa por
+// onde ela entrou. Então aqui a conferência não compara com a constante, ela
+// exige COMPORTAMENTO: oito abas visitadas, oito voltas até minimizar.
+{
+  // Oito trocas de aba, nenhuma repetindo a anterior (tocar na aba em que já
+  // se está não empilha rastro, de propósito). Começa em "learn" porque
+  // `inicio` já está em "home".
+  const abas = ["learn", "health", "garage", "profile", "learn", "health", "garage", "profile"];
+  let p = inicio;
+  for (const a of abas) p = comNovaRaiz(p, v(a));
+  let passos = 0;
+  let q: Pilha | null = p;
+  while (q) { q = passoDeVolta(q); passos++; }
+  // Oito voltas para desfazer as oito trocas, mais a nona que minimiza.
+  conferir(
+    "oito trocas de aba dão oito voltas antes de minimizar",
+    passos === abas.length + 1,
+    `deu ${passos} passos para ${abas.length} trocas; teto baixo demais expulsa a pessoa cedo`,
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) de navegação reprovaram.`);
   process.exit(1);
