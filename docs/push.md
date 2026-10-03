@@ -63,7 +63,7 @@ dispensável: quem fala com a Apple é o nosso servidor.
 ## Como testar quando estiver ligado
 
 ```
-curl -X POST https://mentorque.com.br/api/push/enviar \
+curl -X POST https://www.mentorque.com.br/api/push/enviar \
   -H "content-type: application/json" -H "x-mq-chave: A_CHAVE" \
   -d '{"titulo": "Teste interno", "corpo": "Chegou? Então está de pé.", "userId": "SEU_UUID"}'
 ```

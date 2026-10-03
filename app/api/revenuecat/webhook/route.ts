@@ -5,12 +5,34 @@ import { ehVendaComDinheiro, identidadeUsavel, relatoDeVendaSemConta } from "@/l
 
 export const runtime = "nodejs";
 
-// Webhook do RevenueCat (compras via Apple IAP). Configure no painel do
+// Webhook do RevenueCat (compras na Apple e na Play). Configure no painel do
 // RevenueCat (Project → Integrations → Webhooks) apontando para
-// https://mentorque.com.br/api/revenuecat/webhook com o header Authorization
-// igual ao env REVENUECAT_WEBHOOK_AUTH. O app_user_id é o id do usuário
-// Supabase (definido no Purchases.configure), então o Premium liberado aqui
-// vale em todos os aparelhos e na web.
+// https://www.mentorque.com.br/api/revenuecat/webhook com o header
+// Authorization igual ao env REVENUECAT_WEBHOOK_AUTH. O app_user_id é o id do
+// usuário Supabase (definido no Purchases.configure), então o Premium liberado
+// aqui vale em todos os aparelhos e na web.
+//
+// ⚠️ COM `www`, SEMPRE, E ESTE COMENTÁRIO JÁ MANDOU O CONTRÁRIO (03/10/2026).
+//
+// O domínio sem `www` responde **308 Permanent Redirect** para o com `www` (é
+// a configuração do projeto na Vercel, conferida hoje pela API). Navegador
+// segue e ninguém nota; robô de serviço de terceiro NÃO segue, e quando segue,
+// derruba o header `Authorization` no salto entre hosts, que aqui vira 401.
+// Nos dois caminhos a entrega morre na porta, calada.
+//
+// Isto já custou duas vendas, com 27 dias entre uma e outra, e a segunda foi
+// por causa desta linha. Em 29/08 o Stripe parou de entregar exatamente assim,
+// a causa foi provada com um fetch e o endpoint de lá virou `www`. No mesmo
+// dia ficou escrito no DIARIO que faltava conferir o RevenueCat, "porque a
+// mesma parede vale para ele". Ninguém conferiu: aquilo morou no diário, que é
+// lugar onde se EXPLICA, e não virou linha na lista do dono, que naquela data
+// nem existia. Em 25/09 uma compra de Play de US$ 4 se perdeu pela mesma
+// parede, e o painel de hoje mostra o webhook ainda apontando para o apex.
+//
+// A regra geral, que vale para qualquer serviço de terceiro: **URL registrada
+// fora de casa usa sempre o domínio primário (www)**. A `npm run conferir:loja`
+// reprova endereço de webhook sem `www` escrito no repositório, para este
+// comentário nunca mais ensinar o errado.
 const ACTIVE = new Set(["INITIAL_PURCHASE", "RENEWAL", "UNCANCELLATION", "PRODUCT_CHANGE", "NON_RENEWING_PURCHASE"]);
 
 type RcEvent = {

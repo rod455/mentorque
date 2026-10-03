@@ -253,6 +253,49 @@ console.log("Loja: a compra chega ao Premium, e quando não chega, deixa rastro?
   );
 }
 
+// ── O ENDEREÇO QUE A GENTE MANDA O TERCEIRO REGISTRAR ──────────────────────
+//
+// POR QUE ISTO VIROU CONFERÊNCIA (03/10/2026), e são DUAS vendas perdidas pelo
+// mesmo motivo, com 27 dias entre elas:
+//
+// O domínio sem `www` responde 308 Permanent Redirect para o com `www`.
+// Navegador segue e ninguém nota. Robô de serviço de terceiro ou não segue, ou
+// segue e derruba o header `Authorization` no salto entre hosts, que nas nossas
+// rotas vira 401. Nos dois caminhos a entrega morre na porta, calada.
+//
+// Em 29/08 o Stripe parou de entregar exatamente assim, a causa foi provada com
+// um fetch, o endpoint virou `www` e ficou escrito no diário que faltava
+// conferir o RevenueCat, "porque a mesma parede vale para ele". Aquilo morou no
+// diário, que é lugar onde se explica, e nunca virou linha na lista do dono.
+// Em 25/09 uma compra de Play se perdeu, e o painel de 03/10 mostrou o webhook
+// do RevenueCat ainda no apex. Pior: o COMENTÁRIO DA NOSSA PRÓPRIA ROTA mandava
+// configurar assim.
+//
+// Então a regra agora é do repositório e não da memória de ninguém: endereço de
+// webhook escrito aqui dentro usa o domínio primário.
+{
+  const arquivos = [
+    "app/api/revenuecat/webhook/route.ts",
+    "app/api/stripe/webhook/route.ts",
+    "docs/push.md",
+    "docs/agentes/acoes-do-dono.md",
+  ];
+  for (const arq of arquivos) {
+    const texto = readFileSync(new URL(`../${arq}`, import.meta.url), "utf8");
+    // Só as linhas que ENSINAM um endereço: apex seguido de /api. O apex
+    // sozinho (origem do app, lista de CORS, deep link) é outro assunto e
+    // navegador segue redirect sem reclamar.
+    const apex = texto.match(/https:\/\/mentorque\.com\.br\/api\/[a-z/-]*/g) ?? [];
+    conferir(
+      `${arq} não ensina endereço de API sem www`,
+      apex.length === 0,
+      apex.length
+        ? `${apex.join(", ")} — o apex responde 308 para o www, e robo de terceiro nao segue (ou segue e derruba o Authorization). Duas vendas ja morreram nisso, em 25/08 e 25/09`
+        : "",
+    );
+  }
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) da loja reprovaram.`);
   process.exit(1);

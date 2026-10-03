@@ -3,6 +3,49 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-03 · A venda perdida de 25/09 morreu numa parede que a casa já conhecia há 27 dias
+- O dono abriu o painel do RevenueCat e mandou a foto. O webhook ESTÁ cadastrado
+  e ativo, o que derruba a primeira hipótese. O que a foto mostrou foi outra
+  coisa, no endereço: `https://mentorque.com.br/api/revenuecat/webhook`, **sem
+  `www`**.
+- MEDIDO, não deduzido: a API da Vercel diz que `mentorque.com.br` tem
+  `redirect: www.mentorque.com.br` com `redirectStatusCode: 308`. A rota exige
+  o header `Authorization` e devolve 401 sem ele. E `funil_eventos` tem **zero**
+  eventos de origem `revenuecat`, de sempre: nenhuma entrega jamais foi aceita.
+- DEDUZIDO, e são dois caminhos que dão no mesmo: robô de terceiro ou não segue
+  redirecionamento (e aí 308 é falha de entrega), ou segue e derruba o
+  `Authorization` no salto entre hosts, que aqui vira 401. Navegador segue e
+  ninguém nota, que é o que torna isso invisível.
+- **ISTO JÁ TINHA ACONTECIDO, E ESTAVA ESCRITO.** Em 29/08 o webhook do Stripe
+  parou de entregar exatamente assim, a causa foi provada com um fetch e o
+  endpoint virou `www`. A entrada daquele dia termina com uma pendência do dono:
+  "conferir no painel do RevenueCat se o webhook de lá também aponta para o
+  domínio sem www, porque a mesma parede vale para ele". **Ninguém conferiu.**
+  Aquilo morou no DIARIO, que é lugar onde se EXPLICA, e nunca virou linha da
+  lista do dono, que em 29/08 nem existia (ela nasceu em 07/09, por este mesmo
+  motivo). Vinte e sete dias depois, uma compra de Play de US$ 4 se perdeu na
+  mesma parede.
+- **E O PIOR: o comentário da NOSSA rota mandava configurar no apex.** Quem
+  cadastrou o webhook seguiu a nossa própria documentação. Corrigido hoje, com o
+  caso escrito dentro.
+- CONFERÊNCIA NOVA dentro de `conferir:loja`, com quatro defeitos plantados e os
+  quatro mordendo: endereço de `/api` sem `www` escrito na rota, na lista do
+  dono ou nos docs reprova. O apex sozinho (origem do app, lista de CORS, deep
+  link) continua valendo, porque ali quem segue o redirecionamento é navegador.
+  De quebra ela já pegou dois outros: o `curl` de teste em `docs/push.md` e a
+  própria linha da lista do dono.
+- CONTROLE, para não transformar isto em teoria geral: o webhook do Resend está
+  entregando (829 eventos em 30 dias, o último hoje às 05h21). A parede não pega
+  todo mundo; pega quem está registrado no apex.
+- **O QUE DEPENDE DO DONO, e agora é um campo**: acrescentar `www` ao endereço no
+  painel do RevenueCat, e na mesma tela olhar o histórico de entregas de 25/09 e
+  reenviar o evento se o painel deixar. Mesmo endpoint, mesmo header, nada a
+  mudar na Vercel.
+- O QUE ISTO NÃO PROVA: que a troca resolve. A prova é a próxima compra de loja
+  cair sozinha no banco, ou o reenvio do evento de 25/09 gravar. O detector já
+  está de pé desde 02/10 (`vendas.lojaConferida` compara RevenueCat e banco todo
+  dia), então se continuar entupido a gente descobre em um dia e não em cinco.
+
 ## 2026-10-02 (noite) · A leitura das rodadas de 01 e 02/10: três erros diferentes com a mesma cara
 - Pedido do dono: ler o que os agentes disseram ontem e hoje, dizer o que
   precisa evoluir, e arrumar. Quatro rodadas lidas (QA agendado e ASO em 01/10,
