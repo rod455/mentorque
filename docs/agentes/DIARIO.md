@@ -33,6 +33,41 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-03 (noite, 20) · O quinto zero estrutural estava numa fonte que "coleta todo dia sem erro" ha 35 dias
+
+- Pergunta do dono: "preciso fazer alguma coisa? algum acesso ou ajuste para
+  termos os dados corretos?". Fui conferir o estado de cada degrau antes de
+  pedir qualquer coisa, e achei um defeito nosso no caminho.
+- **O `play_console` coleta desde 22/08, sao 35 dias, e 33 dos 35 pacotes sao
+  IDENTICOS e VAZIOS**: `{"anrPorDia": [], "crashPorDia": []}`. Zero dias com
+  crash. A fonte aparece verde no frescor, responde todo dia, e nao entrega uma
+  linha desde que nasceu.
+- **A CAUSA ESTAVA NO NO DE NORMALIZACAO**: `dados.erro` so era preenchido
+  quando as DUAS chamadas traziam `.error`. Resposta sem linha nenhuma virava
+  `[]`, que o leitor le como "foi medido e deu zero". Tres coisas diferentes
+  viravam a mesma:
+  1. a API respondeu e o app teve zero crash;
+  2. a API respondeu e NAO publicou metrica (o Play suprime vitals abaixo de um
+     minimo de usuarios distintos, e o Mentorque e pequeno);
+  3. a chamada falhou e o `onError: continueRegularOutput` deixou passar.
+- **CONSERTADO E PUBLICADO** (`ee9081b5`, `versionId` e `activeVersionId`
+  iguais): cada pacote passa a trazer `crash.estado` e `anr.estado` com `ok`,
+  `sem-linha` ou `erro`, mais o motivo. E quando os dois dao `sem-linha`, o
+  pacote carrega a frase inteira: **"NAO E ZERO MEDIDO"**, com o porque e com o
+  endereco de quem responde a pergunta de verdade (a migalha propria,
+  `app_erros`, que mede os nossos aparelhos).
+- **E O ACHADO MAIOR, que e sobre o metodo**: este zero sobreviveu 35 dias
+  porque a fonte NUNCA FALHOU. O frescor das fontes mede se o pacote chegou, nao
+  se ele tem conteudo. Fonte que responde vazio todo dia e invisivel para toda
+  vigilancia que esta casa tem.
+- **O QUE FALTA DE ACESSO, e e so um**: a aquisicao do Play Console. O Android e
+  98% da base e a instalacao total dele nao esta em coletor nenhum. A metrica
+  nao vive na API de Reporting (que e so vitals): ela vive no bucket de
+  relatorios do Google Cloud Storage. Precisa do dono dar leitura a conta de
+  servico que ja existe no n8n e passar o id do bucket.
+- O `app_store_downloads` esta coletando e e minusculo: 12 atualizacoes e ZERO
+  downloads novos em 01/10. O iPhone nao e o problema de medicao.
+
 ## 2026-10-03 (noite, 19) · A escada da aquisicao: um dono por degrau, e o que nao se soma nao se soma
 
 - Pedido do dono: "estamos mapeando errado AppsFlyer, Google Ads, Play Store e
