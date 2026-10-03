@@ -58,7 +58,7 @@ console.log("Cadastro: o convite do mês grátis sai uma vez, para quem deve, e 
 // estorno e da avaliação de uma estrela. A regra é do e-mail de lançamento.
 {
   const e = emailTermineOCadastro({ userId: UID, nome: "Ana", cupom: "LANCAMENTO1MES", precoMensal: "R$ 29,90" });
-  conferir("abre com o nome quando existe", /^Oi, Ana\./.test(e.texto), e.texto.slice(0, 30));
+  conferir("abre com o nome quando existe", /Oi, Ana!/.test(e.texto), e.texto.slice(0, 40));
   conferir("diz que falta o carro", /cadastrar o carro/.test(e.texto), "o e-mail inteiro existe por causa disso");
   conferir("explica POR QUE o carro importa", /revis(õ|o)es|IPVA|consumo/.test(e.texto), "pedir sem motivo e so pedir");
   conferir("oferece o primeiro mês", /primeiro mês do Premium é por nossa conta/.test(e.texto), e.texto);
@@ -74,13 +74,27 @@ console.log("Cadastro: o convite do mês grátis sai uma vez, para quem deve, e 
     /Premium é da conta, não do aparelho/.test(e.texto),
     "sem isso a pessoa assina no site e acha que precisa assinar de novo no app",
   );
-  conferir("tem um jeito de sair da lista", /não receber mais e-mails/.test(e.texto), e.texto.slice(-200));
+  conferir("tem um jeito de sair da lista", /Sair em um clique/.test(e.texto), e.texto.slice(-200));
 
   // A BIELA, como nos outros e-mails da casa (pedido do dono, 03/10). Imagem
   // de e-mail sem `alt` vira retângulo vazio para quem lê com imagem
   // desligada, que é muita gente no celular com dados móveis.
   conferir("a imagem da Biela está no e-mail", /email\/biela\.png/.test(e.html), "pedido do dono: igual aos outros");
   conferir("e ela tem texto alternativo", /biela\.png"[^>]*alt="[^"]{5,}"/.test(e.html), "sem alt, quem le com imagem desligada ve um retangulo vazio");
+  // A BIELA NO COMEÇO, e não no rodapé (pedido do dono, 03/10, comparando com
+  // os outros e-mails da casa). Não basta ela existir: o e-mail nasceu com ela
+  // no fim, e "está no e-mail" ficaria verde desse jeito. A asserção é sobre a
+  // POSIÇÃO: ela vem antes da saudação, dentro do cabeçalho escuro.
+  conferir(
+    "a Biela vem ANTES do corpo, no cabeçalho",
+    e.html.indexOf("biela.png") < e.html.indexOf("Oi, Ana!"),
+    `biela em ${e.html.indexOf("biela.png")}, saudação em ${e.html.indexOf("Oi, Ana!")}`,
+  );
+  conferir(
+    "e o cabeçalho é o escuro da casa, com a marca",
+    /background:#16181D[^>]*>[\s\S]{0,400}marca\.png/.test(e.html),
+    "igual aos outros: marca, Biela e titulo no bloco escuro",
+  );
   conferir(
     "a imagem vem do nosso site, não de lugar nenhum",
     /src="https:\/\/www\.mentorque\.com\.br\/email\/biela\.png"/.test(e.html),
@@ -89,7 +103,7 @@ console.log("Cadastro: o convite do mês grátis sai uma vez, para quem deve, e 
 
   // UM BOTÃO SÓ. Dois botões grandes dividem o clique entre assinar e baixar, e
   // o que precisa acontecer primeiro é assinar com o cupom.
-  const botoes = (e.html.match(/display:block;padding:14px/g) ?? []).length;
+  const botoes = (e.html.match(/display:inline-block;background:#F2A623/g) ?? []).length;
   conferir("há um botão grande, e só um", botoes === 1, `achei ${botoes}`);
 
   // O `&` escapado no HTML e CRU no texto puro: em atributo, `&` cru é ambíguo,
@@ -99,7 +113,7 @@ console.log("Cadastro: o convite do mês grátis sai uma vez, para quem deve, e 
   conferir("no texto puro o & vai cru", /[^;]&cupom=/.test(e.texto), "no texto puro, &amp; apareceria na cara da pessoa");
 
   const semNome = emailTermineOCadastro({ userId: UID, cupom: "X", precoMensal: "R$ 29,90" });
-  conferir("sem nome, abre sem vírgula solta", /^Oi\.\n/.test(semNome.texto), semNome.texto.slice(0, 20));
+  conferir("sem nome, abre sem vírgula solta", /\nOi!\n/.test(semNome.texto), semNome.texto.slice(0, 40));
 }
 
 // ── 3. O PREÇO NÃO ESTÁ CHUMBADO NO TEXTO ──────────────────────────────────

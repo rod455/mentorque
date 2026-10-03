@@ -715,6 +715,19 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
 
 const FONTE = "-apple-system,'Segoe UI',Roboto,Arial,sans-serif";
 
+/**
+ * O `&` do endereco, escapado dentro do atributo (03/10/2026).
+ *
+ * Em atributo HTML, `&` cru e ambiguo, e o que segura hoje e a tolerancia do
+ * leitor. Ela acaba no dia em que alguma coisa REESCREVE o link, que e
+ * exatamente o que o rastreio de clique de provedor faz: le o HTML, extrai a
+ * URL e monta outra. No texto puro e o contrario, e por isso so o HTML passa
+ * por aqui: la `&amp;` apareceria na cara da pessoa.
+ */
+function escapaUrl(u: string): string {
+  return String(u).replace(/&/g, "&amp;");
+}
+
 function itemHtml(texto: string): string {
   return `<tr><td style="padding:0 0 10px 0;font:400 15px/1.55 ${FONTE};color:${TEXTO}">
     <span style="color:${AMBAR};font-weight:700">•</span>&nbsp;&nbsp;${texto}
@@ -757,7 +770,7 @@ export function renderEmail(m: Mensagem, sairUrl: string): { assunto: string; ht
           </table>
         </td></tr>` : ""}
         <tr><td align="center" style="padding:24px 28px 8px 28px">
-          <a href="${m.cta.url}" style="display:inline-block;background:${AMBAR};color:${GRAFITE};font:700 15px/1 ${FONTE};text-decoration:none;padding:14px 26px;border-radius:999px">${m.cta.texto}</a>
+          <a href="${escapaUrl(m.cta.url)}" style="display:inline-block;background:${AMBAR};color:${GRAFITE};font:700 15px/1 ${FONTE};text-decoration:none;padding:14px 26px;border-radius:999px">${m.cta.texto}</a>
         </td></tr>
         <tr><td align="center" style="padding:14px 28px 28px 28px">
           <p style="margin:0;font:400 13px/1.6 ${FONTE};color:${SUAVE}">${m.nota ?? "Prefere o app no celular?"} <a href="${APP_STORE}" style="color:${SUAVE}">App Store</a> · <a href="${PLAY_STORE}" style="color:${SUAVE}">Google Play</a></p>
