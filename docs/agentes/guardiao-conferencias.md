@@ -133,6 +133,30 @@ positivo, e foi isso que autorizou o alargamento.
 | 7 | **A fila foi atualizada com a data de hoje** | as provadas mudaram de data neste arquivo |
 | 8 | **Nada foi commitado com defeito de pé** | conferido antes do push |
 | 9 | **O que a prova não alcança foi dito** | conferência de plugin nativo e de aparelho não se prova aqui |
+| 10 | **O defeito foi plantado em QUEM USA a regra, não em quem a define** | existe pelo menos um plantio no consumidor (a rota, o cron, o retrato) por conferência provada, e ele mordeu |
+
+### O critério 10, e por que ele nasceu (03/10/2026)
+
+**A conferência que afirma a regra e não afirma o consumidor fica verde com o
+defeito de pé.** Não é teoria: em dois dias, cinco vezes, sempre a mesma forma.
+
+| onde | o que a conferência afirmava | o que o plantio provou |
+|---|---|---|
+| `conferir:loja` (02/10) | que a linha vizinha existia | trocar o argumento que decide o alarme passava verde |
+| `conferir:saida` (02/10) | "ou o log, ou a falha na resposta" | apagar o log passava verde |
+| `conferir:cadastro` (03/10) | que a variável `comCarro` existia | apagar a linha que exclui quem tem carro passava verde |
+| `conferir:cadastro` (03/10) | a regra pura e a rota de disparo | apagar a linha do cron que entrega a oferta passava verde |
+| `conferir:midia` (03/10) | que a frase existia | o retrato não publicar a frase passava verde |
+
+A regra prática, e ela é a irmã da regra da semana ("conserto na fonte que não
+muda o consumidor não é conserto"): **depois de provar que a conferência pega o
+defeito na regra, plante também no lugar que CHAMA a regra.** Apague a linha que
+passa o valor, troque o argumento, desligue a publicação. Se ficar verde, a
+conferência está medindo um arquivo que ninguém usa.
+
+O jeito de escrever a asserção muda junto: em vez de procurar o nome da função
+no arquivo, procure a CHAMADA com os argumentos que decidem. `/comCarro/` é
+presença; `/const fora = new Set\(\[\s*\.\.\.comCarro,/` é uso.
 
 ## Alçada
 

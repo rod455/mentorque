@@ -165,6 +165,52 @@ const diretrizes = ler("docs/agentes/DIRETRIZES.md");
   }
 }
 
+
+// ── 6. O CRITÉRIO 10 DO GUARDIÃO, E A SKILL QUE O ENTREGA ──────────────────
+//
+// POR QUE ISTO VIROU ASSERÇÃO (03/10/2026). A lição é que conferência que
+// afirma a regra e não afirma QUEM USA a regra fica verde com o defeito de pé:
+// aconteceu cinco vezes em dois dias. Ela entrou na régua do Guardião, que roda
+// aos sábados, E na skill `conferir-que-morde`, que carrega sozinha em QUALQUER
+// sessão que escreva conferência.
+//
+// Os dois lugares, e não um: lição que mora só no manual de sábado não chega na
+// terça, quando alguém escreve a conferência. É a própria regra aplicada a ela
+// mesma, e é por isso que esta seção confere os DOIS.
+{
+  const guardiao = ler("docs/agentes/guardiao-conferencias.md");
+  conferir(
+    "a régua do Guardião cobra plantio em quem USA a regra",
+    /QUEM USA a regra/.test(guardiao),
+    "sem criterio, o veredito do Diretor nao tem contra o que cobrar isso",
+  );
+  // A TABELA DOS CASOS, e não a menção ao nome. `conferir:loja` aparece em
+  // outro lugar deste manual (a fila), então procurar o nome passava verde com
+  // a tabela apagada. É o defeito desta própria lição, no texto que a explica.
+  conferir(
+    "e mostra os casos que a justificam, na tabela",
+    /o que o plantio provou/.test(guardiao) && (guardiao.match(/passava verde/g) ?? []).length >= 4,
+    "regra sem o caso que a gerou e a primeira a ser esquecida",
+  );
+
+  const skill = ler(".claude/skills/conferir-que-morde/SKILL.md");
+  conferir(
+    "a skill carrega a mesma lição",
+    /afirma a regra e não afirma quem a usa/i.test(skill),
+    "a regua roda sabado; a skill carrega em toda sessao que escreve conferencia",
+  );
+  conferir(
+    "e manda plantar DOIS defeitos, um em cada lado",
+    /DOIS plantios por conserto/.test(skill),
+    "plantar so na regra e exatamente o defeito que a licao descreve",
+  );
+  conferir(
+    "o título da seção conta certo quantos jeitos existem",
+    /## Os cinco jeitos de passar verde/.test(skill),
+    "a skill tinha quatro e ganhou o quinto: titulo que nao bate com o conteudo e o primeiro sinal de doc apodrecendo",
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) do time de agentes reprovaram.`);
   process.exit(1);

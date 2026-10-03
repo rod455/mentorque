@@ -22,7 +22,7 @@ Vale plantar mais de um formato do mesmo defeito. Ao consertar a espera pela
 sessão no link de venda, plantei dois: tirar a espera, e esperar **depois** de
 já ter decidido. A segunda é a que alguém faria sem querer numa refatoração.
 
-## Os quatro jeitos de passar verde sem conferir nada
+## Os cinco jeitos de passar verde sem conferir nada
 
 ### 1. A exceção que cega
 
@@ -67,6 +67,38 @@ recusou o envio no fim de um build inteiro.
 
 Concordância prova consistência, não correção. Pergunte o que mais precisa ser
 verdade além de as partes combinarem entre si.
+
+
+### 5. A conferência que afirma a regra e não afirma quem a usa
+
+**O jeito mais comum de todos**, e o mais recente: em dois dias, cinco vezes.
+
+| onde | o que ela afirmava | o que o plantio provou |
+|---|---|---|
+| `conferir:loja` | que a linha vizinha existia | trocar o argumento que decide o alarme passava verde |
+| `conferir:saida` | "ou o log, ou a falha na resposta" | apagar o log passava verde |
+| `conferir:cadastro` | que a variável `comCarro` existia | apagar a linha que exclui quem tem carro passava verde |
+| `conferir:cadastro` | a regra pura e a rota de disparo | apagar a linha do cron que entrega a oferta passava verde |
+| `conferir:midia` | que a frase pronta existia | o retrato não publicar a frase passava verde |
+
+A regra pura é fácil de afirmar e é a metade que não quebra. O que quebra é o
+consumidor: a rota que chama, o cron que roda todo dia, o retrato que imprime.
+Conferência que só olha a regra mede um arquivo que ninguém usa.
+
+**Então são DOIS plantios por conserto, sempre**: um na regra e um em QUEM
+CHAMA a regra. Apague a linha que passa o valor, troque o argumento, desligue a
+publicação. Verde ali é buraco.
+
+E a asserção muda de forma junto. Procurar o nome é presença; procurar a chamada
+com os argumentos que decidem é uso:
+
+```js
+/comCarro/                                 // presença: passa com a linha apagada
+/const fora = new Set\(\[\s*\.\.\.comCarro,/  // uso: morde
+```
+
+É a irmã da regra da semana: **conserto na fonte que não muda o consumidor não
+é conserto**, e conferência que não olha o consumidor não é conferência.
 
 ## O limite que nenhuma conferência daqui atravessa
 
