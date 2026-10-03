@@ -3,6 +3,45 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-03 (noite, 8) · "Tem custo o AppsFlyer?" derrubou metade da minha conclusao de dez minutos antes
+
+- Pergunta do dono, depois de eu listar a atribuição como "saída cara, gasto
+  novo, decisão sua". **A resposta é que ela já está instalada e já atribui.**
+- **O QUE EU DEVIA TER CONFERIDO ANTES DE PRECIFICAR**: o plugin
+  `appsflyer-capacitor-plugin` está no `package.json`, tem conferência própria
+  (`conferir:appsflyer`) e um conserto no `postinstall`. E o diário de 22/09
+  registra o painel dela medindo **13 instalações do Facebook Ads contra 10
+  orgânicas**, de 18 a 20/09. Eu listei três saídas em ordem de custo sem olhar
+  o estado da mais cara, e ela estava de pé, com número escrito nesta mesma
+  casa.
+- **É O MESMO ERRO QUE ESTE PAPEL COMETEU EM 22/09**, e o diário registra: ele
+  afirmou que o OneLink estava parado com base num registro de 05/09, e o dono
+  mostrou que já funcionava. **Prova velha usada como prova atual.** Hoje fui eu,
+  com a prova nova escrita a dez linhas de distância do que eu estava lendo.
+- **O QUE FALTA É LIGAÇÃO DE CONSOLE, NÃO COMPRA.** Naquele relatório de 22/09 o
+  Google Ads não aparece como fonte de mídia; a explicação provável é que a
+  integração de rede autoatribuída do Google nunca foi ligada no painel da
+  AppsFlyer. Virou linha na lista do dono, com destino novo `appsflyer`
+  (acrescentado no código e na documentação, que a `conferir:agentes` obriga a
+  bater).
+- **O PREÇO, para a decisão não ficar sem número**: plano Zero gratuito, pacote
+  de 12.000 conversões no primeiro ano, depois uns US$ 0,07 por conversão
+  atribuída a mídia paga (orgânica não conta). No ritmo que o Play mostrou, uns
+  50 por dia, são umas 1.400 conversões pagas por mês: o pacote cobre uns oito
+  meses e depois é da ordem de US$ 100 por mês, sobre uns R$ 1.200 de mídia
+  mensal. Números de páginas de terceiro, NÃO da AppsFlyer: o plano e o saldo
+  reais estão no console do dono, e isso está dito como está.
+- **A RESSALVA QUE VIAJA JUNTO, medida em 22/09**: 25% dos aparelhos Android da
+  2.7.0 nunca subiram o SDK. A AppsFlyer conta por baixo, então a divisão entre
+  Google e Meta vale como PROPORÇÃO e não como total. Falta reconferir esse 25%
+  na 2.9.
+- **O QUE ISSO MUDA NA CONCLUSÃO DE DEZ MINUTOS ANTES**: a morte da tela do Play
+  Console continua valendo (ela tem duas origens e não divide anunciante), mas
+  a consequência que eu tirei dela estava errada. Não há escolha cara a fazer
+  agora: há uma ligação de console a ligar, e uma decisão de preço que volta
+  daqui a uns oito meses.
+- A lista do dono vai de 11 para 12 itens, e ganhou um painel.
+
 ## 2026-10-03 (noite, 7) · A origem do trafego do Play tem DUAS linhas, e isso encerra um veredito e encarece uma decisao
 
 - O dono foi até o fim das telas. A dimensão "Origem do tráfego", em

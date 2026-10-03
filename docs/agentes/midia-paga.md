@@ -333,6 +333,13 @@ dentro do app e mandar para o funil (nosso, barato, precisa de build), ou
 AppsFlyer/SDK do Meta (mais caro, mais completo). Enquanto nenhuma existir,
 **qualquer conclusão sobre o Meta que passe de "gastou X" é invenção.**
 
+**CORREÇÃO DE 03/10/2026, e ela vale mais que o parágrafo acima: a terceira
+saída JÁ ESTÁ INSTALADA.** A AppsFlyer não é um gasto a decidir, é um
+instrumento de pé: 13 instalações do Facebook Ads medidas em 18 a 20/09. O que
+falta nela é ligar o Google Ads como fonte de mídia no console. O parágrafo
+acima fica como estava escrito, porque ele é o registro de uma leitura que a
+casa fez sem conferir o estado do que já tinha.
+
 **A SAÍDA MAIS BARATA MORREU EM 03/10/2026, e agora é fato medido e não
 suposição.** O dono abriu o relatório de aquisição do Play Console, em
 Estatísticas, com a dimensão "Origem do tráfego", e ela tem **exatamente duas
@@ -696,9 +703,39 @@ do tráfego" do Play tem duas origens só, `Pagas e diretas` e `Não atribuído`
 não separa Google de Meta. Isso não invalida o que está escrito acima, cumpre a
 parte difícil dele: o prazo que eu ia te pedir já venceu, com resposta.
 
-Então a rodada de 09/10 deve a consequência, e ela é uma só: **propor ao dono a
-escolha entre as duas saídas caras, com o preço de cada uma na mesma frase**, ou
-propor a reescrita dos critérios 3 e 6 para o que o instrumento de hoje mede.
-O que não cabe mais é declarar os dois inalcançáveis e seguir. Duas semanas de
-"o limite é do instrumento" com o instrumento mapeado vira escolha adiada, não
-limite.
+**E AÍ O DONO FEZ A PERGUNTA QUE DERRUBOU METADE DISTO: "tem custo o
+AppsFlyer?"** Tem pouco, e o ponto nem é o preço: **a AppsFlyer JÁ ESTÁ NO APP e
+JÁ ATRIBUI.** O plugin está no `package.json` desde sempre, tem conferência
+própria (`conferir:appsflyer`) e conserto no `postinstall`, e em 22/09 o painel
+dela mediu **13 instalações do Facebook Ads contra 10 orgânicas** na janela de
+18 a 20/09. A "saída cara" que eu ia propor está instalada e funcionando há
+semanas.
+
+**O que falta é uma ligação de console, não uma compra**: naquele relatório o
+Google Ads não aparece como fonte de mídia, e a explicação provável é que a
+integração de rede autoatribuída do Google nunca foi ligada no painel da
+AppsFlyer. Virou linha na lista do dono em 03/10.
+
+**O preço, para a decisão não ficar sem número**: o plano Zero é gratuito, com
+um pacote de 12.000 conversões no primeiro ano, e depois disso uns US$ 0,07 por
+conversão atribuída a mídia paga (instalação orgânica não conta). No ritmo de
+hoje, que o Play mostrou em uns 50 por dia na virada de setembro, são umas 1.400
+conversões pagas por mês: o pacote cobre uns oito meses, e depois é da ordem de
+US$ 100 por mês, que em cima de uns R$ 1.200 de mídia por mês NÃO é detalhe e
+precisa voltar como decisão quando chegar perto. Números de páginas de terceiro,
+não da AppsFlyer: o plano e o saldo reais estão no console dele.
+
+**A LIÇÃO, e ela é da mesma família do mês inteiro**: eu listei três saídas em
+ordem de custo sem conferir o estado da mais cara, e ela já estava de pé, com
+número no diário. Antes de precificar uma saída, confira se ela já existe. O
+mesmo erro de 22/09, quando este papel afirmou que o OneLink estava parado com
+base num registro de 05/09 e o dono mostrou que já funcionava: **prova velha
+usada como prova atual.**
+
+Então a rodada de 09/10 deve a consequência, e ela mudou: **se a ligação do
+Google Ads estiver feita, ler a divisão por fonte de mídia na AppsFlyer e
+publicar o custo por instalação de cada campanha**, que é o critério 3 voltando
+a ser alcançável por um caminho que já estava pago. Se não estiver feita, cobrar
+a linha. E em qualquer um dos dois casos, declarar a ressalva medida em 22/09:
+25% dos aparelhos Android da 2.7.0 nunca subiram o SDK, então a AppsFlyer conta
+por baixo e a divisão vale como PROPORÇÃO, não como total.
