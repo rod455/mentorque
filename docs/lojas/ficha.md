@@ -382,7 +382,13 @@ Três consequências, e elas valem mais que a proposta que as gerou:
    de contaminação por tráfego pago escrita acima. É uma leitura mais fraca, e
    está dito que é.
 3. **O ALVO DESTE PAPEL MUDA.** A busca orgânica da loja, se existe, está dentro
-   de "Não atribuído": no máximo uns 11% da aquisição do dia. Somado aos três
+   de "Não atribuído", que foi 6 de 54 em 29/09. **E um segundo instrumento
+   discorda do tamanho**: a AppsFlyer, na semana de 26/09 a 02/10, conta 51
+   orgânicas em 162 atribuições, que é 31%. Os dois baldes não são a mesma
+   coisa (o do Play junta anúncio com link direto; o da AppsFlyer chama de
+   orgânico tudo que não casou com rede paga), então o honesto é a FAIXA: o
+   orgânico está entre um décimo e um terço, e a maioria é paga pelos dois
+   instrumentos. Somado aos três
    quartos de instalação que não passam pela ficha, o retrato é que **a loja hoje
    é quase inteiramente um destino de anúncio**. Enquanto isso durar, a alavanca
    da ficha é a CONVERSÃO de quem o anúncio manda, não a descoberta orgânica:

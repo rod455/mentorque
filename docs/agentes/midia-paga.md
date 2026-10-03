@@ -718,12 +718,20 @@ AppsFlyer. Virou linha na lista do dono em 03/10.
 
 **O preço, para a decisão não ficar sem número**: o plano Zero é gratuito, com
 um pacote de 12.000 conversões no primeiro ano, e depois disso uns US$ 0,07 por
-conversão atribuída a mídia paga (instalação orgânica não conta). No ritmo de
-hoje, que o Play mostrou em uns 50 por dia na virada de setembro, são umas 1.400
-conversões pagas por mês: o pacote cobre uns oito meses, e depois é da ordem de
-US$ 100 por mês, que em cima de uns R$ 1.200 de mídia por mês NÃO é detalhe e
-precisa voltar como decisão quando chegar perto. Números de páginas de terceiro,
-não da AppsFlyer: o plano e o saldo reais estão no console dele.
+conversão atribuída a mídia paga (instalação orgânica não conta). Números de
+páginas de terceiro, não da AppsFlyer: o plano e o saldo reais estão no console
+dele.
+
+**E O VOLUME AGORA É MEDIDO, não estimado.** O painel dela, janela de 26/09 a
+02/10: **162 atribuições no total, 111 não orgânicas e 51 orgânicas.** São umas
+480 conversões pagas por mês, então o pacote de 12.000 cobre uns DOIS ANOS no
+ritmo de hoje, e depois seria da ordem de US$ 34 por mês.
+
+A minha primeira conta, escrita horas antes, dizia 1.400 por mês e oito meses de
+pacote. Ela saía de um gráfico do Play que eu li como instalação diária e não
+era. **Estimativa tirada de um gráfico cuja métrica não foi lida até o fim**, que
+é a mesma doença que este papel levou no retorno de hoje. O número bom veio do
+instrumento que mede exatamente isso.
 
 **A LIÇÃO, e ela é da mesma família do mês inteiro**: eu listei três saídas em
 ordem de custo sem conferir o estado da mais cara, e ela já estava de pé, com

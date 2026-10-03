@@ -358,8 +358,13 @@ números, e os três apontam para o mesmo lugar:
   cerca de três quartos das instalações não passam pela página da loja, porque
   campanha de app instala direto do anúncio.
 - **A dimensão "Origem do tráfego" tem duas origens só**, `Pagas e diretas` e
-  `Não atribuído`. Em 29/09, 48 contra 6. A busca orgânica da loja, se existe,
-  está dentro dos 6: no máximo uns 11% do dia.
+  `Não atribuído`. Em 29/09, 48 contra 6. **Um segundo instrumento discorda do
+  tamanho e isso precisa estar escrito**: a AppsFlyer, de 26/09 a 02/10, conta
+  51 orgânicas em 162 atribuições, 31%. Os dois baldes não são a mesma coisa (o
+  do Play junta anúncio com link direto; o da AppsFlyer chama de orgânico tudo
+  que não casou com rede paga). O que vale é a FAIXA: **o orgânico está entre um
+  décimo e um terço**, e a maioria é paga pelos dois. Qualquer frase deste papel
+  sobre o tamanho do orgânico cita os dois números ou não cita nenhum.
 - **A conversão da ficha é 29,1%** em 28 dias, que é saudável.
 
 **A conclusão: a loja hoje é quase inteiramente um destino de anúncio.** Isso
@@ -372,7 +377,8 @@ não é opinião sobre estratégia, é o que o painel diz.
    nota e as avaliações recentes mexem nos 29,1%. Palavra-chave mexe num canal
    que hoje responde por no máximo um décimo.
 2. **Toda proposta de ficha declara o tamanho do alcance dela.** Uma proposta de
-   palavra-chave mexe em ~11% da aquisição; uma de imagem ou primeira frase mexe
+   palavra-chave mexe no orgânico, que é entre um décimo e um terço da
+   aquisição, com os dois instrumentos citados; uma de imagem ou primeira frase mexe
    no quarto que chega na página. Escrever isso na proposta não é modéstia, é o
    que impede o dono de gastar tempo achando que troca de título muda o mês.
 3. **O veredito do título de 01/09 está encerrado**, pela regra escrita naquele

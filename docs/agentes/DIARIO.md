@@ -3,6 +3,39 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-03 (noite, 9) · O painel da AppsFlyer derruba duas contas minhas do mesmo dia, e as duas eram estimativa lida de grafico
+
+- O dono abriu o painel. Performance Analysis, visão unificada (os dois apps),
+  janela de **26/09 a 02/10**: **162 atribuições, 111 não orgânicas, 51
+  orgânicas**. E três cartões vazios: `Cost of installs`, `eCPI` e `ROAS D1`,
+  todos com "No data found".
+- **PRIMEIRA CORREÇÃO, do preço.** Eu escrevi, horas antes, que o volume era de
+  umas 1.400 conversões pagas por mês e que o pacote gratuito de 12.000 cobriria
+  uns oito meses. O medido são **111 não orgânicas por semana, umas 480 por
+  mês**: o pacote cobre uns DOIS ANOS, e depois seria da ordem de US$ 34 por
+  mês. Minha conta saía de um gráfico do Play que eu li como instalação diária e
+  não era. **Estimativa tirada de gráfico cuja métrica não foi lida até o fim**,
+  que é exatamente a doença que o retorno de hoje cobrou do papel de Mídia.
+- **SEGUNDA CORREÇÃO, e é mais séria, do tamanho do orgânico.** Eu publiquei
+  hoje, no manual do ASO e na ficha, que o orgânico era "no máximo uns 11%",
+  tirado do `Não atribuído` do Play (6 de 54 em 29/09). A AppsFlyer, na mesma
+  semana, diz **51 orgânicas em 162, que é 31%**. Os dois baldes não são a mesma
+  coisa: o do Play junta anúncio com link direto, e o da AppsFlyer chama de
+  orgânico tudo que não casou com rede paga. **O honesto é a faixa: entre um
+  décimo e um terço.** Corrigido nos dois arquivos, com a regra de que qualquer
+  frase sobre o tamanho do orgânico cita os dois números ou não cita nenhum.
+- **O que NÃO muda**: a maioria da aquisição é paga pelos dois instrumentos, e a
+  mudança de alvo do papel de ASO continua de pé. Era a direção que importava, e
+  ela sobreviveu ao segundo instrumento. O que não sobreviveu foi a precisão
+  falsa do "11%".
+- **O QUE OS TRÊS CARTÕES VAZIOS DIZEM**: sem integração de CUSTO ligada, a
+  AppsFlyer atribui instalação mas não sabe quanto ela custou. É por isso que
+  `eCPI` está vazio, e `eCPI` por campanha é literalmente o critério 3 da régua
+  da Mídia. Então a ligação que falta não é só a do Google Ads para atribuir: é
+  a de custo, dos dois lados.
+- Próximo passo, na lista do dono: ligar Google Ads e o custo da Meta no
+  Partner Marketplace da AppsFlyer, e mandar a tabela por media source.
+
 ## 2026-10-03 (noite, 8) · "Tem custo o AppsFlyer?" derrubou metade da minha conclusao de dez minutos antes
 
 - Pergunta do dono, depois de eu listar a atribuição como "saída cara, gasto
