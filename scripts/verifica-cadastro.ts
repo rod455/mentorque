@@ -27,6 +27,8 @@
 // Rode com: npm run conferir:cadastro
 import { readFileSync } from "node:fs";
 import { emailTermineOCadastro, linkDoCupom } from "../lib/email/termineOCadastro.ts";
+import { montarMensagem, renderEmail } from "../lib/jornada/emails.ts";
+import { TETO_DO_CUPOM, linhaDoCupom, ofertaDoCupom } from "../lib/email/cupomDisponivel.ts";
 
 process.env.JORNADA_SEGREDO ||= "segredo-de-conferencia";
 
@@ -177,6 +179,128 @@ console.log("Cadastro: o convite do mês grátis sai uma vez, para quem deve, e 
     "e ela é a mesma do utm_campaign do link",
     url.includes(`utm_campaign=${chave}`),
     `chave "${chave}" e link "${url}": com nomes diferentes, o retrato mede uma campanha e o e-mail etiqueta outra`,
+  );
+}
+
+
+// ── 6. A ROTINA: O MESMO CONVITE DENTRO DA JORNADA ─────────────────────────
+//
+// Pedido do dono (03/10): isto vira rotina para quem cria conta e não cadastra
+// o carro. O gatilho no dia 1 NÃO cabe, e a razão é uma regra que ele aprovou
+// em 12/09: no dia 0 sai o "sua conta está pronta" e o espaçamento mínimo é de
+// três dias. O que já existia e já fala com essa pessoa é o `d2` sem carro, na
+// janela do dia 2 ao 5. A oferta entrou lá dentro, em vez de virar gatilho
+// novo com exceção na regra.
+{
+  const base = {
+    userId: UID,
+    email: "ana@exemplo.com",
+    nome: "Ana",
+    contaCriadaEm: "2026-10-01",
+    veiculos: [],
+    carroPrincipalId: null,
+    servicos: [],
+    abastecimentos: [],
+    motoristaDeApp: false,
+    ganhos: [],
+    quizRespostas: 0,
+    ultimaAtividade: null,
+    temManual: false,
+    uf: null,
+    cidade: null,
+    saiu: false,
+    envios: [],
+  };
+  const escolha = { chave: "d2", familia: "cadencia" as const, motivo: "conta com 2 dias, sem carro", carro: null };
+
+  const com = montarMensagem(escolha, { ...base, ofertaDoCupom: { cupom: "LANCAMENTO1MES", precoMensal: "R$ 29,90" } }, "2026-10-03");
+  const sem = montarMensagem(escolha, { ...base, ofertaDoCupom: null }, "2026-10-03");
+
+  const htmlCom = renderEmail(com, "https://x/sair");
+  const htmlSem = renderEmail(sem, "https://x/sair");
+
+  conferir("com cupom, o d2 sem carro oferece o mês", /por nossa conta/.test(htmlCom.text), htmlCom.text.slice(0, 200));
+  conferir("e leva o link do cupom", /cupom=LANCAMENTO1MES/.test(htmlCom.html), "sem o link a oferta e so uma frase");
+  conferir(
+    "o link aparece também no TEXTO PURO",
+    /https:\/\/www\.mentorque\.com\.br\/app\?assinar=mensal&cupom=LANCAMENTO1MES/.test(htmlCom.text),
+    "a versao em texto e gerada apagando as tags: ancora com texto amigavel vira promessa sem endereco",
+  );
+  conferir("diz o preço do segundo mês", /R\$ 29,90 por mês/.test(htmlCom.text), htmlCom.text);
+  conferir("e o cancelamento", /cancela quando quiser/.test(htmlCom.text), htmlCom.text);
+  conferir(
+    "o botão continua sendo o do carro",
+    /Cadastrar o meu carro/.test(htmlCom.text),
+    "dois botoes grandes dividem o clique, e o que a gente quer que aconteca e o cadastro",
+  );
+
+  conferir("SEM cupom, a oferta some", !/por nossa conta/.test(htmlSem.text), htmlSem.text.slice(0, 300));
+  conferir("e o e-mail volta a ser o que era", /Descobrir na oficina sai caro/.test(htmlSem.text), htmlSem.text.slice(0, 120));
+  conferir("sem oferta, nenhum link de cupom sobra", !/cupom=/.test(htmlSem.html), "cupom esgotado com link vivo entrega preco cheio");
+
+  // O TETO, e ele é do código e não da memória de ninguém.
+  conferir("com o teto cheio não há oferta", ofertaDoCupom(TETO_DO_CUPOM) === null, String(TETO_DO_CUPOM));
+  conferir("com uma vaga, há", ofertaDoCupom(TETO_DO_CUPOM - 1) !== null);
+  conferir("e passar do teto também não oferece", ofertaDoCupom(TETO_DO_CUPOM + 10) === null);
+  conferir("o teto é o do Stripe", TETO_DO_CUPOM === 25, String(TETO_DO_CUPOM));
+  conferir(
+    "a linha do retrato avisa quando acabar",
+    /A OFERTA PAROU DE SAIR/.test(linhaDoCupom(TETO_DO_CUPOM)),
+    linhaDoCupom(TETO_DO_CUPOM),
+  );
+  conferir(
+    "e diz que a conta é por baixo enquanto ninguém leu o painel",
+    /CONTA POR BAIXO/.test(linhaDoCupom(3)),
+    linhaDoCupom(3),
+  );
+}
+
+
+// ── 7. O CRON USA A REGRA, QUE É O QUE DECIDE SE ELA EXISTE ────────────────
+//
+// Regra da semana: conserto na fonte que não muda o consumidor não é conserto.
+// As duas primeiras rodadas de plantio provaram isto aqui: apagar a linha que
+// passa a oferta para a pessoa, e trocar o que o cron faz quando a contagem
+// falha, passavam VERDE, porque a conferência olhava a regra pura e a rota de
+// disparo e não olhava o cron, que é quem roda todo dia.
+{
+  const cron = semComentarios(readFileSync(new URL("../app/api/cron/jornada/route.ts", import.meta.url), "utf8"));
+  conferir("o cron conta os resgates do cupom", /from\("subscriptions"\)[\s\S]{0,160}\.eq\("cupom", CUPOM_DA_CAMPANHA\)/.test(cron));
+  conferir(
+    "e entrega a oferta para cada pessoa",
+    /ofertaDoCupom: oferta,/.test(cron),
+    "a regra existir e ninguem passar e o mesmo que nao ter regra",
+  );
+  conferir(
+    "a oferta é decidida uma vez por rodada, não por pessoa",
+    /const oferta = ofertaDoCupom\(await resgatesDoCupom\(admin\)\);/.test(cron),
+    "uma consulta por pessoa seria trabalho por nada, e a resposta e a mesma para todo mundo",
+  );
+  conferir(
+    "contagem que falha PARA a oferta, em vez de assumir zero",
+    /return Number\.MAX_SAFE_INTEGER;/.test(cron),
+    "na duvida entre oferecer demais e de menos, a que machuca e a primeira: entrega preco cheio para quem leu 'por nossa conta'",
+  );
+  conferir(
+    "e a falha da contagem não sai calada",
+    /console\.error\("\[jornada\] nao consegui contar resgates/.test(cron),
+    "oferta que some sem motivo vira duas semanas procurando",
+  );
+}
+
+
+// ── 8. O RETRATO AVISA ANTES DE O CUPOM ACABAR ─────────────────────────────
+{
+  const op = semComentarios(readFileSync(new URL("../lib/operacao.ts", import.meta.url), "utf8"));
+  conferir(
+    "o retrato publica quantas vagas restam no cupom",
+    /cupomDaCampanha: linhaDoCupom\(/.test(op),
+    "sem isso, o dia em que a oferta sumir dos e-mails passa em silencio",
+  );
+  conferir(
+    "e conta pelo cupom da campanha, não por qualquer cupom",
+    /=== CUPOM_DA_CAMPANHA/.test(op),
+    "somar cupom de outra campanha fecharia a oferta antes da hora",
   );
 }
 

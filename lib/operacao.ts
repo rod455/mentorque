@@ -3,6 +3,7 @@ import { ETIQUETA_DESDE, lerPergunta, linhaDePerguntas, quadroDeTemas } from "./
 import { ORIGEM_VENDA_SEM_CONTA, conferenciaDaLoja, linhaDeVendaSemConta } from "./loja/vendaSemConta";
 import { cicloVencido, linhaDeCiclosVencidos } from "./ciclo";
 import { CHAVE_DO_ENVIO_DE_SAIDA } from "./email/saida";
+import { CUPOM_DA_CAMPANHA, linhaDoCupom } from "./email/cupomDisponivel";
 import { linhaDeMotivos } from "./email/motivoDaSaida";
 import { FONTES_DE_GASTO, linhaDeGasto, type DiaDeGasto } from "./midiaLegivel";
 import { avisoDeColeta, frescorDasFontes } from "./frescorDasFontes";
@@ -567,6 +568,14 @@ export async function coletarDadosOperacao() {
       // de baixo vem da mesma fonte que marca o envio, e não de uma contagem
       // paralela. Abaixo do mínimo, o lugar do ranking é ocupado pelo motivo de
       // não dar para ler. Regra em lib/email/motivoDaSaida.ts.
+      // O CUPOM DA CAMPANHA (03/10/2026). A oferta do mês por nossa conta sai
+      // sozinha dos e-mails quando o teto de 25 acaba, e sem esta linha esse
+      // dia passaria em silêncio: a decisão que o dono reservou para si
+      // (criar cupom novo ou encerrar) chegaria como surpresa. Regra em
+      // lib/email/cupomDisponivel.ts.
+      cupomDaCampanha: linhaDoCupom(
+        (subs ?? []).filter((s) => String(s.cupom ?? "") === CUPOM_DA_CAMPANHA).length,
+      ),
       porQueCancelaram: linhaDeMotivos(
         (motivosDeSaida ?? []) as Parameters<typeof linhaDeMotivos>[0],
         envios.filter((e) => e.chave === CHAVE_DO_ENVIO_DE_SAIDA).length,

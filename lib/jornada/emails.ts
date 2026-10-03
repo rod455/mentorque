@@ -241,14 +241,54 @@ export function montarMensagem(e: Escolha, p: PessoaDaJornada, hoje: string, ago
 
   if (e.chave === "d2") {
     if (!carro) {
+      // A OFERTA ENTRA AQUI, E SAI SOZINHA QUANDO O CUPOM ACABA (03/10/2026).
+      //
+      // Pedido do dono: quem cria conta e não cadastra o carro recebe o
+      // primeiro mês por nossa conta. Este e-mail já existia e já falava
+      // exatamente com essa pessoa, na janela do dia 2 ao 5; o que faltava era
+      // a oferta. Criar um gatilho novo no dia 1 era o pedido original e não
+      // cabe: no dia 0 sai o "sua conta está pronta", e o espaçamento mínimo
+      // de três dias entre e-mails foi aprovado junto com a jornada em 12/09.
+      // Furar o espaçamento para caber uma oferta é o tipo de exceção que a
+      // próxima rodada amplia.
+      //
+      // O BOTÃO CONTINUA SENDO O DO CARRO, e o cupom é um link no meio da
+      // frase. São duas ações (cadastrar o carro e assinar com o desconto), e
+      // dois botões grandes dividiriam o clique; o que a gente quer que
+      // aconteça é o cadastro, então ele fica com o botão.
+      //
+      // O cupom só vale na WEB, porque é código do Stripe e a compra dentro do
+      // app passa pela loja. A frase diz isso em vez de mandar a pessoa para
+      // um lugar onde a promessa não se cumpre.
+      const oferta = p.ofertaDoCupom;
+      const linkCupom = oferta
+        ? `${SITE}/app?assinar=mensal&cupom=${encodeURIComponent(oferta.cupom)}&utm_source=email&utm_campaign=termine-o-cadastro`
+        : null;
       return {
-        assunto: "Não sabe quando é a próxima revisão do seu carro?",
-        preheader: "A maioria descobre na oficina. É o jeito mais caro.",
+        assunto: oferta
+          ? "Cadastre seu carro e o primeiro mês é por nossa conta"
+          : "Não sabe quando é a próxima revisão do seu carro?",
+        preheader: oferta
+          ? "Um minuto de cadastro, e o Premium do primeiro mês fica por nossa conta."
+          : "A maioria descobre na oficina. É o jeito mais caro.",
         titulo: "Descobrir na oficina sai caro",
         saudacao: oi,
         paragrafos: [
           "A maioria das pessoas descobre que a revisão venceu na oficina, quando a troca de óleo já virou retífica ou a pastilha comeu o disco. É o jeito mais caro de descobrir.",
           "Você criou a conta, mas ainda não cadastrou o carro, e sem ele o Mentorque não tem o que vigiar. Com o carro na garagem, cada item ganha data e km e o app avisa antes: sem planilha, sem lembrar, sem susto.",
+          ...(oferta && linkCupom
+            ? [
+                // O TEXTO DO LINK É O PRÓPRIO ENDEREÇO, e não "pegue aqui".
+                //
+                // A versão em texto puro deste e-mail é gerada apagando as
+                // tags (`limpo`, no fim deste arquivo), então uma âncora com
+                // texto amigável vira "pegue aqui" SEM endereço nenhum para
+                // quem lê em texto. Com o endereço como texto do link, as duas
+                // versões funcionam.
+                `E para te dar um empurrão, o primeiro mês do Premium é por nossa conta. O desconto é aplicado no site, porque o cupom é de lá: <a href="${linkCupom}" style="color:#8a5a12;word-break:break-all">${linkCupom}</a>. Depois é só abrir o app com a mesma conta, que o Premium é da conta e não do aparelho.`,
+                `Depois do primeiro mês são ${oferta.precoMensal} por mês, e você cancela quando quiser, sozinho.`,
+              ]
+            : []),
         ],
         cta: { texto: "Cadastrar o meu carro", url: link("addCar") },
         push: { titulo: "Quando é a próxima revisão?", corpo: "Cadastre o carro e o Mentorque avisa antes de vencer. Um minuto." },

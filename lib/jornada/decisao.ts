@@ -38,6 +38,7 @@ import { mesAnterior, resumoDoMes } from "../app/resumoDoMes.ts";
 import { computeUpcoming, REVISION_RULES } from "../app/health.ts";
 import { planoDosItens } from "../app/planoDeRevisao.ts";
 import { FAIXAS_NACIONAIS } from "../app/faixaDePreco.ts";
+import type { OfertaDeCupom } from "../email/cupomDisponivel.ts";
 
 export type Envio = { chave: string; dia: string };
 
@@ -69,6 +70,17 @@ export type PessoaDaJornada = {
   saiu: boolean;
   /** O que já recebeu (chave e dia). */
   envios: Envio[];
+  /**
+   * A oferta do mês por nossa conta, quando o cupom ainda tem vaga.
+   *
+   * Entra por aqui, e não como constante no texto, por duas razões. A
+   * primeira: a decisão continua PURA, e a conferência exercita os dois
+   * caminhos (com oferta e sem) sem rede nem banco. A segunda, que é a que
+   * importa: cupom tem teto, e quando ele acaba o e-mail precisa VOLTAR a ser
+   * o que era, sem a frase "por nossa conta". Null é o estado normal do dia
+   * seguinte ao fim da campanha, não um erro. Regra em lib/email/cupomDisponivel.ts.
+   */
+  ofertaDoCupom?: OfertaDeCupom | null;
 };
 
 export type Familia = "cadencia" | "gatilho" | "sazonal" | "resumo";

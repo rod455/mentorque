@@ -5,6 +5,7 @@ import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { escolherEmail, type Escolha, type PessoaDaJornada } from "@/lib/jornada/decisao";
 import { montarMensagem, renderEmail } from "@/lib/jornada/emails";
 import { linkDeSaida } from "@/lib/jornada/saida";
+import { CUPOM_DA_CAMPANHA, ofertaDoCupom } from "@/lib/email/cupomDisponivel";
 import { enviarPush, pushConfigurado } from "@/lib/push/transporte";
 import {
   escolherPush,
@@ -110,7 +111,31 @@ function temManualPara(manuais: Manual[], v: Vehicle | null): boolean {
 }
 
 /** Lê tudo de que a decisão precisa, para todas as contas. */
+/**
+ * Quantos resgates do cupom da campanha já viraram assinatura nossa.
+ *
+ * Decide se o e-mail do dia 2 sai COM a oferta do mês por nossa conta. Lido
+ * uma vez por rodada, e não por pessoa: é a mesma resposta para todo mundo, e
+ * uma consulta por pessoa seria trabalho por nada.
+ *
+ * Falhar aqui devolve o teto cheio de propósito (a oferta PARA de sair), e não
+ * zero: na dúvida entre oferecer demais e oferecer de menos, a que machuca é a
+ * primeira, porque entrega preço cheio para quem leu "por nossa conta".
+ */
+async function resgatesDoCupom(admin: SupabaseClient): Promise<number> {
+  const { count, error } = await admin
+    .from("subscriptions")
+    .select("user_id", { count: "exact", head: true })
+    .eq("cupom", CUPOM_DA_CAMPANHA);
+  if (error) {
+    console.error("[jornada] nao consegui contar resgates do cupom, a oferta nao sai hoje:", error.message);
+    return Number.MAX_SAFE_INTEGER;
+  }
+  return count ?? 0;
+}
+
 async function carregarPessoas(admin: SupabaseClient, hoje: string): Promise<{ pessoas: PessoaDaJornada[]; comToken: Set<string> }> {
+  const oferta = ofertaDoCupom(await resgatesDoCupom(admin));
   const { data: lista, error: erroUsers } = await admin.auth.admin.listUsers({ page: 1, perPage: 1000 });
   if (erroUsers) throw new Error(`auth: ${erroUsers.message}`);
 
@@ -170,6 +195,7 @@ async function carregarPessoas(admin: SupabaseClient, hoje: string): Promise<{ p
       cidade: d.city ?? null,
       saiu: saiu.has(u.id),
       envios: enviosDe.get(u.id) ?? [],
+      ofertaDoCupom: oferta,
     });
   }
   return { pessoas, comToken };
