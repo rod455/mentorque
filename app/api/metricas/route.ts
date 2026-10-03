@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { chaveDadosOk, negada } from "@/lib/chaveDados";
+import { leParceiros, montaPacote } from "@/lib/appsflyer";
 
 export const runtime = "nodejs";
 // Teto de duracao: funcao pendurada segura memoria provisionada (e cota).
@@ -21,6 +22,11 @@ const FONTES = new Set([
   // Downloads reais das lojas (relatório de vendas da Apple exclui
   // TestFlight; o do Play virá do export no Cloud Storage).
   "app_store_downloads", "play_downloads",
+  // Instalação por FONTE DE MÍDIA (AppsFlyer, Pull API, 03/10/2026). É a única
+  // fonte da casa que diz QUEM trouxe a instalação: o painel do Google e o da
+  // Meta contam cada um a sua, e o Play Console não divide anunciante (a
+  // dimensão de origem dele tem duas linhas: pagas-e-diretas e não-atribuído).
+  "appsflyer",
 ]);
 const MAX_DADOS = 20000; // bytes de JSON por pacote
 
@@ -43,13 +49,45 @@ export async function POST(req: Request) {
     : null;
 
   if (!fonte || !dados) return NextResponse.json({ error: "pacote_invalido" }, { status: 400 });
-  if (JSON.stringify(dados).length > MAX_DADOS) {
+
+  // A APPSFLYER CHEGA COMO CSV CRU, E A LEITURA ACONTECE AQUI (03/10/2026).
+  //
+  // POR QUE ASSIM, e não com um nó de código no n8n como as outras fontes: a
+  // leitura do relatório de parceiros é a parte que quebra calada (vírgula
+  // dentro de campo desloca as colunas, `N/A` virando zero transforma "não sei"
+  // em "foi de graça", e texto de erro da API lido como tabela vazia vira
+  // "zero instalação"). Nó de código do n8n não é conferido por nada; aqui a
+  // `conferir:midia` planta defeito em cima de cada um desses casos.
+  //
+  // E POR QUE NA MESMA PORTA, e não numa rota própria: o nó do n8n que grava
+  // métrica já carrega a chave desta casa. Uma rota separada significaria uma
+  // segunda cópia da mesma chave num segundo lugar, e chave copiada é chave que
+  // um dia gira pela metade.
+  let pacote: Record<string, unknown> = dados;
+  if (fonte === "appsflyer") {
+    const texto = (v: unknown) => (typeof v === "string" ? v : null);
+    const android = leParceiros(texto(dados.csvAndroid));
+    const ios = leParceiros(texto(dados.csvIos));
+    // OS DOIS ILEGÍVEIS É RECUSA, e não pacote vazio: gravar zero quando o
+    // token venceu faria a operação ler queda de campanha onde houve queda de
+    // coleta. É o quarto jeito de inventar número que esta casa já pagou.
+    if (!android && !ios) {
+      return NextResponse.json({ error: "appsflyer_ilegivel" }, { status: 400 });
+    }
+    const janela = {
+      de: typeof dados.de === "string" ? dados.de : "",
+      ate: typeof dados.ate === "string" ? dados.ate : dia,
+    };
+    pacote = montaPacote(janela, android, ios) as unknown as Record<string, unknown>;
+  }
+
+  if (JSON.stringify(pacote).length > MAX_DADOS) {
     return NextResponse.json({ error: "pacote_grande" }, { status: 413 });
   }
 
   const { error } = await admin
     .from("metricas_diarias")
-    .upsert({ dia, fonte, dados, coletado_em: new Date().toISOString() }, { onConflict: "dia,fonte" });
+    .upsert({ dia, fonte, dados: pacote, coletado_em: new Date().toISOString() }, { onConflict: "dia,fonte" });
   if (error) return NextResponse.json({ error: "gravacao_falhou" }, { status: 500 });
   return NextResponse.json({ ok: true, dia, fonte });
 }

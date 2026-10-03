@@ -33,6 +33,50 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-03 (noite, 13) · O coletor da AppsFlyer existe, e a leitura do CSV ficou onde da para conferir
+
+- O dono gerou o token da Pull API e guardou no n8n como credencial Bearer
+  `AppsFlyer`. Com isso a AppsFlyer deixa de ser via de mão única.
+- **O DESENHO, e a decisão que importa: a LEITURA do CSV mora no repositório,
+  não num nó de código do n8n.** O n8n faz o que ele faz bem (guarda o token,
+  bate na Pull API duas vezes, uma por app, e entrega o texto); `lib/appsflyer.ts`
+  lê. O motivo é simples: nó de código do n8n não é conferido por nada, e o que
+  quebra calado num relatório de parceiros é exatamente a leitura.
+- **E A LEITURA TEM QUATRO ARMADILHAS, todas com plantio**: vírgula dentro de
+  campo entre aspas (`"Lançamento, Mentorque"`) desloca todas as colunas à
+  direita e as instalações passam a vir da coluna errada com cara de número
+  certo; `N/A` virando zero transforma "não sei o custo" em "foi de graça";
+  texto de erro da API lido como tabela vazia vira "zero instalação", que é
+  queda de coleta com cara de queda de campanha; e `every` sobre lista vazia
+  diz "custo desligado" sem ter olhado uma linha.
+- **O AVISO DO ZERO ESTRUTURAL É CAMPO DO PACOTE, não comentário de código.**
+  Enquanto o Google Ads não estiver ligado no console, todo pacote gravado
+  carrega a frase: "ZERO aqui significa NAO PERGUNTADO, nunca 'nao trouxe
+  ninguem'". E ela **some sozinha** no dia em que o Google aparecer como fonte,
+  porque é derivada do conteúdo e não uma frase que alguém precisa lembrar de
+  apagar. O mesmo vale para o aviso de custo desligado.
+- **A PORTA É A QUE JÁ EXISTE**, `/api/metricas`, e isso também é decisão: o nó
+  do n8n que grava métrica já carrega a chave da casa, e uma rota separada
+  significaria uma segunda cópia da mesma chave num segundo lugar. Chave
+  copiada é chave que um dia gira pela metade.
+- **DEZOITO DEFEITOS PLANTADOS, DEZOITO MORDIDAS**, com verde antes e depois de
+  cada um: doze na leitura e cinco na ligação da rota, mais um que nasceu de um
+  plantio que PASSOU VERDE (o `every` sobre lista vazia) e virou asserção nova.
+  Esse é o valor do plantio: ele achou um caso que eu tinha protegido no código
+  e não tinha provado.
+- **O QUE FICOU FALTANDO, e é do dono: escolher a credencial nos dois nós.** O
+  MCP do n8n que eu uso **recusa anexar credencial genérica a nó HTTP**, e isso
+  foi testado com duas credenciais diferentes antes de eu desistir. Os nós estão
+  publicados (`versionId` e `activeVersionId` iguais, `bf633fd9`) com a
+  instrução escrita na nota de cada um. Virou linha na lista.
+- **ENQUANTO NÃO FOR ESCOLHIDA**, a coleta das 05:30 grava o pacote com o aviso
+  de relatório não lido, em vez de inventar zero. A falha aparece no dado, que é
+  o jeito desta casa.
+- **ISTO É TEORIA EM PRODUÇÃO**: nenhuma coleta passou por este código. A prova
+  é a execução de amanhã às 05:30, depois da credencial escolhida, e o que ela
+  tem que mostrar é `fonte: appsflyer` com 124 ou mais instalações do Facebook
+  Ads e a lista de avisos com o do Google dentro.
+
 ## 2026-10-03 (noite, 12) · A Meta trouxe 124 instalacoes e o Google trouxe ZERO, e esse zero e estrutural
 
 - O dono baixou o relatório de parceiros do app **Android**, janela de 26/09 a

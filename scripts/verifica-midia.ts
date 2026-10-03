@@ -17,6 +17,7 @@
 // pior que conferência que falta.
 //
 // Rode com: npm run conferir:midia
+import { AVISO_GOOGLE, colunas, leParceiros, montaPacote, numero } from "../lib/appsflyer.ts";
 import {
   DIAS_DA_PONTA,
   FONTES_DE_GASTO,
@@ -175,6 +176,135 @@ console.log("Mídia: a frase do gasto esconde campanha que parou de entregar?");
     "carimbar hoje num pacote de ontem e exatamente o defeito que o frescor das fontes existe para pegar",
   );
   conferir("as duas fontes de gasto entram", FONTES_DE_GASTO.length === 2 && FONTES_DE_GASTO.includes("meta_ads"), FONTES_DE_GASTO.join(", "));
+}
+
+// ── O RELATORIO DE PARCEIROS DA APPSFLYER (03/10/2026) ─────────────────────
+//
+// POR QUE ISTO EXISTE. Ate 03/10 a casa nao sabia QUEM trazia a instalacao: o
+// painel do Google conta a dele, o da Meta a dela, e o Play Console nao divide
+// anunciante. A AppsFlyer divide, e a leitura do CSV dela e a parte que quebra
+// calada. O caso de teste e o arquivo REAL de 26/09 a 03/10, que o dono baixou.
+//
+// O QUE ELA NAO ALCANCA: se a Pull API respondeu a verdade. Isso e a execucao
+// do n8n, e o aviso do token vencido aparece como relatorio nao legivel.
+{
+  console.log("AppsFlyer: o relatorio de parceiros vira numero sem mentir?");
+
+  const CSV_ANDROID = [
+    "Agency/PMD (af_prt),Media Source (pid),Campaign (c),Impressions,Clicks,CTR,Installs,Conversion Rate,Sessions,Loyal Users,Loyal Users/Installs,Total Revenue,Total Cost,ROI,ARPU,Average eCPI",
+    "None,Facebook Ads,Lançamento Mentorque,N/A,N/A,N/A,124,N/A,397,42,0.3387,0.0000,N/A,N/A,0.0000,N/A",
+    "None,Organic,None,N/A,N/A,N/A,52,N/A,0,14,0.2692,0.0000,N/A,N/A,0.0000,N/A",
+  ].join("\n");
+  const CSV_IOS = [
+    "Agency/PMD (af_prt),Media Source (pid),Campaign (c),Impressions,Clicks,CTR,Installs,Conversion Rate,Sessions,Loyal Users,Loyal Users/Installs,Total Revenue,Total Cost,ROI,ARPU,Average eCPI",
+    "None,Organic,None,N/A,N/A,N/A,3,N/A,0,2,0.6667,0.0000,N/A,N/A,0.0000,N/A",
+  ].join("\n");
+
+  const android = leParceiros(CSV_ANDROID);
+  conferir("o Android le as duas linhas", android?.linhas.length === 2, String(android?.linhas.length));
+  conferir("e a Meta traz 124 instalacoes", android?.pagas === 124, String(android?.pagas));
+  conferir("e o organico 52", android?.organicas === 52, String(android?.organicas));
+  conferir("e o total 176", android?.instalacoes === 176, String(android?.instalacoes));
+  conferir("e a campanha vem junto", android?.linhas[0]?.campanha === "Lançamento Mentorque", String(android?.linhas[0]?.campanha));
+  conferir("e `None` na campanha vira nulo, nao a string None", android?.linhas[1]?.campanha === null, String(android?.linhas[1]?.campanha));
+
+  // `N/A` E AUSENCIA, NAO ZERO. Mesma regra do valor da fatura em lib/ciclo.ts.
+  // Custo zero diria "a campanha foi de graca"; custo ausente diz "a integracao
+  // de custo esta desligada", e as duas levam a decisoes opostas.
+  conferir("custo `N/A` vira nulo e nao zero", android?.linhas[0]?.custo === null, String(android?.linhas[0]?.custo));
+  conferir("e a leitura declara que esta sem custo", android?.semCusto === true);
+  // SEM LINHA NENHUMA NAO E "CUSTO DESLIGADO", e esta assercao nasceu de um
+  // plantio que passou verde: `every` sobre lista vazia devolve true, entao um
+  // relatorio com cabecalho e zero linhas afirmaria que a integracao de custo
+  // esta desligada sem ter olhado uma linha sequer.
+  const soCabecalho = leParceiros("Media Source (pid),Campaign (c),Installs,Total Cost");
+  conferir("relatorio sem linha nao afirma custo desligado", soCabecalho?.semCusto === false, JSON.stringify(soCabecalho));
+  conferir("e ele tambem nao inventa instalacao", soCabecalho?.instalacoes === 0, String(soCabecalho?.instalacoes));
+  conferir("numero() devolve nulo para N/A", numero("N/A") === null);
+  conferir("e zero de verdade continua zero", numero("0") === 0);
+
+  // VIRGULA DENTRO DE CAMPO. `split(",")` desloca todas as colunas a direita e
+  // as instalacoes passam a vir da coluna errada, com cara de numero certo.
+  const comVirgula = [
+    "Media Source (pid),Campaign (c),Installs,Sessions,Loyal Users,Total Cost",
+    '\u0046acebook Ads,"Lançamento, Mentorque",124,397,42,N/A',
+  ].join("\n");
+  const lidoComVirgula = leParceiros(comVirgula);
+  conferir(
+    "campo entre aspas com virgula nao desloca as colunas",
+    lidoComVirgula?.linhas[0]?.instalacoes === 124 && lidoComVirgula?.linhas[0]?.campanha === "Lançamento, Mentorque",
+    JSON.stringify(lidoComVirgula?.linhas[0]),
+  );
+  conferir("colunas() respeita aspas", colunas('a,"b,c",d').length === 3, colunas('a,"b,c",d').join(" | "));
+
+  // TEXTO QUE NAO E O RELATORIO vira NULO, e nao pacote vazio. A Pull API
+  // responde 200 com texto de erro em alguns casos, e ler isso como "zero
+  // instalacao" faria a operacao ver queda de campanha onde houve queda de
+  // coleta.
+  conferir("texto de erro nao vira zero instalacao", leParceiros("Token expired") === null);
+  conferir("vazio nao vira zero instalacao", leParceiros("") === null);
+  conferir("nulo nao vira zero instalacao", leParceiros(null) === null);
+
+  // O AVISO DO ZERO ESTRUTURAL, que e o motivo de este pacote existir.
+  const pacote = montaPacote({ de: "2026-09-26", ate: "2026-10-03" }, android, leParceiros(CSV_IOS));
+  conferir("o pacote soma os dois apps", pacote.instalacoes === 179, String(pacote.instalacoes));
+  conferir(
+    "e avisa que o Google nao esta ligado",
+    pacote.avisos.some((a) => a === AVISO_GOOGLE),
+    pacote.avisos.join(" / "),
+  );
+  conferir(
+    "e o aviso diz que zero significa NAO PERGUNTADO",
+    /NAO PERGUNTADO/.test(AVISO_GOOGLE),
+    "sem essa frase o leitor conclui que a campanha do Google nao trouxe ninguem",
+  );
+  conferir("e avisa do custo desligado", pacote.avisos.some((a) => /integracao de custo desligada/.test(a)));
+  conferir("e carrega a ressalva do SDK", pacote.avisos.some((a) => /25% dos aparelhos Android/.test(a)));
+
+  // E O AVISO SOME SOZINHO quando o dado muda, que e o ponto: ele e derivado do
+  // conteudo, nao uma frase que alguem precisa lembrar de apagar.
+  const comGoogle = leParceiros([
+    "Media Source (pid),Campaign (c),Installs,Sessions,Loyal Users,Total Cost",
+    "googleadwords_int,APP Android,80,200,20,151.83",
+  ].join("\n"));
+  const pacoteComGoogle = montaPacote({ de: "a", ate: "b" }, comGoogle, null);
+  conferir(
+    "com o Google ligado, o aviso dele some",
+    !pacoteComGoogle.avisos.some((a) => a === AVISO_GOOGLE),
+    pacoteComGoogle.avisos.join(" / "),
+  );
+  conferir(
+    "e com custo de verdade o aviso de custo some",
+    !pacoteComGoogle.avisos.some((a) => /integracao de custo desligada/.test(a)),
+    pacoteComGoogle.avisos.join(" / "),
+  );
+  conferir("e o custo lido e o numero", comGoogle?.linhas[0]?.custo === 151.83, String(comGoogle?.linhas[0]?.custo));
+
+  // A ROTA USA A REGRA, que e o criterio 10 do Guardiao: conserto na fonte que
+  // o consumidor nao usa nao e conserto.
+  const rota = readFileSync(new URL("../app/api/metricas/route.ts", import.meta.url), "utf8");
+  conferir("a mesa de metricas aceita a fonte appsflyer", /"appsflyer",/.test(rota));
+  conferir("a rota importa a regra", /from "@\/lib\/appsflyer"/.test(rota));
+  conferir("e chama leParceiros nos dois apps", (rota.match(/leParceiros\(/g) ?? []).length >= 2, rota.match(/leParceiros\(/g)?.join(","));
+  conferir("e monta o pacote com os avisos", /montaPacote\(/.test(rota));
+  conferir(
+    "e recusa quando nenhum relatorio e legivel",
+    /appsflyer_ilegivel/.test(rota),
+    "gravar zero quando a coleta falhou faz a operacao ler queda de campanha",
+  );
+  // E O QUE GRAVA E O PACOTE LIDO, nao o CSV cru. Conserto na fonte que o
+  // consumidor nao usa nao e conserto: sem esta, a leitura podia estar perfeita
+  // e o banco continuar guardando texto.
+  conferir(
+    "e o que vai para o banco e o pacote lido",
+    /dados: pacote/.test(rota) && /pacote = montaPacote\(/.test(rota),
+    "a regra pode estar certa e o banco guardar o CSV cru do mesmo jeito",
+  );
+  conferir(
+    "e o teto de tamanho mede o pacote, nao o CSV",
+    /JSON\.stringify\(pacote\)\.length > MAX_DADOS/.test(rota),
+    "medir o CSV faria o relatorio crescer ate a rota recusar uma coleta boa",
+  );
 }
 
 if (falhas) {
