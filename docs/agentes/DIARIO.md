@@ -33,6 +33,36 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-03 (noite, 21) · O coletor de instalacao do Play existe, e a permissao que falta e de CONTA, nao de app
+
+- O dono abriu "Fazer o download de relatorios > Estatisticas" e passou os
+  enderecos do bucket. O que interessa:
+  `gs://pubsite_prod_6201974234817249283/stats/installs/` e
+  `.../stats/store_performance/`, que e onde mora a aquisicao por origem.
+- **O COLETOR ESTA ESCRITO E PUBLICADO** (`8222d989`): quatro nos novos listam o
+  bucket, escolhem o CSV do mes mais novo PELO NOME (o relatorio e mensal e a
+  API do Cloud Storage nao promete ordem nenhuma), baixam como texto e entregam
+  cru para `/api/metricas`, que le com `lib/playRelatorios.ts`.
+- **DUAS ARMADILHAS DESTE FORMATO, e as duas quebram caladas**:
+  1. **o arquivo e UTF-16.** Lido como UTF-8, o cabecalho vem com um byte nulo
+     entre cada letra, nenhuma coluna e achada, e um leitor ingenuo devolve zero
+     linha com cara de "mes sem instalacao";
+  2. **o cabecalho vem no IDIOMA DA CONTA.** Procurar o nome exato em uma lingua
+     so funciona hoje e some no dia em que alguem trocar o idioma.
+- **E A REGRA DE SEMPRE: formato que eu nao reconheco NAO vira zero.** Vira
+  `naoLi` com o cabecalho que chegou, para a proxima rodada ter o que ler.
+- **SETE DEFEITOS PLANTADOS NO LEITOR, SETE MORDIDAS**, com verde antes e depois.
+  Um plantio precisou ser refeito: ele quebrou a sintaxe do arquivo e o script
+  morreu sem imprimir FALHA, que e conferencia que nao provou nada e so pareceu
+  ter provado. E a licao de 03/10 de manha se repetindo, e ela foi pega.
+- **A PERMISSAO QUE FALTA E DE CONTA, NAO DE APP, e isso e o achado util da
+  tela.** A conta de servico do n8n e a
+  `revenuecat@mentorque.iam.gserviceaccount.com` (o dono confirmou), e ela
+  mostra **13 permissoes de APP** no Mentorque. Permissao de app NAO abre o
+  bucket: o acesso aos relatorios em massa vive na aba "Permissoes da CONTA".
+  Confirmar isso e o que falta, mais escolher a credencial nos dois nos novos.
+- A casa vai a 58 conferencias, e a `conferir:aquisicao` acumula 16 plantios.
+
 ## 2026-10-03 (noite, 20) · O quinto zero estrutural estava numa fonte que "coleta todo dia sem erro" ha 35 dias
 
 - Pergunta do dono: "preciso fazer alguma coisa? algum acesso ou ajuste para

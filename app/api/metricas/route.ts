@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { chaveDadosOk, negada } from "@/lib/chaveDados";
 import { leParceiros, montaPacote } from "@/lib/appsflyer";
+import { leInstalacoes } from "@/lib/playRelatorios";
 
 export const runtime = "nodejs";
 // Teto de duracao: funcao pendurada segura memoria provisionada (e cota).
@@ -79,6 +80,25 @@ export async function POST(req: Request) {
       ate: typeof dados.ate === "string" ? dados.ate : dia,
     };
     pacote = montaPacote(janela, android, ios) as unknown as Record<string, unknown>;
+  }
+
+  // O RELATÓRIO DE INSTALAÇÕES DO PLAY, PELO MESMO DESENHO (03/10/2026).
+  //
+  // O n8n baixa o CSV mensal do bucket do Cloud Storage e entrega cru; a
+  // leitura acontece aqui, onde a `conferir:aquisicao` planta defeito em cima
+  // dela. O formato tem duas armadilhas que quebram caladas (o arquivo é UTF-16
+  // e o cabeçalho vem no idioma da conta), e a regra é a mesma do resto: o que
+  // eu não reconheço NÃO vira zero, vira `formatoDesconhecido` com o cabeçalho
+  // que chegou, para a próxima rodada ter o que ler.
+  if (fonte === "play_downloads") {
+    const csv = typeof dados.csv === "string" ? dados.csv : null;
+    const lido = leInstalacoes(csv);
+    pacote = lido.ok
+      ? { ok: true, instalacoes: lido.total, de: lido.de, ate: lido.ate, dias: lido.dias,
+          arquivo: typeof dados.arquivo === "string" ? dados.arquivo : null }
+      : { ok: false, naoLi: lido.formatoDesconhecido, cabecalho: lido.cabecalho,
+          arquivo: typeof dados.arquivo === "string" ? dados.arquivo : null,
+          arquivos: Array.isArray(dados.arquivos) ? dados.arquivos.slice(0, 40) : undefined };
   }
 
   if (JSON.stringify(pacote).length > MAX_DADOS) {

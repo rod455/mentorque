@@ -32,6 +32,7 @@ import {
   linhaDaEscada,
   montaEscada,
 } from "../lib/aquisicao.ts";
+import { achaColuna, arquivoMaisNovo, destextoUtf16, leInstalacoes } from "../lib/playRelatorios.ts";
 import { readFileSync } from "node:fs";
 
 let falhas = 0;
@@ -189,6 +190,81 @@ const PACOTES = {
     "escada montada com objeto vazio devolve NAO SEI em tudo e parece coleta quebrada",
   );
   conferir("o dono de cada degrau está escrito no fonte", Object.keys(DONO_DO_DEGRAU).length === 5, Object.keys(DONO_DO_DEGRAU).join(", "));
+}
+
+// ── O RELATORIO DE INSTALACOES DO PLAY, QUE MORA NUM BUCKET (03/10/2026) ───
+//
+// POR QUE. O degrau da instalacao TOTAL do Android nao tinha dono. A metrica
+// nao vive na API de Reporting (so vitals, e mesmo isso nunca veio: 35 dias, 33
+// pacotes vazios); vive em CSV mensal num bucket do Cloud Storage. O dono
+// passou os enderecos em 03/10.
+//
+// AS DUAS ARMADILHAS DESTE FORMATO, e as duas quebram calado:
+//   1. o arquivo e UTF-16. Lido como UTF-8, o cabecalho vem com um byte nulo
+//      entre cada letra, nenhuma coluna e achada, e um leitor ingenuo devolve
+//      zero linha com cara de "mes sem instalacao";
+//   2. o cabecalho vem no IDIOMA DA CONTA, entao procurar o nome exato em uma
+//      lingua so funciona hoje e some amanha.
+{
+  console.log("Play, relatorio de instalacoes: formato estranho vira aviso ou vira zero?");
+
+  const CABECALHO = "Date,Package Name,Daily Device Installs,Daily Device Uninstalls";
+  const CSV = [CABECALHO, "2026-10-01,mentorque.app,22,3", "2026-10-02,mentorque.app,19,1"].join("\n");
+
+  const lido = leInstalacoes(CSV);
+  conferir("le as duas linhas", lido.ok && lido.dias.length === 2, JSON.stringify(lido));
+  conferir("e soma as instalacoes", lido.ok && lido.total === 41, JSON.stringify(lido.ok && lido.total));
+  conferir("e traz a janela", lido.ok && lido.de === "2026-10-01" && lido.ate === "2026-10-02", JSON.stringify(lido));
+  conferir("e le a desinstalacao", lido.ok && lido.dias[0]?.desinstalacoes === 3, JSON.stringify(lido.ok && lido.dias[0]));
+
+  // UTF-16: o nulo entre as letras. Este e o caso que, sem tratamento, devolve
+  // zero linha e vira "o mes nao teve instalacao" no retrato.
+  const utf16 = "\uFEFF" + CSV.split("").join("\u0000");
+  const lidoUtf16 = leInstalacoes(utf16);
+  conferir("arquivo UTF-16 e lido, nao vira mes vazio", lidoUtf16.ok && lidoUtf16.total === 41, JSON.stringify(lidoUtf16));
+  conferir("destextoUtf16 tira a marca de ordem de bytes", !destextoUtf16("\uFEFFabc").startsWith("\uFEFF"));
+
+  // IDIOMA: o mesmo relatorio em portugues tem que ser lido igual.
+  const EM_PT = ["Data,Nome do pacote,Instalações diárias de dispositivos,Desinstalações diárias de dispositivos",
+                 "2026-10-01,mentorque.app,22,3"].join("\n");
+  const lidoPt = leInstalacoes(EM_PT);
+  conferir("o mesmo relatorio em portugues e lido igual", lidoPt.ok && lidoPt.total === 22, JSON.stringify(lidoPt));
+  conferir("achaColuna ignora acento e caixa", achaColuna(["Instalações Diárias de Dispositivos"], ["instalacoes diarias de dispositivos"]) === 0);
+
+  // FORMATO DESCONHECIDO NAO VIRA ZERO, que e a regra inteira deste arquivo.
+  const estranho = leInstalacoes("Coluna A,Coluna B\n1,2");
+  conferir("cabecalho que eu nao reconheco NAO vira zero", estranho.ok === false, JSON.stringify(estranho));
+  conferir("e devolve o cabecalho que chegou, para a proxima rodada ler", !estranho.ok && estranho.cabecalho.length === 2, JSON.stringify(estranho));
+  conferir("arquivo vazio tambem nao vira zero", leInstalacoes("").ok === false);
+  conferir("nulo tambem nao", leInstalacoes(null).ok === false);
+  const soCabecalho = leInstalacoes(CABECALHO);
+  conferir("cabecalho reconhecido sem linha diz isso, e nao total zero", soCabecalho.ok === false, JSON.stringify(soCabecalho));
+
+  // O ARQUIVO MAIS NOVO vem do nome, nao da ordem da listagem: o relatorio e
+  // MENSAL e a API nao promete ordem nenhuma.
+  const nomes = [
+    "stats/installs/installs_mentorque.app_202608_overview.csv",
+    "stats/installs/installs_mentorque.app_202610_overview.csv",
+    "stats/installs/installs_mentorque.app_202609_overview.csv",
+    "stats/installs/installs_mentorque.app_202610_country.csv",
+  ];
+  conferir(
+    "escolhe o mes mais novo pelo NOME, nao pela ordem da lista",
+    arquivoMaisNovo(nomes, "_overview.csv") === "stats/installs/installs_mentorque.app_202610_overview.csv",
+    String(arquivoMaisNovo(nomes, "_overview.csv")),
+  );
+  conferir("e sem arquivo do sufixo devolve nulo", arquivoMaisNovo(nomes, "_nao_existe.csv") === null);
+
+  // A ROTA USA A REGRA. Criterio 10: conserto na fonte que o consumidor nao usa
+  // nao e conserto.
+  const rotaPlay = readFileSync(new URL("../app/api/metricas/route.ts", import.meta.url), "utf8");
+  conferir("a rota importa o leitor do Play", /from "@\/lib\/playRelatorios"/.test(rotaPlay));
+  conferir("e le o CSV na fonte play_downloads", /fonte === "play_downloads"/.test(rotaPlay) && /leInstalacoes\(csv\)/.test(rotaPlay));
+  conferir(
+    "e grava `naoLi` com o cabecalho quando nao reconhece",
+    /naoLi: lido\.formatoDesconhecido/.test(rotaPlay) && /cabecalho: lido\.cabecalho/.test(rotaPlay),
+    "sem isso o mes que a rota nao entendeu vira instalacao zero no retrato",
+  );
 }
 
 if (falhas) {

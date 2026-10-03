@@ -317,7 +317,7 @@ sem tirar ninguém dela.
 | `conferir:renovacao` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:saida` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:cadastro` | no nascimento (autor), 03/10/2026 | sim, no plantio de quem escreveu |
-| `conferir:aquisicao` | no nascimento (autor), 03/10/2026 | 9 plantios, 9 mordidas: painel no lugar do MMP, total da loja dado pela Apple sozinha, fonte faltando virando zero (duas vezes), ressalva do SDK parando de viajar, recusa sem a aritmetica que a prova, denominador de qualquer fonte, e o retrato parando de publicar a escada |
+| `conferir:aquisicao` | no nascimento (autor), 03/10/2026 | 16 plantios, 16 mordidas: painel no lugar do MMP, total da loja dado pela Apple sozinha, fonte faltando virando zero (duas vezes), ressalva do SDK parando de viajar, recusa sem a aritmetica que a prova, denominador de qualquer fonte, e o retrato parando de publicar a escada. Mais 7 no leitor do relatorio do Play: UTF-16 deixando de ser tratado, marca de ordem de bytes ficando, busca de coluna voltando a ser exata (quebra no idioma), formato desconhecido virando zero, cabecalho sem linha virando total zero, mes mais novo vindo da ordem da lista, e a desinstalacao sumindo |
 | `conferir:fila` | no nascimento (autor), 03/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:baixar` | 19/09/2026 | sim |
 | `conferir:email` | 19/09/2026 | sim, 3 defeitos plantados |
