@@ -40,6 +40,39 @@ sempre". Duas mudanças pequenas levaram 40 minutos por causa da bateria.
 - Commits em português, no estilo dos existentes: título curto com o porquê,
   corpo explicando a decisão.
 
+## Antes de publicar um número (03/10/2026)
+
+O dono perguntou, depois de uma noite de correções: "se temos acesso, por que
+estamos trazendo informações incorretas ainda?". Acesso nunca foi o problema.
+Em uma noite saíram sete afirmações erradas, e **seis têm a mesma causa**:
+conclusão tirada do primeiro número encontrado, sem perguntar o que ele mede e
+sem procurar um segundo instrumento que meça a mesma coisa.
+
+- "o Google Ads não está ligado" (a integração estava ativa; eu inferi a causa
+  a partir da AUSÊNCIA da linha);
+- "o orgânico é no máximo 11%" (o Play dizia 11%, a AppsFlyer dizia 31%);
+- "1.400 conversões por mês" (li um gráfico do Play como instalação diária, e
+  não era; o real era um terço);
+- "72% de quem instala nunca abre" (dois números do Play que eu nunca conferi
+  se eram comparáveis; a AppsFlyer contradiz);
+- "a atribuição é gasto novo" (já estava instalada, com número no nosso diário);
+- "o critério 6 é inalcançável por falta de etiqueta" (é inaplicável: 96% do
+  dinheiro é vídeo, e vídeo não tem termo de busca).
+
+**A regra que fica, e ela vale na conversa e não só na rodada semanal:** antes
+de publicar um número, diga de qual instrumento ele veio, e **se existe um
+segundo instrumento que mede a mesma coisa, cite os dois ou declare que não
+conferiu**. Faixa honesta vale mais que número preciso e errado.
+
+E o irmão disso: **ausência não é causa.** "A linha não apareceu" responde o
+QUE, nunca o PORQUÊ. Se a conclusão começa com "então deve ser porque", ela é
+hipótese e precisa de um teste que a separe das outras.
+
+**E acesso não é a mesma coisa que perguntar.** O coletor do Google Ads tem a
+credencial desde agosto e nunca pediu a quebra por rede, porque a consulta é uma
+lista de perguntas que alguém escreveu uma vez. Quando um número surpreender,
+pergunte primeiro se a fonte já responde algo que a gente nunca pediu.
+
 ## A disciplina das conferências
 
 Prove que a conferência morde antes de confiar no verde dela: plante o

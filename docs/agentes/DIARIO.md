@@ -33,6 +33,48 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-03 (noite, 18) · "Se temos acesso, por que ainda trazemos informacao incorreta?" O inventario dos sete erros de uma noite
+
+- Pergunta do dono, e ela e mais dura e melhor que a anterior. Acesso nunca foi
+  o problema. **Em uma noite sairam sete afirmacoes erradas, e seis tem a mesma
+  causa.**
+- **O INVENTARIO, sem suavizar**:
+  1. "o Google Ads nao esta ligado na AppsFlyer" **(a integracao estava ativa,
+     com link ID nos dois apps)**. Inferi a causa a partir da AUSENCIA da linha;
+  2. "o organico e no maximo 11%" **(o Play dizia 11%, a AppsFlyer dizia 31%)**.
+     Publiquei precisao de um instrumento so;
+  3. "1.400 conversoes pagas por mes, oito meses de pacote" **(o real e umas
+     480, uns dois anos)**. Li um grafico do Play como instalacao diaria;
+  4. "72% de quem instala nunca abre" **(contestado pela AppsFlyer, 124
+     instalacoes com 397 sessoes)**. Dois numeros do Play que eu nunca conferi
+     se eram comparaveis;
+  5. "a atribuicao e saida cara, gasto novo" **(ja estava instalada, com numero
+     no nosso proprio diario de 22/09)**;
+  6. "o criterio 6 e inalcancavel por falta de etiqueta" **(e inaplicavel: 96%
+     do dinheiro e video, e video nao tem termo de busca)**;
+  7. "a tela de aquisicao do Play Console e a saida mais barata para dividir o
+     gasto" **(o Play nao divide anunciante: a dimensao dele tem duas linhas)**.
+     Essa virou prioridade do Diretor e item da lista do dono por dois dias.
+- **A CAUSA COMUM DE SEIS DELES: conclusao tirada do primeiro numero encontrado,
+  sem perguntar o que ele mede e sem procurar um segundo instrumento que meca a
+  mesma coisa.** O setimo (a AppsFlyer como gasto novo) tem a causa que ja virou
+  licao hoje: precificar uma saida sem conferir se ela ja existe.
+- **E O PONTO QUE MAIS DOI: a disciplina existia e nao alcancava onde o erro
+  aconteceu.** A regra "antes de publicar qualquer zero, pergunte quem escreve
+  aquele numero" entrou hoje na regua do QA. Os sete erros desta noite nao
+  aconteceram em rodada nenhuma: aconteceram na CONVERSA, ao vivo, respondendo
+  o dono. Regra que mora em manual de papel semanal nao chega na terca a noite.
+- **ENTAO A REGRA FOI PARA O `CLAUDE.md`**, que e o que carrega em toda sessao,
+  e nao para DIRETRIZES, que e dos papeis. Tres linhas: diga de qual instrumento
+  o numero veio e cite o segundo quando existir, ou declare que nao conferiu;
+  ausencia nao e causa; e acesso nao e a mesma coisa que perguntar.
+- **E O COLETOR FOI CONSERTADO NO MESMO MOVIMENTO**: a consulta do Google Ads
+  ganhou `segments.ad_network_type` e `metrics.interactions`, e o pacote passa a
+  trazer `porRede` e `fatiaDeBusca`. A credencial esta la desde agosto; o que
+  faltava era a PERGUNTA. Publicado, `versionId` e `activeVersionId` iguais
+  (`54843a49`). Da proxima vez a quebra por rede chega sozinha e ninguem precisa
+  exportar CSV.
+
 ## 2026-10-03 (noite, 17) · 96% do dinheiro do Google esta em YouTube e Display, e ninguem aqui sabia
 
 - O dono exportou os cards da visao geral do Google Ads (26/09 a 02/10). A
