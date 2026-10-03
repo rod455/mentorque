@@ -26,6 +26,32 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   preço de terceiros não diz, e a AppsFlyer costuma separar Pull API de Raw Data
   API por plano. Fica escrito como pergunta a responder no console, não como
   premissa, para ninguém montar coletor contra uma porta fechada.
+- **MEIA HORA DEPOIS, o print do dono respondeu metade**: o menu Export tem uma
+  página **API Access**, e tem também Data Locker e Cost ETL. Então a porta
+  existe no console; o que continua sem resposta é o que o plano libera. O
+  caminho do token na linha da lista foi corrigido de "área de conta e
+  segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
+  print mostra.
+
+## 2026-10-03 (noite, 11) · O primeiro export veio com 3 instalacoes, e o motivo e o seletor de app
+
+- O dono baixou os dois relatórios de parceiros, janela de 26/09 a 03/10. O
+  `partners-report` tem **uma linha só**: `Organic`, **3 instalações**, nenhuma
+  linha de Facebook Ads, custo `N/A`.
+- **O DIAGNÓSTICO NÃO É "A ATRIBUIÇÃO QUEBROU", é o seletor.** O painel, na
+  visão unificada dos DOIS apps, diz 162 atribuições e 111 não orgânicas na
+  mesma semana. A tela de export tem um seletor `App` com um app só marcado, e
+  três instalações em oito dias é a ordem de grandeza do iPhone, não do Android
+  (a rodada de Mídia mediu 41 contas Android contra 2 de iPhone na semana de
+  24 a 30/09). O arquivo está certo sobre o app que ele mediu.
+- **E O CABEÇALHO DO CSV JÁ PROVA QUE O CAMINHO É ESTE**: as colunas são
+  `Media Source (pid)`, `Campaign (c)`, `Installs`, `Total Cost`, `Average eCPI`.
+  É exatamente o critério 3 da régua da Mídia, pronto, numa linha por campanha.
+  O `Total Cost` vindo `N/A` é a mesma coisa que os cartões vazios do painel
+  diziam: falta a integração de custo. Mas o gasto por plataforma a casa já tem
+  dos painéis de anúncio, então instalações por fonte fecham a conta na mão.
+- Próximo passo, de um clique: trocar o app no seletor para o Android e baixar o
+  `Partners (media sources)` de novo.
 
 ## 2026-10-03 (noite, 9) · O painel da AppsFlyer derruba duas contas minhas do mesmo dia, e as duas eram estimativa lida de grafico
 
