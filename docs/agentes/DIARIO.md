@@ -3,6 +3,30 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-03 (noite, 10) · A AppsFlyer e via de mao unica, e isso explica a noite inteira
+
+- Pergunta do dono: "estamos sem acesso via api?". **Estamos, e conferi nas duas
+  pontas antes de responder.**
+- **No repositório**: não existe coletor de AppsFlyer. O que existe é o lado do
+  SDK, em `lib/app/atribuicao.ts`, que MANDA a instalação para ela. As fontes de
+  gasto do retrato são `google_ads` e `meta_ads`, e só.
+- **No n8n**: 17 credenciais cadastradas, nenhuma da AppsFlyer. Há Bearer para
+  Meta Marketing, Stripe, RevenueCat, Vercel, GitHub e Instagram; há OAuth para
+  Google Ads, Google Sheets, Drive, Gmail, YouTube e AdMob; há JWT da App Store.
+  AppsFlyer não está.
+- **ENTÃO ELA É VIA DE MÃO ÚNICA: o app manda e ninguém lê de volta.** Toda
+  leitura dela hoje é print de painel, feito à mão, e foi exatamente isso que
+  custou a noite: cinco telas do Play Console e três da AppsFlyer para responder
+  uma pergunta que uma chamada de API responderia toda semana sozinha.
+- **O conserto é um token e um coletor**, e a metade do token é do dono porque é
+  chave. Virou linha própria na lista, separada da ligação do Google Ads, pela
+  regra que esta casa escreveu hoje mesmo para o papel de Segurança: achado com
+  N itens vira N linhas, nunca uma linha com N dentro.
+- **O QUE EU NÃO SEI DAQUI**: se o plano Zero libera a API agregada. A página de
+  preço de terceiros não diz, e a AppsFlyer costuma separar Pull API de Raw Data
+  API por plano. Fica escrito como pergunta a responder no console, não como
+  premissa, para ninguém montar coletor contra uma porta fechada.
+
 ## 2026-10-03 (noite, 9) · O painel da AppsFlyer derruba duas contas minhas do mesmo dia, e as duas eram estimativa lida de grafico
 
 - O dono abriu o painel. Performance Analysis, visão unificada (os dois apps),
