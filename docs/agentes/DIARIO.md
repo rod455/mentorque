@@ -33,6 +33,52 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-03 (noite, 19) · A escada da aquisicao: um dono por degrau, e o que nao se soma nao se soma
+
+- Pedido do dono: "estamos mapeando errado AppsFlyer, Google Ads, Play Store e
+  Apple. Temos acesso a TODAS. Precisamos medir direito."
+- **O DIAGNOSTICO NAO E FALTA DE ACESSO: as quatro fontes respondem perguntas
+  DIFERENTES e a casa vinha misturando as respostas.** Agora cada degrau tem um
+  dono unico, escrito em `lib/aquisicao.ts`:
+
+  | Degrau | Dono, e por que so ele |
+  |---|---|
+  | dinheiro | paineis de anuncio: so eles sabem quanto saiu da conta |
+  | instalacao total | as lojas: so elas veem o aparelho que instalou e nunca abriu |
+  | instalacao por fonte | AppsFlyer: arbitrar entre redes que reivindicam a mesma pessoa e oficio de MMP |
+  | contas | nosso banco |
+  | receita | Stripe e RevenueCat |
+
+- **AS TRES RECUSAS, e elas viajam DENTRO do pacote, nao em comentario de
+  codigo**, porque regra que mora longe do numero nao chega na hora em que o
+  numero e lido:
+  1. **somar painel com painel conta a mesma pessoa duas vezes.** Google 235
+     mais Meta 194 da 429, e a Play inteira registrou uns 140 na semana;
+  2. **`conversoes` do Google Ads nao e instalacao**, e a prova e aritmetica:
+     33,6 por dia reivindicados contra 20 por dia que a Play inteira registra;
+  3. **a AppsFlyer nao e total**: ela so ve o aparelho onde o SDK subiu, 77% dos
+     Android em 03/10. Ela responde PROPORCAO.
+- **E O DEGRAU QUE A CASA NAO TEM DIZ QUE NAO TEM.** A instalacao total devolve
+  `null` com o motivo escrito, **mesmo com o lado da Apple lido**: dar o numero
+  da Apple como total faria o Android, que e 98% da base, sumir. A aquisicao do
+  Play Console nao esta em coletor nenhum, e isso agora e buraco declarado em
+  vez de numero emprestado.
+- **O CUSTO POR INSTALACAO SO EXISTE COM AS DUAS PONTAS DO DONO CERTO.** A Meta
+  tem: R$ 132,11 do painel dela dividido por 124 instalacoes do MMP, R$ 1,07. O
+  Google NAO tem, e esse e o ponto inteiro: usar as 235 conversoes do painel
+  dele como denominador daria R$ 0,65, um numero lindo e inventado. No dia em
+  que o `googleadwords_int` aparecer, ele entra sozinho na conta.
+- **NOVE DEFEITOS PLANTADOS, NOVE MORDIDAS**, e cada plantio e um erro REAL
+  desta noite: painel no lugar do MMP, total da loja dado pela Apple sozinha,
+  fonte faltando virando zero (duas vezes), ressalva do SDK parando de viajar,
+  recusa sem a aritmetica que a prova, denominador de qualquer fonte, e o
+  retrato parando de publicar a escada.
+- `conferir:aquisicao` nasceu com plantio e entrou na fila do Guardiao no
+  estado "no nascimento (autor)". A casa vai a 58 conferencias.
+- **O QUE ISSO NAO CONSERTA**: o julgamento. A escada impede a MISTURA de
+  inventar numero; ela nao impede alguem de ler um numero certo e concluir
+  errado. Para isso a regra foi para o `CLAUDE.md`, que carrega em toda sessao.
+
 ## 2026-10-03 (noite, 18) · "Se temos acesso, por que ainda trazemos informacao incorreta?" O inventario dos sete erros de uma noite
 
 - Pergunta do dono, e ela e mais dura e melhor que a anterior. Acesso nunca foi

@@ -6,6 +6,7 @@ import { CHAVE_DO_ENVIO_DE_SAIDA } from "./email/saida";
 import { CUPOM_DA_CAMPANHA, linhaDoCupom } from "./email/cupomDisponivel";
 import { linhaDeMotivos } from "./email/motivoDaSaida";
 import { FONTES_DE_GASTO, linhaDeGasto, type DiaDeGasto } from "./midiaLegivel";
+import { linhaDaEscada, montaEscada } from "./aquisicao";
 import { avisoDeColeta, frescorDasFontes } from "./frescorDasFontes";
 import {
   CADEIA_ATO,
@@ -638,6 +639,19 @@ export async function coletarDadosOperacao() {
       const dados = (pacote?.dados ?? {}) as { porDia?: DiaDeGasto[] };
       return { fonte: f, ...linhaDeGasto(f, dados.porDia ?? [], pacote?.dia ?? "sem coleta") };
     }),
+    // A ESCADA DA AQUISIÇÃO, COM UM DONO POR DEGRAU (03/10/2026).
+    //
+    // Nasceu de uma noite em que a casa misturou as quatro fontes e publicou
+    // seis números errados. Cada degrau diz quem é o dono legítimo dele, e
+    // devolve "NAO SEI" com o motivo quando o dono não foi coletado, em vez de
+    // tomar emprestado o número de outro. As três recusas viajam junto, porque
+    // regra que mora longe do número não chega na hora em que ele é lido.
+    aquisicao: (() => {
+      const pacotes: Record<string, unknown> = {};
+      for (const f of Object.keys(porFonte)) pacotes[f] = (porFonte[f] ?? [])[0]?.dados;
+      const escada = montaEscada(pacotes);
+      return { ...escada, linhas: linhaDaEscada(escada) };
+    })(),
   };
 }
 

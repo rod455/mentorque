@@ -317,6 +317,7 @@ sem tirar ninguém dela.
 | `conferir:renovacao` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:saida` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:cadastro` | no nascimento (autor), 03/10/2026 | sim, no plantio de quem escreveu |
+| `conferir:aquisicao` | no nascimento (autor), 03/10/2026 | 9 plantios, 9 mordidas: painel no lugar do MMP, total da loja dado pela Apple sozinha, fonte faltando virando zero (duas vezes), ressalva do SDK parando de viajar, recusa sem a aritmetica que a prova, denominador de qualquer fonte, e o retrato parando de publicar a escada |
 | `conferir:fila` | no nascimento (autor), 03/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:baixar` | 19/09/2026 | sim |
 | `conferir:email` | 19/09/2026 | sim, 3 defeitos plantados |
