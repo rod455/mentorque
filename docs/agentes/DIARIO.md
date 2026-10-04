@@ -33,6 +33,22 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 34) · Decidido: o gratis fica com 2 carros, e o preco na descricao nao e escolha
+
+- **Decisao do dono**: "vamos manter no maximo 2 carros no gratis". A proposta
+  de 15/09 fecha como DECIDIDA; o app ja fazia isso (`freeCars: 2`), so o texto
+  da loja dizia "cadastro de veiculos". Os dois blocos de descricao da ficha
+  (Play e App Store) ganharam as frases propostas em 15/09, e a Play virou
+  linha na lista do dono porque muda na hora. O dono disse "ja arrumei tudo"
+  na Apple, entao o bloco PRECO dele ficou com a frase antiga: e uma frase para
+  recolar, e esta dito na resposta.
+- **"Precisamos mesmo colocar o preco?"** Sim, e nao e ASO: a Apple exige, para
+  assinatura renovavel, que a descricao traga nome da assinatura, duracao,
+  preco e os links de Termos de Uso e Privacidade (anexo 2 do contrato de apps
+  pagos, item 3.8(b); e o motivo classico de rejeicao em revisao). A descricao
+  no ar ja carrega tudo isso, entao tirar seria criar risco onde nao havia.
+  Na busca, o preco nao pesa nem ajuda.
+
 ## 2026-10-04 (manha, 33) · O MES100 aponta para o cupom vivo, e a ficha da Apple dizia o proposto como se fosse o publicado
 
 - **Decisao do dono: `/MES100` passa a apontar para `LANCAMENTO1MES`.** Feito

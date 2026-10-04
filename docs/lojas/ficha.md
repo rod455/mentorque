@@ -78,9 +78,9 @@ Ele não diagnostica o seu carro à distância e não substitui a inspeção de 
 
 PREÇO
 
-O uso principal é gratuito e não pede cartão: cadastro de veículos, diagnóstico por sintoma, histórico de manutenção, aulas abertas e ferramentas básicas.
+O uso principal é gratuito e não pede cartão: até 2 carros na garagem, diagnóstico por sintoma, 20 serviços no histórico, aulas abertas e ferramentas básicas. Na versão gratuita do Android aparecem anúncios.
 
-O Premium é opcional, por R$ 29,90 por mês ou R$ 239,90 por ano, e libera o acervo completo de conteúdo, relatórios de gasto, diagnóstico aprofundado e a assistente Biela sem limite.
+O Premium é opcional, por R$ 29,90 por mês ou R$ 239,90 por ano, e libera garagem sem limite, o acervo completo de conteúdo, relatórios de gasto, diagnóstico aprofundado e a assistente Biela sem limite.
 
 Disponível em português e inglês. Também funciona no navegador, em www.mentorque.com.br
 ```
@@ -175,7 +175,7 @@ lê, então o texto continua valendo.
 
 **A que está NO AR (print de 04/10/2026)** é um texto mais antigo, em
 tópicos com travessão em nove linhas. **Para o próximo envio, colar esta**
-(2499 caracteres, sem travessão, preços iguais aos do ar):
+(2523 caracteres, sem travessão, preços iguais aos do ar):
 
 ```
 Mentorque é um aplicativo de manutenção e educação automotiva para quem não é mecânico. Ele ajuda você a entender o que o seu carro tem, a decidir se o problema pode esperar e a chegar na oficina sabendo o que perguntar.
@@ -204,9 +204,9 @@ Ele não diagnostica o seu carro à distância e não substitui a inspeção de 
 
 PREÇO
 
-O uso principal é gratuito e não pede cartão: cadastro de veículos, diagnóstico por sintoma, histórico de manutenção, aulas abertas e ferramentas básicas.
+O uso principal é gratuito e não pede cartão: até 2 carros na garagem, diagnóstico por sintoma, 20 serviços no histórico, aulas abertas e ferramentas básicas.
 
-O Mentorque Premium é opcional e libera o acervo completo de conteúdo, relatórios de gasto, diagnóstico aprofundado e a assistente Biela sem limite:
+O Mentorque Premium é opcional e libera garagem sem limite, o acervo completo de conteúdo, relatórios de gasto, diagnóstico aprofundado e a assistente Biela sem limite:
 Mensal: R$ 29,90 por mês
 Anual: R$ 239,90 por ano (equivale a R$ 19,99 por mês)
 Os dois com período de teste grátis.
@@ -341,9 +341,10 @@ uma semana.
 
 ## 2026-09-15 · O texto diz que o grátis cadastra veículos; o app para no segundo
 
-**Estado: ABERTA, e sem sinal de ter sido aplicada (conferido em 01/10).** Vale
-para a Play (aplicável na hora) e para a App Store (entra junto com o próximo
-envio). Entrou na lista do dono em 01/10, porque duas semanas no diário não
+**Estado: DECIDIDA pelo dono em 04/10/2026 ("vamos manter no máximo 2 carros
+no grátis").** Os blocos de descrição acima já carregam a frase. Na Play é
+colar agora; na App Store entra no próximo envio. Enquanto o texto não estiver
+no ar nas duas lojas, o item fica na lista do dono. Entrou na lista do dono em 01/10, porque duas semanas no diário não
 moveram nada. O prazo de volta atrás de 15/10 só começa a contar do dia em que
 a frase entrar no ar, não da data em que foi proposta.
 
