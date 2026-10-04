@@ -33,6 +33,28 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 48) · O webhook do Instagram ja recebe comentarios, e a linha de 10/09 pedia o que ja estava feito
+
+- O dono foi fazendo os passos da linha da Meta e a cada tela dizia "ja temos
+  isso". Em vez de insistir, fui ao instrumento: o fluxo `Instagram: comentario
+  vira mensagem no Direct` tem **64 execucoes em modo webhook**, a ultima em
+  04/10 as 10:30 UTC, todas com `field: comments` e assinatura da Meta. Os
+  campos `comments`, `live_comments` e `mentions` estao assinados no app, com a
+  URL verificada. **O diagnostico de 10/09 ("comments nao assinado, nada
+  chega") envelheceu sem ninguem reler**, e a linha ficou 24 dias pedindo um
+  clique que ja tinha sido dado.
+- O que o instrumento NAO prova: a resposta no Direct. As tres execucoes que
+  abri sao comentarios da propria @mentorqueapp, que o no "Extrair comentarios"
+  filtra de proposito (sai vazio). O no que responde nunca rodou desde que o
+  produto de mensagens entrou no app. A prova e um comentario de outra conta.
+- A unica permissao que faltava era `instagram_manage_insights`, adicionada
+  hoje. Token carrega as permissoes do momento em que nasce, entao o token do
+  n8n precisa ser gerado de novo.
+- As duas linhas da Meta viraram uma: gerar o token, colar, comentario de
+  teste de outra conta. Erro meu que fica: linha de lista com diagnostico de
+  tela precisa de data de validade; se o instrumento ja respondia, era para
+  eu ter olhado antes de mandar o dono clicar.
+
 ## 2026-10-04 (tarde, 47) · Proposta de simplificacao do app e da LP, com o Biela na porta
 
 - Pedido do dono: referencias de UI no Behance, tudo que o CRO ensinou sobre a
