@@ -204,7 +204,9 @@ console.log("Anomalias: o vigia da operação continua ligado?");
   );
   conferir(
     "a consulta busca as colunas que isso exige",
-    /from\("app_erros"\)\.select\("criado_em, mensagem, plataforma, versao, anon_id"\)/.test(operacao),
+    // `tipo` entrou em 04/10/2026 (3.0): a desistência de login passou a ser
+    // gravada com o tipo na origem, e o leitor precisa recebê-lo.
+    /from\("app_erros"\)\.select\("criado_em, tipo, mensagem, plataforma, versao, anon_id"\)/.test(operacao),
     "o resumo não inventa coluna que a consulta não trouxe",
   );
 }

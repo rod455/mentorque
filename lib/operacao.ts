@@ -88,7 +88,7 @@ export async function coletarDadosOperacao() {
     // de cortesia: conta liberada na mão não tem assinatura no Stripe.
     () => medir("subscriptions", () => admin.from("subscriptions").select("status, cancel_at_period_end, plan, stripe_subscription_id, cupom, current_period_end")),
     () => medir("cadastros", () => admin.from("funil_eventos").select("criado_em, plataforma").eq("evento", "cadastro").gte("criado_em", d14)),
-    () => medir("app_erros", () => admin.from("app_erros").select("criado_em, mensagem, plataforma, versao, anon_id").gte("criado_em", d7).limit(2000)),
+    () => medir("app_erros", () => admin.from("app_erros").select("criado_em, tipo, mensagem, plataforma, versao, anon_id").gte("criado_em", d7).limit(2000)),
     // SEM filtro de data: o frescor precisa enxergar fonte parada há muito
     // tempo, e a janela de 10 dias fazia a fonte morta SUMIR em vez de
     // gritar. O recorte de 10 dias continua existindo, mas em memória,
@@ -525,7 +525,7 @@ export async function coletarDadosOperacao() {
         negativos: votosDoBiela.filter((v) => v.voto === "down").length,
         semNegativo:
           votosDoBiela.length > 0 && votosDoBiela.every((v) => v.voto !== "down")
-            ? "NENHUM voto negativo registrado. A tela so grava o 👎 depois que a pessoa escolhe um motivo, entao 👎 sem motivo nao deixa rastro: isto NAO e aprovacao de 100%."
+            ? "NENHUM voto negativo registrado. Ate a 2.9 a tela so gravava o 👎 depois que a pessoa escolhia um motivo, entao 👎 sem motivo nao deixava rastro; desde a 3.0 o toque grava. Enquanto a base estiver em versoes antigas, isto NAO e aprovacao de 100%."
             : "",
         quadro: quadroDosVotos,
       },

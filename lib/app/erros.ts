@@ -18,6 +18,7 @@ import { APP_VERSION } from "./content";
 import { isNativeApp, nativePlatform } from "./wrapper";
 import { fechamentoAnterior } from "./ultimoPasso";
 import { aparelhoAtual } from "./aparelho";
+import { classeDoErro } from "@/lib/alarmeDeErros";
 
 // Tetos que protegem o servidor de um aparelho em loop de erro: no máximo 10
 // envios por sessão e nunca a mesma mensagem duas vezes.
@@ -26,7 +27,13 @@ let enviados = 0;
 const vistos = new Set<string>();
 let ligado = false;
 
-function reportar(tipo: "erro" | "promessa" | "fechou", mensagem: string, stack?: string, origem?: string): void {
+// `desistencia` é a pessoa fechando a folha de login (3.0, 04/10/2026): vai
+// para a mesma tabela, porque a testemunha continua valendo (o "cancelado
+// depois de escolher a conta" é o sintoma clássico de SHA-1 errado), mas
+// com o tipo dizendo o que é. Até a 2.9 tudo entrava como "erro", e quem
+// olhava `app_erros` cru via 22 erros onde havia 14; o leitor separava pela
+// frase, a origem continuava suja.
+function reportar(tipo: "erro" | "promessa" | "fechou" | "desistencia", mensagem: string, stack?: string, origem?: string): void {
   try {
     if (!mensagem || enviados >= MAX_POR_SESSAO) return;
     const chave = mensagem.slice(0, 120);
@@ -75,7 +82,11 @@ function reportar(tipo: "erro" | "promessa" | "fechou", mensagem: string, stack?
  * A mensagem do plugin não carrega dado da pessoa (nem e-mail, nem nome).
  */
 export function relatarLoginNativo(provedor: "google" | "apple", motivo: string): void {
-  reportar("erro", `login nativo ${provedor}: ${motivo}`, undefined, `login nativo ${provedor}`);
+  // As MESMAS frases que o leitor usa (lib/alarmeDeErros.ts): a classificação
+  // nasce na origem, e o leitor continua classificando pela frase as linhas
+  // antigas, que não têm o tipo.
+  const tipo = classeDoErro(motivo) === "desistencia" ? "desistencia" : "erro";
+  reportar(tipo, `login nativo ${provedor}: ${motivo}`, undefined, `login nativo ${provedor}`);
 }
 
 /**

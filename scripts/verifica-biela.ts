@@ -222,6 +222,40 @@ console.log("Biela: o limite do gratuito, e quem o segura.");
   conferir("sem travessão nos dois", !/—/.test(bloco), bloco);
 }
 
+
+// ── o 👎 GRAVA NO TOQUE, e o motivo completa a mesma linha (3.0, 04/10/2026) ─
+//
+// Até a 2.9 a tela só mandava o voto negativo junto com o motivo. Quem tocava
+// no polegar e fechava não deixava rastro: 24 votos em seis semanas, todos
+// positivos, e o retrato precisava avisar que isso não era aprovação. Agora o
+// toque grava e devolve o id; o motivo, se vier, completa a linha por ele.
+{
+  const tela = leia("components/app/screens/Biela.tsx");
+  const inicio = tela.indexOf('if (v === "down") {');
+  const ramo = inicio >= 0 ? tela.slice(inicio, tela.indexOf("return;\n    }", inicio)) : "";
+  conferir(
+    "o toque no 👎 grava o voto antes de esperar o motivo",
+    /registrar\(i, "down"\)/.test(ramo),
+    "o ramo do 👎 em votar() precisa chamar registrar(i, \"down\") no toque; sem isso 👎 sem motivo some de novo",
+  );
+  conferir(
+    "o motivo COMPLETA a linha gravada em vez de abrir outra",
+    /completar\(i, \{ voto: "down", motivo: chave/.test(tela),
+    "o botão de motivo chama completar() com o id; registrar() ali gravaria o mesmo voto duas vezes",
+  );
+  const rota = leia("app/api/biela-voto/route.ts");
+  conferir(
+    "a rota devolve o id da linha gravada",
+    /\.select\("id"\)\.single\(\)/.test(rota) && /id: data\?\.id/.test(rota),
+    "sem o id na resposta a tela não tem como completar a linha",
+  );
+  conferir(
+    "e completa a linha quando o pedido traz id",
+    /body\.id/.test(rota) && /\.update\(campos\)\.eq\("id", id\)/.test(rota),
+    "o pedido com id tem que virar update, não insert",
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) da Biela reprovaram.`);
   process.exit(1);

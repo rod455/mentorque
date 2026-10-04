@@ -16,6 +16,10 @@ export const runtime = "nodejs";
 // tabela, e ela pode ficar sem política nenhuma de RLS. Ver supabase/biela_votos.sql.
 
 type Body = {
+  // Com `id`, o pedido COMPLETA uma linha já gravada (motivo, comentário ou o
+  // voto desfeito), em vez de abrir outra. Existe desde a 3.0 (04/10/2026),
+  // quando o 👎 passou a ser gravado no toque e o motivo a chegar depois.
+  id?: string;
   voto?: string;
   motivo?: string;
   comentario?: string;
@@ -44,11 +48,6 @@ export async function POST(request: Request) {
   try { body = await request.json(); } catch { return NextResponse.json({ ok: false, error: "invalid_json" }, { status: 400 }); }
 
   const voto = body.voto === "up" || body.voto === "down" ? body.voto : null;
-  const pergunta = corta(body.pergunta, 2000);
-  const resposta = corta(body.resposta, 8000);
-  if (!voto || !pergunta || !resposta) {
-    return NextResponse.json({ ok: false, error: "campos_obrigatorios" }, { status: 422 });
-  }
 
   const admin = getSupabaseAdmin();
   if (!admin) {
@@ -58,7 +57,33 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, guardado: false });
   }
 
-  const { error } = await admin.from("biela_votos").insert({
+  // COMPLETAR uma linha existente. Só os três campos que a pessoa pode mudar
+  // depois do toque; pergunta, resposta e aparelho ficam como foram gravados.
+  const id = typeof body.id === "string" && /^[0-9a-f-]{36}$/i.test(body.id) ? body.id : null;
+  if (id) {
+    const campos: Record<string, unknown> = {};
+    if (voto) campos.voto = voto;
+    if (body.motivo !== undefined) campos.motivo = voto !== "up" && MOTIVOS.has(body.motivo ?? "") ? body.motivo : null;
+    if (body.comentario !== undefined) campos.comentario = corta(body.comentario, 1000);
+    if (Object.keys(campos).length === 0) {
+      return NextResponse.json({ ok: false, error: "nada_a_completar" }, { status: 422 });
+    }
+    const { error } = await admin.from("biela_votos").update(campos).eq("id", id);
+    if (error) {
+      console.error("[biela-voto] update falhou:", error.message);
+      return NextResponse.json({ ok: false, error: "update_failed" }, { status: 502 });
+    }
+    console.log(`[biela-voto] completado ${id}: ${Object.keys(campos).join(",")}`);
+    return NextResponse.json({ ok: true, guardado: true, id });
+  }
+
+  const pergunta = corta(body.pergunta, 2000);
+  const resposta = corta(body.resposta, 8000);
+  if (!voto || !pergunta || !resposta) {
+    return NextResponse.json({ ok: false, error: "campos_obrigatorios" }, { status: 422 });
+  }
+
+  const { data, error } = await admin.from("biela_votos").insert({
     voto,
     motivo: voto === "down" && MOTIVOS.has(body.motivo ?? "") ? body.motivo : null,
     comentario: corta(body.comentario, 1000),
@@ -71,7 +96,7 @@ export async function POST(request: Request) {
     plataforma: corta(body.plataforma, 20),
     versao: corta(body.versao, 20),
     aparelho: corta(body.aparelho, 80),
-  });
+  }).select("id").single();
 
   if (error) {
     console.error("[biela-voto] insert falhou:", error.message);
@@ -80,5 +105,6 @@ export async function POST(request: Request) {
   // Mesmo motivo do /api/feedback: sem registro no caminho feliz, não há como
   // separar "gravou" de "a requisição nunca chegou".
   console.log(`[biela-voto] gravado: ${voto}${body.motivo ? ` (${body.motivo})` : ""}`);
-  return NextResponse.json({ ok: true, guardado: true });
+  // O id volta para a tela completar a linha com o motivo, se ele vier.
+  return NextResponse.json({ ok: true, guardado: true, id: data?.id ?? null });
 }

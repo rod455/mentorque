@@ -23,6 +23,10 @@ export type Msg = {
   // recorte (que desloca os índices) e a pessoa não vota duas vezes na mesma
   // resposta só porque saiu da tela e voltou.
   voto?: "up" | "down";
+  // O id da linha gravada em biela_votos no TOQUE do polegar (3.0, 04/10/2026).
+  // É por ele que o motivo, escolhido depois, completa a mesma linha em vez de
+  // abrir outra. Sem id (sem rede na hora do toque), o motivo vai inteiro.
+  votoId?: string;
 };
 
 const CHAVE = "mentorque-biela-chat";

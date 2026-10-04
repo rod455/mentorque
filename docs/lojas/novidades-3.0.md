@@ -66,19 +66,23 @@ então também vão ao ar no push.
    aparelhos ativos, com desistência de login fora da conta. Regra em
    `lib/alarmeDeErros.ts`.
 
-## Dívidas que estão esperando ESTE binário
+## As duas dívidas da 2.9 entraram, na noite do build (04/10)
 
-São as duas que a 2.9 deixou para trás de propósito, para não mexer numa
-versão já conferida:
+Eram as duas que a 2.9 deixou para trás de propósito. O dono mandou: "vamos
+colocar uai". Entraram como itens 7 e 8 do binário, cada um com a sua
+conferência plantada e mordendo (`conferir:biela` e `conferir:alarme`).
 
-1. **Desistência de login ainda é GRAVADA como erro.** O leitor já separa
-   (`classeDoErro`), mas a origem continua suja: quem olhar `app_erros` cru vê
-   22 erros onde há 14. O conserto é no app.
-2. **O 👎 sozinho não deixa rastro.** A tela só grava o voto negativo depois
-   que a pessoa escolhe um motivo (`components/app/screens/Biela.tsx`), e por
-   isso os 24 votos de seis semanas são todos positivos. Isso **não** é
-   aprovação de 100%, e o retrato já diz isso ao lado do número. O conserto é
-   gravar o voto na hora do toque e completar com o motivo depois.
+7. **O 👎 grava no toque.** Até a 2.9 a tela só mandava o voto negativo junto
+   com o motivo (`components/app/screens/Biela.tsx`), e quem tocava e fechava
+   não deixava rastro: 24 votos em seis semanas, todos positivos, e isso não
+   era aprovação. Agora o toque grava e a rota devolve o id; o motivo, se a
+   pessoa escolher, completa a MESMA linha (`/api/biela-voto` com `id`).
+   Quem toca 👎 e muda para 👍 também completa a linha, sem duplicar.
+8. **A desistência de login sai com o tipo certo.** `relatarLoginNativo`
+   passa a gravar `tipo = "desistencia"` quando a frase é de cancelamento,
+   pela mesma régua do leitor (`classeDoErro`), e o leitor aceita o tipo
+   antes da frase. As linhas antigas continuam classificadas pela frase. O
+   que muda para quem olha `app_erros` cru: 22 erros deixam de parecer 22.
 
 ## A nota das lojas
 
@@ -137,6 +141,11 @@ WebView do aparelho.**
    últimos depoimentos trazem "via App Store" e que os números são 5,0 /
    170+ / 250+. Nada pode estar cortado nos cartões inclinados; o texto do
    aminoru é o mais comprido.
+6. **O 👎 sem motivo.** Perguntar algo ao Biela, tocar no polegar para baixo
+   e FECHAR o app sem escolher motivo. No dia seguinte, `biela_votos` tem que
+   ter uma linha `down` com `motivo` nulo daquele aparelho. Depois, numa
+   segunda resposta, tocar 👎 e escolher "incompleta": a linha é UMA, com o
+   motivo preenchido, não duas.
 
 ## O que este build NÃO conserta, e não pode ser dito como se consertasse
 

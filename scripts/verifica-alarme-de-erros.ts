@@ -204,6 +204,28 @@ console.log("Alarme de erros: razão, e não contagem?");
   );
 }
 
+
+// ── 5. A DESISTÊNCIA CHEGA COM O TIPO DESDE A 3.0 (04/10/2026) ──────────────
+//
+// A origem passou a dizer o que é: `relatarLoginNativo` grava
+// `tipo = "desistencia"` quando a frase é de cancelamento, e o leitor aceita
+// o tipo antes da frase. As linhas antigas continuam classificadas pela
+// frase, porque não têm tipo.
+{
+  conferir("tipo desistencia vence a frase", classeDoErro("login nativo google: Google Sign-In failed: [16] Account reauth failed.", "desistencia") === "desistencia");
+  conferir("tipo erro não muda a leitura pela frase", classeDoErro("login nativo google: Google Sign-In cancelled by user", "erro") === "desistencia");
+  conferir("sem tipo, a frase decide", classeDoErro("app fechou sozinho em: abriu o app", null) === "defeito");
+  const c = contaDeErros([
+    { mensagem: "login nativo apple: The operation couldn’t be completed.", anon_id: "t1", tipo: "desistencia" },
+    { mensagem: "login nativo apple: The operation couldn’t be completed.", anon_id: "t2", tipo: "erro" },
+  ]);
+  conferir("contaDeErros lê o tipo da linha", c.porClasse.desistencia.aparelhos === 1 && c.porClasse.defeito.aparelhos === 1, JSON.stringify(c.porClasse));
+  const operacao = readFileSync(new URL("../lib/operacao.ts", import.meta.url), "utf8");
+  conferir("o retrato pede a coluna tipo ao ler app_erros", /app_erros"\)\.select\("[^"]*\btipo\b/.test(operacao), "sem a coluna, o tipo gravado na origem nunca chega ao leitor");
+  const erros = readFileSync(new URL("../lib/app/erros.ts", import.meta.url), "utf8");
+  conferir("a origem grava o tipo pela MESMA régua do leitor", /classeDoErro\(motivo\) === "desistencia" \? "desistencia" : "erro"/.test(erros), "duas réguas para a mesma frase é o jeito de a origem e o leitor discordarem");
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) do alarme de erros reprovaram.`);
   process.exit(1);

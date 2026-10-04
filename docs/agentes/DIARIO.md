@@ -105,6 +105,38 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (noite, 58) · As duas dívidas da 2.9 entram na 3.0: o 👎 grava no toque e a desistência sai com tipo
+
+- Dono: "vamos colocar uai. Agora estamos monitorando as perguntas para o
+  biela? estamos salvando os feedbacks negativos? precisamos ter isso".
+- **Resposta sobre o que já existia, lida no código**: toda pergunta ao Biela
+  é gravada no servidor em `biela_perguntas` (mês, premium, usou manual,
+  plataforma, versão, e desde 29/09 a origem e o tema), SEM o texto, por
+  decisão de privacidade. O texto só fica guardado onde a pessoa toca no
+  polegar (`biela_votos`, pergunta + resposta). O voto negativo SÓ era
+  gravado quando a pessoa escolhia um motivo; por isso 24 votos em seis
+  semanas, todos positivos, com o retrato avisando que isso não era
+  aprovação.
+- **Conserto 1 (👎 no toque)**: `votar()` grava no toque e guarda o id da
+  linha na mensagem (`Msg.votoId`); o motivo, o comentário e o voto desfeito
+  completam a MESMA linha por `/api/biela-voto` com `id`, que virou update.
+  A rota devolve o id no insert. Sem id (sem rede no toque), o motivo vai
+  inteiro, que é o comportamento antigo.
+- **Conserto 2 (desistência com tipo)**: `relatarLoginNativo` grava
+  `tipo = "desistencia"` quando `classeDoErro(motivo)` diz desistência, a
+  mesma régua do leitor, para origem e leitor nunca discordarem. O leitor
+  (`classeDoErro(mensagem, tipo)`) aceita o tipo antes da frase, e o retrato
+  passou a pedir a coluna `tipo` ao ler `app_erros`. Linhas antigas seguem
+  pela frase.
+- **Conferências que mordem**: quatro asserções novas em `conferir:biela` e
+  seis em `conferir:alarme`. Plantei cinco defeitos (👎 sem gravar no toque,
+  rota sem devolver id, origem gravando tudo como erro, leitor ignorando o
+  tipo, retrato sem pedir a coluna): os cinco reprovaram, restaurados por
+  cópia de segurança, árvore limpa verde.
+- Notas da 3.0: itens 7 e 8 no binário, e o passo 6 do roteiro de aparelho
+  (tocar 👎 e fechar sem motivo; no dia seguinte a linha `down` sem motivo
+  existe; depois 👎 com motivo é UMA linha, não duas).
+
 ## 2026-10-04 (noite, 57) · A API de Analytics da Vercel responde, sim: era o token, não o plano
 
 - Pergunta do dono: "precisamos entender como pegar via API. Não tem como?".

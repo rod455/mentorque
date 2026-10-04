@@ -122,23 +122,51 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
   // Manda o voto para /api/biela-voto, que guarda o par pergunta+resposta.
   // Falhar aqui não pode atrapalhar ninguém: quem tocou no polegar já seguiu a
   // vida, e uma mensagem de erro por causa disso seria pior que o silêncio.
-  const registrar = (i: number, voto: "up" | "down", motivo?: string, comentario?: string) => {
+  //
+  // Devolve o id da linha gravada, para o motivo completar a MESMA linha.
+  const registrar = async (i: number, voto: "up" | "down", motivo?: string, comentario?: string): Promise<string | null> => {
     const msg = msgs[i];
-    if (!msg?.pergunta) return;
-    void apiPost("/api/biela-voto", {
-      voto, motivo, comentario,
-      pergunta: msg.pergunta, resposta: msg.text,
-      carro: v ? `${v.make} ${v.model} ${v.year}` : undefined,
-      comManual: msg.comManual, modo: msg.modo, locale,
-      plataforma: isNativeApp() ? (nativePlatform() ?? "nativo") : "web",
-      versao: APP_VERSION, aparelho: aparelhoId(),
-    }).catch(() => undefined);
+    if (!msg?.pergunta) return null;
+    try {
+      const r = await apiPost("/api/biela-voto", {
+        voto, motivo, comentario,
+        pergunta: msg.pergunta, resposta: msg.text,
+        carro: v ? `${v.make} ${v.model} ${v.year}` : undefined,
+        comManual: msg.comManual, modo: msg.modo, locale,
+        plataforma: isNativeApp() ? (nativePlatform() ?? "nativo") : "web",
+        versao: APP_VERSION, aparelho: aparelhoId(),
+      });
+      const j = (await r.json().catch(() => null)) as { id?: string } | null;
+      return typeof j?.id === "string" ? j.id : null;
+    } catch {
+      return null;
+    }
+  };
+
+  // Completa a linha já gravada (motivo, comentário ou voto desfeito). Sem id,
+  // cai no registro inteiro, que é o comportamento de antes da 3.0.
+  const completar = (i: number, campos: { voto?: "up" | "down"; motivo?: string; comentario?: string }) => {
+    const id = msgs[i]?.votoId;
+    if (!id) { void registrar(i, campos.voto ?? "down", campos.motivo, campos.comentario); return; }
+    void apiPost("/api/biela-voto", { id, ...campos }).catch(() => undefined);
   };
 
   const votar = (i: number, v: "up" | "down") => {
     setMsgs((m) => m.map((msg, j) => (j === i ? { ...msg, voto: v } : msg)));
     desarmar();
-    if (v === "down") { setMotivoDe(i); return; } // o motivo é que vale; o voto vai com ele
+    if (v === "down") {
+      // O 👎 GRAVA NO TOQUE (3.0, 04/10/2026). Até a 2.9 o voto negativo só ia
+      // junto com o motivo, e quem tocava e fechava não deixava rastro: 24
+      // votos em seis semanas, todos positivos, e isso não era aprovação, era
+      // o funil da nossa própria tela. Agora o toque grava, e o motivo, se
+      // vier, completa a mesma linha pelo id.
+      setMotivoDe(i);
+      if (msgs[i]?.votoId) { completar(i, { voto: "down" }); return; }
+      void registrar(i, "down").then((id) => {
+        if (id) setMsgs((m) => m.map((msg, j) => (j === i ? { ...msg, votoId: id } : msg)));
+      });
+      return;
+    }
     // Voltar para 👍 fecha o "O que faltou?".
     //
     // Sem isto, quem tocasse 👎 e se arrependesse ficava com a pergunta de
@@ -147,7 +175,10 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
     // negativo que a pessoa já tinha desfeito.
     setMotivoDe((atual) => (atual === i ? null : atual));
     setComentario("");
-    registrar(i, "up");
+    if (msgs[i]?.votoId) completar(i, { voto: "up" });
+    else void registrar(i, "up").then((id) => {
+      if (id) setMsgs((m) => m.map((msg, j) => (j === i ? { ...msg, votoId: id } : msg)));
+    });
     relogio.current = setTimeout(() => {
       relogio.current = null;
       // Meia pergunta escrita não é fim de conversa, é alguém formulando —
@@ -303,7 +334,7 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
                         {([["errada", c.feedback.bielaErrada], ["incompleta", c.feedback.bielaIncompleta], ["confusa", c.feedback.bielaConfusa]] as const).map(([chave, rotulo]) => (
                           <button
                             key={chave}
-                            onClick={() => { registrar(i, "down", chave, comentario.trim() || undefined); setMotivoDe(null); setComentario(""); }}
+                            onClick={() => { completar(i, { voto: "down", motivo: chave, comentario: comentario.trim() || undefined }); setMotivoDe(null); setComentario(""); }}
                             className="rounded-full bg-graphite-700 px-2.5 py-1 text-xs text-cream/80 ring-1 ring-white/10 hover:bg-graphite-600"
                           >
                             {rotulo}

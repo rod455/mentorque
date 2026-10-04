@@ -89,7 +89,11 @@ const AMBIENTE = ["sem rede", "network error", "sem conexao", "sem conexão", "o
  * específica: "Google Sign-In cancelled by user" também casaria com regra
  * frouxa de falha de login.
  */
-export function classeDoErro(mensagem: string | null | undefined): ClasseDeErro {
+export function classeDoErro(mensagem: string | null | undefined, tipo?: string | null): ClasseDeErro {
+  // Desde a 3.0 (04/10/2026) a origem já diz o tipo: a desistência de login
+  // chega como `tipo = "desistencia"`. A frase continua valendo para as
+  // linhas antigas, gravadas como "erro".
+  if (tipo === "desistencia") return "desistencia";
   const m = String(mensagem ?? "").toLowerCase();
   if (DESISTENCIA.some((f) => m.includes(f))) return "desistencia";
   if (AMBIENTE.some((f) => m.includes(f))) return "ambiente";
@@ -107,7 +111,7 @@ export type ContagemDeErros = {
 
 /** Conta os relatos por classe, sem duplicar aparelho dentro da classe. */
 export function contaDeErros(
-  relatos: { mensagem?: string | null; anon_id?: string | null }[],
+  relatos: { mensagem?: string | null; anon_id?: string | null; tipo?: string | null }[],
 ): ContagemDeErros {
   const vazio = () => ({ relatos: 0, aparelhos: new Set<string>() });
   const acc: Record<ClasseDeErro, { relatos: number; aparelhos: Set<string> }> = {
@@ -118,7 +122,7 @@ export function contaDeErros(
   const todos = new Set<string>();
   let total = 0;
   for (const r of relatos ?? []) {
-    const c = classeDoErro(r.mensagem);
+    const c = classeDoErro(r.mensagem, r.tipo);
     acc[c].relatos += 1;
     total += 1;
     const ap = String(r.anon_id ?? "");
