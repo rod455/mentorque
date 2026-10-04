@@ -33,6 +33,21 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (manha, 31) · Duas linhas saem da lista do dono, com desfecho, e uma encolhe
+
+- **Sai: credencial da AppsFlyer nos dois nos do n8n** (entrou 03/10). Desfecho:
+  o dono escolheu, e a coleta grava `appsflyer` com dado real desde 03/10
+  (Facebook Ads 116, Organic 50 na janela de 27/09 a 04/10).
+- **Sai: permissao da conta de servico no Play Console** (entrou 03/10).
+  Desfecho: o bucket listou e baixou em 04/10; 336 instalacoes de 01 a 25/09
+  e 254 aparelhos ativos, depois do conserto do app errado.
+- **Encolhe: Vercel.** O dono configurou 2 semanas na politica da conta, e
+  essa tela vale para projetos NOVOS. Fica so a confirmacao de que o projeto
+  `mentorque` pegou a politica (caixa marcada, ou a aba do projeto), porque a
+  API nao devolve esse campo e eu nao tenho como fechar sozinho.
+- A lista fica com 14 itens em 8 paineis. O Google Ads continua sendo a sessao
+  mais barata: 6 itens num console so.
+
 ## 2026-10-04 (manha, 30) · Os dois vinculos estao ATIVOS na conta que gasta
 
 - Print do dono, tabela "Analise de aplicativos de terceiros" da conta
