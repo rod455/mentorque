@@ -5,7 +5,16 @@
   <key>CAPACITOR_DEBUG</key>
 	<string>$(CAPACITOR_DEBUG)</string>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>pt-BR</string>
+	<!-- O que a App Store mostra em "Idioma" vem DAQUI, do binario, e nao da
+	     localizacao principal da ficha (que ja era Portugues do Brasil). Sem
+	     esta lista a pagina publica dizia "Idioma: EN, Ingles" para um app
+	     brasileiro. Conferido no print do dono em 04/10/2026. -->
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>pt-BR</string>
+		<string>en</string>
+	</array>
 	<key>CFBundleDisplayName</key>
         <string>Mentorque</string>
 	<key>CFBundleExecutable</key>

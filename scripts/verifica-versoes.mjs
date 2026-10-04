@@ -341,6 +341,31 @@ if (piso <= publicado) {
   process.exit(1);
 }
 
+// ─────────────────────────────────────────────────
+// O IDIOMA QUE A APP STORE MOSTRA VEM DO BINÁRIO (04/10/2026). A página pública
+// do app dizia "Idioma: EN, Inglês" para um app brasileiro, e a localização
+// principal da ficha já era Português (Brasil): o campo da página lê as
+// localizações que o binário DECLARA (`CFBundleLocalizations` e
+// `CFBundleDevelopmentRegion` no Info.plist, `knownRegions` no projeto), e o
+// projeto só declarava `en`. Um `npx cap sync` que regenere o projeto volta ao
+// inglês em silêncio, e a página volta a dizer EN sem ninguém trocar nada.
+{
+  const plist = readFileSync("ios/App/App/Info.plist", "utf8");
+  const pbx = readFileSync("ios/App/App.xcodeproj/project.pbxproj", "utf8");
+  const regiao = plist.match(/<key>CFBundleDevelopmentRegion<\/key>\s*<string>([^<]+)<\/string>/)?.[1];
+  const locs = plist.match(/<key>CFBundleLocalizations<\/key>\s*<array>([\s\S]*?)<\/array>/)?.[1] ?? "";
+  const declaradas = [...locs.matchAll(/<string>([^<]+)<\/string>/g)].map((m) => m[1]);
+  const problemas = [];
+  if (regiao !== "pt-BR") problemas.push(`CFBundleDevelopmentRegion é "${regiao}", e tem que ser pt-BR`);
+  if (!declaradas.includes("pt-BR")) problemas.push(`CFBundleLocalizations não declara pt-BR (declara: ${declaradas.join(", ") || "nada"})`);
+  if (!/knownRegions = \([\s\S]*?"pt-BR",[\s\S]*?\);/.test(pbx)) problemas.push("knownRegions do projeto Xcode não tem pt-BR");
+  if (problemas.length) {
+    console.error("FALHA  o binário do iPhone não declara português, e a App Store vai mostrar \"Idioma: EN\":");
+    for (const p of problemas) console.error(`       ${p}`);
+    process.exit(1);
+  }
+}
+
 console.log(`Versões conferem: ${alvo} (app ${app}, Android ${android}, iOS ${ios}), ainda não publicada.`);
 console.log(`Banner: aponta para a ${mRota[1]}, que é a última publicada.`);
 console.log(`versionCode: piso ${piso}, acima do ${publicado} que já está na Play.`);

@@ -33,6 +33,26 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 41) · "Idioma: EN" nao era a ficha, era o binario
+
+- O dono abriu App Store Connect > App Information: **Primary Language:
+  Portuguese (Brazil)**. Entao a minha leitura de manha ("localizacao principal
+  em ingles") estava errada no lugar: a ficha ja era pt-BR. O "Idioma: EN,
+  Ingles" da pagina publica vem do BINARIO, das localizacoes que o app declara
+  (`CFBundleLocalizations` / `CFBundleDevelopmentRegion` no `Info.plist`, e
+  `knownRegions` no projeto do Xcode). O projeto so declarava `en`.
+- **Conserto no codigo, vai na 3.0**: `CFBundleDevelopmentRegion` = `pt-BR`,
+  `CFBundleLocalizations` = [`pt-BR`, `en`], `knownRegions` ganha `pt-BR`. Nao e
+  plugin, e chave de plist; mesmo assim, o sinal so vem quando a 3.0 estiver na
+  loja e a pagina disser "PT". A `conferir:versoes` passa a exigir as tres
+  coisas, para a proxima versao nao voltar a ingles por um `npx cap sync`
+  regenerando o projeto.
+- A linha da Apple na lista do dono encolheu para a unica coisa que so a loja
+  publicada responde: buscar `manutencao` sem acento depois da 3.0.
+- Erro meu registrado: afirmei "localizacao principal errada" a partir de um
+  campo da pagina publica sem saber o que o campo mede. E a regra de 03/10
+  ("diga de qual instrumento veio e o que ele mede") outra vez, em miniatura.
+
 ## 2026-10-04 (tarde, 40) · Quatro linhas saem da lista por decisao do dono, e a da Apple vira duas conferencias
 
 - **Sai: o banco do Vocaboost** ("nao faz sentido"). Desfecho: o blog fica como
