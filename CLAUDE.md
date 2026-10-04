@@ -86,3 +86,19 @@ entra no binário depois de ler o caminho dele no fonte (não no README), com o
 roteiro de aparelho escrito antes do build; e sobre um build que nenhum
 aparelho abriu, a resposta é "sem sinal ainda", nunca "nada quebrou"
 (regra do dono, 09/09/2026, em `.claude/skills/release-nas-lojas`).
+
+## Antes de mandar o dono clicar (04/10/2026)
+
+Num dia só, quatro vezes, a lista mandou o dono fazer coisa que já estava
+feita: a credencial da AppsFlyer, a localização principal na Apple, as
+permissões e o webhook do Instagram. A reação dele: "você continua me mandando
+fazer coisas que já foram feitas, inútil sua atuação". Ele tinha razão, e a
+causa foi a mesma nas quatro: a linha nasceu de um diagnóstico de tela de
+semanas atrás e ninguém releu o instrumento antes de repetir o pedido.
+
+**A regra que fica:** antes de pedir qualquer clique ao dono, conferir no
+instrumento que a casa já alcança (execuções do n8n, API, definição do fluxo,
+banco) se a coisa já está feita. Linha de lista que nasceu de diagnóstico tem
+que dizer de que dia é, e o pedido só se repete depois de reler. Se o
+instrumento responde, não se pergunta ao dono.
+
