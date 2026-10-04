@@ -105,6 +105,31 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (noite, 56) · Mandei o dono ligar o que já estava ligado, de novo, e a regra de hoje de manhã explica por quê
+
+- Meia hora depois de a linha "ligar o Web Analytics" entrar na lista, o dono
+  mandou o print do painel: Analytics LIGADO, 79 visitantes e 143 páginas
+  vistas em 7 dias, 28 na home. "aqui já está mostrando, o que preciso
+  ativar?". Nada. A linha saiu.
+- A causa é a mesma das quatro de hoje de manhã, e eu escrevi a regra de
+  manhã: a API (`count_pageviews`) respondeu "Web Analytics not found" e eu
+  concluí "está desligado". **Ausência não é causa.** A API responde o QUE
+  (ela não encontra), nunca o PORQUÊ. Testei de novo com e sem equipe, com
+  id e com nome: 404 em todos. A hipótese que fica, NÃO provada, é que a
+  leitura por API não vale no plano Hobby (o print mostra "Hobby" na equipe).
+  O painel é o instrumento; a API não é.
+- O que eu devia ter feito antes de escrever a linha: perguntar ao dono um
+  print do painel, ou escrever "a API não enxerga; confira no painel" em vez
+  de "está desligado". A regra de "antes de mandar o dono clicar" diz
+  "conferir no instrumento que a casa já alcança"; aqui o instrumento que a
+  casa alcança por API não alcançava, e eu não disse isso, inferi o oposto.
+- Consequência boa: o denominador da aposta `landing-em-seis-blocos` existe
+  e está no caderno agora: 28 visitantes por semana na home. É pouco, e
+  isso muda a leitura: qualquer taxa é direção, 3 cliques mudam dez pontos.
+  A maior fonte com nome é um portfólio de terceiro (10 visitantes), o que
+  quer dizer que o tráfego orgânico da home é quase nada hoje; a busca do
+  Google que voltou hoje vai ser a maior parte do que chegar.
+
 ## 2026-10-04 (noite, 55) · Aposta 1 no ar: a landing em seis blocos, com instrumento e sem carrossel
 
 - O dono aprovou a ordem ("Podemos fazer o que você sugeriu, daremos mais
@@ -125,9 +150,10 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   consultoria continua ali, com o mesmo evento), chamada final, rodapé.
 - **Instrumento primeiro**: os selos de loja da home nunca gravaram
   `clicou_baixar`; só o /baixar gravava (4 na semana). Agora o `StoreBadges`
-  grava com a origem `home-topo:*` ou `home-fim:*`. E o denominador não
-  existe: o Web Analytics da Vercel está desligado ("Web Analytics not
-  found"). Virou linha do dono, com a ressalva de não ligar se pedir dinheiro.
+  grava com a origem `home-topo:*` ou `home-fim:*`. ~~E o denominador não
+  existe: o Web Analytics da Vercel está desligado.~~ ERRADO, corrigido na
+  entrada 56 logo acima: o painel está ligado e mostra 28 visitantes na home
+  em 7 dias; a API é que não enxerga.
 - **Dito no dia**: a busca do Google voltou a veicular hoje apontando para a
   home. Toda leitura desta aposta separa por `utm_source`.
 - **A demonstração do Biela mostra a resposta como ela sai HOJE** (prosa

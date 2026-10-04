@@ -108,28 +108,34 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   Então o "antes" da home é ZERO por falta de instrumento, não por falta de
   clique; a primeira semana é o primeiro "antes" que existe, e a comparação
   honesta é entre semanas DEPOIS da mudança, por fonte de tráfego.
-- O DENOMINADOR NÃO EXISTE AINDA: o Web Analytics da Vercel está desligado
-  (a API responde "Web Analytics not found" em 04/10), então ninguém sabe
-  quantas visitas a home recebe. Sem isso, a taxa é cliques por semana, não
-  cliques por visita. Ligar é um clique do dono no painel da Vercel e está na
-  lista dele. Para o tráfego pago há um denominador parcial: os cliques do
-  Google Ads na campanha de busca, que voltou a veicular em 04/10 apontando
-  para a home com `utm_source=google`.
+- O DENOMINADOR EXISTE, E É PEQUENO (corrigido em 04/10 à noite, depois de
+  eu ter escrito que não existia). O painel de Analytics da Vercel está
+  ligado e mostra, nos 7 dias até 04/10: 79 visitantes e 143 páginas vistas
+  no site inteiro, e **28 visitantes na home (`/`)**; a maior fonte com nome
+  é um site de portfólio de terceiro (10), depois Instagram (2) e Facebook
+  (2). Lido do print do dono. A API (`count_pageviews`) responde "Web
+  Analytics not found" para o mesmo projeto, e a hipótese, não provada, é
+  que a leitura por API não vale no plano Hobby. Enquanto for assim, o
+  denominador se lê no painel (Analytics > Pages > `/`), não no coletor.
+  Com 28 visitas por semana na home, qualquer taxa é direção: 3 cliques a
+  mais mudam dez pontos. Para o tráfego pago há outro denominador: os
+  cliques do Google Ads na campanha de busca, que voltou a veicular em 04/10
+  apontando para a home com `utm_source=google`.
 - TOCA O DEGRAU DE OUTRA COISA, dito no dia (regra de 02/10): a busca do
   Google voltou a veicular NO MESMO DIA, e manda tráfego novo para a home.
   Qualquer subida de clique na semana tem duas causas possíveis. A leitura
   separa por `utm_source` (o funil carrega a etiqueta): orgânico e direto de
   um lado, `google` do outro.
 - Métrica: `clicou_baixar` com origem `home-*` por semana, cortado por
-  `utm_source`; quando o Web Analytics estiver ligado, por visita da home ·
-  Duração: 4 semanas, e com a ressalva de que o volume da home é pequeno
-  (o /baixar faz 4 cliques por semana; a home deve fazer mais, mas ninguém
-  mediu), então a leitura será direcional.
+  `utm_source`, dividido pelos visitantes de `/` lidos no painel da Vercel ·
+  Duração: 4 semanas, e com a ressalva de que o volume é pequeno (28 visitas
+  por semana na home, 4 cliques por semana no /baixar), então a leitura será
+  direcional.
 - Aprovação: aprovada pelo dono em 2026-10-04 ("Podemos fazer o que você
   sugeriu, daremos mais visibilidade ao biela")
 - Início: 2026-10-04 · Ler a partir de: 2026-10-18 (direcional) e 2026-11-01
 - Antes: home sem instrumento (zero por construção); /baixar 4 cliques na
-  semana até 04/10; visitas da home desconhecidas
+  semana até 04/10; 28 visitantes na home em 7 dias (painel da Vercel)
 - Veredito: (aberto)
 
 ## [convite-do-carro-nao-queima-com-convidado] O melhor momento do pedido para de ser gasto à toa
