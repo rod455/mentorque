@@ -33,6 +33,20 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 38) · A Play esta no ar com o texto novo, e tres propostas fecham no mesmo dia
+
+- Dono: "feito em ambos". Na Play, breve descricao (a de 01/10, com
+  "economize") e descricao completa (2 carros, frase dos anuncios, sem a do
+  navegador) estao no ar desde 04/10. Fecham, como APLICADAS: a proposta de
+  15/09 (limite de carros) e a de 01/10 (breve descricao). A linha da Play sai
+  da lista do dono.
+- Como ler o efeito, e quando: duas rodadas depois de 04/10, origem "Pesquisa
+  do Google Play" (so sobe de verdade se os TERMOS forem de categoria, nao de
+  marca) e o bucket de instalacoes. E por excecao: nenhuma avaliacao nova com
+  "gratis", "pago" ou "limite" dentro, que e o que a frase dos 2 carros existe
+  para evitar.
+- Lista do dono: 13 itens em 6 paineis.
+
 ## 2026-10-04 (tarde, 37) · "Essa parte do navegador e mentira, ne?"
 
 - O dono pegou na descricao a frase "Tambem funciona no navegador, em

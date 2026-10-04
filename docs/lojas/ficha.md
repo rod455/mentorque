@@ -45,13 +45,14 @@ o critério de leitura estão em "Propostas aplicadas", no fim deste arquivo.
 
 Aparece na listagem e é o trecho que mais viaja para fora da loja.
 
-**NO AR (print do console, 04/10/2026):** `Cuide do seu carro: diagnóstico,
-revisões, histórico e o mecânico de IA Biela.` (78). Esta ficha dizia outra
-linha como publicada, e era a proposta; a de 01/10 ("e economize") foi
-escrita comparando com a linha errada. Mesmo erro da Apple, mesmo dia, mesma
-regra: "no ar" só o que foi lido na loja.
+**NO AR desde 04/10/2026 (colado pelo dono, "feito em ambos"):** a linha
+abaixo. Antes dela, o console mostrava `Cuide do seu carro: diagnóstico,
+revisões, histórico e o mecânico de IA Biela.` (78), e esta ficha dizia outra
+linha como publicada, que era a proposta. Regra que fica: "no ar" só o que foi
+lido na loja, com data e fonte. A leitura do efeito começa duas rodadas depois
+de 04/10, pela origem "Pesquisa do Google Play" e pelo bucket de instalações.
 
-Proposta, entregue ao dono em 04/10 (79 caracteres):
+Colada em 04/10 (79 caracteres):
 
 ```
 Entenda o barulho, a luz do painel e o orçamento antes da oficina, e economize.
@@ -64,10 +65,10 @@ envio de leads para lá").** As duas descrições terminavam com "Também funcio
 no navegador, em www.mentorque.com.br". A decisão da casa é que a loja é o
 destino e a web não recebe lead; a ficha dizia o contrário. Saiu das duas.
 
-**NO AR (print do console, 04/10/2026):** um texto mais antigo, que começa
-com "Mentorque — seu carro bem cuidado, sem depender de achismo", com
-travessão e emoji nas linhas de tópico, e sem o limite de 2 carros. O texto
-abaixo foi entregue ao dono em 04/10 para colar no lugar.
+**NO AR desde 04/10/2026 (colado pelo dono):** o texto abaixo, com os 2
+carros, a frase dos anúncios e sem a do navegador. Até 04/10 o ar tinha um
+texto mais antigo ("Mentorque — seu carro bem cuidado, sem depender de
+achismo"), com travessão e emoji e sem o limite de carros.
 
 ```
 Mentorque é um aplicativo de manutenção e educação automotiva para quem não é mecânico. Ele ajuda você a entender o que o seu carro tem, a decidir se o problema pode esperar e a chegar na oficina sabendo o que perguntar.
@@ -516,7 +517,8 @@ dono: vira assunto do CRO, não da ficha.
 
 ## 2026-10-01 · A palavra que os usuários mais repetem não está em nenhum campo forte
 
-**Estado: ABERTA.** Só Google Play, e muda na hora, sem envio de versão.
+**Estado: APLICADA em 04/10/2026 pelo dono.** Só Google Play. A leitura do
+efeito começa duas rodadas depois, com a ressalva escrita abaixo.
 
 ### A troca, em tabela
 
