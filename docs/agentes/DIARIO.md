@@ -105,6 +105,23 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 51) · googleadwords_int APARECEU: o vinculo fechou no mesmo dia
+
+- Coleta executada as 13:21 (horario de Brasilia): o pacote `appsflyer` traz
+  **`googleadwords_int` com 1 instalacao** no Android, campanha "APP | Android |
+  Instalacoes | BR", 4 sessoes, 1 leal, na janela de 27/09 a 04/10. E o
+  **aviso "Google Ads nao aparece como fonte" sumiu sozinho** do pacote, porque
+  ele e calculado da lista de fontes e nao de uma frase que alguem lembra de
+  apagar. Era a prova que faltava desde 03/10, e veio em horas, nao em dias.
+- Segundo instrumento, do lado do Google: a API ainda lista so a acao de
+  origem GOOGLE_PLAY (416 em 30 dias). Nada de THIRD_PARTY_APP_ANALYTICS ainda,
+  porque isso depende de importar a acao no painel. A linha da lista passou de
+  "esperar" para "agora da", com o caminho de tela.
+- O que o numero NAO diz: 1 instalacao em horas nao e taxa. A leitura de
+  verdade e a semana que vem, com a ressalva de sempre (AppsFlyer conta por
+  baixo, janela de visualizacao do Google e de 1 dia). Custo por instalacao do
+  Google sai da escada quando houver mais de um dia.
+
 ## 2026-10-04 (tarde, 50) · Decisao do dono sobre o Google Ads: negativas e "criou conta" ficam para depois
 
 - Dono: "nao vamos fazer 1 e 2 agora". Saem da lista as negativas (03/09, 31
