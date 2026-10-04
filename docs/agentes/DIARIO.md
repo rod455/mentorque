@@ -33,6 +33,31 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 47) · Proposta de simplificacao do app e da LP, com o Biela na porta
+
+- Pedido do dono: referencias de UI no Behance, tudo que o CRO ensinou sobre a
+  experiencia, e uma sugestao de evolucao da LP e das telas do app, mais clean,
+  com o Biela em destaque. **Behance e Dribbble nao respondem deste ambiente
+  (HTTP 000, proxy)**, entao nao ha print de referencia; as referencias foram
+  dadas por nome (apps de uma tarefa por tela) e a proposta foi DESENHADA, em
+  pranchas: https://claude.ai/artifact/P7h7C33vTbziokaWcxGics (privado ate o
+  dono compartilhar).
+- Quatro pranchas: Inicio proposto (Biela como hero e unica acao primaria,
+  carro como chip com a proxima revisao, duas acoes secundarias, quatro abas),
+  Biela (resposta sempre em tres blocos: causas, urgencia, o que perguntar na
+  oficina; polegar grava no toque; chips de continuacao), Primeira abertura
+  (a pergunta e a porta, carro depois, conta so quando destrava algo) e a LP
+  (seis blocos em vez de doze, uma manchete em vez de carrossel, Biela em acao,
+  tres ganhos, dois depoimentos reais, preco uma vez, loja como unico destino).
+- Cada prancha tem ao lado a nota com a licao do CRO que a sustenta: a porta de
+  entrada de 28/09 (78,7% da web parava no onboarding), o formulario curto que
+  venceu (108 contra 78), as 66 perguntas ao Biela em 30 dias e as avaliacoes
+  que falam de desfecho, os fechamentos concentrados na Home, e a regra de
+  medir antes de mexer (instrumento primeiro, uma aposta por vez, degrau
+  declarado no dia).
+- Nada disso entrou no codigo: e proposta para o dono decidir, e cada tela que
+  ele aprovar vira uma aposta do caderno, uma por vez.
+
 ## 2026-10-04 (tarde, 46) · A 3.0 sobe hoje a noite: numeros medidos no onboarding, notas escritas, regime de release
 
 - Dono: "pode alterar tudo que sugeriu, coloque no proximo build, vamos subir
