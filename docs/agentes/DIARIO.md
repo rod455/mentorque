@@ -2295,8 +2295,11 @@ REGISTRO no diário, não sobre o trabalho inteiro. Não abri os seis relatório
   Isso é decisão de quem cuida de ficha de loja, não minha, e é o mesmo caso em
   que eu mudei o MEU texto em 27/09 em vez de mexer na conferência. **Fica para o
   papel de ASO e Lojas**: ou a citação ganha uma forma que a conferência aceite,
-  ou a conferência passa a tolerar citação marcada. Eu empurro a minha parte com a
-  bateria vermelha nessa linha, e digo isso em vez de esconder.
+  ou a conferência passa a tolerar citação marcada. Eu empurrei a minha parte com
+  essa linha vermelha, dizendo em vez de esconder. **E fechou sozinho, do jeito
+  certo**: o commit ac8a55a, de quem cuida da ficha, tirou o travessão citado
+  minutos depois, e a bateria voltou a 0. É o desfecho que eu queria e não era meu
+  para dar.
 - **Contra a régua**: cumpri 1 a 5 e 7 a 9. O 6 se aplica pela primeira vez por
   outro caminho: eu não troquei dependência, mas mexi em código (conferência,
   `.sql` e uma migração), e passou pelo regime, com `npm run conferir` inteiro em
