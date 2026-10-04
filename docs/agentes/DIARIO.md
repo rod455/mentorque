@@ -33,6 +33,36 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 39) · "O que aconteceu com o blog do Vocaboost?": o banco sumiu, e a minha linha pedia o remedio errado
+
+- O dono: "a gente estava publicando artigos todas as semanas e aumentando o
+  awareness da marca". O blog em vocaboost.com.br/blog mostra "Em breve, novos
+  conteudos por aqui". **Entao o Vocaboost nao esta desligado como produto, e a
+  frase que eu li em 22/09 e repeti em 27/09 estava errada na intencao: o dono
+  deixou justamente esse fluxo ligado porque ele importa.**
+- **O que eu sei, e de que instrumento**: (1) o fluxo `Conteudo/SEO (Blog)`
+  roda terca e sexta, a IA gera o artigo com sucesso e o no `Salvar & publicar`
+  morre com `getaddrinfo ENOTFOUND ytskhrskvobfwrmslnkn.supabase.co`, em todas as
+  execucoes que o n8n ainda guarda (22, 25, 29/09 e 02/10) e nas de 15 e 18/09
+  vistas em 27/09; (2) o resolvedor deste ambiente tambem nao acha esse host, e
+  acha o do Mentorque; (3) o projeto nao esta na org do Mentorque no Supabase
+  (get_project: sem permissao). Dois resolvedores independentes, mesma resposta.
+- **O que eu NAO sei**: se o projeto foi apagado ou pausado (host que nao
+  resolve aponta para apagado, porque pausado continua resolvendo e responde
+  erro; mas e a tela da conta dona que confirma), desde quando exatamente (a
+  primeira falha visivel e 15/09; o blog pode ter esvaziado antes), e se o site
+  le do mesmo projeto (quase certo, mas a pagina nao responde deste ambiente, e
+  fica dito como inferencia).
+- **O que nao esta perdido**: cada artigo gerado vai inteiro, em HTML, no e-mail
+  "[Vocaboost] Novo artigo publicado" para tres enderecos. Recuperar e reler os
+  e-mails de 15/09 para ca e gravar no banco restaurado ou novo.
+- **A linha da lista mudou de "desligar o fluxo" para "abrir o painel do Supabase
+  da conta dona e dizer se esta pausado ou apagado"**, com os dois caminhos. O
+  erro meu que fica registrado: li a razao escrita de uma decisao e nao
+  perguntei por que o dono tinha mantido ligado o unico fluxo que contradizia
+  essa razao. Ausencia de resposta ("o banco nao resolve") virou "produto morto"
+  na minha cabeca, e isso e a regra de 03/10 outra vez.
+
 ## 2026-10-04 (tarde, 38) · A Play esta no ar com o texto novo, e tres propostas fecham no mesmo dia
 
 - Dono: "feito em ambos". Na Play, breve descricao (a de 01/10, com
