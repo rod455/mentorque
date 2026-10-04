@@ -33,6 +33,40 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (manha, 27) · O Google conta 401 instalacoes em 30 dias, e TODAS vem do Google Play, nenhuma da AppsFlyer
+
+- O dono clicou a credencial ("feito"), eu executei, e o no respondeu. **De qual
+  instrumento**: API do Google Ads, conta Mentorque, acoes de conversao dos
+  ultimos 30 dias (05/09 a 04/10), gravado em `metricas_diarias` / `google_ads`
+  / `acoesDeConversao`.
+- **A resposta**: duas acoes de conversao na conta. (1) "Instalacoes de
+  Mentorque: manutencao do carro (Android)", criada em **19/09/2026 10:01**,
+  categoria DOWNLOAD, origem **GOOGLE_PLAY**, **401 conversoes**. (2)
+  "Visualizacao de pagina", origem WEBPAGE, 1. **Nao existe nenhuma acao de
+  origem THIRD_PARTY_APP_ANALYTICS.** O Google nao recebe NADA da AppsFlyer
+  nesta conta: ele conta a instalacao sozinho, pelo Play.
+- **O que isso separa, e o que nao separa.** Mata a leitura "o vinculo esta
+  alimentando o Google e e a AppsFlyer que perde para a Meta": se o vinculo
+  estivesse completo nesta conta, a lista de conversoes teria os eventos da
+  AppsFlyer importados. O que NAO separa sozinho: se o vinculo (link ID) foi
+  criado em OUTRA conta Google Ads do dono, ou se foi criado nesta e so faltou o
+  passo de importar os eventos (Conversoes > Nova acao > App > Analise de apps
+  de terceiros). Os dois caminhos dao a mesma tela vazia. **A proxima pergunta e
+  do painel, e e uma so**: nessa tela de importar, nesta conta, a AppsFlyer
+  aparece como provedora com os eventos do Mentorque? Se aparece, falta
+  importar; se nao aparece, o vinculo esta em outra conta.
+- **Segundo instrumento para o 401**: o bucket do Play diz 336 instalacoes
+  TOTAIS (todas as fontes) de 01 a 25/09, e a Meta reclama 116 a 133 por
+  semana. O Google reclamando 401 em 30 dias, com visualizacao de video na
+  conta (janela de 1 dia, YouTube e 96% do gasto), e um numero que so ele
+  audita. E exatamente o buraco que o vinculo com a AppsFlyer existe para
+  fechar, e e por isso que a linha nao sai da lista: ela muda de "ligar" para
+  "importar, e conferir em qual conta".
+- De passagem: o no `Google Ads: termos de busca` ja estava com credencial (50
+  termos gravados na mesma coleta). A nota "ainda desligado" no `normaliza` so
+  aparece quando a lista vem vazia, entao nao mente, mas o comentario do
+  cabecalho envelheceu. Fica para a proxima passada nesse no.
+
 ## 2026-10-04 (manha, 26) · "Ja esta vinculado na AppsFlyer, o que ainda preciso fazer?", e a resposta honesta e: a pergunta que separa
 
 - O dono: "mas falamos que ja esta vinculado na appsflyer, o que ainda preciso
