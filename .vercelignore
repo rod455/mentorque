@@ -1,0 +1,40 @@
+# O que NÃO sobe para a Vercel.
+#
+# POR QUE ISTO EXISTE (03/10/2026). A Vercel avisou que a conta chegou a 75% dos
+# 10 GB de Deployment Storage no dia 3 do mês. O e-mail dela parabeniza pelo
+# tráfego, e esse não é o número: Deployment Storage é o ACUMULADO dos builds
+# guardados, e cresce com quantas vezes a gente publica, não com quantas pessoas
+# visitam.
+#
+# O QUE FOI MEDIDO antes de mexer em qualquer coisa:
+#   · 75 MB versionados no total;
+#   · `public/` = 46,6 MB (259 arquivos), e `public/learn` sozinho são 22,5 MB.
+#     Esses são servidos ao usuário e TÊM que subir;
+#   · `assets/` = 12,7 MB, e eles TÊM que subir, ao contrário do que parece:
+#     `app/api/pecas/route.tsx` lê `assets/pecas` e `assets/fontes` em tempo de
+#     execução. Conferido no fonte antes de excluir, e foi a leitura que salvou
+#     a peça do Telegram de quebrar em silêncio;
+#   · `tools/` = 5,1 MB de fontes `.ttf` que NENHUM arquivo de `app/` ou `lib/`
+#     referencia. A rota das peças usa `assets/fontes`, não esta pasta.
+#
+# O QUE ISTO RESOLVE, e é honesto dizer que é pouco: tira uns 8 MB por
+# publicação. O lever de verdade é publicar menos vezes e apagar deployment
+# velho, porque o armazenamento é o acumulado.
+
+# Fontes do gerador de peças, usadas só por script local.
+tools/
+
+# Projetos nativos: o app das lojas é compilado no Codemagic, não aqui.
+android/
+ios/
+native/
+
+# Documentação e manuais dos agentes: lidos por git pull, nunca pela web.
+docs/
+.claude/
+
+# Saída do gerador de peças, que nasce em tempo de execução.
+pecas-geradas/
+
+# Esquema do banco, aplicado pela integração e guardado como registro.
+supabase/

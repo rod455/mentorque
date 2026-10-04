@@ -33,6 +33,38 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-03 (noite, 23) · 75% dos 10 GB da Vercel no dia 3, e a causa principal sou eu
+
+- A Vercel avisou que a conta chegou a **75% dos 10 GB de Deployment Storage**
+  no dia 3 do mes. **O e-mail dela parabeniza pelo trafego, e esse nao e o
+  numero**: Deployment Storage e o ACUMULADO dos builds guardados, e cresce com
+  quantas vezes a casa PUBLICA, nao com quantas pessoas visitam. Ler o e-mail ao
+  pe da letra levaria a otimizar a coisa errada.
+- **MEDIDO ANTES DE MEXER**: 75 MB versionados. `public/` e 46,6 MB em 259
+  arquivos, com `public/learn` sozinho em 22,5 MB; `assets/` 12,7 MB; `tools/`
+  5,1 MB; `android` e `ios` juntos 644 KB.
+- **E A LEITURA QUE SALVOU UM CONSERTO ERRADO**: `assets/` parece material de
+  trabalho e eu ia excluir. O `app/api/pecas/route.tsx` le `assets/pecas` e
+  `assets/fontes` em TEMPO DE EXECUCAO, entao excluir quebraria a peca do
+  Telegram em silencio. Conferido no fonte, nao no nome da pasta.
+- **O QUE ENTROU**: um `.vercelignore` tirando `tools/` (5,1 MB de fontes que
+  nenhum arquivo de `app/` ou `lib/` referencia), `android/`, `ios/`, `native/`,
+  `docs/`, `.claude/`, `pecas-geradas/` e `supabase/`. **Uns 8 MB por
+  publicacao**, e e honesto dizer que e pouco.
+- **A CAUSA PRINCIPAL E O RITMO DE PUBLICACAO, E ELE E MEU.** Foram 20 deploys
+  em 7 dias segundo o proprio coletor da Vercel, e so na noite de 03/10 foram
+  uns 12. A regra das duas velocidades manda "cada pedido vira UM commit
+  pequeno, publicado na hora", o que e otimo para rastrear e caro para
+  armazenar. **Nao estou propondo mudar a regra**: estou registrando que ela tem
+  um custo que ninguem tinha medido, e que ele aparece no dia 3 do mes.
+- **O QUE DEVOLVE ESPACO JA GASTO e apagar deployment antigo**, e isso e do dono
+  porque e painel e e destrutivo. Virou linha na lista.
+- **O LEVER DE TAMANHO QUE SOBRA, para outra rodada**: `public/learn` com 22,5
+  MB, servido cru porque o `next.config` tem `images.unoptimized: true` desde a
+  rodada de Seguranca de 27/09 (que desligou o otimizador para fechar a CVE de
+  AVIF). Comprimir essas imagens cortaria armazenamento E banda, e e mudanca
+  visual, entao pede cuidado e nao cabe numa noite.
+
 ## 2026-10-03 (noite, 22) · A coleta foi EXECUTADA, e a execucao achou o que nenhuma leitura de codigo acharia
 
 - Em vez de dizer "roda amanha as 05:30", rodei. Duas execucoes do coletor, e as
