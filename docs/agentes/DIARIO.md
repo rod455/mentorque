@@ -33,6 +33,28 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (manha, 28) · Fechou: a conta que gasta NAO tem analise de terceiros conectada
+
+- O dono abriu a tela "Sobre o app" da conta Mentorque e ela diz, em letras:
+  **"Voce nao tem analises de apps de terceiros conectados"**, com o botao
+  "Conectar um produto de analise de apps de terceiros" ainda por clicar. A
+  unica fonte de app e "mentorque.app (Android) pela Google Play Store".
+- **Dois instrumentos, mesma resposta.** A API (acoes de conversao: 401, todas
+  GOOGLE_PLAY, nenhuma THIRD_PARTY_APP_ANALYTICS) e o painel (nenhuma analise
+  de terceiros conectada). Nao e inferencia de ausencia: e a tela que diz.
+- **Entao as duas pontas que o dono conferiu nao eram desta conta.** O link ID
+  existe em algum lugar (ele viu Android e iPhone "linkados"), mas nao na
+  conta 672-430-8347, que e a que gasta. Vinculo em outra conta e vinculo em
+  lugar nenhum, e a AppsFlyer nunca viu `googleadwords_int` por isso.
+- **O que eu quase fiz de errado ontem, dito para nao repetir**: a primeira
+  versao da linha dizia "ligar nos dois consoles", o dono respondeu "ja esta
+  ligado", e eu tinha duas saidas: discutir ou perguntar ao instrumento. A
+  pergunta certa custou um no no n8n e dois cliques dele, e separou em uma
+  hora o que uma noite de hipoteses nao separou.
+- A linha da lista agora diz o caminho exato: criar o link ID nesta conta (um
+  por app), colar na AppsFlyer, importar a instalacao como acao de conversao.
+  Nao e retroativo; a primeira instalacao atribuida aparece no dia seguinte.
+
 ## 2026-10-04 (manha, 27) · O Google conta 401 instalacoes em 30 dias, e TODAS vem do Google Play, nenhuma da AppsFlyer
 
 - O dono clicou a credencial ("feito"), eu executei, e o no respondeu. **De qual
