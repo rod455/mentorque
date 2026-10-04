@@ -33,6 +33,19 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (manha, 30) · Os dois vinculos estao ATIVOS na conta que gasta
+
+- Print do dono, tabela "Analise de aplicativos de terceiros" da conta
+  Mentorque: **AppsFlyer / mentorque.app / Ativo** e **AppsFlyer / 6797291865
+  (iPhone) / Ativo**. A linha do Adjust ficou como "Nao vinculada", para apagar.
+  Na AppsFlyer, os dois apps com Activate partner ligado e o link ID de cada um.
+- O que falta e um passo so, e e do dono: importar a instalacao da AppsFlyer
+  como acao de conversao no Google Ads. Sem isso o vinculo existe mas o Google
+  continua otimizando para a contagem dele (GOOGLE_PLAY), e a faixa amarela da
+  AppsFlyer continua la.
+- **Primeiro dia possivel de `googleadwords_int` na coleta: 05/10.** O relato
+  de amanha diz de qual instrumento veio, e se nao vier, diz que nao veio.
+
 ## 2026-10-04 (manha, 29) · O vinculo do Android esta feito na conta certa, e a primeira tentativa saiu com o provedor errado
 
 - O dono criou o link ID na conta Mentorque e colou na AppsFlyer. **A primeira
