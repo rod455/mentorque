@@ -33,6 +33,40 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (manha, 26) · "Ja esta vinculado na AppsFlyer, o que ainda preciso fazer?", e a resposta honesta e: a pergunta que separa
+
+- O dono: "mas falamos que ja esta vinculado na appsflyer, o que ainda preciso
+  fazer?". Ele tem razao de cobrar: a linha da lista dizia "ligar nos dois
+  consoles" e ele ja tinha conferido os dois. **Linha que pede ao dono o que ele
+  ja fez e linha que ensina a ignorar a lista.**
+- **O que eu sei e o que eu nao sei.** Sei o sintoma: o Google conta 30 a 42
+  conversoes por dia (coletor proprio) e a AppsFlyer nao registra UMA instalacao
+  de `googleadwords_int` em nenhuma coleta. Nao sei a causa, e nao vou inferir
+  da ausencia (regra de 03/10). As hipoteses vivas: (a) o vinculo esta em outra
+  conta Google Ads da mesma pessoa, nao na 672-430-8347 que gasta; (b) o vinculo
+  esta vivo e a AppsFlyer perde a instalacao para a Meta no ultimo toque, com a
+  janela de visualizacao de 1 dia do Google; (c) a AppsFlyer nao reclama a
+  instalacao porque o parceiro nao esta ativo do lado dela.
+- **A pergunta que separa, e a API que ja temos responde**: de qual ORIGEM sao
+  as conversoes que o Google conta, `segments.external_conversion_source`.
+  THIRD_PARTY_APP_ANALYTICS = o vinculo com a AppsFlyer esta vivo do lado do
+  Google (mata a hipotese a, aponta b ou c); GOOGLE_PLAY ou FIREBASE = o Google
+  conta sozinho e o vinculo nao alimenta ninguem (aponta a ou c). "Acesso nao e
+  a mesma coisa que perguntar": a credencial do Google Ads esta no n8n desde
+  agosto e essa pergunta nunca foi feita.
+- **O que entrou**: no `Google Ads: acoes de conversao` no fluxo "Analista:
+  metricas externas", 30 dias, por campanha, com nome, categoria e origem da
+  acao de conversao; `Google Ads: normaliza` grava `acoesDeConversao` (ou
+  `acoesErro`). Ligado em serie depois de `termos de busca`, com
+  `continueRegularOutput`: erro nele nao derruba o custo. Publicado.
+- **O que NAO entrou, e por que**: a credencial. O MCP do n8n recusa anexar
+  credencial a no HTTP ("does not accept credential googleAdsOAuth2Api"), igual
+  a ontem com a AppsFlyer e o Play. Dois cliques do dono, e a linha da lista
+  agora pede isso, e so isso, mais o print do numero da conta no vinculo.
+- A linha "ligar nos dois consoles" saiu da lista. A conclusao sobre o vinculo
+  so sai depois da primeira execucao com credencial, e vai dizer de qual
+  instrumento veio.
+
 ## 2026-10-04 (manha, 25) · O bucket do Play abriu, e a primeira leitura era o relatorio certo do app ERRADO
 
 - **A permissao do dono funcionou.** A coleta das 05:30 listou o bucket e
