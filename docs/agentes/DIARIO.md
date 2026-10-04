@@ -105,6 +105,25 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 53) · Os cinco anuncios de busca estao "Em analise": a URL final virou a home com etiqueta
+
+- O dono trocou a "URL final" dos cinco anuncios responsivos de pesquisa para
+  `https://www.mentorque.com.br/?utm_source=google&utm_medium=cpc&utm_campaign=lancamento`.
+  Quatro foram para "Em analise" no primeiro salvar; o quinto (grupo
+  "Perguntar/aprender") continuou "Reprovado" com a frase "O URL final para
+  dispositivos moveis rastreado e diferente".
+- O print das "Opcoes de URL do anuncio" mostrou tudo vazio (modelo de
+  rastreamento, sufixo, parametro, caixa de URL movel desmarcada). Entao a
+  frase era o resultado da revisao ANTIGA, feita quando a URL ainda era o
+  `/baixar`, nao uma URL movel escondida. Minha primeira hipotese (campo movel
+  preenchido) estava errada, e o print e que corrigiu. Depois de ajustar e
+  salvar de novo, o quinto tambem foi para "Em analise" (dono, 04/10).
+- Linha da lista apagada. O que falta nao depende do dono: na coleta de amanha
+  (05:30) conferir no funil se voltou cadastro com `utm_source=google` e, no
+  pacote do Google Ads, se a busca voltou a ter impressao e termo de busca. Se
+  continuar reprovado amanha, a API responde em
+  `ad_group_ad.policy_summary.approval_status`, sem pedir print.
+
 ## 2026-10-04 (tarde, 52) · A busca do Google esta REPROVADA desde que o /baixar virou desvio, e a linha da etiqueta tinha o remedio errado
 
 - O dono abriu Campanhas > Anuncios para colar a etiqueta e o print mostrou os
