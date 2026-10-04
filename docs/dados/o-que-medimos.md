@@ -103,8 +103,12 @@ post depende de uma permissão no painel da Meta, que está na lista do dono.
 Ligado em 19/09, e desde 04/10 entra na coleta diária como a fonte
 `vercel_analytics` (fluxo "Analista de Dados: Vercel Web Analytics" no n8n,
 05:35): visitantes e páginas por caminho nos últimos 7 dias, e visitantes da
-home por `utm_source`. A API é `/v1/query/web-analytics/visits/aggregate`, e
-ela responde ao token da credencial "Vercel" do n8n. O token da integração do
+home por site de origem (`referrerHostname`). A quebra por `utm_source` a
+Vercel cobra ("UTM dimensions require an Enterprise plan or the Web Analytics
+Plus add-on", 402 em 04/10), então a leitura por campanha fica com o nosso
+funil, que guarda a etiqueta no aparelho. A API é
+`/v1/query/web-analytics/visits/aggregate`, e ela responde ao token da
+credencial "Vercel" do n8n. O token da integração do
 Claude NÃO alcança essa API (responde "Web Analytics not found"), e por isso
 durante uma noite pareceu que o painel estava desligado. Leitura do dia em que
 entrou: 30 visitantes na home em 7 dias.

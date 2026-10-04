@@ -121,7 +121,11 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   visitantes e 35 páginas na home em 7 dias, lidos às 17:46); o que não
   alcança é o token da integração do Claude. Desde 04/10 o denominador entra
   no retrato pela fonte `vercel_analytics` (fluxo "Analista de Dados: Vercel
-  Web Analytics", 05:35), por caminho e, na home, por `utm_source`.
+  Web Analytics", 05:35), por caminho e, na home, por site de origem. Por
+  `utm_source` a Vercel cobra (402 em 04/10: exige Enterprise ou o add-on
+  Web Analytics Plus); a quebra por campanha desta aposta vem do funil, que
+  carrega a etiqueta no `clicou_baixar`. Primeira coleta real, 04/10 às
+  17:54: 28 visitantes e 31 páginas na home em 7 dias.
   Com 28 visitas por semana na home, qualquer taxa é direção: 3 cliques a
   mais mudam dez pontos. Para o tráfego pago há outro denominador: os
   cliques do Google Ads na campanha de busca, que voltou a veicular em 04/10
@@ -132,7 +136,8 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   separa por `utm_source` (o funil carrega a etiqueta): orgânico e direto de
   um lado, `google` do outro.
 - Métrica: `clicou_baixar` com origem `home-*` por semana, cortado por
-  `utm_source`, dividido pelos visitantes de `/` lidos no painel da Vercel ·
+  `utm_source`, dividido pelos visitantes de `/` que o retrato traz na fonte
+  `vercel_analytics` (`visitantesHome7d`) ·
   Duração: 4 semanas, e com a ressalva de que o volume é pequeno (28 visitas
   por semana na home, 4 cliques por semana no /baixar), então a leitura será
   direcional.

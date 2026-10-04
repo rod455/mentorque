@@ -131,8 +131,17 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   vez: credencial em nó novo, só criando fluxo.
 - O primeiro teste do coletor rodou antes de a rota aceitar a fonte, então a
   gravação deve ter voltado 400; o segundo teste é depois do deploy.
+- **Segundo teste, depois do deploy**: a linha `vercel_analytics` de 04/10
+  chegou ao banco com 28 visitantes e 31 páginas na home em 7 dias, igual ao
+  painel do dono. E um limite que só o instrumento contou: a quebra por
+  `utm_source` voltou 402, "UTM dimensions require an Enterprise plan or the
+  Web Analytics Plus add-on". Gasto é do dono, então não comprei nada: o nó
+  passou a quebrar a home por site de origem (`referrerHostname`), que é
+  gratuito, e a leitura por campanha fica com o funil, que carrega a etiqueta
+  no `clicou_baixar`. O erro ficou gravado no pacote da primeira coleta, como
+  texto, do jeito que a regra manda (erro nunca vira zero).
 - Buraco de medição nº 7 de `docs/dados/o-que-medimos.md` fechado. A aposta
-  `landing-em-seis-blocos` passa a ter denominador no retrato, e por fonte.
+  `landing-em-seis-blocos` passa a ter denominador no retrato.
 
 ## 2026-10-04 (noite, 56) · Mandei o dono ligar o que já estava ligado, de novo, e a regra de hoje de manhã explica por quê
 
