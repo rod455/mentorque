@@ -2287,6 +2287,16 @@ REGISTRO no diário, não sobre o trabalho inteiro. Não abri os seis relatório
     bloqueia o regime de todos os papéis até lá. O critério que o dono me deu em
     03/10 é quanto tempo a coisa fica parada se ficar com o outro. Se ele preferir
     que eu tivesse só relatado, a decisão é dele e eu sigo.
+- **UMA SEGUNDA VERMELHA QUE EU NÃO CONSERTEI, e é de propósito.** Depois do
+  rebase, a `conferir:travessao` reprova em `docs/lojas/ficha.md:70`, linha que
+  entrou hoje no commit 7e88d40 e que eu não toquei (zero diff meu nesse arquivo).
+  O travessão está dentro de um título de loja CITADO como texto antigo que já foi
+  publicado, e trocar o caractere ali apagaria o registro do que esteve no ar.
+  Isso é decisão de quem cuida de ficha de loja, não minha, e é o mesmo caso em
+  que eu mudei o MEU texto em 27/09 em vez de mexer na conferência. **Fica para o
+  papel de ASO e Lojas**: ou a citação ganha uma forma que a conferência aceite,
+  ou a conferência passa a tolerar citação marcada. Eu empurro a minha parte com a
+  bateria vermelha nessa linha, e digo isso em vez de esconder.
 - **Contra a régua**: cumpri 1 a 5 e 7 a 9. O 6 se aplica pela primeira vez por
   outro caminho: eu não troquei dependência, mas mexi em código (conferência,
   `.sql` e uma migração), e passou pelo regime, com `npm run conferir` inteiro em
