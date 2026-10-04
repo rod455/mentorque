@@ -33,6 +33,24 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 36) · A ficha da Play tambem dizia o proposto como publicado
+
+- O print do console da Play mostrou: breve descricao no ar e "Cuide do seu
+  carro: diagnostico, revisoes, historico e o mecanico de IA Biela", e a
+  descricao completa e um texto antigo com travessao e emoji. A ficha dizia
+  outra coisa como "hoje" nos dois campos. **Segunda vez no mesmo dia** (a
+  Apple de manha), e a mesma causa: a ficha escreveu a proposta no lugar do
+  lido, e ninguem conferiu contra a loja. A proposta de 01/10 da descricao
+  curta foi feita contra a linha errada; o raciocinio dela (economizar nao
+  esta em campo nenhum) continua valendo, e ate mais, porque a linha no ar nao
+  tem barulho nem painel.
+- Regra que fica, agora escrita na propria ficha nos dois campos: "no ar" so o
+  que foi LIDO na loja, com a data e de onde. Para a Play o jeito barato de
+  ler e o print do console, porque a pagina publica nao responde do ambiente
+  remoto.
+- Entregue ao dono, campo a campo, o que colar na Play: nome (fica), breve
+  descricao (79) e descricao completa (com 2 carros e a frase dos anuncios).
+
 ## 2026-10-04 (tarde, 35) · A Apple sai como foi colada; as frases dos 2 carros ficam para a versao seguinte
 
 - Dono: "vamos deixar assim mesmo, nao vou mudar, a proxima versao ja sai com a

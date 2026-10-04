@@ -45,11 +45,24 @@ o critério de leitura estão em "Propostas aplicadas", no fim deste arquivo.
 
 Aparece na listagem e é o trecho que mais viaja para fora da loja.
 
+**NO AR (print do console, 04/10/2026):** `Cuide do seu carro: diagnóstico,
+revisões, histórico e o mecânico de IA Biela.` (78). Esta ficha dizia outra
+linha como publicada, e era a proposta; a de 01/10 ("e economize") foi
+escrita comparando com a linha errada. Mesmo erro da Apple, mesmo dia, mesma
+regra: "no ar" só o que foi lido na loja.
+
+Proposta, entregue ao dono em 04/10 (79 caracteres):
+
 ```
-Entenda o barulho, a luz do painel e o orçamento antes de ir na oficina.
+Entenda o barulho, a luz do painel e o orçamento antes da oficina, e economize.
 ```
 
 ### Descrição completa (até 4000 caracteres)
+
+**NO AR (print do console, 04/10/2026):** um texto mais antigo, que começa
+com "Mentorque — seu carro bem cuidado, sem depender de achismo", com
+travessão e emoji nas linhas de tópico, e sem o limite de 2 carros. O texto
+abaixo foi entregue ao dono em 04/10 para colar no lugar.
 
 ```
 Mentorque é um aplicativo de manutenção e educação automotiva para quem não é mecânico. Ele ajuda você a entender o que o seu carro tem, a decidir se o problema pode esperar e a chegar na oficina sabendo o que perguntar.
