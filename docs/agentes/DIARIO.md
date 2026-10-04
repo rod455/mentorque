@@ -33,6 +33,30 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (manha, 33) · O MES100 aponta para o cupom vivo, e a ficha da Apple dizia o proposto como se fosse o publicado
+
+- **Decisao do dono: `/MES100` passa a apontar para `LANCAMENTO1MES`.** Feito
+  em `next.config.mjs`. E entrou a conferencia que faltava: `conferir:cadastro`
+  le os atalhos e exige que o MES100 aponte para `CUPOM_DA_CAMPANHA`, no
+  plano mensal, e nunca para o PREMIUM1MES. Era o jeito de um link publico
+  perder o desconto em silencio: a rota refaz a sessao sem cupom quando o
+  Stripe recusa, entao ninguem ve erro.
+- **O print da App Store corrigiu a ficha.** Nome no ar: `Mentorque:
+  manutencao do carro` (conferido). **Subtitulo no ar: `Seu mentor de
+  manutencao`**, e a ficha dizia `Entenda o carro e a oficina` como publicado;
+  era o proposto. Isso muda a conta das palavras-chave: o subtitulo real
+  repete `manutencao` e NAO carrega `oficina`, entao a lista proposta de 01/09
+  so vale se o subtitulo tambem for trocado. A ficha agora traz as duas
+  listas, uma para cada subtitulo, com a contagem de caracteres.
+- **Mais duas coisas que a pagina publica mostrou**: "IDIOMA: EN, Ingles" (a
+  localizacao principal do app no App Store Connect esta em ingles, e a pagina
+  em portugues e tradução; pesa na busca BR) e a descricao com travessao em
+  nove linhas, contra a regra do dono. Tudo campo de versao: entrou na mesma
+  linha da lista, que agora pede subtitulo, palavras-chave, descricao sem
+  travessao e a conferencia da localizacao principal no proximo envio.
+- Regra que fica: ficha de loja so escreve "no ar" o que foi lido na loja, e
+  diz de onde leu. O proposto fica em tabela, marcado como proposto.
+
 ## 2026-10-04 (manha, 32) · Tres respostas do dono: cupom apagado, dois depoimentos reais, e a Apple ja tem o nome
 
 - **Stripe: o dono APAGOU o `PREMIUM1MES`** (a linha pedia desativar; apagar

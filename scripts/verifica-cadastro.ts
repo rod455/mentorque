@@ -28,7 +28,7 @@
 import { readFileSync } from "node:fs";
 import { emailTermineOCadastro, linkDoCupom } from "../lib/email/termineOCadastro.ts";
 import { montarMensagem, renderEmail } from "../lib/jornada/emails.ts";
-import { LEITURA_DO_PAINEL, TETO_DO_CUPOM, linhaDoCupom, ofertaDoCupom } from "../lib/email/cupomDisponivel.ts";
+import { CUPOM_DA_CAMPANHA, LEITURA_DO_PAINEL, TETO_DO_CUPOM, linhaDoCupom, ofertaDoCupom } from "../lib/email/cupomDisponivel.ts";
 
 process.env.JORNADA_SEGREDO ||= "segredo-de-conferencia";
 
@@ -50,6 +50,21 @@ console.log("Cadastro: o convite do mês grátis sai uma vez, para quem deve, e 
   conferir("leva o cupom", /cupom=LANCAMENTO1MES/.test(url), url);
   conferir("e o plano mensal, que é o que o cupom cobre", /assinar=mensal/.test(url), url);
   conferir("com UTM da campanha", /utm_source=email/.test(url) && /utm_campaign=termine-o-cadastro/.test(url), url);
+
+  // OS ATALHOS DE LINK CURTO APONTAM PARA CUPOM VIVO (04/10/2026). O dono apagou
+  // o PREMIUM1MES no Stripe e o atalho /MES100 continuou apontando para ele:
+  // link para cupom apagado abre o checkout SEM desconto, calado (a rota refaz
+  // a sessao sem cupom quando o Stripe recusa). O atalho do mes gratis tem que
+  // apontar para o mesmo cupom que o e-mail promete.
+  const atalhos = readFileSync(new URL("../next.config.mjs", import.meta.url), "utf8");
+  const mes100 = atalhos.match(/de: "MES100", para: "([^"]+)"/)?.[1] ?? "";
+  conferir("o atalho MES100 existe", mes100.length > 0, "sem ele o link curto do mes gratis cai em 404");
+  conferir(
+    "e aponta para o cupom VIVO da campanha, nao para o apagado",
+    new RegExp(`cupom=${CUPOM_DA_CAMPANHA}(&|$)`).test(mes100) && !/PREMIUM1MES/.test(mes100),
+    `MES100 -> ${mes100}; o cupom da campanha e ${CUPOM_DA_CAMPANHA}`,
+  );
+  conferir("e no plano mensal, que e o unico que o cupom cobre", /assinar=mensal/.test(mes100), mes100);
 }
 
 // ── 2. O TEXTO DIZ O QUE CUSTA DEPOIS ──────────────────────────────────────

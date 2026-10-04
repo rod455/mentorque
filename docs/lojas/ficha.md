@@ -116,6 +116,14 @@ app.
 
 ### Subtítulo (30 caracteres)
 
+**O que está NO AR (print do dono, 04/10/2026):** `Seu mentor de manutenção`.
+Esta ficha dizia `Entenda o carro e a oficina` como se fosse o publicado, e
+não era: era o proposto. A diferença importa para as palavras-chave, porque
+o subtítulo real repete `manutenção` (já está no nome) e não carrega
+`oficina`.
+
+Proposto, para o próximo envio:
+
 ```
 Entenda o carro e a oficina
 ```
@@ -126,9 +134,31 @@ A Apple indexa este campo e ele não aparece para o usuário. Não repita
 palavras que já estão no nome nem no subtítulo: a Apple já as indexa e
 repetir desperdiça caracteres.
 
+No ar (conforme a última leitura desta ficha; o campo não é público):
+
 ```
 manutencao,mecanica,oficina,barulho,painel,obd2,revisao,pneu,freio,motor,diagnostico,gastos
 ```
+
+Proposto para o próximo envio, JUNTO com o subtítulo acima (95 caracteres):
+
+```
+mecanica,barulho,painel,obd2,revisao,pneu,freio,motor,diagnostico,gastos,oleo,bateria,suspensao
+```
+
+Se o dono preferir manter o subtítulo `Seu mentor de manutenção`, então
+`oficina` não está em campo nenhum e tem que VOLTAR para cá; sai `pneu`, o
+termo mais fraco, para caber (98 caracteres):
+
+```
+mecanica,oficina,barulho,painel,obd2,revisao,freio,motor,diagnostico,gastos,oleo,bateria,suspensao
+```
+
+**Outras duas coisas que o print de 04/10 mostrou e que entram no mesmo
+envio:** a ficha diz "IDIOMA: EN, Inglês", ou seja, a localização principal
+do app no App Store Connect está em inglês e a página em português é a
+tradução; e a descrição no ar usa travessão em nove linhas, contra a regra da
+casa. Os dois são campos de versão.
 
 ### Texto promocional (170 caracteres, editável sem nova revisão)
 

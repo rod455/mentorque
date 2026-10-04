@@ -17,7 +17,11 @@ const native = process.env.BUILD_TARGET === "native";
 // perde o direito de mudar para onde ele aponta.
 const ATALHOS = [
   { de: "ALE100", para: "/app?assinar=mensal&cupom=ALESSANDRO1MES" },
-  { de: "MES100", para: "/app?assinar=mensal&cupom=PREMIUM1MES" },
+  // O MES100 apontava para o PREMIUM1MES, que o dono apagou no Stripe em
+  // 04/10/2026. Link para cupom apagado abre o checkout SEM desconto, em
+  // silêncio. Decisão do dono no mesmo dia: aponta para o LANCAMENTO1MES, que
+  // dá o mesmo benefício (1 mês grátis no mensal) e é o cupom vivo, teto 25.
+  { de: "MES100", para: "/app?assinar=mensal&cupom=LANCAMENTO1MES" },
   { de: "ANUAL30", para: "/app?assinar=anual&cupom=PREMIUM30" },
 ];
 

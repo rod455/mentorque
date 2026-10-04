@@ -167,9 +167,12 @@ export async function POST(req: Request) {
     );
   } catch (e) {
     // O cupom do link pode ser recusado pelo Stripe mesmo existindo: os cupons
-    // de convite nascem presos ao produto (applies_to), então PREMIUM1MES no
-    // plano anual é erro na criação da sessão. A compra não pode morrer por
-    // causa do desconto: refaz sem ele, com o campo de digitar aberto.
+    // de convite nascem presos ao produto (applies_to), então um cupom do
+    // mensal no plano anual é erro na criação da sessão, e cupom APAGADO no
+    // painel (o PREMIUM1MES, em 04/10/2026) também é. A compra não pode morrer
+    // por causa do desconto: refaz sem ele, com o campo de digitar aberto.
+    // O que morre em silêncio é a promessa do link, e por isso os atalhos de
+    // `next.config.mjs` são conferidos contra o cupom vivo.
     if (!cupomPromo) throw e;
     session = await criarSessao(null);
   }
