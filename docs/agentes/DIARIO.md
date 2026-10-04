@@ -33,6 +33,29 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (manha, 29) · O vinculo do Android esta feito na conta certa, e a primeira tentativa saiu com o provedor errado
+
+- O dono criou o link ID na conta Mentorque e colou na AppsFlyer. **A primeira
+  tentativa saiu com "Adjust" no campo de provedor**, e eu vi no print antes de
+  dar por feito: ID criado para o Adjust e colado na AppsFlyer nao liga nada,
+  porque so o provedor dono do ID consegue reclama-lo. Linha "Adjust" ficou na
+  tabela do Google Ads, para apagar.
+- **A segunda saiu certa**: provedor AppsFlyer, app Mentorque Android, e o mesmo
+  ID colado na AppsFlyer com "Activate partner" ligado. A tabela do Google Ads
+  agora tem uma linha AppsFlyer e uma Adjust.
+- **O que falta, e esta na linha do dono**: o iPhone (segundo link ID), a
+  importacao da instalacao como acao de conversao quando o Status disser
+  "Vinculado" (a faixa amarela da AppsFlyer "make sure to measure your app
+  conversions in Google Ads" e exatamente isso), e apagar a linha do Adjust.
+- **Como eu vou saber que fechou, e de qual instrumento**: `googleadwords_int`
+  aparecer no pacote `appsflyer` da coleta das 05:30 (nao e retroativo, entao
+  o primeiro dia possivel e 05/10), e a API do Google Ads passar a listar uma
+  acao de conversao de origem THIRD_PARTY_APP_ANALYTICS no no
+  `acoes de conversao`. Dois instrumentos, e os dois ja estao coletando.
+- "Fiz certo agora": sim para o Android. O que eu tinha errado ontem nao era o
+  diagnostico de hoje; era ter escrito "ligar" sem ter perguntado em qual
+  conta. A pergunta ao instrumento custou um no e um clique.
+
 ## 2026-10-04 (manha, 28) · Fechou: a conta que gasta NAO tem analise de terceiros conectada
 
 - O dono abriu a tela "Sobre o app" da conta Mentorque e ela diz, em letras:
