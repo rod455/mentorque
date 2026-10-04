@@ -80,6 +80,61 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 
 ## Experimentos
 
+## [inicio-pergunta-unica] O Início tem uma ação primária: a pergunta ao Biela, com ou sem carro
+- Estado: ABERTO
+- Tipo: mudanca-direta
+- Alvo no funil: `perguntou_biela` por sessão com origem no Início; e os
+  fechamentos do app na Home (retrato de 04/10: 7 em 4 aparelhos na home).
+- Tese BeSci: uma ação por tela. O Início tinha dezesseis blocos e o herói
+  mudava de promessa quando existia carro ("O que vamos cuidar hoje?" com o
+  botão indo para a tela de sintomas). A = isso. B = a pergunta é a porta para
+  todo mundo ("O que está acontecendo com o seu carro?", três atalhos que
+  abrem o chat já preenchido, botão "Perguntar para o Biela"); o carro é o
+  segundo bloco; "Registrar serviço" e "Aprender" são as secundárias; o card
+  do Premium desce do topo para o fim da tela (continua ali e no Perfil); a
+  grade de quatro ações rápidas sai (diagnosticar é o herói, plano de revisão
+  mora no carro); o resto da tela desce inteiro, sem sumir. A arte da Biela
+  na garagem fica.
+- TOCA O DEGRAU DE OUTRAS APOSTAS, dito no dia (regra de 02/10): os cards
+  de `caderno-de-gastos`, `datas-do-carro`, `resumo-mensal` e
+  `modo-motorista-de-app` continuam no Início, mas descem um bloco (entra o
+  par de secundárias acima deles). E o card do Premium saiu do topo, o que
+  mexe em `viu_paywall:home`, degrau que `login-sabe-que-veio-comprar` lê.
+  Está escrito aqui para o veredito dessas cinco não atribuir ao acaso o que
+  foi esta mudança.
+- Métrica: `perguntou_biela` por sessão com origem `sem-carro` e `com-carro`,
+  separadas, e fechamentos na Home · Duração: 4 semanas; ~200 ativos por
+  semana e 66 perguntas em 30 dias, então direção, não medida
+- Aprovação: aprovada pelo dono em 2026-10-04 ("atualiza la para eu testar e
+  ver como ficou"). Por decisão dele, abriu junto com `aba-biela`, que mede o
+  mesmo degrau: a leitura das duas não separa uma da outra, e isso fica dito
+  agora, não no veredito.
+- Início: 2026-10-04 na web; no app, com a 3.0 · Ler a partir de: 2026-10-18
+  (direcional) e 2026-11-01
+- Antes: 66 `perguntou_biela` em 30 dias (16 com palavras da pessoa); 7
+  fechamentos na Home em 4 aparelhos no retrato de 04/10
+- Veredito: (aberto)
+
+## [aba-biela] A aba "Problemas" vira "Biela"
+- Estado: ABERTO
+- Tipo: mudanca-direta
+- Alvo no funil: `perguntou_biela` por usuário ativo na semana; guarda:
+  `consultou_sintoma` não pode cair pela metade.
+- Tese BeSci: o Biela é o uso real do produto e não tinha aba; a tela de
+  sintomas tinha. A = aba "Problemas" abrindo os sintomas. B = aba "Biela"
+  abrindo o chat; os sintomas (causas, urgência, faixa de preço, testes
+  caseiros, anamnese) continuam inteiros, a um toque dentro do chat ("Ver
+  sintomas comuns") e nos problemas comuns do Início. Nada foi apagado: a
+  decisão de trocar sintomas por chat (aposta 8 de
+  `docs/design/evolucao-simplificacao.md`) continua esperando número.
+- Métrica: `perguntou_biela` por ativo na semana; `consultou_sintoma` por
+  ativo na semana como guarda · Duração: 4 semanas, direcional em 2
+- Aprovação: aprovada pelo dono em 2026-10-04, junto com `inicio-pergunta-unica`
+- Início: 2026-10-04 na web; no app, com a 3.0 · Ler a partir de: 2026-10-18
+- Antes: 66 `perguntou_biela` e 178 `consultou_sintoma` (desde 13/09) no
+  funil; não li o recorte semanal de `consultou_sintoma` antes de abrir
+- Veredito: (aberto)
+
 ## [landing-em-seis-blocos] A home tem uma promessa, o Biela em ação e a loja como único destino
 - Estado: ABERTO
 - Tipo: mudanca-direta

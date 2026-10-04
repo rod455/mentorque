@@ -81,7 +81,7 @@ export async function rodar({ nav, ok }) {
     await voltar.click();
     await pg.waitForTimeout(1200);
     const depois = await app.tela();
-    ok("desistir do login solta a pessoa no app", /O que vamos cuidar|Diagnosticar/i.test(depois), depois.slice(0, 60).replace(/\n/g, " "));
+    ok("desistir do login solta a pessoa no app", /O que está acontecendo com o seu carro|Perguntar para o Biela/i.test(depois), depois.slice(0, 60).replace(/\n/g, " "));
 
     // E recarregar não reabre a compra, porque o parâmetro já não existe.
     await app.recarregar();
@@ -168,7 +168,7 @@ export async function rodar({ nav, ok }) {
       rota: "/app?assinar=nada",
     });
     await app.pg.waitForTimeout(500);
-    ok("valor inválido abre o app normal", /O que vamos cuidar|Diagnosticar/i.test(await app.tela()));
+    ok("valor inválido abre o app normal", /O que está acontecendo com o seu carro|Perguntar para o Biela/i.test(await app.tela()));
     ok("nenhum erro de página com valor inválido", app.erros.length === 0, app.erros[0] ?? "");
     await app.fechar();
   }

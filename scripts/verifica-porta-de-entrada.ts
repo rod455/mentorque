@@ -54,10 +54,20 @@ console.log("Porta de entrada: quem não tem carro pergunta antes de cadastrar?"
 {
   const home = semComentarios(leia("components/app/screens/Home.tsx"));
 
+  // Desde 04/10/2026 (aposta `inicio-pergunta-unica`) o botão grande leva ao
+  // Biela para TODO MUNDO, com ou sem carro. Até então a expressão era
+  // `hasCar ? root({ name: "symptoms" }) : go({ name: "biela" })`, e esta
+  // conferência a fixava; agora ela cobra a regra nova e reprova a volta da
+  // bifurcação.
   conferir(
-    "o botão grande de quem NÃO tem carro leva ao Biela",
-    /hasCar \? root\(\{ name: "symptoms" \}\) : go\(\{ name: "biela" \}\)/.test(home),
-    'mandar direto ao formulário é a ordem antiga, e o formulário perde cinco em seis'
+    "o botão grande leva ao Biela, com ou sem carro",
+    /onClick=\{\(\) => go\(\{ name: "biela" \}\)\}/.test(home) && !/hasCar \? root\(\{ name: "symptoms" \}\)/.test(home),
+    'mandar quem tem carro para a tela de sintomas e quem não tem para o chat é a ordem de 28/09; a de 04/10 é uma porta só'
+  );
+  conferir(
+    "e os três atalhos do herói abrem o chat já preenchido",
+    /go\(\{ name: "biela", seed: chip\.seed \}\)/.test(home),
+    "atalho que abre o chat vazio é só um segundo botão; o que vale é a pergunta chegar escrita"
   );
   conferir(
     "e o cadastro continua a um toque, logo abaixo",

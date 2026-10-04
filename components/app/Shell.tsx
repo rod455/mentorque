@@ -241,7 +241,11 @@ const TAB_OF: Record<View["name"], Tab> = {
   cars: "cars", addCar: "cars", car: "cars", health: "cars", healthQuiz: "cars", system: "cars", revisions: "cars", carSettings: "cars",
   symptoms: "problems", symptom: "problems", systemProblems: "problems", equipment: "problems", equipmentHowTo: "problems", checklist: "problems", obd2: "problems", orcamento: "problems",
   history: "history", addService: "history", service: "history", abastecimento: "history", ganhos: "history",
-  learn: "studies", studyTrack: "studies", course: "studies", forYourCar: "studies", savedLessons: "studies", biela: "studies", content: "studies",
+  // O chat do Biela ganhou a aba (04/10/2026, aposta `aba-biela`): a chave
+  // interna continua "problems" porque a tela de sintomas e as irmãs dela
+  // seguem acesas na mesma aba.
+  biela: "problems",
+  learn: "studies", studyTrack: "studies", course: "studies", forYourCar: "studies", savedLessons: "studies", content: "studies",
   quiz: "studies", quizHistorico: "studies",
   profile: "profile", gamification: "profile", achievements: "profile", auth: "profile", subscribe: "profile", checkout: "profile",
 };
@@ -261,7 +265,10 @@ function BottomNav() {
   const items: { tab: Tab; icon: string; label: string; go: () => void }[] = [
     { tab: "home", icon: "home", label: c.nav.home, go: () => tryGo({ name: "home" }) },
     { tab: "cars", icon: "car", label: c.nav.carsShort, go: () => tryGo({ name: "cars" }) },
-    { tab: "problems", icon: "diagnose", label: c.nav.problems, go: () => tryGo({ name: "symptoms" }) },
+    // A aba "Problemas" virou "Biela" (04/10/2026): o toque abre o chat, que
+    // é o uso real do produto e não tinha aba. Os sintomas continuam a um
+    // toque dentro do chat e nos problemas comuns do Início.
+    { tab: "problems", icon: "spark", label: c.nav.problems, go: () => tryGo({ name: "biela" }) },
     { tab: "history", icon: "clock", label: c.nav.history, go: () => tryGo({ name: "history" }) },
     { tab: "studies", icon: "book", label: c.nav.studies, go: () => tryGo({ name: "learn" }) },
   ];

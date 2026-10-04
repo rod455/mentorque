@@ -54,10 +54,18 @@ export async function rodar({ nav, ok }) {
   };
 
   // ---- as cinco abas -------------------------------------------------------
-  ok("Início desenha", /O que vamos cuidar|Diagnosticar um problema/i.test(await app.tela()));
+  // Desde 04/10/2026 o herói é a pergunta para todo mundo, com ou sem carro
+  // (aposta `inicio-pergunta-unica`); a conferência olha a frase e o botão.
+  const inicio = await app.tela();
+  ok("Início desenha, com a pergunta como porta", /O que está acontecendo com o seu carro/i.test(inicio) && /Perguntar para o Biela/i.test(inicio), inicio.slice(0, 80).replace(/\n/g, " "));
+  ok("e os três atalhos do herói estão lá", /Barulho/.test(inicio) && /Luz do painel/.test(inicio) && /Cheiro/.test(inicio));
   ok("o chip do quiz está na barra de cima", (await pg.getByRole("button", { name: /Quiz Diário/i }).count()) > 0);
   ok("Carros desenha", /Golfinho|Golf GTI/i.test(await aba(/^Carros$/i)));
-  ok("Problemas desenha", (await aba(/^Problemas$/i)).length > 80);
+  // A aba "Problemas" virou "Biela" em 04/10/2026 (aposta `aba-biela`): o
+  // toque abre o chat, e os sintomas continuam a um toque dentro dele.
+  const bielaAba = await aba(/^Biela$/i);
+  ok("Biela desenha pela aba", /Sou o Biela|Biela/i.test(bielaAba) && bielaAba.length > 80);
+  ok("e os sintomas continuam a um toque dentro do Biela", /sintomas comuns/i.test(bielaAba));
   // O título nomeia o carro ativo ("Calendário do seu Golfinho"): com o
   // seletor na barra de cima, ele é a confirmação de qual carro a tela mostra.
   ok("Calendário desenha, com o carro ativo no título", /Calendário do seu Golfinho/.test(await aba(/^Calendário$/i)));
@@ -230,7 +238,7 @@ export async function rodar({ nav, ok }) {
       rota: "/app?utm_source=email&utm_campaign=jornada&ir=history",
     });
     const t = await b.tela();
-    ok("`?ir=history` abre o calendário do carro, não o Início", /Calendário do/i.test(t) && !/O que vamos cuidar/i.test(t), t.slice(0, 80).replace(/\n/g, " "));
+    ok("`?ir=history` abre o calendário do carro, não o Início", /Calendário do/i.test(t) && !/O que está acontecendo com o seu carro/i.test(t), t.slice(0, 80).replace(/\n/g, " "));
     ok("nenhum erro de página com `ir=`", b.erros.length === 0, b.erros[0] ?? "");
     await b.fechar();
   }
@@ -241,7 +249,7 @@ export async function rodar({ nav, ok }) {
       rota: "/app?ir=checkout",
     });
     const t = await b.tela();
-    ok("`?ir=` fora da lista é ignorado: fica no Início", /O que vamos cuidar|Diagnosticar um problema/i.test(t), t.slice(0, 80).replace(/\n/g, " "));
+    ok("`?ir=` fora da lista é ignorado: fica no Início", /O que está acontecendo com o seu carro|Perguntar para o Biela/i.test(t), t.slice(0, 80).replace(/\n/g, " "));
     await b.fechar();
   }
 }

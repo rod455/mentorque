@@ -115,12 +115,15 @@ async function perguntarPrimeiro(nav, ok) {
   await app.fechar();
 }
 
-/** Quem JÁ tem carro não perde nada: o Início continua o de sempre. */
+/** Quem JÁ tem carro não perde nada: desde 04/10/2026 (aposta
+ *  `inicio-pergunta-unica`) o Início é o mesmo para todo mundo, a pergunta
+ *  ao Biela como porta, e o carro aparece logo abaixo como segundo bloco. */
 async function quemTemCarroSegueIgual(nav, ok) {
   const app = await abrirApp(nav, { sessao: garagem({ startedAt: dia(0) }), chaves: CHAVES });
   const texto = await app.corpo();
-  ok("com carro, o Início continua perguntando o que cuidar hoje", /O que vamos cuidar hoje/i.test(texto));
-  ok("e o botão grande continua sendo o diagnóstico", /Diagnosticar um problema/i.test(texto));
+  ok("com carro, o Início pergunta o que está acontecendo com o carro", /O que está acontecendo com o seu carro/i.test(texto));
+  ok("e o botão grande é perguntar para o Biela", /Perguntar para o Biela/i.test(texto));
+  ok("e o carro aparece como segundo bloco, com o nome dele", /Seu carro/i.test(texto) && /Golfinho|Golf GTI/i.test(texto));
   ok("o convite de cadastrar carro não sobra para quem já tem", !/Essa resposta serve para qualquer carro/i.test(texto));
   ok("nenhum erro de página com carro na garagem", app.erros.length === 0, app.erros[0] ?? "");
   await app.fechar();

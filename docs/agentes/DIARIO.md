@@ -105,6 +105,37 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (noite, 60) · O Início com uma ação só e a aba Biela, abertos juntos por decisão do dono
+
+- Dono, vendo o `/app` na web: "não mudamos na web? o que fizemos de cro". A
+  resposta honesta: o CRO de hoje foi na landing; o Início era a aposta 4 e a
+  aba Biela a 2, as duas atrás de propósito (quatro apostas abertas no
+  Início, e a aba precisa de build). Ele decidiu: "atualiza la para eu testar
+  e ver como ficou". As duas entram na web agora e no binário da 3.0.
+- **Início** (`Home.tsx`): a pergunta é a porta para todo mundo, com ou sem
+  carro, com três atalhos que abrem o chat já preenchido (`go({name:
+  "biela", seed})`); o carro é o segundo bloco; "Registrar serviço" e
+  "Aprender" são as secundárias; o card do Premium desceu do topo para o fim
+  da tela (não saiu: a suíte `venda` entra no paywall por ele, e a oferta de
+  verdade é a do limite no chat); a grade de quatro ações rápidas saiu; a
+  busca desceu para depois dos cards do carro; fixados, salvos, "Para você",
+  memórias e problemas comuns continuam. A arte da Biela na garagem fica.
+- **Aba** (`Shell.tsx`): "Problemas" virou "Biela" e abre o chat; a chave
+  interna `problems` continua (a conferência do orçamento a fixa, e a tela
+  de sintomas segue acesa nessa aba). No chat, antes da primeira pergunta,
+  entrou o atalho "Ver sintomas comuns" para a tela de sintomas, que
+  continua inteira. Nada apagado: trocar sintomas por chat (aposta 8) segue
+  esperando número.
+- **Dito no dia, no caderno**: as duas apostas medem o mesmo degrau e abriram
+  juntas por decisão do dono, então a leitura não separa uma da outra; e o
+  Início mexe no degrau de cinco apostas abertas (gastos, datas, resumo,
+  motorista descem um bloco; o Premium saindo do topo mexe em
+  `viu_paywall:home`, que `login-sabe-que-veio-comprar` lê).
+- Suíte `telas` ajustada: o Início agora é conferido pela pergunta, pelo
+  botão e pelos três atalhos; a aba Biela pelo chat e pelo atalho de
+  sintomas. Notas da 3.0: item 4 novo (a pessoa sente), passo 7 do roteiro,
+  e a nota das lojas ganhou uma frase sobre a aba.
+
 ## 2026-10-04 (noite, 59) · Regime de release fechado na árvore final, antes do botão do Codemagic
 
 - Dono: "verifique se tudo está funcionando e nada quebrou, antes de eu

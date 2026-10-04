@@ -309,12 +309,6 @@ export function HomeScreen() {
   // na montagem: a marca é de módulo e some ao ser consumida.
   const [convidarNoOnboarding] = useState(() => consumirConviteNoOnboarding());
 
-  const quick: { art: string; label: string; tint: string; go: () => void }[] = [
-    { art: "diagnose", label: h.qDiagnose, tint: "bg-coral/15", go: () => root({ name: "symptoms" }) },
-    { art: "log-service", label: h.qService, tint: "bg-teal/15", go: () => go({ name: "addService" }) },
-    { art: "service-plan", label: h.qRevisions, tint: "bg-amber/15", go: () => root({ name: "revisions" }) },
-    { art: "learn", label: h.qStudies, tint: "bg-white/10", go: () => root({ name: "learn" }) },
-  ];
 
   return (
     <div className="pb-4">
@@ -347,7 +341,16 @@ export function HomeScreen() {
         />
       )}
 
-      {/* Herói */}
+      {/* O HERÓI É A PERGUNTA, COM OU SEM CARRO (04/10/2026, aposta
+          `inicio-pergunta-unica`). Até aqui, quem tinha carro via "O que vamos
+          cuidar hoje?" com o botão mandando para a tela de sintomas, e quem
+          não tinha via a pergunta ao Biela (a troca de ordem de 28/09). A
+          lição 5 do CRO: o Biela é o uso real (66 perguntas em 30 dias) e as
+          avaliações descrevem desfecho, não recurso. Então a pergunta é a
+          única ação primária para todo mundo, com três atalhos que abrem o
+          chat já preenchido; o carro é o segundo bloco; "Registrar serviço" e
+          "Aprender" são as secundárias; e o resto da tela desce, inteiro.
+          A arte da Biela na garagem fica: é a marca (dono, 04/10). */}
       <div className="relative mt-3 overflow-hidden rounded-3xl bg-graphite-800 ring-1 ring-white/5">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -360,19 +363,24 @@ export function HomeScreen() {
         <div className="absolute inset-0 bg-gradient-to-t from-graphite-900 via-graphite-900/40 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-4">
           <h2 className="max-w-[15rem] font-serif text-2xl font-bold leading-tight text-cream">
-            {hasCar ? h.heroTitle : h.heroTitleEmpty}
+            {h.heroTitleEmpty}
           </h2>
-          {/* QUEM NÃO TEM CARRO COMEÇA PERGUNTANDO, NÃO CADASTRANDO
-              (28/09/2026). A ordem anterior mandava direto para o formulário,
-              que é o maior vazamento do produto: cinco em seis que o abrem nas
-              lojas não terminam. O porquê inteiro está em `heroTitleEmpty`,
-              em lib/app/content.ts. O cadastro continua a um toque, aqui
-              embaixo, e volta a ser o botão grande assim que existir um carro. */}
+          <div className="mt-3 flex flex-wrap gap-2">
+            {h.heroChips.map((chip) => (
+              <button
+                key={chip.label}
+                onClick={() => go({ name: "biela", seed: chip.seed })}
+                className="rounded-full bg-graphite-900/70 px-3 py-1.5 text-[13px] text-cream ring-1 ring-white/15 backdrop-blur hover:ring-amber/60 active:scale-[0.98]"
+              >
+                {chip.label}
+              </button>
+            ))}
+          </div>
           <button
-            onClick={() => (hasCar ? root({ name: "symptoms" }) : go({ name: "biela" }))}
+            onClick={() => go({ name: "biela" })}
             className="mt-3 w-full rounded-full bg-amber py-3.5 text-center font-display text-[15px] font-semibold text-graphite active:scale-[0.99]"
           >
-            {hasCar ? h.heroCta : h.heroCtaEmpty}
+            {h.heroCtaEmpty}
           </button>
           {!hasCar && (
             <button
@@ -385,35 +393,10 @@ export function HomeScreen() {
         </div>
       </div>
 
-      {/* Premium (oculto no app da loja — modo leitor) */}
-      {!s.premium && sellsInApp() && (
-        <button
-          onClick={() => go({ name: "subscribe", ctx: "home" })}
-          className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-gradient-to-r from-amber/20 to-amber/5 px-4 py-3.5 text-left ring-1 ring-amber/25"
-        >
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-amber/20 text-amber">
-            <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5"><path d="M3 7l4.5 3L12 4l4.5 6L21 7l-1.6 11H4.6L3 7z" /></svg>
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block font-display text-[15px] font-semibold text-cream">{h.premiumTitle}</span>
-            <span className="block text-xs text-cream/55">{h.premiumSub}</span>
-          </span>
-          <span className="shrink-0 text-lg text-amber">›</span>
-        </button>
-      )}
-
       {/* A chamada do quiz subiu para a barra de cima (QuizNoTopo). */}
-
-      {/* Busca (abre a tela de busca) */}
-      <button
-        onClick={() => go({ name: "search" })}
-        className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-4 py-3 text-left ring-1 ring-white/[0.06]"
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 text-cream/45"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-        <span className="text-sm text-cream/45">{h.searchPh}</span>
-      </button>
-
       {/* A troca de carro subiu para a barra de cima (CarroNoTopo). */}
+
+      {/* O carro, logo abaixo da pergunta: o segundo bloco, não o preço da entrada. */}
       {car && (
         <button onClick={() => root({ name: "car" })} className="mt-3 w-full text-left">
           <Card className="hover:ring-white/15">
@@ -431,12 +414,32 @@ export function HomeScreen() {
                 <span className="block truncate font-display text-[15px] text-cream">{car.nickname || vehicleLabel(car)}</span>
                 <FipeLine />
               </span>
-              {/* Mesma fórmula do quiz usada na Saúde e no hub — um número só no app inteiro */}
+              {/* Mesma fórmula do quiz usada na Saúde e no hub: um número só no app inteiro */}
               <HealthPill score={computeQuizHealth(car.quiz ?? {}, car).score} />
             </div>
           </Card>
         </button>
       )}
+
+      {/* As duas ações secundárias. Substituem a grade de quatro "ações
+          rápidas" do fim da tela: diagnosticar é o próprio herói, e o plano
+          de revisão mora no carro. */}
+      <div className="mt-3 grid grid-cols-2 gap-2.5">
+        <button
+          onClick={() => go({ name: "addService" })}
+          className="rounded-2xl bg-graphite-800 px-4 py-3.5 text-left ring-1 ring-white/[0.06] hover:ring-white/15 active:scale-[0.99]"
+        >
+          <span className="block font-display text-[14px] font-semibold text-cream">{h.secService}</span>
+          <span className="mt-0.5 block text-xs text-cream/50">{h.secServiceSub}</span>
+        </button>
+        <button
+          onClick={() => root({ name: "learn" })}
+          className="rounded-2xl bg-graphite-800 px-4 py-3.5 text-left ring-1 ring-white/[0.06] hover:ring-white/15 active:scale-[0.99]"
+        >
+          <span className="block font-display text-[14px] font-semibold text-cream">{h.secLearn}</span>
+          <span className="mt-0.5 block text-xs text-cream/50">{h.secLearnSub}</span>
+        </button>
+      </div>
 
       {/* Custo do carro (caderno de gastos, 13/09/2026). Abaixo do carro e
           ACIMA das revisões de propósito: é a ação de menor esforço da tela
@@ -451,6 +454,15 @@ export function HomeScreen() {
       {/* O mês fechado, na primeira semana do mês, só para quem teve
           lançamento nele (peça 3 da rotina). Some no dia 8. */}
       {car && <ResumoDoMesCard car={car} />}
+
+      {/* Busca (abre a tela de busca) */}
+      <button
+        onClick={() => go({ name: "search" })}
+        className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-4 py-3 text-left ring-1 ring-white/[0.06]"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 text-cream/45"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+        <span className="text-sm text-cream/45">{h.searchPh}</span>
+      </button>
 
       {/* Fixados — conteúdos que o usuário usa com frequência (📌 nas aulas);
           setinhas reordenam (o próprio usuário escolhe o que fica na frente) */}
@@ -703,19 +715,25 @@ export function HomeScreen() {
       {/* Problemas comuns — mesmo formato dos cards (reusa a lógica da aba Problemas) */}
       <CommonProblems />
 
-      {/* Ações rápidas */}
-      <p className="mb-2 mt-6 font-display text-sm font-semibold text-cream/70">{h.quickTitle}</p>
-      <div className="grid grid-cols-4 gap-2.5">
-        {quick.map((q) => (
-          <button key={q.label} onClick={q.go} className="flex flex-col items-center gap-1.5">
-            <span className={`grid h-14 w-14 place-items-center overflow-hidden rounded-2xl p-2 ${q.tint}`}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`/actions/${q.art}.png`} alt="" className="h-full w-full object-contain" draggable={false} />
-            </span>
-            <span className="text-center text-[11px] leading-tight text-cream/70">{q.label}</span>
-          </button>
-        ))}
-      </div>
+      {/* Premium, no FIM da tela desde 04/10/2026 (oculto no app da loja,
+          modo leitor). Morava logo abaixo do herói, competindo com a única
+          ação primária; continua aqui e no Perfil, e a oferta de verdade é a
+          do limite do mês dentro do Biela. */}
+      {!s.premium && sellsInApp() && (
+        <button
+          onClick={() => go({ name: "subscribe", ctx: "home" })}
+          className="mt-6 flex w-full items-center gap-3 rounded-2xl bg-gradient-to-r from-amber/20 to-amber/5 px-4 py-3.5 text-left ring-1 ring-amber/25"
+        >
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-amber/20 text-amber">
+            <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5"><path d="M3 7l4.5 3L12 4l4.5 6L21 7l-1.6 11H4.6L3 7z" /></svg>
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-display text-[15px] font-semibold text-cream">{h.premiumTitle}</span>
+            <span className="block text-xs text-cream/55">{h.premiumSub}</span>
+          </span>
+          <span className="shrink-0 text-lg text-amber">›</span>
+        </button>
+      )}
 
       {/* Lembrete mensal: atualizar o km do painel */}
       <Sheet open={kmAsk} onClose={adiarKm}>

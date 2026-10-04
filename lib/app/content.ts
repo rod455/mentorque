@@ -132,7 +132,11 @@ export function getContent(locale: Locale) {
       home: T("Início", "Home"),
       cars: T("Meus Carros", "My Cars"),
       carsShort: T("Carros", "Cars"),
-      problems: T("Problemas", "Problems"),
+      // A aba "Problemas" virou "Biela" em 04/10/2026 (aposta `aba-biela`):
+      // o chat é o uso real do produto e não tinha aba; a tela de sintomas
+      // continua inteira, pelo atalho dentro do Biela e pelos problemas comuns
+      // do Início.
+      problems: T("Biela", "Biela"),
       history: T("Calendário", "Calendar"),
       studies: T("Estudos", "Studies"),
       profile: T("Perfil", "Profile"),
@@ -161,6 +165,22 @@ export function getContent(locale: Locale) {
       // depois da resposta, como quem melhora o que a pessoa acabou de receber.
       // O carro deixa de ser o preço da entrada. Ver `bielaSemCarro` no bloco
       // da Biela, que é a outra metade disto.
+      // O INÍCIO TEM UMA AÇÃO PRIMÁRIA, COM OU SEM CARRO (04/10/2026, aposta
+      // `inicio-pergunta-unica` do caderno). Até aqui o herói mudava de
+      // promessa quando existia carro ("O que vamos cuidar hoje?" /
+      // "Diagnosticar um problema"); agora a pergunta é a porta para todo
+      // mundo, com três atalhos que abrem o Biela já preenchido. O carro vira
+      // o segundo bloco, não o preço da entrada. O Premium continua na tela,
+      // no fim, e no Perfil.
+      heroChips: [
+        { label: T("Barulho", "Noise"), seed: T("Começou um barulho quando eu freio", "A noise started when I brake") },
+        { label: T("Luz do painel", "Dashboard light"), seed: T("Acendeu uma luz amarela no painel", "A yellow light came on in the dashboard") },
+        { label: T("Cheiro", "Smell"), seed: T("Cheiro de queimado depois de dirigir", "Burnt smell after driving") },
+      ],
+      secService: T("Registrar serviço", "Log a service"),
+      secServiceSub: T("Oficina, peça, valor", "Shop, part, price"),
+      secLearn: T("Aprender", "Learn"),
+      secLearnSub: T("Aulas para quem não é mecânico", "Lessons for non-mechanics"),
       heroTitleEmpty: T("O que está acontecendo com o seu carro?", "What's going on with your car?"),
       heroCtaEmpty: T("Perguntar para o Biela", "Ask Biela"),
       heroSecEmpty: T("Ou cadastrar meu carro →", "Or add my car →"),
@@ -1652,6 +1672,7 @@ export function getContent(locale: Locale) {
       cardSub: T("Seu mecânico de IA: tira qualquer dúvida", "Your AI mechanic: ask anything"),
       title: T("Biela", "Biela"),
       contextPrefix: T("Sobre seu", "About your"),
+      symptomsLink: T("Ver sintomas comuns, com causas e faixa de preço", "See common symptoms, with causes and price range"),
       intro: T("Oi! Sou o Biela 🐻 Manjo tudo de mecânica. Me conta o que está acontecendo com o seu carro que eu te ajudo: pode perguntar de barulho, revisão, orçamento, o que for.", "Hi! I'm Biela 🐻 I know cars inside out. Tell me what's going on and I'll help: noises, service, quotes, anything."),
       inputPh: T("Pergunte ao Biela...", "Ask Biela..."),
       send: T("Enviar", "Send"),

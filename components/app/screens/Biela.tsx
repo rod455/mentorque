@@ -398,6 +398,23 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
         </div>
       )}
 
+      {/* A TELA DE SINTOMAS CONTINUA A UM TOQUE (04/10/2026). A aba
+          "Problemas" virou "Biela", e os sintomas (causas, urgência, faixa de
+          preço regional, testes caseiros) seguem inteiros: este é o caminho
+          até eles a partir do chat, e os problemas comuns do Início são o
+          outro. Some depois da primeira pergunta, que é quando o chat já é a
+          tela. */}
+      {msgs.length <= 1 && (
+        <button
+          onClick={() => go({ name: "symptoms" })}
+          className="mb-2 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-4 py-3 text-left ring-1 ring-white/[0.06] hover:ring-white/15"
+        >
+          <Icon name="diagnose" className="h-5 w-5 shrink-0 text-coral" />
+          <span className="text-sm font-medium text-cream">{c.biela.symptomsLink}</span>
+          <span className="ml-auto text-cream/40">›</span>
+        </button>
+      )}
+
       {/* Orçamento por foto (13/09/2026): antes do portão do Premium de
           propósito, porque o gratuito tem duas análises por mês, e "esse
           orçamento está caro?" é uma das sugestões desta tela há semanas. */}

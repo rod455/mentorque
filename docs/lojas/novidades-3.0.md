@@ -32,7 +32,16 @@ então também vão ao ar no push.
    sintoma no funil desde 13/09, quando o evento nasceu) e "250+ motoristas"
    (254 aparelhos Android ativos em 25/09, relatório do Play). Pisos, com a
    fonte no comentário do código.
-4. **O iPhone passa a se declarar em português** (04/10). A página pública da
+4. **O Início tem uma ação só, e a aba "Problemas" virou "Biela"** (04/10,
+   noite). A pergunta "O que está acontecendo com o seu carro?" é a porta para
+   todo mundo, com ou sem carro, com três atalhos (Barulho, Luz do painel,
+   Cheiro) que abrem o chat já preenchido. O carro é o segundo bloco,
+   "Registrar serviço" e "Aprender" são as secundárias, o Premium desceu para
+   o fim da tela e a grade de ações rápidas saiu. Na barra de baixo, a aba
+   "Problemas" passou a chamar "Biela" e abre o chat; os sintomas continuam
+   inteiros, a um toque dentro do chat e nos problemas comuns do Início.
+   Apostas `inicio-pergunta-unica` e `aba-biela` do caderno.
+5. **O iPhone passa a se declarar em português** (04/10). A página pública da
    App Store dizia "Idioma: EN, Inglês" porque o binário só declarava `en`
    (`Info.plist` e `knownRegions`); a localização principal da ficha já era
    Português (Brasil). Agora `pt-BR` e `en`. O sinal é a página dizer "PT"
@@ -40,13 +49,13 @@ então também vão ao ar no push.
 
 ### Vai no binário e ninguém vê (medição e robustez)
 
-5. **A compra pela loja sai com identidade** (02/10). O `initPurchases` do
+6. **A compra pela loja sai com identidade** (02/10). O `initPurchases` do
    onboarding passava `null`; a folha da Apple abria com o id anônimo do
    RevenueCat mesmo com a pessoa logada, e o webhook perdia a venda com um 200.
    Agora a compra leva o `appUserID`, e identidade inútil vira linha em
    `app_erros` com a chave de busca. O caso de 25/09 (uma assinatura ativa no
    RevenueCat e nenhuma no banco) é o que isto existe para não repetir.
-6. **A subida do SDK da AppsFlyer tenta três vezes e diz por que falhou**
+7. **A subida do SDK da AppsFlyer tenta três vezes e diz por que falhou**
    (03/10). Na 2.7.0, 24% dos aparelhos Android nunca subiam o SDK e o funil
    gravava só "erro". Agora são três tentativas com espera crescente e, se
    todas falharem, o desfecho vai com o motivo (`erro:<slug>`), uma linha por
@@ -69,16 +78,16 @@ então também vão ao ar no push.
 ## As duas dívidas da 2.9 entraram, na noite do build (04/10)
 
 Eram as duas que a 2.9 deixou para trás de propósito. O dono mandou: "vamos
-colocar uai". Entraram como itens 7 e 8 do binário, cada um com a sua
+colocar uai". Entraram como itens 8 e 9 do binário, cada um com a sua
 conferência plantada e mordendo (`conferir:biela` e `conferir:alarme`).
 
-7. **O 👎 grava no toque.** Até a 2.9 a tela só mandava o voto negativo junto
+8. **O 👎 grava no toque.** Até a 2.9 a tela só mandava o voto negativo junto
    com o motivo (`components/app/screens/Biela.tsx`), e quem tocava e fechava
    não deixava rastro: 24 votos em seis semanas, todos positivos, e isso não
    era aprovação. Agora o toque grava e a rota devolve o id; o motivo, se a
    pessoa escolher, completa a MESMA linha (`/api/biela-voto` com `id`).
    Quem toca 👎 e muda para 👍 também completa a linha, sem duplicar.
-8. **A desistência de login sai com o tipo certo.** `relatarLoginNativo`
+9. **A desistência de login sai com o tipo certo.** `relatarLoginNativo`
    passa a gravar `tipo = "desistencia"` quando a frase é de cancelamento,
    pela mesma régua do leitor (`classeDoErro`), e o leitor aceita o tipo
    antes da frase. As linhas antigas continuam classificadas pela frase. O
@@ -87,7 +96,7 @@ conferência plantada e mordendo (`conferir:biela` e `conferir:alarme`).
 ## A nota das lojas
 
 Escrita pela regra da casa: fala do ganho, não do defeito; verbo na ação da
-pessoa; nada que não tenha sido conferido. 343 caracteres, dentro
+pessoa; nada que não tenha sido conferido. 436 caracteres, dentro
 dos 500 da Play. A mesma nota serve para a Apple.
 
 ```
@@ -96,6 +105,8 @@ Cadastre o carro em uma tela só.
 Marca, modelo e ano, e pronto: o Mentorque já monta o calendário de revisões do seu carro. Sem segunda etapa.
 
 Assinou pela loja? O Premium fica ligado à sua conta, e entra junto com você em qualquer aparelho.
+
+O Biela ganhou a própria aba: descreva o barulho, a luz ou o cheiro e ele responde na hora.
 
 E a página de boas-vindas agora mostra o que as pessoas escrevem de verdade nas lojas sobre o app.
 ```
@@ -146,6 +157,11 @@ WebView do aparelho.**
    ter uma linha `down` com `motivo` nulo daquele aparelho. Depois, numa
    segunda resposta, tocar 👎 e escolher "incompleta": a linha é UMA, com o
    motivo preenchido, não duas.
+7. **O Início novo e a aba Biela.** Com carro cadastrado, o Início abre com a
+   pergunta e os três atalhos; tocar em "Luz do painel" abre o chat com a
+   frase já escrita. A barra de baixo mostra "Biela" no lugar de "Problemas",
+   e dentro do chat o atalho "Ver sintomas comuns" abre a tela de sintomas
+   de sempre. Nada pode estar cortado no herói num celular estreito.
 
 ## O que este build NÃO conserta, e não pode ser dito como se consertasse
 
