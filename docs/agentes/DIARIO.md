@@ -33,6 +33,23 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 40) · Quatro linhas saem da lista por decisao do dono, e a da Apple vira duas conferencias
+
+- **Sai: o banco do Vocaboost** ("nao faz sentido"). Desfecho: o blog fica como
+  esta, com o fluxo gerando artigo sem onde gravar, por escolha dele. O
+  diagnostico de (tarde, 39) continua valendo se um dia ele quiser voltar.
+- **Sai: Vercel.** O dono garantiu que a retencao de 2 semanas foi aplicada ao
+  projeto. Nao conferi por dentro (a API nao devolve o campo); fica dito por ele.
+- **Saem: as duas linhas de avaliacoes das lojas.** Decisao: as 12 respostas
+  prontas em `docs/lojas/respostas.md` NAO serao publicadas, e as chaves de
+  resposta nao serao geradas. Os dois depoimentos reais entraram no app hoje,
+  e e so isso que se aproveita das avaliacoes. O agente de ASO para de rascunhar
+  resposta; a rodada seguinte dele precisa ler isto antes de propor de novo.
+- **A linha da Apple foi reescrita em linguagem de tela**: uma conferencia
+  agora (localizacao principal em App Store Connect, porque a pagina diz EN) e
+  uma depois de publicar (buscar `manutencao` sem acento).
+- Lista: 9 itens em 3 paineis (Google Ads 6, Meta 2, App Store 1).
+
 ## 2026-10-04 (tarde, 39) · "O que aconteceu com o blog do Vocaboost?": o banco sumiu, e a minha linha pedia o remedio errado
 
 - O dono: "a gente estava publicando artigos todas as semanas e aumentando o
