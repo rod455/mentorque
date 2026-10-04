@@ -105,6 +105,35 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 49) · Os oito itens da lista passados pelo instrumento, um a um
+
+- Pedido do dono depois de "inutil sua atuacao": "confira todos e veja se
+  realmente falta alguma coisa". Cada item contra o instrumento, nao a tela.
+- **Google Ads, negativas** (03/09): REAL. Termos de busca da API, 30 dias:
+  seis termos com "curso" gastando R$ 14,43 e 9 cliques. Pequeno, porque busca
+  e 3,7% do gasto. **UTM na URL final** (24/09): REAL. Funil: zero cadastros com
+  UTM ou gclid desde 19/09, em 110 cadastros; antes chegavam 1 a 3 por dia
+  etiquetados. **Conversao "criou conta"** (07/09): REAL, nao existe na API
+  (so "Instalacoes (Google Play)" e "Visualizacao de pagina"); o dono adiou.
+  **Importar 20 contas por GCLID** (19/09): depende da anterior. **Verificacao
+  do anunciante** (04/10): REAL, faixa vista hoje, prazo 30/10. **Importar a
+  instalacao da AppsFlyer** (04/10): espera a AppsFlyer mandar o primeiro
+  evento; nada a clicar ate la, eu aviso.
+- **App Store** (01/10): so depois da 3.0 publicar. Nada hoje.
+- **Meta**: o webhook funciona (64 chamadas, zero erro). Rodei o fluxo
+  `Instagram: conferir token e assinar a Pagina`: o token vale, a Pagina esta
+  assinada com `feed`, as midias respondem, e a chamada de assinar a Pagina
+  com campos de mensagem ainda responde **"(#3) Application does not have the
+  capability"**, hoje, depois de todos os cliques. Entao a resposta no Direct
+  continua sem prova, e a causa nao e permissao faltando no app (estao todas):
+  a hipotese que sobra e o token do n8n ter nascido antes das permissoes, e
+  token nao ganha permissao retroativa. Isso e o unico motivo para a linha do
+  token continuar, e ela continua opcional ate o dono querer insights ou
+  resposta no Direct.
+- Resultado: dos oito, SEIS sao de verdade e dependem dele (cinco no Google
+  Ads, um na Meta), DOIS esperam outra coisa (AppsFlyer, App Store) e nenhum
+  pede algo que ja foi feito.
+
 ## 2026-10-04 (tarde, 48) · O webhook do Instagram ja recebe comentarios, e a linha de 10/09 pedia o que ja estava feito
 
 - O dono foi fazendo os passos da linha da Meta e a cada tela dizia "ja temos
