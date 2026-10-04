@@ -2144,6 +2144,157 @@ REGISTRO no diário, não sobre o trabalho inteiro. Não abri os seis relatório
   serem da mesma régua, e essa janela não é a semana calendário exata; onde o
   agente de mídia mede outra janela, mostrei as duas.
 
+## 2026-10-04 · Segurança (rodada 3): a conferência que eu tinha pedido para outro papel virou trabalho meu, e o quinto fluxo tem uma chave viva atrás de um webhook sem senha
+- Artifact "Segurança da semana" (rodada 3) publicado. Semana de 88 commits.
+- **O VEREDITO DO DONO SOBRE A RODADA 2, PONTO POR PONTO.**
+  - **Ponto 1, o pedido que ficou sem dono: FEITO, e é a maior parte desta
+    rodada.** Eu tinha pedido que a `verifica-banco.mjs` exigisse
+    `security_invoker` explícito em toda view, e pedi para outro papel. Agora
+    está escrito, por mim. A regra é **explícito**, não "sempre `on`", porque o
+    `estado_da_base` é `off` de propósito desde 14/09 e exigir `on` apagaria uma
+    decisão boa; exigir explícito só proíbe o silêncio.
+    - **Ela reprovou num defeito REAL antes de qualquer plantio**: a
+      `assinaturas_conferencia` sem cláusula. Consertei o arquivo
+      (`funil_eventos.sql`) e apliquei no banco pela migração
+      `assinaturas_conferencia_security_invoker`.
+    - **Três plantios, com verde antes e verde depois**: tirar a cláusula de uma
+      view que tem (mordeu), deixar a cláusula só no COMENTÁRIO (mordeu, que é a
+      armadilha nº 2 desta casa) e valor inválido (mordeu).
+    - **Estado do banco depois**: 13 views, **zero sem a cláusula**, 12 em `on` e
+      a do `estado_da_base` em `off`. Nenhuma legível por `anon` nem por
+      `authenticated`.
+    - **E corrigi o comentário que causou o mal-entendido**: a ressalva que tira
+      a view da regra do `pg_temp` continua lá, com razão, mas agora diz que a
+      view tem a regra DELA logo abaixo, e por que a leitura de 27/09 deixou o
+      pedido sete dias sem dono.
+  - **Ponto 2, achado com N itens vira N linhas**: aceito, e já aplicado nesta
+    rodada. O achado novo de hoje entrou como linha própria, com o id do fluxo,
+    em vez de virar sub-item da linha de 27/09.
+  - **Ponto 3, o inventário mensal precisa de data**: aceito. **A próxima é
+    01/11/2026**, primeiro domingo de novembro, e está escrita no manual. Esta
+    rodada é a primeira de outubro, então o inventário foi feito hoje.
+- **ACHADO DA RODADA, e ele só apareceu porque eu li a DEFINIÇÃO do fluxo, e não
+  só a execução.** O quinto fluxo (`mIsag1ifLfNWzCxh`) está **há 7 dias** na
+  lista do dono e continua ativo. Lendo os nós dele:
+  - o nó "IA (Claude)" carrega uma **chave da Anthropic em texto puro**, como
+    valor de cabeçalho e não como credencial do n8n;
+  - **essa chave funciona**: a execução de 25/09 voltou com resposta completa;
+  - e o mesmo fluxo tem um webhook **`POST /webhook/blog-gerar` sem
+    autenticação nenhuma**. Quem souber o endereço dispara a chamada paga quantas
+    vezes quiser.
+  - **Localização apenas. O valor não está no relatório, nem aqui, nem no
+    artifact.**
+- **E AQUI EU ESTAVA ERRADO, e a correção veio de outra sessão no mesmo dia.** A
+  minha linha de 27/09 pedia **desligar** o fluxo. O commit 880badf desmontou o
+  raciocínio: eu li "Vocaboost foi desligado como produto" e concluí "então
+  desliga", **sem perguntar por que o dono tinha mantido justamente ESSE ligado**.
+  Ele mantinha porque publicava artigo toda semana para awareness, e o blog
+  mostra "em breve" porque o banco sumiu. A minha observação ("paga e joga fora")
+  estava certa; a minha conclusão sobre a intenção estava errada. É exatamente a
+  armadilha do CLAUDE.md de 03/10: conclusão tirada do primeiro número encontrado,
+  sem procurar o que ele mede.
+- **E O DONO DECIDIU HOJE, o que muda o estado de novo.** Ele disse que
+  restaurar o banco do Vocaboost **"não faz sentido"**, e as duas linhas (a minha
+  de desligar e a de restaurar) saíram da lista. Então o conserto saiu da mesa e o
+  fluxo **continua ligado**: o que era "quebrado, vão consertar" passou a ser
+  permanente. Isso não é a minha recomendação de 27/09 de volta: é uma pergunta
+  nova que a decisão dele criou, e ela entrou como pergunta única ("continua
+  ligado?"), com a saída explícita de "fica ligado de propósito e eu paro de
+  trazer".
+- **POR QUE A CHAVE NÃO É REABRIR A DECISÃO DE 22/09, E POR QUE NÃO É REPETIR O
+  ARGUMENTO.** Em 22/09 o dono decidiu não girar as chaves do n8n, e a razão foi
+  que os produtos estavam desligados e **ninguém alcançava** aquelas chaves. O
+  fato novo não é "achei chave de novo", que o manual já diz que não é achado: é
+  que **esta** tem um caminho de disparo aberto para qualquer pessoa, sem
+  credencial. Mudou o alcance, não o produto. Virou UMA linha de decisão sobre
+  UMA chave, com prazo de 11/10, e eu não repeti a recomendação geral. E ela fica
+  de pé independente do fluxo ser desligado ou não, porque girar chave é decisão
+  separada de desligar fluxo.
+- **E O QUE CORTA PARA O OUTRO LADO, porque relatório que só junta o que reforça
+  a própria tese é advocacia.** A chave de `service_role` do mesmo fluxo continua
+  apontando para projeto apagado, como eu disse em 27/09. O caminho pago morre
+  dois nós antes do e-mail, então **nenhuma mensagem sai** para os três endereços
+  que o nó de e-mail lista. E o gasto por disparo é de poucos milhares de tokens.
+  O problema é o caminho sem porta, não o tamanho da conta.
+- **SEM PushNotification, e a decisão é consciente.** A regra de avisar na hora
+  vale para segredo exposto NO REPOSITÓRIO; este está no n8n. Além disso o
+  relógio não começou a correr esta semana: o webhook está assim desde julho, e o
+  dono decidiu sobre chaves do n8n há 12 dias. Avisar na hora aqui seria eu
+  passar por cima de uma decisão recente com informação adjacente. Se ele quiser
+  outro limite, a linha está na lista dele para dizer isso.
+- **ACHADO NOVO, e ele era um buraco na conferência que eu acabei de escrever.**
+  A view **`contas_criadas` existia no banco e NÃO existia no repositório**. O
+  `estado_da_base.sql` a mencionava num comentário, e o comando que a cria não
+  estava em lugar nenhum. Ela lê `auth.users`.
+  - **Não era buraco de permissão**: está em `security_invoker = on`, e a ACL no
+    ar era `postgres` e `service_role`, mais ninguém. É a variante SEGURA do par
+    que expôs a lista de e-mail em 19/09, onde o perigo era `SECURITY DEFINER`.
+  - **Era buraco de leitura**, e isso importa para o meu ofício: conferência de
+    texto só vê o que tem arquivo. Escrevi `supabase/contas_criadas.sql` como
+    transcrição do que já estava no ar, lido com `pg_get_viewdef` e `reloptions`,
+    e deixei a limitação escrita no comentário da própria conferência.
+- **Dependências: o total ANDOU e a produção não.** São **24 falhas** agora
+  contra 18 em 27/09, mas as de produção continuam **4** (1 crítica, 2 altas, 1
+  média). Então **20 são só de desenvolvimento**, contra 14. E a `devDependencies`
+  está **idêntica** à de 27/09, confirmado commit a commit: ou seja, **a nossa
+  árvore não mudou, o conhecimento do mundo sobre ela mudou**. É a prova da regra
+  do manual de release: "não mexemos em nada" nunca prova que nada mudou.
+- O `next` segue em 14.2.35, e o que sobra são as duas críticas de sempre, que
+  não alcançam a gente (Vercel é Linux; o otimizador está desligado, com prova no
+  fonte em 27/09). O `fixAvailable` agora é `next` **16.3.8**, versão maior.
+  Recomendação continua a de não decidir isso numa rodada de domingo.
+- **Segredo escapando: nenhum nos 88 commits, e o zero foi provado** plantando as
+  seis formas numa cópia do diff. O `.gitignore` não foi tocado e
+  `.env.local.bak` continua ignorado.
+- **Supabase: duas linhas novas, as duas de objeto que nasceu esta semana, e
+  nenhuma é buraco.** A tabela `saida_motivos` entrou com RLS ligado, zero
+  política e sem `select` para `anon` nem `authenticated`, que é o certo. A função
+  `aparelhos_ativos` entrou sem `search_path` fixo, mas é `SECURITY INVOKER`, SQL
+  simples sob RLS: não dá a ninguém o que ela já não tinha, igual às outras cinco.
+- **Permissões, inventário de outubro.** Repositório: **um colaborador**, o dono,
+  admin. n8n: **18 credenciais** (uma nova, `AppsFlyer`, que casa com o coletor
+  desta semana), todas no projeto pessoal dele. **67 fluxos**, 9 ativos: oito do
+  Mentorque e o de Vocaboost acima. **Fora do alcance desta sessão**, e por isso
+  sem resposta: apps conectados na Meta e no Google, e credenciais do Codemagic.
+  **Próximo inventário: 01/11/2026.**
+- **O LIMITE DESTA VARREDURA.** Alcançou: a árvore do lock, a `devDependencies`
+  comparada commit a commit, o diff de 7 dias, os advisors nos dois tipos, o
+  estado de permissão de função, tabela e view no banco, e a definição E as
+  execuções dos fluxos do n8n. **Não alcançou**: a rede até o nosso site (o proxy
+  segue recusando `mentorque.com.br`), o otimizador de imagem da Vercel, os
+  pacotes SPM do build nativo, o binário das lojas, o WebView do aparelho, e os
+  três painéis de terceiro citados acima.
+- **SAÍ DO MEU TERRITÓRIO UMA VEZ, e digo para o Guardião discordar.** O
+  `npm run conferir` estava **VERMELHO na main**, para todo mundo, e não por
+  minha causa: a `conferir:publicacao` reprovava em `native/` e em
+  `pecas-geradas/`. Diagnostiquei antes de tocar, e é **um de cada**:
+  - **`native/` é erro real, e a conferência estava certa.** Essa pasta
+    **nunca existiu** neste repositório (`git log --all --diff-filter=A` não traz
+    nada), então a linha do `.vercelignore` não excluía nada. A saída do build
+    nativo se chama `.next-native` (next.config.mjs:70) e o git já a ignora.
+    Tirei a linha morta, com o porquê escrito no próprio arquivo.
+  - **`pecas-geradas/` é falso positivo, e a conferência estava errada.** Ela
+    perguntava "existe no disco?", e essa pasta só NASCE quando alguém roda
+    `scripts/pecas.mjs`. Em clone limpo ela não existe, então a bateria ficava
+    vermelha sem nenhum defeito na frente dela. Troquei a pergunta para o que o
+    repositório tem (`git ls-files`), que responde igual em clone novo e em
+    máquina de trabalho, com a exceção nomeada uma por uma e o motivo do lado.
+  - **Três plantios, verde antes e verde depois**: erro de digitação em pasta
+    real (`docs` para `docsx`), pasta que nunca existiu (a própria `native/`) e
+    pasta inventada com cara de saída de execução (`pecas-geradas-v2/`). As três
+    mordem, então a exceção não engoliu os parecidos.
+  - **Por que eu, e não o Guardião**: ele roda sábado, e a bateria vermelha
+    bloqueia o regime de todos os papéis até lá. O critério que o dono me deu em
+    03/10 é quanto tempo a coisa fica parada se ficar com o outro. Se ele preferir
+    que eu tivesse só relatado, a decisão é dele e eu sigo.
+- **Contra a régua**: cumpri 1 a 5 e 7 a 9. O 6 se aplica pela primeira vez por
+  outro caminho: eu não troquei dependência, mas mexi em código (conferência,
+  `.sql` e uma migração), e passou pelo regime, com `npm run conferir` inteiro em
+  0 e os plantios documentados. **O que ficou devendo**: nada que eu consiga
+  nomear nesta rodada, e isso me deixa desconfortável o suficiente para dizer
+  que a parte mais fraca é o inventário de permissão, que segue pela metade por
+  falta de ferramenta em três painéis, com as datas e os nomes ditos.
+
 ## 2026-09-27 · Segurança (rodada 2): as três recomendações foram feitas, e o quinto fluxo que ficou ligado paga um artigo por semana para jogar fora
 - Artifact "Segurança da semana" (rodada 2):
   https://claude.ai/artifact/UbAuWTsw1tVHzVpCJsWZws

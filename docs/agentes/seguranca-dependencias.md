@@ -156,7 +156,59 @@ e aí o achado que importa passa batido junto.
 Se um dia isso mudar (por exemplo, se aparecer conta invadida), o assunto
 reabre com o caso do lado, não com o aviso repetido.
 
+## O inventário mensal de permissões tem DATA
+
+Não é "uma vez por mês": é uma data escrita, cobrada como qualquer desfecho.
+Pulou numa rodada? Diga a data da próxima ali mesmo.
+
+| feito em | próximo |
+|---|---|
+| 20/09/2026 | (pulei 27/09, dito na rodada) |
+| 04/10/2026 | **01/11/2026** |
+
 ## Aprendizados
+
+### Quatro regras da rodada 3 (04/10/2026)
+
+**1. Ler a DEFINIÇÃO do fluxo, não só a execução dele.** Em 27/09 eu li as
+execuções do fluxo de conteúdo do Vocaboost e achei o gasto jogado fora. O que
+eu não tinha lido era o fluxo. Dentro dele: a chave da Anthropic em texto puro
+como valor de cabeçalho (não como credencial) e um webhook
+`POST /webhook/blog-gerar` **sem autenticação nenhuma**. A execução conta o que
+aconteceu; a definição conta o que PODE acontecer, inclusive por quem nunca
+disparou. Toda rodada que tocar num fluxo, leia os dois.
+
+**1b. Antes de recomendar desligar algo, pergunte por que está ligado.** Em
+27/09 eu pedi para desligar o fluxo de conteúdo do Vocaboost lendo "o produto foi
+desligado", e outra sessão desmontou isso em 04/10: o dono mantinha ESSE ligado
+de propósito, porque publicava artigo toda semana. A observação estava certa
+("paga e joga fora") e a conclusão sobre a intenção estava errada. Coisa que
+sobrou ligada no meio de coisas desligadas é PERGUNTA, não resto: alguém pode ter
+escolhido. É a mesma armadilha que o CLAUDE.md fixou em 03/10, de concluir a
+partir do primeiro número achado.
+
+**2. Quando a premissa de uma decisão cai, o que muda é o ALCANCE, e é isso que
+se escreve.** O dono decidiu em 22/09 não girar as chaves do n8n porque os
+produtos estavam desligados e ninguém alcançava. "Achei chave de novo" não é
+achado, o manual já diz. "Esta chave tem um disparo aberto a qualquer pessoa, sem
+credencial" é outra coisa: não contesta a decisão, mostra que o alcance que a
+sustentava não existe naquele caso. Uma linha, uma chave, um prazo, e sem repetir
+a recomendação geral.
+
+**3. Conferência de texto só vê o que tem arquivo, e esse é o buraco dela.** A
+`contas_criadas` existia no banco sem nenhum `create` no repositório, e por isso
+era invisível para a conferência de view que eu acabei de escrever. O par certo
+é sempre: conferência de texto responde "o arquivo está certo?", e a rodada
+responde "o banco está como o arquivo diz?". Toda conferência de texto nova nasce
+com essa limitação escrita no comentário dela, e a rodada nasce com a consulta de
+estado que a cobre.
+
+**4. Exija EXPLÍCITO, não exija o valor certo.** Ao escrever a regra de
+`security_invoker` eu quase exigi `on` em toda view. Teria apagado o
+`estado_da_base`, que é `off` por uma decisão boa e documentada. Exigir explícito
+proíbe só o silêncio, que é o que engana quem lê, e deixa a decisão de pé com o
+motivo do lado. Vale para qualquer asserção sobre configuração de segurança: o
+inimigo é a omissão, não a escolha.
 
 ### Cinco regras da rodada 2 (27/09/2026)
 

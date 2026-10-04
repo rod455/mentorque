@@ -25,9 +25,12 @@
 tools/
 
 # Projetos nativos: o app das lojas é compilado no Codemagic, não aqui.
+#
+# `native/` saiu em 04/10/2026: ela NUNCA existiu neste repositório (conferido
+# com `git log --diff-filter=A`) e portanto não excluía nada. A saída do build
+# nativo se chama `.next-native`, e o git já a ignora, então ela nunca sobe.
 android/
 ios/
-native/
 
 # Documentação e manuais dos agentes: lidos por git pull, nunca pela web.
 docs/

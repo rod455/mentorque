@@ -37,7 +37,7 @@
 //
 // Rode com: npm run conferir:publicacao
 import { execSync, spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 
@@ -81,8 +81,37 @@ for (const pasta of excluidas) {
     "pasta que a Vercel serve nao pode ser motivo para pular build: o site ficaria velho com cara de publicado",
   );
 }
+// Linha do `.vercelignore` que não corresponde a nada não exclui nada, e é
+// erro de digitação. Mas "existe no disco" é a pergunta errada para medir isso,
+// e ela deixou o `npm run conferir` VERMELHO para todo mundo em 04/10: a
+// `pecas-geradas/` só NASCE quando alguém roda o gerador de peças
+// (`scripts/pecas.mjs`), então em qualquer clone limpo ela não existe, e a
+// conferência reprovava sem nenhum defeito na frente dela.
+//
+// A pergunta certa é o que o REPOSITÓRIO tem, não o que esta máquina tem. Daí
+// `git ls-files`: ele responde igual em clone novo e em máquina de trabalho.
+//
+// A exceção é nomeada uma por uma, com o motivo, porque exceção em conferência
+// é buraco (foi assim que o detector de corte lateral engoliu uma folha
+// inteira): pasta que nasce em tempo de execução não é rastreada e nunca vai
+// estar no `git ls-files`.
+const NASCEM_RODANDO = new Set([
+  // scripts/pecas.mjs e scripts/encolhe-biela.mjs escrevem aqui.
+  "pecas-geradas",
+]);
+const rastreadas = new Set(
+  execSync("git ls-files", { cwd: RAIZ, encoding: "utf8" })
+    .split("\n")
+    .filter(Boolean)
+    .map((f) => f.split("/")[0]!),
+);
 for (const pasta of vercelignore) {
-  conferir(`${pasta}/ do .vercelignore existe no repositório`, existsSync(`${RAIZ}${pasta}`) && statSync(`${RAIZ}${pasta}`).isDirectory(), "linha com erro de digitacao nao exclui nada");
+  if (NASCEM_RODANDO.has(pasta)) continue;
+  conferir(
+    `${pasta}/ do .vercelignore existe no repositório`,
+    rastreadas.has(pasta),
+    "linha com erro de digitacao nao exclui nada: nenhum arquivo versionado comeca com esse nome",
+  );
 }
 
 // Nenhuma pasta excluída pode ser lida em tempo de execução. Foi assim que

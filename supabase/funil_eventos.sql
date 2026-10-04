@@ -170,7 +170,18 @@ revoke all on public.funil_semana from anon, authenticated;
 -- O veredito separa os tres casos que nao podem virar um numero so: cortesia
 -- liberada na mao (nunca foi venda), evento faltando (a medicao perdeu uma
 -- venda real) e evento duplicado (a medicao inventou uma).
-create or replace view public.assinaturas_conferencia as
+-- security_invoker = on, acrescentado em 04/10/2026. Ele FALTAVA, e a view era a
+-- única da casa sem a cláusula: sem ela, herda `off` e roda com os privilégios
+-- do dono, furando o RLS de `subscriptions` e de `funil_eventos` trinta linhas
+-- abaixo do comentário que promete o contrário sobre a `funil_semana`.
+--
+-- Não era buraco quando foi achado, porque só a chave de serviço lê esta view, e
+-- a chave de serviço passa por cima do RLS de qualquer jeito. Por isso a
+-- mudança é no-op hoje: ela existe para o dia em que alguém liberar esta view
+-- para um painel, e aí a cláusula decide se cada pessoa logada lê a assinatura
+-- das outras. A `conferir:banco` passou a reprovar view sem a cláusula.
+create or replace view public.assinaturas_conferencia
+  with (security_invoker = on) as
 select
   s.user_id,
   s.status,
