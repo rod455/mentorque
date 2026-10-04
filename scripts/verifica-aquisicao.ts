@@ -32,7 +32,7 @@ import {
   linhaDaEscada,
   montaEscada,
 } from "../lib/aquisicao.ts";
-import { achaColuna, arquivoMaisNovo, destextoUtf16, leInstalacoes } from "../lib/playRelatorios.ts";
+import { PACOTE_ANDROID, achaColuna, arquivoEhDoApp, arquivoMaisNovo, destextoUtf16, leInstalacoes } from "../lib/playRelatorios.ts";
 import { readFileSync } from "node:fs";
 
 let falhas = 0;
@@ -208,14 +208,26 @@ const PACOTES = {
 {
   console.log("Play, relatorio de instalacoes: formato estranho vira aviso ou vira zero?");
 
-  const CABECALHO = "Date,Package Name,Daily Device Installs,Daily Device Uninstalls";
-  const CSV = [CABECALHO, "2026-10-01,mentorque.app,22,3", "2026-10-02,mentorque.app,19,1"].join("\n");
+  // O cabecalho REAL do primeiro CSV do Mentorque (04/10/2026), com as doze
+  // colunas. Tres delas vem zeradas em todos os dias e nao e zero medido:
+  // `Daily Device Uninstalls`, `Daily Device Upgrades` e `Total User Installs`.
+  // A desinstalacao que o Play ainda alimenta e `Daily User Uninstalls`.
+  const CABECALHO =
+    "Date,Package Name,Daily Device Installs,Daily Device Uninstalls,Daily Device Upgrades,Total User Installs," +
+    "Daily User Installs,Daily User Uninstalls,Active Device Installs,Install events,Update events,Uninstall events";
+  const CSV = [CABECALHO, "2026-10-01,mentorque.app,22,0,0,0,23,3,200,22,5,3", "2026-10-02,mentorque.app,19,0,0,0,20,1,218,19,2,1"].join("\n");
 
   const lido = leInstalacoes(CSV);
   conferir("le as duas linhas", lido.ok && lido.dias.length === 2, JSON.stringify(lido));
   conferir("e soma as instalacoes", lido.ok && lido.total === 41, JSON.stringify(lido.ok && lido.total));
   conferir("e traz a janela", lido.ok && lido.de === "2026-10-01" && lido.ate === "2026-10-02", JSON.stringify(lido));
-  conferir("e le a desinstalacao", lido.ok && lido.dias[0]?.desinstalacoes === 3, JSON.stringify(lido.ok && lido.dias[0]));
+  conferir(
+    "e le a desinstalacao da coluna que o Play AINDA alimenta (user), nao da zerada (device)",
+    lido.ok && lido.dias[0]?.desinstalacoes === 3,
+    JSON.stringify(lido.ok && lido.dias[0]),
+  );
+  conferir("e le a base instalada do dia", lido.ok && lido.dias[1]?.ativos === 218, JSON.stringify(lido.ok && lido.dias[1]));
+  conferir("e a base instalada do pacote e a do ULTIMO dia, porque e estoque", lido.ok && lido.ativosNoFim === 218);
 
   // UTF-16: o nulo entre as letras. Este e o caso que, sem tratamento, devolve
   // zero linha e vira "o mes nao teve instalacao" no retrato.
@@ -225,10 +237,10 @@ const PACOTES = {
   conferir("destextoUtf16 tira a marca de ordem de bytes", !destextoUtf16("\uFEFFabc").startsWith("\uFEFF"));
 
   // IDIOMA: o mesmo relatorio em portugues tem que ser lido igual.
-  const EM_PT = ["Data,Nome do pacote,Instalações diárias de dispositivos,Desinstalações diárias de dispositivos",
-                 "2026-10-01,mentorque.app,22,3"].join("\n");
+  const EM_PT = ["Data,Nome do pacote,Instalações diárias de dispositivos,Desinstalações diárias de usuários,Instalações ativas de dispositivos",
+                 "2026-10-01,mentorque.app,22,3,200"].join("\n");
   const lidoPt = leInstalacoes(EM_PT);
-  conferir("o mesmo relatorio em portugues e lido igual", lidoPt.ok && lidoPt.total === 22, JSON.stringify(lidoPt));
+  conferir("o mesmo relatorio em portugues e lido igual", lidoPt.ok && lidoPt.total === 22 && lidoPt.dias[0]?.desinstalacoes === 3 && lidoPt.ativosNoFim === 200, JSON.stringify(lidoPt));
   conferir("achaColuna ignora acento e caixa", achaColuna(["Instalações Diárias de Dispositivos"], ["instalacoes diarias de dispositivos"]) === 0);
 
   // FORMATO DESCONHECIDO NAO VIRA ZERO, que e a regra inteira deste arquivo.
@@ -242,24 +254,44 @@ const PACOTES = {
 
   // O ARQUIVO MAIS NOVO vem do nome, nao da ordem da listagem: o relatorio e
   // MENSAL e a API nao promete ordem nenhuma.
+  //
+  // E O BUCKET E DA CONTA, NAO DO APP (04/10/2026): a primeira listagem real
+  // trouxe 200 arquivos de dois OUTROS apps do dono, e o seletor gravou o
+  // setembro de `com.appfactory.minhanotafinanceira` como zero instalacao do
+  // Mentorque, com `ok: true`. Mes mais novo de outro app e o app errado.
   const nomes = [
     "stats/installs/installs_mentorque.app_202608_overview.csv",
+    "stats/installs/installs_com.appfactory.minhanotafinanceira_202611_overview.csv",
     "stats/installs/installs_mentorque.app_202610_overview.csv",
     "stats/installs/installs_mentorque.app_202609_overview.csv",
     "stats/installs/installs_mentorque.app_202610_country.csv",
   ];
   conferir(
-    "escolhe o mes mais novo pelo NOME, nao pela ordem da lista",
-    arquivoMaisNovo(nomes, "_overview.csv") === "stats/installs/installs_mentorque.app_202610_overview.csv",
-    String(arquivoMaisNovo(nomes, "_overview.csv")),
+    "escolhe o mes mais novo pelo NOME, nao pela ordem da lista, e so DESTE app",
+    arquivoMaisNovo(nomes, "_overview.csv", PACOTE_ANDROID) === "stats/installs/installs_mentorque.app_202610_overview.csv",
+    String(arquivoMaisNovo(nomes, "_overview.csv", PACOTE_ANDROID)),
   );
-  conferir("e sem arquivo do sufixo devolve nulo", arquivoMaisNovo(nomes, "_nao_existe.csv") === null);
+  conferir("e sem arquivo do sufixo devolve nulo", arquivoMaisNovo(nomes, "_nao_existe.csv", PACOTE_ANDROID) === null);
+  conferir(
+    "listagem so com apps vizinhos devolve nulo, nunca o vizinho mais novo",
+    arquivoMaisNovo(nomes.filter((n) => !n.includes("mentorque")), "_overview.csv", PACOTE_ANDROID) === null,
+  );
+  conferir("o pacote e o do capacitor.config.ts", /appId: "mentorque\.app"/.test(readFileSync(new URL("../capacitor.config.ts", import.meta.url), "utf8")) && PACOTE_ANDROID === "mentorque.app");
+  conferir("um nome com o pacote dentro de outro nao engana", !arquivoEhDoApp("stats/installs/installs_mentorque.appfactory_202610_overview.csv", PACOTE_ANDROID));
 
   // A ROTA USA A REGRA. Criterio 10: conserto na fonte que o consumidor nao usa
   // nao e conserto.
   const rotaPlay = readFileSync(new URL("../app/api/metricas/route.ts", import.meta.url), "utf8");
   conferir("a rota importa o leitor do Play", /from "@\/lib\/playRelatorios"/.test(rotaPlay));
   conferir("e le o CSV na fonte play_downloads", /fonte === "play_downloads"/.test(rotaPlay) && /leInstalacoes\(csv\)/.test(rotaPlay));
+  // Quem escolhe o arquivo e um no de codigo do n8n, que nada confere. Entao a
+  // rota confere o pacote DE NOVO, e recusa o arquivo do app vizinho antes de
+  // ler uma linha dele.
+  conferir(
+    "e recusa arquivo de outro app da conta antes de ler o CSV",
+    /arquivoEhDoApp\(arquivo, PACOTE_ANDROID\)/.test(rotaPlay) && /arquivo de OUTRO app da conta/.test(rotaPlay),
+    "sem isso o setembro do app vizinho vira zero instalacao nossa com ok: true, como em 04/10",
+  );
   conferir(
     "e o erro da LISTAGEM ganha do sintoma na hora de explicar",
     /a listagem do bucket falhou/.test(rotaPlay) && /dados\.erroDaListagem/.test(rotaPlay),

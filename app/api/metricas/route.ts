@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { chaveDadosOk, negada } from "@/lib/chaveDados";
 import { leParceiros, montaPacote } from "@/lib/appsflyer";
-import { leInstalacoes } from "@/lib/playRelatorios";
+import { PACOTE_ANDROID, arquivoEhDoApp, leInstalacoes } from "@/lib/playRelatorios";
 
 export const runtime = "nodejs";
 // Teto de duracao: funcao pendurada segura memoria provisionada (e cota).
@@ -92,10 +92,17 @@ export async function POST(req: Request) {
   // que chegou, para a próxima rodada ter o que ler.
   if (fonte === "play_downloads") {
     const csv = typeof dados.csv === "string" ? dados.csv : null;
-    const lido = leInstalacoes(csv);
+    const arquivo = typeof dados.arquivo === "string" ? dados.arquivo : null;
+    // O ARQUIVO TEM QUE SER DESTE APP (04/10/2026). O bucket é da conta e tem
+    // outros apps; a primeira coleta gravou o setembro de outro app como zero
+    // instalação nossa, com `ok: true`. Quem escolhe o arquivo é o n8n, e nó de
+    // código do n8n não é conferido por nada, então a rota confere de novo.
+    const deOutroApp = arquivo !== null && !arquivoEhDoApp(arquivo, PACOTE_ANDROID);
+    const lido = deOutroApp
+      ? { ok: false as const, formatoDesconhecido: `arquivo de OUTRO app da conta, nao de ${PACOTE_ANDROID}`, cabecalho: [] }
+      : leInstalacoes(csv);
     pacote = lido.ok
-      ? { ok: true, instalacoes: lido.total, de: lido.de, ate: lido.ate, dias: lido.dias,
-          arquivo: typeof dados.arquivo === "string" ? dados.arquivo : null }
+      ? { ok: true, instalacoes: lido.total, ativosNoFim: lido.ativosNoFim, de: lido.de, ate: lido.ate, dias: lido.dias, arquivo }
       : { ok: false,
           // O MOTIVO DE QUEM FALHOU PRIMEIRO GANHA (03/10/2026). Na primeira
           // execução o coletor gravou `naoLi: "arquivo vazio"` quando a causa

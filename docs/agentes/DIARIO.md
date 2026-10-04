@@ -33,6 +33,52 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (manha, 25) · O bucket do Play abriu, e a primeira leitura era o relatorio certo do app ERRADO
+
+- **A permissao do dono funcionou.** A coleta das 05:30 listou o bucket e
+  gravou `play_downloads` com `ok: true`. E o que gravou foi **zero instalacao
+  em setembro**, do arquivo
+  `installs_com.appfactory.minhanotafinanceira_202609_overview.csv`. **O bucket
+  e da CONTA, nao do app**: a conta do dono tem outros apps, a listagem tinha
+  prefixo `stats/installs/` e teto de 200 arquivos em ordem alfabetica, e os 200
+  acabaram antes de chegar em `installs_mentorque.app_`. O seletor pegou "o mes
+  mais novo" entre o que veio. Nada no numero denuncia: e um CSV valido, com
+  datas validas, do app do vizinho. **E o sexto zero estrutural desta casa, e o
+  primeiro com `ok: true`.**
+- **Conserto em tres lugares, e os tres provados**: (1) o prefixo da listagem no
+  n8n virou `stats/installs/installs_mentorque.app_`; (2) o no que escolhe o
+  arquivo exige o pacote de novo, porque prefixo e parametro que alguem edita;
+  (3) a ROTA recusa arquivo de outro app antes de ler uma linha (`arquivo de
+  OUTRO app da conta`), porque no de codigo do n8n nao e conferido por nada.
+  `arquivoMaisNovo` ganhou o pacote como parametro obrigatorio. Tres defeitos
+  plantados (seletor sem pacote, `includes` do pacote cru que aceitaria
+  `mentorque.appfactory`, rota sem a trava), tres mordidas. Publicado no n8n
+  (versao `22810c9c`) e EXECUTADO: agora o arquivo e
+  `installs_mentorque.app_202609_overview.csv`, **336 instalacoes de 01 a
+  25/09**, com o salto de 1 por dia para 55 por dia no dia 20/09, que e quando a
+  midia paga comecou.
+- **E O CSV CERTO TINHA OUTRO ZERO ESTRUTURAL DENTRO.** Li o arquivo bruto, nao
+  so o pacote gravado: `Daily Device Uninstalls`, `Daily Device Upgrades` e
+  `Total User Installs` sao 0 em TODOS os 25 dias, enquanto `Daily User
+  Uninstalls` tem 17 e `Uninstall events` 19 no dia 25/09, e `Active Device
+  Installs` sobe de 4 para **254**. O Play parou de alimentar tres colunas e
+  deixou-as no arquivo. O leitor tirava a desinstalacao da coluna morta e
+  gravou 25 dias de "ninguem desinstala". Agora a desinstalacao sai de `Daily
+  User Uninstalls` e o pacote carrega `ativosNoFim` (a base instalada e
+  estoque, vale a do ultimo dia). Tres plantios, tres mordidas.
+- **O que o numero diz, com os dois instrumentos lado a lado**: Play 20 a 25/09
+  = 315 instalacoes por aparelho; AppsFlyer na janela 27/09 a 04/10 = 166 no
+  Android (116 Facebook + 50 Organic). Janelas diferentes, entao nao e
+  comparacao fechada, mas a direcao bate com a ressalva que ja viaja no pacote:
+  a AppsFlyer conta por baixo, e o Google cai dentro de Organic.
+- **LIMITE QUE FICA**: o arquivo de setembro termina em 25/09 e nao existe
+  arquivo de outubro no bucket. O Play atualiza esses CSVs com atraso de dias e
+  o relatorio do mes corrente aparece quando ele quer. A escada vai dizer "ate
+  25/09" e esta certo que diga. A linha gravada hoje ainda tem a desinstalacao
+  da coluna morta: a proxima execucao, depois do deploy desta rota, corrige.
+- **Vercel**: o commit do `ignoreCommand` buildou (READY, 46e1dd3). O primeiro
+  commit so de doc depois dele e o que prova o pulo; ate la, sem sinal.
+
 ## 2026-10-04 (madrugada, 24) · A Vercel deixa de buildar o que ela nem sobe, e apagar um por um nao e o caminho
 
 - Pergunta do dono: "eu preciso apagar 1 por 1? dos deploy antigos". **Nao.** A
