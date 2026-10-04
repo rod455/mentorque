@@ -105,6 +105,29 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 52) · A busca do Google esta REPROVADA desde que o /baixar virou desvio, e a linha da etiqueta tinha o remedio errado
+
+- O dono abriu Campanhas > Anuncios para colar a etiqueta e o print mostrou os
+  cinco anuncios de pesquisa da "Mentorque Lancamento" como **"Nao
+  qualificada, Reprovado (Destino nao correspondente)"**, qualidade "Ruim". So
+  o anuncio da campanha de app esta qualificado.
+- **A causa esta no nosso codigo, com data**: em 19/09 (commit 79b23c2) o
+  `/baixar` virou link inteligente, um desvio por JavaScript para a loja do
+  aparelho (`lib/site/lojaDoAparelho.ts`). A politica do Google reprova URL
+  final que leva a outro dominio. Entao a busca parou de veicular, e e ISSO que
+  explica "zero cadastros com UTM ou gclid desde 19/09", que a linha de 24/09
+  atribuiu a etiqueta que faltava. Dois instrumentos concordam: o funil (zero
+  etiquetado desde 19/09) e o painel (reprovado), e a data do codigo bate.
+- A linha de 24/09 pedia colar a etiqueta no `/baixar`. Colar a etiqueta num
+  destino reprovado nao faria nada. Virou: URL final na home, com a etiqueta
+  (a home tem os botoes das lojas e nao redireciona, entao nao contraria a
+  decisao de lead so na loja), ou pausar a campanha de busca, que e 3,7% do
+  gasto. Decisao do dono.
+- Erro meu que fica: a linha de 24/09 nasceu de "nenhum clique chega com nome"
+  e saltou para "falta etiqueta" sem perguntar se o anuncio estava no ar.
+  Ausencia nao e causa, de novo. O painel respondia; a API tambem responderia
+  (`ad_group_ad.policy_summary.approval_status`), e ninguem perguntou.
+
 ## 2026-10-04 (tarde, 51) · googleadwords_int APARECEU: o vinculo fechou no mesmo dia
 
 - Coleta executada as 13:21 (horario de Brasilia): o pacote `appsflyer` traz
