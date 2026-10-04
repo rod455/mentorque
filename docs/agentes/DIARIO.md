@@ -105,6 +105,28 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (noite, 59) · Regime de release fechado na árvore final, antes do botão do Codemagic
+
+- Dono: "verifique se tudo está funcionando e nada quebrou, antes de eu
+  disparar o build". Fechado na árvore de 748fedf, com os dois consertos
+  dentro:
+  - `npm run conferir` inteiro: 0 falhas (a única reprovação da rodada foi a
+    conferência das anomalias fixando a lista de colunas de `app_erros`, que
+    ganhou `tipo` de propósito; a lista da conferência foi atualizada).
+  - Bateria completa de navegador: **401 verdes, 0 falhas, 930 segundos**,
+    com o servidor que a própria bateria sobe.
+  - Build do site e `build:native` (48 MB) compilados depois dos consertos.
+  - Produção na Vercel: deploy de 748fedf READY; home responde com a
+    manchete nova e `/app` abre; zero erros de execução em 6 horas; em 3
+    horas só 200, um 204, um 400 (meu teste antes do deploy) e dois 416 de
+    pedidos de trecho em estático no `/baixar`.
+- O que isto NÃO prova, pela regra de 09/09: nada aqui alcança a WebView do
+  aparelho. Sobre o build, a frase continua "sem sinal ainda" até o roteiro
+  de seis passos de `docs/lojas/novidades-3.0.md`.
+- Não consegui bater na produção com `curl` daqui: a saída do contêiner
+  bloqueia `mentorque.com.br`. A leitura veio pela ferramenta da Vercel e
+  pelos registros de execução dela, que é instrumento igual.
+
 ## 2026-10-04 (noite, 58) · As duas dívidas da 2.9 entram na 3.0: o 👎 grava no toque e a desistência sai com tipo
 
 - Dono: "vamos colocar uai. Agora estamos monitorando as perguntas para o
