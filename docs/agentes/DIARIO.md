@@ -33,6 +33,30 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 46) · A 3.0 sobe hoje a noite: numeros medidos no onboarding, notas escritas, regime de release
+
+- Dono: "pode alterar tudo que sugeriu, coloque no proximo build, vamos subir
+  hoje a noite". A unica sugestao pendente que entra no binario era a dos
+  numeros inventados da pagina "Amado por motoristas". Entraram medidos, como
+  pisos, com a fonte no comentario: **5,0** (12 avaliacoes nas lojas, todas 5
+  estrelas), **170+ diagnosticos** (178 `consultou_sintoma` no funil desde
+  13/09, quando o evento nasceu) e **250+ motoristas** (254 aparelhos Android
+  ativos em 25/09, relatorio do Play). Sao numeros pequenos perto dos
+  inventados, e sao os nossos.
+- **O que NAO entra, e por que, dito ao dono**: o `next` 14 para 16. E versao
+  maior, entra no binario (o app embarca o export da web) e a Seguranca
+  escreveu hoje que nao se decide num domingo. Release de loja com upgrade
+  maior de framework na mesma noite e dois riscos no mesmo build.
+- `docs/lojas/novidades-3.0.md` ganhou o corpo: seis itens no binario (quatro
+  que a pessoa sente, dois de medicao), a nota das lojas em 343 caracteres, o
+  roteiro de aparelho com cinco passos escrito ANTES do build, o que o build
+  nao conserta (SDK da AppsFlyer, as duas dividas da 2.9, o vinculo do Google
+  Ads que e painel) e a lista de antes de promover.
+- Regime de release, nao o das duas velocidades: `npm run conferir` inteiro,
+  bateria completa de navegador e build local, todos rodados hoje e com o
+  resultado dito no proximo paragrafo deste diario quando terminarem. Versoes:
+  3.0 nos tres lugares, nao publicada, piso 70 acima do 69.
+
 ## 2026-10-04 (tarde, 45) · O webhook sem senha saiu, e o achado da Seguranca fecha inteiro
 
 - Dono: "pode tirar ele, nao precisamos". O no "Sob demanda" (webhook

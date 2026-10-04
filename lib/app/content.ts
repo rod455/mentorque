@@ -367,11 +367,21 @@ export function getContent(locale: Locale) {
       social: {
         title: T("Amado por motoristas de todo o Brasil", "Loved by drivers everywhere"),
         sub: T("Avaliações e histórias reais", "Real reviews and stories"),
-        rating: "4,8",
-        ratingNote: T("média das avaliações", "average rating"),
-        stat1: "10.000+",
+        // NÚMEROS MEDIDOS, não inventados (04/10/2026, decisão do dono: "pode
+        // alterar tudo que sugeriu"). Antes: "4,8", "10.000+" e "5.000+", que
+        // nenhum instrumento sustentava. De onde cada um saiu, e são pisos:
+        //   rating: 12 avaliações nas duas lojas, todas 5 estrelas
+        //     (tabela lojas_avaliacoes, 04/10);
+        //   stat1: 178 consultas de sintoma gravadas no funil desde 13/09,
+        //     quando o evento nasceu (o app fazia isso antes, sem contar);
+        //   stat2: 254 aparelhos Android com o app instalado em 25/09
+        //     (relatório do Play), sem contar iPhone.
+        // Quando os números crescerem, troca-se aqui, com a data e a fonte.
+        rating: "5,0",
+        ratingNote: T("nas avaliações das lojas", "in store reviews"),
+        stat1: "170+",
         stat1Label: T("diagnósticos feitos", "diagnoses run"),
-        stat2: "5.000+",
+        stat2: "250+",
         stat2Label: T("motoristas", "drivers"),
         // DOIS DEPOIMENTOS REAIS (04/10/2026, decisão do dono: "aproveitar
         // somente 2, esses 2 reais, e o restante mantém"). São trechos LITERAIS
