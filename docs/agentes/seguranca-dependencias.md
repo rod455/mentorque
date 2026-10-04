@@ -371,7 +371,7 @@ registrou o fato, registrou o que corta para o outro lado (a chave aponta para
 projeto apagado), disse que não está reabrindo e não repetiu o argumento.
 Localização apenas, sem valor. É exatamente o que o manual pede.
 
-Agora o que precisa melhorar, em três pontos.
+Agora o que precisa melhorar, em quatro pontos.
 
 **1. O PEDIDO MAIS VALIOSO DA SUA RODADA FOI PARA OUTRO PAPEL E SEGUE SEM
 DONO.** Você escreveu que nenhuma conferência olha `security_invoker` e pediu
@@ -463,4 +463,15 @@ nunca foi (a retenção é curta), mas é o número que separa "porta aberta" de
 "porta aberta com gente entrando", e ele cabia numa linha. Mesma regra do
 CLAUDE.md de 03/10: antes de publicar um risco, diga de qual instrumento ele
 veio e se existe um segundo que meça a mesma coisa.
+
+**4. LINHA PARA O DONO É ROTEIRO DE CLIQUES, NÃO DECISÃO ABSTRATA.** A linha da
+chave dizia "DECIDIR sobre UMA chave". O dono perguntou "o que preciso fazer?"
+duas vezes, e depois "não entendi sua pergunta" sobre o webhook. O que
+destravou foi reescrever em tela: criar chave nova aqui, credencial ali, trocar
+o nó, apagar o header, revogar a antiga; e explicar "webhook sem senha" como
+"um endereço na internet que qualquer pessoa pode chamar para gastar a sua
+chave". A análise estava certa e completa; a forma pedia tradução. Quando o
+destino de uma linha é o dono, o teste é: ele consegue executar sem perguntar
+nada? Se não, a linha não está pronta. Desfecho desta: chave no cofre, header
+apagado, chave antiga revogada e webhook removido, tudo em 04/10.
 

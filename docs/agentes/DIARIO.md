@@ -33,6 +33,25 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 45) · O webhook sem senha saiu, e o achado da Seguranca fecha inteiro
+
+- Dono: "pode tirar ele, nao precisamos". O no "Sob demanda" (webhook
+  `POST /webhook/blog-gerar`, sem autenticacao, de julho) foi removido do fluxo
+  do blog do Vocaboost e a versao publicada: 6 nos, so o relogio de terca e
+  sexta dispara. Com isso o achado da rodada 3 da Seguranca fecha inteiro no
+  mesmo dia: chave no cofre, header em texto apagado, chave antiga revogada,
+  porta publica fechada. Linha sai da lista.
+- O que sobrou da rodada dela e nao e acao de hoje: o `next` 14.2.35 com duas
+  criticas que nao nos alcancam (fixAvailable e 16.3.8, versao maior; nao se
+  decide num domingo); o inventario de permissao pela metade em tres paineis
+  que ela nao alcanca (Meta, Google, Codemagic), com a proxima data em 01/11; e
+  a chave `service_role` do Supabase do Vocaboost em texto nos nos de codigo do
+  mesmo fluxo, que aponta para projeto que nao resolve e que o dono vai
+  restaurar um dia: quando restaurar, a chave nova entra como credencial, nao
+  como texto no no. Fica dito aqui para esse dia.
+- Veredito do dono no manual ganhou o ponto 4: linha para o dono e roteiro de
+  cliques, nao decisao abstrata. Lista: 9 itens em 3 paineis.
+
 ## 2026-10-04 (tarde, 44) · A chave do blog esta no cofre, o header em texto sumiu, e a antiga foi apagada
 
 - O dono criou a chave nova na Anthropic (escopo Organization; para funcionar
