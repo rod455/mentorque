@@ -33,6 +33,16 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 37) · "Essa parte do navegador e mentira, ne?"
+
+- O dono pegou na descricao a frase "Tambem funciona no navegador, em
+  www.mentorque.com.br", e lembrou a decisao: nenhum lead vai para a web, a
+  loja e o destino. A frase estava nas duas descricoes da ficha (Play e Apple)
+  e passou por mim duas vezes hoje. Saiu das duas; a ultima linha fica
+  "Disponivel em portugues e ingles."
+- A Apple ja foi colada com a frase; entra na versao seguinte, junto com os 2
+  carros. Na Play o dono cola o texto sem ela agora.
+
 ## 2026-10-04 (tarde, 36) · A ficha da Play tambem dizia o proposto como publicado
 
 - O print do console da Play mostrou: breve descricao no ar e "Cuide do seu

@@ -59,6 +59,11 @@ Entenda o barulho, a luz do painel e o orçamento antes da oficina, e economize.
 
 ### Descrição completa (até 4000 caracteres)
 
+**Sem a frase do navegador (04/10/2026, dono: "falei para tirarmos qualquer
+envio de leads para lá").** As duas descrições terminavam com "Também funciona
+no navegador, em www.mentorque.com.br". A decisão da casa é que a loja é o
+destino e a web não recebe lead; a ficha dizia o contrário. Saiu das duas.
+
 **NO AR (print do console, 04/10/2026):** um texto mais antigo, que começa
 com "Mentorque — seu carro bem cuidado, sem depender de achismo", com
 travessão e emoji nas linhas de tópico, e sem o limite de 2 carros. O texto
@@ -95,7 +100,7 @@ O uso principal é gratuito e não pede cartão: até 2 carros na garagem, diagn
 
 O Premium é opcional, por R$ 29,90 por mês ou R$ 239,90 por ano, e libera garagem sem limite, o acervo completo de conteúdo, relatórios de gasto, diagnóstico aprofundado e a assistente Biela sem limite.
 
-Disponível em português e inglês. Também funciona no navegador, em www.mentorque.com.br
+Disponível em português e inglês.
 ```
 
 ---
@@ -194,7 +199,7 @@ o bloco PREÇO ainda nas frases antigas ("cadastro de veículos" e o Premium sem
 "garagem sem limite"). Decisão dele no mesmo dia: "vamos deixar assim mesmo,
 não vou mudar; a próxima versão já sai com a Apple atualizada". As frases de 2
 carros entram na Apple na versão seguinte a essa. Na Play entram agora. **Para o próximo envio, colar esta**
-(2523 caracteres, sem travessão, preços iguais aos do ar):
+(2469 caracteres, sem travessão, preços iguais aos do ar):
 
 ```
 Mentorque é um aplicativo de manutenção e educação automotiva para quem não é mecânico. Ele ajuda você a entender o que o seu carro tem, a decidir se o problema pode esperar e a chegar na oficina sabendo o que perguntar.
@@ -235,7 +240,7 @@ A assinatura é renovada automaticamente e pode ser cancelada a qualquer momento
 Termos de Uso (EULA): https://www.mentorque.com.br/termos
 Política de Privacidade: https://www.mentorque.com.br/privacidade
 
-Disponível em português e inglês. Também funciona no navegador, em www.mentorque.com.br
+Disponível em português e inglês.
 
 Feito no Brasil, para motoristas de verdade.
 ```
