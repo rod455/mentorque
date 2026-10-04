@@ -33,6 +33,28 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 42) · Veredito do dono sobre a Seguranca (rodada 3), e uma correcao minha sobre os e-mails do blog
+
+- Veredito escrito no manual `seguranca-dependencias.md`: tres coisas a manter
+  (security_invoker feito por ela mesma e mordendo num defeito real; o achado
+  lido na definicao do fluxo, com localizacao e sem valor; a vermelha de outro
+  papel diagnosticada um caso de cada) e tres a melhorar (decisao do dono
+  primeiro e relato do tamanho dela; duas linhas que o mesmo clique fecha dizem
+  isso; exposicao se mede, e as execucoes guardadas sao quatro, todas de
+  trigger, nenhuma de webhook).
+- Os sete plantios originais da `conferir:publicacao` foram rodados de novo
+  depois da troca que a Seguranca fez no criterio de pasta existente: os sete
+  mordem. A troca e boa e fica.
+- **Correcao minha, de (tarde, 39)**: eu disse ao dono que cada artigo gerado
+  ia inteiro por e-mail para tres enderecos. Errado desde 15/09: o fluxo morre
+  no no "Salvar & publicar", DOIS nos antes do e-mail, entao nenhum e-mail sai
+  desde que o banco sumiu. O que existe dos artigos gerados e o texto dentro
+  das execucoes que o n8n ainda guarda (quatro). A Seguranca leu certo e eu
+  nao. Nao muda a decisao dele (o banco nao volta), mas muda o que esta
+  recuperavel, e por isso esta dito.
+- As duas linhas da Seguranca ficam na lista ate o dono decidir: o fluxo
+  continua ligado?, e a chave da Anthropic daquele no, com prazo 11/10.
+
 ## 2026-10-04 (tarde, 41) · "Idioma: EN" nao era a ficha, era o binario
 
 - O dono abriu App Store Connect > App Information: **Primary Language:

@@ -400,3 +400,67 @@ pulou de propósito, porque "ele é mensal e a primeira rodada do mês foi a de
 um lembrete que depende de alguém contar as semanas. Diga a data da próxima na
 rodada em que você pula, e trate essa data como qualquer outro desfecho que este
 papel cobra dos outros.
+
+## Retorno do dono sobre a rodada de 04/10/2026 (rodada 3)
+
+Mandado escrever por ele no mesmo dia: "entenda o que foi relevante e vamos
+aplicar, o que precisa melhorar deixamos como feedback".
+
+Primeiro o que manter.
+
+**VOCÊ FEZ O QUE TINHA PEDIDO PARA OUTRO, E A CONFERÊNCIA MORDEU ANTES DO
+PLANTIO.** A exigência de `security_invoker` explícito entrou na
+`verifica-banco.mjs` escrita por você, reprovou num defeito real
+(`assinaturas_conferencia` sem cláusula) antes de qualquer plantio, e o
+conserto foi aplicado no banco por migração. E a regra é a certa: explícito,
+não "sempre on", porque `estado_da_base` é `off` de propósito. Exigir `on`
+apagaria uma decisão boa; exigir explícito só proíbe o silêncio.
+
+**E O ACHADO VEIO DA DEFINIÇÃO, NÃO DA EXECUÇÃO.** Ler os nós do fluxo em vez
+de só o log foi o que achou a chave em texto puro e o webhook sem senha. E a
+forma está certa: localização apenas, valor em lugar nenhum, uma linha de
+decisão sobre UMA chave com prazo, sem reabrir 22/09 e sem repetir o argumento,
+e o que corta para o outro lado dito junto (o caminho morre antes do e-mail, o
+gasto é de poucos milhares de tokens).
+
+**E A VERMELHA DE OUTRO PAPEL FOI DIAGNOSTICADA ANTES DE TOCAR, UM CASO DE
+CADA.** `native/` era erro real (a pasta nunca existiu) e `pecas-geradas/` era
+a conferência perguntando a coisa errada ("existe no disco" em vez de "o
+repositório tem"). Consertar pelo critério do tempo parado, dizer que saiu do
+território, e deixar a segunda vermelha (o travessão citado) para quem era
+dela, nomeando: é o manual inteiro em um parágrafo. Conferido hoje pelo autor
+da conferência: os sete plantios originais dela continuam mordendo depois da
+sua troca.
+
+**E "A ÁRVORE NÃO MUDOU, O CONHECIMENTO DO MUNDO MUDOU."** 24 falhas contra
+18, produção parada em 4, `devDependencies` idêntica commit a commit. É a
+leitura que separa "a gente quebrou" de "o mundo aprendeu", e ela só existe
+porque você comparou os dois instantes em vez de publicar o número de hoje.
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. O QUE O DONO DECIDE TEM QUE SER A PRIMEIRA COISA DO RELATO, E O RELATO
+TEM O TAMANHO DA DECISÃO.** Esta rodada tem umas duas mil palavras e UMA
+decisão nova do dono (a chave atrás do webhook). Ela está no meio, depois do
+veredito da rodada anterior e do security_invoker. O dono lê a lista; quem lê o
+diário é outro agente. As cinco primeiras linhas do relato dizem o que ele
+decide hoje, com o clique, e o resto vem depois. O que você escreveu está
+certo; a ordem é que custa.
+
+**2. DUAS LINHAS QUE O MESMO CLIQUE FECHA DIZEM ISSO UMA PARA A OUTRA.** A
+regra "N itens, N linhas" é sua e está certa. Mas "o fluxo continua ligado?" e
+"decidir sobre a chave" são resolvidas pelo mesmo gesto: desativar o fluxo
+fecha o webhook (fluxo inativo não serve webhook de produção) e tira a chave
+do caminho público; girar a chave continua valendo, mas deixa de ter prazo de
+risco. Cada linha tem que dizer "fechar a outra fecha esta também", senão o
+dono lê duas decisões onde há uma e meia.
+
+**3. EXPOSIÇÃO SE MEDE, NÃO SÓ SE DESCREVE.** O webhook está aberto desde
+julho. A pergunta que o n8n responde e a rodada não fez: ele foi disparado por
+fora alguma vez? As execuções guardadas desse fluxo são quatro, todas de
+`trigger` (22, 25, 29/09 e 02/10), nenhuma de `webhook`. Isso não prova que
+nunca foi (a retenção é curta), mas é o número que separa "porta aberta" de
+"porta aberta com gente entrando", e ele cabia numa linha. Mesma regra do
+CLAUDE.md de 03/10: antes de publicar um risco, diga de qual instrumento ele
+veio e se existe um segundo que meça a mesma coisa.
+
