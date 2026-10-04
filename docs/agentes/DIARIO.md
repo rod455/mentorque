@@ -33,6 +33,47 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (madrugada, 24) · A Vercel deixa de buildar o que ela nem sobe, e apagar um por um nao e o caminho
+
+- Pergunta do dono: "eu preciso apagar 1 por 1? dos deploy antigos". **Nao.** A
+  Vercel tem a tela **Deployment Retention** (Settings), que apaga por prazo o
+  que passou, guardando sempre os 3 de producao mais recentes e os 3 mais
+  recentes de qualquer tipo. Ao salvar, ela marca para apagar em ate 48 horas,
+  com 30 dias para desfazer. Fonte: vercel.com/docs/deployment-retention e o
+  changelog "hobby projects now retain fewer deployments". **Nao conferi por
+  dentro do painel** (acesso de leitura, e a tela e de conta): a linha do dono
+  diz o caminho e diz "se a tela nao existir no plano, ai sim e na mao".
+- **O QUE O DOCUMENTO DELA DIZ E QUE MUDA A URGENCIA**: acima de 10 GB a Vercel
+  apaga sozinha os deployments nao protegidos e **pode bloquear publicacao nova**
+  ate baixar. Nao e so custo: e risco de a proxima correcao nao subir.
+- **O QUE ENTROU DO MEU LADO, e e a parte que para o crescimento**: um
+  `ignoreCommand` em `vercel.json` que pula o build quando o commit so mexe em
+  `docs/`, `.claude/` ou `supabase/`, pastas que o `.vercelignore` ja nao sobe.
+  **Medido antes de escrever**: 17 dos ultimos 40 commits eram so dessas pastas,
+  e cada um gerou um build inteiro identico ao anterior, guardado como novo. O
+  retrato diario sozinho fez 40 commits em 30 dias, todos de doc.
+- **A CONFERENCIA E `conferir:publicacao`, e ela EXECUTA o comando**, nao so o
+  le: monta um repositorio de mentira com sete commits (so doc, so pastas
+  internas, misto, so codigo, so `vercel.json`, so `public/`, pasta de nome
+  parecido) e confere o codigo de saida de cada um. O motivo e que no
+  `ignoreCommand` sair 0 e "nao builda" e sair 1 e "builda", ao contrario do que
+  o nome sugere; codigo invertido passa em qualquer leitura e so cai executando.
+  Mais duas travas: toda pasta que o comando ignora tem que estar no
+  `.vercelignore` (pular build de pasta que a Vercel SERVE deixaria o site velho
+  com cara de publicado), e nenhuma pasta do `.vercelignore` pode ser lida por
+  `app/` ou `lib/` em tempo de execucao, lendo o fonte e nao o nome da pasta,
+  que foi o quase-erro do `assets/` ontem.
+- **A primeira versao da trava de leitura mentia**: `"android"` e plataforma em
+  16 arquivos, `"tools"` e nome de icone, e comentario que cita `docs/x.md` nao
+  le nada. Cinco falsos positivos. Ficou: linha que chama o sistema de arquivos
+  E cita a pasta como caminho. Sete plantios, sete mordidas, inclusive o do
+  `assets/`.
+- **O QUE EU NAO ALCANCO**: o que a Vercel faz com o comando la dentro. A
+  prova de verdade e a aba Deployments mostrar "Canceled" com motivo de build
+  ignorado no proximo commit so de doc. Este commit NAO e esse caso (mexe em
+  `vercel.json` e `scripts/`), entao o primeiro sinal real vem com o retrato
+  diario de hoje.
+
 ## 2026-10-03 (noite, 23) · 75% dos 10 GB da Vercel no dia 3, e a causa principal sou eu
 
 - A Vercel avisou que a conta chegou a **75% dos 10 GB de Deployment Storage**
