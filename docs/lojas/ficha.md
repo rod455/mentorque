@@ -174,7 +174,13 @@ Apple não indexa a descrição na busca, mas é ela que um modelo de linguagem
 lê, então o texto continua valendo.
 
 **A que está NO AR (print de 04/10/2026)** é um texto mais antigo, em
-tópicos com travessão em nove linhas. **Para o próximo envio, colar esta**
+tópicos com travessão em nove linhas.
+
+**O que o dono colou em 04/10 na versão em preparo**: esta descrição, MAS com
+o bloco PREÇO ainda nas frases antigas ("cadastro de veículos" e o Premium sem
+"garagem sem limite"). Decisão dele no mesmo dia: "vamos deixar assim mesmo,
+não vou mudar; a próxima versão já sai com a Apple atualizada". As frases de 2
+carros entram na Apple na versão seguinte a essa. Na Play entram agora. **Para o próximo envio, colar esta**
 (2523 caracteres, sem travessão, preços iguais aos do ar):
 
 ```

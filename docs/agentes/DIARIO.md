@@ -33,6 +33,16 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 35) · A Apple sai como foi colada; as frases dos 2 carros ficam para a versao seguinte
+
+- Dono: "vamos deixar assim mesmo, nao vou mudar, a proxima versao ja sai com a
+  Apple atualizada". Ou seja, a versao em preparo leva subtitulo, palavras-chave
+  e a descricao nova, com o bloco PRECO nas frases antigas. Registrado na ficha
+  como "o que foi colado", separado de "o que a ficha propoe". A linha da lista
+  da Apple encolheu para as duas conferencias que so a loja publicada responde.
+- Na Play nao ha versao para esperar: a resposta ao dono traz o que colar agora,
+  campo por campo, com o texto exato.
+
 ## 2026-10-04 (tarde, 34) · Decidido: o gratis fica com 2 carros, e o preco na descricao nao e escolha
 
 - **Decisao do dono**: "vamos manter no maximo 2 carros no gratis". A proposta
