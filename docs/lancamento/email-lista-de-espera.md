@@ -56,7 +56,7 @@ O que foi criado em 03/09:
 não devolve esse campo na leitura, e sem ele um código feito para valer
 R$ 29,90 valeria R$ 239,90 no plano anual.
 
-O código antigo `PREMIUM1MES` continua ativo com 9 usos RESTANTES, e a palavra importa: lido no painel em 03/10, o cupom dele (teto 10) está em 1/10, ou seja um resgate gasto e nove livres. A frase original dizia só "com 9 usos" e lê como nove GASTOS, que é o contrário. O ponto continua o mesmo: o MCP do Stripe não
+O código antigo `PREMIUM1MES` foi APAGADO pelo dono no painel em 04/10/2026. Até lá ele continuava ativo com 9 usos RESTANTES, e a palavra importa: lido no painel em 03/10, o cupom dele (teto 10) está em 1/10, ou seja um resgate gasto e nove livres. A frase original dizia só "com 9 usos" e lê como nove GASTOS, que é o contrário. O ponto continua o mesmo: o MCP do Stripe não
 expõe a operação que desativa código promocional. Ele não atrapalha (dá o mesmo
 benefício, no mesmo plano), mas convém desativar no painel para não existirem
 dois códigos vivos para a mesma coisa.

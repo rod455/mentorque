@@ -33,6 +33,39 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (manha, 32) · Tres respostas do dono: cupom apagado, dois depoimentos reais, e a Apple ja tem o nome
+
+- **Stripe: o dono APAGOU o `PREMIUM1MES`** (a linha pedia desativar; apagar
+  resolve o mesmo). Sai da lista, 31 dias depois de entrar. Desfecho no
+  `docs/lancamento/email-lista-de-espera.md`. **Rabo que ficou, e e decisao
+  dele**: o atalho `mentorque.com.br/MES100` (em `next.config.mjs`) aponta para
+  `cupom=PREMIUM1MES`. Com o cupom apagado, quem abrir esse link cai no checkout
+  SEM desconto (a rota refaz a sessao sem cupom quando o Stripe recusa, entao a
+  compra nao morre, mas a promessa do link morre). Perguntado ao dono: apontar
+  para `LANCAMENTO1MES` ou tirar o atalho. Nao mexi, porque e cupom e preco.
+- **Depoimentos: "aproveitar somente 2, esses 2 reais, e o restante mantem.
+  Tire 2 e coloque esses 2."** Os depoimentos do app eram INVENTADOS em dois
+  lugares: quatro no onboarding (pagina "Amado por motoristas") e dois no
+  paywall. Entraram os dois reais da App Store BR, trechos literais com o
+  apelido de quem escreveu e "via App Store": aminoru (13/09, "Aprendizado") e
+  munizluiz (04/09, "Bastante Util"). No onboarding substituiram os dois
+  ultimos (Marina S. e Carlos E. ficam, como o dono pediu); no paywall
+  substituiram os dois que havia. Trecho corta, nunca troca palavra; o
+  "Manu tem os" do original (erro de digitacao de "manutencoes") ficou fora
+  do corte em vez de ser corrigido. **O que eu NAO mexi e esta dito**: a mesma
+  pagina do onboarding diz "4,8", "10.000+ diagnosticos" e "5.000+
+  motoristas", e nenhum desses numeros e medido (a App Store tem 7 avaliacoes
+  com 5,0; a base ativa do Android e 254 aparelhos). O dono mandou manter o
+  restante; fica registrado que o restante inclui numero inventado. Vai para
+  as lojas no build 3.0, nao e mudanca de web.
+- **App Store: o dono diz que o nome ja foi trocado** para `Mentorque:
+  manutencao do carro`. Nao consegui conferir (apps.apple.com e itunes.apple.com
+  nao respondem do ambiente remoto, HTTP 000), entao a ficha diz "trocado pelo
+  dono em 04/10, dito por ele". A linha da lista encolheu para o que falta: as
+  palavras-chave no proximo envio, com o valor exato de 95 caracteres, e a
+  conferencia barata depois (buscar `manutencao` sem acento).
+- Lista: 13 itens em 6 paineis.
+
 ## 2026-10-04 (manha, 31) · Duas linhas saem da lista do dono, com desfecho, e uma encolhe
 
 - **Sai: credencial da AppsFlyer nos dois nos do n8n** (entrou 03/10). Desfecho:

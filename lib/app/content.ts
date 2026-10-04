@@ -373,11 +373,18 @@ export function getContent(locale: Locale) {
         stat1Label: T("diagnósticos feitos", "diagnoses run"),
         stat2: "5.000+",
         stat2Label: T("motoristas", "drivers"),
+        // DOIS DEPOIMENTOS REAIS (04/10/2026, decisão do dono: "aproveitar
+        // somente 2, esses 2 reais, e o restante mantém"). São trechos LITERAIS
+        // de avaliações públicas da App Store BR, 5 estrelas, com o apelido de
+        // quem escreveu: aminoru (13/09/2026, "Aprendizado") e munizluiz
+        // (04/09/2026, "Bastante Útil"). Trecho corta, nunca troca palavra; a
+        // versão em inglês é tradução e está marcada como tal pelo "via App
+        // Store". Os dois primeiros continuam como estavam.
         quotes: [
           { quote: T("Descobri o problema do meu carro em minutos. Finalmente sei o que pedir na oficina.", "Found my car's problem in minutes. Finally I know what to ask the shop."), name: "Marina S." },
           { quote: T("O diagnóstico me salvou de pagar um orçamento absurdo. Apontou o problema e o preço justo.", "The diagnosis saved me from an absurd quote. It showed the problem and the fair price."), name: "Carlos E." },
-          { quote: T("Os lembretes de revisão mudaram tudo. Não perco mais nenhuma manutenção.", "Service reminders changed everything. I never miss maintenance now."), name: "Juliana M." },
-          { quote: T("O melhor app de carro que já usei. O histórico e o Biela são certeiros.", "Best car app I've used. The history and Biela are spot on."), name: "Patrícia L." },
+          { quote: T("Eu não conheço nada sobre carro e mecânica, e com os vídeos do app tenho aprendido cada vez mais.", "I know nothing about cars and mechanics, and with the app's videos I've been learning more and more."), name: "aminoru, via App Store" },
+          { quote: T("Consegui economizar. Muito bom para gerenciar revisões e troca de óleo e coisas do tipo.", "I managed to save money. Great for managing services, oil changes and things like that."), name: "munizluiz, via App Store" },
         ],
       },
       // Última página no Android (11/09/2026): em vez do plano, o carro.
@@ -2045,9 +2052,12 @@ export function getContent(locale: Locale) {
         T("Diagnóstico rápido e soluções na hora", "Fast diagnosis, instant solutions"),
         T("Informações detalhadas sobre o seu carro", "Detailed info about your car"),
       ],
+      // Os mesmos dois depoimentos reais do onboarding (04/10/2026): trechos
+      // literais de avaliações públicas da App Store BR, com o apelido de quem
+      // escreveu. Antes eram dois inventados.
       testimonials: [
-        { quote: T("Melhor app pra cuidar do carro!", "Best app to care for your car!"), name: "Pedro S." },
-        { quote: T("Economizei numa revisão que quase paguei a mais.", "Saved money on a service I nearly overpaid."), name: "Juliana M." },
+        { quote: T("Consegui economizar. Muito bom para gerenciar revisões e troca de óleo e coisas do tipo.", "I managed to save money. Great for managing services, oil changes and things like that."), name: "munizluiz, via App Store" },
+        { quote: T("Eu não conheço nada sobre carro e mecânica, e com os vídeos do app tenho aprendido cada vez mais.", "I know nothing about cars and mechanics, and with the app's videos I've been learning more and more."), name: "aminoru, via App Store" },
       ],
       knowTitle: T("Conheça o Mentorque Premium", "Meet Mentorque Premium"),
       ltd: "Ltd",

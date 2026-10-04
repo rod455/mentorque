@@ -92,12 +92,14 @@ Disponível em português e inglês. Também funciona no navegador, em www.mento
 ### Nome (30 caracteres)
 
 ```
-Mentorque: cuidar do carro
+Mentorque: manutenção do carro
 ```
 
-PENDENTE de troca para `Mentorque: manutenção do carro`, junto com as
-palavras-chave. Na Apple, nome, subtítulo e palavras-chave só mudam com o
-envio de uma versão. A metade da Play já foi aplicada em 01/09.
+TROCADO pelo dono em 04/10/2026 (dito por ele; a página pública da App Store
+não responde do ambiente remoto, então a conferência fica para a coleta do
+App Store Connect). As palavras-chave AINDA NÃO: continuam as de "Hoje" na
+tabela de 01/09, e só mudam junto com o próximo envio de versão. Virou linha
+em `docs/agentes/acoes-do-dono.md`.
 
 **PERDEU QUATRO ENVIOS, e isso está medido (01/10).** O retrato de hoje mostra
 2.5, 2.6, 2.7, 2.8 e 2.9 todas em READY_FOR_SALE na App Store. Ou seja, desde
