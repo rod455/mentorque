@@ -52,9 +52,11 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   roteiro de aparelho com cinco passos escrito ANTES do build, o que o build
   nao conserta (SDK da AppsFlyer, as duas dividas da 2.9, o vinculo do Google
   Ads que e painel) e a lista de antes de promover.
-- Regime de release, nao o das duas velocidades: `npm run conferir` inteiro,
-  bateria completa de navegador e build local, todos rodados hoje e com o
-  resultado dito no proximo paragrafo deste diario quando terminarem. Versoes:
+- Regime de release, nao o das duas velocidades, e os tres fecharam em 04/10:
+  `npm run conferir` inteiro em 0; bateria completa de navegador em 0, **401
+  conferencias verdes em 925 segundos**; `npm run build` local compilou. O que
+  isso prova e o que a conferencia olha, nao o binario: sobre o build que vai
+  sair hoje a noite, a frase e "sem sinal ainda" ate o roteiro de aparelho. Versoes:
   3.0 nos tres lugares, nao publicada, piso 70 acima do 69.
 
 ## 2026-10-04 (tarde, 45) · O webhook sem senha saiu, e o achado da Seguranca fecha inteiro
