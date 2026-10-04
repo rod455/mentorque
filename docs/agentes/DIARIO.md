@@ -3,6 +3,78 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-04 (tarde) · QA agendado: a primeira receita foi estornada, e a fatura só é paga uma hora depois da virada
+- Verificação curta, agendada por mim em 01/10 para provar o conserto do
+  `renovou` na cobrança de hoje. **A prova não existe, e isso já estava
+  resolvido**: 02/10 registrou que os três assinantes saíram e que as
+  renovações de 04/10 e 09/10 não vão acontecer. Confirmado na fonte: a
+  `sub_1U9Phe…` terminou hoje às 13:20:18, com `status` canceled e `ended_at`
+  igual ao `cancel_at`. Não houve virada, então nenhum `renovou` era esperado.
+  Nada reprovou. A rotina agendada se encerra aqui.
+- A integração do Stripe foi autorizada, então fui pagar as dívidas que ficaram
+  das duas rodadas anteriores. Duas coisas que achei não estão em lugar nenhum.
+- **A PRIMEIRA RECEITA REAL DO PRODUTO FOI ESTORNADA INTEGRALMENTE.** MEDIDO:
+  nota de crédito `cn_1UM3tK…`, tipo `post_payment`, R$ 29,90 de R$ 29,90, com
+  estorno `re_3ULujQ…` em `status: succeeded`, criado em 02/10 às 10:40:38, UM
+  SEGUNDO depois de a `sub_1U8U8h…` ser cancelada na hora (não no fim do
+  período). Bruto R$ 29,90; **líquido R$ 0,00**.
+- ISSO RECONCILIA DUAS LINHAS NOSSAS QUE SE CONTRADIZEM. O diário de 02/10
+  fechou a pergunta da primeira cobrança com "a receita 30d do Stripe passou de
+  R$ 0,00 para R$ 29,90", e o retrato de hoje traz `receita30dCentavos: 0`. As
+  duas estão certas: o coletor desconta estorno, e ninguém escreveu por que o
+  número voltou a zero. Quem ler na segunda veria R$ 29,90 no diário e 0,00 no
+  retrato sem jeito de casar os dois. **O produto continua com receita
+  realizada líquida zero.** Não sei por que o estorno foi feito, e não é meu
+  lugar supor.
+- **A SAÍDA DE UM DOS TRÊS TEM MOTIVO DECLARADO NO STRIPE**, e é dado de
+  cliente, não minha leitura: a `sub_1UBIBn…` (b62df1c8) traz
+  `cancellation_details.feedback: "too_expensive"`. As outras duas vêm com
+  `reason: "cancellation_requested"` e `feedback` nulo. Registro e paro aqui:
+  preço e planos são do dono. Vale para o e-mail de quem cancela que subiu em
+  02/10, porque este motivo não veio por ele, veio do próprio Stripe.
+- **CORREÇÃO DE UMA COISA QUE EU ESCREVI EM 01/10**, riscada na entrada de lá.
+  Eu deduzi que "o Stripe só adianta o ciclo quando a fatura é paga, então
+  ciclo adiantado mais status `active` é fatura paga". É falso. A linha do
+  tempo, medida na única renovação que existiu: ciclo vira 23:52:23, fatura
+  criada como RASCUNHO 23:53:10, banco gravado 23:53:13, **fatura finalizada e
+  paga 00:53:48**. Uma hora depois. A conclusão estava certa por sorte; o
+  raciocínio, não.
+- **E ISSO TEM CONSEQUÊNCIA PARA O CONSERTO DE 02/10, que é o achado técnico
+  da rodada.** O `faturaDaVirada` busca a `latest_invoice` no instante da
+  virada e só aceita `status: "paid"`, recusando `draft` e `open` com razão.
+  Mas no instante da virada a fatura TEM 3 SEGUNDOS DE VIDA e está em `draft`:
+  ela só finaliza uma hora depois. Então o `renovou` vai gravar `semValor` em
+  toda renovação, sempre, e não por defeito de código: o código recusa
+  corretamente uma fatura que ainda não foi paga. O que não existe é valor para
+  ler naquele momento.
+- O intervalo não é coincidência de um caso: nas DUAS faturas de ciclo que
+  existem, a distância entre criar e finalizar é de **3638 segundos nas duas**,
+  ao segundo (01/09 e 01/10). É o atraso padrão de finalização do Stripe, não
+  variação de carga.
+- CONSEQUÊNCIA PRÁTICA: o item que o dono fechou em 03/10 (marcar
+  `invoice.paid` no painel) foi fechado com um argumento que os dados agora
+  contradizem. A objeção de lá tinha duas partes: "a rota não tem `case
+  invoice.paid`" (isso é código, não argumento) e "escreveria `renovou` duas
+  vezes" (resolvível com dedup pelo id da fatura, exatamente como o
+  `funil_eventos_rc_evento_unico` faz pelo id do evento). Com a fatura paga uma
+  hora depois, **a entrega da fatura é o único jeito de o valor da renovação
+  existir**. Não mexi em nada: é decisão de desenho mais um passo no painel do
+  dono, e a medição de hoje é o que faltava para decidir com dado.
+- O `valorDoCheckout` (primeira cobrança) NÃO é afetado: a sessão do checkout
+  chega com `amount_total` e `payment_status` já resolvidos, porque ali o
+  pagamento aconteceu antes do evento. A assimetria é real e vale escrever: na
+  venda o dinheiro vem antes do evento, na renovação vem uma hora depois.
+- ESTADO DE HOJE, para o relatório: 1 assinatura `active` no Stripe
+  (`sub_1UBIBn…`, até 09/10 17:43), com `cancel_at_period_end`, e mais nenhuma.
+  O retrato de hoje diz 2 porque foi tirado às 6h e a segunda terminou às
+  13:20. Nenhum `past_due` e nenhuma cobrança falhada em nenhum momento: as
+  três saídas foram cancelamento, não inadimplência.
+- FONTE INDISPONÍVEL: a Supabase recusou permissão nesta sessão, então NÃO
+  conferi `funil_eventos` e não sei se o `expirou` de hoje (13:20) foi gravado.
+  O caminho está provado em produção pelas três saídas de 02/10, que o diário
+  daquele dia registra como dois `cancelou` e um `expirou`; o de hoje fica sem
+  conferência minha.
+
 ## 2026-10-03 (noite, 10) · A AppsFlyer e via de mao unica, e isso explica a noite inteira
 
 - Pergunta do dono: "estamos sem acesso via api?". **Estamos, e conferi nas duas
@@ -1925,10 +1997,17 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   fcd41994 teve o `current_period_end` movido de 01/10 23:52:23 para 01/11
   23:52:23, gravado às 23:53:13, e o `status` seguiu `active`. Nada de
   `past_due` nem `unpaid`, nos três assinantes.
-- DEDUZIDO, e é o passo que sustenta a frase acima: o Stripe só adianta o ciclo
-  de uma assinatura de cobrança automática quando a fatura do ciclo novo é
-  paga; cartão recusado deixa a assinatura em `past_due` com o ciclo onde
-  estava. Ciclo adiantado mais status `active` é fatura paga.
+- ~~DEDUZIDO, e é o passo que sustenta a frase acima: o Stripe só adianta o
+  ciclo de uma assinatura de cobrança automática quando a fatura do ciclo novo
+  é paga; cartão recusado deixa a assinatura em `past_due` com o ciclo onde
+  estava. Ciclo adiantado mais status `active` é fatura paga.~~
+  **ERRADO, corrigido em 04/10 com a fatura na mão.** O ciclo é adiantado na
+  VIRADA, uma hora antes de a fatura ser paga: período novo 23:52:23, fatura
+  criada como rascunho 23:53:10, banco 23:53:13, fatura finalizada e paga
+  **00:53:48**. A conclusão ("entrou dinheiro") estava certa; o raciocínio que
+  a sustentava, não. Ciclo adiantado com status `active` é ciclo virado, e nada
+  mais: se o cartão falhar, o `past_due` chega depois, e nessa hora o ciclo já
+  andou. Quem quiser provar pagamento tem que olhar a fatura.
 - **O VALOR NÃO ESTÁ MEDIDO, e essa é a parte que o Diretor queria.** A
   integração do Stripe não está autorizada nesta sessão, e o repositório não
   guarda valor pago em lugar nenhum: nem `subscriptions`, nem `funil_eventos`,
@@ -3821,8 +3900,10 @@ ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 | Por que o toggle de avisos não fazia nada? | Ele só levava aos ajustes quando o sistema já tinha negado DE VEZ; nos outros nãos o toque era mudo. E a preferência guardada podia discordar da permissão do sistema, estado em que todo agendamento desistia calado. Consertado em 07/09. | 07/09, Engenharia |
 | Por que a migalha de fechamento não pega o crash do Android? | Porque ela só fala na ABERTURA SEGUINTE, e quem fecha e desiste não volta. Os seis relatos que ela deu eram todos da web, onde fechar o navegador produz a mesma evidência sem ser defeito. | 07/09, Engenharia |
 | Quantos assinantes existem de verdade? | **3 pessoas.** A tabela tem 6 linhas: 2 `inactive` e 1 conta de revisão das lojas (válida até 2099) não são clientes. | 04/09 |
-| Quando entra o primeiro dinheiro? | ~~01/10, depois 04/10 e por volta de 09/10, R$ 29,90 cada. Verificação já agendada para o dia 01.~~ **A primeira cobrança passou em 01/10**: o ciclo de `sub_1U8U8h…` foi de 01/10 para 01/11 às 23:53:13 e o status seguiu `active`, o que no Stripe só acontece com a fatura do ciclo novo paga. **O VALOR não está medido** (R$ 29,90 ou R$ 0,00 adiantariam o ciclo igual, e nada no repositório guarda valor pago): isso só o painel do Stripe responde. Próximas em 04/10 e ~09/10. | 04/09 e 01/10, QA agendado |
-| O funil registra renovação? | **Não registrava nenhuma, em nenhum lugar, até 01/10.** O webhook do Stripe escrevia `assinou`, `cancelou` e `expirou`; o único `renovou` do projeto era o do RevenueCat, e a loja nunca vendeu. Então `renovacoes 0` significava "ninguém mediu", não "ninguém renovou", com `funilCorreto.ts` declarando o evento mensurável desde 22/08. Desde 01/10 quem escreve é a virada de ciclo em `/api/stripe/webhook` (o endpoint tem quatro eventos e não recebe `invoice.*`), sem valor no evento, com dedup pela leitura do ciclo antes do upsert. **TEORIA até 04/10**: nenhuma renovação passou pelo código ainda. | 01/10, QA agendado |
+| Quando entra o primeiro dinheiro? | **Entrou em 02/10 às 00:53:48 e voltou em 02/10 às 10:40:38.** A fatura do ciclo de 01/10 da `sub_1U8U8h…` foi paga, R$ 29,90, sem desconto, e estornada integralmente 9h47m depois (nota `cn_1UM3tK…`, estorno `re_3ULujQ…` concluído), um segundo após a assinatura ser cancelada na hora. Bruto R$ 29,90, **líquido R$ 0,00**: o produto segue com receita realizada zero. ~~o ciclo seguiu `active`, o que no Stripe só acontece com a fatura do ciclo novo paga~~ esse raciocínio era falso, ver a linha de baixo. | 04/09, 01/10 e 04/10, QA agendado |
+| Ciclo adiantado prova que a fatura foi paga? | **Não, e eu deduzi que sim em 01/10.** O ciclo é adiantado na VIRADA e a fatura só finaliza uma hora depois: período novo 23:52:23, fatura criada em `draft` 23:53:10, banco 23:53:13, paga 00:53:48. O intervalo é o atraso padrão do Stripe, 3638 segundos ao segundo nas duas faturas de ciclo que existem (01/09 e 01/10). Cartão recusado viraria `past_due` DEPOIS, com o ciclo já andado. Quem quer provar pagamento olha a fatura. | 04/10, QA agendado |
+| O `renovou` consegue dizer quanto entrou? | **Não na virada, e não por defeito de código.** O `faturaDaVirada` (02/10) busca a `latest_invoice` e só aceita `status: "paid"`, recusando `draft` com razão; mas na virada a fatura tem 3 segundos e está em `draft` por mais uma hora. Então toda renovação grava `semValor`. A entrega da fatura (`invoice.paid`, mais dedup pelo id dela) é o único caminho para o valor, e o item foi fechado em 03/10 com um argumento que esta medição contradiz. O `valorDoCheckout` da primeira cobrança NÃO é afetado: lá o pagamento acontece antes do evento. | 04/10, QA agendado |
+| O funil registra renovação? | **Não registrava nenhuma, em nenhum lugar, até 01/10.** O webhook do Stripe escrevia `assinou`, `cancelou` e `expirou`; o único `renovou` do projeto era o do RevenueCat, e a loja nunca vendeu. Então `renovacoes 0` significava "ninguém mediu", não "ninguém renovou", com `funilCorreto.ts` declarando o evento mensurável desde 22/08. Desde 01/10 quem escreve é a virada de ciclo em `/api/stripe/webhook` (o endpoint tem quatro eventos e não recebe `invoice.*`), sem valor no evento, com dedup pela leitura do ciclo antes do upsert. **CONTINUA TEORIA, e a prova deixou de existir**: os três assinantes saíram em 02/10, então as renovações de 04/10 e 09/10 não aconteceram (a de 04/10 confirmada na fonte: a assinatura terminou às 13:20:18 em vez de virar). A rede que sobrou é o `cicloVencido` de 02/10, que acusa ciclo vencido com status ativo. | 01/10 e 04/10, QA agendado |
 | O webhook do Stripe está vivo? | Está. Duas viradas de teste gravadas em 37 segundos, 01/09 e 04/09. | 04/09, QA agendado |
 | A captura de UTM está quebrada? | Não, nunca esteve. A consulta é que lia o caminho errado: é `extra->'utm'->>'utm_source'`. | 03/09 |
 | Por que a AppsFlyer diz que tudo é orgânico? | Porque é. O SDK está vivo (54 instalações e 55 ativos chegaram lá). O que falta é o link: os botões de baixar apontam para a ficha crua da loja (`lib/stores.ts`), então o clique do anúncio morre no navegador. 100% das UTM do google/cpc estão em `plataforma = web`, zero no android e no iOS. O conserto é um OneLink, e ele nasce no console da AppsFlyer. | 05/09 |

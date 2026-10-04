@@ -288,6 +288,24 @@ recomendar.
   as aberturas daquela versão em `funil_eventos` (a régua `public.identidade`):
   10 erros numa versão com 14 identidades é uma coisa, numa com 300 é outra.
   Diga sempre qual dos dois você mediu.
+- **Dinheiro tem hora, e a hora dele não é a hora do evento.** Na venda o
+  pagamento acontece ANTES do evento (a sessão do checkout já chega com
+  `amount_total` resolvido); na renovação ele acontece UMA HORA DEPOIS (o ciclo
+  vira, a fatura nasce em `draft` e só finaliza 3638 segundos mais tarde, o
+  mesmo intervalo ao segundo nas duas faturas de ciclo que existem). Quem lê
+  valor no instante do evento acerta num caso e pega vazio no outro, sem erro
+  nenhum no código. Antes de buscar um valor junto de um evento, pergunte
+  **quando aquele valor passa a existir** em relação àquele evento, e prefira
+  medir a linha do tempo real a inferi-la: foram dois carimbos de fatura que
+  responderam isto, não raciocínio.
+- **Conclusão certa por raciocínio errado continua sendo erro, e é o mais
+  perigoso de todos.** Em 01/10 eu afirmei que ciclo adiantado mais status
+  ativo provava fatura paga. A fatura estava paga mesmo, então ninguém
+  reclamou, e a frase ficou no diário e na tabela de perguntas fechadas pronta
+  para ser reaproveitada em cima de um pagamento que falhou. Quando uma
+  conclusão vier de uma cadeia e não de uma medida, escreva a cadeia inteira
+  para ela poder ser derrubada depois. E quando a fonte que faltava aparecer,
+  volte para CONFERIR o raciocínio, não só para preencher o número.
 - **Antes de escrever o `case` do webhook, descubra a QUE o endpoint está
   inscrito.** Em 01/10 o conserto certo do `renovou` era claramente a fatura
   (`invoice.paid`), que é quem sabe quanto entrou. O endpoint do Stripe está
