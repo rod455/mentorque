@@ -168,8 +168,58 @@ Barulho novo no carro? Descubra as causas prováveis, a urgência de cada uma e 
 
 ### Descrição
 
-Mesmo corpo da Play. A Apple não indexa a descrição na busca, mas é ela que
-um modelo de linguagem lê, então o texto continua valendo.
+Mesmo corpo da Play, mais o que a Apple exige para assinatura renovável (a
+frase da renovação e do cancelamento, e os links de EULA e privacidade). A
+Apple não indexa a descrição na busca, mas é ela que um modelo de linguagem
+lê, então o texto continua valendo.
+
+**A que está NO AR (print de 04/10/2026)** é um texto mais antigo, em
+tópicos com travessão em nove linhas. **Para o próximo envio, colar esta**
+(2499 caracteres, sem travessão, preços iguais aos do ar):
+
+```
+Mentorque é um aplicativo de manutenção e educação automotiva para quem não é mecânico. Ele ajuda você a entender o que o seu carro tem, a decidir se o problema pode esperar e a chegar na oficina sabendo o que perguntar.
+
+O QUE VOCÊ FAZ NO APP
+
+Diagnóstico por sintoma
+Descreva o que está sentindo com as suas palavras: barulho ao frear, luz acesa no painel, cheiro estranho, vibração no volante. O app mostra as causas prováveis, a urgência típica de cada uma e um checklist para levar na oficina, tudo ajustado ao carro que você cadastrou.
+
+Aulas de mecânica para leigos
+Trilhas do básico ao avançado sobre freio, suspensão, motor, elétrica e pneus. Escritas para quem nunca abriu um capô, sem jargão e sem aula de faculdade.
+
+Histórico de manutenção
+Registre serviços, peças e gastos por veículo. O app lembra das revisões pela quilometragem, e o histórico organizado ajuda na hora de vender o carro.
+
+Ferramentas do dia a dia
+Leitura de códigos OBD2, comparador de etanol e gasolina, quiz de saúde do veículo e estimativa de faixa de preço para você saber se o orçamento faz sentido.
+
+PARA QUEM É
+
+Para quem quer economizar sem ser enganado na oficina. Para motorista de aplicativo, que perde renda com o carro parado. Para quem comprou usado e não sabe o que já foi feito. E para quem simplesmente gosta de entender como as coisas funcionam.
+
+O QUE O MENTORQUE NÃO FAZ
+
+Ele não diagnostica o seu carro à distância e não substitui a inspeção de um profissional: mostra causas prováveis e prepara a conversa com o mecânico. Não conserta nada, não agenda serviço, não vende peça e não dá preço fechado. Também não é seguro nem assistência 24 horas.
+
+PREÇO
+
+O uso principal é gratuito e não pede cartão: cadastro de veículos, diagnóstico por sintoma, histórico de manutenção, aulas abertas e ferramentas básicas.
+
+O Mentorque Premium é opcional e libera o acervo completo de conteúdo, relatórios de gasto, diagnóstico aprofundado e a assistente Biela sem limite:
+Mensal: R$ 29,90 por mês
+Anual: R$ 239,90 por ano (equivale a R$ 19,99 por mês)
+Os dois com período de teste grátis.
+
+A assinatura é renovada automaticamente e pode ser cancelada a qualquer momento nos ajustes da sua conta Apple, até 24 horas antes do fim do período vigente.
+
+Termos de Uso (EULA): https://www.mentorque.com.br/termos
+Política de Privacidade: https://www.mentorque.com.br/privacidade
+
+Disponível em português e inglês. Também funciona no navegador, em www.mentorque.com.br
+
+Feito no Brasil, para motoristas de verdade.
+```
 
 ---
 
