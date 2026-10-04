@@ -105,6 +105,45 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (noite, 54) · A proposta de simplificacao, lida contra o codigo e contra o caderno
+
+- O dono trouxe o protótipo clicável (18 telas + landing) e a especificação
+  da sessão com Behance, e pediu: "veja o que faz sentido, converse com CRO e
+  me proponha uma evolução disso em relação ao que temos hoje". A resposta
+  está em `docs/design/evolucao-simplificacao.md`.
+- **O que a proposta acerta** fica: pergunta como porta, uma primária por
+  tela, folha de três campos reaproveitando o FUNCIONOU, portões que dizem o
+  que destravam, prova social depois da resposta, Biela em três blocos,
+  landing em seis blocos.
+- **O que o código desmente**, conferido linha a linha: o limite do grátis é
+  5 por mês mesmo (`lib/biela/limite.ts:32`, não era pendência);
+  `registrou_servico`, `viu_aula` e `clicou_baixar` já existem (a especificação
+  os tratava como eventos novos); o polegar do Biela já grava em
+  `/api/biela-voto`; o login já sabe que a pessoa veio assinar (`Auth.tsx:217`);
+  o convite "Quer que a gente avise a próxima revisão do {carro}?" já existe
+  (`ConviteDeAviso.tsx`). E os dois depoimentos foram ENCURTADOS no protótipo,
+  o que a própria regra 4 da especificação proíbe: vai o texto literal com o
+  nome.
+- **O que o caderno congela**: o Início carrega quatro mudanças diretas
+  abertas (gastos, datas, resumo, motorista); a primeira abertura está dentro
+  do `onboarding-curto` até 23/10; paywall e login dentro do
+  `login-sabe-que-veio-comprar`. A aposta número 1 da especificação (Início)
+  é a tela com mais apostas abertas em cima.
+- **Onde discordo**: Sintomas não viram atalho de chat sem medir antes
+  `consultou_sintoma` → `viu_paywall` (a tela tem causas borradas e preço
+  regional, que é promessa da ficha); quatro abas é a última coisa, não a
+  primeira (a troca barata é Problemas virar Biela); Lora não é aposta, é
+  decisão visual do dono.
+- **A ordem que propus**, com denominador de hoje: 1 landing (área livre,
+  `clicou_baixar` existe, mas a busca do Google voltou hoje e é tráfego novo na
+  mesma semana: ler por fonte); 2 aba Biela; 3 três blocos (66 perguntas em
+  30 dias, só direção); 4 Início (ou agora, declarando nas quatro apostas que
+  toca o degrau); 5 registrar serviço; 6 primeira abertura, depois de 23/10;
+  7 paywall, depois do veredito do login; 8 sintomas só com número.
+- Não medi nesta sessão: `consultou_sintoma` → `viu_paywall`,
+  `registrou_servico` por carro. Estão escritos como leitura a fazer antes
+  das apostas 5 e 8, não como número.
+
 ## 2026-10-04 (tarde, 53) · Os cinco anuncios de busca estao "Em analise": a URL final virou a home com etiqueta
 
 - O dono trocou a "URL final" dos cinco anuncios responsivos de pesquisa para
