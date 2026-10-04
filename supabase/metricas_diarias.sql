@@ -17,7 +17,11 @@ create table if not exists public.metricas_diarias (
     'revenuecat', 'vercel', 'admob', 'app_store_connect', 'play_console',
     'app_store_downloads', 'play_downloads',
     -- Instalação por fonte de mídia (AppsFlyer, Pull API, 03/10/2026).
-    'appsflyer'
+    'appsflyer',
+    -- Web Analytics da Vercel (04/10/2026): visitantes por caminho e, na
+    -- home, por utm_source. Aplicado no banco em 04/10 trocando a restrição
+    -- (drop + add da metricas_diarias_fonte_check).
+    'vercel_analytics'
   )),
   dados        jsonb not null default '{}'::jsonb,
   coletado_em  timestamptz not null default now(),

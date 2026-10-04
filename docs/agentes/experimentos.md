@@ -115,8 +115,13 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   é um site de portfólio de terceiro (10), depois Instagram (2) e Facebook
   (2). Lido do print do dono. A API (`count_pageviews`) responde "Web
   Analytics not found" para o mesmo projeto, e a hipótese, não provada, é
-  que a leitura por API não vale no plano Hobby. Enquanto for assim, o
-  denominador se lê no painel (Analytics > Pages > `/`), não no coletor.
+  que a leitura por API não vale no plano Hobby. ~~Enquanto for assim, o
+  denominador se lê no painel.~~ DESFEITO na mesma noite: a hipótese do plano
+  estava errada. A API responde ao token da credencial "Vercel" do n8n (30
+  visitantes e 35 páginas na home em 7 dias, lidos às 17:46); o que não
+  alcança é o token da integração do Claude. Desde 04/10 o denominador entra
+  no retrato pela fonte `vercel_analytics` (fluxo "Analista de Dados: Vercel
+  Web Analytics", 05:35), por caminho e, na home, por `utm_source`.
   Com 28 visitas por semana na home, qualquer taxa é direção: 3 cliques a
   mais mudam dez pontos. Para o tráfego pago há outro denominador: os
   cliques do Google Ads na campanha de busca, que voltou a veicular em 04/10

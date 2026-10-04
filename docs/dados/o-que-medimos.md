@@ -98,11 +98,16 @@ nenhum clique de Instagram jamais apareceu no funil. O link com etiqueta já
 existe (`mentorque.com.br/ig`, desde 19/09) e resolve o clique. O alcance por
 post depende de uma permissão no painel da Meta, que está na lista do dono.
 
-### 7. Web Analytics da Vercel no retrato
+### 7. Web Analytics da Vercel no retrato (FECHADO em 04/10/2026)
 
-Ligado em 19/09, mas os números ainda não entram na coleta diária: hoje só dá
-para vê-los no painel da Vercel. Entrar no retrato é o que permite ao papel de
-SEO acompanhar visita por guia sem depender de alguém abrir um site.
+Ligado em 19/09, e desde 04/10 entra na coleta diária como a fonte
+`vercel_analytics` (fluxo "Analista de Dados: Vercel Web Analytics" no n8n,
+05:35): visitantes e páginas por caminho nos últimos 7 dias, e visitantes da
+home por `utm_source`. A API é `/v1/query/web-analytics/visits/aggregate`, e
+ela responde ao token da credencial "Vercel" do n8n. O token da integração do
+Claude NÃO alcança essa API (responde "Web Analytics not found"), e por isso
+durante uma noite pareceu que o painel estava desligado. Leitura do dia em que
+entrou: 30 visitantes na home em 7 dias.
 
 ### 8. O que a pessoa procura no app e não encontra
 

@@ -28,6 +28,12 @@ const FONTES = new Set([
   // Meta contam cada um a sua, e o Play Console não divide anunciante (a
   // dimensão de origem dele tem duas linhas: pagas-e-diretas e não-atribuído).
   "appsflyer",
+  // Web Analytics da Vercel (04/10/2026): visitantes por caminho nos últimos
+  // 7 dias e visitantes da home por utm_source. É o denominador da aposta
+  // `landing-em-seis-blocos`. Fonte separada de `vercel` (deploys) porque vem
+  // de outro fluxo do n8n: o editor por API não anexa a credencial da Vercel a
+  // um nó novo dentro do coletor das 05:30, e aceita na criação de fluxo.
+  "vercel_analytics",
 ]);
 const MAX_DADOS = 20000; // bytes de JSON por pacote
 

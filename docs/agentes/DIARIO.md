@@ -105,6 +105,35 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (noite, 57) · A API de Analytics da Vercel responde, sim: era o token, não o plano
+
+- Pergunta do dono: "precisamos entender como pegar via API. Não tem como?".
+  Tem. A hipótese do plano Hobby, da entrada 56, estava errada.
+- **Provado no instrumento**: um fluxo de teste no n8n, com a credencial
+  "Vercel" que a casa já tinha (a mesma que lê os deploys), fez GET em
+  `/v1/query/web-analytics/visits/aggregate` e recebeu 200 com os números:
+  home 30 visitantes e 35 páginas em 7 dias, `/embed` 26 e 56,
+  `/privacidade` 16, `/excluir-conta` 11, `/baixar` 4. Bate com o painel do
+  dono (28 na home, janela um pouco diferente). O que não alcança essa API é
+  o token da integração do Claude com a Vercel, que responde "Web Analytics
+  not found" para o mesmo projeto. Causa do 404, agora com teste que separa:
+  alcance do token, não plano.
+- **Virou coletor diário**: fluxo "Analista de Dados: Vercel Web Analytics"
+  (05:35, publicado), que grava a fonte nova `vercel_analytics` em
+  `/api/metricas`: visitantes e páginas por caminho nos últimos 7 dias e
+  visitantes da home por `utm_source`. A fonte entrou na lista da rota. O
+  retrato imprime o pacote como imprime os outros.
+- Por que fluxo separado e não um nó no coletor das 05:30: o editor por API
+  do n8n recusa anexar a credencial `httpBearerAuth` a um nó de HTTP novo
+  dentro de fluxo existente ("does not accept credential"), nas duas formas
+  que tentei (no `addNode` e no `setNodeCredential`), e aceita na criação de
+  fluxo por código com o id da credencial. Fica registrado para a próxima
+  vez: credencial em nó novo, só criando fluxo.
+- O primeiro teste do coletor rodou antes de a rota aceitar a fonte, então a
+  gravação deve ter voltado 400; o segundo teste é depois do deploy.
+- Buraco de medição nº 7 de `docs/dados/o-que-medimos.md` fechado. A aposta
+  `landing-em-seis-blocos` passa a ter denominador no retrato, e por fonte.
+
 ## 2026-10-04 (noite, 56) · Mandei o dono ligar o que já estava ligado, de novo, e a regra de hoje de manhã explica por quê
 
 - Meia hora depois de a linha "ligar o Web Analytics" entrar na lista, o dono
