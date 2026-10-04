@@ -8,6 +8,7 @@ import {
   PLAY_STORE_URL,
 } from "@/lib/stores";
 import { marcarCliqueDownload } from "@/components/lp/Rastreio";
+import { funil } from "@/lib/app/funil";
 
 /**
  * Selos das lojas. Com `href` viram link; sem `href`, continuam um botão inerte
@@ -23,11 +24,13 @@ function Badge({
   loja,
   caption,
   href,
+  aoClicar,
 }: {
   store: string;
   loja: "app_store" | "google_play";
   caption: string;
   href?: string;
+  aoClicar: (loja: "app_store" | "google_play") => void;
 }) {
   const inner = (
     <span className="flex items-center gap-3">
@@ -48,7 +51,7 @@ function Badge({
       target="_blank"
       rel="noreferrer"
       className={cls}
-      onClick={() => marcarCliqueDownload(loja)}
+      onClick={() => aoClicar(loja)}
     >
       {inner}
     </a>
@@ -59,8 +62,30 @@ function Badge({
   );
 }
 
-export function StoreBadges({ className }: { className?: string }) {
+// O CLIQUE NO SELO DEIXA RASTRO NO NOSSO FUNIL (04/10/2026).
+//
+// Até aqui o selo só avisava o Pixel da Meta e o Google Ads
+// (`marcarCliqueDownload`), e o nosso funil não sabia de nada: os únicos
+// `clicou_baixar` da base vinham do /baixar. A aposta `landing-em-seis-blocos`
+// mede cliques de loja na home, e sem isto ela seria aposta medida por
+// instrumento que não existe (régua do CRO, ponto 13). A `origem` diz de onde
+// na página o clique saiu ("home-topo", "home-fim"), mais a loja, para a
+// leitura separar o que o /baixar grava (lá a origem é só a loja).
+//
+// `umaVez` com chave por origem e loja: a mesma pessoa tocando duas vezes no
+// mesmo selo não são dois interessados. O try/catch é a regra de sempre:
+// medição nunca segura a navegação.
+export function StoreBadges({ className, origem }: { className?: string; origem?: string }) {
   const { t } = useI18n();
+  const marcar = (loja: "app_store" | "google_play") => {
+    marcarCliqueDownload(loja);
+    if (!origem) return;
+    try {
+      funil("clicou_baixar", { origem: `${origem}:${loja}`, umaVez: true, chave: `baixar:${origem}:${loja}` });
+    } catch {
+      /* medição não segura a navegação */
+    }
+  };
   return (
     <div className={`flex flex-wrap gap-3 ${className ?? ""}`}>
       <Badge
@@ -68,12 +93,14 @@ export function StoreBadges({ className }: { className?: string }) {
         loja="app_store"
         caption={APP_STORE_PUBLICADO ? t.hero.downloadOn : t.hero.comingSoon}
         href={APP_STORE_PUBLICADO ? APP_STORE_URL : undefined}
+        aoClicar={marcar}
       />
       <Badge
         store={t.hero.googlePlay}
         loja="google_play"
         caption={PLAY_STORE_PUBLICADO ? t.hero.downloadOn : t.hero.comingSoon}
         href={PLAY_STORE_PUBLICADO ? PLAY_STORE_URL : undefined}
+        aoClicar={marcar}
       />
     </div>
   );

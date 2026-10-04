@@ -13,11 +13,8 @@ export function Footer() {
   const privacyHref = locale === "en" ? "/privacy" : "/privacidade";
   const termsHref = locale === "en" ? "/terms" : "/termos";
   const nav = [
-    { href: "#features", label: t.nav.features },
-    { href: "#how", label: t.nav.how },
-    { href: "#consulting", label: t.nav.consulting },
+    { href: "#biela", label: t.nav.how },
     { href: "#plans", label: t.nav.plans },
-    { href: "#faq", label: t.nav.faq },
     // Guias de busca: páginas próprias, indexáveis, fora da home. O link daqui
     // não é enfeite: é por ele que o robô chega até elas a partir da página com
     // mais autoridade do site. Só aparece em português porque os guias são

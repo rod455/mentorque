@@ -105,6 +105,50 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (noite, 55) · Aposta 1 no ar: a landing em seis blocos, com instrumento e sem carrossel
+
+- O dono aprovou a ordem ("Podemos fazer o que você sugeriu, daremos mais
+  visibilidade ao biela") e pediu para não tirar gifs e animações. Ficam
+  todas: a cena da Biela dirigindo, as artes animadas em `public/biela/`, o
+  carro saindo no onboarding, a abertura do app, o aparecer das seções. A
+  única coisa de movimento que saiu é o carrossel de três manchetes, porque
+  ele troca a promessa e a lição é uma promessa só.
+- **O que mudou na home** (`app/page.tsx`): treze seções viraram seis. Saíram
+  TrustBar, ProblemSolution, Features, HowItWorks, Consulting, Benefits e FAQ,
+  e com elas o que o app não tem mais e a página ainda prometia: trilhas com
+  certificado, comunidade e lives, consultoria em três níveis, "funciona no
+  navegador" (que contrariava a decisão de lead só na loja). Entraram:
+  manchete única, o Biela respondendo uma pergunta real na primeira dobra
+  (`BielaDemo`, no lugar do celular com "Trilha · Freios"), três ganhos, as
+  duas avaliações da App Store com texto inteiro e nome, o preço uma vez
+  (Grátis e Premium com os valores em vigor; o contato de WhatsApp da
+  consultoria continua ali, com o mesmo evento), chamada final, rodapé.
+- **Instrumento primeiro**: os selos de loja da home nunca gravaram
+  `clicou_baixar`; só o /baixar gravava (4 na semana). Agora o `StoreBadges`
+  grava com a origem `home-topo:*` ou `home-fim:*`. E o denominador não
+  existe: o Web Analytics da Vercel está desligado ("Web Analytics not
+  found"). Virou linha do dono, com a ressalva de não ligar se pedir dinheiro.
+- **Dito no dia**: a busca do Google voltou a veicular hoje apontando para a
+  home. Toda leitura desta aposta separa por `utm_source`.
+- **A demonstração do Biela mostra a resposta como ela sai HOJE** (prosa
+  curta), não em três blocos. Três blocos é a aposta 3; mostrar na landing um
+  formato que o app não entrega seria promessa falsa. Quando a 3 for ao ar,
+  a demonstração muda junto (comentário em `strings.pt.ts`).
+- Conferências: `npm run conferir` verde; suíte `site` verde (65). A
+  conferência do trilho do carrossel virou a sua inversa: reprova se o
+  carrossel voltar sem a medição voltar junto. Plantei o marcador de
+  carrossel na manchete e ela reprovou nas quatro larguras; restaurei por
+  cópia de segurança.
+- ERRO MEU NO CAMINHO, para não repetir: subi um servidor de desenvolvimento
+  à mão para tirar foto e rodei a suíte em cima dele; os dois brigaram pelo
+  `.next` e tudo passou a abrir "SEM CSS", inclusive páginas que eu não
+  toquei. O comentário da própria suíte já dizia isso (04/09). O certo:
+  servidor à mão só para foto, derrubar antes da suíte, e a suíte sobe o
+  dela.
+- Fotos tiradas em 390px e 1280px, em português, depois de rolar a página
+  (foto de página inteira sem rolar deixa os blocos de aparecer suave
+  vazios, e isso é artefato da foto, não defeito).
+
 ## 2026-10-04 (noite, 54) · A proposta de simplificacao, lida contra o codigo e contra o caderno
 
 - O dono trouxe o protótipo clicável (18 telas + landing) e a especificação

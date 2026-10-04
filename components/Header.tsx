@@ -16,12 +16,11 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Dois links, porque a página tem seis blocos (04/10/2026): o Biela em ação
+  // é "como funciona", e Planos é o único outro destino que alguém procura.
   const links = [
-    { href: "#features", label: t.nav.features },
-    { href: "#how", label: t.nav.how },
-    { href: "#consulting", label: t.nav.consulting },
+    { href: "#biela", label: t.nav.how },
     { href: "#plans", label: t.nav.plans },
-    { href: "#faq", label: t.nav.faq },
   ];
 
   return (

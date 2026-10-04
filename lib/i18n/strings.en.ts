@@ -12,11 +12,8 @@ export const en: Strings = {
       "Guided tracks, symptom-based diagnosis, fair pricing and consulting with someone who's in the industry. Download it free on the App Store.",
   },
   nav: {
-    features: "Features",
     how: "How it works",
-    consulting: "Consulting",
     plans: "Plans",
-    faq: "FAQ",
     cta: "Get the app",
     toggleLang: "Português",
     skipToContent: "Skip to content",
@@ -24,23 +21,25 @@ export const en: Strings = {
   },
   hero: {
     eyebrow: "Now on the App Store and Google Play",
-    headlines: [
-      { a: "Stop overpaying because you don't understand ", b: "your own car." },
-      { a: "Mechanics from basics to advanced, ", b: "with an expert in your pocket." },
-      { a: "Know what's wrong before the shop does, ", b: "and never be at their mercy again." },
-    ],
+    headline: { a: "Know what your car has ", b: "before you go to the shop." },
     subheadline:
-      "Learn to understand your car, find the fair price before approving any work, and talk to a real expert when you get stuck. You don't need to become a mechanic, just stop paying for what you don't understand.",
-    ctaNote: "Free forever on the base plan, and no card to get started.",
+      "Describe the noise, the dashboard light or the smell. Biela, the Mentorque mechanic, answers with the likely causes, how urgent it is and what to ask at the shop.",
+    ctaNote: "Free to start, no card. Up to 2 cars in your garage.",
+    proof: "Rated 5.0 in store reviews. Over 170 diagnoses and 250 drivers.",
     downloadOn: "Download on the",
     comingSoon: "Coming soon to",
     appStore: "App Store",
     googlePlay: "Google Play",
-    mockupAlt: "Preview of the Mentorque app showing a learning track and symptom-based diagnosis",
-    carouselLabel: "Highlighted headlines",
-    prev: "Previous headline",
-    next: "Next headline",
-    goTo: "Go to headline",
+    demo: {
+      alt: "Biela answering a question about a brake noise",
+      car: "Golf GTI 2014 · 98,000 km",
+      you: "You",
+      biela: "Biela",
+      question: "A metallic noise started when I brake, mostly at low speed.",
+      answer:
+        "Almost certainly brake pads at the end of their life: a metallic noise at low speed is the wear indicator scraping the disc. You can drive a few days, but the longer you wait, the higher the chance of taking the disc with it. At the shop, ask how many millimetres of pad are left, whether the disc is at minimum thickness, and get the part priced separately from labour. Brakes need an in-person inspection.",
+      typing: "Answering for your car",
+    },
   },
   waitlist: {
     placeholder: "Your best email",
@@ -55,233 +54,79 @@ export const en: Strings = {
     privacy: "Free. No card. Cancel anytime. Your email is only used to tell you about launch.",
     emailLabel: "Email address",
   },
-  trust: {
-    eyebrow: "Why get it now",
-    ledBy: "The person teaching you actually works in the auto industry, not just another generic platform course.",
-    foundingTitle: "Start on the free plan",
-    foundingBody: "You can genuinely use it without paying. Premium waits for the day you want the rest.",
-    perks: [
-      "Your garage, with the car's full service history",
-      "Symptom diagnosis, so you reach the shop already knowing",
-      "Service reminders by date and by mileage",
-    ],
-    pressLabel: "As seen in",
-    pressPlaceholders: ["Press", "Partner", "Channel", "Garage"],
-  },
-  problem: {
-    title: "How much have you lost by not understanding your car?",
-    intro:
-      "Every time you don't know what's wrong, someone else decides for you, and almost always charges more. Mentorque takes that power away from the shop and gives it back to you.",
-    items: [
-      {
-        pain: "You pay whatever they tell you to pay",
-        turn: "Walk into the shop already knowing the likely cause and the fair price range. When you understand, the inflated quote doesn't stick.",
-      },
-      {
-        pain: "Fear of being ripped off every visit",
-        turn: "Symptom-based diagnosis and a second opinion from the team: you approve work with confidence, not in the dark.",
-      },
-      {
-        pain: "Hours lost hunting random videos",
-        turn: "Structured tracks from basics to advanced, in the voice of someone in the field: the right knowledge, no YouTube digging.",
-      },
-      {
-        pain: "Generic advice that doesn't fit YOUR car",
-        turn: "Everything adapts to your vehicle (make, model, year): checklists and steps that fit the car actually in your garage.",
-      },
-    ],
-  },
-  features: {
-    title: "Everything to understand, maintain and decide with confidence",
-    intro: "Learning, tools and human help in one place, built around your vehicle.",
-    items: [
-      {
-        icon: "track",
-        title: "Tracks from beginner to advanced",
-        body: "Guided courses in the voice of someone in the industry, from zero to autonomy, with a certificate when you finish each track.",
-      },
-      {
-        icon: "diagnose",
-        title: "Symptom-based diagnosis",
-        body: "Describe what you feel (\"a noise when braking\") and get a step-by-step of likely causes and what to check.",
-      },
-      {
-        icon: "tools",
-        title: "Fair price before the shop",
-        body: "Fair-price estimator, OBD2 code reader, per-vehicle maintenance checklist and car history.",
-      },
-      {
-        icon: "consult",
-        title: "Expert consulting",
-        body: "Talk to the creator and team when a video isn't enough. Human help, straight to the point.",
-      },
-      {
-        icon: "car",
-        title: "Built for your car",
-        body: "Personalized by make, model and year: everything you see is relevant to the vehicle you actually own.",
-      },
-      {
-        icon: "community",
-        title: "Community and live streams",
-        body: "Ask questions, follow live sessions and learn alongside people who live and breathe cars and bikes.",
-      },
-    ],
-  },
-  how: {
-    title: "Start understanding your car today",
-    intro: "Four simple steps, from registering your car to expert help.",
-    steps: [
-      { n: "01", title: "Build your garage", body: "Add make, model and year in 2 minutes. From there, everything in the app is about YOUR car." },
-      { n: "02", title: "See what's going on", body: "Symptom diagnosis, OBD2 and the checklist instantly show what needs attention, and what it should cost." },
-      { n: "03", title: "Learn at your pace", body: "Follow the tracks from basics to advanced and earn a certificate at every step you complete." },
-      { n: "04", title: "Call an expert", body: "Stuck? Tap into consulting (community, team or 1:1 with the creator) and solve it safely." },
-    ],
-  },
   // Empty on purpose — see the note in strings.pt.ts. Fill `items` in both
   // files when real testimonials exist and the section comes back on its own.
-  social: {
-    eyebrow: "Who's coming in",
-    title: "What people are saying",
-    intro: "Stories from people already using Mentorque day to day.",
-    items: [] as { quote: string; name: string; context: string }[],
-  },
-  consulting: {
-    eyebrow: "The edge",
-    title: "Real human help when a video isn't enough",
-    intro:
-      "Content teaches, but every car has its quirk. Mentorque's consulting puts a trusted expert by your side, in three levels, from free to 1:1.",
-    tiers: [
-      {
-        name: "Community",
-        body: "Post your question and get guidance from the community and moderators who know their stuff.",
-        note: "Included in the free plan",
-      },
-      {
-        name: "Diagnosis by the team",
-        body: "The creator's team reviews your case (symptoms, photos, OBD2 codes) and sends back a clear action plan.",
-        note: "On Premium",
-      },
-      {
-        name: "1:1 with the creator",
-        body: "A one-on-one session with the creator for tough cases or buy/restore decisions. Limited spots.",
-        note: "Consulting · limited spots",
-      },
+  gains: {
+    title: "What changes when you understand your car",
+    items: [
+      { title: "Save on the service", body: "Walk into the shop knowing what to ask for and what not to accept." },
+      { title: "Understand your car", body: "Short lessons for people who are not mechanics and do not want to be." },
+      { title: "Never miss the next service", body: "A mileage-based plan and a phone reminder that calls your car by name." },
     ],
-    contactTitle: "Talk to the expert directly",
-    contactName: "Alessandro Vila Nova",
-    contactRole: "Automotive engineer in the US · 4 years with Porsche Cup Brazil",
-    contactTrack: "Currently racing in the IMSA Michelin Pilot Challenge and VP Racing",
-    contactCta: "Message on WhatsApp",
-    contactPhoneLabel: "+1 (248) 768-0340",
+  },
+  social: {
+    eyebrow: "Store reviews",
+    title: "People describe the result, not the app",
+    intro: "Two public App Store reviews, in full. Originally in Portuguese.",
+    items: [
+      {
+        quote: "I managed to save money. Very good for managing services, oil changes and that kind of thing.",
+        name: "munizluiz",
+        context: "via App Store, 5 stars",
+      },
+      {
+        quote: "I know nothing about cars and mechanics, and with the app's videos I have been learning more and more.",
+        name: "aminoru",
+        context: "via App Store, 5 stars",
+      },
+    ] as { quote: string; name: string; context: string }[],
   },
   plans: {
-    title: "Plans for every stage",
-    intro:
-      "Start free and level up when you need more tools and human help.",
-    anchor:
-      "A single part replaced for no reason at the shop usually costs more than a whole year of Premium. The app pays for itself the first time you say “no.”",
+    title: "Start free. Premium is for people who use it every week.",
+    intro: "No card to start. Premium has a 7-day free trial, and you cancel in the app.",
     items: [
       {
         name: "Free",
-        price: "$0",
+        price: "R$ 0",
         priceNote: "forever",
         features: [
-          "Intro tracks",
-          "Symptom-based diagnosis (basic)",
-          "Maintenance checklist",
-          "Community access",
+          "5 questions to Biela per month",
+          "Garage with up to 2 cars",
+          "Symptom diagnosis, history and service reminders",
+          "Open lessons",
         ],
-        cta: "Start free",
+        cta: "Download free",
         highlight: false,
       },
       {
         name: "Premium",
-        price: "Subscription",
-        priceNote: "monthly or yearly",
+        price: "R$ 29.90",
+        priceNote: "per month, or R$ 239.90 per year",
         features: [
-          "All tracks + certificates",
-          "Full tools (OBD2, fair price, history)",
-          "Diagnosis by the team",
-          "Exclusive content and live streams",
+          "Unlimited questions to Biela",
+          "Your car's mileage-based service plan",
+          "Garage with no car limit",
+          "Full lesson library",
         ],
-        cta: "Get Premium",
+        cta: "See it in the app",
         highlight: true,
-        badge: "What most people pick",
-      },
-      {
-        name: "Consulting",
-        price: "Custom",
-        priceNote: "packages and 1:1",
-        features: [
-          "Everything in Premium",
-          "1:1 sessions with the creator",
-          "Project/restoration follow-up",
-          "Priority support",
-        ],
-        cta: "Talk about consulting",
-        highlight: false,
+        badge: "7 days free",
       },
     ],
-    guarantee: "No card to start. No lock-in. You upgrade to Premium only when it makes sense, and cancel with one tap.",
-    note: "There is a free trial to try it out, and each plan's price is shown at checkout. Cancel any time, from the app.",
-  },
-  benefits: {
-    title: "Why join Mentorque",
-    items: [
-      "Save at the shop by knowing the fair price before you approve any work.",
-      "Actually learn, with structure from basics to advanced, not scattered videos.",
-      "Get human help when you're stuck, not just an automated chat.",
-      "Everything built for your car: make, model and year.",
-      "The trust of someone who lives off the auto industry, not marketing.",
-      "Decide with data: OBD2 codes, history and checklists in your pocket.",
-    ],
-  },
-  faq: {
-    title: "Frequently asked questions",
-    intro: "Still unsure? Just reply to the welcome email.",
-    items: [
-      {
-        q: "How do I get started?",
-        a: "Download it from the App Store or Google Play and create your account. The free plan already covers adding your car, keeping its service history and diagnosing a symptom, with no card at all.",
-      },
-      {
-        q: "Is it for people who've never touched a car?",
-        a: "Yes. Tracks start from absolute zero, in plain language, and build up to technical topics. You choose how far to go.",
-      },
-      {
-        q: "Does it work for my car or motorcycle?",
-        a: "You register make, model and year, and the content, checklists and tools adapt to your vehicle, car or bike.",
-      },
-      {
-        q: "Do I have to pay to use it?",
-        a: "No. Download it on the App Store and use it for free: garage, symptom diagnosis, OBD2 codes, fuel calculator and most of the lessons. Premium is optional.",
-      },
-      {
-        q: "Do I need to buy equipment for OBD2?",
-        a: "To read your car's codes you use a common OBD2 adapter (available for a small price). The app guides the reading and explains what each code means.",
-      },
-      {
-        q: "How does consulting work?",
-        a: "Three levels: the community (free), diagnosis by the team, and a 1:1 session with the creator for tough cases. You pick what you need.",
-      },
-      {
-        q: "Is it paid? Is there a free plan?",
-        a: "There's a free plan, forever, with intro tracks and community. Advanced features and consulting are on the paid plans.",
-      },
-      {
-        q: "Is the app out already?",
-        a: "It is. Mentorque is live on the App Store and on Google Play, and the download buttons are at the top of this page. You can also use it in the browser, with nothing to install.",
-      },
-    ],
+    consulting: {
+      title: "Need a real person?",
+      body: "The Mentorque specialist answers on WhatsApp for the cases the app cannot solve.",
+      cta: "Talk on WhatsApp",
+    },
   },
   finalCta: {
-    title: "Mentorque is on the stores.",
+    title: "Ask Biela before your next shop visit.",
     body:
-      "Download it, add your car and see what it is asking for. The free plan has no deadline and asks for no card, and Premium stays there for the day you want the rest.",
+      "Download it free, describe what the car is doing and walk into the shop knowing what to ask.",
     urgency: "Free to start · no card",
   },
   footer: {
-    tagline: "Mechanics from basics to advanced, with expert consulting in your pocket.",
+    tagline: "The app that explains your car before the shop does.",
     navTitle: "Navigation",
     socialTitle: "Social",
     legalTitle: "Legal",

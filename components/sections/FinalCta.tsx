@@ -24,7 +24,7 @@ export function FinalCta() {
             competia com o download e prometia um aviso de lançamento que já
             aconteceu. */}
         <div className="mt-8 flex justify-center">
-          <StoreBadges />
+          <StoreBadges origem="home-fim" />
         </div>
       </div>
     </Section>

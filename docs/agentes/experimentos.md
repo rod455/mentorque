@@ -80,6 +80,58 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 
 ## Experimentos
 
+## [landing-em-seis-blocos] A home tem uma promessa, o Biela em ação e a loja como único destino
+- Estado: ABERTO
+- Tipo: mudanca-direta
+- Alvo no funil: o clique de loja na home (`clicou_baixar` com origem
+  `home-topo:*` e `home-fim:*`). É o único degrau que a landing tem: o
+  destino da página é a loja, por decisão do dono (12/09 e 04/10), e não há
+  formulário.
+- Tese BeSci: uma promessa só (a home tinha treze seções e um carrossel de
+  três manchetes girando a cada cinco segundos; quem chega lê uma frase, não
+  três em sequência) e prova pelo desfecho, não pelo recurso (lição 4 do CRO:
+  as avaliações reais dizem "consegui economizar" e "tenho aprendido", e
+  nenhuma elogia funcionalidade pelo nome). A = treze seções, carrossel, seis
+  recursos, quatro passos, consultoria em três níveis, seis benefícios, FAQ de
+  oito perguntas, três planos sem valor, e um celular desenhado mostrando
+  "Trilha · Freios" que o app não tem mais. B = seis blocos: manchete única
+  ("Saiba o que o carro tem antes de ir na oficina."), o Biela respondendo
+  uma pergunta real na primeira dobra (como ele responde HOJE, em prosa),
+  três ganhos, as duas avaliações da App Store com o texto inteiro e o nome,
+  o preço uma vez (Grátis e Premium, com os valores em vigor), a chamada
+  final com as lojas, rodapé. As animações ficam (cena da Biela no carro,
+  aparecer das seções), por decisão do dono em 04/10; só o carrossel sai.
+- INSTRUMENTO PRIMEIRO (régua 13): os selos de loja da home nunca gravaram
+  evento no nosso funil. Os únicos `clicou_baixar` da base vinham do /baixar
+  (4 na semana até 04/10: 2 `escolha`, 2 `play`). Entrou junto com a mudança
+  o evento nos selos, com a origem dizendo de onde na página o clique saiu.
+  Então o "antes" da home é ZERO por falta de instrumento, não por falta de
+  clique; a primeira semana é o primeiro "antes" que existe, e a comparação
+  honesta é entre semanas DEPOIS da mudança, por fonte de tráfego.
+- O DENOMINADOR NÃO EXISTE AINDA: o Web Analytics da Vercel está desligado
+  (a API responde "Web Analytics not found" em 04/10), então ninguém sabe
+  quantas visitas a home recebe. Sem isso, a taxa é cliques por semana, não
+  cliques por visita. Ligar é um clique do dono no painel da Vercel e está na
+  lista dele. Para o tráfego pago há um denominador parcial: os cliques do
+  Google Ads na campanha de busca, que voltou a veicular em 04/10 apontando
+  para a home com `utm_source=google`.
+- TOCA O DEGRAU DE OUTRA COISA, dito no dia (regra de 02/10): a busca do
+  Google voltou a veicular NO MESMO DIA, e manda tráfego novo para a home.
+  Qualquer subida de clique na semana tem duas causas possíveis. A leitura
+  separa por `utm_source` (o funil carrega a etiqueta): orgânico e direto de
+  um lado, `google` do outro.
+- Métrica: `clicou_baixar` com origem `home-*` por semana, cortado por
+  `utm_source`; quando o Web Analytics estiver ligado, por visita da home ·
+  Duração: 4 semanas, e com a ressalva de que o volume da home é pequeno
+  (o /baixar faz 4 cliques por semana; a home deve fazer mais, mas ninguém
+  mediu), então a leitura será direcional.
+- Aprovação: aprovada pelo dono em 2026-10-04 ("Podemos fazer o que você
+  sugeriu, daremos mais visibilidade ao biela")
+- Início: 2026-10-04 · Ler a partir de: 2026-10-18 (direcional) e 2026-11-01
+- Antes: home sem instrumento (zero por construção); /baixar 4 cliques na
+  semana até 04/10; visitas da home desconhecidas
+- Veredito: (aberto)
+
 ## [convite-do-carro-nao-queima-com-convidado] O melhor momento do pedido para de ser gasto à toa
 - Estado: ABERTO
 - Tipo: mudanca-direta

@@ -130,38 +130,29 @@ export async function rodar({ nav, ok }) {
       // Nenhuma conferência daqui pegava isso: a página não vaza para o lado,
       // não tem rolagem lateral e nenhum texto some. Ela só PULA, e pulo não
       // aparece em foto nem em asserção de texto.
+      //
+      // EM 04/10/2026 O CARROSSEL SAIU (aposta `landing-em-seis-blocos`): a
+      // home tem uma manchete só, então não há trilho nem bolinha para medir.
+      // O que esta conferência passa a vigiar é o contrário: que o carrossel
+      // NÃO volte sem a conferência de trilho voltar junto. Se alguém
+      // reintroduzir as bolinhas, isto reprova e manda recuperar o bloco de
+      // medição do histórico (commit anterior a 04/10) em vez de confiar no
+      // verde. E a manchete tem que existir, uma, com texto.
       if (caminho === "/") {
-        const trilho = await pg.evaluate(() => {
-          const h1 = document.querySelector("h1");
-          if (!h1) return null;
-          const caixa = h1.parentElement;
+        const manchete = await pg.evaluate(() => {
+          const h1s = Array.from(document.querySelectorAll("h1"));
           return {
-            minima: Math.round(parseFloat(getComputedStyle(caixa).minHeight) || 0),
-            alturas: [Math.round(h1.getBoundingClientRect().height)],
+            quantas: h1s.length,
+            texto: (h1s[0]?.textContent ?? "").trim().length,
+            bolinhas: document.querySelectorAll('[aria-label^="Ir para a frase"], [aria-roledescription="carousel"]').length,
           };
         });
-
-        if (trilho) {
-          // Clica em cada bolinha e mede a frase que entrou. Fica FORA do
-          // evaluate porque a troca é animada e medir cedo lê o meio do
-          // caminho, que foi o erro da primeira versão da conferência da barra.
-          const bolinhas = await pg.locator('[aria-label^="Ir para a frase"]').count();
-          for (let i = 0; i < bolinhas; i++) {
-            await pg.locator('[aria-label^="Ir para a frase"]').nth(i).click();
-            await pg.waitForTimeout(650);
-            const alt = await pg.evaluate(() =>
-              Math.round(document.querySelector("h1").getBoundingClientRect().height)
-            );
-            trilho.alturas.push(alt);
-          }
-          const maior = Math.max(...trilho.alturas);
-          ok(
-            `/ @ ${largura}px: a manchete mais alta cabe no trilho (sem pulo)`,
-            maior <= trilho.minima,
-            `trilho ${trilho.minima}px, frase mais alta ${maior}px` +
-              (maior > trilho.minima ? `, ESTOURA ${maior - trilho.minima}px` : "")
-          );
-        }
+        ok(
+          `/ @ ${largura}px: uma manchete só, com texto, e sem carrossel`,
+          manchete.quantas === 1 && manchete.texto > 10 && manchete.bolinhas === 0,
+          `h1: ${manchete.quantas}, texto: ${manchete.texto} caracteres, carrossel: ${manchete.bolinhas}` +
+            (manchete.bolinhas > 0 ? " (o carrossel voltou: a conferência de trilho precisa voltar junto)" : "")
+        );
       }
 
       await pg.close();

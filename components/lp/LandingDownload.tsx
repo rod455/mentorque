@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/stores";
 import { detectPlatform } from "@/lib/app/platform";
-import { PhoneMockup } from "@/components/ui/PhoneMockup";
+import { BielaDemo } from "@/components/ui/BielaDemo";
 import { marcarCliqueDownload, Rastreio } from "./Rastreio";
 import { Especialista } from "./Especialista";
 
@@ -124,7 +124,10 @@ export function LandingDownload({ variante }: { variante?: string }) {
               <p className="mt-3 text-sm text-cream/55">Grátis. Sem cartão. Já disponível pra iPhone e Android.</p>
             </div>
             <div className="relative mx-auto">
-              <PhoneMockup />
+              {/* O celular com "Trilha · Freios" virou o Biela respondendo
+                  (04/10/2026): é o mesmo componente da home, e mostra o uso
+                  real do produto em vez de uma tela que o app não tem mais. */}
+              <BielaDemo />
               <img
                 src="/biela/biela-acenando.png"
                 alt=""
