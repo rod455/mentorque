@@ -67,8 +67,8 @@ destino e a web não recebe lead; a ficha dizia o contrário. Saiu das duas.
 
 **NO AR desde 04/10/2026 (colado pelo dono):** o texto abaixo, com os 2
 carros, a frase dos anúncios e sem a do navegador. Até 04/10 o ar tinha um
-texto mais antigo ("Mentorque — seu carro bem cuidado, sem depender de
-achismo"), com travessão e emoji e sem o limite de carros.
+texto mais antigo (começava com "Mentorque", um travessão e "seu carro bem
+cuidado, sem depender de achismo"), com travessão e emoji e sem o limite de carros.
 
 ```
 Mentorque é um aplicativo de manutenção e educação automotiva para quem não é mecânico. Ele ajuda você a entender o que o seu carro tem, a decidir se o problema pode esperar e a chegar na oficina sabendo o que perguntar.
