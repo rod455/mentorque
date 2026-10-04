@@ -33,6 +33,24 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 44) · A chave do blog esta no cofre, o header em texto sumiu, e a antiga foi apagada
+
+- O dono criou a chave nova na Anthropic (escopo Organization; para funcionar
+  tanto faz, muda so onde o custo aparece), a credencial Header Auth
+  "Anthropic (blog)" no n8n, e trocou o no "IA (Claude)" para a credencial.
+  Faltava apagar a linha `x-api-key` da lista de headers, que ainda carregava
+  a chave antiga: apaguei eu, pela API (a primeira tentativa bateu no editor
+  aberto dele), publiquei, e conferi na definicao: o no tem so
+  `anthropic-version` e `content-type`, e a versao ativa e a publicada.
+- A chave antiga do no era a "IA TUTOR" (25/06), identificada pelo prefixo no
+  print da console; o dono a apagou. Nada ativo alem do blog a usava.
+- O que sobra e o webhook `Sob demanda` sem senha. Pergunta unica ao dono: ele
+  dispara por fora? Se nao, eu apago o no. A linha da lista virou essa
+  pergunta.
+- Duas chaves que apareceram no dump do fluxo (a service_role do Supabase do
+  Vocaboost, que aponta para projeto que nao resolve, e a antiga da Anthropic,
+  ja apagada) ficam registradas por LOCALIZACAO, nunca por valor.
+
 ## 2026-10-04 (tarde, 43) · O fluxo do blog fica ligado de proposito, e a chave vira quatro passos
 
 - Dono: "sim, vai voltar, pode ignorar esse ponto". O banco do Vocaboost vai
