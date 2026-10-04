@@ -2167,7 +2167,9 @@ REGISTRO no diário, não sobre o trabalho inteiro. Não abri os seis relatório
   agente de mídia mede outra janela, mostrei as duas.
 
 ## 2026-10-04 · Segurança (rodada 3): a conferência que eu tinha pedido para outro papel virou trabalho meu, e o quinto fluxo tem uma chave viva atrás de um webhook sem senha
-- Artifact "Segurança da semana" (rodada 3) publicado. Semana de 88 commits.
+- Artifact "Segurança da semana" (rodada 3):
+  https://claude.ai/artifact/JJdYcrmYe1yBZMzSg7ukmA
+- Semana de 88 commits.
 - **O VEREDITO DO DONO SOBRE A RODADA 2, PONTO POR PONTO.**
   - **Ponto 1, o pedido que ficou sem dono: FEITO, e é a maior parte desta
     rodada.** Eu tinha pedido que a `verifica-banco.mjs` exigisse
