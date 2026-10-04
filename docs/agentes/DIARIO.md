@@ -33,6 +33,17 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 43) · O fluxo do blog fica ligado de proposito, e a chave vira quatro passos
+
+- Dono: "sim, vai voltar, pode ignorar esse ponto". O banco do Vocaboost vai
+  ser restaurado por ele; o fluxo continua ligado de proposito, e ninguem traz
+  isso de novo. A linha "continua ligado?" saiu.
+- Sobre a chave: "o que preciso fazer?". A linha virou um roteiro de quatro
+  passos (criar chave nova, credencial Header Auth no n8n, trocar o no para a
+  credencial e apagar o header em texto, revogar a antiga), mais o webhook com
+  Header Auth ou apagado. O passo da credencial e dele porque o MCP nao anexa
+  credencial a no HTTP.
+
 ## 2026-10-04 (tarde, 42) · Veredito do dono sobre a Seguranca (rodada 3), e uma correcao minha sobre os e-mails do blog
 
 - Veredito escrito no manual `seguranca-dependencias.md`: tres coisas a manter
