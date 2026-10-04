@@ -105,6 +105,17 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-04 (tarde, 50) · Decisao do dono sobre o Google Ads: negativas e "criou conta" ficam para depois
+
+- Dono: "nao vamos fazer 1 e 2 agora". Saem da lista as negativas (03/09, 31
+  dias) e a conversao "criou conta" (07/09, 27 dias). **E sai tambem a
+  importacao das 20 contas por GCLID** (19/09): ela existe para alimentar a
+  acao "criou conta", e sem a acao nao ha onde importar. Decisao registrada
+  como adiamento, nao como recusa: os dois voltam no dia em que ele quiser.
+- Ficam no Google Ads: a etiqueta na URL final da busca, a verificacao do
+  anunciante (prazo 30/10) e a importacao da instalacao da AppsFlyer quando o
+  primeiro evento chegar. Lista: 5 itens em 3 paineis.
+
 ## 2026-10-04 (tarde, 49) · Os oito itens da lista passados pelo instrumento, um a um
 
 - Pedido do dono depois de "inutil sua atuacao": "confira todos e veja se
