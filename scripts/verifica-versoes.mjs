@@ -138,6 +138,13 @@ const JA_PUBLICADAS = [
   // retrato de amanhã confere sozinho; se não trouxer READY_FOR_SALE, o campo
   // `ios` de app/api/app/latest/route.ts é o primeiro lugar a olhar.
   "2.9",
+  // Publicada nas DUAS lojas em 05/10/2026, build 70, aviso do dono ("Build 70
+  // no ar tanto Android quanto iOS"). A prova do Android não dependeu de
+  // ninguém: 29 aparelhos Android já reportavam `versao = 3.0.0` no nosso
+  // funil, o mais recente às 20h39 de 05/10. No iPhone, 1 aparelho (04/10, à
+  // noite, TestFlight do dono); a aprovação da Apple se confere no retrato do
+  // `app_store_connect` de 06/10, que é colhido às 6h.
+  "3.0",
 ];
 
 // O BUILD DE CADA VERSÃO PUBLICADA (30/09/2026).
@@ -164,6 +171,7 @@ const BUILD_PUBLICADO = {
   "2.7": 67,
   "2.8": 68,
   "2.9": 69,
+  "3.0": 70,
 };
 
 import { readFileSync } from "node:fs";

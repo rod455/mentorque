@@ -105,6 +105,26 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
   print mostra.
 
+## 2026-10-05 (noite) · 3.0 publicada nas duas lojas, build 70, banner aceso, e o repositório abre a 3.1
+
+- Dono: "Build 70 no ar tanto Android quanto iOS. Vamos atualizar no sistema".
+- **Conferido no instrumento antes de escrever o número**: o funil tem 29
+  aparelhos Android reportando `versao = 3.0.0`, o mais recente às 20h39 de
+  hoje; 14 na web; e 1 no iPhone (04/10 à noite, o TestFlight do dono). O
+  Android não dependeu da palavra de ninguém. O iPhone é a palavra do dono
+  mais o retrato do `app_store_connect` de 06/10 (colhido às 6h), que tem que
+  responder READY_FOR_SALE; se não responder, o campo `ios` da rota volta para
+  69 na hora. É a mesma régua da 2.9.
+- A cadeia inteira, acoplada de propósito e cobrada pela `conferir:versoes`:
+  `3.0` em JA_PUBLICADAS e no mapa de builds (70); o banner de versão nova
+  aponta para 70 nas duas lojas; o piso do versionCode sobe para 71; os três
+  lugares da versão de marketing abrem a 3.1 (content.ts, build.gradle e as
+  duas ocorrências do MARKETING_VERSION).
+- O que o dono ainda faz, da lista: a busca de um minuto na App Store por
+  `manutencao` sem acento, agora que a 3.0 está publicada (linha de 01/10).
+  E o roteiro de aparelho de sete passos da `novidades-3.0.md` continua
+  sendo o único sinal sobre o binário.
+
 ## 2026-10-04 (noite, 60) · O Início com uma ação só e a aba Biela, abertos juntos por decisão do dono
 
 - Dono, vendo o `/app` na web: "não mudamos na web? o que fizemos de cro". A

@@ -4,6 +4,10 @@ Aberta em 30/09/2026, logo depois de a 2.9 ser aprovada nas duas lojas. Tudo o
 que entra aqui **já roda na web** pelo deploy da Vercel; o binário só importa
 para o app das lojas.
 
+**Onde a 3.0 está:** aprovada em 05/10 nas duas lojas, build 70 (aviso do dono;
+Android confirmado pelo funil com 29 aparelhos em 3.0.0; Apple se confere no
+retrato de 06/10).
+
 **Onde a 2.9 está:** aprovada em 30/09 (Play antes, Apple no dia), build 69,
 nas duas lojas.
 
