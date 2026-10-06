@@ -2,15 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { activeVehicle, usePrototype } from "@/lib/app/store";
+import { abastecimentosFor, activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { computeQuizHealth } from "@/lib/app/healthQuiz";
 import { LIMITS } from "@/lib/app/premium";
-import { carName, formatMonths, minPurchaseDate, monthsSinceDate, vehicleLabel } from "@/lib/app/content";
+import { carName, formatBRL, formatMonths, minPurchaseDate, monthsSinceDate, vehicleLabel } from "@/lib/app/content";
+import { funil } from "@/lib/app/funil";
 import { useNav, type View } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { Card, DateField, Icon, inputCls, Sheet, useContent } from "../ui";
+import { Atalho, Card, DateField, Icon, inputCls, Linha, Sheet, useContent } from "../ui";
 import { AvatarPickerSheet } from "../AvatarPicker";
-import { HealthPill } from "./Cars";
+import { healthColor } from "./Cars";
 
 export function CarHub() {
   const c = useContent();
@@ -19,6 +20,7 @@ export function CarHub() {
   const [avatarSheet, setAvatarSheet] = useState(false);
   const [nickOpen, setNickOpen] = useState(false);
   const [nickInput, setNickInput] = useState("");
+  const [pendenciasAbertas, setPendenciasAbertas] = useState(false);
   const v = activeVehicle(s);
 
   if (!v) {
@@ -52,25 +54,42 @@ export function CarHub() {
   ];
   const feitos = passos.filter((p) => p.feito).length;
 
-  const cards: { icon: string; title: string; sub: string; view: View; accent: string }[] = [
-    { icon: "gauge", title: c.carHub.cards.health, sub: c.carHub.cards.healthSub, view: { name: "health" }, accent: "bg-teal/15 text-teal" },
-    { icon: "diagnose", title: c.carHub.cards.problem, sub: c.carHub.cards.problemSub, view: { name: "symptoms" }, accent: "bg-coral/15 text-coral" },
-    { icon: "clock", title: c.carHub.cards.history, sub: c.carHub.cards.historySub, view: { name: "history" }, accent: "bg-amber/15 text-amber" },
-    { icon: "calendar", title: c.carHub.cards.revisions, sub: c.carHub.cards.revisionsSub, view: { name: "revisions" }, accent: "bg-teal/15 text-teal" },
-    { icon: "book", title: c.carHub.cards.learn, sub: c.carHub.cards.learnSub, view: { name: "learn" }, accent: "bg-amber/15 text-amber" },
-    { icon: "settings", title: c.carHub.cards.settings, sub: c.carHub.cards.settingsSub, view: { name: "carSettings" }, accent: "bg-graphite-700 text-cream/70" },
+  // AS LINHAS DE PRODUTO (06/10/2026, docs/design/limpeza-visual-nubank.md):
+  // substituem os seis cards quadrados e o botão repetido de "Ver revisões".
+  // Cada linha é um produto do carro, com o estado de uma linha e a seta.
+  const servicos = servicesFor(s, v.id);
+  const abastecimentos = abastecimentosFor(s, v.id);
+  const corte = (() => { const d = new Date(); d.setMonth(d.getMonth() - 12); return d.toISOString().slice(0, 10); })();
+  const gastoDoze =
+    servicos.filter((r) => r.date >= corte && typeof r.total === "number").reduce((acc, r) => acc + (r.total ?? 0), 0) +
+    abastecimentos.filter((a) => a.date >= corte).reduce((acc, a) => acc + a.valor, 0);
+  const registros = servicos.length + abastecimentos.length;
+  const temQuiz = !!(v.quiz && Object.keys(v.quiz).length);
+  const pendentes = passos.filter((p) => !p.feito);
+  const linhas: { icon: string; title: string; sub: string; view: View }[] = [
+    { icon: "gauge", title: c.carHub.cards.health, sub: c.carHub.cards.healthSub, view: { name: "health" } },
+    { icon: "calendar", title: c.carHub.cards.revisions, sub: c.carHub.cards.revisionsSub, view: { name: "revisions" } },
+    { icon: "clock", title: c.carHub.cards.history, sub: registros > 0 ? c.carHub.registrosLinha.replace("{n}", String(registros)).replace("{valor}", formatBRL(gastoDoze)) : c.carHub.semRegistros, view: { name: "history" } },
+    { icon: "diagnose", title: c.carHub.cards.problem, sub: c.carHub.cards.problemSub, view: { name: "symptoms" } },
+    { icon: "book", title: c.carHub.cards.learn, sub: c.carHub.cards.learnSub, view: { name: "learn" } },
+    { icon: "settings", title: c.carHub.cards.settings, sub: c.carHub.cards.settingsSub, view: { name: "carSettings" } },
   ];
+  const atalho = (nome: string, ir: () => void) => () => {
+    funil("clicou_atalho", { origem: `carro:${nome}` });
+    ir();
+  };
 
   return (
     <div className="pt-3">
       <CarSelector />
 
-      {/* Photo + km + health summary */}
-      <Card className="mt-3 flex items-center gap-3">
+      {/* O carro: foto (toque troca), nome com apelido editável, e as linhas de
+          contexto (km, desde quando, FIPE), que continuam editáveis no toque. */}
+      <div className="mt-4 flex items-center gap-3">
         <button
           type="button"
           onClick={() => setAvatarSheet(true)}
-          className="relative grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-teal/15 text-teal ring-1 ring-white/10 hover:ring-amber/40"
+          className="relative grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite-800 text-teal"
           aria-label={c.addCar.chooseAvatar}
         >
           {v.photo ? (
@@ -106,57 +125,59 @@ export function CarHub() {
           <PurchaseLine />
           <FipeLine />
         </div>
-        <button onClick={() => go({ name: "health" })} className="shrink-0 text-right">
-          <span className="block text-[10px] uppercase tracking-wide text-cream/40">{c.carHub.health}</span>
-          <HealthPill score={score} />
-        </button>
-      </Card>
-
-      {feitos < passos.length && (
-        <Card className="mt-3">
-          <div className="flex items-baseline justify-between gap-2">
-            <p className="font-display text-[15px] font-semibold text-cream">{d.titulo.replace("{carro}", carName(v)).replace("{n}", String(feitos)).replace("{total}", String(passos.length))}</p>
-            <span className="text-xs text-cream/50">{d.sub}</span>
-          </div>
-          <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-graphite-700">
-            <div className="h-full rounded-full bg-amber transition-all" style={{ width: `${Math.round((feitos / passos.length) * 100)}%` }} />
-          </div>
-          <div className="mt-3 space-y-1.5">
-            {passos.filter((p) => !p.feito).map((p) => (
-              <button key={p.rotulo} onClick={p.ir} className="flex w-full items-center gap-2 rounded-xl bg-graphite-800 px-3 py-2 text-left ring-1 ring-white/5 active:scale-[0.99]">
-                <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full ring-1 ring-amber/50 text-[10px] text-amber">+</span>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-sm text-cream">{p.rotulo}</span>
-                  <span className="block text-[11px] text-cream/50">{p.ganho}</span>
-                </span>
-                <span className="text-cream/40">›</span>
-              </button>
-            ))}
-          </div>
-        </Card>
-      )}
-
-      <div className="mt-3 grid grid-cols-2 gap-3">
-        {cards.map((card) => (
-          <button
-            key={card.title}
-            onClick={() => go(card.view)}
-            className="group flex aspect-square flex-col justify-between rounded-3xl bg-graphite-800 p-4 text-left ring-1 ring-white/5 transition-all hover:ring-white/15 active:scale-[0.98]"
-          >
-            <span className={`grid h-11 w-11 place-items-center rounded-2xl ${card.accent}`}>
-              <Icon name={card.icon} className="h-6 w-6" />
-            </span>
-            <span>
-              <span className="block font-display text-[15px] font-semibold leading-tight text-cream">{card.title}</span>
-              <span className="mt-1 block text-xs leading-snug text-cream/50">{card.sub}</span>
-            </span>
-          </button>
-        ))}
       </div>
 
-      <Button variant="secondary" className="mt-3 w-full" onClick={() => go({ name: "revisions" })}>
-        {c.health.seeRevisions}
-      </Button>
+      {/* O número grande: a saúde. Sem quiz, a legenda diz o que destrava. */}
+      <button onClick={() => go(temQuiz ? { name: "health" } : { name: "healthQuiz" })} className="mt-4 block w-full text-left" data-saude>
+        <span className="block text-[11px] uppercase tracking-wide text-cream/45">{c.carHub.health}</span>
+        <span className={`block font-display text-4xl font-bold leading-tight ${temQuiz ? healthColor(score) : "text-cream/50"}`}>{temQuiz ? `${score}%` : "--"}</span>
+        <span className="mt-0.5 block text-xs text-cream/55">{temQuiz ? c.carHub.cards.healthSub : c.carHub.saudeSemQuiz}</span>
+      </button>
+
+      {/* A fila de atalhos do carro. */}
+      <div className="mt-4 flex items-start gap-1" data-atalhos>
+        <Atalho icone="tools" rotulo={c.home.atalhos.servico} onClick={atalho("servico", () => go({ name: "addService" }))} data-atalho="servico" />
+        <Atalho icone="gauge" rotulo={c.home.atalhos.abastecer} onClick={atalho("abastecer", () => go({ name: "abastecimento", origem: "carro" }))} data-atalho="abastecer" />
+        <Atalho icone="calendar" rotulo={c.home.atalhos.revisoes} onClick={atalho("revisoes", () => go({ name: "revisions" }))} data-atalho="revisoes" />
+        <Atalho icone="spark" rotulo={c.nav.problems} onClick={atalho("biela", () => go({ name: "biela" }))} data-atalho="biela" />
+      </div>
+
+      <div className="mt-3">
+        {/* As pendências do cadastro, numa linha com contagem (era um checklist
+            aberto ocupando a tela). O toque abre a lista; cada item leva ao
+            lugar certo. Some quando os seis existem. */}
+        {pendentes.length > 0 && (
+          <>
+            <Linha
+              data-pendencias
+              titulo={d.titulo.replace("{carro}", carName(v)).replace("{n}", String(feitos)).replace("{total}", String(passos.length))}
+              sub={pendenciasAbertas ? c.carHub.pendenciasFechar : c.carHub.pendenciasLinha.replace("{n}", String(pendentes.length)).replace("{lista}", pendentes.map((p) => p.rotulo.toLowerCase()).join(", "))}
+              onClick={() => setPendenciasAbertas((x) => !x)}
+            />
+            {pendenciasAbertas &&
+              pendentes.map((p) => (
+                <Linha
+                  key={p.rotulo}
+                  className="pl-4"
+                  esquerda={<span className="grid h-5 w-5 shrink-0 place-items-center rounded-full ring-1 ring-amber/50 text-[10px] text-amber">+</span>}
+                  titulo={p.rotulo}
+                  sub={p.ganho}
+                  onClick={p.ir}
+                />
+              ))}
+          </>
+        )}
+
+        {linhas.map((l) => (
+          <Linha
+            key={l.title}
+            esquerda={<span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-graphite-800 text-amber"><Icon name={l.icon} className="h-4 w-4" /></span>}
+            titulo={l.title}
+            sub={l.sub}
+            onClick={() => go(l.view)}
+          />
+        ))}
+      </div>
 
       <AvatarPickerSheet
         open={avatarSheet}
@@ -274,7 +295,6 @@ export function FipeLine() {
   if (!v || !info) return null;
   return (
     <span className="mt-0.5 flex items-center gap-1.5 text-xs text-cream/55">
-      <span aria-hidden>💰</span>
       FIPE {info.approximate ? "~" : ""}{info.value}
       {info.month && <span className="text-cream/35">· {info.month}</span>}
     </span>

@@ -604,6 +604,14 @@ export function getContent(locale: Locale) {
         datasGanho: T("Aviso 30, 7 e 1 dia antes de vencer", "A heads-up 30, 7 and 1 day before"),
       },
       health: T("Saúde", "Health"),
+      // O HUB COM A GRAMÁTICA DE TELA DE PRODUTO (06/10/2026): número grande
+      // (a saúde; sem quiz, o km), atalhos, pendências numa linha com
+      // contagem, e os produtos em linhas com seta.
+      saudeSemQuiz: T("Responda o quiz de dois minutos para ver a saúde", "Take the two-minute quiz to see the health score"),
+      pendenciasLinha: T("{n} dado(s) faltando: {lista}", "{n} missing: {lista}"),
+      pendenciasFechar: T("Mostrar menos", "Show less"),
+      registrosLinha: T("{n} registros · {valor} em 12 meses", "{n} entries · {valor} in 12 months"),
+      semRegistros: T("Nenhum serviço registrado ainda", "No services logged yet"),
       cards: {
         health: T("Saúde do carro", "Car health"),
         healthSub: T("Como está seu veículo hoje", "How your vehicle is doing"),

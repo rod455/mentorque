@@ -18,7 +18,7 @@ import { ConviteDeAviso } from "../ConviteDeAviso";
 import { consumirConviteNoCarro, pedirConviteNoCarro } from "@/lib/app/pedidoDeAviso";
 import { useAuth } from "@/lib/app/auth";
 import { carName } from "@/lib/app/content";
-import { AppHeader, Card, Chip, Icon, inputCls, SectionTitle, Sheet, useContent } from "../ui";
+import { AppHeader, Card, Chip, Icon, inputCls, Linha, SectionTitle, Sheet, useContent } from "../ui";
 import BielaMascote from "@/components/BielaMascote";
 
 function monthsSince(iso: string): number {
@@ -36,28 +36,9 @@ export function HealthPill({ score }: { score: number }) {
   return <span className={`font-display text-sm font-semibold ${healthColor(score)}`}>{score}%</span>;
 }
 
-// Biela chegando com o carro na garagem — toca 1x ao abrir "Meus Carros" e
-// congela no último frame. A `key` por montagem recria o <img> a cada visita
-// para reiniciar a animação (que é loop=1 no próprio webp).
-function ArrivalBanner() {
-  const [mountKey] = useState(() => Date.now());
-  return (
-    <div className="mb-3 overflow-hidden rounded-2xl bg-graphite-800 ring-1 ring-white/5">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        key={mountKey}
-        src="/biela/cena-chegada.webp"
-        alt=""
-        className="aspect-[16/10] w-full object-cover"
-        style={{
-          objectPosition: "center 58%",
-          WebkitMaskImage: "linear-gradient(to bottom, #000 78%, transparent 100%)",
-          maskImage: "linear-gradient(to bottom, #000 78%, transparent 100%)",
-        }}
-      />
-    </div>
-  );
-}
+// A arte da Biela na garagem SAIU daqui em 06/10/2026: era a mesma cena do
+// herói do Início, a um toque de distância, em tela cheia. A arte fica no
+// Início, que é a marca (dono, 04/10).
 
 // 1.1 — Meus Carros
 export function CarsScreen() {
@@ -119,13 +100,11 @@ export function CarsScreen() {
       )}
 
       {s.premium && totalSaved > 0 && (
-        <div className="mb-3 flex items-center gap-2.5 rounded-2xl bg-teal/10 px-4 py-3 ring-1 ring-teal/20">
-          <span className="text-lg">💰</span>
+        <div className="mb-3 flex items-center gap-2.5 rounded-2xl bg-teal/10 px-4 py-3">
+          <Icon name="check" className="h-5 w-5 text-teal" />
           <span className="text-sm text-cream/85">{c.premium.saved.replace("{v}", formatBRL(totalSaved))}</span>
         </div>
       )}
-
-      {owned.length > 0 && <ArrivalBanner />}
 
       {convidarAviso && user && owned[0] && (
         <div className="mb-3">
@@ -152,61 +131,49 @@ export function CarsScreen() {
           </button>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div>
           {owned.map((v) => {
             const services = servicesFor(s, v.id);
             const health = computeHealth(v, services);
             const score = computeQuizHealth(v.quiz ?? {}, v).score;
             return (
-              <div
+              <Linha
                 key={v.id}
-                role="button"
-                tabIndex={0}
+                data-carro={v.id}
+                esquerda={
+                  <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite-800 text-teal">
+                    {v.photo ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={v.photo} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      <Icon name={v.type === "moto" ? "moto" : "car"} className="h-6 w-6" />
+                    )}
+                  </span>
+                }
+                titulo={v.nickname || v.model}
+                sub={
+                  <>
+                    <span className="block">
+                      {vehicleLabel(v)} · {v.odometerKm != null ? `${v.odometerKm.toLocaleString()} km` : c.cars.noKm} · {c.cars.health} <span className={healthColor(score)}>{score}%</span>
+                    </span>
+                    {s.premium ? <PremiumCarDetail services={services} systems={health.systems} /> : <FreeCarAlert vehicleId={v.id} findings={health.findings} />}
+                  </>
+                }
+                direita={
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); openNick(v.id, v.nickname); }}
+                    className="shrink-0 p-1 text-amber/70 hover:text-amber"
+                    aria-label={c.common.edit}
+                  >
+                    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 20h9" />
+                      <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                    </svg>
+                  </button>
+                }
                 onClick={() => { setActiveVehicle(v.id); root({ name: "car" }); }}
-                className="block w-full cursor-pointer text-left"
-              >
-                <Card className="hover:ring-white/15">
-                  <div className="flex items-center gap-3">
-                    <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-teal/15 text-teal">
-                      {v.photo ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={v.photo} alt="" className="h-full w-full object-cover" />
-                      ) : (
-                        <Icon name={v.type === "moto" ? "moto" : "car"} className="h-7 w-7" />
-                      )}
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="flex items-center gap-1.5">
-                        <span className="truncate font-display text-base text-cream">{v.nickname || v.model}</span>
-                        <button
-                          type="button"
-                          onClick={(e) => { e.stopPropagation(); openNick(v.id, v.nickname); }}
-                          className="shrink-0 text-amber/70 hover:text-amber"
-                          aria-label={c.common.edit}
-                        >
-                          <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M12 20h9" />
-                            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
-                          </svg>
-                        </button>
-                      </span>
-                      <span className="block truncate text-xs text-cream/50">
-                        {v.odometerKm != null ? `${v.odometerKm.toLocaleString()} km` : c.cars.noKm}
-                      </span>
-                    </span>
-                    <span className="shrink-0 text-right">
-                      <span className="block text-[10px] uppercase tracking-wide text-cream/40">{c.cars.health}</span>
-                      <HealthPill score={score} />
-                    </span>
-                  </div>
-                  <div className="mt-2 flex items-end justify-between gap-2">
-                    <div className="min-w-0">
-                      {s.premium ? <PremiumCarDetail services={services} systems={health.systems} /> : <FreeCarAlert vehicleId={v.id} findings={health.findings} />}
-                    </div>
-                    <span className="shrink-0 text-[11px] text-cream/45">{vehicleLabel(v)}</span>
-                  </div>
-                </Card>
-              </div>
+              />
             );
           })}
         </div>
@@ -277,13 +244,13 @@ function FreeCarAlert({ vehicleId, findings }: { vehicleId: string; findings: { 
 
   if (!pending) {
     return (
-      <div className="mt-2.5">
+      <div className="mt-1">
         <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-medium ${tone}`}>{label}</span>
       </div>
     );
   }
   return (
-    <div className="mt-2.5">
+    <div className="mt-1">
       <button
         type="button"
         onClick={(e) => { e.stopPropagation(); setActiveVehicle(vehicleId); root({ name: "revisions" }); }}
@@ -302,7 +269,7 @@ function PremiumCarDetail({ services, systems }: { services: ServiceRecord[]; sy
   const lastText = last ? c.premium.lastService.replace("{t}", c.premium.monthsAgo.replace("{n}", String(monthsSince(last.date)))) : c.premium.never;
   const attention = systems.filter((sy) => sy.status !== "ok").slice(0, 3);
   return (
-    <div className="mt-2.5 flex items-center gap-2">
+    <div className="mt-1 flex items-center gap-2">
       <span className="text-xs text-cream/55">{lastText}</span>
       <span className="ml-auto flex items-center gap-1.5">
         {attention.length === 0 ? (
