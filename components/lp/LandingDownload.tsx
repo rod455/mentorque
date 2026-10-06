@@ -211,10 +211,12 @@ export function LandingDownload({ variante }: { variante?: string }) {
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="font-serif text-3xl font-bold">Amado por motoristas de todo o Brasil</h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            {/* REAIS, literais das lojas (06/10/2026; docs/lojas/respostas.md).
+                Os três anteriores eram inventados, contra a regra de 04/10. */}
             {[
-              { quote: "Descobri o problema do meu carro em minutos. Finalmente sei o que pedir na oficina.", name: "Marina S." },
-              { quote: "O diagnóstico me salvou de pagar um orçamento absurdo. Apontou o problema e o preço justo.", name: "Carlos E." },
-              { quote: "Os lembretes de revisão mudaram tudo. Não perco mais nenhuma manutenção.", name: "Juliana M." },
+              { quote: "Me fez economizar quase 40% quando tive um problema no carro.", name: "Triplyze, via Google Play" },
+              { quote: "Consegui economizar. Muito bom para gerenciar revisões e troca de óleo e coisas do tipo.", name: "munizluiz, via App Store" },
+              { quote: "Eu não conheço nada sobre carro e mecânica, e com os vídeos do app tenho aprendido cada vez mais.", name: "aminoru, via App Store" },
             ].map((d) => (
               <figure key={d.name} className="flex flex-col rounded-2xl bg-graphite-800 p-5 text-left ring-1 ring-white/5">
                 <span aria-hidden className="text-sm tracking-wider text-amber">★★★★★</span>

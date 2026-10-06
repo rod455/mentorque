@@ -220,3 +220,11 @@ Régua: uma tela por commit com a suíte da área e foto antes e depois; as
 fichas de `inicio-pergunta-unica` e `aba-biela` recebem no dia a nota de que
 a versão B mudou; a bateria completa e o build local antes do botão; a árvore
 escrita na ficha da 3.1 na hora do botão.
+
+## Estado (06/10/2026, tarde)
+
+As cinco fatias do corte da 3.1 estão no ar na web, na `main`, para o dono
+avaliar antes do build: sistema e Início (3e19e9e), Aprender (fce0acd),
+Calendário (812e83f), Carros (e9f7c49) e textos. O que ficou de fora segue
+como aposta própria: `LinhaPremium` (9), pendência de aviso (10), abas (11),
+quiz fora do cabeçalho (12). Nenhum aparelho abriu nada disto: é web.

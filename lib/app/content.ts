@@ -164,7 +164,7 @@ export function getContent(locale: Locale) {
       // A troca é de ORDEM, não de recurso: perguntar primeiro, e pedir o carro
       // depois da resposta, como quem melhora o que a pessoa acabou de receber.
       // O carro deixa de ser o preço da entrada. Ver `bielaSemCarro` no bloco
-      // da Biela, que é a outra metade disto.
+      // do Biela, que é a outra metade disto.
       // O INÍCIO TEM UMA AÇÃO PRIMÁRIA, COM OU SEM CARRO (04/10/2026, aposta
       // `inicio-pergunta-unica` do caderno). Até aqui o herói mudava de
       // promessa quando existia carro ("O que vamos cuidar hoje?" /
@@ -293,8 +293,8 @@ export function getContent(locale: Locale) {
       ph: T("Buscar problemas ou serviços", "Search problems or services"),
       title: T("Buscar no catálogo", "Search the catalog"),
       hint: T("Digite pelo menos 2 caracteres para encontrar problemas e serviços.", "Type at least 2 characters to find problems and services."),
-      empty: T("Não achamos esse assunto. Pergunte à Biela 👇", "We couldn't find that. Ask Biela 👇"),
-      askBiela: T("Perguntar à Biela sobre “{q}”", "Ask Biela about “{q}”"),
+      empty: T("Não achamos esse assunto. Pergunte ao Biela", "We couldn't find that. Ask Biela"),
+      askBiela: T("Perguntar ao Biela sobre “{q}”", "Ask Biela about “{q}”"),
       problemTag: T("Problema", "Problem"),
       serviceTag: T("Serviço", "Service"),
     },
@@ -398,7 +398,7 @@ export function getContent(locale: Locale) {
       curto: {
         cards: [
           { icon: "diagnose", title: T("Carro dá prejuízo em silêncio", "Cars cost you quietly"), body: T("Revisão que atrasa vira conserto. Orçamento sem base vira preço alto. Quase todo mundo descobre isso tarde demais.", "A late service becomes a repair. A quote with no reference becomes a high price. Most people find out too late.") },
-          { icon: "calendar", title: T("Aqui o carro tem calendário e preço justo", "Here your car gets a calendar and fair prices"), body: T("Cadastre o carro e ele ganha as próximas revisões com data, o preço de cada serviço na sua região e a Biela para tirar dúvidas.", "Add your car and it gets upcoming services with dates, the price of each service in your region and Biela to answer questions.") },
+          { icon: "calendar", title: T("Aqui o carro tem calendário e preço justo", "Here your car gets a calendar and fair prices"), body: T("Cadastre o carro e ele ganha as próximas revisões com data, o preço de cada serviço na sua região e o Biela para tirar dúvidas.", "Add your car and it gets upcoming services with dates, the price of each service in your region and Biela to answer questions.") },
         ],
       },
       // Página 4 — prova social
@@ -429,8 +429,14 @@ export function getContent(locale: Locale) {
         // versão em inglês é tradução e está marcada como tal pelo "via App
         // Store". Os dois primeiros continuam como estavam.
         quotes: [
-          { quote: T("Descobri o problema do meu carro em minutos. Finalmente sei o que pedir na oficina.", "Found my car's problem in minutes. Finally I know what to ask the shop."), name: "Marina S." },
-          { quote: T("O diagnóstico me salvou de pagar um orçamento absurdo. Apontou o problema e o preço justo.", "The diagnosis saved me from an absurd quote. It showed the problem and the fair price."), name: "Carlos E." },
+          // OS QUATRO SÃO REAIS (06/10/2026). Até aqui os dois primeiros eram
+          // inventados ("Marina S." e "Carlos E."), contra a regra de 04/10 de
+          // nenhum depoimento inventado. Entraram dois do Google Play, literais
+          // (docs/lojas/respostas.md): Triplyze, 06/09, sem a segunda frase,
+          // que dizia "grátis para 1 carro" e o grátis dá 2; e Luana David,
+          // 04/09, inteira.
+          { quote: T("Me fez economizar quase 40% quando tive um problema no carro.", "It saved me almost 40% when I had a problem with my car."), name: "Triplyze, via Google Play" },
+          { quote: T("Aplicativo sensacional para estudos e identificação de problemas no carro.", "Sensational app for learning and identifying problems with the car."), name: "Luana David, via Google Play" },
           { quote: T("Eu não conheço nada sobre carro e mecânica, e com os vídeos do app tenho aprendido cada vez mais.", "I know nothing about cars and mechanics, and with the app's videos I've been learning more and more."), name: "aminoru, via App Store" },
           { quote: T("Consegui economizar. Muito bom para gerenciar revisões e troca de óleo e coisas do tipo.", "I managed to save money. Great for managing services, oil changes and things like that."), name: "munizluiz, via App Store" },
         ],
@@ -597,7 +603,7 @@ export function getContent(locale: Locale) {
         quiz: T("O quiz de saúde, dois minutos", "The health quiz, two minutes"),
         quizGanho: T("Destrava a nota de saúde e as recomendações", "Unlocks the health score and recommendations"),
         motor: T("A versão ou o motor", "The version or engine"),
-        motorGanho: T("A Biela responde com o manual certo", "Biela answers with the right manual"),
+        motorGanho: T("O Biela responde com o manual certo", "Biela answers with the right manual"),
         foto: T("Uma foto do carro", "A photo of the car"),
         fotoGanho: T("A garagem com a sua cara", "Your garage, your look"),
         datas: T("As datas do carro (IPVA, seguro, CNH)", "The car's dates (tax, insurance, license)"),
@@ -956,12 +962,12 @@ export function getContent(locale: Locale) {
       title: T("Entenda o orçamento", "Understand the quote"),
       entrada: T("Tirar foto do orçamento e entender cada linha", "Snap the quote and understand every line"),
       entradaCurta: T("Analisar orçamento por foto", "Analyze a quote photo"),
-      entradaSub: T("A Biela explica para que serve cada item e o que perguntar antes de aprovar.", "Biela explains what each item is for and what to ask before approving."),
-      intro: T("Tire uma foto do orçamento da oficina, ou escolha uma da galeria. A Biela lê cada linha, explica para que serve, compara com a faixa da sua região quando houver referência e monta as perguntas para você fazer antes de aprovar.", "Take a photo of the shop's quote, or pick one from the gallery. Biela reads every line, explains what it's for, compares with your region's range when there is a reference and lists the questions to ask before approving."),
+      entradaSub: T("O Biela explica para que serve cada item e o que perguntar antes de aprovar.", "Biela explains what each item is for and what to ask before approving."),
+      intro: T("Tire uma foto do orçamento da oficina, ou escolha uma da galeria. O Biela lê cada linha, explica para que serve, compara com a faixa da sua região quando houver referência e monta as perguntas para você fazer antes de aprovar.", "Take a photo of the shop's quote, or pick one from the gallery. Biela reads every line, explains what it's for, compares with your region's range when there is a reference and lists the questions to ask before approving."),
       escolher: T("Tirar foto ou escolher da galeria", "Take a photo or pick from gallery"),
       trocar: T("Trocar foto", "Change photo"),
       analisar: T("Analisar orçamento", "Analyze quote"),
-      analisando: T("A Biela está lendo o orçamento...", "Biela is reading the quote..."),
+      analisando: T("O Biela está lendo o orçamento...", "Biela is reading the quote..."),
       gratisRestantes: T("{n} análises grátis restantes neste mês", "{n} free analyses left this month"),
       gratisUltima: T("Última análise grátis deste mês", "Last free analysis this month"),
       limite: T("Você usou as {n} análises grátis deste mês. Com o Premium, analise quantos orçamentos quiser.", "You used this month's {n} free analyses. With Premium, analyze as many quotes as you want."),
@@ -980,10 +986,10 @@ export function getContent(locale: Locale) {
       perguntas: T("Perguntas para fazer na oficina", "Questions to ask the shop"),
       alerta: T("Item de segurança", "Safety item"),
       salvar: T("Salvar no histórico", "Save to history"),
-      perguntarBiela: T("Perguntar mais à Biela", "Ask Biela more"),
+      perguntarBiela: T("Perguntar mais ao Biela", "Ask Biela more"),
       bielaSeed: T("Sobre este orçamento:", "About this quote:"),
       outra: T("Analisar outro orçamento", "Analyze another quote"),
-      aviso: T("A Biela explica e sugere perguntas; ela não sabe se o serviço é necessário sem ver o carro. As faixas são referência, não tabela. A foto não fica guardada.", "Biela explains and suggests questions; it can't tell if the work is needed without seeing the car. Ranges are a reference, not a price list. The photo is not stored."),
+      aviso: T("O Biela explica e sugere perguntas; ele não sabe se o serviço é necessário sem ver o carro. As faixas são referência, não tabela. A foto não fica guardada.", "Biela explains and suggests questions; it can't tell if the work is needed without seeing the car. Ranges are a reference, not a price list. The photo is not stored."),
       tipo: { peca: T("peça", "part"), servico: T("serviço", "service"), mao_de_obra: T("mão de obra", "labor"), outro: T("outro", "other") },
     },
 
@@ -1741,13 +1747,13 @@ export function getContent(locale: Locale) {
         T("Como faço a revisão em dia?", "How do I keep service up to date?"),
       ],
       disclaimer: T("O Biela orienta, mas não substitui uma inspeção presencial em itens de segurança (freio, direção, airbag).", "Biela guides you, but doesn't replace an in-person inspection for safety items (brakes, steering, airbags)."),
-      // 15/09/2026: a Biela entrou no gratuito com cinco perguntas por mês, e
+      // 15/09/2026: o Biela entrou no gratuito com cinco perguntas por mês, e
       // os dois textos abaixo estavam errados para o mundo novo. O "hoje" do
       // saldo virou "neste mês", que é a janela que o servidor conta, e o
       // "recurso Premium" virou o que de fato acontece: as grátis acabaram.
       // Texto que diz uma janela e código que conta outra é reclamação certa.
       freeLeft: T("{n} perguntas grátis restantes neste mês", "{n} free questions left this month"),
-      freeOver: T("Suas perguntas grátis deste mês acabaram. No Premium a conversa com a Biela não tem limite.", "You've used your free questions this month. With Premium, chatting with Biela has no limit."),
+      freeOver: T("Suas perguntas grátis deste mês acabaram. No Premium a conversa com o Biela não tem limite.", "You've used your free questions this month. With Premium, chatting with Biela has no limit."),
       premiumCta: T("Conversar sem limites", "Chat without limits"),
       offlineNote: T("(Respondendo em modo básico, a IA completa com os manuais está sendo conectada.)", "(Answering in basic mode, the full AI with manuals is being connected.)"),
     },
@@ -1817,7 +1823,7 @@ export function getContent(locale: Locale) {
       // está insatisfeito é o que a Apple trata como manipulação da avaliação.
       lojaMesmoAssim: T("Prefiro avaliar na loja", "I'd rather review on the store"),
 
-      // Polegares na resposta da Biela
+      // Polegares na resposta do Biela
       bielaUtil: T("Resposta útil", "Helpful answer"),
       bielaInutil: T("Resposta ruim", "Poor answer"),
       // O 👎 sozinho só conta tristeza. O motivo é o que diz onde consertar.
@@ -1826,7 +1832,7 @@ export function getContent(locale: Locale) {
       bielaIncompleta: T("Não respondeu", "Didn't answer"),
       bielaConfusa: T("Confusa", "Confusing"),
       bielaComentario: T("Quer detalhar? (opcional)", "Want to add detail? (optional)"),
-      bielaObrigado: T("Obrigado, isso ajuda a Biela a melhorar.", "Thanks, this helps Biela improve."),
+      bielaObrigado: T("Obrigado, isso ajuda o Biela a melhorar.", "Thanks, this helps Biela improve."),
     },
 
     profile: {

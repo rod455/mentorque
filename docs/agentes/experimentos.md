@@ -113,8 +113,14 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   70 da 3.0 saiu da árvore 748fedf, 18h07 UTC de 04/10, e este commit,
   28f13e1, entrou às 22h56; o dono abriu a 3.0 no iPhone em 06/10 e viu o
   Início antigo). Até a 3.1 publicar, quem está no app das lojas está em A, e
-  a leitura separa por `plataforma`: web mede B, android e ios medem A · Ler
-  a partir de: 2026-10-18 (direcional, só web) e 2026-11-01
+  a leitura separa por `plataforma`: web mede B, android e ios medem A.
+  A VERSÃO B MUDOU EM 06/10 na web (limpeza visual, docs/design/
+  limpeza-visual-nubank.md): o herói é o mesmo, mas o resto do Início virou
+  oito blocos em linha (fila de atalhos, carro, uma pendência, gastos,
+  Descubra mais, problemas comuns em linha). A leitura de 18/10 compara A
+  com "B de 04 a 06/10" e "B desde 06/10" sem conseguir separá-las, e isso
+  fica dito aqui, não no veredito · Ler a partir de: 2026-10-18 (direcional,
+  só web) e 2026-11-01
 - Antes: 66 `perguntou_biela` em 30 dias (16 com palavras da pessoa); 7
   fechamentos na Home em 4 aparelhos no retrato de 04/10
 - Veredito: (aberto)
@@ -137,7 +143,10 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Início: 2026-10-04 na web; NO APP SÓ COM A 3.1 (mesma correção de 06/10 da
   aposta acima: a 3.0 das lojas saiu sem o commit 28f13e1 e ainda mostra a
   aba "Problemas"). Até a 3.1, android e ios medem A; a leitura separa por
-  `plataforma` · Ler a partir de: 2026-10-18 (direcional, só web)
+  `plataforma`. Em 06/10 o card do Biela saiu de Aprender e os "problemas
+  comuns" do Início viraram uma linha (limpeza visual): a guarda
+  `consultou_sintoma` continua com porta no Início, só que menor, e a
+  leitura de 18/10 diz isso · Ler a partir de: 2026-10-18 (direcional, só web)
 - Antes: 66 `perguntou_biela` e 178 `consultou_sintoma` (desde 13/09) no
   funil; não li o recorte semanal de `consultou_sintoma` antes de abrir
 - Veredito: (aberto)

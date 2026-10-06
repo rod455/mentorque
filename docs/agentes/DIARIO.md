@@ -71,6 +71,44 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   compromisso de 29/09 que o dono endossou; (2) 27/10, artigo de direção
   pesada, primeira das quatro do plano de cobertura.
 
+## 2026-10-06 (tarde) · Engenharia: a limpeza visual inteira no ar na web, em cinco fatias, para o dono avaliar antes da 3.1
+
+- Dono: "faça os ajustes na versão web para que eu possa avaliar primeiro",
+  depois de aprovar o corte da 3.1 de `docs/design/limpeza-visual-nubank.md`.
+  Cinco commits na `main`, cada um com a cadeia de conferências e as suítes
+  da área, cada um no ar na Vercel antes do seguinte começar:
+  1. **Sistema e Início** (3e19e9e): nascem `Linha` e `Atalho` em `ui.tsx`,
+     o card perde o anel, o `AppHeader` sai da serifa, o "?" flutuante vira
+     ícone de conversa e o chip do quiz diz "Quiz" sem emoji. O Início em
+     oito blocos com ordem fixa; a folha mensal de km virou a pendência da
+     linha 6 e só abre no toque. Nasce `clicou_atalho` nos quatro lugares
+     (régua, rota, SQL, banco). Nove suítes verdes.
+  2. **Aprender** (fce0acd): sem o card do Biela, trilhas em linha com o
+     progresso à direita e a barra só depois de começar, cinco à vista.
+  3. **Calendário** (812e83f): número grande (12 meses e média pelos meses
+     com lançamento), atalhos, aviso do limite do grátis aos 18 como linha,
+     linha do tempo em linhas sem emoji. E `conferir:versoes` aprendeu a
+     dizer "clone raso, não dá para saber" em vez de reprovar por cegueira.
+  4. **Carros** (e9f7c49): a arte da garagem sai da aba (fica no Início), a
+     lista vira linhas, o hub ganha saúde como número grande, atalhos,
+     pendências numa linha com contagem e os produtos em linhas.
+  5. **Textos**: "o Biela" em todas as frases visíveis (eram 24 contra 6);
+     os dois depoimentos inventados saem do onboarding E da landing de
+     download, que ainda tinha três; entram reais, literais, com o nome e a
+     loja. As fichas de `inicio-pergunta-unica` e `aba-biela` dizem que a
+     versão B mudou hoje na web e que a leitura de 18/10 não separa as duas.
+- **O que ficou de fora, de propósito**: `LinhaPremium` (portão único,
+  aposta 9), convite de aviso como pendência (10), abas (11) e quiz fora do
+  cabeçalho (12). Nenhum preço, nenhum texto de loja.
+- **O que a conferência não alcança**: a WebView do aparelho. Nada disto
+  está em binário nenhum; a 3.1 ainda não foi gerada, e o build é botão do
+  dono. Quando ele apertar, a árvore vai para a ficha da 3.1 na hora.
+- O ambiente da sessão foi recriado no meio da tarde (o `node_modules`
+  sumiu e o clone voltou raso, 53 commits); reinstalei e fiz `git fetch
+  --unshallow`. O primeiro push da fatia 1 foi recusado porque a `main`
+  local tinha ficado para trás; o remoto não perdeu nada (os commits da
+  manhã conferidos como ancestrais de `origin/main`).
+
 ## 2026-10-06 (manhã) · Engenharia: a 3.0 das lojas saiu SEM o Início novo e sem a aba Biela, e a casa disse que tinha
 
 - Dono, com dois prints do iPhone às 07h13: "Não aconteceu nada do que você
