@@ -162,10 +162,14 @@ export function LinhaPremium({ ctx, titulo, sub, className }: { ctx: string; tit
   if (!sellsInApp()) return null;
   const beneficios = (c.paywalls as Record<string, { benefits?: string[] } | undefined>)[ctx]?.benefits ?? [];
   const contexto = sub ?? (beneficios.length ? beneficios.slice(0, 2).join(" · ") : c.common.unlock);
+  // COM CONTORNO ÂMBAR (06/10/2026, dono: "coloque uma cor em volta dos
+  // premiuns, para dar um destaque maior"). É a única linha do app com borda
+  // de cor, de propósito: o resto separa por fio, e o portão do Premium é o
+  // que tem que saltar.
   return (
     <Linha
       data-premium={ctx}
-      className={className}
+      className={["my-2 rounded-2xl border border-amber/40 bg-amber/[0.06] px-3.5 last:border-b", className].filter(Boolean).join(" ")}
       esquerda={
         <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-amber/15 text-amber">
           <IconLock className="h-4 w-4" />
