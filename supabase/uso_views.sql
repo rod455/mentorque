@@ -48,11 +48,19 @@ order by 1 desc;
 -- nao fecha. Quem le "0 de 15 ativaram" na semana corrente le uma queda que
 -- ainda nao aconteceu.
 --
--- QUANDO FECHA. A coorte e a semana; a ultima pessoa dela cadastra no dia
--- coorte+6 e a janela usa `< cadastrado_em + 8 days`. Entao:
---   semana_fechada   coorte + 7   (nao entra mais ninguem no denominador)
---   janela de 7 dias coorte + 14  (o numerador parou de subir)
---   janela de 8 a 30 coorte + 37
+-- QUANDO FECHA. A coorte e a semana, e a janela e DE CADA PESSOA
+-- (`< cadastrado_em + 8 days`). Entao:
+--   semana_fechada   coorte + 7                        (nao entra mais ninguem)
+--   janela de 7 dias max(cadastrado_em) + 8 dias  <= now()   (o numerador parou)
+--   janela de 8 a 30 max(cadastrado_em) + 31 dias <= now()
+--
+-- ATE 06/10/2026 as duas ultimas eram `coorte + 14` e `coorte + 37`, em DATA.
+-- Achado do Diretor em 05/10: a ultima pessoa da coorte cadastra no domingo
+-- a noite, a janela DELA fecha no domingo seguinte a noite, e a coluna dizia
+-- "fechada" desde a meia-noite, ate 24 horas antes. O retrato das 6h imprimiu
+-- "8 de 51" sem ressalva quando o numero final era 9. A regra que fica, em
+-- DIRETRIZES: janela fechada se prova pelo ULTIMO membro da coorte, nunca pelo
+-- comeco dela. Aplicado no banco em 06/10 (create or replace nas duas views).
 --
 -- ADITIVO: as colunas antigas nao mudaram de nome, de ordem nem de valor.
 -- Quem ja lia continua lendo igual; quem quiser saber se pode concluir usa as
@@ -85,10 +93,8 @@ select
   )) as voltaram_d8_30,
   (date_trunc('week', c.cadastrado_em at time zone 'America/Sao_Paulo')::date + 7)
     <= (now() at time zone 'America/Sao_Paulo')::date as semana_fechada,
-  (date_trunc('week', c.cadastrado_em at time zone 'America/Sao_Paulo')::date + 14)
-    <= (now() at time zone 'America/Sao_Paulo')::date as d1_7_fechada,
-  (date_trunc('week', c.cadastrado_em at time zone 'America/Sao_Paulo')::date + 37)
-    <= (now() at time zone 'America/Sao_Paulo')::date as d8_30_fechada
+  max(c.cadastrado_em) + interval '8 days' <= now() as d1_7_fechada,
+  max(c.cadastrado_em) + interval '31 days' <= now() as d8_30_fechada
 from cadastros c
 group by 1
 order by 1 desc;

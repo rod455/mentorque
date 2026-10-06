@@ -392,6 +392,51 @@ const diretrizes = ler("docs/agentes/DIRETRIZES.md");
   console.log(`       ATRASO DO VEREDITO, POR PAPEL: ${resumo.join("; ")}.`);
 }
 
+
+// ── 7. O DIÁRIO EM ORDEM, ASSINADO, E A FILA ENTRE PAPÉIS (06/10/2026) ───────
+//
+// Leitura de outubro do Diretor: a conferência só cobra rodada que consegue
+// achar, e ela acha pelo título `data · Papel`. O diário estava fora de ordem
+// em três pontos e 134 entradas numeradas não tinham papel. Daqui para a
+// frente: decrescente por data, sem exceção, e título assinado a partir de
+// 06/10. As entradas anteriores ficam como estão, de propósito.
+{
+  const diario = ler("docs/agentes/DIARIO.md");
+  const datas = [...diario.matchAll(/^## (\d{4}-\d{2}-\d{2})/gm)].map((m) => m[1]!);
+  let foraDeOrdem = "";
+  for (let i = 1; i < datas.length; i++) {
+    if (datas[i]! > datas[i - 1]!) { foraDeOrdem = `${datas[i]} aparece abaixo de ${datas[i - 1]}`; break; }
+  }
+  conferir(
+    "o diário está em ordem decrescente de data",
+    datas.length > 10 && !foraDeOrdem,
+    foraDeOrdem || `${datas.length} entradas`,
+    );
+
+  // Mesma leitura da tabela do time que a seção 1 faz: derivada, não copiada.
+  const APELIDOS = new Set<string>(["Engenharia"]);
+  for (const m of diretrizes.matchAll(/^\|([^|\n]+)\|([^|\n]+)\|[^|\n]+\|\s*([a-z0-9-]+\.md)\s*\|/gm)) {
+    const papel = m[1]!.trim();
+    if (papel !== "Papel") APELIDOS.add(papel.split(/[\s/]/)[0]!);
+  }
+  const semAssinatura = [...diario.matchAll(/^## (\d{4}-\d{2}-\d{2})(?: \([^)]*\))? · ([^:\n]+)/gm)]
+    .filter((m) => m[1]! >= "2026-10-06" && !APELIDOS.has(m[2]!.trim()))
+    .map((m) => m[0].slice(0, 70));
+  const semPonto = [...diario.matchAll(/^## (\d{4}-\d{2}-\d{2})[^\n]*$/gm)]
+    .filter((m) => m[1]! >= "2026-10-06" && !/ · [^:\n]+:/.test(m[0]))
+    .map((m) => m[0].slice(0, 70));
+  conferir(
+    "toda entrada do diário desde 06/10 assina o papel no título (`data · Papel: título`)",
+    semAssinatura.length === 0 && semPonto.length === 0,
+    [...semAssinatura, ...semPonto].slice(0, 3).join(" | ") || "",
+  );
+  conferir("e a regra da ordem e da assinatura está em DIRETRIZES", /decrescente por data, sem exceção/.test(diretrizes) && /assina \*\*Engenharia\*\*/.test(diretrizes));
+
+  conferir("a fila entre papéis existe", existsSync(`${RAIZ}docs/agentes/entre-papeis.md`), "DIRETRIZES, 'A fila entre papéis'");
+  conferir("e DIRETRIZES manda quem recebe abrir a rodada por ela", /abre lendo a fila/i.test(diretrizes));
+  conferir("e o script dela deriva os papéis da tabela, não de uma lista própria", /DIRETRIZES\.md/.test(ler("scripts/entre-papeis.ts")) && !/const PAPEIS = new Set<string>\(\["Diretor"/.test(ler("scripts/entre-papeis.ts")), "segunda lista de papeis e regra copiada");
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) do time de agentes reprovaram.`);
   process.exit(1);

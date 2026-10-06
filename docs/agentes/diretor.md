@@ -576,3 +576,74 @@ sessão de vinte minutos fechava cinco. A fila não era grande, era mal
 apresentada, e apresentá-la é trabalho de quem fala com o dono toda segunda. O
 `npm run acoes` agora agrupa sozinho e imprime a sessão mais barata; o relatório
 passa a levar esse bloco, não a contagem.
+
+## Retorno do dono sobre a rodada de 05/10/2026
+
+Mandado escrever por ele em 06/10 ("veja o que o diretor pontuou, dê feedbacks
+e vamos aplicar as boas sugestões"). O veredito é sobre o registro no diário e
+sobre o que foi aplicado no mesmo dia, que é o teste que você mesmo propõe para
+os outros papéis: o veredito mudou a rodada seguinte?
+
+Primeiro o que manter.
+
+**O ACHADO DA SEMANA VEIO DE LER O MESMO NÚMERO DUAS VEZES NO MESMO DIA.** O
+retrato das 6h dizia 8 de 51 sem ressalva; o banco às 21h dizia 9. Você não
+escolheu um dos dois: foi atrás do mecanismo (`coorte + 14` em data contra
+`cadastro + 8 dias` por pessoa), achou a nona pessoa com hora, e escreveu o
+número que teria publicado errado (15,7% como final). É a quarta semana seguida
+do mesmo TIPO de erro na casa, e desta vez quem o achou foi quem o ia cometer.
+Aplicado em 06/10: as duas views no banco fecham pelo último membro, os dois
+arquivos SQL idem, a `conferir:coorte` cobra a forma e reprova a volta do `+
+14` (plantado, mordeu), e a regra está em DIRETRIZES para toda janela que
+nascer.
+
+**E A ORDEM FOI CONFERIDA ANTES DE CHAMAR DE SINAL.** "Das 7 que ligaram o
+aviso, 4 voltaram" só vale se ligaram ANTES de voltar, e você abriu as quatro
+uma a uma. Sete pessoas não decidem nada, e está escrito como sinal e não como
+resultado. É a frase certa.
+
+**MANTENHA TAMBÉM**: o buraco declarado (62 contas contra 57 eventos) sem causa
+inventada; não ter reordenado o diário à mão, deixando a prova da proposta 3
+visível; e a autocrítica com causa ("a primeira metade da sessão gasta em
+consultas que o retrato já respondia").
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. UM DEFEITO NO INSTRUMENTO QUE ALIMENTA O SEU PRÓPRIO NÚMERO DE SEGUNDA NÃO
+ESPERA A QUARTA.** A Prioridade 1 foi endereçada ao QA, para a rodada de
+quarta, "antes de qualquer leitura de retenção". Entre a segunda e a quarta o
+retrato das 6h seria colhido duas vezes com a coluna errada, e qualquer leitura
+de terça (a sua, a do Conteúdo) publicaria o mesmo número parcial como final. A
+regra que fica: **defeito de instrumento que muda um número já publicado vai
+para as mãos mais rápidas no mesmo dia, com o caso para plantar, e o papel dono
+do instrumento recebe o desfecho, não a tarefa.** Foi o que aconteceu em 06/10
+pela Engenharia, e o QA recebe a linha fechada no diário.
+
+**2. O RELATÓRIO DAS 21H CUSTOU UM DIA, E A CAUSA QUE VOCÊ NOMEOU TEM REMÉDIO
+ESCRITO.** "Consultas que o retrato já respondia" é a obrigação de 04/09 do
+CRO ("esgote as dimensões que JÁ EXISTEM antes de pedir instrumento novo"),
+aplicada ao Diretor. A regra para a sua rodada: **a primeira hora é o retrato
+e o diário, inteiros, antes da primeira consulta ao banco; o banco entra só
+para a pergunta que os dois não respondem.** Se o contexto esgotar de novo, o
+relatório sai parcial às 8h com o que já tem, e completa depois; relatório
+inteiro às 21h é pior que relatório parcial às 8h, porque a decisão do dono é
+de manhã.
+
+**3. A LEITURA DE ATRIBUIÇÃO NÃO DISSE QUE O INSTRUMENTO MUDOU NAQUELE DIA.**
+"10 de 12 `clicou_baixar` chegaram com etiqueta em 04 e 05/10" é verdade, mas
+até 04/10 à tarde só o `/baixar` gravava esse evento; desde a landing nova
+(900c924, 17h36 de 04/10) os selos da home também gravam, com origem
+`home-topo` e `home-fim`. O denominador trocou de composição no meio da
+janela que você leu, e a leitura não disse. É o mesmo cuidado que você cobra
+dos outros ("a aposta declara qual degrau mede, e quando outra mudança toca
+esse degrau, isso é dito no dia"): a mudança foi dita no caderno
+(`landing-em-seis-blocos`) e o seu número a atravessou sem citar.
+
+**O que foi aplicado das suas três propostas, e como:** (1) a regra da janela
+está em DIRETRIZES e cobrada pela `conferir:coorte`; (2) a fila entre papéis
+existe (`entre-papeis.md`, `npm run entre`, `conferir:entre`), com os papéis
+derivados da tabela do time e as suas duas prioridades de sexta já dentro; (3)
+o diário foi reordenado por script (199 blocos, nenhum perdido, provado por
+comparação de conjunto) e a `conferir:agentes` passou a reprovar data fora de
+ordem e, a partir de 06/10, título sem papel. As 134 entradas antigas sem papel
+ficam como estão, como você mesmo sugeriu ao não reordenar à mão.

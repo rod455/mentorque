@@ -305,13 +305,14 @@ sem tirar ninguém dela.
 | `conferir:push` | no nascimento (autor), 15/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:banco` | no nascimento (autor), 20/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:imagem` | no nascimento (autor), 20/09/2026 | sim, no plantio de quem escreveu |
-| `conferir:coorte` | no nascimento (autor), 24/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:coorte` | no nascimento (autor), 24/09/2026 | sim, no plantio de quem escreveu; e de novo em 06/10/2026 (autor), ao cobrar a regra do último membro: o `+ 14` em data plantado de volta reprovou |
 | `conferir:legivel` | no nascimento (autor), 28/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:porta` | no nascimento (autor), 28/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:versoes-do-carro` | no nascimento (autor), 28/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:alarme` | no nascimento (autor), 29/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:perguntas` | no nascimento (autor), 30/09/2026 | sim, no plantio de quem escreveu |
-| `conferir:agentes` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
+| `conferir:agentes` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu; e de novo em 06/10/2026 (autor), ao ganhar ordem e assinatura do diário: entrada de 06/10 jogada abaixo de uma de 04/10 reprovou, título sem papel reprovou |
+| `conferir:entre` | no nascimento (autor), 06/10/2026 | formato só (data e papéis da tabela); não reprova por idade, de propósito |
 | `conferir:loja` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:midia` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:renovacao` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |

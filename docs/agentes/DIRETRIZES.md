@@ -158,6 +158,63 @@ escreve sozinha: o dono lê, discorda e apaga quando quiser. O preço é que
 alguém precisa escrever a lição; a vantagem é que ela é auditável e vale para
 os sete papéis ao mesmo tempo.
 
+## Janela fechada se prova pelo último membro (06/10/2026)
+
+Vale para os dez papéis e para qualquer coluna, view ou frase que diga "a
+janela fechou": **uma janela de coorte só está fechada quando a janela do
+ÚLTIMO membro dela fechou.** É `max(cadastrado_em) + N dias <= agora`, nunca
+`começo da coorte + N` em data.
+
+O caso que ensinou (Diretor, 05/10/2026): a coorte de 21/09 tinha a coluna
+`d1_7_fechada` calculada como `coorte + 14` em data. A última pessoa cadastrou
+no domingo à noite, a janela dela fechava no domingo seguinte à noite, e a
+coluna dizia "fechada" desde a meia-noite daquele dia. O retrato das 6h
+imprimiu "8 de 51 voltaram" sem ressalva; o banco às 21h dizia 9, porque a
+nona pessoa voltou às 21h37, dentro da janela dela. Publicado de manhã, o
+número final teria sido 15,7% em vez de 17,6%. Aplicado nas duas views em
+06/10, com a `conferir:coorte` cobrando a forma.
+
+A regra escrita vale mais que o conserto: toda janela nova (ativação,
+retenção, renovação, o que vier) nasce com a pergunta respondida.
+
+## O diário: ordem e assinatura (06/10/2026)
+
+Duas coisas que o Diretor pediu na leitura de outubro, porque a
+`conferir:agentes` só consegue cobrar rodada que ela consegue achar:
+
+1. **O diário é decrescente por data, sem exceção.** Entrada nova entra no
+   topo. A conferência reprova data fora de ordem. Reordenar à mão já custou
+   uma peça inteira (13/09); se precisar reordenar, é por script, e o script
+   prova que nenhum bloco sumiu.
+2. **A partir de 06/10/2026, todo título de entrada assina quem escreveu**,
+   no formato `## AAAA-MM-DD · Papel: título` (o período e o número podem vir
+   entre parênteses antes do ponto). Papel é o apelido da tabela do time
+   (Diretor, QA, CRO, Conteúdo, Mídia, ASO, Guardião, Segurança, Sentinela,
+   Analista). Quem não é papel da tabela assina **Engenharia** (as sessões de
+   código com o dono). Entradas anteriores a 06/10 ficam como estão: 134
+   entradas numeradas sem papel não vão ser reescritas, e a conferência só
+   cobra daqui para a frente.
+
+## A fila entre papéis (06/10/2026)
+
+Existe fila para o que depende do dono (`acoes-do-dono.md`, `npm run acoes`).
+Não existia para o que um papel deixa com outro, e isso apareceu como o mesmo
+pedido escrito em quatro manuais no mesmo dia (03/10) e em dois desfechos
+medidos: a recomendação do Guardião que envelheceu um mês, e o relatório da
+Mídia que não chegou a quem devia. Quatro manuais com a mesma frase não são
+quatro falhas, é instrumento faltando.
+
+A fila mora em `docs/agentes/entre-papeis.md`: uma linha por pedido, com a
+data em que ENTROU, quem pede, quem recebe, o pedido e o porquê. `npm run
+entre` ordena por idade e agrupa por quem recebe; `npm run conferir:entre`
+confere o formato (data que o calendário tem, papéis que a tabela tem). Ao
+concluir, a linha sai e o desfecho vai para o diário. Pedido parado há mais
+de 14 dias aparece em bloco próprio, e o Diretor o lê na segunda: a
+conferência NÃO reprova por idade, de propósito, pela mesma razão da fila do
+dono (travar o push de quem programa castiga a pessoa errada).
+
+Regra para quem recebe: a rodada ABRE lendo a fila, antes do retrato.
+
 ## O time
 
 | Papel | Onde roda | Cadência | Manual |

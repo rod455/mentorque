@@ -3,6 +3,55 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-06 · Engenharia: o veredito do Diretor aplicado no dia, e três instrumentos novos
+
+- Dono: "veja o que o diretor pontuou, dê feedbacks e vamos aplicar as boas
+  sugestões". Retorno escrito no manual dele (`diretor.md`, seção de 05/10),
+  com três coisas a manter e três a melhorar.
+- **Defeito da janela fechada, consertado no banco e no repositório.**
+  Conferido antes de mexer: a coorte de 21/09 tem o último cadastro em 28/09
+  às 02h29 UTC, então a janela dela fechou em 06/10 às 02h29, e a coluna
+  antiga dizia "fechada" desde 05/10 à meia-noite. As views
+  `retencao_coortes` e `ativacao_coortes` passaram a fechar por
+  `max(cadastrado_em) + N dias <= now()` (migração aplicada em 06/10), os
+  dois SQL do repositório idem, e a `conferir:coorte` cobra a forma: plantei
+  o `+ 14` em data de volta e ela reprovou. Hoje a view responde 21/09
+  fechada com 9 de 51 e 28/09 aberta até 13/10.
+- **Regra em DIRETRIZES**: janela fechada se prova pelo último membro da
+  coorte, para toda janela que nascer.
+- **Fila entre papéis**: `docs/agentes/entre-papeis.md`, `npm run entre` e
+  `conferir:entre` (na corrente do `conferir`). Papéis derivados da tabela do
+  time, não de lista própria. Entraram as duas prioridades de sexta do
+  Diretor (CRO: recusa do convite com motivo; Mídia: a tela de OneLink). A
+  terceira, a janela, fechou hoje e por isso não entrou.
+- **Diário em ordem e assinado**: reordenado por script (199 blocos, mesmo
+  conjunto antes e depois, mesmo tamanho em bytes), e a `conferir:agentes`
+  reprova data fora de ordem e, a partir de 06/10, título sem `· Papel:`.
+  Esta entrada é a primeira no formato novo.
+- O que NÃO fiz, de propósito: as prioridades 2 e 3 do Diretor são das
+  rodadas de sexta e quinta, e ficaram na fila com dono e data em vez de
+  serem feitas pela Engenharia por cima dos papéis.
+
+## 2026-10-05 (noite) · 3.0 publicada nas duas lojas, build 70, banner aceso, e o repositório abre a 3.1
+
+- Dono: "Build 70 no ar tanto Android quanto iOS. Vamos atualizar no sistema".
+- **Conferido no instrumento antes de escrever o número**: o funil tem 29
+  aparelhos Android reportando `versao = 3.0.0`, o mais recente às 20h39 de
+  hoje; 14 na web; e 1 no iPhone (04/10 à noite, o TestFlight do dono). O
+  Android não dependeu da palavra de ninguém. O iPhone é a palavra do dono
+  mais o retrato do `app_store_connect` de 06/10 (colhido às 6h), que tem que
+  responder READY_FOR_SALE; se não responder, o campo `ios` da rota volta para
+  69 na hora. É a mesma régua da 2.9.
+- A cadeia inteira, acoplada de propósito e cobrada pela `conferir:versoes`:
+  `3.0` em JA_PUBLICADAS e no mapa de builds (70); o banner de versão nova
+  aponta para 70 nas duas lojas; o piso do versionCode sobe para 71; os três
+  lugares da versão de marketing abrem a 3.1 (content.ts, build.gradle e as
+  duas ocorrências do MARKETING_VERSION).
+- O que o dono ainda faz, da lista: a busca de um minuto na App Store por
+  `manutencao` sem acento, agora que a 3.0 está publicada (linha de 01/10).
+  E o roteiro de aparelho de sete passos da `novidades-3.0.md` continua
+  sendo o único sinal sobre o binário.
+
 ## 2026-10-05 · Diretor: a retenção virou, e o sinal de "janela fechada" está um dia adiantado
 - Artifact "Semana Mentorque" (28/09 a 04/10):
   https://claude.ai/artifact/E2b588irSQLmMTHVDQFvxd
@@ -141,128 +190,6 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   Atualizei o artifact em duas linhas, porque uma delas muda o que o dono faz: o
   item do App Store Connect parado há cinco dias DESTRAVOU, e a busca de um
   minuto por `manutencao` sem acento já dá. Artifact na versão 2.
-
-## 2026-10-04 (tarde) · QA agendado: a primeira receita foi estornada, e a fatura só é paga uma hora depois da virada
-- Verificação curta, agendada por mim em 01/10 para provar o conserto do
-  `renovou` na cobrança de hoje. **A prova não existe, e isso já estava
-  resolvido**: 02/10 registrou que os três assinantes saíram e que as
-  renovações de 04/10 e 09/10 não vão acontecer. Confirmado na fonte: a
-  `sub_1U9Phe…` terminou hoje às 13:20:18, com `status` canceled e `ended_at`
-  igual ao `cancel_at`. Não houve virada, então nenhum `renovou` era esperado.
-  Nada reprovou. A rotina agendada se encerra aqui.
-- A integração do Stripe foi autorizada, então fui pagar as dívidas que ficaram
-  das duas rodadas anteriores. Duas coisas que achei não estão em lugar nenhum.
-- **A PRIMEIRA RECEITA REAL DO PRODUTO FOI ESTORNADA INTEGRALMENTE.** MEDIDO:
-  nota de crédito `cn_1UM3tK…`, tipo `post_payment`, R$ 29,90 de R$ 29,90, com
-  estorno `re_3ULujQ…` em `status: succeeded`, criado em 02/10 às 10:40:38, UM
-  SEGUNDO depois de a `sub_1U8U8h…` ser cancelada na hora (não no fim do
-  período). Bruto R$ 29,90; **líquido R$ 0,00**.
-- ISSO RECONCILIA DUAS LINHAS NOSSAS QUE SE CONTRADIZEM. O diário de 02/10
-  fechou a pergunta da primeira cobrança com "a receita 30d do Stripe passou de
-  R$ 0,00 para R$ 29,90", e o retrato de hoje traz `receita30dCentavos: 0`. As
-  duas estão certas: o coletor desconta estorno, e ninguém escreveu por que o
-  número voltou a zero. Quem ler na segunda veria R$ 29,90 no diário e 0,00 no
-  retrato sem jeito de casar os dois. **O produto continua com receita
-  realizada líquida zero.** Não sei por que o estorno foi feito, e não é meu
-  lugar supor.
-- **A SAÍDA DE UM DOS TRÊS TEM MOTIVO DECLARADO NO STRIPE**, e é dado de
-  cliente, não minha leitura: a `sub_1UBIBn…` (b62df1c8) traz
-  `cancellation_details.feedback: "too_expensive"`. As outras duas vêm com
-  `reason: "cancellation_requested"` e `feedback` nulo. Registro e paro aqui:
-  preço e planos são do dono. Vale para o e-mail de quem cancela que subiu em
-  02/10, porque este motivo não veio por ele, veio do próprio Stripe.
-- **CORREÇÃO DE UMA COISA QUE EU ESCREVI EM 01/10**, riscada na entrada de lá.
-  Eu deduzi que "o Stripe só adianta o ciclo quando a fatura é paga, então
-  ciclo adiantado mais status `active` é fatura paga". É falso. A linha do
-  tempo, medida na única renovação que existiu: ciclo vira 23:52:23, fatura
-  criada como RASCUNHO 23:53:10, banco gravado 23:53:13, **fatura finalizada e
-  paga 00:53:48**. Uma hora depois. A conclusão estava certa por sorte; o
-  raciocínio, não.
-- **E ISSO TEM CONSEQUÊNCIA PARA O CONSERTO DE 02/10, que é o achado técnico
-  da rodada.** O `faturaDaVirada` busca a `latest_invoice` no instante da
-  virada e só aceita `status: "paid"`, recusando `draft` e `open` com razão.
-  Mas no instante da virada a fatura TEM 3 SEGUNDOS DE VIDA e está em `draft`:
-  ela só finaliza uma hora depois. Então o `renovou` vai gravar `semValor` em
-  toda renovação, sempre, e não por defeito de código: o código recusa
-  corretamente uma fatura que ainda não foi paga. O que não existe é valor para
-  ler naquele momento.
-- O intervalo não é coincidência de um caso: nas DUAS faturas de ciclo que
-  existem, a distância entre criar e finalizar é de **3638 segundos nas duas**,
-  ao segundo (01/09 e 01/10). É o atraso padrão de finalização do Stripe, não
-  variação de carga.
-- CONSEQUÊNCIA PRÁTICA: o item que o dono fechou em 03/10 (marcar
-  `invoice.paid` no painel) foi fechado com um argumento que os dados agora
-  contradizem. A objeção de lá tinha duas partes: "a rota não tem `case
-  invoice.paid`" (isso é código, não argumento) e "escreveria `renovou` duas
-  vezes" (resolvível com dedup pelo id da fatura, exatamente como o
-  `funil_eventos_rc_evento_unico` faz pelo id do evento). Com a fatura paga uma
-  hora depois, **a entrega da fatura é o único jeito de o valor da renovação
-  existir**. Não mexi em nada: é decisão de desenho mais um passo no painel do
-  dono, e a medição de hoje é o que faltava para decidir com dado.
-- O `valorDoCheckout` (primeira cobrança) NÃO é afetado: a sessão do checkout
-  chega com `amount_total` e `payment_status` já resolvidos, porque ali o
-  pagamento aconteceu antes do evento. A assimetria é real e vale escrever: na
-  venda o dinheiro vem antes do evento, na renovação vem uma hora depois.
-- ESTADO DE HOJE, para o relatório: 1 assinatura `active` no Stripe
-  (`sub_1UBIBn…`, até 09/10 17:43), com `cancel_at_period_end`, e mais nenhuma.
-  O retrato de hoje diz 2 porque foi tirado às 6h e a segunda terminou às
-  13:20. Nenhum `past_due` e nenhuma cobrança falhada em nenhum momento: as
-  três saídas foram cancelamento, não inadimplência.
-- FONTE INDISPONÍVEL: a Supabase recusou permissão nesta sessão, então NÃO
-  conferi `funil_eventos` e não sei se o `expirou` de hoje (13:20) foi gravado.
-  O caminho está provado em produção pelas três saídas de 02/10, que o diário
-  daquele dia registra como dois `cancelou` e um `expirou`; o de hoje fica sem
-  conferência minha.
-
-## 2026-10-03 (noite, 10) · A AppsFlyer e via de mao unica, e isso explica a noite inteira
-
-- Pergunta do dono: "estamos sem acesso via api?". **Estamos, e conferi nas duas
-  pontas antes de responder.**
-- **No repositório**: não existe coletor de AppsFlyer. O que existe é o lado do
-  SDK, em `lib/app/atribuicao.ts`, que MANDA a instalação para ela. As fontes de
-  gasto do retrato são `google_ads` e `meta_ads`, e só.
-- **No n8n**: 17 credenciais cadastradas, nenhuma da AppsFlyer. Há Bearer para
-  Meta Marketing, Stripe, RevenueCat, Vercel, GitHub e Instagram; há OAuth para
-  Google Ads, Google Sheets, Drive, Gmail, YouTube e AdMob; há JWT da App Store.
-  AppsFlyer não está.
-- **ENTÃO ELA É VIA DE MÃO ÚNICA: o app manda e ninguém lê de volta.** Toda
-  leitura dela hoje é print de painel, feito à mão, e foi exatamente isso que
-  custou a noite: cinco telas do Play Console e três da AppsFlyer para responder
-  uma pergunta que uma chamada de API responderia toda semana sozinha.
-- **O conserto é um token e um coletor**, e a metade do token é do dono porque é
-  chave. Virou linha própria na lista, separada da ligação do Google Ads, pela
-  regra que esta casa escreveu hoje mesmo para o papel de Segurança: achado com
-  N itens vira N linhas, nunca uma linha com N dentro.
-- **O QUE EU NÃO SEI DAQUI**: se o plano Zero libera a API agregada. A página de
-  preço de terceiros não diz, e a AppsFlyer costuma separar Pull API de Raw Data
-  API por plano. Fica escrito como pergunta a responder no console, não como
-  premissa, para ninguém montar coletor contra uma porta fechada.
-- **MEIA HORA DEPOIS, o print do dono respondeu metade**: o menu Export tem uma
-  página **API Access**, e tem também Data Locker e Cost ETL. Então a porta
-  existe no console; o que continua sem resposta é o que o plano libera. O
-  caminho do token na linha da lista foi corrigido de "área de conta e
-  segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
-  print mostra.
-
-## 2026-10-05 (noite) · 3.0 publicada nas duas lojas, build 70, banner aceso, e o repositório abre a 3.1
-
-- Dono: "Build 70 no ar tanto Android quanto iOS. Vamos atualizar no sistema".
-- **Conferido no instrumento antes de escrever o número**: o funil tem 29
-  aparelhos Android reportando `versao = 3.0.0`, o mais recente às 20h39 de
-  hoje; 14 na web; e 1 no iPhone (04/10 à noite, o TestFlight do dono). O
-  Android não dependeu da palavra de ninguém. O iPhone é a palavra do dono
-  mais o retrato do `app_store_connect` de 06/10 (colhido às 6h), que tem que
-  responder READY_FOR_SALE; se não responder, o campo `ios` da rota volta para
-  69 na hora. É a mesma régua da 2.9.
-- A cadeia inteira, acoplada de propósito e cobrada pela `conferir:versoes`:
-  `3.0` em JA_PUBLICADAS e no mapa de builds (70); o banner de versão nova
-  aponta para 70 nas duas lojas; o piso do versionCode sobe para 71; os três
-  lugares da versão de marketing abrem a 3.1 (content.ts, build.gradle e as
-  duas ocorrências do MARKETING_VERSION).
-- O que o dono ainda faz, da lista: a busca de um minuto na App Store por
-  `manutencao` sem acento, agora que a 3.0 está publicada (linha de 01/10).
-  E o roteiro de aparelho de sete passos da `novidades-3.0.md` continua
-  sendo o único sinal sobre o binário.
 
 ## 2026-10-04 (noite, 60) · O Início com uma ação só e a aba Biela, abertos juntos por decisão do dono
 
@@ -873,6 +800,78 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   no ar ja carrega tudo isso, entao tirar seria criar risco onde nao havia.
   Na busca, o preco nao pesa nem ajuda.
 
+## 2026-10-04 (tarde) · QA agendado: a primeira receita foi estornada, e a fatura só é paga uma hora depois da virada
+- Verificação curta, agendada por mim em 01/10 para provar o conserto do
+  `renovou` na cobrança de hoje. **A prova não existe, e isso já estava
+  resolvido**: 02/10 registrou que os três assinantes saíram e que as
+  renovações de 04/10 e 09/10 não vão acontecer. Confirmado na fonte: a
+  `sub_1U9Phe…` terminou hoje às 13:20:18, com `status` canceled e `ended_at`
+  igual ao `cancel_at`. Não houve virada, então nenhum `renovou` era esperado.
+  Nada reprovou. A rotina agendada se encerra aqui.
+- A integração do Stripe foi autorizada, então fui pagar as dívidas que ficaram
+  das duas rodadas anteriores. Duas coisas que achei não estão em lugar nenhum.
+- **A PRIMEIRA RECEITA REAL DO PRODUTO FOI ESTORNADA INTEGRALMENTE.** MEDIDO:
+  nota de crédito `cn_1UM3tK…`, tipo `post_payment`, R$ 29,90 de R$ 29,90, com
+  estorno `re_3ULujQ…` em `status: succeeded`, criado em 02/10 às 10:40:38, UM
+  SEGUNDO depois de a `sub_1U8U8h…` ser cancelada na hora (não no fim do
+  período). Bruto R$ 29,90; **líquido R$ 0,00**.
+- ISSO RECONCILIA DUAS LINHAS NOSSAS QUE SE CONTRADIZEM. O diário de 02/10
+  fechou a pergunta da primeira cobrança com "a receita 30d do Stripe passou de
+  R$ 0,00 para R$ 29,90", e o retrato de hoje traz `receita30dCentavos: 0`. As
+  duas estão certas: o coletor desconta estorno, e ninguém escreveu por que o
+  número voltou a zero. Quem ler na segunda veria R$ 29,90 no diário e 0,00 no
+  retrato sem jeito de casar os dois. **O produto continua com receita
+  realizada líquida zero.** Não sei por que o estorno foi feito, e não é meu
+  lugar supor.
+- **A SAÍDA DE UM DOS TRÊS TEM MOTIVO DECLARADO NO STRIPE**, e é dado de
+  cliente, não minha leitura: a `sub_1UBIBn…` (b62df1c8) traz
+  `cancellation_details.feedback: "too_expensive"`. As outras duas vêm com
+  `reason: "cancellation_requested"` e `feedback` nulo. Registro e paro aqui:
+  preço e planos são do dono. Vale para o e-mail de quem cancela que subiu em
+  02/10, porque este motivo não veio por ele, veio do próprio Stripe.
+- **CORREÇÃO DE UMA COISA QUE EU ESCREVI EM 01/10**, riscada na entrada de lá.
+  Eu deduzi que "o Stripe só adianta o ciclo quando a fatura é paga, então
+  ciclo adiantado mais status `active` é fatura paga". É falso. A linha do
+  tempo, medida na única renovação que existiu: ciclo vira 23:52:23, fatura
+  criada como RASCUNHO 23:53:10, banco gravado 23:53:13, **fatura finalizada e
+  paga 00:53:48**. Uma hora depois. A conclusão estava certa por sorte; o
+  raciocínio, não.
+- **E ISSO TEM CONSEQUÊNCIA PARA O CONSERTO DE 02/10, que é o achado técnico
+  da rodada.** O `faturaDaVirada` busca a `latest_invoice` no instante da
+  virada e só aceita `status: "paid"`, recusando `draft` e `open` com razão.
+  Mas no instante da virada a fatura TEM 3 SEGUNDOS DE VIDA e está em `draft`:
+  ela só finaliza uma hora depois. Então o `renovou` vai gravar `semValor` em
+  toda renovação, sempre, e não por defeito de código: o código recusa
+  corretamente uma fatura que ainda não foi paga. O que não existe é valor para
+  ler naquele momento.
+- O intervalo não é coincidência de um caso: nas DUAS faturas de ciclo que
+  existem, a distância entre criar e finalizar é de **3638 segundos nas duas**,
+  ao segundo (01/09 e 01/10). É o atraso padrão de finalização do Stripe, não
+  variação de carga.
+- CONSEQUÊNCIA PRÁTICA: o item que o dono fechou em 03/10 (marcar
+  `invoice.paid` no painel) foi fechado com um argumento que os dados agora
+  contradizem. A objeção de lá tinha duas partes: "a rota não tem `case
+  invoice.paid`" (isso é código, não argumento) e "escreveria `renovou` duas
+  vezes" (resolvível com dedup pelo id da fatura, exatamente como o
+  `funil_eventos_rc_evento_unico` faz pelo id do evento). Com a fatura paga uma
+  hora depois, **a entrega da fatura é o único jeito de o valor da renovação
+  existir**. Não mexi em nada: é decisão de desenho mais um passo no painel do
+  dono, e a medição de hoje é o que faltava para decidir com dado.
+- O `valorDoCheckout` (primeira cobrança) NÃO é afetado: a sessão do checkout
+  chega com `amount_total` e `payment_status` já resolvidos, porque ali o
+  pagamento aconteceu antes do evento. A assimetria é real e vale escrever: na
+  venda o dinheiro vem antes do evento, na renovação vem uma hora depois.
+- ESTADO DE HOJE, para o relatório: 1 assinatura `active` no Stripe
+  (`sub_1UBIBn…`, até 09/10 17:43), com `cancel_at_period_end`, e mais nenhuma.
+  O retrato de hoje diz 2 porque foi tirado às 6h e a segunda terminou às
+  13:20. Nenhum `past_due` e nenhuma cobrança falhada em nenhum momento: as
+  três saídas foram cancelamento, não inadimplência.
+- FONTE INDISPONÍVEL: a Supabase recusou permissão nesta sessão, então NÃO
+  conferi `funil_eventos` e não sei se o `expirou` de hoje (13:20) foi gravado.
+  O caminho está provado em produção pelas três saídas de 02/10, que o diário
+  daquele dia registra como dois `cancelou` e um `expirou`; o de hoje fica sem
+  conferência minha.
+
 ## 2026-10-04 (manha, 33) · O MES100 aponta para o cupom vivo, e a ficha da Apple dizia o proposto como se fosse o publicado
 
 - **Decisao do dono: `/MES100` passa a apontar para `LANCAMENTO1MES`.** Feito
@@ -1157,6 +1156,172 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   ignorado no proximo commit so de doc. Este commit NAO e esse caso (mexe em
   `vercel.json` e `scripts/`), entao o primeiro sinal real vem com o retrato
   diario de hoje.
+
+## 2026-10-04 · Segurança (rodada 3): a conferência que eu tinha pedido para outro papel virou trabalho meu, e o quinto fluxo tem uma chave viva atrás de um webhook sem senha
+- Artifact "Segurança da semana" (rodada 3):
+  https://claude.ai/artifact/JJdYcrmYe1yBZMzSg7ukmA
+- Semana de 88 commits.
+- **O VEREDITO DO DONO SOBRE A RODADA 2, PONTO POR PONTO.**
+  - **Ponto 1, o pedido que ficou sem dono: FEITO, e é a maior parte desta
+    rodada.** Eu tinha pedido que a `verifica-banco.mjs` exigisse
+    `security_invoker` explícito em toda view, e pedi para outro papel. Agora
+    está escrito, por mim. A regra é **explícito**, não "sempre `on`", porque o
+    `estado_da_base` é `off` de propósito desde 14/09 e exigir `on` apagaria uma
+    decisão boa; exigir explícito só proíbe o silêncio.
+    - **Ela reprovou num defeito REAL antes de qualquer plantio**: a
+      `assinaturas_conferencia` sem cláusula. Consertei o arquivo
+      (`funil_eventos.sql`) e apliquei no banco pela migração
+      `assinaturas_conferencia_security_invoker`.
+    - **Três plantios, com verde antes e verde depois**: tirar a cláusula de uma
+      view que tem (mordeu), deixar a cláusula só no COMENTÁRIO (mordeu, que é a
+      armadilha nº 2 desta casa) e valor inválido (mordeu).
+    - **Estado do banco depois**: 13 views, **zero sem a cláusula**, 12 em `on` e
+      a do `estado_da_base` em `off`. Nenhuma legível por `anon` nem por
+      `authenticated`.
+    - **E corrigi o comentário que causou o mal-entendido**: a ressalva que tira
+      a view da regra do `pg_temp` continua lá, com razão, mas agora diz que a
+      view tem a regra DELA logo abaixo, e por que a leitura de 27/09 deixou o
+      pedido sete dias sem dono.
+  - **Ponto 2, achado com N itens vira N linhas**: aceito, e já aplicado nesta
+    rodada. O achado novo de hoje entrou como linha própria, com o id do fluxo,
+    em vez de virar sub-item da linha de 27/09.
+  - **Ponto 3, o inventário mensal precisa de data**: aceito. **A próxima é
+    01/11/2026**, primeiro domingo de novembro, e está escrita no manual. Esta
+    rodada é a primeira de outubro, então o inventário foi feito hoje.
+- **ACHADO DA RODADA, e ele só apareceu porque eu li a DEFINIÇÃO do fluxo, e não
+  só a execução.** O quinto fluxo (`mIsag1ifLfNWzCxh`) está **há 7 dias** na
+  lista do dono e continua ativo. Lendo os nós dele:
+  - o nó "IA (Claude)" carrega uma **chave da Anthropic em texto puro**, como
+    valor de cabeçalho e não como credencial do n8n;
+  - **essa chave funciona**: a execução de 25/09 voltou com resposta completa;
+  - e o mesmo fluxo tem um webhook **`POST /webhook/blog-gerar` sem
+    autenticação nenhuma**. Quem souber o endereço dispara a chamada paga quantas
+    vezes quiser.
+  - **Localização apenas. O valor não está no relatório, nem aqui, nem no
+    artifact.**
+- **E AQUI EU ESTAVA ERRADO, e a correção veio de outra sessão no mesmo dia.** A
+  minha linha de 27/09 pedia **desligar** o fluxo. O commit 880badf desmontou o
+  raciocínio: eu li "Vocaboost foi desligado como produto" e concluí "então
+  desliga", **sem perguntar por que o dono tinha mantido justamente ESSE ligado**.
+  Ele mantinha porque publicava artigo toda semana para awareness, e o blog
+  mostra "em breve" porque o banco sumiu. A minha observação ("paga e joga fora")
+  estava certa; a minha conclusão sobre a intenção estava errada. É exatamente a
+  armadilha do CLAUDE.md de 03/10: conclusão tirada do primeiro número encontrado,
+  sem procurar o que ele mede.
+- **E O DONO DECIDIU HOJE, o que muda o estado de novo.** Ele disse que
+  restaurar o banco do Vocaboost **"não faz sentido"**, e as duas linhas (a minha
+  de desligar e a de restaurar) saíram da lista. Então o conserto saiu da mesa e o
+  fluxo **continua ligado**: o que era "quebrado, vão consertar" passou a ser
+  permanente. Isso não é a minha recomendação de 27/09 de volta: é uma pergunta
+  nova que a decisão dele criou, e ela entrou como pergunta única ("continua
+  ligado?"), com a saída explícita de "fica ligado de propósito e eu paro de
+  trazer".
+- **POR QUE A CHAVE NÃO É REABRIR A DECISÃO DE 22/09, E POR QUE NÃO É REPETIR O
+  ARGUMENTO.** Em 22/09 o dono decidiu não girar as chaves do n8n, e a razão foi
+  que os produtos estavam desligados e **ninguém alcançava** aquelas chaves. O
+  fato novo não é "achei chave de novo", que o manual já diz que não é achado: é
+  que **esta** tem um caminho de disparo aberto para qualquer pessoa, sem
+  credencial. Mudou o alcance, não o produto. Virou UMA linha de decisão sobre
+  UMA chave, com prazo de 11/10, e eu não repeti a recomendação geral. E ela fica
+  de pé independente do fluxo ser desligado ou não, porque girar chave é decisão
+  separada de desligar fluxo.
+- **E O QUE CORTA PARA O OUTRO LADO, porque relatório que só junta o que reforça
+  a própria tese é advocacia.** A chave de `service_role` do mesmo fluxo continua
+  apontando para projeto apagado, como eu disse em 27/09. O caminho pago morre
+  dois nós antes do e-mail, então **nenhuma mensagem sai** para os três endereços
+  que o nó de e-mail lista. E o gasto por disparo é de poucos milhares de tokens.
+  O problema é o caminho sem porta, não o tamanho da conta.
+- **SEM PushNotification, e a decisão é consciente.** A regra de avisar na hora
+  vale para segredo exposto NO REPOSITÓRIO; este está no n8n. Além disso o
+  relógio não começou a correr esta semana: o webhook está assim desde julho, e o
+  dono decidiu sobre chaves do n8n há 12 dias. Avisar na hora aqui seria eu
+  passar por cima de uma decisão recente com informação adjacente. Se ele quiser
+  outro limite, a linha está na lista dele para dizer isso.
+- **ACHADO NOVO, e ele era um buraco na conferência que eu acabei de escrever.**
+  A view **`contas_criadas` existia no banco e NÃO existia no repositório**. O
+  `estado_da_base.sql` a mencionava num comentário, e o comando que a cria não
+  estava em lugar nenhum. Ela lê `auth.users`.
+  - **Não era buraco de permissão**: está em `security_invoker = on`, e a ACL no
+    ar era `postgres` e `service_role`, mais ninguém. É a variante SEGURA do par
+    que expôs a lista de e-mail em 19/09, onde o perigo era `SECURITY DEFINER`.
+  - **Era buraco de leitura**, e isso importa para o meu ofício: conferência de
+    texto só vê o que tem arquivo. Escrevi `supabase/contas_criadas.sql` como
+    transcrição do que já estava no ar, lido com `pg_get_viewdef` e `reloptions`,
+    e deixei a limitação escrita no comentário da própria conferência.
+- **Dependências: o total ANDOU e a produção não.** São **24 falhas** agora
+  contra 18 em 27/09, mas as de produção continuam **4** (1 crítica, 2 altas, 1
+  média). Então **20 são só de desenvolvimento**, contra 14. E a `devDependencies`
+  está **idêntica** à de 27/09, confirmado commit a commit: ou seja, **a nossa
+  árvore não mudou, o conhecimento do mundo sobre ela mudou**. É a prova da regra
+  do manual de release: "não mexemos em nada" nunca prova que nada mudou.
+- O `next` segue em 14.2.35, e o que sobra são as duas críticas de sempre, que
+  não alcançam a gente (Vercel é Linux; o otimizador está desligado, com prova no
+  fonte em 27/09). O `fixAvailable` agora é `next` **16.3.8**, versão maior.
+  Recomendação continua a de não decidir isso numa rodada de domingo.
+- **Segredo escapando: nenhum nos 88 commits, e o zero foi provado** plantando as
+  seis formas numa cópia do diff. O `.gitignore` não foi tocado e
+  `.env.local.bak` continua ignorado.
+- **Supabase: duas linhas novas, as duas de objeto que nasceu esta semana, e
+  nenhuma é buraco.** A tabela `saida_motivos` entrou com RLS ligado, zero
+  política e sem `select` para `anon` nem `authenticated`, que é o certo. A função
+  `aparelhos_ativos` entrou sem `search_path` fixo, mas é `SECURITY INVOKER`, SQL
+  simples sob RLS: não dá a ninguém o que ela já não tinha, igual às outras cinco.
+- **Permissões, inventário de outubro.** Repositório: **um colaborador**, o dono,
+  admin. n8n: **18 credenciais** (uma nova, `AppsFlyer`, que casa com o coletor
+  desta semana), todas no projeto pessoal dele. **67 fluxos**, 9 ativos: oito do
+  Mentorque e o de Vocaboost acima. **Fora do alcance desta sessão**, e por isso
+  sem resposta: apps conectados na Meta e no Google, e credenciais do Codemagic.
+  **Próximo inventário: 01/11/2026.**
+- **O LIMITE DESTA VARREDURA.** Alcançou: a árvore do lock, a `devDependencies`
+  comparada commit a commit, o diff de 7 dias, os advisors nos dois tipos, o
+  estado de permissão de função, tabela e view no banco, e a definição E as
+  execuções dos fluxos do n8n. **Não alcançou**: a rede até o nosso site (o proxy
+  segue recusando `mentorque.com.br`), o otimizador de imagem da Vercel, os
+  pacotes SPM do build nativo, o binário das lojas, o WebView do aparelho, e os
+  três painéis de terceiro citados acima.
+- **SAÍ DO MEU TERRITÓRIO UMA VEZ, e digo para o Guardião discordar.** O
+  `npm run conferir` estava **VERMELHO na main**, para todo mundo, e não por
+  minha causa: a `conferir:publicacao` reprovava em `native/` e em
+  `pecas-geradas/`. Diagnostiquei antes de tocar, e é **um de cada**:
+  - **`native/` é erro real, e a conferência estava certa.** Essa pasta
+    **nunca existiu** neste repositório (`git log --all --diff-filter=A` não traz
+    nada), então a linha do `.vercelignore` não excluía nada. A saída do build
+    nativo se chama `.next-native` (next.config.mjs:70) e o git já a ignora.
+    Tirei a linha morta, com o porquê escrito no próprio arquivo.
+  - **`pecas-geradas/` é falso positivo, e a conferência estava errada.** Ela
+    perguntava "existe no disco?", e essa pasta só NASCE quando alguém roda
+    `scripts/pecas.mjs`. Em clone limpo ela não existe, então a bateria ficava
+    vermelha sem nenhum defeito na frente dela. Troquei a pergunta para o que o
+    repositório tem (`git ls-files`), que responde igual em clone novo e em
+    máquina de trabalho, com a exceção nomeada uma por uma e o motivo do lado.
+  - **Três plantios, verde antes e verde depois**: erro de digitação em pasta
+    real (`docs` para `docsx`), pasta que nunca existiu (a própria `native/`) e
+    pasta inventada com cara de saída de execução (`pecas-geradas-v2/`). As três
+    mordem, então a exceção não engoliu os parecidos.
+  - **Por que eu, e não o Guardião**: ele roda sábado, e a bateria vermelha
+    bloqueia o regime de todos os papéis até lá. O critério que o dono me deu em
+    03/10 é quanto tempo a coisa fica parada se ficar com o outro. Se ele preferir
+    que eu tivesse só relatado, a decisão é dele e eu sigo.
+- **UMA SEGUNDA VERMELHA QUE EU NÃO CONSERTEI, e é de propósito.** Depois do
+  rebase, a `conferir:travessao` reprova em `docs/lojas/ficha.md:70`, linha que
+  entrou hoje no commit 7e88d40 e que eu não toquei (zero diff meu nesse arquivo).
+  O travessão está dentro de um título de loja CITADO como texto antigo que já foi
+  publicado, e trocar o caractere ali apagaria o registro do que esteve no ar.
+  Isso é decisão de quem cuida de ficha de loja, não minha, e é o mesmo caso em
+  que eu mudei o MEU texto em 27/09 em vez de mexer na conferência. **Fica para o
+  papel de ASO e Lojas**: ou a citação ganha uma forma que a conferência aceite,
+  ou a conferência passa a tolerar citação marcada. Eu empurrei a minha parte com
+  essa linha vermelha, dizendo em vez de esconder. **E fechou sozinho, do jeito
+  certo**: o commit ac8a55a, de quem cuida da ficha, tirou o travessão citado
+  minutos depois, e a bateria voltou a 0. É o desfecho que eu queria e não era meu
+  para dar.
+- **Contra a régua**: cumpri 1 a 5 e 7 a 9. O 6 se aplica pela primeira vez por
+  outro caminho: eu não troquei dependência, mas mexi em código (conferência,
+  `.sql` e uma migração), e passou pelo regime, com `npm run conferir` inteiro em
+  0 e os plantios documentados. **O que ficou devendo**: nada que eu consiga
+  nomear nesta rodada, e isso me deixa desconfortável o suficiente para dizer
+  que a parte mais fraca é o inventário de permissão, que segue pela metade por
+  falta de ferramenta em três painéis, com as datas e os nomes ditos.
 
 ## 2026-10-03 (noite, 23) · 75% dos 10 GB da Vercel no dia 3, e a causa principal sou eu
 
@@ -1651,6 +1816,36 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   dos painéis de anúncio, então instalações por fonte fecham a conta na mão.
 - Próximo passo, de um clique: trocar o app no seletor para o Android e baixar o
   `Partners (media sources)` de novo.
+
+## 2026-10-03 (noite, 10) · A AppsFlyer e via de mao unica, e isso explica a noite inteira
+
+- Pergunta do dono: "estamos sem acesso via api?". **Estamos, e conferi nas duas
+  pontas antes de responder.**
+- **No repositório**: não existe coletor de AppsFlyer. O que existe é o lado do
+  SDK, em `lib/app/atribuicao.ts`, que MANDA a instalação para ela. As fontes de
+  gasto do retrato são `google_ads` e `meta_ads`, e só.
+- **No n8n**: 17 credenciais cadastradas, nenhuma da AppsFlyer. Há Bearer para
+  Meta Marketing, Stripe, RevenueCat, Vercel, GitHub e Instagram; há OAuth para
+  Google Ads, Google Sheets, Drive, Gmail, YouTube e AdMob; há JWT da App Store.
+  AppsFlyer não está.
+- **ENTÃO ELA É VIA DE MÃO ÚNICA: o app manda e ninguém lê de volta.** Toda
+  leitura dela hoje é print de painel, feito à mão, e foi exatamente isso que
+  custou a noite: cinco telas do Play Console e três da AppsFlyer para responder
+  uma pergunta que uma chamada de API responderia toda semana sozinha.
+- **O conserto é um token e um coletor**, e a metade do token é do dono porque é
+  chave. Virou linha própria na lista, separada da ligação do Google Ads, pela
+  regra que esta casa escreveu hoje mesmo para o papel de Segurança: achado com
+  N itens vira N linhas, nunca uma linha com N dentro.
+- **O QUE EU NÃO SEI DAQUI**: se o plano Zero libera a API agregada. A página de
+  preço de terceiros não diz, e a AppsFlyer costuma separar Pull API de Raw Data
+  API por plano. Fica escrito como pergunta a responder no console, não como
+  premissa, para ninguém montar coletor contra uma porta fechada.
+- **MEIA HORA DEPOIS, o print do dono respondeu metade**: o menu Export tem uma
+  página **API Access**, e tem também Data Locker e Cost ETL. Então a porta
+  existe no console; o que continua sem resposta é o que o plano libera. O
+  caminho do token na linha da lista foi corrigido de "área de conta e
+  segurança" (que era o meu palpite) para `Export > API Access`, que é o que o
+  print mostra.
 
 ## 2026-10-03 (noite, 9) · O painel da AppsFlyer derruba duas contas minhas do mesmo dia, e as duas eram estimativa lida de grafico
 
@@ -2199,6 +2394,42 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   Play Console, que é o instrumento que duas rodadas diferentes pediram na mesma
   semana sem uma saber da outra.
 
+## 2026-10-02 (tarde) · O `renovou` passou a dizer quanto entrou, e ciclo vencido deixou de passar calado
+- O dono perguntou se dava para arrumar os dois pontos que ficaram abertos.
+  Dava, e o primeiro nem precisava dele.
+- **QUANTO ENTROU.** A nota de 01/10 dizia: "quem responde quanto entrou e a
+  fatura, e para ela chegar o Rodrigo precisa acrescentar `invoice.paid` a
+  lista do endpoint". A primeira metade (preco de plano nao e caixa) continua
+  certa; a segunda era UMA saida, nao a unica. A assinatura que chega no evento
+  carrega `latest_invoice`, e a fatura pode ser BUSCADA na hora da virada, com
+  a chave que a casa ja tem. **Nada de painel, nada de evento novo.**
+- O `renovou` passa a carregar `pagoCentavos`, `moeda` e o id da fatura, e so
+  de fatura PAGA: `open` e `draft` sao promessa, `void` e fatura que deixou de
+  existir. Zero continua sendo resposta legitima (cupom de 100%, o caso de
+  01/09) e e DIFERENTE de ausente, que sai como `semValor`. Juntar os dois
+  faria receita sumir com cara de cortesia. A busca nunca lanca.
+- **A PROVA QUE DEIXOU DE EXISTIR.** As duas renovacoes que iam validar o
+  conserto (04/10 e 09/10) foram canceladas em 02/10. Nao da para fabricar uma
+  renovacao; da para garantir que a proxima nao passe calada.
+- `cicloVencido` acusa assinatura que o banco acha ATIVA e cujo ciclo ja
+  venceu. Numa renovacao o webhook empurraria o ciclo; numa falha de pagamento
+  marcaria `past_due`. As duas passam pela MESMA entrega, entao ciclo vencido
+  com status ativo significa que nenhuma chegou. Folga de um dia, porque alarme
+  no minuto exato grita todo mes a toa. Publicado em `vendas.ciclosVencidos`,
+  impresso no retrato e no Vigia.
+- **A CONFERENCIA ANTIGA REPROVOU A MUDANCA e estava certa**: ela exigia que o
+  `renovou` nao carimbasse valor NENHUM. O invariante nasceu certo e ficou pela
+  metade, porque o proibido e o PRECO DO PLANO, nao o dinheiro da fatura. Agora
+  ela nomeia o que nao pode entrar e cobra que o valor venha de
+  `fatura.centavos` e que a ausencia seja dita.
+- Oito defeitos plantados. UM passou verde e o achado e meu: fazer a busca da
+  fatura voltar a lancar DERRUBOU o script, e script derrubado nao imprime
+  FALHA nenhuma. Pareceu prova e nao era; a assercao passou a capturar o
+  lancamento e ai mordeu. **E a segunda vez hoje que esse mesmo engano aparece.**
+- O QUE CONTINUA SEM PROVA, com todas as letras: nenhuma renovacao passou por
+  este codigo, e nao ha nenhuma marcada. O que mudou nao e a prova, e a rede:
+  se falhar, a gente descobre no dia seguinte em vez de um mes depois.
+
 ## 2026-10-02 · O e-mail de quem cancelou: a casa sabia QUE saíram e não sabia POR QUÊ
 - Pedido do dono: "um e-mail para comunicar quem cancelar a assinatura, com uma
   pesquisa de satisfação e perguntando os principais motivos, para a gente
@@ -2383,42 +2614,6 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   prova de campanha parada; número de plataforma tem data de leitura e dia
   fechado é revisado para baixo; e desperdício com nome só existe em campanha de
   busca, com o substituto mais barato nomeado.
-
-## 2026-10-02 (tarde) · O `renovou` passou a dizer quanto entrou, e ciclo vencido deixou de passar calado
-- O dono perguntou se dava para arrumar os dois pontos que ficaram abertos.
-  Dava, e o primeiro nem precisava dele.
-- **QUANTO ENTROU.** A nota de 01/10 dizia: "quem responde quanto entrou e a
-  fatura, e para ela chegar o Rodrigo precisa acrescentar `invoice.paid` a
-  lista do endpoint". A primeira metade (preco de plano nao e caixa) continua
-  certa; a segunda era UMA saida, nao a unica. A assinatura que chega no evento
-  carrega `latest_invoice`, e a fatura pode ser BUSCADA na hora da virada, com
-  a chave que a casa ja tem. **Nada de painel, nada de evento novo.**
-- O `renovou` passa a carregar `pagoCentavos`, `moeda` e o id da fatura, e so
-  de fatura PAGA: `open` e `draft` sao promessa, `void` e fatura que deixou de
-  existir. Zero continua sendo resposta legitima (cupom de 100%, o caso de
-  01/09) e e DIFERENTE de ausente, que sai como `semValor`. Juntar os dois
-  faria receita sumir com cara de cortesia. A busca nunca lanca.
-- **A PROVA QUE DEIXOU DE EXISTIR.** As duas renovacoes que iam validar o
-  conserto (04/10 e 09/10) foram canceladas em 02/10. Nao da para fabricar uma
-  renovacao; da para garantir que a proxima nao passe calada.
-- `cicloVencido` acusa assinatura que o banco acha ATIVA e cujo ciclo ja
-  venceu. Numa renovacao o webhook empurraria o ciclo; numa falha de pagamento
-  marcaria `past_due`. As duas passam pela MESMA entrega, entao ciclo vencido
-  com status ativo significa que nenhuma chegou. Folga de um dia, porque alarme
-  no minuto exato grita todo mes a toa. Publicado em `vendas.ciclosVencidos`,
-  impresso no retrato e no Vigia.
-- **A CONFERENCIA ANTIGA REPROVOU A MUDANCA e estava certa**: ela exigia que o
-  `renovou` nao carimbasse valor NENHUM. O invariante nasceu certo e ficou pela
-  metade, porque o proibido e o PRECO DO PLANO, nao o dinheiro da fatura. Agora
-  ela nomeia o que nao pode entrar e cobra que o valor venha de
-  `fatura.centavos` e que a ausencia seja dita.
-- Oito defeitos plantados. UM passou verde e o achado e meu: fazer a busca da
-  fatura voltar a lancar DERRUBOU o script, e script derrubado nao imprime
-  FALHA nenhuma. Pareceu prova e nao era; a assercao passou a capturar o
-  lancamento e ai mordeu. **E a segunda vez hoje que esse mesmo engano aparece.**
-- O QUE CONTINUA SEM PROVA, com todas as letras: nenhuma renovacao passou por
-  este codigo, e nao ha nenhuma marcada. O que mudou nao e a prova, e a rede:
-  se falhar, a gente descobre no dia seguinte em vez de um mes depois.
 
 ## 2026-10-02 · A venda de Play de 25/09 virou Premium, e o Android vende desde a 2.7
 - A pedido do dono, analise dos dois achados do QA (30/09 e 01/10). O print do
@@ -2855,172 +3050,6 @@ REGISTRO no diário, não sobre o trabalho inteiro. Não abri os seis relatório
 - Limite do critério 1: os dois gastos vêm da linha de 7 dias do retrato para
   serem da mesma régua, e essa janela não é a semana calendário exata; onde o
   agente de mídia mede outra janela, mostrei as duas.
-
-## 2026-10-04 · Segurança (rodada 3): a conferência que eu tinha pedido para outro papel virou trabalho meu, e o quinto fluxo tem uma chave viva atrás de um webhook sem senha
-- Artifact "Segurança da semana" (rodada 3):
-  https://claude.ai/artifact/JJdYcrmYe1yBZMzSg7ukmA
-- Semana de 88 commits.
-- **O VEREDITO DO DONO SOBRE A RODADA 2, PONTO POR PONTO.**
-  - **Ponto 1, o pedido que ficou sem dono: FEITO, e é a maior parte desta
-    rodada.** Eu tinha pedido que a `verifica-banco.mjs` exigisse
-    `security_invoker` explícito em toda view, e pedi para outro papel. Agora
-    está escrito, por mim. A regra é **explícito**, não "sempre `on`", porque o
-    `estado_da_base` é `off` de propósito desde 14/09 e exigir `on` apagaria uma
-    decisão boa; exigir explícito só proíbe o silêncio.
-    - **Ela reprovou num defeito REAL antes de qualquer plantio**: a
-      `assinaturas_conferencia` sem cláusula. Consertei o arquivo
-      (`funil_eventos.sql`) e apliquei no banco pela migração
-      `assinaturas_conferencia_security_invoker`.
-    - **Três plantios, com verde antes e verde depois**: tirar a cláusula de uma
-      view que tem (mordeu), deixar a cláusula só no COMENTÁRIO (mordeu, que é a
-      armadilha nº 2 desta casa) e valor inválido (mordeu).
-    - **Estado do banco depois**: 13 views, **zero sem a cláusula**, 12 em `on` e
-      a do `estado_da_base` em `off`. Nenhuma legível por `anon` nem por
-      `authenticated`.
-    - **E corrigi o comentário que causou o mal-entendido**: a ressalva que tira
-      a view da regra do `pg_temp` continua lá, com razão, mas agora diz que a
-      view tem a regra DELA logo abaixo, e por que a leitura de 27/09 deixou o
-      pedido sete dias sem dono.
-  - **Ponto 2, achado com N itens vira N linhas**: aceito, e já aplicado nesta
-    rodada. O achado novo de hoje entrou como linha própria, com o id do fluxo,
-    em vez de virar sub-item da linha de 27/09.
-  - **Ponto 3, o inventário mensal precisa de data**: aceito. **A próxima é
-    01/11/2026**, primeiro domingo de novembro, e está escrita no manual. Esta
-    rodada é a primeira de outubro, então o inventário foi feito hoje.
-- **ACHADO DA RODADA, e ele só apareceu porque eu li a DEFINIÇÃO do fluxo, e não
-  só a execução.** O quinto fluxo (`mIsag1ifLfNWzCxh`) está **há 7 dias** na
-  lista do dono e continua ativo. Lendo os nós dele:
-  - o nó "IA (Claude)" carrega uma **chave da Anthropic em texto puro**, como
-    valor de cabeçalho e não como credencial do n8n;
-  - **essa chave funciona**: a execução de 25/09 voltou com resposta completa;
-  - e o mesmo fluxo tem um webhook **`POST /webhook/blog-gerar` sem
-    autenticação nenhuma**. Quem souber o endereço dispara a chamada paga quantas
-    vezes quiser.
-  - **Localização apenas. O valor não está no relatório, nem aqui, nem no
-    artifact.**
-- **E AQUI EU ESTAVA ERRADO, e a correção veio de outra sessão no mesmo dia.** A
-  minha linha de 27/09 pedia **desligar** o fluxo. O commit 880badf desmontou o
-  raciocínio: eu li "Vocaboost foi desligado como produto" e concluí "então
-  desliga", **sem perguntar por que o dono tinha mantido justamente ESSE ligado**.
-  Ele mantinha porque publicava artigo toda semana para awareness, e o blog
-  mostra "em breve" porque o banco sumiu. A minha observação ("paga e joga fora")
-  estava certa; a minha conclusão sobre a intenção estava errada. É exatamente a
-  armadilha do CLAUDE.md de 03/10: conclusão tirada do primeiro número encontrado,
-  sem procurar o que ele mede.
-- **E O DONO DECIDIU HOJE, o que muda o estado de novo.** Ele disse que
-  restaurar o banco do Vocaboost **"não faz sentido"**, e as duas linhas (a minha
-  de desligar e a de restaurar) saíram da lista. Então o conserto saiu da mesa e o
-  fluxo **continua ligado**: o que era "quebrado, vão consertar" passou a ser
-  permanente. Isso não é a minha recomendação de 27/09 de volta: é uma pergunta
-  nova que a decisão dele criou, e ela entrou como pergunta única ("continua
-  ligado?"), com a saída explícita de "fica ligado de propósito e eu paro de
-  trazer".
-- **POR QUE A CHAVE NÃO É REABRIR A DECISÃO DE 22/09, E POR QUE NÃO É REPETIR O
-  ARGUMENTO.** Em 22/09 o dono decidiu não girar as chaves do n8n, e a razão foi
-  que os produtos estavam desligados e **ninguém alcançava** aquelas chaves. O
-  fato novo não é "achei chave de novo", que o manual já diz que não é achado: é
-  que **esta** tem um caminho de disparo aberto para qualquer pessoa, sem
-  credencial. Mudou o alcance, não o produto. Virou UMA linha de decisão sobre
-  UMA chave, com prazo de 11/10, e eu não repeti a recomendação geral. E ela fica
-  de pé independente do fluxo ser desligado ou não, porque girar chave é decisão
-  separada de desligar fluxo.
-- **E O QUE CORTA PARA O OUTRO LADO, porque relatório que só junta o que reforça
-  a própria tese é advocacia.** A chave de `service_role` do mesmo fluxo continua
-  apontando para projeto apagado, como eu disse em 27/09. O caminho pago morre
-  dois nós antes do e-mail, então **nenhuma mensagem sai** para os três endereços
-  que o nó de e-mail lista. E o gasto por disparo é de poucos milhares de tokens.
-  O problema é o caminho sem porta, não o tamanho da conta.
-- **SEM PushNotification, e a decisão é consciente.** A regra de avisar na hora
-  vale para segredo exposto NO REPOSITÓRIO; este está no n8n. Além disso o
-  relógio não começou a correr esta semana: o webhook está assim desde julho, e o
-  dono decidiu sobre chaves do n8n há 12 dias. Avisar na hora aqui seria eu
-  passar por cima de uma decisão recente com informação adjacente. Se ele quiser
-  outro limite, a linha está na lista dele para dizer isso.
-- **ACHADO NOVO, e ele era um buraco na conferência que eu acabei de escrever.**
-  A view **`contas_criadas` existia no banco e NÃO existia no repositório**. O
-  `estado_da_base.sql` a mencionava num comentário, e o comando que a cria não
-  estava em lugar nenhum. Ela lê `auth.users`.
-  - **Não era buraco de permissão**: está em `security_invoker = on`, e a ACL no
-    ar era `postgres` e `service_role`, mais ninguém. É a variante SEGURA do par
-    que expôs a lista de e-mail em 19/09, onde o perigo era `SECURITY DEFINER`.
-  - **Era buraco de leitura**, e isso importa para o meu ofício: conferência de
-    texto só vê o que tem arquivo. Escrevi `supabase/contas_criadas.sql` como
-    transcrição do que já estava no ar, lido com `pg_get_viewdef` e `reloptions`,
-    e deixei a limitação escrita no comentário da própria conferência.
-- **Dependências: o total ANDOU e a produção não.** São **24 falhas** agora
-  contra 18 em 27/09, mas as de produção continuam **4** (1 crítica, 2 altas, 1
-  média). Então **20 são só de desenvolvimento**, contra 14. E a `devDependencies`
-  está **idêntica** à de 27/09, confirmado commit a commit: ou seja, **a nossa
-  árvore não mudou, o conhecimento do mundo sobre ela mudou**. É a prova da regra
-  do manual de release: "não mexemos em nada" nunca prova que nada mudou.
-- O `next` segue em 14.2.35, e o que sobra são as duas críticas de sempre, que
-  não alcançam a gente (Vercel é Linux; o otimizador está desligado, com prova no
-  fonte em 27/09). O `fixAvailable` agora é `next` **16.3.8**, versão maior.
-  Recomendação continua a de não decidir isso numa rodada de domingo.
-- **Segredo escapando: nenhum nos 88 commits, e o zero foi provado** plantando as
-  seis formas numa cópia do diff. O `.gitignore` não foi tocado e
-  `.env.local.bak` continua ignorado.
-- **Supabase: duas linhas novas, as duas de objeto que nasceu esta semana, e
-  nenhuma é buraco.** A tabela `saida_motivos` entrou com RLS ligado, zero
-  política e sem `select` para `anon` nem `authenticated`, que é o certo. A função
-  `aparelhos_ativos` entrou sem `search_path` fixo, mas é `SECURITY INVOKER`, SQL
-  simples sob RLS: não dá a ninguém o que ela já não tinha, igual às outras cinco.
-- **Permissões, inventário de outubro.** Repositório: **um colaborador**, o dono,
-  admin. n8n: **18 credenciais** (uma nova, `AppsFlyer`, que casa com o coletor
-  desta semana), todas no projeto pessoal dele. **67 fluxos**, 9 ativos: oito do
-  Mentorque e o de Vocaboost acima. **Fora do alcance desta sessão**, e por isso
-  sem resposta: apps conectados na Meta e no Google, e credenciais do Codemagic.
-  **Próximo inventário: 01/11/2026.**
-- **O LIMITE DESTA VARREDURA.** Alcançou: a árvore do lock, a `devDependencies`
-  comparada commit a commit, o diff de 7 dias, os advisors nos dois tipos, o
-  estado de permissão de função, tabela e view no banco, e a definição E as
-  execuções dos fluxos do n8n. **Não alcançou**: a rede até o nosso site (o proxy
-  segue recusando `mentorque.com.br`), o otimizador de imagem da Vercel, os
-  pacotes SPM do build nativo, o binário das lojas, o WebView do aparelho, e os
-  três painéis de terceiro citados acima.
-- **SAÍ DO MEU TERRITÓRIO UMA VEZ, e digo para o Guardião discordar.** O
-  `npm run conferir` estava **VERMELHO na main**, para todo mundo, e não por
-  minha causa: a `conferir:publicacao` reprovava em `native/` e em
-  `pecas-geradas/`. Diagnostiquei antes de tocar, e é **um de cada**:
-  - **`native/` é erro real, e a conferência estava certa.** Essa pasta
-    **nunca existiu** neste repositório (`git log --all --diff-filter=A` não traz
-    nada), então a linha do `.vercelignore` não excluía nada. A saída do build
-    nativo se chama `.next-native` (next.config.mjs:70) e o git já a ignora.
-    Tirei a linha morta, com o porquê escrito no próprio arquivo.
-  - **`pecas-geradas/` é falso positivo, e a conferência estava errada.** Ela
-    perguntava "existe no disco?", e essa pasta só NASCE quando alguém roda
-    `scripts/pecas.mjs`. Em clone limpo ela não existe, então a bateria ficava
-    vermelha sem nenhum defeito na frente dela. Troquei a pergunta para o que o
-    repositório tem (`git ls-files`), que responde igual em clone novo e em
-    máquina de trabalho, com a exceção nomeada uma por uma e o motivo do lado.
-  - **Três plantios, verde antes e verde depois**: erro de digitação em pasta
-    real (`docs` para `docsx`), pasta que nunca existiu (a própria `native/`) e
-    pasta inventada com cara de saída de execução (`pecas-geradas-v2/`). As três
-    mordem, então a exceção não engoliu os parecidos.
-  - **Por que eu, e não o Guardião**: ele roda sábado, e a bateria vermelha
-    bloqueia o regime de todos os papéis até lá. O critério que o dono me deu em
-    03/10 é quanto tempo a coisa fica parada se ficar com o outro. Se ele preferir
-    que eu tivesse só relatado, a decisão é dele e eu sigo.
-- **UMA SEGUNDA VERMELHA QUE EU NÃO CONSERTEI, e é de propósito.** Depois do
-  rebase, a `conferir:travessao` reprova em `docs/lojas/ficha.md:70`, linha que
-  entrou hoje no commit 7e88d40 e que eu não toquei (zero diff meu nesse arquivo).
-  O travessão está dentro de um título de loja CITADO como texto antigo que já foi
-  publicado, e trocar o caractere ali apagaria o registro do que esteve no ar.
-  Isso é decisão de quem cuida de ficha de loja, não minha, e é o mesmo caso em
-  que eu mudei o MEU texto em 27/09 em vez de mexer na conferência. **Fica para o
-  papel de ASO e Lojas**: ou a citação ganha uma forma que a conferência aceite,
-  ou a conferência passa a tolerar citação marcada. Eu empurrei a minha parte com
-  essa linha vermelha, dizendo em vez de esconder. **E fechou sozinho, do jeito
-  certo**: o commit ac8a55a, de quem cuida da ficha, tirou o travessão citado
-  minutos depois, e a bateria voltou a 0. É o desfecho que eu queria e não era meu
-  para dar.
-- **Contra a régua**: cumpri 1 a 5 e 7 a 9. O 6 se aplica pela primeira vez por
-  outro caminho: eu não troquei dependência, mas mexi em código (conferência,
-  `.sql` e uma migração), e passou pelo regime, com `npm run conferir` inteiro em
-  0 e os plantios documentados. **O que ficou devendo**: nada que eu consiga
-  nomear nesta rodada, e isso me deixa desconfortável o suficiente para dizer
-  que a parte mais fraca é o inventário de permissão, que segue pela metade por
-  falta de ferramenta em três painéis, com as datas e os nomes ditos.
 
 ## 2026-09-27 · Segurança (rodada 2): as três recomendações foram feitas, e o quinto fluxo que ficou ligado paga um artigo por semana para jogar fora
 - Artifact "Segurança da semana" (rodada 2):
@@ -6109,88 +6138,6 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
 - Só documentação mudou nesta rodada, então rodei as conferências que a tocam
   (travessão, skills, frescor), e não a bateria inteira.
 
-## 2026-09-02 · QA: a compra pelas lojas contaria a mesma venda duas vezes
-- Artifact "QA da Semana":
-  https://claude.ai/code/artifact/b104e080-4490-4a88-a9e6-07a366deca63
-- Fluxo varrido: **compra pelas lojas (RevenueCat)**, que era o topo da fila
-  desde 27/08. Lido pelos dois lados, medição e experiência, como pede o
-  direcionamento 6.
-- **PRAZO NOVO, 04/09 às 13h20**: existe um SEGUNDO cliente real,
-  0634d48f (sub_1U9Phe…, mensal R$ 29,90), em teste grátis terminando na
-  sexta. Verificação AGENDADA para 04/09 15h UTC (trigger
-  trig_01QwrDYMNSunEp3oJXKjVT4K), que confere a virada e escreve aqui
-  sozinha. É o direcionamento 5 em prática: diário não dispara, lembrete sim.
-- **Prazo de 01/09 fechado, e bem**: o primeiro cliente virou cobrança às
-  23h52 do dia 1º, período até 01/10. ~~R$ 29,90 de MRR real.~~ A recomendação
-  da rodada passada (segunda porta gravando o `assinou`) já se pagou: o
-  evento do segundo cliente está gravado com origem `stripe-sync`, e sem ela
-  essa venda seria invisível igual à primeira.
-  > **CORRIGIDO em 02/09, com o Stripe liberado.** Não houve R$ 29,90 de
-  > receita. A fatura de 01/09 saiu com subtotal R$ 29,90, desconto R$ 29,90
-  > e **total R$ 0,00**: o cupom `MENSAL-LANCAMENTO100` (100%, `once`) foi
-  > consumido exatamente nessa primeira cobrança pós-teste. O período avançou
-  > porque a fatura foi QUITADA, e uma fatura de R$ 0,00 é quitada na hora.
-  > "Período avançou" prova cobrança emitida, não dinheiro recebido.
-- **Prova indireta sobre o webhook do Stripe** (direcionamento 3): a virada
-  foi escrita no banco 10 segundos depois do fim do teste grátis, de
-  madrugada. Ninguém abre o app nesse segundo exato, então quem escreveu foi
-  o webhook. Ele está VIVO. Marcado como dedução, não como certeza: o log de
-  entregas continua ilegível porque a integração do Stripe pede autorização.
-- **CORRIGIDO, reentrega contando venda em dobro**: o índice
-  `funil_eventos_assinou_unico` casa por `extra->>'sub'`, chave que só o
-  Stripe escreve. A compra pela Apple ou pela Play caía fora dele, e o
-  RevenueCat reenvia quando não recebe 2xx. Índice novo
-  `funil_eventos_rc_evento_unico`, por id do EVENTO e não da assinatura: a
-  reentrega repete o id e é barrada, a renovação do mês seguinte tem id
-  próprio e passa (travar por assinatura apagaria receita, que é por isso que
-  `renovou` fica fora do índice de cima). Aditivo, dentro da alçada de 27/08.
-  Ensaiado antes de subir com as três condições cumpridas: reentrega barrada,
-  renovação nova passando, e as linhas do ensaio desfeitas na mesma transação
-  (conferido depois: 0 linhas de ensaio no banco).
-- **CORRIGIDO, o mesmo defeito pela segunda vez em cinco dias**: o webhook do
-  RevenueCat gravava o evento de funil sem olhar o `error`, igual à
-  `/api/funil` de 26/08. Aqui era pior, porque o evento perdido é o
-  FINANCEIRO e a rota responde 200 de qualquer jeito, então o RevenueCat
-  considera entregue e nunca reenvia. Passou a usar o `eventoDeFunil`, que
-  ganhou `plataforma` opcional: o escritor só sabia dizer "web", e evento de
-  loja precisa dizer ios ou android, senão a leitura por plataforma jura que
-  ninguém compra pelo aplicativo.
-- **CONFERÊNCIA NOVA, `conferir:gravacao`**: achar o mesmo defeito duas vezes
-  é sinal de que ele volta, e "procurar esse padrão" escrito num manual é
-  torcida. Agora gravação em `funil_eventos` que não desestrutura `error`
-  reprova a bateria, apontando arquivo e linha. Provada mordendo antes de
-  entrar, como manda o CLAUDE.md: plantei o insert de volta no webhook, ela
-  reprovou na linha certa, restaurei e ela voltou a passar.
-- **RECOMENDADO, não aplicado** (encosta em cobrança): a compra pela loja
-  pode terminar em silêncio. Se a loja confirma e o direito ainda não
-  propagou, o código não libera, não avisa e não sai da tela: a pessoa foi
-  cobrada e continua olhando o paywall. É o mesmo defeito que quase fez o
-  cliente de 25/08 pagar duas vezes, consertado só do lado da web. Hoje
-  ninguém comprou pela loja ainda, então é de graça. Patch pronto em
-  `docs/agentes/propostas/compra-na-loja-silenciosa.md`.
-- **Zeros, todos com causa** (direcionamentos 1 e 2, nenhum morreu em bullet):
-  `abriu_trilha` e `abriu_cadastro_de_carro` têm instrumentação conferida
-  ponta a ponta e tela alcançável, então é comportamento e não cano entupido;
-  `renovou` porque nenhuma assinatura chegou ao segundo mês (o primeiro
-  renova em 01/10); `cancelou` e `expirou` porque ninguém cancelou.
-- **Erros do retrato, encerrados**: os 12 `LocalNotifications.then()` são
-  todos da versão 1.2.0 e o último é de 29/08, anterior ao conserto da caixa.
-  Zero ocorrência nova. A janela de 7 dias vai continuar mostrando eles até
-  domingo, o que é ruído e não defeito.
-- ~~**Fica para o Analista**: o retrato traz MRR 29,90 e receita 30d 0,00 no
-  mesmo pacote. A assinatura está `active` com período até 01/10, e o Stripe
-  só avança período com fatura paga, então a cobrança entrou. Cheira a
-  defeito do coletor de receita, não de cobrança.~~ Não fechei: integração do
-  Stripe indisponível nesta sessão.
-  > **CORRIGIDO em 02/09.** Não havia defeito nenhum no coletor de receita: os
-  > dois números estavam certos e diziam coisas diferentes. MRR é a PROJEÇÃO
-  > do plano; receita 30d é o CAIXA. Com cupom de 100% no primeiro mês, os
-  > dois divergem de propósito, e a divergência era a resposta, não o
-  > problema. O erro de raciocínio está nomeado no manual do papel
-  > (`qa-produto.md`, direcionamento 7): eu vi a contradição, escolhi o galho
-  > otimista e passei o enigma adiante em vez de dizer "não sei".
-- Saúde: bateria `conferir` inteira passando (12 conferências), build do site
-  e `build:native` verdes.
 ## 2026-09-03 · O envio da 1.7 saiu vestido de 1.6, e a Play aceitou
 - O build compilou (o conserto da AppsFlyer valeu) e morreu na publicação:
   `CFBundleShortVersionString [1.6] must contain a higher version than that of
@@ -6494,6 +6441,88 @@ de verdade sobre os números de hoje: ela diz o que já foi respondido e onde le
   única linha em produção, então tudo o que foi consertado lá é teoria até a
   primeira venda de loja acontecer.
 
+## 2026-09-02 · QA: a compra pelas lojas contaria a mesma venda duas vezes
+- Artifact "QA da Semana":
+  https://claude.ai/code/artifact/b104e080-4490-4a88-a9e6-07a366deca63
+- Fluxo varrido: **compra pelas lojas (RevenueCat)**, que era o topo da fila
+  desde 27/08. Lido pelos dois lados, medição e experiência, como pede o
+  direcionamento 6.
+- **PRAZO NOVO, 04/09 às 13h20**: existe um SEGUNDO cliente real,
+  0634d48f (sub_1U9Phe…, mensal R$ 29,90), em teste grátis terminando na
+  sexta. Verificação AGENDADA para 04/09 15h UTC (trigger
+  trig_01QwrDYMNSunEp3oJXKjVT4K), que confere a virada e escreve aqui
+  sozinha. É o direcionamento 5 em prática: diário não dispara, lembrete sim.
+- **Prazo de 01/09 fechado, e bem**: o primeiro cliente virou cobrança às
+  23h52 do dia 1º, período até 01/10. ~~R$ 29,90 de MRR real.~~ A recomendação
+  da rodada passada (segunda porta gravando o `assinou`) já se pagou: o
+  evento do segundo cliente está gravado com origem `stripe-sync`, e sem ela
+  essa venda seria invisível igual à primeira.
+  > **CORRIGIDO em 02/09, com o Stripe liberado.** Não houve R$ 29,90 de
+  > receita. A fatura de 01/09 saiu com subtotal R$ 29,90, desconto R$ 29,90
+  > e **total R$ 0,00**: o cupom `MENSAL-LANCAMENTO100` (100%, `once`) foi
+  > consumido exatamente nessa primeira cobrança pós-teste. O período avançou
+  > porque a fatura foi QUITADA, e uma fatura de R$ 0,00 é quitada na hora.
+  > "Período avançou" prova cobrança emitida, não dinheiro recebido.
+- **Prova indireta sobre o webhook do Stripe** (direcionamento 3): a virada
+  foi escrita no banco 10 segundos depois do fim do teste grátis, de
+  madrugada. Ninguém abre o app nesse segundo exato, então quem escreveu foi
+  o webhook. Ele está VIVO. Marcado como dedução, não como certeza: o log de
+  entregas continua ilegível porque a integração do Stripe pede autorização.
+- **CORRIGIDO, reentrega contando venda em dobro**: o índice
+  `funil_eventos_assinou_unico` casa por `extra->>'sub'`, chave que só o
+  Stripe escreve. A compra pela Apple ou pela Play caía fora dele, e o
+  RevenueCat reenvia quando não recebe 2xx. Índice novo
+  `funil_eventos_rc_evento_unico`, por id do EVENTO e não da assinatura: a
+  reentrega repete o id e é barrada, a renovação do mês seguinte tem id
+  próprio e passa (travar por assinatura apagaria receita, que é por isso que
+  `renovou` fica fora do índice de cima). Aditivo, dentro da alçada de 27/08.
+  Ensaiado antes de subir com as três condições cumpridas: reentrega barrada,
+  renovação nova passando, e as linhas do ensaio desfeitas na mesma transação
+  (conferido depois: 0 linhas de ensaio no banco).
+- **CORRIGIDO, o mesmo defeito pela segunda vez em cinco dias**: o webhook do
+  RevenueCat gravava o evento de funil sem olhar o `error`, igual à
+  `/api/funil` de 26/08. Aqui era pior, porque o evento perdido é o
+  FINANCEIRO e a rota responde 200 de qualquer jeito, então o RevenueCat
+  considera entregue e nunca reenvia. Passou a usar o `eventoDeFunil`, que
+  ganhou `plataforma` opcional: o escritor só sabia dizer "web", e evento de
+  loja precisa dizer ios ou android, senão a leitura por plataforma jura que
+  ninguém compra pelo aplicativo.
+- **CONFERÊNCIA NOVA, `conferir:gravacao`**: achar o mesmo defeito duas vezes
+  é sinal de que ele volta, e "procurar esse padrão" escrito num manual é
+  torcida. Agora gravação em `funil_eventos` que não desestrutura `error`
+  reprova a bateria, apontando arquivo e linha. Provada mordendo antes de
+  entrar, como manda o CLAUDE.md: plantei o insert de volta no webhook, ela
+  reprovou na linha certa, restaurei e ela voltou a passar.
+- **RECOMENDADO, não aplicado** (encosta em cobrança): a compra pela loja
+  pode terminar em silêncio. Se a loja confirma e o direito ainda não
+  propagou, o código não libera, não avisa e não sai da tela: a pessoa foi
+  cobrada e continua olhando o paywall. É o mesmo defeito que quase fez o
+  cliente de 25/08 pagar duas vezes, consertado só do lado da web. Hoje
+  ninguém comprou pela loja ainda, então é de graça. Patch pronto em
+  `docs/agentes/propostas/compra-na-loja-silenciosa.md`.
+- **Zeros, todos com causa** (direcionamentos 1 e 2, nenhum morreu em bullet):
+  `abriu_trilha` e `abriu_cadastro_de_carro` têm instrumentação conferida
+  ponta a ponta e tela alcançável, então é comportamento e não cano entupido;
+  `renovou` porque nenhuma assinatura chegou ao segundo mês (o primeiro
+  renova em 01/10); `cancelou` e `expirou` porque ninguém cancelou.
+- **Erros do retrato, encerrados**: os 12 `LocalNotifications.then()` são
+  todos da versão 1.2.0 e o último é de 29/08, anterior ao conserto da caixa.
+  Zero ocorrência nova. A janela de 7 dias vai continuar mostrando eles até
+  domingo, o que é ruído e não defeito.
+- ~~**Fica para o Analista**: o retrato traz MRR 29,90 e receita 30d 0,00 no
+  mesmo pacote. A assinatura está `active` com período até 01/10, e o Stripe
+  só avança período com fatura paga, então a cobrança entrou. Cheira a
+  defeito do coletor de receita, não de cobrança.~~ Não fechei: integração do
+  Stripe indisponível nesta sessão.
+  > **CORRIGIDO em 02/09.** Não havia defeito nenhum no coletor de receita: os
+  > dois números estavam certos e diziam coisas diferentes. MRR é a PROJEÇÃO
+  > do plano; receita 30d é o CAIXA. Com cupom de 100% no primeiro mês, os
+  > dois divergem de propósito, e a divergência era a resposta, não o
+  > problema. O erro de raciocínio está nomeado no manual do papel
+  > (`qa-produto.md`, direcionamento 7): eu vi a contradição, escolhi o galho
+  > otimista e passei o enigma adiante em vez de dizer "não sei".
+- Saúde: bateria `conferir` inteira passando (12 conferências), build do site
+  e `build:native` verdes.
 ## 2026-09-02 · A receita recebida é ZERO, e as três vendas foram com cupom
 - Com o Stripe liberado, a conta fechou. E ela corrige duas coisas que EU e o
   agente de QA dissemos hoje, as duas na mesma direção: otimistas demais.

@@ -69,6 +69,28 @@ for (const alvo of ALVOS) {
       "sem ela, quem lê a coorte não sabe se pode concluir",
     );
   }
+
+  // A JANELA FECHA PELO ÚLTIMO MEMBRO, NÃO PELO COMEÇO DA COORTE (06/10/2026).
+  //
+  // Achado do Diretor em 05/10: `coorte + 14` em DATA dizia "fechada" até 24
+  // horas antes de a janela da última pessoa fechar, e o retrato das 6h
+  // imprimiu 8 de 51 sem ressalva quando o número final era 9. A regra está em
+  // DIRETRIZES; aqui ela vira texto cobrado: cada coluna de janela (não a de
+  // semana) tem que vir de `max(c.cadastrado_em) + interval`, e nenhuma pode
+  // voltar ao `+ 14` / `+ 37` em data.
+  const deJanela = alvo.colunas.filter((c) => c !== "semana_fechada");
+  for (const coluna of deJanela) {
+    conferir(
+      `${alvo.view}: ${coluna} fecha pelo último membro da coorte`,
+      new RegExp(`max\\(c\\.cadastrado_em\\)\\s*\\+\\s*interval\\s*'\\d+ days'\\s*<=\\s*now\\(\\)\\s+as\\s+${coluna}\\b`).test(corpo),
+      "coorte + N em data fecha ate 24 horas antes da janela da ultima pessoa, e o retrato publica numero parcial como final",
+    );
+  }
+  conferir(
+    `${alvo.view}: nenhuma janela volta a fechar por data da coorte`,
+    !/::date\s*\+\s*(14|37)\)/.test(corpo),
+    "o `+ 14` e o `+ 37` em data sao o defeito de 05/10",
+  );
 }
 
 if (falhas) {
