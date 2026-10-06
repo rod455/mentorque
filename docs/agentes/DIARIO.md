@@ -136,6 +136,11 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   relatório de segunda à noite perdeu um dia de decisão do dono. Limite
   declarado do critério 7, como em 28/09: o veredito desta semana não é meu, e
   o meu trabalho sobre ele foi conferir consequência.
+- DEPOIS DO RELATÓRIO PUBLICADO, às 21h30: a 3.0 publicou nas duas lojas
+  (f7ecf3c), build 70, com 29 aparelhos Android já reportando `versao 3.0.0`.
+  Atualizei o artifact em duas linhas, porque uma delas muda o que o dono faz: o
+  item do App Store Connect parado há cinco dias DESTRAVOU, e a busca de um
+  minuto por `manutencao` sem acento já dá. Artifact na versão 2.
 
 ## 2026-10-04 (tarde) · QA agendado: a primeira receita foi estornada, e a fatura só é paga uma hora depois da virada
 - Verificação curta, agendada por mim em 01/10 para provar o conserto do
