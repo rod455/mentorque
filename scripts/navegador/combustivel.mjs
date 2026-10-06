@@ -54,7 +54,8 @@ export async function rodar({ nav, ok }) {
   }
   await pg.setViewportSize({ width: 390, height: 844 });
   await pg.waitForTimeout(250);
-  await pg.getByRole("button", { name: /Registrar abastecimento/i }).click();
+  // A linha inteira abre a tela (desde 06/10/2026 o card virou linha com seta).
+  await pg.locator("[data-custo-do-carro]").first().click();
   await pg.waitForTimeout(800);
   ok("abre a tela de abastecimento", /Valor, litros e o km do painel/.test(await app.corpo()));
 
@@ -87,8 +88,8 @@ export async function rodar({ nav, ok }) {
   ok("o card passa a mostrar a semana", /Esta semana: R\$\s?180/.test(corpo1));
   ok("e pede mais um para o custo por km", /Mais um abastecimento/.test(corpo1));
 
-  // 5. O segundo: custo por km e consumo.
-  await pg.getByRole("button", { name: /^Abasteci$/i }).first().click();
+  // 5. O segundo: custo por km e consumo. Pelo atalho da fila (06/10/2026).
+  await pg.locator('[data-atalho="abastecer"]').first().click();
   await pg.waitForTimeout(600);
   await campo("Valor pago").fill("200");
   await campo("Km do painel").fill("98400");

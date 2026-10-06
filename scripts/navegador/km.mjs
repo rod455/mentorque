@@ -19,17 +19,18 @@ export async function rodar({ nav, ok }) {
       quiz: { ultimoDia: dia(0), sequencia: 1, recorde: 1, perdaoEm: null, respostas: 1, acertos: 1 },
     });
 
-  // "Pediu" é a FOLHA de km aberta, e o que só a folha tem é o botão "Salvar
-  // km". Até 12/09/2026 o detector era `/Confirme|km atual|Salvar km/` e
-  // reprovou três casos sem folha nenhuma: o card de revisões do Início
-  // passou a dizer "Estimado. Confirme a última troca", e o "Confirme" casou.
-  // Detector que casa com texto de qualquer card não mede a folha, mede o
-  // vocabulário do app.
+  // "Pediu" é a PENDÊNCIA de km parado na linha 6 do Início (desde
+  // 06/10/2026; até então era uma folha que abria por cima da tela). A folha
+  // continua existindo, mas só abre no toque da linha, e o que só ela tem é
+  // o botão "Salvar km". (Até 12/09/2026 o detector era `/Confirme|km
+  // atual|Salvar km/` e reprovou três casos sem folha nenhuma: detector que
+  // casa com texto de qualquer card não mede a folha, mede o vocabulário.)
   const abrir = async (sessao) => {
     const app = await abrirApp(nav, { sessao });
     const corpo = await app.corpo();
     const s = await app.sessaoGravada();
-    return { ...app, corpo, carimbo: s?.vehicles?.[0]?.kmUpdatedAt ?? null, pediu: /Salvar km/i.test(corpo) };
+    const pediu = (await app.pg.locator('[data-pendencia="km-parado"]').count()) === 1;
+    return { ...app, corpo, carimbo: s?.vehicles?.[0]?.kmUpdatedAt ?? null, pediu, folhaAberta: /Salvar km/i.test(corpo) };
   };
 
   // 1. Carro RECÉM-CADASTRADO (sem carimbo): não pode pedir o km.
@@ -50,8 +51,12 @@ export async function rodar({ nav, ok }) {
   // 3. Km informado há 40 dias: PEDE.
   {
     const c = await abrir(comCarro({ kmUpdatedAt: agoraMenos(40) }));
-    ok("km de 40 dias atrás pede", c.pediu);
+    ok("km de 40 dias atrás pede, como pendência na linha", c.pediu);
+    ok("e NÃO abre a folha por cima da tela sozinho", !c.folhaAberta);
     if (c.pediu) {
+      await c.pg.locator('[data-pendencia="km-parado"]').first().click();
+      await c.pg.waitForTimeout(500);
+      ok("tocar na pendência abre a folha", /Salvar km/i.test(await c.pg.locator("body").innerText()));
       // Confirma o MESMO número: tem de carimbar mesmo assim, senão quem não
       // rodou nada no mês é perguntado de novo todo dia.
       await c.pg.locator("input").first().fill("98000");
@@ -61,6 +66,7 @@ export async function rodar({ nav, ok }) {
       const carimbo = s?.vehicles?.[0]?.kmUpdatedAt ?? null;
       ok("confirmar o MESMO km carimba a data de hoje", !!carimbo && Date.now() - Date.parse(carimbo) < 60000, String(carimbo));
       ok("a folha fecha depois de salvar", !/Salvar km/i.test(await c.pg.locator("body").innerText()));
+      ok("e a pendência some da linha", (await c.pg.locator('[data-pendencia="km-parado"]').count()) === 0);
     }
     await c.fechar();
   }

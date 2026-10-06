@@ -22,7 +22,7 @@ export async function rodar({ nav, ok }) {
   const app = await abrirApp(nav, { sessao: garagem({ quiz, abastecimentos }) });
   const { pg } = app;
   const corpo0 = await app.corpo();
-  ok("com o modo desligado, o Início mostra o custo do carro", /Custo do carro/i.test(corpo0) && !/rendeu hoje/.test(corpo0));
+  ok("com o modo desligado, o Início mostra os gastos do carro", /Gastos do mês/i.test(corpo0) && !/rendeu hoje/.test(corpo0));
 
   // 2. Ligar no Perfil.
   await pg.getByRole("button", { name: /^Perfil$/i }).first().click();
@@ -39,10 +39,11 @@ export async function rodar({ nav, ok }) {
   await pg.waitForTimeout(1200);
   const corpo1 = await app.corpo();
   ok("o Início passa a convidar para lançar o dia", /Quanto o .* rendeu hoje\?/.test(corpo1) && (await pg.locator("[data-dia-do-motorista]").count()) === 1);
-  ok("e ainda oferece o abastecimento", /Abasteci/.test(corpo1));
+  ok("e ainda oferece o abastecimento, no atalho da fila", (await pg.locator('[data-atalho="abastecer"]').count()) === 1);
+  ok("e o atalho de orçamento dá lugar ao dia de trabalho", (await pg.locator('[data-atalho="dia"]').count()) === 1 && (await pg.locator('[data-atalho="orcamento"]').count()) === 0);
 
-  // 4. Lançar o dia.
-  await pg.getByRole("button", { name: /^Lançar o dia$/i }).click();
+  // 4. Lançar o dia (a linha inteira abre a tela, desde 06/10/2026).
+  await pg.locator("[data-dia-do-motorista]").first().click();
   await pg.waitForTimeout(800);
   ok("abre a tela do dia de trabalho", /O que o aplicativo pagou/.test(await app.corpo()));
   const campo = (rotulo) => pg.locator("label", { hasText: rotulo }).locator("input");
@@ -69,7 +70,7 @@ export async function rodar({ nav, ok }) {
   ok("o card mostra ganhou, custou e sobrou", /Ganhou R\$\s?240 · custou R\$\s?121 · sobrou R\$\s?119/.test(corpo2), corpo2.slice(corpo2.indexOf("Hoje com"), corpo2.indexOf("Hoje com") + 120).replace(/\n+/g, " | "));
 
   // 6. Histórico: a linha do dia; apagar apaga.
-  await pg.getByRole("button", { name: /^Lançar o dia$/i }).click();
+  await pg.locator('[data-atalho="dia"]').first().click();
   await pg.waitForTimeout(600);
   await pg.getByRole("button", { name: /^Cancelar$/i }).click();
   await pg.waitForTimeout(600);
@@ -85,7 +86,7 @@ export async function rodar({ nav, ok }) {
 
   // 7. Sem abastecimento, a conta diz que o custo falta.
   const app2 = await abrirApp(nav, { sessao: garagem({ quiz, motoristaDeApp: true }) });
-  await app2.pg.getByRole("button", { name: /^Lançar o dia$/i }).click();
+  await app2.pg.locator("[data-dia-do-motorista]").first().click();
   await app2.pg.waitForTimeout(800);
   const campo2 = (rotulo) => app2.pg.locator("label", { hasText: rotulo }).locator("input");
   await campo2("Recebido no dia").fill("300");

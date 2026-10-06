@@ -166,8 +166,15 @@ conferir("somarMeses recusa data inválida", somarMeses("nem-data", 3) === null)
 // ── a primeira tela depois do carro entrega (12/09/2026) ────────────────────
 {
   const home = readFileSync(new URL("../components/app/screens/Home.tsx", import.meta.url), "utf8").replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/.*$/gm, " ");
-  conferir("com km ou data de compra, o card do Início abre o calendário, não o quiz", /daParaEstimar\) root\(\{ name: "revisions" \}\)/.test(home) && !/go\(\{ name: "healthQuiz" \}\)/.test(home.slice(home.indexOf("revisionsCard"), home.indexOf("revisionsCard") + 1500)));
-  conferir("e diz que é estimado quando o carro está incompleto", /estimadoPeloKm/.test(home));
+  // Desde 06/10/2026 o card de revisões do Início virou o atalho "Revisões"
+  // da fila (Início em oito blocos). A regra é a mesma: com km OU data de
+  // compra, o toque abre o calendário (estimado); sem nenhum dos dois, abre a
+  // tela do carro, que é onde o km se informa, e nunca o quiz.
+  conferir("com km ou data de compra, o atalho do Início abre o calendário, não o quiz", /daParaEstimar \? root\(\{ name: "revisions" \}\) : go\(\{ name: "car" \}\)/.test(home) && !/go\(\{ name: "healthQuiz" \}\)/.test(home));
+  // O aviso de "estimado" mora no próprio calendário, item a item
+  // (`planKmEstimado`), que é onde a pessoa lê a data.
+  const revisoes = readFileSync(new URL("../components/app/screens/Revisions.tsx", import.meta.url), "utf8");
+  conferir("e o calendário diz, item a item, quando a data é estimada", /it\.estimado \? `\$\{base\} \(\$\{r\.planKmEstimado\}\)` : base/.test(revisoes));
 }
 
 if (falhas) {

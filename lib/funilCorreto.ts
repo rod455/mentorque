@@ -64,6 +64,8 @@ export type EventoFunil =
   | "expirou"
   | "clicou_baixar"
   | "clicou_consultoria"
+  // A fila de atalhos do Início (06/10/2026): `origem` leva o nome do atalho.
+  | "clicou_atalho"
   | "atribuicao";
 
 export type Natureza = "sessao" | "ato" | "tecnico";
@@ -122,6 +124,7 @@ export const UNIDADE: Record<EventoFunil, Unidade> = {
   tentou_assinar: "aparelho",
   clicou_baixar: "aparelho",
   clicou_consultoria: "aparelho",
+  clicou_atalho: "aparelho",
   atribuicao: "aparelho",
   // Nascem no webhook da cobrança, que não tem aparelho. A identidade é o
   // user_id, e por isso eles não se comparam com nada da lista de cima.
@@ -176,6 +179,9 @@ export const NATUREZA: Record<EventoFunil, Natureza> = {
   expirou: "ato",
   clicou_baixar: "sessao",
   clicou_consultoria: "sessao",
+  // Repete de propósito: a mesma pessoa abastece três vezes na semana. Quem
+  // lê conta por atalho, no `origem`, e "quantas pessoas" sai do distinct.
+  clicou_atalho: "sessao",
   atribuicao: "tecnico",
 };
 
@@ -205,6 +211,8 @@ export const MEDIDO_DESDE: Record<EventoFunil, string> = {
   atribuicao: "2026-08-30",
   clicou_baixar: "2026-09-19",
   clicou_consultoria: "2026-09-19",
+  // A fila de atalhos do Início: no ar na web em 06/10; nas lojas, com a 3.1.
+  clicou_atalho: "2026-10-06",
   // Vão no ar com a 1.6. Até a versão chegar aos aparelhos, a cadeia da
   // primeira sessão fica sem medição, e o funil DIZ isso em vez de mostrar
   // zero. Quando a 1.6 estiver publicada, esta data continua valendo: ela

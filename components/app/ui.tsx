@@ -193,7 +193,9 @@ export function AppHeader({ title, subtitle, action, onBack }: { title: string; 
         <span className="h-9 w-9 shrink-0" />
       )}
       <div className="min-w-0 flex-1 text-center">
-        <h1 className="text-balance font-serif text-xl font-semibold leading-tight tracking-normal text-cream">{title}</h1>
+        {/* Display, não serifa (06/10/2026): a serifa ficou só na pergunta do
+            Início, que é a voz da marca; o resto do app tem uma fonte de título. */}
+        <h1 className="text-balance font-display text-xl font-semibold leading-tight tracking-normal text-cream">{title}</h1>
         {subtitle ? <p className="truncate text-xs text-cream/55">{subtitle}</p> : null}
       </div>
       <span className="grid h-9 w-9 shrink-0 place-items-center">{action}</span>
@@ -350,8 +352,74 @@ export function GateRow({
   );
 }
 
+// SEM ANEL DESDE 06/10/2026 (limpeza visual, docs/design/limpeza-visual-nubank.md):
+// o card tinha fundo E borda, e borda dentro de borda era o que deixava a tela
+// pesada. O fundo sozinho já separa; o resto é respiro.
 export function Card({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={["rounded-2xl bg-graphite-800 p-4 ring-1 ring-white/5", className].filter(Boolean).join(" ")}>{children}</div>;
+  return <div className={["rounded-2xl bg-graphite-800 p-4", className].filter(Boolean).join(" ")}>{children}</div>;
+}
+
+// A LINHA (06/10/2026): a unidade de tela da limpeza visual, no lugar do card.
+//
+// É a gramática do Nubank lida em docs/design/limpeza-visual-nubank.md: um
+// rótulo pequeno em cima (opcional), o título, uma linha de contexto, e a
+// seta. Linhas se separam por um fio de 1px, não por caixa. O detalhe mora um
+// toque abaixo. Quem precisa de um número grande usa `valor`, que vem no
+// lugar do título em tamanho de display.
+export function Linha({
+  rotulo,
+  titulo,
+  valor,
+  sub,
+  esquerda,
+  direita,
+  onClick,
+  tom = "normal",
+  className,
+  ...resto
+}: {
+  rotulo?: string;
+  titulo?: string;
+  valor?: string;
+  sub?: ReactNode;
+  esquerda?: ReactNode;
+  direita?: ReactNode;
+  onClick?: () => void;
+  tom?: "normal" | "alerta" | "mudo";
+  className?: string;
+} & Record<`data-${string}`, string | boolean | undefined>) {
+  const corTitulo = tom === "alerta" ? "text-coral" : tom === "mudo" ? "text-cream/70" : "text-cream";
+  const Tag = onClick ? "button" : "div";
+  return (
+    <Tag
+      onClick={onClick}
+      className={["flex w-full items-center gap-3 border-b border-white/[0.06] py-3.5 text-left", onClick ? "active:bg-white/[0.03]" : "", className].filter(Boolean).join(" ")}
+      {...resto}
+    >
+      {esquerda}
+      <span className="min-w-0 flex-1">
+        {rotulo ? <span className="block text-[11px] uppercase tracking-wide text-cream/45">{rotulo}</span> : null}
+        {valor ? <span className={`block font-display text-xl font-semibold leading-tight ${corTitulo}`}>{valor}</span> : null}
+        {titulo ? <span className={`block font-display text-[15px] font-semibold leading-snug ${corTitulo}`}>{titulo}</span> : null}
+        {sub ? <span className="mt-0.5 block text-xs leading-snug text-cream/55">{sub}</span> : null}
+      </span>
+      {direita !== undefined ? direita : onClick ? <IconArrow className="h-4 w-4 shrink-0 text-cream/35" /> : null}
+    </Tag>
+  );
+}
+
+// O ATALHO (06/10/2026): o botão redondo com rótulo de uma palavra, em fila
+// de quatro, logo abaixo do número que a pessoa veio ver. É o "Pix, Pagar,
+// Transferir" da home do Nubank.
+export function Atalho({ icone, rotulo, onClick, ...resto }: { icone: string; rotulo: string; onClick: () => void } & Record<`data-${string}`, string | undefined>) {
+  return (
+    <button onClick={onClick} className="flex min-w-0 flex-1 flex-col items-center gap-1.5 py-1 active:scale-[0.97]" {...resto}>
+      <span className="grid h-13 w-13 place-items-center rounded-full bg-graphite-800 text-amber" style={{ height: 52, width: 52 }}>
+        <Icon name={icone} className="h-6 w-6" />
+      </span>
+      <span className="max-w-full truncate text-[12px] text-cream/80">{rotulo}</span>
+    </button>
+  );
 }
 
 // Campo de data que tolera digitação parcial.

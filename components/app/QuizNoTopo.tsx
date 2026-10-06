@@ -53,15 +53,16 @@ export function ChipDoQuiz() {
           : "bg-amber/15 text-amber ring-1 ring-amber/30"
       }`}
     >
-      <span aria-hidden className={feito ? "text-teal" : ""}>{feito ? "✓" : "?"}</span>
+      {/* A palavra "Quiz" SEMPRE, e sem o "?" (06/10/2026): o "?" era o mesmo
+          sinal do botão flutuante de dúvida, com outro sentido. O rótulo
+          comprido continua escondido onde não cabe; a palavra curta cabe em
+          qualquer barra. A sequência vem como número, sem emoji. */}
+      <span aria-hidden className={feito ? "text-teal" : ""}>{feito ? "✓" : "Quiz"}</span>
       <span aria-hidden className={divideComSeletor ? "hidden min-[480px]:inline" : "hidden min-[430px]:inline"}>
-        {q.chipTitulo}
+        {feito ? q.chipTitulo : q.chipTitulo.replace(/^Quiz\s*/i, "")}
       </span>
       {sequencia > 0 && (
-        <span aria-hidden className="flex items-center gap-0.5">
-          <span className="text-[13px] leading-none">🔥</span>
-          <span className={`text-[13px] font-bold leading-none ${feito ? "text-amber" : ""}`}>{sequencia}</span>
-        </span>
+        <span aria-hidden className={`text-[13px] font-bold leading-none ${feito ? "text-amber" : ""}`}>· {sequencia}</span>
       )}
     </button>
   );

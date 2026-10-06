@@ -57,6 +57,9 @@ const EVENTOS_DO_APP = new Set([
   "registrou_abastecimento",
   // Modo motorista de aplicativo (13/09/2026). Ver lib/app/funil.ts.
   "lancou_ganho",
+  // A fila de atalhos do Início (06/10/2026): `origem` é o nome do atalho.
+  // Sem ele a fila não tem leitura, e foi condição para ela entrar.
+  "clicou_atalho",
 ]);
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

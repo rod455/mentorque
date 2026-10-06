@@ -81,7 +81,10 @@ create table if not exists public.funil_eventos (
     -- a mesma cara no painel e levam a decisões opostas. Entrou quando o dono
     -- perguntou se valia montar atendimento automático por voz, e a resposta
     -- honesta era que não dava para saber.
-    'clicou_consultoria'
+    'clicou_consultoria',
+    -- A fila de atalhos do Início, medida em 06/10/2026 (migração
+    -- funil_eventos_clicou_atalho). `origem` leva o nome do atalho.
+    'clicou_atalho'
   )),
 
   anon_id    text,

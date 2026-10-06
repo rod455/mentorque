@@ -28,7 +28,7 @@ function monthsSince(iso: string): number {
   return Math.max(0, (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth()));
 }
 
-function healthColor(score: number) {
+export function healthColor(score: number) {
   return score >= 80 ? "text-teal" : score >= 60 ? "text-amber" : "text-coral";
 }
 

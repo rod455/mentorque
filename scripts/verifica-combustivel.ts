@@ -59,10 +59,13 @@ conferir("sem km atual, qualquer km válido passa", kmValido(10, undefined) === 
   conferir("apagar o carro apaga os abastecimentos dele", /abastecimentos = \(p\.abastecimentos \?\? \[\]\)\.filter\(\(r\) => r\.vehicleId !== id\)/.test(store));
 
   const home = leia("components/app/screens/Home.tsx");
-  const carro = home.indexOf("HealthPill score=");
+  // Desde 06/10/2026 (Início em oito blocos): a linha do carro, a pendência,
+  // os gastos, e só então o "Descubra mais". Os gastos ficam abaixo do carro
+  // e acima do resto, como antes; o que mudou foi card virar linha.
+  const carro = home.indexOf("data-seu-carro");
   const custo = home.indexOf("<CustoDoCarro ");
-  const fixados = home.indexOf("{/* Fixados");
-  conferir("o card Custo do carro fica abaixo do card do carro e acima do resto", carro > 0 && custo > carro && fixados > custo);
+  const resto = home.indexOf("8. Descubra mais");
+  conferir("a linha dos gastos fica abaixo da linha do carro e acima do resto", carro > 0 && custo > carro && resto > custo);
   conferir("o card abre a tela de abastecimento com a origem", /name: "abastecimento", origem: "inicio"/.test(home));
 
   const tela = leia("components/app/screens/Abastecimento.tsx");

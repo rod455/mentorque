@@ -12,18 +12,17 @@ import type { Vehicle } from "@/lib/app/types";
 import { personalScore, vehicleSituations, vehicleTraits } from "@/lib/app/traits";
 import type { ServiceRecord } from "@/lib/app/types";
 import { computeQuizHealth } from "@/lib/app/healthQuiz";
-import { computeStatus, MILESTONES } from "@/lib/app/gamification";
+import { computeStatus } from "@/lib/app/gamification";
 import { carName, formatBRL, isNewLesson, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { openStorePage, useUpdateAvailable } from "@/lib/app/appUpdate";
 import { sellsInApp } from "@/lib/app/wrapper";
+import { funil } from "@/lib/app/funil";
 import { Button } from "@/components/ui/Button";
-import { useContent, Card, Icon, inputCls, Sheet, Thumb } from "../ui";
-import { HealthPill } from "./Cars";
+import { useContent, Atalho, Icon, inputCls, Linha, Sheet, Thumb } from "../ui";
+import { healthColor } from "./Cars";
 import { ConviteDeAviso } from "../ConviteDeAviso";
 import { consumirConviteNoOnboarding } from "@/lib/app/pedidoDeAviso";
-import { FipeLine } from "./CarHub";
-import { CommonProblems } from "./Symptoms";
 
 type Lesson = ReturnType<typeof useContent>["lessons"][number];
 
@@ -34,10 +33,9 @@ function levelPref(phaseIndex: number): "facil" | "medio" | "avancado" {
   return "avancado";
 }
 
-// "Para você": ranqueia as aulas por marca do carro + nível. Regras:
-// - salvos vão pro FIM da lista (mesmo se concluídos) — ficam à mão;
-// - concluído e NÃO salvo sai da seção;
-// - o resto vem primeiro, por relevância.
+// "Descubra mais": ranqueia as aulas por marca do carro + nível. Concluído
+// e não salvo sai; conteúdo novo (addedAt ≤ 7 dias) vai para a frente; o
+// resto segue por relevância.
 function forYou(lessons: Lesson[], opts: { car?: ReturnType<typeof activeVehicle>; services?: ServiceRecord[]; pref: string; seen: string[]; saved: string[]; pinned: string[] }): Lesson[] {
   // Mesma personalização da tela de Estudos: características do veículo +
   // situação do dono (ver lib/app/traits.ts), com fallback genérico.
@@ -46,37 +44,43 @@ function forYou(lessons: Lesson[], opts: { car?: ReturnType<typeof activeVehicle
   const situations = car ? vehicleSituations(car, opts.services ?? []) : new Set<never>();
   const score = (l: Lesson) =>
     personalScore(l, { make: car?.make, model: car?.model, traits: traits as never, situations: situations as never, pref: opts.pref });
-  // "obd2-scan" vive só na área de Estudos — no Para você fica a aula
+  // "obd2-scan" vive só na área de Estudos — no Descubra mais fica a aula
   // "Luz de injeção ligada? Descubra!" (read-obd2), que leva até ela.
-  // Fixados vivem na seção própria (abaixo do carro) — fora do Para você.
   const pool = lessons.filter(
     (l) => l.id !== "obd2-scan" && !opts.seen.includes(l.id) && !opts.saved.includes(l.id) && !opts.pinned.includes(l.id)
   );
-  // Conteúdo novo (addedAt ≤ 7 dias) vai para a frente, do mais recente para
-  // o mais antigo; o resto segue por relevância.
   const news = pool.filter((l) => isNewLesson(l)).sort((a, b) => (b.addedAt ?? "").localeCompare(a.addedAt ?? ""));
   const rest = pool.filter((l) => !isNewLesson(l)).sort((a, b) => score(b) - score(a));
-  const fresh = [...news, ...rest];
-  // Salvos na ordem em que foram guardados — SEMPRE presentes no fim da
-  // lista (o corte de 8 vale só para as sugestões, senão o salvo some).
-  const savedList = opts.saved
-    .filter((id) => !opts.pinned.includes(id))
-    .map((id) => lessons.find((l) => l.id === id))
-    .filter((l): l is Lesson => !!l)
-    .slice(0, 4);
-  return [...fresh.slice(0, Math.max(2, 8 - savedList.length)), ...savedList];
+  return [...news, ...rest];
 }
 
 function typeIcon(t: string) {
   return t === "video" ? "diagnose" : t === "checklist" ? "check" : "book";
 }
 
-// 0.0 — Início (dashboard estilo Bloom)
-// O card "Custo do carro": com abastecimento, a semana e o custo por km; sem,
-// o convite ao primeiro lançamento. Sempre com o botão de abastecer.
-// Com o modo motorista ligado (peça 4 da rotina), o card do custo vira a
-// conta do dia: ganhou, custou, sobrou. Sem lançamento hoje, convida. Sem
-// dois abastecimentos, mostra o ganho e diz que o custo ainda falta.
+// O INÍCIO EM OITO BLOCOS (06/10/2026, docs/design/limpeza-visual-nubank.md).
+//
+// Até aqui a tela tinha dezesseis blocos, todos em card, três carrosséis e seis
+// emojis. A gramática nova é a do Nubank: a pergunta no topo (o número que a
+// pessoa veio ver), uma fila de atalhos, e dali para baixo LINHAS com seta,
+// separadas por um fio. O detalhe mora um toque abaixo. A ordem é fixa:
+//
+//   1. cabeçalho (TopBar)         5. a linha do carro
+//   2. aviso de versão nova       6. UMA pendência (data, km parado, km faltando)
+//   3. a pergunta, com atalhos    7. gastos do mês
+//   4. a fila de quatro atalhos   8. Descubra mais, problemas comuns, Premium
+//
+// O que saiu daqui e para onde foi: a busca (o Biela é a busca de verdade);
+// fixados e salvos (três linhas do Descubra mais, e o Aprender); Memórias
+// (Perfil); o kit do motorista (Aprender); a folha mensal de km (virou a
+// pendência da linha 6); o card do Premium (virou linha). A arte da Biela na
+// garagem fica: é a marca (dono, 04/10). Apostas `inicio-pergunta-unica` e
+// `aba-biela` continuam abertas e a ficha delas diz que a versão B mudou
+// neste dia.
+
+// A conta do dia de quem trabalha com o carro por aplicativo (peça 4 da
+// rotina). Com o modo ligado, a linha dos gastos vira a conta do dia: ganhou,
+// custou, sobrou. Sem lançamento hoje, convida.
 function DiaDoMotorista({ vehicleId, nome }: { vehicleId: string; nome: string }) {
   const c = useContent();
   const t = c.motorista;
@@ -86,171 +90,152 @@ function DiaDoMotorista({ vehicleId, nome }: { vehicleId: string; nome: string }
   const conta = contaDoDia({ ganhos: ganhosFor(s, vehicleId), abastecimentos: abastecimentosFor(s, vehicleId), servicos: servicesFor(s, vehicleId), hoje });
   const lancouHoje = conta.dias > 0;
   return (
-    <div className="mt-3 rounded-2xl bg-graphite-800 px-4 py-3.5 ring-1 ring-white/[0.06]" data-dia-do-motorista>
-      <div className="flex items-center gap-3">
-        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-amber/15 text-xl">🚕</span>
-        <span className="min-w-0 flex-1">
-          {!lancouHoje ? (
-            <>
-              <span className="block font-display text-[15px] font-semibold text-cream">{t.cardVazioTitulo.replace("{carro}", nome)}</span>
-              <span className="block text-xs text-cream/55">{t.cardVazioSub}</span>
-            </>
-          ) : (
-            <>
-              <span className="block text-[11px] uppercase tracking-wide text-cream/45">{t.cardTitulo.replace("{carro}", nome)}</span>
-              <span className="block font-display text-[15px] text-cream">
-                {conta.custou != null && conta.sobrou != null
-                  ? t.cardConta.replace("{ganhou}", formatBRL(conta.ganhou)).replace("{custou}", formatBRL(conta.custou)).replace("{sobrou}", formatBRL(conta.sobrou))
-                  : t.cardSemCusto.replace("{ganhou}", formatBRL(conta.ganhou)).replace("{km}", conta.km.toLocaleString("pt-BR"))}
-              </span>
-            </>
-          )}
-        </span>
-      </div>
-      <div className="mt-3 flex gap-2">
-        <button onClick={() => go({ name: "ganhos", origem: "inicio" })} className="flex-1 rounded-full bg-amber px-3.5 py-1.5 text-xs font-bold text-graphite">{t.cardCta}</button>
-        <button onClick={() => go({ name: "abastecimento", origem: "inicio" })} className="flex-1 rounded-full bg-teal px-3.5 py-1.5 text-xs font-bold text-graphite">{t.cardCtaAbasteci}</button>
-      </div>
-    </div>
+    <Linha
+      data-dia-do-motorista
+      rotulo={lancouHoje ? t.cardTitulo.replace("{carro}", nome) : undefined}
+      titulo={!lancouHoje ? t.cardVazioTitulo.replace("{carro}", nome) : undefined}
+      valor={
+        lancouHoje
+          ? conta.custou != null && conta.sobrou != null
+            ? t.cardConta.replace("{ganhou}", formatBRL(conta.ganhou)).replace("{custou}", formatBRL(conta.custou)).replace("{sobrou}", formatBRL(conta.sobrou))
+            : t.cardSemCusto.replace("{ganhou}", formatBRL(conta.ganhou)).replace("{km}", conta.km.toLocaleString("pt-BR"))
+          : undefined
+      }
+      sub={!lancouHoje ? t.cardVazioSub : undefined}
+      onClick={() => go({ name: "ganhos", origem: "inicio" })}
+    />
   );
 }
 
-function CustoDoCarro({ vehicleId, nome }: { vehicleId: string; nome: string }) {
+// Os gastos do mês, numa linha (a peça 1 da rotina, o caderno de gastos).
+// Sem abastecimento, a linha convida ao primeiro; com um, diz o mês, a
+// semana e o custo por km. Na primeira semana do mês, o mês fechado entra
+// como contexto (peça 3 da rotina), em vez de um card próprio.
+function CustoDoCarro({ car, nome }: { car: Vehicle; nome: string }) {
   const c = useContent();
   const t = c.combustivel;
+  const h = c.home;
   const { s } = usePrototype();
-  const { go } = useNav();
-  const lista = abastecimentosFor(s, vehicleId);
-  if (s.motoristaDeApp) return <DiaDoMotorista vehicleId={vehicleId} nome={nome} />;
+  const { go, root } = useNav();
+  const lista = abastecimentosFor(s, car.id);
+  if (s.motoristaDeApp) return <DiaDoMotorista vehicleId={car.id} nome={nome} />;
   const semana = gastoDaSemana(lista);
   const porKm = custoPorKm(lista);
-  const abrir = () => go({ name: "abastecimento", origem: "inicio" });
-  return (
-    <div className="mt-3 rounded-2xl bg-graphite-800 px-4 py-3.5 ring-1 ring-white/[0.06]" data-custo-do-carro>
-      <div className="flex items-center gap-3">
-        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-teal/15 text-xl">⛽</span>
-        <span className="min-w-0 flex-1">
-          {lista.length === 0 ? (
-            <>
-              <span className="block font-display text-[15px] font-semibold text-cream">{t.cardVazioTitulo.replace("{carro}", nome)}</span>
-              <span className="block text-xs text-cream/55">{t.cardVazioSub}</span>
-            </>
-          ) : (
-            <>
-              <span className="block text-[11px] uppercase tracking-wide text-cream/45">{t.cardTitulo}</span>
-              <span className="block font-display text-[15px] text-cream">
-                {t.cardSemana.replace("{valor}", formatBRL(semana))}
-                {porKm != null ? ` · ${t.cardPorKm.replace("{valor}", brlCentavos(porKm))}` : ""}
-              </span>
-              {porKm == null && <span className="block text-xs text-cream/55">{t.cardFaltaUm}</span>}
-            </>
-          )}
-        </span>
-      </div>
-      {/* O BOTÃO EM LINHA PRÓPRIA (17/09/2026), como o card do motorista logo
-          acima já fazia. Ele morava DENTRO da linha do texto, com `shrink-0`,
-          e num celular de 390px isso esmagava a coluna do texto: o título do
-          card vazio interpola o nome inteiro do carro ("Quanto o Mercedes-Benz
-          A200 2022 custa por km?"), e sobrava largura para uma palavra por
-          linha. Relatado pelo dono no aparelho, na 2.6.
 
-          `min-w-0 flex-1` deixa a coluna encolher até quase nada sem estourar
-          o card para o lado, então o defeito não aparece como corte lateral:
-          aparece como texto em coluna estreita, que nenhuma medida de
-          vazamento pega. Quem pega é medir a largura da coluna. */}
-      <button onClick={abrir} className="mt-3 w-full rounded-full bg-teal px-3.5 py-2 text-xs font-bold text-graphite" data-abastecer>
-        {lista.length === 0 ? t.cardCtaVazio : t.cardCta}
-      </button>
-    </div>
+  const hoje = new Date().toISOString().slice(0, 10);
+  const servicos = servicesFor(s, car.id);
+  const mesAtual = resumoDoMes({ abastecimentos: lista, servicos, mes: hoje.slice(0, 7) });
+  // O mês fechado, na primeira semana, só para quem teve lançamento nele.
+  let fechado: string | null = null;
+  if (Number(hoje.slice(8, 10)) <= 7) {
+    const mes = mesAnterior(hoje);
+    const r = resumoDoMes({ abastecimentos: lista, servicos, mes });
+    if (r.lancamentos > 0 && r.total > 0) {
+      const conta = s.motoristaDeApp ? contaDoMes({ ganhos: ganhosFor(s, car.id), abastecimentos: lista, servicos, mes }) : null;
+      fechado =
+        conta && conta.ganhou > 0 && conta.sobrou != null && conta.lucroPorKm != null
+          ? c.resumoDoMes.subMotorista.replace("{ganhou}", formatBRL(conta.ganhou)).replace("{sobrou}", formatBRL(conta.sobrou)).replace("{lucro}", brlCentavos(conta.lucroPorKm))
+          : h.gastosFechado.replace("{mes}", nomeDoMes(mes)).replace("{valor}", formatBRL(r.total));
+    }
+  }
+
+  if (lista.length === 0) {
+    return (
+      <Linha
+        data-custo-do-carro
+        rotulo={h.gastosTitle}
+        titulo={t.cardVazioTitulo.replace("{carro}", nome)}
+        sub={fechado ?? t.cardVazioSub}
+        onClick={() => go({ name: "abastecimento", origem: "inicio" })}
+      />
+    );
+  }
+  return (
+    <Linha
+      data-custo-do-carro
+      data-resumo-do-mes={fechado ? "sim" : undefined}
+      rotulo={h.gastosTitle}
+      valor={formatBRL(mesAtual.total)}
+      sub={
+        <>
+          {t.cardSemana.replace("{valor}", formatBRL(semana))}
+          {porKm != null ? ` · ${t.cardPorKm.replace("{valor}", brlCentavos(porKm))}` : ` · ${t.cardFaltaUm}`}
+          {fechado ? <><br />{fechado}</> : null}
+        </>
+      }
+      onClick={() => root({ name: "history" })}
+    />
   );
 }
 
-function DataAVencer({ car }: { car: Vehicle }) {
+// A UMA pendência do carro: a mais próxima, e só ela. A ordem é a urgência:
+// uma data vencida ou a 30 dias; depois o km parado há mais de um mês (era a
+// folha mensal, que abria por cima de tudo); depois o km que nunca foi
+// informado, que é o dado que mais destrava.
+function Pendencia({ car, kmParado, onKm }: { car: Vehicle; kmParado: boolean; onKm: () => void }) {
   const c = useContent();
   const t = c.datasDoCarro;
-  const { root } = useNav();
+  const h = c.home;
+  const { go, root } = useNav();
   const d = dataParaOInicio(car);
-  if (!d) return null;
-  const vencida = d.dias < 0;
-  return (
-    <button
-      onClick={() => root({ name: "revisions" })}
-      className={`mt-3 flex w-full items-center gap-3 rounded-2xl px-4 py-3.5 text-left ring-1 ${vencida ? "bg-red-500/10 ring-red-400/30" : "bg-amber/10 ring-amber/25"}`}
-      data-data-a-vencer
-    >
-      <span className="text-xl">📅</span>
-      <span className="min-w-0 flex-1">
-        <span className="block font-display text-[15px] font-semibold text-cream">
-          {t.homeTitulo.replace("{tipo}", t.tipos[d.tipo]).replace("{carro}", carName(car)).replace("{quando}", quandoVence(d.dias, t))}
-        </span>
-        <span className="block text-xs text-cream/60">{d.estimada ? `${t.estimadaLinha} · ` : ""}{d.valor != null ? t.homeSubValor.replace("{valor}", formatBRL(d.valor)) : t.homeSub}</span>
-      </span>
-    </button>
-  );
-}
-
-function ResumoDoMesCard({ car }: { car: Vehicle }) {
-  const c = useContent();
-  const { s } = usePrototype();
-  const { root } = useNav();
-  const hoje = new Date().toISOString().slice(0, 10);
-  if (Number(hoje.slice(8, 10)) > 7) return null;
-  const mes = mesAnterior(hoje);
-  const abastecimentos = abastecimentosFor(s, car.id);
-  const servicos = servicesFor(s, car.id);
-  const r = resumoDoMes({ abastecimentos, servicos, mes });
-  if (r.lancamentos === 0 || r.total <= 0) return null;
-  // Modo motorista (peça 4): a linha do lucro por km, quando o mês teve ganho.
-  const conta = s.motoristaDeApp ? contaDoMes({ ganhos: ganhosFor(s, car.id), abastecimentos, servicos, mes }) : null;
-  const sub = conta && conta.ganhou > 0 && conta.sobrou != null && conta.lucroPorKm != null
-    ? c.resumoDoMes.subMotorista.replace("{ganhou}", formatBRL(conta.ganhou)).replace("{sobrou}", formatBRL(conta.sobrou)).replace("{lucro}", brlCentavos(conta.lucroPorKm))
-    : c.resumoDoMes.sub.replace("{combustivel}", formatBRL(r.combustivel)).replace("{servicos}", formatBRL(r.servicos));
-  return (
-    <button onClick={() => root({ name: "history" })} className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-4 py-3.5 text-left ring-1 ring-white/[0.06]" data-resumo-do-mes>
-      <span className="text-xl">📊</span>
-      <span className="min-w-0 flex-1">
-        <span className="block font-display text-[15px] font-semibold text-cream">
-          {c.resumoDoMes.titulo.replace("{mes}", nomeDoMes(mes)).replace("{carro}", carName(car)).replace("{valor}", formatBRL(r.total))}
-        </span>
-        <span className="block text-xs text-cream/60">{sub}</span>
-      </span>
-    </button>
-  );
+  if (d) {
+    const vencida = d.dias < 0;
+    return (
+      <Linha
+        data-data-a-vencer
+        data-pendencia="data"
+        tom={vencida ? "alerta" : "normal"}
+        titulo={t.homeTitulo.replace("{tipo}", t.tipos[d.tipo]).replace("{carro}", carName(car)).replace("{quando}", quandoVence(d.dias, t))}
+        sub={`${d.estimada ? `${t.estimadaLinha} · ` : ""}${d.valor != null ? t.homeSubValor.replace("{valor}", formatBRL(d.valor)) : t.homeSub}`}
+        onClick={() => root({ name: "revisions" })}
+      />
+    );
+  }
+  if (kmParado && car.odometerKm != null) {
+    return (
+      <Linha
+        data-pendencia="km-parado"
+        titulo={h.kmPendTitle}
+        sub={h.kmPendSub.replace("{km}", car.odometerKm.toLocaleString("pt-BR"))}
+        onClick={onKm}
+      />
+    );
+  }
+  if (car.odometerKm == null && !car.purchaseDate) {
+    return <Linha data-pendencia="sem-km" titulo={h.completeCarCard} sub={h.completeCarWhy} onClick={() => go({ name: "car" })} />;
+  }
+  return null;
 }
 
 export function HomeScreen() {
   const c = useContent();
   const h = c.home;
-  const gm = c.gamification.milestones;
-  const { s, moveLessonPinned, updateVehicle } = usePrototype();
+  const { s, updateVehicle } = usePrototype();
   const { go, root } = useNav();
 
   const car = activeVehicle(s);
   const hasCar = s.vehicles.length > 0;
   const updateReady = useUpdateAvailable();
 
-  // Lembrete mensal de km. O carimbo kmUpdatedAt (gravado pelo store a cada
-  // mudança do odômetro) diz há quanto tempo o número está parado; passados
-  // 30 dias, a tela inicial pede o valor novo. "Agora não" adia por 3 dias
-  // (marcador local por veículo). Km menor que o registrado não passa: o
-  // odômetro só anda para frente, então valor menor é erro de digitação.
+  // O km parado há mais de um mês vira a pendência da linha 6 (06/10/2026).
+  // Até aqui era uma folha que abria por cima da tela; agora a folha só abre
+  // no toque da linha. O carimbo kmUpdatedAt diz há quanto tempo o número
+  // está parado; "Agora não" adia por 3 dias (marcador local por veículo).
+  // Km menor que o registrado não passa: o odômetro só anda para frente.
   const [kmAsk, setKmAsk] = useState(false);
   const [kmNovo, setKmNovo] = useState("");
   const [kmErro, setKmErro] = useState<string | null>(null);
+  const [kmParado, setKmParado] = useState(false);
   const KM_SNOOZE = "mq-km-snooze-";
   useEffect(() => {
+    setKmParado(false);
     if (!car || car.odometerKm == null) return;
     const DIA = 24 * 60 * 60 * 1000;
 
     // Carro SEM carimbo: cadastrado antes deste campo existir, importado da
     // garagem de convidado, ou simplesmente recém-cadastrado. Carimba agora e
-    // começa a contar daqui.
-    //
-    // Era aqui que estava o defeito: a ausência do carimbo virava
-    // `informado = 0`, ou seja, 1º de janeiro de 1970. "Agora menos 1970" é
-    // sempre maior que 30 dias, então o app pedia o km NO DIA do cadastro, e
-    // de novo a cada 3 dias depois de cada "agora não", para sempre — porque
-    // enquanto a pessoa não mudasse o número, o carimbo nunca nascia.
+    // começa a contar daqui. (Era aqui o defeito de 1970: a ausência do
+    // carimbo virava `informado = 0`, e o app pedia o km no dia do cadastro.)
     if (!car.kmUpdatedAt) {
       updateVehicle(car.id, { kmUpdatedAt: new Date().toISOString() });
       return;
@@ -260,16 +245,18 @@ export function HomeScreen() {
     try { adiado = Number(window.localStorage.getItem(KM_SNOOZE + car.id) ?? 0); } catch { /* sem armazenamento: pergunta */ }
     const informado = Date.parse(car.kmUpdatedAt);
     if (Number.isNaN(informado)) return;
-    if (Date.now() - informado > 30 * DIA && Date.now() - adiado > 3 * DIA) {
-      setKmNovo("");
-      setKmErro(null);
-      setKmAsk(true);
-    }
+    if (Date.now() - informado > 30 * DIA && Date.now() - adiado > 3 * DIA) setKmParado(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [car?.id]);
+  }, [car?.id, car?.kmUpdatedAt]);
+  const abrirKm = () => {
+    setKmNovo("");
+    setKmErro(null);
+    setKmAsk(true);
+  };
   const adiarKm = () => {
     try { window.localStorage.setItem(KM_SNOOZE + (car?.id ?? ""), String(Date.now())); } catch { /* ignore */ }
     setKmAsk(false);
+    setKmParado(false);
   };
   const salvarKm = () => {
     if (!car) return;
@@ -281,55 +268,43 @@ export function HomeScreen() {
     }
     updateVehicle(car.id, { odometerKm: n });
     setKmAsk(false);
+    setKmParado(false);
   };
+
   const status = computeStatus(s);
   const seen = s.seenLessons ?? [];
   const savedIds = s.savedLessons ?? [];
   const pinnedIds = s.pinnedLessons ?? [];
-  const pinnedList = pinnedIds
-    .map((id) => c.lessons.find((l) => l.id === id))
-    .filter((l): l is Lesson => !!l);
-  // Salvos para ver depois. Ficavam só dentro de Estudos → Salvos, e quem
-  // tocava em "Salvar para depois" voltava para o Início esperando encontrar
-  // ali — sem nada, parecia que o salvamento não pegou. Os já fixados saem da
-  // lista: apareceriam duas vezes na mesma tela.
-  const savedList = savedIds
-    .filter((id) => !pinnedIds.includes(id))
-    .map((id) => c.lessons.find((l) => l.id === id))
-    .filter((l): l is Lesson => !!l);
+  // Descubra mais: fixados primeiro (a pessoa escolheu), depois salvos, depois
+  // as sugestões. Três linhas, e "Ver tudo" leva ao Aprender.
+  const byId = (ids: string[]) => ids.map((id) => c.lessons.find((l) => l.id === id)).filter((l): l is Lesson => !!l);
   const picks = forYou(c.lessons, { car, services: car ? servicesFor(s, car.id) : [], pref: levelPref(status.phaseIndex), seen, saved: savedIds, pinned: pinnedIds });
-
-  // Memórias: marcos e momentos conquistados, priorizando Momentos.
-  const memories = MILESTONES.filter((m) => m.earned(s)).sort(
-    (a, b) => (a.cat === "momento" ? 0 : 1) - (b.cat === "momento" ? 0 : 1)
-  );
-  const livedMoments = memories.filter((m) => m.cat === "momento").length;
+  const descubra = [...byId(pinnedIds), ...byId(savedIds.filter((id) => !pinnedIds.includes(id))), ...picks].slice(0, 3);
 
   // O convite de aviso logo depois do onboarding (12/09/2026). Lido uma vez,
   // na montagem: a marca é de módulo e some ao ser consumida.
   const [convidarNoOnboarding] = useState(() => consumirConviteNoOnboarding());
 
+  const daParaEstimar = !!car && (car.odometerKm != null || !!car.purchaseDate);
+  const atalho = (nome: string, ir: () => void) => () => {
+    funil("clicou_atalho", { origem: nome });
+    ir();
+  };
+  const nome = car ? vehicleLabel(car) : "";
 
   return (
     <div className="pb-4">
-      {/* Versão nova na loja. Só no app empacotado, e só quando o build
-          instalado está atrás do publicado (lib/app/appUpdate.ts). Vive no
-          topo porque o motorista precisa VER antes de rolar — mas pequeno:
-          é um lembrete, não um bloqueio. */}
+      {/* 2. Versão nova na loja. Só no app empacotado, e só quando o build
+          instalado está atrás do publicado (lib/app/appUpdate.ts). */}
       {updateReady && (
-        <button
+        <Linha
+          className="border-b-0"
+          esquerda={<span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-teal/15 text-teal"><Icon name="spark" className="h-5 w-5" /></span>}
+          titulo={h.updateTitle}
+          sub={h.updateSub}
+          direita={<span className="shrink-0 rounded-full bg-teal px-3.5 py-1.5 text-xs font-bold text-graphite">{h.updateCta}</span>}
           onClick={openStorePage}
-          className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-teal/10 px-4 py-3 text-left ring-1 ring-teal/25 active:scale-[0.99]"
-        >
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-teal/15 text-teal">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14" /></svg>
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block font-display text-[14px] font-semibold text-cream">{h.updateTitle}</span>
-            <span className="block truncate text-xs text-cream/55">{h.updateSub}</span>
-          </span>
-          <span className="shrink-0 rounded-full bg-teal px-3.5 py-1.5 text-xs font-bold text-graphite">{h.updateCta}</span>
-        </button>
+        />
       )}
 
       {convidarNoOnboarding && (
@@ -341,17 +316,10 @@ export function HomeScreen() {
         />
       )}
 
-      {/* O HERÓI É A PERGUNTA, COM OU SEM CARRO (04/10/2026, aposta
-          `inicio-pergunta-unica`). Até aqui, quem tinha carro via "O que vamos
-          cuidar hoje?" com o botão mandando para a tela de sintomas, e quem
-          não tinha via a pergunta ao Biela (a troca de ordem de 28/09). A
-          lição 5 do CRO: o Biela é o uso real (66 perguntas em 30 dias) e as
-          avaliações descrevem desfecho, não recurso. Então a pergunta é a
-          única ação primária para todo mundo, com três atalhos que abrem o
-          chat já preenchido; o carro é o segundo bloco; "Registrar serviço" e
-          "Aprender" são as secundárias; e o resto da tela desce, inteiro.
-          A arte da Biela na garagem fica: é a marca (dono, 04/10). */}
-      <div className="relative mt-3 overflow-hidden rounded-3xl bg-graphite-800 ring-1 ring-white/5">
+      {/* 3. O HERÓI É A PERGUNTA, COM OU SEM CARRO (04/10/2026, aposta
+          `inicio-pergunta-unica`): a única ação primária, com três atalhos que
+          abrem o chat já preenchido. A serifa fica só aqui: é a voz da marca. */}
+      <div className="relative mt-3 overflow-hidden rounded-3xl bg-graphite-800">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/biela/cena-chegada.webp"
@@ -393,15 +361,31 @@ export function HomeScreen() {
         </div>
       </div>
 
-      {/* A chamada do quiz subiu para a barra de cima (QuizNoTopo). */}
-      {/* A troca de carro subiu para a barra de cima (CarroNoTopo). */}
-
-      {/* O carro, logo abaixo da pergunta: o segundo bloco, não o preço da entrada. */}
+      {/* 4. A fila de atalhos: quatro ações frequentes, ícone redondo e rótulo
+          de uma palavra. Cada toque vira `clicou_atalho` com o nome, senão a
+          fila não tem leitura. Com o modo motorista, "Orçamento" dá lugar ao
+          dia de trabalho, que é o lançamento mais frequente dessa pessoa. */}
       {car && (
-        <button onClick={() => root({ name: "car" })} className="mt-3 w-full text-left">
-          <Card className="hover:ring-white/15">
-            <div className="flex items-center gap-3">
-              <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl bg-teal/15 text-teal">
+        <div className="mt-4 flex items-start gap-1" data-atalhos>
+          <Atalho icone="gauge" rotulo={h.atalhos.abastecer} onClick={atalho("abastecer", () => go({ name: "abastecimento", origem: "inicio" }))} data-atalho="abastecer" />
+          <Atalho icone="tools" rotulo={h.atalhos.servico} onClick={atalho("servico", () => go({ name: "addService" }))} data-atalho="servico" />
+          <Atalho icone="calendar" rotulo={h.atalhos.revisoes} onClick={atalho("revisoes", () => (daParaEstimar ? root({ name: "revisions" }) : go({ name: "car" })))} data-atalho="revisoes" />
+          {s.motoristaDeApp ? (
+            <Atalho icone="track" rotulo={h.atalhos.dia} onClick={atalho("dia", () => go({ name: "ganhos", origem: "inicio" }))} data-atalho="dia" />
+          ) : (
+            <Atalho icone="consult" rotulo={h.atalhos.orcamento} onClick={atalho("orcamento", () => go({ name: "orcamento", origem: "inicio" }))} data-atalho="orcamento" />
+          )}
+        </div>
+      )}
+
+      <div className="mt-3">
+        {/* 5. O carro, numa linha: rótulo, nome, estado, seta. A saúde é a
+            mesma fórmula do quiz usada na Saúde e no hub: um número só. */}
+        {car && (
+          <Linha
+            data-seu-carro
+            esquerda={
+              <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite-800 text-teal">
                 {car.photo ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={car.photo} alt="" className="h-full w-full object-cover" />
@@ -409,333 +393,77 @@ export function HomeScreen() {
                   <Icon name={car.type === "moto" ? "moto" : "car"} className="h-6 w-6" />
                 )}
               </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-[11px] uppercase tracking-wide text-cream/45">{h.yourCar}</span>
-                <span className="block truncate font-display text-[15px] text-cream">{car.nickname || vehicleLabel(car)}</span>
-                <FipeLine />
-              </span>
-              {/* Mesma fórmula do quiz usada na Saúde e no hub: um número só no app inteiro */}
-              <HealthPill score={computeQuizHealth(car.quiz ?? {}, car).score} />
-            </div>
-          </Card>
-        </button>
-      )}
+            }
+            rotulo={h.yourCar}
+            titulo={car.nickname || vehicleLabel(car)}
+            sub={(() => {
+              const score = computeQuizHealth(car.quiz ?? {}, car).score;
+              const saude = <span className={healthColor(score)}>{score}%</span>;
+              const texto = car.odometerKm != null ? h.carState.replace("{km}", car.odometerKm.toLocaleString("pt-BR")) : h.carStateNoKm;
+              const [antes, depois] = texto.split("{score}%");
+              return <>{antes}{saude}{depois}</>;
+            })()}
+            onClick={() => root({ name: "car" })}
+          />
+        )}
 
-      {/* As duas ações secundárias. Substituem a grade de quatro "ações
-          rápidas" do fim da tela: diagnosticar é o próprio herói, e o plano
-          de revisão mora no carro. */}
-      <div className="mt-3 grid grid-cols-2 gap-2.5">
-        <button
-          onClick={() => go({ name: "addService" })}
-          className="rounded-2xl bg-graphite-800 px-4 py-3.5 text-left ring-1 ring-white/[0.06] hover:ring-white/15 active:scale-[0.99]"
-        >
-          <span className="block font-display text-[14px] font-semibold text-cream">{h.secService}</span>
-          <span className="mt-0.5 block text-xs text-cream/50">{h.secServiceSub}</span>
-        </button>
-        <button
-          onClick={() => root({ name: "learn" })}
-          className="rounded-2xl bg-graphite-800 px-4 py-3.5 text-left ring-1 ring-white/[0.06] hover:ring-white/15 active:scale-[0.99]"
-        >
-          <span className="block font-display text-[14px] font-semibold text-cream">{h.secLearn}</span>
-          <span className="mt-0.5 block text-xs text-cream/50">{h.secLearnSub}</span>
-        </button>
+        {/* 6. UMA pendência, a mais próxima. */}
+        {car && <Pendencia car={car} kmParado={kmParado} onKm={abrirKm} />}
+
+        {/* 7. Os gastos do mês (ou a conta do dia, no modo motorista). */}
+        {car && <CustoDoCarro car={car} nome={nome} />}
+
+        {/* 8. Descubra mais: três aulas em linha, e o resto no Aprender. */}
+        {descubra.length > 0 && (
+          <>
+            <div className="mt-6 flex items-baseline justify-between">
+              <h3 className="font-display text-[15px] font-semibold text-cream">{h.descubraTitle}</h3>
+              <button onClick={() => root({ name: "learn" })} className="text-xs font-medium text-amber">{c.common.seeAll}</button>
+            </div>
+            {descubra.map((l) => {
+              const locked = l.premium && !s.premium;
+              return (
+                <Linha
+                  key={l.id}
+                  data-descubra={l.id}
+                  esquerda={
+                    <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite-800 text-amber/80">
+                      {l.thumb ? <Thumb src={l.thumb} className="h-full w-full object-contain" /> : <Icon name={typeIcon(l.type)} className="h-5 w-5" />}
+                    </span>
+                  }
+                  titulo={l.title}
+                  sub={locked ? c.common.premium : isNewLesson(l) && !seen.includes(l.id) ? h.newBadge : undefined}
+                  onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
+                />
+              );
+            })}
+          </>
+        )}
+
+        {/* Problemas comuns, numa linha: a tela de sintomas continua inteira
+            a um toque, e `consultou_sintoma` segue tendo porta no Início
+            (é a guarda da aposta `aba-biela`). */}
+        <Linha
+          data-problemas-comuns
+          className="mt-3"
+          titulo={c.symptomsUi.commonTitle}
+          sub={car ? c.symptomsUi.commonSubCar.replace("{car}", carName(car)) : c.symptomsUi.commonSub}
+          onClick={() => go({ name: "symptoms" })}
+        />
+
+        {/* Premium, no fim, como linha (oculto no app da loja, modo leitor). */}
+        {!s.premium && sellsInApp() && (
+          <Linha
+            data-premium
+            esquerda={<span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-amber/15 text-amber"><Icon name="shield" className="h-5 w-5" /></span>}
+            titulo={h.premiumTitle}
+            sub={h.premiumSub}
+            onClick={() => go({ name: "subscribe", ctx: "home" })}
+          />
+        )}
       </div>
 
-      {/* Custo do carro (caderno de gastos, 13/09/2026). Abaixo do carro e
-          ACIMA das revisões de propósito: é a ação de menor esforço da tela
-          e a que alimenta o resto (o km). Onde entra e por quê:
-          docs/agentes/propostas/rotina-do-carro.md. */}
-      {car && <CustoDoCarro vehicleId={car.id} nome={vehicleLabel(car)} />}
-
-      {/* A data do carro a 30 dias ou menos (ou já vencida). Fora dessa
-          janela, nada: card permanente de data distante é ruído. */}
-      {car && <DataAVencer car={car} />}
-
-      {/* O mês fechado, na primeira semana do mês, só para quem teve
-          lançamento nele (peça 3 da rotina). Some no dia 8. */}
-      {car && <ResumoDoMesCard car={car} />}
-
-      {/* Busca (abre a tela de busca) */}
-      <button
-        onClick={() => go({ name: "search" })}
-        className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-4 py-3 text-left ring-1 ring-white/[0.06]"
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 text-cream/45"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-        <span className="text-sm text-cream/45">{h.searchPh}</span>
-      </button>
-
-      {/* Fixados — conteúdos que o usuário usa com frequência (📌 nas aulas);
-          setinhas reordenam (o próprio usuário escolhe o que fica na frente) */}
-      {pinnedList.length > 0 && (
-        <section className="mt-5">
-          <h3 className="mb-2 font-serif text-lg font-bold text-cream">{h.pinnedTitle}</h3>
-          <div className="space-y-2">
-            {pinnedList.map((l, i) => {
-              const locked = l.premium && !s.premium;
-              return (
-                <div
-                  key={l.id}
-                  className="flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-3.5 py-2.5 ring-1 ring-white/5"
-                >
-                  <button
-                    onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
-                    className="flex min-w-0 flex-1 items-center gap-3 text-left"
-                  >
-                    <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite text-amber/80 ring-1 ring-amber/45">
-                      {l.thumb ? (
-                        <Thumb src={l.thumb} className="h-full w-full object-contain" />
-                      ) : (
-                        <Icon name={typeIcon(l.type)} className="h-5 w-5" />
-                      )}
-                    </span>
-                    <span className="min-w-0 flex-1 truncate font-display text-sm text-cream/90">{l.title}</span>
-                    <span aria-hidden className="shrink-0 text-amber">📌</span>
-                  </button>
-                  {pinnedList.length > 1 && (
-                    <span className="flex shrink-0 flex-col">
-                      <button
-                        onClick={() => moveLessonPinned(l.id, -1)}
-                        disabled={i === 0}
-                        aria-label="subir"
-                        className={`grid h-6 w-7 place-items-center rounded-md ${i === 0 ? "text-cream/15" : "text-cream/60 hover:bg-white/5 hover:text-cream"}`}
-                      >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="h-3.5 w-3.5"><path d="m6 14 6-6 6 6" /></svg>
-                      </button>
-                      <button
-                        onClick={() => moveLessonPinned(l.id, 1)}
-                        disabled={i === pinnedList.length - 1}
-                        aria-label="descer"
-                        className={`grid h-6 w-7 place-items-center rounded-md ${i === pinnedList.length - 1 ? "text-cream/15" : "text-cream/60 hover:bg-white/5 hover:text-cream"}`}
-                      >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="h-3.5 w-3.5"><path d="m6 10 6 6 6-6" /></svg>
-                      </button>
-                    </span>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* Salvos para depois */}
-      {savedList.length > 0 && (
-        <section className="mt-5">
-          <div className="mb-2 flex items-baseline justify-between">
-            <h3 className="font-serif text-lg font-bold text-cream">{c.learn.savedTitle}</h3>
-            {savedList.length > 4 && (
-              <button onClick={() => go({ name: "savedLessons" })} className="text-xs font-medium text-amber">{h.seeAll}</button>
-            )}
-          </div>
-          <div className="space-y-2">
-            {savedList.slice(0, 4).map((l) => {
-              const locked = l.premium && !s.premium;
-              return (
-                <button
-                  key={l.id}
-                  onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
-                  className="flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-3.5 py-2.5 text-left ring-1 ring-white/5"
-                >
-                  <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite text-amber/80 ring-1 ring-amber/45">
-                    {l.thumb ? (
-                      <Thumb src={l.thumb} className="h-full w-full object-contain" />
-                    ) : (
-                      <Icon name={typeIcon(l.type)} className="h-5 w-5" />
-                    )}
-                  </span>
-                  <span className="min-w-0 flex-1 truncate font-display text-sm text-cream/90">{l.title}</span>
-                  <span aria-hidden className="shrink-0 text-amber">★</span>
-                </button>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* Para você — sugestões de conteúdo (quadrados de mesmo tamanho) */}
-      {picks.length > 0 && (
-        <section className="mt-6">
-          <div className="mb-1 flex items-baseline justify-between">
-            <h3 className="font-serif text-lg font-bold text-cream">{h.forYouTitle}</h3>
-            <button onClick={() => root({ name: "learn" })} className="text-xs font-medium text-amber">{h.seeAll}</button>
-          </div>
-          <p className="mb-3 text-xs text-cream/45">{h.forYouSub}</p>
-          <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {(() => {
-              const lessonCard = (l: Lesson) => {
-                const locked = l.premium && !s.premium;
-                return (
-                  <button
-                    key={l.id}
-                    onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
-                    className="flex w-36 shrink-0 flex-col self-start text-left"
-                  >
-                    {/* As capas já trazem o fundo #16181D e a margem interna — o card
-                        usa o mesmo tom e zero padding para não criar moldura dupla. */}
-                    <div className="relative aspect-square overflow-hidden rounded-2xl bg-graphite ring-1 ring-amber/45">
-                      {l.thumb ? (
-                        <Thumb src={l.thumb} className="h-full w-full object-contain" />
-                      ) : (
-                        <span className="grid h-full w-full place-items-center text-amber/70">
-                          <Icon name={typeIcon(l.type)} className="h-9 w-9" />
-                        </span>
-                      )}
-                      {locked && (
-                        <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-graphite-900/80 text-amber">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-3.5 w-3.5"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
-                        </span>
-                      )}
-                      {savedIds.includes(l.id) && (
-                        <span className="absolute left-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-graphite-900/80 text-xs text-amber">★</span>
-                      )}
-                      {isNewLesson(l) && !savedIds.includes(l.id) && !seen.includes(l.id) && (
-                        <span className="absolute left-2 top-2 rounded-full bg-amber px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-graphite">
-                          {h.newBadge}
-                        </span>
-                      )}
-                      {seen.includes(l.id) && !locked && (
-                        <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-teal/90 text-graphite">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="h-3 w-3"><path d="M20 6 9 17l-5-5" /></svg>
-                        </span>
-                      )}
-                    </div>
-                    <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{l.title}</p>
-                  </button>
-                );
-              };
-              // Kit do motorista na 3ª posição — arranjo INICIAL, não regra:
-              // quando o ranking por engajamento (content_events) entrar, o
-              // Kit participa como os demais e pode subir/descer.
-              const kitCard = (
-                <button key="kit" onClick={() => go({ name: "equipment" })} className="flex w-36 shrink-0 flex-col self-start text-left">
-                  <div className="aspect-square overflow-hidden rounded-2xl bg-graphite ring-1 ring-amber/45">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/learn/equipment.png?v=4" alt="" className="h-full w-full object-contain" draggable={false} />
-                  </div>
-                  <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{c.equipmentUi.cardTitle}</p>
-                </button>
-              );
-              // 1ª posição: com carro cadastrado, "Próximas revisões".
-              //
-              // ATÉ 12/09/2026 o card exigia quiz de saúde, km E data de compra,
-              // e sem os três mandava a pessoa para o quiz em vez do calendário:
-              // com carro incompleto, o Início pedia dado em vez de entregar. A
-              // revisão de retenção do CRO apontou isto como a primeira tela
-              // depois do carro que não entrega. Agora: com km OU data de
-              // compra, o calendário abre já (estimado, e a tela diz que é
-              // estimado e pede a última troca); só sem nenhum dos dois o card
-              // pede o km, que é o dado que mais destrava, na tela do carro.
-              const carComplete =
-                !!car && !!(car.quiz && Object.keys(car.quiz).length) && car.odometerKm != null && !!car.purchaseDate;
-              const daParaEstimar = !!car && (car.odometerKm != null || !!car.purchaseDate);
-              const revisionsCard = car ? (
-                <button
-                  key="revisions"
-                  onClick={() => {
-                    if (daParaEstimar) root({ name: "revisions" });
-                    else go({ name: "car" });
-                  }}
-                  className="flex w-36 shrink-0 flex-col self-start text-left"
-                >
-                  <div className="relative grid aspect-square place-items-center overflow-hidden rounded-2xl bg-graphite ring-1 ring-amber/45">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/learn/revisions.png?v=4" alt="" className="h-full w-full object-contain" draggable={false} />
-                    {!daParaEstimar && (
-                      <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-amber font-display text-sm font-bold text-graphite">!</span>
-                    )}
-                  </div>
-                  <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">
-                    {daParaEstimar ? h.revisionsCard : h.completeCarCard}
-                  </p>
-                  {daParaEstimar && !carComplete && <p className="line-clamp-2 text-[11px] leading-snug text-amber/80">{h.estimadoPeloKm}</p>}
-                  {!daParaEstimar && <p className="line-clamp-2 text-[11px] leading-snug text-amber/80">{h.completeCarWhy}</p>}
-                </button>
-              ) : null;
-              return [
-                ...(revisionsCard ? [revisionsCard] : []),
-                ...picks.slice(0, 2).map(lessonCard),
-                kitCard,
-                ...picks.slice(2).map(lessonCard),
-              ];
-            })()}
-          </div>
-        </section>
-      )}
-
-      {/* Memórias — marcos e momentos conquistados (Momentos primeiro) */}
-      {memories.length > 0 && (
-        <section className="mt-6">
-          <div className="mb-3 flex items-baseline justify-between">
-            <h3 className="font-serif text-lg font-bold text-cream">{h.memoriesTitle}</h3>
-            <button onClick={() => go({ name: "achievements" })} className="text-xs font-medium text-amber">{h.seeAll}</button>
-          </div>
-          {/* Marcos destravam sozinhos; Momentos são os que o motorista
-              registra. Sem nenhum Momento vivido, a seção só mostra o que veio
-              de brinde — então o convite vem antes do carrossel, direto na aba
-              certa do acervo. */}
-          {livedMoments === 0 && (
-            <button
-              onClick={() => go({ name: "achievements", tab: "momento" })}
-              className="mb-3 flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-amber/15 to-amber/5 px-4 py-3.5 text-left ring-1 ring-amber/25 hover:ring-amber/45"
-            >
-              <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite ring-1 ring-amber/35">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/memories/firstTrip.png" alt="" className="h-full w-full object-contain" draggable={false} />
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block font-display text-[15px] font-semibold text-cream">{h.addMemories}</span>
-                <span className="mt-0.5 block text-xs leading-snug text-cream/55">{h.addMemoriesSub}</span>
-              </span>
-              <span className="shrink-0 text-amber">›</span>
-            </button>
-          )}
-          <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {memories.map((m) => {
-              const photo = s.momentPhotos?.[m.id];
-              const label = gm[m.id]?.title ?? m.id;
-              return (
-                <button key={m.id} onClick={() => go({ name: "achievements", tab: m.cat })} className="flex w-28 shrink-0 flex-col self-start text-left">
-                  <div className="grid aspect-square place-items-center overflow-hidden rounded-2xl bg-graphite ring-1 ring-white/[0.06]">
-                    {photo ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={photo} alt="" className="h-full w-full object-cover" draggable={false} />
-                    ) : (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={`/memories/${m.id}.png`} alt="" className="h-full w-full object-contain" draggable={false} />
-                    )}
-                  </div>
-                  <p className="mt-1.5 line-clamp-2 text-[12px] leading-snug text-cream/80">{label}</p>
-                </button>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* Problemas comuns — mesmo formato dos cards (reusa a lógica da aba Problemas) */}
-      <CommonProblems />
-
-      {/* Premium, no FIM da tela desde 04/10/2026 (oculto no app da loja,
-          modo leitor). Morava logo abaixo do herói, competindo com a única
-          ação primária; continua aqui e no Perfil, e a oferta de verdade é a
-          do limite do mês dentro do Biela. */}
-      {!s.premium && sellsInApp() && (
-        <button
-          onClick={() => go({ name: "subscribe", ctx: "home" })}
-          className="mt-6 flex w-full items-center gap-3 rounded-2xl bg-gradient-to-r from-amber/20 to-amber/5 px-4 py-3.5 text-left ring-1 ring-amber/25"
-        >
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-amber/20 text-amber">
-            <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5"><path d="M3 7l4.5 3L12 4l4.5 6L21 7l-1.6 11H4.6L3 7z" /></svg>
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block font-display text-[15px] font-semibold text-cream">{h.premiumTitle}</span>
-            <span className="block text-xs text-cream/55">{h.premiumSub}</span>
-          </span>
-          <span className="shrink-0 text-lg text-amber">›</span>
-        </button>
-      )}
-
-      {/* Lembrete mensal: atualizar o km do painel */}
+      {/* A folha do km, aberta pela pendência da linha 6. */}
       <Sheet open={kmAsk} onClose={adiarKm}>
         <h2 className="font-display text-xl font-bold text-cream">{h.kmAskTitle}</h2>
         <p className="mt-1 text-sm leading-relaxed text-cream/60">

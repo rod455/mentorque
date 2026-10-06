@@ -87,6 +87,10 @@ export type EventoFunil =
   // da peça é "quem ligou o interruptor lança o dia em cinco dias de uma
   // semana?". O interruptor mora no estado da conta; o lançamento sai daqui.
   | "lancou_ganho"
+  // A fila de atalhos do Início (06/10/2026): `origem` leva o nome do
+  // atalho (abastecer, servico, revisoes, orcamento, dia). Nasceu junto com
+  // a fila, como condição para ela entrar: fila sem leitura é decoração.
+  | "clicou_atalho"
   // Único evento técnico da lista: o desfecho da subida do SDK de atribuição
   // (lib/app/atribuicao.ts). Ele não mede comportamento de ninguém, mede se a
   // nossa própria medição está viva no aparelho.

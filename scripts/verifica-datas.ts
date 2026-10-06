@@ -67,7 +67,9 @@ conferir("vencida há mais de 60 dias sai do Início", dataParaOInicio({ datas: 
   conferir("o calendário de revisões mostra as datas", /<DatasDoCarro v=\{v\} \/>/.test(leia("components/app/screens/Revisions.tsx")));
   conferir("o Diagnóstico do carro tem o passo das datas", /rotulo: d\.datas, ganho: d\.datasGanho/.test(leia("components/app/screens/CarHub.tsx")));
   const home = leia("components/app/screens/Home.tsx");
-  conferir("o Início mostra a data a vencer, depois do custo do carro", home.indexOf("<DataAVencer car={car} />") > home.indexOf("<CustoDoCarro ") && /dataParaOInicio\(car\)/.test(home));
+  // Desde 06/10/2026 (Início em oito blocos) a data a vencer é a PENDÊNCIA da
+  // linha 6, ANTES dos gastos: pendência é urgência, gasto é rotina.
+  conferir("o Início mostra a data a vencer como pendência, antes dos gastos", home.indexOf("<Pendencia car={car}") < home.indexOf("<CustoDoCarro ") && home.indexOf("<Pendencia car={car}") > 0 && /dataParaOInicio\(car\)/.test(home));
 }
 
 // ── 5. pelo final da placa (13/09/2026) ─────────────────────────────────────

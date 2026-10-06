@@ -168,9 +168,12 @@ function BotaoDeDuvida() {
         }}
         aria-label={c.profile.support.title}
         title={c.profile.support.title}
-        className="pointer-events-auto grid h-12 w-12 place-items-center rounded-full bg-amber font-display text-xl font-bold text-graphite shadow-card ring-4 ring-graphite active:scale-95"
+        className="pointer-events-auto grid h-12 w-12 place-items-center rounded-full bg-amber text-graphite shadow-card ring-4 ring-graphite active:scale-95"
       >
-        ?
+        {/* Ícone de conversa, não "?" (06/10/2026): o "?" já era o chip do
+            quiz na barra de cima, e o mesmo sinal com dois sentidos na mesma
+            tela é o que a limpeza visual tira. */}
+        <Icon name="consult" className="h-6 w-6" />
       </button>
     </div>
   );

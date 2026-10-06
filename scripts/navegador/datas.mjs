@@ -37,7 +37,8 @@ export async function rodar({ nav, ok }) {
   const h = await app.corpo();
   ok("o Início avisa que o IPVA vence em 20 dias", /IPVA do .* vence em 20 dias/.test(h));
   ok("com o valor e o convite a ver as datas", /R\$\s?1\.200 · toque para ver todas as datas/.test(h));
-  ok("abaixo do custo do carro", h.indexOf("custa por km") < h.indexOf("vence em 20 dias"));
+  // Desde 06/10/2026 a data é a PENDÊNCIA da linha 6, acima dos gastos.
+  ok("como pendência, acima dos gastos", h.indexOf("vence em 20 dias") < h.indexOf("custa por km"));
 
   // 4. O Diagnóstico do carro (na tela do carro, pelo card do Início) conta
   //    as datas como passo feito: o card só lista o que falta.
