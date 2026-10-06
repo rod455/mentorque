@@ -8,7 +8,7 @@ import { computeUpcoming, type UpcomingItem } from "@/lib/app/health";
 import { carName, formatMonths, minPurchaseDate, monthsSinceDate } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, DateField, Icon, inputCls, PremiumBadge, SectionTitle, Sheet, UpgradeBanner, useContent } from "../ui";
+import { AppHeader, Card, DateField, Icon, inputCls, PremiumBadge, SectionTitle, Sheet, UpgradeBanner, useContent, LinhaPremium } from "../ui";
 import { DatasDoCarro } from "../DatasDoCarro";
 
 const statusTone: Record<string, string> = { overdue: "text-coral", soon: "text-amber", ok: "text-teal", unknown: "text-cream/50" };
@@ -47,13 +47,12 @@ function PremiumPreview({ car }: { car: string }) {
         <button
           onClick={() => go({ name: "subscribe", ctx: "revisions" })}
           aria-label={r.previewCta}
-          className="absolute inset-0 z-10 flex items-end justify-center rounded-xl bg-gradient-to-t from-graphite-900/70 via-transparent to-transparent pb-3"
-        >
-          <span className="rounded-full bg-amber px-4 py-2 font-display text-xs font-semibold text-graphite shadow-card">
-            🔓 {r.previewCta}
-          </span>
-        </button>
+          className="absolute inset-0 z-10 rounded-xl bg-gradient-to-t from-graphite-900/70 via-transparent to-transparent"
+        />
       </div>
+      {/* O portão único (06/10/2026): o preview borrado mostra o que falta, e
+          a linha diz o que a pessoa ganha. */}
+      <LinhaPremium ctx="revisions" titulo={r.previewCta} />
     </div>
   );
 }

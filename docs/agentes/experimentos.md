@@ -158,6 +158,36 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   funil; não li o recorte semanal de `consultou_sintoma` antes de abrir
 - Veredito: (aberto)
 
+## [portao-unico-do-premium] Um portão só, que diz o que a pessoa ganha
+- Estado: ABERTO
+- Tipo: mudanca-direta
+- Alvo no funil: `viu_paywall` → `iniciou_checkout`, por `ctx`; guarda:
+  `perguntou_biela` por ativo na semana não pode cair.
+- Tese BeSci: o app dizia "isso é pago" de seis jeitos (banner, card trancado,
+  preview borrado, cadeado por item, card no fim do Início, caixa no chat) e
+  nenhum dizia o que a pessoa ganharia. Perda sem nome não dói. A = isso. B =
+  uma linha só em toda tela (`LinhaPremium`): rótulo "Premium", o título é o
+  ganho, a linha de contexto é o que fica de fora no gratuito, a seta leva ao
+  paywall com o mesmo `ctx` de antes. No Início, o card "Teste o Premium
+  grátis" vira um bloco de três linhas (Biela sem limite, plano de revisão
+  completo, histórico sem limite e relatório), cada uma com o seu `ctx`.
+- Pedido do dono em 06/10: "dar mais destaque para o Premium, para o
+  usuário entender o que está perdendo". Era a aposta 9 de
+  docs/design/limpeza-visual-nubank.md, antecipada por decisão dele.
+- TOCA O DEGRAU DE OUTRAS APOSTAS, dito no dia: `viu_paywall:home` passa a
+  nascer de três linhas com `ctx` home, revisions e history, não de um card;
+  `login-sabe-que-veio-comprar` lê esse degrau e a leitura dela separa por
+  `ctx` a partir de hoje.
+- Métrica: `viu_paywall` → `iniciou_checkout` por `ctx`, semana a semana;
+  o `ctx` que converter muito acima dos outros diz onde o valor está ·
+  Duração: 4 semanas
+- Aprovação: pedido do dono em 2026-10-06
+- Início: 2026-10-06 na web; no app, com a 3.1 · Ler a partir de: 2026-10-20
+  (direcional) e 2026-11-03
+- Antes: a ler no retrato de 07/10 (viu_paywall e iniciou_checkout por ctx
+  nos 28 dias anteriores); não li antes de abrir, e fica dito
+- Veredito: (aberto)
+
 ## [landing-em-seis-blocos] A home tem uma promessa, o Biela em ação e a loja como único destino
 - Estado: ABERTO
 - Tipo: mudanca-direta

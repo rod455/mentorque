@@ -19,7 +19,8 @@ import { openStorePage, useUpdateAvailable } from "@/lib/app/appUpdate";
 import { sellsInApp } from "@/lib/app/wrapper";
 import { funil } from "@/lib/app/funil";
 import { Button } from "@/components/ui/Button";
-import { useContent, usePopulares, Atalho, Icon, inputCls, Linha, Sheet, Thumb } from "../ui";
+import { useContent, usePopulares, Atalho, Icon, inputCls, Linha, LinhaPremium, Sheet, Thumb } from "../ui";
+import { LIMITS } from "@/lib/app/premium";
 import { healthColor } from "./Cars";
 import { ProblemaLinha, problemasComuns } from "./Symptoms";
 import { ConviteDeAviso } from "../ConviteDeAviso";
@@ -480,15 +481,19 @@ export function HomeScreen() {
           onClick={() => go({ name: "symptoms" })}
         />
 
-        {/* Premium, no fim, como linha (oculto no app da loja, modo leitor). */}
+        {/* O PREMIUM, NO FIM, DIZENDO O QUE FICA DE FORA (06/10/2026, pedido
+            do dono). Três linhas, cada uma o que a pessoa ganha, com o seu
+            `ctx` no paywall. Oculto no app da loja em modo leitor. */}
         {!s.premium && sellsInApp() && (
-          <Linha
-            data-premium
-            esquerda={<span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-amber/15 text-amber"><Icon name="shield" className="h-5 w-5" /></span>}
-            titulo={h.premiumTitle}
-            sub={h.premiumSub}
-            onClick={() => go({ name: "subscribe", ctx: "home" })}
-          />
+          <>
+            <div className="mt-6" data-premium-bloco>
+              <h3 className="font-display text-[15px] font-semibold text-cream">{h.premiumTitle}</h3>
+              <p className="mt-0.5 text-xs text-cream/45">{h.premiumBlocoSub}</p>
+            </div>
+            <LinhaPremium ctx="home" titulo={h.premiumBiela} sub={h.premiumBielaSub} />
+            {car && <LinhaPremium ctx="revisions" titulo={h.premiumRevisoes.replace("{carro}", nome)} sub={h.premiumRevisoesSub} />}
+            <LinhaPremium ctx="history" titulo={h.premiumHistorico} sub={h.premiumHistoricoSub.replace("{n}", String(LIMITS.freeServices))} />
+          </>
         )}
       </div>
 

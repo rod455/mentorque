@@ -209,6 +209,17 @@ export function getContent(locale: Locale) {
       searchPh: T("Buscar problemas ou serviços", "Search problems or services"),
       premiumTitle: T("Teste o Premium grátis", "Try Premium free"),
       premiumSub: T("Toque para começar", "Tap to start"),
+      // O BLOCO DO PREMIUM NO INÍCIO (06/10/2026, pedido do dono: "o usuário
+      // entender o que está perdendo"). Três linhas, cada uma o que a pessoa
+      // GANHA, com o que fica de fora no gratuito como contexto, e cada uma
+      // com o seu `ctx` no paywall, para `viu_paywall` dizer qual puxa mais.
+      premiumBlocoSub: T("O que fica de fora no gratuito", "What the free plan leaves out"),
+      premiumBiela: T("O Biela sem limite de perguntas", "Biela with no question limit"),
+      premiumBielaSub: T("No gratuito são cinco por mês", "The free plan gives five a month"),
+      premiumRevisoes: T("Plano de revisão completo do {carro}", "Full service plan for your {carro}"),
+      premiumRevisoesSub: T("Intervalos pelo manual, custo estimado e aviso antes de vencer", "Manual intervals, estimated cost and a heads-up before it's due"),
+      premiumHistorico: T("Histórico sem limite e relatório de gastos", "Unlimited history and spending report"),
+      premiumHistoricoSub: T("No gratuito cabem {n} serviços; gráficos e PDF só no Premium", "The free plan holds {n} services; charts and PDF are Premium"),
       updateTitle: T("Versão nova disponível", "New version available"),
       updateSub: T("Atualize para receber as melhorias", "Update to get the latest improvements"),
       updateCta: T("Atualizar", "Update"),

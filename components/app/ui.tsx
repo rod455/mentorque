@@ -143,42 +143,51 @@ export function RecoBadge({ children }: { children: ReactNode }) {
   return <span className="inline-flex items-center gap-1 rounded-md bg-teal/15 px-1.5 py-0.5 text-[10px] font-medium text-teal">✦ {children}</span>;
 }
 
-// Contextual upgrade nudge (doesn't block) → opens the paywall for `ctx`.
-export function UpgradeBanner({ ctx, text }: { ctx: string; text: string }) {
+// O PORTÃO ÚNICO DO PREMIUM (06/10/2026, aposta 9 de
+// docs/design/limpeza-visual-nubank.md, antecipada a pedido do dono: "dar mais
+// destaque para o Premium, para o usuário entender o que está perdendo").
+//
+// Até aqui o app dizia "isso é pago" de seis jeitos: banner com quatro
+// contextos, card trancado, preview borrado, cadeado por item, card no fim do
+// Início, caixa no chat. A pessoa aprendia seis linguagens para a mesma
+// mensagem, e nenhuma dizia O QUE ela ganharia. Agora é uma linha só, igual em
+// toda tela: o rótulo "Premium", o título é o que a pessoa GANHA, a linha de
+// contexto diz o que destrava (os benefícios do próprio paywall daquele
+// contexto), e a seta leva ao paywall com o `ctx` de sempre, então
+// `viu_paywall` por contexto continua dizendo onde o valor está.
+export function LinhaPremium({ ctx, titulo, sub, className }: { ctx: string; titulo: string; sub?: string; className?: string }) {
   const { go } = useNav();
+  const c = useContent();
   // Modo leitor (só Android): sem convites de assinatura.
   if (!sellsInApp()) return null;
+  const beneficios = (c.paywalls as Record<string, { benefits?: string[] } | undefined>)[ctx]?.benefits ?? [];
+  const contexto = sub ?? (beneficios.length ? beneficios.slice(0, 2).join(" · ") : c.common.unlock);
   return (
-    <button
+    <Linha
+      data-premium={ctx}
+      className={className}
+      esquerda={
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-amber/15 text-amber">
+          <IconLock className="h-4 w-4" />
+        </span>
+      }
+      rotulo={c.common.premium}
+      titulo={titulo}
+      sub={contexto}
+      direita={<IconArrow className="h-4 w-4 shrink-0 text-amber" />}
       onClick={() => go({ name: "subscribe", ctx })}
-      className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-amber/10 px-4 py-3 text-left ring-1 ring-amber/25 transition-colors hover:ring-amber/40"
-    >
-      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-amber/20 text-amber">★</span>
-      <span className="min-w-0 flex-1 text-sm text-cream/85">{text}</span>
-      <span className="shrink-0 text-xs font-medium text-amber">›</span>
-    </button>
+    />
   );
 }
 
-// Locked content card (gates a Premium-only block) → opens the paywall.
+// Os dois nomes antigos continuam existindo para as telas que os chamam, e
+// desenham a mesma linha: trocar o visual num lugar troca em todas.
+export function UpgradeBanner({ ctx, text }: { ctx: string; text: string }) {
+  return <LinhaPremium ctx={ctx} titulo={text} className="mt-3" />;
+}
+
 export function LockedCard({ ctx, title, body }: { ctx: string; title: string; body?: string }) {
-  const { go } = useNav();
-  const c = useContent();
-  return (
-    <button
-      onClick={() => go({ name: "subscribe", ctx })}
-      className="flex w-full items-start gap-3 rounded-2xl bg-graphite-800 px-4 py-3.5 text-left ring-1 ring-amber/20 hover:ring-amber/40"
-    >
-      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-amber/15 text-amber">
-        <IconLock className="h-5 w-5" />
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="block font-display text-[15px] text-cream">{title}</span>
-        {body ? <span className="mt-0.5 block text-xs text-cream/55">{body}</span> : null}
-        <span className="mt-1.5 inline-block text-xs font-medium text-amber">{c.common.unlock} ›</span>
-      </span>
-    </button>
-  );
+  return <LinhaPremium ctx={ctx} titulo={title} sub={body} />;
 }
 
 // Standard screen header: back arrow (when the nav stack can pop) + title.

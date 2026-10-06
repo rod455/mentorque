@@ -16,7 +16,7 @@ import { useNav } from "@/lib/app/nav";
 import { funil } from "@/lib/app/funil";
 import { isNativeApp, nativePlatform } from "@/lib/app/wrapper";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Chip, Icon, useContent } from "../ui";
+import { AppHeader, Chip, Icon, LinhaPremium, useContent } from "../ui";
 
 // A conversa com a Biela.
 //
@@ -429,9 +429,8 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
       )}
 
       {gated ? (
-        <div className="mb-2 rounded-2xl bg-amber/10 p-4 text-center ring-1 ring-amber/25">
-          <p className="text-sm text-cream/85">{c.biela.freeOver}</p>
-          <Button className="mt-3 w-full" onClick={() => go({ name: "subscribe", ctx: "biela" })}>{c.biela.premiumCta}</Button>
+        <div className="mb-2">
+          <LinhaPremium ctx="biela" titulo={c.biela.premiumCta} sub={c.biela.freeOver} />
         </div>
       ) : (
         <>
