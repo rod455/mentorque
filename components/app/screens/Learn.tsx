@@ -10,7 +10,7 @@ import { useNav } from "@/lib/app/nav";
 import { funil } from "@/lib/app/funil";
 import { abrirAjustesDeAvisos, notificacoesDisponiveis, pedirPermissao, permissaoConcedida } from "@/lib/app/notificacoes";
 import { passo } from "@/lib/app/ultimoPasso";
-import { AppHeader, Icon, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
+import { AppHeader, Icon, Linha, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
 import { ItemRow, typeLabel } from "../estudos/ItemDeAula";
 
 // A área de Estudos: a lista, as trilhas, "para o seu carro" e as salvas.
@@ -46,33 +46,10 @@ function CourseMeter({ done, total }: { done: number; total: number }) {
 //   "!! Texto"   caixa de alerta
 // E `[[id-da-aula|texto]]` em qualquer parágrafo vira link para a aula.
 
-// Big entry card that opens the Biela AI chat. Biela é sempre Premium: sem
-// assinatura, o card leva ao paywall; com assinatura, abre o chat.
-function BielaCard() {
-  const c = useContent();
-  const { s } = usePrototype();
-  const { go } = useNav();
-  return (
-    <button
-      onClick={() => go({ name: "biela" })}
-      className="flex w-full items-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-br from-amber/20 to-amber/5 p-4 text-left ring-1 ring-amber/25 hover:ring-amber/45"
-    >
-      <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-2xl bg-graphite-900/40">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/biela/biela-idle.png" alt="" className="h-full w-full object-contain" />
-      </span>
-      <span className="min-w-0 flex-1">
-        {/* O selo Premium saiu em 17/09/2026, junto com o portão que ele
-            anunciava. A Biela passou a ter cinco perguntas por mês no
-            gratuito (decisão do dono, 15/09), e selo de Premium num recurso
-            aberto afasta justamente quem ele deveria atrair. */}
-        <span className="font-display text-base font-semibold text-cream">{c.biela.cardTitle}</span>
-        <span className="mt-0.5 block text-sm text-cream/70">{c.biela.cardSub}</span>
-      </span>
-      <span className="shrink-0 text-amber">›</span>
-    </button>
-  );
-}
+// O card do Biela SAIU daqui em 06/10/2026: o Biela tem a própria aba desde
+// 04/10 (aposta `aba-biela`), e um card dele dentro de Aprender era a mesma
+// porta duas vezes na mesma barra. (O selo Premium já tinha saído em 17/09:
+// o Biela tem cinco perguntas por mês no gratuito, decisão do dono de 15/09.)
 
 // Pick the most relevant items for the active car: model-specific first, then
 // brand, then fundamentals/DIY basics.
@@ -109,6 +86,9 @@ export function LearnScreen() {
   const { go } = useNav();
   const v = activeVehicle(s);
   const [q, setQ] = useState("");
+  // Trilhas em linha (06/10/2026): cinco à vista, as outras atrás do toque.
+  const [todasAsTrilhas, setTodasAsTrilhas] = useState(false);
+  const A_VISTA = 5;
 
   const query = q.trim().toLowerCase();
   const searching = query.length > 0;
@@ -156,83 +136,79 @@ export function LearnScreen() {
         </div>
       ) : (
         <>
-          <BielaCard />
-
-          {/* Para o seu carro — só aparece quando há carro cadastrado */}
+          {/* APRENDER EM LINHAS (06/10/2026, docs/design/limpeza-visual-nubank.md):
+              "Para o seu carro" e "Salvos" são linhas com seta; as trilhas
+              são linhas com o progresso à direita, e a barra só aparece
+              depois que a trilha começa (doze barras em zero eram um muro de
+              zeros antes de qualquer aula); cinco à vista, o resto atrás do
+              toque. As categorias continuam azulejos, sem borda. */}
           {v && (
-            <button
+            <Linha
+              data-para-o-carro
+              esquerda={
+                <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite-800 text-teal">
+                  {v.photo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={v.photo} alt="" className="h-full w-full object-cover" />
+                  ) : (
+                    <Icon name={v.type === "moto" ? "moto" : "car"} className="h-6 w-6" />
+                  )}
+                </span>
+              }
+              titulo={c.learn.forYourCar.replace("{car}", carName(v))}
+              sub={c.learn.forYourCarCount.replace("{n}", String(recommended.length))}
               onClick={() => go({ name: "forYourCar" })}
-              className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 p-4 text-left ring-1 ring-white/5 hover:ring-amber/30"
-            >
-              <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-2xl bg-teal/15 text-teal">
-                {v.photo ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={v.photo} alt="" className="h-full w-full object-cover" />
-                ) : (
-                  <Icon name={v.type === "moto" ? "moto" : "car"} className="h-6 w-6" />
-                )}
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block font-display text-[15px] font-semibold text-cream">
-                  {c.learn.forYourCar.replace("{car}", carName(v))}
-                </span>
-                <span className="mt-0.5 block text-xs text-cream/55">{c.learn.forYourCarCount.replace("{n}", String(recommended.length))}</span>
-              </span>
-              <span className="shrink-0 text-cream/40">›</span>
-            </button>
+            />
           )}
 
-          {/* Salvos para ver depois */}
           {(s.savedLessons ?? []).length > 0 && (
-            <button
+            <Linha
+              data-salvos
+              esquerda={
+                // Marcador (não a estrela do Premium): conceitos diferentes.
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-graphite-800 text-teal">
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5"><path d="M6 3h12a1 1 0 0 1 1 1v16.2a.8.8 0 0 1-1.24.67L12 17.5l-5.76 3.37A.8.8 0 0 1 5 20.2V4a1 1 0 0 1 1-1Z" /></svg>
+                </span>
+              }
+              titulo={c.learn.savedTitle}
+              sub={`${c.learn.viewSaved} · ${(s.savedLessons ?? []).length}`}
               onClick={() => go({ name: "savedLessons" })}
-              className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 p-4 text-left ring-1 ring-white/5 hover:ring-amber/30"
-            >
-              {/* Marcador (não a estrela do Premium) — conceitos diferentes */}
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-teal/15 text-teal">
-                <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5"><path d="M6 3h12a1 1 0 0 1 1 1v16.2a.8.8 0 0 1-1.24.67L12 17.5l-5.76 3.37A.8.8 0 0 1 5 20.2V4a1 1 0 0 1 1-1Z" /></svg>
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block font-display text-[15px] font-semibold text-cream">{c.learn.savedTitle}</span>
-                <span className="mt-0.5 block text-xs text-cream/55">{c.learn.viewSaved} · {(s.savedLessons ?? []).length}</span>
-              </span>
-              <span className="shrink-0 text-cream/40">›</span>
-            </button>
+            />
           )}
 
-          {/* Trilhas guiadas — cursos com ordem e progresso. Ordenadas por
-              relevância para o carro ativo (traits/situations) e, entre iguais,
-              as em andamento primeiro. */}
+          {/* Trilhas guiadas, ordenadas por relevância para o carro ativo
+              (traits/situations) e, entre iguais, as em andamento primeiro. */}
           <SectionTitle>{c.learn.coursesTitle}</SectionTitle>
-          <p className="-mt-1 mb-2.5 text-xs text-cream/45">{c.learn.coursesSub}</p>
-          <div className="space-y-2.5">
-            {orderedCourses.map(({ course, done, total, started }) => (
-              <button
-                key={course.id}
-                onClick={() => go({ name: "course", id: course.id })}
-                className="flex w-full flex-col gap-2.5 rounded-2xl bg-graphite-800 p-4 text-left ring-1 ring-white/5 transition-all hover:ring-amber/30 active:scale-[0.99]"
-              >
-                <span className="flex items-center gap-3">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber/12 text-amber">
-                    <Icon name={course.icon} className="h-5 w-5" />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate font-display text-[15px] font-semibold text-cream">{course.title}</span>
-                    <span className="block text-xs text-cream/50">{c.learn.courseLevels[course.level]}</span>
-                  </span>
-                  <span className="shrink-0 rounded-md bg-white/5 px-2 py-0.5 font-display text-xs font-semibold tabular-nums text-cream/70">
-                    {done === total ? `✓ ${c.learn.courseDoneBadge}` : `${done}/${total}`}
-                  </span>
+          <p className="-mt-1 mb-1 text-xs text-cream/45">{c.learn.coursesSub}</p>
+          {(todasAsTrilhas ? orderedCourses : orderedCourses.slice(0, A_VISTA)).map(({ course, done, total, started }) => (
+            <Linha
+              key={course.id}
+              data-trilha={course.id}
+              esquerda={
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-graphite-800 text-amber">
+                  <Icon name={course.icon} className="h-5 w-5" />
                 </span>
-                <span className="flex items-center gap-2.5">
-                  <CourseMeter done={done} total={total} />
-                  <span className="shrink-0 text-xs font-medium text-amber">
-                    {done === total ? "↻" : started ? `${c.learn.courseContinue} ›` : `${c.learn.courseStart} ›`}
-                  </span>
+              }
+              titulo={course.title}
+              sub={
+                <>
+                  {c.learn.courseLevels[course.level]}
+                  {started ? <span className="mt-1.5 block"><CourseMeter done={done} total={total} /></span> : null}
+                </>
+              }
+              direita={
+                <span className={`shrink-0 font-display text-xs font-semibold tabular-nums ${done === total ? "text-teal" : started ? "text-amber" : "text-cream/50"}`}>
+                  {done === total ? c.learn.courseDoneBadge : `${done}/${total}`}
                 </span>
-              </button>
-            ))}
-          </div>
+              }
+              onClick={() => go({ name: "course", id: course.id })}
+            />
+          ))}
+          {orderedCourses.length > A_VISTA && (
+            <button onClick={() => setTodasAsTrilhas((x) => !x)} className="w-full py-3 text-center text-sm font-medium text-amber">
+              {todasAsTrilhas ? c.learn.coursesLess : c.learn.coursesAll.replace("{n}", String(orderedCourses.length))}
+            </button>
+          )}
 
           {/* Categorias — navegação livre */}
           <SectionTitle>{c.learn.tracks}</SectionTitle>
@@ -241,7 +217,7 @@ export function LearnScreen() {
               <button
                 key={t.id}
                 onClick={() => go({ name: "studyTrack", trackId: t.id })}
-                className="group flex flex-col gap-2 rounded-3xl bg-graphite-800 p-4 text-left ring-1 ring-white/5 transition-all hover:ring-white/15 active:scale-[0.98]"
+                className="group flex flex-col gap-2 rounded-3xl bg-graphite-800 p-4 text-left transition-all active:scale-[0.98]"
               >
                 <span className={`grid h-16 w-16 place-items-center overflow-hidden rounded-2xl p-1.5 ${t.accent}`}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}

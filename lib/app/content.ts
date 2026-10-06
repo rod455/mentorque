@@ -1627,6 +1627,9 @@ export function getContent(locale: Locale) {
       // Trilhas guiadas (cursos com ordem e progresso)
       coursesTitle: T("Trilhas", "Tracks"),
       coursesSub: T("Sequências com começo, meio e fim", "Sequences with a start, middle and end"),
+      // Trilhas em linha (06/10/2026): cinco à vista, o resto atrás do toque.
+      coursesAll: T("Ver todas as trilhas ({n})", "See all tracks ({n})"),
+      coursesLess: T("Mostrar menos", "Show less"),
       courseProgress: T("{n} de {total} aulas", "{n} of {total} lessons"),
       // A trilha em ritmo: uma aula por dia, às 9h, como aviso. Ver
       // lib/app/ritmoDaTrilha.ts e a tela da trilha.

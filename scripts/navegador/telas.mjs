@@ -96,7 +96,9 @@ export async function rodar({ nav, ok }) {
   // Volta pela aba, e não por botões de voltar contados: a pilha muda conforme
   // a tela, e contar cliques é o jeito mais frágil possível de navegar.
   await aba(/^Estudos$/i);
-  await pg.getByRole("button", { name: /Começar/i }).first().click();
+  // Desde 06/10/2026 a trilha é uma linha com seta (sem o "Começar ›" no
+  // texto): o toque é na linha.
+  await pg.locator("[data-trilha]").first().click();
   await pg.waitForTimeout(1600);
   const trilha = await app.tela();
   ok("a trilha desenha", trilha.length > 100, trilha.slice(0, 50).replace(/\n/g, " "));
@@ -181,15 +183,18 @@ export async function rodar({ nav, ok }) {
   // esta aqui cobra o que a pessoa sente, que é abrir o chat.
   {
     const b = await abrirApp(nav, { sessao: SESSAO(), chaves: { "mq-primeiro-quiz-nao": "1" } });
+    // Desde 06/10/2026 o card do Biela saiu de Estudos (o Biela tem a própria
+    // aba desde 04/10). A porta sem assinatura que se prova aqui é a ABA.
     await b.pg.getByRole("button", { name: /^Estudos$/i }).first().click();
-    await b.pg.waitForTimeout(1500);
-    const card = b.pg.locator("main button").filter({ hasText: /Fala com o Biela|Chat with Biela/i });
+    await b.pg.waitForTimeout(1200);
+    ok("Estudos não tem mais o card do Biela (a aba é a porta)", (await b.pg.locator("main button").filter({ hasText: /Fala com o Biela|Chat with Biela/i }).count()) === 0);
+    const card = b.pg.locator("nav button").filter({ hasText: /^Biela$/i });
     if (await card.count()) {
       await card.first().click();
       await b.pg.waitForTimeout(2000);
       const tela = await b.tela();
       ok(
-        "sem assinatura, o card da Biela abre o CHAT e não o paywall",
+        "sem assinatura, a aba do Biela abre o CHAT e não o paywall",
         !/Grátis[\s\S]{0,400}Premium/i.test(tela) && /Biela/i.test(tela),
         tela.slice(0, 90).replace(/\n/g, " "),
       );
@@ -199,7 +204,7 @@ export async function rodar({ nav, ok }) {
         "sem campo, a pessoa chegou na tela e continua sem poder perguntar",
       );
     } else {
-      ok("sem assinatura, o card da Biela abre o CHAT e não o paywall", false, "não achei o card da Biela no Estudos");
+      ok("sem assinatura, a aba do Biela abre o CHAT e não o paywall", false, "não achei a aba do Biela");
     }
     await b.fechar();
   }
@@ -212,9 +217,7 @@ export async function rodar({ nav, ok }) {
       sessao: SESSAO({ premium: true }),
       chaves: { "mq-primeiro-quiz-nao": "1" },
     });
-    await b.pg.getByRole("button", { name: /^Estudos$/i }).first().click();
-    await b.pg.waitForTimeout(1500);
-    const card = b.pg.locator("main button").filter({ hasText: /Biela/i });
+    const card = b.pg.locator("nav button").filter({ hasText: /^Biela$/i });
     if (await card.count()) {
       await card.first().click();
       await b.pg.waitForTimeout(1800);
@@ -222,7 +225,7 @@ export async function rodar({ nav, ok }) {
       ok("a conversa com a Biela desenha", chat.length > 100, chat.slice(0, 60).replace(/\n/g, " "));
       ok("tem campo para escrever", (await b.pg.locator("main textarea, main input[type=text]").count()) > 0);
     } else {
-      ok("a conversa com a Biela desenha", false, "não achei o card da Biela em Estudos");
+      ok("a conversa com a Biela desenha", false, "não achei a aba do Biela");
     }
     ok("nenhum erro de página na Biela", b.erros.length === 0, b.erros[0] ?? "");
     await b.fechar();
