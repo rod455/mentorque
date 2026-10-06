@@ -35,7 +35,11 @@ export type AulaRemota = Omit<Aula, "title" | "body" | "need" | "steps" | "safet
 type Curso = Content["courses"][number];
 export type CursoRemoto = Omit<Curso, "title" | "goal"> & { title: Bilingue; goal: Bilingue };
 
-type Pacote = { version: string; lessons: AulaRemota[]; courses?: CursoRemoto[] };
+// `populares` (06/10/2026): os ids das aulas mais vistas por todo mundo nos
+// últimos 30 dias (distinct de aparelho em `viu_aula`), do mais visto para o
+// menos. Opcional de ponta a ponta, como as trilhas. O Início usa o primeiro
+// que ainda não esteja na lista como "o que mais gente acessa".
+type Pacote = { version: string; lessons: AulaRemota[]; courses?: CursoRemoto[]; populares?: string[] };
 
 // Interruptor do catálogo remoto.
 //
@@ -81,7 +85,17 @@ function valido(p: unknown): p is Pacote {
       // seguir com o embutido.
       Array.isArray(a.need) && Array.isArray(a.steps) && Array.isArray(a.safety) &&
       (a.body === undefined || Array.isArray(a.body))
-  ) && cursosValidos((p as Pacote).courses);
+  ) && cursosValidos((p as Pacote).courses) && popularesValidos((p as Pacote).populares);
+}
+
+function popularesValidos(ps: unknown): boolean {
+  if (ps === undefined) return true;
+  return Array.isArray(ps) && ps.every((x) => typeof x === "string");
+}
+
+/** Os ids mais vistos por todo mundo, ou vazio quando o pacote não os traz. */
+export function populares(p: Pacote | null): string[] {
+  return p?.populares ?? [];
 }
 
 // Trilha torta não derruba o pacote das aulas? Derruba sim — de propósito: um

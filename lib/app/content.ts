@@ -199,6 +199,8 @@ export function getContent(locale: Locale) {
       gastosSub: T("Combustível {c} · serviços {s}", "Fuel {c} · services {s}"),
       gastosFechado: T("{mes} fechou em {valor}", "{mes} closed at {valor}"),
       descubraTitle: T("Descubra mais", "Discover more"),
+      descubraPopular: T("O que mais gente vê", "Most viewed"),
+      problemasVerTodos: T("Ver todos os problemas comuns", "See all common problems"),
       heroTitleEmpty: T("O que está acontecendo com o seu carro?", "What's going on with your car?"),
       heroCtaEmpty: T("Perguntar para o Biela", "Ask Biela"),
       heroSecEmpty: T("Ou cadastrar meu carro →", "Or add my car →"),
@@ -1718,6 +1720,9 @@ export function getContent(locale: Locale) {
       title: T("Biela", "Biela"),
       contextPrefix: T("Sobre seu", "About your"),
       symptomsLink: T("Ver sintomas comuns, com causas e faixa de preço", "See common symptoms, with causes and price range"),
+      // O botão de sintomas no cabeçalho do chat (06/10/2026): a tela de
+      // sintomas é a tela 2 da aba Biela, alcançável sempre, não só no começo.
+      sintomasAtalho: T("Sintomas comuns", "Common symptoms"),
       intro: T("Oi! Sou o Biela 🐻 Manjo tudo de mecânica. Me conta o que está acontecendo com o seu carro que eu te ajudo: pode perguntar de barulho, revisão, orçamento, o que for.", "Hi! I'm Biela 🐻 I know cars inside out. Tell me what's going on and I'll help: noises, service, quotes, anything."),
       inputPh: T("Pergunte ao Biela...", "Ask Biela..."),
       send: T("Enviar", "Send"),

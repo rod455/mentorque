@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
 import { useI18n } from "@/lib/i18n";
-import { cursosParaIdioma, paraIdioma, serverSnapshot, snapshot, subscribe } from "@/lib/app/remoteLessons";
+import { cursosParaIdioma, paraIdioma, populares, serverSnapshot, snapshot, subscribe } from "@/lib/app/remoteLessons";
 import { getContent } from "@/lib/app/content";
 import { siteOrigin } from "@/lib/app/apiBase";
 import { usePrototype } from "@/lib/app/store";
@@ -57,6 +57,12 @@ export function useContent() {
     return { ...base, lessons: paraIdioma(remoto, locale), ...(cursos ? { courses: cursos } : {}) };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [base, remoto, locale]);
+}
+
+/** Os ids das aulas mais vistas por todo mundo (catálogo remoto), ou vazio. */
+export function usePopulares(): string[] {
+  const remoto = useSyncExternalStore(subscribe, snapshot, serverSnapshot);
+  return useMemo(() => populares(remoto), [remoto]);
 }
 
 const ICON_REGISTRY: Record<string, (p: { className?: string }) => JSX.Element> = {
@@ -198,7 +204,9 @@ export function AppHeader({ title, subtitle, action, onBack }: { title: string; 
         <h1 className="text-balance font-display text-xl font-semibold leading-tight tracking-normal text-cream">{title}</h1>
         {subtitle ? <p className="truncate text-xs text-cream/55">{subtitle}</p> : null}
       </div>
-      <span className="grid h-9 w-9 shrink-0 place-items-center">{action}</span>
+      {/* Largura mínima de um botão, mas aceita dois (o chat do Biela tem
+          sintomas e nova conversa). O título continua centrado pelo flex-1. */}
+      <span className="flex h-9 min-w-9 shrink-0 items-center justify-end" style={{ minWidth: 36 }}>{action}</span>
     </header>
   );
 }

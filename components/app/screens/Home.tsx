@@ -19,8 +19,9 @@ import { openStorePage, useUpdateAvailable } from "@/lib/app/appUpdate";
 import { sellsInApp } from "@/lib/app/wrapper";
 import { funil } from "@/lib/app/funil";
 import { Button } from "@/components/ui/Button";
-import { useContent, Atalho, Icon, inputCls, Linha, Sheet, Thumb } from "../ui";
+import { useContent, usePopulares, Atalho, Icon, inputCls, Linha, Sheet, Thumb } from "../ui";
 import { healthColor } from "./Cars";
+import { ProblemaLinha, problemasComuns } from "./Symptoms";
 import { ConviteDeAviso } from "../ConviteDeAviso";
 import { consumirConviteNoOnboarding } from "@/lib/app/pedidoDeAviso";
 
@@ -216,6 +217,7 @@ export function HomeScreen() {
   const car = activeVehicle(s);
   const hasCar = s.vehicles.length > 0;
   const updateReady = useUpdateAvailable();
+  const populares = usePopulares();
 
   // O km parado há mais de um mês vira a pendência da linha 6 (06/10/2026).
   // Até aqui era uma folha que abria por cima da tela; agora a folha só abre
@@ -275,11 +277,31 @@ export function HomeScreen() {
   const seen = s.seenLessons ?? [];
   const savedIds = s.savedLessons ?? [];
   const pinnedIds = s.pinnedLessons ?? [];
-  // Descubra mais: fixados primeiro (a pessoa escolheu), depois salvos, depois
-  // as sugestões. Três linhas, e "Ver tudo" leva ao Aprender.
+  // DESCUBRA MAIS, na ordem que o dono pediu em 06/10 ("ser dinâmico com o
+  // carro cadastrado e os itens fixados; o OBD2 entre os três primeiros;
+  // depois um com selo de novo, e um que tem mais acesso por todos"):
+  //   1. o que a pessoa fixou (escolha dela vence tudo);
+  //   2. a leitura da luz do painel (OBD2), que é a porta mais usada;
+  //   3. uma aula nova (addedAt a 7 dias), com o selo, quando existir;
+  //   4. a aula mais vista por todo mundo nos últimos 30 dias (catálogo
+  //      remoto, `populares`, contado no funil), quando existir;
+  //   5. as sugestões pelo carro e pelo nível, que completam até quatro.
+  // Repetição é cortada: cada aula entra uma vez, na primeira regra que a
+  // alcançar.
   const byId = (ids: string[]) => ids.map((id) => c.lessons.find((l) => l.id === id)).filter((l): l is Lesson => !!l);
   const picks = forYou(c.lessons, { car, services: car ? servicesFor(s, car.id) : [], pref: levelPref(status.phaseIndex), seen, saved: savedIds, pinned: pinnedIds });
-  const descubra = [...byId(pinnedIds), ...byId(savedIds.filter((id) => !pinnedIds.includes(id))), ...picks].slice(0, 3);
+  const obd2 = c.lessons.find((l) => l.id === "read-obd2");
+  const nova = picks.find((l) => isNewLesson(l) && !seen.includes(l.id));
+  const popular = byId(populares).find((l) => !seen.includes(l.id));
+  const motivo = new Map<string, string>();
+  if (nova) motivo.set(nova.id, h.newBadge);
+  if (popular) motivo.set(popular.id, h.descubraPopular);
+  const descubra: Lesson[] = [];
+  for (const l of [...byId(pinnedIds), ...(obd2 ? [obd2] : []), ...(nova ? [nova] : []), ...(popular ? [popular] : []), ...picks]) {
+    if (!descubra.some((x) => x.id === l.id)) descubra.push(l);
+    if (descubra.length >= 4) break;
+  }
+  const problemas = problemasComuns(c, s);
 
   // O convite de aviso logo depois do onboarding (12/09/2026). Lido uma vez,
   // na montagem: a marca é de módulo e some ao ser consumida.
@@ -432,7 +454,7 @@ export function HomeScreen() {
                     </span>
                   }
                   titulo={l.title}
-                  sub={locked ? c.common.premium : isNewLesson(l) && !seen.includes(l.id) ? h.newBadge : undefined}
+                  sub={locked ? c.common.premium : motivo.get(l.id) ?? (isNewLesson(l) && !seen.includes(l.id) ? h.newBadge : undefined)}
                   onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
                 />
               );
@@ -440,13 +462,20 @@ export function HomeScreen() {
           </>
         )}
 
-        {/* Problemas comuns, numa linha: a tela de sintomas continua inteira
-            a um toque, e `consultou_sintoma` segue tendo porta no Início
-            (é a guarda da aposta `aba-biela`). */}
+        {/* Problemas comuns: dois à vista, em linha, e "ver todos" leva à tela
+            de sintomas (a tela 2 da aba Biela). Pedido do dono em 06/10: só a
+            linha "ficou perdida sobre como chegar lá". `consultou_sintoma`
+            segue tendo porta no Início (é a guarda da aposta `aba-biela`). */}
+        <div className="mt-6 flex items-baseline justify-between" data-problemas-comuns>
+          <h3 className="font-display text-[15px] font-semibold text-cream">{c.symptomsUi.commonTitle}</h3>
+        </div>
+        {problemas.picks.slice(0, 2).map((sx) => (
+          <ProblemaLinha key={sx.id} sx={sx} reco={problemas.isReco(sx)} />
+        ))}
         <Linha
-          data-problemas-comuns
-          className="mt-3"
-          titulo={c.symptomsUi.commonTitle}
+          data-problemas-ver-todos
+          tom="mudo"
+          titulo={h.problemasVerTodos}
           sub={car ? c.symptomsUi.commonSubCar.replace("{car}", carName(car)) : c.symptomsUi.commonSub}
           onClick={() => go({ name: "symptoms" })}
         />

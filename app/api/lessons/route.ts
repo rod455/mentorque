@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createHash } from "node:crypto";
+import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { getContent, lessonPublicada, type Content } from "@/lib/app/content";
 import type { AulaRemota, Bilingue, CursoRemoto } from "@/lib/app/remoteLessons";
 
@@ -85,15 +86,48 @@ function montarCursos(): CursoRemoto[] {
   });
 }
 
-export function GET() {
+// As aulas mais vistas por todo mundo nos últimos 30 dias (06/10/2026).
+//
+// Pedido do dono para o "Descubra mais" do Início: um item que "tem mais
+// acesso por todos". O instrumento é o funil (`viu_aula`, uma vez por
+// aparelho por aula), não a opinião de ninguém. Conta aparelhos distintos
+// por aula, devolve os cinco mais vistos. Sem banco, ou com a tabela vazia,
+// devolve vazio e o Início segue sem a linha: ausência não vira zero
+// inventado nem aula escolhida à mão.
+async function montarPopulares(): Promise<string[]> {
+  const admin = getSupabaseAdmin();
+  if (!admin) return [];
+  const desde = new Date(Date.now() - 30 * 86400000).toISOString();
+  const { data, error } = await admin
+    .from("funil_eventos")
+    .select("origem, anon_id")
+    .eq("evento", "viu_aula")
+    .gte("criado_em", desde)
+    .limit(5000);
+  if (error || !data) return [];
+  const porAula = new Map<string, Set<string>>();
+  for (const r of data as { origem: string | null; anon_id: string | null }[]) {
+    if (!r.origem) continue;
+    if (!porAula.has(r.origem)) porAula.set(r.origem, new Set());
+    porAula.get(r.origem)!.add(r.anon_id ?? "");
+  }
+  return [...porAula.entries()]
+    .sort((a, b) => b[1].size - a[1].size)
+    .slice(0, 5)
+    .map(([id]) => id);
+}
+
+export async function GET() {
   const lessons = montar();
   const courses = montarCursos();
+  const populares = await montarPopulares();
   // A versão é o resumo do próprio conteúdo: muda quando (e só quando) alguma
-  // aula ou trilha muda. O app compara com o guardado e evita reescrever à toa.
-  const version = createHash("sha1").update(JSON.stringify({ lessons, courses })).digest("hex").slice(0, 12);
+  // aula, trilha ou a lista de populares muda. O app compara com o guardado e
+  // evita reescrever à toa.
+  const version = createHash("sha1").update(JSON.stringify({ lessons, courses, populares })).digest("hex").slice(0, 12);
 
   return NextResponse.json(
-    { version, count: lessons.length, lessons, courses },
+    { version, count: lessons.length, lessons, courses, populares },
     {
       headers: {
         // Cache curto na borda: publicar uma aula chega ao aparelho em minutos,

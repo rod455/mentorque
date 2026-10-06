@@ -11,7 +11,7 @@ import { trackPriceReport } from "@/lib/app/track";
 import type { SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Card, inputCls, LockedCard, PremiumBadge, RecoBadge, SeverityDot, Sheet, UpgradeBanner, useContent } from "../ui";
+import { AppHeader, Card, Icon, inputCls, Linha, LockedCard, PremiumBadge, RecoBadge, SeverityDot, Sheet, UpgradeBanner, useContent } from "../ui";
 import { AdOverlay, adsEnabled } from "../AdGate";
 import { canShowAd, markAdShown, registerContentOpen } from "@/lib/app/adPolicy";
 
@@ -76,6 +76,13 @@ export function SymptomsScreen() {
   const query = q.trim().toLowerCase();
   const matches = query ? c.symptoms.filter((sx) => sx.label.toLowerCase().includes(query)) : [];
 
+  // A TELA 2 DA ABA BIELA (06/10/2026, docs/design/limpeza-visual-nubank.md).
+  // Mesma gramática do resto: a busca, os problemas comuns em linhas (não
+  // mais um carrossel no fim da página), os sistemas como azulejos sem borda
+  // (a arte fica), o OBD2 e o kit como linhas, o Biela como saída, e o
+  // Premium por último. Chega-se aqui pela linha "Problemas comuns" do
+  // Início, pelo botão de sintomas no cabeçalho do chat e pelo convite no
+  // começo da conversa.
   return (
     <div>
       <AppHeader title={v ? ui.titleCar.replace("{car}", carName(v)) : ui.titleNoCar} />
@@ -132,23 +139,24 @@ export function SymptomsScreen() {
               }
               className="mt-1 flex w-full items-center gap-2.5 rounded-lg bg-amber/10 px-3 py-2.5 text-left ring-1 ring-amber/20 hover:ring-amber/40"
             >
-              <span className="text-amber">🐻</span>
+              <Icon name="spark" className="h-4 w-4 text-amber" />
               <span className="text-sm text-cream/90">{ui.askBielaQ.replace("{q}", q)}</span>
             </button>
           </div>
         )}
       </div>
 
-      {!s.premium && <UpgradeBanner ctx="symptomReco" text={ui.recoNudge} />}
+      {/* Problemas comuns, em linhas, logo abaixo da busca */}
+      <CommonProblems quantos={6} />
 
-      {/* Grade de subsistemas + Equipamentos úteis */}
-      <p className="mb-2.5 mt-4 text-xs font-semibold uppercase tracking-wide text-cream/45">{ui.browseBySystem}</p>
+      {/* Grade de subsistemas + Equipamentos úteis (azulejos sem borda; a arte fica) */}
+      <p className="mb-2.5 mt-6 text-xs font-semibold uppercase tracking-wide text-cream/45">{ui.browseBySystem}</p>
       <div className="grid grid-cols-2 gap-3">
         {c.problemSystems.map((sysm) => (
           <button
             key={sysm.key}
             onClick={() => go({ name: "systemProblems", system: sysm.key })}
-            className="flex flex-col gap-2 rounded-3xl bg-graphite-800 p-4 text-left ring-1 ring-white/5 transition-all hover:ring-white/15 active:scale-[0.98]"
+            className="flex flex-col gap-2 rounded-3xl bg-graphite-800 p-4 text-left transition-all active:scale-[0.98]"
           >
             <span className="grid h-16 w-16 place-items-center overflow-hidden rounded-2xl bg-coral/12 p-1.5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -160,12 +168,11 @@ export function SymptomsScreen() {
             </span>
           </button>
         ))}
-        {/* Equipamentos úteis — ao lado dos subsistemas */}
         <button
           onClick={() => go({ name: "equipment" })}
-          className="flex flex-col gap-2 rounded-3xl bg-graphite-800 p-4 text-left ring-1 ring-amber/20 transition-all hover:ring-amber/40 active:scale-[0.98]"
+          className="flex flex-col gap-2 rounded-3xl bg-graphite-800 p-4 text-left transition-all active:scale-[0.98]"
         >
-          <span className="grid h-16 w-16 place-items-center overflow-hidden rounded-2xl bg-graphite ring-1 ring-amber/45">
+          <span className="grid h-16 w-16 place-items-center overflow-hidden rounded-2xl bg-graphite">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/learn/equipment.png?v=4" alt="" className="h-full w-full object-contain" draggable={false} />
           </span>
@@ -177,27 +184,27 @@ export function SymptomsScreen() {
       </div>
 
       {/* Códigos OBD2 — leitura da luz do painel */}
-      <button
-        onClick={() => go({ name: "obd2" })}
-        className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-graphite-800 px-3.5 py-3.5 text-left ring-1 ring-white/5 hover:ring-amber/30"
-      >
-        <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-2xl bg-graphite ring-1 ring-amber/45">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/learn/read-obd2.png?v=4" alt="" className="h-full w-full object-contain" draggable={false} />
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="block font-display text-[15px] font-semibold text-cream">{c.obd2.entryTitle}</span>
-          <span className="mt-0.5 block text-xs text-cream/50">{c.obd2.entrySub}</span>
-        </span>
-        <span className="shrink-0 text-cream/40">›</span>
-      </button>
+      <div className="mt-3">
+        <Linha
+          data-obd2
+          esquerda={
+            <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/learn/read-obd2.png?v=4" alt="" className="h-full w-full object-contain" draggable={false} />
+            </span>
+          }
+          titulo={c.obd2.entryTitle}
+          sub={c.obd2.entrySub}
+          onClick={() => go({ name: "obd2" })}
+        />
+      </div>
 
       <div className="mt-5">
         <AskBielaRow seed={(v ? `Meu ${carName(v)} ` : "Meu carro ") + "está com um problema que não achei na lista. Pode me ajudar a diagnosticar?"} label={ui.talkToBiela} />
       </div>
 
-      {/* Problemas comuns — cards quadrados (mesmo formato do "Para você") */}
-      <CommonProblems />
+      {/* O Premium por último, depois do que a tela entrega de graça. */}
+      {!s.premium && <UpgradeBanner ctx="symptomReco" text={ui.recoNudge} />}
     </div>
   );
 }
@@ -220,55 +227,67 @@ const MAKE_COMMON_SYSTEMS: Record<string, SystemKey[]> = {
   "citroën": ["electrical", "engine"],
 };
 
-// Seção "Problemas comuns": prioriza o que é relevante para os carros do
-// usuário — sistema pedindo atenção/km alta (qualquer carro) e sistemas
-// típicos da marca — e completa com os problemas gerais.
-export function CommonProblems() {
-  const c = useContent();
-  const ui = c.symptomsUi;
-  const { s } = usePrototype();
-  const { go } = useNav();
+// Os problemas comuns, ordenados pelo que é relevante para os carros da
+// pessoa: sistema pedindo atenção ou km alta (qualquer carro) e sistemas
+// típicos da marca, completando com os gerais. Função pura, usada pela linha
+// do Início e pela tela de sintomas.
+export function problemasComuns(c: ReturnType<typeof useContent>, s: Parameters<typeof servicesFor>[0]) {
   const cars = s.vehicles;
-  const v = activeVehicle(s);
   const SYSTEMS: SystemKey[] = ["brakes", "engine", "suspension", "tires", "electrical"];
-
-  // Sistemas que pedem atenção (saúde/km) em QUALQUER carro do usuário.
   const recoSystems = new Set<SystemKey>();
-  // Sistemas típicos das marcas dos carros do usuário.
   const makeSystems = new Set<SystemKey>();
   for (const car of cars) {
     const svc = servicesFor(s, car.id);
     for (const sys of SYSTEMS) if (symptomRecommended(sys, car, svc)) recoSystems.add(sys);
     (MAKE_COMMON_SYSTEMS[(car.make || "").trim().toLowerCase()] ?? []).forEach((sys) => makeSystems.add(sys));
   }
-
   const isReco = (sx: (typeof c.symptoms)[number]) => recoSystems.has(sx.category);
   const score = (sx: (typeof c.symptoms)[number]) => (isReco(sx) ? 2 : 0) + (makeSystems.has(sx.category) ? 1 : 0);
   const picks = [...c.symptoms].sort((a, b) => score(b) - score(a)).slice(0, 12);
+  return { picks, isReco };
+}
 
-  const sub = cars.length > 1 ? ui.commonSubCars : v ? ui.commonSubCar.replace("{car}", carName(v)) : ui.commonSub;
+/** Uma linha de problema comum: ponto de urgência, nome, e "recomendado" quando é. */
+export function ProblemaLinha({ sx, reco }: { sx: ReturnType<typeof useContent>["symptoms"][number]; reco?: boolean }) {
+  const c = useContent();
+  const { go } = useNav();
+  return (
+    <Linha
+      data-problema={sx.id}
+      esquerda={
+        <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={`/problems/${sx.id}.png`} alt="" className="h-full w-full object-contain" draggable={false} />
+        </span>
+      }
+      titulo={sx.label}
+      sub={
+        <span className="flex items-center gap-1.5">
+          <SeverityDot level={sx.urgency.level} />
+          {reco ? c.premium.recommended : sx.urgency.text}
+        </span>
+      }
+      onClick={() => go({ name: "symptom", id: sx.id })}
+    />
+  );
+}
+
+// "Problemas comuns" em linhas, na tela de sintomas.
+export function CommonProblems({ quantos = 12 }: { quantos?: number }) {
+  const c = useContent();
+  const ui = c.symptomsUi;
+  const { s } = usePrototype();
+  const v = activeVehicle(s);
+  const { picks, isReco } = problemasComuns(c, s);
+  const sub = s.vehicles.length > 1 ? ui.commonSubCars : v ? ui.commonSubCar.replace("{car}", carName(v)) : ui.commonSub;
 
   return (
-    <section className="mt-6">
-      <h3 className="font-serif text-lg font-bold text-cream">{ui.commonTitle}</h3>
-      <p className="mb-3 mt-0.5 text-xs text-cream/45">{sub}</p>
-      <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {picks.map((sx) => (
-          <button key={sx.id} onClick={() => go({ name: "symptom", id: sx.id })} className="flex w-36 shrink-0 flex-col self-start text-left">
-            <div className="relative grid aspect-square place-items-center overflow-hidden rounded-2xl bg-graphite ring-1 ring-amber/45">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`/problems/${sx.id}.png`} alt="" className="h-full w-full object-contain" draggable={false} />
-              <span className="absolute left-2 top-2"><SeverityDot level={sx.urgency.level} /></span>
-              {isReco(sx) && (
-                <span className="absolute bottom-2 left-2 rounded-full bg-amber/90 px-1.5 py-0.5 text-[9px] font-semibold text-graphite">
-                  {c.premium.recommended}
-                </span>
-              )}
-            </div>
-            <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-cream/85">{sx.label}</p>
-          </button>
-        ))}
-      </div>
+    <section className="mt-6" data-problemas-comuns>
+      <h3 className="font-display text-[15px] font-semibold text-cream">{ui.commonTitle}</h3>
+      <p className="mb-1 mt-0.5 text-xs text-cream/45">{sub}</p>
+      {picks.slice(0, quantos).map((sx) => (
+        <ProblemaLinha key={sx.id} sx={sx} reco={isReco(sx)} />
+      ))}
     </section>
   );
 }
