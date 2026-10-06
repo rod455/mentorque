@@ -35,6 +35,21 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   novo: conclusão sem perguntar ao instrumento que sabe. A nota publicada
   promete o que a 3.0 não entrega; isso só o dono resolve (editar o texto das
   lojas, ou subir a 3.1 logo).
+- **O dono contestou a hora do disparo** ("foi disparado o build às 19h56,
+  depois que atualizou na web"), e a minha frase "você não apertou de novo"
+  era dedução da ausência de um segundo build, não fato. Fui ao instrumento
+  que responde a hora: a API da App Store Connect (`/v1/builds`, fluxo
+  manual `Engenharia: builds da App Store` no n8n, id x4VdaUSauBkkIl6q,
+  com a credencial do coletor). Resposta da Apple: **o build 70 foi enviado
+  às 19h22m45 de Brasília de 04/10** (15:22:45 no fuso do Pacífico), e não
+  existe build 71 nem outro envio naquele dia (o anterior é o 69, de 28/09).
+  O commit 28f13e1 nasceu às 19h56m40. Três instrumentos, três relógios, na
+  mesma ordem: Apple recebeu o binário às 19h22, o primeiro Android abriu
+  em 3.0.0 às 19h26, o commit do Início novo é das 19h56. O que quer que
+  tenha sido apertado às 19h56 não gerou o binário das lojas; se foi um
+  segundo disparo no Codemagic, ele não chegou à Apple (falhou ou não
+  existiu), e só a tela do Codemagic, que a casa não alcança, diz qual dos
+  dois. O binário das lojas é o das 19h22, e ele não tem o Início novo.
 - **O que ficou de pé**: `novidades-3.0.md` ganhou a linha "Árvore do build:
   748fedf", o item 4 foi para "Ficou FORA do binário", cada item cita o seu
   commit, e a lista "o que este build NÃO conserta" parou de dizer que as

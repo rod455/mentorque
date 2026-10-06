@@ -65,6 +65,14 @@ O que passa a valer:
    para a nota das lojas, para a ficha das apostas ("no app, com a X") e para
    a resposta ao dono. "Está na main" e "está no build" são duas afirmações,
    com dois instrumentos: o git e a árvore.
+4. **A hora do envio se pergunta à Apple, não à memória.** O fluxo manual
+   `Engenharia: builds da App Store` no n8n (id x4VdaUSauBkkIl6q, mesma
+   credencial do coletor) lista os últimos builds com `uploadedDate`. Um
+   commit criado depois dessa hora não está no binário, e ponto; foi assim
+   que a discussão sobre "a que horas o botão foi apertado" se encerrou em
+   06/10 (Apple: 19h22; commit: 19h56). A tela do Codemagic mostra o commit
+   de cada build e é o único instrumento que diz se houve um segundo disparo
+   que falhou; ela é do dono.
 
 ## versionCode: a única fonte que vale
 

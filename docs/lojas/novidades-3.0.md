@@ -13,9 +13,11 @@ release fechou e o dono apertou o botão do Codemagic. **O item 4 abaixo NÃO
 está neste binário**: o commit dele (28f13e1) entrou às 22h56 UTC, quase cinco
 horas depois, e ninguém releu a árvore do build antes de escrever que estava.
 Descoberto pelo dono em 06/10, abrindo a 3.0 no iPhone e vendo a aba
-"Problemas". A prova, em dois instrumentos: o git (28f13e1 não é ancestral de
-748fedf) e o funil (o primeiro Android em 3.0.0 abriu às 19h26 de Brasília de
-04/10, meia hora ANTES de o commit existir). O item foi para a seção "Ficou
+"Problemas". A prova, em três instrumentos: a Apple (`/v1/builds` da App
+Store Connect: o build 70 foi enviado às 19h22m45 de Brasília de 04/10, e não
+há outro envio naquele dia), o funil (o primeiro Android em 3.0.0 abriu às
+19h26) e o git (o commit 28f13e1 é das 19h56m40 e não é ancestral de
+748fedf). O item foi para a seção "Ficou
 FORA do binário" e vai na 3.1 (`novidades-3.1.md`). A `conferir:versoes`
 passou a cobrar a árvore de cada build e que cada item citado esteja nela.
 
