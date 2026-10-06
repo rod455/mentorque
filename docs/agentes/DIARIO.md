@@ -3,6 +3,37 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-06 (noite) · Engenharia: a 3.1 fechada para build, com o regime de release inteiro
+
+- Dono: "Perfeito. Vamos colocar tudo e enviar para iOS e Android aprovar.
+  Versão 3.1". Antes disso, na mesma noite, três ajustes dele depois de ver
+  a web: a aba Biela passa a abrir a tela de problemas com o chat a um
+  toque (b2ce634), um portão só para o Premium que diz o que a pessoa ganha
+  (770c0b1, ficha `portao-unico-do-premium`) e o contorno âmbar nele
+  (0426bed).
+- **A ficha** `docs/lojas/novidades-3.1.md` (0549ead): nove itens com o
+  commit de cada um, a nota das lojas em 439 caracteres (e em inglês), o
+  roteiro de aparelho de oito passos, nenhum plugin tocado, e a linha da
+  árvore do build em branco de propósito, para ser escrita na hora do botão.
+- **O regime de release**, no log desta noite: `npm run conferir` inteiro,
+  0 falhas; a bateria completa de navegador com 6 falhas em 940 segundos,
+  todas em suítes que afirmavam o emoji de fogo do chip do quiz ou o
+  `<div role="button">` do card do carro, que a limpeza visual trocou por
+  "· N" e por uma linha `<button>`; as quatro suítes (quiz, historico,
+  calendario, selo) atualizadas e verdes de novo; `npm run build` passou;
+  `npm run build:native` gerou os 48 MB. O ambiente desta sessão não tem
+  `.env.local` (foi recriado à tarde), e o pacote local embute o que o
+  `.env` dá; o binário das lojas é o do Codemagic, com as variáveis dele.
+- **O que fica de fora da 3.1**, dito antes do botão: nada do que o dono
+  aprovou hoje; o `topPaginas` do Search Console (clique dele no n8n); as
+  quatro aulas do plano do catálogo (Conteúdo, 27/10 em diante).
+- **O que a conferência não alcança**: a WebView do aparelho. O roteiro de
+  oito passos é o único sinal sobre o binário. A frase sobre a 3.1 continua
+  "sem sinal ainda" até ele.
+- **Próximo passo é botão do dono.** Quando apertar, a árvore vai para a
+  ficha na hora, e a hora de envio se lê na Apple (fluxo `Engenharia: builds
+  da App Store`), não da memória.
+
 ## 2026-10-06 (noite) · Engenharia: a rodada do SEO lida contra os instrumentos, e o topPaginas tinha resposta na linha de baixo
 
 - Dono: "veja o que o SEO falou hoje e aplique as melhorias propostas / dê

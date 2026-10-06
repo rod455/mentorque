@@ -88,7 +88,8 @@ export async function rodar({ nav, ok }) {
   await pg.getByRole("button", { name: /^Início$/i }).first().click();
   await pg.waitForTimeout(1500);
   const faixa = await pg.getByRole("button", { name: /Quiz Diário/i }).first().innerText();
-  ok("responder o passado NÃO mexeu na sequência", /🔥/.test(faixa) && /\b2\b/.test(faixa) && !/\b3\b/.test(faixa), faixa.replace(/\n/g, " | "));
+  // Desde 06/10/2026 a sequência vem como "· N", sem o emoji de fogo.
+  ok("responder o passado NÃO mexeu na sequência", /·\s*2\b/.test(faixa) && !/·\s*3\b/.test(faixa), faixa.replace(/\n/g, " | "));
 
   // ---- e persiste -----------------------------------------------------------
   await app.recarregar();

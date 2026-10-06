@@ -110,7 +110,7 @@ export async function rodar({ nav, ok }) {
   await u.pg.setViewportSize(ANDROID_ESTREITO);
   await u.pg.getByRole("button", { name: /^Carros$/i }).first().click();
   await u.pg.waitForTimeout(1200);
-  await u.pg.locator('main [role="button"]').first().click();
+  await u.pg.locator("main [data-carro]").first().click();
   await u.pg.waitForTimeout(1800);
   const irRevisoes = u.pg.locator("main button, main a").filter({ hasText: /Próximas revisões/i }).first();
   if (await irRevisoes.count()) { await irRevisoes.click(); await u.pg.waitForTimeout(3000); }
@@ -143,7 +143,7 @@ export async function rodar({ nav, ok }) {
     await u.recarregar();
     await u.pg.getByRole("button", { name: /^Carros$/i }).first().click();
     await u.pg.waitForTimeout(1000);
-    await u.pg.locator('main [role="button"]').first().click();
+    await u.pg.locator("main [data-carro]").first().click();
     await u.pg.waitForTimeout(1500);
     const rev2 = u.pg.locator("main button, main a").filter({ hasText: /Próximas revisões/i }).first();
     if (await rev2.count()) { await rev2.click(); await u.pg.waitForTimeout(2500); }
@@ -154,7 +154,7 @@ export async function rodar({ nav, ok }) {
   // string que estourava o cartão no Android do dono.
   await u.pg.getByRole("button", { name: /^Carros$/i }).first().click();
   await u.pg.waitForTimeout(1000);
-  await u.pg.locator('main [role="button"]').first().click();
+  await u.pg.locator("main [data-carro]").first().click();
   await u.pg.waitForTimeout(2000);
   const estouro = await u.pg.evaluate(() => {
     const fora = [];

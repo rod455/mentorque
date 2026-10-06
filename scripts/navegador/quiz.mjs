@@ -23,7 +23,8 @@ export async function rodar({ nav, ok }) {
   const chip = pg.getByRole("button", { name: /Quiz Diário/i }).first();
   ok("chip do quiz na barra de cima", (await chip.count()) > 0);
   const txtChip = await chip.innerText();
-  ok("o chip mostra a sequência de ontem", /🔥/.test(txtChip) && /\b1\b/.test(txtChip), txtChip.replace(/\n/g, " | "));
+  // Desde 06/10/2026 a sequência vem como "· N", sem o emoji de fogo.
+  ok("o chip mostra a sequência de ontem", /·\s*1\b/.test(txtChip), txtChip.replace(/\n/g, " | "));
 
   await chip.click();
   await pg.waitForTimeout(1200);
@@ -50,7 +51,7 @@ export async function rodar({ nav, ok }) {
   await pg.waitForTimeout(1200);
   const depoisChip = pg.getByRole("button", { name: /Quiz Diário/i }).first();
   ok("o chip virou feito, com o selo em 2",
-    /feita/i.test((await depoisChip.getAttribute("aria-label")) ?? "") && /🔥/.test(await depoisChip.innerText()) && /\b2\b/.test(await depoisChip.innerText()),
+    /feita/i.test((await depoisChip.getAttribute("aria-label")) ?? "") && /·\s*2\b/.test(await depoisChip.innerText()),
     ((await depoisChip.getAttribute("aria-label")) ?? "") + " | " + (await depoisChip.innerText()));
 
   await pg.getByRole("button", { name: /^Calendário$/i }).first().click();
