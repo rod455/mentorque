@@ -16,13 +16,25 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   de 04/10, meia hora ANTES de o commit existir, e o iPhone do dono reporta
   `3.0.0` às 07h13 de hoje, o mesmo minuto dos prints. O build 70 tem os itens
   1, 2, 3, 5, 6, 7, 8 e 9 da ficha; não tem o 4.
-- **O erro foi meu, e tem nome.** A nota das lojas (quarta frase: "O Biela
-  ganhou a própria aba"), a ficha da versão, o caderno de apostas ("no app,
-  com a 3.0") e a resposta ao dono em 05/10 afirmaram o conteúdo do binário
-  sem ler a árvore de que ele saiu. É a regra de 03/10 de novo: conclusão sem
-  perguntar ao instrumento que sabe, e o git sabia desde o primeiro minuto.
-  A nota publicada promete o que a 3.0 não entrega; isso só o dono resolve
-  (editar o texto das lojas, ou subir a 3.1 logo).
+- **O erro foi meu, e tem nome.** Dono, ao ler a causa: "mas você quem falou
+  que eu podia apertar porque já tinha feito todas as alterações". Ele tem
+  razão, e a sequência exata, pelo registro da conversa (hora de Brasília):
+  15h27, "pode disparar o build, tudo verde na árvore final (748fedf)"; o
+  Início novo não existia e não tinha sido pedido ainda. O dono apertou. 19h26,
+  o primeiro Android abre em 3.0.0. 19h29, dono: "não mudamos na web? o que
+  fizemos de cro"; 19h30, "atualiza lá para eu testar". 19h36, eu: "se você
+  disparar o Codemagic antes de eu publicar, a 3.0 sai sem isso; se disparar
+  depois, sai com". 19h56, commit 28f13e1. 19h58, eu, DE NOVO: "pode disparar
+  o build", como se o build não tivesse acontecido. Ele já tinha acontecido
+  quatro horas antes, e eu não perguntei. Em 05/10, "build 70 no ar", e eu
+  marquei a 3.0 publicada contando com a segunda árvore sem conferir de qual
+  o 70 saiu; o funil já mostrava Android em 3.0.0 desde antes do commit. Dois
+  "pode disparar" verdadeiros sobre árvores diferentes, e a loja levou a
+  primeira. A nota das lojas (quarta frase), a ficha da versão e o caderno de
+  apostas ("no app, com a 3.0") repetiram a afirmação. É a regra de 03/10 de
+  novo: conclusão sem perguntar ao instrumento que sabe. A nota publicada
+  promete o que a 3.0 não entrega; isso só o dono resolve (editar o texto das
+  lojas, ou subir a 3.1 logo).
 - **O que ficou de pé**: `novidades-3.0.md` ganhou a linha "Árvore do build:
   748fedf", o item 4 foi para "Ficou FORA do binário", cada item cita o seu
   commit, e a lista "o que este build NÃO conserta" parou de dizer que as
