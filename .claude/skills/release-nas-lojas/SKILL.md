@@ -41,6 +41,31 @@ foi publicada. A segunda pergunta existe porque em 03/09 os três concordavam em
 Ao publicar uma versão, acrescente o número à lista `JA_PUBLICADAS` no
 `scripts/verifica-versoes.mjs`.
 
+## A árvore do build se escreve na hora do botão, e é ela que diz o que viajou
+
+Regra de 06/10/2026, depois de a 3.0 sair das lojas sem o item principal da
+própria nota. O regime de release fechou em 748fedf às 18h07 UTC de 04/10 e o
+dono apertou o botão do Codemagic; o Início novo e a aba Biela entraram na
+`main` às 22h56 UTC, no commit 28f13e1. A nota das lojas, a ficha da versão e o
+caderno de apostas disseram que o binário tinha os dois, e ninguém perguntou ao
+git, que sabia desde o primeiro minuto (`git merge-base --is-ancestor 28f13e1
+748fedf` responde não). O dono descobriu abrindo a 3.0 no iPhone.
+
+O que passa a valer:
+
+1. **No momento do botão, escrever o commit da árvore** na ficha
+   (`**Árvore do build:** <sha>` em `docs/lojas/novidades-<versão>.md`) e, na
+   aprovação, em `ARVORE_DO_BUILD` no `scripts/verifica-versoes.mjs`. Tudo o
+   que entrar na `main` depois desse commit é da PRÓXIMA versão, por
+   definição, mesmo que a ficha já tenha sido escrita contando com ele.
+2. **Cada item do binário cita o seu commit** ("(dd/mm, commit <sha>)"), e a
+   `conferir:versoes` pergunta ao git se ele é ancestral da árvore. Item que
+   não é vai para a seção "Ficou FORA do binário", com o motivo.
+3. **Nenhuma frase sobre o que o binário contém sem reler a árvore.** Vale
+   para a nota das lojas, para a ficha das apostas ("no app, com a X") e para
+   a resposta ao dono. "Está na main" e "está no build" são duas afirmações,
+   com dois instrumentos: o git e a árvore.
+
 ## versionCode: a única fonte que vale
 
 O CI usa o contador do Codemagic e trata o `mentorqueVersionCode` do

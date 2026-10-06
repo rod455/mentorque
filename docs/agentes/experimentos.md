@@ -109,8 +109,12 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   ver como ficou"). Por decisão dele, abriu junto com `aba-biela`, que mede o
   mesmo degrau: a leitura das duas não separa uma da outra, e isso fica dito
   agora, não no veredito.
-- Início: 2026-10-04 na web; no app, com a 3.0 · Ler a partir de: 2026-10-18
-  (direcional) e 2026-11-01
+- Início: 2026-10-04 na web; NO APP SÓ COM A 3.1 (corrigido em 06/10: o build
+  70 da 3.0 saiu da árvore 748fedf, 18h07 UTC de 04/10, e este commit,
+  28f13e1, entrou às 22h56; o dono abriu a 3.0 no iPhone em 06/10 e viu o
+  Início antigo). Até a 3.1 publicar, quem está no app das lojas está em A, e
+  a leitura separa por `plataforma`: web mede B, android e ios medem A · Ler
+  a partir de: 2026-10-18 (direcional, só web) e 2026-11-01
 - Antes: 66 `perguntou_biela` em 30 dias (16 com palavras da pessoa); 7
   fechamentos na Home em 4 aparelhos no retrato de 04/10
 - Veredito: (aberto)
@@ -130,7 +134,10 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Métrica: `perguntou_biela` por ativo na semana; `consultou_sintoma` por
   ativo na semana como guarda · Duração: 4 semanas, direcional em 2
 - Aprovação: aprovada pelo dono em 2026-10-04, junto com `inicio-pergunta-unica`
-- Início: 2026-10-04 na web; no app, com a 3.0 · Ler a partir de: 2026-10-18
+- Início: 2026-10-04 na web; NO APP SÓ COM A 3.1 (mesma correção de 06/10 da
+  aposta acima: a 3.0 das lojas saiu sem o commit 28f13e1 e ainda mostra a
+  aba "Problemas"). Até a 3.1, android e ios medem A; a leitura separa por
+  `plataforma` · Ler a partir de: 2026-10-18 (direcional, só web)
 - Antes: 66 `perguntou_biela` e 178 `consultou_sintoma` (desde 13/09) no
   funil; não li o recorte semanal de `consultou_sintoma` antes de abrir
 - Veredito: (aberto)

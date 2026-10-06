@@ -174,7 +174,26 @@ const BUILD_PUBLICADO = {
   "3.0": 70,
 };
 
-import { readFileSync } from "node:fs";
+// A ÁRVORE DE CADA BUILD PUBLICADO (06/10/2026).
+//
+// POR QUE ESTE MAPA NASCEU. A 3.0 (build 70) saiu da árvore 748fedf às 18h07
+// UTC de 04/10. O Início novo e a aba Biela entraram na `main` às 22h56 UTC do
+// mesmo dia, no commit 28f13e1, e a nota das lojas, a ficha da versão e o
+// caderno de apostas disseram que o binário tinha os dois. O dono abriu a 3.0
+// no iPhone em 06/10 e viu a aba "Problemas". Ninguém releu a árvore do build
+// antes de escrever o que ele continha; o git sabia desde o primeiro minuto
+// (28f13e1 não é ancestral de 748fedf) e ninguém perguntou.
+//
+// Com o mapa, a ficha `docs/lojas/novidades-<versão>.md` declara a árvore e
+// cita o commit de cada item do binário, e a conferência pergunta ao git se
+// cada commit está dentro da árvore. A manutenção é escrever o commit AQUI e
+// na ficha na hora de apertar o botão do Codemagic, não depois.
+const ARVORE_DO_BUILD = {
+  "3.0": "748fedf",
+};
+
+import { readFileSync, existsSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 
 const raiz = new URL("..", import.meta.url);
 const ler = (p) => readFileSync(new URL(p, raiz), "utf8");
@@ -371,6 +390,82 @@ if (piso <= publicado) {
     console.error("FALHA  o binário do iPhone não declara português, e a App Store vai mostrar \"Idioma: EN\":");
     for (const p of problemas) console.error(`       ${p}`);
     process.exit(1);
+  }
+}
+
+// ── CADA ITEM DA FICHA DA ÚLTIMA PUBLICADA ESTÁ NA ÁRVORE DO BUILD? (06/10) ──
+//
+// Três perguntas, todas ao git, que é o único que sabe:
+//   1. a árvore da última publicada está em ARVORE_DO_BUILD e na ficha;
+//   2. todo `commit <sha>` citado nas seções "Vai no binário" da ficha é
+//      ancestral da árvore (senão a ficha promete o que a loja não entrega);
+//   3. todo `commit <sha>` citado em "Ficou FORA do binário" NÃO é ancestral
+//      (senão a ficha esconde o que a loja entregou).
+// O caso que isto existe para pegar está no comentário de ARVORE_DO_BUILD.
+{
+  const ficha = `docs/lojas/novidades-${ultimaPublicada}.md`;
+  const arvore = ARVORE_DO_BUILD[ultimaPublicada];
+  const caminhoFicha = new URL(ficha, raiz);
+  const temGit = existsSync(new URL(".git", raiz));
+  if (!arvore) {
+    console.error(`FALHA  não sei de que árvore a ${ultimaPublicada} foi gerada.`);
+    console.error("       Acrescente em ARVORE_DO_BUILD, neste arquivo, o commit que estava na main");
+    console.error("       na hora do botão do Codemagic. É o que faltou na 3.0 (ver o comentário lá).");
+    process.exit(1);
+  }
+  if (!existsSync(caminhoFicha)) {
+    console.error(`FALHA  a ficha ${ficha} não existe, e a ${ultimaPublicada} está publicada.`);
+    process.exit(1);
+  }
+  const texto = readFileSync(caminhoFicha, "utf8");
+  const mArvore = texto.match(/\*\*Árvore do build:\*\*\s*([0-9a-f]{7,40})/);
+  if (!mArvore) {
+    console.error(`FALHA  ${ficha} não declara "**Árvore do build:** <commit>".`);
+    process.exit(1);
+  }
+  if (!mArvore[1].startsWith(arvore) && !arvore.startsWith(mArvore[1])) {
+    console.error(`FALHA  ${ficha} diz árvore ${mArvore[1]}, e ARVORE_DO_BUILD diz ${arvore}.`);
+    process.exit(1);
+  }
+  if (!temGit) {
+    console.log(`Árvore do build da ${ultimaPublicada}: ${arvore} (sem .git aqui, não conferi os itens).`);
+  } else {
+    const ancestral = (sha) => {
+      try {
+        execFileSync("git", ["merge-base", "--is-ancestor", sha, arvore], { cwd: raiz, stdio: "ignore" });
+        return true;
+      } catch {
+        return false;
+      }
+    };
+    // As seções, pelo título: "### Vai no binário..." até a próxima "##", e
+    // "## Ficou FORA do binário" até a próxima "## ".
+    const secoes = (regexTitulo) => {
+      const fatias = [];
+      const re = new RegExp(`^(${regexTitulo}).*$`, "gm");
+      let m;
+      while ((m = re.exec(texto))) {
+        const inicio = m.index + m[0].length;
+        const prox = texto.slice(inicio).search(/^##(?!#)|^### /m);
+        fatias.push(texto.slice(inicio, prox === -1 ? undefined : inicio + prox));
+      }
+      return fatias.join("\n");
+    };
+    const commits = (trecho) => [...trecho.matchAll(/commit ([0-9a-f]{7,40})/g)].map((m) => m[1]);
+    const dentro = commits(secoes("### Vai no binário"));
+    const fora = commits(secoes("## Ficou FORA do binário"));
+    const problemas = [];
+    for (const sha of dentro) if (!ancestral(sha)) problemas.push(`${sha} está em "Vai no binário", e NÃO é ancestral de ${arvore}`);
+    for (const sha of fora) if (ancestral(sha)) problemas.push(`${sha} está em "Ficou FORA do binário", e É ancestral de ${arvore}`);
+    if (dentro.length === 0) problemas.push(`nenhum item de "Vai no binário" cita o commit (escreva "(dd/mm, commit <sha>)" em cada um)`);
+    if (problemas.length) {
+      console.error(`FALHA  a ficha ${ficha} e a árvore do build ${arvore} discordam:`);
+      for (const p of problemas) console.error(`       ${p}`);
+      console.error("       A ficha promete o que a loja não entrega (ou esconde o que entregou).");
+      console.error("       Foi assim que a 3.0 saiu sem o Início novo e com a nota dizendo que tinha.");
+      process.exit(1);
+    }
+    console.log(`Árvore do build da ${ultimaPublicada}: ${arvore}; ${dentro.length} commit(s) da ficha dentro dela, ${fora.length} declarado(s) fora.`);
   }
 }
 

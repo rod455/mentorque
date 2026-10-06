@@ -3,6 +3,41 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-06 (manhã) · Engenharia: a 3.0 das lojas saiu SEM o Início novo e sem a aba Biela, e a casa disse que tinha
+
+- Dono, com dois prints do iPhone às 07h13: "Não aconteceu nada do que você
+  disse. Tanto deslogado quanto logado, ainda temos a aba problemas e não
+  biela. o premium continua no mesmo lugar".
+- **A causa, provada em dois instrumentos e não deduzida.** Git: o regime de
+  release fechou em 748fedf (04/10, 18h07 UTC) e o dono apertou o botão do
+  Codemagic a partir dali; o commit do Início novo e da aba Biela, 28f13e1,
+  entrou às 22h56 UTC, e `git merge-base --is-ancestor` diz que ele NÃO está
+  em 748fedf. Funil: o primeiro Android em `3.0.0` abriu às 19h26 de Brasília
+  de 04/10, meia hora ANTES de o commit existir, e o iPhone do dono reporta
+  `3.0.0` às 07h13 de hoje, o mesmo minuto dos prints. O build 70 tem os itens
+  1, 2, 3, 5, 6, 7, 8 e 9 da ficha; não tem o 4.
+- **O erro foi meu, e tem nome.** A nota das lojas (quarta frase: "O Biela
+  ganhou a própria aba"), a ficha da versão, o caderno de apostas ("no app,
+  com a 3.0") e a resposta ao dono em 05/10 afirmaram o conteúdo do binário
+  sem ler a árvore de que ele saiu. É a regra de 03/10 de novo: conclusão sem
+  perguntar ao instrumento que sabe, e o git sabia desde o primeiro minuto.
+  A nota publicada promete o que a 3.0 não entrega; isso só o dono resolve
+  (editar o texto das lojas, ou subir a 3.1 logo).
+- **O que ficou de pé**: `novidades-3.0.md` ganhou a linha "Árvore do build:
+  748fedf", o item 4 foi para "Ficou FORA do binário", cada item cita o seu
+  commit, e a lista "o que este build NÃO conserta" parou de dizer que as
+  dívidas da 2.9 ficaram fora (elas entraram). `novidades-3.1.md` nasce com o
+  item como primeiro da lista e o roteiro de aparelho. As fichas de
+  `inicio-pergunta-unica` e `aba-biela` dizem que no app a B só chega com a
+  3.1, e que a leitura separa por `plataforma`.
+- **A conferência que teria pegado**: `conferir:versoes` ganhou
+  `ARVORE_DO_BUILD` e, para a última publicada, lê a ficha, exige a árvore
+  declarada, e pergunta ao git se cada `commit <sha>` de "Vai no binário" é
+  ancestral dela (e se cada um de "Ficou FORA" não é). Plantio: 28f13e1 de
+  volta em "Vai no binário" reprova; 748fedf em "Ficou FORA" reprova.
+- **O que NÃO fiz**: gerar a 3.1. Build é botão do dono. O repositório já
+  está em 3.1 com piso 71 desde 05/10, e a árvore de agora tem o item.
+
 ## 2026-10-06 · Engenharia: o veredito do Diretor aplicado no dia, e três instrumentos novos
 
 - Dono: "veja o que o diretor pontuou, dê feedbacks e vamos aplicar as boas

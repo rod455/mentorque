@@ -5,8 +5,19 @@ que entra aqui **já roda na web** pelo deploy da Vercel; o binário só importa
 para o app das lojas.
 
 **Onde a 3.0 está:** aprovada em 05/10 nas duas lojas, build 70 (aviso do dono;
-Android confirmado pelo funil com 29 aparelhos em 3.0.0; Apple se confere no
-retrato de 06/10).
+Android confirmado pelo funil com 29 aparelhos em 3.0.0; Apple READY_FOR_SALE
+no retrato de 06/10).
+
+**Árvore do build:** 748fedf (04/10, 18h07 UTC). É o commit em que o regime de
+release fechou e o dono apertou o botão do Codemagic. **O item 4 abaixo NÃO
+está neste binário**: o commit dele (28f13e1) entrou às 22h56 UTC, quase cinco
+horas depois, e ninguém releu a árvore do build antes de escrever que estava.
+Descoberto pelo dono em 06/10, abrindo a 3.0 no iPhone e vendo a aba
+"Problemas". A prova, em dois instrumentos: o git (28f13e1 não é ancestral de
+748fedf) e o funil (o primeiro Android em 3.0.0 abriu às 19h26 de Brasília de
+04/10, meia hora ANTES de o commit existir). O item foi para a seção "Ficou
+FORA do binário" e vai na 3.1 (`novidades-3.1.md`). A `conferir:versoes`
+passou a cobrar a árvore de cada build e que cada item citado esteja nela.
 
 **Onde a 2.9 está:** aprovada em 30/09 (Play antes, Apple no dia), build 69,
 nas duas lojas.
@@ -22,30 +33,23 @@ então também vão ao ar no push.
 
 ### Vai no binário, e a pessoa sente
 
-1. **Cadastrar o carro virou uma tela só** (02/10). O formulário curto venceu
+1. **Cadastrar o carro virou uma tela só** (02/10, commit 316a5e7). O formulário curto venceu
    o A/B que rodou desde 15/09 e vira o padrão para todo mundo: marca, modelo e
    ano, sem a segunda etapa. Quem chegava na tela longa desistia mais.
-2. **Dois depoimentos reais no onboarding e no paywall** (04/10). Os textos
+2. **Dois depoimentos reais no onboarding e no paywall** (04/10, commit 9683c22). Os textos
    eram inventados; agora são trechos literais de avaliações públicas da App
    Store, com o apelido de quem escreveu e "via App Store" (aminoru, 13/09;
    munizluiz, 04/09). Os dois primeiros do onboarding continuam.
 3. **Os números da página "Amado por motoristas" passam a ser medidos**
-   (04/10). Antes "4,8", "10.000+ diagnósticos" e "5.000+ motoristas", que
+   (04/10, commit 4e4f056). Antes "4,8", "10.000+ diagnósticos" e "5.000+ motoristas", que
    nenhum instrumento sustentava. Agora "5,0 nas avaliações das lojas" (12
    avaliações, todas 5 estrelas), "170+ diagnósticos" (178 consultas de
    sintoma no funil desde 13/09, quando o evento nasceu) e "250+ motoristas"
    (254 aparelhos Android ativos em 25/09, relatório do Play). Pisos, com a
    fonte no comentário do código.
-4. **O Início tem uma ação só, e a aba "Problemas" virou "Biela"** (04/10,
-   noite). A pergunta "O que está acontecendo com o seu carro?" é a porta para
-   todo mundo, com ou sem carro, com três atalhos (Barulho, Luz do painel,
-   Cheiro) que abrem o chat já preenchido. O carro é o segundo bloco,
-   "Registrar serviço" e "Aprender" são as secundárias, o Premium desceu para
-   o fim da tela e a grade de ações rápidas saiu. Na barra de baixo, a aba
-   "Problemas" passou a chamar "Biela" e abre o chat; os sintomas continuam
-   inteiros, a um toque dentro do chat e nos problemas comuns do Início.
-   Apostas `inicio-pergunta-unica` e `aba-biela` do caderno.
-5. **O iPhone passa a se declarar em português** (04/10). A página pública da
+4. (Era o Início novo e a aba Biela. NÃO VIAJOU neste build; ver "Ficou FORA
+   do binário", abaixo.)
+5. **O iPhone passa a se declarar em português** (04/10, commit 5e1f883). A página pública da
    App Store dizia "Idioma: EN, Inglês" porque o binário só declarava `en`
    (`Info.plist` e `knownRegions`); a localização principal da ficha já era
    Português (Brasil). Agora `pt-BR` e `en`. O sinal é a página dizer "PT"
@@ -53,14 +57,14 @@ então também vão ao ar no push.
 
 ### Vai no binário e ninguém vê (medição e robustez)
 
-6. **A compra pela loja sai com identidade** (02/10). O `initPurchases` do
+6. **A compra pela loja sai com identidade** (02/10, commit 98f00d4). O `initPurchases` do
    onboarding passava `null`; a folha da Apple abria com o id anônimo do
    RevenueCat mesmo com a pessoa logada, e o webhook perdia a venda com um 200.
    Agora a compra leva o `appUserID`, e identidade inútil vira linha em
    `app_erros` com a chave de busca. O caso de 25/09 (uma assinatura ativa no
    RevenueCat e nenhuma no banco) é o que isto existe para não repetir.
 7. **A subida do SDK da AppsFlyer tenta três vezes e diz por que falhou**
-   (03/10). Na 2.7.0, 24% dos aparelhos Android nunca subiam o SDK e o funil
+   (03/10, commit 73d9447). Na 2.7.0, 24% dos aparelhos Android nunca subiam o SDK e o funil
    gravava só "erro". Agora são três tentativas com espera crescente e, se
    todas falharem, o desfecho vai com o motivo (`erro:<slug>`), uma linha por
    aparelho. Isto NÃO é cura: é a testemunha passando a dizer o que viu. A
@@ -82,8 +86,9 @@ então também vão ao ar no push.
 ## As duas dívidas da 2.9 entraram, na noite do build (04/10)
 
 Eram as duas que a 2.9 deixou para trás de propósito. O dono mandou: "vamos
-colocar uai". Entraram como itens 8 e 9 do binário, cada um com a sua
-conferência plantada e mordendo (`conferir:biela` e `conferir:alarme`).
+colocar uai". Entraram como itens 8 e 9 do binário (commit 748fedf, que é a
+própria árvore do build), cada um com a sua conferência plantada e mordendo
+(`conferir:biela` e `conferir:alarme`).
 
 8. **O 👎 grava no toque.** Até a 2.9 a tela só mandava o voto negativo junto
    com o motivo (`components/app/screens/Biela.tsx`), e quem tocava e fechava
@@ -114,6 +119,12 @@ O Biela ganhou a própria aba: descreva o barulho, a luz ou o cheiro e ele respo
 
 E a página de boas-vindas agora mostra o que as pessoas escrevem de verdade nas lojas sobre o app.
 ```
+
+**A quarta frase da nota é uma promessa que a 3.0 não cumpre** (06/10). "O
+Biela ganhou a própria aba" descreve o item que ficou fora do binário. A nota
+já está publicada nas duas lojas; o conserto é a 3.1 sair com ele dentro, ou o
+dono editar o texto "O que há de novo" nas lojas até lá (decisão dele: texto
+de loja não muda sem o dono).
 
 **O que ficou DE FORA da nota, de propósito:** a medição da AppsFlyer, a
 identidade da compra (a pessoa sente o ganho, não o mecanismo; a frase da nota
@@ -161,23 +172,37 @@ WebView do aparelho.**
    ter uma linha `down` com `motivo` nulo daquele aparelho. Depois, numa
    segunda resposta, tocar 👎 e escolher "incompleta": a linha é UMA, com o
    motivo preenchido, não duas.
-7. **O Início novo e a aba Biela.** Com carro cadastrado, o Início abre com a
-   pergunta e os três atalhos; tocar em "Luz do painel" abre o chat com a
-   frase já escrita. A barra de baixo mostra "Biela" no lugar de "Problemas",
-   e dentro do chat o atalho "Ver sintomas comuns" abre a tela de sintomas
-   de sempre. Nada pode estar cortado no herói num celular estreito.
+7. **O Início novo e a aba Biela.** NÃO SE APLICA À 3.0: o passo foi escrito
+   para um item que não viajou. Foi assim que o dono descobriu o buraco, e é
+   o passo 1 do roteiro da 3.1.
 
 ## O que este build NÃO conserta, e não pode ser dito como se consertasse
 
 1. **A falha do SDK da AppsFlyer no Android.** O build faz a falha dizer o
    motivo; não a elimina. A frase honesta continua "sem sinal ainda" até a
    primeira semana de `atribuicao` da 3.0 no funil.
-2. **As duas dívidas da 2.9** continuam: desistência de login gravada como
-   erro, e o voto negativo do Biela sem rastro quando a pessoa não escolhe
-   motivo. Nenhuma das duas entrou nesta versão.
-3. **O vínculo Google Ads e AppsFlyer** foi feito nos dois consoles em 04/10,
+2. **O vínculo Google Ads e AppsFlyer** foi feito nos dois consoles em 04/10,
    mas é de painel, não de binário: a 3.0 não tem nada a ver com ele
    aparecer ou não.
+3. (As duas dívidas da 2.9 ENTRARAM, itens 8 e 9: esta lista dizia o
+   contrário até 06/10, porque foi escrita antes do "vamos colocar uai" e
+   ninguém a releu.)
+
+## Ficou FORA do binário (descoberto em 06/10)
+
+4. **O Início tem uma ação só, e a aba "Problemas" virou "Biela"** (04/10,
+   noite, commit 28f13e1). A pergunta "O que está acontecendo com o seu
+   carro?" é a porta para todo mundo, com ou sem carro, com três atalhos
+   (Barulho, Luz do painel, Cheiro) que abrem o chat já preenchido. O carro é
+   o segundo bloco, "Registrar serviço" e "Aprender" são as secundárias, o
+   Premium desceu para o fim da tela e a grade de ações rápidas saiu. Na
+   barra de baixo, a aba "Problemas" passou a chamar "Biela" e abre o chat.
+   Apostas `inicio-pergunta-unica` e `aba-biela` do caderno.
+
+   **Por que ficou fora:** o build 70 saiu de 748fedf (18h07 UTC) e este
+   commit entrou às 22h56 UTC do mesmo dia. Está na web desde 04/10 e vai ao
+   app na 3.1. A ficha das duas apostas foi corrigida: até a 3.1, android e
+   ios medem A.
 
 ## Antes de promover a produção
 
