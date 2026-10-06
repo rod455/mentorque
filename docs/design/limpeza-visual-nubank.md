@@ -138,3 +138,85 @@ junto com a leitura direcional de 18/10; fatia 2 depois do veredito.
 Cada fatia tem foto antes e depois (`scripts/navegador/` já sabe tirar), e a
 suíte `telas` ganha uma linha que conta emojis e fontes na tela: zero emoji
 no Início é conferência que morde.
+
+## A proposta "área logada com a lógica do Nubank" (06/10), lida contra o código
+
+O dono mandou um segundo documento, da mesma fonte do spec de 04/10. Ele
+chega às mesmas seis regras por outro caminho (os dois redesigns públicos do
+Nubank, 2021 e 2022) e vai mais longe em três pontos: a Home em oito blocos
+com ordem fixa, um portão de Premium só, e pendência como linha em vez de
+folha modal. O que concordo, o que discordo e o que conferi:
+
+**Concordo, e entra no corte da 3.1:**
+
+- A Home em oito blocos (seção 3), com a ordem fixa decidida por dado e sem
+  carrossel. É a versão mais radical da minha fatia 2 e é melhor: "Para você"
+  vira duas linhas no fim ("Descubra mais", P7), fixados e salvos vão para
+  Aprender, Memórias e fase vão para o Perfil. Dois ajustes meus: "Problemas
+  comuns" não sai da Home, vira UMA linha com seta (P4) como último bloco,
+  porque `consultou_sintoma` é a guarda da aposta `aba-biela`, e o convite de
+  aviso continua como está (virar pendência é a aposta 10, com teste).
+- A linha de atalhos (P3): Abastecer, Serviço, Revisões, Orçamento (a tela de
+  orçamento por foto existe: rota `orcamento`). Antes de ela entrar, nasce o
+  evento `clicou_atalho` com o nome do atalho; sem ele a linha não tem
+  leitura. `registrou_servico` e `aceitou_convite_aviso` já existem.
+- Pendência como linha (P5): a mais próxima, uma só, no lugar da folha
+  mensal de km. A folha de km sai; o convite de aviso fica como está.
+- O hub do carro com a gramática de tela de produto (seção 4): número grande,
+  atalhos, pendências numa linha com contagem, produtos em linhas. Entra como
+  conteúdo da aba Carros de hoje, sem mexer na barra.
+- Calendário (seção 5): número grande, atalhos, chips, linha do tempo; o
+  aviso do limite do grátis aos 18 registros em vez da surpresa no 21.
+- Aprender (seção 6) sem o card do Biela e com trilhas em linha. O quiz fica
+  no cabeçalho por enquanto (ver "discordo").
+- Dois dos seis "defeitos" da seção 9 são reais e entram: "o Biela" e "a
+  Biela" alternam em `content.ts` (24 contra 6; fica "o Biela", que é o que a
+  Home e a nota das lojas dizem), e o onboarding ainda mostra dois
+  depoimentos inventados ("Marina S." e "Carlos E.") ao lado dos dois reais,
+  contra a regra de 04/10. Os dois saem e entram dois reais de
+  `docs/lojas/respostas.md`.
+
+**Discordo, ou fica para depois:**
+
+- Abas de cinco para quatro e o "?" flutuante fora (seção 2): navegação é a
+  aposta 11 do próprio documento, e o "?" foi pedido do dono em 09/09. Na
+  3.1 o "?" ganha ícone de conversa e o chip do quiz ganha rótulo; o resto
+  espera.
+- Um portão de Premium só, `LinhaPremium` (seção 7): é a melhor ideia do
+  documento e a de maior superfície (seis telas e o componente). Mexe no
+  degrau `viu_paywall` por contexto, que `login-sabe-que-veio-comprar` lê.
+  É a aposta 9, logo depois da 3.1, sozinha, com `viu_paywall` por `ctx`
+  lido antes e depois.
+- Tirar o quiz do cabeçalho (seção 6, aposta 12): o quiz é a máquina de três
+  manhãs; sai do cabeçalho só com número.
+- "neista mês" em `Biela.tsx` (seção 9, item 1): não existe no código de
+  hoje. Moraes455 (item 4) já está fora da conta em `respostas.md`; Triplyze
+  (item 5) e as doze sem resposta (item 6) já estão lá como pedido ao dono.
+
+**O que o documento diz e eu conferi:** a rota de orçamento por foto existe;
+os eventos `registrou_servico` e `aceitou_convite_aviso` existem em
+`lib/funilCorreto.ts`; `clicou_atalho` e `ligou_avisos` não existem (o
+segundo é coberto por `aceitou_convite_aviso`); os sete fechamentos na Home
+são da migalha própria (`app_erros`), não do Play, que suprime vitals.
+
+## O corte da 3.1, fechado
+
+1. Sistema: card vira seção com fio, um molde de número, uma fonte de título
+   (serifa só na pergunta), emojis viram ícones, uma cor de ação, "?" com
+   ícone de conversa e quiz com rótulo.
+2. Home em oito blocos: cabeçalho, aviso de versão, pergunta com chips,
+   atalhos (com `clicou_atalho`), linha do carro, uma pendência, gastos do
+   mês, "Descubra mais" com duas aulas, e "Problemas comuns" como linha.
+3. Aba Carros: hub com número grande, atalhos, pendências em linha, produtos
+   em linhas.
+4. Calendário: número grande, atalhos, chips, linha do tempo, aviso aos 18.
+5. Aprender: sem o card do Biela, trilhas em linha, salvos dentro.
+6. Texto: "o Biela" em tudo; dois depoimentos inventados saem do onboarding.
+
+Fora da 3.1, cada uma como aposta própria: `LinhaPremium` (9), convite de
+aviso como pendência (10), abas (11), quiz fora do cabeçalho (12).
+
+Régua: uma tela por commit com a suíte da área e foto antes e depois; as
+fichas de `inicio-pergunta-unica` e `aba-biela` recebem no dia a nota de que
+a versão B mudou; a bateria completa e o build local antes do botão; a árvore
+escrita na ficha da 3.1 na hora do botão.
