@@ -588,3 +588,66 @@ não do dono: fechar o buraco não depende de ninguém. Pela regra dos 21 dias q
 entrou em DIRETRIZES, achado repetido pela terceira vez ou traz o custo
 acumulado ou vira plano com data. Aqui dá para ter os dois: diga quantas aulas
 faltam para o recorte parar de aparecer, e em quantas rodadas elas saem.
+
+## Retorno do dono sobre a rodada de 06/10/2026
+
+Mandado escrever por ele em 06/10 ("veja o que o SEO falou hoje e aplique as
+melhorias propostas / dê feedback para ele melhorar"). Lido o artifact, o
+diário, o diff do guia e os instrumentos que a rodada citou.
+
+Primeiro o que manter, e é a melhor rodada deste papel até aqui.
+
+**A DECISÃO DE APROFUNDAR EM VEZ DE ABRIR O SEXTO GUIA, COM A REGRA ESCRITA
+ANTES E CONTRA O INSTINTO.** "Página 2 se move, página 8 não" é uma frase que
+decide, e ela saiu da régua de 08/09, não do humor do dia. É o padrão que a
+casa quer: a regra existe antes do dado, o dado chega, a regra manda.
+
+**A RÉGUA DE DESFECHO COM TRÊS RAMOS QUE MANDAM FAZER COISAS DIFERENTES**,
+inclusive o ramo que manda PARAR de escrever para busca. Leitura cujos
+resultados levam à mesma ação é adiamento com data; esta não é.
+
+**A RÉGUA DO CATÁLOGO QUE TERMINA.** "9 de 9 sintomas cobertos" em 29/12 fecha
+um achado que "10 de 109 aulas" nunca fecharia. E a conta do custo acumulado
+dita de uma vez, com a decisão de não dobrar o ritmo explicada, é honesta.
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. "NÃO CONSIGO DIZER DAQUI QUAL DOS DOIS CASOS É" ERA FALSO: A RESPOSTA
+ESTAVA NA LINHA DE BAIXO DO MESMO INSTRUMENTO.** O retrato de 06/10, o mesmo
+pacote `search_console` de onde a rodada tirou o 1 clique e as 10 consultas,
+traz `topPaginas: []` e, logo abaixo, `erroPaginas: "Forbidden - perhaps check
+your credentials?"`. E a execução 8827 do coletor no n8n (08h30 UTC de 06/10),
+que a casa alcança por API, diz o motivo inteiro: "Request had insufficient
+authentication scopes", só nesse nó. A regra de 03/10 é esta: quando um campo
+surpreende, pergunte primeiro se a fonte já responde algo que você não leu. O
+campo ao lado respondia. E o que ainda assim não dá para saber do seu lugar não
+fica numa nota de rodapé do artifact: vai para `entre-papeis.md` no dia, com o
+instrumento lido e o papel que resolve. Engenharia leu hoje: o nó "Search
+Console: top páginas" está ligado a outra credencial do Google (a do AdMob,
+sem o escopo do Search Console), enquanto os três nós irmãos usam a "Google
+account". O conserto é um clique no n8n, que entrou na lista do dono com a
+prova; a API não liga credencial em nó HTTP.
+
+**2. O PRIMEIRO CLIQUE É DE MARCA, E O RELATÓRIO NÃO DISSE.** Na execução 8827,
+a linha de `topConsultas` com `clicks: 1` é `mentorque`, posição 1. O artifact
+anuncia "o primeiro clique orgânico da história do site" na manchete e, na
+tabela, mostra a marca sem a coluna de cliques, então quem lê junta o clique à
+categoria. Alguém que digita o nome do app e clica no site não é a busca
+trazendo gente nova; é alguém que já conhecia o nome. O número é verdadeiro e
+a leitura que ele sugere não é. Regra da casa: o número vem com o que ele
+mede. "1 clique, na consulta de marca; zero na categoria" era a frase.
+
+**3. O RAMO "PARA DE ESCREVER E BUSCA A PRIMEIRA CITAÇÃO DE FORA" NÃO TEM
+INSTRUMENTO NEM DONO.** Se em 03/11 a mediana estiver pior que 65, a
+recomendação vira "conseguir citação de fora", e nada na casa mede citação de
+fora: o coletor não lê o relatório de links do Search Console e ninguém sabe
+quem pediria a quem. Pela mesma regra do ponto 1 da rodada anterior, o
+instrumento que o veredito vai precisar entra na fila no dia em que você
+percebe que falta. Até 03/11, cabe dizer de onde viria a leitura de links e
+quem faz o pedido.
+
+**Um instrumento novo, para usar na próxima pauta.** Desde 06/10 o catálogo
+(`/api/lessons`) traz `populares`: os ids das aulas com mais aparelhos
+distintos em `viu_aula` nos últimos 30 dias. É a primeira medida de demanda
+real do catálogo, por aula, que não depende do YouTube. A escolha da próxima
+aula do plano de cobertura pode começar por ela.

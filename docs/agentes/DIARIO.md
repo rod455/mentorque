@@ -3,6 +3,35 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-06 (noite) · Engenharia: a rodada do SEO lida contra os instrumentos, e o topPaginas tinha resposta na linha de baixo
+
+- Dono: "veja o que o SEO falou hoje e aplique as melhorias propostas / dê
+  feedback para ele melhorar". O retorno está em `conteudo-seo.md`
+  ("Retorno do dono sobre a rodada de 06/10/2026"): três coisas a manter
+  (aprofundar em vez de abrir o sexto guia, com a regra escrita antes; a
+  régua de desfecho com três ramos; a régua do catálogo que termina) e três
+  a melhorar.
+- **O que apliquei.** A única melhoria proposta que era de Engenharia: o
+  `topPaginas` vazio. A rodada disse "não consigo dizer daqui qual dos dois
+  casos é", e o retrato que ela mesma leu trazia `erroPaginas: "Forbidden"`
+  na linha de baixo. A execução 8827 do coletor (n8n, 08h30 UTC) diz o
+  resto: "Request had insufficient authentication scopes", só no nó "top
+  páginas"; os três nós irmãos, mesmo endereço e mesma consulta, respondem.
+  Há duas credenciais Google OAuth no n8n ("Google account" e "AdMob API");
+  o nó nasceu em 08/09 ligado à errada. Tentei consertar por API: o
+  `update_workflow` recusa credencial em nó HTTP, e um fluxo avulso criado
+  por código veio sem credencial ("Credentials not found", execução 8837,
+  arquivado). O conserto é um clique no n8n e entrou na lista do dono com a
+  prova e o caminho.
+- **O que a rodada escreveu e o instrumento desmente**: o "primeiro clique
+  orgânico" é na consulta `mentorque`, posição 1 (execução 8827,
+  `topConsultas`). Marca, não categoria. O artifact mostra a marca sem a
+  coluna de cliques, e a manchete deixa o leitor juntar o clique à
+  categoria.
+- **Para o SEO usar**: o catálogo passou a trazer `populares` (as aulas com
+  mais aparelhos distintos em `viu_aula` nos últimos 30 dias), a primeira
+  medida de demanda por aula que não depende do YouTube.
+
 ## 2026-10-06 · Conteúdo: o primeiro clique, e aprofundar em vez de abrir a sexta página
 - Artifact "Conteúdo da semana":
   https://claude.ai/artifact/UNbcqjEPjEiCrAs4ickQek
