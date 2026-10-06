@@ -3,6 +3,74 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-06 · Conteúdo: o primeiro clique, e aprofundar em vez de abrir a sexta página
+- Artifact "Conteúdo da semana":
+  https://claude.ai/artifact/UNbcqjEPjEiCrAs4ickQek
+- É a releitura que eu marquei em 08/09 para esta data. Instrumento: pacote
+  `search_console` do retrato de 06/10 (coleta das 09h00 UTC), janela de 28
+  dias. **1 CLIQUE**, o primeiro da história do site, contra 0 nas cinco
+  leituras anteriores. 38 impressões, contra 37 em 29/09.
+- Das 10 consultas listadas, 9 são de categoria somando 15 impressões e 1 é
+  de marca com 2: pela primeira vez a categoria domina. Posição de
+  categoria: melhor 19 (`luz injeção vermelha`), MEDIANA 71, pior 89.
+- ENTREGA DA RODADA (formato a, rodada de guia), e ela NÃO é guia novo: o
+  aprofundamento do `/luz-da-injecao-acesa`, que é a página da consulta em
+  melhor posição de toda a conta. Dezenove é página 2, a mediana 71 é
+  página 8: cinco guias existem e quatro estão na página 6 ou pior, então o
+  sexto nasceria no mesmo lugar. Página 2 se move, página 8 não.
+- O que entrou no guia: um bloco `cor` que ABRE a página e responde de
+  frente a pergunta que a consulta faz, porque ela caía num texto que só
+  falava de vermelho no quarto bloco, de passagem. Em praticamente todo
+  carro a luz da injeção é amarela; se o que a pessoa vê é vermelho,
+  provavelmente é outra luz, e isso muda a urgência inteira. As três
+  vermelhas que mais se confundem com ela estão nomeadas pelo DESENHO e não
+  pelo nome técnico, e a de bateria linka para o guia de bateria. Entrou
+  também a grafia `luz de motor acesa` sem o "do", que aparece nas consultas
+  e não existia na página, mais um FAQ para a cor.
+- Conferido, não estimado: título 63 caracteres, descrição 154, cinco
+  âncoras únicas, zero travessão, `conferir:guias` e `npm run conferir`
+  passando inteiros. `atualizadoEm` subiu para 06/10, que é o que o sitemap
+  carrega para dizer que a página mudou.
+- OS TRÊS PONTOS DO RETORNO DO DONO (escrito por ele em 03/10) estão
+  fechados nesta rodada:
+- **1, o instrumento.** Ele está certo: duas rodadas concluíram sobre o
+  canal só com VIEWS, que é a única coisa que o coletor traz e a que mais
+  compõe com a própria distribuição. Retenção e CTR entraram na lista de
+  ações do dono com o caminho de tela e escopo fechado (os dois números dos
+  cinco vídeos do lote de 19/09, uns cinco minutos). Precisei acrescentar
+  `youtube` aos destinos válidos da lista, que não tinha o Studio.
+- **2, a régua de desfecho escrita ANTES de reler.** Próxima leitura em
+  03/11, métrica é a MEDIANA da posição de categoria (hoje 71) e não o
+  total de impressões, porque impressão sobe só por existir mais página.
+  Três ramos com ações diferentes: melhor que 40 volta a abrir guia novo;
+  entre 40 e 65 continua aprofundando; pior que 65 PARA de escrever para
+  busca, a conclusão passa a ser autoridade de domínio e o slot de guia
+  vira artigo do catálogo. Está no manual.
+- **3, o buraco do catálogo, com conta e data.** A régua antiga ("10 de 109
+  aulas") não fechava nunca, e esse era o defeito: motor tem 54 aulas porque
+  motor tem mais o que ensinar. A régua que substitui e TERMINA: todo
+  sintoma que o app pergunta nesses três sistemas tem aula que responde ele
+  de frente. São nove sintomas e faltam QUATRO: direção pesada (zero
+  cobertura hoje), pneu perdendo pressão, desgaste irregular do pneu e puxa
+  para um lado ao frear. Uma por rodada de artigo: 27/10, 17/11, 08/12 e
+  29/12. Nessa data o achado para de aparecer, porque passa a ser "9 de 9
+  sintomas cobertos".
+- Custo acumulado, dito de uma vez: 29 dias desde que o recorte apareceu, e
+  as duas únicas aulas que entraram nesses sistemas no período foram as duas
+  que este papel escreveu. Se três meses for lento, a decisão é deste papel:
+  duas aulas no slot (c) fecham em 17/11, e não fiz agora porque a regra da
+  casa é UMA entrega por rodada.
+- NÃO DEU PARA SABER, e está declarado: qual página recebeu cada impressão.
+  O campo `topPaginas` do coletor passou a EXISTIR e vem vazio em 06/10, o
+  que não é a mesma coisa que não existir, e não consigo dizer daqui qual
+  dos dois casos é.
+- Autoavaliação: oito critérios cumpridos, e o 6 (guia novo no registro e
+  no sitemap) não se aplica DE PROPÓSITO, porque a decisão da rodada foi não
+  abrir página nova.
+- Próximas: (1) pauta, começando por perguntar se as duas escritas andaram,
+  compromisso de 29/09 que o dono endossou; (2) 27/10, artigo de direção
+  pesada, primeira das quatro do plano de cobertura.
+
 ## 2026-10-06 (manhã) · Engenharia: a 3.0 das lojas saiu SEM o Início novo e sem a aba Biela, e a casa disse que tinha
 
 - Dono, com dois prints do iPhone às 07h13: "Não aconteceu nada do que você

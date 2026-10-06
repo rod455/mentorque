@@ -12,20 +12,43 @@ import type { Guia } from "./tipos";
 // As causas conversam com o sintoma `cel` de lib/app/conteudo/sintomas.ts.
 // Página e app precisam dizer a mesma coisa, senão quem baixa depois de ler
 // aqui encontra outro conteúdo e perde a confiança nos dois.
+//
+// APROFUNDADO EM 06/10/2026, E A ESCOLHA FOI POR DADO. Na releitura marcada
+// desta data, das dez consultas que o Search Console lista, a que está em
+// MELHOR POSIÇÃO de toda a conta é `luz injeção vermelha`, na 19, enquanto a
+// mediana de categoria está na 71. Dezenove é página 2 e setenta e um é página
+// oito: a única consulta ao alcance de um clique é esta, e ela caía numa página
+// que só falava de vermelho no quarto bloco, de passagem.
+//
+// O bloco `cor` nasceu daí, e responde de frente a pergunta que a consulta faz:
+// a luz da injeção é vermelha? Quase sempre não, e se o que a pessoa está vendo
+// é vermelho, provavelmente não é esta luz, o que muda a urgência por completo.
+// Entraram também as duas grafias que aparecem nas consultas ("luz de motor
+// acesa" sem o "do") e um FAQ para a cor.
+//
+// A decisão de aprofundar em vez de abrir o sexto guia está no artifact de
+// 06/10: cinco guias existem e quatro deles estão entre a página 6 e a 9, então
+// o sexto nasceria no mesmo lugar. Página 2 se move; página 8 não.
 
 export const guia: Guia = {
   caminho: "/luz-da-injecao-acesa",
   publicadoEm: "2026-09-04",
-  atualizadoEm: "2026-09-08",
+  atualizadoEm: "2026-10-06",
   rotulo: "Guia de diagnóstico",
   h1: "Luz da injeção acesa: o que significa e o que fazer agora",
   tituloSeo: "Luz da injeção acesa: o que significa e o que fazer | Mentorque",
   descricaoSeo:
-    "Luz do motor acesa? Entenda a diferença entre a luz fixa e a piscando, o que costuma estar por trás e quando dá para seguir viagem com segurança.",
+    "Luz do motor acesa? Entenda a diferença entre a luz fixa e a piscando, por que ela é amarela e não vermelha, e quando dá para seguir viagem com segurança.",
   palavras: [
     "luz da injeção acesa",
     "luz do motor acesa",
+    // Grafia sem o "do", que aparece nas consultas reais do Search Console
+    // (06/10/2026) e não estava em lugar nenhum da página.
+    "luz de motor acesa",
     "luz da injeção piscando",
+    // A consulta em MELHOR posição de toda a conta em 06/10 (19), e a página
+    // não respondia a pergunta que ela faz. Ver o bloco `cor`.
+    "luz injeção vermelha",
     "check engine aceso",
     "luz amarela do motor",
   ],
@@ -33,11 +56,33 @@ export const guia: Guia = {
 
   abertura: [
     "A luz da injeção, também chamada de luz do motor ou check engine, é a mais mal compreendida do painel. Ela não diz qual é o problema: ela diz que a central do carro guardou um código de erro. Pode ser uma tampa de combustível mal fechada e pode ser falha de ignição destruindo o catalisador, e o desenho no painel é exatamente o mesmo.",
-    "Existe, porém, uma diferença que o próprio carro faz questão de mostrar e que quase nenhum texto explica: a luz FIXA e a luz PISCANDO não significam a mesma coisa. Entender esse detalhe já separa o caso de marcar oficina na semana do caso de parar hoje.",
+    "Antes de qualquer coisa, repare em duas coisas: a COR dela e se ela está fixa ou PISCANDO. A cor diz se é mesmo a luz da injeção, porque em praticamente todo carro ela é amarela, e piscar contra fixa separa o caso de marcar oficina na semana do caso de parar hoje. Os dois detalhes são de graça e nenhum texto costuma explicar.",
   ],
   indiceTitulo: "Como a sua luz está se comportando?",
 
   blocos: [
+    {
+      id: "cor",
+      quando: "Ela é amarela ou vermelha?",
+      som: "Você olhou o painel e viu uma luz acesa, e a primeira dúvida é se aquilo é grave.",
+      causas: [
+        "Amarela ou laranja, com o desenho de um motor visto de lado: esta é a luz da injeção. Amarelo, no padrão do painel, significa avisar, não parar.",
+        "Vermelha: em praticamente todo carro a luz da injeção NÃO é vermelha, então o que você está vendo provavelmente é outra luz. As vermelhas mais confundidas com ela são óleo (desenho de uma lata gotejando), temperatura (um termômetro dentro de ondas) e bateria, e esta última aparece acesa andando quando [[/bateria-do-carro-descarregando#luz-acesa-andando|o alternador não está recarregando]].",
+        "Vermelha com um desenho de motor mesmo assim: alguns modelos usam vermelho para falha grave de motor ou de sistema de emissões. Nesses casos a instrução do próprio manual é tratar como parada, não como aviso.",
+        "Amarela e vermelha acesas ao mesmo tempo: quem manda é a vermelha, e o detalhe está mais abaixo, no bloco sobre ela ter acendido junto com outra luz.",
+      ],
+      observar: [
+        "A luz é amarela, laranja ou vermelha? Vale olhar com o carro na sombra, que à luz do sol amarelo e vermelho se confundem no painel.",
+        "O desenho é um motor visto de lado, ou é uma lata de óleo, um termômetro ou uma bateria?",
+        "O ponteiro de temperatura está no meio, ou passou dele?",
+      ],
+      urgencia: {
+        rotulo: "Atenção",
+        tom: "media",
+        texto:
+          "Essa checagem de dez segundos muda a decisão inteira: amarelo avisa e permite dirigir até a oficina na maioria dos casos, vermelho manda parar em lugar seguro. Se você não tem certeza da cor, trate como vermelho até conferir.",
+      },
+    },
     {
       id: "piscando",
       quando: "A luz está PISCANDO",
@@ -175,6 +220,10 @@ export const guia: Guia = {
   },
 
   faq: [
+    {
+      p: "A luz da injeção é vermelha ou amarela?",
+      r: "Em praticamente todo carro ela é amarela ou laranja, com o desenho de um motor visto de lado, porque no padrão do painel amarelo quer dizer avisar e vermelho quer dizer parar. Se o que você está vendo é vermelho, na maioria das vezes não é a luz da injeção: as mais confundidas com ela são a de óleo, a de temperatura e a de bateria, e as três são mais urgentes. Alguns modelos usam vermelho para falha grave de motor, e nesses casos o próprio manual manda tratar como parada. Na dúvida sobre a cor, trate como vermelho até conferir com o carro na sombra.",
+    },
     {
       p: "Posso dirigir com a luz da injeção acesa?",
       r: "Com a luz FIXA, sem perda de força, sem barulho novo e sem outra luz acesa, normalmente dá para rodar até marcar a oficina. Com a luz PISCANDO, não: piscar é a convenção usada para falha de ignição acontecendo agora, e continuar exigindo do motor costuma danificar o catalisador. Na dúvida entre as duas, trate como o caso mais sério.",

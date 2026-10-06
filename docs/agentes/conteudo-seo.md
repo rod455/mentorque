@@ -23,6 +23,38 @@ páginas de busca do site.
 4. Artifact "Conteúdo da semana" com a entrega e as duas próximas sugeridas,
    DIARIO, commit/push.
 
+## A aposta da busca: a régua de desfecho, escrita antes de reler
+
+Escrita em 06/10/2026 porque o dono cobrou, com razão: "leitura cujos dois
+resultados levam à mesma ação não é ponto de decisão, é adiamento com data". A
+régua abaixo tem número e cada ramo manda fazer coisa diferente.
+
+**O estado de hoje, 06/10**, Search Console, janela de 28 dias: **1 clique** (o
+primeiro da história do site), 38 impressões, 10 consultas listadas. Delas, 9
+são de categoria somando 15 impressões e 1 é de marca com 2. Posição de
+categoria: melhor 19, **mediana 71**, pior 89. Cinco guias no ar, o mais antigo
+de 04/09.
+
+**PRÓXIMA LEITURA: 03/11/2026** (quatro semanas). A métrica é a MEDIANA da
+posição de categoria, não o total de impressões, porque impressão sobe só por
+existir mais página e mediana não.
+
+| se em 03/11 a mediana de categoria estiver | então |
+|---|---|
+| **melhor que 40** (metade das consultas na página 4 ou acima) | o domínio está ganhando força: volta a abrir guia novo, um por rodada, pelo sintoma sem guia de maior demanda |
+| **entre 40 e 65** | continua o aprofundamento, uma página por rodada, sempre a de melhor posição, e nenhuma página nova |
+| **pior que 65**, com cinco guias e dois meses no ar | PARA de escrever para busca. A conclusão passa a ser que o limite é autoridade de domínio e não quantidade de página, e a recomendação do papel muda para conseguir a primeira citação de fora. O slot de guia do rodízio vira artigo do catálogo até isso mudar |
+
+**Por que a mediana e não o clique.** Um clique em 28 dias não distingue sorte
+de tendência, e dois meses de dado não dão base para falar de taxa. A mediana
+move junto com a força do domínio e não com o número de páginas, que é
+exatamente a variável que este papel controla e por isso não pode ser a régua.
+
+**O que esta régua NÃO responde, e já está pedido.** Qual página recebeu cada
+impressão: o campo `topPaginas` do coletor passou a existir e vem VAZIO em
+06/10, o que não é a mesma coisa que não existir. Sem ele, a escolha de qual
+guia aprofundar usa a posição da consulta, que é o melhor disponível.
+
 ## A régua da rodada: o que é uma rodada bem feita
 
 Antes de publicar, leia a sua própria rodada contra a lista e **diga no artifact
@@ -61,6 +93,49 @@ Diretor, na segunda, e o dono lendo o artifact.
 Pode: criar/editar páginas de conteúdo do site e artigos do catálogo, subir
 na main. Não pode: prometer números, citar marcas de forma arriscada, mudar
 preço/planos, tocar em telas de app fora de conteúdo.
+
+## O buraco do catálogo: o plano com data, e a régua que o substitui
+
+Escrito em 06/10/2026 porque o dono cobrou: "você achou, mediu três vezes e não
+fechou, e ele é seu". Procede. Aqui está a conta e a data.
+
+**A régua antiga não fechava nunca, e esse era o defeito.** Eu vinha reportando
+"freio, suspensão e pneu somam 10 de 109 aulas". Essa fração não tem como ficar
+boa: motor tem 54 aulas porque motor tem mais o que ensinar, e nenhum plano
+honesto vai empatar isso. Repetir a fração era garantir que o achado voltasse
+para sempre.
+
+**A régua que substitui, e que termina:** todo sintoma que o app PERGUNTA nesses
+três sistemas tem uma aula que responde ele de frente. São nove sintomas, e
+hoje faltam QUATRO:
+
+| sintoma | hoje | falta |
+|---|---|---|
+| `brake-noise` barulho ao frear | `diag-noises` e `diag-freio-avisos` | coberto |
+| `brake-soft-pedal` pedal baixo ou mole | `diag-freio-avisos` | coberto |
+| `suspension-noise` barulho na suspensão | `diag-noises` e `diag-suspensao-avisos` | coberto |
+| `suspension-bounce` carro balançando demais | `diag-suspensao-avisos` | coberto |
+| `steering-vibration` vibração no volante | `diag-vibracao` | coberto |
+| `steering-hard` direção pesada ou dura | nada | **aula nova** |
+| `tire-pressure-loss` pneu perdendo pressão | `tire-calibragem` fala de calibrar, não de perder | **aula nova** |
+| `tire-uneven-wear` desgaste irregular do pneu | aparece como consequência em outras duas | **aula nova** |
+| `brake-pull` puxa para um lado ao frear | uma linha dentro da `diag-freio-avisos` | **aula nova** |
+
+**O compromisso, em datas.** Uma aula por rodada de artigo, que é o slot (c) do
+rodízio e cai a cada três semanas: **27/10, 17/11, 08/12 e 29/12**. Nessa última
+data a régua fecha e este achado para de aparecer em relatório, porque passa a
+ser "9 de 9 sintomas cobertos" em vez de uma fração que nunca melhora.
+
+**O custo acumulado, dito de uma vez**: são 29 dias desde que o recorte apareceu
+(08/09) e as duas únicas aulas que entraram nesses sistemas nesse período foram
+as duas que este papel escreveu. Ao longo dos 12 dias de atraso que o rodízio
+impõe por ciclo, o que fica descoberto é a pergunta que o app já faz e não sabe
+responder, e `steering-hard` é a pior delas porque tem zero cobertura hoje.
+
+**Se três meses for lento demais, a decisão é deste papel e não do dono**: o
+caminho é usar o slot (c) para duas aulas em vez de uma, fechando em 17/11. Não
+fiz isso agora porque a regra da casa é UMA entrega concreta por rodada, e
+trocar essa regra sem o dono ver custa mais do que seis semanas de espera.
 
 ## Aprendizados
 
@@ -175,6 +250,25 @@ preço/planos, tocar em telas de app fora de conteúdo.
   quem lê procura o caso dele, e ruim no Short, onde ela pede que a pessoa
   espere a vez dela chegar. Amostra pequena e distribuição irregular: é
   direção, não lei, e a seção completa está em docs/conteudo/pautas.md.
+
+- **Aprofundar a página de melhor posição vale mais que abrir a próxima, e
+  a conta que decide é a posição.** Em 06/10, com cinco guias no ar, quatro
+  estavam na página 6 ou pior e um estava na 19. Abrir o sexto o colocaria
+  junto dos quatro; mexer no de posição 19 é o único lugar onde clique é
+  plausível. A régua geral: **página 2 se move, página 8 não.** E quando
+  mexer, mexa no que a CONSULTA pede, não no que você acha que falta: a
+  consulta era `luz injeção vermelha` e a página só falava de vermelho no
+  quarto bloco. Ler as consultas palavra por palavra é metade do trabalho.
+
+- **Pedir o instrumento é parte da rodada, não favor.** Duas rodadas
+  concluíram sobre o canal só com views, que é a única coisa que o coletor
+  traz e a que mais compõe com a própria distribuição. A regra, que vale
+  para qualquer veredito deste papel: **no dia em que você percebe que falta
+  o instrumento que o seu veredito vai precisar, ele entra na lista do dono**
+  (`docs/agentes/acoes-do-dono.md`), com caminho de tela e escopo fechado.
+  Sem isso, a conclusão vira a mesma frase repetida com números maiores.
+  Destino novo se acrescenta em `scripts/acoes-do-dono.ts`, que valida a
+  lista fechada; foi assim que `youtube` entrou em 06/10.
 
 - **O ângulo que funciona é o método, não o catálogo de peças.** Quem busca
   sintoma digitou com o problema fresco na cabeça. A primeira coisa útil é
