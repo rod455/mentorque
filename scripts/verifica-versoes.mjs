@@ -189,7 +189,11 @@ const BUILD_PUBLICADO = {
 // cada commit está dentro da árvore. A manutenção é escrever o commit AQUI e
 // na ficha na hora de apertar o botão do Codemagic, não depois.
 const ARVORE_DO_BUILD = {
-  "3.0": "748fedf",
+  // Lido na tela do Codemagic (print do dono, 06/10): build #30, branch main,
+  // commit 18ece86, iniciado em 04/10 às 19h11 de Brasília, gerou o .ipa e o
+  // .aab #70. O 18ece86 é o 748fedf mais um commit de diário: o código é o
+  // mesmo, e o Início novo (28f13e1, 19h56) não está nele.
+  "3.0": "18ece86",
 };
 
 import { readFileSync, existsSync } from "node:fs";

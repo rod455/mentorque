@@ -45,11 +45,24 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   existe build 71 nem outro envio naquele dia (o anterior é o 69, de 28/09).
   O commit 28f13e1 nasceu às 19h56m40. Três instrumentos, três relógios, na
   mesma ordem: Apple recebeu o binário às 19h22, o primeiro Android abriu
-  em 3.0.0 às 19h26, o commit do Início novo é das 19h56. O que quer que
-  tenha sido apertado às 19h56 não gerou o binário das lojas; se foi um
-  segundo disparo no Codemagic, ele não chegou à Apple (falhou ou não
-  existiu), e só a tela do Codemagic, que a casa não alcança, diz qual dos
-  dois. O binário das lojas é o das 19h22, e ele não tem o Início novo.
+  em 3.0.0 às 19h26, o commit do Início novo é das 19h56. O binário das
+  lojas é o das 19h22, e ele não tem o Início novo.
+- **O dono mandou o print do Codemagic, e ele fecha a hora**: build #30,
+  branch main, commit 18ece86 ("Diário: regime de release fechado na árvore
+  final da 3.0"), iniciado em 04/10 às 19h11 de Brasília, gerou App.ipa #70
+  e app-release.aab #70. Não houve disparo às 19h56; houve UM, às 19h11, na
+  árvore que eu tinha certificado às 15h27. A pergunta dele: "você está me
+  dizendo que falou para eu lançar e não tinha atualizado o app no git?".
+  A resposta exata: tudo o que estava FEITO estava no git (18ece86 tem o 👎,
+  a desistência, o cadastro curto, os depoimentos, os números e o idioma).
+  O que não estava no git era o Início novo e a aba Biela, porque eu ainda
+  não tinha feito: ele aprovou a direção de manhã ("daremos mais
+  visibilidade ao biela"), eu disse "pode disparar" às 15h27 sem dizer que
+  isso ficaria de fora, ele apertou às 19h11, e às 19h29 perguntou "não
+  mudamos na web? o que fizemos de cro". Só aí eu fiz (19h56). O erro não é
+  "mandou lançar sem subir o código": é "mandou lançar sem dizer que o que
+  ele tinha aprovado de manhã não estava dentro", e depois escrever a nota
+  e a ficha como se estivesse. ARVORE_DO_BUILD passa a dizer 18ece86.
 - **O que ficou de pé**: `novidades-3.0.md` ganhou a linha "Árvore do build:
   748fedf", o item 4 foi para "Ficou FORA do binário", cada item cita o seu
   commit, e a lista "o que este build NÃO conserta" parou de dizer que as

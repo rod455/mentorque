@@ -8,10 +8,12 @@ para o app das lojas.
 Android confirmado pelo funil com 29 aparelhos em 3.0.0; Apple READY_FOR_SALE
 no retrato de 06/10).
 
-**Árvore do build:** 748fedf (04/10, 18h07 UTC). É o commit em que o regime de
-release fechou e o dono apertou o botão do Codemagic. **O item 4 abaixo NÃO
-está neste binário**: o commit dele (28f13e1) entrou às 22h56 UTC, quase cinco
-horas depois, e ninguém releu a árvore do build antes de escrever que estava.
+**Árvore do build:** 18ece86 (Codemagic, build #30, branch main, iniciado em
+04/10 às 19h11 de Brasília; lido no print do dono em 06/10). É o 748fedf, onde
+o regime de release fechou, mais um commit de diário: o código é o mesmo. **O
+item 4 abaixo NÃO está neste binário**: o commit dele (28f13e1) entrou às
+19h56 de Brasília, 45 minutos depois do botão, e ninguém releu a árvore do
+build antes de escrever que estava.
 Descoberto pelo dono em 06/10, abrindo a 3.0 no iPhone e vendo a aba
 "Problemas". A prova, em três instrumentos: a Apple (`/v1/builds` da App
 Store Connect: o build 70 foi enviado às 19h22m45 de Brasília de 04/10, e não
