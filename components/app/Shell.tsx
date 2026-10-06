@@ -268,10 +268,14 @@ function BottomNav() {
   const items: { tab: Tab; icon: string; label: string; go: () => void }[] = [
     { tab: "home", icon: "home", label: c.nav.home, go: () => tryGo({ name: "home" }) },
     { tab: "cars", icon: "car", label: c.nav.carsShort, go: () => tryGo({ name: "cars" }) },
-    // A aba "Problemas" virou "Biela" (04/10/2026): o toque abre o chat, que
-    // é o uso real do produto e não tinha aba. Os sintomas continuam a um
-    // toque dentro do chat e nos problemas comuns do Início.
-    { tab: "problems", icon: "spark", label: c.nav.problems, go: () => tryGo({ name: "biela" }) },
+    // A aba "Problemas" virou "Biela" em 04/10/2026, abrindo o chat. Em 06/10
+    // o dono decidiu o contrário ("em vez do botão Biela vir para o chat,
+    // mandar para a tela de problemas com o mesmo botão Fale com o Biela"):
+    // a aba abre a tela de problemas (arte, busca, problemas comuns,
+    // sistemas), e o chat fica a um toque no botão "Falar com o Biela", logo
+    // abaixo da busca, para quem tem carro e para quem não tem. O chat
+    // continua sendo a porta do Início (herói e atalhos).
+    { tab: "problems", icon: "spark", label: c.nav.problems, go: () => tryGo({ name: "symptoms" }) },
     { tab: "history", icon: "clock", label: c.nav.history, go: () => tryGo({ name: "history" }) },
     { tab: "studies", icon: "book", label: c.nav.studies, go: () => tryGo({ name: "learn" }) },
   ];

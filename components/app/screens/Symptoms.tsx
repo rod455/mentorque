@@ -146,7 +146,14 @@ export function SymptomsScreen() {
         )}
       </div>
 
-      {/* Problemas comuns, em linhas, logo abaixo da busca */}
+      {/* O CHAT A UM TOQUE (06/10/2026): a aba Biela abre esta tela, e o
+          "Falar com o Biela" logo abaixo da busca é o caminho para o chat, o
+          mesmo botão para quem tem carro e para quem não tem. */}
+      <div className="mt-3" data-falar-com-o-biela>
+        <AskBielaRow seed={(v ? `Meu ${carName(v)} ` : "Meu carro ") + "está com um problema que não achei na lista. Pode me ajudar a diagnosticar?"} label={ui.talkToBiela} />
+      </div>
+
+      {/* Problemas comuns, em linhas, logo abaixo */}
       <CommonProblems quantos={6} />
 
       {/* Grade de subsistemas + Equipamentos úteis (azulejos sem borda; a arte fica) */}
@@ -197,10 +204,6 @@ export function SymptomsScreen() {
           sub={c.obd2.entrySub}
           onClick={() => go({ name: "obd2" })}
         />
-      </div>
-
-      <div className="mt-5">
-        <AskBielaRow seed={(v ? `Meu ${carName(v)} ` : "Meu carro ") + "está com um problema que não achei na lista. Pode me ajudar a diagnosticar?"} label={ui.talkToBiela} />
       </div>
 
       {/* O Premium por último, depois do que a tela entrega de graça. */}

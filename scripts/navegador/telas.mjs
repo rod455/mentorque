@@ -63,9 +63,12 @@ export async function rodar({ nav, ok }) {
   ok("Carros desenha", /Golfinho|Golf GTI/i.test(await aba(/^Carros$/i)));
   // A aba "Problemas" virou "Biela" em 04/10/2026 (aposta `aba-biela`): o
   // toque abre o chat, e os sintomas continuam a um toque dentro dele.
+  // Em 06/10/2026 o dono decidiu que a aba abre a TELA DE PROBLEMAS (arte,
+  // busca, problemas comuns, sistemas) e o chat fica no botão "Falar com o
+  // Biela" logo abaixo da busca, para todo mundo.
   const bielaAba = await aba(/^Biela$/i);
-  ok("Biela desenha pela aba", /Sou o Biela|Biela/i.test(bielaAba) && bielaAba.length > 80);
-  ok("e os sintomas continuam a um toque dentro do Biela", /sintomas comuns/i.test(bielaAba));
+  ok("a aba Biela abre a tela de problemas", /Problemas comuns/i.test(bielaAba) && /explore por sistema/i.test(bielaAba), bielaAba.slice(0, 80).replace(/\n/g, " "));
+  ok("e o chat está a um toque, no botão Falar com o Biela", (await pg.locator("[data-falar-com-o-biela] button").count()) === 1);
   // O título nomeia o carro ativo ("Calendário do seu Golfinho"): com o
   // seletor na barra de cima, ele é a confirmação de qual carro a tela mostra.
   ok("Calendário desenha, com o carro ativo no título", /Calendário do seu Golfinho/.test(await aba(/^Calendário$/i)));
@@ -188,13 +191,15 @@ export async function rodar({ nav, ok }) {
     await b.pg.getByRole("button", { name: /^Estudos$/i }).first().click();
     await b.pg.waitForTimeout(1200);
     ok("Estudos não tem mais o card do Biela (a aba é a porta)", (await b.pg.locator("main button").filter({ hasText: /Fala com o Biela|Chat with Biela/i }).count()) === 0);
-    const card = b.pg.locator("nav button").filter({ hasText: /^Biela$/i });
+    await b.pg.locator("nav button").filter({ hasText: /^Biela$/i }).first().click();
+    await b.pg.waitForTimeout(1500);
+    const card = b.pg.locator("[data-falar-com-o-biela] button");
     if (await card.count()) {
       await card.first().click();
       await b.pg.waitForTimeout(2000);
       const tela = await b.tela();
       ok(
-        "sem assinatura, a aba do Biela abre o CHAT e não o paywall",
+        "sem assinatura, Falar com o Biela abre o CHAT e não o paywall",
         !/Grátis[\s\S]{0,400}Premium/i.test(tela) && /Biela/i.test(tela),
         tela.slice(0, 90).replace(/\n/g, " "),
       );
@@ -204,7 +209,7 @@ export async function rodar({ nav, ok }) {
         "sem campo, a pessoa chegou na tela e continua sem poder perguntar",
       );
     } else {
-      ok("sem assinatura, a aba do Biela abre o CHAT e não o paywall", false, "não achei a aba do Biela");
+      ok("sem assinatura, Falar com o Biela abre o CHAT e não o paywall", false, "não achei o botão Falar com o Biela na tela de problemas");
     }
     await b.fechar();
   }
@@ -217,7 +222,9 @@ export async function rodar({ nav, ok }) {
       sessao: SESSAO({ premium: true }),
       chaves: { "mq-primeiro-quiz-nao": "1" },
     });
-    const card = b.pg.locator("nav button").filter({ hasText: /^Biela$/i });
+    await b.pg.locator("nav button").filter({ hasText: /^Biela$/i }).first().click();
+    await b.pg.waitForTimeout(1500);
+    const card = b.pg.locator("[data-falar-com-o-biela] button");
     if (await card.count()) {
       await card.first().click();
       await b.pg.waitForTimeout(1800);
@@ -225,7 +232,7 @@ export async function rodar({ nav, ok }) {
       ok("a conversa com a Biela desenha", chat.length > 100, chat.slice(0, 60).replace(/\n/g, " "));
       ok("tem campo para escrever", (await b.pg.locator("main textarea, main input[type=text]").count()) > 0);
     } else {
-      ok("a conversa com a Biela desenha", false, "não achei a aba do Biela");
+      ok("a conversa com a Biela desenha", false, "não achei o botão Falar com o Biela");
     }
     ok("nenhum erro de página na Biela", b.erros.length === 0, b.erros[0] ?? "");
     await b.fechar();

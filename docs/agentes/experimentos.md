@@ -144,9 +144,16 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   aposta acima: a 3.0 das lojas saiu sem o commit 28f13e1 e ainda mostra a
   aba "Problemas"). Até a 3.1, android e ios medem A; a leitura separa por
   `plataforma`. Em 06/10 o card do Biela saiu de Aprender e os "problemas
-  comuns" do Início viraram uma linha (limpeza visual): a guarda
-  `consultou_sintoma` continua com porta no Início, só que menor, e a
-  leitura de 18/10 diz isso · Ler a partir de: 2026-10-18 (direcional, só web)
+  comuns" do Início viraram duas linhas mais "ver todos" (limpeza visual).
+  E NA NOITE DE 06/10 O DONO DECIDIU A DIREÇÃO CONTRÁRIA DA APOSTA: a aba
+  "Biela" passa a abrir a tela de problemas (arte, busca, problemas comuns,
+  sistemas) e o chat fica a um toque no botão "Falar com o Biela", logo
+  abaixo da busca, para todo mundo. O rótulo da aba continua "Biela", e o
+  chat continua sendo a porta do Início (herói e atalhos). Na web, a B
+  valeu de 04/10 a 06/10; o que roda daqui em diante é "aba de problemas
+  com rótulo Biela e chat a um toque", que é uma terceira variante, e a
+  leitura de 18/10 não separa as três · Ler a partir de: 2026-10-18
+  (direcional, só web)
 - Antes: 66 `perguntou_biela` e 178 `consultou_sintoma` (desde 13/09) no
   funil; não li o recorte semanal de `consultou_sintoma` antes de abrir
 - Veredito: (aberto)

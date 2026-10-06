@@ -278,29 +278,16 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
         title={c.biela.title}
         subtitle={v ? `${c.biela.contextPrefix} ${vehicleLabel(v)}${v.odometerKm != null ? " · " + v.odometerKm.toLocaleString() + " km" : ""}` : undefined}
         action={
-          <span className="flex items-center gap-2">
-            {/* A tela de sintomas é a tela 2 da aba (06/10/2026): alcançável
-                sempre, não só no convite do começo da conversa. */}
+          msgs.length > 1 ? (
             <button
-              onClick={() => go({ name: "symptoms" })}
-              aria-label={c.biela.sintomasAtalho}
-              title={c.biela.sintomasAtalho}
+              onClick={novaConversa}
+              aria-label={c.biela.novaConversa}
+              title={c.biela.novaConversa}
               className="grid h-9 w-9 place-items-center rounded-full bg-graphite-700 text-cream/70 hover:text-cream"
-              data-sintomas
             >
-              <Icon name="diagnose" className="h-4 w-4" />
+              <Icon name="plus" className="h-4 w-4" />
             </button>
-            {msgs.length > 1 && (
-              <button
-                onClick={novaConversa}
-                aria-label={c.biela.novaConversa}
-                title={c.biela.novaConversa}
-                className="grid h-9 w-9 place-items-center rounded-full bg-graphite-700 text-cream/70 hover:text-cream"
-              >
-                <Icon name="plus" className="h-4 w-4" />
-              </button>
-            )}
-          </span>
+          ) : undefined
         }
       />
 
