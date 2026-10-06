@@ -471,6 +471,29 @@ credibilidade do resto, que nesta rodada estava certo.
   o custo caiu de R$ 15,59 para R$ 6,42 com a última coorte fechada voltando
   zero. Barato para comprar gente que não volta continua sendo caro.
 
+- 2026-10-05: **antes de reescrever um veredito, conferir se ele já existe.** Os
+  oito da semana estavam escritos desde 03/10, sete por ordem do dono e o da
+  Segurança em 04/10, e `npm run conferir:agentes` imprime o atraso por papel.
+  É a regra de 04/10 do CLAUDE.md aplicada ao meu próprio trabalho: se o
+  instrumento responde, não se refaz. E quando o veredito já está dado, o
+  trabalho da segunda muda de escrever para CONFERIR CONSEQUÊNCIA, que é o que
+  o script declara não alcançar. Só serve para o papel que rodou depois dele.
+- 2026-10-05: **sinal de maturidade não é prova de maturidade.** Ler a mesma
+  coorte duas vezes no mesmo dia (retrato das 6h e banco às 21h) pegou 8
+  virando 9 DEPOIS de a coluna dizer "janela fechada", porque a coluna compara o
+  começo da coorte e a janela é de cada pessoa. Para número que decide a
+  manchete, ler duas vezes com horas de distância antes de publicar.
+- 2026-10-05: **associação dentro de coorte só vale com a ORDEM conferida.** As
+  4 pessoas que ligaram o aviso e voltaram ligaram ANTES de voltar, nenhuma
+  depois; sem essa conferência o número só diria que quem volta vê mais telas.
+  Vale para qualquer "quem fez X volta mais": a pergunta que separa medida de
+  artefato é quando X aconteceu.
+- 2026-10-05: **a primeira metade da sessão é o orçamento mais caro da rodada.**
+  O critério 6 falhou (relatório às 21h em vez das 8h) porque gastei contexto em
+  consultas que o retrato já respondia. O caminho curto é retrato primeiro,
+  banco só para o que o retrato NÃO traz: comparação entre semanas, abertura de
+  coorte pessoa a pessoa e conferência de número que decide manchete.
+
 ## Direcionamentos do dono
 
 - Entrega às segundas, 08:00 (horário de Brasília), com notificação.

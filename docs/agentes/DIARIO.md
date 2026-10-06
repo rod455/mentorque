@@ -3,6 +3,140 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-05 · Diretor: a retenção virou, e o sinal de "janela fechada" está um dia adiantado
+- Artifact "Semana Mentorque" (28/09 a 04/10):
+  https://claude.ai/artifact/E2b588irSQLmMTHVDQFvxd
+- Banco conferido no começo e no fim, conforme o direcionamento de 31/08.
+- **O NÚMERO: a coorte de 21/09 fechou com 9 de 51 voltando entre o 1º e o 7º
+  dia, 17,6%.** É a primeira coorte fechada da história do produto dentro da
+  faixa emprestada de 10 a 25%. As fechadas anteriores: 0 de 16 (14/09), 1 de
+  11 (07/09), 1 de 8 (31/08). A de 28/09 tem 57 pessoas e 6 de piso, e fecha
+  em 12/10.
+- **DEFEITO ACHADO LENDO O MESMO NÚMERO DUAS VEZES NO MESMO DIA: a coluna
+  `d1_7_fechada` está um dia adiantada.** O retrato das 6h imprimiu "8
+  voltaram" sem ressalva de janela aberta; o banco às 21h diz 9. A nona pessoa
+  cadastrou em 27/09 às 22h18, a janela DELA fechava hoje às 22h18, e ela
+  voltou às 21h37. A coluna compara `coorte + 14 dias` com hoje e a janela de
+  cada pessoa é `cadastro + 8 dias`: para quem entra no último dia da semana
+  isso dá quase 24 horas de diferença. O mesmo erro cabe em `d8_30_fechada`
+  (`coorte + 37` contra `cadastro + 31`). Se eu tivesse publicado o número da
+  manhã, teria publicado 15,7% como final. Virou Prioridade 1, para o QA, que
+  é quem escreveu as colunas em 23/09.
+- **E DENTRO DA COORTE EXISTE SINAL, com a ordem conferida.** Abri as 51
+  pessoas uma a uma. Cadastrar carro no 1º dia não separa nada (9 de 9 que
+  voltaram, 38 de 42 que não). O que separa é o aviso: das 7 pessoas da coorte
+  que LIGARAM o aviso, 4 voltaram (57%); das 44 que não ligaram, 5 voltaram
+  (11%). Conferi a coisa que transformaria isso em artefato, que é a ORDEM: as
+  quatro ligaram o aviso ANTES de voltar, nenhuma depois. Sete pessoas não
+  decidem nada sozinhas, e está escrito como sinal e não como resultado.
+- CHEGADA, semana fechada contra anterior: aberturas 336 contra 323, visitantes
+  237 contra 209, cadastros 57 contra 51, contas novas 62 contra 55, carros 105
+  contra 102, paywall 39 contra 43, checkout 2 contra 5, assinou 1 contra 0.
+  Gasto de anúncio CAIU de R$ 344,89 para R$ 325,66 (Google 182,72 e Meta
+  142,94, somados pelo último retrato que contém cada dia, para não contar dia
+  duas vezes). Custo por conta R$ 5,36 na régua da semana passada, contra
+  R$ 6,42; R$ 5,25 na semana calendário; R$ 5,61 se o denominador for evento de
+  cadastro. Qualquer das três melhora.
+- BURACO DECLARADO, não número: contas novas (62) e eventos de cadastro (57)
+  discordam em cinco nesta semana e em zero na anterior. Não sei de onde vem e
+  não inventei causa. A régua de gente continua sendo a conta.
+- RECEITA: líquido R$ 0,00. A nota de crédito `cn_1UM3tK` estornou os R$ 29,90
+  integralmente em 02/10, e o coletor desconta estorno, o que reconcilia o
+  diário de 02/10 com o retrato de hoje. As três saídas do Stripe foram
+  cancelamento, nenhuma inadimplência, e uma traz
+  `cancellation_details.feedback: "too_expensive"`, que é dado de cliente.
+  Hoje existem duas relações pagas vivas, as duas com data de fim: Stripe até
+  09/10 (cancelamento agendado) e a venda de loja de 25/09 até 25/10. Banco diz
+  2 e Stripe diz 1 porque o Stripe não conhece a venda de loja: não é
+  discordância.
+- **ATRIBUIÇÃO MEDIDA NOS DOIS LADOS, nos mesmos dois dias, pela primeira
+  vez**: em 04 e 05/10, 10 de 12 `clicou_baixar` chegaram com etiqueta (8
+  google, 2 instagram) e 0 de 10 `cadastro` chegaram com etiqueta. Antes de
+  04/10 eram zero de zero desde 19/09. A etiqueta voltou na web e morre na
+  instalação. NÃO afirmei que falta OneLink: em 22/09 esse item saiu da lista
+  como FEITO com o painel da Meta, que responde outra pergunta, e o console da
+  AppsFlyer (o instrumento que responderia) não é alcançável por API, medido em
+  03/10. A Prioridade 3 começa por uma leitura de tela, não por um clique do
+  dono.
+- PLACAR de 28/09: (1) convite de aviso chegar a quem entra NÃO ANDOU, 41 de
+  237 visitantes (17%) contra 40 de 209 (19%); procurei no git log da janela e o
+  único commit que toca `convite_aviso` é o do alarme virando razão (c2fb92d),
+  e os commits de "convite" de 03/10 são o e-mail de terminar cadastro, que é
+  outro convite; (2) etiqueta na URL final da busca FECHOU em 04/10, com o
+  remédio corrigido no caminho (c7c8369), e a prova é o dado e não o commit;
+  (3) segurar o orçamento CUMPRIDA, gasto caiu e a coorte fechada voltou acima
+  de zero, então a trava sai e a decisão de acelerar passa a ser do dono com
+  número por trás; (3b) as duas listas de negativas saíram da fila por decisão
+  do dono em 03 e 04/10 (dad5cad, dfd5057), dispensadas e não feitas.
+- **OS OITO VEREDITOS DA SEMANA JÁ ESTAVAM ESCRITOS ANTES DE EU CHEGAR**, sete
+  em 03/10 por ordem do dono e o da Segurança em 04/10. Conferi com dois
+  instrumentos antes de escrever qualquer coisa: oito rodadas com título de
+  papel no diário desde a minha última segunda e oito seções datadas nos
+  manuais, e `npm run conferir:agentes` imprime zero dia de atraso para os
+  oito. Então não reescrevi nenhum, e o meu trabalho virou outro: conferir se o
+  veredito mudou a rodada seguinte. Só a Segurança tem resposta medida, porque
+  é a única que rodou depois dele, e a resposta é sim (chave no cofre, webhook
+  sem senha fora, linha da fila virou roteiro de quatro passos no mesmo dia).
+  Os outros seis só respondem na próxima rodada de cada um, e isso eu cobro na
+  segunda que vem. Resumo por papel está na entrada de 03/10 (noite, 2).
+- **CRUZAMENTO DA SEMANA, duas coisas e as duas são da casa:**
+  1. o mesmo TIPO de erro, quarta semana seguida: número que parece medida e é
+     artefato do nosso instrumento. QA com um `renovou` que nunca existiu,
+     Mídia com gasto de oito datas lido como ritmo diário, CRO com dez
+     aparelhos de iPhone como braço de controle, Guardião com uma fila que
+     media outra coisa, e hoje eu, com a coluna de janela fechada que me
+     entregaria 15,7% como final;
+  2. o mesmo PEDIDO em quatro manuais no mesmo dia: "recomendação que depende
+     de outro papel envelhece calada" foi escrita com palavras quase iguais nos
+     vereditos do QA, do Guardião, do ASO e da Mídia em 03/10. Quatro manuais
+     com a mesma frase não são quatro falhas individuais, é instrumento
+     faltando: existe fila para o que depende do dono (`acoes-do-dono.md`,
+     `npm run acoes`) e nada para o que um papel deixa com outro.
+- **LEITURA DO MÊS (primeira segunda de outubro), três propostas e nenhuma
+  mudança feita, porque manual é do dono:**
+  1. para a DIRETRIZES, valendo para os dez papéis: janela declarada fechada se
+     prova pelo ÚLTIMO membro da coorte, nunca pelo começo dela. O caso é o
+     defeito de hoje, e a regra escrita vale mais que o conserto porque toda
+     janela nova nasce com a pergunta respondida;
+  2. a fila ENTRE papéis, com dono e data, do jeito que a fila do dono já
+     funciona, e a conferência que reprova quando uma linha fica N dias sem
+     movimento. O caso são as quatro frases iguais mais dois desfechos medidos
+     (a recomendação do Guardião que envelheceu um mês, o relatório da Mídia
+     que não chegou ao Luiz);
+  3. para a `conferir:agentes`: ordem decrescente do diário e a convenção de
+     título. O diário está fora de ordem AGORA em três pontos (04/10 tarde em
+     cima, 03/10 noite embaixo, 04/10 noite depois); eu reordenei duas entradas
+     à mão em 28/09 e voltou, então é padrão. E a conferência acha rodada pelo
+     título `data · Papel`, com 134 entradas numeradas contra 63 com papel: o
+     buraco que o próprio script declara hoje é a maioria do arquivo, e parte do
+     trabalho de papel de 04/10 (fichas de loja, AppsFlyer, release) não tem
+     veredito sem a conferência conseguir cobrar.
+- NÃO REORDENEI O DIÁRIO à mão desta vez, de propósito: mover entrada à mão já
+  custou uma peça inteira em 13/09, e a prova da proposta 3 fica visível. A
+  minha entrada entra no topo, que é o lugar dela.
+- FILA DO DONO, por painel e não por contagem: 4 itens em 3 painéis. Google Ads
+  é a sessão mais barata com 2 (importar a instalação da AppsFlyer como ação de
+  conversão, agora que o vínculo fechou, e a verificação do anunciante, PRAZO
+  30/10, que o Google diz que limita anúncio). App Store Connect 1 (busca de um
+  minuto depois que a 3.0 publicar, parado há 5 dias) e Painel da Meta 1 (token
+  novo, e só se ele quiser medir alcance por post). A fila caiu de treze para
+  quatro em dois dias, e a maior parte saiu por reconferência no instrumento.
+- PRIORIDADES: (1) QA, quarta: consertar o sinal de janela fechada antes de
+  qualquer leitura de retenção, com `max(cadastrado_em) + 8 dias` em vez de
+  `coorte + 14`, e o caso de hoje para plantar; (2) CRO, sexta: o portão do
+  aviso passa a gravar a recusa COM O MOTIVO, porque 41 de 237 responde o QUE e
+  nunca o PORQUÊ, e com 41 exibições por semana qualquer aposta partida em dois
+  braços não chega a critério de parada; (3) Mídia paga, sexta, depois o QA: uma
+  tela só, a lista de OneLink no console da AppsFlyer, e a resposta decide se o
+  conserto é uma linha em `lib/stores.ts` ou um clique mais a linha.
+- **A MINHA RODADA CONTRA A MINHA RÉGUA: cumpri 10 dos 11, e o que falhou foi o
+  critério 6.** O aviso não saiu segunda às 8h, saiu às 21h: a rodada começou no
+  horário e a sessão esgotou o contexto no meio da coleta. A causa é minha, e é
+  a primeira metade da sessão gasta em consultas que o retrato já respondia. Um
+  relatório de segunda à noite perdeu um dia de decisão do dono. Limite
+  declarado do critério 7, como em 28/09: o veredito desta semana não é meu, e
+  o meu trabalho sobre ele foi conferir consequência.
+
 ## 2026-10-04 (tarde) · QA agendado: a primeira receita foi estornada, e a fatura só é paga uma hora depois da virada
 - Verificação curta, agendada por mim em 01/10 para provar o conserto do
   `renovou` na cobrança de hoje. **A prova não existe, e isso já estava
