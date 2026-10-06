@@ -73,6 +73,27 @@ credencial desde agosto e nunca pediu a quebra por rede, porque a consulta é um
 lista de perguntas que alguém escreveu uma vez. Quando um número surpreender,
 pergunte primeiro se a fonte já responde algo que a gente nunca pediu.
 
+## Antes de afirmar um estado ao dono (06/10/2026)
+
+Três dias seguidos, a mesma causa, e o dono disse que vai trocar de agente
+se continuar: 03/10 (sete números errados), 04/10 (quatro cliques pedidos de
+coisa já feita) e 06/10 (a 3.0 saiu das lojas sem o Início novo, e eu disse
+"pode disparar" às 15h27 sem avisar que o que ele aprovou de manhã não estava
+dentro, e no dia 05 marquei a 3.0 publicada sem ler de que árvore o build
+saiu). As duas seções acima já diziam isso para números e para cliques. A
+régua é uma só, e vale para QUALQUER frase que afirme estado: "está no ar",
+"está no build", "já foi feito", "pode disparar", "pode clicar":
+
+1. **Instrumento e hora.** A frase diz de onde veio e quando foi lida. Sem
+   instrumento, a frase é "não conferi", nunca uma afirmação.
+2. **O que fica de fora.** "Pode disparar" e "está pronto" vêm com a lista
+   do que NÃO está dentro, principalmente o que o dono aprovou e ainda não
+   foi feito. Foi este o pedaço que faltou em 04/10.
+3. **Depois do botão, o estado muda de dono.** Build disparado, deploy feito,
+   mensagem enviada: antes de falar do conteúdo, reler o instrumento (árvore
+   do build, deploy da Vercel, registro de envio), nunca a memória do que
+   "ia entrar".
+
 ## A disciplina das conferências
 
 Prove que a conferência morde antes de confiar no verde dela: plante o
