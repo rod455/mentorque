@@ -16,7 +16,7 @@ import { resizeImage } from "@/lib/app/image";
 import type { ServicePart, ServiceRecord, SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
-import { AppHeader, Autocomplete, Card, Chip, Icon, inputCls, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
+import { AppHeader, Atalho, Autocomplete, Card, Chip, Icon, inputCls, Linha, PremiumBadge, SectionTitle, UpgradeBanner, useContent } from "../ui";
 import { ConviteDeAviso } from "../ConviteDeAviso";
 import { QUIZ_ZERADO, diaLocal, sequenciaHoje } from "@/lib/app/quiz/sequencia";
 import { consumirComparacao, faixaDaRegiao, guardarComparacao, observarPreco, posicaoNaFaixa } from "@/lib/app/precos";
@@ -321,6 +321,21 @@ export function HistoryScreen() {
   const sequenciaDoQuiz = sequenciaHoje(s.quiz ?? QUIZ_ZERADO, diaLocal());
   const atLimit = !s.premium && all.length >= LIMITS.freeServices;
   const onAdd = () => go(atLimit ? { name: "subscribe", ctx: "history" } : { name: "addService" });
+  // O aviso do limite chega aos 18 (dois antes), não como surpresa no 21.
+  const faltamParaOLimite = s.premium ? null : Math.max(0, LIMITS.freeServices - all.length);
+  const avisarLimite = faltamParaOLimite != null && faltamParaOLimite <= 2;
+
+  // O número grande: os últimos 12 meses, serviços com valor mais combustível,
+  // e a média pelos meses que tiveram lançamento (média por 12 inventaria
+  // meses vazios para quem começou a registrar ontem).
+  const corte = (() => { const d = new Date(); d.setMonth(d.getMonth() - 12); return d.toISOString().slice(0, 10); })();
+  const doze = [
+    ...all.filter((r) => r.date >= corte && typeof r.total === "number" && r.total > 0).map((r) => ({ data: r.date, valor: r.total ?? 0 })),
+    ...combustivel.filter((a) => a.date >= corte).map((a) => ({ data: a.date, valor: a.valor })),
+  ];
+  const totalDoze = Math.round(doze.reduce((acc, x) => acc + x.valor, 0) * 100) / 100;
+  const mesesComLancamento = new Set(doze.map((x) => x.data.slice(0, 7))).size;
+  const mediaMes = mesesComLancamento > 0 ? Math.round((totalDoze / mesesComLancamento) * 100) / 100 : 0;
 
   return (
     <div>
@@ -340,16 +355,39 @@ export function HistoryScreen() {
 
       {comparacao && <ComparacaoDaRegiao tipo={comparacao.tipo} valor={comparacao.valor} uf={s.state} cidade={s.city} />}
 
-      {upcoming}
+      {/* O NÚMERO GRANDE E OS ATALHOS (06/10/2026): a mesma gramática da tela
+          de conta do Nubank. A soma do mês continua grátis e no topo, como a
+          linha de contexto do número. */}
+      <Linha
+        data-faixa-do-mes
+        className="border-b-0"
+        rotulo={c.history.dozeMeses}
+        valor={formatBRL(totalDoze)}
+        sub={
+          doze.length > 0
+            ? `${c.history.porMes.replace("{valor}", formatBRL(mediaMes))} · ${c.combustivel.faixaMes.replace("{combustivel}", formatBRL(gastoDoMes(combustivel))).replace("{servicos}", formatBRL(servicosDoMes))}`
+            : c.history.semGastoAinda
+        }
+        direita={null}
+      />
+      <div className="mb-4 flex items-start gap-1" data-atalhos>
+        <Atalho icone="tools" rotulo={c.home.atalhos.servico} onClick={onAdd} data-atalho="servico" />
+        <Atalho icone="gauge" rotulo={c.home.atalhos.abastecer} onClick={() => go({ name: "abastecimento", origem: "historico" })} data-atalho="abastecer" />
+        <Atalho icone="calendar" rotulo={c.home.atalhos.revisoes} onClick={() => go({ name: "revisions" })} data-atalho="revisoes" />
+        {s.motoristaDeApp && <Atalho icone="track" rotulo={c.home.atalhos.dia} onClick={() => go({ name: "ganhos", origem: "historico" })} data-atalho="dia" />}
+      </div>
 
-      {combustivel.length > 0 && (
-        <div className="mb-3 flex items-center gap-3 rounded-2xl bg-graphite-800 px-4 py-3 ring-1 ring-white/[0.06]" data-faixa-do-mes>
-          <span className="min-w-0 flex-1 text-sm text-cream/80">
-            {c.combustivel.faixaMes.replace("{combustivel}", formatBRL(gastoDoMes(combustivel))).replace("{servicos}", formatBRL(servicosDoMes))}
-          </span>
-          <button onClick={() => go({ name: "abastecimento", origem: "historico" })} className="shrink-0 rounded-full bg-teal px-3.5 py-1.5 text-xs font-bold text-graphite">{c.combustivel.cardCta}</button>
-        </div>
+      {avisarLimite && (
+        <Linha
+          data-limite-do-gratis
+          tom={faltamParaOLimite === 0 ? "alerta" : "normal"}
+          titulo={faltamParaOLimite === 0 ? c.history.limiteCheio.replace("{n}", String(LIMITS.freeServices)) : c.history.limiteProximo.replace("{n}", String(faltamParaOLimite))}
+          sub={c.history.limiteProximoSub}
+          onClick={() => go({ name: "subscribe", ctx: "history" })}
+        />
       )}
+
+      {upcoming}
 
       {all.length === 0 && combustivel.length === 0 ? (
         <Card className="mt-2 text-center">
@@ -381,39 +419,38 @@ export function HistoryScreen() {
             <UpgradeBanner ctx="pos-servico" text={c.history.upsellHistorico} />
           )}
 
-          <div className="space-y-2">
+          {/* A linha do tempo em LINHAS (06/10/2026): fio entre elas, ícone
+              de traço no lugar do emoji, valor à direita. */}
+          <div>
             {entradas.map((e) => e.servico ? (
-              <button key={e.servico.id} onClick={() => go({ name: "service", id: e.servico!.id })} className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/5 hover:ring-white/15">
-                <span className="min-w-0 flex-1">
-                  <span className="flex items-center gap-2">
-                    <span className="truncate font-display text-[15px] text-cream">{typeLabel(e.servico.type)}</span>
-                    {e.servico.system && <span className="shrink-0 rounded bg-white/5 px-1.5 py-0.5 text-[10px] text-cream/55">{c.health.systemLabels[e.servico.system]}</span>}
-                  </span>
-                  <span className="block text-xs text-cream/50">{dateFmt(e.servico.date)} · {e.servico.km.toLocaleString()} km</span>
-                </span>
-                {e.servico.total != null && <span className="shrink-0 text-sm text-cream/70">{formatBRL(e.servico.total)}</span>}
-              </button>
+              <Linha
+                key={e.servico.id}
+                esquerda={<span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-graphite-800 text-amber"><Icon name="tools" className="h-4 w-4" /></span>}
+                titulo={typeLabel(e.servico.type)}
+                sub={`${dateFmt(e.servico.date)} · ${e.servico.km.toLocaleString()} km${e.servico.system ? ` · ${c.health.systemLabels[e.servico.system]}` : ""}`}
+                direita={e.servico.total != null ? <span className="shrink-0 font-display text-sm text-cream/80">{formatBRL(e.servico.total)}</span> : <Icon name="check" className="h-4 w-4 shrink-0 text-cream/0" />}
+                onClick={() => go({ name: "service", id: e.servico!.id })}
+              />
             ) : e.abastecimento ? (
-              <button key={e.abastecimento.id} onClick={() => go({ name: "abastecimento", id: e.abastecimento!.id })} className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/5 hover:ring-white/15" data-abastecimento>
-                <span className="min-w-0 flex-1">
-                  <span className="flex items-center gap-2">
-                    <span className="truncate font-display text-[15px] text-cream">⛽ {c.combustivel.linha}</span>
-                    <span className="shrink-0 rounded bg-white/5 px-1.5 py-0.5 text-[10px] text-cream/55">
-                      {c.combustivel.tipos[e.abastecimento.combustivel]}{e.abastecimento.litros ? ` · ${c.combustivel.linhaLitros.replace("{n}", e.abastecimento.litros.toLocaleString("pt-BR"))}` : ""}
-                    </span>
-                  </span>
-                  <span className="block text-xs text-cream/50">{dateFmt(e.abastecimento.date)} · {e.abastecimento.km.toLocaleString()} km</span>
-                </span>
-                <span className="shrink-0 text-sm text-cream/70">{formatBRL(e.abastecimento.valor)}</span>
-              </button>
+              <Linha
+                key={e.abastecimento.id}
+                data-abastecimento
+                esquerda={<span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-graphite-800 text-teal"><Icon name="gauge" className="h-4 w-4" /></span>}
+                titulo={c.combustivel.linha}
+                sub={`${dateFmt(e.abastecimento.date)} · ${e.abastecimento.km.toLocaleString()} km · ${c.combustivel.tipos[e.abastecimento.combustivel]}${e.abastecimento.litros ? ` · ${c.combustivel.linhaLitros.replace("{n}", e.abastecimento.litros.toLocaleString("pt-BR"))}` : ""}`}
+                direita={<span className="shrink-0 font-display text-sm text-cream/80">{formatBRL(e.abastecimento.valor)}</span>}
+                onClick={() => go({ name: "abastecimento", id: e.abastecimento!.id })}
+              />
             ) : e.ganho ? (
-              <button key={e.ganho.id} onClick={() => go({ name: "ganhos", id: e.ganho!.id })} className="flex w-full items-center gap-3 rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-white/5 hover:ring-white/15" data-ganho>
-                <span className="min-w-0 flex-1">
-                  <span className="truncate font-display text-[15px] text-cream">🚕 {c.motorista.linha}</span>
-                  <span className="block text-xs text-cream/50">{dateFmt(e.ganho.date)} · {c.motorista.linhaKm.replace("{km}", e.ganho.km.toLocaleString("pt-BR"))}</span>
-                </span>
-                <span className="shrink-0 text-sm text-teal">+{formatBRL(e.ganho.valor)}</span>
-              </button>
+              <Linha
+                key={e.ganho.id}
+                data-ganho
+                esquerda={<span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-graphite-800 text-teal"><Icon name="track" className="h-4 w-4" /></span>}
+                titulo={c.motorista.linha}
+                sub={`${dateFmt(e.ganho.date)} · ${c.motorista.linhaKm.replace("{km}", e.ganho.km.toLocaleString("pt-BR"))}`}
+                direita={<span className="shrink-0 font-display text-sm text-teal">+{formatBRL(e.ganho.valor)}</span>}
+                onClick={() => go({ name: "ganhos", id: e.ganho!.id })}
+              />
             ) : null)}
           </div>
         </>

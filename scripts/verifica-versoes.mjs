@@ -458,9 +458,34 @@ if (piso <= publicado) {
     const commits = (trecho) => [...trecho.matchAll(/commit ([0-9a-f]{7,40})/g)].map((m) => m[1]);
     const dentro = commits(secoes("### Vai no binário"));
     const fora = commits(secoes("## Ficou FORA do binário"));
+    // CLONE RASO (06/10/2026): as sessões remotas clonam com pouca história, e
+    // um commit de duas semanas atrás simplesmente não existe aqui. Isso não
+    // é "não é ancestral": é "não dá para saber". A conferência diz qual dos
+    // dois, em vez de reprovar por cegueira (foi assim que ela reprovou quatro
+    // commits legítimos da 3.0 num clone de 53 commits). Com `git fetch
+    // --unshallow` ela volta a conferir tudo.
+    const raso = existsSync(new URL(".git/shallow", raiz));
+    const existe = (sha) => {
+      try {
+        execFileSync("git", ["cat-file", "-e", `${sha}^{commit}`], { cwd: raiz, stdio: "ignore" });
+        return true;
+      } catch {
+        return false;
+      }
+    };
     const problemas = [];
-    for (const sha of dentro) if (!ancestral(sha)) problemas.push(`${sha} está em "Vai no binário", e NÃO é ancestral de ${arvore}`);
-    for (const sha of fora) if (ancestral(sha)) problemas.push(`${sha} está em "Ficou FORA do binário", e É ancestral de ${arvore}`);
+    const foraDoAlcance = [];
+    for (const sha of dentro) {
+      if (!existe(sha)) { (raso ? foraDoAlcance : problemas).push(raso ? sha : `${sha} está em "Vai no binário" e não existe neste repositório`); continue; }
+      if (!ancestral(sha)) problemas.push(`${sha} está em "Vai no binário", e NÃO é ancestral de ${arvore}`);
+    }
+    for (const sha of fora) {
+      if (!existe(sha)) { (raso ? foraDoAlcance : problemas).push(raso ? sha : `${sha} está em "Ficou FORA do binário" e não existe neste repositório`); continue; }
+      if (ancestral(sha)) problemas.push(`${sha} está em "Ficou FORA do binário", e É ancestral de ${arvore}`);
+    }
+    if (foraDoAlcance.length) {
+      console.log(`AVISO  clone raso: ${foraDoAlcance.length} commit(s) da ficha fora do alcance (${foraDoAlcance.join(", ")}); \`git fetch --unshallow origin\` para conferir.`);
+    }
     if (dentro.length === 0) problemas.push(`nenhum item de "Vai no binário" cita o commit (escreva "(dd/mm, commit <sha>)" em cada um)`);
     if (problemas.length) {
       console.error(`FALHA  a ficha ${ficha} e a árvore do build ${arvore} discordam:`);

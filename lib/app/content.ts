@@ -1471,6 +1471,16 @@ export function getContent(locale: Locale) {
         "Veja quanto já gastou com o carro e guarde histórico sem limite",
         "See how much you have spent and keep unlimited history",
       ),
+      // O CALENDÁRIO COM A GRAMÁTICA DE TELA DE PRODUTO (06/10/2026,
+      // docs/design/limpeza-visual-nubank.md): número grande em cima, atalhos,
+      // filtros, linha do tempo. E o aviso do limite do grátis chega aos 18
+      // registros, não como surpresa no 21.
+      dozeMeses: T("Gastos em 12 meses", "Spend in 12 months"),
+      porMes: T("{valor} por mês", "{valor} per month"),
+      semGastoAinda: T("Registre um serviço ou um abastecimento e o total aparece aqui.", "Log a service or a fill-up and the total shows up here."),
+      limiteProximo: T("Faltam {n} registros para o limite do grátis", "{n} entries left on the free limit"),
+      limiteProximoSub: T("O Premium guarda o histórico sem limite", "Premium keeps unlimited history"),
+      limiteCheio: T("Você chegou ao limite de {n} serviços do grátis", "You reached the free limit of {n} services"),
     },
 
     addService: {
