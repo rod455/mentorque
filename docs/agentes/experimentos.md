@@ -109,10 +109,10 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   ver como ficou"). Por decisão dele, abriu junto com `aba-biela`, que mede o
   mesmo degrau: a leitura das duas não separa uma da outra, e isso fica dito
   agora, não no veredito.
-- Início: 2026-10-04 na web; NO APP SÓ COM A 3.1 (corrigido em 06/10: o build
-  70 da 3.0 saiu da árvore 748fedf, 18h07 UTC de 04/10, e este commit,
-  28f13e1, entrou às 22h56; o dono abriu a 3.0 no iPhone em 06/10 e viu o
-  Início antigo). Até a 3.1 publicar, quem está no app das lojas está em A, e
+- Início: 2026-10-04 na web; NO APP DESDE 07/10, COM A 3.1 (build 71; a
+  3.0 saiu da árvore 748fedf, 18h07 UTC de 04/10, e este commit, 28f13e1,
+  entrou às 22h56; o dono abriu a 3.0 no iPhone em 06/10 e viu o Início
+  antigo). Até a 3.1 publicar, quem está no app das lojas está em A, e
   a leitura separa por `plataforma`: web mede B, android e ios medem A.
   A VERSÃO B MUDOU EM 06/10 na web (limpeza visual, docs/design/
   limpeza-visual-nubank.md): o herói é o mesmo, mas o resto do Início virou
@@ -140,9 +140,8 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Métrica: `perguntou_biela` por ativo na semana; `consultou_sintoma` por
   ativo na semana como guarda · Duração: 4 semanas, direcional em 2
 - Aprovação: aprovada pelo dono em 2026-10-04, junto com `inicio-pergunta-unica`
-- Início: 2026-10-04 na web; NO APP SÓ COM A 3.1 (mesma correção de 06/10 da
-  aposta acima: a 3.0 das lojas saiu sem o commit 28f13e1 e ainda mostra a
-  aba "Problemas"). Até a 3.1, android e ios medem A; a leitura separa por
+- Início: 2026-10-04 na web; NO APP DESDE 07/10, COM A 3.1 (a 3.0 das lojas
+  saiu sem o commit 28f13e1 e mostrava a aba "Problemas"). Até a 3.1, android e ios medem A; a leitura separa por
   `plataforma`. Em 06/10 o card do Biela saiu de Aprender e os "problemas
   comuns" do Início viraram duas linhas mais "ver todos" (limpeza visual).
   E NA NOITE DE 06/10 O DONO DECIDIU A DIREÇÃO CONTRÁRIA DA APOSTA: a aba
@@ -182,8 +181,8 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   o `ctx` que converter muito acima dos outros diz onde o valor está ·
   Duração: 4 semanas
 - Aprovação: pedido do dono em 2026-10-06
-- Início: 2026-10-06 na web; no app, com a 3.1 · Ler a partir de: 2026-10-20
-  (direcional) e 2026-11-03
+- Início: 2026-10-06 na web; no app desde 07/10, com a 3.1 (build 71) · Ler
+  a partir de: 2026-10-20 (direcional) e 2026-11-03
 - Antes: a ler no retrato de 07/10 (viu_paywall e iniciou_checkout por ctx
   nos 28 dias anteriores); não li antes de abrir, e fica dito
 - Veredito: (aberto)

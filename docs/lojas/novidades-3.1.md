@@ -4,14 +4,17 @@ Aberta em 05/10/2026, logo depois de a 3.0 ser aprovada nas duas lojas. Tudo o
 que entra aqui **já roda na web** pelo deploy da Vercel; o binário só importa
 para o app das lojas.
 
-**Onde a 3.1 está:** fechada para build em 06/10 à noite, a pedido do dono
-("Vamos colocar tudo e enviar para iOS e Android aprovar. Versão 3.1").
-Ainda não gerada.
+**Onde a 3.1 está:** nas duas lojas em 07/10/2026, build 71 (aviso do dono às
+18h17 de Brasília: "A 3.1 está nas lojas. Build 71"). Lido em três
+instrumentos antes de escrever: a Apple (API de builds: o 71 foi enviado às
+06h45 de Brasília de 07/10), o funil (22 aparelhos Android em 3.1.0 entre
+06h50 e 17h51 de 07/10, e 1 iPhone às 08h10) e o git (nenhum commit de código
+de app entre a árvore entregue ao dono e a publicação).
 
-**Árvore do build:** (escrever o commit NA HORA de apertar o botão do
-Codemagic, antes de qualquer frase sobre o que o binário tem. A 3.0 saiu sem
-o item principal da nota porque esta linha não existia; a `conferir:versoes`
-cobra que cada item citado abaixo seja ancestral dela.)
+**Árvore do build:** 34ffaac (entregue ao dono em 06/10 às 18h03 UTC como "o
+commit para apertar"; depois dele só entrou o retrato diário 4fe5d5d, que é
+documento, e o build 71 subiu à Apple às 09h45 UTC de 07/10). Os nove itens
+abaixo são ancestrais dela, e a `conferir:versoes` cobra isso.
 
 **Onde a 3.0 está:** aprovada em 05/10 nas duas lojas, build 70, árvore
 18ece86. Sem o Início novo e sem a aba Biela, que são o item 1 daqui.
@@ -149,6 +152,14 @@ WebView do aparelho.**
 3. **As apostas abertas** (`inicio-pergunta-unica`, `aba-biela`,
    `portao-unico-do-premium`) passam a valer no app com esta versão; a
    leitura separa por plataforma e por versão.
+
+## Depois da publicação (07/10)
+
+Feito na hora do aviso: `3.1` em JA_PUBLICADAS, build 71 no mapa, árvore
+34ffaac no mapa, o aviso de versão nova apontando para 71 nas duas lojas, o
+piso do versionCode em 72, e os três lugares da versão de marketing abrindo a
+3.2. O roteiro de aparelho de oito passos continua sendo o único sinal sobre
+o binário.
 
 ## Antes de promover a produção
 

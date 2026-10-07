@@ -3,6 +3,37 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-07 · Engenharia: a 3.1 nas duas lojas, build 71, lida em três instrumentos antes de marcar
+
+- Dono, 18h17 de Brasília: "A 3.1 está nas lojas. Build 71".
+- **Conferido antes de escrever qualquer número, pela regra de 06/10:**
+  - Apple, pela API (fluxo `Engenharia: builds da App Store`, execução
+    8846, e um avulso de versões, execução 8847, arquivado): o build 71 foi
+    enviado às 06h45 de Brasília de 07/10, e a versão 3.1 está
+    READY_FOR_SALE (criada às 07h11). O retrato das 06h de hoje ainda não a
+    tinha, porque ela nasceu depois.
+  - Funil: 22 aparelhos Android em `3.1.0` entre 06h50 e 17h51 de 07/10
+    (97 ainda em 3.0.0), 1 iPhone em 3.1.0 às 08h10, 7 na web.
+  - Git: depois da árvore entregue ao dono (34ffaac, 18h03 UTC de 06/10)
+    só entrou o retrato diário (4fe5d5d, documento). Código de app: nenhum.
+    O build subiu à Apple às 09h45 UTC de 07/10, depois dos dois. Árvore do
+    build 71: 34ffaac, com os dez commits da ficha dentro.
+- **A corrente inteira, cobrada pela `conferir:versoes`:** `3.1` em
+  JA_PUBLICADAS, build 71 no mapa, árvore 34ffaac no mapa; o aviso de versão
+  nova aponta para 71 nas duas lojas; o piso do versionCode sobe para 72; os
+  três lugares da versão de marketing abrem a 3.2; a ficha da 3.1 diz onde
+  está e de que árvore saiu; nasce a ficha da 3.2 vazia. As fichas de
+  `inicio-pergunta-unica`, `aba-biela` e `portao-unico-do-premium` passam a
+  dizer "no app desde 07/10, com a 3.1".
+- **Um defeito da própria conferência, achado no caminho:** o leitor da
+  ficha só casava "commit <sha>" na mesma linha, e a ficha da 3.1 quebra a
+  linha depois de "commit" em cinco itens e diz "commits X e Y" no nono. Ela
+  respondia "6 de 6 dentro" lendo metade. Agora lê as três formas: 10 de 10.
+- **O que a conferência não alcança**: a WebView. O roteiro de oito passos da
+  ficha é o sinal sobre o binário; o aparelho do dono é o primeiro a abrir.
+- **Fora da 3.1, como estava dito antes do botão**: nada do app. O clique do
+  `topPaginas` no n8n segue na lista do dono.
+
 ## 2026-10-06 (noite) · Engenharia: a 3.1 fechada para build, com o regime de release inteiro
 
 - Dono: "Perfeito. Vamos colocar tudo e enviar para iOS e Android aprovar.

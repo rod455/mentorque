@@ -145,6 +145,14 @@ const JA_PUBLICADAS = [
   // noite, TestFlight do dono); a aprovação da Apple se confere no retrato do
   // `app_store_connect` de 06/10, que é colhido às 6h.
   "3.0",
+  // Build 71, nas duas lojas em 07/10/2026, aviso do dono ("A 3.1 está nas
+  // lojas. Build 71"). Lida em três instrumentos antes de escrever: o funil
+  // (22 aparelhos Android em 3.1.0 desde as 06h50 de 07/10, e 1 iPhone às
+  // 08h10), a App Store Connect pela API (build 71 enviado e a versão 3.1
+  // no estado que o diário de 07/10 registra), e o git (nenhum commit de
+  // código entre a árvore entregue ao dono, 34ffaac, e a publicação).
+  // Acrescentada na hora do aviso.
+  "3.1",
 ];
 
 // O BUILD DE CADA VERSÃO PUBLICADA (30/09/2026).
@@ -172,6 +180,7 @@ const BUILD_PUBLICADO = {
   "2.8": 68,
   "2.9": 69,
   "3.0": 70,
+  "3.1": 71,
 };
 
 // A ÁRVORE DE CADA BUILD PUBLICADO (06/10/2026).
@@ -194,6 +203,9 @@ const ARVORE_DO_BUILD = {
   // .aab #70. O 18ece86 é o 748fedf mais um commit de diário: o código é o
   // mesmo, e o Início novo (28f13e1, 19h56) não está nele.
   "3.0": "18ece86",
+  // Entregue ao dono em 06/10 às 18h03 UTC como "o commit para apertar";
+  // depois dele só entrou o retrato diário (4fe5d5d), sem código de app.
+  "3.1": "34ffaac",
 };
 
 import { readFileSync, existsSync } from "node:fs";
@@ -455,7 +467,13 @@ if (piso <= publicado) {
       }
       return fatias.join("\n");
     };
-    const commits = (trecho) => [...trecho.matchAll(/commit ([0-9a-f]{7,40})/g)].map((m) => m[1]);
+    // "commit 3e19e9e", "commit\n   3e19e9e" (quebra de linha da ficha) e
+    // "commits 770c0b1 e 0426bed" contam os dois. A primeira versão só lia
+    // "commit <sha>" na mesma linha e deixou cinco dos dez commits da 3.1
+    // sem conferir, calada: conferência que lê metade da ficha e diz "6 de
+    // 6 dentro" é a luz verde que ela existe para não dar.
+    const commits = (trecho) =>
+      [...trecho.matchAll(/commits?\s+([0-9a-f]{7,40})(?:\s+e\s+([0-9a-f]{7,40}))?/g)].flatMap((m) => (m[2] ? [m[1], m[2]] : [m[1]]));
     const dentro = commits(secoes("### Vai no binário"));
     const fora = commits(secoes("## Ficou FORA do binário"));
     // CLONE RASO (06/10/2026): as sessões remotas clonam com pouca história, e
