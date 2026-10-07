@@ -33,6 +33,116 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   ficha é o sinal sobre o binário; o aparelho do dono é o primeiro a abrir.
 - **Fora da 3.1, como estava dito antes do botão**: nada do app. O clique do
   `topPaginas` no n8n segue na lista do dono.
+## 2026-10-07 · QA: o quiz do dia 1 nunca acontece, e em 314 aparelhos deu zero
+- Artifact "QA da semana":
+  https://claude.ai/artifact/K31NBjdvkVCFdMjDhuHd41
+- VARREDURA DA SEMANA: **quiz diário**, que era "o maior recurso do app sem
+  varredura dedicada" desde 30/09 e já tinha cedido a vez duas vezes. O dono
+  pediu em 03/10 que marcasse a data: é hoje, e saiu da fila.
+- **O ACHADO, MEDIDO: a resposta do quiz no onboarding consome o dia da
+  pessoa, e o quiz diário fica indisponível naquele mesmo dia. Em 314
+  aparelhos que responderam o onboarding, ZERO responderam um quiz diário
+  no dia da instalação.** O dia 1 é o melhor dia que o quiz vai ter com
+  alguém, e é o único em que ele não roda.
+- São TRÊS camadas independentes empurrando para o mesmo lado, e qualquer uma
+  sozinha bastaria para bloquear:
+  1. a tela decide por `ultimoDia`, que o onboarding carimba
+     (`PrimeiroQuiz.tsx:140` chama `responderQuiz`, que é `aoResponder`), e
+     `Quiz.tsx:67` cai no ramo `JaRespondeu`. `respondeuHoje` responde
+     "respondeu alguma coisa hoje?" e a tela precisa de "respondeu a pergunta
+     DE HOJE?";
+  2. o banco recusaria de todo jeito: `quiz_respostas_uma_por_dia` é único em
+     `(dia, anon_id)`, SEM a pergunta. Ensaiado no banco hoje, em transação
+     desfeita (resíduo conferido, zero): entra a do onboarding, a do dia é
+     recusada. A rota trata `23505` como sucesso, de propósito, então o
+     descarte é silencioso. Consertar só a tela produziria resposta que a
+     pessoa dá e o servidor joga fora;
+  3. a estatística não enxerga: das 373 linhas, **314 são de UMA pergunta**, a
+     `oleo-intervalo` do onboarding, que cresce com instalações e não com uso.
+- **O QUIZ DIÁRIO DE VERDADE: 59 respostas, 23 aparelhos, 34 dias, 1,7 por
+  dia.** E a frase "62% acertaram hoje", que é a razão de a tabela existir,
+  aparece a partir de 20 respostas no dia: em 42 dias ela apareceu em **UM**. A
+  ironia que fecha: a única pergunta com respostas de sobra para mostrá-la
+  (314 contra o piso de 20) é a do onboarding, a única tela que nunca pede o
+  placar.
+- **ERRO MEU NO CAMINHO, e é o da casa inteira em setembro**: minha primeira
+  leitura foi "média de 5 respostas por dia". Não é participação nenhuma: era
+  a pergunta do onboarding somada à rotação diária. Peguei antes de publicar
+  porque o máximo de 314 numa pergunta só não cabia num quiz de 5 por dia.
+- FEITO, dentro da alçada (view aditiva, três condições cumpridas): a view
+  `public.quiz_participacao`, que separa `onboarding` de `diario` com as duas
+  etiquetas nomeadas, ensaiada no banco (devolveu os mesmos 59/34 e 314/40
+  apurados à mão), com `supabase/quiz_respostas.sql` atualizado no mesmo
+  commit e o aviso no cabeçalho da tabela para o próximo que for somar aquelas
+  linhas.
+- CONFERÊNCIA NOVA `conferir:quiz-populacao`, que guarda o acoplamento frágil
+  da view: o id está escrito à mão no SQL porque SQL não importa TypeScript, e
+  a fonte da verdade é `perguntaDoOnboarding`. Cinco defeitos plantados, os
+  cinco reprovando: id trocado no SQL, banco de perguntas reordenado,
+  `security_invoker` removido, etiqueta de uma população perdida, e a rotação
+  diária passando a devolver a pergunta do onboarding. O quarto e o quinto
+  existem porque os três primeiros não cobriam quem USA a regra.
+- NÃO FEITO, de propósito, com proposta pronta em
+  `docs/agentes/propostas/o-quiz-do-dia-1-nunca-acontece.md`: o conserto mexe
+  em uniqueness de tabela e no significado da sequência, que é o único ativo
+  que o quiz constrói. Fora da alçada, e a proposta já traz o detalhe que eu
+  quase deixei passar (duas respostas no mesmo dia somam `respostas` duas
+  vezes com um registro só no histórico) e as três asserções que o conserto
+  pede, com a primeira delas sendo a que olha quem usa a regra.
+- ERROS DO RETRATO, fechados sem alarme. O topo da lista é `tela: home`, 7x em
+  4 aparelhos, e a população muda a leitura: **5 dos 7 são UM aparelho
+  (2312DRA50G) em 67 minutos da manhã de 30/09, na 2.9**, e só 1 dos 7 está na
+  3.0. Contando apenas `sem-pausa`, que é o grupo que ouvinte novo não mexe
+  (regra que eu mesmo escrevi em 30/09), são 3 mortes de verdade em versões que
+  carregam a marca. 2,7% dos aparelhos ativos, abaixo do teto de 10%.
+- **DOIS NÚMEROS MEUS DISCORDARAM E EU FECHEI**: minha primeira consulta deu 2
+  fechamentos em `home` contra os 7 do retrato. O retrato está certo; a janela
+  dele começa 2h20 antes da minha e esse intervalo contém justamente os cinco
+  eventos daquela manhã. Desconfiar do próprio instrumento antes do sistema
+  valeu de novo.
+- FECHA UM ITEM DA FILA ABERTO DESDE 30/09 ("um ou dois aparelhos por versão
+  abrem o app muitas vezes sem conseguir fazer nada"). O 2312DRA50G abriu 34
+  vezes em 4 dias, **viu uma aula**, abriu o cadastro de carro e nunca
+  terminou, e parou de usar o app no minuto do último fechamento. E o tamanho
+  do efeito na medição: na semana fechada, 5 identidades de 236 concentram
+  12,8% das aberturas, o que move "aberturas por usuário" de 1,42 para 1,26.
+  Real, e pequeno demais para mudar decisão.
+- O TRAVAMENTO QUE EU FUI CAÇAR E NÃO EXISTE, etiquetado TEORIA: `diasEntre`
+  devolve 0 quando a data não parseia, e 0 significa "hoje", o que faria
+  `respondeuHoje` travar o quiz para sempre. Medido no banco: 150 contas com
+  estado de quiz, **zero** com `ultimoDia` malformado, zero no futuro, zero sem
+  histórico. Fica escrito porque a escolha de mapear "não sei" para o valor
+  mais consequente é a mesma família de erro que a casa consertou três vezes
+  neste mês.
+- O ZERO DO ADMOB, pela regra nova do dono (quem escreve esse número?): o
+  escritor existe (bloco real do Android, montado em Symptoms e Content pelo
+  `AdOverlay`), então não é zero estrutural de código. Mas **a linha "AdMob 7d:
+  0.00 USD" não é zero medido**: o pacote bruto traz `porDia: []` e uma `nota`
+  do próprio coletor dizendo "sem linhas do app do Mentorque no periodo". O
+  retrato publica o 0.00 e descarta a nota, enquanto o `play_console` no MESMO
+  retrato trata a situação idêntica do jeito certo ("NAO E ZERO MEDIDO"). O
+  renderizador mora no n8n, não neste repositório: é conserto do Analista, não
+  meu, e fica nomeado aqui para o Diretor rotear.
+- SAÚDE, com instrumento e hora (regra de 06/10 do CLAUDE.md): `npm run
+  conferir` verde com a conferência nova dentro, `tsc --noEmit` limpo e
+  `build:native` verde (48 MB), todos rodados nesta máquina entre 11h20 e 12h
+  UTC de 07/10, na árvore com os meus arquivos novos dentro. **Critério 2 cumprido em três dos quatro**: não
+  rodei `npm run build` do site, porque a Vercel builda a cada push e o retrato
+  de hoje traz `deploys7d: 20, comErro7d: 0` com o último READY. Segundo
+  instrumento declarado em vez de bateria repetida.
+- AUTOAVALIAÇÃO CONTRA A RÉGUA: cumpri 1 a 11, com a ressalva do critério 2
+  acima escrita em vez de silenciada. O critério 9 (conferência que teria pego
+  o conserto) vale para a view que subiu; o conserto do dia 1 não subiu, e as
+  asserções dele estão escritas na proposta em vez de implementadas.
+- DE PASSAGEM, e a conferência fez o trabalho dela: o `conferir:agentes`
+  reprovou o título desta entrada porque eu assinei "QA/Produto" e a regra de
+  06/10 quer o apelido curto derivado da tabela das DIRETRIZES, que é "QA". E o
+  `conferir:fila` reprovou em seguida, porque conferência nova sem linha na
+  fila do Guardião nunca é sorteada para prova. As duas corrigidas antes do
+  push, e as duas pegaram defeito meu de verdade.
+- Próxima varredura: **quiz de saúde**, que é o irmão não varrido do que saiu
+  hoje. Se o dono aplicar a proposta, a reconferência do quiz diário entra na
+  frente, com as três asserções.
 
 ## 2026-10-06 (noite) · Engenharia: a 3.1 fechada para build, com o regime de release inteiro
 

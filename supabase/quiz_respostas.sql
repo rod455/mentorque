@@ -47,6 +47,25 @@ create unique index if not exists quiz_respostas_uma_por_dia
 create index if not exists quiz_respostas_dia_pergunta
   on public.quiz_respostas (dia, pergunta_id);
 
+-- CUIDADO AO LER ESTA TABELA (achado do QA, 07/10/2026).
+--
+-- Ela tem DUAS populações dentro, e misturá-las já produziu a leitura errada
+-- na primeira tentativa desta própria rodada: "média de 5 respostas por dia",
+-- que não é participação no quiz diário nenhuma.
+--
+-- Das 373 linhas de 07/10, **314 são de uma pergunta só**, a `oleo-intervalo`,
+-- que é a do ONBOARDING (`perguntaDoOnboarding`, fora da rotação diária em
+-- lib/app/quiz/sequencia.ts). Ela é respondida uma vez por cada pessoa que
+-- instala, então cresce com INSTALAÇÕES e não com uso. O quiz diário de
+-- verdade tem 59 respostas, de 23 aparelhos, em 34 dias: 1,7 por dia.
+--
+-- A ironia que fecha o assunto: a pergunta do onboarding é a ÚNICA com
+-- respostas de sobra para a frase "62% acertaram" aparecer (314, contra o piso
+-- de 20), e é justamente a única tela que nunca pede o placar. As 35 perguntas
+-- que pediriam a frase ficam em 1,7 por dia, e em 42 dias a frase apareceu em
+-- UM. A view `quiz_participacao`, no fim deste arquivo, separa as duas para
+-- ninguém repetir a conta.
+--
 -- Resumo por dia, para os agentes e para acompanhar se o quiz está pegando.
 -- security_invoker: a view NÃO fura o RLS — só a chave de serviço lê.
 create or replace view public.quiz_dia
@@ -61,3 +80,52 @@ select
 from public.quiz_respostas
 group by dia, pergunta_id
 order by dia desc;
+
+-- Participação separada por população, aplicada em 07/10/2026 (QA).
+--
+-- POR QUE ELA EXISTE: a `quiz_dia` acima agrupa por (dia, pergunta_id), e quem
+-- somar aquelas linhas para responder "quanta gente faz o quiz por dia" soma a
+-- pergunta do onboarding junto e erra por quatro vezes. Esta view responde a
+-- pergunta que os agentes realmente fazem, com as duas populações nomeadas e
+-- separadas, de modo que não dá para somar sem ver o que se está somando.
+--
+-- `onboarding` cresce com INSTALAÇÕES; `diario` cresce com USO. Nunca some as
+-- duas: são perguntas diferentes sobre produtos diferentes.
+--
+-- O id fica escrito aqui porque SQL não importa TypeScript, e a fonte da
+-- verdade é `perguntaDoOnboarding(perguntasDoQuiz())` em
+-- lib/app/quiz/sequencia.ts, que devolve `perguntas[0]`. Se alguém reordenar
+-- `perguntasDoQuiz`, este id cala e a view passa a separar a população errada
+-- em silêncio. É exatamente por isso que `npm run conferir:quiz-populacao`
+-- compara os dois e reprova se divergirem.
+create or replace view public.quiz_participacao
+  with (security_invoker = on) as
+select
+  dia,
+  case when pergunta_id = 'oleo-intervalo' then 'onboarding' else 'diario' end as tipo,
+  count(*)                                    as respostas,
+  count(distinct anon_id)                     as aparelhos,
+  count(*) filter (where acertou)              as acertos,
+  count(*) filter (where user_id is not null)  as respostas_logadas
+from public.quiz_respostas
+group by dia, 2
+order by dia desc, 2;
+
+revoke all on public.quiz_participacao from anon, authenticated;
+grant select on public.quiz_participacao to service_role;
+
+-- Ensaiada no banco antes de subir, em 07/10/2026: a view devolveu
+-- `diario` 59 respostas em 34 dias (1,7 por dia) e `onboarding` 314 em 40
+-- dias, que são os mesmos números apurados à mão na varredura. O ensaio do
+-- índice (abaixo) foi desfeito na mesma transação, e a conferência de resíduo
+-- voltou zero.
+--
+-- E O QUE O ENSAIO DO ÍNDICE MOSTROU, que é o achado da varredura: o
+-- `quiz_respostas_uma_por_dia` é único em (dia, anon_id) SEM a pergunta.
+-- Inserida a resposta do onboarding, a resposta da pergunta DO DIA, da mesma
+-- pessoa no mesmo dia, é recusada pelo índice. Somado à tela (que decide por
+-- `ultimoDia`, carimbado pelo onboarding), o quiz do dia 1 não acontece: em
+-- 314 aparelhos que responderam o onboarding, ZERO responderam um quiz diário
+-- naquele mesmo dia. A proposta de conserto está em
+-- docs/agentes/propostas/o-quiz-do-dia-1-nunca-acontece.md e mexe em
+-- uniqueness, então é decisão do dono, não da alçada do QA.

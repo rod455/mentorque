@@ -82,6 +82,9 @@ não é critério, "tem o número e a janela do lado" é.
 | 9 | **Todo conserto veio com a conferência que o teria pego** | e a conferência foi provada com defeito plantado |
 | 10 | **Achado com data foi para o topo** | com a data em destaque e verificação agendada |
 | 11 | **Nada fora da alçada** | sem preço, sem cobrança, sem mensagem a cliente, sem remover funcionalidade |
+| 12 | **Todo zero publicado teve o ESCRITOR conferido** | antes de publicar um zero, perguntar quem escreve aquele número e ir ver se esse escritor existe. Pedido do dono em 03/10, depois de o zero estrutural acontecer quatro vezes: é uma pergunta de trinta segundos que teria fechado o `renovacoes 0` em agosto |
+| 13 | **Asserção apagada deixou escrito o que a cobre** | apagar pode ser certo (não repetir o compilador); o que não pode é apagar sem nomear, do lado, QUAL erro de compilação cobre aquele caso. Sem o nome, o próximo leitor repõe uma asserção mais fraca, ou nenhuma |
+| 14 | **A tabela que virou média tem uma população só** | antes de dividir ou tirar média de uma tabela, perguntar se todas as linhas são a mesma coisa. Em 07/10 a `quiz_respostas` tinha duas populações dentro e a média saiu quatro vezes maior |
 
 **De onde veio esta régua (19/09/2026).** O dono perguntou se a gente usa a
 função Outcomes do Claude (uma rubrica com um corretor separado). Ela é de
@@ -288,6 +291,24 @@ recomendar.
   as aberturas daquela versão em `funil_eventos` (a régua `public.identidade`):
   10 erros numa versão com 14 identidades é uma coisa, numa com 300 é outra.
   Diga sempre qual dos dois você mediu.
+- **Uma tabela pode ter duas populações dentro, e a média não avisa.** A
+  `quiz_respostas` tem a pergunta do ONBOARDING (respondida uma vez por cada
+  pessoa que instala, cresce com instalação) e a rotação DIÁRIA (cresce com
+  uso). São 314 linhas contra 59, e a média das duas juntas deu 5 por dia
+  quando o quiz diário tem 1,7. Antes de dividir ou tirar média de qualquer
+  tabela, pergunte se todas as linhas são a mesma coisa; o sinal de alarme é um
+  máximo que não cabe na média (314 numa pergunta só, num quiz de 5 por dia).
+- **Quando o seu número discorda do retrato, compare as JANELAS antes de
+  qualquer outra coisa.** Minha consulta deu 2 fechamentos onde o retrato deu
+  7, e eu já estava montando a hipótese de defeito no retrato. A diferença era
+  que a janela dele começa 2h20 antes da minha, e esse intervalo continha cinco
+  dos sete eventos. "7 dias" contados de agora não são "7 dias" contados das 9h.
+- **O bloqueio que importa costuma ter mais de uma camada, e consertar uma só
+  piora.** No quiz do dia 1, a tela bloqueia por `ultimoDia` E o índice único
+  do banco recusa a linha. Consertar só a tela produziria resposta que a pessoa
+  dá e o servidor joga fora, em silêncio, porque a rota trata o conflito como
+  sucesso de propósito. Ao achar um caminho bloqueado, procure a SEGUNDA
+  tranca antes de escrever o conserto.
 - **Dinheiro tem hora, e a hora dele não é a hora do evento.** Na venda o
   pagamento acontece ANTES do evento (a sessão do checkout já chega com
   `amount_total` resolvido); na renovação ele acontece UMA HORA DEPOIS (o ciclo
@@ -398,19 +419,33 @@ fila, com dado de produção pela primeira vez.
   novo (ver Aprendizados); o gatilho vale para relato contado pelo mesmo
   instrumento das semanas anteriores. Daqui para a frente, contar só o
   `sem-pausa`, que é o grupo que os ouvintes novos não mexem.
-- **Um ou dois aparelhos por versão abrem o app muitas vezes sem conseguir
-  fazer nada** (dezoito aberturas num aparelho da 2.8, dez num da 2.9). Isso
-  ficou de fora da rodada de 30/09 porque não era a pergunta, e é a pergunta
-  que sobrou: não é regressão, mas também não é normal.
-- **Quiz diário**, que tem bateria própria e nunca passou por QA. É o maior
-  recurso do app sem uma varredura dedicada.
+- ~~**Um ou dois aparelhos por versão abrem o app muitas vezes sem conseguir
+  fazer nada.**~~ **FECHADO em 07/10.** O aparelho da 2.9 (2312DRA50G) abriu 34
+  vezes em 4 dias, viu UMA aula, abriu o cadastro de carro e nunca terminou, e
+  parou de usar no minuto do último fechamento. Reabrir era sintoma do
+  fechamento, não entusiasmo. Tamanho do efeito na medição: 5 identidades de
+  236 concentram 12,8% das aberturas da semana fechada, o que move "aberturas
+  por usuário" de 1,42 para 1,26. Real, e pequeno demais para mudar decisão.
+- ~~**Quiz diário**, o maior recurso do app sem varredura dedicada.~~
+  **VARRIDO em 07/10**, com a data que o dono pediu em 03/10. Achado: a
+  resposta do onboarding consome o dia e o quiz do dia 1 não acontece (0 de
+  314). View `quiz_participacao` e `conferir:quiz-populacao` subiram; o
+  conserto virou proposta, porque mexe em unicidade de tabela. **Reconferir
+  quando o dono decidir**, com as três asserções que a proposta lista.
 - **A recuperação de senha, depois que o dono escolher o desenho.** O achado
   de 16/09 tem patch pronto em `docs/agentes/propostas/`; o que falta é a
   decisão entre deep link e web. Escolhida a saída, o resto é pequeno e volta
   para cá.
-- Quiz de saúde, catálogo remoto de aulas, campos de formulário.
-- **Quiz diário** (novo em 26-27/08, nunca varrido por QA): banco de 65
-  perguntas, sequência com perdão semanal, rota `/api/quiz`, folha do primeiro
+- **A linha do AdMob no retrato não é zero medido** (achado de 07/10, não é
+  meu conserto): o pacote bruto traz `porDia: []` e uma nota do coletor
+  dizendo "sem linhas do app do Mentorque no periodo", e o retrato publica
+  "0.00 USD" descartando a nota, enquanto o `play_console` no mesmo retrato
+  trata a situação idêntica do jeito certo. O renderizador mora no n8n: é do
+  Analista. Se não for consertado até a próxima rodada, nomear de novo.
+- **Quiz de saúde** é a próxima varredura (irmão não varrido do quiz diário),
+  mais catálogo remoto de aulas e campos de formulário.
+- **Quiz diário** (novo em 26-27/08, nunca varrido por QA): banco de 63
+  perguntas (eram 65 na nota antiga; conferido em 07/10), sequência com perdão semanal, rota `/api/quiz`, folha do primeiro
   quiz. Tem bateria própria em `npm run verifica:quiz` e quatro roteiros de
   navegador; conferir se elas cobrem o que mudou desde então.
 
