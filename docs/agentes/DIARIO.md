@@ -3,6 +3,13 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-08 · Engenharia: a função de teste da anomalia 5 caiu pelo clique do dono
+
+- Dono: "Rodei a função". Lido no `pg_proc` em seguida: só resta
+  `anomalias_da_operacao`; a `teste_anomalia5(date)` não existe mais. A linha
+  sai da lista do dono. O alarme 5 continua na função principal (conferido às
+  13h UTC, calado hoje).
+
 ## 2026-10-08 · Engenharia: o relatório de mídia não chegava porque o envio era uma tentativa só às 16h; agora é de hora em hora
 
 - Dono: "Veja a análise de mídia. Ela não está sendo enviada para mim nem
