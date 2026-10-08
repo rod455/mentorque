@@ -185,9 +185,11 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   responderam o onboarding, 0 responderam um quiz diário no mesmo dia (zero
   estrutural, escrito pelo índice), 4 no dia seguinte, 9 em qualquer dia
   depois. Nos últimos 30 dias: 316, 96 voltaram ao app, 5 fizeram o quiz.
-- Ressalva dita na abertura: enquanto o índice antigo `(dia, anon_id)` não
-  cair (clique do dono), a resposta do quiz do dia 1 continua recusada pelo
-  banco, e a métrica da `quiz_respostas` não se move; `abriu_quiz` se move.
+- O índice antigo `(dia, anon_id)` caiu em 08/10 pelo clique do dono (lido
+  no `pg_indexes` em seguida), e o ensaio em transação desfeita gravou as
+  duas respostas da mesma pessoa no mesmo dia (onboarding e pergunta do dia)
+  e recusou o segundo toque na mesma pergunta. As duas trancas estão
+  abertas desde 08/10; a métrica da `quiz_respostas` vale a partir daí.
 - Veredito: (aberto)
 
 ## [portao-unico-do-premium] Um portão só, que diz o que a pessoa ganha

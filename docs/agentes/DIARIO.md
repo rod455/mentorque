@@ -3,6 +3,20 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-08 · Engenharia: o índice antigo caiu, as duas trancas do quiz do dia 1 estão abertas
+
+- Dono: "TEste novamente", depois de rodar o `drop` no SQL Editor. Lido no
+  `pg_indexes` em seguida: `quiz_respostas_uma_por_dia` não existe mais;
+  ficam a chave primária, o índice do GET e o novo `(dia, anon_id,
+  pergunta_id)`.
+- **Ensaio em transação desfeita, no banco:** para a mesma pessoa, no mesmo
+  dia, a resposta do onboarding e a da pergunta do dia entraram (2 linhas);
+  o segundo toque na mesma pergunta foi recusado pelo índice novo
+  (`unique_violation`), que é o que mantém o placar "das pessoas que
+  responderam". Resíduo conferido depois: zero.
+- A linha da lista do dono saiu; a ficha `quiz-no-dia-1` perde a ressalva e
+  a métrica da `quiz_respostas` vale desde 08/10.
+
 ## 2026-10-08 · Engenharia: o quiz do dia 1 passa a acontecer (caminho B), e o índice antigo ficou para o dono
 
 - Dono: "vamos fazer o B. Implemente tudo." Commit bd95618, na web pelo
