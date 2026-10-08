@@ -197,3 +197,23 @@ que a pessoa mais está dentro do app. O custo é uma frase de conteúdo e a
 decisão de produto de que a sequência começa no primeiro quiz do dia, não no
 onboarding. As três asserções da proposta valem para os dois caminhos, e a
 primeira tem que reprovar sobre o código de hoje antes do conserto.
+
+## Decisão do dono (08/10/2026): caminho B, aplicado
+
+"vamos fazer o B. Implemente tudo." Aplicado em 08/10, commit bd95618:
+
+- `aoResponderOnboarding` em `lib/app/quiz/sequencia.ts` (estudo, não
+  presença; guarda em `quiz.onboarding`; não encosta em `ultimoDia`,
+  `sequencia`, `perdaoEm` nem no histórico por dia); `jaRespondeuOnboarding`
+  cobre quem respondeu antes de hoje; `mesclarQuiz` carrega o onboarding;
+- a folha do primeiro quiz entra por esse caminho, ganha o botão "Responder
+  a de hoje" e a frase de fecho deixa de dizer que a sequência começou;
+- o índice novo `(dia, anon_id, pergunta_id)` criado no banco (migração
+  `quiz_respostas_uma_por_dia_e_pergunta`); o `drop` do antigo está na lista
+  do dono, porque a ferramenta desta sessão segura comando destrutivo;
+- `abriu_quiz` no funil, com `origem` "pergunta" ou "ja-respondeu";
+- as três asserções em `scripts/verifica-quiz.ts` (a primeira reprovou sobre
+  o código de 07/10 antes do conserto) e a suíte `primeiro-quiz` tocando o
+  botão novo e provando que a pergunta do dia é oferecida.
+
+Ficha da aposta: `quiz-no-dia-1` em `docs/agentes/experimentos.md`.

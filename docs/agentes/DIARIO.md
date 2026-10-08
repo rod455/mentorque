@@ -3,6 +3,35 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-08 · Engenharia: o quiz do dia 1 passa a acontecer (caminho B), e o índice antigo ficou para o dono
+
+- Dono: "vamos fazer o B. Implemente tudo." Commit bd95618, na web pelo
+  push; no app, com a 3.2 (ficha `novidades-3.2.md`, item 1).
+- **A ordem do QA, cumprida:** a asserção que olha quem usa a regra (a folha
+  do primeiro quiz entra pelo caminho de estudo, e não pelo da pergunta do
+  dia) foi escrita primeiro e reprovou sobre o código de 07/10, duas vezes,
+  antes de qualquer conserto. Depois a regra: `aoResponderOnboarding` não
+  carimba o dia, a pergunta do dia continua oferecida, o segundo toque não
+  conta, e o total nunca passa do histórico mais o onboarding, inclusive na
+  mescla. `npm run conferir` inteiro verde; suítes `primeiro-quiz` e `quiz`
+  verdes, a primeira tocando o botão novo "Responder a de hoje" e lendo a
+  pergunta do dia em seguida.
+- **O que mudou de verdade:** a resposta do onboarding vira `quiz.onboarding`
+  (estudo), a sequência nasce no primeiro quiz do dia, o chip "Quiz" fica
+  aceso depois da folha, a frase de fecho deixa de prometer sequência. Nasce
+  `abriu_quiz` (origem pergunta ou ja-respondeu) nos quatro lugares e no
+  banco (migração `funil_eventos_abriu_quiz`, aplicada).
+- **O banco, pela metade, e dito:** o índice novo `(dia, anon_id,
+  pergunta_id)` está criado (lido no `pg_indexes` às 03h UTC de 08/10). O
+  `drop` do antigo `(dia, anon_id)` a ferramenta do Supabase desta sessão
+  segura para confirmação (quatro tentativas, migração e SQL avulso, todas
+  em espera até o limite de 60 s; nenhuma trava no `pg_locks`). Entrou na
+  lista do dono com o comando. Enquanto ele não cair, a resposta do quiz do
+  dia 1 continua recusada pelo banco em silêncio e só a cópia local vale.
+- **A ficha** `quiz-no-dia-1` em `experimentos.md`, com o antes lido em
+  08/10 (4 de 332 no dia seguinte, 9 em qualquer dia; 5 de 316 em 30 dias)
+  e a leitura por versão. A fila do QA aponta a reconferência.
+
 ## 2026-10-08 · Engenharia: a rodada do QA lida contra o código e o banco; o zero da manchete é o índice
 
 - Dono: "Veja o que QA escreveu hoje". O retorno está em `qa-produto.md`

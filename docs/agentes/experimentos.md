@@ -157,6 +157,39 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   funil; não li o recorte semanal de `consultou_sintoma` antes de abrir
 - Veredito: (aberto)
 
+## [quiz-no-dia-1] A resposta do onboarding deixa de consumir o dia, e a pergunta do dia 1 é oferecida
+- Estado: ABERTO
+- Tipo: mudanca-direta
+- Alvo no funil: `abriu_quiz` por `origem` (pergunta contra ja-respondeu), e
+  na `quiz_respostas`: de quem responde o onboarding, quantos respondem um
+  quiz diário no mesmo dia e no dia seguinte.
+- Tese BeSci: o dia 1 é o dia em que a pessoa está dentro do app por vontade
+  própria, e era o único em que o quiz não rodava (achado do QA, 07/10). A =
+  a resposta do onboarding carimbava o dia; a tela dizia "você já respondeu
+  hoje" e o banco recusava a segunda resposta. B = a resposta do onboarding
+  é estudo, não presença (`aoResponderOnboarding`): a pergunta do dia fica
+  disponível, a folha ganha o botão "Responder a de hoje", o chip "Quiz"
+  continua aceso, e a sequência nasce no primeiro quiz do dia. Índice do
+  banco com a pergunta na chave.
+- Decisão do dono em 08/10 ("vamos fazer o B. Implemente tudo"), entre os
+  dois caminhos da proposta `o-quiz-do-dia-1-nunca-acontece.md`.
+- Métrica: de quem responde o onboarding na semana, % que responde um quiz
+  diário no mesmo dia ou no seguinte (`quiz_participacao` cruzada por
+  `anon_id`); e `abriu_quiz` com `origem = ja-respondeu` no dia do
+  onboarding tem de ir a zero · Duração: 4 semanas
+- Aprovação: pedido do dono em 2026-10-08
+- Início: 2026-10-08 na web (commit bd95618); no app, com a 3.2 · Ler a
+  partir de: 2026-10-22 (direcional) e 2026-11-05. A leitura separa por
+  versão: na 3.1 e antes o muro continua de pé.
+- Antes (lido em 08/10 na `quiz_respostas`): de 332 aparelhos que
+  responderam o onboarding, 0 responderam um quiz diário no mesmo dia (zero
+  estrutural, escrito pelo índice), 4 no dia seguinte, 9 em qualquer dia
+  depois. Nos últimos 30 dias: 316, 96 voltaram ao app, 5 fizeram o quiz.
+- Ressalva dita na abertura: enquanto o índice antigo `(dia, anon_id)` não
+  cair (clique do dono), a resposta do quiz do dia 1 continua recusada pelo
+  banco, e a métrica da `quiz_respostas` não se move; `abriu_quiz` se move.
+- Veredito: (aberto)
+
 ## [portao-unico-do-premium] Um portão só, que diz o que a pessoa ganha
 - Estado: ABERTO
 - Tipo: mudanca-direta

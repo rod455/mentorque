@@ -430,8 +430,13 @@ fila, com dado de produção pela primeira vez.
   **VARRIDO em 07/10**, com a data que o dono pediu em 03/10. Achado: a
   resposta do onboarding consome o dia e o quiz do dia 1 não acontece (0 de
   314). View `quiz_participacao` e `conferir:quiz-populacao` subiram; o
-  conserto virou proposta, porque mexe em unicidade de tabela. **Reconferir
-  quando o dono decidir**, com as três asserções que a proposta lista.
+  conserto virou proposta, porque mexe em unicidade de tabela. **Decidido
+  em 08/10 (caminho B, Engenharia, commit bd95618)**: a resposta do
+  onboarding virou estudo, o índice ganhou a pergunta e nasceu `abriu_quiz`.
+  **Reconferir na próxima rodada**, com as três asserções da proposta (estão
+  em `verifica-quiz.ts`, e a primeira reprovou sobre o código de 07/10 antes
+  do conserto) e com a leitura de `abriu_quiz` por `origem`. Ficou de fora:
+  o `drop` do índice antigo, que está na lista do dono.
 - **A recuperação de senha, depois que o dono escolher o desenho.** O achado
   de 16/09 tem patch pronto em `docs/agentes/propostas/`; o que falta é a
   decisão entre deep link e web. Escolhida a saída, o resto é pequeno e volta

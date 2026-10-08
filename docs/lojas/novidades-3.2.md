@@ -14,8 +14,17 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
 
 ### Vai no binário, e a pessoa sente
 
-(nada ainda)
+1. **O quiz do dia 1 acontece** (08/10, commit bd95618). A resposta da
+   pergunta do onboarding deixa de consumir o dia: a pergunta do dia fica
+   disponível logo em seguida, a folha do primeiro quiz ganha o botão
+   "Responder a de hoje", e a sequência nasce no primeiro quiz do dia. Nasce
+   o evento `abriu_quiz`. Na 3.1 e antes, quem responde o onboarding vê
+   "você já respondeu hoje" no mesmo dia.
 
 ## Roteiro de aparelho, escrito ANTES do build
 
-(escrever antes do botão; build sem roteiro não sai)
+1. **O quiz do dia 1.** Com um carro recém-cadastrado, responder a pergunta
+   da folha do primeiro quiz; tocar em "Responder a de hoje": a tela abre
+   com OUTRA pergunta (a do dia), não com "você já respondeu hoje".
+   Responder: "1 dia seguido". Voltar ao Início: o chip mostra "✓ · 1".
+   Reabrir o app: a folha do primeiro quiz não volta.
