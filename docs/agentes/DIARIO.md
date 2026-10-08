@@ -3,6 +3,19 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-08 · Engenharia: o relatório de mídia chegou, pela primeira vez, ao Luiz
+
+- Lido nas execuções do fluxo `Mídia: relatório por e-mail` às 14h21 UTC:
+  execução 8856, disparada pelo cron novo às 11h05 de Brasília (14h05 UTC),
+  nó de decisão `ok: true`, destinatários o dono e o Luiz, assunto "Mídia
+  Mentorque: relatório da semana (2026-10-08)", PDF anexado
+  (`mentorque-midia-2026-10-08.pdf`, 91 kB), Gmail respondeu SENT, id da
+  mensagem 1a11bd4ee23913ce. É o primeiro relatório de mídia que sai da casa
+  desde que o fluxo existe (19/09).
+- O que ainda não está provado: a trava de não mandar duas vezes no desenho
+  novo. A execução das 12h05 de Brasília é quem prova (ela tem de decidir
+  "já foi" e não mandar nada); conferência agendada nesta sessão.
+
 ## 2026-10-08 · Engenharia: a função de teste da anomalia 5 caiu pelo clique do dono
 
 - Dono: "Rodei a função". Lido no `pg_proc` em seguida: só resta
