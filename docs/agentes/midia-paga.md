@@ -425,6 +425,30 @@ incompleta. Para comparar duas semanas, some o `porDia` você mesmo, só com dia
 cheios. Em 19/09 o `custo7d` dizia R$ 227,13 e a semana cheia de 12 a 18/09 era
 R$ 214,30.
 
+### A janela de 30 dias dos termos virou rolante em 02/10 (08/10/2026)
+
+O aprendizado de 19/09 dizia: enquanto a campanha for mais nova que 30 dias, o
+acumulado da lista de termos é a vida inteira dela, e a diferença entre duas
+coletas é o gasto da semana. **Essa validade venceu.** A busca começou a gastar
+em 02/09, então a partir de 02/10 a ponta de trás da janela também anda.
+
+Consequência prática: a diferença entre duas coletas passou a medir o que
+ENTROU menos o que SAIU, e não o gasto da semana. Em 08/10 o grupo de "aprender
+mecânica" caiu de R$ 34,57 para R$ 20,44 e isso não é economia nenhuma: é o
+gasto de começo de setembro saindo pela porta de trás.
+
+**O que fazer:** publique o retrato de 30 dias e diga que é de 30 dias. Só volte
+a publicar "andou X na semana" se a campanha for mais nova que a janela, ou se
+alguém pedir a quebra por data ao coletor, que hoje ninguém pede.
+
+### Regra de validade para todo aprendizado com janela
+
+Os dois erros deste papel em outubro têm a mesma forma: um método que valia por
+uma condição, usado depois de a condição mudar. O de 24/09 (etiqueta que faltava)
+valia enquanto o anúncio estivesse no ar; o delta de termos valia enquanto a
+campanha fosse nova. **Aprendizado que depende de uma condição nasce com a
+condição escrita do lado, e a rodada confere a condição antes de usar o método.**
+
 ### `porDia` é o total da CONTA, não da campanha (24/09/2026)
 
 Com uma campanha só, essa diferença não aparecia. Com três, ela decide a conta

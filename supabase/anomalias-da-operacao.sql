@@ -219,6 +219,65 @@ as $function$
     and a.criado_em >= now() - (p_dias || ' days')::interval
   group by coalesce(a.plataforma, 'desconhecida')
 
+  union all
+
+  -- 5. Campanha de anúncio que parou de aparecer (08/10/2026).
+  --
+  -- POR QUE ELA EXISTE, com data e preço. A "Mentorque Lançamento" parou de
+  -- entregar em 24/09, com status ENABLED, porque os cinco anúncios dela
+  -- estavam REPROVADOS no painel. A rodada semanal de mídia só viu em 02/10, e
+  -- o sinal estava dentro de dados que a casa já coletava desde sempre: a
+  -- impressão da campanha caindo de 4.360 para 1.018. Oito dias de busca morta
+  -- custam o orçamento inteiro dela.
+  --
+  -- É RAZÃO, não contagem, como manda a lição da anomalia 2: compara a
+  -- impressão da janela de hoje com a da mesma campanha sete coletas atrás.
+  -- O piso de 500 impressões evita gritar por campanha que nunca entregou.
+  --
+  -- O LIMITE, e ele é do instrumento: `porCampanha` traz a janela de OITO
+  -- datas, não o dia. Uma parada de um dia só move a janela em um oitavo,
+  -- então o mais rápido que esta linha consegue é uns quatro dias. Provado
+  -- contra o histórico em 08/10: ela gritaria em 28/09 (menos 77%) e seguiria
+  -- gritando até 04/10, sem um único falso positivo em toda a série. Quem
+  -- quiser o primeiro dia precisa de impressão por campanha POR DIA, que é
+  -- mudança no coletor do Analista.
+  --
+  -- A janela aqui é fixa em 7 dias e ignora p_dias de propósito: o que se
+  -- compara é coleta com coleta, e a coleta tem janela própria.
+  select
+    'campanha parou de aparecer'::text,
+    'google_ads'::text,
+    hoje.impressoes,
+    'campanha ' || hoje.nome || ': ' || hoje.impressoes ||
+      ' impressoes na janela de hoje contra ' || antes.impressoes ||
+      ' sete coletas atras (' ||
+      round(100.0 * hoje.impressoes / antes.impressoes - 100, 0) || '%), status ' ||
+      coalesce(hoje.status, '?') ||
+      '; janela de 8 datas, entao a queda tem pelo menos uns 4 dias. Confira ' ||
+      'anuncio reprovado antes de orcamento: foi a causa em 24/09'
+  from (
+    select c->>'nome' as nome, c->>'status' as status, (c->>'impressoes')::bigint as impressoes
+    from public.metricas_diarias m, jsonb_array_elements(m.dados->'porCampanha') c
+    where m.fonte = 'google_ads'
+      and m.dia = (select max(dia) from public.metricas_diarias where fonte = 'google_ads')
+  ) hoje
+  join (
+    -- A coleta mais nova que seja de SETE DIAS OU MAIS atrás, e não a de
+    -- exatamente sete dias: um dia em que a coleta falhou faria o `= max - 7`
+    -- não casar com nada, e o alarme ficaria calado sem ninguém notar. Alarme
+    -- que depende de a série estar perfeita é alarme que some no pior dia.
+    select c->>'nome' as nome, (c->>'impressoes')::bigint as impressoes
+    from public.metricas_diarias m, jsonb_array_elements(m.dados->'porCampanha') c
+    where m.fonte = 'google_ads'
+      and m.dia = (
+        select max(dia) from public.metricas_diarias
+        where fonte = 'google_ads'
+          and dia <= (select max(dia) - 7 from public.metricas_diarias where fonte = 'google_ads')
+      )
+  ) antes on antes.nome = hoje.nome
+  where antes.impressoes >= 500
+    and hoje.impressoes < antes.impressoes * 0.25
+
   order by 1, 3 desc
 $function$;
 

@@ -129,6 +129,49 @@ console.log("Anomalias: o vigia da operação continua ligado?");
     'sem a versão não dá para responder "já passou e foi para o próximo build?", que é a primeira pergunta que alguém faz ao ver o número'
   );
 
+  // ── A CAMPANHA QUE PARA DE APARECER (08/10/2026) ──────────────────────────
+  //
+  // O DEFEITO QUE ELA EXISTE PARA PEGAR: a "Mentorque Lançamento" parou de
+  // entregar em 24/09, com status ENABLED, porque os cinco anúncios estavam
+  // REPROVADOS no painel. A rodada semanal de mídia só viu em 02/10, e o sinal
+  // estava em dado já coletado: impressão da campanha caindo de 4.360 para
+  // 1.018. Oito dias de busca morta.
+  //
+  // Provado com a lógica rodada sobre a série inteira: calada em 27/09, grita
+  // em 28/09 com menos 77%, segue até 04/10, zero falso positivo em todo o
+  // histórico, e calada hoje que a campanha voltou.
+  //
+  // O QUE ESTA CONFERÊNCIA PROTEGE são as duas peças que se perdem numa edição
+  // distraída, e são as mesmas da anomalia 2: a RAZÃO e o PISO. Sem razão, ela
+  // viraria contagem de impressão e gritaria todo dia; sem piso, gritaria por
+  // campanha que nunca entregou.
+  conferir("a anomalia da campanha parada continua no SQL", sql.includes("'campanha parou de aparecer'"));
+  conferir(
+    "ela compara com a própria campanha sete coletas atrás, e não com zero",
+    /hoje\.impressoes < antes\.impressoes \* 0\.25/.test(sql),
+    "sem a razão vira contagem de impressão, e contagem de impressão grita todo dia"
+  );
+  conferir(
+    "ela exige volume mínimo na janela anterior",
+    /antes\.impressoes >= 500/.test(sql),
+    "sem piso, campanha que nunca entregou vira anomalia e o alarme toca por ruído"
+  );
+  conferir(
+    "ela publica os dois lados da razão no detalhe",
+    /' impressoes na janela de hoje contra ' \|\| antes\.impressoes/.test(sql),
+    "número sem o de baixo foi o defeito da anomalia 2 e do alarme de erros; quem lê precisa dos dois"
+  );
+  conferir(
+    "ela tolera coleta faltando no meio",
+    /dia <= \(select max\(dia\) - 7/.test(sql),
+    "com `= max - 7` um único dia sem coleta deixa o alarme calado, e alarme que depende de série perfeita some no pior dia"
+  );
+  conferir(
+    "ela diz no detalhe para conferir anúncio reprovado",
+    /anuncio reprovado antes de orcamento/.test(sql),
+    "foi a causa em 24/09 e ninguém olha política de anúncio por conta própria: quem lê o alarme precisa da primeira hipótese junto"
+  );
+
   // ── O CONTRATO COM O VIGIA (19/09/2026) ───────────────────────────────────
   //
   // O DEFEITO: de 15 a 19/09 o Vigia mandou todo dia "um erro está se

@@ -3,6 +3,85 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-08 · Mídia: rodada 4, a busca voltou gastando mais e agora dá para dizer que ela custa 15 vezes mais
+- Artifact "Mídia da semana":
+  https://claude.ai/artifact/LfPELdZBB4K2qKTvmyoQXu
+  Relatório e PDF em `docs/agentes/relatorios/`, datados de hoje.
+- **O CRITÉRIO 3 VOLTOU A SER ALCANÇÁVEL, que era a consequência que o dono
+  cobrou desta rodada.** A ligação do Google na AppsFlyer funciona, e o pacote
+  `appsflyer` traz linha por campanha. Custo por instalação atribuída, janela de
+  01 a 08/10 no Android, com o gasto dos painéis: **Meta R$ 1,24 (116
+  instalações), vídeo do Google R$ 3,23 (45), busca R$ 47,79 (3)**.
+- **DUAS RÉGUAS, como manda a regra de 03/10.** Pela contagem de cada
+  plataforma: Meta R$ 0,74 (194), vídeo R$ 0,50 (288), busca R$ 8,96 (16). Os
+  absolutos divergem muito e **a direção é idêntica: a busca custa de 15 a 18
+  vezes mais por instalação que o vídeo.** A divergência tem hipótese declarada
+  (conversão por visualização no YouTube, que a AppsFlyer não atribui) e o que a
+  separaria é uma coluna que o coletor não busca.
+- **A CONTA DA SEMANA, 01 a 07/10 contra 24 a 30/09**: gasto R$ 429,48 contra
+  R$ 280,68 (+53%), **78 contas de fora contra 47** (+66%), custo por conta
+  R$ 5,51 contra R$ 5,97 (-8%). A semana anterior foi RECALCULADA hoje em vez de
+  copiada, e desta vez o Google não revisou nada.
+- **A MANCHETE**: a busca voltou em 04/10, depois de 10 dias reprovada, e voltou
+  a **uns R$ 36 por dia contra os R$ 20 de antes de parar**. São R$ 143,36 em
+  oito dias, 50% do dinheiro do Google, por 3 instalações. Ressalva dita no
+  relatório: 3 é amostra minúscula; o que sustenta a leitura são os 89 cliques,
+  zero conta com etiqueta e zero conta nascida na web.
+- **PROPOSTA DA SEMANA, uma só**: decidir o que fazer com a busca, agora com o
+  número. Em 04/10 a mesma decisão foi oferecida quando ela era 3,7% do gasto;
+  hoje é 33%. Registrada em `acoes-do-dono.md` como DECISÃO, não como clique.
+- **O ERRO MEU QUE FECHOU, e é o segundo da mesma família.** A busca não parou
+  por orçamento nem por lance: os cinco anúncios estavam reprovados por destino
+  não correspondente, por causa do nosso próprio desvio no `/baixar`. Minha
+  linha de 24/09 pedia colar a etiqueta naquela URL, e etiqueta em destino
+  reprovado não veicula. Saltei de "nenhum clique chega com nome" para "falta
+  etiqueta" sem perguntar se o anúncio estava no ar, e a resposta estava em
+  `ad_group_ad.policy_summary.approval_status`. Ausência não é causa.
+- **O ALARME QUE O DONO PEDIU ESTÁ NO AR E PROVADO.** Anomalia 5 em
+  `supabase/anomalias-da-operacao.sql`: campanha do Google cuja impressão cai a
+  menos de um quarto da leitura de sete coletas atrás, com piso de 500
+  impressões e os dois lados da razão no detalhe. **Aplicada no banco e rodada
+  com a lógica da série inteira: calada em 27/09, grita em 28/09 com -77% e
+  status ENABLED, segue até 04/10, calada hoje, zero falso positivo em todo o
+  histórico.** Seis conferências novas em `verifica-anomalias.ts`; plantei o
+  defeito (tirar o piso e a razão) e ela reprovou nos dois pontos, restaurei da
+  cópia de segurança e voltou verde.
+  - O limite está escrito no próprio SQL: `porCampanha` traz janela de oito
+    datas, então uma parada de um dia move a janela em um oitavo e o mais rápido
+    que ela consegue é uns quatro dias, contra os oito que esta rodada levou. O
+    primeiro dia pede impressão por campanha POR DIA, que é coletor e é do
+    Analista.
+  - **SUJEIRA QUE SOBROU, e eu não consegui limpar**: criei
+    `public.teste_anomalia5(date)` para provar que o alarme morde, e o
+    `drop function` estourou o tempo de 60s quatro vezes (duas por
+    `execute_sql`, duas por `apply_migration`) enquanto toda leitura respondia
+    normal. A função é `stable`, somente leitura, e ninguém a chama. Quem
+    conseguir: `drop function if exists public.teste_anomalia5(date);`
+- **ENTREGA DO RELATÓRIO PASSADO: NÃO CHEGOU AO LUIZ**, lido na execução 8750 do
+  fluxo "Mídia: relatório por e-mail". Em 01/10 às 13h UTC ele buscou o arquivo,
+  viu a data 24/09, decidiu `ok: false` e mandou só o aviso para o dono (nó
+  "Avisa o dono"). Depois disso o fluxo não rodou nenhuma vez, então o relatório
+  de 02/10 nunca saiu. O envio de hoje é às 16h, depois desta rodada: **sem
+  sinal ainda**, e a rodada de 15/10 confirma.
+- **APRENDIZADO DE JANELA**: o método de 19/09 (diferença entre duas coletas de
+  termos = gasto da semana) VENCEU em 02/10, quando a campanha passou de 30 dias
+  e a ponta de trás da janela começou a andar. O grupo de curso "caindo" de
+  R$ 34,57 para R$ 20,44 é gasto de começo de setembro saindo, não economia.
+  Virou regra geral no manual: aprendizado com janela nasce com a condição de
+  validade escrita, e a rodada confere a condição antes de usar o método.
+- **Desperdício com nome volta a cobrir um terço do dinheiro** (era 2%), com o
+  retrato de 30 dias: scanner R$ 41,20, sintoma R$ 37,14, curso R$ 20,44,
+  mecânico online R$ 20,41, oficina R$ 3,39. As duas listas de negativa, adiadas
+  pelo dono em 04/10 quando a busca não entregava, voltaram a ter preço: R$ 61,64
+  nos 30 dias. Aponto o fato, não repito a recomendação.
+- **Orgânico medido**: 38 de 202 instalações Android (19%) chegam sem anúncio,
+  pela AppsFlyer, com as duas ressalvas de sempre (conta por baixo, e a
+  integração de custo está desligada, o que virou linha na lista do dono).
+- **A RÉGUA: dez dos doze, e os dois ficam declarados.** O 6 pela metade (janela
+  rolante) e o 12 com nota: substituí uma função de leitura no banco para
+  entregar o alarme, pelo mesmo caminho que a casa usou neste arquivo em 27/09,
+  e sobrou a função de teste acima.
+
 ## 2026-10-08 · Engenharia: o índice antigo caiu, as duas trancas do quiz do dia 1 estão abertas
 
 - Dono: "TEste novamente", depois de rodar o `drop` no SQL Editor. Lido no
@@ -45,6 +124,7 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 - **A ficha** `quiz-no-dia-1` em `experimentos.md`, com o antes lido em
   08/10 (4 de 332 no dia seguinte, 9 em qualquer dia; 5 de 316 em 30 dias)
   e a leitura por versão. A fila do QA aponta a reconferência.
+
 
 ## 2026-10-08 · Engenharia: a rodada do QA lida contra o código e o banco; o zero da manchete é o índice
 
