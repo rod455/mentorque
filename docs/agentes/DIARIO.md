@@ -3,6 +3,36 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-08 · Engenharia: a rodada do QA lida contra o código e o banco; o zero da manchete é o índice
+
+- Dono: "Veja o que QA escreveu hoje". O retorno está em `qa-produto.md`
+  ("Retorno do dono sobre a rodada de 07/10/2026"): três coisas a manter (o
+  erro próprio pego antes de sair, a segunda tranca procurada antes do
+  conserto, a proposta com as três asserções) e três a melhorar.
+- **As três camadas conferem.** `PrimeiroQuiz.tsx:140` chama `responderQuiz`
+  (que é `aoResponder` e carimba `ultimoDia`); `Quiz.tsx:67` decide por
+  `respondeuHoje`; o `pg_indexes` diz `(dia, anon_id)`. Lido em 08/10 de
+  madrugada (UTC).
+- **O que a manchete errou:** "0 de 314" é escrito pelo índice, não pelo
+  comportamento (o critério 12 do próprio QA, "quem escreve este zero?").
+  O número que mede: de 332 aparelhos que responderam o onboarding, 4
+  fizeram o quiz do dia seguinte e 9 algum quiz diário depois; nos últimos
+  30 dias, 316 responderam o onboarding, 96 voltaram ao app em outro dia e 5
+  fizeram algum quiz diário. Três em dez voltam, um em sessenta faz o quiz.
+  Não há evento de funil ao abrir a tela do quiz, então o muro do dia 1
+  continua hipótese sem instrumento.
+- **A proposta diz "estudo, não presença" e mantém a presença.** Escrevi na
+  proposta o caminho B (o onboarding entra pelo caminho de estudo, como
+  `aoResponderPassado`; `respondeuHoje` e seis consumidores ficam como
+  estão; muda uma frase de conteúdo) ao lado do caminho A do QA, com a
+  recomendação por B. O índice vira `(dia, anon_id, pergunta_id)` nos dois,
+  é compatível com o app das lojas e pode subir antes. **Decisão do dono**:
+  a sequência nasce no onboarding (A) ou no primeiro quiz do dia (B)?
+- **"A frase apareceu em um dia" não fecha**: a única pergunta que cruzou o
+  piso de 20 é a do onboarding (05/10 com 22, 07/10 com 34, lido na
+  `quiz_dia`), e essa tela nunca pede o placar. A frase apareceu em zero.
+- Nada de código mudou. A fila do QA segue para o quiz de saúde.
+
 ## 2026-10-07 · Engenharia: a 3.1 nas duas lojas, build 71, lida em três instrumentos antes de marcar
 
 - Dono, 18h17 de Brasília: "A 3.1 está nas lojas. Build 71".

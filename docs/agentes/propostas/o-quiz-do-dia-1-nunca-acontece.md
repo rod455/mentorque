@@ -135,3 +135,65 @@ Quando o conserto subir, ele pede três asserções, e nenhuma delas existe hoje
 A primeira é a que importa: ela é a única que olha QUEM USA a regra, e foi
 exatamente essa família que deixou cinco conferências desta casa verdes com o
 defeito de pé em 03/10.
+
+## Leitura de Engenharia (08/10/2026), para o dono decidir
+
+Conferido no código e no banco em 08/10, de madrugada (UTC). As três camadas
+estão como a proposta descreve: `PrimeiroQuiz.tsx:140` chama `responderQuiz`,
+que é `aoResponder` e carimba `ultimoDia`; `Quiz.tsx:67` decide por
+`respondeuHoje` e mostra a pergunta do onboarding como "a de hoje"; o índice
+`quiz_respostas_uma_por_dia` é `(dia, anon_id)` no `pg_indexes`.
+
+### O número que mede o estrago (não é o zero)
+
+O "0 de 314" é escrito pelo índice: com unicidade em `(dia, anon_id)` não
+existe outro valor possível. O que a tabela mede de verdade, lido em 08/10:
+
+| Quem respondeu o onboarding | Aparelhos |
+| --- | --- |
+| Total | 332 |
+| Fez o quiz do dia seguinte | 4 |
+| Fez algum quiz diário, qualquer dia depois | 9 |
+| Nos últimos 30 dias: respondeu o onboarding | 316 |
+| ... e voltou ao app em outro dia (`abriu_app`) | 96 |
+| ... e fez algum quiz diário | 5 |
+
+Três em cada dez voltam ao app; um em cada sessenta faz o quiz. O muro do dia
+1 é a primeira hipótese e não está medida: não há evento de funil ao abrir a
+tela do quiz, então não se sabe quantos bateram no "você já respondeu". Se o
+conserto subir, vale nascer junto um `abriu_quiz` (com `origem` dizendo se
+caiu na pergunta ou no "já respondeu"), senão a aposta não tem leitura.
+
+### Dois caminhos, e o que cada um muda
+
+**A. O da proposta: a sequência nasce no onboarding.** O onboarding continua
+carimbando `ultimoDia` e `sequencia = 1`; `respondeuHoje` passa a comparar o
+`perguntaId` do registro do dia com a pergunta que a rotação devolve, e para
+isso recebe a lista de perguntas. Mexe em seis consumidores (`Quiz.tsx`,
+`QuizNoTopo.tsx`, `aoResponder`, `lembreteQuiz.ts`, `manhasDoQuiz.ts`, e a
+idempotência) e no incremento de `respostas`. A pessoa sai do onboarding com
+"1 dia seguido" e o chip ainda chama para a pergunta do dia.
+
+**B. O mais curto, e o que as palavras da proposta descrevem: o onboarding é
+estudo.** O onboarding entra por uma função irmã de `aoResponderPassado`:
+soma em `respostas` e `acertos`, guarda a resposta, e NÃO encosta em
+`ultimoDia`, `sequencia` nem no histórico por dia. `respondeuHoje` continua
+o que é, e os seis consumidores ficam como estão. O `PrimeiroQuiz` deixa de
+olhar `ultimoDia` para saber se já apareceu (passa a olhar a resposta
+guardada). A pessoa sai do onboarding com o chip "Quiz" ainda aceso, e a
+sequência nasce no primeiro quiz do dia. Muda a frase de fecho do onboarding,
+que hoje diz "Sua sequência começou hoje": passa a dizer que a pergunta de
+hoje está esperando.
+
+Nos dois caminhos o índice vira `(dia, anon_id, pergunta_id)`, e isso é
+compatível com o app antigo nas lojas: toque duplo na mesma pergunta continua
+batendo em `23505`, e o app antigo nunca manda duas perguntas no mesmo dia.
+A migração pode subir antes do app. O código do app (`lib/app/**`,
+`components/app/**`) só chega às lojas com a 3.2.
+
+**Recomendação de Engenharia: B.** É o que a proposta diz com palavras, toca
+dois arquivos em vez de seis, e deixa o chip chamando para o quiz no dia em
+que a pessoa mais está dentro do app. O custo é uma frase de conteúdo e a
+decisão de produto de que a sequência começa no primeiro quiz do dia, não no
+onboarding. As três asserções da proposta valem para os dois caminhos, e a
+primeira tem que reprovar sobre o código de hoje antes do conserto.

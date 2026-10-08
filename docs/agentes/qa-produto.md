@@ -794,3 +794,78 @@ maior recurso do app sem varredura dedicada" desde 30/09 e já cedeu a vez duas
 vezes para a compra pelas lojas, com razão nas duas. A compra pelas lojas tem
 desfecho desde 03/10: venda recuperada, webhook no `www`, Premium ativo. Marque
 a data do quiz na fila.
+
+## Retorno do dono sobre a rodada de 07/10/2026
+
+Mandado escrever por ele em 08/10 ("Veja o que QA escreveu hoje"). Lido o
+diário, o diff do commit f60b621, a proposta, o código que ela cita (linha a
+linha, nos mesmos arquivos) e o banco, em 08/10 de madrugada (UTC).
+
+Primeiro o que manter, e é uma rodada de nível.
+
+**O SEU PRÓPRIO ERRO FOI PEGO ANTES DE SAIR.** "5 respostas por dia" estava
+escrito, e o que fez você olhar de novo foi um máximo que não cabia na média
+(314 numa pergunta só). O critério 14 nasceu disso, e é um critério de
+trinta segundos. É exatamente a doença que a casa perseguiu setembro inteiro,
+e desta vez ela morreu dentro da rodada.
+
+**A SEGUNDA TRANCA FOI PROCURADA ANTES DE ESCREVER O CONSERTO.** A tela
+bloqueia, e você foi ver se o banco também bloqueava, ensaiou em transação
+desfeita e conferiu o resíduo. Quem consertasse só a tela produziria uma
+resposta que a pessoa dá e o servidor joga fora em silêncio. Conferido em
+08/10 no `pg_indexes`: o `quiz_respostas_uma_por_dia` é `(dia, anon_id)`,
+como você disse.
+
+**O CONSERTO FORA DA ALÇADA VIROU PROPOSTA COM AS TRÊS ASSERÇÕES ESCRITAS**, e
+com o detalhe que você quase deixou passar (o total que soma duas vezes com um
+registro só no histórico). Lido `aoResponder` e `comHistorico`: o detalhe é
+real. E a fila fechou o item dos aparelhos que abrem muito com tamanho de
+efeito (1,42 para 1,26), que é o que torna "real e pequeno demais para mudar
+decisão" uma frase com lastro.
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. "0 DE 314, MEDIDO NO BANCO" É UM ZERO ESTRUTURAL, E É O SEU CRITÉRIO 12
+APLICADO À SUA PRÓPRIA MANCHETE.** O índice que você mesmo nomeou como
+segunda tranca é quem ESCREVE esse zero: com unicidade em `(dia, anon_id)`,
+a tabela não consegue ter outro número ali. O zero é verdadeiro e não prova
+comportamento nenhum; ele repete o índice. O número que mede o estrago é
+outro, e está na mesma tabela. Lido em 08/10: de 332 aparelhos que
+responderam a pergunta do onboarding, 4 responderam o quiz do dia SEGUINTE
+e 9 responderam algum quiz diário em qualquer dia depois. Nos últimos 30
+dias, 316 responderam o onboarding, 96 voltaram ao app em outro dia
+(`abriu_app`, funil) e 5 fizeram algum quiz diário. É isto que a manchete
+deveria dizer: três em cada dez voltam, e um em cada sessenta faz o quiz. O
+muro do dia 1 é o primeiro suspeito, e continua suspeito: não existe evento
+de funil quando a tela do quiz abre, então ninguém sabe quantos bateram no
+"você já respondeu" e foram embora. Instrumento que o veredito vai precisar
+entra na proposta no dia em que você percebe que falta (regra do ponto 3 do
+retorno ao SEO, 06/10).
+
+**2. A PROPOSTA DIZ "ESTUDO, NÃO PRESENÇA" E DEPOIS MANTÉM A PRESENÇA.** A
+direção escrita é que a resposta do onboarding conta como estudo, e o
+vocabulário citado (`aoResponderPassado`) é exatamente esse. Mas o conserto
+proposto mantém o onboarding carimbando `ultimoDia` e `sequencia = 1`, e
+para isso precisa mudar o sentido de `respondeuHoje`, que tem SEIS
+consumidores (a tela, o chip, `aoResponder`, os dois lembretes e o
+histórico). As palavras e o código discordam. Se é estudo, o conserto mais
+curto é o onboarding entrar pelo caminho de estudo e `respondeuHoje`
+continuar o que é; Engenharia escreveu essa alternativa na proposta, com o
+que ela custa e o que ela muda na frase do onboarding. A escolha entre as
+duas é de produto (a sequência nasce no onboarding ou no primeiro quiz do
+dia?) e é do dono, e a proposta deveria ter posto as duas lado a lado em vez
+de uma só.
+
+**3. "EM 42 DIAS A FRASE APARECEU EM UM" NÃO FECHA COM A SUA PRÓPRIA
+IRONIA.** Se a única pergunta que passou do piso de 20 é a do onboarding, e a
+tela do onboarding nunca pede o placar, a frase "62% acertaram" apareceu em
+ZERO dias. O que aconteceu em um dia (hoje já são dois: 05/10 com 22 e 07/10
+com 34, lido na `quiz_dia` em 08/10) foi uma PERGUNTA cruzar o piso, e a
+pergunta errada. Número vem com o que ele mede: "nenhum dia do quiz diário
+passou de 20 respostas; o piso só foi cruzado pela pergunta que não mostra
+placar" é a frase, e ela é mais forte que a sua.
+
+**Fica para a próxima rodada:** quiz de saúde, como você marcou. E quando o
+dono decidir o caminho do dia 1, a reconferência do quiz diário entra na
+frente, com a asserção 1 da proposta reprovando sobre o código de hoje antes
+de qualquer conserto.
