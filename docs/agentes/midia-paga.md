@@ -130,8 +130,19 @@ enquanto, é o dono lendo o artifact e as conferências do repositório.
 
 Por pedido do dono (19/09/2026), o relatório desta rodada é enviado por e-mail
 para ele e para o Luiz, que é de fora da operação. Quem manda é o fluxo
-"Mídia: relatório por e-mail" no n8n, **quinta e sexta às 16h**: ele busca os
-dois arquivos no repositório, manda um corpo curto e **anexa o PDF**.
+"Mídia: relatório por e-mail" no n8n, **quinta e sexta, de hora em hora, das
+10h às 18h de Brasília** (desde 08/10/2026): a cada hora ele busca os dois
+arquivos no repositório e, na PRIMEIRA hora em que o PDF do dia estiver na
+`main`, manda um corpo curto e **anexa o PDF**, uma vez só.
+
+**POR QUE DE HORA EM HORA, E NÃO ÀS 16H (08/10/2026).** O desenho de 02/10
+tinha duas tentativas, quinta e sexta às 16h. Entre 02/10 e 08/10 o fluxo não
+rodou nenhuma vez (a única execução da história dele é a de 01/10, no desenho
+anterior, que mandou só o aviso), e o dono perguntou por que o relatório não
+chegava nem a ele nem ao Luiz. Uma tentativa por dia numa hora fixa faz a
+entrega depender de a rodada terminar ANTES daquela hora, e esconde qualquer
+falha até o dia seguinte. De hora em hora, o PDF sai na hora seguinte ao push
+e a rodada pode conferir a entrega da semana anterior nas execuções do n8n.
 
 **POR QUE DUAS TENTATIVAS, E NÃO UMA (02/10/2026).** O desenho antigo era quinta
 às 10h, aceitando só relatório do DIA. Em 01/10 o gatilho da rodada disparou às
@@ -154,7 +165,11 @@ O que vira contrato por causa disso:
   `Relatório de mídia gerado em AAAA-MM-DD`. O fluxo aceita a data de hoje ou de
   ontem, e nada mais velho: relatório velho chegando como novidade para gente de
   fora é pior do que e-mail nenhum. Fora da janela, o Luiz não recebe nada e o
-  dono recebe o aviso.
+  dono recebe o aviso, na sexta às 18h.
+- **A rodada confere a entrega da semana ANTERIOR** nas execuções do fluxo no
+  n8n (as ferramentas do n8n estão na sessão) e diz no diário se chegou ou não,
+  com o id da execução. Sobre a desta semana, a frase é "sai na próxima hora
+  cheia depois do push", nunca "chegou".
 - **Sem o .pdf commitado, nada sai.** O fluxo não improvisa corpo de e-mail a
   partir do markdown: ou vai o PDF, ou vai o aviso ao dono. Gerar e esquecer de
   commitar dá no mesmo que não gerar.
@@ -904,3 +919,67 @@ enquanto a busca nao voltar**, que e o que ja estava escrito como prova fraca.
 
 **SO SMARTPHONE**: R$ 152,44 em smartphones, R$ 0,72 em tablets, R$ 0,00 em
 computador e TV. Nao ha desperdicio de dispositivo para cortar.
+
+## Retorno do dono sobre a rodada de 08/10/2026
+
+Mandado escrever por ele em 08/10 ("Veja a análise de mídia. Ela não está
+sendo enviada para mim nem para o head de marketing, precisamos ajustar. Além
+disso, dê os feedbacks e vamos entender como melhorar"). Lido o relatório, o
+diário, o retrato de 08/10 (blocos `google_ads`, `meta_ads` e `appsflyer`), a
+função de anomalias no banco e as execuções do fluxo de e-mail no n8n.
+
+Primeiro o que manter.
+
+**OS NÚMEROS BATEM COM O INSTRUMENTO, LINHA POR LINHA.** Vídeo R$ 145,13 com
+288 conversões, busca R$ 143,36 com 16 e 89 cliques, Meta R$ 144,34 com 194;
+AppsFlyer 116, 45 e 3 por campanha e 38 orgânicas de 202. A semana anterior
+recalculada em vez de copiada. E as duas réguas lado a lado, com a hipótese da
+divergência declarada e o que a separaria: é a regra de 03/10 cumprida inteira.
+
+**O ERRO PRÓPRIO FECHADO COM NOME.** "Saltei de ausência para causa pela
+segunda vez na mesma campanha" é a frase que a casa quer ler, e a regra de
+validade para aprendizado com janela, que saiu dos dois erros de outubro, é
+regra de verdade: condição escrita do lado, conferida antes de usar o método.
+
+**O ALARME QUE O DONO PEDIU, PROVADO CONTRA A SÉRIE INTEIRA.** Anomalia 5 no
+banco (conferido em 08/10: a função a contém e está calada hoje), gritaria em
+28/09 e seguiria até 04/10, zero falso positivo, defeito plantado nos dois
+pontos. E o limite dito no próprio SQL: quatro dias, não um.
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. "SEM SINAL AINDA, A RODADA DE 15/10 CONFIRMA" ERA ACEITAR UM DESENHO EM
+QUE A SUA ÚLTIMA ETAPA NÃO PODE ACONTECER.** O retorno de 02/10 disse que o
+último passo do ritual é confirmar a entrega. Você leu a execução 8750 e viu
+que o fluxo nunca mais rodou, e aí a conclusão correta não era esperar a
+semana que vem: era dizer que um envio marcado para seis horas depois da
+rodada é um desenho que ninguém confere, e pedir a mudança. Engenharia trocou
+em 08/10: o fluxo tenta de hora em hora, quinta e sexta das 10h às 18h, e manda
+na primeira hora em que o PDF estiver na `main`. A sua parte, que entrou no
+manual: conferir a entrega da semana anterior nas execuções do n8n, com o id,
+antes de fechar a rodada.
+
+**2. A TABELA DA MANCHETE TEM DUAS JANELAS DENTRO, E NÃO DIZ.** As instalações
+são da AppsFlyer de 01 a 08/10; o gasto do Google é de 01 a 08/10 (o dia 08
+tem R$ 3,35); o gasto do Meta é de 01 a 07/10 (o retrato só traz sete dias do
+Meta). O R$ 1,24 do Meta divide sete dias de gasto por oito dias de
+instalação. Com mais um dia de uns R$ 20, ele fica perto de R$ 1,40. A direção
+não muda, e é por isso que isto é o ponto 2 e não o 1; mas o critério 2 da sua
+régua é "todo número tem janela", e numa tabela a janela é uma só. Quando as
+fontes não cobrem os mesmos dias, corte todas para a janela comum e diga qual.
+
+**3. O PEDIDO DO DIRETOR PARA ESTA RODADA FICOU SEM RESPOSTA, E O SEU PEDIDO AO
+ANALISTA NÃO FOI PARA A FILA.** Em `entre-papeis.md` há uma linha de 05/10, do
+Diretor para você, para esta rodada: a lista de OneLink no console da
+AppsFlyer, que decide se a etiqueta que morre na instalação é uma linha de
+código ou um clique do dono. O relatório não a menciona. E o que você precisa
+do Analista (impressão por campanha POR DIA, para o alarme pegar no primeiro
+dia; e o `approval_status` do anúncio, que teria mostrado a reprovação em
+24/09) está num parágrafo do diário, onde o Analista não lê. Pedido a outro
+papel vai na fila entre papéis, com data; e pedido ao dono (a função de teste
+que sobrou no banco) vai na lista dele, com o comando, que é o que Engenharia
+fez hoje.
+
+**Uma nota sobre a rotina.** O prompt da sua rotina ainda diz "e-mail das 10h"
+e não pode ser mudado desta sessão. Este manual manda; a seção "O relatório vai
+por e-mail" é a regra vigente.

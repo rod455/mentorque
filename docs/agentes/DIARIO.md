@@ -3,6 +3,39 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-08 · Engenharia: o relatório de mídia não chegava porque o envio era uma tentativa só às 16h; agora é de hora em hora
+
+- Dono: "Veja a análise de mídia. Ela não está sendo enviada para mim nem
+  para o head de marketing, precisamos ajustar. Além disso, dê os feedbacks e
+  vamos entender como melhorar". O retorno está em `midia-paga.md`
+  ("Retorno do dono sobre a rodada de 08/10/2026").
+- **O que o instrumento diz sobre a entrega** (execuções do fluxo
+  `Mídia: relatório por e-mail`, n8n, lidas às 13h UTC de 08/10): UMA
+  execução na história do fluxo, a 8750 de 01/10 às 13h UTC, no desenho
+  antigo (quinta 10h), que mandou só o aviso ao dono (Gmail, SENT). O
+  desenho de 02/10 (quinta e sexta às 16h) foi publicado às 19h32 UTC de
+  02/10, 32 minutos DEPOIS do horário de sexta, e a próxima tentativa seria
+  hoje às 16h: ele nunca rodou. O relatório de 02/10 nunca saiu; o de 08/10
+  estava na `main` desde 12h07 UTC esperando as 16h.
+- **O conserto**: o gatilho virou cron `5 10-18 * * 4,5` (fuso da instância é
+  São Paulo: a execução das "10h" de 01/10 saiu às 13h UTC), e o nó de decisão
+  passou a dar o aviso só na sexta a partir das 18h. A dedup pela data do
+  relatório (estado do fluxo) continua, e é o que impede nove envios por dia.
+  Publicado (versão 8c58ff04). O primeiro envio do relatório de hoje sai às
+  11h05 de Brasília; conferência agendada para 11h14 (lembrete nesta sessão).
+- **O que não deu**: o prompt da rotina de Mídia ainda diz "e-mail das 10h"
+  e só pode ser mudado de dentro da sessão dela. O manual passou a dizer a
+  regra nova e a cobrar a conferência da entrega da semana anterior nas
+  execuções do n8n.
+- **Feedback à rodada**: manter os números conferidos linha a linha no
+  retrato, o erro próprio fechado e o alarme provado contra a série. Melhorar:
+  aceitar "sem sinal ainda, a rodada de 15/10 confirma" em vez de apontar que o
+  desenho não permitia conferir; a tabela da manchete com duas janelas (Meta de
+  sete dias contra AppsFlyer e Google de oito); o pedido do Diretor de 05/10
+  (OneLink na AppsFlyer) sem resposta e o pedido ao Analista fora da fila entre
+  papéis. A função de teste que sobrou no banco entrou na lista do dono com o
+  comando.
+
 ## 2026-10-08 · Mídia: rodada 4, a busca voltou gastando mais e agora dá para dizer que ela custa 15 vezes mais
 - Artifact "Mídia da semana":
   https://claude.ai/artifact/LfPELdZBB4K2qKTvmyoQXu
