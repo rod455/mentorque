@@ -60,6 +60,8 @@ const EVENTOS_DO_APP = new Set([
   // A fila de atalhos do Início (06/10/2026): `origem` é o nome do atalho.
   // Sem ele a fila não tem leitura, e foi condição para ela entrar.
   "clicou_atalho",
+  // A tela do quiz (08/10/2026): `origem` é pergunta ou ja-respondeu.
+  "abriu_quiz",
 ]);
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

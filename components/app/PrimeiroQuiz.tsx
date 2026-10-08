@@ -6,7 +6,7 @@ import { useAuth } from "@/lib/app/auth";
 import { useI18n } from "@/lib/i18n";
 import { useNav, type View } from "@/lib/app/nav";
 import { ownedVehicles } from "@/lib/app/store";
-import { diaLocal, diasEntre, perguntaDoOnboarding } from "@/lib/app/quiz/sequencia";
+import { QUIZ_ZERADO, diaLocal, diasEntre, jaRespondeuOnboarding, perguntaDoOnboarding } from "@/lib/app/quiz/sequencia";
 import { perguntasDoQuiz } from "@/lib/app/quiz/perguntas";
 import { enviarResposta } from "@/lib/app/quiz/placar";
 import { useContent } from "./ui";
@@ -43,7 +43,7 @@ export function PrimeiroQuiz() {
   const c = useContent();
   const q = c.quiz;
   const { locale } = useI18n();
-  const { s, responderQuiz } = usePrototype();
+  const { s, responderQuizOnboarding } = usePrototype();
   const { user } = useAuth();
   const { view, go } = useNav();
 
@@ -59,7 +59,9 @@ export function PrimeiroQuiz() {
   const pergunta = perguntaDoOnboarding(perguntas);
 
   const hoje = diaLocal();
-  const jaRespondeuAlgumDia = !!s.quiz?.ultimoDia;
+  // A resposta do onboarding fica em `quiz.onboarding`, fora do dia (ver
+  // quiz/sequencia.ts). `ultimoDia` cobre quem respondeu antes de 08/10/2026.
+  const jaRespondeuAlgumDia = jaRespondeuOnboarding(s.quiz ?? QUIZ_ZERADO);
   const temCarro = ownedVehicles(s).length > 0;
   // "No dia seguinte": um dia inteiro depois do primeiro acesso. `startedAt` é
   // gravado quando o onboarding termina, então isto conta a partir de quando a
@@ -71,8 +73,8 @@ export function PrimeiroQuiz() {
   // Depois de responder, a folha FICA, e só sai pelo botão ou pelo X.
   //
   // Sem essa exceção ela se fecharia sozinha no instante do toque: responder
-  // grava `s.quiz`, `jaRespondeuAlgumDia` vira verdadeiro e a condição de
-  // baixo deixa de valer. A pessoa tocaria numa opção e a tela sumiria antes
+  // grava `s.quiz.onboarding`, `jaRespondeuAlgumDia` vira verdadeiro e a
+  // condição de baixo deixa de valer. A pessoa tocaria numa opção e a tela sumiria antes
   // de ela ler a explicação, que é a única coisa que o quiz entrega.
   const cabe =
     !!pergunta &&
@@ -136,8 +138,12 @@ export function PrimeiroQuiz() {
                   if (respondeu) return;
                   setEscolha(i);
                   const certo = i === pergunta.correta;
-                  // A sequência começa AQUI, acertando ou não.
-                  responderQuiz({ perguntaId: pergunta.id, escolha: i, acertou: certo });
+                  // Estudo, não presença: NÃO carimba o dia nem abre a
+                  // sequência, senão a pergunta do dia 1 nunca é oferecida
+                  // (QA, 07/10/2026; decisão do dono, 08/10). A sequência
+                  // nasce no primeiro quiz do dia, que o chip continua
+                  // chamando depois desta folha.
+                  responderQuizOnboarding({ perguntaId: pergunta.id, escolha: i, acertou: certo });
                   enviarResposta({ dia: hoje, perguntaId: pergunta.id, acertou: certo, userId: user?.id ?? null });
                 }}
                 disabled={respondeu}
@@ -190,9 +196,19 @@ export function PrimeiroQuiz() {
               {q.primeiroFecho}
             </p>
 
+            {/* A pergunta DE HOJE está esperando, e este é o dia em que a
+                pessoa mais está dentro do app: o botão principal leva direto
+                a ela (caminho B, 08/10/2026). "Seguir" fecha a folha. */}
+            <button
+              data-primeiro-quiz-hoje
+              onClick={() => { setFechado(true); go({ name: "quiz" }); }}
+              className="mt-4 w-full rounded-xl bg-amber px-4 py-3.5 font-display text-[15px] font-semibold text-graphite active:scale-[0.99]"
+            >
+              {q.primeiroIrAoQuiz}
+            </button>
             <button
               onClick={() => setFechado(true)}
-              className="mt-4 w-full rounded-xl bg-amber px-4 py-3.5 font-display text-[15px] font-semibold text-graphite active:scale-[0.99]"
+              className="mt-2 w-full rounded-xl px-4 py-3 font-display text-sm font-semibold text-cream/60"
             >
               {q.seguir}
             </button>

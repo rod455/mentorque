@@ -19,6 +19,7 @@ import {
 } from "@/lib/app/quiz/sequencia";
 import { enviarResposta, placarDoDia, type Placar } from "@/lib/app/quiz/placar";
 import { passo } from "@/lib/app/ultimoPasso";
+import { funil } from "@/lib/app/funil";
 import { AppHeader, useContent } from "../ui";
 import { ConviteDeAviso } from "../ConviteDeAviso";
 import { PerguntaRespondida } from "../quiz/PerguntaRespondida";
@@ -61,10 +62,19 @@ export function QuizScreen() {
   // do primeiro desenho: um retrato tirado cedo demais seria o estado vazio.
   const [antes, setAntes] = useState<EstadoQuiz | null>(null);
 
+  // A tela abriu: a pergunta foi oferecida, ou a pessoa bateu no "já
+  // respondeu hoje"? É a leitura do quiz do dia 1 (QA, 07/10/2026). Uma vez
+  // por dia na sessão; a sessão do aparelho já está lida quando se chega
+  // aqui, porque esta tela só abre por toque depois do Início.
+  const jaFeito = respondeuHoje(estado, hoje);
+  useEffect(() => {
+    funil("abriu_quiz", { umaVez: true, chave: `abriu_quiz:${hoje}`, origem: jaFeito ? "ja-respondeu" : "pergunta", userId: user?.id });
+  }, [hoje, jaFeito, user?.id]);
+
   if (!pergunta) return <AppHeader title={q.titulo} />;
   // `escolha === null` é o que segura a explicação na tela: sem ele, responder
   // trocaria o que a pessoa está lendo pelo aviso de "você já respondeu hoje".
-  if (escolha === null && respondeuHoje(estado, hoje)) {
+  if (escolha === null && jaFeito) {
     const r = respostaDe(estado, hoje);
     // A pergunta que ela respondeu HOJE pode não ser a que a rotação devolve
     // agora (o banco cresce, o idioma muda). O registro guarda o id e ele manda.

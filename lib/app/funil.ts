@@ -91,6 +91,11 @@ export type EventoFunil =
   // atalho (abastecer, servico, revisoes, orcamento, dia). Nasceu junto com
   // a fila, como condição para ela entrar: fila sem leitura é decoração.
   | "clicou_atalho"
+  // A tela do quiz abriu (08/10/2026). `origem` é "pergunta" quando a
+  // pergunta do dia foi oferecida e "ja-respondeu" quando a tela disse que a
+  // pessoa já respondeu hoje. Nasceu com o conserto do quiz do dia 1 (QA,
+  // 07/10): sem ele não dava para saber quantos batiam no muro.
+  | "abriu_quiz"
   // Único evento técnico da lista: o desfecho da subida do SDK de atribuição
   // (lib/app/atribuicao.ts). Ele não mede comportamento de ninguém, mede se a
   // nossa própria medição está viva no aparelho.

@@ -1374,10 +1374,13 @@ export function getContent(locale: Locale) {
         "Toda manhã tem uma pergunta nova sobre carro. Esta é a de estreia:",
         "Every morning there's a new question about cars. Here's your first:"
       ),
+      // Desde 08/10/2026 a resposta do onboarding não abre a sequência: ela
+      // nasce no primeiro quiz do dia, que está esperando logo ali.
       primeiroFecho: T(
-        "É só isso: uma por dia, um minuto. Sua sequência começou hoje, e errar não quebra ela.",
-        "That's it: one a day, one minute. Your streak starts today, and getting it wrong doesn't break it."
+        "É só isso: uma por dia, um minuto. A pergunta de hoje já está esperando, e errar não quebra a sequência.",
+        "That's it: one a day, one minute. Today's question is already waiting, and getting it wrong doesn't break your streak."
       ),
+      primeiroIrAoQuiz: T("Responder a de hoje", "Answer today's"),
     },
 
     // Sino do cabeçalho. Todo aviso aqui é derivado do estado atual do app

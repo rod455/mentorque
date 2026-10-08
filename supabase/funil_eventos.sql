@@ -84,7 +84,10 @@ create table if not exists public.funil_eventos (
     'clicou_consultoria',
     -- A fila de atalhos do Início, medida em 06/10/2026 (migração
     -- funil_eventos_clicou_atalho). `origem` leva o nome do atalho.
-    'clicou_atalho'
+    'clicou_atalho',
+    -- A tela do quiz abriu, medida em 08/10/2026 (migração
+    -- funil_eventos_abriu_quiz). `origem` é 'pergunta' ou 'ja-respondeu'.
+    'abriu_quiz'
   )),
 
   anon_id    text,

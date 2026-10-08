@@ -48,12 +48,29 @@ export async function rodar({ nav, ok }) {
       // preço de conferir que a EXPLICAÇÃO apareceu, e não só um "Acertou".
       ok("acertou e explicou", /Acertou/i.test(depois) && /afeta o seu bolso/i.test(depois));
       ok("explica o combinado uma vez só", /uma por dia, um minuto/i.test(depois));
+      // Desde 08/10/2026 (achado do QA de 07/10, decisão do dono): a resposta
+      // do onboarding é estudo, não presença. Ela NÃO carimba o dia nem abre
+      // a sequência, para a pergunta do dia 1 continuar disponível.
       const s = await c.sessaoGravada();
-      ok("a sequência abriu em 1", s?.quiz?.sequencia === 1, JSON.stringify(s?.quiz ?? null));
-      ok("gravou a resposta no histórico", (s?.quiz?.historico ?? []).length === 1, `n=${(s?.quiz?.historico ?? []).length}`);
+      ok("a sequência NÃO abre no onboarding", !s?.quiz?.ultimoDia && !(s?.quiz?.sequencia > 0), JSON.stringify(s?.quiz ?? null));
+      ok("a resposta fica guardada como onboarding, fora do histórico por dia",
+        s?.quiz?.onboarding?.perguntaId === "oleo-intervalo" && (s?.quiz?.historico ?? []).length === 0,
+        JSON.stringify(s?.quiz ?? null));
+      ok("conta nos totais", s?.quiz?.respostas === 1, `resp=${s?.quiz?.respostas}`);
 
-      await c.pg.getByRole("button", { name: /Seguir/i }).first().click();
-      await c.pg.waitForTimeout(600);
+      // O botão principal leva à pergunta DE HOJE, e ela tem de ser oferecida
+      // (era aqui que a tela dizia "você já respondeu hoje").
+      await c.pg.locator("[data-primeiro-quiz-hoje]").first().click();
+      await c.pg.waitForTimeout(1500);
+      const telaDoQuiz = await c.corpo();
+      ok("o botão abre a pergunta do dia, e ela é oferecida", !/já respondeu hoje/i.test(telaDoQuiz) && !TROCA_OLEO.test(telaDoQuiz), telaDoQuiz.slice(0, 120).replace(/\n/g, " | "));
+      await c.pg.locator("main >> css=button").nth(1).click();
+      await c.pg.waitForTimeout(1800);
+      const respondida = await c.corpo();
+      ok("responder a de hoje abre a sequência em 1", /Sua sequência começou hoje|1 dia seguido/i.test(respondida), (respondida.match(/\d+ dias? seguidos?|Sua sequência começou hoje/i) ?? ["?"])[0]);
+
+      await c.pg.getByRole("button", { name: /^Início$/i }).first().click();
+      await c.pg.waitForTimeout(800);
       await c.recarregar();
       ok("não volta depois de respondido", !TROCA_OLEO.test(await c.corpo()));
     }

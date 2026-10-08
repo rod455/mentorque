@@ -72,9 +72,10 @@ export async function POST(req: Request) {
   const admin = getSupabaseAdmin();
   if (!admin) return NextResponse.json({ error: "not_configured" }, { status: 501 });
 
-  // Conflito é sucesso, não erro: a pessoa já respondeu hoje. O app pode
-  // reenviar por toque duplo, por reinstalação ou por dois aparelhos, e nada
-  // disso deve virar duas linhas nem uma tela de erro.
+  // Conflito é sucesso, não erro: a pessoa já respondeu ESTA pergunta hoje
+  // (chave dia + aparelho + pergunta desde 08/10/2026). O app pode reenviar
+  // por toque duplo, por reinstalação ou por dois aparelhos, e nada disso
+  // deve virar duas linhas nem uma tela de erro.
   const { error } = await admin
     .from("quiz_respostas")
     .insert({ dia, pergunta_id: perguntaId, acertou: b.acertou, anon_id: anonId, user_id: userId });

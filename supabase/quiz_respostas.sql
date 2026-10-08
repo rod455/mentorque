@@ -36,12 +36,19 @@ create table if not exists public.quiz_respostas (
 alter table public.quiz_respostas enable row level security;
 revoke all on public.quiz_respostas from anon, authenticated;
 
--- Uma resposta por pessoa por dia. Não é só higiene de dados: sem isto, quem
--- reinstalasse, tocasse duas vezes ou deixasse o app aberto em dois aparelhos
--- entraria várias vezes na conta e a porcentagem deixaria de significar
--- "das pessoas que responderam".
-create unique index if not exists quiz_respostas_uma_por_dia
-  on public.quiz_respostas (dia, anon_id);
+-- Uma resposta por pessoa por dia E POR PERGUNTA. Não é só higiene de dados:
+-- sem isto, quem reinstalasse, tocasse duas vezes ou deixasse o app aberto em
+-- dois aparelhos entraria várias vezes na conta e a porcentagem deixaria de
+-- significar "das pessoas que responderam".
+--
+-- A pergunta entrou na chave em 08/10/2026 (migração
+-- quiz_respostas_uma_por_dia_e_pergunta, decisão do dono sobre o achado do
+-- QA de 07/10). Até então a chave era (dia, anon_id), e a resposta do
+-- ONBOARDING, dada no mesmo dia, fazia o banco recusar a resposta da pergunta
+-- do dia em silêncio (a rota trata o conflito como sucesso). A porcentagem
+-- continua significando o mesmo: ela é por pergunta, que é a unidade do GET.
+create unique index if not exists quiz_respostas_uma_por_dia_e_pergunta
+  on public.quiz_respostas (dia, anon_id, pergunta_id);
 
 -- O índice que o GET usa: conta do dia + pergunta.
 create index if not exists quiz_respostas_dia_pergunta
@@ -120,12 +127,12 @@ grant select on public.quiz_participacao to service_role;
 -- índice (abaixo) foi desfeito na mesma transação, e a conferência de resíduo
 -- voltou zero.
 --
--- E O QUE O ENSAIO DO ÍNDICE MOSTROU, que é o achado da varredura: o
--- `quiz_respostas_uma_por_dia` é único em (dia, anon_id) SEM a pergunta.
+-- E O QUE O ENSAIO DO ÍNDICE MOSTROU, que era o achado da varredura: o
+-- `quiz_respostas_uma_por_dia` era único em (dia, anon_id) SEM a pergunta.
 -- Inserida a resposta do onboarding, a resposta da pergunta DO DIA, da mesma
--- pessoa no mesmo dia, é recusada pelo índice. Somado à tela (que decide por
--- `ultimoDia`, carimbado pelo onboarding), o quiz do dia 1 não acontece: em
--- 314 aparelhos que responderam o onboarding, ZERO responderam um quiz diário
--- naquele mesmo dia. A proposta de conserto está em
--- docs/agentes/propostas/o-quiz-do-dia-1-nunca-acontece.md e mexe em
--- uniqueness, então é decisão do dono, não da alçada do QA.
+-- pessoa no mesmo dia, era recusada pelo índice. Somado à tela (que decidia
+-- por `ultimoDia`, carimbado pelo onboarding), o quiz do dia 1 não acontecia.
+-- CONSERTADO em 08/10/2026 (decisão do dono, caminho B da proposta em
+-- docs/agentes/propostas/o-quiz-do-dia-1-nunca-acontece.md): o índice ganhou
+-- a pergunta (acima) e o app deixou de carimbar o dia na resposta do
+-- onboarding. A leitura do conserto é o evento `abriu_quiz` do funil.

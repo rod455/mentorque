@@ -55,6 +55,16 @@ export type EstadoQuiz = {
   acertos: number;
   /** O que foi respondido em cada dia, do mais antigo para o mais novo. */
   historico?: RespostaDoDia[];
+  /**
+   * A pergunta do onboarding, respondida uma vez no primeiro minuto de app.
+   *
+   * Fica FORA do histórico por dia e fora da sequência, de propósito (decisão
+   * do dono em 08/10/2026, achado do QA de 07/10): quando ela carimbava o
+   * dia, a pergunta do dia 1 nunca era oferecida, e a tela dizia "você já
+   * respondeu hoje" mostrando a pergunta do onboarding. É estudo, não
+   * presença: conta nos totais e vale para a folha não voltar.
+   */
+  onboarding?: RespostaDoDia | null;
 };
 
 /**
@@ -77,6 +87,7 @@ export const QUIZ_ZERADO: EstadoQuiz = {
   respostas: 0,
   acertos: 0,
   historico: [],
+  onboarding: null,
 };
 
 /** O que foi respondido naquele dia, ou null se o dia está em aberto. */
@@ -173,7 +184,46 @@ export function aoResponder(
     respostas: e.respostas + 1,
     acertos: e.acertos + (r.acertou ? 1 : 0),
     historico: comHistorico(e, { dia: hoje, ...r }),
+    onboarding: e.onboarding ?? null,
   } satisfies TodasAsChavesDoQuiz;
+}
+
+/**
+ * Responde a pergunta do ONBOARDING.
+ *
+ * Conta como estudo, não como presença, igual a `aoResponderPassado`: soma no
+ * total de respostas e de acertos, guarda a resposta em `onboarding`, e NÃO
+ * encosta em `ultimoDia`, `sequencia`, `perdaoEm` nem no histórico por dia.
+ *
+ * O porquê (QA, 07/10/2026; decisão do dono, 08/10): quando esta resposta
+ * passava por `aoResponder`, ela carimbava o dia, e no mesmo dia a tela do
+ * quiz dizia "você já respondeu hoje". O dia 1 é o dia em que a pessoa está
+ * dentro do app por vontade própria, e era o único em que o quiz não rodava:
+ * de 332 aparelhos que responderam o onboarding, 4 fizeram o quiz do dia
+ * seguinte. A sequência nasce no primeiro quiz do dia, e o chip "Quiz"
+ * continua aceso depois da folha, chamando para ele.
+ *
+ * Idempotente: a segunda resposta do onboarding não conta.
+ */
+export function aoResponderOnboarding(
+  e: EstadoQuiz,
+  hoje: string,
+  r: { perguntaId: string; escolha: number; acertou: boolean }
+): EstadoQuiz {
+  if (e.onboarding) return e;
+  return {
+    ...e,
+    respostas: e.respostas + 1,
+    acertos: e.acertos + (r.acertou ? 1 : 0),
+    onboarding: { dia: hoje, ...r },
+  };
+}
+
+/** Já respondeu a pergunta do onboarding, ou algum quiz antes dela existir? */
+export function jaRespondeuOnboarding(e: EstadoQuiz): boolean {
+  // `ultimoDia` cobre quem respondeu antes de 08/10/2026, quando o onboarding
+  // carimbava o dia: para essa pessoa a folha também não volta.
+  return !!e.onboarding || !!e.ultimoDia;
 }
 
 /**
@@ -264,22 +314,28 @@ export function mesclarQuiz(nuvem?: EstadoQuiz, local?: EstadoQuiz): EstadoQuiz 
     .sort((a, b) => a.dia.localeCompare(b.dia))
     .slice(-TETO_DO_HISTORICO);
 
+  // A resposta do onboarding é uma só na vida: fica a que existir, e a da
+  // nuvem quando as duas existem, pelo mesmo motivo do histórico.
+  const onboarding = nuvem.onboarding ?? local.onboarding ?? null;
+
   return {
     ultimoDia: dias.ultimoDia,
     sequencia: dias.sequencia,
     recorde: Math.max(nuvem.recorde, local.recorde),
     perdaoEm: perdaoMaisNovo,
     // Máximo, e não soma: é a mesma pessoa, e somar contaria de novo o que já
-    // estava nos dois lados. O piso é o tamanho do histórico, que só cresce
-    // com dia novo — assim responder um dia passado em outro aparelho não some
-    // do total quando as duas cópias se encontram.
-    respostas: Math.max(nuvem.respostas, local.respostas, historico.length),
+    // estava nos dois lados. O piso é o tamanho do histórico mais a resposta
+    // do onboarding, que só cresce com dia novo — assim responder um dia
+    // passado em outro aparelho não some do total quando as duas cópias se
+    // encontram.
+    respostas: Math.max(nuvem.respostas, local.respostas, historico.length + (onboarding ? 1 : 0)),
     acertos: Math.max(
       nuvem.acertos,
       local.acertos,
-      historico.filter((r) => r.acertou).length
+      historico.filter((r) => r.acertou).length + (onboarding?.acertou ? 1 : 0)
     ),
     historico,
+    onboarding,
   } satisfies TodasAsChavesDoQuiz;
 }
 

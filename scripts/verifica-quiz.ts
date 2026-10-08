@@ -10,7 +10,9 @@
 import {
   QUIZ_ZERADO,
   aoResponder,
+  aoResponderOnboarding,
   aoResponderPassado,
+  jaRespondeuOnboarding,
   diasEntre,
   mesclarQuiz,
   perguntaDoDia,
@@ -20,6 +22,7 @@ import {
   temPerdao,
   type EstadoQuiz,
 } from "../lib/app/quiz/sequencia.ts";
+import { readFileSync } from "node:fs";
 
 let falhas = 0;
 function ok(nome: string, condicao: boolean, extra = "") {
@@ -266,5 +269,63 @@ for (let i = 0; i < 365; i++) {
 ok("365 dias seguidos dao sequencia 365", ano.sequencia === 365, `seq=${ano.sequencia}`);
 ok("365 respostas contadas", ano.respostas === 365);
 
-console.log(falhas ? `\n${falhas} verificacao(oes) falharam.` : "\nTodas as verificacoes passaram.");
+// ---- o quiz do dia 1 (achado do QA de 07/10/2026, caminho B do dono) --------
+// A resposta do onboarding e ESTUDO, nao presenca: nao carimba o dia, nao abre
+// sequencia, nao entra no historico por dia. Sem isto o quiz do dia 1 nunca
+// acontecia: a tela decidia por "respondeu alguma coisa hoje" e o onboarding
+// consumia o dia (de 332 aparelhos, 4 fizeram o quiz do dia seguinte).
+//
+// A primeira asserção olha QUEM USA a regra, no fonte, e e a que reprovava
+// sobre o codigo de 07/10: a folha do primeiro quiz chamava `responderQuiz`,
+// o mesmo caminho da pergunta do dia.
+{
+  const fonte = (c: string) => readFileSync(new URL(`../${c}`, import.meta.url), "utf8");
+  const folha = fonte("components/app/PrimeiroQuiz.tsx");
+  const tela = fonte("components/app/screens/Quiz.tsx");
+  ok("a folha do primeiro quiz entra pelo caminho de estudo", /responderQuizOnboarding\(/.test(folha));
+  ok("e NAO pelo caminho da pergunta do dia", !/\bresponderQuiz\(/.test(folha));
+  ok("a tela do quiz continua decidindo por respondeuHoje", /respondeuHoje\(estado, hoje\)/.test(tela));
+}
+// A regra em si, nas tres assercoes que a proposta do QA pediu.
+{
+  const ob = { perguntaId: "oleo-intervalo", escolha: 1, acertou: true };
+  // 1. so com a resposta do onboarding gravada no dia, a pergunta DO DIA ainda
+  //    e oferecida: `respondeuHoje` tem de dizer que nao.
+  let e: EstadoQuiz = aoResponderOnboarding(QUIZ_ZERADO, "2026-10-08", ob);
+  ok("o onboarding NAO carimba o dia", e.ultimoDia === null, String(e.ultimoDia));
+  ok("o onboarding NAO abre sequencia", e.sequencia === 0 && e.recorde === 0, `seq=${e.sequencia}`);
+  ok("depois do onboarding a pergunta do dia ainda e oferecida", !respondeuHoje(e, "2026-10-08"));
+  ok("o onboarding NAO entra no historico por dia", (e.historico ?? []).length === 0);
+  ok("mas fica guardado como onboarding", e.onboarding?.perguntaId === "oleo-intervalo" && e.onboarding?.dia === "2026-10-08");
+  ok("e conta nos totais", e.respostas === 1 && e.acertos === 1, `${e.respostas}/${e.acertos}`);
+  ok("a folha do primeiro quiz nao volta", jaRespondeuOnboarding(e));
+  ok("quem respondeu antes de 08/10 (so ultimoDia) tambem nao ve a folha", jaRespondeuOnboarding(q("2026-10-01", 1)));
+  ok("quem nunca respondeu nada ve a folha", !jaRespondeuOnboarding(QUIZ_ZERADO));
+
+  // 2. respondida a pergunta do dia em seguida, a sequencia nasce em 1 e o
+  //    segundo toque nao conta duas vezes.
+  e = aoResponder(e, "2026-10-08", { perguntaId: "p7", escolha: 0, acertou: false });
+  ok("o quiz do dia 1 abre a sequencia em 1", e.sequencia === 1 && e.ultimoDia === "2026-10-08", `seq=${e.sequencia}`);
+  ok("agora sim respondeu hoje", respondeuHoje(e, "2026-10-08"));
+  const congelado = e;
+  e = aoResponder(e, "2026-10-08", { perguntaId: "p7", escolha: 2, acertou: true });
+  ok("o segundo toque no quiz do dia nao conta", e === congelado);
+  e = aoResponderOnboarding(e, "2026-10-08", { ...ob, acertou: false });
+  ok("o segundo toque no onboarding nao conta", e === congelado);
+  ok("o onboarding guardado e o primeiro", e.onboarding?.acertou === true);
+
+  // 3. `respostas` nunca passa do historico mais a resposta do onboarding
+  //    (mais as de dias passados, que tambem entram no historico), e a mescla
+  //    de dois aparelhos nao infla.
+  const teto = (x: EstadoQuiz) => (x.historico ?? []).length + (x.onboarding ? 1 : 0);
+  ok("respostas = historico + onboarding", e.respostas === 2 && e.respostas === teto(e), `resp=${e.respostas} teto=${teto(e)}`);
+  e = aoResponder(e, "2026-10-09", { perguntaId: "p8", escolha: 0, acertou: true });
+  ok("e segue assim no dia seguinte, com a sequencia em 2", e.respostas === teto(e) && e.sequencia === 2, `resp=${e.respostas} seq=${e.sequencia}`);
+  const m = mesclarQuiz(e, { ...QUIZ_ZERADO, onboarding: { dia: "2026-10-08", perguntaId: "oleo-intervalo", escolha: 0, acertou: false } })!;
+  ok("a mescla fica com um onboarding so, o da nuvem", m.onboarding?.acertou === true);
+  ok("a mescla nao infla o total", m.respostas === teto(m), `resp=${m.respostas} teto=${teto(m)}`);
+  ok("a mescla conta o acerto do onboarding", m.acertos === 2, `ac=${m.acertos}`);
+  const m2 = mesclarQuiz({ ...QUIZ_ZERADO, respostas: 1, acertos: 1, onboarding: { dia: "2026-10-08", perguntaId: "oleo-intervalo", escolha: 1, acertou: true } }, QUIZ_ZERADO)!;
+  ok("a mescla com aparelho vazio preserva o onboarding", !!m2.onboarding && m2.respostas === 1);
+}
 process.exit(falhas ? 1 : 0);
