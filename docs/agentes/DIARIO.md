@@ -12,9 +12,10 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   (`mentorque-midia-2026-10-08.pdf`, 91 kB), Gmail respondeu SENT, id da
   mensagem 1a11bd4ee23913ce. É o primeiro relatório de mídia que sai da casa
   desde que o fluxo existe (19/09).
-- O que ainda não está provado: a trava de não mandar duas vezes no desenho
-  novo. A execução das 12h05 de Brasília é quem prova (ela tem de decidir
-  "já foi" e não mandar nada); conferência agendada nesta sessão.
+- A trava de não mandar duas vezes, provada em produção (lido às 16h24
+  UTC): as execuções 8858 (12h05 de Brasília) e 8859 (13h05) pararam no nó
+  de decisão com saída vazia, nenhum nó de Gmail rodou. O estado do fluxo
+  guardou a data do relatório. Um envio por semana, de hora em hora.
 
 ## 2026-10-08 · Engenharia: a função de teste da anomalia 5 caiu pelo clique do dono
 
