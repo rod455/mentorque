@@ -3,7 +3,27 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
-## 2026-10-09 · CRO (retenção): a retenção se moveu, e a ativação mede a ordem errada
+## 2026-10-09 · Engenharia: a rodada do CRO lida contra o banco; a ordem errada é real, e o denominador que "não existia" existia
+
+- Dono: "Veja o que o CRO falou e como melhorar". O retorno está em
+  `cro-besci.md` ("Retorno do dono sobre a rodada de 09/10/2026").
+- **A hipótese da rodada, testada em consulta própria (09/10):** na coorte de
+  21/09, 45 das 51 pessoas têm `cadastrou_carro` antes do `cadastro`; com a
+  janela começando um dia antes, a ativação vai de 3 de 51 para 47 de 51, e
+  na de 28/09 de 0 de 57 para 56 de 57. A ordem errada é real. E o conserto
+  por janela vira teto por construção, então a métrica precisa de outra
+  pergunta, que é do CRO: linha na fila entre papéis para 16/10.
+- **O denominador do `limite-de-carros-com-aviso`**: `user_state`, o mesmo
+  instrumento do `estadoDaBase`, responde: 6 contas com dois carros ou mais,
+  nenhuma Premium, 1 com três. Inconclusivo por exposição (6 expostas, 0
+  assinaram), não por métrica de ausência; ficha anotada.
+- Retenção conferida no retrato (9 de 51; 0 de 16; 11 na de 28/09 com janela
+  aberta). Suíte `calendario` rodada aqui: verde em 70 s, com os dois lados
+  da fronteira. O pedido do Diretor de 05/10 (recusa do convite com motivo)
+  segue sem resposta na fila.
+- Nada de código mudou.
+
+## 2026-10-09 · CRO: rodada de retenção, a retenção se moveu, e a ativação mede a ordem errada
 - Rodada semanal do CRO/BeSci, foco RETENÇÃO (a de 02/10 foi de conversão).
   Artifact "Conversão da semana":
   https://claude.ai/artifact/H7CYr8XTNebyZofmW9bRRj

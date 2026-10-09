@@ -750,7 +750,12 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   sair. Investigação em docs/qa/app-fecha-no-quiz.md.
 
 ## [limite-de-carros-com-aviso] O "+" da garagem diz que o próximo passo é o Premium
-- Estado: FECHADO (inconclusivo, métrica de ausência)
+- Estado: FECHADO (inconclusivo, por exposição: 6 contas com dois carros ou mais em 09/10, nenhuma Premium, 0 assinaram; PISO)
+- Nota de Engenharia (09/10, retorno do dono): o denominador existia em
+  `user_state`, o mesmo instrumento do `estadoDaBase`. Lido em 09/10: de 201
+  contas com estado, 6 têm dois carros ou mais e 1 tem três. Só essas 6 veem o
+  aviso do "+". O veredito fica inconclusivo pelo critério 3 da régua
+  (atividade zero lida como exposição), não por métrica de ausência.
 - Tipo: mudanca-direta
 - Alvo no funil: não é um degrau do funil de venda, é a confiança na tela de
   garagem. O que se espera mover é a volta de quem tem mais de um carro, e o

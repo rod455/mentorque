@@ -324,3 +324,68 @@ Mídia leu 41 Android, 2 iPhone e nenhuma web na mesma semana, e o QA leu 28 de
 sua alçada em vez de virar nota de ressalva: separe o degrau por plataforma no
 retrato, ou diga por que não dá. Ressalva honesta repetida duas vezes vira
 instrumento que ninguém conserta.
+
+## Retorno do dono sobre a rodada de 09/10/2026 (retenção)
+
+Mandado escrever por ele em 09/10 ("Veja o que o CRO falou e como melhorar").
+Lido o diário, o commit 4fd0308 (texto, suíte e caderno), o retrato de 09/10
+e o banco, com a hipótese da rodada testada em consulta própria.
+
+Primeiro o que manter.
+
+**O ACHADO DE MEDIÇÃO É VERDADEIRO, E EU PROVEI COM A CONSULTA QUE SEPARA.** A
+rodada disse que a ativação por coorte mede a ordem errada porque o carro vem
+antes da conta desde 12/09. Testado no banco em 09/10: na coorte de 21/09, 45
+das 51 pessoas têm o `cadastrou_carro` ANTES do `cadastro`; com a janela
+começando um dia antes da conta, a ativação sai de 3 de 51 para 47 de 51. Na
+de 28/09, 56 de 57 têm o carro antes, e 0 de 57 ativam pela view. É a quinta
+vez que um zero desta casa é estrutural, e a primeira em que o papel que
+construiu a narrativa em cima foi o mesmo que a desfez, com nome.
+
+**A RETENÇÃO LIDA COMO DIREÇÃO, COM A LINHA DE BASE DO LADO.** 9 de 51 contra
+0 de 16, 1 de 11 e 1 de 8 (retrato de 09/10, conferido), sem braço comparável
+e dito. E a coorte de 28/09 com janela aberta tratada como piso.
+
+**A APOSTA NASCEU COM A FRASE "O QUE PODERIA FECHAR ESTE VEREDITO".** Numerador,
+denominador e série no retrato (21 de 175, `estadoDaBase`), e a promessa do
+texto é a que a linha cheia cumpre. A suíte `calendario` passou aqui em 70 s,
+com os dois lados da fronteira.
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. O DENOMINADOR DO `limite-de-carros-com-aviso` EXISTIA, NO MESMO INSTRUMENTO
+QUE VOCÊ USOU NA MESMA RODADA.** Você fechou INCONCLUSIVO por "métrica de
+ausência" porque "ninguém sabe quantas contas têm DOIS carros". O
+`estadoDaBase` conta carros lendo `user_state`, e a mesma leitura responde:
+lido em 09/10, de 201 contas com estado, **6 têm dois carros ou mais**, nenhuma
+delas Premium, e 1 tem três. O aviso do "+" só aparece para essas 6. O
+veredito honesto não é "métrica de ausência": é o seu critério 3, atividade
+zero lida como exposição, com o número do lado: 6 pessoas expostas, 0
+assinaram, PISO, inconclusivo por volume. A regra que você escreveu na skill
+está certa; o que faltou foi perguntar ao instrumento antes de declarar que o
+denominador não existe.
+
+**2. A VIEW NÃO PRECISA DE UMA JANELA MAIOR, PRECISA DE OUTRA PERGUNTA, E ISSO É
+SEU.** Você deixou o conserto para "o Analista ou o QA" num parágrafo do
+diário, sem linha na fila entre papéis. E o conserto óbvio (começar a janela um
+dia antes da conta) produz 47 de 51 e 56 de 57: a ativação vira teto por
+construção, porque no Android a conta só nasce depois do carro. Ou seja, a
+métrica perdeu o sentido, não a janela. A pergunta nova é "quem fez algo de
+valor ALÉM do carro nos 7 dias" (trilha, serviço, abastecimento, sintoma,
+pergunta ao Biela), e definir isso, com numerador e denominador, é do CRO.
+Engenharia aplica a view no dia em que a definição chegar; a linha está na
+fila entre papéis com data.
+
+**3. O PEDIDO DO DIRETOR PARA ESTA RODADA FICOU SEM RESPOSTA.** Em
+`entre-papeis.md` há a linha de 05/10, do Diretor para você, para a rodada de
+sexta: o portão do aviso passa a gravar a RECUSA com o motivo. A rodada não a
+menciona. A regra 4 das DIRETRIZES é que a rodada ABRE fechando o que foi
+pedido a ela; quando não cabe, cabe dizer por quê e quando.
+
+**E uma nota sobre "bateria `conferir` inteira verde".** A `conferir:agentes`
+reprovava na `main` depois do seu push, pelo título da sua própria entrada no
+diário ("CRO (retenção):" não é o molde `data · Papel: título`). Ou a bateria
+rodou antes de o diário ser escrito, ou o verde foi dito de memória. Pela
+regra de 06/10 do CLAUDE.md, a frase vem com instrumento e hora, e o
+instrumento é a bateria depois do último arquivo escrito. Engenharia
+corrigiu o título em 09/10.
