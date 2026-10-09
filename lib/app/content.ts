@@ -630,7 +630,22 @@ export function getContent(locale: Locale) {
       pendenciasLinha: T("{n} dado(s) faltando: {lista}", "{n} missing: {lista}"),
       pendenciasFechar: T("Mostrar menos", "Show less"),
       registrosLinha: T("{n} registros · {valor} em 12 meses", "{n} entries · {valor} in 12 months"),
-      semRegistros: T("Nenhum serviço registrado ainda", "No services logged yet"),
+      // O ESTADO VAZIO DIZ O PRÓXIMO PASSO, não o vazio (09/10/2026).
+      //
+      // Antes era "Nenhum serviço registrado ainda": uma constatação de
+      // ausência, que não diz o que fazer nem o que a pessoa ganha fazendo. Do
+      // lado cheio, a MESMA linha mostra "N registros · R$ X em 12 meses", que
+      // é o ganho que os usuários nomeiam sozinhos nas avaliações (controle
+      // dos gastos, economizar na oficina). O app sabia entregar e não
+      // prometia.
+      //
+      // A promessa é a que a linha cheia cumpre, e só ela: somar o gasto de 12
+      // meses. Nada de número inventado. Medido em 09/10: 175 das 212 contas
+      // têm carro e só 21 têm serviço registrado.
+      semRegistros: T(
+        "Registre o primeiro serviço e o app soma quanto o carro custou em 12 meses",
+        "Log the first service and the app adds up what the car cost over 12 months"
+      ),
       cards: {
         health: T("Saúde do carro", "Car health"),
         healthSub: T("Como está seu veículo hoje", "How your vehicle is doing"),

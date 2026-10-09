@@ -3,6 +3,65 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-09 · CRO (retenção): a retenção se moveu, e a ativação mede a ordem errada
+- Rodada semanal do CRO/BeSci, foco RETENÇÃO (a de 02/10 foi de conversão).
+  Artifact "Conversão da semana":
+  https://claude.ai/artifact/H7CYr8XTNebyZofmW9bRRj
+- **A RETENÇÃO SE MOVEU, e é a primeira vez.** A coorte de 21/09 fechou com
+  **9 de 51 voltando em 1 a 7 dias**, contra 0 de 16 (14/09), 1 de 11 (07/09) e
+  1 de 8 (31/08). A de 28/09 já tem 11, com janela aberta.
+  - É direção, não prova: não há braço comparável e a mesma janela trouxe mais
+    de uma mudança. Mas a de 21/09 é a primeira coorte que NASCEU com as cinco
+    máquinas de recorrência publicadas nas duas lojas, e era exatamente a
+    leitura que a recomendação 3 de 25/09 pediu para esperar.
+- **ACHADO DE MEDIÇÃO, e ele corrige o que eu mesmo escrevi: a ativação por
+  coorte mede a ordem errada dos acontecimentos.** Dois números nossos
+  discordam: `estadoDaBase` diz 175 das 212 contas com carro (83 de cada 100), e
+  a ativação da coorte de 21/09 diz 3 de 51 (6 de cada 100).
+  - A causa está na definição da view: ela conta a primeira ação de valor que
+    acontece em ou DEPOIS do evento `cadastro` (`e.criado_em >= c.cadastrado_em`).
+    Neste produto a ordem natural é o contrário, e de propósito: desde 12/09 a
+    última página do onboarding do Android pede o CARRO, e a conta vem depois,
+    com a folha "Salve sua garagem" em cima do mesmo cadastro. No Android, que
+    é 355 dos 388 aparelhos ativos.
+  - Ou seja: o `cadastrou_carro` cai fora da janela e a ativação lê perto de
+    zero justamente porque o produto melhorou. Quinto zero estrutural desta
+    casa, e o primeiro em que EU construí narrativa em cima: em 25/09 escrevi
+    "ativação caiu de 6 em 11 para 3 em 16" como se fosse comportamento.
+  - A régua honesta enquanto a view não mudar: para "quem experimentou de
+    verdade", usar contas com carro sobre contas. Consertar a view é do
+    Analista ou do QA; a leitura corrigida está no mapa.
+- **VEREDITO VENCIDO FECHADO: `limite-de-carros-com-aviso`, INCONCLUSIVO, e a
+  culpa é de quem escreveu a métrica, ou seja, minha.** Ela era ausência de
+  reclamação, e ausência não fecha veredito. São 12 avaliações, nenhuma citando
+  paywall ou assinatura, mas ninguém sabe quantas contas têm DOIS carros, que é
+  a condição para o aviso aparecer. Sem denominador, "funcionou" e "ninguém
+  passou por ali" parecem idênticos. É o mesmo erro que eu nomeei na skill em
+  02/10, cometido três semanas antes de nomear a regra. A mudança fica no
+  código, porque é correção de clareza e se defende pelo argumento.
+- **APOSTA DA SEMANA, implementada: [primeiro-servico-com-ganho-nomeado].** Com
+  o caminho até o carro consertado (de 7 para 34 de cada 100 em cinco semanas),
+  o buraco mudou de lugar: **175 contas têm carro e só 21 têm serviço
+  registrado**. Na tela do carro, a linha do calendário dizia "Nenhum serviço
+  registrado ainda", uma constatação de ausência. Do lado cheio, a MESMA linha
+  mostra o gasto de 12 meses, que é o ganho que os usuários nomeiam sozinhos nas
+  avaliações (4 das 12 falam de economia e controle de gastos). O app sabia
+  entregar e não prometia. Agora a linha vazia diz o próximo passo e o que ele
+  destrava, e a promessa é só a que a linha cheia cumpre: somar o gasto de 12
+  meses. Nada de número inventado.
+  - Registrei no caderno, antes de implementar, a frase "o que poderia fechar
+    este veredito", para não repetir o erro de cima: a razão contas com serviço
+    sobre contas com carro tem numerador, denominador e série no retrato.
+- **CONFERÊNCIA NOVA na suíte `calendario`, provada mordendo**: os dois lados da
+  fronteira (sem serviço, a linha promete o ganho; com serviço, ela mostra o
+  número e a promessa sai de cena). Devolvi o texto antigo e ela reprovou nos
+  dois pontos certos; restaurei e passou.
+- APRENDIZADOS em besci.md: métrica de ausência nunca fecha veredito, agora com
+  exemplo próprio; e quando o produto muda a ORDEM dos passos, a métrica
+  construída sobre a ordem antiga passa a medir o contrário.
+- Bateria `conferir` inteira verde, tipos limpos, suíte `calendario` passando.
+  Sem build local, que é o regime das duas velocidades.
+
 ## 2026-10-08 · Engenharia: o relatório de mídia chegou, pela primeira vez, ao Luiz
 
 - Lido nas execuções do fluxo `Mídia: relatório por e-mail` às 14h21 UTC:

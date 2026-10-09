@@ -147,3 +147,20 @@ experimentos alimentam a seção final.
   veredito venceu, a base era 266 aparelhos Android, 10 iPhone e 8 web: o braço
   de controle havia evaporado. A distribuição da base não é nossa para
   controlar, então nenhum desenho de experimento pode depender dela.
+- **2026-10-09: métrica de ausência nunca fecha veredito, e eu levei três
+  semanas para pagar essa conta.** O `limite-de-carros-com-aviso` foi
+  registrado com "o sinal é a ausência de reclamação". Chegou a data e o dado
+  era zero reclamações em 12 avaliações, que não distingue "funcionou" de
+  "ninguém passou por ali", porque ninguém sabe quantas pessoas têm dois carros.
+  A regra, agora com exemplo próprio: ao registrar a aposta, escrever a frase
+  "o que poderia fechar este veredito é X" com numerador E denominador. Se X
+  for uma ausência, a aposta é correção e se defende pelo argumento, não pelo
+  dado.
+- **2026-10-09: quando o produto muda a ORDEM dos passos, a métrica construída
+  sobre a ordem antiga passa a medir o contrário.** A ativação por coorte conta
+  a primeira ação de valor que acontece depois do cadastro da conta. Em 12/09 o
+  onboarding do Android passou a pedir o CARRO antes da conta, de propósito e
+  com bom resultado. Desde então a ativação lê perto de zero (3 de 51) enquanto
+  83 de cada 100 contas têm carro. O número piorou porque o produto melhorou.
+  Antes de ler qualquer métrica de sequência, perguntar se a sequência que ela
+  pressupõe é a que o app faz hoje.

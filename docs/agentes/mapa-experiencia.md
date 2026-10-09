@@ -16,6 +16,66 @@ Formato de cada tela/fluxo:
 
 ## Estado
 
+v8 em 2026-10-09: rodada de RETENÇÃO, e ela tem duas notícias grandes. A
+primeira é boa: a coorte de 21/09 fechou com 9 de 51 voltando na primeira
+semana, contra 0 de 16 e 1 de 11 nas anteriores. A segunda é um achado de
+medição: o número de ativação que este mapa e os meus relatórios vinham citando
+mede a ordem errada dos acontecimentos para este produto. Próxima rodada
+alterna para CONVERSÃO.
+
+# A retenção finalmente se moveu (2026-10-09)
+
+    coorte 31/08     8 cadastrados   1 voltou em 1 a 7 dias
+    coorte 07/09    11 cadastrados   1 voltou
+    coorte 14/09    16 cadastrados   0 voltaram
+    coorte 21/09    51 cadastrados   9 voltaram      <- primeira que se move
+    coorte 28/09    57 cadastrados   11 até agora, janela aberta
+
+A de 21/09 é a primeira coorte que NASCEU com as máquinas de recorrência
+publicadas nas duas lojas. Isso é direção, não prova: não há braço comparável,
+e a mesma janela trouxe mais quatro mudanças. Mas era exatamente a leitura que
+a recomendação 3 de 25/09 pediu para esperar, e ela veio para o lado bom.
+
+# ACHADO DE MEDIÇÃO: a ativação mede a ordem errada
+
+Dois números nossos discordam, e discordância é achado, não obstáculo:
+
+- `estadoDaBase` diz **175 das 212 contas têm carro** (83 de cada 100).
+- A ativação por coorte diz **3 de 51** na coorte de 21/09 (6 de cada 100).
+
+A causa está na definição da view `ativacao_coortes`: ela conta a primeira ação
+de valor que acontece **em ou depois** do evento `cadastro`
+(`e.criado_em >= c.cadastrado_em`). E neste produto a ordem natural é o
+contrário: a pessoa explora sem cadastrar, cadastra o CARRO e só depois cria a
+conta, com a folha "Salve sua garagem" em cima do mesmo cadastro. No Android,
+que é 355 dos 388 aparelhos ativos, a última página do onboarding virou
+"Cadastre o seu primeiro carro" em 12/09, ou seja, o produto passou a colocar o
+carro ANTES da conta de propósito.
+
+Consequência: o `cadastrou_carro` cai fora da janela e a ativação lê perto de
+zero justamente porque o produto melhorou. É o quinto zero estrutural desta
+casa, e o primeiro em que eu mesmo construí narrativa em cima dele (em 25/09
+escrevi "ativação caiu de 6 em 11 para 3 em 16" como se fosse comportamento).
+
+A régua honesta, enquanto a view não mudar: para "quem experimentou de
+verdade", usar contas com carro sobre contas (175 de 212). A ativação por
+coorte só vale para quem cadastrou a conta ANTES de usar, que é a minoria.
+Consertar a view é do Analista ou do QA, não meu; a leitura corrigida é minha e
+está aqui.
+
+# Onde a conversão está, para a rodada que vem
+
+    começou o onboarding      994
+    terminou                  677   (68 de cada 100)
+    abriu o cadastro de carro 603   (89 de cada 100)
+    cadastrou o carro         341   (57 de cada 100)
+
+De começar a ter carro: 341 de 994, 34 de cada 100, contra 23 na semana
+passada e 7 no início de setembro. O caminho até o carro deixou de ser o
+problema. **O degrau seguinte é o novo buraco: 21 das 212 contas têm serviço
+registrado, contra 175 com carro.** É a aposta desta semana.
+
+
 v7 em 2026-10-02: rodada de CONVERSÃO, e é a rodada de prestar contas. CINCO
 vereditos vencidos foram fechados, incluindo o primeiro FUNCIONOU do caderno
 (formulário curto de cadastro de carro, promovido a padrão no mesmo dia) e a

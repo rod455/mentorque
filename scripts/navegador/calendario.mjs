@@ -169,4 +169,55 @@ export async function rodar({ nav, ok }) {
   ok("o cartão do carro comprado há dias não corta texto em 360px", estouro.length === 0, estouro.join("; "));
   ok("nenhum erro de página no carro novo", u.erros.length === 0, u.erros[0] ?? "");
   await u.fechar();
+
+  await aLinhaDoCalendarioPrometeOGanho(nav, ok);
 }
+
+
+/**
+ * A LINHA DO CALENDÁRIO NA TELA DO CARRO PROMETE O GANHO, não constata o vazio.
+ *
+ * Por que isto existe: medido em 09/10/2026, 175 das 212 contas têm carro e só
+ * 21 têm serviço registrado. A linha vazia dizia "Nenhum serviço registrado
+ * ainda", que descreve a ausência sem dizer o que fazer nem o que se ganha. A
+ * linha CHEIA, do lado de quem já registrou, mostra o gasto de 12 meses, que é
+ * o ganho que os usuários nomeiam nas avaliações.
+ *
+ * Os dois lados da fronteira: sem serviço, a linha promete o ganho; com
+ * serviço, ela mostra o número de verdade e NÃO fica prometendo nada.
+ */
+async function aLinhaDoCalendarioPrometeOGanho(nav, ok) {
+  // Sem serviço nenhum: a garagem do mesmo carro, sem a lista de serviços.
+  {
+    const app = await abrirApp(nav, {
+      sessao: garagem({ startedAt: "2026-01-01", quiz: { ultimoDia: dia(0), sequencia: 1, recorde: 1, perdaoEm: null, respostas: 1, acertos: 1 } }),
+      chaves: { "mq-primeiro-quiz-nao": "1" },
+    });
+    const { pg } = app;
+    await pg.getByRole("button", { name: /^Carros$/i }).first().click();
+    await pg.waitForTimeout(900);
+    await pg.locator("main").getByText(/Golfinho|Onix|meu carro/i).first().click().catch(() => {});
+    await pg.waitForTimeout(1200);
+    const tela = await app.corpo();
+    ok("sem serviço, a linha promete somar o gasto de 12 meses", /soma quanto o carro custou em 12 meses/i.test(tela), tela.slice(0, 200).replace(/\n/g, " "));
+    ok("e não constata mais o vazio", !/Nenhum serviço registrado ainda/i.test(tela));
+    ok("nenhum erro de página na tela do carro sem serviço", app.erros.length === 0, app.erros[0] ?? "");
+    await app.fechar();
+  }
+
+  // Com serviço: a linha vira número e a promessa sai de cena.
+  {
+    const app = await abrirApp(nav, { sessao: SESSAO(), chaves: { "mq-primeiro-quiz-nao": "1" } });
+    const { pg } = app;
+    await pg.getByRole("button", { name: /^Carros$/i }).first().click();
+    await pg.waitForTimeout(900);
+    await pg.locator("main").getByText(/Golfinho|Onix|meu carro/i).first().click().catch(() => {});
+    await pg.waitForTimeout(1200);
+    const tela = await app.corpo();
+    ok("com serviço, a linha mostra registros e gasto", /registros/i.test(tela), tela.slice(0, 200).replace(/\n/g, " "));
+    ok("e a promessa sai de cena", !/soma quanto o carro custou em 12 meses/i.test(tela));
+    ok("nenhum erro de página na tela do carro com serviço", app.erros.length === 0, app.erros[0] ?? "");
+    await app.fechar();
+  }
+}
+

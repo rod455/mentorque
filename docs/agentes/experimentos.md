@@ -80,6 +80,40 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 
 ## Experimentos
 
+## [primeiro-servico-com-ganho-nomeado] O "nenhum serviço registrado" vira o próximo passo
+- Estado: ABERTO
+- Tipo: mudanca-direta
+- Alvo no funil: a passagem que virou a maior quebra real depois de o caminho
+  até o carro ser consertado: **175 das 212 contas têm carro e só 21 têm
+  serviço registrado**. De cada 100 contas com carro, 12 registram serviço.
+- Tese BeSci: clareza do próximo passo, com o ganho nomeado. Na tela do carro,
+  a linha do calendário mostra "Nenhum serviço registrado ainda", que é um
+  aviso de ausência: ele descreve o vazio sem dizer o que fazer nem o que a
+  pessoa ganha fazendo. Do lado cheio, a MESMA linha mostra "N registros ·
+  R$ X em 12 meses", que é exatamente o ganho que os usuários nomeiam sozinhos
+  nas avaliações ("controle dos gastos", "consegui economizar", "economizar na
+  oficina por não ser enrolado", 4 das 12 avaliações). Ou seja: o app já sabe
+  entregar o ganho, e só não o promete a quem ainda não começou.
+  - A mudança: o estado vazio passa a dizer o próximo passo e o que ele
+    destrava, em vez de constatar o vazio. Nada de número inventado: o que é
+    prometido é o que a linha cheia faz de verdade, somar o gasto de 12 meses.
+  - Por que é o momento: até setembro a quebra estava antes, em chegar ao
+    carro, e ela foi de 7 para 34 de cada 100 em cinco semanas. O degrau
+    seguinte agora é este, e ele é o que sustenta retorno mensal, porque gasto
+    de carro é mensal e problema de carro é raro.
+- Métrica: contas com serviço sobre contas com carro (hoje 21 de 175), e
+  `registrou_servico` por semana · Duração: 4 semanas
+- Aprovação: não se aplica (texto e ênfase, sem variantes, sem tocar em preço,
+  plano ou cobrança)
+- Início: 2026-10-09 · Ler a partir de: 2026-11-06
+- Antes: 21 contas com serviço de 212 contas, 175 delas com carro. A linha
+  vazia diz "Nenhum serviço registrado ainda".
+- O que poderia fechar este veredito, escrito agora para não repetir o erro do
+  `limite-de-carros-com-aviso`: a razão contas com serviço sobre contas com
+  carro é medida e aparece no retrato (estadoDaBase), então existe numerador,
+  denominador e série. Não é métrica de ausência.
+- Veredito: (aberto)
+
 ## [inicio-pergunta-unica] O Início tem uma ação primária: a pergunta ao Biela, com ou sem carro
 - Estado: ABERTO
 - Tipo: mudanca-direta
@@ -716,7 +750,7 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   sair. Investigação em docs/qa/app-fecha-no-quiz.md.
 
 ## [limite-de-carros-com-aviso] O "+" da garagem diz que o próximo passo é o Premium
-- Estado: ABERTO
+- Estado: FECHADO (inconclusivo, métrica de ausência)
 - Tipo: mudanca-direta
 - Alvo no funil: não é um degrau do funil de venda, é a confiança na tela de
   garagem. O que se espera mover é a volta de quem tem mais de um carro, e o
@@ -747,7 +781,27 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   `cars` EXISTE no banco, mas o retrato publicado não a mostra: o que ele traz
   é o total da semana (15 vistas, todas as origens juntas). Quem for fechar
   este veredito pede a quebra por origem em vez de repetir o total.
-- Veredito: (aberto)
+- **Veredito (2026-10-09): INCONCLUSIVO, e a culpa é de quem escreveu a
+  métrica, ou seja, minha.** Ela era ausência de reclamação, e ausência não
+  fecha veredito. É o mesmo erro que eu descrevi na skill em 02/10 ("aposta que
+  nasce sem como ser fechada não é aposta, é correção"), cometido três semanas
+  antes de eu nomear a regra.
+  - O que o dado diz: 12 avaliações, todas cinco estrelas, nenhuma citando
+    paywall, assinatura ou "achei que ia cadastrar". Zero reclamações.
+  - Por que isso não vale como prova: não sei quantas pessoas chegaram a bater
+    na parede. São 175 contas com carro em 212, mas o retrato não diz quantas
+    têm DOIS carros, que é a condição para o aviso aparecer. Sem denominador,
+    zero reclamação pode ser "a mudança funcionou" ou "ninguém passou por ali",
+    e as duas coisas parecem idênticas.
+  - O que FICA: a mudança continua no código e não há motivo para desfazer.
+    Dizer antes do toque que o plano grátis guarda 2 carros é correção de
+    clareza, e correção se defende pelo argumento. Ela também já tem
+    conferência de navegador própria, feita na mesma rodada.
+  - O que PODERIA fechar, se alguém quiser retomar: a quebra de `viu_paywall`
+    por origem (`cars`) contra as outras origens, que existe no banco e não
+    aparece no retrato. Com ela, dá para ver se a visita de paywall vinda da
+    garagem cheia cresceu, caiu ou ficou igual.
+- Estado final: FECHADO em 2026-10-09.
 
 ## [onboarding-termina-no-carro-android] A última página do onboarding é "Cadastrar meu primeiro carro"
 - Estado: FECHADO (inconclusivo por falta de braço comparável)
