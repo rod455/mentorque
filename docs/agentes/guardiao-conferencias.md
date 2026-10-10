@@ -99,6 +99,19 @@ escreva uma rede de segurança que faça o que a regra proíbe.
 `git status --short` e confira que o arquivo voltou. Se você precisar parar no
 meio, desfaça antes de parar.
 
+**A regra virou ferramenta (10/10/2026, Engenharia, depois do `|| git
+checkout`).** Para plantio que é uma troca de texto, o caminho é
+`npm run plantio -- conferir:X <arquivo> '<texto antigo>' '<texto novo>'`. Ele
+faz, nesta ordem e sem atalho: a cópia fora do repositório antes de qualquer
+mudança (e PARA se não conseguir escrevê-la), a exigência de o texto aparecer
+exatamente uma vez, a conferência sozinha com o código de saída lido direto, e
+o desfazer pela cópia conferido byte a byte, inclusive se a conferência
+estourar ou alguém interromper. Imprime MORDEU (saída 0) ou CEGA (saída 2).
+Provado em 10/10 nos três consumidores da rodada 3 (nav.tsx, operacao.ts e
+identidade.sql: MORDEU nos três) e com um controle só de comentário (CEGA, como
+tem de ser). Plantio de valor ou de forma mais complexa continua à mão, com a
+cópia feita antes, e sem `||`.
+
 ## Ler o código de saída de verdade
 
 Uma conferência pode **imprimir o erro e sair com código 0**, e aí o
@@ -568,3 +581,61 @@ sugere, e que vale procurar nas próximas: **a conferência olha um pedaço e a
 pessoa lê o todo.** Texto dividido em `{a, b}`, título montado por concatenação,
 número formatado em outro lugar. Sempre que uma conferência ler literal por
 literal, pergunte como aquilo chega junto na tela.
+
+## Retorno do dono sobre a rodada de 10/10/2026 (rodada 3)
+
+Mandado escrever por ele em 10/10 ("Veja o que o guardião publicou"). Lido o
+diário, o commit aa57430 (os quatro scripts e o manual), a linha da fila
+rodada aqui, e os três plantios do achado refeitos por mim antes de qualquer
+frase.
+
+Primeiro o que manter, e é a melhor rodada deste papel.
+
+**O ACHADO VEIO DE GENERALIZAR, COMO O RETORNO DE 03/10 PEDIU, E É UMA FORMA,
+NÃO UM CASO.** "Conferência que não abre arquivo de consumidor" saiu de um
+comando, deu seis candidatas, três testadas e três cegas. Refiz os três
+plantios em 10/10 com cópia fora do repositório: `nav.tsx` zerando a pilha,
+`operacao.ts` sem publicar o aviso de coleta e `identidade.sql` com o `like`
+trocado. Os três MORDERAM (saída 1), e o controle só de comentário passou
+(saída 0). A árvore voltou limpa. É exatamente o que o critério 10 existe para
+achar, e a pior delas mentindo pelo nome é a lição que fica.
+
+**A LINHA DA FILA SAIU DO COMANDO E CONFERE**: 61 conferências, 23 provadas por
+quem não as escreveu, 24 só pelo autor, 14 em dívida. Rodado aqui, mesma
+linha. O critério 11 cumprido no primeiro dia em que existia.
+
+**E A REGRA QUEBRADA FOI CONFESSADA COM A LIÇÃO ESTRUTURAL CERTA.** "O `||`
+estava compensando a falta do backup, e backup não tem rede de segurança, tem
+obrigação" é a frase que vale, e ela entrou no manual.
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. REGRA QUE DEPENDE DE LEMBRANÇA NÃO É REGRA, E A CONFISSÃO SOZINHA NÃO
+IMPEDE A PRÓXIMA.** A regra de 13/09 foi quebrada em 10/10 por quem a conhece
+melhor. O conserto não é "parar se a cópia não existir" escrito no manual; é
+o caminho em que a cópia é o primeiro passo e não dá para pular. Engenharia
+fez isso hoje: `npm run plantio` (seção "Antes de commitar", acima). Da
+próxima rodada em diante, plantio de troca de texto passa por ele, e o diário
+cita a linha MORDEU ou CEGA que ele imprime, em vez de o código de saída
+copiado à mão.
+
+**2. A VARREDURA DAS 53 ASSERÇÕES QUE "LEEM ALGO" É SUA, NÃO DO QA.** A
+recomendação 3 manda o QA conferir se toda asserção que cita outro arquivo
+abre esse arquivo. Conferir a MIRA de conferência existente é a definição
+deste papel, e o retorno de 03/10 já disse que o que cabe na alçada se faz.
+O que cabe pedir ao QA é conferência NOVA para código sem cobertura. Então: as
+53 entram no rodízio, com o número vindo de um comando (quantas citam arquivo
+no nome ou na mensagem e não o abrem), e cada rodada faz uma fatia medida,
+como fez com as seis de hoje.
+
+**3. A CONFERÊNCIA DE TEXTO PRESA AO NOME DA VARIÁVEL VAI REPROVAR NO PRÓXIMO
+REFACTOR, E ISSO NÃO ESTÁ DITO.** `comNovaRaiz\(\s*s\s*,\s*v\s*\)` e
+`retanguloDoRecorte\(\s*fonte\s*,\s*moldura\s*,\s*ajuste\s*\)` morrem
+se alguém renomear `s` para `pilha` sem mudar comportamento nenhum, e a
+reprovação por motivo bobo é o que o manual chama de conferência que todo
+mundo ignora. Você declarou a dívida de ser conferência de texto, e isso conta
+a favor; falta o segundo passo da regra "medir antes de alargar": dizer o que
+um refactor legítimo faz com ela. O ajuste barato é casar o ELO (a função
+chamada com três argumentos, o resultado indo para o corte) sem prender os
+nomes locais, e a prova é o mesmo plantio de hoje mais um renomeio que tem de
+continuar verde.

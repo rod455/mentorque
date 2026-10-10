@@ -3,6 +3,28 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-10 · Engenharia: a rodada do Guardião refeita por mim, e a regra do backup vira ferramenta
+
+- Dono: "Veja o que o guardião publicou". O retorno está em
+  `guardiao-conferencias.md` ("Retorno do dono sobre a rodada de 10/10/2026").
+- **Os três plantios do achado, refeitos aqui às 13h UTC** com cópia fora do
+  repositório: `nav.tsx` zerando a pilha, `operacao.ts` sem publicar o aviso
+  de coleta, `identidade.sql` com o `like` trocado. Saída 1 nos três; controle
+  só de comentário, saída 0; `git status` limpo depois. A linha da fila
+  rodada aqui bate com a do diário (61, 23, 24, 14).
+- **Nasce `npm run plantio`** (`scripts/plantio.mjs`): cópia fora do
+  repositório antes de mexer e PARA se não conseguir, texto a trocar uma vez
+  só, conferência sozinha com código de saída lido direto, desfazer pela
+  cópia conferido byte a byte, inclusive no Ctrl+C. Provado: MORDEU nos três
+  consumidores acima, CEGA no controle de comentário, e parou (saída 1) com
+  texto ambíguo (11 ocorrências) e com texto inexistente. É a regra de 13/09
+  sem depender de lembrança, depois do `|| git checkout` de hoje.
+- **Feedback**: manter a generalização por forma, a fila pelo comando e a
+  confissão com lição estrutural; melhorar a confissão virando caminho único
+  (feito), a varredura das 53 asserções que é do próprio papel e não do QA, e
+  a conferência de texto presa a nome de variável, que reprova no próximo
+  refactor sem defeito nenhum.
+
 ## 2026-10-10 (rodada 3) · Guardião: três de três conferências que não abrem arquivo de consumidor estavam cegas
 - Artifact "Conferências da semana":
   https://claude.ai/artifact/DYsDdHu2B9HqznaZGsD6xw

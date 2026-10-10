@@ -123,6 +123,14 @@ Verde ANTES prova que a falha veio do defeito. Verde DEPOIS prova que a cópia
 voltou inteira. Sem os dois, "MORDEU" é só "estava vermelha", e é o tipo de
 engano que faz confiar numa conferência que não olha nada.
 
+**Para um plantio de uma troca de texto, use `npm run plantio`** (10/10/2026):
+`npm run plantio -- conferir:X <arquivo> '<texto antigo>' '<texto novo>'`. Ele
+escreve a cópia fora do repositório ANTES de mexer e para se não conseguir,
+exige que o texto apareça uma vez só, roda a conferência sozinha lendo o
+código de saída sem cano, e desfaz pela cópia conferindo byte a byte, inclusive
+no Ctrl+C. Imprime MORDEU ou CEGA. Nasceu no dia em que um `|| git checkout`
+rodou porque a cópia não existia.
+
 ## O limite que nenhuma conferência daqui atravessa
 
 **Nada disso enxerga o lado nativo.** As suítes rodam num Chromium, e Chromium

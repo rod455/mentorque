@@ -47,6 +47,7 @@
     "conferir:embedding": "node --experimental-strip-types scripts/verifica-embedding.ts",
     "reembeddar": "node scripts/reembeddar.mjs",
     "acoes": "node --experimental-strip-types scripts/acoes-do-dono.ts",
+    "plantio": "node scripts/plantio.mjs",
     "conferir:acoes": "node --experimental-strip-types scripts/acoes-do-dono.ts --conferir",
     "entre": "node --experimental-strip-types scripts/entre-papeis.ts",
     "conferir:entre": "node --experimental-strip-types scripts/entre-papeis.ts --conferir",
