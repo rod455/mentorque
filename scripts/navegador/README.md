@@ -30,6 +30,7 @@ próprio Playwright resolve. Para apontar outro: `CHROMIUM=/caminho/do/chromium`
 | `quiz.mjs` | a pergunta do dia: faixa, resposta, sequência, envio para `/api/quiz` |
 | `historico.mjs` | o calendário e a resposta remostrada; que o passado **não** mexe na sequência |
 | `primeiro-quiz.mjs` | os dois gatilhos da folha do primeiro quiz, e os casos de silêncio |
+| `suporte.mjs` | o formulário de dúvidas não envia sem e-mail válido, e envia com ele (10/10/2026) |
 | `km.mjs` | o lembrete mensal de quilometragem |
 | `selo.mjs` | o selo do foguinho nos três estados |
 | `avisos.mjs` | o sino, o X que dispensa, e os botões alcançáveis em tela estreita |

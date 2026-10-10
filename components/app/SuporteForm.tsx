@@ -32,6 +32,11 @@ function deviceId(): string {
 
 export type TipoDeSuporte = "doubt" | "suggestion" | "bug";
 
+/** O mínimo que separa um e-mail de um campo vazio ou de um nome: algo, @, algo, ponto, algo. */
+export function emailValido(v: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+}
+
 export function SuporteForm({ tipoInicial = "doubt", mensagemInicial = "", emailInicial = "" }: { tipoInicial?: TipoDeSuporte; mensagemInicial?: string; emailInicial?: string }) {
   const c = useContent();
   const p = c.profile;
@@ -49,10 +54,17 @@ export function SuporteForm({ tipoInicial = "doubt", mensagemInicial = "", email
   // digitado antes.
   const [supEmail, setSupEmail] = useState(emailInicial.trim() || s.email || "");
   const [supErr, setSupErr] = useState(false);
+  // O E-MAIL É OBRIGATÓRIO (10/10/2026, pedido do dono): chegaram dúvidas sem
+  // e-mail e não houve como responder. O formulário é o único canal de volta,
+  // então mensagem sem endereço é mensagem que a gente lê e não consegue
+  // atender. A validação é a mínima que separa "esqueci" de "digitei": algo,
+  // um @, algo com ponto depois.
+  const [emailErr, setEmailErr] = useState(false);
   const [supStatus, setSupStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   const sendSupport = async () => {
     if (!supMsg.trim()) return setSupErr(true);
+    if (!emailValido(supEmail)) return setEmailErr(true);
     setSupStatus("sending");
     try {
       // `apiPost`, não `fetch` com JSON.
@@ -68,7 +80,7 @@ export function SuporteForm({ tipoInicial = "doubt", mensagemInicial = "", email
         type: supType,
         message: supMsg.trim(),
         name: s.name || undefined,
-        email: (supEmail || s.email || "").trim() || undefined,
+        email: supEmail.trim(),
         userId: deviceId(),
         locale,
       });
@@ -110,12 +122,16 @@ export function SuporteForm({ tipoInicial = "doubt", mensagemInicial = "", email
           />
           <input
             value={supEmail}
-            onChange={(e) => setSupEmail(e.target.value)}
+            onChange={(e) => { setSupEmail(e.target.value); setEmailErr(false); }}
             type="email"
+            required
+            aria-invalid={emailErr || undefined}
+            data-suporte-email
             placeholder={p.support.emailPh}
             className={`mt-2 ${inputCls}`}
           />
           {supErr && <p className="mt-1 text-xs text-coral">{p.support.empty}</p>}
+          {emailErr && <p className="mt-1 text-xs text-coral" data-suporte-email-erro>{p.support.emailRequired}</p>}
           {supStatus === "error" && <p className="mt-1 text-xs text-coral">{p.support.error}</p>}
           <Button size="lg" className="mt-3 w-full" disabled={supStatus === "sending"} onClick={sendSupport}>
             {supStatus === "sending" ? p.support.sending : p.support.send}

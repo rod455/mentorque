@@ -48,9 +48,16 @@ export async function POST(request: Request) {
 
   // A nota entra no assunto para a caixa de entrada virar triagem: um "★1"
   // precisa ser respondido hoje, um "★4" pode esperar a segunda-feira.
+  // Mensagem de dúvida, sugestão ou bug SEM e-mail (10/10/2026): o app passou
+  // a exigir o endereço, mas as versões antigas nas lojas continuam mandando
+  // sem ele até a pessoa atualizar. Recusar aqui perderia a mensagem e a
+  // pessoa veria um erro genérico; aceitar em silêncio foi o que deixou
+  // dúvidas sem resposta. O meio-termo: aceita e marca no assunto, para a
+  // caixa de entrada saber de cara que aquela não tem como ser respondida.
+  const semEmail = !ehNota && body.type !== "deletion" && !email;
   const subject = ehNota
     ? `[Mentorque] ${"★".repeat(nota!)}${"☆".repeat(5 - nota!)} ${nota}/5 — ${name}`
-    : `[Mentorque] ${typeLabel} — ${name}`;
+    : `[Mentorque] ${typeLabel} — ${name}${semEmail ? " [SEM E-MAIL, não dá para responder]" : ""}`;
 
   const contexto: [string, string][] = ehNota
     ? [

@@ -2010,7 +2010,10 @@ export function getContent(locale: Locale) {
         suggestion: T("Sugestão", "Suggestion"),
         bug: "Bug",
         messagePh: T("Escreva sua mensagem aqui...", "Write your message here..."),
-        emailPh: T("Seu e-mail (pra gente responder)", "Your email (so we can reply)"),
+        // Obrigatório desde 10/10/2026: sem e-mail não há como responder, e
+        // chegaram dúvidas que ficaram sem resposta por isso.
+        emailPh: T("Seu e-mail, para a gente responder", "Your email, so we can reply"),
+        emailRequired: T("Precisamos de um e-mail válido para responder você.", "We need a valid email to reply to you."),
         send: T("Enviar mensagem", "Send message"),
         sending: T("Enviando...", "Sending..."),
         empty: T("Escreva uma mensagem antes de enviar.", "Write a message before sending."),
