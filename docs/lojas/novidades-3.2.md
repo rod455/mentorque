@@ -20,6 +20,11 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
    "Responder a de hoje", e a sequência nasce no primeiro quiz do dia. Nasce
    o evento `abriu_quiz`. Na 3.1 e antes, quem responde o onboarding vê
    "você já respondeu hoje" no mesmo dia.
+2. **O "Fale com a gente" exige e-mail** (10/10, commit a793d6c). Chegaram dúvidas
+   sem e-mail que não deu para responder. O campo passa a ser obrigatório,
+   com aviso na tela, e nada sai sem um endereço válido. Até a 3.2 chegar,
+   o app antigo ainda manda sem e-mail e o servidor marca o assunto com
+   "[SEM E-MAIL]".
 
 ## Roteiro de aparelho, escrito ANTES do build
 
@@ -28,3 +33,7 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
    com OUTRA pergunta (a do dia), não com "você já respondeu hoje".
    Responder: "1 dia seguido". Voltar ao Início: o chip mostra "✓ · 1".
    Reabrir o app: a folha do primeiro quiz não volta.
+2. **O "Fale com a gente" sem e-mail.** Perfil, "Fale com a gente", escrever
+   uma mensagem e tocar em Enviar sem e-mail: a tela pede o e-mail e nada é
+   enviado. Com um e-mail válido, envia e confirma. Conferir na caixa
+   contato@ que a mensagem chegou com o endereço.

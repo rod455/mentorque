@@ -3,6 +3,23 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-10 · Engenharia: o "Fale com a gente" passa a exigir e-mail
+
+- Dono: "Vamos colocar como obrigatório colocar o e-mail para enviar dúvidas.
+  Chegaram dúvidas que as pessoas não colocaram e-mail, então não conseguimos
+  responder". Commit a793d6c: campo obrigatório com validação mínima, aviso na
+  tela, nada sai sem endereço; placeholder deixa de soar opcional.
+- **O app antigo nas lojas continua mandando sem e-mail** até a pessoa
+  atualizar. O servidor não recusa (perderia a mensagem com erro genérico):
+  aceita e marca o assunto com "[SEM E-MAIL, não dá para responder]". A
+  exigência chega aos aparelhos com a 3.2 (ficha, item 2); na web está no ar
+  pelo push.
+- **Suíte nova `suporte`**, provada mordendo com a exigência tirada do
+  formulário (duas reprovações certas, restaurada pela cópia). `npm run
+  conferir` inteiro verde; regime das duas velocidades, sem build local.
+- O que não alcança: a caixa contato@ de verdade (a suíte responde a rota
+  localmente) e a WebView do aparelho.
+
 ## 2026-10-10 · Engenharia: a lista do dono relida nos instrumentos antes de responder "o que está pendente"
 
 - Dono: "Temos alguma coisa pendente na lista?". Pela regra de 04/10, cada
