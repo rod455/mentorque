@@ -7,6 +7,7 @@
 // dá para olhar para eles.
 //
 // Rode com: npm run conferir:recorte
+import { readFileSync } from "node:fs";
 import {
   ZOOM_MAXIMO,
   escalaDeCobertura,
@@ -130,6 +131,58 @@ const RETRATO = { largura: 900, altura: 1600 }; // 9:16, como sai do celular em 
   conferir("a pinça não passa do teto", zoomDaPinca(3, 100, 900) === ZOOM_MAXIMO);
   conferir("a pinça não desce de 1", zoomDaPinca(1, 200, 10) === 1);
   conferir("distância zero (dedos no mesmo ponto) não divide por zero", zoomDaPinca(2, 0, 100) === 2);
+}
+
+// ── 6. E QUEM USA A CONTA (o critério 10, achado em 10/10/2026) ────────────
+//
+// Até aqui este arquivo era aritmética pura: ele provava as quatro regras de
+// lib/app/recorte.ts com números e não olhava uma linha de quem as chama.
+// Medido plantando no consumidor: troquei a linha do `AjusteDeFoto.tsx` que
+// chama `retanguloDoRecorte` por um retângulo que devolve a imagem inteira, e
+// esta conferência passou VERDE, saída 0. A `conferir:tipos` também passou,
+// porque o objeto tem a mesma forma. A foto sairia sem recorte nenhum, com o
+// ajuste da pessoa jogado no lixo, e a casa inteira ficaria verde.
+//
+// É conferência DE TEXTO, e isso é dívida visível de propósito: o certo seria
+// exercitar o componente, e não existe executor de testes de React aqui. Então
+// ela segue as três exigências do método: limpa os comentários antes de
+// procurar, aponta o ELO (a chamada com os argumentos que decidem, não o nome
+// da função solto), e diz aqui o que seria melhor.
+//
+// Medição antes de alargar: três arquivos consomem lib/app/recorte.ts hoje, e
+// as asserções abaixo cobrem os três. Zero falso positivo no código limpo.
+{
+  const semComentarios = (f: string) =>
+    f.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/^\s*\/\/.*$/gm, " ");
+  const ler = (p: string) => semComentarios(readFileSync(new URL(`../${p}`, import.meta.url), "utf8"));
+
+  const ajuste = ler("components/app/AjusteDeFoto.tsx");
+  // A CHAMADA com o ajuste da pessoa dentro, não o nome da função solto.
+  conferir(
+    "o AjusteDeFoto calcula o retângulo a partir do ajuste da pessoa",
+    /retanguloDoRecorte\(\s*fonte\s*,\s*moldura\s*,\s*ajuste\s*\)/.test(ajuste),
+    "sem esta chamada o zoom e o arrasto da pessoa não chegam à foto salva",
+  );
+  // E o retângulo tem de ser o que VAI para o corte. Calcular e não usar é o
+  // mesmo que não calcular, e passaria pela asserção de cima sozinha.
+  conferir(
+    "e é esse retângulo que vai para o corte da imagem",
+    /const r = retanguloDoRecorte\([^)]*\);[\s\S]{0,200}?recortarImagem\(\s*fonte\.dataUrl\s*,\s*r\s*,/.test(ajuste),
+    "o retângulo certo entregue a ninguém salva a foto inteira, sem recorte",
+  );
+
+  // O portão: quem decide se a tela de ajuste aparece. Se algum destes parar
+  // de perguntar, uma foto 4:3 é salva achatada e a pessoa nunca vê o ajuste.
+  for (const [arquivo, lado] of [
+    ["components/app/AvatarPicker.tsx", "LADO_DA_FOTO_DO_CARRO"],
+    ["components/app/screens/Profile.tsx", "LADO_DO_AVATAR"],
+  ] as const) {
+    conferir(
+      `${arquivo.split("/").pop()} pergunta se a foto precisa de ajuste antes de salvar`,
+      new RegExp(`precisaDeAjuste\\(\\s*lida\\s*,\\s*\\{[^}]*${lado}`).test(ler(arquivo)),
+      "sem o portão, foto fora do quadrado é salva achatada e a tela de ajuste nunca abre",
+    );
+  }
 }
 
 if (falhas) {

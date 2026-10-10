@@ -16,6 +16,7 @@
 // lado só, o banco volta a contar aparelho sem identidade como pessoa.
 //
 // Rode com: npm run conferir:identidade
+import { readFileSync } from "node:fs";
 import { SEM_ARMAZENAMENTO, _esqueceEfemero, anonId, ehIdentidade } from "../lib/app/anon.ts";
 
 let falhas = 0;
@@ -50,11 +51,45 @@ function conferir(nome: string, condicao: boolean, detalhe = "") {
 }
 
 // ── o elo com o banco ───────────────────────────────────────────────────────
+//
+// ESTA ASSERÇÃO MENTIA PELO NOME, e o achado é de 10/10/2026 (critério 10).
+// Ela se chama "o prefixo é o que o banco procura" e comparava a constante com
+// um texto digitado à mão AQUI. Nunca abriu o SQL. Ou seja, ela garantia que
+// duas cópias nossas concordam, e o lado que importa, o banco, ficava de fora:
+// trocar o `like` em supabase/identidade.sql deixava esta conferência verde e
+// o banco voltava a contar aparelho sem armazenamento como pessoa, que é o
+// defeito de 01/09 inteiro de volta.
+//
+// Agora o elo é lido dos dois lados. A comparação com o literal fica, porque
+// ela é o que prende o valor; o que entrou é o SQL de verdade.
 {
   conferir(
-    "o prefixo é o que o banco procura (like 'sem-armazenamento%')",
+    "o prefixo continua sendo o texto que o banco conhece",
     SEM_ARMAZENAMENTO === "sem-armazenamento",
     `hoje é "${SEM_ARMAZENAMENTO}"; se mudar aqui, mude a função public.identidade no mesmo commit`,
+  );
+
+  const sql = readFileSync(new URL("../supabase/identidade.sql", import.meta.url), "utf8")
+    .replace(/^\s*--.*$/gm, " ");
+  conferir(
+    "o SQL do banco descarta o prefixo que o app escreve",
+    new RegExp(`like\\s*'${SEM_ARMAZENAMENTO}%'`).test(sql),
+    `supabase/identidade.sql precisa ter like '${SEM_ARMAZENAMENTO}%'. Sem isso o app marca e o banco conta: ` +
+      "dois aparelhos sem armazenamento voltam a virar gente no relatório",
+  );
+  conferir(
+    "e o que ele devolve nesse caso é NULO, não um id qualquer",
+    new RegExp(`like\\s*'${SEM_ARMAZENAMENTO}%'\\s*then\\s*null`, "i").test(sql),
+    "devolver qualquer outra coisa recolaria todos esses aparelhos numa pessoa só, que era o defeito original",
+  );
+
+  const push = readFileSync(new URL("../lib/app/push.ts", import.meta.url), "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, " ")
+    .replace(/^\s*\/\/.*$/gm, " ");
+  conferir(
+    "quem usa a regra pergunta de verdade (o push chama ehIdentidade)",
+    /ehIdentidade\(\s*anon\s*\)/.test(push),
+    "trocar a pergunta por `true` deixava esta conferência verde e o aparelho sem identidade virava alvo de push",
   );
 }
 

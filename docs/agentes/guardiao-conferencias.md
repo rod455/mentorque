@@ -82,6 +82,19 @@ cp $SCRATCH/strings.pt.ts.bak lib/i18n/strings.pt.ts   # 4. desfaz
 `git checkout` apaga tudo que não foi commitado naquele arquivo, e naquele dia
 levou junto uma peça inteira de trabalho que ainda não tinha commit.
 
+**E EU QUEBREI ESTA REGRA EM 10/10/2026, com um atalho que parecia prudente.**
+Escrevi o desfazer como `cp $S/anon.ts.bak lib/app/anon.ts || git checkout
+lib/app/anon.ts`, um `||` de segurança para o caso de a cópia não existir. A
+cópia não existia (eu não tinha feito backup daquele arquivo antes de plantar),
+então o `git checkout` rodou. Não custou nada porque aquele arquivo não tinha
+trabalho solto naquele momento, e é exatamente por isso que o atalho é
+perigoso: ele passa em silêncio nas vezes em que não há o que perder.
+
+A lição não é "tomar mais cuidado". É estrutural: **o `||` estava compensando a
+falta do backup, e o backup é que era obrigatório.** Se a cópia não existe, a
+coisa certa a fazer é PARAR e dizer, não achar outro jeito de desfazer. Nunca
+escreva uma rede de segurança que faça o que a regra proíbe.
+
 **Nunca commite com defeito plantado.** Ao fim de cada conferência provada, rode
 `git status --short` e confira que o arquivo voltou. Se você precisar parar no
 meio, desfaça antes de parar.
@@ -292,12 +305,6 @@ sem tirar ninguém dela.
 
 | conferência | última prova | mordeu? |
 |---|---|---|
-| `conferir:contexto` | no nascimento (autor), 04/09/2026 | sim, no plantio de quem escreveu |
-| `conferir:embedding` | no nascimento (autor), 05/09/2026 | sim, no plantio de quem escreveu |
-| `conferir:acoes` | no nascimento (autor), 07/09/2026 | sim, no plantio de quem escreveu |
-| `conferir:anomalias` | no nascimento (autor), 07/09/2026 | sim, no plantio de quem escreveu |
-| `conferir:login` | no nascimento (autor), 07/09/2026 | sim, no plantio de quem escreveu |
-| `conferir:recorte` | no nascimento (autor), 07/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:garagem` | no nascimento (autor), 09/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:jornada` | no nascimento (autor), 12/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:orcamento` | no nascimento (autor), 13/09/2026 | sim, no plantio de quem escreveu |
@@ -312,33 +319,39 @@ sem tirar ninguém dela.
 | `conferir:alarme` | no nascimento (autor), 29/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:perguntas` | no nascimento (autor), 30/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:agentes` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu; e de novo em 06/10/2026 (autor), ao ganhar ordem e assinatura do diário: entrada de 06/10 jogada abaixo de uma de 04/10 reprovou, título sem papel reprovou |
-| `conferir:entre` | no nascimento (autor), 06/10/2026 | formato só (data e papéis da tabela); não reprova por idade, de propósito |
 | `conferir:loja` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:midia` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:renovacao` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:saida` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
-| `conferir:cadastro` | no nascimento (autor), 03/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:aquisicao` | no nascimento (autor), 03/10/2026 | 16 plantios, 16 mordidas: painel no lugar do MMP, total da loja dado pela Apple sozinha, fonte faltando virando zero (duas vezes), ressalva do SDK parando de viajar, recusa sem a aritmetica que a prova, denominador de qualquer fonte, e o retrato parando de publicar a escada. Mais 7 no leitor do relatorio do Play: UTF-16 deixando de ser tratado, marca de ordem de bytes ficando, busca de coluna voltando a ser exata (quebra no idioma), formato desconhecido virando zero, cabecalho sem linha virando total zero, mes mais novo vindo da ordem da lista, e a desinstalacao sumindo, e mais 6 plantios com 6 mordidas em 04/10 (relatorio do app vizinho escolhido como nosso, pacote cru dentro de outro nome, rota sem a trava, desinstalacao da coluna morta, base instalada do dia errado e nunca lida) |
+| `conferir:cadastro` | no nascimento (autor), 03/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:fila` | no nascimento (autor), 03/10/2026 | sim, no plantio de quem escreveu |
-| `conferir:quiz-populacao` | no nascimento (autor), 07/10/2026 | 5 plantios, 5 mordidas: id do onboarding trocado no SQL, banco de perguntas reordenado, `security_invoker` removido, etiqueta de uma das duas populações perdida, e a rotação diária passando a devolver a pergunta do onboarding |
 | `conferir:publicacao` | no nascimento (autor), 04/10/2026 | 7 plantios, 7 mordidas: ignoreCommand apagado, codigo de saida invertido (lido passa, executado nao), app/ excluida do build, comparacao com HEAD~3, assets/ no .vercelignore (a rota das pecas le em tempo de execucao), erro de digitacao em supabase/, e docs/ saindo do .vercelignore enquanto o comando ainda a ignora |
+| `conferir:entre` | no nascimento (autor), 06/10/2026 | formato só (data e papéis da tabela); não reprova por idade, de propósito |
+| `conferir:quiz-populacao` | no nascimento (autor), 07/10/2026 | 5 plantios, 5 mordidas: id do onboarding trocado no SQL, banco de perguntas reordenado, `security_invoker` removido, etiqueta de uma das duas populações perdida, e a rotação diária passando a devolver a pergunta do onboarding |
 | `conferir:baixar` | 19/09/2026 | sim |
 | `conferir:email` | 19/09/2026 | sim, 3 defeitos plantados |
 | `conferir:relatorio` | 19/09/2026 | sim |
 | `conferir:travessao` | 19/09/2026 | sim, depois de consertada |
 | `conferir:catalogo` | 26/09/2026 | não no campo `related`, consertada |
 | `conferir:estilo` | 26/09/2026 | sim, em regra de erro |
-| `conferir:identidade` | 26/09/2026 | não no defeito de origem, consertada |
 | `conferir:regras` | 26/09/2026 | não na borda do perdão, consertada |
 | `conferir:tipos` | 26/09/2026 | sim, saída 2 |
 | `conferir:versoes` | 26/09/2026 | sim, 3 defeitos plantados |
 | `conferir:convite` | 03/10/2026 | sim, cinco de seis (o sexto era alvo inalcançável) |
-| `conferir:frescor` | 03/10/2026 | sim |
 | `conferir:funil` | 03/10/2026 | sim |
 | `conferir:migalha` | 03/10/2026 | não nos dois pisos, consertada |
-| `conferir:navegacao` | 03/10/2026 | não no teto das raízes, consertada |
 | `conferir:revisoes` | 03/10/2026 | sim |
 | `conferir:venda` | 03/10/2026 | não no piso da validade, consertada |
+| `conferir:acoes` | 10/10/2026 | sim, 3 plantios: destino fora da lista, data que o calendário não tem, e o leitor descartando linha em silêncio |
+| `conferir:anomalias` | 10/10/2026 | sim, na regra e no consumidor: função do SQL renomeada de um lado, e o retrato sem o campo |
+| `conferir:contexto` | 10/10/2026 | sim, na regra e no consumidor: teto do app mais frouxo que o da rota, e a rota sem o recorte da lista |
+| `conferir:embedding` | 10/10/2026 | sim, 3 plantios: modelo divergente, dimensão divergente, e a rota sem o aviso de ano do manual |
+| `conferir:frescor` | 10/10/2026 | não no consumidor, consertada: o retrato parava de publicar o aviso e a corrente inteira passava |
+| `conferir:identidade` | 10/10/2026 | não no elo com o banco, consertada: a asserção do prefixo nunca abriu o SQL |
+| `conferir:login` | 10/10/2026 | sim, na regra e no consumidor: motivo da queda renomeado, e o plugin fora do binário do iPhone |
+| `conferir:navegacao` | 10/10/2026 | não no consumidor, consertada: o defeito de 30/08 voltava inteiro pelo nav.tsx |
+| `conferir:recorte` | 10/10/2026 | não no consumidor, consertada: a foto saía sem recorte nenhum com a corrente toda verde |
 | `conferir:agenda` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 | `conferir:appsflyer` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 | `conferir:aviso` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
@@ -394,6 +407,61 @@ custo que não existia. Vale a lição geral, que é a mesma do caso `anonId`: o
 custo que justifica não fazer algo também é uma afirmação, e também se mede.
 
 ## Aprendizados
+
+**A ASSERÇÃO QUE PROMETE O CONSUMIDOR NO NOME E CONFERE A CONSTANTE NO CORPO
+(10/10/2026). O critério 10 aplicado de propósito, e o que ele achou.**
+
+O critério 10 nasceu de cinco casos da casa em dois dias. Aplicado às seis da
+fila, cinco passaram: `contexto`, `embedding`, `acoes`, `anomalias` e `login`
+já cobravam o consumidor, e o plantio nele mordeu. A sexta, `recorte`, era
+aritmética pura e ficou verde com a foto saindo sem recorte nenhum.
+
+Aí veio a parte que vale mais, e é o método que o dono pediu em 03/10: **em vez
+de parar no caso, perguntar em quantos outros lugares a mesma forma cabe.** A
+forma é fácil de procurar com um comando: conferência que não abre arquivo
+nenhum do consumidor.
+
+```bash
+# quais conferências nunca leem um arquivo de quem usa a regra
+node -e "const fs=require('fs'),p=require('./package.json');
+for(const [k,v] of Object.entries(p.scripts)){
+  if(!k.startsWith('conferir:'))continue;
+  const m=v.match(/scripts\/[\w.-]+\.(ts|mjs)/); if(!m)continue;
+  let s; try{s=fs.readFileSync(m[0],'utf8')}catch{continue}
+  if(!/readFileSync|leia\(|ler\(/.test(s))console.log(k);}"
+```
+
+Deu seis candidatas. Testei três, e **as três estavam cegas no consumidor**:
+
+| conferência | o plantio no consumidor | o que ficava verde |
+|---|---|---|
+| `recorte` | `AjusteDeFoto` ignora o retângulo | a foto salva inteira, ajuste da pessoa no lixo |
+| `frescor` | o retrato para de publicar `avisoDeColeta` | fonte morta lida como atual, o caso de 01/09 |
+| `navegacao` | `nav.tsx` zera as raízes ao trocar de aba | o defeito de 30/08 inteiro, o voltar expulsando |
+| `identidade` | o SQL do banco muda o `like` do prefixo | aparelho sem armazenamento contado como pessoa |
+
+Três de três não é azar, é a forma. **Conferência que não abre arquivo de
+consumidor é suspeita até prova em contrário**, e a prova custa um plantio.
+
+**E A PIOR DELAS MENTIA PELO NOME.** A `conferir:identidade` tinha uma asserção
+chamada "o prefixo é o que o banco procura (like 'sem-armazenamento%')" que
+comparava a constante com um texto digitado à mão NO PRÓPRIO ARQUIVO DA
+CONFERÊNCIA. Ela nunca abriu o `supabase/identidade.sql`. Garantia que duas
+cópias nossas concordam e deixava de fora exatamente o lado que o nome dela
+prometia. **Quando o nome de uma asserção fala de outro arquivo, confira se ela
+ABRE esse arquivo**, porque o nome é o que o próximo leitor vai acreditar.
+
+**O PLANTIO NO CONSUMIDOR PASSOU PELA CORRENTE INTEIRA, não só pela
+conferência.** Apagada a linha do aviso de coleta no retrato, o
+`npm run conferir` completo deu saída 0. Quando uma cegueira dessas aparecer,
+vale rodar a corrente toda com o defeito de pé antes de chamar de buraco de uma
+conferência só: às vezes é buraco da casa.
+
+**E CONSERTAR A MIRA NA REGRA NÃO CONSERTA A MIRA NO CONSUMIDOR.** Em 26/09 eu
+"consertei" a `conferir:identidade` fazendo ela chamar `anonId()` de verdade, e
+em 03/10 "consertei" a `conferir:navegacao` exigindo comportamento das raízes.
+As duas continuaram cegas do lado de quem usa. Rodada que conserta uma
+conferência tem de plantar nos DOIS lados antes de riscar a linha.
 
 **O TETO É CONFERIDO, O PISO FICA SOLTO (03/10/2026). O achado mais útil até
 agora, porque apareceu em quatro lugares de uma vez.**

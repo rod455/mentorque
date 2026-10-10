@@ -10,6 +10,7 @@
 // minimizava. Quem ia de Início para Estudos e apertava voltar era expulso.
 //
 // Rode com: npm run conferir:navegacao
+import { readFileSync } from "node:fs";
 import { comNovaRaiz, passoDeVolta, LIMITE_DE_RAIZES, type Pilha } from "../lib/app/navPilha.ts";
 import type { View } from "../lib/app/nav.ts";
 import { comoSair } from "../lib/app/saidaDoApp.ts";
@@ -122,6 +123,41 @@ conferir("na primeira tela, voltar minimiza", passoDeVolta(inicio) === null);
     "oito trocas de aba dão oito voltas antes de minimizar",
     passos === abas.length + 1,
     `deu ${passos} passos para ${abas.length} trocas; teto baixo demais expulsa a pessoa cedo`,
+  );
+}
+
+// ── E QUEM USA A PILHA: o nav.tsx (critério 10, achado em 10/10/2026) ───────
+//
+// Este arquivo existe por causa do defeito de 30/08: trocar de aba zerava a
+// pilha, e o voltar do Android expulsava a pessoa em vez de devolvê-la. Ele
+// provava a REGRA e não olhava quem a chama, e isso deixava o defeito de 30/08
+// voltar inteiro pelo outro lado. Medido: troquei no `lib/app/nav.tsx` a linha
+// `setP((s) => comNovaRaiz(s, v))` por `setP(() => ({ views: [v], raizes: [] }))`,
+// que é literalmente o defeito original, e tanto esta conferência quanto a
+// `conferir:tipos` passaram verdes, saída 0.
+//
+// Conferência de texto, e a dívida é dita: o certo seria exercitar o provider
+// do nav, e não existe executor de React aqui. Ela aponta o ELO, que é a
+// chamada com o estado dentro, não o nome da função solto.
+{
+  const nav = readFileSync(new URL("../lib/app/nav.tsx", import.meta.url), "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, " ")
+    .replace(/^\s*\/\/.*$/gm, " ");
+
+  conferir(
+    "trocar de aba passa pela pilha, e não substitui o estado à mão",
+    /comNovaRaiz\(\s*s\s*,\s*v\s*\)/.test(nav),
+    "montar `{ views: [v], raizes: [] }` direto aqui é o defeito de 30/08: o rastro morre e o voltar expulsa",
+  );
+  conferir(
+    "o voltar do Android pergunta à pilha qual é o próximo passo",
+    /passoDeVolta\(\s*agora\.current\s*\)/.test(nav),
+    "sem esta chamada o botão físico não tem como saber se há para onde voltar",
+  );
+  conferir(
+    "e só minimiza quando a pilha diz que não há mais volta",
+    /if \(!proximo\) return false/.test(nav),
+    "minimizar sem perguntar é exatamente o que a pessoa relatou em 30/08",
   );
 }
 
