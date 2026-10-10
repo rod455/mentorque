@@ -3,6 +3,26 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-10 · Engenharia: a lista do dono relida nos instrumentos antes de responder "o que está pendente"
+
+- Dono: "Temos alguma coisa pendente na lista?". Pela regra de 04/10, cada
+  linha foi relida no instrumento antes de ser repetida.
+- **Uma linha pedia coisa já feita há seis dias.** "Importar a instalação da
+  AppsFlyer como ação de conversão" (04/10): o retrato de 10/10 lista duas
+  ações de origem `THIRD_PARTY_APP_ANALYTICS` (`first_open` e `session_start`)
+  criadas em 04/10 à tarde, pelo dono. A linha foi trocada pelo que o
+  instrumento sugere que falta: `first_open` conta 77 em "todas" e 0 em
+  "conversões", assinatura de ação secundária; marcar como principal é o que
+  faria a campanha otimizar por ela. Inferência, dita como tal.
+- **Continuam pendentes, relidas hoje**: o `topPaginas` do Search Console
+  segue `Forbidden` no retrato de 10/10 (execução 8886 do coletor, 08h30
+  UTC); a AppsFlyer segue com `semCusto: true` no retrato de 10/10; a decisão
+  sobre a busca é de dinheiro e só o dono fecha.
+- **Não dá para reler daqui**: a busca por `manutencao` na App Store (a linha
+  dizia "depois que a 3.0 publicar"; a 3.1 está lá desde 07/10, texto
+  ajustado), a verificação do anunciante no Google Ads (prazo 30/10), os
+  números do YouTube Studio e o token da Meta (opcional).
+
 ## 2026-10-10 · Engenharia: a rodada do Guardião refeita por mim, e a regra do backup vira ferramenta
 
 - Dono: "Veja o que o guardião publicou". O retorno está em
