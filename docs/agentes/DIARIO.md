@@ -3,6 +3,15 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-11 · Engenharia: a chave do blog do Vocaboost sai da lista, por decisão do dono
+
+- Dono: "a chave do vocaboost pode tirar da lista, não vamos fazer". A linha
+  de 11/10 (n8n, chave da Anthropic sem escopo de workspace) sai. O fluxo
+  "Vocaboost: Conteúdo/SEO (Blog)" continua ligado e falhando em 400 duas
+  vezes por semana (terça e sexta, 9h), sem custo de IA porque é recusado
+  antes de gerar. Segurança não volta a trazer: decisão tomada, e o fluxo é
+  de outro produto.
+
 ## 2026-10-11 · Engenharia: Capacitor 8.5.1 aprovado e aplicado, vai na 3.2
 
 - Dono: "pode aprovar." Commit 1487203: `@capacitor/android`, `ios`, `core` e
