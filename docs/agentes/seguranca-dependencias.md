@@ -526,3 +526,76 @@ destino de uma linha é o dono, o teste é: ele consegue executar sem perguntar
 nada? Se não, a linha não está pronta. Desfecho desta: chave no cofre, header
 apagado, chave antiga revogada e webhook removido, tudo em 04/10.
 
+
+## Retorno do dono sobre a rodada de 11/10/2026 (rodada 4)
+
+Mandado escrever por ele em 11/10 ("Veja o que o agente de segurança criou e
+os principais pontos de atenção"). Lido o diário, o commit 88ad6e5, o
+`npm audit` rodado aqui, o texto do aviso do Capacitor (GHSA-rvm3-566m-v7fv),
+o nosso fonte, o `Package.swift`, a CLI do Capacitor e as execuções do fluxo
+do blog no n8n.
+
+Primeiro o que manter.
+
+**AS DUAS DECISÕES DO DONO ANTES DE TUDO, CADA UMA COM O CLIQUE.** É a regra
+"o relato começa pela decisão", cumprida sem enfeite. E a exposição do webhook
+medida nas execuções (quatro, todas de relógio, nenhuma de fora), em vez de
+descrita: foi o pedido da rodada 3, e entrou.
+
+**O CONSERTO DE 04/10 CONFERIDO NO ESTADO, NÃO NO COMMIT**, com os três
+instrumentos (nó que não existe mais, chave no cofre, `versionId` igual ao
+ativo), e a consequência medida pelo tempo de execução (33 segundos para 1,7).
+O 400 da API lido na execução 8873 bate com o que eu li: a chave não tem
+escopo de workspace, e o fluxo quebrou um passo antes.
+
+**O QUE NÃO VOLTOU A TRAZER, E POR QUÊ.** "Encontrar não é achado; achado é
+mudança" sobre a chave do projeto apagado é a frase certa, e poupa o dono de
+reler uma decisão de 22/09.
+
+**E A PLANTIO PELA FERRAMENTA DA CASA**, provando a `conferir:banco` na view
+nova. Primeira rodada de outro papel a usar o `npm run plantio`.
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. "NÃO SOUBE MEDIR A EXPLOITABILIDADE DAQUI" ERA UMA LEITURA DO AVISO E UM
+GREP DE DISTÂNCIA.** O texto do GHSA diz a condição com todas as letras: o
+exploit exige que a vítima TOQUE num link dentro da WebView, e o alvo são
+apps que renderizam link vindo de fora (chat, comentário, texto rico). O
+`CapacitorHttp` não precisa estar ligado, e `server.url` não entra. Com a
+condição escrita, a pergunta vira "alguma tela nossa renderiza link de
+fora?", e o fonte responde em um minuto: o chat do Biela é `<p>` com texto
+puro, a tela de aula não tem `href` nem HTML, os cinco `href` do app são
+fixos (lojas, termos, privacidade, YouTube com id do nosso catálogo) e todo
+link externo sai pelo navegador do sistema. Superfície não encontrada.
+"Tratar como exposta até prova em contrário" é o padrão certo para uma 9,3,
+mas a prova estava ao alcance e a linha do dono ficou dizendo "é onde mora
+o token do usuário" sem o "e nenhuma tela nossa abre esse caminho". É a
+regra de 03/10: quando um número ou um aviso surpreender, pergunte primeiro
+se a fonte já responde o que você não leu.
+
+**2. A DECISÃO VEIO SEM O CUSTO.** "A 3.2 leva, ou merece versão própria?"
+só se responde com o preço de levar, e ele é pequeno: é patch (8.5.0 para
+8.5.1, três correções), o `npx cap sync` reescreve o pino `exact` do
+`capacitor-swift-pm` no `Package.swift` sozinho (lido em
+`@capacitor/cli/dist/ios/update.js`), e a 3.2 já precisa de build pelos dois
+itens que tem. Ou seja: entra na 3.2 sem build extra, com uma linha no
+roteiro de aparelho (abrir o app, o chat, uma aula, o login). Recomendação
+que não diz o custo manda o dono adivinhar.
+
+**3. O FLUXO DO BLOG É DE OUTRO PRODUTO, E A LINHA NÃO DIZ.** O "Vocaboost:
+Conteúdo/SEO (Blog)" mora no mesmo n8n, mas não é do Mentorque, e a lista de
+ações do dono é por produto. Manter a linha é decisão dele (04/10); o que
+cabe a você é dizer de que casa ela é, para a leitura da fila não misturar o
+que é deste app com o que é do outro. O mesmo vale para a chave antiga que
+você deixou de repetir, com razão.
+
+**Pontos de atenção para o dono, lidos hoje:**
+
+- A 3.1 das lojas carrega o Capacitor 8.5.0 (o pacote entrou em 02/08,
+  commit 7c91ecf, ancestral da árvore 34ffaac). O caminho do exploit não foi
+  encontrado no nosso fonte; o conserto é barato e vai na 3.2.
+- O `source-map-js` roda no build, sobre o nosso CSS, e não no aparelho:
+  leitura correta da rodada.
+- O `next` continua em 14.2 com conserto só em versão maior: terceira semana
+  da mesma recomendação, e ela está certa em não fazer agora.
+- Nenhum segredo em 99 commits; RLS, views e funções do banco como estavam.

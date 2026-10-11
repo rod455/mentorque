@@ -3,6 +3,26 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-11 · Engenharia: a rodada de Segurança lida contra o aviso e o fonte; a 9,3 do Capacitor não tem porta no nosso app
+
+- Dono: "Veja o que o agente de segurança criou e os principais pontos de
+  atenção". O retorno está em `seguranca-dependencias.md` ("Retorno do dono
+  sobre a rodada de 11/10/2026").
+- **O que a rodada não mediu, medido aqui**: o GHSA-rvm3-566m-v7fv exige que a
+  pessoa toque num link dentro da WebView, em app que renderiza link de fora.
+  No fonte: o chat do Biela é texto puro, a aula não tem `href` nem HTML, os
+  cinco `href` do app são fixos e link externo sai pelo navegador do sistema.
+  Superfície não encontrada. A 3.1 das lojas carrega o 8.5.0 (desde 02/08,
+  ancestral da árvore 34ffaac).
+- **O custo do conserto**: patch, `npm install` dos quatro pacotes em 8.5.1 e
+  `npx cap sync`, que reescreve o pino do `Package.swift` (lido na CLI).
+  Cabe na 3.2 sem build extra. Recomendação ao dono: na 3.2, sem versão
+  própria. Decisão é dele.
+- **O fluxo do blog**: execução 8873 lida, 400 da API por chave sem escopo de
+  workspace, como a rodada disse. É o fluxo do Vocaboost, não do Mentorque; a
+  linha do dono fica, e o retorno pede que ela diga de que casa é.
+- Nada de código mudou.
+
 ## 2026-10-11 · Segurança: rodada 4, o Capacitor do binário tem uma crítica 9,3, e o conserto da chave de 04/10 quebrou o fluxo um passo antes
 - Artifact "Segurança da semana" (rodada 4):
   https://claude.ai/artifact/GCeiNo9Y92CkueA6XNvQst
