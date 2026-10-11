@@ -5,6 +5,10 @@ description: Como preparar e mandar uma versão do app para a App Store e a Goog
 
 # Mandar uma versão para as lojas
 
+O desenho inteiro (Next.js, Capacitor, Codemagic, versão, ritual) e os
+tropeços que custaram build estão em `docs/lojas/como-criamos-os-apps-no-codemagic.md`.
+Esta skill é a parte que vale a cada envio.
+
 Cada build é caro em tempo de espera, e alguns erros só aparecem no fim do
 caminho, depois de tudo compilar. Todos os tropeços abaixo aconteceram.
 

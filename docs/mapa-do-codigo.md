@@ -8,6 +8,7 @@ começar lendo em vez de garimpando.
 | Quero mudar… | Vá em |
 | --- | --- |
 | um texto que aparece na tela | `lib/app/content.ts`, na seção com o nome da tela (`quiz`, `profile`, `subscribe`…) |
+| como os apps das lojas são gerados e publicados (Codemagic, Capacitor, versão, ritual) | `docs/lojas/como-criamos-os-apps-no-codemagic.md`, o guia inteiro para repetir noutra empresa |
 | uma aula, trilha ou categoria | `lib/app/conteudo/aulas.ts` |
 | um sintoma ("barulho ao frear") | `lib/app/conteudo/sintomas.ts` |
 | o kit do motorista | `lib/app/conteudo/equipamentos.ts` |
