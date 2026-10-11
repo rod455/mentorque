@@ -25,6 +25,17 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
    com aviso na tela, e nada sai sem um endereço válido. Até a 3.2 chegar,
    o app antigo ainda manda sem e-mail e o servidor marca o assunto com
    "[SEM E-MAIL]".
+3. **Capacitor 8.5.1** (11/10, commit 1487203). Fecha a crítica 9,3 do 8.5.0
+   (conteúdo de fora na origem do app pelo caminho do proxy interno). A
+   pessoa não sente nada; é a camada que nenhuma conferência alcança. Sobe
+   os quatro pacotes e o pino do Swift; o Android pega a versão no build.
+
+## Plugin nativo nesta versão
+
+Nenhum plugin novo. O que muda em `ios/` é o pino do `capacitor-swift-pm`
+(8.5.0 para 8.5.1) no `Package.swift`, reescrito pelo `cap update`; em
+`android/` nada versionado muda (o `:capacitor-android` vem do
+`node_modules`). O `capacitor.config.ts` não foi tocado.
 
 ## Roteiro de aparelho, escrito ANTES do build
 
@@ -37,3 +48,8 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
    uma mensagem e tocar em Enviar sem e-mail: a tela pede o e-mail e nada é
    enviado. Com um e-mail válido, envia e confirma. Conferir na caixa
    contato@ que a mensagem chegou com o endereço.
+3. **O Capacitor novo não quebrou a casca.** Abrir o app, entrar com o
+   Google e com a Apple, abrir o chat do Biela e receber resposta, abrir uma
+   aula com vídeo, tocar num link externo (termos) e ver abrir no navegador
+   do sistema, receber o aviso local do quiz. Nada disso muda de propósito;
+   o que se confere é que continua igual.

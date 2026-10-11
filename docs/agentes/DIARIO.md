@@ -3,6 +3,21 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-11 · Engenharia: Capacitor 8.5.1 aprovado e aplicado, vai na 3.2
+
+- Dono: "pode aprovar." Commit 1487203: `@capacitor/android`, `ios`, `core` e
+  `cli` em 8.5.1; `npx cap update` reescreveu o pino do `capacitor-swift-pm`
+  no `Package.swift` (único arquivo nativo que muda; o Android pega a versão
+  do `node_modules` no build). O `cap update android` precisou da pasta
+  `assets/` gerada, que é ignorada pelo git.
+- `npm audit`: de 3 críticas para 1 (a do `next`, sem caminho até nós).
+  `npm run conferir` inteiro verde, remendos do postinstall de pé. Regime
+  das duas velocidades: sem build local; a Vercel não é afetada (pacote só
+  do app) e o binário só muda com a 3.2.
+- Ficha da 3.2: item 3, seção de plugin nativo e o passo 3 do roteiro de
+  aparelho (a casca continua igual: login, chat, aula, link externo, aviso).
+  A linha sai da lista do dono.
+
 ## 2026-10-11 · Engenharia: a rodada de Segurança lida contra o aviso e o fonte; a 9,3 do Capacitor não tem porta no nosso app
 
 - Dono: "Veja o que o agente de segurança criou e os principais pontos de
