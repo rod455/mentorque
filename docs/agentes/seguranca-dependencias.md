@@ -166,7 +166,58 @@ Pulou numa rodada? Diga a data da próxima ali mesmo.
 | 20/09/2026 | (pulei 27/09, dito na rodada) |
 | 04/10/2026 | **01/11/2026** |
 
+## O relato começa pela decisão do dono
+
+Regra do dono, 04/10/2026, ponto 1 do veredito. O relatório tem o tamanho da
+decisão, não do trabalho. **As primeiras linhas dizem o que ele decide hoje, com
+o clique**, e o resto vem depois, porque quem lê o diário é outro agente.
+
+E duas coisas que o mesmo gesto resolve **dizem isso uma para a outra**, senão
+ele lê duas decisões onde há uma e meia. A regra "N itens, N linhas" continua
+valendo; o que ela não autoriza é fingir que são independentes.
+
+## Exposição se mede, não só se descreve
+
+Também do veredito de 04/10. Antes de publicar um risco, traga o número que
+separa **porta aberta** de **porta aberta com gente entrando**, e diga de qual
+instrumento ele veio. No n8n, as execuções têm `mode`: `trigger` é relógio,
+`webhook` é alguém de fora. "Quatro execuções, todas de `trigger`" é medição;
+"o webhook está aberto desde julho" sozinho é descrição.
+
+Quando o instrumento não alcança, diga o que ele não prova em vez de concluir
+pelos fatos que você tem. Em 11/10 a crítica do Capacitor era 9,3 e eu só
+conseguia ler a nossa config: disse que não usamos `CapacitorHttp` e que não há
+`server.url`, **e disse que isso não prova que o caminho não existe**, porque ele
+é da ponte nativa. Para nota 9,3 a ordem é tratar como exposta até alguém provar
+o contrário.
+
 ## Aprendizados
+
+### Três regras da rodada 4 (11/10/2026)
+
+**1. Tempo de execução é instrumento.** O que achou o conserto quebrado não foi
+ler log nem definição: foi a lista de execuções mostrando 33 e 41 segundos antes
+de 04/10 e **1,7 segundo** depois. Chamada de IA não cabe em 1,7 segundo. A
+duração é o número mais barato do n8n e o que mais rápido diz "mudou de
+comportamento", antes de qualquer leitura de erro. Compare sempre a duração das
+execuções de antes e depois de um conserto.
+
+**2. Conserto que fecha o achado pode quebrar o que sobrava de pé, e isso é
+parte do desfecho.** A chave saiu do texto puro e o webhook saiu do fluxo, tudo
+certo e tudo conferido no estado. E a chave nova não funciona, então o fluxo
+passou a morrer um passo ANTES: antes gerava o artigo e falhava ao gravar, com o
+conteúdo sobrevivendo no e-mail; agora não gera nada. Fechar o achado não é o
+fim da pergunta. Toda rodada, depois de confirmar que o conserto entrou, meça se
+a coisa consertada ficou melhor **no que ela existia para fazer**.
+
+**3. Quando uma crítica mora na camada que a conferência não alcança, o limite
+deixa de ser rodapé e vira o achado.** Toda rodada eu escrevo que as nossas
+conferências não chegam ao binário das lojas. Em 11/10 a crítica de nota 9,3
+estava exatamente lá, no Capacitor 8.5.0. Nas três rodadas anteriores as
+críticas do `next` não alcançavam a gente e a frase era ressalva; nesta ela é a
+notícia. Repare em qual camada a falha mora antes de decidir o tamanho dela.
+
+
 
 ### Quatro regras da rodada 3 (04/10/2026)
 

@@ -3,6 +3,129 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-11 · Segurança: rodada 4, o Capacitor do binário tem uma crítica 9,3, e o conserto da chave de 04/10 quebrou o fluxo um passo antes
+- Artifact "Segurança da semana" (rodada 4) publicado. Semana de 99 commits.
+
+### As duas decisões do dono, antes de qualquer outra coisa
+1. **Aprovar que a próxima versão carregue o Capacitor 8.5.1.** O app está em
+   8.5.0, que tem uma crítica de nota **9,3** do próprio Capacitor: conteúdo de
+   fora carregado NA ORIGEM do app, pelo caminho do proxy interno. Só chega ao
+   usuário por BUILD. A pergunta é uma: a 3.2 leva, ou merece versão própria?
+2. **A chave nova do blog não funciona**, e são dois cliques no console da
+   Anthropic. Fecha o que ele começou em 04/10.
+
+As duas estão na lista dele, cada uma com o clique. O resto deste registro é
+para os outros agentes, não para ele.
+
+### O Capacitor, e por que esta é diferente das críticas do Next
+- `@capacitor/android` e `@capacitor/ios` **8.5.0**, faixa afetada
+  `>=8.5.0 <8.5.1`, conserto em **8.5.1**, que é correção e não versão maior.
+  O `@capacitor/cli` (dev) entra na mesma lista.
+- **O caminho até nós existe e é o telefone da pessoa.** As críticas do `next`
+  que eu desmonto toda semana não alcançam a gente (Vercel é Linux, otimizador
+  desligado). Esta alcança: origem do app é onde mora o `Authorization` que o
+  `middleware.ts` descreve desde a rodada 1, e conteúdo de fora rodando ali lê
+  esse armazenamento.
+- **É a camada que as nossas conferências nunca alcançam**, e pela primeira vez
+  isso não é ressalva de rodapé, é o achado. `npm run conferir` verde não diz
+  nada sobre o binário que está nas lojas.
+- **O que eu NÃO consegui medir**: se o caminho do proxy interno é alcançável na
+  nossa configuração. Lidos: não usamos `CapacitorHttp` (não está em
+  `plugins` do `capacitor.config.ts` nem no nosso código) e não existe
+  `server.url`, então a WebView nunca sai para desenhar interface. Isso **não**
+  prova que o caminho não existe, porque ele é da ponte nativa e não da nossa
+  config. Para uma 9,3 a ordem certa é tratar como exposta até alguém provar o
+  contrário, e foi assim que escrevi.
+- **Não subi a dependência eu mesmo, e o motivo não é alçada**: é que um bump de
+  Capacitor pede `cap sync`, mexe em `android/` e `ios/`, e a skill de release é
+  explícita de que build sem roteiro de aparelho não sai. Entrego a recomendação
+  com o número da versão, que é o que este papel entrega.
+
+### O conserto de 04/10 fechou inteiro, e criou uma consequência medida
+- **Conferido no ESTADO, não no commit**, como manda a regra 2 da rodada 2:
+  - o nó do webhook **não existe mais** no fluxo (`triggerCount` caiu de 2 para
+    1, e o `triggerInfo` só lista o gatilho de relógio);
+  - a chave da Anthropic saiu do cabeçalho em texto puro e o nó agora usa
+    `genericCredentialType`, ou seja o cofre do n8n;
+  - `versionId` é **igual** ao `activeVersionId`, que é a única prova de que o
+    que está escrito é o que roda.
+- **E O NÚMERO QUE O DONO PEDIU NA RODADA 3** (exposição se mede, não se
+  descreve): das execuções guardadas, **nenhuma** é de modo `webhook`; as quatro
+  são de `trigger`. Isso não prova que nunca foi disparado de fora, porque a
+  retenção é curta, mas é o número que separa porta aberta de porta aberta com
+  gente entrando. E agora o nó não existe.
+- **A CONSEQUÊNCIA, e ela vem do tempo de execução.** Antes de 04/10 as rodadas
+  levavam 33 e 41 segundos; depois, **1,7 e 1,8 segundo**. Curto demais para ter
+  chamado a IA. Lendo a execução de 09/10: a API devolve **400** em 269 ms, com
+  "This API key is not scoped to a workspace".
+  - **Boa notícia real**: o fluxo PAROU de pagar, porque é recusado antes de
+    gerar. O "paga e joga fora" que eu relatei em 27/09 e 04/10 acabou, só não
+    pelo motivo que alguém quis.
+  - **Notícia que importa**: ele quebrou um passo ANTES do que estava. Antes
+    gerava o artigo e falhava ao gravar, e o conteúdo existia no e-mail de
+    notificação, que foi o argumento do commit 880badf. Agora não gera, então
+    **nem o e-mail chega**. O dono decidiu que o fluxo fica ligado de propósito,
+    e hoje ele não faz mais nada.
+- **O que NÃO voltei a trazer**: a chave `service_role` do projeto apagado
+  continua em texto puro em dois nós do mesmo fluxo. É a mesma que eu já
+  relatei duas vezes, aponta para projeto cujo DNS não resolve, e o dono decidiu
+  em 22/09. Encontrar não é achado; achado é mudança. Fica a linha, sem
+  recomendação.
+
+### Dependências: a produção quase dobrou, e não foi o `next`
+- **29 falhas** contra 24 em 04/10. **Produção foi de 4 para 7**, e as críticas
+  de 1 para **3**. **22 são só de desenvolvimento**, contadas e não listadas.
+- As três novas de produção: `@capacitor/android` e `@capacitor/ios` (as duas
+  críticas acima) e `source-map-js` **1.2.1** (alta, 7,5, nega serviço no laço
+  de eventos; conserto em 1.2.2).
+- **O caminho da `source-map-js` não existe para nós**, pela regra 1 do manual:
+  ela entra pelo `postcss` que vem **preso dentro do `next`** e roda no BUILD,
+  sobre o nosso css. É a mesma leitura do `postcss` e do `nanoid` das três
+  rodadas anteriores, uma camada abaixo.
+- O `next` segue em 14.2.35 e o `fixAvailable` dele agora é **16.4.0**, versão
+  maior. Terceira semana recomendando o não fazer, e por isso a recomendação
+  encolhe em vez de repetir o argumento.
+
+### As fontes que não mudaram, em uma linha cada
+- **Supabase**: avisos **idênticos** aos de 04/10, nos dois tipos. Nada novo,
+  nada sumiu, nenhuma linha nova.
+- **Estado do banco**: 3 funções `SECURITY DEFINER` com `pg_temp` por último e
+  sem `anon`; **15 views, todas declarando `security_invoker`**; e **zero
+  tabelas com RLS desligado**.
+- **Segredo escapando: nenhum** nos 99 commits, com o zero provado nas seis
+  formas numa cópia do diff. O `.gitignore` não foi tocado e `.env.local.bak`
+  continua ignorado.
+- **Permissões**: não é a primeira rodada do mês. A próxima é **01/11/2026**,
+  como está escrito no manual desde 04/10.
+
+### A conferência que eu escrevi na rodada 3 cobre a view que nasceu nesta semana
+- Entrou a `quiz_participacao`, e ela **nasceu com `security_invoker = on`**. Eu
+  não sei dizer se foi a conferência que causou isso (o commit que a criou não a
+  menciona, e a view vizinha já tinha a cláusula para copiar), então não vou
+  dizer que causou. **O que eu provei é o que importa**: plantei a omissão nela e
+  a `conferir:banco` reprovou.
+- **E usei a ferramenta nova da casa para isso**, a `npm run plantio` que o
+  Guardião escreveu em 10/10, em vez do meu laço de sempre. Ela escreve a cópia
+  antes de tocar, exige que o texto apareça exatamente uma vez, e confere byte a
+  byte que o arquivo voltou. É melhor que o meu, e passa a ser o caminho.
+
+### O limite desta varredura
+- **Alcançou**: a árvore do lock, o diff de 7 dias, os avisos do Supabase nos
+  dois tipos, o estado de função, view e RLS no banco, a definição E as
+  execuções do fluxo do n8n, e o `capacitor.config.ts`.
+- **Não alcançou**, e esta semana isso é o assunto e não a ressalva: **o binário
+  que está nas lojas**. A crítica do Capacitor vive exatamente ali. Também fora:
+  a rede até o nosso site (o proxy segue recusando `mentorque.com.br`), o
+  otimizador de imagem da Vercel, os pacotes SPM do build nativo, o WebView do
+  aparelho, e os apps conectados na Meta, no Google e no Codemagic.
+
+### Contra a régua
+Cumpri 1 a 5 e 7 a 9. O 6 não se aplica (nenhuma dependência trocada por mim, e
+o porquê está escrito). **O que ficou devendo**: a exploitabilidade da crítica do
+Capacitor na nossa configuração, que eu não soube medir daqui. Li o que a nossa
+config diz e disse o que isso não prova, em vez de concluir pelos dois fatos que
+eu tinha, que é a armadilha do CLAUDE.md de 03/10.
+
 ## 2026-10-10 · Engenharia: o "Fale com a gente" passa a exigir e-mail
 
 - Dono: "Vamos colocar como obrigatório colocar o e-mail para enviar dúvidas.
