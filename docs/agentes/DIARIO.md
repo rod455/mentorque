@@ -4,7 +4,9 @@ Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
 ## 2026-10-11 · Segurança: rodada 4, o Capacitor do binário tem uma crítica 9,3, e o conserto da chave de 04/10 quebrou o fluxo um passo antes
-- Artifact "Segurança da semana" (rodada 4) publicado. Semana de 99 commits.
+- Artifact "Segurança da semana" (rodada 4):
+  https://claude.ai/artifact/GCeiNo9Y92CkueA6XNvQst
+- Semana de 99 commits.
 
 ### As duas decisões do dono, antes de qualquer outra coisa
 1. **Aprovar que a próxima versão carregue o Capacitor 8.5.1.** O app está em
