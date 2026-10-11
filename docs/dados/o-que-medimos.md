@@ -1,5 +1,10 @@
 # O que a gente mede, e o que ainda não
 
+O desenho inteiro da medição (camadas, identidade, como um evento nasce, o
+vocabulário de leitura, o que mapear numa empresa nova) está em
+`docs/dados/como-medimos-o-app.md`. Este arquivo é o inventário do que entra
+hoje e do que falta.
+
 Inventário escrito em 19/09/2026, por pedido do dono ("quero conseguir mensurar
 tudo que é possível"). Serve para duas coisas: saber onde procurar um número
 antes de inventar um, e saber o que ainda é buraco antes de tirar conclusão de

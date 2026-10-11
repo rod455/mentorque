@@ -5,6 +5,10 @@ description: Como ler os números do Mentorque sem tirar conclusão errada. Use 
 
 # Ler a operação sem se enganar
 
+O desenho inteiro da medição (de onde cada número nasce, quem escreve, as
+etiquetas de cada evento) está em `docs/dados/como-medimos-o-app.md`. Esta
+skill é a parte que evita errar na hora de ler.
+
 Os números do Mentorque são fáceis de consultar e fáceis de ler errado. Todas
 as armadilhas abaixo aconteceram de verdade, foram ditas ao dono com confiança,
 e tiveram de ser corrigidas depois. Elas não são teoria.
