@@ -3,6 +3,134 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-12 · Diretor: a retenção se firmou mais alto, a chegada ficou 22% mais cara, e dois pedidos meus pararam sete dias por data errada
+- Artifact "Semana Mentorque" (05 a 11/10):
+  https://claude.ai/artifact/WCtYFjAyFxbshnsDV9cp96
+- Rodada começou às 8h14. Retrato e diário inteiros ANTES da primeira consulta
+  ao banco, como o retorno de 06/10 mandou; banco às 8h30; relatório publicado
+  antes das 10h. A falha de horário da semana passada não se repetiu.
+- **O NÚMERO: a coorte de 28/09 já tem 12 de 57 voltando em 1 a 7 dias, 21%,
+  com a janela AINDA ABERTA.** É piso e está marcado como piso. A de 21/09
+  fechou em 9 de 51 (17,6%) e a de 05/10 tem 3 de 69 (fecha em 19/10). Duas
+  semanas seguidas dentro da faixa emprestada de 10 a 25% deixam de ser sorte e
+  começam a ser patamar.
+- **E O CONSERTO DE 06/10 PAGOU A CONTA DELE HOJE.** A coorte de 28/09 completa
+  14 dias hoje: pela regra antiga a coluna `d1_7_fechada` teria virado
+  verdadeira à meia-noite e o retrato das 6h imprimiria 12 de 57 como FINAL.
+  Lido no banco às 8h30: a coluna diz `false`, porque a última pessoa se
+  cadastrou no dia 4 à noite. Uma semana depois do achado, o instrumento está do
+  lado certo e a prova é esta coorte.
+- **O PORTÃO DO AVISO PIOROU PELA TERCEIRA SEMANA, e é a coisa mais associada a
+  voltar que esta casa mediu.** Ligaram o aviso 24 de 209 visitantes (11,5%),
+  depois 20 de 237 (8,4%), agora 17 de 306 (5,6%). A EXIBIÇÃO acompanha o
+  crescimento (40, 41 e 55 convites, uns 18% dos visitantes, estável), então o
+  que piorou é a aceitação: 24 de 40, 20 de 41, 17 de 55. Não sei por quê, e é
+  exatamente o ponto: recusa não deixa evento.
+- CHEGADA, semana fechada contra anterior: aberturas 409 contra 336, visitantes
+  306 contra 237, cadastros 69 contra 57, contas novas 72 contra 62, carros 173
+  contra 105 (+65%), perguntas ao Biela 29 contra 15 (+93%), paywall 41 contra
+  39, checkout 3 contra 2. Gasto SUBIU de R$ 325,61 para R$ 472,89 (+45%),
+  Google de 182,65 para 332,22 (+82%) e Meta parada em 140,67. Custo por conta
+  de R$ 5,25 para R$ 6,57 na semana calendário, e de R$ 5,73 para R$ 7,00 na
+  régua de 7 dias do retrato. As duas dizem a mesma coisa: +16% de contas por
+  +45% de dinheiro. É o primeiro retorno medido da trava de orçamento que eu
+  tirei em 05/10.
+- A LEITURA DO BIELA DEIXOU DE SER PISO: 58 perguntas com palavras da pessoa em
+  30 dias, acima do mínimo de 20. Motor é 20 de 58, quase o dobro do segundo
+  colocado nomeado. Primeira vez que o ranking pode ser lido.
+- RECEITA: aconteceu o que estava no topo do relatório passado. A última
+  assinatura do Stripe terminou em 09/10, com o cancelamento que já estava
+  agendado. Pacote `stripe` do retrato de hoje: 0 assinaturas, MRR 0, receita
+  30d 0. Banco diz 1 ativa (a venda de loja de 25/09) e a RevenueCat confirma 1;
+  não é discordância, o Stripe não conhece venda de loja. FONTE DECLARADA: a
+  integração do Stripe NÃO estava disponível nesta sessão (pede autorização
+  nova), então receita vem do coletor e não de leitura minha ao vivo.
+- ERROS: 10 de 395 aparelhos com defeito (2,5%), contra 3,0% na semana passada,
+  abaixo do teto de 10%.
+- PLACAR das minhas prioridades de 05/10: (1) o sinal de janela fechada FECHOU,
+  e no mesmo dia, não na quarta; (2) o portão do aviso PARADO há 7 dias; (3) a
+  leitura do OneLink PARADA há 7 dias, e a cegueira foi de 90% para 97% dos
+  cadastros sem origem.
+- **E A CAUSA DAS DUAS PARADAS É METADE MINHA, MEDIDA:** as duas linhas da fila
+  entre papéis apontavam para o dia errado. Eu escrevi "sexta (10/10)" quando
+  sexta era 09/10, e "quinta (09/10)" quando quinta era 08/10. O CRO rodou em
+  09/10 e a Mídia em 08/10, cada um com um pedido meu esperando, e nenhum dos
+  dois registros cita a fila uma única vez (conferido palavra por palavra nos
+  dois blocos). DIRETRIZES manda desde 06/10 que a rodada ABRA lendo a fila, então
+  a falha deles é real e tem critério; mas um papel que abrisse a fila na própria
+  rodada leria um pedido endereçado ao dia seguinte. As duas datas foram
+  corrigidas hoje para 16/10 (CRO) e 15/10 (Mídia).
+- **DEFEITO DE INSTRUMENTO ACHADO HOJE ÀS 8h20, E ELE SAIU NO MESMO DIA**, pela
+  regra que o retorno de 06/10 me deu: a `conferir:agentes` imprime atraso de
+  MENOS SETE dias para o Guardião. Causa lida no fonte: no mesmo arquivo há duas
+  leituras da mesma convenção. A conferência da assinatura aceita o parêntese do
+  título (linha 422), como DIRETRIZES permite desde 06/10; a que acha a rodada
+  para cobrar o veredito não aceita (linha 337). O título
+  `## 2026-10-10 (rodada 3) · Guardião: ...` é invisível para a cobrança, que
+  compara a rodada de 03/10 com o veredito de 10/10. Atraso negativo é a
+  assinatura de rodada invisível, e papel cuja rodada é invisível NUNCA reprova:
+  é o buraco que eu propus fechar em 05/10, vivo num papel que assina certo.
+  - PROVADO EM CÓPIA FORA DO REPOSITÓRIO (não mexo em código): sem o remendo,
+    -7; com o remendo, 0 e os outros sete manuais sem mudança; com o remendo e o
+    veredito de 10/10 removido, 7 dias, ou seja o número passa a acompanhar a
+    realidade; com os dois vereditos do Guardião removidos, reprova com código
+    1. Virou linha na fila para a Engenharia, hoje, com os três plantios
+    escritos. Limite declarado: a folga de dez dias continua de propósito, então
+    uma segunda pulada ainda passa.
+- **VEREDITOS: seis rodadas, seis vereditos, nenhum escrito por mim**, segunda
+  semana seguida. Todos saíram no mesmo dia ou no dia seguinte, nas sessões de
+  Engenharia com o dono. Conferido com dois instrumentos antes de escrever:
+  seis seções datadas nos manuais e a `conferir:agentes` de hoje. Então não
+  reescrevi nenhum, e o meu trabalho foi consequência e cruzamento. Uma linha por
+  papel:
+  - **QA (07/10)**: cumpriu 1 a 11 com o critério 2 ressalvado por ele. Três
+    camadas independentes bloqueando o quiz no dia 1, e a prova de que consertar
+    só a tela produziria resposta que o servidor joga fora. Consequência medida:
+    o conserto subiu em 08/10.
+  - **Mídia (08/10)**: dez dos doze, os dois declarados. Trouxe a decisão de
+    dinheiro da semana com as duas réguas concordando. Falhou em não abrir a
+    fila, onde havia pedido meu de sete dias.
+  - **CRO (09/10)**: corrigiu narrativa própria de 25/09 com número, achando que
+    a ativação por coorte mede a ordem errada (o carro vem antes da conta no
+    Android desde 12/09). Quinto zero estrutural da casa. Falhou em não abrir a
+    fila.
+  - **Guardião (10/10, rodada 3)**: dez cumpridos, o 4 falhou e ele declarou.
+    Três de três conferências cegas no consumidor, achadas por varredura, e a
+    regra do backup virou `npm run plantio` com prova de que morde.
+  - **Segurança (11/10, rodada 4)**: abriu pelas duas decisões do dono, como o
+    veredito anterior pediu. Achou a crítica 9,3 do Capacitor no binário e disse
+    com precisão o que NÃO conseguiu medir, tratando como exposta até prova em
+    contrário.
+  - **Conteúdo (06/10)**: oito cumpridos, o 6 declarado. O primeiro clique da
+    história do site, e a decisão certa a partir dele: aprofundar a página em
+    posição 19 em vez de abrir a sexta, porque página 2 se move e página 8 não.
+- **CRUZAMENTO DA SEMANA: a fila nova foi ignorada pelos dois papéis que tinham
+  linha nela, na primeira semana dela.** Mesmo tipo de falha em dois papéis,
+  contra uma frase de DIRETRIZES que existe desde 06/10. Com a metade que é
+  minha escrita acima. A saída não é repetir o pedido: é o endereço certo, e é o
+  que eu consertei hoje.
+- PRIORIDADES: (1) DO DONO, e é de dinheiro: decidir a campanha de busca
+  (mantém, corta ou pausa), R$ 143,36 em oito dias, 33% de toda a mídia, 3
+  instalações, de 15 a 18 vezes o custo do vídeo pelas duas réguas; abrir o
+  Google Ads uma vez fecha os três itens do painel, incluindo marcar o
+  `first_open` da AppsFlyer como ação principal e a verificação do anunciante
+  (prazo 30/10); (2) CRO, sexta 16/10: o portão do aviso grava a recusa com o
+  motivo, agora com três semanas de queda medidas; (3) Mídia, quinta 15/10: a
+  leitura da lista de OneLink, uma tela só, com o cuidado novo de dizer que
+  desde 04/10 os selos da home também gravam `clicou_baixar`.
+- **A MINHA RODADA CONTRA A MINHA RÉGUA: cumpri 10 dos 11, e falhou o critério
+  5.** Prioridade com prazo tem data e DONO: as duas que eu deixei na fila
+  tinham dono e data errada, e o resultado foi sete dias de nada em dois
+  pedidos. O 8 não se aplica (segunda segunda do mês; a leitura de outubro foi
+  em 05/10). O 3 cumprido declarando a integração do Stripe como indisponível.
+- PROPOSTA FORA DA LEITURA DO MÊS, e ela é sobre o meu próprio manual: duas
+  semanas seguidas, catorze vereditos, nenhum meu. Eles saem no mesmo dia nas
+  sessões com o dono, o que é mais rápido e melhor que esperar a segunda.
+  Proponho que o manual passe a me pedir CONFERIR que todo veredito existe (dois
+  instrumentos), cobrar a CONSEQUÊNCIA na rodada seguinte de cada papel e fazer
+  o CRUZAMENTO, em vez de escrever o que já existe. Veredito escrito por mim
+  depois viraria o segundo veredito da mesma rodada. Proposta, não mudança.
+
 ## 2026-10-11 · Engenharia: a chave do blog do Vocaboost sai da lista, por decisão do dono
 
 - Dono: "a chave do vocaboost pode tirar da lista, não vamos fazer". A linha

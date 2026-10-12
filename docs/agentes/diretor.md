@@ -494,6 +494,26 @@ credibilidade do resto, que nesta rodada estava certo.
   banco só para o que o retrato NÃO traz: comparação entre semanas, abertura de
   coorte pessoa a pessoa e conferência de número que decide manchete.
 
+- 2026-10-12: **pedido entre papéis cita o dia da CADÊNCIA de quem recebe,
+  conferido no calendário.** Eu escrevi "sexta (10/10)" para quem roda na sexta
+  09/10 e "quinta (09/10)" para quem roda na quinta 08/10: dono certo, data
+  errada, e dois pedidos ficaram sete dias parados porque apontavam para um dia
+  que não existe na cadência deles. Conferir o dia da semana antes de escrever a
+  linha, e quando a data passar, re-datar para a próxima rodada em vez de deixar
+  a linha envelhecer apontando para trás.
+- 2026-10-12: **atraso negativo é a assinatura de rodada invisível.** A
+  `conferir:agentes` imprimiu menos sete dias para o Guardião, e a causa era o
+  mesmo arquivo com duas leituras da mesma convenção de título. Número negativo
+  num medidor de atraso nunca é "está em dia": é o instrumento não achando o que
+  deveria cobrar. Vale para qualquer placar da casa: antes de comemorar verde,
+  olhar se algum número saiu com sinal impossível.
+- 2026-10-12: **o veredito deixou de ser trabalho de segunda, e isso é bom.** Em
+  duas semanas, catorze vereditos saíram no mesmo dia da rodada, nas sessões com
+  o dono. O que sobra para a segunda, e só a segunda faz: conferir que todo
+  veredito EXISTE (dois instrumentos), cobrar a CONSEQUÊNCIA na rodada seguinte
+  de cada papel, e o CRUZAMENTO entre papéis. Reescrever veredito já escrito é
+  produzir o segundo veredito da mesma rodada.
+
 ## Direcionamentos do dono
 
 - Entrega às segundas, 08:00 (horário de Brasília), com notificação.
