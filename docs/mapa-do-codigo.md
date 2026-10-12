@@ -9,6 +9,7 @@ começar lendo em vez de garimpando.
 | --- | --- |
 | um texto que aparece na tela | `lib/app/content.ts`, na seção com o nome da tela (`quiz`, `profile`, `subscribe`…) |
 | como os apps das lojas são gerados e publicados (Codemagic, Capacitor, versão, ritual) | `docs/lojas/como-criamos-os-apps-no-codemagic.md`, o guia inteiro para repetir noutra empresa |
+| configurar o Codemagic ligado à Apple e à Play num app novo (integração, assinaturas, variáveis, yaml modelo) | `docs/lojas/codemagic-apple-e-play-para-um-app-novo.md`, roteiro para outro agente copiar |
 | como o app é medido (eventos, identidade, funil, coortes, retrato, regras de leitura) | `docs/dados/como-medimos-o-app.md`, o desenho inteiro; o inventário do que entra hoje em `docs/dados/o-que-medimos.md` |
 | uma aula, trilha ou categoria | `lib/app/conteudo/aulas.ts` |
 | um sintoma ("barulho ao frear") | `lib/app/conteudo/sintomas.ts` |

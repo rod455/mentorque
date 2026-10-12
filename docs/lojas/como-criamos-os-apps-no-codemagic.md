@@ -5,6 +5,10 @@ do que está no repositório do Mentorque e do que custou build para aprender.
 Onde houver nome do Mentorque (bundle id, grupo de variáveis, nome do
 keystore), é só trocar; a seção final lista tudo o que muda.
 
+O roteiro passo a passo para ligar o Codemagic à Apple e à Play num app
+novo, com o yaml modelo, está em
+`docs/lojas/codemagic-apple-e-play-para-um-app-novo.md`.
+
 Em uma frase: **o site é um app Next.js na Vercel; o app das lojas é o mesmo
 código, exportado como arquivos estáticos e empacotado pelo Capacitor dentro
 de um binário iOS e de um Android; o Codemagic compila os dois numa máquina
