@@ -159,7 +159,10 @@ marcação (+) e (−) em cima da bateria.
 > o carro parado muito tempo. O passo a passo inteiro da troca está no app, de
 > graça.
 
-*Na tela*: `mentorque.com.br/bateria-do-carro-descarregando`.
+*Na tela*: "Mentorque, aula Trocar a bateria" (o app, grátis no Android e no
+iPhone). O link do guia de busca fica na descrição: ele explica por que a
+bateria descarrega e como testar, e não é o passo a passo da troca que a
+narração promete. Ajuste de Engenharia em 13/10, a pedido do dono.
 
 ### O que precisa aparecer
 
@@ -201,7 +204,10 @@ Nada para comprar, nada para desmontar, uma ferramenta.
 
 1. Qual cabo da bateria soltar primeiro
 2. A ordem que evita a faísca embaixo do capô
-3. O cabo preto não leva energia, e é por isso que ele sai primeiro
+3. O cabo negativo não leva energia, e é por isso que ele sai primeiro
+
+(O título 3 dizia "o cabo preto", e o vídeo inteiro ensina a não ir pela cor.
+Ajustado por Engenharia em 13/10.)
 
 **Descrição**:
 

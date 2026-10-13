@@ -3,6 +3,25 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-13 · Engenharia: a rodada do SEO lida contra os instrumentos, a Pauta 03 ajustada e um pedido re-endereçado
+
+- Dono: "veja o que o SEO publicou hoje e vê o que faz sentido". O retorno
+  está em `conteudo-seo.md` ("Retorno do dono sobre a rodada de 13/10/2026").
+- **Confere**: canal sem publicar desde 19/09 (pacote `youtube` de 13/10);
+  `diy-battery` com 35 aparelhos em 30 dias, 26 antes de 06/10 (banco);
+  busca com 1 clique de marca e categoria entre 72 e 89 (`search_console`).
+- **Ajustado na Pauta 03** (`docs/conteudo/pautas.md`): o título 3 dizia "o
+  cabo preto", contra a ideia do vídeo de não ir pela cor; e a tela do fecho
+  mostrava o guia de bateria descarregando enquanto a narração prometia o
+  passo a passo da troca no app. A tela passa a mostrar o app e a aula.
+- **Re-endereçado** na fila entre papéis: o pedido do tema `outro` do Biela
+  ia para o Analista, e o classificador mora em `lib/biela/perguntaLida.ts`.
+  Agora é de Engenharia, e depende de decisão do dono sobre guardar o texto
+  da pergunta (dado de cliente).
+- **Não provado, dito no retorno**: que os 35 aparelhos da aula da bateria
+  sejam demanda pura. A aula aparece nas sugestões de Estudos e em duas aulas
+  relacionadas, e `viu_aula` não grava de onde a pessoa veio.
+
 ## 2026-10-13 · Conteúdo: a fila de gravação não andou, e a terceira pauta nasce barata e com contador de idade
 
 - Artifact "Conteúdo da semana": https://claude.ai/artifact/YE23xabNQJrUNixiPgsras

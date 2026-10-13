@@ -717,3 +717,61 @@ quem faz o pedido.
 distintos em `viu_aula` nos últimos 30 dias. É a primeira medida de demanda
 real do catálogo, por aula, que não depende do YouTube. A escolha da próxima
 aula do plano de cobertura pode começar por ela.
+
+## Retorno do dono sobre a rodada de 13/10/2026
+
+Mandado escrever por ele em 13/10 ("veja o que o SEO publicou hoje e vê o que
+faz sentido"). Lido o diário, o commit 9225c53, a Pauta 03 inteira, o pacote
+`youtube` e o `search_console` do retrato de 13/10, o banco (`viu_aula` por
+aula em 30 dias) e o código das recomendações e do classificador do Biela.
+
+Primeiro o que manter.
+
+**A RODADA ABRIU PERGUNTANDO SE AS DUAS PAUTAS ANDARAM, NO INSTRUMENTO.** O
+canal não publica desde 19/09 (lido aqui: o vídeo mais novo é de 19/09 às
+13h29 UTC), e você separou o que dá para concluir (a 01 perdeu nove janelas
+de câmera ligada) do que não dá (sobre a 02, quem disser por quê está
+inventando). Ausência responde o quê, e você escreveu isso.
+
+**A FALHA PRÓPRIA CONTRA REGRA ESCRITA, CORRIGIDA NO MESMO DIA.** As duas
+pautas moraram só num arquivo, 42 e 21 dias, sem contador; a terceira nasceu
+na lista do dono, com escopo fechado e nada para comprar.
+
+**A RÉGUA DE DESFECHO COM O RAMO QUE PARA DE PRODUZIR.** Se em 10/11 o canal
+não publicou nada, o slot deixa de escrever roteiro. Estoque de roteiro é o
+que essa linha impede. E não mexer na régua da busca no dia em que o número
+piorou é a decisão certa, dita com o número do lado.
+
+**OS NÚMEROS CONFEREM.** `diy-battery` com 35 aparelhos em 30 dias e 26 deles
+antes de 06/10; `vid-manual-habitos` na frente (66 hoje, 64 na sua leitura);
+busca com 1 clique de marca e as quatro consultas de categoria entre 72 e 89.
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. O ROTEIRO CONTRADIZIA A PRÓPRIA IDEIA EM DOIS LUGARES, E ENGENHARIA
+AJUSTOU.** O título 3 dizia "o cabo preto não leva energia", num vídeo cujo
+ponto é não ir pela cor do cabo. E o fecho dizia "o passo a passo inteiro da
+troca está no app" enquanto a tela mostrava o endereço do guia
+`/bateria-do-carro-descarregando`, que explica por que a bateria descarrega e
+não é o passo a passo da troca. A tela agora mostra o app e a aula; o guia
+fica na descrição. Releia a pauta inteira contra a ideia única antes de
+fechar: são as duas frases que a pessoa mais vai repetir.
+
+**2. "O QUE SOBRA É ESCOLHA DE QUEM ABRIU" NÃO ESTÁ PROVADO.** Você conferiu
+duas armadilhas (a ordem da trilha e a linha de populares) e elas não
+explicam o número. Mas há outras portas: a aula entra no complemento
+genérico de "Para o seu carro" na tela de Estudos (trilha DIY sem marca), e
+duas aulas a citam como relacionada (`vid-padaria` e a do Fastback híbrido).
+E o `viu_aula` não grava de onde a pessoa veio, então nenhum instrumento
+separa demanda de vitrine. A escolha da aula continua boa, porque a decisão
+de 01/09 já apontava para ela por segurança; a frase é que precisa dizer
+"35 aparelhos, sem saber por qual porta".
+
+**3. O PEDIDO DO TEMA `outro` FOI PARA O PAPEL ERRADO, E PEDE UMA COISA QUE SÓ
+O DONO DECIDE.** O classificador mora no nosso código,
+`lib/biela/perguntaLida.ts`, e não no coletor do Analista; a linha foi
+re-endereçada a Engenharia. E nenhum dos dois caminhos que ela propõe
+funciona sem o texto da pergunta: uma lista de temas maior precisa saber o
+que está em `outro`, e o classificador não "viu" nada nesse balde, por
+definição. Guardar texto é dado de cliente, decisão do dono, e essa é a
+frase que a linha precisava ter.
