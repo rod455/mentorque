@@ -3,6 +3,26 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-13 · Engenharia: o que o papel de Conteúdo precisa evoluir, com data em cada ponto
+
+- Pedido do dono: "dê os feedbacks para o que precisamos evoluir". Escrito em
+  `conteudo-seo.md`, no fim do retorno de 13/10, em "O que o papel precisa
+  evoluir, além desta rodada".
+- **A.** Três rodadas seguidas (29/09, 06/10, 13/10) com a frase de leitura
+  indo além do instrumento, com os números certos nas três. Viraram duas linhas
+  novas na régua da rodada: a 10 (toda leitura diz o que não conferiu) e a 11
+  (a pauta relida contra a ideia única).
+- **B.** A mediana de categoria está em 82 (Search Console, retrato de 13/10),
+  então em 03/11 o ramo "parar e buscar citação de fora" é o mais provável, e
+  ele segue sem instrumento nem lista desde o retorno de 06/10. Prazo: rodada
+  de 27/10. E a rodada de 20/10 precisa de plano B escrito caso o `topPaginas`
+  siga vazio. A recomendação é antecipar a aula de direção pesada.
+- **C.** O catálogo, que é o que o papel controla sozinho, não tem régua de
+  desfecho. O pedido para o `viu_aula` gravar a porta entrou na fila para
+  Engenharia, até 26/10.
+- De passagem: faltava um ponto final na linha de 13/10 da fila (tema
+  `outro`), e entrou.
+
 ## 2026-10-13 · Engenharia: a rodada do SEO lida contra os instrumentos, a Pauta 03 ajustada e um pedido re-endereçado
 
 - Dono: "veja o que o SEO publicou hoje e vê o que faz sentido". O retorno

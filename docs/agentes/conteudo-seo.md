@@ -98,11 +98,14 @@ não é critério, "tem o número e a janela do lado" é.
 | 7 | **Título e descrição cabem no buscador** | conferido, não estimado |
 | 8 | **Âncoras únicas e FAQ de verdade** | pergunta com resposta, não título solto |
 | 9 | **Português natural, sem travessão** | vale para LP, artigo e pauta |
+| 10 | **Toda leitura diz o que não conferiu** | a frase que explica um número cita as outras explicações conferidas e a que ficou sem instrumento; se nada separa, termina em "sem saber qual" (13/10/2026) |
+| 11 | **A pauta não contradiz a ideia única** | título, fala e tela relidos contra a ideia única, um por um, antes de fechar (13/10/2026) |
 
 **Nem toda linha vale para todo formato (observado em 22/09/2026).** As linhas
 6, 7 e 8 são de rodada de GUIA: registro, sitemap, metadados de busca e âncoras
 não existem num roteiro de vídeo nem numa aula do catálogo. Numa rodada de
-pauta, as aplicáveis são 1, 2, 3, 4, 5 e 9. Dizer "não se aplica" com o motivo
+pauta, as aplicáveis são 1, 2, 3, 4, 5, 9, 10 e 11 (a 10 vale para todo
+formato; a 11 só para pauta). Dizer "não se aplica" com o motivo
 é resposta válida; o que a régua não admite é marcar como cumprido um critério
 que a rodada nem podia tocar.
 
@@ -775,3 +778,56 @@ funciona sem o texto da pergunta: uma lista de temas maior precisa saber o
 que está em `outro`, e o classificador não "viu" nada nesse balde, por
 definição. Guardar texto é dado de cliente, decisão do dono, e essa é a
 frase que a linha precisava ter.
+
+### O que o papel precisa evoluir, além desta rodada
+
+Pedido do dono em 13/10 ("dê os feedbacks para o que precisamos evoluir").
+Os três pontos acima são da rodada. Estes três são do papel, e cada um tem
+data.
+
+**A. A MESMA FALHA TRÊS RODADAS SEGUIDAS: A FRASE DE LEITURA ANDA UM PASSO
+ALÉM DO INSTRUMENTO.** Em 29/09, o veredito do canal saiu só com views. Em
+06/10, o clique de marca virou "primeiro clique orgânico", e "não consigo
+dizer qual dos dois casos é" tinha a resposta na linha de baixo. Em 13/10, 35
+aparelhos viraram "escolha de quem abriu". Os números estavam certos nas três
+vezes. O que errou foi a frase que diz o que eles significam. Uma régua só não
+segura isso; vira linha da régua da rodada (a 10, acima): **toda frase que
+explica um número diz quais outras explicações conferiu, qual não conseguiu
+conferir e por quê.** Se nenhum instrumento separa as explicações, a frase
+termina com "sem saber qual". A próxima rodada se lê por essa linha antes de
+qualquer outra.
+
+**B. A LEITURA DE 03/11 ESTÁ A TRÊS SEMANAS, A MEDIANA ESTÁ EM 82, E O RAMO
+MAIS PROVÁVEL É O ÚNICO SEM PLANO.** A régua diz: pior que 65, para de
+escrever para busca e vai atrás da primeira citação de fora. Hoje a mediana é
+82 (era 71 em 06/10), então esse ramo deixou de ser hipótese. E o ponto 3 de
+06/10 continua aberto: a rodada de 13/10 não disse de onde vem a leitura de
+links nem quem pede citação a quem. **Até a rodada de 27/10, escreva aqui as
+duas coisas.** (1) O instrumento: a API do Search Console que o coletor usa
+não tem o relatório de links. Então a leitura é de tela, no próprio Search
+Console, e o pedido vai para a lista do dono com a data. (2) A lista de quem
+pedir, com o critério de escolha. Publicação paga é gasto novo e é do dono:
+a lista sai sem ela, ou com ela marcada como decisão dele.
+
+**E DECIDA AGORA O QUE A RODADA DE 20/10 FAZ SE O `topPaginas` SEGUIR
+VAZIO.** O diário diz que a escolha do guia de 20/10 depende dele, e o
+conserto está na lista do dono desde 06/10. Rodada que depende de um clique de
+outra pessoa precisa de um plano B escrito antes. A recomendação de
+Engenharia, e a decisão é sua (o rodízio é deste papel): sem `topPaginas` em
+20/10, antecipe a aula de direção pesada (`steering-hard`, a única com zero
+cobertura). O catálogo tem leitor hoje, 164 aparelhos viram uma aula em 30
+dias pelo funil. A busca trouxe zero clique de categoria no mesmo período.
+
+**C. O PAPEL SE MEDE ONDE O PÚBLICO NÃO ESTÁ.** As duas réguas de desfecho
+deste manual são YouTube e busca, e as duas estão perto de zero por motivos
+que este papel não controla (o canal depende da câmera, a busca depende da
+força do domínio). O que este papel controla sozinho é o catálogo, e o
+catálogo não tem régua de desfecho: o plano de cobertura mede se a aula
+EXISTE (9 de 9 em 29/12), não se alguém chega nela. Por isso o ponto 2 desta
+rodada não tinha como ser provado: o `viu_aula` grava o id da aula no campo
+`origem`, e nada da porta por onde a pessoa entrou (lido em
+`components/app/screens/Content.tsx`, 13/10). O pedido para gravar a porta foi
+para Engenharia na fila, em 13/10. Quando ele entrar, o plano de cobertura
+ganha a segunda metade da régua: das pessoas que consultaram o sintoma, quantas
+abriram a aula que responde ele. Escreva essa régua com número antes da
+primeira aula nova, em 27/10, mesmo que a leitura só venha depois.
