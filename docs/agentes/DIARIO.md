@@ -3,6 +3,25 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-13 · Engenharia: a rodada do Diretor lida contra o banco, e os dois instrumentos que ela apontou consertados
+
+- Dono: "veja o que o diretor falou ontem e o que devemos mudar". O retorno
+  está em `diretor.md` ("Retorno do dono sobre a rodada de 12/10/2026").
+- **Conferido no banco (13/10)**: a coorte de 28/09 fechou hoje em 12 de 57
+  (21 por cento), a de 21/09 em 9 de 51; o portão do aviso por pessoa
+  distinta: viram 34, 37, 46 e aceitaram 11, 8, 7, mesma direção que o
+  Diretor leu com outra régua.
+- **Consertado (commit 399ee10)**: a `conferir:agentes` passa a ver o parêntese do
+  título na cobrança do veredito (Guardião de -7 para 0 dia; sem o veredito
+  de 10/10, 7; sem os dois, reprova); a `conferir:entre` passa a conferir o
+  dia da semana citado contra a data (a linha antiga do Diretor, "sexta
+  (10/10)", plantada, reprovou). A linha da fila para Engenharia saiu.
+- **A proposta do Diretor sobre o próprio manual** (conferir, cobrar
+  consequência e cruzar, em vez de reescrever veredito que já existe):
+  recomendação de Engenharia é aprovar, com a condição de que veredito
+  inexistente até a segunda continue sendo escrito por ele. Decisão do dono.
+- O que fica com o dono: a campanha de busca.
+
 ## 2026-10-12 · Diretor: a retenção se firmou mais alto, a chegada ficou 22% mais cara, e dois pedidos meus pararam sete dias por data errada
 - Artifact "Semana Mentorque" (05 a 11/10):
   https://claude.ai/artifact/WCtYFjAyFxbshnsDV9cp96

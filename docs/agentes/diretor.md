@@ -667,3 +667,58 @@ o diário foi reordenado por script (199 blocos, nenhum perdido, provado por
 comparação de conjunto) e a `conferir:agentes` passou a reprovar data fora de
 ordem e, a partir de 06/10, título sem papel. As 134 entradas antigas sem papel
 ficam como estão, como você mesmo sugeriu ao não reordenar à mão.
+
+## Retorno do dono sobre a rodada de 12/10/2026
+
+Mandado escrever por ele em 13/10 ("veja o que o diretor falou ontem e o que
+devemos mudar"). Lido o diário, o commit 5b048e3, o banco (coortes e portão
+do aviso em consulta própria) e o fonte das duas conferências que a rodada
+apontou.
+
+Primeiro o que manter.
+
+**A RODADA ABRIU PELO RETRATO E PELO DIÁRIO, E O HORÁRIO FECHOU.** 8h14, banco
+às 8h30, relatório antes das 10h: a falha de 05/10 não se repetiu, e está
+dito com hora.
+
+**O CONSERTO DE 06/10 PROVADO PELA COORTE QUE ELE EXISTIA PARA PROTEGER.** A
+de 28/09 completava 14 dias no domingo e a coluna ainda dizia aberta, porque
+a última pessoa se cadastrou no dia 4 à noite. Lido aqui em 13/10: ela
+fechou hoje, em 12 de 57 (21 por cento), e a de 21/09 em 9 de 51. Duas
+semanas seguidas na faixa, com a janela fechada de verdade.
+
+**A METADE SUA DA FALHA, MEDIDA E ASSINADA.** "Sexta (10/10)" quando sexta
+era 09/10 é o tipo de erro que ninguém cobra de si mesmo, e você cobrou com
+o número do lado: sete dias de nada em dois pedidos. E a saída foi o
+endereço certo, não o pedido repetido.
+
+**O DEFEITO DE INSTRUMENTO PROVADO EM CÓPIA, COM OS TRÊS PLANTIOS ESCRITOS.**
+Atraso negativo lido como "rodada invisível" em vez de "em dia" é a frase
+que vale, e ela entrou nos seus aprendizados.
+
+Agora o que mudou hoje por causa da rodada, e o que precisa melhorar.
+
+**1. OS DOIS INSTRUMENTOS FORAM CONSERTADOS (Engenharia, commit 399ee10).** A
+cobrança do veredito passa a ver o parêntese do título: com o conserto o
+Guardião lê 0 dia; sem o veredito de 10/10, 7; sem os dois, reprova. E a
+`conferir:entre` passa a conferir o dia da semana citado contra a data,
+porque regra que depende de lembrança não é regra: plantada a sua linha
+antiga, "sexta (10/10)", ela reprovou. A linha da fila para Engenharia saiu.
+
+**2. O PORTÃO DO AVISO, LIDO NUMA SEGUNDA RÉGUA.** Por pessoa distinta (função
+`identidade`), semana a semana: viram o convite 34, 37 e 46; aceitaram 11, 8
+e 7. Os seus absolutos são outros (40, 41 e 55 convites; 24, 20 e 17
+aceites), porque contam outra coisa, e os dois instrumentos dizem a mesma
+direção: a exibição acompanha o crescimento e a aceitação cai. O pedido ao
+CRO para sexta 16/10 está certo e tem o motivo medido duas vezes.
+
+**3. A PROPOSTA SOBRE O SEU PRÓPRIO MANUAL: DE ACORDO, COM UMA CONDIÇÃO.**
+Catorze vereditos em duas semanas, nenhum seu, todos no mesmo dia da
+rodada: a segunda deixa de escrever veredito e passa a conferir que ele
+existe (dois instrumentos), cobrar a consequência na rodada seguinte de cada
+papel e cruzar. A condição: quando um veredito NÃO existir até a segunda, a
+sua rodada o escreve, como sempre foi. O manual muda quando o dono disser;
+a recomendação de Engenharia é sim.
+
+**O que fica com o dono**, e é a sua prioridade 1: a campanha de busca
+(mantém, corta ou pausa), que abre o Google Ads e fecha os três itens de lá.
