@@ -334,7 +334,13 @@ const diretrizes = ler("docs/agentes/DIRETRIZES.md");
     // tabela de propósito: uma segunda lista de nomes aqui seria regra copiada,
     // que é o erro que a seção 5 deste arquivo existe para pegar.
     const apelido = l.papel.split(/[\s/]/)[0]!;
-    const rodadas = [...diario.matchAll(new RegExp(`^## (\\d{4})-(\\d{2})-(\\d{2}) · ${apelido}`, "gmu"))].map(
+    // O parêntese opcional depois da data (`2026-10-10 (rodada 3) · Guardião`)
+    // é o que DIRETRIZES permite desde 06/10 e o que a conferência da
+    // assinatura, mais abaixo, já aceitava. Aqui não aceitava, e o Guardião
+    // ficou invisível para a cobrança: atraso de MENOS sete dias em 12/10
+    // (achado do Diretor). Rodada invisível nunca reprova; as duas leituras da
+    // mesma convenção têm de ser uma só.
+    const rodadas = [...diario.matchAll(new RegExp(`^## (\\d{4})-(\\d{2})-(\\d{2})(?: \\([^)]*\\))? · ${apelido}`, "gmu"))].map(
       (m) => Date.UTC(+m[1]!, +m[2]! - 1, +m[3]!),
     );
     if (rodadas.length === 0) {

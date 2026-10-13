@@ -66,6 +66,24 @@ for (const linha of texto.split("\n")) {
   if (/^dono$/i.test(para)) problemas.push(`pedido para o dono na linha de ${desde}: vai para acoes-do-dono.md`);
   if (!pedido) problemas.push(`pedido sem texto na linha de ${desde}`);
   if (!porque) problemas.push(`pedido sem o porquê na linha de ${desde}`);
+  // O DIA DA SEMANA CITADO TEM DE BATER COM A DATA (13/10/2026). Em 05/10 o
+  // Diretor escreveu "sexta (10/10)" e "quinta (09/10)" quando sexta era 09/10 e
+  // quinta era 08/10: dono certo, data errada, e dois pedidos ficaram sete dias
+  // parados apontando para um dia que não existe na cadência de quem recebe.
+  // Aceita "sexta 16/10", "sexta (16/10)", "sexta-feira 16/10".
+  const DIAS = ["domingo", "segunda", "terca", "quarta", "quinta", "sexta", "sabado"];
+  const semAcento = (t: string) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const ano = Number(desde.slice(0, 4));
+  for (const m of semAcento(pedido).matchAll(/\b(domingo|segunda|terca|quarta|quinta|sexta|sabado)(?:-feira)?\s*\(?(\d{2})\/(\d{2})\)?/g)) {
+    const dia = Number(m[2]), mes = Number(m[3]);
+    // A data citada pode cair no ano seguinte ao da linha (pedido de dezembro para janeiro).
+    const candidatos = [ano, ano + 1].map((a) => new Date(Date.UTC(a, mes - 1, dia)));
+    const bate = candidatos.some((d) => d.getUTCMonth() === mes - 1 && DIAS[d.getUTCDay()] === m[1]);
+    if (!bate) {
+      const certo = DIAS[new Date(Date.UTC(ano, mes - 1, dia)).getUTCDay()];
+      problemas.push(`dia da semana não bate com a data na linha de ${desde}: "${m[1]} ${m[2]}/${m[3]}" (${m[2]}/${m[3]}/${ano} é ${certo})`);
+    }
+  }
   pedidos.push({ desde, de, para, pedido, porque, dias });
 }
 
