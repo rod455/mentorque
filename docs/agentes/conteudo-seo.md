@@ -55,6 +55,30 @@ impressão: o campo `topPaginas` do coletor passou a existir e vem VAZIO em
 06/10, o que não é a mesma coisa que não existir. Sem ele, a escolha de qual
 guia aprofundar usa a posição da consulta, que é o melhor disponível.
 
+## A fila de gravação: a régua de desfecho do slot (b) (13/10/2026)
+
+O compromisso de 29/09, que o dono endossou, era perguntar se as pautas
+escritas andaram ANTES de escrever a próxima. Perguntado em 13/10, no campo
+`publicadoEm` do pacote `youtube`: o canal não publica desde 19/09, 24 dias, e
+nenhuma das duas pautas foi gravada. A conta inteira, com o que dá e o que não
+dá para concluir de cada uma, está em `docs/conteudo/pautas.md`, na seção "A
+fila de gravação não andou, e metade da causa é minha".
+
+**O resumo que precisa estar aqui, porque é o que eu leio antes da próxima
+rodada:** a Pauta 03 saiu em formato que não pede compra nenhuma (o carro do
+dono e uma chave de boca) e, pela primeira vez, virou LINHA NA LISTA DO DONO.
+**PRÓXIMA LEITURA: 10/11/2026**, três ramos, cada um com ação diferente:
+
+- **gravada e publicada** → o par Short mais aula se confirma, o slot (b)
+  continua, e a próxima pauta se escolhe pela mesma régua desta;
+- **canal sem publicar nada** → o slot (b) PARA de produzir roteiro. O rodízio
+  passa a ser guia e artigo, as três pautas ficam congeladas, e o slot vira
+  plano de cobertura do catálogo, que não depende de ninguém;
+- **canal publicou, mas nenhuma das três pautas** → a causa passa a ser o
+  roteiro, não o canal. O slot (b) vira ajuda no que o dono faz de fato
+  (título, descrição, marcação) e uma pergunta na lista dele: o que no roteiro
+  não serve.
+
 ## A régua da rodada: o que é uma rodada bem feita
 
 Antes de publicar, leia a sua própria rodada contra a lista e **diga no artifact
@@ -139,6 +163,42 @@ trocar essa regra sem o dono ver custa mais do que seis semanas de espera.
 
 ## Aprendizados
 
+- **Roteiro que não vira linha na lista do dono é estoque, e eu levei 42 dias
+  para ver isso (13/10/2026).** DIRETRIZES manda desde 02/10 que recomendação
+  que depende do dono saia da rodada como LINHA NA LISTA DELE, "porque o que
+  depende do dono envelhece calado", e eu lia essa obrigação pensando em
+  credencial e console. Pauta é exatamente isso: ela só existe depois que
+  alguém grava, e as duas primeiras moraram 42 e 21 dias dentro de um arquivo
+  sem contador de idade nenhum. **Toda entrega deste papel que precisa da mão
+  do dono para existir nasce com linha na lista, no mesmo dia, com escopo
+  fechado e com o custo de hoje.** E o irmão da regra: se eu não consigo
+  escrever o escopo fechado em uma linha, a entrega está grande demais para ser
+  gravada.
+
+- **O que eu peço para a câmera é a parte que eu controlo.** A Pauta 01 exige
+  pastilha nova, pastilha gasta e um disco, peças que alguém precisa ir buscar;
+  a 02 exige o carro e um teste. Não tenho instrumento que diga por que elas não
+  foram gravadas (não assisti aos vídeos publicados, e o retrato só traz título,
+  data e views), então a causa fica como candidata e não como conclusão. O que é
+  decisão minha, e não hipótese, é o custo de produção do próximo roteiro: a
+  pauta mais barata possível é a que não pede nada além do que o dono já tem em
+  casa, e é assim que a Pauta 03 foi escrita.
+
+- **Como ler o `populares` sem levar as duas armadilhas (13/10/2026).** O campo
+  da `/api/lessons` (e a consulta direta: `funil_eventos`, evento `viu_aula`,
+  30 dias, `anon_id` distinto por `origem`) é a primeira medida de demanda real
+  por aula, e ela mente de dois jeitos se lida crua:
+  1. **a ordem das nossas telas**, que é o mesmo defeito do atalho do Biela
+     ("atalho não é demanda, é a ordem dos nossos botões"). Confira a posição
+     da aula na trilha: `diy-battery` tem 35 aparelhos sendo a TERCEIRA da
+     trilha, atrás de palhetas com 9 e filtro de ar com 17, então ali a ordem
+     não explica, explica o contrário;
+  2. **a própria vitrine**, porque a linha de populares na tela de Início
+     existe desde 06/10 e se alimenta sozinha. Separe a janela: dos 35, 26 são
+     de antes de 06/10.
+  O limite que fica declarado: `viu_aula` conta abertura, não leitura até o
+  fim, e o evento não diz por onde a pessoa chegou.
+
 - **⚠️ A "lição do canal" de 22 e 29/09 está ERRADA, e a correção é de
   29/09/2026.** Duas rodadas seguidas concluíram, a partir das views do
   YouTube, que existe um padrão de gancho: "vídeo que pega distribuição
@@ -200,10 +260,16 @@ trocar essa regra sem o dono ver custa mais do que seis semanas de espera.
   `fontesExternas.google_ads.termos` no retrato, e `termosSemConversao` é a
   lista de quem clicou e não virou nada, que é ainda mais direta.
 
-- **O Biela já recebeu 46 perguntas de verdade em 12 dias, e o texto delas não
-  é guardado.** `biela_perguntas` conta, mas não armazena o que foi perguntado.
-  Se o dono quiser usar as perguntas reais como pauta, isso é decisão dele
-  (é dado de cliente), e hoje a resposta honesta é: não temos o texto.
+- **O Biela conta, etiqueta, e ainda não guarda o texto (relido em
+  13/10/2026).** `biela_perguntas` ganhou `tema` e `origem` em 29/09, e o
+  retrato de 13/10 traz 140 perguntas em 30 dias, 69 com palavras da pessoa e
+  17 de atalho da tela. Colunas conferidas na tabela: o TEXTO continua não
+  sendo guardado, e usar as perguntas reais como pauta segue sendo decisão do
+  dono, porque é dado de cliente. E o ranking de temas, do jeito que está, não
+  serve para escolher conteúdo: **`outro` é 27 das 69**, o maior balde de
+  todos, com motor em segundo com 23. Não dá para saber se o primeiro lugar de
+  verdade está escondido dentro do `outro`, e isso virou linha na fila para o
+  Analista em 13/10.
 
 - **Ordem do rodízio, para quem chegar depois**: a rodada de 25/08 foi a
   primeira e usou o formato (a), LP de palavra-chave. A sequência combinada

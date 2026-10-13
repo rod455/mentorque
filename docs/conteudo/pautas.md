@@ -17,6 +17,233 @@ Regras que valem para toda pauta deste arquivo:
 
 ---
 
+## A fila de gravação não andou, e metade da causa é minha (13/10/2026)
+
+Antes de escrever a terceira pauta, a pergunta que eu me comprometi em 29/09 a
+fazer: as duas primeiras andaram? Não, e aqui está medido com o instrumento e a
+hora.
+
+**O canal não publica desde 19/09.** Lido no pacote `youtube` do retrato de
+13/10 (coleta das 9h), campo `publicadoEm` dos vídeos recentes: o mais novo é
+de 19/09/2026, então são 24 dias sem publicação. Limite do instrumento, dito
+porque ele existe: o pacote lista 10 vídeos e o campo `totalVideos` diz 9, e eu
+não sei qual dos dois está certo; isso não muda a data do mais recente, que é o
+que esta leitura usa.
+
+**Sobre a Pauta 01 dá para concluir. Sobre a 02 não.** A 01 foi escrita em
+01/09, e entre 01/09 e 19/09 saíram NOVE vídeos (dois em 03/09, um em 10/09, um
+em 17/09 e cinco em 19/09). Nenhum deles era ela. Isso é uma janela em que a
+câmera estava ligada e o roteiro não foi escolhido, o que é informação. A 02 é
+de 22/09 e desde então o canal não publicou nada: ela nunca teve uma janela
+dessas, então quem disser por que ela não foi gravada está inventando.
+
+**Duas causas candidatas, nenhuma provada, e o round age nas duas porque as
+duas são baratas de atacar.**
+
+1. **O que eu peço para a câmera.** A Pauta 01 exige pastilha nova, pastilha
+   gasta e um disco, ou seja, peças que alguém precisa ir buscar. A 02 exige o
+   carro e o teste de empurrar o canto. Eu não assisti aos vídeos publicados e
+   o retrato só traz título, data e views, então NÃO afirmo nada sobre a
+   produção deles; o que eu sei de verdade é a produção que as minhas pautas
+   cobram, porque fui eu que escrevi. Pela régua de "produção que o canal já
+   demonstrou", a pauta mais barata possível é a que não pede nada além do que
+   o dono já tem em casa.
+2. **Nenhuma das duas virou linha na lista do dono, e isso é falha minha
+   contra uma regra escrita.** DIRETRIZES, obrigação 3, desde 02/10:
+   recomendação que depende do dono sai da rodada como LINHA NA LISTA DELE, e
+   não vale explicar no diário nem no artifact, "porque o que depende do dono
+   envelhece calado". As duas pautas moraram só neste arquivo, 42 e 21 dias,
+   sem contador de idade. Corrigido hoje: a Pauta 03 entra na lista com escopo
+   fechado.
+
+**A régua de desfecho, escrita antes de reler. PRÓXIMA LEITURA: 10/11/2026**,
+no mesmo campo `publicadoEm` do pacote `youtube`.
+
+| se em 10/11 | então |
+|---|---|
+| **a Pauta 03 foi gravada e publicada** | o par Short mais aula se confirma como o formato do slot (b), e a próxima pauta se escolhe pela mesma régua desta: demanda medida no catálogo, produção que não exige compra, e linha na lista no mesmo dia |
+| **o canal não publicou nada** | o slot (b) do rodízio PARA de produzir roteiro. O rodízio passa a ser guia e artigo, as três pautas ficam congeladas onde estão, e o papel gasta o slot no plano de cobertura do catálogo, que não depende de ninguém. Três roteiros parados é estoque, e estoque é o que esta seção existe para não repetir |
+| **o canal publicou, mas nenhuma das três pautas** | a causa deixa de ser o canal e passa a ser o roteiro. O papel para de escrever Short e o slot (b) vira ajuda no que o dono faz de fato (título, descrição e marcação do que ele já gravou), mais UMA pergunta na lista dele: o que no roteiro não serve |
+
+---
+
+## Pauta 03 · Qual cabo da bateria soltar primeiro
+
+**Formato**: Short vertical (9:16), 40 a 55 segundos.
+**Trilha de destino**: Faça Você Mesmo (gratuita). Não é aula nova: o vídeo
+entra na aula `diy-battery`, que já existe e está esperando por ele desde
+01/09.
+**Status**: pronta para gravar. Não gravada.
+**Precisa comprar**: nada. O carro do dono, uma chave de boca 10mm.
+
+### Por que esta, e por que agora
+
+Três instrumentos, e os três apontam para a mesma aula.
+
+- **É a aula mais aberta do catálogo que ainda não tem vídeo.** Lido no banco
+  em 13/10, pela mesma consulta que alimenta o campo `populares` da
+  `/api/lessons` (evento `viu_aula`, 30 dias, aparelhos distintos):
+  `diy-battery` tem **35 aparelhos**, segundo lugar entre todas as aulas. A
+  única que está na frente dela, `vid-manual-habitos` com 64, já tem vídeo.
+- **E a ordem das nossas telas não explica esse número, que é a armadilha
+  óbvia.** Na trilha Faça Você Mesmo a bateria é a TERCEIRA, atrás de palhetas
+  (9 aparelhos) e filtro de ar (17). O terceiro item tem quase quatro vezes o
+  primeiro. A segunda armadilha também foi conferida: a linha de populares na
+  tela de Início só existe desde 06/10, e 26 dos 35 aparelhos são de antes
+  dessa data, então não é a nossa própria vitrine se alimentando. O que
+  sobra é escolha de quem abriu.
+- **A casa já tinha escolhido esta, por outro motivo, em 01/09.** O
+  `videos-a-gravar.md` diz, no fim: "se você gravar só uma, grave a da
+  bateria", pelo argumento de que a ordem dos polos é o que texto explica e
+  imagem grava. O argumento era de segurança; agora a audiência concorda com
+  ele, e são dois caminhos diferentes chegando no mesmo lugar.
+- **O assunto passa na régua do Short**: um fenômeno que quase todo mundo já
+  viu (a faísca embaixo do capô), UMA coisa concreta para fazer, nenhuma
+  estrutura de triagem, e nada de nicho, porque todo carro tem bateria.
+- **Alimenta o guia de busca que já está no ar**,
+  `/bateria-do-carro-descarregando`, que é da única família de consultas de
+  categoria que o site registrou.
+
+O que este Short NÃO é: o passo a passo da troca. Ele é o reforço do passo
+mais crítico, que é a decisão do dono de 01/09 sobre as sete aulas ("o vídeo
+volta como REFORÇO, não como a entrega: o `body` não se apaga").
+
+### O gancho
+
+> "Essa chave encostando na lataria pode dar um curto violento. Ou
+> absolutamente nada. A diferença é qual cabo você soltou primeiro."
+
+### A ideia única
+
+O cabo negativo não leva energia: ele é o caminho de VOLTA, e quem faz esse
+caminho é a lataria inteira do carro. Com o negativo desligado, a lataria para
+de ser fio, e aí uma ferramenta que escapa e bate no metal não fecha circuito
+nenhum. É por isso que o negativo sai primeiro e entra por último.
+
+Uma ideia só. Nada de "os sete passos para trocar a bateria": a lista é da
+aula, onde quem lê está procurando o caso dele.
+
+### Roteiro
+
+**0 a 6s, o gancho**
+> Essa chave encostando aqui pode dar um curto violento. Ou nada. Depende de
+> qual cabo eu soltei primeiro.
+
+*Na tela*: a chave de boca na mão, a bateria do carro em foco ao fundo.
+
+**6 a 18s, o que o cabo negativo faz**
+> O negativo não leva energia. Ele é o caminho de volta. Ele liga a bateria na
+> lataria do carro, e a lataria inteira trabalha como fio.
+
+*Na tela*: o dedo seguindo o cabo do negativo até onde ele aparafusa na
+carroceria ou no motor.
+
+**18 a 32s, por isso a ordem**
+> Então eu solto o negativo primeiro. A partir daqui a lataria não é caminho de
+> volta de nada. Se a chave escapar da minha mão e bater no metal, não fecha
+> circuito nenhum. Invertendo a ordem é que sai faísca.
+
+*Na tela*: a porca do borne negativo sendo solta, o cabo afastado e apoiado
+longe do metal.
+
+**32 a 45s, a volta, a marcação e a única ação**
+> Na hora de montar é o contrário: o negativo entra por último, pelo mesmo
+> motivo. E não vá pela cor do cabo, que muda de carro para carro: vá pela
+> marcação no borne. Menos é menos.
+
+*Na tela*: cartela com "negativo sai primeiro, entra por último", e um close na
+marcação (+) e (−) em cima da bateria.
+
+**45 a 55s, o fecho**
+> Vale toda vez que você for desligar a bateria: trocar, limpar o borne, deixar
+> o carro parado muito tempo. O passo a passo inteiro da troca está no app, de
+> graça.
+
+*Na tela*: `mentorque.com.br/bateria-do-carro-descarregando`.
+
+### O que precisa aparecer
+
+| Precisa | Por quê |
+|---|---|
+| A bateria do próprio carro, com os dois bornes visíveis | É o plano do vídeo inteiro, e não precisa comprar nada |
+| A marcação (+) e (−) em close | É o que substitui a cor do cabo, que não é confiável |
+| A chave de boca na porca do negativo | É a única ação do vídeo, e precisa ser vista |
+| A cartela com a frase | É o que a pessoa leva, e ela cabe em quatro palavras |
+
+Nada para comprar, nada para desmontar, uma ferramenta.
+
+### Cuidados
+
+- **Anel, relógio e pulseira fora antes de gravar.** Metal no dedo encostando
+  no borne é o acidente comum de verdade, e um vídeo sobre curto não pode dar o
+  exemplo errado na imagem.
+- **Não grave a demonstração ao contrário, nem "só para mostrar".** Ferramenta
+  no positivo com o negativo ligado não entra neste vídeo de jeito nenhum. A
+  ideia se entende pela frase; a faísca não precisa existir.
+- **A bateria é a do próprio carro e não é nova.** O roteiro fala em DESLIGAR a
+  bateria, nunca em trocar, e nenhuma imagem pode dar a entender que houve
+  troca.
+- **O código do rádio.** Desligar o negativo zera relógio, rádio e às vezes a
+  memória do vidro elétrico em alguns carros. Duas saídas, e as duas são
+  honestas: tenha o código à mão e grave soltando o cabo de verdade (melhor
+  imagem), ou grave só até a porca sendo solta, sem retirar o cabo, e diga na
+  narração que a bateria não foi desligada (zero risco, imagem mais fraca).
+- **Nada de certeza fechada sobre cor.** Preto para negativo é o comum, não é
+  lei, e o vídeo diz isso em voz alta porque é justamente onde alguém se
+  machuca.
+- **Nada de chupeta aqui.** Cabo de chupeta tem a sua própria ordem e não cabe
+  em 50 segundos junto com esta. Fica para outro vídeo.
+- **Nenhum preço de bateria**, nem no vídeo nem na descrição.
+
+### Texto do YouTube
+
+**Título** (na ordem de preferência):
+
+1. Qual cabo da bateria soltar primeiro
+2. A ordem que evita a faísca embaixo do capô
+3. O cabo preto não leva energia, e é por isso que ele sai primeiro
+
+**Descrição**:
+
+> O cabo negativo não leva energia: ele é o caminho de volta, e quem faz esse
+> caminho é a lataria inteira do carro. Com ele desligado, a lataria deixa de
+> ser fio e uma ferramenta que escapa não fecha circuito. É por isso que o
+> negativo sai primeiro e entra por último, e por isso que inverter a ordem é
+> o jeito mais comum de fazer faísca embaixo do capô.
+>
+> E uma coisa que quase ninguém fala: não vá pela cor do cabo, que muda de
+> carro para carro. Vá pela marcação no borne.
+>
+> Quando a bateria arria: por que ela descarrega, como testar antes de trocar e
+> quando o problema é o alternador:
+> https://www.mentorque.com.br/bateria-do-carro-descarregando
+>
+> Mentorque é um app para você entender o seu carro e chegar na oficina
+> sabendo o que perguntar. Grátis para começar, no Android e no iPhone.
+
+**Tags**: bateria do carro, trocar bateria, polo negativo, curto embaixo do
+capô, borne da bateria, manutenção de carro, mecânica para leigos, mentorque
+
+### Depois de publicar
+
+Não entra aula nova: a aula existe. São duas linhas em
+`lib/app/conteudo/aulas.ts`, na `diy-battery`, exatamente como o
+`videos-a-gravar.md` descreve:
+
+1. Trocar `type: "article"` de volta para `type: "video"`.
+2. Acrescentar o `media`:
+
+```ts
+media: { provider: "youtube", src: "COLE_O_ID_AQUI", vertical: true },
+```
+
+**Não apague o `body`.** O artigo é o passo a passo completo e o vídeo é o
+reforço do passo crítico; a tela foi feita para os dois conviverem. E o bloco
+"A ordem que evita susto" da aula já é a fonte do texto do roteiro, então os
+dois não vão se contradizer.
+
+---
+
 ## O que a audiência do canal ensinou (22/09/2026)
 
 Até aqui estas pautas foram escritas no escuro: o canal tinha 0 view e não

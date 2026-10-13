@@ -21,11 +21,22 @@ reforço, não como a única entrega.
 
 ## A ordem, e o porquê de cada posição
 
+**A ordem mudou em 13/10/2026, e o motivo é medição.** Até aqui ela era por
+facilidade de gravar, que era o único critério disponível em 01/09. Agora
+existe demanda medida por aula: a consulta que alimenta o campo `populares` da
+`/api/lessons` (evento `viu_aula`, 30 dias, aparelhos distintos) foi lida no
+banco em 13/10 e **`diy-battery` tem 35 aparelhos, contra 17 do filtro de ar e
+9 das palhetas**. O terceiro da lista antiga tinha quase quatro vezes a
+audiência do primeiro, e a ordem da nossa própria trilha não explica isso,
+porque nela a bateria também vinha depois das outras duas. Então a bateria
+passa a ser a primeira. As palhetas continuam sendo o mais fácil de gravar, e
+isso segue escrito na linha delas.
+
 | # | Aula | Sistema | Por que nesta posição |
 |---|---|---|---|
-| 1 | **Trocar as palhetas do limpador** (`diy-wipers`) | elétrica | É o vídeo mais fácil de gravar de todos: dura minutos, não precisa levantar o carro, não precisa de oficina, e o resultado aparece na imagem. Bom primeiro vídeo para acertar enquadramento e ritmo com risco zero. |
-| 2 | **Trocar o filtro de ar** (`diy-airfilter`) | motor | Segundo mais fácil, e resolve uma confusão real: quase todo mundo troca filtro de ar do motor achando que é o de cabine, ou o contrário. Mostrar os dois lugares no mesmo vídeo vale mais que o passo a passo. |
-| 3 | **Trocar a bateria** (`diy-battery`) | elétrica | A ordem dos polos (negativo sai primeiro, entra por último) é a coisa que texto explica e imagem GRAVA na cabeça. É o melhor argumento de vídeo da lista. |
+| 1 | **Trocar a bateria** (`diy-battery`) | elétrica | A mais aberta do catálogo entre as que não têm vídeo (35 aparelhos em 30 dias, lido em 13/10), e a ordem dos polos (negativo sai primeiro, entra por último) é a coisa que texto explica e imagem GRAVA na cabeça. Tem roteiro pronto: Pauta 03 em `pautas.md`, 40 a 55 segundos, sem precisar comprar nada. |
+| 2 | **Trocar as palhetas do limpador** (`diy-wipers`) | elétrica | É o vídeo mais fácil de gravar de todos: dura minutos, não precisa levantar o carro, não precisa de oficina, e o resultado aparece na imagem. Bom vídeo para acertar enquadramento e ritmo com risco zero. |
+| 3 | **Trocar o filtro de ar** (`diy-airfilter`) | motor | Segundo mais fácil, e resolve uma confusão real: quase todo mundo troca filtro de ar do motor achando que é o de cabine, ou o contrário. Mostrar os dois lugares no mesmo vídeo vale mais que o passo a passo. |
 | 4 | **Como usar seu scanner OBD2** (`obd2-scan`) | motor | Casa com a porta de entrada do app, que é diagnóstico, e é o único da lista que mostra tela em vez de peça. Grava rápido e serve de isca para quem chegou pela luz do painel. |
 | 5 | **Como trocar o óleo** (`oil-change`) | motor | O mais buscado da lista, e o mais trabalhoso de gravar: precisa de carro no cavalete, óleo escorrendo e tempo real de dreno. Vale a produção, mas não é o primeiro. |
 | 6 | **Trocar a pastilha de freio** (`brake-pads`) | freios | Único premium da lista, e o de maior responsabilidade: erro em freio não perdoa. Só gravar com bancada boa, cavalete de verdade e sem pressa. |
@@ -63,4 +74,6 @@ as sete.
 
 Grave a da bateria (`diy-battery`). É a única da lista em que a ordem certa
 evita uma faísca de verdade embaixo do capô, e é a que mais ganha em ser
-vista em vez de lida.
+vista em vez de lida. O roteiro de 40 a 55 segundos está pronto na Pauta 03
+de `pautas.md`: o carro que você já tem, uma chave de boca 10mm, nada para
+comprar.

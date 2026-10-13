@@ -3,6 +3,75 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-13 · Conteúdo: a fila de gravação não andou, e a terceira pauta nasce barata e com contador de idade
+
+- Artifact "Conteúdo da semana": https://claude.ai/artifact/YE23xabNQJrUNixiPgsras
+- Rodada abriu pela fila entre papéis (nada para Conteúdo) e pelo compromisso de
+  29/09: perguntar se as duas pautas andaram ANTES de escrever a terceira.
+- **Perguntado no instrumento, e a resposta é não.** Campo `publicadoEm` do
+  pacote `youtube` no retrato de 13/10 (coleta das 9h): o vídeo mais novo do
+  canal é de 19/09, **24 dias sem publicar**, e nenhuma das duas pautas foi
+  gravada. Limite declarado: o pacote lista 10 vídeos e o campo `totalVideos`
+  diz 9, e eu não sei qual está certo; não muda a data do mais recente.
+- **Sobre a Pauta 01 dá para concluir algo, sobre a 02 não.** A 01 é de 01/09 e
+  entre 01/09 e 19/09 saíram NOVE vídeos (2 em 03/09, 1 em 10/09, 1 em 17/09,
+  5 em 19/09), nenhum era ela: janela com a câmera ligada e o roteiro não
+  escolhido. A 02 é de 22/09 e desde então o canal não publicou nada, então
+  quem disser por que ela não foi gravada está inventando. Ausência responde o
+  quê, nunca o porquê.
+- **DUAS CAUSAS CANDIDATAS, NENHUMA PROVADA, e a rodada age nas duas porque as
+  duas são baratas.** (1) O que eu peço para a câmera: a 01 exige pastilha
+  nova, pastilha gasta e um disco, peças que alguém vai buscar, e a 02 exige o
+  carro. Não assisti aos vídeos publicados e o retrato só traz título, data e
+  views, então não afirmo nada sobre a produção deles. (2) **Nenhuma das duas
+  virou linha na lista do dono, e isso é falha minha contra regra escrita**:
+  DIRETRIZES, obrigação 3, desde 02/10. As duas moraram só num arquivo, 42 e
+  21 dias, sem contador de idade.
+- ENTREGA, formato (b): **Pauta 03, qual cabo da bateria soltar primeiro**
+  (`docs/conteudo/pautas.md`). Short de 40 a 55 segundos, ideia única (o
+  negativo é o caminho de volta e a lataria é o fio, então ele sai primeiro e
+  entra por último), e produção que não pede nada comprado: o carro do dono e
+  uma chave de boca 10mm. Não é aula nova: o vídeo entra na `diy-battery`, que
+  espera por ele desde 01/09, em duas linhas.
+- **A ESCOLHA DA AULA SAIU DE TRÊS INSTRUMENTOS, com as duas armadilhas
+  conferidas.** Lido no banco em 13/10 pela mesma consulta do campo `populares`
+  da `/api/lessons` (`viu_aula`, 30 dias, aparelhos distintos): `diy-battery`
+  tem **35 aparelhos**, 2º lugar entre todas as aulas e 1º entre as que não têm
+  vídeo (a única na frente, com 64, já tem). Armadilha 1, a ordem das nossas
+  telas: na trilha ela é a TERCEIRA, atrás de palhetas (9) e filtro de ar (17),
+  então a nossa ordem explica o contrário. Armadilha 2, a própria vitrine: a
+  linha de populares no Início só existe desde 06/10 e 26 dos 35 são de antes.
+  E a casa já tinha escolhido esta em 01/09, por segurança, no
+  `videos-a-gravar.md`, cuja ordem foi corrigida hoje com a medição ao lado.
+- **RÉGUA DE DESFECHO ESCRITA ANTES, leitura em 10/11**, no mesmo
+  `publicadoEm`, com três ramos de ação diferente: gravada → o slot de pauta
+  continua; canal sem publicar nada → **o slot PARA de produzir roteiro** e
+  vira plano de cobertura do catálogo; publicou mas nenhuma das três → a causa
+  passa a ser o roteiro, e o slot vira ajuda no que ele já grava mais uma
+  pergunta na lista dele.
+- SAIU DA RODADA PARA OUTRAS MÃOS: linha na lista do dono (destino `youtube`,
+  gravar o Short, escopo fechado, conferido antes de pedir que nada foi
+  publicado desde 19/09) e linha na fila para o Analista (o tema `outro` é 27
+  das 69 perguntas escritas ao Biela em 30 dias, o maior balde; a tabela
+  `biela_perguntas` tem `tema` e `origem` desde 29/09 e continua sem guardar o
+  texto, e guardar texto é decisão do dono por ser dado de cliente).
+- O QUE EU NÃO DECIDI DE PROPÓSITO: a busca tem número novo (1 clique e 21
+  impressões em 28 dias, contra 1 e 38 em 06/10; o clique continua sendo da
+  consulta de marca `mentorque`, zero em categoria; as quatro consultas de
+  categoria estão em 72, 76, 88 e 89, mediana 82 contra 71 em 06/10). **A
+  leitura continua marcada para 03/11**, porque mexer na régua no dia em que o
+  número piorou é o oposto do que ela existe para fazer. Fica dito que não está
+  andando para o lado bom. E `topPaginas` segue vazio com "Forbidden": o
+  conserto está na lista do dono desde 06/10, há 7 dias, e eu não repito o
+  pedido.
+- RÉGUA DA RODADA: 1, 2, 3, 4, 5 e 9 cumpridos; 6, 7 e 8 não se aplicam a
+  rodada de pauta (não há página nova, metadado de busca nem âncora). O que
+  esta rodada não entrega, dito de frente: nada indexável, e nenhum dos quatro
+  sintomas que faltam no plano de cobertura, cuja primeira data é 27/10.
+- `npm run conferir` verde. Próximas: (1) 20/10, guia, aprofundando a página de
+  melhor posição, e a escolha de qual depende do `topPaginas`; (2) 27/10,
+  artigo de direção pesada, primeira das quatro do plano de cobertura.
+
 ## 2026-10-13 · Engenharia: a rodada do Diretor lida contra o banco, e os dois instrumentos que ela apontou consertados
 
 - Dono: "veja o que o diretor falou ontem e o que devemos mudar". O retorno
