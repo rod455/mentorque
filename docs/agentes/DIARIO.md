@@ -3,6 +3,34 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-13 · Engenharia: nove vídeos novos do canal viraram aulas do app
+
+- Pedido do dono, com print do YouTube Studio: "consegue achar esses vídeos do
+  canal para colocarmos no app?". Achados pela API do canal (credencial
+  "YouTube account" do n8n, lista de envios com `mine=true`, lida às 23h15
+  UTC): **14 envios em 13/10, entre 21h05 e 21h36 UTC, todos não listados.**
+- **Nove são assuntos novos e entraram no catálogo**, com o corpo escrito a
+  partir da legenda automática de cada vídeo: ECU mede ou calcula, siglas dos
+  híbridos, contrapressão no turbo, Virtus contra Astra, partida a frio com
+  etanol, potência contra velocidade máxima, mola e transferência de carga,
+  dois tempos contra quatro tempos e a PME do Onix contra o GT-R. Vídeo não
+  listado toca dentro do app (as oito aulas de 28/08 já são assim). Entram
+  por deploy do site, sem build, pelo catálogo remoto.
+- **Cinco são reenvios de aulas que já existem** (200 cv, carbonização,
+  elétrico 1 e 2), com a mesma duração e a mesma fala. A parte 2 subiu DUAS
+  vezes (`JHaKoMXWxYc` e `8svGg_ctaIE`, legenda idêntica). O app segue com os
+  ids de 28/08; trocar só se o dono quiser apontar para os novos.
+- **Sem capa**: os quadros automáticos do YouTube são cenas do meio do vídeo e
+  destoariam da arte das outras aulas. O card mostra o ícone até a arte
+  chegar; ela entra em `public/learn/<id>.png` com o endereço completo do site
+  no `thumb`.
+- Os três fluxos temporários do n8n usados para ler a lista, as legendas e as
+  capas foram arquivados no fim.
+- Aviso deixado no manual do Conteúdo: a régua de 10/11 lê `publicadoEm`, e o
+  coletor enxerga vídeo não listado. Publicado ali é público.
+- `npm run conferir` e `conferir:navegador telas` verdes; catálogo com 118
+  aulas, 56 com vídeo.
+
 ## 2026-10-13 · Engenharia: o que o papel de Conteúdo precisa evoluir, com data em cada ponto
 
 - Pedido do dono: "dê os feedbacks para o que precisamos evoluir". Escrito em

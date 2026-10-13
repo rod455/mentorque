@@ -74,6 +74,11 @@ dono e uma chave de boca) e, pela primeira vez, virou LINHA NA LISTA DO DONO.
 - **canal sem publicar nada** → o slot (b) PARA de produzir roteiro. O rodízio
   passa a ser guia e artigo, as três pautas ficam congeladas, e o slot vira
   plano de cobertura do catálogo, que não depende de ninguém;
+  **Cuidado ao ler (13/10, à noite):** o dono subiu 14 vídeos NÃO LISTADOS
+  no canal em 13/10, entre 21h05 e 21h36 UTC, e nove viraram aulas do app.
+  O coletor lê os envios com a credencial do dono, então não listado aparece
+  como vídeo novo em `recentes`. "Publicado" nesta régua é vídeo PÚBLICO;
+  confira a visibilidade antes de escolher o ramo;
 - **canal publicou, mas nenhuma das três pautas** → a causa passa a ser o
   roteiro, não o canal. O slot (b) vira ajuda no que o dono faz de fato
   (título, descrição, marcação) e uma pergunta na lista dele: o que no roteiro
