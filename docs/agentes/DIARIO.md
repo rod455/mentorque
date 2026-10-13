@@ -3,6 +3,27 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-13 · Engenharia: o canal inteiro contra o catálogo, e seis vídeos que estavam fora do app
+
+- Pedido do dono: "veja se tem algum lá e não estava". A primeira leitura
+  parava nos 50 envios mais novos; com paginação, o canal tem **67 envios**
+  (API do canal, 23h38 UTC). Comparados um a um com os `src` do catálogo.
+- **Seis estavam no canal e fora do app**, nunca citados no repositório:
+  - os cinco Shorts PÚBLICOS de 19/09, inclusive o mais visto do canal ("A
+    pergunta que muda a conversa na oficina", 1.910 views no retrato de
+    13/10). Viraram cinco aulas novas, com o corpo tirado da legenda: o
+    orçamento detalhado, a poça embaixo do carro, a regra dos 70% depois da
+    E32, a pressão da etiqueta contra o número do pneu e a viagem para a
+    serra (esta conversa com a `vid-altitude`, que já existia com outro
+    vídeo, e acrescenta o limite do turbo);
+  - um não listado de 10/08, o passo a passo de ler o código com o leitor
+    OBD2. Era exatamente o vídeo que a aula `obd2-scan` esperava (quarta da
+    lista de `videos-a-gravar.md`), e foi ligado nela.
+- Fora do app de propósito, só os cinco reenvios de 13/10 (já descritos na
+  entrada abaixo).
+- Catálogo: 123 aulas, 62 com vídeo. Sem capa nas cinco novas, pelo mesmo
+  motivo do lote de hoje.
+
 ## 2026-10-13 · Engenharia: nove vídeos novos do canal viraram aulas do app
 
 - Pedido do dono, com print do YouTube Studio: "consegue achar esses vídeos do
