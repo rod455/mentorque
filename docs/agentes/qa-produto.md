@@ -309,6 +309,36 @@ recomendar.
   dá e o servidor joga fora, em silêncio, porque a rota trata o conflito como
   sucesso de propósito. Ao achar um caminho bloqueado, procure a SEGUNDA
   tranca antes de escrever o conserto.
+- **Metade de um conserto no ar é pior que nenhuma, porque a metade publicada
+  parece conserto.** Em 14/10 o conserto do quiz do dia 1 tinha o índice novo
+  no banco (visível, conferível, verdadeiro) e o app esperando a 3.2. Quem
+  olhasse só o banco diria "está consertado". Ao reconferir qualquer conserto,
+  compare TRÊS coisas e não duas, e a terceira é a que engana: a data do
+  conserto, a versão PUBLICADA, e o que o conserto precisa de cada lado. Um
+  conserto que mexe em banco e em app tem duas datas de entrega, e a frase
+  honesta é "a parte do banco está no ar, a do app não".
+- **Plantar defeito acha defeito na própria asserção, e aconteceu duas vezes no
+  mesmo dia.** Na primeira, eu testava `Number(x)` contra
+  `typeof x === "number"` passando o campo AUSENTE, e `Number(undefined)` já é
+  `NaN`: o plantio passava verde porque a entrada não separava as duas formas.
+  O único valor que separa é `null`. Na segunda, o defeito plantado fazia a
+  função LANÇAR em vez de devolver o valor errado, e script derrubado não
+  imprime FALHA nenhuma; sai com código 1, então a bateria pega, mas a linha
+  não diz qual regra caiu. **Escolha a entrada que separa exatamente as duas
+  implementações, e envolva a chamada num `try` para o lançamento virar a
+  reprovação da regra.** Consertar a asserção é melhor que apagá-la.
+- **O motor cobra a regra de alçada sozinho, e vale ouvir.** `create or replace
+  view` do Postgres recusa coluna nova no meio ("cannot change name of view
+  column"): aditivo de verdade só entra no fim. Quando a plataforma recusa uma
+  mudança que eu achava aditiva, a recusa costuma descrever a regra melhor do
+  que eu descrevi.
+- **Zero cuja fonte é uma restrição do banco só repete a restrição.** Correção
+  do dono sobre a minha manchete de 07/10: com unicidade em `(dia, aparelho)`,
+  aquela tabela não conseguia ter outro número ali, então o "0 de 314" era
+  verdadeiro e não provava comportamento nenhum. O critério 12 (quem escreve
+  esse número?) vale para a MINHA manchete, não só para os zeros dos outros. O
+  número que mede o estrago estava na mesma tabela, e era a distância entre
+  voltar ao app e fazer o quiz.
 - **Dinheiro tem hora, e a hora dele não é a hora do evento.** Na venda o
   pagamento acontece ANTES do evento (a sessão do checkout já chega com
   `amount_total` resolvido); na renovação ele acontece UMA HORA DEPOIS (o ciclo
@@ -433,20 +463,25 @@ fila, com dado de produção pela primeira vez.
   conserto virou proposta, porque mexe em unicidade de tabela. **Decidido
   em 08/10 (caminho B, Engenharia, commit bd95618)**: a resposta do
   onboarding virou estudo, o índice ganhou a pergunta e nasceu `abriu_quiz`.
-  **Reconferir na próxima rodada**, com as três asserções da proposta (estão
-  em `verifica-quiz.ts`, e a primeira reprovou sobre o código de 07/10 antes
-  do conserto) e com a leitura de `abriu_quiz` por `origem`. Ficou de fora:
-  o `drop` do índice antigo, que está na lista do dono.
+  **RECONFERIDO em 14/10**: o índice antigo CAIU (o dono clicou) e o novo
+  `(dia, anon_id, pergunta_id)` está de pé, conferido no catálogo do Postgres.
+  As quatro asserções do conserto foram plantadas por mim e as quatro mordem,
+  inclusive a primeira, que olha quem usa a regra. **CONTINUA ABERTO por um
+  motivo só**: o conserto viaja na 3.2 e a 3.2 não foi publicada, então o muro
+  segue de pé para quem instala, e o `abriu_quiz` tem zero ocorrências porque o
+  escritor não está em binário nenhum. Quando a 3.2 subir, a reconferência fica
+  com comportamento em vez de caminho de código. Até lá, o número que mede o
+  estrago é 22% voltando ao app contra 2% fazendo o quiz.
 - **A recuperação de senha, depois que o dono escolher o desenho.** O achado
   de 16/09 tem patch pronto em `docs/agentes/propostas/`; o que falta é a
   decisão entre deep link e web. Escolhida a saída, o resto é pequeno e volta
   para cá.
-- **A linha do AdMob no retrato não é zero medido** (achado de 07/10, não é
-  meu conserto): o pacote bruto traz `porDia: []` e uma nota do coletor
-  dizendo "sem linhas do app do Mentorque no periodo", e o retrato publica
-  "0.00 USD" descartando a nota, enquanto o `play_console` no mesmo retrato
-  trata a situação idêntica do jeito certo. O renderizador mora no n8n: é do
-  Analista. Se não for consertado até a próxima rodada, nomear de novo.
+- ~~**A linha do AdMob no retrato não é zero medido**, e o renderizador é do
+  Analista.~~ **A METADE NOSSA FOI FEITA em 14/10**, depois de uma semana sem
+  conserto: a frase pronta nasce em `linhaDeAnuncio`, sai por `anuncioLegivel`
+  na rota de dados e a conferência cobra, com seis plantios. Falta um passo no
+  n8n: imprimir a frase que chega pronta em vez de montar a linha à mão. Mesma
+  pendência que a linha de coorte teve em 28/09, e ela foi resolvida assim.
 - **Quiz de saúde** é a próxima varredura (irmão não varrido do quiz diário),
   mais catálogo remoto de aulas e campos de formulário.
 - **Quiz diário** (novo em 26-27/08, nunca varrido por QA): banco de 63

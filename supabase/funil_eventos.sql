@@ -203,9 +203,45 @@ select
     when (select count(*) from public.funil_eventos f
             where f.user_id = s.user_id and f.evento = 'assinou') > 1 then 'evento assinou DUPLICADO'
     else 'ok'
-  end as veredito
+  end as veredito,
+  -- VENDA DE LOJA, coluna acrescentada em 14/10/2026 (QA), e o `veredito` acima
+  -- ficou INTACTO de propósito, porque a rota e o painel já o leem.
+  --
+  -- POR QUE ELA EXISTE. O `veredito` nasceu em 02/09, quando venda de loja não
+  -- existia, e o único identificador que ele conhece é o do Stripe: sem ele,
+  -- ele responde "cortesia, nao e venda". Em 14/10 a ÚNICA assinatura ativa do
+  -- produto é uma venda de Play de verdade (a de 25/09, recuperada em 03/10),
+  -- com evento `assinou` de origem `revenuecat`, e a conferência obrigatória do
+  -- dinheiro a chamava de cortesia. Rótulo errado no único cliente pagante que
+  -- existe, e errado para o lado que parece calmo.
+  --
+  -- E O PONTO CEGO QUE ELA ABRE CAMINHO PARA FECHAR, que é DEDUZIDO do código e
+  -- não observado: `lojaConferida` conta "assinatura de loja no banco" como
+  -- linha ativa SEM id do Stripe (lib/operacao.ts), o que inclui cortesia dada
+  -- na mão. Uma cortesia mais uma venda de loja perdida dá o mesmo total que
+  -- uma venda de loja presente: RevenueCat 1 e banco 1, "batem", e a pessoa que
+  -- pagou fica sem Premium em silêncio. Hoje a leitura está certa por sorte,
+  -- porque só existe uma linha ativa e ela é a venda.
+  --
+  -- A RAIZ é que `subscriptions` não tem campo dizendo que a assinatura veio da
+  -- loja; esta coluna deduz isso do evento, que é o melhor que dá para fazer sem
+  -- mexer no webhook da cobrança. O campo de verdade é recomendação, não alçada
+  -- do QA (ver o diário de 14/10).
+  exists (select 1 from public.funil_eventos f
+            where f.user_id = s.user_id and f.evento = 'assinou'
+              and f.origem = 'revenuecat') as venda_de_loja
 from public.subscriptions s
 where s.status in ('active', 'trialing');
+
+-- Ensaiada no banco em 14/10/2026, antes de entrar aqui: a view devolveu
+-- `cortesia_manual` true, `venda_de_loja` true e `veredito` "cortesia, nao e
+-- venda" para a mesma linha, que é o retrato exato do rótulo errado.
+--
+-- E O POSTGRES COBROU A REGRA ADITIVA SOZINHO: a primeira tentativa punha a
+-- coluna no meio e ele recusou com "cannot change name of view column". Em
+-- `create or replace view`, coluna nova só entra no FIM. Vale guardar: a regra
+-- de alçada do QA (aditivo é o que não remove nem renomeia) tem o motor
+-- obrigando.
 
 revoke all on public.assinaturas_conferencia from anon, authenticated;
 grant select on public.assinaturas_conferencia to service_role;

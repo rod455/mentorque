@@ -3,6 +3,113 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-14 · QA: o conserto do dia 1 está pronto no banco e esperando a 3.2, e a conta do dinheiro chamava a venda de cortesia
+- Artifact "QA da semana":
+  https://claude.ai/artifact/213CXGYSb5v6qoZsJYLqNp
+- VARREDURA: **reconferência do quiz diário**, que o dono pôs na frente do quiz
+  de saúde no retorno de 08/10 ("quando o dono decidir o caminho do dia 1, a
+  reconferência entra na frente, com a asserção 1 reprovando sobre o código de
+  hoje"). Ele decidiu (caminho B) e o conserto subiu em `bd95618`.
+- **O CONSERTO ESTÁ METADE NO AR, E É A METADE QUE NINGUÉM SENTE.** MEDIDO no
+  catálogo do Postgres: o índice antigo `(dia, anon_id)` caiu e o novo
+  `(dia, anon_id, pergunta_id)` está de pé, então o banco ACEITARIA a resposta
+  da pergunta do dia de quem já respondeu o onboarding. MEDIDO pelo
+  `conferir:versoes`: a última publicada é a **3.1, de 07/10**, e o conserto
+  entrou em **08/10**, viajando na 3.2, "ainda não publicada". Quem instalou o
+  app nesta semana recebeu o app de antes do conserto.
+- A prova de que nada mudou na prática, e ela é dupla: o evento novo
+  `abriu_quiz`, que o conserto trouxe para contar quem bate no muro, tem
+  **zero** ocorrências em produção; e desde a queda do índice, em **167 pares
+  de dia e aparelho**, nenhum teve duas respostas. Os dois zeros são o
+  escritor não estar em binário nenhum, não comportamento. É o meu próprio
+  aprendizado de 16/09 ("conserto consertado não é conserto entregue":
+  comparar a versão que emitiu, a publicada e a data do conserto).
+- RECONFERÊNCIA DE VERDADE, em vez de aceitar o verde: plantei quatro defeitos
+  no conserto já publicado no repositório e os quatro reprovaram. A folha
+  voltando a chamar o caminho de presença (que é a asserção 1, a que olha quem
+  USA a regra), o onboarding voltando a carimbar o dia, a queda que protege
+  quem respondeu antes de 08/10 sendo removida, e o segundo toque voltando a
+  contar. A afirmação da Engenharia de que a asserção 1 reprovava sobre o
+  código antigo está conferida de forma independente.
+- **AS TRÊS CORREÇÕES DO DONO SOBRE A MINHA RODADA DE 07/10 ESTÃO APLICADAS.**
+  (1) O "0 de 314" era zero estrutural: o índice que eu mesmo nomeei como
+  segunda tranca era quem ESCREVIA aquele zero, e ele só repetia o índice. O
+  número que mede o estrago, atualizado hoje: de **491** aparelhos que fizeram
+  o onboarding, **108 (22,0%)** voltaram ao app em outro dia e **10 (2,0%)**
+  fizeram algum quiz diário. Dois em cada dez voltam, um em cada cinquenta faz
+  o quiz. (2) e (3) entraram no artifact com o que cada número mede.
+- ARMADILHA PARA QUEM CONSOLIDAR NA SEGUNDA: na janela de 30 dias a taxa de
+  volta caiu de 30,4% (leitura do dono em 08/10) para **21,3%** hoje, e isso
+  NÃO é piora: entraram 144 aparelhos novos no denominador que ainda não
+  tiveram um segundo dia. Os retornos absolutos foram de 96 para 98.
+- **ACHADO NOVO, E É NA MINHA PRÓPRIA PARADA OBRIGATÓRIA.** A
+  `assinaturas_conferencia` devolve hoje UMA linha, e ela diz "cortesia, nao e
+  venda". MEDIDO: essa linha é a venda de Play de 25/09, recuperada em 03/10,
+  com evento `assinou` de origem `revenuecat` e sem id do Stripe. O `veredito`
+  nasceu em 02/09, quando venda de loja não existia, e o único identificador
+  que ele conhece é o do Stripe. **Rótulo errado no único cliente pagante que o
+  produto tem, e errado para o lado que parece calmo.**
+- DEDUZIDO do código, não observado, e com a aritmética: o `lojaConferida`
+  conta "assinatura de loja no banco" como linha ativa SEM id do Stripe
+  (`lib/operacao.ts`), o que inclui cortesia dada na mão. Uma cortesia mais uma
+  venda de loja perdida dão o mesmo total que uma venda presente: RevenueCat 1
+  e banco 1, "batem", e quem pagou fica sem Premium em silêncio. Hoje a leitura
+  está certa por sorte, porque existe uma linha ativa só e ela é a venda. NÃO
+  afirmei que o alarme é cego: o `conferenciaDaLoja` cobre o caso de 25/09, e
+  conferi isso antes de escrever.
+- FEITO, dentro da alçada (view aditiva, três condições): a coluna
+  `venda_de_loja` na `assinaturas_conferencia`, que deduz a venda de loja do
+  evento, ensaiada no banco, com o arquivo `supabase/funil_eventos.sql`
+  atualizado no mesmo commit. **O `veredito` ficou INTACTO de propósito**: a
+  rota e o painel contam em cima dos textos dele, e trocar o sentido em
+  silêncio seria pior que o rótulo errado.
+- A RAIZ, que fica como recomendação e não é alçada minha: `subscriptions` não
+  tem campo dizendo que a assinatura veio da loja. A coluna de hoje deduz do
+  evento, que é o melhor possível sem mexer no webhook da cobrança. O campo de
+  verdade exige o webhook escrevendo, e isso é caminho de cobrança.
+- E O POSTGRES COBROU A MINHA PRÓPRIA REGRA DE ALÇADA: a primeira tentativa
+  punha a coluna no meio da view e o banco recusou com "cannot change name of
+  view column". Em `create or replace view`, coluna nova só entra no FIM.
+  Aditivo de verdade tem o motor obrigando, e isso virou asserção.
+- A LINHA DO ADMOB, recomendada em 07/10 e igual em 14/10. Não mexo no n8n, mas
+  a frase pronta é nossa: nasce `linhaDeAnuncio` em `lib/retratoLegivel.ts`,
+  sai por `anuncioLegivel` na rota de dados, e o painel só imprime. Mesma
+  estrada da linha de coorte em 28/09. A distinção que ela guarda é a da fatura
+  de 02/10: zero COM linha é receita medida de R$ 0,00, zero SEM linha é
+  ausência de medição, e a frase da ausência não imprime o número do lado.
+- **SEIS DEFEITOS PLANTADOS NA LINHA DO ADMOB, SEIS MORDIDAS, E DOIS ACHARAM
+  DEFEITO NA MINHA PRÓPRIA ASSERÇÃO.** O primeiro: eu testava com o campo
+  AUSENTE, e aí `Number(undefined)` já é `NaN`, então trocar `typeof` por
+  `Number(...)` não mudava nada e o plantio passava verde; o único valor em que
+  os dois discordam é `null`. O segundo: com o defeito posto, a função não
+  devolvia zero, ela LANÇAVA, e script derrubado não imprime FALHA nenhuma (sai
+  com código 1, então a bateria pega, mas a linha não diz qual regra caiu). É a
+  mesma armadilha que a Engenharia registrou em 02/10. Consertei as duas
+  asserções em vez de apagá-las.
+- Mais quatro plantios na conferência da loja, quatro mordidas: coluna sumindo,
+  coluna deixando de olhar a origem (venda do Stripe viraria venda de loja), um
+  dos quatro textos do veredito mudando (o que apagaria o alarme da rota), e a
+  coluna voltando para o meio.
+- ERROS DO RETRATO, fechados sem alarme. O topo é cancelamento do login do
+  Google, 10 vezes em 10 aparelhos na 3.1, e o coletor já classifica como
+  `desistencia`, não defeito: é a pessoa fechando a folha do Google. Contra 68
+  cadastros na última semana fechada, é minoria clara. Sobra UM erro de verdade
+  no login (`[28404...]`), uma ocorrência, 11/10. Fechamentos do app: 8 em 4
+  aparelhos na tela inicial, mesma concentração da semana passada. 2,4% dos
+  aparelhos ativos com defeito, abaixo do teto de 10%.
+- SAÚDE, com instrumento e hora: `npm run conferir` verde com as asserções
+  novas dentro, `tsc --noEmit` limpo e `build:native` verde, rodados nesta
+  máquina entre 11h20 e 13h UTC de 14/10. **Critério 2 em três dos quatro**:
+  não rodei o build do site, e o segundo instrumento é a Vercel, que builda a
+  cada push.
+- FONTE INDISPONÍVEL, declarada: o Stripe não está autorizado nesta sessão,
+  então a conta do dinheiro saiu só pelo lado do banco mais a contagem contra o
+  RevenueCat que o retrato publica. O lado da fatura não foi lido.
+- FILA: o quiz diário **continua aberto** até a 3.2 subir e o `abriu_quiz` ter
+  dado; aí a reconferência fica com comportamento em vez de caminho de código.
+  A próxima varredura é o **quiz de saúde**, que cedeu a vez hoje por ordem do
+  dono.
+
 ## 2026-10-13 · Engenharia: o canal inteiro contra o catálogo, e seis vídeos que estavam fora do app
 
 - Pedido do dono: "veja se tem algum lá e não estava". A primeira leitura

@@ -326,7 +326,7 @@ sem tirar ninguém dela.
 | `conferir:banco` | no nascimento (autor), 20/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:imagem` | no nascimento (autor), 20/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:coorte` | no nascimento (autor), 24/09/2026 | sim, no plantio de quem escreveu; e de novo em 06/10/2026 (autor), ao cobrar a regra do último membro: o `+ 14` em data plantado de volta reprovou |
-| `conferir:legivel` | no nascimento (autor), 28/09/2026 | sim, no plantio de quem escreveu |
+| `conferir:legivel` | no nascimento (autor), 28/09/2026 | sim, no plantio de quem escreveu; e de novo em 14/10/2026 (autor), ao ganhar a linha da receita de anúncio: 6 plantios e 6 mordidas, e DOIS deles acharam defeito na própria asserção (a entrada era `undefined`, onde `Number()` e `typeof` concordam, e não `null`, que é o único valor onde discordam; e o plantio DERRUBAVA o script em vez de imprimir FALHA, armadilha que a Engenharia já tinha registrado em 02/10) |
 | `conferir:porta` | no nascimento (autor), 28/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:versoes-do-carro` | no nascimento (autor), 28/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:alarme` | no nascimento (autor), 29/09/2026 | sim, no plantio de quem escreveu |

@@ -296,6 +296,52 @@ console.log("Loja: a compra chega ao Premium, e quando não chega, deixa rastro?
   }
 }
 
+// ── 6. A CONFERÊNCIA DO DINHEIRO SABE SEPARAR VENDA DE LOJA DE CORTESIA ────
+//
+// POR QUE ISTO ENTRA (14/10/2026). A `assinaturas_conferencia` nasceu em 02/09,
+// quando venda de loja não existia, e o único identificador que o `veredito`
+// conhece é o do Stripe: sem ele, responde "cortesia, nao e venda". Em 14/10 a
+// ÚNICA assinatura ativa do produto é uma venda de Play de verdade, e a parada
+// obrigatória do dinheiro a chamava de cortesia. Rótulo errado no único cliente
+// pagante, e errado para o lado que parece calmo.
+//
+// A coluna `venda_de_loja` entrou para dar a separação sem mexer no `veredito`,
+// que a rota e o painel já leem. Estas linhas cobram que ela continue lá e que
+// o `veredito` siga intacto: trocar o sentido dele em silêncio é pior que o
+// rótulo errado, porque o painel conta em cima dele.
+{
+  const sql = readFileSync(new URL("../supabase/funil_eventos.sql", import.meta.url), "utf8");
+  const corpo = sql.slice(sql.indexOf("create or replace view public.assinaturas_conferencia"));
+
+  conferir(
+    "a conferência do dinheiro tem a coluna de venda de loja",
+    /as venda_de_loja/.test(corpo),
+    "sem ela, toda venda de Apple ou Play aparece como cortesia na parada obrigatória do dinheiro",
+  );
+  conferir(
+    "e ela olha a ORIGEM do evento, não só a existência dele",
+    /evento = 'assinou'[\s\S]{0,120}origem = 'revenuecat'/.test(corpo),
+    "sem a origem, uma venda do Stripe também contaria como venda de loja",
+  );
+  conferir(
+    "o `veredito` continua com os quatro casos que a rota conta",
+    /'cortesia, nao e venda'/.test(corpo) &&
+      /'FALTA o evento assinou'/.test(corpo) &&
+      /'evento assinou DUPLICADO'/.test(corpo) &&
+      /else 'ok'/.test(corpo),
+    "a rota filtra por estes textos em lib/operacao.ts: mudar um deles aqui apaga o alarme de lá",
+  );
+  // A coluna nova no FIM, e não por estética: `create or replace view` do
+  // Postgres recusa coluna no meio ("cannot change name of view column"), então
+  // o arquivo tem que refletir a ordem que o banco aceita, senão quem rodar
+  // este SQL por cima do banco existente toma erro em vez de atualizar a view.
+  conferir(
+    "a coluna nova vem DEPOIS do veredito, que é a ordem que o Postgres aceita",
+    corpo.indexOf("as veredito") < corpo.indexOf("as venda_de_loja"),
+    "coluna no meio faz `create or replace view` recusar: o motor cobra a regra aditiva sozinho",
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) da loja reprovaram.`);
   process.exit(1);

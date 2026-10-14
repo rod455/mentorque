@@ -113,3 +113,66 @@ export function linhaDeAtivacao(c: {
     motivo: fechada ? "" : `a janela de 7 dias fecha em ${maisDias(c.coorte, FECHA_D1_7)}`,
   };
 }
+
+/**
+ * A linha da RECEITA DE ANÚNCIO.
+ *
+ * POR QUE ELA EXISTE (14/10/2026). Em 07/10 o QA achou, aplicando a regra do
+ * dono ("antes de publicar um zero, pergunte quem escreve aquele número"), que
+ * o retrato publicava `AdMob 7d: 0.00 USD de receita de anuncio` enquanto o
+ * pacote bruto do próprio coletor trazia `porDia: []` e a nota "sem linhas do
+ * app do Mentorque no periodo". O coletor é honesto; a frase impressa perdia a
+ * ressalva no caminho e afirmava zero medido onde não houve medição.
+ *
+ * A ironia é que o `play_console`, no MESMO retrato, trata a situação idêntica
+ * do jeito certo e diz com todas as letras "NAO E ZERO MEDIDO". Duas fontes, a
+ * mesma ausência, dois tratamentos.
+ *
+ * Foi recomendado em 07/10 e continuava igual em 14/10, uma semana depois. O
+ * conserto do renderizador é do Analista e mora no n8n, mas a frase pronta é
+ * nossa, pelo mesmo caminho que a de coorte tomou em 28/09: ela nasce aqui,
+ * sai por `/api/dados`, a conferência cobra, e o painel só imprime.
+ *
+ * A DIFERENÇA QUE ELA GUARDA: zero com linhas é receita medida de R$ 0,00
+ * (anúncio servido e ninguém clicou, resposta legítima); zero SEM linhas é
+ * "a fonte não publicou nada no período", que não é resultado. Juntar as duas
+ * é o mesmo erro que fazia cupom de 100% virar receita sumida.
+ */
+export function linhaDeAnuncio(a: {
+  /** Ganhos da janela, na moeda do pacote. */
+  ganhos7d?: number | null;
+  moeda?: string | null;
+  /** Quantas linhas por dia a fonte devolveu. Vazio = não publicou nada. */
+  porDia?: unknown[] | null;
+  /** A nota que o coletor escreve quando sabe que não houve linha. */
+  nota?: string | null;
+}): LinhaDoRetrato {
+  const moeda = String(a.moeda ?? "USD").toUpperCase();
+  const linhas = Array.isArray(a.porDia) ? a.porDia.length : 0;
+  // `typeof number` e não `Number(...)`: `Number(null)` é 0, e campo ausente
+  // virando zero medido é a confusão que esta função existe para impedir.
+  const temNumero = typeof a.ganhos7d === "number" && Number.isFinite(a.ganhos7d);
+
+  if (linhas === 0) {
+    const nota = (a.nota ?? "").trim();
+    return {
+      texto:
+        `AdMob 7d: NAO E ZERO MEDIDO (a fonte nao publicou linha nenhuma no periodo` +
+        `${nota ? `: ${nota}` : ""})`,
+      legivel: false,
+      motivo: nota || "a fonte nao devolveu linha nenhuma no periodo",
+    };
+  }
+  if (!temNumero) {
+    return {
+      texto: `AdMob 7d: NAO DA PARA LER (a fonte devolveu ${linhas} dia(s) e nenhum valor de ganho)`,
+      legivel: false,
+      motivo: "a fonte devolveu dias sem o campo de ganho",
+    };
+  }
+  return {
+    texto: `AdMob 7d: ${a.ganhos7d!.toFixed(2)} ${moeda} de receita de anuncio (${linhas} dia(s) com linha)`,
+    legivel: true,
+    motivo: "",
+  };
+}

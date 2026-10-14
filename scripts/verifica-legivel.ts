@@ -32,7 +32,7 @@
 //
 // Rode com: npm run conferir:legivel
 import { readFileSync } from "node:fs";
-import { FECHA_D1_7, FECHA_D8_30, linhaDeAtivacao, linhaDeRetencao, maisDias } from "../lib/retratoLegivel.ts";
+import { FECHA_D1_7, FECHA_D8_30, linhaDeAnuncio, linhaDeAtivacao, linhaDeRetencao, maisDias } from "../lib/retratoLegivel.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -164,6 +164,79 @@ console.log("Retrato: janela aberta vira motivo, e não número?");
     "as duas saem da função, e não de uma cópia local",
     /\.map\(linhaDeRetencao\)/.test(operacao) && /\.map\(linhaDeAtivacao\)/.test(operacao),
     "regra copiada no leitor é regra que para de acompanhar a fonte, que é o defeito do Guardião de 26/09",
+  );
+}
+
+// ── 8. A RECEITA DE ANÚNCIO: AUSÊNCIA NÃO VIRA ZERO MEDIDO ─────────────────
+//
+// Mesma doença da coorte, em outra fonte, e recomendada por uma semana sem
+// conserto: em 07 e em 14/10 o retrato publicou "AdMob 7d: 0.00 USD de receita
+// de anuncio" enquanto o pacote do coletor trazia `porDia: []` e a nota "sem
+// linhas do app do Mentorque no periodo". O coletor é honesto; a frase perdia
+// a ressalva no caminho.
+//
+// A distinção que estas linhas guardam, e ela é a mesma da fatura de 02/10:
+// zero COM linha é receita medida de R$ 0,00 (anúncio servido, ninguém
+// clicou); zero SEM linha é a fonte não ter publicado nada, que não é
+// resultado.
+{
+  const semLinha = linhaDeAnuncio({ ganhos7d: 0, moeda: "USD", porDia: [], nota: "sem linhas do app do Mentorque no periodo" });
+  conferir("fonte sem linha nenhuma NÃO vira zero medido", !semLinha.legivel, semLinha.texto);
+  conferir("e a frase diz que não é zero medido", /NAO E ZERO MEDIDO/.test(semLinha.texto), semLinha.texto);
+  conferir("e carrega a nota do coletor no motivo", /sem linhas do app/.test(semLinha.motivo), semLinha.motivo);
+  conferir(
+    "a frase da ausência NÃO imprime o 0.00",
+    !/0\.00/.test(semLinha.texto),
+    "numero ao lado da ressalva e o que faz o leitor copiar o numero e deixar a ressalva",
+  );
+
+  // Zero COM linha continua sendo número, senão a régua vira um muro: dia com
+  // anúncio servido e ninguém clicando é resposta legítima.
+  const zeroMedido = linhaDeAnuncio({ ganhos7d: 0, moeda: "USD", porDia: [{ dia: "2026-10-13" }] });
+  conferir("zero COM linha continua sendo número", zeroMedido.legivel, zeroMedido.texto);
+  conferir("e sai com duas casas e a moeda", /0\.00 USD/.test(zeroMedido.texto), zeroMedido.texto);
+
+  const comGanho = linhaDeAnuncio({ ganhos7d: 1.5, moeda: "usd", porDia: [{ dia: "x" }, { dia: "y" }] });
+  conferir("ganho de verdade sai como número", comGanho.legivel && /1\.50 USD/.test(comGanho.texto), comGanho.texto);
+  conferir("e diz quantos dias tinham linha", /2 dia\(s\) com linha/.test(comGanho.texto), comGanho.texto);
+
+  // `Number(null)` é 0, e campo nulo virando zero medido é exatamente a
+  // confusão que esta família de funções existe para impedir.
+  //
+  // O CASO TEM QUE SER `null`, E DESCOBRI ISSO PLANTANDO: a primeira versão
+  // desta asserção passava o campo AUSENTE, e aí `Number(undefined)` já é
+  // `NaN`, então trocar `typeof` por `Number(...)` não mudava nada e o plantio
+  // passava verde. `null` é o único valor em que os dois discordam, e é o que
+  // um coletor devolve quando a fonte respondeu sem o campo. Os dois ficam:
+  // o ausente é o caso comum, o nulo é o que morde.
+  //
+  // E A CHAMADA VAI DENTRO DE UM `try`, o que também saiu do plantio: com o
+  // `Number(...)` de volta, a função não devolvia zero medido, ela LANÇAVA
+  // (`null.toFixed`), e script derrubado não imprime FALHA nenhuma. Sai com
+  // código 1, então a bateria pega, mas a linha não diz qual regra caiu. É a
+  // mesma armadilha que a Engenharia registrou em 02/10 ao plantar na busca da
+  // fatura: pareceu prova e não era.
+  const semQuebrar = (o: Parameters<typeof linhaDeAnuncio>[0]) => {
+    try {
+      return linhaDeAnuncio(o);
+    } catch (err) {
+      return { texto: `LANÇOU: ${String(err)}`, legivel: true, motivo: "" };
+    }
+  };
+  const semCampo = semQuebrar({ ganhos7d: null, moeda: "USD", porDia: [{ dia: "2026-10-13" }] });
+  conferir("dia com linha e ganho NULO não vira zero medido (nem lança)", !semCampo.legivel, semCampo.texto);
+  const campoAusente = semQuebrar({ moeda: "USD", porDia: [{ dia: "2026-10-13" }] });
+  conferir("e campo ausente também não", !campoAusente.legivel, campoAusente.texto);
+
+  // E QUEM USA A REGRA, que é a asserção que esta casa esqueceu cinco vezes
+  // em 03/10: a função pode existir e a rota não chamar, que é o mesmo que não
+  // existir. Foi palavra por palavra o que aconteceu com as colunas de coorte.
+  const operacao = readFileSync(new URL("../lib/operacao.ts", import.meta.url), "utf8");
+  conferir("o retrato publica a linha de anúncio", /anuncioLegivel:/.test(operacao));
+  conferir(
+    "e ela sai da função, não de uma cópia local",
+    /linhaDeAnuncio\(/.test(operacao),
+    "regra copiada no leitor para de acompanhar a fonte",
   );
 }
 

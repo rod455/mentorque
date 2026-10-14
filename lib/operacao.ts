@@ -18,7 +18,7 @@ import {
   type EventoFunil,
 } from "./funilCorreto";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
-import { linhaDeAtivacao, linhaDeRetencao } from "./retratoLegivel";
+import { linhaDeAnuncio, linhaDeAtivacao, linhaDeRetencao } from "./retratoLegivel";
 import { comTentativas, transitorio } from "@/lib/transitorio";
 
 // O agregado da operação num lugar só: alimenta a rota /api/dados (que o
@@ -639,6 +639,20 @@ export async function coletarDadosOperacao() {
       const dados = (pacote?.dados ?? {}) as { porDia?: DiaDeGasto[] };
       return { fonte: f, ...linhaDeGasto(f, dados.porDia ?? [], pacote?.dia ?? "sem coleta") };
     }),
+    // A RECEITA DE ANÚNCIO, COM A AUSÊNCIA DECLARADA (14/10/2026).
+    //
+    // Achado do QA em 07/10 e ainda igual em 14/10: o retrato publicava
+    // "AdMob 7d: 0.00 USD de receita de anuncio" enquanto o pacote do próprio
+    // coletor trazia `porDia: []` e a nota "sem linhas do app do Mentorque no
+    // periodo". Zero sem linha nenhuma não é receita medida de R$ 0,00, e o
+    // `play_console` no mesmo retrato já dizia isso certo ("NAO E ZERO
+    // MEDIDO"). Mesma estrada da linha de coorte em 28/09: a frase pronta sai
+    // daqui, e o painel só imprime. Regra em lib/retratoLegivel.ts.
+    anuncioLegivel: (() => {
+      const pacote = (porFonte["admob"] ?? [])[0];
+      const d = (pacote?.dados ?? {}) as Parameters<typeof linhaDeAnuncio>[0];
+      return linhaDeAnuncio(d);
+    })(),
     // A ESCADA DA AQUISIÇÃO, COM UM DONO POR DEGRAU (03/10/2026).
     //
     // Nasceu de uma noite em que a casa misturou as quatro fontes e publicou
