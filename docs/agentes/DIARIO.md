@@ -12,19 +12,32 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   ("0 pagando, 1 cortesia") e na conferência da loja.
 - **No banco** (migrações `subscriptions_origem` e
   `assinaturas_conferencia_usa_origem`, arquivos em `supabase/`): coluna
-  `origem` com cinco valores possíveis e o preenchimento das 13 linhas: 3
-  `stripe`, 1 `play_store`, 9 `cortesia` (estas deduzidas: sem id de cobrança
-  e sem evento de venda). A conferência das assinaturas agora diz "ok" para a
-  venda da Play, com `origem` ao lado do `venda_de_loja`.
+  `origem` com cinco valores possíveis e o preenchimento das 13 linhas. A
+  conferência das assinaturas agora diz "ok" para a venda da Play, com
+  `origem` ao lado do `venda_de_loja`.
+- **O PRIMEIRO PREENCHIMENTO ERROU, E O DONO PEGOU NO MESMO DIA** ("onde você
+  viu 9 pessoas com cortesia? pelo Stripe não tem ninguém novo"). Eu chamei de
+  `cortesia` nove linhas inativas por exclusão: sem assinatura do Stripe e sem
+  evento `assinou`, "sobra liberação na mão". Ausência não é causa. Relido no
+  banco: OITO têm cliente do Stripe e nenhuma assinatura, porque a rota de
+  checkout grava a linha quando a pessoa ABRE o checkout, antes de pagar (três
+  contas do time, cinco pessoas que desistiram do anual em setembro); UMA é
+  um mensal da App Store que expirou em 25/08 (evento `expirou` do iPhone, que
+  a regra não olhava). Corrigido: 11 `stripe` (3 canceladas, 8 checkouts sem
+  pagamento), 1 `play_store` ativa, 1 `app_store` inativa, zero cortesia.
+  Nenhum número do painel mudou com o erro, porque as nove estavam inativas.
+  A rota de checkout passou a gravar `stripe` na linha que ela cria (e só
+  nela, para não apagar a origem de quem comprou na Play e abriu o site).
 - **Quem grava**: o escritor do Stripe grava `stripe`; o webhook do RevenueCat
   grava pela loja do evento, e PROMOTIONAL (acesso dado no painel do
   RevenueCat) vira `cortesia`. Regras em `lib/assinaturaOrigem.ts`.
 - **Quem lê**: o painel separa pagante de cortesia pela origem, e a
   conferência da loja conta só origem de loja (substitui o conserto da manhã,
   que deduzia pelo evento).
-- `conferir:loja` com a seção 10 nova; cinco plantios (webhook sem origem,
-  Stripe sem origem, PROMOTIONAL como venda, loja contando "sem Stripe" e
-  cortesia pela falta do Stripe), cinco MORDERAM.
+- `conferir:loja` com a seção 10 nova; seis plantios (webhook sem origem,
+  Stripe sem origem, PROMOTIONAL como venda, loja contando "sem Stripe",
+  cortesia pela falta do Stripe e checkout regravando a origem de qualquer
+  linha), seis MORDERAM.
 - O que não alcança: nenhuma venda nova passou pelo webhook com a coluna. A
   prova é a próxima compra de loja ou do Stripe chegar com a origem preenchida.
   E quem liberar Premium na mão grava `origem = 'cortesia'` junto (escrito na

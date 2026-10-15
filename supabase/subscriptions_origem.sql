@@ -10,7 +10,9 @@
 -- decisão do dono em 15/10 de gravar a origem em vez de continuar deduzindo.
 --
 -- QUEM ESCREVE, e é por isso que a coluna não tem padrão:
---   stripe      → lib/subscriptionSync.ts (webhook e rotas do Stripe)
+--   stripe      → lib/subscriptionSync.ts (webhook e rotas do Stripe) e
+--                 app/api/stripe/checkout (a linha nasce quando a pessoa
+--                 abre o checkout, antes de pagar, com status `inactive`)
 --   app_store   → app/api/revenuecat/webhook (store APP_STORE ou MAC_APP_STORE)
 --   play_store  → idem (store PLAY_STORE)
 --   loja        → idem, qualquer outra loja que o RevenueCat mande
@@ -27,23 +29,30 @@ alter table public.subscriptions
   check (origem in ('stripe', 'app_store', 'play_store', 'loja', 'cortesia'));
 
 -- O PREENCHIMENTO DAS LINHAS ANTIGAS, lido em 15/10: 13 linhas.
---   3 com id do Stripe (canceladas)                → stripe
---   1 sem Stripe, com `assinou` da loja (Android)  → play_store
---   9 sem Stripe e sem `assinou` nenhum (inativas) → cortesia
--- As nove são DEDUZIDAS: sem id de cobrança e sem evento de venda, a única
--- explicação que sobra é liberação na mão. Os webhooks regravam a origem a
--- cada evento, então este preenchimento só vale até a próxima escrita.
+--   3 com assinatura do Stripe (canceladas)              → stripe
+--   8 com cliente do Stripe e SEM assinatura (inativas)  → stripe
+--   1 sem Stripe, com `assinou` da Play (ativa)          → play_store
+--   1 sem Stripe, com `expirou` do iPhone (inativa)      → app_store
+--   cortesia: nenhuma.
+--
+-- AS OITO SÃO GENTE QUE ABRIU O CHECKOUT DO SITE E NÃO PAGOU: a rota
+-- app/api/stripe/checkout cria o cliente no Stripe e grava a linha antes da
+-- pessoa pagar, e o status fica no padrão `inactive`. Três são contas do
+-- time; cinco, pessoas que começaram o checkout anual em setembro.
+--
+-- A PRIMEIRA VERSÃO DESTE PREENCHIMENTO ERROU, e o dono pegou no mesmo dia:
+-- ela olhava só o evento `assinou` e chamou as nove linhas acima de
+-- "cortesia" por exclusão ("sem cobrança e sem venda, sobra liberação na
+-- mão"). Ausência não é causa: o cliente do Stripe e o evento `expirou`
+-- estavam na própria linha e no funil. Corrigido em 15/10 com a regra abaixo.
 update public.subscriptions s set origem = case
-  when s.stripe_subscription_id is not null then 'stripe'
+  when s.stripe_subscription_id is not null or s.stripe_customer_id is not null then 'stripe'
   when exists (select 1 from public.funil_eventos f
-                where f.user_id = s.user_id and f.evento = 'assinou'
-                  and f.origem = 'revenuecat' and f.plataforma = 'android') then 'play_store'
+                where f.user_id = s.user_id and f.origem = 'revenuecat' and f.plataforma = 'android') then 'play_store'
   when exists (select 1 from public.funil_eventos f
-                where f.user_id = s.user_id and f.evento = 'assinou'
-                  and f.origem = 'revenuecat' and f.plataforma = 'ios') then 'app_store'
+                where f.user_id = s.user_id and f.origem = 'revenuecat' and f.plataforma = 'ios') then 'app_store'
   when exists (select 1 from public.funil_eventos f
-                where f.user_id = s.user_id and f.evento = 'assinou'
-                  and f.origem = 'revenuecat') then 'loja'
+                where f.user_id = s.user_id and f.origem = 'revenuecat') then 'loja'
   else 'cortesia'
 end
 where s.origem is null;

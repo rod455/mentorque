@@ -43,7 +43,18 @@ export async function POST(req: Request) {
     // MESMA pessoa cria um cliente novo no Stripe, e aí a mesma pessoa passa a
     // ter duas fichas, dois históricos de cobrança e um /api/stripe/sync que lê
     // a ficha errada. Falhar aqui é melhor que seguir: nada foi cobrado ainda.
-    const { error } = await admin.from("subscriptions").upsert({ user_id: user.id, stripe_customer_id: customerId });
+    //
+    // A ORIGEM SÓ ENTRA QUANDO A LINHA NASCE AQUI (15/10/2026). Linha criada
+    // por esta rota é "abriu o checkout do Stripe", ainda sem assinatura, e
+    // sem origem ela caía na regra antiga e virava "cortesia": em 15/10 eram
+    // 8 das 13 linhas. Mas se a linha já existe (alguém que comprou na Play e
+    // abriu o checkout do site), a origem dela é de quem vendeu, e regravar
+    // "stripe" por cima faria a conferência da loja perder essa venda.
+    const { error } = await admin.from("subscriptions").upsert({
+      user_id: user.id,
+      stripe_customer_id: customerId,
+      ...(row ? {} : { origem: "stripe" }),
+    });
     if (error) {
       console.error("[checkout] cliente do Stripe não gravado:", error.message);
       return NextResponse.json({ error: "cliente_nao_gravado" }, { status: 500 });

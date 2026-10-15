@@ -388,6 +388,16 @@ console.log("Loja: a compra chega ao Premium, e quando não chega, deixa rastro?
   );
   const stripeSync = semComentarios(readFileSync(new URL("../lib/subscriptionSync.ts", import.meta.url), "utf8"));
   conferir("o escritor do Stripe grava origem stripe", /origem: "stripe"/.test(stripeSync));
+  // 8 das 13 linhas de 15/10 nasceram no checkout, antes de pagar, e sem
+  // origem viravam "cortesia". E a origem só entra quando a linha nasce ali:
+  // regravar "stripe" na linha de quem comprou na Play apagaria a venda da
+  // conferência da loja.
+  const checkout = semComentarios(readFileSync(new URL("../app/api/stripe/checkout/route.ts", import.meta.url), "utf8"));
+  conferir(
+    "o checkout grava origem stripe só na linha que ele cria",
+    /\.\.\.\(row \? \{\} : \{ origem: "stripe" \}\)/.test(checkout),
+    "sem origem a linha do checkout vira cortesia; sempre com origem, a venda da Play some",
+  );
 
   const sqlOrigem = readFileSync(new URL("../supabase/subscriptions_origem.sql", import.meta.url), "utf8");
   conferir(
