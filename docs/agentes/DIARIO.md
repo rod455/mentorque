@@ -21,7 +21,18 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   publicado hoje. Esperado: some na próxima atualização do painel.
 - Leitura: a parte técnica da entrega está certa, o que reforça engajamento
   como causa da queda de abertura. DEDUZIDO do Postmaster mais o banco, não
-  dito pelo Google. Falta ler a seção "Análise de capacidade de entrega".
+  dito pelo Google.
+- **"Análise de capacidade de entrega"** (print do dono): "Não há e-mails de
+  saída suficientes" para contas @gmail.com. Reputação do domínio no Gmail:
+  SEM NOTA, por volume, não boa nem ruim. Entre os motivos comuns, o Google
+  cita "grande porcentagem de mensagens enviadas para contas inativas", que é
+  o nosso caso (68% dos envios de 30 dias para quem nunca abriu). A
+  recomendação dele: volume constante, sem subir rápido. Consequência
+  prática: cair de volume com a regra dos 5 sem abrir não é problema; um
+  disparo grande de uma vez para a base (como o e-mail de lançamento) é o
+  pico que ele desaconselha, e se acontecer deve ir em lotes.
+- **Leitura marcada: 29/10.** Abertura e devolução por semana de envio, antes
+  e depois de 15/10, pela view `email_resumo_30d` e pelo `jornada_envios`.
 
 ## 2026-10-15 · Engenharia: o DMARC está no ar, e o Postmaster pede a conta certa
 
