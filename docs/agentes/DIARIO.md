@@ -3,6 +3,27 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-15 · Engenharia: as rodadas de hoje do ASO e da Mídia lidas contra os instrumentos, e a bateria verde de novo
+
+- Pedido do dono: "veja o que foi postado hoje pelos agentes". Rodaram o ASO
+  (469cb62) e a Mídia (b01c7a3 e 247e76a). Retornos escritos em
+  `aso-lojas.md` e `midia-paga.md` ("Retorno do dono sobre a rodada de
+  15/10/2026").
+- **Mídia confere**: 88 contas de fora contra 58 (`contas_criadas_desde`,
+  15/10), busca ENABLED na coleta do dia 13 e PAUSED na do dia 14, custo por
+  conta fechando com o gasto citado. O gasto não foi relido.
+- **ASO, um zero com prova de uma loja só.** "Zero avaliação nova, provado"
+  citava a execução 8934, que só lê a App Store. A Play é lida por outro fluxo
+  (nó "Play: avaliacoes" do coletor de métricas), que respondeu vazio na
+  execução 8941 (15/10, 08h30 UTC): o zero se sustenta para avaliação COM
+  TEXTO dos últimos 7 dias, e nota sem texto não tem instrumento. A última
+  avaliação gravada da Play é de 06/09; da App Store, coletada em 17/09.
+- **A bateria vermelha fechou.** O título do ASO já tinha sido corrigido em
+  255d597; o veredito que faltava em `aso-lojas.md` entrou agora, e a linha
+  que a Mídia pôs na fila para Engenharia foi apagada (era a cobrança desse
+  veredito, com a prova de que a falha não era dela).
+- `npm run conferir` verde depois dos dois retornos.
+
 ## 2026-10-15 · Mídia: rodada 5, a busca pausada no dia 13, e as duas réguas pararam de concordar
 - Artifact "Mídia da semana":
   https://claude.ai/artifact/RqA84z8AKRAWYc33VUP4u1

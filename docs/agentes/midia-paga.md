@@ -1026,3 +1026,51 @@ fez hoje.
 **Uma nota sobre a rotina.** O prompt da sua rotina ainda diz "e-mail das 10h"
 e não pode ser mudado desta sessão. Este manual manda; a seção "O relatório vai
 por e-mail" é a regra vigente.
+
+## Retorno do dono sobre a rodada de 15/10/2026
+
+Mandado escrever por ele em 15/10 ("veja o que foi postado hoje pelos
+agentes"). Lido o diário, os commits b01c7a3 e 247e76a, o banco e a coleta do
+Google Ads, em 15/10 à tarde.
+
+Primeiro o que manter, e é a rodada mais madura deste papel.
+
+**OS NÚMEROS CONFEREM.** 88 contas de fora contra 58 (`contas_criadas_desde`,
+lido hoje); a busca ENABLED na coleta do dia 13 e PAUSED na do dia 14; o
+custo por conta fecha com o gasto que você citou (R$ 453,69 / 88 = R$ 5,16).
+O gasto em si não foi relido aqui.
+
+**DUAS RÉGUAS SÓ DECIDEM ENQUANTO A DIFERENÇA É MAIOR QUE A DISCORDÂNCIA ENTRE
+ELAS.** É a frase da rodada. A busca era 15 vezes mais cara pelas duas; agora
+Meta e vídeo estão a 20% um do outro, que é o tamanho da briga entre AppsFlyer
+e plataformas. Não recomendar destino para o dinheiro liberado, com esse
+motivo escrito, é decisão, não omissão. E apontar que a integração de custo da
+AppsFlyer virou o que decide dinheiro, sem repetir o pedido como novidade, é
+exatamente a regra de 04/10.
+
+**O PEDIDO DO DIRETOR RESPONDIDO SEM CONSOLE**, com dois instrumentos que você
+alcança (o fonte de `lib/stores.ts` e as fontes de atribuição), e a linha
+apagada da fila. **E A BATERIA VERMELHA QUE NÃO ERA SUA FOI PARA A FILA COM A
+PROVA**, em vez de ficar vermelha sem dono ou de você escrever o veredito de
+outro papel. Engenharia fechou: o veredito do ASO entrou hoje.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. "NÃO RECOMENDO DESTINO" PRECISA DIZER O QUE ACONTECE SE NINGUÉM
+DECIDIR.** Sem decisão, os uns R$ 29 por dia simplesmente deixam de ser gastos:
+o orçamento total cai e a próxima semana compara um gasto menor com a anterior.
+Isso é um desfecho, e é o mais provável. A frase completa era "não recomendo
+destino; se nada for decidido, o gasto cai uns R$ 200 por semana, e a próxima
+rodada lê contas e custo com essa queda dentro". Assim o dono sabe que não
+decidir também é escolher, e a próxima rodada não confunde a queda de gasto com
+efeito de campanha.
+
+**2. A TABELA DO CUSTO POR INSTALAÇÃO TEM OUTRA JANELA, E UMA DATA SOMADA À
+MÃO.** A regra que você mesmo escreveu nesta rodada é "uma janela por tabela".
+A conta de contas e de custo por conta é de 07 a 13/10; a do custo por
+instalação é de 07 a 14/10 (oito datas, a da AppsFlyer), e o Meta só chega a
+oito porque você somou a oitava à mão, já que a coleta traz sete. Está
+declarado, o que é o mínimo. O passo seguinte é não precisar da soma: ou a
+tabela usa as sete datas que as três fontes têm em comum, ou entra na fila
+do Analista o pedido de a coleta do Meta trazer a janela da AppsFlyer. Número
+somado à mão não se reproduz na rodada seguinte.

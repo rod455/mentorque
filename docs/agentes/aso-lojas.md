@@ -410,3 +410,54 @@ não é opinião sobre estratégia, é o que o painel diz.
 4. **O gatilho para o alvo voltar ao orgânico** é o dono desligar as campanhas
    de instalação, ou a fatia "Não atribuído" passar de um terço da aquisição por
    duas rodadas seguidas. Está escrito para não depender de alguém lembrar.
+
+## Retorno do dono sobre a rodada de 15/10/2026
+
+Mandado escrever por ele em 15/10 ("veja o que foi postado hoje pelos
+agentes"). Lido o diário, o commit 469cb62, a ficha, o banco
+(`lojas_avaliacoes`, 15/10 à tarde) e os dois fluxos do n8n que leem as lojas.
+
+Primeiro o que manter.
+
+**ABRIR PELO DESFECHO, COM TUDO FECHADO.** Dois carros e descrição curta
+aplicados, nome e palavras-chave na 3.1, tela de aquisição aberta, respostas
+recusadas e tratadas como encerradas. A rodada que começa dizendo o que andou
+é a que o dono consegue ler em um minuto.
+
+**O SEU ERRO, ACHADO POR VOCÊ E TRANSFORMADO EM CRITÉRIO.** A proposta de
+01/10 comparou contra a ficha, não contra a loja. Você viu, disse que a
+leitura de 01/11 passa a julgar uma troca de tese, e criou o critério 12. É
+o melhor tipo de autocorreção: muda o que a próxima rodada faz.
+
+**PEDIR PARA NÃO APLICAR AGORA.** Duas mudanças na mesma janela e nenhuma fica
+legível. Esperar duas semanas numa frase para ter a única leitura limpa do
+papel é a escolha certa, dita com o custo dos dois lados.
+
+**NÃO PROPOR IMAGEM NO ESCURO**, e juntar as duas leituras numa visita só ao
+console. A coleta do Play traz só travamento, ANR e nota, conferido hoje no
+pacote `play_console`; então o pedido de clique é legítimo, porque nenhum
+instrumento da casa responde conversão da ficha.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. "ZERO AVALIAÇÃO NOVA, E O ZERO ESTÁ PROVADO" FOI PROVADO SÓ PARA A
+APPLE.** A execução 8934 que você citou é do fluxo "Analista: avaliações das
+lojas", que só lê o feed da App Store. A Google Play, onde estão quase todos
+os usuários, é lida por OUTRO fluxo: o nó "Play: avaliacoes" do coletor de
+métricas, que grava na mesma tabela. Ele respondeu vazio hoje (execução 8941,
+08h30 UTC), então o zero da Play também se sustenta, mas com dois limites que a
+frase precisava dizer: a API do Play só devolve avaliação COM TEXTO, e só dos
+últimos 7 dias. Nota sem texto não aparece em instrumento nenhum da casa. A
+frase certa era "nenhuma avaliação com texto nas duas lojas desde 17/09; nota
+sem texto não tem instrumento". Na visita ao Play Console que você já pediu,
+cabe olhar a contagem de notas e a média, que é o número que a ficha mostra.
+
+**2. A RODADA SUBIU COM A BATERIA VERMELHA.** O título "ASO & Lojas" não é o
+apelido do papel ("ASO", a primeira palavra do nome na tabela de DIRETRIZES)
+e reprovou `conferir:agentes`; você rodou `conferir:acoes`, que passou, e não a
+bateria inteira. Engenharia corrigiu o título em 255d597. A regra da casa é
+`npm run conferir` antes do push; a parte que passou não diz nada sobre a que
+não rodou.
+
+**Fica para a próxima rodada:** a leitura de 01/11 com o critério 12 aplicado,
+e as imagens, depois do print do console.
