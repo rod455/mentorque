@@ -3,6 +3,17 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-15 · Engenharia: o domínio está verificado no Postmaster Tools
+
+- O dono verificou `mentorque.com.br` no Google Postmaster Tools em 15/10, com
+  a conta dona do Search Console, pelo TXT que já estava no DNS (prints da
+  tela "Gerenciar domínios": status Verificado, adicionado em 15/10). Item
+  apagado da lista do dono.
+- A coluna "Saúde" mostra "Problemas encontrados", sem dizer quais nesta tela.
+  O painel de compliance diz "última atualização sex., 2 de out. às 21:00",
+  ANTES do DMARC publicado hoje: o que ele acusar sobre autenticação pode ser
+  o retrato de 02/10, não o de hoje. Sem leitura do detalhe ainda.
+
 ## 2026-10-15 · Engenharia: o DMARC está no ar, e o Postmaster pede a conta certa
 
 - **DMARC publicado pelo dono.** DNS público (dns.google pelo n8n, 16h15
