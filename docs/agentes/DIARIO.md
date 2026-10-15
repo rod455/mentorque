@@ -77,6 +77,45 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   que foi com a 3.1; (3) guardar a proposta da primeira frase para depois de
   01/11, porque é a única coisa desta rodada em que esperar vale mais que fazer.
 
+## 2026-10-15 · Engenharia: por que os e-mails não são abertos, e os dois consertos de proteção
+
+- Pedido do dono: "vamos investigar e ver onde melhorar". Tudo lido no banco
+  em 15/10 de manhã (UTC), salvo o DNS.
+- **A ENTREGA PIOROU QUATRO SEMANAS SEGUIDAS.** Por semana de envio: 21/09
+  com 147 enviados, 1% devolvidos e 13% abertos; 28/09 com 277, 4% e 13%;
+  05/10 com 280, 6% e 5%; 12/10 (parcial) com 160, 9% e 3%. Os atrasos de
+  entrega subiram junto (2, 9, 16, 14). É o desenho de reputação caindo no
+  Gmail, para onde vão 799 dos 872 e-mails de 30 dias.
+- **AS DEVOLUÇÕES SÃO DE ENDEREÇO REAL.** As 17 pessoas com devolução no Gmail
+  entraram com a conta Google; nenhuma de e-mail e senha. Endereço que existe
+  e volta é recusa de quem recebe, não erro de digitação. O motivo da recusa
+  não é guardado no evento (`extra` vazio), então isto é DEDUZIDO do padrão,
+  não lido.
+- **68% DOS ENVIOS FORAM PARA QUEM NUNCA ABRE.** De 288 pessoas, 46 abriram
+  algum e-mail; 151 receberam 3 ou mais e não abriram nenhum, e levaram 584
+  envios. O Gmail filtra por engajamento: escrever muito para quem não abre
+  derruba a entrega de todos.
+- **DNS** (dns.google pelo n8n, 11h50 UTC): DKIM do Resend publicado, SPF do
+  subdomínio `send` publicado, **DMARC inexistente**. Os servidores de nome
+  são do Registro.br.
+- **A conta Gmail do n8n não recebe nossos e-mails** (busca de 60 dias
+  vazia), então ela não serve para ver em que aba eles caem. Fica sem
+  instrumento até o Postmaster Tools.
+- **FEITO, proteção sem mexer em texto, assunto ou frequência:**
+  1. o cron da jornada lê o histórico de envios em páginas. A leitura era de
+     uma vez, a API corta em 1.000 e o histórico de 90 dias tinha 955: em um
+     ou dois dias o cron deixaria de ver envios antigos e repetiria e-mail
+     (o único índice único é um envio por pessoa por DIA);
+  2. quem teve e-mail devolvido não recebe mais e-mail (o push segue). Em
+     15/10, 15 das 18 pessoas com devolução tinham seguido recebendo, 31
+     envios depois da primeira volta. Sem push, a pessoa sai da fila antes do
+     corte de 40 por dia.
+  Quatro asserções em `conferir:jornada`, quatro plantios, quatro mordidas.
+- **NA LISTA DO DONO** (destino novo `registro-br`): publicar o DMARC e
+  cadastrar o domínio no Google Postmaster Tools.
+- **DECISÃO DO DONO, recomendada e não feita** (é mensagem a cliente): parar
+  o e-mail para quem recebeu 3 sem abrir nenhum, mantendo o push.
+
 ## 2026-10-15 · Engenharia: as pessoas abrem os e-mails? Pouco, e o retrato mostrava metade
 
 - Pergunta do dono: "as pessoas estão abrindo nossos emails?". Lido no banco

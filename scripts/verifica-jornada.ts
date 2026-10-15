@@ -271,6 +271,29 @@ console.log("Jornada: quem recebe o quê, e quando.");
   conferir("o cron consulta a decisão e monta o texto", /escolherEmail\(/.test(cron) && /montarMensagem\(/.test(cron));
   conferir("o cron manda push pelo mesmo transporte", /enviarPush\(/.test(cron));
   conferir("o cron grava o envio", /from\("jornada_envios"\)\.insert/.test(cron));
+  // 15/10/2026: a API do Supabase corta em 1.000 linhas sem avisar, e o
+  // histórico de 90 dias tinha 955. O que o cron não vê, ele manda de novo.
+  conferir(
+    "o cron lê o histórico de envios em páginas",
+    /todasAsLinhas<[^>]*>\(\(de, ate\) =>\s*admin\.from\("jornada_envios"\)[^\n]*\.range\(de, ate\)/.test(cron),
+    "lendo de uma vez, a 1.001ª linha some e o e-mail daquela chave sai de novo",
+  );
+  conferir(
+    "a página só para quando vem incompleta",
+    /if \(!data \|\| data\.length < PAGINA\) return/.test(cron),
+  );
+  // E quem teve e-mail devolvido não recebe mais e-mail: em 15/10, 15 das 18
+  // pessoas com devolução tinham seguido recebendo, e cada volta conta contra
+  // o domínio no Gmail.
+  conferir(
+    "quem teve devolução não recebe e-mail",
+    /const envio: EnvioFeito = devolvido \? \{ id: null, erro: null \} : await enviarEmail\(/.test(cron),
+    "mandar de novo para endereço que devolveu é o que o Gmail mais pune",
+  );
+  conferir(
+    "e, sem push, sai da fila antes do corte diário",
+    /if \(devolvidos\.has\(p\.userId\) && !comToken\.has\(p\.userId\)\) \{\s*puladosDevolvidos\+\+;\s*continue;/.test(cron),
+  );
   conferir("o cron reconhece a chave e a chamada da Vercel", /CRON_SECRET/.test(cron) && /chaveDadosOk/.test(cron) && /vercel-cron/.test(cron));
   conferir("sem CRON_SECRET, a chamada do cron da Vercel passa (senão a jornada fica muda)", /if \(segredo\) return[\s\S]{0,200}vercel-cron/.test(cron));
   conferir("a lista com e-mails só sai para quem tem a chave", /chamador === "chave" \? candidatos/.test(cron));

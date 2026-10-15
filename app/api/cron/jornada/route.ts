@@ -134,6 +134,45 @@ async function resgatesDoCupom(admin: SupabaseClient): Promise<number> {
   return count ?? 0;
 }
 
+// TODAS AS LINHAS, EM PÁGINAS (15/10/2026).
+//
+// A API do Supabase devolve no máximo 1.000 linhas por consulta, peça o que
+// pedir, e não avisa que cortou. Em 15/10 o histórico de 90 dias de
+// `jornada_envios` tinha 955 linhas: a 1.001ª seria a primeira que este cron
+// deixaria de ver, e o que ele não vê ele manda de novo (o único índice único
+// da tabela é um envio por pessoa por DIA, não por chave). O mesmo teto já
+// tinha escondido metade das aberturas no retrato. Aqui a leitura vai em
+// páginas até a última vir incompleta.
+const PAGINA = 1000;
+async function todasAsLinhas<T>(
+  pagina: (de: number, ate: number) => PromiseLike<{ data: T[] | null; error: { message: string } | null }>,
+): Promise<{ data: T[]; error: { message: string } | null }> {
+  const todas: T[] = [];
+  for (let de = 0; ; de += PAGINA) {
+    const { data, error } = await pagina(de, de + PAGINA - 1);
+    if (error) return { data: todas, error };
+    todas.push(...(data ?? []));
+    if (!data || data.length < PAGINA) return { data: todas, error: null };
+  }
+}
+
+// QUEM JÁ TEVE E-MAIL DEVOLVIDO NÃO RECEBE MAIS E-MAIL (15/10/2026).
+//
+// Em 15/10, 15 das 18 pessoas com devolução tinham seguido recebendo, 31
+// envios depois da primeira volta. Cada devolução nova conta contra o
+// domínio no Gmail, e a devolução subiu de 1% para 9% em quatro semanas
+// enquanto a abertura caía de 13% para 3%. O push continua: ele não passa
+// pelo e-mail. Para voltar a mandar a alguém, apague o evento `bounced` dele.
+async function quemTeveDevolucao(admin: SupabaseClient): Promise<Set<string>> {
+  const { data: voltas, error } = await admin.from("email_eventos").select("id_externo").eq("tipo", "bounced").limit(1000);
+  if (error) throw new Error(`banco: ${error.message}`);
+  const ids = [...new Set((voltas ?? []).map((v) => v.id_externo as string))];
+  if (!ids.length) return new Set();
+  const { data: donos, error: erroDonos } = await admin.from("jornada_envios").select("user_id").in("email_id", ids);
+  if (erroDonos) throw new Error(`banco: ${erroDonos.message}`);
+  return new Set((donos ?? []).map((d) => d.user_id as string));
+}
+
 async function carregarPessoas(admin: SupabaseClient, hoje: string): Promise<{ pessoas: PessoaDaJornada[]; comToken: Set<string> }> {
   const oferta = ofertaDoCupom(await resgatesDoCupom(admin));
   const { data: lista, error: erroUsers } = await admin.auth.admin.listUsers({ page: 1, perPage: 1000 });
@@ -144,7 +183,9 @@ async function carregarPessoas(admin: SupabaseClient, hoje: string): Promise<{ p
   const [estados, saidas, envios, manuais, tokens] = await Promise.all([
     admin.from("user_state").select("user_id, data, updated_at"),
     admin.from("jornada_saidas").select("user_id"),
-    admin.from("jornada_envios").select("user_id, chave, dia").gte("dia", desde.toISOString().slice(0, 10)),
+    todasAsLinhas<{ user_id: string; chave: string; dia: string }>((de, ate) =>
+      admin.from("jornada_envios").select("user_id, chave, dia").gte("dia", desde.toISOString().slice(0, 10)).order("id").range(de, ate),
+    ),
     admin.from("manuals").select("make, model, year_from, year_to"),
     admin.from("push_tokens").select("user_id"),
   ]);
@@ -267,8 +308,10 @@ export async function GET(req: Request) {
 
   let pessoas: PessoaDaJornada[];
   let comToken: Set<string>;
+  let devolvidos: Set<string>;
   try {
     ({ pessoas, comToken } = await carregarPessoas(admin, hoje));
+    devolvidos = await quemTeveDevolucao(admin);
   } catch (err) {
     return NextResponse.json({ ok: false, error: String(err).slice(0, 200) }, { status: 502 });
   }
@@ -282,7 +325,14 @@ export async function GET(req: Request) {
   for (const p of pessoas) for (const env of p.envios) if (env.dia < hoje) chavesJaVistas.add(env.chave);
   const copiasParaODono: { chave: string; assunto: string; html: string; text: string }[] = [];
   let puladosAppleRelay = 0;
+  let puladosDevolvidos = 0;
   for (const p of pessoas) {
+    // Devolução sem push não tem canal nenhum: sai da fila antes do corte das
+    // 40 por dia, senão ocupa vaga de quem ainda recebe.
+    if (devolvidos.has(p.userId) && !comToken.has(p.userId)) {
+      puladosDevolvidos++;
+      continue;
+    }
     let e: Escolha | null = null;
     try {
       e = escolherEmail(p, hoje);
@@ -320,9 +370,13 @@ export async function GET(req: Request) {
     }
     const canais: string[] = [];
     const pronto = renderEmail(mensagem, sairUrl);
-    const envio = await enviarEmail(chaveResend, p.email, pronto, sairUrl, e.chave);
+    const devolvido = devolvidos.has(p.userId);
+    if (devolvido) puladosDevolvidos++;
+    const envio: EnvioFeito = devolvido ? { id: null, erro: null } : await enviarEmail(chaveResend, p.email, pronto, sairUrl, e.chave);
     let emailId: string | null = null;
-    if (envio.erro) erros.push({ userId: p.userId, chave: e.chave, erro: `email: ${envio.erro}` });
+    if (devolvido) {
+      // sem e-mail: só o push, mais abaixo
+    } else if (envio.erro) erros.push({ userId: p.userId, chave: e.chave, erro: `email: ${envio.erro}` });
     else {
       enviados++;
       emailId = envio.id;
@@ -360,8 +414,8 @@ export async function GET(req: Request) {
     }
     const linhas = candidatos.map((c) => `<li>${c.email} · <b>${c.chave}</b> · ${c.assunto}${c.push ? " · push" : ""}</li>`).join("");
     const linhasDeErro = erros.map((x) => `<li>${x.chave}: ${x.erro}</li>`).join("");
-    const resumoHtml = `<p>Jornada de ${hoje}: <b>${enviados}</b> e-mail(s) enviado(s), ${pushEnviados} push, ${puladosAppleRelay} pulado(s) por e-mail oculto da Apple, ${erros.length} erro(s).</p><ul>${linhas}</ul>${linhasDeErro ? `<p>Erros:</p><ul>${linhasDeErro}</ul>` : ""}<p>Para pausar: JORNADA_PAUSADA=sim na Vercel. Manual em docs/jornada.md.</p>`;
-    const resumoText = `Jornada de ${hoje}: ${enviados} e-mail(s), ${pushEnviados} push, ${puladosAppleRelay} pulado(s) por e-mail oculto da Apple, ${erros.length} erro(s).\n` + candidatos.map((c) => `- ${c.email} · ${c.chave} · ${c.assunto}`).join("\n");
+    const resumoHtml = `<p>Jornada de ${hoje}: <b>${enviados}</b> e-mail(s) enviado(s), ${pushEnviados} push, ${puladosAppleRelay} pulado(s) por e-mail oculto da Apple, ${puladosDevolvidos} sem e-mail por devolução anterior, ${erros.length} erro(s).</p><ul>${linhas}</ul>${linhasDeErro ? `<p>Erros:</p><ul>${linhasDeErro}</ul>` : ""}<p>Para pausar: JORNADA_PAUSADA=sim na Vercel. Manual em docs/jornada.md.</p>`;
+    const resumoText = `Jornada de ${hoje}: ${enviados} e-mail(s), ${pushEnviados} push, ${puladosAppleRelay} pulado(s) por e-mail oculto da Apple, ${puladosDevolvidos} sem e-mail por devolução anterior, ${erros.length} erro(s).\n` + candidatos.map((c) => `- ${c.email} · ${c.chave} · ${c.assunto}`).join("\n");
     const { erro } = await enviarEmail(chaveResend, DONO, { assunto: `Jornada de hoje: ${enviados} e-mail(s), ${erros.length} erro(s)`, html: resumoHtml, text: resumoText }, "https://www.mentorque.com.br", "resumo-ao-dono");
     resumoEnviado = !erro;
   }
@@ -384,6 +438,7 @@ export async function GET(req: Request) {
     hoje,
     modo: ativa ? "envio" : "ensaio",
     puladosAppleRelay,
+    puladosDevolvidos,
     copiasParaODono: copiasEnviadas,
     resumoParaODono: resumoEnviado,
     contas: pessoas.length,
