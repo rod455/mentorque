@@ -440,6 +440,49 @@ incompleta. Para comparar duas semanas, some o `porDia` você mesmo, só com dia
 cheios. Em 19/09 o `custo7d` dizia R$ 227,13 e a semana cheia de 12 a 18/09 era
 R$ 214,30.
 
+### Duas réguas só decidem enquanto a diferença for maior que a discordância delas (15/10/2026)
+
+Por três semanas a AppsFlyer e as próprias plataformas disseram a mesma coisa, e
+eu tratei isso como "duas réguas concordam, logo a conclusão é firme". Em 15/10
+elas se inverteram: pela AppsFlyer o Meta é 20% mais barato por instalação, pelas
+plataformas o vídeo do Google é 21% mais barato.
+
+Não foi uma régua que piorou. **O que mudou foi o tamanho do que eu estava
+medindo.** Quando a diferença entre campanhas era de 15 vezes, nenhum erro de
+atribuição cobria aquilo e as duas apontavam junto. Com 20%, a diferença é do
+mesmo tamanho da discordância entre os instrumentos.
+
+**A regra:** antes de decidir dinheiro com duas réguas, compare a diferença que
+você mediu com a distância ENTRE as réguas. Se a segunda for do tamanho da
+primeira, a resposta honesta é "não decide", e o próximo passo é instrumento, não
+opinião. Conclusão forte com réguas que concordam em ordem de grandeza é barata;
+a mesma conclusão com 20% é chute com cara de número.
+
+### Uma janela por tabela, e o residual escrito embaixo (15/10/2026)
+
+Cada fonte tem a janela do coletor dela, e elas não batem: o Google traz oito
+datas no `porCampanha`, o Meta traz sete no `porDia`, a AppsFlyer traz oito e
+sempre terminando hoje. Juntar isso numa tabela sem dizer produz o erro que o
+dono pegou em 08/10: o custo por instalação do Meta dividia sete dias de gasto
+por oito dias de instalação, e saía 15% barato demais.
+
+**O que fazer, e foi o que esta rodada fez:** uma janela por tabela, dita no
+título da tabela; onde uma fonte trouxer menos datas, o número sai com o
+residual no parágrafo logo abaixo, com o valor do dia que falta e o resultado
+corrigido. Nunca prorrateie em silêncio, e nunca misture duas janelas dentro da
+mesma tabela.
+
+### Usuário leal é a régua mais próxima de desfecho que a AppsFlyer dá
+
+O arquivo de parceiros traz `Loyal Users` por campanha, e ele está mais perto do
+negócio que instalação, porque já sabemos que só uma em oito instalações cria
+conta. Em 15/10: Meta 32% de leais, vídeo do Google 26%, busca 20%.
+
+O limite, e ele vale toda vez que esse número aparecer: **a definição de "leal"
+mora no console da AppsFlyer e não foi lida.** Pode ser três sessões, pode ser
+outra regra. Enquanto ninguém ler, ele compara campanhas entre si e NÃO vale
+como taxa.
+
 ### A janela de 30 dias dos termos virou rolante em 02/10 (08/10/2026)
 
 O aprendizado de 19/09 dizia: enquanto a campanha for mais nova que 30 dias, o

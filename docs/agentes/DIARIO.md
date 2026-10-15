@@ -3,6 +3,76 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-15 · Mídia: rodada 5, a busca pausada no dia 13, e as duas réguas pararam de concordar
+- Artifact "Mídia da semana":
+  https://claude.ai/artifact/RqA84z8AKRAWYc33VUP4u1
+  Relatório e PDF em `docs/agentes/relatorios/`, datados de hoje.
+- **A ENTREGA DA SEMANA PASSADA CHEGOU, com número**: execução **8856** do fluxo
+  "Mídia: relatório por e-mail", 08/10 às 14h05 UTC, decisão `ok: true`,
+  destinatários Rodrigo e Luiz, PDF de 91 kB anexado, último nó "Manda o
+  relatorio com o PDF". Primeira entrega de verdade a quem é de fora. O desenho
+  de hora em hora que a Engenharia pôs no ar em 08/10 resolveu o que o de hora
+  fixa escondia, e este é o ponto 1 do retorno fechado.
+- **A MANCHETE: a busca foi pausada no dia 13.** A coleta do dia 13 ainda a lia
+  ENABLED e a do dia 14 já lê PAUSED; até ali gastava uns R$ 29 por dia. Cinco
+  dias entre a decisão ir para a mesa e ser tomada.
+- **A CONTA, 07 a 13/10 contra 30/09 a 06/10**, uma janela só por tabela:
+  gasto R$ 453,69 contra R$ 398,37 (+14%), **88 contas de fora contra 58**
+  (+52%), **custo por conta R$ 5,16 contra R$ 6,87** (-25%), o melhor da série.
+- **O ACHADO: as duas réguas se inverteram.** Custo por instalação atribuída
+  (AppsFlyer, 07 a 14/10): Meta R$ 1,43 (com a oitava data somada à mão, porque
+  a coleta do Meta traz sete), vídeo do Google R$ 1,78, busca R$ 29,38. Pela
+  régua de cada plataforma: vídeo R$ 0,52, Meta R$ 0,66, busca R$ 5,88.
+  **AppsFlyer diz Meta 20% mais barato; as plataformas dizem vídeo 21% mais
+  barato.** Não é régua que piorou: é que a diferença entre campanhas caiu de 15
+  vezes para 20%, que é o tamanho da discordância entre os instrumentos.
+- **POR ISSO NÃO HÁ PROPOSTA NOVA, e é escolha.** A pausa liberou uns R$ 29 por
+  dia (R$ 870 por mês) e eu NÃO recomendo destino: as duas medições apontam para
+  campanhas diferentes. O que destrava já está na lista desde 08/10 (integração
+  de custo da AppsFlyer); aponto que ela virou o que decide dinheiro, sem repetir
+  o pedido como novidade.
+- **NÚMERO NOVO, mais perto de desfecho**: usuário leal da AppsFlyer, 07 a 14/10.
+  Meta 42 de 130 (32%, R$ 4,43 por leal), vídeo 23 de 88 (26%, R$ 6,81), busca 1
+  de 5 (20%, R$ 146,90). Limite dito: a definição de "leal" é de console e não
+  foi lida, então compara campanhas e não vale como taxa.
+- **PEDIDO DO DIRETOR DE 05/10 RESPONDIDO, e sem precisar do console**: ele
+  queria saber se a etiqueta que morre na instalação se conserta com uma linha em
+  `lib/stores.ts` ou com um clique do dono mais a linha. **É clique mais linha.**
+  Dois instrumentos que eu alcanço bastam: no fonte, `lib/stores.ts` tem os dois
+  endereços crus das lojas e nenhum OneLink, então a linha não teria para onde
+  apontar; e na atribuição, as únicas fontes pagas são Facebook Ads e
+  googleadwords_int, que se atribuem sozinhas e não usam OneLink. Criar o
+  OneLink é console sem API. Linha apagada da fila. Ressalva dele registrada:
+  desde 04/10 os selos da home também gravam `clicou_baixar`, então o
+  denominador desse evento trocou de composição no meio da janela.
+- **MEUS DOIS PEDIDOS AO ANALISTA FORAM PARA A FILA**, que era o ponto 3 do
+  retorno: impressão por campanha POR DIA (o alarme de campanha parada compara
+  janela de oito datas e só consegue uns quatro dias; a diferença custou oito
+  dias de orçamento em setembro, uns R$ 160) e
+  `ad_group_ad.policy_summary.approval_status` por anúncio (o campo que teria
+  mostrado a reprovação de 24/09 sem print).
+- **A sujeira do banco fechou sem a minha mão**: a função `teste_anomalia5` que eu
+  não consegui apagar não existe mais, conferido hoje no catálogo. Ela nunca
+  chegou à lista do dono, apesar de o retorno dizer que chegaria; quem apagou,
+  apagou sem linha.
+- **O alarme de campanha parada está calado**, conferido hoje: a função de
+  anomalias não devolve nenhuma linha de "campanha parou de aparecer", que é o
+  certo, porque a busca foi pausada pelo dono e não morreu calada.
+- **Desperdício com nome, retrato de encerramento da busca** (50 termos, 30
+  dias): sintoma R$ 51,19, scanner R$ 42,53, aprender mecânica R$ 17,22,
+  mecânico online R$ 6,89, oficina R$ 3,39. Os dois grupos não atendidos somam
+  R$ 59,75 e param de crescer no dia 13. As negativas adiadas em 04/10 não
+  precisam de decisão enquanto a busca estiver pausada.
+- **Orgânico**: 19 das 242 instalações Android da janela (8%) chegaram sem
+  anúncio, contra 26% duas semanas atrás. Parcela paga subindo, não orgânico
+  encolhendo.
+- **A RÉGUA: doze de doze, pela primeira vez.** O critério 8 é cumprido por
+  subtração (nenhuma proposta nova, de propósito, com o motivo escrito).
+- APRENDIZADOS em `midia-paga.md`: duas réguas só decidem enquanto a diferença
+  medida for maior que a discordância entre elas; uma janela por tabela com o
+  residual escrito embaixo; e usuário leal como a régua mais próxima de desfecho
+  que a AppsFlyer dá, com o limite da definição não lida.
+
 ## 2026-10-15 · ASO: primeira rodada com o alvo novo, e um erro meu muda a leitura de 01/11
 - Quarta rodada deste papel. Artifact "Lojas da quinzena":
   https://claude.ai/artifact/PKH7okX6RwkaZ6X5VtuXjD
@@ -137,6 +207,7 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 - O que não alcança: abertura é pixel. Quem bloqueia imagem não conta, e o
   Mail da Apple conta como aberto o que ninguém leu. O clique é o número
   firme, e ele é 4 em 832.
+
 
 ## 2026-10-15 · Engenharia: cada assinatura passa a dizer de onde veio
 
