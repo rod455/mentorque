@@ -287,12 +287,26 @@ console.log("Jornada: quem recebe o quê, e quando.");
   // o domínio no Gmail.
   conferir(
     "quem teve devolução não recebe e-mail",
-    /const envio: EnvioFeito = devolvido \? \{ id: null, erro: null \} : await enviarEmail\(/.test(cron),
+    /const semEmail = \(id: string\) => devolvidos\.has\(id\) \|\| naoAbrem\.has\(id\)/.test(cron) &&
+      /const envio: EnvioFeito = pulaEmail \? \{ id: null, erro: null \} : await enviarEmail\(/.test(cron),
     "mandar de novo para endereço que devolveu é o que o Gmail mais pune",
   );
   conferir(
     "e, sem push, sai da fila antes do corte diário",
-    /if \(devolvidos\.has\(p\.userId\) && !comToken\.has\(p\.userId\)\) \{\s*puladosDevolvidos\+\+;\s*continue;/.test(cron),
+    /if \(semEmail\(p\.userId\) && !comToken\.has\(p\.userId\)\) \{\s*contaPulo\(p\.userId\);\s*continue;/.test(cron),
+  );
+  // Decisão do dono em 15/10: 5 e-mails sem abrir nem clicar nenhum, sai do
+  // e-mail (o push continua). A regra mora na view, e o cron a lê inteira.
+  conferir(
+    "quem recebeu 5 sem abrir sai do e-mail",
+    /admin\.from\("jornada_sem_engajamento"\)\.select\("user_id"\)[^\n]*\.range\(de, ate\)/.test(cron),
+    "sem isso o cron volta a escrever para quem nunca leu, e o Gmail pune a entrega de todos",
+  );
+  const viewSemAbrir = readFileSync(new URL("../supabase/jornada_sem_engajamento.sql", import.meta.url), "utf8");
+  conferir(
+    "a view conta só envio rastreado e trata clique como abertura",
+    /where je\.email_id is not null/.test(viewSemAbrir) && /tipo in \('opened', 'clicked'\)/.test(viewSemAbrir) && /having count\(\*\) >= 5/.test(viewSemAbrir),
+    "envio sem id não tem evento; contar ele como 'não abriu' tiraria gente por falta de instrumento",
   );
   conferir("o cron reconhece a chave e a chamada da Vercel", /CRON_SECRET/.test(cron) && /chaveDadosOk/.test(cron) && /vercel-cron/.test(cron));
   conferir("sem CRON_SECRET, a chamada do cron da Vercel passa (senão a jornada fica muda)", /if \(segredo\) return[\s\S]{0,200}vercel-cron/.test(cron));

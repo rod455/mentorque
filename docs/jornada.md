@@ -34,6 +34,12 @@ operação: o que existe, onde mora, como testar e como ligar.
 - "Vencida" só com um serviço daquele tipo registrado. Data de compra sem
   registro não vira "vencido há 30 meses".
 - Sem preço de plano e sem oferta em e-mail nenhum. Isso é do dono.
+- Quem recebeu 5 e-mails e não abriu nem clicou nenhum sai do e-mail; o push
+  continua (decisão do dono, 15/10/2026). Conta só envio com id do Resend, e
+  volta sozinho quem abrir algum depois. Regra na view
+  `jornada_sem_engajamento`.
+- Quem teve um e-mail devolvido não recebe mais e-mail; o push continua
+  (15/10/2026). Para voltar a mandar, apague o evento `bounced` da pessoa.
 
 ## Os e-mails
 

@@ -3,6 +3,24 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-15 · Engenharia: quem recebeu 5 e-mails sem abrir nenhum sai do envio
+
+- Decisão do dono: "quem recebeu 5 emails e não abriu nenhum, vamos tirar do
+  fluxo de envio". Feito como regra de e-mail: o push continua, igual à regra
+  da devolução da manhã.
+- A regra mora na view `jornada_sem_engajamento`: conta só envio com id do
+  Resend (desde 19/09, antes não há evento), e clique vale como abertura, para
+  não tirar quem lê com imagem bloqueada. Quem abrir ou clicar algum e-mail
+  antigo depois volta sozinho.
+- Hoje ela tira **33 pessoas** (banco, 15/10 à tarde). Outras 62 têm 4 envios
+  e nenhuma abertura, e saem se o próximo também não for aberto.
+- No cron, quem está sem e-mail e sem push sai da fila antes do corte de 40
+  por dia. O resumo que o dono recebe ganhou a contagem "sem e-mail por 5 sem
+  abrir".
+- `conferir:jornada` cobra a view e a leitura dela; três plantios (cron sem a
+  lista, view contando envio sem rastreio, regra trocada para 3), três
+  MORDERAM. Primeira rodada com a regra: amanhã, 11h UTC.
+
 ## 2026-10-15 · Engenharia: as rodadas de hoje do ASO e da Mídia lidas contra os instrumentos, e a bateria verde de novo
 
 - Pedido do dono: "veja o que foi postado hoje pelos agentes". Rodaram o ASO
