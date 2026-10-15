@@ -3,6 +3,20 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-15 · Engenharia: o DMARC está no ar, e o Postmaster pede a conta certa
+
+- **DMARC publicado pelo dono.** DNS público (dns.google pelo n8n, 16h15
+  UTC): `_dmarc.mentorque.com.br` devolve `v=DMARC1; p=none;
+  rua=mailto:contato@mentorque.com.br`. Item apagado da lista do dono. Os
+  relatórios do DMARC passam a chegar no contato@.
+- **Postmaster Tools ainda não.** O dono abriu com a conta do Mentorque e
+  recebeu "You are not authorized to view data for this domain". A
+  verificação do Google que já está na raiz do DNS é de outra conta
+  (provavelmente a do Search Console). A linha da lista foi reescrita com os
+  dois caminhos.
+- Efeito do DMARC na entrega: sem leitura ainda. Quem diz é a abertura e a
+  devolução por semana de envio, nas próximas duas semanas.
+
 ## 2026-10-15 · Engenharia: quem recebeu 5 e-mails sem abrir nenhum sai do envio
 
 - Decisão do dono: "quem recebeu 5 emails e não abriu nenhum, vamos tirar do
