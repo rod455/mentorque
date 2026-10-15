@@ -193,11 +193,14 @@ select
   s.status,
   s.plan,
   s.current_period_end,
-  (s.stripe_subscription_id is null) as cortesia_manual,
+  -- Desde 15/10/2026 a cortesia vem da `origem` gravada pelo escritor
+  -- (supabase/subscriptions_origem.sql); "sem Stripe" só vale para linha sem
+  -- origem. Antes, a venda da Play de 25/09 aparecia aqui como cortesia.
+  coalesce(s.origem = 'cortesia', s.stripe_subscription_id is null) as cortesia_manual,
   (select count(*) from public.funil_eventos f
      where f.user_id = s.user_id and f.evento = 'assinou') as eventos_assinou,
   case
-    when s.stripe_subscription_id is null then 'cortesia, nao e venda'
+    when coalesce(s.origem = 'cortesia', s.stripe_subscription_id is null) then 'cortesia, nao e venda'
     when (select count(*) from public.funil_eventos f
             where f.user_id = s.user_id and f.evento = 'assinou') = 0 then 'FALTA o evento assinou'
     when (select count(*) from public.funil_eventos f
@@ -229,7 +232,12 @@ select
   -- do QA (ver o diário de 14/10).
   exists (select 1 from public.funil_eventos f
             where f.user_id = s.user_id and f.evento = 'assinou'
-              and f.origem = 'revenuecat') as venda_de_loja
+              and f.origem = 'revenuecat') as venda_de_loja,
+  -- A origem gravada (15/10/2026), no FIM pelo mesmo motivo da coluna acima.
+  -- Ao lado de `venda_de_loja` ela vira conferência: a origem diz o que o
+  -- webhook gravou, o evento diz o que o funil viu, e os dois têm que contar a
+  -- mesma história.
+  s.origem
 from public.subscriptions s
 where s.status in ('active', 'trialing');
 

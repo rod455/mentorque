@@ -98,6 +98,22 @@ Em teste grátis o cartão já foi dado e a pessoa já tem Premium na mão. Cont
 só `active` esconde metade da base. `lib/operacao.ts` já faz isso certo; copie
 o filtro de lá em vez de escrever de novo.
 
+### Venda ou cortesia: pergunte à `origem`, não ao Stripe
+
+Até 15/10/2026 a casa deduzia "sem `stripe_subscription_id` é cortesia". A
+primeira venda de loja (Play, 25/09) não tem id do Stripe e virou cortesia em
+três lugares: a conferência das assinaturas, o painel ("0 pagando, 1
+cortesia") e a conferência da loja. Desde 15/10 cada escritor grava
+`subscriptions.origem`: `stripe`, `app_store`, `play_store`, `loja` ou
+`cortesia`. As regras de leitura estão em `lib/assinaturaOrigem.ts`; use
+`ehCortesia` e `ehVendaDeLoja` em vez de olhar o id do Stripe.
+
+**Quem liberar Premium na mão** (revisor de loja, teste, cliente que pagou e
+ficou sem acesso) grava `origem = 'cortesia'` junto, ou, no caso da venda de
+loja recuperada à mão, a origem da loja (`play_store` ou `app_store`). Linha
+sem origem cai na regra antiga, e para a conferência da loja ela não conta
+como venda.
+
 ### MRR é projeção, `amount_paid` é caixa
 
 MRR é "quanto entraria se todo mundo renovasse pelo plano". Não é dinheiro.

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { eventoDeFunil } from "@/lib/funilServidor";
 import { ehVendaComDinheiro, identidadeUsavel, relatoDeVendaSemConta } from "@/lib/loja/vendaSemConta";
+import { origemDaLoja } from "@/lib/assinaturaOrigem";
 
 export const runtime = "nodejs";
 
@@ -139,6 +140,10 @@ export async function POST(req: Request) {
       plan,
       current_period_end: periodEnd,
       updated_at: new Date().toISOString(),
+      // De onde veio a assinatura (15/10/2026). Sem isto, venda de loja e
+      // cortesia eram a mesma linha para quem lia: as duas sem id do Stripe.
+      // PROMOTIONAL vira cortesia. Regra em lib/assinaturaOrigem.ts.
+      origem: origemDaLoja(event.store),
       ...campos,
     });
     return error?.message ?? null;

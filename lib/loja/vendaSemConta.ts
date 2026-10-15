@@ -111,10 +111,11 @@ export function relatoDeVendaSemConta(e: EventoDaLoja): RelatoDeVenda {
  * Não precisa de chave nova nem de rede: os dois números já chegam ao retrato
  * todo dia. O que faltava era a subtração.
  *
- * `noBanco` conta só assinatura SEM `stripe_subscription_id`, que é como a
- * linha de uma compra de loja se parece aqui: o webhook do RevenueCat não
- * escreve id de Stripe nenhum. Comparar com o total das assinaturas esconderia
- * exatamente o buraco, porque as do Stripe tapariam a conta.
+ * `noBanco` conta só assinatura com origem de LOJA (lib/assinaturaOrigem.ts).
+ * Até 15/10/2026 era "sem `stripe_subscription_id`", o que somava cortesia dada
+ * na mão: cortesia mais venda perdida davam "batem". Comparar com o total das
+ * assinaturas esconderia o buraco do mesmo jeito, porque as do Stripe tapariam
+ * a conta.
  */
 export function conferenciaDaLoja(
   rcAtivas: number | null | undefined,

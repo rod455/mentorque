@@ -3,6 +3,33 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-15 · Engenharia: cada assinatura passa a dizer de onde veio
+
+- Pedido do dono, sobre a raiz que o QA deixou como recomendação em 14/10:
+  "vamos construir agora". A tabela `subscriptions` não dizia de onde a
+  assinatura veio, e a casa deduzia "sem Stripe é cortesia". A venda da Play
+  de 25/09 aparecia como cortesia na conferência das assinaturas, no painel
+  ("0 pagando, 1 cortesia") e na conferência da loja.
+- **No banco** (migrações `subscriptions_origem` e
+  `assinaturas_conferencia_usa_origem`, arquivos em `supabase/`): coluna
+  `origem` com cinco valores possíveis e o preenchimento das 13 linhas: 3
+  `stripe`, 1 `play_store`, 9 `cortesia` (estas deduzidas: sem id de cobrança
+  e sem evento de venda). A conferência das assinaturas agora diz "ok" para a
+  venda da Play, com `origem` ao lado do `venda_de_loja`.
+- **Quem grava**: o escritor do Stripe grava `stripe`; o webhook do RevenueCat
+  grava pela loja do evento, e PROMOTIONAL (acesso dado no painel do
+  RevenueCat) vira `cortesia`. Regras em `lib/assinaturaOrigem.ts`.
+- **Quem lê**: o painel separa pagante de cortesia pela origem, e a
+  conferência da loja conta só origem de loja (substitui o conserto da manhã,
+  que deduzia pelo evento).
+- `conferir:loja` com a seção 10 nova; cinco plantios (webhook sem origem,
+  Stripe sem origem, PROMOTIONAL como venda, loja contando "sem Stripe" e
+  cortesia pela falta do Stripe), cinco MORDERAM.
+- O que não alcança: nenhuma venda nova passou pelo webhook com a coluna. A
+  prova é a próxima compra de loja ou do Stripe chegar com a origem preenchida.
+  E quem liberar Premium na mão grava `origem = 'cortesia'` junto (escrito na
+  skill `ler-a-operacao`).
+
 ## 2026-10-15 · Engenharia: a rodada do QA lida contra os instrumentos, a linha do AdMob chegando ao retrato e a loja contando só venda
 
 - Pedido do dono: "veja o que o agente publicou ontem e o que faz sentido

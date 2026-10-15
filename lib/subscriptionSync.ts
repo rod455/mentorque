@@ -46,6 +46,8 @@ export async function upsertSubscription(admin: SupabaseClient, sub: Stripe.Subs
     user_id: userId,
     stripe_customer_id: typeof sub.customer === "string" ? sub.customer : sub.customer.id,
     stripe_subscription_id: sub.id,
+    // De onde veio a assinatura (15/10/2026): ver lib/assinaturaOrigem.ts.
+    origem: "stripe",
     status: sub.status,
     price_id: price?.id ?? null,
     plan: planForPrice(price?.id),

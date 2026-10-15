@@ -1,6 +1,7 @@
 import { alarmeDeErros, classeDoErro, contaDeErros, linhaDeErros } from "./alarmeDeErros";
 import { ETIQUETA_DESDE, lerPergunta, linhaDePerguntas, quadroDeTemas } from "./biela/perguntaLida";
 import { ORIGEM_VENDA_SEM_CONTA, conferenciaDaLoja, linhaDeVendaSemConta } from "./loja/vendaSemConta";
+import { ehCortesia, ehVendaDeLoja } from "./assinaturaOrigem";
 import { cicloVencido, linhaDeCiclosVencidos } from "./ciclo";
 import { CHAVE_DO_ENVIO_DE_SAIDA } from "./email/saida";
 import { CUPOM_DA_CAMPANHA, linhaDoCupom } from "./email/cupomDisponivel";
@@ -84,9 +85,10 @@ export async function coletarDadosOperacao() {
     { data: conferencia }, { data: emailEnvios }, { data: emailEventos },
   ] = await emFila([
     () => medir("funil_semana", () => admin.from("funil_semana").select("*").limit(12)),
-    // `stripe_subscription_id` entra na leitura porque é ele que separa venda
-    // de cortesia: conta liberada na mão não tem assinatura no Stripe.
-    () => medir("subscriptions", () => admin.from("subscriptions").select("status, cancel_at_period_end, plan, stripe_subscription_id, cupom, current_period_end")),
+    // `origem` separa venda de cortesia desde 15/10/2026 (lib/assinaturaOrigem.ts).
+    // `stripe_subscription_id` continua na leitura como reserva para linha sem
+    // origem: antes dela, "sem Stripe" era o único jeito de ver cortesia.
+    () => medir("subscriptions", () => admin.from("subscriptions").select("status, cancel_at_period_end, plan, stripe_subscription_id, origem, cupom, current_period_end")),
     () => medir("cadastros", () => admin.from("funil_eventos").select("criado_em, plataforma").eq("evento", "cadastro").gte("criado_em", d14)),
     () => medir("app_erros", () => admin.from("app_erros").select("criado_em, tipo, mensagem, plataforma, versao, anon_id").gte("criado_em", d7).limit(2000)),
     // SEM filtro de data: o frescor precisa enxergar fonte parada há muito
@@ -103,7 +105,7 @@ export async function coletarDadosOperacao() {
     // A conferência entre a fonte da verdade e a medição. Ver a view em
     // supabase/funil_eventos.sql: ela existe porque as duas divergiram e
     // ninguém percebeu até alguém perguntar na mão.
-    () => medir("assinaturas_conferencia", () => admin.from("assinaturas_conferencia").select("veredito, venda_de_loja")),
+    () => medir("assinaturas_conferencia", () => admin.from("assinaturas_conferencia").select("veredito")),
     // O QUE ACONTECE COM O E-MAIL DEPOIS DE SAIR (19/09/2026). A jornada manda
     // até 6 por pessoa em 30 dias e a gente só sabia que saíram. Entregue,
     // aberto e clicado chegam pelo webhook do Resend (/api/email/eventos), e
@@ -296,15 +298,19 @@ export async function coletarDadosOperacao() {
   // E não basta somar: as três coisas abaixo são diferentes e virariam mentira
   // se ficassem num número só.
   //
-  //   pagantes  → já teve fatura paga (`active` com assinatura do Stripe)
+  //   pagantes  → venda com cobrança, no Stripe ou numa loja de app (`active`)
   //   emTeste   → `trialing`: vale como assinante, mas ainda não é receita
-  //   cortesias → liberadas na mão, sem Stripe (o revisor das lojas). Nunca
-  //               foram receita e não podem entrar em contagem de venda.
+  //   cortesias → liberadas na mão (o revisor das lojas) ou PROMOTIONAL no
+  //               RevenueCat. Nunca foram receita e não entram em venda.
+  //
+  // ATÉ 15/10/2026 a cortesia era "sem Stripe", e a primeira venda da Play
+  // (25/09) aparecia no painel como "0 pagando, 1 cortesia". Agora quem decide
+  // é a `origem` que o escritor grava. Regra em lib/assinaturaOrigem.ts.
   const assinantes = (subs ?? []).filter((s) => s.status === "active" || s.status === "trialing");
-  const cortesias = assinantes.filter((s) => !s.stripe_subscription_id);
-  const daLoja = assinantes.filter((s) => !!s.stripe_subscription_id);
-  const emTeste = daLoja.filter((s) => s.status === "trialing");
-  const pagantes = daLoja.filter((s) => s.status === "active");
+  const cortesias = assinantes.filter((s) => ehCortesia(s));
+  const vendidas = assinantes.filter((s) => !ehCortesia(s));
+  const emTeste = vendidas.filter((s) => s.status === "trialing");
+  const pagantes = vendidas.filter((s) => s.status === "active");
   // O que o painel chamava de "ativas": mantido com o mesmo nome para não
   // quebrar leitura de fora, mas agora com a definição que o app usa.
   const ativas = assinantes;
@@ -424,9 +430,9 @@ export async function coletarDadosOperacao() {
       // primeira cobrança em um mês inteiro, então venda com cupom entra no
       // MRR hoje e no caixa só depois. Sem esta linha, "3 assinaturas" e
       // "R$ 0,00 recebidos" parecem contradição, e não são.
-      comCupom: daLoja.filter((s) => !!s.cupom).length,
+      comCupom: vendidas.filter((s) => !!s.cupom).length,
       cupons: Object.entries(
-        daLoja.reduce<Record<string, number>>((acc, s) => {
+        vendidas.reduce<Record<string, number>>((acc, s) => {
           if (s.cupom) acc[String(s.cupom)] = (acc[String(s.cupom)] ?? 0) + 1;
           return acc;
         }, {}),
@@ -545,10 +551,10 @@ export async function coletarDadosOperacao() {
       // 1` e as assinaturas do banco eram todas do Stripe. Ninguém comparou,
       // porque comparar era trabalho de quem lê.
       //
-      // `assinaturasDeLoja` conta as ativas SEM `stripe_subscription_id`, que
-      // é como a linha de uma compra de loja se parece aqui. Comparar com o
-      // total esconderia o buraco: as do Stripe tapariam a conta.
-      assinaturasDeLoja: ativas.filter((s) => !s.stripe_subscription_id).length,
+      // `assinaturasDeLoja` conta as ativas com origem de loja (Apple, Google
+      // ou outra). Até 15/10 era "sem Stripe", o que somava cortesia. Comparar
+      // com o total esconderia o buraco: as do Stripe tapariam a conta.
+      assinaturasDeLoja: ativas.filter((s) => ehVendaDeLoja(s)).length,
       // CICLO VENCIDO COM STATUS ATIVO (02/10/2026). O conserto do `renovou`
       // de 01/10 e teoria em producao, e os tres assinantes sairam em 02/10,
       // entao as duas renovacoes que iam prova-lo nao vao acontecer. Nao da
@@ -585,15 +591,12 @@ export async function coletarDadosOperacao() {
       // número era "ativa sem Stripe", e cortesia dada na mão também é ativa sem
       // Stripe: uma cortesia mais uma venda de loja perdida davam o mesmo total
       // que uma venda presente, o alarme dizia "batem" e quem pagou ficava sem
-      // Premium em silêncio. Achado do QA em 14/10, que criou a coluna
-      // `venda_de_loja` na view (evento `assinou` de origem revenuecat). Se a
-      // view não responder, volta para a contagem antiga, que erra para o lado
-      // calmo mas não inventa alarme por falha de leitura.
+      // Premium em silêncio. Achado do QA em 14/10. Agora o lado do banco é a
+      // `origem` que o webhook do RevenueCat grava; linha sem origem não conta
+      // como loja, e o erro, se houver, é o alarme gritar, nunca calar.
       lojaConferida: conferenciaDaLoja(
         (((porFonte.revenuecat ?? [])[0]?.dados ?? {}) as { active_subscriptions?: number }).active_subscriptions,
-        conferencia
-          ? (conferencia as { venda_de_loja?: boolean }[]).filter((c) => c.venda_de_loja === true).length
-          : ativas.filter((s) => !s.stripe_subscription_id).length,
+        ativas.filter((s) => ehVendaDeLoja(s)).length,
       ),
     },
     // Marketing: de onde vieram os cadastros dos últimos 28 dias (UTM da LP).

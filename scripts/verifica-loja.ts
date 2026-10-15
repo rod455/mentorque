@@ -27,6 +27,7 @@
 //
 // Rode com: npm run conferir:loja
 import { readFileSync } from "node:fs";
+import { ehCortesia, ehVendaDeLoja, origemDaLoja } from "../lib/assinaturaOrigem.ts";
 import {
   ORIGEM_VENDA_SEM_CONTA,
   conferenciaDaLoja,
@@ -223,22 +224,22 @@ console.log("Loja: a compra chega ao Premium, e quando não chega, deixa rastro?
   conferir("achei a chamada da conferência da loja", !!chamada);
   // 15/10/2026: "sem Stripe" também era o retrato de uma cortesia dada na mão,
   // e cortesia mais venda perdida davam o mesmo total que venda presente. O
-  // lado do banco passou a ser a coluna `venda_de_loja` da view; a contagem
-  // antiga só sobra como reserva para quando a view não responde.
+  // lado do banco passou a ser a `origem` que o webhook grava.
   conferir(
-    "e ela recebe só as VENDAS DE LOJA, não toda ativa sem Stripe",
-    /conferencia\s*\?\s*\(conferencia[^)]*\)\.filter\(\(c\) => c\.venda_de_loja === true\)\.length/.test(chamada),
-    `${chamada.slice(-160)}; cortesia sem Stripe tapa a venda perdida e o alarme diz "batem"`,
+    "e ela recebe só as VENDAS DE LOJA, pela origem gravada",
+    /ativas\.filter\(\(s\) => ehVendaDeLoja\(s\)\)\.length,?\s*\n?\s*\)/.test(chamada),
+    `${chamada.slice(-120)}; cortesia sem Stripe tapa a venda perdida e o alarme diz "batem"`,
   );
   conferir(
-    "e a reserva, quando a view falha, nunca é o total de ativas",
-    /:\s*ativas\.filter\(\(s\) => !s\.stripe_subscription_id\)\.length,?\s*\n?\s*\)/.test(chamada),
-    `${chamada.slice(-90)}; comparar com o total esconde o buraco, porque as do Stripe tapam a conta`,
+    "a rota lê a coluna origem",
+    /from\("subscriptions"\)\.select\("[^"]*\borigem\b[^"]*"\)/.test(operacao),
+    "sem a coluna no select, toda linha fica sem origem e nenhuma conta como loja",
   );
   conferir(
-    "a rota lê a coluna venda_de_loja da view",
-    /from\("assinaturas_conferencia"\)\.select\("veredito, venda_de_loja"\)/.test(operacao),
-    "sem a coluna no select, todo filtro vira zero e o alarme grita por falha de leitura",
+    "o painel separa cortesia pela origem, não pela falta do Stripe",
+    /const cortesias = assinantes\.filter\(\(s\) => ehCortesia\(s\)\)/.test(operacao) &&
+      /const vendidas = assinantes\.filter\(\(s\) => !ehCortesia\(s\)\)/.test(operacao),
+    "a venda da Play de 25/09 aparecia no painel como \"0 pagando, 1 cortesia\"",
   );
   conferir("a janela é de 30 dias", /vendas_sem_conta[\s\S]{0,300}d30/.test(operacao), "em 7 dias o caso de 25/09 teria passado batido");
 }
@@ -353,6 +354,52 @@ console.log("Loja: a compra chega ao Premium, e quando não chega, deixa rastro?
     "a coluna nova vem DEPOIS do veredito, que é a ordem que o Postgres aceita",
     corpo.indexOf("as veredito") < corpo.indexOf("as venda_de_loja"),
     "coluna no meio faz `create or replace view` recusar: o motor cobra a regra aditiva sozinho",
+  );
+}
+
+// ── 10. A ORIGEM DA ASSINATURA É GRAVADA POR QUEM ESCREVE ────────────────────
+//
+// Decisão do dono em 15/10/2026, depois do achado do QA de 14/10: em vez de
+// deduzir "sem Stripe é cortesia", cada escritor grava de onde a assinatura
+// veio. A regra mora em lib/assinaturaOrigem.ts e aqui ela é cobrada nas duas
+// pontas: a função decide certo, e os dois escritores a usam.
+{
+  conferir("Play vira play_store", origemDaLoja("PLAY_STORE") === "play_store");
+  conferir("Apple vira app_store", origemDaLoja("APP_STORE") === "app_store" && origemDaLoja("MAC_APP_STORE") === "app_store");
+  conferir(
+    "PROMOTIONAL do RevenueCat é cortesia, não venda",
+    origemDaLoja("PROMOTIONAL") === "cortesia",
+    "acesso dado pelo painel do RevenueCat contaria como venda e taparia uma venda perdida",
+  );
+  conferir("loja desconhecida é loja, não cortesia", origemDaLoja("AMAZON") === "loja" && origemDaLoja(undefined) === "loja");
+  conferir("venda da Play sem Stripe NÃO é cortesia", ehCortesia({ origem: "play_store", stripe_subscription_id: null }) === false);
+  conferir("cortesia gravada é cortesia", ehCortesia({ origem: "cortesia", stripe_subscription_id: null }) === true);
+  conferir("linha sem origem e sem Stripe cai na regra antiga", ehCortesia({ origem: null, stripe_subscription_id: null }) === true);
+  conferir("linha sem origem e com Stripe é venda", ehCortesia({ origem: null, stripe_subscription_id: "sub_x" }) === false);
+  conferir("venda de loja é loja", ehVendaDeLoja({ origem: "play_store" }) && ehVendaDeLoja({ origem: "app_store" }) && ehVendaDeLoja({ origem: "loja" }));
+  conferir("cortesia e Stripe não são loja", !ehVendaDeLoja({ origem: "cortesia" }) && !ehVendaDeLoja({ origem: "stripe" }) && !ehVendaDeLoja({ origem: null }));
+
+  const rc = semComentarios(readFileSync(new URL("../app/api/revenuecat/webhook/route.ts", import.meta.url), "utf8"));
+  const escritaRc = rc.match(/from\("subscriptions"\)\.upsert\(\{[\s\S]{0,600}?\}\)/)?.[0] ?? "";
+  conferir(
+    "o webhook do RevenueCat grava a origem a partir do store do evento",
+    /origem: origemDaLoja\(event\.store\)/.test(escritaRc),
+    "sem isso a venda de loja volta a ser indistinguível de cortesia",
+  );
+  const stripeSync = semComentarios(readFileSync(new URL("../lib/subscriptionSync.ts", import.meta.url), "utf8"));
+  conferir("o escritor do Stripe grava origem stripe", /origem: "stripe"/.test(stripeSync));
+
+  const sqlOrigem = readFileSync(new URL("../supabase/subscriptions_origem.sql", import.meta.url), "utf8");
+  conferir(
+    "a coluna aceita só as cinco origens",
+    /check \(origem in \('stripe', 'app_store', 'play_store', 'loja', 'cortesia'\)\)/.test(sqlOrigem),
+  );
+  const sqlView = readFileSync(new URL("../supabase/funil_eventos.sql", import.meta.url), "utf8");
+  const view = sqlView.slice(sqlView.indexOf("create or replace view public.assinaturas_conferencia"));
+  conferir(
+    "o veredito de cortesia olha a origem antes do Stripe",
+    /when coalesce\(s\.origem = 'cortesia', s\.stripe_subscription_id is null\) then 'cortesia, nao e venda'/.test(view),
+    "a venda da Play voltaria a ser chamada de cortesia na conferência obrigatória do dinheiro",
   );
 }
 
