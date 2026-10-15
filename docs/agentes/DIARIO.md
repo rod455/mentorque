@@ -12,7 +12,16 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 - A coluna "Saúde" mostra "Problemas encontrados", sem dizer quais nesta tela.
   O painel de compliance diz "última atualização sex., 2 de out. às 21:00",
   ANTES do DMARC publicado hoje: o que ele acusar sobre autenticação pode ser
-  o retrato de 02/10, não o de hoje. Sem leitura do detalhe ainda.
+  o retrato de 02/10, não o de hoje.
+- **Detalhe lido** (print do dono, painel "Status de compliance", dados de
+  02/10 às 21h): oito requisitos, sete "Em compliance" (SPF e DKIM,
+  alinhamento do "De:", criptografia, taxa de spam denunciado, registros DNS,
+  descadastro em um clique e aceite do descadastro). O único "Precisa de
+  ajustes" é o DMARC com política mínima `p=none`, que é exatamente o que foi
+  publicado hoje. Esperado: some na próxima atualização do painel.
+- Leitura: a parte técnica da entrega está certa, o que reforça engajamento
+  como causa da queda de abertura. DEDUZIDO do Postmaster mais o banco, não
+  dito pelo Google. Falta ler a seção "Análise de capacidade de entrega".
 
 ## 2026-10-15 · Engenharia: o DMARC está no ar, e o Postmaster pede a conta certa
 
