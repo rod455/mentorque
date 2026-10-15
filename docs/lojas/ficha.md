@@ -603,3 +603,138 @@ de hoje, que está preservada na tabela acima para isso. Se ficar igual, FICA: a
 palavra não custou nada e passa a trabalhar na busca. Se subir, a leitura segue
 sendo frágil pelo motivo do parágrafo anterior, e o que vale como confirmação é
 a conversão por origem orgânica, não a média.
+
+---
+
+## 2026-10-15 · Desfecho do que as rodadas anteriores pediram
+
+Pela obrigação que entrou em DIRETRIZES em 02/10, a rodada abre fechando o que
+ela mesma pediu antes. Três itens, todos com data:
+
+| O que eu pedi | Quando | Desfecho |
+|---|---|---|
+| Limite de 2 carros no texto do grátis | 15/09 | **APLICADA** em 04/10, nas duas lojas |
+| Descrição curta com o desfecho ("economize") | 01/10 | **APLICADA** em 04/10, nas duas lojas |
+| Nome e palavras-chave da Apple | 01/09 | **APLICADOS**, foram na 3.1 (App Store desde 07/10). Resta a conferência de busca por `manutencao` sem acento, que é a única coisa que só a loja publicada responde |
+| Colar as 12 respostas às avaliações | 15/09 e 01/10 | **RECUSADA pelo dono em 04/10**, com os rascunhos na mão: não serão publicadas e as chaves não serão geradas. Este papel parou de rascunhar resposta |
+| Tela de aquisição do Play Console | 01/10 | **ABERTA pelo dono em 03/10**, e o resultado mudou o alvo deste papel (ver o manual) |
+
+### CORREÇÃO QUE MUDA A LEITURA DE 01/11
+
+A proposta de 01/10 comparou a descrição curta contra a linha que ESTE arquivo
+dizia estar publicada. O console tinha outra: `Cuide do seu carro: diagnóstico,
+revisões, histórico e o mecânico de IA Biela.` (78 caracteres).
+
+Então o que foi para o ar em 04/10 não é "a linha de hoje mais duas palavras",
+como eu escrevi. É uma troca de tese inteira:
+
+| | Texto | O que ela faz |
+|---|---|---|
+| Até 04/10 | `Cuide do seu carro: diagnóstico, revisões, histórico e o mecânico de IA Biela.` | lista quatro funções do produto |
+| Desde 04/10 | `Entenda o barulho, a luz do painel e o orçamento antes da oficina, e economize.` | nomeia o problema da pessoa e o desfecho |
+
+**A leitura de 01/11 julga essa troca, não a minha frase.** Se a conversão da
+ficha subir, o que foi confirmado é que sintoma mais desfecho vende melhor que
+lista de função, e isso é uma conclusão muito mais útil do que a que eu tinha
+marcado. Se cair, a volta atrás é para a linha de função acima, preservada aqui
+para isso.
+
+---
+
+## 2026-10-15 · A primeira frase que a pessoa lê sem expandir não diz o que ela ganha
+
+**Estado: ABERTA, com data de aplicação proposta para DEPOIS de 01/11.** O
+motivo do atraso está em "quando aplicar", e é para não estragar a leitura da
+proposta anterior.
+
+### O tamanho do alcance desta proposta
+
+Obrigatório desde 03/10, e aqui é o que mais importa. A loja hoje é quase toda
+destino de anúncio: **561 aquisições de dispositivos contra 134 cliques de
+instalação a partir da ficha** em 28 dias (Play Console, janelas deslocadas em
+uma semana, então ordem de grandeza). Cerca de **um quarto** da aquisição passa
+pela página, e é esse quarto que esta proposta toca, multiplicado pela conversão
+de **29,1%**. Ela NÃO mexe no orgânico (entre um décimo e um terço da aquisição
+pelos dois instrumentos: Play Console 48 contra 6 em 29/09; AppsFlyer 51
+orgânicas em 162 atribuições de 26/09 a 02/10).
+
+Dito de outro jeito: isto não muda o mês. Muda a chance de quem o anúncio
+trouxe decidir instalar em vez de voltar.
+
+### A troca, em tabela
+
+Campo: primeiro parágrafo da descrição completa, nas duas lojas. É o que a Play
+mostra antes do "Leia mais" e o que a App Store mostra antes do "mais".
+
+| | Texto | Caracteres | Onde cai o desfecho |
+|---|---|---|---|
+| Hoje (no ar desde 04/10) | `Mentorque é um aplicativo de manutenção e educação automotiva para quem não é mecânico. Ele ajuda você a entender o que o seu carro tem, a decidir se o problema pode esperar e a chegar na oficina sabendo o que perguntar.` | 220 | não existe |
+| Proposto | `Mentorque é um aplicativo de manutenção e educação automotiva para quem não é mecânico. Ele mostra o que o seu carro tem, se dá para esperar e quanto costuma custar, para você gastar menos na oficina sabendo o que perguntar.` | 224 | caractere 176 |
+
+A primeira frase fica **idêntica**, de propósito. Ela é a definição que a regra
+1 desta ficha exige e é o que um modelo de linguagem extrai para responder
+"existe um app que ajuda a saber o que meu carro tem?". Só a segunda muda.
+
+### O raciocínio
+
+Quem chega na página vindo de anúncio já viu uma promessa e está conferindo se
+a página é a mesma coisa. O que ele lê hoje, sem expandir, é uma frase que
+descreve o MEIO (entender, decidir, perguntar) e nunca chega no fim. A palavra
+que as 12 avaliações mais repetem, economia, está no título da descrição curta
+desde 04/10 e desaparece no parágrafo seguinte.
+
+Três mudanças pequenas, e cada uma tem motivo:
+
+1. "ajuda você a entender" vira "mostra". Quem lê anúncio não quer ajuda para
+   entender, quer ver.
+2. "a decidir se o problema pode esperar" vira "se dá para esperar". É como a
+   pessoa fala.
+3. Entra "quanto costuma custar" e "gastar menos", que é o desfecho. "Costuma
+   custar" e não "quanto custa", porque o app dá faixa de preço e esta ficha
+   promete explicitamente que não dá preço fechado.
+
+### O que a proposta NÃO faz
+
+Não toca na descrição curta nem no título, que estão em leitura até 01/11. Não
+toca nas imagens, que são o lever maior deste alvo novo e que eu NÃO VI: isso é
+a proposta da próxima rodada e o instrumento dela entrou hoje na lista do dono.
+Não cita nota nem depoimento na loja. Não promete número.
+
+### O risco, dito na cara
+
+O parágrafo de abertura é o que esta ficha foi desenhada para ser lido por
+máquina, e mexer nele mexe nisso. A mitigação é a primeira frase ficar intacta:
+a definição (categoria, público, o que faz) continua palavra por palavra. O que
+muda é a frase de benefício, que nenhum modelo usa para classificar o app.
+
+Segundo risco: "gastar menos" é promessa de desfecho, e desfecho prometido que
+não acontece vira nota 1. É o mesmo risco que a descrição curta já corre desde
+04/10, e a conferência é a mesma: avaliação nova com "grátis", "pago", "limite"
+ou "não economizei" dentro. Hoje esse teste não tem amostra, porque não chegou
+nenhuma avaliação nova desde 17/09.
+
+### Quando aplicar, e por que não agora
+
+**Depois da leitura de 01/11.** A descrição curta mudou em 04/10 e a conversão
+da ficha é o número que a julga. Trocar o primeiro parágrafo antes dessa leitura
+põe duas mudanças na mesma janela e nenhuma das duas fica legível. O custo de
+esperar é duas semanas numa frase; o custo de não esperar é perder a única
+leitura limpa que este papel conseguiu montar até hoje.
+
+### Como saber se funcionou, e com qual instrumento
+
+Play Console, Ficha da loja, taxa de conversão da ficha, 14 dias antes contra 14
+depois, comparada contra os 29,1% de base. A tela é a mesma da leitura de 01/11,
+e está na lista do dono desde hoje justamente para não chegar atrasada como
+chegou a de 01/10.
+
+Na App Store a leitura é separada (conversão da página do produto no App Store
+Connect) e não foi aberta nenhuma vez. Se o dono só abrir uma, que seja a da
+Play: é lá que está o Android, que é 258 dos 279 aparelhos ativos.
+
+### A condição de volta atrás
+
+Se a conversão cair nos 14 dias depois, volta o parágrafo de hoje, preservado na
+tabela. Se ficar igual, FICA: o texto novo é do mesmo tamanho e diz mais. Se
+subir, a leitura é frágil pelo mesmo motivo de sempre (campanha mudando no meio
+muda a mistura de quem chega), e o que confirma é a conversão por origem.

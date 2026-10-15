@@ -15,6 +15,23 @@ preço, nunca pedir que a pessoa mude a nota.
 
 ---
 
+## ENCERRADO EM 04/10/2026, POR DECISÃO DO DONO
+
+**Este arquivo é registro, não fila.** O dono decidiu em 04/10, com os 12
+rascunhos na mão, que as respostas NÃO serão publicadas e que as chaves de
+resposta não serão geradas. As duas linhas saíram da lista dele. O que se
+aproveita das avaliações é depoimento real, e os dois primeiros entraram no app
+no mesmo dia.
+
+Este papel **parou de rascunhar resposta** a partir de 15/10/2026. O critério 1
+da régua foi aposentado no manual. Nada aqui embaixo deve ser colado, e nada
+novo deve ser escrito aqui sem o dono pedir.
+
+O que fica valendo do trabalho que já estava feito: a curadoria de depoimento
+real, com texto exato e corte sugerido, que continua nas seções abaixo.
+
+---
+
 ## ESTADO EM 01/10/2026: nada foi colado ainda
 
 As **12** avaliações estão com `respondido = false` no banco, inclusive as 8 da

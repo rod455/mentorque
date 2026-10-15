@@ -51,13 +51,12 @@ Do DIARIO tirar duas coisas: qual versão está publicada em cada loja, e quais
 decisões do dono estão em pé (a seção "Direcionamentos do dono" aqui embaixo
 é o resumo, o DIARIO é o original).
 
-**2a. Responder é entrega, não rascunho solto**
-Os rascunhos moram em `docs/lojas/respostas.md`, prontos para colar, com a
-contagem de caracteres contra o limite da loja (Play: 350). Antes de rascunhar,
-conferir `respondido` no banco, não a memória: `select autor, loja, respondido
-from lojas_avaliacoes order by coletado_em`. O dono marca `respondido = true`
-ao colar; enquanto ele não marcar, a avaliação reaparece aqui, e isso é de
-propósito.
+**2a. Resposta a avaliação: ENCERRADO por decisão do dono (04/10/2026)**
+As 12 respostas prontas NÃO serão publicadas e as chaves de resposta não serão
+geradas. **Este papel parou de rascunhar resposta.** O que se aproveita das
+avaliações é depoimento real para o app e para a LP, e isso continua. Os
+rascunhos ficam em `docs/lojas/respostas.md` como registro, não como fila.
+Não propor de novo: a decisão foi tomada com os 12 rascunhos na mão.
 
 **2. Avaliações, e o zero tem que ser provado**
 As coletadas estão na tabela `lojas_avaliacoes` (e resumidas no retrato).
@@ -161,14 +160,18 @@ não é critério, "tem o número e a janela do lado" é.
 
 | # | critério | como se vê que passou |
 |---|---|---|
-| 1 | **Toda avaliação nova tem rascunho de resposta** | pronta para o dono colar, calorosa e específica |
-| 2 | **As de 4 e 5 estrelas viraram depoimento marcado** | com a loja e a data, para a LP usar sem inventar |
+| 1 | ~~Toda avaliação nova tem rascunho de resposta~~ **APOSENTADO em 04/10/2026** | o dono decidiu não publicar resposta; rascunhar virou trabalho jogado fora. Este critério não se aplica mais |
+| 2 | **As de 4 e 5 estrelas viraram depoimento marcado** | com a loja e a data, para a LP e o app usarem sem inventar. É o que se aproveita das avaliações |
 | 3 | **UMA proposta de ficha, com o raciocínio** | o que muda, por que, e o que se espera ver mudar |
 | 4 | **A ficha não promete o que o app não faz** | o caso do "bom que é grátis para 1 carro" não se repete |
 | 5 | **Tendência de reclamação virou alerta ao QA** | escrita no DIARIO, com quantas avaliações dizem o mesmo |
 | 6 | **Nada publicado nas lojas** | nenhuma resposta enviada, nenhuma ficha alterada por conta própria |
 | 7 | **Sem preço** | nem na proposta de ficha |
 | 8 | **Sem avaliação coletada, isso está dito** | e a rodada foca na proposta de ficha, em vez de encher linguiça |
+| 9 | **A proposta declara o tamanho do alcance dela** | qual fatia da aquisição ela toca, com o instrumento citado (ver "O ALVO DESTE PAPEL MUDOU") |
+| 10 | **O instrumento do veredito entrou na lista do dono na mesma rodada** | não no dia em que o veredito vence, que foi o erro de 01/10 |
+| 11 | **A rodada abre fechando o desfecho do que ela mesma pediu antes** | aplicada, recusada ou parada, com data |
+| 12 | **O "hoje" da tabela da proposta foi LIDO na loja, não neste arquivo** | com data e fonte da leitura. Nasceu do erro de 15/10: propus em cima de uma linha que a ficha dizia estar no ar e o console não tinha |
 
 **De onde veio esta régua (19/09/2026).** O dono perguntou se a gente usa a
 função Outcomes do Claude (uma rubrica com um corretor separado). Ela é de
@@ -221,6 +224,26 @@ sem saber o que ela custou.
   vazia, olhar retenção antes de propor mexer no pedido: baixar a carência
   para forçar volume traz nota de quem ainda não tem opinião, que é como se
   ganha 3 estrelas.
+- **15/10/2026, eu propus em cima de uma linha que não estava no ar.** A
+  proposta de 01/10 comparou a descrição curta contra
+  `Entenda o barulho, a luz do painel e o orçamento antes de ir na oficina.`,
+  que era o que ESTA FICHA dizia estar publicado. O console tinha outra coisa:
+  `Cuide do seu carro: diagnóstico, revisões, histórico e o mecânico de IA
+  Biela.` (78). O raciocínio que eu escrevi ("é a linha de hoje inteira mais
+  duas palavras") era falso: a troca real tirou quatro substantivos de função
+  (diagnóstico, revisões, histórico, Biela) e pôs sintoma mais desfecho. **A
+  regra que a casa escreveu em 04/10 e que vale para mim: "no ar" é só o que
+  foi LIDO na loja, com data e fonte.** A ficha é a proposta; a loja é a
+  verdade. E a consequência prática: a leitura de 01/11 não julga "adicionar
+  economize", julga essa troca inteira, e tem que ser escrita assim.
+- **15/10/2026, a duração da execução diz que o feed FALOU, não que chegou
+  avaliação nova.** Refinamento da minha própria régua de 15/09. Em 13 e 14/10
+  as execuções duraram 2,6 s (contra 0,2 s das vazias) e o banco não ganhou
+  nenhuma linha: o feed devolveu as 7 da App Store que já existiam, o POST
+  respondeu `{"ok":true,"gravadas":7}` e a dedup por id fez o resto. Ou seja,
+  execução longa prova que o feed tem conteúdo e que a gravação funciona, e é
+  assim que se prova um zero de verdade. Para saber se é NOVA, só o banco
+  responde.
 - **01/10/2026, a lição mais cara deste papel até agora: recomendação não é
   entrega, e o diário não cobra ninguém.** Em 15/09 eu entreguei 7 rascunhos de
   resposta e disse que a janela da 2.6 custava dois minutos. Duas semanas

@@ -3,6 +3,80 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-15 · ASO & Lojas: primeira rodada com o alvo novo, e um erro meu muda a leitura de 01/11
+- Quarta rodada deste papel. Artifact "Lojas da quinzena":
+  https://claude.ai/artifact/PKH7okX6RwkaZ6X5VtuXjD
+- **DESFECHO PRIMEIRO, como manda a regra de 02/10.** Tudo o que eu pedi nas
+  rodadas anteriores está fechado: limite de 2 carros (15/09) e descrição curta
+  (01/10) APLICADAS em 04/10 nas duas lojas; nome e palavras-chave da Apple
+  (01/09) foram na 3.1, na App Store desde 07/10; tela de aquisição do Play
+  (01/10) ABERTA em 03/10 e foi ela que mudou o alvo do papel; as 12 respostas
+  RECUSADAS pelo dono em 04/10, com os rascunhos na mão.
+- **A recusa é a mais útil da lista, e eu a trato como encerrada.** Este papel
+  parou de rascunhar resposta: o critério 1 da régua foi APOSENTADO no manual,
+  `docs/lojas/respostas.md` virou registro com aviso no topo, e não proponho de
+  novo. O que se aproveita das avaliações é depoimento real, e dois já estão no
+  app.
+- **ERRO MEU, e ele muda uma leitura marcada.** A proposta de 01/10 comparou a
+  descrição curta contra a linha que a FICHA dizia estar no ar. O console tinha
+  `Cuide do seu carro: diagnóstico, revisões, histórico e o mecânico de IA
+  Biela.` (78). Então o que foi para o ar em 04/10 não é "a linha de hoje mais
+  duas palavras", é uma troca de tese: saíram quatro substantivos de função,
+  entraram sintoma e desfecho. **A leitura de 01/11 julga essa troca**, e isso é
+  melhor do que eu tinha marcado: se a conversão subir, o que fica provado é que
+  sintoma mais desfecho vende mais que lista de função, conclusão aproveitável
+  em anúncio e na LP. Virou o critério 12 da minha régua: o "hoje" da tabela da
+  proposta tem que ter sido LIDO na loja, com data e fonte.
+- **ZERO AVALIAÇÃO NOVA EM 28 DIAS, e o zero está provado.** A última é de
+  17/09. Execução 8934 (14/10): o feed devolveu as 7 da App Store, a gravação
+  respondeu `{"ok":true,"gravadas":7}` e o banco não ganhou linha, porque a
+  dedup por id fez o trabalho. **Refinamento da minha régua de 15/09**: execução
+  longa (2,6 s contra 0,2 s) prova que o feed FALOU e que a gravação funciona,
+  não que chegou avaliação nova. Para "é nova?", só o banco responde.
+- Nenhuma nota abaixo de 5 nas duas lojas, então não há tendência de reclamação
+  para o QA. A conferência por exceção da frase dos 2 carros (avaliação nova com
+  "grátis", "pago" ou "limite" dentro) ainda NÃO TEM AMOSTRA: a frase está no ar
+  há 11 dias e não chegou avaliação nenhuma no período.
+- **PROPOSTA DA QUINZENA, a primeira sob o alvo novo: o primeiro parágrafo da
+  descrição completa.** Alcance declarado, como o manual passou a exigir: a
+  página recebe ~1/4 da aquisição (561 aquisições de dispositivos contra 134
+  cliques de instalação a partir da ficha, Play Console, 28 dias) e converte a
+  29,1%. NÃO mexe no orgânico (entre 1/10 e 1/3 pelos dois instrumentos: Play
+  48 contra 6 em 29/09; AppsFlyer 51 de 162 entre 26/09 e 02/10).
+- A troca, em `docs/lojas/ficha.md`: a segunda frase do parágrafo passa a dizer
+  o desfecho, que hoje não aparece em lugar nenhum do que se lê sem expandir.
+  220 para 224 caracteres, desfecho no caractere 176. **A primeira frase fica
+  idêntica de propósito**, porque é a definição que um modelo de linguagem
+  extrai, e esse era o risco da mudança.
+- **E EU PEDI PARA NÃO APLICAREM AGORA.** A descrição curta mudou em 04/10 e a
+  conversão da ficha é o número que a julga em 01/11. Trocar o primeiro
+  parágrafo antes põe duas mudanças na mesma janela e nenhuma fica legível.
+  Esperar custa duas semanas numa frase; não esperar custa a única leitura limpa
+  que este papel conseguiu montar.
+- **A próxima proposta é IMAGEM, e eu disse que não vi as nossas.** Com a loja
+  virando destino de anúncio, as primeiras imagens são a maior alavanca da
+  página. Não há registro delas no repositório e a página pública da Play é
+  bloqueada deste ambiente (tentei, 403 no proxy). Não proponho imagem no
+  escuro: proposta no escuro pode estar pedindo o que já está lá.
+- **UMA linha na lista do dono, com as duas leituras na mesma visita** (regra do
+  retorno dele: o instrumento entra no dia em que o veredito é marcado, não no
+  dia em que vence): no Play Console, a conversão da ficha 14 dias antes e
+  depois de 04/10 mais a origem "Pesquisa do Google Play", e um print das
+  imagens que estão no ar. Lista com 10 itens em 7 painéis, `conferir:acoes`
+  passou.
+- **AUTOEXAME CONTRA A RÉGUA:** cumpri 3, 4, 5, 6, 7, 9, 10 e 11. O 1 está
+  APOSENTADO por decisão do dono. O 2 e o 8 não se aplicam (não houve avaliação
+  nova). **Falhei no que ainda não era critério**: conferir que o "hoje" da
+  minha tabela é o hoje da loja. Virou o critério 12, escrito no manual hoje.
+- Régua atualizada no manual com o retorno do dono de 03/10: entraram o 9
+  (declarar alcance), o 10 (instrumento na mesma rodada) e o 11 (abrir pelo
+  desfecho), e saiu o 1.
+- Recomendações: (1) uma visita ao Play Console que resolve duas coisas, a
+  conversão da ficha e o print das imagens; (2) a busca de um minuto que já está
+  na lista, `manutencao` sem acento na App Store, para fechar o risco do acento
+  que foi com a 3.1; (3) guardar a proposta da primeira frase para depois de
+  01/11, porque é a única coisa desta rodada em que esperar vale mais que fazer.
+
 ## 2026-10-15 · Engenharia: as pessoas abrem os e-mails? Pouco, e o retrato mostrava metade
 
 - Pergunta do dono: "as pessoas estão abrindo nossos emails?". Lido no banco
