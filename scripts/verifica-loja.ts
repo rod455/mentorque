@@ -221,10 +221,24 @@ console.log("Loja: a compra chega ao Premium, e quando não chega, deixa rastro?
   // mesmo que não conferir.
   const chamada = operacao.match(/conferenciaDaLoja\([\s\S]{0,400}?\n      \),/)?.[0] ?? "";
   conferir("achei a chamada da conferência da loja", !!chamada);
+  // 15/10/2026: "sem Stripe" também era o retrato de uma cortesia dada na mão,
+  // e cortesia mais venda perdida davam o mesmo total que venda presente. O
+  // lado do banco passou a ser a coluna `venda_de_loja` da view; a contagem
+  // antiga só sobra como reserva para quando a view não responde.
   conferir(
-    "e ela recebe só as assinaturas SEM stripe",
-    /ativas\.filter\(\(s\) => !s\.stripe_subscription_id\)\.length,?\s*\n?\s*\)/.test(chamada),
+    "e ela recebe só as VENDAS DE LOJA, não toda ativa sem Stripe",
+    /conferencia\s*\?\s*\(conferencia[^)]*\)\.filter\(\(c\) => c\.venda_de_loja === true\)\.length/.test(chamada),
+    `${chamada.slice(-160)}; cortesia sem Stripe tapa a venda perdida e o alarme diz "batem"`,
+  );
+  conferir(
+    "e a reserva, quando a view falha, nunca é o total de ativas",
+    /:\s*ativas\.filter\(\(s\) => !s\.stripe_subscription_id\)\.length,?\s*\n?\s*\)/.test(chamada),
     `${chamada.slice(-90)}; comparar com o total esconde o buraco, porque as do Stripe tapam a conta`,
+  );
+  conferir(
+    "a rota lê a coluna venda_de_loja da view",
+    /from\("assinaturas_conferencia"\)\.select\("veredito, venda_de_loja"\)/.test(operacao),
+    "sem a coluna no select, todo filtro vira zero e o alarme grita por falha de leitura",
   );
   conferir("a janela é de 30 dias", /vendas_sem_conta[\s\S]{0,300}d30/.test(operacao), "em 7 dias o caso de 25/09 teria passado batido");
 }

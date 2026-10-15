@@ -909,3 +909,63 @@ placar" é a frase, e ela é mais forte que a sua.
 dono decidir o caminho do dia 1, a reconferência do quiz diário entra na
 frente, com a asserção 1 da proposta reprovando sobre o código de hoje antes
 de qualquer conserto.
+
+## Retorno do dono sobre a rodada de 14/10/2026
+
+Mandado escrever por ele em 15/10 ("veja o que o agente publicou ontem e o que
+faz sentido termos"). Lido o diário, o commit 7eca9f4, o código que ele mexe,
+o banco às 10h32 UTC de 15/10 e o fluxo "Analista: retrato diário" no n8n.
+
+Primeiro o que manter.
+
+**"CONSERTO CONSERTADO NÃO É CONSERTO ENTREGUE", APLICADO NO DIA CERTO.** O
+banco aceita a resposta do dia 1 (conferido aqui: o índice novo está de pé e o
+antigo caiu), e você não parou nisso: cruzou com a versão publicada (3.1, de
+07/10) e com o `abriu_quiz` em zero, e disse que os dois zeros são o escritor
+fora do binário, não comportamento. É a frase que impede alguém de ler "zero
+pessoas batendo no muro" como sucesso.
+
+**O RÓTULO ERRADO NO ÚNICO CLIENTE PAGANTE, ACHADO NA SUA PRÓPRIA PARADA.** A
+coluna `venda_de_loja` existe e responde certo (conferido: a única ativa tem
+`veredito` "cortesia, nao e venda" e `venda_de_loja` verdadeiro). E o ponto
+cego da conferência da loja, que você DEDUZIU e disse que deduziu, era real.
+
+**A ARMADILHA DA TAXA DE VOLTA PARA QUEM CONSOLIDAR NA SEGUNDA.** De 30,4% para
+21,3% com os retornos absolutos subindo de 96 para 98 é denominador novo, não
+piora. Isso evita uma manchete errada no Diretor.
+
+**DOIS PLANTIOS ACHARAM DEFEITO NA SUA PRÓPRIA ASSERÇÃO, E VOCÊ CONSERTOU EM
+VEZ DE APAGAR.** O `undefined` contra `null` e o script que derrubava em vez de
+imprimir FALHA são exatamente o tipo de cegueira que o verde esconde.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. A LINHA DO ADMOB FOI CONSERTADA NA FONTE E O RETRATO CONTINUOU
+IMPRIMINDO O ZERO.** O retrato de 15/10 às 6h trazia, no JSON bruto,
+`anuncioLegivel` com "AdMob 7d: NAO E ZERO MEDIDO" e, na linha que se lê,
+"AdMob 7d: 0.00 USD de receita de anuncio". Quem monta o texto é o nó "Monta
+retrato" do n8n, que lia `admob.ganhos7d` direto e nunca a frase nova. É a
+mesma lição que está escrita num comentário DENTRO desse nó desde 28/09
+("conserto na fonte que nao muda o consumidor nao e conserto"), e a sua
+conferência só olhava se `anuncioLegivel:` existia em `lib/operacao.ts`.
+"Não mexo no n8n" é alçada certa; o que faltou foi a linha na fila no dia,
+com o nome do nó. Engenharia trocou a linha em 15/10 (versão 0abf5157 do
+fluxo, com o código testado antes sobre os dados de 15/10: das 20.797 linhas,
+só o carimbo de hora e a do AdMob mudaram) e o retrato regravado às 10h35 UTC
+já imprime a frase certa. Regra para a próxima: frase nova na rota só está
+entregue quando aparece no arquivo que as pessoas leem, e a prova é o
+retrato do dia seguinte, não o JSON.
+
+**2. O PONTO CEGO DA LOJA FICOU COMO RECOMENDAÇÃO, E O CONSERTO CABIA EM UMA
+LINHA.** Você criou a coluna que separa venda de cortesia e deixou a
+`lojaConferida` contando "toda ativa sem Stripe". O `veredito` tem um único
+leitor (`lib/operacao.ts`, a contagem de desencontros), e a conferência da loja
+não depende dele: bastava ela contar pela coluna nova. Engenharia fez isso em
+15/10, com a contagem antiga só como reserva quando a view não responde, e duas
+asserções novas em `conferir:loja`, as duas provadas com plantio. Quando o
+achado e a ferramenta que o fecha estão na mesma rodada, feche.
+
+**O que continua aberto e não é seu:** o quiz do dia 1 só vira comportamento
+quando a 3.2 chegar às lojas, e publicar é decisão do dono. A raiz da
+assinatura (campo de origem em `subscriptions`, escrito pelo webhook) segue
+como recomendação, porque é caminho de cobrança.

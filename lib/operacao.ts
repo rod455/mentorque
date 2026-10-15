@@ -103,7 +103,7 @@ export async function coletarDadosOperacao() {
     // A conferência entre a fonte da verdade e a medição. Ver a view em
     // supabase/funil_eventos.sql: ela existe porque as duas divergiram e
     // ninguém percebeu até alguém perguntar na mão.
-    () => medir("assinaturas_conferencia", () => admin.from("assinaturas_conferencia").select("veredito")),
+    () => medir("assinaturas_conferencia", () => admin.from("assinaturas_conferencia").select("veredito, venda_de_loja")),
     // O QUE ACONTECE COM O E-MAIL DEPOIS DE SAIR (19/09/2026). A jornada manda
     // até 6 por pessoa em 30 dias e a gente só sabia que saíram. Entregue,
     // aberto e clicado chegam pelo webhook do Resend (/api/email/eventos), e
@@ -581,9 +581,19 @@ export async function coletarDadosOperacao() {
         (motivosDeSaida ?? []) as Parameters<typeof linhaDeMotivos>[0],
         envios.filter((e) => e.chave === CHAVE_DO_ENVIO_DE_SAIDA).length,
       ),
+      // SÓ VENDA DE LOJA CONTA DO LADO DO BANCO (15/10/2026). Até aqui o
+      // número era "ativa sem Stripe", e cortesia dada na mão também é ativa sem
+      // Stripe: uma cortesia mais uma venda de loja perdida davam o mesmo total
+      // que uma venda presente, o alarme dizia "batem" e quem pagou ficava sem
+      // Premium em silêncio. Achado do QA em 14/10, que criou a coluna
+      // `venda_de_loja` na view (evento `assinou` de origem revenuecat). Se a
+      // view não responder, volta para a contagem antiga, que erra para o lado
+      // calmo mas não inventa alarme por falha de leitura.
       lojaConferida: conferenciaDaLoja(
         (((porFonte.revenuecat ?? [])[0]?.dados ?? {}) as { active_subscriptions?: number }).active_subscriptions,
-        ativas.filter((s) => !s.stripe_subscription_id).length,
+        conferencia
+          ? (conferencia as { venda_de_loja?: boolean }[]).filter((c) => c.venda_de_loja === true).length
+          : ativas.filter((s) => !s.stripe_subscription_id).length,
       ),
     },
     // Marketing: de onde vieram os cadastros dos últimos 28 dias (UTM da LP).

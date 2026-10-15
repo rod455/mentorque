@@ -3,6 +3,33 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-15 · Engenharia: a rodada do QA lida contra os instrumentos, a linha do AdMob chegando ao retrato e a loja contando só venda
+
+- Pedido do dono: "veja o que o agente publicou ontem e o que faz sentido
+  termos". Retorno escrito em `qa-produto.md` ("Retorno do dono sobre a rodada
+  de 14/10/2026").
+- **Confere** (banco, 10h32 UTC de 15/10): índice novo do quiz de pé e o
+  antigo fora; `abriu_quiz` em zero; a única assinatura ativa com `veredito`
+  "cortesia, nao e venda" e `venda_de_loja` verdadeiro. `conferir:versoes`: a
+  3.2 segue não publicada.
+- **A LINHA DO ADMOB NÃO CHEGAVA AO RETRATO.** O JSON bruto de 15/10 trazia a
+  frase nova e a linha legível seguia "0.00 USD de receita de anuncio": o nó
+  "Monta retrato" do n8n nunca lia `anuncioLegivel`. Trocada só essa linha
+  (com reserva que avisa quando a rota não mandar a frase), testada antes
+  sobre os dados de 15/10 (só o carimbo de hora e a linha do AdMob mudaram nas
+  20.797 linhas, e o caso sem a frase cai na reserva com ATENCAO), rodada de
+  ponta a ponta (retrato regravado às 10h35 UTC com a frase certa) e
+  publicada (versão 0abf5157).
+- **A CONFERÊNCIA DA LOJA PASSOU A CONTAR SÓ VENDA DE LOJA.** Antes, "ativa
+  sem Stripe" incluía cortesia, e cortesia mais venda perdida davam "batem".
+  Agora o lado do banco é a coluna `venda_de_loja`; a contagem antiga só
+  sobra se a view falhar. Duas asserções novas em `conferir:loja`, provadas
+  com plantio (contar todas as linhas da view e tirar a coluna do select):
+  as duas MORDERAM. Hoje continua "RevenueCat 1 e banco 1: batem", agora
+  pelo motivo certo.
+- O `veredito` da view ficou como está: o único leitor no código o trata como
+  "sem desencontro", e a coluna nova já desfaz a confusão para quem lê.
+
 ## 2026-10-14 · QA: o conserto do dia 1 está pronto no banco e esperando a 3.2, e a conta do dinheiro chamava a venda de cortesia
 - Artifact "QA da semana":
   https://claude.ai/artifact/213CXGYSb5v6qoZsJYLqNp
