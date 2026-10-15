@@ -3,6 +3,28 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-15 · Engenharia: as pessoas abrem os e-mails? Pouco, e o retrato mostrava metade
+
+- Pergunta do dono: "as pessoas estão abrindo nossos emails?". Lido no banco
+  (11h08 UTC), por e-mail e uma vez por tipo, 30 dias: **832 enviados com id,
+  786 entregues (94%), 77 abertos (9%), 4 clicados (0,5%), 44 com problema
+  (5%)**. O de boas-vindas (`d0`) é o mais aberto, 25 de 219 (11%); os da
+  sequência caem para 6% a 7%.
+- **O RETRATO MOSTRAVA METADE DAS ABERTURAS.** A rota de dados puxava as
+  LINHAS de `email_eventos` com `.limit(5000)`, e a API do Supabase devolve no
+  máximo 1.000 por consulta. Com 2.019 eventos em 30 dias, a rota via 1.000 e
+  o retrato publicava cerca de 40 abertos. Os envios estavam em 889, a caminho
+  do mesmo corte. Conserto: a view `email_resumo_30d` soma no banco (uma linha
+  por chave) e a rota lê a soma. Conferida contra a consulta à mão: os sete
+  números batem. Quatro asserções novas em `conferir:email`; dois plantios
+  (a rota voltando a puxar eventos, a view somando eventos em vez de e-mails),
+  dois MORDERAM.
+- Conferido de passagem que nenhuma outra consulta da rota passa de 1.000
+  linhas hoje (erros 7d: 26; Biela 30d: 159; métricas: 554).
+- O que não alcança: abertura é pixel. Quem bloqueia imagem não conta, e o
+  Mail da Apple conta como aberto o que ninguém leu. O clique é o número
+  firme, e ele é 4 em 832.
+
 ## 2026-10-15 · Engenharia: cada assinatura passa a dizer de onde veio
 
 - Pedido do dono, sobre a raiz que o QA deixou como recomendação em 14/10:
@@ -5860,6 +5882,7 @@ cobrou, com razão: "toda vez você confere as mesmas coisas". A conferência qu
 ele viu pela terceira vez estava escrita duas vezes ali embaixo.
 
 | Pergunta | Resposta, e desde quando | Onde está |
+| As pessoas abrem os e-mails da jornada? | **Pouco: 77 de 832 abertos (9%) e 4 clicados (0,5%)** em 30 dias, com 786 entregues (94%) e 44 com problema (5%, quase tudo devolução). Lido no banco em 15/10, 11h08 UTC, pela view `email_resumo_30d`. Abertura é medida por imagem carregada (o Resend), então é aproximação nos dois sentidos: quem bloqueia imagem some, e o Mail da Apple abre sozinho. Clique é o número firme. **Até 15/10 o retrato publicava cerca de METADE das aberturas**: a rota puxava linhas e a API do Supabase corta em 1.000. | 15/10, Engenharia |
 |---|---|---|
 | Por que a receita é R$ 0,00 se há assinantes? | Cupom de 100% empilha com o teste grátis: 7 dias mais 1 mês. Não é defeito, o cupom faz o que promete. | 04/09, QA agendado |
 | Os cupons vão continuar zerando a fatura? | Não. São `duration: once`, já foram gastos, e as assinaturas estão com `discounts: []`. | 04/09, QA agendado |

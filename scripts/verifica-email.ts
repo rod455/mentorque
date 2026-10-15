@@ -105,14 +105,35 @@ console.log("E-mail: o que sai deixa rastro, e o rastro entra fechado?");
   );
   conferir(
     "envio sem id fica fora do denominador",
-    /semId: envios\.filter\(\(e\) => !e\.email_id\)\.length/.test(operacao),
+    /semId: linhasDeEmail\.reduce\(\(a, c\) => a \+ \(c\.enviados - c\.comId\), 0\)/.test(operacao),
     "envio anterior a 19/09 nunca vai ter evento; contá-lo afundaria a taxa para sempre",
   );
   conferir(
     "o retrato diz quando o webhook está mudo",
-    /semEventos: envios\.filter/.test(operacao),
+    /semEventos: linhasDeEmail\.reduce/.test(operacao),
     "sem este aviso, zero por falta de instrumento é indistinguível de zero por falta de leitor",
   );
+  // A SOMA MORA NO BANCO (15/10/2026). A API do Supabase devolve no máximo
+  // 1.000 linhas por consulta, qualquer que seja o `.limit()`. Puxar eventos
+  // linha a linha cortou metade das aberturas em silêncio quando passaram de
+  // 1.000. A rota lê a view somada, e nunca volta a puxar as linhas.
+  conferir(
+    "a rota lê o resumo somado no banco",
+    /from\("email_resumo_30d"\)/.test(operacao),
+    "somar linhas em TypeScript esbarra no teto de 1.000 linhas da API",
+  );
+  conferir(
+    "e não puxa mais as linhas de eventos",
+    !/from\("email_eventos"\)/.test(operacao),
+    "com 2.019 eventos em 30 dias, a rota via 1.000 e o retrato publicava metade das aberturas",
+  );
+  const view = leia("supabase/email_resumo_30d.sql");
+  conferir(
+    "a view conta cada e-mail uma vez por tipo",
+    /bool_or\(tipo = 'opened'\)/.test(view) && /group by id_externo/.test(view),
+    "abrir três vezes é \"abriu\"; somar eventos inflaria a taxa",
+  );
+  conferir("a view separa o envio sem evento", /as sem_eventos/.test(view));
 }
 
 if (falhas) {

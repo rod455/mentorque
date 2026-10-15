@@ -82,7 +82,7 @@ export async function coletarDadosOperacao() {
     { data: semanas }, { data: subs }, { data: cadastros }, { data: erros }, { data: metricas },
     { data: usoDiario }, { data: usoSemanal }, { data: coortes },
     { data: ativacao }, { data: assCoortes }, { data: porCampanha },
-    { data: conferencia }, { data: emailEnvios }, { data: emailEventos },
+    { data: conferencia }, { data: emailResumo },
   ] = await emFila([
     () => medir("funil_semana", () => admin.from("funil_semana").select("*").limit(12)),
     // `origem` separa venda de cortesia desde 15/10/2026 (lib/assinaturaOrigem.ts).
@@ -111,8 +111,13 @@ export async function coletarDadosOperacao() {
     // aberto e clicado chegam pelo webhook do Resend (/api/email/eventos), e
     // aqui viram taxa por chave: é assim que se descobre QUAL e-mail ninguém
     // abre, em vez de "os e-mails vão mal".
-    () => medir("jornada_envios", () => admin.from("jornada_envios").select("chave, dia, email_id").gte("dia", d30).limit(3000)),
-    () => medir("email_eventos", () => admin.from("email_eventos").select("id_externo, tipo, chave, criado_em").gte("criado_em", d30).limit(5000)),
+    //
+    // SOMADO NO BANCO DESDE 15/10/2026 (supabase/email_resumo_30d.sql). Até
+    // ali esta rota puxava as LINHAS de envios e eventos com `.limit(5000)`, e
+    // a API do Supabase devolve no máximo 1.000 por consulta: com 2.019
+    // eventos em 30 dias, o retrato publicava cerca de metade das aberturas,
+    // calado. Uma linha por chave não chega perto do teto.
+    () => medir("email_resumo_30d", () => admin.from("email_resumo_30d").select("*")),
   ]);
   tempos.paralelo = Date.now() - t0;
   const { data: experimentos } = await medir("experimentos", () => admin.from("experimentos_resultados").select("*").limit(120));
@@ -241,38 +246,29 @@ export async function coletarDadosOperacao() {
       .map((e) => [e.evento as EventoFunil, Number(e.pessoas)]),
   );
   // ── O que aconteceu com os e-mails da jornada (19/09/2026) ───────────────
-  const envios = (emailEnvios ?? []) as { chave: string; dia: string; email_id: string | null }[];
-  const eventos = (emailEventos ?? []) as { id_externo: string; tipo: string; chave: string | null }[];
-  const porEmail = new Map<string, Set<string>>();
-  for (const e of eventos) {
-    const s = porEmail.get(e.id_externo) ?? new Set<string>();
-    s.add(e.tipo);
-    porEmail.set(e.id_externo, s);
-  }
-  const contaPorChave: Record<string, { enviados: number; comId: number; entregues: number; abertos: number; clicados: number; problemas: number }> = {};
-  for (const env of envios) {
-    const c = (contaPorChave[env.chave] ??= { enviados: 0, comId: 0, entregues: 0, abertos: 0, clicados: 0, problemas: 0 });
-    c.enviados++;
-    if (!env.email_id) continue;
-    c.comId++;
-    const tipos = porEmail.get(env.email_id);
-    if (!tipos) continue;
-    if (tipos.has("delivered")) c.entregues++;
-    if (tipos.has("opened")) c.abertos++;
-    if (tipos.has("clicked")) c.clicados++;
-    if (tipos.has("bounced") || tipos.has("complained") || tipos.has("failed")) c.problemas++;
-  }
+  // A soma por chave vem pronta do banco (view `email_resumo_30d`); aqui só
+  // entram as taxas e a ordem.
+  type LinhaDeEmail = { chave: string; enviados: number; com_id: number; sem_eventos: number; entregues: number; abertos: number; clicados: number; problemas: number };
+  const linhasDeEmail = ((emailResumo ?? []) as LinhaDeEmail[]).map((l) => ({
+    chave: l.chave,
+    enviados: Number(l.enviados),
+    comId: Number(l.com_id),
+    semEventos: Number(l.sem_eventos),
+    entregues: Number(l.entregues),
+    abertos: Number(l.abertos),
+    clicados: Number(l.clicados),
+    problemas: Number(l.problemas),
+  }));
   const taxa = (parte: number, todo: number) => (todo > 0 ? Math.round((parte / todo) * 1000) / 10 : null);
   const resumoDeEmail = {
-    enviados: envios.length,
+    enviados: linhasDeEmail.reduce((a, c) => a + c.enviados, 0),
     // Envio SEM id do Resend é envio anterior a 19/09/2026, quando o id passou
     // a ser guardado. Ele nunca vai ter evento, e contá-lo no denominador
     // afundaria a taxa para sempre.
-    semId: envios.filter((e) => !e.email_id).length,
-    semEventos: envios.filter((e) => e.email_id && !porEmail.has(e.email_id)).length,
-    porChave: Object.entries(contaPorChave)
-      .map(([chave, c]) => ({
-        chave,
+    semId: linhasDeEmail.reduce((a, c) => a + (c.enviados - c.comId), 0),
+    semEventos: linhasDeEmail.reduce((a, c) => a + c.semEventos, 0),
+    porChave: linhasDeEmail
+      .map(({ semEventos: _semEventos, ...c }) => ({
         ...c,
         taxaAbertura: taxa(c.abertos, c.comId),
         taxaClique: taxa(c.clicados, c.comId),
@@ -585,7 +581,7 @@ export async function coletarDadosOperacao() {
       ),
       porQueCancelaram: linhaDeMotivos(
         (motivosDeSaida ?? []) as Parameters<typeof linhaDeMotivos>[0],
-        envios.filter((e) => e.chave === CHAVE_DO_ENVIO_DE_SAIDA).length,
+        linhasDeEmail.find((c) => c.chave === CHAVE_DO_ENVIO_DE_SAIDA)?.enviados ?? 0,
       ),
       // SÓ VENDA DE LOJA CONTA DO LADO DO BANCO (15/10/2026). Até aqui o
       // número era "ativa sem Stripe", e cortesia dada na mão também é ativa sem
