@@ -3,7 +3,7 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
-## 2026-10-15 · ASO & Lojas: primeira rodada com o alvo novo, e um erro meu muda a leitura de 01/11
+## 2026-10-15 · ASO: primeira rodada com o alvo novo, e um erro meu muda a leitura de 01/11
 - Quarta rodada deste papel. Artifact "Lojas da quinzena":
   https://claude.ai/artifact/PKH7okX6RwkaZ6X5VtuXjD
 - **DESFECHO PRIMEIRO, como manda a regra de 02/10.** Tudo o que eu pedi nas
