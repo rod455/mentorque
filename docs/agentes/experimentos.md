@@ -80,6 +80,85 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 
 ## Experimentos
 
+## [conta-que-sabe-que-veio-do-carro] Quem toca em "Criar minha conta" não cai numa tela de "Entrar"
+- Estado: ABERTO
+- Tipo: mudanca-direta
+- Alvo no funil: **a maior quebra real do produto hoje, e ela não está na lista
+  de `quebraFunil` porque a folha que a causa não grava evento nenhum.** De
+  quem cadastra o carro como convidado, quantos acabam com conta. Lido no banco
+  em 16/10 às 11h08 UTC, por aparelho e por semana:
+
+      semana 21/09   101 cadastraram carro sem conta    40 criaram conta em 2 min    45 em algum momento
+      semana 28/09   104                                52                           56
+      semana 05/10   165                                63                           68
+      semana 12/10   159 (aberta, piso)                 60                           65
+
+  São cerca de **100 aparelhos por semana que ganham carro e nunca ganham
+  conta**. Para comparar: o paywall inteiro é visto por 37 aparelhos na semana.
+  Esta é a quebra com mais gente dentro, e sem conta não existe assinatura,
+  e-mail, aviso nem garagem em outro aparelho.
+- **A JANELA É DE DOIS MINUTOS, E ISSO É O ACHADO QUE ABRE A APOSTA.** Das 372
+  pessoas que cadastraram carro nas três semanas fechadas de 21/09 a 11/10:
+  200 nunca criaram conta, 155 criaram em até 2 minutos, 14 entre 2 minutos e
+  1 hora, e **ZERO depois de mais de uma hora**. Não é uma, é nenhuma. A
+  decisão acontece em cima da folha "Salve sua garagem" e o momento não volta,
+  porque o convite é consumido e não se repete.
+- Tese BeSci: clareza do próximo passo, e é a TERCEIRA vez que esta casa acha o
+  mesmo defeito, agora no degrau com mais gente. A folha diz "Salve sua
+  garagem", o botão diz **"Criar minha conta"**, e a tela que abre é a de
+  **"Entrar"**: o `AuthScreen` nasce em `mode = "in"`, com o campo de nome
+  escondido, o botão escrito "Entrar", o atalho "Esqueci minha senha" na frente
+  e o herói repetindo a MESMA frase que a folha acabou de dizer ("Salve sua
+  garagem e cuide do seu carro de qualquer aparelho"). A pessoa apertou criar e
+  recebeu entrar.
+  - Os dois irmãos já conhecidos: o "+" da garagem cheia que levava ao paywall
+    calado (11/09) e a tela de entrar que não sabia que a pessoa veio comprar
+    (18/09). A regra da casa é a mesma nos três: **um controle diz o que vai
+    acontecer, e a tela de destino continua a frase da tela de origem.**
+  - A mudança: a folha deixa a marca de onde a pessoa veio (mesmo mecanismo do
+    `mq-veio-assinar` de 18/09, que já atravessa a recarga do login social), e
+    a tela de entrar abre em modo de CRIAR CONTA, com o herói dizendo que a
+    conta é o passo que salva a garagem que ela acabou de montar, e que dá para
+    fazer pelo Google ou por e-mail e senha.
+  - UM PRINCÍPIO SÓ, de propósito: nada de aversão à perda, nada de número, nada
+    de mexer no texto da folha. Se o número andar, foi a continuidade entre as
+    duas telas.
+  - O que NÃO muda: o "Já tem conta? Entrar" continua a um toque, os botões do
+    Google e da Apple continuam onde estão, e dizer "Agora não" continua
+    fechando a folha sem parede nenhuma (o app funciona como convidado por
+    contrato, Termos seção 3). Sem preço, sem plano, sem passo legal.
+- Métrica: de quem gravou `cadastrou_carro` com `user_id` nulo na semana,
+  quantos gravaram `cadastro` em até 2 minutos. Hoje 63 de 165 na última semana
+  fechada (05/10), e a série acima como linha de base ·
+  Duração: 4 semanas, com leitura direcional em 2
+- **Nível da régua: 2, e nunca 3.** É mudança direta, sem variante, então não
+  existe braço comparável. A comparação é contra as quatro semanas anteriores,
+  com a ressalva de que o denominador está crescendo rápido (101, 104, 165,
+  159) e que o mix de plataforma muda junto. Com 165 por semana, 10 pessoas de
+  diferença viram 6 pontos: **é direção, e vira conclusão só se a diferença
+  passar de umas 15 pessoas por semana por duas semanas seguidas.**
+- O que poderia fechar este veredito, escrito agora: numerador
+  (`cadastro` em 2 min) e denominador (`cadastrou_carro` sem conta) existem
+  nos dois no `funil_eventos` desde 23/08, por aparelho, com série semanal.
+  Não é métrica de ausência e não depende de instrumento novo. **Esta aposta
+  NÃO cai num ponto cego** (régua 13): o que é cego na folha é só o MOTIVO da
+  recusa, e o veredito não precisa dele.
+- Aprovação: não se aplica (texto, modo inicial da tela e ênfase; sem variantes,
+  sem tocar em preço, plano ou cobrança)
+- Início: 2026-10-16 na web; no app, com a 3.2 · Ler a partir de: 2026-10-30
+  (direcional) e 2026-11-13. A leitura separa por `versao`: na 3.1 e antes a
+  tela de entrar continua nascendo em "Entrar".
+- TOCA O DEGRAU DE OUTRA APOSTA, dito no dia (regra de 02/10): o
+  `convite-do-carro-nao-queima-com-convidado` (ler em 23/10) vive no mesmo
+  instante da jornada, logo depois de salvar o carro, e mede o convite de
+  AVISO. São duas folhas diferentes no mesmo momento, e a ordem entre elas não
+  muda aqui. O que pode contaminar: quem cria conta agora passa a poder ver o
+  convite de aviso que antes queimava. Isso EMPURRA o número daquela aposta
+  para cima, e por isso fica escrito hoje, não no veredito dela.
+- Antes: 63 de 165 (05/10), 52 de 104 (28/09), 40 de 101 (21/09). A tela de
+  entrar nasce em modo "Entrar" e repete a frase da folha.
+- Veredito: (aberto)
+
 ## [primeiro-servico-com-ganho-nomeado] O "nenhum serviço registrado" vira o próximo passo
 - Estado: ABERTO
 - Tipo: mudanca-direta
@@ -363,7 +442,7 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Veredito: (aberto)
 
 ## [login-sabe-que-veio-comprar] Quem toca em assinar chega num login que explica
-- Estado: ABERTO
+- Estado: FECHADO (inconclusivo por volume: 7 toques medidos, 3 contas)
 - Tipo: mudanca-direta
 - Alvo no funil: viu_paywall → iniciou_checkout. Na semana de 14/09: 11 viram o
   paywall e ZERO iniciaram checkout; na de 07/09, 25 e 2. Nos quatro grupos de
@@ -394,7 +473,43 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Antes: 11 viram paywall e 0 iniciaram checkout na semana de 14/09; 57 e 9 na
   janela desde 22/08. Nenhum número separa "não quis" de "não tinha conta",
   e essa é a lacuna que fica registrada para quem for ler o veredito.
-- Veredito: (aberto)
+- **Veredito (2026-10-16): INCONCLUSIVO por volume, e agora com o número que
+  faltava.** Instrumento: `funil_eventos` no banco do Mentorque, lido por
+  consulta própria em 16/10 às 11h08 UTC. Segundo instrumento para o mesmo
+  degrau: não existe, e isto fica declarado (o retrato publicado traz
+  `viu_paywall` e `iniciou_checkout` somados, sem quebra por `origem` e sem o
+  `tentou_assinar`).
+  - **Nível 1, exposição: 7 aparelhos.** O `tentou_assinar`, que nasceu para
+    contar exatamente quem é barrado pela conta, tem SETE eventos na vida, de 7
+    aparelhos, o primeiro em 25/09 e o último em 15/10. Todos os 7 estão sem
+    conta, o que é o desenho do evento. Todos vêm do app das lojas (5 Android,
+    2 iPhone), nenhum da web, e todos em versão 2.8 ou acima, ou seja **100% da
+    exposição medida é posterior à mudança**: não há braço "antes" nem haverá.
+  - **Nível 2, desfecho: 3 dos 7 criaram a conta, os três no mesmo minuto do
+    toque** (25/09 12h05, 27/09 21h45, 14/10 23h27). Os outros 4 nunca
+    criaram conta, nem depois. Com sete pessoas, uma a mais ou a menos move
+    isto de 43 para 57 ou 29 de cada 100: é anedota com denominador, não taxa.
+  - **Nível 3: não existe, e já estava escrito no dia em que a aposta abriu.**
+    Mudança direta, sem variante, e o `iniciou_checkout` não pode se mover por
+    construção. O que o caderno previu, o dado confirmou.
+  - O QUE O DADO ENTREGA DE GRAÇA, e não era a pergunta: **3 dos 7 toques têm
+    `origem = oferta-exit25`**, a oferta de saída, e nenhum desses 3 criou
+    conta. Os 4 toques vindos do paywall normal (`loja-annual`, `loja-monthly`)
+    produziram 3 contas. Direção, com n de 3 e 4; fica registrado para quem
+    mexer na oferta de saída, não como conclusão.
+  - **O CUSTO DA RÉGUA 13, AGORA MEDIDO.** O retorno do dono de 18/09 disse que
+    esta aposta abriu dentro de um ponto cego e que o instrumento devia ter ido
+    primeiro. O preço exato: a aposta começou em 18/09, o `tentou_assinar`
+    gravou o primeiro evento em 25/09, e quatro semanas de relógio renderam 7
+    pessoas. Não foi a janela que faltou, foi o tamanho do degrau: 7 toques em
+    três semanas não fecham veredito nenhum.
+  - O que FICA: a tela de entrar continua dizendo do que a pessoa veio
+    buscar, e isso se defende pelo argumento, como toda correção de clareza.
+    A conferência de 18/09 em `scripts/navegador/venda.mjs` continua cobrando
+    os dois lados da fronteira.
+  - NÃO REABRE por janela. Só volta a poder dizer algo se o degrau crescer:
+    com 7 toques em três semanas, esperar mais quatro semanas daria 10.
+- Estado final: FECHADO em 2026-10-16.
 
 ## [cadastro-em-duas-etapas] O formulário do carro pede só marca, modelo e ano
 - Estado: FECHADO (venceu B, promovida em 02/10/2026)
@@ -583,6 +698,16 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   - Ressalva que continua: o retrato soma loja e web, e o desenho pedia as
     duas separadas. A randomização protege a comparação; o que falta é saber
     onde.
+- **NOTA DE 2026-10-16, e ela muda o PESO da escolha que está com o dono, não a
+  escolha.** A segunda razão de 02/10 para não promover B era que B apaga a
+  página de prova social, e aquela página tinha prova inventada que o dono
+  havia decidido manter em 01/09. Desde 04/10 e 06/10 ela não tem mais nada
+  inventado: nota 5,0 real, dois números com piso declarado e quatro
+  depoimentos literais de avaliações públicas (ver
+  `prova-social-de-verdade`). Ou seja, promover B agora apagaria uma página
+  VERDADEIRA, e o aprendizado de 04/09 diz que prova pequena e conferível é a
+  que funciona. A decisão continua sendo dele; o que mudou é que o lado A
+  ficou mais defensável do que era em 02/10.
 - Ler de novo a partir de: 2026-10-23
 
 
@@ -856,7 +981,36 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Estado final: FECHADO em 02/10/2026, sem crédito atribuído.
 
 ## [prova-social-de-verdade] As avaliações reais entram no lugar das inventadas
-- Estado: PROPOSTO
+- Estado: FECHADO (aprovada e aplicada pelo dono em 04/10 e 06/10, fora de rodada)
+- **DESFECHO, escrito em 2026-10-16, e eu carreguei esta proposta como
+  "aguardando o dono" por 42 dias depois de ela já ter sido atendida.** Lido no
+  fonte (`lib/app/content.ts`, bloco `onboarding.social`) e nos comentários
+  datados que a própria mudança deixou:
+  - Em **04/10 o dono decidiu sim** ("pode alterar tudo que sugeriu") e os três
+    números inventados saíram: "4,8" virou **5,0 com a nota real das lojas**,
+    "10.000+ diagnósticos" virou **170+** (178 `consultou_sintoma` gravados
+    desde 13/09, piso declarado) e "5.000+ motoristas" virou **250+** (254
+    aparelhos Android instalados em 25/09, pelo relatório do Play).
+  - Dos depoimentos, ele decidiu diferente do que a proposta pedia, e melhor:
+    em vez de reduzir de quatro para dois, mandou manter quatro e trocar os
+    inventados por reais ("aproveitar somente 2, esses 2 reais, e o restante
+    mantém"). Em **06/10 os quatro passaram a ser reais**: aminoru e munizluiz
+    da App Store, Triplyze e Luana David do Google Play, trechos literais com
+    o apelido público de quem escreveu.
+  - A RESSALVA DA PROPOSTA FOI RESPEITADA SEM EU PEDIR: a avaliação
+    `Moraes455`, que parece ser do próprio dono, não entrou em nenhuma das
+    quatro.
+  - O QUE SOBROU, e já está na lista do dono desde 16/10 por outra mão (a
+    Engenharia, conferindo as fichas): **as capturas de tela das duas lojas
+    ainda mostram 4,8, 10.000+ e 5.000+**, a Play com quatro depoimentos
+    inventados com nome. A promessa sem lastro saiu do app e ficou na vitrine
+    que recebe o tráfego pago. Não repito o pedido aqui, pela regra de 04/10:
+    o instrumento já responde e a linha já existe.
+  - LIÇÃO DE PROCESSO, e é minha: proposta minha atendida numa sessão de
+    design não volta para o caderno sozinha. O caderno tem que ser lido contra
+    o FONTE, não contra a memória do que eu pedi. Doze dias de "aguardando o
+    dono" foram ficção.
+- Estado anterior: PROPOSTO
 - Tipo: mudanca-direta (não é A/B: não há dúvida honesta entre duas versões,
   há uma versão verdadeira e uma inventada)
 - Alvo no funil: comecou_onboarding → terminou_onboarding, que é a MAIOR

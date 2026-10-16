@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/app/auth";
 import { useNav } from "@/lib/app/nav";
 import { appleLoginDisponivel } from "@/lib/app/socialLogin";
 import { veioAssinar } from "@/lib/app/vendaPendente";
+import { esqueceVeioSalvarGaragem, veioSalvarGaragem } from "@/lib/app/veioSalvarGaragem";
 import { Button } from "@/components/ui/Button";
 import { Card, Sheet, useContent } from "../ui";
 import { SuporteForm } from "../SuporteForm";
@@ -41,7 +42,24 @@ export function AuthScreen() {
   const a = c.auth;
   const { back } = useNav();
   const { user, signInEmail, signUpEmail, signInGoogle, signInApple, resetPassword, oauthError } = useAuth();
-  const [mode, setMode] = useState<"in" | "up">("in");
+  // A TELA ABRE NO MODO QUE O BOTÃO DE ORIGEM PROMETEU (16/10/2026).
+  //
+  // Quem chega pelo convite "Salve sua garagem" apertou um botão escrito
+  // "Criar minha conta" e recebia a tela de ENTRAR: sem campo de nome, com o
+  // botão escrito "Entrar" e o "Esqueci minha senha" na frente. Medido no
+  // banco em 16/10: uns 100 aparelhos por semana cadastram o carro como
+  // convidado e nunca criam conta, e a decisão acontece em DOIS minutos ou
+  // nunca (zero contas criadas mais de uma hora depois do carro).
+  //
+  // O "Já tem conta? Entrar" continua a um toque no fim da tela, então quem
+  // de fato já tinha conta não perde nada. Ver lib/app/veioSalvarGaragem.ts e
+  // a aposta conta-que-sabe-que-veio-do-carro no caderno de experimentos.
+  //
+  // Esta tela não é desenhada no servidor (a página do app devolve a splash
+  // até o cliente terminar de montar), então ler o armazenamento aqui não
+  // produz divergência de hidratação. É o mesmo lugar de onde o `veioAssinar`
+  // já decide o texto do herói desde 18/09.
+  const [mode, setMode] = useState<"in" | "up">(() => (veioSalvarGaragem() ? "up" : "in"));
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -82,6 +100,15 @@ export function AuthScreen() {
   // propósito, e o certo nesse caso é ela ficar.
   const jaEstavaLogado = useRef(!!user);
   useEffect(() => {
+    // A conta existe: a marca do convite cumpriu o papel e é apagada aqui, e
+    // não na leitura, porque o login social desenha esta tela mais de uma vez.
+    //
+    // As duas linhas ficam separadas de propósito: a `conferir:venda` cobra no
+    // fonte a forma `if (user ...) back()`, porque foi a ausência dela que
+    // deixou a tela pedindo login para quem já tinha entrado (07/09/2026).
+    // Embrulhar as duas chamadas num bloco esconderia essa forma da
+    // conferência, e conferência que perde a pegada não protege mais nada.
+    if (user) esqueceVeioSalvarGaragem();
     if (user && !jaEstavaLogado.current) back();
   }, [user, back]);
 
@@ -214,7 +241,15 @@ export function AuthScreen() {
           quem não entende por que foi parado desiste, e esse passo não deixa
           rastro no funil (o `iniciou_checkout` só nasce para quem já tem
           conta). Ver lib/app/vendaPendente.ts. */}
-      <Hero tagline={veioAssinar() ? a.taglineAssinar : a.tagline} />
+      {/* E quem chegou do convite "Salve sua garagem" recebe a frase do passo
+          que falta, em vez da MESMA frase que a folha anterior acabou de
+          dizer. A ordem importa: a marca de assinar vem primeiro, porque quem
+          veio comprar está num pedido mais específico. */}
+      <Hero
+        tagline={
+          veioAssinar() ? a.taglineAssinar : veioSalvarGaragem() ? a.taglineGaragem : a.tagline
+        }
+      />
 
       <Card>
         {/* Social */}

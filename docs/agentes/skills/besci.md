@@ -156,6 +156,39 @@ experimentos alimentam a seção final.
   "o que poderia fechar este veredito é X" com numerador E denominador. Se X
   for uma ausência, a aposta é correção e se defende pelo argumento, não pelo
   dado.
+- **2026-10-16: a maior quebra do produto pode não estar no painel, e o motivo é
+  que painel só mostra degrau que grava evento.** A lista `quebraFunil` do
+  retrato foi lida por este papel em todas as rodadas como se fosse o mapa das
+  perdas. Ela não é: ela é o mapa das perdas MEDIDAS. O portão de conta depois
+  do carro perde uns 100 aparelhos por semana, três vezes mais gente do que
+  todo o fundo do funil vê, e nunca apareceu em lugar nenhum porque a folha
+  `SalveSuaGaragem` não grava exibição, aceite nem recusa. A regra: antes de
+  escolher o alvo da rodada pela maior quebra do painel, listar as TELAS
+  obrigatórias da jornada e perguntar quais delas não têm evento. Perda sem
+  evento parece ausência de perda.
+- **2026-10-16: toda janela de decisão tem um prazo, e medir o prazo muda o
+  conserto.** De 372 pessoas que cadastraram carro como convidadas, 155 criaram
+  conta em até 2 minutos, 14 em até uma hora e ZERO depois disso. Nenhuma. Antes
+  de propor "pedir de novo mais tarde", vale medir se "mais tarde" existe na
+  base: aqui não existe, e isso move o conserto para o instante do pedido em vez
+  de para a repetição dele. A mesma pergunta cabe em qualquer pedido do app
+  (avaliação, permissão, assinatura): qual é a distribuição do tempo entre a
+  oferta e o sim?
+- **2026-10-16: o LUGAR do pedido vale mais que o texto dele, e agora com número
+  nosso.** O mesmo convite de permissão de aviso, com a mesma copy, aceita 28 de
+  cada 100 quando aparece depois de a pessoa salvar o carro (11 de 39), 16 no
+  calendário (15 de 93) e 7 no onboarding (4 de 54). Quatro vezes de diferença
+  sem uma palavra mudada. E o irmão disso, que é método: quando uma taxa total
+  cai três semanas seguidas, cortar por onde a exposição nasce ANTES de concluir
+  que as pessoas mudaram. Aqui a composição migrou para as duas piores fontes, e
+  boa parte da queda era mix.
+- **2026-10-16: proposta atendida fora da rodada não volta sozinha para o
+  caderno.** A `prova-social-de-verdade` ficou 42 dias marcada como "aguardando
+  o dono" depois de ele ter aprovado e aplicado tudo, em 04/10 e 06/10, numa
+  sessão de design. Eu a carreguei como pendência em duas rodadas. A regra, e
+  ela é gêmea da de 04/10 sobre não mandar o dono fazer coisa já feita: item
+  PROPOSTO se confere no FONTE antes de ser repetido, nunca na memória de quem
+  propôs.
 - **2026-10-09: quando o produto muda a ORDEM dos passos, a métrica construída
   sobre a ordem antiga passa a medir o contrário.** A ativação por coorte conta
   a primeira ação de valor que acontece depois do cadastro da conta. Em 12/09 o

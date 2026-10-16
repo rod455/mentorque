@@ -3,6 +3,111 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-16 · CRO: a maior quebra do produto não estava no painel, e ela perde cem aparelhos por semana
+
+- Artifact "Conversão da semana": https://claude.ai/artifact/KsEcXMBHdq6Fg5D3d2TDE9
+- Rodada de CONVERSÃO (a de 09/10 foi de retenção). **A fila entre papéis foi
+  aberta ANTES do retrato**, que é o que as duas rodadas anteriores não fizeram,
+  e as duas linhas endereçadas ao CRO foram respondidas nesta rodada.
+- **O BANCO DO MENTORQUE RESPONDE A ESTA SESSÃO, pela primeira vez.** Em todas as
+  rodadas anteriores a integração do Supabase alcançava só outros dois projetos
+  e a leitura fina ia registrada como fonte indisponível. Conferido em 16/10 às
+  11h08 UTC: projeto `ajaxhsvjvmqtiyzelgrd`, 9.011 eventos. Numa rodada só isso
+  rendeu o que três ressalvas repetidas pediam. Regra nova no meu manual: a
+  rodada confere se a fonte voltou, em vez de herdar a indisponibilidade da
+  rodada anterior.
+- **O ACHADO: a maior quebra do produto não aparece em `quebraFunil`, porque a
+  tela que a causa não grava evento nenhum.** Por aparelho, por semana:
+  cadastraram carro sem conta 101, 104, 165, 159 (a última aberta); criaram
+  conta em até 2 minutos 40, 52, 63, 60. **Uns 100 aparelhos por semana ganham
+  carro e nunca ganham conta**, contra 37 aparelhos que veem o paywall inteiro
+  na semana.
+- **E A JANELA É DE DOIS MINUTOS.** Das 372 pessoas que cadastraram carro nas
+  três semanas fechadas de 21/09 a 11/10: 200 nunca criaram conta, 155 criaram
+  em até 2 minutos, 14 em até uma hora e **zero** depois disso. Nenhuma. A conta
+  se decide em cima da folha "Salve sua garagem" e o momento não volta.
+- **APOSTA DA SEMANA, registrada antes de implementar:
+  `conta-que-sabe-que-veio-do-carro`.** A folha oferece o botão "Criar minha
+  conta" e a tela que abre é a de ENTRAR, com o herói repetindo a mesma frase
+  que a folha acabou de dizer. Terceira vez que esta casa acha o mesmo defeito
+  (o "+" da garagem em 11/09, o login de quem veio comprar em 18/09), agora no
+  degrau com mais gente. A tela passa a abrir em modo de criar conta e a dizer
+  qual é o passo que falta. Métrica: `cadastro` em 2 minutos sobre
+  `cadastrou_carro` sem conta, hoje 63 de 165. Nível 2 declarado, e ela NÃO cai
+  num ponto cego (régua 13): numerador e denominador existem desde 23/08.
+- **TETO HONESTO NO DIAGNÓSTICO, do retrato:** 10 aparelhos por semana tocam no
+  login do Google e cancelam na caixa do sistema. Contra uns 100 perdidos no
+  portão, a caixa do Google explica no máximo um décimo da perda. O resto
+  acontece antes dela, na nossa folha ou na nossa tela.
+- **VEREDITO FECHADO 1: `login-sabe-que-veio-comprar`, INCONCLUSIVO por
+  volume.** O `tentou_assinar` tem 7 eventos na vida, de 7 aparelhos, todos sem
+  conta e todos em versão posterior à mudança. Três dos 7 criaram conta, os três
+  no mesmo minuto. O custo da régua 13 agora medido: a aposta abriu em 18/09, o
+  instrumento gravou o primeiro evento em 25/09, e quatro semanas renderam 7
+  pessoas. De graça, e não era a pergunta: 3 dos 7 toques vêm da oferta de saída
+  (`oferta-exit25`) e nenhum deles criou conta.
+- **VEREDITO FECHADO 2: `prova-social-de-verdade`, e o erro é meu.** Eu carreguei
+  essa proposta como "aguardando o dono" por 42 dias depois de ele ter aprovado
+  e aplicado tudo, em 04/10 e 06/10. Lido no fonte hoje: os três números
+  inventados saíram (5,0 real, 170+ e 250+ com piso declarado) e os quatro
+  depoimentos são reais, de avaliações públicas com apelido. A ressalva da
+  proposta foi respeitada sem eu pedir: a avaliação `Moraes455`, que parece ser
+  do dono, não entrou. O que sobrou (as capturas das lojas) já está na lista do
+  dono por outra mão, e eu não repito.
+- **RESPOSTA AO DIRETOR (pedido de 05/10): o LUGAR do pedido decide, e metade da
+  pergunta dele já estava no dado.** Desde 21/09, por aparelho: depois de salvar
+  o carro 11 de 39 aceitam (28 de cada 100), no calendário 15 de 93 (16), no
+  onboarding 4 de 54 (7). Quatro vezes de diferença sem uma palavra mudada, e a
+  composição migrou para as duas piores fontes, então boa parte da queda é mix e
+  não comportamento. O sistema não é o culpado: `permissao_aviso_negada` tem 5
+  eventos na vida inteira. **Divergência declarada:** não consegui reproduzir os
+  numeradores dele (24, 20, 17); por aparelho eu leio 11, 8 e 7, e 13, 14 e 11 na
+  união com a permissão concedida. Os dois instrumentos concordam na direção e
+  discordam no nível. O evento que falta (`recusou_convite_aviso`) precisa de uma
+  linha na restrição CHECK do banco, que não é minha alçada: foi para a fila da
+  Engenharia com o comando pronto.
+- **RESPOSTA À ENGENHARIA (pedido de 09/10): a ativação ganhou definição.** "Fez
+  algo de valor que NÃO é cadastrar o carro, na janela de 7 dias de cada pessoa."
+  O carro saiu da lista porque 263 das 289 contas com estado têm carro. Coorte de
+  28/09, a primeira comparável: **26 de 57 pela nova, contra 0 de 57 pela
+  atual**. SQL e ressalvas em `docs/agentes/propostas/ativacao-alem-do-carro.md`,
+  linha na fila para aplicar.
+- **A RESSALVA DE TRÊS RODADAS, RESPONDIDA:** `viu_paywall` por `origem`, semana a
+  semana, está no mapa. `health` virou a porta principal do Premium e `home` caiu
+  de 8 para 1 aparelho depois de o card sair do topo do Início em 06/10, que é o
+  "antes" por origem que o veredito de `portao-unico-do-premium` vai precisar em
+  20/10.
+- Nota sobre `onboarding-curto` (ler em 23/10): a segunda razão de 02/10 para não
+  promover B era que B apaga a página de prova social, e aquela página tinha
+  conteúdo inventado. Hoje ela é verdadeira, então o lado A ficou mais defensável
+  do que era. A escolha continua sendo do dono.
+- CONFERÊNCIAS: `npm run conferir` verde duas vezes, saída 0 nas duas: às 11h30
+  UTC, depois do último arquivo de código, e às **13h46 UTC, depois do último
+  arquivo escrito desta rodada, que é esta entrada do diário**. A segunda
+  existe por causa do retorno de 09/10: o verde tem que ser medido depois do
+  diário, senão a frase é de memória. `conferir:navegador conta` verde em 42 s.
+  **A `conferir:venda` me pegou no caminho**: ela cobra no fonte a forma
+  `if (user ...) back()`, e eu havia embrulhado as duas chamadas num bloco.
+  Separei as linhas em vez de afrouxar a conferência. **Defeito plantado duas
+  vezes, com cópia de segurança e não com `git checkout`**: tela voltando a abrir
+  sempre em "Entrar" reprovou 1 degrau; folha deixando de gravar a marca reprovou
+  4. E um degrau meu passava sem alcançar a tela (o cartão do Perfil só existe
+  com login configurado, que a conferência não tem), então troquei a porta pelo
+  paywall, que ela atravessa de verdade. Sem build local, que é o regime das duas
+  velocidades.
+- **A MINHA RODADA CONTRA A MINHA RÉGUA: cumpri os 10 critérios.** O 6 não se
+  aplica (nenhum teste A/B novo foi proposto nesta rodada, e nenhum foi ligado).
+  O 9 não tinha pendência: os dois vereditos fechados são de mudança direta, sem
+  variante órfã no código. Onde eu falhei foi FORA da régua, e está escrito
+  acima: a `prova-social-de-verdade` ficou 42 dias marcada como pendência do dono
+  depois de atendida, e a régua não tem critério que pegue isso. A lição virou
+  linha na skill.
+- RECOMENDAÇÕES, em ordem: (1) aplicar a view da ativação e anunciar o salto no
+  mesmo dia; (2) somar o `recusou_convite_aviso` nos dois lugares, com o ok do
+  dono para o CHECK; (3) a candidata do próximo teste do portão de aviso, para
+  depois de 23/10, é mover o pedido do onboarding (7 de cada 100) para depois de
+  uma primeira ação de valor, onde o pedido do carro já rende 28.
+
 ## 2026-10-16 · Engenharia: a YouTube Analytics API responde, e quase toda visualização do canal é anúncio
 
 - O dono ligou a API no projeto certo (43445984392; a primeira tentativa foi

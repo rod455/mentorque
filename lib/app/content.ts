@@ -954,6 +954,15 @@ export function getContent(locale: Locale) {
         "Falta só a conta para começar seu teste grátis. É ela que guarda sua assinatura em qualquer aparelho.",
         "Just one account away from starting your free trial. It keeps your subscription on any device."
       ),
+      // Para quem chegou do convite "Salve sua garagem" (16/10/2026). A folha
+      // já disse o que a conta resolve; aqui a frase responde "e agora?", que
+      // é a pergunta de quem apertou um botão escrito "Criar minha conta" e
+      // caiu numa tela. Diz o que vai ser pedido, sem prometer número de
+      // toques: no Google a pessoa ainda escolhe a conta na folha do sistema.
+      taglineGaragem: T(
+        "Criar a conta é o passo que salva sua garagem. Pode ser com o Google, com a Apple ou com e-mail e senha.",
+        "Creating the account is the step that saves your garage. Use Google, Apple, or e-mail and password."
+      ),
       toSignUp: T("Não tem conta? Criar conta", "No account? Create one"),
       toSignIn: T("Já tem conta? Entrar", "Have an account? Sign in"),
       submitSignIn: T("Entrar", "Sign in"),

@@ -5,6 +5,7 @@ import { activeVehicle, usePrototype } from "@/lib/app/store";
 import { useAuth } from "@/lib/app/auth";
 import { useNav } from "@/lib/app/nav";
 import { carName } from "@/lib/app/content";
+import { marcaVeioSalvarGaragem } from "@/lib/app/veioSalvarGaragem";
 import { Icon, useContent } from "./ui";
 
 /**
@@ -66,8 +67,11 @@ export function SalveSuaGaragem() {
           {g.body.replace("{carro}", carName(v))}
         </p>
 
+        {/* A MARCA VAI JUNTO COM O TOQUE (16/10/2026). Sem ela a tela seguinte
+            abre em "Entrar", que é o contrário do que este botão promete. Ver
+            lib/app/veioSalvarGaragem.ts. */}
         <button
-          onClick={() => { setAberta(false); go({ name: "auth" }); }}
+          onClick={() => { marcaVeioSalvarGaragem(); setAberta(false); go({ name: "auth" }); }}
           className="mt-5 w-full rounded-xl bg-amber px-4 py-3 font-display text-sm font-semibold text-graphite active:scale-[0.99]"
         >
           {g.cta}

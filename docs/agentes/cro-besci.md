@@ -107,6 +107,21 @@ funcionalidade paga de quem pagou. Sem travessão em texto visível.
 
 ## Aprendizados
 
+- **2026-10-16: o banco do Mentorque PASSOU a estar ao alcance desta sessão, e
+  isso muda o que "fonte indisponível" significa para as próximas rodadas.** Em
+  todas as rodadas anteriores a integração do Supabase alcançava só outros dois
+  projetos, e a leitura fina ficava registrada como fonte indisponível (certo:
+  fonte indisponível se registra, não se inventa). Em 16/10 ela responde
+  (projeto `ajaxhsvjvmqtiyzelgrd`, 9.011 eventos no `funil_eventos`), e numa
+  rodada só isso rendeu o que três ressalvas repetidas pediam: a quebra de
+  `viu_paywall` por `origem`, o portão de aviso por lugar do pedido, a ativação
+  com definição nova e a quebra do portão de conta, que nenhum painel mostrava.
+  **A regra que fica: a rodada CONFERE no começo se a fonte voltou, em vez de
+  herdar a indisponibilidade da rodada anterior.** Ressalva repetida duas vezes
+  pode ser instrumento que já voltou e ninguém testou. O irmão disto está no
+  CLAUDE.md desde 03/10 ("acesso não é a mesma coisa que perguntar"); aqui foi
+  o contrário, o acesso chegou e eu só descobri porque tentei.
+
 - **2026-08-28 (feedback do dono): metade do achado da rodada estava errada,
   e a metade errada quase virou release às pressas.** A rodada declarou o
   login social travado pelo mesmo defeito dos lembretes, por leitura do

@@ -16,6 +16,136 @@ Formato de cada tela/fluxo:
 
 ## Estado
 
+v9 em 2026-10-16: rodada de CONVERSÃO, e a primeira em que eu consultei o banco
+ao vivo (as sessões anteriores tinham o Supabase do Mentorque fora de alcance e
+o registravam como fonte indisponível). O achado da rodada é uma quebra que
+nenhum painel desta casa mostra, porque a tela que a causa não grava evento
+nenhum: **de cada 100 aparelhos que cadastram o carro como convidado, uns 60
+nunca criam conta, e a decisão acontece em dois minutos ou nunca.** Próxima
+rodada alterna para RETENÇÃO.
+
+# A MAIOR QUEBRA DO PRODUTO NÃO ESTÁ NO PAINEL (2026-10-16)
+
+Instrumento: `funil_eventos`, consulta própria em 16/10 às 11h08 UTC. Por
+aparelho, por semana:
+
+    semana    cadastrou carro sem conta    criou conta em 2 min    em algum momento
+    21/09              101                        40                     45
+    28/09              104                        52                     56
+    05/10              165                        63                     68
+    12/10              159 (aberta, piso)         60                     65
+
+**São uns 100 aparelhos por semana que ganham carro e nunca ganham conta.** O
+paywall inteiro é visto por 37 aparelhos na semana: esta quebra tem três vezes
+mais gente dentro do que todo o fundo do funil, e sem conta não existe
+assinatura, e-mail, aviso nem garagem em outro aparelho.
+
+**A JANELA É DE DOIS MINUTOS.** Das 372 pessoas que cadastraram carro nas três
+semanas fechadas de 21/09 a 11/10: 200 nunca criaram conta, 155 criaram em até
+2 minutos, 14 entre 2 minutos e 1 hora, e **zero depois de mais de uma hora**.
+Não é "poucas", é nenhuma. A conta se decide em cima da folha "Salve sua
+garagem" e o momento não volta, porque o convite é consumido e não se repete.
+
+Por que nenhum painel mostra isso: a folha `SalveSuaGaragem` não grava evento
+de exibição, de aceite nem de recusa, então o degrau não existe em
+`quebraFunil`. O que deu para medir sem evento novo foi a exposição por tabela
+(`cadastrou_carro` com `user_id` nulo é praticamente toda a exposição: 165 de
+165 na semana de 05/10, porque desde 12/09 o Android pede o carro antes da
+conta).
+
+E o defeito que isso expôs, que é a aposta da semana: a folha oferece o botão
+**"Criar minha conta"** e a tela que abre é a de **"Entrar"**, com o herói
+repetindo a mesma frase que a folha acabou de dizer. É a terceira vez que esta
+casa acha o mesmo defeito (o "+" da garagem em 11/09, o login de quem veio
+comprar em 18/09), agora no degrau com mais gente. Aposta
+`conta-que-sabe-que-veio-do-carro`.
+
+# O QUE O USUÁRIO DISSE NESTA SEMANA (2026-10-16)
+
+**Avaliação nova: nenhuma.** São as mesmas 12, média 5,0, e isso agora tem
+limite declarado em vez de ficar no ar: o relatório `stats/ratings/` da Play,
+lido pela Engenharia em 16/10, diz que não entrou nota nenhuma entre 04/09 e
+11/10. Então "zero avaliações novas" é ausência medida, não falta de coleta.
+
+**A fricção repetida da semana é no login, e ela entra aqui como linha com
+data.** No retrato de 16/10, dos 23 relatos de 7 dias: **10 aparelhos tocaram
+no login do Google e cancelaram na caixa do sistema** ("Google Sign-In
+cancelled by user"), e o retrato conta 11 relatos como desistência, o que ele
+classifica como não sendo falha nossa. Classificar como "não é falha" está
+certo tecnicamente e errado como conversão: a pessoa pediu para criar conta e
+voltou atrás na tela seguinte.
+
+E o número põe um TETO honesto no diagnóstico da aposta da semana: 10 aparelhos
+por semana cancelando a caixa do Google contra uns 100 por semana perdidos no
+portão da conta. **A caixa do Google explica no máximo um décimo da perda; o
+resto acontece antes dela**, na nossa folha ou na nossa tela de entrar. Isso é
+o que impede a aposta de virar "o problema é o Google".
+
+Segunda fricção, em pé e sem dono nesta rodada: **8 fechamentos do app em 4
+aparelhos, todos na tela Home.** Não é do CRO (é defeito, não jornada), já está
+abaixo do teto de 10% dos aparelhos ativos, e fica registrado aqui porque a Home
+é onde a aposta `inicio-pergunta-unica` é medida: app que fecha na Home polui o
+degrau daquela aposta.
+
+# O PEDIDO DE AVISO: O LUGAR DECIDE, E AGORA TEM NÚMERO (2026-10-16)
+
+Resposta ao pedido do Diretor de 05/10. Desde 21/09, por aparelho:
+
+    depois de salvar o carro      39 convites    11 aceitaram    28 de cada 100
+    no calendário                 93 convites    15 aceitaram    16 de cada 100
+    no onboarding                 54 convites     4 aceitaram     7 de cada 100
+
+**Quatro vezes de diferença pelo LUGAR do pedido**, que é o timing do pedido da
+skill `besci.md` medido na nossa base pela primeira vez. E a composição migrou
+para as duas piores fontes (o calendário foi de 21 para 27 convites por semana,
+o onboarding de 10 para 15), então boa parte da queda da aceitação total é mix,
+não "as pessoas pioraram". O sistema operacional não é o culpado:
+`permissao_aviso_negada` tem 5 eventos na vida inteira, ou seja as pessoas somem
+na NOSSA folha, antes da caixa do sistema. Detalhe inteiro, com o evento que
+falta e a divergência de leitura declarada, em
+`docs/agentes/propostas/o-portao-do-aviso-grava-a-recusa.md`.
+
+Área CONGELADA até 23/10 (aposta `convite-do-carro-nao-queima-com-convidado`),
+então isto é candidata ao próximo teste e não mudança desta semana: mover o
+pedido do onboarding para depois de uma primeira ação de valor.
+
+# A ATIVAÇÃO GANHOU DEFINIÇÃO, E ELA DISCRIMINA (2026-10-16)
+
+O conserto que a v8 apontou e que o dono devolveu como meu: a ativação por
+coorte passa a ser "fez algo de valor que NÃO é cadastrar o carro, na janela de
+7 dias de cada pessoa". O carro saiu da lista porque 263 das 289 contas com
+estado têm carro (91 de cada 100), e métrica que todo mundo cumpre não mede
+ativação.
+
+    coorte      contas    view ATUAL    definição nova
+    21/09         51          3             25        (subcontada: o perguntou_biela nasceu em 28/09)
+    28/09         57          0             28        <- primeira comparável
+    05/10         69          4 (piso)      28 (piso)
+    12/10         64          1 (piso)      27 (piso)
+
+Metade das contas novas faz algo além do carro na primeira semana, e metade
+não. O número fica entre os dois absurdos da métrica antiga (0 de 57 por um
+lado, 56 de 57 pelo outro), e é isso que faz dele métrica. SQL e ressalvas em
+`docs/agentes/propostas/ativacao-alem-do-carro.md`; a aplicação é da
+Engenharia, com linha na fila.
+
+# O PAYWALL POR ORIGEM, QUE O RETRATO NÃO SEPARA (2026-10-16)
+
+Terceira rodada com a mesma ressalva, agora respondida em vez de repetida.
+`viu_paywall` por `origem`, aparelhos distintos:
+
+    semana     health  revisions  learn  systemDetail  symptomCauses  home  cars  outros
+    21/09         4        11        2         1             0          8     0     8
+    28/09         6         6        6         3             5          8     0     8
+    05/10        11         3        3         8             8          1     2     3
+    12/10         8         6        6         5             1          1     1     9
+
+Duas leituras: **`health` virou a porta principal do Premium** (a saúde do
+carro), e **`home` caiu de 8 para 1** depois de o card do Premium sair do topo
+do Início em 06/10, o que é esperado e está dito na aposta
+`portao-unico-do-premium`. Quem for ler aquele veredito em 20/10 usa esta
+tabela como o "antes" por origem, que não existia.
+
 v8 em 2026-10-09: rodada de RETENÇÃO, e ela tem duas notícias grandes. A
 primeira é boa: a coorte de 21/09 fechou com 9 de 51 voltando na primeira
 semana, contra 0 de 16 e 1 de 11 nas anteriores. A segunda é um achado de
