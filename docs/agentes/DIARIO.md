@@ -16,6 +16,10 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
     páginas" pela ferramenta do n8n (`setNodeCredential`). Ela recusa
     ("node type 'n8n-nodes-base.httpRequest' does not accept credential
     'googleOAuth2Api'"), o mesmo bloqueio de 06/10. Segue clique do dono.
+- **Verificação do anunciante no Google Ads: feita, pela palavra do dono**
+  ("já resolvemos o google Ads", 16/10). Nenhum instrumento da casa lê essa
+  faixa; item apagado da lista com essa ressalva. Se um anúncio aparecer
+  limitado na coleta, é o primeiro lugar a reler.
 
 ## 2026-10-15 · Engenharia: o domínio está verificado no Postmaster Tools
 
