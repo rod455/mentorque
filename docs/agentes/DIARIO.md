@@ -3,6 +3,20 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-16 · Engenharia: a lista do dono relida contra os instrumentos
+
+- Pergunta do dono: "o que ainda tenho de pendências?". Cada item relido
+  antes de repetir (regra de 04/10), na coleta de 16/10:
+  - **Saiu**: decidir a campanha de busca. "Mentorque Lançamento" está
+    PAUSED na coleta do Google Ads de 16/10 (e desde a de 14/10).
+  - **Segue, conferido**: `first_open` da AppsFlyer ainda secundária (179 em
+    "todas", 0 em "conversões"); `topPaginas` do Search Console ainda
+    "Forbidden"; custo da AppsFlyer ainda desligado (aviso na coleta).
+  - **Tentado e bloqueado**: trocar a credencial do nó "Search Console: top
+    páginas" pela ferramenta do n8n (`setNodeCredential`). Ela recusa
+    ("node type 'n8n-nodes-base.httpRequest' does not accept credential
+    'googleOAuth2Api'"), o mesmo bloqueio de 06/10. Segue clique do dono.
+
 ## 2026-10-15 · Engenharia: o domínio está verificado no Postmaster Tools
 
 - O dono verificou `mentorque.com.br` no Google Postmaster Tools em 15/10, com
