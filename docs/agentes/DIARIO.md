@@ -3,6 +3,41 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-16 · Engenharia: a YouTube Analytics API responde, e quase toda visualização do canal é anúncio
+
+- O dono ligou a API no projeto certo (43445984392; a primeira tentativa foi
+  no mentorque-504217, que não é o da credencial). Lido em 16/10 às 11h02
+  UTC, execução 8976 de um fluxo temporário do n8n com a credencial do
+  YouTube que o coletor já usa. O fluxo foi arquivado depois.
+- Retenção dos cinco Shorts de 19/09, janela 19/09 a 15/10:
+
+  | vídeo | visualizações | % médio assistido | duração média |
+  |---|---|---|---|
+  | zK6vH8jWUf0 (serra) | 4.564 | 55% | 83 s |
+  | J54Zp95LZHg (orçamento) | 1.926 | 70% | 53 s |
+  | YfPBaj-Pov8 (pneu) | 127 | 117% | 89 s |
+  | 2SRBhFaR1IY (regra dos 70%) | 112 | 101% | 85 s |
+  | NTmeTHwC7C4 (poça) | 33 | 60% | 47 s |
+
+  Acima de 100% é Short assistido mais de uma vez em loop; não é erro.
+- Clique por impressão (`videoThumbnailImpressionsClickRate`): a API responde
+  "The query is not supported". Só o Studio mostra. Não conferi se existe
+  outro relatório que traga; a documentação pública diz que essa métrica é
+  só do Studio.
+- O achado que muda a leitura: origem do tráfego do canal na mesma janela,
+  ADVERTISING 58.980 visualizações, SHORTS 593, EXT_URL 161, YT_SEARCH 140,
+  canal 22, playlist 21, o resto 6 ou menos. Uns 98% das visualizações são
+  anúncio pago. Visualização do canal mede o gasto em mídia, não o interesse
+  pelo conteúdo; para conteúdo, olhar SHORTS e YT_SEARCH separados, que hoje
+  somam uns 730. Segundo instrumento não conferido: o Google Ads diria quanto
+  dessas 58.980 vieram das campanhas de vídeo, e eu não li.
+- Ainda não é automático: ninguém lê esta API em rotina. Ligar a retenção e
+  a origem do tráfego no pacote `youtube` do retrato é o próximo passo, se o
+  dono quiser.
+- Na lista do dono: o item de 06/10 (ativar a API) saiu, feito. O destino
+  `youtube` agora diz que o Studio só é necessário para o clique por
+  impressão.
+
 ## 2026-10-16 · Engenharia: o custo na AppsFlyer exige plano pago, e o item sai da lista
 
 - O dono abriu a AppsFlyer para ligar a integração de custo (Active
