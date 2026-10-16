@@ -20,6 +20,14 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   ("já resolvemos o google Ads", 16/10). Nenhum instrumento da casa lê essa
   faixa; item apagado da lista com essa ressalva. Se um anúncio aparecer
   limitado na coleta, é o primeiro lugar a reler.
+- **A ação principal de instalação no Google Ads fica como está, decisão do
+  dono.** Ao abrir a `first_open` da AppsFlyer, o Google avisou que só uma
+  ação acompanha as instalações do app: para ela virar principal, a do Google
+  Play teria de virar secundária. ERRO MEU na instrução: eu tinha dito que as
+  duas podiam ser principais juntas. Recomendei não trocar (a do Play conta
+  651 contra 179, e a troca reiniciaria o aprendizado da campanha de vídeo, a
+  única ativa), e o dono decidiu não mexer. Item apagado da lista; registrado
+  em `midia-paga.md`, "Direcionamentos do dono", para não ser pedido de novo.
 
 ## 2026-10-15 · Engenharia: o domínio está verificado no Postmaster Tools
 

@@ -707,6 +707,18 @@ linha com dono e com o ganho estimado.
 
 ## Direcionamentos do dono
 
+- **16/10/2026: a ação principal de instalação no Google Ads CONTINUA a do
+  Google Play; a `first_open` da AppsFlyer fica secundária, por decisão do
+  dono.** Ao tentar trocar, o Google avisou que só uma ação acompanha as
+  instalações do app, então virar a da AppsFlyer exigia rebaixar a do Play.
+  O motivo de não mexer: a do Play conta muito mais (651 contra 179 na coleta
+  do retrato), a AppsFlyer não enxerga parte dos aparelhos Android, e trocar a
+  ação principal reiniciaria o aprendizado da campanha de vídeo, a única ativa
+  e a mais barata. A comparação entre Google e Meta pela mesma régua segue
+  sendo feita do nosso lado; o que a melhora é a integração de custo da
+  AppsFlyer. **Não pedir de novo.** Reabrir só com motivo novo (por exemplo,
+  a ação do Play deixar de contar).
+
 - **2026-09-19, ao criar o papel: acompanhar de perto e PROPOR melhoria.** O
   pedido foi "acompanhar de perto as campanhas e propor as melhorias", uma vez
   por semana, igual aos outros papéis. Acompanhar de perto quer dizer a conta
