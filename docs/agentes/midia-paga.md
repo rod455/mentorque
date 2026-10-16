@@ -707,6 +707,19 @@ linha com dono e com o ganho estimado.
 
 ## Direcionamentos do dono
 
+- **16/10/2026: o custo dentro da AppsFlyer NÃO vai existir, e não é clique
+  pendente.** Ao abrir Active Integrations > Google Ads (Adwords) > aba Cost,
+  a própria AppsFlyer diz: "Cost data is available for ROI360 customers only.
+  To get access to ROI360, please contact your CSM." Ou seja, é pacote pago.
+  Contratar é gasto novo, e o dono decidiu não contratar agora (recomendação
+  da Engenharia, com o gasto de mídia em uns R$ 450 por semana). O aviso
+  "integração de custo desligada no console", que a coleta da AppsFlyer
+  imprime todo dia, descreve o efeito e não a causa: não há o que ligar sem
+  ROI360. O custo por instalação por campanha segue sendo calculado aqui,
+  com o gasto dos painéis contra as instalações atribuídas. **Não pedir de
+  novo.** Reabrir só se o gasto de mídia crescer a ponto de o ROI360 se
+  pagar, e aí como proposta de gasto, com número.
+
 - **16/10/2026: a ação principal de instalação no Google Ads CONTINUA a do
   Google Play; a `first_open` da AppsFlyer fica secundária, por decisão do
   dono.** Ao tentar trocar, o Google avisou que só uma ação acompanha as

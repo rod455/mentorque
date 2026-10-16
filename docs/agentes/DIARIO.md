@@ -3,6 +3,20 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-16 · Engenharia: o custo na AppsFlyer exige plano pago, e o item sai da lista
+
+- O dono abriu a AppsFlyer para ligar a integração de custo (Active
+  Integrations > Google Ads (Adwords) > aba Cost) e a tela diz: "Cost data is
+  available for ROI360 customers only. To get access to ROI360, please contact
+  your CSM." Não é clique: é pacote pago.
+- Recomendação de não contratar agora (gasto de mídia de uns R$ 450 por
+  semana; o custo por instalação já é calculado pela Mídia com o gasto dos
+  painéis). Item apagado da lista do dono, e a decisão registrada em
+  `midia-paga.md`, "Direcionamentos do dono", para não voltar como pedido.
+- O pedido estava na lista desde 08/10 sem ninguém ter lido essa tela: o
+  aviso da coleta ("integração de custo desligada no console") sugeria um
+  interruptor que não existe no plano atual.
+
 ## 2026-10-16 · Engenharia: a lista do dono conferida item a item, três resolvidos sem clique e um problema novo nas lojas
 
 - Pedido do dono: "confira todas essas coisas da lista e veja se realmente
