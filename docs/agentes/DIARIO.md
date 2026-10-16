@@ -3,6 +3,41 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-16 · Engenharia: a lista do dono conferida item a item, três resolvidos sem clique e um problema novo nas lojas
+
+- Pedido do dono: "confira todas essas coisas da lista e veja se realmente
+  precisa, acredito que já fizemos todas". Tudo lido em 16/10 de manhã (UTC),
+  pelo banco e por fluxos temporários do n8n, arquivados no fim.
+- **RESOLVIDOS SEM CLIQUE DO DONO:**
+  - **Busca `manutencao` na App Store**: a API pública de busca da Apple
+    acha o Mentorque sem acento (posição 40 de 182) e com acento (38 de 179).
+    A palavra sem acento funciona. Ressalva: é a API de busca, não o app da
+    loja no iPhone; mesmo índice, a ordem pode variar.
+  - **Conversão da ficha da Play**: o bucket de relatórios que o coletor já
+    lê tem `stats/store_performance/` do Mentorque (por origem de tráfego,
+    mensal, outubro atualizado em 14/10). Antes de 04/10 (20/09 a 03/10):
+    38,7% (731 de 1.888); depois (04 a 08/10): 50,7% (331 de 653). Por
+    origem: "Ads and referrals" de 34,9% para 54,1%; "Other" de 45,6% para
+    44,8%. O relatório NÃO separa "Pesquisa do Google Play" (cai em "Other").
+    A janela de depois tem 5 dias; leitura do ASO segue em 01/11.
+  - **As imagens da ficha**: baixadas das páginas públicas das duas lojas,
+    em `docs/lojas/play-ficha-2026-10-16/` (ícone e 8 capturas, telas cruas do
+    app) e `docs/lojas/appstore-ficha-2026-10-16/` (9 capturas desenhadas).
+  - **De quebra, a nota sem texto**: `stats/ratings/` da Play diz média 5,0 e
+    nenhuma nota nova do dia 04/09 a 11/10. Fecha o limite do "zero" do ASO.
+- **PROBLEMA NOVO, NA LISTA DO DONO**: a 4ª captura da Play e a 5ª da App
+  Store ainda mostram a prova social antiga (4,8, 10.000+, 5.000+ e, na Play,
+  quatro depoimentos com nome), que o dono mandou tirar do app em 04/10.
+- **SEGUEM, CONFERIDOS**: credencial do Search Console (o coletor não é
+  editado desde 04/10 e respondeu "Forbidden" hoje); custo da AppsFlyer
+  (aviso na coleta de hoje); o Short da bateria (os envios mais novos do
+  canal são os de 13/10, nenhum é ele).
+- **REESCRITO**: o pedido de copiar retenção e CTR do YouTube Studio virou
+  ativar a YouTube Analytics API, um clique. A credencial do YouTube do n8n
+  respondeu "SERVICE_DISABLED" no projeto 43445984392.
+- **SAIU POR NÃO SER NECESSÁRIO**: o token da Meta, que era opcional e não
+  alimenta nada que alguém leia hoje.
+
 ## 2026-10-16 · Engenharia: a lista do dono relida contra os instrumentos
 
 - Pergunta do dono: "o que ainda tenho de pendências?". Cada item relido
