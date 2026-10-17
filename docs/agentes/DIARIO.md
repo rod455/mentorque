@@ -3,6 +3,19 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-17 · Engenharia: proposta do que tirar do grátis, com o alcance de cada mudança
+
+- Pedido do dono. Proposta em `docs/agentes/propostas/o-que-sai-do-gratis.md`;
+  plano é decisão dele, nada foi aplicado.
+- O número que mais pesa, da tabela `biela_perguntas` (a verdade da contagem;
+  o funil conta uma vez por sessão e mostra menos): entre contas sem Premium,
+  de 15/09 a 17/10, 12 pessoas-mês bateram no limite de 5 perguntas, e 25
+  bateriam com limite 3. As 12 não assinaram, mas o Android não tinha o teste
+  prometido até hoje.
+- Recomendado: Biela de 5 para 3 agora (só servidor), a segunda consulta de
+  sintoma e o relatório do caderno de gastos na 3.2. Não tirar aulas,
+  registro de serviço, lembretes nem o primeiro uso de nada.
+
 ## 2026-10-17 · Engenharia: a rodada 4 do Guardião lida, e os plantios refeitos com a ferramenta
 
 - Pedido do dono: "veja o que o guardião escreveu hoje". Os dois plantios que
