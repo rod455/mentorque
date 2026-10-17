@@ -3,6 +3,20 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-17 · Engenharia: a rodada 4 do Guardião lida, e os plantios refeitos com a ferramenta
+
+- Pedido do dono: "veja o que o guardião escreveu hoje". Os dois plantios que
+  eram cegos, refeitos com `npm run plantio` depois do push dele: `saiu:
+  false` na jornada e `if (false && ...)` no orçamento. **Os dois mordem.** E
+  um terceiro que a rodada não tocou, a regra de 15/10 dos 5 e-mails sem
+  abrir: mordeu. `git status` limpo depois dos três.
+- As duas rotas que ele destruiu e restaurou não entraram no commit dele
+  (`git show --stat 22f1c99` não as lista). Nada de produto mudou.
+- O retorno, em `guardiao-conferencias.md`: o acidente era evitável com o
+  `npm run plantio`, criado em 10/10 por causa da rodada anterior dele, e o
+  "conserto" proposto era um roteiro na pasta temporária da sessão. O
+  parágrafo do manual que mandava copiar esse roteiro foi corrigido.
+
 ## 2026-10-17 · Engenharia: na Apple também não há teste grátis, e a chave não deixa criar
 
 - Pedido do dono: "veja se na apple está assim também". Está. Lido pela API

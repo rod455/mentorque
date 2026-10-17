@@ -94,8 +94,10 @@ destruídas, com a cópia de segurança parecendo estar lá.
 O conserto é o nome: `app/api/biela/route.ts` vira
 `app%api%biela%route.ts.bak`. E duas travas que vêm junto: **guardar antes de
 plantar, sempre, com o plantio recusando rodar se a cópia não existir**; e
-**desfazer só pela cópia, parando se ela faltar**. O roteiro em
-`$SCRATCH/plantio.sh` é isso escrito, e vale copiar no começo da rodada.
+**desfazer só pela cópia, parando se ela faltar**. Tudo isso já é o
+`npm run plantio` (abaixo), que dá a cada cópia um nome com hora e restaura no
+mesmo processo: use ele, e não um roteiro na pasta temporária da sessão, que
+some quando a sessão acaba (correção do dono em 17/10).
 
 Como saí dessa, porque também é lição: nada do que eu tinha a perder estava
 naqueles arquivos (meus plantios sempre voltam), então reescrevi os dois com
@@ -711,3 +713,59 @@ um refactor legítimo faz com ela. O ajuste barato é casar o ELO (a função
 chamada com três argumentos, o resultado indo para o corte) sem prender os
 nomes locais, e a prova é o mesmo plantio de hoje mais um renomeio que tem de
 continuar verde.
+
+## Retorno do dono sobre a rodada de 17/10/2026 (rodada 4)
+
+Mandado escrever por ele em 17/10 ("veja o que o guardião escreveu hoje").
+Lido o diário, o commit 22f1c99 e o manual, e os plantios principais refeitos
+com `npm run plantio` depois do push.
+
+Primeiro o que manter.
+
+**O ACHADO É O MAIS VALIOSO QUE ESTE PAPEL JÁ TROUXE, E ELE SE CONFIRMA.**
+Refiz os dois plantios que eram cegos: `saiu: false` no cron da jornada e
+`if (false && !podeAnalisar(...))` no orçamento. Os dois MORDEM agora. E
+plantei um terceiro que a rodada não tocou, a regra de 15/10 de tirar do envio
+quem recebeu 5 e-mails sem abrir nenhum (`naoAbrem` fora do `semEmail`):
+mordeu também. Uma conferência que deixava passar mensagem para quem pediu
+para sair era o pior buraco possível, e foi achado antes de custar.
+
+**A RODADA CONTOU O PRÓPRIO ERRO COM O DETALHE QUE PERMITE NÃO REPETIR.** As
+duas rotas destruídas, como aconteceu, como saiu, e a prova de que nada se
+perdeu (o commit não toca nelas). E a linha da fila veio copiada do comando,
+começo e fim.
+
+**O MODELO A COPIAR FICOU ESCRITO.** A `conferir:biela` como forma certa
+(guarda inteiro, argumentos que decidem, resposta adiante) é mais útil que
+qualquer regra abstrata.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. A FERRAMENTA QUE EVITARIA O ACIDENTE EXISTE DESDE 10/10, E FOI CRIADA POR
+CAUSA DE VOCÊ.** O `npm run plantio` nasceu no retorno da sua rodada 3, depois
+do `|| git checkout`. Ele grava a cópia com nome e hora
+(`route.ts.<hora>.bak`) e restaura no mesmo processo, então três `route.ts`
+nunca colidem; foi com ele que refiz os plantios hoje, sem incidente. A rodada
+usou um roteiro próprio com nome de arquivo, e o "conserto que fica" é OUTRO
+roteiro, na pasta temporária da sessão, que some quando a sessão acaba. O
+critério 4 falhou duas semanas seguidas pela mesma família, e a causa das duas
+é a mesma: procedimento feito à mão quando existe um caminho único. Corrigi o
+parágrafo do manual que mandava copiar o roteiro temporário. Se o
+`npm run plantio` não servir para algum plantio (dois arquivos ao mesmo tempo,
+por exemplo), o caminho é pedir à Engenharia que a ferramenta cresça, não
+contorná-la.
+
+**2. A RECOMENDAÇÃO MAIOR FICOU SEM DONO NEM TAMANHO.** "A varredura de
+presença e não uso vale para as 53 conferências que leem arquivo" é o próximo
+passo natural do seu achado, e é seu: você já tem o padrão procurável (regex
+que é só o nome de uma função seguido de parêntese). A próxima rodada abre
+contando quantas asserções têm essa forma, com o número no diário, e prova as
+que guardam mensagem a cliente, cobrança e limite do grátis primeiro, porque
+são as que custam dinheiro ou confiança quando falham. E sobre o pedido ao QA
+para olhar a `conferir:jornada`: os três plantios acima respondem a parte de
+"morde ou não"; o QA não precisa repetir isso.
+
+Veredito: a rodada mais útil do papel até aqui, com o achado certo e o erro
+contado por inteiro, mas o acidente era evitável com a ferramenta que já
+existia, e o conserto proposto repetia o erro.
+
