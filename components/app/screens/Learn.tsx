@@ -49,7 +49,8 @@ function CourseMeter({ done, total }: { done: number; total: number }) {
 // O card do Biela SAIU daqui em 06/10/2026: o Biela tem a própria aba desde
 // 04/10 (aposta `aba-biela`), e um card dele dentro de Aprender era a mesma
 // porta duas vezes na mesma barra. (O selo Premium já tinha saído em 17/09:
-// o Biela tem cinco perguntas por mês no gratuito, decisão do dono de 15/09.)
+// o Biela tem três perguntas por mês no gratuito, decisão do dono de 17/10;
+// eram cinco desde 15/09.)
 
 // Pick the most relevant items for the active car: model-specific first, then
 // brand, then fundamentals/DIY basics.

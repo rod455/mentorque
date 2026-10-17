@@ -29,7 +29,12 @@ import { mesDe } from "../orcamento/analise.ts";
 
 export { mesDe };
 
-export const LIMITE_GRATIS_POR_MES = 5;
+// DE 5 PARA 3 EM 17/10/2026, decisão do dono ("vamos implementar isso tudo").
+// Pela tabela `biela_perguntas`, de 15/09 a 17/10, 12 pessoas-mês sem Premium
+// bateram no limite de 5; com 3, seriam 25. É o limite com mais gente batendo
+// e o único que muda sem versão nova, porque quem conta é o servidor. Proposta
+// em docs/agentes/propostas/o-que-sai-do-gratis.md.
+export const LIMITE_GRATIS_POR_MES = 3;
 
 export function podePerguntar(feitasNoMes: number, premium: boolean): boolean {
   if (premium) return true;

@@ -333,6 +333,12 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   a partir de: 2026-10-20 (direcional) e 2026-11-03
 - Antes: a ler no retrato de 07/10 (viu_paywall e iniciou_checkout por ctx
   nos 28 dias anteriores); não li antes de abrir, e fica dito
+- MUDANÇA NO MEIO, anotada no dia (17/10/2026, Engenharia, decisão do dono):
+  o limite grátis da Biela caiu de 5 para 3 perguntas por mês, no servidor,
+  valendo para todas as versões. Mais gente chega ao Premium pela `origem`
+  `biela` daqui em diante; a leitura de 20/10 separa antes e depois de 17/10.
+  E o teste grátis passou a existir no Play no mesmo dia, o que muda o que
+  acontece DEPOIS do toque em assinar.
 - Veredito: (aberto)
 
 ## [landing-em-seis-blocos] A home tem uma promessa, o Biela em ação e a loja como único destino

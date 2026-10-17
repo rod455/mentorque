@@ -3,6 +3,20 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-17 · Engenharia: a Biela passa a 3 perguntas grátis por mês
+
+- Decisão do dono em 17/10 ("vamos implementar isso tudo"), primeiro item da
+  proposta `o-que-sai-do-gratis.md`. `LIMITE_GRATIS_POR_MES` de 5 para 3 em
+  `lib/biela/limite.ts`. Quem conta é o servidor, então vale para todas as
+  versões assim que a Vercel publicar este commit.
+- Textos que diziam 5 trocados: a seção de planos do site (pt e en) e a
+  página "leva para a loja". A tabela do Premium dentro do app muda na 3.2,
+  junto com os outros limites.
+- Linha de base para ler depois: de 15/09 a 17/10, 12 pessoas-mês sem Premium
+  bateram no limite de 5 (`biela_perguntas`). Com 3, a mesma base daria 25.
+- `conferir:biela` cobra o 3; o plantio de volta ao 5 reprovou. Anotado na
+  aposta `portao-unico-do-premium`, que lê a porta do Premium em 20/10.
+
 ## 2026-10-17 · Engenharia: proposta do que tirar do grátis, com o alcance de cada mudança
 
 - Pedido do dono. Proposta em `docs/agentes/propostas/o-que-sai-do-gratis.md`;

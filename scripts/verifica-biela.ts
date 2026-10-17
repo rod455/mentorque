@@ -31,14 +31,14 @@ console.log("Biela: o limite do gratuito, e quem o segura.");
 
 // ── a conta ─────────────────────────────────────────────────────────────────
 {
-  conferir("o limite do gratuito é cinco por mês (decisão do dono, 15/09)", LIMITE_GRATIS_POR_MES === 5, String(LIMITE_GRATIS_POR_MES));
+  conferir("o limite do gratuito é três por mês (decisão do dono, 17/10; eram cinco desde 15/09)", LIMITE_GRATIS_POR_MES === 3, String(LIMITE_GRATIS_POR_MES));
   conferir("com zero feitas, pode", podePerguntar(0, false));
   conferir(`com ${LIMITE_GRATIS_POR_MES - 1} feitas, ainda pode`, podePerguntar(LIMITE_GRATIS_POR_MES - 1, false));
   conferir(`com ${LIMITE_GRATIS_POR_MES} feitas, NÃO pode`, !podePerguntar(LIMITE_GRATIS_POR_MES, false));
   conferir("Premium passa por cima do teto", podePerguntar(999, true));
   conferir("o saldo do Premium é nulo, não um número", restantes(999, true) === null);
   conferir("o saldo nunca fica negativo", restantes(LIMITE_GRATIS_POR_MES + 3, false) === 0, String(restantes(LIMITE_GRATIS_POR_MES + 3, false)));
-  conferir("com uma feita, sobram quatro", restantes(1, false) === LIMITE_GRATIS_POR_MES - 1);
+  conferir("com uma feita, sobram duas", restantes(1, false) === LIMITE_GRATIS_POR_MES - 1);
 
   // O mês é o MESMO do orçamento por foto, e não uma cópia. Dois relógios
   // diferentes para os dois limites gratuitos da mesma pessoa é o tipo de

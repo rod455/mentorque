@@ -90,7 +90,7 @@ export const en: Strings = {
         price: "R$ 0",
         priceNote: "forever",
         features: [
-          "5 questions to Biela per month",
+          "3 questions to Biela per month",
           "Garage with up to 2 cars",
           "Symptom diagnosis, history and service reminders",
           "Open lessons",

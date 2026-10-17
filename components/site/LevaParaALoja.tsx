@@ -101,7 +101,7 @@ export function LevaParaALoja() {
             o endereço chega do mesmo jeito. A conferir:caminho cobra isso, e
             foi ela que pegou este link na primeira versão desta página. */}
         <p className="mt-8 text-xs text-cream/50">
-          Grátis para começar: 5 perguntas por mês para a Biela, sem criar conta.
+          Grátis para começar: 3 perguntas por mês para a Biela, sem criar conta.
         </p>
       </div>
     </main>

@@ -181,7 +181,8 @@ export async function POST(request: Request) {
 
   // ── QUEM É, E QUANTAS JÁ FEZ (15/09/2026) ────────────────────────────────
   //
-  // A Biela entrou no gratuito com cinco perguntas por mês (decisão do dono).
+  // A Biela entrou no gratuito com cinco perguntas por mês (decisão do dono),
+  // e passou a três em 17/10/2026 (lib/biela/limite.ts).
   // Até hoje esta rota não conferia nada: sem sessão, sem Premium, sem
   // contagem, sem teto. O único freio era o `FREE_BIELA_QUESTIONS = 0` da
   // tela, e portão que mora no cliente é enfeite: o contador dele vivia num
