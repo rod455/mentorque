@@ -69,6 +69,13 @@ export type EventoFunil =
   // A tela do quiz abriu (08/10/2026): `origem` diz se caiu na pergunta ou no
   // "você já respondeu hoje". Nasceu com o conserto do quiz do dia 1.
   | "abriu_quiz"
+  // Os desfechos que faltavam (17/10/2026). Ver lib/app/funil.ts.
+  | "recusou_convite_aviso"
+  | "convite_conta"
+  | "aceitou_convite_conta"
+  | "recusou_convite_conta"
+  | "desistiu_da_compra"
+  | "erro_na_compra"
   | "atribuicao";
 
 export type Natureza = "sessao" | "ato" | "tecnico";
@@ -129,6 +136,14 @@ export const UNIDADE: Record<EventoFunil, Unidade> = {
   clicou_consultoria: "aparelho",
   clicou_atalho: "aparelho",
   abriu_quiz: "aparelho",
+  recusou_convite_aviso: "aparelho",
+  // A folha da conta só aparece para quem NÃO tem conta: é do aparelho por
+  // definição, e o aceite vira conta no passo seguinte (`cadastro`).
+  convite_conta: "aparelho",
+  aceitou_convite_conta: "aparelho",
+  recusou_convite_conta: "aparelho",
+  desistiu_da_compra: "aparelho",
+  erro_na_compra: "aparelho",
   atribuicao: "aparelho",
   // Nascem no webhook da cobrança, que não tem aparelho. A identidade é o
   // user_id, e por isso eles não se comparam com nada da lista de cima.
@@ -189,6 +204,14 @@ export const NATUREZA: Record<EventoFunil, Natureza> = {
   // Uma por dia por pessoa, no máximo, e repete amanhã: é sessão. Quem lê
   // separa pelo `origem` (pergunta ou ja-respondeu).
   abriu_quiz: "sessao",
+  // O convite e a recusa podem voltar em outra sessão; o aceite é ato, como o
+  // do aviso. Desistir e errar na loja repetem a cada tentativa.
+  recusou_convite_aviso: "sessao",
+  convite_conta: "sessao",
+  aceitou_convite_conta: "ato",
+  recusou_convite_conta: "sessao",
+  desistiu_da_compra: "sessao",
+  erro_na_compra: "sessao",
   atribuicao: "tecnico",
 };
 
@@ -222,6 +245,13 @@ export const MEDIDO_DESDE: Record<EventoFunil, string> = {
   clicou_atalho: "2026-10-06",
   // A tela do quiz: na web em 08/10; nas lojas, com a 3.2.
   abriu_quiz: "2026-10-08",
+  // Os desfechos: no ar na web em 17/10; nas lojas, com a 3.2.
+  recusou_convite_aviso: "2026-10-17",
+  convite_conta: "2026-10-17",
+  aceitou_convite_conta: "2026-10-17",
+  recusou_convite_conta: "2026-10-17",
+  desistiu_da_compra: "2026-10-17",
+  erro_na_compra: "2026-10-17",
   // Vão no ar com a 1.6. Até a versão chegar aos aparelhos, a cadeia da
   // primeira sessão fica sem medição, e o funil DIZ isso em vez de mostrar
   // zero. Quando a 1.6 estiver publicada, esta data continua valendo: ela
@@ -295,6 +325,11 @@ export const SO_NA_PLATAFORMA: Partial<Record<EventoFunil, Plataforma[]>> = {
   aceitou_convite_aviso: ["android", "ios"],
   permissao_aviso_concedida: ["android", "ios"],
   permissao_aviso_negada: ["android", "ios"],
+  recusou_convite_aviso: ["android", "ios"],
+  // A folha de compra da loja só existe no app; na web quem cobra é o Stripe,
+  // com a página dele.
+  desistiu_da_compra: ["android", "ios"],
+  erro_na_compra: ["android", "ios"],
   // A AppsFlyer é plugin nativo: `iniciarAtribuicao` não faz nada na web.
   atribuicao: ["android", "ios"],
   // Moram em components/site e components/sections, que são páginas do site.

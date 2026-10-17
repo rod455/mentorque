@@ -6,7 +6,7 @@ import { usePrototype } from "@/lib/app/store";
 import { stripeConfigured } from "@/lib/app/stripeClient";
 import { trialDaysFor, trialPlatform, type Platform } from "@/lib/app/platform";
 import { iapKey, isLocalDev, isNativeApp, nativePlatform } from "@/lib/app/wrapper";
-import { compraCancelada, googleOffer, hasActiveEntitlement, initPurchases, offerPrice, type GoogleOption, type RcPackage } from "@/lib/app/purchases";
+import { compraCancelada, codigoDoErroDeCompra, googleOffer, hasActiveEntitlement, initPurchases, offerPrice, type GoogleOption, type RcPackage } from "@/lib/app/purchases";
 import { useNav, type View } from "@/lib/app/nav";
 import { funil } from "@/lib/app/funil";
 // A tela de entrar precisa saber que a pessoa veio de um botão de assinar.
@@ -215,6 +215,16 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offerLeft, showOffer]);
 
+  // O QUE ACONTECEU NA FOLHA DA LOJA (17/10/2026). Desde 15/09, 16 pessoas
+  // tocaram em assinar e 1 comprou, e o que houve com as outras 15 era
+  // invisível: desistir sai calado da tela, de propósito, e saía calado do
+  // funil também. Agora a desistência e o erro viram evento, com a mesma
+  // `origem` do `iniciou_checkout` que eles respondem.
+  const relataDesfechoDaLoja = (err: unknown, origem: string) => {
+    if (compraCancelada(err)) funil("desistiu_da_compra", { origem });
+    else funil("erro_na_compra", { origem, detalhe: codigoDoErroDeCompra(err) });
+  };
+
   // Compra uma oferta do Play (exit10/exit25). Fecha os pop-ups e sai do
   // paywall quando o entitlement chega.
   const buyGoogleOffer = async (opt: GoogleOption | null) => {
@@ -232,7 +242,10 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
         setShowOffer2(false);
         back();
       }
-    } catch { /* cancelou/erro: permanece na oferta */ } finally {
+    } catch (err) {
+      // Cancelou ou deu erro: permanece na oferta.
+      relataDesfechoDaLoja(err, `oferta-${opt.id.split(":").pop()}`);
+    } finally {
       setIapBusy(false);
     }
   };
@@ -255,7 +268,10 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
         setShowOffer2(false);
         back();
       }
-    } catch { /* cancelou/erro: permanece na oferta */ } finally {
+    } catch (err) {
+      // Cancelou ou deu erro: permanece na oferta.
+      relataDesfechoDaLoja(err, `oferta-${pkg.identifier}`);
+    } finally {
       setIapBusy(false);
     }
   };
@@ -366,6 +382,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
       // Desistir é escolha da pessoa e sai calado. Qualquer outro erro cai na
       // confirmação: o dinheiro pode ter entrado, e "deu erro" seria um convite
       // a pagar duas vezes.
+      relataDesfechoDaLoja(err, `loja-${plan}`);
       if (!compraCancelada(err)) abrirConfirmacaoDeCompra("loja");
     } finally {
       setIapBusy(false);

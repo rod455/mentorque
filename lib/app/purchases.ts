@@ -128,6 +128,17 @@ export function hasActiveEntitlement(info?: CustomerInfo): boolean {
  * confirmação é chato, errar para o outro lado é deixar alguém achando que
  * pagou à toa.
  */
+/**
+ * O código curto de um erro de compra, para o evento `erro_na_compra`
+ * (17/10/2026). O RevenueCat manda `code` numérico (o 1 é desistência, que
+ * vai para `desistiu_da_compra`); sem código, "sem-codigo".
+ */
+export function codigoDoErroDeCompra(err: unknown): string {
+  const code = err && typeof err === "object" ? (err as { code?: unknown }).code : undefined;
+  const limpo = String(code ?? "").replace(/[^a-z0-9_-]/gi, "").slice(0, 20);
+  return limpo ? `codigo-${limpo}` : "sem-codigo";
+}
+
 export function compraCancelada(err: unknown): boolean {
   if (!err || typeof err !== "object") return false;
   const e = err as { userCancelled?: unknown; code?: unknown; message?: unknown };

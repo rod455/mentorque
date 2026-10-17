@@ -62,6 +62,12 @@ const EVENTOS_DO_APP = new Set([
   "clicou_atalho",
   // A tela do quiz (08/10/2026): `origem` é pergunta ou ja-respondeu.
   "abriu_quiz",
+  // Os desfechos que faltavam (17/10/2026): a recusa do convite de aviso, os
+  // três degraus da folha "Salve sua garagem" e o que acontece na folha de
+  // compra da loja. Ver lib/app/funil.ts.
+  "recusou_convite_aviso",
+  "convite_conta", "aceitou_convite_conta", "recusou_convite_conta",
+  "desistiu_da_compra", "erro_na_compra",
 ]);
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -115,7 +121,15 @@ export async function POST(req: Request) {
     if (Object.keys(limpo).length) exp = limpo;
   }
 
-  const extra = utm || exp ? { ...(utm ? { utm } : {}), ...(exp ? { exp } : {}) } : null;
+  // O COMO de um desfecho (17/10/2026): 'botao', 'saiu', o código do erro da
+  // loja. Curto e só com letra, número, hífen e sublinhado, porque vem do
+  // aparelho e vira coluna de leitura.
+  const detalhe = corta(b?.detalhe, 24);
+  const detalheLimpo = detalhe && /^[a-z0-9_-]+$/i.test(detalhe) ? detalhe.toLowerCase() : null;
+
+  const extra = utm || exp || detalheLimpo
+    ? { ...(utm ? { utm } : {}), ...(exp ? { exp } : {}), ...(detalheLimpo ? { detalhe: detalheLimpo } : {}) }
+    : null;
 
   // TENTA DE NOVO quando a ponte engasga (14/09/2026). Seis eventos de seis
   // pessoas foram perdidos entre 12 e 14/09 com "Gateway Timeout" e "Bad

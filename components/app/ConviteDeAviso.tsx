@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePrototype } from "@/lib/app/store";
 import { abrirAjustesDeAvisos } from "@/lib/app/notificacoes";
 import { convidar, podeConvidar, type MomentoDoPedido } from "@/lib/app/pedidoDeAviso";
@@ -44,6 +44,14 @@ export function ConviteDeAviso({
   const { setNotifications } = usePrototype();
   const [cabe, setCabe] = useState(false);
   const [fechado, setFechado] = useState(false);
+  // A RECUSA TAMBÉM É RESPOSTA (17/10/2026). Até aqui o convite gravava que
+  // apareceu e que foi aceito, e o resto era silêncio: de 93 convites no
+  // calendário, 78 não deixavam rastro. Agora a recusa grava o como: `botao`
+  // quando a pessoa tocou no "não", `saiu` quando a tela foi embora com o
+  // convite à vista e sem resposta. O que ainda escapa é o app fechado na
+  // hora, que não desmonta nada.
+  const mostrado = useRef(false);
+  const respondeu = useRef(false);
 
   // A pergunta "cabe um convite agora?" é assíncrona porque a resposta que mais
   // vale vem do sistema (já concedida? já negada?), não do nosso registro.
@@ -55,15 +63,29 @@ export function ConviteDeAviso({
       // O portão medido (11/09/2026): quantas vezes o convite aparece, de
       // onde, e o que acontece depois. Uma vez por momento por sessão.
       if (r) funil("convite_aviso", { origem: momento, umaVez: true, chave: momento });
+      if (r) mostrado.current = true;
     });
-    return () => { vivo = false; };
+    return () => {
+      vivo = false;
+      if (mostrado.current && !respondeu.current) {
+        respondeu.current = true;
+        funil("recusou_convite_aviso", { origem: momento, detalhe: "saiu" });
+      }
+    };
   }, [momento]);
+
+  const recusar = () => {
+    respondeu.current = true;
+    setFechado(true);
+    funil("recusou_convite_aviso", { origem: momento, detalhe: "botao" });
+  };
 
   if (!cabe || fechado) return null;
 
   const comSequencia = sequencia >= SEQUENCIA_PARA_ARGUMENTO;
 
   const aceitar = async () => {
+    respondeu.current = true;
     setFechado(true);
     // Aqui abre a caixa do SISTEMA, que é código nativo. Se o app sumir na
     // frente dela, a migalha é a única testemunha.
@@ -107,7 +129,7 @@ export function ConviteDeAviso({
           {q.avisoSim}
         </button>
         <button
-          onClick={() => setFechado(true)}
+          onClick={recusar}
           className="rounded-xl bg-graphite-700 px-4 py-2.5 font-display text-sm font-medium text-cream/70 ring-1 ring-white/10"
         >
           {q.avisoNao}

@@ -96,6 +96,19 @@ export type EventoFunil =
   // pessoa já respondeu hoje. Nasceu com o conserto do quiz do dia 1 (QA,
   // 07/10): sem ele não dava para saber quantos batiam no muro.
   | "abriu_quiz"
+  // OS DESFECHOS QUE FALTAVAM (17/10/2026). Três portões gravavam só o sim:
+  // o convite de aviso (de 93 convites no calendário, 78 sem rastro nenhum), a
+  // folha "Salve sua garagem" (uns 100 aparelhos por semana com carro e sem
+  // conta, e nenhum evento da folha) e a folha de compra da loja (16 toques em
+  // assinar desde 15/09, 1 compra, e nenhuma desistência registrada). O
+  // `detalhe` diz o como: 'botao' quando tocou no "não", 'saiu' quando a tela
+  // foi embora sem resposta, e o código do erro na compra que falhou.
+  | "recusou_convite_aviso"
+  | "convite_conta"
+  | "aceitou_convite_conta"
+  | "recusou_convite_conta"
+  | "desistiu_da_compra"
+  | "erro_na_compra"
   // Único evento técnico da lista: o desfecho da subida do SDK de atribuição
   // (lib/app/atribuicao.ts). Ele não mede comportamento de ninguém, mede se a
   // nossa própria medição está viva no aparelho.
@@ -204,7 +217,7 @@ function utmGuardada(): Record<string, string> | null {
 
 export function funil(
   evento: EventoFunil,
-  o?: { userId?: string | null; origem?: string; umaVez?: boolean; chave?: string; umaVezPorAparelho?: boolean },
+  o?: { userId?: string | null; origem?: string; umaVez?: boolean; chave?: string; umaVezPorAparelho?: boolean; detalhe?: string },
 ): void {
   try {
     if (typeof window === "undefined") return;
@@ -233,6 +246,7 @@ export function funil(
       plataforma: isNativeApp() ? nativePlatform() ?? "nativo" : "web",
       versao: APP_VERSION,
       origem: o?.origem ?? null,
+      detalhe: o?.detalhe ?? null,
       utm: utmGuardada(),
       // Os testes A/B que esta pessoa está vendo: é o carimbo que permite
       // ler conversão por variante (view experimentos_resultados).

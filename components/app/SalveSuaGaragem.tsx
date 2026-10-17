@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/app/auth";
 import { useNav } from "@/lib/app/nav";
 import { carName } from "@/lib/app/content";
 import { marcaVeioSalvarGaragem } from "@/lib/app/veioSalvarGaragem";
+import { funil } from "@/lib/app/funil";
 import { Icon, useContent } from "./ui";
 
 /**
@@ -54,7 +55,18 @@ export function SalveSuaGaragem() {
   }, []);
 
   const v = activeVehicle(s);
-  if (!aberta || user || !v) return null;
+  const visivel = aberta && !user && !!v;
+
+  // A FOLHA PASSA A CONTAR (17/10/2026). Ela é o degrau com mais gente do
+  // produto, uns 100 aparelhos por semana que ganham carro e não ganham conta,
+  // e não gravava nada: nem que apareceu, nem o sim, nem o não. A rodada do CRO
+  // de 16/10 teve de reconstruir o degrau pelo carro e pelo cadastro. Uma vez
+  // por sessão, como a própria folha.
+  useEffect(() => {
+    if (visivel) funil("convite_conta", { origem: "carro", umaVez: true, chave: "convite_conta" });
+  }, [visivel]);
+
+  if (!visivel || !v) return null;
 
   return (
     <div className="fixed inset-0 z-[60] flex items-end justify-center bg-graphite/80 px-4 pb-[max(env(safe-area-inset-bottom),16px)] backdrop-blur-sm">
@@ -71,13 +83,18 @@ export function SalveSuaGaragem() {
             abre em "Entrar", que é o contrário do que este botão promete. Ver
             lib/app/veioSalvarGaragem.ts. */}
         <button
-          onClick={() => { marcaVeioSalvarGaragem(); setAberta(false); go({ name: "auth" }); }}
+          onClick={() => {
+            funil("aceitou_convite_conta", { origem: "carro" });
+            marcaVeioSalvarGaragem();
+            setAberta(false);
+            go({ name: "auth" });
+          }}
           className="mt-5 w-full rounded-xl bg-amber px-4 py-3 font-display text-sm font-semibold text-graphite active:scale-[0.99]"
         >
           {g.cta}
         </button>
         <button
-          onClick={() => setAberta(false)}
+          onClick={() => { funil("recusou_convite_conta", { origem: "carro", detalhe: "botao" }); setAberta(false); }}
           className="mt-2 w-full rounded-xl px-4 py-2.5 font-display text-sm font-medium text-cream/55"
         >
           {g.later}

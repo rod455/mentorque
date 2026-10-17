@@ -87,7 +87,18 @@ create table if not exists public.funil_eventos (
     'clicou_atalho',
     -- A tela do quiz abriu, medida em 08/10/2026 (migração
     -- funil_eventos_abriu_quiz). `origem` é 'pergunta' ou 'ja-respondeu'.
-    'abriu_quiz'
+    'abriu_quiz',
+    -- Os desfechos que faltavam, medidos em 17/10/2026 (migração
+    -- funil_eventos_desfechos), a pedido do dono depois do diagnóstico da
+    -- assinatura. Até aqui três portões só gravavam o SIM, e o resto era
+    -- silêncio: o convite de aviso (78 de 93 convites no calendário sem rastro),
+    -- a folha "Salve sua garagem" (a maior quebra do produto, sem evento
+    -- nenhum) e a folha de compra da loja (16 toques em assinar, 1 compra, e
+    -- nenhuma desistência registrada). `extra.detalhe` diz o como: botao ou
+    -- saiu nas recusas, o código do erro da loja em `erro_na_compra`.
+    'recusou_convite_aviso',
+    'convite_conta', 'aceitou_convite_conta', 'recusou_convite_conta',
+    'desistiu_da_compra', 'erro_na_compra'
   )),
 
   anon_id    text,

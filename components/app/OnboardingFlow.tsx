@@ -9,7 +9,7 @@ import { useSwipe } from "@/lib/app/swipe";
 import { useAuth } from "@/lib/app/auth";
 import { trialDaysFor, trialPlatform } from "@/lib/app/platform";
 import { isNativeApp, nativePlatform, sellsInApp } from "@/lib/app/wrapper";
-import { hasActiveEntitlement, initPurchases, type RcPackage } from "@/lib/app/purchases";
+import { codigoDoErroDeCompra, compraCancelada, hasActiveEntitlement, initPurchases, type RcPackage } from "@/lib/app/purchases";
 import { Button } from "@/components/ui/Button";
 import { LangSwitcher } from "@/components/ui/LangSwitcher";
 import { Icon, LegalLinks, PhoneFrame, ProgressDots, useContent } from "./ui";
@@ -178,8 +178,11 @@ export function OnboardingFlow() {
       const res = await rc.purchasePackage({ aPackage: pkg });
       if (res && hasActiveEntitlement(res.customerInfo)) setPremium(true);
       sair("assinou");
-    } catch {
+    } catch (err) {
       // Cancelou ou falhou: entra no app do mesmo jeito, sem travar ninguém.
+      // O desfecho vai para o funil como no paywall (17/10/2026).
+      if (compraCancelada(err)) funil("desistiu_da_compra", { origem: `onb-${plan}` });
+      else funil("erro_na_compra", { origem: `onb-${plan}`, detalhe: codigoDoErroDeCompra(err) });
       sair("agora-nao");
     } finally {
       setBuying(false);

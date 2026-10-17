@@ -3,6 +3,35 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-17 · Engenharia: seis eventos novos, para os três portões que só gravavam o sim
+
+- Ok do dono em 17/10 ("crie mais eventos para medirmos o necessário"). O
+  CHECK de `funil_eventos` foi recriado no banco às 11h20 UTC com os seis, e
+  um insert de teste dos seis dentro de transação desfeita passou (6
+  inseridos, 0 restantes depois).
+- **Convite de aviso**: `recusou_convite_aviso`, com a `origem` do convite e
+  `extra.detalhe` = `botao` (tocou no "não") ou `saiu` (a tela foi embora com
+  o convite à vista e sem resposta). Pedido do Diretor de 05/10 e do CRO de
+  16/10, que sai da fila. Não alcança o app fechado na hora.
+- **Folha "Salve sua garagem"**: `convite_conta`, `aceitou_convite_conta` e
+  `recusou_convite_conta`, origem `carro`. É o degrau com mais gente do
+  produto e não gravava nada; a rodada do CRO teve de reconstruí-lo pelo
+  carro e pelo cadastro.
+- **Folha de compra da loja**: `desistiu_da_compra` e `erro_na_compra` (com
+  o código do erro em `extra.detalhe`), com a mesma `origem` do
+  `iniciou_checkout`, nos três caminhos de compra do paywall e na compra
+  direta do onboarding do iPhone. Desde 15/09 eram 16 toques e 1 compra, e as
+  outras 15 não deixavam rastro.
+- A rota aceita um campo novo, `detalhe`: até 24 caracteres, só letra,
+  número, hífen e sublinhado, gravado em `extra.detalhe`.
+- **Chegam com a 3.2**, exceto na web. Até lá, zero nestes eventos no Android
+  quer dizer "versão velha", não "ninguém recusou".
+- Conferências: `conferir:aviso` ganhou cinco degraus. Defeito plantado três
+  vezes, com cópia de segurança: a recusa por saída trocada (reprovou 1), um
+  caminho de compra sem desfecho (reprovou com "2 de 3") e a folha sem o
+  não (reprovou 1). `npm run conferir` verde, e as suítes de navegador
+  `conta` (42 s), `venda` (105 s) e `avisos` (50 s) verdes, todas depois do
+  último arquivo de código.
 ## 2026-10-17 (rodada 4) · Guardião: a regra do critério 10 estava escrita e não estava valendo
 - Artifact "Conferências da semana":
   https://claude.ai/artifact/DjafLdPM4vyjf5C11886kj

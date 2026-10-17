@@ -508,6 +508,25 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
   conferir("o 'Quero' da trilha relata o desfecho da permissão", desfecho.test(learn) && /origem: "trilha"/.test(learn));
 }
 
+// ── os desfechos que faltavam (17/10/2026) ──────────────────────────────────
+// Três portões gravavam só o sim. O convite de aviso (78 de 93 convites no
+// calendário sem rastro), a folha "Salve sua garagem" (a maior quebra do
+// produto, sem evento nenhum) e a folha de compra da loja (16 toques, 1
+// compra, nenhuma desistência registrada). Cada um tem de gravar o não.
+{
+  const convite = leia("components/app/ConviteDeAviso.tsx");
+  const garagem = leia("components/app/SalveSuaGaragem.tsx");
+  const paywall = leia("components/app/screens/Subscribe.tsx");
+  conferir("o convite de aviso grava a recusa no botão", /funil\("recusou_convite_aviso",[^)]*detalhe: "botao"/.test(convite) && /onClick=\{recusar\}/.test(convite));
+  conferir("e grava quando a tela vai embora sem resposta", /funil\("recusou_convite_aviso",[^)]*detalhe: "saiu"/.test(convite));
+  conferir("a folha da conta grava que apareceu, o sim e o não",
+    /funil\("convite_conta"/.test(garagem) && /funil\("aceitou_convite_conta"/.test(garagem) && /funil\("recusou_convite_conta"/.test(garagem));
+  const desfechos = (paywall.match(/relataDesfechoDaLoja\(err,/g) ?? []).length;
+  conferir("as três compras do paywall gravam desistência e erro da loja", desfechos === 3, `${desfechos} de 3 caminhos de compra`);
+  conferir("e a desistência e o erro são eventos diferentes",
+    /compraCancelada\(err\)\) funil\("desistiu_da_compra"/.test(paywall) && /funil\("erro_na_compra"/.test(paywall));
+}
+
 // ── o convite ao terminar o onboarding (12/09/2026) ─────────────────────────
 {
   const pedido = leia("lib/app/pedidoDeAviso.ts");
