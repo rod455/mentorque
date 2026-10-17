@@ -3,6 +3,26 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-17 · Engenharia: a 3.2 pronta para o botão, com a bateria completa verde
+
+- Pedido do dono: "vamos implementar isso tudo e subir a nova versão".
+  Regime de release, não o das duas velocidades: `npm run conferir:navegador`
+  inteiro verde em 1005 s e `npm run build` verde, os dois rodados sobre o
+  código do commit dca2448, o último de código; depois dele só entrou a
+  ficha (0d8678d). `conferir:versoes`: 3.2 nos três lugares, não publicada,
+  piso do versionCode 72.
+- **Árvore entregue ao dono: 0d8678d**, às 12h13 UTC. Sete itens no binário,
+  cada um com o commit na ficha `docs/lojas/novidades-3.2.md`.
+- **O que NÃO está dentro**: o teste grátis no iPhone (configuração no App
+  Store Connect, na lista do dono; a tela promete 3 dias e a Apple não tem
+  oferta). O que já está no ar sem build não depende do binário: Biela com 3
+  perguntas, teste grátis no Play, ativação nova.
+- **Sem sinal ainda** sobre o binário: nenhum aparelho abriu a 3.2. O roteiro
+  de aparelho tem oito passos, e o 5 (folha do Google com 7 dias grátis e a
+  oferta de 10% ainda aparecendo) é o que mais importa.
+- Depois da aprovação, e só depois: `3.2` em `JA_PUBLICADAS`, a árvore em
+  `ARVORE_DO_BUILD`, o banner de versão nova e o piso do versionCode.
+
 ## 2026-10-17 · Engenharia: sintoma, custo por km e a tabela do Premium, para a 3.2
 
 - Decisão do dono em 17/10, itens 2 e 3 da proposta `o-que-sai-do-gratis.md`,

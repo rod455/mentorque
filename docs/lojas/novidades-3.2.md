@@ -4,11 +4,14 @@ Aberta em 07/10/2026, logo depois de a 3.1 (build 71) chegar às duas lojas.
 Tudo o que entra aqui **já roda na web** pelo deploy da Vercel; o binário só
 importa para o app das lojas.
 
-**Onde a 3.2 está:** ainda não gerada.
+**Onde a 3.2 está:** pronta para o botão, ainda não gerada. Bateria completa
+de navegador verde em 17/10 (1005 s) e build local verde, depois do último
+commit de código (dca2448).
 
-**Árvore do build:** (escrever o commit NA HORA de apertar o botão do
-Codemagic, antes de qualquer frase sobre o que o binário tem; a
-`conferir:versoes` cobra que cada item citado abaixo seja ancestral dela.)
+**Árvore do build:** 0d8678d (entregue ao dono em 17/10 às 12h13 UTC como o
+commit para apertar; o que entrar na `main` depois dele é da PRÓXIMA versão,
+mesmo que seja só documento. Se o Codemagic mostrar outro commit, esta linha
+se corrige com o que ele mostrar.)
 
 ## O que vai NO BINÁRIO
 
