@@ -138,8 +138,9 @@ uma compra por mês, mudar preço agora é mexer no escuro.
 
 ## O que este diagnóstico não alcança
 
-- O iPhone (15 aparelhos no período): não li as ofertas da App Store. A tela
-  promete 3 dias no iPhone.
+- O iPhone (15 aparelhos no período): lido em 17/10, também não tinha teste
+  grátis nenhum, e a tela promete 3 dias. A chave da API só lê; a criação
+  ficou com o dono (lista, destino `app-store`).
 - Quantas pessoas abriram a folha do Google e desistiram: não existe
   instrumento.
 - Retenção por outro instrumento (AppsFlyer, Play Console): não conferida.

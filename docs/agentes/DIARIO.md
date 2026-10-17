@@ -3,6 +3,24 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-17 · Engenharia: na Apple também não há teste grátis, e a chave não deixa criar
+
+- Pedido do dono: "veja se na apple está assim também". Está. Lido pela API
+  da App Store Connect em 17/10 às 11h29 UTC: o grupo "Premium" tem quatro
+  assinaturas (`mentorque_annual`, `mentorque_mensal`, `mentorque_annual_10`,
+  `mentorque_annual_25`), todas aprovadas, e **zero ofertas introdutórias em
+  todas**. O app no iPhone promete 3 dias grátis no paywall e no onboarding.
+- Tentei criar o teste de 3 dias nas duas principais pela API: a Apple
+  respondeu 403, "The API key in use does not allow this request". A chave
+  da casa é de leitura. Foi para a lista do dono, destino `app-store`, com o
+  caminho no App Store Connect.
+- Diferente do Play, na Apple não há a escolha automática da oferta mais
+  barata: os descontos de saída são produtos separados, comprados só pelo
+  caminho da oferta. O defeito aqui é só a promessa de teste.
+- Escala: 15 aparelhos iPhone terminaram o onboarding desde 15/09, contra
+  1.001 Android. O conserto importa menos que o do Play, mas é o mesmo
+  descumprimento de promessa.
+
 ## 2026-10-17 · Engenharia: o teste grátis de 7 dias existe no Play, criado pela API
 
 - O dono decidiu em 17/10: teste grátis no Android, e perguntou se dava para
