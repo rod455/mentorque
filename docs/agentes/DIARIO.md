@@ -3,6 +3,40 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-17 · Engenharia: o Android promete 7 dias grátis e a loja cobra na hora, com a oferta errada
+
+- Pedido do dono: "só temos 1 assinante, precisamos revisar tudo". Diagnóstico
+  inteiro em `docs/agentes/propostas/por-que-quase-ninguem-assina.md`.
+- **O funil de 15/09 a 17/10, por aparelho** (`funil_canonico`, 17/10 10h
+  UTC): 1.040 terminaram o onboarding, 612 cadastraram carro, 286 criaram
+  conta, 174 viram o paywall, 16 tocaram em assinar, 1 comprou. E 16% dos
+  aparelhos voltam depois do primeiro dia, 6% depois de 7 (PISO pelo
+  `anon_id`; AppsFlyer e Play não conferidos).
+- **NÃO EXISTE TESTE GRÁTIS NO ANDROID.** API do Play com a conta de serviço
+  do coletor, 17/10 10h55 UTC: a assinatura `annual100` tem os planos
+  mensal (R$ 29,99) e anual (R$ 239,99) e as ofertas `exit10`, `exit25` e
+  `save30`, nenhuma de teste. Segundo instrumento, API v2 do RevenueCat na
+  mesma hora: `trial_duration` nulo e 0 testes ativos. A tela diz "Começar 7
+  dias grátis" em 1.001 dos 1.040 aparelhos.
+- **A ÚNICA VENDA SAIU COM A OFERTA DE RETENÇÃO.** Pedido
+  GPA.3319-9481-4117-99885, pela API de pedidos do Play: mensal, `save30`,
+  R$ 20,99, comprado pelo botão principal (`iniciou_checkout loja-monthly`
+  um minuto antes). O `purchasePackage` do RevenueCat escolhe a opção de
+  primeira fase mais barata e conta a oferta do desenvolvedor como elegível.
+  O comentário de `lib/app/purchases.ts` dizia o contrário e foi corrigido.
+  No anual a mesma regra escolheria a `exit25`: inferência, sem pedido que
+  prove.
+- **O que não está provado**: que as 15 desistências foram na folha do
+  Google. A folha não grava desistência. É a explicação mais forte, não a
+  única.
+- **O valor do Premium, como hipótese**: o que as pessoas usam é quase todo
+  grátis (aula 201, sintoma 172, Biela 69), quase ninguém bate num limite (o
+  do Biela levou 8 ao paywall, o do orçamento nenhum), e o Premium vende
+  acompanhamento para quem, na média, usa o app uma vez.
+- Na lista do dono, destino `play-console`: decidir o teste grátis no Android
+  e etiquetar as três ofertas com `rc-ignore-offer`. Sem build, vale para a
+  3.1 instalada. Fluxos temporários do n8n (RevenueCat e Play) arquivados.
+
 ## 2026-10-17 · Engenharia: a ativação mede algo além do carro, e o retorno ao CRO
 
 - **A SÉRIE DA ATIVAÇÃO SALTA HOJE, DE PROPÓSITO.** A `ativacao_coortes` foi

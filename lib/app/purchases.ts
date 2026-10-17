@@ -30,10 +30,16 @@ type PurchasesPlugin = {
   configure: (o: { apiKey: string; appUserID?: string }) => Promise<unknown>;
   getOfferings: () => Promise<{ current?: { availablePackages?: RcPackage[] } | null }>;
   purchasePackage: (o: { aPackage: RcPackage }) => Promise<{ customerInfo?: CustomerInfo }>;
-  // Compra uma opção específica do Google (é assim que se aplica uma oferta
-  // com elegibilidade "determinada pelo desenvolvedor", que o purchasePackage
-  // nunca seleciona sozinho). `googleProductChangeInfo` entra quando o usuário
-  // JÁ assina e está trocando de plano (ex.: retenção no cancelamento).
+  // Compra uma opção específica do Google. ATENÇÃO (17/10/2026): o
+  // purchasePackage acima NÃO é neutro. Ele compra a `defaultOption`, que é o
+  // teste grátis mais longo ou, sem teste, a opção de primeira fase mais
+  // barata, e oferta "determinada pelo desenvolvedor" entra na escolha. A única
+  // venda do Play (pedido GPA.3319-9481-4117-99885) saiu pelo botão do mensal
+  // com a `save30`, a oferta de retenção. Só a etiqueta `rc-ignore-offer` no
+  // Play Console tira uma oferta dessa escolha. Diagnóstico em
+  // docs/agentes/propostas/por-que-quase-ninguem-assina.md.
+  // `googleProductChangeInfo` entra quando o usuário JÁ assina e está trocando
+  // de plano (ex.: retenção no cancelamento).
   purchaseSubscriptionOption: (o: {
     subscriptionOption: GoogleOption;
     googleProductChangeInfo?: { oldProductIdentifier: string };
