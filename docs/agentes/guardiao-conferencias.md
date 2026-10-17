@@ -82,7 +82,29 @@ cp $SCRATCH/strings.pt.ts.bak lib/i18n/strings.pt.ts   # 4. desfaz
 `git checkout` apaga tudo que não foi commitado naquele arquivo, e naquele dia
 levou junto uma peça inteira de trabalho que ainda não tinha commit.
 
-**E EU QUEBREI ESTA REGRA EM 10/10/2026, com um atalho que parecia prudente.**
+**O NOME DO BACKUP CARREGA O CAMINHO INTEIRO, e isto custou dois arquivos em
+17/10/2026.** Eu guardava as cópias por nome de arquivo
+(`$S/$(basename $f).bak`). Numa rodada que planta em várias rotas, `basename`
+colide: `app/api/biela/route.ts`, `app/api/orcamento/route.ts` e
+`app/api/push/registrar/route.ts` são TODOS `route.ts`. O último backup
+sobrescreveu os outros, e o desfazer escreveu o conteúdo da rota de push dentro
+da rota da Biela e dentro da rota do orçamento. Duas rotas de produto
+destruídas, com a cópia de segurança parecendo estar lá.
+
+O conserto é o nome: `app/api/biela/route.ts` vira
+`app%api%biela%route.ts.bak`. E duas travas que vêm junto: **guardar antes de
+plantar, sempre, com o plantio recusando rodar se a cópia não existir**; e
+**desfazer só pela cópia, parando se ela faltar**. O roteiro em
+`$SCRATCH/plantio.sh` é isso escrito, e vale copiar no começo da rodada.
+
+Como saí dessa, porque também é lição: nada do que eu tinha a perder estava
+naqueles arquivos (meus plantios sempre voltam), então reescrevi os dois com
+`git show HEAD:<caminho> > <caminho>`, que toca UM arquivo e nada mais, e
+conferi `git status` vazio depois. Isto não é a exceção ao `git checkout`: é o
+caso em que o conteúdo certo é o do HEAD e não existe trabalho não commitado
+para perder, e isso se confirma ANTES, lendo o `git status` e o diff.
+
+**E EU QUEBREI A REGRA DO `git checkout` EM 10/10/2026, com um atalho que parecia prudente.**
 Escrevi o desfazer como `cp $S/anon.ts.bak lib/app/anon.ts || git checkout
 lib/app/anon.ts`, um `||` de segurança para o caso de a cópia não existir. A
 cópia não existia (eu não tinha feito backup daquele arquivo antes de plantar),
@@ -318,12 +340,6 @@ sem tirar ninguém dela.
 
 | conferência | última prova | mordeu? |
 |---|---|---|
-| `conferir:garagem` | no nascimento (autor), 09/09/2026 | sim, no plantio de quem escreveu |
-| `conferir:jornada` | no nascimento (autor), 12/09/2026 | sim, no plantio de quem escreveu |
-| `conferir:orcamento` | no nascimento (autor), 13/09/2026 | sim, no plantio de quem escreveu |
-| `conferir:biela` | no nascimento (autor), 15/09/2026 | sim, no plantio de quem escreveu |
-| `conferir:push` | no nascimento (autor), 15/09/2026 | sim, no plantio de quem escreveu |
-| `conferir:banco` | no nascimento (autor), 20/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:imagem` | no nascimento (autor), 20/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:coorte` | no nascimento (autor), 24/09/2026 | sim, no plantio de quem escreveu; e de novo em 06/10/2026 (autor), ao cobrar a regra do último membro: o `+ 14` em data plantado de volta reprovou |
 | `conferir:legivel` | no nascimento (autor), 28/09/2026 | sim, no plantio de quem escreveu; e de novo em 14/10/2026 (autor), ao ganhar a linha da receita de anúncio: 6 plantios e 6 mordidas, e DOIS deles acharam defeito na própria asserção (a entrada era `undefined`, onde `Number()` e `typeof` concordam, e não `null`, que é o único valor onde discordam; e o plantio DERRUBAVA o script em vez de imprimir FALHA, armadilha que a Engenharia já tinha registrado em 02/10) |
@@ -346,12 +362,10 @@ sem tirar ninguém dela.
 | `conferir:email` | 19/09/2026 | sim, 3 defeitos plantados |
 | `conferir:relatorio` | 19/09/2026 | sim |
 | `conferir:travessao` | 19/09/2026 | sim, depois de consertada |
-| `conferir:catalogo` | 26/09/2026 | não no campo `related`, consertada |
 | `conferir:estilo` | 26/09/2026 | sim, em regra de erro |
 | `conferir:regras` | 26/09/2026 | não na borda do perdão, consertada |
 | `conferir:tipos` | 26/09/2026 | sim, saída 2 |
 | `conferir:versoes` | 26/09/2026 | sim, 3 defeitos plantados |
-| `conferir:convite` | 03/10/2026 | sim, cinco de seis (o sexto era alvo inalcançável) |
 | `conferir:funil` | 03/10/2026 | sim |
 | `conferir:migalha` | 03/10/2026 | não nos dois pisos, consertada |
 | `conferir:revisoes` | 03/10/2026 | sim |
@@ -365,6 +379,14 @@ sem tirar ninguém dela.
 | `conferir:login` | 10/10/2026 | sim, na regra e no consumidor: motivo da queda renomeado, e o plugin fora do binário do iPhone |
 | `conferir:navegacao` | 10/10/2026 | não no consumidor, consertada: o defeito de 30/08 voltava inteiro pelo nav.tsx |
 | `conferir:recorte` | 10/10/2026 | não no consumidor, consertada: a foto saía sem recorte nenhum com a corrente toda verde |
+| `conferir:banco` | 17/10/2026 | sim, 3 plantios: `pg_temp` fora da lista, `pg_temp` em primeiro, e a função sem `search_path` |
+| `conferir:biela` | 17/10/2026 | sim, 3 plantios: teto em 0, teto em 9999, e a rota sem aplicar o freio (ela cobra a forma do guarda, com o 429) |
+| `conferir:catalogo` | 17/10/2026 | não no consumidor, consertada: o player escondido em toda aula de vídeo passava a corrente inteira |
+| `conferir:convite` | 17/10/2026 | não no consumidor, consertada: o buraco de 25/09 voltava pelo `consumirConviteNoCarro(true)` |
+| `conferir:garagem` | 17/10/2026 | sim, na regra e no consumidor: a placa deixando de decidir, e a tela do carro sem perguntar se já existe |
+| `conferir:jornada` | 17/10/2026 | não no consumidor, consertada: `saiu: false` no cron reabria a jornada para quem pediu para sair |
+| `conferir:orcamento` | 17/10/2026 | não no consumidor, consertada: a asserção era presença e não uso, e o gratuito virava ilimitado |
+| `conferir:push` | 17/10/2026 | sim, 2 plantios: Bearer inválido rebaixado para aparelho, e id sem armazenamento virando linha |
 | `conferir:agenda` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 | `conferir:appsflyer` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 | `conferir:aviso` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
@@ -420,6 +442,56 @@ custo que não existia. Vale a lição geral, que é a mesma do caso `anonId`: o
 custo que justifica não fazer algo também é uma afirmação, e também se mede.
 
 ## Aprendizados
+
+**PRESENÇA NÃO É USO, e a regra já estava escrita aqui (17/10/2026). O achado
+desta vez não é uma falha nova: é a de sempre, passando por baixo de uma regra
+que o manual já tinha.**
+
+O critério 10 diz, com exemplo: "em vez de procurar o nome da função no
+arquivo, procure a CHAMADA com os argumentos que decidem. `/comCarro/` é
+presença; `/const fora = new Set\(\[\s*\.\.\.comCarro,/` é uso." Duas
+conferências que se anunciam cobrindo o consumidor estavam escritas como
+presença, e as duas passaram verde com o consumidor desligado:
+
+(Os nomes abaixo vão sem o prefixo `conferir:` de propósito: a `conferir:fila`
+lê qualquer linha de três colunas que comece com o nome entre acentos graves
+como se fosse linha da fila, e foi assim que ela reprovou esta seção quando eu
+a escrevi com o prefixo.)
+
+| conferência | o que ela exigia | o plantio que passou |
+|---|---|---|
+| `orcamento` | `/podeAnalisar\(/` aparecer antes do modelo | `if (false && !podeAnalisar(...))`: a menção fica, o freio sai, o gratuito vira ilimitado |
+| `jornada` | o cron CHAMAR `escolherEmail(` | `saiu: false`: a decisão descarta quem saiu, e ninguém diz quem saiu |
+
+Nos dois casos a corrente inteira do `npm run conferir` deu saída 0. O da
+jornada é o pior que este papel já achou em efeito: **todo mundo que pediu para
+sair volta a receber e-mail e push**, e mensagem a cliente não tem desfazer.
+
+**E a conferência que mordeu o mesmo plantio mostra como escrever.** A
+`conferir:biela` exige
+`/if \(!podePerguntar\(feitas, premium\)\)[\s\S]{0,260}status: 429/`: a
+negação, os dois argumentos que decidem, e a resposta logo adiante. Ela pegou
+o `if (false && ...)` de primeira. **Quando a asserção é sobre o consumidor,
+copie a forma da `conferir:biela`**: o guarda inteiro, não o nome da função.
+
+A lição de fundo é desconfortável e vale guardar: **regra escrita no manual não
+é regra aplicada.** O jeito de saber qual das duas está valendo é o mesmo de
+sempre, plantar; e quando um achado se repetir, vale procurar a regra que ele
+deveria ter violado, porque às vezes ela existe e está sendo lida como
+decoração.
+
+**A FORMA "NÃO ABRE ARQUIVO DE CONSUMIDOR" FECHOU 6 DE 6 (17/10/2026).** Em
+10/10 a varredura deu seis candidatas e eu provei três, todas cegas. Nesta
+rodada provei as duas que faltavam no rodízio (`agenda` está em dívida
+assumida):
+
+| conferência | o plantio no consumidor | o que ficava verde |
+|---|---|---|
+| `catalogo` | o player escondido em toda aula de vídeo | 48 vídeos desaparecem da tela, e o dado continua dizendo que estão lá |
+| `convite` | `consumirConviteNoCarro(true)` | o buraco de 25/09 inteiro, o convidado queimando o convite sem vê-lo |
+
+Seis de seis. A varredura vale como triagem permanente, e o comando dela está
+na seção de 10/10.
 
 **A ASSERÇÃO QUE PROMETE O CONSUMIDOR NO NOME E CONFERE A CONSTANTE NO CORPO
 (10/10/2026). O critério 10 aplicado de propósito, e o que ele achou.**

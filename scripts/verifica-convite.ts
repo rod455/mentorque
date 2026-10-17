@@ -27,6 +27,7 @@
 // conta no dia seguinte" continua sem convite, por desenho.
 //
 // Rode com: npm run conferir:convite
+import { readFileSync } from "node:fs";
 import { pedirConviteNoCarro, consumirConviteNoCarro } from "../lib/app/marcasDeConvite.ts";
 
 let falhas = 0;
@@ -73,6 +74,41 @@ const SEM_CONTA = false;
 {
   conferir("sem cadastro de carro não há convite", consumirConviteNoCarro(COM_CONTA) === false);
   conferir("nem para convidado", consumirConviteNoCarro(SEM_CONTA) === false);
+}
+
+// ── 6. QUEM CHAMA A REGRA: a tela do carro (critério 10, achado em 17/10) ───
+//
+// Os cinco casos de cima exercitam a regra de verdade, chamando as funções, e
+// isso é melhor que texto. Só que a regra não serve de nada se a tela não a
+// chamar, e esse lado não era conferido. Medido no `Cars.tsx`, dois plantios,
+// os dois verdes aqui e verdes no tsc:
+//
+//   1. apagada a linha `pedirConviteNoCarro()` do cadastro: ninguém nunca é
+//      convidado, porque a marca nunca nasce;
+//   2. trocado `consumirConviteNoCarro(!!user)` por `consumirConviteNoCarro(true)`:
+//      é O BURACO DE 25/09 DE VOLTA, letra por letra. O convidado queima o
+//      melhor momento do pedido sem ver convite nenhum, e criar a conta cinco
+//      minutos depois já não traz o momento de volta.
+//
+// O segundo é o motivo deste arquivo existir, e ele podia voltar pelo
+// consumidor com tudo verde. Conferência de texto, e o que seria melhor está
+// dito: exercitar a tela, que aqui não tem executor.
+{
+  const cars = readFileSync(new URL("../components/app/screens/Cars.tsx", import.meta.url), "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, " ")
+    .replace(/^\s*\/\/.*$/gm, " ");
+
+  conferir(
+    "a tela do carro PEDE o convite ao cadastrar",
+    /pedirConviteNoCarro\(\)/.test(cars),
+    "sem a marca nascer, nenhum dos cinco casos acima acontece na vida real",
+  );
+  // O ELO: o estado da conta é o ARGUMENTO. Literal aqui é o defeito de 25/09.
+  conferir(
+    "e consome a marca passando o estado da CONTA, nunca um literal",
+    /consumirConviteNoCarro\(!!user\)/.test(cars),
+    "`consumirConviteNoCarro(true)` queima a marca do convidado, que é exatamente o buraco de 25/09",
+  );
 }
 
 if (falhas) {

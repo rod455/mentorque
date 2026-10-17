@@ -3,6 +3,78 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-17 (rodada 4) · Guardião: a regra do critério 10 estava escrita e não estava valendo
+- Artifact "Conferências da semana":
+  https://claude.ai/artifact/DjafLdPM4vyjf5C11886kj
+- **A LINHA DA FILA, copiada do comando** (começo e fim): 61 conferências,
+  **23 para 29** provadas por quem não as escreveu, **24 para 18** só pelo autor
+  no nascimento (a fila de verdade), 14 em dívida assumida. A fila de verdade
+  encolheu seis pela segunda semana seguida.
+- **Oito provadas: as seis da fila mais as duas que eu devia de 10/10.**
+  Morderam na regra e no consumidor: `garagem`, `biela` (3 plantios), `push`
+  (2) e `banco` (3). **Quatro não morderam no consumidor** e foram consertadas
+  e provadas: `catalogo`, `convite`, `jornada` e `orcamento`.
+- **O ACHADO, e o incômodo dele é que a regra já estava no meu manual.** O
+  critério 10 diz, com exemplo, que a asserção de consumidor tem de cobrar a
+  CHAMADA com os argumentos que decidem, e não a presença do nome. Duas
+  conferências que se anunciam cobrindo as ligações estavam escritas como
+  presença:
+  - `conferir:orcamento` exigia `/podeAnalisar\(/` antes da chamada ao modelo.
+    Plantado `if (false && !podeAnalisar(feitas, premium))`, a menção fica na
+    ordem certa, o freio sai, e o gratuito de 2 por mês vira ilimitado. Verde,
+    e a corrente inteira também.
+  - `conferir:jornada` exigia que o cron chamasse `escolherEmail(`. Plantado
+    `saiu: false` no lugar de `saiu: saiu.has(u.id)`, **todo mundo que pediu
+    para sair volta a receber e-mail e push**. Verde, e a corrente inteira
+    também. É o pior efeito que este papel já achou, porque mensagem a cliente
+    não tem desfazer.
+- **E a conferência que mordeu o mesmo plantio mostra como escrever**: a
+  `conferir:biela` cobra `if (!podePerguntar(feitas, premium)) ... 429`, o
+  guarda inteiro, e pegou o `if (false && ...)` de primeira. Virou o modelo a
+  copiar, escrito no manual.
+- **A forma "não abre arquivo de consumidor" fechou 6 de 6.** Em 10/10 a
+  varredura deu seis candidatas e eu provei três, todas cegas. Hoje provei as
+  duas que faltavam no rodízio: `catalogo` (o player escondido em toda aula de
+  vídeo, 48 vídeos desaparecendo da tela com o dado dizendo que estão lá) e
+  `convite` (o buraco de 25/09 voltando inteiro pelo `consumirConviteNoCarro(true)`).
+- **Medição dos quatro consertos**: 7 plantios no consumidor passaram a
+  reprovar, com zero falso positivo no código limpo, e os 4 plantios de regra
+  continuam mordendo depois da edição.
+- **EU DESTRUÍ DOIS ARQUIVOS DE PRODUTO NO MEIO DA RODADA, e digo como.** Eu
+  guardava as cópias por `basename`, e numa rodada que planta em várias rotas
+  isso colide: `app/api/biela/route.ts`, `app/api/orcamento/route.ts` e
+  `app/api/push/registrar/route.ts` são todos `route.ts`. O último backup
+  sobrescreveu os outros e o desfazer escreveu o conteúdo da rota de push
+  dentro da rota da Biela e da do orçamento. A cópia de segurança parecia
+  estar lá e estava errada, que é o pior jeito de falhar.
+  - **Como saí**: conferi no `git status` e no diff que só aqueles dois
+    arquivos estavam diferentes do HEAD e que não havia nada meu a perder
+    neles (meus plantios sempre voltam), e reescrevi os dois com
+    `git show HEAD:<caminho> > <caminho>`, que toca um arquivo e nada mais.
+    `git status` vazio depois, e as duas rotas conferidas coerentes.
+  - **O conserto que fica**: o nome do backup carrega o caminho inteiro, o
+    plantio recusa rodar sem cópia, e o desfazer para se a cópia faltar. Está
+    no manual e no roteiro que uso.
+- **Contra a minha régua**: nove critérios cumpridos, **o 4 falhou de novo**
+  (todo defeito desfeito por cópia), e pela segunda semana seguida é o mesmo
+  critério, por causa diferente: em 10/10 foi uma rede de segurança que fazia
+  o proibido, hoje foi a cópia existir com o conteúdo errado. As duas são a
+  mesma família, procedimento de backup frouxo, e agora ele é um roteiro em vez
+  de linhas digitadas na hora.
+- **O que esta rodada NÃO alcança**: os quatro consertos são conferência de
+  texto, dito dentro de cada um com o que seria melhor. O `conferir:catalogo`
+  agora afirma que a tela desenha o player, o que é diferente de ver o player
+  desenhado: isso é a suíte de navegador, que roda uma vez por mês. E nada aqui
+  prova lado nativo nem aparelho.
+- **RECOMENDAÇÕES (3)**: (1) a varredura de "presença e não uso" vale para as
+  53 conferências que leem arquivo, e é maior que uma rodada minha: o padrão
+  procurável é asserção cujo regex é só o nome de uma função seguido de `\(`;
+  (2) ao escrever asserção de consumidor, copiar a forma da `conferir:biela`
+  (guarda inteiro, argumentos que decidem, resposta adiante) em vez da menção;
+  (3) `conferir:jornada` merece uma segunda olhada do QA além da minha: ela
+  governa mensagem a cliente, e hoje descobri que a regra 0 dela dependia de um
+  campo que ninguém conferia.
+
 ## 2026-10-17 · Engenharia: o Android promete 7 dias grátis e a loja cobra na hora, com a oferta errada
 
 - Pedido do dono: "só temos 1 assinante, precisamos revisar tudo". Diagnóstico

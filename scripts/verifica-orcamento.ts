@@ -101,7 +101,23 @@ conferir("existe a versão em inglês", /ONLY a JSON object/.test(promptDaAnalis
 // ── 5. as ligações ──────────────────────────────────────────────────────────
 {
   const rota = leia("app/api/orcamento/route.ts");
-  conferir("a rota conta o limite antes de chamar o modelo", /podeAnalisar\(/.test(rota) && rota.indexOf("podeAnalisar(") < rota.indexOf("api.anthropic.com"));
+  // PRESENÇA NÃO É USO, e esta linha era presença (achado do Guardião em
+  // 17/10/2026). Ela exigia que `podeAnalisar(` aparecesse na rota antes da
+  // chamada ao modelo. Plantado `if (false && !podeAnalisar(feitas, premium))`,
+  // a menção continua lá, na ordem certa, e a rota deixa de aplicar o limite:
+  // esta conferência passou verde, e a CORRENTE INTEIRA do `npm run conferir`
+  // também, saída 0. O gratuito viraria ilimitado e a conta da API apareceria
+  // na fatura, que é o jeito mais caro de descobrir.
+  //
+  // Agora a asserção cobra a FORMA DO FREIO, igual à irmã dela na
+  // `conferir:biela`, que mordeu o mesmo plantio por ter sido escrita assim: a
+  // negação, os dois argumentos que decidem, e o 429 logo adiante.
+  conferir(
+    "a rota APLICA o limite (não só menciona) antes de chamar o modelo",
+    /if \(!podeAnalisar\(feitas, premium\)\)[\s\S]{0,260}status: 429/.test(rota) &&
+      rota.indexOf("podeAnalisar(") < rota.indexOf("api.anthropic.com"),
+    "mencionar a função sem usá-la deixa o gratuito ilimitado, e a conta aparece na fatura",
+  );
   conferir("a rota confere o Premium no servidor, pela tabela, com o Bearer", /from\("subscriptions"\)/.test(rota) && /auth\.getUser\(bearer\)/.test(rota));
   conferir("a rota manda a imagem ao modelo", /type: "image"/.test(rota) && /base64/.test(rota));
   const insercao = rota.indexOf('from("orcamentos_analisados").insert(');

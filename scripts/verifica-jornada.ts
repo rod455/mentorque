@@ -269,6 +269,27 @@ console.log("Jornada: quem recebe o quê, e quando.");
   conferir("os e-mails ocultos da Apple ficam de fora até o relay estar cadastrado", /privaterelay\.appleid\.com/.test(cron) && /JORNADA_APPLE_RELAY/.test(cron));
   conferir("o dono recebe a cópia de cada e-mail na primeira vez e o resumo do dia", /copiasParaODono/.test(cron) && /Jornada de hoje/.test(cron));
   conferir("o cron consulta a decisão e monta o texto", /escolherEmail\(/.test(cron) && /montarMensagem\(/.test(cron));
+
+  // E A REGRA 0 TEM DE CHEGAR AO CRON, não só existir na decisão (achado do
+  // Guardião em 17/10/2026). A linha de cima cobra que o cron CHAME
+  // `escolherEmail`, e a decisão descarta quem saiu no `if (p.saiu) return
+  // null`. Faltava o elo do meio: quem enche esse campo.
+  //
+  // Plantado `saiu: false` no lugar de `saiu: saiu.has(u.id)`, esta conferência
+  // passou verde e a corrente inteira também, saída 0. Efeito: TODO MUNDO que
+  // pediu para sair volta a receber e-mail e push. É o defeito mais caro que
+  // este arquivo pode deixar passar, porque mensagem a cliente não tem
+  // desfazer, e quem recebe depois de pedir para sair não reclama, denuncia.
+  conferir(
+    "o cron enche o campo `saiu` com a lista de quem saiu, não com um literal",
+    /saiu:\s*saiu\.has\(/.test(cron),
+    "a decisão só descarta quem saiu se alguém disser quem saiu; `saiu: false` reabre a jornada para todos",
+  );
+  conferir(
+    "e essa lista vem da tabela de saídas",
+    /const saiu = new Set\(\(saidas\.data \?\? \[\]\)\.map\(/.test(cron),
+    "sem ler a tabela, o conjunto nasce vazio e o efeito é o mesmo de `saiu: false`",
+  );
   conferir("o cron manda push pelo mesmo transporte", /enviarPush\(/.test(cron));
   conferir("o cron grava o envio", /from\("jornada_envios"\)\.insert/.test(cron));
   // 15/10/2026: a API do Supabase corta em 1.000 linhas sem avisar, e o

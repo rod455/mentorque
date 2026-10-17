@@ -16,6 +16,7 @@
 //   4. id não se repete
 //
 // Rode com: npm run conferir:catalogo
+import { readFileSync } from "node:fs";
 import { aulas } from "../lib/app/conteudo/aulas.ts";
 
 let falhas = 0;
@@ -111,6 +112,42 @@ const { lessons } = aulas((pt: string) => pt);
     vistos.add(l.id);
   }
   conferir("nenhum id de aula repetido", repetidos.length === 0, repetidos.join(", "));
+}
+
+// ── 5. QUEM ENTREGA A PROMESSA: a tela (critério 10, achado em 17/10/2026) ──
+//
+// Este arquivo se chama "o catálogo de aulas não promete o que não entrega", e
+// até hoje conferia só o lado do DADO: a aula que diz `video` tem `media`. O
+// outro lado da mesma promessa é a tela desenhar o player, e isso não era
+// conferido por ninguém.
+//
+// Medido: no `Content.tsx`, troquei `{lesson.media ? (` por
+// `{lesson.media && lesson.type !== "video" ? (`. O tsc aceita, porque os
+// tipos continuam certos, e aí as 48 aulas de vídeo passam a aparecer SEM
+// player. Esta conferência passou verde e a CORRENTE INTEIRA do
+// `npm run conferir` também, saída 0.
+//
+// É a mesma degradação silenciosa das sete aulas sem vídeo que fizeram este
+// arquivo nascer, só que do outro lado do contrato: lá o dado mentia, aqui a
+// tela emudece. Conferência de texto, e a dívida fica dita: o certo seria a
+// suíte de navegador afirmar o player, e ela roda uma vez por mês.
+{
+  const tela = readFileSync(new URL("../components/app/screens/Content.tsx", import.meta.url), "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, " ")
+    .replace(/^\s*\/\/.*$/gm, " ");
+
+  // O ELO: o player é desenhado por TER vídeo, e por mais nada. Qualquer
+  // condição extra nesse portão é um jeito de esconder vídeo que existe.
+  conferir(
+    "a tela desenha o player para toda aula que tem vídeo",
+    /\{lesson\.media \? \(/.test(tela),
+    "condição extra nesse portão esconde vídeo que existe, e o dado continua dizendo que ele está lá",
+  );
+  conferir(
+    "e o player recebe o vídeo da própria aula",
+    /<VideoPlayer media=\{lesson\.media\}/.test(tela),
+    "player sem o media da aula desenha outra coisa, ou nada",
+  );
 }
 
 if (falhas) {
