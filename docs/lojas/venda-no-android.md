@@ -96,6 +96,21 @@ O app procura **pelo id da oferta**, e aceita tanto `exit10` quanto
 | `exit10` | **anual** | 10% OFF quando a pessoa sai do paywall | `Subscribe.tsx:327` |
 | `exit25` | **anual** | 25% OFF em tela cheia, na segunda saída | `Subscribe.tsx:327` |
 | `save30` | **mensal** | retenção: 30% OFF antes de cancelar | `Profile.tsx:184` |
+| `teste7` | **mensal** e **anual** | 7 dias grátis para quem nunca assinou | nenhum: o RevenueCat escolhe sozinho |
+
+**As três ofertas de desconto têm a etiqueta `rc-ignore-offer` (17/10/2026), e
+ela não é enfeite.** O `purchasePackage` compra a `defaultOption`: o teste
+grátis mais longo ou, sem teste, a opção de primeira fase mais barata, e
+oferta "determinada pelo desenvolvedor" entra na escolha. Sem a etiqueta, a
+única venda do Play (pedido GPA.3319-9481-4117-99885, 25/09) saiu pelo botão
+principal do mensal com a `save30`, a R$ 20,99. Oferta nova de desconto
+nasce com a etiqueta, ou o botão principal passa a vendê-la.
+
+**O `teste7` foi criado em 17/10/2026 pela API**, com a conta de serviço do
+coletor, porque a nossa tela prometia "Começar 7 dias grátis" e a loja não
+tinha teste nenhum. Elegibilidade: quem nunca teve esta assinatura. Para a
+API aceitar, a lista de países saiu da `exit10` sem a Etiópia (ET), que o
+Play não fatura.
 
 **Elegibilidade das três: "determinada pelo desenvolvedor".** É por isso que o
 app usa `purchaseSubscriptionOption` e não `purchasePackage`: o segundo nunca

@@ -102,7 +102,9 @@ toques em um mês, nenhum teste de texto ou de preço lê em menos de meses.
 
 ## O que fazer, em ordem
 
-**A. Hoje, sem build, no Play Console (decisão do dono, porque é cobrança):**
+**A. Hoje, sem build, no Play Console. FEITO em 17/10 pela API, por decisão
+do dono no mesmo dia** (oferta `teste7` ativa nos dois planos às 11h09 UTC;
+etiqueta nas três ofertas às 11h08 UTC). O que estava escrito:
 
 1. Criar uma oferta de teste grátis de 7 dias nos dois planos (`monthly` e
    `annual`), com elegibilidade "aquisição de novo cliente". Assim a folha do

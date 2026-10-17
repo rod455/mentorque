@@ -3,6 +3,31 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-17 · Engenharia: o teste grátis de 7 dias existe no Play, criado pela API
+
+- O dono decidiu em 17/10: teste grátis no Android, e perguntou se dava para
+  criar daqui. Dava: a conta de serviço que o coletor usa tem escrita na
+  monetização do Play.
+- **Feito e relido na resposta da própria API**: oferta `teste7` nos planos
+  `monthly` e `annual` da `annual100`, 7 dias grátis, uma fase,
+  elegibilidade "nunca teve esta assinatura", estado ACTIVE às 11h09 UTC. E
+  as ofertas `exit10`, `exit25` e `save30` com a etiqueta `rc-ignore-offer`
+  às 11h08 UTC. Duas tentativas recusadas antes: a lista de países copiada da
+  `exit10` tinha a Etiópia, que o Play não fatura; saiu da lista.
+- **O que muda e para quem**: o botão principal passa a comprar o teste,
+  porque o RevenueCat escolhe a opção com o teste mais longo; quem já assinou
+  antes cai no plano cheio, porque as ofertas de desconto deixaram a escolha.
+  Vale para a 3.1 já instalada, sem build.
+- **O que não conferi e ninguém conferiu ainda**: nenhum aparelho abriu a
+  folha do Google depois da mudança. Sem sinal ainda. Duas coisas para o
+  primeiro teste num Android: a folha diz "7 dias grátis", e a oferta de 10%
+  ao sair do paywall ainda aparece (a etiqueta tira a oferta da escolha
+  automática; pela documentação do RevenueCat ela continua comprável pelo
+  caminho explícito, e isso é leitura de documento, não de aparelho). O
+  Google e o RevenueCat podem levar algumas horas para refletir.
+- A linha `play-console` saiu da lista do dono; `docs/lojas/venda-no-android.md`
+  ganhou o `teste7` e a regra da etiqueta. Fluxo temporário do n8n arquivado.
+
 ## 2026-10-17 · Engenharia: seis eventos novos, para os três portões que só gravavam o sim
 
 - Ok do dono em 17/10 ("crie mais eventos para medirmos o necessário"). O
