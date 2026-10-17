@@ -107,7 +107,7 @@ export function linhaDeAtivacao(c: {
   const fechada = c.janela_fechada === true;
   return {
     texto: fechada
-      ? `Ativacao, coorte ${c.coorte}: ${c.ativados_7d} de ${c.cadastrados} fizeram a primeira acao de valor em 7 dias`
+      ? `Ativacao, coorte ${c.coorte}: ${c.ativados_7d} de ${c.cadastrados} fizeram algo de valor alem do carro em 7 dias (regua de 17/10, comparavel desde a coorte de 28/09)`
       : `Ativacao, coorte ${c.coorte}: AINDA NAO DA PARA LER (a janela fecha em ${maisDias(c.coorte, FECHA_D1_7)}; hoje sao ${c.ativados_7d} de ${c.cadastrados}, PISO)`,
     legivel: fechada,
     motivo: fechada ? "" : `a janela de 7 dias fecha em ${maisDias(c.coorte, FECHA_D1_7)}`,

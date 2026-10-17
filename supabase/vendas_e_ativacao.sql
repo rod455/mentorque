@@ -43,6 +43,20 @@
 -- Quem ja lia continua lendo igual; quem quiser saber se pode concluir usa as
 -- novas. O retrato e montado no n8n, fora deste repositorio, entao a coluna e
 -- o unico jeito de a fonte contar isso a quem consome.
+--
+-- A ATIVAÇÃO MUDOU DE PERGUNTA EM 17/10/2026, e a série dá um salto de
+-- propósito. Até aqui ela contava `abriu_trilha` ou `cadastrou_carro` a partir
+-- da conta. Desde 12/09 o Android pede o carro ANTES da conta, então a ação
+-- acontecia antes da largada e a view lia 0 de 57 na coorte de 28/09; começar
+-- a janela um dia antes também não serve, porque vira teto (56 de 57): 91 de
+-- cada 100 contas têm carro, e métrica que todo mundo cumpre mede existir.
+-- Definição do CRO (docs/agentes/propostas/ativacao-alem-do-carro.md, 16/10):
+-- fez ao menos uma ação de valor que NÃO é cadastrar o carro, de um dia antes
+-- da conta até 7 dias depois. Série comparável só a partir da coorte de
+-- 28/09: `perguntou_biela` nasceu nesse dia e `analisou_orcamento` em 25/09.
+-- Ação de valor nova que nascer no app entra nesta lista no mesmo dia, ou a
+-- ativação cai sem motivo. Fora de propósito: `abriu_quiz` (abrir não é
+-- responder) e `clicou_atalho` (mede a nossa vitrine, não a demanda).
 create or replace view public.ativacao_coortes
   with (security_invoker = on) as
 with cadastros as (
@@ -56,9 +70,12 @@ select
   count(*) as cadastrados,
   count(*) filter (where exists (
     select 1 from public.funil_eventos e
-    where e.evento in ('abriu_trilha', 'cadastrou_carro')
+    where e.evento in (
+            'perguntou_biela', 'consultou_sintoma', 'registrou_servico',
+            'registrou_abastecimento', 'abriu_trilha', 'viu_aula',
+            'analisou_orcamento', 'lancou_ganho')
       and public.identidade(e.anon_id, e.user_id) = c.pessoa
-      and e.criado_em >= c.cadastrado_em
+      and e.criado_em >= c.cadastrado_em - interval '1 day'
       and e.criado_em <  c.cadastrado_em + interval '8 days'
   )) as ativados_7d,
   (date_trunc('week', c.cadastrado_em at time zone 'America/Sao_Paulo')::date + 7)

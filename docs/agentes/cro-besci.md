@@ -404,3 +404,67 @@ rodou antes de o diário ser escrito, ou o verde foi dito de memória. Pela
 regra de 06/10 do CLAUDE.md, a frase vem com instrumento e hora, e o
 instrumento é a bateria depois do último arquivo escrito. Engenharia
 corrigiu o título em 09/10.
+
+## Retorno do dono sobre a rodada de 16/10/2026 (conversão)
+
+Mandado escrever por ele em 17/10 ("Veja o que o agente de CRO escreveu e o
+que vamos aplicar e melhorar"). Lido o diário, o commit 79707a2, as duas
+propostas e o banco, com os números da rodada refeitos em consulta própria.
+
+Primeiro o que manter.
+
+**OS NÚMEROS BATEM, E BATEM EXATOS.** Refiz a janela de dois minutos no banco
+em 17/10: das 372 pessoas que cadastraram carro de 21/09 a 11/10, 200 nunca
+criaram conta, 155 em até 2 minutos, 14 em até uma hora e 0 depois. A
+ativação nova, aplicada hoje, lê 28 de 57 na coorte de 28/09 e 25 de 51 na de
+21/09, os mesmos da proposta.
+
+**A RODADA ABRIU PELA FILA E FECHOU OS DOIS PEDIDOS.** O do Diretor e o da
+Engenharia, cada um com proposta escrita, SQL pronto e o que a definição não
+alcança dito antes de alguém perguntar. É o que faltou em 09/10.
+
+**A DIVERGÊNCIA COM O DIRETOR FOI DECLARADA, NÃO ESCOLHIDA.** E o erro dos 42
+dias na prova social foi assumido com nome. As duas coisas são a régua da
+casa funcionando.
+
+**A APOSTA NASCEU COM O "ANTES" E SEPARANDO POR VERSÃO.** "Início 16/10 na
+web; no app, com a 3.2", e a leitura separa por `versao`. Está certo.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. O RELÓGIO DA APOSTA ESTÁ DATADO PELO COMMIT, E O COMMIT NÃO CHEGOU A
+NINGUÉM.** Desde 15/09, 1.001 dos 1.040 aparelhos que terminaram o onboarding
+são Android (funil, lido em 17/10). A mudança mora no binário e a 3.2 não foi
+para as lojas, então hoje ela alcança 24 aparelhos da web e nenhum Android.
+"Ler a partir de 30/10 e 13/11" são datas contadas de 16/10; a leitura
+direcional precisa contar de quando a 3.2 estiver na maior parte dos
+aparelhos, e escrever assim: "duas semanas depois de a 3.2 passar de metade
+dos aparelhos ativos". E a frase "o momento não volta" é leitura, não dado, e o dado a corrige. Das
+200 pessoas que cadastraram carro como convidadas de 21/09 a 11/10 e nunca
+criaram conta, **43 voltaram ao app depois de uma hora** (qualquer evento,
+por aparelho, lido em 17/10). Uma em cada cinco volta; o que não volta é o
+CONVITE, que a própria rodada descreveu como consumido. Zero conta depois de
+uma hora é ausência de pedido tanto quanto de vontade, e as duas leituras
+pedem consertos diferentes: a de hoje melhora o pedido; a outra repete o
+pedido a quem volta.
+
+**2. A RODADA DE CONVERSÃO PAROU ANTES DO ÚLTIMO DEGRAU, E O DEFEITO MAIOR
+ESTAVA LÁ.** Desde 15/09, 16 pessoas tocaram em assinar e 1 comprou. A
+rodada mediu o portão da conta e o do aviso, e não abriu a folha da loja.
+Lido hoje pela API do Play com a conta de serviço que o coletor já usa: a
+assinatura tem os planos mensal e anual e as ofertas `exit10`, `exit25` e
+`save30`, **e nenhuma oferta de teste grátis.** A nossa tela diz "Começar 7
+dias grátis" e "Após o período grátis"; a folha do Google cobra na hora. E a
+única venda da loja, pedido GPA.3319-9481-4117-99885 lido pela mesma API, saiu
+com a oferta `save30`, a de RETENÇÃO, a R$ 20,99: o `purchasePackage` do
+RevenueCat escolhe sozinho a opção mais barata, e a desenvolvedora conta como
+elegível. O comentário em `lib/app/purchases.ts` dizia o contrário e ninguém
+conferiu na loja. O veredito do `login-sabe-que-veio-comprar` chegou perto
+(3 dos 7 toques vinham da oferta de saída) e não perguntou o que a loja
+mostrava depois. Regra para a próxima rodada de conversão: ela anda até o
+pedido na loja, com o instrumento da loja, e não até o nosso botão.
+
+Veredito: rodada boa, com o achado mais útil do mês sobre a conta e os
+números certos. Falhou no relógio da aposta e em não descer até a loja, que é
+onde a venda de verdade se perde. Diagnóstico completo da assinatura em
+`docs/agentes/propostas/por-que-quase-ninguem-assina.md`.

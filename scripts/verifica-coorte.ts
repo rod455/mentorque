@@ -91,6 +91,24 @@ for (const alvo of ALVOS) {
     !/::date\s*\+\s*(14|37)\)/.test(corpo),
     "o `+ 14` e o `+ 37` em data sao o defeito de 05/10",
   );
+
+  // A ATIVAÇÃO NÃO CONTA O CARRO E COMEÇA UM DIA ANTES DA CONTA (17/10/2026).
+  //
+  // Com o carro antes da conta no Android, a lista antiga lia 0 de 57 na coorte
+  // de 28/09; com o carro na lista e a janela adiantada, 56 de 57. As duas
+  // formas erradas são exatamente o carro de volta e a largada na conta.
+  if (alvo.view === "ativacao_coortes") {
+    conferir(
+      "ativacao_coortes: o carro não é ação de valor",
+      !/'cadastrou_carro'/.test(corpo),
+      "91 de cada 100 contas têm carro; com ele na lista a ativação vira teto e mede existir",
+    );
+    conferir(
+      "ativacao_coortes: a janela começa um dia antes da conta",
+      /e\.criado_em\s*>=\s*c\.cadastrado_em\s*-\s*interval\s*'1 day'/.test(corpo),
+      "no Android o valor vem antes da conta; largando na conta, a ação some da janela",
+    );
+  }
 }
 
 if (falhas) {

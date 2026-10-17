@@ -3,6 +3,35 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-17 · Engenharia: a ativação mede algo além do carro, e o retorno ao CRO
+
+- **A SÉRIE DA ATIVAÇÃO SALTA HOJE, DE PROPÓSITO.** A `ativacao_coortes` foi
+  trocada no banco em 17/10 pela definição do CRO
+  (`propostas/ativacao-alem-do-carro.md`): ação de valor que NÃO é cadastrar o
+  carro, de um dia antes da conta até 7 dias depois. Lido logo depois:
+  coorte de 28/09, **28 de 57** (antes 0); 21/09, 25 de 51 (antes 3); 05/10,
+  28 de 69 e 12/10, 34 de 94, as duas com janela aberta, PISO. **Série
+  comparável só desde 28/09**, porque `perguntou_biela` nasceu nesse dia.
+  Quem ler o retrato de amanhã e vir o salto: é a régua, não as pessoas. A
+  linha do retrato passou a dizer isso (`lib/retratoLegivel.ts`).
+- A `conferir:coorte` ganhou dois degraus para a ativação: o carro fora da
+  lista e a janela começando um dia antes. Defeito plantado nas duas formas
+  (carro de volta, largada na conta), com cópia de segurança: cada uma
+  reprovou o seu degrau.
+- **Os números da rodada do CRO refeitos no banco, e batem exatos**: 372
+  carros de convidado, 200 sem conta, 155 em 2 minutos, 14 em uma hora, 0
+  depois. Mas a frase "o momento não volta" não fica: **43 das 200 voltaram
+  ao app depois de uma hora** e não criaram conta. O que não volta é o
+  convite, e isso abre outro conserto (pedir de novo a quem volta).
+- A aposta `conta-que-sabe-que-veio-do-carro` está no binário da 3.2, que não
+  foi para as lojas. Hoje alcança a web (24 dos 1.040 aparelhos que
+  terminaram o onboarding desde 15/09) e nenhum Android (1.001). O relógio
+  dela começa no dia da 3.2.
+- Fica com o dono: `recusou_convite_aviso` mexe no CHECK do banco, que a
+  DIRETRIZES reserva ao pedido dele. A linha continua na fila.
+- Retorno escrito em `cro-besci.md`. O segundo ponto dele é o diagnóstico da
+  assinatura, na entrada de cima.
+
 ## 2026-10-16 · CRO: a maior quebra do produto não estava no painel, e ela perde cem aparelhos por semana
 
 - Artifact "Conversão da semana": https://claude.ai/artifact/KsEcXMBHdq6Fg5D3d2TDE9
