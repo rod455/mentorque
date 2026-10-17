@@ -108,12 +108,22 @@ export function AbastecimentoScreen({ origem, id }: { origem?: string; id?: stri
         <AppHeader title={t.titulo} subtitle={carName(v)} />
         <Card className="mt-2">
           <p className="text-xs font-semibold uppercase tracking-wide text-cream/45">{t.devolucaoTitulo.replace("{carro}", carName(v))}</p>
-          {salvo.custoPorKm != null ? (
+          {/* O CUSTO POR KM E O CONSUMO SÃO PREMIUM (17/10/2026, decisão do
+              dono). Registrar e o gasto do mês continuam grátis: é o hábito
+              que traz a pessoa de volta, e 7 dos 15 aparelhos que
+              registraram voltaram em outro dia. A conta pronta é o que se
+              vende. O número fica borrado, para dar para ver que existe. */}
+          {salvo.custoPorKm != null && s.premium ? (
             <p className="mt-2 font-display text-3xl text-cream">{brlCentavos(salvo.custoPorKm)} <span className="text-base text-cream/55">{t.porKm}</span></p>
+          ) : salvo.custoPorKm != null ? (
+            <button onClick={() => go({ name: "subscribe", ctx: "combustivel" })} className="mt-2 block w-full text-left">
+              <span aria-hidden className="block select-none font-display text-3xl text-cream blur-[6px]">R$ 0,00 <span className="text-base">{t.porKm}</span></span>
+              <span className="mt-1 block text-xs font-medium text-amber">{t.porKmPremium.replace("{carro}", carName(v))} ›</span>
+            </button>
           ) : (
-            <p className="mt-2 text-sm text-cream/85">{t.primeiro}</p>
+            <p className="mt-2 text-sm text-cream/85">{s.premium ? t.primeiro : t.primeiroGratis}</p>
           )}
-          {salvo.consumo != null && <p className="mt-1 text-sm text-cream/70">{t.consumo.replace("{n}", salvo.consumo.toLocaleString("pt-BR"))}</p>}
+          {salvo.consumo != null && s.premium && <p className="mt-1 text-sm text-cream/70">{t.consumo.replace("{n}", salvo.consumo.toLocaleString("pt-BR"))}</p>}
           <p className="mt-1 text-sm text-cream/70">{t.mes.replace("{valor}", formatBRL(salvo.mes))}</p>
           {kmSalvo != null && <p className="mt-2 text-xs text-teal/90">{t.kmCarimbado.replace("{km}", kmSalvo.toLocaleString("pt-BR"))}</p>}
         </Card>

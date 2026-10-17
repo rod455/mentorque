@@ -5,6 +5,7 @@ import { funil } from "@/lib/app/funil";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { anotaSintoma } from "@/lib/app/sintomaEmFoco";
 import { symptomRecommended } from "@/lib/app/premium";
+import { causasLivres, ehOPrimeiroSintoma, itensLivres } from "@/lib/app/primeiroSintoma";
 import { carName, vehicleLabel } from "@/lib/app/content";
 import { adjustPriceRange, regionFactor, regionLabel, UF_LIST } from "@/lib/app/pricing";
 import { trackPriceReport } from "@/lib/app/track";
@@ -337,6 +338,9 @@ export function SymptomDetail({ id }: { id: string }) {
   const sx = c.symptoms.find((x) => x.id === id);
   const [answers, setAnswers] = useState<Record<number, "yes" | "no">>({});
   const [regionOpen, setRegionOpen] = useState(false);
+  // A primeira consulta de sintoma é inteira (17/10/2026, lib/app/primeiroSintoma.ts).
+  // Lido uma vez por sintoma aberto: a tela só monta depois do splash, no cliente.
+  const [ehOPrimeiro] = useState(() => ehOPrimeiroSintoma(id));
   // Interstitial ao abrir um problema específico (só free), sujeito à política
   // de anúncios: carência nas primeiras aberturas, intervalo e teto diário.
   const [needAd, setNeedAd] = useState(false);
@@ -353,8 +357,9 @@ export function SymptomDetail({ id }: { id: string }) {
   if (!sx) return <AppHeader title="—" />;
   const pd = c.symptomPremium[sx.id];
 
-  const shownCauses = s.premium ? sx.causes : sx.causes.slice(0, 2);
-  const lockedCauses = s.premium ? [] : sx.causes.slice(2);
+  const livres = causasLivres({ premium: s.premium, ehOPrimeiro, total: sx.causes.length });
+  const shownCauses = sx.causes.slice(0, livres);
+  const lockedCauses = sx.causes.slice(livres);
 
   // Ajuste regional dos preços: cidade grande tem fator próprio; senão, a
   // média do estado; sem região, a faixa nacional de referência.
@@ -607,8 +612,10 @@ export function ChecklistScreen({ symptomId }: { symptomId: string }) {
 
   // Os 3 primeiros itens (os mais relevantes) são livres; o resto fica
   // borrado com cadeado — dá pra ver que existe mais.
-  const items = s.premium ? sx.checklist : sx.checklist.slice(0, 3);
-  const lockedItems = s.premium ? [] : sx.checklist.slice(3);
+  // Na primeira consulta de sintoma, o checklist vem inteiro (17/10/2026).
+  const itens = itensLivres({ premium: s.premium, ehOPrimeiro: ehOPrimeiroSintoma(symptomId), total: sx.checklist.length });
+  const items = sx.checklist.slice(0, itens);
+  const lockedItems = sx.checklist.slice(itens);
 
   const share = async () => {
     if (!s.premium) {

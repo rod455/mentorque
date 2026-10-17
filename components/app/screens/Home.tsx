@@ -161,7 +161,8 @@ function CustoDoCarro({ car, nome }: { car: Vehicle; nome: string }) {
       sub={
         <>
           {t.cardSemana.replace("{valor}", formatBRL(semana))}
-          {porKm != null ? ` · ${t.cardPorKm.replace("{valor}", brlCentavos(porKm))}` : ` · ${t.cardFaltaUm}`}
+          {/* O custo por km é Premium desde 17/10/2026; a semana e o mês, não. */}
+          {!s.premium ? ` · ${t.cardPorKmPremium}` : porKm != null ? ` · ${t.cardPorKm.replace("{valor}", brlCentavos(porKm))}` : ` · ${t.cardFaltaUm}`}
           {fechado ? <><br />{fechado}</> : null}
         </>
       }

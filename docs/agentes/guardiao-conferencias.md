@@ -360,6 +360,7 @@ sem tirar ninguém dela.
 | `conferir:publicacao` | no nascimento (autor), 04/10/2026 | 7 plantios, 7 mordidas: ignoreCommand apagado, codigo de saida invertido (lido passa, executado nao), app/ excluida do build, comparacao com HEAD~3, assets/ no .vercelignore (a rota das pecas le em tempo de execucao), erro de digitacao em supabase/, e docs/ saindo do .vercelignore enquanto o comando ainda a ignora |
 | `conferir:entre` | no nascimento (autor), 06/10/2026 | formato só (data e papéis da tabela); não reprova por idade, de propósito |
 | `conferir:quiz-populacao` | no nascimento (autor), 07/10/2026 | 5 plantios, 5 mordidas: id do onboarding trocado no SQL, banco de perguntas reordenado, `security_invoker` removido, etiqueta de uma das duas populações perdida, e a rotação diária passando a devolver a pergunta do onboarding |
+| `conferir:gratis` | no nascimento (autor), 17/10/2026 | 6 plantios com `npm run plantio`, 6 mordidas: custo por km aberto ao grátis, causas cortadas em 2 de volta, a regra dando 2 causas na segunda consulta, a tela sem perguntar se é a primeira, o Biela trancado na tabela, e o card do Início mostrando o custo por km ao grátis |
 | `conferir:baixar` | 19/09/2026 | sim |
 | `conferir:email` | 19/09/2026 | sim, 3 defeitos plantados |
 | `conferir:relatorio` | 19/09/2026 | sim |

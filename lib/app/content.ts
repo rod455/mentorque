@@ -1135,6 +1135,7 @@ export function getContent(locale: Locale) {
       cardSemana: T("Esta semana: {valor}", "This week: {valor}"),
       cardPorKm: T("{valor} por km", "{valor} per km"),
       cardFaltaUm: T("Mais um abastecimento e o custo por km aparece", "One more fill-up and cost per km shows up"),
+      cardPorKmPremium: T("custo por km no Premium", "cost per km with Premium"),
       cardVazioTitulo: T("Quanto o {carro} custa por km?", "How much does the {carro} cost per km?"),
       cardVazioSub: T("Registre o próximo abastecimento em três toques. O km entra no calendário de graça.", "Log the next fill-up in three taps. The mileage feeds the calendar for free."),
       cardCta: T("Abasteci", "I filled up"),
@@ -1159,6 +1160,11 @@ export function getContent(locale: Locale) {
       consumo: T("{n} km por litro", "{n} km per liter"),
       mes: T("Este mês em combustível: {valor}", "Fuel this month: {valor}"),
       primeiro: T("Primeiro abastecimento guardado. O próximo destrava o custo por km e o consumo.", "First fill-up saved. The next one unlocks cost per km and consumption."),
+      // O custo por km e o consumo são Premium desde 17/10/2026 (decisão do
+      // dono); registrar e o gasto do mês continuam grátis. Ver
+      // docs/agentes/propostas/o-que-sai-do-gratis.md.
+      primeiroGratis: T("Primeiro abastecimento guardado. Do próximo em diante, o Premium mostra o custo por km e o consumo.", "First fill-up saved. From the next one on, Premium shows cost per km and consumption."),
+      porKmPremium: T("Ver o custo por km e o consumo do {carro}", "See the {carro}'s cost per km and consumption"),
       kmCarimbado: T("O km do calendário foi atualizado para {km}.", "The calendar mileage was updated to {km}."),
       pronto: T("Pronto", "Done"),
       verHistorico: T("Ver no histórico", "See in history"),
@@ -2183,15 +2189,24 @@ export function getContent(locale: Locale) {
       ],
       knowTitle: T("Conheça o Mentorque Premium", "Meet Mentorque Premium"),
       ltd: "Ltd",
+      // A TABELA DIZ O QUE O CÓDIGO FAZ (17/10/2026). Duas linhas mentiam para
+      // menos: o Biela aparecia trancado com 5 perguntas grátis, e o plano de
+      // revisão aparecia trancado existindo no grátis (o Premium tem o feito
+      // por IA). E os lembretes diziam "Ltd" sem limite nenhum no código.
+      // Junto entraram os limites novos da decisão do dono de 17/10: 3
+      // perguntas ao Biela por mês, a segunda consulta de sintoma com a causa
+      // mais provável, e o custo por km só no Premium. `nota` troca o "Ltd"
+      // pelo limite quando ele cabe na célula.
       features: [
-        { icon: "clock", label: T("Registrar serviços", "Log services"), free: "check" },
-        { icon: "diagnose", label: T("Diagnóstico por sintoma", "Symptom diagnosis"), free: "ltd" },
-        { icon: "calendar", label: T("Lembretes de revisão", "Service reminders"), free: "ltd" },
-        { icon: "gauge", label: T("Saúde por sistema", "Per-system health"), free: "lock" },
-        { icon: "book", label: T("Plano de revisão do seu carro", "Your car's service plan"), free: "lock" },
-        { icon: "spark", label: T("Diagnóstico ilimitado com o Biela", "Unlimited diagnosis with Biela"), free: "lock" },
-        { icon: "book", label: T("Biblioteca de aulas completa", "Full lesson library"), free: "lock" },
-      ] as { icon: string; label: string; free: "check" | "ltd" | "lock" }[],
+        { icon: "clock", label: T("Registrar serviços e abastecimentos", "Log services and fill-ups"), free: "check" },
+        { icon: "calendar", label: T("Lembretes de revisão", "Service reminders"), free: "check" },
+        { icon: "spark", label: T("Perguntas ao Biela", "Questions to Biela"), free: "ltd", nota: T("3/mês", "3/mo") },
+        { icon: "diagnose", label: T("Todas as causas de cada sintoma", "Every cause of each symptom"), free: "ltd" },
+        { icon: "gauge", label: T("Custo por km e consumo", "Cost per km and consumption"), free: "lock" },
+        { icon: "gauge", label: T("Saúde por sistema", "Per-system health"), free: "ltd" },
+        { icon: "book", label: T("Plano de revisão feito para o seu carro", "Service plan made for your car"), free: "ltd" },
+        { icon: "book", label: T("Biblioteca de aulas completa", "Full lesson library"), free: "ltd" },
+      ] as { icon: string; label: string; free: "check" | "ltd" | "lock"; nota?: string }[],
       // Era um interruptor "Lembrar antes do teste terminar" que NÃO agendava
       // aviso nenhum (estado morto na tela). Prometer aviso e não avisar é o
       // caminho curto para a cobrança surpresa e a avaliação de uma estrela.

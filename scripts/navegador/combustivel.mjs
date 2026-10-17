@@ -4,7 +4,11 @@
 // carimba o km e explica que o próximo destrava o custo, o segundo devolve
 // custo por km e consumo, o histórico lista os dois com a soma do mês, e
 // apagar apaga. O km menor que o atual é recusado antes de salvar.
-import { abrirApp, controlesForaDaTela, dia, garagem } from "./base.mjs";
+//
+// DESDE 17/10/2026 o custo por km e o consumo são Premium (decisão do dono):
+// a sessão grátis prova que o número NÃO aparece e que a oferta aparece no
+// lugar, e uma segunda sessão, Premium, prova a conta (200 / 300 e 300 / 32).
+import { abrirApp, CARRO, controlesForaDaTela, dia, garagem } from "./base.mjs";
 
 export const nome = "combustivel";
 export const sobre = "o abastecimento em três toques: card, devolução, histórico e apagar";
@@ -86,7 +90,7 @@ export async function rodar({ nav, ok }) {
   await pg.waitForTimeout(800);
   const corpo1 = await app.corpo();
   ok("o card passa a mostrar a semana", /Esta semana: R\$\s?180/.test(corpo1));
-  ok("e pede mais um para o custo por km", /Mais um abastecimento/.test(corpo1));
+  ok("e, no grátis, diz que o custo por km é do Premium", /custo por km no Premium/.test(corpo1) && !/Mais um abastecimento/.test(corpo1));
 
   // 5. O segundo: custo por km e consumo. Pelo atalho da fila (06/10/2026).
   await pg.locator('[data-atalho="abastecer"]').first().click();
@@ -97,8 +101,10 @@ export async function rodar({ nav, ok }) {
   await pg.getByRole("button", { name: /Salvar abastecimento/i }).click();
   await pg.waitForTimeout(800);
   const c2 = await app.corpo();
-  ok("o segundo devolve o custo por km (200 / 300)", /R\$\s?0,67\s+por km/.test(c2), c2.slice(c2.indexOf("hoje:"), c2.indexOf("hoje:") + 120).replace(/\n+/g, " | "));
-  ok("e o consumo (300 / 32)", /9,4 km por litro/.test(c2));
+  ok("no grátis, o segundo NÃO mostra o custo por km", !/R\$\s?0,67\s+por km/.test(c2), c2.slice(c2.indexOf("hoje:"), c2.indexOf("hoje:") + 120).replace(/\n+/g, " | "));
+  ok("nem o consumo", !/9,4 km por litro/.test(c2));
+  ok("e oferece o Premium no lugar", /Ver o custo por km e o consumo do/.test(c2));
+  ok("o gasto do mês continua grátis", /Este mês em combustível: R\$\s?380/.test(c2));
   if (process.env.FOTO_DO_COMBUSTIVEL) await pg.screenshot({ path: process.env.FOTO_DO_COMBUSTIVEL, fullPage: false }).catch(() => undefined);
 
   // 6. Histórico: a soma do mês e as duas linhas; apagar apaga.
@@ -114,4 +120,32 @@ export async function rodar({ nav, ok }) {
   ok("apagar apaga e avisa", /Abastecimento apagado/.test(await app.corpo()) && (await app.sessaoGravada())?.abastecimentos?.length === 1);
 
   await app.fechar();
+
+  // 7. No Premium, a conta aparece: o segundo abastecimento devolve custo por
+  // km (200 / 300) e consumo (300 / 32), e o card do Início mostra o custo.
+  const premium = await abrirApp(nav, {
+    sessao: garagem({
+      premium: true,
+      vehicles: [{ ...CARRO, odometerKm: 98100 }],
+      abastecimentos: [{ id: "a1", vehicleId: CARRO.id, date: dia(0), km: 98100, valor: 180, litros: 30, combustivel: "gasolina" }],
+      quiz: { ultimoDia: dia(0), sequencia: 1, recorde: 1, perdaoEm: null, respostas: 1, acertos: 1 },
+    }),
+  });
+  const pp = premium.pg;
+  // Com abastecimento já lançado, o card leva ao histórico; o atalho abre a tela.
+  await pp.locator('[data-atalho="abastecer"]').first().click();
+  await pp.waitForTimeout(800);
+  const campoP = (rotulo) => pp.locator("label", { hasText: rotulo }).locator("input");
+  await campoP("Valor pago").fill("200");
+  await campoP("Km do painel").fill("98400");
+  await campoP("Litros").fill("32");
+  await pp.getByRole("button", { name: /Salvar abastecimento/i }).click();
+  await pp.waitForTimeout(800);
+  const cp = await premium.corpo();
+  ok("no Premium, o segundo devolve o custo por km (200 / 300)", /R\$\s?0,67\s+por km/.test(cp), cp.slice(cp.indexOf("hoje:"), cp.indexOf("hoje:") + 120).replace(/\n+/g, " | "));
+  ok("e o consumo (300 / 32)", /9,4 km por litro/.test(cp));
+  await pp.getByRole("button", { name: /^Pronto$/i }).click();
+  await pp.waitForTimeout(800);
+  ok("e o card do Início mostra o custo por km", /R\$\s?0,67 por km/.test(await premium.corpo()));
+  await premium.fechar();
 }

@@ -69,7 +69,7 @@ function ComparativoPlanos() {
             </span>
             <span className="flex justify-center">
               {f.free === "check" ? <TealCheck /> : f.free === "ltd" ? (
-                <span className="rounded bg-amber/15 px-1.5 py-0.5 text-[10px] font-semibold text-amber">{sub.ltd}</span>
+                <span className="rounded bg-amber/15 px-1.5 py-0.5 text-[10px] font-semibold text-amber">{f.nota ?? sub.ltd}</span>
               ) : cadeado}
             </span>
             <span className="flex justify-center"><TealCheck /></span>

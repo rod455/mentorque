@@ -3,6 +3,32 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-17 · Engenharia: sintoma, custo por km e a tabela do Premium, para a 3.2
+
+- Decisão do dono em 17/10, itens 2 e 3 da proposta `o-que-sai-do-gratis.md`,
+  mais a tabela. Tudo isto é tela, então chega ao Android e ao iPhone com a
+  3.2; na web vale com este deploy.
+- **Sintoma**: o primeiro sintoma consultado no aparelho mostra todas as
+  causas e o checklist inteiro; voltar a ele continua mostrando tudo. Dos
+  outros, o grátis vê a causa mais provável e os 3 primeiros itens do
+  checklist (antes eram 2 causas sempre). Regra em
+  `lib/app/primeiroSintoma.ts`; a marca mora no aparelho, e sem armazenamento
+  a pessoa vê tudo.
+- **Caderno de gastos**: registrar e o gasto do mês continuam grátis. O custo
+  por km e o consumo ficam borrados com a oferta "Ver o custo por km e o
+  consumo do {carro}" (paywall com `origem` `combustivel`), e o card do Início
+  diz "custo por km no Premium".
+- **A tabela do Premium diz o que o código faz**: Biela "3/mês" (era
+  trancado, com 5 grátis), plano de revisão como limitado (era trancado,
+  existindo no grátis), lembretes sem "Ltd" (não há limite no código), e a
+  linha nova "Custo por km e consumo", trancada.
+- Conferência nova, `conferir:gratis`: 6 plantios com `npm run plantio`, 6
+  mordidas. A suíte de navegador `combustivel` passou a provar os dois lados:
+  no grátis o número não aparece e a oferta sim; numa segunda sessão
+  Premium, 0,67 por km e 9,4 km por litro. Verdes depois do último arquivo de
+  código: `npm run conferir`, e as suítes `telas` (89 s), `venda` (105 s) e
+  `combustivel` (29 s).
+
 ## 2026-10-17 · Engenharia: a Biela passa a 3 perguntas grátis por mês
 
 - Decisão do dono em 17/10 ("vamos implementar isso tudo"), primeiro item da
