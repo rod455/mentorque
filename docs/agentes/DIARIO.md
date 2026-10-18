@@ -3,6 +3,32 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-18 · Engenharia: a rodada 5 de Segurança lida, e a varredura de segredo passa a ver as chaves que a casa usa
+
+- Pedido do dono: "veja o que o agente de segurança criou, dê feedback e
+  aplique as sugestões que forem importantes".
+- **A `conferir:segredo` ganhou sete formas** que a casa usa e ela não via:
+  chave privada em PEM (APNs, conta de serviço do FCM, App Store Connect,
+  conta de serviço do Play), Resend, Voyage, token do GitHub, chave de API do
+  Google, segredo OAuth do Google e token de bot do Telegram. O inventário
+  veio dos `process.env.*` do código e das credenciais do n8n.
+- **E passou a ler arquivo ainda não adicionado** (`git ls-files --cached
+  --others --exclude-standard`): antes, chave num arquivo novo só aparecia
+  depois do commit.
+- A chave de API do Google achou a configuração do Firebase do Android, que é
+  pública por desenho; entrou em `PUBLICA_POR_DESENHO`, só para aquele arquivo
+  e aquela forma.
+- Plantios, três mordidas: chave privada num arquivo novo nunca adicionado;
+  chave do Resend num documento (com `npm run plantio`); e a chave do
+  Firebase colada num documento, para provar que a exceção não vaza (com
+  `npm run plantio`). 911 arquivos lidos, verde.
+- Dependências, conferido hoje: 32 avisos nos 5 pacotes de produção, 24 no
+  `next` 14.2.35. As críticas (RCE de AVIF e RCE em servidor Windows) seguem
+  sem porta: o otimizador de imagem está desligado (`unoptimized: true`) e o
+  servidor é a Vercel. Retorno escrito em `seguranca-dependencias.md`; o
+  ponto pedido para a próxima rodada é listar os avisos por ID, não por
+  pacote.
+
 ## 2026-10-18 · Segurança: rodada 5, ZERO decisões para o dono, e a varredura de segredo saiu do meu scratchpad para a bateria
 - Artifact "Segurança da semana" (rodada 5):
   https://claude.ai/artifact/TNPTix937VGSnaYsANdRdr

@@ -48,6 +48,18 @@ const FORMAS = [
   ["chave da Anthropic", /sk-ant-[A-Za-z0-9_-]{10,}/],
   ["SERVICE_ROLE com valor", /SERVICE_ROLE[A-Z_]*\s*[:=]\s*["'`]?[A-Za-z0-9_\-.]{8,}/],
   ["SECRET com valor", /[A-Z_]*SECRET[A-Z_]*\s*[:=]\s*["'`]?[A-Za-z0-9_\-.]{8,}/],
+  // As sete abaixo entraram em 18/10/2026, no retorno do dono: as chaves que a
+  // casa USA e que a lista de cima não via. A mais grave é a privada em PEM:
+  // a do APNs (APNS_CHAVE_P), a da conta de serviço do FCM (FCM_CONTA_SERVICO),
+  // a da App Store Connect e a da conta de serviço do Play são todas assim, e
+  // são as que mais custam se vazarem (mandam aviso e mexem nas lojas).
+  ["chave privada (PEM)", /-----BEGIN (?:RSA |EC |ENCRYPTED |OPENSSH )?PRIVATE KEY-----/],
+  ["chave do Resend", /\bre_[A-Za-z0-9]{8,}_[A-Za-z0-9]{12,}/],
+  ["chave da Voyage", /\bpa-[A-Za-z0-9_-]{30,}/],
+  ["token do GitHub", /\b(?:gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,})/],
+  ["chave de API do Google", /\bAIza[0-9A-Za-z_-]{35}\b/],
+  ["segredo de cliente OAuth do Google", /\bGOCSPX-[A-Za-z0-9_-]{20,}/],
+  ["token de bot do Telegram", /\b\d{8,10}:AA[A-Za-z0-9_-]{30,}/],
 ];
 
 /**
@@ -61,6 +73,19 @@ const FORMAS = [
 const DE_PROPOSITO = [
   [".env.example", "SERVICE_ROLE com valor", "o arquivo é o molde das variáveis, e o lado direito é instrução"],
   [".claude/skills/google-ads-api-mcp-setup/SKILL.md", "SECRET com valor", "documentação de fora, do Google, com exemplo de linha de comando"],
+];
+
+/**
+ * Onde a forma aparece com VALOR DE VERDADE, de propósito, porque a chave é
+ * pública por desenho (18/10/2026).
+ *
+ * Diferente de `DE_PROPOSITO`: aqui o trecho É uma chave real, e o teste de
+ * modelo não se aplica. Por isso a lista é mínima, cada par tem o motivo, e o
+ * par vale só para aquele arquivo e aquela forma: a mesma chave em qualquer
+ * outro arquivo reprova.
+ */
+const PUBLICA_POR_DESENHO = [
+  ["android/app/google-services.json", "chave de API do Google", "a configuração do Firebase do Android vai dentro do app e é pública por desenho; o que a protege é a restrição por pacote e SHA-1 no Google Cloud, não o segredo"],
 ];
 
 /**
@@ -84,7 +109,11 @@ function pareceModelo(trecho) {
 
 console.log("Segredo: alguma chave com forma de verdade entrou no repositório?");
 
-const arquivos = execFileSync("git", ["ls-files"], { cwd: RAIZ, encoding: "utf8" })
+// Os arquivos do git E os que ainda não foram adicionados, menos os que o
+// `.gitignore` exclui (18/10/2026). Só com `ls-files`, uma chave num arquivo
+// novo passava pela conferência antes do `git add` e só era vista depois do
+// commit, que é tarde: o push costuma vir junto.
+const arquivos = execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard"], { cwd: RAIZ, encoding: "utf8" })
   .split("\n")
   .filter(Boolean);
 
@@ -105,6 +134,7 @@ for (const arquivo of arquivos) {
       const m = linhas[i].match(forma);
       if (!m) continue;
 
+      if (PUBLICA_POR_DESENHO.some(([a, f]) => a === arquivo && f === nome)) continue;
       const liberado = DE_PROPOSITO.some(([a, f]) => a === arquivo && f === nome);
       if (liberado && pareceModelo(m[0])) continue;
 

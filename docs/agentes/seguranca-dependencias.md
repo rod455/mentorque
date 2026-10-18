@@ -634,3 +634,65 @@ você deixou de repetir, com razão.
 - O `next` continua em 14.2 com conserto só em versão maior: terceira semana
   da mesma recomendação, e ela está certa em não fazer agora.
 - Nenhum segredo em 99 commits; RLS, views e funções do banco como estavam.
+
+## Retorno do dono sobre a rodada de 18/10/2026 (rodada 5)
+
+Mandado escrever por ele em 18/10 ("veja o que o agente de segurança criou,
+dê feedback e aplique as sugestões que forem importantes"). Lido o diário, o
+commit ee7f7b7 e o `scripts/verifica-segredo.mjs`, e a conferência provada de
+novo com plantios.
+
+Primeiro o que manter.
+
+**O VEREDITO DE 11/10 VIROU MÉTODO, E NÃO SÓ DESCULPA.** A exploitabilidade da
+9,3 do Capacitor foi medida desta vez: o aviso diz a condição, a condição virou
+dois greps, e o "superfície não encontrada" veio com o que continua fora do
+alcance (a WebView do aparelho). É exatamente a regra 1 que você escreveu.
+
+**AS TRÊS AFIRMAÇÕES SEPARADAS, CADA UMA COM O SEU INSTRUMENTO.** No
+repositório desde 11/10, na árvore do build de 17/10, enviado à Apple no build
+73 às 12h45 UTC, e ainda não no telefone de ninguém. Ninguém tinha lido a
+Apple depois do botão; você leu.
+
+**O INSTRUMENTO SAIU DA MEMÓRIA PARA O REPOSITÓRIO, COM O CUSTO MEDIDO.** 1,65 s
+contra 37 s da bateria, em três rodadas. E a exceção que exige que o trecho
+pareça modelo é o detalhe certo: o plantio de chave real dentro do arquivo com
+exceção era o que importava, e você o fez.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. A LISTA DE FORMAS ERA A QUE VOCÊ LEMBRAVA, NÃO A QUE A CASA USA.** Você
+mesmo escreveu que instrumento que deriva de memória é o que este papel existe
+para pegar, e a lista nasceu do mesmo jeito: oito formas, e faltavam as chaves
+mais caras da casa. As privadas em PEM (a do APNs, a da conta de serviço do
+FCM, a da App Store Connect e a da conta de serviço do Play), a do Resend, a da
+Voyage, o token do GitHub que o n8n usa, a chave de API do Google, o segredo
+OAuth do Google e o token do bot do Telegram. O inventário existia em dois
+lugares que a casa já alcança: os `process.env.*` do código (`APNS_CHAVE_P`,
+`FCM_CONTA_SERVICO`, `RESEND_API_KEY`, `VOYAGE_API_KEY`) e a lista de
+credenciais do n8n. Entraram as sete formas em 18/10. Ao entrar, a chave de
+API do Google achou a configuração do Firebase do Android, que é pública por
+desenho; ela ganhou uma lista própria (`PUBLICA_POR_DESENHO`), por arquivo e
+por forma, e a mesma chave plantada em outro arquivo reprova.
+E a frase "agora é achado antes do push" não era verdade para arquivo NOVO: o
+`git ls-files` só lê o que já foi adicionado. Passou a ler também os arquivos
+ainda não adicionados, menos os do `.gitignore`; uma chave privada num arquivo
+novo, nunca adicionado, reprovou. Três plantios, três mordidas.
+
+**2. "PRODUÇÃO CAIU DE 7 PARA 5" CONTA PACOTE, E O RISCO MORA NO AVISO.** Hoje
+são 32 avisos dentro desses 5 pacotes, 24 deles só no `next`, e um aviso novo
+dentro de um pacote conhecido não muda a sua contagem. A rodada repetiu
+"o conjunto conhecido" sem dizer quais avisos são novos desde 11/10. Na
+próxima: a lista de IDs de aviso por pacote, a diferença contra a semana
+anterior, e a regra 1 (a condição vira grep) aplicada só aos novos. Três
+leituras que já respondem parte disso: não há `"use server"` no código (as de
+Server Actions não têm porta), não há Pages Router com i18n (a de bypass do
+middleware também não), e existe `middleware.ts` (a de envenenamento de cache
+dos redirecionamentos, baixa, tem). E a decisão que um dia vai chegar ao dono,
+subir o Next para a linha 15, precisa nascer com o custo do lado, pela sua
+regra 2: é versão maior, com React 19 e mudança de API.
+
+Veredito: a rodada mais madura do papel, com o retorno anterior aplicado de
+verdade. Faltou fazer com a lista de chaves o que você fez com o resto: ler o
+inventário em vez de lembrar dele.
+
