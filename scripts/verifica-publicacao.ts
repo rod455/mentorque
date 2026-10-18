@@ -57,10 +57,17 @@ console.log("Publicação: a Vercel pula o build quando o commit não muda nada 
 const vercel = JSON.parse(ler("vercel.json")) as { ignoreCommand?: unknown };
 const comando = typeof vercel.ignoreCommand === "string" ? vercel.ignoreCommand : "";
 conferir("vercel.json tem ignoreCommand", comando.length > 0, "sem ele a Vercel builda todo commit, inclusive os so de doc");
+// COMPARA COM O ÚLTIMO DEPLOY QUE DEU CERTO, E NÃO COM O COMMIT ANTERIOR
+// (18/10/2026). Com `HEAD^`, um push de vários commits terminando num commit só
+// de documento era pulado inteiro: foi assim que o Next 15 (dois commits de
+// código seguidos de um do diário) foi "publicado" e a produção ficou no Next
+// 14, com o deploy CANCELED. A Vercel dá `VERCEL_GIT_PREVIOUS_SHA` (o commit
+// do último deploy bom); sem ele, ou sem ele no clone raso, o comando BUILDA,
+// porque na dúvida publicar é o erro barato.
 conferir(
-  "e ele compara o commit com o anterior",
-  /git diff --quiet HEAD\^ HEAD/.test(comando),
-  "a comparacao e o que decide; outra forma precisa ser provada de novo abaixo",
+  "e ele compara com o último deploy bom, não com o commit anterior",
+  /VERCEL_GIT_PREVIOUS_SHA/.test(comando) && /git diff --quiet "\$BASE" HEAD/.test(comando) && !/HEAD\^/.test(comando),
+  "comparar com HEAD^ pula o codigo de um push de varios commits que termina em doc",
 );
 
 /** As pastas que o comando ignora: `':(exclude)docs'` vira `docs`. */
@@ -164,8 +171,17 @@ if (comando) {
     git("add -A");
     git(`commit -q -m "${msg}"`);
   };
-  /** O que a Vercel veria: o código de saída do comando no HEAD atual. */
-  const decisao = () => spawnSync("sh", ["-c", comando], { cwd: repo, encoding: "utf8" }).status;
+  /**
+   * O que a Vercel veria: o código de saída do comando no HEAD atual, com o
+   * commit do último deploy bom em `VERCEL_GIT_PREVIOUS_SHA`. Sem argumento,
+   * o último deploy é o commit anterior (o caso de um push de um commit só).
+   */
+  const decisao = (anterior: string | null = git("rev-parse HEAD^").trim()) =>
+    spawnSync("sh", ["-c", comando], {
+      cwd: repo,
+      encoding: "utf8",
+      env: { ...process.env, ...(anterior === null ? { VERCEL_GIT_PREVIOUS_SHA: "" } : { VERCEL_GIT_PREVIOUS_SHA: anterior }) },
+    }).status;
 
   try {
     git("init -q");
@@ -191,6 +207,16 @@ if (comando) {
 
     commit("doc com nome parecido", { "docs-do-app/x.md": "1" });
     conferir("pasta de nome parecido com a excluída NÃO é excluída (sai 1)", decisao() === 1, "exclusao por prefixo pegaria pasta que a Vercel serve");
+
+    // O caso de 18/10: código e depois doc no MESMO push. O último deploy bom
+    // é o commit de antes dos dois, e o código tem de subir.
+    const ultimoDeploy = git("rev-parse HEAD").trim();
+    commit("codigo do push", { "app/page.tsx": "3" });
+    commit("diario do push", { "docs/a.md": "4" });
+    conferir("push de código seguido de doc BUILDA (sai 1)", decisao(ultimoDeploy) === 1, "foi assim que o Next 15 ficou fora da producao");
+    conferir("e o mesmo push, depois de publicado, um doc a mais PULA (sai 0)", (commit("so doc depois", { "docs/a.md": "5" }), decisao()) === 0);
+    conferir("sem o commit do último deploy, BUILDA (sai 1)", decisao(null) === 1, "na duvida, publicar e o erro barato");
+    conferir("com um commit que o clone não tem, BUILDA (sai 1)", decisao("0123456789abcdef0123456789abcdef01234567") === 1, "clone raso sem o ultimo deploy");
   } finally {
     rmSync(repo, { recursive: true, force: true });
   }
@@ -201,5 +227,5 @@ if (falhas) {
   process.exit(1);
 }
 console.log(
-  `Publicação: o build é pulado para ${excluidas.map((p) => `${p}/`).join(", ")}, e só para elas; executado em 7 commits de mentira com o código de saída certo em todos.`,
+  `Publicação: o build é pulado para ${excluidas.map((p) => `${p}/`).join(", ")}, e só para elas; executado em 11 casos de mentira, inclusive o push de código seguido de doc, com o código de saída certo em todos.`,
 );

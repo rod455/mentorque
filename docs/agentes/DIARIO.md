@@ -29,9 +29,17 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   verde em 1019 s, `npm run conferir` verde, `npm run build` e
   `npm run build:native` verdes. Os dois commits ficaram no ramo de trabalho
   até a bateria passar, porque o push na `main` publica o site na hora.
-- **Vai para o binário na 3.3.** No site e nas rotas, vale com este deploy.
-  Sem sinal ainda do deploy da Vercel no momento deste registro; conferir o
-  estado dele depois do push.
+- **Vai para o binário na 3.3.** No site e nas rotas, vale com o deploy.
+- **E O DEPLOY FOI CANCELADO, lido na Vercel logo depois do push**: o push
+  levou os dois commits de código e terminou no commit do diário, e a regra
+  `ignoreCommand` comparava só `HEAD^` com `HEAD`, viu só documento e pulou
+  o build. A produção ficou no 38c7d54, ainda no Next 14, com a `main`
+  dizendo Next 15. **A regra agora compara com o último deploy bom**
+  (`VERCEL_GIT_PREVIOUS_SHA`) e, sem ele, builda. A `conferir:publicacao`
+  ganhou o caso do push de código seguido de doc, o de sem variável e o de
+  commit fora do clone; o plantio da regra antiga e o do recuo invertido
+  morderam. O commit da regra mexe em `vercel.json`, então ele mesmo builda,
+  levando o Next 15.
 
 ## 2026-10-18 · Engenharia: o botão de compra do Android escolhe a opção, para a próxima versão
 
