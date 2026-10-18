@@ -3,6 +3,36 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-18 · Engenharia: o Next 15 no ar, e os avisos de segurança de produção caem de 32 para 9
+
+- Pedido do dono: "vamos corrigir os 2 que estão fora". Segundo item:
+  `next` de 14.2.35 para **15.5.28**. React fica na 18, que o Next 15 aceita.
+- **`npm audit --omit=dev`, lido em 18/10**: de 32 avisos em 5 pacotes para
+  **9 em 4**, **nenhum crítico e nenhum do `next`**. Sobram `postcss` (preso
+  dentro do `next`, roda no build), `nanoid`, `source-map-js` e `qs` (dentro
+  do SDK do Stripe), os quatro sem caminho de entrada de estranho pela regra
+  1 do manual de Segurança.
+- **O que precisou mudar**: parâmetros de rota como Promise (a imagem dos
+  guias e o painel); `robots` e `sitemap` com `dynamic = "force-static"`,
+  porque a exportação do app nativo recusava; seis links para a home
+  trocados por `Link`, que o lint do Next 15 cobra; e o selo do Next em
+  desenvolvimento desligado.
+- **E um defeito de verdade que o React 19 achou**: na lista de Carros, a
+  linha do carro era um botão com dois botões dentro (o lápis e o "Revisão
+  vencida"). HTML inválido; o React 18 avisava calado, o 19 põe um selo em
+  cima da barra de baixo, e 15 suítes quebraram no clique. A `Linha` ganhou
+  `controlesDentro` (div com papel de botão, Enter e espaço).
+- **O instrumento quase mentiu**: a primeira bateria "rodou" sem abrir
+  navegador nenhum, porque o `npm install` apagou o Playwright que fica fora
+  das dependências de propósito. Reinstalado com `--no-save` antes de valer.
+- Conferido depois do último arquivo de código: bateria completa de navegador
+  verde em 1019 s, `npm run conferir` verde, `npm run build` e
+  `npm run build:native` verdes. Os dois commits ficaram no ramo de trabalho
+  até a bateria passar, porque o push na `main` publica o site na hora.
+- **Vai para o binário na 3.3.** No site e nas rotas, vale com este deploy.
+  Sem sinal ainda do deploy da Vercel no momento deste registro; conferir o
+  estado dele depois do push.
+
 ## 2026-10-18 · Engenharia: o botão de compra do Android escolhe a opção, para a próxima versão
 
 - Pedido do dono: "vamos corrigir os 2 que estão fora, para já deixar
