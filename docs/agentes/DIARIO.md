@@ -4,6 +4,9 @@ Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
 ## 2026-10-18 · Segurança: rodada 5, ZERO decisões para o dono, e a varredura de segredo saiu do meu scratchpad para a bateria
+- Artifact "Segurança da semana" (rodada 5):
+  https://claude.ai/artifact/TNPTix937VGSnaYsANdRdr
+- Semana de 59 commits.
 
 ### Nada para o dono decidir nesta rodada
 Pela regra dele de 04/10, o relatório tem o tamanho da decisão. Esta semana são
