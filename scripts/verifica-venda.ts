@@ -18,6 +18,7 @@
 // Rode com: npm run conferir:venda
 import { readFileSync } from "node:fs";
 import { esqueceVenda, guardaVenda, vendaPendente, veioComprar } from "../lib/app/vendaPendente.ts";
+import { googleDaOTeste, opcaoPrincipalDoGoogle } from "../lib/app/opcoesDoGoogle.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -381,13 +382,36 @@ const CHAVE = "mq-venda-pendente";
     "se o interruptor mudar de lugar, o passo 3 do documento passa a mandar configurar coisa nenhuma"
   );
 
-  // A compra de OFERTA não pode virar compra de pacote: `purchasePackage`
-  // nunca seleciona uma oferta de elegibilidade "determinada pelo
-  // desenvolvedor", então os três descontos sumiriam em silêncio.
+  // A compra de OFERTA é comprada pela opção dela, com purchaseSubscriptionOption.
   conferir(
     "a oferta é comprada com purchaseSubscriptionOption",
     /purchaseSubscriptionOption/.test(subscribe) && /purchaseSubscriptionOption/.test(compras),
-    "com purchasePackage os descontos exit10, exit25 e save30 nunca são aplicados, e ninguém percebe: a compra funciona, só sai pelo preço cheio"
+    "a oferta de saída precisa ser comprada pela opção dela"
+  );
+
+  // O BOTÃO PRINCIPAL ESCOLHE A OPÇÃO, NO ANDROID (18/10/2026).
+  //
+  // O comentário que morava aqui dizia que o `purchasePackage` nunca escolhe
+  // uma oferta do desenvolvedor sozinho. O pedido do Play de 25/09 provou o
+  // contrário: o botão do mensal vendeu a `save30`, a oferta de retenção. A
+  // regra agora é explícita, e esta conferência cobra a regra e quem a usa.
+  const op = (id: string, base = false) => ({ id, productId: "annual100", isBasePlan: base });
+  const pacote = (...ids: [string, boolean?][]) => ({ identifier: "$rc_annual", product: { subscriptionOptions: ids.map(([i, b]) => op(i, !!b)) } });
+  const comTudo = pacote(["annual", true], ["annual:exit10"], ["annual:exit25"], ["annual:teste7"]);
+  const semTeste = pacote(["annual", true], ["annual:exit10"], ["annual:exit25"]);
+  conferir("com o teste disponível, o botão compra o teste", opcaoPrincipalDoGoogle(comTudo)?.id === "annual:teste7", String(opcaoPrincipalDoGoogle(comTudo)?.id));
+  conferir("sem o teste, compra o plano cheio, nunca o desconto", opcaoPrincipalDoGoogle(semTeste)?.id === "annual", String(opcaoPrincipalDoGoogle(semTeste)?.id));
+  conferir("sem opções do Google, devolve nulo (o iPhone segue com purchasePackage)", opcaoPrincipalDoGoogle({ identifier: "x", product: {} }) === null);
+  conferir("a tela sabe que o teste existe", googleDaOTeste(comTudo) === true && googleDaOTeste(semTeste) === false && googleDaOTeste({ identifier: "x" }) === null);
+  conferir(
+    "a compra principal do Android usa a opção escolhida",
+    /nativePlatform\(\) === "android" \? opcaoPrincipalDoGoogle\(pkg\) : null/.test(subscribe) &&
+      /opcao\s*\?\s*await p\?\.purchaseSubscriptionOption\(\{ subscriptionOption: opcao \}\)/.test(subscribe),
+    "sem isso, o RevenueCat escolhe a opção mais barata, e foi assim que o mensal saiu com a oferta de retenção",
+  );
+  conferir(
+    "e a tela não promete teste a quem a loja não vai dar",
+    /semTeste \? sub\.ctaSemTeste : sub\.trialCta/.test(subscribe),
   );
 }
 

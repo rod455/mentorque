@@ -6,7 +6,7 @@ import { usePrototype } from "@/lib/app/store";
 import { stripeConfigured } from "@/lib/app/stripeClient";
 import { trialDaysFor, trialPlatform, type Platform } from "@/lib/app/platform";
 import { iapKey, isLocalDev, isNativeApp, nativePlatform } from "@/lib/app/wrapper";
-import { compraCancelada, codigoDoErroDeCompra, googleOffer, hasActiveEntitlement, initPurchases, offerPrice, type GoogleOption, type RcPackage } from "@/lib/app/purchases";
+import { compraCancelada, googleDaOTeste, opcaoPrincipalDoGoogle, codigoDoErroDeCompra, googleOffer, hasActiveEntitlement, initPurchases, offerPrice, type GoogleOption, type RcPackage } from "@/lib/app/purchases";
 import { useNav, type View } from "@/lib/app/nav";
 import { funil } from "@/lib/app/funil";
 // A tela de entrar precisa saber que a pessoa veio de um botão de assinar.
@@ -358,7 +358,13 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
     setIapBusy(true);
     try {
       const p = await initPurchases(user.id);
-      const res = await p?.purchasePackage({ aPackage: pkg });
+      // No Android, a opção é escolhida AQUI, e não pelo RevenueCat: o teste
+      // grátis se o Google o oferece, senão o plano cheio, nunca um desconto
+      // (18/10/2026, ver opcaoPrincipalDoGoogle).
+      const opcao = nativePlatform() === "android" ? opcaoPrincipalDoGoogle(pkg) : null;
+      const res = opcao
+        ? await p?.purchaseSubscriptionOption({ subscriptionOption: opcao })
+        : await p?.purchasePackage({ aPackage: pkg });
       if (res && hasActiveEntitlement(res.customerInfo)) {
         setPremium(true);
         refreshSubscription();
@@ -515,6 +521,14 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
     </>
   );
 
+  // A folha do Google vai dar o teste a esta pessoa? Só o Android sabe dizer;
+  // quem já assinou antes não recebe o `teste7`, e a tela não promete o que a
+  // loja não vai dar (18/10/2026). Sem as opções do Google, segue o texto de
+  // sempre.
+  const semTeste =
+    isNativeApp() && nativePlatform() === "android" && !!iap &&
+    googleDaOTeste(plan === "monthly" ? iap.monthly ?? iap.annual : iap.annual ?? iap.monthly) === false;
+
   if (isNativeApp()) {
     // Paywall com compra interna (IAP) quando o RevenueCat está configurado.
     if (iap) {
@@ -554,7 +568,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
             })}
           </div>
           <Button size="lg" className="mt-4 w-full" onClick={buyNative} disabled={iapBusy}>
-            {iapBusy ? "…" : sub.trialCta.replace("{n}", String(trialDays))}
+            {iapBusy ? "…" : semTeste ? sub.ctaSemTeste : sub.trialCta.replace("{n}", String(trialDays))}
           </Button>
 
           {/*
@@ -581,7 +595,10 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
             // da Apple lê isso como preço incorreto (3.1.2(c)).
             const pkg = plan === "annual" ? iap.annual : iap.monthly;
             const preco = pkg?.product?.priceString ?? (plan === "annual" ? sub.planAnnualPrice : sub.planMonthlyPrice);
-            const fine = (plan === "annual" ? sub.trialFine : sub.trialFineMonthly).replace("{preco}", preco);
+            const fine = (semTeste
+              ? plan === "annual" ? sub.fineSemTeste : sub.fineSemTesteMonthly
+              : plan === "annual" ? sub.trialFine : sub.trialFineMonthly
+            ).replace("{preco}", preco);
             // Cada loja tem a sua conta e o seu lugar de cancelar.
             const renovacao = nativePlatform() === "android" ? sub.iapRenewNotePlay : sub.iapRenewNote;
             return (

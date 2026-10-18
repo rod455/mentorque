@@ -2227,6 +2227,11 @@ export function getContent(locale: Locale) {
       // contradição que a revisão da Apple trata como preço incorreto (3.1.2(c)).
       trialFine: T("Após o período grátis, {preco} cobrado anual. Cancele quando quiser.", "After the free trial, {preco} billed yearly. Cancel anytime."),
       trialFineMonthly: T("Após o período grátis, {preco} por mês. Cancele quando quiser.", "After the free trial, {preco} per month. Cancel anytime."),
+      // Para quem a loja NÃO oferece o teste (já assinou antes): a tela não
+      // promete o que a folha do Google não vai dar (18/10/2026).
+      ctaSemTeste: T("Assinar o Premium", "Subscribe to Premium"),
+      fineSemTeste: T("{preco} cobrado anual, a partir de hoje. Cancele quando quiser.", "{preco} billed yearly, starting today. Cancel anytime."),
+      fineSemTesteMonthly: T("{preco} por mês, a partir de hoje. Cancele quando quiser.", "{preco} per month, starting today. Cancel anytime."),
       planAnnual: T("Anual", "Yearly"),
       planAnnualPrice: T("R$ 239,90/ano", "R$ 239.90/yr"),
       planAnnualNote: T("R$ 19,99/mês", "R$ 19.99/mo"),

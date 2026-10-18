@@ -7,24 +7,13 @@
 // (`goog_…`). A resolução mora em wrapper.ts, junto do `sellsInApp()` que decide
 // as telas — os dois precisam concordar, e concordam por lerem a mesma fonte.
 import { iapKey } from "./wrapper";
+import type { GoogleOption, RcPackage } from "./opcoesDoGoogle";
 
-// Opção de assinatura do Google (plano base ou oferta). O `id` de uma oferta
-// vem como "planoBase:oferta" (ex.: "annual:exit10"); o `productId` é o id da
-// assinatura na Play (ex.: "annual100"), que também é o "produto antigo" numa
-// troca de plano — tudo mora na mesma assinatura.
-export type GoogleOption = {
-  id: string;
-  storeProductId?: string;
-  productId: string;
-  isBasePlan?: boolean;
-  pricingPhases?: { price?: { formatted?: string }; billingPeriod?: unknown }[];
-};
+// A parte pura da escolha de opção do Google mora em opcoesDoGoogle.ts, sem
+// dependência nenhuma, para a conferir:venda abrir no node (18/10/2026).
+export { googleDaOTeste, googleOffer, OFERTA_DE_TESTE, opcaoPrincipalDoGoogle } from "./opcoesDoGoogle";
+export type { GoogleOption, RcPackage } from "./opcoesDoGoogle";
 
-export type RcPackage = {
-  identifier: string;
-  packageType?: string;
-  product?: { priceString?: string; title?: string; identifier?: string; subscriptionOptions?: GoogleOption[] | null };
-};
 type CustomerInfo = { entitlements?: { active?: Record<string, unknown> } };
 type PurchasesPlugin = {
   configure: (o: { apiKey: string; appUserID?: string }) => Promise<unknown>;
@@ -49,11 +38,7 @@ type PurchasesPlugin = {
   logIn: (o: { appUserID: string }) => Promise<unknown>;
 };
 
-// Acha uma oferta do Google pelo id ("exit10", "save30") dentro de um pacote.
-export function googleOffer(pkg: RcPackage | undefined, offerId: string): GoogleOption | null {
-  const options = pkg?.product?.subscriptionOptions ?? [];
-  return options.find((o) => o.id === offerId || o.id.endsWith(`:${offerId}`)) ?? null;
-}
+
 
 // Preço formatado da primeira fase da oferta (o valor COM desconto).
 export function offerPrice(opt: GoogleOption | null): string | null {

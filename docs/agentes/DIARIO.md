@@ -3,6 +3,28 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-18 · Engenharia: o botão de compra do Android escolhe a opção, para a próxima versão
+
+- Pedido do dono: "vamos corrigir os 2 que estão fora, para já deixar
+  preparado para a próxima versão". Este é o primeiro; o Next 15 vem em
+  seguida, separado.
+- **O botão principal do Android compra a opção escolhida no código**: o
+  `teste7` quando o Google o oferece, senão o plano cheio, nunca uma oferta de
+  desconto. Antes quem escolhia era o RevenueCat (a opção mais barata), e a
+  única venda do Play saiu com a oferta de retenção. A etiqueta
+  `rc-ignore-offer` no console continua, como segunda trava e para as versões
+  até a 3.2.
+- **A tela não promete teste a quem a loja não vai dar**: quem já assinou
+  antes não recebe o `teste7`, e vê "Assinar o Premium" com "a partir de
+  hoje" na letra miúda. Sem as opções do Google (iPhone), segue o texto de
+  sempre.
+- A parte pura mudou para `lib/app/opcoesDoGoogle.ts`, sem dependência, e a
+  `conferir:venda` a abre no node: quatro degraus de regra e dois de quem a
+  usa. Três plantios com `npm run plantio`, três mordidas. `npm run conferir`
+  e a suíte de navegador `venda` (106 s) verdes.
+- **Vai na 3.3**, não na 3.2: a árvore da 3.2 é a 0d8678d, e este commit vem
+  depois. Na web, onde não há loja, nada muda.
+
 ## 2026-10-18 · Engenharia: a rodada 5 de Segurança lida, e a varredura de segredo passa a ver as chaves que a casa usa
 
 - Pedido do dono: "veja o que o agente de segurança criou, dê feedback e

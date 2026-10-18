@@ -106,6 +106,13 @@ oferta "determinada pelo desenvolvedor" entra na escolha. Sem a etiqueta, a
 principal do mensal com a `save30`, a R$ 20,99. Oferta nova de desconto
 nasce com a etiqueta, ou o botão principal passa a vendê-la.
 
+**Desde 18/10/2026 o botão principal escolhe a opção no código** (a partir da
+3.3): o `teste7` quando o Google o oferece, senão o plano cheio, nunca um
+desconto (`opcaoPrincipalDoGoogle`, em `lib/app/opcoesDoGoogle.ts`). A
+etiqueta continua, como segunda trava, e para as versões até a 3.2. E quem a
+loja não dá o teste (já assinou antes) vê "Assinar o Premium", sem a promessa
+de dias grátis.
+
 **O `teste7` foi criado em 17/10/2026 pela API**, com a conta de serviço do
 coletor, porque a nossa tela prometia "Começar 7 dias grátis" e a loja não
 tinha teste nenhum. Elegibilidade: quem nunca teve esta assinatura. Para a
