@@ -193,6 +193,41 @@ o contrário.
 
 ## Aprendizados
 
+### Quatro regras da rodada 5 (18/10/2026)
+
+**1. "Não soube medir" só é honesto depois de ler o texto do aviso e rodar o
+grep que ele implica.** Em 11/10 eu disse que não conseguia medir a
+exploitabilidade da 9,3 do Capacitor daqui, e isso soou cuidadoso. O veredito do
+dono mostrou que estava a uma leitura de distância: **todo aviso nomeia a
+condição dele**, e a condição vira grep. O GHSA exigia que a vítima tocasse num
+link dentro da WebView, em app que renderiza link vindo de fora; duas buscas no
+repositório (`dangerouslySetInnerHTML` e todos os `href`) responderam em um
+minuto. Tratar como exposta até prova em contrário continua certo para 9,3; o que
+não é certo é parar antes de procurar a prova que está ao alcance.
+
+**2. Recomendação sem custo manda o dono adivinhar.** "A 3.2 leva ou merece
+versão própria?" não se responde sem o preço de levar, e o preço era pequeno:
+correção de patch, `cap sync` reescrevendo o pino sozinho, e uma versão que já
+ia precisar de build. Toda recomendação sai com o custo do lado, e quando o custo
+é baixo isso é o que faz a decisão ser rápida.
+
+**3. "Está na main", "está no build" e "está no telefone" são três afirmações com
+três instrumentos.** Git responde a primeira. A segunda é a árvore registrada na
+ficha mais `git merge-base --is-ancestor`, e a hora do envio se pergunta à Apple
+pelo fluxo `x4VdaUSauBkkIl6q`. A terceira é `JA_PUBLICADAS`. Em 18/10 as três
+tinham respostas diferentes para o mesmo conserto: no repositório desde 11/10, na
+árvore do build de 17/10, e **ainda não** no telefone de ninguém. Responder uma e
+dizer as outras é a diferença entre relatar e tranquilizar.
+
+**4. Instrumento que vive fora do repositório deriva, e este papel existe para
+pegar isso.** A varredura de segredo morava no scratchpad da sessão e era
+reescrita de memória toda semana. Em 18/10 saiu diferente da anterior, e a
+diferença era justamente a forma de chave que o achado de 11/10 tinha ensinado.
+Virou `npm run conferir:segredo`. A regra geral: se uma fonte deste papel depende
+de um script que não está versionado, ela não é uma fonte, é uma lembrança.
+
+
+
 ### Três regras da rodada 4 (11/10/2026)
 
 **1. Tempo de execução é instrumento.** O que achou o conserto quebrado não foi

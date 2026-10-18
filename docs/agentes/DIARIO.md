@@ -3,6 +3,110 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-18 · Segurança: rodada 5, ZERO decisões para o dono, e a varredura de segredo saiu do meu scratchpad para a bateria
+
+### Nada para o dono decidir nesta rodada
+Pela regra dele de 04/10, o relatório tem o tamanho da decisão. Esta semana são
+zero, e por isso este registro é curto. As duas linhas de 11/10 foram decididas
+por ele e **não voltam**: o Capacitor foi aprovado e aplicado, e a chave do blog
+do Vocaboost saiu com "não vamos fazer".
+
+### O desfecho do Capacitor, com instrumento e hora para cada afirmação
+A regra de 06/10 diz que "está na main", "está no build" e "está no telefone" são
+três afirmações. As três, medidas hoje:
+- **No repositório: sim, desde 11/10 às 11h48 UTC** (commit 1487203, os quatro
+  pacotes em 8.5.1; instrumento: git).
+- **Na árvore de onde o build saiu: SIM.** A ficha da 3.2 registra
+  `Árvore do build: 0d8678d` (17/10 às 11h56 UTC), e
+  `git merge-base --is-ancestor 1487203 0d8678d` responde sim. É a disciplina que
+  a casa escreveu em 06/10 depois de a 3.0 sair sem o item principal, e desta vez
+  ela foi seguida.
+- **Enviado à Apple: build 73, em 17/10 às 12h45 UTC**, estado VALID, lido na
+  App Store Connect pelo fluxo `x4VdaUSauBkkIl6q`. São 49 minutos depois da
+  árvore, o que fecha a cronologia.
+- **No telefone das pessoas: AINDA NÃO.** A 3.2 não está em `JA_PUBLICADAS`, e a
+  última publicada é a 3.1, cuja árvore (34ffaac, 06/10) é ANTERIOR ao conserto,
+  conferido com o mesmo `is-ancestor`. Enquanto a 3.2 não for aprovada, todo
+  binário em uso está em 8.5.0.
+- E o limite de sempre, que aqui não é formalidade: **nenhum aparelho abriu esse
+  build**. A frase é "sem sinal ainda", nunca "nada quebrou".
+
+### Eu devia ter medido a exploitabilidade na rodada 4, e media
+O veredito do dono sobre a rodada 4 mostrou que o "não soube medir daqui" estava
+a uma leitura do aviso e um grep de distância. **Refiz o trabalho em vez de
+aceitar de fé**, porque conferir o que outro papel concluiu é o meu ofício:
+- o GHSA-rvm3-566m-v7fv exige que a vítima TOQUE num link dentro da WebView, em
+  app que renderiza link vindo de fora;
+- `dangerouslySetInnerHTML` aparece **4 vezes no repositório inteiro**, todas
+  blocos `<script>` com constante nossa (vigia de abertura e dado estruturado), e
+  três delas no site e não no app;
+- **todo `href` do app é literal fixo**: caminhos nossos, a política do Google, a
+  EULA da Apple, o nosso domínio e um `mailto:` com o endereço escapado.
+- Sem HTML de dado e sem `href` de dado, nenhuma tela pode renderizar link vindo
+  de fora. **Superfície não encontrada**, e agora por medição minha.
+- **O que eu continuo não alcançando**: se a WebView do aparelho transforma URL
+  em texto num link tocável por conta própria. Isso é o aparelho, não o código.
+
+### O que eu construí, e por que era uma fraqueza minha
+A varredura de segredo é a fonte nº 3 deste papel desde 19/09 e vivia **fora do
+repositório**, num script do meu scratchpad. O contêiner morre toda semana, e eu
+a reescrevia de memória. Hoje reescrevi e **saiu DIFERENTE da da semana passada**:
+ganhou a forma `sk-ant-`, que eu só pensei em acrescentar depois de achar a chave
+da Anthropic no n8n em 11/10. Instrumento que deriva de memória é exatamente o
+que este papel existe para pegar nos outros.
+- Virou **`npm run conferir:segredo`** (`scripts/verifica-segredo.mjs`), na
+  corrente da bateria, ao lado da `conferir:banco`. Oito formas de chave, 910
+  arquivos de texto lidos.
+- **O que muda**: roda a cada mudança em vez de uma vez por semana, então segredo
+  commitado numa terça era achado no domingo (até 6 dias de exposição) e agora é
+  achado antes do push. E qualquer pessoa roda, não só o agente de domingo.
+- **As duas exceções são nomeadas com motivo** (`.env.example` e uma skill de
+  fora do Google), e elas **não bastam**: o trecho ainda tem que parecer modelo.
+  Chave de verdade dentro do arquivo com exceção reprova igual.
+- **Quatro plantios, com a ferramenta da casa e um à mão:** chave real em arquivo
+  sem exceção (mordeu), chave real DENTRO do arquivo com exceção (mordeu, que é o
+  plantio que importa), JWT em documento (mordeu), e a bateria inteira com o
+  defeito de pé (código 1, com o arquivo restaurado pela cópia byte a byte).
+- **A primeira versão da minha heurística estava errada** e eu só vi pelo
+  plantio: ela reprovava "corrida longa de base64", e um nome de variável de 50
+  caracteres com underscore é corrida longa sem entropia nenhuma. O teste que
+  separa modelo de valor é **dígito**: toda chave desta casa tem, nome de exemplo
+  não. E o erro cai para o lado seguro.
+- **E ela entrou na fila do Guardião** (`no nascimento (autor), 18/10/2026`),
+  porque a `conferir:fila` reprovou a bateria quando eu esqueci. Conferência fora
+  da fila nunca é sorteada para prova e some do rodízio sem ninguém decidir isso,
+  então o esquecimento era exatamente o defeito que aquela conferência existe para
+  pegar. Ela me pegou.
+- **O que ela NÃO alcança, e é muito**: segredo que nunca passou pelo git. As
+  chaves em texto puro dos fluxos do n8n, que foram o achado das rodadas 2, 3 e
+  4, vivem no n8n. Nenhuma conferência de repositório vê aquilo. A varredura
+  semanal do diff também continua, porque ela conta exposição com commit e linha
+  e alcança o que foi apagado depois.
+
+### As fontes, em uma linha cada
+- **Dependências**: 27 falhas contra 29 em 11/10. Produção caiu de **7 para 5**,
+  e as críticas de **3 para 1**, porque o Capacitor saiu da lista com o 8.5.1.
+  **22 são só de desenvolvimento**, contadas e não listadas. O que sobra em
+  produção é o conjunto conhecido: `next` (crítica, `fixAvailable` agora 16.4.2,
+  versão maior), `postcss`, `nanoid` e `source-map-js` (os três sem caminho de
+  entrada de estranho, pela regra 1 do manual) e `qs` dentro do SDK do Stripe.
+- **Segredo escapando: nenhum** nos 59 commits da semana, e o zero provado nas
+  sete formas numa cópia do diff. O `.gitignore` não foi tocado.
+- **Supabase**: avisos **idênticos** aos de 11/10, nos dois tipos.
+- **Estado do banco**: 3 funções `SECURITY DEFINER` com `pg_temp` por último e
+  sem `anon`; **16 views, todas declarando `security_invoker`**, inclusive as
+  duas que nasceram esta semana (`email_resumo_30d` e `jornada_sem_engajamento`);
+  e zero tabelas com RLS desligado.
+- **Permissões**: não é a primeira rodada do mês. A próxima é **01/11/2026**.
+
+### Contra a régua
+Cumpri 1 a 5 e 7 a 9. O 6 não se aplica (nenhuma dependência trocada por mim).
+**O que eu quase deixei de fazer**: escrevi primeiro que não tinha medido o
+custo da `conferir:segredo` na bateria de todo mundo, e confissão não é medida.
+Medi: **1,65 s** (três rodadas: 1654, 1707 e 1636 ms) contra **37 s** da bateria
+inteira, ou seja **4,5%**. Dito com número, dá para discordar; dito como
+confissão, não dava.
+
 ## 2026-10-17 · Engenharia: a 3.2 pronta para o botão, com a bateria completa verde
 
 - Pedido do dono: "vamos implementar isso tudo e subir a nova versão".
