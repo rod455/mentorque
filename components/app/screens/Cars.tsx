@@ -140,6 +140,7 @@ export function CarsScreen() {
               <Linha
                 key={v.id}
                 data-carro={v.id}
+                controlesDentro
                 esquerda={
                   <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite-800 text-teal">
                     {v.photo ? (

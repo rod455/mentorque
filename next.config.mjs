@@ -65,6 +65,12 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // O selo do Next no canto da tela, só em desenvolvimento (18/10/2026). No
+  // Next 15 ele fica em cima do botão "Início" da barra de baixo e recebe o
+  // toque no lugar dele: 15 suítes de navegador quebraram no clique. A versão
+  // publicada nunca teve o selo; erro de verdade continua abrindo a janela de
+  // erro do Next.
+  devIndicators: false,
   ...(native
     ? {
         output: "export",

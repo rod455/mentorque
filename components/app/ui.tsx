@@ -397,6 +397,7 @@ export function Linha({
   onClick,
   tom = "normal",
   className,
+  controlesDentro = false,
   ...resto
 }: {
   rotulo?: string;
@@ -408,12 +409,32 @@ export function Linha({
   onClick?: () => void;
   tom?: "normal" | "alerta" | "mudo";
   className?: string;
+  /**
+   * A linha tem botões DENTRO dela (editar, um alerta tocável). Botão dentro
+   * de botão é HTML inválido, e o React 19 do Next 15 passou a denunciar isso
+   * na tela de desenvolvimento (18/10/2026, a lista de Carros). Com esta
+   * marca, a linha vira um `div` com papel de botão, focável e acionável por
+   * Enter e espaço, e os botões de dentro continuam sendo botões.
+   */
+  controlesDentro?: boolean;
 } & Record<`data-${string}`, string | boolean | undefined>) {
   const corTitulo = tom === "alerta" ? "text-coral" : tom === "mudo" ? "text-cream/70" : "text-cream";
-  const Tag = onClick ? "button" : "div";
+  const Tag = onClick && !controlesDentro ? "button" : "div";
+  const comoBotao =
+    onClick && controlesDentro
+      ? {
+          role: "button" as const,
+          tabIndex: 0,
+          onKeyDown: (e: { key: string; target: unknown; currentTarget: unknown; preventDefault: () => void }) => {
+            if (e.target !== e.currentTarget) return;
+            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); }
+          },
+        }
+      : {};
   return (
     <Tag
       onClick={onClick}
+      {...comoBotao}
       className={["flex w-full items-center gap-3 border-b border-white/[0.06] py-3.5 text-left", onClick ? "active:bg-white/[0.03]" : "", className].filter(Boolean).join(" ")}
       {...resto}
     >
