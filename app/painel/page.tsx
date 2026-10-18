@@ -102,7 +102,9 @@ function CartaoGrafico({ titulo, children }: { titulo: string; children: React.R
   );
 }
 
-export default async function Painel({ searchParams }: { searchParams: { chave?: string } }) {
+// No Next 15 o searchParams chega como Promise (18/10/2026).
+export default async function Painel(props: { searchParams: Promise<{ chave?: string }> }) {
+  const searchParams = await props.searchParams;
   const esperada = process.env.DADOS_CHAVE;
   if (!esperada || searchParams.chave !== esperada) {
     return (

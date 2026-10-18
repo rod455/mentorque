@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/stores";
 import { jsonLd } from "@/lib/jsonLd";
 import { irmaosDe, type Bloco, type Guia } from "@/lib/site/guias";
+import Link from "next/link";
 
 const SITE = "https://www.mentorque.com.br";
 
@@ -190,11 +191,11 @@ export function GuiaDeSintoma({ guia: g }: { guia: Guia }) {
           para a home. */}
       <header className="sticky top-0 z-40 border-b border-white/5 bg-graphite/95 px-5 py-3 backdrop-blur sm:px-8">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
-          <a href="/" className="flex shrink-0 items-center gap-2.5" aria-label="Mentorque">
+          <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="Mentorque">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo/mark.svg" alt="" className="h-7 w-7" />
             <span className="hidden font-display text-sm font-semibold text-cream/80 sm:inline">Mentorque</span>
-          </a>
+          </Link>
           <div className="flex shrink-0 items-center gap-2">
             <a
               href={PLAY_STORE_URL}
@@ -386,7 +387,7 @@ export function GuiaDeSintoma({ guia: g }: { guia: Guia }) {
             informado na hora de decidir.
           </p>
           <p className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
-            <a href="/" className="underline underline-offset-4 hover:text-cream">Mentorque</a>
+            <Link href="/" className="underline underline-offset-4 hover:text-cream">Mentorque</Link>
             <a href="/privacidade" className="underline underline-offset-4 hover:text-cream">Privacidade</a>
             <a href="/termos" className="underline underline-offset-4 hover:text-cream">Termos</a>
           </p>

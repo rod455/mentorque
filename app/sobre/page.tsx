@@ -3,6 +3,7 @@ import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/stores";
 import { DEFINICAO_MENTORQUE, jsonLd } from "@/lib/jsonLd";
 import { getContent } from "@/lib/app/content";
 import { LINKS_DOS_GUIAS } from "@/lib/site/guias/links";
+import Link from "next/link";
 
 // mentorque.com.br/sobre — a resposta canônica sobre o produto.
 //
@@ -189,9 +190,9 @@ export default function Page() {
 
       <header className="border-b border-white/5 px-5 py-4 sm:px-8">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-4">
-          <a href="/" className="font-display text-sm font-semibold text-cream/70 hover:text-cream">
+          <Link href="/" className="font-display text-sm font-semibold text-cream/70 hover:text-cream">
             ← Mentorque
-          </a>
+          </Link>
           <a href="/barulho-no-carro" className="text-sm text-cream/50 underline underline-offset-4 hover:text-cream">
             Barulho no carro
           </a>
@@ -304,7 +305,7 @@ export default function Page() {
             objetivo é te deixar mais bem informado na hora de decidir.
           </p>
           <p className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
-            <a href="/" className="underline underline-offset-4 hover:text-cream">Mentorque</a>
+            <Link href="/" className="underline underline-offset-4 hover:text-cream">Mentorque</Link>
             {/* Os guias vêm da lista pelo mesmo motivo do rodapé da home: o
                 caminho escrito aqui à mão era de quando só existia um, e os
                 três seguintes ficaram sem link a partir das duas páginas com

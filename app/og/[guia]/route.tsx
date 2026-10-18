@@ -18,7 +18,9 @@ export const runtime = "nodejs";
 
 const fonte = (arquivo: string) => readFileSync(join(process.cwd(), "assets/fontes", arquivo));
 
-export async function GET(_req: Request, { params }: { params: { guia: string } }) {
+// No Next 15 os parâmetros da rota chegam como Promise (18/10/2026).
+export async function GET(_req: Request, props: { params: Promise<{ guia: string }> }) {
+  const params = await props.params;
   const g = GUIAS.find((x) => x.caminho === `/${params.guia}`);
   if (!g) return new Response("guia desconhecido", { status: 404 });
 

@@ -105,7 +105,7 @@
     "@vercel/analytics": "^2.0.1",
     "appsflyer-capacitor-plugin": "6.18.0",
     "framer-motion": "^11.3.24",
-    "next": "14.2.35",
+    "next": "15.5.28",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "stripe": "^17.7.0"
@@ -117,7 +117,7 @@
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.0",
-    "eslint-config-next": "14.2.5",
+    "eslint-config-next": "15.5.28",
     "pdf-parse": "^2.4.5",
     "postcss": "^8.4.41",
     "tailwindcss": "^3.4.10",

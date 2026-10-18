@@ -1,4 +1,9 @@
 import type { MetadataRoute } from "next";
+
+// Estático de propósito (18/10/2026): no Next 15 os arquivos de metadados viram
+// rota dinâmica por padrão, e a exportação do app nativo (output: export)
+// recusa rota dinâmica. O conteúdo não depende de pedido nenhum.
+export const dynamic = "force-static";
 import { GUIAS } from "@/lib/site/guias";
 
 // Mapa do site para os buscadores.

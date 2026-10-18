@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
 
 // Shared chrome + typography for the legal pages (privacy, etc.). Server
 // component, no client hooks — these pages are static and indexable.
@@ -21,10 +22,10 @@ export function LegalPage({
     <div className="min-h-screen bg-graphite text-cream">
       <header className="border-b border-white/5">
         <div className="mx-auto flex h-16 w-full max-w-2xl items-center justify-between px-5 sm:px-8">
-          <a href="/" className="inline-flex items-center gap-2">
+          <Link href="/" className="inline-flex items-center gap-2">
             <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber/15 font-display text-sm font-bold text-amber">M</span>
             <span className="font-serif text-lg font-semibold text-cream">Mentorque</span>
-          </a>
+          </Link>
           <a href={altHref} className="text-sm font-medium text-cream/60 hover:text-cream">{altLabel}</a>
         </div>
       </header>
@@ -47,7 +48,7 @@ export function LegalPage({
         </div>
 
         <div className="mt-12 border-t border-white/5 pt-6 text-sm">
-          <a href="/" className="text-amber hover:text-amber-300">← {homeLabel}</a>
+          <Link href="/" className="text-amber hover:text-amber-300">← {homeLabel}</Link>
           <p className="mt-4 text-xs text-cream/40">© 2026 Mentorque</p>
         </div>
       </main>
