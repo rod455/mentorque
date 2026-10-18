@@ -4,9 +4,10 @@ Aberta em 07/10/2026, logo depois de a 3.1 (build 71) chegar às duas lojas.
 Tudo o que entra aqui **já roda na web** pelo deploy da Vercel; o binário só
 importa para o app das lojas.
 
-**Onde a 3.2 está:** pronta para o botão, ainda não gerada. Bateria completa
-de navegador verde em 17/10 (1005 s) e build local verde, depois do último
-commit de código (dca2448).
+**Onde a 3.2 está:** publicada nas duas lojas em 18/10/2026, build 73. Lido
+nas APIs: App Store com a versão 3.2 READY_FOR_SALE (build 73 enviado em
+17/10 às 12h45 UTC) e Play com a 3.2 na faixa de produção, versionCode 73,
+status completed. O aviso de versão nova aponta para 73 nas duas lojas.
 
 **Árvore do build:** 0d8678d (entregue ao dono em 17/10 às 12h13 UTC como o
 commit para apertar; o que entrar na `main` depois dele é da PRÓXIMA versão,

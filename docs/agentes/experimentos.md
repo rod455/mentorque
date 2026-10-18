@@ -145,9 +145,13 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   recusa, e o veredito não precisa dele.
 - Aprovação: não se aplica (texto, modo inicial da tela e ênfase; sem variantes,
   sem tocar em preço, plano ou cobrança)
-- Início: 2026-10-16 na web; no app, com a 3.2 · Ler a partir de: 2026-10-30
-  (direcional) e 2026-11-13. A leitura separa por `versao`: na 3.1 e antes a
-  tela de entrar continua nascendo em "Entrar".
+- Início: 2026-10-16 na web; **no app desde 18/10, com a 3.2** (build 73,
+  lido nas APIs das duas lojas) · Ler a partir de: **2026-11-01**
+  (direcional) e **2026-11-15**, contadas da loja e não do commit (retorno do
+  dono de 17/10). A leitura separa por `versao`: na 3.1 e antes a tela de
+  entrar continua nascendo em "Entrar". Desde a 3.2 a folha grava
+  `convite_conta`, `aceitou_convite_conta` e `recusou_convite_conta`, então o
+  degrau passa a ter instrumento próprio além da reconstrução pelo carro.
 - TOCA O DEGRAU DE OUTRA APOSTA, dito no dia (regra de 02/10): o
   `convite-do-carro-nao-queima-com-convidado` (ler em 23/10) vive no mesmo
   instante da jornada, logo depois de salvar o carro, e mede o convite de
@@ -291,9 +295,11 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   `anon_id`); e `abriu_quiz` com `origem = ja-respondeu` no dia do
   onboarding tem de ir a zero · Duração: 4 semanas
 - Aprovação: pedido do dono em 2026-10-08
-- Início: 2026-10-08 na web (commit bd95618); no app, com a 3.2 · Ler a
-  partir de: 2026-10-22 (direcional) e 2026-11-05. A leitura separa por
-  versão: na 3.1 e antes o muro continua de pé.
+- Início: 2026-10-08 na web (commit bd95618); **no app desde 18/10, com a
+  3.2** (build 73) · Ler a partir de: **2026-11-01** (direcional) e
+  **2026-11-15**, contadas da loja: as datas antigas (22/10 e 05/11) contavam
+  da web, onde quase ninguém responde o quiz. A leitura separa por versão: na
+  3.1 e antes o muro continua de pé.
 - Antes (lido em 08/10 na `quiz_respostas`): de 332 aparelhos que
   responderam o onboarding, 0 responderam um quiz diário no mesmo dia (zero
   estrutural, escrito pelo índice), 4 no dia seguinte, 9 em qualquer dia

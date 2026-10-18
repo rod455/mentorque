@@ -59,7 +59,10 @@ const LATEST = {
   // ninguém: 29 aparelhos Android reportam `versao = 3.0.0` no funil desde
   // 04/10, o mais recente às 20h39 de hoje.
   // Antes: 2.9 = 69, 2.8 = 68, 2.7 = 67, 2.6 = 66, 2.4 = 63, 1.7 = 55.
-  android: 71, // 3.1 na Play, publicada em 07/10
+  // 18/10/2026: 3.2, build 73, nas duas lojas, lido na API do Play (produção,
+  // versionCode 73, completed) e na da Apple (READY_FOR_SALE, build 73).
+  // Antes: 3.1 = 71, 3.0 = 70.
+  android: 73, // 3.2 na Play, publicada em 18/10
   // A LIÇÃO DESTE CAMPO, que vale mais que o número: em 12/09 ele foi para 74
   // pela lembrança de alguém, e o banner acendeu para todo mundo na 2.4
   // apontando para um build que a loja não tinha. O erro tem lados de custo
@@ -93,7 +96,7 @@ const LATEST = {
   // dono), então a confirmação é a de sempre: o retrato do `app_store_connect`
   // de 06/10 tem que responder READY_FOR_SALE para a 3.0; se não responder,
   // este campo volta para 69 na hora.
-  ios: 71, // 3.1 na App Store, publicada em 07/10
+  ios: 73, // 3.2 na App Store, aprovada em 18/10
   // A QUAL VERSÃO DE MARKETING OS DOIS NÚMEROS ACIMA CORRESPONDEM (25/09/2026).
   //
   // Existe porque neste dia o banner NÃO acendeu, e a causa não era loja nem
@@ -109,7 +112,7 @@ const LATEST = {
   //
   // O app ignora este campo (lê só `android`/`ios`), então ele não muda nada
   // para quem consome.
-  versao: "3.1",
+  versao: "3.2",
 };
 
 export function GET() {

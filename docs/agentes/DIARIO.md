@@ -3,6 +3,29 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-18 · Engenharia: a 3.2 nas duas lojas, o aviso de versão nova aceso e o repositório abre a 3.3
+
+- Aviso do dono: "foi aprovado o 3.2 da apple. Vamos subir a versão de
+  atualização para todos". Lido antes de escrever, às 18h15 UTC: a API da
+  App Store responde a versão 3.2 READY_FOR_SALE com o build 73 (enviado em
+  17/10 às 12h45 UTC); a API do Play responde a faixa de produção com a 3.2,
+  versionCode 73, status completed (edição aberta só para ler e apagada em
+  seguida). O funil por versão não foi lido: a integração do Supabase
+  recusou a consulta nesta hora.
+- **O aviso de versão nova aponta para 73 nas duas lojas** (`/api/app/latest`),
+  e vale assim que a Vercel publicar este commit. `3.2` em `JA_PUBLICADAS`,
+  build 73 e árvore 0d8678d nos mapas, piso do versionCode em 74, e os três
+  lugares da versão de marketing em 3.3. `conferir:versoes`: 7 commits da
+  ficha da 3.2 dentro da árvore, 0 fora.
+- **As apostas que esperavam a 3.2 têm data nova, contada da loja**:
+  `conta-que-sabe-que-veio-do-carro` e o quiz do dia 1 leem a partir de
+  01/11 (direcional) e 15/11.
+- **A ficha da 3.3 abre com dois itens**: o botão de compra do Android que
+  escolhe a opção (38c7d54) e o Next 15 (505435b e 4193e05).
+- **O que segue fora**, relido às 18h36 UTC na API: o teste grátis no iPhone, zero ofertas nas duas assinaturas (configuração no App Store
+  Connect, na lista do dono). A 3.2 no iPhone está prometendo 3 dias que a
+  Apple não dá, para todo mundo que atualizar.
+
 ## 2026-10-18 · Engenharia: o Next 15 no ar, e os avisos de segurança de produção caem de 32 para 9
 
 - Pedido do dono: "vamos corrigir os 2 que estão fora". Segundo item:

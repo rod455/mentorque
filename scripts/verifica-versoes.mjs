@@ -153,6 +153,11 @@ const JA_PUBLICADAS = [
   // código entre a árvore entregue ao dono, 34ffaac, e a publicação).
   // Acrescentada na hora do aviso.
   "3.1",
+  // Build 73, nas duas lojas em 18/10/2026, aviso do dono ("foi aprovado o 3.2
+  // da apple"). Lida antes de escrever: a App Store Connect pela API (versão
+  // 3.2 READY_FOR_SALE, build 73 enviado em 17/10 às 12h45 UTC) e a API do
+  // Play (faixa de produção com a 3.2, versionCode 73, status completed).
+  "3.2",
 ];
 
 // O BUILD DE CADA VERSÃO PUBLICADA (30/09/2026).
@@ -181,6 +186,7 @@ const BUILD_PUBLICADO = {
   "2.9": 69,
   "3.0": 70,
   "3.1": 71,
+  "3.2": 73,
 };
 
 // A ÁRVORE DE CADA BUILD PUBLICADO (06/10/2026).
@@ -206,6 +212,10 @@ const ARVORE_DO_BUILD = {
   // Entregue ao dono em 06/10 às 18h03 UTC como "o commit para apertar";
   // depois dele só entrou o retrato diário (4fe5d5d), sem código de app.
   "3.1": "34ffaac",
+  // Entregue ao dono em 17/10 às 12h13 UTC como "o commit para apertar"; a
+  // main estava em bbd7120 na hora, que é a 0d8678d mais um commit de diário
+  // (o código é o mesmo). A Apple recebeu o build 73 às 12h45 UTC.
+  "3.2": "0d8678d",
 };
 
 import { readFileSync, existsSync } from "node:fs";
