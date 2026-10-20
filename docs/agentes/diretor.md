@@ -529,6 +529,24 @@ credibilidade do resto, que nesta rodada estava certo.
   está fora" por "reconecte a organização do Mentorque", que é um pedido que o
   dono consegue atender.
 
+- 2026-10-20: **pedido que sai de uma fila precisa dizer onde foi parar.** A
+  Mídia concluiu o meu pedido do OneLink com a resposta certa, apagou a linha da
+  fila entre papéis como a regra manda, e o clique que faltava nunca entrou na
+  lista do dono: ficou dez dias em lugar nenhum, com a atribuição 100% cega. As
+  duas filas têm conferência de formato e nenhuma tem conferência de PASSAGEM.
+  Enquanto não tiver, é trabalho desta rodada: toda segunda, conferir se o que
+  saiu da fila entre papéis na semana tem desfecho escrito ou destino novo.
+- 2026-10-20: **antes de repassar número de outro papel na manchete, refazer a
+  consulta.** A série do portão da conta é achado do CRO, e eu a refiz no banco
+  antes de publicar, o que custou dois minutos e me deu a série de quatro semanas
+  que a rodada dele não tinha (53, 48, 101, 174). Repassar vira telefone sem fio;
+  refazer vira série.
+- 2026-10-20: **conserto só está no binário se o commit for ancestral da árvore
+  do build.** Conferido com `git merge-base --is-ancestor` em vez de confiar na
+  data: o conserto do portão é de 16/10 às 13h47 e a árvore da 3.2 é de 17/10,
+  então entrou. É a régua de 06/10 (afirmar estado com instrumento) aplicada a
+  "está no app": data mais nova não prova inclusão, ancestralidade prova.
+
 ## Direcionamentos do dono
 
 - Entrega às segundas, 08:00 (horário de Brasília), com notificação.

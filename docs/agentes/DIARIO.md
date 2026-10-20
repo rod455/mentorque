@@ -61,6 +61,91 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   com o relatório inteiro, porque tudo que não depende do banco já está lido (o
   retrato, o diário das sete rodadas, as duas filas e o git log da janela).
 
+### FECHADA no mesmo dia, 20/10 às 7h30: o dono reconectou e o banco respondeu
+- Dono: "pode tentar novamente". O `list_projects` voltou a trazer o Mentorque
+  (`ajaxhsvjvmqtiyzelgrd`, organização `oogzvojiytkjrltyxcht`) e as consultas
+  passaram. Relatório publicado:
+  https://claude.ai/artifact/RP3hUizhik82r8Cy5Uxhj6
+- **O NÚMERO DA SEMANA: 141 contas novas contra 72, a R$ 3,18 contra R$ 6,57,
+  com o gasto CAINDO 5% (R$ 449,10 contra R$ 472,93).** Melhor semana de
+  aquisição da história. Aberturas 655 contra 409, visitantes 488 contra 306,
+  pessoas com carro 305 contra 170, pessoas que perguntaram ao Biela 42 contra
+  26, paywall 64 contra 39, checkout 1 contra 3, assinou 0. Todas as medidas de
+  pessoa em PESSOAS DISTINTAS pela função `identidade`, que é a correção do erro
+  de unidade de 12/10.
+- **A MAIOR QUEBRA DO PRODUTO, achado do CRO em 16/10 e REFEITO POR MIM no banco
+  hoje antes de repassar:** 305 pessoas cadastraram carro na semana e 174 nunca
+  criaram conta. A série é 53, 48, 101 e 174 nas quatro semanas: a taxa fica
+  perto de 43% e o que triplicou foi o volume, então a perda cresce junto com o
+  dinheiro. Para dar tamanho: 64 pessoas viram o paywall na mesma semana, ou
+  seja o portão da conta perde quase três vezes mais gente do que o paywall
+  inteiro vê. E das 131 que criaram conta, 121 criaram em até DOIS MINUTOS e
+  exatamente uma depois de uma hora.
+  - CONFERI O QUE NÃO SE SUPÕE: o conserto ("quem toca em Criar minha conta para
+    de cair numa tela de Entrar", `79707a2`, 16/10 às 13h47) é ancestral da
+    árvore da 3.2 (`0d8678d`), publicada em 18/10. Então está no binário. A
+    ressalva que a conferência não alcança: a base Android atualiza ao longo de
+    dias, o corte não é limpo, e a primeira coorte com o conserto na mão da
+    maioria é a que fecha em 02/11.
+- **A RETENÇÃO CAIU NA COORTE QUE FECHOU: 8 de 69 (11,6%)**, depois de 9 de 51
+  (17,6%) e 12 de 57 (21,1%). A de 12/10 está em 21 de 131 (16,0%) de piso e
+  fecha em 26/10. **E eu NÃO consigo dizer se é produto ou mistura**, porque a
+  origem de 311 de 311 cadastros de 28 dias é "(direto)". A cegueira da
+  atribuição deixou de ser problema de marketing e passou a impedir a leitura da
+  métrica que o dono escolheu. Virou a prioridade 2.
+- ATIVAÇÃO com a régua nova de 17/10: 28 de 57 (49%) na coorte de 28/09 e 28 de
+  69 (41%) na de 05/10. A régua antiga dava 0 de 57 para a mesma coorte: o
+  conserto do CRO e da Engenharia tirou a métrica de um zero estrutural.
+- PLACAR das minhas prioridades de 12/10, as TRÊS fecharam: (1) a busca pausada
+  em 14/10 por decisão do dono, confirmada em duas coletas (ENABLED no dia 13,
+  PAUSED no dia 14); (2) o portão do aviso gravando a recusa FEITO em 17/10, e
+  maior que o pedido, porque foram TRÊS portões e seis eventos novos (`1be2b21`);
+  (3) a leitura do OneLink RESPONDIDA pela Mídia em 15/10 sem o console, com dois
+  instrumentos, e a resposta é "clique mais linha".
+- **O BURACO QUE EU ACHEI HOJE, e ele é entre as duas filas:** a Mídia concluiu o
+  pedido do OneLink e apagou a linha da fila entre papéis, como a regra manda, e
+  **o clique nunca entrou na lista do dono**. Conferido hoje: zero menção a
+  OneLink em `acoes-do-dono.md`. É a falha que esta casa nomeou em 03/10 e para a
+  qual criou a fila: recomendação que depende de outro envelhece calada. A fila
+  nova cobre papel para papel, a do dono cobre o que depende dele, e ninguém
+  cobre a PASSAGEM de uma para a outra. Levei o item para a lista do dono hoje,
+  começando por leitura e não por criação, porque em 22/09 um item de OneLink
+  saiu daquela lista marcado como feito com base num painel que respondia outra
+  pergunta. E propus a conferência que faria o buraco gritar: ao apagar linha da
+  fila, o diário recebe o desfecho com a palavra FECHA e a `conferir:entre`
+  reprova quando a linha desaparece sem ele.
+- **VEREDITOS: sete rodadas, sete vereditos, nenhum meu.** A condição que o dono
+  pôs em 13/10 (se faltar algum, eu escrevo) não precisou valer: conferido em
+  dois instrumentos, sete seções datadas e zero dia de atraso para os oito
+  manuais. Uma linha por papel está no artifact; o resumo do que cada um entregou:
+  CRO achou a quebra do portão e abriu pela fila antes do retrato; Mídia respondeu
+  a fila com dois instrumentos e declarou que as duas réguas pararam de concordar;
+  QA pegou erro próprio de classificação (cortesia contada como venda) antes de
+  publicar; Guardião declarou que a própria regra do critério 10 estava escrita e
+  não estava valendo; Segurança abriu com ZERO decisões para o dono e levou a
+  varredura de segredo do scratchpad para a bateria; ASO declarou ter proposto em
+  cima de uma linha que não estava no ar; Conteúdo disse que a fila de gravação
+  não andou em vez de propor a quarta pauta por cima das três paradas.
+- **CRUZAMENTO DA SEMANA, e ele mudou de sinal:** TRÊS papéis declararam erro
+  próprio na mesma semana, cada um com número do lado (CRO, ASO e QA). Nas
+  semanas anteriores o cruzamento achava o mesmo TIPO DE ERRO em papéis
+  diferentes; nesta ele acha o mesmo tipo de CORREÇÃO, e os três erros são do
+  tipo que o veredito anterior de cada um cobrou. Registro como padrão para
+  acompanhar, não como vitória: duas semanas não fazem hábito.
+- PRIORIDADES: (1) CRO, sexta 23/10: medir o portão da conta semana a semana e
+  por versão do app, agora que o conserto está nas lojas, com a linha de base de
+  121 de 305 (40%); (2) DO DONO: uma tela na AppsFlyer (Configuration > OneLink),
+  que destrava a leitura da retenção; (3) proposta de conferência da passagem
+  entre as filas, se ele aprovar.
+- **A MINHA RÉGUA: cumpri 9 dos 11.** Falhou o critério 4, e é a correção do erro
+  da rodada passada: o placar carregava uma prova que não se divide, com
+  numerador em eventos e denominador em pessoas. Por pessoa distinta, a aceitação
+  do aviso é 38%, 35%, 24% e 20% (13 de 34, 13 de 37, 11 de 46, 19 de 94): a
+  direção que eu publiquei se sustenta nos três instrumentos, o nível não era taxa
+  de nada. E falhou o direcionamento do horário: rodada de segunda publicada na
+  terça, com a causa no topo do relatório. O que faltou no aviso de ontem: dizer
+  quanto tempo eu levaria depois de ele reconectar.
+
 ## 2026-10-18 · Engenharia: a 3.2 nas duas lojas, o aviso de versão nova aceso e o repositório abre a 3.3
 
 - Aviso do dono: "foi aprovado o 3.2 da apple. Vamos subir a versão de
