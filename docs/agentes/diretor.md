@@ -514,6 +514,21 @@ credibilidade do resto, que nesta rodada estava certo.
   de cada papel, e o CRUZAMENTO entre papéis. Reescrever veredito já escrito é
   produzir o segundo veredito da mesma rodada.
 
+- 2026-10-20: **razão só existe se numerador e denominador estiverem na mesma
+  unidade.** Eu publiquei "17 de 306 visitantes ligaram o aviso (5,6%)" com o
+  numerador em EVENTOS e o denominador em PESSOAS distintas, e a mesma pessoa
+  gera dois eventos daquele par. O CRO leu 7 por pessoa e o dono leu 7 também,
+  com 46 de denominador. Os três concordam na direção e discordam no nível, e
+  o nível que eu chamei de taxa não era taxa de nada. Antes de dividir, dizer
+  em voz alta de que unidade é cada metade.
+- 2026-10-20: **quando o banco recusa, o teste que separa a causa é o
+  `list_projects`.** Erro de permissão não diz se o banco caiu ou se a
+  integração mudou de organização. Em 14/09 e em 20/10 a lista respondeu com
+  projetos de OUTRA organização, os dois saudáveis, o que prova que a
+  ferramenta funciona e o alcance mudou. Dois minutos de teste trocam "o banco
+  está fora" por "reconecte a organização do Mentorque", que é um pedido que o
+  dono consegue atender.
+
 ## Direcionamentos do dono
 
 - Entrega às segundas, 08:00 (horário de Brasília), com notificação.

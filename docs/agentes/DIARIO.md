@@ -3,6 +3,64 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-20 · Diretor: rodada PARADA, o banco recusou por permissão, e a integração está apontada para outra organização
+
+- **A rodada de segunda 19/10 não fechou, e o motivo é o do direcionamento de
+  31/08: o banco não respondeu.** Pela regra do dono eu PARO e aviso para ele
+  reconectar, em vez de escrever o relatório só com o retrato. Não publiquei
+  artifact.
+- **O QUE EU TENTEI, com hora.** Duas consultas ao projeto
+  `ajaxhsvjvmqtiyzelgrd` (o funil por semana e um `count(*)` simples em
+  `funil_eventos`), às 09h30 e 09h32 UTC de 20/10: as duas devolveram
+  `MCP error -32600: You do not have permission to perform this action`.
+- **E O TESTE QUE SEPARA A CAUSA, porque ausência não é causa.** O
+  `list_projects` responde normalmente e devolve DOIS projetos, os dois
+  `ACTIVE_HEALTHY`: `concurso-brasil` e `meulivrinhodecolorir`, ambos da
+  organização `qlimhklgjsrlbbylbfzj`. O Mentorque
+  (`ajaxhsvjvmqtiyzelgrd`, organização `oogzvojiytkjrltyxcht`) NÃO está na
+  lista. Então não é banco fora do ar nem integração quebrada: **a integração
+  desta sessão está apontada para outra organização**, e o erro de permissão é o
+  que se espera de um projeto que ela não alcança. É o mesmo quadro de 14/09,
+  quando a lista trouxe Inglês20minutos e bolaonacopa.
+- **O QUE EU CONFERI SEM O BANCO, e está pronto para quando ele voltar:**
+  - as sete rodadas da semana (Conteúdo 13/10, QA 14/10, Mídia 15/10, ASO 15/10,
+    CRO 16/10, Guardião 17/10, Segurança 18/10) TÊM veredito no manual de cada
+    papel, escritos no mesmo dia nas sessões com o dono. Conferido em dois
+    instrumentos: sete seções datadas e a `conferir:agentes`, que imprime zero
+    dia de atraso para os oito manuais. Pela condição que o dono aceitou em
+    13/10, eu só escrevo veredito que não exista, e não falta nenhum;
+  - a `conferir:agentes` e a `conferir:entre` passam, e o conserto da expressão
+    de 12/10 está de pé: o Guardião lê zero dia com o título em parêntese,
+    que era o buraco que imprimia menos sete;
+  - a fila entre papéis tem 5 pedidos e nenhum meu parado: os dois de 05/10
+    foram respondidos na rodada do CRO de 16/10, que **abriu pela fila antes do
+    retrato**, exatamente o que faltou nas duas rodadas anteriores.
+- **DUAS COISAS DO RETRATO QUE O DONO PRECISA SABER HOJE, e as duas estão
+  marcadas como NÃO CONFERIDAS no banco**, porque é o retrato de 20/10 às 6h
+  sozinho, sem o segundo instrumento:
+  1. **a retenção caiu na coorte que fechou ontem.** A de 05/10 fechou em 8 de
+     69 (11,6%), depois de 9 de 51 (17,6%) e 12 de 57 (21,1%). A de 12/10 está
+     em 21 de 131 de piso e fecha em 26/10. Na mesma semana os cadastros quase
+     dobraram (124 contra 69) e o CAC caiu para R$ 3,59. Mais gente chegando e
+     uma fatia menor voltando é a leitura que eu levaria para a manchete, e é
+     exatamente o tipo de número que o direcionamento de 31/08 manda conferir no
+     banco antes de publicar;
+  2. **a atribuição está 100% cega**: 311 de 311 cadastros de 28 dias sem
+     origem, contra 97% na semana passada.
+- **UM ERRO MEU DA RODADA PASSADA, achado pelo CRO em 16/10 e eu assino.** Eu
+  publiquei "ligaram o aviso 17 de 306 visitantes (5,6%)" com o numerador em
+  EVENTOS e o denominador em PESSOAS, e as duas coisas não se dividem: a mesma
+  pessoa pode gerar `aceitou_convite_aviso` e `permissao_aviso_concedida`. Por
+  pessoa distinta o CRO lê 11, 8 e 7, e o retorno do dono de 13/10 lê 34, 37 e
+  46 convites contra 11, 8 e 7 aceites. Os três instrumentos concordam na
+  DIREÇÃO (a exibição acompanha o crescimento e a aceitação cai) e discordam no
+  nível, e o nível que eu publiquei como taxa não é taxa de nada. Régua que
+  fica: numerador e denominador na mesma unidade, ou não é razão.
+- PRÓXIMO PASSO, e é do dono: reconectar a integração do Supabase na
+  organização do Mentorque. No minuto em que ela responder, esta rodada fecha
+  com o relatório inteiro, porque tudo que não depende do banco já está lido (o
+  retrato, o diário das sete rodadas, as duas filas e o git log da janela).
+
 ## 2026-10-18 · Engenharia: a 3.2 nas duas lojas, o aviso de versão nova aceso e o repositório abre a 3.3
 
 - Aviso do dono: "foi aprovado o 3.2 da apple. Vamos subir a versão de
