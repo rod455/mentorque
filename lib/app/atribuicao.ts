@@ -26,12 +26,37 @@ import { APPLE_APP_ID } from "@/lib/stores";
 import { isNativeApp, nativePlatform } from "./wrapper";
 import { funil } from "./funil";
 import { motivoDaFalha } from "./motivoDaFalha";
+import { campanhaDaInstalacao, guardaCampanhaDaInstalacao } from "./campanha";
 
 const DEV_KEY = "BdcX8hssR4U7ifDf7reF7n";
 
 type PluginAppsFlyer = {
-  initSDK: (o: { devKey: string; appID: string; isDebug?: boolean }) => Promise<unknown>;
+  initSDK: (o: { devKey: string; appID: string; isDebug?: boolean; registerConversionListener?: boolean }) => Promise<unknown>;
+  addListener?: (evento: string, ouvinte: (e: { callbackName?: string; data?: unknown }) => void) => unknown;
 };
+
+/**
+ * O retorno de conversão da AppsFlyer, ESCUTADO (20/10/2026).
+ *
+ * Lido no fonte do plugin antes de ligar (regra de 09/09 para plugin nativo):
+ * no Android (`AppsFlyerPlugin.kt`, `getConversionListener`) e no iPhone
+ * (`AppsFlyerPlugin.swift`, `onConversionDataSuccess`) o `initSDK` liga o
+ * ouvinte por padrão (`registerConversionListener` vale `true`) e emite
+ * `conversion_callback` com `callbackName` e `data`. A emissão NÃO é retida:
+ * quem não estiver escutando quando ela sai perde o dado. Por isso o ouvinte
+ * entra ANTES do `initSDK`.
+ */
+const EVENTO_DE_CONVERSAO = "conversion_callback";
+function escutaConversao(plugin: PluginAppsFlyer): void {
+  try {
+    plugin.addListener?.(EVENTO_DE_CONVERSAO, (e) => {
+      if (e?.callbackName !== "onConversionDataSuccess") return;
+      guardaCampanhaDaInstalacao(campanhaDaInstalacao(e.data));
+    });
+  } catch {
+    // Medição nunca pode quebrar o app.
+  }
+}
 type Caixa = { plugin: PluginAppsFlyer };
 
 let caixa: Caixa | null = null;
@@ -120,11 +145,13 @@ export async function iniciarAtribuicao(): Promise<void> {
     return;
   }
   iniciado = true;
+  // O ouvinte vem ANTES da subida: a conversão sai uma vez e não espera.
+  escutaConversao(c.plugin);
   let ultimo = "erro:sem-mensagem";
   for (let tentativa = 1; tentativa <= TENTATIVAS; tentativa++) {
     try {
       // appID é só do iPhone (o id numérico da App Store); o Android ignora.
-      await c.plugin.initSDK({ devKey: DEV_KEY, appID: APPLE_APP_ID, isDebug: false });
+      await c.plugin.initSDK({ devKey: DEV_KEY, appID: APPLE_APP_ID, isDebug: false, registerConversionListener: true });
       registrar("ok");
       return;
     } catch (e) {

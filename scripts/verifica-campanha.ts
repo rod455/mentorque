@@ -17,7 +17,7 @@
 //      que a pessoa digitou em campo de busca e o que um terceiro pendurar
 //
 // Rode com: npm run conferir:campanha
-import { capturaCampanha, campanhaGuardada, gclidGuardado, leDaUrl } from "../lib/app/campanha.ts";
+import { campanhaDaInstalacao, capturaCampanha, campanhaGuardada, gclidGuardado, guardaCampanhaDaInstalacao, leDaUrl } from "../lib/app/campanha.ts";
 
 import { readFileSync } from "node:fs";
 
@@ -158,6 +158,35 @@ const ANUNCIO = "?utm_source=google&utm_medium=cpc&utm_campaign=lancamento&gclid
 
   // O texto puro é o contrário: ali `&amp;` apareceria na cara da pessoa.
   conferir("a versão em texto usa & normal", text.includes(linkDaOferta("TESTE100")) && !text.includes("&amp;"));
+}
+
+// ── A CAMPANHA DA INSTALAÇÃO (20/10/2026) ──────────────────────────────────
+// O app ligava a AppsFlyer e nunca escutava o retorno de conversão: zero
+// cadastros do app com etiqueta desde 21/09. A regra lê o retorno e vira a
+// mesma etiqueta da web; o consumidor escuta ANTES de subir o SDK.
+{
+  const paga = campanhaDaInstalacao({ af_status: "Non-organic", media_source: "googleadwords_int", campaign: "App Android", adset: "None" });
+  conferir("instalação paga vira utm_source da fonte e a campanha", paga?.utm_source === "googleadwords_int" && paga?.utm_campaign === "App Android" && paga?.utm_medium === "instalacao", JSON.stringify(paga));
+  conferir("e o 'None' do SDK não vira conjunto", paga?.utm_content === undefined, JSON.stringify(paga));
+  const organica = campanhaDaInstalacao({ af_status: "Organic", media_source: null });
+  conferir("instalação orgânica vira 'organico'", organica?.utm_source === "organico", JSON.stringify(organica));
+  conferir("retorno vazio não inventa etiqueta", campanhaDaInstalacao({}) === null && campanhaDaInstalacao(null) === null);
+
+  gaveta.clear();
+  guardaCampanhaDaInstalacao(paga);
+  conferir("aparelho sem etiqueta guarda a da instalação", campanhaGuardada()?.utm_source === "googleadwords_int", JSON.stringify(campanhaGuardada()));
+  guardaCampanhaDaInstalacao(organica);
+  conferir("e a repetição do retorno não sobrescreve a primeira", campanhaGuardada()?.utm_source === "googleadwords_int", JSON.stringify(campanhaGuardada()));
+
+  const atrib = readFileSync(new URL("../lib/app/atribuicao.ts", import.meta.url), "utf8");
+  const ouvinte = atrib.indexOf("escutaConversao(c.plugin);");
+  const subida = atrib.indexOf("await c.plugin.initSDK(");
+  conferir("o app escuta a conversão ANTES de subir o SDK", ouvinte > 0 && subida > ouvinte, "a emissao da conversao nao e retida: ouvinte depois da subida perde o dado");
+  conferir(
+    "e o ouvinte guarda a etiqueta lida do retorno",
+    /addListener\?\.\(EVENTO_DE_CONVERSAO,[\s\S]*?onConversionDataSuccess[\s\S]*?guardaCampanhaDaInstalacao\(campanhaDaInstalacao\(e\.data\)\)/.test(atrib) &&
+      /const EVENTO_DE_CONVERSAO = "conversion_callback"/.test(atrib),
+  );
 }
 
 if (falhas) {

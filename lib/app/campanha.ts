@@ -101,3 +101,48 @@ export function capturaCampanha(busca: string): Campanha | null {
   }
   return completa;
 }
+
+/**
+ * A campanha da INSTALAÇÃO, lida do retorno de conversão da AppsFlyer
+ * (20/10/2026). Pura para poder ser conferida sozinha.
+ *
+ * O DEFEITO QUE ISTO CONSERTA: o app liga a AppsFlyer desde 29/08 e nunca
+ * escutou o retorno de conversão, que é onde o SDK diz de onde veio a
+ * instalação. Resultado medido no banco em 20/10: zero cadastros do app com
+ * etiqueta em TODAS as semanas desde 21/09 (o "311 de 311 sem origem" do
+ * Diretor não era uma queda, era o estado de sempre). Sem isso, a retenção
+ * não separa produto de mistura de tráfego.
+ *
+ * O SDK manda `af_status` ("Organic" ou "Non-organic"), `media_source` (ex.:
+ * "googleadwords_int", "Facebook Ads") e `campaign`. Vira a mesma etiqueta
+ * que a web usa, com `utm_medium = "instalacao"` para separar uma da outra.
+ */
+export function campanhaDaInstalacao(dados: unknown): Campanha | null {
+  if (!dados || typeof dados !== "object") return null;
+  const d = dados as Record<string, unknown>;
+  const texto = (v: unknown) => (typeof v === "string" && v.trim() && v.trim().toLowerCase() !== "none" && v.trim().toLowerCase() !== "null" ? v.trim().slice(0, 80) : null);
+  const status = texto(d.af_status);
+  const fonte = texto(d.media_source) ?? texto(d.pid);
+  const campanha = texto(d.campaign) ?? texto(d.c);
+  if (!fonte && status?.toLowerCase() !== "organic") return null;
+  const c: Campanha = { utm_source: fonte ?? "organico", utm_medium: "instalacao" };
+  if (campanha) c.utm_campaign = campanha;
+  const conjunto = texto(d.adset) ?? texto(d.af_adset);
+  if (conjunto) c.utm_content = conjunto;
+  return c;
+}
+
+/**
+ * Guarda a campanha da instalação, se o aparelho ainda não tem nenhuma. A
+ * etiqueta da instalação não sobrescreve uma que já exista: o SDK repete o
+ * mesmo retorno em toda abertura, e a primeira gravação é a que vale.
+ */
+export function guardaCampanhaDaInstalacao(c: Campanha | null): void {
+  if (!c) return;
+  if (campanhaGuardada()) return;
+  try {
+    window.localStorage.setItem(CHAVE, JSON.stringify({ ...c, em: new Date().toISOString() }));
+  } catch {
+    /* sem armazenamento: a etiqueta não viaja, e é o que dá */
+  }
+}
