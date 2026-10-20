@@ -3,6 +3,32 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-20 · Engenharia: a rodada do Diretor lida, e a cegueira da atribuição tinha outra causa
+
+- Pedido do dono: "veja o que o diretor publicou e o SEO também". **O SEO não
+  publicou hoje**: a rotina é de terça às 8h, e às 11h32 UTC não havia commit
+  nem entrada dele no diário. A última rodada de Conteúdo é a de 13/10.
+- **Números do Diretor refeitos**, por aparelho, que é outra régua (ele leu por
+  pessoa): de 12 a 18/10, 300 cadastraram carro, 176 nunca criaram conta e 113
+  criaram em até dois minutos (ele: 305, 174, 121). Contas novas, em UTC: 134
+  contra 71 (ele: 141 contra 72, semana de Brasília). Batem na direção e no
+  tamanho.
+- **A ATRIBUIÇÃO NUNCA ENXERGOU, E A CAUSA ESTAVA NO CÓDIGO.** O `cadastro`
+  tem zero etiqueta de campanha em todas as semanas desde 21/09 (51, 58, 68,
+  124 e 24 cadastros). O "311 de 311 contra 97%" não era queda. E o evento
+  `atribuicao` só diz "ok": o app ligava a AppsFlyer e nunca escutava o
+  retorno de conversão. Consertado em `a1a91f2`: o ouvinte do
+  `conversion_callback` entra antes do `initSDK` (a emissão não é retida,
+  lido no fonte do plugin nos dois sistemas) e grava fonte e campanha como a
+  mesma etiqueta da web, com `utm_medium = instalacao`. Três plantios, três
+  mordidas na `conferir:campanha`. **Chega com a 3.3**; até lá, a leitura da
+  retenção por origem continua impossível.
+- **A linha do OneLink na lista do dono teve o porquê reescrito**: ela serve
+  ao `/baixar` (o clique do site até a loja), não à retenção, e as instalações
+  pagas da Meta e do Google não passam por ela. Prioridade baixa.
+- Retorno escrito em `diretor.md`: manter a parada com a causa separada e os
+  números refeitos; melhorar a leitura da atribuição (estado de sempre tratado
+  como queda) e o pedido de clique ao dono num item que o código resolvia.
 ## 2026-10-20 · Conteúdo: a pergunta que o app fazia e não sabia responder tem aula, e da tela do sintoma não existe caminho para ela
 
 - Artifact "Conteúdo da semana": https://claude.ai/artifact/Li3pCGvTr3gfQ4Chj5vRmD

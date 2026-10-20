@@ -24,9 +24,22 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
    deixa de ter botão dentro de botão (o lápis e o "Revisão vencida"
    continuam funcionando).
 
+3. **De onde veio cada instalação** (20/10, commit a1a91f2). O app passa a escutar o retorno de conversão da AppsFlyer e a
+   etiquetar o aparelho com a fonte (Google, Meta ou orgânico) e a campanha.
+   A pessoa não sente nada; é o que faltava para separar a retenção por
+   origem. Na 3.2 e antes, nenhum cadastro do app tem campanha.
+
 ## Plugin nativo nesta versão
 
-Nenhum até aqui.
+Nenhum plugin novo. Muda o USO de um que já está no binário: o
+`appsflyer-capacitor-plugin` passa a ter um ouvinte do `conversion_callback`.
+Caminho lido no fonte antes de ligar, pela regra de 09/09: no Android,
+`AppsFlyerPlugin.kt` (`initSDK` lê `registerConversionListener`, padrão
+`true`; `getConversionListener` emite `onConversionDataSuccess` com `data`);
+no iPhone, `AppsFlyerPlugin.swift` (`conversion` padrão `true`,
+`onConversionDataSuccess` emite o mesmo). A emissão não é retida, por isso o
+ouvinte entra antes do `initSDK`. As travas (`reject`) do `initSDK` são sobre
+dev key nula e chamada repetida, que o app já não faz.
 
 ## Roteiro de aparelho, escrito ANTES do build
 
@@ -34,6 +47,10 @@ Nenhum até aqui.
    grátis" abre a folha do Google com 7 dias grátis. Conta que já assinou:
    o botão diz "Assinar o Premium" e a folha cobra o plano cheio, sem
    desconto.
-2. **O Next 15 não quebrou a casca.** Abrir o app, entrar com o Google, abrir
+2. **A atribuição da instalação.** Instalar a 3.3 por um anúncio (ou, sem
+   anúncio, de forma orgânica), abrir, cadastrar um carro e criar conta. No
+   banco, o `cadastro` desse aparelho tem de trazer `extra.utm.utm_medium =
+   instalacao` e um `utm_source` (a fonte do anúncio ou `organico`).
+3. **O Next 15 não quebrou a casca.** Abrir o app, entrar com o Google, abrir
    Carros (tocar na linha abre o carro; o lápis edita o apelido), abrir uma
    aula, abrir o Premium.

@@ -755,3 +755,55 @@ a recomendação de Engenharia é sim.
 
 **O que fica com o dono**, e é a sua prioridade 1: a campanha de busca
 (mantém, corta ou pausa), que abre o Google Ads e fecha os três itens de lá.
+
+## Retorno do dono sobre a rodada de 19/10/2026 (fechada em 20/10)
+
+Mandado escrever por ele em 20/10 ("veja o que o diretor publicou"). Lido o
+diário, os dois commits da rodada e o banco, com os números principais
+refeitos.
+
+Primeiro o que manter.
+
+**PARAR QUANDO O BANCO NÃO RESPONDE, E SEPARAR A CAUSA.** O erro de permissão
+podia virar "o banco caiu"; o `list_projects` mostrou que a integração apontava
+para outra organização. É exatamente "ausência não é causa", feito antes de
+escrever, e a rodada fechou no mesmo dia em que o dono reconectou.
+
+**OS NÚMEROS REFEITOS ANTES DE REPASSAR, E A UNIDADE CORRIGIDA.** O portão da
+conta foi refeito no banco antes de virar manchete, e por pessoa distinta.
+Conferi por aparelho, que é outra régua: 300 cadastraram carro de 12 a 18/10,
+176 nunca criaram conta e 113 criaram em até dois minutos. A sua leitura (305,
+174, 121) bate na direção e no tamanho. Contas novas: a minha leitura em UTC dá
+134 contra 71; a sua, 141 contra 72. A diferença é a janela (semana de
+Brasília contra UTC); diga a janela junto com o número.
+
+**O BURACO ENTRE AS DUAS FILAS.** Achar que um pedido concluído entre papéis
+nunca chegou à lista do dono é o tipo de falha que só o seu papel enxerga.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. "311 DE 311 SEM ORIGEM, CONTRA 97%" NÃO ERA UMA QUEDA, E A CAUSA NÃO ERA O
+ONELINK.** Lido no banco em 20/10: o evento `cadastro` tem zero etiqueta de
+campanha em TODAS as semanas desde 21/09 (51, 58, 68, 124 e 24 cadastros, zero
+com `utm_source`). A cegueira sempre esteve lá. E o segundo instrumento que
+responde o porquê estava no fonte: `lib/app/atribuicao.ts` liga a AppsFlyer e
+nunca escuta o retorno de conversão, que é onde o SDK diz se a instalação veio
+do Google, da Meta ou do orgânico. O evento `atribuicao` só carrega "ok". O
+OneLink responde outra pergunta (o clique do site até a loja, uns 150
+aparelhos por mês pelo `/baixar`), e as instalações pagas da Meta e do Google
+nem passam por ele. Engenharia ligou o ouvinte de conversão em 20/10, com o
+caminho do plugin lido no fonte Android e iPhone; chega com a 3.3.
+
+**2. A PRIORIDADE QUE VOCÊ DEU AO DONO ERA UM CLIQUE, E O CONSERTO ESTAVA NO
+CÓDIGO.** "(2) DO DONO: uma tela na AppsFlyer, que destrava a leitura da
+retenção" manda o dono agir num item que não destrava a leitura. A regra de
+04/10 vale para o Diretor também: antes de pedir clique, perguntar ao
+instrumento que a casa alcança. Aqui eram dois: o banco (zero em todas as
+semanas, então não é regressão) e o fonte (o ouvinte não existe). A linha do
+OneLink continua na lista do dono, com o porquê reescrito: ela serve ao
+`/baixar`, não à retenção.
+
+Veredito: rodada bem conduzida sob pane, com o achado mais útil da semana (o
+buraco entre as filas). Errou na atribuição ao tratar o estado de sempre como
+queda e ao mandar o dono clicar numa coisa que o código resolvia.
+
