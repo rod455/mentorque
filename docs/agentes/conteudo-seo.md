@@ -67,7 +67,15 @@ fila de gravação não andou, e metade da causa é minha".
 **O resumo que precisa estar aqui, porque é o que eu leio antes da próxima
 rodada:** a Pauta 03 saiu em formato que não pede compra nenhuma (o carro do
 dono e uma chave de boca) e, pela primeira vez, virou LINHA NA LISTA DO DONO.
-**PRÓXIMA LEITURA: 10/11/2026**, três ramos, cada um com ação diferente:
+**PRÓXIMA LEITURA: 03/11/2026**, três ramos, cada um com ação diferente:
+
+**A data mudou de 10/11 para 03/11 em 20/10, e o motivo é de forma, não de
+placar.** Contei o rodízio contra o diário e 03/11 é o próximo slot (b): a
+leitura marcada para 10/11 cairia uma semana DEPOIS da rodada que ela deveria
+decidir, e eu teria escrito a quarta pauta antes de saber se escrever pauta
+ainda faz sentido. A data nova encurta o prazo do meu próprio lado (21 dias
+em vez de 28), então não é afrouxar a régua. E 03/11 é também a data da
+leitura da busca: as duas decisões caem no mesmo dia, de propósito.
 
 - **gravada e publicada** → o par Short mais aula se confirma, o slot (b)
   continua, e a próxima pauta se escolhe pela mesma régua desta;
@@ -83,6 +91,41 @@ dono e uma chave de boca) e, pela primeira vez, virou LINHA NA LISTA DO DONO.
   roteiro, não o canal. O slot (b) vira ajuda no que o dono faz de fato
   (título, descrição, marcação) e uma pergunta na lista dele: o que no roteiro
   não serve.
+
+## O ramo da citação de fora: de onde vem a leitura e quem pede (20/10/2026)
+
+Pedido pelo dono no retorno de 13/10, ponto B, com prazo até 27/10, porque o
+ramo "pior que 65" deixou de ser hipótese: a mediana de categoria era 71 em
+06/10, 82 em 13/10 e 93,5 em 20/10 (duas consultas só, as duas de luz de
+motor, nas posições 89 e 98). Escrito antes da leitura de 03/11 de propósito.
+
+**(1) O instrumento, e ele é de tela.** A API do Search Console que o coletor
+usa serve três coisas: `searchanalytics`, `sitemaps` e inspeção de URL. O
+relatório de LINKS não está nela, então não existe jeito de a casa ler links
+por rotina, e isso não é defeito de credencial como o `topPaginas`: é a API
+não ter o endereço. A leitura é no próprio Search Console, menu Links, que
+mostra os sites que mais apontam para o nosso e as páginas mais linkadas.
+**Ninguém nesta casa nunca leu essa tela**, então hoje o número de partida é
+desconhecido, e "zero citação de fora" é suposição minha e não medida. Virou
+linha na lista do dono em 20/10, com escopo de uma tela.
+
+**(2) A lista de quem pedir, com o critério.** O critério, antes dos nomes:
+vale o site que tem domínio próprio e público real, a citação tem que ser
+editorial (alguém achou útil), a página citada precisa servir ao leitor
+daquele site, e **nada que envolva pagar entra nesta lista**, porque
+publicação paga é gasto novo e é decisão do dono. Em ordem de esforço:
+
+| quem | por que ele | o que pede |
+|---|---|---|
+| Canal e Instagram da casa | é nosso, não depende de ninguém | o link do guia na descrição de cada vídeo cujo assunto ele responde. **Limite honesto: link de YouTube e de Instagram é `nofollow` e não passa autoridade.** Ele traz gente, e isso vale por si, mas não move a busca |
+| Oficinas e autocenters com site | o guia serve de material para o cliente deles, e a conversa é de interesse mútuo | uma citação na página de serviços, no assunto que a oficina já atende |
+| Fóruns e comunidades de carro | é onde a pergunta é feita com as palavras da pessoa | responder a pergunta de verdade e citar o guia só quando ele responde. Despejar link é spam e queima o endereço |
+| Blogs e canais de carro de porte médio | citação editorial de quem escreve sobre o assunto | um e-mail curto apontando UM guia específico e por que ele serve ao leitor daquele site |
+
+**Quem pede.** Este papel escreve a lista, o guia alvo e o texto do pedido.
+Mandar mensagem para terceiro em nome da casa é do dono, pela regra de
+DIRETRIZES, então o pedido sai daqui pronto para ele enviar ou autorizar, com
+a data em que entrou na lista.
 
 ## A régua da rodada: o que é uma rodada bem feita
 
@@ -148,15 +191,58 @@ hoje faltam QUATRO:
 | `suspension-noise` barulho na suspensão | `diag-noises` e `diag-suspensao-avisos` | coberto |
 | `suspension-bounce` carro balançando demais | `diag-suspensao-avisos` | coberto |
 | `steering-vibration` vibração no volante | `diag-vibracao` | coberto |
-| `steering-hard` direção pesada ou dura | nada | **aula nova** |
+| `steering-hard` direção pesada ou dura | `diag-direcao-pesada` (20/10) | coberto |
 | `tire-pressure-loss` pneu perdendo pressão | `tire-calibragem` fala de calibrar, não de perder | **aula nova** |
 | `tire-uneven-wear` desgaste irregular do pneu | aparece como consequência em outras duas | **aula nova** |
 | `brake-pull` puxa para um lado ao frear | uma linha dentro da `diag-freio-avisos` | **aula nova** |
 
-**O compromisso, em datas.** Uma aula por rodada de artigo, que é o slot (c) do
-rodízio e cai a cada três semanas: **27/10, 17/11, 08/12 e 29/12**. Nessa última
-data a régua fecha e este achado para de aparecer em relatório, porque passa a
-ser "9 de 9 sintomas cobertos" em vez de uma fração que nunca melhora.
+**O compromisso, em datas, CORRIGIDO em 20/10/2026.** Uma aula por rodada de
+artigo, que é o slot (c) do rodízio e cai a cada três semanas. As datas
+escritas em 06/10 (27/10, 17/11, 08/12, 29/12) estavam uma semana adiantadas
+em relação ao rodízio que o DIARIO registra: 06/10 foi guia (a), 13/10 foi
+pauta (b), então o slot (c) é **20/10, 10/11, 01/12 e 22/12**. Contado nas
+entradas do diário, uma por uma, e não de cabeça. A régua fecha uma semana
+mais cedo do que o plano dizia, e a primeira aula saiu hoje.
+
+| slot (c) | sintoma | estado |
+|---|---|---|
+| **20/10** | `steering-hard` direção pesada | **feito**, `diag-direcao-pesada` |
+| 10/11 | `tire-pressure-loss` pneu perdendo pressão | a fazer |
+| 01/12 | `tire-uneven-wear` desgaste irregular | a fazer |
+| 22/12 | `brake-pull` puxa para um lado ao frear | a fazer |
+
+Em 22/12 a régua fecha e este achado para de aparecer em relatório, porque
+passa a ser "9 de 9 sintomas cobertos" em vez de uma fração que nunca melhora.
+
+## A segunda metade da régua do catálogo, escrita antes de poder ser lida (20/10/2026)
+
+Pedida pelo dono no retorno de 13/10, ponto C: o plano acima mede se a aula
+EXISTE, não se alguém chega nela, e "este papel se mede onde o público não
+está". A régua que falta, com número, escrita antes da leitura de propósito:
+
+**Das pessoas que consultam o sintoma no app, quantas abrem a aula que
+responde ele?** Alvo para a primeira leitura: **uma em cada dez**, ou seja
+10%. O número não vem de referência de mercado nenhuma, e por isso ele é
+declarado como o que é: um alvo escolhido por este papel para ter com o que
+comparar, e que se corrige na primeira leitura real.
+
+**E ela não dá para ler hoje, por DOIS motivos, não um.** O primeiro é
+medição: o `viu_aula` grava só o id da aula no campo `origem` e nada da porta
+por onde a pessoa entrou, e o pedido está na fila para Engenharia desde
+13/10. O segundo é mais grave e apareceu ao escrever a aula de hoje: **o
+caminho não existe no produto.** O tipo `Sym` de `lib/app/conteudo/sintomas.ts`
+não tem campo de aula, e a tela `components/app/screens/Symptoms.tsx` nunca
+cita aula nenhuma (lido nos dois arquivos em 20/10). Quem toca em "Direção
+pesada ou dura" vê causas, urgência, faixa de preço, o que observar, a lista
+para a oficina e, agora, o teste de garagem; e não tem como chegar na aula
+que explica aquilo. Medir uma porta que não existe daria 0% e a conclusão
+seria sobre a aula, quando o defeito é o caminho.
+
+Enquanto o caminho não existir, o que ESTE papel pode fazer sozinho é o que
+foi feito hoje: o campo `testes` do sintoma, que a tela já desenha, passou a
+carregar o mesmo teste de garagem que a aula ensina. É conteúdo, não é tela, e
+responde a pessoa no lugar onde ela está. A ligação de verdade virou linha na
+fila para Engenharia em 20/10.
 
 **O custo acumulado, dito de uma vez**: são 29 dias desde que o recorte apareceu
 (08/09) e as duas únicas aulas que entraram nesses sistemas nesse período foram
@@ -170,6 +256,44 @@ fiz isso agora porque a regra da casa é UMA entrega concreta por rodada, e
 trocar essa regra sem o dono ver custa mais do que seis semanas de espera.
 
 ## Aprendizados
+
+- **⚠️ CHEGOU O INSTRUMENTO QUE FALTAVA, E ELE DERRUBA A LEITURA DE GANCHO
+  DESTE MANUAL (lido em 20/10/2026, medido por Engenharia em 16/10).** O dono
+  ligou a YouTube Analytics API e a casa leu, uma vez, o que o coletor não
+  traz. Duas coisas, e as duas mudam o que este papel pode dizer:
+
+  **A origem do tráfego do canal, janela 19/09 a 15/10**: ADVERTISING 58.980
+  visualizações, SHORTS 593, EXT_URL 161, YT_SEARCH 140, canal 22, playlist
+  21. Uns **98% das visualizações são anúncio pago**. Visualização deste canal
+  mede o gasto em mídia, não o interesse pelo conteúdo. O conteúdo são as
+  SHORTS mais YT_SEARCH, umas 730 no período inteiro.
+
+  **E a retenção dos cinco Shorts de 19/09, que inverte quase na ordem o que
+  eu chamei de ganhador e de perdedor:**
+
+  | vídeo | views | % médio assistido |
+  |---|---|---|
+  | serra | 4.564 | 55% |
+  | orçamento | 1.926 | 70% |
+  | o número no pneu | 127 | **117%** |
+  | a regra dos 70% | 112 | **101%** |
+  | poça embaixo do carro | 33 | 60% |
+
+  Acima de 100% é Short visto mais de uma vez em loop, e não é erro. **Os dois
+  vídeos que eu classifiquei como perdedores pelas views são os dois que mais
+  prenderam quem assistiu.** Então a hipótese de gancho que este manual
+  carregava desde 22/09 (o fenômeno sentido ganha, a estrutura de triagem
+  perde) perde a base: ela foi tirada do espalhamento de views, e o
+  espalhamento de views é entrega de anúncio. A "poça", que eu citei como a
+  prova da triagem ruim, tem 60% de retenção, acima da serra.
+
+  **A regra que fica: views deste canal não escolhem nem julgam assunto. Quem
+  faz isso é a retenção, com a origem do tráfego separada ao lado.** E o que
+  continua sem instrumento, declarado: o clique por impressão, que a API
+  responde "The query is not supported" e só o Studio mostra; e quanto das
+  58.980 visualizações de anúncio veio de qual campanha, que ninguém leu. Nada
+  disso está no retrato: a leitura de 16/10 foi um fluxo temporário, já
+  arquivado. Virou linha na fila em 20/10.
 
 - **Roteiro que não vira linha na lista do dono é estoque, e eu levei 42 dias
   para ver isso (13/10/2026).** DIRETRIZES manda desde 02/10 que recomendação
@@ -300,6 +424,12 @@ trocar essa regra sem o dono ver custa mais do que seis semanas de espera.
   promessa de preço travado do lote de fundadores, e qualquer faixa de
   valor. Preço dentro do app é estimativa ajustada ao carro da pessoa; solto
   no site, vira promessa.
+
+- **⚠️ Os dois itens abaixo saíram do espalhamento de views do lote de 19/09, e
+  a retenção lida em 16/10 tirou a base deles (ver o primeiro aprendizado).
+  Ficam escritos porque a parte de ARTESANATO continua de pé (um Short entrega
+  uma ideia; lista de casos funciona em texto, onde quem lê procura o caso
+  dele), e a parte que dizia QUEM GANHOU e QUEM PERDEU não vale mais.**
 
 - **Vídeo que não pega nos primeiros dias não se recupera, e isso decide
   onde gastar esforço.** Uma semana depois do lote de 19/09, os que tinham

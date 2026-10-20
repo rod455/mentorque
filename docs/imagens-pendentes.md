@@ -258,3 +258,4 @@ texto viaja pela rede, o arquivo não).
 |---|---|
 | `diag-freio-avisos` | Freio: os avisos que vêm antes do barulho |
 | `diag-suspensao-avisos` | Suspensão: o que ela avisa antes de virar conta |
+| `diag-direcao-pesada` | Direção pesada: o momento diz a causa |

@@ -3,6 +3,90 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-20 · Conteúdo: a pergunta que o app fazia e não sabia responder tem aula, e da tela do sintoma não existe caminho para ela
+
+- Artifact "Conteúdo da semana": https://claude.ai/artifact/Li3pCGvTr3gfQ4Chj5vRmD
+- Rodada abriu pela fila entre papéis (nada para Conteúdo), pelo retorno de
+  13/10 no manual e pelo desfecho do que esta cadeira pediu antes.
+- ENTREGA, formato (c): **aula `diag-direcao-pesada`**, gratuita, trilha de
+  diagnóstico, PT e EN, recortada pelo MOMENTO em que a direção fica pesada
+  (de uma vez hoje, devagar em meses, só em manobra, só a frio, o que dá para
+  conferir hoje). Fecha `steering-hard`, que era o ÚNICO dos nove sintomas de
+  freio, suspensão e pneu com cobertura zero. Antes dos blocos ela separa
+  assistência hidráulica de elétrica, porque isso decide o que se confere e o
+  que não se aceita num orçamento. Catálogo em 124 aulas.
+- **E o sintoma no app ganhou o mesmo teste de garagem**: o campo `testes` de
+  `steering-hard` estava vazio e a tela já o desenha quando existe. É
+  conteúdo, não é tela, então cabe nesta cadeira.
+- **CONFERÊNCIA PROVADA ANTES DE SER CRIDA**: `node scripts/plantio.mjs
+  conferir:catalogo` com um link morto plantado no lugar do novo
+  `[[diag-direcao-pesada|...]]` → MORDEU, saída 1, arquivo restaurado pela
+  cópia. `npm run conferir` inteiro verde, saída 0. Sem suíte de navegador: a
+  mudança é de dado, nenhuma tela foi tocada.
+- **POR QUE ARTIGO HOJE, E É O PLANO B ESCRITO EM 13/10**: o rodízio já marcava
+  (c), e o retorno pedia saída escrita caso o `topPaginas` seguisse vazio.
+  Lido no retrato de 20/10, gerado às 9h UTC: `topPaginas: []` e `erroPaginas`
+  "Forbidden". O clique está na lista do dono desde 06/10, há 14 dias; não
+  repeti o pedido. Não conferi se a credencial mudou depois das 9h.
+- **AS DATAS DO PLANO DE COBERTURA ESTAVAM UMA SEMANA ADIANTADAS, correção
+  minha.** Contado o rodízio nas entradas deste diário, uma por uma: 06/10
+  guia, 13/10 pauta, então o slot (c) é 20/10, 10/11, 01/12 e 22/12, e não
+  27/10, 17/11, 08/12, 29/12 como eu escrevi em 06/10. A régua fecha uma
+  semana mais cedo. Hoje são 6 de 9 cobertos.
+- **O ACHADO DA SEMANA É DO PRODUTO, e ele é anterior à medição que o dono
+  cobrou:** o tipo `Sym` de `lib/app/conteudo/sintomas.ts` não tem campo de
+  aula e `components/app/screens/Symptoms.tsx` nunca cita aula nenhuma (os
+  dois lidos hoje). **Da tela do sintoma não existe caminho para a aula que
+  responde ele.** Medir a porta daria 0% e a conclusão sairia sobre a aula,
+  quando o defeito é o caminho. Virou linha na fila para Engenharia; tela não
+  é alçada deste papel.
+- RÉGUA NOVA DO CATÁLOGO, escrita antes de poder ser lida, como o ponto C do
+  retorno pediu: das pessoas que consultam o sintoma, **uma em cada dez** abre
+  a aula que responde ele. O 10% é declarado pelo que é, alvo escolhido por
+  este papel sem referência de mercado, para ter com o que comparar. Depende
+  de duas coisas que não existem: a porta no `viu_aula` (fila, 13/10) e o
+  caminho no produto (fila, hoje).
+- **CORREÇÃO DE UMA LEITURA MINHA, com o instrumento que eu pedi em 06/10 e
+  que chegou.** A YouTube Analytics API, ligada pelo dono, foi lida por
+  Engenharia em 16/10: na janela 19/09 a 15/10 a origem do tráfego é
+  ADVERTISING 58.980, SHORTS 593, YT_SEARCH 140, uns 98% de anúncio. E a
+  retenção dos cinco Shorts de 19/09 inverte quase na ordem o que eu chamei de
+  ganhador e perdedor: serra 4.564 views e 55% assistido, orçamento 1.926 e
+  70%, pneu 127 e 117%, regra dos 70% 112 e 101%, poça 33 e 60%. **Os dois que
+  eu classifiquei como perdedores são os dois que mais prenderam.** A hipótese
+  de gancho de 22/09 perde a base, porque saiu do espalhamento de views e o
+  espalhamento é entrega de anúncio. Regra nova: views deste canal não
+  escolhem nem julgam assunto; quem faz isso é a retenção com a origem do
+  tráfego ao lado. Sem instrumento, declarado: o CTR (a API responde "The query
+  is not supported") e de qual campanha vieram as 58.980.
+- **RAMO DA CITAÇÃO DE FORA, ponto B do retorno, com prazo 27/10 e entregue
+  hoje**: o relatório de LINKS não está na API do Search Console (que serve
+  busca, sitemap e inspeção de URL), então é tela, e ninguém nesta casa nunca
+  abriu essa tela; logo "temos zero citação de fora" é suposição minha e não
+  medida. Virou linha na lista do dono, destino novo `search-console`
+  (acrescentado em `scripts/acoes-do-dono.ts`). A lista de quem pedir está no
+  manual, com o critério antes dos nomes e com o limite dito de que link de
+  rede social é `nofollow`.
+- DESFECHO DO QUE EU PEDI: Pauta 03 na lista do dono há 7 dias, não gravada (o
+  canal recebeu 14 vídeos em 13/10 à noite, nenhum é ela, e são NÃO LISTADOS).
+  Fechado o pedido de 06/10 de retenção e CTR: a API foi ligada em 16/10.
+  Abertos na fila há 7 dias: a porta do `viu_aula` e o balde `outro` do Biela.
+- **E EU ANTECIPEI A MINHA PRÓPRIA LEITURA DE 10/11 PARA 03/11**: contado o
+  rodízio, 03/11 é o próximo slot de pauta, e a leitura cairia uma semana
+  DEPOIS da rodada que ela deveria decidir. Encurta o prazo do meu lado, de 28
+  para 21 dias, então não é afrouxar a régua. 03/11 passa a ser o dia das duas
+  decisões, com a leitura da busca.
+- BUSCA, sem decidir nada hoje de propósito: 1 clique (marca `mentorque`) e 17
+  impressões em 28 dias; duas consultas de categoria, as duas de luz de motor,
+  nas posições 89 e 98, mediana 93,5 contra 82 em 13/10 e 71 em 06/10.
+  Amostra de duas não vira veredito, e a leitura segue marcada para 03/11.
+- RÉGUA DA RODADA: 1, 2, 3, 4, 5, 9 e 10 cumpridos; 6, 7 e 8 não se aplicam a
+  aula de catálogo (não tem rota no site) e a 11 não se aplica (não há pauta).
+  O que não entrega: nada indexável, e a régua nova não pode ser lida.
+- Próximas: (1) 27/10, guia, aprofundando a página de melhor posição, com a
+  escolha pela posição da consulta enquanto o `topPaginas` não voltar; (2)
+  03/11, o dia das duas decisões.
+
 ## 2026-10-20 · Diretor: rodada PARADA, o banco recusou por permissão, e a integração está apontada para outra organização
 
 - **A rodada de segunda 19/10 não fechou, e o motivo é o do direcionamento de

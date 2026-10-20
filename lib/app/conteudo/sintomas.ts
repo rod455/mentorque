@@ -224,6 +224,9 @@ const symptoms: Sym[] = [
     price: "R$ 150–1.500",
     observe: [T("Fica dura a frio ou o tempo todo?", "Stiff when cold or all the time?"), T("Acendeu alguma luz de direção no painel?", "Any steering warning light on?")],
     checklist: [T("Verificar fluido (se hidráulica)", "Check fluid (if hydraulic)"), T("Checar correia e bomba", "Check belt and pump"), T("Ler códigos da direção elétrica", "Read electric-steering codes"), T("Pedir orçamento detalhado", "Ask for an itemized quote")],
+    testes: [
+      { faca: T("Com o carro parado e ligado, gire o volante devagar de um lado ao outro, sem forçar no fim do curso, e escute. Depois confira a pressão dos quatro pneus, com o pneu frio.", "With the car parked and running, turn the wheel slowly from side to side, without forcing it at full lock, and listen. Then check the pressure in all four tyres, with the tyres cold."), entao: T("Gemido que acompanha o giro aponta assistência hidráulica sofrendo, de fluido ou de bomba; peso em silêncio, com luz de direção acesa, aponta a parte elétrica, e aí o caminho é ler o código em vez de completar fluido. E pressão baixa sozinha já deixa a direção mais pesada: é a conferência mais barata das três.", "A groan that follows the movement points to hydraulic assistance struggling, from fluid or the pump; heaviness in silence, with a steering light on, points to the electric side, and then the path is reading the code rather than topping up fluid. And low pressure on its own already makes the steering heavier: it's the cheapest of the three checks.") },
+    ],
   },
   {
     id: "suspension-bounce",

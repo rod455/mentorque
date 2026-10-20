@@ -31,7 +31,7 @@ const soConferir = process.argv.includes("--conferir");
 type Acao = { desde: string; onde: string; dias: number; acao: string; porque: string; quem: string; prazo: string | null };
 
 /** Os painéis onde o dono resolve. Fora desta lista, a conferência reprova. */
-const DESTINOS = ["google-ads", "play-console", "app-store", "lojas", "meta", "n8n", "revenuecat", "stripe", "appsflyer", "vercel", "youtube", "supabase", "registro-br"] as const;
+const DESTINOS = ["google-ads", "play-console", "app-store", "lojas", "meta", "n8n", "revenuecat", "stripe", "appsflyer", "vercel", "youtube", "supabase", "registro-br", "search-console"] as const;
 
 /** O nome de cada painel como ele aparece para quem vai abrir. */
 const NOME_DO_DESTINO: Record<string, string> = {
@@ -47,6 +47,7 @@ const NOME_DO_DESTINO: Record<string, string> = {
   vercel: "Vercel",
   youtube: "YouTube Studio",
   supabase: "Supabase (SQL Editor)",
+  "search-console": "Search Console",
 };
 
 /**
