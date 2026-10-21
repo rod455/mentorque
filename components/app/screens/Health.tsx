@@ -108,6 +108,12 @@ export function HealthScreen() {
           ) : (
             <p className="mt-0.5 text-xs text-amber/80">{h.quizProvisional}</p>
           )}
+          {/* O km estimado sai do lado do "baseado no seu quiz", e não no lugar
+              dele: o quiz foi respondido mesmo, e é só este componente que a
+              pessoa não informou. Ver kmEstimado em lib/app/healthQuiz.ts. */}
+          {result.kmEstimado && (
+            <p className="mt-0.5 text-xs text-amber/80">{h.quizKmEstimado}</p>
+          )}
         </div>
       </Card>
 

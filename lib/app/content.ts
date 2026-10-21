@@ -1217,6 +1217,14 @@ export function getContent(locale: Locale) {
       quizRedo: T("Refazer o quiz de saúde", "Retake the health quiz"),
       quizBasedOn: T("Diagnóstico baseado no seu quiz", "Diagnosis based on your quiz"),
       quizProvisional: T("Provisório: faça o quiz para o cálculo real", "Provisional: take the quiz for the real score"),
+      // A ressalva do km estimado (21/10/2026, varredura do QA). O cálculo cai
+      // para "idade vezes 12.000" quando o odômetro não foi informado, e esse
+      // componente tem o maior peso do risco. Sem esta linha a tela afirmava
+      // "baseado no seu quiz" sobre um número que a pessoa nunca deu.
+      quizKmEstimado: T(
+        "A quilometragem foi estimada pela idade do carro. Informe o odômetro para o risco ficar real.",
+        "Mileage was estimated from the car's age. Enter the odometer to make the risk figure real.",
+      ),
       quizTitle: T("Quiz de Saúde", "Health Quiz"),
       quizIntro: T("Responda com sinceridade: quanto mais preciso, melhor o diagnóstico.", "Answer honestly, the more accurate, the better the diagnosis."),
       quizSubmit: T("Ver resultado", "See result"),

@@ -192,15 +192,42 @@ function optOf(qid: string, answers: Record<string, string>): Opt | null {
 const noteOf = (qid: string, answers: Record<string, string>, fallback = 5): number =>
   optOf(qid, answers)?.note ?? fallback;
 
-export type QuizResult = { score: number; vhs: number; vri: number };
+export type QuizResult = {
+  score: number;
+  vhs: number;
+  vri: number;
+  /**
+   * O km usado no cálculo foi ESTIMADO pela idade do carro, porque a pessoa não
+   * informou o odômetro.
+   *
+   * POR QUE ISTO VIAJA NO RESULTADO (21/10/2026, varredura do QA). O `kmAgeNote`
+   * cai para `idade * 12000` quando não há odômetro, e esse componente tem o
+   * MAIOR peso do VRI (0,25). A tela mostra o VRI como número próprio e dizia
+   * "diagnóstico baseado no seu quiz" sem ressalva nenhuma, então um número
+   * parcialmente inventado saía com a cara de medido. É a mesma falha que esta
+   * casa consertou em três fontes diferentes em outubro: ausência virando
+   * valor.
+   *
+   * TAMANHO MEDIDO, para ninguém ler como urgente: no score final o efeito é de
+   * 0 a 2 pontos, porque o VRI entra com peso 0,2. No VRI exibido sozinho chega
+   * a 6 pontos (carro de 2008 com 90.000 km reais contra 216.000 estimados).
+   * Em 21/10 eram 25 carros com quiz completo e sem odômetro, de 378.
+   */
+  kmEstimado: boolean;
+};
 
 // Robustness (0-10) of the km/age component, derived from the car itself.
-function kmAgeNote(v: Vehicle, now: Date): number {
+//
+// Devolve junto se o km foi ESTIMADO: quem calcula sabe, e quem mostra o número
+// precisa saber também. Sem isso a tela afirma "baseado no seu quiz" sobre um
+// componente que a pessoa nunca informou.
+function kmAgeNote(v: Vehicle, now: Date): { nota: number; estimado: boolean } {
   const age = Math.max(0, now.getFullYear() - v.year);
-  const km = typeof v.odometerKm === "number" && v.odometerKm > 0 ? v.odometerKm : age * 12000;
+  const informado = typeof v.odometerKm === "number" && v.odometerKm > 0;
+  const km = informado ? (v.odometerKm as number) : age * 12000;
   const ageNote = clamp(10 - age * 0.3, 0, 10);
   const kmNote = clamp(10 - km / 25000, 0, 10);
-  return (ageNote + kmNote) / 2;
+  return { nota: (ageNote + kmNote) / 2, estimado: !informado };
 }
 
 // First scheduled service (generic until each car's manual is loaded):
@@ -235,8 +262,9 @@ export function computeQuizHealth(answers: Record<string, string>, v: Vehicle, n
   const vhsFinal = clamp(Math.min(vhsBase, cap), 0, 100);
 
   // --- VRI: 100 - robustness across weighted components. ---
+  const km = kmAgeNote(v, now);
   const rob = {
-    kmAge: kmAgeNote(v, now),
+    kmAge: km.nota,
     engine: noteOf("engineArch", answers, 6),
     transmission: noteOf("transmission", answers, 6),
     use: noteOf("usePattern", answers, def),
@@ -254,5 +282,5 @@ export function computeQuizHealth(answers: Record<string, string>, v: Vehicle, n
   const vri = clamp(100 - robustness * 100, 0, 100);
 
   const score = Math.round(clamp(0.8 * vhsFinal + 0.2 * (100 - vri), 0, 100));
-  return { score, vhs: Math.round(vhsFinal), vri: Math.round(vri) };
+  return { score, vhs: Math.round(vhsFinal), vri: Math.round(vri), kmEstimado: km.estimado };
 }
