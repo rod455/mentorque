@@ -361,6 +361,7 @@ sem tirar ninguém dela.
 | `conferir:entre` | no nascimento (autor), 06/10/2026 | formato só (data e papéis da tabela); não reprova por idade, de propósito |
 | `conferir:quiz-populacao` | no nascimento (autor), 07/10/2026 | 5 plantios, 5 mordidas: id do onboarding trocado no SQL, banco de perguntas reordenado, `security_invoker` removido, etiqueta de uma das duas populações perdida, e a rotação diária passando a devolver a pergunta do onboarding |
 | `conferir:gratis` | no nascimento (autor), 17/10/2026 | 6 plantios com `npm run plantio`, 6 mordidas: custo por km aberto ao grátis, causas cortadas em 2 de volta, a regra dando 2 causas na segunda consulta, a tela sem perguntar se é a primeira, o Biela trancado na tabela, e o card do Início mostrando o custo por km ao grátis |
+| `conferir:prazo` | no nascimento (autor), 21/10/2026 | 6 plantios com `npm run plantio`, 6 mordidas: aborto com outro nome (o cliente da Supabase passa a repetir sozinho), relógio desligado quando chega o cabeçalho (o corpo travado escapa), coleta voltando ao cliente sem prazo, orçamento que estoura os 30 s do Vigia, orçamento sem conferência no `medir`, e o cancelamento de quem chamou ignorado |
 | `conferir:segredo` | no nascimento (autor), 18/10/2026 | 4 plantios, 4 mordidas: chave real em arquivo sem exceção, chave real DENTRO do arquivo com exceção (a que importa), JWT em documento, e a bateria inteira com o defeito de pé |
 | `conferir:baixar` | 19/09/2026 | sim |
 | `conferir:email` | 19/09/2026 | sim, 3 defeitos plantados |

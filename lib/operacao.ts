@@ -18,7 +18,8 @@ import {
   janelaDaCadeia,
   type EventoFunil,
 } from "./funilCorreto";
-import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
+import { getSupabaseAdmin, getSupabaseAdminComPrazo } from "@/lib/supabaseAdmin";
+import { ORCAMENTO_DA_ROTA_MS, PRAZO_POR_CONSULTA_MS, cabeMaisUma, foiOPrazo } from "@/lib/prazo";
 import { linhaDeAnuncio, linhaDeAtivacao, linhaDeRetencao } from "./retratoLegivel";
 import { comTentativas, transitorio } from "@/lib/transitorio";
 
@@ -29,7 +30,10 @@ import { comTentativas, transitorio } from "@/lib/transitorio";
 export type DadosOperacao = Awaited<ReturnType<typeof coletarDadosOperacao>>;
 
 export async function coletarDadosOperacao() {
-  const admin = getSupabaseAdmin();
+  // Com prazo em cada consulta e orçamento para a rota inteira (21/10/2026):
+  // o Vigia desiste em 30 s, e uma conexão travada até o banco fazia a rota
+  // esperar até os 60 s do teto, calada. Regra e números em lib/prazo.ts.
+  const admin = getSupabaseAdminComPrazo();
   if (!admin) return null;
 
   // Os tempos de cada consulta (14/09/2026). A rota levava uns 8 segundos
@@ -54,9 +58,15 @@ export async function coletarDadosOperacao() {
   // /api/funil tambem: uma ponte, uma regra.
   const medir = async <T extends Resposta>(nome: string, fabrica: () => PromiseLike<T>): Promise<T> => {
     const inicio = Date.now();
+    // Orçamento esgotado: a consulta nem começa, e vira buraco declarado.
+    if (!cabeMaisUma(t0, inicio)) {
+      falhas[nome] = `sem tempo: a rota passou de ${ORCAMENTO_DA_ROTA_MS / 1000} s e esta consulta nem começou`;
+      return { data: null, count: null, error: { message: falhas[nome] }, status: 0 } as unknown as T;
+    }
     const r = await comTentativas(fabrica, { pausaMs: 300 });
     tempos[nome] = Date.now() - inicio;
-    if (r.error) falhas[nome] = `${r.status ?? ""} ${r.error.code ?? ""} ${r.error.message ?? ""}${transitorio(r) ? " (passageiro, tentou 3x)" : ""}`.trim();
+    if (r.error && foiOPrazo(r)) falhas[nome] = `prazo de ${PRAZO_POR_CONSULTA_MS / 1000} s esgotado sem resposta do banco`;
+    else if (r.error) falhas[nome] = `${r.status ?? ""} ${r.error.code ?? ""} ${r.error.message ?? ""}${transitorio(r) ? " (passageiro, tentou 3x)" : ""}`.trim();
     return r;
   };
   // Poucas por vez: é a pilha da API que engasga, não o banco.
