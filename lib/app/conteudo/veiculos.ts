@@ -143,7 +143,24 @@ const motoModelsByMake: Record<string, string[]> = {
   ],
   Kasinski: ["Mirage 250", "Comet 250", "Win 110", "Prima 150", "Seta 125"],
 };
-const years = Array.from({ length: 27 }, (_, i) => 2026 - i);
+const years = anosDoCadastro();
 
   return { makes, modelsByMake, motoModelsByMake, years };
+}
+
+// Os anos que o "Adicionar carro" oferece (21/10/2026).
+//
+// Era uma lista fixa de 2026 a 2000. Um motorista com um carro de 1984 escreveu
+// pelo suporte: "não apareceu o ano, aí coloquei o último que tinha". O app
+// passou a tratar como de 2000 um carro de 1984, e plano de revisão, idade e
+// quilometragem estimada saem todos errados a partir disso. E a lista não
+// andava sozinha: em 2027 o modelo do ano não apareceria.
+//
+// Agora vai do ano que vem (o modelo novo chega às lojas no segundo semestre)
+// até 1960, calculado pela data. Conferido por `npm run conferir:catalogo`.
+export const ANO_MAIS_ANTIGO_DO_CADASTRO = 1960;
+
+export function anosDoCadastro(agora = new Date()): number[] {
+  const maisNovo = agora.getFullYear() + 1;
+  return Array.from({ length: maisNovo - ANO_MAIS_ANTIGO_DO_CADASTRO + 1 }, (_, i) => maisNovo - i);
 }

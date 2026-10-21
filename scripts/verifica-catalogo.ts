@@ -14,10 +14,13 @@
 //   2. link [[id|texto]] aponta para aula que existe (link morto vira beco)
 //   3. aula não se linka para ela mesma
 //   4. id não se repete
+//   5. o "Adicionar carro" oferece o ano do carro da pessoa (21/10/2026: um
+//      carro de 1984 virou 2000 porque a lista parava em 2000)
 //
 // Rode com: npm run conferir:catalogo
 import { readFileSync } from "node:fs";
 import { aulas } from "../lib/app/conteudo/aulas.ts";
+import { ANO_MAIS_ANTIGO_DO_CADASTRO, anosDoCadastro, veiculos } from "../lib/app/conteudo/veiculos.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -148,6 +151,17 @@ const { lessons } = aulas((pt: string) => pt);
     /<VideoPlayer media=\{lesson\.media\}/.test(tela),
     "player sem o media da aula desenha outra coisa, ou nada",
   );
+}
+
+// ── 5. o ano do carro da pessoa existe na lista ────────────────────────────
+{
+  const em2026 = anosDoCadastro(new Date("2026-10-21T12:00:00Z"));
+  conferir("o carro de 1984 do relato de 21/10 tem o ano dele", em2026.includes(1984));
+  conferir("a lista vai até 1960", em2026.at(-1) === ANO_MAIS_ANTIGO_DO_CADASTRO && ANO_MAIS_ANTIGO_DO_CADASTRO <= 1960);
+  conferir("o modelo do ano que vem já aparece", em2026[0] === 2027);
+  conferir("a lista anda com o calendário", anosDoCadastro(new Date("2031-03-01T12:00:00Z"))[0] === 2032);
+  conferir("sem buraco nem repetição, do mais novo ao mais antigo", em2026.every((a, i) => i === 0 || em2026[i - 1] - a === 1));
+  conferir("a tela recebe essa lista", veiculos((pt: string) => pt).years.join() === anosDoCadastro().join());
 }
 
 if (falhas) {
