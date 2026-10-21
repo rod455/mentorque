@@ -309,6 +309,26 @@ recomendar.
   dá e o servidor joga fora, em silêncio, porque a rota trata o conflito como
   sucesso de propósito. Ao achar um caminho bloqueado, procure a SEGUNDA
   tranca antes de escrever o conserto.
+- **Asserção que existe para tornar uma frase falsificável tem que apertar no
+  valor publicado, não numa folga.** Escrevi "0 a 2 pontos no score" no diário e
+  uma asserção para o dia em que alguém mudar os pesos. Pus o limite em 3 por
+  prudência, plantei o peso do VRI dobrado, e ela passou verde: a folga absorvia
+  exatamente a mudança que ela existia para pegar. Quando a asserção protege uma
+  CONCLUSÃO minha e não um invariante do produto, o limite é o número que eu
+  publiquei, e vale também ler na fonte o parâmetro de que a conclusão depende.
+- **A trava que torna um rótulo honesto costuma morar longe de quem lê o
+  rótulo.** O "diagnóstico baseado no seu quiz" liga com UMA resposta de treze,
+  e o que o salva é a folha não deixar salvar incompleto, numa tela diferente.
+  Hoje é verdade; no dia em que entrar gravação automática ou "continuar
+  depois", o rótulo mente sem ninguém mexer nele. **Achado desarmado pela
+  medição merece a asserção da trava que o desarmou**, senão a próxima pessoa
+  reencontra o mesmo raciocínio sem a garantia.
+- **Antes de REPETIR uma recomendação, conferir no instrumento se ela já foi
+  feita.** Eu ia repetir o pedido do campo de origem em `subscriptions`; ele
+  estava no banco havia seis dias. A regra de 04/10 do CLAUDE.md foi escrita
+  para pedido ao dono, e vale igual para recomendação minha da semana anterior:
+  a fila envelhece sozinha, e recomendação repetida gasta a credibilidade das
+  outras. Trinta segundos de consulta.
 - **Metade de um conserto no ar é pior que nenhuma, porque a metade publicada
   parece conserto.** Em 14/10 o conserto do quiz do dia 1 tinha o índice novo
   no banco (visível, conferível, verdadeiro) e o app esperando a 3.2. Quem
@@ -423,7 +443,9 @@ recomendar.
 
 Varridos: **compra/checkout web** (26/08), **compra pelas lojas via
 RevenueCat** (02/09), **receita e cupom** (02/09, com o dono), **garagem e
-carro duplicado** (09/09), **login e recuperação de conta** (16/09).
+carro duplicado** (09/09), **login e recuperação de conta** (16/09), **quiz
+diário** (07/10, reconferido em 14/10 e FECHADO em 21/10 com comportamento
+medido), **quiz de saúde** (21/10).
 
 Reaberto na mesma data, porque a varredura da loja passou por ele e o deixou
 pela metade: **a compra pelas lojas continua sem uma única linha em produção**
@@ -482,8 +504,18 @@ fila, com dado de produção pela primeira vez.
   na rota de dados e a conferência cobra, com seis plantios. Falta um passo no
   n8n: imprimir a frase que chega pronta em vez de montar a linha à mão. Mesma
   pendência que a linha de coorte teve em 28/09, e ela foi resolvida assim.
-- **Quiz de saúde** é a próxima varredura (irmão não varrido do quiz diário),
-  mais catálogo remoto de aulas e campos de formulário.
+- ~~**Quiz de saúde** é a próxima varredura.~~ **VARRIDO em 21/10**: um
+  candidato desarmado pela medição (378 carros dizem que o quiz parcial não
+  existe) e um consertado (o km estimado agora aparece na tela), os dois com o
+  tamanho escrito do lado. `conferir:saude` nasceu com cinco plantios.
+- **O INSTRUMENTO QUE FALTA no quiz de saúde** (anotado em 21/10): não dá para
+  saber quantas pessoas abandonam a folha no meio. Como ela não salva
+  incompleto, desistir não deixa rastro, e os 300 carros com zero respostas
+  podem ser 300 que nunca abriram ou 300 que abriram e saíram. Um evento de
+  abertura da folha separaria os dois, igual ao `abriu_quiz` que resolveu a
+  mesma cegueira no quiz diário.
+- **Catálogo remoto de aulas** é a próxima varredura, com campos de formulário
+  atrás.
 - **Quiz diário** (novo em 26-27/08, nunca varrido por QA): banco de 63
   perguntas (eram 65 na nota antiga; conferido em 07/10), sequência com perdão semanal, rota `/api/quiz`, folha do primeiro
   quiz. Tem bateria própria em `npm run verifica:quiz` e quatro roteiros de

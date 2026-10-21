@@ -3,6 +3,90 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-21 · QA: o quiz do dia 1 virou comportamento, e o risco do carro parou de inventar o km
+- Artifact "QA da semana":
+  https://claude.ai/artifact/A38tbnU84NRffAPXNrxMJk
+- VARREDURA: **quiz de saúde**, que estava na fila desde 07/10. Mais o fecho do
+  item que ficou aberto três rodadas.
+- **O QUIZ DO DIA 1 FECHA COM COMPORTAMENTO, não com caminho de código.** A 3.2
+  subiu em 17/10 e o instrumento que o conserto trouxe respondeu: **91
+  aberturas da tela do quiz em 90 pessoas distintas, TODAS com origem
+  `pergunta` e NENHUMA com `ja-respondeu`**. O muro não está mais lá.
+- O antes e depois, com o denominador do lado para descartar crescimento:
+
+  | janela | quiz do dia por dia | instalações por dia | os dois no mesmo dia |
+  |---|---|---|---|
+  | 12 a 16/10, antes da 3.2 | 2,2 | ~37 | 0 |
+  | 17 a 20/10, 3.2 no ar | 11,3 | ~46 | 33 |
+
+  Cinco vezes mais, começando no dia exato em que a versão subiu, com as
+  instalações praticamente iguais. Os 33 do mesmo dia eram ZERO antes do
+  conserto, em 491 aparelhos. Hoje (21/10) aparece com zero no banco e isso
+  NÃO é leitura: são 8h20 de Brasília, com seis instalações no dia.
+- A frase "62% acertaram" ainda não aparece: o melhor dia teve 14 respostas
+  contra o piso de 20. Mas saiu de 1,7 por dia para 14 num dia, então o piso
+  ficou ao alcance de um dia bom.
+- **A VARREDURA DO QUIZ DE SAÚDE TROUXE DOIS CANDIDATOS, E A MEDIÇÃO SEPAROU
+  OS DOIS.**
+- DESARMADO, etiquetado TEORIA: `hasQuiz` na tela é
+  `Object.keys(quiz).length > 0`, e o quiz tem 13 perguntas, então UMA resposta
+  viraria "diagnóstico baseado no seu quiz" com doze notas padrão por baixo.
+  Medido: **378 carros, 300 com zero respostas, 78 com as treze, e NENHUM
+  parcial**. Não acontece porque a folha não salva incompleto (botão
+  desabilitado mais retorno antecipado no `submit`). A trava é o que torna o
+  rótulo honesto, e ela mora numa tela, longe de quem lê o número: se entrar
+  "continuar depois" ou gravação automática, o rótulo mente em silêncio. Virou
+  asserção por isso.
+- REAL E CONSERTADO: sem odômetro o cálculo usa `idade * 12000`, e esse
+  componente tem o MAIOR peso do VRI (0,25), que a tela mostra como número
+  próprio dizendo "baseado no seu quiz", sem ressalva. **222 dos 378 carros sem
+  odômetro, 25 deles com o quiz completo.** Tamanho medido, para ninguém ler
+  como urgente: **0 a 2 pontos no score** (o VRI entra com peso 0,2) e **até 6
+  no VRI exibido sozinho** (carro de 2008, 90.000 km reais contra 216.000
+  estimados). Pequeno, e ainda assim é valor inventado com cara de medido, que é
+  a falha que esta casa consertou em três fontes diferentes neste mês.
+- O conserto, no lugar certo: `computeQuizHealth` passa a devolver
+  `kmEstimado`, a tela mostra a ressalva **AO LADO** da confirmação do quiz e
+  não no lugar dela (o quiz foi respondido mesmo, é só esse componente que
+  faltou), e o texto entrou nos dois idiomas. Fechei em vez de recomendar,
+  seguindo a correção 2 do retorno de 15/10.
+- CONFERÊNCIA NOVA `conferir:saude`, cinco plantios. **O quinto passou verde na
+  primeira vez e o achado é meu**: a asserção que existe para tornar
+  falsificável a frase "0 a 2 pontos" tinha limite de 3 pontos, com folga para
+  absorver o peso do VRI dobrado. Apertei para o valor que o código produz hoje
+  e acrescentei a leitura do peso direto na fonte, porque é dele que a frase
+  depende.
+- **E QUASE REPETI UM PEDIDO JÁ FEITO.** A minha recomendação da semana passada
+  era o campo de origem em `subscriptions`, e eu ia repetir. Fui conferir no
+  instrumento antes, como a regra de 04/10 do CLAUDE.md manda: ele existe desde
+  15/10 (`supabase/subscriptions_origem.sql`), escrito por cada caminho que
+  cria a linha, e o veredito da única assinatura ativa saiu de "cortesia, nao e
+  venda" para **"ok"** com `venda_de_loja` verdadeiro. A regra pagou por si, e
+  a recomendação 3 do artifact virou "já está feito" em vez de pedido repetido.
+- OS OUTROS DOIS PENDENTES, fechados pelos outros e conferidos por mim: a frase
+  do AdMob chega ao arquivo que as pessoas leem (lida hoje no retrato: "NAO E
+  ZERO MEDIDO" com o motivo do coletor dentro), e o ponto cego da conferência
+  da loja ganhou duas asserções.
+- ERROS DO RETRATO, sem alarme e com a base crescendo: **607 aparelhos ativos
+  contra 422** na semana passada, e os defeitos em **1,8%** contra 2,4%. Os dois
+  topos são cancelamento de login do Google, 13 dos 15 relatos de desistência,
+  já classificados assim pelo coletor. Fechamentos na tela inicial caíram de 8
+  para 5, em 4 aparelhos.
+- SAÚDE, com instrumento e hora: `npm run conferir` verde com a conferência
+  nova dentro, `tsc --noEmit` limpo e `build:native` verde, rodados nesta
+  máquina entre 11h20 e 13h UTC de 21/10. Critério 2 em três dos quatro, com a
+  Vercel como segundo instrumento do build do site.
+- FONTE INDISPONÍVEL: o Stripe não está autorizado nesta sessão, então a conta
+  do dinheiro saiu pelo lado do banco (um veredito, "ok", e nenhum ciclo
+  vencido).
+- O INSTRUMENTO QUE FALTA, anotado em vez de suposto: não dá para saber quantas
+  pessoas abandonam o quiz de saúde no meio. Como a folha não salva incompleto,
+  desistir não deixa rastro, e os 300 carros com zero respostas podem ser 300
+  que nunca abriram ou 300 que abriram e saíram. Entrou na fila.
+- FILA: o quiz diário SAI depois de três rodadas, com comportamento medido. O
+  quiz de saúde foi varrido hoje. A próxima é o **catálogo remoto de aulas**,
+  com campos de formulário atrás.
+
 ## 2026-10-21 · Engenharia: o Vigia ficou cego às 7h30, e a rota nem chegou ao banco
 
 - Alerta do Vigia por e-mail às 7h31 (BRT): "O /api/dados não respondeu como
