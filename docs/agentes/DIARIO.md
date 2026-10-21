@@ -3,6 +3,33 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-21 · Engenharia: o Vigia ficou cego às 7h30, e a rota nem chegou ao banco
+
+- Alerta do Vigia por e-mail às 7h31 (BRT): "O /api/dados não respondeu como
+  esperado". Na execução 9043 do n8n, o nó "Busca dados da operacao" estourou
+  o prazo de 30 s (10:30:32 a 10:31:02 UTC). Os outros nós responderam.
+- **A rota não chegou ao banco nesses 30 s.** Nos logs de borda da Supabase,
+  de 10:25 a 10:35 UTC, nenhuma das consultas do `/api/dados` aparece
+  (`funil_semana`, `uso_diario`, `email_resumo_30d`, `anomalias_da_operacao`).
+  A única leitura é a do nó seguinte do Vigia, às 10:31:03. Às 9h00 UTC as
+  quatro aparecem, e o retrato do dia saiu inteiro (6,3 s dentro da rota).
+- **Descartado:** deploy (o último no ar é de 20/10, 15:22 UTC; o das 9h de hoje
+  foi cancelado pela regra de só docs) e mudança na rota. Nos nove dias
+  anteriores o Vigia inteiro levou de 5 a 7 s.
+- **Não separado, e não dá mais para separar:** a Vercel não chegou a rodar a
+  função, ou rodou e a conexão até a Supabase travou antes de chegar à borda.
+  Os logs da Vercel no plano Hobby duram 1 hora, e a leitura foi feita depois
+  disso. A segunda hipótese tem um buraco real: as consultas da rota não têm
+  prazo próprio, então uma conexão travada espera até o teto de 60 s.
+- **Feito:** o nó do Vigia que chama a rota agora tenta 2 vezes, com 5 s de
+  pausa (versão ativa `723e24b3`, relida às 11:17 UTC). Um travamento isolado
+  deixa de virar alerta, e rota quebrada de verdade continua gritando.
+- **Não feito, oferecido ao dono:** um prazo por consulta dentro do
+  `/api/dados`, para a conexão travada virar `falhas` em vez de silêncio.
+- **Fora daqui:** o `tempos.total` da rota subiu de cerca de 2,5 s (16 a 19/10)
+  para 7,1 s (20/10) e 6,3 s (21/10). Ainda é metade do limiar de 10 s do
+  Vigia, e não explica o estouro de hoje, porque hoje nada chegou ao banco.
+
 ## 2026-10-20 · Engenharia: a rodada do Diretor lida, e a cegueira da atribuição tinha outra causa
 
 - Pedido do dono: "veja o que o diretor publicou e o SEO também". **O SEO não
