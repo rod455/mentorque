@@ -28,6 +28,10 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
    etiquetar o aparelho com a fonte (Google, Meta ou orgânico) e a campanha.
    A pessoa não sente nada; é o que faltava para separar a retenção por
    origem. Na 3.2 e antes, nenhum cadastro do app tem campanha.
+4. **Carro antigo tem o ano dele** (21/10, commit 1a7577f). O cadastro do
+   carro oferecia só de 2026 a 2000; agora vai de 1960 até o ano que vem, e a
+   lista anda com o calendário. Pedido de um motorista com carro de 1984, que
+   cadastrou como 2000 por falta de opção.
 
 ## Plugin nativo nesta versão
 
