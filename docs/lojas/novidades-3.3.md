@@ -36,6 +36,14 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
    odômetro, a ressalva "km estimado pela idade" passa a ter um campo para
    informar o km ali mesmo. E três eventos novos: quem abre e quem termina o
    quiz de saúde, e quem informa o km pela saúde.
+6. **O convite do aviso aparece onde a pessoa cai, e o onboarding fica com
+   cinco páginas** (23/10, commit d22e5e8, rodada do CRO). Quem cadastra o
+   carro como convidado e depois cria conta cai na tela do carro, e o convite
+   para ligar os avisos esperava na garagem, por onde essa pessoa não passa.
+   E o A/B `onboarding-curto` fechou a favor da versão de cinco páginas (mais
+   contas criadas), que vira a única. A aposta do CRO
+   (`convite-do-carro-aparece-onde-a-pessoa-cai`) só começa a contar quando a
+   3.3 passar de metade dos aparelhos ativos.
 
 ## Plugin nativo nesta versão
 

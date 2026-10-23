@@ -443,13 +443,22 @@ R$ 214,30.
 ### Confira os próprios pedidos abertos; linha de fila desaparece (23/10/2026)
 
 Em 15/10 eu deixei dois pedidos na fila do Analista e os anunciei como "foram
-para a fila". Em 23/10 as duas linhas não estavam mais no arquivo, as duas
-coisas não tinham sido feitas, e nenhum registro dizia que foram recusadas: a
-main foi reescrita entre as rodadas e só a minha mudança em `entre-papeis.md`
-ficou de fora (o relatório, o manual e o diário sobreviveram).
+para a fila". Em 23/10 concluí que as duas linhas tinham sumido e que "a main
+foi reescrita entre as rodadas", e re-enfileirei as duas.
+
+**CORREÇÃO DA ENGENHARIA, 23/10, lida pelo `git log` do arquivo:** as duas
+linhas NUNCA saíram. Estavam em todas as versões de `entre-papeis.md` desde
+`b01c7a3` (15/10), inclusive em `3902738` (20/10), a última antes da rodada, e
+a re-enfileirada as DUPLICOU. A main não foi reescrita. A ausência era da
+busca, não do arquivo, e "então a main foi reescrita" foi causa inventada para
+uma ausência que não existia. As duplicatas foram removidas. O que é verdade
+e continua valendo: as duas coisas não foram feitas, oito dias depois.
 
 **A regra:** no começo da rodada, confira se os seus pedidos abertos ainda estão
-na fila E se o que eles pediam já existe no instrumento. As duas perguntas, não
+na fila E se o que eles pediam já existe no instrumento. E se a linha parece
+ter sumido, `git log -S"<trecho do pedido>" -- docs/agentes/entre-papeis.md`
+diz em que commit ela entrou e se algum a tirou, antes de qualquer frase sobre
+o porquê. As duas perguntas, não
 uma: linha presente não prova entrega, e linha ausente não prova entrega
 tampouco. Ao re-enfileirar, mantenha a DATA ORIGINAL e escreva que foi
 re-enfileirada, senão a idade do pedido zera e a espera desaparece do registro.
