@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { activeVehicle, servicesFor, usePrototype } from "@/lib/app/store";
 import { computeHealth, SERVICE_SYSTEMS } from "@/lib/app/health";
 import { computeQuizHealth, getHealthQuiz } from "@/lib/app/healthQuiz";
@@ -9,6 +9,7 @@ import { costProjection, systemPct, systemPriority } from "@/lib/app/premium";
 import { carName, formatBRL, minPurchaseDate, vehicleLabel } from "@/lib/app/content";
 import type { SystemKey } from "@/lib/app/types";
 import { useNav } from "@/lib/app/nav";
+import { funil } from "@/lib/app/funil";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Card, DateField, Icon, inputCls, LockedCard, PremiumBadge, SectionTitle, SeverityDot, useContent } from "../ui";
 import { SafetyPanel } from "../SafetyPanel";
@@ -62,9 +63,12 @@ const REMAINING: Record<string, string> = { ok: "80%", attention: "40%", overdue
 export function HealthScreen() {
   const c = useContent();
   const h = c.health;
-  const { s } = usePrototype();
+  const { s, updateVehicle } = usePrototype();
   const { go } = useNav();
   const [scoreInfo, setScoreInfo] = useState<"vhs" | "vri" | null>(null);
+  const [kmAberto, setKmAberto] = useState(false);
+  const [kmNovo, setKmNovo] = useState("");
+  const [kmErro, setKmErro] = useState(false);
   const v = activeVehicle(s);
   if (!v) return <NoCarHealth />;
 
@@ -74,6 +78,21 @@ export function HealthScreen() {
   const hasQuiz = !!(v.quiz && Object.keys(v.quiz).length);
   const result = computeQuizHealth(v.quiz ?? {}, v);
   const displayScore = result.score;
+
+  // O km pedido onde a falta dele aparece (22/10/2026). A varredura do QA de
+  // 21/10 pôs a ressalva "km estimado pela idade" e recomendou pedir o
+  // odômetro no cadastro do carro. Só que o cadastro curto, sem km, venceu um
+  // teste A/B por 17 pontos (docs/agentes/experimentos.md): pôr o campo de
+  // volta lá arrisca o cadastro inteiro por um componente que vale de 0 a 2
+  // pontos. Aqui a pessoa já está olhando o risco do carro, e o pedido custa um
+  // campo só.
+  const salvarKm = () => {
+    const n = parseInt(kmNovo.replace(/\D/g, ""), 10);
+    if (!Number.isFinite(n) || n <= 0) { setKmErro(true); return; }
+    updateVehicle(v.id, { odometerKm: n });
+    funil("informou_km", { origem: "saude" });
+    setKmAberto(false);
+  };
 
   const findingText = (code: string, km?: number, system?: SystemKey, months?: number) => {
     let text = h.findings[code] ?? code;
@@ -114,6 +133,31 @@ export function HealthScreen() {
           {result.kmEstimado && (
             <p className="mt-0.5 text-xs text-amber/80">{h.quizKmEstimado}</p>
           )}
+          {result.kmEstimado && !kmAberto && (
+            <button
+              onClick={() => { setKmNovo(""); setKmErro(false); setKmAberto(true); }}
+              className="mt-1 text-xs font-semibold text-amber underline-offset-2 hover:underline"
+              data-informar-km
+            >
+              {h.quizKmInformar}
+            </button>
+          )}
+          {result.kmEstimado && kmAberto && (
+            <div className="mt-1.5 flex items-center gap-2">
+              <input
+                value={kmNovo}
+                inputMode="numeric"
+                autoFocus
+                onChange={(e) => { setKmNovo(e.target.value.replace(/\D/g, "")); setKmErro(false); }}
+                onKeyDown={(e) => { if (e.key === "Enter") salvarKm(); }}
+                placeholder={h.quizKmPh}
+                aria-label={h.quizKmPh}
+                className={`${inputCls} h-9 min-w-0 flex-1 py-1 text-sm`}
+              />
+              <Button size="md" onClick={salvarKm}>{h.quizKmSalvar}</Button>
+            </div>
+          )}
+          {kmErro && <p className="mt-1 text-xs text-coral">{h.quizKmInvalido}</p>}
         </div>
       </Card>
 
@@ -378,6 +422,19 @@ export function HealthQuizScreen() {
   const [answers, setAnswers] = useState<Record<string, string>>(v?.quiz ?? {});
   const [purchase, setPurchase] = useState<string>(v?.purchaseDate ?? "");
 
+  // Quem abre e quem termina (22/10/2026). A folha não salva incompleto, e é
+  // isso que mantém honesto o "baseado no seu quiz". O preço era não saber
+  // quem desiste no meio: sem estes dois, desistir não deixava rastro.
+  const origemDoQuiz = v?.quiz && Object.keys(v.quiz).length ? "refazer" : "primeira";
+  useEffect(() => {
+    if (!v) return;
+    // Uma vez por sessão: a leitura é por aparelho (abriu e nunca completou),
+    // e o efeito roda duas vezes no modo estrito do React em desenvolvimento.
+    funil("abriu_quiz_saude", { origem: origemDoQuiz, umaVez: true });
+    // Só na abertura da folha: a resposta de cada pergunta muda `v`.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (!v) return <NoCarHealth />;
 
   const total = questions.length + 1; // +1: data de compra (pergunta 1)
@@ -387,6 +444,7 @@ export function HealthQuizScreen() {
   const submit = () => {
     if (!allDone) return;
     updateVehicle(v.id, { quiz: answers, purchaseDate: purchase || undefined });
+    funil("completou_quiz_saude", { origem: origemDoQuiz });
     back();
   };
 

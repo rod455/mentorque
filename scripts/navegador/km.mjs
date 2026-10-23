@@ -6,7 +6,7 @@
 import { garagem, CARRO, abrirApp, dia } from "./base.mjs";
 
 export const nome = "km";
-export const sobre = "o lembrete mensal de quilometragem";
+export const sobre = "o lembrete mensal de quilometragem e o km pedido na tela de saúde";
 
 const agoraMenos = (dias) => new Date(Date.now() - dias * 86400000).toISOString();
 
@@ -75,6 +75,45 @@ export async function rodar({ nav, ok }) {
   {
     const c = await abrir(comCarro({ odometerKm: undefined }));
     ok("carro sem odômetro não pede nem carimba", !c.pediu && !c.carimbo);
+    await c.fechar();
+  }
+
+  // 5. A tela de saúde pede o km onde a falta dele aparece (22/10/2026).
+  //
+  // Sem odômetro, o risco usa "idade vezes 12.000" e a tela diz isso. A
+  // ressalva passou a oferecer o campo ali mesmo, e o evento `informou_km` é a
+  // única leitura de se alguém responde. Junto, a folha do quiz de saúde passou
+  // a contar quem abre (`abriu_quiz_saude`): sem isso, desistir no meio não
+  // deixa rastro, porque a folha não salva incompleto.
+  {
+    const eventos = [];
+    const c = await abrirApp(nav, { sessao: comCarro({ odometerKm: undefined }), rota: "/app?ir=health" });
+    c.pg.on("request", (r) => {
+      if (!r.url().includes("/api/funil")) return;
+      try { eventos.push(JSON.parse(r.postData() ?? "{}")); } catch { /* corpo que não é JSON */ }
+    });
+    const botao = c.pg.locator("[data-informar-km]");
+    ok("sem odômetro, a saúde oferece informar o km", (await botao.count()) === 1);
+    if ((await botao.count()) === 1) {
+      await botao.click();
+      await c.pg.getByPlaceholder(/Km do painel/i).fill("abc");
+      await c.pg.getByRole("button", { name: /^Salvar$/ }).click();
+      await c.pg.waitForTimeout(300);
+      ok("km sem número é recusado com aviso", /Digite o km em números/i.test(await c.corpo()));
+      await c.pg.getByPlaceholder(/Km do painel/i).fill("87000");
+      await c.pg.getByRole("button", { name: /^Salvar$/ }).click();
+      await c.pg.waitForTimeout(1200);
+      const s = await c.sessaoGravada();
+      ok("salvar grava o odômetro no carro", s?.vehicles?.[0]?.odometerKm === 87000, String(s?.vehicles?.[0]?.odometerKm));
+      ok("e a ressalva do km estimado some", !/estimada pela idade/i.test(await c.corpo()) && (await botao.count()) === 0);
+      ok("e o funil recebe informou_km da saúde", eventos.some((e) => e.evento === "informou_km" && e.origem === "saude"), JSON.stringify(eventos.map((e) => e.evento)));
+    }
+    await c.pg.getByRole("button", { name: /Fazer o Quiz de Saúde/i }).first().click();
+    await c.pg.waitForTimeout(1500);
+    const aberturas = eventos.filter((e) => e.evento === "abriu_quiz_saude");
+    ok("abrir a folha do quiz de saúde conta a abertura, uma vez", aberturas.length === 1 && aberturas[0].origem === "primeira", JSON.stringify(eventos.map((e) => e.evento)));
+    ok("e abrir não conta como completar", !eventos.some((e) => e.evento === "completou_quiz_saude"));
+    ok("nenhum erro de página na saúde", c.erros.length === 0, c.erros.join(" | "));
     await c.fechar();
   }
 }

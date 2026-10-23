@@ -18,7 +18,11 @@
 //      inclusive quando a conferência estoura ou alguém aperta Ctrl+C.
 //
 // Uso:
-//   node scripts/plantio.mjs <conferir:nome> <arquivo> <texto-antigo> <texto-novo>
+//   node scripts/plantio.mjs <conferir:nome> <arquivo> <texto-antigo> <texto-novo> [args da conferência]
+//
+// O que vem depois do texto novo vai para a conferência. É o que deixa plantar
+// contra UMA suíte de navegador (`... conferir:navegador <arquivo> <a> <b> km`),
+// em vez de rodar a bateria inteira de 11 minutos por um plantio.
 //
 // Exemplo (o defeito de 30/08, no consumidor da pilha):
 //   node scripts/plantio.mjs conferir:navegacao lib/app/nav.tsx \
@@ -28,12 +32,12 @@
 // quando ela passa. O código de saída do programa é 0 quando mordeu e 2 quando
 // ficou cega, para dar para encadear numa prova maior. Qualquer problema de
 // processo (cópia, texto, restauração) sai com 1 e explica.
-import { spawnSync } from "node:child_process";
+import { spawn } from "node:child_process";
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, resolve } from "node:path";
 import { tmpdir } from "node:os";
 
-const [conferencia, arquivo, antigo, novo] = process.argv.slice(2);
+const [conferencia, arquivo, antigo, novo, ...argsDaConferencia] = process.argv.slice(2);
 if (!conferencia || !arquivo || antigo === undefined || novo === undefined) {
   console.error("uso: node scripts/plantio.mjs <conferir:nome> <arquivo> <texto-antigo> <texto-novo>");
   process.exit(1);
@@ -77,13 +81,33 @@ function restaurar() {
     process.exit(1);
   }
 }
-process.on("SIGINT", () => { restaurar(); process.exit(1); });
-process.on("exit", () => restaurar());
-
 // 3. Planta e roda a conferência sozinha, lendo o código de saída direto.
+//
+// A conferência roda SEM bloquear este processo, e todo sinal de parada
+// restaura. Até 22/10/2026 só o Ctrl+C (SIGINT) restaurava, e a conferência
+// rodava num `spawnSync`: um `timeout` em volta do plantio manda SIGTERM, o
+// processo morria no meio da suíte de navegador, e o defeito ficou de pé no
+// `Health.tsx`. Voltou pela cópia, à mão. Regra que depende de como o
+// processo morre não é regra.
 writeFileSync(caminho, texto.replace(antigo, novo));
-const r = spawnSync("npm", ["run", "--silent", conferencia], { stdio: ["ignore", "pipe", "pipe"], encoding: "utf8" });
-const saida = r.status ?? 1;
+//
+// `detached` põe a conferência num grupo de processos próprio, e a parada mata
+// o grupo inteiro: a suíte de navegador sobe um servidor de desenvolvimento
+// que, morto só o `npm`, ficava solto segurando a porta.
+const filho = spawn("npm", ["run", "--silent", conferencia, ...argsDaConferencia], { stdio: ["ignore", "pipe", "pipe"], detached: true });
+for (const sinal of ["SIGINT", "SIGTERM", "SIGHUP"]) {
+  process.on(sinal, () => {
+    try { process.kill(-filho.pid, "SIGTERM"); } catch { /* o grupo já acabou */ }
+    restaurar();
+    console.error(`${sinal}: plantio interrompido, ${arquivo} restaurado pela cópia (${copia})`);
+    process.exit(1);
+  });
+}
+process.on("exit", () => restaurar());
+let saidaTexto = "";
+filho.stdout.on("data", (d) => { saidaTexto += d; });
+filho.stderr.on("data", (d) => { saidaTexto += d; });
+const saida = await new Promise((ok) => filho.on("close", (codigo) => ok(codigo ?? 1)));
 
 // 4. Desfaz pela cópia e confere que desfez.
 restaurar();
@@ -91,7 +115,7 @@ restaurar();
 const veredito = saida === 0 ? "CEGA" : "MORDEU";
 console.log(`${veredito}  ${conferencia} com o defeito em ${arquivo}: saída ${saida}; arquivo restaurado pela cópia (${copia})`);
 if (saida === 0) {
-  const ultimas = (r.stdout + r.stderr).trim().split("\n").slice(-3).join("\n");
+  const ultimas = saidaTexto.trim().split("\n").slice(-3).join("\n");
   if (ultimas) console.log(ultimas);
 }
 process.exit(saida === 0 ? 2 : 0);

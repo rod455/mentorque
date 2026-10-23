@@ -151,6 +151,31 @@ for (const q of HEALTH_QUESTIONS) completo[q.id] = q.opts[Math.floor(q.opts.leng
   );
 }
 
+// ── 5. QUEM ABRE, QUEM TERMINA, E O KM PEDIDO NA SAÚDE (22/10/2026) ───────
+//
+// A trava de cima tem um preço: desistir no meio não deixa rastro. Os dois
+// eventos separam "nunca abriu" de "abriu e saiu". O `completou` só pode sair
+// DEPOIS da trava, senão conta quem tocou no botão com resposta faltando. O
+// caminho da tela (abrir, informar o km, salvar) está na suíte de navegador
+// `km`; daqui só o que ela não alcança sem responder as catorze perguntas.
+{
+  const tela = semComentarios(leia("components/app/screens/Health.tsx"));
+  const submit = tela.slice(tela.indexOf("const submit = () => {"), tela.indexOf("back();", tela.indexOf("const submit = () => {")));
+  conferir(
+    "terminar o quiz conta, e só depois da trava",
+    /if \(!allDone\) return;[\s\S]*updateVehicle\(v\.id, \{ quiz: answers[\s\S]*funil\("completou_quiz_saude"/.test(submit),
+    "o evento antes do `if (!allDone) return` conta quem não terminou",
+  );
+  conferir("abrir e terminar levam a mesma origem (primeira ou refazer)", /funil\("abriu_quiz_saude", \{ origem: origemDoQuiz/.test(tela) && /funil\("completou_quiz_saude", \{ origem: origemDoQuiz/.test(tela));
+  const funilCorreto = leia("lib/funilCorreto.ts");
+  conferir(
+    "os três eventos novos entram no banco, na rota e no funil",
+    ["abriu_quiz_saude", "completou_quiz_saude", "informou_km"].every(
+      (e) => leia("supabase/funil_eventos.sql").includes(`'${e}'`) && leia("app/api/funil/route.ts").includes(`"${e}"`) && funilCorreto.includes(`${e}: "2026-10-22"`),
+    ),
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) da saúde reprovaram.`);
   process.exit(1);

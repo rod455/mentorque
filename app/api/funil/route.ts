@@ -68,6 +68,9 @@ const EVENTOS_DO_APP = new Set([
   "recusou_convite_aviso",
   "convite_conta", "aceitou_convite_conta", "recusou_convite_conta",
   "desistiu_da_compra", "erro_na_compra",
+  // O quiz de saúde e o km (22/10/2026): quem abre a folha do quiz e não
+  // termina, e o km dado na tela de saúde. Ver lib/app/funil.ts.
+  "abriu_quiz_saude", "completou_quiz_saude", "informou_km",
 ]);
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

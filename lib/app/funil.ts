@@ -109,6 +109,16 @@ export type EventoFunil =
   | "recusou_convite_conta"
   | "desistiu_da_compra"
   | "erro_na_compra"
+  // O QUIZ DE SAÚDE E O KM (22/10/2026), da varredura do QA de 21/10. A folha
+  // do quiz não salva incompleto (é o que mantém honesto o "baseado no seu
+  // quiz"), e por isso desistir no meio não deixava rastro: 322 de 401 carros
+  // com zero respostas podiam ser quem nunca abriu ou quem abriu e saiu. Agora
+  // `abriu_quiz_saude` menos `completou_quiz_saude`, por aparelho, separa os
+  // dois. `informou_km` mede a ressalva do km estimado: a tela de saúde passou
+  // a pedir o odômetro ali mesmo, e só o evento diz se alguém responde.
+  | "abriu_quiz_saude"
+  | "completou_quiz_saude"
+  | "informou_km"
   // Único evento técnico da lista: o desfecho da subida do SDK de atribuição
   // (lib/app/atribuicao.ts). Ele não mede comportamento de ninguém, mede se a
   // nossa própria medição está viva no aparelho.

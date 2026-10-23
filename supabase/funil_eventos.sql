@@ -98,7 +98,14 @@ create table if not exists public.funil_eventos (
     -- saiu nas recusas, o código do erro da loja em `erro_na_compra`.
     'recusou_convite_aviso',
     'convite_conta', 'aceitou_convite_conta', 'recusou_convite_conta',
-    'desistiu_da_compra', 'erro_na_compra'
+    'desistiu_da_compra', 'erro_na_compra',
+    -- O quiz de saúde e o km, medidos em 22/10/2026 (migração
+    -- funil_eventos_quiz_saude), a pedido da varredura do QA de 21/10: a folha
+    -- não salva quiz incompleto, então quem desiste no meio não deixava rastro,
+    -- e 322 de 401 carros com zero respostas podiam ser quem nunca abriu ou
+    -- quem abriu e saiu. `origem` em abriu/completou é 'primeira' ou
+    -- 'refazer'; em `informou_km` é a tela onde o km foi dado.
+    'abriu_quiz_saude', 'completou_quiz_saude', 'informou_km'
   )),
 
   anon_id    text,

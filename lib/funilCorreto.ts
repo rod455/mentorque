@@ -76,6 +76,9 @@ export type EventoFunil =
   | "recusou_convite_conta"
   | "desistiu_da_compra"
   | "erro_na_compra"
+  | "abriu_quiz_saude"
+  | "completou_quiz_saude"
+  | "informou_km"
   | "atribuicao";
 
 export type Natureza = "sessao" | "ato" | "tecnico";
@@ -144,6 +147,9 @@ export const UNIDADE: Record<EventoFunil, Unidade> = {
   recusou_convite_conta: "aparelho",
   desistiu_da_compra: "aparelho",
   erro_na_compra: "aparelho",
+  abriu_quiz_saude: "aparelho",
+  completou_quiz_saude: "aparelho",
+  informou_km: "aparelho",
   atribuicao: "aparelho",
   // Nascem no webhook da cobrança, que não tem aparelho. A identidade é o
   // user_id, e por isso eles não se comparam com nada da lista de cima.
@@ -212,6 +218,10 @@ export const NATUREZA: Record<EventoFunil, Natureza> = {
   recusou_convite_conta: "sessao",
   desistiu_da_compra: "sessao",
   erro_na_compra: "sessao",
+  // Abrir a folha do quiz se repete a cada visita; terminar e dar o km são atos.
+  abriu_quiz_saude: "sessao",
+  completou_quiz_saude: "ato",
+  informou_km: "ato",
   atribuicao: "tecnico",
 };
 
@@ -252,6 +262,10 @@ export const MEDIDO_DESDE: Record<EventoFunil, string> = {
   recusou_convite_conta: "2026-10-17",
   desistiu_da_compra: "2026-10-17",
   erro_na_compra: "2026-10-17",
+  // O quiz de saúde e o km: no ar na web em 22/10; nas lojas, com a 3.3.
+  abriu_quiz_saude: "2026-10-22",
+  completou_quiz_saude: "2026-10-22",
+  informou_km: "2026-10-22",
   // Vão no ar com a 1.6. Até a versão chegar aos aparelhos, a cadeia da
   // primeira sessão fica sem medição, e o funil DIZ isso em vez de mostrar
   // zero. Quando a 1.6 estiver publicada, esta data continua valendo: ela
