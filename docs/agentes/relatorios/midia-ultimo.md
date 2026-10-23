@@ -1,126 +1,131 @@
-Relatório de mídia gerado em 2026-10-15
+Relatório de mídia gerado em 2026-10-23
 
 # Mídia da semana
 
-Janela principal: 7 a 13 de outubro, sete dias cheios, comparada com 30 de
-setembro a 6 de outubro. Números lidos hoje às 8h30.
+Janela principal: 15 a 21 de outubro, sete dias cheios, comparada com 8 a 14 de
+outubro. Números lidos hoje de manhã.
 
-**O relatório da semana passada chegou.** Confirmado no registro do envio: no dia
-8, às 11h05, ele saiu com o PDF anexado para o Rodrigo e para o Luiz. Foi a
-primeira vez que chegou a quem é de fora, depois de duas semanas em que não
-chegou.
+**O relatório da semana passada chegou.** Confirmado no registro do envio: dia 15,
+às 10h05, com o PDF anexado, para o Rodrigo e para o Luiz. Segunda semana
+seguida que chega a quem é de fora.
 
-## A manchete: a busca foi pausada, e as contas subiram 52%
+Esta rodada está um dia atrasada: a tarefa disparou na quinta e rodou na sexta.
+O envio agora tenta de hora em hora nos dois dias, então o atraso não custa a
+entrega.
 
-A campanha de busca estava custando 15 vezes mais por instalação que as outras
-duas. Ela foi pausada no dia 13, cinco dias depois de a decisão ir para a mesa.
-Até ali seguia gastando uns R$ 29 por dia.
+## A manchete: o custo por conta caiu 42% com 5% menos dinheiro
 
-| Medida | 7 a 13/10 | 30/09 a 6/10 |
+| Medida | 15 a 21/10 | 8 a 14/10 |
 |---|---|---|
-| Gasto no Google | R$ 300,84 | R$ 253,27 |
-| Gasto no Meta | R$ 152,85 | R$ 145,10 |
-| Gasto total | R$ 453,69 | R$ 398,37 |
-| **Contas novas de fora** | **88** | **58** |
-| **Custo por conta** | **R$ 5,16** | **R$ 6,87** |
+| Gasto no Google | R$ 222,99 | R$ 282,10 |
+| Gasto no Meta | R$ 202,25 | R$ 167,49 |
+| Gasto total | R$ 425,24 | R$ 449,59 |
+| **Contas novas de fora** | **138** | **85** |
+| **Custo por conta** | **R$ 3,08** | **R$ 5,29** |
 
-O gasto subiu 14% e as contas subiram 52%. O custo por conta caiu um quarto, e é
-o melhor da história deste relatório.
+É o melhor custo por conta da série, e com menos dinheiro saindo. A pausa da
+busca, feita no dia 13, é a única mudança de campanha na janela.
 
-## Quanto custa cada campanha, e as duas réguas discordam
+## O que aconteceu sem ninguém decidir
 
-| Campanha | Gasto | Instalações atribuídas | Custo por instalação |
+Na semana passada eu disse que não recomendaria destino para os uns R$ 29 por dia
+que a pausa liberou, e deixei de dizer o que aconteceria se nada fosse decidido.
+A resposta, medida:
+
+- o gasto total caiu só 5%, não o tanto que a pausa sozinha sugeriria;
+- o Google caiu R$ 59 e **o Meta subiu R$ 35 por conta própria**, porque a
+  campanha dele acompanha o que a plataforma consegue entregar;
+- a campanha de busca sumiu da lista de campanhas da coleta, que é o esperado
+  para campanha sem nenhuma entrega na janela, e não um erro de leitura.
+
+Ou seja: não decidir empurrou parte do dinheiro para o Meta sozinho, sem
+ninguém escolher. É um desfecho, e vale saber que ele acontece.
+
+## Por campanha, cada uma contra ela mesma
+
+A coleta do Meta traz sete datas e a da AppsFlyer traz oito, então o nível do
+custo por instalação do Meta tem um viés para baixo. **O viés é o mesmo nas duas
+semanas, então a variação vale mesmo onde o nível não é exato**, e é assim que a
+tabela deve ser lida. Nada foi somado à mão nesta rodada.
+
+| Campanha | Custo por instalação, esta semana | Semana anterior | Variação |
 |---|---|---|---|
-| Meta, promoção de app | R$ 152,85 | 130 | R$ 1,18 |
-| Google, app por vídeo | R$ 156,53 | 88 | R$ 1,78 |
-| Google, busca (pausada dia 13) | R$ 146,90 | 5 | R$ 29,38 |
+| Meta, promoção de app | R$ 0,80 | R$ 1,11 | 28% mais barato |
+| Google, app por vídeo | R$ 1,86 | R$ 1,80 | estável |
 
-As instalações são da AppsFlyer, janela de 7 a 14 de outubro, oito datas. O gasto
-do Google é da mesma janela de oito datas. **O gasto do Meta na tabela é de sete
-datas**, porque a coleta dele traz sete: somando o oitavo dia, que custou
-R$ 33,00, o custo por instalação do Meta fica em **R$ 1,43**, e é esse o número
-que vale para comparar com os R$ 1,78 do vídeo.
+No vídeo do Google o gasto e as instalações vêm da mesma janela de oito datas,
+então ali o nível também é exato.
 
-E aí vem o achado que impede uma decisão apressada. Pela régua de cada
-plataforma, a ordem se inverte:
+E pela régua de cada plataforma, que mede outra coisa e pelo próprio dono do
+anúncio:
 
-| Campanha | Desfecho que a plataforma conta | Custo |
+| Campanha | Custo por desfecho que ela conta | Semana anterior |
 |---|---|---|
-| Google, app por vídeo | 302 conversões | R$ 0,52 |
-| Meta, promoção de app | 232 instalações | R$ 0,66 |
-| Google, busca | 25 conversões | R$ 5,88 |
+| Meta | R$ 0,44 | R$ 0,60 |
+| Google, vídeo | R$ 0,63 | R$ 0,52 |
 
-**Pela AppsFlyer o Meta é 20% mais barato; pelas próprias plataformas o vídeo do
-Google é 21% mais barato.** As duas réguas concordaram nas semanas anteriores,
-quando a diferença entre campanhas era de 15 vezes, e param de concordar agora
-que ela é de 20%. Uma diferença de 20% entre duas réguas que discordam em 20%
-não decide nada.
+**As duas réguas voltaram a concordar.** Na semana passada elas se contradiziam
+com 20% de diferença entre campanhas, e por isso eu não recomendei nada. Agora o
+Meta sai na frente nas duas: 2,3 vezes mais barato pela AppsFlyer e 1,4 vezes
+pelas plataformas. Uma diferença dessas é maior que a briga entre os
+instrumentos, e aí ela decide.
 
-## O que isso significa para o dinheiro que a pausa liberou
+## A proposta da semana
 
-Uns R$ 29 por dia, cerca de R$ 870 por mês, deixaram de sair na busca.
+**Mover um pedaço do orçamento do vídeo do Google para o Meta.**
 
-**Não vou recomendar para onde levar esse dinheiro nesta semana**, e o motivo é o
-parágrafo acima: as duas medições disponíveis apontam para campanhas diferentes.
-O que resolveria já está na sua lista desde o dia 8: ligar a integração de custo
-na AppsFlyer. Com ela, o custo por instalação sai do painel de quem atribui, em
-vez de ser calculado cruzando duas fontes com janelas diferentes.
+O vídeo gasta uns R$ 28 por dia e compra umas 15 instalações por dia. O mesmo
+dinheiro no Meta, ao custo medido nesta semana, compraria umas 35.
 
-Enquanto isso, um número novo que aponta na mesma direção e vale registrar. A
-AppsFlyer também conta usuário leal, que é quem volta ao aplicativo, e isso está
-mais perto de desfecho que instalação:
+Duas ressalvas que fazem parte da proposta, não notas de pé:
 
-| Campanha | Leais | De quantas instalações | Custo por leal |
-|---|---|---|---|
-| Meta | 42 | 130 (32%) | R$ 4,43 |
-| Google, vídeo | 23 | 88 (26%) | R$ 6,81 |
-| Google, busca | 1 | 5 (20%) | R$ 146,90 |
+- **eficiência não sobrevive inteira a uma mudança de orçamento.** Campanha que
+  dobra de verba costuma ficar mais cara por instalação, porque passa a comprar
+  público menos barato. Por isso a proposta é um passo, não a verba toda;
+- **o vídeo traz gente que fica mais.** Dos que instalam, 39% voltam ao app no
+  vídeo contra 32% no Meta. Mesmo assim o Meta é mais barato por usuário que
+  volta: R$ 2,50 contra R$ 4,72. A vantagem de qualidade existe e não cobre a
+  diferença de preço.
 
-Vale como direção, não como lei: a definição de "leal" mora no console da
-AppsFlyer e eu não a li.
+Orçamento é decisão sua. O que esta rodada entrega é a decisão com os dois
+números do lado e com o que ela arrisca.
 
 ## Instalação continua não sendo conta
 
-Nenhuma das 88 contas da semana carrega etiqueta de campanha, pela quarta semana
-seguida. Isso é esperado para campanha de loja, e é o motivo pelo qual o custo
-por conta existe só para o conjunto, nunca por campanha.
+Nenhuma das 138 contas da semana carrega etiqueta de campanha, pela quinta semana
+seguida. É o esperado para campanha de loja, e é por isso que o custo por conta
+existe só para o conjunto.
 
-Sobre a origem das instalações, no Android: 19 das 242 chegaram sem anúncio na
-janela, ou 8%, contra 26% duas semanas atrás. A parcela orgânica cai enquanto a
-paga sobe, então isso é a mídia crescendo e não o orgânico encolhendo.
+No Android, 13 das 390 instalações da janela chegaram sem anúncio, 3%, contra 6%
+na semana passada. A parcela paga cresce e a orgânica, em número absoluto, fica
+onde estava.
 
-## Onde o dinheiro da busca ia
+## Desperdício com nome: não se aplica esta semana
 
-A campanha está pausada, então esta parte vira retrato de encerramento. Os 50
-termos mais caros dos últimos 30 dias, agrupados por assunto:
+Toda a verba da semana foi para campanhas que não têm termo de busca: a de vídeo
+no Google e a de promoção de app no Meta. A única campanha que tem termo é a
+busca, que gastou zero na janela.
 
-| Assunto | 30 dias | Termos | O app atende? |
-|---|---|---|---|
-| Sintoma do carro | R$ 51,19 | 24 | sim |
-| Scanner pelo celular | R$ 42,53 | 14 | não |
-| Aprender mecânica | R$ 17,22 | 8 | não |
-| Mecânico online | R$ 6,89 | 2 | sim |
-| Ferramenta de oficina | R$ 3,39 | 2 | não, e é pouco |
-
-Os dois grupos que o aplicativo não atende somam R$ 59,75 e param de crescer a
-partir do dia 13. **As duas listas de palavras negativas, adiadas por sua decisão
-no dia 4, não precisam mais ser decididas enquanto a busca estiver pausada.** Se
-ela voltar, voltam com ela.
+Isso é diferente de "não deu para medir": a ferramenta existe e funciona, e o que
+ela mede não aconteceu. As duas listas de palavras negativas continuam sem
+precisar de decisão enquanto a busca estiver pausada.
 
 ## O que este relatório não alcança
 
-- **Conta por campanha.** Continua sem etiqueta. A AppsFlyer atribui a
-  instalação, não a conta criada dentro do aplicativo.
-- **Qual das duas campanhas de app é mais barata.** As réguas discordam, e está
-  dito acima em vez de escolhido.
-- **O que conta como usuário leal.** Definição de console, não lida.
+- **Conta por campanha.** Sem etiqueta, continua existindo só para o conjunto.
+- **Custo por instalação do Meta com janela exata.** A coleta dele traz sete
+  datas contra as oito da AppsFlyer. O pedido para igualar as duas está na fila
+  do Analista desde hoje.
+- **A definição de usuário leal**, que é de console e segue não lida.
 
 ## Como esta rodada se mede
 
-Dos doze critérios, doze cumpridos. E a sujeira que a rodada passada deixou no
-banco, uma função de teste que eu não consegui apagar, não existe mais:
-conferido hoje, alguém a removeu.
+Dos doze critérios, onze cumpridos e um que não se aplica, o do desperdício com
+nome, pelo motivo acima.
 
-Sobre a entrega deste relatório: ele sai na primeira hora cheia depois que o PDF
-estiver publicado, entre 10h e 18h de hoje. A rodada da semana que vem confirma
-com o número da execução, como esta confirmou a de hoje.
+E uma coisa que eu preciso dizer sobre o processo: **os dois pedidos que eu deixei
+na fila do Analista na semana passada não estão mais lá.** Eles não foram feitos,
+porque a coleta continua sem os dois campos, e nenhum registro diz que foram
+recusados. Perdi as linhas em alguma junção de arquivo. Elas voltaram hoje, com a
+data original, e a lição está no meu manual: a rodada confere os próprios pedidos
+abertos em vez de supor que continuam na fila.

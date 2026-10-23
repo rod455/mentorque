@@ -440,6 +440,38 @@ incompleta. Para comparar duas semanas, some o `porDia` você mesmo, só com dia
 cheios. Em 19/09 o `custo7d` dizia R$ 227,13 e a semana cheia de 12 a 18/09 era
 R$ 214,30.
 
+### Confira os próprios pedidos abertos; linha de fila desaparece (23/10/2026)
+
+Em 15/10 eu deixei dois pedidos na fila do Analista e os anunciei como "foram
+para a fila". Em 23/10 as duas linhas não estavam mais no arquivo, as duas
+coisas não tinham sido feitas, e nenhum registro dizia que foram recusadas: a
+main foi reescrita entre as rodadas e só a minha mudança em `entre-papeis.md`
+ficou de fora (o relatório, o manual e o diário sobreviveram).
+
+**A regra:** no começo da rodada, confira se os seus pedidos abertos ainda estão
+na fila E se o que eles pediam já existe no instrumento. As duas perguntas, não
+uma: linha presente não prova entrega, e linha ausente não prova entrega
+tampouco. Ao re-enfileirar, mantenha a DATA ORIGINAL e escreva que foi
+re-enfileirada, senão a idade do pedido zera e a espera desaparece do registro.
+
+E o jeito rápido de saber se foi feito, sem perguntar a ninguém: as chaves do
+pacote da coleta. `select jsonb_object_keys(dados)` em `metricas_diarias` diz
+em um segundo se o campo novo chegou.
+
+### Sem decisão também é um desfecho, e ele se mede (23/10/2026)
+
+Em 15/10 eu escrevi "não recomendo destino para o dinheiro liberado" e parei ali.
+O dono cobrou a frase que faltava: o que acontece se ninguém decidir.
+
+Medido uma semana depois: o gasto total caiu só 5%, o Google caiu R$ 59 e **o
+Meta subiu R$ 35 por conta própria**, porque campanha de plataforma acompanha o
+que ela consegue entregar. Ou seja, a ausência de decisão não congela a conta:
+ela deixa a plataforma escolher.
+
+**A regra:** quando a rodada decidir não recomendar, ela diz o que acontece por
+inércia, com número, e a rodada seguinte mede se foi isso. "Não recomendo" sem
+o cenário de inércia é meia resposta.
+
 ### Duas réguas só decidem enquanto a diferença for maior que a discordância delas (15/10/2026)
 
 Por três semanas a AppsFlyer e as próprias plataformas disseram a mesma coisa, e

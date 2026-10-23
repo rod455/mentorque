@@ -3,6 +3,69 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-23 · Mídia: rodada 6, custo por conta de R$ 3,08, e as duas réguas voltaram a concordar
+- Artifact "Mídia da semana":
+  https://claude.ai/artifact/4K8Mr2dbrzxTogbVj6Dj5j
+  Relatório e PDF em `docs/agentes/relatorios/`, datados de hoje. Rodada um dia
+  atrasada: o gatilho disparou quinta 22/10 às 11h03 e ela rodou sexta 23/10. O
+  envio tenta de hora em hora nos dois dias, então o atraso não custa a entrega.
+- **ENTREGA DA SEMANA PASSADA, com número**: execução **8949**, 15/10 às 13h05
+  UTC (10h05 de Brasília), `ok: true`, Rodrigo e Luiz, PDF de 97,9 kB. Segunda
+  semana seguida que chega a quem é de fora, e saiu na primeira hora cheia
+  depois do push.
+- **A CONTA, 15 a 21/10 contra 08 a 14/10**: gasto R$ 425,24 contra R$ 449,59
+  (-5%), **138 contas de fora contra 85** (+62%), **custo por conta R$ 3,08
+  contra R$ 5,29** (-42%). Melhor da série, com menos dinheiro saindo.
+- **PONTO 1 DO RETORNO FECHADO, e com medição**: eu devia ter dito o que
+  acontece se ninguém decidir sobre o dinheiro que a pausa liberou. Resposta de
+  uma semana depois: o total caiu só 5%, o Google caiu R$ 59 e **o Meta subiu
+  R$ 35 por conta própria**, porque campanha de plataforma acompanha o que ela
+  entrega. Não decidir não congela a conta: deixa a plataforma escolher. Virou
+  regra no manual.
+- **PONTO 2 FECHADO: nenhuma data somada à mão.** A coleta do Meta traz sete
+  datas e a da AppsFlyer oito, então o nível do custo por instalação do Meta tem
+  viés; como o viés é IGUAL nas duas semanas, publiquei VARIAÇÃO contra a própria
+  campanha em vez de nível cruzado. E o pedido de igualar as janelas entrou na
+  fila do Analista.
+- **O ACHADO: as duas réguas voltaram a concordar, e a decisão destravou.**
+  Custo por instalação: Meta R$ 0,80 (era R$ 1,11, -28%) contra vídeo R$ 1,86
+  (era R$ 1,80, estável). Pela régua de cada plataforma: Meta R$ 0,44 (era
+  R$ 0,60) contra vídeo R$ 0,63 (era R$ 0,52). **Meta 2,3 vezes mais barato pela
+  AppsFlyer e 1,4 pelas plataformas**, contra os 20% de discordância entre
+  instrumentos da semana passada.
+- **PROPOSTA DA SEMANA**: mover um pedaço do orçamento do vídeo para o Meta, um
+  passo e não a verba toda. O vídeo gasta uns R$ 28 por dia e compra umas 15
+  instalações; o mesmo dinheiro no Meta compraria umas 35. Com as duas ressalvas
+  dentro da proposta: eficiência não sobrevive inteira a aumento de verba, e o
+  vídeo traz gente que fica mais (39% voltam contra 32%), o que não cobre a
+  diferença de preço (R$ 2,50 contra R$ 4,72 por usuário que volta). Na lista do
+  dono como DECISÃO.
+- **DOIS PEDIDOS MEUS DESAPARECERAM DA FILA, e eu só vi hoje.** As linhas de
+  15/10 para o Analista (impressão por campanha por dia; `approval_status` do
+  anúncio) não estão mais em `entre-papeis.md`, as duas coisas NÃO foram feitas
+  (conferido pelas chaves do pacote da coleta, que seguem sem os campos) e
+  nenhum registro diz que foram recusadas. A main foi reescrita entre as rodadas
+  e só a minha mudança naquele arquivo ficou de fora: relatório, manual e diário
+  sobreviveram. Re-enfileiradas hoje **com a data original de 15/10**, para a
+  idade não zerar. Virou regra no manual, com o jeito rápido de conferir se um
+  pedido de coleta foi atendido (as chaves do `dados` em `metricas_diarias`).
+- **Desperdício com nome: NÃO SE APLICA**, e isso é diferente de inalcançável.
+  Toda a verba está em campanha sem termo de busca (vídeo e Meta); a única com
+  termo é a busca, que gastou zero na janela. A ferramenta funciona e o que ela
+  mede não aconteceu. As duas listas de negativa seguem sem precisar de decisão
+  enquanto a busca estiver pausada.
+- **Alarme de campanha parada: calado**, conferido hoje, o que é o certo: a busca
+  foi pausada pelo dono e não morreu calada. E ela saiu do `porCampanha` da
+  coleta, que é o esperado para campanha sem entrega na janela.
+- **Etiqueta**: zero das 138 contas carrega campanha, quinta semana seguida.
+  Orgânico no Android: 13 de 390 instalações (3%), contra 15 de 264 (6%); em
+  número absoluto o orgânico ficou onde estava, e o que cresceu foi o pago.
+- **A RÉGUA: onze cumpridos e um não aplicável** (o 6, pelo motivo acima).
+- APRENDIZADOS em `midia-paga.md`: confira os próprios pedidos abertos, nas duas
+  pontas (linha na fila e campo no instrumento), e re-enfileire com a data
+  original; e "não recomendo" vem sempre com o cenário de inércia, que a rodada
+  seguinte mede.
+
 ## 2026-10-22 · Engenharia: a rodada da QA lida, e o km pedido onde a falta dele aparece
 
 - Pedido do dono: "veja o que o QA criou ontem, dê feedbacks e vamos aplicar
@@ -33,6 +96,7 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   processos da conferência (o servidor de desenvolvimento ficava solto) e
   aceita o nome da suíte (`... conferir:navegador <arquivo> <a> <b> km`). Provado
   interrompendo de propósito: restaurado, sem servidor solto.
+
 
 ## 2026-10-21 · QA: o quiz do dia 1 virou comportamento, e o risco do carro parou de inventar o km
 - Artifact "QA da semana":
