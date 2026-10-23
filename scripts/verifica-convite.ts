@@ -109,6 +109,54 @@ const SEM_CONTA = false;
     /consumirConviteNoCarro\(!!user\)/.test(cars),
     "`consumirConviteNoCarro(true)` queima a marca do convidado, que é exatamente o buraco de 25/09",
   );
+
+  // ── A SEGUNDA TRANCA DA MESMA PORTA (23/10/2026) ─────────────────────────
+  //
+  // O conserto de 25/09 tirou uma das duas travas e o número não se moveu: de
+  // 341 pessoas que cadastraram o carro como convidadas e depois criaram
+  // conta, 46 viram o convite, 13 de cada 100, com as três travas do pedido
+  // LIVRES em 339 delas (testado antes de acusar o lugar).
+  //
+  // A causa estava no roteiro: `gravar()` manda a pessoa para
+  // `root({ name: "car" })`, que o roteador desenha como <CarHub />, e quem
+  // consumia a marca era só a CarsScreen, a tela da GARAGEM. A marca ficava
+  // esperando uma montagem que aquele caminho não faz.
+  //
+  // Então o que esta conferência passa a cobrar é o ELO INTEIRO: a tela de
+  // DESTINO do cadastro tem de ser a mesma que consome a marca. Mexer no
+  // destino sem levar o consumidor junto volta a abrir o buraco, e em silêncio,
+  // porque marca não consumida não gera erro em lugar nenhum.
+  // O destino é lido DENTRO do `gravar`, e não no primeiro `root(` do arquivo:
+  // a tela tem quatro, três deles em botões da lista de carros. A primeira
+  // escrita desta conferência pegava o primeiro e passava verde com o destino
+  // trocado, que é o defeito que ela existe para pegar.
+  const gravar = /const gravar = [\s\S]*?\n  \};/.exec(cars)?.[0] ?? "";
+  conferir(
+    "o trecho do `gravar` foi encontrado no fonte",
+    gravar.length > 0 && /pedirConviteNoCarro\(\)/.test(gravar),
+    "sem achar o `gravar`, o degrau do destino abaixo passaria sem olhar nada",
+  );
+  const destino = /root\(\{\s*name:\s*"(\w+)"\s*\}\)/.exec(gravar)?.[1] ?? "";
+  conferir(
+    "o cadastro de carro ainda termina na tela do carro",
+    destino === "car",
+    `o destino lido dentro do \`gravar\` é "${destino}"; se ele mudou, o consumidor da marca tem de mudar com ele`,
+  );
+
+  const hub = readFileSync(new URL("../components/app/screens/CarHub.tsx", import.meta.url), "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, " ")
+    .replace(/^\s*\/\/.*$/gm, " ");
+
+  conferir(
+    "a tela onde a pessoa CAI consome a marca",
+    /consumirConviteNoCarro\(!!user\)/.test(hub),
+    "sem isto o convite espera numa tela por onde a jornada não passa, que é o defeito de 23/10",
+  );
+  conferir(
+    "e ela desenha o convite de aviso",
+    /<ConviteDeAviso/.test(hub),
+    "consumir a marca sem desenhar o convite gasta o melhor momento do pedido em silêncio",
+  );
 }
 
 if (falhas) {

@@ -80,6 +80,68 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 
 ## Experimentos
 
+## [convite-do-carro-aparece-onde-a-pessoa-cai] O convite do aviso deixa de esperar numa tela por onde ninguém passa
+- Estado: ABERTO
+- Tipo: mudanca-direta
+- Alvo: o portão de permissão de aviso, que é a única máquina de volta que este
+  app tem (não há push; o que existe é lembrete local, e ele depende da
+  permissão). Hoje **49 das 423 contas têm aviso ligado, 12 de cada 100**
+  (`user_state`, 23/10).
+- O NÚMERO QUE ABRE ISTO é o veredito de hoje do
+  `convite-do-carro-nao-queima-com-convidado`: de 341 pessoas que cadastraram o
+  carro como convidadas e depois criaram conta, **46 chegaram a ver o convite do
+  carro, 13 de cada 100**, e as três travas do pedido estavam LIVRES em 339
+  delas. A trava foi testada e não é a causa.
+- A CAUSA, lida no fonte e não inferida: `AddCarScreen.gravar()`
+  (`components/app/screens/Cars.tsx`) marca o convite e manda a pessoa para
+  `root({ name: "car" })`, que é o `<CarHub />`. Quem consome a marca é a
+  `CarsScreen`, a tela da GARAGEM. A marca é variável de módulo e morre com a
+  sessão. Então o convite só acontece para quem, na mesma sessão, ainda abre a
+  aba da garagem por conta própria.
+- Tese BeSci: timing do pedido, e aqui ele é literal. O melhor instante medido
+  desta casa é logo depois de salvar o carro: por origem, o convite do `carro`
+  aceita **27 de cada 100** (3 de 11 desde a 3.2; 11 de 39 na janela longa) e
+  **ninguém nunca tocou em "não" nele** (0 recusas por botão em toda a série).
+  O `calendario` aceita 20 de cada 100 e o `quiz` aceita 5, com 16 recusas por
+  botão em 37 convites, que é o único lugar onde a pessoa lê e diz não.
+  - A mudança: o `<CarHub />`, que é a tela onde a pessoa de fato cai depois de
+    salvar o carro, passa a consumir a marca e a desenhar o mesmo convite que a
+    garagem já desenha, com o mesmo texto e as mesmas três travas.
+  - UM PRINCÍPIO SÓ: nada de mexer no texto do convite, nas travas, nas outras
+    origens nem na ordem de nada. A única diferença é o convite acontecer na
+    tela onde a pessoa está, em vez de esperar numa tela por onde ela não
+    passa.
+  - POR QUE NÃO MEXO NO `quiz`, que é o pior momento medido: a leitura dele tem
+    uma semana de vida (o `recusou_convite_aviso` chegou com a 3.2 em 18/10) e
+    uma aposta por rodada. Fica como candidata do próximo teste, com 16 de 37
+    recusas por botão escrito aqui.
+- Métrica: das pessoas que cadastram carro e têm conta na semana, quantas
+  gravam `convite_aviso` com origem `carro`; e, de guarda, `aceitou` sobre
+  `convite` nessa origem, que hoje é 27 de cada 100 e não deve cair ·
+  Duração: 4 semanas
+- **O que poderia fechar este veredito:** numerador (`convite_aviso` origem
+  `carro`) e denominador (quem cadastrou carro e tem conta) existem os dois no
+  `funil_eventos`, por aparelho, com série semanal desde 21/09. Não é métrica
+  de ausência e não depende de instrumento novo. A linha de base está escrita
+  abaixo.
+- **O DENOMINADOR ESPERADO, com o número de hoje** (régua de 02/10): a
+  população é de 77 a 122 pessoas por semana, então em duas semanas há de 150 a
+  240 pessoas, muito acima do que esta leitura precisa.
+- Nível da régua: **2, nunca 3.** Mudança direta, sem braço comparável; a
+  comparação é contra as cinco semanas de série acima (9 de 45, 7 de 56, 9 de
+  68, 18 de 122, 9 de 77). Com 100 pessoas por semana, 10 a mais são 10 pontos,
+  então o sinal honesto é dobrar a razão, não melhorá-la um pouco.
+- Aprovação: não se aplica (ordem e lugar de um convite que já existe, sem
+  variantes, sem tocar em preço, plano, cobrança ou passo legal)
+- Início: 2026-10-23 na web; no app, com a 3.3 · **Ler a partir de: duas
+  semanas depois de a 3.3 passar de metade dos aparelhos ativos** (a régua que
+  o retorno do dono de 17/10 pediu: desde 15/09, 1.001 dos 1.040 aparelhos que
+  terminaram o onboarding são Android, então data contada do commit mede a web
+  e mais nada). A leitura separa por `versao`.
+- Antes: 46 de 341 (13 de cada 100) viram o convite do carro desde 25/09; 49 de
+  423 contas com aviso ligado; aceite na origem `carro` em 27 de cada 100.
+- Veredito: (aberto)
+
 ## [conta-que-sabe-que-veio-do-carro] Quem toca em "Criar minha conta" não cai numa tela de "Entrar"
 - Estado: ABERTO
 - Tipo: mudanca-direta
@@ -238,6 +300,13 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   com "B de 04 a 06/10" e "B desde 06/10" sem conseguir separá-las, e isso
   fica dito aqui, não no veredito · Ler a partir de: 2026-10-18 (direcional,
   só web) e 2026-11-01
+- **LEITURA DIRECIONAL de 2026-10-23, cinco dias atrasada, e ela NÃO fecha
+  nada.** `perguntou_biela` por aparelho ativo na semana, lido no banco em
+  23/10 às 11h30 UTC: 14 de 236 (6 de cada 100), 24 de 299 (8), 43 de 483 (9),
+  20 de 323 (6, semana aberta). Sobe de 6 para 9 e volta a 6 com a semana
+  ainda enchendo. Direção fraca a favor, e **nada aqui separa esta aposta da
+  `aba-biela`**, que mede o mesmo degrau, como já estava dito no dia em que as
+  duas abriram. O veredito continua marcado para 01/11.
 - Antes: 66 `perguntou_biela` em 30 dias (16 com palavras da pessoa); 7
   fechamentos na Home em 4 aparelhos no retrato de 04/10
 - Veredito: (aberto)
@@ -345,7 +414,24 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   `biela` daqui em diante; a leitura de 20/10 separa antes e depois de 17/10.
   E o teste grátis passou a existir no Play no mesmo dia, o que muda o que
   acontece DEPOIS do toque em assinar.
-- Veredito: (aberto)
+- **LEITURA DIRECIONAL de 2026-10-23, três dias atrasada, e ela não fecha
+  nada: o degrau de chegada está em ZERO.** Lido em 23/10 às 11h30 UTC, por
+  aparelho e por semana: `viu_paywall` 35, 38, 63, 47 (e por ativo, 15, 13, 13,
+  15 de cada 100, plano), `iniciou_checkout` **2, 2, 1, 0**. O portão único não
+  mudou quantos chegam ao paywall nem quantos saem dele.
+  - E o que o retorno do dono de 17/10 achou explica para onde esse zero
+    aponta, fora do alcance desta aposta: a folha da loja não tinha oferta de
+    teste grátis até 17/10, enquanto a nossa tela prometia 7 dias. Diagnóstico
+    em `docs/agentes/propostas/por-que-quase-ninguem-assina.md`. Então o
+    veredito de 03/11 precisa separar a janela antes e depois de 17/10, e com
+    1 ou 2 checkouts por semana nenhuma das duas metades vai sustentar
+    conclusão: a verdade é que esta aposta está medindo um degrau de três
+    pessoas.
+  - **O `desistiu_da_compra`, que subiu com a 3.2 para contar quem abre a folha
+    da loja e desiste, tem ZERO eventos até agora.** Com `iniciou_checkout` em
+    0 na semana, isso é coerente e não é instrumento quebrado: ninguém chegou à
+    folha. Fica dito para a leitura de 03/11 não confundir os dois zeros.
+- Veredito: (aberto, com o degrau de chegada em 1 a 2 por semana)
 
 ## [landing-em-seis-blocos] A home tem uma promessa, o Biela em ação e a loja como único destino
 - Estado: ABERTO
@@ -416,7 +502,7 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Veredito: (aberto)
 
 ## [convite-do-carro-nao-queima-com-convidado] O melhor momento do pedido para de ser gasto à toa
-- Estado: ABERTO
+- Estado: FECHADO (NAO FUNCIONOU, e a causa do fracasso está achada no fonte)
 - Tipo: mudanca-direta
 - Alvo no funil: o portão de permissão de aviso, medido desde 19/09 pelos
   eventos `convite_aviso`, `aceitou_convite_aviso` e `permissao_aviso_concedida`.
@@ -445,6 +531,49 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Aprovação: não se aplica (momento do pedido, sem variantes, sem tocar em
   preço, plano ou cobrança)
 - Início: 2026-09-25 · Ler a partir de: 2026-10-23
+- **Veredito (2026-10-23): NAO FUNCIONOU, e o valor desta aposta é a causa, não
+  o número.** Instrumento: `funil_eventos` e o fonte, em 23/10 entre 11h10 e
+  11h40 UTC.
+  - **A métrica da aposta, pelos degraus que ela escreveu.** O `convite_aviso`
+    por semana cresceu (34, 37, 44, 94, 80), e a razão `aceitou/convite` CAIU:
+    11 de 34, 8 de 37, 7 de 44, 12 de 94, 12 de 80. Só que o crescimento do
+    total não é obra desta aposta: ele vem de duas outras origens de convite
+    (o `calendario`, que cresceu, e o `quiz`, que praticamente nasceu com a
+    3.2). Confusão dentro da janela, dita aqui.
+  - **O DENOMINADOR CERTO DELA, que nenhuma rodada anterior usou.** Esta aposta
+    serve exatamente uma população: quem cadastra o carro como CONVIDADO e
+    depois cria conta. Por semana, quantos desses chegaram a ver o convite do
+    carro: 9 de 45, 7 de 56, 9 de 68, 18 de 122, 9 de 77. **Entre 12 e 20 de
+    cada 100, sem tendência de melhora depois do conserto.** Com 341 pessoas
+    somadas desde 25/09, 46 viram o convite, 13 de cada 100.
+  - **A PRIMEIRA HIPÓTESE FOI TESTADA E CAIU.** Eu suspeitei das três travas
+    (uma a cada 4 dias, três na vida, nunca depois de um não do sistema), e o
+    teste separa: das 341 pessoas dessa população, **339 tinham a trava LIVRE**
+    nos quatro dias anteriores ao carro, e mesmo assim só 46 viram o convite. A
+    trava não é a causa. Ausência de convite não era ausência de permissão.
+  - **A CAUSA, lida no fonte e não inferida.** `AddCarScreen.gravar()`
+    (`components/app/screens/Cars.tsx`) marca o convite com
+    `pedirConviteNoCarro()` e em seguida chama `root({ name: "car" })`, que o
+    roteador (`components/app/telas.tsx`) desenha como `<CarHub />`. Quem
+    CONSOME a marca é a `CarsScreen`, a tela da garagem, que a rota `"cars"`
+    desenha. Ou seja: a pessoa salva o carro, cai na tela DO CARRO, e a marca
+    fica esperando uma montagem da GARAGEM que aquele caminho não faz. E a
+    marca é variável de módulo, que morre com a sessão de propósito. O convite
+    só acontece para quem, na mesma sessão, ainda abre a aba da garagem.
+  - **O conserto de 25/09 estava certo e era metade da porta.** Ele tirou a
+    primeira tranca (a marca não queima mais no convidado, e a
+    `conferir:convite` prova as cinco regras). A segunda tranca, na mesma
+    porta, nunca foi olhada: o consumidor mora numa tela por onde a jornada não
+    passa. Conserto que resolve uma de duas travas da mesma porta não move
+    número, e o número não diz qual das duas sobrou.
+  - A LIÇÃO, e ela vira linha na skill: antes de festejar uma marca que
+    "espera pela conta", seguir a marca até a TELA QUE A CONSOME e conferir se
+    a jornada passa por ela. Marca sem consumidor no caminho é promessa sem
+    entrega, e ela não deixa erro em lugar nenhum.
+  - CONSEQUÊNCIA: é a aposta desta semana
+    (`convite-do-carro-aparece-onde-a-pessoa-cai`), com o denominador acima
+    como linha de base.
+- Estado final: FECHADO em 2026-10-23.
 - Antes: 28 convites, 7 aceites e 9 permissões concedidas na janela desde
   19/09. RESSALVA DE JANELA, na régua do critério 11: os quatro eventos subiram
   no código em 19/09 e só alcançaram as lojas com a 2.8, aprovada em 24/09.
@@ -592,7 +721,7 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 > conferir a data de aprovação da 2.6 e somar as semanas a partir dali.
 
 ## [caderno-de-gastos] O abastecimento em três toques, com custo por km na hora
-- Estado: ABERTO
+- Estado: FECHADO (não funcionou: 1 pessoa em duas semanas seguidas, de 27 que lançaram uma vez)
 - Tipo: mudanca-direta
 - Alvo no funil: a rotina. Hoje "voltou" é qualquer abertura, e 11 de 253
   voltaram algum dia. A régua nova é "pessoas com lançamento em duas
@@ -612,10 +741,33 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   2026-10-11
 - Antes: zero lançamentos (a peça não existia); km carimbado com mais de
   30 dias na maioria dos carros
-- Veredito: (aberto)
+- **Veredito (2026-10-23, doze dias atrasado e isso é falha minha): NAO
+  FUNCIONOU na régua que ela mesma escreveu.** Instrumento: `funil_eventos` e
+  `user_state`, lidos em 23/10 às 11h15 UTC.
+  - A régua era "pessoas com lançamento em DUAS SEMANAS SEGUIDAS". Resposta:
+    **1 pessoa.** Uma. De 27 aparelhos que lançaram um abastecimento alguma vez
+    (32 lançamentos em 31 dias), exatamente uma voltou a lançar na semana
+    seguinte, e nenhuma outra lançou em duas semanas quaisquer.
+  - Segundo instrumento, e ele conta outra população: no `user_state` são **14
+    contas com abastecimento, 3 delas com dois ou mais**. A diferença com os 27
+    é esperada e não é discordância: o funil conta APARELHOS, inclusive o
+    convidado sem conta, cujo estado só existe no aparelho. Os dois dizem a
+    mesma coisa, que é "experimentaram e não viraram hábito".
+  - Exposição não é o problema desta vez, e é o que torna o veredito possível:
+    402 contas estão em versão que tem a peça, 397 têm carro. A peça foi vista
+    e usada uma vez por 27 pessoas; o que não aconteceu foi a segunda vez.
+  - O que isso ensina: lançar abastecimento é trabalho manual recorrente, e
+    recorrência manual sem gatilho não se sustenta sozinha. A peça entrega o
+    custo por km DEPOIS do segundo lançamento, ou seja o ganho mora do outro
+    lado de uma barreira que 26 de 27 não atravessaram. Quem quiser retomar
+    ataca o gatilho (lembrar no dia em que a pessoa costuma abastecer), não a
+    tela.
+  - O que FICA: a peça continua no código. Ela não atrapalha nada, custa uma
+    linha no Início e é a única fonte de km fresco que o app tem.
+- Estado final: FECHADO em 2026-10-23.
 
 ## [datas-do-carro] IPVA, licenciamento, seguro e CNH no calendário, com aviso
-- Estado: ABERTO (web desde 13/09; lojas com a 2.6)
+- Estado: FECHADO (inconclusivo: a métrica pedia uma etiqueta que nunca existiu; a peça é usada por 37 de 423 contas)
 - Tipo: mudanca-direta
 - Alvo no funil: avisos ligados (3 de 28 contas) e retorno no mês de um
   vencimento.
@@ -631,7 +783,34 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Início: 2026-09-13 na web; nas lojas, com a 2.6 · Ler a partir de:
   2026-10-11
 - Antes: nenhuma data cadastrável; avisos ligados em 3 de 28 contas
-- Veredito: (aberto)
+- **Veredito (2026-10-23): INCONCLUSIVO, e a métrica principal era impossível
+  desde o dia em que eu a escrevi.** Instrumento: `user_state`,
+  `jornada_envios` e `funil_eventos`, lidos em 23/10 às 11h15 UTC.
+  - A métrica dizia "avisos ligados por origem `datas`". **Essa origem nunca
+    existiu.** O `convite_aviso` tem quatro origens no banco (`carro`,
+    `calendario`, `onboarding`, `quiz`) e nenhuma é `datas`. É o terceiro
+    veredito meu que morre pela métrica, depois do
+    `limite-de-carros-com-aviso` (ausência sem denominador) e do
+    `cta-teste-por-plano` (sem braço e sem antes). A regra da skill estava
+    escrita; o que faltou foi conferir se a ETIQUETA que a métrica pede existe
+    no evento, e não só se o evento existe.
+  - **O que dá para dizer, e é o lado honesto da aposta:** a peça é usada.
+    **37 das 423 contas (9 de cada 100) têm pelo menos uma data preenchida**,
+    43 carros têm o objeto `datas`, e a jornada já disparou **12 e-mails de
+    vencimento** (7 de seguro, 3 de IPVA, 2 de licenciamento), o primeiro em
+    21/09. Numa base onde o quiz de saúde chega a 82 carros, 43 com datas é
+    adoção de verdade para um campo que ninguém pede.
+  - **O que NÃO dá para dizer, e era a pergunta inteira:** se a data traz a
+    pessoa de volta. A leitura forte exige um ciclo de IPVA, que é janeiro a
+    março, e a fraca exigia a origem que não existe. Com 12 e-mails, nenhuma
+    taxa de retorno se sustenta.
+  - **Como fechar de verdade, escrito agora para quem retomar:** a origem do
+    convite ganha o valor `datas` quando o pedido sair da tela de datas; e a
+    leitura de janeiro compara abertura no mês do vencimento contra os outros
+    meses, para as contas que têm data. Até lá isto não volta ao caderno como
+    aposta aberta, para não ficar quatro meses contando relógio.
+- Estado final: FECHADO em 2026-10-23 como inconclusivo, com a peça em uso e a
+  leitura forte remarcada para o ciclo de IPVA.
 
 ## [resumo-mensal] O mês do carro fechado, por e-mail, push e no Início
 - Estado: ABERTO (web desde 13/09; o card do Início nas lojas com a 2.6)
@@ -645,10 +824,16 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Aprovação: aprovada pelo dono em 2026-09-13
 - Início: 2026-09-13 (primeiro envio possível em 01/10) · Ler a partir de: dois envios
 - Antes: a jornada não tem resumo; o e-mail `km` é o mais perto disso
-- Veredito: (não começou)
+- **NÃO ESTÁ VENCIDA, e a conta é esta (23/10):** a condição de leitura é DOIS
+  envios, e houve UM. Lido na `jornada_envios` em 23/10 às 11h15 UTC: a chave
+  `mes:2026-09` saiu para **15 pessoas** entre 01 e 03/10, e não há `mes:2026-10`
+  ainda. O segundo envio cai em 01/11, então a leitura é depois disso. Fica
+  registrado para a rodada que vier não a contar como atrasada nem a fechar com
+  um envio só.
+- Veredito: (aguardando o segundo envio, 01/11)
 
 ## [modo-motorista-de-app] Ganhou, custou, sobrou: a conta do dia de quem trabalha com o carro
-- Estado: ABERTO (web desde 13/09, como modo; lojas com a 2.6; o público principal segue decisão do dono)
+- Estado: FECHADO (zero de 402 contas expostas ligaram o interruptor)
 - Tipo: mudanca-direta
 - Alvo no funil: uso diário de um público que a ficha já mira.
 - Tese BeSci: clareza do próximo passo (a conta que decide se a corrida
@@ -663,10 +848,33 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   `motoristaDeApp = true` no `user_state`, e dias distintos com evento
   `lancou_ganho` por semana; a régua é cinco em sete
 - Antes: nenhum dado de ganho; custo por km só de serviços, no Premium
-- Veredito: (não começou)
+- **Veredito (2026-10-23): ZERO ABSOLUTO, e desta vez o zero NÃO é estrutural.**
+  Instrumento: `user_state` e `funil_eventos`, lidos em 23/10 às 11h15 UTC,
+  pela régua que a própria aposta escreveu.
+  - **402 contas têm a chave `motoristaDeApp` no estado, e em NENHUMA ela é
+    verdadeira.** Zero de 402. O evento `lancou_ganho` nunca foi gravado uma
+    única vez desde que existe, e nenhuma conta tem lançamento no array
+    `ganhos`.
+  - **Por que isto é veredito e não diagnóstico de exposição** (critério 3 da
+    régua, que já me pegou duas vezes): a chave existir em 402 contas prova que
+    essas contas rodam a versão que tem o interruptor. A peça foi publicada, e
+    a casa dos 611 aparelhos ativos passou por ela. O que não houve foi um
+    único toque.
+  - A leitura honesta: **este app não encontrou o público que a aposta supôs.**
+    A ficha das lojas mira motorista de aplicativo, e a aposta nasceu com a
+    decisão de público "pendente" com o dono, em 13/09. Quarenta dias depois,
+    nenhum sinal de que ele esteja aqui, e nenhum esforço foi feito para
+    trazê-lo (nenhuma campanha, nenhum texto do app fala com ele).
+  - O que FICA e o que NÃO fica: a peça continua no código, atrás de um
+    interruptor desligado, então ela não custa nada a ninguém. **Não recomendo
+    tirar nem investir**: tirar joga fora trabalho pronto, e investir significa
+    campanha e copy para um público que é decisão do dono, não minha. Se a
+    decisão de público nunca vier, isto fica como peça adormecida e o caderno
+    não a conta mais.
+- Estado final: FECHADO em 2026-10-23, sem adoção e sem público definido.
 
 ## [onboarding-curto] O onboarding tem três páginas, não cinco
-- Estado: ABERTO
+- Estado: FECHADO (venceu A, promovida em 23/10/2026; B perdeu no degrau da conta)
 - Tipo: teste-ab
 - Alvo no funil: comecou_onboarding → terminou_onboarding. Desde 04/09: web
   184 → 41 (22%), Android 45 → 28 (62%), iPhone 9 → 9. Na loja, 4 em 10
@@ -720,7 +928,40 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   VERDADEIRA, e o aprendizado de 04/09 diz que prova pequena e conferível é a
   que funciona. A decisão continua sendo dele; o que mudou é que o lado A
   ficou mais defensável do que era em 02/10.
-- Ler de novo a partir de: 2026-10-23
+- **Veredito final (2026-10-23): A VENCEU, e venceu no degrau que hoje decide.
+  B NAO FUNCIONOU.** Instrumento: `funil_eventos`, exposição carimbada por
+  variante, lido em 23/10 às 11h25 UTC. É nível 3: braço comparável, sorteio
+  por aparelho.
+  - Começaram o onboarding: **891 em A e 960 em B**. Terminaram: 672 (75 de
+    cada 100) e 759 (79). Cadastraram carro: 435 (49) e 444 (46). **Criaram
+    conta: 214 (24 de cada 100) e 179 (19).**
+  - A diferença que decide é a conta: 5,4 pontos a favor de A, com erro padrão
+    de perto de 1,9, ou seja quase três vezes o erro. **Conferido por um
+    segundo corte**, a conta condicionada a já ter carro: 206 de 428 em A (48
+    de cada 100) contra 174 de 439 em B (40). Oito pontos, 2,4 vezes o erro.
+    Dois cortes, mesma direção, os dois acima de duas vezes o erro.
+  - O degrau do meio continua favorecendo B (quatro pontos, menos de duas vezes
+    o erro) e o do carro empatou, como em 02/10. O desenho previa isso desde o
+    começo: "um onboarding mais curto que entrega gente que não cadastra o
+    carro não vale nada". Com a amostra seis vezes maior, a frase vale um grau
+    acima: **B passa mais gente pela apresentação, entrega o mesmo número de
+    carros e entrega MENOS CONTAS.**
+  - A leitura comportamental, e é hipótese: B tira duas páginas, entre elas a
+    prova social, e quem atravessa menos passos chega ao pedido de conta com
+    menos investido. Fricção retirada de um passo que a pessoa precisa suportar
+    não some, ela reaparece no pedido seguinte. Não há como separar "foram as
+    duas páginas" de "foi a prova social" com este desenho, e isso fica dito.
+  - RESSALVA: os denominadores saíram 891 contra 960, uma diferença de 69 que é
+    cerca de três vezes o erro do próprio sorteio. Não derruba o veredito (as
+    taxas é que são comparadas, e os dois cortes concordam), mas o sorteio
+    merece um olhar de quem cuida dele.
+  - **CONSEQUÊNCIA, feita nesta rodada: A virou o padrão e o experimento SAIU
+    do código.** E vale registrar o que isso resolve: a pergunta que estava com
+    o dono desde 02/10 era qual das duas promover, porque promover B apagaria a
+    página de prova social que ele decidiu manter em 01/09. **O resultado
+    respondeu na direção que não desfaz decisão dele nenhuma**: o onboarding
+    fica com as cinco páginas, a prova social fica, e nada precisa ser pedido.
+- Estado final: FECHADO em 2026-10-23, vencedora A promovida.
 
 
 

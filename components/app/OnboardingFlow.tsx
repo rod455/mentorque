@@ -36,18 +36,26 @@ function CheckDot() {
 // comparação entre plataformas que vai dizer se valeu (experimento
 // onboarding-termina-no-carro-android em docs/agentes/experimentos.md).
 //
-// TESTE A/B `onboarding-curto` (aprovado pelo dono em 12/09/2026): na variante
-// B são três páginas, não cinco. Dois cards (a dor e como resolve) e a última
-// página; a prova social fica de fora. Motivo: na web 4 em 5 desistiam dentro
-// das cinco páginas de promessa, e no Android 4 em 10. Lido num efeito, como
-// a plataforma, para o servidor não chutar variante.
+// O TESTE `onboarding-curto` ACABOU EM 23/10/2026, E A VERSÃO DE CINCO PÁGINAS
+// GANHOU. O teste comparou cinco páginas (três cards, prova social, última)
+// contra três (a dor, como resolve, a última). De 891 aparelhos contra 960: a
+// versão curta passou MAIS gente pela apresentação (759 contra 672) e entregou
+// o MESMO número de carros (444 contra 435), mas entregou MENOS CONTAS: 179
+// contra 214, cinco pontos com quase três vezes o erro padrão, confirmados por
+// um segundo corte (a conta entre quem já tem carro, 174 de 439 contra 206 de
+// 428).
+//
+// A leitura, e ela é hipótese: fricção retirada de um passo que a pessoa só
+// precisa SUPORTAR não desaparece, ela reaparece no pedido seguinte. Quem
+// atravessa menos passos chega ao pedido de conta com menos investido. O que o
+// desenho não separa é "foram as duas páginas" de "foi a prova social".
+//
+// Veredito e números em docs/agentes/experimentos.md. O texto da versão curta
+// fica em content.ts (`splash.curto`), sem uso, para não jogar fora copy que
+// pode servir em outro teste.
 export function OnboardingFlow() {
   const c = useContent();
-  const [curto, setCurto] = useState(false);
-  useEffect(() => {
-    setCurto(variante("onboarding-curto") === "b");
-  }, []);
-  const cards = curto ? c.splash.curto.cards : c.splash.cards;
+  const cards = c.splash.cards;
   const social = c.splash.social;
   const trial = c.splash.trial;
   const { finishOnboarding, setPremium } = usePrototype();
@@ -103,13 +111,12 @@ export function OnboardingFlow() {
       } catch { /* sem ofertas: cai no fluxo antigo */ }
     })();
   }, []);
-  // 3 cards + social (+ teste onde vende; no Android, + a página do carro).
-  // Na variante curta: 2 cards, sem social, + a última página.
-  const total = cards.length + (curto ? 0 : 1) + (paraOCarro || sells ? 1 : 0);
+  // 3 cards + prova social (+ teste onde vende; no Android, + a página do carro).
+  const total = cards.length + 1 + (paraOCarro || sells ? 1 : 0);
   const last = i === total - 1;
   const card = i < cards.length ? cards[i] : null;
   const paginaDoCarro = paraOCarro && last;
-  const paginaSocial = !curto && i === cards.length;
+  const paginaSocial = i === cards.length;
 
   const [trialDays, setTrialDays] = useState(7);
   useEffect(() => setTrialDays(trialDaysFor(trialPlatform())), []);

@@ -26,11 +26,14 @@ export const EXPERIMENTOS: Record<string, string[]> = {
   // padrão em AddCarScreen. Fica anotado aqui porque o id não pode voltar:
   // reaproveitar um id encerrado misturaria exposição velha com nova na view
   // experimentos_resultados.
-  // Aprovado pelo dono em 12/09/2026. A = cinco páginas (três de
-  // apresentação, prova social, última). B = três: a dor, como resolve, e a
-  // última (o carro no Android; o teste onde vende). A prova social fica de
-  // fora da B.
-  "onboarding-curto": ["a", "b"],
+  // ENCERRADO em 23/10/2026: a variante A venceu, e venceu no degrau da CONTA.
+  // De 891 aparelhos em A e 960 em B: terminaram o onboarding 672 e 759 (B
+  // passa mais gente, quatro pontos, menos de duas vezes o erro), cadastraram
+  // carro 435 e 444 (empate), e CRIARAM CONTA 214 e 179, cinco pontos a favor
+  // de A com quase três vezes o erro padrão. Conferido por um segundo corte, a
+  // conta entre quem já tem carro: 206 de 428 contra 174 de 439. A virou o
+  // padrão (as cinco páginas, com a prova social que o dono decidiu manter em
+  // 01/09) e o id não pode voltar, pelo mesmo motivo do de cima.
 };
 
 // A variante desta pessoa neste experimento ("a" se o teste não existir,

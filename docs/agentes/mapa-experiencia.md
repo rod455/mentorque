@@ -16,13 +16,123 @@ Formato de cada tela/fluxo:
 
 ## Estado
 
+v10 em 2026-10-23: rodada de RETENÇÃO, e é a rodada de prestar contas: **nove
+experimentos settlados**, seis fechados, um deles com braço comparável de
+verdade. O achado é uma segunda tranca na mesma porta: o convite de permissão,
+que é a única máquina de volta deste app, espera numa tela por onde a jornada
+não passa. Próxima rodada alterna para CONVERSÃO, e o retorno do dono de 17/10
+já disse onde ela começa: na folha da loja, não no nosso botão.
+
+# O PRIMEIRO A/B QUE DECIDIU CONTRA A VERSÃO MAIS CURTA (2026-10-23)
+
+O `onboarding-curto` rodou seis semanas e fechou com braço comparável:
+
+    variante          começou   terminou   com carro   COM CONTA
+    A, cinco páginas      891   672 (75)   435 (49)    214 (24)
+    B, três páginas       960   759 (79)   444 (46)    179 (19)
+
+B passa mais gente pela apresentação, entrega o mesmo número de carros e
+entrega MENOS CONTAS: cinco pontos, quase três vezes o erro padrão, conferidos
+por um segundo corte (a conta entre quem já tem carro, 206 de 428 contra 174 de
+439, 2,4 vezes o erro). **A venceu e virou padrão; o experimento saiu do
+código.**
+
+A lição, e ela é a de 02/10 um grau acima: fricção retirada de um passo que a
+pessoa só precisa SUPORTAR não desaparece, ela reaparece no pedido seguinte.
+E de quebra o resultado resolveu sozinho a pergunta que estava com o dono desde
+02/10, na direção que não desfaz decisão nenhuma dele: as cinco páginas ficam, a
+prova social fica.
+
+# A SEGUNDA TRANCA DA MESMA PORTA (2026-10-23)
+
+O convite de permissão de aviso é a única máquina de volta que este app tem:
+não há push, há lembrete local, e ele depende da permissão. Hoje **49 das 423
+contas têm aviso ligado, 12 de cada 100**.
+
+O conserto de 25/09 (a marca não queima mais no convidado) não moveu nada, e
+agora se sabe por quê. De 341 pessoas que cadastraram o carro como convidadas e
+depois criaram conta, **46 viram o convite, 13 de cada 100**, sem tendência de
+melhora. A primeira hipótese era a trava do pedido, e ela foi TESTADA e caiu:
+**339 dessas 341 tinham a trava livre.**
+
+A causa está no fonte: `gravar()` manda a pessoa para a tela DO CARRO, e quem
+consumia a marca era só a tela da GARAGEM. A marca é variável de módulo, morre
+com a sessão, e ficava esperando uma montagem que aquele caminho não faz.
+Conserto que resolve uma de duas travas da mesma porta não move número, e o
+número não diz qual sobrou. É a aposta desta semana.
+
+# O LUGAR DO PEDIDO, AGORA COM O DESFECHO INTEIRO (2026-10-23)
+
+O `recusou_convite_aviso` chegou com a 3.2 em 18/10, e o portão deixou de ser
+cego. **A previsão que eu registrei em 16/10 se resolveu:** eu escrevi que se o
+"saiu" dominasse, o problema era o momento, e se o "botão" dominasse, era o
+texto. Resultado, por aparelho:
+
+    recusa por SAIR da tela sem responder    70
+    recusa por TOCAR em "não"                24
+
+Três para um a favor do momento. **O conserto é onde o pedido aparece, não o
+que ele diz.** E por origem, desde a 3.2:
+
+    depois de salvar o carro   11 convites   3 sim (27 de cada 100)   0 "não"
+    no calendário              49 convites  10 sim (20)              7 "não"   32 saíram
+    no quiz                    37 convites   2 sim (5)              16 "não"   19 saíram
+    no onboarding              15 convites   1 sim                   1 "não"    4 saíram
+
+O convite do carro é o melhor momento medido da casa e ninguém nunca tocou em
+"não" nele. O do quiz é o pior, e é o único lugar onde a pessoa LÊ e recusa:
+candidata do próximo teste, não desta rodada.
+
+# A ROTINA DO CARRO, QUARENTA DIAS DEPOIS (2026-10-23)
+
+As quatro apostas de 13/09 estavam vencidas desde 11/10 e nenhuma rodada as
+leu. Falha minha, e os vereditos saem agora:
+
+- **Caderno de gastos: NÃO FUNCIONOU na régua dele.** A régua era "lançamento
+  em duas semanas seguidas": **1 pessoa**, de 27 que lançaram uma vez. A peça
+  entrega o custo por km depois do SEGUNDO lançamento, ou seja o ganho mora do
+  outro lado de uma barreira que 26 de 27 não atravessaram.
+- **Modo motorista de app: zero de 402 contas expostas ligaram o interruptor.**
+  Zero não estrutural: a chave existe no estado de 402 contas, então a peça foi
+  publicada e vista. Este app não encontrou o público que a aposta supôs, e a
+  decisão de público segue sendo do dono desde 13/09.
+- **Datas do carro: INCONCLUSIVO, e a métrica era impossível desde que eu a
+  escrevi** (ela pedia a origem `datas` no convite, que nunca existiu). O lado
+  honesto: **37 das 423 contas têm data preenchida** e a jornada já disparou 12
+  e-mails de vencimento. A leitura forte é o ciclo de IPVA, janeiro a março.
+- **Resumo mensal: NÃO está vencida.** A condição era dois envios e houve um
+  (`mes:2026-09`, 15 pessoas). O segundo cai em 01/11.
+
+# A RETENÇÃO, LIDA COM IDADE IGUAL (2026-10-23)
+
+O retrato mostra 12 de 57 e 8 de 69, o que parece queda. Lido com a janela de
+cada pessoa fechada, que é a regra de 06/10:
+
+    coorte 21/09    9 de 51    (18 de cada 100)
+    coorte 28/09   12 de 57    (21)
+    coorte 05/10    8 de 69    (12)
+    coorte 12/10   12 de 46    (26, e só 46 das 131 pessoas têm janela fechada)
+
+A de 05/10 é o fundo e a de 12/10 aponta para cima, mas **o subconjunto maduro
+da de 12/10 é torto de propósito**: são as pessoas que se cadastraram no começo
+da semana. Com coortes de 50 a 130, três pessoas movem cinco pontos. **Não há
+tendência provável aqui**, e a faixa honesta é de 12 a 26 de cada 100. A
+chegada, essa sim dobrou: 124 cadastros na semana de 12/10 contra 68 na
+anterior, com custo por conta caindo de 6,51 para 3,51.
+
 v9 em 2026-10-16: rodada de CONVERSÃO, e a primeira em que eu consultei o banco
 ao vivo (as sessões anteriores tinham o Supabase do Mentorque fora de alcance e
 o registravam como fonte indisponível). O achado da rodada é uma quebra que
 nenhum painel desta casa mostra, porque a tela que a causa não grava evento
 nenhum: **de cada 100 aparelhos que cadastram o carro como convidado, uns 60
-nunca criam conta, e a decisão acontece em dois minutos ou nunca.** Próxima
-rodada alterna para RETENÇÃO.
+nunca criam conta.**
+
+CORREÇÃO de 17/10, pelo dono, e ela vale como regra: eu escrevi que "o momento
+não volta" porque nenhuma conta nasce mais de uma hora depois do carro. O dado
+corrige a frase: das 200 pessoas que não criaram conta, **43 voltaram ao app
+depois de uma hora**. Uma em cada cinco volta; o que não volta é o CONVITE, que
+é consumido. Zero conta depois de uma hora é ausência de PEDIDO tanto quanto de
+vontade, e as duas leituras pedem consertos diferentes.
 
 # A MAIOR QUEBRA DO PRODUTO NÃO ESTÁ NO PAINEL (2026-10-16)
 

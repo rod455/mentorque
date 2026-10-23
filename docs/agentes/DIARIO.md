@@ -3,6 +3,107 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-23 · CRO: a segunda tranca da mesma porta, e o A/B que decidiu contra a versão mais curta
+
+- Artifact "Retenção da semana": https://claude.ai/artifact/BGESSrEjchnjW5qWpJk6MK
+- Rodada de RETENÇÃO (a de 16/10 foi de conversão). Fila entre papéis aberta
+  antes do retrato: **nenhuma linha para o CRO**, porque as duas de 16/10 foram
+  resolvidas pela Engenharia em 17/10. Nove experimentos settlados, seis
+  fechados.
+- **O A/B `onboarding-curto` FECHOU, e a vencedora é A, a de cinco páginas.** De
+  891 aparelhos em A e 960 em B: terminaram 672 e 759 (B passa mais gente,
+  quatro pontos, menos de duas vezes o erro), carro 435 e 444 (empate), e
+  **conta 214 e 179**, cinco pontos a favor de A com quase três vezes o erro.
+  Segundo corte, a conta entre quem já tem carro: 206 de 428 contra 174 de 439,
+  2,4 vezes o erro. A virou padrão, o id saiu de `EXPERIMENTOS` e o `curto` saiu
+  do `OnboardingFlow`. A lição é a de 02/10 um grau acima: **fricção retirada de
+  um passo que a pessoa só precisa SUPORTAR reaparece no pedido seguinte.**
+  - E isso resolveu sozinho a pergunta que estava com o dono desde 02/10:
+    promover B apagaria a prova social que ele decidiu manter em 01/09, e o
+    resultado decidiu na direção que não desfaz nada dele.
+- **O ACHADO: a segunda tranca da mesma porta.** O convite de permissão é a
+  única máquina de volta do app (não há push). Hoje 49 de 423 contas têm aviso
+  ligado. O conserto de 25/09 fez a marca esperar pela conta e o número não se
+  moveu: de 341 pessoas que cadastraram carro como convidadas e depois criaram
+  conta, **46 viram o convite, 13 de cada 100**, sem tendência.
+  - **A primeira hipótese foi TESTADA e caiu:** as três travas do pedido
+    estavam LIVRES em **339 dessas 341**. Explicação que já existe no código não
+    é prova de que é a causa deste número.
+  - **A causa, no fonte:** `gravar()` manda a pessoa para `root({name:"car"})`,
+    que é o `<CarHub />`, e quem consumia a marca era só a `CarsScreen`, a tela
+    da GARAGEM. Marca de módulo, morre com a sessão, esperando uma montagem que
+    o caminho não faz. Conserto que resolve uma de duas travas da mesma porta
+    não move número, e o número não diz qual sobrou.
+- **APOSTA DA SEMANA, registrada antes de implementar:
+  `convite-do-carro-aparece-onde-a-pessoa-cai`.** O `CarHub` passa a consumir a
+  marca e a desenhar o mesmo convite, com o mesmo texto e as mesmas travas.
+  Relógio pela régua que o dono deu em 17/10: **duas semanas depois de a 3.3
+  passar de metade dos aparelhos ativos**, não duas semanas depois do commit.
+- **O PORTÃO DEIXOU DE SER CEGO, E A MINHA PREVISÃO DE 16/10 SE RESOLVEU.** Eu
+  escrevi que se o `saiu` dominasse o conserto era o momento, e se o `botao`
+  dominasse era o texto. Medido: **70 saíram sem responder contra 24 que
+  tocaram em "não"**, três para um. É o momento. Por origem, desde a 3.2: carro
+  3 de 11 (27 por 100) com ZERO recusas por botão, calendário 10 de 49 (20),
+  quiz 2 de 37 (5) com 16 recusas por botão, onboarding 1 de 15.
+- **A ROTINA DO CARRO, vencida desde 11/10 e lida só agora, falha minha:**
+  - `caderno-de-gastos` **NÃO FUNCIONOU**: a régua era lançamento em duas
+    semanas seguidas, e é **1 pessoa** de 27 que lançaram uma vez. O ganho
+    (custo por km) mora depois do SEGUNDO lançamento.
+  - `modo-motorista-de-app` **ZERO de 402 contas expostas**, e o zero não é
+    estrutural: a chave existe no estado das 402, o evento nunca foi gravado.
+    Público nunca definido, decisão do dono desde 13/09. Não recomendo tirar
+    nem investir.
+  - `datas-do-carro` **INCONCLUSIVO, com a métrica impossível desde que eu a
+    escrevi**: ela pedia a origem `datas` no convite, e essa origem nunca
+    existiu. Terceiro veredito meu perdido na métrica. O lado honesto: 37 de
+    423 contas com data preenchida e 12 e-mails de vencimento disparados.
+  - `resumo-mensal` **NÃO está vencida**: a condição era dois envios e houve um
+    (`mes:2026-09`, 15 pessoas). O segundo cai em 01/11.
+- **DIRECIONAIS ATRASADAS, feitas hoje e nenhuma fecha nada:** Biela por ativo
+  6, 8, 9 e 6 de cada 100 (e nada separa `inicio-pergunta-unica` de
+  `aba-biela`); `viu_paywall` por ativo plano em 13 a 15, com
+  `iniciou_checkout` em **2, 2, 1, 0**. O `desistiu_da_compra` tem zero
+  registros, coerente com ninguém ter chegado à folha da loja, não instrumento
+  quebrado.
+- **RETENÇÃO com idade igual** (regra de 06/10): 9 de 51, 12 de 57, 8 de 69 e
+  12 de 46 na de 12/10, cujo subconjunto maduro é torto (quem se cadastrou no
+  começo da semana). Faixa honesta de 12 a 26 de cada 100, **sem tendência
+  provável** com coortes desse tamanho. A chegada dobrou: 124 cadastros contra
+  68, custo por conta de 6,51 para 3,51.
+- CONFERÊNCIAS: `npm run conferir` verde, saída 0. `conferir:convite` ganhou
+  cinco degraus que cobram o elo inteiro (onde a marca nasce, para onde a
+  jornada leva, quem consome), com defeito plantado três vezes por cópia de
+  segurança: consumidor removido reprovou 1, convite removido reprovou 1,
+  destino trocado reprovou 1. **Suíte de navegador NOVA, `apresentacao`**,
+  porque nenhuma suíte abria o onboarding (a `garagem()` nasce com
+  `onboarded: true`) e eu mexi na aritmética das páginas: verde em 33 s, e o
+  defeito da aritmética reprovou 4 degraus. `telas`, `conta` e `carro` verdes.
+- **DUAS CORREÇÕES QUE A CONFERÊNCIA ME FEZ, e as duas valem escrever.** A
+  primeira: a conferência nova passou verde com o convite desligado por uma
+  condição falsa, porque ela procura o TEXTO no fonte. Conferência de texto não
+  distingue "está escrito" de "é alcançável", e isso fica declarado em vez de
+  disfarçado. A segunda: ela passou verde com o destino do cadastro trocado,
+  porque minha busca pegava o primeiro de quatro `root(` do arquivo em vez do
+  que está dentro do `gravar`. Corrigida, reprova os três defeitos reais.
+- **O QUE A CONFERÊNCIA NÃO ALCANÇA:** o convite só é desenhado para quem tem
+  conta, e o ambiente da conferência de navegador não tem login configurado
+  (achado em 16/10). Então o caminho inteiro desta aposta não se anda no
+  navegador aqui; o que morde é a de linha de comando, no fonte. Sobre o
+  aparelho, sem sinal ainda.
+- **A MINHA RODADA CONTRA A MINHA RÉGUA: dez cumpridos.** O 6 não se aplica
+  (nenhum A/B proposto nem ligado) e o 9 foi cumprido no sentido forte, que é o
+  que faltava: experimento encerrado, vencedora promovida, id fora do registro.
+  **Onde falhei: o critério 1.** Quatro apostas estavam vencidas desde 11/10 e
+  eu abri aposta nova em 16/10 sem ler nenhuma delas. Os seis fechamentos de
+  hoje são a dívida sendo paga, não mérito.
+- RECOMENDAÇÕES: (1) a próxima rodada de conversão começa na folha da loja, pela
+  regra que o dono deu em 17/10, e o degrau de chegada do paywall em 1 a 2 por
+  semana confirma que nada no nosso lado vai medir antes disso; (2) depois de a
+  3.3 chegar às lojas, mover o convite do quiz, que aceita 5 de cada 100 e é o
+  único lugar onde a pessoa lê e recusa; (3) o sorteio dos A/B merece um olhar:
+  891 contra 960 é cerca de três vezes o erro do próprio sorteio, e sorteio
+  torto estraga o próximo teste em silêncio.
+
 ## 2026-10-23 · Mídia: rodada 6, custo por conta de R$ 3,08, e as duas réguas voltaram a concordar
 - Artifact "Mídia da semana":
   https://claude.ai/artifact/4K8Mr2dbrzxTogbVj6Dj5j

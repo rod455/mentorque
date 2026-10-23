@@ -156,6 +156,48 @@ experimentos alimentam a seção final.
   "o que poderia fechar este veredito é X" com numerador E denominador. Se X
   for uma ausência, a aposta é correção e se defende pelo argumento, não pelo
   dado.
+- **2026-10-23: siga a marca até a TELA QUE A CONSOME, porque pedido que espera
+  no lugar errado não deixa erro em lugar nenhum.** O convite de permissão
+  nasce quando a pessoa salva o carro e é consumido pela tela da GARAGEM; só que
+  salvar o carro manda a pessoa para a tela DO CARRO. A marca ficava esperando
+  uma montagem que a jornada não faz, e o resultado foi 46 convites em 341
+  pessoas da população certa. Um conserto anterior (25/09) havia tirado a outra
+  trava da mesma porta e o número não se moveu, o que é a parte perversa:
+  **conserto que resolve uma de duas travas da mesma porta não move número, e o
+  número não diz qual sobrou.** A regra: ao desenhar ou auditar qualquer pedido
+  que viaje numa marca (convite, folha, oferta), escrever as três coisas lado a
+  lado: onde a marca NASCE, para que tela a jornada LEVA, e qual tela a CONSOME.
+  Se a segunda e a terceira não são a mesma, o pedido não acontece.
+- **2026-10-23: antes de acusar a regra de negócio, teste a regra de negócio.**
+  A primeira hipótese para o convite que não aparecia eram as três travas (uma a
+  cada quatro dias, três na vida, nunca depois de um não do sistema), que é a
+  explicação mais confortável porque já está escrita e documentada. O teste que
+  separa custou uma consulta: das 341 pessoas, **339 tinham a trava livre**.
+  Hipótese confortável derrubada em cinco minutos, e o que sobrou apontou para o
+  lugar certo. Explicação que já existe no código não é prova de que ela é a
+  causa deste número.
+- **2026-10-23, do primeiro A/B que decidiu contra a versão mais curta: fricção
+  retirada de um passo que a pessoa só precisa SUPORTAR não desaparece, ela
+  reaparece no pedido seguinte.** O onboarding de três páginas passou mais gente
+  pela apresentação (759 de 960 contra 672 de 891), entregou o mesmo número de
+  carros e entregou MENOS CONTAS: 179 contra 214, quase três vezes o erro
+  padrão. Em 02/10 eu havia escrito que fricção tirada de um passo de suportar
+  "desloca a desistência para o passo seguinte"; agora há o número, e ele é
+  maior do que o ganho de passagem. **Ao desenhar encurtamento, declarar qual
+  pedido vem DEPOIS e medir aquele**, porque é lá que a conta é paga.
+- **2026-10-23: adoção zero com a chave presente no estado É veredito, e é
+  diferente de adoção zero por falta de exposição.** O modo motorista de app lê
+  zero de 402, e as 402 contas TÊM a chave no estado, o que prova que elas rodam
+  a versão com a peça. Isso fecha, ao contrário dos quatro zeros de 15/09, que
+  eram apostas presas atrás de um build. A regra prática: quando a peça guarda
+  estado, a presença da CHAVE é o denominador de exposição, e ele costuma estar
+  no banco sem ninguém ter pedido.
+- **2026-10-23: conferir que a ETIQUETA que a métrica pede existe, não só que o
+  evento existe.** O veredito de `datas-do-carro` morreu porque a métrica pedia
+  "avisos ligados por origem `datas`" e essa origem nunca foi escrita em lugar
+  nenhum: o evento existe, com quatro origens, e nenhuma é essa. É o terceiro
+  veredito meu perdido na métrica. Ao registrar a aposta, abrir o banco e
+  conferir que o corte pedido TEM VALOR no dado de hoje.
 - **2026-10-16: a maior quebra do produto pode não estar no painel, e o motivo é
   que painel só mostra degrau que grava evento.** A lista `quebraFunil` do
   retrato foi lida por este papel em todas as rodadas como se fosse o mapa das

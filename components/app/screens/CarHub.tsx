@@ -11,16 +11,48 @@ import { useNav, type View } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { Atalho, Card, DateField, Icon, inputCls, Linha, Sheet, useContent } from "../ui";
 import { AvatarPickerSheet } from "../AvatarPicker";
+import { ConviteDeAviso } from "../ConviteDeAviso";
+import { consumirConviteNoCarro } from "@/lib/app/pedidoDeAviso";
+import { useAuth } from "@/lib/app/auth";
 import { healthColor } from "./Cars";
 
 export function CarHub() {
   const c = useContent();
   const { s, updateVehicle } = usePrototype();
   const { go } = useNav();
+  const { user } = useAuth();
   const [avatarSheet, setAvatarSheet] = useState(false);
   const [nickOpen, setNickOpen] = useState(false);
   const [nickInput, setNickInput] = useState("");
   const [pendenciasAbertas, setPendenciasAbertas] = useState(false);
+
+  // O CONVITE DO AVISO ACONTECE AQUI, QUE É ONDE A PESSOA CAI (23/10/2026).
+  //
+  // O DEFEITO, medido e depois lido no fonte. O `AddCarScreen.gravar()` marca o
+  // convite de aviso e manda a pessoa para `root({ name: "car" })`, que é esta
+  // tela. Quem consumia a marca era só a `CarsScreen`, a tela da GARAGEM, e a
+  // marca é variável de módulo que morre com a sessão. Então o convite ficava
+  // esperando uma montagem da garagem que aquele caminho não faz: ele só
+  // acontecia para quem, na mesma sessão, ainda abria a aba da garagem.
+  //
+  // O TAMANHO DISSO: de 341 pessoas que cadastraram o carro como convidadas e
+  // depois criaram conta, 46 viram o convite, 13 de cada 100. E não é trava: as
+  // três travas do pedido (uma a cada 4 dias, três na vida, nunca depois de um
+  // não do sistema) estavam LIVRES em 339 dessas 341, o que foi testado antes
+  // de acusar o lugar.
+  //
+  // POR QUE AQUI VALE A PENA: por origem, este é o melhor momento medido da
+  // casa. O convite depois de salvar o carro aceita 27 de cada 100 e ninguém
+  // nunca tocou em "não" nele; o do calendário aceita 20 e o do quiz, 5, com 16
+  // recusas por botão em 37 convites.
+  //
+  // Nada mais muda: mesmo texto, mesmas três travas, mesma origem `carro`. Ver
+  // a aposta convite-do-carro-aparece-onde-a-pessoa-cai no caderno.
+  const [convidarAviso, setConvidarAviso] = useState(false);
+  useEffect(() => {
+    if (consumirConviteNoCarro(!!user)) setConvidarAviso(true);
+  }, [user]);
+
   const v = activeVehicle(s);
 
   if (!v) {
@@ -82,6 +114,20 @@ export function CarHub() {
   return (
     <div className="pt-3">
       <CarSelector />
+
+      {/* O convite do aviso, no instante em que a promessa é concreta: a pessoa
+          acabou de salvar ESTE carro. As três travas e o texto são os mesmos da
+          garagem; o que mudou é ele acontecer na tela onde ela está. */}
+      {convidarAviso && (
+        <div className="mt-4">
+          <ConviteDeAviso
+            momento="carro"
+            sequencia={0}
+            titulo={c.cars.conviteAvisoTitulo}
+            corpo={c.cars.conviteAvisoCorpo.replace("{carro}", carName(v))}
+          />
+        </div>
+      )}
 
       {/* O carro: foto (toque troca), nome com apelido editável, e as linhas de
           contexto (km, desde quando, FIPE), que continuam editáveis no toque. */}
