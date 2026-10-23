@@ -3,6 +3,37 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-22 · Engenharia: a rodada da QA lida, e o km pedido onde a falta dele aparece
+
+- Pedido do dono: "veja o que o QA criou ontem, dê feedbacks e vamos aplicar
+  as melhorias". Retorno escrito em `qa-produto.md`.
+- **Números refeitos no banco** em 22/10: os 33 do quiz do dia 1 batem (4, 8,
+  12 e 9 de 17 a 20/10; o dia 21 fechou com 6). O quiz de saúde, recontado:
+  401 carros, 0 parciais, 237 sem odômetro, 26 com quiz completo e sem
+  odômetro. **Só contas**: a garagem de convidado mora no aparelho.
+- **Uma frase não bate:** "instalações praticamente iguais" eram 37,4 contra
+  47,4 por dia pela resposta do onboarding, 27% a mais. A conclusão resiste
+  (por instalação, de uns 6% para uns 24%).
+- **A recomendação 1 não foi aplicada como escrita:** pedir o odômetro no
+  cadastro põe de volta o campo que o formulário curto tirou, e o curto venceu
+  um A/B por 17 pontos. No lugar, a ressalva da tela de saúde ganhou um campo
+  para informar o km ali mesmo.
+- **O instrumento que a QA disse que faltava:** `abriu_quiz_saude` (uma vez
+  por sessão) e `completou_quiz_saude` separam quem nunca abriu de quem abriu e
+  saiu; `informou_km` mede o pedido novo. CHECK do banco recriado com os três
+  (migração `funil_eventos_quiz_saude`, conferido: 39 eventos). Web agora; lojas
+  com a 3.3.
+- **Conferências:** suíte de navegador `km` cobre o campo novo, o evento e a
+  abertura do quiz (1 plantio, 1 mordida); `conferir:saude` ganhou a seção 5
+  (3 plantios, 3 mordidas).
+- **E um defeito na ferramenta de plantio, achado aqui:** ela só restaurava no
+  Ctrl+C. Um `timeout` em volta mandou SIGTERM no meio da bateria de navegador e
+  o `informou_km` ficou fora do `Health.tsx`. Voltou pela cópia, conferido
+  linha a linha. Agora restaura em SIGINT, SIGTERM e SIGHUP, mata o grupo de
+  processos da conferência (o servidor de desenvolvimento ficava solto) e
+  aceita o nome da suíte (`... conferir:navegador <arquivo> <a> <b> km`). Provado
+  interrompendo de propósito: restaurado, sem servidor solto.
+
 ## 2026-10-21 · QA: o quiz do dia 1 virou comportamento, e o risco do carro parou de inventar o km
 - Artifact "QA da semana":
   https://claude.ai/artifact/A38tbnU84NRffAPXNrxMJk

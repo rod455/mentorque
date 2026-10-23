@@ -1001,3 +1001,68 @@ achado e a ferramenta que o fecha estão na mesma rodada, feche.
 quando a 3.2 chegar às lojas, e publicar é decisão do dono. A raiz da
 assinatura (campo de origem em `subscriptions`, escrito pelo webhook) segue
 como recomendação, porque é caminho de cobrança.
+
+## Retorno do dono sobre a rodada de 21/10/2026
+
+Mandado escrever por ele em 22/10 ("veja o que o QA criou ontem, dê feedbacks
+e vamos aplicar as melhorias"). Lidos o diário, o artifact, o commit 959a640 e
+o código que ele mexe; os números refeitos no banco em 22/10, de manhã (UTC).
+
+Primeiro o que manter.
+
+**O QUIZ DO DIA 1 FECHOU COM COMPORTAMENTO, E O NÚMERO BATE.** Refeito por
+`quiz_respostas`: 4, 8, 12 e 9 pessoas responderam onboarding e pergunta do
+dia na mesma data de 17 a 20/10, os seus 33, e zero antes da 3.2. O dia 21,
+que você deixou de fora por estar aberto, fechou com 6. Fechar o item com o
+instrumento que o próprio conserto trouxe, e não com caminho de código, é o
+padrão certo.
+
+**A TEORIA DESARMADA PELA MEDIÇÃO, E A TRAVA VIROU ASSERÇÃO.** As doze notas
+padrão por baixo de uma resposta só não viraram manchete porque você contou
+antes. Recontado: 401 carros, 0 parciais. E a observação de que a trava mora
+numa tela, longe de quem lê o número, é a razão certa para a asserção existir.
+
+**A RESSALVA AO LADO, NÃO NO LUGAR, E FECHADA EM VEZ DE RECOMENDADA.** É a
+correção 2 do retorno de 15/10 aplicada no dia, com o tamanho escrito do lado
+(0 a 2 pontos no score) para ninguém ler como urgente.
+
+**A CONFERÊNCIA DE TRINTA SEGUNDOS ANTES DE REPETIR O PEDIDO.** O campo de
+origem existia desde 15/10, e a recomendação virou "já está feito". É a regra
+de 04/10 funcionando.
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. "AS INSTALAÇÕES FICARAM PRATICAMENTE IGUAIS" NÃO É O QUE O NÚMERO DIZ.**
+A sua tabela tem 37 e 46 por dia: são 24% a mais. Refeito pela resposta do
+onboarding (que é o que cresce com instalação): 37,4 por dia de 12 a 16/10 e
+47,4 de 17 a 21/10, 27% a mais. A conclusão resiste (por instalação, o quiz do
+dia vai de uns 6% para uns 24%, quatro vezes), mas a frase que a sustentava
+estava errada, e a tabela também não diz de que instrumento saiu a coluna de
+instalações. Denominador sem instrumento é a primeira falha da lista de 03/10
+no CLAUDE.md. Regra para a próxima: o denominador diz de onde veio, e a
+variação dele vai em número, não em adjetivo.
+
+**2. A RECOMENDAÇÃO 1 BATIA DE FRENTE COM UM TESTE A/B JÁ DECIDIDO.** "Pedir o
+odômetro no cadastro do carro" é pôr de volta o campo que o formulário curto
+tirou, e o curto venceu por 17 pontos, mais de três vezes o erro padrão
+(`docs/agentes/experimentos.md`, citado no comentário do próprio
+`AddCarScreen`). Arriscar o cadastro inteiro, que é a maior etapa do funil,
+por um componente que você mediu em 0 a 2 pontos é a troca errada.
+Antes de recomendar mudança de produto, leia o histórico de experimentos da
+tela. O que a Engenharia fez em 22/10, no lugar: o km é pedido onde a falta
+dele aparece, na própria ressalva da tela de saúde, com um campo só, e o
+evento `informou_km` (origem `saude`) diz se alguém responde.
+
+**3. "378 CARROS" SÃO SÓ OS DE QUEM TEM CONTA.** A garagem de convidado mora
+no aparelho, e a maioria dos aparelhos é convidado (de 15/09 a 17/10, 1.040
+terminaram o onboarding e 308 criaram conta). A trava do quiz incompleto é de
+código e vale para todos, então "nenhum parcial" se sustenta. Mas "222 dos 378
+sem odômetro" é a proporção entre contas, e o texto não diz. Regra: número de
+`user_state` diz que a população é de contas.
+
+**Aplicado em 22/10, com o seu instrumento que faltava:** `abriu_quiz_saude` e
+`completou_quiz_saude` (origem `primeira` ou `refazer`) separam "nunca abriu"
+de "abriu e saiu" por aparelho; `informou_km` mede o pedido novo. O CHECK do
+banco foi recriado com os três (migração `funil_eventos_quiz_saude`). No ar na
+web com este deploy; nas lojas, com a 3.3. Primeira leitura útil: uma semana
+depois da 3.3 chegar aos aparelhos.

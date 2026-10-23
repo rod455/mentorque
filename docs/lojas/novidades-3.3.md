@@ -32,6 +32,10 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
    carro oferecia só de 2026 a 2000; agora vai de 1960 até o ano que vem, e a
    lista anda com o calendário. Pedido de um motorista com carro de 1984, que
    cadastrou como 2000 por falta de opção.
+5. **O km pedido na tela de saúde, e o quiz de saúde medido** (22/10, commit b1f3b27). Sem
+   odômetro, a ressalva "km estimado pela idade" passa a ter um campo para
+   informar o km ali mesmo. E três eventos novos: quem abre e quem termina o
+   quiz de saúde, e quem informa o km pela saúde.
 
 ## Plugin nativo nesta versão
 
