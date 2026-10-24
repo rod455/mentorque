@@ -3,6 +3,30 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-24 · Engenharia: o convite do Premium saiu para 23 pessoas que usam o app
+
+- Pedido do dono: e-mail para quem usa o app regularmente e não assina, com os
+  benefícios e o cupom de 100%. Decisões dele na conversa: os 23 recebem,
+  cupom `LANCAMENTO1MES` (primeiro mês do mensal), e o texto diz "5 primeiras
+  pessoas" (o teto no Stripe é 25, dividido com a rotina de convite).
+- **Público** (`publico_convite_premium`, consultado na hora): conta com
+  e-mail, uso em 3 dias ou mais nos últimos 30 e algum nos últimos 14, sem
+  assinatura ativa ou em teste, fora do time e de quem saiu da lista. 23.
+- **Disparo** às 11h29 UTC de 24/10, por ordem do dono, antes da jornada do
+  dia: 23 enviados, 0 falhas, 0 adiados, resgates do cupom antes do envio 0.
+  Marca `convite-premium-2026-10` em `jornada_envios` para os 23, com o id do
+  Resend. A jornada conta essa marca no espaçamento de 3 dias, então ninguém
+  recebe dois e-mails hoje.
+- **Entrega lida às 11h31 UTC** (webhook do Resend): 22 entregues, 3 abertos,
+  1 sem confirmação de entrega ainda e nenhuma recusa registrada.
+- **O que ficou sem conferir:** o clique no botão até a tela de pagamento, com
+  o desconto aparecendo. O dono mandou disparar antes; a última leitura do
+  cupom é de 03/10 (0 de 25 no painel).
+- **Como ler:** clique é sinal, abertura é estimativa. O medidor que ninguém
+  bloqueia é o resgate: `subscriptions.cupom = 'LANCAMENTO1MES'`, e o
+  `utm_campaign=convite-premium-2026-10` no funil. Fluxo temporário do n8n
+  arquivado depois do envio.
+
 ## 2026-10-24 · Engenharia: os dois pedidos da Mídia de 15/10 feitos, e o alarme avisa no dia seguinte
 
 - Pedido do dono: "vamos fazer o 2" (os dois pedidos da Mídia para a coleta do
