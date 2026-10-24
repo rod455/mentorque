@@ -172,6 +172,33 @@ console.log("Anomalias: o vigia da operação continua ligado?");
     "foi a causa em 24/09 e ninguém olha política de anúncio por conta própria: quem lê o alarme precisa da primeira hipótese junto"
   );
 
+  // ── A CAMPANHA PARADA NO DIA SEGUINTE, E O ANÚNCIO REPROVADO (24/10/2026) ──
+  //
+  // A coleta passou a trazer a impressão por campanha POR DIA e o
+  // `approval_status` de cada anúncio (pedidos da Mídia de 15/10). Sem estas
+  // duas linhas no alarme, o dado novo existiria e ninguém olharia. A 5b herda
+  // as duas peças da 5 (razão e piso) e acrescenta a terceira, que só faz
+  // sentido por dia: o dia de ONTEM, porque o de hoje está incompleto e
+  // compará-lo grita toda manhã.
+  conferir("a campanha parada no dia seguinte está no SQL", sql.includes("'campanha parou ontem'"));
+  conferir(
+    "ela lê o dia de ontem (posição 7 de 8), não o de hoje, que está pela metade",
+    /\(c->'dias'\)->6->>'impressoes'/.test(sql) && /where i between 1 and 6/.test(sql),
+    "com o dia de hoje, toda coleta da manhã veria menos de um quarto da média e o alarme gritaria todo dia",
+  );
+  conferir("ela compara com a média dos seis dias antes, com razão de um quarto", /t\.ontem < t\.media \* 0\.25/.test(sql));
+  conferir("ela exige volume mínimo (60 por dia, os 500 da janela)", /t\.media >= 60/.test(sql));
+  conferir(
+    "ela ignora campanha pausada pelo dono",
+    /t\.status = 'ENABLED'/.test(sql),
+    "a busca foi pausada em 13/10 de propósito; pausa não é parada",
+  );
+  conferir(
+    "o anúncio reprovado em campanha ativa grita sem limiar",
+    sql.includes("'anuncio reprovado'") && /coalesce\(\(m\.dados->>'anunciosReprovados'\)::int, 0\) > 0/.test(sql),
+    "anúncio reprovado com campanha ENABLED foi o que parou a busca por oito dias em 24/09",
+  );
+
   // ── O CONTRATO COM O VIGIA (19/09/2026) ───────────────────────────────────
   //
   // O DEFEITO: de 15 a 19/09 o Vigia mandou todo dia "um erro está se

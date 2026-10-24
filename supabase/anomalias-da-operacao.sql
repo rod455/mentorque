@@ -278,6 +278,70 @@ as $function$
   where antes.impressoes >= 500
     and hoje.impressoes < antes.impressoes * 0.25
 
+  union all
+
+  -- 5b. A mesma campanha parada, NO DIA SEGUINTE (24/10/2026).
+  --
+  -- A anomalia 5 acima enxerga a janela de oito datas e grita uns quatro dias
+  -- depois da parada. Desde 24/10 a coleta traz `porCampanhaPorDia` (pedido da
+  -- Mídia de 15/10), com ZERO no dia em que a campanha não entregou. Aqui o dia
+  -- de ontem (posição 7 das 8; a 8 é hoje, incompleta) contra a média dos seis
+  -- dias antes. As duas peças da anomalia 5 continuam: RAZÃO (menos de um
+  -- quarto da média) e PISO (média de 60 por dia, o equivalente aos 500 da
+  -- janela). E só campanha ENABLED: a pausada pelo dono não é parada.
+  --
+  -- Provado em 24/10 com a mesma consulta sobre quatro casos: a linha real do
+  -- dia calada (5.826 ontem contra média de 6.954), um 24/09 sintético gritando
+  -- (12 contra 580), a mesma pausada calada e uma campanha de 25 por dia calada.
+  -- As duas convivem de propósito: esta pega o primeiro dia, a de cima confirma
+  -- que a queda durou.
+  select
+    'campanha parou ontem'::text,
+    'google_ads'::text,
+    t.ontem,
+    'campanha ' || t.nome || ': ' || t.ontem || ' impressoes em ' || t.dia ||
+      ' contra media de ' || round(t.media) || ' nos seis dias antes, status ' ||
+      t.status || '. Confira anuncio reprovado (anuncios na coleta) antes de orcamento'
+  from (
+    select c->>'nome' as nome, c->>'status' as status,
+      ((c->'dias')->6->>'impressoes')::bigint as ontem,
+      (c->'dias')->6->>'dia' as dia,
+      (select avg((d->>'impressoes')::numeric)
+         from jsonb_array_elements(c->'dias') with ordinality as x(d, i)
+         where i between 1 and 6) as media
+    from public.metricas_diarias m, jsonb_array_elements(m.dados->'porCampanhaPorDia') c
+    where m.fonte = 'google_ads'
+      and m.dia = (select max(dia) from public.metricas_diarias where fonte = 'google_ads')
+      and jsonb_array_length(c->'dias') = 8
+  ) t
+  where t.status = 'ENABLED'
+    and t.media >= 60
+    and t.ontem < t.media * 0.25
+
+  union all
+
+  -- 5c. Anúncio REPROVADO em campanha ativa (24/10/2026).
+  --
+  -- A causa de 24/09, que a anomalia 5 só podia sugerir ("confira anúncio
+  -- reprovado"), agora vem medida: a coleta traz o `approval_status` de cada
+  -- anúncio (pedido da Mídia de 15/10). Não tem limiar: anúncio reprovado em
+  -- campanha ligada é dinheiro que não sai, e um já basta.
+  select
+    'anuncio reprovado'::text,
+    'google_ads'::text,
+    (m.dados->>'anunciosReprovados')::bigint,
+    (m.dados->>'anunciosReprovados') || ' de ' || coalesce(m.dados->>'anunciosAtivos', '?') ||
+      ' anuncios ativos reprovados, em: ' ||
+      coalesce((select string_agg(distinct a->>'campanha', ', ')
+                from jsonb_array_elements(m.dados->'anuncios') a
+                where a->>'aprovacao' = 'DISAPPROVED' and a->>'status' = 'ENABLED'
+                  and a->>'statusCampanha' = 'ENABLED'), '?') ||
+      '. Campanha com status ENABLED e anuncio reprovado nao entrega, como em 24/09'
+  from public.metricas_diarias m
+  where m.fonte = 'google_ads'
+    and m.dia = (select max(dia) from public.metricas_diarias where fonte = 'google_ads')
+    and coalesce((m.dados->>'anunciosReprovados')::int, 0) > 0
+
   order by 1, 3 desc
 $function$;
 

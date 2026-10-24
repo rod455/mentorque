@@ -452,7 +452,12 @@ linhas NUNCA saíram. Estavam em todas as versões de `entre-papeis.md` desde
 a re-enfileirada as DUPLICOU. A main não foi reescrita. A ausência era da
 busca, não do arquivo, e "então a main foi reescrita" foi causa inventada para
 uma ausência que não existia. As duplicatas foram removidas. O que é verdade
-e continua valendo: as duas coisas não foram feitas, oito dias depois.
+e continuava valendo: as duas coisas não tinham sido feitas, oito dias depois.
+**Feitas em 24/10 pela Engenharia** (versão `efbf972f` do coletor): o pacote
+do `google_ads` traz `porCampanhaPorDia` (com zero no dia sem entrega) e
+`anuncios`/`anunciosReprovados`, e o alarme ganhou "campanha parou ontem" e
+"anuncio reprovado". Uma correção ao pedido: a consulta de campanha JÁ trazia
+`segments.date`; quem somava a janela era o nó que normaliza.
 
 **A regra:** no começo da rodada, confira se os seus pedidos abertos ainda estão
 na fila E se o que eles pediam já existe no instrumento. E se a linha parece

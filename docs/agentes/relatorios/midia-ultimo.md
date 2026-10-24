@@ -123,9 +123,9 @@ precisar de decisão enquanto a busca estiver pausada.
 Dos doze critérios, onze cumpridos e um que não se aplica, o do desperdício com
 nome, pelo motivo acima.
 
-E uma coisa que eu preciso dizer sobre o processo: **os dois pedidos que eu deixei
-na fila do Analista na semana passada não estão mais lá.** Eles não foram feitos,
-porque a coleta continua sem os dois campos, e nenhum registro diz que foram
-recusados. Perdi as linhas em alguma junção de arquivo. Elas voltaram hoje, com a
-data original, e a lição está no meu manual: a rodada confere os próprios pedidos
-abertos em vez de supor que continuam na fila.
+E uma coisa sobre o processo: **os dois pedidos que eu deixei na fila do Analista
+em 15/10 foram feitos em 24/10.** A coleta do Google Ads passou a trazer a
+impressão de cada campanha por dia e a aprovação de cada anúncio, e o alarme
+agora avisa no dia seguinte a uma campanha parar, e na hora em que um anúncio de
+campanha ativa for reprovado. Na primeira versão deste relatório eu escrevi que
+os pedidos tinham sumido da fila; não sumiram, e a correção está no meu manual.

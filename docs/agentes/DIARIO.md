@@ -3,6 +3,34 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-24 · Engenharia: os dois pedidos da Mídia de 15/10 feitos, e o alarme avisa no dia seguinte
+
+- Pedido do dono: "vamos fazer o 2" (os dois pedidos da Mídia para a coleta do
+  Google Ads, abertos desde 15/10).
+- **Impressão por campanha e por dia:** a consulta JÁ trazia `segments.date`;
+  quem somava tudo numa janela era o nó "Google Ads: normaliza". Agora ele grava
+  `porCampanhaPorDia` (8 datas, com ZERO no dia sem entrega, hoje marcado como
+  incompleto em `janelaDias`).
+- **Aprovação de cada anúncio:** `anuncios`, `anunciosReprovados`,
+  `anunciosLimitados`, `anunciosAtivos`. O MCP do n8n recusa pôr a credencial do
+  Google Ads num nó novo, então a consulta passa pelo nó que já a tem: um nó de
+  código entrega as duas consultas e "acoes de conversao" roda uma por item. Sem
+  clique do dono.
+- **Rodado no rascunho antes de publicar** (execução 9086, 10h43 UTC): 6 anúncios,
+  todos aprovados, 1 ativo em campanha ativa (os da busca estão aprovados, com a
+  campanha pausada); a campanha de app com 5.826 impressões ontem contra média
+  de 6.954; ações de conversão iguais (5). Publicado como `efbf972f`, a mesma
+  versão conferida.
+- **O consumidor, senão o dado não serve:** `anomalias_da_operacao` ganhou
+  "campanha parou ontem" (ontem contra a média dos seis dias antes, razão de um
+  quarto, piso de 60 por dia, só ENABLED) e "anuncio reprovado" (sem limiar).
+  Testadas antes em quatro casos (real calado, 24/09 sintético gritando, pausada
+  calada, campanha minúscula calada). Migração
+  `anomalias_campanha_por_dia_e_anuncio_reprovado`, conferida rodando a função.
+  `conferir:anomalias`: 4 plantios, 4 mordidas.
+- O relatório de mídia de 23/10 (o .md e o PDF) foi corrigido no parágrafo que
+  dizia que os pedidos tinham sumido, antes de o dono mandá-lo ao Diretor.
+
 ## 2026-10-23 · CRO: a segunda tranca da mesma porta, e o A/B que decidiu contra a versão mais curta
 
 - Artifact "Retenção da semana": https://claude.ai/artifact/BGESSrEjchnjW5qWpJk6MK

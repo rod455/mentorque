@@ -377,7 +377,7 @@ sem tirar ninguém dela.
 | `conferir:revisoes` | 03/10/2026 | sim |
 | `conferir:venda` | 03/10/2026 | não no piso da validade, consertada |
 | `conferir:acoes` | 10/10/2026 | sim, 3 plantios: destino fora da lista, data que o calendário não tem, e o leitor descartando linha em silêncio |
-| `conferir:anomalias` | 10/10/2026 | sim, na regra e no consumidor: função do SQL renomeada de um lado, e o retrato sem o campo |
+| `conferir:anomalias` | 10/10/2026 | sim, na regra e no consumidor: função do SQL renomeada de um lado, e o retrato sem o campo. Em 24/10 (Engenharia), 4 plantios e 4 mordidas nas linhas novas: a 5b lendo o dia de hoje (incompleto) em vez de ontem, gritando com campanha pausada, sem piso, e o anúncio reprovado com limiar de 3 |
 | `conferir:contexto` | 10/10/2026 | sim, na regra e no consumidor: teto do app mais frouxo que o da rota, e a rota sem o recorte da lista |
 | `conferir:embedding` | 10/10/2026 | sim, 3 plantios: modelo divergente, dimensão divergente, e a rota sem o aviso de ano do manual |
 | `conferir:frescor` | 10/10/2026 | não no consumidor, consertada: o retrato parava de publicar o aviso e a corrente inteira passava |
