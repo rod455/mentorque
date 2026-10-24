@@ -19,6 +19,7 @@
 //
 // Rode com: npm run conferir:email
 import { readFileSync } from "node:fs";
+import { emailDoConvitePremium, linkDoConvite, PRIMEIRAS_PESSOAS } from "../lib/email/convitePremium.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -27,6 +28,7 @@ function conferir(nome: string, condicao: boolean, detalhe = "") {
   console.error(`FALHA  ${nome}${detalhe ? `\n       ${detalhe}` : ""}`);
 }
 const leia = (caminho: string) => readFileSync(new URL(`../${caminho}`, import.meta.url), "utf8");
+const semComentarios = (f: string) => f.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/^\s*\/\/.*$/gm, " ");
 
 console.log("E-mail: o que sai deixa rastro, e o rastro entra fechado?");
 
@@ -134,6 +136,43 @@ console.log("E-mail: o que sai deixa rastro, e o rastro entra fechado?");
     "abrir três vezes é \"abriu\"; somar eventos inflaria a taxa",
   );
   conferir("a view separa o envio sem evento", /as sem_eventos/.test(view));
+}
+
+// ── O CONVITE DO PREMIUM (24/10/2026) ───────────────────────────────────────
+//
+// Mensagem a cliente não tem desfazer. O que se perde numa edição distraída e
+// só se descobre com a lista inteira já tendo recebido: o link de venda sem o
+// cupom, o `&` cru no atributo (o rastreio de clique reescreve e a query se
+// perde), o preço do mês seguinte, o número de aulas escrito à mão, e as travas
+// da rota.
+{
+  const o = { nome: "joão da silva", cupom: "CUPOMTESTE", precoMensal: "R$ 29,90", aulas: 124, aulasPremium: 16, limiteBiela: 3, sair: "https://x.test/sair?u=1&a=2" };
+  const e = emailDoConvitePremium(o);
+  const link = linkDoConvite("CUPOMTESTE");
+  conferir("o link do convite abre o mensal com o cupom e a campanha", /assinar=mensal&cupom=CUPOMTESTE&utm_source=email&utm_campaign=convite-premium/.test(link));
+  conferir("no HTML o link vai com &amp; e nenhum & cru", e.html.includes(link.replace(/&/g, "&amp;")) && !e.html.includes(link));
+  conferir("no texto puro o link vai com & normal", e.texto.includes(link) && !e.texto.includes("&amp;"));
+  conferir("o preço depois do mês grátis está no corpo", e.html.includes("R$ 29,90 por mês") && e.texto.includes("R$ 29,90 por mês"));
+  conferir(`o e-mail diz as ${PRIMEIRAS_PESSOAS} primeiras pessoas, que é a decisão do dono`, e.html.includes(`${PRIMEIRAS_PESSOAS} primeiras pessoas`));
+  conferir("os números vêm de fora: 16 Premium e 108 abertas", e.html.includes("As 16 aulas Premium") && e.html.includes("108 que você já tem") && e.html.includes("3 perguntas por mês"));
+  const outro = emailDoConvitePremium({ ...o, aulas: 130, aulasPremium: 20, limiteBiela: 5 });
+  conferir("e mudam quando o catálogo muda", outro.html.includes("As 20 aulas Premium") && outro.html.includes("110 que você já tem") && outro.html.includes("5 perguntas por mês"));
+  conferir("a saudação usa só o primeiro nome", e.html.includes("Oi, João!"));
+  conferir("sem nome, a saudação não inventa um", emailDoConvitePremium({ ...o, nome: null }).html.includes("<b>Oi!</b>"));
+  conferir("o link de sair está no rodapé, escapado", e.html.includes("https://x.test/sair?u=1&amp;a=2"));
+  conferir("sem travessão no texto que a pessoa lê", !/\u2014/.test(e.html + e.texto + e.assunto));
+
+  const rota = semComentarios(leia("app/api/email/convite-premium/route.ts"));
+  conferir("a rota exige a chave dos dados", /if \(!chaveDadosOk\(req\)\) return negada\(\);/.test(rota));
+  conferir("a rota só dispara com disparar: true", /if \(body\?\.disparar !== true\)/.test(rota));
+  conferir(
+    "a marca é gravada dentro do laço, logo depois de cada envio",
+    /for \(const p of lista\) \{[\s\S]*await enviar\([\s\S]*\.from\("jornada_envios"\)[\s\S]*\.insert\(\{ user_id: p\.user_id, chave: CHAVE_DO_CONVITE_PREMIUM/.test(rota),
+  );
+  conferir("quem já recebeu e-mail hoje fica de fora (um envio por pessoa por dia)", /\.eq\("dia", hoje\)/.test(rota) && /recebeuHoje\.has\(p\.user_id\)/.test(rota));
+  conferir("o cupom é conferido antes de mandar, e sem vaga não manda", /cupomAindaTemVaga\(/.test(rota) && rota.indexOf("cupomAindaTemVaga(") < rota.indexOf("for (const p of lista)"));
+  conferir("o catálogo é contado na hora, sem as aulas agendadas", /lessonPublicada\(l, new Date\(\)\)/.test(rota));
+  conferir("a rota tem teto de tempo", /export const maxDuration = \d+/.test(rota));
 }
 
 if (falhas) {
