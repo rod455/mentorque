@@ -3,6 +3,38 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-25 · Engenharia: a guarda da ficha das lojas de volta, o painel sem a chave na URL, e os 70 fluxos do n8n com o nome do app
+
+- Pedido do dono: "pode corrigir tudo do seu lado", e padronizar o nome dos
+  fluxos do n8n com o app na frente.
+- **`conferir:versoes`**: o conserto do Guardião de 24/10 tinha transformado a
+  resposta negativa em clone raso em aviso, e toda sessão remota começa rasa.
+  Agora ela busca a história (`git fetch --unshallow`) antes de decidir. Provado
+  num clone raso de 50 commits: limpo passa; com um commit de 25/10 plantado na
+  ficha da 3.2, a versão de 24/10 dava saída 0 e esta dá 1; sem remoto, volta ao
+  aviso dizendo que a busca falhou.
+- **Painel**: a chave entra uma vez, vira cookie `httpOnly` com um SELO
+  derivado dela (não a chave), e o endereço fica limpo. O selo não passa no
+  `chaveDadosOk`. Fecha o pedido da Segurança de 25/10 na fila.
+  `conferir:painel`, 5 plantios, 5 mordidas. Build local verde. Em produção
+  (deploy de 4844a7c, lido às 15h44 UTC por um fluxo temporário, já
+  arquivado): chave errada dá 303 para `/painel` limpo e sem cookie; sem nada e
+  com cookie falso, "Acesso restrito". O caminho da chave CERTA foi provado só
+  na conferência local; o primeiro uso do dono é a prova em produção.
+- **Nomes do n8n**: os 70 fluxos agora seguem `App | Área: o que faz`: 16
+  Mentorque, 44 Vocaboost (os TEMP de julho entraram como `Vocaboost | TEMP:`),
+  6 Pessoal, 3 Dermato, 1 Meu Livrinho. Nenhum ativo mudou de estado, nenhum foi
+  publicado (renomear não precisa, e o "Peças: rede social" tem rascunho
+  pendente que publicar poria no ar). Padrão escrito no mapa do código.
+- **A chave no n8n, inventariada e NÃO movida**: 16 nós em 11 fluxos, todos com
+  a mesma `DADOS_CHAVE` inline no `x-mq-chave` (10 nós em 6 fluxos ativos). A
+  credencial "Header Auth account" que existe guarda OUTRA chave (testada:
+  401), e o MCP do n8n não cria credencial. Falta o dono criar uma; depois a
+  troca dos 16 nós é da Engenharia.
+- **Visto de passagem, de outros apps**: o validador do n8n acusou chaves em
+  texto puro também no Vocaboost e no Dermato (Anthropic, Evolution, Supabase).
+  Não mexi; é fora do Mentorque.
+
 ## 2026-10-25 · Segurança: rodada 6, as três críticas do Next fecharam de verdade, e a chave do painel viaja na URL
 - Artifact "Segurança da semana" (rodada 6):
   https://claude.ai/artifact/SQ85pbDSXVurdrjYXr9KcU
