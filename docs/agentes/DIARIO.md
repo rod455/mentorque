@@ -3,6 +3,41 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-25 · Engenharia: a chave dos dados saiu dos nós do n8n
+
+- Pedido do dono: "Feito. Faça a atualização", depois de criar no n8n a
+  credencial "Mentorque: chave dos dados" (achado 1 da Segurança, rodada 6).
+- **Como ficou**: a chave mora na credencial e só o fluxo
+  `Mentorque | Chave: chamar a operação` (`8rfDZfAhzOjnORgu`) a usa. Os 16
+  nós HTTP que levavam a chave escrita no cabeçalho viraram nós "Execute
+  Workflow" apontando para ele, em 11 fluxos (6 ativos, 5 parados). A regra e
+  o formato da chamada estão no `mapa-do-codigo.md`.
+- **Por que um fluxo intermediário e não a credencial em cada nó**: o MCP do
+  n8n recusa prender credencial Header Auth em nó HTTP existente; só cria
+  fluxo novo com ela. Primeira versão do intermediário mandava o corpo por
+  expressão em `sendBody` e o POST chegava vazio; refeito com um IF e dois nós
+  HTTP, e a versão velha foi arquivada.
+- **Prova, n8n lido às 16:07 a 16:09 UTC**: os 6 fluxos ativos publicados
+  (versão ativa nova em cada um) e executados uma vez. Vercel Analytics: 200 em
+  `/api/metricas`. Avaliações: 7 gravadas. Sentinela: sem suspeita, funil lido
+  nas duas chamadas. Vigia: 200 em `/api/dados` e `/api/metricas`, nenhuma
+  anomalia, nenhum e-mail. Retrato: 200 nas duas leituras e commit do retrato
+  na `main`. Coletor: as 13 gravações na mesa voltaram `ok`; a do Play voltou
+  `gravadas: 0`, igual à execução das 08:30 com a chave antiga (execução 9092).
+  Os 5 parados não foram executados; o "Copia de prova para o dono" teve o
+  corpo trocado do disparo real (`disparar: true`) para o modo teste.
+- **Inventário depois (subagente, MCP do n8n)**: 72 fluxos listados, zero
+  ocorrências de `mq-chave` ou `DADOS_CHAVE` em parâmetro ou nota de nó, no
+  rascunho e na versão publicada.
+- **O que o inventário NÃO alcança**: fluxos arquivados (a listagem do MCP não
+  os mostra; o TEMP do convite de 24/10 tinha a chave e guarda a definição);
+  qual credencial está presa no nó (o MCP não devolve esse campo, a prova é o
+  200 das execuções); histórico de execuções antigas.
+- **Achado de passagem, para a Segurança**: o `developer-token` do Google Ads
+  está escrito em três nós do coletor (`8HswG6ZPdzBSnlPv`). Fluxos de outros
+  apps do mesmo n8n têm chaves de Supabase, Anthropic, OpenAI e Telegram
+  escritas em nó; um deles está ativo. Mover ou girar é decisão do dono.
+
 ## 2026-10-25 · Engenharia: a guarda da ficha das lojas de volta, o painel sem a chave na URL, e os 70 fluxos do n8n com o nome do app
 
 - Pedido do dono: "pode corrigir tudo do seu lado", e padronizar o nome dos
