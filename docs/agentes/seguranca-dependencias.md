@@ -752,3 +752,62 @@ Veredito: a rodada mais madura do papel, com o retorno anterior aplicado de
 verdade. Faltou fazer com a lista de chaves o que você fez com o resto: ler o
 inventário em vez de lembrar dele.
 
+
+## Retorno do dono sobre a rodada de 25/10/2026 (rodada 6)
+
+Mandado escrever por ele em 25/10 ("veja tudo que foi publicado ontem e hoje,
+analise e dê feedback"). Lidos o diário, o commit d503f42, o `next.config.mjs`
+e as rotas citadas.
+
+Primeiro o que manter.
+
+**"NO TELEFONE" VIROU MEDIDA, E A ARMADILHA FOI ACHADA NO CAMINHO.** Os quatro
+instrumentos do Capacitor (repositório, árvore do build, lojas e o `versao` do
+funil por aparelho) fecham a pergunta que estava aberta desde 18/10. E os 626
+aparelhos "na 3.2" dez dias antes da publicação, que você percebeu serem a web
+ganhando versão a cada deploy, é exatamente a conclusão errada que a regra de
+03/10 existe para evitar.
+
+**DEPENDÊNCIA CONTADA POR AVISO, COM O CAMINHO ATÉ NÓS.** 34 para 9, os 25 no
+`next`, zero novos, e cada um dos 9 com o motivo de não alcançar o usuário. É o
+pedido de 18/10 cumprido. A divergência de 34 contra 32 ficou declarada, não
+escondida.
+
+**O ACHADO DA CHAVE NA URL, COM O TAMANHO MEDIDO PARA OS DOIS LADOS.** A Vercel
+guarda 1 hora, o código não grava `req.url`, o `Referer` já é cortado pelo
+navegador, e o histórico do navegador do dono é o que sobra. E você escreveu
+como inferência o que é inferência. O `Referrer-Policy` provado no servidor, e
+não na config, é o padrão certo.
+
+**A FUNÇÃO NOVA DO CONVITE CONFERIDA PELO LADO DO BURACO DE 19/09.** Ler a
+`publico_convite_premium` com `has_function_privilege`, e não pelo `revoke` do
+arquivo, é o jeito certo.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. A MESMA CHAVE ESTÁ GRAVADA EM TEXTO PURO NO N8N, E ISSO É MAIOR QUE O
+HISTÓRICO DO NAVEGADOR.** O achado olhou arquivo e URL. A `DADOS_CHAVE` também
+mora, escrita à mão, no cabeçalho `x-mq-chave` de nós HTTP do n8n: pelo menos
+no "Vigia de anomalias" (dois nós) e no "Analista: metricas externas" (o nó que
+grava a mesa), lidos pela Engenharia em 21/10 e 24/10. O fluxo temporário do
+convite Premium de 24/10 também a teve, e fluxo arquivado guarda a definição.
+O n8n é auto-hospedado num servidor do dono, e o próprio n8n tem o tipo de
+credencial "Header Auth" para guardar isso cifrado (já existe uma, "Header Auth
+account", sem uso conhecido). A casa alcança as definições pelo MCP do n8n:
+"acesso não é perguntar" (CLAUDE.md, 03/10) vale para segredo também. Na
+próxima rodada: inventário de onde a chave mora (arquivo, URL, n8n, Vercel),
+com o número de nós, e a recomendação de mover para credencial, que é o que
+torna girar a chave uma operação de um lugar só. Girar continua não sendo
+pedido enquanto o mecanismo da URL não fechar, e isso estava certo.
+
+**2. UM NÚMERO QUE MUDOU SEM DATA.** O `rls_enabled_no_policy` está em 17 e
+estava em 16 em 19/09, e você não sabe em qual semana entrou o 17º porque o
+número não foi anotado nas rodadas 2 a 5. Disse isso, e dizer foi o certo; o
+conserto é não precisar dizer de novo. Os contadores que a rodada lê toda
+semana (avisos por tipo no Supabase, funções `SECURITY DEFINER`, tabelas,
+views, avisos de produção) vão numa linha fixa do diário, sempre na mesma
+ordem. Aí a próxima mudança tem data por construção, e a pergunta "em que
+semana entrou" se responde com `git log -S`.
+
+Veredito: rodada sólida, com instrumento novo e armadilha achada no caminho. O
+achado da chave precisa do inventário inteiro para ter o tamanho certo.

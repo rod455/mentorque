@@ -835,3 +835,55 @@ Veredito: a rodada mais útil do papel até aqui, com o achado certo e o erro
 contado por inteiro, mas o acidente era evitável com a ferramenta que já
 existia, e o conserto proposto repetia o erro.
 
+
+## Retorno do dono sobre a rodada de 24/10/2026 (rodada 5)
+
+Mandado escrever por ele em 25/10 ("veja tudo que foi publicado ontem e hoje,
+analise e dê feedback"). Lidos o diário, o commit 740e684 e o diff da
+`conferir:versoes`; conferidos a rota de sair da jornada e o comando de build
+da Vercel.
+
+Primeiro o que manter.
+
+**OS DOIS PONTOS DO RETORNO ANTERIOR, FEITOS DE VERDADE.** Trinta plantios pelo
+`npm run plantio`, nenhum incidente, e a varredura de presença com o número que
+foi pedido: 16 asserções, 9 cegas, 6 delas em mensagem a cliente. É a rodada que
+mais tirou cegueira de onde dói.
+
+**O VERDE FALSO DA RODADA 4, CONTADO POR VOCÊ MESMO.** "Renomear apaga a string,
+isto é, testa presença; plantio em consumidor se faz mantendo a chamada e
+quebrando o uso." É a melhor lição escrita deste papel até aqui, e vale para
+todo mundo que planta.
+
+**O PASSO ZERO.** Exigir verde no limpo antes de plantar pegou dois consertos
+seus nascidos errados. Sem isso, os plantios teriam dito MORDEU contra uma
+conferência quebrada.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. A `conferir:versoes` FICOU CEGA JUSTAMENTE ONDE ELA RODA.** O diagnóstico
+estava certo: em clone raso, o `merge-base` responde "não" por falta de
+história. O conserto transformou essa resposta em aviso, e o comentário diz que
+"o veredito fica para quem tem a história inteira (a Vercel e ...)". Só que a
+Vercel roda `next build` e mais nada (`package.json`, script `build`): a
+conferência nunca roda lá. E toda sessão remota começa com clone raso de 50
+commits. Na prática, o ramo que pega "a nota diz que está no binário e não
+está", o caso da 3.0 em 06/10, passou a nunca reprovar, a menos que alguém leia
+um aviso no meio de 65 conferências. Conserto que tira um falso positivo não
+pode tirar o positivo verdadeiro junto. O caminho certo é a conferência buscar a
+história que falta (`git fetch --unshallow`, ou `--deepen` até achar a árvore)
+antes de decidir, e só virar aviso se a busca falhar. A Engenharia aplica, a
+menos que você prefira fazer na próxima rodada.
+
+**2. A FRASE DO DIÁRIO DIZ DEFEITO DE PRODUÇÃO ONDE ERA CEGUEIRA DE
+CONFERÊNCIA.** "O link de sair da jornada aceitava qualquer `u` sem assinatura
+válida: dava para tirar outra pessoa da jornada" se lê como um buraco aberto em
+produção, e o dono lê o diário assim. Em produção a rota confere a assinatura
+(`app/api/jornada/sair/route.ts`, `assinaturaConfere`) e devolve 400. O que
+estava cego era a conferência: ela deixaria esse defeito passar se alguém o
+introduzisse. A régua de 06/10 do CLAUDE.md vale para frase de estado: escreva
+"a conferência deixaria passar X", e não "X acontecia".
+
+Veredito: a rodada mais produtiva do papel, com a lição da rodada 4 virando
+método. Mas o conserto da `versoes` desligou a guarda da nota das lojas no único
+lugar onde ela roda.
