@@ -306,6 +306,21 @@ avisar saem de `/api/dados` prontos, e o nó do n8n não recalcula nada.
 > `Dermato`, `Meu Livrinho`, `Pessoal`), porque é por ele que a lista do n8n se
 > separa.
 
+> **A `DADOS_CHAVE` não se escreve em nó (25/10/2026).** Até esta data ela
+> estava digitada no cabeçalho `x-mq-chave` de 16 nós HTTP. Agora mora na
+> credencial "Mentorque: chave dos dados" e só um fluxo a usa:
+> `Mentorque | Chave: chamar a operação` (`8rfDZfAhzOjnORgu`). Quem precisa de
+> uma rota `/api/` do mentorque.com.br põe um nó "Execute Workflow" apontando
+> para ele, com `metodo` (GET/POST), `caminho` (`/api/...`), `corpo` (texto
+> JSON ou vazio), `prazo` (ms) e `inteira`: `true` devolve
+> `{statusCode, headers, body}`, como um nó HTTP com resposta completa;
+> `false` devolve só o corpo e FALHA em status 400 ou mais, como um nó HTTP
+> comum. O fluxo recusa endereço fora de `https://mentorque.com.br/api/`.
+> Por que assim, e não a credencial direto no nó HTTP: o MCP do n8n não
+> consegue prender credencial "Header Auth" em nó HTTP por `update_workflow`,
+> só criando o fluxo do zero. Girar a chave virou trocar dois lugares: a
+> credencial e a env na Vercel.
+
 E o que a conferência não alcança continua não alcançando: **nenhum
 `npm run conferir` enxerga dentro do n8n.** O que dá para provar daqui é que a
 frase certa SAI por `/api/dados` (`conferir:legivel`, `conferir:alarme`); que o
