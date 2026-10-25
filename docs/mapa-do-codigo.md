@@ -290,6 +290,21 @@ avisar saem de `/api/dados` prontos, e o nó do n8n não recalcula nada.
 > continuou rodando o código velho.** Depois de qualquer `update_workflow`:
 > chame `publish_workflow` e confira que os dois ids bateram. O sintoma é
 > cruel, porque o painel mostra o código novo.
+>
+> **Mas publicar leva junto qualquer rascunho pendente.** Antes de
+> `publish_workflow`, confira que o `versionId` era igual ao `activeVersionId`
+> antes da sua mudança. Se não era, alguém deixou rascunho ali, e publicar põe
+> no ar o que essa pessoa não terminou. Em 25/10 o fluxo "Peças: rede social"
+> estava assim. Trocar só o NOME do fluxo não precisa de publicar.
+
+> **O nome de todo fluxo começa pelo app (25/10/2026, pedido do dono).** O
+> mesmo n8n roda o Mentorque, o Vocaboost, o Dermato, o Meu Livrinho e fluxos
+> pessoais. O padrão é `App | Área: o que faz`, por exemplo
+> `Mentorque | Analista: retrato diário` ou `Mentorque | E-mail: jornada agora`;
+> fluxo descartável é `App | TEMP: ...` e é arquivado depois do uso. Sem
+> travessão, e com o app escrito sempre igual (`Mentorque`, `Vocaboost`,
+> `Dermato`, `Meu Livrinho`, `Pessoal`), porque é por ele que a lista do n8n se
+> separa.
 
 E o que a conferência não alcança continua não alcançando: **nenhum
 `npm run conferir` enxerga dentro do n8n.** O que dá para provar daqui é que a

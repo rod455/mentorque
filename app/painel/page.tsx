@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import { coletarDadosOperacao, resumoAvaliacoes } from "@/lib/operacao";
+import { cookies } from "next/headers";
+import { COOKIE_DO_PAINEL, iguais, seloDoPainel } from "@/lib/painelCookie";
 
 // O painel da operação: os mesmos números que alimentam os agentes, na tela,
-// atualizados a cada visita. Portão pela chave dos dados (?chave=...), e a
-// página é montada no servidor, então a chave nunca aparece no JavaScript.
+// atualizados a cada visita. Portão pela chave dos dados: ela entra uma vez
+// (?chave=...), o middleware troca por um selo em cookie e limpa o endereço
+// (25/10/2026, lib/painelCookie.ts). A página é montada no servidor, então nem
+// a chave nem o selo aparecem no JavaScript.
 export const metadata: Metadata = {
   title: "Painel Mentorque",
   robots: { index: false, follow: false },
@@ -106,13 +110,19 @@ function CartaoGrafico({ titulo, children }: { titulo: string; children: React.R
 export default async function Painel(props: { searchParams: Promise<{ chave?: string }> }) {
   const searchParams = await props.searchParams;
   const esperada = process.env.DADOS_CHAVE;
-  if (!esperada || searchParams.chave !== esperada) {
+  // O selo do cookie (gravado pelo middleware, lib/painelCookie.ts) ou, de
+  // reserva, a chave na URL, para o caso de o middleware não ter rodado.
+  const selo = (await cookies()).get(COOKIE_DO_PAINEL)?.value ?? "";
+  const pelaChave = !!esperada && searchParams.chave === esperada;
+  const peloSelo = !!esperada && !!selo && iguais(selo, await seloDoPainel(esperada));
+  if (!pelaChave && !peloSelo) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-graphite p-6 text-cream">
         <div className="max-w-sm rounded-2xl bg-graphite-800 p-8 text-center ring-1 ring-white/10">
           <p className="font-display text-lg font-semibold">Acesso restrito</p>
           <p className="mt-2 text-sm text-cream/60">
-            Este painel é interno. Abra pelo endereço com a chave de acesso
+            Este painel é interno. Abra uma vez pelo endereço com a chave de
+            acesso; depois disso o navegador lembra sozinho
             {!esperada && " (a variável DADOS_CHAVE ainda não está configurada no ambiente)"}.
           </p>
         </div>

@@ -492,7 +492,25 @@ if (piso <= publicado) {
     // dois, em vez de reprovar por cegueira (foi assim que ela reprovou quatro
     // commits legítimos da 3.0 num clone de 53 commits). Com `git fetch
     // --unshallow` ela volta a conferir tudo.
-    const raso = existsSync(new URL(".git/shallow", raiz));
+    let raso = existsSync(new URL(".git/shallow", raiz));
+    // E A CONFERÊNCIA BUSCA A HISTÓRIA ANTES DE DECIDIR (25/10/2026). Em 24/10
+    // o clone raso passou a virar AVISO na resposta negativa, e o comentário
+    // dizia que "o veredito fica para a Vercel". A Vercel roda `next build` e
+    // mais nada, e toda sessão remota começa rasa: na prática o ramo que pega
+    // "a ficha diz que está no binário e não está" (a 3.0, 06/10) nunca mais
+    // reprovaria. Conserto que tira o falso positivo não pode tirar o positivo
+    // verdadeiro junto. Então: rasa, ela busca a história inteira e decide com
+    // ela. Só se a busca falhar (sem rede, sem remoto) o aviso continua, e ele
+    // diz que a busca falhou.
+    let buscaFalhou = null;
+    if (raso) {
+      try {
+        execFileSync("git", ["fetch", "--quiet", "--unshallow", "origin"], { cwd: raiz, stdio: "ignore", timeout: 120000 });
+      } catch (err) {
+        buscaFalhou = String(err?.message ?? err).split("\n")[0].slice(0, 160);
+      }
+      raso = existsSync(new URL(".git/shallow", raiz));
+    }
     const existe = (sha) => {
       try {
         execFileSync("git", ["cat-file", "-e", `${sha}^{commit}`], { cwd: raiz, stdio: "ignore" });
@@ -517,9 +535,9 @@ if (piso <= publicado) {
     // é conferência que o time aprende a ignorar, e esta guarda a nota das
     // lojas, que é onde a 3.0 saiu prometendo o que não entregou.
     //
-    // Em clone raso, portanto, resposta negativa de ancestralidade é AVISO, e o
-    // veredito fica para quem tem a história inteira (a Vercel e qualquer
-    // sessão que rode o `--unshallow` que o aviso manda rodar).
+    // Em clone raso, portanto, resposta negativa de ancestralidade é AVISO. Isso
+    // só acontece quando a busca da história (logo acima) falhou: com ela, o
+    // clone deixa de ser raso e a resposta negativa volta a reprovar.
     for (const sha of dentro) {
       if (!existe(sha)) { (raso ? foraDoAlcance : problemas).push(raso ? sha : `${sha} está em "Vai no binário" e não existe neste repositório`); continue; }
       if (!ancestral(sha)) {
@@ -534,7 +552,7 @@ if (piso <= publicado) {
       if (ancestral(sha)) problemas.push(`${sha} está em "Ficou FORA do binário", e É ancestral de ${arvore}`);
     }
     if (foraDoAlcance.length) {
-      console.log(`AVISO  clone raso: ${foraDoAlcance.length} commit(s) da ficha fora do alcance (${foraDoAlcance.join(", ")}); \`git fetch --unshallow origin\` para conferir.`);
+      console.log(`AVISO  clone raso e a busca da história falhou (${buscaFalhou ?? "motivo desconhecido"}): ${foraDoAlcance.length} commit(s) da ficha fora do alcance (${foraDoAlcance.join(", ")}). Rode \`git fetch --unshallow origin\` e confira de novo antes de qualquer frase sobre o que o binário tem.`);
     }
     if (dentro.length === 0) problemas.push(`nenhum item de "Vai no binário" cita o commit (escreva "(dd/mm, commit <sha>)" em cada um)`);
     if (problemas.length) {

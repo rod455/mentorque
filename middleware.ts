@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { COOKIE_DO_PAINEL, VALIDADE_DO_SELO_S, destinoDoPainel } from "./lib/painelCookie";
 
 // CORS para o app das lojas.
 //
@@ -57,7 +58,31 @@ function cabecalhos(origem: string | null): Headers {
   return new Headers(CABECALHOS);
 }
 
-export function middleware(request: NextRequest) {
+// O PAINEL TROCA A CHAVE DA URL POR UM SELO EM COOKIE (25/10/2026). Ver
+// lib/painelCookie.ts: a chave entra uma vez pelo endereço, vira cookie
+// `httpOnly` com um selo derivado dela, e o endereço fica limpo. Cookie não se
+// grava durante a renderização de componente de servidor, e por isso mora aqui.
+async function painel(request: NextRequest): Promise<NextResponse> {
+  const { redirecionar, selo } = await destinoDoPainel(request.nextUrl, process.env.DADOS_CHAVE);
+  if (!redirecionar) return NextResponse.next();
+  const resposta = NextResponse.redirect(new URL(redirecionar, request.url), 303);
+  resposta.headers.set("Referrer-Policy", "no-referrer");
+  resposta.headers.set("Cache-Control", "no-store");
+  if (selo) {
+    resposta.cookies.set(COOKIE_DO_PAINEL, selo, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      path: "/painel",
+      maxAge: VALIDADE_DO_SELO_S,
+    });
+  }
+  return resposta;
+}
+
+export async function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname === "/painel") return painel(request);
+
   const h = cabecalhos(request.headers.get("origin"));
 
   // Verificação prévia: responde e encerra, sem tocar na rota.
@@ -70,4 +95,4 @@ export function middleware(request: NextRequest) {
 
 // Só /api. As páginas são servidas normalmente — e o webhook do Stripe, que é
 // servidor-para-servidor, não manda `Origin` e sai daqui intocado.
-export const config = { matcher: "/api/:path*" };
+export const config = { matcher: ["/api/:path*", "/painel"] };
