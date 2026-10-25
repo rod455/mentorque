@@ -180,8 +180,12 @@ function oQueATelaDesenha(versoes: string[], digitado: string): string[] {
   }
   conferir(
     "a rota decide o ano pela função com a regra da dúvida",
-    /versaoServeParaOAno\(/.test(rota),
-    "sem ela, a rota volta a descartar em silêncio a versão cuja conferência falhou"
+    // Era presença (varredura de 24/10/2026). Plantado
+    // `if ((versaoServeParaOAno(anos[k], year), true))`, a chamada acontece, a
+    // menção fica, e TODA versão entra na lista: a regra da dúvida deixa de
+    // decidir qualquer coisa. O que prende é o veredito dentro do `if`.
+    /if \(versaoServeParaOAno\(anos\[k\], year\)\) checked\.push\(m\);/.test(rota),
+    "sem ela, a rota volta a descartar em silêncio a versão cuja conferência falhou; e chamar sem usar o veredito aceita todas"
   );
   conferir(
     "a rota não voltou a cortar em número escrito à mão",

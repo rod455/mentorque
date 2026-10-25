@@ -235,8 +235,13 @@ console.log("Retrato: janela aberta vira motivo, e não número?");
   conferir("o retrato publica a linha de anúncio", /anuncioLegivel:/.test(operacao));
   conferir(
     "e ela sai da função, não de uma cópia local",
-    /linhaDeAnuncio\(/.test(operacao),
-    "regra copiada no leitor para de acompanhar a fonte",
+    // Era presença (varredura de 24/10/2026). Plantado
+    // `return (linhaDeAnuncio(d), \`${d.campanha}: ${d.cliques} cliques\`)`, a
+    // chamada acontece, a menção fica, e o retrato publica uma frase montada à
+    // mão que para de acompanhar a fonte: exatamente o que esta linha existe
+    // para impedir. O que prende é o RETURN da função, não a citação dela.
+    /return linhaDeAnuncio\(d\);/.test(operacao),
+    "regra copiada no leitor para de acompanhar a fonte, e chamar sem devolver tem o mesmo efeito",
   );
 }
 

@@ -108,6 +108,30 @@ for (const alvo of ALVOS) {
       /e\.criado_em\s*>=\s*c\.cadastrado_em\s*-\s*interval\s*'1 day'/.test(corpo),
       "no Android o valor vem antes da conta; largando na conta, a ação some da janela",
     );
+    // E ONDE ELA TERMINA, que faltava (achado do Guardião em 24/10/2026). As
+    // asserções acima prendem o começo da janela e o selo de madura
+    // (`max(cadastrado_em) + interval '8 days' <= now()`), e nada prendia o FIM
+    // da janela do numerador. Plantado `+ interval '2 days'` no lugar de
+    // `'8 days'`, a conferência passou verde: o selo continua dizendo "coorte
+    // madura, pode ler como resultado" e o numerador passa a contar seis dias
+    // menos de ativação.
+    //
+    // O efeito é uma queda de ativação que nunca aconteceu, com o selo de
+    // confiança em cima, chegando ao relatório de segunda. É o mesmo defeito
+    // que este arquivo existe para impedir, de dentro para fora.
+    //
+    // Os dois lados têm de ser o MESMO número: a janela que o selo promete
+    // fechada é a janela que o numerador conta.
+    {
+      const fim = corpo.match(/e\.criado_em\s*<\s*c\.cadastrado_em\s*\+\s*interval\s*'(\d+) days'/);
+      const selo = corpo.match(/max\(c\.cadastrado_em\)\s*\+\s*interval\s*'(\d+) days'\s*<=\s*now\(\)\s+as\s+janela_fechada/);
+      conferir(
+        "ativacao_coortes: a janela do numerador acaba no mesmo dia que o selo de madura promete",
+        !!fim && !!selo && fim[1] === selo[1],
+        `numerador conta até ${fim?.[1] ?? "?"} dias e o selo promete ${selo?.[1] ?? "?"}; ` +
+          "números diferentes publicam queda de ativação que não aconteceu, com selo de confiança em cima",
+      );
+    }
   }
 }
 

@@ -503,12 +503,34 @@ if (piso <= publicado) {
     };
     const problemas = [];
     const foraDoAlcance = [];
+    // E O COMMIT PODE EXISTIR COM A ANCESTRALIDADE CORTADA (24/10/2026, achado
+    // do Guardião). O tratamento de clone raso acima cobria só o commit que
+    // NÃO EXISTE. Num clone raso o commit pode estar presente e o CAMINHO até
+    // ele estar cortado na borda da história: aí `git merge-base --is-ancestor`
+    // responde "não" por cegueira, exatamente o que o comentário de 06/10 diz
+    // que não se deve tratar como "não é ancestral".
+    //
+    // Foi o que aconteceu neste contêiner: `npm run conferir` reprovou com
+    // "a793d6c está em Vai no binário, e NÃO é ancestral de 0d8678d" num clone
+    // de 50 commits, e passou limpo depois de `git fetch --unshallow origin`,
+    // sem uma linha de código mudar. Conferência que reprova em contêiner novo
+    // é conferência que o time aprende a ignorar, e esta guarda a nota das
+    // lojas, que é onde a 3.0 saiu prometendo o que não entregou.
+    //
+    // Em clone raso, portanto, resposta negativa de ancestralidade é AVISO, e o
+    // veredito fica para quem tem a história inteira (a Vercel e qualquer
+    // sessão que rode o `--unshallow` que o aviso manda rodar).
     for (const sha of dentro) {
       if (!existe(sha)) { (raso ? foraDoAlcance : problemas).push(raso ? sha : `${sha} está em "Vai no binário" e não existe neste repositório`); continue; }
-      if (!ancestral(sha)) problemas.push(`${sha} está em "Vai no binário", e NÃO é ancestral de ${arvore}`);
+      if (!ancestral(sha)) {
+        if (raso) foraDoAlcance.push(`${sha} (existe, mas o caminho até ${arvore} está cortado)`);
+        else problemas.push(`${sha} está em "Vai no binário", e NÃO é ancestral de ${arvore}`);
+      }
     }
     for (const sha of fora) {
       if (!existe(sha)) { (raso ? foraDoAlcance : problemas).push(raso ? sha : `${sha} está em "Ficou FORA do binário" e não existe neste repositório`); continue; }
+      // Aqui o raso NÃO afrouxa: "É ancestral" é uma resposta positiva, e
+      // positiva num clone raso continua valendo (o caminho foi encontrado).
       if (ancestral(sha)) problemas.push(`${sha} está em "Ficou FORA do binário", e É ancestral de ${arvore}`);
     }
     if (foraDoAlcance.length) {

@@ -85,6 +85,27 @@ console.log("Porta de entrada: quem não tem carro pergunta antes de cadastrar?"
     "o botão grande convida a perguntar",
     /heroCtaEmpty: T\("Perguntar para o Biela"/.test(textos)
   );
+
+  // E A TELA TEM DE DESENHAR ESSES DOIS TEXTOS (achado do Guardião em
+  // 24/10/2026). As duas asserções acima prendem o TEXTO em content.ts, e a
+  // tela podia desenhar outro: plantados `{h.heroTitle}` e `{h.heroCta}` no
+  // lugar dos `...Empty` no Home.tsx, esta conferência passou verde nos dois.
+  //
+  // O efeito é a ordem de 28/09 desfeita inteira: a primeira tela de quem não
+  // tem carro volta a mandar cadastrar, com a pergunta certa guardada em
+  // content.ts sem ninguém usar. O número que motivou a mudança (o botão de
+  // cadastrar levando a abandono) voltaria sem uma linha vermelha.
+  const heroTela = leia("components/app/screens/Home.tsx");
+  conferir(
+    "e a tela desenha a PERGUNTA para quem não tem carro, não o título com carro",
+    /\{h\.heroTitleEmpty\}/.test(heroTela),
+    "texto certo em content.ts e outro na tela desfaz a ordem de 28/09 em silêncio",
+  );
+  conferir(
+    "e o botão grande da tela é o de perguntar",
+    /\{h\.heroCtaEmpty\}/.test(heroTela),
+    "o botão voltando ao formulário é o defeito de 28/09, com a frase nova em cima",
+  );
 }
 
 // ── 3. O CONVITE DENTRO DO BIELA ────────────────────────────────────────────

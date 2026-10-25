@@ -268,7 +268,19 @@ console.log("Jornada: quem recebe o quê, e quando.");
   conferir("o cron tem o freio JORNADA_PAUSADA e o ensaio forçado", /JORNADA_PAUSADA/.test(cron) && /ensaio.*=== "1"/.test(cron));
   conferir("os e-mails ocultos da Apple ficam de fora até o relay estar cadastrado", /privaterelay\.appleid\.com/.test(cron) && /JORNADA_APPLE_RELAY/.test(cron));
   conferir("o dono recebe a cópia de cada e-mail na primeira vez e o resumo do dia", /copiasParaODono/.test(cron) && /Jornada de hoje/.test(cron));
-  conferir("o cron consulta a decisão e monta o texto", /escolherEmail\(/.test(cron) && /montarMensagem\(/.test(cron));
+  // PRESENÇA VIROU USO AQUI (varredura do Guardião em 24/10/2026). Esta linha
+  // exigia que os dois nomes aparecessem no cron. Plantado
+  // `montarMensagem({ ...e, chave: "boas_vindas" }, p, hoje)`, as duas menções
+  // ficam e a decisão vira enfeite: TODO MUNDO recebe o e-mail de boas-vindas,
+  // qualquer que seja o momento dele na jornada. Verde, saída 0.
+  //
+  // Agora a asserção cobra que a escolha calculada seja a MESMA que vai para o
+  // texto, pelo nome da variável, e que a pessoa e o dia viajem junto.
+  conferir(
+    "o cron consulta a decisão e monta o texto COM a escolha que calculou",
+    /e = escolherEmail\(p, hoje\)/.test(cron) && /montarMensagem\(e, p, hoje\)/.test(cron),
+    "montar a mensagem a partir de outra coisa manda o e-mail errado para todo mundo, com a decisão intacta do lado",
+  );
 
   // E A REGRA 0 TEM DE CHEGAR AO CRON, não só existir na decisão (achado do
   // Guardião em 17/10/2026). A linha de cima cobra que o cron CHAME
@@ -290,7 +302,15 @@ console.log("Jornada: quem recebe o quê, e quando.");
     /const saiu = new Set\(\(saidas\.data \?\? \[\]\)\.map\(/.test(cron),
     "sem ler a tabela, o conjunto nasce vazio e o efeito é o mesmo de `saiu: false`",
   );
-  conferir("o cron manda push pelo mesmo transporte", /enviarPush\(/.test(cron));
+  // Também era presença (24/10/2026). Plantado o userId fixo
+  // `00000000-...-000000000000` no lugar de `p.userId`, a menção fica e o push
+  // de toda a jornada vai para UMA pessoa, ou para ninguém. Verde, saída 0.
+  // A asserção agora cobra o alvo e a mensagem viajando juntos.
+  conferir(
+    "o cron manda push pelo mesmo transporte, para a PESSOA da vez",
+    /enviarPush\(admin, \{ userId: p\.userId \}, mensagem\.push\)/.test(cron),
+    "alvo fixo manda o push da jornada inteira para a pessoa errada, e a menção da função continua lá",
+  );
   conferir("o cron grava o envio", /from\("jornada_envios"\)\.insert/.test(cron));
   // 15/10/2026: a API do Supabase corta em 1.000 linhas sem avisar, e o
   // histórico de 90 dias tinha 955. O que o cron não vê, ele manda de novo.
@@ -336,7 +356,20 @@ console.log("Jornada: quem recebe o quê, e quando.");
   const vercel = readFileSync(new URL("../vercel.json", import.meta.url), "utf8");
   conferir("a Vercel agenda o cron todo dia às 8h de Brasília (11h UTC), pedido do dono em 12/09", /"\/api\/cron\/jornada"[\s\S]{0,60}"0 11 \* \* \*"/.test(vercel));
   const sair = leia("app/api/jornada/sair/route.ts");
-  conferir("sair confere a assinatura e grava a saída", /assinaturaConfere\(/.test(sair) && /jornada_saidas/.test(sair) && /export async function POST/.test(sair));
+  // A PIOR DAS SEIS (24/10/2026), e era presença: bastava `assinaturaConfere(`
+  // aparecer. Plantado `if (false && !assinaturaConfere(u, a))`, a menção fica
+  // e o portão nunca recusa: o link de sair aceita qualquer `u` sem assinatura
+  // válida, e dá para tirar OUTRA pessoa da jornada sabendo só o id dela.
+  // Verde, saída 0.
+  //
+  // A asserção agora cobra o guarda inteiro, na forma da `conferir:biela`: os
+  // dois valores que decidem, a negação, e a recusa logo adiante.
+  conferir(
+    "sair RECUSA quem não traz assinatura válida",
+    /if \(!u \|\| !a \|\| !assinaturaConfere\(u, a\)\)[\s\S]{0,300}?\b400\b/.test(sair),
+    "sem o portão recusando, qualquer um tira outra pessoa da jornada sabendo o id dela",
+  );
+  conferir("e grava a saída", /jornada_saidas/.test(sair) && /export async function POST/.test(sair));
   const push = leia("app/api/push/enviar/route.ts");
   conferir("a rota de push usa o transporte compartilhado", /from "@\/lib\/push\/transporte"/.test(push) && /enviarPush\(/.test(push));
   const sql = readFileSync(new URL("../supabase/jornada.sql", import.meta.url), "utf8");

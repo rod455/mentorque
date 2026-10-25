@@ -433,7 +433,19 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
   const abertura = leia("lib/app/aberturaDoApp.ts");
   conferir("a abertura sincroniza o aviso de revisão vencida", /sincronizarLembreteRevisaoVencida\(\{/.test(abertura));
   const vencida = leia("lib/app/lembreteRevisaoVencida.ts");
-  conferir("o aviso nasce da saúde do carro (overdue), não do calendário", /computeUpcoming\(/.test(vencida) && /"overdue"/.test(vencida));
+  // PRESENÇA VIROU USO (varredura do Guardião em 24/10/2026). Esta linha pedia
+  // que `computeUpcoming(` e a palavra `"overdue"` aparecessem no arquivo, em
+  // qualquer lugar. Plantada a chamada com o resultado DESCARTADO e uma lista
+  // fixa no lugar, as duas menções continuam lá e o aviso de revisão vencida
+  // passa a sair para carro em dia. Verde, saída 0.
+  //
+  // Mandar alguém à oficina sem necessidade é mensagem a cliente errada, e o
+  // custo dela é confiança: quem recebe um aviso falso desliga os avisos.
+  conferir(
+    "o aviso nasce da saúde do carro: o overdue FILTRA o que computeUpcoming devolveu",
+    /computeUpcoming\(v, o\.servicos, agora\)\s*\n?\s*\.filter\(\([^)]*\) => [^)]*\.status === "overdue"\)/.test(vencida),
+    "calcular a saúde e avisar de qualquer jeito manda à oficina quem está em dia, com as duas menções intactas",
+  );
   conferir("o dia do agendamento é marcado, senão reagenda para amanhã todo dia", /marcar\(proximo\.chave/.test(vencida));
 }
 
@@ -552,7 +564,21 @@ const leia = (caminho: string) => semComentarios(readFileSync(new URL(`../${cami
   const lembrete = leia("lib/app/lembreteQuiz.ts");
   const notificacoes = leia("lib/app/notificacoes.ts");
   const perfil = leia("components/app/screens/Profile.tsx");
-  conferir("o agendador usa as três manhãs com três ids fixos", /manhasDoQuiz\(/.test(lembrete) && /AVISOS_DO_QUIZ\[i\]/.test(lembrete) && /quizDoDia2: 6/.test(notificacoes) && /quizDoDia3: 7/.test(notificacoes));
+  // PRESENÇA VIROU USO (24/10/2026). Pedia `manhasDoQuiz(` e `AVISOS_DO_QUIZ[i]`
+  // no arquivo. Plantados dois defeitos, os dois verdes: `quando: manhas[0]`
+  // para todos os ids (os TRÊS avisos chegam no mesmo instante) e
+  // `quando: new Date()` (chegam agora, de madrugada se for o caso). Cada
+  // manhã calculada e nenhuma usada.
+  //
+  // Três notificações de uma vez é o jeito mais rápido de alguém desligar os
+  // avisos para sempre, e aí a trilha inteira para de alcançar a pessoa.
+  conferir(
+    "o agendador usa CADA manhã para o seu aviso, não a mesma para os três",
+    /agendar\(\{ id: AVISOS_DO_QUIZ\[i\][^}]*quando: manhas\[i\]/.test(lembrete) &&
+      /quizDoDia2: 6/.test(notificacoes) &&
+      /quizDoDia3: 7/.test(notificacoes),
+    "mesma hora para os três ids dispara três avisos juntos, e a pessoa desliga os avisos",
+  );
   conferir("desligar cancela os três", /for \(const id of AVISOS_DO_QUIZ\) await cancelar\(id\)/.test(lembrete) && /for \(const id of AVISOS_DO_QUIZ\) await cancelar\(id\)/.test(perfil));
   conferir("ligar avisos responde na tela com o próximo horário", /avisosLigadosHoje/.test(perfil) && /avisosLigadosAmanha/.test(perfil) && /ligadoAgora \?\? p\.notificationsSub/.test(perfil));
 }

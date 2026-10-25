@@ -27,6 +27,88 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   `utm_campaign=convite-premium-2026-10` no funil. Fluxo temporário do n8n
   arquivado depois do envio.
 
+## 2026-10-24 (rodada 5) · Guardião: 16 asserções de presença varridas, 9 cegas, e um verde falso meu da rodada 4
+- Artifact "Conferências da semana":
+  https://claude.ai/artifact/GfiDeGJZzTNme5NZ7U2GNs
+- **Os dois pontos do retorno do dono, feitos.** (1) Usei o `npm run plantio`
+  em todos os 30 plantios desta rodada, e não roteiro meu: nenhum incidente, e
+  cada plantio diz onde deixou a cópia. (2) A varredura de presença era minha, e
+  abriu a rodada com o número.
+- **A VARREDURA, com o número que o dono pediu: 16 asserções escritas como
+  presença, em 9 das 63 conferências.** Por custo: 7 em mensagem a cliente
+  (`jornada` 5, `aviso` 2), 1 em cobrança e grátis, 8 em outros. Provei 11:
+  **9 estavam cegas**, 1 mordeu, e 1 é sólida por construção (a da `biela` é
+  NEGATIVA, "este nome não pode aparecer", e aí procurar o nome é o certo).
+- **LINHA DA FILA, copiada do comando** (começo e fim): 65 conferências,
+  **29 para 36** provadas por quem não as escreveu, **22 para 16** só pelo autor
+  (a fila de verdade), **14 para 13** em dívida assumida, porque a `aviso` saiu
+  da dívida ao ser provada.
+- **Os seis buracos de mensagem a cliente, todos verdes antes de hoje:**
+  - o link de sair da jornada aceitava qualquer `u` sem assinatura válida: dava
+    para tirar OUTRA pessoa da jornada sabendo só o id dela;
+  - o cron podia montar a mensagem com a chave trocada, e TODO MUNDO receberia
+    o e-mail de boas-vindas, com a decisão intacta do lado;
+  - o push do cron podia ir para um id fixo, ou seja, para a pessoa errada;
+  - o aviso de revisão vencida podia sair para carro em dia (chamava
+    `computeUpcoming` e descartava o resultado);
+  - os três avisos do quiz podiam ser agendados no mesmo instante, ou para
+    agora, com as três manhãs calculadas e nenhuma usada.
+  A sétima, a rota de push, mordeu. As seis foram consertadas na forma da
+  `conferir:biela` e provadas: 6 plantios, 6 mordidas, zero falso positivo.
+- **MAIS QUATRO CEGUEIRAS fora da varredura**, nas seis da fila: `coorte` (a
+  janela do numerador encurtando para 2 dias passava com o selo de "coorte
+  madura" em cima, o que publica queda de ativação que não aconteceu),
+  `porta` (a tela podia desenhar o título com carro e desfazer a ordem de 28/09
+  inteira, com a pergunta certa guardada sem uso), `legivel` e
+  `versoes-do-carro` (as duas chamando a função e ignorando o resultado).
+  `imagem` e `alarme` morderam na primeira.
+- **O VERDE FALSO QUE EU MESMO PRODUZI NA RODADA 4, e é a lição da rodada.** Em
+  17/10 provei o consumidor da `conferir:garagem` RENOMEANDO a função, ela
+  mordeu, e eu risquei o elo como provado. Hoje plantei a forma que se erra de
+  verdade, `const igual = (carroIgualNaGaragem(...), null)`: ficou VERDE. A
+  guarda continua escrita certa e `igual` é sempre nulo, então o carro repetido
+  volta a ser gravado calado, que é o relato de 23/08. **Renomear apaga a
+  string, isto é, testa presença**; plantio em consumidor se faz mantendo a
+  chamada e quebrando o uso. Meu plantio frouxo confirmou a asserção frouxa, e
+  os dois erros se cancelaram num verde. Consertada e provada nas duas formas.
+- **A CORRENTE REPROVAVA NESTE CONTÊINER, E NÃO ERA DEFEITO.** O
+  `npm run conferir` deu 1 na `conferir:versoes`: "a793d6c está em Vai no
+  binário, e NÃO é ancestral de 0d8678d". A causa é o clone raso de 50 commits
+  das sessões remotas: o commit EXISTE e o caminho até ele está cortado, então
+  `git merge-base --is-ancestor` responde "não" por cegueira. Depois de
+  `git fetch --unshallow origin`, saída 0, sem uma linha mudar. O tratamento de
+  clone raso existia desde 06/10 e cobria só o commit ausente. Consertado:
+  resposta negativa em clone raso é aviso, positiva continua reprovando.
+  Provado nos dois sentidos num clone raso de verdade, feito para o teste.
+  Isto importa porque essa conferência guarda a nota das lojas, que é onde a
+  3.0 saiu prometendo o que não entregou, e conferência que reprova em
+  contêiner novo é conferência que o time aprende a ignorar.
+- **O passo zero salvou a rodada três vezes**: exigir 0 no limpo antes de
+  plantar pegou a reprovação do clone raso e, duas vezes, conferência que EU
+  quebrei ao consertar (um regex que não casava com a forma real da recusa na
+  `jornada`, e uma variável `home` declarada duas vezes na `porta`). Nas duas,
+  todo plantio dizia MORDEU, porque conferência quebrada reprova qualquer
+  coisa. Sem o verde no limpo, "mordeu" não significa nada.
+- **Contra a minha régua**: os onze critérios cumpridos, e o 4 voltou a ser
+  cumprido depois de duas semanas falhando, porque o `npm run plantio` tirou o
+  backup das minhas mãos. O que eu declaro no lugar: **dois dos consertos
+  nasceram errados e só o passo zero pegou**, o que não é critério da régua e é
+  o que mais me preocupa nesta rodada.
+- **O que esta rodada NÃO alcança**: os consertos de `porta`, `legivel`,
+  `versoes-do-carro`, `garagem`, `aviso` e `jornada` são conferência de texto,
+  dito dentro de cada um. Texto não prova qual ramo da tela desenha o quê: isso
+  é a suíte de navegador, que roda uma vez por mês. E nada aqui prova lado
+  nativo nem aparelho.
+- **RECOMENDAÇÕES (3)**: (1) sobraram 5 das 16 asserções de presença sem
+  provar, todas no grupo "outros" (`regras`, `login`, `midia` e duas da
+  `garagem` na folha de importação); vão para a próxima rodada antes da fila;
+  (2) o contador da varredura vale virar conferência de verdade, que reprove
+  asserção nova escrita como presença, e isso é do QA porque é conferência nova;
+  (3) o `npm run plantio` podia recusar plantio que só RENOMEIA o nome da
+  função num arquivo de consumidor, porque esse plantio testa presença e dá
+  verde falso, como o meu de 17/10.
+
+
 ## 2026-10-24 · Engenharia: os dois pedidos da Mídia de 15/10 feitos, e o alarme avisa no dia seguinte
 
 - Pedido do dono: "vamos fazer o 2" (os dois pedidos da Mídia para a coleta do

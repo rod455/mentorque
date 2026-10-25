@@ -104,10 +104,23 @@ const semComentarios = (f: string) =>
   f.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/.*$/gm, " ");
 
 const cars = semComentarios(readFileSync("components/app/screens/Cars.tsx", "utf8"));
+// E ESTA LINHA TAMBÉM NASCEU FROUXA, achado em 24/10/2026, numa varredura de
+// asserções escritas como presença. Ela pedia a string `carroIgualNaGaragem(`
+// no arquivo, e o `igual` que a guarda abaixo usa podia vir de qualquer lugar.
+//
+// Plantado `const igual = (carroIgualNaGaragem(s.vehicles, data), null);`, a
+// chamada acontece, a menção fica, a guarda abaixo continua escrita com a
+// forma certa, e `igual` é sempre nulo: o aviso nunca aparece e o carro
+// repetido volta a ser gravado em silêncio, que é o relato de 23/08.
+//
+// A lição do plantio, e ela é sobre mim: na rodada de 17/10 eu provei este
+// mesmo elo RENOMEANDO a função, e aquilo mordeu. Renomear apaga a string, ou
+// seja, testa presença. Quem erra de verdade mantém a chamada e perde o USO.
+// Plantio em consumidor se faz ignorando o resultado, não apagando o nome.
 conferir(
-  "a tela de cadastrar carro consulta a garagem antes de gravar",
-  cars.includes("carroIgualNaGaragem("),
-  "sem isso, cadastrar o mesmo carro duas vezes volta a ser silencioso",
+  "a tela de cadastrar carro tira o `igual` DA chamada, não de outro lugar",
+  /const igual = carroIgualNaGaragem\(s\.vehicles, data\)/.test(cars),
+  "chamar e descartar o resultado deixa a guarda de baixo intacta e sempre falsa, e o repetido é gravado calado",
 );
 // Esta conferência nasceu frouxa e a versão frouxa está registrada de
 // propósito: ela procurava `setJaExiste(` e `jaExiste` no arquivo, e passou

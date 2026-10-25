@@ -342,12 +342,6 @@ sem tirar ninguém dela.
 
 | conferência | última prova | mordeu? |
 |---|---|---|
-| `conferir:imagem` | no nascimento (autor), 20/09/2026 | sim, no plantio de quem escreveu |
-| `conferir:coorte` | no nascimento (autor), 24/09/2026 | sim, no plantio de quem escreveu; e de novo em 06/10/2026 (autor), ao cobrar a regra do último membro: o `+ 14` em data plantado de volta reprovou |
-| `conferir:legivel` | no nascimento (autor), 28/09/2026 | sim, no plantio de quem escreveu; e de novo em 14/10/2026 (autor), ao ganhar a linha da receita de anúncio: 6 plantios e 6 mordidas, e DOIS deles acharam defeito na própria asserção (a entrada era `undefined`, onde `Number()` e `typeof` concordam, e não `null`, que é o único valor onde discordam; e o plantio DERRUBAVA o script em vez de imprimir FALHA, armadilha que a Engenharia já tinha registrado em 02/10) |
-| `conferir:porta` | no nascimento (autor), 28/09/2026 | sim, no plantio de quem escreveu |
-| `conferir:versoes-do-carro` | no nascimento (autor), 28/09/2026 | sim, no plantio de quem escreveu |
-| `conferir:alarme` | no nascimento (autor), 29/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:perguntas` | no nascimento (autor), 30/09/2026 | sim, no plantio de quem escreveu |
 | `conferir:agentes` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu; e de novo em 06/10/2026 (autor), ao ganhar ordem e assinatura do diário: entrada de 06/10 jogada abaixo de uma de 04/10 reprovou, título sem papel reprovou |
 | `conferir:loja` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
@@ -360,10 +354,10 @@ sem tirar ninguém dela.
 | `conferir:publicacao` | no nascimento (autor), 04/10/2026 | 7 plantios, 7 mordidas: ignoreCommand apagado, codigo de saida invertido (lido passa, executado nao), app/ excluida do build, comparacao com HEAD~3, assets/ no .vercelignore (a rota das pecas le em tempo de execucao), erro de digitacao em supabase/, e docs/ saindo do .vercelignore enquanto o comando ainda a ignora |
 | `conferir:entre` | no nascimento (autor), 06/10/2026 | formato só (data e papéis da tabela); não reprova por idade, de propósito |
 | `conferir:quiz-populacao` | no nascimento (autor), 07/10/2026 | 5 plantios, 5 mordidas: id do onboarding trocado no SQL, banco de perguntas reordenado, `security_invoker` removido, etiqueta de uma das duas populações perdida, e a rotação diária passando a devolver a pergunta do onboarding |
-| `conferir:saude` | no nascimento (autor), 21/10/2026 | 5 plantios, 5 mordidas: odômetro zero voltando a contar como km medido, a tela parando de mostrar a ressalva, a ressalva substituindo o "baseado no seu quiz", a folha voltando a salvar quiz incompleto, e o peso do VRI dobrado. O quinto passou verde na primeira vez: o limite de 3 pontos tinha folga e absorvia a mudança de peso, então apertei para o valor publicado e acrescentei a leitura do peso na fonte. Em 22/10 (Engenharia), mais 3 plantios e 3 mordidas na seção 5: o `completou_quiz_saude` sumindo do `submit`, o evento saindo ANTES da trava do quiz incompleto, e um dos eventos fora da lista da rota. E o caminho da tela (o km pedido na saúde) foi para a suíte de navegador `km`, com 1 plantio e 1 mordida: o `informou_km` sumindo |
 | `conferir:gratis` | no nascimento (autor), 17/10/2026 | 6 plantios com `npm run plantio`, 6 mordidas: custo por km aberto ao grátis, causas cortadas em 2 de volta, a regra dando 2 causas na segunda consulta, a tela sem perguntar se é a primeira, o Biela trancado na tabela, e o card do Início mostrando o custo por km ao grátis |
-| `conferir:prazo` | no nascimento (autor), 21/10/2026 | 6 plantios com `npm run plantio`, 6 mordidas: aborto com outro nome (o cliente da Supabase passa a repetir sozinho), relógio desligado quando chega o cabeçalho (o corpo travado escapa), coleta voltando ao cliente sem prazo, orçamento que estoura os 30 s do Vigia, orçamento sem conferência no `medir`, e o cancelamento de quem chamou ignorado |
 | `conferir:segredo` | no nascimento (autor), 18/10/2026 | 4 plantios, 4 mordidas: chave real em arquivo sem exceção, chave real DENTRO do arquivo com exceção (a que importa), JWT em documento, e a bateria inteira com o defeito de pé |
+| `conferir:prazo` | no nascimento (autor), 21/10/2026 | 6 plantios com `npm run plantio`, 6 mordidas: aborto com outro nome (o cliente da Supabase passa a repetir sozinho), relógio desligado quando chega o cabeçalho (o corpo travado escapa), coleta voltando ao cliente sem prazo, orçamento que estoura os 30 s do Vigia, orçamento sem conferência no `medir`, e o cancelamento de quem chamou ignorado |
+| `conferir:saude` | no nascimento (autor), 21/10/2026 | 5 plantios, 5 mordidas: odômetro zero voltando a contar como km medido, a tela parando de mostrar a ressalva, a ressalva substituindo o "baseado no seu quiz", a folha voltando a salvar quiz incompleto, e o peso do VRI dobrado. O quinto passou verde na primeira vez: o limite de 3 pontos tinha folga e absorvia a mudança de peso, então apertei para o valor publicado e acrescentei a leitura do peso na fonte. Em 22/10 (Engenharia), mais 3 plantios e 3 mordidas na seção 5: o `completou_quiz_saude` sumindo do `submit`, o evento saindo ANTES da trava do quiz incompleto, e um dos eventos fora da lista da rota. E o caminho da tela (o km pedido na saúde) foi para a suíte de navegador `km`, com 1 plantio e 1 mordida: o `informou_km` sumindo |
 | `conferir:baixar` | 19/09/2026 | sim |
 | `conferir:email` | 19/09/2026 | sim, 3 defeitos plantados |
 | `conferir:relatorio` | 19/09/2026 | sim |
@@ -371,7 +365,6 @@ sem tirar ninguém dela.
 | `conferir:estilo` | 26/09/2026 | sim, em regra de erro |
 | `conferir:regras` | 26/09/2026 | não na borda do perdão, consertada |
 | `conferir:tipos` | 26/09/2026 | sim, saída 2 |
-| `conferir:versoes` | 26/09/2026 | sim, 3 defeitos plantados |
 | `conferir:funil` | 03/10/2026 | sim |
 | `conferir:migalha` | 03/10/2026 | não nos dois pisos, consertada |
 | `conferir:revisoes` | 03/10/2026 | sim |
@@ -389,13 +382,20 @@ sem tirar ninguém dela.
 | `conferir:biela` | 17/10/2026 | sim, 3 plantios: teto em 0, teto em 9999, e a rota sem aplicar o freio (ela cobra a forma do guarda, com o 429) |
 | `conferir:catalogo` | 17/10/2026 | não no consumidor, consertada: o player escondido em toda aula de vídeo passava a corrente inteira |
 | `conferir:convite` | 17/10/2026 | não no consumidor, consertada: o buraco de 25/09 voltava pelo `consumirConviteNoCarro(true)` |
-| `conferir:garagem` | 17/10/2026 | sim, na regra e no consumidor: a placa deixando de decidir, e a tela do carro sem perguntar se já existe |
-| `conferir:jornada` | 17/10/2026 | não no consumidor, consertada: `saiu: false` no cron reabria a jornada para quem pediu para sair |
 | `conferir:orcamento` | 17/10/2026 | não no consumidor, consertada: a asserção era presença e não uso, e o gratuito virava ilimitado |
 | `conferir:push` | 17/10/2026 | sim, 2 plantios: Bearer inválido rebaixado para aparelho, e id sem armazenamento virando linha |
+| `conferir:alarme` | 24/10/2026 | sim, 2 plantios: o teto de aparelhos virando contagem bruta, e o mínimo de ativos caindo para 1 |
+| `conferir:aviso` | 24/10/2026 | não em 3 elos, consertada: aviso de revisão para carro em dia, e os três avisos do quiz no mesmo instante |
+| `conferir:coorte` | 24/10/2026 | não no fim da janela, consertada: o numerador encurtando para 2 dias passava com o selo de madura em cima |
+| `conferir:garagem` | 24/10/2026 | não na forma subtil, consertada: chamar carroIgualNaGaragem e descartar o resultado gravava o repetido calado |
+| `conferir:imagem` | 24/10/2026 | sim, na regra: o otimizador do Next religado reprovou |
+| `conferir:jornada` | 24/10/2026 | não em 3 elos, consertada: assinatura do link de sair não aplicada, e-mail errado para todos, push para a pessoa errada |
+| `conferir:legivel` | 24/10/2026 | não no uso, consertada: chamar linhaDeAnuncio e devolver outra frase passava verde |
+| `conferir:porta` | 24/10/2026 | não no consumidor, consertada: a tela podia desenhar o título com carro e desfazer a ordem de 28/09 |
+| `conferir:versoes` | 24/10/2026 | não em clone raso, consertada: ela reprovava a ficha das lojas em contêiner novo, por cegueira de história |
+| `conferir:versoes-do-carro` | 24/10/2026 | não no uso, consertada: chamar versaoServeParaOAno e ignorar o veredito aceitava toda versão |
 | `conferir:agenda` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 | `conferir:appsflyer` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
-| `conferir:aviso` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 | `conferir:caminho` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 | `conferir:campanha` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 | `conferir:combustivel` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
@@ -448,6 +448,68 @@ custo que não existia. Vale a lição geral, que é a mesma do caso `anonId`: o
 custo que justifica não fazer algo também é uma afirmação, e também se mede.
 
 ## Aprendizados
+
+**A VARREDURA DE PRESENÇA, COM O NÚMERO (24/10/2026).** Tarefa que o dono me
+deu no retorno da rodada 4. O padrão é procurável: asserção cujo regex é só o
+nome de uma função seguido de parêntese, ou `.includes("nome(")`.
+
+**16 asserções nessa forma, em 9 das 63 conferências varridas.** Por custo:
+7 em mensagem a cliente (`jornada` 5, `aviso` 2), 1 em cobrança e grátis
+(`biela`), 8 em outros. O contador está em
+`$SCRATCH/varredura-presenca.mjs`; ele é de uma rodada, não de produção.
+
+Provei 11 das 16: **9 estavam cegas**, 1 mordeu e 1 é sólida por construção.
+
+E a de construção sólida vale a distinção, porque me enganou primeiro: a da
+`biela` é NEGATIVA (`!/setUsed\(/.test(tela)`, "este nome não pode aparecer").
+Presença é frouxa quando se exige que algo ESTEJA lá; quando se exige que algo
+NÃO esteja, o nome é exatamente a coisa certa a procurar. **Varredura de forma
+precisa separar afirmação de negação antes de contar.**
+
+**E O PLANTIO ERRADO ME DEU UM VERDE FALSO NA RODADA 4 (24/10/2026). Esta é a
+lição mais útil da rodada, e é sobre mim.**
+
+Em 17/10 provei o consumidor da `conferir:garagem` RENOMEANDO a função
+(`carroIgualNaGaragem` para outro nome) e ela mordeu, então marquei o elo como
+provado. Hoje plantei a forma que uma pessoa erra de verdade:
+
+```js
+const igual = (carroIgualNaGaragem(s.vehicles, data), null);   // chama e descarta
+```
+
+Ficou VERDE. A guarda `if (igual) { setJaExiste(igual); return; }` continua
+escrita com a forma certa e `igual` é sempre nulo: o carro repetido volta a ser
+gravado em silêncio, que é o relato de 23/08.
+
+**Renomear apaga a string, ou seja, testa PRESENÇA.** Plantio em consumidor se
+faz mantendo a chamada e quebrando o USO: descartar o resultado, trocar um
+argumento que decide, publicar outra coisa. Se o meu plantio é presença, ele
+confirma a asserção frouxa que eu deveria estar criticando, e os dois erros se
+cancelam num verde.
+
+**CONFERÊNCIA QUE REPROVA EM CONTÊINER NOVO É CONFERÊNCIA QUE O TIME APRENDE A
+IGNORAR (24/10/2026).** O `npm run conferir` deste contêiner reprovou na
+`conferir:versoes`: "a793d6c está em Vai no binário, e NÃO é ancestral de
+0d8678d". Nada de errado com a ficha das lojas. O clone das sessões remotas tem
+50 commits, e num clone raso o commit pode EXISTIR com o caminho até ele
+cortado: `git merge-base --is-ancestor` responde "não" por cegueira. Depois de
+`git fetch --unshallow origin`, saída 0, sem uma linha de código mudar.
+
+O tratamento de clone raso existia desde 06/10 e cobria só o commit que não
+existe. Agora resposta negativa em clone raso é AVISO, e a positiva continua
+reprovando (achar o caminho é resposta boa em qualquer profundidade). Provado
+nos dois sentidos, num clone raso de verdade feito para isso.
+
+**O passo zero do manual foi o que pegou isso**: exigir saída 0 na conferência
+limpa ANTES de plantar. Sem ele eu teria lido aquela reprovação como achado.
+
+**E ELE PEGOU OUTRA COISA, duas vezes, na minha própria edição.** A
+`conferir:jornada` e a `conferir:porta` ficaram reprovando no código limpo
+depois dos meus consertos (um regex meu que não casava com a forma real da
+recusa, e uma variável `home` declarada duas vezes). Enquanto isso, TODO
+plantio contra elas dizia MORDEU, porque conferência quebrada reprova qualquer
+coisa. **Verde no limpo não é cerimônia: sem ele, "mordeu" não significa
+nada.**
 
 **PRESENÇA NÃO É USO, e a regra já estava escrita aqui (17/10/2026). O achado
 desta vez não é uma falha nova: é a de sempre, passando por baixo de uma regra
