@@ -4,7 +4,8 @@ Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
 ## 2026-10-25 · Segurança: rodada 6, as três críticas do Next fecharam de verdade, e a chave do painel viaja na URL
-- Artifact "Segurança da semana" (rodada 6): (link no commit seguinte)
+- Artifact "Segurança da semana" (rodada 6):
+  https://claude.ai/artifact/SQ85pbDSXVurdrjYXr9KcU
 - Semana de 36 commits.
 
 ### Nada para o dono decidir nesta rodada, e a lista dele não tem linha minha
