@@ -193,6 +193,62 @@ o contrário.
 
 ## Aprendizados
 
+### Quatro regras da rodada 6 (25/10/2026)
+
+**1. Para saber o que a NOSSA mudança fechou, audite a árvore antiga com o
+conhecimento de hoje.** Foi o pedido 2 do retorno de 18/10: a diferença que
+informa é no aviso, não no pacote. A receita, e ela é de três comandos:
+`git show <commit>:package-lock.json` para um diretório à parte, mais o
+`package.json` do mesmo commit, e `npm audit --package-lock-only --json` nos
+dois. Como as duas auditorias usam o mesmo banco de avisos, a comparação isola
+o que a nossa subida fechou do que o mundo aprendeu na semana. Em 25/10: 34
+avisos de produção na árvore de 18/10 contra 9 na de hoje, 25 fechados, todos
+no `next`, três deles críticos, e ZERO avisos novos. Guarde os IDs, não o
+total: `npm audit` conta pacote, e pacote continua na lista com um aviso ou com
+vinte e cinco.
+
+**2. O `node_modules` do contêiner pode ser de outra semana, e aí a bateria
+mede a árvore errada.** Nesta rodada o `npm ls` disse
+`next@14.2.35 invalid: "15.5.28" from the root project`: o `package.json` tinha
+a versão nova e o disco tinha a velha, porque o contêiner nasce com um
+`node_modules` de antes. O `npm audit` acertou (lê o lockfile) e o `npm ls`
+errou (lê o disco), e qualquer verde da bateria ali mediria a semana passada.
+Antes de confiar na bateria num contêiner novo, compare
+`node_modules/<pacote>/package.json` com o lockfile, ou rode `npm ci` e diga
+que rodou.
+
+**3. "Está no telefone" TEM instrumento, e ele estava no nosso banco desde
+sempre.** Em 18/10 eu escrevi "ainda não no telefone de ninguém" com a
+`JA_PUBLICADAS`, que responde "publicamos?" e não "as pessoas têm?". Quem
+responde a segunda é `funil_eventos.versao` com `plataforma`. E o primeiro
+número que ela dá é armadilha dupla: 626 aparelhos em 3.2.0 incluía a WEB (o
+`versao` é a constante do pacote que está rodando, e a web ganha versão nova em
+todo deploy), e contava duas vezes quem atualizou no meio da janela. A forma
+certa é a ÚLTIMA versão por aparelho, em janela curta:
+`distinct on (anon_id) ... order by anon_id, criado_em desc` em 3 dias. Deu 243
+de 244 aparelhos ativos com o conserto.
+
+**4. Chave que viaja na URL é uma classe de segredo que a varredura não vê, e
+medir o vazamento tem que cortar para os dois lados.** A `conferir:segredo`
+procura FORMA DE CHAVE EM ARQUIVO. A `DADOS_CHAVE` não está em arquivo nenhum:
+ela mora numa env e viaja em query string (`/painel?chave=...`). O que achou foi
+ler o portão (`lib/chaveDados.ts`) e perguntar para onde a chave vai; o que
+dimensionou foi medir cada caminho, inclusive os que diminuem o achado:
+o nosso código nunca escreve `req.url` em log (grep), o registro de execução da
+Vercel guarda 1 hora neste plano (lido na recusa da própria API), a lista de
+drenos respondeu 404 duas vezes e ficou como fonte não lida, e o `Referer` para
+outro domínio já é cortado pelo PADRÃO do navegador. Sobra o histórico do
+navegador do dono, que é certo e permanente. Relatório que só junta o que
+aumenta o próprio achado é advocacia.
+
+**E uma técnica, para a próxima vez que uma conferência precisar de commit para
+ser provada:** o modo `--semana` só morde se existir commit com chave, e plantar
+isso na `main` é exatamente o que não se faz. O plantio foi num CLONE do
+repositório no scratchpad, com `git remote remove origin`, onde quatro plantios
+rodaram (chave acrescentada, chave acrescentada e depois APAGADA, valor de
+verdade dentro do arquivo que tem exceção, e um negativo que não deve gritar).
+Clone sem remoto não tem para onde empurrar.
+
 ### Quatro regras da rodada 5 (18/10/2026)
 
 **1. "Não soube medir" só é honesto depois de ler o texto do aviso e rodar o

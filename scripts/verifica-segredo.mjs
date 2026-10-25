@@ -16,16 +16,29 @@
 //   · qualquer pessoa roda, não só o agente de domingo;
 //   · e a forma nova entra aqui, onde fica, em vez de na memória de uma sessão.
 //
-// A VARREDURA SEMANAL CONTINUA, e não é redundante: ela olha o DIFF da semana
-// com commit e linha, serve para contar exposição, e alcança o que foi apagado
-// depois (esta aqui só vê o estado de agora). As duas perguntas são diferentes:
-// aqui, "tem segredo no repositório?"; lá, "entrou segredo esta semana?".
+// AS DUAS PERGUNTAS, E OS DOIS MODOS (a segunda entrou em 25/10/2026):
 //
-// O QUE ELA NÃO ALCANÇA, e é muito: segredo que nunca passou pelo git. As
-// chaves em texto puro dos fluxos do n8n, que foram o achado das rodadas 2, 3 e
-// 4, vivem no n8n e não aqui. Nenhuma conferência de repositório vê aquilo.
+//   `npm run conferir:segredo`                      → "tem segredo no
+//     repositório AGORA?" Olha a árvore de trabalho, roda na bateria.
+//   `node scripts/verifica-segredo.mjs --semana [dias]` → "ENTROU segredo nos
+//     últimos dias?" Olha o diff com commit, arquivo e linha, e alcança o que
+//     foi acrescentado e depois apagado, que o modo de cima não vê.
 //
-// Rode com: npm run conferir:segredo
+// O segundo modo existe porque a varredura semanal da rodada de domingo era a
+// ÚLTIMA parte deste papel que ainda vivia no scratchpad da sessão, reescrita
+// de memória toda semana. Em 18/10 o modo da bateria nasceu e a varredura
+// semanal continuou fora, com a sua própria lista de formas; em 18/10 à noite
+// o retorno do dono acrescentou sete formas aqui, e a varredura da semana não
+// as teria. Duas listas de formas é uma lista errada. Agora as duas perguntas
+// leem o mesmo `FORMAS`, e forma nova serve às duas de graça.
+//
+// O QUE O MODO `--semana` NÃO ALCANÇA: diff de commit de MERGE (o `git log -p`
+// não mostra, por desenho), e segredo que entrou antes da janela de dias
+// pedida. Para esse, o modo da árvore responde, se ainda estiver lá.
+//
+// O QUE NENHUM DOS DOIS ALCANÇA, e é muito: segredo que nunca passou pelo git.
+// As chaves em texto puro dos fluxos do n8n, que foram o achado das rodadas 2,
+// 3 e 4, vivem no n8n e não aqui. Nenhuma conferência de repositório vê aquilo.
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
@@ -107,54 +120,134 @@ function pareceModelo(trecho) {
   return !/\d/.test(trecho);
 }
 
-console.log("Segredo: alguma chave com forma de verdade entrou no repositório?");
-
-// Os arquivos do git E os que ainda não foram adicionados, menos os que o
-// `.gitignore` exclui (18/10/2026). Só com `ls-files`, uma chave num arquivo
-// novo passava pela conferência antes do `git add` e só era vista depois do
-// commit, que é tarde: o push costuma vir junto.
-const arquivos = execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard"], { cwd: RAIZ, encoding: "utf8" })
-  .split("\n")
-  .filter(Boolean);
-
-let lidos = 0;
-for (const arquivo of arquivos) {
-  let fonte;
-  try {
-    fonte = readFileSync(`${RAIZ}${arquivo}`, "utf8");
-  } catch {
-    continue; // apagado no meio do caminho, ou ilegível
+/**
+ * Uma linha de texto, e o que ela tem de forma de chave.
+ *
+ * É o único lugar que decide o que é achado, e por isso os dois modos passam
+ * por aqui: exceção que vale na árvore vale no diff, e forma nova serve às
+ * duas sem ninguém lembrar de copiar.
+ *
+ * Devolve `{ nome, tamanho, liberado }`, NUNCA o trecho. O valor não sai desta
+ * função, para que nenhum chamador consiga imprimi-lo por descuido: a regra do
+ * manual é dizer ONDE está e nunca O QUE É.
+ */
+function formasNaLinha(linha, arquivo) {
+  const achados = [];
+  for (const [nome, forma] of FORMAS) {
+    const m = linha.match(forma);
+    if (!m) continue;
+    if (PUBLICA_POR_DESENHO.some(([a, f]) => a === arquivo && f === nome)) continue;
+    const liberado = DE_PROPOSITO.some(([a, f]) => a === arquivo && f === nome);
+    if (liberado && pareceModelo(m[0])) continue;
+    achados.push({ nome, tamanho: m[0].length, liberado });
   }
-  if (fonte.includes("\u0000")) continue; // binário
-  lidos++;
+  return achados;
+}
 
-  const linhas = fonte.split("\n");
-  for (let i = 0; i < linhas.length; i++) {
-    for (const [nome, forma] of FORMAS) {
-      const m = linhas[i].match(forma);
-      if (!m) continue;
+/** Diz o achado e o que fazer, sem nunca dizer o valor. */
+function relata(onde, { nome, tamanho, liberado }) {
+  falhas++;
+  console.error(`FALHA  ${nome} em ${onde} (trecho de ${tamanho} caracteres)`);
+  if (liberado) {
+    console.error("       este arquivo tem exceção para esta forma, e o trecho NÃO parece modelo:");
+    console.error("       tem dígito, ou seja, tem cara de valor de verdade");
+  } else {
+    console.error("       tire o valor do repositório e gire a chave; depois diga ao dono");
+    console.error("       se for molde e não valor, acrescente o par a DE_PROPOSITO com o motivo");
+  }
+}
 
-      if (PUBLICA_POR_DESENHO.some(([a, f]) => a === arquivo && f === nome)) continue;
-      const liberado = DE_PROPOSITO.some(([a, f]) => a === arquivo && f === nome);
-      if (liberado && pareceModelo(m[0])) continue;
+const argumentos = process.argv.slice(2);
+const modoSemana = argumentos.includes("--semana");
 
-      falhas++;
-      // NUNCA imprimir o valor: a regra do manual é dizer ONDE está e nunca O
-      // QUE É, porque segredo citado no relatório vazou duas vezes.
-      console.error(`FALHA  ${nome} em ${arquivo}:${i + 1} (trecho de ${m[0].length} caracteres)`);
-      if (liberado) {
-        console.error("       este arquivo tem exceção para esta forma, e o trecho NÃO parece modelo:");
-        console.error("       tem dígito ou corrida longa, ou seja, tem cara de valor de verdade");
-      } else {
-        console.error("       tire o valor do repositório e gire a chave; depois diga ao dono");
-        console.error("       se for molde e não valor, acrescente o par a DE_PROPOSITO com o motivo");
+if (modoSemana) {
+  const dias = Number(argumentos[argumentos.indexOf("--semana") + 1]) || 7;
+  console.log(`Segredo: entrou alguma chave com forma de verdade nos últimos ${dias} dias?`);
+
+  // `--unified=0` porque só as linhas acrescentadas interessam, e sem contexto
+  // o diff fica pequeno. `--no-color` para o `+` do começo da linha ser sempre
+  // o `+` do diff, e não um código de cor.
+  const diff = execFileSync(
+    "git",
+    ["log", `--since=${dias} days ago`, "-p", "--unified=0", "--no-color"],
+    { cwd: RAIZ, encoding: "utf8", maxBuffer: 512 * 1024 * 1024 },
+  );
+
+  let commit = "(sem commit)";
+  let arquivo = "(sem arquivo)";
+  let linhaNova = 0;
+  let commits = 0;
+  let acrescentadas = 0;
+
+  for (const linha of diff.split("\n")) {
+    const mCommit = /^commit ([0-9a-f]{7,40})$/.exec(linha);
+    if (mCommit) {
+      commit = mCommit[1].slice(0, 7);
+      commits++;
+      continue;
+    }
+    if (linha.startsWith("+++ b/")) {
+      arquivo = linha.slice(6);
+      continue;
+    }
+    if (linha.startsWith("+++ ") || linha.startsWith("--- ")) continue;
+    const mPedaco = /^@@ -\d+(?:,\d+)? \+(\d+)/.exec(linha);
+    if (mPedaco) {
+      linhaNova = Number(mPedaco[1]);
+      continue;
+    }
+    if (!linha.startsWith("+")) continue;
+
+    const texto = linha.slice(1);
+    acrescentadas++;
+    for (const achado of formasNaLinha(texto, arquivo)) {
+      relata(`${arquivo}:${linhaNova}, no commit ${commit}`, achado);
+    }
+    linhaNova++;
+  }
+
+  if (falhas) {
+    console.error(`\n${falhas} achado(s) com forma de chave no diff. NÃO cite o valor em relatório nenhum.`);
+    process.exit(1);
+  }
+  console.log(
+    `Segredo: ${commits} commits e ${acrescentadas} linhas acrescentadas lidas, nenhuma com forma de chave.`,
+  );
+  console.log("Segredo: isto não alcança commit de merge nem o que entrou antes da janela.");
+} else {
+  console.log("Segredo: alguma chave com forma de verdade entrou no repositório?");
+
+  // Os arquivos do git E os que ainda não foram adicionados, menos os que o
+  // `.gitignore` exclui (18/10/2026). Só com `ls-files`, uma chave num arquivo
+  // novo passava pela conferência antes do `git add` e só era vista depois do
+  // commit, que é tarde: o push costuma vir junto.
+  const arquivos = execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard"], { cwd: RAIZ, encoding: "utf8" })
+    .split("\n")
+    .filter(Boolean);
+
+  let lidos = 0;
+  for (const arquivo of arquivos) {
+    let fonte;
+    try {
+      fonte = readFileSync(`${RAIZ}${arquivo}`, "utf8");
+    } catch {
+      continue; // apagado no meio do caminho, ou ilegível
+    }
+    if (fonte.includes("\u0000")) continue; // binário
+    lidos++;
+
+    const linhas = fonte.split("\n");
+    for (let i = 0; i < linhas.length; i++) {
+      for (const achado of formasNaLinha(linhas[i], arquivo)) {
+        relata(`${arquivo}:${i + 1}`, achado);
       }
     }
   }
-}
 
-if (falhas) {
-  console.error(`\n${falhas} achado(s) com forma de chave. NÃO cite o valor em relatório nenhum.`);
-  process.exit(1);
+  if (falhas) {
+    console.error(`\n${falhas} achado(s) com forma de chave. NÃO cite o valor em relatório nenhum.`);
+    process.exit(1);
+  }
+  const excecoes = DE_PROPOSITO.length + PUBLICA_POR_DESENHO.length;
+  console.log(`Segredo: ${lidos} arquivos de texto lidos, ${FORMAS.length} formas procuradas, nenhuma fora das ${excecoes} exceções nomeadas.`);
 }
-console.log(`Segredo: ${lidos} arquivos de texto lidos, nenhuma forma de chave fora dos ${DE_PROPOSITO.length} moldes conhecidos.`);

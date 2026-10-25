@@ -3,6 +3,160 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-25 · Segurança: rodada 6, as três críticas do Next fecharam de verdade, e a chave do painel viaja na URL
+- Artifact "Segurança da semana" (rodada 6): (link no commit seguinte)
+- Semana de 36 commits.
+
+### Nada para o dono decidir nesta rodada, e a lista dele não tem linha minha
+Segunda rodada seguida com zero decisões. As oito linhas de `acoes-do-dono.md`
+são de outros papéis (conferido hoje na coluna "Quem levantou"), então não tenho
+nada parado para cobrar em dias. O achado desta semana tem uma parte que é
+minha, já feita, e uma que é de engenharia, e essa foi para `entre-papeis.md`
+em vez da fila do dono, porque girar chave não resolve o mecanismo.
+
+### O desfecho do Capacitor: agora SIM está no telefone, e isto é medição
+Em 18/10 eu escrevi "ainda não no telefone de ninguém". Fechando com os quatro
+instrumentos, e o quarto é novo:
+- **No repositório**: commit 1487203, desde 11/10.
+- **Na árvore do build**: `git merge-base --is-ancestor 1487203 0d8678d` responde
+  sim, e 0d8678d é a árvore registrada da 3.2.
+- **Nas lojas**: 3.2 entrou em `JA_PUBLICADAS` com build 73, publicada nas duas
+  em 18/10.
+- **NO TELEFONE, que é o que eu não media**: `funil_eventos.versao` com
+  `plataforma` responde. Última versão por aparelho, nos últimos 3 dias:
+  **243 de 244 aparelhos ativos estão na 3.2** (um ficou na 3.1). Do envio à
+  Apple (17/10) até estar na mão das pessoas levou uma semana.
+- **O que esse número NÃO cobre**: iOS. Nos 3 dias não houve nenhum evento de
+  iOS; em 14 dias foram 6 aparelhos, e 6 é pouco para porcentagem. E continua
+  valendo que nenhuma conferência nossa abre a WebView do aparelho.
+- **A armadilha no caminho**, que vale mais que o número: a primeira consulta
+  deu 626 aparelhos na 3.2 desde 08/10, dez dias ANTES da publicação. O `versao`
+  é a constante do pacote que está rodando e a WEB ganha versão nova em todo
+  deploy, então aquilo misturava web com binário e contava duas vezes quem
+  atualizou no meio da janela.
+
+### As dependências, no nível do AVISO, que era o pedido do retorno de 18/10
+"Produção caiu de 7 para 5" conta pacote, e o risco mora no aviso. Para separar
+o que a nossa mudança fechou do que o mundo aprendeu, auditei a árvore de 18/10
+(`git show ee7f7b7:package-lock.json`) com o banco de avisos de hoje:
+- **34 avisos de produção antes, 9 agora. 25 fecharam, todos no `next`**, três
+  deles críticos (GHSA-p293-qw3h-jr36 de nota 9, e as duas de execução remota na
+  API de imagem). **Zero avisos novos.**
+- A causa não foi minha: outra sessão subiu o **Next 14.2.35 para 15.5.28** em
+  18/10 (commit 505435b), no mesmo dia em que o retorno do dono dizia que essa
+  decisão precisava nascer com o custo do lado. Era a minha recomendação de
+  "não fazer agora" por quatro rodadas, e ela saiu. Conferido no estado e não no
+  commit: o lockfile tem 15.5.28, o React ficou na 18, e a bateria roda verde
+  aqui com o `node_modules` sincronizado.
+- **Uma diferença que eu não consegui separar**: a minha contagem da árvore
+  antiga deu 34 avisos, e o retorno do dono contou 32 em 18/10. Ou o mundo
+  publicou dois avisos sobre o `next` 14.x nesta semana, ou as duas contagens
+  somam coisas diferentes. Não conferi qual das duas, e as duas levam ao mesmo
+  lugar: fecharam.
+- **Os 9 que sobram, com o caminho até nós**: 4 do `postcss`, 2 do `nanoid` e 1
+  do `source-map-js`, todos dentro do `next` e rodando no BUILD sobre o nosso
+  próprio CSS; e 2 do `qs` dentro do SDK do Stripe, que o usa para MONTAR o que
+  a gente manda, enquanto os avisos dele são sobre INTERPRETAR entrada de
+  estranho. Nenhum caminho de entrada de desconhecido, que é informação melhor
+  que a gravidade.
+- **Conserto sem versão maior existe para três deles**, e é recomendação com
+  número: `nanoid` 3.3.18 (a faixa vulnerável acaba em 3.3.17 e o `postcss` pede
+  `^3.3.6`), `source-map-js` 1.2.2 e `qs` 6.16.1. Fecham 5 dos 9 avisos mexendo
+  só no lockfile. **Não recomendo fazer agora**: nenhum deles alcança o usuário,
+  e o custo é mexer no lockfile de graça. Os 4 do `postcss` não têm esse caminho:
+  o `next` fixa `postcss` em 8.4.31 EXATO, então o `fixAvailable` é `next`
+  16.4.3, versão maior. Não vale.
+- **11 pacotes são só de desenvolvimento**, contados e não listados.
+
+### O achado da semana: a chave que abre a operação viaja na URL
+A `conferir:segredo` procura forma de chave EM ARQUIVO, e por isso nunca ia ver
+esta. A `DADOS_CHAVE` mora numa env e viaja em query string, porque é assim que
+o painel é aberto (`/painel?chave=...`, escrito em `app/painel/page.tsx`) e
+assim que o `docs/jornada.md` ensina a chamar o cron.
+- **O que essa chave abre**: 12 rotas da operação, e **cinco mandam mensagem a
+  cliente** (`/api/email/cadastro`, `/saida`, `/lancamento`, `/convite-premium`
+  e o `cron/jornada`). Quem tiver a chave manda e-mail para a base.
+- **O tamanho medido, com o que corta para os dois lados**: o nosso código nunca
+  escreve `req.url` em log (grep em `app/api` e `lib`); o registro de execução da
+  Vercel guarda **1 hora** neste plano (lido na recusa da própria API ao pedir 7
+  dias); a lista de drenos respondeu **404 duas vezes**, com e sem escopo, e fica
+  como **fonte não lida**; e o `Referer` para outro domínio já é cortado pelo
+  padrão dos navegadores desde 2020. O que sobra certo é o histórico do navegador
+  do dono, que é permanente até ele limpar.
+- **O que eu fiz, e é pequeno**: `Referrer-Policy: no-referrer` no `/painel`, no
+  `next.config.mjs`, no ramo do site (o build nativo é `output: export` e não
+  serve cabeçalho). Isso troca "está fechado porque o Chrome decidiu assim" por
+  "está fechado porque nós decidimos", e **não resolve** o histórico nem o
+  registro. Provado no servidor e não na config: `/painel` responde
+  `Referrer-Policy: no-referrer` e `/` não responde nada.
+- **O que ficou com engenharia** (`entre-papeis.md`, 25/10): a chave entra uma
+  vez e vira cookie, com o `?chave=` continuando a funcionar para não trancar o
+  dono fora do painel. E li o caminho antes de prometer que é fácil: cookie não
+  se escreve durante a renderização de componente de servidor, então pede
+  `middleware.ts` ou route handler.
+- **Girar a chave não está sendo pedido**, de propósito: sem fechar o mecanismo,
+  girar só troca o valor que vai para o histórico.
+
+### A varredura semanal entrou no repositório, e virou modo da mesma conferência
+Era a última parte deste papel que ainda vivia no scratchpad, reescrita de
+memória toda semana. Em 18/10 o modo da bateria nasceu versionado e a varredura
+semanal ficou fora, com a SUA PRÓPRIA lista de formas; no mesmo dia o retorno do
+dono acrescentou sete formas à lista da bateria, e a da semana não as teria.
+Duas listas de formas é uma lista errada.
+- Agora é `node scripts/verifica-segredo.mjs --semana [dias]`, lendo o mesmo
+  `FORMAS` (15 formas) e as mesmas exceções. Diz commit, arquivo e linha.
+- **Não virou script no `package.json`** de propósito: a `conferir:fila` casa
+  `conferir:[a-z-]+`, e um `conferir:segredo:semana` não casaria o molde da
+  tabela do Guardião. A pergunta da semana também não pertence à bateria: ela é
+  da rodada.
+- **Quatro plantios, quatro acertos**, num CLONE sem remoto (plantar chave de
+  mentira em commit da `main` é o que não se faz): chave do Stripe acrescentada
+  (mordeu, com linha e commit certos), chave PEM acrescentada e depois APAGADA
+  (mordeu, e é a reivindicação central do modo, porque o modo da árvore não vê
+  o que saiu), valor com dígito DENTRO do `.env.example`, que tem exceção
+  (mordeu nas duas formas), e um molde sem dígito no mesmo arquivo (NÃO gritou,
+  que é o acerto negativo). As linhas apontadas foram conferidas uma a uma.
+- **O limite, escrito no cabeçalho dela**: não alcança diff de commit de merge
+  (o `git log -p` não mostra, por desenho) nem o que entrou antes da janela.
+  Nesta semana isso custou zero: `git log --merges --since="7 days ago"` deu 0.
+- Custo: 0,27 s para 36 commits e 21.784 linhas acrescentadas.
+
+### As fontes, em uma linha cada
+- **Segredo escapando: nenhum.** Zero nos 36 commits e nas 21.784 linhas
+  acrescentadas, e zero nos 920 arquivos da árvore. O `.gitignore` continua com
+  a regra invertida inteira (`.env*` mais `!.env.example`).
+- **Supabase**: os mesmos quatro avisos de segurança das rodadas anteriores,
+  nenhum tipo novo, nenhum sumiu. O `rls_enabled_no_policy` está em **17** e o
+  registro de 19/09 dizia 16; eu não anotei esse número nas rodadas 2 a 5, então
+  **não sei em qual semana entrou o 17º**, e sei que não foi nesta: as três
+  migrações da semana não criaram tabela nem mexeram em RLS. Os 6 WARN de
+  `search_path` mutável são todos de função `SECURITY INVOKER`, que roda com o
+  direito de quem chama, e é por isso que são WARN e não o buraco de 19/09.
+- **Estado do banco**: **4 funções `SECURITY DEFINER`** (eram 3), todas com
+  `pg_temp` por último e nenhuma executável por `anon` nem por `authenticated`,
+  conferido com `has_function_privilege` e não lendo o `revoke` do arquivo; 22
+  tabelas, todas com RLS ligado e nenhuma legível por `anon`; e 16 views, todas
+  declarando `security_invoker` (15 `on`, e o `estado_da_base` `off` pela decisão
+  documentada).
+- **A função nova é a forma exata do buraco de 19/09, e nasceu certa**: a
+  `publico_convite_premium` (migração de 24/10) é `SECURITY DEFINER`, lê
+  `auth.users` e devolve e-mail e nome. Fechada no banco, e a porta que a chama
+  (`/api/email/convite-premium`) é POST com `DADOS_CHAVE`, falha fechada sem a
+  env e **nenhuma resposta dela devolve e-mail**, só contagem e `user_id`. É o
+  mesmo par que expôs a lista de e-mail em setembro, do lado certo.
+- **Permissões**: não é a primeira rodada do mês. A próxima é **01/11/2026**,
+  que é o próximo domingo.
+
+### Contra a régua
+Cumpri 1 a 5 e 7 a 9. O 6 não se aplica por mim (não troquei dependência), e a
+troca que houve, do Next, foi de outra sessão e eu conferi no estado.
+**O que eu devo**: dois pedaços do achado da chave são mecanismo e não leitura.
+Eu nunca VI a chave num registro de acesso, porque a retenção de 1 hora não
+guarda nada de quando o dono abriu o painel; o que eu sei é como HTTP funciona,
+e isso é inferência, não instrumento. E o histórico do navegador dele eu não
+alcanço daqui de jeito nenhum. As duas frases ficaram escritas como inferência,
+e não como medição, que é o mínimo que eu podia fazer.
+
 ## 2026-10-24 · Engenharia: o convite do Premium saiu para 23 pessoas que usam o app
 
 - Pedido do dono: e-mail para quem usa o app regularmente e não assina, com os

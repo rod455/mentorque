@@ -80,6 +80,35 @@ const nextConfig = {
         distDir: ".next-native",
       }
     : {
+        // O PAINEL NÃO MANDA A URL DELE PARA FORA (25/10/2026).
+        //
+        // Achado da rodada 6 do agente de segurança. O painel é aberto com a
+        // chave DENTRO da URL (`/painel?chave=...`), e essa chave abre 12 rotas
+        // da operação, cinco delas de MENSAGEM A CLIENTE. URL em query string
+        // viaja: vai para registro de acesso, para o histórico do navegador e,
+        // em navegador antigo, para o cabeçalho `Referer` de qualquer recurso
+        // de outro domínio que a página carregue.
+        //
+        // O TAMANHO HONESTO DISTO, porque ele é pequeno e dizer o contrário é
+        // que estraga: navegador de hoje já manda só a origem para fora
+        // (`strict-origin-when-cross-origin` é o padrão desde 2020), então o
+        // caminho do `Referer` estava fechado pelo PADRÃO DO NAVEGADOR, e não
+        // por nós. Esta linha é o que troca "está fechado porque o Chrome
+        // decidiu assim" por "está fechado porque nós decidimos". É a mesma
+        // lição de 19/09: defesa que depende de outra pessoa não é defesa
+        // nossa.
+        //
+        // O QUE ELA NÃO RESOLVE, e é a parte maior: a chave continua no
+        // histórico do navegador do dono e no registro de acesso. Isso é
+        // decisão dele, está em `docs/agentes/acoes-do-dono.md`, e nenhum
+        // cabeçalho conserta.
+        //
+        // Fica no ramo do site de propósito: `output: "export"` do build nativo
+        // não serve cabeçalho (não há servidor), e o Next avisa alto se a gente
+        // tentar.
+        async headers() {
+          return [{ source: "/painel", headers: [{ key: "Referrer-Policy", value: "no-referrer" }] }];
+        },
         // Só no site: o export estático não suporta redirect (e o app da
         // loja não é lugar de link de venda).
         async redirects() {
