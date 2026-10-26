@@ -44,6 +44,17 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
    contas criadas), que vira a única. A aposta do CRO
    (`convite-do-carro-aparece-onde-a-pessoa-cai`) só começa a contar quando a
    3.3 passar de metade dos aparelhos ativos.
+7. **O cadastro por e-mail volta a entrar no app** (26/10, commit e8ec9e9).
+   Dentro do app a página é `https://localhost`, e o link de confirmação pedia
+   para voltar a `https://localhost/app`; o Supabase recusava e mandava a
+   pessoa para o site. Desde 28/09, nenhuma das 32 contas por e-mail entrou no
+   app. Na 3.3 o link volta pela ponte. O site já conserta as versões antigas
+   desde o deploy de 26/10.
+8. **O sintoma leva à aula, e a aula diz por onde abriu** (26/10, commit
+   2ce344c). Card "Para entender de vez" em 12 dos 19 sintomas, e o
+   `viu_aula` com a porta no `detalhe`.
+9. **A volta ao paywall depois da conta é contada** (26/10, commit 0aff863).
+   `viu_paywall` com origem `pos-conta`.
 
 ## Plugin nativo nesta versão
 
@@ -70,3 +81,13 @@ dev key nula e chamada repetida, que o app já não faz.
 3. **O Next 15 não quebrou a casca.** Abrir o app, entrar com o Google, abrir
    Carros (tocar na linha abre o carro; o lápis edita o apelido), abrir uma
    aula, abrir o Premium.
+4. **O cadastro por e-mail entra no app.** Com um e-mail que nunca teve conta:
+   "Criar conta" por e-mail no app, abrir o e-mail de confirmação NO MESMO
+   celular, tocar no link. Tem de abrir o app já logado. No banco, a conta tem
+   de ter linha em `user_state`. É a prova que nenhuma conferência daqui dá.
+5. **Do paywall, pela conta, de volta ao paywall.** Sem conta, tocar em
+   "Começar 7 dias grátis", entrar com o Google, e ver o paywall de novo. No
+   banco, um `viu_paywall` com origem `pos-conta` desse aparelho. Se não
+   voltar, o defeito é o caminho nativo do Google, que o navegador não roda.
+6. **O sintoma abre a aula.** "Barulho ao frear", tocar no card da aula: no
+   banco, `viu_aula` com `extra.detalhe = sintoma`.
