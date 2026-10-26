@@ -966,3 +966,61 @@ para Engenharia na fila, em 13/10. Quando ele entrar, o plano de cobertura
 ganha a segunda metade da régua: das pessoas que consultaram o sintoma, quantas
 abriram a aula que responde ele. Escreva essa régua com número antes da
 primeira aula nova, em 27/10, mesmo que a leitura só venha depois.
+
+## Retorno do dono sobre a rodada de 20/10/2026
+
+Escrito pelo Diretor na segunda 26/10, pela condição de 13/10: veredito que não
+existe até a segunda é escrito nesta rodada. Lido o registro no diário, a régua
+deste manual, a fila, a lista do dono e o pacote `youtube` do retrato.
+
+Primeiro o que manter, e duas destas coisas são difíceis.
+
+**VOCÊ DERRUBOU A SUA PRÓPRIA LEITURA DE 22/09 COM O INSTRUMENTO QUE VOCÊ MESMO
+PEDIU.** A YouTube Analytics mostrou 98% de ADVERTISING na origem do tráfego, e a
+retenção inverte quase na ordem o que você chamou de ganhador e perdedor: os dois
+"perdedores" (pneu 117% e regra dos 70% 101%) são os dois que mais prenderam. A
+regra que nasce disso, "views deste canal não escolhem nem julgam assunto, quem
+faz isso é a retenção com a origem do tráfego ao lado", mata uma família inteira
+de conclusões erradas futuras. E você declarou o que continua sem instrumento: o
+CTR, que a API recusa, e de qual campanha vieram as 58.980.
+
+**A ENTREGA FECHA O ÚLTIMO BURACO DE UM GRUPO INTEIRO.** A aula de direção
+pesada era o único dos nove sintomas de freio, suspensão e pneu com cobertura
+zero, e o recorte pelo MOMENTO em que o sintoma aparece é o que separa conteúdo
+de enciclopédia. A conferência foi provada antes de ser crida, com o link morto
+plantado pela ferramenta e o arquivo restaurado pela cópia.
+
+**E A CORREÇÃO DAS SUAS PRÓPRIAS DATAS, CONTRA VOCÊ.** O plano de cobertura
+estava uma semana adiantado, você recontou o rodízio entrada por entrada e a
+régua passou a fechar mais cedo, não mais tarde. Depois antecipou a sua leitura
+de 10/11 para 03/11 porque ela cairia depois da rodada que ela deveria decidir.
+Duas correções que encurtam o seu próprio prazo, sem ninguém pedir.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. O ACHADO DA RODADA É DO PRODUTO E ELE FICOU SÓ NA FILA, QUANDO ELE MUDA A
+LEITURA DA SUA PRÓPRIA RÉGUA NOVA.** "Da tela do sintoma não existe caminho para
+a aula que responde ele", lido nos dois arquivos, é o tipo de achado que decide
+prioridade de produto, e você acertou em dizer que tela não é a sua alçada. O que
+faltou foi o tamanho: quantas pessoas consultam sintoma por semana, que é o
+denominador que transforma "não existe caminho" em "N pessoas por semana batem
+numa parede". O retrato traz `consultou_sintoma` e você já o citou em rodadas
+anteriores. Com o número, esse achado entra no meu relatório como prioridade; sem
+ele, ele concorre com dez outras linhas de fila. E a sua régua nova (uma em cada
+dez abre a aula que responde o sintoma) nasce impossível de ler enquanto o
+caminho não existir, o que você disse, mas então ela é uma régua para depois do
+conserto e isso precisa estar na própria frase da régua.
+
+**2. A PAUTA 03 ESTÁ NA LISTA DO DONO HÁ SETE DIAS E A SUA LEITURA DISSO FOI
+CURTA DEMAIS.** Você conferiu o certo (o canal recebeu 14 vídeos em 13/10 e
+nenhum é ela, e são não listados) e parou aí. O que a rodada não perguntou: se
+catorze vídeos entraram não listados em 13/10, existe produção acontecendo por
+fora do que esta cadeira pede, e isso muda a recomendação de gravar mais uma. Não
+é cobrança de clique: é a pergunta que separa "o dono não teve tempo" de "o dono
+está produzindo outra coisa". A obrigação 4 de DIRETRIZES manda a rodada abrir
+fechando o desfecho do que ela pediu, e desfecho de pedido ao dono inclui o
+porquê quando o instrumento já mostra um sinal.
+
+**O que eu levo para o meu relatório**: a correção do canal, porque ela apaga uma
+conclusão que já circulou nesta casa, e o caminho que falta do sintoma para a
+aula, como candidato a prioridade assim que tiver denominador.

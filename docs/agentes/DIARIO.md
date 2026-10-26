@@ -3,6 +3,89 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-26 · Diretor: o banco recusou pela segunda segunda seguida, e os três vereditos que faltavam foram escritos
+
+- **A rodada de hoje está PARCIAL, e a parte que falta é a dos números.** O
+  banco recusou por permissão, e pela regra de 31/08 eu não escrevo a análise só
+  com o retrato. O que não depende do banco está feito e está abaixo.
+- **O QUE TENTEI, com hora.** Três consultas ao projeto `ajaxhsvjvmqtiyzelgrd`
+  (as assinaturas, os eventos de venda e um `count(*)` em `funil_eventos`), às
+  11h05, 11h06 e 11h20 UTC: as três devolveram
+  `MCP error -32600: You do not have permission to perform this action`.
+- **E O TESTE QUE SEPARA A CAUSA, que agora é regra no meu manual:** o
+  `list_projects` responde e devolve os mesmos dois projetos de outra
+  organização de 20/10 (`concurso-brasil` e `meulivrinhodecolorir`, organização
+  `qlimhklgjsrlbbylbfzj`), os dois saudáveis, sem o Mentorque na lista. Não é
+  banco fora do ar: é alcance da integração.
+- **E ISTO É NOVO, porque é a SEGUNDA SEGUNDA SEGUIDA.** Em 20/10 o dono
+  reconectou e o banco respondeu no mesmo dia; seis dias depois voltou ao mesmo
+  estado. Então o pedido "reconecte" não é mais o pedido certo sozinho: a
+  pergunta é por que a conexão não se mantém de uma segunda para a outra. Não
+  tenho instrumento aqui para responder isso, e registro como pergunta em vez de
+  inventar causa. A consequência prática, essa eu meço: duas das quatro últimas
+  rodadas semanais começaram sem banco.
+- **OS TRÊS VEREDITOS QUE FALTAVAM, ESCRITOS HOJE**, pela condição que o dono pôs
+  em 13/10 (o veredito sai no dia da rodada nas sessões com ele, e quando não
+  sair até a segunda, a minha rodada o escreve). A `conferir:agentes` apontou
+  os três com 7, 7 e 8 dias de atraso; agora os oito manuais estão em zero.
+  - **CRO (23/10, retenção)**: dez critérios cumpridos e o 1 falhou, declarado
+    por ele. Mantém: a primeira hipótese TESTADA e derrubada (as três travas
+    estavam livres em 339 de 341), a previsão de 16/10 liquidada pelo dado (70
+    saíram sem responder contra 24 que tocaram em "não"), o A/B que decidiu
+    contra a versão mais curta e as duas correções que a conferência lhe fez.
+    Cobrado: o custo do critério 1 já tem tamanho, porque `datas-do-carro` é o
+    TERCEIRO veredito dele perdido na métrica, e a régua não exige que a métrica
+    seja legível no dia em que a aposta abre: proposta de critério novo, em vez
+    de cobrança inventada. Também: o sorteio torto (891 contra 960) entrou como
+    recomendação e toca a conclusão que ele acabou de publicar; e o
+    `modo-motorista-de-app` é decisão do dono desde 13/09 e segue sem linha na
+    lista dele, 43 dias, contra a obrigação 3.
+  - **Mídia (23/10, rodada 6)**: onze cumpridos e um não aplicável, declarado.
+    Mantém: o ponto 1 do retorno anterior fechado COM medição, e a lição que vale
+    para a casa ("não decidir não congela a conta: deixa a plataforma escolher",
+    com o Meta subindo R$ 35 sozinho); a variação publicada no lugar do nível
+    cruzado quando as janelas diferem; e a distinção entre "não se aplica" e
+    "inalcançável". Cobrado: a afirmação de que dois pedidos dela desapareceram da
+    fila era FALSA, e ela escreveu regra no manual em cima disso. Conferido hoje
+    no histórico do arquivo: as duas linhas de 15/10 estavam em todas as versões,
+    inclusive na de 20/10, que eu li e que imprimiu as duas com cinco dias; a
+    re-enfileirada duplicou e a Engenharia limpou no mesmo dia às 18h40. A régua
+    dela não tem linha para AFIRMAÇÃO DE ESTADO, e eu proponho uma em vez de
+    cobrar fora do critério.
+  - **Conteúdo (20/10)**: sete cumpridos, quatro não aplicáveis, declarado por
+    ele. Mantém: derrubou a própria leitura de 22/09 com o instrumento que ele
+    pediu (98% do tráfego do canal é anúncio, e os dois vídeos que ele chamou de
+    perdedores são os dois que mais prenderam), fechou o último sintoma sem
+    cobertura de um grupo inteiro, e corrigiu as próprias datas contra si,
+    encurtando o prazo. Cobrado: o achado do produto ("da tela do sintoma não
+    existe caminho para a aula que responde ele") ficou sem denominador, e sem
+    ele concorre com dez linhas de fila em vez de virar prioridade; e a leitura
+    da Pauta 03 parou antes da pergunta que o próprio instrumento levantou
+    (catorze vídeos não listados entraram em 13/10, o que separa "não teve
+    tempo" de "está produzindo outra coisa").
+- **O CRUZAMENTO DESTA SEMANA, e ele é sobre afirmação de estado.** Três papéis
+  diferentes afirmaram estado sem o instrumento que decide: a Mídia (os pedidos
+  que "desapareceram"), eu mesmo na semana passada (a atribuição tratada como
+  queda, quando o zero está em todas as semanas desde 21/09) e o Conteúdo em
+  22/09 (o gancho lido a partir de views que eram entrega de anúncio, corrigido
+  por ele agora). A casa tem a régua desde 06/10 no CLAUDE.md e ela não está em
+  régua de papel nenhum. É o mesmo desenho das duas filas: regra que depende de
+  lembrança não vale. Proposta levada nos dois vereditos.
+- **O QUE EU CONFERI SEM O BANCO:** `conferir:agentes` e `conferir:entre`
+  passam; a fila entre papéis tem 6 pedidos e nenhum meu; a lista do dono tem 7
+  itens em 7 painéis, nenhum com prazo vencido, e o mais velho (YouTube Studio,
+  13 dias) é a Pauta 03; e 36 commits na janela, lidos por conteúdo.
+- **DO RETRATO DE HOJE ÀS 6h, marcado como NÃO CONFERIDO no banco**, porque é
+  um instrumento só: a coorte de 12/10 está em 28 de 131 (21,4%) de piso e fecha
+  hoje, o que seria recuperação depois dos 11,6% da de 05/10; o custo por conta
+  caiu para R$ 3,15; e **o produto ficou sem nenhum assinante pagante**, com o
+  próprio retrato apontando a sobra ("o banco tem 1 assinatura de loja e o
+  RevenueCat 0: provavelmente assinatura que expirou lá e segue ativa aqui"). Se
+  isso se confirmar no banco, é a manchete da semana e não o custo por conta.
+- PRÓXIMO PASSO: reconectar, e desta vez com a pergunta de por que não se
+  mantém. No minuto em que o banco responder, eu fecho a parte dos números, que
+  é a única que falta.
+
 ## 2026-10-25 · Engenharia: a chave dos dados saiu dos nós do n8n
 
 - Pedido do dono: "Feito. Faça a atualização", depois de criar no n8n a

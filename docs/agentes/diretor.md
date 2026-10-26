@@ -547,6 +547,24 @@ credibilidade do resto, que nesta rodada estava certo.
   então entrou. É a régua de 06/10 (afirmar estado com instrumento) aplicada a
   "está no app": data mais nova não prova inclusão, ancestralidade prova.
 
+- 2026-10-26: **antes de chamar um número de QUEDA, olhar a série inteira.** Eu
+  publiquei "100% sem origem contra 97%" como piora, e o `cadastro` tem zero
+  etiqueta em TODAS as semanas desde 21/09: era estado de sempre, e os 97%
+  vinham da janela de 28 dias arrastando etiquetas antigas. Mudança se prova com
+  pelo menos três pontos da mesma série e da mesma janela; dois pontos de janelas
+  diferentes não são tendência.
+- 2026-10-26: **antes de pedir clique ao dono, perguntar aos instrumentos que a
+  casa alcança, e são dois: o banco e o FONTE.** A tela que eu mandei ele abrir
+  na AppsFlyer não destravava a leitura da retenção; o que faltava era um ouvinte
+  de conversão que nunca existiu em `lib/app/atribuicao.ts`. A regra de 04/10
+  valia para mim também, e o segundo instrumento era o código.
+- 2026-10-26: **a condição do dono de 13/10 é a parte do veredito que mais pesa,
+  e ela apareceu na terceira semana.** Nas duas primeiras não faltou nenhum
+  veredito; nesta faltaram três, e a `conferir:agentes` os apontou com 7, 7 e 8
+  dias de atraso antes de eu abrir qualquer manual. A ordem que funciona: rodar a
+  conferência ANTES de ler as rodadas, porque ela diz quais vereditos são meus
+  nesta segunda, e aí a leitura já é com a caneta na mão.
+
 ## Direcionamentos do dono
 
 - Entrega às segundas, 08:00 (horário de Brasília), com notificação.

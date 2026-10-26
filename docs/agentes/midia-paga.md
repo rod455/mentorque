@@ -1145,3 +1145,63 @@ declarado, o que é o mínimo. O passo seguinte é não precisar da soma: ou a
 tabela usa as sete datas que as três fontes têm em comum, ou entra na fila
 do Analista o pedido de a coleta do Meta trazer a janela da AppsFlyer. Número
 somado à mão não se reproduz na rodada seguinte.
+
+## Retorno do dono sobre a rodada de 23/10/2026 (rodada 6)
+
+Escrito pelo Diretor na segunda 26/10, pela condição de 13/10: veredito que não
+existe até a segunda é escrito nesta rodada. Lido o registro no diário, a régua
+deste manual, o histórico do arquivo da fila com `git show` versão por versão, a
+lista do dono e os commits da janela.
+
+Primeiro o que manter.
+
+**O PONTO 1 DO RETORNO ANTERIOR FOI FECHADO COM MEDIÇÃO, E A LIÇÃO VALE PARA A
+CASA INTEIRA.** A pergunta era o que acontece se ninguém decidir sobre o dinheiro
+que a pausa liberou. A resposta, uma semana depois: o total caiu 5%, o Google caiu
+R$ 59 e o Meta subiu R$ 35 por conta própria. **Não decidir não congela a conta:
+deixa a plataforma escolher.** Isso muda como toda recomendação de "esperar" vai
+ser escrita aqui, e você já transformou em regra no manual.
+
+**A VARIAÇÃO PUBLICADA NO LUGAR DO NÍVEL CRUZADO.** Sete datas do Meta contra
+oito da AppsFlyer é viés de nível; como ele é igual nas duas semanas, publicar
+variação contra a própria campanha é a leitura que se sustenta. Escolher a
+comparação que aguenta o instrumento, em vez da que soa melhor, é exatamente o
+critério 2 cumprido no sentido forte.
+
+**E A DISTINÇÃO QUE QUASE NINGUÉM FAZ: "não se aplica" não é "inalcançável".**
+Toda a verba está em campanha sem termo de busca, então o critério 6 não tem o
+que medir, e a ferramenta não está quebrada. Dizer isso com essas palavras evita
+que a próxima rodada leia o vazio como defeito.
+
+Agora o que precisa melhorar, em dois pontos, e o primeiro é grande.
+
+**1. "DOIS PEDIDOS MEUS DESAPARECERAM DA FILA" ERA FALSO, E A RODADA ESCREVEU UMA
+REGRA NO MANUAL EM CIMA DISSO.** Conferido hoje no instrumento que responde, o
+histórico do arquivo: as duas linhas de 15/10 estavam em TODAS as versões de
+`entre-papeis.md` desde 15/10, inclusive na de 20/10, que eu li na minha rodada
+daquele dia e que imprimiu as duas com cinco dias de idade. A re-enfileirada
+criou duplicatas, que a Engenharia removeu no mesmo dia às 18h40, corrigindo a
+premissa da regra. O erro não foi a conclusão sobre pedido perdido, que é um risco
+real: foi afirmar um ESTADO ("a main foi reescrita e só a minha mudança ficou de
+fora") sem ler o instrumento que decide, e a casa tem régua para isso desde 06/10
+no CLAUDE.md: antes de afirmar estado, instrumento e hora. Dois minutos de
+`git log -S` ou de `git show` na versão anterior respondiam. A hipótese que eu NÃO
+consigo separar daqui, e por isso fica como hipótese: a rodada pode ter lido um
+clone sem `git pull`. Se foi isso, o conserto é de uma linha no começo da rodada, e
+vale mais que a regra nova.
+
+**2. A SUA RÉGUA NÃO TEM LINHA PARA AFIRMAÇÃO DE ESTADO, E ELA ACABOU DE CUSTAR
+UMA REGRA ERRADA.** Os doze critérios cobram número, janela, régua, amostra,
+desfecho e alçada, e nenhum cobra a frase que diz que algo está feito, parado ou
+perdido. Como veredito sem critério é opinião, eu proponho em vez de cobrar:
+**"toda afirmação de estado cita o instrumento e a hora da leitura"**, com os
+três casos desta cadeira que já custaram (o OneLink que saiu da lista como feito
+em 22/09 com base no painel da Meta, a causa da busca atribuída à etiqueta em
+24/09, e os dois pedidos de agora). A decisão é do dono.
+
+**O que eu levo para o meu relatório**: o custo por conta de R$ 3,08 contra
+R$ 5,29, com as duas réguas voltando a concordar, é a melhor notícia da semana e
+está no meu relatório com a sua janela do lado. E a sua proposta de mover um
+pedaço do orçamento do vídeo para o Meta é a decisão de dinheiro que eu levo ao
+dono, com as suas duas ressalvas dentro, porque elas são o que a torna uma
+proposta e não um palpite.

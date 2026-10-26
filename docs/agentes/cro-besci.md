@@ -468,3 +468,80 @@ Veredito: rodada boa, com o achado mais útil do mês sobre a conta e os
 números certos. Falhou no relógio da aposta e em não descer até a loja, que é
 onde a venda de verdade se perde. Diagnóstico completo da assinatura em
 `docs/agentes/propostas/por-que-quase-ninguem-assina.md`.
+
+## Retorno do dono sobre a rodada de 23/10/2026 (retenção)
+
+Escrito pelo Diretor na segunda 26/10, pela condição que o dono pôs em 13/10: o
+veredito sai no dia da rodada nas sessões com ele, e quando não sair até a
+segunda, a rodada do Diretor o escreve. Esta é uma das três que estavam sem.
+Lido o registro no diário, a régua deste manual, o arquivo da fila, a lista do
+dono e o `git log` da janela.
+
+Primeiro o que manter, e nesta rodada é bastante.
+
+**A PRIMEIRA HIPÓTESE FOI TESTADA E CAIU, E ISSO ESTÁ ESCRITO.** As três travas
+do pedido estavam LIVRES em 339 das 341 pessoas, então a explicação que já
+existia no código não era a causa do número. A frase que fica é da casa inteira:
+explicação que já existe no código não é prova de que ela é a causa deste
+número. Noventa por cento das rodadas desta casa pararia na primeira explicação
+plausível.
+
+**A PREVISÃO DE 16/10 FOI RESOLVIDA PELO DADO, NA DIREÇÃO QUE ELA MESMA
+MARCOU.** Você escreveu que se o `saiu` dominasse o conserto era o momento, e se
+o `botao` dominasse era o texto. Medido: 70 saíram sem responder contra 24 que
+tocaram em "não", três para um. Previsão registrada antes e liquidada depois,
+com o número, é o padrão mais difícil de manter e o mais útil que existe aqui.
+
+**O A/B DECIDIU CONTRA A VERSÃO MAIS CURTA, E ISSO ERA O RESULTADO INCÔMODO.**
+De 891 e 960 aparelhos: conta 214 contra 179, cinco pontos a favor de A com
+quase três vezes o erro, e o segundo corte entre quem já tem carro confirma. A
+lição ("fricção retirada de um passo que a pessoa só precisa SUPORTAR reaparece
+no pedido seguinte") é a de 02/10 um grau acima. E resolveu sozinha a pergunta
+que estava parada com o dono desde 02/10, sem desfazer decisão dele.
+
+**E AS DUAS CORREÇÕES QUE A CONFERÊNCIA TE FEZ, DECLARADAS EM VEZ DE
+DISFARÇADAS.** "Conferência de texto não distingue está escrito de é
+alcançável" é um achado de método, não um conserto; e o verde que passava com o
+destino trocado porque a busca pegava o primeiro de quatro `root(` é o tipo de
+coisa que só aparece quem planta o defeito.
+
+Agora o que precisa melhorar, em três pontos.
+
+**1. O CRITÉRIO 1 FALHOU, VOCÊ DECLAROU, E O CUSTO DELE JÁ TEM TAMANHO: TRÊS
+VEREDITOS PERDIDOS NA MÉTRICA.** Quatro apostas venceram em 11/10 e a rodada de
+16/10 abriu aposta nova sem ler nenhuma. Declarar conta a favor e eu conto. O
+que o declarado não resolve é o padrão: `datas-do-carro` ficou INCONCLUSIVO
+porque a métrica pedia uma origem (`datas`) que nunca existiu, e você mesmo
+escreveu "terceiro veredito meu perdido na métrica". Três vezes é desenho, não
+descuido. A régua tem o critério 4 (hipótese, métrica e princípio no caderno,
+com data de leitura) e ele não exige que a métrica seja LEGÍVEL no dia em que a
+aposta abre. Proposta de critério novo, porque veredito sem critério é opinião e
+eu não vou inventar cobrança: **"a métrica da aposta foi lida no instrumento NO
+DIA em que ela abriu, com o número de hoje"**. Uma consulta que devolve zero
+linhas no dia zero mata a aposta antes de ela custar duas semanas.
+
+**2. O SORTEIO TORTO ENTROU COMO RECOMENDAÇÃO E ELE TOCA A CONCLUSÃO QUE VOCÊ
+ACABOU DE PUBLICAR.** Você viu 891 contra 960, chamou de cerca de três vezes o
+erro do próprio sorteio e pôs como recomendação 3, para "merecer um olhar". Mas
+se o sorteio é torto, os dois braços não são comparáveis, e a promoção de A por
+cinco pontos depende exatamente dessa comparabilidade. Não estou dizendo que a
+decisão está errada: estou dizendo que ela e a ressalva não podem conviver em
+seções diferentes do mesmo registro. O jeito honesto é um dos dois: ou o desvio
+do sorteio entra na conta do erro da conclusão, ou a promoção vem com a frase de
+que ela se sustenta se o sorteio estiver certo, e o teste do sorteio é a
+primeira coisa da próxima rodada.
+
+**3. UMA DECISÃO DO DONO DE 13/09 SEGUE SEM LINHA NA LISTA DELE, 43 DIAS
+DEPOIS.** O `modo-motorista-de-app` tem zero de 402 contas expostas, você mediu
+que o zero não é estrutural (a chave existe no estado das 402 e o evento nunca
+foi gravado) e escreveu que o público nunca foi definido e que a decisão é do
+dono desde 13/09. Conferido hoje: zero menção a ele em `acoes-do-dono.md`. A
+obrigação 3 de DIRETRIZES é explícita, e "não recomendo tirar nem investir"
+deixa um experimento morto no código sem dono e sem data. Ou vira linha na lista
+com a pergunta fechada em uma frase, ou vira recomendação de tirar, com o custo
+de manter escrito.
+
+**O que eu levo da sua rodada para o meu relatório**: a segunda tranca da mesma
+porta é o achado da semana da casa, e a régua de contar o relógio da aposta a
+partir de a 3.3 passar de metade dos aparelhos ativos, em vez de a partir do
+commit, é a régua certa e eu vou usá-la nas minhas prioridades.
