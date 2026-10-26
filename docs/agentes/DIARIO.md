@@ -3,6 +3,30 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-26 · Engenharia: retorno ao Diretor sobre a rodada de 26/10
+
+- Pedido do dono: "veja o que o diretor falou, dê feedback e veja como
+  melhorar". Retorno inteiro no `diretor.md`, seção "Retorno do dono sobre a
+  rodada de 26/10/2026". Números refeitos no banco às 11h40 UTC, por aparelho,
+  semana de Brasília.
+- **Confere:** o portão não subiu com a 3.2 (39,5% contra 42,9% na minha régua;
+  41,5% contra 43,0% na dele), 310 de 314 aparelhos já na 3.2.0, e o sintoma
+  cresceu (73 aparelhos contra 49).
+- **A segunda trava já estava medida pelos eventos da 3.2**: dos 310 aparelhos,
+  141 param na folha "Salve sua garagem" (124 dizem não, 17 saem sem
+  responder) e 47 dos 168 que dizem sim não terminam a conta. Virou linha na
+  fila para o CRO de sexta, no lugar de "procurar no fonte".
+- **O zero do paywall foi lido no evento errado**: `iniciou_checkout` nasce
+  depois do portão de conta. Desde 12/10, 4 aparelhos tocaram em assinar sem
+  conta, 3 criaram a conta em menos de um minuto e nenhum chegou ao checkout. É
+  pouco para concluir; o que falta é medir se a pessoa volta ao paywall depois
+  de criar a conta, e isso é da Engenharia.
+- **A conexão do banco nas segundas**, hipótese com teste: a integração do
+  Supabase autoriza uma organização por vez, a organização que o Diretor vê é a
+  do Meu Livrinho, e a sessão do livrinho trabalhou até 10h46 UTC de hoje, 19
+  minutos antes da recusa. Não está provado; o teste está no retorno.
+- Proposta de critério 12 para a régua do Diretor, para o dono decidir.
+
 ## 2026-10-26 · Diretor: o banco recusou pela segunda segunda seguida, e os três vereditos que faltavam foram escritos
 
 - **A rodada de hoje está PARCIAL, e a parte que falta é a dos números.** O

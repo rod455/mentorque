@@ -825,3 +825,107 @@ Veredito: rodada bem conduzida sob pane, com o achado mais útil da semana (o
 buraco entre as filas). Errou na atribuição ao tratar o estado de sempre como
 queda e ao mandar o dono clicar numa coisa que o código resolvia.
 
+
+## Retorno do dono sobre a rodada de 26/10/2026
+
+Mandado escrever por ele em 26/10 ("veja o que o diretor falou, dê feedback e
+veja como melhorar"). Lidos o diário, os dois commits da rodada (a4e5e4d e
+98ca7af) e o fonte do portão e do paywall. Os números principais foram refeitos
+no banco às 11h40 UTC, por aparelho (`anon_id`), na semana de Brasília.
+
+Primeiro o que manter.
+
+**A ESPERA VIROU TRABALHO.** O banco recusou às 11h05 e os três vereditos
+atrasados saíram antes de ele voltar. A parada custou os números, não a rodada,
+como você mesmo escreveu. E o `list_projects` separou "banco fora do ar" de
+"integração apontando para outro lugar" de novo, antes de qualquer frase.
+
+**O ANTES E DEPOIS POR VERSÃO, COM O PORQUÊ DE ELE SER LIMPO.** Instalação nova
+pega a versão atual da loja, então a semana fechada é quase toda 3.2.0. Refeito
+aqui: 310 de 314 aparelhos Android que cadastraram carro estavam na 3.2.0, e 124
+criaram conta (39,5%), contra 130 de 303 (42,9%) na semana anterior. Os seus
+números são outros (311 de 317, 41,5% contra 43,0%) porque contam outra
+identidade, e os dois instrumentos dizem a mesma coisa: não subiu.
+
+**AS DUAS CORREÇÕES ASSINADAS.** Retenção e atribuição, as duas vezes lendo
+oscilação como movimento, ditas por você antes de alguém cobrar. E a janela de
+8 a 30 dias, que ninguém olhava, é o achado mais novo da rodada.
+
+**O DENOMINADOR QUE FALTAVA AO CONTEÚDO.** Conferido: 73 aparelhos consultaram
+sintoma na semana, contra 49 (a sua leitura, 71, bate na direção e no tamanho).
+
+Agora o que precisa melhorar, em quatro pontos.
+
+**1. A "SEGUNDA TRAVA" QUE VOCÊ MANDOU O CRO PROCURAR NO FONTE JÁ ESTÁ MEDIDA.**
+A 3.2 que você cita com 98% de adoção trouxe os eventos que o dono aprovou em
+17/10 (commit 1be2b21): a folha "Salve sua garagem" grava que apareceu
+(`convite_conta`), o sim e o não. Lido no banco, Android 3.2.0, semana de 19 a
+25/10, 310 aparelhos que cadastraram carro:
+- todos os 310 viram a folha;
+- 124 tocaram em "não" e 17 saíram sem responder: **141 param na folha (45%)**;
+- 168 tocaram em "sim", e **47 deles não terminaram a conta (28% de quem
+  aceitou)**;
+- 121 aceitaram e criaram, e 1 recusou e criou mesmo assim.
+
+São duas travas, e as duas têm tamanho: a primeira é o convite (o que a folha
+oferece), a segunda é a tela de criar conta. Os 10 aparelhos por semana que
+cancelam na caixa do Google estão dentro dos 47. Andar o caminho no fonte
+continua útil para a segunda trava, mas só depois de saber o tamanho dela, e o
+tamanho já existia. É a regra de 03/10 ("acesso não é a mesma coisa que
+perguntar") aplicada ao seu próprio pedido: antes de mandar alguém investigar,
+pergunte aos eventos da versão publicada se eles já respondem.
+
+E uma nuance no "não se moveu": o conserto da 3.2 (79707a2) mexe na tela DEPOIS
+do sim, ou seja, só nos 47. Com 310 aparelhos, uma semana tem margem de uns 5
+pontos para cada lado. "Sem efeito detectável, e o teto do efeito era a segunda
+trava" é a frase do tamanho certo; "resposta negativa" é maior que o dado.
+
+**2. "O APERTO DO GRÁTIS PRODUZIU ZERO" FOI LIDO NO EVENTO QUE NÃO MEDE VONTADE.**
+O `iniciou_checkout` nasce DEPOIS do portão de conta, e por isso o
+`tentou_assinar` existe desde 18/09 (o comentário está em `lib/app/funil.ts`).
+Na semana: 1 `tentou_assinar` (plano anual, Android 3.2.0) e 0 checkout. Desde
+12/10: 4 aparelhos tocaram em assinar sem ter conta, 3 criaram a conta em menos
+de um minuto, e **nenhum dos 3 chegou ao checkout**. Então houve vontade, pouca,
+e a que houve morreu depois da conta. É o mesmo portão da sua prioridade 1,
+agora do lado do dinheiro. Com 4 casos não é conclusão, e o que falta para ser é
+uma medida: hoje não se vê se a pessoa volta ao paywall depois de criar a conta,
+porque o `viu_paywall` é um por sessão. Isso é da Engenharia.
+
+O critério 11 da sua régua cobre o zero contra a versão. O que faltou aqui é o
+irmão dele: o zero conferido contra o evento que mede a pergunta.
+
+**3. A CONEXÃO DO BANCO: UMA HIPÓTESE COM TESTE, NÃO UMA CAUSA.** A
+documentação do Supabase diz que a autorização da integração escolhe UMA
+organização ("Be sure to choose the organization that contains the project").
+A organização que aparece nas suas segundas (`concurso-brasil` e
+`meulivrinhodecolorir`) é a do Meu Livrinho, e a sessão "Artes do livrinho de
+colorir no site", do repositório do livrinho, trabalhou até as 10h46 UTC de
+hoje, 19 minutos antes da sua primeira recusa. A integração é uma só para a
+conta inteira. A hipótese: quando o dono autoriza o Supabase para o livrinho,
+todas as sessões passam a ver a organização do livrinho, inclusive a sua rotina
+de segunda. O teste que separa: depois da próxima sessão do livrinho que usar o
+banco, rodar `list_projects` numa sessão do Mentorque. Às 11h40 de hoje esta
+sessão via a organização do Mentorque. O conserto, se a hipótese passar, é do
+dono: uma integração por app, presa ao projeto.
+
+**4. CUSTO POR CONTA, TRÊS NÚMEROS NA MESMA SEMANA SEM A JANELA DE CADA UM.**
+R$ 3,15 no retrato das 6h (citado na parte parcial), R$ 2,97 na rodada fechada,
+R$ 3,08 na Mídia de 23/10. Podem estar os três certos, porque as janelas são
+diferentes, mas o relatório publicou dois deles sem dizer por que diferem. A
+regra de 03/10 manda citar os dois instrumentos ou declarar que não conferiu.
+
+Um ponto menor: "a de loja renovou em 25/10" não tem instrumento citado. Na
+nossa tabela há o `assinou` de 03/10 e o `cancelou` de hoje às 8h41, nenhum
+evento de renovação, e a linha diz período até 01/11. A pergunta ao QA de
+quarta fica, sem a afirmação.
+
+**Proposta para a sua régua, para o dono decidir:** critério 12, "toda pergunta
+mandada a outro papel foi conferida antes contra os eventos da versão
+publicada". Nasce do ponto 1, que é o mesmo desenho do 04/10: um pedido que o
+instrumento já respondia.
+
+Veredito: rodada honesta e bem recuperada da pane, com as correções próprias
+assinadas. Errou duas vezes no mesmo lugar, que é ler o portão e o paywall pelo
+evento mais grosso quando a casa já tinha o evento fino: a segunda trava estava
+medida pela versão que a rodada celebrou, e a vontade de pagar estava no
+`tentou_assinar`.
