@@ -86,6 +86,76 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   mantém. No minuto em que o banco responder, eu fecho a parte dos números, que
   é a única que falta.
 
+### FECHADA no mesmo dia: o dono reconectou e os números saíram
+- Dono: "pode tentar novamente". Relatório publicado:
+  https://claude.ai/artifact/VqC9JTPgihk9Zc6oBhffjY
+- **A MANCHETE, e ela é a resposta negativa à minha própria prioridade 1: o
+  conserto do portão da conta chegou a 98% de quem entra e a taxa NÃO se
+  moveu.** O corte por versão que eu pedi ao CRO e que não foi feito, feito aqui:
+  no Android da semana fechada, 311 das 317 pessoas que cadastraram carro já
+  estavam na 3.2.0, com taxa de 41,5%, contra 43,0% na semana anterior. A razão
+  de a população já estar atualizada é simples e vale escrever: quem cadastra
+  carro por primeira vez acabou de instalar, e instalação nova pega a versão
+  atual da loja. Então o antes e depois é limpo.
+  - A série do portão: 53,8% (104 pessoas), 40,6% (170), 43,0% (305) e 39,9%
+    (306). São 184 pessoas perdidas na semana fechada, contra 174.
+  - HIPÓTESE, não causa, e ela é da própria casa: o CRO achou em 23/10 que
+    conserto que resolve uma de duas travas da mesma porta não move número. Das
+    122 que criaram conta, 108 criaram em até dois minutos, igual às semanas
+    anteriores: quem passa se comporta igual e quem não passa continua não
+    passando. Virou a prioridade 1 para o CRO de sexta, com o método que ele
+    mesmo usou no convite.
+- **CORREÇÃO MINHA, da rodada passada:** eu levei "a retenção caiu para 11,6%" à
+  manchete, e a coorte de 12/10 está em 21,4% com a janela fechando hoje. A
+  leitura certa é a do CRO de 23/10: faixa de 12 a 26 de cada 100, sem tendência
+  provável com coortes deste tamanho. Duas coortes não fazem linha. Com a
+  correção da Engenharia de 20/10 (a atribuição não piorou, está em 100% desde
+  21/09), são DUAS vezes no mesmo mês em que eu li oscilação como movimento.
+- E uma coisa que ninguém estava olhando: a janela de 8 a 30 dias começou a
+  encher, 5, 7 e 7 nas três coortes fechadas, da mesma ordem da janela de 1 a 7.
+  Gente que volta depois da primeira semana existe e não aparece na métrica que a
+  casa acompanha. A primeira janela de 30 dias fecha em 04/11.
+- CHEGADA: o crescimento PAROU no melhor preço da história. Contas novas 139
+  contra 141, aberturas 673 contra 655, visitantes 509 contra 488, carro 306
+  contra 305. Gasto R$ 413,42 contra R$ 449,09 (terceira queda seguida: 473, 449,
+  413) e custo por conta R$ 2,97 contra R$ 3,18. Google caiu R$ 45 e Meta subiu
+  R$ 9, que é o movimento que a Mídia mediu: não decidir deixa a plataforma
+  escolher.
+- **O APERTO DO GRÁTIS PRODUZIU ZERO.** A Biela virou 3 perguntas por mês em
+  17/10; na semana fechada 77 pessoas viram o paywall (contra 64) e NENHUMA
+  iniciou checkout. Em duas semanas, 141 pessoas no paywall e 1 checkout. Mais
+  gente na parede não virou vontade de pagar, e a pergunta que abre não é de
+  preço: é se o que está atrás do paywall é o que essas 141 queriam.
+- RECEITA, com discordância declarada e não resolvida: a linha da assinatura
+  mudou hoje às 8h41 UTC, está `active` com período até 01/11 e
+  `cancel_at_period_end` verdadeiro, ou seja a de loja renovou em 25/10 e já está
+  marcada para não renovar. O banco diz 1 ativa e a RevenueCat diz 0, e a linha
+  não tem provedor gravado desde 03/10. O que não depende de resolver isso:
+  ninguém novo assinou, o Stripe está em zero e a única relação paga tem fim
+  marcado. Fica como pergunta para o QA de quarta.
+- **O NÚMERO QUE FALTAVA AO CONTEÚDO, buscado por mim depois de cobrar no
+  veredito:** 71 pessoas consultaram sintoma na semana fechada, +45%, a medida
+  que mais cresceu no funil, e da tela do sintoma não existe caminho para a aula
+  que responde ele. Com denominador, o achado dele deixa de concorrer com dez
+  linhas de fila e virou a minha prioridade 3.
+- PLACAR das minhas prioridades de 20/10: (1) medir o portão por versão FEITO por
+  mim, com resposta negativa; (2) a tela da AppsFlyer estava ERRADA e quem
+  corrigiu foi a Engenharia, porque a causa estava no fonte (o ouvinte de
+  conversão nunca existiu, ligado em 20/10, chega com a 3.3); (3) a conferência
+  da passagem entre filas foi aceita e já pagou hoje, porque foi assim que eu
+  achei a re-enfileirada falsa da Mídia.
+- PRIORIDADES: (1) CRO, sexta 30/10: achar a segunda trava do portão da conta
+  andando o caminho no fonte, com o teto do diagnóstico já medido por ele (10
+  aparelhos por semana cancelam na caixa do Google, um vigésimo das 184); (2) DO
+  DONO: a conexão do banco que não se mantém de uma segunda para a outra, com a
+  pista de que o que ela devolve ao falhar são sempre os mesmos dois projetos de
+  outra organização; (3) Engenharia: o caminho do sintoma para a aula, já na fila
+  desde 20/10, agora com 71 pessoas por semana de tamanho.
+- **A MINHA RÉGUA: 10 de 11.** Falhou o horário outra vez, e a causa foi a parada
+  do banco às 11h05. O que fiz diferente: usei a espera para o que não dependia do
+  banco e entreguei os três vereditos antes de ele reconectar. A parada custou os
+  números, não a rodada.
+
 ## 2026-10-25 · Engenharia: a chave dos dados saiu dos nós do n8n
 
 - Pedido do dono: "Feito. Faça a atualização", depois de criar no n8n a
