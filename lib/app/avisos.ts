@@ -177,7 +177,7 @@ export function montarAvisos(e: EntradaAvisos): Aviso[] {
       icone: "book",
       titulo: troca(t.aulaTitulo, { titulo: nova.title }),
       corpo: resto > 0 ? troca(t.aulaCorpoN, { n: resto }) : t.aulaCorpo,
-      destino: { tipo: "tela", view: { name: "content", id: nova.id } },
+      destino: { tipo: "tela", view: { name: "content", id: nova.id, porta: "aviso" } },
     });
   }
 

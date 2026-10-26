@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { funil } from "@/lib/app/funil";
 import { usePrototype } from "@/lib/app/store";
-import { useNav } from "@/lib/app/nav";
+import { useNav, type PortaDaAula } from "@/lib/app/nav";
 import { courseOf } from "@/lib/app/cursos";
 import { pedirFeedback } from "@/lib/app/feedbackPrompt";
 import { Button } from "@/components/ui/Button";
@@ -33,7 +33,7 @@ function InlineText({ text }: { text: string }) {
     if (m.index > last) parts.push(text.slice(last, m.index));
     const id = m[1];
     parts.push(
-      <button key={m.index} onClick={() => go({ name: "content", id })} className="font-medium text-amber underline decoration-amber/40 underline-offset-2 hover:decoration-amber">
+      <button key={m.index} onClick={() => go({ name: "content", id, porta: "relacionada" })} className="font-medium text-amber underline decoration-amber/40 underline-offset-2 hover:decoration-amber">
         {m[2]}
       </button>
     );
@@ -80,7 +80,7 @@ function ArticleBody({ body }: { body: string[] }) {
 }
 
 
-export function ContentScreen({ id }: { id: string }) {
+export function ContentScreen({ id, porta }: { id: string; porta?: PortaDaAula }) {
   const c = useContent();
   const { go, back } = useNav();
   const { s, markLessonSeen, toggleLessonSaved } = usePrototype();
@@ -124,7 +124,7 @@ export function ContentScreen({ id }: { id: string }) {
   const concluirEAvancar = () => {
     if (!lesson || !courseNext) return;
     concluir();
-    if (!done) go({ name: "content", id: courseNext.id });
+    if (!done) go({ name: "content", id: courseNext.id, porta: "trilha" });
   };
   // Interstitial ao abrir uma aula (só free), sujeito à política de anúncios:
   // carência nas primeiras aberturas, intervalo mínimo e teto diário.
@@ -132,7 +132,9 @@ export function ContentScreen({ id }: { id: string }) {
   useEffect(() => {
     registerContentOpen();
     // Valor consumado: a aula foi ABERTA. Uma vez por aula por sessão.
-    funil("viu_aula", { umaVez: true, origem: id });
+    // A porta vai no `detalhe` e o id continua no `origem` (ver PortaDaAula em
+    // lib/app/nav.tsx). Uma vez por aula por sessão, então vale a primeira porta.
+    funil("viu_aula", { umaVez: true, origem: id, detalhe: porta ?? "outra" });
     if (adsEnabled() && !s.premium && canShowAd()) {
       markAdShown();
       setNeedAd(true);
@@ -252,7 +254,7 @@ export function ContentScreen({ id }: { id: string }) {
       {courseNext && (
         <div className="mt-5">
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-cream/45">{c.learn.courseNextUp}</p>
-          <ItemRow item={courseNext} />
+          <ItemRow item={courseNext} porta="trilha" />
         </div>
       )}
 
@@ -265,7 +267,7 @@ export function ContentScreen({ id }: { id: string }) {
               .map((rid) => c.lessons.find((l) => l.id === rid))
               .filter((l): l is Item => !!l && l.id !== courseNext?.id)
               .slice(0, 3)
-              .map((l) => <ItemRow key={l.id} item={l} />)}
+              .map((l) => <ItemRow key={l.id} item={l} porta="relacionada" />)}
           </div>
         </div>
       )}

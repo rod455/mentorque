@@ -3,6 +3,34 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-26 · Engenharia: o sintoma leva à aula, e a aula diz por onde abriu
+
+- Pedido do dono: "sim, veja tudo que pode estar dando errado e resolva",
+  depois do retorno ao Diretor. Duas linhas da fila do Conteúdo fechadas aqui
+  (20/10, o caminho do sintoma para a aula; 13/10, a porta do `viu_aula`, que
+  vencia hoje).
+- **O caminho**: a tela do sintoma ganhou o card "Para entender de vez" com a
+  aula que responde ele. A tabela `AULAS_DO_SINTOMA` liga 12 dos 19 sintomas;
+  as nove de freio, suspensão e pneu seguem a tabela do Conteúdo, as de motor
+  e elétrica foram lidas no corpo de cada aula. Ficaram sem aula os três do
+  plano de cobertura e quatro de motor e ar, que viraram linha para o Conteúdo.
+  `read-obd2` ficou de fora de propósito: abre a ferramenta, não o leitor, e não
+  grava `viu_aula`.
+- **A porta**: o `viu_aula` passa a levar no `detalhe` (que o banco guarda em
+  `extra.detalhe`) por onde a aula abriu: busca, tema, trilha, para-seu-carro,
+  salvas, relacionada, inicio, quiz, obd2, sintoma ou aviso. O id continua no
+  `origem`. A rota de aula ganhou o campo, e o `ItemRow` passou a EXIGIR a
+  porta, então o compilador aponta qualquer caminho novo que esquecer.
+- **Prova**: suíte nova `sintoma` (card aparece no freio, some no ar, tocar
+  abre o leitor, o evento sai com `diag-freio-avisos` e `sintoma`, e a busca
+  sai com `busca`), e a `conferir:catalogo` cobra que todo id da tabela exista,
+  abra no leitor e seja livre. Cinco defeitos plantados com `plantio.mjs`, os
+  cinco morderam. Suítes `telas`, `quiz`, `primeiro-quiz` e `historico` verdes.
+- **O que fica de fora**: no app das lojas isto só chega com a 3.3, porque o
+  código vai dentro do binário. No `/app` da web vale no deploy. A régua do
+  Conteúdo (quantos de quem consulta o sintoma abrem a aula) só fica legível
+  depois que a 3.3 estiver nos aparelhos.
+
 ## 2026-10-26 · Engenharia: retorno ao Diretor sobre a rodada de 26/10
 
 - Pedido do dono: "veja o que o diretor falou, dê feedback e veja como

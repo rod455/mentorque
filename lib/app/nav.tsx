@@ -6,6 +6,26 @@ import { comNovaRaiz, passoDeVolta, type Pilha } from "./navPilha";
 
 // Lightweight in-app router: a stack of views with push/back plus a "root"
 // reset used by the bottom navigation. Params travel with the view.
+// POR ONDE A PESSOA ABRIU A AULA (26/10/2026, pedido do Conteúdo de 13/10).
+//
+// O `viu_aula` gravava só o id, então nenhum instrumento separava demanda de
+// vitrine: uma aula vista por 35 aparelhos podia ser escolha ou podia ser ela
+// aparecendo sozinha em Estudos. A porta vai no `detalhe` do evento, e o id
+// continua no `origem`, como sempre. Aula aberta sem porta grava "outra", que
+// é o sinal de que alguém criou um caminho novo sem dizer qual.
+export type PortaDaAula =
+  | "busca"          // a busca de Estudos
+  | "tema"           // a lista de um tema (studyTrack)
+  | "trilha"         // uma trilha guiada, inclusive "concluir e seguir"
+  | "para-seu-carro" // Estudos, "Para o seu carro"
+  | "salvas"         // aulas salvas
+  | "relacionada"    // o rodapé ou um link dentro de outra aula
+  | "inicio"         // a vitrine do Início
+  | "quiz"           // a explicação de uma pergunta do quiz
+  | "obd2"           // a ferramenta do OBD2
+  | "sintoma"        // a tela de um sintoma
+  | "aviso";         // toque num aviso ou lembrete
+
 export type View =
   | { name: "home" }
   | { name: "search" }
@@ -46,7 +66,7 @@ export type View =
   | { name: "studyTrack"; trackId: string }
   | { name: "course"; id: string }
   | { name: "biela"; seed?: string }
-  | { name: "content"; id: string }
+  | { name: "content"; id: string; porta?: PortaDaAula }
   | { name: "carSettings" }
   | { name: "profile" }
   | { name: "gamification" }

@@ -688,6 +688,8 @@ export function getContent(locale: Locale) {
       testesTitle: T("Confira você mesmo, antes de ir", "Check it yourself, before you go"),
       testesSub: T("Leva minutos, não precisa de ferramenta e já estreita o problema.", "Takes minutes, needs no tools, and narrows the problem down."),
       testesEntao: T("O que isso quer dizer", "What that means"),
+      aulaTitle: T("Para entender de vez", "To really understand it"),
+      aulaSub: T("A aula que explica este sintoma, com calma e sem pressa de oficina.", "The lesson that explains this symptom, calmly and with no workshop rush."),
       causes: T("Possíveis causas", "Possible causes"),
       urgency: T("Nível de urgência", "Urgency level"),
       price: T("Faixa de preço estimada", "Estimated price range"),

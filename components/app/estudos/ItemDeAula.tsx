@@ -1,7 +1,7 @@
 "use client";
 
 import { usePrototype } from "@/lib/app/store";
-import { useNav } from "@/lib/app/nav";
+import { useNav, type PortaDaAula } from "@/lib/app/nav";
 import type { Content } from "@/lib/app/content";
 import { Icon, PremiumBadge, Thumb, useContent } from "../ui";
 
@@ -22,14 +22,14 @@ export function typeIcon(t: string): string {
   return t === "video" ? "diagnose" : t === "checklist" ? "check" : "book";
 }
 
-export function ItemRow({ item }: { item: Item }) {
+export function ItemRow({ item, porta }: { item: Item; porta: PortaDaAula }) {
   const c = useContent();
   const { s } = usePrototype();
   const { go } = useNav();
   const locked = item.premium && !s.premium;
   return (
     <button
-      onClick={() => go(locked ? { name: "subscribe", ctx: "learn" } : { name: "content", id: item.id })}
+      onClick={() => go(locked ? { name: "subscribe", ctx: "learn" } : { name: "content", id: item.id, porta })}
       className="flex w-full items-center gap-3 rounded-2xl bg-graphite-800 p-3.5 text-left ring-1 ring-white/5 hover:ring-amber/30"
     >
       <span className={`grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-graphite ring-1 ${locked ? "text-amber/70 ring-amber/25" : "text-amber ring-amber/45"}`}>

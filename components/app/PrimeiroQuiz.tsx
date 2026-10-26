@@ -181,7 +181,7 @@ export function PrimeiroQuiz() {
               )}
               <p className="mt-2.5 text-sm leading-relaxed text-cream/70">{pergunta.porque}</p>
               <button
-                onClick={() => { setFechado(true); go({ name: "content", id: pergunta.aula }); }}
+                onClick={() => { setFechado(true); go({ name: "content", id: pergunta.aula, porta: "quiz" }); }}
                 className="mt-4 inline-flex items-center gap-1.5 font-display text-sm font-semibold text-amber"
               >
                 {q.verAula}

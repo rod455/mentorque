@@ -65,7 +65,9 @@ export type EventoFunil =
   // consultar um, e cadastrar carro não é registrar serviço. Sem estes três,
   // "primeiro valor" não tem medida e nenhuma aposta de retenção tem leitura.
   // `origem` carrega o id da aula ou do sintoma; no serviço, "com-valor" ou
-  // "sem-valor" (o valor pago é o que alimenta a comparação de preço).
+  // "sem-valor" (o valor pago é o que alimenta a comparação de preço). Desde
+  // 26/10/2026 o `viu_aula` leva no `detalhe` a PORTA por onde a aula abriu
+  // (busca, sintoma, inicio...; a lista é `PortaDaAula` em nav.tsx).
   | "viu_aula"
   | "consultou_sintoma"
   // A pergunta feita ao Biela (28/09/2026). Ela vira degrau de funil porque

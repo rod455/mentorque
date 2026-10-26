@@ -86,7 +86,7 @@ export function QuizScreen() {
         sequencia={sequenciaHoje(estado, hoje)}
         pergunta={respondida}
         escolha={r?.escolha ?? null}
-        aoAbrirAula={(aula) => go({ name: "content", id: aula })}
+        aoAbrirAula={(aula) => go({ name: "content", id: aula, porta: "quiz" })}
       />
     );
   }
@@ -121,7 +121,7 @@ export function QuizScreen() {
       }}
       aoSeguir={back}
       aoVerAnteriores={() => go({ name: "quizHistorico" })}
-      aoAbrirAula={() => go({ name: "content", id: pergunta.aula })}
+      aoAbrirAula={() => go({ name: "content", id: pergunta.aula, porta: "quiz" })}
     />
   );
 }

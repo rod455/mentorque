@@ -457,7 +457,7 @@ export function HomeScreen() {
                   }
                   titulo={l.title}
                   sub={locked ? c.common.premium : motivo.get(l.id) ?? (isNewLesson(l) && !seen.includes(l.id) ? h.newBadge : undefined)}
-                  onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id })}
+                  onClick={() => go(locked ? { name: "subscribe", ctx: "home" } : { name: "content", id: l.id, porta: "inicio" })}
                 />
               );
             })}

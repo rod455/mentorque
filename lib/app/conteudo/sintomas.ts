@@ -32,6 +32,8 @@ type Sym = {
    * teste honesto fica sem teste, e isso é melhor que inventar um.
    */
   testes?: { faca: string; entao: string }[];
+  /** As aulas que respondem este sintoma de frente. Vem de `AULAS_DO_SINTOMA`. */
+  aulas?: string[];
 };
 const symptoms: Sym[] = [
   {
@@ -350,5 +352,43 @@ const problemSystems: { key: SystemKey; label: string; icon: string; sub: string
 
 // Peças comuns por tipo de serviço — alimenta o autocomplete de "Peças trocadas".
 
+  for (const sx of symptoms) {
+    const aulas = AULAS_DO_SINTOMA[sx.id];
+    if (aulas?.length) sx.aulas = aulas;
+  }
+
   return { symptoms, symptomPremium, problemSystems };
 }
+
+// A AULA QUE RESPONDE O SINTOMA (26/10/2026, pedido do Conteúdo de 20/10).
+//
+// A tela do sintoma mostrava causa, urgência, preço, o teste de garagem e a
+// lista para a oficina, e não tinha como chegar na aula que explica aquilo. O
+// plano de cobertura do catálogo mede "das pessoas que consultam o sintoma,
+// quantas abrem a aula que responde ele", e medir uma porta que não existe
+// daria zero e a culpa cairia na aula.
+//
+// A tabela mora aqui, e não dentro de cada sintoma, para ser lida de uma vez.
+// Só entra aula que responde o sintoma DE FRENTE: as nove de freio, suspensão e
+// pneu seguem a tabela do Conteúdo (docs/agentes/conteudo-seo.md); as de motor
+// e elétrica foram lidas no corpo da aula em 26/10. Sintoma sem aula fica sem
+// aula, e isso é melhor que mandar a pessoa para um texto que fala de outra
+// coisa. Os que faltam estão no diário de 26/10, para o Conteúdo.
+//
+// `read-obd2` não entra de propósito: ela abre a ferramenta do OBD2, e não o
+// leitor de aula, então a abertura não grava `viu_aula` e a régua do Conteúdo
+// não a veria. A conferir:catalogo cobra que todo id daqui exista no acervo.
+export const AULAS_DO_SINTOMA: Record<string, string[]> = {
+  "brake-noise": ["diag-freio-avisos", "diag-noises"],
+  "brake-soft-pedal": ["diag-freio-avisos"],
+  "suspension-noise": ["diag-suspensao-avisos", "diag-noises"],
+  "suspension-bounce": ["diag-suspensao-avisos"],
+  "steering-vibration": ["diag-vibracao"],
+  "steering-hard": ["diag-direcao-pesada"],
+  "cel": ["vid-luz-injecao-acendeu"],
+  "overheating": ["diag-superaquecimento"],
+  "consumption": ["money-fuel"],
+  "battery-draining": ["diy-battery"],
+  "hard-start": ["diy-battery"],
+  "lights-dim": ["diy-battery"],
+};

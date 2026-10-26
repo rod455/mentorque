@@ -16,11 +16,13 @@
 //   4. id não se repete
 //   5. o "Adicionar carro" oferece o ano do carro da pessoa (21/10/2026: um
 //      carro de 1984 virou 2000 porque a lista parava em 2000)
+//   6. a aula que responde o sintoma existe e abre no leitor (26/10/2026)
 //
 // Rode com: npm run conferir:catalogo
 import { readFileSync } from "node:fs";
 import { aulas } from "../lib/app/conteudo/aulas.ts";
 import { ANO_MAIS_ANTIGO_DO_CADASTRO, anosDoCadastro, veiculos } from "../lib/app/conteudo/veiculos.ts";
+import { AULAS_DO_SINTOMA, sintomas } from "../lib/app/conteudo/sintomas.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -162,6 +164,35 @@ const { lessons } = aulas((pt: string) => pt);
   conferir("a lista anda com o calendário", anosDoCadastro(new Date("2031-03-01T12:00:00Z"))[0] === 2032);
   conferir("sem buraco nem repetição, do mais novo ao mais antigo", em2026.every((a, i) => i === 0 || em2026[i - 1] - a === 1));
   conferir("a tela recebe essa lista", veiculos((pt: string) => pt).years.join() === anosDoCadastro().join());
+}
+
+// ── 6. a aula do sintoma existe, abre no leitor e chega à tela ──────────────
+//
+// O caminho do sintoma para a aula (26/10/2026) é uma tabela de ids, e id que
+// não resolve some calado: a tela não desenha card para aula que não acha. É o
+// mesmo beco do `related` (bloco 3b). E três ids do acervo não abrem o leitor,
+// abrem uma ferramenta (`telas.tsx`), que não grava `viu_aula`: apontar o
+// sintoma para eles deixaria a régua do Conteúdo cega sem ninguém ver.
+{
+  const porId = new Map(lessons.map((l) => [l.id, l]));
+  const { symptoms } = sintomas((pt: string) => pt);
+  const sintomasQueExistem = new Set(symptoms.map((x) => x.id));
+  const telas = readFileSync(new URL("../components/app/telas.tsx", import.meta.url), "utf8");
+  const ferramentas = new Set([...telas.matchAll(/view\.id === "([a-z0-9-]+)"/g)].map((m) => m[1]));
+  const problemas: string[] = [];
+  for (const [sid, ids] of Object.entries(AULAS_DO_SINTOMA)) {
+    if (!sintomasQueExistem.has(sid)) problemas.push(`${sid} não é sintoma do app`);
+    for (const id of ids) {
+      const aula = porId.get(id);
+      if (!aula) problemas.push(`${sid} aponta para ${id}, que não existe`);
+      else if (ferramentas.has(id)) problemas.push(`${sid} aponta para ${id}, que abre ferramenta e não grava viu_aula`);
+      else if (aula.premium) problemas.push(`${sid} aponta para ${id}, que é Premium: o caminho viraria paywall`);
+    }
+  }
+  conferir("a aula de cada sintoma existe, abre no leitor e é livre", problemas.length === 0, problemas.join("\n       "));
+  conferir("a conferência enxerga as ferramentas de telas.tsx", ferramentas.has("read-obd2"), [...ferramentas].join(", "));
+  const chegam = symptoms.filter((x) => (x.aulas?.length ?? 0) > 0).length;
+  conferir("a tabela chega aos sintomas que a tela recebe", chegam === Object.keys(AULAS_DO_SINTOMA).length, `${chegam} de ${Object.keys(AULAS_DO_SINTOMA).length}`);
 }
 
 if (falhas) {

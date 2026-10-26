@@ -74,7 +74,7 @@ export function telaDaView(view: View) {
         if (view.id === "read-obd2") return <Obd2Screen />;
         if (view.id === "obd2-scan") return <Obd2ScanScreen />;
         if (view.id === "fuel-compare") return <FuelCompareScreen />;
-        return <ContentScreen id={view.id} />;
+        return <ContentScreen id={view.id} porta={view.porta} />;
       case "carSettings": return <CarSettingsScreen />;
       case "profile": return <ProfileScreen />;
       case "quiz": return <QuizScreen />;

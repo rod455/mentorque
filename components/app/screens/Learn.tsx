@@ -131,7 +131,7 @@ export function LearnScreen() {
 
       {searching ? (
         <div className="space-y-2.5">
-          {results.length > 0 ? results.map((l) => <ItemRow key={l.id} item={l} />) : (
+          {results.length > 0 ? results.map((l) => <ItemRow key={l.id} item={l} porta="busca" />) : (
             <p className="py-8 text-center text-sm text-cream/50">{c.learn.searchEmpty}</p>
           )}
         </div>
@@ -271,11 +271,11 @@ export function StudyTrackScreen({ trackId }: { trackId: string }) {
         groups.map((g) => (
           <div key={g.label}>
             <SectionTitle>{g.label}</SectionTitle>
-            <div className="space-y-2.5">{g.items.map((l) => <ItemRow key={l.id} item={l} />)}</div>
+            <div className="space-y-2.5">{g.items.map((l) => <ItemRow key={l.id} item={l} porta="tema" />)}</div>
           </div>
         ))
       ) : (
-        <div className="space-y-2.5">{items.map((l) => <ItemRow key={l.id} item={l} />)}</div>
+        <div className="space-y-2.5">{items.map((l) => <ItemRow key={l.id} item={l} porta="tema" />)}</div>
       )}
       {!s.premium && <UpgradeBanner ctx="learn" text={c.paywalls.learn.title} />}
     </div>
@@ -313,7 +313,7 @@ export function CourseScreen({ id }: { id: string }) {
         </div>
         {next ? (
           <button
-            onClick={() => go({ name: "content", id: next.id })}
+            onClick={() => go({ name: "content", id: next.id, porta: "trilha" })}
             className="mt-3.5 w-full rounded-full bg-amber py-3 text-center font-display text-[15px] font-semibold text-graphite active:scale-[0.99]"
           >
             {done === 0 ? c.learn.courseStart : c.learn.courseContinue} → {next.title.length > 28 ? next.title.slice(0, 28) + "…" : next.title}
@@ -333,7 +333,7 @@ export function CourseScreen({ id }: { id: string }) {
           return (
             <button
               key={l.id}
-              onClick={() => go(locked ? { name: "subscribe", ctx: "learn" } : { name: "content", id: l.id })}
+              onClick={() => go(locked ? { name: "subscribe", ctx: "learn" } : { name: "content", id: l.id, porta: "trilha" })}
               className={`flex w-full items-center gap-3 rounded-2xl p-3 text-left ring-1 transition-all hover:ring-amber/30 ${isDone ? "bg-teal/[0.07] ring-teal/20" : "bg-graphite-800 ring-white/5"}`}
             >
               <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-full font-display text-xs font-bold ${isDone ? "bg-teal text-graphite" : "bg-white/8 text-cream/60"}`}>
@@ -430,7 +430,7 @@ export function ForYourCarScreen() {
         subtitle={c.learn.forYourCarSub}
       />
       <div className="mt-1 space-y-2.5">
-        {items.map((l) => <ItemRow key={l.id} item={l} />)}
+        {items.map((l) => <ItemRow key={l.id} item={l} porta="para-seu-carro" />)}
       </div>
       {!s.premium && <UpgradeBanner ctx="learn" text={c.paywalls.learn.title} />}
     </div>
@@ -449,7 +449,7 @@ export function SavedLessonsScreen() {
       <AppHeader title={c.learn.savedTitle} subtitle={c.learn.savedSub} />
       {items.length > 0 ? (
         <div className="mt-1 space-y-2.5">
-          {items.map((l) => <ItemRow key={l.id} item={l} />)}
+          {items.map((l) => <ItemRow key={l.id} item={l} porta="salvas" />)}
         </div>
       ) : (
         <p className="py-10 text-center text-sm text-cream/50">{c.learn.savedEmpty}</p>

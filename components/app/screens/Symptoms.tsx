@@ -14,6 +14,7 @@ import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Card, Icon, inputCls, Linha, LockedCard, PremiumBadge, RecoBadge, SeverityDot, Sheet, UpgradeBanner, useContent } from "../ui";
 import { AdOverlay, adsEnabled } from "../AdGate";
+import { ItemRow } from "../estudos/ItemDeAula";
 import { canShowAd, markAdShown, registerContentOpen } from "@/lib/app/adPolicy";
 
 // Map a symptom category to a service type for pre-filling the history form.
@@ -356,6 +357,9 @@ export function SymptomDetail({ id }: { id: string }) {
   }, [id]);
   if (!sx) return <AppHeader title="—" />;
   const pd = c.symptomPremium[sx.id];
+  const aulasDoSintoma = (sx.aulas ?? [])
+    .map((aid) => c.lessons.find((l) => l.id === aid))
+    .filter((l): l is NonNullable<typeof l> => !!l);
 
   const livres = causasLivres({ premium: s.premium, ehOPrimeiro, total: sx.causes.length });
   const shownCauses = sx.causes.slice(0, livres);
@@ -481,6 +485,20 @@ export function SymptomDetail({ id }: { id: string }) {
             ))}
           </ol>
         </Card>
+      )}
+
+      {/* A AULA QUE RESPONDE ESTE SINTOMA (26/10/2026). Até aqui não havia
+          caminho da tela do sintoma para a aula que explica ele, e a régua do
+          Conteúdo mede justamente quantos fazem esse caminho. A tabela mora em
+          lib/app/conteudo/sintomas.ts (AULAS_DO_SINTOMA). */}
+      {aulasDoSintoma.length > 0 && (
+        <div className="mt-5" data-aula-do-sintoma>
+          <p className="font-display text-[15px] text-cream">{ui.aulaTitle}</p>
+          <p className="mb-2.5 mt-0.5 text-xs text-cream/55">{ui.aulaSub}</p>
+          <div className="space-y-2.5">
+            {aulasDoSintoma.map((l) => <ItemRow key={l.id} item={l} porta="sintoma" />)}
+          </div>
+        </div>
       )}
 
       {/* Aprofundar com o Biela: mini-anamnese + CTA (premium) */}

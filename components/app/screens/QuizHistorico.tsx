@@ -214,13 +214,13 @@ export function QuizHistoricoScreen() {
             <PerguntaRespondida
               pergunta={perguntaDoRegistro}
               escolha={respostaSelecionada.escolha}
-              aoAbrirAula={() => go({ name: "content", id: perguntaDoRegistro.aula })}
+              aoAbrirAula={() => go({ name: "content", id: perguntaDoRegistro.aula, porta: "quiz" })}
             />
           ) : escolhaAgora !== null ? (
             <PerguntaRespondida
               pergunta={perguntaDoRegistro}
               escolha={escolhaAgora}
-              aoAbrirAula={() => go({ name: "content", id: perguntaDoRegistro.aula })}
+              aoAbrirAula={() => go({ name: "content", id: perguntaDoRegistro.aula, porta: "quiz" })}
             />
           ) : (
             <>

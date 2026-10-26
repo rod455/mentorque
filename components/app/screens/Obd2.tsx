@@ -141,7 +141,7 @@ export function Obd2Screen() {
 
       {/* Como escanear — aula com vídeo e passo a passo */}
       <button
-        onClick={() => go({ name: "content", id: "obd2-scan" })}
+        onClick={() => go({ name: "content", id: "obd2-scan", porta: "obd2" })}
         className="mt-3 flex w-full items-center gap-3 rounded-2xl bg-amber/10 px-4 py-3.5 text-left ring-1 ring-amber/30 hover:ring-amber/50"
       >
         <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber/15 text-lg">🎬</span>
