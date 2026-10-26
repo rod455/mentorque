@@ -55,10 +55,31 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
    `viu_aula` com a porta no `detalhe`.
 9. **A volta ao paywall depois da conta é contada** (26/10, commit 0aff863).
    `viu_paywall` com origem `pos-conta`.
-10. **A compra é retomada depois da conta** (26/10, decisão do dono). Quem
+10. **A compra é retomada depois da conta** (26/10, commit 2d8291e, decisão do dono). Quem
    toca em assinar sem conta, cria a conta e volta tem a folha da loja
    reaberta no plano que tocou, sem segundo toque. Conta que já assina não vê
    compra; depois de dez minutos não retoma nada.
+
+## A nota das lojas
+
+Pela regra da casa: o ganho, não o defeito; o verbo na ação da pessoa; nada
+que não tenha sido conferido. A mesma nota serve para a Apple. 357
+caracteres, abaixo dos 500 da Play. Fora dela de propósito: o Next 15 e a
+atribuição da instalação (a pessoa não sente), e o botão de compra do
+Android (é configuração de loja, e prometer teste grátis aqui é prometer o
+que a Apple ainda não tem).
+
+```
+Assinar ficou mais curto: se a conta for pedida no meio do caminho, a compra continua de onde você parou.
+
+Em cada sintoma, a aula que explica o problema está a um toque.
+
+Quem cria a conta com e-mail confirma e já entra no app.
+
+Carro antigo tem vez: o cadastro aceita o ano do seu carro, até 1960.
+
+A tela de saúde pede o km ali mesmo, onde ele faz falta.
+```
 
 ## Plugin nativo nesta versão
 
