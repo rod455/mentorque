@@ -15,6 +15,7 @@ import { comoSair } from "./saidaDoApp.ts";
 export { isNativeApp } from "./capacitorPresente.ts";
 // E importada também, porque este arquivo a usa (ver `sellsInApp`).
 import { isNativeApp } from "./capacitorPresente.ts";
+import { destinoDoLinkDeEmail } from "./pontePraApp.ts";
 
 // Origem de produção do app. Precisa bater com `server.url` do
 // capacitor.config.ts — é para cá que voltam os links de e-mail (confirmação
@@ -137,10 +138,20 @@ export function onDeepLink(handler: (url: string) => void): () => void {
 // FORA DE PRODUÇÃO O RETORNO CONTINUA LOCAL. A ponte é um endereço fixo de
 // produção, e mandar o link de um `localhost:3000` ou de uma prévia da Vercel
 // para lá tiraria o teste de dentro do que está sendo testado.
+//
+// DENTRO DO APP O DESTINO É SEMPRE A PONTE (26/10/2026). O app das lojas é
+// servido em `https://localhost`, e a pergunta só pelo endereço o tratava como
+// teste local: o link pedia `https://localhost/app`, o Supabase recusava e
+// mandava a pessoa para o site. O porquê inteiro está em `destinoDoLinkDeEmail`
+// (lib/app/pontePraApp.ts), que é pura para a conferir:login executar.
 export function emailRedirectUrl(): string {
   if (typeof window === "undefined") return NATIVE_AUTH_REDIRECT;
-  const emProducao = /(^|\.)mentorque\.com\.br$/.test(window.location.hostname);
-  return emProducao ? NATIVE_AUTH_REDIRECT : `${window.location.origin}/app`;
+  return destinoDoLinkDeEmail({
+    hostname: window.location.hostname,
+    origin: window.location.origin,
+    nativo: isNativeApp(),
+    ponte: NATIVE_AUTH_REDIRECT,
+  });
 }
 
 // Chave pública do RevenueCat da loja onde o app está rodando.

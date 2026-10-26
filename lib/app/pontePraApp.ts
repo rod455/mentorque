@@ -94,3 +94,60 @@ export function destinoDaPonteDaJanela(): DestinoDaPonte {
     hash: window.location.hash,
   });
 }
+
+// ---------------------------------------------------------------------------
+// PARA ONDE O LINK DO E-MAIL PEDE PARA VOLTAR (26/10/2026).
+//
+// O DEFEITO, lido nos logs do Supabase em 26/10: o cadastro por e-mail feito
+// DENTRO do app Android pedia `redirect_to=https://localhost/app`. Dentro do
+// app das lojas a página é servida em `https://localhost`, e a regra antiga
+// perguntava só "o endereço é mentorque.com.br?". Não era, então caía no ramo
+// de teste local. O Supabase recusa esse destino e devolve no endereço do
+// site, a página inicial, aberta no navegador do celular: a sessão nascia lá,
+// e o app continuava deslogado. Desde a semana de 28/09, 32 contas por e-mail
+// foram criadas, 20 confirmaram o e-mail, e NENHUMA chegou a entrar no app.
+// Pelo Google, no mesmo período, quase todas entraram.
+//
+// A conferência que existia lia o TEXTO da regra (`emProducao ?
+// NATIVE_AUTH_REDIRECT`) e passava, porque o texto estava certo; quem estava
+// errado era a pergunta sobre o endereço. Por isso a regra agora é pura e a
+// conferência a executa com o endereço que o app tem de verdade.
+//
+// Dentro do app, a ponte é sempre o destino certo: ela mesma decide pelo
+// aparelho que abre o link, que é a regra do dono de 20/09.
+export function destinoDoLinkDeEmail({
+  hostname,
+  origin,
+  nativo,
+  ponte,
+}: {
+  hostname: string;
+  origin: string;
+  nativo: boolean;
+  ponte: string;
+}): string {
+  if (nativo) return ponte;
+  if (/(^|\.)mentorque\.com\.br$/.test(hostname)) return ponte;
+  return `${origin}/app`;
+}
+
+/**
+ * Este endereço é a sobra de um link de conta que caiu no lugar errado?
+ *
+ * Quando o Supabase recusa o destino pedido, ele devolve no endereço do site,
+ * e a credencial vem junto: `#access_token=…` (o nosso fluxo, implícito),
+ * `?code=…` ou o erro do link. A página inicial do site não sabe fazer nada
+ * com isso. Com esta pergunta ela repassa para a ponte, que leva ao app no
+ * celular e ao `/app` no computador. É o que conserta, sem build, quem ainda
+ * está numa versão do app com o defeito acima.
+ */
+export function ehSobraDeLinkDeConta(search: string, hash: string): boolean {
+  const h = new URLSearchParams(hash.replace(/^#/, ""));
+  const q = new URLSearchParams(search.replace(/^\?/, ""));
+  return (
+    h.has("access_token") ||
+    h.has("error_description") ||
+    q.has("code") ||
+    q.has("error_description")
+  );
+}

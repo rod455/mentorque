@@ -3,6 +3,36 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-26 · Engenharia: o cadastro por e-mail no app Android nunca entrava, desde 28/09
+
+- **Achado** procurando onde morrem os 47 aparelhos que tocam em "sim" na folha
+  da conta. Banco, lido às 12h30 UTC: desde 12/10, das 264 contas Google, 263
+  têm `user_state` (entraram no app); das 24 contas por e-mail, ZERO, inclusive
+  as 14 que confirmaram o e-mail. Por semana: até 21/09, 9 de 11 contas por
+  e-mail que confirmaram entraram; desde 28/09, 0 de 20 (32 contas criadas).
+- **Causa, lida no instrumento e não deduzida**: os logs do Supabase de 25/10
+  às 23h34 mostram o cadastro feito de dentro do app Android pedindo
+  `redirect_to=https://localhost/app`, e a confirmação às 23h36 voltando para
+  `https://mentorque.com.br`, a página inicial do site. Dentro do app a página
+  é servida em `https://localhost`, e o `emailRedirectUrl` (mudado em 20/09,
+  commit f6e37ef) só perguntava se o endereço era mentorque.com.br. Não era,
+  então caía no ramo de teste local; o Supabase recusa esse destino e devolve
+  no site, onde a sessão nascia no navegador do celular e o app ficava
+  deslogado. A conferência que existia lia o texto da regra e passava.
+- **Dois consertos.** (1) No app: dentro do app o destino é sempre a ponte, e a
+  regra virou função pura (`destinoDoLinkDeEmail`) que a `conferir:login`
+  executa com os cinco endereços reais. Chega com a 3.3. (2) No site, que vale
+  no deploy e conserta também a 3.2: a página inicial repassa para a ponte o
+  link de conta que cair nela (`ehSobraDeLinkDeConta`). Provado no navegador:
+  no computador o link termina em `/app` com a credencial; no Android a ponte
+  tenta o app e cai em `/app` se não houver app; endereço comum não é tocado.
+  Quatro defeitos plantados na `conferir:login`, os quatro morderam, e a suíte
+  `site` verde.
+- **O que fica de fora, e é do dono**: as 24 pessoas que criaram conta por
+  e-mail desde 12/10 (32 desde 28/09) têm a conta, mas nunca entraram. As que
+  confirmaram conseguem entrar com e-mail e senha; as que não confirmaram têm um
+  link que já venceu. Avisar essa gente é mensagem a cliente.
+
 ## 2026-10-26 · Engenharia: a volta ao paywall depois da conta passa a ser contada
 
 - O ponto 2 do retorno ao Diretor: desde 12/10, 4 aparelhos tocaram em assinar

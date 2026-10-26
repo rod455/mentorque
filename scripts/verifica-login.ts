@@ -22,7 +22,7 @@
 //
 // Rode com: npm run conferir:login
 import { existsSync, readFileSync } from "node:fs";
-import { destinoDaPonte } from "../lib/app/pontePraApp.ts";
+import { destinoDaPonte, destinoDoLinkDeEmail, ehSobraDeLinkDeConta } from "../lib/app/pontePraApp.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -268,10 +268,41 @@ if (!noAndroid) {
   // `if (isNativeApp()) return NATIVE_AUTH_REDIRECT`, e o `isNativeApp` saiu de
   // lá de propósito. Ele responde "de onde o pedido saiu", e a pergunta certa é
   // "onde a pessoa vai abrir". O que a conferência guarda agora é o destino.
+  //
+  // E MUDOU DE NOVO EM 26/10, porque ela passava sobre o defeito. Ela lia o
+  // texto `emProducao ? NATIVE_AUTH_REDIRECT`, que estava certo, e não via que
+  // dentro do app das lojas o endereço é `https://localhost`: o cadastro por
+  // e-mail no Android pedia `redirect_to=https://localhost/app` (logs do
+  // Supabase de 25/10), e de 32 contas por e-mail desde 28/09 nenhuma entrou no
+  // app. Agora a regra é pura e roda aqui com os endereços de verdade.
+  const PONTE = "https://mentorque.com.br/auth-bridge";
+  const casos: { nome: string; hostname: string; origin: string; nativo: boolean; espera: string }[] = [
+    { nome: "o app das lojas (https://localhost)", hostname: "localhost", origin: "https://localhost", nativo: true, espera: PONTE },
+    { nome: "o site em produção", hostname: "mentorque.com.br", origin: "https://mentorque.com.br", nativo: false, espera: PONTE },
+    { nome: "o site com www", hostname: "www.mentorque.com.br", origin: "https://www.mentorque.com.br", nativo: false, espera: PONTE },
+    { nome: "o teste local no navegador", hostname: "localhost", origin: "http://localhost:3000", nativo: false, espera: "http://localhost:3000/app" },
+    { nome: "uma prévia da Vercel", hostname: "mentorque-x.vercel.app", origin: "https://mentorque-x.vercel.app", nativo: false, espera: "https://mentorque-x.vercel.app/app" },
+  ];
+  for (const c of casos) {
+    const obtido = destinoDoLinkDeEmail({ hostname: c.hostname, origin: c.origin, nativo: c.nativo, ponte: PONTE });
+    conferir(`o link de e-mail pedido de ${c.nome} volta para ${c.espera}`, obtido === c.espera, `voltou para ${obtido}`);
+  }
   conferir(
-    "em produção TODO link de e-mail volta pela ponte, e não para o site",
-    /emProducao\s*\?\s*NATIVE_AUTH_REDIRECT/.test(wrapper) && !/isNativeApp\(\)\)\s*return\s+NATIVE_AUTH_REDIRECT/.test(wrapper),
-    "decidindo por isNativeApp, quem pede pelo site cai no navegador mesmo tendo o app",
+    "o emailRedirectUrl usa a regra pura, com o isNativeApp de verdade",
+    /destinoDoLinkDeEmail\(\{[\s\S]*nativo:\s*isNativeApp\(\)/.test(wrapper),
+    "a regra pura certa não adianta se o app não a chama",
+  );
+
+  // A sobra do link que caiu no site, para quem está numa versão com o defeito.
+  conferir("a credencial no fragmento é sobra de link de conta", ehSobraDeLinkDeConta("", "#access_token=abc&type=signup"));
+  conferir("o código na query também", ehSobraDeLinkDeConta("?code=abc", ""));
+  conferir("o erro do link também, para a pessoa ver a mensagem no app", ehSobraDeLinkDeConta("", "#error_description=expirado"));
+  conferir("a página inicial comum não é sobra", !ehSobraDeLinkDeConta("", "") && !ehSobraDeLinkDeConta("?utm_source=meta", "#planos"));
+  const inicial = leia("app/page.tsx");
+  conferir(
+    "a página inicial do site monta o repasse para a ponte",
+    /<RepasseDeLinkDeConta\s*\/>/.test(inicial) && /auth-bridge/.test(leia("components/RepasseDeLinkDeConta.tsx")),
+    "sem ele, quem confirma o e-mail numa versão antiga do app continua caindo no site",
   );
 
   // A ponte tem que ter reserva. Sem ela, quem não tem o app instalado fica

@@ -19,6 +19,7 @@ import { SocialProof } from "@/components/sections/SocialProof";
 import { Plans } from "@/components/sections/Plans";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { Footer } from "@/components/sections/Footer";
+import { RepasseDeLinkDeConta } from "@/components/RepasseDeLinkDeConta";
 
 // SEIS BLOCOS DESDE 04/10/2026 (aposta `landing-em-seis-blocos`, caderno de
 // experimentos). Antes eram treze: TrustBar, ProblemSolution, Features,
@@ -34,6 +35,7 @@ export default function Page() {
           autoridade do site, então é daqui que buscador e IA tiram a ficha do
           produto: nome, preço, plataformas e idiomas. */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd() }} />
+      <RepasseDeLinkDeConta />
       <Header />
       <main>
         <Hero />
