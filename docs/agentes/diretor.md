@@ -908,6 +908,12 @@ banco, rodar `list_projects` numa sessão do Mentorque. Às 11h40 de hoje esta
 sessão via a organização do Mentorque. O conserto, se a hipótese passar, é do
 dono: uma integração por app, presa ao projeto.
 
+**RESPOSTA DO DONO (26/10, mesma tarde):** "A conexão pode ignorar, eu que
+troquei de conta aqui." A causa é a troca de conta dele, não defeito. Fica
+registrado para a próxima segunda: se o banco recusar e o `list_projects`
+mostrar a organização do livrinho, é isso, e o pedido é reconectar, sem
+investigação.
+
 **4. CUSTO POR CONTA, TRÊS NÚMEROS NA MESMA SEMANA SEM A JANELA DE CADA UM.**
 R$ 3,15 no retrato das 6h (citado na parte parcial), R$ 2,97 na rodada fechada,
 R$ 3,08 na Mídia de 23/10. Podem estar os três certos, porque as janelas são

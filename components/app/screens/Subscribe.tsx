@@ -13,6 +13,8 @@ import { funil } from "@/lib/app/funil";
 // Sem isso ela recebe quem pediu um teste grátis com a frase de quem está
 // sendo convidado a criar conta. Ver lib/app/vendaPendente.ts.
 import { esqueceVeioAssinar, guardaVenda, marcaVeioAssinar, veioAssinar } from "@/lib/app/vendaPendente";
+import { comoRetomar, compraARetomar, esqueceCompraARetomar, guardaCompraARetomar, type CompraARetomar } from "@/lib/app/compraARetomar";
+import { getBrowserSupabase } from "@/lib/supabaseBrowser";
 import { Button } from "@/components/ui/Button";
 import { Card, Icon, LegalLinks, useContent } from "../ui";
 
@@ -121,9 +123,13 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   //
   // O mecanismo inteiro já existia e era usado só pelo link de venda; o
   // caminho de dentro do app não o usava. Ver lib/app/vendaPendente.ts.
+  // 4. GUARDA O BOTÃO TOCADO (26/10/2026), para a compra ser RETOMADA depois do
+  //    login em vez de a pessoa ter de tocar de novo. Ver "A COMPRA RETOMADA"
+  //    mais abaixo e lib/app/compraARetomar.ts.
   const paraLogin = (origem: string, plano: "annual" | "monthly") => {
     funil("tentou_assinar", { umaVez: true, chave: "tentou_assinar", origem });
     marcaVeioAssinar();
+    guardaCompraARetomar(origem, plano);
     guardaVenda({ plano, direto: false });
     go({ name: "auth" });
   };
@@ -149,11 +155,11 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
     esqueceVeioAssinar();
   }, [user]);
 
-  const subscribe = () => {
-    if (!user) return paraLogin(`web-${plan}`, plan);
-    funil("iniciou_checkout", { origem: `web-${plan}`, userId: user.id });
+  const subscribe = (qual: "monthly" | "annual" = plan) => {
+    if (!user) return paraLogin(`web-${qual}`, qual);
+    funil("iniciou_checkout", { origem: `web-${qual}`, userId: user.id });
     if (!stripeConfigured() && isLocalDev()) { setPremium(true); back(); return; } // demo só em dev
-    go({ name: "checkout", plan }); // checkout embutido (com teste grátis)
+    go({ name: "checkout", plan: qual }); // checkout embutido (com teste grátis)
   };
 
   // Funil de saída do paywall: QUALQUER saída (X, abas de baixo, gesto de
@@ -369,11 +375,11 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
     })();
   }, [user]);
 
-  const buyNative = async () => {
-    const pkg = plan === "monthly" ? iap?.monthly ?? iap?.annual : iap?.annual ?? iap?.monthly;
+  const buyNative = async (qual: "monthly" | "annual" = plan) => {
+    const pkg = qual === "monthly" ? iap?.monthly ?? iap?.annual : iap?.annual ?? iap?.monthly;
     if (!pkg || iapBusy) return;
-    if (!user) return paraLogin(`loja-${plan}`, plan);
-    funil("iniciou_checkout", { origem: `loja-${plan}`, userId: user.id });
+    if (!user) return paraLogin(`loja-${qual}`, qual);
+    funil("iniciou_checkout", { origem: `loja-${qual}`, userId: user.id });
     setIapBusy(true);
     try {
       const p = await initPurchases(user.id);
@@ -407,12 +413,60 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
       // Desistir é escolha da pessoa e sai calado. Qualquer outro erro cai na
       // confirmação: o dinheiro pode ter entrado, e "deu erro" seria um convite
       // a pagar duas vezes.
-      relataDesfechoDaLoja(err, `loja-${plan}`);
+      relataDesfechoDaLoja(err, `loja-${qual}`);
       if (!compraCancelada(err)) abrirConfirmacaoDeCompra("loja");
     } finally {
       setIapBusy(false);
     }
   };
+
+  // A COMPRA RETOMADA DEPOIS DA CONTA (26/10/2026, decisão do dono).
+  //
+  // Quem tocou em assinar sem conta foi criar a conta e voltou para cá. Em vez
+  // de mostrar de novo o botão que ele já tocou, o paywall reabre o MESMO
+  // passo: a folha da loja no app, o checkout no site, a oferta de saída se
+  // foi ela. Nada é cobrado sem a confirmação dele na folha; o porquê inteiro
+  // está em lib/app/compraARetomar.ts.
+  //
+  // Três esperas, e cada uma tem motivo. A conta tem de existir (`user`). No
+  // app, os planos da loja têm de ter carregado (`iapReady`), senão a folha
+  // não tem o que abrir e a retomada se perderia calada. E a conta que entrou
+  // pode já ser assinante (entrou numa conta antiga): então a tabela de
+  // assinaturas é lida ANTES, e assinante sai do paywall em vez de ver uma
+  // segunda compra.
+  const retomada = useRef<CompraARetomar | null>(null);
+  useEffect(() => {
+    if (!user) return;
+    const r = compraARetomar();
+    if (!r) return;
+    esqueceCompraARetomar();
+    retomada.current = r;
+  }, [user]);
+  useEffect(() => {
+    const r = retomada.current;
+    if (!r || !user) return;
+    if (isNativeApp() && !iapReady) return;
+    retomada.current = null;
+    const passo = comoRetomar(r);
+    if (!passo) return;
+    void (async () => {
+      const sb = getBrowserSupabase();
+      const { data } = sb
+        ? await sb.from("subscriptions").select("status").eq("user_id", user.id).maybeSingle()
+        : { data: null };
+      if (data && ["active", "trialing"].includes(String(data.status))) {
+        refreshSubscription();
+        back();
+        return;
+      }
+      if (passo.tipo === "oferta10") return subscribeOffer();
+      if (passo.tipo === "oferta25") return subscribeOffer2();
+      setPlan(passo.plano);
+      if (passo.tipo === "loja") return buyNative(passo.plano);
+      return subscribe(passo.plano);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, iapReady, iap]);
 
   // Modo leitor: "já sou assinante". Não é compra nem restauração de loja —
   // é reler a tabela de assinaturas do Supabase, onde cai quem pagou pelo site.
@@ -586,7 +640,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
               );
             })}
           </div>
-          <Button size="lg" className="mt-4 w-full" onClick={buyNative} disabled={iapBusy}>
+          <Button size="lg" className="mt-4 w-full" onClick={() => buyNative()} disabled={iapBusy}>
             {iapBusy ? "…" : semTeste ? sub.ctaSemTeste : sub.trialCta.replace("{n}", String(trialDays))}
           </Button>
 
@@ -764,7 +818,7 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
       </div>
 
       {/* CTA */}
-      <Button size="lg" className="mt-4 w-full" onClick={subscribe}>
+      <Button size="lg" className="mt-4 w-full" onClick={() => subscribe()}>
         {sub.trialCta.replace("{n}", String(trialDays))}
       </Button>
       <p className="mx-auto mt-3 max-w-xs text-center text-xs leading-relaxed text-cream/45">

@@ -55,6 +55,10 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
    `viu_aula` com a porta no `detalhe`.
 9. **A volta ao paywall depois da conta é contada** (26/10, commit 0aff863).
    `viu_paywall` com origem `pos-conta`.
+10. **A compra é retomada depois da conta** (26/10, decisão do dono). Quem
+   toca em assinar sem conta, cria a conta e volta tem a folha da loja
+   reaberta no plano que tocou, sem segundo toque. Conta que já assina não vê
+   compra; depois de dez minutos não retoma nada.
 
 ## Plugin nativo nesta versão
 
@@ -85,9 +89,12 @@ dev key nula e chamada repetida, que o app já não faz.
    "Criar conta" por e-mail no app, abrir o e-mail de confirmação NO MESMO
    celular, tocar no link. Tem de abrir o app já logado. No banco, a conta tem
    de ter linha em `user_state`. É a prova que nenhuma conferência daqui dá.
-5. **Do paywall, pela conta, de volta ao paywall.** Sem conta, tocar em
-   "Começar 7 dias grátis", entrar com o Google, e ver o paywall de novo. No
-   banco, um `viu_paywall` com origem `pos-conta` desse aparelho. Se não
-   voltar, o defeito é o caminho nativo do Google, que o navegador não roda.
+5. **Do paywall, pela conta, direto para a compra.** Sem conta, tocar em
+   "Começar 7 dias grátis" no plano MENSAL, entrar com o Google: a folha da
+   Google tem de abrir sozinha no mensal. Desistir na folha deixa a pessoa no
+   paywall. No banco: `viu_paywall` com origem `pos-conta` e
+   `iniciou_checkout` com origem `loja-monthly`. Se a folha não abrir, o
+   defeito é o caminho nativo do Google, que o navegador não roda. Repetir com
+   uma conta que já assina: nenhuma folha.
 6. **O sintoma abre a aula.** "Barulho ao frear", tocar no card da aula: no
    banco, `viu_aula` com `extra.detalhe = sintoma`.

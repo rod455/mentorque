@@ -3,6 +3,29 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-26 · Engenharia: a compra é retomada depois da conta
+
+- Pedido do dono: "podemos implementar o ir direto para a compra". Quem toca
+  em assinar sem conta, cria a conta e volta tem o MESMO passo reaberto: a
+  folha da loja no plano tocado, o checkout do site, ou a oferta de saída se
+  foi ela. Nada é cobrado sem a confirmação da pessoa na folha.
+- **As travas, que são o que protege o dinheiro**: o botão tocado fica num
+  registro próprio (`lib/app/compraARetomar.ts`) que vale dez minutos e é
+  apagado ao ser usado; conta que já assina (lida na tabela de assinaturas
+  antes de abrir qualquer coisa) sai do paywall sem compra; no app, espera os
+  planos da loja carregarem, senão a retomada se perderia calada.
+- **Prova**: a suíte `pos-conta` agora cobra a retomada no site (o
+  `iniciou_checkout` sai sozinho, no plano tocado, uma vez), a conta que já
+  assina (nenhuma compra) e a retomada vencida (nada abre). Três defeitos
+  plantados, os três morderam. A decisão de qual passo reabrir, botão por
+  botão, entrou na `conferir:venda` com dois defeitos plantados, os dois
+  mordidos. `venda`, `conta` e `pos-conta` verdes.
+- **O que fica de fora**: a folha da loja só existe no aparelho; o roteiro 5
+  da ficha da 3.3 é a prova. No app chega com a 3.3; no `/app` da web vale
+  no deploy.
+- A conexão do banco nas segundas: o dono respondeu que foi troca de conta
+  dele. Hipótese fechada, registrado no `diretor.md`.
+
 ## 2026-10-26 · Engenharia: o cadastro por e-mail no app Android nunca entrava, desde 28/09
 
 - **Achado** procurando onde morrem os 47 aparelhos que tocam em "sim" na folha

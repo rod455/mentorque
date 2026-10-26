@@ -19,6 +19,7 @@
 import { readFileSync } from "node:fs";
 import { esqueceVenda, guardaVenda, vendaPendente, veioComprar } from "../lib/app/vendaPendente.ts";
 import { googleDaOTeste, opcaoPrincipalDoGoogle } from "../lib/app/opcoesDoGoogle.ts";
+import { aindaVale, comoRetomar, VALIDADE_DA_RETOMADA_MS } from "../lib/app/compraARetomar.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -413,6 +414,38 @@ const CHAVE = "mq-venda-pendente";
     "e a tela não promete teste a quem a loja não vai dar",
     /semTeste \? sub\.ctaSemTeste : sub\.trialCta/.test(subscribe),
   );
+}
+
+// ── A COMPRA RETOMADA DEPOIS DA CONTA (26/10/2026) ──────────────────────────
+//
+// O dono decidiu que quem toca em assinar sem conta tem a compra reaberta
+// depois do login. A suíte de navegador `pos-conta` prova o botão do site; os
+// da loja e das ofertas de saída só existem no aparelho, então a decisão de
+// QUAL passo reabrir é conferida aqui, botão por botão. Errar aqui é abrir a
+// folha do anual para quem tocou no mensal, ou uma oferta que a pessoa não
+// pediu.
+{
+  const casos: [string, "annual" | "monthly", string][] = [
+    ["loja-monthly", "monthly", "loja:monthly"],
+    ["loja-annual", "annual", "loja:annual"],
+    ["web-monthly", "monthly", "site:monthly"],
+    ["web-annual", "annual", "site:annual"],
+    ["web-exit10", "annual", "oferta10"],
+    ["web-exit25", "annual", "oferta25"],
+    ["oferta-exit10", "annual", "oferta10"],
+    ["oferta-exit25", "annual", "oferta25"],
+    ["um-botao-que-nao-existe", "annual", "nada"],
+  ];
+  for (const [origem, plano, espera] of casos) {
+    const r = comoRetomar({ origem, plano });
+    const obtido = !r ? "nada" : "plano" in r ? `${r.tipo}:${r.plano}` : r.tipo;
+    conferir(`o botão ${origem} retoma ${espera}`, obtido === espera, `retomou ${obtido}`);
+  }
+  const agora = 1_800_000_000_000;
+  conferir("a retomada de agora vale", aindaVale({ origem: "loja-annual", plano: "annual", t: agora }, agora));
+  conferir("a retomada passa da validade e deixa de valer", !aindaVale({ origem: "loja-annual", plano: "annual", t: agora - VALIDADE_DA_RETOMADA_MS - 1 }, agora));
+  conferir("relógio voltando não ressuscita retomada", !aindaVale({ origem: "loja-annual", plano: "annual", t: agora + 60_000 }, agora));
+  conferir("a validade é curta: no máximo meia hora", VALIDADE_DA_RETOMADA_MS <= 30 * 60 * 1000);
 }
 
 if (falhas) {

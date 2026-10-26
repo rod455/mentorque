@@ -150,7 +150,10 @@ export function veioComprar(): boolean {
 // guarda plano nem cupom; quem faz isso é a compra pendente aqui de cima, que
 // é do caminho do link de venda. Separar as duas é de propósito: mudar o que
 // acontece DEPOIS do login num fluxo de dinheiro é decisão de quem cuida do
-// pagamento, e está registrado como recomendação.
+// pagamento, e está registrado como recomendação. O dono decidiu em
+// 26/10/2026: a compra é retomada depois do login, por um registro próprio
+// (lib/app/compraARetomar.ts) que guarda o botão tocado. Esta marca continua
+// servindo só ao texto e à contagem da volta.
 //
 // Mesma validade da compra pendente, pelo mesmo motivo: meia hora atravessa um
 // login social; uma semana faria a tela de entrar falar de assinatura para
