@@ -36,6 +36,7 @@ próprio Playwright resolve. Para apontar outro: `CHROMIUM=/caminho/do/chromium`
 | `avisos.mjs` | o sino, o X que dispensa, e os botões alcançáveis em tela estreita |
 | `site.mjs` | vazamento lateral das páginas do site em 320/360/390/430px |
 | `sintoma.mjs` | o sintoma oferece a aula que responde ele, e o `viu_aula` grava a porta no `detalhe` (26/10/2026) |
+| `pos-conta.mjs` | quem toca em assinar sem conta volta ao paywall depois do login, e a volta grava `viu_paywall` com origem `pos-conta`; roda num servidor com Supabase de mentira (`supabaseFalso`) |
 | `moto.mjs` | cadastrar uma moto: escolher o tipo, achar pelo nome do tanque, e o `type` que fica GRAVADO |
 
 ## Escrever uma nova

@@ -28,6 +28,9 @@ export type EventoFunil =
   // aparelho e quase todo mundo que chega é convidado, o fundo do funil
   // parecia parado. Este evento é emitido NO portão, antes do desvio, e é o
   // que separa "viu e desistiu" de "quis e foi barrado pela conta".
+  // E a volta (26/10/2026): quem passa pela conta e reencontra o paywall grava
+  // um segundo `viu_paywall` com origem "pos-conta", fora da regra de um por
+  // sessão (components/app/screens/Subscribe.tsx).
   | "tentou_assinar"
   // O CLIQUE NO LINK INTELIGENTE DE DOWNLOAD (19/09/2026). A loja não conta de
   // onde a pessoa veio, então clique de Instagram era invisível: a página

@@ -3,6 +3,30 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-26 · Engenharia: a volta ao paywall depois da conta passa a ser contada
+
+- O ponto 2 do retorno ao Diretor: desde 12/10, 4 aparelhos tocaram em assinar
+  sem conta, 3 criaram a conta (os três com o Google, em menos de um minuto) e
+  nenhum chegou ao checkout. Lido no banco às 12h, a linha do tempo dos três:
+  menos de um minuto depois do `cadastro` eles já estavam perguntando ao Biela
+  ou consultando sintoma. Se passaram pelo paywall de novo, não deixaram
+  rastro, porque o `viu_paywall` é um por sessão.
+- **Provado no navegador, com um Supabase de mentira**: no login por e-mail,
+  que roda dentro da página, a pessoa VOLTA ao paywall. Então a navegação não é
+  o defeito nesse caminho. O caminho dos três (Google no Android) sai para o
+  navegador do sistema e volta por link profundo, e esse não roda no Chromium.
+- **O conserto é de medida**: a volta grava um `viu_paywall` com origem
+  `pos-conta`, uma vez, e apaga a marca do botão de assinar. Na 3.3 a leitura
+  separa "criou a conta e não foi devolvido ao paywall" de "voltou e desistiu
+  ali". Mudar o que acontece depois do login (ir direto à compra, por exemplo)
+  é fluxo de dinheiro e fica com o dono.
+- **A suíte nova `pos-conta`** roda num servidor subido com um Supabase que não
+  existe, respondido pelo próprio navegador: nada sai da máquina e nenhuma
+  conta é criada. O `todos.mjs` passou a separar as suítes que precisam disso
+  e troca de servidor no meio; com servidor de fora, a suíte reprova dizendo
+  por quê. Dois defeitos plantados, os dois morderam; `sintoma`, `venda`,
+  `conta` e `pos-conta` juntas verdes, com a troca de servidor.
+
 ## 2026-10-26 · Engenharia: o sintoma leva à aula, e a aula diz por onde abriu
 
 - Pedido do dono: "sim, veja tudo que pode estar dando errado e resolva",

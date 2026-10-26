@@ -10,7 +10,7 @@
 import { spawn } from "node:child_process";
 import { BASE, abrirNavegador, conferidor } from "./base.mjs";
 
-const SUITES = ["telas", "sintoma", "quiz", "historico", "calendario", "conta", "suporte", "primeiro-quiz", "km", "selo", "carro", "moto", "porta", "foto", "avisos", "venda", "site", "erros", "orcamento", "combustivel", "datas", "motorista", "apresentacao"];
+const SUITES = ["telas", "sintoma", "pos-conta", "quiz", "historico", "calendario", "conta", "suporte", "primeiro-quiz", "km", "selo", "carro", "moto", "porta", "foto", "avisos", "venda", "site", "erros", "orcamento", "combustivel", "datas", "motorista", "apresentacao"];
 
 const pedidas = process.argv.slice(2);
 const desconhecida = pedidas.find((p) => !SUITES.includes(p));
@@ -31,9 +31,22 @@ async function noAr() {
   }
 }
 
-async function subirServidor() {
-  console.log("Subindo o servidor de desenvolvimento...");
-  const p = spawn("npm", ["run", "dev"], { stdio: "ignore", detached: true });
+// O SUPABASE DE MENTIRA (26/10/2026). Sem as variáveis públicas do Supabase o
+// app roda como convidado puro, e nenhuma suíte alcança o que acontece DEPOIS
+// do login (a volta ao paywall de quem foi parado pela conta, por exemplo). A
+// suíte que exporta `supabaseFalso = true` roda num servidor subido com um
+// endereço que não existe; ela mesma responde as chamadas dele no navegador,
+// então nada sai da máquina e nenhuma conta de verdade é criada. As outras
+// suítes continuam no servidor de sempre, porque ligar o login para todas
+// mudaria o ambiente de 23 suítes de uma vez.
+export const SUPABASE_FALSO = {
+  NEXT_PUBLIC_SUPABASE_URL: "https://falso.supabase.co",
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: "chave-falsa-de-teste",
+};
+
+async function subirServidor(env = {}) {
+  console.log(`Subindo o servidor de desenvolvimento${Object.keys(env).length ? " com o Supabase de mentira" : ""}...`);
+  const p = spawn("npm", ["run", "dev"], { stdio: "ignore", detached: true, env: { ...process.env, ...env } });
   for (let i = 0; i < 60; i++) {
     await new Promise((r) => setTimeout(r, 2000));
     if (await noAr()) return p;
@@ -44,9 +57,19 @@ async function subirServidor() {
 
 // ---- execução --------------------------------------------------------------
 
+const modulos = new Map();
+for (const alvo of alvos) modulos.set(alvo, await import(`./${alvo}.mjs`));
+const comumAlvos = alvos.filter((a) => !modulos.get(a).supabaseFalso);
+const falsoAlvos = alvos.filter((a) => modulos.get(a).supabaseFalso);
+
 let servidor = null;
-if (!(await noAr())) servidor = await subirServidor();
-else console.log(`Usando o servidor já de pé em ${BASE}`);
+let servidorDeFora = false;
+if (await noAr()) {
+  servidorDeFora = true;
+  console.log(`Usando o servidor já de pé em ${BASE}`);
+} else {
+  servidor = await subirServidor(comumAlvos.length ? {} : SUPABASE_FALSO);
+}
 
 let nav;
 try {
@@ -66,8 +89,8 @@ try {
 const falhasTotais = [];
 const inicio = Date.now();
 
-for (const alvo of alvos) {
-  const suite = await import(`./${alvo}.mjs`);
+async function rodarSuite(alvo) {
+  const suite = modulos.get(alvo);
   console.log(`\n▸ ${suite.nome} — ${suite.sobre}`);
   const { ok, falhas } = conferidor();
   try {
@@ -77,6 +100,28 @@ for (const alvo of alvos) {
     console.log(`  ✗ a suíte quebrou: ${e.message}`);
   }
   falhasTotais.push(...falhas.map((f) => `${suite.nome}: ${f}`));
+}
+
+for (const alvo of comumAlvos) await rodarSuite(alvo);
+
+// As suítes do Supabase de mentira. Com servidor nosso, troca de servidor;
+// com servidor de fora, não dá para saber com que variáveis ele subiu, e a
+// suíte REPROVA dizendo por quê, em vez de passar ou pular calada.
+if (falsoAlvos.length) {
+  if (servidorDeFora) {
+    for (const alvo of falsoAlvos) {
+      const msg = "precisa do servidor com o Supabase de mentira: derrube o servidor de pé e rode de novo";
+      console.log(`\n▸ ${modulos.get(alvo).nome}\n  ✗ ${msg}`);
+      falhasTotais.push(`${modulos.get(alvo).nome}: ${msg}`);
+    }
+  } else {
+    if (comumAlvos.length) {
+      try { process.kill(-servidor.pid); } catch { /* ok */ }
+      for (let i = 0; i < 20 && (await noAr()); i++) await new Promise((r) => setTimeout(r, 500));
+      servidor = await subirServidor(SUPABASE_FALSO);
+    }
+    for (const alvo of falsoAlvos) await rodarSuite(alvo);
+  }
 }
 
 await nav.close();

@@ -12,7 +12,7 @@ import { funil } from "@/lib/app/funil";
 // A tela de entrar precisa saber que a pessoa veio de um botão de assinar.
 // Sem isso ela recebe quem pediu um teste grátis com a frase de quem está
 // sendo convidado a criar conta. Ver lib/app/vendaPendente.ts.
-import { guardaVenda, marcaVeioAssinar } from "@/lib/app/vendaPendente";
+import { esqueceVeioAssinar, guardaVenda, marcaVeioAssinar, veioAssinar } from "@/lib/app/vendaPendente";
 import { Button } from "@/components/ui/Button";
 import { Card, Icon, LegalLinks, useContent } from "../ui";
 
@@ -129,6 +129,25 @@ export function SubscribeScreen({ ctx: _ctx }: { ctx?: string }) {
   };
 
   useEffect(() => { funil("viu_paywall", { umaVez: true, chave: "viu_paywall", origem: _ctx ?? "direto", userId: user?.id }); }, [_ctx, user?.id]);
+
+  // A VOLTA AO PAYWALL DEPOIS DA CONTA (26/10/2026).
+  //
+  // Desde 12/10, quatro aparelhos tocaram em assinar sem conta, três criaram a
+  // conta em menos de um minuto, e nenhum chegou ao checkout. O que não se
+  // sabia é se eles VOLTARAM ao paywall: o `viu_paywall` acima é um por
+  // sessão, então a volta não deixava rastro. Este evento é a volta: mesma
+  // pessoa, agora com conta, de novo diante do paywall, com a marca do botão
+  // de assinar ainda de pé. A marca é apagada aqui, porque a conta existe e o
+  // assunto dela acabou, e é isso que impede de contar duas vezes.
+  //
+  // A leitura: `tentou_assinar` seguido de `cadastro` sem este evento é gente
+  // que criou a conta e não foi devolvida ao paywall; com este evento e sem
+  // `iniciou_checkout`, é gente que voltou e desistiu ali.
+  useEffect(() => {
+    if (!user || !veioAssinar()) return;
+    funil("viu_paywall", { umaVez: true, chave: "viu_paywall-pos-conta", origem: "pos-conta", userId: user.id });
+    esqueceVeioAssinar();
+  }, [user]);
 
   const subscribe = () => {
     if (!user) return paraLogin(`web-${plan}`, plan);
