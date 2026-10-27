@@ -158,6 +158,12 @@ const JA_PUBLICADAS = [
   // 3.2 READY_FOR_SALE, build 73 enviado em 17/10 às 12h45 UTC) e a API do
   // Play (faixa de produção com a 3.2, versionCode 73, status completed).
   "3.2",
+  // Build 74, nas duas lojas em 26/10/2026, aviso do dono ("3.3 publicado nas
+  // lojas ja"). Lida antes de escrever, em 27/10 às 01h08 UTC: a App Store
+  // Connect pela API (versão 3.3 READY_FOR_SALE, build 74 enviado em 26/10 às
+  // 16h55 UTC) e a API do Play (faixa de produção com a 3.3, versionCode 74,
+  // status completed, com a nota da ficha).
+  "3.3",
 ];
 
 // O BUILD DE CADA VERSÃO PUBLICADA (30/09/2026).
@@ -187,6 +193,7 @@ const BUILD_PUBLICADO = {
   "3.0": 70,
   "3.1": 71,
   "3.2": 73,
+  "3.3": 74,
 };
 
 // A ÁRVORE DE CADA BUILD PUBLICADO (06/10/2026).
@@ -216,6 +223,12 @@ const ARVORE_DO_BUILD = {
   // main estava em bbd7120 na hora, que é a 0d8678d mais um commit de diário
   // (o código é o mesmo). A Apple recebeu o build 73 às 12h45 UTC.
   "3.2": "0d8678d",
+  // Entregue ao dono em 26/10 às 16h26 UTC como "o commit para apertar". A
+  // Apple recebeu o build 74 às 16h55 UTC, e o último commit na main antes
+  // disso é este, das 16h03 (o git e a hora da Apple, não a memória). Ele é o
+  // 2d8291e mais a nota das lojas: o código é o mesmo. O commit da tela do
+  // Codemagic não foi lido; quem tem a tela é o dono.
+  "3.3": "e39b866",
 };
 
 import { readFileSync, existsSync } from "node:fs";

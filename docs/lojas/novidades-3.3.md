@@ -4,11 +4,14 @@ Aberta em 18/10/2026, quando a 3.2 (build 73) chegou às duas lojas. Tudo o que
 entra aqui **já roda na web** pelo deploy da Vercel; o binário só importa para
 o app das lojas.
 
-**Onde a 3.3 está:** ainda não gerada.
+**Onde a 3.3 está:** publicada nas duas lojas em 26/10, build 74. Lido em
+27/10 às 01h08 UTC: a App Store Connect responde a 3.3 READY_FOR_SALE com o
+build 74 (enviado às 16h55 UTC de 26/10), e a faixa de produção da Play
+responde a 3.3, versionCode 74, status completed, com a nota abaixo.
 
-**Árvore do build:** (escrever o commit NA HORA de apertar o botão do
-Codemagic, antes de qualquer frase sobre o que o binário tem; a
-`conferir:versoes` cobra que cada item citado abaixo seja ancestral dela.)
+**Árvore do build:** e39b866. Entregue ao dono às 16h26 UTC como o commit
+para apertar; é o último da `main` antes do envio à Apple (16h55). O código é o
+mesmo do 2d8291e. A tela do Codemagic não foi lida.
 
 ## O que vai NO BINÁRIO
 
@@ -24,7 +27,7 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
    deixa de ter botão dentro de botão (o lápis e o "Revisão vencida"
    continuam funcionando).
 
-3. **De onde veio cada instalação** (20/10, commit a1a91f2). O app passa a escutar o retorno de conversão da AppsFlyer e a
+3. **De onde veio cada instalação** (20/10, commit 404a84f; a ficha citava a1a91f2, o mesmo patch antes de um rebase, que não ficou em ramo nenhum). O app passa a escutar o retorno de conversão da AppsFlyer e a
    etiquetar o aparelho com a fonte (Google, Meta ou orgânico) e a campanha.
    A pessoa não sente nada; é o que faltava para separar a retenção por
    origem. Na 3.2 e antes, nenhum cadastro do app tem campanha.

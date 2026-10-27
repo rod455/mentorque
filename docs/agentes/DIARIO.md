@@ -3,6 +3,32 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-27 · Engenharia: a 3.3 nas duas lojas, o aviso de versão nova aceso e o repositório abre a 3.4
+
+- Aviso do dono: "3.3 publicado nas lojas ja". Lido antes de escrever, às
+  01h08 UTC: a API da App Store responde a 3.3 READY_FOR_SALE com o build 74
+  (enviado às 16h55 UTC de 26/10); a API do Play responde a faixa de produção
+  com a 3.3, versionCode 74, status completed, com a nota da ficha (edição
+  aberta só para ler e apagada em seguida, por um fluxo TEMP já arquivado).
+- **A árvore do build é e39b866**, lida pelo git contra a hora da Apple: o
+  último commit da `main` antes do envio (16h55) é ele, das 16h03, e é o
+  mesmo que foi entregue ao dono como "o commit para apertar". A tela do
+  Codemagic não foi lida.
+- **A conferência pegou uma citação velha na ficha**: o item da atribuição
+  citava `a1a91f2`, que não está em ramo nenhum. É o mesmo patch (patch-id
+  igual) reescrito num rebase como `404a84f`, que está na árvore. O código
+  viajou; a citação foi corrigida. `conferir:versoes`: 11 commits da ficha
+  dentro da árvore, 0 fora.
+- **O aviso de versão nova aponta para 74 nas duas lojas** (`/api/app/latest`)
+  e vale com o deploy deste commit. `3.3` em `JA_PUBLICADAS`, build 74 e árvore
+  nos mapas, piso do versionCode em 75, e os três lugares da versão de
+  marketing em 3.4. A ficha da 3.4 nasce vazia.
+- **O que segue sem sinal**: nenhum aparelho reportou ainda a 3.3. O roteiro de
+  aparelho da ficha (6 passos) não foi feito; os eventos que dizem se a compra
+  retomada, a porta da aula e o cadastro por e-mail funcionam no celular
+  (`viu_paywall` pos-conta, `viu_aula` com `detalhe`, `user_state` de conta por
+  e-mail) só aparecem quando a 3.3 começar a chegar nos aparelhos.
+
 ## 2026-10-26 · Engenharia: a compra é retomada depois da conta
 
 - Pedido do dono: "podemos implementar o ir direto para a compra". Quem toca

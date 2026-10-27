@@ -62,7 +62,10 @@ const LATEST = {
   // 18/10/2026: 3.2, build 73, nas duas lojas, lido na API do Play (produção,
   // versionCode 73, completed) e na da Apple (READY_FOR_SALE, build 73).
   // Antes: 3.1 = 71, 3.0 = 70.
-  android: 73, // 3.2 na Play, publicada em 18/10
+  // 27/10/2026: 3.3, build 74, nas duas lojas, lido às 01h08 UTC na API do
+  // Play (produção, versionCode 74, completed) e na da Apple (READY_FOR_SALE,
+  // build 74). Antes: 3.2 = 73.
+  android: 74, // 3.3 na Play, publicada em 26/10
   // A LIÇÃO DESTE CAMPO, que vale mais que o número: em 12/09 ele foi para 74
   // pela lembrança de alguém, e o banner acendeu para todo mundo na 2.4
   // apontando para um build que a loja não tinha. O erro tem lados de custo
@@ -96,7 +99,7 @@ const LATEST = {
   // dono), então a confirmação é a de sempre: o retrato do `app_store_connect`
   // de 06/10 tem que responder READY_FOR_SALE para a 3.0; se não responder,
   // este campo volta para 69 na hora.
-  ios: 73, // 3.2 na App Store, aprovada em 18/10
+  ios: 74, // 3.3 na App Store, aprovada em 26/10
   // A QUAL VERSÃO DE MARKETING OS DOIS NÚMEROS ACIMA CORRESPONDEM (25/09/2026).
   //
   // Existe porque neste dia o banner NÃO acendeu, e a causa não era loja nem
@@ -112,7 +115,7 @@ const LATEST = {
   //
   // O app ignora este campo (lê só `android`/`ios`), então ele não muda nada
   // para quem consome.
-  versao: "3.2",
+  versao: "3.3",
 };
 
 export function GET() {

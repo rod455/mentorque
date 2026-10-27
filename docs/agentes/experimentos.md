@@ -133,7 +133,7 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   então o sinal honesto é dobrar a razão, não melhorá-la um pouco.
 - Aprovação: não se aplica (ordem e lugar de um convite que já existe, sem
   variantes, sem tocar em preço, plano, cobrança ou passo legal)
-- Início: 2026-10-23 na web; no app, com a 3.3 · **Ler a partir de: duas
+- Início: 2026-10-23 na web; no app, com a 3.3 (nas lojas desde 26/10) · **Ler a partir de: duas
   semanas depois de a 3.3 passar de metade dos aparelhos ativos** (a régua que
   o retorno do dono de 17/10 pediu: desde 15/09, 1.001 dos 1.040 aparelhos que
   terminaram o onboarding são Android, então data contada do commit mede a web
