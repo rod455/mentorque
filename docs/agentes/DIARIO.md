@@ -3,6 +3,95 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-29 · Conteúdo: o meu plano de cobertura estava invertido, e a aula de perda de força é o primeiro da fila nova
+
+- Artifact "Conteúdo da semana": https://claude.ai/artifact/VinEg9qgNp3TJxgF44TaFZ
+- **A rodada é a de terça 27/10 e foi publicada em 29/10**, porque a sessão foi
+  reiniciada no meio. As leituras de instrumento são de 27/10 e foram
+  RECONFERIDAS no retrato de 29/10 das 9h antes do commit: nada mudou de valor
+  (as duas consultas de categoria seguem em 89 e 98, `topPaginas` segue vazio
+  com "Forbidden", o vídeo mais novo do canal segue sendo o de 13/10, e as
+  impressões de 28 dias foram de 35 para 34).
+- Rodada abriu pela fila entre papéis, e **os dois pedidos que esta cadeira
+  deixou lá foram atendidos em uma semana**: desde 26/10 a tabela
+  `AULAS_DO_SINTOMA` liga o sintoma à aula, a tela oferece, e o `viu_aula` grava
+  a PORTA por onde a aula abriu. Desfecho fechado. Havia também um pedido PARA
+  mim (decidir se quatro sintomas de motor e ar entram no plano), e ele está
+  respondido abaixo; a linha saiu da fila.
+- **O INSTRUMENTO NOVO INVERTEU O MEU PRÓPRIO PLANO.** Lido no banco em 27/10
+  (evento `consultou_sintoma`, 30 dias, aparelhos distintos), os 19 sintomas:
+  `cel` 55, `consumption` 44, `hard-start` 42, `suspension-noise` 34,
+  `brake-noise` 33, **`engine-power-loss` 25**, **`engine-misfire` 20**,
+  `lights-dim` 14, `steering-hard` 14, `suspension-bounce` 12, `overheating` 12,
+  `steering-vibration` 9, `battery-draining` 9, **`engine-smoke` 7**,
+  `brake-soft-pedal` 6, **`ac-not-cooling` 4**, **`brake-pull` 4**,
+  **`tire-pressure-loss` 3**, **`tire-uneven-wear` 2**. Os três que sobravam no
+  meu plano (pneu perdendo pressão, desgaste irregular, puxa ao frear) são os
+  TRÊS MENOS consultados dos dezenove, e dois sintomas de motor sem aula estavam
+  FORA do plano em 6º e 7º lugar. Eu ia gastar os três próximos slots de artigo
+  no fim da fila de demanda.
+- Regra que fica no manual: **plano feito antes do instrumento se relê quando o
+  instrumento nasce, inclusive quando ele já tem data e commit.** O recorte
+  "freio, suspensão e pneu" vinha de um argumento de equilíbrio do acervo de
+  08/09, quando não havia como saber o que a pessoa consulta.
+- ENTREGA: **aula `diag-perda-de-forca`**, gratuita, trilha de diagnóstico, PT e
+  EN, recortada pelo que a própria tela pergunta (de repente ou aos poucos;
+  entrou em modo de emergência). Tem seção de quando NÃO é o motor (freio
+  arrastando, pneu murcho, câmbio patinando), que é a mais provável de economizar
+  dinheiro de quem lê, e a de quando perder força é o esperado (ar rarefeito,
+  ar quente). Entrou na `AULAS_DO_SINTOMA`, na ordem da trilha e no `related` de
+  duas irmãs. São 125 aulas e 13 dos 19 sintomas com aula.
+- PLANO REESCRITO, 19 de 19, na ordem da demanda: 10/11 motor falhando (20),
+  01/12 fumaça no escapamento (7), 22/12 puxa ao frear (4), 12/01 ar não gela
+  (4), 02/02 pneu perdendo pressão (3), 23/02 desgaste irregular (2). Datas
+  somadas de 21 em 21 dias e conferidas, não feitas de cabeça, porque esta conta
+  já saiu errada em 06/10.
+- **O DENOMINADOR QUE O RETORNO DE 20/10 COBROU**: 221 aparelhos consultaram
+  algum sintoma em 30 dias e 67 em 7 dias; **52 dos 221 (24%) consultaram pelo
+  menos um sintoma SEM aula**, e com a aula de hoje caem para 35 (16%); na
+  semana são 12 de 67. Então o achado "não existe caminho do sintoma para a
+  aula" tinha o tamanho de uma dúzia de aparelhos por semana, e a aula de hoje
+  tira um terço dessa dúzia. O que o número não diz: `anon_id` é armazenamento
+  de navegador e conta por baixo, e não há evento de saída da tela do sintoma.
+- RÉGUA DO SINTOMA ATÉ A AULA, agora com a frase certa (ela é para depois do
+  conserto, e o conserto chegou): uma em cada dez abre a aula que responde o
+  sintoma, com o 10% declarado como alvo escolhido por esta cadeira sem
+  referência de mercado. **PRIMEIRA LEITURA 24/11, com portão de amostra escrito
+  antes**: só se lê com pelo menos 100 eventos `viu_aula` carregando porta. Hoje
+  são 15 com porta (trilha 6, início 5, para-seu-carro 2, aviso 1, quiz 1, e
+  ZERO pela porta `sintoma`) contra 239 sem porta em 10 dias, porque versão
+  antiga do app não manda o campo.
+- **POR QUE AULA NO SLOT DE GUIA, e o critério que isso custou.** A régua que
+  governa o slot de guia desde 06/10 diz "página 2 se move, página 8 não", e as
+  únicas consultas de categoria estão em 89 e 98. Não há página para aprofundar
+  com clique plausível, nem sentido em abrir a sexta no mesmo lugar: a régua do
+  slot não mandava fazer nada, então o slot foi gasto onde o instrumento diz que
+  tem gente. Isso NÃO é a leitura de 03/11 antecipada, que decide pela mediana e
+  tem três ramos. **O critério 2 da régua da rodada fica declarado como NÃO
+  cumprido**, com este motivo.
+- DESFECHO DA PAUTA 03, com o porquê que faltou na semana passada: as 14 aulas
+  criadas em 13/10 são NOVE vídeos não listados subidos naquela noite mais CINCO
+  que já estavam públicos desde 19/09 e só agora ganharam aula, e os assuntos
+  são de engenharia e curiosidade (a central mede ou calcula, siglas de
+  híbridos, contrapressão, curva de potência, dois tempos contra quatro). Nenhum
+  é diagnóstico com o carro na frente. **O sinal aponta para "o dono produz
+  outra coisa", não para "não teve tempo"**, e isso entra na leitura de 03/11
+  como dado. Não decido hoje e não repito o pedido, que está na lista dele.
+- CONFERÊNCIAS: `plantio` com id inexistente na linha nova da `AULAS_DO_SINTOMA`
+  → MORDEU, saída 1, arquivo restaurado pela cópia. `npm run conferir` verde. E
+  a suíte de navegador da área tocada (`sintoma`, nova de 26/10) passou nos sete
+  pontos em 24s. O `tsc` reprovou antes por falta de `@types/node` e
+  `tailwindcss` neste contêiner: era dependência velha, não defeito, e `npm ci`
+  resolveu, como o manual manda desde 08/09.
+- Armadilha com data marcada, escrita no manual: a suíte `sintoma` usa
+  "ar-condicionado não gela" como exemplo de sintoma SEM aula. Quando essa aula
+  entrar (12/01), a afirmação precisa de outro sintoma, e quando a régua fechar
+  em 19 de 19 ela deixa de ser testável.
+- RÉGUA DA RODADA: 1, 3, 4, 5, 9 e 10 cumpridos; **2 NÃO cumprido, declarado**;
+  6, 7 e 8 não se aplicam a aula de catálogo e a 11 não se aplica fora de pauta.
+- Próximas: (1) 03/11, o dia das duas decisões (busca e fila de gravação); (2)
+  10/11, aula de motor falhando, segundo da fila nova.
+
 ## 2026-10-28 · QA: o coletor de vitals do Play não está suprimido, e a recusa da Play diz qual campo está errado
 
 - **O achado, e ele é de uma linha.** A execução 9214 do fluxo "Mentorque |

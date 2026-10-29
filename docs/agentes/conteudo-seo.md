@@ -92,6 +92,43 @@ leitura da busca: as duas decisões caem no mesmo dia, de propósito.
   (título, descrição, marcação) e uma pergunta na lista dele: o que no roteiro
   não serve.
 
+## A régua do sintoma até a aula, com denominador e data (27/10/2026)
+
+O caminho que faltava EXISTE desde 26/10: Engenharia ligou a tabela
+`AULAS_DO_SINTOMA` e a tela do sintoma passou a oferecer a aula, e o `viu_aula`
+passou a gravar a PORTA por onde a aula abriu. No app das lojas chegou com a
+3.3. Os dois pedidos que esta cadeira deixou na fila em 13/10 e 20/10 foram
+atendidos em uma semana, e isso fecha o desfecho deles.
+
+**O denominador que o retorno de 20/10 cobrou, lido no banco em 27/10** (evento
+`consultou_sintoma`, aparelhos distintos):
+
+- **221 aparelhos consultaram algum sintoma em 30 dias, 67 em 7 dias**, com 353
+  consultas no período de 30 dias.
+- **52 desses 221 (24%) consultaram pelo menos um sintoma SEM aula.** Com a
+  aula de hoje, caem para 35 de 221 (16%). Na semana, 12 de 67 (18%).
+- Então "não existe caminho" tinha o tamanho de uma dúzia de aparelhos por
+  semana batendo em parede, e a aula de hoje tira um terço dessa dúzia.
+- O que eu NÃO sei com esse número: quantas pessoas, porque `anon_id` é
+  armazenamento de navegador e não gente, e a casa já mediu que isso conta por
+  baixo. E não sei o que a pessoa fez depois de bater na parede, porque não há
+  evento de saída da tela do sintoma.
+
+**A régua, agora com a frase certa: ela é para depois do conserto, e o conserto
+chegou.** Das pessoas que consultam o sintoma, **uma em cada dez** abre a aula
+que responde ele. O 10% segue sendo alvo escolhido por esta cadeira, sem
+referência de mercado, para ter com o que comparar, e se corrige na primeira
+leitura real.
+
+**PRIMEIRA LEITURA: 24/11/2026**, com portão de amostra escrito antes: só se lê
+se pelo menos **100 eventos `viu_aula` do período tiverem porta**. Lido hoje,
+desde 26/10, são 15 com porta (trilha 6, início 5, "para o seu carro" 2, aviso
+1, quiz 1, e **zero pela porta `sintoma`**) contra 239 sem porta nos últimos 10
+dias, porque versão antiga do app não manda o campo. Ler 15 eventos daria um
+número que fala do ritmo de atualização das lojas e não do conteúdo. Se em
+24/11 o portão não tiver sido atingido, a leitura adia com a contagem escrita, e
+isso não é adiamento sem critério: é o portão funcionando.
+
 ## O ramo da citação de fora: de onde vem a leitura e quem pede (20/10/2026)
 
 Pedido pelo dono no retorno de 13/10, ponto B, com prazo até 27/10, porque o
@@ -180,39 +217,87 @@ boa: motor tem 54 aulas porque motor tem mais o que ensinar, e nenhum plano
 honesto vai empatar isso. Repetir a fração era garantir que o achado voltasse
 para sempre.
 
-**A régua que substitui, e que termina:** todo sintoma que o app PERGUNTA nesses
-três sistemas tem uma aula que responde ele de frente. São nove sintomas, e
-hoje faltam QUATRO:
+**A régua que substitui, e que termina:** todo sintoma que o app PERGUNTA tem
+uma aula que responde ele de frente.
 
-| sintoma | hoje | falta |
+**E ELA MUDOU DE RECORTE EM 27/10/2026, por medição, contra o meu próprio
+plano.** Até aqui ela cobria só freio, suspensão e pneu, nove sintomas, e esse
+recorte veio de um argumento de EQUILÍBRIO DO ACERVO escrito em 08/09, quando
+não existia instrumento que dissesse o que a pessoa consulta. Ele existe: o
+evento `consultou_sintoma` grava o id do sintoma no campo `origem`. Lido no
+banco em 27/10, 30 dias, aparelhos distintos, os 19 sintomas:
+
+| sintoma | aparelhos 30d | aula |
 |---|---|---|
-| `brake-noise` barulho ao frear | `diag-noises` e `diag-freio-avisos` | coberto |
-| `brake-soft-pedal` pedal baixo ou mole | `diag-freio-avisos` | coberto |
-| `suspension-noise` barulho na suspensão | `diag-noises` e `diag-suspensao-avisos` | coberto |
-| `suspension-bounce` carro balançando demais | `diag-suspensao-avisos` | coberto |
-| `steering-vibration` vibração no volante | `diag-vibracao` | coberto |
-| `steering-hard` direção pesada ou dura | `diag-direcao-pesada` (20/10) | coberto |
-| `tire-pressure-loss` pneu perdendo pressão | `tire-calibragem` fala de calibrar, não de perder | **aula nova** |
-| `tire-uneven-wear` desgaste irregular do pneu | aparece como consequência em outras duas | **aula nova** |
-| `brake-pull` puxa para um lado ao frear | uma linha dentro da `diag-freio-avisos` | **aula nova** |
+| `cel` luz do motor acesa | 55 | `vid-luz-injecao-acendeu` |
+| `consumption` consumo subiu | 44 | `money-fuel` |
+| `hard-start` custa a pegar | 42 | `diy-battery` |
+| `suspension-noise` barulho na suspensão | 34 | `diag-suspensao-avisos`, `diag-noises` |
+| `brake-noise` barulho ao frear | 33 | `diag-freio-avisos`, `diag-noises` |
+| **`engine-power-loss` perda de força** | **25** | **`diag-perda-de-forca` (27/10)** |
+| **`engine-misfire` motor falhando** | **20** | **falta** |
+| `lights-dim` luzes fracas | 14 | `diy-battery` |
+| `steering-hard` direção pesada | 14 | `diag-direcao-pesada` |
+| `suspension-bounce` balançando demais | 12 | `diag-suspensao-avisos` |
+| `overheating` esquentando | 12 | `diag-superaquecimento` |
+| `steering-vibration` vibração no volante | 9 | `diag-vibracao` |
+| `battery-draining` bateria descarregando | 9 | `diy-battery` |
+| **`engine-smoke` fumaça no escapamento** | **7** | **falta** |
+| `brake-soft-pedal` pedal mole | 6 | `diag-freio-avisos` |
+| **`ac-not-cooling` ar não gela** | **4** | **falta** |
+| **`brake-pull` puxa ao frear** | **4** | **falta** |
+| **`tire-pressure-loss` pneu perdendo pressão** | **3** | **falta** |
+| **`tire-uneven-wear` desgaste irregular** | **2** | **falta** |
 
-**O compromisso, em datas, CORRIGIDO em 20/10/2026.** Uma aula por rodada de
-artigo, que é o slot (c) do rodízio e cai a cada três semanas. As datas
-escritas em 06/10 (27/10, 17/11, 08/12, 29/12) estavam uma semana adiantadas
-em relação ao rodízio que o DIARIO registra: 06/10 foi guia (a), 13/10 foi
-pauta (b), então o slot (c) é **20/10, 10/11, 01/12 e 22/12**. Contado nas
-entradas do diário, uma por uma, e não de cabeça. A régua fecha uma semana
-mais cedo do que o plano dizia, e a primeira aula saiu hoje.
+**O plano antigo estava invertido, e isso é achado contra mim.** Os três
+sintomas que sobravam nele (`tire-pressure-loss` 3, `tire-uneven-wear` 2,
+`brake-pull` 4) são os TRÊS MENOS CONSULTADOS dos dezenove. E dois sintomas de
+motor sem aula, `engine-power-loss` com 25 e `engine-misfire` com 20, estão em
+6º e 7º lugar, à frente de seis sintomas que já tinham aula. Eu ia gastar os
+três próximos slots de artigo no fim da fila de demanda. Vale como regra geral
+desta cadeira: **plano feito antes do instrumento se relê quando o instrumento
+nasce, inclusive quando ele tem data e commit.**
 
-| slot (c) | sintoma | estado |
+**A régua nova, e ela fecha: 19 de 19 sintomas com aula.** Hoje são 13 de 19,
+e a ordem dos seis que faltam é a da demanda medida, não a do sistema:
+
+| rodada | sintoma | aparelhos 30d |
 |---|---|---|
-| **20/10** | `steering-hard` direção pesada | **feito**, `diag-direcao-pesada` |
-| 10/11 | `tire-pressure-loss` pneu perdendo pressão | a fazer |
-| 01/12 | `tire-uneven-wear` desgaste irregular | a fazer |
-| 22/12 | `brake-pull` puxa para um lado ao frear | a fazer |
+| **27/10** | `engine-power-loss` perda de força | 25, **feito** (no slot (a), e isso está declarado na régua da rodada) |
+| 10/11 | `engine-misfire` motor falhando | 20 |
+| 01/12 | `engine-smoke` fumaça no escapamento | 7 |
+| 22/12 | `brake-pull` puxa ao frear | 4 |
+| 12/01 | `ac-not-cooling` ar não gela | 4 |
+| 02/02 | `tire-pressure-loss` pneu perdendo pressão | 3 |
+| 23/02 | `tire-uneven-wear` desgaste irregular | 2 |
 
-Em 22/12 a régua fecha e este achado para de aparecer em relatório, porque
-passa a ser "9 de 9 sintomas cobertos" em vez de uma fração que nunca melhora.
+As datas são os slots (c) contados a partir daqui: hoje é terça 27/10 e o
+rodízio segue 03/11 pauta, 10/11 aula, 17/11 guia, e assim por diante. Conferido
+somando 21 dias de 10/11, e não de cabeça, porque esta conta já saiu errada uma
+vez (06/10).
+
+**As datas supõem uma aula a cada três semanas, e esse ritmo é longo demais
+para o topo da lista.** Dois sintomas sem aula somam 45 aparelhos em 30 dias, e
+a conta de quem bate em parede está na seção seguinte. Se o slot (a) continuar
+sem ação justificada depois da leitura de 03/11, ele vira slot de aula também,
+e aí a fila fecha em 01/12 em vez de 23/02. A decisão é desta cadeira, e ela
+depende da leitura de 03/11; não antecipo porque a régua da busca tem data e
+ramos escritos.
+
+**Armadilha com data marcada, para a rodada que escrever a aula de ar
+condicionado (hoje marcada para 12/01).** A suíte de navegador `sintoma`, nova
+de 26/10, usa "Ar-condicionado não gela" como o exemplo de sintoma SEM aula
+("o sintoma sem aula não mostra card", linha 59 de `scripts/navegador/sintoma.mjs`).
+No dia em que essa aula entrar, a afirmação passa a precisar de outro sintoma, e
+quando a régua fechar em 19 de 19 ela deixa de ser testável e tem que mudar de
+forma. Rodada que fecha um sintoma confere essa suíte junto, senão ela reprova
+por um acerto nosso.
+
+**O que sai da régua, dito de uma vez:** a fração "freio, suspensão e pneu
+somam 10 de 109 aulas" está morta desde 06/10 e não volta. E `read-obd2` não
+entra na tabela de propósito, porque ela abre a ferramenta do OBD2 e não o
+leitor de aula, então a abertura não grava `viu_aula` (decisão de Engenharia em
+26/10, e eu concordo: medida que não existe não entra em régua).
 
 ## A segunda metade da régua do catálogo, escrita antes de poder ser lida (20/10/2026)
 
@@ -256,6 +341,35 @@ fiz isso agora porque a regra da casa é UMA entrega concreta por rodada, e
 trocar essa regra sem o dono ver custa mais do que seis semanas de espera.
 
 ## Aprendizados
+
+- **Quando o slot do rodízio não tem ação justificada pela régua DELE, o slot
+  muda de uso e isso se declara (27/10/2026).** Hoje era slot (a), de guia, e a
+  régua que governa esse slot desde 06/10 diz: aprofundar a página de melhor
+  posição vale mais que abrir a próxima, e **página 2 se move, página 8 não**.
+  A melhor posição de consulta de categoria hoje é 89, página 9 (as duas únicas
+  consultas de categoria são `luz de motor acesa` em 89 e `luz do motor acesa`
+  em 98, no retrato de 27/10). Não existe página para aprofundar com clique
+  plausível, e abrir a sexta colocaria mais uma no mesmo lugar. Então a régua do
+  slot não manda fazer nada, e o slot foi gasto onde o instrumento diz que tem
+  gente: a aula do sintoma mais consultado sem aula. **Isso NÃO é a leitura de
+  03/11 antecipada**: a de 03/11 decide se a cadeira continua escrevendo para
+  busca, com mediana e três ramos; esta é a regra de dentro do slot, com o seu
+  próprio número. O critério 2 da régua da rodada (o formato alternou) fica
+  declarado como NÃO cumprido, com este motivo, que é o que a régua admite.
+
+- **Desfecho de pedido ao dono inclui o PORQUÊ quando o instrumento já mostra um
+  sinal (27/10/2026, cobrado no retorno de 20/10).** Em 20/10 eu disse que o
+  canal recebeu 14 vídeos em 13/10 e que nenhum era a Pauta 03, e parei aí. A
+  pergunta que faltava: se catorze entraram, existe produção acontecendo fora do
+  que esta cadeira pede? Lido no acervo em 27/10: as 14 aulas criadas em 13/10
+  são NOVE vídeos não listados subidos naquela noite mais CINCO que já estavam
+  públicos desde 19/09 e só agora ganharam aula. E os assuntos são de engenharia
+  e curiosidade (a central mede ou calcula, siglas de híbridos, contrapressão do
+  turbo, curva de potência, dois tempos contra quatro tempos), não de
+  diagnóstico com o carro na frente. **Então o sinal aponta para "o dono produz
+  outra coisa", e não para "o dono não teve tempo"**, e isso muda a recomendação
+  do slot de pauta. Não decido hoje porque a régua desse slot lê em 03/11 e os
+  ramos já estão escritos; entra na leitura como dado.
 
 - **⚠️ CHEGOU O INSTRUMENTO QUE FALTAVA, E ELE DERRUBA A LEITURA DE GANCHO
   DESTE MANUAL (lido em 20/10/2026, medido por Engenharia em 16/10).** O dono
