@@ -3,6 +3,27 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-29 · Engenharia: retorno ao Conteúdo (27/10) e ao QA (28/10)
+
+- Pedido do dono: "veja o que foi publicado de SEO e QA, dê feedbacks e
+  proponha melhorias". Retornos inteiros nos manuais dos dois.
+- **Conteúdo**: a demanda por sintoma refeita no banco confirma a virada do
+  plano (222 aparelhos em 30 dias; 52 com sintoma sem aula antes da aula nova,
+  35 depois). Dois pontos: (1) a ligação da aula de perda de força ao sintoma
+  vai no binário, então no app só aparece com a 3.4, e o diário não disse;
+  entrou na ficha da 3.4 com o commit 99889cc; (2) a régua de 03/11, que pode
+  PARAR a escrita para busca, lê a mediana de duas consultas e não tem portão
+  de amostra.
+- **QA**: diagnóstico do coletor de vitals mantido. Dois pontos: (1) o
+  conserto ficou "com o Analista", que é um fluxo, sem linha na fila; (2) a
+  frase pronta sai em `/api/dados` mas a linha que se lê no retrato continua
+  crua, porque o retrato é montado no n8n.
+- **Fila da Engenharia, nova**: o coletor de vitals e a frase no retrato
+  (linha de 28/10, escrita hoje pelo QA) e o `topPaginas` do Search Console
+  (saiu da lista do dono, onde estava desde 06/10, porque desde 25/10 a
+  Engenharia contorna a credencial com um fluxo criado já com ela). As duas
+  esperam a integração do n8n, que pediu nova autorização nesta sessão.
+
 ## 2026-10-29 · Conteúdo: o meu plano de cobertura estava invertido, e a aula de perda de força é o primeiro da fila nova
 
 - Artifact "Conteúdo da semana": https://claude.ai/artifact/VinEg9qgNp3TJxgF44TaFZ

@@ -1130,3 +1130,52 @@ de "abriu e saiu" por aparelho; `informou_km` mede o pedido novo. O CHECK do
 banco foi recriado com os três (migração `funil_eventos_quiz_saude`). No ar na
 web com este deploy; nas lojas, com a 3.3. Primeira leitura útil: uma semana
 depois da 3.3 chegar aos aparelhos.
+
+## Retorno do dono sobre a rodada de 28/10/2026
+
+Mandado escrever por ele em 29/10 ("veja o que foi publicado de SEO e QA, dê
+feedbacks e proponha melhorias"). Lidos o diário, o commit f81efa1, o retrato
+de 29/10 e a fila entre papéis. A execução do n8n não foi relida aqui: a
+integração do n8n pedia nova autorização nesta sessão.
+
+Primeiro o que manter.
+
+**O ERRO LIDO ATÉ O CAMPO QUE NOMEIA A CAUSA.** Nove dias de "Bad request"
+viraram uma frase com o campo (`timeline_spec.end_date`) e o motivo (a
+frescura da Play parada em 19/10). E o conserto certo veio junto: perguntar a
+frescura à própria API em vez de chutar um deslocamento maior.
+
+**A PRÓPRIA TEORIA DERRUBADA PELO DENOMINADOR.** "Crash 0% na Play" contra 50 a
+70 usuários quando a base é de mil é o tipo de zero que esta casa já leu como
+resultado. Você o rebaixou a TEORIA antes de publicar.
+
+**O ERRO DA SUA CONSULTA PEGO PELA FORMA DO RESULTADO.** 11 de 11 numa categoria
+e 0 na outra, quando as duas são possíveis, é sinal de campo que não existia.
+E a regra do plantio com `undefined` foi para dentro da asserção, que é onde ela
+é lida na hora certa.
+
+**A CONTA DO DINHEIRO FECHADA NO INSTRUMENTO CERTO.** O retrato de 29/10 diz o
+mesmo: RevenueCat 1 e banco 1, batendo.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. O CONSERTO FICOU "COM O ANALISTA" E SEM LINHA NA FILA, ENTÃO FICOU SEM
+DONO.** O Analista é um fluxo do n8n, não uma sessão: ninguém lê o diário do
+lado dele. Quem edita o fluxo é a Engenharia, e a fila entre papéis não ganhou
+linha nenhuma. Do jeito que a rodada fechou, o coletor seguiria quebrado na
+próxima quarta, com o achado escrito e ninguém para executar. Regra para a
+próxima: conserto fora da alçada sai da rodada como linha na fila, para quem
+EXECUTA, e não para quem é dono do assunto. A linha foi escrita hoje, de QA
+para Engenharia.
+
+**2. A FRASE PRONTA NÃO CHEGA AONDE SE LÊ.** A `vitalsLegivel` sai em
+`/api/dados`, mas o `retrato.md` é montado pelo nó "Monta retrato" do n8n, e a
+linha que os papéis leem (a do `play_console`, perto do topo) continua crua:
+`{"erro":"crash: Bad request - please check your parameters ..."}`. A frase nova
+vai aparecer só no bloco JSON do fim do arquivo, a umas vinte mil linhas do
+topo. O critério 5 da sua régua cobre isto: "conferir que X existe e faz o que
+se diz" inclui conferir que X chega no leitor. Também é n8n, e entrou na mesma
+linha da fila.
+
+Veredito: diagnóstico exemplar, com duas teorias próprias derrubadas antes de
+publicar. Faltou a última milha: o conserto sem dono e a frase sem leitor.

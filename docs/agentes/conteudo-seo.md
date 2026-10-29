@@ -1138,3 +1138,72 @@ porquê quando o instrumento já mostra um sinal.
 **O que eu levo para o meu relatório**: a correção do canal, porque ela apaga uma
 conclusão que já circulou nesta casa, e o caminho que falta do sintoma para a
 aula, como candidato a prioridade assim que tiver denominador.
+
+## Retorno do dono sobre a rodada de 27/10/2026 (publicada em 29/10)
+
+Mandado escrever por ele em 29/10 ("veja o que foi publicado de SEO e QA, dê
+feedbacks e proponha melhorias"). Lidos o diário, o commit 99889cc e o fonte
+da tabela do sintoma; a demanda por sintoma refeita no banco em 29/10.
+
+Primeiro o que manter.
+
+**O INSTRUMENTO NOVO VIROU DECISÃO NA PRIMEIRA SEMANA.** O plano de 06/10 tinha
+data, commit e régua, e você o derrubou porque o instrumento que você mesmo
+pediu mostrou que os três sintomas restantes eram os três menos consultados.
+Refeito aqui na mesma janela de 30 dias: 222 aparelhos consultaram sintoma (a
+sua leitura, 221, bate), `engine-power-loss` 25 e `engine-misfire` 20 no sexto
+e no sétimo lugar, 52 aparelhos com sintoma sem aula antes da aula de hoje e 35
+depois. Os números sustentam a virada.
+
+**O DENOMINADOR QUE O RETORNO DE 20/10 COBROU CHEGOU, COM O QUE ELE NÃO DIZ.**
+"Uma dúzia de aparelhos por semana" é o tamanho certo do achado, e o aviso de
+que `anon_id` conta por baixo vai junto.
+
+**PORTÃO DE AMOSTRA ESCRITO ANTES DA LEITURA.** Cem `viu_aula` com porta antes
+de ler a régua do sintoma. Para a sua agenda: lido às 10h UTC de 29/10, já são
+56 eventos com porta desde a 3.3, 3 deles pela porta `sintoma`. O portão deve
+abrir no começo de novembro, antes de 24/11; a data que você escreveu continua
+valendo como piso.
+
+**A PAUTA 03 LIDA ATÉ O FIM.** Separar "não teve tempo" de "produz outra coisa"
+pelos assuntos dos vídeos é o dado que a decisão de 03/11 precisava.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. "13 DOS 19 SINTOMAS COM AULA" É VERDADE NA WEB E NÃO NO APP, E O DIÁRIO NÃO
+DIZ.** A aula `diag-perda-de-forca` chega ao app pelo catálogo remoto, sem
+build. A LIGAÇÃO do sintoma à aula não: a `AULAS_DO_SINTOMA` mora em
+`lib/app/conteudo/sintomas.ts`, que vai dentro do binário. Quem está na 3.3
+abre "Perda de força" e não vê o card; a aula aparece em Estudos e na busca,
+mas não no sintoma. Isso vale até a 3.4 chegar aos aparelhos, e muda a sua
+régua: a porta `sintoma` da perda de força fica em zero no app até lá, e o zero
+não será da aula. É a regra de 06/10 (o que fica de fora vai junto com o "está
+feito"), e a pergunta de trinta segundos era "esse arquivo vai no binário?",
+que a skill `release-nas-lojas` responde numa tabela.
+
+**O que a Engenharia faz com isso:** o item entrou na ficha da 3.4 com o seu
+commit, e a proposta é a tabela do sintoma viajar no catálogo remoto, como as
+aulas e as trilhas já viajam. Se o dono aprovar, as próximas quatro aulas do
+seu plano (motor falhando em 10/11 e as seguintes) passam a ligar no sintoma
+no deploy, sem esperar build.
+
+**2. A RÉGUA DE 03/11 VAI DECIDIR O FUTURO DA BUSCA COM DUAS CONSULTAS.** A
+regra dos três ramos lê a MEDIANA da posição de categoria, e hoje existem duas
+consultas de categoria (89 e 98), com 34 impressões em 28 dias. Mediana de dois
+valores é a média deles, e um terceiro valor que apareça ou suma move o
+resultado inteiro. O ramo "pior que 65" é o mais forte que este papel tem: ele
+PARA de escrever para busca. Você escreveu o portão de amostra para a régua do
+sintoma (cem eventos antes de ler) e não para esta, que decide mais. Proposta
+para escrever antes de 03/11, e não depois: a mediana só decide com pelo menos
+N consultas de categoria (o N é seu, e diga por quê); abaixo disso a leitura de
+03/11 sai como "sem amostra", e o ramo que vale é o que você escolher agora,
+com o motivo. E para o `topPaginas`, que segue "Forbidden" no retrato de 29/10:
+o conserto está na lista do dono desde 06/10 porque a API do n8n não prendia
+credencial em nó existente. Desde 25/10 a Engenharia sabe contornar isso (um
+fluxo pequeno, criado já com a credencial certa, chamado pelo coletor). Saiu da
+lista do dono e entrou na fila da Engenharia hoje.
+
+Veredito: rodada boa, com o achado mais útil da semana para o catálogo (o plano
+invertido) e a régua da rodada declarada com a falha. Errou na fronteira entre
+web e binário, que nesta casa custou a 3.0, e deixou a régua que decide mais
+sem o portão de amostra que a outra ganhou.
