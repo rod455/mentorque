@@ -176,3 +176,95 @@ export function linhaDeAnuncio(a: {
     motivo: "",
   };
 }
+
+/**
+ * A linha do VITALS DO PLAY (crash e ANR do processo nativo).
+ *
+ * POR QUE ELA EXISTE (28/10/2026, varredura do QA). Este é o ÚNICO instrumento
+ * da casa que mede o processo nativo do Android: a migalha de fechamento mede o
+ * JavaScript, e quando o app morre o JavaScript morre junto. E ele passou por
+ * três estados sem o retrato dizer uma palavra sobre nenhum, porque a linha
+ * legível nunca existiu e o dado só vivia no JSON bruto:
+ *
+ *   · de 22/08 a 17/10, SUPRIMIDO: o Play não publica vitals abaixo de um
+ *     mínimo de usuários distintos, e ninguém via isso;
+ *   · em 18, 19 e 20/10, VIVO, com dado de verdade (crashRate 0 em 50, 70 e 60
+ *     usuários distintos nos dias 13, 14 e 15/10). Três dias de dado novo, o
+ *     primeiro da história do app, e ninguém leu;
+ *   · desde 21/10, ERRO: "Bad request - please check your parameters". Oito dias
+ *     quebrado sem ninguém notar.
+ *
+ * Os três são invisíveis pelo mesmo motivo, e é o motivo que esta função
+ * remove. Mesma estrada da linha de coorte (28/09) e da do AdMob (14/10): a
+ * frase nasce aqui, sai por `/api/dados`, a conferência cobra, e o painel só
+ * imprime.
+ *
+ * E A DATA DA LINHA VIAJA JUNTO, que é a parte fácil de errar: a API do Play
+ * atrasa de três a cinco dias, então o pacote coletado em 20/10 traz o dia
+ * 15/10. Publicar o número sem a data dele faria o leitor achar que é de hoje.
+ */
+export type VitalsDoPlay = {
+  crash?: { estado?: string | null; motivo?: string | null; linhas?: number | null } | null;
+  anr?: { estado?: string | null; motivo?: string | null; linhas?: number | null } | null;
+  crashPorDia?: { dia?: string | null; metricas?: { crashRate?: number | null; distinctUsers?: number | null } | null }[] | null;
+  nota?: string | null;
+};
+
+export function linhaDeVitals(v: VitalsDoPlay): LinhaDoRetrato {
+  const estado = String(v.crash?.estado ?? "").trim();
+  const motivo = String(v.crash?.motivo ?? "").trim();
+
+  // ERRO é diferente de SUPRIMIDO, e confundir os dois é o que deixou o coletor
+  // oito dias quebrado: "o Play não publica para nós" soa definitivo e vira
+  // paisagem, enquanto "a nossa requisição está malformada" é conserto nosso.
+  if (estado === "erro") {
+    return {
+      texto: `Vitals do Play: COLETOR FALHANDO${motivo ? ` (${motivo})` : ""}. Nao e supressao do Play, e erro da nossa requisicao.`,
+      legivel: false,
+      motivo: motivo || "o coletor devolveu erro",
+    };
+  }
+
+  const dias = Array.isArray(v.crashPorDia) ? v.crashPorDia : [];
+  if (estado !== "ok" || dias.length === 0) {
+    const nota = String(v.nota ?? "").trim();
+    return {
+      texto:
+        "Vitals do Play: NAO E ZERO MEDIDO (o Play nao publicou vitals no periodo; ele suprime abaixo de um minimo de usuarios distintos)" +
+        `${nota ? `: ${nota}` : ""}`,
+      legivel: false,
+      motivo: nota || "o Play nao publicou vitals no periodo",
+    };
+  }
+
+  // A linha mais recente, pela data, e não a última do array: ordem de array é
+  // promessa de quem montou, e já mordeu esta casa em 04/10 na leitura do Play.
+  const comData = dias.filter((d) => typeof d?.dia === "string" && d.dia);
+  if (comData.length === 0) {
+    return {
+      texto: "Vitals do Play: NAO DA PARA LER (o coletor trouxe linhas sem data)",
+      legivel: false,
+      motivo: "linhas sem data",
+    };
+  }
+  const maisNova = comData.reduce((a, b) => (String(a.dia) >= String(b.dia) ? a : b));
+  const taxa = maisNova.metricas?.crashRate;
+  const usuarios = maisNova.metricas?.distinctUsers;
+  // `typeof number` e não `Number(...)`: campo ausente virando zero medido é a
+  // confusão que esta família de funções existe para impedir.
+  if (typeof taxa !== "number" || !Number.isFinite(taxa)) {
+    return {
+      texto: `Vitals do Play: NAO DA PARA LER (a linha de ${maisNova.dia} veio sem taxa de crash)`,
+      legivel: false,
+      motivo: "linha sem taxa de crash",
+    };
+  }
+  const quantos = typeof usuarios === "number" && Number.isFinite(usuarios) ? `${usuarios} usuarios distintos` : "usuarios distintos nao informados";
+  return {
+    texto:
+      `Vitals do Play, dia ${maisNova.dia} (a API atrasa de 3 a 5 dias, NAO e hoje): ` +
+      `crash em ${taxa}% dos ${quantos}. Mede o processo NATIVO, nao a migalha de fechamento.`,
+    legivel: true,
+    motivo: "",
+  };
+}

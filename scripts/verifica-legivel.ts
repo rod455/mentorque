@@ -32,7 +32,7 @@
 //
 // Rode com: npm run conferir:legivel
 import { readFileSync } from "node:fs";
-import { FECHA_D1_7, FECHA_D8_30, linhaDeAnuncio, linhaDeAtivacao, linhaDeRetencao, maisDias } from "../lib/retratoLegivel.ts";
+import { FECHA_D1_7, FECHA_D8_30, linhaDeAnuncio, linhaDeAtivacao, linhaDeRetencao, linhaDeVitals, maisDias } from "../lib/retratoLegivel.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -243,6 +243,66 @@ console.log("Retrato: janela aberta vira motivo, e não número?");
     /return linhaDeAnuncio\(d\);/.test(operacao),
     "regra copiada no leitor para de acompanhar a fonte, e chamar sem devolver tem o mesmo efeito",
   );
+}
+
+// ── 9. O VITALS DO PLAY: ERRO NÃO É SUPRESSÃO ──────────────────────────────
+//
+// O único instrumento que mede o processo NATIVO do Android passou por três
+// estados sem o retrato dizer nada, porque a linha legível não existia:
+// suprimido de 22/08 a 17/10, VIVO em 18, 19 e 20/10 (o primeiro dado de crash
+// da história do app, que ninguém leu) e com ERRO de requisição desde 21/10,
+// oito dias sem ninguém notar.
+//
+// A distinção que estas linhas guardam é a que custou os oito dias: "o Play não
+// publica para nós" soa definitivo e vira paisagem; "a nossa requisição está
+// malformada" é conserto nosso.
+{
+  const comErro = linhaDeVitals({ crash: { estado: "erro", motivo: "Bad request - please check your parameters" } });
+  conferir("coletor com erro NÃO vira zero medido", !comErro.legivel, comErro.texto);
+  conferir("e a frase diz que é a NOSSA requisição, não supressão do Play",
+    /COLETOR FALHANDO/.test(comErro.texto) && /[Nn]ao e supressao/.test(comErro.texto), comErro.texto);
+  conferir("e carrega o motivo do coletor", /Bad request/.test(comErro.motivo), comErro.motivo);
+
+  const suprimido = linhaDeVitals({ crash: { estado: "sem-linha" }, nota: "o Play suprime abaixo de um minimo" });
+  conferir("supressão continua sendo dita como supressão", !suprimido.legivel && /NAO E ZERO MEDIDO/.test(suprimido.texto), suprimido.texto);
+  conferir("e NÃO é confundida com falha do coletor", !/COLETOR FALHANDO/.test(suprimido.texto), suprimido.texto);
+
+  // Dado de verdade: o que o Play publicou em 18 a 20/10, com a data da LINHA.
+  const vivo = linhaDeVitals({
+    crash: { estado: "ok", linhas: 3 },
+    crashPorDia: [
+      { dia: "2026-10-13", metricas: { crashRate: 0, distinctUsers: 50 } },
+      { dia: "2026-10-15", metricas: { crashRate: 0, distinctUsers: 60 } },
+      { dia: "2026-10-14", metricas: { crashRate: 0, distinctUsers: 70 } },
+    ],
+  });
+  conferir("dado publicado vira número", vivo.legivel, vivo.texto);
+  // A linha MAIS NOVA pela data, e não a última do array: ordem de array é
+  // promessa de quem montou, e já mordeu esta casa em 04/10 lendo o Play.
+  conferir("e sai a linha mais nova pela DATA, não a última do array",
+    /dia 2026-10-15/.test(vivo.texto), vivo.texto);
+  conferir("a frase diz que a API atrasa, para o número não passar por hoje",
+    /atrasa de 3 a 5 dias/.test(vivo.texto), vivo.texto);
+  conferir("e diz que mede o processo NATIVO, não a migalha",
+    /processo NATIVO/.test(vivo.texto), vivo.texto);
+
+  // `Number(null)` é 0: taxa NULA não pode virar crash zero medido.
+  //
+  // A ENTRADA TEM QUE SER `null`, e eu errei isto DE NOVO aqui, duas semanas
+  // depois de escrever a regra no manual em 14/10: a primeira versão desta
+  // asserção passava a taxa AUSENTE, e `Number(undefined)` já é `NaN`, então
+  // trocar `typeof` por `Number(...)` não mudava nada e o plantio passava
+  // verde. `null` é o único valor em que as duas formas discordam, e é o que um
+  // coletor devolve quando a fonte respondeu sem o campo. Os dois ficam.
+  const taxaNula = linhaDeVitals({ crash: { estado: "ok", linhas: 1 }, crashPorDia: [{ dia: "2026-10-15", metricas: { crashRate: null, distinctUsers: 60 } }] });
+  conferir("linha com taxa NULA não vira crash zero medido", !taxaNula.legivel, taxaNula.texto);
+  const semTaxa = linhaDeVitals({ crash: { estado: "ok", linhas: 1 }, crashPorDia: [{ dia: "2026-10-15", metricas: { distinctUsers: 60 } }] });
+  conferir("e sem o campo também não", !semTaxa.legivel, semTaxa.texto);
+
+  // E quem usa a regra.
+  const operacao = readFileSync(new URL("../lib/operacao.ts", import.meta.url), "utf8");
+  conferir("o retrato publica a linha do vitals", /vitalsLegivel:/.test(operacao));
+  conferir("e ela sai da função, não de uma cópia local", /linhaDeVitals\(/.test(operacao));
 }
 
 if (falhas) {

@@ -3,6 +3,68 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-28 · QA: o coletor de vitals do Play não está suprimido, e a recusa da Play diz qual campo está errado
+
+- **O achado, e ele é de uma linha.** A execução 9214 do fluxo "Mentorque |
+  Analista: metricas externas" no n8n (lida em 28/10 às 11h05 UTC) tem a
+  resposta inteira do nó "Play: taxa de crash": `'timeline_spec.end_date'
+  field should be at most the current freshness 2026-10-19 00:00`. O pedido
+  pede o fim da janela em HOJE MENOS 4 DIAS, e a Play só tem dado até 19/10.
+  Não é supressão da fonte por amostra pequena, que era a hipótese da semana
+  passada: a fonte responde na hora, e o nosso pedido é que está errado.
+- **E o buraco cresce sozinho**: funcionou nos dias 18, 19 e 20/10 (fim pedido
+  14, 15 e 16/10) e quebrou a partir de 21/10 (fim pedido 17/10). Entre 20/10
+  e 28/10 a frescura da Play andou de ~16/10 para 19/10: três dias de dado em
+  oito de calendário. Deslocamento fixo não alcança fonte que anda mais
+  devagar que o relógio. **Reconferido no retrato de 29/10 às 09h59 UTC: o
+  mesmo erro, nove dias seguidos.**
+- **O retrato guardava a metade inútil do erro.** A API manda `message`
+  ("Bad request - please check your parameters") e `description` (a frase
+  acima). O nó "Play: normaliza vitals" guarda o primeiro e joga fora o
+  segundo. Nove dias de sintoma sem nome, com o nome dentro do mesmo objeto.
+- **Os dois consertos são do Analista e eu não editei o fluxo dele.** O fim da
+  janela tem que vir de `GET .../crashRateMetricSet` (campo `freshnessInfo`),
+  não de hoje-4; um deslocamento maior chutado por mim seria o mesmo erro com
+  outro número. **Nenhum clique para o dono, e conferi antes de dizer isso:**
+  a credencial já está colada e respondendo, que é como sabemos qual campo
+  está errado.
+- **A minha leitura de ontem caiu, e quem a derrubou foi o denominador.** Eu
+  ia publicar que "app fechou sozinho" é o sistema recolhendo o app e não
+  crash, porque a Play diz crash 0% nos dias 13 e 14/10 e a nossa migalha
+  registrou 1 e 2 fechamentos `sem-pausa` nos mesmos dias. Só que a Play diz
+  50 e 70 `distinctUsers` nesses dias, contra 1.078 e 1.142 de base instalada
+  no coletor de downloads DA PRÓPRIA PLAY e 589 aparelhos Android ativos no
+  nosso funil. Amostra de 50 a 70 espera 0,1 ocorrência onde a nossa conta tem
+  1 ou 2: zero ali não contradiz nada. Virou TEORIA, e não sai taxa daquele
+  denominador até alguém conferir o que ele conta.
+- **A minha consulta cometeu o erro de 03/10 ao contrário**: separei
+  `sem-pausa` de `pausa-colada` com "não contém o marcador", e as semanas de
+  21 e 28/09 voltaram 11 e 11 como pausa-colada. O campo nasceu em 05/10 às
+  23h25 (primeira ocorrência no banco): ausência do marcador virou valor do
+  marcador. Pego pela FORMA do resultado, não pela memória: 11 de 11 numa
+  categoria e 0 na outra não acontece quando as duas são possíveis.
+- **A série que vale, só na era da etiqueta** (semanas fechadas): 13, 14 e 14
+  fechamentos, com 9, 13 e 13 aparelhos, e 1,4 → 1,1 → 1,1 por aparelho. Os
+  fechamentos acompanham o tamanho da base, não uma piora do app; 13 de 589
+  ativos é 2,2%, abaixo do teto de 10% do alarme. A semana de 26/10 foi de 6
+  para 7 entre 28 e 29/10, que é o motivo de não se ler semana aberta.
+- **O que subiu:** `linhaDeVitals` em `lib/retratoLegivel.ts`, saindo por
+  `vitalsLegivel` em `lib/operacao.ts`, com a seção 9 da
+  `conferir:legivel`. A frase pronta diz COLETOR FALHANDO em vez de deixar o
+  leitor supor supressão, carrega a data da linha mais nova, avisa que a API
+  atrasa de 3 a 5 dias e lembra que ela mede o processo nativo e não a nossa
+  migalha. Cinco defeitos plantados, os cinco mordem.
+- **O terceiro plantio passou verde na primeira tentativa, pelo mesmo motivo
+  de 14/10**: entrada de teste `undefined`, que já é `NaN` depois de
+  `Number()`. A regra estava escrita no meu manual desde 14/10 e eu repeti o
+  erro duas semanas depois. Agora ela mora DENTRO da asserção, com o motivo do
+  lado, porque manual não é onde se lê na hora de escrever asserção.
+- Conta do dinheiro limpa: 1 ativa, veredito "ok", origem `play_store`,
+  marcada como venda de loja; RevenueCat 1 e banco 1 batem; Stripe 0; nenhum
+  ciclo vencido. `npm run conferir` verde às 11h23 UTC de 28/10 e
+  `build:native` passou (48 MB).
+- Artifact da rodada: https://claude.ai/artifact/WVj3Hizv8SomGGjCcwaxjE
+
 ## 2026-10-27 · Engenharia: a 3.3 nas duas lojas, o aviso de versão nova aceso e o repositório abre a 3.4
 
 - Aviso do dono: "3.3 publicado nas lojas ja". Lido antes de escrever, às

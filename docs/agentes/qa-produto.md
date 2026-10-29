@@ -432,6 +432,47 @@ recomendar.
   procurava um símbolo que aquele script não imprime (ele escreve `FALHA`).
   Ao plantar defeito, confira ANTES como o script reprovado fala, e prefira
   ler o código de saída a caçar marca no texto.
+- **Leia o ERRO INTEIRO antes de teorizar sobre o coletor** (28/10/2026). O
+  pacote `play_console` dizia "Bad request - please check your parameters" há
+  nove dias, e eu passei uma rodada inteira tratando isso como mistério. A API
+  manda DOIS campos: `message`, que é essa frase, e `description`, que é
+  `'timeline_spec.end_date' field should be at most the current freshness
+  2026-10-19 00:00`. O normalizador do n8n guardava o primeiro e jogava fora o
+  segundo. O diagnóstico chegou junto todos os dias. Antes de levantar
+  hipótese sobre fonte que falha, abra o objeto de erro todo, na execução do
+  fluxo, não só o campo que o retrato imprime.
+- **Erro de coletor NÃO é supressão da fonte** (28/10/2026, irmão da regra de
+  03/10). Linha que não aparece tem pelo menos dois pais: a fonte não tem o
+  que dizer, ou o nosso pedido está malformado. São conclusões opostas, e o
+  retrato não as separava. É por isso que `linhaDeVitals` nasceu com os dois
+  ramos escritos e com a palavra COLETOR FALHANDO: quem lê não tem que supor.
+- **Antes de fatiar série por etiqueta, ache o dia em que a etiqueta nasceu**
+  (28/10/2026). Separei `sem-pausa` de `pausa-colada` com `not like
+  '%(sem-pausa)%'` e as semanas de 21 e 28/09 voltaram 11 e 11 como
+  pausa-colada. Não havia nenhuma: o campo nasceu em 05/10 às 23h25. Ausência
+  do marcador virou valor do marcador, que é a regra de 03/10 cometida por mim
+  contra a minha própria consulta. `select min(criado_em) where <marcador>` é
+  uma linha e responde antes de qualquer gráfico. E o que me salvou foi a
+  FORMA do resultado: 11 de 11 numa categoria e 0 na outra não acontece quando
+  as duas são possíveis, igual a 314 respostas numa pergunta de um quiz de
+  cinco por dia em 07/10. Resultado limpo demais é suspeito, não é sorte.
+- **Denominador pequeno não refuta nada** (28/10/2026). Ia publicar que "app
+  fechou sozinho" não é crash porque a Play diz 0% nos dias em que a nossa
+  migalha conta 1 e 2 fechamentos. A Play mede aquilo em 50 a 70
+  `distinctUsers`, contra 1.078 de base instalada no coletor de downloads DA
+  PRÓPRIA PLAY e 589 Android ativos no nosso funil. Numa amostra de 50, 1 ou 2
+  casos num parque de 600 esperam 0,1 ocorrência: zero não tem resolução para
+  negar. Antes de usar taxa de fora para derrubar contagem nossa, confira se o
+  denominador dela enxerga o que a gente está contando, e, se não souber o que
+  ele conta, diga que não sabe.
+- **Regra escrita no manual não é regra aplicada** (28/10/2026, e esta é a
+  mais incômoda). Em 14/10 anotei aqui que entrada de teste `undefined` deixa
+  plantio verde, porque `Number(undefined)` já é `NaN` e não separa
+  `Number(x)` de `typeof x === "number"`. Em 28/10 cometi o MESMO erro no
+  terceiro plantio da seção 9. Manual não é o que se lê na hora de escrever
+  asserção; o arquivo da conferência é. A regra agora mora dentro da asserção,
+  com `crashRate: null` e o motivo escrito do lado. Aprendizado sobre COMO
+  escrever conferência vai no arquivo da conferência, e só o resumo fica aqui.
 - Rodar `npm install` antes de qualquer checagem: o contêiner da sessão nasce
   sem `node_modules` e o `tsc` cospe centenas de erros falsos de módulo.
 - Rodar `npm run conferir` (bateria inteira, 12 conferências) no lugar de
@@ -514,8 +555,31 @@ fila, com dado de produção pela primeira vez.
   podem ser 300 que nunca abriram ou 300 que abriram e saíram. Um evento de
   abertura da folha separaria os dois, igual ao `abriu_quiz` que resolveu a
   mesma cegueira no quiz diário.
+- **O COLETOR DE VITALS DO PLAY ESTÁ QUEBRADO, e o conserto é do Analista**
+  (28/10). Nove dias sem uma linha de crash, e não é supressão: o nó "Play:
+  taxa de crash" pede `end_date = hoje - 4` e a Play recusa, com a frase
+  `'timeline_spec.end_date' field should be at most the current freshness
+  2026-10-19 00:00` (execução 9214, lida em 28/10 às 11h05 UTC; mesmo erro no
+  retrato de 29/10 às 09h59). Dois itens para ele, nenhum para o dono: (1) o
+  fim da janela sai de `GET .../crashRateMetricSet`, campo `freshnessInfo`, e
+  não de hoje-4, porque a frescura andou três dias em oito de calendário e um
+  deslocamento fixo nunca alcança; (2) o normalizador guarda
+  `error.description` junto do `error.message`. Não editei o fluxo: é dele, e
+  chutar um deslocamento maior seria o mesmo erro com outro número. **A metade
+  nossa foi feita**: `linhaDeVitals` diz COLETOR FALHANDO em vez de deixar
+  supor supressão. Falta o passo do n8n que imprime a frase pronta, igual à
+  pendência do AdMob desde 14/10 e à da coorte em 28/09: são três agora, e
+  vale tratar como um item só de "o retrato imprime frase pronta em vez de
+  montar linha à mão".
+- **O denominador da vitals do Play é desconhecido** (anotado em 28/10). Ela
+  diz 50 a 70 `distinctUsers` por dia onde a própria Play, no coletor de
+  downloads, diz 1.078 de base instalada, e o nosso funil diz 589 Android
+  ativos. Enquanto ninguém conferir o que esse campo conta, nenhuma taxa de
+  crash nossa pode sair dele, e nada que ele diga derruba a contagem da
+  migalha. Primeira coisa a resolver quando o coletor voltar.
 - **Catálogo remoto de aulas** é a próxima varredura, com campos de formulário
-  atrás.
+  atrás. Em 28/10 ela foi puxada pelo erro real do retrato, que é a ordem da
+  rotina (erro primeiro, varredura depois).
 - **Quiz diário** (novo em 26-27/08, nunca varrido por QA): banco de 63
   perguntas (eram 65 na nota antiga; conferido em 07/10), sequência com perdão semanal, rota `/api/quiz`, folha do primeiro
   quiz. Tem bateria própria em `npm run verifica:quiz` e quatro roteiros de

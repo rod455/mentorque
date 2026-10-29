@@ -20,7 +20,7 @@ import {
 } from "./funilCorreto";
 import { getSupabaseAdmin, getSupabaseAdminComPrazo } from "@/lib/supabaseAdmin";
 import { ORCAMENTO_DA_ROTA_MS, PRAZO_POR_CONSULTA_MS, cabeMaisUma, foiOPrazo } from "@/lib/prazo";
-import { linhaDeAnuncio, linhaDeAtivacao, linhaDeRetencao } from "./retratoLegivel";
+import { linhaDeAnuncio, linhaDeAtivacao, linhaDeRetencao, linhaDeVitals } from "./retratoLegivel";
 import { comTentativas, transitorio } from "@/lib/transitorio";
 
 // O agregado da operação num lugar só: alimenta a rota /api/dados (que o
@@ -671,6 +671,20 @@ export async function coletarDadosOperacao() {
       const pacote = (porFonte["admob"] ?? [])[0];
       const d = (pacote?.dados ?? {}) as Parameters<typeof linhaDeAnuncio>[0];
       return linhaDeAnuncio(d);
+    })(),
+    // O VITALS DO PLAY, COM O ESTADO DO COLETOR DECLARADO (28/10/2026).
+    //
+    // Achado do QA: este é o único instrumento que mede o processo NATIVO do
+    // Android, e ele passou por três estados sem o retrato dizer nada, porque
+    // a linha legível nunca existiu. Suprimido de 22/08 a 17/10; VIVO em 18,
+    // 19 e 20/10, com o primeiro dado de crash da história do app, que ninguém
+    // leu; e com ERRO de requisição desde 21/10, oito dias sem ninguém notar.
+    // Erro não é supressão: o primeiro é conserto nosso. Regra em
+    // lib/retratoLegivel.ts.
+    vitalsLegivel: (() => {
+      const pacote = (porFonte["play_console"] ?? [])[0];
+      const d = (pacote?.dados ?? {}) as Parameters<typeof linhaDeVitals>[0];
+      return linhaDeVitals(d);
     })(),
     // A ESCADA DA AQUISIÇÃO, COM UM DONO POR DEGRAU (03/10/2026).
     //
