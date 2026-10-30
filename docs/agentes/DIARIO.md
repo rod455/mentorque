@@ -101,6 +101,20 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   CONSISTENTE com e-mail de conta nova indo para o spam a partir de 04/10, e
   não prova. O dono, conta antiga e engajada, não serve de amostra. O teste
   que fecha é uma conta Gmail nova recebendo o e-mail.
+- **O teste com conta nova, feito em 30/10.** A cópia de prova do d0 (rota de
+  prova da jornada, pelo fluxo da chave no n8n, fluxo TEMP arquivado) saiu às
+  11h05 UTC para uma conta Gmail nova do dono, que nunca recebeu nada nosso.
+  Resend: entregue às 11h05min32s. O dono viu o e-mail na caixa PRINCIPAL, nem
+  em Promoções. E a abertura dele foi registrada às 12h12 (`opened`, mesmo id).
+  Então, nesta amostra de uma conta: o e-mail chega onde se vê e a abertura é
+  contada. Spam e defeito de medição saem como explicação principal.
+- **O que sobra é a pessoa não abrir**, e a hipótese de público volta a ser a
+  mais provável, apesar do sinal fraco da versão 2.9 (1 de 15 contra 6 de 29,
+  amostra pequena demais para separar data de público). O que pesa a favor: o
+  número de contas por dia dobrou a partir de 04/10 (de 8,5 para 16), com a 3.0
+  e a mídia paga, e conta criada para guardar o carro na hora não é conta de
+  quem quer ler e-mail na manhã seguinte. Próxima leitura útil: a abertura por
+  origem do cadastro, que a 3.3 grava, daqui a duas ou três semanas.
 
 ## 2026-10-29 · Engenharia: retorno ao Conteúdo (27/10) e ao QA (28/10)
 
