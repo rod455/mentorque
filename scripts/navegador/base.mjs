@@ -112,6 +112,11 @@ export async function abrirApp(nav, { sessao, chaves = {}, rota = "/app" } = {})
         localStorage.setItem("mentorque-garage", JSON.stringify(s));
       }
       localStorage.setItem("mentorque-welcome-back", "1");
+      // O segundo pedido de conta já gasto, em toda suíte (30/10/2026). Desde
+      // que "sem contador" vale uma recusa, todo convidado com carro e serviço
+      // (calendário, telas) abriria com a folha por cima da tela que a suíte
+      // quer olhar. Quem quer o repique passa a chave vazia (ver conta.mjs).
+      localStorage.setItem("mq-conta-repique", "1");
       for (const [k, v] of Object.entries(c)) localStorage.setItem(k, v);
     } catch { /* modo privado */ }
   }, [sessao ?? null, chaves]);

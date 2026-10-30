@@ -3,6 +3,36 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-30 · Engenharia: o segundo pedido de conta não alcançava nenhum dos recusantes da aposta
+
+- Revisão da rodada do CRO de hoje, a pedido do dono. Retorno escrito em
+  `docs/agentes/cro-besci.md` (rodada de 30/10), com o que manter e três
+  pontos.
+- **Os dois zeros da rodada caem no banco** (`funil_eventos`, Supabase, lido
+  hoje à tarde). Dos 225 recusantes desde 17/10, 7 criaram conta: 5 aceitaram a
+  folha de 1 a 3 minutos depois de recusar, quando ela reapareceu no cadastro
+  de outro carro, e 2 vieram pelo paywall. O "0 de 224 viram de novo" é o
+  `convite_conta`, que é `umaVez` por sessão e não consegue mostrar repetição.
+  Dos 73 de "algo de valor", 39 estão no gatilho do código (serviço,
+  abastecimento, aula). Não conferi por segundo instrumento: não há outro que
+  grave a folha.
+- **O defeito, e o conserto.** `cabeSegundoPedido` exigia o contador de
+  recusas, que só nasceu no 7c52226; nenhum dos 225 tem. Agora sem contador
+  vale uma recusa para convidado com carro, a não ser na sessão em que a folha
+  acabou de ser pedida (marca síncrona no cadastro do carro). Junto, dois
+  buracos achados na leitura: o repique não esperava `ready` da conta (quem
+  tem conta teria o repique gasto e contado na abertura) e não exigia carro.
+- Conferências: `conferir:segundo-pedido` com o degrau do aparelho de antes,
+  quatro plantios mordidos; suíte `conta` com dois degraus novos, plantio
+  mordido; `npm run conferir` verde; `conferir:navegador conta calendario
+  telas` verde em 236s. `base.mjs` passa a abrir toda suíte com o repique
+  gasto, porque calendário e telas têm convidado com serviço e abririam com a
+  folha por cima.
+- O que NÃO está coberto: nenhum aparelho abriu isto; no app das lojas, só com
+  a 3.4 (item 2 e roteiro escritos em `docs/lojas/novidades-3.4.md`). Na web,
+  o repique passa a aparecer na abertura para os convidados antigos com carro
+  e serviço, abastecimento ou aula concluída.
+
 ## 2026-10-30 · CRO: quem disse "agora não" para a conta nunca foi perguntado de novo
 
 - Artifact "Conversão da semana": https://claude.ai/artifact/VxVMEkqxffNW7BhNDwekEQ

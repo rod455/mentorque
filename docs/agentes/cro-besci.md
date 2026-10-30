@@ -559,3 +559,95 @@ de manter escrito.
 porta é o achado da semana da casa, e a régua de contar o relógio da aposta a
 partir de a 3.3 passar de metade dos aparelhos ativos, em vez de a partir do
 commit, é a régua certa e eu vou usá-la nas minhas prioridades.
+
+## Retorno do dono sobre a rodada de 30/10/2026 (conversão)
+
+Escrito na sessão com o dono no mesmo dia, a pedido dele ("veja o que o CRO
+analisou, dê feedback e melhore"). Lidos o registro no diário, o commit
+7c52226 inteiro, a aposta no caderno e o banco (`funil_eventos` no Supabase,
+30/10 à tarde), com as mesmas consultas da rodada refeitas.
+
+Primeiro o que manter, porque a rodada tem bastante.
+
+**O CRITÉRIO 11 SE PAGOU NO PRIMEIRO USO, E VOCÊ DEIXOU A APOSTA MORRER POR
+ELE.** O desenho de "quem recusou e voltou dois dias depois" dava uns 7 por
+semana, e você mediu isso no dia zero e trocou de gatilho em vez de abrir uma
+aposta que nenhuma janela de quatro semanas fecharia. É exatamente o uso para
+o qual o critério foi proposto.
+
+**A DISCIPLINA CONTRA A PRAGA ESTÁ ESCRITA E CONFERIDA.** Três travas puras, no
+molde do convite de permissão, com a conferência de linha de comando
+exercitando cada uma e a ligação na folha cobrada no fonte, dizendo o limite
+("conferência de texto prova que está escrito, não que é alcançável"). E a
+etiqueta `repique` no funil, sem a qual a aposta não fecharia.
+
+**A CORREÇÃO DO SORTEIO E A RECOMENDAÇÃO DO PAYWALL**, e a linha do motorista
+na lista do dono, que eram os pontos 2 e 3 do retorno de 23/10. Retorno
+atendido na rodada seguinte é o que faz o retorno valer a pena.
+
+Agora o que precisa melhorar, em três pontos, e o primeiro é o maior.
+
+**1. OS DOIS ZEROS DA ABERTURA FORAM LIDOS DE EVENTOS QUE NÃO CONSEGUEM
+MOSTRAR O QUE VOCÊ PROCUROU.** "73 fizeram algo de valor e NENHUM criou conta"
+e "0 de 224 viram a folha uma segunda vez" são as duas frases que vendem a
+aposta, e as duas caem no banco. Dos 225 recusantes desde 17/10, **7 criaram
+conta**; cinco deles **aceitaram a folha de 1 a 3 minutos depois de recusá-la**,
+quando ela reapareceu ao cadastrar outro carro (`gravar()` em
+`components/app/screens/Cars.tsx` acorda a folha a cada carro), e dois vieram
+pelo paywall. O segundo zero é estrutural: `convite_conta` e `cadastrou_carro`
+são `umaVez` por sessão, então a repetição que você procurava é invisível
+nesses dois eventos, e o zero dizia isso do evento, não da pessoa. É a seção
+"Antes de publicar um número" do CLAUDE.md com um caso novo: **um zero lido de
+evento com trava de repetição é o tamanho da trava, não o do comportamento.**
+A aposta continua de pé (39 no gatilho, nenhum repique), mas o número que a
+justifica é outro, e os cinco que aceitaram na segunda vista são o melhor
+argumento A FAVOR dela que você não viu.
+
+**2. O CÓDIGO NÃO ALCANÇAVA A POPULAÇÃO DA APOSTA, E A CONFERÊNCIA PASSAVA
+VERDE.** `cabeSegundoPedido` exigia o contador `mq-conta-recusas`, que só
+nasce com este commit. Os 225 recusantes da aposta, e quem saiu da folha sem
+responder, não têm contador, então nunca seriam perguntados: a aposta media,
+por quatro semanas, só gente que recusasse dali em diante. A conferência não
+pegou porque todo caso dela começava chamando `marcaRecusaDeConta()`, ou seja,
+ela nunca montou o aparelho de antes. A pergunta que faltou é a do
+`conferir-que-morde` virada do avesso: **além de "a trava segura?", "quem
+exatamente passa por ela HOJE, no aparelho de quem já existe?"**. Junto, o
+denominador: os 73 eram "algo de valor" largo (Biela e sintoma inclusos), e o
+gatilho do código é serviço, abastecimento ou aula, que dá **39**. Métrica e
+gatilho com populações diferentes é o mesmo defeito do `datas-do-carro`, um
+grau acima, e o critério 11 lido no instrumento tem de ler o número do
+GATILHO, não o da tese. Consertado nesta sessão, e o conserto está descrito
+abaixo para você revisar, não aceitar.
+
+**3. O ITEM DE BINÁRIO FICOU FORA DA FOLHA DA 3.4.** A folha e as travas moram
+em `components/app/` e `lib/app/`, que vão no binário. A aposta diz "no app,
+com a 3.4", e `docs/lojas/novidades-3.4.md` não tinha o item nem o roteiro de
+aparelho. Se a 3.4 fosse gerada hoje, o build sairia com o código, ninguém
+teria o roteiro para conferir o repique no aparelho, e a pergunta "isto está
+no build?" seria respondida de memória, que é o defeito de 06/10. Aposta que
+depende de binário escreve o item na folha da versão no mesmo commit.
+
+**O que foi consertado nesta sessão (Engenharia, 30/10)**, para você conferir
+na próxima rodada:
+
+- sem contador vale UMA recusa, para convidado com carro (todo convidado com
+  carro já recebeu a folha no cadastro); a exceção é a sessão em que a folha
+  acabou de ser pedida, marcada de forma síncrona pelo cadastro do carro antes
+  de acordar a folha (`marcaPedidoDeContaNaSessao`);
+- o repique espera `ready` da conta e exige carro: sem `ready`, quem já tem
+  conta teria o repique gasto e contado na abertura, no instante em que `user`
+  ainda é nulo; sem carro, ele seria gasto numa folha que não desenha;
+- o "não" do aparelho de antes conta 2 quando já gastou o repique ou recusa a
+  folha de outro carro, para o funil etiquetar `botao-2` certo e não haver
+  terceiro pedido;
+- `conferir:segundo-pedido` ganhou o degrau 0 (o aparelho de antes) e a suíte
+  `conta` ganhou dois degraus de navegador (o repique abre sozinho com a
+  etiqueta certa, e não abre com ele gasto); os quatro plantios e o da suíte
+  morderam;
+- o caderno corrige os dois zeros e alinha a métrica ao gatilho; o
+  denominador esperado por semana ("30 a 38") ainda é o da tese larga e
+  precisa ser relido com o gatilho na sua próxima rodada.
+
+**O que eu levo da sua rodada**: o achado de que a folha só nasce do cadastro
+de carro está certo e é o que importa; o que estava errado era o tamanho do
+buraco, não a existência dele.

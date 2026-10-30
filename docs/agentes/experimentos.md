@@ -102,6 +102,20 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
     quatro semanas fecha. O gatilho de VALOR dá 4, 38 e 26 por semana nas três
     semanas medidas, de 25, 125 e 66 recusantes. Trinta por semana fecha; sete
     não.
+- **CORREÇÃO DA REVISÃO, MESMO DIA (30/10, Engenharia com o dono, lido em
+  `funil_eventos` no Supabase).** Os dois zeros acima não se sustentam no
+  instrumento, e a causa é a mesma nos dois: eles foram lidos de eventos que
+  são `umaVez` por sessão. Dos 225 recusantes desde 17/10, **7 criaram conta**,
+  não zero: **5 aceitaram a folha de 1 a 3 minutos depois de recusar**, quando
+  ela reapareceu ao cadastrar OUTRO carro (`gravar()` em
+  `components/app/screens/Cars.tsx` chama a folha a cada carro), e 2 vieram
+  pelo paywall. O "0 de 224 viram a folha de novo" é o `convite_conta`, que só
+  grava uma vez por sessão e por isso não consegue mostrar a repetição. E o
+  denominador da métrica não era o do gatilho do código: dos 73, só **39**
+  fizeram serviço, abastecimento ou aula; os outros 34 fizeram Biela ou
+  sintoma, que não disparam o repique. A métrica abaixo foi alinhada aos 39.
+  O defeito de alcance que a revisão achou (o repique exigia um contador que
+  nenhum dos 225 tem) está consertado no mesmo dia, ver a nota em Início.
 - Tese BeSci: aversão à perda, com a perda finalmente real, e timing do pedido.
   A folha de hoje pede a conta no instante em que a pessoa acabou de digitar
   marca, modelo e ano, e oferece em troca uma proteção contra perder o aparelho
@@ -128,9 +142,13 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   entre pedidos e 3 na vida): **no máximo um repique na vida do aparelho, nunca
   na mesma sessão da recusa, e nunca depois de dois "não".** Quem disser não
   duas vezes não é perguntado mais.
-- Métrica: dos convidados que recusaram a folha e depois fizeram algo de valor
-  na semana, quantos recebem o segundo pedido e quantos criam conta. Hoje 0 de
-  73 criam conta e 0 recebem o pedido · Duração: 4 semanas
+- Métrica: dos convidados que recusaram a folha e depois registraram serviço,
+  abastecimento ou aula (o gatilho do código, não "algo de valor" em sentido
+  largo), quantos recebem o segundo pedido (`convite_conta` com detalhe
+  `repique`) e quantos criam conta por ele (`aceitou_convite_conta` com
+  detalhe `repique`). Linha de base corrigida em 30/10: 39 recusantes no
+  gatilho desde 17/10, 0 receberam o repique (ele não existia) · Duração: 4
+  semanas
 - **Denominador esperado, com o número de hoje** (régua de 02/10): 30 a 38
   pessoas por semana, logo 120 a 150 em quatro semanas. Para sair de 0, bastam
   poucas contas para o sinal existir; o alvo honesto é **10 contas em quatro
@@ -140,12 +158,18 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   risco de confundir é baixo justamente porque não há de onde cair.
 - Aprovação: não se aplica (momento de um pedido que já existe, sem variantes,
   sem texto novo, sem tocar em preço, plano, cobrança ou passo legal)
-- Início: 2026-10-30 na web; no app, com a 3.4 · **Ler a partir de: duas semanas
+- Início: 2026-10-30 na web; no app, com a 3.4. **O alcance só existe a
+  partir do conserto da revisão de 30/10**: até ele, o repique exigia o
+  contador de recusas, que só nasceu com ele, e nenhum dos 225 recusantes
+  seria perguntado. As horas de web entre os dois commits não contam ·
+  **Ler a partir de: duas semanas
   depois de a 3.4 passar de metade dos aparelhos ativos.** A régua é a de 17/10,
   e hoje ela está medida: a 3.3 tem 213 dos 500 aparelhos ativos de 7 dias
   (43%), ou seja ainda não passou de metade, dez dias depois de publicada.
-- Antes: 0 de 73 criaram conta; 0 de 224 recusantes foram perguntados de novo;
-  126 recusas por botão na semana de 19/10.
+- Antes: dos 225 recusantes desde 17/10, 7 criaram conta (5 pela folha que
+  reaparece no cadastro de outro carro, 2 pelo paywall); 39 no gatilho do
+  código, nenhum recebeu repique; 126 recusas por botão na semana de 19/10.
+  (A primeira escrita dizia "0 de 73" e "0 de 224"; ver a correção acima.)
 - Veredito: (aberto)
 
 ## [convite-do-carro-aparece-onde-a-pessoa-cai] O convite do aviso deixa de esperar numa tela por onde ninguém passa

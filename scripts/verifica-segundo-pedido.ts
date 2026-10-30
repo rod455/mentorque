@@ -11,10 +11,16 @@
 // As três travas, e cada uma tem um degrau aqui:
 //
 //   1. no máximo UM repique na vida do aparelho;
-//   2. nunca na mesma sessão da recusa;
+//   2. nunca na mesma sessão em que a conta já foi pedida (recusa inclusa);
 //   3. nunca depois de dois "não".
 //
 // E a quarta regra, que não é trava: sem algo a perder, não há pedido nenhum.
+//
+// E O ALCANCE, que esta conferência deixou passar na primeira escrita (revisão
+// de 30/10). Todo caso dela começava chamando `marcaRecusaDeConta()`, então ela
+// nunca viu o aparelho de ANTES do contador, que é o de todos os 225
+// recusantes que motivaram a aposta. As travas estavam certas e o pedido não
+// alcançava ninguém. O degrau 0 abaixo é esse aparelho.
 //
 // O que ela NÃO alcança, e fica dito: o gatilho de verdade (serviço,
 // abastecimento ou aula no estado) mora na folha, que é React, e aqui entra
@@ -41,7 +47,7 @@ const sessao = memoria();
   sessionStorage: sessao,
 };
 
-const { marcaRecusaDeConta, cabeSegundoPedido, gastaSegundoPedido } = await import(
+const { marcaRecusaDeConta, cabeSegundoPedido, gastaSegundoPedido, marcaPedidoDeContaNaSessao } = await import(
   "../lib/app/segundoPedidoDeConta.ts"
 );
 
@@ -65,12 +71,35 @@ function novaSessao() {
   sessao.clear();
 }
 
-// ── 1. sem recusa nenhuma, não existe segundo pedido ─────────────────────────
+// ── 0. o recusante de antes do contador é alcançado ──────────────────────────
+//
+// Convidado com carro, sem contador, numa sessão em que a folha não foi pedida:
+// é quem recusou (ou saiu sem responder) antes de este código existir.
 aparelhoNovo();
 conferir(
-  "quem nunca recusou não recebe segundo pedido",
+  "o convidado com carro e sem contador recebe o segundo pedido",
+  cabeSegundoPedido(true) === true,
+  "sem contador vale UMA recusa: todo convidado com carro já recebeu a folha no cadastro; exigir o contador deixa de fora os 225 recusantes da aposta",
+);
+conferir(
+  "e o não dele ao repique conta como o segundo",
+  (gastaSegundoPedido(), marcaRecusaDeConta()) === 2,
+  "contar 1 etiquetaria o segundo não como o primeiro no funil (botao em vez de botao-2)",
+);
+aparelhoNovo();
+conferir(
+  "o recusante antigo que recusa a folha de OUTRO carro também chega a 2",
+  marcaRecusaDeConta(true) === 2,
+  "sem isso ele ainda ganharia um repique, que seria o terceiro pedido",
+);
+
+// ── 1. o aparelho novo, que acabou de cadastrar o carro, não ganha repique ───
+aparelhoNovo();
+marcaPedidoDeContaNaSessao();
+conferir(
+  "na sessão em que a folha foi pedida, sem contador, não há segundo pedido",
   cabeSegundoPedido(true) === false,
-  "o repique é para quem disse não uma vez, não para todo mundo",
+  "sem a marca da sessão, quem viu uma aula e depois cadastrou o carro ganharia o repique por cima do primeiro pedido",
 );
 
 // ── 2. trava 2: nunca na mesma sessão da recusa ──────────────────────────────
@@ -131,7 +160,7 @@ conferir(
 
   conferir(
     "a folha CONTA a recusa",
-    /marcaRecusaDeConta\(\)/.test(folha),
+    /marcaRecusaDeConta\(/.test(folha),
     "sem contar a recusa, a trava 3 nunca dispara e o repique nunca é destravado",
   );
   conferir(
@@ -139,13 +168,26 @@ conferir(
     /cabeSegundoPedido\(/.test(folha) && /gastaSegundoPedido\(\)/.test(folha),
     "mostrar sem gastar repete para sempre, que é a praga",
   );
+  // Só a expressão do gatilho: a recusa usa o número de carros, de propósito,
+  // para contar o segundo não do aparelho de antes do contador.
+  const gatilho = /const temAlgoAPerder =([\s\S]*?);/.exec(folha)?.[1] ?? "";
   conferir(
     "o gatilho é estado da PESSOA, não o carro",
-    /services\?\.length/.test(folha) &&
-      /abastecimentos\?\.length/.test(folha) &&
-      /seenLessons\?\.length/.test(folha) &&
-      !/vehicles\?\.length/.test(folha),
+    /services\?\.length/.test(gatilho) &&
+      /abastecimentos\?\.length/.test(gatilho) &&
+      /seenLessons\?\.length/.test(gatilho) &&
+      !/vehicles/.test(gatilho),
     "o carro dispara a PRIMEIRA folha; usá-lo aqui perguntaria de novo a quem acabou de dizer não com o carro na mão",
+  );
+  conferir(
+    "o cadastro marca a sessão ANTES de acordar a folha",
+    /marcaPedidoDeContaNaSessao\(\);\s*window\.dispatchEvent/.test(folha),
+    "a marca depois do evento, ou num efeito, chega tarde: o repique veria o carro novo sem a marca",
+  );
+  conferir(
+    "o repique espera a conta carregar e exige carro",
+    /if \(!ready \|\| user \|\| !temCarro\) return;/.test(folha),
+    "sem `ready`, quem já tem conta tem o repique gasto e contado na abertura; sem carro, ele é gasto numa folha que não desenha",
   );
   conferir(
     "o funil separa o repique do primeiro pedido",

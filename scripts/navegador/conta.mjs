@@ -16,10 +16,10 @@
 // qualquer uma delas a folha não volta, então cada desfecho roda num aparelho
 // novo, com o caminho do carro andado de novo. Juntar os dois num aparelho só
 // faria o segundo degrau passar verde sem folha na frente.
-import { garagem, abrirApp } from "./base.mjs";
+import { garagem, abrirApp, BASE, ESPERA_DE_ABERTURA } from "./base.mjs";
 
 export const nome = "conta";
-export const sobre = "quem cadastra carro como convidado recebe o convite a salvar a garagem";
+export const sobre = "quem cadastra carro como convidado recebe o convite a salvar a garagem, e o recusante antigo com algo a perder recebe o segundo pedido";
 
 const SESSAO = () => garagem({ semCarro: true, startedAt: "2026-01-01" });
 const CHAVES = { "mq-primeiro-quiz-nao": "1" };
@@ -154,6 +154,69 @@ export async function rodar({ nav, ok }) {
     );
     ok("e o herói não fala da garagem que acabou de ser salva", !/passo que salva sua garagem/i.test(tela));
     ok("nenhum erro de página no caminho da recusa", b.erros.length === 0, b.erros[0] ?? "");
+    await b.fechar();
+  }
+
+  // ---- 3. O SEGUNDO PEDIDO ALCANÇA O RECUSANTE DE ANTES DO CONTADOR --------
+  //
+  // Revisão de 30/10/2026. A primeira escrita do repique exigia o contador de
+  // recusas, que só nasce com ela: os 225 recusantes que motivaram a aposta
+  // não têm contador e nunca seriam perguntados de novo, e a conferência de
+  // linha de comando passava verde porque cada caso dela começava recusando.
+  // Aqui o aparelho é o de antes: convidado, com carro e com um serviço, sem
+  // contador nenhum. Ele abre o app e a folha tem de aparecer sozinha, sem
+  // cadastro de carro, etiquetada como repique.
+  {
+    const eventos = [];
+    const comServico = () =>
+      garagem({
+        startedAt: "2026-01-01",
+        services: [{ id: "s1", vehicleId: "v1", type: "oil", date: "2026-09-01", km: 90000, total: 320, parts: [], notes: "" }],
+      });
+    // Abre primeiro o site e só depois o app: o convite sai na abertura, e o
+    // ouvido do funil tem de estar ligado antes dela. Recarregar o app não
+    // serve, porque a recarga reescreve a chave vazia por cima do repique que
+    // a primeira abertura gastou.
+    const b = await abrirApp(nav, { sessao: comServico(), chaves: { ...CHAVES, "mq-conta-repique": "" }, rota: "/" });
+    b.pg.on("request", (r) => {
+      if (!r.url().includes("/api/funil")) return;
+      try { eventos.push(JSON.parse(r.postData() ?? "{}")); } catch { /* corpo que não é JSON */ }
+    });
+    await b.pg.goto(BASE + "/app", { waitUntil: "domcontentloaded" });
+    await b.pg.waitForTimeout(ESPERA_DE_ABERTURA);
+    ok("o recusante antigo com algo a perder recebe o segundo pedido ao abrir", /Salve sua garagem/i.test(await b.corpo()));
+    const convites = eventos.filter((e) => e.evento === "convite_conta");
+    ok(
+      "e o convite sai etiquetado como repique",
+      convites.length === 1 && convites[0].detalhe === "repique",
+      JSON.stringify(convites.map((e) => e.detalhe)),
+    );
+    const agoraNao = b.pg.locator("button").filter({ hasText: /Agora não/i }).first();
+    if (await agoraNao.count()) await agoraNao.click();
+    await b.pg.waitForTimeout(800);
+    const recusa = eventos.filter((e) => e.evento === "recusou_convite_conta");
+    ok(
+      "recusar o repique conta como o segundo não",
+      recusa.length === 1 && recusa[0].detalhe === "botao-2",
+      JSON.stringify(recusa.map((e) => e.detalhe)),
+    );
+    ok("nenhum erro de página no segundo pedido", b.erros.length === 0, b.erros[0] ?? "");
+    await b.fechar();
+  }
+
+  // ---- 4. O OUTRO LADO: O MESMO APARELHO, COM O REPIQUE JÁ GASTO -----------
+  //
+  // Sem este degrau, uma folha que abrisse para todo convidado com serviço
+  // passaria verde no degrau 3.
+  {
+    const b = await abrirApp(nav, {
+      sessao: garagem({
+        startedAt: "2026-01-01",
+        services: [{ id: "s1", vehicleId: "v1", type: "oil", date: "2026-09-01", km: 90000, total: 320, parts: [], notes: "" }],
+      }),
+      chaves: CHAVES,
+    });
+    ok("com o repique gasto, a folha não abre sozinha", !/Salve sua garagem/i.test(await b.corpo()));
     await b.fechar();
   }
 }

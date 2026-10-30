@@ -9,6 +9,7 @@ import { marcaVeioSalvarGaragem } from "@/lib/app/veioSalvarGaragem";
 import {
   cabeSegundoPedido,
   gastaSegundoPedido,
+  marcaPedidoDeContaNaSessao,
   marcaRecusaDeConta,
 } from "@/lib/app/segundoPedidoDeConta";
 import { funil } from "@/lib/app/funil";
@@ -28,6 +29,9 @@ export const EVENTO = "mq-salve-garagem";
 /** Chamado pelo cadastro de carro: acorda a folha. */
 export function pedirConviteDeConta(): void {
   if (typeof window === "undefined") return;
+  // Antes do evento, e de forma síncrona: o carro novo chega ao estado no
+  // mesmo toque, e o efeito do segundo pedido não pode vê-lo sem ver a marca.
+  marcaPedidoDeContaNaSessao();
   window.dispatchEvent(new CustomEvent(EVENTO));
 }
 
@@ -49,7 +53,7 @@ export function SalveSuaGaragem() {
   const c = useContent();
   const g = c.salvarGaragem;
   const { s } = usePrototype();
-  const { user } = useAuth();
+  const { user, ready } = useAuth();
   const { go } = useNav();
   const [aberta, setAberta] = useState(false);
   // Qual dos dois pedidos está na tela. Sem isto o funil não separa a conta que
@@ -64,10 +68,11 @@ export function SalveSuaGaragem() {
 
   // O SEGUNDO PEDIDO, para quem já tem algo a perder (30/10/2026).
   //
-  // Medido em 30/10: dos 224 convidados que tocaram em "Agora não", 73 depois
-  // fizeram algo de valor no app e NENHUM criou conta, e nenhum deles foi
-  // perguntado uma segunda vez. A folha nasce só do cadastro de carro, e quem
-  // já tem carro nunca mais a dispara.
+  // Medido em 30/10: dos 225 convidados que tocaram em "Agora não" desde
+  // 17/10, 73 depois fizeram algo de valor no app e só 7 criaram conta, cinco
+  // deles pela folha que reapareceu ao cadastrar outro carro. Fora isso a
+  // folha nasce só do cadastro de carro, e quem já tem carro nunca mais a
+  // dispara.
   //
   // "Algo a perder" é estado que existe e é da pessoa: um serviço registrado,
   // um abastecimento ou uma aula vista. O carro NÃO conta aqui, de propósito:
@@ -81,15 +86,22 @@ export function SalveSuaGaragem() {
     (s.services?.length ?? 0) > 0 ||
     (s.abastecimentos?.length ?? 0) > 0 ||
     (s.seenLessons?.length ?? 0) > 0;
+  const v = activeVehicle(s);
+  // `ready` e `v` são travas, não enfeite (revisão de 30/10). Sem `ready`, a
+  // conta de quem já está logado ainda não chegou na abertura, `user` é nulo
+  // por um instante, e o repique seria gasto e contado como convite para quem
+  // já tem conta. Sem `v`, o convidado sem carro que viu uma aula gastaria o
+  // repique numa folha que não desenha (ela precisa do carro), e sem contador
+  // isso agora é o caso comum.
+  const temCarro = !!v;
   useEffect(() => {
-    if (user) return;
+    if (!ready || user || !temCarro) return;
     if (!cabeSegundoPedido(temAlgoAPerder)) return;
     gastaSegundoPedido();
     setRepique(true);
     setAberta(true);
-  }, [user, temAlgoAPerder]);
+  }, [ready, user, temCarro, temAlgoAPerder]);
 
-  const v = activeVehicle(s);
   const visivel = aberta && !user && !!v;
 
   // A FOLHA PASSA A CONTAR (17/10/2026). Ela é o degrau com mais gente do
@@ -139,7 +151,7 @@ export function SalveSuaGaragem() {
           onClick={() => {
             // A recusa é contada aqui: é ela que destrava o segundo pedido (a
             // primeira) e que encerra o assunto (a segunda).
-            const recusas = marcaRecusaDeConta();
+            const recusas = marcaRecusaDeConta(repique || (s.vehicles?.length ?? 0) > 1);
             funil("recusou_convite_conta", {
               origem: "carro",
               detalhe: recusas >= 2 ? "botao-2" : "botao",
