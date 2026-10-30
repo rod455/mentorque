@@ -3,6 +3,30 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-30 · Engenharia: a leitura marcada de entrega de e-mail (antes e depois de 15/10)
+
+- Leitura agendada em 15/10. Instrumento: `jornada_envios` cruzado com
+  `email_eventos` (eventos do Resend), por semana de envio, lido em 30/10.
+  O painel do Postmaster Tools não foi lido (é tela do dono).
+- **A devolução caiu, como o conserto de 15/10 queria**: 6,4% e 7,5% das
+  enviadas nas semanas de 05/10 e 12/10; 1,7% na de 19/10 e 1,3% na de 26/10
+  (parcial). Reclamação de spam: zero em todas.
+- **A abertura NÃO voltou, e ela caiu antes de 15/10, não depois.** Mesmo
+  e-mail, para comparar igual com igual: o d0 abria 22,8% na semana de 28/09,
+  5,0% na de 05/10, 1,8% na de 12/10, 3,0% na de 19/10. Dia a dia, todos os
+  e-mails: 15,9% de 26/09 a 03/10 (43 de 271) e 5,3% de 04/10 a 11/10 (16 de
+  303). O público do d0 é Gmail nas duas pontas (54 de 60 e 127 de 134).
+- **O que NÃO explica, conferido**: o DMARC publicado em 15/10 é `p=none`,
+  que só relata e não manda nada para o spam; e o d0 não mudou de texto nem de
+  molde em 03/10 (a troca de molde daquele dia foi só no convite).
+- **Hipóteses, não causas**: (1) reputação do domínio no Gmail, porque a
+  devolução subiu para 6 a 7% justo nas semanas da queda, e reputação demora
+  semanas para voltar depois que a devolução cai; (2) mudança de público, com
+  mais contas criadas pela folha "Salve sua garagem", gente que criou conta
+  para guardar o carro e não para ler e-mail. O teste que separa as duas é o
+  Postmaster Tools (reputação e taxa de spam do domínio por dia), que só o
+  dono abre, e a abertura por origem do cadastro, que a 3.3 começou a gravar.
+
 ## 2026-10-29 · Engenharia: retorno ao Conteúdo (27/10) e ao QA (28/10)
 
 - Pedido do dono: "veja o que foi publicado de SEO e QA, dê feedbacks e
