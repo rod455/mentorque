@@ -3,6 +3,56 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-30 · Mídia: a conta passou a dizer de que campanha veio, e ela discorda da minha proposta
+
+- Artifact "Mídia da semana": https://claude.ai/artifact/11PNmQ7RijezDjK67jidid
+- **A rodada é a de quinta 29/10 e rodou na sexta 30/10.** Custo do atraso,
+  lido no registro de execuções do fluxo "Mídia: relatório por e-mail" em 30/10:
+  em 29/10 ele rodou nove vezes, todas verdes, e **não mandou nada**, porque o nó
+  "Decide e monta o e-mail" devolve lista vazia quando o relatório na main não é
+  de hoje nem de ontem. Não existe nó de aviso. Ou seja, rodada atrasada custa
+  SILÊNCIO, não aviso, e o manual já dizia o contrário. Corrigido lá.
+- **Entrega da semana passada confirmada**: execução 9069, 23/10 às 10h05 de
+  Brasília, PDF `mentorque-midia-2026-10-23.pdf` anexado, para o Rodrigo e para
+  o Luiz, `labelIds: ["SENT"]`. Terceira semana seguida.
+- **Janela: 23 a 29/10, sete dias cheios, contra 16 a 22/10.** Primeira vez que
+  Google e Meta cobrem os MESMOS dias: em vez de somar à mão a oitava data do
+  Meta, cortei a janela do Google na dele, com a soma dos oito dias do `porDia`
+  conferida contra o `custo7d` da campanha (163,385365 + 1,901749 = 165,287114).
+  Gasto total R$ 360,55 contra R$ 432,37; 136 contas contra 146; **custo por
+  conta R$ 2,65 contra R$ 2,96**, o melhor da série.
+- **A MANCHETE: desde 29/10 a conta nova carrega a etiqueta da campanha.** É a
+  conversão da AppsFlyer chegando ao app (conserto da Engenharia de 20/10, na
+  3.3). Cobertura por dia: 0 de 57 em 23 a 25/10, 3 de 17 em 26/10, 12 de 18,
+  15 de 17 e **17 de 17 em 29/10**. O critério 3 da minha régua saiu de
+  "inalcançável por falta de etiqueta" para parcial.
+- **E a régua nova aponta para o lado contrário da minha proposta de 23/10.** No
+  único dia de cobertura cheia, o vídeo do Google custou R$ 3,15 por conta e o
+  Meta R$ 5,21; somando 28 e 29/10 (32 de 34 etiquetadas) a ordem inverte, R$ 4,38
+  contra R$ 3,20. Com dez e quinze contas de cada lado, ela ainda não decide, e em
+  05/11 ela completa sete dias cheios. Por isso a proposta desta rodada é
+  **decidir o item em 06/11, não hoje**, com o custo acumulado da espera dito
+  como faixa honesta: entre zero e umas 108 instalações por semana. A linha na
+  lista do dono foi reescrita com isso, mantendo a data de entrada 23/10.
+- **Dois erros meus de rodada anterior, corrigidos aqui.** (1) A ressalva de que
+  "o vídeo traz gente que fica mais" (39% contra 32% em 23/10) se INVERTEU: 45%
+  no Meta contra 31% no vídeo, lido no mesmo campo `leais`. Amostra de 43 e 84
+  usuários não sustentava a frase, e eu nunca li a definição de `leais`, que é de
+  console. (2) A causa EXATA da falsa afirmação de 23/10 sobre a fila: o meu
+  filtro era `[A-Za-zç]+`, que não contém `í`, então "Mídia" nunca casava.
+  Conferido nas duas pontas. Classe de caractere escrita à mão não lê português.
+- **Quase publiquei "zero conta nova na semana".** `contas_criadas_desde(date)`
+  devolve `bigint`, e `count(*) from` ela devolve 1 para qualquer data. Pegou a
+  regra que já estava no manual: mesmo valor em 100% das linhas é suspeita de
+  caminho errado antes de ser notícia.
+- **Desperdício com nome: não se aplica, e agora com o tamanho do que escapa.**
+  As 50 linhas do relatório de termos trazem só a campanha de busca, pausada
+  desde 13/10 e ausente da janela. A quebra por rede mostra que a campanha de app
+  compra R$ 1,72 de clique de busca (12 cliques), 1% do dinheiro da semana, e
+  campanha de app não publica termo: é o tamanho exato do que a régua não alcança.
+- **Régua da rodada**: onze critérios cumpridos, um não se aplica (o 6, pelo
+  motivo acima). Nada escrito em conta de anúncio.
+
 ## 2026-10-30 · Engenharia: a leitura marcada de entrega de e-mail (antes e depois de 15/10)
 
 - Leitura agendada em 15/10. Instrumento: `jornada_envios` cruzado com

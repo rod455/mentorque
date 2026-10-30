@@ -472,6 +472,21 @@ E o jeito rápido de saber se foi feito, sem perguntar a ninguém: as chaves do
 pacote da coleta. `select jsonb_object_keys(dados)` em `metricas_diarias` diz
 em um segundo se o campo novo chegou.
 
+**A CAUSA EXATA DA AUSÊNCIA, achada em 30/10/2026, porque "a ausência era da
+busca" ainda não diz o que na busca.** O filtro que eu usei na rodada 6 foi
+`grep -cE "^\| 2026-[0-9-]+ \| [A-Za-zç]+ \| [A-Za-zç]+"`. A classe
+`[A-Za-zç]` não contém `í`, então a linha `| 2026-10-15 | Mídia | Analista |`
+nunca casava. Conferido nas duas pontas: com o meu padrão o arquivo devolve 0
+linhas, com `[^|]+` no lugar da classe devolve as linhas, e na versão de 20/10
+do arquivo são duas com "Mídia | Analista".
+
+Fica a regra, e ela não é só deste papel: **classe de caractere escrita à mão
+não lê português.** Papel, nome de campanha e termo de busca desta casa têm
+acento e cedilha. Em filtro de coluna, use `[^|]+`; em busca de palavra, use o
+texto inteiro em vez de montar a classe. E quando um filtro devolve ZERO, a
+primeira hipótese é o filtro, nunca o arquivo, porque zero é o que um filtro
+quebrado sempre responde.
+
 ### Sem decisão também é um desfecho, e ele se mede (23/10/2026)
 
 Em 15/10 eu escrevi "não recomendo destino para o dinheiro liberado" e parei ali.
@@ -704,6 +719,86 @@ intenção que o app não atende, e não um zero medido**. Dizer "esses termos n
 deram nenhuma conta" é verdade sem valor: nenhum termo deu conta nenhuma,
 porque essa ligação não existe na medição. A importação por gclid é o que
 passaria a criar essa ligação.
+
+### Função que devolve número não se conta com `count(*)` (30/10/2026)
+
+`public.contas_criadas_desde(date)` devolve `bigint`, não um conjunto de contas.
+`select count(*) from public.contas_criadas_desde('2026-10-22')` devolve 1,
+sempre, qualquer que seja a data, porque conta a única linha do resultado. Nesta
+rodada eu rodei exatamente isso e a primeira leitura disse que a semana teve
+ZERO conta nova, com 145 contas no banco. O certo é
+`select public.contas_criadas_desde('2026-10-22')`.
+
+O que salvou foi a regra que já estava aqui: consulta que devolve o MESMO valor
+em 100% das linhas é suspeita de caminho errado antes de ser notícia. Quatro
+datas diferentes devolvendo 1 é o retrato dessa suspeita. Antes de publicar
+qualquer queda grande, rode a mesma pergunta com duas datas distantes: se o
+número não se move, o erro é da consulta.
+
+### Janela desigual se corta, não se completa à mão (30/10/2026)
+
+O pedido de igualar a janela do Meta à da AppsFlyer está na fila desde 23/10 e
+nesta rodada ficou claro que ele resolve o problema menor. O problema maior se
+resolveu do nosso lado: com o `porDia` do Google, **corte a janela maior na
+menor** em vez de somar a data que falta.
+
+A conferência do corte é obrigatória e é de um segundo: a soma de TODOS os dias
+do `porDia` tem que fechar no centavo com o `custo7d` da campanha. Nesta rodada
+fechou (163,385365 + 1,901749 = 165,287114). Se não fechar, o corte perdeu ou
+duplicou dia, e o número não sai.
+
+Sobra viés só onde o lado que falta não tem dia a dia: a tabela de instalação,
+porque a AppsFlyer dá o total da janela e não o dia. Lá o viés continua
+declarado.
+
+### Instrumento que nasce no meio da janela só vale nos dias cheios (30/10/2026)
+
+A etiqueta de origem da conta começou a aparecer em 26/10 (3 de 17) e ficou
+completa em 29/10 (17 de 17). A tentação é dividir o gasto da semana pelas
+contas etiquetadas da semana, e isso é numerador de sete dias contra
+denominador de quatro: dá custo por conta inflado em mais de duas vezes.
+
+A regra: **quando o instrumento nasce dentro da janela, a janela usável é só os
+dias de cobertura cheia**, com o tamanho da amostra escrito do lado, e a data em
+que a janela cheia completa dita no relatório. Imprima a cobertura por dia antes
+de dividir qualquer coisa; é uma consulta e evita o número que ninguém consegue
+reproduzir depois.
+
+### Vantagem que vira de lado em uma semana não era vantagem (30/10/2026)
+
+Em 23/10 eu publiquei, como ressalva de uma proposta de dinheiro, que o vídeo
+traz gente que fica mais: 39% voltam contra 32% do Meta. Uma semana depois, lido
+no mesmo campo `leais` da AppsFlyer, está invertido: 45% no Meta contra 31% no
+vídeo. A amostra eram 43 e 84 usuários.
+
+Antes de pôr uma ressalva de qualidade ao lado de uma recomendação de orçamento,
+pergunte se ela sobrevive a uma semana: leia a mesma razão na coleta da semana
+anterior. Se as duas semanas não concordam, ela entra como "não sei", não como
+ressalva. E o agravante aqui é que eu nunca li a definição de `leais`, que é de
+console: ressalva construída sobre campo de definição desconhecida é opinião com
+cara de medida.
+
+### Corrigir o repositório não corrige a caixa de entrada (30/10/2026)
+
+O relatório de 23/10 saiu por e-mail às 10h05 com uma afirmação falsa dentro
+(execução 9069, com o PDF anexado). O texto no repositório foi corrigido no dia
+24, e o e-mail não. Quem é de fora, como o Luiz, leu só o errado.
+
+**A regra: afirmação falsa que já saiu no PDF se corrige no PRÓXIMO relatório, no
+começo, não só no arquivo.** O repositório é o registro; o e-mail é o que
+chegou em alguém.
+
+### O fluxo do e-mail não avisa quando o relatório está velho (30/10/2026)
+
+Lido no registro das execuções em 30/10: em 29/10, quinta, o fluxo rodou nove
+vezes, todas verdes, das 13h às 21h UTC, e **não mandou nada**. O nó "Decide e
+monta o e-mail" devolveu lista vazia porque o relatório na main era de 23/10, e
+nada rodou depois dele. Não existe nó de aviso.
+
+Então "sem o PDF do dia na main o Rodrigo recebe um aviso" não é o que o
+instrumento faz: ele fica em silêncio. Rodada atrasada custa silêncio, e
+silêncio é pior que aviso, porque ninguém de fora tem como saber que faltou.
+Nove execuções verdes sem um e-mail é, mais uma vez, verde que não prova envio.
 
 ## O retorno da rodada 1 (19/09/2026), e o que muda na rodada 2
 
