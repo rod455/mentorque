@@ -76,6 +76,31 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   para guardar o carro e não para ler e-mail. O teste que separa as duas é o
   Postmaster Tools (reputação e taxa de spam do domínio por dia), que só o
   dono abre, e a abertura por origem do cadastro, que a 3.3 começou a gravar.
+- **Atualizado no mesmo dia, com três instrumentos novos.** (a) Postmaster
+  Tools, print do dono: oito requisitos em compliance, inclusive o DMARC, que
+  em 02/10 era o único "precisa de ajustes"; a análise de entrega segue "não
+  há e-mails suficientes", então a reputação no Gmail continua SEM NOTA. (b)
+  Relatórios agregados do DMARC (Google de 29/10, Outlook de 25, 27 e 28/10):
+  todos os envios do Resend passam DKIM alinhado (`mentorque.com.br`, seletor
+  `resend`) e SPF (`send.mentorque.com.br`); os dois do ImprovMX são
+  encaminhamento do `contato@`, com DKIM passando. Autenticação descartada como
+  causa. (c) Banco: a abertura do d0 caiu também entre quem seguiu usando o app
+  na semana seguinte (2 de 12, 16,7%, para 2 de 40, 5,0%), não só entre quem
+  sumiu (21,8% para 2,9%). Amostra pequena, mas aponta mais para onde o e-mail
+  cai do que para quem o recebe. O teste que fecha é ver a aba do Gmail.
+- **Mais tarde, com a resposta do dono** ("sempre caiu em promoções, desde o
+  início"): a aba Promoções é constante e não explica a virada de 04/10, quando
+  a abertura já era 22% com o e-mail em Promoções. Descartados no banco, um a
+  um: as duas versões do d0 caíram juntas (com carro 20,5% para 3,4%); o
+  horário é o mesmo (11h UTC, mediana de 17h depois da conta); contas criadas
+  na MESMA versão do app (2.9) abriam 6 de 29 antes de 04/10 e 1 de 15 depois.
+  A queda segue a data, não o público. Um sinal a mais: as aberturas em menos
+  de 2 minutos depois da entrega, que costumam ser carregamento automático da
+  imagem e não leitura, caíram junto (31 em ~300 envios antes, 30 em ~1.100
+  depois). O Gmail não carrega imagem na pasta de spam, então isso é
+  CONSISTENTE com e-mail de conta nova indo para o spam a partir de 04/10, e
+  não prova. O dono, conta antiga e engajada, não serve de amostra. O teste
+  que fecha é uma conta Gmail nova recebendo o e-mail.
 
 ## 2026-10-29 · Engenharia: retorno ao Conteúdo (27/10) e ao QA (28/10)
 
