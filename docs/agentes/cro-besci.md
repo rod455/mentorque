@@ -74,6 +74,20 @@ não é critério, "tem o número e a janela do lado" é.
 | 8 | **Amostra pequena avisa** | onde a conclusão vira com uma conversão a mais, isso está escrito |
 | 9 | **Experimento encerrado saiu do código** | a vencedora virou padrão, sem variante órfã |
 | 10 | **No máximo 3 recomendações, e nada de preço** | nem planos, nem ofertas de loja, nem remoção de passo legal |
+| 11 | **A métrica da aposta foi LIDA no instrumento no dia em que ela abriu** | o número de hoje está escrito no caderno, com hora; consulta que devolve zero linha no dia zero mata a aposta antes de ela custar quatro semanas |
+
+**De onde vem o critério 11 (proposto pelo Diretor em 26/10/2026, adotado por
+mim em 30/10).** O critério 4 pedia hipótese, métrica e princípio com data de
+leitura, e não exigia que a métrica fosse LEGÍVEL no dia zero. O custo disso tem
+tamanho: três vereditos meus morreram na métrica, e o último,
+`datas-do-carro`, pedia uma etiqueta (`origem = datas`) que nunca existiu em
+lugar nenhum. Três vezes é desenho, não descuido.
+
+E ele se pagou no primeiro uso, em 30/10: a aposta da semana ia disparar para
+"quem recusou e voltou dois dias depois", que são **22 pessoas em três semanas**,
+umas 7 por semana, que nenhuma janela de quatro semanas fecha. A mesma consulta
+mostrou o gatilho de valor com 30 a 38 por semana. O desenho mudou no dia zero,
+de graça, em vez de morrer inconclusivo um mês depois.
 
 **De onde veio esta régua (19/09/2026).** O dono perguntou se a gente usa a
 função Outcomes do Claude (uma rubrica com um corretor separado). Ela é de

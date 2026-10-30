@@ -16,6 +16,89 @@ Formato de cada tela/fluxo:
 
 ## Estado
 
+v11 em 2026-10-30: rodada de CONVERSÃO, e ela desce o portão da conta até o
+fundo. Nenhum veredito venceu hoje, e isso está medido em vez de suposto. O
+achado: **de 224 convidados que disseram "Agora não" à folha da conta, 73
+depois fizeram algo de valor no app, nenhum criou conta, e nenhum foi
+perguntado uma segunda vez.** Próxima rodada alterna para RETENÇÃO.
+
+# O PORTÃO DA CONTA, OS DOIS DEGRAUS COM NÚMERO (2026-10-30)
+
+Os eventos da 3.2 (17/10) tornaram a folha legível. Por aparelho, por semana:
+
+    semana    a folha apareceu   tocou SIM   tocou "Agora não"   terminou a conta
+    12/10            63              36             25                 25
+    19/10           312             176            126                121
+    26/10           162              85             69                 72
+
+O primeiro degrau perde uns 45 de cada 100, e **a perda é um "não" explícito**:
+126 de 142 recusas na semana de 19/10 tocaram o botão, e só 16 saíram sem
+responder. É o inverso do portão de AVISO, onde o sair ganhava do botão em três
+para um. Pela régua que eu registrei em 16/10 e liquidei em 23/10, **botão que
+domina significa que o conserto é a promessa, não o momento.**
+
+O segundo degrau (de quem toca sim até a conta existir) perde de 15 a 30 de
+cada 100, e é o que a aposta de 16/10 atacou.
+
+# QUEM DIZ "AGORA NÃO" ESTÁ CERTO, E ESSE É O ACHADO (2026-10-30)
+
+O que a folha promete é verdade e é completo: o carro está só neste aparelho, e
+a conta o leva para outro. O problema é que, naquele instante, a pessoa acabou
+de digitar marca, modelo e ano e **não tem nada no app que doa perder**. A
+promessa é seguro contra um futuro hipotético, e recusar é a resposta racional.
+
+E a conta de verdade é esta, medida em 30/10:
+
+    tocaram "Agora não"                               224
+    seguem convidados                                 216
+    DEPOIS fizeram algo de valor no app                73
+    desses, criaram conta                               0
+    foram perguntados uma segunda vez                   0
+
+Setenta e três pessoas passaram a ter algo seu dentro do app (serviço,
+abastecimento, aula, pergunta ao Biela) e **nenhuma delas foi perguntada de
+novo, nunca**. A folha nasce só do cadastro de carro, e quem já tem carro não a
+dispara outra vez. É a aposta desta semana, e é o conserto que o dono nomeou em
+17/10 quando corrigiu a minha frase "o momento não volta".
+
+# O FUNDO DO FUNIL, COM O INSTRUMENTO DA LOJA (2026-10-30)
+
+A regra do dono de 17/10 ("a rodada de conversão anda até o pedido na loja, e
+não até o nosso botão"), cumprida até onde esta sessão alcança:
+
+- **`iniciou_checkout` está em ZERO há duas semanas fechadas**, com 80 e 48
+  aparelhos vendo o paywall. O `desistiu_da_compra`, que existe desde a 3.2
+  para contar quem abre a folha da loja e volta, também está em zero: ninguém
+  chegou à folha. Os dois zeros são coerentes, e nenhum é instrumento quebrado.
+- **A única assinatura que havia cancelou.** O retrato de hoje: 1 ativa com 1
+  cancelamento agendado, MRR 0 no Stripe, `active_trials` 0 no RevenueCat.
+- **FONTE QUE EU NÃO LI:** a API do Play e a do App Store Connect, que são onde
+  mora a resposta sobre as ofertas. Elas vivem no coletor do n8n e não nesta
+  sessão, então o estado das ofertas aqui vem do diário de 17 e 18/10 (o teste
+  grátis de 7 dias foi criado no Play em 17/10; na Apple não existe e a chave da
+  casa não deixa criar, item na lista do dono desde 17/10). **Não conferi eu
+  mesmo, e por isso não afirmo o estado de hoje.**
+- Então a leitura honesta do fundo: enquanto o teste grátis não existir nas
+  duas lojas, nenhuma aposta nossa no paywall mede coisa alguma, porque o
+  degrau de chegada é zero.
+
+# O SORTEIO ESTÁ CERTO, E A RESSALVA DE 23/10 ERA ERRO MEU (2026-10-30)
+
+Em 23/10 eu publiquei a promoção da variante A com uma ressalva ao lado: 891
+contra 960 aparelhos, "cerca de três vezes o erro do próprio sorteio". O
+retorno do dono de 26/10 disse, com razão, que conclusão e ressalva não podem
+conviver em seções diferentes do mesmo registro, e mandou testar o sorteio.
+
+Testado em 30/10, com a função real sobre os **1.996 anon_id reais** expostos:
+`onboarding-curto` dá 973 contra 1023, **z = 1,12**; cinco ids de controle dão
+z entre 0,36 e 1,16; e a concordância entre dois ids é 1.003 de 1.996,
+exatamente 50%.
+
+**O sorteio está certo. O erro era de conta minha:** eu comparei a diferença
+entre os braços (69) com o desvio padrão de UM braço (21,5). A comparação certa
+é contra o desvio padrão DA DIFERENÇA (43), e dá 1,6, que é ordinário. A
+promoção de A não depende de ressalva nenhuma.
+
 v10 em 2026-10-23: rodada de RETENÇÃO, e é a rodada de prestar contas: **nove
 experimentos settlados**, seis fechados, um deles com braço comparável de
 verdade. O achado é uma segunda tranca na mesma porta: o convite de permissão,

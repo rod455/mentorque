@@ -3,6 +3,99 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-10-30 · CRO: quem disse "agora não" para a conta nunca foi perguntado de novo
+
+- Artifact "Conversão da semana": https://claude.ai/artifact/VxVMEkqxffNW7BhNDwekEQ
+- Rodada de CONVERSÃO (a de 23/10 foi de retenção). Fila aberta antes do retrato:
+  **a linha da Engenharia de 26/10 era para mim hoje**, e ela é a base desta
+  rodada. Os dois degraus lidos por semana antes de propor mudança, como ela
+  pedia.
+- **NENHUM VEREDITO VENCEU HOJE, e isto foi conferido item por item** em vez de
+  suposto, que é a falha que eu declarei na semana passada:
+  `conta-que-sabe-que-veio-do-carro` e o quiz do dia 1 leem em 01/11 (contados
+  da 3.2, que passou de metade); `resumo-mensal` espera o segundo envio em
+  01/11; o paywall único lê em 03/11; o primeiro serviço em 06/11.
+  - **E a régua da 3.3 foi MEDIDA, não suposta: 213 dos 500 aparelhos ativos de
+    7 dias (43%)**, dez dias depois de publicada. Então o relógio do
+    `convite-do-carro-aparece-onde-a-pessoa-cai` ainda não começou. A régua é a
+    que o dono deu em 17/10 e ela está funcionando como desenhada.
+- **O ACHADO: a recusa da conta é racional, e ninguém volta a perguntar.** Dos
+  **224 convidados que tocaram em "Agora não"** na folha, **73 depois fizeram
+  algo de valor no app** (serviço, abastecimento, aula, pergunta ao Biela),
+  **NENHUM criou conta** e **nenhum dos 224 foi perguntado uma segunda vez**. A
+  folha nasce só do cadastro de carro, e quem já tem carro não a dispara outra
+  vez.
+  - Isto muda o diagnóstico do maior degrau do produto: o número parecia dizer
+    "45 de cada 100 não querem conta", e diz "45 de cada 100 não queriam conta
+    NAQUELE INSTANTE, e ninguém nunca voltou a perguntar".
+  - E quem recusa está certo: a folha promete proteção contra perder o aparelho
+    para quem acabou de digitar marca, modelo e ano e não tem nada que doa
+    perder. **Reescrever o texto para soar mais urgente seria inventar perda.**
+- **OS DOIS DEGRAUS, por semana** (aparelhos, eventos da 3.2): a folha apareceu
+  para 63, 312 e 162; tocaram sim 36, 176 e 85; tocaram "Agora não" 25, 126 e
+  69; terminaram a conta 25, 121 e 72. O primeiro degrau perde uns 45 de cada
+  100 e a perda é **"não" explícito: 126 das 142 recusas na semana de 19/10
+  tocaram o botão**, 16 saíram sem desfecho. É o inverso do portão de AVISO.
+- **APOSTA DA SEMANA, registrada antes de implementar:
+  `a-conta-e-pedida-de-novo-a-quem-ja-tem-algo-a-perder`.** O convidado é
+  perguntado uma segunda e última vez, depois de o app guardar algo que é dele.
+  Texto inalterado de propósito: é o momento que está em teste. **É o conserto
+  que o dono nomeou em 17/10** ao corrigir a minha frase "o momento não volta".
+  Travas no molde do convite de permissão: um repique na vida, nunca na sessão
+  da recusa, nunca depois de dois "não".
+- **O CRITÉRIO 11 FOI ADOTADO E SE PAGOU NO PRIMEIRO USO.** Proposto pelo
+  Diretor em 26/10 ("a métrica foi lida no instrumento no dia em que a aposta
+  abriu"), está na minha régua desde hoje. Ele matou o primeiro desenho desta
+  aposta no dia zero: o gatilho "recusou e voltou dois dias depois" são **22
+  pessoas em três semanas**, umas 7 por semana, que nenhuma janela fecha. O
+  gatilho de valor dá 30 a 38 por semana. Mudou de graça em vez de morrer
+  inconclusivo num mês.
+- **A RESSALVA DO SORTEIO DE 23/10 ERA ERRO MEU, E ESTÁ DESFEITA.** Testado em
+  30/10 com a função real sobre os **1.996 anon_id reais**: `onboarding-curto`
+  dá 973 contra 1023, **z = 1,12**; cinco ids de controle entre 0,36 e 1,16;
+  concordância entre dois ids 1.003 de 1.996, exatamente 50%. Eu havia
+  comparado a diferença entre braços (69) com o desvio padrão de UM braço
+  (21,5); o certo é contra o desvio da diferença (43), e dá 1,6. **A promoção de
+  A não depende de ressalva nenhuma**, e o ponto 2 do retorno de 26/10 está
+  fechado.
+- **O FUNDO DO FUNIL, pela regra do dono de 17/10:** `iniciou_checkout` em ZERO
+  nas duas semanas fechadas, com 80 e 48 aparelhos vendo o paywall, e
+  `desistiu_da_compra` também em zero (ninguém chegou à folha da loja). Os dois
+  zeros são coerentes. A única assinatura cancelou. **FONTE QUE EU NÃO LI:** as
+  APIs do Play e do App Store Connect vivem no coletor do n8n e não nesta
+  sessão, então o estado das ofertas que eu tenho vem do diário de 17 e 18/10 e
+  eu NÃO afirmo o estado de hoje.
+- **A LISTA DO DONO ganhou a linha que faltava há 43 dias** (ponto 3 do retorno
+  de 26/10): o modo motorista de aplicativo, com a pergunta fechada em uma
+  frase, o zero de 402 medido e o custo de manter e de tirar escritos.
+- CONFERÊNCIAS: `npm run conferir` verde, saída 0. **`conferir:segundo-pedido`
+  nova**, 13 degraus, com localStorage e sessionStorage de mentira para
+  exercitar as travas sem navegador. **Defeito plantado quatro vezes, por cópia
+  de segurança**: tirar o limite de um repique reprovou 2 degraus, tirar a trava
+  da sessão reprovou 1, tirar o limite de dois "não" reprovou 1, e trocar o
+  gatilho de volta para o CARRO reprovou 1. Suíte `conta` verde em 44 s.
+- **UMA CONFERÊNCIA QUE EU NÃO CONHECIA ME PEGOU**, e ela estava certa: a
+  `conferir:fila` reprovou a bateria inteira porque conferência nova tem de
+  entrar na fila de provas do Guardião, senão sai do rodízio sem ninguém
+  decidir isso. Registrada, com o limite declarado: seis dos sete degraus
+  exercitam as travas de verdade, o sétimo é texto no fonte, e texto diz que a
+  chamada está escrita, não que é alcançável (lição de 23/10, contra mim).
+- **DOIS ERROS MEUS DE LEITURA, corrigidos no caminho e escritos aqui:** uma
+  coluna minha lia zero por comparar com nulo em SQL (`detalhe <> 'botao'`
+  descarta nulo), e o zero era artefato da consulta, não achado; e a minha
+  contagem de recusas (126 botão, 16 sem desfecho) difere da da Engenharia de
+  26/10 (124 e 17) por janela e por como se conta quem não deixa desfecho. Os
+  dois instrumentos dizem a mesma coisa; a divergência fica declarada.
+- **A MINHA RODADA CONTRA A MINHA RÉGUA: onze critérios, com o 11 estreando, e
+  todos cumpridos.** O 6 não se aplica (nenhum A/B proposto nem ligado). O 1,
+  que falhou na semana passada, foi cumprido por verificação com as datas
+  escritas acima.
+- RECOMENDAÇÕES: (1) a frase de decisão sobre o modo motorista, já na lista do
+  dono; (2) não gastar rodada no paywall até o teste grátis existir nas duas
+  lojas, porque aposta medida em degrau de zero volta inconclusiva por
+  construção; (3) o critério 11 virar régua da casa e não só minha, já que o
+  padrão que ele corrige não é exclusividade deste papel.
+
 ## 2026-10-30 · Mídia: a conta passou a dizer de que campanha veio, e ela discorda da minha proposta
 
 - Artifact "Mídia da semana": https://claude.ai/artifact/11PNmQ7RijezDjK67jidid

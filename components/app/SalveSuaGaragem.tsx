@@ -6,6 +6,11 @@ import { useAuth } from "@/lib/app/auth";
 import { useNav } from "@/lib/app/nav";
 import { carName } from "@/lib/app/content";
 import { marcaVeioSalvarGaragem } from "@/lib/app/veioSalvarGaragem";
+import {
+  cabeSegundoPedido,
+  gastaSegundoPedido,
+  marcaRecusaDeConta,
+} from "@/lib/app/segundoPedidoDeConta";
 import { funil } from "@/lib/app/funil";
 import { Icon, useContent } from "./ui";
 
@@ -47,12 +52,42 @@ export function SalveSuaGaragem() {
   const { user } = useAuth();
   const { go } = useNav();
   const [aberta, setAberta] = useState(false);
+  // Qual dos dois pedidos está na tela. Sem isto o funil não separa a conta que
+  // o segundo pedido trouxe da que o primeiro já trazia, e a aposta não fecha.
+  const [repique, setRepique] = useState(false);
 
   useEffect(() => {
     const abrir = () => setAberta(true);
     window.addEventListener(EVENTO, abrir);
     return () => window.removeEventListener(EVENTO, abrir);
   }, []);
+
+  // O SEGUNDO PEDIDO, para quem já tem algo a perder (30/10/2026).
+  //
+  // Medido em 30/10: dos 224 convidados que tocaram em "Agora não", 73 depois
+  // fizeram algo de valor no app e NENHUM criou conta, e nenhum deles foi
+  // perguntado uma segunda vez. A folha nasce só do cadastro de carro, e quem
+  // já tem carro nunca mais a dispara.
+  //
+  // "Algo a perder" é estado que existe e é da pessoa: um serviço registrado,
+  // um abastecimento ou uma aula vista. O carro NÃO conta aqui, de propósito:
+  // é ele que dispara a primeira folha, e foi exatamente com o carro na mão
+  // que ela disse não.
+  //
+  // As três travas (um repique na vida, nunca na sessão da recusa, nunca depois
+  // de dois "não") moram em lib/app/segundoPedidoDeConta.ts, puras, para a
+  // conferência de linha de comando exercitá-las sem navegador.
+  const temAlgoAPerder =
+    (s.services?.length ?? 0) > 0 ||
+    (s.abastecimentos?.length ?? 0) > 0 ||
+    (s.seenLessons?.length ?? 0) > 0;
+  useEffect(() => {
+    if (user) return;
+    if (!cabeSegundoPedido(temAlgoAPerder)) return;
+    gastaSegundoPedido();
+    setRepique(true);
+    setAberta(true);
+  }, [user, temAlgoAPerder]);
 
   const v = activeVehicle(s);
   const visivel = aberta && !user && !!v;
@@ -63,8 +98,15 @@ export function SalveSuaGaragem() {
   // de 16/10 teve de reconstruir o degrau pelo carro e pelo cadastro. Uma vez
   // por sessão, como a própria folha.
   useEffect(() => {
-    if (visivel) funil("convite_conta", { origem: "carro", umaVez: true, chave: "convite_conta" });
-  }, [visivel]);
+    if (visivel) {
+      funil("convite_conta", {
+        origem: "carro",
+        umaVez: true,
+        chave: repique ? "convite_conta_repique" : "convite_conta",
+        ...(repique ? { detalhe: "repique" } : {}),
+      });
+    }
+  }, [visivel, repique]);
 
   if (!visivel || !v) return null;
 
@@ -84,7 +126,7 @@ export function SalveSuaGaragem() {
             lib/app/veioSalvarGaragem.ts. */}
         <button
           onClick={() => {
-            funil("aceitou_convite_conta", { origem: "carro" });
+            funil("aceitou_convite_conta", { origem: "carro", ...(repique ? { detalhe: "repique" } : {}) });
             marcaVeioSalvarGaragem();
             setAberta(false);
             go({ name: "auth" });
@@ -94,7 +136,16 @@ export function SalveSuaGaragem() {
           {g.cta}
         </button>
         <button
-          onClick={() => { funil("recusou_convite_conta", { origem: "carro", detalhe: "botao" }); setAberta(false); }}
+          onClick={() => {
+            // A recusa é contada aqui: é ela que destrava o segundo pedido (a
+            // primeira) e que encerra o assunto (a segunda).
+            const recusas = marcaRecusaDeConta();
+            funil("recusou_convite_conta", {
+              origem: "carro",
+              detalhe: recusas >= 2 ? "botao-2" : "botao",
+            });
+            setAberta(false);
+          }}
           className="mt-2 w-full rounded-xl px-4 py-2.5 font-display text-sm font-medium text-cream/55"
         >
           {g.later}

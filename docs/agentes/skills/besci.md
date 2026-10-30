@@ -156,6 +156,30 @@ experimentos alimentam a seção final.
   "o que poderia fechar este veredito é X" com numerador E denominador. Se X
   for uma ausência, a aposta é correção e se defende pelo argumento, não pelo
   dado.
+- **2026-10-30: "a pessoa recusou" e "a pessoa recusou e nunca foi perguntada de
+  novo" são diagnósticos diferentes, e o segundo é o que costuma ser verdade.**
+  De 224 convidados que tocaram em "Agora não" na folha da conta, 73 depois
+  passaram a ter algo seu no app, nenhum criou conta, e **zero foram perguntados
+  uma segunda vez**. O número que parecia "45 de cada 100 não querem conta" é
+  na verdade "45 de cada 100 não queriam conta NAQUELE INSTANTE, e ninguém
+  nunca voltou a perguntar". A regra: ao ler a perda de qualquer portão,
+  perguntar quantas vezes o pedido foi feito antes de concluir sobre a vontade
+  de quem recusou. Pedido de uma vez só mede o momento, não a pessoa.
+- **2026-10-30: recusa racional não se conserta com copy.** A folha promete o
+  que é verdade e completo (o carro está só neste aparelho; a conta o leva para
+  outro), e quem acabou de digitar marca, modelo e ano não tem nada que doa
+  perder. Reescrever o texto para parecer mais urgente seria inventar perda, que
+  é o que esta casa não faz. Antes de propor copy nova para um pedido que a
+  pessoa recusa, perguntar se ela tem motivo para aceitar HOJE; se não tiver, o
+  conserto é o momento ou o que o pedido oferece, e os dois são decisão maior
+  que copy.
+- **2026-10-30: repetir um pedido é aposta; repetir sem trava é praga, e a
+  diferença se escreve em conferência.** O segundo pedido de conta nasceu com
+  três travas no molde do convite de permissão (um repique na vida, nunca na
+  sessão da recusa, nunca depois de dois "não") e com uma conferência que
+  reprova se qualquer uma delas sair. O código dizia o contrário ("pedido que
+  ressuscita dias depois vira praga"), e a forma de discordar de uma decisão
+  escrita no código é citá-la e dizer o que mudou, não ignorá-la.
 - **2026-10-23: siga a marca até a TELA QUE A CONSOME, porque pedido que espera
   no lugar errado não deixa erro em lugar nenhum.** O convite de permissão
   nasce quando a pessoa salva o carro e é consumido pela tela da GARAGEM; só que

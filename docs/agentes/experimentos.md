@@ -80,6 +80,74 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 
 ## Experimentos
 
+## [a-conta-e-pedida-de-novo-a-quem-ja-tem-algo-a-perder] O convidado que disse "agora não" é perguntado uma segunda vez
+- Estado: ABERTO
+- Tipo: mudanca-direta
+- Alvo no funil: o primeiro degrau do portão da conta, que é o maior do produto.
+  Na semana de 19 a 25/10, a folha "Salve sua garagem" apareceu para **312
+  aparelhos**: 176 tocaram em sim, **126 tocaram em "Agora não"** e 16 saíram
+  sem responder. Por semana: 63 → 36 sim, 312 → 176, 162 → 85.
+- **MÉTRICA LIDA NO INSTRUMENTO HOJE, 30/10 às 11h30 UTC** (critério 11, o que o
+  Diretor propôs em 26/10, e ele se pagou no primeiro uso):
+  - **Numerador e denominador de hoje: ZERO de 73.** Setenta e três convidados
+    recusaram a folha, DEPOIS fizeram algo de valor no app (pergunta ao Biela,
+    sintoma, serviço, aula, abastecimento) e **nenhum deles criou conta**. Não
+    um a cada tanto: nenhum.
+  - **E nenhum deles foi perguntado de novo: 0 de 224 recusantes viram a folha
+    uma segunda vez**, medido. A folha é uma vez por sessão e só nasce do
+    cadastro de carro, e quem já tem carro nunca a dispara outra vez.
+  - **O primeiro desenho desta aposta MORREU no dia zero, por causa do critério
+    novo.** Eu ia disparar para "quem recusou e voltou dois dias depois": são
+    **22 pessoas em três semanas**, uns 7 por semana, que nenhuma janela de
+    quatro semanas fecha. O gatilho de VALOR dá 4, 38 e 26 por semana nas três
+    semanas medidas, de 25, 125 e 66 recusantes. Trinta por semana fecha; sete
+    não.
+- Tese BeSci: aversão à perda, com a perda finalmente real, e timing do pedido.
+  A folha de hoje pede a conta no instante em que a pessoa acabou de digitar
+  marca, modelo e ano, e oferece em troca uma proteção contra perder o aparelho
+  algum dia. **Quem toca em "Agora não" está certo:** naquele momento ela não
+  tem nada no app que doa perder, e a promessa é sobre um futuro hipotético. O
+  texto não mente e não é por isso que ela recusa.
+  - O que muda: a pessoa é perguntada DE NOVO, uma única vez, depois de o app
+    passar a guardar algo que é dela de verdade (um serviço registrado, um
+    abastecimento, uma aula vista). Aí "está só neste aparelho" deixa de ser
+    hipótese e passa a nomear uma coisa que existe.
+  - **O texto da folha não muda nesta aposta**, de propósito: é o momento que
+    está sendo testado, e um princípio por mudança. Se o número não se mover com
+    o momento certo, aí a conversa é sobre o que a conta oferece, que é decisão
+    de produto e não de copy.
+  - **E ISTO É O CONSERTO QUE O DONO NOMEOU EM 17/10**, quando corrigiu a minha
+    frase "o momento não volta": "as duas leituras pedem consertos diferentes: a
+    de hoje melhora o pedido; a outra REPETE o pedido a quem volta". A de hoje
+    (`conta-que-sabe-que-veio-do-carro`) foi a primeira; esta é a segunda.
+- **A DISCIPLINA CONTRA A PRAGA, e ela é a razão de o limite existir.** O
+  comentário em `lib/app/marcasDeConvite.ts` diz que a marca morre com a sessão
+  de propósito, porque "pedido que ressuscita dias depois vira praga". Esta
+  aposta não desfaz isso: ela não ressuscita a marca do cadastro, ela cria UM
+  segundo pedido, com as travas no molde do convite de permissão (que tem 4 dias
+  entre pedidos e 3 na vida): **no máximo um repique na vida do aparelho, nunca
+  na mesma sessão da recusa, e nunca depois de dois "não".** Quem disser não
+  duas vezes não é perguntado mais.
+- Métrica: dos convidados que recusaram a folha e depois fizeram algo de valor
+  na semana, quantos recebem o segundo pedido e quantos criam conta. Hoje 0 de
+  73 criam conta e 0 recebem o pedido · Duração: 4 semanas
+- **Denominador esperado, com o número de hoje** (régua de 02/10): 30 a 38
+  pessoas por semana, logo 120 a 150 em quatro semanas. Para sair de 0, bastam
+  poucas contas para o sinal existir; o alvo honesto é **10 contas em quatro
+  semanas**, que é mais do que o zero absoluto de hoje sem depender de taxa.
+- Nível da régua: **2, nunca 3.** Mudança direta, sem braço comparável. A linha
+  de base é zero medido, o que ajuda: qualquer coisa acima de zero é sinal, e o
+  risco de confundir é baixo justamente porque não há de onde cair.
+- Aprovação: não se aplica (momento de um pedido que já existe, sem variantes,
+  sem texto novo, sem tocar em preço, plano, cobrança ou passo legal)
+- Início: 2026-10-30 na web; no app, com a 3.4 · **Ler a partir de: duas semanas
+  depois de a 3.4 passar de metade dos aparelhos ativos.** A régua é a de 17/10,
+  e hoje ela está medida: a 3.3 tem 213 dos 500 aparelhos ativos de 7 dias
+  (43%), ou seja ainda não passou de metade, dez dias depois de publicada.
+- Antes: 0 de 73 criaram conta; 0 de 224 recusantes foram perguntados de novo;
+  126 recusas por botão na semana de 19/10.
+- Veredito: (aberto)
+
 ## [convite-do-carro-aparece-onde-a-pessoa-cai] O convite do aviso deixa de esperar numa tela por onde ninguém passa
 - Estado: ABERTO
 - Tipo: mudanca-direta
@@ -951,10 +1019,24 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
     menos investido. Fricção retirada de um passo que a pessoa precisa suportar
     não some, ela reaparece no pedido seguinte. Não há como separar "foram as
     duas páginas" de "foi a prova social" com este desenho, e isso fica dito.
-  - RESSALVA: os denominadores saíram 891 contra 960, uma diferença de 69 que é
-    cerca de três vezes o erro do próprio sorteio. Não derruba o veredito (as
-    taxas é que são comparadas, e os dois cortes concordam), mas o sorteio
-    merece um olhar de quem cuida dele.
+  - ~~RESSALVA: os denominadores saíram 891 contra 960, uma diferença de 69 que é
+    cerca de três vezes o erro do próprio sorteio.~~ **A RESSALVA ESTAVA ERRADA, E
+    O ERRO ERA DE CONTA MINHA. Desfeita em 30/10, com o teste que o Diretor
+    cobrou.** Eu comparei a DIFERENÇA entre os braços (69) com o desvio padrão de
+    UM braço (21,5) e li "três vezes o erro". A comparação certa é o desvio de um
+    braço contra a expectativa (34,5) sobre o mesmo desvio padrão, ou a diferença
+    contra o desvio padrão DA DIFERENÇA (43): nos dois casos dá **1,6**, que é
+    ordinário.
+    - E o teste direto, rodado em 30/10 com a função real
+      (`lib/app/sorteio.ts`) sobre os **1.996 anon_id reais** que foram
+      expostos: `onboarding-curto` sorteia 973 contra 1023, **z = 1,12**. Cinco
+      outros ids de controle dão z entre 0,36 e 1,16. E a concordância entre dois
+      ids é **1.003 de 1.996, exatamente 50%**, que era a armadilha de 12/09.
+    - **O sorteio está certo, a promoção de A não depende de ressalva nenhuma, e
+      quem errou fui eu.** Fica escrito aqui porque o veredito de 23/10 foi
+      publicado com a ressalva ao lado, e o ponto 2 do retorno do dono de 26/10
+      disse, com razão, que conclusão e ressalva não podem conviver em seções
+      diferentes do mesmo registro.
   - **CONSEQUÊNCIA, feita nesta rodada: A virou o padrão e o experimento SAIU
     do código.** E vale registrar o que isso resolve: a pergunta que estava com
     o dono desde 02/10 era qual das duas promover, porque promover B apagaria a
