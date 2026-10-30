@@ -26,6 +26,18 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   para guardar o carro e não para ler e-mail. O teste que separa as duas é o
   Postmaster Tools (reputação e taxa de spam do domínio por dia), que só o
   dono abre, e a abertura por origem do cadastro, que a 3.3 começou a gravar.
+- **Atualizado no mesmo dia, com três instrumentos novos.** (a) Postmaster
+  Tools, print do dono: oito requisitos em compliance, inclusive o DMARC, que
+  em 02/10 era o único "precisa de ajustes"; a análise de entrega segue "não
+  há e-mails suficientes", então a reputação no Gmail continua SEM NOTA. (b)
+  Relatórios agregados do DMARC (Google de 29/10, Outlook de 25, 27 e 28/10):
+  todos os envios do Resend passam DKIM alinhado (`mentorque.com.br`, seletor
+  `resend`) e SPF (`send.mentorque.com.br`); os dois do ImprovMX são
+  encaminhamento do `contato@`, com DKIM passando. Autenticação descartada como
+  causa. (c) Banco: a abertura do d0 caiu também entre quem seguiu usando o app
+  na semana seguinte (2 de 12, 16,7%, para 2 de 40, 5,0%), não só entre quem
+  sumiu (21,8% para 2,9%). Amostra pequena, mas aponta mais para onde o e-mail
+  cai do que para quem o recebe. O teste que fecha é ver a aba do Gmail.
 
 ## 2026-10-29 · Engenharia: retorno ao Conteúdo (27/10) e ao QA (28/10)
 
