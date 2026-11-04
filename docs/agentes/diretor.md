@@ -953,3 +953,56 @@ assinadas. Errou duas vezes no mesmo lugar, que é ler o portão e o paywall pel
 evento mais grosso quando a casa já tinha o evento fino: a segunda trava estava
 medida pela versão que a rodada celebrou, e a vontade de pagar estava no
 `tentou_assinar`.
+
+## Retorno do dono sobre a rodada de 02/11/2026 (publicada em 04/11)
+
+Escrito na sessão com o dono em 04/11, a pedido dele ("veja todas as análises
+que saíram agora"). Lidos o registro no diário, o caderno de experimentos, o
+manual do CRO e a lista do dono.
+
+Primeiro o que manter, e é muito.
+
+**VOCÊ DESFEZ O "NÃO SE MOVEU" COM O EVENTO FINO, E O CONSERTO DE 16/10 APARECEU.**
+Aceitaram e não terminaram foi de 28% para 14%; a primeira trava ficou onde
+estava. Julgar a porta inteira escondia a trava que o conserto mexeu, e você
+publicou a correção contra si.
+
+**O PRIMEIRO USO DA ETIQUETA DE CAMPANHA LIDO COMO DIREÇÃO, NÃO NÍVEL.** Orgânico
+63% contra Facebook 47% e sem origem 40% no portão, com 38 pessoas no orgânico e
+a frase certa ("o portão não é só tela, é também quem bate nele"). E a régua de
+cada custo por conta dita (semana calendário, 7 dias do retrato, janela da
+Mídia), que era o ponto 4 do retorno anterior.
+
+**A LEITURA DO MÊS ACHOU UMA FAMÍLIA SÓ EM SEIS DOS SETE PAPÉIS**, contou treze
+casos, quatro seus, e notou que nenhuma das quatro regras escritas mora na
+régua, que é o único texto que a rodada relê. É o diagnóstico de método mais
+útil de outubro.
+
+Agora o que precisa melhorar.
+
+**1. O REGISTRO REPETE DOIS NÚMEROS QUE JÁ ESTAVAM CORRIGIDOS DESDE 30/10.** "73
+fizeram algo de valor, NENHUM criou conta, e nenhum dos 224 foi perguntado de
+novo" foi corrigido no mesmo dia em três lugares: o caderno de experimentos
+(correção datada dentro da aposta), o retorno no manual do CRO e o diário da
+Engenharia. Dos 225 recusantes, 7 criaram conta, 5 deles pela folha que
+reaparece ao cadastrar outro carro; o "0 de 224" é o `convite_conta`, que só
+grava uma vez por sessão; e o gatilho do código alcança 39, não 73. A regra
+nova da sua rodada ("listar depois do último pull") não cobre isto: a correção
+estava na main havia cinco dias. É a família que a sua própria leitura do mês
+achou, com uma variante que vale escrever: **número que viaja do registro de
+outro papel se relê na fonte de verdade da aposta (o caderno), não na entrada
+do diário onde ele nasceu.** E a frase "a primeira trava é onde estão as 119, e
+o CRO achou por quê" fica menor: o CRO achou um motivo, não o motivo, e a
+aposta ainda não leu.
+
+**2. AS TRÊS PROPOSTAS PARA O DONO DECIDIR FICARAM NO CORPO DO REGISTRO.** É o
+mesmo ponto que você cobrou do ASO na mesma noite: recomendação no corpo
+envelhece calada. A lista do dono é para clique em ferramenta, então decisão
+não mora lá; o lugar é a frase de fechamento do relatório para o dono, com a
+pergunta fechada em uma linha e o que muda se ele disser sim. A critério 12 é
+de 26/10 e ainda não tem resposta, e é por isso. Nesta sessão eu levei as três
+ao dono diretamente.
+
+Veredito: a melhor leitura de método do mês, com a própria conclusão desfeita
+pelo instrumento novo. Errou ao republicar dois números corrigidos havia cinco
+dias, que é exatamente a família que a leitura do mês descreve.

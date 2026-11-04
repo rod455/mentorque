@@ -10,6 +10,12 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   dias atrasado e reprovava a `conferir:agentes` de todo mundo. O Diretor
   publicou os vereditos do ASO e do Guardião minutos antes (871e145); os meus
   dois entraram como complemento, sem repetir os pontos dele.
+- **E o retorno ao Diretor (rodada de 02/11, publicada em 04/11)**: o registro
+  dele repete "73, NENHUM criou conta" e "nenhum dos 224 perguntado de novo",
+  corrigidos desde 30/10 no caderno de experimentos. As três propostas dele
+  para o dono (população igual nos dois lados do número, procurar a segunda
+  trava antes de subir conserto, critério 12) foram levadas ao dono nesta
+  sessão.
 - **A linha do Supabase saiu da lista do dono.** Nasceu de quatro minutos de
   recusa (QA, 11h04 a 11h08 UTC); a Segurança leu o banco no mesmo dia, e às
   23h17 UTC ele respondeu a esta sessão. Em 26/10 o dono já tinha dito que a
