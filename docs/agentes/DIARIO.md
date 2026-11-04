@@ -3,6 +3,78 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-04 · QA: o medidor de crash voltou sozinho, e verde não é consertado
+
+- **O retorno do dono de 29/10 cobrou duas coisas e as duas valem aqui**: conserto
+  fora da alçada sai como linha na fila para quem EXECUTA, e frase pronta tem que
+  chegar onde se lê. A linha de 28/10 (QA para Engenharia) existia; nesta rodada
+  ela foi ATUALIZADA com a medida nova, em vez de eu abrir item novo.
+- **A série de crash do Play voltou em 01/11 e ninguém consertou nada.** O campo
+  `updatedAt` do fluxo "Analista: metricas externas" diz 2026-10-25 (API do n8n,
+  lida hoje às 11h15 UTC), três dias ANTES do meu achado, e os nós "Play: taxa de
+  crash" e "Play: taxa de ANR" seguem pedindo o fim da janela em hoje menos 4.
+  Quem voltou foi a frescura da Play, que alcançou a janela.
+- **A conta pelos pacotes do retrato**: erro de 21 a 31/10, ONZE dias (na rodada
+  passada eu disse oito e depois nove, que era a conta até ela acabar); `ok` com
+  sete linhas de 01/11 a 04/11. E em todos os quatro pacotes `ok` a linha mais
+  nova está a exatamente CINCO dias, ou seja o pedido está colado no limite da
+  Play. **Margem zero**: a API não devolve menos linhas quando passa do limite,
+  ela recusa o pedido inteiro, e por isso a perda é de uma semana e não de um dia.
+  Um dia de atraso a mais na Play e a série cai outra vez.
+- Os três itens da fila continuam abertos, inclusive o terceiro: a linha do
+  `play_console` no topo do `retrato.md` de hoje ainda é JSON cru.
+- **ERRO MEU, e o pior dos dois: a frase que eu publiquei estava errada e a minha
+  asserção defendia o erro.** A linha dizia "a API atrasa de 3 a 5 dias" como se
+  fosse constante. Não é: foi de nove dias durante os onze de queda e nunca foi de
+  três. E em 28/10 eu escrevi uma asserção que cobrava essa frase LITERAL, pela
+  régua de 21/10 de tornar frase publicada falsificável. Por uma semana a
+  conferência ficou verde defendendo a minha frase errada. **Asserção sobre o
+  mundo de fora tem que cobrar quantidade MEDIDA, não texto digitado.** Consertado
+  nos dois lugares: o atraso é contado da linha mais nova contra hoje (`diasAtras`,
+  UTC dos dois lados), e a asserção cobra a contagem.
+- **A linha ganhou o aviso que faltava**: dado mais novo a mais de cinco dias diz
+  MARGEM ZERO e explica que a recusa é do pedido inteiro. É o único sinal
+  automático que existe antes de a série sumir de novo; sem ele, o jeito de
+  descobrir continuaria sendo onze dias de retrato sem série.
+- **A conferência do dinheiro publicava um palpite, e é código meu de 02/10.** O
+  retrato de hoje imprime, sobre a ÚNICA assinatura ativa da casa: "o banco tem 1
+  assinatura(s) de loja e o RevenueCat 0: sobra nossa, **provavelmente** assinatura
+  que expirou la e segue ativa aqui". São três mundos e dois são defeito nosso
+  (o nosso webhook não gravar a saída, que é a família do `renovou` fechado em
+  01/10; ou cortesia etiquetada como venda de loja). Não gritar continua certo, que
+  o lado perigoso é o contrário e alarme sobre sobra nossa ensina a ignorar alarme.
+  O que mudou: o silêncio diz o que SEPARA os três e nomeia o instrumento (ler a
+  linha da assinatura e ver se há cancelamento ou expiração gravados).
+- **Cinco defeitos plantados, quatro morderam de primeira.** O quinto ensinou algo
+  que ficou escrito ao lado da asserção: tirei a regex de formato de data e a
+  conferência passou VERDE, porque a guarda de `Number.isFinite` pegava o caso
+  sozinha. Com as duas guardas fora, ela reprova. Então ela prova o desfecho que
+  diz (nenhum formato estranho chega ao retrato como `NaN`) e não a guarda que eu
+  imaginava. Asserção que se atribui mérito de outra guarda é a família do defeito
+  de 03/10.
+- **O BANCO NÃO RESPONDEU NESTA SESSÃO**: três chamadas negadas com "You do not
+  have permission to perform this action", inclusive `list_tables`, entre 11h04 e
+  11h08 UTC; em 28/10 às 11h a mesma ferramenta respondia. Entrou na lista do dono
+  (destino `supabase`) como PERGUNTA, porque não dá para eu distinguir autorização
+  vencida de permissão mudada. **O que ficou sem medir por causa disso**: qual dos
+  três mundos é a assinatura que sobra; e a concentração dos fechamentos (a janela
+  de 7 dias do retrato mostra 13 fechamentos em 6 aparelhos na home, 2,2 por
+  aparelho, contra 1,0 e 1,1 que eu medi por semana de calendário em 28/10). Isso
+  fica ANOTADO e não vira conclusão: janela curta já pareceu alarme em 28/10 e não
+  tinha salto nenhum por semana.
+- **Não houve varredura dirigida nesta rodada**, e é bom dizer em vez de maquiar:
+  os dois erros reais tomaram a rodada e a metade de dados de qualquer varredura
+  depende de ler linha. O catálogo remoto de aulas segue sendo a próxima.
+- O denominador da vitals continua sem conferir: 50 a 70 `distinctUsers` por dia
+  contra 495 aparelhos Android ativos no nosso funil, de sete a dez vezes menos.
+  Nenhuma taxa sai dele, e o 0% de crash não derruba nem confirma a migalha. E o
+  dia 24/10 não existe em nenhum dos quatro pacotes; não sei por quê e não suponho.
+- `npm run conferir` verde às 11h12 UTC com o código desta rodada, e reconferida
+  verde às 23h06 depois das linhas de documentação (a sessão foi reiniciada no
+  meio, e as leituras de instrumento são todas da manhã, entre 11h04 e 11h15).
+  `conferir:entre` e `conferir:acoes` verdes depois das linhas novas.
+- Artifact da rodada: https://claude.ai/artifact/YVwopeWq1oJPvG4ihYQ6Hv
+
 ## 2026-10-30 · Engenharia: o segundo pedido de conta não alcançava nenhum dos recusantes da aposta
 
 - Revisão da rodada do CRO de hoje, a pedido do dono. Retorno escrito em

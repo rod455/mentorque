@@ -678,13 +678,17 @@ export async function coletarDadosOperacao() {
     // Android, e ele passou por três estados sem o retrato dizer nada, porque
     // a linha legível nunca existiu. Suprimido de 22/08 a 17/10; VIVO em 18,
     // 19 e 20/10, com o primeiro dado de crash da história do app, que ninguém
-    // leu; e com ERRO de requisição desde 21/10, oito dias sem ninguém notar.
+    // leu; e com ERRO de requisição de 21 a 31/10, onze dias sem ninguém notar.
     // Erro não é supressão: o primeiro é conserto nosso. Regra em
     // lib/retratoLegivel.ts.
+    //
+    // A série voltou em 01/11 SEM NINGUÉM CONSERTAR NADA (o fluxo do n8n não é
+    // editado desde 25/10): quem voltou foi a frescura da Play. É por isso que
+    // a linha agora conta o atraso e avisa quando a margem do pedido acaba.
     vitalsLegivel: (() => {
       const pacote = (porFonte["play_console"] ?? [])[0];
       const d = (pacote?.dados ?? {}) as Parameters<typeof linhaDeVitals>[0];
-      return linhaDeVitals(d);
+      return linhaDeVitals(d, new Date());
     })(),
     // A ESCADA DA AQUISIÇÃO, COM UM DONO POR DEGRAU (03/10/2026).
     //

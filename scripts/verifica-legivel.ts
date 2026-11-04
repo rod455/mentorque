@@ -250,12 +250,17 @@ console.log("Retrato: janela aberta vira motivo, e não número?");
 // O único instrumento que mede o processo NATIVO do Android passou por três
 // estados sem o retrato dizer nada, porque a linha legível não existia:
 // suprimido de 22/08 a 17/10, VIVO em 18, 19 e 20/10 (o primeiro dado de crash
-// da história do app, que ninguém leu) e com ERRO de requisição desde 21/10,
-// oito dias sem ninguém notar.
+// da história do app, que ninguém leu) e com ERRO de requisição de 21 a 31/10,
+// onze dias sem ninguém notar.
 //
-// A distinção que estas linhas guardam é a que custou os oito dias: "o Play não
+// A distinção que estas linhas guardam é a que custou os onze dias: "o Play não
 // publica para nós" soa definitivo e vira paisagem; "a nossa requisição está
 // malformada" é conserto nosso.
+//
+// E DESDE 01/11 A SÉRIE VOLTOU SEM NINGUÉM CONSERTAR NADA: o fluxo do n8n não é
+// editado desde 25/10 e continua pedindo o fim da janela em hoje menos 4; quem
+// voltou foi a frescura da Play. Por isso a seção passou a cobrar o AVISO DE
+// MARGEM, que é a única coisa que grita antes de a série sumir outra vez.
 {
   const comErro = linhaDeVitals({ crash: { estado: "erro", motivo: "Bad request - please check your parameters" } });
   conferir("coletor com erro NÃO vira zero medido", !comErro.legivel, comErro.texto);
@@ -268,6 +273,8 @@ console.log("Retrato: janela aberta vira motivo, e não número?");
   conferir("e NÃO é confundida com falha do coletor", !/COLETOR FALHANDO/.test(suprimido.texto), suprimido.texto);
 
   // Dado de verdade: o que o Play publicou em 18 a 20/10, com a data da LINHA.
+  // O `hoje` entra por parâmetro para a contagem do atraso ser determinística:
+  // conferência que depende do relógio reprova sozinha num dia qualquer.
   const vivo = linhaDeVitals({
     crash: { estado: "ok", linhas: 3 },
     crashPorDia: [
@@ -275,16 +282,66 @@ console.log("Retrato: janela aberta vira motivo, e não número?");
       { dia: "2026-10-15", metricas: { crashRate: 0, distinctUsers: 60 } },
       { dia: "2026-10-14", metricas: { crashRate: 0, distinctUsers: 70 } },
     ],
-  });
+  }, new Date("2026-10-20T09:00:00Z"));
   conferir("dado publicado vira número", vivo.legivel, vivo.texto);
   // A linha MAIS NOVA pela data, e não a última do array: ordem de array é
   // promessa de quem montou, e já mordeu esta casa em 04/10 lendo o Play.
   conferir("e sai a linha mais nova pela DATA, não a última do array",
-    /dia 2026-10-15/.test(vivo.texto), vivo.texto);
-  conferir("a frase diz que a API atrasa, para o número não passar por hoje",
-    /atrasa de 3 a 5 dias/.test(vivo.texto), vivo.texto);
+    /de 2026-10-15/.test(vivo.texto), vivo.texto);
+  // O ATRASO É CONTADO, E ESTA ASSERÇÃO É UM ERRO MEU CORRIGIDO (04/11/2026).
+  //
+  // Até aqui ela cobrava a frase LITERAL "atrasa de 3 a 5 dias", e eu a escrevi
+  // em 28/10 com orgulho, pela regra de 21/10 de tornar frase publicada
+  // falsificável. Só que a frase estava ERRADA: o atraso não é constante, foi de
+  // nove dias de 21 a 31/10 e nunca foi de três. A asserção não protegeu a
+  // verdade, protegeu a minha frase, e por duas semanas defendeu o erro com
+  // verde. Asserção sobre o mundo de fora tem que cobrar quantidade MEDIDA, não
+  // texto digitado: 15/10 lido em 20/10 são cinco dias, e é isso que ela cobra.
+  conferir("o atraso sai CONTADO da linha, não como faixa digitada",
+    /5 dias atras/.test(vivo.texto) && !/3 a 5 dias/.test(vivo.texto), vivo.texto);
+  conferir("e cinco dias é tratado como normal, não como alarme",
+    /normal desta fonte/.test(vivo.texto) && !/MARGEM ZERO/.test(vivo.texto), vivo.texto);
   conferir("e diz que mede o processo NATIVO, não a migalha",
     /processo NATIVO/.test(vivo.texto), vivo.texto);
+
+  // O AVISO DE MARGEM, que é o achado de 04/11 virando instrumento.
+  //
+  // O pedido do coletor pede o fim da janela em hoje-4, e a Play RECUSA O PEDIDO
+  // INTEIRO quando a frescura dela é mais velha que isso (não devolve menos
+  // linhas: devolve nada). Então linha mais nova a mais de cinco dias é o único
+  // sinal automático que temos de que a próxima coleta pode não voltar. Sem
+  // isto, o jeito de descobrir continuaria sendo onze dias de retrato sem série.
+  const semMargem = linhaDeVitals({
+    crash: { estado: "ok", linhas: 1 },
+    crashPorDia: [{ dia: "2026-10-15", metricas: { crashRate: 0, distinctUsers: 60 } }],
+  }, new Date("2026-10-23T09:00:00Z"));
+  conferir("linha velha avisa que a margem do pedido acabou",
+    /MARGEM ZERO/.test(semMargem.texto), semMargem.texto);
+  conferir("e o aviso explica que a recusa é do pedido INTEIRO",
+    /pedido INTEIRO/.test(semMargem.texto), semMargem.texto);
+  // Mas continua sendo dado legível: o risco é do coletor, não do número.
+  conferir("e o número velho continua legível, porque quem está em risco é o coletor",
+    semMargem.legivel, semMargem.texto);
+
+  // Data que não parseia não pode virar contagem: `NaN` dias atrás impresso no
+  // retrato seria pior que não contar.
+  //
+  // E ESTA ASSERÇÃO COBRE O DESFECHO, NÃO A GUARDA, o que descobri plantando
+  // (04/11). `diasAtras` tem duas guardas, a regex de formato e o
+  // `Number.isFinite`. Tirei a regex e a asserção passou VERDE, porque
+  // `new Date("15/10/2026")` já é `NaN` e o `isFinite` pegou sozinho. Tirando as
+  // duas, ela reprova. Então o que ela prova é o que ela diz: nenhum formato
+  // estranho chega ao retrato como `NaN`. A regex continua no código porque
+  // documenta o formato acordado com a fonte e torna a função total, e NÃO
+  // porque esta linha a prove; a guarda que morde neste caso é o `isFinite`.
+  // Asserção que se atribui mérito de outra guarda é a família do defeito de
+  // 03/10, cinco conferências verdes com defeito de pé.
+  const dataTorta = linhaDeVitals({
+    crash: { estado: "ok", linhas: 1 },
+    crashPorDia: [{ dia: "15/10/2026", metricas: { crashRate: 0, distinctUsers: 60 } }],
+  }, new Date("2026-10-20T09:00:00Z"));
+  conferir("data em outro formato não vira NaN dias atrás",
+    !/NaN/.test(dataTorta.texto) && /nao parseou/.test(dataTorta.texto), dataTorta.texto);
 
   // `Number(null)` é 0: taxa NULA não pode virar crash zero medido.
   //

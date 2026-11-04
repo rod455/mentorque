@@ -473,6 +473,38 @@ recomendar.
   asserção; o arquivo da conferência é. A regra agora mora dentro da asserção,
   com `crashRate: null` e o motivo escrito do lado. Aprendizado sobre COMO
   escrever conferência vai no arquivo da conferência, e só o resumo fica aqui.
+- **VERDE NÃO É CONSERTADO: releia o instrumento do CONSERTO, não o do sintoma**
+  (04/11/2026, e é a lição mais útil desta rodada). O coletor de vitals do Play
+  voltou a entregar série em 01/11 depois de onze dias fora, e a leitura fácil
+  era "a Engenharia consertou". Não consertou: o `updatedAt` do fluxo no n8n diz
+  25/10, três dias ANTES do meu achado, e os nós seguem pedindo hoje menos 4. O
+  sintoma sumiu porque a frescura da Play alcançou a janela. Se eu tivesse lido
+  só o retrato verde, teria fechado a linha da fila e a casa perderia a série de
+  novo, descobrindo em outros onze dias. Antes de dizer que algo foi consertado,
+  leia o instrumento do conserto (a data de edição do fluxo, o commit, o deploy),
+  e não o instrumento do sintoma. É a regra de 06/10 ("depois do botão, o estado
+  muda de dono") aplicada ao botão que ninguém apertou.
+- **ASSERÇÃO QUE TRAVA FRASE PUBLICADA DEFENDE A FRASE, NÃO A VERDADE**
+  (04/11/2026, e isto corrige a técnica de 21/10 da qual eu me orgulhei). Em
+  21/10 eu escrevi que asserção pode existir para tornar frase publicada
+  falsificável, e isso continua valendo. Em 28/10 eu apliquei errado: a linha do
+  retrato dizia "a API atrasa de 3 a 5 dias" e a asserção cobrava esse TEXTO
+  literal. A frase estava errada (o atraso foi de nove dias por onze dias
+  seguidos e nunca foi de três), e por uma semana a conferência ficou verde
+  defendendo o meu erro com cara de rigor. **A emenda: quando a frase afirma algo
+  do mundo de fora, a asserção cobra a quantidade MEDIDA, não o texto digitado.**
+  Frase com número fixo sobre fonte externa é suspeita por natureza; se o número
+  pode variar, ele tem que ser calculado do dado e a asserção cobra o cálculo.
+  Travar texto só vale para frase sobre o NOSSO código, onde a constante é nossa.
+- **"PROVAVELMENTE" DENTRO DO CÓDIGO É PALPITE PUBLICADO** (04/11/2026). A regra
+  de 03/10 do dono ("ausência não é causa", "se começa com 'deve ser porque' é
+  hipótese") eu aplicava aos meus relatórios e não ao que eu escrevo em string.
+  A `conferenciaDaLoja`, que eu mesmo escrevi em 02/10, dizia "sobra nossa,
+  provavelmente assinatura que expirou la e segue ativa aqui", e o retrato
+  imprimiu isso com o "provavelmente" e tudo, sobre a única assinatura ativa da
+  casa. Eram três mundos e dois eram defeito nosso. Frase pronta do retrato é
+  publicação: ela passa pela mesma régua dos números da rodada, e quando a causa
+  não está conferida ela diz isso e NOMEIA o que separa as possibilidades.
 - Rodar `npm install` antes de qualquer checagem: o contêiner da sessão nasce
   sem `node_modules` e o `tsc` cospe centenas de erros falsos de módulo.
 - Rodar `npm run conferir` (bateria inteira, 12 conferências) no lugar de
@@ -579,7 +611,19 @@ fila, com dado de produção pela primeira vez.
   migalha. Primeira coisa a resolver quando o coletor voltar.
 - **Catálogo remoto de aulas** é a próxima varredura, com campos de formulário
   atrás. Em 28/10 ela foi puxada pelo erro real do retrato, que é a ordem da
-  rotina (erro primeiro, varredura depois).
+  rotina (erro primeiro, varredura depois), e em 04/11 pelo mesmo motivo mais um:
+  o banco não respondeu (três chamadas negadas, na lista do dono em 04/11) e a
+  metade de dados de qualquer varredura é leitura de linha. **Duas rodadas sem
+  varredura dirigida é o limite**: se a de 11/11 também não tiver, isso já não é
+  fila, é um papel que deixou de fazer metade do trabalho, e vale dizer no
+  artifact com essas palavras.
+- **A concentração dos fechamentos, anotada em 04/11 e SEM MEDIDA**: a janela de
+  7 dias do retrato mostra 13 fechamentos em 6 aparelhos na home, 2,2 por
+  aparelho, contra 1,0 e 1,1 que eu medi por semana de calendário em 28/10. Pode
+  ser ruído de janela curta, que é exatamente o que aconteceu em 28/10 com "8 em
+  8 aparelhos". Para saber, preciso da série por semana e do detalhe por
+  aparelho, que são leitura de linha. Primeira coisa a medir quando o acesso ao
+  banco voltar, e NÃO publicar direção antes disso.
 - **Quiz diário** (novo em 26-27/08, nunca varrido por QA): banco de 63
   perguntas (eram 65 na nota antiga; conferido em 07/10), sequência com perdão semanal, rota `/api/quiz`, folha do primeiro
   quiz. Tem bateria própria em `npm run verifica:quiz` e quatro roteiros de

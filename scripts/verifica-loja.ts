@@ -167,12 +167,29 @@ console.log("Loja: a compra chega ao Premium, e quando não chega, deixa rastro?
   conferir("0 e 0 não dispara", conferenciaDaLoja(0, 0).deveAvisar === false);
   conferir("e o silêncio diz que batem", /batem/.test(conferenciaDaLoja(2, 2).silencio));
 
-  // Sobra nossa não é venda perdida: assinatura que expirou no RevenueCat e
-  // segue ativa aqui é outro problema, e gritar "alguém pagou" sobre ela
-  // ensinaria a ignorar o alarme.
+  // Sobra nossa não é venda perdida: gritar "alguém pagou" sobre ela ensinaria
+  // a ignorar o alarme, e o lado perigoso é o outro. O silêncio continua.
+  //
+  // O QUE MUDOU EM 04/11/2026, E É O DEFEITO DA RODADA: o silêncio dizia
+  // "provavelmente assinatura que expirou la e segue ativa aqui", e em 04/11 o
+  // retrato imprimiu exatamente isso, com o "provavelmente" e tudo, sobre a
+  // ÚNICA assinatura ativa da casa. É palpite: são três mundos, e dois são
+  // defeito nosso (o nosso webhook não gravar a saída, ou cortesia etiquetada
+  // como venda de loja). A regra de 03/10 do dono vale dentro do código também:
+  // ausência não é causa, e "provavelmente" não é medição.
   const sobra = conferenciaDaLoja(0, 1);
   conferir("banco com mais que o RevenueCat NÃO grita que alguém pagou", sobra.deveAvisar === false, sobra.texto);
-  conferir("mas o motivo fica dito", /sobra nossa/.test(sobra.silencio), sobra.silencio);
+  conferir("mas o motivo fica dito", /sobra NOSSA/.test(sobra.silencio), sobra.silencio);
+  conferir(
+    "e o silêncio NÃO escolhe uma causa",
+    !/provavelmente/i.test(sobra.silencio) && /NAO esta conferida/.test(sobra.silencio),
+    sobra.silencio,
+  );
+  conferir(
+    "e diz o que SEPARA as causas, senão a ressalva só adia",
+    /ler a linha da assinatura/.test(sobra.silencio) && /cancelamento ou expiracao/.test(sobra.silencio),
+    sobra.silencio,
+  );
 
   // Sem leitura não é zero. É a regra da casa desde 28/09: ausência de medida
   // não pode virar afirmação sobre o mundo.

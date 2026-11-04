@@ -191,17 +191,29 @@ export function linhaDeAnuncio(a: {
  *   · em 18, 19 e 20/10, VIVO, com dado de verdade (crashRate 0 em 50, 70 e 60
  *     usuários distintos nos dias 13, 14 e 15/10). Três dias de dado novo, o
  *     primeiro da história do app, e ninguém leu;
- *   · desde 21/10, ERRO: "Bad request - please check your parameters". Oito dias
- *     quebrado sem ninguém notar.
+ *   · de 21 a 31/10, ERRO: "Bad request - please check your parameters". ONZE
+ *     dias quebrado sem ninguém notar (contados nos pacotes do retrato em
+ *     04/11; a primeira versão deste comentário dizia oito, que era a conta
+ *     até a rodada acabar);
+ *   · desde 01/11, VIVO outra vez, com sete dias de série. **E ninguém
+ *     consertou nada**: o fluxo do n8n não é editado desde 25/10 (lido na API
+ *     em 04/11 às 11h15 UTC) e continua pedindo o fim da janela em hoje menos
+ *     quatro. Quem voltou foi a frescura da Play, que alcançou a janela.
  *
- * Os três são invisíveis pelo mesmo motivo, e é o motivo que esta função
- * remove. Mesma estrada da linha de coorte (28/09) e da do AdMob (14/10): a
- * frase nasce aqui, sai por `/api/dados`, a conferência cobra, e o painel só
- * imprime.
+ * Os três primeiros são invisíveis pelo mesmo motivo, e é o motivo que esta
+ * função remove. Mesma estrada da linha de coorte (28/09) e da do AdMob
+ * (14/10): a frase nasce aqui, sai por `/api/dados`, a conferência cobra, e o
+ * painel só imprime.
  *
- * E A DATA DA LINHA VIAJA JUNTO, que é a parte fácil de errar: a API do Play
- * atrasa de três a cinco dias, então o pacote coletado em 20/10 traz o dia
- * 15/10. Publicar o número sem a data dele faria o leitor achar que é de hoje.
+ * E A DATA DA LINHA VIAJA JUNTO, que é a parte fácil de errar: o pacote
+ * coletado em 20/10 traz o dia 15/10. Publicar o número sem a data dele faria
+ * o leitor achar que é de hoje.
+ *
+ * O QUE MUDOU EM 04/11, e é um erro meu corrigido: até aqui esta função
+ * imprimia "a API atrasa de 3 a 5 dias" como se fosse constante, e a asserção
+ * da conferência cobrava essa frase LITERAL. Não é constante: em 21 a 31/10 o
+ * atraso foi de nove dias, e nunca foi de três. Agora o atraso é CONTADO da
+ * linha mais nova contra hoje, e a asserção cobra a contagem em vez da frase.
  */
 export type VitalsDoPlay = {
   crash?: { estado?: string | null; motivo?: string | null; linhas?: number | null } | null;
@@ -210,12 +222,29 @@ export type VitalsDoPlay = {
   nota?: string | null;
 };
 
-export function linhaDeVitals(v: VitalsDoPlay): LinhaDoRetrato {
+/**
+ * Dias entre o dia da linha (YYYY-MM-DD) e hoje, pelo calendário UTC.
+ *
+ * Em UTC dos dois lados de propósito: o dia da Play é um dia de calendário sem
+ * hora, e usar o fuso local faria a mesma linha contar um dia a mais ou a menos
+ * segundo a hora em que o retrato roda. Devolve `null` quando a data não
+ * parseia, porque contar em cima de lixo seria pior que não contar.
+ */
+function diasAtras(dia: string, hoje: Date): number | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dia.trim());
+  if (!m) return null;
+  const daLinha = Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  const deHoje = Date.UTC(hoje.getUTCFullYear(), hoje.getUTCMonth(), hoje.getUTCDate());
+  if (!Number.isFinite(daLinha) || !Number.isFinite(deHoje)) return null;
+  return Math.round((deHoje - daLinha) / 86400000);
+}
+
+export function linhaDeVitals(v: VitalsDoPlay, hoje: Date = new Date()): LinhaDoRetrato {
   const estado = String(v.crash?.estado ?? "").trim();
   const motivo = String(v.crash?.motivo ?? "").trim();
 
   // ERRO é diferente de SUPRIMIDO, e confundir os dois é o que deixou o coletor
-  // oito dias quebrado: "o Play não publica para nós" soa definitivo e vira
+  // onze dias quebrado: "o Play não publica para nós" soa definitivo e vira
   // paisagem, enquanto "a nossa requisição está malformada" é conserto nosso.
   if (estado === "erro") {
     return {
@@ -260,10 +289,30 @@ export function linhaDeVitals(v: VitalsDoPlay): LinhaDoRetrato {
     };
   }
   const quantos = typeof usuarios === "number" && Number.isFinite(usuarios) ? `${usuarios} usuarios distintos` : "usuarios distintos nao informados";
+
+  // O ATRASO É CONTADO, e o aviso de margem é o que faltava em 28/10.
+  //
+  // O pedido do coletor pede o fim da janela em HOJE MENOS 4. Quando a frescura
+  // da Play fica mais velha que isso, a API não devolve menos linhas: ela
+  // RECUSA o pedido inteiro, e perde-se a semana toda. Foi o que aconteceu de
+  // 21 a 31/10 (`timeline_spec.end_date field should be at most the current
+  // freshness 2026-10-19`, execução 9214 do n8n em 28/10).
+  //
+  // No estado saudável a linha mais nova fica a cinco dias, porque o fim da
+  // janela é hoje-4 e a Play publica com um dia de folga. Passar de cinco quer
+  // dizer que a frescura escorregou e o próximo pedido pode não voltar: é o
+  // único aviso automático que temos antes de a série sumir de novo.
+  const atraso = diasAtras(String(maisNova.dia), hoje);
+  const sobreAtraso =
+    atraso == null
+      ? "sem contar o atraso (a data da linha nao parseou)"
+      : atraso > 5
+        ? `${atraso} dias atras, e isso e MARGEM ZERO: o coletor pede o fim da janela em hoje menos 4 e a Play recusa o pedido INTEIRO quando a frescura dela passa disso, que foi o que tirou a serie do ar de 21 a 31/10`
+        : `${atraso} dias atras, que e o normal desta fonte (a API atrasa, NAO e hoje)`;
   return {
     texto:
-      `Vitals do Play, dia ${maisNova.dia} (a API atrasa de 3 a 5 dias, NAO e hoje): ` +
-      `crash em ${taxa}% dos ${quantos}. Mede o processo NATIVO, nao a migalha de fechamento.`,
+      `Vitals do Play: o dado mais novo e de ${maisNova.dia}, ${sobreAtraso}. ` +
+      `Crash em ${taxa}% dos ${quantos}. Mede o processo NATIVO, nao a migalha de fechamento.`,
     legivel: true,
     motivo: "",
   };

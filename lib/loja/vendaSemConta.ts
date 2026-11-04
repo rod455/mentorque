@@ -141,10 +141,30 @@ export function conferenciaDaLoja(
     };
   }
   if (faltando < 0) {
+    // SOBRA NOSSA NÃO GRITA, MAS TAMBÉM NÃO INVENTA CAUSA (conserto do QA em
+    // 04/11/2026). Até aqui esta frase dizia "provavelmente assinatura que
+    // expirou la e segue ativa aqui", e foi impressa no retrato assim, com o
+    // "provavelmente" e tudo. É um palpite: são pelo menos três mundos
+    // diferentes, e dois deles são defeito nosso.
+    //
+    //   · lapso normal: expirou na loja e a nossa linha já registra a saída;
+    //   · o nosso escritor não gravou a saída, e então o próximo churn de
+    //     verdade também não vai aparecer (mesma família do `renovou` que o
+    //     webhook do Stripe nunca escreveu, fechado em 01/10);
+    //   · cortesia dada na mão etiquetada como venda de loja, que faz a conta
+    //     dos dois lados mentir.
+    //
+    // Não gritar continua certo: gritar "alguém pagou" sobre sobra nossa
+    // ensinaria a ignorar o alarme, e o lado perigoso é o outro. Mas o silêncio
+    // passa a dizer O QUE SEPARA os três, porque "ausência não é causa" vale
+    // dentro do nosso código e não só nos nossos relatórios.
     return {
       deveAvisar: false,
       texto: "",
-      silencio: `o banco tem ${noBanco} assinatura(s) de loja e o RevenueCat ${rc}: sobra nossa, provavelmente assinatura que expirou la e segue ativa aqui`,
+      silencio:
+        `o banco tem ${noBanco} assinatura(s) de loja e o RevenueCat ${rc}: sobra NOSSA, e a causa NAO esta conferida.` +
+        ` Pode ser lapso normal da loja, ou a saida que o nosso webhook nao gravou, ou cortesia etiquetada como venda.` +
+        ` O que separa: ler a linha da assinatura e ver se ha cancelamento ou expiracao gravados nela.`,
     };
   }
   return { deveAvisar: false, texto: "", silencio: `RevenueCat ${rc} e banco ${noBanco}: batem` };
