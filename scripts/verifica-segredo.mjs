@@ -32,8 +32,16 @@
 // as teria. Duas listas de formas é uma lista errada. Agora as duas perguntas
 // leem o mesmo `FORMAS`, e forma nova serve às duas de graça.
 //
-// O QUE O MODO `--semana` NÃO ALCANÇA: diff de commit de MERGE (o `git log -p`
-// não mostra, por desenho), e segredo que entrou antes da janela de dias
+// O MODO `--semana` PASSOU A VER COMMIT DE JUNÇÃO EM 01/11/2026, e o motivo é
+// que o limite mordeu: naquela semana houve duas junções e uma delas trazia 90
+// linhas que o `git log -p` NÃO mostra. O `git log -p` omite o diff de junção
+// por desenho, e o que ele omite é justamente o que a resolução de conflito
+// escreveu à mão, ou seja, o lugar onde um valor entra sem ninguém reparar.
+// Agora o modo pede `--diff-merges=combined`, que mostra esse pedaço, e sabe
+// ler o formato dele (cabeçalho com três arrobas e um caractere de prefixo por
+// pai).
+//
+// O QUE ELE AINDA NÃO ALCANÇA: segredo que entrou antes da janela de dias
 // pedida. Para esse, o modo da árvore responde, se ainda estiver lá.
 //
 // O QUE NENHUM DOS DOIS ALCANÇA, e é muito: segredo que nunca passou pelo git.
@@ -166,10 +174,11 @@ if (modoSemana) {
 
   // `--unified=0` porque só as linhas acrescentadas interessam, e sem contexto
   // o diff fica pequeno. `--no-color` para o `+` do começo da linha ser sempre
-  // o `+` do diff, e não um código de cor.
+  // o `+` do diff, e não um código de cor. `--diff-merges=combined` traz o
+  // pedaço que a junção escreveu, que é o que o `-p` sozinho esconde.
   const diff = execFileSync(
     "git",
-    ["log", `--since=${dias} days ago`, "-p", "--unified=0", "--no-color"],
+    ["log", `--since=${dias} days ago`, "-p", "--diff-merges=combined", "--unified=0", "--no-color"],
     { cwd: RAIZ, encoding: "utf8", maxBuffer: 512 * 1024 * 1024 },
   );
 
@@ -178,6 +187,14 @@ if (modoSemana) {
   let linhaNova = 0;
   let commits = 0;
   let acrescentadas = 0;
+  /**
+   * Quantos caracteres de prefixo cada linha do pedaço atual tem.
+   *
+   * Diff comum: 1 (`+`, `-` ou espaço). Diff de junção de dois pais: 2, um por
+   * pai, e o cabeçalho vem com três arrobas em vez de duas. É o que diferencia
+   * "esta linha entrou" de "esta linha saiu de um dos lados".
+   */
+  let prefixo = 1;
 
   for (const linha of diff.split("\n")) {
     const mCommit = /^commit ([0-9a-f]{7,40})$/.exec(linha);
@@ -191,14 +208,26 @@ if (modoSemana) {
       continue;
     }
     if (linha.startsWith("+++ ") || linha.startsWith("--- ")) continue;
-    const mPedaco = /^@@ -\d+(?:,\d+)? \+(\d+)/.exec(linha);
+    // `@@ -a,b +c,d @@` ou `@@@ -a,b -c,d +e,f @@@`: o número de arrobas diz
+    // quantos pais o pedaço tem, e o ÚLTIMO intervalo é sempre o do resultado.
+    const mPedaco = /^(@{2,})((?: [-+]\d+(?:,\d+)?)+) @{2,}/.exec(linha);
     if (mPedaco) {
-      linhaNova = Number(mPedaco[1]);
+      prefixo = mPedaco[1].length - 1;
+      const intervalos = mPedaco[2].trim().split(" ");
+      linhaNova = Number(intervalos[intervalos.length - 1].replace(/^\+/, "").split(",")[0]);
       continue;
     }
-    if (!linha.startsWith("+")) continue;
 
-    const texto = linha.slice(1);
+    const marcas = linha.slice(0, prefixo);
+    const entrou = marcas.includes("+");
+    // Linha que só tem `-` saiu, e não existe no resultado: não conta linha.
+    if (!entrou && marcas.includes("-")) continue;
+    if (!entrou) {
+      linhaNova++; // contexto
+      continue;
+    }
+
+    const texto = linha.slice(prefixo);
     acrescentadas++;
     for (const achado of formasNaLinha(texto, arquivo)) {
       relata(`${arquivo}:${linhaNova}, no commit ${commit}`, achado);
@@ -213,7 +242,7 @@ if (modoSemana) {
   console.log(
     `Segredo: ${commits} commits e ${acrescentadas} linhas acrescentadas lidas, nenhuma com forma de chave.`,
   );
-  console.log("Segredo: isto não alcança commit de merge nem o que entrou antes da janela.");
+  console.log("Segredo: inclui o diff das junções; não alcança o que entrou antes da janela.");
 } else {
   console.log("Segredo: alguma chave com forma de verdade entrou no repositório?");
 
