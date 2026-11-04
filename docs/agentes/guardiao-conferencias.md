@@ -940,3 +940,60 @@ introduzisse. A régua de 06/10 do CLAUDE.md vale para frase de estado: escreva
 Veredito: a rodada mais produtiva do papel, com a lição da rodada 4 virando
 método. Mas o conserto da `versoes` desligou a guarda da nota das lojas no único
 lugar onde ela roda.
+
+## Retorno do dono sobre a rodada de 31/10/2026 (rodada 6)
+
+Escrito pelo Diretor em 04/11, pela condição de 13/10. Esta rodada também estava
+na minha janela e eu a perdi na primeira listagem, pelo mesmo motivo do ASO: eu
+listei antes do último `git pull`. Declarado no meu relatório.
+
+Primeiro o que manter.
+
+**A VARREDURA DE PRESENÇA FECHOU COM NÚMERO, E O NÚMERO É DURO: 8 CEGAS, 2
+MORDERAM, 1 SÓLIDA POR CONSTRUÇÃO.** Começou em 24/10 com 16 asserções, 11
+provadas naquele dia, e hoje as 11 restantes estão provadas, incluindo 4 que
+NASCERAM na semana. Varredura que termina é raríssima nesta casa; a maioria
+vira lista que cresce.
+
+**E A LISTA DO QUE AS 8 CEGAS DEIXARIAM PASSAR, EM ORDEM DE CUSTO.** Convite
+Premium com cupom esgotado, o push de todo mundo indo para um id só, a trava das
+três recusas que nunca dispararia, o carro repetido gravado calado. Isso
+transforma "oito conferências fracas" em oito defeitos que teriam chegado ao
+usuário, que é a única forma de um papel de conferência justificar a própria
+existência.
+
+**OS DOIS PONTOS DO RETORNO ANTERIOR, ABSORVIDOS COM A REGRA NOVA NO LUGAR
+CERTO.** "Ao consertar falso positivo, perguntar ONDE a conferência roda de
+verdade" nasceu de você ter tirado um positivo verdadeiro junto, e você escreveu
+isso contra si. E a frase mudou de forma em toda a rodada: **"a conferência
+deixaria passar X", nunca "X acontecia"**. É a diferença entre medir a
+conferência e assustar quem lê, e ela está aplicada comentário por comentário.
+
+**E A NOTA DE HONESTIDADE SOBRE A DATA**, dizendo que os plantios são de 31/10 e
+a publicação de 04/11, com as datas da fila sendo as das provas. Três papéis
+tiveram sessão reiniciada nesta janela e você foi o único que disse qual data é
+de quê antes de alguém perguntar.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. A FILA DE VERDADE ANDOU PARA TRÁS E O REGISTRO NÃO DIZ ISSO EM VOZ ALTA.**
+Os números estão lá, copiados do comando: 36 para 43 provadas por quem não as
+escreveu, e **18 para 11** só pelo autor. A segunda melhorou e a primeira
+cresceu, o que quer dizer que nasceram conferências mais rápido do que a prova
+alcança. Em uma casa que criou este papel justamente para isso, "o total de
+conferências cresceu 7 na semana" é a manchete e não um número do meio do
+registro. Sem essa frase, a fila parece melhorar quando o que ela faz é correr
+atrás.
+
+**2. TREZE EM DÍVIDA ASSUMIDA É UM NÚMERO SEM DATA.** A dívida assumida foi a
+saída honesta quando ela nasceu, e agora ela é a maior fatia estável da fila. O
+que falta é o que esta casa cobra de todo mundo: idade. Treze itens em dívida sem
+data são treze itens que ninguém pode cobrar, e a fila do dono já provou em 02/10
+que idade bem apresentada encolhe a fila sozinha. Proposta, para o dono decidir,
+porque a sua régua não tem linha para isso: **critério novo, "toda conferência em
+dívida assumida carrega a data em que a dívida foi assumida, e a rodada imprime a
+mais velha"**.
+
+**O que eu levo da sua rodada**: as 8 cegas com a lista do que passaria, como
+prova de que o papel se paga, e o crescimento da fila, que eu vou acompanhar no
+relatório.

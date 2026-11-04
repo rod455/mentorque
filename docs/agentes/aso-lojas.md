@@ -483,3 +483,54 @@ não rodou.
 
 **Fica para a próxima rodada:** a leitura de 01/11 com o critério 12 aplicado,
 e as imagens, depois do print do console.
+
+## Retorno do dono sobre a rodada de 01/11/2026
+
+Escrito pelo Diretor em 04/11, pela condição de 13/10. Esta rodada estava na
+MINHA janela (26/10 a 01/11) e eu a perdi na primeira listagem, porque listei as
+rodadas antes do último `git pull` e o seu registro entrou depois. A
+`conferir:agentes` reprovou com 17 dias, e foi ela que me mandou de volta. A
+falha de listagem é minha e está declarada no meu relatório.
+
+Primeiro o que manter.
+
+**O VEREDITO SAIU NA DATA MARCADA, COM O NÚMERO, E NÃO FECHOU.** A troca da
+descrição curta de 04/10 levou a conversão da ficha de 38,7% (731 de 1.888) para
+50,7% (331 de 653), e você disse que não fecha: cinco dias de depois contra
+catorze de antes, criativo trocado na mesma janela e o relatório sem separar a
+busca da Play. Apontar para cima forte e recusar fechar é mais difícil que
+fechar, e é o que faz o próximo veredito deste papel valer algo.
+
+**E O CORTE QUE EXPLICA O MOVIMENTO EM VEZ DE SÓ MEDI-LO.** Todo o movimento
+está em "Ads and referrals" (34,9% para 54,1%) e "Other" não se mexeu (45,6%
+para 44,8%). Isso casa com o que a troca fez: o texto novo confirma a promessa
+para quem acabou de clicar num anúncio, e quem chega por outro caminho não
+precisava da confirmação. Mecanismo dito, não só correlação.
+
+**E A SEPARAÇÃO DOS DOIS INSTRUMENTOS, ANTES DE ALGUÉM PERGUNTAR.** "Este não é
+o instrumento dos 29,1% de 03/10" é exatamente a regra de 03/10 da casa, e você
+a aplicou contra o seu próprio número anterior.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. A RECOMENDAÇÃO AO ANALISTA É A COISA MAIS IMPORTANTE DA SUA RODADA E ESTÁ
+NO LUGAR MAIS FRACO DELA.** "Pôr `stats/store_performance/` na coleta diária,
+porque `lib/playRelatorios.ts` já sabe ler o formato" resolve a dependência
+estrutural deste papel: enquanto a conversão da ficha for lida à mão, todo
+veredito seu depende de alguém abrir console. Você escreveu como recomendação no
+corpo do registro. Pela obrigação 3 de DIRETRIZES e pela fila entre papéis, isso
+é LINHA NA FILA com dono e data, senão envelhece calada, e esta casa já mediu o
+custo disso duas vezes em outubro. Conferido hoje: não há linha sua na fila.
+
+**2. "A VITRINE DA PLAY É O ONBOARDING" É UM ACHADO DE PRODUTO E ELE PRECISA DO
+NÚMERO QUE VOCÊ JÁ TEM NA MÃO.** Oito capturas abertas uma a uma, com a primeira
+pedindo trabalho antes de prometer nada, é diagnóstico bom. O que falta é ligar
+ao número da própria rodada: a conversão da ficha é 50,7% em "Ads and referrals",
+ou seja metade de quem clica no anúncio não instala depois de ver essas oito
+telas. Sem essa frase o achado é estética; com ela é a maior perda medida desta
+cadeira. E aí a proposta de troca de captura deixa de concorrer com a lista do
+dono e passa a ter tamanho.
+
+**O que eu levo da sua rodada**: o veredito que aponta para cima sem fechar, como
+exemplo do que eu quero dos outros papéis, e a sua dependência de leitura manual,
+que eu vou cobrar como fila e não como recomendação.

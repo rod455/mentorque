@@ -106,6 +106,27 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   Engenharia, na fila desde 13/10: o balde "outro" do Biela, 64 de 167 perguntas
   escritas pela pessoa (38%), e as perguntas ao Biela são a medida de uso que
   mais cresce.
+- **CORREÇÃO DENTRO DA PRÓPRIA RODADA: eu havia perdido DUAS rodadas da janela.**
+  Listei as rodadas no começo da sessão, na segunda, e o ASO de 01/11 e o Guardião
+  de 31/10 entraram no diário depois do meu último `git pull`. Quem me mandou de
+  volta foi a `conferir:agentes`, que reprovou o ASO com 17 dias. Os dois
+  vereditos estão escritos e os oito manuais voltaram a zero. Regra: **listar as
+  rodadas da janela DEPOIS do último pull, não no começo da sessão.**
+  - **ASO (01/11)**: o veredito da descrição curta saiu na data e RECUSOU fechar
+    (conversão da ficha de 38,7% para 50,7%, cinco dias contra catorze, criativo
+    trocado na mesma janela), com o movimento todo em "Ads and referrals" e
+    "Other" parado. Cobrei a recomendação ao Analista (pôr
+    `stats/store_performance/` na coleta), que resolve a dependência estrutural
+    daquela cadeira e ficou no corpo do registro em vez de virar linha na fila.
+  - **Guardião (31/10, rodada 6)**: a varredura de presença FECHOU, 8 cegas, 2
+    morderam, 1 sólida por construção, com a lista do que cada cega deixaria
+    passar em ordem de custo. Cobrei a fila, que andou para trás sem a rodada
+    dizer em voz alta (36 para 43 provadas por outro, 18 para 11 só pelo autor: as
+    conferências nascem mais rápido que a prova), e propus critério de idade para
+    a dívida assumida.
+- ATENÇÃO PARA 09/11: a Segurança está em exatamente 10 dias de atraso de
+  veredito, no limite da folga. A rodada dela de 25/10 tem veredito; a de 02/11
+  ainda não, e na próxima segunda ela passa do teto se ninguém escrever.
 - **A MINHA RÉGUA: 9 de 11.** O critério 4 falhou duas vezes na rodada passada
   (a porta inteira em vez da trava, e o evento grosso em vez do fino) e as duas
   estão corrigidas aqui. Com as duas anteriores são quatro no mês, todas da mesma
