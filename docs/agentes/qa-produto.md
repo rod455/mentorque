@@ -496,6 +496,20 @@ recomendar.
   Frase com número fixo sobre fonte externa é suspeita por natureza; se o número
   pode variar, ele tem que ser calculado do dado e a asserção cobra o cálculo.
   Travar texto só vale para frase sobre o NOSSO código, onde a constante é nossa.
+- **ASSERÇÃO DE FORMA CRAVA A FORMA QUE IMPORTA, NÃO A LISTA DE ARGUMENTOS**
+  (04/11/2026, e veio de um merge, que é um lugar barato de aprender). O Guardião
+  apertou em 31/10 a minha asserção de "quem usa a regra" para o texto exato
+  `return linhaDeVitals(d);`, com um plantio certíssimo por trás: `return
+  (linhaDeVitals(d), "frase à mão")` chama e não devolve. A intenção estava
+  perfeita. Só que no mesmo dia em que a função ganhou um parâmetro (`hoje`), a
+  conferência reprovou **pela vírgula**, sem defeito nenhum na frente. Asserção
+  que crava assinatura inteira cobra manutenção de quem mexer na função, e quem
+  mexe sob pressão afrouxa a asserção em vez de entender. Alarguei para `return
+  linhaDeVitals(`, que mantém a intenção (devolver, em vez de montar à mão) e
+  tolera parâmetro novo, e replantei o defeito dele para provar que ainda morde.
+  **A regra geral, que é a mesma do item de cima por outro ângulo:** a asserção
+  crava o que quebraria o leitor, e nada além. Texto exato só quando o texto É o
+  invariante.
 - **"PROVAVELMENTE" DENTRO DO CÓDIGO É PALPITE PUBLICADO** (04/11/2026). A regra
   de 03/10 do dono ("ausência não é causa", "se começa com 'deve ser porque' é
   hipótese") eu aplicava aos meus relatórios e não ao que eu escrevo em string.
