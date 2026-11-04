@@ -35,7 +35,9 @@ são de categoria somando 15 impressões e 1 é de marca com 2. Posição de
 categoria: melhor 19, **mediana 71**, pior 89. Cinco guias no ar, o mais antigo
 de 04/09.
 
-**PRÓXIMA LEITURA: 03/11/2026** (quatro semanas). A métrica é a MEDIANA da
+**LIDA EM 03/11/2026, e o ramo "pior que 65" venceu: ver a seção "03/11/2026:
+as duas réguas leram". A cadeira parou de escrever para busca e a próxima
+leitura é 02/02/2027.** A métrica é a MEDIANA da
 posição de categoria, não o total de impressões, porque impressão sobe só por
 existir mais página e mediana não.
 
@@ -67,7 +69,9 @@ fila de gravação não andou, e metade da causa é minha".
 **O resumo que precisa estar aqui, porque é o que eu leio antes da próxima
 rodada:** a Pauta 03 saiu em formato que não pede compra nenhuma (o carro do
 dono e uma chave de boca) e, pela primeira vez, virou LINHA NA LISTA DO DONO.
-**PRÓXIMA LEITURA: 03/11/2026**, três ramos, cada um com ação diferente:
+**LIDA EM 03/11/2026, e o ramo "canal sem publicar nada" venceu: o slot de
+pauta parou de produzir roteiro. Ver a seção "03/11/2026: as duas réguas
+leram".** Os três ramos, como estavam escritos:
 
 **A data mudou de 10/11 para 03/11 em 20/10, e o motivo é de forma, não de
 placar.** Contei o rodízio contra o diário e 03/11 é o próximo slot (b): a
@@ -163,6 +167,134 @@ publicação paga é gasto novo e é decisão do dono. Em ordem de esforço:
 Mandar mensagem para terceiro em nome da casa é do dono, pela regra de
 DIRETRIZES, então o pedido sai daqui pronto para ele enviar ou autorizar, com
 a data em que entrou na lista.
+
+## 03/11/2026: as duas réguas leram, e as duas pararam o que esta cadeira fazia
+
+As duas réguas desta cadeira tinham data marcada para hoje. As duas leram, as
+duas caíram no ramo mais forte que elas tinham, e o efeito somado é que **o
+rodízio de formato deixa de existir até uma das duas reabrir**: toda rodada
+passa a ser aula do catálogo.
+
+### O portão de amostra, escrito DEPOIS da leitura, e por quê
+
+O retorno de 29/10 pediu, com razão, um portão de amostra para esta régua
+("a mediana só decide com pelo menos N consultas de categoria, e o N é seu"),
+e pediu para escrever ANTES de 03/11. Não deu: aquele retorno foi escrito em
+29/10, no mesmo dia em que a minha rodada de 27/10 fechou, e hoje é a primeira
+rodada minha desde então. Então o portão está escrito abaixo, DEPOIS de eu ter
+visto o número, e isso fica dito em vez de escondido.
+
+**O portão: N = 4 consultas de categoria distintas na janela de 28 dias.** Por
+que 4: com três ou menos, a mediana é a média de dois valores ou um valor único,
+e um termo que aparece ou desaparece move o resultado inteiro; 4 é o menor
+número em que a mediana deixa de ser um único termo e é o que a casa de fato já
+viu (13/10). Abaixo de 4, a leitura sai como **sem amostra**, e vale o último
+ramo decidido com amostra.
+
+**E o portão não muda o resultado de hoje, que é a única razão pela qual eu me
+sinto à vontade de escrevê-lo depois.** As cinco leituras desta régua, com
+tamanhos de amostra diferentes, caem todas no mesmo ramo:
+
+| leitura | consultas de categoria | mediana | ramo |
+|---|---|---|---|
+| 06/10 | 9 | 71 | pior que 65 |
+| 13/10 | 4 | 82 | pior que 65 |
+| 20/10 | 2 | 93,5 | pior que 65 |
+| 27/10 | 2 | 93,5 | pior que 65 |
+| **03/11** | **1** | **98** | pior que 65 |
+
+Com a leitura de hoje (sem amostra pelo portão), vale a de 13/10, que tinha
+amostra: mediana 82, mesmo ramo. Um portão existe para impedir que amostra
+magra VIRE uma decisão; aqui ele só me deixaria fugir de uma decisão que o dado
+sustenta com 9, com 4 e com 1 consulta. Então o ramo vale.
+
+### Leitura 1, busca: o ramo que PARA de escrever para busca
+
+**Lido no retrato de 03/11, gerado às 9h UTC.** Uma única consulta de
+categoria, `luz do motor acesa`, posição 98. A outra (`luz de motor acesa`,
+posição 89 nas três leituras anteriores) desapareceu da lista. As demais linhas
+são `mentorque` (posição 1, zero clique hoje), `mitrenque` (posição 5, que é a
+marca escrita errado) e `é gratuito?` (posição 1), nenhuma de categoria. Total:
+2 cliques e 33 impressões em 28 dias, contra 3 e 34 em 29/10.
+
+**O ramo, como estava escrito desde 06/10:** com cinco guias e dois meses no
+ar, mediana pior que 65 significa que o limite é AUTORIDADE DE DOMÍNIO e não
+quantidade de página. Então:
+
+1. **A cadeira para de escrever página nova para busca.** O slot de guia do
+   rodízio vira aula do catálogo até isso mudar.
+2. **A recomendação do papel passa a ser conseguir a primeira citação de
+   fora**, com o instrumento e a lista que já estão escritos na seção do ramo
+   da citação (20/10). A leitura de partida, a tela de Links do Search Console,
+   está na lista do dono há 14 dias e segue sem resposta, então o ponto de
+   partida continua desconhecido e eu não repito o pedido: atualizo o motivo
+   dele, porque a condição que ele citava ("se em 03/11 a mediana estiver pior
+   que 65") aconteceu.
+3. **O que isso NÃO significa, para não virar outra conclusão errada:** os
+   cinco guias continuam no ar e no sitemap, as datas de `relerEm` continuam
+   valendo (o de gasolina vence em 10/01/2027 e a `conferir:guias` reprova
+   quando passar), e o site não deixou de servir. O que o dado diz é que
+   ESCREVER MAIS PÁGINA não move a posição, não que as páginas sejam inúteis.
+4. **VOLTA QUANDO: leitura em 02/02/2027**, treze semanas, no mesmo campo e com
+   o mesmo portão. Volta a escrever guia se a mediana de pelo menos 4 consultas
+   de categoria estiver melhor que 65. Antes disso, só se a tela de Links
+   chegar e mostrar citação de fora entrando, porque aí a variável que o ramo
+   culpa mudou de valor.
+
+### Leitura 2, fila de gravação: o slot de pauta para de produzir roteiro
+
+**Lido no mesmo retrato: o vídeo mais novo do canal continua sendo o de 13/10
+às 21h36 UTC**, e os de 13/10 são os não listados. Nenhum envio em 21 dias, e
+o último vídeo PÚBLICO é de 19/09, há 45 dias.
+
+A ressalva de visibilidade que eu mesmo escrevi em 13/10 (o pacote não diz se o
+vídeo é público) **não bloqueia esta leitura**, e é bom dizer por quê: não
+houve envio NENHUM desde 13/10, e envio nenhum é publicação nenhuma, qualquer
+que seja a visibilidade. O pedido da visibilidade segue na fila para o Analista,
+há 14 dias, porque a próxima leitura pode precisar dele.
+
+**O ramo: o slot (b) PARA de produzir roteiro.** As três pautas ficam onde
+estão, prontas, em `docs/conteudo/pautas.md`, e nenhuma quarta é escrita. O
+slot vira aula do catálogo.
+
+**E a linha da lista do dono sai hoje, com decisão e não com repetição.** Ela
+completa 21 dias hoje, e a regra dos 21 dias manda voltar com o custo de hoje
+ou com a decisão de não fazer. Escolho a segunda: esta cadeira para de pedir
+gravação. O custo de hoje, dito de uma vez para quem for ler o histórico: a
+`diy-battery` segue sendo a aula mais aberta do catálogo entre as que não têm
+vídeo, e o canal segue 45 dias sem vídeo público. Os roteiros ficam na
+prateleira; se o dono quiser um, ele diz e eu adapto no dia.
+
+**VOLTA QUANDO:** no dia em que um vídeo público novo aparecer no canal, ou o
+dono pedir roteiro. Quem lê isso é a rodada semanal, no mesmo campo
+`publicadoEm`, sem data marcada, porque agora é gatilho e não agenda.
+
+### O efeito somado, e o que ele faz com o plano do catálogo
+
+Com os dois slots de volume (guia e pauta) parados, **toda rodada passa a ser
+aula do catálogo**, uma por semana em vez de uma a cada três. O plano de
+cobertura, que fechava em 23/02, passa a fechar em **08/12/2026**:
+
+| rodada | sintoma | aparelhos 30d |
+|---|---|---|
+| 03/11 | `engine-misfire` motor falhando | 20, **feito** |
+| 10/11 | `engine-smoke` fumaça no escapamento | 7 |
+| 17/11 | `ac-not-cooling` ar não gela | 4 |
+| 24/11 | `brake-pull` puxa ao frear | 4 |
+| 01/12 | `tire-pressure-loss` pneu perdendo pressão | 3 |
+| 08/12 | `tire-uneven-wear` desgaste irregular | 2 |
+
+Em 08/12 a régua fecha em 19 de 19 e a pergunta do rodízio reabre: aí a cadeira
+não tem mais fila de cobertura, e o que fazer com o slot volta a ser decisão,
+com a leitura de 02/02 ainda pendente.
+
+**Ressalva da fronteira web e binário, que o retorno de 29/10 cobrou:** "14 de
+19 sintomas com aula" é verdade na web hoje. No app das lojas, a LIGAÇÃO do
+sintoma à aula viaja no binário (`AULAS_DO_SINTOMA` em
+`lib/app/conteudo/sintomas.ts`), então quem está na 3.3 abre "Motor falhando" e
+não vê o card; a aula aparece em Estudos e na busca. Isso vale até a 3.4, que
+em 03/11 ainda não foi gerada. A proposta da Engenharia (a tabela viajar no
+catálogo remoto) está na ficha da 3.4 e espera o dono.
 
 ## A régua da rodada: o que é uma rodada bem feita
 
@@ -341,6 +473,26 @@ fiz isso agora porque a regra da casa é UMA entrega concreta por rodada, e
 trocar essa regra sem o dono ver custa mais do que seis semanas de espera.
 
 ## Aprendizados
+
+- **Portão de amostra escrito depois da leitura só vale se ele não muda o
+  resultado, e isso se mostra, não se afirma (03/11/2026).** O retorno de 29/10
+  pediu um portão de amostra para a régua da busca antes de 03/11, e eu não tive
+  rodada entre uma data e outra. Escrevi depois, com a data dita, e a única
+  coisa que me deixou à vontade foi poder mostrar que o resultado é o mesmo em
+  três tamanhos de amostra diferentes (9 consultas e mediana 71, 4 e 82, 1 e
+  98, todas no mesmo ramo). **A regra que fica: portão escrito depois da leitura
+  vem com a tabela que prova que ele não escolheu o resultado.** Se a tabela não
+  existir, o portão vale só para a leitura seguinte, nunca para a de hoje.
+
+- **Régua que para a própria cadeira é para ser cumprida, não negociada
+  (03/11/2026).** As duas réguas desta cadeira caíram hoje no ramo mais forte
+  que elas tinham, e os dois ramos tiram trabalho de mim: um para de escrever
+  para busca, o outro para de escrever roteiro. A tentação de achar motivo para
+  não cumprir (a amostra é magra, o canal pode voltar na semana que vem) é
+  exatamente o que a régua existe para impedir, e os dois ramos estavam escritos
+  semanas antes com instrumento e número. O que sobra de trabalho não encolheu:
+  o plano de cobertura do catálogo passou de uma aula a cada três semanas para
+  uma por semana, e fecha em 08/12 em vez de 23/02.
 
 - **Quando o slot do rodízio não tem ação justificada pela régua DELE, o slot
   muda de uso e isso se declara (27/10/2026).** Hoje era slot (a), de guia, e a

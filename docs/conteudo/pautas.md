@@ -17,6 +17,28 @@ Regras que valem para toda pauta deste arquivo:
 
 ---
 
+## CONGELADO EM 03/11/2026: a régua leu e o slot de pauta parou
+
+As três pautas abaixo continuam prontas e corretas, e **nenhuma quarta será
+escrita até que um vídeo público novo apareça no canal ou o dono peça um
+roteiro.** A régua de desfecho escrita em 13/10 leu hoje, no campo
+`publicadoEm` do pacote `youtube` do retrato de 03/11 (9h UTC): o vídeo mais
+novo do canal continua sendo o de 13/10 às 21h36, os de 13/10 são os NÃO
+LISTADOS, e o último vídeo público é de 19/09, há 45 dias. Nenhum envio em 21
+dias. O ramo "canal sem publicar nada" manda o slot parar de produzir roteiro,
+e o slot virou aula do catálogo.
+
+Isto NÃO é desistência do canal nem julgamento do que o dono grava: em 13/10
+entraram catorze vídeos, e os assuntos (central, siglas de híbrido,
+contrapressão, curva de potência) dizem que existe produção acontecendo, de
+outro tipo. O que parou é esta cadeira escrever roteiro de diagnóstico com o
+carro na frente para uma fila que não anda, que é a definição de estoque. A
+linha que pedia a gravação saiu da lista do dono hoje, com 21 dias, pela regra
+dos 21 dias: decisão de não fazer em vez de pedido repetido.
+
+Se o dono quiser gravar qualquer uma das três, ela está pronta plano por plano,
+e eu adapto o roteiro no dia em que ele pedir.
+
 ## A fila de gravação não andou, e metade da causa é minha (13/10/2026)
 
 Antes de escrever a terceira pauta, a pergunta que eu me comprometi em 29/09 a
