@@ -203,7 +203,8 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   como exemplo de "sem aula".
 
 ## 2026-11-04 · Segurança: rodada 7, o inventário mensal, e o limite que eu declarei na semana passada mordeu
-- Artifact "Segurança da semana" (rodada 7): (link no commit seguinte)
+- Artifact "Segurança da semana" (rodada 7):
+  https://claude.ai/artifact/FLLtR4J1weut6T76h57j8a
 - **A rodada disparou em 01/11 e fechou hoje, 04/11**: o processo desta sessão
   foi reiniciado no meio dela. Todas as leituras que envelhecem foram REFEITAS
   hoje, e a varredura de segredo usou janela de 10 dias em vez de 7, para não
