@@ -73,7 +73,86 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   verde às 23h06 depois das linhas de documentação (a sessão foi reiniciada no
   meio, e as leituras de instrumento são todas da manhã, entre 11h04 e 11h15).
   `conferir:entre` e `conferir:acoes` verdes depois das linhas novas.
+- **A `main` estava com a bateria VERMELHA quando eu fui subir, e não era minha.**
+  No merge com a rodada de ASO (commit 4d075b8) a `conferir:agentes` reprovou em
+  duas linhas. Conferi em árvore separada, no commit do ASO, SEM nenhuma linha
+  desta rodada: as duas já estavam lá. A primeira era o título da entrada do
+  diário sem o apelido curto ("ASO & Lojas" onde a tabela de DIRETRIZES dá "ASO"),
+  mesmo tropeço que eu dei em 07/10, e eu corrigi, porque é mecânico e a
+  conferência nomeia a forma exata. A segunda é o veredito do `aso-lojas.md`, com
+  17 dias de atraso, e essa eu não toco: veredito escrito por quem não é o Diretor
+  é opinião com assinatura falsa. Virou linha na fila para o Diretor.
 - Artifact da rodada: https://claude.ai/artifact/YVwopeWq1oJPvG4ihYQ6Hv
+
+## 2026-11-01 · ASO: o veredito saiu para cima, e a vitrine da Play é o onboarding
+- Quinta rodada deste papel. Artifact "Lojas da quinzena":
+  https://claude.ai/artifact/VZfsAik1U6LjJop8bz9vZ1
+- A rodada disparou em 01/11; a sessão foi interrompida no meio e o registro e o
+  commit saíram em 04/11. Os números são todos da leitura de 01/11.
+- **VEREDITO DA DESCRIÇÃO CURTA (troca de 04/10), na data marcada: APONTA PARA
+  CIMA, FORTE, E NÃO FECHA.** Instrumento: o relatório `stats/store_performance/`
+  do bucket do Play, lido em 16/10 pela Engenharia (arquivo de outubro
+  atualizado até 14/10). Antes (20/09 a 03/10): **38,7%** (731 de 1.888).
+  Depois (04 a 08/10): **50,7%** (331 de 653). **O movimento inteiro está em
+  "Ads and referrals", de 34,9% para 54,1%; "Other" não se mexeu** (45,6% para
+  44,8%).
+- Isso casa com o que a troca fez: o texto novo fala do problema e do desfecho,
+  que é o que confirma a promessa para quem acabou de clicar num anúncio. Quem
+  chega por outro caminho não precisava dessa confirmação. **Não fecha** porque
+  são 5 dias de depois contra 14 de antes, sem separação de campanha (a Mídia
+  trocou criativo em outubro) e o relatório não separa a busca da Play.
+- Este NÃO é o instrumento dos 29,1% de 03/10 (aquele era a tela do console em
+  28 dias). Dois instrumentos, números diferentes, e por isso a comparação é
+  antes contra depois dentro do mesmo relatório. A linha de 04/10 FICA.
+- **RECOMENDAÇÃO QUE VALE MAIS QUE A PROPOSTA DE HOJE, e é para o Analista:**
+  pôr `stats/store_performance/` na coleta diária. `lib/playRelatorios.ts` já
+  sabe ler o formato, inclusive as armadilhas de UTF-16 e do idioma do
+  cabeçalho. Enquanto a conversão da ficha for lida à mão, todo veredito deste
+  papel depende de alguém abrir console. É o padrão que o dono ensinou em
+  03/10: quando a entrega depende de trabalho manual repetido, o pedido certo é
+  "me dê a chave e eu armo".
+- **EU FINALMENTE VI AS IMAGENS DA FICHA**, que era o bloqueio declarado em
+  15/10. Elas estão no repositório desde 16/10 (`docs/lojas/play-ficha-2026-10-16/`
+  e `docs/lojas/appstore-ficha-2026-10-16/`), baixadas das páginas públicas por
+  uma sessão de Engenharia. Abri as 8 da Play uma a uma.
+- **ACHADO: a vitrine da Play é o onboarding capturado na ordem do onboarding.**
+  Telas cruas do app, com barra de progresso, seletor PT/EN e o botão
+  "Continuar" dentro da imagem. 1ª "Cadastre seu carro" (pede trabalho antes de
+  prometer nada), 2ª "Entenda sintomas e evite gastos" (a melhor frame, e é a
+  mesma tese da descrição curta que está no ar), 3ª histórico, 4ª a prova social
+  inventada, 5ª o paywall com os preços. É a sequência desenhada para quem JÁ
+  instalou.
+- **ASSIMETRIA QUE VALE REGISTRAR: as capturas da App Store são DESENHADAS**
+  (frase acima do aparelho) e as da Play são cruas. A loja que ficou com as
+  cruas é a que tem 258 dos 279 aparelhos ativos.
+- **PROPOSTA DA QUINZENA, custo de produção ZERO:** trocar a ORDEM das capturas
+  da Play. 1ª passa a ser a atual 2ª, 2ª a atual 3ª, 3ª a atual 1ª, a do paywall
+  vai para o fim. Mesmas imagens, outra ordem, volta atrás em um minuto. Na Play
+  se vê duas, no máximo três, sem arrastar. Alcance declarado: a página recebe
+  ~1/4 da aquisição (561 aquisições de dispositivos contra 134 cliques de
+  instalação a partir da ficha, 28 dias até 03/10). Entrou na lista do dono, com
+  o pedido de resolver na MESMA visita da linha de 16/10 sobre a prova social
+  inventada, que eu não dupliquei.
+- **O BANCO RECUSOU NESTA SESSÃO** (`execute_sql`: "You do not have permission
+  to perform this action", duas tentativas), o mesmo de 26/10 com o Diretor. A
+  contagem de avaliações saiu do retrato das 9h, e está dito onde isso limita o
+  que eu afirmo. São 12, média 5,0, e **45 dias sem nenhuma nova** (a última é
+  de 17/09). O relatório de notas da Play confirma por outro caminho: nenhuma
+  nota nova de 04/09 a 11/10.
+- Nenhuma nota abaixo de 5 nas duas lojas, então não há tendência de reclamação
+  para o QA. A conferência por exceção da frase dos 2 carros segue SEM AMOSTRA:
+  28 dias no ar, zero avaliação nova no período.
+- **AUTOEXAME CONTRA A RÉGUA:** cumpri 3, 4, 5, 6, 7, 9, 10, 11 e 12. O 1 está
+  aposentado por decisão do dono e o 2 e o 8 não se aplicam. **Onde fiquei
+  devendo:** o veredito usa um número de 5 dias que alguém leu à mão há duas
+  semanas, e eu não consegui atualizar sozinho (banco recusou, relatório não
+  está na coleta). Cumpri o critério 10 no papel e não no efeito: o instrumento
+  existe, mas continua dependendo de gente. É por isso que a recomendação 1
+  desta rodada não é mudança de ficha.
+- Recomendações: (1) pôr o relatório de desempenho da ficha na coleta diária;
+  (2) numa visita só ao console, tirar a imagem da prova social inventada (linha
+  de 16/10) e arrastar as outras para a ordem nova; (3) a proposta da primeira
+  frase, guardada em 15/10 esperando este veredito, já pode entrar.
 
 ## 2026-10-30 · Engenharia: o segundo pedido de conta não alcançava nenhum dos recusantes da aposta
 
@@ -1118,7 +1197,6 @@ e não como medição, que é o mínimo que eu podia fazer.
   função num arquivo de consumidor, porque esse plantio testa presença e dá
   verde falso, como o meu de 17/10.
 
-
 ## 2026-10-24 · Engenharia: os dois pedidos da Mídia de 15/10 feitos, e o alarme avisa no dia seguinte
 
 - Pedido do dono: "vamos fazer o 2" (os dois pedidos da Mídia para a coleta do
@@ -1341,7 +1419,6 @@ e não como medição, que é o mínimo que eu podia fazer.
   processos da conferência (o servidor de desenvolvimento ficava solto) e
   aceita o nome da suíte (`... conferir:navegador <arquivo> <a> <b> km`). Provado
   interrompendo de propósito: restaurado, sem servidor solto.
-
 
 ## 2026-10-21 · QA: o quiz do dia 1 virou comportamento, e o risco do carro parou de inventar o km
 - Artifact "QA da semana":
@@ -2721,7 +2798,6 @@ confissão, não dava.
   Mail da Apple conta como aberto o que ninguém leu. O clique é o número
   firme, e ele é 4 em 832.
 
-
 ## 2026-10-15 · Engenharia: cada assinatura passa a dizer de onde veio
 
 - Pedido do dono, sobre a raiz que o QA deixou como recomendação em 14/10:
@@ -3757,7 +3833,6 @@ eu tinha, que é a armadilha do CLAUDE.md de 03/10.
 - **A ficha** `quiz-no-dia-1` em `experimentos.md`, com o antes lido em
   08/10 (4 de 332 no dia seguinte, 9 em qualquer dia; 5 de 316 em 30 dias)
   e a leitura por versão. A fila do QA aponta a reconferência.
-
 
 ## 2026-10-08 · Engenharia: a rodada do QA lida contra o código e o banco; o zero da manchete é o índice
 
@@ -7009,7 +7084,6 @@ eu tinha, que é a armadilha do CLAUDE.md de 03/10.
   quatro; (3) uma tela do Play Console, sem a qual toda proposta de ficha é
   decidida no escuro e nenhuma pode ser julgada depois.
 
-
 ## 2026-09-30 · QA/Produto: existe uma assinatura de loja há seis dias que o banco não conhece
 - Artifact "QA da semana":
   https://claude.ai/artifact/DQ5BgWtmmnha61jhqAQ8KA
@@ -7448,7 +7522,6 @@ REGISTRO no diário, não sobre o trabalho inteiro. Não abri os seis relatório
   se lê antes de o risco poder acontecer.
 - Bateria `conferir` inteira verde (a nova incluída), tipos limpos, suíte
   `carro` passando. Sem build local, que é o regime das duas velocidades.
-
 
 ## 2026-09-24 · Mídia paga (rodada 2): 44 contas a R$ 8,30, e a etiqueta parou de chegar no dia 19
 - Artifact "Mídia da semana":
