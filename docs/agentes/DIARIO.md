@@ -84,6 +84,124 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   é opinião com assinatura falsa. Virou linha na fila para o Diretor.
 - Artifact da rodada: https://claude.ai/artifact/YVwopeWq1oJPvG4ihYQ6Hv
 
+## 2026-11-04 · Conteúdo: as duas réguas leram, pararam a busca e a pauta, e o rodízio deixou de existir
+
+- Artifact "Conteúdo da semana": https://claude.ai/artifact/SPHgiLU6ZyfWksff9BVPq8
+- **A rodada é a de terça 03/11 e fechou em 04/11** (a sessão foi reiniciada no
+  meio, segunda vez). As leituras são de 03/11 e foram RECONFERIDAS no retrato
+  de 04/11 das 9h antes do commit: segue uma consulta de categoria só na posição
+  98, `topPaginas` segue vazio, o vídeo mais novo do canal segue sendo o de
+  13/10, e as impressões de 28 dias foram de 33 para 32. Nenhuma frase de estado
+  mudou de valor.
+- **AS DUAS RÉGUAS DESTA CADEIRA TINHAM DATA PARA HOJE, AS DUAS LERAM, E AS DUAS
+  CAÍRAM NO RAMO QUE TIRA TRABALHO DE MIM.** A seção inteira está no manual
+  ("03/11/2026: as duas réguas leram").
+- **LEITURA 1, BUSCA: ramo "pior que 65", que manda PARAR de escrever para
+  busca.** Hoje existe uma consulta de categoria só, `luz do motor acesa` na
+  posição 98; a de 89 desapareceu da lista. 2 cliques e 33 impressões em 28
+  dias. As cinco leituras da régua, com amostras diferentes, caem todas no mesmo
+  ramo: 06/10 nove consultas e mediana 71, 13/10 quatro e 82, 20/10 duas e 93,5,
+  27/10 duas e 93,5, hoje uma e 98.
+- **O PORTÃO DE AMOSTRA QUE O RETORNO DE 29/10 PEDIU ESTÁ ESCRITO, E DEPOIS DA
+  LEITURA, com o motivo dito:** aquele retorno saiu em 29/10, no mesmo dia em
+  que a minha rodada anterior fechou, e hoje é a primeira rodada minha desde
+  então. O portão são QUATRO consultas de categoria distintas em 28 dias; abaixo
+  disso a leitura sai "sem amostra" e vale o último ramo com amostra. **E ele
+  não muda o resultado de hoje, que é a única razão de eu escrevê-lo depois**:
+  pelo portão vale a leitura de 13/10, mediana 82, mesmo ramo. Regra nova no
+  manual: portão escrito depois da leitura vem com a tabela que prova que ele
+  não escolheu o resultado.
+- Consequências, como estavam escritas desde 06/10: o slot de guia vira aula do
+  catálogo; a recomendação do papel passa a ser conseguir a primeira citação de
+  fora, com a lista e o critério já escritos em 20/10; os cinco guias continuam
+  no ar, no sitemap e com as datas de releitura valendo, porque o dado diz que
+  escrever MAIS página não move a posição, não que as páginas sejam inúteis.
+  **Volta quando: leitura em 02/02/2027**, mesmo portão, e volta a escrever guia
+  se a mediana de pelo menos quatro consultas estiver melhor que 65.
+- **LEITURA 2, FILA DE GRAVAÇÃO: ramo "canal sem publicar nada".** O vídeo mais
+  novo do canal continua sendo o de 13/10 às 21h36 UTC, e os de 13/10 são os não
+  listados; o último vídeo PÚBLICO é de 19/09, há 45 dias. A ressalva de
+  visibilidade que eu escrevi em 13/10 não bloqueia a leitura, e o motivo está
+  dito: não houve envio NENHUM em 21 dias, e envio nenhum é publicação nenhuma,
+  qualquer que seja a visibilidade.
+- Consequência: **o slot de pauta para de produzir roteiro.** As três pautas
+  ficam prontas e congeladas em `docs/conteudo/pautas.md`, com a seção datada.
+  Não é desistência do canal nem julgamento do que o dono grava: em 13/10
+  entraram catorze vídeos e os assuntos dizem que existe produção, de outro
+  tipo. O que parou é escrever roteiro para fila que não anda. **Volta quando**
+  aparecer vídeo público novo ou o dono pedir, e isso é gatilho, não agenda.
+- **A LINHA DA PAUTA 03 SAIU DA LISTA DO DONO HOJE, com 21 dias, pela regra dos
+  21 dias: decisão de não fazer em vez de pedido repetido.** Custo de hoje dito
+  de uma vez: a `diy-battery` segue sendo a aula mais aberta entre as que não
+  têm vídeo e o canal segue 45 dias sem vídeo público. Se ele quiser gravar
+  qualquer uma das três, eu adapto no dia.
+- **O EFEITO SOMADO: o rodízio de formato deixa de existir até uma das duas
+  reabrir, e toda rodada passa a ser aula do catálogo**, uma por semana em vez
+  de uma a cada três. O plano de cobertura passa a fechar em **08/12** em vez de
+  23/02: 10/11 fumaça no escapamento (7), 17/11 ar não gela (4), 24/11 puxa ao
+  frear (4), 01/12 pneu perdendo pressão (3), 08/12 desgaste irregular (2). Em
+  08/12 a régua fecha em 19 de 19 e a pergunta do rodízio reabre.
+- ENTREGA: **aula `diag-motor-falhando`**, gratuita, trilha de diagnóstico, PT e
+  EN. Segundo da fila nova por demanda medida (20 aparelhos em 30 dias). Abre
+  pela única pressa da família (luz piscando é falha acontecendo agora, e o
+  combustível que não queimou esquenta o catalisador) e depois recorta pelo que
+  a tela pergunta: em marcha lenta, na aceleração, só a frio, e o caso que não é
+  peça nenhuma (começou depois de abastecer). O `>>` traz o aviso que vale
+  dinheiro: desconfiar de orçamento que troca velas, bobinas, bicos e filtro de
+  uma vez sem ler código. São 126 aulas e 14 dos 19 sintomas com aula.
+- **RESSALVA WEB CONTRA BINÁRIO, que o retorno de 29/10 cobrou:** "14 de 19" é
+  verdade na web. No app das lojas a ligação do sintoma à aula viaja no binário,
+  então quem está na 3.3 abre "Motor falhando" e não vê o card; a aula aparece
+  em Estudos e na busca. Vale até a 3.4, que ainda não foi gerada.
+- **O QUE EU NÃO CONSEGUI LER HOJE:** duas consultas ao banco às 11h20 UTC,
+  inclusive um `select 1`, devolveram "You do not have permission to perform
+  this action". Então a demanda por sintoma que escolheu a aula é a leitura de
+  27/10 (refeita pelo Diretor em 29/10 com o mesmo resultado), e o portão de
+  amostra da régua do sintoma não pôde ser recontado (último valor conhecido:
+  56 eventos com porta, 3 pela porta `sintoma`, por Engenharia em 29/10 às 10h;
+  o portão são 100 e a leitura segue marcada para 24/11). **Observação que ajuda
+  o item do dono, já levantado pelo Diretor:** ele registrou como "segunda
+  segunda seguida", e hoje é terça, e eu li o banco sem problema na terça 27/10
+  e na quinta 29/10. Não é padrão de dia da semana, é intermitente. Não abro
+  linha nova.
+- A linha da fila que a Engenharia endereçou a mim em 29/10 (fazer o
+  `topPaginas` responder por um fluxo novo do n8n) ficou com **prioridade
+  rebaixada, sem fechar**, e o motivo está na linha: com a busca parada, saber
+  qual página recebe cada impressão deixou de ser entrada de decisão desta
+  cadeira; o dado volta a importar em 02/02/2027. E mexer em fluxo do n8n não é
+  alçada deste papel.
+- CONFERÊNCIAS: `plantio` com id inexistente na linha nova da `AULAS_DO_SINTOMA`
+  → MORDEU, saída 1, arquivo restaurado pela cópia. A suíte de navegador
+  `sintoma`, a da área tocada, passou nos sete pontos em 24s. O
+  `npm run conferir` saiu verde na minha árvore antes do rebase.
+- **E DEPOIS DO REBASE A BATERIA FICOU VERMELHA, por coisa que não é minha, com
+  prova.** Ao trazer a main veio a rodada do ASO de 01/11, e a
+  `conferir:agentes` reprova por duas razões. Rodei a conferência numa ÁRVORE
+  SEPARADA da `origin/main`, sem nenhuma mudança minha, e as duas falhas
+  aparecem lá do mesmo jeito.
+  - A segunda eu consertei, porque é formato com definição única em DIRETRIZES:
+    o título assinava `ASO & Lojas` e o apelido da tabela é `ASO`, que é a mesma
+    armadilha que me pegou em 06/10.
+  - A primeira não dá para eu consertar: falta o veredito da rodada do ASO, 17
+    dias, acima da folga de dez. Veredito é escrito de fora por quem lê a
+    semana, e escrever o do ASO no lugar do Diretor seria autoavaliação por
+    procuração. Virou linha na fila para o Diretor, com o aviso de que a bateria
+    inteira sai vermelha para qualquer papel enquanto isso não for escrito.
+- E a resolução do conflito do diário seguiu a regra de 15/09: as duas entradas
+  ficaram, a minha em cima por data, com linha em branco entre elas, e nada foi
+  reordenado à mão além disso. Na lista do dono o conflito também foi resolvido
+  mantendo as duas coisas: a linha nova do ASO de 01/11 fica, a minha do
+  Search Console fica com o motivo atualizado, e a da Pauta 03 sai.
+- RÉGUA DA RODADA: 1 a 5, 9 e 10 cumpridos; 6, 7 e 8 não se aplicam a aula de
+  catálogo e a 11 não se aplica (não há pauta, e não haverá até a régua
+  reabrir). Sobre o critério 2: o slot de hoje era pauta e a régua daquele slot
+  o parou por escrito, o que é diferente de 27/10, quando eu gastei o slot de
+  guia e declarei a falha.
+- Próximas: (1) 10/11, aula de fumaça no escapamento, a única de urgência ALTA
+  entre as que faltam, recortada pela COR; (2) 17/11, aula de ar-condicionado,
+  e essa rodada confere a suíte `sintoma` junto, porque ela usa esse sintoma
+  como exemplo de "sem aula".
+
 ## 2026-11-01 · ASO: o veredito saiu para cima, e a vitrine da Play é o onboarding
 - Quinta rodada deste papel. Artifact "Lojas da quinzena":
   https://claude.ai/artifact/VZfsAik1U6LjJop8bz9vZ1
@@ -153,6 +271,82 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   (2) numa visita só ao console, tirar a imagem da prova social inventada (linha
   de 16/10) e arrastar as outras para a ordem nova; (3) a proposta da primeira
   frase, guardada em 15/10 esperando este veredito, já pode entrar.
+
+## 2026-10-31 (rodada 6) · Guardião: a varredura de presença fechou, e a mesma forma estava no texto
+- Artifact "Conferências da semana":
+  https://claude.ai/artifact/5Fi7gTeQQZGLPZUydR2aWM
+- **Nota de honestidade sobre a data**: os 24 plantios e as provas desta rodada
+  rodaram em 31/10; o processo da sessão foi reiniciado antes do push, e o
+  artifact e o commit saíram em 04/11. As datas da fila são as das provas, não
+  as da publicação.
+- **Os dois pontos do retorno do dono, absorvidos.** (1) Sobre a
+  `conferir:versoes`: ele está certo, meu conserto tirou o positivo verdadeiro
+  junto, e a Engenharia já aplicou o caminho certo (a conferência busca a
+  história que falta e só avisa se a busca falhar). Virou aprendizado no manual:
+  ao consertar falso positivo, perguntar ONDE a conferência roda de verdade.
+  (2) Sobre a frase: **"a conferência deixaria passar X", nunca "X acontecia"**.
+  Aplicado em cada comentário desta rodada e neste registro.
+- **LINHA DA FILA, copiada do comando** (começo e fim): 67 conferências,
+  **36 para 43** provadas por quem não as escreveu, **18 para 11** só pelo autor
+  (a fila de verdade), 13 em dívida assumida.
+- **A VARREDURA DE PRESENÇA FECHOU, com o número.** Começou em 24/10 com 16; 11
+  foram provadas naquele dia e 5 ficaram abertas. Hoje a lista tinha 11 (as 5
+  abertas, mais 4 que NASCERAM na semana, menos as que consertei) e provei todas:
+  **8 cegas, 2 morderam, 1 sólida por construção.** Sobraram 3 no repositório e
+  as três estão explicadas: a da `biela` é negativa (exigir que um nome NÃO
+  apareça é o uso certo de procurar o nome) e as da `regras` e `midia` mordem.
+  A forma não condena a asserção; o plantio decide.
+- **O que as 8 cegas deixariam passar**, nesta ordem de custo:
+  - `email`: convite Premium enviado com o cupom esgotado (quem recebe não
+    consegue resgatar);
+  - `jornada`: o push de todo mundo indo para um id só;
+  - `segundo-pedido`, dois elos: a recusa contada e descartada (a trava das três
+    nunca dispara) e o portão do repique sem barrar, que é a praga que o arquivo
+    existe para impedir;
+  - `garagem`, dois elos: a folha de importação e o store chamando e descartando
+    o resultado, e o carro repetido voltando a ser gravado calado;
+  - `login`: o relato de erro nativo com motivo fixo, e foi um relato desses que
+    achou a SHA-1 não cadastrada em 10/09;
+  - `legivel`: o retrato publicando frase montada à mão em vez da função.
+- **A FORMA SE REGENERA EM CÓDIGO NOVO, e esse é o argumento de virar
+  conferência.** Consertei a `linhaDeAnuncio` da `conferir:legivel` em 24/10 e
+  hoje apareceu, no MESMO arquivo, uma `linhaDeVitals` escrita igual, de código
+  da semana. Quatro das 11 de hoje nasceram depois da varredura anterior.
+  Vigilância minha semanal não acompanha isso.
+- **E A MESMA FORMA ESTAVA NO TEXTO, não só no código.** A `conferir:agentes`
+  cobrava que a frase "A régua da rodada" aparecesse no manual, em qualquer
+  lugar. Plantado o cabeçalho virando outro nome no `diretor.md`, ela passou
+  verde, porque o próprio texto cita "a seção A régua da rodada" numa frase em
+  prosa. Um manual podia perder a régua e ser aprovado pela frase que explica
+  que a régua existe. Medido antes de apertar: os 8 manuais de Rotina Claude
+  têm o cabeçalho, então a regra nova não reprova ninguém.
+- **As seis da fila, nos dois lados**: `saida` e `midia` morderam;
+  `perguntas` (a rota podia ler a pergunta e gravar origem e tema fixos),
+  `renovacao` (o `funil("renovou")` podia ficar dentro de um ramo que nunca
+  roda, que é o buraco de 01/10 com a linha visível no código), `loja` (o
+  webhook podia chamar `identidadeUsavel` e não barrar) e `agentes` estavam
+  cegas e foram consertadas.
+- **Medição**: 11 plantios de consumidor passaram a reprovar, com zero falso
+  positivo no código limpo nas doze conferências tocadas, e as regras puras
+  seguem mordendo depois das edições. Todos os 24 plantios pelo
+  `npm run plantio`, sem incidente.
+- **Contra a minha régua**: os onze critérios cumpridos. O que declaro no lugar:
+  **esta rodada não tocou a fila por data**, ela seguiu a ordem de custo que o
+  dono pediu em 25/10, e as seis da fila entraram porque sobrava tempo. Se a
+  prioridade voltar a ser a data, as próximas são `aquisicao`, `cadastro`,
+  `fila`, `publicacao`, `entre` e `quiz-populacao`.
+- **O que esta rodada NÃO alcança**: os consertos são todos conferência de
+  texto, dito dentro de cada um. Texto prova que a chamada e o veredito estão
+  escritos no lugar certo, não que o programa se comporta assim em execução:
+  isso é a suíte de navegador, uma vez por mês, e o aparelho, que não se prova
+  aqui.
+- **RECOMENDAÇÕES (3)**: (1) a conferência de presença é do QA e agora tem dois
+  argumentos medidos a favor, a regeneração em código novo (4 em uma semana) e a
+  variante em texto; (2) o `npm run plantio` podia recusar plantio que só
+  renomeia a função no consumidor, porque esse plantio testa presença e deu
+  verde falso na minha rodada 4; (3) a varredura em texto vale uma passada
+  própria: onde uma conferência procura FRASE num documento, perguntar se ela
+  cobra a estrutura ou a palavra.
 
 ## 2026-10-30 · Engenharia: o segundo pedido de conta não alcançava nenhum dos recusantes da aposta
 

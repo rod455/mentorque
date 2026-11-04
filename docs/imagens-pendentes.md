@@ -260,3 +260,4 @@ texto viaja pela rede, o arquivo não).
 | `diag-suspensao-avisos` | Suspensão: o que ela avisa antes de virar conta |
 | `diag-direcao-pesada` | Direção pesada: o momento diz a causa |
 | `diag-perda-de-forca` | Perda de força: de repente ou aos poucos |
+| `diag-motor-falhando` | Motor falhando: quando ele falha diz o que é |

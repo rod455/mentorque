@@ -342,12 +342,6 @@ sem tirar ninguém dela.
 
 | conferência | última prova | mordeu? |
 |---|---|---|
-| `conferir:perguntas` | no nascimento (autor), 30/09/2026 | sim, no plantio de quem escreveu |
-| `conferir:agentes` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu; e de novo em 06/10/2026 (autor), ao ganhar ordem e assinatura do diário: entrada de 06/10 jogada abaixo de uma de 04/10 reprovou, título sem papel reprovou |
-| `conferir:loja` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
-| `conferir:midia` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
-| `conferir:renovacao` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
-| `conferir:saida` | no nascimento (autor), 02/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:aquisicao` | no nascimento (autor), 03/10/2026 | 16 plantios, 16 mordidas: painel no lugar do MMP, total da loja dado pela Apple sozinha, fonte faltando virando zero (duas vezes), ressalva do SDK parando de viajar, recusa sem a aritmetica que a prova, denominador de qualquer fonte, e o retrato parando de publicar a escada. Mais 7 no leitor do relatorio do Play: UTF-16 deixando de ser tratado, marca de ordem de bytes ficando, busca de coluna voltando a ser exata (quebra no idioma), formato desconhecido virando zero, cabecalho sem linha virando total zero, mes mais novo vindo da ordem da lista, e a desinstalacao sumindo, e mais 6 plantios com 6 mordidas em 04/10 (relatorio do app vizinho escolhido como nosso, pacote cru dentro de outro nome, rota sem a trava, desinstalacao da coluna morta, base instalada do dia errado e nunca lida) |
 | `conferir:cadastro` | no nascimento (autor), 03/10/2026 | sim, no plantio de quem escreveu |
 | `conferir:fila` | no nascimento (autor), 03/10/2026 | sim, no plantio de quem escreveu |
@@ -357,11 +351,9 @@ sem tirar ninguém dela.
 | `conferir:gratis` | no nascimento (autor), 17/10/2026 | 6 plantios com `npm run plantio`, 6 mordidas: custo por km aberto ao grátis, causas cortadas em 2 de volta, a regra dando 2 causas na segunda consulta, a tela sem perguntar se é a primeira, o Biela trancado na tabela, e o card do Início mostrando o custo por km ao grátis |
 | `conferir:segredo` | no nascimento (autor), 18/10/2026 | 4 plantios, 4 mordidas: chave real em arquivo sem exceção, chave real DENTRO do arquivo com exceção (a que importa), JWT em documento, e a bateria inteira com o defeito de pé |
 | `conferir:prazo` | no nascimento (autor), 21/10/2026 | 6 plantios com `npm run plantio`, 6 mordidas: aborto com outro nome (o cliente da Supabase passa a repetir sozinho), relógio desligado quando chega o cabeçalho (o corpo travado escapa), coleta voltando ao cliente sem prazo, orçamento que estoura os 30 s do Vigia, orçamento sem conferência no `medir`, e o cancelamento de quem chamou ignorado |
-| `conferir:segundo-pedido` | no nascimento (autor), 30/10/2026 | 4 plantios, 4 mordidas: as tres travas removidas uma a uma (um repique na vida reprovou 2 degraus, nunca na sessao da recusa reprovou 1, nunca depois de dois nao reprovou 1) e o gatilho voltando a ser o CARRO, que e exatamente perguntar de novo a quem acabou de dizer nao com o carro na mao. LIMITE DECLARADO: os seis primeiros degraus exercitam as travas de verdade, com localStorage e sessionStorage de mentira; o setimo e conferencia de TEXTO no fonte da folha, e texto diz que a chamada esta escrita, nao que ela e alcancavel (a licao de 23/10) |
-| `conferir:painel` | no nascimento (autor), 25/10/2026 | 5 plantios com `npm run plantio`, 5 mordidas: chave errada ganhando selo, chave ficando no endereço do redirecionamento, o cookie guardando a própria chave, cookie sem `httpOnly`, e o `chaveDadosOk` passando a aceitar o cookie (o selo abriria as rotas que mandam e-mail) |
 | `conferir:saude` | no nascimento (autor), 21/10/2026 | 5 plantios, 5 mordidas: odômetro zero voltando a contar como km medido, a tela parando de mostrar a ressalva, a ressalva substituindo o "baseado no seu quiz", a folha voltando a salvar quiz incompleto, e o peso do VRI dobrado. O quinto passou verde na primeira vez: o limite de 3 pontos tinha folga e absorvia a mudança de peso, então apertei para o valor publicado e acrescentei a leitura do peso na fonte. Em 22/10 (Engenharia), mais 3 plantios e 3 mordidas na seção 5: o `completou_quiz_saude` sumindo do `submit`, o evento saindo ANTES da trava do quiz incompleto, e um dos eventos fora da lista da rota. E o caminho da tela (o km pedido na saúde) foi para a suíte de navegador `km`, com 1 plantio e 1 mordida: o `informou_km` sumindo |
+| `conferir:painel` | no nascimento (autor), 25/10/2026 | 5 plantios com `npm run plantio`, 5 mordidas: chave errada ganhando selo, chave ficando no endereço do redirecionamento, o cookie guardando a própria chave, cookie sem `httpOnly`, e o `chaveDadosOk` passando a aceitar o cookie (o selo abriria as rotas que mandam e-mail) |
 | `conferir:baixar` | 19/09/2026 | sim |
-| `conferir:email` | 19/09/2026 | sim, 3 defeitos plantados |
 | `conferir:relatorio` | 19/09/2026 | sim |
 | `conferir:travessao` | 19/09/2026 | sim, depois de consertada |
 | `conferir:estilo` | 26/09/2026 | sim, em regra de erro |
@@ -377,7 +369,6 @@ sem tirar ninguém dela.
 | `conferir:embedding` | 10/10/2026 | sim, 3 plantios: modelo divergente, dimensão divergente, e a rota sem o aviso de ano do manual |
 | `conferir:frescor` | 10/10/2026 | não no consumidor, consertada: o retrato parava de publicar o aviso e a corrente inteira passava |
 | `conferir:identidade` | 10/10/2026 | não no elo com o banco, consertada: a asserção do prefixo nunca abriu o SQL |
-| `conferir:login` | 10/10/2026 | sim, na regra e no consumidor: motivo da queda renomeado, e o plugin fora do binário do iPhone |
 | `conferir:navegacao` | 10/10/2026 | não no consumidor, consertada: o defeito de 30/08 voltava inteiro pelo nav.tsx |
 | `conferir:recorte` | 10/10/2026 | não no consumidor, consertada: a foto saía sem recorte nenhum com a corrente toda verde |
 | `conferir:banco` | 17/10/2026 | sim, 3 plantios: `pg_temp` fora da lista, `pg_temp` em primeiro, e a função sem `search_path` |
@@ -389,13 +380,22 @@ sem tirar ninguém dela.
 | `conferir:alarme` | 24/10/2026 | sim, 2 plantios: o teto de aparelhos virando contagem bruta, e o mínimo de ativos caindo para 1 |
 | `conferir:aviso` | 24/10/2026 | não em 3 elos, consertada: aviso de revisão para carro em dia, e os três avisos do quiz no mesmo instante |
 | `conferir:coorte` | 24/10/2026 | não no fim da janela, consertada: o numerador encurtando para 2 dias passava com o selo de madura em cima |
-| `conferir:garagem` | 24/10/2026 | não na forma subtil, consertada: chamar carroIgualNaGaragem e descartar o resultado gravava o repetido calado |
 | `conferir:imagem` | 24/10/2026 | sim, na regra: o otimizador do Next religado reprovou |
-| `conferir:jornada` | 24/10/2026 | não em 3 elos, consertada: assinatura do link de sair não aplicada, e-mail errado para todos, push para a pessoa errada |
-| `conferir:legivel` | 24/10/2026 | não no uso, consertada: chamar linhaDeAnuncio e devolver outra frase passava verde; e de novo em 28/10/2026 (autor), ao ganhar a linha do vitals do Play: 5 plantios e 5 mordidas, e o terceiro passou verde na primeira vez pelo MESMO motivo de 14/10 (a entrada era o campo ausente, onde `Number(undefined)` ja e `NaN`, e nao `null`, que e o unico valor onde as duas formas discordam) |
 | `conferir:porta` | 24/10/2026 | não no consumidor, consertada: a tela podia desenhar o título com carro e desfazer a ordem de 28/09 |
 | `conferir:versoes` | 24/10/2026 | não em clone raso, consertada: ela reprovava a ficha das lojas em contêiner novo, por cegueira de história. Em 25/10 (Engenharia) o conserto de 24/10 foi refeito, porque transformava a resposta negativa em aviso e a guarda deixava de reprovar em toda sessão remota: agora ela busca a história antes de decidir. Provado em clone raso de 50 commits feito para o teste: limpo passa e deixa de ser raso; com um commit de 25/10 plantado na ficha da 3.2, a versão de 24/10 passava (saída 0, só aviso) e a nova reprova (saída 1); sem remoto, volta ao aviso dizendo que a busca falhou |
 | `conferir:versoes-do-carro` | 24/10/2026 | não no uso, consertada: chamar versaoServeParaOAno e ignorar o veredito aceitava toda versão |
+| `conferir:agentes` | 31/10/2026 | não na seção, consertada: a régua podia sumir do manual e a menção em prosa mantinha o verde |
+| `conferir:email` | 31/10/2026 | não no freio do cupom, consertada: deixaria passar convite com cupom esgotado |
+| `conferir:garagem` | 31/10/2026 | não em 2 elos, consertada: folha de importação e store chamando e descartando |
+| `conferir:jornada` | 31/10/2026 | não no alvo do push, consertada: deixaria passar push de todos para um id só |
+| `conferir:legivel` | 31/10/2026 | não no uso (linhaDeVitals), consertada: a forma reapareceu em código novo |
+| `conferir:login` | 31/10/2026 | não no motivo, consertada: deixaria passar relato de erro nativo com motivo fixo |
+| `conferir:loja` | 31/10/2026 | não no veredito, consertada: o webhook podia chamar identidadeUsavel e não barrar |
+| `conferir:midia` | 31/10/2026 | sim, mordeu na forma de presença (montaPacote) |
+| `conferir:perguntas` | 31/10/2026 | não no uso, consertada: a rota podia ler a pergunta e gravar origem e tema fixos |
+| `conferir:renovacao` | 31/10/2026 | não no ramo, consertada: `funil(renovou)` podia ficar dentro de ramo que nunca roda |
+| `conferir:saida` | 31/10/2026 | sim, 2 plantios: a assinatura do motivo na regra e na rota |
+| `conferir:segundo-pedido` | 31/10/2026 | não em 2 elos, consertada: a recusa descartada e o portão do repique sem barrar |
 | `conferir:agenda` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 | `conferir:appsflyer` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 | `conferir:caminho` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
@@ -450,6 +450,57 @@ custo que não existia. Vale a lição geral, que é a mesma do caso `anonId`: o
 custo que justifica não fazer algo também é uma afirmação, e também se mede.
 
 ## Aprendizados
+
+**A VARREDURA DE PRESENÇA ACABOU, E O NÚMERO FECHA (31/10/2026).** Começou em
+24/10 com 16 asserções; 11 foram provadas naquele dia e 5 ficaram. Nesta rodada
+a lista tinha 11 (as 5 abertas, mais 4 que NASCERAM na semana, menos as que eu
+consertei), e provei todas as 11: **8 cegas, 2 morderam, 1 sólida por
+construção.**
+
+Sobraram 3 no repositório, e as três estão explicadas: a da `biela` é negativa
+(exigir que um nome NÃO apareça é o uso certo de procurar o nome), e as da
+`regras` e da `midia` MORDERAM. **A forma não condena a asserção; o que decide
+é o plantio.** Quem repetir esta varredura precisa saber disso, senão conserta
+o que já funciona.
+
+**E A FORMA SE REGENERA EM CÓDIGO NOVO, que é o argumento de virar conferência.**
+Em 24/10 consertei a `linhaDeAnuncio` da `conferir:legivel`. Nesta rodada
+apareceu, no MESMO arquivo, uma `linhaDeVitals` escrita igual, de código novo da
+semana. Quatro das 11 de hoje nasceram depois da varredura anterior. Vigilância
+minha, uma vez por semana, não acompanha isso: o que acompanha é a conferência
+que o QA ainda não escreveu.
+
+**A MESMA FORMA EXISTE EM TEXTO, NÃO SÓ EM CÓDIGO (31/10/2026).** A
+`conferir:agentes` cobrava que a frase "A régua da rodada" aparecesse no manual,
+em qualquer lugar. Plantado o cabeçalho `## A régua da rodada` virando outro
+nome no `diretor.md`, ela passou verde: o próprio texto cita "a seção A régua da
+rodada" numa frase em prosa, e a menção satisfez a busca.
+
+Um manual podia perder a régua e continuar aprovado **pela própria frase que
+explica que a régua existe.** É o parente do "comentário que satisfaz a busca"
+da skill, e a regra prática é a mesma de código: cobre a ESTRUTURA (o
+cabeçalho), não a palavra.
+
+**COMO ESCREVER O QUE A CEGUEIRA SIGNIFICA (correção do dono, 25/10/2026).** Eu
+escrevi no diário que "o link de sair aceitava qualquer `u` sem assinatura
+válida: dava para tirar outra pessoa da jornada". Em produção a rota confere a
+assinatura e devolve 400; o que estava cego era a conferência. A frase certa é
+**"a conferência deixaria passar X"**, nunca "X acontecia". O dono lê o diário
+como estado do produto, e a régua de 06/10 do CLAUDE.md vale para toda frase de
+estado, inclusive as minhas sobre cegueira.
+
+**E TIRAR UM FALSO POSITIVO NÃO PODE TIRAR O POSITIVO VERDADEIRO JUNTO
+(correção do dono, 25/10/2026).** Meu conserto da `conferir:versoes` em 24/10
+transformou a resposta negativa do `merge-base` em aviso quando o clone é raso,
+e escrevi que "o veredito fica para quem tem a história inteira". Não fica: a
+Vercel roda `next build` e mais nada, então a conferência não roda lá, e toda
+sessão remota começa rasa. O ramo que pega "a nota diz que está no binário e não
+está", o caso da 3.0, passou a nunca reprovar.
+
+O caminho certo, já aplicado pela Engenharia: a conferência **busca a história
+que falta** (`git fetch --unshallow`) e só vira aviso se a busca falhar. A
+lição para mim: ao consertar falso positivo, perguntar onde a conferência roda
+de verdade, e o que deixa de reprovar junto.
 
 **A VARREDURA DE PRESENÇA, COM O NÚMERO (24/10/2026).** Tarefa que o dono me
 deu no retorno da rodada 4. O padrão é procurável: asserção cujo regex é só o

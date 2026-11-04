@@ -136,7 +136,13 @@ console.log("Loja: a compra chega ao Premium, e quando não chega, deixa rastro?
   const rota = semComentarios(readFileSync(new URL("../app/api/revenuecat/webhook/route.ts", import.meta.url), "utf8"));
   conferir(
     "a identidade é conferida pela régua, e não por uma cópia da regex",
-    /identidadeUsavel\(userId\)/.test(rota) && !/\[0-9a-f\]\{8\}/.test(rota),
+    // O VEREDITO TEM DE BARRAR (achado do Guardião em 31/10/2026). A asserção
+    // pedia a chamada `identidadeUsavel(userId)` e a ausência da regex copiada.
+    // Plantado `if (false && !identidadeUsavel(userId))`, a chamada fica e o
+    // portão nunca barra: esta conferência deixaria passar um webhook que trata
+    // identidade imprestável como conta boa, e a venda paga iria para um dono
+    // que não existe, que é o caso de 25/09 que fez este arquivo nascer.
+    /if \(!identidadeUsavel\(userId\)\)/.test(rota) && !/\[0-9a-f\]\{8\}/.test(rota),
     "regex copiada no leitor é regra que para de acompanhar a fonte",
   );
   conferir(

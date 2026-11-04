@@ -386,6 +386,7 @@ export const AULAS_DO_SINTOMA: Record<string, string[]> = {
   "steering-vibration": ["diag-vibracao"],
   "steering-hard": ["diag-direcao-pesada"],
   "engine-power-loss": ["diag-perda-de-forca"],
+  "engine-misfire": ["diag-motor-falhando"],
   "cel": ["vid-luz-injecao-acendeu"],
   "overheating": ["diag-superaquecimento"],
   "consumption": ["money-fuel"],

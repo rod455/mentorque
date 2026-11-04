@@ -172,8 +172,11 @@ for (const motivo of MOTIVOS) {
   );
   const catchDoPlugin = social.slice(social.indexOf("} catch (e) {", social.indexOf("plugin.login(")), social.indexOf("canceled: true"));
   conferir(
-    "o 'cancelado' é relatado ANTES de ser engolido",
-    /relatarLoginNativo\(/.test(catchDoPlugin),
+    "o 'cancelado' é relatado ANTES de ser engolido, COM o motivo de verdade",
+    // Era presença (31/10/2026): plantado `relatarLoginNativo(provider, "ok")`,
+    // a menção fica e a testemunha passa a relatar "ok" para todo erro nativo.
+    // Foi um relato desses que achou a SHA-1 não cadastrada em 10/09.
+    /relatarLoginNativo\(provider, msg \|\| "login_falhou"\)/.test(catchDoPlugin),
     "relatar depois do return de cancelamento deixa o caso que mais importa sem testemunha"
   );
 }

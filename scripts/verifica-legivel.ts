@@ -359,7 +359,26 @@ console.log("Retrato: janela aberta vira motivo, e não número?");
   // E quem usa a regra.
   const operacao = readFileSync(new URL("../lib/operacao.ts", import.meta.url), "utf8");
   conferir("o retrato publica a linha do vitals", /vitalsLegivel:/.test(operacao));
-  conferir("e ela sai da função, não de uma cópia local", /linhaDeVitals\(/.test(operacao));
+  // PRESENÇA VIROU USO (31/10/2026), e esta nasceu DEPOIS de eu consertar a
+  // irmã dela (`linhaDeAnuncio`) em 24/10: a forma se repete em código novo, e
+  // é por isso que ela merece uma conferência própria, não vigilância minha.
+  // Plantado `return (linhaDeVitals(d), \`vitals: ...\`)`, a menção fica e o
+  // retrato publica frase montada à mão, que para de acompanhar a fonte.
+  //
+  // REGEX ALARGADA EM 04/11 PELO QA, sem mexer na intenção: ela pedia o texto
+  // exato `return linhaDeVitals(d);` e eu passei a chamar
+  // `linhaDeVitals(d, new Date())`, porque o atraso agora é contado contra hoje.
+  // A conferência reprovou por causa da VÍRGULA, não por causa de um defeito. O
+  // que precisa estar cravado é a FORMA que importa (devolver a chamada, em vez
+  // de chamar e montar frase à mão), e não a lista de argumentos, que muda
+  // sempre que a função ganha um parâmetro. O plantio do Guardião continua
+  // mordendo, porque `return (linhaDeVitals(` tem um parêntese no meio e não
+  // casa com isto: conferido em 04/11 plantando a vírgula dele de volta.
+  conferir(
+    "e ela sai da função, não de uma cópia local",
+    /return linhaDeVitals\(/.test(operacao),
+    "chamar sem devolver tem o mesmo efeito de copiar a regra no leitor",
+  );
 }
 
 if (falhas) {

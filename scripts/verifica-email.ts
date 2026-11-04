@@ -170,7 +170,18 @@ console.log("E-mail: o que sai deixa rastro, e o rastro entra fechado?");
     /for \(const p of lista\) \{[\s\S]*await enviar\([\s\S]*\.from\("jornada_envios"\)[\s\S]*\.insert\(\{ user_id: p\.user_id, chave: CHAVE_DO_CONVITE_PREMIUM/.test(rota),
   );
   conferir("quem já recebeu e-mail hoje fica de fora (um envio por pessoa por dia)", /\.eq\("dia", hoje\)/.test(rota) && /recebeuHoje\.has\(p\.user_id\)/.test(rota));
-  conferir("o cupom é conferido antes de mandar, e sem vaga não manda", /cupomAindaTemVaga\(/.test(rota) && rota.indexOf("cupomAindaTemVaga(") < rota.indexOf("for (const p of lista)"));
+  // PRESENÇA VIROU USO (varredura do Guardião em 31/10/2026). Era a menção
+  // mais a ordem dela no arquivo. Plantado
+  // `if (false && !cupomAindaTemVaga(resgates ?? 0))`, a menção fica na ordem
+  // certa e o freio sai: esta conferência deixaria passar uma rota que manda o
+  // convite com o cupom esgotado. Quem recebe não consegue resgatar, e é
+  // mensagem a cliente que não tem desfazer.
+  conferir(
+    "o cupom é conferido antes de mandar, e sem vaga NÃO manda",
+    /if \(erroCupom \|\| !cupomAindaTemVaga\(resgates \?\? 0\)\)/.test(rota) &&
+      rota.indexOf("cupomAindaTemVaga(") < rota.indexOf("for (const p of lista)"),
+    "mencionar a função sem usar o veredito manda o convite com o cupom esgotado",
+  );
   conferir("o catálogo é contado na hora, sem as aulas agendadas", /lessonPublicada\(l, new Date\(\)\)/.test(rota));
   conferir("a rota tem teto de tempo", /export const maxDuration = \d+/.test(rota));
 }

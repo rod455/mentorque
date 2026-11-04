@@ -65,7 +65,23 @@ const diretrizes = ler("docs/agentes/DIRETRIZES.md");
   for (const l of linhas.filter((x) => /Rotina Claude/i.test(x.onde))) {
     if (!existsSync(`${RAIZ}docs/agentes/${l.manual}`)) continue;
     const texto = ler(`docs/agentes/${l.manual}`);
-    conferir(`${l.manual} tem a seção da régua`, /A r[ée]gua da rodada/i.test(texto), "manual sem regua nao da veredito, da opiniao");
+    // A SEÇÃO, NÃO A MENÇÃO (achado do Guardião em 31/10/2026). O regex antigo
+    // procurava a frase em qualquer lugar do arquivo. Plantado
+    // `## A régua da rodada` virando `## A medida da rodada` no diretor.md, o
+    // cabeçalho sumiu e a conferência passou verde, porque o próprio texto cita
+    // "a seção A régua da rodada" numa frase em prosa.
+    //
+    // Ou seja: um manual podia perder a régua e continuar aprovado pela própria
+    // frase que explica que a régua existe. É a mesma família das asserções de
+    // presença varridas hoje, só que em texto em vez de código.
+    //
+    // Medido antes de apertar: os 8 manuais de Rotina Claude têm o cabeçalho
+    // hoje, então a regra nova não reprova ninguém.
+    conferir(
+      `${l.manual} tem a SEÇÃO da régua, com cabeçalho`,
+      /^#{2,}\s+.*A r[ée]gua da rodada/im.test(texto),
+      "manual sem regua nao da veredito, da opiniao; e citar a frase em prosa nao e ter a secao",
+    );
   }
   // E A INVARIANTE QUE FECHA A PORTA DOS FUNDOS: quem roda no Claude é
   // exatamente quem tem régua. Um limiar ("pelo menos sete") deixava mover um

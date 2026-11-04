@@ -159,13 +159,22 @@ conferir(
     .replace(/^\s*\/\/.*$/gm, " ");
 
   conferir(
-    "a folha CONTA a recusa",
-    /marcaRecusaDeConta\(/.test(folha),
+    "a folha CONTA a recusa e guarda o número que ela devolve",
+    // Era presença (31/10/2026): plantado
+    // `const recusas = (marcaRecusaDeConta(...), 0)`, a menção fica, o contador
+    // nunca sobe, e esta conferência deixaria passar uma folha onde a trava 3
+    // nunca dispara, ou seja, o pedido de conta volta para sempre.
+    /const recusas = marcaRecusaDeConta\(/.test(folha),
     "sem contar a recusa, a trava 3 nunca dispara e o repique nunca é destravado",
   );
   conferir(
-    "a folha pergunta se cabe, e gasta o repique ao mostrar",
-    /cabeSegundoPedido\(/.test(folha) && /gastaSegundoPedido\(\)/.test(folha),
+    "a folha pergunta se cabe, OBEDECE a resposta, e gasta o repique ao mostrar",
+    // Era presença (31/10/2026): plantado
+    // `if (false && !cabeSegundoPedido(temAlgoAPerder)) return;`, a menção fica
+    // e o portão nunca barra. Esta conferência deixaria passar a praga que ela
+    // existe para impedir: o segundo pedido reaparecendo sem limite.
+    /if \(!cabeSegundoPedido\(temAlgoAPerder\)\) return;/.test(folha) &&
+      /gastaSegundoPedido\(\)/.test(folha),
     "mostrar sem gastar repete para sempre, que é a praga",
   );
   // Só a expressão do gatilho: a recusa usa o número de carros, de propósito,
