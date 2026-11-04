@@ -73,6 +73,83 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   de 16/10) e arrastar as outras para a ordem nova; (3) a proposta da primeira
   frase, guardada em 15/10 esperando este veredito, já pode entrar.
 
+## 2026-10-31 (rodada 6) · Guardião: a varredura de presença fechou, e a mesma forma estava no texto
+- Artifact "Conferências da semana":
+  https://claude.ai/artifact/5Fi7gTeQQZGLPZUydR2aWM
+- **Nota de honestidade sobre a data**: os 24 plantios e as provas desta rodada
+  rodaram em 31/10; o processo da sessão foi reiniciado antes do push, e o
+  artifact e o commit saíram em 04/11. As datas da fila são as das provas, não
+  as da publicação.
+- **Os dois pontos do retorno do dono, absorvidos.** (1) Sobre a
+  `conferir:versoes`: ele está certo, meu conserto tirou o positivo verdadeiro
+  junto, e a Engenharia já aplicou o caminho certo (a conferência busca a
+  história que falta e só avisa se a busca falhar). Virou aprendizado no manual:
+  ao consertar falso positivo, perguntar ONDE a conferência roda de verdade.
+  (2) Sobre a frase: **"a conferência deixaria passar X", nunca "X acontecia"**.
+  Aplicado em cada comentário desta rodada e neste registro.
+- **LINHA DA FILA, copiada do comando** (começo e fim): 67 conferências,
+  **36 para 43** provadas por quem não as escreveu, **18 para 11** só pelo autor
+  (a fila de verdade), 13 em dívida assumida.
+- **A VARREDURA DE PRESENÇA FECHOU, com o número.** Começou em 24/10 com 16; 11
+  foram provadas naquele dia e 5 ficaram abertas. Hoje a lista tinha 11 (as 5
+  abertas, mais 4 que NASCERAM na semana, menos as que consertei) e provei todas:
+  **8 cegas, 2 morderam, 1 sólida por construção.** Sobraram 3 no repositório e
+  as três estão explicadas: a da `biela` é negativa (exigir que um nome NÃO
+  apareça é o uso certo de procurar o nome) e as da `regras` e `midia` mordem.
+  A forma não condena a asserção; o plantio decide.
+- **O que as 8 cegas deixariam passar**, nesta ordem de custo:
+  - `email`: convite Premium enviado com o cupom esgotado (quem recebe não
+    consegue resgatar);
+  - `jornada`: o push de todo mundo indo para um id só;
+  - `segundo-pedido`, dois elos: a recusa contada e descartada (a trava das três
+    nunca dispara) e o portão do repique sem barrar, que é a praga que o arquivo
+    existe para impedir;
+  - `garagem`, dois elos: a folha de importação e o store chamando e descartando
+    o resultado, e o carro repetido voltando a ser gravado calado;
+  - `login`: o relato de erro nativo com motivo fixo, e foi um relato desses que
+    achou a SHA-1 não cadastrada em 10/09;
+  - `legivel`: o retrato publicando frase montada à mão em vez da função.
+- **A FORMA SE REGENERA EM CÓDIGO NOVO, e esse é o argumento de virar
+  conferência.** Consertei a `linhaDeAnuncio` da `conferir:legivel` em 24/10 e
+  hoje apareceu, no MESMO arquivo, uma `linhaDeVitals` escrita igual, de código
+  da semana. Quatro das 11 de hoje nasceram depois da varredura anterior.
+  Vigilância minha semanal não acompanha isso.
+- **E A MESMA FORMA ESTAVA NO TEXTO, não só no código.** A `conferir:agentes`
+  cobrava que a frase "A régua da rodada" aparecesse no manual, em qualquer
+  lugar. Plantado o cabeçalho virando outro nome no `diretor.md`, ela passou
+  verde, porque o próprio texto cita "a seção A régua da rodada" numa frase em
+  prosa. Um manual podia perder a régua e ser aprovado pela frase que explica
+  que a régua existe. Medido antes de apertar: os 8 manuais de Rotina Claude
+  têm o cabeçalho, então a regra nova não reprova ninguém.
+- **As seis da fila, nos dois lados**: `saida` e `midia` morderam;
+  `perguntas` (a rota podia ler a pergunta e gravar origem e tema fixos),
+  `renovacao` (o `funil("renovou")` podia ficar dentro de um ramo que nunca
+  roda, que é o buraco de 01/10 com a linha visível no código), `loja` (o
+  webhook podia chamar `identidadeUsavel` e não barrar) e `agentes` estavam
+  cegas e foram consertadas.
+- **Medição**: 11 plantios de consumidor passaram a reprovar, com zero falso
+  positivo no código limpo nas doze conferências tocadas, e as regras puras
+  seguem mordendo depois das edições. Todos os 24 plantios pelo
+  `npm run plantio`, sem incidente.
+- **Contra a minha régua**: os onze critérios cumpridos. O que declaro no lugar:
+  **esta rodada não tocou a fila por data**, ela seguiu a ordem de custo que o
+  dono pediu em 25/10, e as seis da fila entraram porque sobrava tempo. Se a
+  prioridade voltar a ser a data, as próximas são `aquisicao`, `cadastro`,
+  `fila`, `publicacao`, `entre` e `quiz-populacao`.
+- **O que esta rodada NÃO alcança**: os consertos são todos conferência de
+  texto, dito dentro de cada um. Texto prova que a chamada e o veredito estão
+  escritos no lugar certo, não que o programa se comporta assim em execução:
+  isso é a suíte de navegador, uma vez por mês, e o aparelho, que não se prova
+  aqui.
+- **RECOMENDAÇÕES (3)**: (1) a conferência de presença é do QA e agora tem dois
+  argumentos medidos a favor, a regeneração em código novo (4 em uma semana) e a
+  variante em texto; (2) o `npm run plantio` podia recusar plantio que só
+  renomeia a função no consumidor, porque esse plantio testa presença e deu
+  verde falso na minha rodada 4; (3) a varredura em texto vale uma passada
+  própria: onde uma conferência procura FRASE num documento, perguntar se ela
+  cobra a estrutura ou a palavra.
+
+
 ## 2026-10-30 · Engenharia: o segundo pedido de conta não alcançava nenhum dos recusantes da aposta
 
 - Revisão da rodada do CRO de hoje, a pedido do dono. Retorno escrito em

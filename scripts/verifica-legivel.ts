@@ -302,7 +302,16 @@ console.log("Retrato: janela aberta vira motivo, e não número?");
   // E quem usa a regra.
   const operacao = readFileSync(new URL("../lib/operacao.ts", import.meta.url), "utf8");
   conferir("o retrato publica a linha do vitals", /vitalsLegivel:/.test(operacao));
-  conferir("e ela sai da função, não de uma cópia local", /linhaDeVitals\(/.test(operacao));
+  // PRESENÇA VIROU USO (31/10/2026), e esta nasceu DEPOIS de eu consertar a
+  // irmã dela (`linhaDeAnuncio`) em 24/10: a forma se repete em código novo, e
+  // é por isso que ela merece uma conferência própria, não vigilância minha.
+  // Plantado `return (linhaDeVitals(d), \`vitals: ...\`)`, a menção fica e o
+  // retrato publica frase montada à mão, que para de acompanhar a fonte.
+  conferir(
+    "e ela sai da função, não de uma cópia local",
+    /return linhaDeVitals\(d\);/.test(operacao),
+    "chamar sem devolver tem o mesmo efeito de copiar a regra no leitor",
+  );
 }
 
 if (falhas) {

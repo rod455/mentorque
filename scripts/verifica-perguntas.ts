@@ -212,7 +212,19 @@ console.log("Biela: a pergunta vira tema sem virar medida da nossa própria tela
 
   const rota = readFileSync(new URL("../app/api/biela/route.ts", import.meta.url), "utf8");
   const semComentarios = rota.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
-  conferir("a rota grava origem e tema", /origem,/.test(semComentarios) && /tema,/.test(semComentarios));
+  // E OS DOIS TÊM DE VIR DA LEITURA (achado do Guardião em 31/10/2026). A
+  // asserção pedia que `origem,` e `tema,` aparecessem na rota. Plantado
+  // `const { origem, tema } = (lerPergunta(question), { origem: "app", tema: null })`,
+  // os dois nomes continuam lá e a tabela passa a receber "app" e nulo para
+  // toda pergunta: esta conferência deixaria passar uma rota que grava a mesma
+  // coisa sempre, e o relatório leria isso como o que o motorista pergunta.
+  conferir(
+    "a rota grava origem e tema, tirados da LEITURA da pergunta",
+    /const \{ origem, tema \} = lerPergunta\(question\);/.test(semComentarios) &&
+      /origem,/.test(semComentarios) &&
+      /tema,/.test(semComentarios),
+    "gravar os dois campos com valor fixo mede a nossa tela, não a pergunta de quem escreveu",
+  );
   conferir(
     "a rota NÃO grava o texto da pergunta em biela_perguntas",
     !/pergunta:\s*question/.test(semComentarios),

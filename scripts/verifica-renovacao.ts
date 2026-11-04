@@ -141,10 +141,16 @@ function semComentarios(fonte: string): string {
 {
   const rota = semComentarios(leia("app/api/stripe/webhook/route.ts"));
 
+  // A ESCRITA TEM DE ESTAR ATRÁS DA PERGUNTA CERTA (achado do Guardião em
+  // 31/10/2026). A asserção pedia que `funil("renovou"` aparecesse na rota.
+  // Plantado `if (false && viradaDeCiclo(cicloGravado, sub))`, a escrita
+  // continua no arquivo, dentro de um ramo que nunca roda: esta conferência
+  // deixaria passar exatamente o buraco de 01/10, a rota que nunca escreve
+  // `renovou`, com a linha visível no código.
   conferir(
-    "o webhook do Stripe escreve `renovou`",
-    /funil\(\s*["']renovou["']/.test(rota),
-    "o buraco de 01/10: a rota escrevia assinou, cancelou e expirou, e nunca renovou"
+    "o webhook do Stripe escreve `renovou` DENTRO do ramo da virada de ciclo",
+    /if \(event\.type === "customer\.subscription\.updated" && viradaDeCiclo\(cicloGravado, sub\)\)[\s\S]{0,1200}?funil\(\s*["']renovou["']/.test(rota),
+    "o buraco de 01/10: a rota escrevia assinou, cancelou e expirou, e nunca renovou; e escrita em ramo morto é o mesmo que não escrever"
   );
 
   // A ORDEM. `cicloNoBanco` lê o ciclo VELHO; `upsertSubscription` grava o

@@ -134,10 +134,14 @@ conferir(
 );
 
 const importar = semComentarios(readFileSync("components/app/ImportarGaragem.tsx", "utf8"));
+// PRESENÇA VIROU USO (31/10/2026), a terceira linha desta conferência a cair
+// na mesma forma. Plantado `[v.id, (carroIgualNaGaragem(s.vehicles, v), null)]`,
+// a menção fica e o mapa de repetidos nasce todo nulo: esta conferência
+// deixaria passar uma folha que trata todo carro repetido como novo.
 conferir(
-  "a folha de importação reconhece o carro que a conta já tem",
-  importar.includes("carroIgualNaGaragem("),
-  "sem isso, o repetido vira caixa de marcar e produz dois iguais sem uma palavra",
+  "a folha de importação tira o repetido DA chamada, não de outro lugar",
+  /\[v\.id, carroIgualNaGaragem\(s\.vehicles, v\)\]/.test(importar),
+  "chamar e descartar faz o mapa de repetidos nascer vazio, e o repetido vira caixa de marcar",
 );
 conferir(
   "e para ele oferece as três respostas: juntar, só o da conta, só o deste aparelho",
@@ -147,7 +151,10 @@ conferir(
 const store = semComentarios(readFileSync("lib/app/store.tsx", "utf8"));
 conferir(
   "o store aplica a resposta pela regra pura, não por lista de ids",
-  store.includes("aplicarImportacao(") && !/resolverImportacao\s*=\s*useCallback\(\(ids: string\[\]\)/.test(store),
+  // Era presença (31/10/2026): plantado `patch((p) => (aplicarImportacao(...), p))`
+  // a menção fica, o estado não muda, e a resposta da pessoa se perde.
+  /patch\(\(p\) => aplicarImportacao\(p, pend, escolhas\)\)/.test(store) &&
+    !/resolverImportacao\s*=\s*useCallback\(\(ids: string\[\]\)/.test(store),
   "sem isso, juntar e trocar chegam ao store e viram 'levar', duplicando de novo",
 );
 

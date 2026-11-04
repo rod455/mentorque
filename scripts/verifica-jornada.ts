@@ -371,7 +371,15 @@ console.log("Jornada: quem recebe o quê, e quando.");
   );
   conferir("e grava a saída", /jornada_saidas/.test(sair) && /export async function POST/.test(sair));
   const push = leia("app/api/push/enviar/route.ts");
-  conferir("a rota de push usa o transporte compartilhado", /from "@\/lib\/push\/transporte"/.test(push) && /enviarPush\(/.test(push));
+  // PRESENÇA VIROU USO (31/10/2026). Plantado o alvo fixo `{ userId: "0" }` no
+  // lugar de `alvo`, a menção e o import ficam, e esta conferência deixaria
+  // passar uma rota que manda todo push para a pessoa errada.
+  conferir(
+    "a rota de push usa o transporte compartilhado, com o ALVO que recebeu",
+    /from "@\/lib\/push\/transporte"/.test(push) &&
+      /enviarPush\(admin, alvo, \{ titulo, corpo, rota \}\)/.test(push),
+    "alvo fixo manda o push de todo mundo para um id só, com o import intacto",
+  );
   const sql = readFileSync(new URL("../supabase/jornada.sql", import.meta.url), "utf8");
   conferir("o banco tem a trava 'nunca dois no mesmo dia'", /unique index[\s\S]{0,80}\(user_id, dia\)/.test(sql));
 }
