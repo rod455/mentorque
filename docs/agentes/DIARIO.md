@@ -3,6 +3,116 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-04 · Diretor: a segunda trava do portão caiu pela metade, a etiqueta chegou, e a leitura de outubro
+
+- Artifact "Semana Mentorque" (26/10 a 01/11, com a leitura do mês):
+  https://claude.ai/artifact/WNBk27rmYA4JCuRpjjhxSH
+- **Rodada de segunda 02/11 publicada na quarta 04/11.** O banco respondeu sem
+  recusa desta vez; a causa do atraso foi a sessão, que ficou dois dias sem
+  andar. Números colhidos em 04/11 à noite sobre a janela fechada de 26/10 a
+  01/11, com a data de cada leitura dita.
+- **EU ERREI NA SEMANA PASSADA E O CONSERTO FUNCIONOU.** Com os eventos que a
+  3.2 passou a gravar (apontados pelo retorno de 26/10), a porta se abre em duas
+  travas, no Android: viram a folha 254 contra 310; aceitaram 135 (53%) contra
+  168 (54%); **pararam na folha 119 (47%) contra 141 (45%)**; e **aceitaram e não
+  terminaram 19 (14%) contra 47 (28%)**. O conserto de 16/10 mexe na tela DEPOIS
+  do sim, ou seja só na segunda trava, e ela caiu pela metade. Eu julguei a porta
+  inteira, onde a primeira trava domina, e publiquei "não se moveu".
+- **A PRIMEIRA TRAVA É ONDE ESTÃO AS 119, e o CRO achou por quê em 30/10:** dos
+  224 convidados que tocaram em "Agora não", 73 depois fizeram algo de valor no
+  app, NENHUM criou conta e nenhum dos 224 foi perguntado de novo. A folha só
+  nasce do cadastro de carro. A aposta dele subiu em 30/10 com texto inalterado
+  de propósito, porque é o momento que está em teste.
+- **A ETIQUETA DE CAMPANHA CHEGOU, depois de cinco semanas de cegueira total.**
+  O ouvinte de conversão da AppsFlyer (conserto da Engenharia de 20/10) veio na
+  3.3 e grava desde 29/10. Cobertura por dia, medida pela Mídia: 0 de 57, 3 de
+  17, 12 de 18, 15 de 17 e 17 de 17 em 29/10. Em 28 dias, 143 das 473 contas
+  (30%) têm origem: Facebook Ads 95, orgânico 28, Google 15, restritas 5.
+- **E O PRIMEIRO USO DELA RESPONDE UMA PERGUNTA DE DOIS MESES:** o portão da
+  conta por origem, na semana fechada, é orgânico 24 de 38 (63,2%), Facebook Ads
+  52 de 111 (46,8%), Google 15 de 36 (41,7%), sem origem 25 de 63 (39,7%) e
+  restrita 1 de 8 (12,5%). Com 38 pessoas no orgânico eu leio DIREÇÃO e não
+  nível: o portão não é só tela, é também quem bate nele. Parte da variação da
+  taxa cheia nas semanas de anúncio caro era mistura.
+- CHEGADA: gasto R$ 303,63 contra R$ 413,63 (-27%, quarta queda seguida: 473,
+  449, 414, 304), Google 91,00 contra 200,66 e Meta parada em 212,63. Contas
+  novas 133 contra 137, custo por conta R$ 2,28 contra R$ 3,02. Visitantes 452
+  contra 509, carro 264 contra 314, sintoma 51 contra 73, Biela 45 contra 35
+  (+29%), paywall 77 igual. **Digo a régua de cada custo por conta**, que é o
+  ponto 4 do retorno de 26/10: a minha é semana calendário sobre `auth.users`; o
+  retrato usa 7 dias (R$ 2,25) e a Mídia corta a janela nos dias que as duas
+  plataformas cobrem (R$ 2,65).
+- RETENÇÃO: cinco coortes fechadas, 17,6%, 21,1%, 11,6%, 21,4% e 14,5%, média
+  perto de 17%. A leitura certa continua sendo a do CRO: faixa de 12 a 26 sem
+  tendência provável com coortes deste tamanho. A de 26/10 está em 22 de 126 de
+  piso e fecha em 09/11.
+- DINHEIRO: **e aqui a segunda correção minha**, do ponto 2 do retorno. "77
+  pessoas no paywall e zero checkout" foi lido no `iniciou_checkout`, que nasce
+  DEPOIS do portão de conta. O evento que mede vontade é o `tentou_assinar`: 1
+  aparelho na semana, e desde 12/10 são 4, três criaram conta em menos de um
+  minuto e nenhum chegou ao checkout. Houve vontade, pouca, e ela morre depois
+  da conta. Uma assinatura ativa, a de loja, nenhuma nova.
+- **A LEITURA DO MÊS DE OUTUBRO (primeira segunda), e o que repete é UMA coisa
+  em SEIS dos sete papéis: número cujo numerador e denominador não medem a mesma
+  coisa, ou cuja janela não é a que a frase diz.** Treze ocorrências listadas no
+  artifact, quatro delas minhas. A casa tem quatro regras escritas para isso, as
+  quatro de outubro (CLAUDE.md 03/10 e 06/10, DIRETRIZES 06/10, meu manual
+  20/10), e nenhuma na régua de nenhum papel, que é o único lugar que a rodada
+  relê antes de publicar. Daí as três propostas, todas para o dono decidir:
+  1. **um critério igual na régua dos dez papéis**: todo número publicado diz
+     qual é a população do numerador e do denominador, e elas são a mesma;
+  2. **critério para toda rodada que sobe conserto**: antes de subir, procurar a
+     SEGUNDA trava da mesma porta e dizer quantas procurou. O mês tem o caso
+     certo e o errado lado a lado: o QA achou três camadas no quiz do dia 1 antes
+     de consertar e funcionou; o CRO consertou uma de duas no convite (25/09) e
+     uma de duas no portão (16/10), e nos dois casos o número só falou depois;
+  3. **critério 12 da minha régua**, e a proposta é do dono em 26/10: toda
+     pergunta mandada a outro papel foi conferida antes contra os eventos da
+     versão publicada. O caso é meu, mandei o CRO procurar no fonte o que a 3.2
+     já media.
+  - E uma quarta coisa que repetiu e eu NÃO propus, porque já tem conserto a
+    caminho: plano feito antes do instrumento. O Conteúdo reescreveu o plano de
+    cobertura inteiro em 29/10 quando o instrumento nasceu. Prefiro ver duas
+    rodadas usando a regra dele antes de propor critério.
+- VEREDITOS: quatro rodadas, duas com veredito no dia (CRO 30/10 e QA 28/10) e
+  **duas escritas por mim hoje**: Conteúdo 29/10 e Mídia 30/10. Os oito manuais
+  voltaram a zero dia.
+  - **Conteúdo (29/10)**: o instrumento novo inverteu o plano dele e ele publicou
+    a inversão (os três sintomas que sobravam eram os três MENOS consultados dos
+    dezenove); reescreveu 19 de 19 na ordem da demanda. Cobrei a outra metade do
+    número que viajou para o meu relatório sem população.
+  - **Mídia (30/10)**: achou a causa exata da falsa afirmação de 23/10 e ela
+    derruba a minha hipótese do clone sem pull: o filtro era `[A-Za-zç]+`, que
+    não contém `í`. E a manchete dela aponta contra a própria proposta de 23/10,
+    com decisão adiada para 06/11 e o custo da espera como faixa. Cobrei o fluxo
+    que falha em silêncio, que ficou como nota de manual em vez de achado com
+    dono.
+- **CRUZAMENTO DA SEMANA: três rodadas corrigiram a própria conclusão, e nos
+  três casos o que mudou foi um instrumento nascendo**, não a opinião (a etiqueta
+  de campanha, a contagem de sintomas por aparelho, os eventos separados do
+  portão). É o oposto do cruzamento de setembro. Sugere onde está o retorno: a
+  casa ganha mais construindo o instrumento que falta do que discutindo a
+  conclusão que existe.
+- PLACAR de 26/10: (1) a segunda trava JÁ ESTAVA MEDIDA e o meu pedido ao CRO era
+  desnecessário, apontado pelo retorno no mesmo dia; (2) a conexão do banco
+  FECHADA pela resposta do dono ("eu que troquei de conta aqui"), não era
+  defeito; (3) o caminho do sintoma para a aula SUBIU em 26/10, e o Conteúdo
+  trouxe o denominador certo, que desmente o meu: 52 de 221 aparelhos em 30 dias
+  e 12 de 67 na semana, não as 71 que eu publiquei.
+- PRIORIDADES: (1) CRO, sexta 06/11: a primeira trava, com a adoção da 3.3 medida
+  na abertura e a série dos dois degraus separados, mais a leitura por origem;
+  (2) Mídia, quinta 05/11: escrever o PISO de contas etiquetadas por braço antes
+  de ler o resultado de 06/11, senão a decisão sai pelo número que aparecer; (3)
+  Engenharia, na fila desde 13/10: o balde "outro" do Biela, 64 de 167 perguntas
+  escritas pela pessoa (38%), e as perguntas ao Biela são a medida de uso que
+  mais cresce.
+- **A MINHA RÉGUA: 9 de 11.** O critério 4 falhou duas vezes na rodada passada
+  (a porta inteira em vez da trava, e o evento grosso em vez do fino) e as duas
+  estão corrigidas aqui. Com as duas anteriores são quatro no mês, todas da mesma
+  família, e é por isso que a proposta 1 é critério e não conselho. E o
+  direcionamento do horário falhou: rodada de segunda publicada na quarta, com a
+  causa na sessão e não no banco.
+
 ## 2026-11-04 · QA: o medidor de crash voltou sozinho, e verde não é consertado
 
 - **O retorno do dono de 29/10 cobrou duas coisas e as duas valem aqui**: conserto

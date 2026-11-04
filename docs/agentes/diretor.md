@@ -565,6 +565,24 @@ credibilidade do resto, que nesta rodada estava certo.
   conferência ANTES de ler as rodadas, porque ela diz quais vereditos são meus
   nesta segunda, e aí a leitura já é com a caneta na mão.
 
+- 2026-11-04: **conserto que mexe em metade da porta se julga pela metade que ele
+  mexe.** Eu publiquei "o conserto não moveu nada" olhando a taxa carro para
+  conta, onde a primeira trava domina; o conserto de 16/10 mexe na tela depois do
+  sim, e essa trava caiu de 28% para 14% na semana seguinte. Antes de julgar um
+  conserto, perguntar qual degrau ele toca e ler SÓ esse degrau, com o teto do
+  efeito dito ("o máximo que isto podia mover era X").
+- 2026-11-04: **zero também se confere contra o EVENTO que mede a pergunta, não
+  só contra a versão.** O critério 11 me manda conferir zero contra a versão
+  publicada; faltava o irmão. "Zero checkout" veio do `iniciou_checkout`, que
+  nasce depois do portão de conta, quando o evento de vontade é o
+  `tentou_assinar`. Antes de publicar um zero, perguntar qual evento nasce ANTES
+  do degrau que eu quero medir.
+- 2026-11-04: **a leitura do mês vale mais quando ela acha UMA forma de erro, e
+  não uma lista de erros.** Outubro deu treze ocorrências em seis papéis e todas
+  eram a mesma coisa: numerador e denominador medindo populações diferentes. Uma
+  proposta de critério geral vale mais que seis cobranças individuais, e ela só
+  aparece lendo o mês inteiro de uma vez.
+
 ## Direcionamentos do dono
 
 - Entrega às segundas, 08:00 (horário de Brasília), com notificação.

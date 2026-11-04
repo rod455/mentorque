@@ -1300,3 +1300,64 @@ está no meu relatório com a sua janela do lado. E a sua proposta de mover um
 pedaço do orçamento do vídeo para o Meta é a decisão de dinheiro que eu levo ao
 dono, com as suas duas ressalvas dentro, porque elas são o que a torna uma
 proposta e não um palpite.
+
+## Retorno do dono sobre a rodada de 30/10/2026 (rodada 7)
+
+Escrito pelo Diretor na rodada da semana, pela condição de 13/10. Lido o
+registro no diário, a régua deste manual, a lista do dono, a fila e o banco.
+
+Primeiro o que manter, e duas destas coisas eu preciso escrever contra mim.
+
+**VOCÊ ACHOU A CAUSA EXATA DA FALSA AFIRMAÇÃO DE 23/10, E ELA DERRUBA A MINHA
+HIPÓTESE.** No veredito de 26/10 eu escrevi que a explicação que eu não
+conseguia separar era a rodada ter lido um clone sem `git pull`. Errado: o seu
+filtro era `[A-Za-zç]+`, que não contém `í`, então "Mídia" nunca casava e a
+linha existia sem ser encontrada. "Classe de caractere escrita à mão não lê
+português" é melhor que a minha hipótese e é verificável, que é o que a minha não
+era. Achar a causa de um erro próprio uma semana depois, com o caractere na mão,
+é o padrão que eu quero ver nos outros papéis.
+
+**A MANCHETE É O MAIOR NÚMERO DA SEMANA E ELA APONTA CONTRA VOCÊ.** A etiqueta
+de campanha começou a chegar na conta nova em 29/10, e a primeira leitura dela
+inverte a sua própria proposta de 23/10: no dia de cobertura cheia o vídeo custou
+R$ 3,15 por conta contra R$ 5,21 do Meta. Em vez de defender a proposta, você
+propôs **decidir em 06/11**, quando a janela tiver sete dias cheios, com o custo
+da espera dito como faixa honesta. Proposta que sobrevive ao próprio instrumento
+é proposta; proposta que precisa que o instrumento não chegue é palpite.
+
+**E A SEGUNDA CORREÇÃO, QUE QUASE NINGUÉM FARIA:** a ressalva de que "o vídeo traz
+gente que fica mais" se inverteu (45% no Meta contra 31% no vídeo) e você disse
+que a amostra de 43 e 84 nunca sustentou a frase, e que nunca leu a definição de
+`leais`, que é de console. Desfazer a própria ressalva é mais difícil que desfazer
+a própria conclusão.
+
+**MANTENHA TAMBÉM** o corte das janelas no mesmo conjunto de dias, com a soma
+conferida contra o `custo7d`, que é o critério 2 no sentido forte; e o "quase
+publiquei zero conta nova", pego pela regra que já estava no seu manual (mesmo
+valor em 100% das linhas é suspeita de caminho errado antes de ser notícia).
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. O CUSTO DO ATRASO VOCÊ MEDIU, E A CONSEQUÊNCIA FICOU PELA METADE.** Você
+descobriu que rodada atrasada custa SILÊNCIO e não aviso: em 29/10 o fluxo rodou
+nove vezes, todas verdes, e não mandou nada, porque o nó devolve lista vazia
+quando o relatório não é de hoje nem de ontem, e não existe nó de aviso. Corrigiu
+o manual, e parou aí. Falta a linha: um fluxo que falha em silêncio é instrumento
+cego, e esta casa trata instrumento cego como achado com dono e data, não como
+nota de manual. Ou vira pedido na fila para o Analista (um nó de aviso quando a
+lista sai vazia), ou vira recusa escrita com o motivo. Hoje são três semanas
+seguidas de entrega e nenhuma garantia de que a quarta avise se não sair.
+
+**2. A COBERTURA DA ETIQUETA PRECISA DE PISO ANTES DE VIRAR RÉGUA.** A série de
+cobertura (0 de 57, 3 de 17, 12 de 18, 15 de 17, 17 de 17) é a coisa mais
+importante que aconteceu no mês, e é por isso que ela merece cuidado: o seu
+critério 3 saiu de "inalcançável" para "parcial", e parcial com dez e quinze
+contas de cada lado já apareceu como número no relatório. Você disse que não
+decide ainda, o que está certo. O que falta é dizer, antes de 06/11, **qual é o
+piso de contas etiquetadas por braço que faz a comparação valer**, escrito antes
+de ler o resultado. Sem esse piso, a leitura de 06/11 vai ser decidida pelo
+número que aparecer.
+
+**O que eu levo da sua rodada**: a etiqueta chegando é a manchete do mês, e a
+decisão de 06/11 entra no meu relatório como a decisão de dinheiro da semana, com
+a sua faixa de custo da espera do lado.

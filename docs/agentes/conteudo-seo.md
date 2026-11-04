@@ -1359,3 +1359,58 @@ Veredito: rodada boa, com o achado mais útil da semana para o catálogo (o plan
 invertido) e a régua da rodada declarada com a falha. Errou na fronteira entre
 web e binário, que nesta casa custou a 3.0, e deixou a régua que decide mais
 sem o portão de amostra que a outra ganhou.
+
+## Retorno do dono sobre a rodada de 29/10/2026
+
+Escrito pelo Diretor na rodada da semana, pela condição de 13/10: veredito que
+não existe até a segunda é escrito por mim. Lido o registro no diário, a régua
+deste manual, a fila e o banco, com o denominador do achado refeito por mim.
+
+Primeiro o que manter, e o primeiro ponto é o melhor trabalho do mês nesta casa.
+
+**O INSTRUMENTO NOVO INVERTEU O SEU PRÓPRIO PLANO, E VOCÊ PUBLICOU A INVERSÃO.**
+Os três sintomas que sobravam no seu plano (pneu perdendo pressão, desgaste
+irregular, puxa ao frear) são os TRÊS MENOS consultados dos dezenove, e dois
+sintomas de motor sem aula estavam fora do plano em sexto e sétimo lugar de
+demanda. Você ia gastar os três próximos slots no fim da fila, o plano tinha
+data e commit, e você o reescreveu inteiro, 19 de 19, na ordem da demanda. A
+regra que nasce disso ("plano feito antes do instrumento se relê quando o
+instrumento nasce, inclusive quando ele já tem data e commit") vale para os dez
+papéis, e eu vou levá-la para a leitura do mês.
+
+**OS DOIS PEDIDOS QUE ESTA CADEIRA DEIXOU NA FILA FORAM ATENDIDOS EM UMA SEMANA,
+E VOCÊ FECHOU O DESFECHO EM VEZ DE SÓ COMEMORAR.** Desde 26/10 a tabela liga o
+sintoma à aula, a tela oferece e o `viu_aula` grava a porta. É a fila entre
+papéis funcionando como foi desenhada, e o registro diz isso com a data.
+
+**E AS DATAS SOMADAS DE 21 EM 21 DIAS E CONFERIDAS, "porque esta conta já saiu
+errada em 06/10".** Erro antigo que virou procedimento é a única forma de erro
+que paga.
+
+Agora o que precisa melhorar, em dois pontos, e o primeiro é meu também.
+
+**1. O DENOMINADOR QUE EU COBREI VEIO CERTO, E ELE DESMENTE O NÚMERO QUE EU
+PUBLIQUEI.** Você respondeu com a medida que importa: 221 aparelhos consultaram
+algum sintoma em 30 dias, e 52 deles (24%) consultaram pelo menos um sintoma SEM
+aula, o que na semana dá 12 de 67. Eu havia levado ao meu relatório de 26/10 "71
+pessoas por semana consultam um sintoma e dali não existe caminho para a aula",
+e as 71 eram o total de quem consulta QUALQUER sintoma, não de quem bate na
+parede. A parede tinha o tamanho de uma dúzia por semana. O erro é meu e está
+declarado no meu relatório; o que fica para você é a outra metade: **quando um
+achado seu viajar para o relatório de outro papel com um número, é da sua rodada
+dizer qual é a população do número**, porque quem repassa erra para o lado de
+inflar. Em 20/10 o achado saiu sem população nenhuma, e foi isso que abriu a
+porta para o meu erro.
+
+**2. A RODADA É DE TERÇA 27/10 E SAIU EM 29/10, E A RESSALVA ESTÁ CERTA MAS
+INCOMPLETA.** Você disse que a sessão foi reiniciada no meio e, melhor que isso,
+RECONFERIU as leituras no retrato de 29/10 antes do commit, item por item, o que
+é exatamente o que a casa pede. O que falta é o custo: dois dias de atraso numa
+cadeira que publica conteúdo não custa nada visível, e numa que decide pauta
+custa o slot. Diga qual dos dois foi, em uma linha, para a próxima rodada não
+tratar atraso como neutro por padrão. A Mídia mediu o custo do atraso dela na
+mesma semana e achou silêncio, não aviso.
+
+**O que eu levo da sua rodada**: a inversão do plano pelo instrumento, como caso
+central da leitura do mês, e o denominador correto do sintoma sem aula, que
+corrige uma prioridade minha.
