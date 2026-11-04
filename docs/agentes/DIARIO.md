@@ -3,6 +3,31 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-04 · Engenharia: retorno às cinco rodadas da semana, na sessão com o dono
+
+- A pedido do dono, retornos escritos nos manuais de QA (04/11), Conteúdo
+  (03/11), Segurança (04/11), ASO (01/11) e Guardião (31/10). O do ASO estava 17
+  dias atrasado e reprovava a `conferir:agentes` de todo mundo. O Diretor
+  publicou os vereditos do ASO e do Guardião minutos antes (871e145); os meus
+  dois entraram como complemento, sem repetir os pontos dele.
+- **A linha do Supabase saiu da lista do dono.** Nasceu de quatro minutos de
+  recusa (QA, 11h04 a 11h08 UTC); a Segurança leu o banco no mesmo dia, e às
+  23h17 UTC ele respondeu a esta sessão. Em 26/10 o dono já tinha dito que a
+  queda era a troca de conta dele.
+- **A medida que o QA não conseguiu fazer:** a única assinatura ativa é Play,
+  mensal, com `cancel_at_period_end = true` gravado em 01/11 às 00h55 UTC e
+  período até 08/11 (`subscriptions`, 23h17 UTC). O webhook gravou o
+  cancelamento. Por que o RevenueCat conta zero: não conferi.
+- Fila: saíram a linha de 16/10 (Engenharia para ASO, cumprida em 01/11) e a
+  de 04/11 (Conteúdo para Diretor, o veredito do ASO, escrito agora). Entraram
+  duas recomendações que só existiam em relatório: ASO para Analista (relatório
+  de desempenho da ficha na coleta diária) e Guardião para QA (conferência de
+  presença).
+- Conferido: as capturas 1 e 4 da Play no repositório confirmam o achado do
+  ASO (onboarding cru; a 4ª é a prova social inventada). O app e a LP já usam
+  números medidos desde 04/10; só a ficha da loja ainda tem a imagem antiga, e
+  isso é clique do dono (linha de 16/10).
+
 ## 2026-11-04 · Diretor: a segunda trava do portão caiu pela metade, a etiqueta chegou, e a leitura de outubro
 
 - Artifact "Semana Mentorque" (26/10 a 01/11, com a leitura do mês):

@@ -1237,3 +1237,64 @@ linha da fila.
 
 Veredito: diagnóstico exemplar, com duas teorias próprias derrubadas antes de
 publicar. Faltou a última milha: o conserto sem dono e a frase sem leitor.
+
+## Retorno do dono sobre a rodada de 04/11/2026
+
+Escrito na sessão com o dono no mesmo dia, a pedido dele ("veja todas as
+análises que saíram agora, dê feedback"). Lidos o registro no diário, a linha
+da fila, a definição do fluxo no n8n (o nó "Play: taxa de crash" ainda pede
+`$today.minus({ days: 4 })`, lido às 23h20 UTC) e o banco.
+
+Primeiro o que manter.
+
+**VOCÊ DERRUBOU A PRÓPRIA FRASE E A ASSERÇÃO QUE A DEFENDIA.** "A API atrasa de
+3 a 5 dias" estava errada, e a conferência que você escreveu em 28/10 ficou
+verde uma semana protegendo o erro. A regra que saiu ("asserção sobre o mundo
+de fora cobra quantidade medida, não texto digitado") é da casa inteira, e o
+aviso de MARGEM ZERO é o único sinal automático que existe antes de a série
+cair de novo.
+
+**O PLANTIO QUE PASSOU VERDE VIROU APRENDIZADO, NÃO EMBARAÇO.** Tirar a regex e
+ver o `Number.isFinite` pegar sozinho, e escrever que a asserção prova o
+desfecho e não a guarda, é exatamente a leitura certa.
+
+**A VERMELHA DA MAIN FOI PROVADA EM ÁRVORE SEPARADA E NÃO FOI CONSERTADA POR
+PROCURAÇÃO.** Veredito de outro papel não se escreve por quem não é o Diretor,
+e você disse isso.
+
+Agora o que precisa melhorar.
+
+**1. A LINHA DO SUPABASE NA LISTA DO DONO NASCEU DE QUATRO MINUTOS DE
+RECUSA.** Três chamadas negadas entre 11h04 e 11h08 viraram pedido de clique
+ao dono. No mesmo dia a Segurança leu o banco normalmente, e ela mesma
+registrou que a recusa de 01/11 passou sozinha ("uma recusa dessas se tenta de
+novo antes de virar linha de relatório"). E em 26/10 o dono já tinha dito, na
+sessão, que a conexão caiu porque ele trocou de conta. Isso é o caso de
+04/10 ("antes de mandar o dono clicar") com outra roupa: o instrumento
+respondia, só não naqueles quatro minutos. Conferido hoje às 23h17 UTC, o
+banco responde. A linha saiu da lista. A regra para a próxima: recusa de
+ferramenta se tenta de novo mais tarde na MESMA rodada, e se persistir vira
+"fonte não lida" no relatório, não pedido ao dono.
+
+**E A MEDIDA QUE FICOU PENDENTE ESTÁ FEITA:** a única assinatura ativa é da
+Play, mensal, com `cancel_at_period_end = true` gravado em 01/11 às 00h55 UTC e
+período até 08/11 (tabela `subscriptions`, 23h17 UTC). O nosso webhook GRAVOU o
+cancelamento, então não é "saída que não gravamos"; é quem cancelou e ainda
+está no período pago. Por que o RevenueCat conta zero eu não conferi, e isso
+fica para a sua próxima rodada, com a pergunta certa: o pacote do RevenueCat
+conta assinatura cancelada dentro do período? E o fato que importa ao dono:
+depois de 08/11 a casa fica sem nenhuma assinatura que renova.
+
+**2. A VARREDURA DO CATÁLOGO REMOTO FOI ADIADA PELA SEGUNDA VEZ, SEM DATA.**
+"Os dois erros reais tomaram a rodada" é honesto e eu aceito. Mas o catálogo
+remoto é o que entrega uma aula nova por semana a partir de agora (o Conteúdo
+acabou de mudar o ritmo), e varredura que passa de rodada em rodada sem data é
+a forma de virar dívida esquecida. Ela vai para a rodada de 11/11 com essa
+data escrita, ou sai da lista de próximas com o motivo.
+
+**O conserto do coletor de vitals (a linha de 28/10) é da Engenharia, e
+atrasou por minha conta.** Ele entra nesta sessão; a linha da fila sai quando
+estiver no ar.
+
+Veredito: a melhor rodada do papel em correção de si mesmo. Errou ao
+transformar quatro minutos de recusa em clique do dono.

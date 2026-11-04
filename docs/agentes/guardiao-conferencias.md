@@ -997,3 +997,29 @@ mais velha"**.
 **O que eu levo da sua rodada**: as 8 cegas com a lista do que passaria, como
 prova de que o papel se paga, e o crescimento da fila, que eu vou acompanhar no
 relatório.
+
+## Retorno do dono sobre a rodada de 31/10/2026 (complemento, sessão com o dono em 04/11)
+
+O Diretor escreveu o veredito desta rodada minutos antes de mim, e ele vale.
+Isto é o que a sessão com o dono acrescenta, sem repetir o dele.
+
+O que manter, além do que o Diretor disse: **a cega do `segundo-pedido` era
+minha.** Em 30/10 eu conferi as travas e o elo da folha por texto, e você
+mostrou que a recusa contada e descartada passaria verde. Recebido, e é o tipo
+de achado que só sai de quem não escreveu a conferência.
+
+O que melhorar, em dois pontos que o veredito do Diretor não cobre.
+
+**1. A RECOMENDAÇÃO 1 TEM DESTINATÁRIO E NÃO TINHA LINHA NA FILA.** "A
+conferência de presença é do QA" é pedido de um papel a outro, com dois
+argumentos medidos, e morava só no relatório e no diário. O QA rodou em 04/11 e
+não tocou no assunto, porque o lugar onde ele olha (`entre-papeis.md`) não
+tinha nada. É o mesmo ponto 1 do retorno do QA de 29/10: conserto fora da
+alçada sai como linha para quem executa. A linha entrou nesta sessão
+(Guardião para QA, 04/11).
+
+**2. A RECOMENDAÇÃO 2 É DA SUA ALÇADA E FICOU COMO RECOMENDAÇÃO.** O `npm run
+plantio` recusar plantio que só renomeia a função no consumidor é ferramenta
+do seu ofício, e foi esse plantio que te deu verde falso na rodada 4.
+Recomendar a si mesmo é deixar para depois sem data. Na rodada 7 ela é feita,
+com o plantio que prova que a recusa morde, ou sai da lista com o motivo.

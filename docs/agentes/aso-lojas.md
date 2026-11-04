@@ -534,3 +534,41 @@ dono e passa a ter tamanho.
 **O que eu levo da sua rodada**: o veredito que aponta para cima sem fechar, como
 exemplo do que eu quero dos outros papéis, e a sua dependência de leitura manual,
 que eu vou cobrar como fila e não como recomendação.
+
+## Retorno do dono sobre a rodada de 01/11/2026 (complemento, sessão com o dono em 04/11)
+
+O Diretor escreveu o veredito desta rodada minutos antes de mim, e ele vale.
+Isto é o que a sessão com o dono acrescenta, sem repetir o dele (a linha da
+fila que ele cobrou no ponto 1 foi escrita nesta sessão: ASO para Analista,
+04/11). Lidos o registro, as capturas 1 e 4 da Play no repositório, a lista
+do dono e o retrato de 04/11.
+
+O que manter, além do que o Diretor disse: **o achado das imagens se confirma
+no arquivo.** A 1ª é o onboarding cru, com "Continuar" dentro da imagem, e a 4ª
+é a prova social inventada (4,8, 10.000+, 5.000+, depoimentos com nome) que o
+app e a LP já trocaram por números medidos em 04/10. A ficha é o único lugar
+onde ela sobrou. E a proposta de reordenar, de custo zero e reversível em um
+minuto, é a melhor que este papel já fez.
+
+O que melhorar, em dois pontos que o veredito do Diretor não cobre.
+
+**1. "258 DOS 279 APARELHOS ATIVOS" SAIU SEM INSTRUMENTO NEM DATA.** O retrato de
+04/11 diz 495 Android de 504 ativos em 7 dias (nosso funil). A direção da sua
+frase está certa (a Play é quase tudo), mas o número não é de nenhum
+instrumento que eu achei, e é a frase que justifica a prioridade da rodada.
+Regra de 03/10: número com fonte e hora, e se existe segundo instrumento, os
+dois.
+
+**2. A RECOMENDAÇÃO 3 EMPILHA UMA MUDANÇA EM CIMA DE UM VEREDITO QUE VOCÊ MESMO
+DISSE QUE NÃO FECHA.** Pôr a primeira frase nova agora, com a descrição curta
+lida em 5 dias e a reordenação das capturas indo na mesma visita, deixa três
+mudanças na mesma ficha sem janela limpa para nenhuma. Ou a frase espera a
+coleta diária do relatório ler a descrição curta com janela decente, ou a
+recomendação vem dizendo que se aceita perder a leitura.
+
+E um terceiro, mecânico: o título do diário assinou "ASO & Lojas" em vez do
+apelido "ASO", que reprovou a `conferir:agentes` de todo mundo, e o QA e o
+Conteúdo consertaram por você. `npm run conferir` antes do push.
+
+A linha de 16/10 (Engenharia para ASO, "as imagens estão ao alcance") foi
+cumprida nesta rodada e saiu da fila.

@@ -1414,3 +1414,51 @@ mesma semana e achou silêncio, não aviso.
 **O que eu levo da sua rodada**: a inversão do plano pelo instrumento, como caso
 central da leitura do mês, e o denominador correto do sintoma sem aula, que
 corrige uma prioridade minha.
+
+## Retorno do dono sobre a rodada de 03/11/2026 (fechada em 04/11)
+
+Escrito na sessão com o dono no mesmo dia, a pedido dele. Lidos o registro no
+diário, a seção do manual "03/11/2026: as duas réguas leram", a fila e o
+`AULAS_DO_SINTOMA` no fonte.
+
+Primeiro o que manter, e é raro.
+
+**AS DUAS RÉGUAS LERAM NA DATA E TIRARAM TRABALHO DE VOCÊ, E VOCÊ OBEDECEU.**
+Parar de escrever para busca e parar de escrever roteiro para fila que não
+anda são as duas decisões que um papel menos quer tomar sobre si mesmo. Com
+"volta quando" escrito nas duas, uma por data (02/02/2027) e outra por
+gatilho, e a linha da Pauta 03 saindo da lista do dono pela regra dos 21 dias
+em vez de virar pedido repetido.
+
+**O PORTÃO ESCRITO DEPOIS DA LEITURA VEIO COM A TABELA QUE PROVA QUE ELE NÃO
+ESCOLHEU O RESULTADO.** Essa é a única forma honesta de escrever régua depois de
+ver o número, e virou regra no manual.
+
+**A RESSALVA DE WEB CONTRA BINÁRIO, que o retorno de 29/10 cobrou, apareceu
+sozinha** ("14 de 19 é verdade na web; na 3.3 o card não aparece").
+
+Agora o que precisa melhorar.
+
+**1. A RESSALVA VIROU SEMANAL, E O QUE ELA PEDE É UM CONSERTO, NÃO UMA FRASE.**
+O plano novo entrega uma aula por semana até 08/12, e cada uma é ligada a um
+sintoma pela tabela `AULAS_DO_SINTOMA`, que mora no binário. Com 495 dos 504
+aparelhos ativos no app Android (retrato de 04/11, nosso funil), cinco aulas
+seguidas vão nascer sem o card para quase todo mundo até uma versão nova
+chegar a metade dos aparelhos. Você escreveu a ressalva em vez de pedir à
+Engenharia que a tabela viaje no catálogo remoto, como as próprias aulas. Isso
+é pedido seu, e a linha na fila era o lugar dele. A Engenharia leva o assunto
+ao dono nesta sessão.
+
+**2. A RÉGUA DO SINTOMA DE 24/11 VAI MEDIR DUAS POPULAÇÕES MISTURADAS.** O
+portão é 100 aberturas com porta e hoje há 56, 3 pela porta `sintoma`. Mas a
+porta `sintoma` só existe para as aulas cujo card está no binário que a pessoa
+tem: na 3.3, as ligações anteriores a 27/10; na web, todas. Ler "de quem
+consulta o sintoma, quantos abrem a aula" sem separar sintoma com card no
+binário de sintoma com card só na web vai somar zeros estruturais aos zeros de
+desinteresse, e a régua culparia a aula. Escreva o corte antes da leitura, do
+jeito que você escreveu o portão: por sintoma, só os que tinham card na versão
+de quem consultou.
+
+Veredito: rodada de disciplina, que obedeceu às próprias réguas mesmo quando
+elas tiravam o trabalho do papel. Faltou transformar a ressalva repetida no
+pedido que acaba com ela.

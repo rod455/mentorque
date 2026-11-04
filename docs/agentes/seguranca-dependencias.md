@@ -864,3 +864,49 @@ semana entrou" se responde com `git log -S`.
 
 Veredito: rodada sólida, com instrumento novo e armadilha achada no caminho. O
 achado da chave precisa do inventário inteiro para ter o tamanho certo.
+
+## Retorno do dono sobre a rodada de 04/11/2026 (rodada 7)
+
+Escrito na sessão com o dono no mesmo dia, a pedido dele. Lidos o registro no
+diário, a linha nova na lista do dono e o banco.
+
+Primeiro o que manter.
+
+**A LINHA DE CONTADORES, NA MESMA ORDEM, MESMO QUANDO NADA MUDA.** Era o pedido 2
+de 25/10, e agora a próxima mudança tem data por construção. E o inventário da
+chave com o DENOMINADOR ("zero nós com a chave em 11 dos 17", com os 6 que
+faltam nomeados) é a frase honesta que o pedido 1 queria.
+
+**O LIMITE QUE VOCÊ DECLAROU MORDEU EM NOVE DIAS, E VOCÊ PROVOU O CONSERTO NOS
+DOIS LADOS.** A mesma chave plantada numa resolução de conflito dá zero no modo
+antigo e é achada no novo, com linha conferida à mão. Limite declarado que vira
+conserto provado é o ciclo inteiro funcionando.
+
+**O AVISO DO `qs` MEDIDO NO FONTE DO STRIPE** (`arrayFormat`, lido em
+`node_modules/stripe/cjs/utils.js:31`) em vez de suposto. E a recusa de 01/11
+tentada de novo antes de virar linha de relatório, que é a regra que eu acabei
+de cobrar do QA usando o seu exemplo.
+
+Agora o que precisa melhorar.
+
+**1. A ORDEM DO INVENTÁRIO DISSE "PRIMEIRO QUEM MANDA MENSAGEM A CLIENTE", E OS
+DOIS FLUXOS DO INSTAGRAM FICARAM ENTRE OS 6 NÃO ABERTOS.** Se eles respondem
+gente de fora (o webhook do Instagram está na história desta casa desde 04/10),
+eles são exatamente a primeira leva que você mesmo definiu, e a frase "cobri
+primeiro quem manda mensagem a cliente" fica maior que o que foi feito. Na
+rodada 8, abra os dois do Instagram antes de qualquer outra coisa, ou escreva
+por que eles não mandam mensagem a ninguém.
+
+**2. A EXPLICAÇÃO DO BALDE DE DESENVOLVIMENTO SÓ COBRE METADE DOS DADOS.** 11, 27
+e 17 sem ninguém tocar numa dependência, e a frase é "mede o que o mundo
+aprendeu". O mundo aprender explica subir; não explica cair de 27 para 17 em
+três dias. Aviso não costuma ser retirado em lote. Pode ser a contagem (por
+pacote ou por aviso, com ou sem dedupe), a resposta do registro naquele dia,
+ou a árvore instalada na sessão. É a regra "ausência não é causa" com outra
+roupa: a explicação plausível foi publicada sem um teste que a separe das
+outras. Se não vale o custo de investigar, a frase honesta é "variou sem
+mudança nossa, e não sei por quê".
+
+Veredito: rodada sólida, com o inventário mensal saindo inteiro pela primeira
+vez e um limite próprio fechado com prova. Faltou seguir a ordem que a própria
+rodada declarou.
