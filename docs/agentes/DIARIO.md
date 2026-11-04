@@ -3,6 +3,34 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-04 · Engenharia: o coletor de crash da Play pergunta a frescura antes, e o retrato lê a frase pronta
+
+- Fecha a linha do QA de 28/10 (três itens), que estava comigo desde 29/10.
+- **(1) A janela pela frescura.** No fluxo "Analista: metricas externas" entraram
+  os nós "Play: frescor do crash" e "Play: frescor do ANR" (`GET` dos conjuntos,
+  campo `freshnessInfo`); os pedidos de crash e ANR terminam na frescura que a
+  Play informou, e sem ela recuam para hoje menos 6 (antes: hoje menos 4, com
+  margem zero). Publicado às 23h40 UTC, versão 43a88ccc. **Falta um clique do
+  dono**: a ferramenta do n8n recusa ligar a credencial do Google em nó novo, e
+  os dois nós estão sem ela. Até o clique, eles falham calados e vale o recuo.
+  Linha na lista do dono.
+- **(2) O `description` do erro** passa a ir junto do `message` no "Play:
+  normaliza vitals", e o pacote ganha `frescor` (o dia que a Play informou, ou
+  nulo quando foi pelo recuo).
+- **(3) O retrato lê a frase pronta.** Um nó novo no fluxo do retrato troca a
+  linha "Play vitals" e a linha `play_console` das fontes externas pelo
+  `vitalsLegivel` do `/api/dados`. Nó separado de propósito: editar o "Monta
+  retrato" exige reescrever 12 mil caracteres pela ferramenta. Testado sobre o
+  retrato de 04/11: duas linhas mudam, as outras 22.628 saem iguais. Publicado
+  às 23h45 UTC, versão 6f48512e.
+- `linhaDeVitals` entende o pacote novo: com frescura, atraso é da Play e não
+  grita margem; no recuo, o normal passa a sete dias. Três casos novos na
+  `conferir:legivel`, dois plantios mordidos.
+- Expressão do pedido testada localmente com a mesma biblioteca de datas do n8n
+  (com frescura, sem frescura, virada de mês). **O que não está provado**:
+  nenhuma execução real rodou ainda. A primeira é amanhã às 05h30 (coletor) e
+  06h (retrato); até lá, "sem sinal ainda".
+
 ## 2026-11-04 · Engenharia: retorno às cinco rodadas da semana, na sessão com o dono
 
 - A pedido do dono, retornos escritos nos manuais de QA (04/11), Conteúdo

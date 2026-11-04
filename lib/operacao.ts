@@ -685,6 +685,8 @@ export async function coletarDadosOperacao() {
     // A série voltou em 01/11 SEM NINGUÉM CONSERTAR NADA (o fluxo do n8n não é
     // editado desde 25/10): quem voltou foi a frescura da Play. É por isso que
     // a linha agora conta o atraso e avisa quando a margem do pedido acaba.
+    // Desde 04/11 o coletor pergunta a frescura antes e manda o dia em
+    // `dados.frescor`; a linha usa isso para não gritar margem à toa.
     vitalsLegivel: (() => {
       const pacote = (porFonte["play_console"] ?? [])[0];
       const d = (pacote?.dados ?? {}) as Parameters<typeof linhaDeVitals>[0];

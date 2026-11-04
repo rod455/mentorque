@@ -323,6 +323,34 @@ console.log("Retrato: janela aberta vira motivo, e não número?");
   conferir("e o número velho continua legível, porque quem está em risco é o coletor",
     semMargem.legivel, semMargem.texto);
 
+  // O COLETOR NOVO, QUE PERGUNTA A FRESCURA ANTES (04/11/2026). Com a
+  // frescura informada, o pedido nunca passa do que a Play tem, e linha velha
+  // é a Play atrasando, não risco da série: o aviso de margem ali seria alarme
+  // falso. Sem a frescura (nó sem credencial, ou recusado), o pedido recua
+  // para hoje menos 6, e o aviso volta, com o limite de sete dias.
+  const linhaVelha = [{ dia: "2026-10-15", metricas: { crashRate: 0, distinctUsers: 60 } }];
+  const comFrescor = linhaDeVitals({
+    crash: { estado: "ok", linhas: 1 },
+    crashPorDia: linhaVelha,
+    frescor: { crash: "2026-10-16", anr: "2026-10-16" },
+  }, new Date("2026-10-26T09:00:00Z"));
+  conferir("pedido pela frescura: linha velha NÃO grita margem zero",
+    !/MARGEM ZERO/.test(comFrescor.texto) && /informou dado ate 2026-10-16/.test(comFrescor.texto), comFrescor.texto);
+  const noRecuo = linhaDeVitals({
+    crash: { estado: "ok", linhas: 1 },
+    crashPorDia: linhaVelha,
+    frescor: { crash: null, anr: null },
+  }, new Date("2026-10-23T09:00:00Z"));
+  conferir("no recuo de hoje menos 6, oito dias grita margem zero e diz por quê",
+    /MARGEM ZERO/.test(noRecuo.texto) && /hoje menos 6/.test(noRecuo.texto), noRecuo.texto);
+  const recuoNormal = linhaDeVitals({
+    crash: { estado: "ok", linhas: 1 },
+    crashPorDia: linhaVelha,
+    frescor: { crash: null, anr: null },
+  }, new Date("2026-10-22T09:00:00Z"));
+  conferir("e sete dias no recuo é o normal dele, sem alarme",
+    !/MARGEM ZERO/.test(recuoNormal.texto) && /7 dias atras/.test(recuoNormal.texto), recuoNormal.texto);
+
   // Data que não parseia não pode virar contagem: `NaN` dias atrás impresso no
   // retrato seria pior que não contar.
   //

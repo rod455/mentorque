@@ -220,6 +220,13 @@ export type VitalsDoPlay = {
   anr?: { estado?: string | null; motivo?: string | null; linhas?: number | null } | null;
   crashPorDia?: { dia?: string | null; metricas?: { crashRate?: number | null; distinctUsers?: number | null } | null }[] | null;
   nota?: string | null;
+  /**
+   * Até onde a Play disse que tem dado, por conjunto (04/11/2026). Ausente: o
+   * pacote é do coletor antigo, que pedia até hoje menos 4. Presente com `crash`
+   * nulo: a pergunta de frescura não respondeu e o pedido foi pelo recuo de
+   * hoje menos 6.
+   */
+  frescor?: { crash?: string | null; anr?: string | null } | null;
 };
 
 /**
@@ -302,13 +309,26 @@ export function linhaDeVitals(v: VitalsDoPlay, hoje: Date = new Date()): LinhaDo
   // janela é hoje-4 e a Play publica com um dia de folga. Passar de cinco quer
   // dizer que a frescura escorregou e o próximo pedido pode não voltar: é o
   // único aviso automático que temos antes de a série sumir de novo.
+  //
+  // DESDE 04/11 O COLETOR PERGUNTA A FRESCURA ANTES (nós "Play: frescor do
+  // crash" e "do ANR"), e o aviso muda de sentido. Pedido feito pela frescura
+  // nunca passa do que a Play tem, então atraso deixa de ser risco da série e
+  // passa a ser só a Play atrasando: dizer MARGEM ZERO aí seria alarme falso, e
+  // alarme falso ensina a ignorar alarme. Sem a frescura, o pedido recua para
+  // hoje menos 6, e o normal passa a ser sete dias.
   const atraso = diasAtras(String(maisNova.dia), hoje);
+  const temCampoFrescor = v.frescor != null && typeof v.frescor === "object";
+  const frescor = temCampoFrescor ? String(v.frescor?.crash ?? "").trim() : "";
+  const limite = temCampoFrescor ? 7 : 5;
+  const pedido = temCampoFrescor ? "hoje menos 6 (a pergunta de frescura nao respondeu)" : "hoje menos 4";
   const sobreAtraso =
     atraso == null
       ? "sem contar o atraso (a data da linha nao parseou)"
-      : atraso > 5
-        ? `${atraso} dias atras, e isso e MARGEM ZERO: o coletor pede o fim da janela em hoje menos 4 e a Play recusa o pedido INTEIRO quando a frescura dela passa disso, que foi o que tirou a serie do ar de 21 a 31/10`
-        : `${atraso} dias atras, que e o normal desta fonte (a API atrasa, NAO e hoje)`;
+      : frescor
+        ? `${atraso} dias atras; a Play informou dado ate ${frescor} e o coletor pede ate la, entao atraso aqui e da Play e nao risco de perder a serie`
+        : atraso > limite
+          ? `${atraso} dias atras, e isso e MARGEM ZERO: o coletor pede o fim da janela em ${pedido} e a Play recusa o pedido INTEIRO quando a frescura dela passa disso, que foi o que tirou a serie do ar de 21 a 31/10`
+          : `${atraso} dias atras, que e o normal desta fonte (a API atrasa, NAO e hoje)${temCampoFrescor ? `; pedido pelo recuo de ${pedido}` : ""}`;
   return {
     texto:
       `Vitals do Play: o dado mais novo e de ${maisNova.dia}, ${sobreAtraso}. ` +
