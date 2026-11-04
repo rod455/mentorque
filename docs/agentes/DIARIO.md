@@ -202,6 +202,156 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   e essa rodada confere a suíte `sintoma` junto, porque ela usa esse sintoma
   como exemplo de "sem aula".
 
+## 2026-11-04 · Segurança: rodada 7, o inventário mensal, e o limite que eu declarei na semana passada mordeu
+- Artifact "Segurança da semana" (rodada 7): (link no commit seguinte)
+- **A rodada disparou em 01/11 e fechou hoje, 04/11**: o processo desta sessão
+  foi reiniciado no meio dela. Todas as leituras que envelhecem foram REFEITAS
+  hoje, e a varredura de segredo usou janela de 10 dias em vez de 7, para não
+  deixar buraco entre 25/10 e 28/10. O que ficou de 01/11 está marcado como tal.
+
+```
+CONTADORES (04/11/2026): avisos Supabase seguranca 17/6/1/1
+| performance 3/7/11/1
+| banco definer 4 (sem pg_temp 0, anon executa 0) | tabelas 22 (sem RLS 0, anon le 0)
+| views 16 (sem declarar 0) | npm producao 5 pacotes/10 avisos (criticas 0) | so dev 17 pacotes
+```
+Esta linha é o pedido 2 do retorno de 25/10 e passa a sair em toda rodada, na
+mesma ordem, mesmo quando nada muda. O motivo: em 25/10 eu disse que o
+`rls_enabled_no_policy` foi de 16 para 17 e que **não sabia em qual semana**,
+porque as rodadas 2 a 5 escreveram "idêntico" em vez do número. Agora a próxima
+mudança tem data por construção, e o molde está no manual.
+
+### O INVENTÁRIO MENSAL DE PERMISSÕES, e a única pergunta que sobra para o dono
+Era a data marcada desde 04/10. O que tem acesso à casa, lido hoje:
+- **n8n** (auto-hospedado, servidor do dono): **21 credenciais** e **74 fluxos,
+  14 ativos**. Por produto: Mentorque 17 (10 ativos), **Vocaboost 44 (1 ativo)**,
+  Meu Livrinho 4 (3 ativos), Dermato 3 (nenhum ativo), Pessoal 6 (nenhum ativo).
+- **GitHub**: **um colaborador**, o dono, como admin. Nenhum convidado antigo.
+- **Vercel**: **um membro**, o dono, como OWNER. A lista de integrações
+  instaladas respondeu **403** e fica como fonte não lida.
+- **Supabase**: a organização tem **2 projetos**, o Mentorque e um
+  `amigoocultoja` de 04/10, que não é deste produto. Lista de membros da
+  organização: sem ferramenta nesta sessão.
+- **Codemagic** e **apps conectados na Meta e no Google**: sem ferramenta aqui.
+  O que a casa alcança desses dois é a lista de credenciais do n8n, que inclui
+  Google Drive, Sheets, Google account, conta de serviço, YouTube, AdMob,
+  Google Ads, Gmail, Meta Marketing e Instagram.
+- **A pergunta, e é uma só** (está em `acoes-do-dono.md`): três coisas parecem
+  não ter mais uso, e eu NÃO desligo nada nem recomendo desligar antes de ele
+  dizer por que estão ligadas, que é a regra 1b deste manual: a credencial
+  "Header Auth account" (sem uso conhecido, e o retorno de 25/10 já a tinha
+  notado), os 44 fluxos de Vocaboost e 3 de Dermato (produtos desligados, cujas
+  definições guardadas podem conter chave), e o fluxo do blog do Vocaboost, que
+  continua ATIVO.
+
+### O inventário da chave, que era o pedido 1 do retorno de 25/10
+"Onde mora a `DADOS_CHAVE`", com o número de nós, lido na definição dos fluxos
+e não no comentário do código:
+- **No repositório: em nenhum arquivo.** Ela é env, não tem forma de chave, e
+  por isso nenhuma varredura de repositório a veria: o que a achou em 25/10 foi
+  ler o portão.
+- **Na URL: não mais.** Era o meu pedido de 25/10 à engenharia, e está fechado.
+  Conferido no COMPORTAMENTO, com uma chave de teste minha num servidor local:
+  `/painel?chave=...` responde **303 para `/painel` limpo** e grava o selo em
+  cookie `Secure; HttpOnly; SameSite=strict; Path=/painel`; sem chave e sem
+  cookie a página não traz dado nenhum, só a frase de como abrir.
+- **Na Vercel: um lugar**, a env `DADOS_CHAVE`, que é o desenho.
+- **No n8n: UM lugar, e é credencial.** A "Mentorque: chave dos dados"
+  (`httpHeaderAuth`) pertence a um único fluxo, o "Chave: chamar a operação"
+  (`8rfDZfAhzOjnORgu`), que valida método e caminho e só chama `/api/` do nosso
+  domínio, para a chave não poder ser mandada para outro endereço por engano de
+  quem chama.
+- **Zero nós com a chave escrita à mão em 11 dos 17 fluxos do Mentorque**,
+  incluindo os TRÊS que o retorno nomeou e os QUATRO que mandam e-mail. Cada nó
+  que precisa da chave chama o fluxo da credencial, com a mesma nota da
+  migração de 25/10. **Os 6 que eu não abri** estão nomeados com id no
+  inventário (`avaliações das lojas`, `Peças Telegram`, os dois do Instagram,
+  `prova do orçamento por foto`, `builds da App Store`): cada definição custa
+  caro de ler e eu cobri primeiro quem manda mensagem a cliente e os maiores
+  coletores. É o limite deste inventário, e ele tem lista.
+- **E não é só desenho: está rodando.** O fluxo da credencial teve **176
+  execuções em 7 dias, todas em modo `integrated`** (chamado por outro fluxo),
+  nos horários dos coletores. Se algum coletor ainda tivesse o caminho antigo,
+  ele não apareceria ali.
+- **Girar a chave continua não sendo pedido**, e agora por um motivo melhor que
+  o de 25/10: o mecanismo fechou, e girar passou a ser operação de **dois
+  lugares** (env da Vercel e a credencial do n8n), que é o que a migração
+  comprou.
+
+### O limite que eu declarei em 25/10 mordeu em nove dias
+A varredura semanal nasceu dizendo "não alcança commit de junção". Na semana de
+01/11 houve **duas junções**, e uma delas trazia **90 linhas que o `git log -p`
+não mostra**: ele omite o diff de junção por desenho, e o que ele omite é
+exatamente o que a resolução de conflito escreveu à mão.
+- O modo `--semana` passou a pedir `--diff-merges=combined` e a ler o formato
+  dele (cabeçalho com três arrobas, um caractere de prefixo por pai, e a conta
+  de linha pelo último intervalo).
+- **Provado nos dois lados, num clone sem remoto:** a mesma chave plantada na
+  resolução de uma junção dá **zero** no modo antigo (`git log -p` sozinho,
+  conferido) e é **achada** no novo, com arquivo, linha (163, conferida à mão) e
+  commit. E o caminho normal continua mordendo, com um plantio de chave PEM num
+  commit comum.
+- Hoje a varredura leu **25.377 linhas acrescentadas em 32 commits**, junções
+  dentro, e **nenhuma com forma de chave**. O `.gitignore` continua com a regra
+  invertida inteira.
+
+### As dependências, no nível do aviso
+- **Produção: 5 pacotes, 10 avisos, nenhuma crítica.** Igual à leitura de 01/11:
+  nenhum aviso novo e nenhum que saiu nesses três dias.
+- **O aviso novo da semana foi um só, e ele quase alcançava:**
+  **GHSA-6pq8-jhm2-2vcw** entrou no `qs` (que foi de 2 para 3 avisos) e é o
+  ÚNICO do conjunto que fala de `stringify`, que é justamente o que o SDK do
+  Stripe usa. A condição do aviso é `arrayFormat: 'comma'`; o Stripe chama com
+  `'repeat'` ou `'indices'`, lido em `node_modules/stripe/cjs/utils.js:31`.
+  **Não alcança**, e isso é medição, não suposição.
+- **Os outros 9** são os conhecidos, todos rodando no build sobre o nosso CSS
+  (`postcss` 4, `nanoid` 2, `source-map-js` 1) ou dentro do SDK do Stripe
+  (`qs` 2). A recomendação de 25/10 continua a mesma e **não mudou de tamanho**:
+  `nanoid` 3.3.18, `source-map-js` 1.2.2 e `qs` 6.16.1 fecham 5 dos 10 mexendo
+  só no lockfile, e eu continuo NÃO recomendando fazer agora, porque nenhum
+  alcança o usuário. Os 4 do `postcss` só saem com o Next 16, versão maior.
+- **Só desenvolvimento: 17 pacotes**, contados e não listados. E vale a
+  observação, porque o número engana: foram **11 em 25/10, 27 em 01/11 e 17
+  hoje**, sem ninguém tocar numa dependência (os commits da janela são retratos
+  diários e scripts). O balde de desenvolvimento mede o que o mundo aprendeu,
+  não a nossa árvore, e é por isso que ele se conta em vez de se listar.
+
+### Supabase e banco
+- **Avisos de segurança: os mesmos quatro tipos**, nenhum novo, nenhum sumiu
+  (17/6/1/1, na linha de contadores). Os 6 WARN de `search_path` mutável são
+  todos de função `SECURITY INVOKER`, que roda com o direito de quem chama.
+- **Performance: uma mudança boa**, e ela entra porque mudou: os índices sem uso
+  foram de **13 para 11**. Os dois que saíram da lista (`saida_motivos_user_idx`
+  e `push_tokens_sem_conta_idx`) passaram a ser usados.
+- **Estado do banco igual ao de 25/10** nos seis contadores, e as 4 funções
+  `SECURITY DEFINER` continuam com `pg_temp` por último e sem `anon`, conferido
+  com `has_function_privilege` e não lendo o `revoke` do arquivo.
+- **A leitura de 01/11 falhou por permissão** (`get_advisors` respondeu "You do
+  not have permission", duas vezes) e eu ia publicar como fonte indisponível.
+  Hoje respondeu normalmente. Era passageiro, e o que fica é que uma recusa
+  dessas se tenta de novo antes de virar linha de relatório.
+
+### Contra a régua
+Cumpri 1 a 9, com uma ressalva e uma dívida.
+- **A ressalva**: o critério 1 diz "a fonte que falhou foi nomeada". Duas
+  falharam e estão nomeadas: as integrações da Vercel (403) e os membros da
+  organização do Supabase (sem ferramenta). O Codemagic e os apps da Meta e do
+  Google eu nunca alcancei daqui, e isso está no inventário em vez de ficar de
+  fora.
+- **A dívida**: o inventário da chave no n8n cobre **11 de 17 fluxos**, e os 6
+  que faltam estão nomeados. "Zero nós com a chave" é verdade sobre 11, não
+  sobre 17, e a frase honesta diz o denominador.
+
+### Uma vermelha que não é minha, diagnosticada e não consertada
+A `conferir:agentes` reprova por causa do veredito da rodada do ASO de 01/11,
+com 17 dias de atraso, e isso reprova a bateria de TODO MUNDO. Conferi que a
+vermelha existe na árvore de origin sem o meu commit (rodei a conferência em
+`f1cea63`, sem nada meu dentro), então ela não nasceu aqui, e escrever veredito
+de outro papel não é da minha alçada. **E não encaminhei de novo**: o Conteúdo
+já abriu a linha para o Diretor hoje (`entre-papeis.md`, 04/11), e o
+instrumento respondeu antes de eu repetir o pedido. O que eu empurro hoje passa
+em todas as conferências que tocam no que eu mudei.
+
 ## 2026-11-01 · ASO: o veredito saiu para cima, e a vitrine da Play é o onboarding
 - Quinta rodada deste papel. Artifact "Lojas da quinzena":
   https://claude.ai/artifact/VZfsAik1U6LjJop8bz9vZ1

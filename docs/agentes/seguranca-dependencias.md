@@ -164,7 +164,8 @@ Pulou numa rodada? Diga a data da próxima ali mesmo.
 | feito em | próximo |
 |---|---|
 | 20/09/2026 | (pulei 27/09, dito na rodada) |
-| 04/10/2026 | **01/11/2026** |
+| 04/10/2026 | 01/11/2026 |
+| 04/11/2026 (a rodada disparou em 01/11 e fechou em 04/11, com as leituras refeitas no dia de fechar) | **06/12/2026** |
 
 ## O relato começa pela decisão do dono
 
@@ -191,7 +192,59 @@ conseguia ler a nossa config: disse que não usamos `CapacitorHttp` e que não h
 é da ponte nativa. Para nota 9,3 a ordem é tratar como exposta até alguém provar
 o contrário.
 
+## A linha fixa de contadores (01/11/2026)
+
+Pedido 2 do retorno da rodada 6, e o motivo dele: em 25/10 eu disse que o
+`rls_enabled_no_policy` tinha ido de 16 para 17 e que **não sabia em qual
+semana**, porque as rodadas 2 a 5 escreveram "idêntico" em vez do número.
+Dizer foi certo; o conserto é não precisar dizer de novo.
+
+Toda rodada escreve no diário esta linha, nesta ordem, com os números crus,
+mesmo quando nada muda. Aí a próxima mudança tem data por construção, e
+"em que semana entrou" se responde com `git log -S` no diário.
+
+```
+CONTADORES: avisos Supabase seguranca R/W/I <rls_sem_politica>/<search_path>/<extensao>/<senha>
+| performance <fk_sem_indice>/<rls_initplan>/<indice_sem_uso>/<politicas_demais>
+| banco definer <n> (sem pg_temp <n>, anon executa <n>) | tabelas <n> (sem RLS <n>, anon le <n>)
+| views <n> (sem declarar <n>) | npm producao <pacotes>/<avisos> (criticas <n>) | so dev <pacotes>
+```
+
+Número que mudou ganha uma linha de texto explicando; número igual fica só na
+linha de contadores, sem virar parágrafo. É o contrário de "achado repetido":
+aqui o repetido é o que dá data ao que mudar depois.
+
 ## Aprendizados
+
+### Três regras da rodada 7 (04/11/2026)
+
+**1. Limite declarado é dívida, não desculpa, e esta mordeu em nove dias.** Em
+25/10 a varredura semanal nasceu dizendo "não alcança commit de junção". Em
+01/11 havia duas junções na semana, e uma trazia 90 linhas que o `git log -p`
+NÃO mostra, porque ele omite o diff de junção por desenho. Ou seja: o pedaço
+invisível era justamente o que a resolução de conflito escreveu à mão, que é
+onde um valor entra sem ninguém reparar. O modo passou a pedir
+`--diff-merges=combined` e a ler o formato dele (cabeçalho com três arrobas,
+um caractere de prefixo por pai). **E o plantio provou os dois lados:** a mesma
+chave plantada na resolução de uma junção dá ZERO no modo antigo e é achada no
+novo, com arquivo, linha e commit certos. Quando um limite seu custar algo,
+feche o limite em vez de repetir a ressalva.
+
+**2. Resultado grande que vai para o disco é mais barato que resultado médio
+que vem para a conversa.** O inventário da chave no n8n parecia inviável: 17
+definições de fluxo, cada uma custando uns 10 mil tokens de leitura. A do maior
+coletor estourou o limite da ferramenta, foi salva em arquivo, e aí a resposta
+saiu com `jq` em quatro linhas e custo quase zero: zero `x-mq-chave`, zero nós
+apontando para o nosso domínio, 2 nós chamando o fluxo da credencial. Quando a
+pergunta é um SIM OU NÃO dentro de um documento grande, procure o caminho que
+deixa o documento no disco.
+
+**3. `updatedAt` em massa não é sinal de nada.** Para saber quais fluxos a
+migração da chave tocou, o primeiro reflexo foi olhar a data de alteração. Os
+**74** fluxos do n8n mostram 25/10, incluindo os de dois produtos que não são
+este, porque naquele dia houve um salvamento em massa. Carimbo de tempo só
+separa o que mudou quando se sabe que ele não foi mexido por outro motivo, e
+aqui a pergunta certa era a definição, não a data.
 
 ### Quatro regras da rodada 6 (25/10/2026)
 
