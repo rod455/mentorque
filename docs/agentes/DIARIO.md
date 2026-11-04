@@ -27,9 +27,23 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   grita margem; no recuo, o normal passa a sete dias. Três casos novos na
   `conferir:legivel`, dois plantios mordidos.
 - Expressão do pedido testada localmente com a mesma biblioteca de datas do n8n
-  (com frescura, sem frescura, virada de mês). **O que não está provado**:
-  nenhuma execução real rodou ainda. A primeira é amanhã às 05h30 (coletor) e
-  06h (retrato); até lá, "sem sinal ainda".
+  (com frescura, sem frescura, virada de mês).
+- **ATUALIZAÇÃO, 23h45 UTC: o dono escolheu a credencial nos dois nós e
+  publicou (versão 559b9122, 23h43 UTC), e a execução 9538, disparada por mim
+  às 23h44, saiu `success` em 30 s.** Os dois nós de frescor responderam
+  (DAILY até 2026-11-04 nos dois conjuntos), crash e ANR vieram `ok` com 8
+  linhas cada, e a mais nova é de **03/11, um dia atrás**. Pacote gravado na
+  `metricas_diarias` (dia 04/11, com `frescor`), conferido no banco. Deploy da
+  Vercel do 9713dea em READY, então o `/api/dados` já usa a linha nova; a frase
+  que sai, calculada aqui com o pacote real: "o dado mais novo e de 2026-11-03,
+  [...] atraso aqui e da Play e nao risco de perder a serie".
+- **E O ACHADO QUE ISSO TRAZ: o "atraso de cinco dias" era nosso, não da
+  Play.** Com a frescura de hoje, a Play tinha dado até ontem; a série vinha 4
+  dias mais velha só porque o pedido parava em hoje menos 4. A queda de 21 a
+  31/10 foi a Play atrasando de verdade (frescura em 19/10 lida em 28/10), mas
+  o atraso do dia a dia era o nosso pedido. Vale para quem leu "a API atrasa".
+- O que ainda não rodou: o nó novo do retrato, que roda às 06h UTC de 05/11.
+  Conferência agendada para 06h20.
 
 ## 2026-11-04 · Engenharia: retorno às cinco rodadas da semana, na sessão com o dono
 
