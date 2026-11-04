@@ -738,3 +738,146 @@ Se a conversão cair nos 14 dias depois, volta o parágrafo de hoje, preservado 
 tabela. Se ficar igual, FICA: o texto novo é do mesmo tamanho e diz mais. Se
 subir, a leitura é frágil pelo mesmo motivo de sempre (campanha mudando no meio
 muda a mistura de quem chega), e o que confirma é a conversão por origem.
+
+---
+
+## 2026-11-01 · VEREDITO da descrição curta (troca de 04/10), na data marcada
+
+**Resultado: aponta para cima, forte, e NÃO FECHA. A janela de depois tem 5
+dias.**
+
+O instrumento é o relatório `stats/store_performance/` do bucket do Play, lido
+em 16/10 por uma sessão de Engenharia (o arquivo de outubro estava atualizado
+até 14/10). Não é o mesmo instrumento dos 29,1% que o painel mostrou em 03/10:
+aquele era a tela do console em 28 dias, este é o relatório mensal por origem
+de tráfego. Dois instrumentos, números diferentes, e por isso a comparação
+honesta é antes contra depois DENTRO deste relatório, nunca contra os 29,1%.
+
+| Janela | Conversão da ficha | Base |
+|---|---|---|
+| Antes (20/09 a 03/10) | 38,7% | 731 de 1.888 |
+| Depois (04 a 08/10) | 50,7% | 331 de 653 |
+| Antes, só "Ads and referrals" | 34,9% | |
+| Depois, só "Ads and referrals" | 54,1% | |
+| Antes, só "Other" | 45,6% | |
+| Depois, só "Other" | 44,8% | |
+
+**O que isso sugere, e por que é interessante.** O movimento inteiro está em
+"Ads and referrals", quase 20 pontos, e "Other" não se mexeu. Isso casa com o
+que a troca fez: o texto novo fala do problema e do desfecho, que é exatamente
+o que confirma a promessa para quem acabou de clicar num anúncio. Quem chega
+por outro caminho não precisava dessa confirmação.
+
+**Por que não fecha:** cinco dias de depois contra quatorze de antes; nenhuma
+separação de campanha (a mistura de quem chega muda sozinha quando a Mídia
+troca criativo, e em outubro ela trocou); e o relatório não separa "Pesquisa do
+Google Play", que cai dentro de "Other".
+
+**O que fecha de verdade, e é barato:** o mesmo relatório que foi lido à mão em
+16/10 já está no alcance do coletor (`lib/playRelatorios.ts` sabe ler o
+formato, inclusive as duas armadilhas de UTF-16 e de idioma do cabeçalho). Pôr
+`store_performance` na coleta diária transforma a conversão da ficha num número
+de toda rodada, e este papel para de depender de alguém abrir tela. É
+recomendação para o Analista, registrada no DIARIO, e é o padrão que o dono
+ensinou em 03/10: quando a entrega depende de trabalho manual repetido, o
+pedido certo não é "abra de novo", é "me dê a chave e eu armo".
+
+**Decisão de hoje:** a linha de 04/10 FICA, porque não há nenhum sinal contra
+ela. A leitura definitiva volta quando o relatório de outubro inteiro for lido,
+com 27 dias de depois em vez de 5.
+
+---
+
+## 2026-11-01 · As 8 imagens da Play são o onboarding na ordem do onboarding
+
+**Estado: ABERTA. Custo de produção: ZERO.** É arrastar imagem no console.
+
+### O que eu vi, e com qual instrumento
+
+As capturas das duas lojas foram baixadas das páginas públicas em 16/10 e estão
+no repositório (`docs/lojas/play-ficha-2026-10-16/`, ícone e 8 capturas;
+`docs/lojas/appstore-ficha-2026-10-16/`, 9 capturas). Eu abri as da Play uma a
+uma nesta rodada. Até aqui eu nunca tinha visto nenhuma das duas fichas.
+
+A ordem da Play hoje:
+
+| # | O que mostra | O que ela faz por quem está decidindo |
+|---|---|---|
+| 1 | "Cadastre seu carro. Sua garagem digital: modelo, ano, km e foto." | pede trabalho antes de prometer qualquer coisa |
+| 2 | "Entenda sintomas e evite gastos. Descubra causas prováveis e o preço justo antes da oficina." | **é a melhor frame que existe**, e repete a descrição curta que está no ar |
+| 3 | "Tenha o histórico completo. Todo serviço, peça e nota do seu veículo em um só lugar." | concreta, e é o que os usuários elogiam nas avaliações |
+| 4 | "Amado por motoristas de todo o Brasil", 4,8, 10.000+, 5.000+ e quatro depoimentos com nome | prova social inventada, que o dono mandou tirar do app em 04/10 |
+| 5 | "Monte seu teste", com R$ 29,90 e R$ 239,90 | responde preço para quem ainda não decidiu instalar |
+
+São telas cruas do app, capturadas na ordem do onboarding, com a barra de
+progresso, o seletor PT/EN e o botão "Continuar" dentro da imagem. Ou seja: a
+vitrine é o fluxo desenhado para quem JÁ instalou.
+
+### A troca proposta, e ela não precisa de arte nova
+
+Só a ordem, e tirar duas:
+
+| Posição | Hoje | Proposto |
+|---|---|---|
+| 1 | Cadastre seu carro | **Entenda sintomas e evite gastos** (a atual 2) |
+| 2 | Entenda sintomas | **Tenha o histórico completo** (a atual 3) |
+| 3 | Tenha o histórico | **Cadastre seu carro** (a atual 1) |
+| 4 | Prova social inventada | **fora** (já é linha da lista do dono desde 16/10) |
+| 5 | Paywall com preço | **para o fim**, depois das telas de uso |
+
+### O raciocínio
+
+Na Play, quem chega vê duas, no máximo três imagens sem arrastar. Hoje a
+primeira pede cadastro e a melhor está na segunda. Trocar a ordem põe na
+primeira posição a única frame que diz problema e desfecho juntos, e que é a
+mesma tese da descrição curta que subiu em 04/10 e que o relatório de
+conversão sugere ter funcionado justamente com quem vem de anúncio.
+
+O cadastro não sai, só anda: ele responde "como funciona", que é a terceira
+pergunta de quem está decidindo, não a primeira.
+
+O paywall na quinta posição responde "quanto custa" para alguém que ainda não
+decidiu instalar. Isso não é mexer em preço (os valores ficam idênticos onde
+precisam estar, na ficha e na loja): é não abrir a conversa por ele.
+
+### O tamanho do alcance
+
+A página recebe cerca de **um quarto** da aquisição (561 aquisições de
+dispositivos contra 134 cliques de instalação a partir da ficha, Play Console,
+28 dias até 03/10) e converte, pelo relatório de outubro, entre 38,7% e 50,7%.
+A imagem é a primeira coisa que esse quarto vê. Não toca no orgânico nem em
+quem instala direto do anúncio sem passar pela página.
+
+### O que a proposta NÃO faz
+
+Não produz arte nova. Não mexe em título, descrição curta ou descrição
+completa, que estão todos em leitura. Não mexe em preço. E não duplica a linha
+de 16/10 sobre a prova social inventada: ela já está na lista, é da Engenharia,
+e as duas se resolvem na mesma visita ao console.
+
+### O risco, dito na cara
+
+Ordem de captura é uma das coisas que a Play usa para montar variantes de
+ficha, e trocar tudo de uma vez apaga a comparação com o que havia antes. É por
+isso que a ordem proposta mantém as MESMAS imagens: se a conversão cair, volta
+a ordem antiga em um minuto, sem precisar de ninguém desenhar nada.
+
+O segundo risco é o de sempre quando duas coisas mudam juntas: se a prova
+social sair na mesma visita, a conversão vai se mover pelos dois motivos. Eu
+prefiro assim mesmo, porque a prova social inventada é risco de política e não
+espera leitura, mas fica dito que a leitura sai misturada.
+
+### Como saber se funcionou
+
+O mesmo relatório `store_performance`, comparando as duas semanas antes e as
+duas depois da troca, e de novo olhando "Ads and referrals" separado de
+"Other", que foi onde o efeito de 04/10 apareceu inteiro.
+
+### A condição de volta atrás
+
+Se "Ads and referrals" cair abaixo dos 34,9% de antes de 04/10 nas duas semanas
+seguintes, volta a ordem de hoje, que está preservada na tabela acima. Se ficar
+igual, FICA, porque custou zero e a primeira frame passa a dizer o que o app
+resolve. A próxima proposta, que já tem dona, é dar às capturas da Play o
+tratamento que as da App Store já têm: frase acima do aparelho, em vez de tela
+crua com o botão "Continuar" dentro.

@@ -3,6 +3,76 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-01 · ASO & Lojas: o veredito saiu para cima, e a vitrine da Play é o onboarding
+- Quinta rodada deste papel. Artifact "Lojas da quinzena":
+  https://claude.ai/artifact/VZfsAik1U6LjJop8bz9vZ1
+- A rodada disparou em 01/11; a sessão foi interrompida no meio e o registro e o
+  commit saíram em 04/11. Os números são todos da leitura de 01/11.
+- **VEREDITO DA DESCRIÇÃO CURTA (troca de 04/10), na data marcada: APONTA PARA
+  CIMA, FORTE, E NÃO FECHA.** Instrumento: o relatório `stats/store_performance/`
+  do bucket do Play, lido em 16/10 pela Engenharia (arquivo de outubro
+  atualizado até 14/10). Antes (20/09 a 03/10): **38,7%** (731 de 1.888).
+  Depois (04 a 08/10): **50,7%** (331 de 653). **O movimento inteiro está em
+  "Ads and referrals", de 34,9% para 54,1%; "Other" não se mexeu** (45,6% para
+  44,8%).
+- Isso casa com o que a troca fez: o texto novo fala do problema e do desfecho,
+  que é o que confirma a promessa para quem acabou de clicar num anúncio. Quem
+  chega por outro caminho não precisava dessa confirmação. **Não fecha** porque
+  são 5 dias de depois contra 14 de antes, sem separação de campanha (a Mídia
+  trocou criativo em outubro) e o relatório não separa a busca da Play.
+- Este NÃO é o instrumento dos 29,1% de 03/10 (aquele era a tela do console em
+  28 dias). Dois instrumentos, números diferentes, e por isso a comparação é
+  antes contra depois dentro do mesmo relatório. A linha de 04/10 FICA.
+- **RECOMENDAÇÃO QUE VALE MAIS QUE A PROPOSTA DE HOJE, e é para o Analista:**
+  pôr `stats/store_performance/` na coleta diária. `lib/playRelatorios.ts` já
+  sabe ler o formato, inclusive as armadilhas de UTF-16 e do idioma do
+  cabeçalho. Enquanto a conversão da ficha for lida à mão, todo veredito deste
+  papel depende de alguém abrir console. É o padrão que o dono ensinou em
+  03/10: quando a entrega depende de trabalho manual repetido, o pedido certo é
+  "me dê a chave e eu armo".
+- **EU FINALMENTE VI AS IMAGENS DA FICHA**, que era o bloqueio declarado em
+  15/10. Elas estão no repositório desde 16/10 (`docs/lojas/play-ficha-2026-10-16/`
+  e `docs/lojas/appstore-ficha-2026-10-16/`), baixadas das páginas públicas por
+  uma sessão de Engenharia. Abri as 8 da Play uma a uma.
+- **ACHADO: a vitrine da Play é o onboarding capturado na ordem do onboarding.**
+  Telas cruas do app, com barra de progresso, seletor PT/EN e o botão
+  "Continuar" dentro da imagem. 1ª "Cadastre seu carro" (pede trabalho antes de
+  prometer nada), 2ª "Entenda sintomas e evite gastos" (a melhor frame, e é a
+  mesma tese da descrição curta que está no ar), 3ª histórico, 4ª a prova social
+  inventada, 5ª o paywall com os preços. É a sequência desenhada para quem JÁ
+  instalou.
+- **ASSIMETRIA QUE VALE REGISTRAR: as capturas da App Store são DESENHADAS**
+  (frase acima do aparelho) e as da Play são cruas. A loja que ficou com as
+  cruas é a que tem 258 dos 279 aparelhos ativos.
+- **PROPOSTA DA QUINZENA, custo de produção ZERO:** trocar a ORDEM das capturas
+  da Play. 1ª passa a ser a atual 2ª, 2ª a atual 3ª, 3ª a atual 1ª, a do paywall
+  vai para o fim. Mesmas imagens, outra ordem, volta atrás em um minuto. Na Play
+  se vê duas, no máximo três, sem arrastar. Alcance declarado: a página recebe
+  ~1/4 da aquisição (561 aquisições de dispositivos contra 134 cliques de
+  instalação a partir da ficha, 28 dias até 03/10). Entrou na lista do dono, com
+  o pedido de resolver na MESMA visita da linha de 16/10 sobre a prova social
+  inventada, que eu não dupliquei.
+- **O BANCO RECUSOU NESTA SESSÃO** (`execute_sql`: "You do not have permission
+  to perform this action", duas tentativas), o mesmo de 26/10 com o Diretor. A
+  contagem de avaliações saiu do retrato das 9h, e está dito onde isso limita o
+  que eu afirmo. São 12, média 5,0, e **45 dias sem nenhuma nova** (a última é
+  de 17/09). O relatório de notas da Play confirma por outro caminho: nenhuma
+  nota nova de 04/09 a 11/10.
+- Nenhuma nota abaixo de 5 nas duas lojas, então não há tendência de reclamação
+  para o QA. A conferência por exceção da frase dos 2 carros segue SEM AMOSTRA:
+  28 dias no ar, zero avaliação nova no período.
+- **AUTOEXAME CONTRA A RÉGUA:** cumpri 3, 4, 5, 6, 7, 9, 10, 11 e 12. O 1 está
+  aposentado por decisão do dono e o 2 e o 8 não se aplicam. **Onde fiquei
+  devendo:** o veredito usa um número de 5 dias que alguém leu à mão há duas
+  semanas, e eu não consegui atualizar sozinho (banco recusou, relatório não
+  está na coleta). Cumpri o critério 10 no papel e não no efeito: o instrumento
+  existe, mas continua dependendo de gente. É por isso que a recomendação 1
+  desta rodada não é mudança de ficha.
+- Recomendações: (1) pôr o relatório de desempenho da ficha na coleta diária;
+  (2) numa visita só ao console, tirar a imagem da prova social inventada (linha
+  de 16/10) e arrastar as outras para a ordem nova; (3) a proposta da primeira
+  frase, guardada em 15/10 esperando este veredito, já pode entrar.
+
 ## 2026-10-30 · Engenharia: o segundo pedido de conta não alcançava nenhum dos recusantes da aposta
 
 - Revisão da rodada do CRO de hoje, a pedido do dono. Retorno escrito em

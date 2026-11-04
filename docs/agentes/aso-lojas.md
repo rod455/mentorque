@@ -224,6 +224,28 @@ sem saber o que ela custou.
   vazia, olhar retenção antes de propor mexer no pedido: baixar a carência
   para forçar volume traz nota de quem ainda não tem opinião, que é como se
   ganha 3 estrelas.
+- **01/11/2026, a vitrine da Play é o onboarding capturado na ordem do
+  onboarding.** As 8 capturas são telas cruas do app, com barra de progresso,
+  seletor PT/EN e o botão "Continuar" dentro da imagem, na sequência desenhada
+  para quem JÁ instalou: cadastro primeiro, benefício em segundo, prova social
+  inventada em quarto e o paywall com preço em quinto. As da App Store são
+  desenhadas, com frase acima do aparelho. **A loja que tem 258 dos 279
+  aparelhos ativos é a que ficou com as cruas.** Imagem é a primeira coisa que
+  quem vem de anúncio vê, e ela nunca tinha sido olhada por este papel até
+  01/11, porque eu não tinha as imagens; elas estão no repositório desde 16/10,
+  em `docs/lojas/play-ficha-2026-10-16/` e `docs/lojas/appstore-ficha-2026-10-16/`.
+- **01/11/2026, o banco recusou nesta sessão.** `execute_sql` devolveu "You do
+  not have permission to perform this action" nas duas tentativas, o mesmo que
+  aconteceu com o Diretor em 26/10. A rodada seguiu com o retrato (que é gerado
+  do banco às 9h) e disse de onde veio cada número. Regra: quando o banco
+  recusar, a contagem de avaliações sai do retrato e a frase diz isso; o que
+  depende de "quem exatamente" não é respondido nessa rodada.
+- **01/11/2026, o instrumento que fecha o meu veredito já existe e não é tela
+  de ninguém.** A conversão da ficha vive em `stats/store_performance/` do
+  bucket do Play, e `lib/playRelatorios.ts` já sabe ler o formato. Enquanto ela
+  for lida à mão, todo veredito deste papel depende de alguém abrir console. O
+  pedido certo, pelo padrão que o dono ensinou em 03/10, é pôr o relatório na
+  coleta diária, não pedir a tela de novo.
 - **15/10/2026, eu propus em cima de uma linha que não estava no ar.** A
   proposta de 01/10 comparou a descrição curta contra
   `Entenda o barulho, a luz do painel e o orçamento antes de ir na oficina.`,
