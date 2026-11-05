@@ -57,6 +57,15 @@ console.log("Publicação: a Vercel pula o build quando o commit não muda nada 
 const vercel = JSON.parse(ler("vercel.json")) as { ignoreCommand?: unknown };
 const comando = typeof vercel.ignoreCommand === "string" ? vercel.ignoreCommand : "";
 conferir("vercel.json tem ignoreCommand", comando.length > 0, "sem ele a Vercel builda todo commit, inclusive os so de doc");
+// O LIMITE DA VERCEL É 256 CARACTERES (05/11/2026). Passou disso, a Vercel
+// recusa o vercel.json inteiro antes de buildar, e o deploy de produção sai
+// ERROR sem uma linha de log. Aconteceu no commit que ensinou o redeploy a
+// buildar: 335 caracteres, e a chave da Voyage ficou mais uma rodada fora.
+conferir(
+  "o ignoreCommand cabe no limite de 256 caracteres da Vercel",
+  comando.length <= 256,
+  `${comando.length} caracteres: a Vercel recusa o vercel.json e o deploy sai ERROR sem log`,
+);
 // COMPARA COM O ÚLTIMO DEPLOY QUE DEU CERTO, E NÃO COM O COMMIT ANTERIOR
 // (18/10/2026). Com `HEAD^`, um push de vários commits terminando num commit só
 // de documento era pulado inteiro: foi assim que o Next 15 (dois commits de
@@ -71,7 +80,9 @@ conferir(
 );
 
 /** As pastas que o comando ignora: `':(exclude)docs'` vira `docs`. */
-const excluidas = [...comando.matchAll(/:\(exclude\)([^'" ]+)/g)].map((m) => m[1]!.replace(/\/$/, ""));
+// As duas grafias do git valem: `:(exclude)docs` e a curta `:!docs`, que é a
+// que cabe no limite de 256 caracteres desde 05/11/2026.
+const excluidas = [...comando.matchAll(/:(?:\(exclude\)|!)([^'" ]+)/g)].map((m) => m[1]!.replace(/\/$/, ""));
 conferir("o comando exclui pelo menos as pastas de documentação", excluidas.includes("docs") && excluidas.includes(".claude"));
 
 // ── 2. O QUE O COMANDO IGNORA É O QUE A VERCEL NÃO SOBE ────────────────────

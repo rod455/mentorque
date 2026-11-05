@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "ignoreCommand": "BASE=\"${VERCEL_GIT_PREVIOUS_SHA:-}\"; if [ -z \"$BASE\" ] || ! git cat-file -e \"$BASE^{commit}\" 2>/dev/null; then exit 1; fi; if [ \"$(git rev-parse \"$BASE^{commit}\")\" = \"$(git rev-parse HEAD)\" ]; then exit 1; fi; if git diff --quiet \"$BASE\" HEAD -- . ':(exclude)docs' ':(exclude).claude' ':(exclude)supabase'; then exit 0; else exit 1; fi",
+  "ignoreCommand": "BASE=$VERCEL_GIT_PREVIOUS_SHA; R=$(git rev-parse -q --verify \"$BASE^{commit}\") || exit 1; [ \"$R\" = \"$(git rev-parse HEAD)\" ] && exit 1; git diff --quiet \"$BASE\" HEAD -- . ':!docs' ':!.claude' ':!supabase' && exit 0; exit 1",
   "crons": [
     {
       "path": "/api/cron/biela-resumo",
