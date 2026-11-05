@@ -122,7 +122,7 @@ export const pt = {
         price: "R$ 0",
         priceNote: "para sempre",
         features: [
-          "3 perguntas ao Biela por mês",
+          "1 pergunta ao Biela por mês",
           "Garagem com até 2 carros",
           "Diagnóstico por sintoma, histórico e lembretes de revisão",
           "Aulas abertas",

@@ -439,7 +439,7 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
               saldo é metade do ponto de a Biela ser grátis: quem não sabe que
               tem não usa. */}
           {!s.premium && restantes !== null && (
-            <p className="mb-1.5 text-center text-xs text-cream/50">{c.biela.freeLeft.replace("{n}", String(restantes))}</p>
+            <p className="mb-1.5 text-center text-xs text-cream/50">{restantes === 1 ? c.biela.freeLeftUm : c.biela.freeLeft.replace("{n}", String(restantes))}</p>
           )}
           <div className="mb-2 flex items-end gap-2">
             <textarea

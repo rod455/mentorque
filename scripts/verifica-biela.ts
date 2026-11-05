@@ -31,7 +31,7 @@ console.log("Biela: o limite do gratuito, e quem o segura.");
 
 // ── a conta ─────────────────────────────────────────────────────────────────
 {
-  conferir("o limite do gratuito é três por mês (decisão do dono, 17/10; eram cinco desde 15/09)", LIMITE_GRATIS_POR_MES === 3, String(LIMITE_GRATIS_POR_MES));
+  conferir("o limite do gratuito é uma por mês (decisão do dono, 05/11; eram três desde 17/10 e cinco desde 15/09)", LIMITE_GRATIS_POR_MES === 1, String(LIMITE_GRATIS_POR_MES));
   conferir("com zero feitas, pode", podePerguntar(0, false));
   conferir(`com ${LIMITE_GRATIS_POR_MES - 1} feitas, ainda pode`, podePerguntar(LIMITE_GRATIS_POR_MES - 1, false));
   conferir(`com ${LIMITE_GRATIS_POR_MES} feitas, NÃO pode`, !podePerguntar(LIMITE_GRATIS_POR_MES, false));

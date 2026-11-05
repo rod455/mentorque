@@ -82,7 +82,7 @@ function primeiroNome(nome: string | null): string | null {
 function beneficios(o: ConvitePremium): string[] {
   const abertas = Math.max(0, o.aulas - o.aulasPremium);
   return [
-    `<b>Biela sem limite.</b> No grátis são ${o.limiteBiela} perguntas por mês; no Premium você pergunta o quanto quiser sobre o seu carro.`,
+    `<b>Biela sem limite.</b> No grátis ${o.limiteBiela === 1 ? "é 1 pergunta" : `são ${o.limiteBiela} perguntas`} por mês; no Premium você pergunta o quanto quiser sobre o seu carro.`,
     `<b>Todas as causas de cada sintoma</b>, com o checklist inteiro, e não só a mais provável.`,
     `<b>Custo por km e consumo</b> do seu carro, calculados a partir dos abastecimentos que você registra.`,
     `<b>Plano de revisão feito para o seu carro</b>, montado para o modelo e a quilometragem dele.`,

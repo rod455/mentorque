@@ -27,6 +27,13 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
    `a-conta-e-pedida-de-novo-a-quem-ja-tem-algo-a-perder` só lê depois que a
    3.4 passar de metade dos aparelhos ativos.
 
+3. **O Biela grátis com 1 pergunta por mês, nos textos do app** (05/11,
+   decisão do dono). O limite em si é do servidor e vale para todas as
+   versões desde o deploy; o que vai no binário são os dois textos com o
+   número: a tabela de planos ("Perguntas ao Biela, 1/mês", que na 3.3 ainda
+   diz "3/mês") e o singular "1 pergunta grátis restante neste mês" (na 3.3
+   sai "1 perguntas grátis restantes").
+
 ## Roteiro de aparelho, escrito ANTES do build
 
 **Item 2, o segundo pedido.** Num aparelho que já tinha o app como convidado,

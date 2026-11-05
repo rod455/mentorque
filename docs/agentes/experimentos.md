@@ -81,8 +81,7 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 ## Experimentos
 
 ## [compra-avulsa-por-momento] Pagar pelo problema ou pelas perguntas, sem mensalidade
-- Estado: PROPOSTO (formatos e preços aprovados pelo dono em 05/11/2026;
-  faltam o escopo do passe, a compra sem conta e o teto de uso justo)
+- Estado: PROPOSTO (tudo decidido pelo dono em 05/11/2026; falta construir)
 - Tipo: mudanca-direta (os dois formatos aparecem lado a lado na mesma folha,
   e a escolha da pessoa é a medida; não há sorteio, ver "Por que lado a lado")
 - Alvo no funil: o fundo do funil, que hoje é zero. Em 30 dias (lido no banco
@@ -153,12 +152,24 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   perguntas em 7 dias. O maior uso medido em 30 dias foi 6 perguntas por
   pessoa, então o risco é teórico, mas um teto de uso justo no servidor
   (proposta: 30 perguntas por dia) fecha a porta sem ninguém normal esbarrar.
-- **O que o dono ainda decide:** se o passe vale para um carro ou para a conta
-  (proposta: a conta, que é o que ninguém precisa entender); se a compra
-  avulsa exige conta (proposta: NÃO para o pacote, porque o portão da conta é
-  onde as tentativas de assinar morrem hoje: desde 12/10, três criaram a conta
-  em menos de um minuto e nenhuma chegou ao checkout); e o teto de uso justo
-  do passe.
+- **DECIDIDO PELO DONO EM 05/11/2026, na mesma conversa:** o passe vale para
+  a conta inteira (todos os carros), e não para um carro; a compra avulsa NÃO
+  exige conta (o direito fica com a conta quando há, e com o aparelho quando
+  não há); o teto de uso justo do passe é de 30 perguntas por dia.
+- **E UMA MUDANÇA JUNTO, que contamina a leitura e fica dita:** o Biela grátis
+  caiu de 3 para 1 pergunta por mês em 05/11, também decisão do dono ("para vê
+  se forçamos as pessoas a utilizarem"). Isso aumenta quem vê a oferta (em 30
+  dias, 74 das 162 pessoas que perguntaram fizeram mais de uma pergunta) e
+  também pode diminuir quem volta ao Biela. Por isso a leitura tem de olhar,
+  além das compras, as perguntas por semana antes e depois de 05/11: se elas
+  caírem muito mais do que as compras compensam, o corte foi caro.
+- **O MANUAL NUNCA ENTROU NA CONTA, e é um defeito, não uma decisão.** O código
+  consulta o manual do carro para todo mundo, gratuito inclusive, mas nenhuma
+  das 304 perguntas de 30 dias usou manual (`biela_perguntas.usou_manual`, e
+  nenhuma desde 14/09). A suspeita é a chave da Voyage ausente em produção; ver
+  o diário de 05/11. Até isso ser consertado, nem o passe nem o pacote entregam
+  "a resposta pelo manual do seu carro", e nenhum texto de venda pode prometer
+  isso.
 - **O que a Engenharia constrói** (nada disto existe hoje):
   - produtos de compra única na Play e na App Store, ligados no RevenueCat, e
     no Stripe para a web;

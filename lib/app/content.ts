@@ -1816,6 +1816,10 @@ export function getContent(locale: Locale) {
       // "recurso Premium" virou o que de fato acontece: as grátis acabaram.
       // Texto que diz uma janela e código que conta outra é reclamação certa.
       freeLeft: T("{n} perguntas grátis restantes neste mês", "{n} free questions left this month"),
+      // O singular existe desde 05/11/2026, quando o grátis passou a ser UMA
+      // pergunta: "1 perguntas grátis restantes" seria o primeiro texto que a
+      // pessoa lê no Biela.
+      freeLeftUm: T("1 pergunta grátis restante neste mês", "1 free question left this month"),
       freeOver: T("Suas perguntas grátis deste mês acabaram. No Premium a conversa com o Biela não tem limite.", "You've used your free questions this month. With Premium, chatting with Biela has no limit."),
       premiumCta: T("Conversar sem limites", "Chat without limits"),
       offlineNote: T("(Respondendo em modo básico, a IA completa com os manuais está sendo conectada.)", "(Answering in basic mode, the full AI with manuals is being connected.)"),
@@ -2214,7 +2218,7 @@ export function getContent(locale: Locale) {
       features: [
         { icon: "clock", label: T("Registrar serviços e abastecimentos", "Log services and fill-ups"), free: "check" },
         { icon: "calendar", label: T("Lembretes de revisão", "Service reminders"), free: "check" },
-        { icon: "spark", label: T("Perguntas ao Biela", "Questions to Biela"), free: "ltd", nota: T("3/mês", "3/mo") },
+        { icon: "spark", label: T("Perguntas ao Biela", "Questions to Biela"), free: "ltd", nota: T("1/mês", "1/mo") },
         { icon: "diagnose", label: T("Todas as causas de cada sintoma", "Every cause of each symptom"), free: "ltd" },
         { icon: "gauge", label: T("Custo por km e consumo", "Cost per km and consumption"), free: "lock" },
         { icon: "gauge", label: T("Saúde por sistema", "Per-system health"), free: "ltd" },

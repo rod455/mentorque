@@ -38,11 +38,26 @@ export const EMBEDDING = {
   dimensoes: 1024,
 } as const;
 
+/** Para o aviso de chave ausente sair uma vez por instância, e não por pergunta. */
+let avisouSemChave = false;
+
 export async function retrieveManualContext(query: string, car: CarCtx | null, matchCount = 6): Promise<string> {
   const voyageKey = process.env.VOYAGE_API_KEY;
   const supaUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!voyageKey || !supaUrl || !serviceKey) return "";
+  // SEM CHAVE TAMBÉM AVISA (05/11/2026). Este retorno calado é o suspeito de
+  // a Biela nunca ter usado manual nenhum: das 304 perguntas de 30 dias, zero
+  // com manual, e nenhum aviso de busca caída em `app_erros`, embora a busca
+  // no banco responda (testada em 05/11 com um trecho do Onix: 5 achados). O
+  // aviso sai uma vez por instância do servidor, não uma por pergunta.
+  if (!voyageKey) {
+    if (supaUrl && serviceKey && !avisouSemChave) {
+      avisouSemChave = true;
+      void avisarQueABuscaCaiu(new Error("VOYAGE_API_KEY ausente no ambiente: a Biela responde sem manual"), supaUrl, serviceKey);
+    }
+    return "";
+  }
+  if (!supaUrl || !serviceKey) return "";
   try {
     const embRes = await fetch(EMBEDDING.endpoint, {
       method: "POST",
@@ -66,7 +81,10 @@ export async function retrieveManualContext(query: string, car: CarCtx | null, m
       f_model: car?.model ?? null,
       f_year: car?.year ?? null,
     });
-    if (error || !Array.isArray(data) || data.length === 0) return "";
+    // Erro do banco é falha e avisa; zero trechos é só um carro sem manual na
+    // base, e não avisa.
+    if (error) throw new Error(`match_manual_chunks: ${error.message}`);
+    if (!Array.isArray(data) || data.length === 0) return "";
     // CADA TRECHO VAI ETIQUETADO COM O MANUAL DE ONDE SAIU.
     //
     // POR QUE (06/09/2026). O ano NÃO filtra a busca, só ordena por

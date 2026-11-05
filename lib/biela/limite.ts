@@ -34,7 +34,14 @@ export { mesDe };
 // bateram no limite de 5; com 3, seriam 25. É o limite com mais gente batendo
 // e o único que muda sem versão nova, porque quem conta é o servidor. Proposta
 // em docs/agentes/propostas/o-que-sai-do-gratis.md.
-export const LIMITE_GRATIS_POR_MES = 3;
+//
+// DE 3 PARA 1 EM 05/11/2026, decisão do dono: "vamos colocar somente 1
+// pergunta para o biela no free também, para vê se forçamos as pessoas a
+// utilizarem". Junto com a compra avulsa (`compra-avulsa-por-momento` no
+// caderno): a segunda pergunta do mês passa a encontrar a oferta do pacote e
+// do passe. Em 30 dias até 05/11, 162 pessoas perguntaram e 88 perguntaram uma
+// vez só; com 1, as outras 74 teriam batido no limite.
+export const LIMITE_GRATIS_POR_MES = 1;
 
 export function podePerguntar(feitasNoMes: number, premium: boolean): boolean {
   if (premium) return true;

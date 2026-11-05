@@ -3,6 +3,44 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-05 · Engenharia: o Biela grátis vai a 1 pergunta, e o manual do carro nunca foi usado
+
+- **Decisões do dono de hoje, todas registradas no caderno**
+  (`compra-avulsa-por-momento`): passe para a conta inteira, compra avulsa sem
+  exigir conta, teto de uso justo de 30 perguntas por dia no passe, e o Biela
+  grátis de 3 para **1 pergunta por mês**.
+- **O limite mudou no servidor** (`lib/biela/limite.ts`), então vale para
+  todas as versões assim que o deploy sair. Os textos com o número mudaram na
+  LP e na tabela de planos. O "{n} perguntas grátis restantes" ganhou o
+  singular no app (vai no binário, 3.4; até lá, a 3.3 mostra "1 perguntas"), e
+  o e-mail de convite Premium também ("No grátis é 1 pergunta por mês"). A
+  tabela de planos dentro do app dizia "3/mês" e a `conferir:gratis` pegou;
+  ela também vai no binário, então a 3.3 segue dizendo "3/mês" até a 3.4.
+  Item 3 na lista da 3.4.
+- **ACHADO: o manual do carro nunca chegou a uma resposta do Biela.** O dono
+  pediu para liberar o manual no gratuito, e ele já era liberado no código:
+  `retrieveManualContext` roda para todo mundo. Mas `usou_manual` é falso nas
+  304 perguntas de 30 dias e em todas desde 14/09, inclusive de carros que
+  estão na base (HB20S 2022, Strada 2020, nos votos). São 115 manuais e 35.717
+  trechos, todos com vetor.
+  - Testado no banco às 11h40 UTC: `match_manual_chunks` com o vetor de um
+    trecho do Onix devolve 5 trechos. A busca funciona.
+  - `app_erros` não tem NENHUM aviso de busca caída, e o código grava esse
+    aviso quando a chamada à Voyage falha.
+  - Sobra o caminho que voltava calado: sem `VOYAGE_API_KEY` no ambiente, a
+    função devolvia vazio sem avisar. **Hipótese, não provada**: a chave foi
+    usada na ingestão (máquina local) e nunca posta na Vercel. Não consegui ler
+    as variáveis da Vercel (403). O erro do banco também voltava calado, e é a
+    outra hipótese.
+  - Conserto de diagnóstico: os dois caminhos passam a avisar em `app_erros`
+    (sem chave, uma vez por instância; erro do banco, com o motivo). Carro sem
+    manual na base continua sem aviso. A `conferir:embedding` roda a função de
+    verdade com `fetch` de mentira; três plantios mordidos.
+  - O teste que separa as duas hipóteses: a primeira pergunta ao Biela depois
+    do deploy grava um aviso com "VOYAGE_API_KEY ausente" ou com
+    "match_manual_chunks". Se gravar o primeiro, o conserto é pôr a chave na
+    Vercel (clique do dono, e a chave é dele).
+
 ## 2026-11-05 · Engenharia: quem bate no limite do Biela e do orçamento passa a ser contado
 
 - Pré-requisito da proposta `compra-avulsa-por-momento`: a oferta aparece na

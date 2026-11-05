@@ -161,6 +161,70 @@ console.log("Embedding: quem grava e quem procura falam a mesma língua?");
   );
 }
 
+// ── A BUSCA QUE VOLTA VAZIA DIZ POR QUÊ (05/11/2026) ────────────────────────
+//
+// Das 304 perguntas de 30 dias, nenhuma usou manual, e `app_erros` não tinha
+// um único aviso da busca: o caminho "sem chave" voltava calado. Aqui a função
+// roda de verdade, com o `fetch` de mentira (o cliente do Supabase usa o
+// global), e o que se cobra é o aviso que chega na tabela.
+{
+  const { retrieveManualContext } = await import("../lib/rag.ts");
+  const chamadas: { url: string; corpo: string }[] = [];
+  let respostaDoRpc: () => Response = () => new Response("[]", { status: 200, headers: { "content-type": "application/json" } });
+  const fetchOriginal = globalThis.fetch;
+  globalThis.fetch = (async (entrada: RequestInfo | URL, init?: RequestInit) => {
+    const url = String(entrada instanceof Request ? entrada.url : entrada);
+    chamadas.push({ url, corpo: typeof init?.body === "string" ? init.body : "" });
+    if (url.includes("voyageai.com")) {
+      return new Response(JSON.stringify({ data: [{ embedding: new Array(1024).fill(0.01) }] }), { status: 200, headers: { "content-type": "application/json" } });
+    }
+    if (url.includes("/rpc/match_manual_chunks")) return respostaDoRpc();
+    return new Response("[]", { status: 201, headers: { "content-type": "application/json" } });
+  }) as typeof fetch;
+  const avisos = () => chamadas.filter((c) => c.url.includes("/app_erros"));
+  const esperar = () => new Promise((r) => setTimeout(r, 50));
+  const envAntes = { ...process.env };
+  const avisoOriginal = console.warn;
+  console.warn = () => undefined;
+  try {
+    process.env.NEXT_PUBLIC_SUPABASE_URL = "https://falso.supabase.co";
+    process.env.SUPABASE_SERVICE_ROLE_KEY = "falso";
+    delete process.env.VOYAGE_API_KEY;
+    const r1 = await retrieveManualContext("barulho ao frear", { make: "Chevrolet", model: "Onix", year: 2019 });
+    await retrieveManualContext("outra pergunta", { make: "Chevrolet", model: "Onix", year: 2019 });
+    await esperar();
+    conferir("sem a chave da Voyage, a Biela segue sem manual (vazio, não erro)", r1 === "");
+    conferir(
+      "e a falta da chave AVISA em app_erros, uma vez por instância",
+      avisos().length === 1 && /VOYAGE_API_KEY ausente/.test(avisos()[0]?.corpo ?? ""),
+      `${avisos().length} aviso(s): ${avisos().map((a) => a.corpo).join(" | ").slice(0, 200)}`,
+    );
+
+    chamadas.length = 0;
+    process.env.VOYAGE_API_KEY = "chave-de-mentira";
+    respostaDoRpc = () => new Response(JSON.stringify({ message: "function does not exist", code: "42883" }), { status: 404, headers: { "content-type": "application/json" } });
+    const r2 = await retrieveManualContext("barulho ao frear", { make: "Chevrolet", model: "Onix", year: 2019 });
+    await esperar();
+    conferir("erro do banco também volta vazio", r2 === "");
+    conferir(
+      "e AVISA com o motivo do banco",
+      avisos().length === 1 && /match_manual_chunks/.test(avisos()[0]?.corpo ?? ""),
+      `${avisos().length} aviso(s)`,
+    );
+
+    chamadas.length = 0;
+    respostaDoRpc = () => new Response("[]", { status: 200, headers: { "content-type": "application/json" } });
+    await retrieveManualContext("barulho ao frear", { make: "Gurgel", model: "BR-800", year: 1990 });
+    await esperar();
+    conferir("carro sem manual na base NÃO avisa (não é defeito)", avisos().length === 0, `${avisos().length} aviso(s)`);
+  } finally {
+    globalThis.fetch = fetchOriginal;
+    console.warn = avisoOriginal;
+    for (const k of Object.keys(process.env)) if (!(k in envAntes)) delete process.env[k];
+    Object.assign(process.env, envAntes);
+  }
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) do embedding reprovaram.`);
   process.exit(1);
