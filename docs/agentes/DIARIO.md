@@ -42,8 +42,14 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   dias mais velha só porque o pedido parava em hoje menos 4. A queda de 21 a
   31/10 foi a Play atrasando de verdade (frescura em 19/10 lida em 28/10), mas
   o atraso do dia a dia era o nosso pedido. Vale para quem leu "a API atrasa".
-- O que ainda não rodou: o nó novo do retrato, que roda às 06h UTC de 05/11.
-  Conferência agendada para 06h20.
+- **CONFERIDO EM 05/11 ÀS 09h10 UTC, nas execuções do n8n e no arquivo:** o
+  coletor das 08h30 UTC (execução 9555) e o retrato das 09h UTC (execução
+  9572) saíram `success`, e o `docs/dados/retrato.md` de 05/11 traz a frase do
+  `vitalsLegivel` nas duas linhas do Play, com o dado mais novo em 03/11.
+- **CORREÇÃO DE UMA FRASE MINHA ACIMA:** escrevi "05h30 (coletor) e 06h
+  (retrato)" como se fosse UTC, e agendei a conferência para 06h20 UTC. Os
+  gatilhos do n8n estão no fuso de Brasília: 05h30 BRT é 08h30 UTC, e 06h BRT é
+  09h UTC. A conferência chegou três horas antes de haver o que conferir.
 
 ## 2026-11-04 · Engenharia: retorno às cinco rodadas da semana, na sessão com o dono
 
