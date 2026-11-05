@@ -81,8 +81,8 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 ## Experimentos
 
 ## [compra-avulsa-por-momento] Pagar pelo problema ou pelas perguntas, sem mensalidade
-- Estado: PROPOSTO (os dois formatos aprovados pelo dono em 05/11/2026; preço,
-  embalagem e cobrança aguardam o dono)
+- Estado: PROPOSTO (formatos e preços aprovados pelo dono em 05/11/2026;
+  faltam o escopo do passe, a compra sem conta e o teto de uso justo)
 - Tipo: mudanca-direta (os dois formatos aparecem lado a lado na mesma folha,
   e a escolha da pessoa é a medida; não há sorteio, ver "Por que lado a lado")
 - Alvo no funil: o fundo do funil, que hoje é zero. Em 30 dias (lido no banco
@@ -133,13 +133,32 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   (b) compras em um formato e zero no outro: o que vendeu fica, o outro sai;
   (c) compras nos dois: ficam os dois, e o próximo teste é de preço.
   Volume pequeno vai dar INCONCLUSIVO, e isso será dito assim.
-- **O que o dono decide antes de construir:** o preço de cada formato; o
-  tamanho do pacote (quantas perguntas); a duração do passe (7 dias é a
-  proposta); e se o passe vale para um carro ou para a conta. Faixas para
-  ajudar a decidir, não decididas: passe entre R$ 9,90 e R$ 19,90; pacote
-  entre R$ 4,90 e R$ 9,90. O custo de cada pergunta ao Biela (a chamada à IA)
-  precisa ser medido antes de fechar o preço do pacote, para ele não vender
-  pergunta abaixo do custo.
+- **PREÇOS DECIDIDOS PELO DONO EM 05/11/2026:** passe do problema **R$ 9,90
+  por 7 dias**; pacote de perguntas em dois tamanhos, **2 perguntas por R$
+  1,90** e **10 perguntas por R$ 4,90**. A folha tem então três compras
+  avulsas e o Premium; os dois pacotes entram como um cartão só, com os dois
+  tamanhos, para a escolha continuar sendo entre FORMATOS.
+- **Custo por pergunta, estimado e não medido** (05/11): o Biela roda no
+  `claude-sonnet-5` (padrão do código e do `.env.example`; a variável de
+  produção não pôde ser lida, a listagem da Vercel respondeu 403), a US$ 2 por
+  milhão de tokens de entrada e US$ 10 por milhão de saída (tabela da
+  Anthropic). Entrada entre uns 700 tokens (só a instrução) e uns 3.000 (com
+  três turnos de conversa), saída de até 600: **de US$ 0,004 a US$ 0,012 por
+  pergunta**, perto de R$ 0,02 a R$ 0,07 com o dólar entre R$ 5,50 e R$ 6,00
+  (câmbio suposto, não lido). Contra a receita líquida depois da taxa da loja
+  (15% ou 30%, não conferi em qual programa a conta está): o pacote de 2 deixa
+  de R$ 1,33 a R$ 1,61 por até R$ 0,14 de custo; o de 10, de R$ 3,43 a R$ 4,16
+  por até R$ 0,70. **O único formato com risco de custo é o passe**, porque é
+  sem limite: com o custo do pior caso, ele empata em torno de 100 a 120
+  perguntas em 7 dias. O maior uso medido em 30 dias foi 6 perguntas por
+  pessoa, então o risco é teórico, mas um teto de uso justo no servidor
+  (proposta: 30 perguntas por dia) fecha a porta sem ninguém normal esbarrar.
+- **O que o dono ainda decide:** se o passe vale para um carro ou para a conta
+  (proposta: a conta, que é o que ninguém precisa entender); se a compra
+  avulsa exige conta (proposta: NÃO para o pacote, porque o portão da conta é
+  onde as tentativas de assinar morrem hoje: desde 12/10, três criaram a conta
+  em menos de um minuto e nenhuma chegou ao checkout); e o teto de uso justo
+  do passe.
 - **O que a Engenharia constrói** (nada disto existe hoje):
   - produtos de compra única na Play e na App Store, ligados no RevenueCat, e
     no Stripe para a web;
