@@ -114,7 +114,7 @@ conferir("existe a versão em inglês", /ONLY a JSON object/.test(promptDaAnalis
   // negação, os dois argumentos que decidem, e o 429 logo adiante.
   conferir(
     "a rota APLICA o limite (não só menciona) antes de chamar o modelo",
-    /if \(!podeAnalisar\(feitas, premium\)\)[\s\S]{0,260}status: 429/.test(rota) &&
+    /if \(!podeAnalisar\(feitas, premium\)\)[\s\S]{0,480}status: 429/.test(rota) &&
       rota.indexOf("podeAnalisar(") < rota.indexOf("api.anthropic.com"),
     "mencionar a função sem usá-la deixa o gratuito ilimitado, e a conta aparece na fatura",
   );

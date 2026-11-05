@@ -3,6 +3,28 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-05 · Engenharia: quem bate no limite do Biela e do orçamento passa a ser contado
+
+- Pré-requisito da proposta `compra-avulsa-por-momento`: a oferta aparece na
+  recusa do limite, e a recusa não gravava nada. Agora as rotas `/api/biela` e
+  `/api/orcamento` gravam uma linha em `limites_atingidos` (onde, mês, quem,
+  quantas já tinha feito, plataforma, versão) ANTES de responder 429. Sem texto
+  da pergunta e sem foto.
+- **Vale desde o deploy para todas as versões do app**, porque quem grava é o
+  servidor. Não precisa de binário.
+- Tabela própria e não evento do funil: evento novo exige mudar a lista em
+  quatro arquivos e no banco, e linha em `biela_perguntas` contaria contra o
+  limite da própria pessoa.
+- Migração aplicada no Supabase às 09h40 UTC. Para a Segurança: é uma tabela
+  com RLS ligada e sem política (só o servidor grava), então o contador
+  `rls_enabled_no_policy` sobe de 17 para 18 por causa dela.
+- `conferir:biela` ganhou a função exercitada com banco de mentira e o elo nas
+  duas rotas, dentro do ramo da recusa; quatro plantios mordidos. As janelas das
+  duas asserções antigas do 429 foram de 260 para 480 caracteres, porque a
+  linha nova fica entre o `if` e o `status: 429`.
+- O que não está provado: nenhuma recusa real passou pela rota nova ainda.
+  Leitura no banco depois das primeiras.
+
 ## 2026-11-05 · Engenharia: a proposta de cobrar pelo problema ou pelas perguntas, sem mensalidade
 
 - A pedido do dono, que aprovou testar os dois formatos ("vamos testar os 2

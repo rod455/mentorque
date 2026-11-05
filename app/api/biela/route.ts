@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { retrieveManualContext, type CarCtx as Car } from "@/lib/rag";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { LIMITE_GRATIS_POR_MES, mesDe, podePerguntar, restantes } from "@/lib/biela/limite";
+import { gravaLimiteAtingido } from "@/lib/limitesAtingidos";
 import { lerPergunta } from "@/lib/biela/perguntaLida";
 
 export const runtime = "nodejs";
@@ -223,6 +224,9 @@ export async function POST(request: Request) {
       const { count } = userId ? await q.eq("user_id", userId) : await q.eq("anon_id", anonId!);
       feitas = count ?? 0;
       if (!podePerguntar(feitas, premium)) {
+        // A recusa é contada (05/11/2026): é o denominador do teste da compra
+        // avulsa, que aparece justamente aqui. Ver lib/limitesAtingidos.ts.
+        await gravaLimiteAtingido(admin, { onde: "biela", mes, userId, anonId, feitas, plataforma: body.plataforma, versao: body.versao });
         return NextResponse.json(
           { ok: false, error: "limite", limite: LIMITE_GRATIS_POR_MES, feitas, restantes: 0 },
           { status: 429 },

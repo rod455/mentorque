@@ -79,7 +79,7 @@ console.log("Biela: o limite do gratuito, e quem o segura.");
   );
   conferir(
     "e recusa com 429 quando o mês acabou",
-    /if \(!podePerguntar\(feitas, premium\)\)[\s\S]{0,260}status: 429/.test(rota),
+    /if \(!podePerguntar\(feitas, premium\)\)[\s\S]{0,480}status: 429/.test(rota),
   );
   conferir(
     "quem não tem identidade nenhuma é recusado",
@@ -253,6 +253,61 @@ console.log("Biela: o limite do gratuito, e quem o segura.");
     "e completa a linha quando o pedido traz id",
     /body\.id/.test(rota) && /\.update\(campos\)\.eq\("id", id\)/.test(rota),
     "o pedido com id tem que virar update, não insert",
+  );
+}
+
+// ── quem bateu no limite é contado (05/11/2026) ─────────────────────────────
+//
+// É o denominador do teste da compra avulsa (`compra-avulsa-por-momento`): a
+// oferta aparece na recusa, e até aqui a recusa não gravava nada. Duas metades:
+// a função, exercitada com um banco de mentira (a linha certa, e nunca derruba
+// o 429 que a pessoa tem de receber); e o elo nas duas rotas, por texto, DENTRO
+// do ramo da recusa e antes do `return`. Por texto quer dizer que a chamada
+// está escrita no lugar certo, não que a rota roda: isso fica dito.
+{
+  const { gravaLimiteAtingido } = await import("../lib/limitesAtingidos.ts");
+  const linhas: Record<string, unknown>[] = [];
+  const falso = { from: () => ({ insert: async (l: Record<string, unknown>) => { linhas.push(l); return { error: null }; } }) };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await gravaLimiteAtingido(falso as any, { onde: "biela", mes: "2026-11", userId: "u1", anonId: "a1", feitas: 3, plataforma: "android", versao: "3.3.0" });
+  const l = linhas[0] ?? {};
+  conferir(
+    "a recusa vira uma linha com onde, mês e quantas já tinha feito",
+    linhas.length === 1 && l.onde === "biela" && l.mes === "2026-11" && l.feitas === 3,
+    JSON.stringify(linhas),
+  );
+  conferir(
+    "com conta, a linha leva a conta e não o aparelho (a mesma regra do limite)",
+    l.user_id === "u1" && l.anon_id === null,
+    JSON.stringify(l),
+  );
+  const quebrado = { from: () => ({ insert: async () => { throw new Error("banco fora"); } }) };
+  let lancou = false;
+  const erroOriginal = console.error;
+  console.error = () => undefined;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await gravaLimiteAtingido(quebrado as any, { onde: "orcamento", mes: "2026-11", userId: null, anonId: "a1", feitas: 2 });
+  } catch {
+    lancou = true;
+  } finally {
+    console.error = erroOriginal;
+  }
+  conferir("banco fora NÃO derruba a recusa", !lancou, "a pessoa tem de receber o 429, não um 500");
+
+  const ramo = (rota: string, guarda: string) => {
+    const i = rota.indexOf(guarda);
+    if (i < 0) return "";
+    const fim = rota.indexOf("return NextResponse.json(", i);
+    return fim < 0 ? "" : rota.slice(i, fim);
+  };
+  conferir(
+    "a rota do Biela grava a recusa dentro do ramo do limite, antes de responder",
+    /gravaLimiteAtingido\(admin, \{ onde: "biela"/.test(ramo(leia("app/api/biela/route.ts"), "if (!podePerguntar(feitas, premium))")),
+  );
+  conferir(
+    "e a do orçamento também",
+    /gravaLimiteAtingido\(admin, \{ onde: "orcamento"/.test(ramo(leia("app/api/orcamento/route.ts"), "if (!podeAnalisar(feitas, premium))")),
   );
 }
 

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
+import { gravaLimiteAtingido } from "@/lib/limitesAtingidos";
 import {
   compararComFaixas,
   extrairJson,
@@ -86,6 +87,8 @@ export async function POST(req: Request) {
     const { count } = userId ? await q.eq("user_id", userId) : await q.eq("anon_id", anonId!);
     feitas = count ?? 0;
     if (!podeAnalisar(feitas, premium)) {
+      // A recusa é contada (05/11/2026), como a do Biela. Ver lib/limitesAtingidos.ts.
+      await gravaLimiteAtingido(admin, { onde: "orcamento", mes, userId, anonId, feitas, plataforma: b.plataforma, versao: b.versao });
       return NextResponse.json({ error: "limite", limite: LIMITE_GRATIS_POR_MES, feitas, restantes: 0 }, { status: 429 });
     }
   }
