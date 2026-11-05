@@ -40,6 +40,23 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
     do deploy grava um aviso com "VOYAGE_API_KEY ausente" ou com
     "match_manual_chunks". Se gravar o primeiro, o conserto é pôr a chave na
     Vercel (clique do dono, e a chave é dele).
+  - **RESOLVIDO O PORQUÊ, às 10h03 UTC.** Com o deploy do 1303fc7 em READY,
+    uma pergunta de teste à rota de produção (fluxo temporário do n8n
+    `001QX8zf32cOeDhX`, execução 9576; Onix 2019, aparelho
+    `teste-engenharia-manual-0511`, que deixa UMA linha de teste em
+    `biela_perguntas` com plataforma `teste`) gravou em `app_erros`: "busca de
+    manual caiu: VOYAGE_API_KEY ausente no ambiente". A outra hipótese caiu.
+    E o painel da Voyage, que o dono mandou às 07h01 de Brasília, fecha o
+    quadro por outro instrumento: a chave "Biela" está ativa, com US$ 5 de
+    saldo, e o ÚLTIMO USO foi em 06/09, o dia da ingestão dos manuais.
+  - O mesmo teste provou o limite de 1 em produção: a primeira pergunta passou
+    e a resposta trouxe `restantes: 0`.
+  - **E ACHOU UM DEFEITO PIOR:** sem manual nenhum, a resposta dizia "conforme o
+    manual do Onix 2019". O prompt agora proíbe citar o manual quando nenhum
+    trecho veio, nas duas línguas (`conferir:biela`, plantio mordido). Que o
+    modelo obedeça se confere lendo respostas, não aqui.
+  - Falta o clique do dono: pôr a `VOYAGE_API_KEY` nas variáveis da Vercel e
+    refazer o deploy. Depois, o mesmo fluxo temporário confere, e é arquivado.
 
 ## 2026-11-05 · Engenharia: quem bate no limite do Biela e do orçamento passa a ser contado
 

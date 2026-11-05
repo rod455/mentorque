@@ -273,6 +273,15 @@ export async function POST(request: Request) {
           `Cada trecho vem etiquetado com o manual de onde saiu. Se o ano do manual for diferente do ano do carro da pessoa, DIGA isso numa frase curta (ex.: "pelo manual do ${car?.model ?? "modelo"} 2017, que é o mais próximo que eu tenho") e avise que detalhes podem mudar entre os anos.\n${manual}`
         : `\n\nManual excerpts for this car (use as the primary source; if they don't cover it, say what's general).\n` +
           `Each excerpt is labelled with the manual it came from. If the manual's year differs from the car's year, SAY so in a short sentence and warn that details may differ between years.\n${manual}`);
+    } else {
+      // SEM TRECHO, SEM "CONFORME O MANUAL" (05/11/2026). Num teste em
+      // produção, sem manual nenhum na mão, a Biela respondeu "conforme o
+      // manual do Onix 2019". É citar fonte que ela não leu, e a pessoa
+      // confia mais exatamente por causa da citação. Sem trecho, ela fala do
+      // que é comum para o motor e manda conferir o manual.
+      system += locale === "pt"
+        ? `\n\nNesta pergunta você NÃO recebeu trecho de manual. NUNCA escreva "conforme o manual", "segundo o manual" ou "pelo manual" do carro: você não leu o manual. Diga o que é usual para esse tipo de motor ou carro e recomende conferir no manual do proprietário.`
+        : `\n\nYou did NOT receive any manual excerpt for this question. NEVER write "according to the manual", "per the manual" or similar: you have not read it. Say what is usual for this kind of engine or car and recommend checking the owner's manual.`;
     }
 
     const res = await fetch("https://api.anthropic.com/v1/messages", {

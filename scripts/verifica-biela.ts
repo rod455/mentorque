@@ -311,6 +311,23 @@ console.log("Biela: o limite do gratuito, e quem o segura.");
   );
 }
 
+// ── sem trecho de manual, a Biela não cita o manual (05/11/2026) ─────────────
+//
+// Num teste em produção, sem manual, a resposta dizia "conforme o manual do
+// Onix 2019". Por texto: o ramo SEM manual existe e proíbe a citação nas duas
+// línguas. Que o modelo obedeça não se prova aqui; prova-se lendo respostas.
+{
+  const rota = leia("app/api/biela/route.ts");
+  const i = rota.indexOf("if (manual) {");
+  const ramo = i < 0 ? "" : rota.slice(i, rota.indexOf("const res = await fetch", i));
+  conferir(
+    "sem trecho de manual, o prompt proíbe dizer 'conforme o manual'",
+    /\} else \{[\s\S]*NÃO recebeu trecho de manual[\s\S]*NUNCA escreva "conforme o manual"/.test(ramo) &&
+      /did NOT receive any manual excerpt/.test(ramo),
+    "sem isto a Biela cita uma fonte que não leu, e a citação é o que faz a pessoa confiar",
+  );
+}
+
 if (falhas) {
   console.error(`\n${falhas} conferência(s) da Biela reprovaram.`);
   process.exit(1);
