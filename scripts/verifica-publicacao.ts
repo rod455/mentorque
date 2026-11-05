@@ -217,6 +217,16 @@ if (comando) {
     conferir("e o mesmo push, depois de publicado, um doc a mais PULA (sai 0)", (commit("so doc depois", { "docs/a.md": "5" }), decisao()) === 0);
     conferir("sem o commit do último deploy, BUILDA (sai 1)", decisao(null) === 1, "na duvida, publicar e o erro barato");
     conferir("com um commit que o clone não tem, BUILDA (sai 1)", decisao("0123456789abcdef0123456789abcdef01234567") === 1, "clone raso sem o ultimo deploy");
+    // O caso de 05/11/2026: o dono pôs a VOYAGE_API_KEY na Vercel e mandou
+    // refazer o deploy. A Vercel passa o MESMO commit como o anterior, o diff
+    // dá vazio, e a regra cancelava: redeploy para pegar variável nova era
+    // sempre cancelado, e a Biela seguia sem manual. Mesmo commit é redeploy
+    // pedido por alguém, e redeploy pedido BUILDA.
+    conferir(
+      "redeploy do MESMO commit BUILDA (sai 1)",
+      decisao(git("rev-parse HEAD").trim()) === 1,
+      "o redeploy existe para pegar variavel nova; pular ele deixa a variavel sem efeito",
+    );
   } finally {
     rmSync(repo, { recursive: true, force: true });
   }
@@ -227,5 +237,5 @@ if (falhas) {
   process.exit(1);
 }
 console.log(
-  `Publicação: o build é pulado para ${excluidas.map((p) => `${p}/`).join(", ")}, e só para elas; executado em 11 casos de mentira, inclusive o push de código seguido de doc, com o código de saída certo em todos.`,
+  `Publicação: o build é pulado para ${excluidas.map((p) => `${p}/`).join(", ")}, e só para elas; executado em 12 casos de mentira, inclusive o push de código seguido de doc e o redeploy do mesmo commit, com o código de saída certo em todos.`,
 );
