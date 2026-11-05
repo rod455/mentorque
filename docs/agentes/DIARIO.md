@@ -55,8 +55,27 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
     manual do Onix 2019". O prompt agora proíbe citar o manual quando nenhum
     trecho veio, nas duas línguas (`conferir:biela`, plantio mordido). Que o
     modelo obedeça se confere lendo respostas, não aqui.
-  - Falta o clique do dono: pôr a `VOYAGE_API_KEY` nas variáveis da Vercel e
-    refazer o deploy. Depois, o mesmo fluxo temporário confere, e é arquivado.
+  - **RESOLVIDO ÀS 10h48 UTC, conferido em dois instrumentos.** O dono pôs a
+    `VOYAGE_API_KEY` na Vercel e pediu o redeploy, que a Vercel CANCELOU: o
+    nosso próprio comando de pular build (o `ignoreCommand` do `vercel.json`)
+    comparava o commit com o do último deploy, e num redeploy os dois são o
+    mesmo, então o diff dava vazio e a regra concluía "nada mudou". Redeploy
+    para pegar variável nova era sempre cancelado. Consertado (mesmo commit
+    agora builda, 13º caso da `conferir:publicacao`), mas o primeiro conserto
+    passou de 256 caracteres e a Vercel recusou o `vercel.json` (deploy ERROR
+    sem log; a produção não mudou). Reescrito em 222 caracteres, e o limite
+    virou conferência. Com o deploy do 6b220f8 em READY, a pergunta de teste
+    (execução 9581, aparelho `teste-engenharia-manual-0511c`) voltou com
+    `usedManual: true` e `usou_manual = true` em `biela_perguntas`, e nenhum
+    aviso novo em `app_erros`. O fluxo temporário foi arquivado.
+  - Ficam em `biela_perguntas` três linhas de teste (aparelhos
+    `teste-engenharia-manual-0511`, `0511b`, `0511c`, plataforma `teste`).
+    Apagar é decisão do dono; quem ler perguntas por semana deve tirar a
+    plataforma `teste`.
+  - O que isto NÃO prova: só um carro (Onix 2019) foi testado. Quantas
+    respostas reais passam a usar manual se lê em `usou_manual` nos próximos
+    dias; o limite natural é a base de 115 manuais, que não cobre todos os
+    carros (Uno 2010, C3 2009 e Sentra 2012, dos votos, não estão lá).
 
 ## 2026-11-05 · Engenharia: quem bate no limite do Biela e do orçamento passa a ser contado
 
