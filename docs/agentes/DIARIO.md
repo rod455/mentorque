@@ -3,6 +3,23 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-05 · Engenharia: a proposta de cobrar pelo problema ou pelas perguntas, sem mensalidade
+
+- A pedido do dono, que aprovou testar os dois formatos ("vamos testar os 2
+  formatos"). Escrita no caderno como `compra-avulsa-por-momento`, PROPOSTO:
+  o passe do problema (7 dias de Biela e orçamento sem limite) e o pacote de
+  perguntas, lado a lado na mesma folha, com o Premium como terceira opção.
+- A tese sai do banco de 05/11: uso por episódio (506 aparelhos na semana, 33
+  em 3 de 4 semanas), cerca de 300 paywalls e nenhuma compra em 30 dias, 40
+  pessoas no teto do Biela grátis.
+- Lado a lado e não sorteio, porque 40 por mês divididos em dois braços não
+  separam nada. A regra de decisão está escrita antes da leitura.
+- Aguardam o dono: preço de cada formato, tamanho do pacote, duração do passe,
+  e se o passe vale por carro ou por conta. Pré-requisito da Engenharia:
+  contar quem bate no limite do Biela, que hoje não é gravado.
+- Vai no binário (compra pela loja), então o teste alcança o Android com a
+  versão que levar a compra.
+
 ## 2026-11-04 · Engenharia: o coletor de crash da Play pergunta a frescura antes, e o retrato lê a frase pronta
 
 - Fecha a linha do QA de 28/10 (três itens), que estava comigo desde 29/10.

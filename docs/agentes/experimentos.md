@@ -80,6 +80,88 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 
 ## Experimentos
 
+## [compra-avulsa-por-momento] Pagar pelo problema ou pelas perguntas, sem mensalidade
+- Estado: PROPOSTO (os dois formatos aprovados pelo dono em 05/11/2026; preço,
+  embalagem e cobrança aguardam o dono)
+- Tipo: mudanca-direta (os dois formatos aparecem lado a lado na mesma folha,
+  e a escolha da pessoa é a medida; não há sorteio, ver "Por que lado a lado")
+- Alvo no funil: o fundo do funil, que hoje é zero. Em 30 dias (lido no banco
+  em 05/11): o paywall apareceu para cerca de 300 aparelhos, 5 tocaram em
+  assinar, 6 abriram o checkout e ninguém pagou. A única assinatura nova foi um
+  teste de 7 dias, cancelado 31 minutos depois de começar.
+- Tese BeSci: **o preço tem que ter a forma do uso.** O uso desta base é por
+  EPISÓDIO: 506 aparelhos abriram o app na semana e só 33 aparecem em 3 de 4
+  semanas. A pessoa chega quando o carro faz um barulho ou a revisão vence, e
+  some quando resolve. A assinatura mensal cobra todo mês por uma necessidade
+  que aparece de vez em quando, e por isso parece cara mesmo quando o valor
+  por uso seria baixo (contabilidade mental: a pessoa compara o preço com o
+  mês, não com o problema). Os dois formatos cobram NO MOMENTO da dor e pelo
+  tamanho dela:
+  - **Formato 1, o passe do problema.** Um pagamento único que libera por 7
+    dias o Biela sem limite e a análise de orçamento sem limite, para resolver
+    UM problema. A promessa é concreta e tem prazo: "entenda o problema e não
+    pague a oficina no escuro". Onde aparece: no card da tela do sintoma (228
+    aparelhos consultaram sintoma em 30 dias) e na folha do limite do Biela.
+  - **Formato 2, o pacote de perguntas.** Um pagamento único por um punhado de
+    perguntas ao Biela, sem prazo curto. É o menor degrau possível acima do
+    grátis. Onde aparece: na folha do limite do Biela, ao lado do formato 1.
+  - **O que fica igual:** o Premium mensal e o anual continuam no paywall, como
+    terceira opção da mesma folha. Nada é retirado de quem já assina.
+- **Por que lado a lado, e não sorteio.** Quem bate no limite do Biela são
+  cerca de 40 pessoas por mês (40 chegaram ao teto de 3 perguntas grátis em
+  30 dias, `biela_perguntas`). Dividir isso em dois braços dá 20 por braço, e
+  nenhum sorteio desse tamanho separa uma taxa da outra. Mostrando os dois na
+  mesma folha, cada pessoa que compra diz qual dos dois quis, e a amostra
+  inteira responde a mesma pergunta. O custo: a escolha de um depende da
+  presença do outro (efeito de cardápio), e isso fica dito no veredito.
+- **Pré-requisito, antes de qualquer número:** contar quem bate no limite do
+  Biela. Hoje a rota recusa a quarta pergunta sem gravar nada, e o "cerca de
+  40" acima é um piso tirado de quem chegou a 3, não de quem tentou a 4ª. Sem
+  essa contagem não existe denominador para o formato 2.
+- Métrica (nível 2, conversão observada; não há braço comparável):
+  - exposição: aparelhos que viram a folha com os dois formatos, por porta
+    (limite do Biela, tela do sintoma);
+  - escolha: quantos tocaram em cada formato e quantos concluíram a compra;
+  - dinheiro: receita total dos dois em 4 semanas, contra o zero de hoje;
+  - e o efeito no Premium: se as assinaturas caem a zero DEPOIS de existir a
+    opção avulsa (hoje já são zero, então isto só serve se alguém assinar).
+  - Duração: 4 semanas contadas de quando a versão com a compra passar de
+    metade dos aparelhos ativos (régua de 17/10).
+- **Regra de decisão, escrita antes de ler:** com 4 semanas lidas,
+  (a) zero compras nos dois formatos com mais de 100 exposições: o problema
+  não é a forma do preço, e a conversa volta ao que o app oferece;
+  (b) compras em um formato e zero no outro: o que vendeu fica, o outro sai;
+  (c) compras nos dois: ficam os dois, e o próximo teste é de preço.
+  Volume pequeno vai dar INCONCLUSIVO, e isso será dito assim.
+- **O que o dono decide antes de construir:** o preço de cada formato; o
+  tamanho do pacote (quantas perguntas); a duração do passe (7 dias é a
+  proposta); e se o passe vale para um carro ou para a conta. Faixas para
+  ajudar a decidir, não decididas: passe entre R$ 9,90 e R$ 19,90; pacote
+  entre R$ 4,90 e R$ 9,90. O custo de cada pergunta ao Biela (a chamada à IA)
+  precisa ser medido antes de fechar o preço do pacote, para ele não vender
+  pergunta abaixo do custo.
+- **O que a Engenharia constrói** (nada disto existe hoje):
+  - produtos de compra única na Play e na App Store, ligados no RevenueCat, e
+    no Stripe para a web;
+  - o direito no servidor: `passe_ate` (data) e `creditos_biela` (contador),
+    gravados pelo webhook da compra e conferidos nas rotas do Biela e do
+    orçamento ANTES do limite do grátis;
+  - a folha com os três caminhos (passe, pacote, Premium) e os eventos de
+    exposição, toque e compra com o formato no `origem`;
+  - **vai no binário**: a compra pela loja é código do app, então o teste só
+    alcança o Android de verdade com a versão que levar isso (hoje, a 3.4).
+    Na web, onde estão 6 dos 504 aparelhos ativos, começa antes e não mede
+    nada sozinho.
+- Aprovação: formatos aprovados pelo dono em 05/11/2026 ("vamos testar os 2
+  formatos"); preço e embalagem aguardando o dono
+- Início: (quando a versão com a compra for publicada) · Ler a partir de: 4
+  semanas depois de ela passar de metade dos aparelhos ativos
+- Antes (05/11/2026, banco): 0 assinaturas pagantes; 5 toques em assinar e 6
+  checkouts em 30 dias, nenhuma compra; 162 pessoas perguntaram ao Biela, 40
+  chegaram ao teto grátis; 228 aparelhos consultaram sintoma; 8 aparelhos
+  analisaram orçamento.
+- Veredito: (aberto)
+
 ## [a-conta-e-pedida-de-novo-a-quem-ja-tem-algo-a-perder] O convidado que disse "agora não" é perguntado uma segunda vez
 - Estado: ABERTO
 - Tipo: mudanca-direta
