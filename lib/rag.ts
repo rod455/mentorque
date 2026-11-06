@@ -42,6 +42,13 @@ export const EMBEDDING = {
 let avisouSemChave = false;
 
 export async function retrieveManualContext(query: string, car: CarCtx | null, matchCount = 6): Promise<string> {
+  // SEM MARCA, SEM BUSCA (06/11/2026). Sem carro, a consulta compara a
+  // pergunta com os 35.717 trechos de TODOS os manuais: medida no banco em
+  // 06/11, 20,8 segundos, e o banco cancela por tempo (aviso de 05/11 às 23h41,
+  // "statement timeout"). E mesmo quando terminasse, os trechos viriam do
+  // manual de qualquer marca, e a Biela citaria o manual de outro carro. Sem
+  // carro não há manual DO carro para consultar.
+  if (!car?.make) return "";
   const voyageKey = process.env.VOYAGE_API_KEY;
   const supaUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;

@@ -3,6 +3,32 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-06 · Engenharia: o primeiro dia do manual de volta, e a busca sem carro que levava 20 segundos
+
+- Conferência agendada de 05/11 (chegou às 10h09 UTC de 06/11), lida em
+  `biela_perguntas`, `funil_eventos`, `limites_atingidos` e `app_erros`.
+- **Volume:** 2 perguntas reais nas 23 horas depois do conserto do manual, e 2
+  nas 23 horas antes; o `perguntou_biela` do funil dá os mesmos 2 e 2. As
+  mudanças de 05/11 não derrubaram o uso: ele já estava baixo. As semanas de
+  85 perguntas são de outubro.
+- **Limite de 1:** nenhuma linha em `limites_atingidos`. Ninguém tentou a
+  segunda pergunta; com 2 perguntas no dia, zero recusa não diz nada ainda.
+- **Manual:** das 2, uma usou manual (01h20 UTC, Android 3.3.0). A outra, às
+  23h41 de 05/11, teve a busca cancelada pelo banco: "match_manual_chunks:
+  canceling statement due to statement timeout".
+- **A causa, medida com EXPLAIN ANALYZE no banco:** com marca e modelo, a busca
+  usa o índice e leva 0,25 s (Fiat Uno 2010, 136 trechos). SEM carro, ela varre
+  os 35.717 trechos e leva **20,8 s**. Não há como saber pela tabela se a
+  pergunta das 23h41 vinha sem carro (`biela_perguntas` não guarda o carro), então
+  isso é a hipótese que o tempo medido sustenta, não a causa provada daquela
+  pergunta.
+- **Conserto:** sem marca, `retrieveManualContext` não busca nada. Além do
+  tempo, a busca sem carro traria trechos do manual de qualquer marca, e a
+  Biela citaria o manual de outro carro. `conferir:embedding` cobra que nem a
+  Voyage nem o banco são chamados; plantio mordido. Não foi preciso índice
+  vetorial, que custaria perto do tamanho da coluna numa cota de 0,5 GB (o
+  banco está com 283 MB).
+
 ## 2026-11-05 · Engenharia: o Biela grátis vai a 1 pergunta, e o manual do carro nunca foi usado
 
 - **Decisões do dono de hoje, todas registradas no caderno**

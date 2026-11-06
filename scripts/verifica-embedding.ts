@@ -217,6 +217,19 @@ console.log("Embedding: quem grava e quem procura falam a mesma língua?");
     await retrieveManualContext("barulho ao frear", { make: "Gurgel", model: "BR-800", year: 1990 });
     await esperar();
     conferir("carro sem manual na base NÃO avisa (não é defeito)", avisos().length === 0, `${avisos().length} aviso(s)`);
+
+    // Sem carro, nem a Voyage nem o banco são chamados (06/11/2026): a busca
+    // sem marca varre os 35.717 trechos, levou 20,8 s medida no banco e o
+    // banco a cancelou por tempo.
+    chamadas.length = 0;
+    const r3 = await retrieveManualContext("barulho ao frear", null);
+    const r4 = await retrieveManualContext("barulho ao frear", { make: "", model: "Onix", year: 2019 });
+    await esperar();
+    conferir(
+      "sem carro (ou sem marca), não há busca nenhuma",
+      r3 === "" && r4 === "" && !chamadas.some((c) => c.url.includes("voyageai.com") || c.url.includes("/rpc/match_manual_chunks")),
+      chamadas.map((c) => c.url).join(" | ").slice(0, 200),
+    );
   } finally {
     globalThis.fetch = fetchOriginal;
     console.warn = avisoOriginal;
