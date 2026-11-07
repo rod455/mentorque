@@ -183,7 +183,26 @@ const PACOTES = {
   const op = readFileSync(new URL("../lib/operacao.ts", import.meta.url), "utf8");
   conferir("o retrato importa a escada", /from "\.\/aquisicao"/.test(op));
   conferir("e publica o campo", /aquisicao: \(\(\) => \{/.test(op), "sem o campo, a regra existe e ninguem le");
-  conferir("e publica as linhas prontas", /linhas: linhaDaEscada\(escada\)/.test(op));
+  // A ESCADA INTEIRA, E NÃO SÓ AS LINHAS (07/11/2026, rodada 7 do Guardião).
+  //
+  // A asserção era `/linhas: linhaDaEscada\(escada\)/`. Plantei no retrato
+  // `return { ...escada, recusas: [], linhas: linhaDaEscada(escada) };` e esta
+  // conferência ficou VERDE: as linhas continuavam publicadas e as três
+  // recusas saíam vazias. A seção 5 prova que `montaEscada` CARREGA as
+  // recusas, e esta seção provava que o retrato publica as LINHAS; ninguém
+  // provava que as recusas chegam a quem lê. E é a frase com que esta
+  // conferência se encerra: "as recusas viajam com o número".
+  //
+  // Então a asserção é a publicação inteira, com o espalhamento: qualquer
+  // campo reescrito na saída quebra isto. É conferência de TEXTO, e isso é
+  // dívida: mudar a formatação desta linha reprova sem defeito nenhum. O
+  // jeito certo seria chamar o retrato e ler o campo, e o retrato pede o
+  // mundo inteiro para rodar. Fica dito.
+  conferir(
+    "e publica a escada INTEIRA, sem reescrever campo na saída",
+    /return \{ \.\.\.escada, linhas: linhaDaEscada\(escada\) \};/.test(op),
+    "recusa esvaziada na saida deixa o numero viajar sem a regra que impede refazer a conta errada",
+  );
   conferir(
     "e monta a partir das fontes coletadas",
     /montaEscada\(pacotes\)/.test(op) && /pacotes\[f\] = \(porFonte\[f\] \?\? \[\]\)\[0\]\?\.dados/.test(op),
@@ -319,8 +338,29 @@ const PACOTES = {
   const rota = readFileSync(new URL("../app/api/metricas/route.ts", import.meta.url), "utf8");
   const sql = readFileSync(new URL("../supabase/metricas_diarias.sql", import.meta.url), "utf8");
 
-  const doCodigo = [...(rota.match(/const FONTES = new Set\(\[([\s\S]*?)\]\)/)?.[1] ?? "").matchAll(/"([a-z_]+)"/g)].map((m) => m[1]!);
-  const doBanco = [...(sql.match(/check \(fonte in \(([\s\S]*?)\)\)/)?.[1] ?? "").matchAll(/'([a-z_]+)'/g)].map((m) => m[1]!);
+  // FONTE CITADA EM COMENTÁRIO NÃO É FONTE ACEITA (07/11/2026, rodada 7).
+  //
+  // As duas listas moram dentro de trechos que têm comentário no meio, e os
+  // dois lados contavam o nome escrito no comentário como se fosse item da
+  // lista. Plantei, em cada lado, a forma com que gente de verdade tira uma
+  // fonte:
+  //
+  //     'app_store_downloads',
+  //     -- 'play_downloads' saiu em 07/11: o relatório vem do Cloud Storage.
+  //
+  // e esta conferência ficou VERDE das duas vezes. A frase que documenta a
+  // saída virava a prova de que a fonte continuava lá. E o estrago é o que o
+  // comentário acima desta seção descreve: tirada do banco, a rota aceita o
+  // pacote e o banco recusa, 500 `gravacao_falhou` todo dia em silêncio;
+  // tirada da rota, o coletor manda e a rota rejeita, e o dia fica sem linha.
+  // Esse "sem linha" é o degrau que depois vira zero na escada, que é a doença
+  // que esta conferência inteira existe para pegar.
+  //
+  // Comentário fora ANTES de extrair, nos dois lados.
+  const semComentarioJs = (s: string) => s.replace(/^[ \t]*\/\/.*$/gm, "").replace(/\/\*[\s\S]*?\*\//g, "");
+  const semComentarioSql = (s: string) => s.replace(/^[ \t]*--.*$/gm, "");
+  const doCodigo = [...(semComentarioJs(rota).match(/const FONTES = new Set\(\[([\s\S]*?)\]\)/)?.[1] ?? "").matchAll(/"([a-z_]+)"/g)].map((m) => m[1]!);
+  const doBanco = [...(semComentarioSql(sql).match(/check \(fonte in \(([\s\S]*?)\)\)/)?.[1] ?? "").matchAll(/'([a-z_]+)'/g)].map((m) => m[1]!);
 
   conferir("a lista de fontes existe no codigo", doCodigo.length >= 10, doCodigo.join(", "));
   conferir("e existe no arquivo de esquema", doBanco.length >= 10, doBanco.join(", "));

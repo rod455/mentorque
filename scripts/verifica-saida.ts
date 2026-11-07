@@ -179,8 +179,22 @@ console.log("Saída: o e-mail do cancelamento sai uma vez, pergunta direito, e a
 // ── 7. AS TRÊS TRAVAS DA ROTA DE DISPARO ───────────────────────────────────
 {
   const rota = semComentarios(readFileSync(new URL("../app/api/email/saida/route.ts", import.meta.url), "utf8"));
-  conferir("1ª trava: a chave dos dados", /chaveDadosOk\(req\)/.test(rota));
-  conferir("2ª trava: o disparar explícito", /body\?\.disparar !== true/.test(rota), "sem isto um GET de rastreador manda e-mail para gente de verdade");
+  // A GUARDA INTEIRA, E NÃO O TEXTO DA CONDIÇÃO (07/11/2026, rodada 7).
+  // O plantio foi na rota do cadastro, mas a forma frouxa era a mesma aqui, e
+  // medi: duas conferências escreviam as travas 1 e 2 como presença do nome
+  // (`conferir:cadastro` e esta), contra uma que já escrevia a guarda inteira
+  // (`conferir:email`). `if (false && !chaveDadosOk(req))` passava verde nas
+  // duas. Isto é rota que manda e-mail para a base, e e-mail não tem desfazer.
+  conferir(
+    "1ª trava: a chave dos dados, e a recusa que ela produz",
+    /if \(!chaveDadosOk\(req\)\) return negada\(\);/.test(rota),
+    "afirmar so o nome deixa passar a guarda desligada com a conferencia verde",
+  );
+  conferir(
+    "2ª trava: o disparar explícito, com o 400 que ele devolve",
+    /if \(body\?\.disparar !== true\)[\s\S]{0,400}status: 400/.test(rota),
+    "sem isto um GET de rastreador manda e-mail para gente de verdade",
+  );
   conferir("3ª trava: a marca por destinatário", /from\("jornada_envios"\)\s*\n?\s*\.insert/.test(rota));
   conferir(
     "e a marca é gravada DENTRO do laço, logo depois do envio",

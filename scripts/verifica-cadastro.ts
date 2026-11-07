@@ -145,11 +145,30 @@ console.log("Cadastro: o convite do mês grátis sai uma vez, para quem deve, e 
 // ── 4. AS TRAVAS DA ROTA DE DISPARO ────────────────────────────────────────
 {
   const rota = semComentarios(readFileSync(new URL("../app/api/email/cadastro/route.ts", import.meta.url), "utf8"));
-  conferir("1ª trava: a chave dos dados", /chaveDadosOk\(req\)/.test(rota));
+  // AS TRÊS PRIMEIRAS TRAVAS SÃO AFIRMADAS COM A GUARDA INTEIRA, E NÃO COM O
+  // TEXTO DA CONDIÇÃO (07/11/2026, rodada 7 do Guardião).
+  //
+  // Até esta data as travas 1, 2 e 4 eram afirmadas assim: `/chaveDadosOk\(req\)/`,
+  // `/body\?\.disparar !== true/`, `/Number\.isInteger\(cupons\)/`. Plantei
+  // `if (false && !chaveDadosOk(req)) return negada();` na rota e esta
+  // conferência ficou VERDE, e o mesmo nas outras duas. A condição continua
+  // escrita, a recusa nunca acontece, e o que sobra é uma asserção de PRESENÇA
+  // do nome: a trava podia estar desligada com a conferência passando.
+  //
+  // São as três travas da skill `mensagem-a-cliente`, numa rota que manda
+  // e-mail para a base inteira. Mensagem a cliente não tem desfazer.
+  //
+  // O molde é o da `conferir:biela` e da `conferir:email`: a guarda e a recusa
+  // que ela produz, juntas, porque é o par que não sobrevive a desligar o `if`.
   conferir(
-    "2ª trava: o disparar explícito",
-    /body\?\.disparar !== true/.test(rota),
-    "sem isto um GET de rastreador manda e-mail para gente de verdade",
+    "1ª trava: a chave dos dados, e a recusa que ela produz",
+    /if \(!chaveDadosOk\(req\)\) return negada\(\);/.test(rota),
+    "afirmar so o nome chaveDadosOk deixa passar `if (false && !chaveDadosOk(req))`, que foi o plantio de 07/11",
+  );
+  conferir(
+    "2ª trava: o disparar explícito, com o 400 que ele devolve",
+    /if \(body\?\.disparar !== true\)[\s\S]{0,400}status: 400/.test(rota),
+    "sem isto um GET de rastreador manda e-mail para gente de verdade, e a guarda desligada passa verde",
   );
   conferir("3ª trava: a marca por destinatário", /from\("jornada_envios"\)\s*\n?\s*\.insert/.test(rota));
   conferir(
@@ -158,8 +177,8 @@ console.log("Cadastro: o convite do mês grátis sai uma vez, para quem deve, e 
     "marcada so no fim, uma rota que morre no meio manda tudo de novo",
   );
   conferir(
-    "4ª trava: o teto do cupom é obrigatório",
-    /Number\.isInteger\(cupons\)/.test(rota) && /faltou_cupons/.test(rota),
+    "4ª trava: o teto do cupom é obrigatório, e sem ele a rota recusa",
+    /if \(!Number\.isInteger\(cupons\) \|\| cupons <= 0\)[\s\S]{0,600}faltou_cupons[\s\S]{0,600}status: 400/.test(rota),
     "cupom tem max_redemptions NAO editavel: passar do teto entrega preco cheio ao ultimo da fila, calado",
   );
   conferir(

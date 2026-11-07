@@ -45,13 +45,26 @@ const sql = leia("supabase/quiz_respostas.sql");
 {
   conferir("existe pergunta de onboarding", !!onboarding?.id, "perguntasDoQuiz() voltou vazio?");
 
-  // O id como a view o escreve: `pergunta_id = '<id>'`. Procuro a forma, e não
-  // só o texto solto, porque o id também aparece nos comentários explicativos
-  // deste mesmo arquivo: casar com o comentário deixaria a conferência verde
-  // com a view já apontando para outra pergunta. É o erro que esta casa já
-  // cometeu duas vezes (o `@capacitor/core` citado num comentário, e o
+  // O id como a view o escreve. DUAS COISAS AQUI, e a segunda é de 07/11/2026.
+  //
+  // A primeira: procurar a FORMA `pergunta_id = '<id>'` em vez do texto solto,
+  // porque o id também aparece na prosa deste arquivo. É o erro que esta casa
+  // já cometeu duas vezes (o `@capacitor/core` citado num comentário, e o
   // `SECURITY DEFINER` dentro de outro).
-  const naView = /pergunta_id\s*=\s*'([^']+)'/.exec(sql)?.[1] ?? "";
+  //
+  // A segunda: a forma NÃO BASTA, e o plantio da rodada 7 do Guardião provou.
+  // Troquei o id da view para 'freio-pastilha' e deixei uma linha
+  // `-- antes de 07/11 era: pergunta_id = 'oleo-intervalo'` logo acima, que é
+  // como gente de verdade documenta uma troca. A conferência ficou VERDE: o
+  // comentário tem a forma inteira, vem primeiro no arquivo, e `exec` devolve
+  // a PRIMEIRA ocorrência. O comentário que explica a troca virava a prova de
+  // que a troca não houve.
+  //
+  // Então: comentário `--` fora antes de procurar, e a procura é pela DECISÃO
+  // que separa as populações (`case when ... then 'onboarding'`), não por uma
+  // comparação qualquer solta no arquivo. Quem mexer no que decide, quebra isto.
+  const sqlSemComentarios = sql.replace(/^[ \t]*--.*$/gm, "");
+  const naView = /case when pergunta_id\s*=\s*'([^']+)'\s*then\s*'onboarding'/i.exec(sqlSemComentarios)?.[1] ?? "";
   conferir(
     "a view separa pelo id que o código chama de onboarding",
     !!onboarding && naView === onboarding.id,

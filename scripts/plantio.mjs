@@ -40,6 +40,12 @@ import { tmpdir } from "node:os";
 const [conferencia, arquivo, antigo, novo, ...argsDaConferencia] = process.argv.slice(2);
 if (!conferencia || !arquivo || antigo === undefined || novo === undefined) {
   console.error("uso: node scripts/plantio.mjs <conferir:nome> <arquivo> <texto-antigo> <texto-novo>");
+  // SE VOCÊ CHAMOU POR `npm run plantio` E CAIU AQUI COM OS QUATRO ARGUMENTOS
+  // ESCRITOS, é o npm (07/11/2026): texto que começa com `-` ou `--` ele come
+  // como opção dele e nunca chega aqui. Plantio em SQL cai nisso direto, porque
+  // comentário de SQL começa com `--`. Chame `node scripts/plantio.mjs ...`
+  // direto nesse caso. Cair aqui é seguro: nada foi tocado no arquivo.
+  console.error("se um dos textos começa com '-', chame com `node scripts/plantio.mjs` em vez de `npm run plantio`: o npm come o argumento");
   process.exit(1);
 }
 if (!/^conferir:[\w-]+$/.test(conferencia)) {
@@ -69,6 +75,53 @@ const ocorrencias = texto.split(antigo).length - 1;
 if (ocorrencias !== 1) {
   console.error(`o texto antigo aparece ${ocorrencias} vez(es) em ${arquivo}; precisa aparecer exatamente 1. Nada foi mudado.`);
   process.exit(1);
+}
+
+// 2b. PLANTIO QUE SÓ RENOMEIA A CHAMADA NÃO VALE (07/11/2026).
+//
+// POR QUE ESTA RECUSA EXISTE, e o caso é meu. Em 17/10 provei o elo de
+// consumidor da `conferir:garagem` trocando `carroIgualNaGaragem(s.vehicles,
+// data)` por `outraCoisa(s.vehicles, data)`. Mordeu, e eu risquei o elo como
+// provado. Em 24/10 plantei a forma que alguém erra de verdade,
+// `const igual = (carroIgualNaGaragem(s.vehicles, data), null)`, e ela ficou
+// VERDE: a chamada acontece, o resultado é descartado, a guarda de baixo
+// continua escrita certa e nunca dispara.
+//
+// Renomear APAGA o nome do arquivo, então testa PRESENÇA, que é exatamente a
+// asserção frouxa que o plantio deveria estar criticando. Os dois erros se
+// cancelam num verde, e o verde é o pior resultado possível aqui.
+//
+// A recusa é estreita de propósito: só pega plantio em que os dois lados são
+// uma chamada nua, com a MESMA lista de argumentos e nome diferente. Trocar
+// argumento (`relatarLoginNativo(provider, "ok")`), descartar o resultado,
+// desligar a guarda (`if (false && ...)`) e renomear a DEFINIÇÃO de uma função
+// ou de uma função SQL continuam passando, porque essas quebram o uso.
+{
+  const chamadaNua = (s) => {
+    const m = s.trim().match(/^([A-Za-z_$][\w$.]*)\s*\(([\s\S]*)\)$/);
+    if (!m) return null;
+    // `foo(a)(b)` ou `foo(a) + foo(b)` não são chamada nua: o fecha-parênteses
+    // tem de ser o do abre, isto é, o último caractere.
+    return { nome: m[1], args: m[2].trim() };
+  };
+  const a = chamadaNua(antigo);
+  const b = chamadaNua(novo);
+  if (a && b && a.args === b.args && a.nome !== b.nome) {
+    console.error(
+      `PLANTIO RECUSADO: isto só renomeia a chamada (${a.nome} -> ${b.nome}) com os mesmos argumentos.`,
+    );
+    console.error("");
+    console.error("Renomear apaga o nome do arquivo, então testa PRESENÇA, e foi esse plantio");
+    console.error("que deu verde falso na rodada 4 do Guardião: a conferência mordeu o nome");
+    console.error("trocado e seguia cega ao uso. Plante quebrando o USO, não o nome:");
+    console.error("");
+    console.error(`  descartar o resultado   const x = (${a.nome}(${a.args}), null);`);
+    console.error(`  trocar o que decide     ${a.nome}(<outro argumento>)`);
+    console.error(`  desligar a guarda       if (false && !${a.nome}(${a.args}))`);
+    console.error("");
+    console.error("Nada foi mudado, e a cópia de segurança está em " + copia);
+    process.exit(1);
+  }
 }
 
 let restaurado = false;

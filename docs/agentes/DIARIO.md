@@ -3,6 +3,74 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-07 · Guardião: o comentário que explica a troca virando a prova de que a troca não houve
+
+- **O número primeiro, porque é o que o Diretor pediu para não ficar enterrado:**
+  nenhuma conferência nova esta semana. O total ficou em **67**, igual ao de
+  31/10, e a fila de verdade caiu de **11 para 5**. Lido de
+  `npm run conferir:fila`, copiado: 67 conferências, 49 provadas por quem não as
+  escreveu, 5 só pelo autor no nascimento, 13 em dívida assumida.
+- **Dívida assumida: 13 itens, todos assumidos em 03/10/2026, e a mais velha
+  (`conferir:agenda`) faz 35 dias.** Ninguém reabriu nenhuma, e o gatilho de
+  reabrir é o mundo, não o calendário. O Diretor propôs que cada item carregue a
+  data em que a dívida foi assumida e que a rodada publique a mais velha: feito
+  aqui, e a decisão de transformar isso em critério é do dono.
+- **As seis da fila:** `aquisicao`, `cadastro`, `fila`, `publicacao`, `entre`,
+  `quiz-populacao`. **29 plantios, 24 mordidas, 5 cegas, todas as 5 consertadas e
+  replantadas.** Mais 1 plantio na `conferir:anomalias` e 2 na `conferir:saida`,
+  que não são das seis mas tinham o mesmo defeito medido.
+- **A forma nova, e ela é a prima da varredura de presença que fechou em 31/10:**
+  a conferência EXTRAI um valor de um arquivo e pega a primeira ocorrência do
+  arquivo inteiro. Quem renomeia alguma coisa documenta a troca num comentário
+  logo acima, e o comentário vem primeiro:
+
+  ```
+  -- antes de 07/11: create or replace function public.aparelhos_ativos
+  create or replace function public.aparelhos_ativos_v2(...)
+  ```
+
+  Plantado assim, a `conferir:anomalias` ficou verde lendo o nome antigo. A
+  `conferir:quiz-populacao` ficou verde com a view separando a população errada,
+  e o comentário do próprio script avisava desse risco achando que exigir a forma
+  `pergunta_id = '<id>'` bastava: não basta, o comentário tem a forma inteira. A
+  `conferir:aquisicao` contava fonte comentada como fonte aceita, nos dois lados.
+- **Medido antes de alargar:** 18 conferências leem `.sql`, **4 extraem valor de
+  dentro** e as 4 estavam cegas. Consertei as 4; nas 14 que só afirmam presença de
+  forma não mexi, porque ali comentário não vira valor.
+- **A outra forma: afirmar a condição não é afirmar a guarda.** `if (false &&
+  !chaveDadosOk(req))` deixou verdes as travas 1, 2 e 4 da `conferir:cadastro`.
+  São as três travas da skill `mensagem-a-cliente`, numa rota que manda e-mail
+  para a base. Medido: de 3 conferências que afirmam essas travas, 1 já usava a
+  guarda inteira (`conferir:email`) e 2 usavam o texto da condição (`cadastro` e
+  `saida`). As duas consertadas no molde da `conferir:biela`: a guarda com a
+  recusa que ela produz.
+- **Mais duas cegas, de famílias diferentes.** O retrato publicava a escada da
+  aquisição com as recusas esvaziadas e a `conferir:aquisicao` passava, embora a
+  frase final dela seja "as recusas viajam com o número". E um pedido da fila
+  entre papéis que perde a barra vertical da frente desaparecia: não aparecia para
+  quem recebe, não entrava no bloco dos parados e não envelhecia, que é a doença
+  exata que aquela fila existe para curar.
+- **A ferramenta:** o `npm run plantio` agora RECUSA plantio que só renomeia a
+  chamada com os mesmos argumentos, que foi o plantio que me deu verde falso na
+  rodada 4. Recusa provada (o plantio de 17/10 é rejeitado sem tocar no arquivo) e
+  as quatro formas que quebram o uso continuam passando. Era recomendação minha
+  para mim mesma desde 31/10, e o Diretor mandou fazer ou tirar da lista.
+- **A `conferir:publicacao` é o melhor molde da casa e vale copiar:** ela não LÊ o
+  comando da Vercel, ela o EXECUTA contra commits de verdade num repositório
+  temporário. Quatro plantios, quatro mordidas, nenhuma asserção de texto.
+- **O que esta rodada não alcança, e continua não alcançando:** plugin nativo e
+  qualquer coisa de aparelho. Não há sinal de aparelho aqui, e sobre build que
+  nenhum aparelho abriu a resposta é "sem sinal ainda".
+- **Onde eu falhei na minha própria régua:** critério 10 (plantar no consumidor).
+  Nas seis, eu plantei no consumidor em cinco. Na `conferir:cadastro` eu plantei
+  na rota, que é o consumidor certo, mas **não** no cron que conta os resgates do
+  cupom, e é o cron que decide se a oferta ainda existe. Fica para a próxima
+  rodada, escrito aqui com data para não envelhecer calado.
+- **Para o QA:** a linha de 04/11 na fila entre papéis (conferência de presença
+  por semana) ganhou um argumento novo hoje: a forma tem pelo menos três
+  parentes, e duas delas (extrair valor com comentário no caminho, e afirmar a
+  condição sem a guarda) nenhuma vigilância semanal minha pega sozinha.
+
 ## 2026-11-06 · Engenharia: o primeiro dia do manual de volta, e a busca sem carro que levava 20 segundos
 
 - Conferência agendada de 05/11 (chegou às 10h09 UTC de 06/11), lida em
