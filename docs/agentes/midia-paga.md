@@ -720,6 +720,91 @@ deram nenhuma conta" é verdade sem valor: nenhum termo deu conta nenhuma,
 porque essa ligação não existe na medição. A importação por gclid é o que
 passaria a criar essa ligação.
 
+### Perguntar à fonte ganha de pedir clique, e as consultas que provaram isso (06/11/2026)
+
+O vídeo do Google parou de entregar em 31/10 e a coleta não dizia por quê: ela
+traz gasto, clique, impressão e `status`, e nada sobre APTIDÃO, LANCE ou MUDANÇA
+de configuração. O caminho antigo seria uma linha na lista do dono pedindo que
+ele abrisse o painel. Em vez disso eu fiz à API, numa leitura temporária criada
+e arquivada no mesmo dia, as perguntas que a nossa consulta nunca fez. Quinze
+minutos, e a causa saiu de "não sei" para "nenhuma mão parou isso".
+
+As duas consultas que FUNCIONARAM na v25, para não precisar redescobrir:
+
+```
+SELECT campaign.id, campaign.status, campaign.primary_status,
+       campaign.primary_status_reasons, campaign_budget.amount_micros
+FROM campaign WHERE campaign.id = <id>
+```
+
+```
+SELECT change_event.change_date_time, change_event.change_resource_type,
+       change_event.changed_fields, change_event.resource_change_operation,
+       change_event.client_type, change_event.user_email,
+       change_event.old_resource, change_event.new_resource
+FROM change_event
+WHERE change_event.change_date_time >= 'AAAA-MM-DD 00:00:00'
+  AND change_event.change_date_time <= 'AAAA-MM-DD 23:59:59'
+ORDER BY change_event.change_date_time DESC LIMIT 50
+```
+
+O `change_event` é o instrumento que este papel não tinha e mais precisava:
+**ele responde quem mudou o quê e quando na conta de anúncio**, com valor antigo
+e novo, nos últimos 30 dias. Filtro de data e `LIMIT` são obrigatórios nele.
+Com ele, "o dono mexeu no orçamento?" deixa de ser pergunta ao dono.
+
+E o que NÃO funcionou, para a próxima tentativa não repetir: `campaign.
+serving_status`, `campaign.advertising_channel_sub_type`, `campaign.target_cpa.
+target_cpa_micros`, `campaign.maximize_conversions.target_cpa_micros`,
+`campaign.app_campaign_setting.*` e `campaign_budget.has_recommended_budget`
+devolveram "Request contains an invalid argument" nesta versão. Quando a
+consulta é recusada assim, o erro não diz QUAL campo é o inválido: tire um por
+vez, do mais novo para o mais antigo, em vez de reescrever a consulta inteira.
+
+A regra que fica, e ela é a do CLAUDE.md aplicada a este papel: **acesso não é a
+mesma coisa que perguntar.** A credencial do Google Ads está na casa desde
+agosto e a consulta da coleta é uma lista de perguntas que alguém escreveu uma
+vez. Antes de pôr um clique na lista do dono, pergunte se a fonte responde algo
+que a gente nunca pediu.
+
+### `primary_status: ELIGIBLE` não quer dizer entregando (06/11/2026)
+
+A campanha de app ficou sete dias com zero impressão, e o campo de aptidão do
+próprio Google respondia `ELIGIBLE`, com a lista de razões de bloqueio VAZIA.
+Ou seja: o Google não considera defeito uma campanha que está apta e não compra
+nada. Campanha de app que não consegue comprar instalação ao preço que a
+estratégia de lance aceita simplesmente para, sem ficar inapta.
+
+Então `ELIGIBLE` serve para DESCARTAR causa (não é pausa, não é reprovação, não
+é orçamento zerado, não é cobrança), e nunca para afirmar que está tudo bem. A
+frase honesta é "o Google não aponta bloqueio", não "o Google diz que está
+funcionando".
+
+### Esperar por um instrumento que pode morrer antes de medir (06/11/2026)
+
+Em 30/10 eu recomendei ao dono esperar uma semana para decidir orçamento, porque
+a régua de conta por campanha completava sete dias em 05/11. A régua completou.
+Só que o lado que a decisão queria medir, o vídeo do Google, parou de gastar em
+31/10, dois dias depois de a etiqueta ficar completa. **A espera que eu pedi
+entregou a medida de um lado só.**
+
+A regra: ao recomendar esperar por um instrumento, pergunte se o que ele vai
+medir continua existindo durante a espera, e diga o que a espera entrega se não
+continuar. Instrumento novo em cima de campanha viva é aposta nos dois, não em
+um.
+
+### O preço de subir verba, com tamanho (06/11/2026)
+
+Desde setembro eu escrevo "eficiência não sobrevive inteira a um aumento de
+verba" como ressalva de toda proposta de mover dinheiro. Em 30/10 a 05/11 isso
+virou número no Meta: **12% mais gasto, 3 a 4% mais caro em todas as três
+réguas** (instalação atribuída R$ 0,80 para R$ 0,82; usuário que volta R$ 1,79
+para R$ 1,86; desfecho da plataforma R$ 0,44 para R$ 0,46).
+
+Use esse tamanho na próxima proposta, em vez da ressalva solta. E note o limite:
+é UM degrau de 12%, não dobrar a verba; a curva não é reta e um degrau grande
+não custa quatro vezes isso só porque é quatro vezes maior.
+
 ### Função que devolve número não se conta com `count(*)` (30/10/2026)
 
 `public.contas_criadas_desde(date)` devolve `bigint`, não um conjunto de contas.
