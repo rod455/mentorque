@@ -3,6 +3,60 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-07 · Mídia: o vídeo do Google parou sozinho, e a causa veio da API em vez de um clique do dono
+
+- Artifact "Mídia da semana": https://claude.ai/artifact/R1EhjxazDTLrHzs28pxS2N
+- **A rodada é a de quinta 05/11 e saiu no sábado 07/11**, porque a sessão foi
+  reiniciada duas vezes no meio. Custo real: nas duas tentativas de envio
+  (quinta e sexta, de hora em hora) a main tinha o relatório de 30/10, e pela
+  regra do fluxo relatório velho é SILÊNCIO. O e-mail de hoje saiu porque eu
+  disparei o fluxo à mão (execução 9663, 07/11 às 9h03 de Brasília, PDF
+  `mentorque-midia-2026-11-07.pdf`, `labelIds: ["SENT"]`). A entrega de 30/10
+  também está confirmada: execução 9310, 10h05.
+- **O VÍDEO DO GOOGLE PAROU EM 31/10 E SEGUE PARADO.** Última entrega em 30/10;
+  oito dias de zero impressão e zero gasto, conferido duas vezes (coleta de
+  06/11, com zero escrito em cada dia do `porCampanhaPorDia`, e coleta de 07/11,
+  onde a campanha já não aparece na lista e o `custo7d` é 0). O alarme
+  "campanha parou de aparecer", que entrou em 22/10, disparou com -99%.
+- **A CAUSA: eu perguntei ao Google em vez de pedir um clique.** Numa leitura
+  temporária, criada e arquivada no mesmo dia, fiz três perguntas que a coleta
+  nunca fez. (1) `campaign.primary_status` = `ELIGIBLE`, com
+  `primary_status_reasons` VAZIO. (2) Orçamento: R$ 20 por dia. (3)
+  `change_event`, 20/10 a 06/11: **uma única alteração em dezessete dias**, em
+  24/10 ao meio-dia, orçamento de R$ 30 para R$ 20, pelo painel. Mais o anúncio
+  ativo, revisado e APROVADO. Ou seja: nenhuma mão parou a campanha e o Google
+  não aponta bloqueio. O que sobra é hipótese de lance, e o campo que a testaria
+  (`bidding_strategy_type`, alvo de custo, `app_campaign_setting`) foi recusado
+  pela API com "invalid argument". Virou linha da fila para o Analista, com as
+  DUAS consultas que funcionaram escritas nela.
+- **O `change_event` é o instrumento que faltava a este papel**: responde quem
+  mudou o quê e quando na conta de anúncio, com valor antigo e novo, 30 dias.
+  Com ele, "o dono mexeu no orçamento?" deixa de ser pergunta ao dono.
+- **A semana sem o vídeo foi a mais barata da série.** Janela 30/10 a 05/11
+  contra 23 a 29/10: gasto R$ 223,04 contra R$ 360,55 (-38%), contas 132 contra
+  136 (-3%), **custo por conta R$ 1,69 contra R$ 2,65**.
+- **Primeira semana cheia do custo por desfecho medido por campanha**: 123 das
+  127 contas da janela com etiqueta, 97%. Meta 89 contas a **R$ 2,48 cada**. A
+  linha do Google fica sem leitura de propósito: as 6 contas dele são retorno de
+  cliques comprados antes do dia 31.
+- **O item de 23/10 saiu da lista do dono.** Ele pedia mover um pedaço do
+  orçamento do vídeo para o Meta; o vídeo saiu inteiro sozinho. Desfecho medido
+  como faixa, porque duas coisas mudaram juntas (o vídeo deixou de gastar
+  R$ 161,47 e o Meta subiu R$ 23,96): o vídeo comprava entre 4 contas por semana
+  a R$ 40 e 14 a R$ 11,80. Proposta da rodada: **não religar até saber por quê**.
+- **O preço de subir verba virou número**: o Meta gastou 12% mais e ficou 3 a 4%
+  mais caro nas três réguas (R$ 0,80 para R$ 0,82 por instalação, R$ 1,79 para
+  R$ 1,86 por usuário que volta, R$ 0,44 para R$ 0,46 pelo contador dele). Era
+  ressalva solta desde setembro; agora tem tamanho.
+- **O que eu errei na semana passada**: pedi ao dono esperar uma semana para
+  decidir orçamento, apostando na régua que completava em 05/11. A régua
+  completou e o lado que a decisão queria medir morreu em 31/10. Aprendizado no
+  manual: ao recomendar esperar por um instrumento, pergunte se o que ele vai
+  medir continua existindo durante a espera.
+- **Régua da rodada**: onze cumpridos, um não se aplica (o 6, desperdício com
+  nome: a única campanha com termo é a de busca, pausada desde 13/10). Nada
+  escrito em conta de anúncio; as leituras de hoje são consultas.
+
 ## 2026-11-07 · Guardião: o comentário que explica a troca virando a prova de que a troca não houve
 
 - **O número primeiro, porque é o que o Diretor pediu para não ficar enterrado:**
