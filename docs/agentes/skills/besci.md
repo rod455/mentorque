@@ -156,6 +156,33 @@ experimentos alimentam a seção final.
   "o que poderia fechar este veredito é X" com numerador E denominador. Se X
   for uma ausência, a aposta é correção e se defende pelo argumento, não pelo
   dado.
+- **2026-11-06: um zero lido de evento com trava de repetição é o tamanho da
+  trava, não o do comportamento.** Eu publiquei "0 de 224 viram a folha uma
+  segunda vez" e "73 fizeram algo de valor e NENHUM criou conta". As duas caem:
+  `convite_conta` e `cadastrou_carro` são `umaVez` por sessão, então a repetição
+  que eu procurava é invisível nesses eventos; e dos 225 recusantes, **7 criaram
+  conta, cinco deles aceitando a folha de 1 a 3 minutos depois de recusá-la**,
+  quando ela reapareceu ao cadastrar outro carro. A regra, irmã de "ausência não
+  é causa": antes de ler um zero, abrir o emissor do evento e ver se ele TEM
+  COMO contar o que a pergunta precisa. `umaVez`, `umaVezPorAparelho` e chave de
+  deduplicação são travas, e cada uma apaga uma pergunta diferente.
+- **2026-11-06: corte por versão sem atribuir cada aparelho à versão de ENTRADA
+  fabrica o efeito.** Medindo serviço em 14 dias por versão, contando cada
+  aparelho em toda versão em que ele apareceu, deu 4,3 de cada 100 na 3.1
+  contra 7,0 e 8,2 na 3.2 e 3.3, o que parecia dobrar. Com cada aparelho
+  contado UMA vez, pela versão em que entrou, dá 4,4 contra 6,0, com o braço
+  novo só metade maduro. Quem atualiza é exatamente quem usa mais, então o
+  aparelho ativo entra nos dois lados e infla o lado novo.
+- **2026-11-06: métrica de estoque sobre estoque não lê mudança quando a base
+  está crescendo, e eu escrevi uma.** O `primeiro-servico-com-ganho-nomeado`
+  declarou "contas com serviço sobre contas com carro", que foi de 21 de 175
+  para 62 de 651: lido assim, piorou. O denominador quase quadruplicou em quatro
+  semanas e conta nova não teve tempo de registrar nada. A leitura de FLUXO (da
+  coorte da semana, quantos registram em 14 dias) mostra outra coisa, e o que
+  domina é composição: a chegada triplicou e ficou mais barata. **Ao escrever a
+  métrica, perguntar se ela é estoque ou fluxo, e se o denominador vai mudar de
+  tamanho dentro da janela.** É o quarto veredito meu perdido na métrica, e o
+  `lib/funilCorreto.ts` desta casa existe exatamente para esta armadilha.
 - **2026-10-30: "a pessoa recusou" e "a pessoa recusou e nunca foi perguntada de
   novo" são diagnósticos diferentes, e o segundo é o que costuma ser verdade.**
   De 224 convidados que tocaram em "Agora não" na folha da conta, 73 depois
