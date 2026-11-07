@@ -80,6 +80,86 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 
 ## Experimentos
 
+## [servico-em-tres-campos] O formulário de serviço pede o que o calendário precisa, e o resto vira opcional
+- Estado: **PROPOSTO** (teste A/B; só liga com a sua aprovação)
+- Tipo: teste-ab
+- **O ALVO, e ele não está no `quebraFunil` do retrato.** Desde 19/10, **125
+  aparelhos tocaram em "Registrar serviço"** na tela do carro (`clicou_atalho`
+  com origem `carro:servico`, mais 41 pela origem `servico`), e por semana:
+
+      semana    tocaram no atalho   salvaram em 1 h   salvaram algum dia
+      05/10            16                  2                  3
+      12/10            52                  6                  6
+      19/10            59                 10                 13
+      26/10            62                  9                 11
+      02/11            36 (parcial)        5                  6
+
+  **85 de cada 100 que pedem para registrar um serviço nunca salvam um.** A
+  razão é estável nas cinco semanas (12 a 17 de cada 100 salvam), com
+  denominador de 52 a 62 por semana. Nenhuma linha do `quebraFunil` cobre este
+  degrau, pelo mesmo motivo do portão da conta em 16/10: ele não estava no
+  funil canônico.
+- **MÉTRICA LIDA NO INSTRUMENTO HOJE** (critério 11): numerador e denominador
+  existem os dois no `funil_eventos` desde 07/10 (quando o `clicou_atalho`
+  nasceu), por aparelho, com série semanal. Hoje: 9 de 62 na última semana
+  fechada.
+- **POR QUE ISTO É O DEGRAU DE RETENÇÃO QUE IMPORTA.** De 678 contas com
+  estado, **651 têm carro e 62 têm serviço**. O serviço é o que faz o app ter
+  assunto no mês seguinte: gasto de carro é mensal, problema de carro é raro, e
+  a linha do calendário que eu mudei em 09/10 promete somar o custo de 12 meses,
+  o que só existe para quem registra. E dos 62 que registraram um, **31
+  registraram dois ou mais**: quem atravessa a primeira vez volta. A barreira é
+  a primeira.
+- Tese BeSci: fricção, e é o mesmo princípio que deu o primeiro FUNCIONOU desta
+  casa em 02/10. A regra que ficou daquele veredito era literal: **antes de
+  escrever copy nova para uma tela que converte mal, contar os campos dela.**
+  Contados, no formulário de serviço: o que foi feito (com busca e um seletor de
+  subsistema por item), a data, o km, a oficina, o total, as peças (nome e valor,
+  repetível), as notas e a foto. **Oito grupos de campo**, dos quais três são
+  listas que crescem.
+  - **A = o formulário de hoje**, com os oito grupos numa tela.
+  - **B = três campos para salvar**: o que foi feito, quando, e quanto custou. O
+    botão salva com esses três. Km, oficina, peças, notas e foto continuam
+    existindo, e aparecem depois de salvar, no registro, com uma linha dizendo o
+    que cada um destrava (o km alimenta o calendário de revisões; a oficina
+    alimenta a comparação de preço). É exatamente o desenho que venceu no
+    cadastro de carro: salvar com o mínimo, completar depois com o ganho
+    nomeado.
+- **A DÚVIDA HONESTA, e é por isso que isto é teste e não mudança direta.** No
+  cadastro de carro, encurtar foi ganho puro, porque marca, modelo e ano bastam
+  para o app trabalhar. Aqui NÃO é óbvio: o valor do registro para a pessoa é a
+  conta do gasto, e um registro sem total não soma nada; um registro sem km não
+  move o calendário de revisões. **B pode trocar 85 de cada 100 que não salvam
+  nada por registros que não servem para nada**, e essa é uma troca ruim que o
+  número bruto de "salvou" esconderia. Por isso a métrica tem duas metades.
+- Métrica, e as duas metades contam:
+  1. **passagem:** de quem toca no atalho, quantos salvam em 1 hora (hoje 9 de
+     62, 15 de cada 100);
+  2. **guarda, que é o que impede o falso ganho:** dos serviços salvos, quantos
+     têm total preenchido e quantos têm km. Se a passagem dobrar e a fração com
+     total cair pela metade, **B não venceu**, e isso está escrito antes.
+  · Duração: 2 semanas, ou até 40 toques por braço
+- **Denominador esperado por braço, com o número de hoje** (régua de 02/10):
+  52 a 62 toques por semana, logo 26 a 31 por braço por semana, e o critério de
+  parada de 40 por braço chega em duas semanas. **O braço menor passa o
+  critério**, então a aposta não nasce condenada como a de plataforma de 02/10.
+- Nível da régua: **3**, porque há braço comparável e sorteio por aparelho. O
+  sorteio foi testado em 30/10 sobre 1.996 aparelhos reais e está correto
+  (z de 1,12, concordância entre dois ids em exatos 50%).
+- **Aprovação: aguardando o dono.** É teste A/B, e teste A/B só liga com a sua
+  aprovação. Não toca em preço, plano, oferta de loja nem passo legal: o que
+  muda é quantos campos o botão de salvar exige, e nada é apagado nem escondido
+  de quem quiser preencher.
+- **Área livre:** nenhum outro A/B está ativo (o `onboarding-curto` encerrou em
+  23/10 e o `cadastro-em-duas-etapas` em 02/10), e o
+  `primeiro-servico-com-ganho-nomeado`, que era a aposta aberta desta área,
+  fecha nesta mesma rodada.
+- Início: (não começou) · Ler a partir de: 2 semanas depois de a versão com o
+  teste passar de metade dos aparelhos ativos, pela régua de 17/10
+- Antes: 9 de 62 salvam em 1 hora (semana de 26/10); 62 de 651 contas com carro
+  têm algum serviço; 31 dos 62 têm dois ou mais
+- Veredito: (não começou)
+
 ## [compra-avulsa-por-momento] Pagar pelo problema ou pelas perguntas, sem mensalidade
 - Estado: PROPOSTO (tudo decidido pelo dono em 05/11/2026; falta construir)
 - Tipo: mudanca-direta (os dois formatos aparecem lado a lado na mesma folha,
@@ -261,13 +341,37 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   detalhe `repique`). Linha de base corrigida em 30/10: 39 recusantes no
   gatilho desde 17/10, 0 receberam o repique (ele não existia) · Duração: 4
   semanas
-- **Denominador esperado, com o número de hoje** (régua de 02/10): 30 a 38
-  pessoas por semana, logo 120 a 150 em quatro semanas. Para sair de 0, bastam
-  poucas contas para o sinal existir; o alvo honesto é **10 contas em quatro
-  semanas**, que é mais do que o zero absoluto de hoje sem depender de taxa.
-- Nível da régua: **2, nunca 3.** Mudança direta, sem braço comparável. A linha
-  de base é zero medido, o que ajuda: qualquer coisa acima de zero é sinal, e o
-  risco de confundir é baixo justamente porque não há de onde cair.
+- ~~**Denominador esperado, com o número de hoje**: 30 a 38 pessoas por semana,
+  logo 120 a 150 em quatro semanas. O alvo honesto é 10 contas em quatro
+  semanas.~~ **RELIDO COM O GATILHO DO CÓDIGO EM 06/11, como o retorno de 30/10
+  mandou, e ele é quase METADE do que eu escrevi.** O 30 a 38 era da tese larga
+  (que incluía Biela e sintoma); o gatilho do código é serviço, abastecimento ou
+  aula. Por semana da recusa, convidados que depois caem no gatilho:
+
+      semana 12/10     3  (tese larga diria 4)
+      semana 19/10    18  (tese larga diria 39)
+      semana 26/10    25  (tese larga diria 40)
+      semana 02/11     8  (parcial; tese larga diria 12)
+
+  **São 18 a 25 por semana, logo 70 a 100 em quatro semanas.**
+- **E O ALVO DE 10 CONTAS NÃO SE SUSTENTA NESSE TAMANHO, então ele cai.** A
+  linha de base verdadeira não é zero: dos 225 recusantes desde 17/10, **7
+  criaram conta sem repique nenhum** (3 de cada 100), e cinco deles aceitaram a
+  folha quando ela reapareceu ao cadastrar OUTRO carro, de 1 a 3 minutos depois
+  de recusá-la. Com 70 a 100 pessoas, 3 de cada 100 já são 2 ou 3 contas por
+  acaso, então 10 contas estariam a pouco mais de duas vezes o ruído e qualquer
+  número abaixo disso não diria nada.
+  - **O que esta aposta PODE entregar em quatro semanas é direção, não efeito
+    medido**, e isso fica escrito agora em vez de aparecer no veredito. Para
+    efeito medido seriam necessárias umas 8 semanas no volume de hoje, ou um
+    braço comparável, que mudança direta não tem.
+  - OS CINCO QUE ACEITARAM NA SEGUNDA VISTA são o melhor argumento A FAVOR
+    desta aposta, e eu não os tinha visto: a folha reaparecendo por acidente (o
+    `gravar()` acorda a folha a cada carro) já converteu cinco pessoas que
+    haviam dito não minutos antes. O repique faz de propósito o que o acidente
+    já fez.
+- Nível da régua: **2, nunca 3.** Mudança direta, sem braço comparável. A
+  comparação é contra os 3 de cada 100 acima, não contra zero.
 - Aprovação: não se aplica (momento de um pedido que já existe, sem variantes,
   sem texto novo, sem tocar em preço, plano, cobrança ou passo legal)
 - Início: 2026-10-30 na web; no app, com a 3.4. **O alcance só existe a
@@ -427,10 +531,22 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   para cima, e por isso fica escrito hoje, não no veredito dela.
 - Antes: 63 de 165 (05/10), 52 de 104 (28/09), 40 de 101 (21/09). A tela de
   entrar nasce em modo "Entrar" e repete a frase da folha.
+- **LEITURA DIRECIONAL de 2026-11-06, cinco dias atrasada, e ela não fecha
+  nada.** O degrau desta aposta é o SEGUNDO do portão da conta: de quem toca em
+  "Criar minha conta", quantos terminam. Por semana, lido em 06/11 às 11h15
+  UTC: **25 de 36, 121 de 168, 72 de 85 e 94 de quem tocou na semana parcial**,
+  ou seja 69, 72 e 85 de cada 100 nas três semanas fechadas.
+  - A direção é a favor (69 para 85 de cada 100), e ela NÃO é atribuível a esta
+    aposta: a mesma janela recebeu a 3.2 inteira, com seis eventos novos, o
+    limite da Biela de 5 para 3 e o conserto do botão de compra. O veredito de
+    15/11 vai ter o mesmo problema, e isso está dito desde hoje em vez de
+    aparecer como surpresa.
+  - O que esta aposta pedia era `cadastro` entre quem viu o paywall, e esse
+    degrau continua pequeno demais para ler.
 - Veredito: (aberto)
 
 ## [primeiro-servico-com-ganho-nomeado] O "nenhum serviço registrado" vira o próximo passo
-- Estado: ABERTO
+- Estado: FECHADO (inconclusivo: a métrica era estoque sobre estoque, e a composição da chegada domina)
 - Tipo: mudanca-direta
 - Alvo no funil: a passagem que virou a maior quebra real depois de o caminho
   até o carro ser consertado: **175 das 212 contas têm carro e só 21 têm
@@ -461,10 +577,49 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   `limite-de-carros-com-aviso`: a razão contas com serviço sobre contas com
   carro é medida e aparece no retrato (estadoDaBase), então existe numerador,
   denominador e série. Não é métrica de ausência.
-- Veredito: (aberto)
+- **Veredito (2026-11-06): INCONCLUSIVO, e o motivo é a MINHA MÉTRICA outra
+  vez, agora de um jeito novo: ela é estoque sobre estoque.** Instrumento:
+  `user_state` e `funil_eventos`, lidos em 06/11 às 11h20 UTC.
+  - **A métrica que eu declarei: 21 de 175 (12 de cada 100) no início, hoje 62
+    de 651 (9,5).** Lido assim, ela PIOROU. Só que o denominador quase
+    quadruplicou em quatro semanas, e conta recém-criada não teve tempo de
+    registrar serviço: a razão cai por diluição, não por comportamento. É a
+    armadilha de fluxo contra estoque que o `lib/funilCorreto.ts` desta casa
+    existe para evitar, e eu escrevi a métrica justamente nessa forma.
+  - **A leitura de FLUXO, que é a certa.** Da coorte de quem cadastrou carro na
+    semana, quantos registraram serviço em até 14 dias, só com a janela de cada
+    pessoa fechada: **9 de 100 (21/09), 11 de 104 (28/09), 8 de 170 (05/10), 11
+    de 305 (12/10)**, e 12 de 144 maduros na de 19/10. A taxa cai de ~10 para
+    ~4 por 100 enquanto a chegada triplica, e **essa queda começa ANTES de a
+    mudança alcançar as lojas** (ela entrou na 3.2, em 17/10). O que domina é
+    composição: o custo por conta caiu de 6,51 para 2,75 e a gente passou a
+    receber muito mais gente, mais barata, que registra menos serviço.
+  - **E O CORTE POR VERSÃO, que é o mais perto de um braço que existe aqui,
+    aponta para o OUTRO lado, com ressalva grande.** Com cada aparelho contado
+    UMA vez, pela versão em que entrou, e serviço em 14 dias do carro:
+    **2.9.0 10 de 101 (9,9), 3.0.0 5 de 67 (7,5), 3.1.0 15 de 342 (4,4),
+    3.2.0 12 de 201 maduros (6,0)**. A 3.1 é a última sem a cópia nova e a 3.2 a
+    primeira com ela: 4,4 contra 6,0. A amostra madura da 3.2 é só metade do
+    braço e é torta (quem entrou no começo), e a 3.2 carregou meia dúzia de
+    outras mudanças. **É direção, no máximo.**
+  - **ACHADO DE MÉTODO, e é o irmão da correção que o dono me fez em 30/10.** A
+    minha primeira versão desse corte contava cada aparelho em TODA versão em
+    que ele apareceu, e dava 4,3 na 3.1 contra 7,0 e 8,2 na 3.2 e 3.3, o que
+    parecia dobrar. Os braços limpos dissolvem quase tudo. **Corte por versão
+    sem atribuir cada aparelho à versão de ENTRADA conta o mesmo aparelho duas
+    vezes, dos dois lados, e fabrica o efeito.** Quem atualiza é exatamente quem
+    usa mais.
+  - O que FICA: a linha cheia promete o que ela cumpre, e prometer o próximo
+    passo em vez de constatar o vazio se defende pelo argumento. A conferência
+    de navegador `calendario` continua cobrando os dois lados da fronteira.
+  - **O QUE ESTA APOSTA DEIXA PARA A SEGUINTE, e é o achado de hoje:** o degrau
+    que ela mirou não é onde a perda está. **125 aparelhos tocaram em
+    "Registrar serviço" desde 19/10 e 85 de cada 100 nunca salvaram um.** Isso
+    não aparece em `quebraFunil` e é a aposta proposta nesta rodada.
+- Estado final: FECHADO em 2026-11-06.
 
 ## [inicio-pergunta-unica] O Início tem uma ação primária: a pergunta ao Biela, com ou sem carro
-- Estado: ABERTO
+- Estado: FECHADO (inconclusivo: três mudanças no mesmo degrau na mesma janela, sem braço)
 - Tipo: mudanca-direta
 - Alvo no funil: `perguntou_biela` por sessão com origem no Início; e os
   fechamentos do app na Home (retrato de 04/10: 7 em 4 aparelhos na home).
@@ -513,10 +668,23 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   duas abriram. O veredito continua marcado para 01/11.
 - Antes: 66 `perguntou_biela` em 30 dias (16 com palavras da pessoa); 7
   fechamentos na Home em 4 aparelhos no retrato de 04/10
+- **LEITURA DE 2026-11-06, cinco dias depois da data cheia (01/11), e o
+  veredito honesto é INCONCLUSIVO, não um número.** `perguntou_biela` por
+  aparelho ativo na semana, lido em 06/11 às 11h30 UTC: **42 de 488 (8,6 de
+  cada 100), 35 de 509 (6,9), 45 de 452 (10,0)** e 22 de 277 na parcial. Antes
+  da mudança a série estava em 6 a 9 de cada 100. **Fica plano dentro do
+  ruído**, e a razão de não fechar com uma palavra é a que já estava escrita no
+  dia em que esta aposta abriu: nada aqui a separa da outra que mede o MESMO
+  degrau, e no meio da janela o limite grátis da Biela caiu de 5 para 3
+  perguntas por mês (17/10), que mexe no numerador por outro caminho.
+  - Então o veredito é: **INCONCLUSIVO, e não por falta de volume (são 500
+    aparelhos por semana), mas por desenho:** três mudanças no mesmo degrau na
+    mesma janela, sem braço comparável. Não reabre por janela; se a Biela como
+    porta de entrada voltar à mesa, ela volta como teste A/B com braço.
 - Veredito: (aberto)
 
 ## [aba-biela] A aba "Problemas" vira "Biela"
-- Estado: ABERTO
+- Estado: FECHADO (inconclusivo: mede o mesmo degrau da inicio-pergunta-unica, sem separação possível)
 - Tipo: mudanca-direta
 - Alvo no funil: `perguntou_biela` por usuário ativo na semana; guarda:
   `consultou_sintoma` não pode cair pela metade.
@@ -545,6 +713,19 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   (direcional, só web)
 - Antes: 66 `perguntou_biela` e 178 `consultou_sintoma` (desde 13/09) no
   funil; não li o recorte semanal de `consultou_sintoma` antes de abrir
+- **LEITURA DE 2026-11-06, cinco dias depois da data cheia (01/11), e o
+  veredito honesto é INCONCLUSIVO, não um número.** `perguntou_biela` por
+  aparelho ativo na semana, lido em 06/11 às 11h30 UTC: **42 de 488 (8,6 de
+  cada 100), 35 de 509 (6,9), 45 de 452 (10,0)** e 22 de 277 na parcial. Antes
+  da mudança a série estava em 6 a 9 de cada 100. **Fica plano dentro do
+  ruído**, e a razão de não fechar com uma palavra é a que já estava escrita no
+  dia em que esta aposta abriu: nada aqui a separa da outra que mede o MESMO
+  degrau, e no meio da janela o limite grátis da Biela caiu de 5 para 3
+  perguntas por mês (17/10), que mexe no numerador por outro caminho.
+  - Então o veredito é: **INCONCLUSIVO, e não por falta de volume (são 500
+    aparelhos por semana), mas por desenho:** três mudanças no mesmo degrau na
+    mesma janela, sem braço comparável. Não reabre por janela; se a Biela como
+    porta de entrada voltar à mesa, ela volta como teste A/B com braço.
 - Veredito: (aberto)
 
 ## [quiz-no-dia-1] A resposta do onboarding deixa de consumir o dia, e a pergunta do dia 1 é oferecida
@@ -585,7 +766,7 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Veredito: (aberto)
 
 ## [portao-unico-do-premium] Um portão só, que diz o que a pessoa ganha
-- Estado: ABERTO
+- Estado: FECHADO (inconclusivo: 1 a 2 checkouts por semana, degrau pequeno demais)
 - Tipo: mudanca-direta
 - Alvo no funil: `viu_paywall` → `iniciou_checkout`, por `ctx`; guarda:
   `perguntou_biela` por ativo na semana não pode cair.
@@ -635,7 +816,26 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
     da loja e desiste, tem ZERO eventos até agora.** Com `iniciou_checkout` em
     0 na semana, isso é coerente e não é instrumento quebrado: ninguém chegou à
     folha. Fica dito para a leitura de 03/11 não confundir os dois zeros.
-- Veredito: (aberto, com o degrau de chegada em 1 a 2 por semana)
+- **Veredito (2026-11-06, três dias depois da data cheia): INCONCLUSIVO, porque
+  o degrau de chegada é de uma a duas pessoas por semana.** Lido em 06/11 às
+  11h30 UTC, por aparelho: `viu_paywall` 64, 77, 77 e 38 na parcial (13 a 17 de
+  cada 100 ativos, plano); `iniciou_checkout` **1, 0, 2, 0**.
+  - O portão único não mudou quantos chegam ao paywall nem quantos saem dele, e
+    com 1 ou 2 checkouts por semana nenhuma quebra por `ctx` sustenta
+    conclusão. A métrica pedia conversão por `ctx`, e com três eventos na
+    janela isso não existe.
+  - **O PRIMEIRO `desistiu_da_compra` DA HISTÓRIA apareceu na semana de 26/10:
+    um aparelho.** O evento subiu com a 3.2 para contar quem abre a folha da
+    loja e volta. Um registro não é leitura, mas prova que o instrumento
+    funciona, o que até hoje era suposição.
+  - A causa de o degrau ser esse tamanho está fora do alcance desta aposta e
+    está diagnosticada em `docs/agentes/propostas/por-que-quase-ninguem-assina.md`:
+    a folha da loja não entregava o que a nossa tela prometia. **Aposta medida
+    num degrau de três pessoas volta inconclusiva por construção**, e isso é a
+    recomendação que eu repito desde 30/10.
+  - NÃO REABRE por janela. Ela volta quando o fundo do funil tiver gente, e
+    quem decide isso é o dono (preço, planos e ofertas das lojas).
+- Estado final: FECHADO em 2026-11-06.
 
 ## [landing-em-seis-blocos] A home tem uma promessa, o Biela em ação e a loja como único destino
 - Estado: ABERTO
@@ -703,6 +903,22 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Início: 2026-10-04 · Ler a partir de: 2026-10-18 (direcional) e 2026-11-01
 - Antes: home sem instrumento (zero por construção); /baixar 4 cliques na
   semana até 04/10; 28 visitantes na home em 7 dias (painel da Vercel)
+- **LEITURA DE 2026-11-06, cinco dias depois da data cheia, e ela tem um
+  problema que não é da aposta: o clique sumiu.** `clicou_baixar` com origem
+  `home-*`, por aparelho e por semana: **5, 8, 0 e 0**. Duas semanas seguidas
+  com ZERO cliques nos selos de loja da home.
+  - **Isto NÃO é veredito e eu não vou tratar como tal.** Zero absoluto depois
+    de duas semanas com 5 e 8 é o padrão de instrumento que parou, não de
+    comportamento que mudou, e esta casa já pagou cinco vezes por confundir os
+    dois. As duas hipóteses que separam: o evento parou de ser emitido (mudança
+    na home, no site, no deploy) ou o tráfego da home sumiu (a busca do Google
+    tem 3 cliques em 28 dias e a campanha mudou de alvo).
+  - **Não consigo separar as duas nesta sessão**, porque o denominador da home
+    vem do pacote `vercel_analytics` do retrato e eu não li a série dele por
+    semana aqui. Fica como pergunta endereçada, não como conclusão: a aposta
+    segue ABERTA e a leitura cheia espera a resposta.
+  - O que já estava dito e continua: a home tem 28 a 30 visitantes por semana,
+    então qualquer taxa aqui é direção, e 3 cliques a mais mudam dez pontos.
 - Veredito: (aberto)
 
 ## [convite-do-carro-nao-queima-com-convidado] O melhor momento do pedido para de ser gasto à toa
@@ -1017,7 +1233,7 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   leitura forte remarcada para o ciclo de IPVA.
 
 ## [resumo-mensal] O mês do carro fechado, por e-mail, push e no Início
-- Estado: ABERTO (web desde 13/09; o card do Início nas lojas com a 2.6)
+- Estado: FECHADO (inconclusivo por volume: 24 envios em dois meses, porque só 3,5 de cada 100 contas se qualificam)
 - Tipo: mudanca-direta
 - Alvo no funil: retorno nos três dias depois do envio.
 - Tese BeSci: efeito de progresso (o mês fechado é um marco). Chave `mes`
@@ -1028,13 +1244,30 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Aprovação: aprovada pelo dono em 2026-09-13
 - Início: 2026-09-13 (primeiro envio possível em 01/10) · Ler a partir de: dois envios
 - Antes: a jornada não tem resumo; o e-mail `km` é o mais perto disso
-- **NÃO ESTÁ VENCIDA, e a conta é esta (23/10):** a condição de leitura é DOIS
-  envios, e houve UM. Lido na `jornada_envios` em 23/10 às 11h15 UTC: a chave
-  `mes:2026-09` saiu para **15 pessoas** entre 01 e 03/10, e não há `mes:2026-10`
-  ainda. O segundo envio cai em 01/11, então a leitura é depois disso. Fica
-  registrado para a rodada que vier não a contar como atrasada nem a fechar com
-  um envio só.
-- Veredito: (aguardando o segundo envio, 01/11)
+- A condição de leitura era DOIS envios. Em 23/10 havia um (`mes:2026-09`, 15
+  pessoas), e por isso ela não foi lida naquela rodada.
+- **Veredito (2026-11-06): INCONCLUSIVO POR VOLUME, e o volume tem causa
+  conhecida.** Instrumento: `jornada_envios` e `funil_eventos`, 06/11 às 11h25
+  UTC. O segundo envio aconteceu: `mes:2026-10` saiu para **9 pessoas** em
+  01/11, depois de `mes:2026-09` para 15 em 01/10.
+  - A métrica era abertura nos 3 dias seguintes contra a média. Medido:
+    **3 de 15 no primeiro envio e 1 de 9 no segundo**, 4 de 24 no total. Com 24
+    pessoas, uma a mais ou a menos move a taxa em 4 pontos: não há leitura
+    possível, e nem faz sentido comparar contra média nenhuma.
+  - **A CAUSA DO VOLUME, e ela é o achado útil deste veredito:** o resumo só vai
+    para quem tem lançamento ou data cadastrada, que hoje são 14 contas com
+    abastecimento e 37 com data, de 678 com estado. **A máquina de retorno mais
+    recorrente que o app tem alcança umas 24 pessoas, 3,5 de cada 100 contas.**
+    O gargalo não é o e-mail, é quem se qualifica a recebê-lo.
+  - E o envio SEGUNDO caiu de 15 para 9, o que é a direção contrária do
+    crescimento da base. Não investiguei a causa, e isso fica declarado: pode ser
+    a regra de quem se qualifica, pode ser a saída de quem não abre (regra de
+    15/10, quem recebeu 5 sem abrir nenhum sai do envio).
+  - **NÃO REABRE por janela.** Com 24 pessoas, esperar mais dois meses daria 40,
+    e a pergunta continuaria sem resposta. Ela só volta a poder ser lida se o
+    público do resumo crescer, e isso é mudar quem recebe um e-mail, que é
+    decisão do dono (recomendação desta rodada).
+- Estado final: FECHADO em 2026-11-06.
 
 ## [modo-motorista-de-app] Ganhou, custou, sobrou: a conta do dia de quem trabalha com o carro
 - Estado: FECHADO (zero de 402 contas expostas ligaram o interruptor)

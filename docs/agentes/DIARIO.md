@@ -3,6 +3,192 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-07 · Guardião: o comentário que explica a troca virando a prova de que a troca não houve
+
+- **O número primeiro, porque é o que o Diretor pediu para não ficar enterrado:**
+  nenhuma conferência nova esta semana. O total ficou em **67**, igual ao de
+  31/10, e a fila de verdade caiu de **11 para 5**. Lido de
+  `npm run conferir:fila`, copiado: 67 conferências, 49 provadas por quem não as
+  escreveu, 5 só pelo autor no nascimento, 13 em dívida assumida.
+- **Dívida assumida: 13 itens, todos assumidos em 03/10/2026, e a mais velha
+  (`conferir:agenda`) faz 35 dias.** Ninguém reabriu nenhuma, e o gatilho de
+  reabrir é o mundo, não o calendário. O Diretor propôs que cada item carregue a
+  data em que a dívida foi assumida e que a rodada publique a mais velha: feito
+  aqui, e a decisão de transformar isso em critério é do dono.
+- **As seis da fila:** `aquisicao`, `cadastro`, `fila`, `publicacao`, `entre`,
+  `quiz-populacao`. **29 plantios, 24 mordidas, 5 cegas, todas as 5 consertadas e
+  replantadas.** Mais 1 plantio na `conferir:anomalias` e 2 na `conferir:saida`,
+  que não são das seis mas tinham o mesmo defeito medido.
+- **A forma nova, e ela é a prima da varredura de presença que fechou em 31/10:**
+  a conferência EXTRAI um valor de um arquivo e pega a primeira ocorrência do
+  arquivo inteiro. Quem renomeia alguma coisa documenta a troca num comentário
+  logo acima, e o comentário vem primeiro:
+
+  ```
+  -- antes de 07/11: create or replace function public.aparelhos_ativos
+  create or replace function public.aparelhos_ativos_v2(...)
+  ```
+
+  Plantado assim, a `conferir:anomalias` ficou verde lendo o nome antigo. A
+  `conferir:quiz-populacao` ficou verde com a view separando a população errada,
+  e o comentário do próprio script avisava desse risco achando que exigir a forma
+  `pergunta_id = '<id>'` bastava: não basta, o comentário tem a forma inteira. A
+  `conferir:aquisicao` contava fonte comentada como fonte aceita, nos dois lados.
+- **Medido antes de alargar:** 18 conferências leem `.sql`, **4 extraem valor de
+  dentro** e as 4 estavam cegas. Consertei as 4; nas 14 que só afirmam presença de
+  forma não mexi, porque ali comentário não vira valor.
+- **A outra forma: afirmar a condição não é afirmar a guarda.** `if (false &&
+  !chaveDadosOk(req))` deixou verdes as travas 1, 2 e 4 da `conferir:cadastro`.
+  São as três travas da skill `mensagem-a-cliente`, numa rota que manda e-mail
+  para a base. Medido: de 3 conferências que afirmam essas travas, 1 já usava a
+  guarda inteira (`conferir:email`) e 2 usavam o texto da condição (`cadastro` e
+  `saida`). As duas consertadas no molde da `conferir:biela`: a guarda com a
+  recusa que ela produz.
+- **Mais duas cegas, de famílias diferentes.** O retrato publicava a escada da
+  aquisição com as recusas esvaziadas e a `conferir:aquisicao` passava, embora a
+  frase final dela seja "as recusas viajam com o número". E um pedido da fila
+  entre papéis que perde a barra vertical da frente desaparecia: não aparecia para
+  quem recebe, não entrava no bloco dos parados e não envelhecia, que é a doença
+  exata que aquela fila existe para curar.
+- **A ferramenta:** o `npm run plantio` agora RECUSA plantio que só renomeia a
+  chamada com os mesmos argumentos, que foi o plantio que me deu verde falso na
+  rodada 4. Recusa provada (o plantio de 17/10 é rejeitado sem tocar no arquivo) e
+  as quatro formas que quebram o uso continuam passando. Era recomendação minha
+  para mim mesma desde 31/10, e o Diretor mandou fazer ou tirar da lista.
+- **A `conferir:publicacao` é o melhor molde da casa e vale copiar:** ela não LÊ o
+  comando da Vercel, ela o EXECUTA contra commits de verdade num repositório
+  temporário. Quatro plantios, quatro mordidas, nenhuma asserção de texto.
+- **O que esta rodada não alcança, e continua não alcançando:** plugin nativo e
+  qualquer coisa de aparelho. Não há sinal de aparelho aqui, e sobre build que
+  nenhum aparelho abriu a resposta é "sem sinal ainda".
+- **Onde eu falhei na minha própria régua:** critério 10 (plantar no consumidor).
+  Nas seis, eu plantei no consumidor em cinco. Na `conferir:cadastro` eu plantei
+  na rota, que é o consumidor certo, mas **não** no cron que conta os resgates do
+  cupom, e é o cron que decide se a oferta ainda existe. Fica para a próxima
+  rodada, escrito aqui com data para não envelhecer calado.
+- **Para o QA:** a linha de 04/11 na fila entre papéis (conferência de presença
+  por semana) ganhou um argumento novo hoje: a forma tem pelo menos três
+  parentes, e duas delas (extrair valor com comentário no caminho, e afirmar a
+  condição sem a guarda) nenhuma vigilância semanal minha pega sozinha.
+
+## 2026-11-06 · CRO: 85 de cada 100 pedem para registrar um serviço e não salvam, e três métricas minhas estavam erradas por desenho
+
+- Artifact "Retenção da semana": https://claude.ai/artifact/53J9he7ifo4ktWkqqLjMUr
+- Rodada de RETENÇÃO (a de 30/10 foi de conversão). **Cinco experimentos
+  fechados**, quatro deles inconclusivos com a causa nomeada.
+- **O ACHADO, e é a segunda vez em quatro semanas que a maior perda de uma área
+  está fora do painel.** Desde 19/10, **125 aparelhos tocaram em "Registrar
+  serviço"** na tela do carro, e por semana: tocaram 16, 52, 59, 62 e 36
+  (parcial); salvaram em 1 hora 2, 6, 10, 9 e 5. **85 de cada 100 nunca salvam
+  um serviço**, com a razão estável nas cinco semanas. O `quebraFunil` do
+  retrato não tem linha para este degrau.
+  - Por que é o degrau de retenção que importa: de 678 contas com estado, 651
+    têm carro e **62 têm serviço**; e **31 dos 62 têm dois ou mais**, ou seja
+    quem atravessa a primeira vez volta. A barreira é a primeira.
+  - O formulário tem **oito grupos de campo**, três deles listas que crescem,
+    contra os três que o cadastro de carro passou a pedir quando venceu em
+    02/10.
+- **PROPOSTA DA SEMANA, registrada como PROPOSTO: `servico-em-tres-campos`**,
+  teste A/B. A salva com os oito grupos; B salva com três (o que foi feito,
+  quando, quanto custou) e o resto aparece depois de salvar, com o ganho
+  nomeado, que é o desenho que venceu no cadastro de carro.
+  - **A DÚVIDA HONESTA que faz disto teste e não mudança direta:** registro sem
+    total não soma gasto nenhum, e registro sem km não move o calendário. B pode
+    trocar 85 que não salvam nada por registros que não servem para nada. Por
+    isso a métrica tem DUAS metades, e a segunda é guarda: se a passagem dobrar
+    e a fração com total cair pela metade, **B não venceu**. Escrito antes.
+  - Braço menor passa o critério de parada (40 toques por braço) em duas
+    semanas. **Teste A/B só liga com aprovação do dono; nada foi ligado.**
+- **TRÊS MÉTRICAS MINHAS, TRÊS MANEIRAS DE ERRAR, e as três são de desenho:**
+  - **Estoque sobre estoque.** O `primeiro-servico-com-ganho-nomeado` mediu
+    "contas com serviço sobre contas com carro": 21 de 175 para **62 de 651**,
+    ou seja piorou, porque o denominador quase quadruplicou e conta nova não
+    teve tempo de registrar nada. A leitura de FLUXO (coorte da semana, serviço
+    em 14 dias) dá 9 de 100, 11 de 104, 8 de 170 e 11 de 305: cai enquanto a
+    chegada triplica e o custo por conta vai de 6,51 para 2,75. Domina
+    composição. **INCONCLUSIVO.**
+  - **Zero lido de evento com trava de repetição.** Em 30/10 eu publiquei "0 de
+    224 viram a folha uma segunda vez"; `convite_conta` é `umaVez` por sessão,
+    então aquele zero era o tamanho da trava. E "73 fizeram algo de valor e
+    nenhum criou conta" cai também: **7 criaram, cinco aceitando a folha de 1 a
+    3 minutos depois de recusá-la**, quando ela reapareceu ao cadastrar outro
+    carro. Correção do dono em 30/10, conferida por mim hoje no banco.
+  - **Gatilho e tese com populações diferentes.** O denominador do repique que
+    eu escrevi (30 a 38 por semana) era da tese larga; o gatilho do código
+    (serviço, abastecimento ou aula) dá **18 a 25 por semana**. Relido hoje,
+    como o retorno mandou. **E o alvo de 10 contas caiu com ele:** a linha de
+    base verdadeira é 3 de cada 100 criando conta sem repique, então com 70 a
+    100 pessoas a aposta entrega direção, não efeito medido. Dito agora.
+- **O CORTE POR VERSÃO, e o achado de método:** com cada aparelho contado em
+  TODA versão em que apareceu, serviço em 14 dias dava 4,3 na 3.1 contra 7,0 e
+  8,2 na 3.2 e 3.3, o que parecia dobrar. Com cada aparelho contado UMA vez,
+  pela versão de ENTRADA: **4,4 contra 6,0**, e o braço novo só metade maduro.
+  **Corte por versão sem atribuição de entrada conta o mesmo aparelho dos dois
+  lados e fabrica o efeito**, porque quem atualiza é quem usa mais.
+- **OS OUTROS VEREDITOS:**
+  - `resumo-mensal` **INCONCLUSIVO por volume, com causa.** O segundo envio saiu
+    em 01/11 para **9 pessoas** (o primeiro, 15 em 01/10); abriram o app em 3
+    dias 3 de 15 e 1 de 9. A máquina de retorno mais recorrente do app alcança
+    **24 pessoas, 3,5 de cada 100 contas**, porque só quem tem lançamento ou
+    data se qualifica. O gargalo não é o e-mail. Não reabre por janela.
+  - `inicio-pergunta-unica` e `aba-biela` **INCONCLUSIVOS, e não por volume**
+    (500 aparelhos por semana): Biela por ativo em 7 a 10 de cada 100, dentro do
+    ruído, com **três mudanças no mesmo degrau na mesma janela**, incluindo o
+    limite grátis de 5 para 3 em 17/10.
+  - `portao-unico-do-premium` **INCONCLUSIVO**: checkout 1, 0, 2 e 0 por semana.
+    **O primeiro `desistiu_da_compra` da história apareceu na semana de 26/10**,
+    um aparelho: não é leitura, mas prova que o instrumento funciona.
+- **UM ZERO QUE EU NÃO CHAMO DE VEREDITO:** o `clicou_baixar` dos selos da home
+  deu **5, 8, 0 e 0**. Zero absoluto depois de 5 e 8 é padrão de instrumento que
+  parou, não de comportamento, e esta casa já pagou cinco vezes por confundir os
+  dois. **Não consigo separar nesta sessão** (não li a série de visitantes da
+  home), então o `landing-em-seis-blocos` segue ABERTO com a pergunta
+  endereçada. Recomendação 3.
+- **DÍVIDA DE PROCESSO PAGA:** a linha da fila entre papéis que eu respondi em
+  30/10 continuava lá porque eu não a apaguei. A regra diz que quem conclui
+  apaga a linha e escreve o desfecho no diário. Apagada; o desfecho está na
+  entrada de 30/10.
+- CONFERÊNCIAS: `npm run conferir` verde, saída 0, depois do último arquivo
+  escrito. **Nenhum código de app mudou nesta rodada**, porque a aposta é
+  proposta e teste A/B não liga sem o dono: então não há defeito plantado a
+  relatar, e isso é o esperado, não omissão.
+- **A MINHA RODADA CONTRA A MINHA RÉGUA: onze critérios, cumpridos.** O 1 por
+  verificação (os cinco vencidos fechados antes de registrar a proposta). O 6 no
+  sentido estrito: PROPOSTO e nada ligado. O critério 11 trabalhou de novo, agora
+  sobre a aposta da semana passada.
+- RECOMENDAÇÕES: (1) aprovar ou recusar o teste do formulário de serviço; (2)
+  quem recebe o resumo mensal, porque ampliar o público é mexer em envio
+  automático e é decisão do dono; (3) alguém conferir a emissão do clique na
+  home antes de a landing ser julgada, e não sou eu nesta sessão porque é
+  instrumento, não conversão.
+
+
+## 2026-11-06 · Engenharia: o primeiro dia do manual de volta, e a busca sem carro que levava 20 segundos
+
+- Conferência agendada de 05/11 (chegou às 10h09 UTC de 06/11), lida em
+  `biela_perguntas`, `funil_eventos`, `limites_atingidos` e `app_erros`.
+- **Volume:** 2 perguntas reais nas 23 horas depois do conserto do manual, e 2
+  nas 23 horas antes; o `perguntou_biela` do funil dá os mesmos 2 e 2. As
+  mudanças de 05/11 não derrubaram o uso: ele já estava baixo. As semanas de
+  85 perguntas são de outubro.
+- **Limite de 1:** nenhuma linha em `limites_atingidos`. Ninguém tentou a
+  segunda pergunta; com 2 perguntas no dia, zero recusa não diz nada ainda.
+- **Manual:** das 2, uma usou manual (01h20 UTC, Android 3.3.0). A outra, às
+  23h41 de 05/11, teve a busca cancelada pelo banco: "match_manual_chunks:
+  canceling statement due to statement timeout".
+- **A causa, medida com EXPLAIN ANALYZE no banco:** com marca e modelo, a busca
+  usa o índice e leva 0,25 s (Fiat Uno 2010, 136 trechos). SEM carro, ela varre
+  os 35.717 trechos e leva **20,8 s**. Não há como saber pela tabela se a
+  pergunta das 23h41 vinha sem carro (`biela_perguntas` não guarda o carro), então
+  isso é a hipótese que o tempo medido sustenta, não a causa provada daquela
+  pergunta.
+- **Conserto:** sem marca, `retrieveManualContext` não busca nada. Além do
+  tempo, a busca sem carro traria trechos do manual de qualquer marca, e a
+  Biela citaria o manual de outro carro. `conferir:embedding` cobra que nem a
+  Voyage nem o banco são chamados; plantio mordido. Não foi preciso índice
+  vetorial, que custaria perto do tamanho da coluna numa cota de 0,5 GB (o
+  banco está com 283 MB).
+
 ## 2026-11-05 · Engenharia: o Biela grátis vai a 1 pergunta, e o manual do carro nunca foi usado
 
 - **Decisões do dono de hoje, todas registradas no caderno**

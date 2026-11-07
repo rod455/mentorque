@@ -42,6 +42,21 @@ const problemas: string[] = [];
 const pedidos: Pedido[] = [];
 
 for (const linha of texto.split("\n")) {
+  // PEDIDO QUE PERDE O `|` DA FRENTE DESAPARECE (07/11/2026, rodada 7 do
+  // Guardião). Plantei a linha de 04/11 do ASO sem o `|` inicial e esta
+  // conferência ficou VERDE. O estrago não é de formato: a linha deixa de ser
+  // lida aqui E no `npm run entre`, então o pedido não aparece para quem
+  // recebe, não aparece no bloco dos parados e não envelhece, que é a doença
+  // exata que esta fila existe para curar. Some em silêncio, e silêncio é o
+  // que não dá para auditar depois.
+  //
+  // A regra: linha que COMEÇA com data no formato da fila é linha da fila,
+  // tenha ou não o `|` da frente. Não dá para reclamar de prosa que só cita
+  // uma data no meio de uma frase, e é por isso que a âncora é o começo.
+  if (!linha.trim().startsWith("|") && /^\s*\d{4}-\d{2}-\d{2}\s*\|/.test(linha)) {
+    problemas.push(`linha de pedido sem o "|" da frente: "${linha.trim().slice(0, 48)}". Assim ela nao entra na fila nem envelhece`);
+    continue;
+  }
   if (!linha.trim().startsWith("|")) continue;
   const col = linha.split("|").slice(1, -1).map((c) => c.trim());
   if (col.length !== 5) {

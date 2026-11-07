@@ -342,17 +342,11 @@ sem tirar ninguém dela.
 
 | conferência | última prova | mordeu? |
 |---|---|---|
-| `conferir:aquisicao` | no nascimento (autor), 03/10/2026 | 16 plantios, 16 mordidas: painel no lugar do MMP, total da loja dado pela Apple sozinha, fonte faltando virando zero (duas vezes), ressalva do SDK parando de viajar, recusa sem a aritmetica que a prova, denominador de qualquer fonte, e o retrato parando de publicar a escada. Mais 7 no leitor do relatorio do Play: UTF-16 deixando de ser tratado, marca de ordem de bytes ficando, busca de coluna voltando a ser exata (quebra no idioma), formato desconhecido virando zero, cabecalho sem linha virando total zero, mes mais novo vindo da ordem da lista, e a desinstalacao sumindo, e mais 6 plantios com 6 mordidas em 04/10 (relatorio do app vizinho escolhido como nosso, pacote cru dentro de outro nome, rota sem a trava, desinstalacao da coluna morta, base instalada do dia errado e nunca lida) |
-| `conferir:cadastro` | no nascimento (autor), 03/10/2026 | sim, no plantio de quem escreveu |
-| `conferir:fila` | no nascimento (autor), 03/10/2026 | sim, no plantio de quem escreveu |
-| `conferir:publicacao` | no nascimento (autor), 04/10/2026 | 7 plantios, 7 mordidas: ignoreCommand apagado, codigo de saida invertido (lido passa, executado nao), app/ excluida do build, comparacao com HEAD~3, assets/ no .vercelignore (a rota das pecas le em tempo de execucao), erro de digitacao em supabase/, e docs/ saindo do .vercelignore enquanto o comando ainda a ignora |
-| `conferir:entre` | no nascimento (autor), 06/10/2026 | formato só (data e papéis da tabela); não reprova por idade, de propósito |
-| `conferir:quiz-populacao` | no nascimento (autor), 07/10/2026 | 5 plantios, 5 mordidas: id do onboarding trocado no SQL, banco de perguntas reordenado, `security_invoker` removido, etiqueta de uma das duas populações perdida, e a rotação diária passando a devolver a pergunta do onboarding |
 | `conferir:gratis` | no nascimento (autor), 17/10/2026 | 6 plantios com `npm run plantio`, 6 mordidas: custo por km aberto ao grátis, causas cortadas em 2 de volta, a regra dando 2 causas na segunda consulta, a tela sem perguntar se é a primeira, o Biela trancado na tabela, e o card do Início mostrando o custo por km ao grátis |
-| `conferir:segredo` | no nascimento (autor), 04/11/2026 | 6 plantios, 6 mordidas: chave real em arquivo sem exceção, chave real DENTRO do arquivo com exceção (a que importa), JWT em documento, a bateria inteira com o defeito de pé, e no modo `--semana` a chave escrita na RESOLUÇÃO de uma junção, que o `git log -p` sozinho não vê (provado: zero no modo antigo, achado no novo, linha conferida) |
 | `conferir:prazo` | no nascimento (autor), 21/10/2026 | 6 plantios com `npm run plantio`, 6 mordidas: aborto com outro nome (o cliente da Supabase passa a repetir sozinho), relógio desligado quando chega o cabeçalho (o corpo travado escapa), coleta voltando ao cliente sem prazo, orçamento que estoura os 30 s do Vigia, orçamento sem conferência no `medir`, e o cancelamento de quem chamou ignorado |
 | `conferir:saude` | no nascimento (autor), 21/10/2026 | 5 plantios, 5 mordidas: odômetro zero voltando a contar como km medido, a tela parando de mostrar a ressalva, a ressalva substituindo o "baseado no seu quiz", a folha voltando a salvar quiz incompleto, e o peso do VRI dobrado. O quinto passou verde na primeira vez: o limite de 3 pontos tinha folga e absorvia a mudança de peso, então apertei para o valor publicado e acrescentei a leitura do peso na fonte. Em 22/10 (Engenharia), mais 3 plantios e 3 mordidas na seção 5: o `completou_quiz_saude` sumindo do `submit`, o evento saindo ANTES da trava do quiz incompleto, e um dos eventos fora da lista da rota. E o caminho da tela (o km pedido na saúde) foi para a suíte de navegador `km`, com 1 plantio e 1 mordida: o `informou_km` sumindo |
 | `conferir:painel` | no nascimento (autor), 25/10/2026 | 5 plantios com `npm run plantio`, 5 mordidas: chave errada ganhando selo, chave ficando no endereço do redirecionamento, o cookie guardando a própria chave, cookie sem `httpOnly`, e o `chaveDadosOk` passando a aceitar o cookie (o selo abriria as rotas que mandam e-mail) |
+| `conferir:segredo` | no nascimento (autor), 04/11/2026 | 6 plantios, 6 mordidas: chave real em arquivo sem exceção, chave real DENTRO do arquivo com exceção (a que importa), JWT em documento, a bateria inteira com o defeito de pé, e no modo `--semana` a chave escrita na RESOLUÇÃO de uma junção, que o `git log -p` sozinho não vê (provado: zero no modo antigo, achado no novo, linha conferida) |
 | `conferir:baixar` | 19/09/2026 | sim |
 | `conferir:relatorio` | 19/09/2026 | sim |
 | `conferir:travessao` | 19/09/2026 | sim, depois de consertada |
@@ -396,6 +390,12 @@ sem tirar ninguém dela.
 | `conferir:renovacao` | 31/10/2026 | não no ramo, consertada: `funil(renovou)` podia ficar dentro de ramo que nunca roda |
 | `conferir:saida` | 31/10/2026 | sim, 2 plantios: a assinatura do motivo na regra e na rota |
 | `conferir:segundo-pedido` | 31/10/2026 | não em 2 elos, consertada: a recusa descartada e o portão do repique sem barrar |
+| `conferir:aquisicao` | 07/11/2026 | 5 plantios, 2 mordidas e 3 CEGAS consertadas: fonte no código sem estar no banco mordia, e o retrato sem as linhas da escada também; ficavam VERDES uma fonte comentada com o nome citado no próprio comentário (nos dois lados, e o estrago é 500 `gravacao_falhou` todo dia em silêncio) e o retrato publicando a escada com as recusas esvaziadas. Soma-se aos 29 plantios do autor |
+| `conferir:cadastro` | 07/11/2026 | 8 plantios, 5 mordidas e 3 CEGAS consertadas: as travas 1, 2 e 4 (chave dos dados, `disparar: true` e teto do cupom) eram afirmadas pelo texto da condição, e `if (false && !chaveDadosOk(req))` passava VERDE nas três. Agora é a guarda com a recusa que ela produz, e as três mordem. Mordiam desde antes: teto que não corta a lista e consulta de exclusão ignorada |
+| `conferir:entre` | 07/11/2026 | 4 plantios, 3 mordidas e 1 CEGA consertada: papel fora da tabela do time, data que o calendário não tem e dia da semana que não bate mordiam; pedido que perde a barra vertical da frente desaparecia da fila em silêncio, sem aparecer para quem recebe nem envelhecer. Agora linha que começa com data é linha da fila, tenha a barra ou não |
+| `conferir:fila` | 07/11/2026 | 4 plantios, 4 mordidas: linha renomeada (a conferência sai do rodízio e vira órfã), dívida assumida escrita no lugar da linha (a ordem que escolhe as seis quebra), estado fora do molde, e conferência nova no package.json sem linha na fila, que é o caso vivo que a fez nascer |
+| `conferir:publicacao` | 07/11/2026 | 4 plantios, 4 mordidas, e ela EXECUTA o comando num repositório temporário em vez de lê-lo: código de saída invertido, base que falta passando a não publicar, pasta excluída do comando sem estar no `.vercelignore`, e `assets/` entrando no `.vercelignore` (a rota das peças o lê em tempo de execução) |
+| `conferir:quiz-populacao` | 07/11/2026 | 4 plantios, 3 mordidas e 1 CEGA consertada: id do onboarding trocado no código, pergunta do onboarding entrando na rotação diária e `security_invoker` removido mordiam; trocar o id DA VIEW deixando o antigo num comentário logo acima ficava verde, porque a busca pegava a primeira ocorrência do arquivo. Agora o comentário sai antes, e a busca é pela decisão que separa as populações |
 | `conferir:agenda` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 | `conferir:appsflyer` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 | `conferir:caminho` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
@@ -450,6 +450,54 @@ custo que não existia. Vale a lição geral, que é a mesma do caso `anonId`: o
 custo que justifica não fazer algo também é uma afirmação, e também se mede.
 
 ## Aprendizados
+
+**NOME CITADO EM COMENTÁRIO NÃO É NOME DECLARADO (07/11/2026, rodada 7).** A
+varredura de presença fechou em 31/10 com a forma "afirmar que o nome aparece".
+Esta rodada achou a prima dela, e ela é pior, porque a prova falsa vem de uma
+boa prática: **escrever no comentário o que mudou.**
+
+Três das cinco cegas de hoje são a mesma forma. A conferência EXTRAI um valor de
+um arquivo com `.exec`/`.match`, pega a PRIMEIRA ocorrência do arquivo inteiro, e
+o jeito como gente de verdade documenta uma troca põe a ocorrência antiga antes
+da nova:
+
+```
+-- antes de 07/11: create or replace function public.aparelhos_ativos
+create or replace function public.aparelhos_ativos_v2(...)
+```
+
+Plantado assim, a `conferir:anomalias` leu o nome ANTIGO no comentário, achou que
+batia com o retrato, e ficou verde. O retrato passaria a chamar função que o
+banco não tem. Na `conferir:quiz-populacao` o mesmo plantio fez a view separar a
+população errada com a conferência passando, e o comentário do próprio script
+avisava desse risco e achava que exigir a FORMA (`pergunta_id = '<id>'`)
+resolvia: não resolve, porque o comentário tem a forma inteira. Na
+`conferir:aquisicao` a fonte comentada com o nome citado dentro do comentário
+contava como fonte aceita, nos DOIS lados, e o estrago é 500 `gravacao_falhou`
+todo dia em silêncio.
+
+**Medido antes de alargar:** 18 conferências leem arquivo `.sql`; **4 extraem um
+valor de dentro dele**, e as 4 pegavam a primeira ocorrência sem descartar
+comentário. Consertei as 4 (em `quiz-populacao`, `aquisicao` e as duas de
+`anomalias`), e não toquei nas 14 que só afirmam presença de forma, porque ali o
+comentário não vira valor. O conserto é de duas linhas: **comentário fora antes
+de extrair, e extrair pela DECISÃO** (`case when pergunta_id = '<id>' then
+'onboarding'`), não por uma comparação solta em qualquer lugar do arquivo.
+
+**E AFIRMAR A CONDIÇÃO NÃO É AFIRMAR A GUARDA (07/11/2026, rodada 7).** As outras
+duas cegas de hoje: `/chaveDadosOk\(req\)/`, `/body\?\.disparar !== true/` e
+`/Number\.isInteger\(cupons\)/`. Plantei `if (false && !chaveDadosOk(req))` na
+rota do cadastro e as três ficaram VERDES: a condição continua escrita, a recusa
+nunca acontece. São as três travas da skill `mensagem-a-cliente`, numa rota que
+manda e-mail para a base inteira, e mensagem a cliente não tem desfazer.
+
+Medido: das 3 conferências que afirmam essas travas, **1 já usava a guarda
+inteira** (`conferir:email`, consertada numa rodada anterior) e **2 usavam o
+texto da condição** (`conferir:cadastro` e `conferir:saida`). Consertei as duas,
+no molde da `conferir:biela`: **a guarda e a recusa que ela produz, juntas**, que
+é o par que não sobrevive a desligar o `if`. A `conferir:saida` não é das seis da
+semana e eu só plantei duas das suas seções, então a data dela na fila NÃO mudou:
+conserto de um elo não é prova da conferência.
 
 **A VARREDURA DE PRESENÇA ACABOU, E O NÚMERO FECHA (31/10/2026).** Começou em
 24/10 com 16 asserções; 11 foram provadas naquele dia e 5 ficaram. Nesta rodada

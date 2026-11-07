@@ -16,6 +16,87 @@ Formato de cada tela/fluxo:
 
 ## Estado
 
+v12 em 2026-11-06: rodada de RETENÇÃO, e é de prestar contas: **cinco
+experimentos fechados**, quatro deles inconclusivos com a causa nomeada, e três
+dessas causas são métrica que eu mesmo escrevi errado. O achado é um degrau que
+nenhum painel desta casa tem: **125 aparelhos pediram para registrar um serviço
+e 85 de cada 100 nunca salvaram.** Próxima rodada alterna para CONVERSÃO.
+
+# O DEGRAU QUE NÃO ESTÁ NO PAINEL, OUTRA VEZ (2026-11-06)
+
+Desde 19/10, por aparelho e por semana, quem toca em "Registrar serviço" na tela
+do carro e quem salva:
+
+    semana    tocaram no atalho   salvaram em 1 h   salvaram algum dia
+    05/10            16                  2                  3
+    12/10            52                  6                  6
+    19/10            59                 10                 13
+    26/10            62                  9                 11
+    02/11            36 (parcial)        5                  6
+
+**85 de cada 100 que pedem para registrar um serviço nunca salvam um**, e a
+razão é estável nas cinco semanas. O `quebraFunil` do retrato não tem linha para
+este degrau, pela mesma razão do portão da conta em 16/10: ele não está no funil
+canônico. É a segunda vez em quatro semanas que a maior perda de uma área está
+fora do painel.
+
+Por que isto é o degrau de retenção que importa: de 678 contas com estado, 651
+têm carro e **62 têm serviço**. E dos 62, **31 têm dois ou mais**: quem atravessa
+a primeira vez volta. A barreira é a primeira. O formulário tem **oito grupos de
+campo**, três deles listas que crescem, contra os três que o cadastro de carro
+passou a pedir quando venceu o A/B de 02/10. Proposta de teste A/B desta rodada,
+aguardando o dono.
+
+# TRÊS MÉTRICAS MINHAS, TRÊS MANEIRAS DE ERRAR (2026-11-06)
+
+As três aparecem nos vereditos de hoje e as três são de desenho, não de leitura:
+
+- **Estoque sobre estoque.** O `primeiro-servico-com-ganho-nomeado` mediu
+  "contas com serviço sobre contas com carro": foi de 21 de 175 para 62 de 651,
+  ou seja piorou, porque o denominador quase quadruplicou e conta nova não teve
+  tempo de registrar nada. A leitura de fluxo (coorte da semana, 14 dias) dá 9,
+  11, 8 e 11 de cada 100, caindo enquanto a chegada triplica: o que domina é
+  composição, e o custo por conta caiu de 6,51 para 2,75 na mesma janela.
+- **Zero lido de evento com trava de repetição.** Em 30/10 eu publiquei "0 de
+  224 viram a folha uma segunda vez"; `convite_conta` é `umaVez` por sessão,
+  então aquele zero era o tamanho da trava. E "73 fizeram algo de valor e nenhum
+  criou conta" também cai: **7 criaram, cinco deles aceitando a folha de 1 a 3
+  minutos depois de recusá-la**, quando ela reapareceu ao cadastrar outro carro.
+  Correção do dono em 30/10, conferida por mim hoje.
+- **Gatilho e tese com populações diferentes.** O denominador do repique que eu
+  escrevi (30 a 38 por semana) era da tese larga, com Biela e sintoma dentro; o
+  gatilho do código é serviço, abastecimento ou aula, e dá **18 a 25 por
+  semana**. Relido hoje, como o retorno de 30/10 mandou.
+
+# O QUE FECHOU, E POR QUE NENHUM DELES É "NÃO FUNCIONOU" (2026-11-06)
+
+- `primeiro-servico-com-ganho-nomeado`: INCONCLUSIVO pela métrica de estoque. O
+  corte por versão com braços limpos dá 4,4 de cada 100 na 3.1 (última sem a
+  cópia) contra 6,0 na 3.2 (primeira com ela, metade madura): direção, no
+  máximo.
+- `resumo-mensal`: INCONCLUSIVO por volume, e o volume tem causa. O segundo
+  envio saiu em 01/11 para **9 pessoas**, depois de 15 em 01/10. A máquina de
+  retorno mais recorrente do app alcança **24 pessoas, 3,5 de cada 100 contas**,
+  porque só quem tem lançamento ou data se qualifica. O gargalo não é o e-mail.
+- `inicio-pergunta-unica` e `aba-biela`: INCONCLUSIVO, e não por falta de
+  volume (500 aparelhos por semana). Biela por ativo fica em 7 a 10 de cada 100,
+  dentro do ruído, e **três mudanças mexeram no mesmo degrau na mesma janela**,
+  incluindo o limite grátis caindo de 5 para 3 em 17/10.
+- `portao-unico-do-premium`: INCONCLUSIVO porque o degrau de chegada é de uma a
+  duas pessoas por semana. **O primeiro `desistiu_da_compra` da história
+  apareceu na semana de 26/10**, um aparelho: não é leitura, mas prova que o
+  instrumento funciona.
+
+# UM ZERO QUE EU NÃO VOU CHAMAR DE VEREDITO (2026-11-06)
+
+O `clicou_baixar` dos selos da home deu **5, 8, 0 e 0** nas últimas quatro
+semanas. Zero absoluto depois de 5 e 8 é o padrão de instrumento que parou, não
+de comportamento que mudou, e esta casa já pagou cinco vezes por confundir os
+dois. As duas hipóteses que separam: o evento parou de ser emitido, ou o tráfego
+da home sumiu (a busca do Google tem 3 cliques em 28 dias). **Não consigo
+separar nesta sessão**, então o `landing-em-seis-blocos` segue aberto com a
+pergunta endereçada, e não com um veredito.
+
 v11 em 2026-10-30: rodada de CONVERSÃO, e ela desce o portão da conta até o
 fundo. Nenhum veredito venceu hoje, e isso está medido em vez de suposto. O
 achado: **de 224 convidados que disseram "Agora não" à folha da conta, 73

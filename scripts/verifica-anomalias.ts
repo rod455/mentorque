@@ -37,6 +37,8 @@ function conferir(nome: string, condicao: boolean, detalhe = "") {
 const leia = (caminho: string) => readFileSync(new URL(`../${caminho}`, import.meta.url), "utf8");
 
 const sql = leia("supabase/anomalias-da-operacao.sql");
+/** Linha de comentário de SQL fora: nome citado em comentário não é nome declarado (07/11/2026). */
+const semComentarioSql = (s: string) => s.replace(/^[ \t]*--.*$/gm, "");
 const operacao = leia("lib/operacao.ts");
 const erros = leia("lib/app/erros.ts");
 
@@ -47,7 +49,22 @@ console.log("Anomalias: o vigia da operação continua ligado?");
 // Lido do arquivo e não repetido à mão: repetir o nome aqui criaria uma
 // terceira cópia, e a próxima divergência ficaria entre as duas cópias nossas.
 {
-  const nome = sql.match(/create or replace function public\.(\w+)/)?.[1] ?? "";
+  // E COMENTÁRIO FORA ANTES DE LER O NOME (07/11/2026, rodada 7 do Guardião).
+  //
+  // A medição daquela rodada: 18 conferências leem arquivo `.sql`, 4 EXTRAEM um
+  // valor de dentro dele, e as 4 pegavam a primeira ocorrência do arquivo sem
+  // descartar comentário. Plantei em `aparelhos-ativos.sql` a forma com que
+  // gente de verdade renomeia uma função:
+  //
+  //     -- antes de 07/11: create or replace function public.aparelhos_ativos
+  //     create or replace function public.aparelhos_ativos_v2(...)
+  //
+  // e esta conferência ficou VERDE. Ela leu o nome ANTIGO no comentário, achou
+  // que batia com o retrato, e o retrato passaria a chamar uma função que o
+  // banco não tem: a porta vira decoração, o campo vem vazio, e ninguém
+  // percebe. É palavra por palavra o estrago que a mensagem de falha abaixo
+  // promete pegar.
+  const nome = semComentarioSql(sql).match(/create or replace function public\.(\w+)/)?.[1] ?? "";
   conferir("o SQL declara a função das anomalias", !!nome, "o arquivo mudou de forma; releia antes de confiar nesta conferência");
 
   conferir(
@@ -228,7 +245,9 @@ console.log("Anomalias: o vigia da operação continua ligado?");
   // do funil ganhou a regra em lib/funilCorreto.ts; aqui é o alarme.
   {
     const sqlAtivos = leia("supabase/aparelhos-ativos.sql");
-    const nomeAtivos = sqlAtivos.match(/create or replace function public\.(\w+)/)?.[1] ?? "";
+    // Comentário fora antes de ler o nome, pelo mesmo motivo da seção 1: foi
+    // NESTE arquivo que o plantio de 07/11/2026 ficou verde.
+    const nomeAtivos = semComentarioSql(sqlAtivos).match(/create or replace function public\.(\w+)/)?.[1] ?? "";
     conferir("o SQL declara a função do denominador", !!nomeAtivos);
     conferir(
       "o retrato chama a função pelo nome que o SQL declara",
