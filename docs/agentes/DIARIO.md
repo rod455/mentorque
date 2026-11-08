@@ -4,7 +4,8 @@ Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
 ## 2026-11-08 · Segurança: rodada 8, o webhook do Instagram responde sem conferir quem chamou, e os 17 fluxos fecharam
-- Artifact "Segurança da semana" (rodada 8): (link no commit seguinte)
+- Artifact "Segurança da semana" (rodada 8):
+  https://claude.ai/artifact/8MPsdDdkL4AqTZgUeKFMqu
 - Semana de 39 commits, 4 deles de junção, todos dentro da varredura.
 
 ```
