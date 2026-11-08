@@ -17,6 +17,7 @@
 import { readFileSync } from "node:fs";
 import { LIMITE_GRATIS_POR_MES, mesDe, podePerguntar, restantes } from "../lib/biela/limite.ts";
 import { mesDe as mesDoOrcamento } from "../lib/orcamento/analise.ts";
+import { semTravessao } from "../lib/biela/semTravessao.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -326,6 +327,43 @@ console.log("Biela: o limite do gratuito, e quem o segura.");
       /did NOT receive any manual excerpt/.test(ramo),
     "sem isto a Biela cita uma fonte que não leu, e a citação é o que faz a pessoa confiar",
   );
+}
+
+// ── a resposta sai sem travessão (08/11/2026) ──────────────────────────────
+// Regra do dono para todo texto visível. A resposta é escrita pelo modelo, e
+// num teste em produção as duas vieram com travessão. O prompt pede; a função
+// garante; a rota tem de passar a resposta por ela.
+{
+  const T = "\u2014"; // travessão
+  const M = "\u2013"; // meia-risca
+  const casos: [string, string][] = [
+    [`A cada 15.000 km ${T} usando óleo semissintético.`, "A cada 15.000 km, usando óleo semissintético."],
+    [`gastas${T}o chiado avisa`, "gastas, o chiado avisa"],
+    [`Troque entre 10${M}15 mil km.`, "Troque entre 10 a 15 mil km."],
+    [`${T} pastilha\n${T} disco`, "- pastilha\n- disco"],
+    [`pelo manual. ${T} Isso muda se`, "pelo manual. Isso muda se"],
+    [`termina assim ${T}\noutra linha`, "termina assim\noutra linha"],
+    [`uma pausa ${M} no meio`, "uma pausa, no meio"],
+  ];
+  for (const [entra, sai] of casos) {
+    const r = semTravessao(entra);
+    conferir(`sem travessão: ${JSON.stringify(entra)}`, r === sai && !/[\u2014]/.test(r), JSON.stringify(r));
+  }
+  const intacto = "Óleo 5W-30, troca a cada 10.000 km (ou 6 meses). Ver item 3.2, etc.";
+  conferir("texto sem travessão sai idêntico (hífen, vírgula e ponto ficam)", semTravessao(intacto) === intacto, semTravessao(intacto));
+
+  const rota = leia("app/api/biela/route.ts");
+  conferir(
+    "a rota passa a resposta do modelo pela semTravessao",
+    /const answer = semTravessao\(/.test(rota),
+    "sem isto a função existe e a resposta sai com travessão do mesmo jeito",
+  );
+  conferir(
+    "o prompt proíbe travessão nos dois idiomas",
+    /nunca use travessão/.test(rota) && /never use an em dash/.test(rota),
+  );
+  const prompt = rota.slice(rota.indexOf("function systemPrompt"), rota.indexOf("function basicAnswer"));
+  conferir("o prompt não ensina travessão pelo exemplo", prompt.length > 0 && !prompt.includes(T), "o modelo imita a pontuação do prompt");
 }
 
 if (falhas) {

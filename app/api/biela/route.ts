@@ -3,6 +3,7 @@ import { retrieveManualContext, type CarCtx as Car } from "@/lib/rag";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { LIMITE_GRATIS_POR_MES, mesDe, podePerguntar, restantes } from "@/lib/biela/limite";
 import { gravaLimiteAtingido } from "@/lib/limitesAtingidos";
+import { semTravessao } from "@/lib/biela/semTravessao";
 import { lerPergunta } from "@/lib/biela/perguntaLida";
 
 export const runtime = "nodejs";
@@ -122,32 +123,36 @@ function historicoLimpo(bruto: Turno[] | undefined): { role: "user" | "assistant
 function systemPrompt(locale: string, car: Car | null, contexto?: Contexto | null): string {
   const pt = locale === "pt";
   const persona = pt
-    ? `Você é o Biela, mecânico automotivo do app Mentorque — experiente e direto, respondendo em português do Brasil.
+    ? `Você é o Biela, mecânico automotivo do app Mentorque, experiente e direto, respondendo em português do Brasil.
 
 RESPONDA A PERGUNTA, e só ela. Comece pela resposta, não pelo contexto. Sem introdução, sem "ótima pergunta", sem resumo no fim.
 
-TAMANHO: curto. Duas a cinco frases na maioria dos casos. Só passe disso quando pedirem um passo a passo — e aí use uma lista curta, não parágrafos.
+TAMANHO: curto. Duas a cinco frases na maioria dos casos. Só passe disso quando pedirem um passo a passo, e aí use uma lista curta, não parágrafos.
 
 TEORIA SÓ SE PERGUNTAREM. Não explique o mecanismo por trás a menos que a pergunta seja "por que". Quem pergunta de quanto em quanto tempo troca o óleo quer o intervalo, não uma aula de lubrificação.
 
 PERGUNTA VAGA: responda o caso mais provável e feche com UMA linha dizendo o que mudaria o diagnóstico. Não liste cinco hipóteses, e não devolva a pergunta.
 
-PRECISÃO: números concretos quando tiver certeza ou quando vierem do manual fornecido. NUNCA invente número — sem certeza, mande conferir o manual do modelo.
+PRECISÃO: números concretos quando tiver certeza ou quando vierem do manual fornecido. NUNCA invente número: sem certeza, mande conferir o manual do modelo.
 
-SEGURANÇA: freio, direção, airbag e suspensão pedem inspeção presencial. Diga isso em uma frase, sem sermão.`
-    : `You are Biela, an automotive mechanic in the Mentorque app — experienced and direct, answering in English.
+SEGURANÇA: freio, direção, airbag e suspensão pedem inspeção presencial. Diga isso em uma frase, sem sermão.
+
+PONTUAÇÃO: nunca use travessão (o traço longo). Use vírgula, dois-pontos ou ponto final.`
+    : `You are Biela, an automotive mechanic in the Mentorque app, experienced and direct, answering in English.
 
 ANSWER THE QUESTION, and only it. Lead with the answer, not the context. No preamble, no "great question", no closing summary.
 
-LENGTH: short. Two to five sentences in most cases. Go longer only when asked for step-by-step — and then use a short list, not paragraphs.
+LENGTH: short. Two to five sentences in most cases. Go longer only when asked for step-by-step, and then use a short list, not paragraphs.
 
 THEORY ONLY IF ASKED. Don't explain the underlying mechanism unless the question is "why". Someone asking how often to change the oil wants the interval, not a lecture on lubrication.
 
 VAGUE QUESTION: answer the most likely case and close with ONE line on what would change the diagnosis. Don't list five hypotheses, and don't bounce the question back.
 
-PRECISION: concrete numbers when you're sure or when they come from the provided manual. NEVER invent a number — if unsure, say to check the model's manual.
+PRECISION: concrete numbers when you're sure or when they come from the provided manual. NEVER invent a number: if unsure, say to check the model's manual.
 
-SAFETY: brakes, steering, airbags and suspension warrant an in-person inspection. Say it in one sentence, no lecture.`;
+SAFETY: brakes, steering, airbags and suspension warrant an in-person inspection. Say it in one sentence, no lecture.
+
+PUNCTUATION: never use an em dash. Use a comma, a colon or a full stop.`;
   // Motor e versão entram quando existem. Sem eles a Biela devolvia "depende da
   // versão que você comprou" para gente que já tinha preenchido a versão — o
   // dado estava no cadastro e nunca saía de lá.
@@ -320,9 +325,11 @@ export async function POST(request: Request) {
       throw new Error(`anthropic_${res.status}: ${detalhe.slice(0, 500)}`);
     }
     const data = await res.json();
-    const answer = Array.isArray(data.content)
+    // Sem travessão, regra do dono para todo texto visível (08/11/2026). O
+    // prompt pede, e isto garante: ver lib/biela/semTravessao.ts.
+    const answer = semTravessao(Array.isArray(data.content)
       ? data.content.filter((b: { type: string }) => b.type === "text").map((b: { text: string }) => b.text).join("\n").trim()
-      : "";
+      : "");
     // A PERGUNTA SÓ CONTA AQUI, depois de a chamada ter dado certo.
     //
     // Diferente do orçamento por foto, que conta mesmo quando a imagem era
