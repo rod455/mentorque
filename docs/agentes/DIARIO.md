@@ -3,6 +3,48 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-08 · Engenharia: a Biela caiu mais que o tráfego depois do limite de 1, e o servidor está são
+
+Leitura de 08/11, 13h UTC, no banco (`biela_perguntas` sem plataforma `teste`,
+`funil_eventos`, `limites_atingidos`, `app_erros`) e em dois testes em produção
+por fluxo TEMP do n8n (arquivados).
+
+- **Semana contra semana** (01/11 13h a 08/11 13h, contra os 7 dias antes):
+  Biela 39 perguntas de 28 pessoas, contra 98 de 55. Aparelhos que abriram o
+  app (android e ios) 406 contra 480, ou seja, -15%. Começaram o onboarding 315
+  contra 427 (-26%).
+- **Por dia, segundo instrumento:** o `perguntou_biela` do funil cai de 7,0
+  por dia (26/10 a 04/11) para 2,0 (05 a 07/11). A tabela dá o mesmo desenho.
+  O tráfego cai uns 20% no mesmo corte. **A Biela cai bem mais que o tráfego, e
+  a causa NÃO está provada.**
+- **O que foi descartado, com teste:**
+  - O servidor quebrado? Não. Às 13h12 UTC, uma pergunta com carro (Uno 2010)
+    respondeu em 7,2 s usando o manual do Uno 2013, e uma sem carro respondeu
+    em 4,1 s. Nenhum erro de Biela em `app_erros` desde 06/11.
+  - O registro de recusa quebrado? Não. Às 13h10 UTC, a segunda pergunta do
+    mês de um aparelho de teste levou 429 e gravou a linha em
+    `limites_atingidos`.
+- **O que o limite explica, e o que não explica.** Ele explica a queda de
+  perguntas por pessoa (de 1,8 para 1,0: ninguém faz a segunda). Ele NÃO
+  explica a queda de pessoas: quase todo mundo que pergunta está perguntando
+  pela primeira vez na vida, e a primeira pergunta continua livre. A amostra
+  depois de 05/11 é de 3,5 dias e 6 pessoas.
+- **A régua do teste da compra avulsa, que este dia esclareceu.** Com limite
+  de 1, a tela da Biela tranca logo depois da primeira resposta, no próprio
+  app, sem chamar o servidor. Então `limites_atingidos` só conta quem volta
+  numa sessão nova e tenta de novo (zero até agora). **Quem viu a parede é
+  quem fez a pergunta grátis do mês**, e isso sai de `biela_perguntas`
+  (`premium = false`). Desde 05/11: 6 viram, 0 tocaram no Premium dali
+  (`viu_paywall` com origem `biela`: 5 nos 10 dias antes, 0 depois).
+- **Manual:** das 4 perguntas reais desde o conserto de 06/11 10h13, nenhuma
+  usou manual. O teste com carro usou. A tabela não guarda o carro, então se
+  elas vieram sem carro ou com carro fora da base é coisa que eu não sei.
+- **Achado de passagem, consertado (4c3a6ce):** as duas respostas de teste
+  vieram com travessão. O prompt tinha quatro; perdeu os quatro, ganhou a
+  proibição, e a rota passa a resposta por `semTravessao`. Vale no deploy,
+  sem build. O orçamento por foto também mostra texto do modelo e eu não
+  conferi se ele tem o mesmo problema.
+
 ## 2026-11-08 · Segurança: rodada 8, o webhook do Instagram responde sem conferir quem chamou, e os 17 fluxos fecharam
 - Artifact "Segurança da semana" (rodada 8):
   https://claude.ai/artifact/8MPsdDdkL4AqTZgUeKFMqu
