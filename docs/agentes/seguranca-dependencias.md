@@ -216,6 +216,40 @@ aqui o repetido é o que dá data ao que mudar depois.
 
 ## Aprendizados
 
+### Três regras da rodada 8 (08/11/2026)
+
+**1. Contagem de pacote também cai quando a FAIXA de um aviso é corrigida, e aí
+ela cai em bloco.** Era a pergunta que eu não soube responder em 04/11 (o balde
+de desenvolvimento foi de 11 para 27 e voltou para 17 sem ninguém tocar numa
+dependência), e o retorno do dono cobrou o teste que separasse as hipóteses. O
+teste é barato e cabe em três leituras: compare a LISTA DE PACOTES de duas
+rodadas, veja quais saíram, e pergunte quantos deles tinham aviso PRÓPRIO. Em
+08/11 os dez que saíram tinham ZERO avisos próprios: todos herdavam, e as
+cadeias levavam a `minimatch` e `rimraf`. E ali estava a causa, no campo
+`range`: o aviso do `minimatch` (GHSA-g3hv-75wg-m249) passou de `<11.0.1` para
+`7.0.0 - 11.0.0`, e a nossa versão instalada é a **3.1.5**, que estava dentro e
+saiu; o do `rimraf` passou a começar em 4.2.0 e a nossa é 3.0.2. Uma correção de
+faixa em duas raízes derrubou dez pacotes da lista. **Então o `range` e o
+`effects` são o instrumento, e o total não é.** Não era aviso retirado em lote
+nem contagem mudada, que eram as outras duas hipóteses.
+
+**2. "Cobri primeiro quem manda mensagem a cliente" é uma promessa sobre a
+ORDEM, e ela se confere pela lista do que ficou de fora.** Em 04/11 eu escrevi
+essa frase e deixei os dois fluxos do Instagram entre os seis não abertos. Um
+deles manda mensagem privada para quem comenta: era a primeira leva pela minha
+própria régua. O conserto não é só abrir (está feito, 17 de 17): é que **quando
+uma rodada declara uma ordem de prioridade, a lista do que sobrou tem que ser
+lida contra essa ordem antes de publicar**, porque é ali que a promessa se
+desmente.
+
+**3. Webhook que recebe de uma plataforma grande quase sempre já traz a prova
+de origem, e não conferi-la é a decisão de ignorar o que chegou de graça.** O
+webhook de comentários do Instagram não autentica nada, e toda entrega da Meta
+chega com `x-hub-signature-256` no cabeçalho (lido numa execução real, com o
+user-agent e o IP da Meta do lado). Ou seja: o material para fechar a porta
+chega em toda requisição. Antes de chamar um webhook de "aberto por desenho",
+leia UMA execução e veja o que o remetente manda junto.
+
 ### Três regras da rodada 7 (04/11/2026)
 
 **1. Limite declarado é dívida, não desculpa, e esta mordeu em nove dias.** Em

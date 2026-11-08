@@ -3,6 +3,126 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-08 · Segurança: rodada 8, o webhook do Instagram responde sem conferir quem chamou, e os 17 fluxos fecharam
+- Artifact "Segurança da semana" (rodada 8): (link no commit seguinte)
+- Semana de 39 commits, 4 deles de junção, todos dentro da varredura.
+
+```
+CONTADORES (08/11/2026): avisos Supabase seguranca 18/6/1/1
+| performance 3/7/12/1
+| banco definer 4 (sem pg_temp 0, anon executa 0) | tabelas 23 (sem RLS 0, anon le 0)
+| views 16 (sem declarar 0) | npm producao 5 pacotes/10 avisos (criticas 0) | so dev 17 pacotes
+```
+**A linha de contadores provou o que ela existe para provar, na primeira semana
+de vida.** Dois números mudaram desde 04/11, e os dois têm a MESMA causa, com
+nome e data: a tabela `limites_atingidos`, nascida nesta semana. Ela subiu o
+`rls_enabled_no_policy` de 17 para 18 e o `unused_index` de 11 para 12 (o índice
+dela ainda não foi usado, o que é o normal de tabela recém-nascida). Nasceu
+certa, conferido em cima dela e não no agregado: RLS ligado, zero políticas,
+`anon` não lê nem grava, `authenticated` não lê, só o `service_role`. Em 25/10 eu
+disse "não sei em qual semana entrou o 17º"; o 18º já nasceu com data.
+
+### O ACHADO: o webhook do Instagram responde no Direct sem conferir quem chamou
+O retorno do dono de 04/11 mandou abrir os dois fluxos do Instagram **antes de
+qualquer outra coisa**, porque eu tinha prometido "primeiro quem manda mensagem
+a cliente" e deixado os dois de fora. Ele estava certo, e o achado estava ali.
+- **O que está aberto**: o webhook de POST do fluxo `dY9UPGPghiPYrO0S` não
+  autentica nada (o próprio n8n diz "No credentials required for this webhook"),
+  e o fluxo age sobre o corpo recebido **mandando mensagem privada pela nossa
+  conta**. Quem souber o endereço pode fabricar um comentário e escolher em qual
+  conversa a nossa conta responde, além de gravar linhas nas duas tabelas de
+  controle.
+- **O que limita o estrago, e isto é parte do achado**: o texto da mensagem sai
+  da nossa tabela `instagram_regras` (o atacante não escolhe a frase), a chamada
+  ao Graph usa o nosso token, e há dedupe por comentário e por pessoa por post.
+- **A exposição, medida**: 11 execuções na janela guardada, **todas em modo
+  `webhook`**, ou seja, todas de fora. Abri uma: era a Meta de verdade
+  (user-agent `Webhooks/1.0 (https://fb.me/webhooks)`, IP 173.252.95.47). Sem
+  evidência de abuso, e a retenção de execução do n8n é curta, então "só a Meta
+  até agora" vale para o que eu alcanço.
+- **E a tranca chega junto com a porta**: aquela entrega **já trazia o cabeçalho
+  `x-hub-signature-256`**. A Meta assina toda requisição; o fluxo ignora. O
+  conserto é comparar o HMAC-SHA256 do corpo cru com esse cabeçalho, e o que
+  falta é o App Secret numa credencial, que é a mão do dono (linha de 08/11 na
+  lista dele, e a linha de engenharia em `entre-papeis.md` diz que só anda
+  depois daquela).
+- **Um segredo escrito à mão, localização apenas**: o token de verificação da
+  Meta está em texto puro no nó "Token de verificacao bate?" desse mesmo fluxo.
+  Não digo o valor, por regra. Vale pouco (serve só para passar o aperto de mão
+  do GET), e entra aqui porque é a mesma família dos achados das rodadas 2 a 4.
+- **O segundo fluxo do Instagram (`YxFWWEGlMMgGT3Lw`) NÃO manda mensagem a
+  ninguém**, que era a outra resposta aceitável do retorno: está inativo, é
+  gatilho manual e só faz consulta ao Graph. Tem um texto de mensagem sobrando
+  de um teste antigo num nó, com o envio de corpo DESLIGADO, e isso é restinho,
+  não caminho.
+
+### A dívida da rodada 7 está paga: 17 de 17 fluxos lidos
+Em 04/11 eu publiquei "zero nós com a chave escrita à mão em 11 dos 17" e nomeei
+os 6 que faltavam. Os seis foram abertos hoje. **O resultado agora é sobre o
+denominador inteiro: zero nós com a `DADOS_CHAVE` escrita à mão nos 17 fluxos do
+Mentorque**, e cada nó que precisa dela chama o fluxo da credencial. Dos seis:
+dois do Instagram (acima), `prova do orçamento` e `avaliações das lojas` com um
+nó cada pelo fluxo da chave, `builds da App Store` com credencial JWT da Apple
+(o `kid` e o `iss` no nó são identificadores, não segredo), e `Peças Telegram`,
+que trouxe o segundo achado.
+
+### O segundo achado: a versão publicada do fluxo de Peças é uma antiga
+No `Sqvs6exQ6F4owt5o`, `versionId` e `activeVersionId` são DIFERENTES. A versão
+publicada não tem a lógica de não repetir peça já aprovada (o parâmetro `pular`
+e a `fonte` no botão Aprovar), que existe no rascunho. Não é segurança: é a
+família de erro que esta casa já pagou duas vezes, o arquivo dizendo uma coisa e
+o que roda dizendo outra. Foi para `entre-papeis.md`, porque publicar fluxo de
+outro papel não é minha alçada.
+
+### O balde de desenvolvimento: agora com teste, e não com explicação plausível
+O retorno cobrou isto com razão. Eu havia escrito que o balde "mede o que o
+mundo aprendeu", e isso explica SUBIR (11 para 27) e não explica CAIR (27 para
+17 em três dias). O teste que separa as três hipóteses (contagem, resposta do
+registro, árvore instalada) custou três leituras:
+1. **Quais pacotes saíram**: os dez são todos da cadeia do `eslint`.
+2. **Quantos tinham aviso PRÓPRIO**: zero. Todos herdavam, e as cadeias levam a
+   `minimatch` e `rimraf`.
+3. **O que mudou nas raízes**: o campo `range`. O aviso do `minimatch`
+   (GHSA-g3hv-75wg-m249) passou de `<11.0.1` para **`7.0.0 - 11.0.0`**, e a
+   nossa versão instalada é a **3.1.5**, que estava dentro da faixa antiga e
+   está fora da nova; o `effects` dele caiu de 8 para 2. O do `rimraf` passou a
+   começar em `4.2.0` e a nossa é `3.0.2`, com `effects` de 2 para 0.
+**Conclusão com instrumento:** não foi aviso retirado em lote nem contagem
+mudada. Foi a FAIXA AFETADA de dois avisos sendo corrigida, o que tirou as
+nossas versões de dentro dela e levou embora, de uma vez, os dez pacotes que só
+herdavam. O que fica como regra: o instrumento é `range` e `effects`, não o
+total.
+
+### As outras fontes
+- **Segredo escapando: nenhum.** 39 commits e 17.530 linhas acrescentadas,
+  **com as 4 junções da semana dentro** (é a primeira semana em que o conserto
+  de 04/11 trabalha de verdade: antes dele, quatro junções seriam quatro buracos).
+  Zero também nos 932 arquivos da árvore. O `.gitignore` continua com a regra
+  invertida inteira.
+- **Dependências de produção: paradas**, e isso aqui é bom: 5 pacotes, 10 avisos,
+  nenhuma crítica, nenhum aviso novo desde 04/11. A recomendação dos três
+  consertos sem versão maior (`nanoid` 3.3.18, `source-map-js` 1.2.2, `qs`
+  6.16.1) continua a mesma e continua **não sendo para fazer agora**, porque
+  nenhum alcança o usuário.
+- **Avisos do Supabase**: os mesmos quatro tipos, e a única mudança é a da tabela
+  nova, explicada na linha de contadores.
+- **Permissões**: não é a primeira rodada do mês. O inventário foi em 04/11 e o
+  próximo é **06/12/2026**.
+
+### O que está parado comigo
+- **4 dias**: a pergunta de 04/11 sobre as três portas sem uso no n8n (a
+  credencial sem dono, os 47 fluxos de produtos desligados e o fluxo do blog do
+  Vocaboost). Não repito a recomendação, só a idade.
+
+### Contra a régua
+Cumpri 1 a 9. **O que eu devo:** nada desta rodada, e isso é raro o bastante
+para eu desconfiar, então digo onde a rodada é fraca por construção. A exposição
+do webhook do Instagram eu medi com 11 execuções, que é a janela de retenção do
+n8n, e não com o registro de acesso do servidor, que eu não alcanço. Então
+"nenhum abuso" é verdade sobre o que o n8n guardou, não sobre a vida do webhook,
+que está de pé desde 10/09. Isso não muda o conserto nem a prioridade, mas muda
+o tamanho da frase.
+
 ## 2026-11-07 · Mídia: o vídeo do Google parou sozinho, e a causa veio da API em vez de um clique do dono
 
 - Artifact "Mídia da semana": https://claude.ai/artifact/R1EhjxazDTLrHzs28pxS2N
