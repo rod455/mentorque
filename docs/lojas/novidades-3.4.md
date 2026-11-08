@@ -34,7 +34,52 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
    diz "3/mês") e o singular "1 pergunta grátis restante neste mês" (na 3.3
    sai "1 perguntas grátis restantes").
 
+4. **O sintoma "Motor falhando" ganha o card da aula** (04/11, commit f1cea63,
+   rodada do Conteúdo). Mesmo caso do item 1: a aula `diag-motor-falhando`
+   chega pelo catálogo remoto, e a ligação na tela do sintoma
+   (`AULAS_DO_SINTOMA`, `engine-misfire`) vai no binário. Faltava nesta lista
+   até a revisão de 08/11.
+
+## Ficou FORA do binário, de propósito
+
+- **A compra avulsa (passe do problema e pacote de perguntas),** aprovada pelo
+  dono em 05/11, ainda não foi construída: faltam os produtos nas lojas e no
+  RevenueCat (cliques do dono) e o código de compra única. Vai numa versão
+  própria, com roteiro de aparelho de compra.
+- Tudo o que foi feito no servidor nesta semana já está no ar para todas as
+  versões, sem build: o limite de 1 pergunta grátis, o manual do carro no
+  Biela, a contagem de quem bate no limite, e a frase "conforme o manual"
+  proibida quando não há trecho.
+
+## A nota das lojas
+
+Pela regra da casa: o ganho, não o defeito; o verbo na ação da pessoa; nada
+que não tenha sido conferido. Fora dela de propósito: a mudança de 3 para 1
+pergunta grátis (não é ganho para a pessoa, e o texto da tabela de planos já
+diz o número certo).
+
+```
+Agora o app volta a lembrar de salvar sua garagem quando você já tem serviço, abastecimento ou aula guardados, para nada se perder se trocar de celular.
+
+Nos sintomas "Perda de força" e "Motor falhando", a aula que explica o problema está a um toque.
+```
+
+## Plugin nativo nesta versão
+
+Nenhum. De `android/`, `ios/` e `capacitor.config.ts`, desde a árvore da 3.3
+(e39b866), mudaram só os números de versão (3.4 e o piso 75). Nada de
+caminho nativo novo para ler no fonte.
+
 ## Roteiro de aparelho, escrito ANTES do build
+
+**Itens 1 e 4, os cards de aula.** No app atualizado, abrir o Biela, escolher
+os sintomas "Perda de força" e "Motor falhando": cada um mostra o card da aula
+na tela do sintoma, e tocar abre o leitor na aula certa
+(`diag-perda-de-forca` e `diag-motor-falhando`).
+
+**Item 3, os textos do Biela.** Num aparelho sem Premium e sem pergunta feita
+no mês: o Biela mostra "1 pergunta grátis restante neste mês", no singular, e
+a tabela de planos diz "1/mês".
 
 **Item 2, o segundo pedido.** Num aparelho que já tinha o app como convidado,
 com carro e pelo menos um serviço registrado, e que nunca criou conta:
