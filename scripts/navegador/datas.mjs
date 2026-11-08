@@ -79,7 +79,13 @@ export async function rodar({ nav, ok }) {
   ok("a folha do licenciamento vem com estado e final preenchidos", (await p3.locator("[data-pela-placa] select").inputValue()) === "SP" && (await p3.locator("[data-pela-placa] input").inputValue()) === "7");
   await p3.getByRole("button", { name: /Sugerir a data/i }).click();
   await p3.waitForTimeout(400);
-  ok("sugerir explica a data pelo calendário", /Final 7 em SP: vence 31\/10\/\d{4}, pelo calendário de \d{4}/.test(await app3.corpo()));
+  // Os DOIS textos valem, e qual aparece depende do dia em que a suíte roda
+  // (08/11/2026): até 31/10 a data cai num ano de calendário publicado e o
+  // texto é o exato; depois, a próxima é a do ano seguinte, ainda sem
+  // calendário, e o texto é o estimado. A suíte nasceu em 13/09 aceitando só o
+  // exato e reprovou sozinha no primeiro release depois de 31/10.
+  const cSug = await app3.corpo();
+  ok("sugerir explica a data pelo calendário (exata, ou estimada quando o ano ainda não tem calendário)", /Final 7 em SP: vence 31\/10\/\d{4}, pelo calendário de \d{4}/.test(cSug) || /Final 7 em SP: costuma vencer perto de 31\/10\/\d{4}\. O calendário de \d{4} ainda não saiu; a data é estimada pelo de \d{4}/.test(cSug), (cSug.match(/Final 7 em SP[^\n]*/) ?? ["(nenhuma explicação)"])[0]);
   await p3.getByRole("button", { name: /^Salvar$/i }).click();
   await p3.waitForTimeout(600);
   ok("salvar grava o licenciamento", /-10-31$/.test((await app3.sessaoGravada())?.vehicles?.[0]?.datas?.licenciamento?.em ?? ""));
