@@ -3,6 +3,32 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-09 · Engenharia: a compra avulsa pelo Stripe está construída, e desligada até o SQL rodar
+
+- **Decisão do dono de 08/11, com o risco dito antes:** no Android a compra
+  avulsa passa pelo Stripe, fora do app. A política de pagamentos da Play
+  exige a cobrança do Google para conteúdo digital; vender pelo Stripe pode
+  fazer a Play recusar a versão ou tirar o app do ar. Ele escolheu esse caminho
+  sabendo disso. No iPhone a folha não aparece.
+- **Construído:** o servidor (5270f77), a folha na parede da Biela e a volta
+  (3376307), e a folha só aparecendo com o servidor ligado (7c8c721). Preços
+  do dono de 05/11 no código, sem produto no painel do Stripe.
+- **Desligado, conferido em produção às 21h55 UTC:** `/api/avulsa/confirmar`
+  responde `ligada: false` e o checkout recusa com 503. O motivo: a tabela
+  `compras_avulsas` e a coluna `biela_perguntas.pago_com` não existem. O SQL
+  está em `supabase/compras_avulsas.sql` e não rodou, porque o conector do
+  Supabase desta sessão passou a responder por outra conta, que lista os
+  projetos "financasrodlu" e "sipatgo" e não o Mentorque.
+- **Provas:** `conferir:avulsa` nasceu com 10 plantios e 10 mordidas; a suíte
+  de navegador `avulsa` (o caminho na web com rotas dubladas, mais o caso do
+  servidor desligado) com 2 plantios e 2 mordidas; bateria completa verde em
+  1.213 s; build nativo local verde (49 MB); build da web verde na Vercel nos
+  três commits (o local caiu no carregador de fontes do Google, rede da
+  sessão).
+- **O que nenhuma conferência alcança:** o Stripe de verdade, a aba do sistema
+  e o `mentorque://compra` num Android. Roteiro de 8 passos na ficha da 3.4.
+  Até alguém pagar num aparelho, "sem sinal ainda".
+
 ## 2026-11-08 · Engenharia: a Biela caiu mais que o tráfego depois do limite de 1, e o servidor está são
 
 Leitura de 08/11, 13h UTC, no banco (`biela_perguntas` sem plataforma `teste`,
