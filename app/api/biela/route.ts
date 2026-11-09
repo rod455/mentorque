@@ -4,6 +4,8 @@ import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { LIMITE_GRATIS_POR_MES, mesDe, podePerguntar, restantes } from "@/lib/biela/limite";
 import { gravaLimiteAtingido } from "@/lib/limitesAtingidos";
 import { semTravessao } from "@/lib/biela/semTravessao";
+import { cabemAinda, creditosRestantes, passeValendo, quemPagaAPergunta, SALDO_VAZIO, type Saldo } from "@/lib/avulsa/direito";
+import { adotarCompras, avulsaPronta, lerSaldo } from "@/lib/avulsa/servidor";
 import { lerPergunta } from "@/lib/biela/perguntaLida";
 
 export const runtime = "nodejs";
@@ -208,6 +210,11 @@ export async function POST(request: Request) {
   let premium = false;
   let feitas = 0;
   const mes = mesDe();
+  // A COMPRA AVULSA (09/11/2026). Ligada só quando a tabela e a coluna
+  // existem (ver lib/avulsa/servidor.ts): sem elas, tudo como antes.
+  let avulsa = false;
+  let saldo: Saldo = SALDO_VAZIO;
+  let pagoCom: null | "credito" | "passe" = null;
   if (admin) {
     if (!userId && !anonId) return NextResponse.json({ ok: false, error: "sem_identidade" }, { status: 400 });
     if (userId) {
@@ -221,24 +228,52 @@ export async function POST(request: Request) {
       // para o quadro de temas medir quem mais usa o Biela. Sem este filtro,
       // quem cancelasse o Premium herdaria as próprias perguntas de assinante
       // como se fossem do mês grátis, e abriria o mês seguinte já no limite.
-      const q = admin
+      avulsa = await avulsaPronta(admin);
+      const q0 = admin
         .from("biela_perguntas")
         .select("id", { count: "exact", head: true })
         .eq("mes", mes)
         .eq("premium", false);
+      // Com a compra avulsa, o grátis do mês conta só a pergunta que NÃO foi
+      // paga: quem gastou crédito não perde a grátis por isso.
+      const q = avulsa ? q0.is("pago_com", null) : q0;
       const { count } = userId ? await q.eq("user_id", userId) : await q.eq("anon_id", anonId!);
       feitas = count ?? 0;
-      if (!podePerguntar(feitas, premium)) {
+      if (avulsa) {
+        await adotarCompras(admin, userId, anonId);
+        saldo = await lerSaldo(admin, userId, anonId);
+      }
+      const decisao = avulsa
+        ? quemPagaAPergunta({ premium, gratisFeitasNoMes: feitas, limiteGratis: LIMITE_GRATIS_POR_MES, saldo, agora: new Date() })
+        : null;
+      if (decisao?.pode) pagoCom = decisao.pagoCom;
+      if (decisao && !decisao.pode && decisao.motivo === "teto_do_passe") {
+        return NextResponse.json({ ok: false, error: "teto_do_passe", restantes: 0 }, { status: 429 });
+      }
+      if (decisao ? !decisao.pode : !podePerguntar(feitas, premium)) {
         // A recusa é contada (05/11/2026): é o denominador do teste da compra
         // avulsa, que aparece justamente aqui. Ver lib/limitesAtingidos.ts.
         await gravaLimiteAtingido(admin, { onde: "biela", mes, userId, anonId, feitas, plataforma: body.plataforma, versao: body.versao });
         return NextResponse.json(
-          { ok: false, error: "limite", limite: LIMITE_GRATIS_POR_MES, feitas, restantes: 0 },
+          { ok: false, error: "limite", limite: LIMITE_GRATIS_POR_MES, feitas, restantes: 0, ...(avulsa ? { avulsa: true } : {}) },
           { status: 429 },
         );
       }
     }
   }
+
+  // O que a tela precisa saber depois desta pergunta: quantas ainda cabem
+  // (nulo com Premium ou passe), quantos créditos sobram e até quando vai o
+  // passe. Sem a compra avulsa ligada, a resposta é a de sempre.
+  const saldoDaResposta = () => {
+    if (!avulsa) return { restantes: restantes(feitas, premium) };
+    const agora = new Date();
+    return {
+      restantes: cabemAinda({ premium, gratisFeitasNoMes: feitas, limiteGratis: LIMITE_GRATIS_POR_MES, saldo, agora }),
+      creditos: creditosRestantes(saldo),
+      passeAte: passeValendo(saldo, agora) ? saldo.passeAte!.toISOString() : null,
+    };
+  };
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
 
@@ -357,6 +392,9 @@ export async function POST(request: Request) {
         anon_id: userId ? null : anonId,
         premium,
         usou_manual: !!manual,
+        // Só existe com a compra avulsa ligada: com a coluna ausente, mandar o
+        // campo faria o insert falhar e a pergunta não contaria no limite.
+        ...(avulsa ? { pago_com: pagoCom } : {}),
         // DUAS ETIQUETAS, NUNCA O TEXTO. A política de privacidade promete
         // que o texto da pergunta só fica guardado quando a pessoa toca em
         // 👍 ou 👎; mudar essa promessa é decisão do dono. A régua e o porquê
@@ -370,6 +408,8 @@ export async function POST(request: Request) {
       // Mas fica no registro, porque contagem que não grava é limite que não
       // existe, e isso some em silêncio.
       if (error) console.error("[biela] não gravei a pergunta para o limite", { motivo: error.message });
+      else if (pagoCom === "credito") saldo = { ...saldo, creditosUsados: saldo.creditosUsados + 1 };
+      else if (pagoCom === "passe") saldo = { ...saldo, perguntasDoPasseHoje: saldo.perguntasDoPasseHoje + 1 };
       else feitas += 1;
     }
 
@@ -381,11 +421,11 @@ export async function POST(request: Request) {
       mode: "ai",
       answer: answer || basicAnswer(locale, car),
       usedManual: !!manual,
-      restantes: restantes(feitas, premium),
+      ...saldoDaResposta(),
     });
   } catch (err) {
     console.warn("[biela] AI call failed, falling back:", err);
     // Não conta: a chamada não completou, então a pessoa não gastou nada.
-    return NextResponse.json({ ok: true, mode: "basic", answer: basicAnswer(locale, car), restantes: restantes(feitas, premium) });
+    return NextResponse.json({ ok: true, mode: "basic", answer: basicAnswer(locale, car), ...saldoDaResposta() });
   }
 }

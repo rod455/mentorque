@@ -42,12 +42,15 @@ type Admin = SupabaseClient;
 export async function eventoDeFunil(
   admin: Admin,
   evento: string,
-  o: { userId?: string | null; origem: string; extra?: Record<string, unknown>; plataforma?: string }
+  o: { userId?: string | null; anonId?: string | null; origem: string; extra?: Record<string, unknown>; plataforma?: string }
 ): Promise<void> {
   try {
     const { error } = await admin.from("funil_eventos").insert({
       evento,
       user_id: o.userId && /^[0-9a-f-]{36}$/i.test(o.userId) ? o.userId : null,
+      // A compra avulsa não exige conta (09/11/2026): sem o aparelho, a compra
+      // de quem não tem conta viraria uma linha sem dono no funil.
+      ...(o.anonId ? { anon_id: String(o.anonId).slice(0, 64) } : {}),
       // "web" é o padrão porque o Stripe só vende na web. A compra pela LOJA
       // passa por aqui também (webhook do RevenueCat) e precisa dizer ios ou
       // android, senão a leitura por plataforma jura que ninguém compra pelo

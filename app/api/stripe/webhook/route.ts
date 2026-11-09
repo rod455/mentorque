@@ -5,6 +5,7 @@ import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { upsertSubscription, cicloNoBanco } from "@/lib/subscriptionSync";
 import { faturaDaVirada, fimDoCiclo, valorDoCheckout, viradaDeCiclo } from "@/lib/ciclo";
 import { eventoDeFunil } from "@/lib/funilServidor";
+import { avulsaPronta, gravarCompra, sessaoAvulsaPaga } from "@/lib/avulsa/servidor";
 
 export const runtime = "nodejs";
 
@@ -42,6 +43,27 @@ export async function POST(req: Request) {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
+        // A COMPRA AVULSA (09/11/2026): pagamento único, sem assinatura. Ela
+        // não toca em `subscriptions`: um pacote de R$ 1,90 não é Premium.
+        // Erro ao gravar LANÇA, para o Stripe reenviar: a pessoa pagou, e
+        // responder 200 aqui seria perder a compra calado.
+        if (session.mode === "payment" && session.metadata?.tipo === "avulsa") {
+          if (sessaoAvulsaPaga(session) && (await avulsaPronta(admin))) {
+            const r = await gravarCompra(admin, session);
+            if (r === "gravou") {
+              await eventoDeFunil(admin, "comprou_avulsa", {
+                userId: session.metadata?.user_id ?? null,
+                anonId: session.metadata?.anon_id ?? null,
+                origem: session.metadata?.produto ?? "avulsa",
+                plataforma: session.metadata?.plataforma || undefined,
+                extra: { sessao: session.id, pagoCentavos: session.amount_total ?? null, por: "webhook" },
+              });
+            }
+          } else if (sessaoAvulsaPaga(session)) {
+            throw new Error("compra avulsa paga sem a tabela compras_avulsas");
+          }
+          break;
+        }
         if (session.subscription) {
           const sub = await stripe.subscriptions.retrieve(session.subscription as string);
           await upsertSubscription(admin, sub, session.client_reference_id);

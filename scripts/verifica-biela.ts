@@ -80,7 +80,9 @@ console.log("Biela: o limite do gratuito, e quem o segura.");
   );
   conferir(
     "e recusa com 429 quando o mês acabou",
-    /if \(!podePerguntar\(feitas, premium\)\)[\s\S]{0,480}status: 429/.test(rota),
+    // A guarda ganhou a compra avulsa em 09/11 ("decisao ? !decisao.pode :
+    // !podePerguntar(...)"); o que se cobra é o mesmo: recusa com 429.
+    /!podePerguntar\(feitas, premium\)\) \{[\s\S]{0,480}status: 429/.test(rota),
   );
   conferir(
     "quem não tem identidade nenhuma é recusado",
@@ -304,7 +306,7 @@ console.log("Biela: o limite do gratuito, e quem o segura.");
   };
   conferir(
     "a rota do Biela grava a recusa dentro do ramo do limite, antes de responder",
-    /gravaLimiteAtingido\(admin, \{ onde: "biela"/.test(ramo(leia("app/api/biela/route.ts"), "if (!podePerguntar(feitas, premium))")),
+    /gravaLimiteAtingido\(admin, \{ onde: "biela"/.test(ramo(leia("app/api/biela/route.ts"), "!podePerguntar(feitas, premium)) {")),
   );
   conferir(
     "e a do orçamento também",

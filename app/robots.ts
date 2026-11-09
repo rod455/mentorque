@@ -20,7 +20,7 @@ export const dynamic = "force-static";
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://www.mentorque.com.br";
 
 // Caminhos que nenhum robô precisa ler, de IA ou de busca.
-const FECHADOS = ["/api/", "/painel", "/auth-bridge", "/embed"];
+const FECHADOS = ["/api/", "/painel", "/auth-bridge", "/compra-concluida", "/embed"];
 
 // Robôs de IA, nomeados um a um DE PROPÓSITO.
 //

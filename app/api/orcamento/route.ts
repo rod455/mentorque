@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { gravaLimiteAtingido } from "@/lib/limitesAtingidos";
+import { passeValendo } from "@/lib/avulsa/direito";
+import { avulsaPronta, lerSaldo } from "@/lib/avulsa/servidor";
 import {
   compararComFaixas,
   extrairJson,
@@ -80,9 +82,16 @@ export async function POST(req: Request) {
     premium = sub?.status === "active" || sub?.status === "trialing";
   }
 
+  // O PASSE DE 7 DIAS libera a análise sem limite (decisão do dono, 05/11).
+  // Só com a compra avulsa ligada; ver lib/avulsa/servidor.ts.
+  let comPasse = false;
+  if (!premium && (await avulsaPronta(admin))) {
+    comPasse = passeValendo(await lerSaldo(admin, userId, anonId), new Date());
+  }
+
   const mes = mesDe();
   let feitas = 0;
-  if (!premium) {
+  if (!premium && !comPasse) {
     const q = admin.from("orcamentos_analisados").select("id", { count: "exact", head: true }).eq("mes", mes);
     const { count } = userId ? await q.eq("user_id", userId) : await q.eq("anon_id", anonId!);
     feitas = count ?? 0;
@@ -144,7 +153,7 @@ export async function POST(req: Request) {
       versao: typeof b.versao === "string" ? b.versao.slice(0, 16) : null,
     });
 
-    const restantes = premium ? null : Math.max(0, LIMITE_GRATIS_POR_MES - feitas - 1);
+    const restantes = premium || comPasse ? null : Math.max(0, LIMITE_GRATIS_POR_MES - feitas - 1);
     return NextResponse.json({ ok: true, analise, restantes, premium });
   } catch (err) {
     console.warn("[orcamento] falhou:", err);
