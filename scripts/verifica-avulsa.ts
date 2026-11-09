@@ -114,11 +114,37 @@ console.log("Compra avulsa: produtos, quem paga a pergunta e as portas do servid
   const app = voltaDaCompra("?sessao=cs_live_abcdefghij&de=app");
   conferir("no app, volta pelo mentorque://compra com a sessão", app.tipo === "app" && app.url === "mentorque://compra?compra=cs_live_abcdefghij", app.url);
   const web = voltaDaCompra("?sessao=cs_live_abcdefghij&de=web");
-  conferir("na web, volta para o /app com a sessão", web.tipo === "web" && web.url === "/app?compra=cs_live_abcdefghij", web.url);
+  conferir("na web, volta para o /app com a sessão", web.tipo === "web" && web.url === "/app?ir=biela&compra=cs_live_abcdefghij", web.url);
   const torta = voltaDaCompra("?sessao=javascript:alert(1)&de=app");
   conferir("sessão sem forma de sessão do Stripe não passa", torta.url === "mentorque://compra", torta.url);
   const cancelou = voltaDaCompra("?cancelou=1&de=app");
   conferir("cancelado volta avisando", cancelou.cancelou && cancelou.url === "mentorque://compra?compra=cancelou", cancelou.url);
+}
+
+// ── o app (09/11/2026) ─────────────────────────────────────────────────────
+{
+  const folha = readFileSync(new URL("../components/app/CompraAvulsa.tsx", import.meta.url), "utf8");
+  const reais = (c: number) => `R$ ${Math.floor(c / 100)},${String(c % 100).padStart(2, "0")}`;
+  for (const [id, p] of Object.entries(PRODUTOS)) {
+    conferir(`o preço na tela de ${id} é o que o checkout cobra (${reais(p.centavos)})`, new RegExp(`${id}: "${reais(p.centavos).replace("$", "\\$")}"`).test(folha));
+  }
+  const cliente = leia("lib/app/compraAvulsa.ts");
+  conferir("a folha não aparece no iPhone", /return nativePlatform\(\) !== "ios";/.test(cliente) && /if \(!disponivel\) return null;/.test(semComentarios(folha)));
+  conferir("no app, o checkout abre FORA da WebView (aba do sistema)", /if \(isNativeApp\(\)\) openExternal\(data\.url\)/.test(cliente) && !/window\.location[^;]*data\.url[^;]*;[\s\S]{0,40}isNativeApp/.test(cliente));
+  // Lido cru: o tira-comentários come o "//" de dentro de "mentorque://".
+  const clienteCru = readFileSync(new URL("../lib/app/compraAvulsa.ts", import.meta.url), "utf8");
+  conferir("a volta pelo deep link fecha a aba e confirma", /url\.startsWith\("mentorque:\/\/compra"\)/.test(clienteCru) && /closeExternal\(\)/.test(cliente));
+  conferir("a volta para a frente confirma a sessão pendente", /visibilitychange/.test(cliente) && /sessaoPendente\(\)\) void tratar\(null\)/.test(cliente));
+  conferir("sessão pendente só sai quando a confirmação respondeu algo final", /data\.compra !== "pendente"\) guardar\(PENDENTE, null\)/.test(cliente));
+
+  const tela = leia("components/app/screens/Biela.tsx");
+  const i = tela.indexOf(") : gated ? (");
+  conferir("a parede da Biela mostra a folha avulsa junto do Premium", i > 0 && /<CompraAvulsa /.test(tela.slice(i, i + 300)) && /<LinhaPremium ctx="biela"/.test(tela.slice(i, i + 400)));
+  conferir("o teto do passe não vira oferta de compra (quem tem passe não compra de novo)", /recusa\.error === "teto_do_passe"\) setTetoDoPasse\(true\)/.test(tela));
+
+  const rotaFunil = leia("app/api/funil/route.ts");
+  conferir("o app pode gravar viu_avulsa e tentou_avulsa", /"viu_avulsa"/.test(rotaFunil) && /"tentou_avulsa"/.test(rotaFunil));
+  conferir("e NÃO pode gravar comprou_avulsa (quem grava compra é o servidor)", !/"comprou_avulsa"/.test(rotaFunil));
 }
 
 if (falhas) {

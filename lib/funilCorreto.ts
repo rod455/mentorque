@@ -66,6 +66,12 @@ export type EventoFunil =
   | "clicou_consultoria"
   // A fila de atalhos do Início (06/10/2026): `origem` leva o nome do atalho.
   | "clicou_atalho"
+  // A compra avulsa pelo Stripe (09/11/2026): a folha vista na parede da
+  // Biela, o toque num formato (`origem` = produto) e a compra paga, que
+  // chega pelo servidor. Ver lib/avulsa/direito.ts.
+  | "viu_avulsa"
+  | "tentou_avulsa"
+  | "comprou_avulsa"
   // A tela do quiz abriu (08/10/2026): `origem` diz se caiu na pergunta ou no
   // "você já respondeu hoje". Nasceu com o conserto do quiz do dia 1.
   | "abriu_quiz"
@@ -138,6 +144,11 @@ export const UNIDADE: Record<EventoFunil, Unidade> = {
   clicou_baixar: "aparelho",
   clicou_consultoria: "aparelho",
   clicou_atalho: "aparelho",
+  viu_avulsa: "aparelho",
+  tentou_avulsa: "aparelho",
+  // Gravado pelo servidor com a conta E o aparelho de quem foi ao Stripe: a
+  // compra avulsa não exige conta.
+  comprou_avulsa: "aparelho",
   abriu_quiz: "aparelho",
   recusou_convite_aviso: "aparelho",
   // A folha da conta só aparece para quem NÃO tem conta: é do aparelho por
@@ -207,6 +218,11 @@ export const NATUREZA: Record<EventoFunil, Natureza> = {
   // Repete de propósito: a mesma pessoa abastece três vezes na semana. Quem
   // lê conta por atalho, no `origem`, e "quantas pessoas" sai do distinct.
   clicou_atalho: "sessao",
+  // A parede aparece uma vez por sessão; o toque e a compra repetem (a mesma
+  // pessoa compra outro pacote na semana seguinte).
+  viu_avulsa: "sessao",
+  tentou_avulsa: "sessao",
+  comprou_avulsa: "ato",
   // Uma por dia por pessoa, no máximo, e repete amanhã: é sessão. Quem lê
   // separa pelo `origem` (pergunta ou ja-respondeu).
   abriu_quiz: "sessao",
@@ -253,6 +269,10 @@ export const MEDIDO_DESDE: Record<EventoFunil, string> = {
   clicou_consultoria: "2026-09-19",
   // A fila de atalhos do Início: no ar na web em 06/10; nas lojas, com a 3.1.
   clicou_atalho: "2026-10-06",
+  // A compra avulsa: servidor em 09/11; a folha só nas lojas com a 3.4.
+  viu_avulsa: "2026-11-09",
+  tentou_avulsa: "2026-11-09",
+  comprou_avulsa: "2026-11-09",
   // A tela do quiz: na web em 08/10; nas lojas, com a 3.2.
   abriu_quiz: "2026-10-08",
   // Os desfechos: no ar na web em 17/10; nas lojas, com a 3.2.

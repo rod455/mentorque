@@ -60,6 +60,9 @@ const EVENTOS_DO_APP = new Set([
   // A fila de atalhos do Início (06/10/2026): `origem` é o nome do atalho.
   // Sem ele a fila não tem leitura, e foi condição para ela entrar.
   "clicou_atalho",
+  // A compra avulsa (09/11/2026). `comprou_avulsa` NÃO entra aqui: quem grava
+  // a compra paga é o servidor, nunca o app.
+  "viu_avulsa", "tentou_avulsa",
   // A tela do quiz (08/10/2026): `origem` é pergunta ou ja-respondeu.
   "abriu_quiz",
   // Os desfechos que faltavam (17/10/2026): a recusa do convite de aviso, os

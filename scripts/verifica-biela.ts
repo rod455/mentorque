@@ -153,7 +153,9 @@ console.log("Biela: o limite do gratuito, e quem o segura.");
   );
   conferir(
     "o 429 fecha a tela e não vira mensagem de erro solta",
-    /if \(res\.status === 429\) \{[\s\S]{0,120}setRestantes\(0\)/.test(tela),
+    // 09/11: o 429 do teto do passe é o único que não fecha com zero (quem tem
+    // passe não recebe oferta de compra); todo outro 429 fecha.
+    /if \(res\.status === 429\) \{[\s\S]{0,260}else setRestantes\(0\)/.test(tela),
   );
   conferir(
     "a identidade viaja no pedido",

@@ -96,6 +96,10 @@ export type EventoFunil =
   // atalho (abastecer, servico, revisoes, orcamento, dia). Nasceu junto com
   // a fila, como condição para ela entrar: fila sem leitura é decoração.
   | "clicou_atalho"
+  // A compra avulsa (09/11/2026): a folha na parede da Biela e o toque num
+  // formato (`origem` = produto). A compra paga é gravada pelo servidor.
+  | "viu_avulsa"
+  | "tentou_avulsa"
   // A tela do quiz abriu (08/10/2026). `origem` é "pergunta" quando a
   // pergunta do dia foi oferecida e "ja-respondeu" quando a tela disse que a
   // pessoa já respondeu hoje. Nasceu com o conserto do quiz do dia 1 (QA,

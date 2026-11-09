@@ -15,6 +15,8 @@ import { APP_VERSION, vehicleLabel } from "@/lib/app/content";
 import { useNav } from "@/lib/app/nav";
 import { funil } from "@/lib/app/funil";
 import { isNativeApp, nativePlatform } from "@/lib/app/wrapper";
+import { confirmarCompra, escutarVoltaDaCompra, jaComprouAqui, sessaoPendente, type SaldoAvulso } from "@/lib/app/compraAvulsa";
+import { CompraAvulsa } from "../CompraAvulsa";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Chip, Icon, LinhaPremium, useContent } from "../ui";
 
@@ -68,6 +70,12 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
   const [input, setInput] = useState(seed ?? "");
   const [busy, setBusy] = useState(false);
   const [restantes, setRestantes] = useState<number | null>(null);
+  // A compra avulsa (09/11/2026): créditos de pacote, validade do passe, o
+  // teto de 30 por dia do passe e o aviso da volta do Stripe.
+  const [creditos, setCreditos] = useState(0);
+  const [passeAte, setPasseAte] = useState<string | null>(null);
+  const [tetoDoPasse, setTetoDoPasse] = useState(false);
+  const [avisoCompra, setAvisoCompra] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [motivoDe, setMotivoDe] = useState<number | null>(null); // índice da resposta esperando motivo
@@ -94,6 +102,29 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
   }, [idChat]);
 
   const gated = !s.premium && restantes !== null && restantes <= 0;
+
+  // A VOLTA DA COMPRA. O saldo que o servidor devolve manda na tela: com
+  // passe, `restantes` vem nulo e a parede some; com crédito, vem o número.
+  const aplicarSaldo = (r: SaldoAvulso | null) => {
+    if (!r?.ligada) return;
+    setRestantes(typeof r.restantes === "number" ? r.restantes : null);
+    setCreditos(r.creditos ?? 0);
+    setPasseAte(r.passeAte ?? null);
+    if (r.passeAte) setTetoDoPasse(false);
+  };
+  useEffect(() => {
+    const parar = escutarVoltaDaCompra((r) => {
+      if (r === "cancelou") { setAvisoCompra(c.biela.avulsaCancelada); return; }
+      aplicarSaldo(r);
+      if (r?.compra === "gravou" || r?.compra === "ja_existia") setAvisoCompra(c.biela.avulsaConfirmada);
+      else if (r?.compra === "pendente") setAvisoCompra(c.biela.avulsaPendente);
+    });
+    // Quem já comprou neste aparelho abre a tela sabendo o saldo; quem nunca
+    // comprou não gasta uma chamada por abertura.
+    if (jaComprouAqui() && !sessaoPendente()) void confirmarCompra(null).then(aplicarSaldo);
+    return parar;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // O 👍 ARMA o pedido de nota; quem dispara é o silêncio.
   //
@@ -249,12 +280,18 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
       // 429: as cinco do mês acabaram. A pergunta que a pessoa digitou fica na
       // tela (ela não some do nada) e a folha do Premium toma o lugar do campo.
       if (res.status === 429) {
-        setRestantes(0);
+        const recusa = (await res.json().catch(() => ({}))) as { error?: string };
+        if (recusa.error === "teto_do_passe") setTetoDoPasse(true);
+        else setRestantes(0);
         setBusy(false);
         return;
       }
       const data = await res.json();
+      setAvisoCompra(null);
       if (typeof data.restantes === "number") setRestantes(data.restantes);
+      else if (data.restantes === null && data.passeAte) setRestantes(null);
+      if (typeof data.creditos === "number") setCreditos(data.creditos);
+      if ("passeAte" in data) setPasseAte(data.passeAte ?? null);
       setMsgs((m) => [...m, {
         role: "biela", text: data.answer, note: data.mode === "ai" ? undefined : c.biela.offlineNote,
         pergunta: text, modo: data.mode, comManual: data.usedManual,
@@ -428,8 +465,13 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
         </button>
       )}
 
-      {gated ? (
+      {tetoDoPasse ? (
+        <p className="mb-2 rounded-2xl bg-graphite-800/60 p-3.5 text-center text-sm text-cream/80 ring-1 ring-white/10" data-teto-do-passe>
+          {c.biela.tetoDoPasse}
+        </p>
+      ) : gated ? (
         <div className="mb-2">
+          <CompraAvulsa aviso={avisoCompra} />
           <LinhaPremium ctx="biela" titulo={c.biela.premiumCta} sub={c.biela.freeOver} />
         </div>
       ) : (
@@ -438,8 +480,20 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
               (`restantes` nulo é "não perguntei ainda", não "zero"). Dizer o
               saldo é metade do ponto de a Biela ser grátis: quem não sabe que
               tem não usa. */}
-          {!s.premium && restantes !== null && (
-            <p className="mb-1.5 text-center text-xs text-cream/50">{restantes === 1 ? c.biela.freeLeftUm : c.biela.freeLeft.replace("{n}", String(restantes))}</p>
+          {avisoCompra && (
+            <p className="mb-1.5 text-center text-xs text-amber" role="status" data-aviso-compra>{avisoCompra}</p>
+          )}
+          {!s.premium && passeAte && (
+            <p className="mb-1.5 text-center text-xs text-cream/50" data-passe-ate>
+              {c.biela.passeAte.replace("{data}", new Date(passeAte).toLocaleDateString(locale === "pt" ? "pt-BR" : "en-US", { day: "2-digit", month: "2-digit" }))}
+            </p>
+          )}
+          {!s.premium && !passeAte && restantes !== null && (
+            <p className="mb-1.5 text-center text-xs text-cream/50">
+              {creditos > 0
+                ? (restantes === 1 ? c.biela.restanteComCompraUm : c.biela.restantesComCompra.replace("{n}", String(restantes)))
+                : (restantes === 1 ? c.biela.freeLeftUm : c.biela.freeLeft.replace("{n}", String(restantes)))}
+            </p>
           )}
           <div className="mb-2 flex items-end gap-2">
             <textarea

@@ -1822,6 +1822,26 @@ export function getContent(locale: Locale) {
       freeLeftUm: T("1 pergunta grátis restante neste mês", "1 free question left this month"),
       freeOver: T("Suas perguntas grátis deste mês acabaram. No Premium a conversa com o Biela não tem limite.", "You've used your free questions this month. With Premium, chatting with Biela has no limit."),
       premiumCta: T("Conversar sem limites", "Chat without limits"),
+      // A compra avulsa (09/11/2026): preços do dono de 05/11, em
+      // lib/avulsa/direito.ts. O valor aparece aqui por extenso porque a
+      // folha não consulta preço em lugar nenhum: o checkout cobra o mesmo
+      // número, e conferir:avulsa cobra que os dois batem.
+      avulsaTitulo: T("Ou pague só pelo que precisar, sem assinatura", "Or pay only for what you need, no subscription"),
+      avulsaPacote2: T("2 perguntas", "2 questions"),
+      avulsaPacote10: T("10 perguntas", "10 questions"),
+      avulsaPasse: T("Passe de 7 dias", "7-day pass"),
+      avulsaPasseSub: T("Biela e análise de orçamento sem limite por 7 dias", "Unlimited Biela and quote analysis for 7 days"),
+      avulsaPacoteSub: T("Sem prazo para usar", "No deadline to use them"),
+      avulsaAbrindo: T("Abrindo o pagamento…", "Opening checkout…"),
+      avulsaErro: T("Não consegui abrir o pagamento agora. Tente de novo em instantes.", "Couldn't open checkout right now. Please try again shortly."),
+      avulsaConfirmando: T("Confirmando seu pagamento…", "Confirming your payment…"),
+      avulsaConfirmada: T("Pronto, compra confirmada. Pode perguntar.", "Done, purchase confirmed. Go ahead and ask."),
+      avulsaCancelada: T("Compra cancelada. Nada foi cobrado.", "Purchase cancelled. You were not charged."),
+      avulsaPendente: T("O pagamento ainda não foi confirmado. Se você pagou, ele aparece aqui em alguns minutos.", "Payment not confirmed yet. If you paid, it will show up here in a few minutes."),
+      restantesComCompra: T("{n} perguntas restantes", "{n} questions left"),
+      restanteComCompraUm: T("1 pergunta restante", "1 question left"),
+      passeAte: T("Passe ativo até {data}", "Pass active until {data}"),
+      tetoDoPasse: T("Você chegou ao teto de 30 perguntas por dia do passe. Amanhã libera de novo.", "You've reached the pass limit of 30 questions per day. It resets tomorrow."),
       offlineNote: T("(Respondendo em modo básico, a IA completa com os manuais está sendo conectada.)", "(Answering in basic mode, the full AI with manuals is being connected.)"),
     },
 

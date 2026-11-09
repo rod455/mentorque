@@ -18,5 +18,6 @@ export function voltaDaCompra(busca: string): VoltaDaCompra {
   const cancelou = p.get("cancelou") === "1";
   const qs = valida && !cancelou ? `?compra=${encodeURIComponent(sessao)}` : cancelou ? "?compra=cancelou" : "";
   if (p.get("de") === "app") return { tipo: "app", url: `mentorque://compra${qs}`, cancelou };
-  return { tipo: "web", url: `/app${qs}`, cancelou };
+  // Na web, volta direto para a Biela, que é onde a confirmação acontece.
+  return { tipo: "web", url: `/app?ir=biela${qs.replace("?", "&")}`, cancelou };
 }
