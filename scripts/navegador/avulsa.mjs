@@ -107,9 +107,24 @@ async function cancelar(nav, ok) {
   await app.fechar();
 }
 
+/** O servidor de antes da tabela (o estado de 09/11, até o SQL rodar): a
+ *  resposta não traz `creditos`, e a parede tem de mostrar só o Premium. */
+async function servidorSemAvulsa(nav, ok) {
+  const app = await abrirApp(nav, { sessao: garagem({ startedAt: dia(0) }), rota: "/app?ir=biela" });
+  await app.ctx.route("**/api/biela", (rota) =>
+    rota.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true, mode: "ai", answer: "Óleo a cada 10.000 km.", restantes: 0 }) }),
+  );
+  await perguntar(app.pg, "De quanto em quanto tempo troco o óleo?");
+  ok("sem a compra ligada no servidor, a parede NÃO mostra os pacotes", (await app.pg.locator("[data-compra-avulsa]").count()) === 0);
+  ok("e mostra o Premium, como antes", (await app.pg.locator('[data-premium="biela"]').count()) === 1);
+  ok("nenhum erro de página sem a compra ligada", app.erros.length === 0, app.erros[0] ?? "");
+  await app.fechar();
+}
+
 const ESPERA_DA_VOLTA = 9000;
 
 export async function rodar({ nav, ok }) {
   await comprarEVoltar(nav, ok);
   await cancelar(nav, ok);
+  await servidorSemAvulsa(nav, ok);
 }

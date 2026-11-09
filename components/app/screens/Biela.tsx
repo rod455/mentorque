@@ -76,6 +76,11 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
   const [passeAte, setPasseAte] = useState<string | null>(null);
   const [tetoDoPasse, setTetoDoPasse] = useState(false);
   const [avisoCompra, setAvisoCompra] = useState<string | null>(null);
+  // A folha só aparece quando o SERVIDOR diz que a compra está ligada (o
+  // campo `creditos` na resposta, ou `avulsa` no 429). Sem a tabela no banco,
+  // o checkout responde 503, e mostrar os pacotes seria vender um botão que
+  // dá erro. A web recebe esta tela no push, antes de qualquer SQL.
+  const [avulsaLigada, setAvulsaLigada] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [motivoDe, setMotivoDe] = useState<number | null>(null); // índice da resposta esperando motivo
@@ -107,6 +112,7 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
   // passe, `restantes` vem nulo e a parede some; com crédito, vem o número.
   const aplicarSaldo = (r: SaldoAvulso | null) => {
     if (!r?.ligada) return;
+    setAvulsaLigada(true);
     setRestantes(typeof r.restantes === "number" ? r.restantes : null);
     setCreditos(r.creditos ?? 0);
     setPasseAte(r.passeAte ?? null);
@@ -280,7 +286,8 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
       // 429: as cinco do mês acabaram. A pergunta que a pessoa digitou fica na
       // tela (ela não some do nada) e a folha do Premium toma o lugar do campo.
       if (res.status === 429) {
-        const recusa = (await res.json().catch(() => ({}))) as { error?: string };
+        const recusa = (await res.json().catch(() => ({}))) as { error?: string; avulsa?: boolean };
+        if (recusa.avulsa) setAvulsaLigada(true);
         if (recusa.error === "teto_do_passe") setTetoDoPasse(true);
         else setRestantes(0);
         setBusy(false);
@@ -290,7 +297,7 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
       setAvisoCompra(null);
       if (typeof data.restantes === "number") setRestantes(data.restantes);
       else if (data.restantes === null && data.passeAte) setRestantes(null);
-      if (typeof data.creditos === "number") setCreditos(data.creditos);
+      if (typeof data.creditos === "number") { setCreditos(data.creditos); setAvulsaLigada(true); }
       if ("passeAte" in data) setPasseAte(data.passeAte ?? null);
       setMsgs((m) => [...m, {
         role: "biela", text: data.answer, note: data.mode === "ai" ? undefined : c.biela.offlineNote,
@@ -471,7 +478,7 @@ export function BielaChatScreen({ seed }: { seed?: string }) {
         </p>
       ) : gated ? (
         <div className="mb-2">
-          <CompraAvulsa aviso={avisoCompra} />
+          {avulsaLigada && <CompraAvulsa aviso={avisoCompra} />}
           <LinhaPremium ctx="biela" titulo={c.biela.premiumCta} sub={c.biela.freeOver} />
         </div>
       ) : (

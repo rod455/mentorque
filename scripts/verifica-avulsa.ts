@@ -139,7 +139,8 @@ console.log("Compra avulsa: produtos, quem paga a pergunta e as portas do servid
 
   const tela = leia("components/app/screens/Biela.tsx");
   const i = tela.indexOf(") : gated ? (");
-  conferir("a parede da Biela mostra a folha avulsa junto do Premium", i > 0 && /<CompraAvulsa /.test(tela.slice(i, i + 300)) && /<LinhaPremium ctx="biela"/.test(tela.slice(i, i + 400)));
+  conferir("a parede da Biela mostra a folha avulsa junto do Premium", i > 0 && /\{avulsaLigada && <CompraAvulsa /.test(tela.slice(i, i + 300)) && /<LinhaPremium ctx="biela"/.test(tela.slice(i, i + 400)));
+  conferir("a folha só liga quando o servidor manda o saldo (sem a tabela, o checkout dá 503)", /if \(typeof data\.creditos === "number"\) \{ setCreditos\(data\.creditos\); setAvulsaLigada\(true\); \}/.test(tela) && !/useState\(true\)[^\n]*\n[^\n]*avulsa/i.test(tela));
   conferir("o teto do passe não vira oferta de compra (quem tem passe não compra de novo)", /recusa\.error === "teto_do_passe"\) setTetoDoPasse\(true\)/.test(tela));
 
   const rotaFunil = leia("app/api/funil/route.ts");
