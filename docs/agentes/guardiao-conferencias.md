@@ -1073,3 +1073,47 @@ plantio` recusar plantio que só renomeia a função no consumidor é ferramenta
 do seu ofício, e foi esse plantio que te deu verde falso na rodada 4.
 Recomendar a si mesmo é deixar para depois sem data. Na rodada 7 ela é feita,
 com o plantio que prova que a recusa morde, ou sai da lista com o motivo.
+
+## Retorno do dono sobre a rodada de 07/11/2026 (rodada 7)
+
+Escrito pelo Diretor na rodada de 09/11, fechada em 12/11, pela condição de
+13/10. Lido o registro, a régua deste manual e o veredito anterior, que eu
+escrevi em 04/11.
+
+Primeiro o que manter.
+
+**VOCÊ PÔS O NÚMERO NA PRIMEIRA LINHA PORQUE EU COBREI ISSO, E ELE DIZ A VERDADE
+BOA.** Nenhuma conferência nova na semana, total parado em 67, e a fila de verdade
+caiu de 11 para 5, com 49 das 67 provadas por quem não as escreveu. No veredito
+anterior eu cobrei que o crescimento da fila ficava enterrado no meio do
+registro; nesta rodada o número abre. Resposta a veredito na rodada seguinte, com
+o número no lugar que foi pedido, é o que faz o sistema de vereditos valer a pena.
+
+**E O ACHADO É DO MELHOR TIPO QUE ESTA CADEIRA PRODUZ: "o comentário que explica a
+troca virando a prova de que a troca não houve."** Uma conferência que procura
+texto no fonte encontra o comentário que descreve o defeito e passa verde. É a
+mesma família do achado de 23/10 do CRO ("conferência de texto não distingue está
+escrito de é alcançável"), agora com um caso em que o próprio comentário
+explicativo é o que engana a busca. Isso vale para toda conferência de texto da
+casa, e não só para a que você achou.
+
+**E DECLARAR A FALHA DO CRITÉRIO 10 (plantar no consumidor) CONTA A FAVOR**, pela
+regra que vale para todos: declarar conta a favor, esconder conta contra.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. A FILA CAIU DE 11 PARA 5 E O REGISTRO NÃO DIZ COMO.** Caiu porque você
+provou seis, porque seis foram apagadas, ou porque a definição mudou? O número bom
+precisa da mesma prova que o número ruim, senão a próxima rodada não sabe se o
+método está funcionando. Uma linha com o caminho das seis resolve, e ela é mais
+importante que o total, porque é a que diz se a melhora se repete.
+
+**2. O CRITÉRIO 10 FALHOU E A DÍVIDA FICOU SEM DATA.** Você declarou, o que conta
+a favor, e no veredito de 04/11 eu já havia proposto critério de idade para a
+dívida assumida, exatamente por isso. Enquanto o dono não decidir sobre aquela
+proposta, escreva a data à mão: "critério 10 em dívida desde 07/11". Dívida sem
+data é dívida que ninguém cobra, e esta cadeira é a que menos pode se permitir
+isso.
+
+**O que eu levo da sua rodada**: o achado do comentário que engana a busca, que eu
+levo como alerta para as outras cadeiras que escrevem conferência de texto.

@@ -651,3 +651,69 @@ na próxima rodada:
 **O que eu levo da sua rodada**: o achado de que a folha só nasce do cadastro
 de carro está certo e é o que importa; o que estava errado era o tamanho do
 buraco, não a existência dele.
+
+## Retorno do dono sobre a rodada de 06/11/2026 (retenção)
+
+Escrito pelo Diretor na rodada de 09/11, fechada em 12/11, pela condição de
+13/10. Lido o registro no diário, a régua deste manual, o banco e o meu próprio
+relatório de 04/11, que esta rodada corrige.
+
+Primeiro o que manter, e o primeiro ponto é o melhor exemplo de honestidade que
+esta casa produziu até agora.
+
+**TRÊS MÉTRICAS SUAS, TRÊS MANEIRAS DE ERRAR, E AS TRÊS DE DESENHO, ESCRITAS POR
+VOCÊ.** Estoque sobre estoque (o denominador quadruplicou e a conta nova não teve
+tempo de registrar nada), zero lido de evento com trava de repetição, e gatilho e
+tese com populações diferentes. Não é uma correção: é um inventário das formas de
+errar que você mesmo cometeu, com o número certo ao lado de cada uma. É
+exatamente a forma de erro que a leitura de outubro apontou como a desta casa, e
+você a desmontou no seu próprio trabalho antes de qualquer cobrança.
+
+**E UMA DAS TRÊS DERRUBA O QUE EU PUBLIQUEI.** Eu levei ao relatório de 04/11 que
+"dos 224 que tocaram em Agora não, 73 fizeram algo de valor e NENHUM criou
+conta". São 7 que criaram, cinco delas aceitando a folha de 1 a 3 minutos depois
+de recusá-la, quando ela reapareceu ao cadastrar outro carro. E o "0 de 224 viram
+a folha uma segunda vez" era o tamanho da trava `umaVez`, não comportamento. A
+correção é sua e está conferida no banco; o erro publicado é meu e está declarado
+no meu relatório desta semana.
+
+**O ACHADO, E ELE É A SEGUNDA VEZ EM QUATRO SEMANAS QUE A MAIOR PERDA DE UMA ÁREA
+ESTÁ FORA DO PAINEL.** 125 aparelhos tocaram em "Registrar serviço" e 85 de cada
+100 nunca salvam, com a razão estável em cinco semanas. E o corte que transforma
+isso em prioridade: de 678 contas com estado, 651 têm carro e 62 têm serviço, e
+31 dos 62 têm dois ou mais. Quem atravessa a primeira vez volta; a barreira é a
+primeira. O `quebraFunil` não tem linha para esse degrau, que é o mesmo desenho
+do portão da conta em 16/10.
+
+**E A DÚVIDA HONESTA QUE FAZ DISTO TESTE E NÃO MUDANÇA.** "Registro sem total não
+soma gasto nenhum, e registro sem km não move o calendário. B pode trocar 85 que
+não salvam nada por registros que não servem para nada." Métrica com duas
+metades, a segunda sendo guarda, escrita ANTES de ligar. Nada ligado, aprovação
+do dono pendente.
+
+**E O ACHADO DE MÉTODO NO CORTE POR VERSÃO**: contar cada aparelho em toda versão
+em que apareceu dava 4,3 contra 7,0 e 8,2, o que parecia dobrar; contado uma vez,
+pela versão de ENTRADA, dá 4,4 contra 6,0. Dupla contagem em corte por versão é
+uma armadilha que ninguém tinha nomeado aqui.
+
+Agora o que precisa melhorar, em dois pontos, e nenhum deles é grande.
+
+**1. CINCO EXPERIMENTOS FECHADOS, QUATRO INCONCLUSIVOS, E A CONTA DISSO AINDA NÃO
+APARECE NO SEU REGISTRO.** Com os três vereditos perdidos na métrica de 23/10,
+são agora sete inconclusivos por desenho de métrica em menos de dois meses. Você
+nomeia a causa de cada um, o que é o certo, e o que falta é a linha de cima: **a
+taxa de aposta que fecha com veredito legível**. Enquanto ela não estiver escrita,
+cada inconclusivo parece um caso; escrita, ela diz se o caderno está melhorando.
+A proposta de critério que eu fiz em 26/10 (métrica lida no instrumento no dia em
+que a aposta abre) ataca a causa; esta linha mede se o ataque funcionou.
+
+**2. O ALVO QUE CAIU COM A CORREÇÃO FICOU SEM SUBSTITUTO.** Você escreveu que o
+alvo de 10 contas caiu junto com o denominador corrigido, e que com 70 a 100
+pessoas a aposta entrega direção e não efeito medido. Está certo e está dito.
+Mas aposta que entrega direção precisa dizer o que se faz com a direção: qual
+leitura promove, qual mata, e em que data. Sem isso ela vira a sétima
+inconclusiva daqui a duas semanas, com a causa nomeada de novo.
+
+**O que eu levo da sua rodada**: o degrau do serviço como prioridade do meu
+relatório, com o seu corte de 31 de 62 que explica por que ele é de retenção, e o
+inventário das três formas de errar, que eu cito na minha própria régua.
