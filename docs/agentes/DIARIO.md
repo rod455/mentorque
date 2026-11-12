@@ -3,6 +3,80 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-12 · Conteúdo: a cor da fumaça, e a ressalva de três semanas virou pedido com o número que ele vale
+
+- Artifact "Conteúdo da semana": https://claude.ai/artifact/X5sACyzfa91GczHbaNc4gL
+- **A rodada é a de terça 10/11 e fechou em 12/11** (a sessão foi reiniciada no
+  meio). **Custo do atraso, pela regra que entrou neste manual hoje: nenhum
+  visível**, porque aula de catálogo vai ao ar pelo deploy e não tem janela.
+  Tudo reconferido no retrato de 12/11 das 9h antes do commit.
+- ENTREGA: **aula `diag-fumaca-escapamento`**, gratuita, trilha de diagnóstico,
+  PT e EN. Terceira da fila nova (7 aparelhos em 30 dias) e a única das que
+  faltavam com urgência ALTA na própria ficha. Recorte por COR, que é o que a
+  tela pergunta, e abre pela distinção que evita pânico e descuido ao mesmo
+  tempo: nuvem branca fina que SOME ao aquecer é vapor de água e é normal;
+  branca densa que continua, com cheiro adocicado, é a mais urgente da lista.
+  Azulada é óleo, preta é mistura rica, e no diesel o limite é outro. São 127
+  aulas e **15 dos 19 sintomas com aula**.
+- E o sintoma ganhou dois testes de garagem, que o campo `testes` não tinha:
+  olhar a cor com o motor quente, de dia, com alguém acelerando; e conferir os
+  níveis com o motor FRIO, repetindo em alguns dias.
+- **UMA CONFERÊNCIA DA CASA MORDEU O MEU TEXTO, e é o melhor tipo de notícia.**
+  A `conferir:contexto` reprova teste de garagem com padrão de manobra perigosa
+  (`abra.*radiador`), e pegou a minha frase "nunca abra o reservatório nem o
+  radiador com o motor quente": o aviso é correto, mas dentro do campo do que
+  FAZER ele pode ser lido de relance como instrução. Reescrevi no mesmo formato
+  que a aula de superaquecimento já usava, com o aviso no campo do resultado. A
+  conferência está certa em ser literal, e foi o comentário dela que me disse
+  isso ("a intenção aqui é reprovar cedo e o autor reescrever a frase").
+- **A COBRANÇA DO RETORNO DE 03/11 FOI ATENDIDA: a ressalva semanal virou
+  pedido.** Três semanas seguidas eu escrevi que a aula chega ao app pelo
+  catálogo remoto e a LIGAÇÃO dela ao sintoma não, porque a `AULAS_DO_SINTOMA`
+  mora no binário. Virou linha na fila para a Engenharia: a tabela passar a
+  viajar no catálogo remoto. O número que o pedido vale, do retrato de 12/11:
+  387 de 398 aparelhos ativos no Android, 8 na web, e a 3.4 ainda não gerada,
+  então as aulas de 20/10, 27/10, 03/11 e a de hoje nasceram sem o card para
+  quase todo mundo. Conferido antes de abrir a linha: o `/api/lessons` não leva
+  a tabela hoje, e a `conferir:catalogo-remoto` que o QA criou em 11/11 é
+  conferência do mecanismo, não o conserto.
+- **O CORTE DA LEITURA DE 24/11, escrito antes de ler**, como o retorno pediu: a
+  porta `sintoma` só existe para as ligações que estão no binário de quem
+  consultou, então a régua somaria zero estrutural com zero de desinteresse.
+  Entram na conta: a web com todos os sintomas ligados; o app 3.3 ou mais novo
+  só com as doze ligações que foram no binário da 3.3. Ficam FORA: app abaixo da
+  3.3 (sai do denominador) e as quatro aulas novas, que só contam pela web até a
+  3.4. **E o que isso provavelmente faz com a leitura, dito antes:** com 8
+  aparelhos na web, a parte "só pela web" nasce sem amostra, e o que vai dar
+  para ler são as doze da 3.3.
+- DUAS REGRAS NOVAS NO MANUAL, as duas cobradas no retorno de 29/10:
+  - **Achado que viaja para o relatório de outro papel vai com a POPULAÇÃO do
+    número.** Em 20/10 eu publiquei "não existe caminho do sintoma para a aula"
+    sem denominador; o Diretor levou "71 pessoas por semana", que era o total de
+    quem consulta qualquer sintoma, e o certo era uma dúzia. O erro de repasse é
+    dele e está declarado no relatório dele; a metade que é minha é a regra.
+  - **Atraso de rodada vem com o custo dito, não como ressalva neutra.** Aula
+    custa zero e se diz que é zero; rodada que decide gasto, gravação ou release
+    custa o slot, e aí a frase é "custou o slot de tal coisa".
+- AS DUAS RÉGUAS PARADAS, conferidas hoje: a busca segue com uma consulta de
+  categoria só (`luz do motor acesa`, posição 98), 3 cliques e 42 impressões em
+  28 dias, `topPaginas` vazio, e não é dia de releitura (02/02/2027). A fila de
+  gravação segue parada por gatilho: o vídeo mais novo do canal continua sendo o
+  de 13/10, não listado, e são 54 dias sem vídeo público.
+- CONFERÊNCIAS: `plantio` com id inexistente na linha nova da `AULAS_DO_SINTOMA`
+  → MORDEU, saída 1, arquivo restaurado pela cópia. `npm run conferir` verde
+  (saída 0, e a reprovação do veredito do ASO que eu encontrei em 04/11 saiu).
+  Suíte de navegador `sintoma`, a da área tocada, nos sete pontos em 24s.
+- O banco recusou por permissão nesta sessão outra vez, então a demanda por
+  sintoma é a leitura de 27/10 e está marcada como tal; e o portão de amostra da
+  régua do sintoma não pôde ser recontado (último conhecido: 56 eventos com
+  porta, 29/10).
+- RÉGUA DA RODADA: 1 a 5, 9 e 10 cumpridos; 6, 7 e 8 não se aplicam a aula de
+  catálogo, e a 11 não se aplica porque não há pauta até o gatilho reabrir.
+- Próximas: (1) 17/11, aula de ar-condicionado, e essa rodada confere a suíte
+  `sintoma` junto, porque ela usa esse sintoma como exemplo de "sem aula"; (2)
+  24/11, aula de puxar ao frear mais a primeira leitura da régua do sintoma, com
+  o portão e o corte já escritos.
+
 ## 2026-11-11 · QA: a série de crash está sangrando debaixo de uma frase que diz que não há risco
 
 - **Primeiro o crédito: o conserto do coletor saiu, e melhor do que eu havia

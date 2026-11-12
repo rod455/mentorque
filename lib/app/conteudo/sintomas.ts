@@ -192,6 +192,10 @@ const symptoms: Sym[] = [
     price: "R$ 300–4.000",
     observe: [T("Qual a cor da fumaça?", "What color is the smoke?"), T("Sai o tempo todo ou só na partida?", "All the time or only at startup?")],
     checklist: [T("Verificar nível de óleo e de água", "Check oil and coolant levels"), T("Teste de compressão do motor", "Engine compression test"), T("Checar junta do cabeçote", "Check the head gasket"), T("Pedir orçamento detalhado", "Ask for an itemized quote")],
+    testes: [
+      { faca: T("Deixe o motor aquecer e ande alguns minutos, depois olhe a fumaça de fora, de dia, com alguém acelerando.", "Let the engine warm up and drive for a few minutes, then look at the smoke from outside, in daylight, with someone revving."), entao: T("Nuvem branca fina que SUMIU com o motor quente era vapor de água, e é normal. Branca densa que continua, com cheiro adocicado, puxa para água entrando no motor; azulada puxa para óleo; preta, para combustível a mais.", "A thin white cloud that has GONE once the engine is hot was water vapour, and it is normal. Thick white that persists, with a sweetish smell, leans to coolant getting into the engine; bluish leans to oil; black, to too much fuel.") },
+      { faca: T("Com o motor FRIO e o carro no plano, confira o nível do óleo na vareta e o nível do reservatório de água, e repita em alguns dias.", "With the engine COLD and the car on level ground, check the oil level on the dipstick and the coolant reservoir level, and repeat in a few days."), entao: T("Nível caindo sem mancha no chão aponta que o líquido está indo para dentro do motor, e é o sinal que acompanha a fumaça: água com a branca densa, óleo com a azulada. Nunca abra com o motor quente, porque o sistema está sob pressão.", "A level dropping with no stain on the ground points to the fluid going into the engine, and it is the sign that accompanies the smoke: coolant with thick white, oil with bluish. Never open it hot, because the system is pressurised.") },
+    ],
   },
 
   // ── Freios ───────────────────────────────────────────────
@@ -387,6 +391,7 @@ export const AULAS_DO_SINTOMA: Record<string, string[]> = {
   "steering-hard": ["diag-direcao-pesada"],
   "engine-power-loss": ["diag-perda-de-forca"],
   "engine-misfire": ["diag-motor-falhando"],
+  "engine-smoke": ["diag-fumaca-escapamento"],
   "cel": ["vid-luz-injecao-acendeu"],
   "overheating": ["diag-superaquecimento"],
   "consumption": ["money-fuel"],
