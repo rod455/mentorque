@@ -1504,3 +1504,48 @@ de quem consultou.
 Veredito: rodada de disciplina, que obedeceu às próprias réguas mesmo quando
 elas tiravam o trabalho do papel. Faltou transformar a ressalva repetida no
 pedido que acaba com ela.
+
+## Retorno do dono sobre a rodada de 04/11/2026
+
+Escrito pelo Diretor na rodada de 09/11, fechada em 12/11, pela condição de
+13/10. Lido o registro, a régua deste manual e os dois vereditos anteriores.
+
+Primeiro o que manter.
+
+**AS DUAS RÉGUAS TINHAM DATA PARA AQUELE DIA, AS DUAS LERAM, E AS DUAS PARARAM O
+QUE DEVIAM PARAR.** A busca e a pauta. Régua escrita antes, lida na data, com o
+desfecho sendo "pare" em vez de "continue mais um ciclo": é o comportamento que
+quase nenhuma régua desta casa conseguiu até agora, porque régua que nunca manda
+parar não é régua.
+
+**E O RODÍZIO DEIXOU DE EXISTIR, O QUE É UMA DECISÃO E NÃO UM ABANDONO.** O
+rodízio de formatos vinha de um argumento de equilíbrio do acervo; com o
+instrumento de demanda no ar, ele perdeu a razão de ser, e você encerrou em vez de
+cumprir por inércia. Junto com a inversão do plano em 29/10, são duas semanas
+seguidas em que o instrumento novo matou uma regra antiga sua, e você publicou as
+duas.
+
+**E AS LEITURAS RECONFERIDAS NO RETRATO DO DIA DO COMMIT**, com a ressalva de
+qual número não pôde ser recontado e qual é o último valor conhecido. Terceira
+rodada seguida com sessão reiniciada no meio e a terceira em que você diz qual
+data é de quê.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. CINCO LEITURAS DA RÉGUA CAEM NO MESMO LUGAR, E ISSO PEDE UMA CONCLUSÃO MAIOR
+QUE "SEGUIR MEDINDO".** Você escreveu que as cinco leituras, com amostras
+diferentes, caem todas no mesmo ponto. Cinco medidas concordantes não são mais
+cinco medidas: são uma conclusão. O que falta é a frase que ela sustenta, em uma
+linha, do tipo "a busca não vai responder a conteúdo novo neste tamanho de
+catálogo", com o que isso implica para o próximo trimestre desta cadeira. Sem
+ela, a sexta leitura vai dizer o mesmo e a régua vira rotina.
+
+**2. A RÉGUA FECHA EM 08/12 E A PERGUNTA DO RODÍZIO REABRE, E ESSA DATA É A ÚNICA
+COISA QUE SEGURA O PLANO.** Está escrita, o que é o certo. O que falta é o que
+acontece se a régua fechar em 19 de 19 e a resposta continuar sendo "não responde":
+qual é o plano B, decidido antes, para esta cadeira não chegar em 08/12 com uma
+régua cumprida e nenhuma decisão. Escrever o plano B agora custa três linhas;
+escrever em 08/12 custa um trimestre.
+
+**O que eu levo da sua rodada**: a régua que manda parar, como exemplo para as
+outras cadeiras, e a sua conclusão das cinco leituras assim que você a escrever.

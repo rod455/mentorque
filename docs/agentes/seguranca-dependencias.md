@@ -944,3 +944,46 @@ mudança nossa, e não sei por quê".
 Veredito: rodada sólida, com o inventário mensal saindo inteiro pela primeira
 vez e um limite próprio fechado com prova. Faltou seguir a ordem que a própria
 rodada declarou.
+
+## Retorno do dono sobre a rodada de 08/11/2026 (rodada 8)
+
+Escrito pelo Diretor na rodada de 09/11, fechada em 12/11, pela condição de
+13/10. Lido o registro, a régua deste manual e a lista do dono.
+
+Primeiro o que manter.
+
+**O ACHADO É DE SUPERFÍCIE REAL E A FRASE DIZ EXATAMENTE O QUE ELE É:** o webhook
+do Instagram responde sem conferir quem chamou. Não é uma crítica de biblioteca
+que não nos alcança, que é o que esta cadeira passa a maior parte do tempo
+desmontando: é um endereço nosso que aceita chamada de qualquer um. Achado assim
+vale a rodada inteira.
+
+**OS 17 FLUXOS FECHARAM, e isso é o inventário terminando em vez de crescendo.**
+Varredura que fecha é raríssima nesta casa, e esta é a segunda semana seguida em
+que uma cadeira entrega uma lista encerrada em vez de uma lista maior.
+
+**E "O QUE EU DEVO: NADA DESTA RODADA, E ISSO É RARO O BASTANTE" É A FRASE DE UM
+PAPEL MADURO.** Dizer que não há dívida, nomeando que isso é incomum, é diferente
+de não falar de dívida. Cumpriu 1 a 9.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. ZERO DECISÕES PARA O DONO EM DUAS RODADAS, E UM ACHADO DE SUPERFÍCIE REAL NO
+MEIO: ESSAS DUAS COISAS PRECISAM CONVERSAR.** Em 25/10 você abriu com zero
+decisões e eu elogiei. Agora há um webhook que aceita chamada de qualquer um, e o
+conserto é nosso, não do dono, o que está certo. O que falta no registro é a frase
+que o dono precisa para dormir: **o que um estranho consegue fazer com aquele
+endereço hoje, e o que ele NÃO consegue.** "Responde sem conferir quem chamou" é o
+mecanismo; o dono decide risco pela consequência. Uma linha de cada lado resolve, e
+ela é a diferença entre um achado técnico e uma decisão informada.
+
+**2. TRINTA E NOVE COMMITS NA JANELA, QUATRO DE JUNÇÃO, TODOS DENTRO DA
+VARREDURA, E NENHUMA PALAVRA SOBRE O QUE A VARREDURA NÃO ALCANÇA NESTA SEMANA.** O
+critério 10 desta casa pede os limites ditos. Em rodadas anteriores você foi
+exemplar nisso (a 9,3 do Capacitor, dizendo o que não conseguiu medir). Nesta, a
+varredura cobre os commits, e o que ela não cobre é o binário que já está nas
+lojas e os consoles de terceiros. Dizer isso em uma linha, mesmo quando não há
+achado, mantém a régua honesta nas semanas boas, que é quando ela mais escorrega.
+
+**O que eu levo da sua rodada**: o webhook como item do meu relatório, e eu vou
+pedir a frase da consequência antes de levar isso ao dono como risco.

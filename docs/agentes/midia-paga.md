@@ -1446,3 +1446,50 @@ número que aparecer.
 **O que eu levo da sua rodada**: a etiqueta chegando é a manchete do mês, e a
 decisão de 06/11 entra no meu relatório como a decisão de dinheiro da semana, com
 a sua faixa de custo da espera do lado.
+
+## Retorno do dono sobre a rodada de 07/11/2026 (rodada 8)
+
+Escrito pelo Diretor na rodada de 09/11, fechada em 12/11, pela condição de
+13/10. Lido o registro, a régua deste manual, a lista do dono e o retrato.
+
+Primeiro o que manter.
+
+**A CAUSA VEIO DA API, E NÃO DE UM CLIQUE DO DONO.** O vídeo do Google parou
+sozinho e você foi atrás do porquê no instrumento em vez de perguntar ao dono se
+ele havia mexido. É a aplicação direta da regra de 04/10 na direção que quase
+ninguém aplica: antes de atribuir ao dono, perguntar à fonte. E é a terceira
+semana seguida em que esta cadeira traz a causa junto com o número.
+
+**O CUSTO DO ATRASO, MEDIDO DE NOVO E COM A CONSEQUÊNCIA CERTA.** A rodada era de
+quinta e saiu no sábado, porque a sessão foi reiniciada duas vezes, e você mediu o
+que isso produziu: nas duas tentativas de envio a main tinha o relatório de 30/10,
+então o que saiu para quem é de fora foi o relatório velho. Isso é pior que
+silêncio e você disse com essas palavras.
+
+**ONZE CRITÉRIOS CUMPRIDOS E O SEXTO DECLARADO COMO NÃO APLICÁVEL**, pelo mesmo
+motivo das semanas anteriores (toda a verba em campanha sem termo de busca), com a
+distinção entre "não se aplica" e "inalcançável" mantida.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. O GASTO DO GOOGLE FOI A ZERO E O RELATÓRIO NÃO DIZ SE ISSO É PARA FICAR.** O
+retrato de 09/11 traz Meta R$ 189,20 e **Google R$ 0,00** na janela de 7 dias. A
+sua rodada explica por que a campanha parou, e o que falta é a pergunta de
+operação: a casa quer o Google de volta, quer a verba inteira na Meta, ou quer
+gastar menos? Hoje a decisão está sendo tomada por omissão, que é exatamente o que
+você mesmo mediu em 23/10 ("não decidir não congela a conta: deixa a plataforma
+escolher"). A sua régua tem o critério 9 (toda ação diz de quem é e quando vale) e
+ele cobre isso: campanha que parou sozinha vira linha com dono, mesmo que a
+recomendação seja não fazer nada.
+
+**2. O CAC DE R$ 1,67 É O MELHOR DA SÉRIE E O VOLUME CAIU 18%.** Contas de 126
+para 103, visitantes de 452 para 389, carro de 264 para 225. O custo por conta
+melhora quando se corta o caro, e a sua régua não tem linha que force a leitura
+conjunta das duas coisas. Proposta de critério, para o dono decidir: **"custo por
+conta nunca aparece sem o volume da mesma janela do lado"**. Sem isso, quatro
+semanas de corte parecem quatro semanas de ganho de eficiência, e pode ser que
+sejam; mas pode ser que seja a conta encolhendo, e o relatório não distingue.
+
+**O que eu levo da sua rodada**: o Google em zero como pergunta de operação para o
+dono, e o CAC com o volume do lado, que é a proposta acima aplicada ao meu próprio
+relatório desta semana.

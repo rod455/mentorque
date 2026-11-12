@@ -3,6 +3,92 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-12 · Diretor: zero assinante pagando, a conta mais barata da história, e o degrau do serviço
+
+- Artifact "Semana Mentorque" (02 a 08/11):
+  https://claude.ai/artifact/J6ubnbACFv38aYbkZm7eMw
+- **Rodada de segunda 09/11 publicada na quinta 12/11**, sessão reiniciada no
+  meio. Não é só minha: cinco das sete rodadas desta semana perderam a sessão
+  (Mídia duas vezes, Conteúdo, Segurança, QA e eu). O banco respondeu sem recusa;
+  números da janela fechada de 02 a 08/11, colhidos em 12/11.
+- **O PRODUTO ESTÁ COM ZERO ASSINATURA ATIVA, e agora os dois instrumentos
+  concordam** (banco 0 e RevenueCat 0, com o retrato registrando que batem).
+  Stripe em zero, MRR 0, receita 30d 0. Das cinco pessoas que assinaram na vida
+  do produto, cinco saíram. Na semana, 49 viram o paywall e NENHUMA iniciou
+  checkout. Escrevo como ESTADO chegando ao fim da contagem, não como piora da
+  semana, porque a leitura de outubro mostrou que eu leio estado como movimento
+  quando não olho a série.
+- **O DEGRAU DO SERVIÇO É A PERDA DE RETENÇÃO COM MAIS PROVA ATÉ AGORA**, achado
+  do CRO em 06/11: desde 19/10, 125 aparelhos tocaram em "Registrar serviço" e
+  **85 de cada 100 nunca salvam**, com a razão estável em cinco semanas. E o
+  corte que faz disso retenção: de 678 contas com estado, 651 têm carro, 62 têm
+  serviço e **31 das 62 têm duas ou mais**. Quem atravessa a primeira vez volta;
+  a barreira é a primeira. O formulário pede oito grupos de campo contra os três
+  do cadastro de carro que venceu o A/B em 02/10.
+- CHEGADA: gasto R$ 189,37 contra R$ 303,63 (-38%), **Google em zero** e Meta
+  189,37. Contas 112 contra 133 (-16%), custo por conta **R$ 1,69** contra
+  R$ 2,28, o melhor da história. Visitantes 389 contra 452, carro 225 contra 264,
+  Biela 27 contra 45, serviço 13 contra 26, paywall 49 contra 77.
+  - O zero do Google é parada REAL e não buraco de medição, e são dois
+    instrumentos: a série diária do coletor não tem linha de Google na semana (o
+    que sozinho seria buraco) e a rodada da Mídia de 07/11 foi à API e achou a
+    campanha de vídeo parada por conta própria, sem clique do dono.
+  - **E a leitura que eu devo a esta cadeira, a mesma que cobrei da Mídia hoje:**
+    quatro semanas de custo por conta em queda (3,02, 2,28, 1,69) são também
+    quatro semanas de volume em queda (137, 133, 112). As duas coisas
+    aconteceram juntas, e o relatório não distingue eficiência de encolhimento.
+- RETENÇÃO: cinco coortes fechadas em 21,1%, 11,6%, 21,4%, 14,5% e 18,3%. Faixa
+  de 12 a 26 de cada 100, sem tendência provável. Terceira semana que escrevo
+  essa frase, e escrever de novo é o certo.
+- **O QUE EU PUBLIQUEI ERRADO, e quem achou foi o CRO:** em 04/11 eu levei "dos
+  224 que tocaram em Agora não, 73 fizeram algo de valor e NENHUM criou conta, e
+  nenhum foi perguntado uma segunda vez". As duas metades estão erradas. SETE
+  criaram conta, cinco delas aceitando a folha de 1 a 3 minutos depois de
+  recusá-la, quando ela reapareceu ao cadastrar outro carro; e o zero de segunda
+  exibição era o tamanho da trava `umaVez` do evento. Quarta vez em cinco semanas
+  no critério 4, e desta vez o erro foi de REPASSE e não de leitura minha.
+- **VEREDITOS: sete rodadas, CINCO escritas por mim hoje** (CRO 06/11, Mídia
+  07/11, Guardião 07/11, Conteúdo 04/11, Segurança 08/11). A conferência apontou
+  as cinco antes de eu abrir manual nenhum, que é a ordem que funciona. Os oito
+  manuais voltaram a zero dia.
+  - **CRO (06/11)**: publicou um inventário de TRÊS métricas próprias erradas por
+    desenho, e uma delas derruba o meu número. Cobrei a linha de cima que falta
+    (sete apostas inconclusivas em dois meses pedem a taxa de aposta que fecha com
+    veredito legível) e o alvo que caiu sem substituto.
+  - **Mídia (07/11)**: foi à API em vez de atribuir ao dono, e mediu que o atraso
+    dela mandou para fora o relatório velho, que é pior que silêncio. Cobrei linha
+    com dono para o Google em zero e propus critério: custo por conta nunca
+    aparece sem o volume da mesma janela.
+  - **Guardião (07/11)**: pôs o número na primeira linha porque eu cobrei na
+    semana passada (nenhuma conferência nova, 67 no total, fila de 11 para 5) e
+    achou o comentário que explica a troca virando a prova de que a troca não
+    houve. Cobrei que a queda não diz COMO caiu e que a dívida do critério 10
+    ficou sem data.
+  - **Conteúdo (04/11)**: as duas réguas tinham data, leram e mandaram PARAR, e o
+    rodízio deixou de existir por decisão. Cobrei que cinco leituras concordantes
+    já são conclusão e pedem a frase que ela sustenta, e o plano B de 08/12.
+  - **Segurança (08/11)**: achado de superfície real (o webhook do Instagram
+    responde sem conferir quem chamou) e os 17 fluxos fechados, sem dívida.
+    Cobrei a frase da consequência, que é o que transforma mecanismo em risco.
+  - **QA**: o de 04/11 tem veredito no dia. O de 11/11 é da próxima janela e
+    merece nota agora porque é risco vivo: a série de crash da Play sangrando
+    debaixo de uma frase que dizia não haver risco, achada e consertada por ele.
+- **CRUZAMENTO: cinco das sete rodadas perderam a sessão no meio, e nenhuma
+  escondeu.** Não é método, é infraestrutura, e por isso não vira cobrança. O que
+  vira elogio é que as cinco disseram qual leitura é de que dia e reconferiram no
+  instrumento antes de publicar, e a Mídia mediu o que o atraso dela produziu lá
+  fora. Em setembro o mesmo acidente teria somado números de dias diferentes sem
+  aviso.
+- PRIORIDADES: (1) DO DONO: aprovar ou recusar o `servico-em-tres-campos` do CRO,
+  porque é a maior perda medida e a única com prova de que o outro lado traz gente
+  de volta; (2) Mídia, quinta: o Google em zero vira linha com dono dizendo uma de
+  três coisas com número, e o custo por conta passa a sair com o volume do lado;
+  (3) Segurança: a frase da consequência do webhook, antes de eu levar isso ao
+  dono como risco.
+- **A MINHA RÉGUA: 9 de 11.** Critério 4 pela quarta vez em cinco semanas, agora
+  por repasse. Regra nova no manual: antes de repassar número de outro papel,
+  perguntar que trava o evento tem. E o horário falhou, com a causa na sessão.
+
 ## 2026-11-12 · Conteúdo: a cor da fumaça, e a ressalva de três semanas virou pedido com o número que ele vale
 
 - Artifact "Conteúdo da semana": https://claude.ai/artifact/X5sACyzfa91GczHbaNc4gL

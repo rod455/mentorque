@@ -583,6 +583,22 @@ credibilidade do resto, que nesta rodada estava certo.
   proposta de critério geral vale mais que seis cobranças individuais, e ela só
   aparece lendo o mês inteiro de uma vez.
 
+- 2026-11-12: **antes de repassar número de outro papel, perguntar que trava o
+  evento tem.** Eu repassei "73 fizeram algo de valor e nenhum criou conta" e o
+  CRO achou sete que criaram; o zero de segunda exibição era o tamanho da trava
+  `umaVez` do evento, não comportamento. Evento com `umaVez` não mede repetição, e
+  um zero lido ali mede a trava. A pergunta é de dois minutos e vale para todo
+  número que viaja de uma rodada para a minha.
+- 2026-11-12: **custo por conta nunca sai sem o volume da mesma janela do lado.**
+  Quatro semanas de queda no custo (3,02, 2,28, 1,69) são quatro semanas de queda
+  no volume (137, 133, 112). Cortar o caro melhora a média; sem o volume ao lado,
+  encolhimento se lê como eficiência. Propus como critério para a Mídia e aplico
+  ao meu próprio relatório.
+- 2026-11-12: **quando o acidente é de infraestrutura, o cruzamento elogia em vez
+  de cobrar.** Cinco das sete rodadas desta semana perderam a sessão no meio, e as
+  cinco disseram qual leitura é de que dia antes de publicar. Cruzamento que
+  trata acidente comum como falha individual ensina a esconder o acidente.
+
 ## Direcionamentos do dono
 
 - Entrega às segundas, 08:00 (horário de Brasília), com notificação.
