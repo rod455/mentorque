@@ -46,6 +46,24 @@ type RcEvent = {
   product_id?: string;
   expiration_at_ms?: number;
   store?: string; // PLAY_STORE | APP_STORE | …
+  // POR QUE O MOTIVO ENTRA AQUI (varredura do QA, 12/11/2026).
+  //
+  // Uma pergunta do dono ("o RevenueCat conta assinatura cancelada dentro do
+  // período?") levou uma semana e uma leitura de banco para ficar MEIO
+  // respondida, e o que faltava era um campo. Medido no funil: duas assinaturas
+  // da Play, mesmo produto, as duas canceladas com o período aberto, e o
+  // RevenueCat tratou as duas de forma OPOSTA. A de 03/10 (cancelada em 26/10,
+  // período até 01/11) ele contou como ativa até expirar. A de 01/11 00h24
+  // (cancelada 00h55, TRINTA E UM MINUTOS depois, período até 08/11) ele parou
+  // de contar no mesmo dia, enquanto o nosso lado a manteve ativa por sete dias.
+  //
+  // A diferença entre as duas tem de estar no MOTIVO do cancelamento, e o nosso
+  // `extra` guardava só o produto e o id do evento, então nenhuma consulta nossa
+  // conseguia separar "a pessoa desligou a renovação" de "a compra foi
+  // devolvida". Guardar o tipo e o motivo é a diferença entre responder isso
+  // numa consulta e responder numa semana.
+  cancel_reason?: string;
+  expiration_reason?: string;
 };
 
 // Funil: o lado financeiro das lojas. O mapa é deliberadamente curto —
@@ -188,7 +206,19 @@ export async function POST(req: Request) {
       userId,
       origem: "revenuecat",
       plataforma: event.store === "PLAY_STORE" ? "android" : event.store === "APP_STORE" ? "ios" : "loja",
-      extra: { product: productId, ...(event.id ? { rc_event: event.id } : {}) },
+      // `tipo` e `motivo` são INSTRUMENTO, não regra: nada aqui decide acesso
+      // nem cobrança, e o que grava a assinatura continua acima, intocado. Eles
+      // existem para a próxima pergunta sobre uma divergência ser uma consulta
+      // em vez de uma semana (ver a nota em `RcEvent`). O motivo vem de um
+      // campo só, porque `CANCELLATION` traz `cancel_reason` e `EXPIRATION`
+      // traz `expiration_reason`, e nunca os dois.
+      extra: {
+        product: productId,
+        ...(event.id ? { rc_event: event.id } : {}),
+        ...(event.type ? { tipo: event.type } : {}),
+        ...(event.cancel_reason ? { motivo: String(event.cancel_reason) } : {}),
+        ...(event.expiration_reason ? { motivo: String(event.expiration_reason) } : {}),
+      },
     });
   }
 

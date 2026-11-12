@@ -107,13 +107,15 @@ async function montarPopulares(): Promise<string[]> {
   // fabricou um salto que por semana de calendário não existia: número que mede
   // o nosso recorte e se apresenta como medida do mundo.
   //
-  // TAMANHO MEDIDO HOJE, para ninguém ler como urgente: o retrato de 11/11 dá
-  // 389 eventos de `viu_aula` na semana mais cheia das quatro, ou seja algo
-  // entre mil e mil e quatrocentos em 30 dias, contra o teto de 5.000. O defeito
-  // está DESARMADO pelo volume, e é por isso que o conserto é de uma linha
-  // agora, em vez de um incidente depois. O que muda a conta é o ritmo novo de
-  // uma aula por semana que o Conteúdo começou em 11/11: mais aula, mais
-  // `viu_aula` por aparelho.
+  // TAMANHO MEDIDO NO BANCO EM 12/11, e ele CORRIGE o que eu publiquei em 11/11:
+  // são **716 eventos** de `viu_aula` em 30 dias, de 338 aparelhos em 61 aulas,
+  // contra o teto de 5.000. Em 11/11 eu estimei "mil a mil e quatrocentos"
+  // somando as semanas do retrato, e a soma inflava: as janelas do retrato se
+  // sobrepõem e uma delas é parcial. O defeito está DESARMADO pelo volume, com
+  // folga de sete vezes, e é por isso que o conserto é de uma linha agora em vez
+  // de um incidente depois. O que muda a conta é o ritmo novo de uma aula por
+  // semana que o Conteúdo começou em 11/11: mais aula, mais `viu_aula` por
+  // aparelho.
   //
   // Com a ordem, passar do teto deixa de ser silencioso e passa a ser uma
   // definição honesta: o ranking dos 5.000 eventos MAIS RECENTES.

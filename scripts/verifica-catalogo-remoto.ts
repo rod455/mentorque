@@ -118,10 +118,11 @@ console.log("Catálogo remoto: publica aula sem build sem apagar o catálogo bom
 // aviso nenhum. É a doença de 28/10, quando uma janela de oito dias fabricou um
 // salto que por semana de calendário não existia.
 //
-// TAMANHO MEDIDO EM 11/11, para não parecer urgente: o retrato daquele dia dá
-// 389 eventos de `viu_aula` na semana mais cheia das quatro, ou seja algo entre
-// mil e mil e quatrocentos em 30 dias, contra o teto de 5.000. Desarmado hoje
-// pelo volume. O que muda a conta é o ritmo novo de uma aula por semana.
+// TAMANHO MEDIDO NO BANCO EM 12/11: 716 eventos de `viu_aula` em 30 dias, de 338
+// aparelhos em 61 aulas, contra o teto de 5.000. Isto CORRIGE a estimativa que eu
+// publiquei em 11/11 ("mil a mil e quatrocentos", somada das semanas do retrato,
+// que se sobrepõem e inflam). Desarmado pelo volume, com folga de sete vezes. O
+// que muda a conta é o ritmo novo de uma aula por semana.
 {
   conferir(
     "a leitura das mais vistas é ordenada, senão o teto devolve fatia arbitrária",

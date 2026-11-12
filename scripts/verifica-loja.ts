@@ -154,6 +154,35 @@ console.log("Loja: a compra chega ao Premium, e quando não chega, deixa rastro?
     "e o relato vem da régua, não montado ali",
     /relatoDeVendaSemConta\(event\)/.test(rota),
   );
+
+  // O TIPO E O MOTIVO DO EVENTO FICAM GRAVADOS (varredura do QA, 12/11/2026).
+  //
+  // A pergunta do dono de 04/11 ("o RevenueCat conta assinatura cancelada
+  // dentro do período?") levou uma semana e uma leitura de banco para ficar meio
+  // respondida, e o que faltava era um campo. Medido no funil: duas assinaturas
+  // da Play, mesmo produto, as duas canceladas com o período aberto, e o
+  // RevenueCat tratou as duas de forma OPOSTA: contou a de 03/10 até expirar e
+  // parou de contar a de 01/11 no mesmo dia, 31 minutos depois da compra. A
+  // diferença tem de estar no motivo, e o `extra` guardava só produto e id.
+  //
+  // Esta asserção guarda INSTRUMENTO, não regra de acesso: ela não diz nada
+  // sobre o que o webhook faz com `status`, que é alçada de quem mexe em
+  // cobrança, e está na fila para a Engenharia com a medida.
+  conferir(
+    "o tipo do evento do RevenueCat fica gravado no funil",
+    /tipo: event\.type/.test(rota),
+    "sem o tipo, nenhuma consulta nossa separa cancelamento de expiração depois do fato",
+  );
+  conferir(
+    "e o motivo também, dos dois campos que a fonte usa",
+    /motivo: String\(event\.cancel_reason\)/.test(rota) && /motivo: String\(event\.expiration_reason\)/.test(rota),
+    "`CANCELLATION` traz cancel_reason e `EXPIRATION` traz expiration_reason: sem os dois, metade dos casos fica sem motivo",
+  );
+  conferir(
+    "e nada disso encostou no que decide acesso",
+    /event\.type === "CANCELLATION"[\s\S]{0,120}status: "active", cancel_at_period_end: true/.test(rota),
+    "se o ramo do CANCELLATION mudou, não foi o QA: isto é cobrança e sai da alçada dele",
+  );
 }
 
 // ── 6b. A SUBTRAÇÃO QUE FALTAVA: RevenueCat contra o banco ──────────────────

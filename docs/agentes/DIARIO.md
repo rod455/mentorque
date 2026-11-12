@@ -92,6 +92,46 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 - **Próxima varredura dirigida: a compra avulsa pelo Stripe, em 18/11**, com a
   data escrita aqui para não repetir o adiamento. É dinheiro, é desta semana e
   está desligada até a tabela existir, que é a hora boa de varrer.
+- **ADENDO DE 12/11, com o banco de volta** (o dono disse "pode tentar dnv" e a
+  ferramenta respondeu às 09h38 UTC; na rodada do dia 11 foram quatro recusas).
+  As três leituras que ficaram bloqueadas foram feitas, e duas CORRIGEM o que eu
+  publiquei:
+  - **A pergunta do RevenueCat está respondida, e ela expõe um defeito nosso de
+    ACESSO.** O funil tem a história inteira, e são DUAS assinaturas da Play, não
+    uma: a A (user 14e31832) assinou 03/10, cancelou 26/10, expirou 01/11 05h00;
+    a B (user 2f29e7c0) assinou 01/11 00h24, **cancelou 00h55, trinta e um
+    minutos depois**, e expirou 08/11 06h08. Mesmo produto
+    (`annual100:monthly`), as duas canceladas com o período aberto, e o
+    RevenueCat tratou as duas de forma OPOSTA: contou A até expirar (banco e RC
+    batiam de 26 a 31/10) e parou de contar B no mesmo dia. Enquanto isso o
+    NOSSO lado manteve B `active` por sete dias, de 01 a 08/11. **São sete dias
+    de Premium para quem a loja já não contava**, e é exatamente a divergência
+    que a conferência do dinheiro acusou em 04/11 como "sobra nossa, causa não
+    conferida". A causa é esta.
+  - O motivo do cancelamento de B é TEORIA (devolução dentro da janela de
+    reembolso da Play), porque o webhook não gravava tipo nem motivo do evento.
+    **Agora grava**: `tipo` e `motivo` entram no `extra` do funil, com 3 plantios
+    e 3 mordidas na `conferir:loja`, incluindo uma que grita se alguém mexer no
+    ramo do `CANCELLATION`. O que fazer com o ACESSO eu não toquei, porque é
+    cobrança: virou linha na fila para a Engenharia, com a medida e com o
+    `rc_event` a conferir no painel.
+  - **CORREÇÃO do número de 11/11**: `viu_aula` em 30 dias são **716 eventos**
+    (338 aparelhos, 61 aulas), lidos no banco, e não os "mil a mil e
+    quatrocentos" que eu estimei somando as semanas do retrato. A soma inflava,
+    porque as janelas do retrato se sobrepõem e uma é parcial. O teto de 5.000
+    fica com folga de SETE vezes, então o defeito está ainda mais desarmado do
+    que eu disse. Corrigido na rota e na conferência.
+  - **CORREÇÃO da forma do que eu sinalizei em 04/11**: por semana de calendário
+    os fechamentos são 14, 14, **24**, 14 e 3 (parcial), com 1,1, 1,1, **1,6**,
+    1,2 e 1,5 por aparelho. Eu li a janela de 7 dias do retrato como
+    "concentração, não volume", e é o contrário: foi VOLUME numa semana, a de
+    26/10, que é a primeira da 3.3 (21 dos 24 são 3.3.0, em 12 aparelhos). Na
+    segunda semana da 3.3, mesmos 12 aparelhos e 14 fechamentos, um terço menos.
+    Repique de primeira semana, não piora sustentada; nenhum aparelho em laço
+    (máximo 3 em novembro) e 12 de uns 500 Android ativos é 2,4%, abaixo do teto
+    de 10%. **Item fechado**, e o gatilho para reabrir é por aparelho acima de
+    1,8 ou um aparelho repetindo. E o erro de leitura foi o MESMO que eu
+    documentei em 28/10: ler janela curta como série.
 - `npm run conferir` verde às 11h19 UTC, já com a conferência nova (69).
 - Artifact da rodada: https://claude.ai/artifact/CqEC2z5Lu8JrA3EzAp8BkS
 

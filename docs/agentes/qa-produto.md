@@ -496,6 +496,25 @@ recomendar.
   Frase com número fixo sobre fonte externa é suspeita por natureza; se o número
   pode variar, ele tem que ser calculado do dado e a asserção cobra o cálculo.
   Travar texto só vale para frase sobre o NOSSO código, onde a constante é nossa.
+- **"DUAS LINHAS NA TABELA" EXPLICA MAIS DIVERGÊNCIA QUE QUALQUER TEORIA SOBRE A
+  FONTE** (12/11/2026). Eu passei duas rodadas perguntando se o RevenueCat conta
+  assinatura cancelada dentro do período, com o banco negado, e a resposta não
+  era sobre o RevenueCat: eram DUAS assinaturas, uma de 03/10 e outra de 01/11,
+  que eu tratei como uma só porque o retrato imprime CONTAGEM e não linha. As
+  contagens "banco 1, RevenueCat 0" se mantiveram iguais por seis dias enquanto
+  por baixo uma expirava e outra nascia. **Antes de teorizar sobre o que a fonte
+  de fora conta, pergunte quantas linhas existem do nosso lado**, e peça a
+  história em eventos (o `funil_eventos` tinha tudo, com hora) em vez do estado
+  atual, que não guarda o caminho.
+- **O MOTIVO É O CAMPO QUE SEMPRE FALTA** (12/11/2026, e esta é a terceira vez).
+  O webhook gravava o id e o produto do evento do RevenueCat, e não o TIPO nem o
+  MOTIVO. Com isso, "a pessoa desligou a renovação" e "a compra foi devolvida"
+  ficam indistinguíveis depois do fato, e a pergunta do dono levou uma semana e
+  uma leitura de banco para ficar meio respondida. Mesma forma do `como` da
+  migalha (que separou `sem-pausa` de `pausa-colada`) e da etiqueta das perguntas
+  da Biela: **evento sem o porquê mede que aconteceu e não deixa ninguém
+  decidir**. Quando um escritor nosso recebe um campo de motivo da fonte e não o
+  grava, isso é achado, mesmo sem defeito à vista.
 - **TRANQUILIZAÇÃO TEM DE SER MERECIDA, E ELA É MAIS PERIGOSA QUE ALARME FALSO**
   (11/11/2026). Em 04/11 a Engenharia tirou o meu MARGEM ZERO do ramo da
   frescura, com razão: alarme em cima do normal ensina a ignorar alarme. Só que a
