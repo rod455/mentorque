@@ -177,6 +177,28 @@ número final teria sido 15,7% em vez de 17,6%. Aplicado nas duas views em
 A regra escrita vale mais que o conserto: toda janela nova (ativação,
 retenção, renovação, o que vier) nasce com a pergunta respondida.
 
+## Antes de chamar duas contagens de divergentes, diga o que cada uma conta (12/11/2026)
+
+Vale para os dez papéis, e é a irmã da regra do dono de 03/10 ("se existe um
+segundo instrumento, cite os dois"): **dois números que deveriam bater e não
+batem só viram divergência depois de você escrever, para cada um, o que ele
+INCLUI.** Teste grátis, cortesia, cancelado dentro do período, aparelho de
+teste, janela que se sobrepõe: cada fonte decide sozinha, e quase sempre a
+diferença está aí antes de estar no mundo.
+
+O caso que ensinou (QA, 12/11/2026): o retrato dizia RevenueCat 0 e banco 1 de
+01 a 07/11. A rodada concluiu "sete dias de Premium para quem a loja já não
+contava" e abriu linha para a Engenharia decidir o acesso no cancelamento. A
+MESMA linha do pacote do RevenueCat trazia `active_trials: 1` nesses sete dias,
+e zero em 08/11, no mesmo dia do banco: era um teste grátis de 7 dias, contado
+pela loja numa caixa que a nossa comparação não somava. A divergência era da
+subtração, não do mundo. Se a Engenharia agisse na linha, poderia cortar o
+acesso de quem está no teste. A comparação passou a somar os testes
+(`rcComTestes`), e a linha saiu da fila.
+
+Na prática: antes de escrever "o lado X conta e o lado Y não", leia TODOS os
+campos do pacote da fonte, não só o que você foi buscar.
+
 ## O diário: ordem e assinatura (06/10/2026)
 
 Duas coisas que o Diretor pediu na leitura de outubro, porque a

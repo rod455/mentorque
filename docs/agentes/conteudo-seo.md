@@ -1549,3 +1549,55 @@ escrever em 08/12 custa um trimestre.
 
 **O que eu levo da sua rodada**: a régua que manda parar, como exemplo para as
 outras cadeiras, e a sua conclusão das cinco leituras assim que você a escrever.
+
+## Retorno do dono sobre a rodada de 10/11/2026 (fechada em 12/11)
+
+Escrito na sessão com o dono em 12/11, a pedido dele ("veja tudo que foi
+publicado hoje, dê feedbacks e evolua os agentes"). Lidos o registro no diário,
+o commit dd38f73, a fila e a árvore da 3.3 (e39b866) no git.
+
+Primeiro o que manter.
+
+**A CONFERÊNCIA MORDEU O SEU TEXTO E VOCÊ CONTOU COMO NOTÍCIA BOA.** "Nunca
+abra o radiador com o motor quente" no campo do que FAZER é instrução lida de
+relance, e você moveu o aviso para o resultado no formato que a casa já usava.
+É o comportamento certo diante de conferência literal.
+
+**A RESSALVA DE TRÊS SEMANAS VIROU PEDIDO COM O NÚMERO QUE ELE VALE**, e o corte
+da leitura de 24/11 foi escrito antes de ler, com o que ele provavelmente faz
+com a amostra ("a parte só pela web nasce sem amostra"). As duas eram cobranças
+de retornos anteriores.
+
+**O CUSTO DO ATRASO FOI DITO, MESMO SENDO ZERO.** Aula de catálogo não tem
+janela, e dizer isso é a regra nova sendo usada no mesmo dia.
+
+Agora o que precisa melhorar.
+
+**1. A LINHA PARA A ENGENHARIA CONTOU UMA AULA A MAIS.** "As aulas de 20/10,
+27/10, 03/11 e a de hoje nasceram sem o card": a de 20/10 (direção pesada,
+3902738) ESTÁ no binário da 3.3. Lido no git: o commit é ancestral da árvore
+da 3.3, e a `AULAS_DO_SINTOMA` daquela árvore tem 12 ligações, entre elas
+`steering-hard`. Faltam três (perda de força, motor falhando e fumaça). O seu
+próprio corte de 24/11 diz "as doze ligações da 3.3", e a linha contradiz o
+corte. Corrigido na linha da fila pela Engenharia, com a data. Regra para a
+régua: **frase sobre o que um binário contém se confere na árvore dele
+(`git merge-base --is-ancestor <commit> <árvore>`), como manda a skill de
+release, e não pela data da rodada.**
+
+**2. O CONSERTO MAIS RÁPIDO PARA OS TRÊS CARDS É O BOTÃO DA 3.4, E A LINHA NÃO
+DIZ ISSO.** Uma 3.4 gerada hoje leva as três ligações (99889cc, f1cea63 e
+dd38f73 estão na main e fora da 3.3). A tabela viajar no catálogo remoto é o
+conserto certo para as PRÓXIMAS, mas ela própria precisa de um build para o app
+aprender a lê-la, então não alcança ninguém antes da 3.5. Quem lê a linha hoje
+deveria saber que o card das três chega com o botão que já está pronto.
+
+**3. O BANCO RECUSOU, E O QA LEU O MESMO BANCO CINCO MINUTOS ANTES DO SEU
+COMMIT.** Às 09h38 UTC ele respondeu ao QA; a sua rodada publicou às 09h43 com
+a demanda por sintoma de 27/10. A regra de 04/11 vale aqui: recusa se tenta de
+novo antes de publicar. Não custou decisão hoje (a aula já estava escolhida),
+mas o portão de amostra de 24/11 vai depender dessa leitura.
+
+Veredito: a rodada que transformou ressalva em pedido e deixou a conferência
+corrigir o próprio texto. Errou ao afirmar o conteúdo de um binário pela data,
+e não pela árvore.
+

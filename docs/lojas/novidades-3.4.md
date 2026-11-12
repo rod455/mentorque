@@ -58,6 +58,12 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
      (`supabase/compras_avulsas.sql`). Sem elas, a 3.4 mostra a parede de
      antes, só com o Premium, e nada quebra.
 
+6. **O sintoma "Fumaça no escapamento" ganha o card da aula** (12/11, commit
+   dd38f73, rodada do Conteúdo). Mesmo caso dos itens 1 e 4: a aula
+   `diag-fumaca-escapamento` chega pelo catálogo remoto, e a ligação
+   (`AULAS_DO_SINTOMA`, `engine-smoke`) vai no binário. Com ela, a 3.4 leva os
+   três cards que a 3.3 não tem; a de direção pesada já estava na 3.3.
+
 ## Ficou FORA do binário, de propósito
 
 - **A compra avulsa no iPhone e pela cobrança das lojas.** A Apple não aceita
@@ -108,6 +114,9 @@ voltas não se pisam.
 os sintomas "Perda de força" e "Motor falhando": cada um mostra o card da aula
 na tela do sintoma, e tocar abre o leitor na aula certa
 (`diag-perda-de-forca` e `diag-motor-falhando`).
+
+**Item 6, o card da fumaça.** Abrir o sintoma "Fumaça no escapamento": o
+card da aula aparece, e tocar abre `diag-fumaca-escapamento`.
 
 **Item 3, os textos do Biela.** Num aparelho sem Premium e sem pergunta feita
 no mês: o Biela mostra "1 pergunta grátis restante neste mês", no singular, e

@@ -1355,3 +1355,72 @@ estiver no ar.
 
 Veredito: a melhor rodada do papel em correção de si mesmo. Errou ao
 transformar quatro minutos de recusa em clique do dono.
+
+## Retorno do dono sobre a rodada de 11/11/2026 (com o adendo de 12/11)
+
+Escrito na sessão com o dono em 12/11, a pedido dele ("veja tudo que foi
+publicado hoje, dê feedbacks e evolua os agentes"). Lidos o diário, a fila,
+os commits f41cabc e b3f78bd, o histórico do `retrato.md` no git (13 pacotes,
+de 31/10 a 12/11) e o banco às 10h UTC.
+
+Primeiro o que manter, e é muito.
+
+**A FRASE QUE CONSOLAVA SOBRE UM INSTRUMENTO PARADO É O MELHOR ACHADO DO MÊS.**
+Comparar o que a Play DIZ ter com o que ela ENTREGOU, num pacote só e sem
+memória entre dias, e pôr a conta de linhas na frase sempre. A previsão
+("zera em uns três dias") virou falsificável e o pacote do dia seguinte a
+confirmou. E a regra "frase que diz sem risco carrega a quantidade que
+mostraria o risco" vale para a casa inteira.
+
+**A VARREDURA DO CATÁLOGO REMOTO SAIU NA DATA, E A PRÓXIMA JÁ TEM DATA.** Era o
+ponto 2 do retorno de 04/11. O `.order` é conserto de uma linha que transforma
+passar do teto numa definição honesta, e a conferência nasceu com dez plantios.
+
+**A RECUSA DO BANCO NÃO VIROU CLIQUE DO DONO.** Quatro tentativas espalhadas
+pela rodada, depois "fonte não lida". Era o ponto 1 do retorno de 04/11, e
+você aplicou na primeira chance.
+
+**VOCÊ CORRIGIU DOIS NÚMEROS SEUS NO ADENDO**, o "mil a mil e quatrocentos"
+(716, conferido por mim no banco às 10h: 716 eventos, 338 aparelhos, 61
+aulas) e a concentração que era volume. E não mexeu no acesso, que é cobrança.
+
+Agora o que precisa melhorar.
+
+**1. A CONCLUSÃO DO REVENUECAT ESTÁ ERRADA, E A LINHA PARA A ENGENHARIA PODIA
+CORTAR O ACESSO DE QUEM ESTÁ NO TESTE GRÁTIS.** A assinatura B não foi
+"descontada" pelo RevenueCat: era um teste de 7 dias (assinou 01/11 00h24,
+expirou 08/11 06h08, exatamente sete dias), e o RevenueCat a contou o tempo
+todo em `active_trials`. Lido no histórico do retrato no git: `active_trials:
+1` de 01/11 a 07/11 e `0` em 08/11, no mesmo dia em que o nosso banco zerou.
+Ninguém teve Premium que a loja não contasse. O que divergia era a nossa
+SUBTRAÇÃO: o banco conta quem está no teste como assinante, e a
+`conferenciaDaLoja` comparava isso só com `active_subscriptions`. O campo que
+derrubava a hipótese estava na MESMA linha do pacote que você leu, e o caderno
+de experimentos de 05/11 já chamava essa assinatura de "teste de 7 dias,
+cancelado 31 minutos depois".
+- Consertado pela Engenharia hoje: `rcComTestes` soma os testes ao lado do
+  RevenueCat, com 2 plantios e 2 mordidas na `conferir:loja`. A linha da fila
+  saiu, com o desfecho no diário. O instrumento que você pôs no webhook
+  (`tipo` e `motivo`) fica: é bom e não custa nada.
+- A regra virou diretriz da casa ("Antes de chamar duas contagens de
+  divergentes, diga o que cada uma conta"). Para este papel, na régua: **antes
+  de escrever que uma fonte "tratou de forma oposta" dois casos, liste o que
+  separa os dois casos (pago ou teste, loja, produto, período) e leia todos os
+  campos do pacote, não só o que você foi buscar.**
+
+**2. NÚMERO ESTIMADO NÃO VAI PARA COMENTÁRIO DE CÓDIGO.** O "mil a mil e
+quatrocentos" entrou no `/api/lessons` como TAMANHO MEDIDO e precisou de outro
+commit para sair. Comentário de código é lido por meses como fato. Estimativa
+vai no diário marcada como estimativa; no código entra só o que foi medido,
+com a data e o instrumento.
+
+**3. A VARREDURA DE 18/11 (COMPRA AVULSA) TEM UM DADO NOVO.** O SQL da
+`compras_avulsas` NÃO rodou (lido às 10h UTC: tabela e coluna ausentes), então
+a compra está desligada e a varredura vai olhar código que ainda não viu
+dinheiro. Isso não adia a varredura: é a hora boa, como você escreveu.
+
+Veredito: a rodada com o achado mais importante do mês (a frase que atestava
+sem risco) e a conclusão mais errada do mês (o RevenueCat), as duas pelo mesmo
+caminho, que é comparar dois números. Num você leu o que cada um media, no
+outro não.
+

@@ -1022,3 +1022,55 @@ ao dono diretamente.
 Veredito: a melhor leitura de método do mês, com a própria conclusão desfeita
 pelo instrumento novo. Errou ao republicar dois números corrigidos havia cinco
 dias, que é exatamente a família que a leitura do mês descreve.
+
+## Retorno do dono sobre a rodada de 09/11/2026 (publicada em 12/11)
+
+Escrito na sessão com o dono em 12/11, a pedido dele ("veja tudo que foi
+publicado hoje, dê feedbacks e evolua os agentes"). Lidos o registro no diário,
+o commit 1610ec4 com os cinco manuais, a fila e o banco às 10h UTC.
+
+Primeiro o que manter.
+
+**CINCO VEREDITOS NUMA RODADA, NA ORDEM QUE FUNCIONA.** A conferência apontou
+quais faltavam antes de você abrir manual, e os oito voltaram a zero dia.
+
+**O CRUZAMENTO ELOGIOU O QUE MERECIA.** Cinco rodadas perderam a sessão, as
+cinco disseram de que dia era cada leitura, e você separou acidente de
+infraestrutura de falha de método. Em setembro esse acidente teria virado soma
+de dias diferentes sem aviso.
+
+**"EFICIÊNCIA OU ENCOLHIMENTO" FOI DITO DOS DOIS LADOS.** R$ 1,69 por conta com
+112 contas contra 133, e o critério novo para a Mídia aplicado primeiro ao
+próprio relatório. E a correção do repasse de 04/11 assinada, com a regra que
+faltava (que trava o evento tem).
+
+Agora o que precisa melhorar.
+
+**1. A MANCHETE É "ZERO ASSINANTE PAGANDO", E AS PRIORIDADES NÃO DIZEM O ESTADO
+DA ÚNICA ALAVANCA DE RECEITA CONSTRUÍDA.** A compra avulsa pelo Stripe foi
+decidida pelo dono em 05/11 e 08/11 e construída em 09/11 (diário da
+Engenharia de 09/11), e está parada em duas coisas que só ele destrava: o SQL
+da `compras_avulsas` (lido às 10h UTC de 12/11: não rodou) e o botão da 3.4
+(nenhum Android abriu versão acima da 3.3.0 nos três dias até 12/11). O
+relatório não cita nenhuma das duas. Com receita em zero, a pergunta que o dono
+precisa ver primeiro é "o que já está pronto para gerar dinheiro e o que falta
+para ligar". Para a régua: **quando a manchete é sobre dinheiro, as
+prioridades dizem o estado de cada alavanca de receita já construída, com o
+instrumento e o clique que falta.**
+
+**2. O MESMO VALE PARA A 3.4, QUE É A PENDÊNCIA DE MAIOR ALCANCE DA SEMANA.**
+Ela carrega o segundo pedido de conta (aposta do CRO), três cards de aula que o
+Conteúdo escreveu e que 97% dos aparelhos não veem, e a compra avulsa. São três
+papéis esperando o mesmo botão, e nenhum relatório juntou os três. É o tipo de
+cruzamento que só esta cadeira enxerga.
+
+**3. A LINHA DO RISCO VIVO REPASSOU UMA CAUSA QUE CAIU HOJE.** Você citou a
+série de crash do QA, que está certa. Mas o adendo do QA de 12/11 ("sete dias
+de Premium para quem a loja já não contava") estava errado, e o motivo está
+no retorno do QA e na diretriz nova. Você não o repassou; fica o aviso para a
+próxima rodada não pegá-lo do diário sem a correção ao lado.
+
+Veredito: a rodada mais completa em vereditos e a mais generosa no cruzamento.
+Errou ao deixar fora das prioridades as duas pendências do dono que destravam
+dinheiro e três apostas de uma vez.
+
