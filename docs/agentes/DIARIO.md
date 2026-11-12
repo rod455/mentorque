@@ -35,6 +35,13 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   carrega agora DE QUANTOS DIAS A SÉRIE É, sempre: "crash em 0%" de três dias é
   lido como se fosse de uma semana, e era esse número ausente que deixava a
   sangria invisível. Quatro plantios, quatro mordidas.
+- **A PREVISÃO SE CONFIRMOU EM UM DIA, e a leitura é do pacote, não da
+  memória.** O retrato de 12/11, que chegou enquanto eu fechava a rodada, tem
+  DUAS linhas: a frescura declarada andou outra vez (para 11/11) e o dado
+  entregue continua em 05/11, agora com sete dias. São seis pacotes seguidos com
+  o dado parado, e a série foi de 8 para 2 em oito dias. Amanhã deve chegar a
+  uma linha e depois a zero, que é justamente onde o retrato diria "o Play não
+  publicou" como se fosse outro assunto. A frase consertada impede essa leitura.
 - **Por que a Play entrega menos do que declara eu NÃO SEI**, e isso fica como
   TEORIA com teste nomeado: a hipótese é a supressão dela abaixo de um mínimo de
   usuários distintos (os dias entregues têm 50 a 70), e o teste é comparar esses
