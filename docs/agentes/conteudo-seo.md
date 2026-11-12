@@ -124,6 +124,27 @@ que responde ele. O 10% segue sendo alvo escolhido por esta cadeira, sem
 referência de mercado, para ter com o que comparar, e se corrige na primeira
 leitura real.
 
+**O CORTE DA LEITURA, escrito em 10/11, antes de ler, porque o retorno de 03/11
+mostrou que a régua ia somar duas populações.** A porta `sintoma` só existe para
+as ligações que estão no binário de quem consultou, então contar tudo junto
+somaria zero ESTRUTURAL (o card não existia no app daquela pessoa) com zero de
+desinteresse, e a régua culparia a aula. O corte, por plataforma e por versão:
+
+| quem consultou | quais sintomas entram na conta |
+|---|---|
+| web | todos os que têm ligação na data da leitura, porque a web recebe no deploy |
+| app 3.3 ou mais novo | só as DOZE ligações que entraram no binário da 3.3 (as de freio, suspensão, direção, `cel`, `overheating`, `consumption`, `battery-draining`, `hard-start`, `lights-dim`) |
+| app abaixo da 3.3 | **ninguém**: não existia card nenhum, então essas consultas saem do denominador |
+| `engine-power-loss`, `engine-misfire`, `engine-smoke` e as próximas do plano | só pela web, até a 3.4 chegar aos aparelhos |
+
+**E o que isso provavelmente faz com a leitura de 24/11, dito antes:** no
+retrato de 12/11 são 387 de 398 aparelhos ativos no Android e 8 na web, então a
+parte "só pela web" vai nascer sem amostra, e o que dá para ler em 24/11 são as
+doze ligações da 3.3. As aulas novas do plano só entram na régua depois de a
+3.4 (ou o catálogo remoto) chegar. Isso não é desculpa adiantada: é o motivo de
+o conserto ter virado linha na fila para a Engenharia hoje, em vez de ficar
+como ressalva repetida toda semana.
+
 **PRIMEIRA LEITURA: 24/11/2026**, com portão de amostra escrito antes: só se lê
 se pelo menos **100 eventos `viu_aula` do período tiverem porta**. Lido hoje,
 desde 26/10, são 15 com porta (trilha 6, início 5, "para o seu carro" 2, aviso
@@ -473,6 +494,27 @@ fiz isso agora porque a regra da casa é UMA entrega concreta por rodada, e
 trocar essa regra sem o dono ver custa mais do que seis semanas de espera.
 
 ## Aprendizados
+
+- **Achado que viaja para o relatório de outro papel vai com a POPULAÇÃO do
+  número, senão quem repassa infla (10/11/2026, cobrado no retorno de 29/10).**
+  Em 20/10 eu publiquei "da tela do sintoma não existe caminho para a aula" sem
+  dizer quantas pessoas batiam nisso. O Diretor levou ao relatório de 26/10 "71
+  pessoas por semana", que era o total de quem consulta QUALQUER sintoma; o
+  número certo, que eu só dei em 27/10, era uma dúzia por semana. O erro de
+  repasse foi dele e está declarado, e a metade que é minha é a que vira regra:
+  **todo achado sai da rodada com numerador e denominador juntos, porque sem o
+  denominador a frase viaja e cresce.**
+
+- **Atraso de rodada vem com o custo dito em uma linha, e não como ressalva
+  neutra (10/11/2026, cobrado no retorno de 29/10).** As rodadas de 27/10 e de
+  03/11 fecharam um e dois dias depois do disparo, por reinício de sessão, e eu
+  disse isso sem dizer o que custou. **O custo de cada uma: nenhum visível**, e
+  o motivo é verificável: as duas entregaram aula de catálogo, que vai ao ar
+  pelo deploy e não tem janela; e as duas decisões de 03/11 (parar a busca,
+  parar a pauta) não tinham nada esperando por elas naquele dia. **A regra que
+  fica: atraso em rodada de aula custa zero e se diz que é zero; atraso em
+  rodada que decide gasto, gravação ou release custa o slot, e aí a frase é
+  "custou o slot de tal coisa", não "a sessão reiniciou".**
 
 - **Portão de amostra escrito depois da leitura só vale se ele não muda o
   resultado, e isso se mostra, não se afirma (03/11/2026).** O retorno de 29/10
