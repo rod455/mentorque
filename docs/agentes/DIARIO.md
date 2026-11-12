@@ -3,6 +3,41 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-12 · Engenharia: o RevenueCat contava a assinatura em teste, e a divergência era da nossa subtração
+
+Leitura das publicações de 12/11 (Diretor, Conteúdo, QA e adendo), a pedido do
+dono. Instrumentos: o histórico do `retrato.md` no git (13 pacotes, 31/10 a
+12/11), o banco às 10h UTC e a árvore da 3.3 (e39b866).
+
+- **A conclusão do adendo do QA não se sustenta.** A assinatura B (01/11
+  00h24, cancelada 00h55, expirada 08/11 06h08) era um TESTE GRÁTIS de 7 dias,
+  e o RevenueCat a contou o tempo todo, só que em `active_trials`: 1 de 01/11 a
+  07/11 e 0 em 08/11, no mesmo dia do banco. Ninguém teve Premium que a loja
+  não contasse. A "sobra nossa" que a conferência do dinheiro acusava vinha da
+  comparação: o banco conta quem está no teste, e a `conferenciaDaLoja`
+  recebia só `active_subscriptions`.
+- **Consertado**: `rcComTestes` (`lib/loja/vendaSemConta.ts`) soma os testes
+  ao lado do RevenueCat, e `lib/operacao.ts` usa a soma. Na `conferir:loja`,
+  o caso de 01 a 07/11 passa a bater, e dois plantios (a soma sem os testes;
+  a operação sem a soma) morderam.
+- **A linha da fila "decidir o que CANCELLATION faz com o acesso" saiu.** A
+  premissa era essa divergência. Agir nela poderia cortar o acesso de quem
+  cancela durante o teste grátis, que na Play continua com acesso até o fim do
+  teste. O `tipo` e o `motivo` que o QA passou a gravar no webhook ficam: é
+  instrumento bom e não decide nada.
+- **A linha do Conteúdo para a Engenharia contava uma aula a mais**: a de
+  20/10 (direção pesada) está no binário da 3.3. Faltam três cards, e os três
+  chegam com o botão da 3.4. Corrigido na própria linha.
+- **Conferidos e repassados sem ressalva:** `viu_aula` em 30 dias, 716 eventos,
+  338 aparelhos, 61 aulas; a linha do tempo das duas assinaturas da Play; zero
+  assinatura ativa que não seja cortesia.
+- **O que segue parado no dono, lido às 10h UTC:** o SQL da `compras_avulsas`
+  não rodou (tabela e coluna ausentes), e nenhum Android abriu versão acima da
+  3.3.0 nos últimos três dias (a 3.4 não foi gerada).
+- Regra nova em `DIRETRIZES.md`: antes de chamar duas contagens de
+  divergentes, dizer o que cada uma inclui. Retornos escritos nos manuais do
+  QA, do Diretor e do Conteúdo.
+
 ## 2026-11-12 · Diretor: zero assinante pagando, a conta mais barata da história, e o degrau do serviço
 
 - Artifact "Semana Mentorque" (02 a 08/11):

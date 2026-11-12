@@ -117,6 +117,27 @@ export function relatoDeVendaSemConta(e: EventoDaLoja): RelatoDeVenda {
  * assinaturas esconderia o buraco do mesmo jeito, porque as do Stripe tapariam
  * a conta.
  */
+/**
+ * O lado do RevenueCat na subtração: assinaturas pagas MAIS testes grátis.
+ *
+ * POR QUE (12/11/2026). O lado do banco conta quem tem Premium da loja, e quem
+ * está no teste grátis tem Premium (`active` ou `trialing`). O RevenueCat separa
+ * os dois: `active_subscriptions` não inclui o teste, que vem em
+ * `active_trials`. Comparar o banco com só o primeiro fabrica uma "sobra nossa"
+ * a cada teste grátis da loja. Foi o que aconteceu de 01 a 07/11: o retrato
+ * dizia RevenueCat 0 e banco 1, a conferência acusou sobra, e uma rodada do QA
+ * leu "sete dias de Premium que a loja não contava". O RevenueCat contava, em
+ * `active_trials: 1`, e zerou em 08/11 no mesmo dia do banco.
+ *
+ * Sem `active_subscriptions`, devolve nulo: sem leitura não é zero.
+ */
+export function rcComTestes(dados: { active_subscriptions?: unknown; active_trials?: unknown } | null | undefined): number | null {
+  const subs = Number(dados?.active_subscriptions);
+  if (dados?.active_subscriptions == null || !Number.isFinite(subs)) return null;
+  const testes = Number(dados?.active_trials);
+  return subs + (Number.isFinite(testes) ? testes : 0);
+}
+
 export function conferenciaDaLoja(
   rcAtivas: number | null | undefined,
   noBanco: number,

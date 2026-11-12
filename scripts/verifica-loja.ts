@@ -31,6 +31,7 @@ import { ehCortesia, ehVendaDeLoja, origemDaLoja } from "../lib/assinaturaOrigem
 import {
   ORIGEM_VENDA_SEM_CONTA,
   conferenciaDaLoja,
+  rcComTestes,
   ehVendaComDinheiro,
   identidadeUsavel,
   linhaDeVendaSemConta,
@@ -212,6 +213,14 @@ console.log("Loja: a compra chega ao Premium, e quando não chega, deixa rastro?
   // defeito nosso (o nosso webhook não gravar a saída, ou cortesia etiquetada
   // como venda de loja). A regra de 03/10 do dono vale dentro do código também:
   // ausência não é causa, e "provavelmente" não é medição.
+  // O TESTE GRÁTIS (12/11/2026). De 01 a 07/11 o retrato teve
+  // active_subscriptions 0 e active_trials 1, e o banco 1 (a pessoa no teste).
+  // Isso BATE: o RevenueCat contava, só que em outra caixa.
+  conferir("o teste grátis do RevenueCat entra na conta", rcComTestes({ active_subscriptions: 0, active_trials: 1 }) === 1);
+  conferir("e com ele o caso de 01 a 07/11 bate", conferenciaDaLoja(rcComTestes({ active_subscriptions: 0, active_trials: 1 }), 1).silencio.includes("batem"));
+  conferir("sem o campo de testes, conta só as assinaturas", rcComTestes({ active_subscriptions: 2 }) === 2);
+  conferir("sem assinaturas não é zero, é sem leitura", rcComTestes({ active_trials: 1 }) === null && rcComTestes(null) === null);
+
   const sobra = conferenciaDaLoja(0, 1);
   conferir("banco com mais que o RevenueCat NÃO grita que alguém pagou", sobra.deveAvisar === false, sobra.texto);
   conferir("mas o motivo fica dito", /sobra NOSSA/.test(sobra.silencio), sobra.silencio);
@@ -265,6 +274,11 @@ console.log("Loja: a compra chega ao Premium, e quando não chega, deixa rastro?
   conferir("o retrato conta as vendas sem conta", /ORIGEM_VENDA_SEM_CONTA/.test(operacao));
   conferir("e publica a frase pronta", /linhaSemConta: linhaDeVendaSemConta\(/.test(operacao));
   conferir("e a conferencia contra o RevenueCat", /lojaConferida: conferenciaDaLoja\(/.test(operacao));
+  conferir(
+    "e o lado do RevenueCat soma os testes grátis (o banco conta quem está no teste)",
+    /lojaConferida: conferenciaDaLoja\(\s*rcComTestes\(/.test(operacao),
+    "sem isto, cada teste grátis da loja vira uma 'sobra nossa' falsa, como de 01 a 07/11",
+  );
   // A ASSERÇÃO OLHA O ARGUMENTO, e não uma linha vizinha parecida.
   //
   // A primeira versão conferia só que existia `assinaturasDeLoja: ativas.filter(...)`.

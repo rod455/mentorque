@@ -1,6 +1,6 @@
 import { alarmeDeErros, classeDoErro, contaDeErros, linhaDeErros } from "./alarmeDeErros";
 import { ETIQUETA_DESDE, lerPergunta, linhaDePerguntas, quadroDeTemas } from "./biela/perguntaLida";
-import { ORIGEM_VENDA_SEM_CONTA, conferenciaDaLoja, linhaDeVendaSemConta } from "./loja/vendaSemConta";
+import { ORIGEM_VENDA_SEM_CONTA, conferenciaDaLoja, linhaDeVendaSemConta, rcComTestes } from "./loja/vendaSemConta";
 import { ehCortesia, ehVendaDeLoja } from "./assinaturaOrigem";
 import { cicloVencido, linhaDeCiclosVencidos } from "./ciclo";
 import { CHAVE_DO_ENVIO_DE_SAIDA } from "./email/saida";
@@ -600,8 +600,11 @@ export async function coletarDadosOperacao() {
       // Premium em silêncio. Achado do QA em 14/10. Agora o lado do banco é a
       // `origem` que o webhook do RevenueCat grava; linha sem origem não conta
       // como loja, e o erro, se houver, é o alarme gritar, nunca calar.
+      // Com os testes grátis do RevenueCat somados (12/11/2026): o banco conta
+      // quem está no teste como assinante, então o outro lado também tem de
+      // contar. Ver `rcComTestes`.
       lojaConferida: conferenciaDaLoja(
-        (((porFonte.revenuecat ?? [])[0]?.dados ?? {}) as { active_subscriptions?: number }).active_subscriptions,
+        rcComTestes(((porFonte.revenuecat ?? [])[0]?.dados ?? {}) as { active_subscriptions?: number; active_trials?: number }),
         ativas.filter((s) => ehVendaDeLoja(s)).length,
       ),
     },
