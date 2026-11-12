@@ -98,11 +98,31 @@ async function montarPopulares(): Promise<string[]> {
   const admin = getSupabaseAdmin();
   if (!admin) return [];
   const desde = new Date(Date.now() - 30 * 86400000).toISOString();
+  // O `.order` É O CONSERTO, E ELE NÃO É ESTÉTICA (varredura do QA, 11/11/2026).
+  //
+  // `.limit(5000)` sem ordem devolve um pedaço ESCOLHIDO PELO BANCO. Enquanto a
+  // tabela couber no teto não há diferença; passando dele, "as aulas que mais
+  // gente acessa" passaria a ser o ranking de uma fatia arbitrária, e sem aviso
+  // nenhum. É a mesma doença do alarme de 28/10, quando uma janela de oito dias
+  // fabricou um salto que por semana de calendário não existia: número que mede
+  // o nosso recorte e se apresenta como medida do mundo.
+  //
+  // TAMANHO MEDIDO HOJE, para ninguém ler como urgente: o retrato de 11/11 dá
+  // 389 eventos de `viu_aula` na semana mais cheia das quatro, ou seja algo
+  // entre mil e mil e quatrocentos em 30 dias, contra o teto de 5.000. O defeito
+  // está DESARMADO pelo volume, e é por isso que o conserto é de uma linha
+  // agora, em vez de um incidente depois. O que muda a conta é o ritmo novo de
+  // uma aula por semana que o Conteúdo começou em 11/11: mais aula, mais
+  // `viu_aula` por aparelho.
+  //
+  // Com a ordem, passar do teto deixa de ser silencioso e passa a ser uma
+  // definição honesta: o ranking dos 5.000 eventos MAIS RECENTES.
   const { data, error } = await admin
     .from("funil_eventos")
     .select("origem, anon_id")
     .eq("evento", "viu_aula")
     .gte("criado_em", desde)
+    .order("criado_em", { ascending: false })
     .limit(5000);
   if (error || !data) return [];
   const porAula = new Map<string, Set<string>>();

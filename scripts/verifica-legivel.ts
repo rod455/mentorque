@@ -351,6 +351,71 @@ console.log("Retrato: janela aberta vira motivo, e não número?");
   conferir("e sete dias no recuo é o normal dele, sem alarme",
     !/MARGEM ZERO/.test(recuoNormal.texto) && /7 dias atras/.test(recuoNormal.texto), recuoNormal.texto);
 
+  // A TRANQUILIZAÇÃO TEM DE SER MERECIDA (achado do QA em 11/11/2026).
+  //
+  // A frase de 04/11 dizia "nao risco de perder a serie" SEMPRE que a frescura
+  // vinha preenchida, e nos pacotes de 04 a 11/11 ela consolou sobre um
+  // instrumento parado: a frescura declarada andou de 04/11 para 10/11 e o dado
+  // entregue ficou preso em 05/11, com as linhas vazando de 8 para 3. Em três
+  // dias a série zera e a função cairia no ramo de supressão, lido como "o Play
+  // não publica", quando a série sangrou com o retrato dizendo que estava tudo
+  // bem. O buraco aparece num pacote só: a Play DIZ ter até um dia e ENTREGA até
+  // outro.
+  const buraco = linhaDeVitals({
+    crash: { estado: "ok", linhas: 3 },
+    crashPorDia: [
+      { dia: "2026-11-02", metricas: { crashRate: 0, distinctUsers: 70 } },
+      { dia: "2026-11-03", metricas: { crashRate: 0, distinctUsers: 60 } },
+      { dia: "2026-11-05", metricas: { crashRate: 0, distinctUsers: 60 } },
+    ],
+    frescor: { crash: "2026-11-10", anr: "2026-11-10" },
+  }, new Date("2026-11-11T09:00:00Z"));
+  conferir(
+    "a Play dizendo ter mais do que entrega NÃO é tranquilizada",
+    !/nao risco de perder a serie/.test(buraco.texto) && /DIZ TER MAIS DO QUE ENTREGA/.test(buraco.texto),
+    buraco.texto,
+  );
+  conferir(
+    "e o tamanho do buraco sai em dias, não em adjetivo",
+    /5 dia\(s\) do fim da janela NAO vieram/.test(buraco.texto),
+    buraco.texto,
+  );
+  // O número que mostra a sangria. Sem ele, "crash em 0%" parece a medida de uma
+  // semana quando é a de três dias.
+  conferir("e a frase diz de quantos dias a série é", /a serie tem 3 dia\(s\)/.test(buraco.texto), buraco.texto);
+  conferir(
+    "a conta de dias também sai quando está tudo bem",
+    /a serie tem 1 dia\(s\)/.test(comFrescor.texto),
+    comFrescor.texto,
+  );
+  // E A CONTA É DE DIAS COM DATA, NÃO DE LINHAS DO PACOTE, o que só se prova com
+  // uma linha sem data dentro (plantio de 11/11: trocar `comData.length` por
+  // `dias.length` passou verde com as entradas todas datadas, porque as duas
+  // contas davam o mesmo). Linha sem data não é um dia da série: ela não entra
+  // na escolha do mais novo e não pode engordar o número que o dono lê.
+  const comLinhaSemData = linhaDeVitals({
+    crash: { estado: "ok", linhas: 3 },
+    crashPorDia: [
+      { dia: "2026-11-03", metricas: { crashRate: 0, distinctUsers: 60 } },
+      { dia: null, metricas: { crashRate: 0, distinctUsers: 60 } },
+      { dia: "2026-11-05", metricas: { crashRate: 0, distinctUsers: 60 } },
+    ],
+    frescor: { crash: "2026-11-06", anr: "2026-11-06" },
+  }, new Date("2026-11-11T09:00:00Z"));
+  conferir(
+    "linha sem data não conta como dia da série",
+    /a serie tem 2 dia\(s\)/.test(comLinhaSemData.texto),
+    comLinhaSemData.texto,
+  );
+  // Um dia de diferença é a folga normal de publicação, e tranquilizar aí está
+  // certo: alarme em cima do normal ensina a ignorar alarme, que é a razão pela
+  // qual a Engenharia tirou o MARGEM ZERO deste ramo em 04/11.
+  conferir(
+    "um dia de folga continua sendo tranquilizado",
+    /entregou ate o fim/.test(comFrescor.texto) && /nao risco de perder a serie/.test(comFrescor.texto),
+    comFrescor.texto,
+  );
+
   // Data que não parseia não pode virar contagem: `NaN` dias atrás impresso no
   // retrato seria pior que não contar.
   //

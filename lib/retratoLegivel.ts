@@ -316,19 +316,51 @@ export function linhaDeVitals(v: VitalsDoPlay, hoje: Date = new Date()): LinhaDo
   // passa a ser só a Play atrasando: dizer MARGEM ZERO aí seria alarme falso, e
   // alarme falso ensina a ignorar alarme. Sem a frescura, o pedido recua para
   // hoje menos 6, e o normal passa a ser sete dias.
+  // E A TRANQUILIZAÇÃO TEM DE SER MERECIDA (achado do QA em 11/11/2026).
+  //
+  // A frase acima, de 04/11, diz "atraso aqui e da Play e nao risco de perder a
+  // serie" sempre que a frescura vem preenchida. Medido nos pacotes do retrato
+  // em 11/11, ela estava consolando sobre um instrumento parado:
+  //
+  //   pacote   linhas   a Play diz ter ate   entregou ate
+  //   04/11      8          04/11               03/11
+  //   06/11      7          05/11               03/11
+  //   08/11      6          07/11               05/11
+  //   10/11      4          09/11               05/11
+  //   11/11      3          10/11               05/11
+  //
+  // A frescura DECLARADA andou seis dias e o dado ENTREGUE não andou nenhum: o
+  // mais novo está preso em 05/11 desde o pacote de 07/11. A janela desliza, os
+  // dias velhos caem atrás e nada entra na frente, então as linhas vazam (8, 7,
+  // 6, 5, 4, 3) e em três dias a série fica vazia. Aí a função cai no ramo de
+  // supressão e o retrato diria "o Play não publicou", quando na verdade a série
+  // sangrou enquanto a linha repetia todo dia que não havia risco.
+  //
+  // O conserto não precisa de memória entre dias: o buraco aparece num pacote
+  // só, comparando o que a Play DIZ ter com o que ela ENTREGOU. Gap de até um
+  // dia é a folga normal de publicação; acima disso são dias pedidos que não
+  // vieram, e aí não se tranquiliza ninguém.
+  //
+  // A CONTA DE LINHAS VAI NA FRASE SEMPRE, porque é ela que mostra a sangria. Um
+  // número de crash sozinho, sem dizer de quantos dias ele é, foi o que deixou
+  // esta fonte invisível por 35 dias até 03/10.
   const atraso = diasAtras(String(maisNova.dia), hoje);
   const temCampoFrescor = v.frescor != null && typeof v.frescor === "object";
   const frescor = temCampoFrescor ? String(v.frescor?.crash ?? "").trim() : "";
   const limite = temCampoFrescor ? 7 : 5;
   const pedido = temCampoFrescor ? "hoje menos 6 (a pergunta de frescura nao respondeu)" : "hoje menos 4";
+  const buraco = frescor ? diasAtras(String(maisNova.dia), new Date(`${frescor}T12:00:00Z`)) : null;
+  const serie = `a serie tem ${comData.length} dia(s)`;
   const sobreAtraso =
     atraso == null
       ? "sem contar o atraso (a data da linha nao parseou)"
       : frescor
-        ? `${atraso} dias atras; a Play informou dado ate ${frescor} e o coletor pede ate la, entao atraso aqui e da Play e nao risco de perder a serie`
+        ? buraco != null && buraco > 1
+          ? `${atraso} dias atras, e A PLAY DIZ TER MAIS DO QUE ENTREGA: ela informou dado ate ${frescor}, o coletor pediu ate la e ${buraco} dia(s) do fim da janela NAO vieram. Isso nao e a Play atrasando, sao dias faltando, e ${serie}`
+          : `${atraso} dias atras; a Play informou dado ate ${frescor} e entregou ate o fim, entao atraso aqui e da Play e nao risco de perder a serie; ${serie}`
         : atraso > limite
           ? `${atraso} dias atras, e isso e MARGEM ZERO: o coletor pede o fim da janela em ${pedido} e a Play recusa o pedido INTEIRO quando a frescura dela passa disso, que foi o que tirou a serie do ar de 21 a 31/10`
-          : `${atraso} dias atras, que e o normal desta fonte (a API atrasa, NAO e hoje)${temCampoFrescor ? `; pedido pelo recuo de ${pedido}` : ""}`;
+          : `${atraso} dias atras, que e o normal desta fonte (a API atrasa, NAO e hoje)${temCampoFrescor ? `; pedido pelo recuo de ${pedido}` : ""}; ${serie}`;
   return {
     texto:
       `Vitals do Play: o dado mais novo e de ${maisNova.dia}, ${sobreAtraso}. ` +

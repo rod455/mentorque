@@ -3,6 +3,91 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-11 · QA: a série de crash está sangrando debaixo de uma frase que diz que não há risco
+
+- **Primeiro o crédito: o conserto do coletor saiu, e melhor do que eu havia
+  escrito.** O coletor pergunta à Play até onde ela tem dado antes de pedir, a
+  frase pronta chegou ao TOPO do `retrato.md` (o item 3 que o dono cobrou em
+  29/10) e o meu aviso de margem zero virou um que compara com a frescura real.
+  Os três itens que eu deixei na fila em 28/10 estão fechados.
+- **E a frase nova está consolando sobre um instrumento parado.** Ela diz
+  "atraso aqui e da Play e nao risco de perder a serie" sempre que a frescura
+  vem preenchida. Os oito pacotes de 04 a 11/11, lidos hoje às 11h12 UTC:
+
+  | Pacote | Dias na série | Play diz ter até | Entregou até |
+  | --- | --- | --- | --- |
+  | 04/11 | 8 | 04/11 | 03/11 |
+  | 06/11 | 7 | 05/11 | 03/11 |
+  | 08/11 | 6 | 07/11 | 05/11 |
+  | 10/11 | 4 | 09/11 | 05/11 |
+  | 11/11 | 3 | 10/11 | 05/11 |
+
+  A frescura DECLARADA andou seis dias e o dado ENTREGUE não andou nenhum: o
+  mais novo está preso em 05/11 desde o pacote de 07/11. A janela desliza, os
+  dias velhos caem atrás, nada entra na frente, e as linhas vazam (8, 8, 7, 7,
+  6, 5, 4, 3). No ritmo dos últimos cinco pacotes, em uns três dias a série
+  zera, e aí a função cai no ramo de supressão e o retrato passa a dizer "o Play
+  não publicou" como se fosse outro assunto. A série teria sangrado inteira
+  debaixo de um atestado diário de que estava tudo bem.
+- **Consertado na frase, que é código meu.** A tranquilização passa a exigir que
+  a Play tenha entregado até onde diz ter, com um dia de folga de publicação;
+  acima disso a linha diz quantos dias do fim da janela NÃO vieram. E a frase
+  carrega agora DE QUANTOS DIAS A SÉRIE É, sempre: "crash em 0%" de três dias é
+  lido como se fosse de uma semana, e era esse número ausente que deixava a
+  sangria invisível. Quatro plantios, quatro mordidas.
+- **Por que a Play entrega menos do que declara eu NÃO SEI**, e isso fica como
+  TEORIA com teste nomeado: a hipótese é a supressão dela abaixo de um mínimo de
+  usuários distintos (os dias entregues têm 50 a 70), e o teste é comparar esses
+  50 a 70 com o mínimo que a Play publica, que eu não li.
+- **A pergunta que o dono me deixou tem resposta, e ela derruba a hipótese
+  limpa.** "O pacote do RevenueCat conta assinatura cancelada dentro do
+  período?" Não: em 28, 29, 30 e 31/10 o banco JÁ TINHA cancelamento agendado e
+  o RevenueCat ainda dizia 1. Ele caiu para 0 em 01/11, sem nada mudar do nosso
+  lado, e o banco só foi a 0 entre 06 e 08/11, quando o período acabou (quinze
+  retratos no histórico do git). Aconteceu algo específico em 01/11 e eu não sei
+  o quê.
+- **Por isso eu NÃO mexi na conferência do dinheiro.** Eu tinha o conserto
+  pronto (passar a contagem de cancelamentos agendados e usá-la para explicar a
+  sobra) e a medição o matou: nos quatro dias com cancelamento agendado, sobra
+  não havia. A frase de 04/11, que diz "a causa NÃO está conferida" e nomeia o
+  instrumento que separa, estava certa justamente porque a causa óbvia não era a
+  causa. Conserto em cima de causa errada é pior que ressalva honesta.
+- **Fato de negócio, com os três instrumentos concordando: desde 08/11 a casa
+  não tem nenhuma assinatura que renova.** Banco 0, RevenueCat 0, Stripe 0 no
+  retrato de hoje. A que existia era mensal da Play, cancelada.
+- **VARREDURA DIRIGIDA: catálogo remoto de aulas**, na data que o dono marcou
+  depois de eu adiar duas vezes. Ele entrega aula nova sem build e é o único
+  lugar da casa onde dado da rede SOBREPÕE o binário, e **não tinha conferência
+  nenhuma**: nenhum script citava `/api/lessons`, `remoteLessons` ou
+  `montarPopulares`.
+- **Achado de código da varredura**: `montarPopulares` lia o funil com
+  `.limit(5000)` e SEM ORDEM, e limite sem ordem devolve um pedaço que o banco
+  escolhe. Passando do teto, "o que mais gente acessa" no Início viraria o
+  ranking de uma fatia arbitrária, calado. Mesma doença do alarme de 28/10.
+  **Tamanho medido**: 389 eventos de `viu_aula` na mais cheia das quatro semanas
+  do retrato, ou seja mil a mil e quatrocentos em 30 dias, contra o teto de
+  5.000: DESARMADO hoje pelo volume. Consertado com uma linha (`.order` por
+  `criado_em` desc), que também torna passar do teto uma definição honesta.
+  O que muda a conta é o ritmo novo de uma aula por semana do Conteúdo.
+- **Nasceu a `conferir:catalogo-remoto`**, 15 asserções em 6 seções, dez
+  plantios e dez mordidas. Guarda o que quebraria a tela do motorista: pacote
+  torto sobrepondo o embutido e ficando GRAVADO no aparelho, aula agendada
+  viajando antes de estrear, a enumeração campo a campo que um dia derrubou
+  todas as aulas, e o interruptor que precisa apagar o que guardou. É
+  conferência de FONTE e o cabeçalho dela diz isso: prova que a regra está
+  escrita, não que roda.
+- **O banco não respondeu, e desta vez NÃO virou clique do dono**, que é a regra
+  que ele fixou em 04/11. Quatro tentativas espalhadas pela rodada, entre 11h09
+  e 11h20 UTC, todas com "You do not have permission", inclusive a de só listar
+  tabelas. Fica como FONTE NÃO LIDA. Sem ela ficaram sem medir: o histórico de
+  eventos da assinatura (a pergunta do RevenueCat) e a concentração dos
+  fechamentos que eu sinalizei em 04/11. Nenhum dos dois virou conclusão.
+- **Próxima varredura dirigida: a compra avulsa pelo Stripe, em 18/11**, com a
+  data escrita aqui para não repetir o adiamento. É dinheiro, é desta semana e
+  está desligada até a tabela existir, que é a hora boa de varrer.
+- `npm run conferir` verde às 11h19 UTC, já com a conferência nova (69).
+- Artifact da rodada: https://claude.ai/artifact/CqEC2z5Lu8JrA3EzAp8BkS
+
 ## 2026-11-09 · Engenharia: a compra avulsa pelo Stripe está construída, e desligada até o SQL rodar
 
 - **Decisão do dono de 08/11, com o risco dito antes:** no Android a compra

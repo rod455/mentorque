@@ -496,6 +496,37 @@ recomendar.
   Frase com número fixo sobre fonte externa é suspeita por natureza; se o número
   pode variar, ele tem que ser calculado do dado e a asserção cobra o cálculo.
   Travar texto só vale para frase sobre o NOSSO código, onde a constante é nossa.
+- **TRANQUILIZAÇÃO TEM DE SER MERECIDA, E ELA É MAIS PERIGOSA QUE ALARME FALSO**
+  (11/11/2026). Em 04/11 a Engenharia tirou o meu MARGEM ZERO do ramo da
+  frescura, com razão: alarme em cima do normal ensina a ignorar alarme. Só que a
+  frase que entrou no lugar dizia "não é risco de perder a série" SEMPRE que a
+  frescura vinha preenchida, e por oito pacotes ela atestou que estava tudo bem
+  enquanto a série caía de oito dias para três, com o dado mais novo preso em
+  05/11. Alarme falso irrita e é investigado; **atestado falso é arquivado**, e é
+  por isso que ele custa mais. A régua que fica: frase que diz "sem risco" tem
+  que carregar a quantidade que mostraria o risco. Aqui eram duas, e as duas
+  faltavam: o buraco entre o que a fonte DIZ ter e o que ENTREGA, e de quantos
+  dias a série é.
+- **CONSERTO PRONTO NA CABEÇA MORRE QUANDO A MEDIÇÃO NÃO O SUSTENTA**
+  (11/11/2026, e doeu de um jeito bom). Eu abri a rodada com o conserto da
+  conferência do dinheiro decidido: passar a contagem de cancelamentos agendados
+  e usá-la para explicar a sobra do banco contra o RevenueCat. Fui medir antes:
+  em 28, 29, 30 e 31/10 o cancelamento JÁ estava agendado e o RevenueCat ainda
+  contava 1, então o cancelamento agendado não explica sobra nenhuma. O conserto
+  teria publicado uma causa que o dado refuta, com cara de rigor. **E a lição de
+  trás é melhor ainda:** a frase que eu escrevi em 04/11 ("a causa NÃO está
+  conferida", mais o instrumento que separa) estava certa justamente porque a
+  causa óbvia não era a causa. Ressalva honesta envelhece bem; explicação
+  apressada vira o próximo erro a corrigir.
+- **PLANTIO VERDE PERGUNTA "QUAL ENTRADA SEPARA AS DUAS FORMAS?", NUNCA
+  "COMO AFROUXO A ASSERÇÃO?"** (11/11/2026, terceira vez que isto aparece: 14/10
+  com `undefined`, 04/11 com a regex de data, agora com a contagem da série).
+  Plantei contar a série pelas linhas cruas do pacote em vez das linhas com data
+  e passou verde, porque nas minhas entradas toda linha tinha data. A saída não é
+  apertar o texto da asserção: é achar a entrada em que as duas formas discordam
+  (um pacote com linha SEM data, que o coletor produz de verdade) e acrescentá-la.
+  Como isto já voltou três vezes, virou passo fixo: todo plantio que passa verde
+  gera a pergunta da entrada ANTES de qualquer mudança na asserção.
 - **ASSERÇÃO DE FORMA CRAVA A FORMA QUE IMPORTA, NÃO A LISTA DE ARGUMENTOS**
   (04/11/2026, e veio de um merge, que é um lugar barato de aprender). O Guardião
   apertou em 31/10 a minha asserção de "quem usa a regra" para o texto exato
@@ -623,14 +654,21 @@ fila, com dado de produção pela primeira vez.
   ativos. Enquanto ninguém conferir o que esse campo conta, nenhuma taxa de
   crash nossa pode sair dele, e nada que ele diga derruba a contagem da
   migalha. Primeira coisa a resolver quando o coletor voltar.
-- **Catálogo remoto de aulas** é a próxima varredura, com campos de formulário
-  atrás. Em 28/10 ela foi puxada pelo erro real do retrato, que é a ordem da
-  rotina (erro primeiro, varredura depois), e em 04/11 pelo mesmo motivo mais um:
-  o banco não respondeu (três chamadas negadas, na lista do dono em 04/11) e a
-  metade de dados de qualquer varredura é leitura de linha. **Duas rodadas sem
-  varredura dirigida é o limite**: se a de 11/11 também não tiver, isso já não é
-  fila, é um papel que deixou de fazer metade do trabalho, e vale dizer no
-  artifact com essas palavras.
+- ~~**Catálogo remoto de aulas** é a próxima varredura.~~ **VARRIDO em
+  11/11/2026**, na data que o dono marcou depois de eu adiar em 28/10 e 04/11.
+  Ele não tinha conferência nenhuma, e é o único lugar da casa onde dado da rede
+  SOBREPÕE o binário. Achado: `montarPopulares` lia o funil com `.limit(5000)` e
+  sem ordem, então "o que mais gente acessa" viraria o ranking de uma fatia do
+  banco depois do teto; desarmado hoje pelo volume (mil a mil e quatrocentos
+  eventos em 30 dias), consertado com uma linha. Nasceu a
+  `conferir:catalogo-remoto`, 15 asserções, dez plantios e dez mordidas.
+- **A PRÓXIMA VARREDURA TEM DATA, e a data é parte do item** (regra que o dono
+  fixou em 04/11 depois de dois adiamentos sem data): **a compra avulsa pelo
+  Stripe, em 18/11/2026**. É dinheiro, nasceu em 09/11 e está desligada até a
+  tabela existir, que é a hora boa de varrer: dá para ler o caminho inteiro antes
+  de ele cobrar alguém. Varredura que passa de rodada sem data é dívida
+  esquecida; se esta for adiada, o artifact diz a data nova e o motivo, nunca "a
+  próxima".
 - **A concentração dos fechamentos, anotada em 04/11 e SEM MEDIDA**: a janela de
   7 dias do retrato mostra 13 fechamentos em 6 aparelhos na home, 2,2 por
   aparelho, contra 1,0 e 1,1 que eu medi por semana de calendário em 28/10. Pode
