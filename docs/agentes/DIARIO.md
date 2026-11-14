@@ -3,6 +3,25 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-14 · Engenharia: a compra avulsa ligada, e a 3.4 pronta para o botão
+
+- **O dono mandou ligar** a compra avulsa. O SQL rodou às 18h02 UTC pelo
+  conector do Supabase (organização do Mentorque): `compras_avulsas` com RLS e
+  zero política, `anon` e `authenticated` sem leitura, e a coluna
+  `biela_perguntas.pago_com` criada. Zero compras até agora.
+- **Conferido em produção às 18h03 UTC**, por fluxo TEMP do n8n já arquivado:
+  `/api/avulsa/confirmar` responde `ligada: true`; o checkout devolve sessão
+  `cs_live` do Stripe (sem pagamento, ela expira e não cobra); a Biela de um
+  aparelho de teste que já gastou a grátis responde 429 com `avulsa: true`.
+- **A 3.4 está pronta para o botão.** Desde a última bateria (09/11), só um
+  commit mexeu no binário (dd38f73, o card da fumaça, item 6 da ficha). Bateria
+  completa de navegador verde em 1.209 s e build nativo verde (49 MB), os dois
+  hoje. Nada da compra avulsa precisa de produto na Play, na Apple ou no
+  RevenueCat: ela passa pelo Stripe, com o preço no código.
+- **O que a nenhuma conferência alcança**: o pagamento de verdade num Android e
+  a volta pelo `mentorque://compra`. Roteiro de 8 passos na ficha. Até alguém
+  pagar num aparelho, "sem sinal ainda".
+
 ## 2026-11-14 · Engenharia: a base cresce, a chegada desacelera desde 19/10, e o dinheiro continua em zero
 
 Leitura pedida pelo dono ("vamos entender se o aplicativo está crescendo e se a

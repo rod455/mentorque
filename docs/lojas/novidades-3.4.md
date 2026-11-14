@@ -52,11 +52,12 @@ Codemagic, antes de qualquer frase sobre o que o binário tem; a
      dentro do app. Vender pelo Stripe pode fazer a Play recusar a versão ou
      tirar o app do ar. O Brasil tem um programa de escolha de cobrança, que
      exige a Play ao lado e a inscrição no Play Console; não estamos nele.
-   - **Desligada até o SQL rodar.** A folha só aparece quando o servidor diz
-     que a compra está ligada, e o servidor só liga com a tabela
-     `compras_avulsas` e a coluna `biela_perguntas.pago_com`
-     (`supabase/compras_avulsas.sql`). Sem elas, a 3.4 mostra a parede de
-     antes, só com o Premium, e nada quebra.
+   - **LIGADA EM 14/11, às 18h02 UTC, por ordem do dono.** O SQL
+     (`supabase/compras_avulsas.sql`) rodou pelo conector do Supabase: tabela
+     com RLS, sem política, e `anon`/`authenticated` sem leitura. Conferido em
+     produção às 18h03 UTC: `/api/avulsa/confirmar` responde `ligada: true`, o
+     checkout devolve uma sessão `cs_live` do Stripe (sem pagamento, ela
+     expira sozinha) e a Biela no limite responde 429 com `avulsa: true`.
 
 6. **O sintoma "Fumaça no escapamento" ganha o card da aula** (12/11, commit
    dd38f73, rodada do Conteúdo). Mesmo caso dos itens 1 e 4: a aula
@@ -91,9 +92,8 @@ Nos sintomas "Perda de força" e "Motor falhando", a aula que explica o problema
 Acabou a pergunta grátis do mês? Agora dá para continuar conversando com o Biela sem assinar: pacotes de perguntas ou um passe de 7 dias.
 ```
 
-A terceira frase só entra se o SQL da compra avulsa tiver rodado antes do
-envio; sem ele, a folha não aparece e a frase prometeria o que o app não
-mostra.
+A terceira frase entra: o SQL da compra avulsa rodou em 14/11 às 18h02 UTC,
+antes do envio.
 
 ## Plugin nativo nesta versão
 
@@ -136,7 +136,7 @@ com carro e pelo menos um serviço registrado, e que nunca criou conta:
 4. No banco, depois: `convite_conta` com `extra.detalhe = 'repique'` e o
    `recusou_convite_conta` com `botao-2` do mesmo aparelho.
 
-**Item 5, a compra avulsa (só Android, e só com o SQL rodado).** Num Android
+**Item 5, a compra avulsa (só Android; o SQL rodou em 14/11).** Num Android
 sem Premium, com a pergunta grátis do mês já gasta:
 
 1. Abrir a Biela e perguntar. A parede mostra "Ou pague só pelo que precisar,
