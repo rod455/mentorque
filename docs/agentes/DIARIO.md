@@ -3,6 +3,22 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-14 · Engenharia: a 3.4 em análise na Play, a compra de teste não aconteceu, e a Apple com acordo vencido
+
+- **Árvore do build: 93bc0c7**, pelo git: a `main` não se moveu das 18h11 às
+  19h08 UTC, e o primeiro evento na 3.4.0 é das 18h48 UTC. O dono gerou no
+  Codemagic e subiu o Android para produção; está em análise na Play.
+- **A compra de teste da faixa interna NÃO aconteceu**, lido no banco às 19h09
+  UTC: `compras_avulsas` com zero linhas, e nenhum `viu_avulsa` nem
+  `tentou_avulsa` em 24 horas. Os dois aparelhos na 3.4.0 (18h48 e 18h51 UTC)
+  fizeram o cadastro inicial e abriram a aula da fumaça pelo Início; nenhum
+  perguntou à Biela, então a parede com os pacotes não apareceu. **O pagamento
+  real pelo Android segue sem sinal**, e a 3.4 vai a produção sem ele.
+- **A API da App Store respondeu 403 `REQUIRED_AGREEMENTS_MISSING_OR_EXPIRED`**
+  às 19h09 UTC nas duas consultas do fluxo de builds. Linha na lista do dono:
+  aceitar o acordo em Negócios. Sem isso, não leio se a 3.4 chegou ao
+  TestFlight.
+
 ## 2026-11-14 · Engenharia: a compra avulsa ligada, e a 3.4 pronta para o botão
 
 - **O dono mandou ligar** a compra avulsa. O SQL rodou às 18h02 UTC pelo

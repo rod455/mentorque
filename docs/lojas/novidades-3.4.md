@@ -4,11 +4,18 @@ Aberta em 27/10/2026, quando a 3.3 (build 74) chegou às duas lojas. Tudo o que
 entra aqui **já roda na web** pelo deploy da Vercel; o binário só importa para
 o app das lojas.
 
-**Onde a 3.4 está:** ainda não gerada.
+**Onde a 3.4 está:** gerada em 14/11 no Codemagic pelo dono. **Android: em
+análise para PRODUÇÃO na Play** (dito pelo dono às 19h UTC de 14/11). **iPhone:
+não conferido**: a API da App Store recusou às 19h09 UTC com acordo pendente
+ou expirado (linha na lista do dono), então não sei se o build chegou ao
+TestFlight. `/api/app/latest` só sobe depois da aprovação, e o
+`ARVORE_DO_BUILD` e o `JA_PUBLICADAS` da `conferir:versoes` também.
 
-**Árvore do build:** (escrever o commit NA HORA de apertar o botão do
-Codemagic, antes de qualquer frase sobre o que o binário tem; a
-`conferir:versoes` cobra que cada item citado abaixo seja ancestral dela.)
+**Árvore do build:** 93bc0c7. Instrumento: o git. A `main` ficou parada em
+93bc0c7 das 18h11 às 19h08 UTC de 14/11, e o primeiro evento de um aparelho na
+3.4.0 é das 18h48 UTC, então o build saiu dela. A tela do Codemagic, que diria
+o commit direto, não foi vista por mim. Os seis itens abaixo são ancestrais de
+93bc0c7.
 
 ## O que vai NO BINÁRIO
 
