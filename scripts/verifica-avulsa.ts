@@ -15,6 +15,7 @@ import {
 } from "../lib/avulsa/direito.ts";
 import { anonSeguro, filtroDeDono, sessaoAvulsaPaga } from "../lib/avulsa/servidor.ts";
 import { voltaDaCompra } from "../lib/app/voltaDaCompra.ts";
+import { fraseDaVendaAvulsa } from "../lib/avulsa/leitura.ts";
 
 let falhas = 0;
 function conferir(nome: string, condicao: boolean, detalhe = "") {
@@ -146,6 +147,24 @@ console.log("Compra avulsa: produtos, quem paga a pergunta e as portas do servid
   const rotaFunil = leia("app/api/funil/route.ts");
   conferir("o app pode gravar viu_avulsa e tentou_avulsa", /"viu_avulsa"/.test(rotaFunil) && /"tentou_avulsa"/.test(rotaFunil));
   conferir("e NÃO pode gravar comprou_avulsa (quem grava compra é o servidor)", !/"comprou_avulsa"/.test(rotaFunil));
+}
+
+// ── o retrato lê a venda (14/11/2026) ──────────────────────────────────────
+// A 3.4 foi a produção com a compra e o retrato não lia nada dela. Executa a
+// frase com entradas conhecidas e confere que a operação a publica.
+{
+  const linha = (janela: string, o: Partial<Record<string, unknown>> = {}) => ({
+    janela, podiam_ver: 10, viram: 8, tocaram: 3, toques_por_produto: { pacote_2: 2, passe_7d: 1 },
+    compras: 1, compras_por_produto: { pacote_2: 1 }, receita_centavos: 190, recusas: 4, ...o,
+  }) as Parameters<typeof fraseDaVendaAvulsa>[0] extends (infer T)[] | null | undefined ? T : never;
+  const f = fraseDaVendaAvulsa([linha("7d"), linha("30d", { compras: 3, receita_centavos: 1170 })]);
+  conferir("a frase diz os degraus da semana", /7 dias: 10 podiam ver os pacotes, 8 viram, 3 abriram o checkout \(pacote_2 2, passe_7d 1\), 1 compraram \(pacote_2 1\) \(R\$ 1,90\), 4 voltaram/.test(f.texto), f.texto);
+  conferir("e a receita de 30 dias em reais", /30 dias: .*3 compraram .*\(R\$ 11,70\)/.test(f.texto), f.texto);
+  conferir("e a ressalva de quando os eventos passaram a ser medidos", /so medem desde 14\/11 21h50 UTC/.test(f.texto));
+  const sem = fraseDaVendaAvulsa(null);
+  conferir("sem a view não é zero, é SEM LEITURA", sem.semLeitura && /SEM LEITURA/.test(sem.texto) && !/0 compraram/.test(sem.texto), sem.texto);
+  const operacao = leia("lib/operacao.ts");
+  conferir("a operação lê a view e publica a frase em vendas.vendaAvulsa", /from\("venda_avulsa_resumo"\)/.test(operacao) && /vendaAvulsa: \{[\s\S]{0,200}fraseDaVendaAvulsa\(/.test(operacao));
 }
 
 if (falhas) {

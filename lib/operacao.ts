@@ -22,6 +22,7 @@ import { getSupabaseAdmin, getSupabaseAdminComPrazo } from "@/lib/supabaseAdmin"
 import { ORCAMENTO_DA_ROTA_MS, PRAZO_POR_CONSULTA_MS, cabeMaisUma, foiOPrazo } from "@/lib/prazo";
 import { linhaDeAnuncio, linhaDeAtivacao, linhaDeRetencao, linhaDeVitals } from "./retratoLegivel";
 import { comTentativas, transitorio } from "@/lib/transitorio";
+import { fraseDaVendaAvulsa, type LinhaVendaAvulsa } from "@/lib/avulsa/leitura";
 
 // O agregado da operação num lugar só: alimenta a rota /api/dados (que o
 // Analista de Dados coleta todo dia) e o painel /painel (que o Rodrigo abre
@@ -135,6 +136,8 @@ export async function coletarDadosOperacao() {
   // mora no banco pelo mesmo motivo do funil_canonico: consulta escrita à mão
   // em cada leitor produz um número diferente por leitor.
   const { data: anomalias } = await medir("anomalias", () => admin.rpc("anomalias_da_operacao", { p_dias: 14 }));
+  // A venda avulsa, degrau por degrau (14/11/2026). Ver lib/avulsa/leitura.ts.
+  const { data: vendaAvulsaLinhas } = await medir("venda_avulsa_resumo", () => admin.from("venda_avulsa_resumo").select("*"));
   // O DENOMINADOR DOS ALARMES (28/09/2026), pela mesma porta e pelo mesmo
   // motivo. O Vigia mandou "Erros no app dispararam: 22 em 7 dias (mais
   // comum: 11x em 6 aparelhos)". Os dois números estavam certos e o alarme
@@ -607,6 +610,12 @@ export async function coletarDadosOperacao() {
         rcComTestes(((porFonte.revenuecat ?? [])[0]?.dados ?? {}) as { active_subscriptions?: number; active_trials?: number }),
         ativas.filter((s) => ehVendaDeLoja(s)).length,
       ),
+      // A compra avulsa pelo Stripe (14/11/2026): os degraus e a frase pronta.
+      // Sem isto, os agentes só veriam venda indo ao banco na mão.
+      vendaAvulsa: {
+        janelas: (vendaAvulsaLinhas ?? []) as LinhaVendaAvulsa[],
+        ...fraseDaVendaAvulsa((vendaAvulsaLinhas ?? null) as LinhaVendaAvulsa[] | null),
+      },
     },
     // Marketing: de onde vieram os cadastros dos últimos 28 dias (UTM da LP).
     // Cruzado com o gasto de meta_ads/google_ads, vira CAC por campanha.

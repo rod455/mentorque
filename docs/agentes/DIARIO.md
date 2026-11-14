@@ -3,6 +3,39 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-14 · Engenharia: a 3.4 em produção, e as oportunidades de venda eram recusadas pelo banco
+
+Leitura pedida pelo dono depois da aprovação da Play ("veja se está funcionando
+e se estamos medindo as oportunidades de vendas"). Banco às 21h47 UTC.
+
+- **Funcionando:** 8 aparelhos Android na 3.4.0, zero erro registrado nessa
+  versão, compra avulsa ligada no servidor. Nenhuma compra ainda.
+- **O DEFEITO: `viu_avulsa`, `tentou_avulsa` e `comprou_avulsa` não estavam no
+  check `funil_eventos_evento_check`.** O app mandava, a rota aceitava, o banco
+  recusava, calado. O primeiro caso real: o aparelho `mwgs51ij` usou a pergunta
+  grátis às 19h18 UTC na 3.4 e deveria ter gravado `viu_avulsa`; não há linha.
+  Consertado no banco às 21h49 UTC (migração `funil_eventos_avulsa`, 42 eventos
+  no check) e em `supabase/funil_eventos.sql`. Prova de ponta a ponta: um
+  `viu_avulsa` de teste pela rota real gravou às 21h50 UTC (plataforma `teste`).
+- **E a conferência que existia para isso estava CEGA.** "Todo evento do app cabe
+  no check do banco" cortava a lista do app no primeiro ";", e havia um ";"
+  dentro de um comentário no meio da união: ela lia 16 eventos de uns 40. Agora
+  tira os comentários antes, cobra que leu a união inteira (35 ou mais) e
+  confere também a régua canônica, que tem os eventos do servidor. Dois
+  plantios morderam (o evento do app e o do servidor fora do SQL).
+- **O retrato não lia a venda.** Nem compras, nem quem viu, nem as recusas de
+  limite de 05/11. Nasceu a view `venda_avulsa_resumo` (7 e 30 dias:
+  podiam ver, viram, abriram o checkout por produto, compraram por produto,
+  receita, recusas) e o retrato publica `vendas.vendaAvulsa` com a frase pronta
+  (`lib/avulsa/leitura.ts`, executada pela `conferir:avulsa`, três plantios,
+  três mordidas). Primeira leitura: 1 podia ver, 0 viram (antes do conserto), 0
+  compras, **5 pessoas voltaram e levaram recusa de limite**, todas numa versão
+  sem os pacotes.
+- **Pendente da aprovação, esperando o número do dono:** o versionCode da 3.4
+  em Produção na Play, para acender o aviso de versão nova no Android e marcar
+  a 3.4 como publicada na `conferir:versoes`. O iPhone segue sem leitura (acordo
+  da Apple vencido).
+
 ## 2026-11-14 · Engenharia: a 3.4 em análise na Play, a compra de teste não aconteceu, e a Apple com acordo vencido
 
 - **Árvore do build: 93bc0c7**, pelo git: a `main` não se moveu das 18h11 às

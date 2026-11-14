@@ -306,7 +306,17 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
   const sql = ler("../supabase/funil_eventos.sql");
 
   // O tipo do app: as alternativas da união EventoFunil.
-  const bloco = tipoApp.slice(tipoApp.indexOf("export type EventoFunil"), tipoApp.indexOf(";", tipoApp.indexOf("export type EventoFunil")));
+  //
+  // SEM OS COMENTÁRIOS ANTES DE CORTAR (14/11/2026). Esta linha cortava no
+  // primeiro ";" depois do tipo, e havia um ";" DENTRO de um comentário no meio
+  // da união ("o id da aula ou do sintoma; no serviço"). A conferência lia 16
+  // eventos de uns 40 e ficava verde: tudo o que vinha depois do comentário
+  // nunca foi conferido contra o banco. Foi assim que `viu_avulsa` e
+  // `tentou_avulsa` foram ao ar na 3.4 com o insert recusado pelo check, e as
+  // oportunidades de venda sumiram caladas no primeiro dia.
+  const tipoSemComentario = tipoApp.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/.*$/gm, " ");
+  const inicioTipo = tipoSemComentario.indexOf("export type EventoFunil");
+  const bloco = tipoSemComentario.slice(inicioTipo, tipoSemComentario.indexOf(";", inicioTipo));
   const noApp = nomes(bloco, /\|\s*"([a-z_]+)"/g);
 
   const blocoRota = rota.slice(rota.indexOf("EVENTOS_DO_APP"), rota.indexOf("]);", rota.indexOf("EVENTOS_DO_APP")));
@@ -332,6 +342,18 @@ const CEDO = "2026-08-04"; // 28 dias antes, a janela que o /api/dados usa
     faltandoNoBanco.length === 0,
     faltandoNoBanco.length ? `${faltandoNoBanco.join(", ")} teriam o insert recusado` : "",
   );
+
+  // OS EVENTOS DO SERVIDOR TAMBÉM (14/11/2026). `comprou_avulsa`, `assinou`,
+  // `renovou` não passam pelo tipo do app: quem grava é o servidor. A régua
+  // canônica (NATUREZA) tem todos, então é contra ela que o check do banco se
+  // confere por inteiro.
+  const regraForaDoBanco = [...naRegra].filter((e) => !noBanco.has(e));
+  conferir(
+    "todo evento da régua canônica cabe no check do banco (inclusive os do servidor)",
+    regraForaDoBanco.length === 0,
+    regraForaDoBanco.length ? `${regraForaDoBanco.join(", ")} teriam o insert recusado pelo banco` : "",
+  );
+  conferir("a leitura do tipo do app pega a união inteira", noApp.size >= 35, `li ${noApp.size} eventos`);
 
   const faltandoNaRegra = [...noApp].filter((e) => !naRegra.has(e));
   conferir(

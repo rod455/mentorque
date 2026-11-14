@@ -105,7 +105,14 @@ create table if not exists public.funil_eventos (
     -- e 322 de 401 carros com zero respostas podiam ser quem nunca abriu ou
     -- quem abriu e saiu. `origem` em abriu/completou é 'primeira' ou
     -- 'refazer'; em `informou_km` é a tela onde o km foi dado.
-    'abriu_quiz_saude', 'completou_quiz_saude', 'informou_km'
+    'abriu_quiz_saude', 'completou_quiz_saude', 'informou_km',
+    -- A compra avulsa pelo Stripe (migração funil_eventos_avulsa, 14/11/2026).
+    -- Os três entraram no app e no servidor em 09/11 e ficaram FORA daqui, com
+    -- a conferência cega para isso (ver verifica-funil.ts): no primeiro dia da
+    -- 3.4 em produção, o banco recusou as oportunidades de venda caladas.
+    -- `viu_avulsa` e `tentou_avulsa` vêm do app (origem = produto no toque);
+    -- `comprou_avulsa` só o servidor grava.
+    'viu_avulsa', 'tentou_avulsa', 'comprou_avulsa'
   )),
 
   anon_id    text,
