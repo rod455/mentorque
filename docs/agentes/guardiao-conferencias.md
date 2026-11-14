@@ -1170,3 +1170,52 @@ isso.
 
 **O que eu levo da sua rodada**: o achado do comentário que engana a busca, que eu
 levo como alerta para as outras cadeiras que escrevem conferência de texto.
+
+## Retorno do dono sobre a rodada de 14/11/2026 (rodada 8)
+
+Escrito na sessão com o dono em 14/11, a pedido dele ("veja tudo que foi
+publicado pelos agentes, vamos de feedbacks e evoluções"). Lidos o registro no
+diário, o commit 5615aa7 e a fila.
+
+Primeiro o que manter.
+
+**O NÚMERO E O CAMINHO DELE NA PRIMEIRA LINHA**, que era a cobrança do Diretor:
+69 conferências, a fila de 11 para 1, o que entrou e o que você provou, sem
+nenhuma apagada.
+
+**31 PLANTIOS, 5 CEGAS, UMA RAIZ SÓ, E MEDIDO ANTES DE ALARGAR.** "Busca de texto
+prova que o texto existe, nunca que ele decide" é a frase mais útil que esta
+cadeira já escreveu, e você contou as 28 candidatas antes de mexer em seis.
+
+**A PRÓPRIA FALHA COM DATA**, como pedido: o modo `--semana` da
+`conferir:segredo` sem plantio, em dívida desde 14/11, com o caminho escrito.
+E a `conferir:avulsa` (5 plantios, 5 mordidas) foi provada por quem não a
+escreveu, que é o que ela precisava.
+
+Agora o que precisa melhorar, e é evolução de método, não erro.
+
+**1. "ELA SE REGENERA" PEDE UM CONSERTO DE OUTRA NATUREZA.** Prender a asserção
+nas duas pontas fecha a porta que o plantio achou, e você mesmo mostrou que a
+próxima porta abre ao lado (a `conferir:legivel` consertada duas vezes na mesma
+linha). O que não se regenera é a asserção que EXECUTA: chamar a função com uma
+entrada e conferir a saída. `if (true) return 0;` enxertado numa função pura
+reprova na primeira chamada, sem precisar de nenhuma regex adivinhar a forma.
+As conferências que nasceram assim (`conferir:avulsa` com `quemPagaAPergunta`,
+`conferir:publicacao` executando o comando num repositório temporário) são as
+que passam nos seus plantios sem conserto.
+- **Proposta para a régua desta cadeira:** o número da primeira linha ganha uma
+  segunda medida, **quantas das asserções que decidem alguma coisa são por
+  execução e quantas por texto**, e a fila prioriza converter as de texto que
+  guardam dinheiro, acesso ou mensagem a cliente. Regex fica para o que só ela
+  alcança: a LIGAÇÃO (a rota chama a função), presa nas duas pontas.
+- **E para quem escreve conferência nova** (vale para todas as cadeiras, e eu
+  levo para a Engenharia): a regra mora numa função pura; a conferência executa
+  a função e usa texto só para a ligação.
+
+**2. A DÍVIDA DO `--semana` PRECISA DE DATA, NÃO SÓ DE RODADA.** "Na rodada 9" é
+21/11 se nada atrasar, e três semanas seguidas perderam a sessão no meio.
+Escreva 21/11.
+
+Veredito: a rodada de maior rendimento da cadeira, com a raiz dita em uma
+frase. O próximo passo é parar de consertar a forma da busca e trocar a busca
+por execução onde a regra decide.

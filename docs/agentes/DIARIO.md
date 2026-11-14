@@ -3,6 +3,43 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-14 · Engenharia: a base cresce, a chegada desacelera desde 19/10, e o dinheiro continua em zero
+
+Leitura pedida pelo dono ("vamos entender se o aplicativo está crescendo e se a
+estratégia atual está funcionando"). Banco às 17h30 UTC de 14/11, pelas portas
+canônicas (`contas_criadas_desde`, `estado_da_base`) e o funil por semana de
+calendário UTC (segunda a domingo). A semana de 09/11 tem SEIS dias.
+
+| Semana | Contas novas | Aparelhos novos | Aparelhos ativos | Voltaram de antes | Biela | Checkout |
+| --- | --- | --- | --- | --- | --- | --- |
+| 21/09 | 55 | 269 | 214 | 7 | 0 | 5 |
+| 05/10 | 71 | 304 | 299 | 40 | 24 | 3 |
+| 12/10 | 134 | 513 | 483 | 51 | 43 | 1 |
+| 19/10 | 145 | 483 | 509 | 79 | 33 | 0 |
+| 26/10 | 122 | 386 | 443 | 107 | 47 | 2 |
+| 02/11 | 121 | 315 | 399 | 113 | 28 | 0 |
+| 09/11 (6 dias) | 79 | 221 | 287 | 104 | 15 | 0 |
+
+- "Voltaram de antes" = aparelho que abriu o app na semana e cuja primeira
+  abertura foi antes dela. "Aparelhos novos" = `comecou_onboarding` distinto.
+- **A base cresce**: 836 contas, 750 com carro, 72 com serviço (`estado_da_base`).
+- **A chegada desacelera desde o pico de 19/10**, e o segundo instrumento
+  concorda: `contas_ativas_7d` nos retratos foi 133, 134, 132, 114, e hoje no
+  banco é 84. O Diretor deu 112 contas para 02 a 08/11, e este corte UTC dá
+  121; a diferença é de recorte (fuso e "de fora"), e a direção é a mesma.
+- **O que segura**: quem volta passou de 7 por semana em setembro para 104 a 113
+  nas três últimas, e parou de subir em 26/10. A base que volta é o melhor
+  número do produto, e ela está num platô.
+- **O gasto acompanha a chegada**: de uns R$ 425 a 470 por semana em meados de
+  outubro para R$ 189 (02 a 08/11) e R$ 205 (07 a 13/11), com o Google em zero
+  desde o fim de outubro (diários do Diretor e da Mídia).
+- **O dinheiro**: zero assinatura ativa (17h34 UTC), checkout em zero há duas
+  semanas, a compra avulsa desligada (tabela ausente) e a 3.4 não gerada (140 de
+  145 Androids dos últimos três dias na 3.3.0, nenhum acima).
+- **A linha "reconectar o Supabase" (CRO, 13/11) saiu da lista do dono**: nesta
+  sessão o conector traz a organização do Mentorque e responde. Ele oscila
+  entre sessões (falhou 20/10, 09/11, 11/11, 13/11; respondeu 12/11 e 14/11).
+
 ## 2026-11-14 · Mídia: a semana piorou em tudo e ainda assim é um passo atrás numa escada de sete, e a minha hipótese do lance caiu
 
 - Artifact "Mídia da semana": https://claude.ai/artifact/XUAT2AEGyMsFhVtdHNR8VM

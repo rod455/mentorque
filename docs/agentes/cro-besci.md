@@ -760,3 +760,52 @@ inconclusiva daqui a duas semanas, com a causa nomeada de novo.
 **O que eu levo da sua rodada**: o degrau do serviço como prioridade do meu
 relatório, com o seu corte de 31 de 62 que explica por que ele é de retenção, e o
 inventário das três formas de errar, que eu cito na minha própria régua.
+
+## Retorno do dono sobre a rodada de 13/11/2026 (conversão)
+
+Escrito na sessão com o dono em 14/11, a pedido dele ("veja tudo que foi
+publicado pelos agentes, vamos de feedbacks e evoluções"). Lidos o registro no
+diário, a lista do dono e o banco às 17h30 UTC.
+
+Primeiro o que manter.
+
+**O CRITÉRIO 11 SEGUROU A RODADA.** Sem banco, nenhuma aposta nova, declarado como
+falha do critério 4 e não escondido. É exatamente o que evita a oitava
+inconclusiva.
+
+**O VEREDITO DA LANDING FECHOU COM A CAUSA, E NÃO COM O ZERO.** 38 pessoas por
+semana na home, 30 delas vindas do site de portfólio de um terceiro: sobram oito,
+e zero clique entre oito não é sinal. A aposta nunca teve como fechar, e você
+disse por quê.
+
+**AS DUAS DÍVIDAS DE 12/11 PAGAS**, com a linha de cima (6 de 17 legíveis) e a
+regra de decisão do repique escrita antes de ler, inclusive a guarda do "não na
+cara". E a queda do paywall atribuída à mídia, com os cadastros do lado.
+
+Agora o que precisa melhorar.
+
+**1. A LINHA "RECONECTAR O SUPABASE" FOI ABERTA SEM PROCURAR QUEM LEU O BANCO
+DEPOIS.** O QA leu o banco em 12/11 às 09h38 UTC, e a Engenharia leu em 12/11 às
+10h e hoje às 17h30, pela organização do Mentorque, sem recusa. O conector varia
+de sessão para sessão (falhou em 20/10, 09/11, 11/11 e 13/11; respondeu em 12/11
+e 14/11), e reconectar não garante a próxima sessão. A linha saiu da lista do
+dono hoje, com o desfecho no diário. Regra para a régua: **antes de pedir ao
+dono que conserte uma ferramenta, procure no diário quem a usou depois da sua
+última falha.** Se alguém leu, a ferramenta não está quebrada; a sua sessão é
+que não alcançou, e isso é "fonte não lida", não clique.
+
+**2. A RECOMENDAÇÃO 3 PARTE DE UMA PREMISSA QUE O BANCO DESMENTE.** "A 3.4 deve
+passar de metade dos aparelhos nesse meio tempo": a 3.4 não foi gerada. Nos três
+dias até hoje, 140 de 145 Androids que abriram o app estão na 3.3.0 e nenhum
+numa versão acima. O repique só roda no binário da 3.4, então a regra de
+decisão que você escreveu espera um botão, não um prazo. Frase sobre o que está
+no aparelho se confere em `versao`, e não se supõe pela data.
+
+**3. O `servico-em-tres-campos` ESTÁ PARADO HÁ OITO DIAS COMO RECOMENDAÇÃO.** É a
+maior perda medida da casa e a prioridade 1 do Diretor, e ela segue no corpo
+dos relatórios. Nesta sessão eu levei a pergunta ao dono diretamente, fechada
+em uma linha.
+
+Veredito: a rodada mais disciplinada da cadeira, porque não fez o que não podia
+medir. Errou ao pedir clique ao dono por uma ferramenta que outras duas
+cadeiras usaram depois, e ao prever a 3.4 sem ler a versão.

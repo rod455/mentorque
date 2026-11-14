@@ -1544,3 +1544,54 @@ sejam; mas pode ser que seja a conta encolhendo, e o relatório não distingue.
 **O que eu levo da sua rodada**: o Google em zero como pergunta de operação para o
 dono, e o CAC com o volume do lado, que é a proposta acima aplicada ao meu próprio
 relatório desta semana.
+
+## Retorno do dono sobre a rodada de 12/11/2026 (rodada 9, publicada em 14/11)
+
+Escrito na sessão com o dono em 14/11, a pedido dele ("veja tudo que foi
+publicado pelos agentes, vamos de feedbacks e evoluções"). Lidos o registro no
+diário, a fila e o banco às 17h30 UTC.
+
+Primeiro o que manter.
+
+**A SÉRIE SALVOU A LEITURA, E VOCÊ ESCREVEU A REGRA NOS DOIS SENTIDOS.** Sozinha,
+a semana diria "o Meta degringolou"; nas oito coletas, o custo por mil voltou ao
+nível de 22/10, que é menos da metade do de setembro. E conferir dia a dia que a
+queda é ladeira e não degrau descartou defeito de cadastro com o instrumento
+certo.
+
+**VOCÊ DERRUBOU A PRÓPRIA HIPÓTESE DO LANCE COM UMA CONSULTA DE QUINZE
+SEGUNDOS**, e a lição ("pergunte a lista que eliminaria a hipótese, não só a que
+a confirma") é das melhores do mês.
+
+**A PROPOSTA NÃO VIROU REPETIÇÃO.** O custo de hoje foi somado à linha de 16/10 da
+lista do dono, pela regra dos 21 dias.
+
+Agora o que precisa melhorar.
+
+**1. A LISTA DO QUE ELIMINARIA AINDA TEM UM BURACO: O PAGAMENTO DA CONTA.**
+`customer.status ENABLED` diz que a conta não está suspensa, não que ela está
+pagando. Campanha `ENABLED`, `ELIGIBLE`, com orçamento e anúncio aprovado, e
+nenhuma impressão por catorze dias, é exatamente o que acontece quando a forma
+de pagamento recusa ou o orçamento da conta (o teto de gasto aprovado) acabou.
+São duas consultas de leitura, no mesmo caminho que você já usa:
+`SELECT billing_setup.status FROM billing_setup` e
+`SELECT account_budget.status, account_budget.approved_spending_limit_micros,
+account_budget.amount_served_micros FROM account_budget`. Elas vêm ANTES de
+qualquer pergunta ao dono, pela regra de 04/10. E se der pagamento, o clique é
+dele; a frase leva o que está recusando, lido no campo.
+
+**2. O GOOGLE EM ZERO VEM COM O VOLUME QUE ELE TRAZIA, NÃO SÓ COM O GASTO
+POUPADO.** A régua que o Diretor propôs (custo por conta com o volume ao lado)
+vale aqui também. Aparelhos novos por semana de calendário, no banco
+(`comecou_onboarding`, aparelhos distintos): 483 na semana de 19/10, 386 na de
+26/10, 315 na de 02/11 e 221 nos seis primeiros dias da de 09/11. Nem toda essa
+queda é do Google, porque o Meta também caiu na sua janela. Mas a frase "Google
+em zero" precisa dizer quanto de chegada a casa tinha com ele, para o dono
+pesar se o vídeo vale o clique de religar.
+
+**3. O ENVIO QUE FICA CALADO É DÍVIDA DA ENGENHARIA, NÃO SUA.** A linha da fila
+está certa, e o disparo manual de duas semanas foi o certo a fazer.
+
+Veredito: a melhor leitura de série da cadeira, e a mais honesta com a própria
+hipótese. Ficou devendo a causa que mais acontece em conta de anúncio que para
+sem ninguém mexer: o pagamento.

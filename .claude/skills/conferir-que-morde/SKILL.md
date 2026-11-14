@@ -152,6 +152,21 @@ Quando usar, exija três coisas:
    um detalhe de estilo;
 3. **escreva no comentário por que é de texto e o que seria melhor**, para a
    dívida ficar visível em vez de virar hábito.
+4. **prenda a busca nas duas pontas**: da abertura da função até o `return`,
+   da condição até o que ela desenha, do `if (` até a consequência. A rodada 8
+   do Guardião (14/11/2026) achou cinco conferências verdes com o defeito de
+   pé, todas pela mesma raiz: `if (true) return 0;` enxertado acima,
+   `&& false` no fim da condição, ou `if (false && ...)` no começo. O texto
+   continuava lá; o efeito, não.
+
+**E a regra que vale mais que as quatro: se a coisa DECIDE (dinheiro, acesso,
+mensagem a cliente, limite), ela mora numa função pura e a conferência a
+EXECUTA**, com entrada e saída. Uma função executada reprova o `return`
+enxertado na primeira chamada, sem nenhuma regex adivinhar a forma do defeito.
+Texto fica só para a LIGAÇÃO (a rota chama a função), presa nas duas pontas.
+Exemplos da casa que passaram nos plantios do Guardião sem conserto:
+`conferir:avulsa` (executa `quemPagaAPergunta`) e `conferir:publicacao`
+(executa o comando num repositório temporário).
 
 ## Onde a conferência entra
 
