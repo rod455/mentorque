@@ -76,6 +76,49 @@ não é critério, "tem o número e a janela do lado" é.
 | 10 | **No máximo 3 recomendações, e nada de preço** | nem planos, nem ofertas de loja, nem remoção de passo legal |
 | 11 | **A métrica da aposta foi LIDA no instrumento no dia em que ela abriu** | o número de hoje está escrito no caderno, com hora; consulta que devolve zero linha no dia zero mata a aposta antes de ela custar quatro semanas |
 
+## A linha de cima: quantas apostas fecham com veredito legível
+
+Pedida pelo Diretor em 12/11, e ela é a medida do caderno, não de uma aposta:
+"enquanto ela não estiver escrita, cada inconclusivo parece um caso; escrita,
+ela diz se o caderno está melhorando". Atualizar a cada rodada que fechar
+veredito.
+
+**Veredito LEGÍVEL** = o veredito responde a pergunta que a aposta fez: venceu,
+não venceu, ou um zero com denominador de exposição real. **NÃO LEGÍVEL** = a
+pergunta ficou sem resposta, qualquer que seja a causa.
+
+Contagem de 13/11/2026, sobre as 17 apostas fechadas com veredito (a
+`prova-social-de-verdade` sai da conta: ela foi executada pelo dono, não
+medida):
+
+| | quantas |
+|---|---|
+| **LEGÍVEIS** | **6 de 17, 35 de cada 100** |
+| não legíveis por MÉTRICA mal desenhada | 4 |
+| não legíveis por falta de BRAÇO ou mudanças somadas | 3 |
+| não legíveis por DEGRAU pequeno demais | 4 |
+
+As seis legíveis: `cadastro-em-duas-etapas` (venceu, nível 3),
+`onboarding-curto` (A venceu, nível 3), `caderno-de-gastos` (não funcionou, 1 de
+27), `convite-do-carro-nao-queima-com-convidado` (não funcionou, com a causa
+achada no fonte), `modo-motorista-de-app` (zero de 402 expostas) e
+`lembrete-que-chega` (metade: o conserto fechou, o efeito não).
+
+**E a leitura por rodada diz mais que o total, porque ela mostra onde o caderno
+está hoje:**
+
+    rodadas até 09/10      6 fechadas    1,5 legíveis
+    rodada de 23/10        5 fechadas    4 legíveis
+    rodada de 06/11        5 fechadas    0 legíveis
+
+**A rodada de 06/11 fechou cinco e nenhuma legível, e isso não contradiz o
+critério 11: as cinco nasceram ANTES dele.** Foram abertas entre 13/09 e 09/10,
+e o critério existe desde 30/10. As duas apostas abertas sob ele
+(`a-conta-e-pedida-de-novo-a-quem-ja-tem-algo-a-perder`, de 30/10, e
+`servico-em-tres-campos`, proposta em 06/11) **ainda não fecharam**, então esta
+linha AINDA NÃO SABE se o critério 11 funciona, e dizer o contrário seria
+inventar. A primeira medição honesta dele sai quando essas duas fecharem.
+
 **De onde vem o critério 11 (proposto pelo Diretor em 26/10/2026, adotado por
 mim em 30/10).** O critério 4 pedia hipótese, métrica e princípio com data de
 leitura, e não exigia que a métrica fosse LEGÍVEL no dia zero. O custo disso tem

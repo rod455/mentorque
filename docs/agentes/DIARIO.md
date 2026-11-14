@@ -63,6 +63,80 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   passou pelo git, que é onde estavam os achados das rodadas 2, 3 e 4 (chaves em
   texto puro dentro do n8n). Nenhuma conferência de repositório vê aquilo.
 
+## 2026-11-13 · CRO: o banco fora pela segunda vez em quatro semanas, e nenhuma aposta nova por decisão
+
+- Artifact "Conversão da semana": https://claude.ai/artifact/WJPEZDJcXBXRYjjbdgTe5g
+- Rodada de CONVERSÃO (a de 06/11 foi de retenção). Fila entre papéis aberta
+  antes do retrato: nenhuma linha para o CRO.
+- **FONTE INDISPONÍVEL, registrada e não contornada.** O `list_projects` desta
+  sessão traz a organização `ianjvpotzelxokbdupmx` (financasrodlu e sipatgo) e
+  **não traz o Mentorque**; toda consulta responde "You do not have permission to
+  perform this action". É a segunda vez em quatro semanas (em 20/10 parou a
+  rodada do Diretor, e o dono reconectou em minutos). **Linha na lista dele
+  desde hoje**, com o precedente citado. Nenhum número desta rodada vem de
+  consulta própria ao banco, ao contrário das quatro anteriores.
+  - **E eu NÃO pedi para liberar o plano B.** O `/api/funil` é recusado pelo
+    proxy desta sessão (403), e eu poderia ter proposto o host; não propus porque
+    ele devolve as mesmas semanas que o retrato já traz. Seria aprovação do dono
+    para recuperar um número que eu já tinha.
+- **NENHUMA APOSTA NOVA, e é o critério 11 funcionando.** Com o banco fora eu não
+  leio numerador nem denominador de corte novo, e o retrato não carrega o degrau
+  de nenhuma aposta que fizesse sentido abrir nesta área. Abrir seria abrir com a
+  métrica prometida para depois, que é a causa das sete inconclusivas em dois
+  meses. **Critério 4 falhado e declarado.**
+- **VEREDITO FECHADO: `landing-em-seis-blocos`, INCONCLUSIVO, e a pergunta que eu
+  deixei aberta em 06/11 está respondida.** Eu havia visto `clicou_baixar` em 5,
+  8, 0 e 0 e me recusado a chamar de veredito, com duas hipóteses escritas. As
+  duas caíram: **a emissão não parou** (lido no fonte: `StoreBadges` emite, e as
+  duas chamadas da home seguem de pé) e **o tráfego da home é de 38 pessoas por
+  semana, com 30 vindas do site de portfólio de um terceiro**
+  (`vilanovaalessandro.framer.website`, pacote `vercel_analytics`). Sobram **oito
+  pessoas por semana** de vontade própria. Zero clique entre oito não é sinal em
+  direção nenhuma, e a aposta nunca teve como fechar: o denominador encolheu de
+  28 para 8 em seis semanas.
+- **AS DUAS DÍVIDAS DO RETORNO DE 12/11, PAGAS:**
+  - **A linha de cima, a taxa de aposta que fecha com veredito legível:** **6 de
+    17, 35 de cada 100**. Não legíveis: 4 por métrica mal desenhada, 3 por falta
+    de braço ou mudanças somadas, 4 por degrau pequeno. Por rodada: até 09/10
+    foram 1,5 de 6; em 23/10, 4 de 5; em 06/11, **0 de 5**. **E a de 06/11 não
+    contradiz o critério 11: as cinco nasceram entre 13/09 e 09/10, antes dele.**
+    As duas abertas sob o critério ainda não fecharam, então **a linha ainda não
+    sabe se ele funciona**, e dizer o contrário seria inventar.
+  - **A regra de decisão do repique**, que era o alvo sem substituto: promove com
+    8+ contas em 60 expostas; mata com 0 ou 1 em 60; espera uma única janela a
+    mais entre 2 e 7, e aí morre inconclusiva por volume. **E a guarda que vale
+    mais que as três:** se mais da metade dos repiques levar "não" na cara
+    (`botao-2`), a peça sai mesmo com contas aparecendo.
+- **CONVERSÃO, com o retrato:** **zero assinaturas ativas**, MRR zero no Stripe e
+  na RevenueCat, e `cadastro → iniciou_checkout` em **2 de 513 (0,4 de cada
+  100)**. Checkout por semana 0, 2, 0, 0. As três coortes de assinante fecham com
+  saída igual à entrada.
+  - **A queda do paywall desta semana é MÍDIA, não produto**, e isso precisa ser
+    dito para ninguém atribuir a uma tela o que a torneira fez: paywall 80, 79,
+    60 e 33 com cadastros 132, 116, 113 e 50, e o **gasto do Google em R$ 0,00**
+    nos últimos 7 dias (Meta 207,75).
+  - Composição nova que vale registrar: **Facebook virou 175 dos 469 cadastros de
+    28 dias (37%)**, contra 88% direto um mês atrás, e o custo por cadastro caiu
+    para 1,84.
+  - O degrau segue sendo o da loja, que é do dono. A recomendação seria a terceira
+    repetição, então **ela não volta como recomendação nova** (regra de 02/10).
+- **O QUE O USUÁRIO DISSE:** a 13ª avaliação chegou, cinco estrelas, e é a
+  **primeira do Google Play com autor** (Celio lira souza), sem texto. Média
+  segue 5,0. E os erros caíram: 5 de 391 aparelhos com defeito (1,3%), contra 19
+  de 563 na semana passada.
+- CONFERÊNCIAS: `npm run conferir` verde, saída 0, depois do último arquivo
+  escrito. **Nenhum código mudou nesta rodada**, então não há defeito plantado a
+  relatar, e isso é o esperado e não omissão.
+- **A MINHA RODADA CONTRA A MINHA RÉGUA: falhei o critério 4 e declarei** (sem
+  aposta nova, pelo motivo acima). Os outros dez cumpridos.
+- RECOMENDAÇÕES: (1) reconectar o Supabase, já na lista do dono, porque sem ele
+  as rodadas existem mas param de fechar veredito; (2) aprovar ou recusar o
+  `servico-em-tres-campos`, proposto desde 06/11 e prioridade 1 do Diretor; (3)
+  quando o banco voltar, a primeira coisa não é aposta nova, é ler a regra de
+  decisão do repique contra o número, porque a 3.4 deve passar de metade dos
+  aparelhos nesse meio tempo.
+
+
 ## 2026-11-12 · Engenharia: o RevenueCat contava a assinatura em teste, e a divergência era da nossa subtração
 
 Leitura das publicações de 12/11 (Diretor, Conteúdo, QA e adendo), a pedido do

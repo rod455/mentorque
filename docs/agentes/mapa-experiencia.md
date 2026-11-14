@@ -16,6 +16,84 @@ Formato de cada tela/fluxo:
 
 ## Estado
 
+v13 em 2026-11-13: rodada de CONVERSÃO com **metade dos instrumentos fora**: a
+integração do Supabase apontou para outra organização e nenhuma consulta fina
+passou, pela segunda vez em quatro semanas. O que a rodada entrega, com o
+retrato só: **zero assinantes**, um veredito fechado com a pergunta da semana
+passada respondida, e **nenhuma aposta nova, por decisão e com o motivo
+escrito.** Próxima rodada alterna para RETENÇÃO.
+
+# FONTE INDISPONÍVEL, E O QUE ISSO CUSTOU (2026-11-13)
+
+O `list_projects` desta sessão traz a organização `ianjvpotzelxokbdupmx`
+(financasrodlu e sipatgo) e NÃO traz o Mentorque; toda consulta responde "You do
+not have permission to perform this action". Em 20/10 a mesma coisa parou a
+rodada do Diretor e o dono reconectou em minutos. **Linha na lista dele desde
+hoje**, com o precedente citado.
+
+O retrato continua chegando (ele nasce no n8n, por outro caminho), então o
+diagnóstico semanal vive. **O que morre é todo corte fino:** por `origem`, por
+`versao`, por `detalhe`, e as leituras por aparelho que fecham veredito. O
+`/api/funil`, que seria o plano B, não resolve duas vezes: o proxy desta sessão
+recusa o host (403) e, mesmo liberado, ele devolve as mesmas semanas que o
+retrato já traz. **Não propus liberar o host por isso**: seria aprovação pedida
+ao dono para recuperar um número que eu já tenho.
+
+# NENHUMA APOSTA NOVA HOJE, E ESSA É A APLICAÇÃO DO CRITÉRIO 11 (2026-11-13)
+
+O critério 11 diz que a métrica da aposta é lida no instrumento no dia em que
+ela abre. Com o banco fora, eu não consigo ler numerador nem denominador de
+nenhum corte novo, e o retrato não carrega o degrau de nenhuma aposta que faça
+sentido abrir nesta área. **Abrir aposta hoje seria abrir com a métrica
+prometida para depois, que é exatamente o que produziu sete inconclusivas em
+dois meses.**
+
+O que fica no lugar: o `servico-em-tres-campos` segue PROPOSTO desde 06/11
+(prioridade 1 do dono no relatório do Diretor), e a regra de decisão do repique
+foi escrita hoje, que era a dívida do retorno de 12/11.
+
+# CONVERSÃO: ZERO ASSINANTES, E O DEGRAU É O MESMO DE UM MÊS (2026-11-13)
+
+Retrato de 13/11:
+
+    cadastro -> iniciou_checkout     2 de 513     (0,4 de cada 100)
+    iniciou_checkout -> assinou      1 de 2
+    assinaturas ativas               ZERO
+    MRR                              zero, no Stripe e na RevenueCat
+
+`iniciou_checkout` por semana: 0, 2, 0, 0 nas últimas quatro. **A única
+assinatura que existia saiu**, e as três coortes de assinante fecham com saída
+igual à entrada (2 e 2, 1 e 1, 2 e 2).
+
+**E a queda do paywall desta semana é MÍDIA, não produto.** Vistas de paywall
+80, 79, 60 e 33, com cadastros 132, 116, 113 e 50: a chegada caiu junto, e o
+gasto do Google foi a **R$ 0,00** nos últimos 7 dias (Meta 207,75). Ler produto
+nessa queda seria atribuir a uma tela o que a torneira de mídia fez. O que
+mudou de composição e vale registrar: **o Facebook passou a 175 dos 469
+cadastros de 28 dias (37%)**, contra 88% direto um mês atrás, e o custo por
+cadastro caiu para 1,84.
+
+O degrau segue sendo o da loja, e ele é do dono (preço, planos, ofertas). A
+recomendação é a mesma de 30/10 e de 06/11, pela terceira vez, e por isso ela
+não volta como recomendação nova: **não se gasta rodada no paywall enquanto o
+degrau de chegada for de duas pessoas.**
+
+# O ZERO DA HOME, RESPONDIDO (2026-11-13)
+
+Em 06/11 eu me recusei a chamar de veredito o `clicou_baixar` em 5, 8, 0 e 0, e
+deixei duas hipóteses escritas. As duas caíram:
+
+- **a emissão não parou**: `StoreBadges` continua emitindo, com as duas chamadas
+  da home de pé (lido no fonte em 13/11);
+- **o tráfego da home é de 38 pessoas por semana, e 30 vêm do site de portfólio
+  de um terceiro** (`vilanovaalessandro.framer.website`, pacote
+  `vercel_analytics`). Sobram **oito pessoas por semana** que chegaram por
+  vontade própria.
+
+Zero clique entre oito pessoas não é sinal em nenhuma direção. O
+`landing-em-seis-blocos` fecha como INCONCLUSIVO, e o motivo é que ele nunca
+teve como fechar: o denominador não cresceu em seis semanas, encolheu.
+
 v12 em 2026-11-06: rodada de RETENÇÃO, e é de prestar contas: **cinco
 experimentos fechados**, quatro deles inconclusivos com a causa nomeada, e três
 dessas causas são métrica que eu mesmo escrevi errado. O achado é um degrau que

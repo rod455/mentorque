@@ -156,6 +156,24 @@ experimentos alimentam a seção final.
   "o que poderia fechar este veredito é X" com numerador E denominador. Se X
   for uma ausência, a aposta é correção e se defende pelo argumento, não pelo
   dado.
+- **2026-11-13: antes de ler uma taxa da landing, leia de ONDE vem o tráfego
+  dela.** O clique nos selos de loja da home deu 5, 8, 0 e 0 por semana, e eu
+  tinha duas hipóteses: a emissão parou, ou o tráfego sumiu. As duas caíram. O
+  código emite (lido no fonte) e a home tem 38 visitantes por semana, dos quais
+  **30 vêm do site de portfólio de um terceiro** e 8 chegaram por vontade
+  própria. Zero clique entre oito pessoas não é sinal em direção nenhuma. A
+  regra: quando o denominador de uma página é pequeno, pedir a quebra por
+  ORIGEM antes de ler qualquer taxa, porque tráfego de referência de um
+  portfólio não tem intenção de baixar app e infla o denominador sem trazer
+  ninguém que possa converter.
+- **2026-11-13: fonte fora do ar não é desculpa para abrir aposta às cegas, e o
+  critério 11 decide isso sozinho.** Com o banco inacessível eu não conseguia
+  ler numerador nem denominador de nada novo, e o retrato não carrega o degrau
+  das apostas que fariam sentido. Abrir mesmo assim seria abrir com a métrica
+  prometida para depois, que é a causa das sete inconclusivas em dois meses.
+  **Rodada sem aposta nova, com o motivo escrito, é melhor que a oitava
+  inconclusiva.** O critério 4 falha declarado; o 11 é o que impede a falha
+  silenciosa.
 - **2026-11-06: um zero lido de evento com trava de repetição é o tamanho da
   trava, não o do comportamento.** Eu publiquei "0 de 224 viram a folha uma
   segunda vez" e "73 fizeram algo de valor e NENHUM criou conta". As duas caem:
