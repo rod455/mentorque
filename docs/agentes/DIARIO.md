@@ -3,6 +3,66 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-14 · Guardião: linha afirmada não é linha que roda
+
+- **O número e o caminho dele, que é o que o Diretor cobrou em 12/11.** Lido de
+  `npm run conferir:fila` e copiado: 69 conferências, 55 provadas por quem não as
+  escreveu, **1 só pelo autor no nascimento**, 13 em dívida assumida. O caminho:
+  31/10 tinha 11 na fila; em 07/11 caiu para 5 porque **provei seis** (nenhuma
+  apagada, nenhuma definição mudada); esta semana entraram **2 nascidas**
+  (`conferir:avulsa` em 09/11 e `conferir:catalogo-remoto` em 11/11, de outras
+  cadeiras), o que deu 7 no começo da rodada, e **provei seis**. Sobrou 1. O total
+  subiu de 67 para 69 pelas mesmas duas conferências novas.
+- **Dívida assumida: 13 itens, todos de 03/10/2026, e a mais velha
+  (`conferir:agenda`) faz 42 dias.** Nenhuma reaberta: o gatilho é o mundo, não o
+  calendário.
+- **As seis da fila:** `gratis`, `prazo`, `saude`, `painel`, `segredo`, `avulsa`.
+  **31 plantios, 26 mordidas, 5 cegas, todas as 5 consertadas e replantadas.**
+  Inclui 2 plantios na `conferir:legivel`, que não era das seis mas tinha a mesma
+  forma medida.
+- **A dívida do critério 10 que eu declarei em 07/11 está fechada.** Faltava
+  plantio no cron que entrega a oferta do cupom. Plantei, e o plantio achou o
+  achado da rodada.
+- **O achado, e é uma raiz só para as cinco cegas: busca de texto prova que o
+  texto existe, nunca que ele decide alguma coisa.** Três jeitos de deixar o texto
+  no lugar e tirar o efeito dele, cada um num arquivo de verdade:
+  - `if (true) return 0;` como primeira linha de `resgatesDoCupom`: os três textos
+    que a `conferir:cadastro` afirmava continuavam escritos, a contagem devolvia
+    zero para sempre, a oferta do mês grátis nunca fechava, e quem chegasse depois
+    do teto abriria o checkout com preço cheio depois de ler "por nossa conta";
+  - `{result.kmEstimado && false && (` no `Health.tsx`: a ressalva do km estimado
+    parava de desenhar, e o número da saúde voltava a sair sem dizer que o km foi
+    chutado, que é o achado real de 21/10;
+  - `if (false && request.nextUrl.pathname === "/painel")` no middleware: a chave
+    dos dados voltava a ficar em `/painel?chave=...`, que é o achado da Segurança
+    de 25/10 e a razão da `conferir:painel` existir.
+- **Medido antes de alargar, nas três formas.** 25 asserções da casa citam um
+  `return`, 21 já o prendiam, 4 eram return solto e **3 dessas estavam cegas**;
+  **2** asserções terminavam em `&&`, as duas cegas; **1** começava no meio da
+  condição, cega. Seis asserções em cinco scripts, de 28 candidatas. Fora dessas
+  28 a forma não existe no repositório hoje, então nada foi alargado além disso.
+- **O conserto é sempre o mesmo e é de uma linha: prender a asserção nas duas
+  pontas.** Da abertura da função até o `return`; da condição até o que ela
+  desenha; do `if (` até a consequência que ele produz.
+- **E ela se regenera.** A `conferir:legivel` já foi consertada nesta mesma linha
+  duas vezes: em 24/10 ela afirmava a menção da função e virou o `return`; hoje o
+  `return` virou o trecho da abertura até ele. Cada conserto fecha a porta que o
+  plantio anterior achou, e o seguinte acha a porta ao lado.
+- **A melhor da semana:** `conferir:segredo`, 5 plantios e 5 mordidas. Ela achou
+  chave falsa em arquivo de código, em documento do diário, em arquivo de esquema
+  SQL e em arquivo de skill, e achou valor com cara de JWT de verdade DENTRO da
+  exceção nomeada do `.env.example`: a exceção não engole valor real.
+- **Onde eu falhei na minha régua, com data, como o Diretor pediu em 12/11:**
+  provei a `conferir:segredo` só no modo que a bateria roda. O modo `--semana`,
+  que é o que acha segredo acrescentado e depois apagado, ficou com zero plantios,
+  porque provar ele exige um commit com valor em forma de chave, e este papel não
+  faz esse commit. **Em dívida desde 14/11**, e o caminho está escrito: provar num
+  clone descartável, fora deste repositório, na rodada 9.
+- **O que esta rodada não alcança:** plugin nativo e aparelho, como sempre, porque
+  não há sinal de aparelho aqui. E a `conferir:segredo` não vê segredo que nunca
+  passou pelo git, que é onde estavam os achados das rodadas 2, 3 e 4 (chaves em
+  texto puro dentro do n8n). Nenhuma conferência de repositório vê aquilo.
+
 ## 2026-11-12 · Engenharia: o RevenueCat contava a assinatura em teste, e a divergência era da nossa subtração
 
 Leitura das publicações de 12/11 (Diretor, Conteúdo, QA e adendo), a pedido do

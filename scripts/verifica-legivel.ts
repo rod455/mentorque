@@ -240,8 +240,15 @@ console.log("Retrato: janela aberta vira motivo, e não número?");
     // chamada acontece, a menção fica, e o retrato publica uma frase montada à
     // mão que para de acompanhar a fonte: exatamente o que esta linha existe
     // para impedir. O que prende é o RETURN da função, não a citação dela.
-    /return linhaDeAnuncio\(d\);/.test(operacao),
-    "regra copiada no leitor para de acompanhar a fonte, e chamar sem devolver tem o mesmo efeito",
+    //
+    // E DESDE 14/11/2026 A AFIRMAÇÃO COMEÇA NA ABERTURA DA FUNÇÃO, porque linha
+    // afirmada não é linha que roda. Plantei `if (true) return "sem leitura de
+    // anuncio hoje";` como PRIMEIRA linha da função: o `return linhaDeAnuncio(d)`
+    // continua escrito logo abaixo, inalcançável, e esta conferência ficou
+    // VERDE. O retrato publicaria a frase à mão. Prendendo da abertura até o
+    // return, não dá para inserir nada no meio sem quebrar isto.
+    /anuncioLegivel: \(\(\) => \{\s*const pacote = \(porFonte\["admob"\] \?\? \[\]\)\[0\];[\s\S]{0,300}return linhaDeAnuncio\(d\);/.test(operacao),
+    "regra copiada no leitor para de acompanhar a fonte; chamar sem devolver, ou devolver antes de chegar aqui, tem o mesmo efeito",
   );
 }
 
@@ -469,8 +476,11 @@ console.log("Retrato: janela aberta vira motivo, e não número?");
   // casa com isto: conferido em 04/11 plantando a vírgula dele de volta.
   conferir(
     "e ela sai da função, não de uma cópia local",
-    /return linhaDeVitals\(/.test(operacao),
-    "chamar sem devolver tem o mesmo efeito de copiar a regra no leitor",
+    // Da abertura da função até o return, pelo mesmo motivo da linha do anúncio
+    // (14/11/2026): um `return` inserido antes deixa esta linha inalcançável e
+    // escrita, e busca de texto não vê isso.
+    /vitalsLegivel: \(\(\) => \{\s*const pacote = \(porFonte\["play_console"\] \?\? \[\]\)\[0\];[\s\S]{0,300}return linhaDeVitals\(/.test(operacao),
+    "chamar sem devolver, ou devolver antes de chegar aqui, tem o mesmo efeito de copiar a regra no leitor",
   );
 }
 

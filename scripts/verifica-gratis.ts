@@ -57,7 +57,16 @@ console.log("Grátis: a primeira consulta inteira, o custo por km no Premium e a
     /salvo\.custoPorKm != null && s\.premium \? \(\s*<p[^>]*>\{brlCentavos\(salvo\.custoPorKm\)\}/.test(abastecimento) &&
       (abastecimento.match(/brlCentavos\(salvo\.custoPorKm\)/g) ?? []).length === 1,
   );
-  conferir("e o consumo também", /salvo\.consumo != null && s\.premium &&/.test(abastecimento));
+  // A condição ligada ao que ela desenha (14/11/2026, rodada 8). Era
+  // `/salvo\.consumo != null && s\.premium &&/`, e o plantio
+  // `&& s.premium && false &&` ficou VERDE: o consumo desaparecia da tela do
+  // Premium com a conferência passando. Condição que termina em `&&` aceita mais
+  // um termo sem avisar.
+  conferir(
+    "e o consumo também",
+    /\{salvo\.consumo != null && s\.premium && <p[^>]*>\{t\.consumo/.test(abastecimento),
+    "sem amarrar no que desenha, `&& false` no meio da condicao passa verde",
+  );
 
   const home = leia("components/app/screens/Home.tsx");
   conferir("o card do Início não mostra o custo por km ao grátis", /!s\.premium \? ` · \$\{t\.cardPorKmPremium\}`/.test(home));

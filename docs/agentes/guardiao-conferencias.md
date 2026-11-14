@@ -342,12 +342,6 @@ sem tirar ninguém dela.
 
 | conferência | última prova | mordeu? |
 |---|---|---|
-| `conferir:gratis` | no nascimento (autor), 17/10/2026 | 6 plantios com `npm run plantio`, 6 mordidas: custo por km aberto ao grátis, causas cortadas em 2 de volta, a regra dando 2 causas na segunda consulta, a tela sem perguntar se é a primeira, o Biela trancado na tabela, e o card do Início mostrando o custo por km ao grátis |
-| `conferir:prazo` | no nascimento (autor), 21/10/2026 | 6 plantios com `npm run plantio`, 6 mordidas: aborto com outro nome (o cliente da Supabase passa a repetir sozinho), relógio desligado quando chega o cabeçalho (o corpo travado escapa), coleta voltando ao cliente sem prazo, orçamento que estoura os 30 s do Vigia, orçamento sem conferência no `medir`, e o cancelamento de quem chamou ignorado |
-| `conferir:saude` | no nascimento (autor), 21/10/2026 | 5 plantios, 5 mordidas: odômetro zero voltando a contar como km medido, a tela parando de mostrar a ressalva, a ressalva substituindo o "baseado no seu quiz", a folha voltando a salvar quiz incompleto, e o peso do VRI dobrado. O quinto passou verde na primeira vez: o limite de 3 pontos tinha folga e absorvia a mudança de peso, então apertei para o valor publicado e acrescentei a leitura do peso na fonte. Em 22/10 (Engenharia), mais 3 plantios e 3 mordidas na seção 5: o `completou_quiz_saude` sumindo do `submit`, o evento saindo ANTES da trava do quiz incompleto, e um dos eventos fora da lista da rota. E o caminho da tela (o km pedido na saúde) foi para a suíte de navegador `km`, com 1 plantio e 1 mordida: o `informou_km` sumindo |
-| `conferir:painel` | no nascimento (autor), 25/10/2026 | 5 plantios com `npm run plantio`, 5 mordidas: chave errada ganhando selo, chave ficando no endereço do redirecionamento, o cookie guardando a própria chave, cookie sem `httpOnly`, e o `chaveDadosOk` passando a aceitar o cookie (o selo abriria as rotas que mandam e-mail) |
-| `conferir:segredo` | no nascimento (autor), 04/11/2026 | 6 plantios, 6 mordidas: chave real em arquivo sem exceção, chave real DENTRO do arquivo com exceção (a que importa), JWT em documento, a bateria inteira com o defeito de pé, e no modo `--semana` a chave escrita na RESOLUÇÃO de uma junção, que o `git log -p` sozinho não vê (provado: zero no modo antigo, achado no novo, linha conferida) |
-| `conferir:avulsa` | no nascimento (autor), 09/11/2026 | 5 plantios com `npm run plantio`, 5 mordidas: o crédito comido antes da grátis do mês, o ramo avulso do webhook caindo na assinatura (o pacote viraria Premium), o grátis contando a pergunta paga, o id de aparelho aceitando vírgula no filtro `or` do PostgREST, e a confirmação gravando sessão de outra pessoa |
 | `conferir:catalogo-remoto` | no nascimento (autor), 11/11/2026 | mordeu nos dez plantios: pacote vazio, campos obrigatórios, aceitar antes de validar, aula agendada nos dois lados, enumerar campo a campo, limite sem ordem, contar evento em vez de aparelho, interruptor que não apaga, regravar com versão igual |
 | `conferir:baixar` | 19/09/2026 | sim |
 | `conferir:relatorio` | 19/09/2026 | sim |
@@ -398,6 +392,12 @@ sem tirar ninguém dela.
 | `conferir:fila` | 07/11/2026 | 4 plantios, 4 mordidas: linha renomeada (a conferência sai do rodízio e vira órfã), dívida assumida escrita no lugar da linha (a ordem que escolhe as seis quebra), estado fora do molde, e conferência nova no package.json sem linha na fila, que é o caso vivo que a fez nascer |
 | `conferir:publicacao` | 07/11/2026 | 4 plantios, 4 mordidas, e ela EXECUTA o comando num repositório temporário em vez de lê-lo: código de saída invertido, base que falta passando a não publicar, pasta excluída do comando sem estar no `.vercelignore`, e `assets/` entrando no `.vercelignore` (a rota das peças o lê em tempo de execução) |
 | `conferir:quiz-populacao` | 07/11/2026 | 4 plantios, 3 mordidas e 1 CEGA consertada: id do onboarding trocado no código, pergunta do onboarding entrando na rotação diária e `security_invoker` removido mordiam; trocar o id DA VIEW deixando o antigo num comentário logo acima ficava verde, porque a busca pegava a primeira ocorrência do arquivo. Agora o comentário sai antes, e a busca é pela decisão que separa as populações |
+| `conferir:avulsa` | 14/11/2026 | 5 plantios, 5 mordidas: atalho enxertado na regra de quem paga a pergunta, a regra renomeada na definição, a guarda da Biela trocada por `decisao ? false`, o resultado do `avulsaPronta` descartado e a guarda do orçamento do passe desligada |
+| `conferir:gratis` | 14/11/2026 | 5 plantios, 4 mordidas e 1 CEGA consertada: atalho enxertado na regra das causas, a tela cortando por `sx.causes.length` em vez do que a regra devolveu, o consumo perdendo a trava do Premium e o card do Início perdendo a frase do grátis mordiam; `&& false` no meio da condição que desenha o consumo ficava VERDE, porque a asserção parava no primeiro termo e condição que termina em `&&` aceita mais um termo sem avisar |
+| `conferir:painel` | 14/11/2026 | 4 plantios, 3 mordidas e 1 CEGA consertada: a página aberta sem nenhuma das duas provas, o selo renomeado e a CHAVE gravada no cookie no lugar do selo mordiam; `if (false && ...)` na guarda do middleware ficava VERDE, porque a asserção começava no meio da condição, e a chave voltava a ficar em `/painel?chave=...`, que é o achado da Segurança de 25/10 |
+| `conferir:prazo` | 14/11/2026 | 4 plantios, 4 mordidas, e ela executa contra um servidor local que trava de propósito: a coleta voltando ao cliente sem prazo, atalho enxertado no `cabeMaisUma` e no `foiOPrazo`, e a guarda do orçamento desligada antes de cada consulta |
+| `conferir:saude` | 14/11/2026 | 3 plantios, 2 mordidas e 1 CEGA consertada: `if (!allDone) return` desligado e botão sempre habilitado mordiam; `{result.kmEstimado && false && (` ficava VERDE, e a ressalva do km estimado desaparecia da tela com o número da saúde saindo sem dizer que o km foi chutado |
+| `conferir:segredo` | 14/11/2026 | 5 plantios, 5 mordidas: chave falsa em forma de Stripe real achada em arquivo de código, em documento do diário, em arquivo de esquema SQL e em arquivo de skill, e valor com cara de JWT de verdade DENTRO da exceção nomeada do `.env.example` (a exceção não engole valor real, o `pareceModelo` recusa). NÃO provado: o modo `--semana`, que a bateria não roda e cuja prova exigiria commit com valor em forma de chave |
 | `conferir:agenda` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 | `conferir:appsflyer` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 | `conferir:caminho` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
@@ -452,6 +452,59 @@ custo que não existia. Vale a lição geral, que é a mesma do caso `anonId`: o
 custo que justifica não fazer algo também é uma afirmação, e também se mede.
 
 ## Aprendizados
+
+**LINHA AFIRMADA NÃO É LINHA QUE RODA (14/11/2026, rodada 8).** As cinco cegas
+desta rodada são uma raiz só, e ela é a maior encontrada até hoje nesta cadeira:
+**busca de texto prova que o texto existe, nunca que ele decide alguma coisa.**
+São três jeitos de deixar o texto no lugar e tirar o efeito dele, e cada um
+apareceu num arquivo de verdade:
+
+| a forma | o plantio | o que ficava verde |
+|---|---|---|
+| return enxertado acima | `if (true) return 0;` como primeira linha da função | a contagem de resgates do cupom devolvia zero para sempre, a oferta nunca fechava |
+| termo a mais na condição | `{result.kmEstimado && false && (` | a ressalva do km estimado nunca desenhava |
+| asserção que começa no meio | `if (false && request.nextUrl.pathname === "/painel")` | o middleware parava de limpar a chave do endereço |
+
+As três sobrevivem porque a asserção não cerca o pedaço que decide. O conserto é
+sempre o mesmo e é de uma linha: **prender a asserção nas duas pontas.** Da
+abertura da função até o return; da condição até o que ela desenha; do `if (` até
+a consequência. O molde é o da `conferir:biela`, de 03/10, e agora ele tem três
+irmãs com nome.
+
+**Medido antes de alargar, nas três formas:**
+
+- 25 asserções da casa citam um `return`; 21 já o prendiam à condição ou ao
+  statement inteiro, e **4 eram return solto**. Das 4, uma já era apertada
+  (`conferir:aquisicao`, consertada em 07/11) e **3 estavam cegas**
+  (`conferir:cadastro` e as duas da `conferir:legivel`). Consertei as 3;
+- **2 asserções terminavam em `&&`**, as duas cegas, as duas consertadas
+  (`conferir:saude` e `conferir:gratis`);
+- **1 asserção começava no meio da condição**, cega, consertada
+  (`conferir:painel`).
+
+Seis asserções em cinco scripts, de 28 candidatas medidas. Nenhuma regra foi
+alargada para além disso, porque fora dessas 28 a forma não existe no
+repositório hoje.
+
+**E ELA SE REGENERA, como a de presença.** A `conferir:legivel` já foi consertada
+duas vezes nesta mesma linha: em 24/10 ela afirmava a MENÇÃO da função, e virou o
+`return`; em 14/11 o `return` virou o trecho da abertura até ele. Cada conserto
+fechou a porta que o plantio anterior achou, e o plantio seguinte achou a porta
+ao lado. Quem repetir isto: a pergunta não é "o texto está certo?", é **"o que eu
+posso escrever em volta deste texto para ele não fazer mais nada?"**
+
+**O CAMINHO DA FILA, QUE O DIRETOR COBROU EM 12/11.** O número bom precisa da
+mesma prova que o ruim, então a fila passa a vir com o caminho, e não só com o
+total:
+
+- 31/10: 11 na fila;
+- 07/11: 11 → 5. Caiu porque **eu provei seis** (nenhuma apagada, nenhuma
+  definição mudada);
+- 14/11: 5 **+ 2 nascidas na semana** (`avulsa` em 09/11, `catalogo-remoto` em
+  11/11, de outras cadeiras) = 7 no começo da rodada; **provei seis**, sobrou 1.
+
+O total foi de 67 para 69 pelo mesmo motivo: duas conferências novas. A fila cai
+por prova e sobe por nascimento, e as duas coisas ficam escritas.
 
 **NOME CITADO EM COMENTÁRIO NÃO É NOME DECLARADO (07/11/2026, rodada 7).** A
 varredura de presença fechou em 31/10 com a forma "afirmar que o nome aparece".

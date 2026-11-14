@@ -380,6 +380,26 @@ console.log("Cadastro: o convite do mês grátis sai uma vez, para quem deve, e 
     /const oferta = ofertaDoCupom\(await resgatesDoCupom\(admin\)\);/.test(cron),
     "uma consulta por pessoa seria trabalho por nada, e a resposta e a mesma para todo mundo",
   );
+  // E A CONTAGEM INTEIRA, DA ABERTURA AO FIM (14/11/2026, rodada 8).
+  //
+  // Aqui eu fechei a dívida do critério 10 que declarei em 07/11 (não havia
+  // plantio no cron), e o plantio achou outra coisa. Pus `if (true) return 0;`
+  // como primeira linha de `resgatesDoCupom`: os três textos que esta seção
+  // afirmava continuavam escritos (a consulta, o `Number.MAX_SAFE_INTEGER` e o
+  // log), e esta conferência ficou VERDE. A contagem devolveria zero para
+  // sempre, a oferta nunca fecharia, e quem chegasse depois do teto abriria o
+  // checkout com preço cheio depois de ler "por nossa conta".
+  //
+  // **Linha afirmada não é linha que roda.** Um `return` inserido acima deixa
+  // tudo o que vem depois escrito e inalcançável, e busca de texto não vê isso.
+  // Por isso a função é afirmada do início ao fim, numa forma só: qualquer
+  // enxerto no meio quebra. As três linhas abaixo continuam, porque elas é que
+  // explicam o PORQUÊ quando reprovam.
+  conferir(
+    "a contagem é o corpo inteiro da função, sem atalho enxertado",
+    /async function resgatesDoCupom\(admin: SupabaseClient\): Promise<number> \{\s*const \{ count, error \} = await admin\s*\.from\("subscriptions"\)[\s\S]{0,200}\.eq\("cupom", CUPOM_DA_CAMPANHA\);\s*if \(error\) \{[\s\S]{0,300}return Number\.MAX_SAFE_INTEGER;\s*\}\s*return count \?\? 0;\s*\}/.test(cron),
+    "`if (true) return 0` como primeira linha deixa os tres textos de pe e a oferta aberta para sempre",
+  );
   conferir(
     "contagem que falha PARA a oferta, em vez de assumir zero",
     /return Number\.MAX_SAFE_INTEGER;/.test(cron),

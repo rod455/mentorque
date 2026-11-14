@@ -103,10 +103,18 @@ for (const q of HEALTH_QUESTIONS) completo[q.id] = q.opts[Math.floor(q.opts.leng
   const tela = semComentarios(leia("components/app/screens/Health.tsx"));
   const texto = leia("lib/app/content.ts");
 
+  // A CONDIÇÃO COM O QUE ELA DESENHA, E NÃO O PRIMEIRO TERMO DELA (14/11/2026,
+  // rodada 8 do Guardião). A asserção era `/result\.kmEstimado\s*&&/`. Plantei
+  // `{result.kmEstimado && false && (` e esta conferência ficou VERDE: o texto
+  // afirmado continua escrito, a ressalva nunca desenha, e o número da saúde
+  // volta a sair sem dizer que o km foi estimado, que é o achado real de 21/10.
+  //
+  // Condição que termina em `&&` aceita mais um termo sem avisar. O que prende é
+  // a condição ligada ao que ela DESENHA, num pedaço só.
   conferir(
     "a tela mostra a ressalva do km estimado",
-    /result\.kmEstimado\s*&&/.test(tela),
-    "o campo existir sem a tela olhar é o mesmo que não existir",
+    /\{result\.kmEstimado && \(\s*<p[^>]*>\{h\.quizKmEstimado\}/.test(tela),
+    "o campo existir sem a tela olhar é o mesmo que não existir, e `&& false` no meio tem o mesmo efeito",
   );
   conferir(
     "e usa a string de conteúdo, não texto solto",

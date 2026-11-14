@@ -67,7 +67,20 @@ const base = "https://www.mentorque.com.br";
 // ── 3. quem usa ─────────────────────────────────────────────────────────────
 {
   const mw = leia("middleware.ts");
-  conferir("o middleware pega o /painel", /matcher: \[[^\]]*"\/painel"/.test(mw) && /pathname === "\/painel"\) return painel\(request\)/.test(mw));
+  // A GUARDA DESDE O `if (`, E NÃO DO MEIO DA CONDIÇÃO (14/11/2026, rodada 8).
+  //
+  // A asserção começava em `pathname === "/painel") return painel(request)`.
+  // Plantei `if (false && request.nextUrl.pathname === "/painel") return
+  // painel(request);` e esta conferência ficou VERDE: o texto afirmado continua
+  // inteiro, o middleware para de pegar o /painel, e a chave volta a ficar em
+  // `/painel?chave=...`, que é o achado da Segurança de 25/10 e a razão desta
+  // conferência existir. Afirmação que começa no meio da condição não vê o que
+  // foi posto na frente. Medido: esta era a única da casa nessa forma.
+  conferir(
+    "o middleware pega o /painel",
+    /matcher: \[[^\]]*"\/painel"/.test(mw) && /if \(request\.nextUrl\.pathname === "\/painel"\) return painel\(request\);/.test(mw),
+    "sem a guarda inteira, `if (false && ...)` passa verde e a chave volta para o endereco",
+  );
   conferir(
     "o cookie é httpOnly, secure, sameSite strict e preso ao /painel",
     /httpOnly: true/.test(mw) && /secure: true/.test(mw) && /sameSite: "strict"/.test(mw) && /path: "\/painel"/.test(mw),
