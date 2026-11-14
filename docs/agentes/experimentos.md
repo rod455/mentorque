@@ -372,6 +372,32 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
     já fez.
 - Nível da régua: **2, nunca 3.** Mudança direta, sem braço comparável. A
   comparação é contra os 3 de cada 100 acima, não contra zero.
+- **O QUE SE FAZ COM A DIREÇÃO: a regra de decisão, escrita em 13/11 porque o
+  retorno do Diretor de 12/11 cobrou que "aposta que entrega direção precisa
+  dizer o que promove, o que mata, e em que data".** Sem isto ela virava a
+  sétima inconclusiva com a causa nomeada de novo.
+  - **DATA:** duas semanas depois de a 3.4 passar de metade dos aparelhos
+    ativos. Essa data é um FATO a medir, não um palpite: na rodada de 06/11 a
+    3.3 estava em 213 de 500 (43%) dez dias depois de publicada, então o passo
+    costuma levar de duas a três semanas.
+  - **PROMOVE (a peça fica e para de ser aposta)** se, dos que recebem o
+    repique, **8 ou mais criarem conta**, com pelo menos 60 pessoas expostas.
+    Oito contra a linha de base de 3 de cada 100 é mais de duas vezes o que o
+    acaso daria em 60 a 100 pessoas, e não depende de a taxa ser bonita.
+  - **MATA (a peça sai do código)** se, com 60 ou mais expostas, **nenhuma ou
+    uma criar conta**. Zero ou um em 60 é abaixo até da linha de base sem
+    repique, ou seja o segundo pedido não só não ajuda, atrapalha, e aí ela sai
+    em vez de ficar adormecida.
+  - **ESPERA MAIS UMA JANELA, uma única vez**, se o número cair entre 2 e 7 com
+    60 expostas, ou se a exposição não chegar a 60. Na segunda leitura, o mesmo
+    corte decide, e **se ainda estiver no meio ela MORRE como inconclusiva por
+    volume e a peça fica** (ela não machuca ninguém: um repique na vida, com as
+    três travas).
+  - **E A GUARDA, que vale mais que as três linhas acima:** se a fração de
+    `recusou_convite_conta` com detalhe `botao-2` passar de metade dos
+    repiques, a peça sai mesmo que as contas apareçam. Segundo pedido que a
+    maioria recusa na cara é irritação paga com cadastro, e isso é o oposto do
+    que esta casa vende.
 - Aprovação: não se aplica (momento de um pedido que já existe, sem variantes,
   sem texto novo, sem tocar em preço, plano, cobrança ou passo legal)
 - Início: 2026-10-30 na web; no app, com a 3.4. **O alcance só existe a
@@ -838,7 +864,7 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
 - Estado final: FECHADO em 2026-11-06.
 
 ## [landing-em-seis-blocos] A home tem uma promessa, o Biela em ação e a loja como único destino
-- Estado: ABERTO
+- Estado: FECHADO (inconclusivo: a home recebe 8 pessoas por semana de vontade própria)
 - Tipo: mudanca-direta
 - Alvo no funil: o clique de loja na home (`clicou_baixar` com origem
   `home-topo:*` e `home-fim:*`). É o único degrau que a landing tem: o
@@ -919,7 +945,37 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
     segue ABERTA e a leitura cheia espera a resposta.
   - O que já estava dito e continua: a home tem 28 a 30 visitantes por semana,
     então qualquer taxa aqui é direção, e 3 cliques a mais mudam dez pontos.
-- Veredito: (aberto)
+- **Veredito (2026-11-13): INCONCLUSIVO, e a pergunta que eu deixei em aberto
+  na semana passada está RESPONDIDA: não é instrumento parado nem comportamento,
+  é denominador de quase ninguém.** Em 06/11 eu vi `clicou_baixar` em 5, 8, 0 e
+  0 por semana e me recusei a chamar aquilo de veredito, com duas hipóteses
+  escritas. As duas foram separadas hoje, e nenhuma delas era a certa:
+  - **A emissão NÃO parou.** Lido no fonte em 13/11: `components/ui/StoreBadges.tsx`
+    continua emitindo `clicou_baixar`, e as duas chamadas da home seguem de pé
+    (`origem="home-topo"` no `Hero` e `origem="home-fim"` no `FinalCta`). A
+    primeira hipótese cai por leitura de código.
+  - **O TRÁFEGO DA HOME É DE 38 PESSOAS POR SEMANA, E 30 DELAS VÊM DO SITE DE
+    PORTFÓLIO DE UM TERCEIRO.** Pacote `vercel_analytics` do retrato de 13/11:
+    38 visitantes em `/`, com `homePorOrigem` dando **30 de
+    `vilanovaalessandro.framer.website`** e 8 de "direto ou sem origem". Ou
+    seja: a home recebe, por semana, oito pessoas que chegaram por vontade
+    própria. Zero clique em selo de loja entre oito pessoas não é sinal de nada,
+    em nenhuma direção.
+  - **ENTÃO A APOSTA NUNCA TEVE COMO FECHAR, e isso estava escrito no dia em que
+    ela abriu**: "com 28 visitas por semana na home, qualquer taxa é direção, e
+    3 cliques a mais mudam dez pontos". O denominador não cresceu em seis
+    semanas; ele encolheu de 28 para 8 pessoas de vontade própria. É a lição de
+    25/09 outra vez (aposta que nasce sem como ser fechada é correção, não
+    aposta), e desta vez eu a reconheci no dia da leitura em vez de três semanas
+    depois.
+  - O que FICA: a home de seis blocos continua no ar e se defende pelo
+    argumento (uma promessa em vez de treze seções e um carrossel). O
+    instrumento dos selos também fica: ele custa nada e passa a servir no dia em
+    que a home tiver gente.
+  - **NÃO REABRE por janela.** Ela só volta se a home passar a receber tráfego
+    de verdade, e isso é decisão de mídia (hoje o dinheiro vai para instalação
+    direta nas lojas, não para a home), não de copy.
+- Estado final: FECHADO em 2026-11-13.
 
 ## [convite-do-carro-nao-queima-com-convidado] O melhor momento do pedido para de ser gasto à toa
 - Estado: FECHADO (NAO FUNCIONOU, e a causa do fracasso está achada no fonte)

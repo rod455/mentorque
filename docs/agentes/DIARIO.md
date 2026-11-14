@@ -57,6 +57,139 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   regra dos 21 dias, em vez de repetir recomendação.
 - **Régua da rodada**: onze cumpridos, um sem instrumento (o 6). Nada escrito em
   conta de anúncio.
+## 2026-11-14 · Guardião: linha afirmada não é linha que roda
+
+- **O número e o caminho dele, que é o que o Diretor cobrou em 12/11.** Lido de
+  `npm run conferir:fila` e copiado: 69 conferências, 55 provadas por quem não as
+  escreveu, **1 só pelo autor no nascimento**, 13 em dívida assumida. O caminho:
+  31/10 tinha 11 na fila; em 07/11 caiu para 5 porque **provei seis** (nenhuma
+  apagada, nenhuma definição mudada); esta semana entraram **2 nascidas**
+  (`conferir:avulsa` em 09/11 e `conferir:catalogo-remoto` em 11/11, de outras
+  cadeiras), o que deu 7 no começo da rodada, e **provei seis**. Sobrou 1. O total
+  subiu de 67 para 69 pelas mesmas duas conferências novas.
+- **Dívida assumida: 13 itens, todos de 03/10/2026, e a mais velha
+  (`conferir:agenda`) faz 42 dias.** Nenhuma reaberta: o gatilho é o mundo, não o
+  calendário.
+- **As seis da fila:** `gratis`, `prazo`, `saude`, `painel`, `segredo`, `avulsa`.
+  **31 plantios, 26 mordidas, 5 cegas, todas as 5 consertadas e replantadas.**
+  Inclui 2 plantios na `conferir:legivel`, que não era das seis mas tinha a mesma
+  forma medida.
+- **A dívida do critério 10 que eu declarei em 07/11 está fechada.** Faltava
+  plantio no cron que entrega a oferta do cupom. Plantei, e o plantio achou o
+  achado da rodada.
+- **O achado, e é uma raiz só para as cinco cegas: busca de texto prova que o
+  texto existe, nunca que ele decide alguma coisa.** Três jeitos de deixar o texto
+  no lugar e tirar o efeito dele, cada um num arquivo de verdade:
+  - `if (true) return 0;` como primeira linha de `resgatesDoCupom`: os três textos
+    que a `conferir:cadastro` afirmava continuavam escritos, a contagem devolvia
+    zero para sempre, a oferta do mês grátis nunca fechava, e quem chegasse depois
+    do teto abriria o checkout com preço cheio depois de ler "por nossa conta";
+  - `{result.kmEstimado && false && (` no `Health.tsx`: a ressalva do km estimado
+    parava de desenhar, e o número da saúde voltava a sair sem dizer que o km foi
+    chutado, que é o achado real de 21/10;
+  - `if (false && request.nextUrl.pathname === "/painel")` no middleware: a chave
+    dos dados voltava a ficar em `/painel?chave=...`, que é o achado da Segurança
+    de 25/10 e a razão da `conferir:painel` existir.
+- **Medido antes de alargar, nas três formas.** 25 asserções da casa citam um
+  `return`, 21 já o prendiam, 4 eram return solto e **3 dessas estavam cegas**;
+  **2** asserções terminavam em `&&`, as duas cegas; **1** começava no meio da
+  condição, cega. Seis asserções em cinco scripts, de 28 candidatas. Fora dessas
+  28 a forma não existe no repositório hoje, então nada foi alargado além disso.
+- **O conserto é sempre o mesmo e é de uma linha: prender a asserção nas duas
+  pontas.** Da abertura da função até o `return`; da condição até o que ela
+  desenha; do `if (` até a consequência que ele produz.
+- **E ela se regenera.** A `conferir:legivel` já foi consertada nesta mesma linha
+  duas vezes: em 24/10 ela afirmava a menção da função e virou o `return`; hoje o
+  `return` virou o trecho da abertura até ele. Cada conserto fecha a porta que o
+  plantio anterior achou, e o seguinte acha a porta ao lado.
+- **A melhor da semana:** `conferir:segredo`, 5 plantios e 5 mordidas. Ela achou
+  chave falsa em arquivo de código, em documento do diário, em arquivo de esquema
+  SQL e em arquivo de skill, e achou valor com cara de JWT de verdade DENTRO da
+  exceção nomeada do `.env.example`: a exceção não engole valor real.
+- **Onde eu falhei na minha régua, com data, como o Diretor pediu em 12/11:**
+  provei a `conferir:segredo` só no modo que a bateria roda. O modo `--semana`,
+  que é o que acha segredo acrescentado e depois apagado, ficou com zero plantios,
+  porque provar ele exige um commit com valor em forma de chave, e este papel não
+  faz esse commit. **Em dívida desde 14/11**, e o caminho está escrito: provar num
+  clone descartável, fora deste repositório, na rodada 9.
+- **O que esta rodada não alcança:** plugin nativo e aparelho, como sempre, porque
+  não há sinal de aparelho aqui. E a `conferir:segredo` não vê segredo que nunca
+  passou pelo git, que é onde estavam os achados das rodadas 2, 3 e 4 (chaves em
+  texto puro dentro do n8n). Nenhuma conferência de repositório vê aquilo.
+
+## 2026-11-13 · CRO: o banco fora pela segunda vez em quatro semanas, e nenhuma aposta nova por decisão
+
+- Artifact "Conversão da semana": https://claude.ai/artifact/WJPEZDJcXBXRYjjbdgTe5g
+- Rodada de CONVERSÃO (a de 06/11 foi de retenção). Fila entre papéis aberta
+  antes do retrato: nenhuma linha para o CRO.
+- **FONTE INDISPONÍVEL, registrada e não contornada.** O `list_projects` desta
+  sessão traz a organização `ianjvpotzelxokbdupmx` (financasrodlu e sipatgo) e
+  **não traz o Mentorque**; toda consulta responde "You do not have permission to
+  perform this action". É a segunda vez em quatro semanas (em 20/10 parou a
+  rodada do Diretor, e o dono reconectou em minutos). **Linha na lista dele
+  desde hoje**, com o precedente citado. Nenhum número desta rodada vem de
+  consulta própria ao banco, ao contrário das quatro anteriores.
+  - **E eu NÃO pedi para liberar o plano B.** O `/api/funil` é recusado pelo
+    proxy desta sessão (403), e eu poderia ter proposto o host; não propus porque
+    ele devolve as mesmas semanas que o retrato já traz. Seria aprovação do dono
+    para recuperar um número que eu já tinha.
+- **NENHUMA APOSTA NOVA, e é o critério 11 funcionando.** Com o banco fora eu não
+  leio numerador nem denominador de corte novo, e o retrato não carrega o degrau
+  de nenhuma aposta que fizesse sentido abrir nesta área. Abrir seria abrir com a
+  métrica prometida para depois, que é a causa das sete inconclusivas em dois
+  meses. **Critério 4 falhado e declarado.**
+- **VEREDITO FECHADO: `landing-em-seis-blocos`, INCONCLUSIVO, e a pergunta que eu
+  deixei aberta em 06/11 está respondida.** Eu havia visto `clicou_baixar` em 5,
+  8, 0 e 0 e me recusado a chamar de veredito, com duas hipóteses escritas. As
+  duas caíram: **a emissão não parou** (lido no fonte: `StoreBadges` emite, e as
+  duas chamadas da home seguem de pé) e **o tráfego da home é de 38 pessoas por
+  semana, com 30 vindas do site de portfólio de um terceiro**
+  (`vilanovaalessandro.framer.website`, pacote `vercel_analytics`). Sobram **oito
+  pessoas por semana** de vontade própria. Zero clique entre oito não é sinal em
+  direção nenhuma, e a aposta nunca teve como fechar: o denominador encolheu de
+  28 para 8 em seis semanas.
+- **AS DUAS DÍVIDAS DO RETORNO DE 12/11, PAGAS:**
+  - **A linha de cima, a taxa de aposta que fecha com veredito legível:** **6 de
+    17, 35 de cada 100**. Não legíveis: 4 por métrica mal desenhada, 3 por falta
+    de braço ou mudanças somadas, 4 por degrau pequeno. Por rodada: até 09/10
+    foram 1,5 de 6; em 23/10, 4 de 5; em 06/11, **0 de 5**. **E a de 06/11 não
+    contradiz o critério 11: as cinco nasceram entre 13/09 e 09/10, antes dele.**
+    As duas abertas sob o critério ainda não fecharam, então **a linha ainda não
+    sabe se ele funciona**, e dizer o contrário seria inventar.
+  - **A regra de decisão do repique**, que era o alvo sem substituto: promove com
+    8+ contas em 60 expostas; mata com 0 ou 1 em 60; espera uma única janela a
+    mais entre 2 e 7, e aí morre inconclusiva por volume. **E a guarda que vale
+    mais que as três:** se mais da metade dos repiques levar "não" na cara
+    (`botao-2`), a peça sai mesmo com contas aparecendo.
+- **CONVERSÃO, com o retrato:** **zero assinaturas ativas**, MRR zero no Stripe e
+  na RevenueCat, e `cadastro → iniciou_checkout` em **2 de 513 (0,4 de cada
+  100)**. Checkout por semana 0, 2, 0, 0. As três coortes de assinante fecham com
+  saída igual à entrada.
+  - **A queda do paywall desta semana é MÍDIA, não produto**, e isso precisa ser
+    dito para ninguém atribuir a uma tela o que a torneira fez: paywall 80, 79,
+    60 e 33 com cadastros 132, 116, 113 e 50, e o **gasto do Google em R$ 0,00**
+    nos últimos 7 dias (Meta 207,75).
+  - Composição nova que vale registrar: **Facebook virou 175 dos 469 cadastros de
+    28 dias (37%)**, contra 88% direto um mês atrás, e o custo por cadastro caiu
+    para 1,84.
+  - O degrau segue sendo o da loja, que é do dono. A recomendação seria a terceira
+    repetição, então **ela não volta como recomendação nova** (regra de 02/10).
+- **O QUE O USUÁRIO DISSE:** a 13ª avaliação chegou, cinco estrelas, e é a
+  **primeira do Google Play com autor** (Celio lira souza), sem texto. Média
+  segue 5,0. E os erros caíram: 5 de 391 aparelhos com defeito (1,3%), contra 19
+  de 563 na semana passada.
+- CONFERÊNCIAS: `npm run conferir` verde, saída 0, depois do último arquivo
+  escrito. **Nenhum código mudou nesta rodada**, então não há defeito plantado a
+  relatar, e isso é o esperado e não omissão.
+- **A MINHA RODADA CONTRA A MINHA RÉGUA: falhei o critério 4 e declarei** (sem
+  aposta nova, pelo motivo acima). Os outros dez cumpridos.
+- RECOMENDAÇÕES: (1) reconectar o Supabase, já na lista do dono, porque sem ele
+  as rodadas existem mas param de fechar veredito; (2) aprovar ou recusar o
+  `servico-em-tres-campos`, proposto desde 06/11 e prioridade 1 do Diretor; (3)
+  quando o banco voltar, a primeira coisa não é aposta nova, é ler a regra de
+  decisão do repique contra o número, porque a 3.4 deve passar de metade dos
+  aparelhos nesse meio tempo.
+
 
 ## 2026-11-12 · Engenharia: o RevenueCat contava a assinatura em teste, e a divergência era da nossa subtração
 
