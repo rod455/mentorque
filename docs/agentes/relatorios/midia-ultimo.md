@@ -1,181 +1,180 @@
-Relatório de mídia gerado em 2026-11-07
+Relatório de mídia gerado em 2026-11-14
 
 # Mídia da semana
 
-Janela principal: 30 de outubro a 5 de novembro, sete dias cheios, comparada com
-23 a 29 de outubro. Os números da janela foram lidos em 06/11 entre 7h e 7h30 de
-Brasília, e a parada do Google foi reconferida hoje, 07/11, na coleta das 5h30.
+Janela principal: 7 a 13 de novembro, sete dias cheios, comparada com 31 de
+outubro a 6 de novembro. As duas janelas têm zero gasto no Google, então a
+comparação é do Meta contra ele mesmo. Números lidos hoje, 14/11, entre 14h e
+14h30 de Brasília.
 
-**O relatório da semana passada chegou.** Confirmado no registro do envio
-(execução 9310, 30/10 às 10h05 de Brasília): corpo curto e o PDF anexado, para o
-Rodrigo e para o Luiz. Quarta semana seguida.
+**O relatório da semana passada chegou, e foi eu quem disparou.** Execução 9663,
+07/11 às 9h03, com o PDF anexado, para o Rodrigo e para o Luiz. E esta semana
+houve silêncio de novo: a rodada disparou na quinta 12/11, a sessão foi
+reiniciada, e nos dois dias de envio automático a main tinha o relatório de
+07/11, que pela regra do fluxo é velho. Este e-mail também saiu de um disparo à
+mão. Terceira semana seguida com desvio de dia, segunda seguida sem envio
+automático: isso virou linha da fila, porque já não é acidente.
 
-**Este chegou no sábado, e a culpa é da minha rodada.** A tarefa disparou na
-quinta 05/11 e a sessão foi reiniciada duas vezes no meio do trabalho, então o
-relatório só ficou pronto hoje. O envio automático só tenta quinta e sexta, de
-hora em hora, e nos dois dias ele encontrou na main o relatório de 30/10, que já
-era velho: pela regra do fluxo, isso é silêncio, e foi silêncio. Este e-mail saiu
-porque eu disparei o fluxo à mão, com o relatório de hoje. O atraso está dito
-aqui porque ele é o segundo seguido e porque silêncio é pior que aviso.
+## A manchete: a semana piorou em todas as réguas, e o motivo é um só degrau
 
-## A manchete: o vídeo do Google parou sozinho em 31/10, e a semana sem ele foi a mais barata da série
-
-A campanha de app do Google entregou pela última vez no dia 30/10. São oito dias
-com zero impressão, zero clique e zero real gasto, de 31/10 até hoje: na coleta
-de hoje a campanha nem aparece mais na lista de campanhas da janela, e o custo
-dos últimos oito dias é zero. Não foi a janela que escondeu: a coleta traz o dia
-a dia de cada campanha, com zero escrito em cada dia sem entrega, e o alarme de
-campanha parada disparou.
-
-| Medida | 30/10 a 05/11 | 23 a 29/10 |
+| Medida | 7 a 13/11 | 31/10 a 6/11 |
 |---|---|---|
-| Gasto no Google | R$ 1,92 | R$ 163,39 |
-| Gasto no Meta | R$ 221,12 | R$ 197,16 |
-| Gasto total | R$ 223,04 | R$ 360,55 |
-| Custo por clique, Meta | R$ 0,28 | R$ 0,28 |
-| **Contas novas de fora** | **132** | **136** |
-| **Custo por conta** | **R$ 1,69** | **R$ 2,65** |
+| Gasto no Google | R$ 0,00 | R$ 0,00 |
+| Gasto no Meta | R$ 205,17 | R$ 223,54 |
+| Custo por mil impressões, Meta | R$ 5,32 | R$ 4,28 |
+| Custo por clique, Meta | R$ 0,31 | R$ 0,28 |
+| **Contas novas de fora** | **87** | **134** |
+| **Custo por conta** | **R$ 2,36** | **R$ 1,67** |
 
-Trinta e oito por cento menos dinheiro, três por cento menos contas. O custo por
-conta caiu 36% e é o melhor da série. Os R$ 1,92 do Google são todos do dia 30.
+Gastando 8% menos, a semana trouxe 35% menos contas, e o custo por conta subiu
+41%. A corrente que liga uma coisa à outra está medida elo por elo:
 
-## Por que ela parou: eu perguntei à fonte, e a fonte respondeu
+- o preço da impressão subiu 24%;
+- com quase o mesmo dinheiro, as impressões caíram 26%;
+- as instalações caíram 29%;
+- as contas caíram 35%.
 
-Isto é o que mudou nesta rodada em relação a todas as anteriores. Em vez de
-mandar você abrir o painel, eu fiz ao Google Ads as três perguntas que a nossa
-coleta nunca fez, por uma leitura temporária e somente de leitura, em 06/11 às
-7h15 de Brasília:
+Um elo só, propagando. Não é cadastro quebrado: eu conferi dia a dia e a queda é
+ladeira, não degrau, sem nenhum dia em que o número cai e não volta.
 
-- **a campanha está apta a entregar?** O campo que o próprio Google usa para
-  isso responde `ELIGIBLE`, e a lista de razões de bloqueio voltou VAZIA;
-- **qual o orçamento?** R$ 20 por dia;
-- **o que mudou na conta?** Uma única alteração em dezessete dias: no dia 24/10,
-  ao meio-dia, o orçamento desta campanha caiu de R$ 30 para R$ 20 por dia, pelo
-  seu login no painel. Nada no dia 30, nada no 31, nenhuma pausa, nenhuma
-  mudança de lance, público ou região.
+## A mesma semana dentro da série de oito: é um passo atrás, não um regime novo
 
-O anúncio também está certo: um anúncio ativo, revisado e APROVADO, o que
-descarta a causa de 24/09, quando os anúncios foram reprovados.
+Esta é a leitura que muda o que fazer. O preço da impressão vinha caindo havia
+sete semanas:
 
-**Então nenhuma mão parou essa campanha, e o Google diz que não há nada de
-errado com ela.** A redução de 24/10 não explica o dia 31: a campanha seguiu
-gastando uns R$ 22 por dia nos seis dias seguintes à redução, que é o
-comportamento normal de um orçamento de R$ 20.
+| Coleta | Custo por mil impressões | Instalação por clique |
+|---|---|---|
+| 24/09 | R$ 11,06 | 27,2% |
+| 01/10 | R$ 10,93 | 28,5% |
+| 08/10 | R$ 10,06 | 31,1% |
+| 15/10 | R$ 7,16 | 39,5% |
+| 22/10 | R$ 4,75 | 55,1% |
+| 30/10 | R$ 4,57 | 63,2% |
+| 07/11 | R$ 4,28 | 64,4% |
+| **14/11** | **R$ 5,32** | **55,5%** |
 
-O que sobra é hipótese, e vai escrita como hipótese: campanha de app que não
-consegue comprar instalação ao preço que a estratégia de lance aceita
-simplesmente para de comprar, sem ficar inapta. O teste que separa isso de
-qualquer outra coisa é a estratégia de lance e o alvo de custo por instalação.
-Eu tentei ler esses dois campos hoje e a consulta foi recusada por nome de campo
-inválido nesta versão da API; é uma linha para a fila, não um clique seu.
+O nível de hoje é o de 22 de outubro, três semanas atrás, e segue menos da metade
+do de setembro. **Então a semana ruim é um passo atrás dentro de uma escada que
+subiu sete vezes, e não o começo de uma queda.** O meu próprio manual já tinha a
+lição na direção contrária, de quando eu publiquei uma vantagem que virou de lado
+em uma semana: uma semana é uma leitura, para o bem e para o mal.
 
-## Custo por desfecho medido, por campanha: a primeira semana cheia
+## Custo por desfecho medido, por campanha
 
-A etiqueta de origem na conta nova, que ficou completa em 29/10, teve a sua
-primeira janela de sete dias: **123 das 127 contas da janela carregam etiqueta,
-97%**.
+Segunda semana cheia com a etiqueta de origem: 72 das 76 contas do evento
+carregam etiqueta, 95%.
 
-| Origem | Contas etiquetadas | Gasto na janela | Custo por conta medida |
-|---|---|---|---|
-| Meta, promoção de app | 89 | R$ 221,12 | **R$ 2,48** |
-| Google, app por vídeo | 6 | R$ 1,92 | não tem leitura |
-| Orgânico | 23 | zero | sem custo |
-| Outras origens | 5 | zero | sem custo |
+| Origem | Contas etiquetadas | Gasto | Custo por conta medida | Semana anterior |
+|---|---|---|---|---|
+| Meta, promoção de app | 55 | R$ 205,17 | **R$ 3,73** | R$ 2,26 |
+| Google, app por vídeo | 1 | R$ 0,00 | sem leitura | sem leitura |
+| Orgânico | 11 | zero | sem custo | sem custo |
+| Outras origens | 5 | zero | sem custo | sem custo |
 
-R$ 2,48 é o primeiro custo por conta por campanha que este relatório publica com
-uma semana inteira e o instrumento completo. A linha do Google não tem leitura de
-propósito: as seis contas são retorno de cliques comprados ANTES do dia 31, e
-dividir R$ 1,92 por elas daria um número bonito que não mede nada.
+Sessenta e cinco por cento mais caro por conta medida. E as outras duas réguas
+concordam, cada uma medindo outra coisa:
 
-Duas notas de régua: as contas da tabela são 132 e os eventos são 127, ou seja o
-evento conta 4% a menos, e é por isso que o total vem da tabela e só a REPARTIÇÃO
-vem do evento. E a etiqueta vem da mesma atribuição da AppsFlyer que mede as
-instalações, então as duas concordarem vale menos que concordarem com os
-contadores das plataformas.
+| Régua do Meta | 7 a 13/11 | 31/10 a 6/11 |
+|---|---|---|
+| Custo por instalação atribuída, AppsFlyer | R$ 1,05 | R$ 0,80 |
+| Custo por usuário que volta, AppsFlyer | R$ 3,31 | R$ 1,80 |
+| Custo por desfecho que a plataforma conta | R$ 0,56 | R$ 0,43 |
 
-## O que a semana passada deixou aberto, respondido pelos fatos
+As três pioraram, e pioram mais quanto mais perto do desfecho: 30% na
+instalação, 65% na conta, 84% no usuário que volta. A taxa de usuário que volta
+caiu de 44% para 32%.
 
-Na sua lista desde 23/10 estava: mover um pedaço do orçamento do vídeo para o
-Meta, e na semana passada eu pedi para decidir em 06/11, quando a régua de
-conta completasse sete dias. O que aconteceu foi melhor e pior que isso: **o
-vídeo saiu inteiro, sozinho, e a régua nova nunca teve o que medir do lado
-dele.** Eu pedi uma semana de espera para um instrumento que morreu dois dias
-depois de ficar pronto, do lado que importava.
+Duas notas de régua: a tabela de contas diz 87 e o evento diz 76, ou seja o
+evento conta 13% a menos nesta janela, contra 4% na passada, então só a
+repartição vem do evento. E o custo por instalação do Meta divide sete datas de
+gasto por oito de instalação, viés igual nas duas semanas.
 
-O que a semana mediu, então, é o experimento que ninguém desenhou: o vídeo
-deixou de gastar R$ 161,47 e o total de contas caiu de 136 para 132, enquanto o
-Meta subiu R$ 23,96 por conta própria.
+## O vídeo do Google: sete causas eliminadas, e a minha hipótese caiu
 
-- **ponta alta**: se os R$ 23,96 extras do Meta não trouxeram conta nenhuma, o
-  vídeo estava comprando 4 contas por semana a R$ 40 cada;
-- **ponta baixa**: se esses R$ 23,96 compraram ao preço medido do Meta, umas 10
-  contas, então o vídeo trazia umas 14 por semana, a R$ 11,80 cada.
+Catorze dias sem entregar nada. A coleta passou a escrever isso sozinha, com a
+frase "sem atividade na conta nos últimos 7 dias", e eu voltei à API hoje com
+mais perguntas, numa leitura temporária criada e arquivada no mesmo dia.
 
-Contra R$ 2,48 do Meta. Qualquer uma das duas pontas diz a mesma coisa, e é por
-isso que a faixa serve mesmo sendo larga. Uma semana só, e com duas coisas
-mudando ao mesmo tempo: isso está dito porque é o limite da conclusão, não uma
-nota de pé.
+O que está ELIMINADO, com o campo que eliminou:
+
+- **campanha pausada**: não, `status` é `ENABLED`, lido em 06/11 e de novo hoje;
+- **orçamento zerado**: não, são R$ 20 por dia, e o histórico da conta tem UMA
+  única alteração em dezessete dias (24/10, de R$ 30 para R$ 20);
+- **anúncio reprovado**: não, está ativo, revisado e aprovado;
+- **inaptidão**: não, `primary_status` é `ELIGIBLE` com a lista de razões vazia,
+  nas duas leituras;
+- **conta suspensa ou problema de cobrança**: não, o `status` do cliente é
+  `ENABLED`;
+- **campanha com data de fim vencida**: não, `ELIGIBLE` e `ENDED` são valores
+  diferentes do mesmo campo;
+- **sinal de conversão morto**: não, a ação de instalação do Play continua
+  registrando, 680 nos últimos 30 dias.
+
+**E a hipótese que eu publiquei em 07/11 está refutada.** Eu escrevi que
+provavelmente era lance apertado, campanha que não consegue comprar ao preço que
+a estratégia aceita. A estratégia é `MAXIMIZE_CONVERSIONS` **sem alvo de custo**,
+ou seja, não existe teto para ela recusar. A hipótese era razoável e estava
+errada, e quem a derrubou foi um campo que eu podia ter lido na semana passada.
+
+O que sobra sem leitura é o bloco de configuração de app da campanha, que a API
+recusa pelos nomes que eu tentei. É a terceira coisa na mesma linha da fila, que
+está lá há oito dias.
+
+## Desperdício com nome: sem instrumento esta semana
+
+Duas coisas diferentes, e elas não se confundem:
+
+- **não se aplica**: a única campanha que tem termo de busca é a de busca, e ela
+  está pausada desde 13/10;
+- **e agora também não dá para medir**: a coleta passou a avisar que o nó de
+  termos de busca está DESLIGADO, esperando uma credencial no n8n. Enquanto isso
+  valer, eu não tenho a lista de termos nem para conferir o passado.
+
+Registro como fonte indisponível, com a data: 14/11. Virou linha da fila junto
+com o resto, porque pelo histórico desta casa esse tipo de nó se religa por um
+fluxo novo, sem clique seu.
 
 ## A proposta da semana
 
-**Não religar o vídeo do Google até saber por que ele parou.**
+**Antes de qualquer decisão de orçamento, medir a conversão da página da loja.**
 
-O número do lado: religar sem saber compra de volta um canal que custava entre
-R$ 11,80 e R$ 40 por conta, contra R$ 2,48 que o Meta entrega hoje. E a semana
-sem ele foi a mais barata da série por conta, não só no total.
+A instalação por clique caiu 8,9 pontos nesta semana, de 64,4% para 55,5%. Sobre
+os 656 cliques da janela, isso são 59 instalações que o mesmo dinheiro deixou de
+trazer, uns R$ 62 dos R$ 205 que não compraram nada.
 
-O que falta para a decisão ser definitiva, e não depende de você: ler a
-estratégia de lance e o alvo de custo da campanha. Virou linha da fila, com a
-consulta que já funcionou escrita lá, para a próxima rodada abrir com isso
-respondido.
+Eu não sei se a causa é a loja, e não vou dizer que é. Sei que **a página da
+Play é o único degrau entre o meu clique e a minha instalação que ninguém desta
+casa mede**, e que o degrau moveu 8,9 pontos. O arquivo que responde já está ao
+alcance: a conversão por origem de tráfego, nos relatórios da Play que o coletor
+já lê, e que está num pedido da Engenharia para o ASO desde 16/10.
 
-## O preço de subir verba, medido pela primeira vez
+E duas coisas que já estão na sua lista moram exatamente nesse degrau, então elas
+voltam aqui com o custo de hoje em vez de voltarem como recomendação repetida:
 
-Desde setembro eu escrevo, em toda proposta de mover dinheiro, que eficiência
-não sobrevive inteira a um aumento de verba. Esta semana isso virou número: o
-Meta gastou 12% mais e ficou 3 a 4% mais caro em todas as réguas.
+- a captura com a prova social antiga nas duas lojas, **29 dias** na lista, que
+  promete 4,8 e 10.000+ enquanto o app mostra 5,0 e 170+;
+- a reordenação das capturas da Play, **13 dias** na lista.
 
-| Régua do Meta | 30/10 a 05/11 | 23 a 29/10 |
-|---|---|---|
-| Custo por instalação atribuída | R$ 0,82 | R$ 0,80 |
-| Custo por usuário que volta | R$ 1,86 | R$ 1,79 |
-| Custo por desfecho que a plataforma conta | R$ 0,46 | R$ 0,44 |
-
-A instalação atribuída e o usuário que volta vêm da janela de oito datas da
-AppsFlyer contra sete de gasto, viés igual nas duas semanas. Doze por cento de
-verba a mais por 3 a 4% de preço a mais é um preço barato, e agora ele tem
-tamanho em vez de ser só uma ressalva.
-
-No Android, 15 das 304 instalações da janela chegaram sem anúncio, 4,9%, contra
-5,0% na semana anterior. As instalações caíram 16% no total, o que é o vídeo
-saindo: o Google foi de 97 para 20 e o Meta de 245 para 269.
-
-## Desperdício com nome: não se aplica, pela terceira semana
-
-A única campanha com relatório de termo de busca é a de busca, pausada desde
-13/10. Nesta janela o Google gastou R$ 1,92 em um dia, e a quebra por rede desse
-dia é R$ 1,76 no YouTube e R$ 0,16 no Display, com zero em busca e em parceiros
-de busca. Não há termo para agrupar, e a ferramenta não está quebrada.
+Todo clique pago desta semana, os 656, passou por essa página antes de virar
+instalação ou de virar nada.
 
 ## O que este relatório não alcança
 
-- **A causa da parada do vídeo**, que está em hipótese com o teste escrito.
-- **Custo por conta do vídeo**, que nunca teve semana cheia com etiqueta.
-- **Custo por instalação do Meta com janela exata**: sete datas de gasto contra
-  oito de instalação. Continua na fila do Analista desde 23/10, em prioridade
-  baixa.
+- **A causa da parada do vídeo.** Sete causas eliminadas, nenhuma encontrada, e o
+  campo que falta a API recusa pelos nomes que eu conheço.
+- **A lista de termos de busca**, desligada na coleta desde esta semana.
+- **Frequência e alcance do Meta**, que separariam "o público saturou" de "o
+  leilão ficou caro". A coleta do Meta não traz nenhum dos dois.
+- **A conversão da página da loja**, que é a proposta acima.
 - **A definição de usuário leal**, que é de console e segue não lida.
-- **Instalação no iOS**, 2 na janela.
 
 ## Como esta rodada se mede
 
-Dos doze critérios, onze cumpridos e um que não se aplica, o do desperdício com
-nome. O critério da conta fechada por campanha saiu de parcial para cumprido no
-lado do Meta, com semana cheia e 97% de cobertura, e segue sem leitura no lado
-do Google por falta de gasto.
+Dos doze critérios, onze cumpridos e um sem instrumento, o do desperdício com
+nome, pelos dois motivos acima. Nada foi escrito em conta de anúncio: as
+leituras de hoje são consultas, e a leitura temporária que as fez foi arquivada.
 
-E a coisa que esta rodada fez diferente de todas as anteriores: em vez de pedir
-um clique seu para saber por que a campanha parou, eu perguntei ao Google. A
-credencial estava aqui desde agosto e a consulta era uma lista de perguntas que
-alguém escreveu uma vez. Três perguntas novas responderam em quinze minutos o
-que seria uma semana de espera na sua lista.
+Uma coisa que eu devo dizer de mim mesmo: a hipótese do lance, que eu publiquei
+na semana passada como a mais provável, caiu com uma consulta de quinze segundos
+que eu não fiz na semana passada. Eu tinha a credencial, tinha o caminho, e paguei
+uma semana por não ter perguntado tudo de uma vez.

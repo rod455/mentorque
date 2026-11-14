@@ -3,6 +3,61 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-14 · Mídia: a semana piorou em tudo e ainda assim é um passo atrás numa escada de sete, e a minha hipótese do lance caiu
+
+- Artifact "Mídia da semana": https://claude.ai/artifact/XUAT2AEGyMsFhVtdHNR8VM
+- **A rodada é a de quinta 12/11 e saiu no sábado 14/11**, com a sessão
+  reiniciada no meio pela terceira semana seguida. Nos dois dias de envio o fluxo
+  encontrou na main o relatório de 07/11, que pela regra dele é velho, então foi
+  silêncio outra vez, e eu disparei à mão. É a segunda semana seguida de disparo
+  manual, e virou linha da fila para a Engenharia: rodar o fluxo TODO DIA (ele já
+  se protege sozinho pela data do relatório) e gravar o não envio em algum lugar
+  que a casa leia, porque hoje ele é silêncio total.
+- **Janela 07 a 13/11 contra 31/10 a 06/11**, as duas com zero no Google, então é
+  o Meta contra ele mesmo. Gasto R$ 205,17 contra R$ 223,54 (-8%), contas 87
+  contra 134 (-35%), **custo por conta R$ 2,36 contra R$ 1,67 (+41%)**.
+- **A corrente, elo por elo**: preço da impressão +24%, impressões -26%,
+  instalações -29%, contas -35%. Um elo só propagando. **Conferi dia a dia que a
+  queda é ladeira e não degrau**, o que descarta cadastro quebrado: degrau que não
+  volta seria defeito de produto ou de medição, não leilão.
+- **A SÉRIE SALVOU A LEITURA.** Sozinha, a semana diria "o Meta está
+  degringolando": custo por conta medida +65%, por instalação +32%, por usuário
+  que volta +84%. Posta nas oito coletas, o custo por mil impressões vinha caindo
+  havia sete semanas (R$ 11,06 em 24/09 até R$ 4,28 em 07/11) e subiu para
+  R$ 5,32, que é o nível de 22/10 e menos da metade do de setembro. Passo atrás,
+  não regime novo. Virou regra no manual, nos dois sentidos: uma semana é uma
+  leitura para o bem e para o mal.
+- **Segunda semana cheia da etiqueta** (72 de 76, 95%): Meta a R$ 3,73 por conta
+  medida contra R$ 2,26 na anterior. Nota de régua nova: a tabela diz 87 contas e
+  o evento diz 76, 13% a menos, contra 4% na semana passada, então só a repartição
+  sai do evento.
+- **O VÍDEO DO GOOGLE: SETE CAUSAS ELIMINADAS E A MINHA HIPÓTESE REFUTADA.**
+  Catorze dias sem entrega. Eliminadas com o campo que eliminou cada uma: pausa
+  (`status ENABLED`, duas leituras), orçamento zerado (R$ 20/dia e uma única
+  alteração em dezessete dias), anúncio reprovado (aprovado e ativo), inaptidão
+  (`primary_status ELIGIBLE`, razões vazias, duas leituras), conta suspensa
+  (`customer.status ENABLED`), data de fim vencida (`ELIGIBLE` e `ENDED` são
+  valores diferentes do mesmo campo) e sinal de conversão morto (a ação do Play
+  registra 680 em 30 dias). **E a hipótese que eu publiquei em 07/11, de lance
+  apertado, caiu: a estratégia é `MAXIMIZE_CONVERSIONS` SEM alvo de custo**, logo
+  não há teto para recusar. Quem derrubou foi uma consulta de quinze segundos que
+  eu podia ter feito na semana passada. Aprendizado no manual: pergunte de uma vez
+  a lista que ELIMINARIA a sua hipótese, não só a que a confirma.
+- **Fonte indisponível, registrada e não inventada**: a coleta passou a avisar
+  que o nó de termos de busca está desligado (`termosNota`), e as chaves `termos`
+  e `termosSemConversao` saíram do pacote. O critério do desperdício com nome fica
+  sem instrumento, além de não se aplicar porque a busca está pausada. Virou linha
+  da fila.
+- **Proposta da rodada**: medir a conversão da página da loja antes de qualquer
+  decisão de orçamento. A instalação por clique caiu 8,9 pontos (64,4% para
+  55,5%), o que sobre os 656 cliques da janela são 59 instalações e uns R$ 62 dos
+  R$ 205. Eu NÃO digo que a loja é a causa: digo que ela é o único degrau entre o
+  clique pago e a instalação que ninguém mede. Acrescentei o custo de hoje à linha
+  de 16/10 da lista do dono (29 dias, a captura com prova social antiga), pela
+  regra dos 21 dias, em vez de repetir recomendação.
+- **Régua da rodada**: onze cumpridos, um sem instrumento (o 6). Nada escrito em
+  conta de anúncio.
+
 ## 2026-11-12 · Engenharia: o RevenueCat contava a assinatura em teste, e a divergência era da nossa subtração
 
 Leitura das publicações de 12/11 (Diretor, Conteúdo, QA e adendo), a pedido do

@@ -720,6 +720,57 @@ deram nenhuma conta" é verdade sem valor: nenhum termo deu conta nenhuma,
 porque essa ligação não existe na medição. A importação por gclid é o que
 passaria a criar essa ligação.
 
+### Pergunte TUDO de uma vez, senão a hipótese dura uma semana (14/11/2026)
+
+Em 07/11 eu publiquei, como a hipótese mais provável da parada do vídeo, que era
+lance apertado: campanha de app que não compra ao preço que a estratégia aceita.
+Em 14/11, uma consulta de quinze segundos derrubou isso:
+`campaign.bidding_strategy_type` é `MAXIMIZE_CONVERSIONS` **sem alvo de custo**,
+ou seja não existe teto para ela recusar. Eu tinha a credencial e o caminho na
+semana anterior, e a consulta que me faltava era de uma linha.
+
+O erro não foi a hipótese, que era razoável: foi parar de perguntar no meio.
+Quando a rodada abre uma leitura nova numa fonte, **faça de uma vez a lista
+inteira de perguntas que podem derrubar a conclusão**, não só as que a
+confirmam. Custa os mesmos quinze minutos, e evita publicar uma causa que o
+próprio instrumento desmente sete dias depois.
+
+E o jeito de não esquecer: antes de escrever "a causa provável é X", escreva a
+lista do que ELIMINARIA X, e veja quantos itens dessa lista a fonte responde
+agora. Em 14/11 essa lista virou sete causas eliminadas uma por uma (pausa,
+orçamento, anúncio reprovado, inaptidão, conta suspensa, data de fim, sinal de
+conversão morto), e é assim que um "não sei" fica útil.
+
+### Uma semana é uma leitura, para o bem e para o mal (14/11/2026)
+
+Em 30/10 eu aprendi isso com uma vantagem que virou de lado em sete dias. Em
+14/11 a mesma régua me impediu de errar na direção oposta: a semana piorou em
+todas as medidas do Meta (custo por conta medida +65%, por instalação +32%, por
+usuário que volta +84%), e a conclusão fácil seria "o Meta está degringolando".
+
+A série de oito coletas diz outra coisa. O custo por mil impressões vinha
+caindo havia sete semanas (R$ 11,06 em 24/09 até R$ 4,28 em 07/11) e subiu para
+R$ 5,32, que é o nível de 22/10. **Um passo atrás numa escada que subiu sete
+vezes não é um regime novo.**
+
+A regra: antes de publicar "piorou" ou "melhorou", ponha a semana na série
+inteira de coletas e diga a que nível ela voltou. A série está sempre ao
+alcance, é uma consulta no `metricas_diarias`, e é o que separa variação de
+virada.
+
+### A corrente se publica elo por elo (14/11/2026)
+
+Quando um número grande se move, o útil não é o número: é a corrente. Nesta
+semana o custo por conta subiu 41%, e por trás dele: preço da impressão +24%,
+impressões -26%, instalações -29%, contas -35%. Um elo só, propagando até o
+fim.
+
+Publicar a corrente faz duas coisas que o número sozinho não faz: mostra onde
+cabe uma ação (no elo que se move primeiro, não no último) e permite ao leitor
+derrubar a leitura num elo específico. E antes de culpar a mídia por uma queda
+de contas, confira dia a dia se a queda é ladeira ou DEGRAU: degrau que não
+volta é defeito de produto ou de medição, não leilão.
+
 ### Perguntar à fonte ganha de pedir clique, e as consultas que provaram isso (06/11/2026)
 
 O vídeo do Google parou de entregar em 31/10 e a coleta não dizia por quê: ela
