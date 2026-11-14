@@ -74,6 +74,17 @@ async function comprarEVoltar(nav, ok) {
   ok("com os três formatos", (await pg.locator('[data-avulsa="pacote_2"]').count()) === 1 && (await pg.locator('[data-avulsa="pacote_10"]').count()) === 1 && (await pg.locator('[data-avulsa="passe_7d"]').count()) === 1);
   ok("e os preços do dono", /R\$ 1,90/.test(parede) && /R\$ 4,90/.test(parede) && /R\$ 9,90/.test(parede), parede.slice(parede.indexOf("Ou pague"), parede.indexOf("Ou pague") + 160).replace(/\n+/g, " | "));
   ok("e o Premium continua logo abaixo", (await pg.locator('[data-premium="biela"]').count()) === 1);
+  // Preço que quebra em duas linhas ("R$" numa, "9,90" na outra) foi visto na
+  // foto de 14/11, no passe. Conta as LINHAS do texto, por um Range: o preço é
+  // item de flex, vira bloco, e o próprio elemento devolve um retângulo só
+  // mesmo quebrado (a primeira versão desta linha passou verde com o defeito).
+  const quebrados = await pg.$$eval("[data-preco]", (els) => els.filter((e) => {
+    const r = document.createRange();
+    r.selectNodeContents(e);
+    const linhas = new Set([...r.getClientRects()].map((q) => Math.round(q.top)));
+    return linhas.size > 1;
+  }).map((e) => e.textContent));
+  ok("nenhum preço quebra em duas linhas", quebrados.length === 0 && (await pg.locator("[data-preco]").count()) === 3, JSON.stringify(quebrados));
   ok("e o campo de pergunta some", (await pg.locator("textarea").count()) === 0);
 
   await pg.locator('[data-avulsa="pacote_10"]').click();

@@ -51,7 +51,7 @@ export function CompraAvulsa({ aviso }: { aviso?: string | null }) {
       className="flex flex-1 flex-col items-center rounded-xl bg-graphite-800 px-3 py-2.5 ring-1 ring-white/10 transition active:scale-[0.98] disabled:opacity-50"
     >
       <span className="text-sm font-semibold text-cream">{titulo}</span>
-      <span className="text-xs text-amber">{PRECO_NA_TELA[produto]}</span>
+      <span className="whitespace-nowrap text-xs text-amber" data-preco>{PRECO_NA_TELA[produto]}</span>
     </button>
   );
 
@@ -73,7 +73,9 @@ export function CompraAvulsa({ aviso }: { aviso?: string | null }) {
           <span className="block text-sm font-semibold text-cream">{c.biela.avulsaPasse}</span>
           <span className="block text-xs text-cream/60">{c.biela.avulsaPasseSub}</span>
         </span>
-        <span className="text-sm font-semibold text-amber">{PRECO_NA_TELA.passe_7d}</span>
+        {/* Preço nunca quebra (14/11/2026): na foto de 390 px o "R$" ficava numa
+            linha e o "9,90" na outra, porque o texto do passe ocupava a largura. */}
+        <span className="shrink-0 whitespace-nowrap pl-3 text-sm font-semibold text-amber" data-preco>{PRECO_NA_TELA.passe_7d}</span>
       </button>
       {(abrindo || erro || aviso) && (
         <p className="mt-2 text-center text-xs text-cream/70" role="status">
