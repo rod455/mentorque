@@ -3,6 +3,17 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-15 · Engenharia: o relatório da Mídia roda todo dia
+
+- O fluxo "Mídia: relatório por e-mail" (`hGHGy2qbZ1reg7S8`) foi publicado às
+  21h16 UTC (18h16 de Brasília), depois da última tentativa do dia, para não
+  reenviar hoje o PDF de 14/11. Conferido no n8n: a versão ativa é igual ao
+  rascunho (`afce0900`) e o cron é `5 10-18 * * *`. A primeira tentativa é
+  amanhã às 10h05. A janela aceita só relatório de hoje ou de ontem, e o de
+  14/11 já fica fora dela.
+- A linha da Mídia em `entre-papeis.md` ficou só com a metade que falta: gravar
+  em algum lugar quando o fluxo deixa de mandar.
+
 ## 2026-11-15 · Engenharia: o iPhone em revisão, com a 3.4 na loja e 3.5 no binário
 
 - **Lido na API da App Store Connect às 16h13 UTC:** o build 76 (binário 3.5)
