@@ -19,6 +19,8 @@ o commit direto, não foi vista por mim. Os seis itens abaixo são ancestrais de
 
 ## O que vai NO BINÁRIO
 
+### Vai no binário, e a pessoa sente
+
 1. **O sintoma "Perda de força" ganha o card da aula** (29/10, commit
    99889cc, rodada do Conteúdo). A aula `diag-perda-de-forca` já chega à 3.3
    pelo catálogo remoto; a ligação na tela do sintoma (`AULAS_DO_SINTOMA`) vai
@@ -59,8 +61,7 @@ o commit direto, não foi vista por mim. Os seis itens abaixo são ancestrais de
      dentro do app. Vender pelo Stripe pode fazer a Play recusar a versão ou
      tirar o app do ar. O Brasil tem um programa de escolha de cobrança, que
      exige a Play ao lado e a inscrição no Play Console; não estamos nele.
-   - **O preço do passe não quebra mais em duas linhas** (14/11, commit
-     seguinte a 1e7c5c6, achado na foto da tela antes do build).
+   - **O preço do passe não quebra mais em duas linhas** (14/11, commit 93bc0c7, achado na foto da tela antes do build).
    - **LIGADA EM 14/11, às 18h02 UTC, por ordem do dono.** O SQL
      (`supabase/compras_avulsas.sql`) rodou pelo conector do Supabase: tabela
      com RLS, sem política, e `anon`/`authenticated` sem leitura. Conferido em

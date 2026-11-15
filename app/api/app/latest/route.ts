@@ -65,7 +65,12 @@ const LATEST = {
   // 27/10/2026: 3.3, build 74, nas duas lojas, lido às 01h08 UTC na API do
   // Play (produção, versionCode 74, completed) e na da Apple (READY_FOR_SALE,
   // build 74). Antes: 3.2 = 73.
-  android: 74, // 3.3 na Play, publicada em 26/10
+  // 15/11/2026: 3.4 SÓ NO ANDROID, publicada em 14/11 (aviso do dono). O 75 é
+  // o menor versionCode possível da 3.4 (piso 75 na árvore 93bc0c7, e o
+  // Codemagic usa o maior entre contador e piso): todo aparelho na 3.3 (74) vê
+  // o aviso e nenhum na 3.4 vê. A prova está em BUILD_PUBLICADO, na
+  // conferir:versoes. Antes: 3.3 = 74.
+  android: 75, // 3.4 na Play, publicada em 14/11
   // A LIÇÃO DESTE CAMPO, que vale mais que o número: em 12/09 ele foi para 74
   // pela lembrança de alguém, e o banner acendeu para todo mundo na 2.4
   // apontando para um build que a loja não tinha. O erro tem lados de custo
@@ -99,6 +104,10 @@ const LATEST = {
   // dono), então a confirmação é a de sempre: o retrato do `app_store_connect`
   // de 06/10 tem que responder READY_FOR_SALE para a 3.0; se não responder,
   // este campo volta para 69 na hora.
+  // 15/11/2026: o iPhone NÃO muda. A 3.4 não foi lida na Apple (a API
+  // responde 403 por acordo vencido desde 14/11), e nenhum iPhone reporta
+  // 3.4.0. Número alto demais aqui mandaria todo iPhone para uma versão que
+  // talvez não exista na loja.
   ios: 74, // 3.3 na App Store, aprovada em 26/10
   // A QUAL VERSÃO DE MARKETING OS DOIS NÚMEROS ACIMA CORRESPONDEM (25/09/2026).
   //
@@ -115,7 +124,7 @@ const LATEST = {
   //
   // O app ignora este campo (lê só `android`/`ios`), então ele não muda nada
   // para quem consome.
-  versao: "3.3",
+  versao: "3.4",
 };
 
 export function GET() {

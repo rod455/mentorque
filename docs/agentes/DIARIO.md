@@ -3,6 +3,28 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-15 · Engenharia: o aviso de versão nova acende no Android para a 3.4, e o repositório abre a 3.5
+
+- **Pedido do dono**: "coloque o aviso em todos os aparelhos na 3.4 no
+  android". Lido antes, às 10h53 UTC: nas últimas 24 horas, 60 Androids
+  abriram o app, 26 na 3.4 e 34 na 3.3; dos 33 aparelhos que já usaram a 3.4,
+  32 são instalações novas e 1 atualizou. Quem já tinha o app não estava
+  atualizando, e as 5 pessoas que bateram no limite da Biela estão na 3.3, sem
+  ver os pacotes.
+- **O número do aviso sem a tela de ninguém**: `android: 75`. É o menor
+  versionCode possível da 3.4, provado no git (piso 75 na árvore 93bc0c7) e no
+  `codemagic.yaml` (o maior entre contador e piso). Todo aparelho na 3.3 (74)
+  vê o aviso, nenhum na 3.4 vê, e o lado caro do erro (número alto demais) é
+  impossível. Se a Play mostrar outro número, ele entra no lugar.
+- **O iPhone não muda** (`ios: 74`): a 3.4 não foi lida na Apple (acordo
+  vencido) e nenhum iPhone reporta 3.4.0. A `conferir:versoes` passou a aceitar
+  build POR LOJA (`"3.4": { android: 75, ios: 74 }`), com dois plantios que
+  morderam (Android de volta a 74; iPhone subindo para 75).
+- **A 3.4 entra em `JA_PUBLICADAS`**, com `ARVORE_DO_BUILD` 93bc0c7 (7 commits
+  da ficha dentro dela, conferido pelo git), o piso sobe para 76 e o
+  repositório abre a 3.5 (`novidades-3.5.md`). A ficha da 3.4 ganhou o
+  subtítulo que a conferência lê e o commit real do conserto do preço.
+
 ## 2026-11-14 · Engenharia: a 3.4 em produção, e as oportunidades de venda eram recusadas pelo banco
 
 Leitura pedida pelo dono depois da aprovação da Play ("veja se está funcionando

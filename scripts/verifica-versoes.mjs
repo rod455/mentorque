@@ -164,6 +164,12 @@ const JA_PUBLICADAS = [
   // 16h55 UTC) e a API do Play (faixa de produção com a 3.3, versionCode 74,
   // status completed, com a nota da ficha).
   "3.3",
+  // 3.4 publicada SÓ NO ANDROID, em 14/11/2026, aviso do dono ("foi publicado",
+  // depois de "Está em avaliação pela play"). No iPhone a casa não sabe: a API
+  // da App Store responde 403 por acordo vencido desde 14/11 às 19h09 UTC, e
+  // nenhum aparelho iOS reporta 3.4.0 no funil. 33 aparelhos Android reportam
+  // 3.4.0 até 15/11 às 10h53 UTC.
+  "3.4",
 ];
 
 // O BUILD DE CADA VERSÃO PUBLICADA (30/09/2026).
@@ -194,6 +200,17 @@ const BUILD_PUBLICADO = {
   "3.1": 71,
   "3.2": 73,
   "3.3": 74,
+  // A 3.4 saiu só no Android (ver JA_PUBLICADAS), por isso o número vem POR
+  // LOJA, e o iPhone segue no 74 da 3.3 até a Apple ser lida.
+  //
+  // O 75 do Android é o MENOR valor possível, e é provado sem a tela de
+  // ninguém: a árvore 93bc0c7 tem piso 75 no gradle.properties, e o passo
+  // "Compilar .aab" do codemagic.yaml usa o maior entre o contador e o piso.
+  // A 3.4 saiu com 75 ou mais. Com o banner em 75, todo aparelho na 3.3 (74)
+  // vê o aviso e nenhum na 3.4 vê, seja o número exato qual for: o lado caro
+  // do erro (número ALTO demais) é impossível aqui. Se a Play mostrar outro
+  // número, ele entra no lugar.
+  "3.4": { android: 75, ios: 74 },
 };
 
 // A ÁRVORE DE CADA BUILD PUBLICADO (06/10/2026).
@@ -229,6 +246,10 @@ const ARVORE_DO_BUILD = {
   // 2d8291e mais a nota das lojas: o código é o mesmo. O commit da tela do
   // Codemagic não foi lido; quem tem a tela é o dono.
   "3.3": "e39b866",
+  // A main ficou parada em 93bc0c7 das 18h11 às 19h08 UTC de 14/11, e o
+  // primeiro aparelho na 3.4.0 é das 18h48 UTC (o git e o funil, não a tela do
+  // Codemagic, que o dono tem).
+  "3.4": "93bc0c7",
 };
 
 import { readFileSync, existsSync } from "node:fs";
@@ -350,8 +371,12 @@ if (!mIos || !mAndroidBanner) {
   process.exit(1);
 }
 const erradosDoBanner = [];
-if (Number(mAndroidBanner[1]) !== buildEsperado) erradosDoBanner.push(`android está ${mAndroidBanner[1]}, e a ${ultimaPublicada} saiu com ${buildEsperado}`);
-if (Number(mIos[1]) !== buildEsperado) erradosDoBanner.push(`ios está ${mIos[1]}, e a ${ultimaPublicada} saiu com ${buildEsperado}`);
+// Por loja desde 15/11/2026: a 3.4 saiu só no Android. Número sozinho vale
+// para as duas lojas; objeto diz cada uma.
+const esperadoAndroid = typeof buildEsperado === "object" ? buildEsperado.android : buildEsperado;
+const esperadoIos = typeof buildEsperado === "object" ? buildEsperado.ios : buildEsperado;
+if (Number(mAndroidBanner[1]) !== esperadoAndroid) erradosDoBanner.push(`android está ${mAndroidBanner[1]}, e a ${ultimaPublicada} saiu com ${esperadoAndroid}`);
+if (Number(mIos[1]) !== esperadoIos) erradosDoBanner.push(`ios está ${mIos[1]}, e a ${ultimaPublicada} está com ${esperadoIos} na App Store`);
 if (erradosDoBanner.length) {
   console.error(`Banner diz ${ultimaPublicada}, mas aponta para build de outra versão:`);
   for (const e of erradosDoBanner) console.error(`  - ${e}`);
