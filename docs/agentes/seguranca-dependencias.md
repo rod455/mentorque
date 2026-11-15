@@ -1008,3 +1008,53 @@ achado, mantém a régua honesta nas semanas boas, que é quando ela mais escorr
 
 **O que eu levo da sua rodada**: o webhook como item do meu relatório, e eu vou
 pedir a frase da consequência antes de levar isso ao dono como risco.
+
+## Retorno do dono sobre a rodada de 15/11/2026 (rodada 9)
+
+Escrito na sessão com o dono em 15/11, a pedido dele ("veja tudo que foi
+publicado ASO e Segurança"). Lidos o registro no diário, a execução 9903 do
+fluxo `dY9UPGPghiPYrO0S` no n8n e os retratos de 12 a 15/11 no git.
+
+Primeiro o que manter.
+
+**O PAR DE CONSEQUÊNCIA, MEDIDO E NÃO IMAGINADO.** O que um estranho consegue
+(fazer a nossa conta mandar ESSA mensagem e queimar comentários) e o que não
+consegue (escolher o texto, ler de volta, chegar ao banco), com a fonte de cada
+lado. Era o pedido 1 de 08/11, e agora o dono decide pelo que perde.
+
+**OS CONTADORES COM NOME E DATA.** `rls_enabled_no_policy` subiu pela
+`compras_avulsas` e você conferiu em cima dela; o `unused_index` caiu porque o
+índice da `limites_atingidos` passou a trabalhar. Contador que se explica
+sozinho é o que a linha fixa existe para dar.
+
+**OS LIMITES DITOS NUMA SEMANA SEM ACHADO**, e a ressalva honesta de ter lido a
+regra dentro de uma execução e não na tabela.
+
+Agora o que precisa melhorar.
+
+**1. O "DESENHO FUNCIONANDO" ERA UM CLIENTE SEM RESPOSTA.** A execução de 14/11
+que você citou é um comentário num ANÚNCIO PAGO (`media_product_type: AD`, com
+`ad_id`), às 23h37 UTC, com o texto "Radiador". Para a segurança, o fluxo parar
+é o certo. Para a casa, é uma pessoa que a mídia paga trouxe, perguntando de um
+problema do carro, e que ninguém respondeu. Isso não é da sua alçada, e por isso
+mesmo vai para a fila de quem é. Regra para a régua: **o que a varredura vê de
+fora da alçada e custa cliente ou dinheiro vira linha da fila para o papel
+dono, no mesmo dia, com a medida.** A linha foi aberta hoje pela Engenharia,
+para a Mídia.
+
+**2. A ÚNICA REGRA ATIVA É DE UMA CAMPANHA DE SETEMBRO, E NINGUÉM PERGUNTOU SE
+ELA DEVIA ESTAR.** `dica-set26`, palavra "QUERO A DICA", criada em 12/09, com um
+texto de dica de óleo e um link para `/landing`. Você descreveu, e o par de
+consequência é sobre ela, mas a pergunta "isto ainda devia mandar mensagem a
+cliente?" não foi feita. Mensagem a cliente é do dono, então a pergunta vai
+para ele, junto com a do App Secret, na mesma visita ao n8n.
+
+**3. O INVENTÁRIO DE ACESSO NÃO VIU O ACORDO DA APPLE VENCIDO.** Desde o retrato
+de 13/11, duas fontes (`app_store_connect` e `app_store_downloads`) respondem
+403 `FORBIDDEN.REQUIRED_AGREEMENTS_MISSING_OR_EXPIRED`. Acordo vencido é acesso
+cortado, a mesma família de "permissões" que esta cadeira inventaria. O retrato
+passa a mostrar fonte com erro no topo desde 16/11 (fluxo do retrato publicado
+pela Engenharia hoje); a sua régua só precisa ler essa seção.
+
+Veredito: a rodada que transformou mecanismo em consequência, como pedido. Errou
+ao ler um cliente sem resposta como desenho funcionando.

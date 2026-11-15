@@ -3,6 +3,35 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-15 · Engenharia: a App Store parou há três dias e o retrato não dizia, e a venda avulsa só estava no JSON
+
+Leitura das rodadas do ASO e da Segurança de 15/11, a pedido do dono.
+
+- **A App Store responde 403 por acordo vencido desde o retrato de 13/11**, nas
+  duas fontes (`app_store_connect` e `app_store_downloads`), lido nos retratos
+  de 12 a 15/11 no git. O "Monta retrato" só imprimia a linha "Lojas" quando
+  havia versões, então com erro ela sumia calada. Cinco rodadas de agentes
+  leram esses retratos (CRO, Guardião, Mídia, ASO, Segurança) e nenhuma viu.
+- **Consertado no fluxo do retrato** (`3iP9vS2KQJ6E9cHD`), publicado às 15h40 UTC
+  de 15/11, com a versão ativa conferida: um nó novo põe no TOPO a seção
+  "FONTES COM ERRO HOJE", com o código e há quantas coletas seguidas. Rodado
+  aqui contra os dados do retrato de 15/11 antes de publicar: as duas fontes da
+  Apple aparecem, há 3 coletas.
+- **CORREÇÃO DO MEU REGISTRO DE 14/11:** escrevi que "o retrato publica
+  `vendas.vendaAvulsa` com a frase pronta". Publicava só no JSON bruto do fim
+  do arquivo; as linhas que os agentes leem não tinham a venda. O mesmo nó novo
+  põe a frase na seção VENDAS, logo abaixo das assinaturas. Na leitura de
+  15/11: 1 podia ver os pacotes, 0 viram, 0 compraram, 6 voltaram e levaram
+  recusa de limite.
+- **O "desenho funcionando" da Segurança era um cliente sem resposta**: a
+  execução de 14/11 é um comentário num anúncio pago ("Radiador") que ninguém
+  respondeu, porque a única regra ativa é a "QUERO A DICA" de setembro. Linha na
+  fila para a Mídia (medir e propor) e pergunta na lista do dono (a regra de
+  setembro continua?).
+- **De passagem, e bom:** o Google voltou a gastar (R$ 54,09 em 7 dias no
+  retrato de 15/11), depois de 14 dias parado. A causa não foi lida.
+- Retornos escritos nos manuais do ASO e da Segurança.
+
 ## 2026-11-15 · Segurança: rodada 9, o que um estranho consegue e o que não consegue no webhook do Instagram
 - Artifact "Segurança da semana" (rodada 9):
   https://claude.ai/artifact/ACSF5bMJgFEmVWL7qows9v

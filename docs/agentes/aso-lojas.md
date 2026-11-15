@@ -598,3 +598,52 @@ Conteúdo consertaram por você. `npm run conferir` antes do push.
 
 A linha de 16/10 (Engenharia para ASO, "as imagens estão ao alcance") foi
 cumprida nesta rodada e saiu da fila.
+
+## Retorno do dono sobre a rodada de 15/11/2026
+
+Escrito na sessão com o dono em 15/11, a pedido dele ("veja tudo que foi
+publicado ASO e Segurança"). Lidos o registro no diário, `docs/lojas/ficha.md`
+e os retratos de 12 a 15/11 no git.
+
+Primeiro o que manter.
+
+**NENHUMA PROPOSTA NOVA, DE PROPÓSITO, E A PARADA VIROU INSTRUÇÃO.** Posição por
+posição, com o nome do arquivo, executável em cinco minutos. É o que o retorno
+de 04/11 pediu, e a linha reescrita preservou a data para o contador de idade
+não zerar.
+
+**A CORREÇÃO DO PRÓPRIO NÚMERO** ("258 de 279" sem fonte, agora 399 de 411 com
+o retrato e a hora) e **O RISCO DA REMOÇÃO** (as capturas salvas têm 720 px e são
+registro, não cópia) dito antes de propor.
+
+Agora o que precisa melhorar.
+
+**1. A APP STORE PAROU DE RESPONDER HÁ TRÊS DIAS, E A RODADA DA CADEIRA DAS
+LOJAS NÃO DISSE.** Nos retratos de 13, 14 e 15/11, `app_store_connect` e
+`app_store_downloads` vêm com 403 `FORBIDDEN.REQUIRED_AGREEMENTS_MISSING_OR_EXPIRED`:
+um acordo da Apple venceu. É o maior risco de loja desta semana. Se for o de
+apps pagos, a Apple para de vender a assinatura no iPhone, e a casa não sabe
+nem se a 3.4 do iPhone chegou ao TestFlight. Ele está na lista do dono desde
+14/11 (Engenharia), mas o relatório desta cadeira precisava abrir por ele. Regra
+para a régua: **a rodada abre lendo o estado de toda fonte de loja no retrato, e
+fonte com erro é a primeira linha, antes de qualquer número de ficha.** O
+retrato passa a imprimir isso no topo a partir de 16/11.
+
+**2. A MANCHETE TEM UM NÚMERO VELHO E UMA CAUSA QUE NÃO FOI MEDIDA.** "Metade de
+quem clica no anúncio não instala depois de ver as oito telas":
+- os 50,7% são de 04 a 08/10, cinco dias, lidos há um mês;
+- "depois de ver as oito telas" é causa: a Play não diz quantos visitantes
+  arrastaram as capturas;
+- existe um segundo instrumento para o mesmo degrau, mais novo: a Mídia mediu a
+  instalação por clique do Meta em 55,5% de 07 a 13/11 (64,4% na semana
+  anterior). A regra de 03/10 manda citar os dois;
+- e "maior perda" pede régua: o Play Console mostra a mediana dos apps
+  parecidos nessa mesma origem. Sem ela, 50% pode ser bom.
+
+**3. A INSTRUÇÃO TIRA A CAPTURA DO PAYWALL SEM DIZER O PREÇO DISSO.** Mostrar o
+preço na ficha afasta quem não pagaria, e isso pode ser bom ou ruim para uma
+casa com zero assinante. Quem decide é o dono; a instrução precisa dizer o que
+se troca.
+
+Veredito: a rodada que melhor obedeceu ao "não abra mais nada" e a que pior olhou
+para a loja que parou de responder.
