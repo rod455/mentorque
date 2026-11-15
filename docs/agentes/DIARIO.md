@@ -3,6 +3,32 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-15 · Engenharia: o relatório da Mídia passa a rodar todo dia, e o nó de termos nunca esteve desligado
+
+- **Decisão do dono, na sessão:** a regra "QUERO A DICA" do Instagram
+  (`dica-set26`) **continua ativa**. A linha saiu da lista dele.
+- **Apple:** o dono disse "feito" sobre o acordo. Às 15h27 UTC o fluxo de builds
+  da App Store ainda respondeu 403 `REQUIRED_AGREEMENTS_MISSING_OR_EXPIRED` nas
+  duas consultas. A linha da lista ficou, com as duas hipóteses (a Apple
+  processando, ou o acordo pendente ser o do Developer Program, aceito em
+  developer.apple.com) e a reconferência marcada para 21h20 UTC.
+- **Pedido da Mídia 1, o relatório que não saía:** o fluxo
+  `hGHGy2qbZ1reg7S8` passa de quinta e sexta para todo dia, das 10h às 18h de
+  Brasília, e o aviso ao dono agora diz isso. O rascunho está pronto e só é
+  publicado às 21h15 UTC (agendado), depois das 18h de Brasília, para não
+  reenviar hoje o PDF de 14/11 se a trava de duplicata não tiver gravado.
+  Medido antes: o não envio NÃO era silêncio total. Na sexta 13/11 às 18h05 de
+  Brasília o fluxo mandou ao dono "o relatório da semana não saiu"; o que
+  faltava era a casa ver, não o dono.
+- **Pedido da Mídia 2, religar o nó de termos de busca: não havia o que
+  religar.** Na coleta de 15/11 às 08h30 UTC o nó respondeu 200, com a
+  credencial funcionando, e zero linhas, porque nenhuma campanha de busca teve
+  impressão em 30 dias. A nota "nó desligado, falta clicar a credencial" saía
+  sempre que a lista vinha vazia. Um nó novo no coletor (`8HswG6ZPdzBSnlPv`,
+  publicado) troca a nota pela causa quando o nó respondeu 200; testado com
+  quatro entradas (200 vazio, erro, 200 com termos, fonte preservada). A linha
+  saiu da fila.
+
 ## 2026-11-15 · Engenharia: a App Store parou há três dias e o retrato não dizia, e a venda avulsa só estava no JSON
 
 Leitura das rodadas do ASO e da Segurança de 15/11, a pedido do dono.
