@@ -3,6 +3,23 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-15 · Engenharia: o iPhone em revisão, com a 3.4 na loja e 3.5 no binário
+
+- **Lido na API da App Store Connect às 16h13 UTC:** o build 76 (binário 3.5)
+  chegou às 16h03 UTC, VALID; a versão da loja "3.4", criada às 16h04 UTC, está
+  em WAITING_FOR_REVIEW com o build 76. A nota é a sem pacotes, conferida
+  palavra por palavra.
+- **Árvore:** bc30de0, provável (faixa possível 38dc9ec..bc30de0, todas com o
+  mesmo binário). O commit exato está na tela do Codemagic.
+- **O fluxo manual "Engenharia: builds da App Store" melhorou:** a coluna
+  `versao` vinha sempre nula (a consulta não pedia a relação), e agora ele lê
+  também a nota da versão mais nova. Assim, conferir a nota deixa de depender
+  de perguntar ao dono.
+- **Os números não batem:** a loja vai mostrar 3.4, e o app diz 3.5.0. Na
+  aprovação, o aviso do iPhone sobe para 76 e o "3.5" entra no `JA_PUBLICADAS`.
+  A próxima versão é a 3.6 nas duas lojas, com o mesmo número na loja e no
+  binário. Isso está na ficha da 3.5.
+
 ## 2026-11-15 · Engenharia: a Apple destravou, e a 3.4 do iPhone nunca subiu
 
 - O dono assinou o contrato do Apple Developer Program (e-mail às 12h26 de

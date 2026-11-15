@@ -6,7 +6,22 @@ por acordo vencido desde 14/11), então a próxima versão do iPhone pode ser
 esta. Tudo o que entra aqui **já roda na web** pelo deploy da Vercel; o
 binário só importa para o app das lojas.
 
-**Onde a 3.5 está:** aberta, nada gerado.
+**Onde a 3.5 está:** iPhone em revisão na Apple. Lido na API da App Store
+Connect às 16h13 UTC de 15/11 (fluxo manual do n8n "Engenharia: builds da App
+Store", que agora também lê a nota): o build **76**, versão de binário **3.5**,
+chegou às 16h03 UTC (VALID), e a versão da loja criada às 16h04 UTC tem o nome
+**3.4**, o build 76 ligado e o estado WAITING_FOR_REVIEW. A nota enviada é a
+desta ficha, sem a frase dos pacotes, conferida palavra por palavra na API.
+Android: nada gerado, e não precisa (a 3.4 da Play já tem o mesmo conteúdo).
+
+**Os dois números do iPhone não batem, e isso tem consequência.** A loja vai
+mostrar "Versão 3.4"; o app, por dentro, diz 3.5.0 (é o que chega ao funil e ao
+RevenueCat como versão). Depois da aprovação: `BUILD_PUBLICADO["3.4"].ios`
+passa a 76, o `/api/app/latest` do iPhone sobe para 76, e o "3.5" entra no
+`JA_PUBLICADAS`, porque o binário 3.5 terá saído na Apple e o próximo envio do
+iPhone precisa de número de binário maior. A próxima versão do repositório é a
+3.6, nas duas lojas, e a versão criada no App Store Connect deve levar o mesmo
+número do binário.
 
 **O iPhone precisa dela antes do Android.** A 3.4 nunca chegou à Apple (o
 último build lá é o 74, da 3.3, lido na API em 15/11 às 15h36 UTC), porque o
@@ -18,8 +33,13 @@ de 1 pergunta grátis. A compra avulsa não aparece no iPhone. Caminho: o
 workflow "iOS → TestFlight" do Codemagic, depois "Enviar para revisão" no App
 Store Connect.
 
-**Árvore do build:** (escrever o commit NA HORA de apertar o botão do
-Codemagic, antes de qualquer frase sobre o que o binário tem.)
+**Árvore do build:** bc30de0, provável. Instrumento: o git e a hora de envio da
+Apple. O binário diz 3.5, então a árvore é 38dc9ec (que abriu a 3.5, 10h58 UTC)
+ou posterior; o build chegou à Apple às 16h03 UTC, e a `main` estava em
+bc30de0 desde 15h50 UTC. Qualquer commit dessa faixa dá o MESMO binário: de
+93bc0c7 (a árvore da 3.4) até bc30de0, o que entra no app (`lib/app`,
+`components`, `app/app`, `android`, `ios`, dependências) só mudou nos números
+de versão. O commit exato está na tela do Codemagic, que eu não vi.
 
 ## O que vai NO BINÁRIO
 

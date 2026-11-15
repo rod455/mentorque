@@ -12,7 +12,9 @@ contrato do Apple Developer Program: a última versão na App Store é a 3.3
 segundo acordo assinado, a lista de builds respondeu: **o último build que
 chegou à Apple é o 74 (3.3), enviado em 26/10**. O build da 3.4 do iPhone nunca
 subiu: o envio do Codemagic de 14/11 bateu no acordo vencido. A próxima versão
-do iPhone sai da main, já com o nome 3.5 (ver `novidades-3.5.md`). `/api/app/latest` só sobe depois da aprovação, e o
+do iPhone sai da main, já com o nome 3.5 (ver `novidades-3.5.md`). Às 16h13
+UTC de 15/11, a API mostrou a versão "3.4" da loja em revisão com o build 76,
+que é o binário 3.5 de conteúdo igual. `/api/app/latest` só sobe depois da aprovação, e o
 `ARVORE_DO_BUILD` e o `JA_PUBLICADAS` da `conferir:versoes` também.
 
 **Árvore do build:** 93bc0c7. Instrumento: o git. A `main` ficou parada em
