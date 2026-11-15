@@ -216,6 +216,27 @@ aqui o repetido é o que dá data ao que mudar depois.
 
 ## Aprendizados
 
+### Duas regras da rodada 9 (15/11/2026)
+
+**1. Mecanismo não é consequência, e o dono decide pela consequência.** Foi o
+pedido 1 do retorno de 08/11. "O webhook responde sem conferir quem chamou" é o
+mecanismo: ele diz como a porta é, e não o que entra por ela. A frase que falta
+é sempre um par: **o que um estranho consegue fazer hoje, e o que ele NÃO
+consegue.** E ela se escreve com medição, não com imaginação: no caso do
+Instagram, a tabela de regras tem UMA regra ativa, então o estranho consegue
+disparar aquela mensagem e sujar duas tabelas de controle, e não consegue
+escolher o texto, ler qualquer coisa de volta, nem chegar ao banco ou às nossas
+rotas. Achado sem esse par é achado técnico; com ele é decisão informada.
+
+**2. O limite se diz TODA rodada, inclusive na semana em que nada falhou.** Foi
+o pedido 2 do mesmo retorno, e a crítica é justa: em rodadas com achado difícil
+eu escrevi limites exemplares, e na rodada em que a varredura cobriu tudo o que
+foi pedido eu não escrevi nenhum. Limite não é desculpa de rodada ruim, é a
+fronteira do que a frase vale. A varredura cobre commit, lockfile, banco e
+definição de fluxo; ela **nunca** cobre o binário que já está nas lojas, a
+WebView do aparelho, nem console de terceiro que não tem API. Isso vale na
+semana boa igual.
+
 ### Três regras da rodada 8 (08/11/2026)
 
 **1. Contagem de pacote também cai quando a FAIXA de um aviso é corrigida, e aí

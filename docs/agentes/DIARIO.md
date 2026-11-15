@@ -3,6 +3,97 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-15 · Segurança: rodada 9, o que um estranho consegue e o que não consegue no webhook do Instagram
+- Artifact "Segurança da semana" (rodada 9): (link no commit seguinte)
+- Semana de 38 commits, 4 deles de junção, todos dentro da varredura.
+
+```
+CONTADORES (15/11/2026): avisos Supabase seguranca 19/6/1/1
+| performance 3/7/11/1
+| banco definer 4 (sem pg_temp 0, anon executa 0) | tabelas 24 (sem RLS 0, anon le 0)
+| views 17 (sem declarar 0) | npm producao 5 pacotes/10 avisos (criticas 0) | so dev 17 pacotes
+```
+Dois contadores mexeram, e a linha fixa deu nome e data aos dois na hora:
+- `rls_enabled_no_policy` 18 para **19**, pela tabela `compras_avulsas`, nascida
+  esta semana. Conferida em cima dela: RLS ligado, `anon` não lê nem grava,
+  `authenticated` não lê. A view `venda_avulsa_resumo`, também desta semana,
+  declara `security_invoker` e não é legível por `anon` nem por
+  `authenticated`.
+- `unused_index` 12 para **11**, e esta é boa notícia: o índice da
+  `limites_atingidos`, a tabela que nasceu na semana passada, **passou a ser
+  usado**. Semana passada ele entrou na lista por ser recém-nascido; agora saiu
+  por estar trabalhando.
+
+### O par que faltava: o que um estranho consegue, e o que NÃO consegue
+Pedido 1 do retorno de 08/11, e ele está certo: "responde sem conferir quem
+chamou" é o mecanismo, e o dono decide pela consequência. Medido hoje, não
+imaginado, porque a tabela de regras responde isso.
+- **A tabela tem UMA regra ativa**, de uma campanha de setembro (post_id `*`,
+  ou seja, vale para todo post).
+- **O que um estranho CONSEGUE hoje**: fazer a nossa conta mandar ESSA mensagem,
+  em privado, numa conversa de comentário escolhida por ele; e gravar linhas nas
+  duas tabelas de controle, o que pode queimar um comentário ou um par de pessoa
+  e post, sumindo com uma resposta legítima depois.
+- **O que ele NÃO consegue**: escrever o texto (sai da nossa tabela); mandar
+  para quem não está preso a um comentário que a Meta aceite; ler qualquer coisa
+  de volta (a resposta do webhook não carrega dado, é só "Workflow got
+  started"); chegar ao nosso banco ou às nossas rotas, porque **este fluxo não
+  chama a nossa API em nó nenhum**; nem usar o token para outra coisa, que ele
+  está preso numa credencial e num endereço.
+- **E o comportamento observado continua o esperado**: 3 execuções desde 08/11,
+  todas em modo `webhook`, todas da Meta. A de 14/11 era um comentário real de
+  uma pessoa que **não** casou com a regra, e o fluxo parou antes de mandar
+  nada, que é o desenho funcionando.
+
+### O que está parado comigo, só com a idade
+- **11 dias**: a pergunta de 04/11 sobre as três portas sem uso no n8n.
+- **7 dias**: a chave do App Secret da Meta na lista do dono. A linha dele ganhou
+  hoje o par de consequência acima, porque linha parada precisa dizer o que se
+  ganha e o que não se ganha; a recomendação em si não foi repetida.
+- **7 dias**, na fila entre papéis: a conferência de assinatura no webhook (só
+  anda depois da chave) e a versão publicada do fluxo de Peças.
+
+### As fontes, em uma linha cada
+- **Segredo escapando: nenhum.** 38 commits e 16.104 linhas acrescentadas, com
+  as 4 junções da semana dentro, e nenhuma forma de chave. Zero também nos 948
+  arquivos da árvore. O `.gitignore` continua com a regra invertida inteira.
+- **Dependências de produção: paradas em 5 pacotes e 10 avisos**, nenhuma
+  crítica, **nenhum aviso novo e nenhum que saiu** desde 08/11. As faixas do
+  `minimatch` (`7.0.0 - 11.0.0`) e do `rimraf` (`4.2.0 - 6.1.3`) continuam onde
+  a rodada passada as leu, então a explicação da queda do balde de
+  desenvolvimento se sustentou uma semana depois, em vez de ter sido uma leitura
+  de um dia.
+- **Só desenvolvimento: 17 pacotes**, contados e não listados.
+- **O `node_modules` desta sessão é desta árvore** (`next` 15.5.28 no disco e no
+  lockfile), conferido antes de confiar em qualquer verde, pela regra 2 da
+  rodada 6.
+- **Permissões**: não é a primeira rodada do mês. A próxima é **06/12/2026**.
+
+### O que esta varredura NÃO alcançou nesta semana
+Pedido 2 do retorno de 08/11, e ele vale justamente na semana em que nada
+falhou: limite não é desculpa de rodada ruim, é a fronteira do que a frase vale.
+- **O binário que já está nas lojas.** A 3.4 entrou em produção nesta semana
+  (registro da Engenharia de 14/11) e eu não leio o que está dentro dele: o que
+  eu leio é lockfile e commit.
+- **A WebView do aparelho**, como sempre.
+- **O registro de acesso do servidor do n8n.** "Só a Meta chamou" vale para as
+  execuções que o n8n guarda, e a retenção é curta; o webhook está de pé desde
+  10/09.
+- **Codemagic e os apps conectados na Meta e no Google**, que não têm ferramenta
+  nesta sessão, e **as integrações instaladas na Vercel**, que responderam 403
+  em 04/11.
+- **As definições dos 57 fluxos do n8n que não são do Mentorque** (44 do
+  Vocaboost, 4 do Meu Livrinho, 3 do Dermato, 6 pessoais). Eles moram no mesmo
+  n8n que guarda as 21 credenciais, e eu nunca os abri.
+
+### Contra a régua
+Cumpri 1 a 9, e os dois pedidos do retorno entraram: o par de consequência e os
+limites ditos numa semana sem achado novo. **O que eu devo:** o par de
+consequência eu escrevi lendo a tabela de regras DENTRO de uma execução
+guardada, e não a tabela direto, porque a ferramenta do n8n que eu tenho lista e
+escreve tabela de dados mas não lê linha. Então "existe uma regra ativa" é
+verdade sobre o que a execução de 14/11 viu; se alguém ligar outra regra amanhã,
+o par muda e eu só saberia na próxima execução guardada.
 ## 2026-11-15 · ASO: metade de quem clica no anúncio não instala depois de ver as oito telas
 - Sexta rodada deste papel. Artifact "Lojas da quinzena":
   https://claude.ai/artifact/Kjurv7xkukBHnDCh7Gg4nN
