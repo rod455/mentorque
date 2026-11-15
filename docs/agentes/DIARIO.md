@@ -3,6 +3,20 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-15 · Engenharia: a Apple destravou, e a 3.4 do iPhone nunca subiu
+
+- O dono assinou o contrato do Apple Developer Program (e-mail às 12h26 de
+  Brasília) e mais um acordo em seguida. Às 15h32 UTC a consulta de versões
+  voltou; às 15h36 UTC, a de builds também.
+- **O que a Apple diz:** a última versão na App Store é a 3.3, à venda, com o
+  build 74; o último build ENVIADO é o próprio 74, de 26/10. **A 3.4 do iPhone
+  nunca chegou à Apple**: o envio do Codemagic de 14/11 bateu no acordo vencido.
+  O aviso do iPhone fica em 74, que é o certo.
+- **O próximo build do iPhone é a 3.4 com o nome 3.5**: de 93bc0c7 para cá só
+  mudaram os números de versão no binário (git). Caminho escrito em
+  `novidades-3.5.md`. A linha do acordo saiu da lista do dono, e a
+  reconferência agendada para 21h20 UTC foi cancelada.
+
 ## 2026-11-15 · Engenharia: o relatório da Mídia passa a rodar todo dia, e o nó de termos nunca esteve desligado
 
 - **Decisão do dono, na sessão:** a regra "QUERO A DICA" do Instagram
