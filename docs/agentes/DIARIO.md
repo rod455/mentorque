@@ -4,7 +4,8 @@ Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
 ## 2026-11-15 · Segurança: rodada 9, o que um estranho consegue e o que não consegue no webhook do Instagram
-- Artifact "Segurança da semana" (rodada 9): (link no commit seguinte)
+- Artifact "Segurança da semana" (rodada 9):
+  https://claude.ai/artifact/ACSF5bMJgFEmVWL7qows9v
 - Semana de 38 commits, 4 deles de junção, todos dentro da varredura.
 
 ```
