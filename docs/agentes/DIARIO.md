@@ -3,6 +3,68 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-15 · ASO: metade de quem clica no anúncio não instala depois de ver as oito telas
+- Sexta rodada deste papel. Artifact "Lojas da quinzena":
+  https://claude.ai/artifact/Kjurv7xkukBHnDCh7Gg4nN
+- **DESFECHO DO QUE EU PEDI, primeiro.** As duas linhas de loja continuam
+  ABERTAS: a de 16/10 (tirar a captura com a prova social inventada, da
+  Engenharia) está parada há 30 dias e a minha de 01/11 (reordenar) há 14. A
+  linha na fila entre papéis (ASO para Analista, pôr `stats/store_performance/`
+  na coleta diária) está parada há 11 dias, e o retrato de hoje confirma: a
+  conversão da ficha continua fora do pacote.
+- **ESTA RODADA NÃO ABRE PROPOSTA NOVA, de propósito**, e isso é resposta ao
+  retorno do dono de 04/11. Com a descrição curta lida em 5 dias e duas
+  mudanças de captura esperando, uma terceira deixaria três coisas na mesma
+  ficha sem janela limpa para nenhuma. O que a rodada faz é dar TAMANHO à
+  proposta parada e trocar o pedido por instrução que se executa em cinco
+  minutos.
+- **O NÚMERO QUE FALTAVA, e era da minha própria rodada:** a conversão da ficha
+  em "Ads and referrals" é 50,7% (331 de 653, `stats/store_performance/`, 04 a
+  08/10, lido em 16/10). Dito do outro lado: **metade de quem clica no anúncio
+  e chega na página não instala depois de ver as oito telas.** É a maior perda
+  medida desta cadeira, e sem essa frase o achado das capturas era estética.
+- **CORREÇÃO DE UM NÚMERO MEU DE 01/11:** escrevi "258 dos 279 aparelhos
+  ativos" sem instrumento nem data. O certo, retrato de 15/11 às 9h: **399
+  Android de 411 aparelhos ativos em 7 dias** (web 9, iOS 2, teste 1). A
+  direção estava certa, o número não tinha fonte. Regra de 03/10 contra mim.
+- **ABRI AS TRÊS CAPTURAS QUE FALTAVAM** (6, 7 e 8 da Play) e o quadro fechou:
+  **três das oito pedem o cadastro do carro** (1, 6 e 7) e as duas telas de
+  produto de verdade, a Home e os Estudos, estão em 7º e 8º. A dos Estudos tem
+  "Economia & Bolso: gaste menos e evite golpes" escrito na tela, que é o
+  vocabulário das avaliações, e está em último.
+- A instrução pronta está em `docs/lojas/ficha.md` e na linha do dono, com o
+  nome do arquivo em cada posição: 1ª `captura-2`, 2ª `captura-8`, 3ª
+  `captura-3`, 4ª `captura-7`, 5ª `captura-1`; saem a 4 (prova social), a 5
+  (paywall com preço) e a 6 (terceira vez que pede cadastro). A linha de 01/11
+  foi REESCRITA com a data original preservada, para o contador de idade não
+  zerar.
+- **RISCO NOVO, registrado antes de propor remoção:** as capturas salvas no
+  repositório têm 720 px de largura, porque foram baixadas da página pública.
+  São REGISTRO, não cópia de segurança. Reordenar é reversível em um minuto;
+  remover só é reversível se o original existir em outro lugar. Por isso a
+  única remoção que eu trato como urgente é a da prova social inventada, que
+  ninguém quer de volta.
+- **AVALIAÇÕES: 13, média 5,0, UMA nova** (Celio lira souza, Play, 5 estrelas,
+  versão 3.2, texto "Excelente"). Sem rascunho de resposta, pela decisão do
+  dono de 04/10. **Não entra como depoimento**: uma palavra não conta história,
+  e elogio genérico na LP é o que faz depoimento verdadeiro parecer inventado,
+  o mesmo critério que tirou o "muito bom" do matthewsmc0 em 01/10.
+- Nenhuma nota abaixo de 5 nas duas lojas desde sempre, então não há tendência
+  de reclamação para o QA. A conferência por exceção da frase dos 2 carros
+  segue sem amostra útil: 42 dias no ar, uma avaliação nova no período e ela
+  não fala de limite, preço nem grátis.
+- **AUTOEXAME CONTRA A RÉGUA:** cumpri 2 (por exclusão, com o motivo escrito),
+  4, 5, 6, 7, 9, 10, 11 e 12. O 1 está aposentado e o 8 não se aplica.
+  **O critério 3 eu cumpri de um jeito que precisa estar declarado**: não abri
+  proposta nova de ficha, e isso é deliberado pelo retorno de 04/11. Se a régua
+  quiser uma proposta nova por rodada mesmo com duas paradas, ela e o
+  direcionamento do dono se contradizem, e quem decide é ele.
+- Recomendações: (1) cinco minutos no console resolvem as duas linhas de loja
+  na mesma visita, e a instrução está escrita posição por posição; (2) a linha
+  da fila para o Analista, parada há 11 dias, é o que tira este papel da leitura
+  manual; (3) a proposta da primeira frase continua guardada, e só entra quando
+  a descrição curta tiver uma janela de leitura decente.
+
 ## 2026-11-15 · Engenharia: o aviso de versão nova acende no Android para a 3.4, e o repositório abre a 3.5
 
 - **Pedido do dono**: "coloque o aviso em todos os aparelhos na 3.4 no

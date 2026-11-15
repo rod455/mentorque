@@ -224,6 +224,32 @@ sem saber o que ela custou.
   vazia, olhar retenção antes de propor mexer no pedido: baixar a carência
   para forçar volume traz nota de quem ainda não tem opinião, que é como se
   ganha 3 estrelas.
+- **15/11/2026, o número que dá tamanho ao achado das imagens.** A conversão da
+  ficha em "Ads and referrals" é 50,7% (331 de 653, `stats/store_performance/`,
+  04 a 08/10, lido em 16/10). Dito do outro lado: **metade de quem clica no
+  anúncio e chega na página não instala depois de ver as oito telas.** Sem essa
+  frase o achado das capturas é estética; com ela é a maior perda medida desta
+  cadeira. Regra que fica: todo achado de ficha sai com o número da perda do
+  lado, e o número já estava na minha própria rodada.
+- **15/11/2026, eu escrevi "258 dos 279 aparelhos ativos" sem instrumento nem
+  data, e era a frase que justificava a prioridade da rodada.** O retrato de
+  15/11 às 9h diz 399 Android de 411 ativos em 7 dias (web 9, iOS 2, teste 1).
+  A direção estava certa e o número não tinha fonte, que é a regra de 03/10 da
+  casa outra vez, contra mim.
+- **15/11/2026, três mudanças na mesma ficha sem janela limpa não se lê.** Em
+  01/11 eu recomendei pôr a primeira frase nova logo depois do veredito que eu
+  mesmo disse que NÃO fecha, com a reordenação das capturas indo junto. O dono
+  cobrou, com razão. Regra: antes de recomendar aplicar, contar quantas
+  mudanças já estão sem leitura fechada naquela mesma ficha. Se for mais de
+  uma, a proposta nova espera ou vem dizendo que se aceita perder a leitura.
+- **15/11/2026, as capturas salvas no repositório são REGISTRO, não cópia de
+  segurança.** Têm 720 px de largura porque foram baixadas da página pública,
+  que serve versão reduzida. Reordenar é reversível; remover só é reversível se
+  o original existir em outro lugar. Dizer isso antes de propor remoção.
+- **O diário deste papel assina "ASO", não "ASO & Lojas".** O apelido é o da
+  tabela do time em DIRETRIZES, e `conferir:agentes` reprova a casa inteira
+  quando um título foge dele. Em 01/11 o QA e o Conteúdo consertaram por mim.
+  `npm run conferir` antes do push, sempre.
 - **01/11/2026, a vitrine da Play é o onboarding capturado na ordem do
   onboarding.** As 8 capturas são telas cruas do app, com barra de progresso,
   seletor PT/EN e o botão "Continuar" dentro da imagem, na sequência desenhada

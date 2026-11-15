@@ -881,3 +881,88 @@ igual, FICA, porque custou zero e a primeira frame passa a dizer o que o app
 resolve. A próxima proposta, que já tem dona, é dar às capturas da Play o
 tratamento que as da App Store já têm: frase acima do aparelho, em vez de tela
 crua com o botão "Continuar" dentro.
+
+---
+
+## 2026-11-15 · O tamanho da perda que as 8 capturas explicam, e a ordem exata para consertar
+
+**Estado: a proposta de 01/11 continua ABERTA, 14 dias. Esta rodada não abre
+uma proposta nova: ela dá tamanho à que está parada e troca o pedido por uma
+instrução que se executa em cinco minutos.** O motivo de não abrir outra está
+no retorno do dono de 04/11: com a descrição curta lida em 5 dias e as capturas
+esperando, uma terceira mudança deixaria três coisas na mesma ficha sem janela
+limpa para nenhuma.
+
+### O número que faltava, e ele muda o tamanho do assunto
+
+A conversão da ficha em "Ads and referrals" é **50,7%** (331 de 653, relatório
+`stats/store_performance/`, janela de 04 a 08/10, lido em 16/10). Dito do outro
+lado: **metade de quem clica no anúncio e chega na página NÃO instala depois de
+ver estas oito telas.** Essa é a maior perda medida desta cadeira, e é por isso
+que ordem de captura deixa de ser assunto de estética.
+
+Correção de um número meu de 01/11: eu escrevi "258 dos 279 aparelhos ativos"
+sem instrumento nem data. O certo, do retrato de 15/11 às 9h: **399 Android de
+411 aparelhos ativos em 7 dias** (web 9, iOS 2, teste 1). A direção estava
+certa, o número não tinha fonte.
+
+### As 8 capturas, abertas uma a uma
+
+| Arquivo | O que mostra | Veredito |
+|---|---|---|
+| `captura-1.jpg` | Cadastre seu carro (slide do onboarding) | pede trabalho antes de prometer nada |
+| `captura-2.jpg` | Entenda sintomas e evite gastos | **a melhor que existe**: problema e desfecho juntos |
+| `captura-3.jpg` | Tenha o histórico completo | concreta, e é o que as avaliações elogiam |
+| `captura-4.jpg` | 4,8, 10.000+, 5.000+ e quatro depoimentos com nome | prova social inventada, **fora** |
+| `captura-5.jpg` | "Monte seu teste", com R$ 29,90 e R$ 239,90 | preço antes da decisão de instalar, **fora das primeiras** |
+| `captura-6.jpg` | "Adicione seu primeiro carro à garagem" | **terceira vez** que a ficha pede o mesmo cadastro |
+| `captura-7.jpg` | Home real do app | primeira tela de produto de verdade, e está em 7º |
+| `captura-8.jpg` | Estudos, com as trilhas e "Economia & Bolso: gaste menos e evite golpes" | mostra o conteúdo que as avaliações mais citam, e está em último |
+
+Três das oito (1, 6 e 7) pedem o cadastro do carro. A ficha repete a mesma
+tarefa três vezes antes de mostrar o produto.
+
+### A instrução, pronta para executar
+
+Ordem proposta, usando só o que já está no ar:
+
+| Posição | Arquivo | Por que aqui |
+|---|---|---|
+| 1 | `captura-2.jpg` | problema e desfecho, a mesma tese da descrição curta que subiu em 04/10 |
+| 2 | `captura-8.jpg` | o conteúdo que as avaliações elogiam, e "gaste menos" escrito na tela |
+| 3 | `captura-3.jpg` | o histórico, a outra coisa que elogiam |
+| 4 | `captura-7.jpg` | como o app é de verdade |
+| 5 | `captura-1.jpg` | o como, depois do porquê |
+| fora | `captura-4.jpg` | prova social inventada (linha do dono desde 16/10) |
+| fora | `captura-5.jpg` | preço antes da decisão |
+| fora | `captura-6.jpg` | repete o cadastro pela terceira vez |
+
+Na Play se vê duas, no máximo três, sem arrastar. As duas primeiras passam a
+ser benefício e conteúdo, em vez de cadastro e benefício.
+
+### O risco, dito na cara
+
+**As cópias do repositório são de 720 px de largura**, baixadas da página
+pública: elas são REGISTRO do que está no ar, não cópia de segurança. Se as
+originais não existirem mais em algum lugar, tirar uma captura é difícil de
+desfazer com a mesma qualidade. Reordenar não corre esse risco; remover corre.
+Por isso a ordem vem primeiro e a remoção depois, e por isso a única remoção
+urgente é a `captura-4.jpg`, que ninguém quer de volta.
+
+Segundo risco, o de sempre: se a prova social sair na mesma visita, a conversão
+se move pelos dois motivos. Continua valendo a pena, porque prova social
+inventada é risco de política e não espera leitura.
+
+### Como saber se funcionou
+
+O mesmo relatório `store_performance`, "Ads and referrals" separado de "Other",
+duas semanas antes contra duas depois. Hoje ele ainda é leitura manual: a linha
+na fila entre papéis (ASO para Analista, 04/11) é o que transforma isso num
+número de toda rodada, e ela está parada há 11 dias.
+
+### A condição de volta atrás
+
+Se "Ads and referrals" cair abaixo dos 34,9% de antes de 04/10 nas duas semanas
+seguintes, volta a ordem antiga, que está escrita na tabela das 8 capturas
+acima. Se ficar igual, fica: custou zero e as duas primeiras telas passam a
+dizer o que o app resolve.
