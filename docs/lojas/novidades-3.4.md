@@ -6,9 +6,11 @@ o app das lojas.
 
 **Onde a 3.4 está:** gerada em 14/11 no Codemagic pelo dono. **Android: em
 análise para PRODUÇÃO na Play** (dito pelo dono às 19h UTC de 14/11). **iPhone:
-não conferido**: a API da App Store recusou às 19h09 UTC com acordo pendente
-ou expirado (linha na lista do dono), então não sei se o build chegou ao
-TestFlight. `/api/app/latest` só sobe depois da aprovação, e o
+NÃO publicada.** Lido às 15h32 UTC de 15/11, depois de o dono assinar o
+contrato do Apple Developer Program: a última versão na App Store é a 3.3
+(READY_FOR_SALE, build 74), e não existe versão 3.4 criada na Apple. A lista de
+builds ainda responde 403 por acordo, então não sei se o build da 3.4 chegou ao
+TestFlight. A próxima versão do iPhone sai da main, já na 3.5. `/api/app/latest` só sobe depois da aprovação, e o
 `ARVORE_DO_BUILD` e o `JA_PUBLICADAS` da `conferir:versoes` também.
 
 **Árvore do build:** 93bc0c7. Instrumento: o git. A `main` ficou parada em
