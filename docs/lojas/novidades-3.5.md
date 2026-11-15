@@ -29,8 +29,43 @@ Codemagic, antes de qualquer frase sobre o que o binário tem.)
 
 ## Ficou FORA do binário, de propósito
 
+## O que muda para quem está na 3.3 do iPhone
+
+O mesmo conteúdo dos itens da 3.4 (`novidades-3.4.md`), MENOS a compra avulsa,
+que o código esconde no iPhone (`avulsaDisponivel`, cobrada pela
+`conferir:avulsa`):
+
+1. Card da aula no sintoma "Perda de força" (99889cc).
+2. O segundo pedido para salvar a garagem, para quem já tem serviço,
+   abastecimento ou aula guardados e disse "agora não" (7c52226).
+3. Os textos da Biela com o limite certo: "1/mês" na tabela de planos e
+   "1 pergunta grátis restante neste mês" (1303fc7). A 3.3 do iPhone diz
+   "3/mês" enquanto o servidor libera 1.
+4. Card da aula no sintoma "Motor falhando" (f1cea63).
+5. Card da aula no sintoma "Fumaça no escapamento" (dd38f73).
+
+O que o iPhone JÁ tem sem build, porque é servidor: o limite de 1 pergunta, o
+manual do carro na Biela, a resposta sem travessão e a contagem de recusas.
+
 ## A nota das lojas
+
+**Para a App Store (só o iPhone), SEM a frase dos pacotes**, que no iPhone
+prometeria o que o app não mostra:
+
+```
+Agora o app volta a lembrar de salvar sua garagem quando você já tem serviço, abastecimento ou aula guardados, para nada se perder se trocar de celular.
+
+Nos sintomas "Perda de força", "Motor falhando" e "Fumaça no escapamento", a aula que explica o problema está a um toque.
+```
 
 ## Plugin nativo nesta versão
 
 ## Roteiro de aparelho, escrito ANTES do build
+
+**iPhone (o build que leva a 3.4 com o nome 3.5).**
+1. Abrir os sintomas "Perda de força", "Motor falhando" e "Fumaça no
+   escapamento": cada um mostra o card da aula, e o toque abre a aula certa.
+2. Sem Premium, perguntar à Biela: aparece "1 pergunta grátis restante neste
+   mês" antes e, depois da resposta, a parede com SÓ o Premium, sem os
+   pacotes. Se os pacotes aparecerem no iPhone, é defeito e o build não sobe.
+3. Planos: a tabela diz "1/mês" para as perguntas ao Biela.
