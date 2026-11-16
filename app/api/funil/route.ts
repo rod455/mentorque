@@ -63,6 +63,8 @@ const EVENTOS_DO_APP = new Set([
   // A compra avulsa (09/11/2026). `comprou_avulsa` NÃO entra aqui: quem grava
   // a compra paga é o servidor, nunca o app.
   "viu_avulsa", "tentou_avulsa",
+  // O teste de demanda do seguro (16/11/2026): o toque e o "me avise".
+  "viu_seguro", "tocou_seguro", "quer_seguro",
   // A tela do quiz (08/10/2026): `origem` é pergunta ou ja-respondeu.
   "abriu_quiz",
   // Os desfechos que faltavam (17/10/2026): a recusa do convite de aviso, os

@@ -107,4 +107,33 @@ export async function rodar({ nav, ok }) {
   const s4 = await app4.sessaoGravada();
   ok("o estado e o final ficaram guardados para a próxima vez", s4?.state === "AC" && s4?.vehicles?.[0]?.finalDaPlaca === "3");
   await app4.fechar();
+
+  // O TESTE DE DEMANDA DO SEGURO (16/11/2026, plano de receita). O botão
+  // aparece na linha do seguro, a folha diz que a cotação ainda NÃO existe, e
+  // o "me avise" sai no funil. Os três eventos são lidos na saída do app, que
+  // é o que o banco recebe.
+  const eventos = [];
+  // A escuta liga ANTES de a página abrir: o `viu_seguro` sai na montagem da
+  // folha das datas. A primeira versão ligava depois e perdia o evento.
+  const escutar = (pg) => pg.on("request", (r) => {
+    if (!r.url().includes("/api/funil")) return;
+    try { eventos.push(JSON.parse(r.postData() ?? "{}")); } catch { /* corpo que não é JSON */ }
+  });
+  const app5 = await abrirApp(nav, { sessao: garagem({ quiz: sessao.quiz }), rota: "/app?ir=revisions", antesDeAbrir: escutar });
+  const p5 = app5.pg;
+  await p5.waitForTimeout(800);
+  ok("a linha do seguro oferece cotar", (await p5.locator("[data-cotar-seguro]").count()) === 1);
+  if (await p5.locator("[data-cotar-seguro] button").count()) {
+    await p5.locator("[data-cotar-seguro] button").click();
+    await p5.waitForTimeout(500);
+    const folha = (await p5.locator("[data-folha-seguro]").count()) ? await p5.locator("[data-folha-seguro]").innerText() : "";
+    ok("a folha diz que a cotação ainda não está pronta", /Ainda não está pronto/i.test(folha) && /Quer que a gente te avise/i.test(folha), folha.replace(/\n+/g, " | "));
+    await p5.getByRole("button", { name: /Sim, me avise/i }).click();
+    await p5.waitForTimeout(800);
+    ok("e confirma o pedido de aviso", /Combinado/i.test(await app5.corpo()));
+  }
+  const nomes = eventos.map((e) => e.evento);
+  ok("o funil recebe viu, tocou e quer seguro", ["viu_seguro", "tocou_seguro", "quer_seguro"].every((n) => nomes.includes(n)), JSON.stringify(nomes));
+  ok("nenhum erro de página no seguro", app5.erros.length === 0, app5.erros[0] ?? "");
+  await app5.fechar();
 }

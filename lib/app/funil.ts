@@ -100,6 +100,11 @@ export type EventoFunil =
   // formato (`origem` = produto). A compra paga é gravada pelo servidor.
   | "viu_avulsa"
   | "tentou_avulsa"
+  // O teste de demanda do seguro (16/11/2026, plano de receita): o toque em
+  // "Cotar meu seguro" e o "sim, me avise". `origem` = onde estava o botão.
+  | "viu_seguro"
+  | "tocou_seguro"
+  | "quer_seguro"
   // A tela do quiz abriu (08/10/2026). `origem` é "pergunta" quando a
   // pergunta do dia foi oferecida e "ja-respondeu" quando a tela disse que a
   // pessoa já respondeu hoje. Nasceu com o conserto do quiz do dia 1 (QA,
