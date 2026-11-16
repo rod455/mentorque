@@ -343,7 +343,7 @@ sem tirar ninguém dela.
 | conferência | última prova | mordeu? |
 |---|---|---|
 | `conferir:pesquisa` | no nascimento (autor), 16/11/2026 | mordeu nos três plantios: a lista de respostas aceitando qualquer valor, a pesquisa voltando para quem já respondeu e a rota gravando resposta incompleta |
-| `conferir:oferta-primeiro-dia` | no nascimento (autor), 16/11/2026 | mordeu nos dois plantios: a guarda do iPhone apagada da regra e o botão levando ao Premium com a origem errada. A suíte de navegador `oferta` mordeu no "agora não" esquecido depois de reabrir, mas só na segunda versão: a primeira recarregava a página, caía no Início e ficava CEGA |
+| `conferir:oferta-primeiro-dia` | no nascimento (autor), 16/11/2026 | mordeu nos dois plantios: a guarda do iPhone apagada da regra e o botão levando ao Premium com a origem errada. A suíte de navegador `oferta` ficou CEGA duas vezes no "agora não" esquecido: a primeira versão recarregava e caía no Início; a segunda reabria a tela do carro mas esperava 2 s e olhava a tela de entrada, e o "mordeu" daquele plantio veio da linha errada ("a tela do carro reabriu"). A bateria completa de 16/11 pegou. Com a espera da abertura, o mesmo plantio reprova na linha certa ("a oferta não volta") |
 | `conferir:catalogo-remoto` | no nascimento (autor), 11/11/2026 | mordeu nos dez plantios: pacote vazio, campos obrigatórios, aceitar antes de validar, aula agendada nos dois lados, enumerar campo a campo, limite sem ordem, contar evento em vez de aparelho, interruptor que não apaga, regravar com versão igual |
 | `conferir:baixar` | 19/09/2026 | sim |
 | `conferir:relatorio` | 19/09/2026 | sim |

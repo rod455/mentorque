@@ -9,7 +9,7 @@
 //
 // O QUE ELA NÃO ALCANÇA: o iPhone (a regra esconde a oferta lá, e isso a
 // conferência de script prova) e a compra de verdade na loja.
-import { garagem, CARRO, dia, abrirApp, BASE } from "./base.mjs";
+import { garagem, CARRO, dia, abrirApp, BASE, ESPERA_DE_ABERTURA } from "./base.mjs";
 
 export const nome = "oferta";
 export const sobre = "o Premium aparece no primeiro dia do carro, e o \"agora não\" vale para sempre";
@@ -53,8 +53,11 @@ export async function rodar({ nav, ok }) {
     // Reabre a TELA DO CARRO, e não só recarrega: o app limpa o `ir=` da URL,
     // e uma recarga simples cai no Início, onde o card nunca está. A primeira
     // versão desta linha recarregava e passou verde com o "não" esquecido.
+    // A espera é a da abertura (a tela de entrada dura segundos). A segunda
+    // versão desta linha esperava 2 s, olhava a tela de entrada e ficava
+    // cega do mesmo jeito; quem pegou foi a bateria completa de 16/11.
     await pg.goto(BASE + "/app?ir=car", { waitUntil: "domcontentloaded" });
-    await pg.waitForTimeout(2000);
+    await pg.waitForTimeout(ESPERA_DE_ABERTURA + 1500);
     ok("a tela do carro reabriu", /Golfinho/i.test(await app.corpo()));
     ok("e depois de reabrir a oferta não volta", (await pg.locator("[data-oferta-primeiro-dia]").count()) === 0);
     await app.fechar();
