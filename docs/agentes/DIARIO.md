@@ -3,6 +3,18 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-16 · Engenharia: a Apple aprovou, e o aviso do iPhone sobe para 76
+
+- O dono disse que a Apple aprovou. Lido na API da App Store Connect às 21h43
+  UTC: a versão de loja "3.4" está READY_FOR_SALE com o build 76 (binário
+  3.5, conteúdo da 3.4).
+- `/api/app/latest` passou de `ios: 74` para `ios: 76`, e
+  `BUILD_PUBLICADO["3.4"]` para `{ android: 75, ios: 76 }`. O plantio do 74
+  mordeu na `conferir:versoes`.
+- A 3.5 não entra em `JA_PUBLICADAS`: nenhuma loja tem uma versão com esse
+  nome, e o repositório já está na 3.6.
+- A conferência agendada da Apple (00h48 UTC) foi cancelada.
+
 ## 2026-11-16 · Diretor: a semana custou 56% mais por 18% menos contas, e a minha prioridade 1 nunca virou linha na lista do dono
 
 Rodada 13, janela de 09 a 15/11. Relatório publicado:

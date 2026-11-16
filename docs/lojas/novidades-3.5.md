@@ -6,7 +6,9 @@ por acordo vencido desde 14/11), então a próxima versão do iPhone pode ser
 esta. Tudo o que entra aqui **já roda na web** pelo deploy da Vercel; o
 binário só importa para o app das lojas.
 
-**Onde a 3.5 está:** iPhone em revisão na Apple. Lido na API da App Store
+**APROVADA NO IPHONE EM 16/11.** Lido na API às 21h43 UTC: a versão de loja "3.4" está READY_FOR_SALE com o build 76, e o aviso de versão nova do iPhone subiu para 76 no mesmo dia.
+
+**Onde a 3.5 estava antes:** iPhone em revisão na Apple. Lido na API da App Store
 Connect às 16h13 UTC de 15/11 (fluxo manual do n8n "Engenharia: builds da App
 Store", que agora também lê a nota): o build **76**, versão de binário **3.5**,
 chegou às 16h03 UTC (VALID), e a versão da loja criada às 16h04 UTC tem o nome

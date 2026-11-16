@@ -108,7 +108,11 @@ const LATEST = {
   // responde 403 por acordo vencido desde 14/11), e nenhum iPhone reporta
   // 3.4.0. Número alto demais aqui mandaria todo iPhone para uma versão que
   // talvez não exista na loja.
-  ios: 74, // 3.3 na App Store, aprovada em 26/10
+  // 16/11/2026: o iPhone sobe para 76. Lido na API da App Store Connect às
+  // 21h43 UTC (fluxo manual do n8n "builds da App Store"): a versão de loja
+  // "3.4" está READY_FOR_SALE com o build 76, que é o binário 3.5 (conteúdo
+  // igual ao da 3.4 do Android). Todo iPhone na 3.3 (74) passa a ver o aviso.
+  ios: 76, // "3.4" na App Store (binário 3.5), à venda desde 16/11
   // A QUAL VERSÃO DE MARKETING OS DOIS NÚMEROS ACIMA CORRESPONDEM (25/09/2026).
   //
   // Existe porque neste dia o banner NÃO acendeu, e a causa não era loja nem

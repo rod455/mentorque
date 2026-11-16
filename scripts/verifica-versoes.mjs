@@ -210,7 +210,14 @@ const BUILD_PUBLICADO = {
   // vê o aviso e nenhum na 3.4 vê, seja o número exato qual for: o lado caro
   // do erro (número ALTO demais) é impossível aqui. Se a Play mostrar outro
   // número, ele entra no lugar.
-  "3.4": { android: 75, ios: 74 },
+  //
+  // 16/11/2026: o iPhone chegou. A versão de loja "3.4" está READY_FOR_SALE
+  // com o build 76 (lido na API da App Store Connect às 21h43 UTC). O binário
+  // do iPhone diz 3.5 por dentro, porque saiu da main depois da abertura da
+  // 3.5; o conteúdo é o mesmo da 3.4 (ver docs/lojas/novidades-3.5.md). A 3.5
+  // NÃO entra em JA_PUBLICADAS: nenhuma loja tem uma versão chamada 3.5, e o
+  // repositório já está na 3.6, que é maior que o binário 3.5 da Apple.
+  "3.4": { android: 75, ios: 76 },
 };
 
 // A ÁRVORE DE CADA BUILD PUBLICADO (06/10/2026).
