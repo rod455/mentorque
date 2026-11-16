@@ -630,6 +630,12 @@ export function getContent(locale: Locale) {
       pendenciasLinha: T("{n} dado(s) faltando: {lista}", "{n} missing: {lista}"),
       pendenciasFechar: T("Mostrar menos", "Show less"),
       registrosLinha: T("{n} registros · {valor} em 12 meses", "{n} entries · {valor} in 12 months"),
+      // A oferta do primeiro dia (16/11/2026, lib/app/ofertaPrimeiroDia.ts).
+      // Cada promessa aqui é linha da tabela do Premium; nada a mais.
+      ofertaTitulo: T("Experimente o Premium por 7 dias, de graça", "Try Premium free for 7 days"),
+      ofertaCorpo: T("Plano de revisão feito para o seu {carro}, Biela sem limite e o custo de cada km. Cancele antes do 7º dia e não paga nada.", "A service plan made for your {carro}, unlimited Biela and the cost of every km. Cancel before day 7 and pay nothing."),
+      ofertaCta: T("Começar 7 dias grátis", "Start 7 free days"),
+      ofertaNao: T("Agora não", "Not now"),
       // O ESTADO VAZIO DIZ O PRÓXIMO PASSO, não o vazio (09/10/2026).
       //
       // Antes era "Nenhum serviço registrado ainda": uma constatação de

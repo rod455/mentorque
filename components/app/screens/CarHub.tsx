@@ -15,6 +15,8 @@ import { ConviteDeAviso } from "../ConviteDeAviso";
 import { consumirConviteNoCarro } from "@/lib/app/pedidoDeAviso";
 import { useAuth } from "@/lib/app/auth";
 import { healthColor } from "./Cars";
+import { CHAVE_RECUSOU, mostrarOfertaDoPrimeiroDia } from "@/lib/app/ofertaPrimeiroDia";
+import { trialPlatform } from "@/lib/app/platform";
 
 export function CarHub() {
   const c = useContent();
@@ -52,6 +54,20 @@ export function CarHub() {
   useEffect(() => {
     if (consumirConviteNoCarro(!!user)) setConvidarAviso(true);
   }, [user]);
+
+  // A OFERTA DO PRIMEIRO DIA (16/11/2026, plano de receita). A regra inteira
+  // mora em lib/app/ofertaPrimeiroDia.ts; aqui só a leitura do "agora não"
+  // (no cliente, depois de montar) e o desenho.
+  const [ofertaRecusada, setOfertaRecusada] = useState(true);
+  useEffect(() => {
+    try { setOfertaRecusada(localStorage.getItem(CHAVE_RECUSOU) === "1"); } catch { setOfertaRecusada(false); }
+  }, []);
+  const recusarOferta = () => {
+    setOfertaRecusada(true);
+    try { localStorage.setItem(CHAVE_RECUSOU, "1"); } catch { /* sem armazenamento: some só nesta sessão */ }
+  };
+  const carroDesde = s.vehicles.map((x) => x.createdAt).filter((x): x is string => !!x).sort()[0];
+  const mostrarOferta = mostrarOfertaDoPrimeiroDia({ premium: s.premium, plataforma: trialPlatform() === "ios" ? "ios" : "other", carroDesde, agora: new Date(), recusou: ofertaRecusada });
 
   const v = activeVehicle(s);
 
@@ -126,6 +142,21 @@ export function CarHub() {
             titulo={c.cars.conviteAvisoTitulo}
             corpo={c.cars.conviteAvisoCorpo.replace("{carro}", carName(v))}
           />
+        </div>
+      )}
+
+      {mostrarOferta && (
+        <div data-oferta-primeiro-dia>
+        <Card className="mt-4 ring-1 ring-amber/40">
+          <p className="font-display text-[15px] text-cream">{c.carHub.ofertaTitulo}</p>
+          <p className="mt-1 text-sm leading-relaxed text-cream/70">{c.carHub.ofertaCorpo.replace("{carro}", carName(v))}</p>
+          <Button className="mt-3 w-full" onClick={() => go({ name: "subscribe", ctx: "primeiro-dia" })}>
+            {c.carHub.ofertaCta}
+          </Button>
+          <button type="button" onClick={recusarOferta} className="mt-2 w-full py-1.5 text-center text-xs text-cream/55">
+            {c.carHub.ofertaNao}
+          </button>
+        </Card>
         </div>
       )}
 

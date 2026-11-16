@@ -25,6 +25,12 @@ Codemagic, antes de qualquer frase sobre o que o binário tem.)
    Se precisar de mais, resolva este problema por R$ 9,90, sem assinatura."
    Só onde a compra avulsa existe (não no iPhone) e só para quem não é
    Premium.
+3. **O Premium com 7 dias grátis aparece no primeiro dia do carro** (16/11,
+   plano de receita). Na tela do carro, nos 3 primeiros dias depois de
+   cadastrar, um card oferece o teste. "Agora não" o esconde para sempre. A
+   regra mora em `lib/app/ofertaPrimeiroDia.ts`. No iPhone não aparece, porque
+   a Apple ainda não tem oferta de teste. Para medir, o paywall registra a
+   origem `primeiro-dia` no `viu_paywall`.
 
 ## Ficou FORA do binário, de propósito
 
@@ -45,3 +51,9 @@ Nenhum até aqui.
 Gastar a pergunta grátis do mês: a parede mostra primeiro "Resolver este
 problema" (R$ 9,90), depois "Ou só algumas perguntas" com os dois pacotes, e
 o Premium abaixo. No iPhone, nenhuma das duas coisas aparece.
+
+**Item 3, Android sem Premium.** Cadastrar um carro novo: a tela do carro
+mostra "Experimente o Premium por 7 dias, de graça" com o nome do carro.
+"Começar 7 dias grátis" abre o Premium, e a Play mostra a oferta de teste.
+Voltar, tocar em "Agora não", fechar e abrir o app: o card não volta. No
+iPhone, cadastrar um carro não mostra o card.

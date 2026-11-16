@@ -37,6 +37,7 @@ próprio Playwright resolve. Para apontar outro: `CHROMIUM=/caminho/do/chromium`
 | `site.mjs` | vazamento lateral das páginas do site em 320/360/390/430px |
 | `sintoma.mjs` | o sintoma oferece a aula que responde ele, e o `viu_aula` grava a porta no `detalhe` (26/10/2026) |
 | `avulsa.mjs` | a parede da Biela mostra os três formatos da compra avulsa com o preço do dono, o toque chama o checkout com produto e identidade, a volta confirma a sessão certa e destranca o campo, e o cancelamento avisa sem cobrar (09/11/2026) |
+| `oferta.mjs` | a oferta do Premium com 7 dias grátis aparece na tela do carro recém-cadastrado, leva ao Premium, some de vez com "agora não" (inclusive depois de recarregar) e não aparece para carro antigo (16/11/2026, plano de receita) |
 | `pos-conta.mjs` | quem toca em assinar sem conta volta ao paywall depois do login, e a volta grava `viu_paywall` com origem `pos-conta`; roda num servidor com Supabase de mentira (`supabaseFalso`) |
 | `moto.mjs` | cadastrar uma moto: escolher o tipo, achar pelo nome do tanque, e o `type` que fica GRAVADO |
 
