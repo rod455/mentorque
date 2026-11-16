@@ -112,7 +112,10 @@ create table if not exists public.funil_eventos (
     -- 3.4 em produção, o banco recusou as oportunidades de venda caladas.
     -- `viu_avulsa` e `tentou_avulsa` vêm do app (origem = produto no toque);
     -- `comprou_avulsa` só o servidor grava.
-    'viu_avulsa', 'tentou_avulsa', 'comprou_avulsa'
+    'viu_avulsa', 'tentou_avulsa', 'comprou_avulsa',
+    -- O teste de demanda do seguro (migração funil_eventos_seguro, 16/11/2026,
+    -- plano de receita): o toque em "Cotar meu seguro" e o "sim, me avise".
+    'viu_seguro', 'tocou_seguro', 'quer_seguro'
   )),
 
   anon_id    text,

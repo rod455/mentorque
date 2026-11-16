@@ -100,7 +100,7 @@ export async function abrirNavegador() {
  * Devolve `{ pg, ctx, fechar, corpo() }`. O `corpo()` lê o texto da tela
  * inteira, que é como quase toda asserção aqui é escrita.
  */
-export async function abrirApp(nav, { sessao, chaves = {}, rota = "/app" } = {}) {
+export async function abrirApp(nav, { sessao, chaves = {}, rota = "/app", antesDeAbrir = null } = {}) {
   const ctx = await nav.newContext({ viewport: CELULAR, deviceScaleFactor: 2, locale: "pt-BR" });
 
   // O `if` é obrigatório e não é zelo: o addInitScript roda a CADA navegação,
@@ -124,6 +124,9 @@ export async function abrirApp(nav, { sessao, chaves = {}, rota = "/app" } = {})
   const pg = await ctx.newPage();
   const erros = [];
   pg.on("pageerror", (e) => erros.push(e.message));
+  // Para quem precisa escutar o que sai NA ABERTURA (um evento disparado na
+  // montagem da tela): o gancho roda com a página criada e ainda vazia.
+  if (antesDeAbrir) await antesDeAbrir(pg);
 
   await pg.goto(BASE + rota, { waitUntil: "domcontentloaded" });
   await pg.waitForTimeout(ESPERA_DE_ABERTURA);

@@ -72,6 +72,13 @@ export type EventoFunil =
   | "viu_avulsa"
   | "tentou_avulsa"
   | "comprou_avulsa"
+  // O teste de demanda do seguro (16/11/2026, plano de receita): o toque em
+  // "Cotar meu seguro" e o "sim, me avise" de quem leu que a parceria está
+  // sendo fechada. `origem` = onde estava o botão. `viu_seguro` é o
+  // denominador: sem ele, "quantos tocaram" não vira taxa.
+  | "viu_seguro"
+  | "tocou_seguro"
+  | "quer_seguro"
   // A tela do quiz abriu (08/10/2026): `origem` diz se caiu na pergunta ou no
   // "você já respondeu hoje". Nasceu com o conserto do quiz do dia 1.
   | "abriu_quiz"
@@ -149,6 +156,9 @@ export const UNIDADE: Record<EventoFunil, Unidade> = {
   // Gravado pelo servidor com a conta E o aparelho de quem foi ao Stripe: a
   // compra avulsa não exige conta.
   comprou_avulsa: "aparelho",
+  viu_seguro: "aparelho",
+  tocou_seguro: "aparelho",
+  quer_seguro: "aparelho",
   abriu_quiz: "aparelho",
   recusou_convite_aviso: "aparelho",
   // A folha da conta só aparece para quem NÃO tem conta: é do aparelho por
@@ -223,6 +233,10 @@ export const NATUREZA: Record<EventoFunil, Natureza> = {
   viu_avulsa: "sessao",
   tentou_avulsa: "sessao",
   comprou_avulsa: "ato",
+  // O toque repete (a pessoa abre a folha e fecha); o "me avise" é uma vez.
+  viu_seguro: "sessao",
+  tocou_seguro: "sessao",
+  quer_seguro: "ato",
   // Uma por dia por pessoa, no máximo, e repete amanhã: é sessão. Quem lê
   // separa pelo `origem` (pergunta ou ja-respondeu).
   abriu_quiz: "sessao",
@@ -273,6 +287,10 @@ export const MEDIDO_DESDE: Record<EventoFunil, string> = {
   viu_avulsa: "2026-11-09",
   tentou_avulsa: "2026-11-09",
   comprou_avulsa: "2026-11-09",
+  // O teste do seguro: na web em 16/11; nas lojas, com a 3.6.
+  viu_seguro: "2026-11-16",
+  tocou_seguro: "2026-11-16",
+  quer_seguro: "2026-11-16",
   // A tela do quiz: na web em 08/10; nas lojas, com a 3.2.
   abriu_quiz: "2026-10-08",
   // Os desfechos: no ar na web em 17/10; nas lojas, com a 3.2.

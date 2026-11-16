@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { datasDoCarro, estadoDaData, TIPOS_DE_DATA } from "@/lib/app/datasDoCarro";
 import { finalDaPlaca, sugestaoDeData, ufsComCalendario, type Sugestao, type TipoComCalendario } from "@/lib/app/calendarioDaPlaca";
 import { BR_STATES } from "@/lib/app/ufs";
-import { formatBRL } from "@/lib/app/content";
+import { carName, formatBRL } from "@/lib/app/content";
+import { funil } from "@/lib/app/funil";
 import { usePrototype } from "@/lib/app/store";
 import type { TipoDeData, Vehicle } from "@/lib/app/types";
 import { Button } from "@/components/ui/Button";
@@ -50,6 +51,15 @@ export function DatasDoCarro({ v }: { v: Vehicle }) {
   const [final, setFinal] = useState(v.finalDaPlaca ?? finalDaPlaca(v.plate) ?? "");
   const [sugestao, setSugestao] = useState<Sugestao | null>(null);
   const [semCalendario, setSemCalendario] = useState(false);
+  // O TESTE DE DEMANDA DO SEGURO (16/11/2026, plano de receita). Antes de o
+  // dono gastar tempo fechando parceria com corretora, mede-se quem quer:
+  // `viu_seguro` (o botão apareceu), `tocou_seguro` e `quer_seguro` (pediu
+  // aviso). A folha diz que a cotação ainda não existe; nada aqui finge.
+  const [seguroAberto, setSeguroAberto] = useState(false);
+  const [seguroPedido, setSeguroPedido] = useState(false);
+  useEffect(() => { funil("viu_seguro", { umaVez: true, origem: "datas" }); }, []);
+  const abrirSeguro = () => { funil("tocou_seguro", { origem: "datas" }); setSeguroPedido(false); setSeguroAberto(true); };
+  const pedirAvisoDoSeguro = () => { funil("quer_seguro", { umaVezPorAparelho: true, origem: "datas", detalhe: v.datas?.seguro ? "tem-data" : "sem-data" }); setSeguroPedido(true); };
   const lidas = datasDoCarro(v);
   const porTipo = new Map(lidas.map((d) => [d.tipo, d]));
 
@@ -126,6 +136,11 @@ export function DatasDoCarro({ v }: { v: Vehicle }) {
                 </span>
                 <span className="shrink-0 text-xs font-medium text-amber">{d ? br(d.em) : t.informar}</span>
               </button>
+              {tipo === "seguro" && (
+                <div className="-mt-1 mb-2" data-cotar-seguro>
+                  <button onClick={abrirSeguro} className="rounded-full bg-amber/15 px-3 py-1 text-xs font-bold text-amber">{t.seguroCotar}</button>
+                </div>
+              )}
               {sug && (
                 <div className="-mt-1 mb-2 flex items-center gap-2" data-sugestao-da-placa={tipo}>
                   <span className="min-w-0 flex-1 text-xs text-cream/55">{t.linhaSugestao.replace("{data}", br(sug.em)).replace("{estimada}", sug.estimada ? t.estimadaCurta : "")}</span>
@@ -136,6 +151,22 @@ export function DatasDoCarro({ v }: { v: Vehicle }) {
           );
         })}
       </div>
+
+      <Sheet open={seguroAberto} onClose={() => setSeguroAberto(false)}>
+        <div data-folha-seguro>
+          <h2 className="font-display text-xl font-bold text-cream">{t.seguroTitulo.replace("{carro}", carName(v))}</h2>
+          <p className="mt-2 text-sm leading-relaxed text-cream/75">{t.seguroCorpo}</p>
+          {seguroPedido ? (
+            <p className="mt-4 text-sm text-teal/90" role="status">{t.seguroCombinado}</p>
+          ) : (
+            <>
+              <p className="mt-3 text-sm text-cream/90">{t.seguroPergunta}</p>
+              <Button size="lg" className="mt-4 w-full" onClick={pedirAvisoDoSeguro}>{t.seguroSim}</Button>
+              <Button variant="ghost" className="mt-2 w-full" onClick={() => setSeguroAberto(false)}>{t.seguroNao}</Button>
+            </>
+          )}
+        </div>
+      </Sheet>
 
       <Sheet open={!!aberta} onClose={() => setAberta(null)}>
         {aberta && (

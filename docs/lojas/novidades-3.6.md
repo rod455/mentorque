@@ -31,6 +31,13 @@ Codemagic, antes de qualquer frase sobre o que o binário tem.)
    regra mora em `lib/app/ofertaPrimeiroDia.ts`. No iPhone não aparece, porque
    a Apple ainda não tem oferta de teste. Para medir, o paywall registra a
    origem `primeiro-dia` no `viu_paywall`.
+4. **"Cotar meu seguro" nas datas do carro, como teste de demanda** (16/11,
+   plano de receita). O botão fica na linha do seguro. A folha diz a
+   verdade: a cotação ainda não existe e a parceria está sendo fechada; quem
+   quiser, pede para ser avisado. Os eventos `viu_seguro`, `tocou_seguro` e
+   `quer_seguro` entraram no banco em 16/11 (migrações
+   `funil_eventos_seguro` e `funil_eventos_seguro_visto`). Na web vale desde
+   o deploy.
 
 ## Ficou FORA do binário, de propósito
 
@@ -57,3 +64,8 @@ mostra "Experimente o Premium por 7 dias, de graça" com o nome do carro.
 "Começar 7 dias grátis" abre o Premium, e a Play mostra a oferta de teste.
 Voltar, tocar em "Agora não", fechar e abrir o app: o card não volta. No
 iPhone, cadastrar um carro não mostra o card.
+
+**Item 4, qualquer aparelho.** Abrir o calendário de revisões: na linha do
+seguro aparece "Cotar meu seguro". Tocar abre a folha que diz "Ainda não está
+pronto". "Sim, me avise" mostra "Combinado". No banco, depois: `viu_seguro`,
+`tocou_seguro` e `quer_seguro` do mesmo aparelho, com a versão 3.6.0.
