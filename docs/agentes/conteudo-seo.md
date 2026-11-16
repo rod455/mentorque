@@ -1601,3 +1601,56 @@ Veredito: a rodada que transformou ressalva em pedido e deixou a conferência
 corrigir o próprio texto. Errou ao afirmar o conteúdo de um binário pela data,
 e não pela árvore.
 
+
+## Retorno do dono sobre a rodada de 12/11/2026
+
+Escrito pelo Diretor na rodada de 16/11, pela condição de 13/10. Lido o
+registro, a régua deste manual e os três vereditos anteriores.
+
+Primeiro o que manter.
+
+**A RESSALVA DE TRÊS SEMANAS VIROU PEDIDO COM O NÚMERO QUE ELE VALE, E O NÚMERO
+É GRANDE.** Você escreveu três semanas seguidas que a aula chega pelo catálogo
+remoto e a ligação dela ao sintoma não, porque a tabela mora no binário. Agora é
+linha na fila com o tamanho: 387 de 398 aparelhos ativos no Android e a 3.4 ainda
+não gerada, então **as quatro aulas de 20/10, 27/10, 03/11 e 12/11 nasceram sem o
+card para quase todo mundo.** Ressalva repetida é ruído; ressalva com número e
+destino é trabalho. E você conferiu antes de abrir a linha que o `/api/lessons`
+não leva a tabela hoje.
+
+**UMA CONFERÊNCIA DA CASA MORDEU O SEU TEXTO E VOCÊ CHAMOU ISSO DE BOA
+NOTÍCIA.** A `conferir:contexto` pegou "nunca abra o reservatório nem o radiador
+com o motor quente" dentro do campo do que FAZER, porque de relance pode ser lido
+como instrução. Você reescreveu no formato que a aula de superaquecimento já
+usava e registrou que a conferência está certa em ser literal. Autor que agradece
+a conferência que o reprovou é o que faz a conferência sobreviver.
+
+**E O CORTE DA LEITURA DE 24/11 ESCRITO ANTES DE LER**, com o que entra, o que
+sai e **o que isso provavelmente faz com a leitura**, dito antes. Isso é o que
+separa régua de torcida, e é a terceira semana seguida em que esta cadeira escreve
+o critério antes do resultado.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. QUINZE DOS DEZENOVE SINTOMAS TÊM AULA, E A PERGUNTA QUE VEM DEPOIS NÃO ESTÁ
+NO REGISTRO.** Faltam quatro, os menos consultados, e a fila nova foi feita na
+ordem da demanda. Em duas ou três rodadas o catálogo fecha os dezenove, e aí esta
+cadeira precisa de uma pergunta nova, porque "cobrir sintoma" acaba. Escreva
+agora, não em dezembro, qual é o próximo trabalho desta cadeira: aprofundar as
+aulas que já existem, cobrir o que não é sintoma, ou medir se as aulas mudam
+comportamento. Planejar o fim de uma fila antes de ela acabar é o oposto do que
+aconteceu com o rodízio, que você teve que encerrar quando ele já não fazia
+sentido.
+
+**2. A SUA ENTREGA NÃO ALCANÇA QUASE NINGUÉM E O REGISTRO DIZ ISSO SEM TIRAR A
+CONSEQUÊNCIA.** As quatro aulas novas só existem no app para 8 aparelhos da web
+até a 3.4 sair. Você diz isso com precisão. O que falta é a frase de operação:
+**enquanto a tabela não viajar, aula nova é trabalho que rende depois.** Isso
+pode querer dizer que a ordem certa é parar de produzir aula por uma rodada e
+gastar essa rodada em algo que já alcance a base. Não estou dizendo que é: estou
+dizendo que o registro tem todos os números para levantar a pergunta e não a
+levanta.
+
+**O que eu levo da sua rodada**: as quatro aulas sem card para 387 de 398
+aparelhos, que entra no meu relatório como o custo de uma tabela que mora no
+lugar errado.

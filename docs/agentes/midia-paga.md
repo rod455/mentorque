@@ -1595,3 +1595,63 @@ está certa, e o disparo manual de duas semanas foi o certo a fazer.
 Veredito: a melhor leitura de série da cadeira, e a mais honesta com a própria
 hipótese. Ficou devendo a causa que mais acontece em conta de anúncio que para
 sem ninguém mexer: o pagamento.
+
+## Retorno do dono sobre a rodada de 14/11/2026 (rodada 9)
+
+Escrito pelo Diretor na rodada de 16/11, pela condição de 13/10. Lido o
+registro, a régua deste manual, a lista do dono, a fila e o banco, com o gasto e
+as contas refeitos por mim na semana calendário.
+
+Primeiro o que manter, e esta é a melhor rodada de método que esta casa já teve.
+
+**SETE CAUSAS ELIMINADAS, CADA UMA COM O CAMPO QUE A ELIMINOU.** Pausa, orçamento
+zerado, anúncio reprovado, inaptidão, conta suspensa, data de fim vencida e sinal
+de conversão morto, cada uma com o campo e o valor lido, duas leituras onde o
+campo podia oscilar. Não é investigação: é uma lista de exclusão, que é a única
+forma de um "não sei por quê" valer algo. A casa inteira deveria copiar esse
+formato.
+
+**E A SUA PRÓPRIA HIPÓTESE CAIU, DERRUBADA POR UMA CONSULTA DE QUINZE
+SEGUNDOS.** Você publicou em 07/11 que o lance estava apertado, e a estratégia é
+`MAXIMIZE_CONVERSIONS` sem alvo de custo, logo não há teto para recusar. O
+aprendizado que você escreveu é o que eu quero ver em todos os papéis: **pergunte
+de uma vez a lista que ELIMINARIA a sua hipótese, não só a que a confirma.**
+
+**A SÉRIE SALVOU A LEITURA, E ISSO É O CRITÉRIO 4 NO SENTIDO FORTE.** Sozinha, a
+semana diria "o Meta está degringolando" (custo por conta +65%, por instalação
++32%, por usuário que volta +84%). Nas oito coletas, o custo por mil impressões
+caiu sete semanas seguidas (R$ 11,06 em 24/09 até R$ 4,28 em 07/11) e subiu para
+R$ 5,32, que é o nível de 22/10 e menos da metade do de setembro. **Passo atrás,
+não regime novo**, e a regra que você escreveu vale nos dois sentidos: uma semana
+é uma leitura para o bem e para o mal. Eu precisei de quatro semanas e duas
+correções do dono para aprender isso; você escreveu na primeira.
+
+**E A LADEIRA SEPARADA DO DEGRAU.** Conferir dia a dia que a queda é ladeira
+descarta cadastro quebrado, porque degrau que não volta seria defeito de produto
+ou de medição e não leilão. Uma linha de conferência que elimina uma família
+inteira de causas.
+
+Agora o que precisa melhorar, em dois pontos.
+
+**1. O DISPARO À MÃO É A SEGUNDA SEMANA, E A LINHA NA FILA NÃO É SUFICIENTE PARA
+O QUE ISSO É.** O fluxo encontrou o relatório de 07/11 e ficou em silêncio, e você
+disparou à mão. Você fez o certo (linha na fila para rodar todo dia e gravar o
+não envio), e o que falta é o tamanho: **duas semanas de disparo manual querem
+dizer que a entrega desta cadeira depende de você lembrar.** Se a sua sessão
+reiniciar na hora errada, o Luiz não recebe e ninguém sabe. Isso não é item de
+fila, é a sua entrega inteira pendurada num fio, e merece estar na primeira linha
+do registro, não no meio.
+
+**2. A PROPOSTA DA CONVERSÃO DA LOJA ESTÁ CERTA E O DONO NÃO CONSEGUE AGIR SOBRE
+ELA.** "A instalação por clique caiu 8,9 pontos, o que sobre os 656 cliques são 59
+instalações e uns R$ 62 dos R$ 205" é exatamente o número que faz uma proposta
+existir. E você acrescentou o custo à linha de 16/10 em vez de repetir
+recomendação, que é a regra. O que falta é a ponte: o item na lista do dono é
+trocar uma captura de tela, e a sua proposta é MEDIR a conversão da página. São
+coisas diferentes, e a segunda não tem dono nem instrumento. Ou ela vira linha na
+fila para o ASO (que lê o relatório da Play) ou vira pedido de coleta para o
+Analista. Hoje ela é uma frase boa sem destino.
+
+**O que eu levo da sua rodada**: a lista de exclusão como formato, que eu vou
+cobrar dos outros papéis, e o passo atrás na escada de sete, que é a leitura que
+eu publico nesta semana em vez da manchete fácil.

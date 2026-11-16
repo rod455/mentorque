@@ -3,6 +3,64 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-16 · Diretor: a semana custou 56% mais por 18% menos contas, e a minha prioridade 1 nunca virou linha na lista do dono
+
+Rodada 13, janela de 09 a 15/11. Relatório publicado:
+https://claude.ai/artifact/UZHk7pXoweNybEf8bAMtn1
+
+**O retrato.** Visitantes 368 contra 389, contas novas 92 contra 112 (-18%),
+carro cadastrado 188 contra 225, paywall 52 contra 49, serviço 13 e 13, Biela 26
+contra 27, todos em pessoas distintas. Gasto da semana calendário R$ 295,38
+(Google R$ 81,54, voltando de duas semanas em zero, e Meta R$ 213,84) contra
+R$ 189,37, que é +56%. Custo por conta R$ 3,21 contra R$ 1,69 na minha régua, e
+eu disse as três réguas lado a lado no relatório: R$ 4,09 na do retrato (7 dias)
+e R$ 2,36 na da Mídia (07 a 13/11, Meta contra ele mesmo). Zero assinatura ativa
+pela terceira semana, com banco e RevenueCat de acordo. Coorte de 26/10 fechada
+em 18,3% (23 de 126), série fechada de 21,1 / 11,6 / 21,4 / 14,5 / 18,3, e a de
+02/11 fecha hoje com piso de 21,4%. Atribuição de 28 dias: Facebook Ads passou a
+ser a maior origem, com 45% dos 441 cadastros, contra 35% sem origem.
+
+**A manchete não é a queda, é a série.** A Mídia desmontou a corrente (preço da
+impressão +24%, impressões -26%, instalações -29%, contas -35%: um elo só,
+propagando) e pôs oito coletas do lado: o custo por mil impressões caiu sete
+semanas seguidas, de R$ 11,06 em 24/09 a R$ 4,28 em 07/11, e subiu para R$ 5,32,
+que é o nível de 22/10. Passo atrás numa escada de sete, não regime novo.
+
+**A minha falha da rodada, critério 5.** A minha prioridade 1 de 12/11 era "DO
+DONO: aprovar ou recusar o `servico-em-tres-campos`", e ela NÃO virou linha em
+`acoes-do-dono.md`. O relatório é semanal; a lista é que conta idade todo dia.
+Dez dias parados, e quem me lembrou foi o CRO citando a espera na rodada de
+13/11. É o mesmo buraco entre as duas filas que eu mesmo achei em 20/10, no
+pedido de OneLink da Mídia: eu descobri o buraco e caí nele. A linha está posta
+com data de entrada de 06/11, porque a idade é dela e não minha.
+
+**Desfecho de um pedido que estava na fila para mim.** A Segurança levantou em
+15/11 que o veredito do ASO estava 14 dias atrasado e reprovava a bateria de
+todos os papéis. Conferido no instrumento antes de pedir qualquer coisa: ele já
+existe, escrito em 15/11 às 15h21 na sessão com o dono (commit `3f3f850`), depois
+de ela abrir a linha. Linha apagada e desfecho escrito aqui, que é a regra da
+fila.
+
+**Vereditos escritos nesta rodada**, pela condição de 13/10 (quando não existe
+até segunda, a minha rodada escreve): Mídia 14/11 e Conteúdo 12/11. Os outros
+cinco da janela saíram no dia, nas sessões com o dono: QA 11/11, CRO 13/11,
+Guardião 14/11, ASO 15/11 e Segurança 15/11. A `conferir:agentes` devolveu os
+oito manuais em zero dia depois dos dois.
+
+**A linha nova que eu abri.** A lista do dono não tem destino para decisão sem
+console, e por isso duas linhas de decisão estão etiquetadas com um painel que
+ele não precisa abrir (esta, em `vercel`, e a do modo motorista, em `n8n`).
+Pedido na fila para a Engenharia acrescentar `decisao` ao `DESTINOS`.
+
+**As três prioridades.** 1) Do dono: sim ou não ao `servico-em-tres-campos`.
+2) Engenharia: a `AULAS_DO_SINTOMA` viajar no `/api/lessons`, porque 387 dos 398
+aparelhos ativos não têm o card das quatro aulas novas. 3) Analista: pôr
+`stats/store_performance/` na coleta diária, que é o degrau que a Mídia e o ASO
+pediram no mesmo dia pelas duas pontas.
+
+**Procurado nos 43 commits da janela** antes de escrever as prioridades: nenhum
+toca a rota de catálogo no ponto da tabela de sintomas.
+
 ## 2026-11-16 · Engenharia: o plano de receita, a pedido do dono
 
 - O dono pediu um plano de receita como "última chance". O plano está no doc

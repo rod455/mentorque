@@ -599,6 +599,40 @@ credibilidade do resto, que nesta rodada estava certo.
   cinco disseram qual leitura é de que dia antes de publicar. Cruzamento que
   trata acidente comum como falha individual ensina a esconder o acidente.
 
+- 2026-11-16: **prioridade do dono que fica só no relatório não tem idade, e por
+  isso não anda.** Eu escrevi "DO DONO: aprovar ou recusar o
+  `servico-em-tres-campos`" como prioridade 1 em 12/11 e não transformei em linha
+  em `acoes-do-dono.md`. Dez dias parados, e quem me lembrou foi o CRO citando a
+  espera na rodada dele. O relatório é semanal e cobra a semana anterior; a lista
+  conta idade todo dia. É o mesmo buraco entre as duas filas que eu achei em
+  20/10 no pedido de OneLink da Mídia: eu descobri o buraco e caí nele. Regra:
+  toda prioridade do dono sai da rodada como LINHA na lista dele, com a data em
+  que a decisão nasceu e não a de hoje, e o relatório só aponta para ela.
+- 2026-11-16: **a fila a que eu mando o pedido tem que ter uma etiqueta que
+  corresponda ao pedido.** Ao pôr aquela linha, descobri que `acoes-do-dono.md`
+  não tem destino para decisão sem console, e que já havia uma segunda linha
+  assim desde 30/10 etiquetada com um painel que o dono não precisa abrir. Fila
+  sem a etiqueta certa recebe o pedido mentindo sobre o que a visita resolve, e o
+  destino existe justamente para agrupar por visita. Isso vira pedido na fila da
+  Engenharia, não gambiarra silenciosa.
+- 2026-11-16: **pergunte de uma vez a lista que ELIMINARIA a sua hipótese, não só
+  a que a confirma.** Da rodada da Mídia de 14/11, que eliminou sete causas, cada
+  uma com o campo que a eliminou, e derrubou a própria hipótese de 07/11 com uma
+  consulta de quinze segundos. Vou cobrar esse formato dos outros papéis: um "não
+  sei por quê" com sete portas fechadas vale mais que uma causa inventada.
+- 2026-11-16: **quando duas cadeiras pedem o mesmo instrumento na mesma semana, o
+  instrumento é a prioridade, não o pedido.** A Mídia (instalação por clique
+  -8,9 pontos) e o ASO (metade de quem clica não instala depois das oito telas)
+  acharam o mesmo degrau pelas duas pontas, sem uma saber da outra, e nenhuma
+  consegue medi-lo sozinha porque o relatório da Play é leitura manual. A regra
+  já estava no manual desde 02/10; esta é a primeira vez com as duas pontas tão
+  nítidas, e ela virou prioridade 3.
+- 2026-11-16: **conserto dado por fechado precisa da pergunta "chega a quem?".**
+  Eu dei o caminho do sintoma para a aula por fechado em 26/10; ele está fechado
+  só para quem tem a tabela no binário, e isso é 11 de 398 aparelhos ativos.
+  Terceira vez em seis semanas que eu fecho um conserto sem perguntar o alcance:
+  a régua de 06/10 pede instrumento e hora para afirmar estado, e alcance é parte
+  do estado.
 ## Direcionamentos do dono
 
 - Entrega às segundas, 08:00 (horário de Brasília), com notificação.
