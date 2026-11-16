@@ -12,16 +12,17 @@ data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
   dia (171 de 1.377, coortes de 05 a 26/10), e quem usa a Biela volta tanto
   quanto os outros (8 de 85). A receita tem de vir de onde o dono de carro
   velho já gasta: o conserto, o seguro, o IPVA e a peça.
-- **Quatro frentes:**
-  1. o trilho de pagamento (avulsa pela Play com Pix, um preço só, teste
-     grátis no iPhone);
-  2. o passe vira "Resolver este problema", mais o Premium no fim do
+- **Três frentes:**
+  1. o passe vira "Resolver este problema", mais o Premium no fim do
      cadastro;
-  3. parceiros (IPVA 2027, seguro, afiliados);
-  4. dez conversas e uma pesquisa no app.
+  2. parceiros (IPVA 2027, seguro, afiliados);
+  3. dez conversas e uma pesquisa no app.
+- **Decisão do dono (16/11):** o meio de pagamento (Play ou Stripe) não é
+  problema enquanto ninguém compra. Ele saiu do plano, e não se volta a
+  levantar esse ponto.
 - **A régua:** receita em 60 dias por aparelho novo contra o custo da mídia
   por aparelho novo (R$ 0,60 a R$ 0,80). Os portões são 16/12 e 14/02/2027.
-- **O que nada disso é:** decisão. As oito decisões estão no doc e são do dono.
+- **O que nada disso é:** decisão. As seis decisões estão no doc e são do dono.
   Nenhum código foi mudado.
 - **Limite da pesquisa:** os números de fora vêm do resumo do buscador. A rede
   da sessão bloqueou a leitura das páginas inteiras.
