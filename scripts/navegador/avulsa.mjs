@@ -72,7 +72,11 @@ async function comprarEVoltar(nav, ok) {
   const parede = await app.corpo();
   ok("gasta a grátis, a parede aparece com a folha avulsa", (await pg.locator("[data-compra-avulsa]").count()) === 1);
   ok("com os três formatos", (await pg.locator('[data-avulsa="pacote_2"]').count()) === 1 && (await pg.locator('[data-avulsa="pacote_10"]').count()) === 1 && (await pg.locator('[data-avulsa="passe_7d"]').count()) === 1);
-  ok("e os preços do dono", /R\$ 1,90/.test(parede) && /R\$ 4,90/.test(parede) && /R\$ 9,90/.test(parede), parede.slice(parede.indexOf("Ou pague"), parede.indexOf("Ou pague") + 160).replace(/\n+/g, " | "));
+  ok("e os preços do dono", /R\$ 1,90/.test(parede) && /R\$ 4,90/.test(parede) && /R\$ 9,90/.test(parede), parede.slice(parede.indexOf("Sem assinatura"), parede.indexOf("Sem assinatura") + 160).replace(/\n+/g, " | "));
+  // 16/11/2026, plano de receita: o passe é "Resolver este problema" e vem
+  // PRIMEIRO, antes dos pacotes. A ordem se lê no DOM, não no texto.
+  const ordem = await pg.$$eval("[data-avulsa]", (els) => els.map((e) => e.getAttribute("data-avulsa")));
+  ok("o passe vem primeiro, como \"Resolver este problema\"", ordem[0] === "passe_7d" && /Resolver este problema/.test(parede), JSON.stringify(ordem));
   ok("e o Premium continua logo abaixo", (await pg.locator('[data-premium="biela"]').count()) === 1);
   // Preço que quebra em duas linhas ("R$" numa, "9,90" na outra) foi visto na
   // foto de 14/11, no passe. Conta as LINHAS do texto, por um Range: o preço é

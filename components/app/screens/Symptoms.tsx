@@ -14,6 +14,8 @@ import { useNav } from "@/lib/app/nav";
 import { Button } from "@/components/ui/Button";
 import { AppHeader, Card, Icon, inputCls, Linha, LockedCard, PremiumBadge, RecoBadge, SeverityDot, Sheet, UpgradeBanner, useContent } from "../ui";
 import { AdOverlay, adsEnabled } from "../AdGate";
+import { PRECO_NA_TELA } from "../CompraAvulsa";
+import { avulsaDisponivel } from "@/lib/app/compraAvulsa";
 import { ItemRow } from "../estudos/ItemDeAula";
 import { canShowAd, markAdShown, registerContentOpen } from "@/lib/app/adPolicy";
 
@@ -545,6 +547,14 @@ export function SymptomDetail({ id }: { id: string }) {
           >
             🐻 {ui.diagnoseWithBiela}
           </Button>
+          {/* O preço do problema dito ANTES da parede (16/11/2026, plano de
+              receita): quem está com o carro dando sinal lê aqui que existe
+              um jeito de resolver sem assinar. Só onde a compra avulsa existe. */}
+          {!s.premium && avulsaDisponivel() && (
+            <p className="mt-2 text-center text-xs text-cream/55" data-preco-do-problema>
+              {ui.bielaSemAssinatura.replace("{preco}", PRECO_NA_TELA.passe_7d)}
+            </p>
+          )}
         </Card>
       )}
 

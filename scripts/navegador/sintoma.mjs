@@ -42,6 +42,12 @@ export async function rodar({ nav, ok }) {
   const textoDoCard = (await card.count()) ? await card.innerText() : "";
   ok("e o card traz a aula de freio", /Freio: os avisos que vêm antes do barulho/i.test(textoDoCard), textoDoCard.slice(0, 120).replace(/\n/g, " "));
 
+  // 1b. O preço de resolver sem assinar, dito antes da parede (16/11/2026,
+  //     plano de receita). Na web a compra avulsa existe, então a linha aparece.
+  const nota = pg.locator("[data-preco-do-problema]");
+  const textoDaNota = (await nota.count()) ? await nota.innerText() : "";
+  ok("o sintoma diz quanto custa resolver sem assinar", /resolva este problema por R\$ 9,90, sem assinatura/i.test(textoDaNota), textoDaNota);
+
   // 2. Tocar abre o leitor, e o evento sai com a porta.
   if ((await card.count()) === 1) {
     await card.getByRole("button").first().click();

@@ -24,7 +24,7 @@ import { veiculos } from "./conteudo/veiculos";
 //
 // Por isso `npm run conferir` agora reprova se este número divergir do
 // versionName do Android e do MARKETING_VERSION do iOS (scripts/verifica-versoes.mjs).
-export const APP_VERSION = "3.5.0";
+export const APP_VERSION = "3.6.0";
 
 export function formatBRL(n: number): string {
   return "R$ " + Math.round(n).toLocaleString("pt-BR");
@@ -684,6 +684,8 @@ export function getContent(locale: Locale) {
       yes: T("Sim", "Yes"),
       no: T("Não", "No"),
       diagnoseWithBiela: T("Aprofundar diagnóstico com o Biela", "Deepen the diagnosis with Biela"),
+      // O preço vem de PRECO_NA_TELA (o mesmo que o checkout cobra), nunca daqui.
+      bielaSemAssinatura: T("1 pergunta grátis por mês. Se precisar de mais, resolva este problema por {preco}, sem assinatura.", "1 free question a month. Need more? Solve this problem for {preco}, no subscription."),
       detailIntro: T("Veja o que pode ser, a urgência e quanto deve custar, e chegue na oficina sabendo o que pedir.", "See what it could be, how urgent it is and what it should cost, and walk into the shop knowing what to ask."),
       testesTitle: T("Confira você mesmo, antes de ir", "Check it yourself, before you go"),
       testesSub: T("Leva minutos, não precisa de ferramenta e já estreita o problema.", "Takes minutes, needs no tools, and narrows the problem down."),
@@ -1826,11 +1828,15 @@ export function getContent(locale: Locale) {
       // lib/avulsa/direito.ts. O valor aparece aqui por extenso porque a
       // folha não consulta preço em lugar nenhum: o checkout cobra o mesmo
       // número, e conferir:avulsa cobra que os dois batem.
-      avulsaTitulo: T("Ou pague só pelo que precisar, sem assinatura", "Or pay only for what you need, no subscription"),
+      // 16/11/2026, plano de receita: o passe vira o produto do MOMENTO do
+      // problema ("Resolver este problema") e vem primeiro; os pacotes ficam
+      // como a opção menor. Preço e o que libera não mudaram (direito.ts).
+      avulsaTitulo: T("Sem assinatura: pague só por este problema", "No subscription: pay only for this problem"),
       avulsaPacote2: T("2 perguntas", "2 questions"),
       avulsaPacote10: T("10 perguntas", "10 questions"),
-      avulsaPasse: T("Passe de 7 dias", "7-day pass"),
-      avulsaPasseSub: T("Biela e análise de orçamento sem limite por 7 dias", "Unlimited Biela and quote analysis for 7 days"),
+      avulsaPasse: T("Resolver este problema", "Solve this problem"),
+      avulsaPasseSub: T("7 dias de Biela sem limite. Pergunte tudo e confira o orçamento da oficina antes de pagar.", "7 days of unlimited Biela. Ask everything and check the shop's quote before you pay."),
+      avulsaOuPerguntas: T("Ou só algumas perguntas", "Or just a few questions"),
       avulsaPacoteSub: T("Sem prazo para usar", "No deadline to use them"),
       avulsaAbrindo: T("Abrindo o pagamento…", "Opening checkout…"),
       avulsaErro: T("Não consegui abrir o pagamento agora. Tente de novo em instantes.", "Couldn't open checkout right now. Please try again shortly."),

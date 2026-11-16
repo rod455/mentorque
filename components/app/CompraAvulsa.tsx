@@ -58,16 +58,13 @@ export function CompraAvulsa({ aviso }: { aviso?: string | null }) {
   return (
     <div className="mb-2 rounded-2xl bg-graphite-800/60 p-3.5 ring-1 ring-white/10" data-compra-avulsa>
       <p className="mb-2.5 text-center text-sm font-medium text-cream">{c.biela.avulsaTitulo}</p>
-      <div className="flex gap-2">
-        {botao("pacote_2", c.biela.avulsaPacote2)}
-        {botao("pacote_10", c.biela.avulsaPacote10)}
-      </div>
-      <p className="mt-1 text-center text-[11px] text-cream/50">{c.biela.avulsaPacoteSub}</p>
+      {/* O passe primeiro (16/11/2026): é o produto do momento do problema,
+          "Resolver este problema". Os pacotes vêm abaixo, como a opção menor. */}
       <button
         data-avulsa="passe_7d"
         onClick={() => void comprar("passe_7d")}
         disabled={!!abrindo}
-        className="mt-2.5 flex w-full items-center justify-between rounded-xl bg-graphite-800 px-3.5 py-2.5 text-left ring-1 ring-amber/30 transition active:scale-[0.98] disabled:opacity-50"
+        className="flex w-full items-center justify-between rounded-xl bg-graphite-800 px-3.5 py-3 text-left ring-1 ring-amber/50 transition active:scale-[0.98] disabled:opacity-50"
       >
         <span>
           <span className="block text-sm font-semibold text-cream">{c.biela.avulsaPasse}</span>
@@ -77,6 +74,12 @@ export function CompraAvulsa({ aviso }: { aviso?: string | null }) {
             linha e o "9,90" na outra, porque o texto do passe ocupava a largura. */}
         <span className="shrink-0 whitespace-nowrap pl-3 text-sm font-semibold text-amber" data-preco>{PRECO_NA_TELA.passe_7d}</span>
       </button>
+      <p className="mb-1.5 mt-3 text-center text-[11px] text-cream/50">{c.biela.avulsaOuPerguntas}</p>
+      <div className="flex gap-2">
+        {botao("pacote_2", c.biela.avulsaPacote2)}
+        {botao("pacote_10", c.biela.avulsaPacote10)}
+      </div>
+      <p className="mt-1 text-center text-[11px] text-cream/50">{c.biela.avulsaPacoteSub}</p>
       {(abrindo || erro || aviso) && (
         <p className="mt-2 text-center text-xs text-cream/70" role="status">
           {abrindo ? c.biela.avulsaAbrindo : erro ? c.biela.avulsaErro : aviso}
