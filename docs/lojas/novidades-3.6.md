@@ -1,8 +1,8 @@
 # Novidades da versão 3.6
 
 Aberta em 16/11/2026, junto com o plano de receita do dono. É a próxima versão
-das DUAS lojas: o iPhone já tem um binário 3.5 na Apple (build 76, em revisão
-com o nome de loja "3.4"), então o próximo envio do iPhone precisa de número
+das DUAS lojas: o iPhone já tem um binário 3.5 na Apple (build 76, à venda desde
+16/11 com o nome de loja "3.4"), então o próximo envio do iPhone precisa de número
 de binário maior. A 3.5 nunca foi gerada para o Android, e o Android pula
 direto para a 3.6. Tudo o que entra aqui **já roda na web** pelo deploy da
 Vercel; o binário só importa para o app das lojas.
@@ -17,28 +17,29 @@ Codemagic, antes de qualquer frase sobre o que o binário tem.)
 ### Vai no binário, e a pessoa sente
 
 1. **O passe vira "Resolver este problema" e vem primeiro na parede da Biela**
-   (16/11, plano de receita). Preço e o que libera não mudaram (R$ 9,90, 7
+   (16/11, commit 16450d1, plano de receita). Preço e o que libera não mudaram (R$ 9,90, 7
    dias de Biela e orçamento sem limite). Os pacotes de 2 e 10 perguntas vêm
    abaixo, como a opção menor.
-2. **A tela do sintoma diz o preço de resolver sem assinar** (16/11), embaixo
+2. **A tela do sintoma diz o preço de resolver sem assinar** (16/11, commit
+   16450d1), embaixo
    do botão "Aprofundar diagnóstico com o Biela": "1 pergunta grátis por mês.
    Se precisar de mais, resolva este problema por R$ 9,90, sem assinatura."
    Só onde a compra avulsa existe (não no iPhone) e só para quem não é
    Premium.
 3. **O Premium com 7 dias grátis aparece no primeiro dia do carro** (16/11,
-   plano de receita). Na tela do carro, nos 3 primeiros dias depois de
+   commit 7f94150, plano de receita). Na tela do carro, nos 3 primeiros dias depois de
    cadastrar, um card oferece o teste. "Agora não" o esconde para sempre. A
    regra mora em `lib/app/ofertaPrimeiroDia.ts`. No iPhone não aparece, porque
    a Apple ainda não tem oferta de teste. Para medir, o paywall registra a
    origem `primeiro-dia` no `viu_paywall`.
 4. **"Cotar meu seguro" nas datas do carro, como teste de demanda** (16/11,
-   plano de receita). O botão fica na linha do seguro. A folha diz a
+   commit cd415fc, plano de receita). O botão fica na linha do seguro. A folha diz a
    verdade: a cotação ainda não existe e a parceria está sendo fechada; quem
    quiser, pede para ser avisado. Os eventos `viu_seguro`, `tocou_seguro` e
    `quer_seguro` entraram no banco em 16/11 (migrações
    `funil_eventos_seguro` e `funil_eventos_seguro_visto`). Na web vale desde
    o deploy.
-5. **A pesquisa curta no Início** (16/11, plano de receita). Quem começou a
+5. **A pesquisa curta no Início** (16/11, commit 8236a08, plano de receita). Quem começou a
    usar há 3 dias ou mais vê, uma vez, um card com 4 perguntas: o teste de
    Sean Ellis, quanto gastou com o carro em 3 meses, se tem seguro e quanto
    pagaria por "Resolver este problema", mais um campo livre. As respostas vão
@@ -51,11 +52,37 @@ Codemagic, antes de qualquer frase sobre o que o binário tem.)
 
 ## A nota das lojas
 
-(escrever quando a lista fechar)
+Pela regra da casa: o ganho, não o defeito; o verbo na ação da pessoa; nada
+que não tenha sido conferido. A pesquisa fica fora: não é ganho para quem lê
+a loja. O seguro entra só como "peça para ser avisado", porque a cotação
+ainda não existe.
+
+**Para a Play (Android):**
+
+```
+Carro dando sinal? Agora dá para resolver o problema com a Biela por 7 dias, sem assinatura, e conferir o orçamento da oficina antes de pagar.
+
+Acabou de cadastrar o carro? Experimente o Premium por 7 dias, de graça.
+
+Nas datas do carro, peça para ser avisado quando a cotação de seguro estiver disponível no app.
+```
+
+**Para a App Store (iPhone)**, sem as duas primeiras frases, porque a compra
+avulsa e a oferta de teste não aparecem no iPhone:
+
+```
+Nas datas do carro, peça para ser avisado quando a cotação de seguro estiver disponível no app.
+```
+
+Na Apple, a versão nova se cria no App Store Connect com o MESMO número do
+binário: **3.6**. A 3.4 da loja levou o binário 3.5, e essa diferença não
+deve se repetir.
 
 ## Plugin nativo nesta versão
 
-Nenhum até aqui.
+Nenhum. De `android/`, `ios/`, `capacitor.config.ts` e `package-lock.json`,
+desde a árvore da 3.4 (93bc0c7), mudaram só os números de versão (3.6 e o piso
+76). Conferido no git em 16/11.
 
 ## Roteiro de aparelho, escrito ANTES do build
 
