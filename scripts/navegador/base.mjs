@@ -117,6 +117,10 @@ export async function abrirApp(nav, { sessao, chaves = {}, rota = "/app", antesD
       // (calendário, telas) abriria com a folha por cima da tela que a suíte
       // quer olhar. Quem quer o repique passa a chave vazia (ver conta.mjs).
       localStorage.setItem("mq-conta-repique", "1");
+      // A pesquisa curta do Início já respondida, em toda suíte (16/11/2026):
+      // quase toda sessão semeada começou há mais de 3 dias e veria o card.
+      // Quem quer a pesquisa passa a chave vazia (ver pesquisa.mjs).
+      localStorage.setItem("mentorque.pesquisaReceita", "1");
       for (const [k, v] of Object.entries(c)) localStorage.setItem(k, v);
     } catch { /* modo privado */ }
   }, [sessao ?? null, chaves]);

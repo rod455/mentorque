@@ -38,6 +38,12 @@ Codemagic, antes de qualquer frase sobre o que o binário tem.)
    `quer_seguro` entraram no banco em 16/11 (migrações
    `funil_eventos_seguro` e `funil_eventos_seguro_visto`). Na web vale desde
    o deploy.
+5. **A pesquisa curta no Início** (16/11, plano de receita). Quem começou a
+   usar há 3 dias ou mais vê, uma vez, um card com 4 perguntas: o teste de
+   Sean Ellis, quanto gastou com o carro em 3 meses, se tem seguro e quanto
+   pagaria por "Resolver este problema", mais um campo livre. As respostas vão
+   para `pesquisa_respostas` (tabela criada em 16/11, RLS sem política) pela
+   rota `/api/pesquisa`. Na web vale desde o deploy.
 
 ## Ficou FORA do binário, de propósito
 
@@ -69,3 +75,8 @@ iPhone, cadastrar um carro não mostra o card.
 seguro aparece "Cotar meu seguro". Tocar abre a folha que diz "Ainda não está
 pronto". "Sim, me avise" mostra "Combinado". No banco, depois: `viu_seguro`,
 `tocou_seguro` e `quer_seguro` do mesmo aparelho, com a versão 3.6.0.
+
+**Item 5, aparelho que usa o app há mais de 3 dias.** O Início mostra "4
+perguntas rápidas". Responder as quatro liga o Enviar; enviar agradece e o
+card não volta. No banco, depois: uma linha em `pesquisa_respostas` com a
+plataforma e a versão 3.6.0.

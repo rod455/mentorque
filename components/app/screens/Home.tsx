@@ -8,6 +8,7 @@ import { brlCentavos } from "./Abastecimento";
 import { dataParaOInicio } from "@/lib/app/datasDoCarro";
 import { mesAnterior, nomeDoMes, resumoDoMes } from "@/lib/app/resumoDoMes";
 import { quandoVence } from "../DatasDoCarro";
+import { PesquisaCurta } from "../PesquisaCurta";
 import type { Vehicle } from "@/lib/app/types";
 import { personalScore, vehicleSituations, vehicleTraits } from "@/lib/app/traits";
 import type { ServiceRecord } from "@/lib/app/types";
@@ -401,6 +402,10 @@ export function HomeScreen() {
           )}
         </div>
       )}
+
+      {/* A pesquisa curta (16/11/2026, plano de receita): só para quem já
+          voltou ao app, uma vez. Ver lib/pesquisa/perguntas.ts. */}
+      <PesquisaCurta comecouEm={s.startedAt} />
 
       <div className="mt-3">
         {/* 5. O carro, numa linha: rótulo, nome, estado, seta. A saúde é a

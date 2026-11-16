@@ -1044,6 +1044,32 @@ export function getContent(locale: Locale) {
     // seguro e CNH, no calendário de revisões, no Início a 30 dias, e como
     // aviso 30, 7 e 1 dia antes. Onde entra e por quê: docs/agentes/propostas/
     // rotina-do-carro.md.
+    // A pesquisa curta (16/11/2026, plano de receita; lib/pesquisa/perguntas.ts).
+    // As chaves das opções são as mesmas que a rota aceita e o banco guarda.
+    pesquisa: {
+      titulo: T("4 perguntas rápidas para melhorar o app", "4 quick questions to improve the app"),
+      sub: T("Leva 30 segundos. Ajuda a decidir o que fazer a seguir no Mentorque.", "Takes 30 seconds. Helps us decide what to build next."),
+      abrir: T("Responder", "Answer"),
+      agoraNao: T("Agora não", "Not now"),
+      perguntas: {
+        sentir: T("Se o Mentorque deixasse de existir amanhã, como você se sentiria?", "If Mentorque disappeared tomorrow, how would you feel?"),
+        gasto: T("Quanto você gastou com o carro (oficina e peças) nos últimos 3 meses?", "How much did you spend on your car (shop and parts) in the last 3 months?"),
+        seguro: T("Seu carro tem seguro?", "Is your car insured?"),
+        preco: T("Para resolver um problema do carro com a Biela, sem limite por 7 dias, quanto você pagaria?", "To solve a car problem with Biela, unlimited for 7 days, how much would you pay?"),
+      },
+      opcoes: {
+        sentir: { muito: T("Muito decepcionado", "Very disappointed"), pouco: T("Um pouco decepcionado", "Somewhat disappointed"), nada: T("Não faria diferença", "Wouldn't matter") },
+        gasto: { nada: T("Nada", "Nothing"), ate500: T("Até R$ 500", "Up to R$ 500"), ate2000: T("De R$ 500 a R$ 2.000", "R$ 500 to R$ 2,000"), mais: T("Mais de R$ 2.000", "Over R$ 2,000") },
+        seguro: { sim: T("Sim", "Yes"), nao: T("Não", "No"), naosei: T("Não sei", "Not sure") },
+        preco: { nada: T("Não pagaria", "Wouldn't pay"), ate5: T("Até R$ 5", "Up to R$ 5"), ate10: T("Até R$ 10", "Up to R$ 10"), ate20: T("Até R$ 20", "Up to R$ 20"), mais: T("Mais de R$ 20", "Over R$ 20") },
+      },
+      livre: T("O que faria você pagar pelo app? (opcional)", "What would make you pay for the app? (optional)"),
+      enviar: T("Enviar", "Send"),
+      enviando: T("Enviando…", "Sending…"),
+      erro: T("Não consegui enviar agora. Tente de novo em instantes.", "Couldn't send right now. Please try again shortly."),
+      obrigado: T("Obrigado! Sua resposta já está com a gente.", "Thanks! We've got your answer."),
+    },
+
     datasDoCarro: {
       titulo: T("Datas do carro", "Car dates"),
       sub: T("Informe uma vez. O app avisa 30, 7 e 1 dia antes.", "Set them once. The app warns 30, 7 and 1 day before."),

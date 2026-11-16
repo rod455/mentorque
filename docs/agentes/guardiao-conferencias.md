@@ -342,6 +342,7 @@ sem tirar ninguém dela.
 
 | conferência | última prova | mordeu? |
 |---|---|---|
+| `conferir:pesquisa` | no nascimento (autor), 16/11/2026 | mordeu nos três plantios: a lista de respostas aceitando qualquer valor, a pesquisa voltando para quem já respondeu e a rota gravando resposta incompleta |
 | `conferir:oferta-primeiro-dia` | no nascimento (autor), 16/11/2026 | mordeu nos dois plantios: a guarda do iPhone apagada da regra e o botão levando ao Premium com a origem errada. A suíte de navegador `oferta` mordeu no "agora não" esquecido depois de reabrir, mas só na segunda versão: a primeira recarregava a página, caía no Início e ficava CEGA |
 | `conferir:catalogo-remoto` | no nascimento (autor), 11/11/2026 | mordeu nos dez plantios: pacote vazio, campos obrigatórios, aceitar antes de validar, aula agendada nos dois lados, enumerar campo a campo, limite sem ordem, contar evento em vez de aparelho, interruptor que não apaga, regravar com versão igual |
 | `conferir:baixar` | 19/09/2026 | sim |
