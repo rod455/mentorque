@@ -1,49 +1,49 @@
 # Retrato diario da operacao Mentorque
 
-Gerado pelo Analista de Dados (n8n) em 2026-11-16T09:00:10.295Z.
+Gerado pelo Analista de Dados (n8n) em 2026-11-17T09:00:10.241Z.
 NAO editar a mao. Metodo de leitura: docs/agentes/skills/analise-da-operacao.md.
 COMO LER: linha marcada PARCIAL ou AINDA NAO DA PARA LER nao e resultado,
 e so cresce ate a janela fechar. Auditoria das medidas em
 docs/dados/auditoria-das-medidas.md.
 
 ## MARKETING (gente chegando)
-- Semana corrente (PARCIAL, ainda enche) (2026-11-16): aberturas 24, visitantes 20, cadastros 9
+- Semana corrente (PARCIAL, ainda enche) (2026-11-16): aberturas 99, visitantes 82, cadastros 27
 - Semana anterior (FECHADA) (2026-11-09): aberturas 508, visitantes 366, cadastros 82
-- Cadastros 28d via Facebook Ads / Lançamento Mentorque: 199 (45% dos 441)
-- Cadastros 28d via (direto) / (sem campanha): 153 (35% dos 441)
-- Cadastros 28d via organico / (sem campanha): 58 (13% dos 441)
-- Cadastros 28d via googleadwords_int / APP | Android | Instalações | BR: 20 (5% dos 441)
-- Cadastros 28d via restricted / (sem campanha): 11 (2% dos 441)
-- Gasto de midia 7d: Meta 213.84 + Google 121.65 = 335.49
-- CAC bruto (gasto dos ultimos 7 dias / cadastros da ultima semana FECHADA, 2026-11-09): 4.09
-- A semana corrente tem 9 cadastros e ainda esta aberta: nao serve de denominador
-- Busca Google 28d: 3 cliques, 51 impressoes
-- YouTube (acumulado desde o canal existir, NAO e janela): 24 inscritos, 147792 views totais, 10 videos recentes
+- Cadastros 28d via Facebook Ads / Lançamento Mentorque: 209 (47% dos 447)
+- Cadastros 28d via (direto) / (sem campanha): 142 (32% dos 447)
+- Cadastros 28d via organico / (sem campanha): 59 (13% dos 447)
+- Cadastros 28d via googleadwords_int / APP | Android | Instalações | BR: 25 (6% dos 447)
+- Cadastros 28d via restricted / (sem campanha): 12 (3% dos 447)
+- Gasto de midia 7d: Meta 208.00 + Google 141.48 = 349.48
+- CAC bruto (gasto dos ultimos 7 dias / cadastros da ultima semana FECHADA, 2026-11-09): 4.26
+- A semana corrente tem 27 cadastros e ainda esta aberta: nao serve de denominador
+- Busca Google 28d: 3 cliques, 52 impressoes
+- YouTube (acumulado desde o canal existir, NAO e janela): 24 inscritos, 152155 views totais, 10 videos recentes
   - RESSALVA: estas views NAO separam pago de organico, e ha campanha de app rodando no YouTube desde 20/09. Nao leia gancho nem titulo a partir daqui.
 
 ## ENGAJAMENTO (gente usando e voltando)
-- Semana corrente (PARCIAL, ainda enche) (2026-11-16): 11 usuarios ativos, 14 aberturas (1.3 por usuario)
+- Semana corrente (PARCIAL, ainda enche) (2026-11-16): 73 usuarios ativos, 89 aberturas (1.2 por usuario)
 - Semana anterior (FECHADA) (2026-11-09): 368 usuarios ativos, 510 aberturas (1.4 por usuario)
-- Retencao, coorte 2026-11-16: 4 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-11-30; hoje sao 0, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-12-23; hoje sao 0, PISO)
-- Retencao, coorte 2026-11-09: 86 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-11-23; hoje sao 8, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-12-16; hoje sao 0, PISO)
-- Retencao, coorte 2026-11-02: 103 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-11-16; hoje sao 22, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-12-09; hoje sao 5, PISO)
-- Retencao, coorte 2026-10-26: 126 cadastrados, 23 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-12-02; hoje sao 14, PISO)
-- Ativacao, coorte 2026-11-16: AINDA NAO DA PARA LER (a janela fecha em 2026-11-30; hoje sao 2 de 4, PISO)
+- Retencao, coorte 2026-11-16: 22 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-11-30; hoje sao 0, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-12-23; hoje sao 0, PISO)
+- Retencao, coorte 2026-11-09: 86 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-11-23; hoje sao 10, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-12-16; hoje sao 0, PISO)
+- Retencao, coorte 2026-11-02: 103 cadastrados, 22 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-12-09; hoje sao 7, PISO)
+- Retencao, coorte 2026-10-26: 126 cadastrados, 23 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-12-02; hoje sao 15, PISO)
+- Ativacao, coorte 2026-11-16: AINDA NAO DA PARA LER (a janela fecha em 2026-11-30; hoje sao 6 de 22, PISO)
 - Ativacao, coorte 2026-11-09: AINDA NAO DA PARA LER (a janela fecha em 2026-11-23; hoje sao 35 de 86, PISO)
-- Ativacao, coorte 2026-11-02: AINDA NAO DA PARA LER (a janela fecha em 2026-11-16; hoje sao 38 de 103, PISO)
+- Ativacao, coorte 2026-11-02: 38 de 103 fizeram algo de valor alem do carro em 7 dias (regua de 17/10, comparavel desde a coorte de 28/09)
 - Ativacao, coorte 2026-10-26: 66 de 126 fizeram algo de valor alem do carro em 7 dias (regua de 17/10, comparavel desde a coorte de 28/09)
-- Erros no app: 16 relatos no app em 7 dias; 11 de defeito em 9 aparelho(s); 5 de desistencia (a pessoa fechou o login, NAO e falha); 0 de ambiente (sem rede). 9 de 438 aparelhos ativos com defeito (2.1%) [ativos: android 420, web 11, ios 6, teste 1]
-  - Sem alarme, e o motivo: 9 de 438 aparelhos com defeito (2.1%), abaixo do teto de 10%
-  - 3x em 3 aparelho(s): login nativo google: Google Sign-In cancelled by user ([16] Cancelled by user.) package=mentorque.app signingSha1=E5:1C:
-  - 2x em 2 aparelho(s): app fechou sozinho em: tela: home
-  - 2x em 2 aparelho(s): push: o sistema recusou o registro: java.util.concurrent.ExecutionException: java.io.IOException: SERVICE_NOT_AVAILABLE
-- Perguntas ao Biela: 234 em 30 dias, 177 com palavras da pessoa e 41 de atalho da tela (atalho NAO e demanda, e a ordem dos nossos botoes). Temas do que a pessoa escreveu: outro 65, motor 40, eletrica 22, freios 13, combustivel 9
-  - Temas, PALAVRAS DA PESSOA: outro 65, motor 40, eletrica 22, freios 13, combustivel 9, cambio 7
-  - Temas de ATALHO da tela (isto mede a nossa tela, nao a demanda): motor 16, freios 9, manutencao 9, outro 4
-  - Etiquetadas: 2 de quem e Premium, 232 do gratuito (a etiqueta comecou em 2026-09-29)
-  - Votos no polegar: 45 (43 positivos, 2 negativos)
+- Erros no app: 20 relatos no app em 7 dias; 14 de defeito em 12 aparelho(s); 6 de desistencia (a pessoa fechou o login, NAO e falha); 0 de ambiente (sem rede). 12 de 450 aparelhos ativos com defeito (2.7%) [ativos: android 428, web 16, ios 5, teste 1]
+  - Sem alarme, e o motivo: 12 de 450 aparelhos com defeito (2.7%), abaixo do teto de 10%
+  - 4x em 4 aparelho(s): app fechou sozinho em: tela: home
+  - 3x em 3 aparelho(s): push: o sistema recusou o registro: java.util.concurrent.ExecutionException: java.io.IOException: SERVICE_NOT_AVAILABLE
+  - 2x em 2 aparelho(s): login nativo google: Google Sign-In cancelled by user ([16] User cancelled during add account flow and accounts were pre
+- Perguntas ao Biela: 218 em 30 dias, 163 com palavras da pessoa e 40 de atalho da tela (atalho NAO e demanda, e a ordem dos nossos botoes). Temas do que a pessoa escreveu: outro 57, motor 40, eletrica 21, freios 12, combustivel 9
+  - Temas, PALAVRAS DA PESSOA: outro 57, motor 40, eletrica 21, freios 12, combustivel 9, cambio 5
+  - Temas de ATALHO da tela (isto mede a nossa tela, nao a demanda): motor 16, manutencao 9, freios 8, outro 4
+  - Etiquetadas: 2 de quem e Premium, 216 do gratuito (a etiqueta comecou em 2026-09-29)
+  - Votos no polegar: 39 (37 positivos, 2 negativos)
   - Historico pelos votos (so quem votou, amostra torta de proposito): outro 10, combustivel 4, eletrica 3, arrefecimento 2, motor 2, ar_condicionado 1
-- Vitals do Play: NAO E ZERO MEDIDO (o Play nao publicou vitals no periodo; ele suprime abaixo de um minimo de usuarios distintos): NAO E ZERO MEDIDO: a API do Play respondeu sem publicar metrica nenhuma no periodo. O Play suprime vitals abaixo de um minimo de usuarios distintos, e esta fonte esta assim desde 22/08. Quem precisa de fechamento de app usa a migalha propria (app_erros), que mede os nossos aparelhos.
+- Vitals do Play: o dado mais novo e de 2026-11-15, 2 dias atras; a Play informou dado ate 2026-11-16 e entregou ate o fim, entao atraso aqui e da Play e nao risco de perder a serie; a serie tem 1 dia(s). Crash em 0% dos 60 usuarios distintos. Mede o processo NATIVO, nao a migalha de fechamento.
 - Avaliacoes nas lojas: 13 (media 5)
   - [google_play 5/5]  (Celio lira souza)
   - [app_store 5/5] Bastante Útil (munizluiz)
@@ -51,8 +51,8 @@ docs/dados/auditoria-das-medidas.md.
 
 ## VENDAS (gente pagando e continuando)
 - Assinaturas ativas (banco): 0 (anuais 0, mensais 0), cancelamento agendado: 0
-- Venda avulsa, 7 dias: 6 podiam ver os pacotes, 4 viram, 0 abriram o checkout, 0 compraram (R$ 0,00), 8 voltaram e levaram recusa de limite. 30 dias: 6 podiam ver os pacotes, 4 viram, 0 abriram o checkout, 0 compraram (R$ 0,00), 8 voltaram e levaram recusa de limite. "Viram" e "abriram" so medem desde 14/11 21h50 UTC. Recusa em versao abaixo da 3.4 nao viu oferta, so o Premium.
-- Fundo do funil, Semana corrente (PARCIAL, ainda enche): viram paywall 1, iniciaram checkout 0, assinaram 0, cancelaram 0
+- Venda avulsa, 7 dias: 8 podiam ver os pacotes, 6 viram, 0 abriram o checkout, 0 compraram (R$ 0,00), 8 voltaram e levaram recusa de limite. 30 dias: 8 podiam ver os pacotes, 6 viram, 0 abriram o checkout, 0 compraram (R$ 0,00), 8 voltaram e levaram recusa de limite. "Viram" e "abriram" so medem desde 14/11 21h50 UTC. Recusa em versao abaixo da 3.4 nao viu oferta, so o Premium.
+- Fundo do funil, Semana corrente (PARCIAL, ainda enche): viram paywall 11, iniciaram checkout 0, assinaram 0, cancelaram 0
 - Fundo do funil, Semana anterior (FECHADA): viram paywall 53, iniciaram checkout 0, assinaram 0, cancelaram 0
   - Loja conferida: RevenueCat 0 e banco 0: batem
   - Vendas de loja sem conta (30d): nenhuma. Toda compra da Apple ou da Play chegou com conta e virou Premium
@@ -63,76 +63,76 @@ docs/dados/auditoria-das-medidas.md.
 - Stripe (live): 0 assinaturas, MRR 0.00, receita 30d 0.00 (MRR e o contratado por mes; receita 30d e o COBRADO)
 - RevenueCat: 0 assinaturas, MRR 0 (aviso: active_users = aparelhos, inclui testes)
 - AdMob 7d: NAO E ZERO MEDIDO (a fonte nao publicou linha nenhuma no periodo: sem linhas do app do Mentorque no periodo)
-- Lojas: iOS 3.4 WAITING_FOR_REVIEW; iOS 3.3 READY_FOR_SALE; iOS 3.2 READY_FOR_SALE; iOS 3.1 READY_FOR_SALE; iOS 3.0 READY_FOR_SALE
+- Lojas: iOS 3.4 READY_FOR_SALE; iOS 3.3 READY_FOR_SALE; iOS 3.2 READY_FOR_SALE; iOS 3.1 READY_FOR_SALE; iOS 3.0 READY_FOR_SALE
 
 ## Fontes externas (pacote bruto mais recente por fonte)
-- admob (2026-11-16): {"apps":["ca-app-pub-9316035916536420~8094986125"],"nota":"sem linhas do app do Mentorque no periodo","moeda":"USD","porDia":[],"ganhos7d":0,"impressoes7d":0}
-- app_store_connect (2026-11-16): {"versoes":[{"estado":"WAITING_FOR_REVIEW","versao":"3.4","criadaEm":"2026-11-15T08:04:37-08:00"},{"estado":"READY_FOR_SALE","versao":"3.3","criadaEm":"2026-10-26T10:37:45-07:00"},{"estado":"READY_FOR_SALE","versao":"3.2","criadaEm":"2026-10-17T05:56:08-07:00"},{"estado":"READY_FOR_SALE","versao":"3.1","criadaEm":"2026-10-07T03:11:42-07:00"},{"estado":"READY_FOR_SALE","versao":"3.0","criadaEm":"20...
-- app_store_downloads (2026-11-16): {"dia":"2026-11-14","atualizacoes":0,"downloadsApp":6,"unidadesPorTipo":{"1":5,"1F":1}}
-- appsflyer (2026-11-16): {"ios":{"pagas":0,"linhas":[{"custo":null,"fonte":"Organic","leais":1,"sessoes":0,"campanha":null,"instalacoes":4}],"semCusto":true,"organicas":4,"fontesPagas":[],"instalacoes":4},"pagas":211,"avisos":["A AppsFlyer conta por baixo: em 22/09/2026 foram medidos 25% dos aparelhos Android da 2.7.0 que nunca subiram o SDK. Use proporcao entre fontes, nao total absoluto.","Custo vazio em todas as linhas...
-- google_ads (2026-11-16): {"conta":"Mentorque","porDia":[{"dia":"2026-11-14","custo":41.477791,"cliques":136,"conversoes":20,"impressoes":617,"interacoes":122},{"dia":"2026-11-15","custo":40.059317,"cliques":113,"conversoes":57,"impressoes":2978,"interacoes":853},{"dia":"2026-11-16","custo":40.112783,"cliques":89,"conversoes":27,"impressoes":4642,"interacoes":1351}],"contaId":"6724308347","custo7d":121.649891,"porRede":[{"...
-- meta_ads (2026-11-16): {"conta":"Mentorque Ads","moeda":"BRL","contas":[{"id":"act_1071232758617319","nome":"Mentorque Ads","moeda":"BRL"}],"porDia":[{"dia":"2026-11-09","gasto":33.75,"cliques":117,"impressoes":6396,"instalacoes":62},{"dia":"2026-11-10","gasto":39.34,"cliques":138,"impressoes":7151,"instalacoes":74},{"dia":"2026-11-11","gasto":24.91,"cliques":70,"impressoes":4440,"instalacoes":48},{"dia":"2026-11-12","g...
-- play_console (2026-11-16): Vitals do Play: NAO E ZERO MEDIDO (o Play nao publicou vitals no periodo; ele suprime abaixo de um minimo de usuarios distintos): NAO E ZERO MEDIDO: a API do Play respondeu sem publicar metrica nenhuma no periodo. O Play suprime vitals abaixo de um minimo de usuarios distintos, e esta fonte esta assim desde 22/08. Quem precisa de fechamento de app usa a migalha propria (app_erros), que mede os nossos aparelhos. (o pacote bruto esta no JSON do fim)
-- play_downloads (2026-11-16): {"de":"2026-11-01","ok":true,"ate":"2026-11-09","dias":[{"dia":"2026-11-01","ativos":1927,"instalacoes":52,"desinstalacoes":47},{"dia":"2026-11-02","ativos":1935,"instalacoes":58,"desinstalacoes":45},{"dia":"2026-11-03","ativos":1874,"instalacoes":29,"desinstalacoes":41},{"dia":"2026-11-04","ativos":1924,"instalacoes":42,"desinstalacoes":37},{"dia":"2026-11-05","ativos":1907,"instalacoes":35,"desi...
-- revenuecat (2026-11-16): {"mrr":0,"nota":"active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil","revenue":0,"active_users":1542,"active_trials":0,"new_customers":1491,"active_subscriptions":0}
-- search_console (2026-11-16): {"porDia":[{"dia":"2026-10-19","cliques":0,"impressoes":1},{"dia":"2026-10-20","cliques":0,"impressoes":3},{"dia":"2026-10-21","cliques":1,"impressoes":6},{"dia":"2026-10-22","cliques":0,"impressoes":0},{"dia":"2026-10-23","cliques":1,"impressoes":4},{"dia":"2026-10-24","cliques":0,"impressoes":1},{"dia":"2026-10-25","cliques":0,"impressoes":4},{"dia":"2026-10-26","cliques":0,"impressoes":0},{"dia...
-- stripe (2026-11-16): {"moeda":null,"mrrCentavos":0,"assinaturasAtivas":0,"receita30dCentavos":0}
-- vercel (2026-11-16): {"ultimo":{"alvo":null,"estado":"READY","quando":"2026-11-15T21:17:20.039Z"},"comErro7d":0,"deploys7d":20,"prontos7d":4}
-- vercel_analytics (2026-11-16): {"janela":"7 dias ate a hora da coleta","porCaminho":[{"paginas":66,"visitantes":66,"requestPath":"/"},{"paginas":51,"visitantes":34,"requestPath":"/embed"},{"paginas":21,"visitantes":14,"requestPath":"/privacidade"},{"paginas":7,"visitantes":7,"requestPath":"/auth-bridge"},{"paginas":7,"visitantes":7,"requestPath":"/baixar"},{"paginas":15,"visitantes":7,"requestPath":"/excluir-conta"},{"paginas":...
-- youtube (2026-11-16): {"recentes":[{"views":8,"titulo":"A ECU do carro mede ou calcula?","publicadoEm":"2026-10-13T21:36:22Z"},{"views":1,"titulo":"Siglas de Carros Hibridos","publicadoEm":"2026-10-13T21:35:08Z"},{"views":0,"titulo":"Contrapressao em motores Turbo","publicadoEm":"2026-10-13T21:33:41Z"},{"views":1,"titulo":"VW Virtus TSI vs GM Astra 2.0 - Curva de potencia","publicadoEm":"2026-10-13T21:32:48Z"},{"views"...
+- admob (2026-11-17): {"apps":["ca-app-pub-9316035916536420~8094986125"],"nota":"sem linhas do app do Mentorque no periodo","moeda":"USD","porDia":[],"ganhos7d":0,"impressoes7d":0}
+- app_store_connect (2026-11-17): {"versoes":[{"estado":"READY_FOR_SALE","versao":"3.4","criadaEm":"2026-11-15T08:04:37-08:00"},{"estado":"READY_FOR_SALE","versao":"3.3","criadaEm":"2026-10-26T10:37:45-07:00"},{"estado":"READY_FOR_SALE","versao":"3.2","criadaEm":"2026-10-17T05:56:08-07:00"},{"estado":"READY_FOR_SALE","versao":"3.1","criadaEm":"2026-10-07T03:11:42-07:00"},{"estado":"READY_FOR_SALE","versao":"3.0","criadaEm":"2026-1...
+- app_store_downloads (2026-11-17): {"dia":"2026-11-15","atualizacoes":0,"downloadsApp":5,"unidadesPorTipo":{"1":4,"1F":1}}
+- appsflyer (2026-11-17): {"ios":{"pagas":0,"linhas":[{"custo":null,"fonte":"Organic","leais":2,"sessoes":0,"campanha":null,"instalacoes":4}],"semCusto":true,"organicas":4,"fontesPagas":[],"instalacoes":4},"pagas":206,"avisos":["A AppsFlyer conta por baixo: em 22/09/2026 foram medidos 25% dos aparelhos Android da 2.7.0 que nunca subiram o SDK. Use proporcao entre fontes, nao total absoluto.","Custo vazio em todas as linhas...
+- google_ads (2026-11-17): {"conta":"Mentorque","porDia":[{"dia":"2026-11-14","custo":41.284663,"cliques":135,"conversoes":20,"impressoes":617,"interacoes":121},{"dia":"2026-11-15","custo":40.059317,"cliques":113,"conversoes":58,"impressoes":2978,"interacoes":853},{"dia":"2026-11-16","custo":40.112783,"cliques":89,"conversoes":30,"impressoes":4641,"interacoes":1351},{"dia":"2026-11-17","custo":20.024607999999997,"cliques":6...
+- meta_ads (2026-11-17): {"conta":"Mentorque Ads","moeda":"BRL","contas":[{"id":"act_1071232758617319","nome":"Mentorque Ads","moeda":"BRL"}],"porDia":[{"dia":"2026-11-10","gasto":39.34,"cliques":138,"impressoes":7151,"instalacoes":74},{"dia":"2026-11-11","gasto":24.91,"cliques":70,"impressoes":4440,"instalacoes":48},{"dia":"2026-11-12","gasto":29.96,"cliques":76,"impressoes":5420,"instalacoes":30},{"dia":"2026-11-13","ga...
+- play_console (2026-11-17): Vitals do Play: o dado mais novo e de 2026-11-15, 2 dias atras; a Play informou dado ate 2026-11-16 e entregou ate o fim, entao atraso aqui e da Play e nao risco de perder a serie; a serie tem 1 dia(s). Crash em 0% dos 60 usuarios distintos. Mede o processo NATIVO, nao a migalha de fechamento. (o pacote bruto esta no JSON do fim)
+- play_downloads (2026-11-17): {"de":"2026-11-01","ok":true,"ate":"2026-11-09","dias":[{"dia":"2026-11-01","ativos":1927,"instalacoes":52,"desinstalacoes":47},{"dia":"2026-11-02","ativos":1935,"instalacoes":58,"desinstalacoes":45},{"dia":"2026-11-03","ativos":1874,"instalacoes":29,"desinstalacoes":41},{"dia":"2026-11-04","ativos":1924,"instalacoes":42,"desinstalacoes":37},{"dia":"2026-11-05","ativos":1907,"instalacoes":35,"desi...
+- revenuecat (2026-11-17): {"mrr":0,"nota":"active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil","revenue":0,"active_users":1533,"active_trials":0,"new_customers":1481,"active_subscriptions":0}
+- search_console (2026-11-17): {"porDia":[{"dia":"2026-10-20","cliques":0,"impressoes":3},{"dia":"2026-10-21","cliques":1,"impressoes":6},{"dia":"2026-10-22","cliques":0,"impressoes":0},{"dia":"2026-10-23","cliques":1,"impressoes":4},{"dia":"2026-10-24","cliques":0,"impressoes":1},{"dia":"2026-10-25","cliques":0,"impressoes":4},{"dia":"2026-10-26","cliques":0,"impressoes":0},{"dia":"2026-10-27","cliques":0,"impressoes":1},{"dia...
+- stripe (2026-11-17): {"moeda":null,"mrrCentavos":0,"assinaturasAtivas":0,"receita30dCentavos":0}
+- vercel (2026-11-17): {"ultimo":{"alvo":null,"estado":"READY","quando":"2026-11-16T22:32:14.620Z"},"comErro7d":0,"deploys7d":20,"prontos7d":13}
+- vercel_analytics (2026-11-17): {"janela":"7 dias ate a hora da coleta","porCaminho":[{"paginas":73,"visitantes":72,"requestPath":"/"},{"paginas":47,"visitantes":32,"requestPath":"/embed"},{"paginas":20,"visitantes":13,"requestPath":"/privacidade"},{"paginas":8,"visitantes":8,"requestPath":"/baixar"},{"paginas":7,"visitantes":7,"requestPath":"/auth-bridge"},{"paginas":13,"visitantes":6,"requestPath":"/excluir-conta"},{"paginas":...
+- youtube (2026-11-17): {"recentes":[{"views":8,"titulo":"A ECU do carro mede ou calcula?","publicadoEm":"2026-10-13T21:36:22Z"},{"views":1,"titulo":"Siglas de Carros Hibridos","publicadoEm":"2026-10-13T21:35:08Z"},{"views":0,"titulo":"Contrapressao em motores Turbo","publicadoEm":"2026-10-13T21:33:41Z"},{"views":1,"titulo":"VW Virtus TSI vs GM Astra 2.0 - Curva de potencia","publicadoEm":"2026-10-13T21:32:48Z"},{"views"...
 
 ## Dados brutos (JSON)
 
 ```json
 {
   "dados": {
-    "geradoEm": "2026-11-16T09:00:08.001Z",
+    "geradoEm": "2026-11-17T09:00:08.237Z",
     "tempos": {
-      "subscriptions": 625,
-      "app_erros": 149,
-      "cadastros": 820,
-      "metricas_diarias": 357,
-      "uso_semanal": 132,
-      "uso_diario": 449,
-      "funil_semana": 1273,
-      "assinaturas_coortes": 51,
-      "cadastros_por_campanha": 46,
-      "assinaturas_conferencia": 51,
-      "ativacao_coortes": 284,
-      "email_resumo_30d": 146,
-      "retencao_coortes": 883,
-      "paralelo": 2147,
-      "experimentos": 312,
-      "anomalias": 425,
-      "venda_avulsa_resumo": 54,
-      "aparelhos_ativos": 50,
-      "biela_perguntas": 49,
-      "biela_votos": 56,
-      "vendas_sem_conta": 75,
-      "saida_motivos": 55,
-      "estado_da_base": 497,
-      "funil_etapas": 112,
-      "contas_criadas_desde": 41,
-      "funil_etapas_primeira": 106,
-      "total": 4002
+      "subscriptions": 401,
+      "app_erros": 89,
+      "cadastros": 501,
+      "uso_diario": 339,
+      "funil_semana": 869,
+      "metricas_diarias": 433,
+      "uso_semanal": 107,
+      "assinaturas_coortes": 33,
+      "cadastros_por_campanha": 35,
+      "assinaturas_conferencia": 63,
+      "ativacao_coortes": 274,
+      "email_resumo_30d": 234,
+      "retencao_coortes": 952,
+      "paralelo": 1822,
+      "experimentos": 373,
+      "anomalias": 486,
+      "venda_avulsa_resumo": 78,
+      "aparelhos_ativos": 67,
+      "biela_perguntas": 39,
+      "biela_votos": 45,
+      "vendas_sem_conta": 54,
+      "saida_motivos": 39,
+      "estado_da_base": 767,
+      "funil_etapas": 108,
+      "contas_criadas_desde": 39,
+      "funil_etapas_primeira": 112,
+      "total": 4049
     },
     "falhas": {},
     "funilSemanas": [
       {
         "semana": "2026-11-16",
-        "aberturas": 24,
-        "visitantes": 20,
-        "cadastros": 9,
-        "viram_paywall": 1,
+        "aberturas": 99,
+        "visitantes": 82,
+        "cadastros": 27,
+        "viram_paywall": 11,
         "iniciaram_checkout": 0,
         "assinaturas": 0,
         "renovacoes": 0,
         "cancelamentos": 0,
         "expirados": 0,
-        "viram_paywall_pessoas": 1,
+        "viram_paywall_pessoas": 11,
         "iniciaram_checkout_pessoas": 0,
         "assinaturas_pessoas": 0,
-        "ativaram_pessoas": 12,
+        "ativaram_pessoas": 45,
         "aberturas_sem_identidade": 0
       },
       {
@@ -340,8 +340,7 @@ docs/dados/auditoria-das-medidas.md.
       "2026-11-09": 15,
       "2026-11-07": 10,
       "2026-11-06": 20,
-      "2026-11-02": 14,
-      "2026-11-03": 20,
+      "2026-11-03": 14,
       "2026-11-04": 13,
       "2026-11-05": 12,
       "2026-11-10": 15,
@@ -350,25 +349,17 @@ docs/dados/auditoria-das-medidas.md.
       "2026-11-13": 12,
       "2026-11-14": 14,
       "2026-11-15": 9,
-      "2026-11-16": 9
+      "2026-11-16": 23,
+      "2026-11-17": 4
     },
     "erros7d": {
-      "total": 16,
+      "total": 20,
       "top": [
         {
-          "mensagem": "login nativo google: Google Sign-In cancelled by user ([16] Cancelled by user.) package=mentorque.app signingSha1=E5:1C:",
-          "total": 3,
-          "ultimo": "2026-11-14",
-          "aparelhos": 3,
-          "versoes": [
-            "3.3.0"
-          ]
-        },
-        {
           "mensagem": "app fechou sozinho em: tela: home",
-          "total": 2,
-          "ultimo": "2026-11-15",
-          "aparelhos": 2,
+          "total": 4,
+          "ultimo": "2026-11-16",
+          "aparelhos": 4,
           "versoes": [
             "3.3.0",
             "3.4.0"
@@ -376,11 +367,32 @@ docs/dados/auditoria-das-medidas.md.
         },
         {
           "mensagem": "push: o sistema recusou o registro: java.util.concurrent.ExecutionException: java.io.IOException: SERVICE_NOT_AVAILABLE",
+          "total": 3,
+          "ultimo": "2026-11-16",
+          "aparelhos": 3,
+          "versoes": [
+            "3.3.0",
+            "3.4.0"
+          ]
+        },
+        {
+          "mensagem": "login nativo google: Google Sign-In cancelled by user ([16] User cancelled during add account flow and accounts were pre",
           "total": 2,
-          "ultimo": "2026-11-15",
+          "ultimo": "2026-11-16",
           "aparelhos": 2,
           "versoes": [
-            "3.3.0"
+            "3.3.0",
+            "3.4.0"
+          ]
+        },
+        {
+          "mensagem": "login nativo google: Google Sign-In cancelled by user ([16] Cancelled by user.) package=mentorque.app signingSha1=E5:1C:",
+          "total": 2,
+          "ultimo": "2026-11-17",
+          "aparelhos": 2,
+          "versoes": [
+            "3.3.0",
+            "3.4.0"
           ]
         },
         {
@@ -391,48 +403,39 @@ docs/dados/auditoria-das-medidas.md.
           "versoes": [
             "3.3.0"
           ]
-        },
-        {
-          "mensagem": "app fechou sozinho em: tela: history",
-          "total": 1,
-          "ultimo": "2026-11-11",
-          "aparelhos": 1,
-          "versoes": [
-            "3.3.0"
-          ]
         }
       ],
-      "aparelhosComErro": 14,
+      "aparelhosComErro": 18,
       "aparelhosAtivos": {
-        "android": 420,
-        "web": 11,
-        "ios": 6,
+        "android": 428,
+        "web": 16,
+        "ios": 5,
         "teste": 1
       },
       "porClasse": {
         "defeito": {
-          "relatos": 11,
-          "aparelhos": 9
+          "relatos": 14,
+          "aparelhos": 12
         },
         "desistencia": {
-          "relatos": 5,
-          "aparelhos": 5
+          "relatos": 6,
+          "aparelhos": 6
         },
         "ambiente": {
           "relatos": 0,
           "aparelhos": 0
         }
       },
-      "aparelhosComDefeito": 9,
+      "aparelhosComDefeito": 12,
       "linha": {
-        "texto": "Erros no app: 16 relatos no app em 7 dias; 11 de defeito em 9 aparelho(s); 5 de desistencia (a pessoa fechou o login, NAO e falha); 0 de ambiente (sem rede). 9 de 438 aparelhos ativos com defeito (2.1%) [ativos: android 420, web 11, ios 6, teste 1]",
+        "texto": "Erros no app: 20 relatos no app em 7 dias; 14 de defeito em 12 aparelho(s); 6 de desistencia (a pessoa fechou o login, NAO e falha); 0 de ambiente (sem rede). 12 de 450 aparelhos ativos com defeito (2.7%) [ativos: android 428, web 16, ios 5, teste 1]",
         "legivel": true,
         "motivo": ""
       },
       "alarme": {
         "deveAvisar": false,
         "texto": "",
-        "silencio": "9 de 438 aparelhos com defeito (2.1%), abaixo do teto de 10%"
+        "silencio": "12 de 450 aparelhos com defeito (2.7%), abaixo do teto de 10%"
       }
     },
     "email30d": {
@@ -442,35 +445,35 @@ docs/dados/auditoria-das-medidas.md.
       "porChave": [
         {
           "chave": "d0",
-          "enviados": 511,
-          "comId": 511,
-          "entregues": 497,
-          "abertos": 11,
-          "clicados": 2,
-          "problemas": 14,
-          "taxaAbertura": 2.2,
-          "taxaClique": 0.4
+          "enviados": 503,
+          "comId": 503,
+          "entregues": 490,
+          "abertos": 10,
+          "clicados": 3,
+          "problemas": 13,
+          "taxaAbertura": 2,
+          "taxaClique": 0.6
         },
         {
           "chave": "d2",
-          "enviados": 486,
-          "comId": 485,
-          "entregues": 484,
-          "abertos": 11,
+          "enviados": 473,
+          "comId": 472,
+          "entregues": 471,
+          "abertos": 9,
           "clicados": 1,
           "problemas": 1,
-          "taxaAbertura": 2.3,
+          "taxaAbertura": 1.9,
           "taxaClique": 0.2
         },
         {
           "chave": "d5",
-          "enviados": 131,
-          "comId": 130,
-          "entregues": 129,
-          "abertos": 1,
+          "enviados": 146,
+          "comId": 145,
+          "entregues": 144,
+          "abertos": 2,
           "clicados": 0,
           "problemas": 1,
-          "taxaAbertura": 0.8,
+          "taxaAbertura": 1.4,
           "taxaClique": 0
         },
         {
@@ -497,9 +500,9 @@ docs/dados/auditoria-das-medidas.md.
         },
         {
           "chave": "d9",
-          "enviados": 11,
-          "comId": 11,
-          "entregues": 11,
+          "enviados": 17,
+          "comId": 17,
+          "entregues": 17,
           "abertos": 0,
           "clicados": 0,
           "problemas": 0,
@@ -529,6 +532,17 @@ docs/dados/auditoria-das-medidas.md.
           "taxaClique": 0
         },
         {
+          "chave": "parado-7",
+          "enviados": 3,
+          "comId": 2,
+          "entregues": 2,
+          "abertos": 0,
+          "clicados": 0,
+          "problemas": 0,
+          "taxaAbertura": 0,
+          "taxaClique": 0
+        },
+        {
           "chave": "vence:ipva",
           "enviados": 2,
           "comId": 2,
@@ -551,17 +565,6 @@ docs/dados/auditoria-das-medidas.md.
           "taxaClique": 0
         },
         {
-          "chave": "parado-7",
-          "enviados": 2,
-          "comId": 1,
-          "entregues": 1,
-          "abertos": 0,
-          "clicados": 0,
-          "problemas": 0,
-          "taxaAbertura": 0,
-          "taxaClique": 0
-        },
-        {
           "chave": "preco:c9dae55d-d4c1-4ed3-951b-8f75077a9ea9",
           "enviados": 1,
           "comId": 1,
@@ -570,17 +573,6 @@ docs/dados/auditoria-das-medidas.md.
           "clicados": 0,
           "problemas": 0,
           "taxaAbertura": 100,
-          "taxaClique": 0
-        },
-        {
-          "chave": "preco:803721a0-e6d8-4f33-85a4-b145d0b91cae",
-          "enviados": 1,
-          "comId": 1,
-          "entregues": 1,
-          "abertos": 0,
-          "clicados": 0,
-          "problemas": 0,
-          "taxaAbertura": 0,
           "taxaClique": 0
         },
         {
@@ -753,9 +745,15 @@ docs/dados/auditoria-das-medidas.md.
     "uso": {
       "porDia": [
         {
+          "dia": "2026-11-17",
+          "usuarios": 15,
+          "aberturas": 16,
+          "aberturas_sem_identidade": 0
+        },
+        {
           "dia": "2026-11-16",
-          "usuarios": 11,
-          "aberturas": 14,
+          "usuarios": 59,
+          "aberturas": 73,
           "aberturas_sem_identidade": 0
         },
         {
@@ -829,20 +827,14 @@ docs/dados/auditoria-das-medidas.md.
           "usuarios": 70,
           "aberturas": 81,
           "aberturas_sem_identidade": 0
-        },
-        {
-          "dia": "2026-11-03",
-          "usuarios": 66,
-          "aberturas": 80,
-          "aberturas_sem_identidade": 0
         }
       ],
       "porSemana": [
         {
           "semana": "2026-11-16",
-          "usuarios_ativos": 11,
-          "aberturas": 14,
-          "aberturas_por_usuario": 1.3,
+          "usuarios_ativos": 73,
+          "aberturas": 89,
+          "aberturas_por_usuario": 1.2,
           "aberturas_sem_identidade": 0
         },
         {
@@ -898,7 +890,7 @@ docs/dados/auditoria-das-medidas.md.
       "coortes": [
         {
           "coorte": "2026-11-16",
-          "cadastrados": 4,
+          "cadastrados": 22,
           "voltaram_d1_7": 0,
           "voltaram_d8_30": 0,
           "semana_fechada": false,
@@ -908,7 +900,7 @@ docs/dados/auditoria-das-medidas.md.
         {
           "coorte": "2026-11-09",
           "cadastrados": 86,
-          "voltaram_d1_7": 8,
+          "voltaram_d1_7": 10,
           "voltaram_d8_30": 0,
           "semana_fechada": true,
           "d1_7_fechada": false,
@@ -918,16 +910,16 @@ docs/dados/auditoria-das-medidas.md.
           "coorte": "2026-11-02",
           "cadastrados": 103,
           "voltaram_d1_7": 22,
-          "voltaram_d8_30": 5,
+          "voltaram_d8_30": 7,
           "semana_fechada": true,
-          "d1_7_fechada": false,
+          "d1_7_fechada": true,
           "d8_30_fechada": false
         },
         {
           "coorte": "2026-10-26",
           "cadastrados": 126,
           "voltaram_d1_7": 23,
-          "voltaram_d8_30": 14,
+          "voltaram_d8_30": 15,
           "semana_fechada": true,
           "d1_7_fechada": true,
           "d8_30_fechada": false
@@ -936,7 +928,7 @@ docs/dados/auditoria-das-medidas.md.
           "coorte": "2026-10-19",
           "cadastrados": 124,
           "voltaram_d1_7": 18,
-          "voltaram_d8_30": 15,
+          "voltaram_d8_30": 16,
           "semana_fechada": true,
           "d1_7_fechada": true,
           "d8_30_fechada": false
@@ -945,7 +937,7 @@ docs/dados/auditoria-das-medidas.md.
           "coorte": "2026-10-12",
           "cadastrados": 131,
           "voltaram_d1_7": 28,
-          "voltaram_d8_30": 15,
+          "voltaram_d8_30": 16,
           "semana_fechada": true,
           "d1_7_fechada": true,
           "d8_30_fechada": false
@@ -971,32 +963,32 @@ docs/dados/auditoria-das-medidas.md.
       ],
       "linhasRetencao": [
         {
-          "texto": "Retencao, coorte 2026-11-16: 4 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-11-30; hoje sao 0, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-12-23; hoje sao 0, PISO)",
+          "texto": "Retencao, coorte 2026-11-16: 22 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-11-30; hoje sao 0, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-12-23; hoje sao 0, PISO)",
           "legivel": false,
           "motivo": "janela(s) em aberto: 1 a 7 dias e 8 a 30 dias"
         },
         {
-          "texto": "Retencao, coorte 2026-11-09: 86 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-11-23; hoje sao 8, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-12-16; hoje sao 0, PISO)",
+          "texto": "Retencao, coorte 2026-11-09: 86 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-11-23; hoje sao 10, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-12-16; hoje sao 0, PISO)",
           "legivel": false,
           "motivo": "janela(s) em aberto: 1 a 7 dias e 8 a 30 dias"
         },
         {
-          "texto": "Retencao, coorte 2026-11-02: 103 cadastrados, 1 a 7 dias AINDA NAO DA PARA LER (fecha em 2026-11-16; hoje sao 22, PISO), 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-12-09; hoje sao 5, PISO)",
-          "legivel": false,
-          "motivo": "janela(s) em aberto: 1 a 7 dias e 8 a 30 dias"
-        },
-        {
-          "texto": "Retencao, coorte 2026-10-26: 126 cadastrados, 23 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-12-02; hoje sao 14, PISO)",
+          "texto": "Retencao, coorte 2026-11-02: 103 cadastrados, 22 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-12-09; hoje sao 7, PISO)",
           "legivel": false,
           "motivo": "janela(s) em aberto: 8 a 30 dias"
         },
         {
-          "texto": "Retencao, coorte 2026-10-19: 124 cadastrados, 18 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-11-25; hoje sao 15, PISO)",
+          "texto": "Retencao, coorte 2026-10-26: 126 cadastrados, 23 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-12-02; hoje sao 15, PISO)",
           "legivel": false,
           "motivo": "janela(s) em aberto: 8 a 30 dias"
         },
         {
-          "texto": "Retencao, coorte 2026-10-12: 131 cadastrados, 28 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-11-18; hoje sao 15, PISO)",
+          "texto": "Retencao, coorte 2026-10-19: 124 cadastrados, 18 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-11-25; hoje sao 16, PISO)",
+          "legivel": false,
+          "motivo": "janela(s) em aberto: 8 a 30 dias"
+        },
+        {
+          "texto": "Retencao, coorte 2026-10-12: 131 cadastrados, 28 voltaram em 1 a 7 dias, 8 a 30 dias AINDA NAO DA PARA LER (fecha em 2026-11-18; hoje sao 16, PISO)",
           "legivel": false,
           "motivo": "janela(s) em aberto: 8 a 30 dias"
         },
@@ -1013,7 +1005,7 @@ docs/dados/auditoria-das-medidas.md.
       ],
       "linhasAtivacao": [
         {
-          "texto": "Ativacao, coorte 2026-11-16: AINDA NAO DA PARA LER (a janela fecha em 2026-11-30; hoje sao 2 de 4, PISO)",
+          "texto": "Ativacao, coorte 2026-11-16: AINDA NAO DA PARA LER (a janela fecha em 2026-11-30; hoje sao 6 de 22, PISO)",
           "legivel": false,
           "motivo": "a janela de 7 dias fecha em 2026-11-30"
         },
@@ -1023,9 +1015,9 @@ docs/dados/auditoria-das-medidas.md.
           "motivo": "a janela de 7 dias fecha em 2026-11-23"
         },
         {
-          "texto": "Ativacao, coorte 2026-11-02: AINDA NAO DA PARA LER (a janela fecha em 2026-11-16; hoje sao 38 de 103, PISO)",
-          "legivel": false,
-          "motivo": "a janela de 7 dias fecha em 2026-11-16"
+          "texto": "Ativacao, coorte 2026-11-02: 38 de 103 fizeram algo de valor alem do carro em 7 dias (regua de 17/10, comparavel desde a coorte de 28/09)",
+          "legivel": true,
+          "motivo": ""
         },
         {
           "texto": "Ativacao, coorte 2026-10-26: 66 de 126 fizeram algo de valor alem do carro em 7 dias (regua de 17/10, comparavel desde a coorte de 28/09)",
@@ -1056,8 +1048,8 @@ docs/dados/auditoria-das-medidas.md.
       "ativacao": [
         {
           "coorte": "2026-11-16",
-          "cadastrados": 4,
-          "ativados_7d": 2,
+          "cadastrados": 22,
+          "ativados_7d": 6,
           "semana_fechada": false,
           "janela_fechada": false
         },
@@ -1073,7 +1065,7 @@ docs/dados/auditoria-das-medidas.md.
           "cadastrados": 103,
           "ativados_7d": 38,
           "semana_fechada": true,
-          "janela_fechada": false
+          "janela_fechada": true
         },
         {
           "coorte": "2026-10-26",
@@ -1118,7 +1110,7 @@ docs/dados/auditoria-das-medidas.md.
         "daPessoa": [
           {
             "tema": "outro",
-            "total": 65
+            "total": 57
           },
           {
             "tema": "motor",
@@ -1126,11 +1118,11 @@ docs/dados/auditoria-das-medidas.md.
           },
           {
             "tema": "eletrica",
-            "total": 22
+            "total": 21
           },
           {
             "tema": "freios",
-            "total": 13
+            "total": 12
           },
           {
             "tema": "combustivel",
@@ -1138,14 +1130,10 @@ docs/dados/auditoria-das-medidas.md.
           },
           {
             "tema": "cambio",
-            "total": 7
+            "total": 5
           },
           {
             "tema": "suspensao",
-            "total": 6
-          },
-          {
-            "tema": "direcao",
             "total": 5
           },
           {
@@ -1154,7 +1142,11 @@ docs/dados/auditoria-das-medidas.md.
           },
           {
             "tema": "arrefecimento",
-            "total": 2
+            "total": 3
+          },
+          {
+            "tema": "direcao",
+            "total": 3
           },
           {
             "tema": "partida",
@@ -1175,12 +1167,12 @@ docs/dados/auditoria-das-medidas.md.
             "total": 16
           },
           {
-            "tema": "freios",
+            "tema": "manutencao",
             "total": 9
           },
           {
-            "tema": "manutencao",
-            "total": 9
+            "tema": "freios",
+            "total": 8
           },
           {
             "tema": "outro",
@@ -1192,25 +1184,25 @@ docs/dados/auditoria-das-medidas.md.
           }
         ],
         "porOrigem": {
-          "livre": 136,
-          "sugerida": 41,
-          "sintoma": 41,
-          "continuacao": 16
+          "sugerida": 40,
+          "livre": 126,
+          "continuacao": 15,
+          "sintoma": 37
         },
-        "total": 234
+        "total": 218
       },
       "linha": {
-        "texto": "Perguntas ao Biela: 234 em 30 dias, 177 com palavras da pessoa e 41 de atalho da tela (atalho NAO e demanda, e a ordem dos nossos botoes). Temas do que a pessoa escreveu: outro 65, motor 40, eletrica 22, freios 13, combustivel 9",
+        "texto": "Perguntas ao Biela: 218 em 30 dias, 163 com palavras da pessoa e 40 de atalho da tela (atalho NAO e demanda, e a ordem dos nossos botoes). Temas do que a pessoa escreveu: outro 57, motor 40, eletrica 21, freios 12, combustivel 9",
         "legivel": true,
         "motivo": ""
       },
       "premium": {
         "com": 2,
-        "sem": 232
+        "sem": 216
       },
       "votos": {
-        "total": 45,
-        "positivos": 43,
+        "total": 39,
+        "positivos": 37,
         "negativos": 2,
         "semNegativo": "",
         "quadro": {
@@ -1262,12 +1254,12 @@ docs/dados/auditoria-das-medidas.md.
           ],
           "deAtalho": [
             {
-              "tema": "freios",
-              "total": 9
-            },
-            {
               "tema": "motor",
               "total": 5
+            },
+            {
+              "tema": "freios",
+              "total": 3
             },
             {
               "tema": "outro",
@@ -1275,12 +1267,12 @@ docs/dados/auditoria-das-medidas.md.
             }
           ],
           "porOrigem": {
-            "sugerida": 15,
             "livre": 18,
             "sintoma": 9,
-            "continuacao": 3
+            "continuacao": 3,
+            "sugerida": 9
           },
-          "total": 45
+          "total": 39
         }
       }
     },
@@ -1332,8 +1324,8 @@ docs/dados/auditoria-das-medidas.md.
         "janelas": [
           {
             "janela": "7d",
-            "podiam_ver": 6,
-            "viram": 4,
+            "podiam_ver": 8,
+            "viram": 6,
             "tocaram": 0,
             "toques_por_produto": {},
             "compras": 0,
@@ -1343,8 +1335,8 @@ docs/dados/auditoria-das-medidas.md.
           },
           {
             "janela": "30d",
-            "podiam_ver": 6,
-            "viram": 4,
+            "podiam_ver": 8,
+            "viram": 6,
             "tocaram": 0,
             "toques_por_produto": {},
             "compras": 0,
@@ -1353,7 +1345,7 @@ docs/dados/auditoria-das-medidas.md.
             "recusas": 8
           }
         ],
-        "texto": "Venda avulsa, 7 dias: 6 podiam ver os pacotes, 4 viram, 0 abriram o checkout, 0 compraram (R$ 0,00), 8 voltaram e levaram recusa de limite. 30 dias: 6 podiam ver os pacotes, 4 viram, 0 abriram o checkout, 0 compraram (R$ 0,00), 8 voltaram e levaram recusa de limite. \"Viram\" e \"abriram\" so medem desde 14/11 21h50 UTC. Recusa em versao abaixo da 3.4 nao viu oferta, so o Premium.",
+        "texto": "Venda avulsa, 7 dias: 8 podiam ver os pacotes, 6 viram, 0 abriram o checkout, 0 compraram (R$ 0,00), 8 voltaram e levaram recusa de limite. 30 dias: 8 podiam ver os pacotes, 6 viram, 0 abriram o checkout, 0 compraram (R$ 0,00), 8 voltaram e levaram recusa de limite. \"Viram\" e \"abriram\" so medem desde 14/11 21h50 UTC. Recusa em versao abaixo da 3.4 nao viu oferta, so o Premium.",
         "semLeitura": false
       }
     },
@@ -1362,27 +1354,27 @@ docs/dados/auditoria-das-medidas.md.
         {
           "origem": "Facebook Ads",
           "campanha": "Lançamento Mentorque",
-          "cadastros_28d": 199
+          "cadastros_28d": 209
         },
         {
           "origem": "(direto)",
           "campanha": "(sem campanha)",
-          "cadastros_28d": 153
+          "cadastros_28d": 142
         },
         {
           "origem": "organico",
           "campanha": "(sem campanha)",
-          "cadastros_28d": 58
+          "cadastros_28d": 59
         },
         {
           "origem": "googleadwords_int",
           "campanha": "APP | Android | Instalações | BR",
-          "cadastros_28d": 20
+          "cadastros_28d": 25
         },
         {
           "origem": "restricted",
           "campanha": "(sem campanha)",
-          "cadastros_28d": 11
+          "cadastros_28d": 12
         }
       ]
     },
@@ -1881,15 +1873,15 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "abriu_app",
-        "eventos": 1394,
-        "pessoas": 883
+        "eventos": 1395,
+        "pessoas": 884
       },
       {
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "abriu_cadastro_de_carro",
-        "eventos": 801,
-        "pessoas": 801
+        "eventos": 802,
+        "pessoas": 802
       },
       {
         "experimento": "onboarding-curto",
@@ -1930,8 +1922,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "atribuicao",
-        "eventos": 780,
-        "pessoas": 778
+        "eventos": 781,
+        "pessoas": 779
       },
       {
         "experimento": "onboarding-curto",
@@ -1944,8 +1936,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "cadastrou_carro",
-        "eventos": 539,
-        "pessoas": 530
+        "eventos": 540,
+        "pessoas": 531
       },
       {
         "experimento": "onboarding-curto",
@@ -1986,8 +1978,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "convite_conta",
-        "eventos": 215,
-        "pessoas": 215
+        "eventos": 216,
+        "pessoas": 216
       },
       {
         "experimento": "onboarding-curto",
@@ -2028,8 +2020,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "recusou_convite_conta",
-        "eventos": 98,
-        "pessoas": 92
+        "eventos": 99,
+        "pessoas": 93
       },
       {
         "experimento": "onboarding-curto",
@@ -2056,8 +2048,8 @@ docs/dados/auditoria-das-medidas.md.
         "experimento": "onboarding-curto",
         "variante": "b",
         "evento": "terminou_onboarding",
-        "eventos": 874,
-        "pessoas": 874
+        "eventos": 875,
+        "pessoas": 875
       },
       {
         "experimento": "onboarding-curto",
@@ -2078,20 +2070,20 @@ docs/dados/auditoria-das-medidas.md.
       {
         "de": "abriu_app",
         "para": "viu_paywall",
-        "antes": 1480,
-        "depois": 246,
+        "antes": 1468,
+        "depois": 243,
         "validoDesde": "2026-08-22",
         "ressalvas": [
           "a maior parte das exibições vem do Android. O Android VENDE desde a 2.7 (há `iniciou_checkout` de loja desde 23/09 e uma compra concluída em 25/09), então o denominador não é mais estrutural; o que ainda não bate é a venda de loja chegar ao banco, conferido em vendas.lojaConferida"
         ],
         "taxa": 16.6,
         "motivo": null,
-        "perdidos": 1234
+        "perdidos": 1225
       },
       {
         "de": "cadastro",
         "para": "iniciou_checkout",
-        "antes": 486,
+        "antes": 484,
         "depois": 2,
         "validoDesde": "2026-08-22",
         "ressalvas": [
@@ -2099,7 +2091,7 @@ docs/dados/auditoria-das-medidas.md.
         ],
         "taxa": 0.4,
         "motivo": null,
-        "perdidos": 484
+        "perdidos": 482
       },
       {
         "de": "iniciou_checkout",
@@ -2115,76 +2107,82 @@ docs/dados/auditoria-das-medidas.md.
       {
         "de": "comecou_onboarding",
         "para": "terminou_onboarding",
-        "antes": 1486,
-        "depois": 1288,
+        "antes": 1475,
+        "depois": 1271,
         "validoDesde": "2026-09-01",
         "ressalvas": [],
-        "taxa": 86.7,
+        "taxa": 86.2,
         "motivo": null,
-        "perdidos": 198
+        "perdidos": 204
       },
       {
         "de": "terminou_onboarding",
         "para": "abriu_cadastro_de_carro",
-        "antes": 1288,
-        "depois": 1253,
+        "antes": 1271,
+        "depois": 1241,
         "validoDesde": "2026-09-01",
         "ressalvas": [],
-        "taxa": 97.3,
+        "taxa": 97.6,
         "motivo": null,
-        "perdidos": 35
+        "perdidos": 30
       },
       {
         "de": "abriu_cadastro_de_carro",
         "para": "cadastrou_carro",
-        "antes": 1253,
-        "depois": 1007,
+        "antes": 1241,
+        "depois": 996,
         "validoDesde": "2026-09-01",
         "ressalvas": [
           "isto é ATO, e conta só quem cadastrou DENTRO da janela. Para quantos TÊM carro hoje, some as contas em estado_da_base: o ato não enxerga quem cadastrou antes do instrumento (23/08/2026) nem quem usa como convidado, sem conta"
         ],
-        "taxa": 80.4,
+        "taxa": 80.3,
         "motivo": null,
-        "perdidos": 246
+        "perdidos": 245
       }
     ],
     "janelaDoFunil": {
-      "desde": "2026-10-19",
+      "desde": "2026-10-20",
       "encurtada": false,
       "aviso": null
     },
     "estadoDaBase": {
-      "contas": 855,
-      "contas_com_estado": 796,
-      "contas_com_carro": 769,
-      "contas_com_servico": 73,
-      "contas_ativas_7d": 87,
-      "contas_ativas_30d": 478
+      "contas": 873,
+      "contas_com_estado": 814,
+      "contas_com_carro": 787,
+      "contas_com_servico": 76,
+      "contas_ativas_7d": 86,
+      "contas_ativas_30d": 484
     },
     "anomalias": [
       {
         "anomalia": "abriu o cadastro de carro e sumiu",
         "plataforma": "android",
-        "quantas": 3,
+        "quantas": 5,
         "detalhe": "sem nenhum evento depois de abrir o cadastro; indicio, nao prova"
       },
       {
         "anomalia": "acao que costuma ser a ultima",
         "plataforma": "android",
-        "quantas": 83,
-        "detalhe": "de 290 vezes de recusou_convite_aviso (28.6%), base da plataforma 11.6%; indicio, nao prova"
+        "quantas": 86,
+        "detalhe": "de 279 vezes de recusou_convite_aviso (30.8%), base da plataforma 11.8%; indicio, nao prova"
       },
       {
         "anomalia": "acao que costuma ser a ultima",
         "plataforma": "android",
-        "quantas": 40,
-        "detalhe": "de 105 vezes de viu_paywall (38.1%), base da plataforma 11.6%; indicio, nao prova"
+        "quantas": 42,
+        "detalhe": "de 107 vezes de viu_paywall (39.3%), base da plataforma 11.8%; indicio, nao prova"
       },
       {
         "anomalia": "acao que costuma ser a ultima",
         "plataforma": "android",
-        "quantas": 18,
-        "detalhe": "de 55 vezes de perguntou_biela (32.7%), base da plataforma 11.6%; indicio, nao prova"
+        "quantas": 25,
+        "detalhe": "de 90 vezes de permissao_aviso_concedida (27.8%), base da plataforma 11.8%; indicio, nao prova"
+      },
+      {
+        "anomalia": "acao que costuma ser a ultima",
+        "plataforma": "android",
+        "quantas": 14,
+        "detalhe": "de 47 vezes de perguntou_biela (29.8%), base da plataforma 11.8%; indicio, nao prova"
       },
       {
         "anomalia": "app fechou sozinho",
@@ -2195,6 +2193,66 @@ docs/dados/auditoria-das-medidas.md.
     ],
     "fontesExternas": {
       "youtube": [
+        {
+          "dia": "2026-11-17",
+          "dados": {
+            "recentes": [
+              {
+                "views": 8,
+                "titulo": "A ECU do carro mede ou calcula?",
+                "publicadoEm": "2026-10-13T21:36:22Z"
+              },
+              {
+                "views": 1,
+                "titulo": "Siglas de Carros Hibridos",
+                "publicadoEm": "2026-10-13T21:35:08Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Contrapressao em motores Turbo",
+                "publicadoEm": "2026-10-13T21:33:41Z"
+              },
+              {
+                "views": 1,
+                "titulo": "VW Virtus TSI vs GM Astra 2.0 - Curva de potencia",
+                "publicadoEm": "2026-10-13T21:32:48Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Partida a frio com etanol - Por que e Dificil?",
+                "publicadoEm": "2026-10-13T21:27:43Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Dobrei a potencia, dobra a velocidade final?",
+                "publicadoEm": "2026-10-13T21:25:53Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Mola mais dura, transfere mais carga?",
+                "publicadoEm": "2026-10-13T21:24:16Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Motor 2T vs 4T",
+                "publicadoEm": "2026-10-13T21:23:37Z"
+              },
+              {
+                "views": 0,
+                "titulo": "GM Onix vs Nissan GT-R - Onde o Onix ganha?",
+                "publicadoEm": "2026-10-13T21:22:27Z"
+              },
+              {
+                "views": 0,
+                "titulo": "Carro Eletrico vs Combustao - Parte 2",
+                "publicadoEm": "2026-10-13T21:19:30Z"
+              }
+            ],
+            "inscritos": 24,
+            "totalVideos": 9,
+            "viewsTotais": 152155
+          }
+        },
         {
           "dia": "2026-11-16",
           "dados": {
@@ -2794,69 +2852,83 @@ docs/dados/auditoria-das-medidas.md.
             "totalVideos": 9,
             "viewsTotais": 145350
           }
-        },
-        {
-          "dia": "2026-11-06",
-          "dados": {
-            "recentes": [
-              {
-                "views": 8,
-                "titulo": "A ECU do carro mede ou calcula?",
-                "publicadoEm": "2026-10-13T21:36:22Z"
-              },
-              {
-                "views": 1,
-                "titulo": "Siglas de Carros Hibridos",
-                "publicadoEm": "2026-10-13T21:35:08Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Contrapressao em motores Turbo",
-                "publicadoEm": "2026-10-13T21:33:41Z"
-              },
-              {
-                "views": 1,
-                "titulo": "VW Virtus TSI vs GM Astra 2.0 - Curva de potencia",
-                "publicadoEm": "2026-10-13T21:32:48Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Partida a frio com etanol - Por que e Dificil?",
-                "publicadoEm": "2026-10-13T21:27:43Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Dobrei a potencia, dobra a velocidade final?",
-                "publicadoEm": "2026-10-13T21:25:53Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Mola mais dura, transfere mais carga?",
-                "publicadoEm": "2026-10-13T21:24:16Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Motor 2T vs 4T",
-                "publicadoEm": "2026-10-13T21:23:37Z"
-              },
-              {
-                "views": 0,
-                "titulo": "GM Onix vs Nissan GT-R - Onde o Onix ganha?",
-                "publicadoEm": "2026-10-13T21:22:27Z"
-              },
-              {
-                "views": 0,
-                "titulo": "Carro Eletrico vs Combustao - Parte 2",
-                "publicadoEm": "2026-10-13T21:19:30Z"
-              }
-            ],
-            "inscritos": 23,
-            "totalVideos": 9,
-            "viewsTotais": 145349
-          }
         }
       ],
       "vercel_analytics": [
+        {
+          "dia": "2026-11-17",
+          "dados": {
+            "janela": "7 dias ate a hora da coleta",
+            "porCaminho": [
+              {
+                "paginas": 73,
+                "visitantes": 72,
+                "requestPath": "/"
+              },
+              {
+                "paginas": 47,
+                "visitantes": 32,
+                "requestPath": "/embed"
+              },
+              {
+                "paginas": 20,
+                "visitantes": 13,
+                "requestPath": "/privacidade"
+              },
+              {
+                "paginas": 8,
+                "visitantes": 8,
+                "requestPath": "/baixar"
+              },
+              {
+                "paginas": 7,
+                "visitantes": 7,
+                "requestPath": "/auth-bridge"
+              },
+              {
+                "paginas": 13,
+                "visitantes": 6,
+                "requestPath": "/excluir-conta"
+              },
+              {
+                "paginas": 5,
+                "visitantes": 5,
+                "requestPath": "/app"
+              },
+              {
+                "paginas": 2,
+                "visitantes": 2,
+                "requestPath": "/carro-nao-pega"
+              },
+              {
+                "paginas": 1,
+                "visitantes": 1,
+                "requestPath": "/bateria-do-carro-descarregando"
+              },
+              {
+                "paginas": 1,
+                "visitantes": 1,
+                "requestPath": "/terms"
+              }
+            ],
+            "homePorOrigem": [
+              {
+                "paginas": 63,
+                "visitantes": 62,
+                "referrerHostname": "vilanovaalessandro.framer.website"
+              },
+              {
+                "paginas": 10,
+                "visitantes": 10,
+                "referrerHostname": "(direto ou sem origem)"
+              }
+            ],
+            "paginasHome7d": 73,
+            "erroPorCaminho": null,
+            "visitantesHome7d": 72,
+            "erroHomePorOrigem": null
+          }
+        },
         {
           "dia": "2026-11-16",
           "dados": {
@@ -3681,103 +3753,22 @@ docs/dados/auditoria-das-medidas.md.
             "visitantesHome7d": 22,
             "erroHomePorOrigem": null
           }
-        },
-        {
-          "dia": "2026-11-06",
-          "dados": {
-            "janela": "7 dias ate a hora da coleta",
-            "porCaminho": [
-              {
-                "paginas": 65,
-                "visitantes": 42,
-                "requestPath": "/embed"
-              },
-              {
-                "paginas": 21,
-                "visitantes": 19,
-                "requestPath": "/"
-              },
-              {
-                "paginas": 8,
-                "visitantes": 7,
-                "requestPath": "/privacidade"
-              },
-              {
-                "paginas": 6,
-                "visitantes": 6,
-                "requestPath": "/auth-bridge"
-              },
-              {
-                "paginas": 3,
-                "visitantes": 3,
-                "requestPath": "/app"
-              },
-              {
-                "paginas": 3,
-                "visitantes": 3,
-                "requestPath": "/baixar"
-              },
-              {
-                "paginas": 7,
-                "visitantes": 3,
-                "requestPath": "/excluir-conta"
-              },
-              {
-                "paginas": 2,
-                "visitantes": 2,
-                "requestPath": "/barulho-no-carro"
-              },
-              {
-                "paginas": 4,
-                "visitantes": 2,
-                "requestPath": "/terms"
-              },
-              {
-                "paginas": 1,
-                "visitantes": 1,
-                "requestPath": "/carro-gastando-muita-gasolina"
-              },
-              {
-                "paginas": 1,
-                "visitantes": 1,
-                "requestPath": "/landing"
-              },
-              {
-                "paginas": 1,
-                "visitantes": 1,
-                "requestPath": "/luz-da-injecao-acesa"
-              }
-            ],
-            "homePorOrigem": [
-              {
-                "paginas": 15,
-                "visitantes": 13,
-                "referrerHostname": "vilanovaalessandro.framer.website"
-              },
-              {
-                "paginas": 4,
-                "visitantes": 4,
-                "referrerHostname": "(direto ou sem origem)"
-              },
-              {
-                "paginas": 1,
-                "visitantes": 1,
-                "referrerHostname": "bing.com"
-              },
-              {
-                "paginas": 1,
-                "visitantes": 1,
-                "referrerHostname": "google.com"
-              }
-            ],
-            "paginasHome7d": 21,
-            "erroPorCaminho": null,
-            "visitantesHome7d": 19,
-            "erroHomePorOrigem": null
-          }
         }
       ],
       "vercel": [
+        {
+          "dia": "2026-11-17",
+          "dados": {
+            "ultimo": {
+              "alvo": null,
+              "estado": "READY",
+              "quando": "2026-11-16T22:32:14.620Z"
+            },
+            "comErro7d": 0,
+            "deploys7d": 20,
+            "prontos7d": 13
+          }
+        },
         {
           "dia": "2026-11-16",
           "dados": {
@@ -3907,22 +3898,18 @@ docs/dados/auditoria-das-medidas.md.
             "deploys7d": 20,
             "prontos7d": 10
           }
-        },
-        {
-          "dia": "2026-11-06",
-          "dados": {
-            "ultimo": {
-              "alvo": null,
-              "estado": "CANCELED",
-              "quando": "2026-11-05T11:48:26.138Z"
-            },
-            "comErro7d": 2,
-            "deploys7d": 20,
-            "prontos7d": 8
-          }
         }
       ],
       "stripe": [
+        {
+          "dia": "2026-11-17",
+          "dados": {
+            "moeda": null,
+            "mrrCentavos": 0,
+            "assinaturasAtivas": 0,
+            "receita30dCentavos": 0
+          }
+        },
         {
           "dia": "2026-11-16",
           "dados": {
@@ -4012,18 +3999,181 @@ docs/dados/auditoria-das-medidas.md.
             "assinaturasAtivas": 0,
             "receita30dCentavos": 0
           }
-        },
-        {
-          "dia": "2026-11-06",
-          "dados": {
-            "moeda": null,
-            "mrrCentavos": 0,
-            "assinaturasAtivas": 0,
-            "receita30dCentavos": 0
-          }
         }
       ],
       "search_console": [
+        {
+          "dia": "2026-11-17",
+          "dados": {
+            "porDia": [
+              {
+                "dia": "2026-10-20",
+                "cliques": 0,
+                "impressoes": 3
+              },
+              {
+                "dia": "2026-10-21",
+                "cliques": 1,
+                "impressoes": 6
+              },
+              {
+                "dia": "2026-10-22",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-10-23",
+                "cliques": 1,
+                "impressoes": 4
+              },
+              {
+                "dia": "2026-10-24",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-10-25",
+                "cliques": 0,
+                "impressoes": 4
+              },
+              {
+                "dia": "2026-10-26",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-10-27",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-10-28",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-10-29",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-10-30",
+                "cliques": 0,
+                "impressoes": 2
+              },
+              {
+                "dia": "2026-10-31",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-11-01",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-11-02",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-11-03",
+                "cliques": 1,
+                "impressoes": 3
+              },
+              {
+                "dia": "2026-11-04",
+                "cliques": 0,
+                "impressoes": 0
+              },
+              {
+                "dia": "2026-11-05",
+                "cliques": 0,
+                "impressoes": 2
+              },
+              {
+                "dia": "2026-11-06",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-11-07",
+                "cliques": 0,
+                "impressoes": 3
+              },
+              {
+                "dia": "2026-11-08",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-11-09",
+                "cliques": 0,
+                "impressoes": 1
+              },
+              {
+                "dia": "2026-11-10",
+                "cliques": 0,
+                "impressoes": 3
+              },
+              {
+                "dia": "2026-11-11",
+                "cliques": 0,
+                "impressoes": 3
+              },
+              {
+                "dia": "2026-11-12",
+                "cliques": 0,
+                "impressoes": 3
+              },
+              {
+                "dia": "2026-11-13",
+                "cliques": 0,
+                "impressoes": 4
+              },
+              {
+                "dia": "2026-11-14",
+                "cliques": 0,
+                "impressoes": 2
+              },
+              {
+                "dia": "2026-11-15",
+                "cliques": 0,
+                "impressoes": 2
+              }
+            ],
+            "cliques28d": 3,
+            "topPaginas": [],
+            "erroPaginas": "Forbidden - perhaps check your credentials?",
+            "topConsultas": [
+              {
+                "cliques": 1,
+                "posicao": 1,
+                "consulta": "mentorque",
+                "impressoes": 2
+              },
+              {
+                "cliques": 0,
+                "posicao": 5,
+                "consulta": "mitrenque",
+                "impressoes": 1
+              },
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "moteque",
+                "impressoes": 1
+              },
+              {
+                "cliques": 0,
+                "posicao": 1,
+                "consulta": "é gratuito?",
+                "impressoes": 1
+              }
+            ],
+            "impressoes28d": 52
+          }
+        },
         {
           "dia": "2026-11-16",
           "dados": {
@@ -5711,176 +5861,21 @@ docs/dados/auditoria-das-medidas.md.
             ],
             "impressoes28d": 34
           }
-        },
-        {
-          "dia": "2026-11-06",
-          "dados": {
-            "porDia": [
-              {
-                "dia": "2026-10-09",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-10-10",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-10-11",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-10-12",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-10-13",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-10-14",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-10-15",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-10-16",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-10-17",
-                "cliques": 0,
-                "impressoes": 2
-              },
-              {
-                "dia": "2026-10-18",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-10-19",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-10-20",
-                "cliques": 0,
-                "impressoes": 3
-              },
-              {
-                "dia": "2026-10-21",
-                "cliques": 1,
-                "impressoes": 6
-              },
-              {
-                "dia": "2026-10-22",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-10-23",
-                "cliques": 1,
-                "impressoes": 4
-              },
-              {
-                "dia": "2026-10-24",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-10-25",
-                "cliques": 0,
-                "impressoes": 4
-              },
-              {
-                "dia": "2026-10-26",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-10-27",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-10-28",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-10-29",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-10-30",
-                "cliques": 0,
-                "impressoes": 2
-              },
-              {
-                "dia": "2026-10-31",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-11-01",
-                "cliques": 0,
-                "impressoes": 0
-              },
-              {
-                "dia": "2026-11-02",
-                "cliques": 0,
-                "impressoes": 1
-              },
-              {
-                "dia": "2026-11-03",
-                "cliques": 1,
-                "impressoes": 3
-              }
-            ],
-            "cliques28d": 3,
-            "topPaginas": [],
-            "erroPaginas": "Forbidden - perhaps check your credentials?",
-            "topConsultas": [
-              {
-                "cliques": 1,
-                "posicao": 1,
-                "consulta": "mentorque",
-                "impressoes": 1
-              },
-              {
-                "cliques": 0,
-                "posicao": 98,
-                "consulta": "luz do motor acesa",
-                "impressoes": 1
-              },
-              {
-                "cliques": 0,
-                "posicao": 5,
-                "consulta": "mitrenque",
-                "impressoes": 1
-              },
-              {
-                "cliques": 0,
-                "posicao": 1,
-                "consulta": "é gratuito?",
-                "impressoes": 1
-              }
-            ],
-            "impressoes28d": 34
-          }
         }
       ],
       "revenuecat": [
+        {
+          "dia": "2026-11-17",
+          "dados": {
+            "mrr": 0,
+            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
+            "revenue": 0,
+            "active_users": 1533,
+            "active_trials": 0,
+            "new_customers": 1481,
+            "active_subscriptions": 0
+          }
+        },
         {
           "dia": "2026-11-16",
           "dados": {
@@ -6000,21 +5995,76 @@ docs/dados/auditoria-das-medidas.md.
             "new_customers": 1747,
             "active_subscriptions": 0
           }
-        },
-        {
-          "dia": "2026-11-06",
-          "dados": {
-            "mrr": 0,
-            "nota": "active_users e new_customers contam APARELHOS que abriram o app (inclui TestFlight e aparelhos de teste do dono); pessoas reais = contas do banco e regua de uso do funil",
-            "revenue": 0,
-            "active_users": 1751,
-            "active_trials": 1,
-            "new_customers": 1731,
-            "active_subscriptions": 0
-          }
         }
       ],
       "play_downloads": [
+        {
+          "dia": "2026-11-17",
+          "dados": {
+            "de": "2026-11-01",
+            "ok": true,
+            "ate": "2026-11-09",
+            "dias": [
+              {
+                "dia": "2026-11-01",
+                "ativos": 1927,
+                "instalacoes": 52,
+                "desinstalacoes": 47
+              },
+              {
+                "dia": "2026-11-02",
+                "ativos": 1935,
+                "instalacoes": 58,
+                "desinstalacoes": 45
+              },
+              {
+                "dia": "2026-11-03",
+                "ativos": 1874,
+                "instalacoes": 29,
+                "desinstalacoes": 41
+              },
+              {
+                "dia": "2026-11-04",
+                "ativos": 1924,
+                "instalacoes": 42,
+                "desinstalacoes": 37
+              },
+              {
+                "dia": "2026-11-05",
+                "ativos": 1907,
+                "instalacoes": 35,
+                "desinstalacoes": 23
+              },
+              {
+                "dia": "2026-11-06",
+                "ativos": 1935,
+                "instalacoes": 34,
+                "desinstalacoes": 35
+              },
+              {
+                "dia": "2026-11-07",
+                "ativos": 1935,
+                "instalacoes": 39,
+                "desinstalacoes": 33
+              },
+              {
+                "dia": "2026-11-08",
+                "ativos": 1891,
+                "instalacoes": 18,
+                "desinstalacoes": 41
+              },
+              {
+                "dia": "2026-11-09",
+                "ativos": 1890,
+                "instalacoes": 49,
+                "desinstalacoes": 51
+              }
+            ],
+            "arquivo": "stats/installs/installs_mentorque.app_202611_overview.csv",
+            "ativosNoFim": 1890,
+            "instalacoes": 356
+          }
+        },
         {
           "dia": "2026-11-16",
           "dados": {
@@ -6510,28 +6560,46 @@ docs/dados/auditoria-das-medidas.md.
             "ativosNoFim": 1935,
             "instalacoes": 58
           }
-        },
-        {
-          "dia": "2026-11-06",
-          "dados": {
-            "de": "2026-11-01",
-            "ok": true,
-            "ate": "2026-11-01",
-            "dias": [
-              {
-                "dia": "2026-11-01",
-                "ativos": 1927,
-                "instalacoes": 0,
-                "desinstalacoes": 0
-              }
-            ],
-            "arquivo": "stats/installs/installs_mentorque.app_202611_overview.csv",
-            "ativosNoFim": 1927,
-            "instalacoes": 0
-          }
         }
       ],
       "play_console": [
+        {
+          "dia": "2026-11-17",
+          "dados": {
+            "anr": {
+              "estado": "ok",
+              "linhas": 1,
+              "motivo": ""
+            },
+            "crash": {
+              "estado": "ok",
+              "linhas": 1,
+              "motivo": ""
+            },
+            "frescor": {
+              "anr": "2026-11-16",
+              "crash": "2026-11-16"
+            },
+            "anrPorDia": [
+              {
+                "dia": "2026-11-15",
+                "metricas": {
+                  "anrRate": 0,
+                  "distinctUsers": 60
+                }
+              }
+            ],
+            "crashPorDia": [
+              {
+                "dia": "2026-11-15",
+                "metricas": {
+                  "crashRate": 0,
+                  "distinctUsers": 60
+                }
+              }
+            ]
+          }
+        },
         {
           "dia": "2026-11-16",
           "dados": {
@@ -7157,130 +7225,154 @@ docs/dados/auditoria-das-medidas.md.
               }
             ]
           }
-        },
-        {
-          "dia": "2026-11-06",
-          "dados": {
-            "anr": {
-              "estado": "ok",
-              "linhas": 7,
-              "motivo": ""
-            },
-            "crash": {
-              "estado": "ok",
-              "linhas": 7,
-              "motivo": ""
-            },
-            "frescor": {
-              "anr": "2026-11-05",
-              "crash": "2026-11-05"
-            },
-            "anrPorDia": [
-              {
-                "dia": "2026-10-28",
-                "metricas": {
-                  "anrRate": 0,
-                  "distinctUsers": 60
-                }
-              },
-              {
-                "dia": "2026-10-29",
-                "metricas": {
-                  "anrRate": 0,
-                  "distinctUsers": 60
-                }
-              },
-              {
-                "dia": "2026-10-30",
-                "metricas": {
-                  "anrRate": 0,
-                  "distinctUsers": 50
-                }
-              },
-              {
-                "dia": "2026-10-31",
-                "metricas": {
-                  "anrRate": 0,
-                  "distinctUsers": 60
-                }
-              },
-              {
-                "dia": "2026-11-01",
-                "metricas": {
-                  "anrRate": 0,
-                  "distinctUsers": 60
-                }
-              },
-              {
-                "dia": "2026-11-02",
-                "metricas": {
-                  "anrRate": 0,
-                  "distinctUsers": 70
-                }
-              },
-              {
-                "dia": "2026-11-03",
-                "metricas": {
-                  "anrRate": 0,
-                  "distinctUsers": 60
-                }
-              }
-            ],
-            "crashPorDia": [
-              {
-                "dia": "2026-10-28",
-                "metricas": {
-                  "crashRate": 0,
-                  "distinctUsers": 60
-                }
-              },
-              {
-                "dia": "2026-10-29",
-                "metricas": {
-                  "crashRate": 0,
-                  "distinctUsers": 60
-                }
-              },
-              {
-                "dia": "2026-10-30",
-                "metricas": {
-                  "crashRate": 0,
-                  "distinctUsers": 50
-                }
-              },
-              {
-                "dia": "2026-10-31",
-                "metricas": {
-                  "crashRate": 0,
-                  "distinctUsers": 60
-                }
-              },
-              {
-                "dia": "2026-11-01",
-                "metricas": {
-                  "crashRate": 0,
-                  "distinctUsers": 60
-                }
-              },
-              {
-                "dia": "2026-11-02",
-                "metricas": {
-                  "crashRate": 0,
-                  "distinctUsers": 70
-                }
-              },
-              {
-                "dia": "2026-11-03",
-                "metricas": {
-                  "crashRate": 0,
-                  "distinctUsers": 60
-                }
-              }
-            ]
-          }
         }
       ],
       "meta_ads": [
+        {
+          "dia": "2026-11-17",
+          "dados": {
+            "conta": "Mentorque Ads",
+            "moeda": "BRL",
+            "contas": [
+              {
+                "id": "act_1071232758617319",
+                "nome": "Mentorque Ads",
+                "moeda": "BRL"
+              }
+            ],
+            "porDia": [
+              {
+                "dia": "2026-11-10",
+                "gasto": 39.34,
+                "cliques": 138,
+                "impressoes": 7151,
+                "instalacoes": 74
+              },
+              {
+                "dia": "2026-11-11",
+                "gasto": 24.91,
+                "cliques": 70,
+                "impressoes": 4440,
+                "instalacoes": 48
+              },
+              {
+                "dia": "2026-11-12",
+                "gasto": 29.96,
+                "cliques": 76,
+                "impressoes": 5420,
+                "instalacoes": 30
+              },
+              {
+                "dia": "2026-11-13",
+                "gasto": 27.73,
+                "cliques": 83,
+                "impressoes": 4709,
+                "instalacoes": 56
+              },
+              {
+                "dia": "2026-11-14",
+                "gasto": 31.5,
+                "cliques": 118,
+                "impressoes": 5040,
+                "instalacoes": 44
+              },
+              {
+                "dia": "2026-11-15",
+                "gasto": 26.69,
+                "cliques": 98,
+                "impressoes": 4528,
+                "instalacoes": 44
+              },
+              {
+                "dia": "2026-11-16",
+                "gasto": 27.87,
+                "cliques": 92,
+                "impressoes": 4420,
+                "instalacoes": 48
+              }
+            ],
+            "gasto7d": 208,
+            "truncado": false,
+            "campanhas": [
+              {
+                "nome": "Lançamento Mentorque",
+                "criada": "2026-09-19",
+                "status": "ACTIVE",
+                "objetivo": "OUTCOME_APP_PROMOTION",
+                "conjuntos": [
+                  {
+                    "nome": "Lançamento Mentorque",
+                    "estadoReal": "ACTIVE",
+                    "otimizaPor": "APP_INSTALLS",
+                    "orcamentoDiario": null
+                  }
+                ],
+                "estadoReal": "ACTIVE",
+                "orcamentoDiario": 30
+              }
+            ],
+            "contaLida": "act_1071232758617319",
+            "porAnuncio": [
+              {
+                "nome": "Publicação - Mentorque cuidados",
+                "gasto": 147.25,
+                "cliques": 464,
+                "campanha": "Lançamento Mentorque",
+                "impressoes": 26113,
+                "instalacoes": 240
+              },
+              {
+                "nome": "Carro aqueceu na estrada",
+                "gasto": 26.33,
+                "cliques": 84,
+                "campanha": "Lançamento Mentorque",
+                "impressoes": 4000,
+                "instalacoes": 66
+              },
+              {
+                "nome": "Carrosel peça quebrada",
+                "gasto": 23.24,
+                "cliques": 98,
+                "campanha": "Lançamento Mentorque",
+                "impressoes": 4364,
+                "instalacoes": 28
+              },
+              {
+                "nome": "Você liga o carro e espera parado",
+                "gasto": 10.48,
+                "cliques": 28,
+                "campanha": "Lançamento Mentorque",
+                "impressoes": 1110,
+                "instalacoes": 8
+              },
+              {
+                "nome": "Carro perde força na serra",
+                "gasto": 0.45,
+                "cliques": 1,
+                "campanha": "Lançamento Mentorque",
+                "impressoes": 82,
+                "instalacoes": 2
+              },
+              {
+                "nome": "Regra dos 70%",
+                "gasto": 0.25,
+                "cliques": 0,
+                "campanha": "Lançamento Mentorque",
+                "impressoes": 39,
+                "instalacoes": 0
+              }
+            ],
+            "porCampanha": [
+              {
+                "nome": "Lançamento Mentorque",
+                "gasto": 208,
+                "cliques": 675,
+                "impressoes": 35708,
+                "instalacoes": 344
+              }
+            ]
+          }
+        },
         {
           "dia": "2026-11-16",
           "dados": {
@@ -8690,154 +8782,267 @@ docs/dados/auditoria-das-medidas.md.
               }
             ]
           }
-        },
-        {
-          "dia": "2026-11-06",
-          "dados": {
-            "conta": "Mentorque Ads",
-            "moeda": "BRL",
-            "contas": [
-              {
-                "id": "act_1071232758617319",
-                "nome": "Mentorque Ads",
-                "moeda": "BRL"
-              }
-            ],
-            "porDia": [
-              {
-                "dia": "2026-10-30",
-                "gasto": 28.22,
-                "cliques": 92,
-                "impressoes": 3015,
-                "instalacoes": 32
-              },
-              {
-                "dia": "2026-10-31",
-                "gasto": 40.55,
-                "cliques": 127,
-                "impressoes": 6177,
-                "instalacoes": 72
-              },
-              {
-                "dia": "2026-11-01",
-                "gasto": 43.24,
-                "cliques": 158,
-                "impressoes": 9549,
-                "instalacoes": 106
-              },
-              {
-                "dia": "2026-11-02",
-                "gasto": 34.48,
-                "cliques": 144,
-                "impressoes": 9626,
-                "instalacoes": 104
-              },
-              {
-                "dia": "2026-11-03",
-                "gasto": 20.82,
-                "cliques": 81,
-                "impressoes": 7563,
-                "instalacoes": 48
-              },
-              {
-                "dia": "2026-11-04",
-                "gasto": 27.13,
-                "cliques": 98,
-                "impressoes": 7125,
-                "instalacoes": 74
-              },
-              {
-                "dia": "2026-11-05",
-                "gasto": 26.68,
-                "cliques": 96,
-                "impressoes": 5944,
-                "instalacoes": 50
-              }
-            ],
-            "gasto7d": 221.12,
-            "truncado": false,
-            "campanhas": [
-              {
-                "nome": "Lançamento Mentorque",
-                "criada": "2026-09-19",
-                "status": "ACTIVE",
-                "objetivo": "OUTCOME_APP_PROMOTION",
-                "conjuntos": [
-                  {
-                    "nome": "Lançamento Mentorque",
-                    "estadoReal": "ACTIVE",
-                    "otimizaPor": "APP_INSTALLS",
-                    "orcamentoDiario": null
-                  }
-                ],
-                "estadoReal": "ACTIVE",
-                "orcamentoDiario": 30
-              }
-            ],
-            "contaLida": "act_1071232758617319",
-            "porAnuncio": [
-              {
-                "nome": "Publicação - Mentorque cuidados",
-                "gasto": 170.77,
-                "cliques": 607,
-                "campanha": "Lançamento Mentorque",
-                "impressoes": 43393,
-                "instalacoes": 414
-              },
-              {
-                "nome": "Você liga o carro e espera parado",
-                "gasto": 35.68,
-                "cliques": 123,
-                "campanha": "Lançamento Mentorque",
-                "impressoes": 3280,
-                "instalacoes": 46
-              },
-              {
-                "nome": "Carro aqueceu na estrada",
-                "gasto": 9.56,
-                "cliques": 38,
-                "campanha": "Lançamento Mentorque",
-                "impressoes": 1472,
-                "instalacoes": 14
-              },
-              {
-                "nome": "Carro perde força na serra",
-                "gasto": 2.83,
-                "cliques": 12,
-                "campanha": "Lançamento Mentorque",
-                "impressoes": 394,
-                "instalacoes": 6
-              },
-              {
-                "nome": "Carrosel peça quebrada",
-                "gasto": 1.85,
-                "cliques": 16,
-                "campanha": "Lançamento Mentorque",
-                "impressoes": 403,
-                "instalacoes": 6
-              },
-              {
-                "nome": "Regra dos 70%",
-                "gasto": 0.43,
-                "cliques": 0,
-                "campanha": "Lançamento Mentorque",
-                "impressoes": 57,
-                "instalacoes": 0
-              }
-            ],
-            "porCampanha": [
-              {
-                "nome": "Lançamento Mentorque",
-                "gasto": 221.12,
-                "cliques": 796,
-                "impressoes": 48999,
-                "instalacoes": 486
-              }
-            ]
-          }
         }
       ],
       "google_ads": [
+        {
+          "dia": "2026-11-17",
+          "dados": {
+            "conta": "Mentorque",
+            "porDia": [
+              {
+                "dia": "2026-11-14",
+                "custo": 41.284663,
+                "cliques": 135,
+                "conversoes": 20,
+                "impressoes": 617,
+                "interacoes": 121
+              },
+              {
+                "dia": "2026-11-15",
+                "custo": 40.059317,
+                "cliques": 113,
+                "conversoes": 58,
+                "impressoes": 2978,
+                "interacoes": 853
+              },
+              {
+                "dia": "2026-11-16",
+                "custo": 40.112783,
+                "cliques": 89,
+                "conversoes": 30,
+                "impressoes": 4641,
+                "interacoes": 1351
+              },
+              {
+                "dia": "2026-11-17",
+                "custo": 20.024607999999997,
+                "cliques": 64,
+                "conversoes": 16,
+                "impressoes": 2937,
+                "interacoes": 945
+              }
+            ],
+            "contaId": "6724308347",
+            "custo7d": 141.481371,
+            "porRede": [
+              {
+                "rede": "YOUTUBE",
+                "custo": 72.958671,
+                "cliques": 192,
+                "conversoes": 70,
+                "impressoes": 9717,
+                "interacoes": 3073
+              },
+              {
+                "rede": "CONTENT",
+                "custo": 68.420132,
+                "cliques": 208,
+                "conversoes": 54,
+                "impressoes": 1425,
+                "interacoes": 196
+              },
+              {
+                "rede": "SEARCH",
+                "custo": 0.102568,
+                "cliques": 1,
+                "conversoes": 0,
+                "impressoes": 31,
+                "interacoes": 1
+              }
+            ],
+            "anuncios": [
+              {
+                "grupo": "Sintomas",
+                "status": "ENABLED",
+                "anuncio": "821800243431",
+                "revisao": "REVIEWED",
+                "campanha": "Mentorque Lançamento",
+                "aprovacao": "APPROVED",
+                "statusCampanha": "PAUSED"
+              },
+              {
+                "grupo": "Controle/garagem",
+                "status": "ENABLED",
+                "anuncio": "822987558439",
+                "revisao": "REVIEWED",
+                "campanha": "Mentorque Lançamento",
+                "aprovacao": "APPROVED",
+                "statusCampanha": "PAUSED"
+              },
+              {
+                "grupo": "Revisão por carro",
+                "status": "ENABLED",
+                "anuncio": "822945314520",
+                "revisao": "REVIEWED",
+                "campanha": "Mentorque Lançamento",
+                "aprovacao": "APPROVED",
+                "statusCampanha": "PAUSED"
+              },
+              {
+                "grupo": "Preço justo (mão no bolso)",
+                "status": "ENABLED",
+                "anuncio": "822987408604",
+                "revisao": "REVIEWED",
+                "campanha": "Mentorque Lançamento",
+                "aprovacao": "APPROVED",
+                "statusCampanha": "PAUSED"
+              },
+              {
+                "grupo": "Android - APP",
+                "status": "ENABLED",
+                "anuncio": "825294437755",
+                "revisao": "REVIEWED",
+                "campanha": "APP | Android | Instalações | BR",
+                "aprovacao": "APPROVED",
+                "statusCampanha": "ENABLED"
+              },
+              {
+                "grupo": "Perguntar/aprender (IA + trilhas)",
+                "status": "ENABLED",
+                "anuncio": "823061515097",
+                "revisao": "REVIEWED",
+                "campanha": "Mentorque Lançamento",
+                "aprovacao": "APPROVED",
+                "statusCampanha": "PAUSED"
+              }
+            ],
+            "janelaDias": {
+              "de": "2026-11-10",
+              "ate": "2026-11-17",
+              "hojeIncompleto": true
+            },
+            "termosNota": "zero termos de busca nos ultimos 30 dias: o no respondeu 200 com a credencial funcionando, e nenhuma campanha de busca teve impressao no periodo (nao e credencial)",
+            "acoesJanela": "30 dias",
+            "porCampanha": [
+              {
+                "id": "24273898063",
+                "nome": "APP | Android | Instalações | BR",
+                "canal": "MULTI_CHANNEL",
+                "custo": 141.48137100000002,
+                "status": "ENABLED",
+                "cliques": 401,
+                "conversoes": 124,
+                "impressoes": 11173,
+                "interacoes": 3270
+              }
+            ],
+            "fatiaDeBusca": 0.1,
+            "anunciosAtivos": 1,
+            "acoesDeConversao": [
+              {
+                "acao": "Instalações de Mentorque: manutenção do carro (Android) 2026-09-19T10:01:56.697",
+                "todas": 622,
+                "origem": "GOOGLE_PLAY",
+                "categoria": "DOWNLOAD",
+                "conversoes": 622
+              },
+              {
+                "acao": "mentorque.app (Android) session_start 2026-10-04T14:48:04.195",
+                "todas": 547,
+                "origem": "THIRD_PARTY_APP_ANALYTICS",
+                "categoria": "DEFAULT",
+                "conversoes": 0
+              },
+              {
+                "acao": "mentorque.app (Android) first_open 2026-10-04T13:10:00.497",
+                "todas": 196,
+                "origem": "THIRD_PARTY_APP_ANALYTICS",
+                "categoria": "DOWNLOAD",
+                "conversoes": 0
+              },
+              {
+                "acao": "mentorque.app (Android) reinstall_open 2026-10-09T13:58:56.623",
+                "todas": 7,
+                "origem": "THIRD_PARTY_APP_ANALYTICS",
+                "categoria": "DEFAULT",
+                "conversoes": 0
+              },
+              {
+                "acao": "Visualização de página",
+                "todas": 1,
+                "origem": "WEBPAGE",
+                "categoria": "PAGE_VIEW",
+                "conversoes": 0
+              }
+            ],
+            "anunciosLimitados": 0,
+            "porCampanhaPorDia": [
+              {
+                "id": "24273898063",
+                "dias": [
+                  {
+                    "dia": "2026-11-10",
+                    "custo": 0,
+                    "cliques": 0,
+                    "conversoes": 0,
+                    "impressoes": 0,
+                    "interacoes": 0
+                  },
+                  {
+                    "dia": "2026-11-11",
+                    "custo": 0,
+                    "cliques": 0,
+                    "conversoes": 0,
+                    "impressoes": 0,
+                    "interacoes": 0
+                  },
+                  {
+                    "dia": "2026-11-12",
+                    "custo": 0,
+                    "cliques": 0,
+                    "conversoes": 0,
+                    "impressoes": 0,
+                    "interacoes": 0
+                  },
+                  {
+                    "dia": "2026-11-13",
+                    "custo": 0,
+                    "cliques": 0,
+                    "conversoes": 0,
+                    "impressoes": 0,
+                    "interacoes": 0
+                  },
+                  {
+                    "dia": "2026-11-14",
+                    "custo": 41.284663,
+                    "cliques": 135,
+                    "conversoes": 20,
+                    "impressoes": 617,
+                    "interacoes": 121
+                  },
+                  {
+                    "dia": "2026-11-15",
+                    "custo": 40.059317,
+                    "cliques": 113,
+                    "conversoes": 58,
+                    "impressoes": 2978,
+                    "interacoes": 853
+                  },
+                  {
+                    "dia": "2026-11-16",
+                    "custo": 40.112783,
+                    "cliques": 89,
+                    "conversoes": 30,
+                    "impressoes": 4641,
+                    "interacoes": 1351
+                  },
+                  {
+                    "dia": "2026-11-17",
+                    "custo": 20.024607999999997,
+                    "cliques": 64,
+                    "conversoes": 16,
+                    "impressoes": 2937,
+                    "interacoes": 945
+                  }
+                ],
+                "nome": "APP | Android | Instalações | BR",
+                "status": "ENABLED"
+              }
+            ],
+            "anunciosReprovados": 0
+          }
+        },
         {
           "dia": "2026-11-16",
           "dados": {
@@ -13195,846 +13400,82 @@ docs/dados/auditoria-das-medidas.md.
               }
             ]
           }
-        },
-        {
-          "dia": "2026-11-06",
-          "dados": {
-            "conta": "Mentorque",
-            "porDia": [
-              {
-                "dia": "2026-10-30",
-                "custo": 1.916914,
-                "cliques": 10,
-                "conversoes": 4,
-                "impressoes": 297,
-                "interacoes": 97
-              }
-            ],
-            "termos": [
-              {
-                "custo": 7.98,
-                "termo": "equipe nt carro",
-                "cliques": 7,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 4,
-                "impressoes": 39
-              },
-              {
-                "custo": 6.46,
-                "termo": "como escanear o carro pelo celular",
-                "cliques": 6,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 6,
-                "impressoes": 28
-              },
-              {
-                "custo": 1.46,
-                "termo": "o carro não liga mas acende o painel",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 4
-              },
-              {
-                "custo": 1.36,
-                "termo": "curso de automotivo",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.36,
-                "termo": "livros de mecanica automotiva",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.34,
-                "termo": "quando o carro acende a luz de injeção o que pode ser",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.33,
-                "termo": "carro perdendo força o que pode ser",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.32,
-                "termo": "ford ka 2018 não acelera",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.28,
-                "termo": "pq o carro perde a força na subida",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.23,
-                "termo": "de quanto em quanto tempo tenho que trocar a correia dentada",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.2,
-                "termo": "escanear veiculo com celular",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.2,
-                "termo": "estudando mecanica",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.19,
-                "termo": "como passar scanner no carro pelo celular",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.19,
-                "termo": "scanner automotivo para celular grátis",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 9
-              },
-              {
-                "custo": 1.16,
-                "termo": "kl tutors scanner automotivo",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.16,
-                "termo": "scanner automotivo por celular",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.16,
-                "termo": "como arrumar alternador",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.15,
-                "termo": "curso de mecânica básica",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 2,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.14,
-                "termo": "kl tutors escanear o carro pelo celular",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.13,
-                "termo": "escanear carro pelo celular",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 21
-              },
-              {
-                "custo": 1.1,
-                "termo": "escanear carro pelo celular android",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 4
-              },
-              {
-                "custo": 1.08,
-                "termo": "curso de mecânico diesel gratuito",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.06,
-                "termo": "aula de mecânica",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 0.99,
-                "termo": "scanner celular para carro",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 1,
-                "impressoes": 1
-              },
-              {
-                "custo": 0.99,
-                "termo": "como trocar o rolamento do alternador",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0.97,
-                "termo": "quando o carro falha",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 0.93,
-                "termo": "o carro não liga ao virar a chave",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0.84,
-                "termo": "celta falhando na partida",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "a luz da injeção acendeu o que pode ser",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "a luz da injeção eletrônica acendeu o que fazer",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "a luz da injeção está acesa",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "a luz de freio do meu carro nao apaga",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "andar com a luz da injeção acesa é perigoso",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "aplicativo de manutenção de carro",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 0,
-                "termo": "aplicativo para escanear carro",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "aplicativo para escanear o carro",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "aplicativo para manutenção de carro",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "app de diagnostico de carro",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "app para diagnostico de carros",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "ar do carro não gela o que pode ser",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "barulho ao acelerar em alta rotação",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "barulho de assobio ao acelerar o carro",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "barulho metálico no motor",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "barulho na coluna de direção",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "barulho na roda",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "barulho na roda dianteira palio",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "barulho na roda dianteira tec tec",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "barulho na roda do carro o que pode ser",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "barulho no carro quando passa em lombada",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0,
-                "termo": "barulho no motor do carro quando acelera",
-                "cliques": 0,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              }
-            ],
-            "contaId": "6724308347",
-            "custo7d": 1.916914,
-            "porRede": [
-              {
-                "rede": "YOUTUBE",
-                "custo": 1.758464,
-                "cliques": 9,
-                "conversoes": 4,
-                "impressoes": 290,
-                "interacoes": 96
-              },
-              {
-                "rede": "CONTENT",
-                "custo": 0.15845,
-                "cliques": 1,
-                "conversoes": 0,
-                "impressoes": 5,
-                "interacoes": 1
-              },
-              {
-                "rede": "SEARCH",
-                "custo": 0,
-                "cliques": 0,
-                "conversoes": 0,
-                "impressoes": 1,
-                "interacoes": 0
-              },
-              {
-                "rede": "SEARCH_PARTNERS",
-                "custo": 0,
-                "cliques": 0,
-                "conversoes": 0,
-                "impressoes": 1,
-                "interacoes": 0
-              }
-            ],
-            "anuncios": [
-              {
-                "grupo": "Sintomas",
-                "status": "ENABLED",
-                "anuncio": "821800243431",
-                "revisao": "REVIEWED",
-                "campanha": "Mentorque Lançamento",
-                "aprovacao": "APPROVED",
-                "statusCampanha": "PAUSED"
-              },
-              {
-                "grupo": "Controle/garagem",
-                "status": "ENABLED",
-                "anuncio": "822987558439",
-                "revisao": "REVIEWED",
-                "campanha": "Mentorque Lançamento",
-                "aprovacao": "APPROVED",
-                "statusCampanha": "PAUSED"
-              },
-              {
-                "grupo": "Revisão por carro",
-                "status": "ENABLED",
-                "anuncio": "822945314520",
-                "revisao": "REVIEWED",
-                "campanha": "Mentorque Lançamento",
-                "aprovacao": "APPROVED",
-                "statusCampanha": "PAUSED"
-              },
-              {
-                "grupo": "Preço justo (mão no bolso)",
-                "status": "ENABLED",
-                "anuncio": "822987408604",
-                "revisao": "REVIEWED",
-                "campanha": "Mentorque Lançamento",
-                "aprovacao": "APPROVED",
-                "statusCampanha": "PAUSED"
-              },
-              {
-                "grupo": "Perguntar/aprender (IA + trilhas)",
-                "status": "ENABLED",
-                "anuncio": "823061515097",
-                "revisao": "REVIEWED",
-                "campanha": "Mentorque Lançamento",
-                "aprovacao": "APPROVED",
-                "statusCampanha": "PAUSED"
-              },
-              {
-                "grupo": "Android - APP",
-                "status": "ENABLED",
-                "anuncio": "825294437755",
-                "revisao": "REVIEWED",
-                "campanha": "APP | Android | Instalações | BR",
-                "aprovacao": "APPROVED",
-                "statusCampanha": "ENABLED"
-              }
-            ],
-            "janelaDias": {
-              "de": "2026-10-30",
-              "ate": "2026-11-06",
-              "hojeIncompleto": true
-            },
-            "acoesJanela": "30 dias",
-            "porCampanha": [
-              {
-                "id": "24273898063",
-                "nome": "APP | Android | Instalações | BR",
-                "canal": "MULTI_CHANNEL",
-                "custo": 1.916914,
-                "status": "ENABLED",
-                "cliques": 10,
-                "conversoes": 4,
-                "impressoes": 297,
-                "interacoes": 97
-              }
-            ],
-            "fatiaDeBusca": 0,
-            "anunciosAtivos": 1,
-            "acoesDeConversao": [
-              {
-                "acao": "Instalações de Mentorque: manutenção do carro (Android) 2026-09-19T10:01:56.697",
-                "todas": 1068,
-                "origem": "GOOGLE_PLAY",
-                "categoria": "DOWNLOAD",
-                "conversoes": 1068
-              },
-              {
-                "acao": "mentorque.app (Android) session_start 2026-10-04T14:48:04.195",
-                "todas": 1010,
-                "origem": "THIRD_PARTY_APP_ANALYTICS",
-                "categoria": "DEFAULT",
-                "conversoes": 0
-              },
-              {
-                "acao": "mentorque.app (Android) first_open 2026-10-04T13:10:00.497",
-                "todas": 370,
-                "origem": "THIRD_PARTY_APP_ANALYTICS",
-                "categoria": "DOWNLOAD",
-                "conversoes": 0
-              },
-              {
-                "acao": "Visualização de página",
-                "todas": 19,
-                "origem": "WEBPAGE",
-                "categoria": "PAGE_VIEW",
-                "conversoes": 18
-              },
-              {
-                "acao": "mentorque.app (Android) reinstall_open 2026-10-09T13:58:56.623",
-                "todas": 8,
-                "origem": "THIRD_PARTY_APP_ANALYTICS",
-                "categoria": "DEFAULT",
-                "conversoes": 0
-              }
-            ],
-            "anunciosLimitados": 0,
-            "porCampanhaPorDia": [
-              {
-                "id": "24273898063",
-                "dias": [
-                  {
-                    "dia": "2026-10-30",
-                    "custo": 1.916914,
-                    "cliques": 10,
-                    "conversoes": 4,
-                    "impressoes": 297,
-                    "interacoes": 97
-                  },
-                  {
-                    "dia": "2026-10-31",
-                    "custo": 0,
-                    "cliques": 0,
-                    "conversoes": 0,
-                    "impressoes": 0,
-                    "interacoes": 0
-                  },
-                  {
-                    "dia": "2026-11-01",
-                    "custo": 0,
-                    "cliques": 0,
-                    "conversoes": 0,
-                    "impressoes": 0,
-                    "interacoes": 0
-                  },
-                  {
-                    "dia": "2026-11-02",
-                    "custo": 0,
-                    "cliques": 0,
-                    "conversoes": 0,
-                    "impressoes": 0,
-                    "interacoes": 0
-                  },
-                  {
-                    "dia": "2026-11-03",
-                    "custo": 0,
-                    "cliques": 0,
-                    "conversoes": 0,
-                    "impressoes": 0,
-                    "interacoes": 0
-                  },
-                  {
-                    "dia": "2026-11-04",
-                    "custo": 0,
-                    "cliques": 0,
-                    "conversoes": 0,
-                    "impressoes": 0,
-                    "interacoes": 0
-                  },
-                  {
-                    "dia": "2026-11-05",
-                    "custo": 0,
-                    "cliques": 0,
-                    "conversoes": 0,
-                    "impressoes": 0,
-                    "interacoes": 0
-                  },
-                  {
-                    "dia": "2026-11-06",
-                    "custo": 0,
-                    "cliques": 0,
-                    "conversoes": 0,
-                    "impressoes": 0,
-                    "interacoes": 0
-                  }
-                ],
-                "nome": "APP | Android | Instalações | BR",
-                "status": "ENABLED"
-              }
-            ],
-            "anunciosReprovados": 0,
-            "termosSemConversao": [
-              {
-                "custo": 1.46,
-                "termo": "o carro não liga mas acende o painel",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 4
-              },
-              {
-                "custo": 1.36,
-                "termo": "curso de automotivo",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.36,
-                "termo": "livros de mecanica automotiva",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.34,
-                "termo": "quando o carro acende a luz de injeção o que pode ser",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.33,
-                "termo": "carro perdendo força o que pode ser",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.32,
-                "termo": "ford ka 2018 não acelera",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.28,
-                "termo": "pq o carro perde a força na subida",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.23,
-                "termo": "de quanto em quanto tempo tenho que trocar a correia dentada",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.2,
-                "termo": "escanear veiculo com celular",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.2,
-                "termo": "estudando mecanica",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.19,
-                "termo": "como passar scanner no carro pelo celular",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.19,
-                "termo": "scanner automotivo para celular grátis",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 9
-              },
-              {
-                "custo": 1.16,
-                "termo": "kl tutors scanner automotivo",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.16,
-                "termo": "scanner automotivo por celular",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.16,
-                "termo": "como arrumar alternador",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 1.14,
-                "termo": "kl tutors escanear o carro pelo celular",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.13,
-                "termo": "escanear carro pelo celular",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 21
-              },
-              {
-                "custo": 1.1,
-                "termo": "escanear carro pelo celular android",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 4
-              },
-              {
-                "custo": 1.08,
-                "termo": "curso de mecânico diesel gratuito",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 1.06,
-                "termo": "aula de mecânica",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 0.99,
-                "termo": "como trocar o rolamento do alternador",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0.97,
-                "termo": "quando o carro falha",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 2
-              },
-              {
-                "custo": 0.93,
-                "termo": "o carro não liga ao virar a chave",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              },
-              {
-                "custo": 0.84,
-                "termo": "celta falhando na partida",
-                "cliques": 1,
-                "campanha": "Mentorque Lançamento",
-                "conversoes": 0,
-                "impressoes": 1
-              }
-            ]
-          }
         }
       ],
       "appsflyer": [
+        {
+          "dia": "2026-11-17",
+          "dados": {
+            "ios": {
+              "pagas": 0,
+              "linhas": [
+                {
+                  "custo": null,
+                  "fonte": "Organic",
+                  "leais": 2,
+                  "sessoes": 0,
+                  "campanha": null,
+                  "instalacoes": 4
+                }
+              ],
+              "semCusto": true,
+              "organicas": 4,
+              "fontesPagas": [],
+              "instalacoes": 4
+            },
+            "pagas": 206,
+            "avisos": [
+              "A AppsFlyer conta por baixo: em 22/09/2026 foram medidos 25% dos aparelhos Android da 2.7.0 que nunca subiram o SDK. Use proporcao entre fontes, nao total absoluto.",
+              "Custo vazio em todas as linhas: integracao de custo desligada no console. O custo por instalacao tem que ser calculado com o gasto dos paineis de anuncio."
+            ],
+            "janela": {
+              "de": "2026-11-10",
+              "ate": "2026-11-17"
+            },
+            "android": {
+              "pagas": 206,
+              "linhas": [
+                {
+                  "custo": null,
+                  "fonte": "Facebook Ads",
+                  "leais": 72,
+                  "sessoes": 616,
+                  "campanha": "Lançamento Mentorque",
+                  "instalacoes": 182
+                },
+                {
+                  "custo": null,
+                  "fonte": "Organic",
+                  "leais": 2,
+                  "sessoes": 0,
+                  "campanha": null,
+                  "instalacoes": 15
+                },
+                {
+                  "custo": null,
+                  "fonte": "googleadwords_int",
+                  "leais": 5,
+                  "sessoes": 68,
+                  "campanha": "APP | Android | Instalações | BR",
+                  "instalacoes": 24
+                }
+              ],
+              "semCusto": true,
+              "organicas": 15,
+              "fontesPagas": [
+                "Facebook Ads",
+                "googleadwords_int"
+              ],
+              "instalacoes": 221
+            },
+            "organicas": 19,
+            "fontesPagas": [
+              "Facebook Ads",
+              "googleadwords_int"
+            ],
+            "instalacoes": 225
+          }
+        },
         {
           "dia": "2026-11-16",
           "dados": {
@@ -14764,82 +14205,21 @@ docs/dados/auditoria-das-medidas.md.
             ],
             "instalacoes": 312
           }
-        },
-        {
-          "dia": "2026-11-06",
-          "dados": {
-            "ios": {
-              "pagas": 0,
-              "linhas": [
-                {
-                  "custo": null,
-                  "fonte": "Organic",
-                  "leais": 0,
-                  "sessoes": 0,
-                  "campanha": null,
-                  "instalacoes": 2
-                }
-              ],
-              "semCusto": true,
-              "organicas": 2,
-              "fontesPagas": [],
-              "instalacoes": 2
-            },
-            "pagas": 289,
-            "avisos": [
-              "A AppsFlyer conta por baixo: em 22/09/2026 foram medidos 25% dos aparelhos Android da 2.7.0 que nunca subiram o SDK. Use proporcao entre fontes, nao total absoluto.",
-              "Custo vazio em todas as linhas: integracao de custo desligada no console. O custo por instalacao tem que ser calculado com o gasto dos paineis de anuncio."
-            ],
-            "janela": {
-              "de": "2026-10-30",
-              "ate": "2026-11-06"
-            },
-            "android": {
-              "pagas": 289,
-              "linhas": [
-                {
-                  "custo": null,
-                  "fonte": "Facebook Ads",
-                  "leais": 119,
-                  "sessoes": 971,
-                  "campanha": "Lançamento Mentorque",
-                  "instalacoes": 269
-                },
-                {
-                  "custo": null,
-                  "fonte": "Organic",
-                  "leais": 6,
-                  "sessoes": 0,
-                  "campanha": null,
-                  "instalacoes": 15
-                },
-                {
-                  "custo": null,
-                  "fonte": "googleadwords_int",
-                  "leais": 3,
-                  "sessoes": 53,
-                  "campanha": "APP | Android | Instalações | BR",
-                  "instalacoes": 20
-                }
-              ],
-              "semCusto": true,
-              "organicas": 15,
-              "fontesPagas": [
-                "Facebook Ads",
-                "googleadwords_int"
-              ],
-              "instalacoes": 304
-            },
-            "organicas": 17,
-            "fontesPagas": [
-              "Facebook Ads",
-              "googleadwords_int"
-            ],
-            "instalacoes": 306
-          }
         }
       ],
       "app_store_downloads": [
+        {
+          "dia": "2026-11-17",
+          "dados": {
+            "dia": "2026-11-15",
+            "atualizacoes": 0,
+            "downloadsApp": 5,
+            "unidadesPorTipo": {
+              "1": 4,
+              "1F": 1
+            }
+          }
+        },
         {
           "dia": "2026-11-16",
           "dados": {
@@ -14945,22 +14325,41 @@ docs/dados/auditoria-das-medidas.md.
               "7F": 1
             }
           }
-        },
-        {
-          "dia": "2026-11-06",
-          "dados": {
-            "dia": "2026-11-04",
-            "atualizacoes": 0,
-            "downloadsApp": 5,
-            "unidadesPorTipo": {
-              "1": 4,
-              "3": 1,
-              "1F": 1
-            }
-          }
         }
       ],
       "app_store_connect": [
+        {
+          "dia": "2026-11-17",
+          "dados": {
+            "versoes": [
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "3.4",
+                "criadaEm": "2026-11-15T08:04:37-08:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "3.3",
+                "criadaEm": "2026-10-26T10:37:45-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "3.2",
+                "criadaEm": "2026-10-17T05:56:08-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "3.1",
+                "criadaEm": "2026-10-07T03:11:42-07:00"
+              },
+              {
+                "estado": "READY_FOR_SALE",
+                "versao": "3.0",
+                "criadaEm": "2026-10-04T05:02:07-07:00"
+              }
+            ]
+          }
+        },
         {
           "dia": "2026-11-16",
           "dados": {
@@ -15202,41 +14601,22 @@ docs/dados/auditoria-das-medidas.md.
               }
             ]
           }
-        },
-        {
-          "dia": "2026-11-06",
-          "dados": {
-            "versoes": [
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "3.3",
-                "criadaEm": "2026-10-26T10:37:45-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "3.2",
-                "criadaEm": "2026-10-17T05:56:08-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "3.1",
-                "criadaEm": "2026-10-07T03:11:42-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "3.0",
-                "criadaEm": "2026-10-04T05:02:07-07:00"
-              },
-              {
-                "estado": "READY_FOR_SALE",
-                "versao": "2.9",
-                "criadaEm": "2026-09-28T08:20:34-07:00"
-              }
-            ]
-          }
         }
       ],
       "admob": [
+        {
+          "dia": "2026-11-17",
+          "dados": {
+            "apps": [
+              "ca-app-pub-9316035916536420~8094986125"
+            ],
+            "nota": "sem linhas do app do Mentorque no periodo",
+            "moeda": "USD",
+            "porDia": [],
+            "ganhos7d": 0,
+            "impressoes7d": 0
+          }
+        },
         {
           "dia": "2026-11-16",
           "dados": {
@@ -15366,104 +14746,91 @@ docs/dados/auditoria-das-medidas.md.
             "ganhos7d": 0,
             "impressoes7d": 0
           }
-        },
-        {
-          "dia": "2026-11-06",
-          "dados": {
-            "apps": [
-              "ca-app-pub-9316035916536420~8094986125"
-            ],
-            "nota": "sem linhas do app do Mentorque no periodo",
-            "moeda": "USD",
-            "porDia": [],
-            "ganhos7d": 0,
-            "impressoes7d": 0
-          }
         }
       ]
     },
     "frescorDasFontes": [
       {
         "fonte": "admob",
-        "ultimoDia": "2026-11-16",
+        "ultimoDia": "2026-11-17",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "app_store_connect",
-        "ultimoDia": "2026-11-16",
+        "ultimoDia": "2026-11-17",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "app_store_downloads",
-        "ultimoDia": "2026-11-16",
+        "ultimoDia": "2026-11-17",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "appsflyer",
-        "ultimoDia": "2026-11-16",
+        "ultimoDia": "2026-11-17",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "google_ads",
-        "ultimoDia": "2026-11-16",
+        "ultimoDia": "2026-11-17",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "meta_ads",
-        "ultimoDia": "2026-11-16",
+        "ultimoDia": "2026-11-17",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "play_console",
-        "ultimoDia": "2026-11-16",
+        "ultimoDia": "2026-11-17",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "play_downloads",
-        "ultimoDia": "2026-11-16",
+        "ultimoDia": "2026-11-17",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "revenuecat",
-        "ultimoDia": "2026-11-16",
+        "ultimoDia": "2026-11-17",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "search_console",
-        "ultimoDia": "2026-11-16",
+        "ultimoDia": "2026-11-17",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "stripe",
-        "ultimoDia": "2026-11-16",
+        "ultimoDia": "2026-11-17",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "vercel",
-        "ultimoDia": "2026-11-16",
+        "ultimoDia": "2026-11-17",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "vercel_analytics",
-        "ultimoDia": "2026-11-16",
+        "ultimoDia": "2026-11-17",
         "diasParado": 0,
         "parada": false
       },
       {
         "fonte": "youtube",
-        "ultimoDia": "2026-11-16",
+        "ultimoDia": "2026-11-17",
         "diasParado": 0,
         "parada": false
       }
@@ -15472,13 +14839,13 @@ docs/dados/auditoria-das-medidas.md.
     "gastoLegivel": [
       {
         "fonte": "google_ads",
-        "texto": "google_ads: R$ 121,65 em 3 dia(s), janela 2026-11-14 a 2026-11-16, lido em 2026-11-16. Janela curta demais para dizer se o ritmo caiu (precisa de 6 dias).",
+        "texto": "google_ads: R$ 141,48 em 4 dia(s), janela 2026-11-14 a 2026-11-17, lido em 2026-11-17. Janela curta demais para dizer se o ritmo caiu (precisa de 6 dias).",
         "parada": false,
         "motivo": "janela curta"
       },
       {
         "fonte": "meta_ads",
-        "texto": "meta_ads: R$ 213,84 em 7 dia(s), janela 2026-11-09 a 2026-11-15, lido em 2026-11-16. Ritmo: R$ 32,67 por dia nos 3 primeiros dias contra R$ 28,63 nos 3 últimos.",
+        "texto": "meta_ads: R$ 208,00 em 7 dia(s), janela 2026-11-10 a 2026-11-16, lido em 2026-11-17. Ritmo: R$ 31,40 por dia nos 3 primeiros dias contra R$ 28,69 nos 3 últimos.",
         "parada": false,
         "motivo": ""
       }
@@ -15489,25 +14856,25 @@ docs/dados/auditoria-das-medidas.md.
       "motivo": "sem linhas do app do Mentorque no periodo"
     },
     "vitalsLegivel": {
-      "texto": "Vitals do Play: NAO E ZERO MEDIDO (o Play nao publicou vitals no periodo; ele suprime abaixo de um minimo de usuarios distintos): NAO E ZERO MEDIDO: a API do Play respondeu sem publicar metrica nenhuma no periodo. O Play suprime vitals abaixo de um minimo de usuarios distintos, e esta fonte esta assim desde 22/08. Quem precisa de fechamento de app usa a migalha propria (app_erros), que mede os nossos aparelhos.",
-      "legivel": false,
-      "motivo": "NAO E ZERO MEDIDO: a API do Play respondeu sem publicar metrica nenhuma no periodo. O Play suprime vitals abaixo de um minimo de usuarios distintos, e esta fonte esta assim desde 22/08. Quem precisa de fechamento de app usa a migalha propria (app_erros), que mede os nossos aparelhos."
+      "texto": "Vitals do Play: o dado mais novo e de 2026-11-15, 2 dias atras; a Play informou dado ate 2026-11-16 e entregou ate o fim, entao atraso aqui e da Play e nao risco de perder a serie; a serie tem 1 dia(s). Crash em 0% dos 60 usuarios distintos. Mede o processo NATIVO, nao a migalha de fechamento.",
+      "legivel": true,
+      "motivo": ""
     },
     "aquisicao": {
       "degraus": [
         {
           "degrau": "dinheiro (7 dias)",
           "dono": "painéis de anúncio (Google Ads e Meta), porque só eles sabem quanto saiu da conta",
-          "valor": 335.49,
+          "valor": 349.48,
           "unidade": "R$",
           "porFonte": [
             {
               "fonte": "google_ads",
-              "valor": 121.65
+              "valor": 141.48
             },
             {
               "fonte": "meta_ads",
-              "valor": 213.84
+              "valor": 208
             }
           ],
           "ressalvas": [],
@@ -15525,20 +14892,20 @@ docs/dados/auditoria-das-medidas.md.
         {
           "degrau": "instalação por fonte (7 dias)",
           "dono": "AppsFlyer, porque arbitrar entre redes que reivindicam a mesma pessoa é o ofício de um MMP",
-          "valor": 231,
+          "valor": 225,
           "unidade": "instalações",
           "porFonte": [
             {
               "fonte": "Facebook Ads",
-              "valor": 194
+              "valor": 182
             },
             {
               "fonte": "googleadwords_int",
-              "valor": 17
+              "valor": 24
             },
             {
               "fonte": "Organic",
-              "valor": 16
+              "valor": 15
             }
           ],
           "ressalvas": [
@@ -15550,15 +14917,15 @@ docs/dados/auditoria-das-medidas.md.
       "custoPorInstalacao": [
         {
           "fonte": "google_ads",
-          "custo": 121.65,
-          "instalacoes": 17,
-          "porInstalacao": 7.16
+          "custo": 141.48,
+          "instalacoes": 24,
+          "porInstalacao": 5.89
         },
         {
           "fonte": "meta_ads",
-          "custo": 213.84,
-          "instalacoes": 194,
-          "porInstalacao": 1.1
+          "custo": 208,
+          "instalacoes": 182,
+          "porInstalacao": 1.14
         }
       ],
       "recusas": [
@@ -15567,9 +14934,9 @@ docs/dados/auditoria-das-medidas.md.
         "A AppsFlyer so ve o aparelho onde o SDK subiu, e em 03/10 isso eram 77% dos Android. Ela responde PROPORCAO entre fontes, nunca o total de instalacoes."
       ],
       "linhas": [
-        "dinheiro (7 dias) [dono: painéis de anúncio (Google Ads e Meta)]: R$ 335.49 (google_ads 121.65, meta_ads 213.84)",
+        "dinheiro (7 dias) [dono: painéis de anúncio (Google Ads e Meta)]: R$ 349.48 (google_ads 141.48, meta_ads 208)",
         "instalação total (7 dias) [dono: as lojas (Play Console e App Store)]: NAO SEI, a aquisição do Play Console não está em coletor nenhum (o `play_console` traz só ANR e crash), e o Android é 98% da base",
-        "instalação por fonte (7 dias) [dono: AppsFlyer]: 231 instalações (Facebook Ads 194, googleadwords_int 17, Organic 16)"
+        "instalação por fonte (7 dias) [dono: AppsFlyer]: 225 instalações (Facebook Ads 182, googleadwords_int 24, Organic 15)"
       ]
     }
   },
