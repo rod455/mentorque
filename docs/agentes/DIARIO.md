@@ -3,6 +3,93 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-20 · Conteúdo: o site passou a ser legível daqui, e isso corrigiu uma frase sobre o alcance da minha entrega
+
+- Artifact "Conteúdo da semana": https://claude.ai/artifact/RQVLi2uqSZcf4uxUFXwwB9
+- **A rodada é a de terça 17/11 e fechou em 20/11** (sessão reiniciada no meio,
+  terceira vez). **Custo do atraso, pela minha regra de 10/11: nenhum visível.**
+  A entrega é aula de catálogo, que vai ao ar pelo deploy e não tem janela, e o
+  próximo slot é 24/11, que não foi tocado. Reconferido no retrato de 20/11 das
+  9h: segue nenhuma consulta de categoria e o canal segue com o envio de 13/10
+  como o mais novo.
+- ENTREGA: **aula `diag-ar-nao-gela`**, gratuita, trilha de diagnóstico, PT e
+  EN. Quarta da fila nova (4 aparelhos em 30 dias) e a única das que faltavam
+  com urgência BAIXA na ficha, o que muda o tom: a aula diz com todas as letras
+  que dá para esperar, e nomeia as duas exceções (barulho novo ao ligar o ar, ou
+  a temperatura do motor subindo com o ar ligado). Recorte pela pergunta da
+  própria tela: **pouco ar** (quase sempre filtro de cabine, e não é o filtro de
+  ar do motor) contra **ar quente** (o circuito que gela). O ponto que economiza
+  dinheiro: o circuito é FECHADO e não gasta gás com o uso, então recarga todo
+  ano é assinatura de vazamento, e pagar carga sem procurar o vazamento é pagar
+  duas vezes. Mais as três coisas que parecem defeito e não são. São 128 aulas e
+  16 dos 19 sintomas com aula.
+- **A ARMADILHA COM DATA MARCADA CHEGOU NA DATA MARCADA.** Em 27/10 eu escrevi
+  no manual que a suíte `sintoma` usava "Ar-condicionado não gela" como exemplo
+  de sintoma SEM aula e que a rodada que escrevesse essa aula ia derrubar a
+  afirmação. Rodei a suíte depois da aula e ela reprovou exatamente nela.
+  Troquei para "Desgaste irregular dos pneus", o ÚLTIMO da fila (08/12), que dá
+  o maior prazo possível, e escrevi o prazo no comentário da suíte. **A terceira
+  troca não existe**: em 08/12 não há mais sintoma descoberto, então a afirmação
+  troca de FORMA. Desenho de conferência é alçada do Guardião e virou linha na
+  fila para ele, com o que a afirmação protege.
+- **INSTRUMENTO NOVO, e ele derruba um limite de agosto deste manual.** "Não dá
+  para abrir o site por esta sessão" deixou de ser verdade: a ferramenta
+  `web_fetch_vercel_url` da Vercel busca URL de deploy da conta do dono e
+  respondeu 200 para `/api/lessons` (catálogo servido inteiro, `count: 127`) e
+  para `/robots.txt`. Desbloqueia três coisas: o HTML GERADO das páginas (que o
+  aprendizado de 25/08 manda conferir e ninguém conseguia desde então), o campo
+  `populares` sem passar pelo banco, e conferir o que o app recebe de fato.
+  `populares` hoje: `vid-manual-habitos`, `trait-highkm`, `fund-systems`,
+  `basics`, `sit-no-history` (em 13/10 eram manual-habitos, diy-battery,
+  fund-systems, sit-no-history, diy-airfilter). Ressalva que continua valendo: a
+  lista aparece no Início e se alimenta sozinha.
+- **CORREÇÃO, E ELA É NA DIREÇÃO DE INFLAR.** O retorno de 12/11 escreveu "a sua
+  entrega não alcança quase ninguém: as quatro aulas novas só existem no app
+  para 8 aparelhos da web". Está errado, e a porta foi aberta pelo meu próprio
+  registro. Conferido em dois instrumentos: no fonte, `remoteLessons.ts` diz que
+  o catálogo remoto SOBREPÕE o embutido no binário, e é para isso que ele
+  existe; na produção, as quatro aulas estão no pacote que todo aparelho baixa.
+  **As quatro alcançam a base inteira** por Estudos, busca no app e lista do
+  Início; o que não alcança é a PORTA do sintoma, que é o pedido na fila. Regra
+  nova, irmã da regra da população: quando eu escrever que algo "não chega", a
+  frase diz QUAL CAMINHO não chega. E a consequência para a pergunta que o
+  retorno levantou (talvez parar de produzir aula por uma rodada): **não**, e
+  agora com instrumento.
+- **A CONCLUSÃO QUE O RETORNO DE 04/11 COBROU, com a sexta leitura.** No retrato
+  de 17/11 e de novo em 20/11 **não existe nenhuma consulta de categoria**: as
+  linhas são `mentorque`, `mitrenque`, `moteque` (a marca escrita errado de dois
+  jeitos) e `é gratuito?`. A série: 06/10 nove consultas e mediana 71, 13/10
+  quatro e 82, 20/10 e 27/10 duas e 93,5, 03/11 uma e 98, 17/11 e 20/11
+  nenhuma. **A frase: a busca orgânica não responde a conteúdo novo neste
+  tamanho de domínio; o que falta não é página, é alguém de fora apontando para
+  nós.** Três implicações escritas no manual: zero slot de guia até 02/02/2027;
+  a única ação de busca é a citação de fora, travada no ponto de partida; e uma
+  hipótese nova que o robots.txt mostrou, os robôs de busca por IA liberados
+  nome por nome, que fica como hipótese porque instrumento para medir citação
+  por assistente eu não tenho.
+- A linha da tela de Links passou dos 21 dias (28 em 17/11) e voltou **com o
+  custo de hoje em vez do pedido repetido**: sem ela, qualquer plano de citação
+  nasce sem linha de base, e ela é a única ação de busca que sobrou no trimestre.
+- **O PLANO B DE 08/12, escrito antes de a fila acabar**, porque planejar o fim
+  depois que acaba foi o erro do rodízio. Ele sai da leitura de 24/11: 1 em 10
+  ou melhor → o trabalho vira PROFUNDIDADE nas aulas mais abertas do
+  `populares`; pior que 1 em 10 com amostra → o problema é a ENTRADA, o trabalho
+  vira cobrir o que não é sintoma e a pergunta do card vai para o CRO; sem
+  amostra até 08/12 → a cadeira não espera e aprofunda as cinco mais abertas.
+- CONFERÊNCIAS: `plantio` na linha nova da `AULAS_DO_SINTOMA` → MORDEU, saída 1,
+  arquivo restaurado pela cópia. `npm run conferir` verde. Suíte `sintoma` nos
+  sete pontos depois da troca.
+- O banco recusou TRÊS vezes (11h12, 11h14 e 11h31 UTC, inclusive um
+  `select 1`), e a regra de tentar de novo antes de publicar foi cumprida. A
+  demanda por sintoma é de 27/10 e está marcada. **E a recusa deixou de travar a
+  rodada**, porque a API de produção respondeu o que eu precisava: quando o
+  banco cai, a pergunta é se existe outra tabela interposta.
+- RÉGUA DA RODADA: 1 a 5, 9 e 10 cumpridos; 6, 7 e 8 não se aplicam a aula de
+  catálogo e a 11 não se aplica (sem pauta até o gatilho).
+- Próximas: (1) 24/11, aula de puxar ao frear mais a primeira leitura da régua
+  do sintoma, com portão e corte já escritos; (2) 01/12, aula de pneu perdendo
+  pressão, prima do circuito fechado que a aula de hoje explica.
+
 ## 2026-11-16 · Engenharia: a Apple aprovou, e o aviso do iPhone sobe para 76
 
 - O dono disse que a Apple aprovou. Lido na API da App Store Connect às 21h43
