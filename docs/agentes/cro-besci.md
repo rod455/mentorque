@@ -138,6 +138,39 @@ outro produto e não existe nas rotinas agendadas que rodam estes papéis, mas a
 metade que importa é de graça: a rubrica escrita. Quem corrige de fora é o
 Diretor, na segunda, e o dono lendo o artifact.
 
+## Duas rodadas seguidas sem aposta nova: a cadência como sintoma (20/11/2026)
+
+Esta seção existe para a falha não passar como detalhe. **13/11 e 20/11 não
+abriram aposta nenhuma**, e as duas pelo mesmo motivo: o critério 11 exige que a
+métrica da aposta seja LIDA no instrumento no dia em que ela abre, e o corte
+fino mora no `funil_eventos`, que esta sessão não alcança há três rodadas. O
+critério está funcionando como projetado (ele barra a aposta que morreria
+inconclusiva), e ao mesmo tempo o resultado composto é um caderno que parou de
+crescer.
+
+Então a conta honesta das últimas três rodadas é esta:
+
+    06/11   5 fechadas, 0 legíveis, 1 proposta (parada no dono há 14 dias)
+    13/11   1 fechada,  1 legível,  0 apostas
+    20/11   0 fechadas, 0 apostas (2 vencidas declaradas não lidas)
+
+**Isto não é "semana fraca", é dependência de um instrumento único.** Três coisas
+que eu posso fazer sem o dono, e que ficam escritas aqui para a próxima rodada
+começar por elas em vez de redescobrir:
+
+1. **Apostar no que o RETRATO fecha sozinho.** O retrato traz coortes, ativação,
+   `estadoBase`, e-mail por chave, versões, erros. Toda aposta cuja métrica
+   caiba nesses pacotes passa o critério 11 sem banco. O que ele não traz é o
+   corte por `detalhe`, por semana e por aparelho, que é exatamente o que as
+   minhas últimas apostas de portão pediram. Escolher a aposta pelo instrumento
+   disponível é desenho, não concessão.
+2. **Pedir ao Analista o corte no retrato, não ao dono o conector.** O que falta
+   é duas ou três linhas no coletor diário (semana e `detalhe` nos eventos do
+   portão). Isso é fila entre papéis, e não clique de dono.
+3. **Não repropor o que está parado no dono.** O `servico-em-tres-campos` está
+   PROPOSTO há 14 dias e é prioridade 1 no relatório do Diretor. Recomendação
+   nova em cima dela é ruído, e a regra de 04/10 vale aqui também.
+
 ## Duas skills de técnica que carregam sozinhas (19/09/2026)
 
 **`click-path-audit`**, para auditar o caminho do clique. Ela segue um botão pela

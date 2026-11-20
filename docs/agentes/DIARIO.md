@@ -3,6 +3,161 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-20 · CRO: a volta da primeira semana está parada em 18 há nove semanas, e a jornada de e-mail somou 4 cliques em 1.219 envios
+
+Rodada de RETENÇÃO. Artifact publicado:
+https://claude.ai/artifact/7KxTvq8hwrwcHqngwqvtjM
+
+- **Fonte fina fora pela terceira rodada.** O conector do Supabase desta sessão
+  traz a organização `ianjvpotzelxokbdupmx` (financasrodlu, sipatgo), não traz o
+  Mentorque, e recusa toda consulta. **Apliquei a regra que o dono me deu em
+  14/11 antes de pedir qualquer clique**: procurei no diário quem leu o banco
+  depois da minha falha, e a Engenharia leu em 14/11 (19h09 e 21h49) e em 16/11.
+  Logo a ferramenta funciona e a minha sessão é que não alcançou. **Isto é
+  "fonte não lida", não clique de dono, e nenhuma linha foi para a lista dele.**
+- **A leitura que o retrato fecha sozinho** (20/11 às 09h00 UTC, pacote de
+  coortes): seis coortes d1-7 fechadas, volta na semana 1 de 21, 12, 21, 15, 18
+  e 21 por 100, com n de 57, 69, 131, 124, 126 e 103. Com n perto de 100 o erro
+  padrão é ~3,8 pontos, então as seis são compatíveis com UM número de ~18.
+  Ativação igualmente parada (49, 41, 42, 43, 52, 37; média ~44). Nove semanas de
+  mudanças de conversão não moveram a volta, e nada do app de hoje traz a pessoa
+  de volta sozinho.
+- **A consequência de projeto, que vale mais que o número:** com ~100 por coorte,
+  só uma mudança de uns 8 pontos aparece aqui. Trocar texto não move 8 pontos.
+  A conta de poder passou a vir ANTES de escolher a aposta (escrito na skill).
+- **O achado da semana: a jornada de e-mail não é lida, e o medidor está vivo.**
+  1.219 envios em 30 dias; a jornada automática lê d0 1,6% (8 de 491), d2 0,9%,
+  d5 1,2%, d9 0%, com 4 cliques em 1.138 e-mails. Antes de concluir "ninguém
+  lê", provei que o carimbo mede, e **o segundo instrumento estava DENTRO do
+  primeiro**: as chaves mandadas à mão, mesma janela e mesmo provedor, leem 17,4%
+  (4 de 23) e 33,3% (3 de 9), e as faixas de 95% não encostam na do d0 (0,8% a
+  3,2%). O clique confirma por outro caminho, porque clique não depende de
+  imagem. **Limite declarado:** as campanhas à mão foram para lista escolhida, a
+  jornada vai para todo mundo, então isto prova que o medidor vive, não que o
+  texto seja ruim. E `entregues` não diz em que aba caiu: Promoções não é
+  legível daqui.
+- **Nenhuma aposta nova, pela SEGUNDA rodada seguida, e tratei isso como
+  sintoma, não como semana fraca.** O critério 11 (métrica lida no dia zero)
+  barra toda aposta de portão enquanto o corte fino não volta, e está certo em
+  barrar. Abri no manual a seção "Duas rodadas seguidas sem aposta nova", com a
+  conta das três últimas rodadas e com as três saídas que não dependem do dono:
+  apostar no que o retrato fecha sozinho, pedir o corte ao Analista em vez do
+  conector ao dono, e não repropor o que está parado com ele.
+- **Duas apostas venceram sem veredito** (as duas com data cheia em 15/11):
+  `conta-que-sabe-que-veio-do-carro` e `quiz-no-dia-1`. Marcadas no caderno como
+  NÃO LIDAS com o instrumento nomeado e a dívida datada, em vez de fechadas com
+  o instrumento errado.
+- **Não conferido, e dito como não conferido:** quanto a 3.4 alcançou dos
+  aparelhos ativos. A régua do dono (17/10) manda ler isso em `versao`, e **o
+  retrato não carrega essa quebra**: as versões só aparecem dentro de `erros7d`,
+  como efeito colateral de quem deu erro. A 3.4 está em aparelhos (aparece ali, e
+  a loja tem 3.4 READY_FOR_SALE desde 15/11), mas a FATIA não é legível, então o
+  relógio do repique de `a-conta-e-pedida-de-novo-a-quem-ja-tem-algo-a-perder`
+  continua NÃO iniciado.
+- **Duas linhas para a fila entre papéis.** Ao Analista: três cortes no retrato
+  (portão da conta por semana, `detalhe` e aparelho; pacote novo de aparelhos
+  ativos por versão; contagem sem a trava `umaVez`). À Engenharia: dizer se a
+  recusa de registro de push é ruído ou porta fechada (5 aparelhos, última em
+  19/11, versões 3.3.0 e 3.4.0) **sem eu afirmar que é defeito**, porque o push
+  é a única alavanca de retenção com mecanismo de verdade agora que o e-mail
+  está nesse estado.
+- **Recomendações:** (1) decidir a jornada de e-mail, que é mensagem a cliente e
+  portanto do dono, entre mudar e medir, encolher para um e-mail, ou desligar;
+  (2) olhar o registro de push antes de apostar nele (já na fila, sem clique do
+  dono); (3) nenhuma recomendação nova sobre `servico-em-tres-campos`, que está
+  PROPOSTO há 14 dias e é prioridade 1 do Diretor, porque repetir seria ruído.
+- Mapa da experiência em v14. Três aprendizados na skill de BeSci: o segundo
+  instrumento costuma estar dentro do primeiro; medida grossa demais é veredito
+  impossível antes de a aposta começar; "entregue" não diz em que aba caiu.
+
+## 2026-11-20 · Conteúdo: o site passou a ser legível daqui, e isso corrigiu uma frase sobre o alcance da minha entrega
+
+- Artifact "Conteúdo da semana": https://claude.ai/artifact/RQVLi2uqSZcf4uxUFXwwB9
+- **A rodada é a de terça 17/11 e fechou em 20/11** (sessão reiniciada no meio,
+  terceira vez). **Custo do atraso, pela minha regra de 10/11: nenhum visível.**
+  A entrega é aula de catálogo, que vai ao ar pelo deploy e não tem janela, e o
+  próximo slot é 24/11, que não foi tocado. Reconferido no retrato de 20/11 das
+  9h: segue nenhuma consulta de categoria e o canal segue com o envio de 13/10
+  como o mais novo.
+- ENTREGA: **aula `diag-ar-nao-gela`**, gratuita, trilha de diagnóstico, PT e
+  EN. Quarta da fila nova (4 aparelhos em 30 dias) e a única das que faltavam
+  com urgência BAIXA na ficha, o que muda o tom: a aula diz com todas as letras
+  que dá para esperar, e nomeia as duas exceções (barulho novo ao ligar o ar, ou
+  a temperatura do motor subindo com o ar ligado). Recorte pela pergunta da
+  própria tela: **pouco ar** (quase sempre filtro de cabine, e não é o filtro de
+  ar do motor) contra **ar quente** (o circuito que gela). O ponto que economiza
+  dinheiro: o circuito é FECHADO e não gasta gás com o uso, então recarga todo
+  ano é assinatura de vazamento, e pagar carga sem procurar o vazamento é pagar
+  duas vezes. Mais as três coisas que parecem defeito e não são. São 128 aulas e
+  16 dos 19 sintomas com aula.
+- **A ARMADILHA COM DATA MARCADA CHEGOU NA DATA MARCADA.** Em 27/10 eu escrevi
+  no manual que a suíte `sintoma` usava "Ar-condicionado não gela" como exemplo
+  de sintoma SEM aula e que a rodada que escrevesse essa aula ia derrubar a
+  afirmação. Rodei a suíte depois da aula e ela reprovou exatamente nela.
+  Troquei para "Desgaste irregular dos pneus", o ÚLTIMO da fila (08/12), que dá
+  o maior prazo possível, e escrevi o prazo no comentário da suíte. **A terceira
+  troca não existe**: em 08/12 não há mais sintoma descoberto, então a afirmação
+  troca de FORMA. Desenho de conferência é alçada do Guardião e virou linha na
+  fila para ele, com o que a afirmação protege.
+- **INSTRUMENTO NOVO, e ele derruba um limite de agosto deste manual.** "Não dá
+  para abrir o site por esta sessão" deixou de ser verdade: a ferramenta
+  `web_fetch_vercel_url` da Vercel busca URL de deploy da conta do dono e
+  respondeu 200 para `/api/lessons` (catálogo servido inteiro, `count: 127`) e
+  para `/robots.txt`. Desbloqueia três coisas: o HTML GERADO das páginas (que o
+  aprendizado de 25/08 manda conferir e ninguém conseguia desde então), o campo
+  `populares` sem passar pelo banco, e conferir o que o app recebe de fato.
+  `populares` hoje: `vid-manual-habitos`, `trait-highkm`, `fund-systems`,
+  `basics`, `sit-no-history` (em 13/10 eram manual-habitos, diy-battery,
+  fund-systems, sit-no-history, diy-airfilter). Ressalva que continua valendo: a
+  lista aparece no Início e se alimenta sozinha.
+- **CORREÇÃO, E ELA É NA DIREÇÃO DE INFLAR.** O retorno de 12/11 escreveu "a sua
+  entrega não alcança quase ninguém: as quatro aulas novas só existem no app
+  para 8 aparelhos da web". Está errado, e a porta foi aberta pelo meu próprio
+  registro. Conferido em dois instrumentos: no fonte, `remoteLessons.ts` diz que
+  o catálogo remoto SOBREPÕE o embutido no binário, e é para isso que ele
+  existe; na produção, as quatro aulas estão no pacote que todo aparelho baixa.
+  **As quatro alcançam a base inteira** por Estudos, busca no app e lista do
+  Início; o que não alcança é a PORTA do sintoma, que é o pedido na fila. Regra
+  nova, irmã da regra da população: quando eu escrever que algo "não chega", a
+  frase diz QUAL CAMINHO não chega. E a consequência para a pergunta que o
+  retorno levantou (talvez parar de produzir aula por uma rodada): **não**, e
+  agora com instrumento.
+- **A CONCLUSÃO QUE O RETORNO DE 04/11 COBROU, com a sexta leitura.** No retrato
+  de 17/11 e de novo em 20/11 **não existe nenhuma consulta de categoria**: as
+  linhas são `mentorque`, `mitrenque`, `moteque` (a marca escrita errado de dois
+  jeitos) e `é gratuito?`. A série: 06/10 nove consultas e mediana 71, 13/10
+  quatro e 82, 20/10 e 27/10 duas e 93,5, 03/11 uma e 98, 17/11 e 20/11
+  nenhuma. **A frase: a busca orgânica não responde a conteúdo novo neste
+  tamanho de domínio; o que falta não é página, é alguém de fora apontando para
+  nós.** Três implicações escritas no manual: zero slot de guia até 02/02/2027;
+  a única ação de busca é a citação de fora, travada no ponto de partida; e uma
+  hipótese nova que o robots.txt mostrou, os robôs de busca por IA liberados
+  nome por nome, que fica como hipótese porque instrumento para medir citação
+  por assistente eu não tenho.
+- A linha da tela de Links passou dos 21 dias (28 em 17/11) e voltou **com o
+  custo de hoje em vez do pedido repetido**: sem ela, qualquer plano de citação
+  nasce sem linha de base, e ela é a única ação de busca que sobrou no trimestre.
+- **O PLANO B DE 08/12, escrito antes de a fila acabar**, porque planejar o fim
+  depois que acaba foi o erro do rodízio. Ele sai da leitura de 24/11: 1 em 10
+  ou melhor → o trabalho vira PROFUNDIDADE nas aulas mais abertas do
+  `populares`; pior que 1 em 10 com amostra → o problema é a ENTRADA, o trabalho
+  vira cobrir o que não é sintoma e a pergunta do card vai para o CRO; sem
+  amostra até 08/12 → a cadeira não espera e aprofunda as cinco mais abertas.
+- CONFERÊNCIAS: `plantio` na linha nova da `AULAS_DO_SINTOMA` → MORDEU, saída 1,
+  arquivo restaurado pela cópia. `npm run conferir` verde. Suíte `sintoma` nos
+  sete pontos depois da troca.
+- O banco recusou TRÊS vezes (11h12, 11h14 e 11h31 UTC, inclusive um
+  `select 1`), e a regra de tentar de novo antes de publicar foi cumprida. A
+  demanda por sintoma é de 27/10 e está marcada. **E a recusa deixou de travar a
+  rodada**, porque a API de produção respondeu o que eu precisava: quando o
+  banco cai, a pergunta é se existe outra tabela interposta.
+- RÉGUA DA RODADA: 1 a 5, 9 e 10 cumpridos; 6, 7 e 8 não se aplicam a aula de
+  catálogo e a 11 não se aplica (sem pauta até o gatilho).
+- Próximas: (1) 24/11, aula de puxar ao frear mais a primeira leitura da régua
+  do sintoma, com portão e corte já escritos; (2) 01/12, aula de pneu perdendo
+  pressão, prima do circuito fechado que a aula de hoje explica.
+
+
 ## 2026-11-16 · Engenharia: a Apple aprovou, e o aviso do iPhone sobe para 76
 
 - O dono disse que a Apple aprovou. Lido na API da App Store Connect às 21h43

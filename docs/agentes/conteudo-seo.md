@@ -317,6 +317,131 @@ não vê o card; a aula aparece em Estudos e na busca. Isso vale até a 3.4, que
 em 03/11 ainda não foi gerada. A proposta da Engenharia (a tabela viajar no
 catálogo remoto) está na ficha da 3.4 e espera o dono.
 
+## 17/11/2026: o site PASSOU a ser legível desta sessão, e isso derruba um limite de agosto
+
+Durante quase três meses este manual carregou: "não dá para abrir o site por
+esta sessão, o proxy recusa `www.mentorque.com.br` (403 no CONNECT)". **Deixou
+de ser verdade, e o caminho é a ferramenta da Vercel `web_fetch_vercel_url`**,
+que busca uma URL de deploy da conta do dono. Lido em 17/11:
+
+- `https://www.mentorque.com.br/api/lessons` responde 200 com o catálogo
+  servido inteiro (`count: 127` na leitura de hoje);
+- `https://www.mentorque.com.br/robots.txt` responde 200, com o `Host` e o
+  `Sitemap` certos, e com os robôs de busca por IA (GPTBot, ClaudeBot,
+  PerplexityBot, Bingbot e outros) liberados nome por nome.
+
+**O que isso desbloqueia, e vale mais que a curiosidade:**
+
+1. **O HTML GERADO das páginas**, que é o que o aprendizado de 25/08 deste
+   manual manda conferir ("confira o HTML gerado, não o código") e que ninguém
+   nesta cadeira conseguiu conferir desde então. Canonical, `title`,
+   `description` e ausência de `noindex` passam a ser leitura de uma chamada.
+2. **O campo `populares` sem passar pelo banco.** Ele é calculado no servidor a
+   partir de `viu_aula`, então a resposta da API é leitura de banco por tabela
+   interposta. Em 17/11: `vid-manual-habitos`, `trait-highkm`, `fund-systems`,
+   `basics`, `sit-no-history`. Em 13/10 eram `vid-manual-habitos`,
+   `diy-battery`, `fund-systems`, `sit-no-history`, `diy-airfilter`. **Ressalva
+   que continua valendo**: a lista aparece na tela de Início, então ela se
+   alimenta sozinha, e a janela é de 30 dias.
+3. **Conferir o que o app realmente recebe**, que é o que resolveu a dúvida
+   desta rodada (seção abaixo).
+
+O limite que fica: a ferramenta busca URL de deploy da conta, então ela serve
+para o nosso site e não para ler site de terceiro.
+
+## A correção que o instrumento novo permitiu: a aula CHEGA, o card não (17/11/2026)
+
+O retorno de 12/11 escreveu "a sua entrega não alcança quase ninguém: as quatro
+aulas novas só existem no app para 8 aparelhos da web até a 3.4 sair". **Isso
+está errado, e o erro é na direção de inflar, que é a mesma do "71 pessoas por
+semana".** E a porta foi aberta pelo meu próprio registro, que disse "nasceram
+sem o card para quase todo mundo" sem separar as duas coisas.
+
+**Conferido hoje no instrumento, duas vezes:**
+
+- No fonte, `lib/app/remoteLessons.ts`: o catálogo remoto SOBREPÕE o embutido
+  no binário, e é exatamente para isso que ele existe ("publicar uma aula nova
+  passa a ser um deploy do site em vez de um build").
+- Na produção, `/api/lessons` servido hoje: `diag-direcao-pesada`,
+  `diag-perda-de-forca`, `diag-motor-falhando` e `diag-fumaca-escapamento`
+  estão no pacote que todo aparelho baixa.
+
+**Então as quatro aulas alcançam a base inteira** por Estudos, pela busca
+dentro do app e pela lista do Início. O que NÃO alcança é a PORTA do sintoma,
+porque a `AULAS_DO_SINTOMA` viaja no binário, e isso continua sendo o pedido na
+fila. Uma ressalva honesta sobre o alcance: aula publicada entre dois builds
+precisa de `thumb` com endereço completo para o card ter imagem, e as minhas
+não têm `thumb` nenhuma, então elas chegam com o ícone da trilha, que é o
+comportamento limpo documentado em `content.ts`.
+
+**A regra que fica, e ela é a irmã da regra da população:** quando eu escrever
+que algo "não chega", a frase diz QUAL CAMINHO não chega. "A entrega não
+alcança ninguém" e "uma das portas não alcança" são frases diferentes, e a
+segunda é a verdadeira. Sem isso, quem repassa escolhe a versão mais forte.
+
+E a consequência para a pergunta que o retorno levantou ("talvez a ordem certa
+seja parar de produzir aula por uma rodada"): **não, e agora com instrumento.**
+A aula rende no dia do deploy para todo mundo; o que rende depois é uma das
+portas. Se a resposta fosse "só 8 aparelhos", a pergunta estaria certa.
+
+## A conclusão das seis leituras da busca, e o que ela implica (17/11/2026)
+
+O retorno de 04/11 cobrou: cinco medidas concordantes não são cinco medidas,
+são uma conclusão, e faltava a frase. Hoje são SEIS, e a de hoje é a mais
+dura: **no retrato de 17/11 não existe nenhuma consulta de categoria.** As
+quatro linhas são `mentorque`, `mitrenque` e `moteque` (a marca escrita errado
+de dois jeitos) e `é gratuito?`. O `luz do motor acesa`, que era a última de
+categoria, saiu da lista. São 3 cliques e 52 impressões em 28 dias, todas de
+marca.
+
+| leitura | consultas de categoria | mediana |
+|---|---|---|
+| 06/10 | 9 | 71 |
+| 13/10 | 4 | 82 |
+| 20/10 | 2 | 93,5 |
+| 27/10 | 2 | 93,5 |
+| 03/11 | 1 | 98 |
+| **17/11** | **0** | **não existe** |
+
+**A frase que as seis leituras sustentam:** *a busca orgânica não responde a
+conteúdo novo neste tamanho de domínio; o que falta não é página, é alguém de
+fora apontando para nós.* O que o site recebe hoje de busca é gente que já
+conhece o nome, inclusive escrevendo errado.
+
+**O que isso implica para o trimestre desta cadeira**, em três linhas:
+
+1. **Zero slot de guia até 02/02/2027**, e nem um de exceção. Escrever a sexta
+   página é a ação que as seis leituras dizem que não move nada.
+2. **A única ação de busca é a citação de fora**, e ela está travada no ponto
+   de partida: a tela de Links do Search Console está na lista do dono desde
+   20/10, hoje com 28 dias, acima da regra dos 21. Custo de hoje, dito sem
+   repetir o pedido: sem ela, qualquer plano de citação nasce sem linha de base
+   e não terá como ser conferido depois.
+3. **Existe um caminho que eu não tinha olhado, e o robots.txt mostrou hoje:**
+   os robôs de busca por IA estão liberados nome por nome. Isso não é SEO
+   clássico e eu não tenho instrumento para medir citação por assistente, então
+   fica escrito como hipótese e não como plano: se em 02/02 a busca seguir em
+   zero, a pergunta a fazer é se o conteúdo desta casa é citado por assistente,
+   e qual instrumento mediria isso.
+
+## O plano B de 08/12: qual é o próximo trabalho desta cadeira (17/11/2026)
+
+Cobrado nos retornos de 04/11 e 12/11, e escrito agora porque planejar o fim de
+uma fila depois que ela acaba foi exatamente o erro do rodízio. Em 08/12 a régua
+fecha em 19 de 19 sintomas com aula, e "cobrir sintoma" deixa de existir como
+fila. **O que vem depois não é escolha de gosto: ela sai da leitura de 24/11**,
+que mede quantos de quem consulta o sintoma abrem a aula que responde ele.
+
+| se a leitura de 24/11 (ou a primeira com amostra) disser | o próximo trabalho é |
+|---|---|
+| **1 em 10 ou melhor** | a porta funciona, e o trabalho vira PROFUNDIDADE: reescrever as aulas mais abertas do `populares`, uma por rodada, começando pela mais aberta que ainda não passou por esta cadeira. A régua vira "a aula mais aberta do mês foi relida este trimestre" |
+| **pior que 1 em 10, com amostra** | o problema é a ENTRADA e não o acervo. O trabalho vira cobrir o que NÃO é sintoma, pela mesma ordem de demanda medida, e a pergunta do card (texto, posição) vai para o CRO como pedido, porque é tela |
+| **sem amostra até 08/12** | a cadeira NÃO fica esperando. O slot vai para a segunda fila de demanda medida que já existe, o `populares`: aprofundar as cinco aulas mais abertas, que hoje são `vid-manual-habitos`, `trait-highkm`, `fund-systems`, `basics` e `sit-no-history`, e três delas são de fundamento, o que é outro recorte |
+
+**O que NÃO entra como próximo trabalho, e por quê:** mais sintoma (acaba em
+08/12), mais guia de busca (as seis leituras), e mais pauta (a régua de 03/11,
+que lê por gatilho). A cadeira fica com uma fila só, e é a do catálogo.
+
 ## A régua da rodada: o que é uma rodada bem feita
 
 Antes de publicar, leia a sua própria rodada contra a lista e **diga no artifact
@@ -494,6 +619,23 @@ fiz isso agora porque a regra da casa é UMA entrega concreta por rodada, e
 trocar essa regra sem o dono ver custa mais do que seis semanas de espera.
 
 ## Aprendizados
+
+- **Frase sobre o que um BINÁRIO contém se confere na árvore dele, não pela
+  data da rodada (17/11/2026, cobrado no retorno de 10/11).** Eu escrevi que
+  "as aulas de 20/10, 27/10, 03/11 e 12/11 nasceram sem o card" e contei uma a
+  mais: a de 20/10 (direção pesada) ESTÁ na árvore da 3.3. O jeito certo é o
+  que a skill de release manda: `git merge-base --is-ancestor <commit>
+  <árvore-do-build>`. Data de rodada e conteúdo de binário não são a mesma
+  coisa, e esta casa já pagou caro por confundir as duas (a 3.0 de 06/10).
+
+- **Banco que recusa se tenta DE NOVO antes de publicar, e as tentativas vão
+  com a hora (17/11/2026).** Em 10/11 eu publiquei com dado de 27/10 depois de
+  uma recusa, e o QA leu o mesmo banco cinco minutos antes do meu commit.
+  Hoje tentei três vezes, 11h12, 11h14 e 11h31 UTC, e as três recusaram com
+  `You do not have permission to perform this action`. **E a recusa deixou de
+  travar a rodada**, porque a API de produção respondeu o que eu precisava (ver
+  a seção do site legível): quando o banco cai, a pergunta certa é se existe
+  outra tabela interposta que responde a mesma coisa.
 
 - **Achado que viaja para o relatório de outro papel vai com a POPULAÇÃO do
   número, senão quem repassa infla (10/11/2026, cobrado no retorno de 29/10).**
@@ -865,6 +1007,13 @@ trocar essa regra sem o dono ver custa mais do que seis semanas de espera.
   conteúdo gratuito, mesmo quando existe uma aula premium sobre o mesmo
   assunto. O passo a passo de execução pode ser premium; o "o que é isso que
   estou ouvindo" não pode, senão o gancho é desperdiçado.
+
+- **⚠️ CORRIGIDO EM 17/11/2026: dá para abrir o site por esta sessão.** A
+  ferramenta `web_fetch_vercel_url` da Vercel busca URL de deploy da conta do
+  dono e responde 200 para `www.mentorque.com.br`, inclusive para
+  `/api/lessons` e `/robots.txt`. A seção "o site PASSOU a ser legível" tem o
+  que isso desbloqueia. O item abaixo fica como registro do que valeu de 25/08
+  a 17/11, e a parte da API da Vercel continua verdadeira e útil.
 
 - **Não dá para abrir o site por esta sessão, mas dá para provar que ele
   está no ar.** O proxy recusa a conexão com www.mentorque.com.br (403 no
