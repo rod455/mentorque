@@ -62,7 +62,20 @@ export async function rodar({ nav, ok }) {
   }
 
   // 3. Sintoma sem aula de frente: nada de card que mande para outra coisa.
-  await abrirSintoma("Ar-condicionado não gela");
+  //
+  // O SINTOMA DESTA LINHA TEM PRAZO, e isso é escolha. O plano de cobertura do
+  // Conteúdo (docs/agentes/conteudo-seo.md) escreve uma aula por semana na ordem
+  // da demanda, então todo sintoma sem aula aqui vira sintoma COM aula numa data
+  // conhecida, e esta afirmação reprova por um acerto nosso. Já aconteceu em
+  // 17/11, com "Ar-condicionado não gela", na semana que o plano marcava, e a
+  // troca foi para o último da fila para dar o maior prazo possível.
+  //
+  // Prazo de hoje: "Desgaste irregular dos pneus" está marcado para 08/12/2026,
+  // e nessa data a régua fecha em 19 de 19 e NÃO EXISTE mais sintoma sem aula.
+  // Aí esta afirmação não troca de sintoma: ela troca de forma, ou sai com o
+  // motivo escrito. A pergunta de desenho ficou com o Guardião na fila entre
+  // papéis em 17/11.
+  await abrirSintoma("Desgaste irregular dos pneus");
   ok("o sintoma sem aula não mostra card", (await pg.locator("[data-aula-do-sintoma]").count()) === 0);
 
   // 4. Outra porta, para provar que a porta não está chumbada em "sintoma":
