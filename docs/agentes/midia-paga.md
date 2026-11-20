@@ -720,6 +720,39 @@ deram nenhuma conta" é verdade sem valor: nenhum termo deu conta nenhuma,
 porque essa ligação não existe na medição. A importação por gclid é o que
 passaria a criar essa ligação.
 
+### Gasto diário travado no dobro do orçamento é teto, não orçamento novo (20/11/2026)
+
+O vídeo do Google voltou a entregar em 14/11 gastando R$ 40,09, R$ 39,34,
+R$ 40,11, R$ 40,00, R$ 40,00 e R$ 40,03 por dia. Parecia orçamento novo de
+R$ 40. Lido na API: **o orçamento continua R$ 20,00 por dia** e o histórico de
+mudanças da conta entre 06 e 20/11 está VAZIO, nenhuma alteração de ninguém.
+
+A explicação é o teto do Google: ele pode gastar até o DOBRO do orçamento diário
+num dia, e tende a ficar nesse teto depois de um período sem entregar, para usar
+a verba do mês que sobrou. Então:
+
+- **antes de dizer "o orçamento mudou", leia o orçamento.** Gasto diário não é
+  orçamento, e número redondo e travado é sinal de teto, não de escolha;
+- **o `change_event` VAZIO é informação forte**, não ausência de dado: ele diz
+  que nenhuma mão tocou a conta. Foi o que fechou "ninguém parou e ninguém
+  religou esta campanha";
+- a verba do mês é o diário vezes 30,4, e a aritmética dela dá PREVISÃO: com
+  R$ 608 no mês e R$ 246 gastos até 20/11, sobram uns 9 dias de R$ 40, então o
+  diário deve cair para perto de R$ 20 por volta de 29/11 sem ninguém mexer.
+  Publiquei essa previsão de propósito: se não cair, a explicação está errada.
+
+### Faixa publicada honestamente se confirma, e isso vale dizer (20/11/2026)
+
+Em 07/11, sem poder medir o custo por conta do vídeo, eu publiquei uma FAIXA:
+entre R$ 11,80 e R$ 40, com a premissa de cada ponta escrita do lado. Em 20/11,
+com a semana cheia e a etiqueta funcionando, o número saiu: **R$ 18,43**, dentro
+da faixa.
+
+Fica como padrão: quando não dá para medir, publicar faixa com as premissas das
+duas pontas é melhor que publicar nada e muito melhor que publicar o ponto médio
+como se fosse medida. E quando a medida chega, diga que a faixa acertou ou errou,
+porque é isso que ensina a confiar ou desconfiar da próxima faixa.
+
 ### Pergunte TUDO de uma vez, senão a hipótese dura uma semana (14/11/2026)
 
 Em 07/11 eu publiquei, como a hipótese mais provável da parada do vídeo, que era

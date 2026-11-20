@@ -3,6 +3,64 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-20 · Mídia: o vídeo voltou sozinho e agora tem preço, R$ 18,43 por conta contra R$ 3,57 do Meta
+
+- Artifact "Mídia da semana": https://claude.ai/artifact/GeF2LY3dAHwwBbGpLENS4Q
+- **A ENTREGA SAIU SOZINHA, pela primeira vez em três semanas**: execução 10142,
+  hoje às 17h05 de Brasília, `labelIds: ["SENT"]`, com o gatilho já chamado "Todo
+  dia, de hora em hora (10h a 18h)". Foi o conserto que eu pedi na fila em 14/11
+  e a Engenharia publicou em 15/11. A rodada disparou na quinta 19/11 e saiu na
+  sexta, e justamente por isso ela prova o conserto: com o desenho antigo, de
+  quinta e sexta, teria sido a terceira semana de disparo à mão. A outra metade do
+  pedido (registrar o não envio) segue na fila.
+- **Janela 13 a 19/11 contra 06 a 12/11.** O vídeo do Google voltou a entregar em
+  14/11 depois de catorze dias em zero e gastou R$ 239,58. Gasto total R$ 453,77
+  contra R$ 207,75, contas 115 contra 97 (+19%), custo por conta R$ 3,95 contra
+  R$ 2,14.
+- **A MANCHETE: as quatro réguas, com uma semana cheia cada, e todas para o mesmo
+  lado.** Vídeo contra Meta: por instalação atribuída R$ 4,13 contra R$ 1,02 (4,1
+  vezes), por CONTA MEDIDA R$ 18,43 contra R$ 3,57 (5,2), por usuário que volta
+  R$ 17,11 contra R$ 2,41 (7,1) e pelo contador de cada plataforma R$ 0,96 contra
+  R$ 0,56 (1,7). Piora quanto mais perto do desfecho. 105 das 112 contas do evento
+  com etiqueta, 94%.
+- **A faixa de 07/11 acertou.** Sem poder medir, eu havia publicado que o vídeo
+  custava entre R$ 11,80 e R$ 40 por conta, com a premissa de cada ponta escrita.
+  O número saiu R$ 18,43, dentro da faixa. Virou padrão no manual: faixa com as
+  duas premissas vale mais que nada e muito mais que o ponto médio disfarçado de
+  medida, e quando a medida chega diga se a faixa acertou.
+- **NINGUÉM RELIGOU A CAMPANHA, E OS R$ 40 POR DIA NÃO SÃO ORÇAMENTO NOVO.** Lido
+  hoje na API: o orçamento continua R$ 20,00 por dia (entrega padrão, não
+  compartilhado) e o `change_event` entre 06 e 20/11 está VAZIO, nenhuma
+  alteração de ninguém. Os R$ 40 travados (40,09 / 39,34 / 40,11 / 40,00 / 40,00 /
+  40,03) são o dobro do orçamento, que é o teto diário do Google, onde ele costuma
+  ficar depois de um período sem entregar. **Previsão publicada de propósito**: a
+  verba do mês é 20 × 30,4 = R$ 608, novembro gastou R$ 246, então sobram uns 9
+  dias de R$ 40 e o diário deve cair para perto de R$ 20 por volta de 29/11 sem
+  ninguém mexer. Se não cair, a explicação está errada e eu volto a procurar.
+  Aprendizado no manual: gasto diário não é orçamento, e `change_event` vazio é
+  informação forte, não falta de dado.
+- **Proposta: um passo, vídeo de R$ 20 para R$ 5 por dia e Meta +R$ 15.** São
+  R$ 105 por semana que no vídeo compram 5,7 contas e no Meta 29,4, umas 24 contas
+  a mais com o mesmo dinheiro. Com três ressalvas dentro: é a primeira semana do
+  vídeo depois de parado, eficiência não sobrevive inteira a aumento de verba (em
+  30/10 medi +12% de verba e +3 a 4% de preço no Meta), e o vídeo está no teto
+  dobrado. Entrou na lista do dono hoje.
+- **Desperdício com nome, critério cumprido sem desculpa pela primeira vez**: o
+  nó de termos voltou e a coleta agora EXPLICA o zero ("zero termos em 30 dias, o
+  nó respondeu com a credencial funcionando, e nenhuma campanha de busca teve
+  impressão"). Fecha a linha que eu abri em 14/11 como fonte indisponível.
+- **Pedido da Engenharia de 15/11 respondido e a linha apagada**: comentário em
+  anúncio pago. Piso, não taxa: 15 chamadas do fluxo do Instagram em 9 dias, umas
+  12 por semana, UMA confirmada como comentário em anúncio (a execução 9903 que
+  eles acharam). As outras 14 não dá para classificar, porque o registro guarda
+  janela curta e não separa anúncio de post, e o painel da Meta é tela. Das três
+  opções (responder à mão, regra nova, registrar), recomendei REGISTRAR primeiro,
+  com o custo de cada uma escrito, e virou linha para a Engenharia: entre
+  responder à mão e automatizar não dá para escolher sem saber se são 2 ou 40 por
+  semana.
+- **Régua da rodada: doze de doze**, a primeira vez. O critério 3 existe para as
+  duas campanhas e o 6 não precisa de desculpa. Nada escrito em conta de anúncio.
+
 ## 2026-11-20 · CRO: a volta da primeira semana está parada em 18 há nove semanas, e a jornada de e-mail somou 4 cliques em 1.219 envios
 
 Rodada de RETENÇÃO. Artifact publicado:
