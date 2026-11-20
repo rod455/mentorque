@@ -3,6 +3,73 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-20 · CRO: a volta da primeira semana está parada em 18 há nove semanas, e a jornada de e-mail somou 4 cliques em 1.219 envios
+
+Rodada de RETENÇÃO. Artifact publicado:
+https://claude.ai/artifact/7KxTvq8hwrwcHqngwqvtjM
+
+- **Fonte fina fora pela terceira rodada.** O conector do Supabase desta sessão
+  traz a organização `ianjvpotzelxokbdupmx` (financasrodlu, sipatgo), não traz o
+  Mentorque, e recusa toda consulta. **Apliquei a regra que o dono me deu em
+  14/11 antes de pedir qualquer clique**: procurei no diário quem leu o banco
+  depois da minha falha, e a Engenharia leu em 14/11 (19h09 e 21h49) e em 16/11.
+  Logo a ferramenta funciona e a minha sessão é que não alcançou. **Isto é
+  "fonte não lida", não clique de dono, e nenhuma linha foi para a lista dele.**
+- **A leitura que o retrato fecha sozinho** (20/11 às 09h00 UTC, pacote de
+  coortes): seis coortes d1-7 fechadas, volta na semana 1 de 21, 12, 21, 15, 18
+  e 21 por 100, com n de 57, 69, 131, 124, 126 e 103. Com n perto de 100 o erro
+  padrão é ~3,8 pontos, então as seis são compatíveis com UM número de ~18.
+  Ativação igualmente parada (49, 41, 42, 43, 52, 37; média ~44). Nove semanas de
+  mudanças de conversão não moveram a volta, e nada do app de hoje traz a pessoa
+  de volta sozinho.
+- **A consequência de projeto, que vale mais que o número:** com ~100 por coorte,
+  só uma mudança de uns 8 pontos aparece aqui. Trocar texto não move 8 pontos.
+  A conta de poder passou a vir ANTES de escolher a aposta (escrito na skill).
+- **O achado da semana: a jornada de e-mail não é lida, e o medidor está vivo.**
+  1.219 envios em 30 dias; a jornada automática lê d0 1,6% (8 de 491), d2 0,9%,
+  d5 1,2%, d9 0%, com 4 cliques em 1.138 e-mails. Antes de concluir "ninguém
+  lê", provei que o carimbo mede, e **o segundo instrumento estava DENTRO do
+  primeiro**: as chaves mandadas à mão, mesma janela e mesmo provedor, leem 17,4%
+  (4 de 23) e 33,3% (3 de 9), e as faixas de 95% não encostam na do d0 (0,8% a
+  3,2%). O clique confirma por outro caminho, porque clique não depende de
+  imagem. **Limite declarado:** as campanhas à mão foram para lista escolhida, a
+  jornada vai para todo mundo, então isto prova que o medidor vive, não que o
+  texto seja ruim. E `entregues` não diz em que aba caiu: Promoções não é
+  legível daqui.
+- **Nenhuma aposta nova, pela SEGUNDA rodada seguida, e tratei isso como
+  sintoma, não como semana fraca.** O critério 11 (métrica lida no dia zero)
+  barra toda aposta de portão enquanto o corte fino não volta, e está certo em
+  barrar. Abri no manual a seção "Duas rodadas seguidas sem aposta nova", com a
+  conta das três últimas rodadas e com as três saídas que não dependem do dono:
+  apostar no que o retrato fecha sozinho, pedir o corte ao Analista em vez do
+  conector ao dono, e não repropor o que está parado com ele.
+- **Duas apostas venceram sem veredito** (as duas com data cheia em 15/11):
+  `conta-que-sabe-que-veio-do-carro` e `quiz-no-dia-1`. Marcadas no caderno como
+  NÃO LIDAS com o instrumento nomeado e a dívida datada, em vez de fechadas com
+  o instrumento errado.
+- **Não conferido, e dito como não conferido:** quanto a 3.4 alcançou dos
+  aparelhos ativos. A régua do dono (17/10) manda ler isso em `versao`, e **o
+  retrato não carrega essa quebra**: as versões só aparecem dentro de `erros7d`,
+  como efeito colateral de quem deu erro. A 3.4 está em aparelhos (aparece ali, e
+  a loja tem 3.4 READY_FOR_SALE desde 15/11), mas a FATIA não é legível, então o
+  relógio do repique de `a-conta-e-pedida-de-novo-a-quem-ja-tem-algo-a-perder`
+  continua NÃO iniciado.
+- **Duas linhas para a fila entre papéis.** Ao Analista: três cortes no retrato
+  (portão da conta por semana, `detalhe` e aparelho; pacote novo de aparelhos
+  ativos por versão; contagem sem a trava `umaVez`). À Engenharia: dizer se a
+  recusa de registro de push é ruído ou porta fechada (5 aparelhos, última em
+  19/11, versões 3.3.0 e 3.4.0) **sem eu afirmar que é defeito**, porque o push
+  é a única alavanca de retenção com mecanismo de verdade agora que o e-mail
+  está nesse estado.
+- **Recomendações:** (1) decidir a jornada de e-mail, que é mensagem a cliente e
+  portanto do dono, entre mudar e medir, encolher para um e-mail, ou desligar;
+  (2) olhar o registro de push antes de apostar nele (já na fila, sem clique do
+  dono); (3) nenhuma recomendação nova sobre `servico-em-tres-campos`, que está
+  PROPOSTO há 14 dias e é prioridade 1 do Diretor, porque repetir seria ruído.
+- Mapa da experiência em v14. Três aprendizados na skill de BeSci: o segundo
+  instrumento costuma estar dentro do primeiro; medida grossa demais é veredito
+  impossível antes de a aposta começar; "entregue" não diz em que aba caiu.
+
 ## 2026-11-16 · Engenharia: a Apple aprovou, e o aviso do iPhone sobe para 76
 
 - O dono disse que a Apple aprovou. Lido na API da App Store Connect às 21h43

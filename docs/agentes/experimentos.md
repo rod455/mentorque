@@ -569,6 +569,21 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
     aparecer como surpresa.
   - O que esta aposta pedia era `cadastro` entre quem viu o paywall, e esse
     degrau continua pequeno demais para ler.
+- **NÃO LIDA EM 20/11, E O MOTIVO NÃO É PRAZO: É FONTE QUE ESTA SESSÃO NÃO
+  ALCANÇOU.** A data cheia era 15/11, então este veredito está cinco dias
+  atrasado. O corte que ele exige (por aparelho, por `detalhe` e por semana)
+  mora no `funil_eventos`, e o conector do Supabase desta sessão traz outra
+  organização e recusa toda consulta. **A ferramenta NÃO está quebrada**: a
+  Engenharia leu o banco em 14/11 às 19h09 e 21h49 e em 16/11, pela organização
+  do Mentorque, sem recusa (regra que o dono me deu em 14/11: antes de chamar
+  ferramenta de quebrada, procurar quem a usou depois da minha falha). Isto é
+  **fonte não lida**, e fica como dívida datada em vez de veredito com o
+  instrumento errado.
+  - O que o retrato alcança e não basta: ele traz os totais do portão da conta
+    (415 viram a folha, 223 aceitaram, 175 recusaram na janela desde 23/10),
+    mas só para os aparelhos que carregam o carimbo do `onboarding-curto`, que
+    encerrou em 23/10. Sem semana e sem `detalhe`, nenhum dos dois vereditos
+    fecha.
 - Veredito: (aberto)
 
 ## [primeiro-servico-com-ganho-nomeado] O "nenhum serviço registrado" vira o próximo passo
@@ -789,6 +804,21 @@ Esta régua é convenção escrita, não tem conferência automática atrás del
   duas respostas da mesma pessoa no mesmo dia (onboarding e pergunta do dia)
   e recusou o segundo toque na mesma pergunta. As duas trancas estão
   abertas desde 08/10; a métrica da `quiz_respostas` vale a partir daí.
+- **NÃO LIDA EM 20/11, E O MOTIVO NÃO É PRAZO: É FONTE QUE ESTA SESSÃO NÃO
+  ALCANÇOU.** A data cheia era 15/11, então este veredito está cinco dias
+  atrasado. O corte que ele exige (por aparelho, por `detalhe` e por semana)
+  mora no `funil_eventos`, e o conector do Supabase desta sessão traz outra
+  organização e recusa toda consulta. **A ferramenta NÃO está quebrada**: a
+  Engenharia leu o banco em 14/11 às 19h09 e 21h49 e em 16/11, pela organização
+  do Mentorque, sem recusa (regra que o dono me deu em 14/11: antes de chamar
+  ferramenta de quebrada, procurar quem a usou depois da minha falha). Isto é
+  **fonte não lida**, e fica como dívida datada em vez de veredito com o
+  instrumento errado.
+  - O que o retrato alcança e não basta: ele traz os totais do portão da conta
+    (415 viram a folha, 223 aceitaram, 175 recusaram na janela desde 23/10),
+    mas só para os aparelhos que carregam o carimbo do `onboarding-curto`, que
+    encerrou em 23/10. Sem semana e sem `detalhe`, nenhum dos dois vereditos
+    fecha.
 - Veredito: (aberto)
 
 ## [portao-unico-do-premium] Um portão só, que diz o que a pessoa ganha
