@@ -1,180 +1,170 @@
-Relatório de mídia gerado em 2026-11-14
+Relatório de mídia gerado em 2026-11-20
 
 # Mídia da semana
 
-Janela principal: 7 a 13 de novembro, sete dias cheios, comparada com 31 de
-outubro a 6 de novembro. As duas janelas têm zero gasto no Google, então a
-comparação é do Meta contra ele mesmo. Números lidos hoje, 14/11, entre 14h e
-14h30 de Brasília.
+Janela principal: 13 a 19 de novembro, sete dias cheios, comparada com 6 a 12 de
+novembro. Números lidos hoje, 20/11, entre 16h50 e 17h20 de Brasília. A soma dos
+oito dias do Google fecha no centavo com o total que a própria coleta declara
+para a campanha, que é como se confere que o corte da janela não perdeu dia.
 
-**O relatório da semana passada chegou, e foi eu quem disparou.** Execução 9663,
-07/11 às 9h03, com o PDF anexado, para o Rodrigo e para o Luiz. E esta semana
-houve silêncio de novo: a rodada disparou na quinta 12/11, a sessão foi
-reiniciada, e nos dois dias de envio automático a main tinha o relatório de
-07/11, que pela regra do fluxo é velho. Este e-mail também saiu de um disparo à
-mão. Terceira semana seguida com desvio de dia, segunda seguida sem envio
-automático: isso virou linha da fila, porque já não é acidente.
+**O relatório de 14/11 chegou**, e foi eu quem disparou à mão: execução 9899,
+14/11 às 14h29, com o PDF anexado, para o Rodrigo e para o Luiz. **E isso não vai
+mais acontecer**: desde 15/11 o fluxo de envio roda TODO DIA das 10h às 18h, e
+não só quinta e sexta. Foi metade do que eu havia pedido na fila, e a Engenharia
+fez em um dia.
 
-## A manchete: a semana piorou em todas as réguas, e o motivo é um só degrau
+## A manchete: o vídeo voltou sozinho, e agora ele tem preço
 
-| Medida | 7 a 13/11 | 31/10 a 6/11 |
+A campanha de app do Google voltou a entregar em 14/11, depois de catorze dias em
+zero. Nesta semana ela gastou R$ 239,58, e **pela primeira vez existe o custo por
+conta medida dela, com uma semana cheia**:
+
+| Origem | Contas etiquetadas | Gasto na janela | Custo por conta medida |
+|---|---|---|---|
+| Meta, promoção de app | 60 | R$ 214,19 | **R$ 3,57** |
+| Google, app por vídeo | 13 | R$ 239,58 | **R$ 18,43** |
+| Orgânico | 25 | zero | sem custo |
+| Outras origens | 7 | zero | sem custo |
+
+Cinco vezes mais caro por conta. São 105 das 112 contas do evento com etiqueta,
+94%.
+
+E as outras três réguas dizem a mesma coisa, cada uma medindo outra coisa:
+
+| Régua | Google, vídeo | Meta | Quantas vezes |
+|---|---|---|---|
+| Custo por instalação atribuída | R$ 4,13 | R$ 1,02 | 4,1 |
+| Custo por conta medida | R$ 18,43 | R$ 3,57 | 5,2 |
+| Custo por usuário que volta | R$ 17,11 | R$ 2,41 | 7,1 |
+| Custo por desfecho que a plataforma conta | R$ 0,96 | R$ 0,56 | 1,7 |
+
+**Quatro réguas, todas com uma semana cheia, todas apontando para o mesmo lado, e
+piorando quanto mais perto do desfecho.** É a leitura mais firme que esta cadeira
+já produziu. Em 07/11 eu publiquei que o vídeo custava entre R$ 11,80 e R$ 40 por
+conta, como faixa, sem poder medir: R$ 18,43 caiu dentro da faixa.
+
+## A conta da semana
+
+| Medida | 13 a 19/11 | 6 a 12/11 |
 |---|---|---|
-| Gasto no Google | R$ 0,00 | R$ 0,00 |
-| Gasto no Meta | R$ 205,17 | R$ 223,54 |
-| Custo por mil impressões, Meta | R$ 5,32 | R$ 4,28 |
-| Custo por clique, Meta | R$ 0,31 | R$ 0,28 |
-| **Contas novas de fora** | **87** | **134** |
-| **Custo por conta** | **R$ 2,36** | **R$ 1,67** |
+| Gasto no Google | R$ 239,58 | R$ 0,00 |
+| Gasto no Meta | R$ 214,19 | R$ 207,75 |
+| Gasto total | R$ 453,77 | R$ 207,75 |
+| **Contas novas de fora** | **115** | **97** |
+| **Custo por conta** | **R$ 3,95** | **R$ 2,14** |
 
-Gastando 8% menos, a semana trouxe 35% menos contas, e o custo por conta subiu
-41%. A corrente que liga uma coisa à outra está medida elo por elo:
+O dobro do dinheiro trouxe 19% mais contas, e o custo por conta subiu 84%. As
+duas janelas não são comparáveis como "semana do Meta", porque numa o vídeo
+existe e na outra não: a comparação que vale é a tabela por campanha acima.
 
-- o preço da impressão subiu 24%;
-- com quase o mesmo dinheiro, as impressões caíram 26%;
-- as instalações caíram 29%;
-- as contas caíram 35%.
+No Android, 19 das 288 instalações da janela chegaram sem anúncio, 6,6%, contra
+5,8% na janela anterior.
 
-Um elo só, propagando. Não é cadastro quebrado: eu conferi dia a dia e a queda é
-ladeira, não degrau, sem nenhum dia em que o número cai e não volta.
+## Ninguém religou essa campanha, e os R$ 40 por dia não são orçamento novo
 
-## A mesma semana dentro da série de oito: é um passo atrás, não um regime novo
+Isto é o fecho de três semanas de investigação, e vale escrever inteiro porque
+contraria o que parece.
 
-Esta é a leitura que muda o que fazer. O preço da impressão vinha caindo havia
-sete semanas:
+O gasto diário do vídeo desde que voltou é R$ 40,09, R$ 39,34, R$ 40,11,
+R$ 40,00, R$ 40,00 e R$ 40,03. Parece orçamento novo de R$ 40. Lido hoje na API:
 
-| Coleta | Custo por mil impressões | Instalação por clique |
-|---|---|---|
-| 24/09 | R$ 11,06 | 27,2% |
-| 01/10 | R$ 10,93 | 28,5% |
-| 08/10 | R$ 10,06 | 31,1% |
-| 15/10 | R$ 7,16 | 39,5% |
-| 22/10 | R$ 4,75 | 55,1% |
-| 30/10 | R$ 4,57 | 63,2% |
-| 07/11 | R$ 4,28 | 64,4% |
-| **14/11** | **R$ 5,32** | **55,5%** |
+- **o orçamento da campanha continua R$ 20,00 por dia**, entrega padrão, não
+  compartilhado;
+- **o histórico de mudanças da conta entre 06 e 20/11 está VAZIO**: nenhuma
+  alteração, de ninguém, nem de orçamento, nem de pausa, nem de lance.
 
-O nível de hoje é o de 22 de outubro, três semanas atrás, e segue menos da metade
-do de setembro. **Então a semana ruim é um passo atrás dentro de uma escada que
-subiu sete vezes, e não o começo de uma queda.** O meu próprio manual já tinha a
-lição na direção contrária, de quando eu publiquei uma vantagem que virou de lado
-em uma semana: uma semana é uma leitura, para o bem e para o mal.
+Ou seja: **ninguém parou essa campanha em 31/10 e ninguém a religou em 14/11.**
+Os R$ 40 travados são exatamente o dobro do orçamento, que é o teto que o Google
+permite gastar num dia, e ele costuma ficar nesse teto depois de um período sem
+entregar, para usar a verba do mês que sobrou.
 
-## Custo por desfecho medido, por campanha
-
-Segunda semana cheia com a etiqueta de origem: 72 das 76 contas do evento
-carregam etiqueta, 95%.
-
-| Origem | Contas etiquetadas | Gasto | Custo por conta medida | Semana anterior |
-|---|---|---|---|---|
-| Meta, promoção de app | 55 | R$ 205,17 | **R$ 3,73** | R$ 2,26 |
-| Google, app por vídeo | 1 | R$ 0,00 | sem leitura | sem leitura |
-| Orgânico | 11 | zero | sem custo | sem custo |
-| Outras origens | 5 | zero | sem custo | sem custo |
-
-Sessenta e cinco por cento mais caro por conta medida. E as outras duas réguas
-concordam, cada uma medindo outra coisa:
-
-| Régua do Meta | 7 a 13/11 | 31/10 a 6/11 |
-|---|---|---|
-| Custo por instalação atribuída, AppsFlyer | R$ 1,05 | R$ 0,80 |
-| Custo por usuário que volta, AppsFlyer | R$ 3,31 | R$ 1,80 |
-| Custo por desfecho que a plataforma conta | R$ 0,56 | R$ 0,43 |
-
-As três pioraram, e pioram mais quanto mais perto do desfecho: 30% na
-instalação, 65% na conta, 84% no usuário que volta. A taxa de usuário que volta
-caiu de 44% para 32%.
-
-Duas notas de régua: a tabela de contas diz 87 e o evento diz 76, ou seja o
-evento conta 13% a menos nesta janela, contra 4% na passada, então só a
-repartição vem do evento. E o custo por instalação do Meta divide sete datas de
-gasto por oito de instalação, viés igual nas duas semanas.
-
-## O vídeo do Google: sete causas eliminadas, e a minha hipótese caiu
-
-Catorze dias sem entregar nada. A coleta passou a escrever isso sozinha, com a
-frase "sem atividade na conta nos últimos 7 dias", e eu voltei à API hoje com
-mais perguntas, numa leitura temporária criada e arquivada no mesmo dia.
-
-O que está ELIMINADO, com o campo que eliminou:
-
-- **campanha pausada**: não, `status` é `ENABLED`, lido em 06/11 e de novo hoje;
-- **orçamento zerado**: não, são R$ 20 por dia, e o histórico da conta tem UMA
-  única alteração em dezessete dias (24/10, de R$ 30 para R$ 20);
-- **anúncio reprovado**: não, está ativo, revisado e aprovado;
-- **inaptidão**: não, `primary_status` é `ELIGIBLE` com a lista de razões vazia,
-  nas duas leituras;
-- **conta suspensa ou problema de cobrança**: não, o `status` do cliente é
-  `ENABLED`;
-- **campanha com data de fim vencida**: não, `ELIGIBLE` e `ENDED` são valores
-  diferentes do mesmo campo;
-- **sinal de conversão morto**: não, a ação de instalação do Play continua
-  registrando, 680 nos últimos 30 dias.
-
-**E a hipótese que eu publiquei em 07/11 está refutada.** Eu escrevi que
-provavelmente era lance apertado, campanha que não consegue comprar ao preço que
-a estratégia aceita. A estratégia é `MAXIMIZE_CONVERSIONS` **sem alvo de custo**,
-ou seja, não existe teto para ela recusar. A hipótese era razoável e estava
-errada, e quem a derrubou foi um campo que eu podia ter lido na semana passada.
-
-O que sobra sem leitura é o bloco de configuração de app da campanha, que a API
-recusa pelos nomes que eu tentei. É a terceira coisa na mesma linha da fila, que
-está lá há oito dias.
-
-## Desperdício com nome: sem instrumento esta semana
-
-Duas coisas diferentes, e elas não se confundem:
-
-- **não se aplica**: a única campanha que tem termo de busca é a de busca, e ela
-  está pausada desde 13/10;
-- **e agora também não dá para medir**: a coleta passou a avisar que o nó de
-  termos de busca está DESLIGADO, esperando uma credencial no n8n. Enquanto isso
-  valer, eu não tenho a lista de termos nem para conferir o passado.
-
-Registro como fonte indisponível, com a data: 14/11. Virou linha da fila junto
-com o resto, porque pelo histórico desta casa esse tipo de nó se religa por um
-fluxo novo, sem clique seu.
+Isso dá uma previsão que dá para conferir na semana que vem: a verba do mês é o
+orçamento diário vezes 30,4, uns R$ 608. Até hoje novembro gastou R$ 246. Se a
+explicação do teto dobrado estiver certa, sobram uns 9 dias de R$ 40 e **o gasto
+diário deve cair para perto de R$ 20 por volta de 29/11, sem ninguém mexer**. Se
+não cair, a explicação está errada e eu volto a procurar.
 
 ## A proposta da semana
 
-**Antes de qualquer decisão de orçamento, medir a conversão da página da loja.**
+**Um passo: baixar o orçamento diário do vídeo de R$ 20 para R$ 5, e subir o do
+Meta em R$ 15 por dia.**
 
-A instalação por clique caiu 8,9 pontos nesta semana, de 64,4% para 55,5%. Sobre
-os 656 cliques da janela, isso são 59 instalações que o mesmo dinheiro deixou de
-trazer, uns R$ 62 dos R$ 205 que não compraram nada.
+O número, pelas quatro réguas desta semana: R$ 15 por dia são R$ 105 por semana.
+No vídeo, ao preço medido dele, esses R$ 105 compram 5,7 contas. No Meta, ao
+preço medido dele, compram 29,4. **Diferença de umas 24 contas por semana com o
+mesmo dinheiro.**
 
-Eu não sei se a causa é a loja, e não vou dizer que é. Sei que **a página da
-Play é o único degrau entre o meu clique e a minha instalação que ninguém desta
-casa mede**, e que o degrau moveu 8,9 pontos. O arquivo que responde já está ao
-alcance: a conversão por origem de tráfego, nos relatórios da Play que o coletor
-já lê, e que está num pedido da Engenharia para o ASO desde 16/10.
+Três ressalvas que fazem parte da proposta, não notas de pé:
 
-E duas coisas que já estão na sua lista moram exatamente nesse degrau, então elas
-voltam aqui com o custo de hoje em vez de voltarem como recomendação repetida:
+- **é a primeira semana do vídeo depois de catorze dias parado**, e campanha que
+  volta de zero não está no seu estado normal. É por isso que a proposta é um
+  passo e não um desligamento: R$ 5 por dia mantém a campanha viva e medida, e se
+  a semana que vem desmentir este R$ 18,43, a gente vê;
+- **eficiência não sobrevive inteira a aumento de verba, e isso já tem tamanho
+  aqui**: em 30/10 o Meta subiu 12% de verba e ficou 3 a 4% mais caro. R$ 15 por
+  dia é um aumento grande para ele, então as 29,4 contas são o teto, não a
+  aposta;
+- **o vídeo está gastando o dobro do orçamento agora**, então baixar o orçamento
+  para R$ 5 pode significar até R$ 10 por dia enquanto a verba do mês sobrar.
 
-- a captura com a prova social antiga nas duas lojas, **29 dias** na lista, que
-  promete 4,8 e 10.000+ enquanto o app mostra 5,0 e 170+;
-- a reordenação das capturas da Play, **13 dias** na lista.
+Orçamento é decisão sua. O que esta rodada entrega é a decisão com quatro réguas
+do lado, o passo pronto para colar no console e o que ele arrisca.
 
-Todo clique pago desta semana, os 656, passou por essa página antes de virar
-instalação ou de virar nada.
+## Desperdício com nome: o instrumento voltou, e ele diz zero de verdade
+
+Na semana passada eu registrei o relatório de termos como fonte indisponível. Ele
+voltou, e agora a coleta explica o zero em vez de deixá-lo no ar: "zero termos de
+busca nos últimos 30 dias, o nó respondeu com a credencial funcionando, e nenhuma
+campanha de busca teve impressão no período".
+
+Isso é a diferença entre "não deu para medir" e "medi e não aconteceu", e agora
+ela está escrita na própria coleta. A campanha de busca segue pausada desde
+13/10. Na janela, a rede de busca dentro da campanha de app gastou R$ 0,60 em 4
+cliques, 0,2% do dinheiro do Google, e campanha de app não publica termo.
+
+## Comentário em anúncio pago: medido como piso, e a proposta é registrar antes de responder
+
+A Engenharia me deixou um pedido em 15/11: dizer o que a casa faz com comentário
+em anúncio pago, depois de achar uma pessoa real comentando "Radiador" num
+anúncio e ficando sem resposta.
+
+O que eu consegui medir, e é PISO e não taxa: o fluxo do Instagram registrou 15
+chamadas em 9 dias, umas 12 por semana, e **uma delas está confirmada como
+comentário em anúncio**. As outras 14 eu não classifiquei, porque o registro do
+n8n guarda só a janela curta e não separa comentário de anúncio de comentário de
+post comum; e o painel da Meta, que guardaria, é tela e não API.
+
+As três opções com o custo de cada uma:
+
+- **responder à mão**: custa o seu tempo, uns minutos por dia, e não resolve o
+  passado porque o comentário envelhece;
+- **regra nova no fluxo**, respondendo qualquer comentário de anúncio com uma
+  mensagem genérica: custa trabalho de Engenharia e arrisca responder bobagem a
+  uma reclamação;
+- **registrar primeiro**: custa menos que as duas e transforma o desconhecido em
+  número em uma semana.
+
+Eu recomendo registrar primeiro, e isso virou linha da fila para a Engenharia.
+Não dá para escolher entre responder à mão e automatizar sem saber se são 2 ou 40
+por semana.
 
 ## O que este relatório não alcança
 
-- **A causa da parada do vídeo.** Sete causas eliminadas, nenhuma encontrada, e o
-  campo que falta a API recusa pelos nomes que eu conheço.
-- **A lista de termos de busca**, desligada na coleta desde esta semana.
-- **Frequência e alcance do Meta**, que separariam "o público saturou" de "o
-  leilão ficou caro". A coleta do Meta não traz nenhum dos dois.
-- **A conversão da página da loja**, que é a proposta acima.
+- **A causa da parada de 31/10 a 13/11.** Oito causas eliminadas em três
+  rodadas, nenhuma encontrada, e agora sabe-se também que não foi mão humana. A
+  parada e a volta foram do lado do Google.
+- **O estado normal do vídeo**, porque esta é a primeira semana dele depois de
+  parado.
+- **Quantos comentários de anúncio chegam por semana**, por falta de registro.
+- **Frequência e alcance do Meta**, que separariam saturação de leilão caro.
 - **A definição de usuário leal**, que é de console e segue não lida.
 
 ## Como esta rodada se mede
 
-Dos doze critérios, onze cumpridos e um sem instrumento, o do desperdício com
-nome, pelos dois motivos acima. Nada foi escrito em conta de anúncio: as
-leituras de hoje são consultas, e a leitura temporária que as fez foi arquivada.
+Dos doze critérios, doze cumpridos. É a primeira rodada em que o critério 6, o do
+desperdício com nome, não precisa de desculpa: o instrumento está de pé e diz
+zero com o motivo escrito. E o critério 3, a conta fechada por campanha, está
+cumprido para as duas campanhas pela primeira vez.
 
-Uma coisa que eu devo dizer de mim mesmo: a hipótese do lance, que eu publiquei
-na semana passada como a mais provável, caiu com uma consulta de quinze segundos
-que eu não fiz na semana passada. Eu tinha a credencial, tinha o caminho, e paguei
-uma semana por não ter perguntado tudo de uma vez.
+Nada foi escrito em conta de anúncio: as leituras de hoje são consultas, e a
+leitura temporária que as fez foi arquivada no mesmo dia.
