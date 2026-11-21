@@ -496,6 +496,35 @@ recomendar.
   Frase com número fixo sobre fonte externa é suspeita por natureza; se o número
   pode variar, ele tem que ser calculado do dado e a asserção cobra o cálculo.
   Travar texto só vale para frase sobre o NOSSO código, onde a constante é nossa.
+- **FLUXO DE DINHEIRO SE VARRE ANTES DA PRIMEIRA VENDA, E ESSA É A MELHOR HORA**
+  (21/11/2026). "É teoria até a primeira venda" era, nesta casa, sempre uma
+  ressalva: o rótulo que eu punha para dizer que não dava para concluir. Na
+  varredura da compra avulsa ele virou o contrário, uma OPORTUNIDADE. Dois
+  defeitos fechados (o direito preso ao id do aparelho e o crédito gasto que
+  voltava a existir) com o estrago em ZERO, porque `compras_avulsas` tinha zero
+  linhas. Depois da primeira venda, o mesmo achado vem com gente pagando no meio
+  e com o conserto precisando de migração de dados. **Quando a casa liga um
+  caminho de dinheiro, a janela entre ligar e vender é o momento de varrer**, e
+  vale pedir a varredura nessa janela em vez de esperar a fila.
+- **MEÇA A POPULAÇÃO ANTES DE ESCOLHER A MANCHETE** (21/11/2026, e é a regra de
+  21/10 aplicada por vontade própria em vez de depois do erro). Nesta varredura o
+  achado mais assustador era o aparelho sem armazenamento, que recebe id efêmero
+  e perderia a compra quando o app fechasse. Fui medir antes de escrever: **0 de
+  1.855 aparelhos em 30 dias**. A manchete passou a ser o caso que tem gente
+  dentro (as 3 aberturas de checkout, todas de aparelho sem conta). Achado
+  dramático sem denominador come o espaço do achado que tem um.
+- **CONFERÊNCIA DE OUTRO PAPEL QUE DÁ FALSO POSITIVO: APERTE AO CONTRATO
+  ESCRITO, NUNCA AFROUXE, E DIGA EM VOZ ALTA** (21/11/2026). A `conferir:acoes`
+  reprovou uma linha minha porque ela CITAVA uma folha de compra que diz "Sem
+  prazo para usar": a regra escrita é o marcador `PRAZO AAAA-MM-DD` em
+  maiúsculas, e a regex era `/i`, casando a palavra em qualquer caixa. Havia duas
+  saídas fáceis e erradas: reescrever o meu texto para fugir da palavra (deixando
+  a armadilha para o próximo) ou afrouxar a regra. A certa foi apertar ao
+  contrato que a própria conferência documenta, plantar nas DUAS direções para
+  provar que ela ainda pega o que existe para pegar, registrar na fila do dono
+  dela, e escrever no relatório que eu mexi numa conferência de outro papel para
+  a minha linha passar. Essa última parte não é formalidade: é o que permite
+  alguém discordar de mim depois.
 - **"DUAS LINHAS NA TABELA" EXPLICA MAIS DIVERGÊNCIA QUE QUALQUER TEORIA SOBRE A
   FONTE** (12/11/2026). Eu passei duas rodadas perguntando se o RevenueCat conta
   assinatura cancelada dentro do período, com o banco negado, e a resposta não
@@ -681,13 +710,20 @@ fila, com dado de produção pela primeira vez.
   banco depois do teto; desarmado hoje pelo volume (mil a mil e quatrocentos
   eventos em 30 dias), consertado com uma linha. Nasceu a
   `conferir:catalogo-remoto`, 15 asserções, dez plantios e dez mordidas.
-- **A PRÓXIMA VARREDURA TEM DATA, e a data é parte do item** (regra que o dono
-  fixou em 04/11 depois de dois adiamentos sem data): **a compra avulsa pelo
-  Stripe, em 18/11/2026**. É dinheiro, nasceu em 09/11 e está desligada até a
-  tabela existir, que é a hora boa de varrer: dá para ler o caminho inteiro antes
-  de ele cobrar alguém. Varredura que passa de rodada sem data é dívida
-  esquecida; se esta for adiada, o artifact diz a data nova e o motivo, nunca "a
-  próxima".
+- ~~**A compra avulsa pelo Stripe, em 18/11/2026.**~~ **VARRIDA na data**, com a
+  venda já LIGADA (desde 14/11) e ainda sem nenhuma venda. Dois achados fechados
+  com estrago zero: o direito preso ao id do aparelho (virou decisão na lista do
+  dono, com as 3 aberturas de checkout todas de aparelho sem conta) e o crédito
+  gasto que voltava a existir (consertado, 3 plantios). A variante do id efêmero
+  ficou desarmada pela medição, 0 de 1.855.
+- **A PRÓXIMA VARREDURA TEM DATA, e a data é parte do item** (regra do dono,
+  04/11): **a compra avulsa RECONFERIDA com dinheiro de verdade, na primeira
+  rodada depois da primeira venda**. Não é repetir a varredura: é a parte que eu
+  marquei como TEORIA e que só o dinheiro prova (a gravação pelo webhook, a
+  adoção, o saldo e a recusa). Se até 09/12 ninguém comprar, a reconferência sai
+  da fila e volta como acompanhamento, com o motivo escrito. **E a varredura
+  dirigida de 25/11 é outra**, porque esta foi a desta semana: o candidato é a
+  pesquisa nova (`pesquisa_respostas`, que nasceu em 17/11 e eu ainda não li).
 - **A concentração dos fechamentos, anotada em 04/11 e SEM MEDIDA**: a janela de
   7 dias do retrato mostra 13 fechamentos em 6 aparelhos na home, 2,2 por
   aparelho, contra 1,0 e 1,1 que eu medi por semana de calendário em 28/10. Pode

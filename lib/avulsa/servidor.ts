@@ -69,12 +69,43 @@ export async function lerSaldo(admin: SupabaseClient, userId: string | null, ano
   return { creditosComprados, creditosUsados: usados.count ?? 0, passeAte, perguntasDoPasseHoje: hoje.count ?? 0 };
 }
 
-/** A compra feita sem conta passa para a conta quando a pessoa entra. */
+/**
+ * A compra feita sem conta passa para a conta quando a pessoa entra. E O GASTO
+ * PASSA JUNTO, que é o conserto do QA de 21/11/2026.
+ *
+ * O DEFEITO, por enquanto só em teoria (zero compras e zero linhas de consumo
+ * no banco em 21/11, lido às 09h50 UTC): a compra era adotada e o CONSUMO não.
+ * A pergunta é gravada com `anon_id: userId ? null : anonId`, ou seja um OU
+ * outro, nunca os dois, então o que foi gasto enquanto a pessoa não tinha conta
+ * carrega só o id do aparelho. `lerSaldo` casa dono por
+ * `user_id.eq.X,anon_id.eq.Y`, e num aparelho NOVO o `Y` é outro:
+ *
+ *   compra de 10 créditos sem conta, 4 gastos, cria conta, abre em outro
+ *   aparelho -> a compra é achada pela conta (10) e os 4 gastos não são achados
+ *   por ninguém. Os 4 voltam a existir.
+ *
+ * Adotar o consumo junto fecha isso: crédito gasto continua gasto. O filtro
+ * `pago_com is not null` é a parte que importa, porque a pergunta GRÁTIS não
+ * pode ser adotada aqui: se a grátis do mês passa a seguir a conta ou não é
+ * decisão de produto, e não conserto de contabilidade. Hoje ela reseta ao criar
+ * conta (a contagem é por `user_id` quando logado), e isso está no relatório
+ * para o dono decidir, não aqui.
+ */
 export async function adotarCompras(admin: SupabaseClient, userId: string | null, anonId: string | null): Promise<void> {
   const a = anonSeguro(anonId);
   if (!userId || !a) return;
   const { error } = await admin.from("compras_avulsas").update({ user_id: userId }).eq("anon_id", a).is("user_id", null);
   if (error) console.error("[avulsa] compra do aparelho não passou para a conta", { motivo: error.message });
+  // O gasto, na mesma volta. Erro aqui NÃO cala: saldo que volta a existir é
+  // dinheiro que a casa entrega duas vezes, e o log é o que deixa rastro até a
+  // primeira compra de verdade acontecer.
+  const gasto = await admin
+    .from("biela_perguntas")
+    .update({ user_id: userId })
+    .eq("anon_id", a)
+    .is("user_id", null)
+    .not("pago_com", "is", null);
+  if (gasto.error) console.error("[avulsa] gasto do aparelho não passou para a conta", { motivo: gasto.error.message });
 }
 
 type SessaoDoStripe = {

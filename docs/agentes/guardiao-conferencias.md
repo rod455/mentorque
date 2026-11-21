@@ -355,7 +355,7 @@ sem tirar ninguém dela.
 | `conferir:migalha` | 03/10/2026 | não nos dois pisos, consertada |
 | `conferir:revisoes` | 03/10/2026 | sim |
 | `conferir:venda` | 03/10/2026 | não no piso da validade, consertada |
-| `conferir:acoes` | 10/10/2026 | sim, 3 plantios: destino fora da lista, data que o calendário não tem, e o leitor descartando linha em silêncio |
+| `conferir:acoes` | 21/11/2026 | sim, 3 plantios em 10/10 (destino fora da lista, data que o calendário não tem, o leitor descartando linha em silêncio) e mais 2 em 21/11, depois de um FALSO POSITIVO: a regex do prazo era `/i` e reprovava qualquer "prazo" em português, inclusive uma ação que CITAVA a folha da compra avulsa ("Sem prazo para usar"). Apertada para o marcador em maiúsculas, que é a regra escrita da lista, e plantada nas duas direções: `PRAZO: fim do mês` reprova e `PRAZO 2026-02-31` reprova |
 | `conferir:anomalias` | 10/10/2026 | sim, na regra e no consumidor: função do SQL renomeada de um lado, e o retrato sem o campo. Em 24/10 (Engenharia), 4 plantios e 4 mordidas nas linhas novas: a 5b lendo o dia de hoje (incompleto) em vez de ontem, gritando com campanha pausada, sem piso, e o anúncio reprovado com limiar de 3 |
 | `conferir:contexto` | 10/10/2026 | sim, na regra e no consumidor: teto do app mais frouxo que o da rota, e a rota sem o recorte da lista |
 | `conferir:embedding` | 10/10/2026 | sim, 3 plantios: modelo divergente, dimensão divergente, e a rota sem o aviso de ano do manual |

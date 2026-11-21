@@ -131,8 +131,20 @@ for (const linha of texto.split("\n")) {
   if (!quem) problemas.push(`falta quem levantou, na linha de ${desde}`);
   // O PRAZO, quando houver. Escrever a palavra sem a data reprova: "PRAZO: fim
   // do mês" não dá para contar, e prazo que não dá para contar não ordena nada.
+  //
+  // A COMPARAÇÃO É SENSÍVEL À CAIXA DESDE 21/11/2026, e é conserto de um falso
+  // positivo que me pegou. A regra desta lista é escrever o MARCADOR
+  // `PRAZO AAAA-MM-DD`, em maiúsculas, no começo do texto. A regex era `/i`, e
+  // casava a palavra "prazo" em qualquer caixa e em qualquer lugar: a ação de
+  // 21/11 reprovou porque CITAVA a folha da compra avulsa, que diz "Sem prazo
+  // para usar". Numa lista sobre dinheiro e oferta, "prazo" é palavra comum do
+  // assunto, então o `/i` ia reprovar texto honesto para sempre.
+  //
+  // O que o comentário acima exige continua valendo: "PRAZO: fim do mês"
+  // reprova, porque o marcador está em maiúsculas e a data não vem. Plantado
+  // nas duas direções em 21/11 (QA).
   const prazo = acao.match(MOLDE_DO_PRAZO)?.[1] ?? null;
-  if (/\bPRAZO\b/i.test(acao) && !prazo) {
+  if (/\bPRAZO\b/.test(acao) && !prazo) {
     problemas.push(`a ação de ${desde} fala em PRAZO sem uma data no formato AAAA-MM-DD: ${acao.slice(0, 60)}`);
   }
   if (prazo) {

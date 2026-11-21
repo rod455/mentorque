@@ -108,6 +108,33 @@ console.log("Compra avulsa: produtos, quem paga a pergunta e as portas do servid
   const checkout = leia("app/api/avulsa/checkout/route.ts");
   conferir("o checkout é pagamento único em real", /mode: "payment"/.test(checkout) && /currency: "brl"/.test(checkout) && /unit_amount: p\.centavos/.test(checkout));
   conferir("o checkout marca a sessão como avulsa", /tipo: "avulsa"/.test(checkout));
+
+  // ── CRÉDITO GASTO CONTINUA GASTO (varredura do QA, 21/11/2026) ────────────
+  //
+  // A compra era adotada pela conta e o CONSUMO não. A pergunta é gravada com
+  // `anon_id: userId ? null : anonId`, um OU outro, então o que foi gasto sem
+  // conta carrega só o id do aparelho; num aparelho novo o `lerSaldo` acha a
+  // compra pela conta e não acha os gastos por ninguém, e eles voltam a existir.
+  // Dez créditos comprados com quatro gastos viram dez de novo.
+  //
+  // Em teoria hoje: zero compras e zero linhas de consumo no banco em 21/11.
+  // Por isso o conserto cabe agora, antes da primeira venda de verdade.
+  const servidor = leia("lib/avulsa/servidor.ts");
+  conferir(
+    "a adoção leva o GASTO junto com a compra",
+    /from\("biela_perguntas"\)[\s\S]{0,200}\.update\(\{ user_id: userId \}\)/.test(servidor),
+    "adotar só a compra faz o crédito gasto voltar a existir no aparelho seguinte",
+  );
+  conferir(
+    "e leva só o que foi PAGO, nunca a pergunta grátis",
+    /\.not\("pago_com", "is", null\)/.test(servidor),
+    "adotar a grátis é decisão de produto (hoje ela reseta ao criar conta), não conserto de contabilidade",
+  );
+  conferir(
+    "e só mexe em linha órfã, do aparelho e sem conta",
+    /from\("biela_perguntas"\)[\s\S]{0,200}\.eq\("anon_id", a\)[\s\S]{0,60}\.is\("user_id", null\)/.test(servidor),
+    "sem os dois filtros a adoção puxaria pergunta de outra conta",
+  );
 }
 
 // ── a volta do Stripe ──────────────────────────────────────────────────────

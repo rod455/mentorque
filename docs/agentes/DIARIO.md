@@ -3,6 +3,65 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-18 · QA: a compra avulsa varrida antes da primeira venda, com dois defeitos fechados sem ninguém ter sido afetado
+
+- Rodada de 18/11 fechada em 21/11: a sessão foi reiniciada três vezes no meio,
+  e por isso as leituras levam a data em que foram feitas (banco e retrato entre
+  09h40 e 10h39 UTC de 21/11), não a data da rodada.
+- **O retorno do dono de 12/11 dizia que o SQL da avulsa não tinha rodado.
+  Reli o instrumento: rodou.** As três tabelas existem e a oferta está no ar
+  desde 14/11 21h50 UTC. Então a varredura olhou o caminho com a venda LIGADA e
+  ainda sem nenhuma venda, que é a melhor hora possível.
+- **ACHADO 1: o que foi comprado mora no aparelho, e a folha não avisa.** A
+  compra não exige conta (decisão do dono de 05/11) e o direito é achado por um
+  id que vive no armazenamento do app. Reinstalar, limpar dados ou trocar de
+  celular sem conta apaga o que a pessoa pagou, e a folha diz "Sem prazo para
+  usar" sem ressalva. O que torna isso concreto é QUEM está na porta: das 3
+  aberturas de checkout (`tentou_avulsa`), **as três de aparelho sem conta**; dos
+  26 que viram a oferta (`viu_avulsa`), 15 sem conta; e o Play registra 37 a 47
+  desinstalações por dia contra 29 a 58 instalações. Estrago hoje: ZERO, porque
+  `compras_avulsas` tem zero linhas. Não toquei na folha (texto de oferta paga) e
+  não decidi por ele: virou linha na lista do dono com três saídas.
+- **E a variante pior está DESARMADA pela medição, que eu fui buscar antes de
+  escolher a manchete**: aparelho sem armazenamento recebe id efêmero que morre
+  quando o app fecha, e quem comprasse nessa condição perderia o pacote na mesma
+  sessão. São **0 de 1.855 aparelhos** em 30 dias. Publicar isso como manchete
+  seria um susto sem população.
+- **ACHADO 2, consertado: o crédito gasto voltava a existir no aparelho
+  seguinte.** A compra era adotada pela conta e o GASTO não. A pergunta grava a
+  conta OU o aparelho, nunca os dois (`anon_id: userId ? null : anonId`), então o
+  consumo de antes da conta carregava só o id do aparelho: dez créditos comprados
+  sem conta, quatro gastos, cria conta, abre em outro aparelho, e os quatro
+  voltam a existir. Agora o gasto é adotado junto, e **só o que foi pago**: a
+  pergunta grátis fica fora de propósito, porque se a grátis do mês segue a conta
+  é decisão de produto. 3 plantios, 3 mordidas, inclusive a que impede a adoção
+  de puxar pergunta de outra conta.
+- **O que eu li e NÃO tenho o que apontar**, porque varredura também é dizer
+  isso: a sessão do Stripe tem índice único e a gravação usa conflito por ela
+  (webhook e volta do app nunca contam duas vezes); o webhook LANÇA quando a
+  compra paga não grava, então o Stripe reenvia em vez de perder a venda com um
+  200 (cicatriz de 25/09); `lerSaldo` falha fechada; a confirmação só aceita
+  sessão de quem pergunta; e a compra fica desligada inteira sem a tabela, para a
+  contagem do grátis não virar zero e soltar o limite para todos.
+- **Tudo isso é TEORIA até a primeira venda**, com a palavra da casa: zero
+  compras, zero linhas de consumo. Índice, conflito e tratamento de erro só se
+  provam com dinheiro de verdade passando.
+- **FALSO POSITIVO MEU numa conferência que não é minha.** A `conferir:acoes`
+  reprovou a minha linha porque ela CITA a folha ("Sem prazo para usar"): a regra
+  escrita da lista é o marcador `PRAZO AAAA-MM-DD` em maiúsculas, e a regex era
+  `/i`, casando a palavra em qualquer caixa. Numa lista sobre dinheiro, "prazo" é
+  palavra comum do assunto. Apertei para o marcador, que é o contrato escrito, e
+  plantei nas DUAS direções (`PRAZO: fim do mês` reprova, `PRAZO 2026-02-31`
+  reprova). Está na fila do Guardião, e fica dito em voz alta que eu mexi numa
+  conferência dele para a minha linha passar.
+- Sobre o retorno de 12/11: a minha conclusão do RevenueCat estava errada, era um
+  teste de sete dias contado em `active_trials`, e o campo estava na mesma linha
+  do pacote que eu li. A régua nova (listar o que separa os dois casos e ler
+  TODOS os campos) foi aplicada hoje duas vezes: no `sem-armazenamento` e em
+  separar consumo pago de consumo grátis antes de adotar.
+- `npm run conferir` verde às 10h39 UTC de 21/11.
+- Artifact da rodada: https://claude.ai/artifact/133mLN4emhzNFpnm5HaXah
+
 ## 2026-11-16 · Engenharia: a Apple aprovou, e o aviso do iPhone sobe para 76
 
 - O dono disse que a Apple aprovou. Lido na API da App Store Connect às 21h43
