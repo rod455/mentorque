@@ -392,6 +392,7 @@ export const AULAS_DO_SINTOMA: Record<string, string[]> = {
   "engine-power-loss": ["diag-perda-de-forca"],
   "engine-misfire": ["diag-motor-falhando"],
   "engine-smoke": ["diag-fumaca-escapamento"],
+  "ac-not-cooling": ["diag-ar-nao-gela"],
   "cel": ["vid-luz-injecao-acendeu"],
   "overheating": ["diag-superaquecimento"],
   "consumption": ["money-fuel"],

@@ -16,12 +16,81 @@ Formato de cada tela/fluxo:
 
 ## Estado
 
-v13 em 2026-11-13: rodada de CONVERSÃO com **metade dos instrumentos fora**: a
-integração do Supabase apontou para outra organização e nenhuma consulta fina
-passou, pela segunda vez em quatro semanas. O que a rodada entrega, com o
-retrato só: **zero assinantes**, um veredito fechado com a pergunta da semana
-passada respondida, e **nenhuma aposta nova, por decisão e com o motivo
-escrito.** Próxima rodada alterna para RETENÇÃO.
+v14 em 2026-11-20: rodada de RETENÇÃO, terceira semana seguida com o corte fino
+fora (o conector do Supabase desta sessão aponta para outra organização). O que
+o retrato alcança sozinho, e é bastante: **a volta da primeira semana está
+parada em ~18 a cada 100 há nove semanas**, atravessando seis coortes e todas
+as mudanças deste trimestre; e **a jornada de e-mail, a única máquina que
+alcança quem não abre o app, produz 14 aberturas e 4 cliques em 1.219 envios.**
+Nenhuma aposta nova, pela segunda rodada seguida, com o motivo escrito abaixo.
+Próxima rodada alterna para CONVERSÃO.
+
+# A VOLTA DA PRIMEIRA SEMANA NÃO SE MEXEU EM NOVE SEMANAS (2026-11-20)
+
+Lido no retrato de 20/11 às 09h00 UTC, pacote `coortes`, seis coortes d1-7 já
+fechadas (a janela fecha pelo ÚLTIMO integrante, então estas seis são as que
+têm os sete dias cumpridos por todo mundo):
+
+| Coorte | Voltaram na semana 1 | Ativaram |
+| --- | --- | --- |
+| 1 | 12 de 57 (21%) | 49 por 100 |
+| 2 | 8 de 69 (12%) | 41 por 100 |
+| 3 | 28 de 131 (21%) | 42 por 100 |
+| 4 | 18 de 124 (15%) | 43 por 100 |
+| 5 | 23 de 126 (18%) | 52 por 100 |
+| 6 | 22 de 103 (21%) | 37 por 100 |
+
+**A leitura honesta é "parado", não "oscilando".** Com n perto de 100, o erro
+padrão de cada linha é de uns 3,8 pontos, então a distância entre 12% e 21%
+cabe inteira no ruído: as seis linhas são compatíveis com um único número de
+~18 por 100. A ativação conta a mesma história (média ~44, nenhuma linha longe).
+Isto é informação, e não ausência dela: nove semanas de mudanças de conversão
+não moveram a volta, o que já era esperado (elas tratam a entrada), mas também
+quer dizer que **nada do que está no app hoje faz a pessoa voltar sozinha**.
+
+E a consequência de projeto, que vale mais que o número: **com ~100 pessoas por
+coorte, uma mudança só é visível aqui se mover uns 8 pontos.** Trocar um texto
+não move 8 pontos. É por isso que a próxima aposta de retenção não pode ser uma
+troca de palavra: tem que ser um mecanismo novo, ou tem que ser medida num
+degrau mais fino que a volta em 7 dias.
+
+# A JORNADA DE E-MAIL NÃO É LIDA, E NÃO É O MEDIDOR QUE ESTÁ QUEBRADO (2026-11-20)
+
+Mesmo retrato, pacote `email30d`, 30 dias, 1.219 envios. A jornada automática:
+
+| Chave | Enviados | Entregues | Abertos | Cliques | Abertura |
+| --- | --- | --- | --- | --- | --- |
+| d0 | 491 | 477 | 8 | 3 | 1,6% |
+| d2 | 459 | 457 | 4 | 1 | 0,9% |
+| d5 | 163 | 161 | 2 | 0 | 1,2% |
+| d9 | 25 | 25 | 0 | 0 | 0% |
+
+**A primeira pergunta tinha que ser se o instrumento mede.** Taxa de abertura
+depende de a pessoa carregar a imagem do e-mail, e Gmail e Apple distorcem isso;
+1,6% poderia ser medidor cego, não gente sem ler. Duas conferências dizem que
+não é:
+
+1. **Comparação dentro do mesmo instrumento.** As chaves mandadas à mão, na
+   mesma janela e pelo mesmo Resend, registram abertura normal: `convite-premium-2026-10`
+   4 de 23 (17,4%, faixa de 95% de 7,0% a 37,1%) e `mes:2026-10` 3 de 9 (33,3%,
+   faixa de 12,1% a 64,6%). A faixa do d0 vai de 0,8% a 3,2%. **As faixas não se
+   encostam**, então a diferença sobrevive ao tamanho pequeno das campanhas: o
+   carimbo de abertura funciona neste provedor.
+2. **O clique não depende de imagem.** 3 cliques em 491 no d0, 1 em 459 no d2.
+   Quatro cliques em 1.138 e-mails da jornada.
+
+**O que NÃO se pode concluir daí:** que o texto da jornada é ruim. As campanhas
+à mão foram para uma lista ESCOLHIDA (convidados a premium, gente que já estava
+dentro) e a jornada vai para todo mundo que se cadastra, inclusive quem veio de
+anúncio e nunca voltou. Seleção de público, sozinha, explica parte da distância.
+O que fica provado é mais estreito e basta: **a jornada, como ela chega aos
+cadastros de hoje, não é aberta nem clicada, e portanto não está trazendo
+ninguém de volta.**
+
+E o que este instrumento NÃO alcança, dito antes que alguém suponha: `entregues`
+477 de 491 diz que o provedor aceitou, e **não diz em que aba caiu**. Promoções
+não é legível daqui. Então "não abre" está medido; "não abre porque está em
+Promoções" é hipótese, e precisa de outro teste.
 
 # FONTE INDISPONÍVEL, E O QUE ISSO CUSTOU (2026-11-13)
 

@@ -262,3 +262,4 @@ texto viaja pela rede, o arquivo não).
 | `diag-perda-de-forca` | Perda de força: de repente ou aos poucos |
 | `diag-motor-falhando` | Motor falhando: quando ele falha diz o que é |
 | `diag-fumaca-escapamento` | Fumaça no escapamento: a cor diz o que está queimando |
+| `diag-ar-nao-gela` | Ar-condicionado não gela: é pouco ar ou é ar quente? |

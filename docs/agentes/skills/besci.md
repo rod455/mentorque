@@ -308,3 +308,33 @@ experimentos alimentam a seção final.
   83 de cada 100 contas têm carro. O número piorou porque o produto melhorou.
   Antes de ler qualquer métrica de sequência, perguntar se a sequência que ela
   pressupõe é a que o app faz hoje.
+- **2026-11-20: antes de concluir que ninguém lê, provar que o medidor mede, e o
+  melhor segundo instrumento costuma estar DENTRO do primeiro.** A jornada de
+  e-mail lê 1,6% de abertura no d0 (8 de 491). Taxa de abertura depende de a
+  pessoa carregar imagem, e Gmail e Apple cegam isso, então o número podia ser
+  medidor morto em vez de gente sem ler. Não precisei de fonte nova para
+  separar: as chaves mandadas À MÃO, na mesma janela e pelo mesmo provedor,
+  leem 17,4% (4 de 23) e 33,3% (3 de 9), e as faixas de 95% não encostam na do
+  d0 (0,8% a 3,2%). O carimbo funciona. O clique confirma por outro caminho,
+  porque clique não depende de imagem: 4 em 1.138. **Quando a fonte tem várias
+  fatias, uma fatia que DEVERIA se comportar diferente é um grupo de controle
+  de graça, e ele chega antes de qualquer pedido de integração nova.**
+  E o limite, declarado junto: as campanhas à mão foram para lista escolhida, a
+  jornada vai para todo mundo, então a comparação prova que o MEDIDOR vive, não
+  que o texto da jornada seja ruim.
+- **2026-11-20: medida grossa demais para a mudança que se quer fazer é um
+  veredito impossível antes de a aposta começar.** A volta da primeira semana
+  roda com ~100 pessoas por coorte, e nesse tamanho o erro padrão é de ~3,8
+  pontos: só uma mudança de uns 8 pontos aparece. Seis coortes em nove semanas
+  leram 21, 12, 21, 15, 18 e 21 por 100, e isso é UM número de ~18 visto seis
+  vezes, não uma série que sobe e desce. A conta de poder vem ANTES de escolher
+  a aposta: se a mudança plausível move 2 pontos e o instrumento vê 8, ou se
+  troca o instrumento por um degrau mais fino, ou se escolhe outra aposta.
+  Trocar palavra e esperar nove semanas é gastar a coorte sem chance de
+  veredito.
+- **2026-11-20: "entregue" não diz em que aba caiu, e a diferença entre as duas
+  frases é uma hipótese inteira.** 477 de 491 entregues significa que o provedor
+  aceitou. Promoções não é legível no nosso instrumento. Então "não abre" está
+  medido e "não abre porque caiu em Promoções" é suposição; dizer a segunda como
+  se fosse a primeira é a família de erro de 03/10.
+
