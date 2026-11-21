@@ -32,14 +32,7 @@ Codemagic, antes de qualquer frase sobre o que o binário tem.)
    regra mora em `lib/app/ofertaPrimeiroDia.ts`. No iPhone não aparece, porque
    a Apple ainda não tem oferta de teste. Para medir, o paywall registra a
    origem `primeiro-dia` no `viu_paywall`.
-4. **"Cotar meu seguro" nas datas do carro, como teste de demanda** (16/11,
-   commit cd415fc, plano de receita). O botão fica na linha do seguro. A folha diz a
-   verdade: a cotação ainda não existe e a parceria está sendo fechada; quem
-   quiser, pede para ser avisado. Os eventos `viu_seguro`, `tocou_seguro` e
-   `quer_seguro` entraram no banco em 16/11 (migrações
-   `funil_eventos_seguro` e `funil_eventos_seguro_visto`). Na web vale desde
-   o deploy.
-5. **A pesquisa curta no Início** (16/11, commit 8236a08, plano de receita). Quem começou a
+4. **A pesquisa curta no Início** (16/11, commit 8236a08, plano de receita). Quem começou a
    usar há 3 dias ou mais vê, uma vez, um card com 4 perguntas: o teste de
    Sean Ellis, quanto gastou com o carro em 3 meses, se tem seguro e quanto
    pagaria por "Resolver este problema", mais um campo livre. As respostas vão
@@ -49,13 +42,19 @@ Codemagic, antes de qualquer frase sobre o que o binário tem.)
 ## Ficou FORA do binário, de propósito
 
 - A compra avulsa no iPhone, como na 3.4.
+- **O botão "Cotar meu seguro"** (criado em 16/11). Saiu em 21/11, antes
+  de qualquer build, por decisão do dono: "vamos colocar a 3.6 sem o link de
+  afiliado de seguro". Saiu também da web. Os eventos `viu_seguro`,
+  `tocou_seguro` e `quer_seguro` continuam aceitos pelo banco, sem ninguém
+  que os emita. O commit de 16/11 está DENTRO da árvore (o botão nasceu e
+  saiu depois), por isso esta linha não cita o número: a `conferir:versoes`
+  acusaria "está em Ficou FORA e é ancestral".
 
 ## A nota das lojas
 
 Pela regra da casa: o ganho, não o defeito; o verbo na ação da pessoa; nada
 que não tenha sido conferido. A pesquisa fica fora: não é ganho para quem lê
-a loja. O seguro entra só como "peça para ser avisado", porque a cotação
-ainda não existe.
+a loja. O seguro saiu da versão em 21/11.
 
 **Para a Play (Android):**
 
@@ -63,16 +62,12 @@ ainda não existe.
 Carro dando sinal? Agora dá para resolver o problema com a Biela por 7 dias, sem assinatura, e conferir o orçamento da oficina antes de pagar.
 
 Acabou de cadastrar o carro? Experimente o Premium por 7 dias, de graça.
-
-Nas datas do carro, peça para ser avisado quando a cotação de seguro estiver disponível no app.
 ```
 
-**Para a App Store (iPhone)**, sem as duas primeiras frases, porque a compra
-avulsa e a oferta de teste não aparecem no iPhone:
-
-```
-Nas datas do carro, peça para ser avisado quando a cotação de seguro estiver disponível no app.
-```
+**Para a App Store (iPhone): não enviar por enquanto.** Sem o seguro, a 3.6 do
+iPhone leva só a pesquisa (a compra avulsa e a oferta de teste não aparecem
+lá). Não há ganho para escrever na loja, e a recomendação de 21/11 é mandar só
+o Android agora.
 
 Na Apple, a versão nova se cria no App Store Connect com o MESMO número do
 binário: **3.6**. A 3.4 da loja levou o binário 3.5, e essa diferença não
@@ -86,6 +81,9 @@ desde a árvore da 3.4 (93bc0c7), mudaram só os números de versão (3.6 e o pi
 
 ## Roteiro de aparelho, escrito ANTES do build
 
+**Seguro, qualquer aparelho.** No calendário de revisões, a linha do seguro
+mostra só a data, sem botão de cotar.
+
 **Itens 1 e 2, Android sem Premium.** Abrir um sintoma com perguntas (ex.:
 "Barulho ao frear"): embaixo do botão da Biela aparece a frase com R$ 9,90.
 Gastar a pergunta grátis do mês: a parede mostra primeiro "Resolver este
@@ -98,12 +96,7 @@ mostra "Experimente o Premium por 7 dias, de graça" com o nome do carro.
 Voltar, tocar em "Agora não", fechar e abrir o app: o card não volta. No
 iPhone, cadastrar um carro não mostra o card.
 
-**Item 4, qualquer aparelho.** Abrir o calendário de revisões: na linha do
-seguro aparece "Cotar meu seguro". Tocar abre a folha que diz "Ainda não está
-pronto". "Sim, me avise" mostra "Combinado". No banco, depois: `viu_seguro`,
-`tocou_seguro` e `quer_seguro` do mesmo aparelho, com a versão 3.6.0.
-
-**Item 5, aparelho que usa o app há mais de 3 dias.** O Início mostra "4
+**Item 4, aparelho que usa o app há mais de 3 dias.** O Início mostra "4
 perguntas rápidas". Responder as quatro liga o Enviar; enviar agradece e o
 card não volta. No banco, depois: uma linha em `pesquisa_respostas` com a
 plataforma e a versão 3.6.0.

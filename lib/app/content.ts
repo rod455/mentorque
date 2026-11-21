@@ -1085,16 +1085,6 @@ export function getContent(locale: Locale) {
       salvar: T("Salvar", "Save"),
       remover: T("Remover esta data", "Remove this date"),
       salvo: T("Data guardada. Você recebe aviso 30, 7 e 1 dia antes, com os avisos ligados.", "Date saved. You'll get a heads-up 30, 7 and 1 day before, with notifications on."),
-      // O teste de demanda do seguro (16/11/2026, plano de receita). A folha
-      // diz a verdade: a cotação ainda não existe, a parceria está sendo
-      // fechada. Quem quiser, pede para ser avisado.
-      seguroCotar: T("Cotar meu seguro", "Get an insurance quote"),
-      seguroTitulo: T("Cotar o seguro do seu {carro}", "Get a quote for your {carro}"),
-      seguroCorpo: T("Estamos fechando parceria com corretoras para você cotar o seguro aqui no app, com os dados do carro já preenchidos. Ainda não está pronto.", "We're partnering with brokers so you can get a quote right here, with your car's details already filled in. It isn't ready yet."),
-      seguroPergunta: T("Quer que a gente te avise quando estiver pronto?", "Want us to let you know when it's ready?"),
-      seguroSim: T("Sim, me avise", "Yes, let me know"),
-      seguroNao: T("Agora não", "Not now"),
-      seguroCombinado: T("Combinado. A gente avisa aqui no app quando a cotação estiver pronta.", "Deal. We'll let you know in the app when quotes are ready."),
       homeTitulo: T("{tipo} do {carro} {quando}", "{carro} {tipo} {quando}"),
       homeSub: T("Toque para ver todas as datas", "Tap to see every date"),
       homeSubValor: T("{valor} · toque para ver todas as datas", "{valor} · tap to see every date"),
