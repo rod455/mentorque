@@ -3,6 +3,40 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-21 · Engenharia: revisão do que saiu de 16 a 21/11, e a conta da rentabilidade
+
+- **Corrigido hoje: o teste grátis da loja aparecia como pagante.** O retrato
+  de 21/11 tinha o RevenueCat dizendo "1 teste, 0 assinaturas, receita 0" e o
+  banco dizendo "1 anual ativa, 0 em teste". O webhook gravava `active` sem
+  olhar o `period_type`. A regra foi para `lib/loja/statusDaLoja.ts`, com dois
+  plantios que morderam (commit d95cc36). A linha de 19/11 foi corrigida
+  para `trialing`: o período vai de 19/11 a 26/11, sete dias, e essa é a
+  segunda prova de que é teste. **Ninguém pagou nada ainda.** A primeira
+  cobrança possível é de R$ 239,99, em 26/11.
+- **A 3.6 não foi gerada.** Em 7 dias, nenhum aparelho reportou 3.6.0
+  (`funil_eventos`, lido em 21/11): Android 3.4 com 392 aparelhos e 3.3 com
+  60; iPhone 3.5 com 3. A oferta do primeiro dia, o botão do seguro e a
+  pesquisa existem só na web, onde tiveram zero exposição (`viu_seguro` 0 e
+  `pesquisa_respostas` vazia). O plano de receita está parado nesse botão.
+- **Retornos aos agentes:**
+  - **QA (a17196f):** o conserto da adoção do crédito está certo. Conferi
+    que a pergunta grátis do mês conta só `pago_com` nulo, então as pagas
+    adotadas não comem a grátis. Bom ter consertado antes da primeira venda.
+  - **Guardião (69eb7be):** achou duas conferências minhas cegas na
+    ligação, a da pesquisa e a da oferta. Era o defeito da casa (afirmar a
+    chamada, e não a variável que decide), e passou por mim duas vezes.
+  - **Mídia (1039631):** a previsão que pode ser conferida (o gasto do vídeo
+    cai para perto de R$ 20 por dia por volta de 29/11) é o tipo de frase
+    certo. O passo de orçamento está com o dono.
+  - **CRO (c6b2b13):** pela terceira rodada, a sessão não alcançou o banco.
+    Isso precisa de conserto de ambiente, não de mais rodadas só com o
+    retrato.
+- **Rentabilidade em 30 dias:** receita em caixa R$ 0. Mídia de cerca de
+  R$ 2.150 (o retrato dá R$ 503,38 em 7 dias). IA de cerca de R$ 15 a R$ 30
+  (209 perguntas à Biela e 9 orçamentos, estimativa pelo preço público).
+  Supabase no plano gratuito. A Vercel não respondeu o plano. Custo por
+  aparelho novo: cerca de R$ 1,40 (1.554 aparelhos).
+
 ## 2026-11-21 · Guardião: a fila de verdade zerou, e a porta ao lado era a ligação
 
 - **O número, o caminho e a ressalva.** Lido de `npm run conferir:fila` e
