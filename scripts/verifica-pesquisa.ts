@@ -41,7 +41,19 @@ conferir("sem data de começo, não vê", !mostrarPesquisa({ comecouEm: null, ag
 conferir("data ilegível não vira pesquisa", !mostrarPesquisa({ comecouEm: "ontem", agora, jaFeita: false }));
 
 const rota = leia("app/api/pesquisa/route.ts");
-conferir("a rota filtra pela lista", /respostasValidas\(body\.respostas\)/.test(rota));
+// A LIGAÇÃO NAS DUAS PONTAS (21/11/2026, rodada 9 do Guardião). Era
+// `/respostasValidas\(body\.respostas\)/`, só a chamada. Plantei
+// `const r = (respostasValidas(body.respostas), body.respostas);` e esta
+// conferência ficou VERDE: o filtro roda, o resultado é jogado fora, e o corpo
+// CRU vai para o banco, que é o item 1 do que esta conferência existe para
+// pegar (valor fora da lista entrando no banco). Então a asserção prende a
+// variável recebendo a chamada, e o que vai para o banco saindo dela.
+conferir(
+  "a rota filtra pela lista, e é o filtrado que vai para o banco",
+  /const r = respostasValidas\(body\.respostas\);/.test(rota) &&
+    /sentir: r\.sentir,[\s\S]{0,200}preco: r\.preco,/.test(rota),
+  "afirmar so a chamada deixa passar `(respostasValidas(...), body.respostas)`, que foi o plantio de 21/11",
+);
 conferir("a rota recusa resposta incompleta", /if \(!completa\(r\)\) return NextResponse\.json\(\{ ok: false, error: "incompleta" \}, \{ status: 422 \}\)/.test(rota));
 conferir("a rota grava uma por aparelho", /onConflict: "pesquisa,anon_id", ignoreDuplicates: true/.test(rota));
 const card = leia("components/app/PesquisaCurta.tsx");

@@ -3,6 +3,75 @@
 Registro cronológico das rodadas. Cada agente escreve aqui ao terminar:
 data, papel, o que fez, o que encontrou, o que recomenda. O mais novo em cima.
 
+## 2026-11-21 · Guardião: a fila de verdade zerou, e a porta ao lado era a ligação
+
+- **O número, o caminho e a ressalva.** Lido de `npm run conferir:fila` e
+  copiado: 71 conferências, 58 provadas por quem não as escreveu, **0 provadas só
+  pelo autor** e 13 em dívida assumida. O caminho: 11 em 31/10, 5 em 07/11, 1 em
+  14/11, e hoje as 3 que havia (2 nascidas em 16/11) mais as 3 provadas mais
+  antigas da casa, de 19/09. **Zero não é pronto:** as 13 em dívida nunca foram
+  provadas, a mais velha há 49 dias, e prova não vale para sempre, que é por que o
+  rodízio segue pelas mais antigas.
+- **A dívida que eu declarei em 14/11 está paga, na data que o Diretor exigiu
+  (21/11).** Provei o modo `--semana` da `conferir:segredo` num clone descartável,
+  fora deste repositório, porque provar aquele modo exige um commit contendo valor
+  em forma de chave. Quatro casos, quatro veredictos certos: clone limpo dá 0 nos
+  dois modos; segredo de pé dá 1 nos dois; **segredo acrescentado e apagado no
+  commit seguinte dá 1 no `--semana` e 0 no modo da árvore**, que é a razão de o
+  modo existir e nunca tinha sido provada; e **segredo escrito na resolução de um
+  commit de junção dá 1**, com `git log -p` sozinho mostrando zero ocorrências e
+  `--diff-merges=combined` mostrando uma, que é exatamente o conserto de 01/11.
+- **As seis da fila:** `oferta-primeiro-dia`, `pesquisa`, `catalogo-remoto`,
+  `baixar`, `relatorio`, `travessao`. **19 plantios (15 aqui, 4 no clone), 14
+  mordidas, 5 cegas, todas as 5 consertadas e replantadas.**
+- **A medida nova que o dono pediu em 14/11: execução contra texto.** Das 2.040
+  asserções da casa, **1.455 (71%) decidem por execução** e **585 (29%) por
+  texto**. As mais dependentes de texto são `aviso` (57 de 101), `anomalias` (33
+  de 38) e `cadastro` (30 de 76); só `agenda`, `relatorio` e `skills` são execução
+  pura. O critério foi de onde vem o valor que a asserção olha, e ele está escrito
+  no manual junto com o número.
+- **E a previsão dele se confirmou no mesmo dia: 4 das 5 cegas são a porta ao
+  lado, todas na LIGAÇÃO.** Nos quatro casos a chamada continua escrita e o
+  resultado dela não decide nada:
+  - `const r = (respostasValidas(body.respostas), body.respostas);` e o corpo CRU
+    da pesquisa ia para o banco, que é o item 1 do que aquela conferência existe
+    para pegar;
+  - `const mostrarOferta = true` com ou-lógico antes da chamada, e a faixa de
+    teste grátis aparecia no iPhone, que é a promessa falsa de outubro;
+  - `void 0` e e-lógico antes de `funil("clicou_baixar", ...)`, e o clique da bio
+    do Instagram ficava sem rastro, que é a razão de a página existir;
+  - `if (true) return true;` na primeira linha de `valido()`, e **as 15 asserções
+    da `conferir:catalogo-remoto` passaram**, com qualquer pacote da rede
+    sobrepondo o catálogo embutido e ficando gravado no aparelho.
+- **A regra que fica para a ligação:** afirme a VARIÁVEL que recebe a chamada e o
+  lugar onde ela é usada. Afirmar a chamada é afirmar que alguém digitou o nome.
+- **A quinta cega é de outra natureza, e é a mais fácil de repetir:** a
+  `conferir:travessao` varria `lib/email` e não `lib/jornada`, onde o texto dos
+  e-mails da jornada é montado, ou seja, o que chega na caixa do cliente. A regra
+  do dono cita e-mails. Alarguei para `lib/jornada`, `lib/site`, `lib/biela` e
+  `lib/pesquisa`, **medindo antes: zero casos novos e zero falsos positivos**, e
+  conferi que o zero não era cegueira plantando o travessão contra a varredura
+  alargada. São 69 frases com cara de texto de usuário em `lib/jornada` e 248 em
+  `lib/site` que ninguém olhava.
+- **Onde eu falhei na minha régua, e vai com data:** o dono pediu em 14/11 para
+  trocar busca por execução onde a regra decide, e eu fiz isso só onde era de
+  graça. Na `conferir:catalogo-remoto`, que é justamente a que tinha 15 asserções
+  passando com o validador desligado, eu apertei a asserção de texto e **não**
+  converti para execução, porque converter pede dividir
+  `lib/app/remoteLessons.ts` em dois módulos, e refatorar código de produto não é
+  desta cadeira. Pedido escrito na fila entre papéis para a Engenharia hoje, com
+  o plantio como argumento. **Em dívida desde 21/11.**
+- **O contêiner subiu sem `node_modules` e o passo zero pegou.** A primeira
+  bateria saiu com código 2 por falta de `@types/node` e `tailwindcss`, não por
+  defeito nenhum. `npm ci` e a bateria voltou a zero. É a terceira vez que o passo
+  zero paga o aluguel: sem ele, cada MORDEU da rodada seria falso.
+- **Observado, sem conserto:** `--semana 0` na `conferir:segredo` varre 7 dias, não
+  zero, porque a leitura é `Number(...) || 7`. Pedir zero dia não quer dizer nada,
+  então fica como está; anotado para quem ler a saída e estranhar.
+- **O que esta rodada não alcança:** plugin nativo e aparelho, como sempre. E a
+  `conferir:segredo` não vê segredo que nunca passou pelo git, que é onde estavam
+  os achados das rodadas 2, 3 e 4 (chaves em texto puro dentro do n8n).
+
 ## 2026-11-20 · Mídia: o vídeo voltou sozinho e agora tem preço, R$ 18,43 por conta contra R$ 3,57 do Meta
 
 - Artifact "Mídia da semana": https://claude.ai/artifact/GeF2LY3dAHwwBbGpLENS4Q

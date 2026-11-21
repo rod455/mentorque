@@ -62,10 +62,24 @@ for (const [nome, ua, toques, esperado] of APARELHOS) {
 // ── 3. o rastro, que é a razão de a página existir ─────────────────────────
 {
   const componente = leia("components/site/LevaParaALoja.tsx");
+  // O EVENTO TEM DE SER UM COMANDO POR SI (21/11/2026, rodada 9 do Guardião).
+  //
+  // Era `/funil\("clicou_baixar"/`, a chamada solta. Plantei
+  // `void 0 && funil("clicou_baixar", {...});` e esta conferência ficou VERDE: a
+  // chamada continua escrita, o evento nunca sai, e o rastro, que é a razão de
+  // a página existir, se perde em silêncio.
+  //
+  // A âncora é o começo da linha: chamada precedida de qualquer coisa que a
+  // desligue (`void 0 &&`, `false &&`, outra condição) deixa de casar. Medido na
+  // casa em 21/11: 19 asserções de emissão de evento do funil, em 11
+  // conferências, e NENHUMA estava presa ao começo da linha. Consertei esta,
+  // que é a que o plantio provou cega; a varredura das outras 18 é da rodada
+  // 10 (28/11), porque cada uma precisa da leitura do seu arquivo para saber se
+  // a chamada é comando por si ou faz parte de uma expressão de propósito.
   conferir(
-    "o clique vira evento no funil",
-    /funil\("clicou_baixar"/.test(componente),
-    "sem o evento, a página só atrasa a pessoa em 400ms e a origem continua invisível",
+    "o clique vira evento no funil, como comando por si",
+    /^[ \t]*funil\("clicou_baixar"/m.test(componente),
+    "sem o evento, a página só atrasa a pessoa em 400ms e a origem continua invisível; e `void 0 &&` na frente tem o mesmo efeito",
   );
   conferir(
     "a etiqueta da campanha é guardada antes do desvio",

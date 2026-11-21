@@ -54,7 +54,22 @@ const TRAVESSAO = "—";
 // Por que docs importa, se não é tela: é o texto que ensina a escrever o resto.
 // Manual com travessão é manual que produz travessão, e a regra existe para o
 // que sai daqui, não para o que fica.
-const TELAS = ["components", "lib/app/conteudo", "lib/email", "lib/i18n", "emails", "docs"];
+// `lib/jornada`, `lib/site`, `lib/biela` e `lib/pesquisa` ENTRARAM EM
+// 21/11/2026, por um plantio do Guardião. A regra do dono diz "vale para app,
+// LP, e-mails e docs", e `lib/email` estava na lista enquanto `lib/jornada`,
+// que monta os e-mails da jornada (texto que chega na caixa do cliente), não
+// estava. Plantei `"Cadastrar o meu carro — leva 1 minuto"` lá e esta
+// conferência ficou VERDE.
+//
+// MEDIDO ANTES DE ALARGAR, que é a regra da casa: com as quatro pastas dentro,
+// a varredura acusa ZERO casos hoje, e zero falsos positivos. Conferido que o
+// zero não é cegueira: com o travessão plantado em `lib/jornada`, a varredura
+// alargada reprova (saída 1). São 69 frases com cara de texto de usuário em
+// `lib/jornada` e 248 em `lib/site` que antes ninguém olhava.
+//
+// `lib/avulsa` e `lib/relatorio` ficaram FORA: zero frases de usuário nas duas,
+// e pasta sem texto na lista é lista que cresce sem ganhar nada.
+const TELAS = ["components", "lib/app/conteudo", "lib/email", "lib/i18n", "lib/jornada", "lib/site", "lib/biela", "lib/pesquisa", "emails", "docs"];
 /** Arquivos avulsos de texto de tela. */
 const AVULSOS = ["lib/app/content.ts"];
 /** Em app/, só os campos que viram título e descrição de página. */

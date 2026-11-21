@@ -49,6 +49,26 @@ console.log("Catálogo remoto: publica aula sem build sem apagar o catálogo bom
 // lixo viraria o catálogo e ficaria GRAVADO no aparelho, porque o pacote vai
 // para o `localStorage`: o estrago sobreviveria ao fim da rede.
 {
+  // O CORPO DA FUNÇÃO, DA ABERTURA AO FECHO (21/11/2026, rodada 9 do Guardião).
+  //
+  // Plantei `if (true) return true;` como primeira linha de `valido()` e as 15
+  // asserções desta conferência passaram, porque todas leem texto e o texto
+  // continuava inteiro, inalcançável. Com o validador neutralizado, qualquer
+  // pacote da rede sobrepõe o catálogo embutido E fica gravado no
+  // `localStorage`: o estrago sobrevive ao fim da rede, que é o piso desta
+  // seção.
+  //
+  // Esta asserção prende o corpo nas duas pontas, então enxerto no meio quebra.
+  // Mas ela ainda é TEXTO, e texto não prova que a função roda. O conserto de
+  // verdade é a função morar num módulo puro para esta conferência EXECUTÁ-LA;
+  // o módulo é `"use client"` e importa sem extensão, então isso é divisão de
+  // módulo, serviço da Engenharia. Pedido escrito em `entre-papeis.md` em
+  // 21/11/2026, com este plantio como argumento.
+  conferir(
+    "o validador é o corpo inteiro, sem atalho enxertado",
+    /function valido\(p: unknown\): p is Pacote \{\s*if \(!p \|\| typeof p !== "object"\) return false;[\s\S]{0,1200}cursosValidos\(\(p as Pacote\)\.courses\) && popularesValidos\(\(p as Pacote\)\.populares\);\s*\}/.test(cliente),
+    "`if (true) return true` na primeira linha deixava as 15 asercoes desta conferencia verdes, com o piso do catalogo desligado",
+  );
   conferir(
     "pacote sem aula nenhuma é recusado",
     /!Array\.isArray\(lessons\) \|\| lessons\.length === 0/.test(cliente),

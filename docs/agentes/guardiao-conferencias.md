@@ -342,12 +342,6 @@ sem tirar ninguém dela.
 
 | conferência | última prova | mordeu? |
 |---|---|---|
-| `conferir:pesquisa` | no nascimento (autor), 16/11/2026 | mordeu nos três plantios: a lista de respostas aceitando qualquer valor, a pesquisa voltando para quem já respondeu e a rota gravando resposta incompleta |
-| `conferir:oferta-primeiro-dia` | no nascimento (autor), 16/11/2026 | mordeu nos dois plantios: a guarda do iPhone apagada da regra e o botão levando ao Premium com a origem errada. A suíte de navegador `oferta` ficou CEGA duas vezes no "agora não" esquecido: a primeira versão recarregava e caía no Início; a segunda reabria a tela do carro mas esperava 2 s e olhava a tela de entrada, e o "mordeu" daquele plantio veio da linha errada ("a tela do carro reabriu"). A bateria completa de 16/11 pegou. Com a espera da abertura, o mesmo plantio reprova na linha certa ("a oferta não volta") |
-| `conferir:catalogo-remoto` | no nascimento (autor), 11/11/2026 | mordeu nos dez plantios: pacote vazio, campos obrigatórios, aceitar antes de validar, aula agendada nos dois lados, enumerar campo a campo, limite sem ordem, contar evento em vez de aparelho, interruptor que não apaga, regravar com versão igual |
-| `conferir:baixar` | 19/09/2026 | sim |
-| `conferir:relatorio` | 19/09/2026 | sim |
-| `conferir:travessao` | 19/09/2026 | sim, depois de consertada |
 | `conferir:estilo` | 26/09/2026 | sim, em regra de erro |
 | `conferir:regras` | 26/09/2026 | não na borda do perdão, consertada |
 | `conferir:tipos` | 26/09/2026 | sim, saída 2 |
@@ -400,6 +394,12 @@ sem tirar ninguém dela.
 | `conferir:prazo` | 14/11/2026 | 4 plantios, 4 mordidas, e ela executa contra um servidor local que trava de propósito: a coleta voltando ao cliente sem prazo, atalho enxertado no `cabeMaisUma` e no `foiOPrazo`, e a guarda do orçamento desligada antes de cada consulta |
 | `conferir:saude` | 14/11/2026 | 3 plantios, 2 mordidas e 1 CEGA consertada: `if (!allDone) return` desligado e botão sempre habilitado mordiam; `{result.kmEstimado && false && (` ficava VERDE, e a ressalva do km estimado desaparecia da tela com o número da saúde saindo sem dizer que o km foi chutado |
 | `conferir:segredo` | 14/11/2026 | 5 plantios, 5 mordidas: chave falsa em forma de Stripe real achada em arquivo de código, em documento do diário, em arquivo de esquema SQL e em arquivo de skill, e valor com cara de JWT de verdade DENTRO da exceção nomeada do `.env.example` (a exceção não engole valor real, o `pareceModelo` recusa). NÃO provado: o modo `--semana`, que a bateria não roda e cuja prova exigiria commit com valor em forma de chave |
+| `conferir:baixar` | 21/11/2026 | 3 plantios, 2 mordidas e 1 CEGA consertada: atalho na regra da loja do aparelho e atributo do botão renomeado mordiam; a chamada do evento com `void 0` e e-lógico na frente ficava VERDE, e o rastro, que é a razão da página existir, se perdia calado. A asserção passou a exigir o evento como comando por si (começo de linha) |
+| `conferir:catalogo-remoto` | 21/11/2026 | 3 plantios, 2 mordidas e 1 CEGA consertada: guarda do validador desligada e interruptor do remoto desligado mordiam; `if (true) return true;` na primeira linha de `valido()` deixava as 15 asserções VERDES, com o piso do catálogo desligado (pacote torto da rede sobrepondo o embutido e ficando gravado no aparelho). Asserção presa ao corpo inteiro da função; a divisão do módulo para EXECUTAR o validador foi pedida à Engenharia em 21/11 |
+| `conferir:oferta-primeiro-dia` | 21/11/2026 | 2 plantios, 1 mordida e 1 CEGA consertada: atalho enxertado na regra pura mordeu na primeira chamada (ela é executada); um `true` com ou-lógico na frente da chamada (`= true ou-logico mostrarOfertaDoPrimeiroDia(...)`) ficava VERDE, com a faixa de teste grátis aparecendo no iPhone, que é a promessa falsa de outubro. A ligação passou a ser afirmada nas duas pontas: a variável recebendo a chamada e a mesma variável desenhando a faixa |
+| `conferir:pesquisa` | 21/11/2026 | 2 plantios, 1 mordida e 1 CEGA consertada: atalho na regra pura mordeu; `const r = (respostasValidas(body.respostas), body.respostas);` ficava VERDE, e o corpo CRU ia para o banco, que é o item 1 do que ela existe para pegar. Agora prende a variável que recebe o filtro e o que vai para o banco saindo dela |
+| `conferir:relatorio` | 21/11/2026 | 2 plantios, 2 mordidas, e ela é só execução (nenhuma asserção de texto): atalho enxertado na leitura da data e o conversor de markdown renomeado |
+| `conferir:travessao` | 21/11/2026 | 3 plantios, 2 mordidas e 1 CEGA consertada: travessão no atributo de um componente e a frase partida em dois campos (o caso de 19/09) mordiam; travessão em `lib/jornada/emails.ts`, que é texto que chega na caixa do cliente, ficava VERDE porque a varredura não olhava a pasta. Alargada para `lib/jornada`, `lib/site`, `lib/biela` e `lib/pesquisa`, medido: zero casos novos e zero falsos positivos hoje, e o zero foi conferido com plantio |
 | `conferir:agenda` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 | `conferir:appsflyer` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
 | `conferir:caminho` | dívida assumida (03/10/2026) | não provada, e o dono decidiu não cobrar |
@@ -454,6 +454,60 @@ custo que não existia. Vale a lição geral, que é a mesma do caso `anonId`: o
 custo que justifica não fazer algo também é uma afirmação, e também se mede.
 
 ## Aprendizados
+
+**A FILA DE VERDADE ZEROU (21/11/2026, rodada 9).** 71 conferências, 58 provadas
+por quem não as escreveu, **0 provadas só pelo autor**, 13 em dívida assumida. O
+caminho, que é mais importante que o total: 11 em 31/10, 5 em 07/11, 1 em 14/11,
+e nesta rodada as 3 que havia (2 nascidas em 16/11) mais as 3 provadas mais
+antigas da casa (19/09, dois meses atrás). **Zero não quer dizer pronto:** as 13
+em dívida continuam sem prova nenhuma, a mais velha há 49 dias, e conferência
+provada não fica provada para sempre, que é a razão de o rodízio continuar pelas
+mais antigas.
+
+**A SEGUNDA MEDIDA QUE O DONO PEDIU EM 14/11: EXECUÇÃO CONTRA TEXTO.** Medi as
+2.040 asserções da casa: **1.455 (71%) decidem por execução** (chamam a função,
+comparam valor calculado, rodam processo) e **585 (29%) por texto** (leem o fonte
+e procuram forma). O método está em `scripts/` não, de propósito: é uma medida de
+rodada, não uma conferência, e o critério foi "de onde vem o valor que a asserção
+olha" (variável nascida de leitura de arquivo = texto; qualquer outra = execução).
+As mais dependentes de texto: `aviso` (57 de 101), `anomalias` (33 de 38),
+`cadastro` (30 de 76), `biela` (27 de 50), `email` (26 de 38), `push` (26 de 50).
+Só três são execução pura: `agenda`, `relatorio`, `skills`.
+
+**E A PREVISÃO DO DONO SE CONFIRMOU NO MESMO DIA.** Ele escreveu que prender a
+asserção nas duas pontas fecha a porta que o plantio achou e a próxima abre ao
+lado. Das 5 cegas desta rodada, **4 são a porta ao lado**, e todas na LIGAÇÃO (a
+parte que só texto alcança):
+
+| onde | o plantio | o que ficava verde |
+|---|---|---|
+| `pesquisa` | `const r = (respostasValidas(body.respostas), body.respostas);` | o corpo CRU ia para o banco |
+| `oferta-primeiro-dia` | `const mostrarOferta = true` com ou-lógico antes da chamada | teste grátis aparecendo no iPhone |
+| `baixar` | `void 0` e e-lógico antes de `funil("clicou_baixar", ...)` | o clique sem rastro nenhum |
+| `catalogo-remoto` | `if (true) return true;` na primeira linha de `valido()` | pacote torto da rede sobrepondo o catálogo bom e ficando gravado no aparelho |
+
+Nos quatro a chamada continua escrita e o resultado dela não decide nada. **A
+regra que fica para a ligação: afirme a VARIÁVEL que recebe a chamada e o lugar
+onde essa variável é usada.** Afirmar a chamada é afirmar que alguém digitou o
+nome.
+
+**E ONDE A LIGAÇÃO NÃO BASTA, O CONSERTO É DE OUTRA CADEIRA.** A
+`conferir:catalogo-remoto` tem 15 asserções e todas as 15 passaram com o
+validador neutralizado. O conserto que não se regenera é executar `valido()`, e
+isso pede o módulo dividido em dois, porque `remoteLessons.ts` é `"use client"` e
+importa sem extensão. Refatorar código de produto não é desta cadeira: pedido
+escrito na fila entre papéis em 21/11, com o plantio como argumento, e a asserção
+de texto apertada no corpo inteiro da função enquanto isso.
+
+**INSTRUMENTO QUE NÃO OLHA ONDE O TEXTO MORA (21/11/2026).** A quinta cega é de
+outra natureza, e é a mais barata de repetir em qualquer conferência de varredura:
+a `conferir:travessao` varria `lib/email` e **não** `lib/jornada`, que é onde o
+texto dos e-mails da jornada é montado, isto é, o que chega na caixa do cliente.
+A regra do dono diz "vale para app, LP, e-mails e docs". Plantei o travessão lá e
+ela passou verde. **A pergunta para toda varredura: a lista de lugares cobre todos
+os lugares onde a coisa mora hoje?** Alarguei para quatro pastas, medindo antes:
+zero casos novos e zero falsos positivos, e o zero foi conferido com plantio
+(porque "não achou nada" e "não olhou" têm a mesma cara).
 
 **LINHA AFIRMADA NÃO É LINHA QUE RODA (14/11/2026, rodada 8).** As cinco cegas
 desta rodada são uma raiz só, e ela é a maior encontrada até hoje nesta cadeira:

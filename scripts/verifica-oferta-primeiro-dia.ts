@@ -38,7 +38,24 @@ conferir("carro com data no futuro (relógio errado) não vira oferta", mostrarO
 // A ligação: a tela usa a regra, com a plataforma do TESTE (não a do aparelho),
 // e o botão leva ao Premium com a origem que o funil vai contar.
 const hub = leia("components/app/screens/CarHub.tsx");
-conferir("o CarHub decide pela função pura", /mostrarOfertaDoPrimeiroDia\(\{/.test(hub));
+// A LIGAÇÃO SE AFIRMA NAS DUAS PONTAS (21/11/2026, rodada 9 do Guardião).
+//
+// Era `/mostrarOfertaDoPrimeiroDia\(\{/`, só a chamada. Plantei
+// `const mostrarOferta = true || mostrarOfertaDoPrimeiroDia({...})` e esta
+// conferência ficou VERDE: a chamada continua escrita, a regra é pulada, e a
+// faixa de teste grátis aparece no iPhone, que é a promessa falsa de outubro e
+// a razão desta conferência existir.
+//
+// Texto é o único instrumento que alcança a ligação (a tela não roda aqui), e
+// por isso a ligação se afirma nas DUAS pontas: a variável recebendo a chamada
+// e a MESMA variável desenhando a faixa. Quem quiser burlar precisa mexer nas
+// duas, e aí quebra.
+conferir(
+  "o CarHub decide pela função pura, e é esse resultado que desenha a faixa",
+  /const mostrarOferta = mostrarOfertaDoPrimeiroDia\(\{/.test(hub) &&
+    /\{mostrarOferta && \(\s*<div data-oferta-primeiro-dia>/.test(hub),
+  "afirmar so a chamada deixa passar `= true || mostrarOferta...`, que foi o plantio de 21/11",
+);
 conferir("a plataforma vem do trialPlatform()", /plataforma:\s*trialPlatform\(\)\s*===\s*"ios"/.test(hub));
 conferir("o botão leva ao Premium com a origem primeiro-dia", /go\(\{ name: "subscribe", ctx: "primeiro-dia" \}\)/.test(hub));
 conferir("o \"agora não\" fica gravado", /localStorage\.setItem\(CHAVE_RECUSOU, "1"\)/.test(hub));
