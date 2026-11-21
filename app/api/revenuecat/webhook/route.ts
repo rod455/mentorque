@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { eventoDeFunil } from "@/lib/funilServidor";
 import { ehVendaComDinheiro, identidadeUsavel, relatoDeVendaSemConta } from "@/lib/loja/vendaSemConta";
+import { statusDaLoja } from "@/lib/loja/statusDaLoja";
 import { origemDaLoja } from "@/lib/assinaturaOrigem";
 
 export const runtime = "nodejs";
@@ -64,7 +65,11 @@ type RcEvent = {
   // numa consulta e responder numa semana.
   cancel_reason?: string;
   expiration_reason?: string;
+  // TRIAL | INTRO | NORMAL | PROMOTIONAL. Ver `statusDaLoja` abaixo.
+  period_type?: string;
 };
+
+// Teste grátis é `trialing` (21/11/2026): ver lib/loja/statusDaLoja.ts.
 
 // Funil: o lado financeiro das lojas. O mapa é deliberadamente curto —
 // UNCANCELLATION e PRODUCT_CHANGE mexem na assinatura mas não são um degrau
@@ -169,10 +174,11 @@ export async function POST(req: Request) {
 
   let erroDaAssinatura: string | null = null;
   if (ACTIVE.has(event.type)) {
-    erroDaAssinatura = await gravaAssinatura({ status: "active", cancel_at_period_end: false });
+    erroDaAssinatura = await gravaAssinatura({ status: statusDaLoja(event.period_type), cancel_at_period_end: false });
   } else if (event.type === "CANCELLATION") {
-    // Desligou a renovação: continua ativo até o fim do período.
-    erroDaAssinatura = await gravaAssinatura({ status: "active", cancel_at_period_end: true });
+    // Desligou a renovação: continua com acesso até o fim do período. Se o
+    // período é de teste, segue `trialing`: cancelar o teste não vira pagante.
+    erroDaAssinatura = await gravaAssinatura({ status: statusDaLoja(event.period_type), cancel_at_period_end: true });
   } else if (event.type === "EXPIRATION") {
     erroDaAssinatura = await gravaAssinatura({ status: "inactive", cancel_at_period_end: false });
   }
@@ -216,6 +222,8 @@ export async function POST(req: Request) {
         product: productId,
         ...(event.id ? { rc_event: event.id } : {}),
         ...(event.type ? { tipo: event.type } : {}),
+        // O `assinou` de um teste grátis não é venda: quem lê separa por aqui.
+        ...(event.period_type ? { periodo: String(event.period_type) } : {}),
         ...(event.cancel_reason ? { motivo: String(event.cancel_reason) } : {}),
         ...(event.expiration_reason ? { motivo: String(event.expiration_reason) } : {}),
       },

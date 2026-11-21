@@ -28,6 +28,7 @@
 // Rode com: npm run conferir:loja
 import { readFileSync } from "node:fs";
 import { ehCortesia, ehVendaDeLoja, origemDaLoja } from "../lib/assinaturaOrigem.ts";
+import { statusDaLoja } from "../lib/loja/statusDaLoja.ts";
 import {
   ORIGEM_VENDA_SEM_CONTA,
   conferenciaDaLoja,
@@ -181,7 +182,11 @@ console.log("Loja: a compra chega ao Premium, e quando não chega, deixa rastro?
   );
   conferir(
     "e nada disso encostou no que decide acesso",
-    /event\.type === "CANCELLATION"[\s\S]{0,120}status: "active", cancel_at_period_end: true/.test(rota),
+    // Mudado pela Engenharia em 21/11/2026, de propósito: o status do
+    // cancelamento passou a vir de `statusDaLoja` (teste cancelado segue
+    // `trialing`, e não vira pagante). O que esta linha guarda continua igual:
+    // cancelar mantém o acesso até o fim do período.
+    /event\.type === "CANCELLATION"[\s\S]{0,240}status: statusDaLoja\(event\.period_type\), cancel_at_period_end: true/.test(rota),
     "se o ramo do CANCELLATION mudou, não foi o QA: isto é cobrança e sai da alçada dele",
   );
 }
@@ -477,6 +482,23 @@ console.log("Loja: a compra chega ao Premium, e quando não chega, deixa rastro?
     /when coalesce\(s\.origem = 'cortesia', s\.stripe_subscription_id is null\) then 'cortesia, nao e venda'/.test(view),
     "a venda da Play voltaria a ser chamada de cortesia na conferência obrigatória do dinheiro",
   );
+}
+
+// ── TESTE GRÁTIS É `trialing` (21/11/2026) ─────────────────────────────────
+// O retrato de 21/11 viu "1 teste" no RevenueCat e "1 ativa, 0 em teste" no
+// banco: a rota gravava `active` para teste grátis. A regra é executada, e a
+// rota é lida para provar que as DUAS escritas de acesso (compra e
+// cancelamento) passam por ela.
+{
+  conferir("período TRIAL vira trialing", statusDaLoja("TRIAL") === "trialing");
+  conferir("o caso de letra não engana", statusDaLoja("trial") === "trialing");
+  conferir("período NORMAL é active", statusDaLoja("NORMAL") === "active");
+  conferir("período INTRO (preço de entrada pago) é active", statusDaLoja("INTRO") === "active");
+  conferir("sem período, active (o comportamento de antes)", statusDaLoja(undefined) === "active");
+  const rcRota = semComentarios(readFileSync(new URL("../app/api/revenuecat/webhook/route.ts", import.meta.url), "utf8"));
+  const usos = rcRota.match(/gravaAssinatura\(\{ status: statusDaLoja\(event\.period_type\), cancel_at_period_end: (true|false) \}\)/g) ?? [];
+  conferir("compra e cancelamento gravam o status pela regra", usos.length === 2, `achei ${usos.length}`);
+  conferir("nenhuma escrita de acesso grava active na mão", !/gravaAssinatura\(\{ status: "active"/.test(rcRota));
 }
 
 if (falhas) {
